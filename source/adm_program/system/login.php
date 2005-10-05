@@ -59,13 +59,13 @@ require("../../adm_config/body_top.php");
       </div>
       <div class=\"formBody\" style=\"width: 260px\">
          <div style=\"margin-top: 7px;\">
-            <div style=\"text-align: right; width: 110; float: left;\">Benutzername:</div>
+            <div style=\"text-align: right; width: 110px; float: left;\">Benutzername:</div>
             <div style=\"text-align: left; margin-left: 120px;\">
                <input type=\"text\" name=\"loginname\" size=\"14\" maxlength=\"20\" />
             </div>
          </div>
          <div style=\"margin-top: 15px;\">
-            <div style=\"text-align: right; width: 110; float: left;\">Passwort:</div>
+            <div style=\"text-align: right; width: 110px; float: left;\">Passwort:</div>
             <div style=\"text-align: left; margin-left: 120px;\">
                <input type=\"password\" name=\"passwort\" size=\"14\" maxlength=\"20\" />
             </div>
@@ -73,12 +73,12 @@ require("../../adm_config/body_top.php");
          <div style=\"margin-top: 10px;\">
             <input type=\"checkbox\" style=\"vertical-align: middle;\" id=\"long_login\" name=\"long_login\" value=\"1\" />
             <label for=\"long_login\">nach 8 Stunden ausloggen</label>
-            <img src=\"$g_root_path/adm_images/help.png\" style=\"cursor: pointer; vertical-align: middle;\" vspace=\"1\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+            <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: middle;\" vspace=\"1\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
             onClick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=login','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
          </div>
          <div style=\"margin-top: 5px;\">
             <button name=\"login\" type=\"submit\" value=\"login\">
-            <img src=\"$g_root_path/adm_images/key.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Login\">
+            <img src=\"$g_root_path/adm_program/images/key.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Login\">
             &nbsp;Login</button>
          </div>
       </div>
@@ -87,8 +87,8 @@ require("../../adm_config/body_top.php");
       <div class=\"formBody\" style=\"width: 260px\">
          <div style=\"margin-bottom: 7px;\">Du bist noch nicht registriert ???</div>
          <button name=\"Registrieren\" type=\"button\" value=\"Registrieren\"
-            onclick=\"self.location.href='registrieren.php'\">
-            <img src=\"$g_root_path/adm_images/write.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Registrieren\">
+            onclick=\"self.location.href='registration.php'\">
+            <img src=\"$g_root_path/adm_program/images/write.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Registrieren\">
             Registrieren</button>
          <div style=\"font-size: 8pt; margin-top: 5px;\">
             Powered by <a href=\"http://www.admidio.org\" target=\"_blank\">Admidio ". getVersion(). "</a>
