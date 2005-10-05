@@ -65,7 +65,7 @@ else
 <body>
 <div align="center">
    <div class="formHead" style="text-align: left;">
-        <img style="float:left; padding: 5px 0px 0px 0px;" src="../adm_images/admidio_logo_50.png" border="0" alt="www.admidio.org" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <img style="float:left; padding: 5px 0px 0px 0px;" src="../adm_program/images/admidio_logo_50.png" border="0" alt="www.admidio.org" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <div style="font-size: 16pt; font-weight: bold; text-align: right; padding: 5px 10px 10px 0px;">Version <?php echo getVersion(); ?></div>
         <div style="font-size: 11pt; padding: 0px 0px 5px 0px;">Das Online-Verwaltungssystem f&uuml;r Vereine, Gruppen und Organisationen</div>
    </div>
