@@ -149,7 +149,7 @@ else
       $url = $url;
       
    // User nicht eingeloggt
-   $location = "location: $g_root_path/adm_program/login.php?url=". urlencode($url);
+   $location = "location: $g_root_path/adm_program/system/login.php?url=". urlencode($url);
    header($location);
    exit();
 }
