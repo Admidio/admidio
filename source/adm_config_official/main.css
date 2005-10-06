@@ -1,0 +1,223 @@
+/******************************************************************************
+ * Cascading-Style-Sheets-Datei um das Aussehen von Admidio anzupassen
+ *
+ * Copyright    : (c) 2004 - 2005 The Admidio Team
+ * Homepage     : http://www.admidio.org
+ * Module-Owner : Markus Fassbender
+ *
+ ******************************************************************************
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *
+ *****************************************************************************/
+
+/* Allgemeine Anpassungen */
+
+body {   
+   color:            #85C226;
+   font-family:      Helvetica, Arial, Times; 
+   font-size:        10pt;
+}
+
+hr {
+   border:           1px solid #6CA7A8;
+}
+
+button {
+   color:            #000000;
+   font-size:        10pt;
+}
+
+.readonly {
+   color:            #666666;
+}
+
+/* Links */
+
+a:link {
+   color:            #E0791F;
+   font-weight:      bold;
+   text-decoration:  none;
+}
+
+a:visited {
+   color:            #E0791F;
+   font-weight:      bold;
+   text-decoration:  none;
+}
+
+a:hover {
+   color:            #E0791F;
+   font-weight:      bold;
+   text-decoration:  underline;
+}
+
+/* Einfache rechteckige Groupbox mit Rahmen um bestimmte Teile zu markieren,
+   wird momentan nur auf der Installations- und Profilseite benutzt */
+
+.groupBox {
+   color:            #555555;
+   background-color: #6CA7A8;
+   border-width:     1px;
+   border-color:     #555555;
+   border-style:     solid;
+   border-collapse:  collapse;
+   padding:          5px;
+}
+
+/* Ueberschrift der rechteckigen Groupbox */
+
+.groupBoxHeadline {
+   font-weight:      bold;
+   padding-bottom:   5px;
+}
+
+/* Layout fuer die Formulare
+   Es ist in einen Kopf (formHead) und einen Inhalt (formBody) unterteilt
+   Beispiele: Profil, Login, Registrieren */
+
+.formHead {
+   width:            550px;         /* Maximale Breite von Formularen */
+   color:            #555555;
+   background-color: #85C226;
+   font-size:        13pt;
+   font-weight:      bold;
+   border-width:     1px;
+   border-color:     #555555;
+   border-style:     solid;
+   border-collapse:  collapse;
+   padding:          3px 8px 0px 8px;
+}
+
+.formBody {
+   width:            550px;         /* Maximale Breite von Formularen */
+   color:            #74B115;
+   font-size:        11pt;
+   background-color: #eaeaea;
+   border-width:     0px 1px 1px 1px;
+   border-color:     #555555;
+   border-style:     solid;
+   border-collapse:  collapse;
+   padding:          8px;
+}
+
+/* Layout fuer die Boxen (Termine usw.)
+   Es ist in einen Kopf (formHead) und einen Inhalt (formBody),
+   der aber den Kopfbereich umschliesst, unterteilt
+   Beispiele: Ankuendigungen, Termine */
+
+.boxHead {
+   color:            #555555;
+   background-color: #85C226;
+   width:            100%;
+   min-height:       20px;
+   font-size:        12pt;
+   font-weight:      bold;
+   padding:          2px;
+}
+
+.boxBody {
+   color:            #74B115;
+   width:            550px;
+   font-size:        11pt;
+   background-color: #eaeaea;
+   border-width:     1px;
+   border-color:     #555555;
+   border-style:     solid;
+   border-collapse:  collapse;
+   padding:          0px;
+}
+
+/* Layout fuer Listen
+   Die Klasse tableList wird dem <table>-Element zugeordnet
+   tableHeader dem <th>-Element und
+   listMouseOut dem <td>-Element
+   Beispiele: Listen, Eigene Liste */
+
+.tableList {
+   width:            550px;         /* Optimale Breite von Listen */
+   background-color: #eaeaea;
+   font-size:        10pt;
+   border-width:     1px;
+   border-color:     #555555;
+   border-style:     solid;
+   padding:          0px;
+   border-spacing:   0px;
+}
+
+.tableHeader {
+   color:            #555555;
+   background-color: #85C226;
+   font-size:        10pt;
+   padding:          3px;
+}
+
+.listMouseOut {
+   background-color: #eaeaea;
+   color:            #555555;
+}
+
+.listMouseOver {
+   background-color: #6CA7A8;
+   color:            #555555;
+}
+
+/* Layout fuer die Drucklisten
+   Dieses braucht in der Regel nicht angepasst werden.
+   Es ist für schwarz/weiß Drucker optimiert. */
+
+.bodyPrint {
+   color:            #000000;
+   font-family:      Helvetica, Arial, Times;
+   font-size:        10pt;
+   background-color: #ffffff;
+}
+
+.tableListPrint {
+   width:            270mm;
+   background-color: #ffffff;
+   border-width:     1px;
+   border-color:     #dddddd;
+   border-style:     solid;
+   padding:          0px;
+   border-spacing:   0px;
+   margin:           0px;
+}
+
+.tableHeaderPrint {
+   color:            #000000;
+   font-family:      Helvetica, Arial, Times;
+   font-size:        10pt;
+   background-color: #cccccc;
+}
+
+.tableRowPrint {
+   border-top-color:    #cccccc;
+   border-bottom-color: #cccccc;
+   border-left-color:   #ffffff;
+   border-right-color:  #ffffff;
+   border-width:        1px;
+   border-style:        solid;
+}
+
+/* Bilder */
+
+.bildRand {
+   border: 2px groove #000000;
+}
+
+.bildLink {
+   border-width: 0px;
+}
