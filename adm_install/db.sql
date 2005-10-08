@@ -13,11 +13,10 @@ CREATE TABLE `adm_ankuendigungen` (
   PRIMARY KEY  (`aa_id`)
 ) TYPE=MyISAM AUTO_INCREMENT=1 ;
 DROP TABLE IF EXISTS `adm_foto`;
-CREATE TABLE `adm_foto` (
+CREATE TABLE `adm_photo` (
   `af_id` int(11) unsigned NOT NULL auto_increment,
   `af_anzahl` int(11) NOT NULL default '0',
   `af_name` varchar(50) NOT NULL default '',
-  `af_kurzname` varchar(10) NOT NULL default '',
   `af_beginn` date NOT NULL default '0000-00-00',
   `af_ende` date NOT NULL default '0000-00-00',
   `af_fotografen` varchar(100) default NULL,
