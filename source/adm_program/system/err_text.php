@@ -211,18 +211,18 @@ function getErrorText($error_code, $error_text)
           break;
 
          
-//Fehlermeldungen Fotomodul          
+//Fehlermeldungen Photomodul          
 
-      case "fotodateifotoup":
+      case "photodateiphotoup":
          $error_str = "Du hast keine Bilddatei ausgewählt, die hinzugefügt
                        werden sollen.<br />";
           break;
       
-      case "fotoverwaltunsrecht":
-         $error_str = "Nur eingeloggte Benutzer mit Moderationsrechten dürfen Fotos verwalten.<br />";
+      case "photoverwaltunsrecht":
+         $error_str = "Nur eingeloggte Benutzer mit Moderationsrechten dürfen Photos verwalten.<br />";
           break;
           
-      case "dateiendungfotoup":
+      case "dateiendungphotoup":
          $error_str = "Die ausgewählte Datei ist nicht im JPG-Format gespeichert.<br />";
           break;
           
@@ -251,16 +251,16 @@ function getErrorText($error_code, $error_text)
          <b>$error_text</b><br />wirklich l&ouml;schen ?<br> Alle enthaltenen Bilder gehen verloren.";
          break;
       
-      case "delete_foto":
-         $error_str = "Soll das ausgewählte Foto wirklich gel&ouml;scht werden?";
+      case "delete_photo":
+         $error_str = "Soll das ausgewählte Photo wirklich gel&ouml;scht werden?";
          break;
          
-      case "foto_deleted":
-         $error_str = "Das Foto wurde erfolgreich gel&ouml;scht.";
+      case "photo_deleted":
+         $error_str = "Das Photo wurde erfolgreich gel&ouml;scht.";
          break;
          
 
-//Ende Fehlermeldungen Fotomodul
+//Ende Fehlermeldungen Photomodul
       default:
          $error_str = "Es ist ein Fehler aufgetreten.";
          break;

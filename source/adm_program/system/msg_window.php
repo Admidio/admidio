@@ -228,9 +228,9 @@ echo "
                Der Dateiname hat Einfluss auf die Anzeigereihenfolge. In einem Ordner in dem z.B. Sitzungsprotokolle
                gespeichert werden, sollten die Dateinamen immer mit dem Datum beginnen (jjjj-mm-tt).";
             break;
-      //Fotomodulehifen
+      //Photomodulehifen
       
-      case "foto_up_help":
+      case "photo_up_help":
          echo " <h3>Was ist zu tun?</h3>
          Auf das „Durchsuchen“ Button klicken und die gewünschte Bilddatei auf der
          Festplatte auswählen. Den Vorgang ggf. bis zu fünfmal wiederholen, 
@@ -254,7 +254,7 @@ echo "
       case "veranst_help":
          echo " <h3>Was ist zu tun?</h3>
          Alle offenen Felder ausfüllen. Die Felder Veranstaltung und Beginn sind Pflichtfelder.
-         Die Felder Ende und Fotografen sind optional. Alle übrigen Felder werden automatisch ausgefüllt.
+         Die Felder Ende und Photografen sind optional. Alle übrigen Felder werden automatisch ausgefüllt.
          Danach auf Speichern klicken.
          ";
          break;
