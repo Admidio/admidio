@@ -28,11 +28,10 @@ INSERT INTO adm_user_field (auf_ag_shortname, auf_type, auf_name, auf_descriptio
 INSERT INTO adm_user_field (auf_ag_shortname, auf_type, auf_name, auf_description) VALUES (NULL, 'MESSENGER', 'Skype', 'Skype');
 INSERT INTO adm_user_field (auf_ag_shortname, auf_type, auf_name, auf_description) VALUES (NULL, 'MESSENGER', 'Google Talk', 'Google Talk');
 ALTER TABLE `adm_mitglieder` ADD UNIQUE `am_ar_au_id` ( `am_ar_id` , `am_au_id` );
-CREATE TABLE `adm_foto` (
+CREATE TABLE `adm_photo` (
   `af_id` int(11) unsigned NOT NULL auto_increment,
   `af_anzahl` int(11) NOT NULL default '0',
   `af_name` varchar(50) NOT NULL default '',
-  `af_kurzname` varchar(10) NOT NULL default '',
   `af_beginn` date NOT NULL default '0000-00-00',
   `af_ende` date NOT NULL default '0000-00-00',
   `af_fotografen` varchar(100) default NULL,
