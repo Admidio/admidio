@@ -254,7 +254,7 @@ echo "
       case "veranst_help":
          echo " <h3>Was ist zu tun?</h3>
          Alle offenen Felder ausfüllen. Die Felder Veranstaltung und Beginn sind Pflichtfelder.
-         Die Felder Ende und Photografen sind optional. Alle übrigen Felder werden automatisch ausgefüllt.
+         Die Felder Ende und Photographen sind optional. Alle übrigen Felder werden automatisch ausgefüllt.
          Danach auf Speichern klicken.
          ";
          break;
