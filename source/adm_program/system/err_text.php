@@ -211,7 +211,7 @@ function getErrorText($error_code, $error_text)
           break;
 
          
-//Fehlermeldungen Photomodul          
+//Fehlermeldungen Fotomodul          
 
       case "photodateiphotoup":
          $error_str = "Du hast keine Bilddatei ausgewählt, die hinzugefügt
@@ -219,7 +219,7 @@ function getErrorText($error_code, $error_text)
           break;
       
       case "photoverwaltunsrecht":
-         $error_str = "Nur eingeloggte Benutzer mit Moderationsrechten dürfen Photos verwalten.<br />";
+         $error_str = "Nur eingeloggte Benutzer mit Moderationsrechten dürfen Fotos verwalten.<br />";
           break;
           
       case "dateiendungphotoup":
@@ -252,15 +252,15 @@ function getErrorText($error_code, $error_text)
          break;
       
       case "delete_photo":
-         $error_str = "Soll das ausgewählte Photo wirklich gel&ouml;scht werden?";
+         $error_str = "Soll das ausgewählte Foto wirklich gel&ouml;scht werden?";
          break;
          
       case "photo_deleted":
-         $error_str = "Das Photo wurde erfolgreich gel&ouml;scht.";
+         $error_str = "Das Foto wurde erfolgreich gel&ouml;scht.";
          break;
          
 
-//Ende Fehlermeldungen Photomodul
+//Ende Fehlermeldungen Fotomodul
       default:
          $error_str = "Es ist ein Fehler aufgetreten.";
          break;
