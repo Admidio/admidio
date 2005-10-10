@@ -12,19 +12,6 @@ CREATE TABLE `adm_ankuendigungen` (
   `aa_last_change_id` int(7) unsigned default NULL,
   PRIMARY KEY  (`aa_id`)
 ) TYPE=MyISAM AUTO_INCREMENT=1 ;
-DROP TABLE IF EXISTS `adm_foto`;
-CREATE TABLE `adm_photo` (
-  `af_id` int(11) unsigned NOT NULL auto_increment,
-  `af_anzahl` int(11) NOT NULL default '0',
-  `af_name` varchar(50) NOT NULL default '',
-  `af_beginn` date NOT NULL default '0000-00-00',
-  `af_ende` date NOT NULL default '0000-00-00',
-  `af_fotografen` varchar(100) default NULL,
-  `af_online_seit` datetime default NULL,
-  `af_last_change` datetime default NULL,
-  `af_ag_shortname` varchar(10) NOT NULL default '',
-  PRIMARY KEY  (`af_id`)
-) TYPE=MyISAM AUTO_INCREMENT=1 ;
 DROP TABLE IF EXISTS `adm_gruppierung`;
 CREATE TABLE `adm_gruppierung` (
   `ag_id` tinyint(4) NOT NULL auto_increment,
@@ -58,6 +45,19 @@ CREATE TABLE `adm_new_user` (
   `anu_login` varchar(20) NOT NULL default '',
   `anu_password` varchar(35) NOT NULL default '',
   PRIMARY KEY  (`anu_id`)
+) TYPE=MyISAM AUTO_INCREMENT=1 ;
+DROP TABLE IF EXISTS `adm_photo`;
+CREATE TABLE `adm_photo` (
+  `ap_id` int(11) unsigned NOT NULL auto_increment,
+  `ap_number` int(11) NOT NULL default '0',
+  `ap_name` varchar(50) NOT NULL default '',
+  `ap_begin` date NOT NULL default '0000-00-00',
+  `ap_end` date NOT NULL default '0000-00-00',
+  `ap_photographers` varchar(100) default NULL,
+  `ap_online_since` datetime default NULL,
+  `ap_last_change` datetime default NULL,
+  `ap_ag_shortname` varchar(10) NOT NULL default '',
+  PRIMARY KEY  (`ap_id`)
 ) TYPE=MyISAM AUTO_INCREMENT=1 ;
 DROP TABLE IF EXISTS `adm_rolle`;
 CREATE TABLE `adm_rolle` (

@@ -29,14 +29,14 @@ INSERT INTO adm_user_field (auf_ag_shortname, auf_type, auf_name, auf_descriptio
 INSERT INTO adm_user_field (auf_ag_shortname, auf_type, auf_name, auf_description) VALUES (NULL, 'MESSENGER', 'Google Talk', 'Google Talk');
 ALTER TABLE `adm_mitglieder` ADD UNIQUE `am_ar_au_id` ( `am_ar_id` , `am_au_id` );
 CREATE TABLE `adm_photo` (
-  `af_id` int(11) unsigned NOT NULL auto_increment,
-  `af_anzahl` int(11) NOT NULL default '0',
-  `af_name` varchar(50) NOT NULL default '',
-  `af_beginn` date NOT NULL default '0000-00-00',
-  `af_ende` date NOT NULL default '0000-00-00',
-  `af_fotografen` varchar(100) default NULL,
-  `af_online_seit` datetime default NULL,
-  `af_last_change` datetime default NULL,
-  `af_ag_shortname` varchar(10) NOT NULL default '',
-  PRIMARY KEY  (`af_id`)
+  `ap_id` int(11) unsigned NOT NULL auto_increment,
+  `ap_number` int(11) NOT NULL default '0',
+  `ap_name` varchar(50) NOT NULL default '',
+  `ap_begin` date NOT NULL default '0000-00-00',
+  `ap_end` date NOT NULL default '0000-00-00',
+  `ap_photographers` varchar(100) default NULL,
+  `ap_online_since` datetime default NULL,
+  `ap_last_change` datetime default NULL,
+  `ap_ag_shortname` varchar(10) NOT NULL default '',
+  PRIMARY KEY  (`ap_id`)
 ) TYPE=MyISAM AUTO_INCREMENT=1 ;
