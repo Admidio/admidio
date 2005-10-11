@@ -255,7 +255,7 @@ require("../../../adm_config/body_top.php");
                if($r_foto == 1)
                   echo " checked ";
                echo " value=\"1\" />&nbsp;
-               <img src=\"$g_root_path/adm_program/images/foto.png\" alt=\"Fotos hochladen und bearbeiten\">
+               <img src=\"$g_root_path/adm_program/images/photo.png\" alt=\"Fotos hochladen und bearbeiten\">
             </div>
             <div style=\"text-align: left; margin-left: 16%;\">
                <label for=\"foto\">Fotos hochladen und bearbeiten&nbsp;</label>

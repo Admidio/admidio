@@ -79,7 +79,7 @@ require("../../../adm_config/body_top.php");
          <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/wand.png\" alt=\"Moderation (Benutzer &amp; Rollen verwalten uvm.)\" title=\"Moderation (Benutzer &amp; Rollen verwalten uvm.)\"></th>
          <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/person.png\" alt=\"Daten aller Benutzer bearbeiten\" title=\"Daten aller Benutzer bearbeiten\"></th>
          <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/history.png\" alt=\"Termine erfassen und bearbeiten\" title=\"Termine erfassen und bearbeiten\"></th>
-         <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/foto.png\" alt=\"Fotos hochladen und bearbeiten\" title=\"Fotos hochladen und bearbeiten\"></th>
+         <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/photo.png\" alt=\"Fotos hochladen und bearbeiten\" title=\"Fotos hochladen und bearbeiten\"></th>
          <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/download.png\" alt=\"Downloads hochladen und bearbeiten\" title=\"Downloads hochladen und bearbeiten\"></th>
          <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/mail-open.png\" alt=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\" title=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\"></th>
          <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/mail-open-key.png\" alt=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\" title=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\"></th>
@@ -107,7 +107,7 @@ require("../../../adm_config/body_top.php");
                   echo "</td>
                   <td align=\"center\">";
                      if($row->ar_r_foto == 1)
-                        echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/foto.png\" alt=\"Fotos hochladen und bearbeiten\" title=\"Fotos hochladen und bearbeiten\">";
+                        echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/photo.png\" alt=\"Fotos hochladen und bearbeiten\" title=\"Fotos hochladen und bearbeiten\">";
                   echo "</td>
                   <td align=\"center\">";
                      if($row->ar_r_download == 1)
