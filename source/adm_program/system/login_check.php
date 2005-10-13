@@ -32,8 +32,9 @@ require("function.php");
 require("date.php");
 require("session_check.php");
 
-if(!array_key_exists("url", $_GET))
-   $_GET['url'] = "";
+if(!array_key_exists("url", $_GET)
+|| strlen($_GET['url']) == 0)
+   $_GET['url'] = "home";
    
 $_POST['loginname'] = trim($_POST['loginname']);
 
