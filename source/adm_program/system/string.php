@@ -31,6 +31,8 @@
 
 function strspace($srcString, $count = 1)
 {
+   // Html-Entitaeten durch Sonderzeichen ersetzen
+   $srcString = html_entity_decode($srcString);
    for($i = 0; $i < strlen($srcString); $i++)
       $strArray[$i] = substr($srcString, $i, 1);
          
