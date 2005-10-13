@@ -205,7 +205,7 @@ function getErrorText($error_code, $error_text)
          $error_str = "Wollen Sie die aktuelle Webanmeldung wirklich<br />
                <b>$error_text</b> zuordnen ?";
          break;
-			
+         
       case "send_login_mail":
          $error_str = "Die Logindaten wurden erfolgreich zugeordnet und der Benutzer wurde dar&uuml;ber benachrichtigt.";
           break;
@@ -234,7 +234,7 @@ function getErrorText($error_code, $error_text)
          $error_str = "Es muss ein gültiges  Startdatum für die Veranstalltung eingegeben werden.<br />";
           break;
       
-		case "enddatum":
+      case "enddatum":
          $error_str = "Das eingegebene Enddatum ist ungültig.<br />";
           break;
               
@@ -259,8 +259,31 @@ function getErrorText($error_code, $error_text)
          $error_str = "Das Foto wurde erfolgreich gel&ouml;scht.";
          break;
          
-
 //Ende Fehlermeldungen Fotomodul
+
+
+//Fehlermeldungen Downloadmodul
+
+      case "invalid_folder":
+         $error_str = "Sie haben einen ungültigen Ordner aufgerufen !";
+         break;
+
+      case "folder_not_exist":
+         $error_str = "Der von Ihnen aufgerufene Ordner existiert nicht.";
+         break;
+
+      case "delete_file":
+         $error_str = "Die Datei <b>$error_text</b> wurde gel&ouml;scht.";
+         break;
+
+      case "delete_folder":
+         $error_str = "Der Ordner <b>$error_text</b> wurde gel&ouml;scht.";
+         break;
+
+      case "upload_file":
+         $error_str = "Die Datei <b>$error_text</b> wurde erfolgreich hochgeladen.";
+         break;
+
       default:
          $error_str = "Es ist ein Fehler aufgetreten.";
          break;
