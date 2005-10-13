@@ -72,8 +72,7 @@ if(!isset($_GET['url']))
    $_GET['url']      = "";
 else
 {
-   if($_GET['url'] == "home"
-   || strlen($_GET['url']) == 0)
+   if($_GET['url'] == "home")
       $_GET['url'] = "$g_root_path/$g_main_page";
    else
       $_GET['url'] = urldecode($_GET['url']);
