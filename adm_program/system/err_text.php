@@ -28,7 +28,7 @@ function getErrorText($error_code, $error_text)
 {
    global $g_root_path;
    global $g_organization;
-   
+
    switch ($error_code)
    {
       case "anmeldung":
@@ -44,7 +44,7 @@ function getErrorText($error_code, $error_text)
       case "delete":
          $error_str = "Die Daten wurden gel&ouml;scht !";
          break;
-         
+
       case "delete_field":
          $error_str = "<p>Willst du das Feld <b>$error_text</b> wirklich l&ouml;schen ?</p>
          <p>Es werden alle Daten, die Benutzer in diesem Feld gespeichert haben, gel&ouml;scht.</p>";
@@ -61,7 +61,7 @@ function getErrorText($error_code, $error_text)
          $error_str = "<p>Willst du die Web-Registrierung von
          <b>$error_text</b> wirklich l&ouml;schen ?</p>";
          break;
-         
+
       case "delete_member":
          $error_str = "Wollen Sie die Mitgliedschaft des Benutzers $error_text bei $g_organization beenden ?";
          break;
@@ -129,7 +129,7 @@ function getErrorText($error_code, $error_text)
          $error_str = "Folgender Fehler trat beim Zugriff auf die Datenbank auf:<br /><br />
                <b>$error_text</b>";
          break;
-         
+
       case "new_user":
          $error_str = "Bist du sicher, dass der Benutzer noch nicht in der Datenbank existiert ?";
          break;
@@ -138,14 +138,14 @@ function getErrorText($error_code, $error_text)
          $error_str = "Deine Anmeldung wurde noch nicht vom Administrator best&auml;tigt.<br /><br />
                Einloggen ist nicht m&ouml;glich";
          break;
-         
+
       case "nodata":
          $error_str = "Es sind keine Daten vorhanden !";
          break;
-         
+
       case "nolist":
-         $error_str = "Es sind noch keine Rollen für diese Listen erstellt worden.<br /><br />
-            Rollen können <a href=\"$g_root_path/adm_program/administration/roles/roles.php\">hier</a>
+         $error_str = "Es sind noch keine Rollen f&uuml;r diese Listen erstellt worden.<br /><br />
+            Rollen k&ouml;nnen <a href=\"$g_root_path/adm_program/administration/roles/roles.php\">hier</a>
             erstellt und gepflegt werden.";
          break;
 
@@ -200,76 +200,80 @@ function getErrorText($error_code, $error_text)
                Die Uhrzeit muss dem Format mm:ss entsprechen.<br />
                Beispiele: 13:05 ; 04:30 ; 23:55";
          break;
-         
+
       case "zuordnen":
          $error_str = "Wollen Sie die aktuelle Webanmeldung wirklich<br />
                <b>$error_text</b> zuordnen ?";
          break;
-         
+
       case "send_login_mail":
          $error_str = "Die Logindaten wurden erfolgreich zugeordnet und der Benutzer wurde dar&uuml;ber benachrichtigt.";
           break;
 
-         
-//Fehlermeldungen Fotomodul          
+
+//Fehlermeldungen Fotomodul
 
       case "photodateiphotoup":
-         $error_str = "Du hast keine Bilddatei ausgewählt, die hinzugefügt
+         $error_str = "Du hast keine Bilddatei ausgew&auml;hlt, die hinzugef&uuml;gt
                        werden sollen.<br />";
           break;
-      
+
       case "photoverwaltunsrecht":
-         $error_str = "Nur eingeloggte Benutzer mit Moderationsrechten dürfen Fotos verwalten.<br />";
+         $error_str = "Nur eingeloggte Benutzer mit Moderationsrechten d&uuml;rfen Fotos verwalten.<br />";
           break;
-          
+
       case "dateiendungphotoup":
-         $error_str = "Die ausgewählte Datei ist nicht im JPG-Format gespeichert.<br />";
+         $error_str = "Die ausgew&auml;hlte Datei ist nicht im JPG-Format gespeichert.<br />";
           break;
-          
+
       case "ordnereing":
-         $error_str = "Es muss ein Kurzname für die Veranstaltung eingegeben weden. (z.B. Sola für Sommerlager)<br />";
+         $error_str = "Es muss ein Kurzname f&uuml;r die Veranstaltung eingegeben weden. (z.B. Sola f&uuml;r Sommerlager)<br />";
           break;
 
       case "startdatum":
-         $error_str = "Es muss ein gültiges  Startdatum für die Veranstalltung eingegeben werden.<br />";
+         $error_str = "Es muss ein g&uuml;ltiges  Startdatum f&uuml;r die Veranstalltung eingegeben werden.<br />";
           break;
-      
+
       case "enddatum":
-         $error_str = "Das eingegebene Enddatum ist ungültig.<br />";
+         $error_str = "Das eingegebene Enddatum ist ung&uuml;ltig.<br />";
           break;
-              
+
       case "veranstaltung":
-         $error_str = "Es muss ein Name für die Veranstaltung eingegeben weden.<br />";
+         $error_str = "Es muss ein Name f&uuml;r die Veranstaltung eingegeben weden.<br />";
           break;
-          
+
       case "ordnerexistiert":
          $error_str = "Eine Versnstaltung mit gleichem Anfangsdatum und gleichem Kurznamen existiert bereits.<br />";
           break;
-      
+
       case "delete_veranst":
          $error_str = "Willst du die Veranstaltung:<br />
          <b>$error_text</b><br />wirklich l&ouml;schen ?<br> Alle enthaltenen Bilder gehen verloren.";
          break;
-      
+
       case "delete_photo":
-         $error_str = "Soll das ausgewählte Foto wirklich gel&ouml;scht werden?";
+         $error_str = "Soll das ausgew&auml;hlte Foto wirklich gel&ouml;scht werden?";
          break;
-         
+
       case "photo_deleted":
          $error_str = "Das Foto wurde erfolgreich gel&ouml;scht.";
          break;
-         
+
 //Ende Fehlermeldungen Fotomodul
 
 
 //Fehlermeldungen Downloadmodul
 
       case "invalid_folder":
-         $error_str = "Sie haben einen ungültigen Ordner aufgerufen !";
+         $error_str = "Sie haben einen ung&uuml;ltigen Ordner aufgerufen !";
          break;
 
       case "folder_not_exist":
          $error_str = "Der von Ihnen aufgerufene Ordner existiert nicht.";
+         break;
+
+      case "delete_file_folder":
+         $error_str = "Willst du die Datei / den Ordner <b>$error_text</b> wirklich l&ouml;schen ?";
          break;
 
       case "delete_file":
