@@ -285,7 +285,16 @@ function getErrorText($error_code, $error_text)
          break;
 
       case "upload_file":
-         $error_str = "Die Datei <b>$error_text</b> wurde erfolgreich hochgeladen.";
+         $error_str = "Die Datei <b>$error_text</b> wurde hochgeladen.";
+         break;
+
+      case "create_folder":
+         $error_str = "Der Ordner <b>$error_text</b> wurde angelegt.";
+         break;
+
+      case "folder_exists":
+         $error_str = "Der Ordner <b>$error_text</b> existiert bereits.<br />
+         Gib bitte einen anderen Namen ein.";
          break;
 
       default:
