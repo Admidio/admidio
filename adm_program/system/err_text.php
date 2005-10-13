@@ -297,6 +297,18 @@ function getErrorText($error_code, $error_text)
          Gib bitte einen anderen Namen ein.";
          break;
 
+      case "file_exists":
+         $error_str = "Die Datei <b>$error_text</b> existiert bereits.";
+         break;
+
+      case "rename_folder":
+         $error_str = "Der Ordner <b>$error_text</b> wurde umbenannt.";
+         break;
+
+      case "rename_file":
+         $error_str = "Die Datei <b>$error_text</b> wurde umbenannt.";
+         break;
+
       default:
          $error_str = "Es ist ein Fehler aufgetreten.";
          break;
