@@ -53,44 +53,6 @@ function strspace($srcString, $count = 1)
 }
 
 
-// die deutschen Sonderzeichen werden in Html-Standard übersetzt
-//
-// ü -> &uuml;  ä -> &auml;  ö -> &ouml;  ß -> &szlig;
-
-function gerchars2html($srcString)
-{
-   $srcString = str_replace("ü", "&uuml;", $srcString);
-   $srcString = str_replace("ä", "&auml;", $srcString);
-   $srcString = str_replace("ö", "&ouml;", $srcString);
-   $srcString = str_replace("ß", "&szlig;", $srcString);
-
-   $srcString = str_replace("Ü", "&Uuml;", $srcString);
-   $srcString = str_replace("Ä", "&Auml;", $srcString);
-   $srcString = str_replace("Ö", "&Ouml;", $srcString);
-   
-   return $srcString;
-}
-
-
-// die deutschen Sonderzeichen werden in internationale Zeichen übersetzt
-//
-// ü -> ue   ä -> ae   ö -> oe   ß -> ss
-
-function gerchars2eng($srcString)
-{
-   $srcString = str_replace("ü", "ue", $srcString);
-   $srcString = str_replace("ä", "ae", $srcString);
-   $srcString = str_replace("ö", "oe", $srcString);
-   $srcString = str_replace("ß", "ss", $srcString);
-
-   $srcString = str_replace("Ü", "Ue", $srcString);
-   $srcString = str_replace("Ä", "Ae", $srcString);
-   $srcString = str_replace("Ö", "Oe", $srcString);
-   
-   return $srcString;
-}
-
-
 // sind die Nachkommastellen 0, dann werden sie unterdrückt
 //
 // Bsp:   153.00 -> 153   153.50 -> 153.5   153.54 -> 153.54
@@ -170,6 +132,45 @@ function isValidEmailAddress($emailAddress)
    else
    {
       return false;
+   }
+}
+
+// prueft, ob der Dateiname gueltig ist
+// check_ext = true : prueft, ob die Dateiextension fuer den Downloadbereich gueltig ist
+// Rueckgabe 0 : Dateiname ist gueltig
+//          -1 : kein Dateinamen uebergeben
+//          -2 : ungueltige Zeichen
+//          -3 : keine gueltige Dateiextension
+
+function isValidFileName($file_name, $check_ext = false)
+{
+   // If the email address was not empty
+   if(strlen(trim($file_name)) > 0)
+   {
+      // nur gueltige Zeichen zulassen
+      $anz = strspn($file_name, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@.-_+");
+      
+      if($anz == strlen($file_name))
+      {
+         if($check_ext)
+         {
+            // auf gueltige Endungen pruefen
+            $arr_invalid_ext = array("php", "php3", "php4", "php5", "html", "htm", "htaccess", "htpasswd", "pl");
+            $file_ext  = substr($file_name, strrpos($file_name, ".")+1);
+            
+            if(in_array($file_ext, $arr_invalid_ext))
+               return -3;
+            else
+               return 0;
+         }
+         return 0;
+      }
+      else
+         return -2;
+   }
+   else
+   {
+      return -1;
    }
 }
 
