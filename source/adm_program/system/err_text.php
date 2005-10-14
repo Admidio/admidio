@@ -268,6 +268,15 @@ function getErrorText($error_code, $error_text)
          $error_str = "Sie haben einen ung&uuml;ltigen Ordner aufgerufen !";
          break;
 
+      case "invalid_file_name":
+         $error_str = "Du kannst die Datei <b>$error_text</b> nicht hochladen,
+            da der Dateiname ungültige Zeichen enthält.";
+         break;
+
+      case "invalid_file_extension":
+         $error_str = "Du kannst keine PHP, HTML oder Perl Dateien hochladen.";
+         break;
+
       case "folder_not_exist":
          $error_str = "Der von Ihnen aufgerufene Ordner existiert nicht.";
          break;
