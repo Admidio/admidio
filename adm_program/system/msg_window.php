@@ -174,7 +174,7 @@ echo "
          case "rolle_moderation":
             echo "Benutzer dieser Rolle bekommen erweiterte Rechte. Sie k&ouml;nnen Rollen erstellen,
                   verwalten und anderen Benutzern Rollen zuordnen. Au&szlig;erdem k&ouml;nnen Sie
-                  alle Termine bearbeiten oder l&ouml;schen.";
+                  Ankündigungen und Termine erfassen, bearbeiten und l&ouml;schen.";
             break;
 
          case "rolle_mail":
