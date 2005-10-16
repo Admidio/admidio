@@ -258,6 +258,11 @@ function getErrorText($error_code, $error_text)
       case "photo_deleted":
          $error_str = "Das Foto wurde erfolgreich gel&ouml;scht.";
          break;
+			
+		case "photoschreibrechte":
+         $error_str = "Es konnte keine Ordner angelegt werden, da für den Ordner adm_my-files/photos 
+			 keine Schreibrechte bestehen. Bitte über FTP auf 0777 bzw drwxrwxrwx setzen.";
+         break;
 
 //Ende Fehlermeldungen Fotomodul
 
