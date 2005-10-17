@@ -45,6 +45,16 @@ function getErrorText($error_code, $error_text)
          $error_str = "Die Daten wurden gel&ouml;scht !";
          break;
 
+      case "delete_announcement":
+         $error_str = "Willst du die Ank&uuml;ndigung<br />
+         <b>$error_text</b><br />wirklich l&ouml;schen ?";
+         break;
+
+      case "delete_date":
+         $error_str = "Willst du den Termin<br />
+         <b>$error_text</b><br />wirklich l&ouml;schen ?";
+         break;
+
       case "delete_field":
          $error_str = "<p>Willst du das Feld <b>$error_text</b> wirklich l&ouml;schen ?</p>
          <p>Es werden alle Daten, die Benutzer in diesem Feld gespeichert haben, gel&ouml;scht.</p>";
@@ -69,11 +79,6 @@ function getErrorText($error_code, $error_text)
       case "delete_member_ok":
          $error_str = "Die Mitgliedschaft des Benutzers bei $g_organization
          wurde erfolgreich beendet !";
-         break;
-
-      case "delete_termin":
-         $error_str = "Willst du den Termin:<br />
-         <b>$error_text</b><br />wirklich l&ouml;schen ?";
          break;
 
       case "email":
@@ -258,10 +263,10 @@ function getErrorText($error_code, $error_text)
       case "photo_deleted":
          $error_str = "Das Foto wurde erfolgreich gel&ouml;scht.";
          break;
-			
-		case "photoschreibrechte":
-         $error_str = "Es konnte keine Ordner angelegt werden, da für den Ordner adm_my-files/photos 
-			 keine Schreibrechte bestehen. Bitte über FTP auf 0777 bzw drwxrwxrwx setzen.";
+
+      case "photoschreibrechte":
+         $error_str = "Es konnte keine Ordner angelegt werden, da f&uuml;r den Ordner adm_my-files/photos
+          keine Schreibrechte bestehen. Bitte &uuml;ber FTP auf 0777 bzw drwxrwxrwx setzen.";
          break;
 
 //Ende Fehlermeldungen Fotomodul
@@ -275,7 +280,7 @@ function getErrorText($error_code, $error_text)
 
       case "invalid_file_name":
          $error_str = "Du kannst die Datei <b>$error_text</b> nicht hochladen,
-            da der Dateiname ungültige Zeichen enthält.";
+            da der Dateiname ung&uuml;ltige Zeichen enth&auml;lt.";
          break;
 
       case "invalid_file_extension":
