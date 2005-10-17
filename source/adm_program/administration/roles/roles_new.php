@@ -340,10 +340,10 @@ require("../../../adm_config/body_top.php");
                <input ";
                if($r_gruppe == 0)
                   echo "class=\"disabled\" disabled";
-               echo " type=\"text\" name=\"max_mitglieder\" size=\"3\" maxlength=\"3\" value=\""; if($max_mitglieder > 0) echo $max_mitglieder; echo "\"></div>
+               echo " type=\"text\" name=\"max_mitglieder\" size=\"3\" maxlength=\"3\" value=\""; if($max_mitglieder > 0) echo $max_mitglieder; echo "\">&nbsp;(inkl. Leiter)</div>
          </div>
          <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 28%; float: left;\">Zeitraum:</div>
+            <div style=\"text-align: right; width: 28%; float: left;\">Datum von:</div>
             <div style=\"text-align: left; margin-left: 30%;\">
                <input ";
                if($r_gruppe == 0)
@@ -354,7 +354,6 @@ require("../../../adm_config/body_top.php");
                if($r_gruppe == 0)
                   echo "class=\"disabled\" disabled";
                echo " type=\"text\" name=\"datum_bis\" size=\"10\" maxlength=\"10\" value=\"$datum_bis\">
-               <span style=\"font-family: Courier, Helvetica; font-size: 10pt\">(tt.mm.jjjj)</span>
             </div>
          </div>
          <div style=\"margin-top: 6px;\">
@@ -369,7 +368,6 @@ require("../../../adm_config/body_top.php");
                if($r_gruppe == 0)
                   echo "class=\"disabled\" disabled";
                echo " type=\"text\" name=\"uhrzeit_bis\" size=\"5\" maxlength=\"5\" value=\"$uhrzeit_bis\">
-               <span style=\"font-family: Courier, Helvetica; font-size: 10pt\">(hh:mm)</span>
             </div>
          </div>
          <div style=\"margin-top: 6px;\">
@@ -422,7 +420,7 @@ require("../../../adm_config/body_top.php");
                          FROM adm_user
                         WHERE au_id = $row_ar->ar_last_change_id ";
             $result = mysql_query($sql, $g_adm_con);
-            db_error($result);
+            db_error($result, true);
             $row = mysql_fetch_array($result);
 
             echo "<div style=\"margin-top: 6px;\">
