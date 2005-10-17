@@ -94,10 +94,10 @@ echo "
             break;
 
          case "field_locked":
-            echo "Felder, die diese Option aktiviert haben, sind <b>nur</b> für Moderatoren
-                  sichtbar und können auch nur von diesen gepflegt werden.<br /><br />
+            echo "Felder, die diese Option aktiviert haben, sind <b>nur</b> f&uuml;r Moderatoren
+                  sichtbar und k&ouml;nnen auch nur von diesen gepflegt werden.<br /><br />
                   Benutzer, denen keiner moderierenden Rolle zugewiesen wurden,
-                  können den Inhalt der Felder weder sehen noch bearbeiten.";
+                  k&ouml;nnen den Inhalt der Felder weder sehen noch bearbeiten.";
             break;
 
          case "login":
@@ -119,10 +119,10 @@ echo "
                   Es ist sp&auml;ter nicht mehr m&ouml;glich dieses nachzuschauen.
                   Aus diesem Grund solltest du es dir gut merken.";
             break;
-            
+
          case "profil_felder":
             echo "Du kannst beliebig viele neue Felder definieren, die im Profil der einzelnen Benutzer
-            angezeigt und von diesen bearbeitet werden können.";
+            angezeigt und von diesen bearbeitet werden k&ouml;nnen.";
             break;
 
          case "ranking":
@@ -145,14 +145,14 @@ echo "
 
          case "rolle_benutzer":
             echo "Rollen, die diese Option aktiviert haben, haben die Berechtigung
-                  Benutzerdaten (au&szlig;er Passw&ouml;rter) und Rollenzugehörigkeiten
+                  Benutzerdaten (au&szlig;er Passw&ouml;rter) und Rollenzugeh&ouml;rigkeiten
                   anderer Mitglieder zu bearbeiten.";
             break;
 
          case "rolle_locked":
-            echo "Rollen, die diese Option aktiviert haben, sind <b>nur</b> für Moderatoren
+            echo "Rollen, die diese Option aktiviert haben, sind <b>nur</b> f&uuml;r Moderatoren
                   sichtbar. Benutzer, denen keiner moderierenden Rolle zugewiesen wurden,
-                  können keine E-Mails an diese Rolle schreiben, keine Listen dieser Rolle
+                  k&ouml;nnen keine E-Mails an diese Rolle schreiben, keine Listen dieser Rolle
                   aufrufen und sehen auch nicht im Profil einer Person, dass diese Mitglied
                   dieser Rolle ist.";
             break;
@@ -175,7 +175,7 @@ echo "
          case "rolle_moderation":
             echo "Benutzer dieser Rolle bekommen erweiterte Rechte. Sie k&ouml;nnen Rollen erstellen,
                   verwalten und anderen Benutzern Rollen zuordnen. Au&szlig;erdem k&ouml;nnen Sie
-                  Ankündigungen und Termine erfassen, bearbeiten und l&ouml;schen.";
+                  Ank&uuml;ndigungen und Termine erfassen, bearbeiten und l&ouml;schen.";
             break;
 
          case "rolle_mail":
@@ -186,7 +186,7 @@ echo "
             break;
 
          case "termin_global":
-            echo "Termine / Nachrichten, die diese Option aktiviert haben, erscheinen auf den Webseiten
+            echo "Termine / Ank&uuml;ndigungen, die diese Option aktiviert haben, erscheinen auf den Webseiten
                   folgender Gruppierungen:<br /><b>";
 
                   // alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
@@ -194,7 +194,7 @@ echo "
                            WHERE ag_shortname = '$g_organization'
                               OR ag_mutter    = '$g_organization' ";
                   $result_bg = mysql_query($sql, $g_adm_con);
-                  db_error($result_bg);
+                  db_error($result_bg, true);
 
                   $organizations = "";
                   $i             = 0;
@@ -211,7 +211,7 @@ echo "
                         $sql = "SELECT ag_longname FROM adm_gruppierung
                                  WHERE ag_shortname = '$row_bg->ag_mutter' ";
                         $result = mysql_query($sql, $g_adm_con);
-                        db_error($result);
+                        db_error($result, true);
                         $row = mysql_fetch_array($result);
                         $organizations = $organizations. ", ". $row[0];
                      }
@@ -223,43 +223,43 @@ echo "
                   Moderatoren dieser Gruppierungen k&ouml;nnen den Termin / Nachricht dann bearbeiten
                   bzw. die Option zur&uuml;cksetzen.";
             break;
-         
+
       case "dateiname":
-            echo "   Die Datei sollte so benannt sein, dass man vom Namen auf den Inhalt schließen kann.
+            echo "   Die Datei sollte so benannt sein, dass man vom Namen auf den Inhalt schlie&szlig;en kann.
                Der Dateiname hat Einfluss auf die Anzeigereihenfolge. In einem Ordner in dem z.B. Sitzungsprotokolle
                gespeichert werden, sollten die Dateinamen immer mit dem Datum beginnen (jjjj-mm-tt).";
             break;
       //Fotomodulehifen
-      
+
       case "photo_up_help":
          echo " <h3>Was ist zu tun?</h3>
-         Auf das „Durchsuchen“ Button klicken und die gewünschte Bilddatei auf der
-         Festplatte auswählen. Den Vorgang ggf. bis zu fünfmal wiederholen, 
-         bis alle Felder gefüllt sind. Dann auf „Bilder Speichern“ klicken und ein wenig Geduld haben.
+         Auf das &bdquo;Durchsuchen&ldquo; Button klicken und die gew&uuml;nschte Bilddatei auf der
+         Festplatte ausw&auml;hlen. Den Vorgang ggf. bis zu f&uuml;nfmal wiederholen,
+         bis alle Felder gef&uuml;llt sind. Dann auf &bdquo;Bilder Speichern&ldquo; klicken und ein wenig Geduld haben.
          <br>
          <h3>Hinweise:</h3>
-         Die Bilder müssen im JPG Format gespeichert sein.
-         Die Bilder werden automatisch auf eine Auflösung von 640Pixel der 
-         längeren Seite skaliert (andere Seite im Verhältnis), bevor sie gespeichert werden.
+         Die Bilder m&uuml;ssen im JPG Format gespeichert sein.
+         Die Bilder werden automatisch auf eine Aufl&ouml;sung von 640Pixel der
+         l&auml;ngeren Seite skaliert (andere Seite im Verh&auml;ltnis), bevor sie gespeichert werden.
          Der Name der Dateien spielt keine Rolle, da sie automatisch mit fortlaufender
          Nummer benannt werden.
-         Da auch bei schnellen Internetanbindungen das Hochladen von größeren Dateien einige
-         Zeit in Anspruch nehmen kann, empfehlen wir zunächst alle hoch zu ladenden Bilder in einen
-         Sammelordner zu kopieren und diese dann mit einer Bildbearbeitungssoftware auf 640Pixel 
-         (längere Bildseite) zu skalieren. Die JPG-Qualität sollte beim abspeichern auf 100% 
+         Da auch bei schnellen Internetanbindungen das Hochladen von gr&ouml;&szlig;eren Dateien einige
+         Zeit in Anspruch nehmen kann, empfehlen wir zun&auml;chst alle hoch zu ladenden Bilder in einen
+         Sammelordner zu kopieren und diese dann mit einer Bildbearbeitungssoftware auf 640Pixel
+         (l&auml;ngere Bildseite) zu skalieren. Die JPG-Qualit&auml;t sollte beim abspeichern auf 100%
          (also keine Komprimierung) gestellt werden.
-         Natürlich ist auch das direkte Upload möglich.
+         Nat&uuml;rlich ist auch das direkte Upload m&ouml;glich.
          ";
          break;
-      
+
       case "veranst_help":
          echo " <h3>Was ist zu tun?</h3>
-         Alle offenen Felder ausfüllen. Die Felder Veranstaltung und Beginn sind Pflichtfelder.
-         Die Felder Ende und Fotografen sind optional. Alle übrigen Felder werden automatisch ausgefüllt.
+         Alle offenen Felder ausf&uuml;llen. Die Felder Veranstaltung und Beginn sind Pflichtfelder.
+         Die Felder Ende und Fotografen sind optional. Alle &uuml;brigen Felder werden automatisch ausgef&uuml;llt.
          Danach auf Speichern klicken.
          ";
          break;
-         
+
 
          default:
             echo "Es ist ein Fehler aufgetreten.";
