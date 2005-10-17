@@ -144,8 +144,9 @@ echo "
             break;
 
          case "rolle_benutzer":
-            echo "Rollen, die diese Option aktiviert haben, haben die Berechtigung fremde
-                  Benutzerdaten (au&szlig;er Passw&ouml;rter & Rollen) zu bearbeiten.";
+            echo "Rollen, die diese Option aktiviert haben, haben die Berechtigung
+                  Benutzerdaten (au&szlig;er Passw&ouml;rter) und Rollenzugehörigkeiten
+                  anderer Mitglieder zu bearbeiten.";
             break;
 
          case "rolle_locked":
