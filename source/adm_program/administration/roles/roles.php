@@ -92,7 +92,7 @@ require("../../../adm_config/body_top.php");
       while($row = mysql_fetch_object($result))
       {
          echo "<tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
-                  <td align=\"left\">&nbsp;<a href=\"$g_root_path/adm_program/administration/roles/roles_new.php?ar_id=$row->ar_id\">$row->ar_funktion</a></td>
+                  <td align=\"left\">&nbsp;<a href=\"$g_root_path/adm_program/moduls/lists/lists_show.php?typ=address&amp;mode=html&amp;rolle=". urlencode($row->ar_funktion). "\">$row->ar_funktion</a></td>
                   <td align=\"center\">";
                      if($row->ar_r_moderation == 1)
                         echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/wand.png\" alt=\"Moderation (Benutzer &amp; Rollen verwalten uvm.)\" title=\"Moderation (Benutzer &amp; Rollen verwalten uvm.)\">";
