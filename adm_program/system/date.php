@@ -242,14 +242,19 @@ function dtFormatDate($date, $format = "")
    // Jahr
    if($arrDate[2] < 100)
    {
-      if($arrDate[2] > 30)
-         $year = "19". $arrDate[2];
+      if(strlen($arrDate[2]) == 0)
+         $year = date("Y");
       else
-         $year = "20". $arrDate[2];
+      {
+         if($arrDate[2] > 30)
+            $year = "19". $arrDate[2];
+         else
+            $year = "20". $arrDate[2];
+      }
    }
    else
       $year = $arrDate[2];
-      
+
    if(strlen($format) > 0)
       return date($format, mktime(0, 0, 0, $month, $day, $year));
    else
