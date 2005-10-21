@@ -215,6 +215,12 @@ function getErrorText($error_code, $error_text)
          $error_str = "Die Logindaten wurden erfolgreich zugeordnet und der Benutzer wurde dar&uuml;ber benachrichtigt.";
           break;
 
+      case "write_access":
+         $error_str = "Der Ordner <b>$error_text</b> konnte nicht angelegt werden. Du musst dich an
+         den <a href=\"$g_root_path/adm_program/moduls/mail/mail.php?rolle=Webmaster\">Webmaster</a>
+         wenden, damit dieser <acronym title=\"Über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen.\">
+         Schreibrechte</acronym> für den Ordner setzen kann.";
+         break;
 
 //Fehlermeldungen Fotomodul
 
@@ -262,11 +268,6 @@ function getErrorText($error_code, $error_text)
 
       case "photo_deleted":
          $error_str = "Das Foto wurde erfolgreich gel&ouml;scht.";
-         break;
-
-      case "photoschreibrechte":
-         $error_str = "Es konnte keine Ordner angelegt werden, da f&uuml;r den Ordner adm_my-files/photos
-          keine Schreibrechte bestehen. Bitte &uuml;ber FTP auf 0777 bzw drwxrwxrwx setzen.";
          break;
 
 //Ende Fehlermeldungen Fotomodul
