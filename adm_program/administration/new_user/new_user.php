@@ -59,11 +59,11 @@ echo "
 <head>
    <title>$g_title - Neue Anmeldungen</title>
    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
-   
+
    <!--[if gte IE 5.5000]>
    <script language=\"JavaScript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
    <![endif]-->";
-   
+
    require("../../../adm_config/header.php");
 echo "</head>";
 
@@ -73,30 +73,32 @@ require("../../../adm_config/body_top.php");
 
    <table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\">
       <tr>
-         <th class=\"tableHeader\" align=\"left\">&nbsp;Nachname</th>
-         <th class=\"tableHeader\" align=\"left\">&nbsp;Vorname</th>
-         <th class=\"tableHeader\" align=\"left\">&nbsp;Benutzername</th>
-         <th class=\"tableHeader\" align=\"left\">&nbsp;E-Mail</th>
-         <th class=\"tableHeader\" align=\"left\">&nbsp;Funktionen</th>
+         <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;Nachname</th>
+         <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;Vorname</th>
+         <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;Benutzername</th>
+         <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;E-Mail</th>
+         <th class=\"tableHeader\" style=\"text-align: center;\">&nbsp;Funktionen</th>
       </tr>";
 
       while($row = mysql_fetch_object($result))
       {
          echo "<tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
-                  <td>&nbsp;$row->anu_name</td>
-                  <td>&nbsp;$row->anu_vorname</td>
-                  <td>&nbsp;$row->anu_login</td>
-                  <td>&nbsp;<a href=\"mailto:$row->anu_mail\">$row->anu_mail</a></td>
-                  <td>
-                     &nbsp;<a href=\"new_user_function.php?mode=3&amp;anu_id=$row->anu_id\">Zuordnen</a>&nbsp;&nbsp;&nbsp;
-                     <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_new_user&amp;err_text=$row->anu_vorname $row->anu_name&amp;err_head=L&ouml;schen&amp;button=2&amp;url=". urlencode("$g_root_path/adm_program/new_user_function.php?anu_id=$row->anu_id&amp;mode=4"). "\">L&ouml;schen</a>
+                  <td style=\"text-align: left;\">&nbsp;$row->anu_name</td>
+                  <td style=\"text-align: left;\">&nbsp;$row->anu_vorname</td>
+                  <td style=\"text-align: left;\">&nbsp;$row->anu_login</td>
+                  <td style=\"text-align: left;\">&nbsp;<a href=\"mailto:$row->anu_mail\">$row->anu_mail</a></td>
+                  <td style=\"text-align: center;\">
+                     <a href=\"new_user_function.php?mode=3&amp;anu_id=$row->anu_id\">
+                        <img src=\"$g_root_path/adm_program/images/properties.png\" border=\"0\" alt=\"Anmeldung zuordnen\" title=\"Anmeldung zuordnen\"></a>&nbsp;&nbsp;
+                     <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_new_user&amp;err_text=$row->anu_vorname $row->anu_name&amp;err_head=L&ouml;schen&amp;button=2&amp;url=". urlencode("$g_root_path/adm_program/new_user_function.php?anu_id=$row->anu_id&amp;mode=4"). "\">
+                        <img src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"Anmeldung l&ouml;schen\" title=\"Anmeldung l&ouml;schen\"></a>
                   </td>
                </tr>";
       }
 
    echo "</table>
    </div>";
-   
+
    require("../../../adm_config/body_bottom.php");
 echo "</body>
 </html>";
