@@ -84,11 +84,6 @@ function getErrorText($error_code, $error_text)
       case "email":
          $error_str = "Die E-Mail-Adresse ist nicht g&uuml;ltig.";
          break;
-         
-      case "field_length":
-         $error_str = "Der Text aus dem Feld <b>$error_text</b> ist zu lang.<br>
-         Gib bitte einen kürzen Text ein.";
-         break;
 
       case "field_numeric":
          $error_str = "Das Feld <b>$error_text</b> darf nur Zahlen enthalten.<br>
