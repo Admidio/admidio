@@ -126,7 +126,7 @@ echo "
    <!--[if gte IE 5.5000]>
    <script language=\"JavaScript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
    <![endif]-->";
-   
+
    require("../../../adm_config/header.php");
 echo "</head>";
 
@@ -142,7 +142,7 @@ if($_GET["all"] == 1 || $member_found == 0)
 {
    echo "<p>W&auml;hle den Anfangsbuchstaben des Nachnamens aus:</p>
    <p>";
-   
+
    $letter_menu = "A";
    for($i = 0; $i < 26;$i++)
    {
@@ -176,19 +176,19 @@ if($_GET["all"] == 1 || $member_found == 0)
 echo "
 <table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\">
    <tr>
-      <th class=\"tableHeader\" align=\"left\">&nbsp;Name</th>
-      <th class=\"tableHeader\" align=\"left\">&nbsp;Benutzername</th>
-      <th class=\"tableHeader\" align=\"left\">&nbsp;E-Mail</th>
-      <th class=\"tableHeader\" align=\"left\">&nbsp;Funktion</th>
+      <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;Name</th>
+      <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;Benutzername</th>
+      <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;E-Mail</th>
+      <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;Funktion</th>
    </tr>";
 
    while($row = mysql_fetch_object($result_all))
    {
       echo "<tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\">
-               <td align=\"left\">&nbsp;<a href=\"$g_root_path/adm_program/moduls/profile/profile.php?user_id=$row->au_id\">$row->au_name,&nbsp;$row->au_vorname</a></td>
-               <td align=\"left\">&nbsp;$row->au_login</td>
-               <td align=\"left\">&nbsp;<a href=\"../adm_program/moduls/mail/mail.php?au_id=$row->au_id\">$row->au_mail</a></td>
-               <td align=\"left\">&nbsp;";
+               <td style=\"text-align: left;\">&nbsp;<a href=\"$g_root_path/adm_program/moduls/profile/profile.php?user_id=$row->au_id\">$row->au_name,&nbsp;$row->au_vorname</a></td>
+               <td style=\"text-align: left;\">&nbsp;$row->au_login</td>
+               <td style=\"text-align: left;\">&nbsp;<a href=\"../adm_program/moduls/mail/mail.php?au_id=$row->au_id\">$row->au_mail</a></td>
+               <td style=\"text-align: left;\">&nbsp;";
       if(strlen($row->au_login) > 0)
          echo "Angemeldet";
       else

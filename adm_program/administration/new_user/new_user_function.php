@@ -47,12 +47,12 @@ if(!hasRole("Webmaster"))
 if($_GET["mode"] == 1)
 {
    // User-Account einem Mitglied zuordnen
-   
+
    $sql    = "SELECT * FROM adm_new_user WHERE anu_id = {0}";
    $sql    = prepareSQL($sql, array($_GET['anu_id']));
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
-   
+
    if($user_row = mysql_fetch_object($result))
    {
       $sql    = "SELECT au_login
@@ -61,7 +61,7 @@ if($_GET["mode"] == 1)
       $sql    = prepareSQL($sql, array($_GET['au_id']));
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
-      
+
       $row = mysql_fetch_array($result);
       $old_login = $row[0];
 
@@ -73,7 +73,7 @@ if($_GET["mode"] == 1)
       $sql    = prepareSQL($sql, array($_GET['au_id']));
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
-      
+
       if($g_forum == 1)
       {
          mysql_select_db($g_forum_db, $g_forum_con);
@@ -88,12 +88,12 @@ if($_GET["mode"] == 1)
 
          mysql_select_db($g_adm_db, $g_adm_con);
       }
-      
+
       // nun kann der User-Account gel&ouml;scht werden
       $sql    = "DELETE FROM adm_new_user WHERE anu_id = {0}";
       $sql    = prepareSQL($sql, array($_GET['anu_id']));
       $result = mysql_query($sql, $g_adm_con);
-      db_error($result); 
+      db_error($result);
 
       // nur im Internet ausfuehren
       if($g_internet == 1)
@@ -139,14 +139,14 @@ elseif($_GET["mode"] == 3)
       <div class=\"formHead\" style=\"width: 400px\">". strspace("Anmeldung zuordnen"). "</div>
 
       <div class=\"formBody\" style=\"width: 400px\">
-         <p align=\"left\">
+         <p style=\"text-align: left;\">
             <img src=\"$g_root_path/adm_program/images/properties.png\" style=\"vertical-align: bottom;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer anlegen\">
             Existiert der Benutzer bereits in der Datenbank oder bist du dir nicht sicher,
             wähle erst einmal <b>zuordnen</b> aus. Dort werden dir alle vorhandenen Benutzer
             angezeigt und du kannst die Anmeldung einem vorhandenen Benutzer zuordnen oder einen neuen
             Benutzer anlegen.
          </p>
-         <p align=\"left\">
+         <p style=\"text-align: left;\">
             <img src=\"$g_root_path/adm_program/images/person_new.png\" style=\"vertical-align: bottom;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer anlegen\">
             Existiert dieser Benutzer noch nicht, kannst du aus der vorhandenen
             Anmeldung einen neuen Benutzer <b>anlegen</b>.
@@ -176,11 +176,11 @@ elseif($_GET["mode"] == 3)
 elseif($_GET["mode"] == 4)
 {
    // User-Account loeschen
-   
+
    $sql    = "DELETE FROM adm_new_user WHERE anu_id = {0}";
    $sql    = prepareSQL($sql, array($_GET['anu_id']));
    $result = mysql_query($sql, $g_adm_con);
-   db_error($result);      
+   db_error($result);
 
    $location = "location: $g_root_path/adm_program/new_user_list.php";
    header($location);
