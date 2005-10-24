@@ -253,7 +253,7 @@ require("../../../adm_config/body_top.php");
    }
    echo "<p>Falls der gesuchte Benutzer noch nicht existiert:</p>
    <p><button name=\"neu\" type=\"button\" value=\"neu\" onclick=\"self.location.href='$g_root_path/adm_program/moduls/profile/profile_edit.php?new_user=1'\">
-   <img src=\"$g_root_path/adm_program/images/write.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer anlegen\">
+   <img src=\"$g_root_path/adm_program/images/person_new.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer anlegen\">
    &nbsp;Benutzer anlegen</button></p>
 
    </div>";
