@@ -6,6 +6,10 @@
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  *
+ * Uebergaben:
+ *
+ * url:     URL auf die danach weitergeleitet wird
+ *
  ******************************************************************************
  *
  * This program is free software; you can redistribute it and/or
@@ -38,6 +42,12 @@ if(!hasRole("Webmaster"))
    exit();
 }
 
+// wenn URL uebergeben wurde zu dieser gehen, ansonsten zurueck
+if(array_key_exists('url', $_GET))
+   $url = $_GET['url'];
+else
+   $url = urlencode(getHttpReferer());
+
 $sql    = "SELECT * FROM adm_gruppierung WHERE ag_shortname = '$g_organization' ";
 $result = mysql_query($sql, $g_adm_con);
 db_error($result);
@@ -62,7 +72,7 @@ require("../../../adm_config/body_top.php");
    echo "
    <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
 
-   <form action=\"organization_function.php?ag_id=$row_orga->ag_id\" method=\"post\" name=\"Gruppierung bearbeiten\">
+   <form action=\"organization_function.php?ag_id=$row_orga->ag_id&amp;url=$url\" method=\"post\" name=\"Gruppierung bearbeiten\">
       
       <div class=\"formHead\">$row_orga->ag_longname bearbeiten</div>
       <div class=\"formBody\">
@@ -162,9 +172,9 @@ require("../../../adm_config/body_top.php");
                      echo "&nbsp;";
                   echo "</td>
                   <td style=\"text-align: right;\">
-                     <a href=\"$g_root_path/adm_program/administration/organization/field.php?auf_id=$row->auf_id\">
+                     <a href=\"$g_root_path/adm_program/administration/organization/field.php?auf_id=$row->auf_id&amp;url=$url\">
                         <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>&nbsp;";
-                        $load_url =urlencode("$g_root_path/adm_program/administration/organization/field_function.php?auf_id=$row->auf_id&mode=2");
+                        $load_url = urlencode("$g_root_path/adm_program/administration/organization/field_function.php?auf_id=$row->auf_id&mode=2&url=$url");
                      echo "<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_field&err_text=$row->auf_name&err_head=Profilfeld l&ouml;schen&button=2&url=$load_url\">
                         <img src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"Veranstaltung löschen\" title=\"Veranstaltung löschen\"></a>
                   </td>
@@ -183,7 +193,7 @@ require("../../../adm_config/body_top.php");
 
          echo "
          <button name=\"field\" type=\"button\" value=\"field\"
-            onClick=\"self.location.href='$g_root_path/adm_program/administration/organization/field.php'\">
+            onClick=\"self.location.href='$g_root_path/adm_program/administration/organization/field.php?url=$url'\">
             <img src=\"$g_root_path/adm_program/images/wand.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Rollen zuordnen\">
             &nbsp;Feld hinzuf&uuml;gen</button>
 
@@ -194,7 +204,7 @@ require("../../../adm_config/body_top.php");
             <img src=\"$g_root_path/adm_program/images/save.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
             Speichern</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-            <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
+            <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='". urldecode($url). "'\">
             <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
             Zur&uuml;ck</button>
          </div>

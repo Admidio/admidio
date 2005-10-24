@@ -9,6 +9,7 @@
  * Uebergaben:
  *
  * ag_id: ID der Gruppierung, die bearbeitet werden soll
+ * url:   URL auf die danach weitergeleitet wird
  *
  ******************************************************************************
  *
@@ -70,7 +71,8 @@ $result = mysql_query($sql, $g_adm_con);
 db_error($result);
 
 // zur Ausgangsseite zurueck
-$location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=save&timer=2000&url=". urlencode($_GET["url"]);
+$load_url = urlencode("$g_root_path/adm_program/administration/organization/organization.php?url=". $_GET['url']);
+$location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=save&timer=2000&url=$load_url";
 header($location);
 exit();
 ?>

@@ -9,6 +9,9 @@
  * Uebergaben:
  *
  * auf_id: ID des Feldes, das bearbeitet werden soll
+ * url :   URL von der die aufrufende Seite aufgerufen wurde
+ *         (muss uebergeben werden, damit der Zurueck-Button funktioniert)
+ *
  ******************************************************************************
  *
  * This program is free software; you can redistribute it and/or
@@ -40,6 +43,12 @@ if(!isModerator())
    header($location);
    exit();
 }
+
+// wenn URL uebergeben wurde zu dieser gehen, ansonsten zurueck
+if(array_key_exists('url', $_GET))
+   $url = $_GET['url'];
+else
+   $url = urlencode(getHttpReferer());
 
 $field_type        = "";
 $field_name        = "";
@@ -86,7 +95,7 @@ require("../../../adm_config/body_top.php");
    echo "
    <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
 
-   <form action=\"field_function.php?auf_id=". $_GET['auf_id']. "&amp;mode=1\" method=\"post\" name=\"TerminAnlegen\">
+   <form action=\"field_function.php?auf_id=". $_GET['auf_id']. "&amp;mode=1&amp;url=$url\" method=\"post\" name=\"TerminAnlegen\">
       <div class=\"formHead\" style=\"width: 400px\">";
          if($_GET['auf_id'] > 0)
             echo strspace("Feld ändern", 2);
