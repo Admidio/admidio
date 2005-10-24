@@ -11,6 +11,9 @@
  * auf_id: ID des Feldes
  * mode:   1 - Feld anlegen oder updaten
  *         2 - Feld loeschen
+ * url :   URL von der die aufrufende Seite aufgerufen wurde
+ *         (muss uebergeben werden, damit der Zurueck-Button funktioniert)
+ *
  ******************************************************************************
  *
  * This program is free software; you can redistribute it and/or
@@ -128,7 +131,9 @@ elseif($_GET['mode'] == 2)
    $err_code = "delete";
 }
          
-$location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&timer=2000&url=$g_root_path/adm_program/administration/organization/organization.php";
+// zur Gruppierungsseite zurueck
+$load_url = urlencode("$g_root_path/adm_program/administration/organization/organization.php?url=". $_GET['url']);
+$location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&timer=2000&url=$load_url";
 header($location);
 exit();
 ?>
