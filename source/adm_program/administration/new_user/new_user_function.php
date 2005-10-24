@@ -140,27 +140,32 @@ elseif($_GET["mode"] == 3)
 
       <div class=\"formBody\" style=\"width: 400px\">
          <p align=\"left\">
+            <img src=\"$g_root_path/adm_program/images/properties.png\" style=\"vertical-align: bottom;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer anlegen\">
             Existiert der Benutzer bereits in der Datenbank oder bist du dir nicht sicher,
             wähle erst einmal <b>zuordnen</b> aus. Dort werden dir alle vorhandenen Benutzer
             angezeigt und du kannst die Anmeldung einem vorhandenen Benutzer zuordnen oder einen neuen
             Benutzer anlegen.
          </p>
          <p align=\"left\">
+            <img src=\"$g_root_path/adm_program/images/person_new.png\" style=\"vertical-align: bottom;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer anlegen\">
             Existiert dieser Benutzer noch nicht, kannst du aus der vorhandenen
             Anmeldung einen neuen Benutzer <b>anlegen</b>.
          </p>
 
             <button name=\"zuordnen\" type=\"button\" value=\"zuordnen\"
                onclick=\"self.location.href='$g_root_path/adm_program/administration/new_user/new_user_assign.php?anu_id=". $_GET['anu_id']. "&amp;all=0'\">
-               Zuordnen</button>
+               <img src=\"$g_root_path/adm_program/images/properties.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer anlegen\">
+               &nbsp;Zuordnen</button>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <button name=\"anlegen\" type=\"button\" value=\"anlegen\"
                onclick=\"self.location.href='$g_root_path/adm_program/moduls/profile/profile_edit.php?user_id=". $_GET['anu_id']. "&amp;new_user=1&amp;url=". urlencode("$g_root_path/adm_program/administration/new_user/new_user.php"). "'\">
-               Anlegen</button>
+               <img src=\"$g_root_path/adm_program/images/person_new.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer anlegen\">
+               &nbsp;Anlegen</button>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <button name=\"back\" type=\"button\" value=\"back\"
                onclick=\"history.back()\">
-               Zur&uuml;ck</button>
+               <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer anlegen\">
+               &nbsp;Zur&uuml;ck</button>
 
       </div>
       </div>";
