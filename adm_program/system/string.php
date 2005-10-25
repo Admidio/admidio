@@ -53,11 +53,27 @@ function strspace($srcString, $count = 1)
 }
 
 
+// alle Sonderzeichen werden in Html-Standard übersetzt
+// Diese Funktion unterscheidet sich von htmlentities(), da HTML-Tags
+// hierdurch immer noch funktionieren
+//
+// z.B.: ü -> &uuml;  ä -> &auml;  ö -> &ouml;  ß -> &szlig;
+
+function specialChars2Html($srcString)
+{
+   $srcString = htmlentities($srcString, ENT_NOQUOTES);
+   $srcString = str_replace("&lt;", "<", $srcString);
+   $srcString = str_replace("&gt;", ">", $srcString);
+
+   return $srcString;
+}
+
+
 // sind die Nachkommastellen 0, dann werden sie unterdrückt
 //
 // Bsp:   153.00 -> 153   153.50 -> 153.5   153.54 -> 153.54
 
-function NumWithoutZero($number)
+function numWithoutZero($number)
 {
    $pos = strpos($number, ".");
    
