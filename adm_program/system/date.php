@@ -208,12 +208,9 @@ function mysqlmaketimestamp($dateTime)
 function dtCheckDate($date)
 {
    $formatDate = dtFormatDate($date);
-   
-   $day   = substr($formatDate, 0, 2);
-   $month = substr($formatDate, 3, 2);
-   $year  = substr($formatDate, 6, 4);
-   
-   return checkdate($month,$day,$year);
+   $arrDate    = explode(".", $formatDate);
+
+   return checkdate($arrDate[1],$arrDate[0],$arrDate[2]);
 }
 
 // formatiert ein Datum
