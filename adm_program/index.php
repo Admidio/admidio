@@ -143,7 +143,7 @@ require("../adm_config/body_top.php");
 
    echo "
    <div class=\"formHead\">";
-      echo strspace("Funktionen", 1);
+      echo strspace("Module", 1);
    echo "</div>
    <div class=\"formBody\">
       <div style=\"text-align: left; width: 40; float: left;\">
