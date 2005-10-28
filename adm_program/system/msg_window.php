@@ -140,7 +140,9 @@ echo "
             break;
 
          case "rolle_termine":
-            echo "Rollen, die diese Option aktiviert haben, d&uuml;rfen Termine erfassen.";
+            echo "Benutzer der Rollen, die diese Option aktiviert haben,
+                  können eigene Termine anlegen (keine Ankündigungen) und diese
+                  später auch bearbeiten oder löschen.";
             break;
 
          case "rolle_benutzer":
@@ -158,12 +160,13 @@ echo "
             break;
 
          case "rolle_logout":
-            echo "Besucher der Homepage, die nicht eingeloggt sind, k&ouml;nnen den Mitgliedern
-                  dieser Rolle E-Mails schreiben.";
+            echo "Besucher der Homepage, die nicht eingeloggt sind, k&ouml;nnen E-Mails an diese Rolle
+                  schreiben, die dann automatisch an alle Mitglieder weitergeleitet wird.";
             break;
 
          case "rolle_login":
-            echo "Eingeloggte Benutzer k&ouml;nnen den Mitgliedern dieser Rolle E-Mails schreiben.";
+            echo "Benutzer, die sich angemeldet haben, können E-Mails an diese Rolle schreiben, die
+                  dann automatisch an alle Mitglieder weitergeleitet wird.";
             break;
 
          case "rolle_gruppe":
