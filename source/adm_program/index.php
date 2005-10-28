@@ -147,76 +147,76 @@ require("../adm_config/body_top.php");
    echo "</div>
    <div class=\"formBody\">
       <div style=\"text-align: left; width: 40; float: left;\">
-         <a href=\"$g_root_path/adm_program/moduls/announcements/announcements.php\">
+         <a href=\"$g_root_path/adm_program/modules/announcements/announcements.php\">
             <img style=\"position: relative; top: 2px;\" src=\"$g_root_path/adm_program/images/note_big.png\" border=\"0\" alt=\"Ank&uuml;ndigungen\" />
          </a>
       </div>
       <div style=\"text-align: left; margin-left: 45px;\">
-         <span class=\"textHead\"><a href=\"$g_root_path/adm_program/moduls/announcements/announcements.php\">Ank&uuml;ndigungen</a></span>&nbsp;&nbsp;
-         <span class=\"textHeadSmall\">&#91; <a href=\"$g_root_path/adm_program/moduls/announcements/announcements.php?mode=new\">Zuk&uuml;nftige</a> &#124;
-         <a href=\"$g_root_path/adm_program/moduls/announcements/announcements.php?mode=old\">Vergangene</a> &#93;</span><br />
+         <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/announcements/announcements.php\">Ank&uuml;ndigungen</a></span>&nbsp;&nbsp;
+         <span class=\"textHeadSmall\">&#91; <a href=\"$g_root_path/adm_program/modules/announcements/announcements.php?mode=new\">Zuk&uuml;nftige</a> &#124;
+         <a href=\"$g_root_path/adm_program/modules/announcements/announcements.php?mode=old\">Vergangene</a> &#93;</span><br />
          <span class=\"textDescription\">Hier k&ouml;nnen Ank&uuml;ndigungen (News / Aktuelles) angeschaut, erstellt und bearbeitet werden.</span>
       </div>
 
       <div style=\"margin-top: 7px;\"></div>
 
       <div style=\"text-align: left; width: 40; float: left;\">
-         <a href=\"$g_root_path/adm_program/moduls/download/download.php\">
+         <a href=\"$g_root_path/adm_program/modules/download/download.php\">
             <img style=\"position: relative; top: 2px;\" src=\"$g_root_path/adm_program/images/download_big.png\" border=\"0\" alt=\"Download\" />
          </a>
       </div>
       <div style=\"text-align: left; margin-left: 45px;\">
-         <span class=\"textHead\"><a href=\"$g_root_path/adm_program/moduls/download/download.php\">Download</a></span><br />
+         <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/download/download.php\">Download</a></span><br />
          <span class=\"textDescription\">Benutzer k&ouml;nnen Dateien aus bestimmten Verzeichnissen herunterladen.</span>
       </div>
 
       <div style=\"margin-top: 7px;\"></div>
 
       <div style=\"text-align: left; width: 40; float: left;\">
-         <a href=\"$g_root_path/adm_program/moduls/photos/photos.php\">
+         <a href=\"$g_root_path/adm_program/modules/photos/photos.php\">
             <img style=\"position: relative; top: 2px;\" src=\"$g_root_path/adm_program/images/photo_big.png\" border=\"0\" alt=\"Fotos\" />
          </a>
       </div>
       <div style=\"text-align: left; margin-left: 45px;\">
-         <span class=\"textHead\"><a href=\"$g_root_path/adm_program/moduls/photos/photos.php\">Fotos</a></span><br />
+         <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/photos/photos.php\">Fotos</a></span><br />
          <span class=\"textDescription\">Eine Fotoverwaltung bei der berechtigte Benutzer online Fotos hochladen k&ouml;nnen.</span>
       </div>
 
       <div style=\"margin-top: 7px;\"></div>
 
       <div style=\"text-align: left; width: 40; float: left;\">
-         <a href=\"$g_root_path/adm_program/moduls/lists/mylist.php\">
+         <a href=\"$g_root_path/adm_program/modules/lists/mylist.php\">
             <img style=\"position: relative; top: 5px;\" src=\"$g_root_path/adm_program/images/list_big.png\" border=\"0\" alt=\"Eigene Liste\" />
          </a>
       </div>
       <div style=\"text-align: left; margin-left: 45px;\">
-         <span class=\"textHead\"><a href=\"$g_root_path/adm_program/moduls/lists/mylist.php\">Eigene Liste</a></span><br />
+         <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/lists/mylist.php\">Eigene Liste</a></span><br />
          <span class=\"textDescription\">Kriterien einer Benutzerliste selber zusammensetzen und anzeigen.</span>
       </div>
 
       <div style=\"margin-top: 7px;\"></div>
 
       <div style=\"text-align: left; width: 40; float: left;\">
-         <a href=\"$g_root_path/adm_program/moduls/mail/mail.php\">
+         <a href=\"$g_root_path/adm_program/modules/mail/mail.php\">
             <img style=\"position: relative; top: 5px;\" src=\"$g_root_path/adm_program/images/mail_open_big.png\" border=\"0\" alt=\"E-Mail\" />
          </a>
       </div>
       <div style=\"text-align: left; margin-left: 45px;\">
-         <span class=\"textHead\"><a href=\"$g_root_path/adm_program/moduls/mail/mail.php\">E-Mail</a></span><br />
+         <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/mail/mail.php\">E-Mail</a></span><br />
          <span class=\"textDescription\">E-Mails an Rollen (Gruppen / Kurse / Abteilungen) schreiben.</span>
       </div>
 
       <div style=\"margin-top: 7px;\"></div>
 
       <div style=\"text-align: left; width: 40; float: left;\">
-         <a href=\"$g_root_path/adm_program/moduls/lists/lists.php\">
+         <a href=\"$g_root_path/adm_program/modules/lists/lists.php\">
             <img style=\"position: relative; top: 5px;\" src=\"$g_root_path/adm_program/images/list_big.png\" border=\"0\" alt=\"Listen\" />
          </a>
       </div>
       <div style=\"text-align: left; margin-left: 45px;\">
-         <span class=\"textHead\"><a href=\"$g_root_path/adm_program/moduls/lists/lists.php\">Listen</a></span>&nbsp;&nbsp;
-         <span class=\"textHeadSmall\">&#91; <a href=\"$g_root_path/adm_program/moduls/lists/lists.php?show=group\">Gruppen</a> &#124;
-         <a href=\"$g_root_path/adm_program/moduls/lists/lists.php?type=former\">Ehemalige</a> &#93;</span><br />
+         <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/lists/lists.php\">Listen</a></span>&nbsp;&nbsp;
+         <span class=\"textHeadSmall\">&#91; <a href=\"$g_root_path/adm_program/modules/lists/lists.php?show=group\">Gruppen</a> &#124;
+         <a href=\"$g_root_path/adm_program/modules/lists/lists.php?type=former\">Ehemalige</a> &#93;</span><br />
          <span class=\"textDescription\">Verschiedene Benutzerlisten der Rollen (Gruppen / Kurse / Abteilungen) anzeigen.</span>
       </div>
 
@@ -247,12 +247,12 @@ require("../adm_config/body_top.php");
       <div style=\"margin-top: 7px;\"></div>
 
       <div style=\"text-align: left; width: 40; float: left;\">
-         <a href=\"$g_root_path/adm_program/moduls/profile/profile.php\">
+         <a href=\"$g_root_path/adm_program/modules/profile/profile.php\">
             <img style=\"position: relative; top: 5px;\" src=\"$g_root_path/adm_program/images/person_big.png\" border=\"0\" alt=\"Profil\" />
          </a>
       </div>
       <div style=\"text-align: left; margin-left: 45px;\">
-         <span class=\"textHead\"><a href=\"$g_root_path/adm_program/moduls/profile/profile.php\">Profil</a></span><br />
+         <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/profile/profile.php\">Profil</a></span><br />
          <span class=\"textDescription\">Das eigene Profil anschauen und bearbeiten.</span>
       </div>
 
@@ -271,13 +271,13 @@ require("../adm_config/body_top.php");
       <div style=\"margin-top: 7px;\"></div>
 
       <div style=\"text-align: left; width: 40; float: left;\">
-         <a href=\"$g_root_path/adm_program/moduls/dates/dates.php\">
+         <a href=\"$g_root_path/adm_program/modules/dates/dates.php\">
             <img style=\"position: relative; top: 5px;\" src=\"$g_root_path/adm_program/images/history_big.png\" border=\"0\" alt=\"Termine\" />
          </a>
       </div>
       <div style=\"text-align: left; margin-left: 45px;\">
-         <span class=\"textHead\"><a href=\"$g_root_path/adm_program/moduls/dates/dates.php\">Termine</a></span>&nbsp;&nbsp;
-         <span class=\"textHeadSmall\">&#91; <a href=\"$g_root_path/adm_program/moduls/dates/dates.php?mode=old\">Vergangene Termine</a> &#93;</span><br />
+         <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/dates/dates.php\">Termine</a></span>&nbsp;&nbsp;
+         <span class=\"textHeadSmall\">&#91; <a href=\"$g_root_path/adm_program/modules/dates/dates.php?mode=old\">Vergangene Termine</a> &#93;</span><br />
          <span class=\"textDescription\">Hier k&ouml;nnen Termine angeschaut, erstellt und bearbeitet werden.</span>
       </div>
    </div>

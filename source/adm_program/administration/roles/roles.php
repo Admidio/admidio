@@ -56,7 +56,7 @@ echo "
 <head>
    <title>$g_title - Rollenverwaltung</title>
    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
-   
+
    <!--[if gte IE 5.5000]>
    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
    <![endif]-->";
@@ -68,7 +68,7 @@ require("../../../adm_config/body_top.php");
    echo "
    <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
    <h1>Rollenverwaltung</h1>
-   
+
    <p><button name=\"neu\" type=\"button\" value=\"neu\" onclick=\"self.location.href='roles_new.php'\">
    <img src=\"$g_root_path/adm_program/images/write.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Rolle anlegen\">
    &nbsp;Rolle anlegen</button></p>
@@ -92,7 +92,7 @@ require("../../../adm_config/body_top.php");
       while($row = mysql_fetch_object($result))
       {
          echo "<tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
-                  <td align=\"left\">&nbsp;<a href=\"$g_root_path/adm_program/moduls/lists/lists_show.php?typ=address&amp;mode=html&amp;rolle=". urlencode($row->ar_funktion). "\">$row->ar_funktion</a></td>
+                  <td align=\"left\">&nbsp;<a href=\"$g_root_path/adm_program/modules/lists/lists_show.php?typ=address&amp;mode=html&amp;rolle=". urlencode($row->ar_funktion). "\">$row->ar_funktion</a></td>
                   <td align=\"center\">";
                      if($row->ar_r_moderation == 1)
                         echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/wand.png\" alt=\"Moderation (Benutzer &amp; Rollen verwalten uvm.)\" title=\"Moderation (Benutzer &amp; Rollen verwalten uvm.)\">";

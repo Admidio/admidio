@@ -52,7 +52,7 @@ if(!array_key_exists("letter", $_GET))
    $sql    = "SELECT au_id FROM adm_user ";
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
-   
+
    if(mysql_num_rows($result) > 50)
       $_GET["letter"] = "A%";
    else
@@ -101,7 +101,7 @@ require("../../../adm_config/body_top.php");
    <h1>Benutzerverwaltung</h1>
 
    <h1>- ";
-   
+
    if($_GET["letter"] == "%")
       echo "Alle";
    else
@@ -120,12 +120,12 @@ require("../../../adm_config/body_top.php");
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
       $row = mysql_fetch_array($result);
-      
+
       if($row[0] > 0)
          echo "<a href=\"members.php?letter=$letter_menu\">$letter_menu</a>";
       else
          echo $letter_menu;
-         
+
       echo "&nbsp;&nbsp;";
       // naechsten Buchstaben anwaehlen
       $letter_menu = strNextLetter($letter_menu);
@@ -167,15 +167,15 @@ require("../../../adm_config/body_top.php");
                   <td align=\"right\">$i&nbsp;</td>
                   <td align=\"center\">";
                      if($row_count[0] > 0)
-                        echo "<a href=\"$g_root_path/adm_program/moduls/profile/profile.php?user_id=$row->au_id\"><img src=\"$g_root_path/adm_program/images/person.png\" alt=\"Mitglied bei $orga_long_name\" title=\"Mitglied bei $orga_long_name\" border=\"0\"></a>";
+                        echo "<a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->au_id\"><img src=\"$g_root_path/adm_program/images/person.png\" alt=\"Mitglied bei $orga_long_name\" title=\"Mitglied bei $orga_long_name\" border=\"0\"></a>";
                      else
                         echo "&nbsp;";
                   echo "</td>
-                  <td align=\"left\">&nbsp;<a href=\"$g_root_path/adm_program/moduls/profile/profile.php?user_id=$row->au_id\">$row->au_name,&nbsp;$row->au_vorname</a></td>
+                  <td align=\"left\">&nbsp;<a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->au_id\">$row->au_name,&nbsp;$row->au_vorname</a></td>
                   <td align=\"center\">";
                      if(strlen($row->au_mail) > 0)
                      {
-                        echo "<a href=\"$g_root_path/adm_program/moduls/mail/mail.php?au_id=$row->au_id\">
+                        echo "<a href=\"$g_root_path/adm_program/modules/mail/mail.php?au_id=$row->au_id\">
                            <img src=\"$g_root_path/adm_program/images/mail.png\" alt=\"E-Mail an $row->au_mail schreiben\" title=\"E-Mail an $row->au_mail schreiben\" border=\"0\"></a>";
                      }
                   echo "</td>
@@ -197,12 +197,12 @@ require("../../../adm_config/body_top.php");
                      if($row_count[0] > 0)
                      {
                         // Webmaster kann nur Mitglieder der eigenen Gliedgemeinschaft editieren
-                        echo "<a href=\"$g_root_path/adm_program/moduls/profile/profile_edit.php?user_id=$row->au_id\">
+                        echo "<a href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=$row->au_id\">
                            <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Benutzerdaten bearbeiten\" title=\"Benutzerdaten bearbeiten\"></a>&nbsp;&nbsp;";
                      }
                      else
                         echo "<img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">&nbsp;&nbsp;";
-                        
+
                      $sql    = "SELECT COUNT(*)
                                   FROM adm_rolle, adm_mitglieder
                                  WHERE ar_ag_shortname <> '$g_organization'
@@ -235,7 +235,7 @@ require("../../../adm_config/body_top.php");
                      if($row_count[0] > 0 && !hasRole("Webmaster", $row->au_id))
                      {
                         echo "
-                        <a href=\"$g_root_path/adm_program/moduls/profile/profile_edit.php?user_id=$row->au_id\">
+                        <a href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=$row->au_id\">
                            <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Benutzerdaten bearbeiten\" title=\"Benutzerdaten bearbeiten\"></a>&nbsp;&nbsp;
                         <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_member&err_text=$row->au_vorname $row->au_name&err_head=Entfernen&button=2&url=". urlencode("$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->au_id&mode=2"). "\">
                            <img src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"Benutzer entfernen\" title=\"Benutzer entfernen\"></a>";
@@ -252,7 +252,7 @@ require("../../../adm_config/body_top.php");
       echo "<p>Es wurde keine Daten gefunden !</p><br />";
    }
    echo "<p>Falls der gesuchte Benutzer noch nicht existiert:</p>
-   <p><button name=\"neu\" type=\"button\" value=\"neu\" onclick=\"self.location.href='$g_root_path/adm_program/moduls/profile/profile_edit.php?new_user=1'\">
+   <p><button name=\"neu\" type=\"button\" value=\"neu\" onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_edit.php?new_user=1'\">
    <img src=\"$g_root_path/adm_program/images/person_new.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer anlegen\">
    &nbsp;Benutzer anlegen</button></p>
 
