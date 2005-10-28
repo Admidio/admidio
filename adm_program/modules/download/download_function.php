@@ -53,7 +53,7 @@ if(!editDownload())
 //testen ob Schreibrechte für adm_my_files bestehen
 if (decoct(fileperms("../../../adm_my_files/download"))!=40777)
 {
-   $load_url = urlencode("$g_root_path/adm_program/moduls/download/download.php");
+   $load_url = urlencode("$g_root_path/adm_program/modules/download/download.php");
    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=write_access&err_text=adm_my_files/download&url=$load_url";
    header($location);
    exit();
@@ -132,7 +132,7 @@ if($_GET["mode"] == 1)
       // Zielpfad mit Dateinamen zusammensetzen
       if(strlen($file_ext) > 0)
          $file_name = "$file_name.$file_ext";
-         
+
       $ret = isValidFileName($file_name, true);
       if($ret == 0)
       {
@@ -141,7 +141,7 @@ if($_GET["mode"] == 1)
          {
             $err_code = "upload_file";
             $err_text = $file_name;
-            $url = urlencode("$g_root_path/adm_program/moduls/download/download.php?folder=$folder&default_folder=$default_folder");
+            $url = urlencode("$g_root_path/adm_program/modules/download/download.php?folder=$folder&default_folder=$default_folder");
          }
       }
       else
@@ -175,7 +175,7 @@ elseif($_GET["mode"] == 2)
          $err_text = $file;
       }
    }
-   $url = urlencode("$g_root_path/adm_program/moduls/download/download.php?folder=$folder&default_folder=$default_folder");
+   $url = urlencode("$g_root_path/adm_program/modules/download/download.php?folder=$folder&default_folder=$default_folder");
 }
 elseif($_GET["mode"] == 3)
 {
@@ -214,7 +214,7 @@ elseif($_GET["mode"] == 3)
 
             $err_code = "create_folder";
             $err_text = $new_folder;
-            $url = urlencode("$g_root_path/adm_program/moduls/download/download.php?folder=$folder&default_folder=$default_folder");
+            $url = urlencode("$g_root_path/adm_program/modules/download/download.php?folder=$folder&default_folder=$default_folder");
          }
       }
    }
@@ -255,7 +255,7 @@ elseif($_GET["mode"] == 4)
             {
                $err_code = "rename_folder";
                $err_text = $file;
-               $url = urlencode("$g_root_path/adm_program/moduls/download/download.php?folder=$folder&default_folder=$default_folder");
+               $url = urlencode("$g_root_path/adm_program/modules/download/download.php?folder=$folder&default_folder=$default_folder");
             }
          }
       }
@@ -287,7 +287,7 @@ elseif($_GET["mode"] == 4)
             {
                $err_code = "rename_file";
                $err_text = $file;
-               $url = urlencode("$g_root_path/adm_program/moduls/download/download.php?folder=$folder&default_folder=$default_folder");
+               $url = urlencode("$g_root_path/adm_program/modules/download/download.php?folder=$folder&default_folder=$default_folder");
             }
             }
             else

@@ -44,7 +44,7 @@ if(!isModerator())
 {
    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
    header($location);
-   exit();   
+   exit();
 }
 
 if(!array_key_exists("headline", $_GET))
@@ -103,7 +103,7 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
                db_error($result);
             }
 
-            $location = "location: $g_root_path/adm_program/moduls/announcements/announcements.php?headline=". $_GET['headline'];
+            $location = "location: $g_root_path/adm_program/modules/announcements/announcements.php?headline=". $_GET['headline'];
             header($location);
             exit();
          }
@@ -135,7 +135,7 @@ elseif($_GET["mode"] == 2)
 
    $location = "location: $g_root_path/adm_program/system/err_msg.php?id=$id&err_code=delete&url=". urlencode($_GET["url"]);
    header($location);
-   exit();      
+   exit();
 }
 
 if ($err_code != "")

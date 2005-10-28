@@ -42,7 +42,7 @@
 	  imagedestroy("$rotate");
 // zur Ausgangsseite zurueck
 $seite=$_GET["seite"];
-$location = "location: $g_root_path/adm_program/moduls/photos/thumbnails.php?ordner=$ordner&seite=$seite";
+$location = "location: $g_root_path/adm_program/modules/photos/thumbnails.php?ordner=$ordner&seite=$seite";
 header($location);
 exit();
 ?>

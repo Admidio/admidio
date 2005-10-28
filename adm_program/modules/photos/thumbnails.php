@@ -41,9 +41,9 @@
    $seite= $_GET['seite'];//aktuelle Seite
 	if($seite=="")$seite=1;
 
-//erfassen der Veranstaltung 
-	$sql = "	SELECT * 
-				FROM adm_photo 
+//erfassen der Veranstaltung
+	$sql = "	SELECT *
+				FROM adm_photo
 				WHERE (ap_id ='$ap_id')";
 	$result = mysql_query($sql, $g_adm_con);
 	db_error($result);
@@ -103,7 +103,7 @@
 		echo"
 		<br><br>
       Seite $seite / $seiten
-		
+
       <table cellspacing=10 cellpadding=0 border=0>";
          for($zeile=1;$zeile<=5;$zeile++){//durchlaufen der Tabellenzeilen
             echo "<tr>";
@@ -118,7 +118,7 @@
 						//Buttons für moderatoren
 						if ($g_session_valid & editPhoto()){
 							echo"
-							<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_photo&err_head=Foto L&ouml;schen&button=2&url=". urlencode("$g_root_path/adm_program/moduls/photos/photodelete.php?ap_id=$ap_id&bild=$bild&seite=$seite"). "\">
+							<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_photo&err_head=Foto L&ouml;schen&button=2&url=". urlencode("$g_root_path/adm_program/modules/photos/photodelete.php?ap_id=$ap_id&bild=$bild&seite=$seite"). "\">
 								<img src=\"$g_root_path/adm_program/images/photo_delete.png\" border=\"0\" alt=\"Photo löschen\" title=\"Photo löschen\">
 							</a>";
 						}
@@ -140,7 +140,7 @@
          </button>";
 		}
 		//Uebersicht
-		echo"	<button name=\"up\" type=\"button\" value=\"up\" style=\"width: 135px;\" onclick=\"self.location.href='$g_root_path/adm_program/moduls/photos/photos.php'\">
+		echo"	<button name=\"up\" type=\"button\" value=\"up\" style=\"width: 135px;\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php'\">
            		<img src=\"../../../adm_program/images/list.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"&Uuml;bersicht\">  &Uuml;bersicht
            	</button>";
 		//naechste Seite
@@ -153,7 +153,7 @@
    echo"
 	</div>
    </div>";
-   
+
 //Seitenende
    require("../../../adm_config/body_bottom.php");
    echo "</body>

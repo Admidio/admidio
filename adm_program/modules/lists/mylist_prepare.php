@@ -61,7 +61,7 @@ else
 $value = reset($_POST);
 $key   = key($_POST);
 $i     = 0;
-   
+
 // Felder zusammenstringen
 for($i = 0; $i < count($_POST); $i++)
 {
@@ -94,7 +94,7 @@ for($i = 0; $i < count($_POST); $i++)
       if(substr_count($key, "column") > 0)
          $act_field = "";
    }
-   
+
    $value    = next($_POST);
    $key      = key($_POST);
 }
@@ -109,19 +109,19 @@ $main_sql = "SELECT au_id, $sql_select
                 AND am_leiter       = 0
                 AND am_au_id        = au_id
                     $sql_where ";
-                
+
 if(strlen($sql_orderby) > 0)
    $main_sql = $main_sql. " ORDER BY $sql_orderby ";
-   
+
 //echo $main_sql; exit();
 
-$sql    = "UPDATE adm_session SET as_list_sql = '$main_sql' 
+$sql    = "UPDATE adm_session SET as_list_sql = '$main_sql'
             WHERE as_session = '$g_session_id' ";
 $result = mysql_query($sql, $g_adm_con);
 db_error($result);
 
 // weiterleiten zur allgemeinen Listeseite
-$location = "location: $g_root_path/adm_program/moduls/lists/lists_show.php?typ=mylist&mode=html&rolle=$rolle";
+$location = "location: $g_root_path/adm_program/modules/lists/lists_show.php?typ=mylist&mode=html&rolle=$rolle";
 header($location);
 exit();
 

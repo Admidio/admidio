@@ -41,9 +41,9 @@ if($g_session_valid & editPhoto()){
 //Übernahme Variablen
 	 $ap_id= $_GET['ap_id'];
 	 $bild = $_GET["bild"];
-//erfassen der Veranstaltung 
-	$sql = "	SELECT * 
-				FROM adm_photo 
+//erfassen der Veranstaltung
+	$sql = "	SELECT *
+				FROM adm_photo
 				WHERE (ap_id ='$ap_id')";
 	$result = mysql_query($sql, $g_adm_con);
 	db_error($result);
@@ -77,7 +77,7 @@ if($g_session_valid & editPhoto()){
 
 // zur Ausgangsseite zurueck
 $seite=$_GET["seite"];
-$location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=photo_deleted&timer=2000&url=". urlencode("$g_root_path/adm_program/moduls/photos/thumbnails.php?ap_id=$ap_id&seite=$seite");
+$location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=photo_deleted&timer=2000&url=". urlencode("$g_root_path/adm_program/modules/photos/thumbnails.php?ap_id=$ap_id&seite=$seite");
 header($location);
 exit();
 }//if Moderator

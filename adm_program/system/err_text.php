@@ -222,7 +222,7 @@ function getErrorText($error_code, $error_text)
 
       case "write_access":
          $error_str = "Der Ordner <b>$error_text</b> konnte nicht angelegt werden. Du musst dich an
-         den <a href=\"$g_root_path/adm_program/moduls/mail/mail.php?rolle=Webmaster\">Webmaster</a>
+         den <a href=\"$g_root_path/adm_program/modules/mail/mail.php?rolle=Webmaster\">Webmaster</a>
          wenden, damit dieser <acronym title=\"Über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen.\">
          Schreibrechte</acronym> für den Ordner setzen kann.";
          break;

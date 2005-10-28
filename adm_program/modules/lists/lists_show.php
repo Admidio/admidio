@@ -67,7 +67,7 @@ $arr_col_name = array('au_name'     => 'Nachname',
                       'am_ende'         => 'Ende',
                       'am_leiter'       => 'Leiter'
                       );
-                      
+
 if($_GET["mode"] == "html")
 {
    $class_table  = "tableList";
@@ -84,7 +84,7 @@ else if($_GET["mode"] == "print")
 $main_sql  = "";   // enthält das Haupt-Sql-Statement für die Liste
 $str_csv   = "";   // enthält die komplette CSV-Datei als String
 $leiter    = 0;    // Gruppe besitzt Leiter
-                      
+
 // das geweilige Sql-Statement zusammenbauen
 // !!!! Das erste Feld muss immer au_id sein !!!!
 // !!!! wenn Gruppen angezeigt werden, muss am_leiter = 0 gesetzt sein !!!!
@@ -111,7 +111,7 @@ switch($_GET["typ"])
                       AND am_au_id  = au_id
                     ORDER BY au_name, au_vorname ";
       break;
-      
+
    case "telephone":
       $main_sql = "SELECT au_id, au_name, au_vorname, au_tel1, au_tel2, au_mobil, au_mail
                      FROM adm_rolle, adm_mitglieder, adm_user
@@ -123,7 +123,7 @@ switch($_GET["typ"])
                       AND am_au_id  = au_id
                     ORDER BY au_name, au_vorname ";
       break;
-      
+
    case "former":
       $main_sql = "SELECT au_id, au_name, au_vorname, au_geburtstag, am_start, am_ende
                      FROM adm_rolle, adm_mitglieder, adm_user
@@ -156,7 +156,7 @@ if($gruppe == 1)
       $former = 0;
    else
       $former = 1;
-   
+
    $sql = "SELECT am_leiter
              FROM adm_mitglieder
             WHERE am_ar_id  = ". $row[0]. "
@@ -206,7 +206,7 @@ if($leiter == 0)
    $main_sql = prepareSQL($main_sql, array($_GET['rolle']));
    $result_lst = mysql_query($main_sql, $g_adm_con);
    db_error($result_lst);
-   
+
    if(mysql_num_rows($result_lst) == 0)
    {
       // Es sind keine Daten vorhanden !
@@ -226,11 +226,11 @@ if($_GET["mode"] != "csv")
    <head>
       <title>$g_title - Liste - ". $_GET["rolle"]. "</title>
       <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
-      
+
       <!--[if gte IE 5.5000]>
       <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
       <![endif]-->";
-      
+
       if($_GET["mode"] == "print")
       {
          echo "<style type=\"text/css\">
@@ -245,7 +245,7 @@ if($_GET["mode"] != "csv")
       echo "<body class=\"bodyPrint\">";
    else
       require("../../../adm_config/body_top.php");
-      
+
    echo "
    <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
    <h1>". $_GET["rolle"]. "</h1>";
@@ -296,7 +296,7 @@ for($j = 0; $j < $max_count; $j++)
       }
       db_error($result_lst, true);
    }
-   
+
    if(mysql_num_rows($result_lst) > 0)
    {
       if($_GET["mode"] == "csv")
@@ -349,7 +349,7 @@ for($j = 0; $j < $max_count; $j++)
          if($_GET["mode"] == "html")
          {
             echo "<tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\"
-               style=\"cursor: pointer\" onClick=\"window.location.href='$g_root_path/adm_program/moduls/profile/profile.php?user_id=$row[0]'\">\n";
+               style=\"cursor: pointer\" onClick=\"window.location.href='$g_root_path/adm_program/modules/profile/profile.php?user_id=$row[0]'\">\n";
          }
          else if($_GET["mode"] == "print")
          {
@@ -380,7 +380,7 @@ for($j = 0; $j < $max_count; $j++)
                   {
                      case "au_mail":
                         if($_GET["mode"] == "html")
-                           $content = "<a href=\"../../adm_program/moduls/mail/mail.php?au_id=". $row[0]. "\">". $row[$i]. "</a>";
+                           $content = "<a href=\"../../adm_program/modules/mail/mail.php?au_id=". $row[0]. "\">". $row[$i]. "</a>";
                         else
                            $content = $row[$i];
                         break;
@@ -430,7 +430,7 @@ for($j = 0; $j < $max_count; $j++)
    }  // End-If (Rows > 0)
 }  // End-For (Leiter, Teilnehmer)
 
-if($_GET["mode"] == "csv")      
+if($_GET["mode"] == "csv")
 {
    // nun die erstellte CSV-Datei an den User schicken
    $filename = $g_organization. "-". str_replace(" ", "_", str_replace(".", "", $_GET["rolle"])). ".csv";
@@ -443,7 +443,7 @@ if($_GET["mode"] == "csv")
 else
 {
    echo "</table>";
-   
+
    if($_GET["mode"] == "print")
    {
       if(!$_GET["typ"] == "mylist")
@@ -473,7 +473,7 @@ else
          <img src=\"$g_root_path/adm_program/images/excel.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"MS-Excel\">
          &nbsp;MS-Excel</button></p>";
    }
-   
+
    echo "</div>";
    if($_GET["mode"] != "print")
       require("../../../adm_config/body_bottom.php");
