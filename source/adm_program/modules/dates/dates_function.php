@@ -42,7 +42,7 @@ if(!editDate())
 {
    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
    header($location);
-   exit();   
+   exit();
 }
 
 if($_GET["mode"] == 2 || $_GET["mode"] == 3)
@@ -56,14 +56,14 @@ if($_GET["mode"] == 2 || $_GET["mode"] == 3)
       db_error($result);
 
       $row_date = mysql_fetch_object($result);
-      
+
       if($g_user_id != $row_date->at_au_id)
       {
          $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=noforeigndel";
          header($location);
-         exit();   
+         exit();
       }
-   }   
+   }
 }
 
 $err_code = "";
@@ -73,7 +73,7 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
 {
    $_POST['ueberschrift'] = trim($_POST['ueberschrift']);
    $_POST['datum_von']    = trim($_POST['datum_von']);
-   
+
    if(strlen($_POST['ueberschrift']) > 0
    && strlen($_POST['datum_von'])    > 0 )
    {
@@ -125,7 +125,7 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
             if ($_GET["at_id"] == 0)
             {
                $sql = "INSERT INTO adm_termine (at_global, at_ag_shortname, at_au_id, at_timestamp, at_ueberschrift,
-                                                 at_von, at_bis, at_ort, at_beschreibung) 
+                                                 at_von, at_bis, at_ort, at_beschreibung)
                                          VALUES ($global, '$g_organization', '$g_user_id', '$act_date', {0},
                                                  '$dt_datum_von', '$dt_datum_bis', {1}, {2})";
             }
@@ -146,7 +146,7 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
 
-            $location = "location: $g_root_path/adm_program/moduls/dates/dates.php";
+            $location = "location: $g_root_path/adm_program/modules/dates/dates.php";
             header($location);
             exit();
          }
@@ -178,7 +178,7 @@ elseif($_GET["mode"] == 2)
 
    $location = "location: $g_root_path/adm_program/system/err_msg.php?id=$id&err_code=delete&url=". urlencode($_GET["url"]);
    header($location);
-   exit();      
+   exit();
 }
 
 if ($err_code != "")

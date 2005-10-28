@@ -46,8 +46,8 @@ if($g_session_valid & editPhoto()){
 //Aktueller Timestamp
    $act_datetime= date("Y.m.d G:i:s", time());
 //erfassen der Veranstaltung bei Änderungsaufruf
-   $sql = "   SELECT * 
-            FROM adm_photo 
+   $sql = "   SELECT *
+            FROM adm_photo
             WHERE (ap_id ='$ap_id')";
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
@@ -106,11 +106,11 @@ if($g_session_valid & editPhoto()){
          if (decoct(fileperms("../../../adm_my_files/photos"))!=40777){
             //Wenn keine Schreibrechte Löschen der Daten aus der Datenbank
             $sql ="DELETE
-               FROM adm_photo 
-               WHERE (ap_id ='$ap_id')";      
+               FROM adm_photo
+               WHERE (ap_id ='$ap_id')";
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
-            $load_url = urlencode("$g_root_path/adm_program/moduls/photos/photos.php");
+            $load_url = urlencode("$g_root_path/adm_program/modules/photos/photos.php");
             $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=write_access&err_text=adm_my_files/photos&url=$load_url";
             header($location);
             exit();
@@ -124,7 +124,7 @@ if($g_session_valid & editPhoto()){
          $ordnerneu = "$beginn"."_$adm_photo[0]";
          //testen ob Schreibrechte für adm_my_files bestehen
          if (decoct(fileperms("../../../adm_my_files/photos"))!=40777){
-            $load_url = urlencode("$g_root_path/adm_program/moduls/photos/photos.php");
+            $load_url = urlencode("$g_root_path/adm_program/modules/photos/photos.php");
             $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=write_access&err_text=adm_my_files/photos&url=$load_url";
             header($location);
             exit();
@@ -154,16 +154,16 @@ if($g_session_valid & editPhoto()){
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
    //daten aus Datenbank neu laden
-   //erfassen der Veranstaltung 
-   $sql = "   SELECT * 
-            FROM adm_photo 
+   //erfassen der Veranstaltung
+   $sql = "   SELECT *
+            FROM adm_photo
             WHERE ap_id ='$ap_id'";
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
    $neudaten = mysql_fetch_array($result);
 //Speicherort
    $ordner = "../../../adm_my_files/photos/"."$adm_photo[3]"."_$adm_photo[0]";
-   
+
    }// If submit
 
 //*************************************************************************************
@@ -207,7 +207,7 @@ if($g_session_valid & editPhoto()){
             <tr><td align=\"right\">Gruppierung:</td><td align=\"left\">$neudaten[8]</td></tr>
          </table>
          <hr width=\"85%\" />
-         <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/moduls/photos/photos.php'\">
+         <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php'\">
             <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">Zur&uuml;ck
          </button>
       </div>
@@ -230,17 +230,17 @@ if($_GET["aufgabe"]=="change" || $_GET["aufgabe"]=="new"){
             if($_GET["aufgabe"]=="change")echo "&aufgabe=makechange\">";
             //Veranstaltung
             echo"
-              <div>      
+              <div>
             <div style=\"text-align: right; width: 170px; float: left;\">Veranstaltung:</div>
             <div style=\"text-align: left; margin-left: 180px;\">";
                if($_GET["aufgabe"]=="new")echo "<input type=\"text\" name=\"veranstaltung\" size=\"30\" maxlength=\"40\" tabindex=\"1\">";
                if($_GET["aufgabe"]=="change")echo "<input type=\"text\" name=\"veranstaltung\" size=\"30\" maxlength=\"40\" tabindex=\"1\" value=\"$adm_photo[2]\">";
-            echo"</div></div>";   
+            echo"</div></div>";
             //Beginn
             echo"
             <div style=\"margin-top: 6px;\">
               <div style=\"text-align: right; width: 170px; float: left;\">Beginn:</div>
-            <div style=\"text-align: left; margin-left: 180px;\">";   
+            <div style=\"text-align: left; margin-left: 180px;\">";
                if($_GET["aufgabe"]=="new")echo "<input type=\"text\" name=\"beginn\" size=\"10\" tabindex=\"1\" maxlength=\"10\" >";
                if($_GET["aufgabe"]=="change"){
                   $dt_date = mysqldate("d.m.y", $adm_photo[3]);
@@ -251,7 +251,7 @@ if($_GET["aufgabe"]=="change" || $_GET["aufgabe"]=="new"){
             echo"
             <div style=\"margin-top: 6px;\">
               <div style=\"text-align: right; width: 170px; float: left;\">Ende:</div>
-            <div style=\"text-align: left; margin-left: 180px;\">";   
+            <div style=\"text-align: left; margin-left: 180px;\">";
                if($_GET["aufgabe"]=="new")echo "<input type=\"text\" name=\"ende\" size=\"10\" tabindex=\"1\" maxlength=\"10\">";
                if($_GET["aufgabe"]=="change"){
                   $dt_date = mysqldate("d.m.y", $adm_photo[4]);
@@ -262,7 +262,7 @@ if($_GET["aufgabe"]=="change" || $_GET["aufgabe"]=="new"){
             echo"
             <div style=\"margin-top: 6px;\">
               <div style=\"text-align: right; width: 170px; float: left;\">Fotografen:</div>
-            <div style=\"text-align: left; margin-left: 180px;\">";   
+            <div style=\"text-align: left; margin-left: 180px;\">";
                if($_GET["aufgabe"]=="new")echo "<input type=\"text\" name=\"photographen\" size=\"30\" tabindex=\"1\">";
                if($_GET["aufgabe"]=="change")echo "<input type=\"text\" name=\"photographen\" size=\"30\" tabindex=\"1\" value=\"$adm_photo[5]\">";
             echo"</div></div>";
@@ -270,7 +270,7 @@ if($_GET["aufgabe"]=="change" || $_GET["aufgabe"]=="new"){
             echo"
             <div style=\"margin-top: 6px;\">
               <div style=\"text-align: right; width: 170px; float: left;\">Online seit:</div>
-            <div style=\"text-align: left; margin-left: 180px;\">";   
+            <div style=\"text-align: left; margin-left: 180px;\">";
                if($_GET["aufgabe"]=="new")echo "<input type=\"text\" name=\"onlineseit\" size=\"10\" tabindex=\"1\" value=\"(Auto)\" class=\"readonly\" readonly=\"readonly\">";
                if($_GET["aufgabe"]=="change"){
                   $dt_datetime = mysqldatetime("d.m.y h:i", $adm_photo[6]);
@@ -281,7 +281,7 @@ if($_GET["aufgabe"]=="change" || $_GET["aufgabe"]=="new"){
             echo"
             <div style=\"margin-top: 6px;\">
               <div style=\"text-align: right; width: 170px; float: left;\">Letzte &Auml;nderung:</div>
-            <div style=\"text-align: left; margin-left: 180px;\">";   
+            <div style=\"text-align: left; margin-left: 180px;\">";
                if($_GET["aufgabe"]=="new")echo "<input type=\"text\" name=\"onlineseit\" size=\"10\" tabindex=\"1\" value=\"(Auto)\" class=\"readonly\" readonly=\"readonly\">";
                if($_GET["aufgabe"]=="change"){
                   $dt_datetime = mysqldatetime("d.m.y h:i", $adm_photo[7]);
@@ -292,7 +292,7 @@ if($_GET["aufgabe"]=="change" || $_GET["aufgabe"]=="new"){
             echo"
             <div style=\"margin-top: 6px;\">
               <div style=\"text-align: right; width: 170px; float: left;\">Gruppierung:</div>
-            <div style=\"text-align: left; margin-left: 180px;\">";   
+            <div style=\"text-align: left; margin-left: 180px;\">";
                if($_GET["aufgabe"]=="new")echo "<input type=\"text\" name=\"gruppierung\" size=\"10\" tabindex=\"1\" value=\"$g_organization\" class=\"readonly\" readonly=\"readonly\">";
                if($_GET["aufgabe"]=="change")echo "<input type=\"text\" name=\"gruppierung\" size=\"10\" tabindex=\"1\" value=\"$adm_photo[8]\" class=\"readonly\" readonly=\"readonly\">";
             echo"</div></div>";
@@ -300,7 +300,7 @@ if($_GET["aufgabe"]=="change" || $_GET["aufgabe"]=="new"){
             echo"
             <div style=\"margin-top: 6px;\">
               <div style=\"text-align: right; width: 170px; float: left;\">Enthaltene Bilder:</div>
-            <div style=\"text-align: left; margin-left: 180px;\">";   
+            <div style=\"text-align: left; margin-left: 180px;\">";
                if($_GET["aufgabe"]=="new")echo "<input type=\"text\" name=\"bilderzahl\" size=\"5\" tabindex=\"1\" value=\"0\" class=\"readonly\" readonly=\"readonly\">";
                if($_GET["aufgabe"]=="change")echo "<input type=\"text\" name=\"bilderzahl\" size=\"5\" tabindex=\"1\" value=\"$adm_photo[1]\" class=\"readonly\" readonly=\"readonly\">";
             echo"</div></div>";
@@ -334,20 +334,20 @@ if($_GET["aufgabe"]=="delete"){
          chmod("$ordner/$x.jpg", 0777);
          if(unlink("$ordner/$x.jpg"))echo"Datei $x.jpg wurde erfolgreich GEL&Ouml;SCHT.<br>";
       }
-      
+
       //Löschen der Daten aus der Datenbank
       $sql ="DELETE
-            FROM adm_photo 
-            WHERE (ap_id ='$ap_id')";      
+            FROM adm_photo
+            WHERE (ap_id ='$ap_id')";
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
       if($result)echo"Der zugehörige Datensatz wurde aus der Datenbank GEL&Ouml;SCHT.";
-      
+
       //Löschen der Ordners
        if(rmdir("$ordner"))echo"Die Veranstaltung Wurde erfolgreich GEL&Ouml;SCHT.<br>";
        echo"
        <hr width=\"85%\" />
-         <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/moduls/photos/photos.php'\">
+         <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php'\">
             <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">Zur&uuml;ck
          </button>
       </div>";

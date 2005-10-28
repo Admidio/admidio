@@ -30,13 +30,13 @@
    require("../../system/tbl_user.php");
    require("../../system/session_check.php");
 //erfassen der Veranstaltungen die zur Gruppierung gehören
-	$sql = "	SELECT * 
-				FROM adm_photo 
+	$sql = "	SELECT *
+				FROM adm_photo
 				WHERE (ap_ag_shortname ='$g_organization')
 				ORDER BY ap_begin DESC ";
 	$result = mysql_query($sql, $g_adm_con);
 	db_error($result);
-  
+
    //beginn HTML
    echo "
    <!-- (c) 2004 - 2005 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
@@ -54,18 +54,18 @@
    echo "</head>";
 
    require("../../../adm_config/body_top.php");
-   
+
    echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">";
    echo"<h1>Fotogalerien</h1>";
    //bei Seitenaufruf mit Moderationsrechten
-   if($g_session_valid & editPhoto()){   
+   if($g_session_valid & editPhoto()){
       echo"
       <button name=\"verwaltung\" type=\"button\" value=\"up\" style=\"width: 187px;\"
-         onclick=\"self.location.href='$g_root_path/adm_program/moduls/photos/event.php?aufgabe=new'\">
+         onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/event.php?aufgabe=new'\">
          <img src=\"$g_root_path/adm_program/images/edit.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Veranstaltung anlegen\">  Veranstaltung anlegen
         </button><br><br>";
-   }   
-   
+   }
+
 
    //anlegen der Tabelle und ausgeb der Kopfzeile
    echo "
@@ -81,7 +81,7 @@
       echo"</tr>
    ";
 
-//durchlaufen des Result-Tabelle und Ausgabe in Tabelle      
+//durchlaufen des Result-Tabelle und Ausgabe in Tabelle
    $bildersumme=0;//Summe der Bilder in den Unterordnern
    for($x=0; $adm_photo = mysql_fetch_array($result); $x++){
       If($adm_photo[8]==$g_organization){//Ausgabe nur bei entsprechender Gruppierung
@@ -95,17 +95,17 @@
             <td>";$dt_date = mysqldate("d.m.y", $adm_photo[7]);echo"<div align=\"center\">$dt_date </div></td>";//Anzeige online seitdatum im deutschen Format
             if ($g_session_valid & editPhoto()){
                echo"<td style=\"text-align: center;\">
-                  <a href=\"$g_root_path/adm_program/moduls/photos/photoupload.php?ap_id=$adm_photo[0]\">
+                  <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?ap_id=$adm_photo[0]\">
                      <img src=\"$g_root_path/adm_program/images/photo.png\" border=\"0\" alt=\"Photoupload\" title=\"Photoupload\"></a>&nbsp;
-                  <a href=\"$g_root_path/adm_program/moduls/photos/event.php?ap_id=$adm_photo[0]&aufgabe=change\">
+                  <a href=\"$g_root_path/adm_program/modules/photos/event.php?ap_id=$adm_photo[0]&aufgabe=change\">
                      <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>&nbsp;";
                   $err_text= "$adm_photo[2]"."("."Beginn: $adm_photo[3]".")";
                   echo"
-                  <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_veranst&err_text=$err_text&err_head=Veranstaltung L&ouml;schen&button=2&url=". urlencode("$g_root_path/adm_program/moduls/photos/event.php?aufgabe=delete&ap_id=$adm_photo[0]"). "\">
+                  <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_veranst&err_text=$err_text&err_head=Veranstaltung L&ouml;schen&button=2&url=". urlencode("$g_root_path/adm_program/modules/photos/event.php?aufgabe=delete&ap_id=$adm_photo[0]"). "\">
                      <img src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"Veranstaltung löschen\" title=\"Veranstaltung löschen\"></a>
                </td>";
-            }   
-         echo"</tr>         
+            }
+         echo"</tr>
          ";
       };//If
    };//for

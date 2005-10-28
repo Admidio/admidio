@@ -37,18 +37,18 @@ if(!$g_session_valid || $g_session_valid & !editPhoto())
       exit();
       }
 //bei Seitenaufruf mit Moderationsrechten
-if($g_session_valid & editPhoto()){   
+if($g_session_valid & editPhoto()){
 //Übernahme Variablen
 	 $ap_id= $_GET['ap_id'];
-//erfassen der Veranstaltung 
-	$sql = "	SELECT * 
-				FROM adm_photo 
+//erfassen der Veranstaltung
+	$sql = "	SELECT *
+				FROM adm_photo
 				WHERE (ap_id ='$ap_id')";
 	$result = mysql_query($sql, $g_adm_con);
 	db_error($result);
 	$adm_photo = mysql_fetch_array($result);
 //Speicherort
-	$ordner = "../../../adm_my_files/photos/"."$adm_photo[3]"."_$adm_photo[0]";  
+	$ordner = "../../../adm_my_files/photos/"."$adm_photo[3]"."_$adm_photo[0]";
 
 //kontrollmechanismen bei selbstaufruf
    if($_POST["upload"]){
@@ -100,7 +100,7 @@ if($_POST["upload"]){
       echo"<div style=\"width: 670px\" align=\"center\" class=\"formBody\">Bitte einen Moment Geduld. Die Bilder wurden der Veranstaltung <br> - $adm_photo[2] - <br>erfolgreich hinzugefügt, wenn sie hier angezeigt werden.<br>";
    //Verarbeitungsschleife für die einzelnen Bilder
       $bildnr=$adm_photo[1];
-		for($x=0; $x<=4; $x=$x+1){         
+		for($x=0; $x<=4; $x=$x+1){
          $y=$x+1;
          if($_FILES["bilddatei"]["name"][$x]!="" && $ordner!="") {
          //errechnen der neuen Bilderzahl
@@ -124,12 +124,12 @@ if($_POST["upload"]){
 	//Ende Bericht
       echo"
 		<hr width=\"85%\" />
-		<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/moduls/photos/photos.php'\">
+		<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php'\">
    		<img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">Zur&uuml;ck
 		</button>
-		</div><br><br>"; 
+		</div><br><br>";
    }//if($upload)
-   
+
 //Formular
    echo"
    <form name=\"photoup\" method=\"post\" action=\"photoupload.php?ap_id=$ap_id\" enctype=\"multipart/form-data\">
@@ -138,7 +138,7 @@ if($_POST["upload"]){
          Bilder zu dieser Veranstaltung hinzufügen:<br>
          $adm_photo[2] <br>";
 			$dt_date_von = mysqldate("d.m.y", $adm_photo[3]);
-			echo"(Beginn: $dt_date_von) 
+			echo"(Beginn: $dt_date_von)
 			<hr width=\"85%\" />
          <p>Bild 1:<input type='file' name='bilddatei[]' value='durchsuchen'></p>
          <p>Bild 2:<input type='file' name='bilddatei[]' value='durchsuchen'></p>
@@ -153,7 +153,7 @@ if($_POST["upload"]){
    	   <button name=\"upload\" type=\"submit\" value=\"speichern\">
       	   <img src=\"$g_root_path/adm_program/images/save.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">Bilder Speichern
 			</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	      <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/moduls/photos/photos.php'\">
+	      <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php'\">
    		   <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">Zur&uuml;ck
 			</button>
          	</div></div>

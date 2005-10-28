@@ -41,7 +41,7 @@ $err_text      = "";
 
 if(!isset($_POST['login']))
    $_POST['login'] = "";
-   
+
 /*------------------------------------------------------------*/
 // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
 /*------------------------------------------------------------*/
@@ -137,7 +137,7 @@ if(strlen($_POST['name']) > 0)
                $err_code = "login_name";
          }
       }
-      
+
       if(strlen($_POST['geburtstag']) > 0)
       {
          if(!dtCheckDate($_POST['geburtstag']))
@@ -146,7 +146,7 @@ if(strlen($_POST['name']) > 0)
             $err_text = "Geburtstag";
          }
       }
-      
+
       // Feldinhalt der gruppierungsspezifischen Felder pruefen
       $sql = "SELECT auf_name, auf_type
                 FROM adm_user_field
@@ -194,7 +194,7 @@ $act_date      = date("Y-m-d H:i:s", time());
 
 if(strlen($_POST['geburtstag']) > 0)
    $db_geburtstag = dtFormatDate($_POST['geburtstag'], "Y-m-d");
-   
+
 if($_GET['user_id'] != 0 && $_GET['new_user'] == 0)
 {
    /*------------------------------------------------------------*/
@@ -219,7 +219,7 @@ if($_GET['user_id'] != 0 && $_GET['new_user'] == 0)
       $sql = $sql. " NULL, au_password = NULL ";
    else
       $sql = $sql. " {12} ";
-      
+
    $sql = $sql. "             , au_last_change    = '$act_date'
                               , au_last_change_id = $g_user_id
             WHERE au_id = {13}";
@@ -249,7 +249,7 @@ else
    // neue User-Id auslesen
    $row_id = mysql_insert_id($g_adm_con);
 }
-   
+
 /*------------------------------------------------------------*/
 // Messenger-Daten und gruppierungsspezifische Felder anlegen / updaten
 /*------------------------------------------------------------*/
@@ -343,7 +343,7 @@ if($_GET['new_user'] == 1 && $_GET['user_id'] > 0)
          mysql_select_db($g_adm_db, $g_adm_con);
       }
    }
-   
+
    // Login und Passwort eintragen
    $sql = "UPDATE adm_user SET au_login    = {0}
                              , au_password = {1}
@@ -357,7 +357,7 @@ if($_GET['new_user'] == 1 && $_GET['user_id'] > 0)
    $sql    = prepareSQL($sql, array($_GET['user_id']));
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
-   
+
    // nur im Internet ausfuehren
    if($g_internet == 1)
    {
@@ -381,7 +381,7 @@ if($_GET['new_user'] == 1)
 }
 
 // zur Profilseite zurueckkehren und die URL, von der die Profilseite aufgerufen wurde uebergeben
-$load_url = urlencode("$g_root_path/adm_program/moduls/profile/profile.php?user_id=". $_GET['user_id']. "&url=". $_GET['url']);
+$load_url = urlencode("$g_root_path/adm_program/modules/profile/profile.php?user_id=". $_GET['user_id']. "&url=". $_GET['url']);
 $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=save&timer=2000&url=$load_url";
 header($location);
 exit();

@@ -32,17 +32,17 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
- 
+
    require("../../../adm_config/config.php");
    require("../../system/function.php");
    require("../../system/date.php");
    require("../../system/tbl_user.php");
    require("../../system/session_check.php");
-   
+
    $default_folder = strtolower($_GET['default_folder']);
    $folder     = strtolower($_GET['folder']);
    $act_folder = "../../../adm_my_files/download";
-   
+
    // uebergebene Ordner auf Gueltigkeit pruefen
    // und Ordnerpfad zusammensetzen
    if(strlen($default_folder) > 0)
@@ -68,7 +68,7 @@
    }
 
    $info= $_GET['info'];
-      
+
    //Auslesen des Ordners und schreiben in array
    if(!is_dir($act_folder))
    {
@@ -76,14 +76,14 @@
       header($location);
       exit();
    }
-   
+
    $ordnerinhalt = dir($act_folder);
    while ($inhalt = $ordnerinhalt->read()) {
        if ($inhalt != "." AND $inhalt != ".."){
            $ordnerarray[] = $inhalt;
         }
     }
-      
+
    echo "
    <!-- (c) 2004 - 2005 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
    <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
@@ -98,40 +98,40 @@
 
       require("../../../adm_config/header.php");
    echo "</head>";
-   
+
    require("../../../adm_config/body_top.php");
    echo"<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
    <h1>Downloadbereich</h1>
    <p>";
-   
+
    //Button zurück zur Downloadübersicht & Eins zurück
    if(strlen($folder) > 0)
    {
       $pfad = strrev(substr(strchr(strrev($folder),"/"),1));
-      echo "<button name=\"uebersicht\" type=\"button\" value=\"uebersicht\" style=\"width: 165px;\" onclick=\"self.location.href='$g_root_path/adm_program/moduls/download/download.php?folder=$pfad&amp;default_folder=$default_folder'\">
+      echo "<button name=\"uebersicht\" type=\"button\" value=\"uebersicht\" style=\"width: 165px;\" onclick=\"self.location.href='$g_root_path/adm_program/modules/download/download.php?folder=$pfad&amp;default_folder=$default_folder'\">
                <img src=\"$g_root_path/adm_program/images/folder.png\" style=\"vertical-align: bottom;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Download&uuml;bersicht\">
                Ordner schlie&szlig;en
             </button>
       ";
    };
-   
+
    //Button Upload und Neuer Ordner
    if ($g_session_valid && editDownload())
    {
-      echo "<button name=\"down\" type=\"button\" value=\"down\" style=\"width: 150px;\" onclick=\"self.location.href='$g_root_path/adm_program/moduls/download/folder_new.php?folder=$folder&amp;default_folder=$default_folder'\">
+      echo "<button name=\"down\" type=\"button\" value=\"down\" style=\"width: 150px;\" onclick=\"self.location.href='$g_root_path/adm_program/modules/download/folder_new.php?folder=$folder&amp;default_folder=$default_folder'\">
       <img src=\"$g_root_path/adm_program/images/folder_create.png\" style=\"vertical-align: bottom;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Ordner erstellen\">
       Ordner anlegen
       </button>
-      <button name=\"down\" type=\"button\" value=\"down\" style=\"width: 150px;\" onclick=\"self.location.href='$g_root_path/adm_program/moduls/download/upload.php?folder=$folder&amp;default_folder=$default_folder'\">
+      <button name=\"down\" type=\"button\" value=\"down\" style=\"width: 150px;\" onclick=\"self.location.href='$g_root_path/adm_program/modules/download/upload.php?folder=$folder&amp;default_folder=$default_folder'\">
       <img src=\"$g_root_path/adm_program/images/upload.png\" style=\"vertical-align: bottom;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hochladen\">
       Datei hochladen
       </button>";
    };
    echo "</p>";
-   
+
    // Ausgabe von Verwaltungsinfos
    echo "$info";
-   
+
    //Anlegen der Tabelle
    echo" <table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\">
             <tr>
@@ -152,8 +152,8 @@
                if ($g_session_valid && editDownload())
                   echo "<th class=\"tableHeader\" align=\"center\">Editieren</th>";
             echo "</tr>";
-            
-        
+
+
    //falls der Ordner leer ist
    if($ordnerarray==0){
       echo"
@@ -163,10 +163,10 @@
                <td></td>";
                if ($g_session_valid && editDownload()) echo "<td></td>";
       echo "</tr>";
-   }   
-   
-   
-   //durchlafen des Ordnerarrays und Ordnerlinkausgabe in Tabellenzeilen, ruft erneut die download.txt auf nur mit neuem Ordner   
+   }
+
+
+   //durchlafen des Ordnerarrays und Ordnerlinkausgabe in Tabellenzeilen, ruft erneut die download.txt auf nur mit neuem Ordner
    for($i=0; $i<count($ordnerarray); $i++)
    {
          if(filetype("$act_folder/$ordnerarray[$i]")=="dir")
@@ -175,21 +175,21 @@
                $next_folder = "$folder/$ordnerarray[$i]";
             else
                $next_folder = $ordnerarray[$i];
-               
-            echo "   
+
+            echo "
                <tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\">
-                  <td style=\"text-align: center;\"><a href=\"$g_root_path/adm_program/moduls/download/download.php?folder=$next_folder&amp;default_folder=". urlencode($default_folder). "\">
+                  <td style=\"text-align: center;\"><a href=\"$g_root_path/adm_program/modules/download/download.php?folder=$next_folder&amp;default_folder=". urlencode($default_folder). "\">
                      <img src=\"$g_root_path/adm_program/images/folder.png\" border=\"0\" alt=\"Ordner\" title=\"Ordner\"></a></td>
-                  <td style=\"text-align: left;\"><a href=\"$g_root_path/adm_program/moduls/download/download.php?folder=$next_folder&amp;default_folder=". urlencode($default_folder). "\">$ordnerarray[$i]</a></td>
+                  <td style=\"text-align: left;\"><a href=\"$g_root_path/adm_program/modules/download/download.php?folder=$next_folder&amp;default_folder=". urlencode($default_folder). "\">$ordnerarray[$i]</a></td>
                   <td>&nbsp;</td>
                   <td>&nbsp;</td>";
             if ($g_session_valid && editDownload())
             {
                echo "
                <td style=\"text-align: center;\">&nbsp;
-                  <a href=\"$g_root_path/adm_program/moduls/download/rename.php?folder=". urlencode($folder). "&amp;file=$ordnerarray[$i]&amp;default_folder=". urlencode($default_folder). "\">
+                  <a href=\"$g_root_path/adm_program/modules/download/rename.php?folder=". urlencode($folder). "&amp;file=$ordnerarray[$i]&amp;default_folder=". urlencode($default_folder). "\">
                      <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Umbenennen\"></a>&nbsp;&nbsp;&nbsp;";
-                  $load_url = urlencode("$g_root_path/adm_program/moduls/download/download_function.php?mode=2&amp;folder=$folder&amp;file=$ordnerarray[$i]&amp;default_folder=$default_folder");
+                  $load_url = urlencode("$g_root_path/adm_program/modules/download/download_function.php?mode=2&amp;folder=$folder&amp;file=$ordnerarray[$i]&amp;default_folder=$default_folder");
                   echo "<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_file_folder&amp;err_text=$ordnerarray[$i]&amp;err_head=". urlencode("L&ouml;schen"). "&amp;button=2&amp;url=$load_url\">
                      <img src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>
                </td>";
@@ -207,7 +207,7 @@
             //Ermittlung der dateiendung
             $datei = explode(".","$ordnerarray[$i]");
             $dateiendung = strtolower($datei[1]);
-            
+
             //Auszugebendes Icon
             if($dateiendung=="gif"
             || $dateiendung=="cdr"
@@ -229,28 +229,28 @@
                $dateiendung = "pdf";
             else
                $dateiendung = "file";
-               
+
             //Link und Dateiinfo Ausgabe
             echo "<tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\">
                      <td style=\"text-align: center;\"><a href=\"$act_folder/$ordnerarray[$i]\"><img src=\"$g_root_path/adm_program/images/$dateiendung.gif\" border=\"0\" alt=\"Datei\" title=\"Datei\"></a></td>
                      <td style=\"text-align: left;\"><a href=\"$act_folder/$ordnerarray[$i]\">$ordnerarray[$i]</a></td>
                      <td style=\"text-align: center;\">$dateidatum</td>
                      <td style=\"text-align: right;\">$dateigroesse kB&nbsp;</td>";
-            
+
             //Moderation
             if ($g_session_valid && editDownload())
             {
                echo "
                <td align=\"center\">&nbsp;
-                  <a href=\"$g_root_path/adm_program/moduls/download/rename.php?folder=". urlencode($folder). "&amp;file=$ordnerarray[$i]&amp;default_folder=". urlencode($default_folder). "\">
+                  <a href=\"$g_root_path/adm_program/modules/download/rename.php?folder=". urlencode($folder). "&amp;file=$ordnerarray[$i]&amp;default_folder=". urlencode($default_folder). "\">
                      <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Umbenennen\"></a>&nbsp;&nbsp;&nbsp;";
-                  $load_url = urlencode("$g_root_path/adm_program/moduls/download/download_function.php?mode=2&amp;folder=$folder&amp;file=$ordnerarray[$i]&amp;default_folder=$default_folder");
+                  $load_url = urlencode("$g_root_path/adm_program/modules/download/download_function.php?mode=2&amp;folder=$folder&amp;file=$ordnerarray[$i]&amp;default_folder=$default_folder");
                   echo "<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_file_folder&amp;err_text=$ordnerarray[$i]&amp;err_head=". urlencode("L&ouml;schen"). "&amp;button=2&amp;url=$load_url\">
                      <img src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>
                </td>";
             }
             echo "</tr>";
-         };   
+         };
    };
    //Ende der Tabelle
    echo"</table>

@@ -65,7 +65,7 @@ else
       $sql    = prepareSQL($sql, array($_GET['user_id']));
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
-      
+
       if(mysql_num_rows($result) > 0)
          $edit_user = true;
       else
@@ -89,11 +89,11 @@ echo "
 <head>
    <title>$g_title - Profil</title>
    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
-   
+
    <!--[if gte IE 5.5000]>
    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
    <![endif]-->";
-   
+
    require("../../../adm_config/header.php");
 echo "</head>";
 
@@ -112,7 +112,7 @@ require("../../../adm_config/body_top.php");
          <div style=\"width: 63%; margin-right: 3%; float: left;\">
             <div class=\"groupBox\" style=\"margin-top: 4px; text-align: left;\">
                <div class=\"groupBoxHeadline\">$user->m_vorname $user->m_name</div>
-               
+
                <div style=\"float: left; width: 28%; text-align: left\">Adresse:";
                   if(strlen($user->m_plz) > 0 || strlen($user->m_ort) > 0)
                      echo "<br />&nbsp;";
@@ -188,7 +188,7 @@ require("../../../adm_config/body_top.php");
                   echo "<div style=\"float: left; width: 28%; text-align: left\">2. Telefon:</div>
                   <div style=\"margin-left: 30%; text-align: left\">$user->m_tel2</div>";
                }
-                  
+
                echo "<div style=\"float: left; width: 28%; text-align: left\">Handy:</div>
                <div style=\"margin-left: 30%; text-align: left\">$user->m_mobil&nbsp;</div>";
 
@@ -197,7 +197,7 @@ require("../../../adm_config/body_top.php");
                   echo "<div style=\"float: left; width: 28%; text-align: left\">Fax:</div>
                   <div style=\"margin-left: 30%; text-align: left\">$user->m_fax</div>";
                }
-               
+
                // Block Geburtstag und Benutzer
 
                echo "<div style=\"float: left; margin-top: 10px; width: 28%; text-align: left\">Geburtstag:</div>
@@ -209,7 +209,7 @@ require("../../../adm_config/body_top.php");
                      $act_date = getDate(time());
                      $geb_date = getDate(mysqlmaketimestamp($user->m_geburtstag));
                      $birthday = false;
-                     
+
                      if($act_date['mon'] >= $geb_date['mon'])
                      {
                         if($act_date['mon'] == $geb_date['mon'])
@@ -230,17 +230,17 @@ require("../../../adm_config/body_top.php");
                echo "</div>
                <div style=\"float: left; width: 28%; text-align: left\">Benutzer:</div>
                <div style=\"margin-left: 30%; text-align: left\">$user->m_login&nbsp;</div>";
-               
+
                // Block E-Mail und Homepage
-               
+
                echo "<div style=\"float: left; margin-top: 10px; width: 28%; text-align: left\">E-Mail:</div>
                <div style=\"margin-top: 10px; margin-left: 30%; text-align: left\">";
                   if(strlen($user->m_mail) > 0)
                   {
-                     echo "<a href=\"$g_root_path/adm_program/moduls/mail/mail.php?au_id=$user->m_id\">
+                     echo "<a href=\"$g_root_path/adm_program/modules/mail/mail.php?au_id=$user->m_id\">
                         <img src=\"$g_root_path/adm_program/images/mail.png\" style=\"vertical-align: middle;\" alt=\"E-Mail an $user->m_mail schreiben\"
                         title=\"E-Mail an $user->m_mail schreiben\" border=\"0\"></a>
-                     <a href=\"$g_root_path/adm_program/moduls/mail/mail.php?au_id=$user->m_id\" style=\" overflow: visible; display: inline;\">$user->m_mail</a>";
+                     <a href=\"$g_root_path/adm_program/modules/mail/mail.php?au_id=$user->m_id\" style=\" overflow: visible; display: inline;\">$user->m_mail</a>";
                   }
                   else
                      echo "&nbsp;";
@@ -262,7 +262,7 @@ require("../../../adm_config/body_top.php");
                echo "</div>
             </div>
          </div>
-         
+
          <div style=\"width: 34%; float: left\">";
             // alle zugeordneten Messengerdaten einlesen
             $sql = "SELECT auf_name, auf_description, aud_value
@@ -313,7 +313,7 @@ require("../../../adm_config/body_top.php");
                // Messenger anzeigen
                mysql_data_seek($result_msg, 0);
                $i=0;
-               
+
                echo "<div class=\"groupBox\" style=\"margin-top: 4px; text-align: left;\">
                <div class=\"groupBoxHeadline\">Messenger</div>";
 
@@ -347,7 +347,7 @@ require("../../../adm_config/body_top.php");
 
                $count_grp = mysql_num_rows($result);
                $i = 0;
-               
+
                if($count_msg > 0) echo "<br />";
 
                echo "<div class=\"groupBox\" style=\"margin-top: 4px; text-align: left;\">
@@ -407,7 +407,7 @@ require("../../../adm_config/body_top.php");
                         echo "<div style=\"float: left; width: 20%; position: relative; text-align: left\">$row_field->auf_name:</div>
                         <div style=\"text-align: left; position: relative;\">";
                   }
-                  
+
                   // Feldinhalt ausgeben
                   if($row_field->auf_type == 'CHECKBOX')
                   {
@@ -420,9 +420,9 @@ require("../../../adm_config/body_top.php");
                   {
                      echo "$row_field->aud_value&nbsp;";
                   }
-                  
+
                   echo "</div>";
-                  
+
                   if(($zweite_spalte == 1 && $i == $count_field)
                   || $zweite_spalte == 0)
                      echo "</div>";
@@ -432,12 +432,12 @@ require("../../../adm_config/body_top.php");
          }
 
          echo "<div style=\"clear: left;\"><br /></div>
-         
+
          <div style=\"margin-top: 6px;\">";
             if($edit_user)
             {
                echo "<button style=\"width: 150px;\" type=\"button\" name=\"bearbeiten\" value=\"bearbeiten\"
-                  onclick=\"self.location.href='$g_root_path/adm_program/moduls/profile/profile_edit.php?user_id=$a_user_id&amp;url=$url'\">
+                  onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=$a_user_id&amp;url=$url'\">
                   <img src=\"$g_root_path/adm_program/images/edit.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Profil bearbeiten\">
                   &nbsp;Profil bearbeiten</button>";
             }
