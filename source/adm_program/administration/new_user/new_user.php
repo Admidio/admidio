@@ -90,7 +90,7 @@ require("../../../adm_config/body_top.php");
                   <td style=\"text-align: center;\">
                      <a href=\"new_user_function.php?mode=3&amp;anu_id=$row->anu_id\">
                         <img src=\"$g_root_path/adm_program/images/properties.png\" border=\"0\" alt=\"Anmeldung zuordnen\" title=\"Anmeldung zuordnen\"></a>&nbsp;&nbsp;
-                     <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_new_user&amp;err_text=$row->anu_vorname $row->anu_name&amp;err_head=L&ouml;schen&amp;button=2&amp;url=". urlencode("$g_root_path/adm_program/new_user_function.php?anu_id=$row->anu_id&amp;mode=4"). "\">
+                     <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_new_user&amp;err_text=$row->anu_vorname $row->anu_name&amp;err_head=L&ouml;schen&amp;button=2&amp;url=". urlencode("$g_root_path/adm_program/administration/new_user/new_user_function.php?anu_id=$row->anu_id&amp;mode=4"). "\">
                         <img src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"Anmeldung l&ouml;schen\" title=\"Anmeldung l&ouml;schen\"></a>
                   </td>
                </tr>";

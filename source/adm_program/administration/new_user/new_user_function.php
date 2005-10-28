@@ -182,7 +182,7 @@ elseif($_GET["mode"] == 4)
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
 
-   $location = "location: $g_root_path/adm_program/new_user_list.php";
+   $location = "location: $g_root_path/adm_program/administration/new_user/new_user.php";
    header($location);
 }
 
