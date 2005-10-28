@@ -185,9 +185,9 @@ echo "
    while($row = mysql_fetch_object($result_all))
    {
       echo "<tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\">
-               <td style=\"text-align: left;\">&nbsp;<a href=\"$g_root_path/adm_program/moduls/profile/profile.php?user_id=$row->au_id\">$row->au_name,&nbsp;$row->au_vorname</a></td>
+               <td style=\"text-align: left;\">&nbsp;<a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->au_id\">$row->au_name,&nbsp;$row->au_vorname</a></td>
                <td style=\"text-align: left;\">&nbsp;$row->au_login</td>
-               <td style=\"text-align: left;\">&nbsp;<a href=\"../adm_program/moduls/mail/mail.php?au_id=$row->au_id\">$row->au_mail</a></td>
+               <td style=\"text-align: left;\">&nbsp;<a href=\"../adm_program/modules/mail/mail.php?au_id=$row->au_id\">$row->au_mail</a></td>
                <td style=\"text-align: left;\">&nbsp;";
       if(strlen($row->au_login) > 0)
          echo "Angemeldet";
@@ -201,7 +201,7 @@ echo "
 
 <p>Falls der Benutzer noch nicht existiert:</p>
 <p><button name=\"neu\" type=\"button\" value=\"neu\"
-   onclick=\"self.location.href='$g_root_path/adm_program/moduls/profile/profile_edit.php?user_id=". $_GET['anu_id']. "&amp;new_user=1&amp;url=". urlencode("$g_root_path/adm_program/new_user_list.php"). "'\">
+   onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=". $_GET['anu_id']. "&amp;new_user=1&amp;url=". urlencode("$g_root_path/adm_program/new_user_list.php"). "'\">
 <img src=\"$g_root_path/adm_program/images/person_new.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Neuer Benutzer\">
 &nbsp;Neuer Benutzer</button></p>
 
