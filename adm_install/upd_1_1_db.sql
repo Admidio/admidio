@@ -24,7 +24,7 @@ CREATE TABLE `adm_user_field` (
 INSERT INTO adm_user_field (auf_ag_shortname, auf_type, auf_name, auf_description) VALUES (NULL, 'MESSENGER', 'AIM', 'AOL Instant Messenger');
 INSERT INTO adm_user_field (auf_ag_shortname, auf_type, auf_name, auf_description) VALUES (NULL, 'MESSENGER', 'ICQ', 'ICQ');
 INSERT INTO adm_user_field (auf_ag_shortname, auf_type, auf_name, auf_description) VALUES (NULL, 'MESSENGER', 'MSN', 'MSN Messenger');
-INSERT INTO adm_user_field (auf_ag_shortname, auf_type, auf_name, auf_description) VALUES (NULL, 'MESSENGER', 'Yahoo!', 'Yahoo! Messenger');
+INSERT INTO adm_user_field (auf_ag_shortname, auf_type, auf_name, auf_description) VALUES (NULL, 'MESSENGER', 'Yahoo', 'Yahoo! Messenger');
 INSERT INTO adm_user_field (auf_ag_shortname, auf_type, auf_name, auf_description) VALUES (NULL, 'MESSENGER', 'Skype', 'Skype');
 INSERT INTO adm_user_field (auf_ag_shortname, auf_type, auf_name, auf_description) VALUES (NULL, 'MESSENGER', 'Google Talk', 'Google Talk');
 ALTER TABLE `adm_mitglieder` ADD UNIQUE `am_ar_au_id` ( `am_ar_id` , `am_au_id` );
