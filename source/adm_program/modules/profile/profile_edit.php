@@ -346,8 +346,6 @@ require("../../../adm_config/body_top.php");
             }
          }
 
-         echo "<hr width=\"80%\" />";
-
          // gruppierungsspezifische Felder einlesen
          if($a_new_user)
          {
@@ -369,6 +367,9 @@ require("../../../adm_config/body_top.php");
          }
          $result_field = mysql_query($sql, $g_adm_con);
          db_error($result_field, true);
+         
+         if(mysql_num_rows($result_field) > 0)
+            echo "<hr width=\"80%\" />";
 
          while($row = mysql_fetch_object($result_field))
          {
