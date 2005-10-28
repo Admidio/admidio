@@ -30,12 +30,12 @@
    require("../../system/tbl_user.php");
    require("../../system/session_check.php");
 //erfassen der Veranstaltungen die zur Gruppierung gehören
-	$sql = "	SELECT *
-				FROM adm_photo
-				WHERE (ap_ag_shortname ='$g_organization')
-				ORDER BY ap_begin DESC ";
-	$result = mysql_query($sql, $g_adm_con);
-	db_error($result);
+   $sql = "   SELECT *
+            FROM adm_photo
+            WHERE (ap_ag_shortname ='$g_organization')
+            ORDER BY ap_begin DESC ";
+   $result = mysql_query($sql, $g_adm_con);
+   db_error($result);
 
    //beginn HTML
    echo "
@@ -71,8 +71,8 @@
    echo "
    <table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\">
       <tr>
-         <th class=\"tableHeader\" style=\"text-align: center;\">&nbsp;Veranstaltung</th>
-         <th class=\"tableHeader\" style=\"text-align: center;\">Datum</th>
+         <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;Veranstaltung</th>
+         <th class=\"tableHeader\" style=\"text-align: left;\">Datum</th>
          <th class=\"tableHeader\" style=\"text-align: center;\">Bilder</th>
          <th class=\"tableHeader\" style=\"text-align: center;\">Letze &Auml;nderung</th>";
          if ($g_session_valid & editPhoto()){
@@ -86,13 +86,13 @@
    for($x=0; $adm_photo = mysql_fetch_array($result); $x++){
       If($adm_photo[8]==$g_organization){//Ausgabe nur bei entsprechender Gruppierung
          $bildersumme=$bildersumme+$adm_photo[1];//erhöhen der Bildersumme
-			$ordner="$adm_photo[3]"."_"."$adm_photo[0]";
+         $ordner="$adm_photo[3]"."_"."$adm_photo[0]";
          echo "
          <tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\">
-            <td>&nbsp;<a target=\"_self\" href=\"thumbnails.php?ap_id=$adm_photo[0]\">$adm_photo[2]</a></td>
-            <td>"; $dt_date = mysqldate("d.m.y", $adm_photo[3]);echo"<div align=\"center\">$dt_date </div></td>";//Anzeige beginn datum im deutschen Format
-       echo"<td><div align=\"center\">$adm_photo[1]</div></td>
-            <td>";$dt_date = mysqldate("d.m.y", $adm_photo[7]);echo"<div align=\"center\">$dt_date </div></td>";//Anzeige online seitdatum im deutschen Format
+            <td style=\"text-align: left;\">&nbsp;<a target=\"_self\" href=\"thumbnails.php?ap_id=$adm_photo[0]\">$adm_photo[2]</a></td>
+            <td style=\"text-align: center;\">"; $dt_date = mysqldate("d.m.y", $adm_photo[3]);echo"$dt_date </td>";//Anzeige beginn datum im deutschen Format
+       echo"<td style=\"text-align: center;\">$adm_photo[1]</td>
+            <td style=\"text-align: center;\">";$dt_date = mysqldate("d.m.y", $adm_photo[7]);echo"$dt_date </td>";//Anzeige online seitdatum im deutschen Format
             if ($g_session_valid & editPhoto()){
                echo"<td style=\"text-align: center;\">
                   <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?ap_id=$adm_photo[0]\">
@@ -109,6 +109,11 @@
          ";
       };//If
    };//for
+   // wenn keine Bilder vorhanden sind, dann eine Meldung ausgeben
+   if($x==0)
+   {
+      echo "<tr><td>&nbsp;Es sind keine Bilder vorhanden.</td></tr>";
+   }
 //tabbelen Ende mit Ausgabe der Gesammtbilderzahl
    echo"
       <tr>
