@@ -211,7 +211,7 @@ if($_POST['struktur'] == 1)
    if(!$result) showError(mysql_error());
    
    $sql = "INSERT INTO adm_user_field (auf_ag_shortname, auf_type, auf_name, auf_description)
-                VALUES (NULL, 'MESSENGER', 'Yahoo!', 'Yahoo! Messenger') ";
+                VALUES (NULL, 'MESSENGER', 'Yahoo', 'Yahoo! Messenger') ";
    $result = mysql_query($sql, $connection);
    if(!$result) showError(mysql_error());
 
