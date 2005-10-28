@@ -331,7 +331,7 @@ require("../../../adm_config/body_top.php");
                       echo "msn.png";
                   elseif($row->auf_name == 'Skype')
                       echo "skype.png";
-                  elseif($row->auf_name == 'Yahoo!')
+                  elseif($row->auf_name == 'Yahoo')
                       echo "yahoo.png";
                   echo "\" style=\"vertical-align: middle;\" alt=\"$row->auf_description\" title=\"$row->auf_description\" />&nbsp;&nbsp;$row->aud_value";
                   $i++;
