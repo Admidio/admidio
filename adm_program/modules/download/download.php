@@ -39,8 +39,8 @@
    require("../../system/tbl_user.php");
    require("../../system/session_check.php");
 
-   $default_folder = strtolower($_GET['default_folder']);
-   $folder     = strtolower($_GET['folder']);
+   $default_folder = $_GET['default_folder'];
+   $folder     = $_GET['folder'];
    $act_folder = "../../../adm_my_files/download";
 
    // uebergebene Ordner auf Gueltigkeit pruefen
@@ -142,10 +142,10 @@
                      if(strlen($default_folder) == 0)
                         echo "Download";
                      else
-                        echo ucfirst($default_folder);
+                        echo $default_folder;
                   }
                   else
-                     echo ucfirst($folder);
+                     echo $folder;
                echo "</th>
                <th class=\"tableHeader\" style=\"text-align: center;\">Erstellungsdatum</th>
                <th class=\"tableHeader\" style=\"text-align: right;\">Gr&ouml;&szlig;e&nbsp;</th>";

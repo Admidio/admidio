@@ -180,7 +180,7 @@ elseif($_GET["mode"] == 2)
 elseif($_GET["mode"] == 3)
 {
    // Ordner erstellen
-   $new_folder = strtolower($_POST['new_folder']);
+   $new_folder = $_POST['new_folder'];
 
    if(strpos($new_folder, "..") !== false)
       $err_code = "invalid_folder";

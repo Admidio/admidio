@@ -42,9 +42,9 @@
    }
    
 
-   $default_folder = strtolower($_GET['default_folder']);
-   $folder     = strtolower($_GET['folder']);
-   $file       = strtolower($_GET['file']);
+   $default_folder = $_GET['default_folder'];
+   $folder     = $_GET['folder'];
+   $file       = $_GET['file'];
    $act_folder = "../../../adm_my_files/download";
 
    // uebergebene Ordner auf Gueltigkeit pruefen
