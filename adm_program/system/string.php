@@ -31,25 +31,29 @@
 
 function strspace($srcString, $count = 1)
 {
-   // Html-Entitaeten durch Sonderzeichen ersetzen
-   $srcString = html_entity_decode($srcString);
+   $html_special = false;
+   $dest_string  = "";
    for($i = 0; $i < strlen($srcString); $i++)
-      $strArray[$i] = substr($srcString, $i, 1);
-         
-   switch ($count)
-   {   
-      case 1:
-         return implode("&nbsp;", $strArray);
-         break;
-         
-      case 2:
-         return implode("&nbsp;&nbsp;", $strArray);
-         break;
-         
-      default:
-         return implode("", $strArray);
-         break;
+   {
+      $dest_string = $dest_string. substr($srcString, $i, 1);
+      if($html_special == true)
+      {
+         if(substr($srcString, $i, 1) == ";")
+            $html_special = false;
+      }
+      
+      if($html_special == false)
+      {
+         if(substr($srcString, $i, 1) == "&")
+            $html_special = true;
+         else
+         {
+            for($j = 0; $j < $count; $j++)
+               $dest_string = $dest_string. "&nbsp;";
+         }
+      }
    }
+   return $dest_string;
 }
 
 
