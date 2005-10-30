@@ -214,7 +214,7 @@ require("../../../adm_config/body_top.php");
                      {
                         if($act_date['mon'] == $geb_date['mon'])
                         {
-                           if($act_date['mday'] <= $geb_date['mday'])
+                           if($act_date['mday'] >= $geb_date['mday'])
                               $birthday = true;
                         }
                         else
