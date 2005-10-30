@@ -333,7 +333,11 @@ require("../../../adm_config/body_top.php");
                       echo "skype.png";
                   elseif($row->auf_name == 'Yahoo')
                       echo "yahoo.png";
-                  echo "\" style=\"vertical-align: middle;\" alt=\"$row->auf_description\" title=\"$row->auf_description\" />&nbsp;&nbsp;$row->aud_value";
+                  echo "\" style=\"vertical-align: middle;\" alt=\"$row->auf_description\" title=\"$row->auf_description\" />";
+                  if(strlen($row->aud_value) > 20)
+                     echo "<span style=\"font-size: 8pt;\">&nbsp;&nbsp;$row->aud_value</span>";
+                  else
+                     echo "&nbsp;&nbsp;$row->aud_value";
                   $i++;
                }
                echo "</div>";
