@@ -43,6 +43,7 @@ if($g_session_valid & editPhoto()){
 
 //Übernahme Variablen
    $ap_id= $_GET['ap_id'];
+	$aufgabe=$_GET['aufgabe'];
 //Aktueller Timestamp
    $act_datetime= date("Y.m.d G:i:s", time());
 //erfassen der Veranstaltung bei Änderungsaufruf
