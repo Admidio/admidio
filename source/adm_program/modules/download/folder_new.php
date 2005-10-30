@@ -41,8 +41,8 @@
       exit();
    }
    
-   $default_folder = strtolower($_GET['default_folder']);
-   $folder = strtolower($_GET['folder']);
+   $default_folder = $_GET['default_folder'];
+   $folder = $_GET['folder'];
 
    // uebergebene Ordner auf Gueltigkeit pruefen
    // und Ordnerpfad zusammensetzen
