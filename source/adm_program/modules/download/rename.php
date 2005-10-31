@@ -42,8 +42,8 @@
    }
    
 
-   $default_folder = $_GET['default_folder'];
-   $folder     = $_GET['folder'];
+   $default_folder = urldecode($_GET['default_folder']);
+   $folder     = urldecode($_GET['folder']);
    $file       = $_GET['file'];
    $act_folder = "../../../adm_my_files/download";
 
@@ -101,7 +101,7 @@
    
    $datei = explode(".","$file");
    echo "<p>&nbsp;</p>
-      <form method=\"POST\" action=\"download_function.php?mode=4&amp;folder=$folder&amp;default_folder=$default_folder&amp;file=$file\">
+      <form method=\"POST\" action=\"download_function.php?mode=4&amp;folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "&amp;file=". urlencode($file). "\">
          <div class=\"formHead\" style=\"width: 400px\">Datei/Ordner umbenennen</div>
          <div class=\"formBody\" style=\"width: 400px\">
             <div>
