@@ -187,10 +187,10 @@
             {
                echo "
                <td style=\"text-align: center;\">&nbsp;
-                  <a href=\"$g_root_path/adm_program/modules/download/rename.php?folder=". urlencode($folder). "&amp;file=$ordnerarray[$i]&amp;default_folder=". urlencode($default_folder). "\">
+                  <a href=\"$g_root_path/adm_program/modules/download/rename.php?folder=". urlencode($folder). "&amp;file=". urlencode($ordnerarray[$i]). "&amp;default_folder=". urlencode($default_folder). "\">
                      <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Umbenennen\"></a>&nbsp;&nbsp;&nbsp;";
                   $load_url = urlencode("$g_root_path/adm_program/modules/download/download_function.php?mode=2&amp;folder=$folder&amp;file=$ordnerarray[$i]&amp;default_folder=$default_folder");
-                  echo "<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_file_folder&amp;err_text=$ordnerarray[$i]&amp;err_head=". urlencode("L&ouml;schen"). "&amp;button=2&amp;url=$load_url\">
+                  echo "<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_file_folder&amp;err_text=". urlencode($ordnerarray[$i]). "&amp;err_head=". urlencode("L&ouml;schen"). "&amp;button=2&amp;url=$load_url\">
                      <img src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>
                </td>";
             }
@@ -242,10 +242,10 @@
             {
                echo "
                <td align=\"center\">&nbsp;
-                  <a href=\"$g_root_path/adm_program/modules/download/rename.php?folder=". urlencode($folder). "&amp;file=$ordnerarray[$i]&amp;default_folder=". urlencode($default_folder). "\">
+                  <a href=\"$g_root_path/adm_program/modules/download/rename.php?folder=". urlencode($folder). "&amp;file=". urlencode($ordnerarray[$i]). "&amp;default_folder=". urlencode($default_folder). "\">
                      <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Umbenennen\"></a>&nbsp;&nbsp;&nbsp;";
                   $load_url = urlencode("$g_root_path/adm_program/modules/download/download_function.php?mode=2&amp;folder=$folder&amp;file=$ordnerarray[$i]&amp;default_folder=$default_folder");
-                  echo "<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_file_folder&amp;err_text=$ordnerarray[$i]&amp;err_head=". urlencode("L&ouml;schen"). "&amp;button=2&amp;url=$load_url\">
+                  echo "<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_file_folder&amp;err_text=". urlencode($ordnerarray[$i]). "&amp;err_head=". urlencode("L&ouml;schen"). "&amp;button=2&amp;url=$load_url\">
                      <img src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>
                </td>";
             }
