@@ -69,18 +69,33 @@ if(!isset($_GET["button"]))
 if(!isset($_GET['timer']))
    $_GET['timer']    = 0;
 if(!isset($_GET['url']))
-   $_GET['url']      = "";
+   $load_url = "";
 else
 {
    if($_GET['url'] == "home")
-      $_GET['url'] = "$g_root_path/$g_main_page";
+      $load_url = "$g_root_path/$g_main_page";
    else
-      $_GET['url'] = urldecode($_GET['url']);
+   {
+      // die uebergebene Url wird in ihre Bestandteile zerlegt und danach wieder zusammengebaut,
+      // wobei die PHP-Variablen alle mit urlencode kodiert werden, damit Umlaute korrekt übergeben werden
+      $url_arr = parse_url($_GET['url']);
+      parse_str($url_arr['query'], $var_arr);
+      // Url wieder zusammenbauen
+      $load_url = $url_arr['scheme']. "://". $url_arr['host']. $url_arr['path']. "?";
+      reset($var_arr);
+      // PHP-Variablen wieder hinzufuegen
+      for($i = 0; $i < count($var_arr); $i++)
+      {
+         if($i > 0) $load_url = $load_url. "&";
+         $load_url = $load_url. key($var_arr). "=". urlencode(current($var_arr));
+         next($var_arr);
+      }
+   }
 }
 
 if(!isset($_GET['err_head']))
 {
-   if(strlen($_GET['url']) > 0)
+   if(strlen($load_url) > 0)
       $_GET['err_head'] = "Hinweis";
    else
       $_GET['err_head'] = "Fehlermeldung";
@@ -103,7 +118,7 @@ if($inline == 0)
       if($_GET['timer'] > 0)
       {
          echo "<script language=\"JavaScript1.2\" type=\"text/javascript\"><!--\n
-               window.setTimeout(\"window.location.href='". $_GET['url']. "'\", ". $_GET['timer']. ");\n
+               window.setTimeout(\"window.location.href='$load_url'\", ". $_GET['timer']. ");\n
                //--></script>";
       }
 
@@ -127,18 +142,18 @@ echo "
          }
          else
          {
-            if(strlen($_GET['url']) > 0)
+            if(strlen($load_url) > 0)
             {
                if($_GET['button'] == 1)
                {
-                  echo "<button name=\"weiter\" type=\"button\" value=\"weiter\" onclick=\"window.location.href='". $_GET['url']. "'\">
+                  echo "<button name=\"weiter\" type=\"button\" value=\"weiter\" onclick=\"window.location.href='$load_url'\">
                   <img src=\"$g_root_path/adm_program/images/forward.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Weiter\">
                   &nbsp;Weiter</button>";
                }
                else
                {
                   echo "<button name=\"ja\" type=\"button\" value=\"ja\"
-                     onclick=\"self.location.href='". $_GET['url']. "'\">
+                     onclick=\"self.location.href='$load_url'\">
                      <img src=\"$g_root_path/adm_program/images/ok.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Ja\">
                      &nbsp;&nbsp;Ja&nbsp;&nbsp;&nbsp;</button>
                   &nbsp;&nbsp;&nbsp;&nbsp;
