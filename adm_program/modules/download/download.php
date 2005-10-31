@@ -39,8 +39,8 @@
    require("../../system/tbl_user.php");
    require("../../system/session_check.php");
 
-   $default_folder = $_GET['default_folder'];
-   $folder     = $_GET['folder'];
+   $default_folder = urldecode($_GET['default_folder']);
+   $folder     = urldecode($_GET['folder']);
    $act_folder = "../../../adm_my_files/download";
 
    // uebergebene Ordner auf Gueltigkeit pruefen
@@ -108,7 +108,7 @@
    if(strlen($folder) > 0)
    {
       $pfad = strrev(substr(strchr(strrev($folder),"/"),1));
-      echo "<button name=\"uebersicht\" type=\"button\" value=\"uebersicht\" style=\"width: 165px;\" onclick=\"self.location.href='$g_root_path/adm_program/modules/download/download.php?folder=$pfad&amp;default_folder=$default_folder'\">
+      echo "<button name=\"uebersicht\" type=\"button\" value=\"uebersicht\" style=\"width: 165px;\" onclick=\"self.location.href='$g_root_path/adm_program/modules/download/download.php?folder=". urlencode($pfad). "&amp;default_folder=". urlencode($default_folder). "'\">
                <img src=\"$g_root_path/adm_program/images/folder.png\" style=\"vertical-align: bottom;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Download&uuml;bersicht\">
                Ordner schlie&szlig;en
             </button>
@@ -118,11 +118,11 @@
    //Button Upload und Neuer Ordner
    if ($g_session_valid && editDownload())
    {
-      echo "<button name=\"down\" type=\"button\" value=\"down\" style=\"width: 150px;\" onclick=\"self.location.href='$g_root_path/adm_program/modules/download/folder_new.php?folder=$folder&amp;default_folder=$default_folder'\">
+      echo "<button name=\"down\" type=\"button\" value=\"down\" style=\"width: 150px;\" onclick=\"self.location.href='$g_root_path/adm_program/modules/download/folder_new.php?folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "'\">
       <img src=\"$g_root_path/adm_program/images/folder_create.png\" style=\"vertical-align: bottom;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Ordner erstellen\">
       Ordner anlegen
       </button>
-      <button name=\"down\" type=\"button\" value=\"down\" style=\"width: 150px;\" onclick=\"self.location.href='$g_root_path/adm_program/modules/download/upload.php?folder=$folder&amp;default_folder=$default_folder'\">
+      <button name=\"down\" type=\"button\" value=\"down\" style=\"width: 150px;\" onclick=\"self.location.href='$g_root_path/adm_program/modules/download/upload.php?folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "'\">
       <img src=\"$g_root_path/adm_program/images/upload.png\" style=\"vertical-align: bottom;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hochladen\">
       Datei hochladen
       </button>";
@@ -178,9 +178,9 @@
 
             echo "
                <tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\">
-                  <td style=\"text-align: center;\"><a href=\"$g_root_path/adm_program/modules/download/download.php?folder=$next_folder&amp;default_folder=". urlencode($default_folder). "\">
+                  <td style=\"text-align: center;\"><a href=\"$g_root_path/adm_program/modules/download/download.php?folder=". urlencode($next_folder). "&amp;default_folder=". urlencode($default_folder). "\">
                      <img src=\"$g_root_path/adm_program/images/folder.png\" border=\"0\" alt=\"Ordner\" title=\"Ordner\"></a></td>
-                  <td style=\"text-align: left;\"><a href=\"$g_root_path/adm_program/modules/download/download.php?folder=$next_folder&amp;default_folder=". urlencode($default_folder). "\">$ordnerarray[$i]</a></td>
+                  <td style=\"text-align: left;\"><a href=\"$g_root_path/adm_program/modules/download/download.php?folder=". urlencode($next_folder). "&amp;default_folder=". urlencode($default_folder). "\">$ordnerarray[$i]</a></td>
                   <td>&nbsp;</td>
                   <td>&nbsp;</td>";
             if ($g_session_valid && editDownload())

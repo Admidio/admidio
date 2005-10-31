@@ -41,8 +41,8 @@
       exit();
    }
    
-   $default_folder = $_GET['default_folder'];
-   $folder = $_GET['folder'];
+   $default_folder = urldecode($_GET['default_folder']);
+   $folder = urldecode($_GET['folder']);
 
    // uebergebene Ordner auf Gueltigkeit pruefen
    // und Ordnerpfad zusammensetzen
@@ -85,7 +85,7 @@
    require("../../../adm_config/body_top.php");
    //Beginn des Inhaltes
    echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\"><br />
-      <form method=\"post\" action=\"download_function.php?mode=3&amp;folder=$folder&amp;default_folder=$default_folder\">
+      <form method=\"post\" action=\"download_function.php?mode=3&amp;folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\">
          <div class=\"formHead\" style=\"width: 400px\">Ordner erstellen</div>
          <div class=\"formBody\" style=\"width: 400px\">
             <div style=\"text-align: center; width: 100%;\">Neuer Ordner in <b>";

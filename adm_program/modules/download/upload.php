@@ -45,8 +45,8 @@
       exit();
    }
 
-   $default_folder = $_GET['default_folder'];
-   $folder     = $_GET['folder'];
+   $default_folder = urldecode($_GET['default_folder']);
+   $folder     = urldecode($_GET['folder']);
 
    // uebergebene Ordner auf Gueltigkeit pruefen
    // und Ordnerpfad zusammensetzen
@@ -91,7 +91,7 @@
    echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
    
       <p>&nbsp;</p>
-      <form action=\"download_function.php?mode=1&amp;folder=$folder&amp;default_folder=$default_folder\" method=\"post\" enctype=\"multipart/form-data\">
+      <form action=\"download_function.php?mode=1&amp;folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\" method=\"post\" enctype=\"multipart/form-data\">
          <div class=\"formHead\">Datei hochladen</div>
          <div class=\"formBody\">
             <div style=\"text-align: center; width: 100%;\">Datei in den Ordner <b>";

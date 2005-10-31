@@ -59,9 +59,9 @@ if (decoct(fileperms("../../../adm_my_files/download"))!=40777)
    exit();
 }
 
-$folder = $_GET['folder'];
-$file   = $_GET['file'];
-$default_folder = $_GET['default_folder'];
+$folder = urldecode($_GET['folder']);
+$file   = urldecode($_GET['file']);
+$default_folder = urldecode($_GET['default_folder']);
 
 $url        = "";
 $err_code   = "";
