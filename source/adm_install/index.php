@@ -208,7 +208,7 @@ else
       </form>
       </div>
    </div>
-   <div class="formHead" style="font-size: 8pt; text-align: center; width: 550px; border-top-width: 0px;">
+   <div class="formHead" style="font-size: 8pt; text-align: center; border-top-width: 0px;">
       &copy; 2004 - 2005&nbsp;&nbsp;<a href="http://www.admidio.org" target="_blank">The Admidio Team</a>
    </div>
 </div>
