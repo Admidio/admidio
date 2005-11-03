@@ -46,6 +46,14 @@ if(array_key_exists("au_id", $_GET) && !$g_session_valid)
    exit();
 }
 
+if(empty($_POST))
+{
+   $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=attachment";
+   header($location);
+   exit();
+}
+
+
 $_POST['mailfrom'] = trim($_POST['mailfrom']);
 $_POST['name']     = trim($_POST['name']);
 $_POST['subject']  = trim($_POST['subject']);
@@ -58,6 +66,13 @@ if(strlen($_POST['name']) > 0)
       {
          $err_code = "feld";
          $err_text = "Betreff";
+      }
+      else
+      {
+      	 if (($_FILES['userfile']['error'] != 0) &&  ($_FILES['userfile']['error'] != 4))
+      	 {
+      	 	$err_code = "attachment";
+     	 }
       }
    }
    else
@@ -109,23 +124,56 @@ function sendMail($email, $rolle = "")
    global $g_homepage;
    global $g_session_valid;
 
-   // E-Mail-Text zusammenbauen
-   $mail_properties = "From: \"". $_POST['name']. "\" <". $_POST['mailfrom']. ">";
-   $mail_body       = $_POST['name']. " hat ";
+   //Zufaelliges Trennzeichen zwischen MessageParts generieren
+   $mailBoundary = "--NextPart_AdmidioMailSystem_". md5(uniqid(rand()));
+
+
+   // E-Mail-Header zusammenbauen
+   $mail_properties = "From: ". $_POST['name']. " <". $_POST['mailfrom']. ">\n";
+   $mail_properties = $mail_properties. "MIME-Version: 1.0\nContent-Type: multipart/mixed;\n\tboundary=\"$mailBoundary\"\n";
+
+
+   // E-Mail-Body zusammenbauen
+   $mail_body	= "This message is in MIME format.\n";
+   $mail_body	= $mail_body. "Since your mail reader does not understand this format,\n";
+   $mail_body	= $mail_body. "some or all of this message may not be legible.\n\n";
+
+   $mail_body = $mail_body. "--". $mailBoundary. "\nContent-Type: text/plain; charset=\"iso-8859-1\"\n\n";
+
+   $mail_body		= $mail_body. $_POST['name']. " hat ";
    if(strlen($rolle) > 0)
       $mail_body = $mail_body. "an die Rolle \"$rolle\"";
    else
-      $mail_body = $mail_body. "dir";
-      
-   $mail_body = $mail_body. " von $g_homepage folgende Mail geschickt:\nEine Antwort kannst du an ".
+      $mail_body = $mail_body. "Dir";
+
+   $mail_body = $mail_body. " von $g_homepage folgende Mail geschickt:\nEine Antwort kannst Du an ".
                       $_POST['mailfrom']. " schicken.";
 
    if(!$g_session_valid)
    {
-      $mail_body = $mail_body. "\n(Der Absender war nicht eingeloggt. Deshalb können die Absenderangaben fehlerhaft sein.)";
+      $mail_body = $mail_body. "\n(Der Absender war nicht eingeloggt. Deshalb könnten die Absenderangaben fehlerhaft sein.)";
    }
 
-   $mail_body = $mail_body. "\n\n\n". $_POST['body'];
+   $mail_body = $mail_body. "\n\n\n". $_POST['body']. "\n\n";
+
+
+   // Eventuell noch ein Attachment an die Mail haengen
+   if ($_FILES['userfile']['error'] != 4)
+      	 {
+      	 	$mail_body = $mail_body. "--". $mailBoundary. "\nContent-Type: ". $_FILES['userfile']['type']. ";\n";
+      	 	$mail_body = $mail_body. "\tname=\"". $_FILES['userfile']['tmp_name']. "\"\nContent-Transfer-Encoding: base64\n";
+      	 	$mail_body = $mail_body. "Content-Disposition: attachment;\n\tfilename=\"". $_FILES['userfile']['name']. "\"\n\n";
+			$theFile = fopen($_FILES['userfile']['tmp_name'], "rb");
+			$fileContent = fread($theFile, $_FILES['userfile']['size']);
+			$fileContent = chunk_split(base64_encode($fileContent)); //Attachment encodieren und splitten
+
+			$mail_body = $mail_body. $fileContent. "\n\n";
+
+     	 }
+
+
+   // Jetzt noch das Ende der Mail kennzeichnen
+   $mail_body = $mail_body. "--". $mailBoundary. "--";
 
    // Versenden nur im Internet ausfuehren
    if($g_internet == 1)
@@ -171,21 +219,19 @@ else
          $mail_receivers = $mail_receivers. "- \"$row->au_vorname $row->au_name $row->au_mail\" ";
       }
    }
-   
-   // jetzt noch eine Mail an den Versender schicken mit allen Empfängern und dem Text
-   
-   // E-Mail-Text zusammenbauen
-   $mail_properties = "From: \"". $_POST['name']. "\" <". $_POST['mailfrom']. ">";
-   $mail_body       = "Du hast von $g_homepage folgende Mail an\n$mail_receivers\ngeschickt:\n\n\n". $_POST['body'];
-   $mail_subject    = "Kopie: ". $_POST['subject'];
-                      
+}
+   // jetzt noch eine Mail an den Versender schicken...
    if($g_internet == 1)
    {
-      If ($_POST[kopie]) mail($_POST['mailfrom'], $mail_subject, $mail_body, $mail_properties);
+      If ($_POST[kopie])
+      {
+      	 $_POST['body'] = "Hier ist Deine angeforderte Kopie der Nachricht:\n\n". $_POST['body'];
+      	 sendMail($_POST['mailfrom']);
+      }
    }
    else
       echo $mail_body;
-}
+
 
 if(strlen($_POST['rolle']) > 0)
    $err_text = $_POST['rolle'];
