@@ -131,10 +131,6 @@ function getErrorText($error_code, $error_text)
          $error_str = "Du wurdest erfolgreich abgemeldet.";
          break;
 
-      case "mailSend":
-         $error_str = "Deine Mail wurde erfolgreich an $error_text versendet.";
-         break;
-
       case "mysql":
          $error_str = "Folgender Fehler trat beim Zugriff auf die Datenbank auf:<br /><br />
                <b>$error_text</b>";
@@ -277,7 +273,6 @@ function getErrorText($error_code, $error_text)
 
 //Ende Fehlermeldungen Fotomodul
 
-
 //Fehlermeldungen Downloadmodul
 
       case "invalid_folder":
@@ -334,9 +329,29 @@ function getErrorText($error_code, $error_text)
          $error_str = "Die Datei <b>$error_text</b> wurde umbenannt.";
          break;
 
+//Ende Fehlermeldungen Downloadmodul
+
+//Fehlermeldungen Mailmodul
+
+      case "mailSend":
+         $error_str = "Deine Mail wurde erfolgreich an $error_text versendet.";
+         break;
+
+      case "attachment":
+         $error_str = "Dein Dateinanhang konnte nicht hochgeladen werden.<br />
+         Vermutlich ist das Attachment zu groﬂ!";
+         break;
+
+
+
+//Ende Fehlermeldungen Mailmodul
+
+
       default:
          $error_str = "Es ist ein Fehler aufgetreten.";
          break;
+
+
    }
    return $error_str;
 }
