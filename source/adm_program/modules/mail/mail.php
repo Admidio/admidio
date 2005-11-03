@@ -94,7 +94,7 @@ echo "
 <head>
    <title>$g_title - E-Mail verschicken</title>
    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
-   
+
    <!--[if gte IE 5.5000]>
    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
    <![endif]-->";
@@ -111,8 +111,8 @@ require("../../../adm_config/body_top.php");
       // da keine E-Mail-Adresse von mail_send angenommen werden soll
       if(array_key_exists("au_id", $_GET))
          echo "au_id=". $_GET['au_id']. "&";
-      echo "url=". urlencode(getHttpReferer()). "\" method=\"post\" name=\"Mail\">
-      
+      echo "url=". urlencode(getHttpReferer()). "\" method=\"post\" name=\"Mail\" enctype=\"multipart/form-data\">
+
       <div class=\"formHead\">";
          if($_GET["subject"] == "")
             echo strspace("E-Mail verschicken");
@@ -193,9 +193,9 @@ require("../../../adm_config/body_top.php");
                }
             echo "</div>
          </div>
-         
+
          <hr width=\"90%\" />
-         
+
          <div style=\"margin-top: 8px;\">
             <div style=\"text-align: right; width: 70px; float: left;\">Name:</div>
             <div style=\"text-align: left; margin-left: 80px;\">";
@@ -214,9 +214,9 @@ require("../../../adm_config/body_top.php");
                   echo "<input type=\"text\" name=\"mailfrom\" size=\"50\" maxlength=\"50\" value=\"\">";
             echo "</div>
          </div>
-         
+
          <hr width=\"90%\" />
-         
+
          <div style=\"margin-top: 8px;\">
             <div style=\"text-align: right; width: 70px; float: left;\">Betreff:</div>
             <div style=\"text-align: left; margin-left: 80px;\">";
@@ -231,8 +231,21 @@ require("../../../adm_config/body_top.php");
             <div style=\"text-align: left; margin-left: 80px;\">
                <textarea name=\"body\" rows=\"10\" cols=\"45\">". $_GET["body"]. "</textarea>
             </div>
-         </div>
+         </div>";
 
+         if($g_session_valid)	// Nur eingeloggte User duerfen Attachments mit max 3MB anhaengen...
+         {
+		 echo "
+         <div style=\"margin-top: 8px;\">
+            <div style=\"text-align: right; width: 70px; float: left;\">Anhang:</div>
+            <div style=\"text-align: left; margin-left: 80px;\">
+                <input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"3145728\">
+               	<input name=\"userfile\" size=\"40\" type=\"file\">
+            </div>
+         </div>";
+         }
+
+         echo "
          <div style=\"margin-top: 8px;\">
             <div style=\"text-align: left; margin-left: 80px;\">
                <input type=\"checkbox\" id=\"kopie\" name=\"kopie\" value=\"1\" ";
@@ -240,9 +253,9 @@ require("../../../adm_config/body_top.php");
                echo "> <label for=\"kopie\">Kopie der E-Mail an mich senden</label>
             </div>
          </div>
-         
+
          <hr width=\"90%\" />
-         
+
          <div style=\"margin-top: 8px;\">
             <button name=\"abschicken\" type=\"submit\" value=\"abschicken\">
                <img src=\"$g_root_path/adm_program/images/mail.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Abschicken\">
