@@ -272,7 +272,7 @@ while($row = mysql_fetch_object($result_msg))
    if(strlen($row->aud_value) > 0)
    {
       // auch ein neuer Wert vorhanden
-      if(strlen($_POST[urlencode($row->auf_name)]) > 0)
+      if(strlen(trim($_POST[urlencode($row->auf_name)])) > 0)
       {
          if($_POST[urlencode($row->auf_name)] != $row->aud_value)
          {
