@@ -46,6 +46,8 @@ if(array_key_exists("au_id", $_GET) && !$g_session_valid)
    exit();
 }
 
+// Falls Attachmentgröße die max_post_size aus der php.ini übertrifft, ist $_POST komplett leer.
+// Deswegen muss dies überprüft werden...
 if(empty($_POST))
 {
    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=attachment";
@@ -124,22 +126,31 @@ function sendMail($email, $rolle = "")
    global $g_homepage;
    global $g_session_valid;
 
+   $mail_body = "";
+
    //Zufaelliges Trennzeichen zwischen MessageParts generieren
    $mailBoundary = "--NextPart_AdmidioMailSystem_". md5(uniqid(rand()));
 
 
    // E-Mail-Header zusammenbauen
    $mail_properties = "From: ". $_POST['name']. " <". $_POST['mailfrom']. ">\n";
-   $mail_properties = $mail_properties. "MIME-Version: 1.0\nContent-Type: multipart/mixed;\n\tboundary=\"$mailBoundary\"\n";
+   $mail_properties = $mail_properties. "MIME-Version: 1.0\n";
 
 
-   // E-Mail-Body zusammenbauen
-   $mail_body	= "This message is in MIME format.\n";
-   $mail_body	= $mail_body. "Since your mail reader does not understand this format,\n";
-   $mail_body	= $mail_body. "some or all of this message may not be legible.\n\n";
+   // Im Falle eines Attachments Header und Body um Zusaetze ergaenzen
+   if ($_FILES['userfile']['error'] != 4)
+   {
+      $mail_properties = $mail_properties. "Content-Type: multipart/mixed;\n\tboundary=\"$mailBoundary\"\n";
 
-   $mail_body = $mail_body. "--". $mailBoundary. "\nContent-Type: text/plain; charset=\"iso-8859-1\"\n\n";
+ 	  // E-Mail-Body fuer Attachment vorbereiten
+      $mail_body	= "This message is in MIME format.\n";
+      $mail_body	= $mail_body. "Since your mail reader does not understand this format,\n";
+      $mail_body	= $mail_body. "some or all of this message may not be legible.\n\n";
 
+      $mail_body = $mail_body. "--". $mailBoundary. "\nContent-Type: text/plain; charset=\"iso-8859-1\"\n\n";
+   }
+
+   // Eigentliche Nachricht an den Body anfuegen
    $mail_body		= $mail_body. $_POST['name']. " hat ";
    if(strlen($rolle) > 0)
       $mail_body = $mail_body. "an die Rolle \"$rolle\"";
@@ -159,21 +170,21 @@ function sendMail($email, $rolle = "")
 
    // Eventuell noch ein Attachment an die Mail haengen
    if ($_FILES['userfile']['error'] != 4)
-      	 {
-      	 	$mail_body = $mail_body. "--". $mailBoundary. "\nContent-Type: ". $_FILES['userfile']['type']. ";\n";
-      	 	$mail_body = $mail_body. "\tname=\"". $_FILES['userfile']['tmp_name']. "\"\nContent-Transfer-Encoding: base64\n";
-      	 	$mail_body = $mail_body. "Content-Disposition: attachment;\n\tfilename=\"". $_FILES['userfile']['name']. "\"\n\n";
-			$theFile = fopen($_FILES['userfile']['tmp_name'], "rb");
-			$fileContent = fread($theFile, $_FILES['userfile']['size']);
-			$fileContent = chunk_split(base64_encode($fileContent)); //Attachment encodieren und splitten
+   {
+      $mail_body = $mail_body. "--". $mailBoundary. "\nContent-Type: ". $_FILES['userfile']['type']. ";\n";
+      $mail_body = $mail_body. "\tname=\"". $_FILES['userfile']['name']. "\"\nContent-Transfer-Encoding: base64\n";
+      $mail_body = $mail_body. "Content-Disposition: attachment;\n\tfilename=\"". $_FILES['userfile']['name']. "\"\n\n";
+	  $theFile = fopen($_FILES['userfile']['tmp_name'], "rb");
+	  $fileContent = fread($theFile, $_FILES['userfile']['size']);
 
-			$mail_body = $mail_body. $fileContent. "\n\n";
+	  // Attachment encodieren und splitten
+	  $fileContent = chunk_split(base64_encode($fileContent));
 
-     	 }
+	  $mail_body = $mail_body. $fileContent. "\n\n";
 
-
-   // Jetzt noch das Ende der Mail kennzeichnen
-   $mail_body = $mail_body. "--". $mailBoundary. "--";
+	  // Das Ende der Mail mit der Boundary kennzeichnen...
+	  $mail_body = $mail_body. "--". $mailBoundary. "--";
+   }
 
    // Versenden nur im Internet ausfuehren
    if($g_internet == 1)
@@ -186,14 +197,19 @@ function sendMail($email, $rolle = "")
 
 if(array_key_exists("au_id", $_GET))
 {
+   $mail_receivers = "";
+
    // au_id wurde uebergeben, dann E-Mail direkt an den User schreiben
    $sql    = "SELECT au_mail FROM adm_user WHERE au_id = {0} ";
    $sql    = prepareSQL($sql, array($_GET['au_id']));
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
-
+   $mail_receivers = "- \"$row->au_mail\" ";
    $row = mysql_fetch_array($result);
-   sendMail($row[0]);
+   if(sendMail($row[0]))
+   {
+   	 $mail_receivers = "- \"$row[0]\" ";
+   }
 }
 else
 {
@@ -220,17 +236,17 @@ else
       }
    }
 }
-   // jetzt noch eine Mail an den Versender schicken...
+   // jetzt noch eventuell eine Kopie der Mail an den Versender schicken...
    if($g_internet == 1)
    {
       If ($_POST[kopie])
       {
       	 $_POST['body'] = "Hier ist Deine angeforderte Kopie der Nachricht:\n\n". $_POST['body'];
+      	 $_POST['body'] = $mail_receivers. "\n\n". $_POST['body'];
+      	 $_POST['body'] = "Die Nachricht ging an:\n". $_POST['body'];
       	 sendMail($_POST['mailfrom']);
       }
    }
-   else
-      echo $mail_body;
 
 
 if(strlen($_POST['rolle']) > 0)
