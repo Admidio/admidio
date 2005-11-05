@@ -48,17 +48,12 @@ if(array_key_exists('url', $_GET))
 else
    $url = urlencode(getHttpReferer());
 
-$sql    = "SELECT * FROM adm_gruppierung WHERE ag_shortname = '$g_organization' ";
-$result = mysql_query($sql, $g_adm_con);
-db_error($result);
-$row_orga = mysql_fetch_object($result);
-
 echo "
 <!-- (c) 2004 - 2005 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
 <html>
 <head>
-   <title>". $g_orga_property['ag_shortname']. " - $row_orga->ag_longname bearbeiten</title>
+   <title>". $g_orga_property['ag_shortname']. " - bearbeiten</title>
    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
    
    <!--[if gte IE 5.5000]>
@@ -72,20 +67,20 @@ require("../../../adm_config/body_top.php");
    echo "
    <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
 
-   <form action=\"organization_function.php?ag_id=$row_orga->ag_id&amp;url=$url\" method=\"post\" name=\"Gruppierung bearbeiten\">
+   <form action=\"organization_function.php?ag_id=". $g_orga_property['ag_id']. "&amp;url=$url\" method=\"post\" name=\"Gruppierung bearbeiten\">
       
-      <div class=\"formHead\">$row_orga->ag_longname bearbeiten</div>
+      <div class=\"formHead\">". $g_orga_property['ag_longname']. " bearbeiten</div>
       <div class=\"formBody\">
          <div>
             <div style=\"text-align: right; width: 40%; float: left;\">Name (Abk.):</div>
             <div style=\"text-align: left; margin-left: 42%;\">
-               <input type=\"text\" name=\"shortname\" class=\"readonly\" readonly size=\"10\" maxlength=\"10\" value=\"$row_orga->ag_shortname\">
+               <input type=\"text\" name=\"shortname\" class=\"readonly\" readonly size=\"10\" maxlength=\"10\" value=\"". $g_orga_property['ag_shortname']. "\">
             </div>
          </div>
          <div style=\"margin-top: 6px;\">
             <div style=\"text-align: right; width: 40%; float: left;\">Name (lang):</div>
             <div style=\"text-align: left; margin-left: 42%;\">
-               <input type=\"text\" name=\"longname\" size=\"30\" maxlength=\"60\" value=\"$row_orga->ag_longname\">
+               <input type=\"text\" name=\"longname\" size=\"30\" maxlength=\"60\" value=\"". $g_orga_property['ag_longname']. "\">
             </div>
          </div>";
 
@@ -104,14 +99,14 @@ require("../../../adm_config/body_top.php");
                <div style=\"text-align: left; margin-left: 42%;\">
                   <select size=\"1\" name=\"mutter\">
                      <option value=\" \" ";
-                        if(strlen($row_orga->ag_mother) == 0)
+                        if(strlen($g_orga_property['ag_mother']) == 0)
                            echo " selected ";
                      echo ">Ausw&auml;hlen ...</option>";
                      
                      while($row = mysql_fetch_object($result))
                      {
                         echo "<option value=\"$row->ag_shortname\"";
-                           if($row_orga->ag_mother == $row->ag_shortname)
+                           if($g_orga_property['ag_mother'] == $row->ag_shortname)
                               echo " selected ";
                         echo ">";
                         

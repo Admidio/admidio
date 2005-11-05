@@ -64,14 +64,6 @@ else
       $_GET["letter"] = $_GET["letter"]. "%";
 }
 
-// Name der Gliedgemeinschaft auslesen
-$sql    = "SELECT * FROM adm_gruppierung
-            WHERE ag_shortname = '$g_organization' ";
-$result = mysql_query($sql, $g_adm_con);
-db_error($result);
-$row = mysql_fetch_object($result);
-$orga_long_name = $row->ag_longname;
-
 // alle Mitglieder zur Auswahl selektieren
 $sql    = "SELECT * FROM adm_user
             WHERE au_name LIKE {0}
@@ -138,7 +130,7 @@ require("../../../adm_config/body_top.php");
       <table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\">
          <tr>
             <th class=\"tableHeader\" align=\"right\">Nr.</th>
-            <th class=\"tableHeader\" align=\"center\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/person.png\" alt=\"Mitglied bei $orga_long_name\" title=\"Mitglied bei $orga_long_name\" border=\"0\"></th>
+            <th class=\"tableHeader\" align=\"center\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/person.png\" alt=\"Mitglied bei ". $g_orga_property['ag_longname']. "\" title=\"Mitglied bei ". $g_orga_property['ag_longname']. "\" border=\"0\"></th>
             <th class=\"tableHeader\" align=\"left\">&nbsp;Name</th>
             <th class=\"tableHeader\" align=\"center\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/mail.png\" alt=\"E-Mail\" title=\"E-Mail\"></th>
             <th class=\"tableHeader\" align=\"center\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/globe.png\" alt=\"Homepage\" title=\"Homepage\"></th>
@@ -167,7 +159,7 @@ require("../../../adm_config/body_top.php");
                   <td align=\"right\">$i&nbsp;</td>
                   <td align=\"center\">";
                      if($row_count[0] > 0)
-                        echo "<a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->au_id\"><img src=\"$g_root_path/adm_program/images/person.png\" alt=\"Mitglied bei $orga_long_name\" title=\"Mitglied bei $orga_long_name\" border=\"0\"></a>";
+                        echo "<a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->au_id\"><img src=\"$g_root_path/adm_program/images/person.png\" alt=\"Mitglied bei ". $g_orga_property['ag_longname']. "\" title=\"Mitglied bei ". $g_orga_property['ag_longname']. "\" border=\"0\"></a>";
                      else
                         echo "&nbsp;";
                   echo "</td>
