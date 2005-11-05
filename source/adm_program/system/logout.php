@@ -40,8 +40,9 @@ $session_found = mysql_num_rows($result);
 
 // Inhalt der Cookies loeschen
 
-if($g_internet == 0)
+if($_SERVER['HTTP_HOST'] == 'localhost')
 {
+   // beim localhost darf keine Domaine uebergeben werden
    setcookie("adm_session", "", 0, "/");
    setcookie("adm_user_id", "", 0, "/");
    setcookie("adm_login",   "", 0, "/");

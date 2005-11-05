@@ -111,8 +111,10 @@ if ($user_found >= 1)
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
 
-      if($g_internet == 0)
+      // Cookies fuer die Anmeldung setzen
+      if($_SERVER['HTTP_HOST'] == 'localhost')
       {
+         // beim localhost darf keine Domaine uebergeben werden
          setcookie("adm_session", "$user_session", 0, "/");
          setcookie("adm_user_id", "$user_row->au_id" , 0, "/");
          setcookie("adm_login",   "$user_row->au_login" , 0, "/");
