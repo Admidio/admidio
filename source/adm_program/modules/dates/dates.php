@@ -47,7 +47,7 @@ echo "
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
 <html>
 <head>
-   <title>$g_title - Termine</title>
+   <title>". $g_orga_property['ag_shortname']. " - Termine</title>
    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
 
    <!--[if gte IE 5.5000]>
@@ -72,7 +72,7 @@ require("../../../adm_config/body_top.php");
    // alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
    $sql = "SELECT * FROM adm_gruppierung
             WHERE ag_shortname = '$g_organization'
-               OR ag_mutter    = '$g_organization' ";
+               OR ag_mother    = '$g_organization' ";
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
 
@@ -84,7 +84,7 @@ require("../../../adm_config/body_top.php");
       if($i > 0) $organizations = $organizations. ", ";
 
       if($row->ag_shortname == $g_organization)
-         $organizations = $organizations. "'$row->ag_mutter'";
+         $organizations = $organizations. "'$row->ag_mother'";
       else
          $organizations = $organizations. "'$row->ag_shortname'";
 

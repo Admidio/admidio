@@ -58,7 +58,7 @@ echo "
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
 <html>
 <head>
-   <title>$g_title - $row_orga->ag_longname bearbeiten</title>
+   <title>". $g_orga_property['ag_shortname']. " - $row_orga->ag_longname bearbeiten</title>
    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
    
    <!--[if gte IE 5.5000]>
@@ -104,14 +104,14 @@ require("../../../adm_config/body_top.php");
                <div style=\"text-align: left; margin-left: 42%;\">
                   <select size=\"1\" name=\"mutter\">
                      <option value=\" \" ";
-                        if(strlen($row_orga->ag_mutter) == 0)
+                        if(strlen($row_orga->ag_mother) == 0)
                            echo " selected ";
                      echo ">Ausw&auml;hlen ...</option>";
                      
                      while($row = mysql_fetch_object($result))
                      {
                         echo "<option value=\"$row->ag_shortname\"";
-                           if($row_orga->ag_mutter == $row->ag_shortname)
+                           if($row_orga->ag_mother == $row->ag_shortname)
                               echo " selected ";
                         echo ">";
                         

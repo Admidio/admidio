@@ -59,7 +59,7 @@ if ($err_code != "")
 
 // Gruppierung updaten
 $sql = "UPDATE adm_gruppierung SET ag_longname = {0}
-                                 , ag_mutter   = ";
+                                 , ag_mother   = ";
 if(strlen($_POST["mutter"]) > 0)
    $sql = $sql. " {1} ";
 else

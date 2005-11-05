@@ -58,9 +58,6 @@
 
    // URL der Homepage
    $g_homepage = "www.admidio.org";
-   
-   // Titel der Homepage, der später im Browser angezeigt werden soll
-   $g_title    = "Admidio - Das Online-Verwaltungssystem für Vereine, Gruppen und Organisationen";
       
    
    // Forumspezifisch

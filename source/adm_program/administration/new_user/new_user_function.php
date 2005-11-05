@@ -116,7 +116,7 @@ elseif($_GET["mode"] == 3)
    <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
    <html>
    <head>
-      <title>$g_title - Messagebox</title>
+      <title>". $g_orga_property['ag_shortname']. " - Messagebox</title>
       <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
 
       <!--[if gte IE 5.5000]>

@@ -44,7 +44,7 @@ echo "
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
 <html>
 <head>
-   <title>$g_title - Admidio &Uuml;bersicht</title>
+   <title>". $g_orga_property['ag_shortname']. " - Admidio &Uuml;bersicht</title>
    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
 
    <style type=\"text/css\">
