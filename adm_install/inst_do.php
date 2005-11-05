@@ -232,7 +232,7 @@ if($_POST['update'] == 1)
    {
       $filename = "upd_1_1_db.sql";
       $file     = fopen($filename, "r")
-                  or showError("Die Datei <b>db_upd.sql</b> konnte nicht im Verzeichnis <b>adm_install</b> gefunden werden.");
+                  or showError("Die Datei <b>upd_1_1_db.sql</b> konnte nicht im Verzeichnis <b>adm_install</b> gefunden werden.");
       $content  = fread($file, filesize($filename));
       $sql_arr = explode(";", $content);
       fclose($file);
@@ -247,6 +247,24 @@ if($_POST['update'] == 1)
       }
       
       include("upd_1_1_konv.php");
+   }
+   if($_POST['version'] == 1 || $_POST['version'] == 2)
+   {
+      $filename = "upd_1_2_db.sql";
+      $file     = fopen($filename, "r")
+                  or showError("Die Datei <b>upd_1_1_db.sql</b> konnte nicht im Verzeichnis <b>adm_install</b> gefunden werden.");
+      $content  = fread($file, filesize($filename));
+      $sql_arr = explode(";", $content);
+      fclose($file);
+
+      foreach($sql_arr as $sql)
+      {
+         if(strlen($sql) > 0)
+         {
+            $result = mysql_query($sql, $connection);
+            if(!$result) showError(mysql_error());
+         }
+      }
    }
 }
 
