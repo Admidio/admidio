@@ -97,7 +97,7 @@ echo "
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
 <html>
 <head>
-   <title>$g_title - Termin</title>
+   <title>". $g_orga_property['ag_shortname']. " - Termin</title>
    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
    
    <!--[if gte IE 5.5000]>
@@ -134,7 +134,7 @@ require("../../../adm_config/body_top.php");
          
          // bei mehr als einer Gruppierung, Checkbox anzeigen, ob, Termin bei anderen angezeigt werden soll
          $sql = "SELECT COUNT(1) FROM adm_gruppierung
-                  WHERE ag_mutter IS NOT NULL ";
+                  WHERE ag_mother IS NOT NULL ";
          $result = mysql_query($sql, $g_adm_con);
          db_error($result);
          $row = mysql_fetch_array($result);
