@@ -268,8 +268,19 @@ db_error($result_msg);
 
 while($row = mysql_fetch_object($result_msg))
 {
-   // bereits ein alter Wert vorhanden
-   if(strlen($row->aud_value) > 0)
+   if(is_null($row->aud_value))
+   {
+      // noch kein Wert vorhanden -> neu einfuegen
+      if(strlen(trim($_POST[urlencode($row->auf_name)])) > 0)
+      {
+         $sql = "INSERT INTO adm_user_data (aud_au_id, aud_auf_id, aud_value)
+                                    VALUES ({0}, $row->auf_id, '". $_POST[urlencode($row->auf_name)]. "') ";
+         $sql = prepareSQL($sql, array($row_id));
+         $result = mysql_query($sql, $g_adm_con);
+         db_error($result);
+      }
+   }
+   else
    {
       // auch ein neuer Wert vorhanden
       if(strlen(trim($_POST[urlencode($row->auf_name)])) > 0)
@@ -287,18 +298,6 @@ while($row = mysql_fetch_object($result_msg))
       {
          $sql = "DELETE FROM adm_user_data
                   WHERE aud_id = $row->aud_id ";
-         $result = mysql_query($sql, $g_adm_con);
-         db_error($result);
-      }
-   }
-   else
-   {
-      // noch kein Wert vorhanden -> neu einfuegen
-      if(strlen($_POST[urlencode($row->auf_name)]) > 0)
-      {
-         $sql = "INSERT INTO adm_user_data (aud_au_id, aud_auf_id, aud_value)
-                                    VALUES ({0}, $row->auf_id, '". $_POST[urlencode($row->auf_name)]. "') ";
-         $sql = prepareSQL($sql, array($row_id));
          $result = mysql_query($sql, $g_adm_con);
          db_error($result);
       }
