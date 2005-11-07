@@ -192,7 +192,10 @@ echo "
       if(strlen($row->au_login) > 0)
          echo "Angemeldet";
       else
-         echo "<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=zuordnen&amp;err_text=$row->au_vorname $row->au_name&amp;err_head=Webanmeldung zuordnen&amp;button=2&amp;url=". urlencode("$g_root_path/adm_program/new_user_function.php?anu_id=". $_GET['anu_id']. "&amp;au_id=$row->au_id&amp;mode=1"). "\">Zuordnen</a>";
+      {
+         $load_url = urlencode("$g_root_path/adm_program/administration/new_user/new_user_function.php?anu_id=". $_GET['anu_id']. "&amp;au_id=$row->au_id&amp;mode=1");
+         echo "<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=zuordnen&amp;err_text=$row->au_vorname $row->au_name&amp;err_head=Webanmeldung zuordnen&amp;button=2&amp;url=$load_url\">Zuordnen</a>";
+      }
 
       echo "</td></tr>";
    }
