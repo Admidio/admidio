@@ -120,7 +120,14 @@ if($_GET['mode'] == 1)
 }
 elseif($_GET['mode'] == 2)
 {
-   // Rolle ungueltig machen
+   // Feld loeschen
+
+   // erst die Userdaten zum Feld loeschen
+   $sql    = "DELETE FROM adm_user_data
+               WHERE aud_auf_id = {0}";
+   $sql    = prepareSQL($sql, array($_GET['auf_id']));
+   $result = mysql_query($sql, $g_adm_con);
+   db_error($result);
 
    $sql    = "DELETE FROM adm_user_field
                WHERE auf_id = {0}";
