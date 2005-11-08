@@ -121,8 +121,8 @@ else
                <td>
                   <select size="1" name="version">
                      <option value="0" selected="selected">bisherige Version</option>
-                     <option value="1">1.0.*</option>
                      <option value="2">1.1.*</option>
+                     <option value="1">1.0.*</option>
                   </select>
                </td>
             </tr>
