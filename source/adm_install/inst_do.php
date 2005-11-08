@@ -102,7 +102,7 @@ if(array_key_exists("user-webmaster", $_POST))
       $_POST['user-surname']   = trim($_POST['user-surname']);
       $_POST['user-firstname'] = trim($_POST['user-firstname']);
       $_POST['user-login']     = trim($_POST['user-login']);
-      
+
       if(strlen($_POST['user-surname'])   == 0
       || strlen($_POST['user-firstname']) == 0
       || strlen($_POST['user-login'])     == 0
@@ -191,25 +191,25 @@ if($_POST['struktur'] == 1)
          if(!$result) showError(mysql_error());
       }
    }
-   
+
    // Default-Daten anlegen
-   
+
    // Messenger anlegen
    $sql = "INSERT INTO adm_user_field (auf_ag_shortname, auf_type, auf_name, auf_description)
                 VALUES (NULL, 'MESSENGER', 'AIM', 'AOL Instant Messenger') ";
    $result = mysql_query($sql, $connection);
    if(!$result) showError(mysql_error());
-   
+
    $sql = "INSERT INTO adm_user_field (auf_ag_shortname, auf_type, auf_name, auf_description)
                 VALUES (NULL, 'MESSENGER', 'ICQ', 'ICQ') ";
    $result = mysql_query($sql, $connection);
    if(!$result) showError(mysql_error());
-   
+
    $sql = "INSERT INTO adm_user_field (auf_ag_shortname, auf_type, auf_name, auf_description)
                 VALUES (NULL, 'MESSENGER', 'MSN', 'MSN Messenger') ";
    $result = mysql_query($sql, $connection);
    if(!$result) showError(mysql_error());
-   
+
    $sql = "INSERT INTO adm_user_field (auf_ag_shortname, auf_type, auf_name, auf_description)
                 VALUES (NULL, 'MESSENGER', 'Yahoo', 'Yahoo! Messenger') ";
    $result = mysql_query($sql, $connection);
@@ -219,7 +219,7 @@ if($_POST['struktur'] == 1)
                 VALUES (NULL, 'MESSENGER', 'Skype', 'Skype') ";
    $result = mysql_query($sql, $connection);
    if(!$result) showError(mysql_error());
-   
+
    $sql = "INSERT INTO adm_user_field (auf_ag_shortname, auf_type, auf_name, auf_description)
                 VALUES (NULL, 'MESSENGER', 'Google Talk', 'Google Talk') ";
    $result = mysql_query($sql, $connection);
@@ -228,44 +228,37 @@ if($_POST['struktur'] == 1)
 
 if($_POST['update'] == 1)
 {
-   if($_POST['version'] == 1)
+   // Updatescripte fuer die Datenbank verarbeiten
+   if($_POST['version'] > 0)
    {
-      $filename = "upd_1_1_db.sql";
-      $file     = fopen($filename, "r")
-                  or showError("Die Datei <b>upd_1_1_db.sql</b> konnte nicht im Verzeichnis <b>adm_install</b> gefunden werden.");
-      $content  = fread($file, filesize($filename));
-      $sql_arr = explode(";", $content);
-      fclose($file);
-      
-      foreach($sql_arr as $sql)
+      for($i = $_POST['version']; $i <= 2; $i++)
       {
-         if(strlen($sql) > 0)
-         {
-            $result = mysql_query($sql, $connection);
-            if(!$result) showError(mysql_error());
-         }
-      }
-      
-      include("upd_1_1_konv.php");
-   }
-   if($_POST['version'] == 1 || $_POST['version'] == 2)
-   {
-      $filename = "upd_1_2_db.sql";
-      $file     = fopen($filename, "r")
-                  or showError("Die Datei <b>upd_1_1_db.sql</b> konnte nicht im Verzeichnis <b>adm_install</b> gefunden werden.");
-      $content  = fread($file, filesize($filename));
-      $sql_arr = explode(";", $content);
-      fclose($file);
+         if($i == 1)
+            $filename = "upd_1_1_db.sql";
+         elseif($i == 2)
+            $filename = "upd_1_2_db.sql";
 
-      foreach($sql_arr as $sql)
-      {
-         if(strlen($sql) > 0)
+         $file     = fopen($filename, "r")
+                     or showError("Die Datei <b>$filename</b> konnte nicht im Verzeichnis <b>adm_install</b> gefunden werden.");
+         $content  = fread($file, filesize($filename));
+         $sql_arr = explode(";", $content);
+         fclose($file);
+
+         foreach($sql_arr as $sql)
          {
-            $result = mysql_query($sql, $connection);
-            if(!$result) showError(mysql_error());
+            if(strlen($sql) > 0)
+            {
+               $result = mysql_query($sql, $connection);
+               if(!$result) showError(mysql_error());
+            }
          }
+
+         if($i == 1)
+            include("upd_1_1_konv.php");
       }
    }
+   else
+      showError("Sie haben Ihre bisherige Version nicht angegeben !");
 }
 
 if($_POST['verein'] == 1)
@@ -292,9 +285,9 @@ if($_POST['verein'] == 1)
    // nun die Default-Rollen anlegen
 
    $sql = "INSERT INTO adm_rolle (ar_ag_shortname, ar_funktion, ar_beschreibung, ar_valid,
-                                  ar_r_moderation, ar_r_termine, ar_r_foto, ar_r_download, 
+                                  ar_r_moderation, ar_r_termine, ar_r_foto, ar_r_download,
                                   ar_r_user_bearbeiten, ar_r_mail_logout, ar_r_mail_login)
-                VALUES ({0}, 'Webmaster', 'Gruppe der Administratoren des Systems', 1, 
+                VALUES ({0}, 'Webmaster', 'Gruppe der Administratoren des Systems', 1,
                                    1, 1, 1, 1, 1, 1, 1) ";
    $sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
    $result = mysql_query($sql, $connection);
