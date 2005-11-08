@@ -47,7 +47,7 @@ function db_error ($result, $inline = 0)
 
 function getVersion()
 {
-   return "1.1";
+   return "1.2b";
 }
 
 // die Übergebenen Variablen für den SQL-Code werden geprueft
