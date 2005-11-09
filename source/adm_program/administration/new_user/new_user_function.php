@@ -95,8 +95,8 @@ if($_GET["mode"] == 1)
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
 
-      // nur im Internet ausfuehren
-      if($g_internet == 1)
+      // nur ausfuehren, wenn E-Mails auch unterstuetzt werden
+      if($g_orga_property['ag_mail_extern'] != 1)
       {
          mail("$user_row->anu_mail", "Anmeldung auf $g_homepage", "Hallo $user_row->anu_vorname,\n\ndeine Anmeldung auf $g_homepage ".
               "wurde bestätigt.\n\nNun kannst du dich mit deinem Benutzernamen : $user_row->anu_login\nund dem Passwort auf der Homepage ".

@@ -112,7 +112,7 @@
                <div style=\"text-align: right; width: 35%; float: left;\">Neuer Name:</div>
                <div style=\"text-align: left; margin-left: 37%;\">
                   <input type=\"text\" name=\"new_name\" size=\"25\" tabindex=\"1\">.$datei[1]
-                  &nbsp;<img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: middle;\" vspace=\"1\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                  &nbsp;<img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                   onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=dateiname','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\">               </div>
             </div>
 

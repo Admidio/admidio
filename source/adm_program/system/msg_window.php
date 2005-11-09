@@ -107,6 +107,15 @@ echo "
                   bist, du dich aber trotzdem nicht jedesmal neu einloggen willst, so kannst
                   du diesen Zeitraum auf maximal 8 Stunden erh&ouml;hen.";
             break;
+            
+         case "mail_extern":
+            echo "E-Mails werden in der Regel über den Webserver verschickt auf dem Admidio eingerichtet
+                  ist. Sollte dein Webserver keinen E-Mailversand unterstützen, kannst du diese Option
+                  aktivieren. Dadurch wird versucht, das lokale E-Mail-Programm des Benutzers zu starten,
+                  sobald dieser auf einen E-Mail-Link klickt.<br /><br />
+                  Allerdings funktioniert dann die automatische Benachrichtigung bei Neuanmeldungen nicht
+                  mehr.";
+            break;
 
          case "nickname":
             echo "Mit diesem Namen kannst du dich sp&auml;ter auf der Homepage anmelden.<br /><br />

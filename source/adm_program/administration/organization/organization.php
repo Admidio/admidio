@@ -120,8 +120,20 @@ require("../../../adm_config/body_top.php");
                </div>
             </div>";
          }
-         
-         echo "<hr width=\"85%\" />";
+
+         echo "<div style=\"margin-top: 6px;\">
+            <div style=\"text-align: right; width: 40%; float: left;\">Externes Mailprogramm:</div>
+            <div style=\"text-align: left; margin-left: 42%;\">
+               <input type=\"checkbox\" id=\"mail_extern\" name=\"mail_extern\" ";
+               if($g_orga_property['ag_mail_extern'] == 1)
+                  echo " checked ";
+               echo " value=\"1\" />
+               <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+               onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=mail_extern','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
+            </div>
+         </div>
+
+         <hr width=\"85%\" />";
          
          // gruppierungsspezifische Felder anzeigen
          $sql = "SELECT * FROM adm_user_field
@@ -132,7 +144,7 @@ require("../../../adm_config/body_top.php");
          if(mysql_num_rows($result) > 0)
          {
             echo "<p>Gruppierungsspezifische Profilfelder:
-            <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: middle;\" vspace=\"1\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+            <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=profil_felder','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
             </p>
             <table class=\"tableList\" style=\"width: 95%;\" cellpadding=\"2\" cellspacing=\"0\">
@@ -181,7 +193,7 @@ require("../../../adm_config/body_top.php");
          {
             echo "
             Es wurden keine Profilfelder erstellt !
-            <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: middle;\" vspace=\"1\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+            <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=profil_felder','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
             <br />";
          }
