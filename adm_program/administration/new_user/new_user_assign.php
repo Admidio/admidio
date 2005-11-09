@@ -187,7 +187,12 @@ echo "
       echo "<tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\">
                <td style=\"text-align: left;\">&nbsp;<a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->au_id\">$row->au_name,&nbsp;$row->au_vorname</a></td>
                <td style=\"text-align: left;\">&nbsp;$row->au_login</td>
-               <td style=\"text-align: left;\">&nbsp;<a href=\"../adm_program/modules/mail/mail.php?au_id=$row->au_id\">$row->au_mail</a></td>
+               <td style=\"text-align: left;\">&nbsp;";
+               if($g_orga_property['ag_mail_extern'] == 1)
+                  echo "<a href=\"mailto:$row->au_mail\">";
+               else
+                  echo "<a href=\"../adm_program/modules/mail/mail.php?au_id=$row->au_id\">";
+               echo "$row->au_mail</a></td>
                <td style=\"text-align: left;\">&nbsp;";
       if(strlen($row->au_login) > 0)
          echo "Angemeldet";

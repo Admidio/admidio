@@ -24,12 +24,6 @@
  *
  *****************************************************************************/
  
-   // Kennzeichen, ob Scripte im Internet oder lokal auf dem Rechner ausgefuehrt werden
-   // Lokal muessen z.B. keine Mails verschickt werden, das fuehrt nur zum Fehler im Script
-   // 1 = Internet
-   // 0 = Local
-   $g_internet = 1;
-   
    // Daten für die MySQL-Datenbank-Verbindung
    $g_adm_srv = "%SERVER%";      // Server
    $g_adm_usr = "%USER%";        // Benutzer

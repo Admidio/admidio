@@ -55,6 +55,13 @@ if(empty($_POST))
    exit();
 }
 
+if($g_orga_property['ag_mail_extern'] == 1)
+{
+	// es duerfen oder koennen keine Mails ueber den Server verschickt werden
+   $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=mail_extern";
+   header($location);
+   exit();
+}
 
 $_POST['mailfrom'] = trim($_POST['mailfrom']);
 $_POST['name']     = trim($_POST['name']);
@@ -122,7 +129,6 @@ if(strlen($err_code) > 0)
 
 function sendMail($email, $rolle = "")
 {
-   global $g_internet;
    global $g_homepage;
    global $g_session_valid;
 
@@ -186,13 +192,7 @@ function sendMail($email, $rolle = "")
 	  $mail_body = $mail_body. "--". $mailBoundary. "--";
    }
 
-   // Versenden nur im Internet ausfuehren
-   if($g_internet == 1)
-   {
-      return mail($email, $_POST['subject'], $mail_body, $mail_properties);
-   }
-   else
-      return true;
+	return mail($email, $_POST['subject'], $mail_body, $mail_properties);
 }
 
 if(array_key_exists("au_id", $_GET))
@@ -236,18 +236,15 @@ else
       }
    }
 }
-   // jetzt noch eventuell eine Kopie der Mail an den Versender schicken...
-   if($g_internet == 1)
-   {
-      If ($_POST[kopie])
-      {
-      	 $_POST['body'] = "Hier ist Deine angeforderte Kopie der Nachricht:\n\n". $_POST['body'];
-      	 $_POST['body'] = $mail_receivers. "\n\n". $_POST['body'];
-      	 $_POST['body'] = "Die Nachricht ging an:\n". $_POST['body'];
-      	 sendMail($_POST['mailfrom']);
-      }
-   }
 
+// jetzt noch eventuell eine Kopie der Mail an den Versender schicken...
+if($_POST[kopie])
+{
+	 $_POST['body'] = "Hier ist Deine angeforderte Kopie der Nachricht:\n\n". $_POST['body'];
+	 $_POST['body'] = $mail_receivers. "\n\n". $_POST['body'];
+	 $_POST['body'] = "Die Nachricht ging an:\n". $_POST['body'];
+	 sendMail($_POST['mailfrom']);
+}
 
 if(strlen($_POST['rolle']) > 0)
    $err_text = $_POST['rolle'];

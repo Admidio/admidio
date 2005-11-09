@@ -68,7 +68,7 @@ require("../../adm_config/body_top.php");
             <div style=\"text-align: right; width: 130; float: left;\">E-Mail:</div>
             <div style=\"text-align: left; margin-left: 140px;\">
                <input type=\"text\" name=\"email\" size=\"24\" maxlength=\"50\" />&nbsp;
-               <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: middle;\" vspace=\"1\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+               <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                onClick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=email','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
             </div>
          </div>
@@ -79,14 +79,14 @@ require("../../adm_config/body_top.php");
             <div style=\"text-align: right; width: 130; float: left;\">Benutzername:</div>
             <div style=\"text-align: left; margin-left: 140px;\">
                <input type=\"text\" name=\"benutzername\" size=\"20\" maxlength=\"20\" />&nbsp;
-               <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: middle;\" vspace=\"1\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+               <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=nickname','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">            </div>
          </div>
          <div style=\"margin-top: 8px;\">
             <div style=\"text-align: right; width: 130; float: left;\">Passwort:</div>
             <div style=\"text-align: left; margin-left: 140px;\">
                <input type=\"password\" name=\"passwort\" size=\"10\" maxlength=\"20\" />&nbsp;
-               <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: middle;\" vspace=\"1\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+               <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=password','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">            </div>
          </div>
          <div style=\"margin-top: 8px;\">

@@ -146,7 +146,7 @@ if($_POST["upload"]){
          <p>Bild 4:<input type='file' name='bilddatei[]' value='durchsuchen'></p>
          <p>Bild 5:<input type='file' name='bilddatei[]' value='durchsuchen'></p>
          <hr width=\"85%\" />
-			Hilfe: <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: middle;\" vspace=\"1\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+			Hilfe: <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                      onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_up_help','Message','width=500,height=550,left=310,top=200,scrollbars=yes')\">
 			<hr width=\"85%\" />
 	      <div style=\"margin-top: 6px;\">

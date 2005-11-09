@@ -217,7 +217,7 @@ require("../../../adm_config/body_top.php");
             </div>
             <div style=\"text-align: left; margin-left: 16%;\">
                <label for=\"moderation\">Moderation (Benutzer &amp; Rollen verwalten uvm.)&nbsp;</label>
-               <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: middle;\" vspace=\"1\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+               <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_moderation','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
             </div>
          </div>
@@ -231,7 +231,7 @@ require("../../../adm_config/body_top.php");
             </div>
             <div style=\"text-align: left; margin-left: 16%;\">
                <label for=\"benutzer\">Daten aller Benutzer bearbeiten&nbsp;</label>
-               <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: middle;\" vspace=\"1\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+               <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_benutzer','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
             </div>
          </div>
@@ -245,7 +245,7 @@ require("../../../adm_config/body_top.php");
             </div>
             <div style=\"text-align: left; margin-left: 16%;\">
                <label for=\"termine\">Termine erfassen und bearbeiten&nbsp;</label>
-               <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: middle;\" vspace=\"1\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+               <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_termine','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
             </div>
          </div>
@@ -259,7 +259,7 @@ require("../../../adm_config/body_top.php");
             </div>
             <div style=\"text-align: left; margin-left: 16%;\">
                <label for=\"foto\">Fotos hochladen und bearbeiten&nbsp;</label>
-               <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: middle;\" vspace=\"1\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+               <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_foto','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
             </div>
          </div>
@@ -273,7 +273,7 @@ require("../../../adm_config/body_top.php");
             </div>
             <div style=\"text-align: left; margin-left: 16%;\">
                <label for=\"download\">Downloads hochladen und bearbeiten&nbsp;</label>
-               <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: middle;\" vspace=\"1\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+               <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_download','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
             </div>
          </div>
@@ -287,7 +287,7 @@ require("../../../adm_config/body_top.php");
             </div>
             <div style=\"text-align: left; margin-left: 16%;\">
                <label for=\"mail_logout\">Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben&nbsp;</label>
-               <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: middle;\" vspace=\"1\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+               <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_logout','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
             </div>
          </div>
@@ -301,7 +301,7 @@ require("../../../adm_config/body_top.php");
             </div>
             <div style=\"text-align: left; margin-left: 16%;\">
                <label for=\"mail_login\">Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben&nbsp;</label>
-               <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: middle;\" vspace=\"1\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+               <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_login','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
             </div>
          </div>
@@ -315,7 +315,7 @@ require("../../../adm_config/body_top.php");
             </div>
             <div style=\"text-align: left; margin-left: 16%;\">
                <label for=\"locked\">Rolle nur für Moderatoren sichtbar&nbsp;</label>
-               <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: middle;\" vspace=\"1\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+               <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_locked','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
             </div>
          </div>
@@ -330,7 +330,7 @@ require("../../../adm_config/body_top.php");
                   echo " checked ";
                echo " value=\"1\" onclick=\"setDisabled()\" />&nbsp;
                <img src=\"$g_root_path/adm_program/images/gruppe.png\" alt=\"Gruppe\">&nbsp;
-               <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer;\" vspace=\"1\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+               <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_gruppe','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
             </div>
          </div>

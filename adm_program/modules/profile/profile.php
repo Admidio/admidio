@@ -237,10 +237,14 @@ require("../../../adm_config/body_top.php");
                <div style=\"margin-top: 10px; margin-left: 30%; text-align: left\">";
                   if(strlen($user->m_mail) > 0)
                   {
-                     echo "<a href=\"$g_root_path/adm_program/modules/mail/mail.php?au_id=$user->m_id\">
+                     if($g_orga_property['ag_mail_extern'] == 1)
+                        $mail_link = "mailto:$user->m_mail";
+                     else
+                        $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?au_id=$user->m_id";
+                     echo "<a href=\"$mail_link\">
                         <img src=\"$g_root_path/adm_program/images/mail.png\" style=\"vertical-align: middle;\" alt=\"E-Mail an $user->m_mail schreiben\"
                         title=\"E-Mail an $user->m_mail schreiben\" border=\"0\"></a>
-                     <a href=\"$g_root_path/adm_program/modules/mail/mail.php?au_id=$user->m_id\" style=\" overflow: visible; display: inline;\">$user->m_mail</a>";
+                     <a href=\"$mail_link\" style=\" overflow: visible; display: inline;\">$user->m_mail</a>";
                   }
                   else
                      echo "&nbsp;";

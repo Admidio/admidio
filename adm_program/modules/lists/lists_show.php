@@ -380,7 +380,12 @@ for($j = 0; $j < $max_count; $j++)
                   {
                      case "au_mail":
                         if($_GET["mode"] == "html")
-                           $content = "<a href=\"../../adm_program/modules/mail/mail.php?au_id=". $row[0]. "\">". $row[$i]. "</a>";
+                        {
+                           if($g_orga_property['ag_mail_extern'] == 1)
+                              $content = "<a href=\"mailto:". $row[$i]. "\">". $row[$i]. "</a>";
+                           else
+                              $content = "<a href=\"../../adm_program/modules/mail/mail.php?au_id=". $row[0]. "\">". $row[$i]. "</a>";
+                        }
                         else
                            $content = $row[$i];
                         break;

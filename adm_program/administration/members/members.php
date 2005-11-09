@@ -167,8 +167,12 @@ require("../../../adm_config/body_top.php");
                   <td align=\"center\">";
                      if(strlen($row->au_mail) > 0)
                      {
-                        echo "<a href=\"$g_root_path/adm_program/modules/mail/mail.php?au_id=$row->au_id\">
-                           <img src=\"$g_root_path/adm_program/images/mail.png\" alt=\"E-Mail an $row->au_mail schreiben\" title=\"E-Mail an $row->au_mail schreiben\" border=\"0\"></a>";
+                        if($g_orga_property['ag_mail_extern'] == 1)
+                           $mail_link = "mailto:$row->au_mail";
+                        else
+                           $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?au_id=$row->au_id";
+                        echo "<a href=\"$mail_link\"><img src=\"$g_root_path/adm_program/images/mail.png\"
+                           alt=\"E-Mail an $row->au_mail schreiben\" title=\"E-Mail an $row->au_mail schreiben\" border=\"0\"></a>";
                      }
                   echo "</td>
                   <td align=\"center\">";

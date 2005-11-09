@@ -217,8 +217,12 @@ function getErrorText($error_code, $error_text)
           break;
 
       case "write_access":
+       if($g_orga_property['ag_mail_extern'] == 1)
+         $mail_link = "mailto:webmaster@$g_domain";
+       else
+         $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?rolle=Webmaster";
          $error_str = "Der Ordner <b>$error_text</b> konnte nicht angelegt werden. Du musst dich an
-         den <a href=\"$g_root_path/adm_program/modules/mail/mail.php?rolle=Webmaster\">Webmaster</a>
+         den <a href=\"$mail_link\">Webmaster</a>
          wenden, damit dieser <acronym title=\"Über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen.\">
          Schreibrechte</acronym> für den Ordner setzen kann.";
          break;
@@ -342,6 +346,10 @@ function getErrorText($error_code, $error_text)
          Vermutlich ist das Attachment zu groß!";
          break;
 
+      case "mail_extern":
+         $error_str = "Es können keine E-Mails über diese Homepage verschickt werden.<br /><br />
+         Benutz bitte dein E-Mail-Programm zum Versenden der E-Mail.";
+         break;
 
 
 //Ende Fehlermeldungen Mailmodul
