@@ -76,7 +76,7 @@ class CParser
       $b_cond_start = true;   // gibt an, dass eine neue Bedingung angefangen wurde
       $b_new_cond   = true;   // in Stringfeldern wird nach einem neuen Wort gesucht -> neue Bedingung
       $b_math_start = false;  // gibt an, ob bei num. oder Datumsfeldern schon <>= angegeben wurde
-      $date;                  // Variable speichert bei Datumsfeldern das gesamte Datum
+      $date         = "";     // Variable speichert bei Datumsfeldern das gesamte Datum
 
       $this->m_src     = $this->makeStandardSrc($str_src);
       $this->m_str_arr = strsplit($this->m_src);
