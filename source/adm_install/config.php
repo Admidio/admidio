@@ -35,8 +35,9 @@
    // Beispiel: "http://www.admidio.org/beispiel"
    $g_root_path = "%ROOT_PATH%";
    
-   // Startseite der Homepage
-   // Relativer Pfad von g_root_path aus gesehen
+   // Startseite deiner Homepage
+   // Auf diese Seite geht Admidio z.B. nach dem Login
+   // Relativer Pfad von $g_root_path aus gesehen
    $g_main_page = "admidio.html";
    
    // Kurzbezeichnung der Gruppierung, des Vereins oder der Organisation auf der Admidio läuft
