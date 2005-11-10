@@ -60,14 +60,15 @@ if ($err_code != "")
 // Gruppierung updaten
 $sql = "UPDATE adm_gruppierung SET ag_longname    = {0}
                                  , ag_mail_extern = {1}
+                                 , ag_homepage    = {2}
                                  , ag_mother      = ";
 if(strlen($_POST["mutter"]) > 0)
-   $sql = $sql. " {2} ";
+   $sql = $sql. " {3} ";
 else
    $sql = $sql. " NULL ";
    
-$sql = $sql. " WHERE ag_id = {3} ";
-$sql    = prepareSQL($sql, array($_POST['longname'], $_POST['mail_extern'], $_POST['mutter'], $_GET['ag_id']));
+$sql = $sql. " WHERE ag_id = {4} ";
+$sql    = prepareSQL($sql, array($_POST['longname'], $_POST['mail_extern'], $_POST['homepage'], $_POST['mutter'], $_GET['ag_id']));
 $result = mysql_query($sql, $g_adm_con);
 db_error($result);
 

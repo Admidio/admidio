@@ -69,6 +69,7 @@ $g_orga_property['ag_longname']    = $row->ag_longname;
 $g_orga_property['ag_shortname']   = $row->ag_shortname;
 $g_orga_property['ag_mother']      = $row->ag_mother;
 $g_orga_property['ag_mail_extern'] = $row->ag_mail_extern;
+$g_orga_property['ag_homepage']    = $row->ag_homepage;
 
 // Session auf Gueltigkeit pruefen
 
