@@ -48,14 +48,7 @@ function showError($err_msg, $err_head = "Fehler", $finish = false)
       <div align=\"center\"><br /><br />
          <div class=\"formHead\" style=\"width: 300px;\">$err_head</div>
          <div class=\"formBody\" style=\"width: 300px;\">
-            <p>$err_msg</p>";
-            if($err_file_write)
-            {
-               echo "<p>Die Zugangsdaten f&uuml;r die Datenbank konnten nicht in die Datei
-               <i>adm_config/config.php</i> geschrieben werden. Bitte tun Sie dies manuell. </p>";
-            }
-
-            echo "
+            <p>$err_msg</p>
             <p><button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"";
             if($finish)
                echo "self.location.href='../adm_program/index.php'\">Admidio &Uuml;bersicht";
