@@ -71,7 +71,7 @@ require("../../../adm_config/body_top.php");
       
       <div class=\"formHead\">". $g_orga_property['ag_longname']. " bearbeiten</div>
       <div class=\"formBody\">
-         <div>
+      	 <div>
             <div style=\"text-align: right; width: 40%; float: left;\">Name (Abk.):</div>
             <div style=\"text-align: left; margin-left: 42%;\">
                <input type=\"text\" name=\"shortname\" class=\"readonly\" readonly size=\"10\" maxlength=\"10\" value=\"". $g_orga_property['ag_shortname']. "\">
@@ -82,8 +82,14 @@ require("../../../adm_config/body_top.php");
             <div style=\"text-align: left; margin-left: 42%;\">
                <input type=\"text\" name=\"longname\" size=\"30\" maxlength=\"60\" value=\"". $g_orga_property['ag_longname']. "\">
             </div>
+         </div>
+         <div style=\"margin-top: 6px;\">
+            <div style=\"text-align: right; width: 40%; float: left;\">Homepage:</div>
+            <div style=\"text-align: left; margin-left: 42%;\">
+               <input type=\"text\" name=\"homepage\" size=\"30\" maxlength=\"30\" value=\"". $g_orga_property['ag_homepage']. "\">
+            </div>
          </div>";
-
+			
          // bei mehr als einer Gruppierung, Checkbox anzeigen, ob, Termin bei anderen angezeigt werden soll
          $sql = "SELECT * FROM adm_gruppierung
                   WHERE ag_shortname NOT LIKE '$g_organization' ";

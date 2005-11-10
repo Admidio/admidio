@@ -129,7 +129,7 @@ if(strlen($err_code) > 0)
 
 function sendMail($email, $rolle = "")
 {
-   global $g_homepage;
+   global $g_orga_property;
    global $g_session_valid;
 
    $mail_body = "";
@@ -163,7 +163,7 @@ function sendMail($email, $rolle = "")
    else
       $mail_body = $mail_body. "Dir";
 
-   $mail_body = $mail_body. " von $g_homepage folgende Mail geschickt:\nEine Antwort kannst Du an ".
+   $mail_body = "$mail_body von ". $g_orga_property['ag_homepage']. " folgende Mail geschickt:\nEine Antwort kannst Du an ".
                       $_POST['mailfrom']. " schicken.";
 
    if(!$g_session_valid)

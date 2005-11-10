@@ -49,10 +49,8 @@
    // Ohne http:// oder www. und auch keine Subdomains angeben !!!
    // Beispiel: "admidio.org"
    $g_domain   = "%DOMAIN%";
-
-   // URL der Homepage
-   $g_homepage = "www.admidio.org";
-      
+   
+         
    
    // Forumspezifisch
    
