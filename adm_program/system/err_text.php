@@ -348,7 +348,11 @@ function getErrorText($error_code, $error_text)
 
       case "mail_extern":
          $error_str = "Es können keine E-Mails über diese Homepage verschickt werden.<br /><br />
-         Benutz bitte dein E-Mail-Programm zum Versenden der E-Mail.";
+         Benutze bitte dein E-Mail-Programm zum Versenden der E-Mail.";
+         break;
+
+      case "mail_rolle":
+         $error_str = "Bitte wähle eine Rolle als Adressat der Mail aus!";
          break;
 
 

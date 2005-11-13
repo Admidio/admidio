@@ -95,26 +95,34 @@ else
 
 if(array_key_exists("rolle", $_POST) && strlen($err_code) == 0)
 {
-   if($g_session_valid)
+
+   if (strlen($_POST['rolle']) == 0)
    {
-      $sql    = "SELECT ar_r_mail_login FROM adm_rolle
-                  WHERE ar_ag_shortname    = '$g_organization'
-                    AND UPPER(ar_funktion) = UPPER({0}) ";
+   		$err_code = "mail_rolle";
    }
    else
    {
-      $sql    = "SELECT ar_r_mail_logout FROM adm_rolle
-                  WHERE ar_ag_shortname    = '$g_organization'
-                    AND UPPER(ar_funktion) = UPPER({0}) ";
-   }
-   $sql    = prepareSQL($sql, array($_POST['rolle']));
-   $result = mysql_query($sql, $g_adm_con);
-   db_error($result);
-   $row = mysql_fetch_array($result);
+   		if($g_session_valid)
+   		{
+      		$sql    = "SELECT ar_r_mail_login FROM adm_rolle
+           		       WHERE ar_ag_shortname    = '$g_organization'
+               		     AND UPPER(ar_funktion) = UPPER({0}) ";
+   		}
+   		else
+   		{
+      		$sql    = "SELECT ar_r_mail_logout FROM adm_rolle
+           		       WHERE ar_ag_shortname    = '$g_organization'
+               		     AND UPPER(ar_funktion) = UPPER({0}) ";
+   		}
+   		$sql    = prepareSQL($sql, array($_POST['rolle']));
+   		$result = mysql_query($sql, $g_adm_con);
+   		db_error($result);
+   		$row = mysql_fetch_array($result);
 
-   if($row[0] != 1)
-   {
-      $err_code = "invalid";
+   		if($row[0] != 1)
+   		{
+      		$err_code = "invalid";
+   		}
    }
 }
 

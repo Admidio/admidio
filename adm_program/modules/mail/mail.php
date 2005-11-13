@@ -152,6 +152,7 @@ require("../../../adm_config/body_top.php");
                {
                   // keine Uebergabe, dann alle Rollen entsprechend Login/Logout auflisten
                   echo "<select size=\"1\" name=\"rolle\">";
+                  echo "<option value=\"\" selected=\"selected\">- Bitte wählen -</option>";
 
                   if($g_session_valid)
                   {
@@ -187,12 +188,7 @@ require("../../../adm_config/body_top.php");
 
                   while($row = mysql_fetch_array($result))
                   {
-                     echo "<option value=\"$row[0]\"";
-
-                     if(strcmp($row[0], "Webmaster") == 0)
-                        echo " selected=\"selected\" ";
-
-                     echo ">$row[0]</option>";
+                     echo "<option value=\"$row[0]\">$row[0]</option>";
                   }
 
                   echo "</select>&nbsp;
