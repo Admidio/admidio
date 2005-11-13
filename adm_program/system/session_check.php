@@ -45,12 +45,12 @@ if(isset($_COOKIE["adm_session"]))
    $g_session_id = $_COOKIE["adm_session"];
 else
    $g_session_id = "";
-   
+
 if(isset($_COOKIE["adm_user_id"]))
    $g_user_id = $_COOKIE["adm_user_id"];
 else
    $g_user_id = 0;
-   
+
 if(isset($_COOKIE["adm_login"]))
    $g_nickname = $_COOKIE["adm_login"];
 else
@@ -70,7 +70,8 @@ $g_orga_property['ag_shortname']   = $row->ag_shortname;
 $g_orga_property['ag_mother']      = $row->ag_mother;
 $g_orga_property['ag_mail_extern'] = $row->ag_mail_extern;
 $g_orga_property['ag_homepage']    = $row->ag_homepage;
-   
+$g_orga_property['ag_mail_attachment_size']    = $row->ag_mail_attachment_size;
+
 if ($g_session_id != "")
 {
    // Session auf Gueltigkeit pruefen
@@ -80,7 +81,7 @@ if ($g_session_id != "")
    $result = mysql_query($sql, $g_adm_con);
 
    db_error($result);
-   
+
    $session_found = mysql_num_rows($result);
    $row           = mysql_fetch_object($result);
 
@@ -118,7 +119,7 @@ if ($g_session_id != "")
       else
       {
          // User war zu lange inaktiv -> Session loeschen
-         
+
          $g_user_id       = 0;
          $g_nickname      = "";
 
@@ -144,7 +145,7 @@ if ($g_session_id != "")
 
          db_error($result);
       }
-      
+
       $g_user_id       = 0;
       $g_nickname      = "";
    }

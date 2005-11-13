@@ -50,7 +50,7 @@ if(array_key_exists("au_id", $_GET) && !$g_session_valid)
 
 if($g_orga_property['ag_mail_extern'] == 1)
 {
-	// es duerfen oder koennen keine Mails ueber den Server verschickt werden
+  // es duerfen oder koennen keine Mails ueber den Server verschickt werden
    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=mail_extern";
    header($location);
    exit();
@@ -237,16 +237,17 @@ require("../../../adm_config/body_top.php");
             </div>
          </div>";
 
-         if($g_session_valid)   // Nur eingeloggte User duerfen Attachments mit max 3MB anhaengen...
+         // Nur eingeloggte User duerfen Attachments mit max 3MB anhaengen...
+         if(($g_session_valid) && ($g_orga_property['ag_mail_attachment_size'] > 0))
          {
-       echo "
-         <div style=\"margin-top: 8px;\">
-            <div style=\"text-align: right; width: 70px; float: left;\">Anhang:</div>
-            <div style=\"text-align: left; margin-left: 80px;\">
-                <input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"3145728\">
-                  <input name=\"userfile\" size=\"40\" type=\"file\">
-            </div>
-         </div>";
+           echo "
+           <div style=\"margin-top: 8px;\">
+              <div style=\"text-align: right; width: 70px; float: left;\">Anhang:</div>
+              <div style=\"text-align: left; margin-left: 80px;\">
+                 <input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"" . ($g_orga_property['ag_mail_attachment_size'] * 1024) . "\">
+                 <input name=\"userfile\" size=\"40\" type=\"file\">
+              </div>
+           </div>";
          }
 
          echo "

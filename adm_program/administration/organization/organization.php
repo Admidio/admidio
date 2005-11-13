@@ -55,7 +55,7 @@ echo "
 <head>
    <title>". $g_orga_property['ag_shortname']. " - bearbeiten</title>
    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
-   
+
    <!--[if gte IE 5.5000]>
    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
    <![endif]-->";
@@ -68,7 +68,7 @@ require("../../../adm_config/body_top.php");
    <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
 
    <form action=\"organization_function.php?ag_id=". $g_orga_property['ag_id']. "&amp;url=$url\" method=\"post\" name=\"Gruppierung bearbeiten\">
-      
+
       <div class=\"formHead\">". $g_orga_property['ag_longname']. " bearbeiten</div>
       <div class=\"formBody\">
       	 <div>
@@ -89,13 +89,13 @@ require("../../../adm_config/body_top.php");
                <input type=\"text\" name=\"homepage\" size=\"30\" maxlength=\"30\" value=\"". $g_orga_property['ag_homepage']. "\">
             </div>
          </div>";
-			
+
          // bei mehr als einer Gruppierung, Checkbox anzeigen, ob, Termin bei anderen angezeigt werden soll
          $sql = "SELECT * FROM adm_gruppierung
                   WHERE ag_shortname NOT LIKE '$g_organization' ";
          $result = mysql_query($sql, $g_adm_con);
          db_error($result);
-         
+
          if(mysql_num_rows($result) > 0)
          {
             // Auswahlfeld fuer die uebergeordnete Gruppierung
@@ -108,14 +108,14 @@ require("../../../adm_config/body_top.php");
                         if(strlen($g_orga_property['ag_mother']) == 0)
                            echo " selected ";
                      echo ">Ausw&auml;hlen ...</option>";
-                     
+
                      while($row = mysql_fetch_object($result))
                      {
                         echo "<option value=\"$row->ag_shortname\"";
                            if($g_orga_property['ag_mother'] == $row->ag_shortname)
                               echo " selected ";
                         echo ">";
-                        
+
                         if(strlen($row->ag_longname) > 2)
                            echo $row->ag_longname;
                         else
@@ -139,8 +139,18 @@ require("../../../adm_config/body_top.php");
             </div>
          </div>
 
+         <div style=\"margin-top: 6px;\">
+            <div style=\"text-align: right; width: 40%; float: left;\">Max. Attachmentgr&ouml;&szlig;e:</div>
+            <div style=\"text-align: left; margin-left: 42%;\">
+               <input type=\"text\" name=\"attachment_size\" size=\"4\" maxlength=\"4\" value=\"". $g_orga_property['ag_mail_attachment_size']. "\"> KB
+               <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+               onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=attachmentgroesse','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
+            </div>
+         </div>
+
          <hr width=\"85%\" />";
-         
+
+
          // gruppierungsspezifische Felder anzeigen
          $sql = "SELECT * FROM adm_user_field
                   WHERE auf_ag_shortname LIKE '$g_organization' ";
@@ -161,7 +171,7 @@ require("../../../adm_config/body_top.php");
                   <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Feld nur für Moderatoren sichtbar\" title=\"Feld nur für Moderatoren sichtbar\"></th>
                   <th class=\"tableHeader\">&nbsp;</th>
                </tr>";
-               
+
             while($row = mysql_fetch_object($result))
             {
                echo "
@@ -223,7 +233,7 @@ require("../../../adm_config/body_top.php");
          </div>
       </div>
    </form>
-   
+
    </div>";
 
    require("../../../adm_config/body_bottom.php");

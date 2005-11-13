@@ -45,7 +45,7 @@ if(isset($_COOKIE["adm_session"]))
    $g_session_id = $_COOKIE["adm_session"];
 else
    $g_session_id = "";
-   
+
 if(isset($_COOKIE["adm_user_id"]))
    $g_user_id = $_COOKIE["adm_user_id"];
 else
@@ -55,7 +55,7 @@ if(isset($_COOKIE["adm_login"]))
    $g_nickname = $_COOKIE["adm_login"];
 else
    $g_nickname = "";
-   
+
 // Daten der Gruppierung in Variable einlesen
 $sql    = "SELECT * FROM adm_gruppierung
             WHERE ag_shortname LIKE '$g_organization' ";
@@ -70,6 +70,7 @@ $g_orga_property['ag_shortname']   = $row->ag_shortname;
 $g_orga_property['ag_mother']      = $row->ag_mother;
 $g_orga_property['ag_mail_extern'] = $row->ag_mail_extern;
 $g_orga_property['ag_homepage']    = $row->ag_homepage;
+$g_orga_property['ag_mail_attachment_size']    = $row->ag_mail_attachment_size;
 
 // Session auf Gueltigkeit pruefen
 
@@ -85,7 +86,7 @@ if ($session_found == 1)
 {
    $valid    = false;
    $time_gap = time() - mysqlmaketimestamp($row->as_datetime);
-   
+
    if($row->as_long_login == 1)
    {
       // User will erst nach 10 Stunden ausgeloggt werden
@@ -119,7 +120,7 @@ if ($session_found == 1)
       $sql    = prepareSQL($sql, array($g_session_id));
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
-      
+
       $g_user_id       = 0;
       $g_nickname      = "";
 
@@ -162,7 +163,7 @@ else
       $url = "http://". $url;
    else
       $url = $url;
-      
+
    // User nicht eingeloggt
    $location = "location: $g_root_path/adm_program/system/login.php?url=". urlencode($url);
    header($location);

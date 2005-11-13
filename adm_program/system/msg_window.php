@@ -48,6 +48,11 @@ echo "
    <div class=\"groupBox\" align=\"left\" style=\"padding: 10px\">";
       switch ($_GET['err_code'])
       {
+         case "attachmentgroesse":
+         	echo "Hier kannst Du die maximal zul&auml;ssige Gr&ouml;&szlig;e der Email-Attachments in Kilobyte definieren.<br /><br />
+                  Wenn Du das Verschicken von Attachments komplett unterbinden m&ouml;chtest, solltest Du 0 eintragen.";
+            break;
+
          case "condition":
             echo "Hier kannst du Bedingungen zu jedem Feld in deiner neuen Liste eingeben.
                   Damit wird die ausgew&auml;hlte Rolle noch einmal nach deinen Bedingungen
@@ -107,7 +112,7 @@ echo "
                   bist, du dich aber trotzdem nicht jedesmal neu einloggen willst, so kannst
                   du diesen Zeitraum auf maximal 8 Stunden erh&ouml;hen.";
             break;
-            
+
          case "mail_extern":
             echo "E-Mails werden in der Regel über den Webserver verschickt auf dem Admidio eingerichtet
                   ist. Sollte dein Webserver keinen E-Mailversand unterstützen, kannst du diese Option
