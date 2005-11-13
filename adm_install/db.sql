@@ -19,6 +19,7 @@ CREATE TABLE `adm_gruppierung` (
   `ag_shortname` varchar(10) NOT NULL default '',
   `ag_mother` varchar(10) default NULL,
   `ag_mail_extern` tinyint(1) unsigned NOT NULL default '0',
+  `ag_homepage` varchar(30) NULL default 'www.admidio.org',
   PRIMARY KEY  (`ag_id`),
   UNIQUE KEY `bg_shortname` (`ag_shortname`)
 ) TYPE=MyISAM COMMENT='Gruppierung' AUTO_INCREMENT=1 ;
