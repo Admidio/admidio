@@ -83,7 +83,7 @@
            $ordnerarray[] = $inhalt;
         }
     }
-	//Falls Existent, Sortierung de Arrays. Absteigend, damit neue Daten oben stehen
+	//Falls Existent, Sortierung des Arrays. Absteigend, damit neue Daten oben stehen
 	if(array_count_values($ordnerarray)!=0){
 		rsort($ordnerarray);
 	}
