@@ -83,10 +83,10 @@
            $ordnerarray[] = $inhalt;
         }
     }
-	//Falls Existent, Sortierung des Arrays. Absteigend, damit neue Daten oben stehen
-	if(array_count_values($ordnerarray)!=0){
-		rsort($ordnerarray);
-	}
+   //Falls Existent, Sortierung des Arrays aufsteigend nach Name
+   if(array_count_values($ordnerarray)!=0){
+      sort($ordnerarray);
+   }
    echo "
    <!-- (c) 2004 - 2005 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
    <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
