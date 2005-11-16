@@ -1,0 +1,137 @@
+<?php
+/******************************************************************************
+ * Funktionen des Benutzers speichern
+ *
+ * Copyright    : (c) 2004 - 2005 The Admidio Team
+ * Homepage     : http://www.admidio.org
+ * Module-Owner : Jochen Erkens
+ *
+ * Uebergaben:
+ *
+ * user_id: Funktionen der uebergebenen ID aendern
+ * url:     URL auf die danach weitergeleitet wird
+ *
+ ******************************************************************************
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *
+ *****************************************************************************/
+require("../../../adm_config/config.php");
+require("../../system/function.php");
+require("../../system/date.php");
+require("../../system/tbl_user.php");
+require("../../system/session_check_login.php");
+require("../../system/string.php");
+
+// nur Webmaster & Moderatoren duerfen Rollen zuweisen
+if(!isModerator() && !isGroupLeader() && !editUser())
+ {
+   $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
+   header($location);
+   exit();
+ }
+//Übernahme der Rolle die bearbeitet werden soll
+$role_id = $_GET["role_id"];
+//Veraarbeitung der Daten
+	//Abfrag aller Datensätze die mit der Rolle zu tun haben
+	$sql ="	SELECT *
+				FROM adm_mitglieder
+				WHERE am_ar_id = $role_id";
+	$result_role = mysql_query($sql, $g_adm_con);
+   db_error($result, true);
+   //Schreiben der Datensätze in Array sortiert nach zugewiesenen Benutzern (id)
+   $mitglieder_array= array(array());
+   for($x=0; $role= mysql_fetch_array($result_role); $x++){
+   	for($y=0; $y<=6; $y++){
+   		$mitglieder_array["$role[2]"][$y]=$role[$y];
+   	}
+   }
+   //Aufrufen alle Leute aus der Datenbank
+    $sql ="	SELECT *
+           	FROM adm_user";
+   			$result_user = mysql_query($sql, $g_adm_con);
+   			db_error($result_user);
+	//Datensätze durchgehen und sehen ob für den Benutzer eine Änderung vorliegt
+	while($user= mysql_fetch_array($result_user)){
+		//Falls User Mitglied der Rolle ist oder schonmal war
+		if(array_key_exists($user["au_id"], $mitglieder_array)){
+			//Kontolle ob Zuweisung geändert wurde wen ja entsprechenden SQL-Befehl zusammensetzen
+			//Falls abgewählt wurde
+			if($mitglieder_array[$user["au_id"]][5]==1 && $_POST[$user["au_id"]]==false){
+				$am_id = $mitglieder_array[$user["au_id"]][0];
+				$sql ="	UPDATE adm_mitglieder SET am_valid  = 0
+                                          , am_ende   = NOW()
+							WHERE am_id = '$am_id'";                             
+			}
+			//Falls wieder angemeldet wurde
+			if($mitglieder_array[$user["au_id"]][5]==0 && $_POST[$user["au_id"]]==true){
+				$am_id = $mitglieder_array[$user["au_id"]][0];
+				$sql ="	UPDATE adm_mitglieder SET am_valid  = 1
+                                          , am_ende   = '0000-00-00'
+							WHERE am_id = '$am_id'";
+			}
+		}
+		//Falls noch nie angemeldet gewesen aber jetzt werden soll
+		else if(!array_key_exists($user["au_id"], $mitglieder_array) && $_POST[$user["au_id"]]==true){
+			$au_id = $user["au_id"];
+			$sql = "INSERT INTO adm_mitglieder (am_ar_id, am_au_id, am_start, am_valid)
+                 VALUES ($role_id, $au_id, NOW(), 1) ";
+		}
+		$result = mysql_query($sql, $g_adm_con);
+   	db_error($result);
+	}
+
+
+
+if($_GET['popup'] == 1)
+{
+   echo "
+   <?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?". ">
+   <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 TRANSITIONAL//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
+   <html xmlns=\"http://www.w3.org/1999/xhtml\">
+   <head>
+      <!-- (c) 2004 - 2005 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->
+      <title>Funktionen zuordnen</title>
+      <meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\" />
+      <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\" />
+      
+      <!--[if gte IE 5.5000]>
+      <script language=\"JavaScript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
+      <![endif]-->
+   </head>
+
+   <body>
+      <div align=\"center\"><br />
+         <div class=\"groupBox\" align=\"left\" style=\"padding: 10px\">
+            <p>Die &Auml;nderungen wurden erfolgreich gespeichert.</p>
+            <p>Bitte denk daran, die Listenauswahl im Browser neu zu laden,
+            damit die ge&auml;nderten Daten angezeigt werden.</p>
+         </div>
+         <div style=\"padding-top: 10px;\" align=\"center\">
+            <button name=\"schliessen\" type=\"button\" value=\"schliessen\" onclick=\"window.close()\">
+            <img src=\"$g_root_path/adm_program/images/error.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\">
+            &nbsp;Schlie&szlig;en</button>
+         </div>
+      </div>
+   </body>
+   </html>";
+}
+else
+{
+   // zur Ausgangsseite zurueck
+   $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=save&url=". $_GET['url']. "&timer=2000";
+   header($location);
+   exit();
+}
