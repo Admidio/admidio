@@ -8,9 +8,6 @@
  *
  * Uebergaben:
  *
- * mode: all - (Default) Alle (alte und neue) Ankuendigungen anzeigen
- *       new - Alle aktuellen und zukuenftige Ankuendigungen anzeigen
- *       old - Alle bereits erledigten
  * start     - Angabe, ab welchem Datensatz Ankuendigungen angezeigt werden sollen
  * headline  - Ueberschrift, die ueber den Ankuendigungen steht
  *             (Default) Ankuendigungen
@@ -92,32 +89,11 @@ require("../../../adm_config/body_top.php");
       $i++;
    }
 
-   if(strcmp($_GET['mode'], "old") == 0)
-   {
-      $sql    = "SELECT COUNT(*) FROM adm_ankuendigungen
-                  WHERE (  aa_ag_shortname = '$g_organization'
-                        OR (   aa_global   = 1
-                           AND aa_ag_shortname IN ($organizations) ))
-                    AND aa_datum <= '$act_date'
-                  ORDER BY aa_datum DESC ";
-   }
-   elseif(strcmp($_GET['mode'], "new") == 0)
-   {
-      $sql    = "SELECT COUNT(*) FROM adm_ankuendigungen
-                  WHERE (  aa_ag_shortname = '$g_organization'
-                        OR (   aa_global   = 1
-                           AND aa_ag_shortname IN ($organizations) ))
-                    AND aa_datum >= '$act_date'
-                  ORDER BY aa_datum ASC ";
-   }
-   else
-   {
-      $sql    = "SELECT COUNT(*) FROM adm_ankuendigungen
-                  WHERE (  aa_ag_shortname = '$g_organization'
-                        OR (   aa_global   = 1
-                           AND aa_ag_shortname IN ($organizations) ))
-                  ORDER BY aa_datum ASC ";
-   }
+	$sql    = "SELECT COUNT(*) FROM adm_ankuendigungen
+               WHERE (  aa_ag_shortname = '$g_organization'
+                     OR (   aa_global   = 1
+                        AND aa_ag_shortname IN ($organizations) ))
+               ORDER BY aa_timestamp ASC ";
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
 
@@ -130,35 +106,12 @@ require("../../../adm_config/body_top.php");
    }
    else
    {
-      if(strcmp($_GET['mode'], "old") == 0)
-      {
-         $sql    = "SELECT * FROM adm_ankuendigungen
-                     WHERE (  aa_ag_shortname = '$g_organization'
+		$sql    = "SELECT * FROM adm_ankuendigungen
+                  WHERE (  aa_ag_shortname = '$g_organization'
                         OR (   aa_global   = 1
                            AND aa_ag_shortname IN ($organizations) ))
-                       AND aa_datum <= '$act_date'
-                     ORDER BY aa_datum DESC
-                     LIMIT ". $_GET["start"]. ", 10 ";
-      }
-      elseif(strcmp($_GET['mode'], "new") == 0)
-      {
-         $sql    = "SELECT * FROM adm_ankuendigungen
-                     WHERE (  aa_ag_shortname = '$g_organization'
-                        OR (   aa_global   = 1
-                           AND aa_ag_shortname IN ($organizations) ))
-                       AND aa_datum >= '$act_date'
-                     ORDER BY aa_datum ASC
-                     LIMIT ". $_GET["start"]. ", 10 ";
-      }
-      else
-      {
-         $sql    = "SELECT * FROM adm_ankuendigungen
-                     WHERE (  aa_ag_shortname = '$g_organization'
-                        OR (   aa_global   = 1
-                           AND aa_ag_shortname IN ($organizations) ))
-                     ORDER BY aa_datum DESC
-                     LIMIT ". $_GET["start"]. ", 10 ";
-      }
+                  ORDER BY aa_timestamp DESC
+                  LIMIT ". $_GET["start"]. ", 10 ";
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
 
@@ -214,17 +167,15 @@ require("../../../adm_config/body_top.php");
          <div class=\"boxBody\" style=\"overflow: hidden;\">
             <div class=\"boxHead\">
                <div style=\"text-align: left; float: left;\">
-                  <img src=\"$g_root_path/adm_program/images/note.png\" style=\"vertical-align: top;\" alt=\"". specialChars2Html($row->aa_ueberschrift). "\">
-                  ". mysqldatetime("d.m.y", $row->aa_datum);
-                  if(mysqldatetime("h:i", $row->aa_datum) != "00:00")
-                     echo "&nbsp;&nbsp;". mysqldatetime("h:i", $row->aa_datum). "&nbsp;";
-                  echo "&nbsp;". specialChars2Html($row->aa_ueberschrift). "
+                  <img src=\"$g_root_path/adm_program/images/note.png\" style=\"vertical-align: top;\" alt=\"". specialChars2Html($row->aa_ueberschrift). "\">&nbsp;".
+                  specialChars2Html($row->aa_ueberschrift). "
                </div>";
 
                // aendern & loeschen darf man nur eigene Termine, ausser Admins & Moderatoren
                if(isModerator())
                {
-                  echo "<div style=\"text-align: right;\">
+                  echo "<div style=\"text-align: right;\">" .
+                  	mysqldatetime("d.m.y", $row->aa_timestamp). "&nbsp;
                      <img src=\"$g_root_path/adm_program/images/edit.png\" style=\"cursor: pointer;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"
                      onclick=\"self.location.href='announcements_new.php?aa_id=$row->aa_id&amp;headline=". $_GET['headline']. "'\">";
 
@@ -237,6 +188,10 @@ require("../../../adm_config/body_top.php");
                      echo " onclick=\"self.location.href='$g_root_path/adm_program/system/err_msg.php?err_code=delete_announcement&amp;err_text=". urlencode($row->aa_ueberschrift). "&amp;err_head=L&ouml;schen&amp;button=2&amp;url=$load_url'\">";
                   }
                   echo "&nbsp;</div>";
+               }
+               else
+               {
+               	echo "<div style=\"text-align: right;\">". mysqldatetime("d.m.y", $row->aa_timestamp). "&nbsp;</div>"; 
                }
             echo "</div>
 
