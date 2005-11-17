@@ -64,13 +64,15 @@ $result = mysql_query($sql, $g_adm_con);
 db_error($result);
 
 $row = mysql_fetch_object($result);
-$g_orga_property['ag_id'] = $row->ag_id;
-$g_orga_property['ag_longname']    = $row->ag_longname;
-$g_orga_property['ag_shortname']   = $row->ag_shortname;
-$g_orga_property['ag_mother']      = $row->ag_mother;
-$g_orga_property['ag_mail_extern'] = $row->ag_mail_extern;
-$g_orga_property['ag_homepage']    = $row->ag_homepage;
-$g_orga_property['ag_mail_attachment_size']    = $row->ag_mail_attachment_size;
+$g_orga_property = array(
+	'ag_id'          => $row->ag_id,
+	'ag_longname'    => $row->ag_longname,
+	'ag_shortname'   => $row->ag_shortname,
+	'ag_mother'      => $row->ag_mother,
+	'ag_mail_extern' => $row->ag_mail_extern,
+	'ag_homepage'    => $row->ag_homepage,
+	'ag_mail_attachment_size' => $row->ag_mail_attachment_size
+	);
 
 if ($g_session_id != "")
 {
