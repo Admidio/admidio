@@ -48,8 +48,6 @@ if(!array_key_exists("headline", $_GET))
 
 $global        = 0;
 $headline      = "";
-$date          = "";
-$time          = "";
 $description   = "";
 
 // Wenn eine Ankuendigungs-ID uebergeben wurde, soll die Ankuendigung geaendert werden
@@ -68,15 +66,8 @@ if ($_GET["aa_id"] != 0)
 
       $global        = $row_ba->aa_global;
       $headline      = $row_ba->aa_ueberschrift;
-      $date          = mysqldatetime("d.m.y", $row_ba->aa_datum);
-      $time          = mysqldatetime("h:i", $row_ba->aa_datum);
-      if ($time == "00:00") $time = "";
       $description   = $row_ba->aa_beschreibung;
    }
-}
-else
-{
-	$date = date("d.m.Y");
 }
 
 echo "
@@ -116,7 +107,14 @@ require("../../../adm_config/body_top.php");
          <div>
             <div style=\"text-align: right; width: 25%; float: left;\">&Uuml;berschrift:</div>
             <div style=\"text-align: left; margin-left: 27%;\">
-               <input type=\"text\" name=\"ueberschrift\" size=\"52\" maxlength=\"100\" value=\"". htmlspecialchars($headline, ENT_QUOTES). "\">
+               <input type=\"text\" name=\"ueberschrift\" size=\"53\" maxlength=\"100\" value=\"". htmlspecialchars($headline, ENT_QUOTES). "\">
+            </div>
+         </div>
+
+         <div style=\"margin-top: 6px;\">
+            <div style=\"text-align: right; width: 25%; float: left;\">Beschreibung:</div>
+            <div style=\"text-align: left; margin-left: 27%;\">
+               <textarea  name=\"beschreibung\" rows=\"7\" cols=\"40\">". htmlspecialchars($description, ENT_QUOTES). "</textarea>
             </div>
          </div>";
 
@@ -143,30 +141,8 @@ require("../../../adm_config/body_top.php");
                </div>
             </div>";
          }
-         
+
          echo "<hr width=\"85%\" />
-         
-         <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 25%; float: left;\">Datum:</div>
-            <div style=\"text-align: left; margin-left: 27%;\">
-               <input type=\"text\" name=\"datum\" size=\"10\" maxlength=\"10\" value=\"$date\">
-            </div>
-         </div>
-         <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 25%; float: left;\">Uhrzeit:</div>
-            <div style=\"text-align: left; margin-left: 27%;\">
-               <input type=\"text\" name=\"uhrzeit\" size=\"5\" maxlength=\"5\" value=\"$time\">
-               <span style=\"font-family: Courier, Helvetica; font-size: 10pt\">(optional)</span>
-            </div>
-         </div>
-         <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 25%; float: left;\">Beschreibung:</div>
-            <div style=\"text-align: left; margin-left: 27%;\">
-               <textarea  name=\"beschreibung\" rows=\"7\" cols=\"40\">". htmlspecialchars($description, ENT_QUOTES). "</textarea>
-            </div>
-         </div>
-         
-         <hr width=\"85%\" />
 
          <div style=\"margin-top: 6px;\">
             <button name=\"speichern\" type=\"submit\" value=\"speichern\">
