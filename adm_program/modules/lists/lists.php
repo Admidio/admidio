@@ -180,7 +180,7 @@ require("../../../adm_config/body_top.php");
                   if(isModerator())
                   {
                     echo "&nbsp;<a href=\"$g_root_path/adm_program/administration/roles/roles_new.php?ar_id=$row_lst->ar_id\"><img src=\"$g_root_path/adm_program/images/edit.png\" vspace=\"1\" style=\"vertical-align: middle;\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Einstellungen\" title=\"Einstellungen\"></a>";    
-                    echo "&nbsp;<a href onClick=\"window.open('$g_root_path/adm_program/modules/lists/members.php?ar_id=$row_lst->ar_id&amp;popup=1','Titel','width=550,height=450,left=310,top=100,scrollbars=yes,resizable=yes')\"><img src=\"$g_root_path/adm_program/images/person.png\" vspace=\"1\" style=\"vertical-align: middle;\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Mitglieder zuordnen\" title=\"Mitglieder zuordnen\"></a>";    
+                    echo "&nbsp;<img src=\"$g_root_path/adm_program/images/person.png\" vspace=\"1\" style=\"vertical-align: middle; cursor: pointer;\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Mitglieder zuordnen\" title=\"Mitglieder zuordnen\" onClick=\"window.open('$g_root_path/adm_program/modules/lists/members.php?ar_id=$row_lst->ar_id&amp;popup=1','Titel','width=550,height=450,left=310,top=100,scrollbars=yes,resizable=yes')\">";    
                   }
             echo "</div>
             <div style=\"text-align: right;\">";

@@ -8,8 +8,9 @@
  *
  * Uebergaben:
  *
- * user_id: Funktionen der uebergebenen ID aendern
+ * user_id: Benutzer deren zuordnung geändert werden soll
  * url:     URL auf die danach weitergeleitet wird
+ * role_id: Rolle zu denen die Zuordnug geändert werden soll
  *
  ******************************************************************************
  *
@@ -74,6 +75,8 @@ $role_id = $_GET["role_id"];
 				$sql ="	UPDATE adm_mitglieder SET am_valid  = 0
                                           , am_ende   = NOW()
 							WHERE am_id = '$am_id'";                             
+				$result = mysql_query($sql, $g_adm_con);
+   			db_error($result);
 			}
 			//Falls wieder angemeldet wurde
 			if($mitglieder_array[$user["au_id"]][5]==0 && $_POST[$user["au_id"]]==true){
@@ -81,6 +84,8 @@ $role_id = $_GET["role_id"];
 				$sql ="	UPDATE adm_mitglieder SET am_valid  = 1
                                           , am_ende   = '0000-00-00'
 							WHERE am_id = '$am_id'";
+				$result = mysql_query($sql, $g_adm_con);
+   			db_error($result);			
 			}
 		}
 		//Falls noch nie angemeldet gewesen aber jetzt werden soll
@@ -88,9 +93,9 @@ $role_id = $_GET["role_id"];
 			$au_id = $user["au_id"];
 			$sql = "INSERT INTO adm_mitglieder (am_ar_id, am_au_id, am_start, am_valid)
                  VALUES ($role_id, $au_id, NOW(), 1) ";
+			$result = mysql_query($sql, $g_adm_con);
+   		db_error($result);
 		}
-		$result = mysql_query($sql, $g_adm_con);
-   	db_error($result);
 	}
 
 
