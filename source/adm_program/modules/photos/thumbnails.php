@@ -76,7 +76,7 @@
          echo "
          function win$x()
          {
-            msg = window.open(\"photopopup.php?bild=$x&ap_id=$ap_id\",\"msg\",\"height=600,width=580,left=162,top=5\")
+            msg = 
          } ";
       };
       echo "// End --></script>
@@ -111,9 +111,7 @@
                $bild = ($seite*25)-25+($zeile*5)-5+$spalte;//Errechnug welches Bild ausgegeben wird
                if ($bild <= $bilder){
                   echo "<td align=\"center\">
-                  <a href=\"#\" onclick=\"win$bild()\">
-                     <img src=\"resize.php?bild=$ordner/$bild.jpg&amp;scal=100&amp;aufgabe=anzeigen\" border=\"0\" alt=\"$bild\">
-                  </a>
+                     <img onclick=\"window.open('photopopup.php?bild=$bild&ap_id=$ap_id','msg', 'height=600,width=580,left=162,top=5')\" style=\"vertical-align: middle; cursor: pointer;\" src=\"resize.php?bild=$ordner/$bild.jpg&amp;scal=100&amp;aufgabe=anzeigen\" border=\"0\" alt=\"$bild\">
 						<br>";
 						//Buttons für moderatoren
 						if ($g_session_valid & editPhoto()){
