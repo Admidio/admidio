@@ -53,6 +53,56 @@ echo "
                   Wenn Du das Verschicken von Attachments komplett unterbinden m&ouml;chtest, solltest Du 0 eintragen.";
             break;
 
+         case "bbcode":
+            echo "Die Beschreibung von Terminen und Ankündigungen kannst du mit " .
+            		"verschiedenen Tags formatieren. Dafür musst du die hier aufgelisteten " .
+            		"Tags um den entsprechenden Text setzen.<br /><br />
+                  Beispiele:<br /><br />
+                  <table class=\"tableList\" style=\"width: 100%;\" cellpadding=\"5\" cellspacing=\"0\">
+                     <tr>
+                        <th class=\"tableHeader\" width=\"160\" valign=\"top\">Beispiel</th>
+                        <th class=\"tableHeader\" valign=\"top\">Code</th>
+                     </tr>
+                     <tr>
+                        <td valign=\"top\">Einen <a href=\"http://". $g_orga_property['ag_homepage']. "\">Link</a> setzen</td>
+                        <td valign=\"top\">Einen <b>[url=</b>http://www.beispiel.de<b>]</b>Link<b>[/url]</b> setzen</td>
+                     </tr>
+                     <tr>
+                        <td valign=\"top\">Eine <a href=\"mailto:webmaster@$g_domain\">Mailadresse</a> angeben</td>
+                        <td valign=\"top\">Eine <b>[mail=</b>webmaster@demo.de<b>]</b> Mailadresse<b>[/url]</b> angeben</td>
+                     </tr>
+                     <tr>
+                        <td valign=\"top\">Text <b>fett</b> darstellen</td>
+                        <td valign=\"top\">Text <b>[b]</b>fett<b>[/b]</b> darstellen</td>
+                     </tr>
+                     <tr>
+                        <td valign=\"top\">Text <u>unterstreichen</u></td>
+                        <td valign=\"top\">Text <b>[u]</b>unterstreichen<b>[/u]</b></td>
+                     </tr>
+                     <tr>
+                        <td valign=\"top\">Text <i>kursiv</i> darstellen</td>
+                        <td valign=\"top\">Text <b>[i]</b>kursiv<b>[/i]</b> darstellen</td>
+                     </tr>
+                     <tr>
+                        <td valign=\"top\">Text <span style=\"color: #ff0000\">rot</span> darstellen</td>
+                        <td valign=\"top\">Text <b>[color=red]</b>rot<b>[/color]</b> darstellen<br>" .
+                        "	oder <b>[color=#ff0000]</b>rot<b>[/color]</b></td>
+                     </tr>
+                     <tr>
+                        <td valign=\"top\">Text <span style=\"font-size: 14pt;\">groß</span> darstellen</td>
+                        <td valign=\"top\">Text <b>[big]</b>groß<b>[/big]</b> darstellen</td>
+                     </tr>
+                     <tr>
+                        <td valign=\"top\">Text <span style=\"font-size: 8pt;\">klein</span> darstellen</td>
+                        <td valign=\"top\">Text <b>[small]</b>klein<b>[/small]</b> darstellen</td>
+                     </tr>
+                     <tr>
+                        <td valign=\"top\">Ein Bild <img src=\"$g_root_path/adm_program/images/admidio_logo_20.jpg\"> anzeigen</td>
+                        <td valign=\"top\">Eine Bild <b>[img]</b>http://www.beispiel.de/bild.jpg<b>[/img]</b> anzeigen</td>
+                     </tr>
+                  </table>";
+         	break;
+
          case "condition":
             echo "Hier kannst du Bedingungen zu jedem Feld in deiner neuen Liste eingeben.
                   Damit wird die ausgew&auml;hlte Rolle noch einmal nach deinen Bedingungen
@@ -137,20 +187,6 @@ echo "
          case "profil_felder":
             echo "Du kannst beliebig viele neue Felder definieren, die im Profil der einzelnen Benutzer
             angezeigt und von diesen bearbeitet werden k&ouml;nnen.";
-            break;
-
-         case "ranking":
-            echo "<table class=\"tableBox\">
-                     <th class=\"tableHeader\" colspan=\"2\">Login-Ranking</th>
-                     <tr><td>00 - 19</td><td>&nbsp;&nbsp;Newbie</td></tr>
-                     <tr><td>20 - 39</td><td>&nbsp;&nbsp;Gruppenkind</td></tr>
-                     <tr><td>40 - 69</td><td>&nbsp;&nbsp;Hilfsleiter</td></tr>
-                     <tr><td>70 - 99</td><td>&nbsp;&nbsp;Leiter</td></tr>
-                     <tr><td>100 - 149</td><td>&nbsp;&nbsp;Planschreiber</td></tr>
-                     <tr><td>150 - 199</td><td>&nbsp;&nbsp;Obermini</td></tr>
-                     <tr><td>ab 200</td><td>&nbsp;&nbsp;Ehrenmitglied</td></tr>
-                  </table>
-                     ";
             break;
 
          case "rolle_termine":
