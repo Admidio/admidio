@@ -72,7 +72,8 @@ $g_orga_property = array(
 	'ag_bbcode'      => $row->ag_bbcode,
 	'ag_mail_extern' => $row->ag_mail_extern,
 	'ag_homepage'    => $row->ag_homepage,
-	'ag_mail_attachment_size' => $row->ag_mail_attachment_size
+	'ag_mail_attachment_size' => $row->ag_mail_attachment_size,
+	'ag_enable_rss' => $row->ag_enable_rss
 	);
 
 // Session auf Gueltigkeit pruefen

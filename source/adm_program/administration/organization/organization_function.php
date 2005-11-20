@@ -72,15 +72,16 @@ $sql = "UPDATE adm_gruppierung SET ag_longname    = {0}
                                  , ag_bbcode      = {2}
                                  , ag_mail_extern = {3}
                                  , ag_mail_attachment_size = {4}
+                                 , ag_enable_rss = {5}
                                  , ag_mother      = ";
 if(strlen($_POST["mutter"]) > 0)
-   $sql = $sql. " {5} ";
+   $sql = $sql. " {6} ";
 else
    $sql = $sql. " NULL ";
 
-$sql = $sql. " WHERE ag_id = {6} ";
+$sql = $sql. " WHERE ag_id = {7} ";
 $sql    = prepareSQL($sql, array($longname, $homepage, $_POST['bbcode'], $_POST['mail_extern'],
-                                 $_POST['attachment_size'], $_POST['mutter'], $_GET['ag_id']));
+                                 $_POST['attachment_size'], $_POST['enable_rss'] ,$_POST['mutter'], $_GET['ag_id']));
 $result = mysql_query($sql, $g_adm_con);
 db_error($result);
 

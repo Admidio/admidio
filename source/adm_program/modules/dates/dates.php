@@ -11,6 +11,7 @@
  * mode: actual  - (Default) Alle aktuellen und zukuenftige Termine anzeigen
  *       old     - Alle bereits erledigten
  * start         - Angabe, ab welchem Datensatz Termine angezeigt werden sollen
+ * dateid		 - Nur einen einzigen Termin anzeigen lassen.
  *
  ******************************************************************************
  *
@@ -48,8 +49,15 @@ echo "
 <html>
 <head>
    <title>". $g_orga_property['ag_shortname']. " - Termine</title>
-   <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
+   <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">";
 
+if($g_orga_property['ag_enable_rss'] == 1)
+{
+echo "
+   <link type=\"application/rss+xml\" rel=\"alternate\" title=\"$g_orga_property[ag_homepage] - Die naechsten 10 Termine\" href=\"$g_root_path/adm_program/modules/rss/rss_dates.php\">";
+};
+
+echo "
    <!--[if gte IE 5.5000]>
    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
    <![endif]-->";
@@ -145,6 +153,11 @@ require("../../../adm_config/body_top.php");
                      ORDER BY at_von ASC
                      LIMIT {0}, 10 ";
       }
+      if (array_key_exists("dateid", $_GET))
+      {
+      	 $sql    = "SELECT * FROM adm_termine
+                     WHERE at_id = $_GET[dateid]";
+      }
       $sql    = prepareSQL($sql, array($_GET['start']));
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
@@ -222,6 +235,7 @@ require("../../../adm_config/body_top.php");
                      $load_url = urlencode("$g_root_path/adm_program/modules/dates/dates_function.php?at_id=$row->at_id&amp;mode=2&amp;url=$g_root_path/adm_program/modules/dates/dates.php");
                      echo " onclick=\"self.location.href='$g_root_path/adm_program/system/err_msg.php?err_code=delete_date&amp;err_text=". urlencode($row->at_ueberschrift). "&amp;err_head=L&ouml;schen&amp;button=2&amp;url=$load_url'\">";
                   }
+
                   echo "&nbsp;</div>";
                }
             echo "</div>
