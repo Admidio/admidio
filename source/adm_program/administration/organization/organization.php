@@ -107,7 +107,7 @@ require("../../../adm_config/body_top.php");
                      <option value=\" \" ";
                         if(strlen($g_orga_property['ag_mother']) == 0)
                            echo " selected ";
-                     echo ">Ausw&auml;hlen ...</option>";
+                     echo ">- Bitte w&auml;hlen -</option>";
 
                      while($row = mysql_fetch_object($result))
                      {
@@ -128,6 +128,18 @@ require("../../../adm_config/body_top.php");
          }
 
          echo "<div style=\"margin-top: 6px;\">
+            <div style=\"text-align: right; width: 40%; float: left;\">BBCode zulassen:</div>
+            <div style=\"text-align: left; margin-left: 42%;\">
+               <input type=\"checkbox\" id=\"bbcode\" name=\"bbcode\" ";
+               if($g_orga_property['ag_bbcode'] == 1)
+                  echo " checked ";
+               echo " value=\"1\" />
+               <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+               onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=350,left=310,top=200,scrollbars=yes')\">
+            </div>
+         </div>
+
+         <div style=\"margin-top: 6px;\">
             <div style=\"text-align: right; width: 40%; float: left;\">Externes Mailprogramm:</div>
             <div style=\"text-align: left; margin-left: 42%;\">
                <input type=\"checkbox\" id=\"mail_extern\" name=\"mail_extern\" ";

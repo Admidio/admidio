@@ -63,19 +63,24 @@ if ($err_code != "")
    exit();
 }
 
+$longname = strStripTags($_POST['longname']);
+$homepage = strStripTags($_POST['homepage']);
+
 // Gruppierung updaten
 $sql = "UPDATE adm_gruppierung SET ag_longname    = {0}
-                                 , ag_mail_extern = {1}
-                                 , ag_homepage    = {2}
-                                 , ag_mail_attachment_size = {3}
+                                 , ag_homepage    = {1}
+                                 , ag_bbcode      = {2}
+                                 , ag_mail_extern = {3}
+                                 , ag_mail_attachment_size = {4}
                                  , ag_mother      = ";
 if(strlen($_POST["mutter"]) > 0)
-   $sql = $sql. " {4} ";
+   $sql = $sql. " {5} ";
 else
    $sql = $sql. " NULL ";
 
-$sql = $sql. " WHERE ag_id = {5} ";
-$sql    = prepareSQL($sql, array($_POST['longname'], $_POST['mail_extern'], $_POST['homepage'], $_POST['attachment_size'], $_POST['mutter'], $_GET['ag_id']));
+$sql = $sql. " WHERE ag_id = {6} ";
+$sql    = prepareSQL($sql, array($longname, $homepage, $_POST['bbcode'], $_POST['mail_extern'],
+                                 $_POST['attachment_size'], $_POST['mutter'], $_GET['ag_id']));
 $result = mysql_query($sql, $g_adm_con);
 db_error($result);
 
