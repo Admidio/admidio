@@ -77,7 +77,7 @@ echo "
 <head>
    <title>". $g_orga_property['ag_shortname']. " - ". $_GET["headline"]. "</title>
    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
-   
+
    <!--[if gte IE 5.5000]>
    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
    <![endif]-->";
@@ -95,7 +95,7 @@ require("../../../adm_config/body_top.php");
       else
          echo "1";
       echo "\" method=\"post\" name=\"AnkuendigungAnlegen\">
-      
+
       <div class=\"formHead\">";
          if($_GET["aa_id"] > 0)
             $formHeadline = $_GET["headline"]. " ändern";
@@ -112,9 +112,13 @@ require("../../../adm_config/body_top.php");
          </div>
 
          <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 25%; float: left;\">Beschreibung:</div>
+            <div style=\"text-align: right; width: 25%; float: left;\">Beschreibung:<br><br>
+            	Text formatieren
+               <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+               onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=350,left=310,top=200,scrollbars=yes')\">
+            	</div>
             <div style=\"text-align: left; margin-left: 27%;\">
-               <textarea  name=\"beschreibung\" rows=\"7\" cols=\"40\">". htmlspecialchars($description, ENT_QUOTES). "</textarea>
+               <textarea  name=\"beschreibung\" rows=\"10\" cols=\"40\">". htmlspecialchars($description, ENT_QUOTES). "</textarea>
             </div>
          </div>";
 
@@ -173,7 +177,7 @@ require("../../../adm_config/body_top.php");
 
       echo "</div>
    </form>
-   
+
    </div>";
 
    require("../../../adm_config/body_bottom.php");

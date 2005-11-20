@@ -55,26 +55,28 @@ $err_text = "";
 
 if($_GET["mode"] == 1 || $_GET["mode"] == 3)
 {
-   $_POST['ueberschrift'] = trim($_POST['ueberschrift']);
+	$headline = strStripTags($_POST['ueberschrift']);
+	$content  = strStripTags($_POST['beschreibung']);
 
-   if(strlen($_POST['ueberschrift']) > 0)
+   if(strlen($headline) > 0
+   && strlen($content)  > 0)
    {
 		$act_date = date("Y.m.d G:i:s", time());
-		
+
 		if(array_key_exists("global", $_POST))
 		   $global = 1;
 		else
 		   $global = 0;
-		
+
 		// Termin speichern
-		
+
 		if ($_GET["aa_id"] == 0)
 		{
 		   $sql = "INSERT INTO adm_ankuendigungen (aa_global, aa_ag_shortname, aa_au_id, aa_timestamp,
 		                                            aa_ueberschrift, aa_beschreibung)
 		                             VALUES ($global, '$g_organization', '$g_user_id', '$act_date',
 		                                     {0}, {1})";
-		   $sql    = prepareSQL($sql, array($_POST['ueberschrift'], $_POST['beschreibung']));
+		   $sql    = prepareSQL($sql, array($headline, $content));
 		   $result = mysql_query($sql, $g_adm_con);
 		   db_error($result);
 		}
@@ -86,18 +88,22 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
 		                                        , aa_last_change    = '$act_date'
 		                                        , aa_last_change_id = $g_user_id
 		            WHERE aa_id = {2}";
-		   $sql    = prepareSQL($sql, array($_POST['ueberschrift'], $_POST['beschreibung'], $_GET['aa_id']));
+		   $sql    = prepareSQL($sql, array($headline, $content, $_GET['aa_id']));
 		   $result = mysql_query($sql, $g_adm_con);
 		   db_error($result);
 		}
-		
+
 		$location = "location: $g_root_path/adm_program/modules/announcements/announcements.php?headline=". $_GET['headline'];
 		header($location);
 		exit();
    }
    else
    {
-      $err_code = "felder";
+   	if(strlen($headline) > 0)
+   		$err_text = "Beschreibung";
+   	else
+   		$err_text = "Überschrift";
+      $err_code = "feld";
    }
 }
 elseif($_GET["mode"] == 2)
