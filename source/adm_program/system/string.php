@@ -41,7 +41,7 @@ function strspace($srcString, $count = 1)
          if(substr($srcString, $i, 1) == ";")
             $html_special = false;
       }
-      
+
       if($html_special == false)
       {
          if(substr($srcString, $i, 1) == "&")
@@ -72,6 +72,18 @@ function specialChars2Html($srcString)
    return $srcString;
 }
 
+// entfernt Html-, PHP-Codes und Spaces am Anfang und Ende des Strings
+
+function strStripTags($srcString)
+{
+	// Spaces vorne und hinten entfernen
+	$srcString = trim($srcString);
+	// HTML und PHP Tags entfernen
+   $srcString = strip_tags($srcString);
+
+   return $srcString;
+}
+
 
 // sind die Nachkommastellen 0, dann werden sie unterdrückt
 //
@@ -80,21 +92,21 @@ function specialChars2Html($srcString)
 function numWithoutZero($number)
 {
    $pos = strpos($number, ".");
-   
+
    if($pos === false)
       return $number;
    else
    {
       $divideNum = explode(".", $number);
-   
+
       if(substr($divideNum[1], 1, 1) == 0)
       {
          if(substr($divideNum[1], 0, 1) == 0)
             return $divideNum[0];
-         
+
          return $divideNum[0]. ".". substr($divideNum[1], 0, 1);
       }
-      
+
       return $number;
    }
 }
@@ -128,7 +140,7 @@ function strNextLetter($letter, $mode = 0)
       else
          $ascii++;
    }
-   
+
    return chr($ascii);
 }
 
@@ -140,7 +152,7 @@ function isValidEmailAddress($emailAddress)
    {
       // nur gueltige Zeichen zulassen
       $anz = strspn($emailAddress, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@.-_+");
-      
+
       if($anz == strlen($emailAddress))
       {
          // Aufbau der E-Mail-Adresse pruefen
@@ -169,7 +181,7 @@ function isValidFileName($file_name, $check_ext = false)
    {
       // nur gueltige Zeichen zulassen
       $anz = strspn($file_name, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@.-_+");
-      
+
       if($anz == strlen($file_name))
       {
          if($check_ext)
@@ -177,7 +189,7 @@ function isValidFileName($file_name, $check_ext = false)
             // auf gueltige Endungen pruefen
             $arr_invalid_ext = array("php", "php3", "php4", "php5", "html", "htm", "htaccess", "htpasswd", "pl");
             $file_ext  = substr($file_name, strrpos($file_name, ".")+1);
-            
+
             if(in_array($file_ext, $arr_invalid_ext))
                return -3;
             else
