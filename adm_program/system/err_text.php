@@ -355,8 +355,15 @@ function getErrorText($error_code, $error_text)
          $error_str = "Bitte wähle eine Rolle als Adressat der Mail aus!";
          break;
 
-
 //Ende Fehlermeldungen Mailmodul
+
+//Fehlermeldungen RSSmodul
+
+      case "rss_disabled":
+         $error_str = "Die RSS-Funktion wurde vom Webmaster deaktiviert";
+         break;
+
+//Ende Fehlermeldungen RSSmodul
 
 
       default:

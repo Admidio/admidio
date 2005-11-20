@@ -143,6 +143,11 @@ echo "
                   </table>";
             break;
 
+         case "enable_rss":
+            echo "Admidio kann RSS-Feeds f&uuml;r Termine und
+            	  Ank&uuml;ndigungen auf den jeweiligen &Uuml;bersichtsseiten bereitstellen.";
+            break;
+
          case "email":
             echo "Es ist wichtig, dass du eine g&uuml;ltige E-Mail-Adresse angibst.<br />
                   Ohne diese kann die Anmeldung nicht durchgef&uuml;hrt werden.";

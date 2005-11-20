@@ -160,6 +160,18 @@ require("../../../adm_config/body_top.php");
             </div>
          </div>
 
+         <div style=\"margin-top: 6px;\">
+            <div style=\"text-align: right; width: 40%; float: left;\">Aktiviere RSS-Feeds:</div>
+            <div style=\"text-align: left; margin-left: 42%;\">
+               <input type=\"checkbox\" id=\"enable_rss\" name=\"enable_rss\" ";
+               if($g_orga_property['ag_enable_rss'] == 1)
+                  echo " checked ";
+               echo " value=\"1\" />
+               <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+               onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=enable_rss','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
+            </div>
+         </div>
+
          <hr width=\"85%\" />";
 
 
