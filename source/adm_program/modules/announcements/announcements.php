@@ -29,12 +29,13 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
-require("../../../adm_config/config.php");
-require("../../system/function.php");
-require("../../system/date.php");
-require("../../system/string.php");
-require("../../system/tbl_user.php");
-require("../../system/session_check.php");
+require_once("../../../adm_config/config.php");
+require_once("../../system/function.php");
+require_once("../../system/date.php");
+require_once("../../system/string.php");
+require_once("../../system/tbl_user.php");
+require_once("../../system/session_check.php");
+require_once("../../system/quickerubb.php");
 
 if(!array_key_exists("mode", $_GET))
    $_GET["mode"] = "all";
@@ -44,6 +45,9 @@ if(!array_key_exists("start", $_GET))
 
 if(!array_key_exists("headline", $_GET))
    $_GET["headline"] = "Ankündigungen";
+
+// Klasse fuer BBCode
+$bbcode = new ubbParser();
 
 echo "
 <!-- (c) 2004 - 2005 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
@@ -191,11 +195,11 @@ require("../../../adm_config/body_top.php");
                }
                else
                {
-               	echo "<div style=\"text-align: right;\">". mysqldatetime("d.m.y", $row->aa_timestamp). "&nbsp;</div>"; 
+               	echo "<div style=\"text-align: right;\">". mysqldatetime("d.m.y", $row->aa_timestamp). "&nbsp;</div>";
                }
             echo "</div>
 
-            <div style=\"margin: 8px 4px 4px 4px; text-align: left;\">". nl2br(specialChars2Html($row->aa_beschreibung)). "</div>
+            <div style=\"margin: 8px 4px 4px 4px; text-align: left;\">". nl2br(specialChars2Html($bbcode->parse($row->aa_beschreibung))). "</div>
             <div style=\"margin: 8px 4px 4px 4px; font-size: 8pt; text-align: left;\">
                   Angelegt von ". specialChars2Html($user->au_vorname). " ". specialChars2Html($user->au_name).
                   " am ". mysqldatetime("d.m.y h:i", $row->aa_timestamp). "
