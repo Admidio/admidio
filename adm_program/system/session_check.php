@@ -69,6 +69,7 @@ $g_orga_property = array(
 	'ag_longname'    => $row->ag_longname,
 	'ag_shortname'   => $row->ag_shortname,
 	'ag_mother'      => $row->ag_mother,
+	'ag_bbcode'      => $row->ag_bbcode,
 	'ag_mail_extern' => $row->ag_mail_extern,
 	'ag_homepage'    => $row->ag_homepage,
 	'ag_mail_attachment_size' => $row->ag_mail_attachment_size
