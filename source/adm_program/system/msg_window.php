@@ -55,13 +55,13 @@ echo "
 
          case "bbcode":
             echo "Die Beschreibung von Terminen und Ankündigungen kannst du mit " .
-                  "verschiedenen Tags formatieren. Dafür musst du die hier aufgelisteten " .
+                  "verschiedenen Tags (BBCode) formatieren. Dafür musst du die hier aufgelisteten " .
                   "Tags um den entsprechenden Text setzen.<br /><br />
                   Beispiele:<br /><br />
                   <table class=\"tableList\" style=\"width: 100%;\" cellpadding=\"5\" cellspacing=\"0\">
                      <tr>
                         <th class=\"tableHeader\" width=\"155\" valign=\"top\">Beispiel</th>
-                        <th class=\"tableHeader\" valign=\"top\">Code</th>
+                        <th class=\"tableHeader\" valign=\"top\">BBCode</th>
                      </tr>
                      <tr>
                         <td valign=\"top\">Text <b>fett</b> darstellen</td>
