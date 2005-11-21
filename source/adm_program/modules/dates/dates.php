@@ -54,7 +54,7 @@ echo "
 if($g_orga_property['ag_enable_rss'] == 1)
 {
 echo "
-   <link type=\"application/rss+xml\" rel=\"alternate\" title=\"$g_orga_property[ag_homepage] - Die naechsten 10 Termine\" href=\"$g_root_path/adm_program/modules/rss/rss_dates.php\">";
+   <link type=\"application/rss+xml\" rel=\"alternate\" title=\"$g_orga_property[ag_homepage] - Die naechsten 10 Termine\" href=\"$g_root_path/adm_program/modules/dates/rss_dates.php\">";
 };
 
 echo "
@@ -153,6 +153,8 @@ require("../../../adm_config/body_top.php");
                      ORDER BY at_von ASC
                      LIMIT {0}, 10 ";
       }
+
+      // falls eine dateid uebergeben worden ist...
       if (array_key_exists("dateid", $_GET))
       {
       	 $sql    = "SELECT * FROM adm_termine
@@ -162,13 +164,14 @@ require("../../../adm_config/body_top.php");
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
 
+
       // Tabelle mit den vor- und zurück und neu Buttons
 
       echo "
       <table style=\"margin-top: 10px; margin-bottom: 10px;\" border=\"0\">
          <tr>
             <td width=\"33%\" align=\"left\">";
-               if($_GET["start"] > 0)
+               if(($_GET["start"] > 0) && (!array_key_exists("dateid", $_GET)))
                {
                   $start = $_GET["start"] - 10;
                   if($start < 0) $start = 0;
@@ -179,8 +182,8 @@ require("../../../adm_config/body_top.php");
                }
             echo "</td>
             <td width=\"33%\" align=\"center\">";
-               // wenn nicht eingeloggt oder Termin editiert werden darf, dann anzeigen
-               if(!$g_session_valid || editDate())
+               // wenn Termine editiert werden duerfen, dann anzeigen
+               if(editDate())
                {
                   echo "<button name=\"new\" type=\"button\" value=\"new\" style=\"width: 152px;\"
                            onclick=\"self.location.href='dates_new.php'\">
@@ -189,7 +192,7 @@ require("../../../adm_config/body_top.php");
                }
             echo "</td>
             <td width=\"33%\" align=\"right\">";
-               if($count_date > $_GET["start"] + 10)
+               if(($count_date > $_GET["start"] + 10) && (!array_key_exists("dateid", $_GET)))
                {
                   $start = $_GET["start"] + 10;
                   echo "<button name=\"forward\" type=\"button\" value=\"forward\" style=\"width: 152px;\"
@@ -282,16 +285,13 @@ require("../../../adm_config/body_top.php");
       }  // Ende While-Schleife
    }
 
-   // wenn nicht eingeloggt oder Termin editiert werden darf, dann anzeigen
-   if(!$g_session_valid || editDate())
-   {
-      // Tabelle mit den vor- und zurück und neu Buttons
+   // Tabelle mit den vor- und zurück und neu Buttons
 
       echo "
-      <table style=\"margin-top: 10px; margin-bottom: 10px;\" width=\"500\" border=\"0\">
+      <table style=\"margin-top: 10px; margin-bottom: 10px;\" border=\"0\">
          <tr>
             <td width=\"33%\" align=\"left\">";
-               if($_GET["start"] > 0)
+               if(($_GET["start"] > 0) && (!array_key_exists("dateid", $_GET)))
                {
                   $start = $_GET["start"] - 10;
                   if($start < 0) $start = 0;
@@ -302,8 +302,8 @@ require("../../../adm_config/body_top.php");
                }
             echo "</td>
             <td width=\"33%\" align=\"center\">";
-               // wenn nicht eingeloggt oder Termin editiert werden darf, dann anzeigen
-               if(!$g_session_valid || editDate())
+               // wenn Termine editiert werden duerfen, dann anzeigen
+               if(editDate())
                {
                   echo "<button name=\"new\" type=\"button\" value=\"new\" style=\"width: 152px;\"
                            onclick=\"self.location.href='dates_new.php'\">
@@ -312,7 +312,7 @@ require("../../../adm_config/body_top.php");
                }
             echo "</td>
             <td width=\"33%\" align=\"right\">";
-               if($count_date > $_GET["start"] + 10)
+               if(($count_date > $_GET["start"] + 10) && (!array_key_exists("dateid", $_GET)))
                {
                   $start = $_GET["start"] + 10;
                   echo "<button name=\"forward\" type=\"button\" value=\"forward\" style=\"width: 152px;\"
@@ -322,7 +322,7 @@ require("../../../adm_config/body_top.php");
             echo "</td>
          </tr>
       </table>";
-   }
+
    echo "</div>";
 
    require("../../../adm_config/body_bottom.php");
