@@ -63,11 +63,12 @@ function strspace($srcString, $count = 1)
 //
 // z.B.: ü -> &uuml;  ä -> &auml;  ö -> &ouml;  ß -> &szlig;
 
-function specialChars2Html($srcString)
+function strSpecialChars2Html($srcString)
 {
    $srcString = htmlentities($srcString, ENT_NOQUOTES);
    $srcString = str_replace("&lt;", "<", $srcString);
    $srcString = str_replace("&gt;", ">", $srcString);
+   $srcString = str_replace("&amp;", "&", $srcString);
 
    return $srcString;
 }
