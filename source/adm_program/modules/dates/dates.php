@@ -214,9 +214,9 @@ require("../../../adm_config/body_top.php");
          <div class=\"boxBody\" style=\"overflow: hidden;\">
             <div class=\"boxHead\">
                <div style=\"text-align: left; float: left;\">
-                  <img src=\"$g_root_path/adm_program/images/history.png\" style=\"vertical-align: middle;\" alt=\"". specialChars2Html($row->at_ueberschrift). "\">
+                  <img src=\"$g_root_path/adm_program/images/history.png\" style=\"vertical-align: middle;\" alt=\"". strSpecialChars2Html($row->at_ueberschrift). "\">
                   ". mysqldatetime("d.m.y", $row->at_von). "
-                  &nbsp;". specialChars2Html($row->at_ueberschrift). "</div>";
+                  &nbsp;". strSpecialChars2Html($row->at_ueberschrift). "</div>";
 
                // aendern & loeschen darf man nur eigene Termine, ausser Moderatoren
                if (editDate()
@@ -267,13 +267,13 @@ require("../../../adm_config/body_top.php");
 
                if ($row->at_ort != "")
                {
-                  echo "<br />Treffpunkt:&nbsp;<b>". specialChars2Html($row->at_ort). "</b>";
+                  echo "<br />Treffpunkt:&nbsp;<b>". strSpecialChars2Html($row->at_ort). "</b>";
                }
 
             echo "</div>
-            <div style=\"margin: 8px 4px 4px 4px; text-align: left;\">". nl2br(specialChars2Html($row->at_beschreibung)). "</div>
+            <div style=\"margin: 8px 4px 4px 4px; text-align: left;\">". nl2br(strSpecialChars2Html($row->at_beschreibung)). "</div>
             <div style=\"margin: 8px 4px 4px 4px; font-size: 8pt; text-align: left;\">
-                  Angelegt von ". specialChars2Html($user->au_vorname). " ". specialChars2Html($user->au_name).
+                  Angelegt von ". strSpecialChars2Html($user->au_vorname). " ". strSpecialChars2Html($user->au_name).
                   " am ". mysqldatetime("d.m.y h:i", $row->at_timestamp). "
             </div>
          </div>

@@ -122,11 +122,11 @@ while($row = mysql_fetch_object($result))
 
         if ($row->at_ort != "")
                {
-                  $description = $description. "<br />Treffpunkt:&nbsp;". specialChars2Html($row->at_ort). "<br />";
+                  $description = $description. "<br />Treffpunkt:&nbsp;". strSpecialChars2Html($row->at_ort). "<br />";
                }
 
-        $description = $description. "<br>". nl2br(specialChars2Html($row->at_beschreibung)). "<br />";
-        $description = $description. "<br>Angelegt von ". specialChars2Html($user->au_vorname). " ". specialChars2Html($user->au_name). "<br />";
+        $description = $description. "<br>". nl2br(strSpecialChars2Html($row->at_beschreibung)). "<br />";
+        $description = $description. "<br>Angelegt von ". strSpecialChars2Html($user->au_vorname). " ". strSpecialChars2Html($user->au_name). "<br />";
 
 
 
