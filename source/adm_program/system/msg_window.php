@@ -64,14 +64,6 @@ echo "
                         <th class=\"tableHeader\" valign=\"top\">Code</th>
                      </tr>
                      <tr>
-                        <td valign=\"top\">Einen <a href=\"http://". $g_orga_property['ag_homepage']. "\">Link</a> setzen</td>
-                        <td valign=\"top\">Einen <b>[url=</b>http://www.beispiel.de<b>]</b>Link<b>[/url]</b> setzen</td>
-                     </tr>
-                     <tr>
-                        <td valign=\"top\">Eine <a href=\"mailto:webmaster@$g_domain\">Mailadresse</a> angeben</td>
-                        <td valign=\"top\">Eine <b>[mail=</b>webmaster@demo.de<b>]</b> Mailadresse<b>[/mail]</b> angeben</td>
-                     </tr>
-                     <tr>
                         <td valign=\"top\">Text <b>fett</b> darstellen</td>
                         <td valign=\"top\">Text <b>[b]</b>fett<b>[/b]</b> darstellen</td>
                      </tr>
@@ -95,6 +87,14 @@ echo "
                      <tr>
                         <td valign=\"top\">Text <span style=\"font-size: 8pt;\">klein</span> darstellen</td>
                         <td valign=\"top\">Text <b>[small]</b>klein<b>[/small]</b> darstellen</td>
+                     </tr>
+                     <tr>
+                        <td valign=\"top\">Einen <a href=\"http://". $g_orga_property['ag_homepage']. "\">Link</a> setzen</td>
+                        <td valign=\"top\">Einen <b>[url=</b>http://www.beispiel.de<b>]</b>Link<b>[/url]</b> setzen</td>
+                     </tr>
+                     <tr>
+                        <td valign=\"top\">Eine <a href=\"mailto:webmaster@$g_domain\">Mailadresse</a> angeben</td>
+                        <td valign=\"top\">Eine <b>[email=</b>webmaster@demo.de<b>]</b> Mailadresse<b>[/email]</b> angeben</td>
                      </tr>
                      <tr>
                         <td valign=\"top\">Ein Bild <img src=\"$g_root_path/adm_program/images/admidio_logo_20.png\"> anzeigen</td>
