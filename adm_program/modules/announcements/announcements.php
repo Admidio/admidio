@@ -46,8 +46,11 @@ if(!array_key_exists("start", $_GET))
 if(!array_key_exists("headline", $_GET))
    $_GET["headline"] = "Ankündigungen";
 
-// Klasse fuer BBCode
-$bbcode = new ubbParser();
+if($g_orga_property['ag_bbcode'] == 1)
+{
+   // Klasse fuer BBCode
+   $bbcode = new ubbParser();
+}
 
 echo "
 <!-- (c) 2004 - 2005 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
@@ -93,7 +96,7 @@ require("../../../adm_config/body_top.php");
       $i++;
    }
 
-	$sql    = "SELECT COUNT(*) FROM adm_ankuendigungen
+   $sql    = "SELECT COUNT(*) FROM adm_ankuendigungen
                WHERE (  aa_ag_shortname = '$g_organization'
                      OR (   aa_global   = 1
                         AND aa_ag_shortname IN ($organizations) ))
@@ -110,7 +113,7 @@ require("../../../adm_config/body_top.php");
    }
    else
    {
-		$sql    = "SELECT * FROM adm_ankuendigungen
+      $sql    = "SELECT * FROM adm_ankuendigungen
                   WHERE (  aa_ag_shortname = '$g_organization'
                         OR (   aa_global   = 1
                            AND aa_ag_shortname IN ($organizations) ))
@@ -171,15 +174,15 @@ require("../../../adm_config/body_top.php");
          <div class=\"boxBody\" style=\"overflow: hidden;\">
             <div class=\"boxHead\">
                <div style=\"text-align: left; float: left;\">
-                  <img src=\"$g_root_path/adm_program/images/note.png\" style=\"vertical-align: top;\" alt=\"". specialChars2Html($row->aa_ueberschrift). "\">&nbsp;".
-                  specialChars2Html($row->aa_ueberschrift). "
+                  <img src=\"$g_root_path/adm_program/images/note.png\" style=\"vertical-align: top;\" alt=\"". strSpecialChars2Html($row->aa_ueberschrift). "\">&nbsp;".
+                  strSpecialChars2Html($row->aa_ueberschrift). "
                </div>";
 
                // aendern & loeschen darf man nur eigene Termine, ausser Admins & Moderatoren
                if(isModerator())
                {
                   echo "<div style=\"text-align: right;\">" .
-                  	mysqldatetime("d.m.y", $row->aa_timestamp). "&nbsp;
+                     mysqldatetime("d.m.y", $row->aa_timestamp). "&nbsp;
                      <img src=\"$g_root_path/adm_program/images/edit.png\" style=\"cursor: pointer;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"
                      onclick=\"self.location.href='announcements_new.php?aa_id=$row->aa_id&amp;headline=". $_GET['headline']. "'\">";
 
@@ -195,13 +198,19 @@ require("../../../adm_config/body_top.php");
                }
                else
                {
-               	echo "<div style=\"text-align: right;\">". mysqldatetime("d.m.y", $row->aa_timestamp). "&nbsp;</div>";
+                  echo "<div style=\"text-align: right;\">". mysqldatetime("d.m.y", $row->aa_timestamp). "&nbsp;</div>";
                }
             echo "</div>
 
-            <div style=\"margin: 8px 4px 4px 4px; text-align: left;\">". nl2br(specialChars2Html($bbcode->parse($row->aa_beschreibung))). "</div>
+            <div style=\"margin: 8px 4px 4px 4px; text-align: left;\">";
+               // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
+               if($g_orga_property['ag_bbcode'] == 1)
+                  echo nl2br(strSpecialChars2Html($bbcode->parse($row->aa_beschreibung)));
+               else
+                  echo nl2br(strSpecialChars2Html($row->aa_beschreibung));
+            echo "</div>
             <div style=\"margin: 8px 4px 4px 4px; font-size: 8pt; text-align: left;\">
-                  Angelegt von ". specialChars2Html($user->au_vorname). " ". specialChars2Html($user->au_name).
+                  Angelegt von ". strSpecialChars2Html($user->au_vorname). " ". strSpecialChars2Html($user->au_name).
                   " am ". mysqldatetime("d.m.y h:i", $row->aa_timestamp). "
             </div>
          </div>
