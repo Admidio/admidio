@@ -35,7 +35,7 @@ require_once("../../system/date.php");
 require_once("../../system/string.php");
 require_once("../../system/tbl_user.php");
 require_once("../../system/session_check.php");
-require_once("../../system/quickerubb.php");
+require_once("../../system/bbcode.php");
 
 if(!array_key_exists("mode", $_GET))
    $_GET["mode"] = "all";
