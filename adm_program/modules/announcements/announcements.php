@@ -205,7 +205,7 @@ require("../../../adm_config/body_top.php");
             <div style=\"margin: 8px 4px 4px 4px; text-align: left;\">";
                // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
                if($g_orga_property['ag_bbcode'] == 1)
-                  echo nl2br(strSpecialChars2Html($bbcode->parse($row->aa_beschreibung)));
+                  echo strSpecialChars2Html($bbcode->parse($row->aa_beschreibung));
                else
                   echo nl2br(strSpecialChars2Html($row->aa_beschreibung));
             echo "</div>
