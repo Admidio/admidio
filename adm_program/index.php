@@ -152,9 +152,7 @@ require("../adm_config/body_top.php");
          </a>
       </div>
       <div style=\"text-align: left; margin-left: 45px;\">
-         <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/announcements/announcements.php\">Ank&uuml;ndigungen</a></span>&nbsp;&nbsp;
-         <span class=\"textHeadSmall\">&#91; <a href=\"$g_root_path/adm_program/modules/announcements/announcements.php?mode=new\">Zuk&uuml;nftige</a> &#124;
-         <a href=\"$g_root_path/adm_program/modules/announcements/announcements.php?mode=old\">Vergangene</a> &#93;</span><br />
+         <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/announcements/announcements.php\">Ank&uuml;ndigungen</a></span><br />
          <span class=\"textDescription\">Hier k&ouml;nnen Ank&uuml;ndigungen (News / Aktuelles) angeschaut, erstellt und bearbeitet werden.</span>
       </div>
 
