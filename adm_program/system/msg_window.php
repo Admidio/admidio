@@ -49,18 +49,18 @@ echo "
       switch ($_GET['err_code'])
       {
          case "attachmentgroesse":
-         	echo "Hier kannst Du die maximal zul&auml;ssige Gr&ouml;&szlig;e der Email-Attachments in Kilobyte definieren.<br /><br />
+            echo "Hier kannst Du die maximal zul&auml;ssige Gr&ouml;&szlig;e der Email-Attachments in Kilobyte definieren.<br /><br />
                   Wenn Du das Verschicken von Attachments komplett unterbinden m&ouml;chtest, solltest Du 0 eintragen.";
             break;
 
          case "bbcode":
             echo "Die Beschreibung von Terminen und Ankündigungen kannst du mit " .
-            		"verschiedenen Tags formatieren. Dafür musst du die hier aufgelisteten " .
-            		"Tags um den entsprechenden Text setzen.<br /><br />
+                  "verschiedenen Tags formatieren. Dafür musst du die hier aufgelisteten " .
+                  "Tags um den entsprechenden Text setzen.<br /><br />
                   Beispiele:<br /><br />
                   <table class=\"tableList\" style=\"width: 100%;\" cellpadding=\"5\" cellspacing=\"0\">
                      <tr>
-                        <th class=\"tableHeader\" width=\"160\" valign=\"top\">Beispiel</th>
+                        <th class=\"tableHeader\" width=\"155\" valign=\"top\">Beispiel</th>
                         <th class=\"tableHeader\" valign=\"top\">Code</th>
                      </tr>
                      <tr>
@@ -69,7 +69,7 @@ echo "
                      </tr>
                      <tr>
                         <td valign=\"top\">Eine <a href=\"mailto:webmaster@$g_domain\">Mailadresse</a> angeben</td>
-                        <td valign=\"top\">Eine <b>[mail=</b>webmaster@demo.de<b>]</b> Mailadresse<b>[/url]</b> angeben</td>
+                        <td valign=\"top\">Eine <b>[mail=</b>webmaster@demo.de<b>]</b> Mailadresse<b>[/mail]</b> angeben</td>
                      </tr>
                      <tr>
                         <td valign=\"top\">Text <b>fett</b> darstellen</td>
@@ -86,7 +86,7 @@ echo "
                      <tr>
                         <td valign=\"top\">Text <span style=\"color: #ff0000\">rot</span> darstellen</td>
                         <td valign=\"top\">Text <b>[color=red]</b>rot<b>[/color]</b> darstellen<br>" .
-                        "	oder <b>[color=#ff0000]</b>rot<b>[/color]</b></td>
+                        "   oder <b>[color=#ff0000]</b>rot<b>[/color]</b></td>
                      </tr>
                      <tr>
                         <td valign=\"top\">Text <span style=\"font-size: 14pt;\">groß</span> darstellen</td>
@@ -101,7 +101,7 @@ echo "
                         <td valign=\"top\">Eine Bild <b>[img]</b>http://www.beispiel.de/bild.jpg<b>[/img]</b> anzeigen</td>
                      </tr>
                   </table>";
-         	break;
+            break;
 
          case "condition":
             echo "Hier kannst du Bedingungen zu jedem Feld in deiner neuen Liste eingeben.
@@ -145,7 +145,7 @@ echo "
 
          case "enable_rss":
             echo "Admidio kann RSS-Feeds f&uuml;r Termine und
-            	  Ank&uuml;ndigungen auf den jeweiligen &Uuml;bersichtsseiten bereitstellen.";
+                 Ank&uuml;ndigungen auf den jeweiligen &Uuml;bersichtsseiten bereitstellen.";
             break;
 
          case "email":
