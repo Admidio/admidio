@@ -3,6 +3,11 @@ error_reporting(E_ALL);
   /**********************************************
   * quickerUbb (c)2004 Roönaän
   *
+  * with enhancements of:
+  *
+  * Nathan Codding from phpBB Group
+  * Markus Fassbender from Admidio Team
+  *
   * version 1.4:
   * [25/02/2004]:
   * Added a _quickerUBB_isTextTag() method in order to
@@ -10,17 +15,7 @@ error_reporting(E_ALL);
   * should be skipped while parsing.
   * In order to add tags, you should edit this method,
   * Starting at line 119 of this file.
-  *
-  *
-  * [14/02/2004]: Fixed the problem with [php] tags where
-  * for all array-indexes an closing tag was added.:
-  * ie: [php]$a[0] = 0;[/php] resulted in
-  * <? $a[0] = 0; [/0]?>
-  *
-  * [12/08/2003]: Fixed the empty string/infinit loop bug
-  * [09/08/2003]: Added security-check to url/mail/img
-  * [04/08/2003]: Fixed lowercase tags only bug
-  *
+  * 
   * Ubb Parsing Engine based on stacks.
   *
   * Add additional parse_ubbtag methods to the main class.
@@ -65,48 +60,10 @@ function ubbtexthandler($text, $this = null)
 
   //echo '<div>'.htmlspecialchars($text).'</div>';
   $smiles = array();
-  $smiles['&lt;:)&gt;'] = 'beard';
-  $smiles['&gt;:)'] = 'Evil';
+  /*
   $smiles[':)'] = "<img src=\"$g_root_path/adm_program/images/smiles/icon_smile.gif\">";
-  $smiles['|:('] = 'Headbanger';
   $smiles[':('] = 'Angry';
-  $smiles[':\'('] = 'Rears';
-  $smiles[':o'] = 'Amazed';
-  $smiles[':D'] = 'Big Smile';
-  $smiles[':r'] = 'Disgusted';
-  $smiles[':9~'] = 'Jummy!';
-  $smiles[':9'] = 'Delicious';
-  $smiles[';)'] = 'Wink';
-  $smiles[':9'] = 'Delicious';
-  $smiles[':7'] = 'Love It';
-  $smiles[':+'] = 'Clown';
-  $smiles['O+'] = 'Heart';
-  $smiles[':*'] = 'Kiss';
-  $smiles['}:O'] = 'Stupid Cow';
-  $smiles['^)'] = 'Married';
-  $smiles['_O_'] = 'Worshippie';
-  $smiles[':W'] = 'Wave goodbye';
-  $smiles['^O^'] = 'Way To Go!';
-  $smiles[':?'] = 'Come Again?';
-  $smiles['(8&gt;'] = 'Spy vs. Spy';
-  $smiles[':Y)'] = 'Vork';
-  $smiles[':Z'] = 'Sleeping';
-  $smiles[';('] = 'cry';
-  $smiles['}:|'] = 'Grmbl';
-  $smiles[':z'] = 'Sleepy';
-  $smiles['}&gt;'] = 'Evil';
-  $smiles[':X'] = 'Hgnn';
-  $smiles[':O'] = 'Booooring';
-  $smiles['*)'] = 'Prodent';
-  $smiles[':{'] = 'Uhuh';
-  $smiles['O-)'] = 'The Saint';
-  $smiles['8-)'] = 'Sunchaser';
-  $smiles['*;'] = 'Liefde is';
-  $smiles[':Y'] = 'Yes';
-  $smiles[':N'] = 'No';
-  $smiles[':@'] = 'Ashamed';
-  $smiles['8)7'] = 'Twisted';
-  $smiles[':P'] = 'puh';
+  */
   foreach($smiles as $ubb => $html)
     $text = str_replace($ubb, $html, $text);
 
@@ -182,7 +139,7 @@ class ubbParser
       }
     }
 
-  }
+  }  
 
   function parse($text)
   {
@@ -191,7 +148,10 @@ class ubbParser
      $text = str_replace('[/*]','[/li]', $text);
      $basetree = new stackItem();
      $basetree->build(' '.trim($text));
-     return $basetree->parse($this, $this->usedTags);
+     // MFA 
+     $text = $basetree->parse($this, $this->usedTags);
+     $text = $this->make_clickable($text);
+     return $text;
   }
 
   /* Auxilary method which calls upon the ubbtexthandler
@@ -258,10 +218,11 @@ class ubbParser
      $href = $this->valid_url($href) ? $href : '';
      return $this->simple_parse($tree, '<a href="'.htmlspecialchars($href).'">', '</a>');
   }
-  function parse_mail($tree, $params = array())
+  // MFA mail in email umbenannt
+  function parse_email($tree, $params = array())
   {
-     /* [mail]email[/mail] as well as [mail=email]text[/mail] is supported */
-     $href = isset($params['mail']) ? $params['mail'] : $tree->toText();
+     /* [mail]email[/mail] as well as [mail=email]text[/mail] is supported */     
+     $href = isset($params['email']) ? $params['email'] : $tree->toText();
      return $this->simple_parse($tree, '<a href="mailto:'.htmlspecialchars($href).'">', '</a>');
   }
   function parse_img($tree)
@@ -297,6 +258,38 @@ class ubbParser
      $lowhref = strtolower($href);
      return ((substr($lowhref,0,7)=='http://') || (substr($lowhref,0,6)=='ftp://') || (substr($lowhref,0,7)=='mailto:'));
   }
+
+	/***************************************************************************
+	 *   written by           : Nathan Codding - Feb 6, 2001
+	 *   copyright            : (C) 2001 The phpBB Group
+	 ***************************************************************************/
+	function make_clickable($text)
+	{
+		$text = preg_replace('#(script|about|applet|activex|chrome):#is', "\\1&#058;", $text);
+
+		// pad it with a space so we can match things at the start of the 1st line.
+		$ret = ' ' . $text;
+
+		// matches an "xxxx://yyyy" URL at the start of a line, or after a space.
+		// xxxx can only be alpha characters.
+		// yyyy is anything up to the first space, newline, comma, double quote or <
+		$ret = preg_replace("#(^|[\n ])([\w]+?://[\w\#$%&~/.\-;:=,?@\[\]+]*)#is", "\\1<a href=\"\\2\" target=\"_blank\">\\2</a>", $ret);
+
+		// matches a "www|ftp.xxxx.yyyy[/zzzz]" kinda lazy URL thing
+		// Must contain at least 2 dots. xxxx contains either alphanum, or "-"
+		// zzzz is optional.. will contain everything up to the first space, newline,
+		// comma, double quote or <.
+		$ret = preg_replace("#(^|[\n ])((www|ftp)\.[\w\#$%&~/.\-;:=,?@\[\]+]*)#is", "\\1<a href=\"http://\\2\" target=\"_blank\">\\2</a>", $ret);
+
+		// matches an email@domain type address at the start of a line, or after a space.
+		// Note: Only the followed chars are valid; alphanums, "-", "_" and or ".".
+		$ret = preg_replace("#(^|[\n ])([a-z0-9&\-_.]+?)@([\w\-]+\.([\w\-\.]+\.)*[\w]+)#i", "\\1<a href=\"mailto:\\2@\\3\">\\2@\\3</a>", $ret);
+
+		// Remove our padding..
+		$ret = substr($ret, 1);
+
+		return($ret);
+	}
 }
 
 /* ubbAdminParse class which enabled site admins to input
@@ -701,4 +694,5 @@ class stackItem
       return $text;
     }
 }
+
 ?>
