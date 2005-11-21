@@ -107,7 +107,7 @@ require("../../../adm_config/body_top.php");
          <div>
             <div style=\"text-align: right; width: 25%; float: left;\">&Uuml;berschrift:</div>
             <div style=\"text-align: left; margin-left: 27%;\">
-               <input type=\"text\" name=\"ueberschrift\" size=\"53\" maxlength=\"100\" value=\"". htmlspecialchars($headline, ENT_QUOTES). "\">
+               <input type=\"text\" name=\"ueberschrift\" tabindex=\"1\" size=\"53\" maxlength=\"100\" value=\"". htmlspecialchars($headline, ENT_QUOTES). "\">
             </div>
          </div>
 
@@ -116,11 +116,11 @@ require("../../../adm_config/body_top.php");
                if($g_orga_property['ag_bbcode'] == 1)
                {
                   echo "<br><br>
-                  <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=350,left=310,top=200,scrollbars=yes')\">Text formatieren</a>";
+                  <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=350,left=310,top=200,scrollbars=yes')\" tabindex=\"6\">Text formatieren</a>";
                }
             echo "</div>
             <div style=\"text-align: left; margin-left: 27%;\">
-               <textarea  name=\"beschreibung\" rows=\"10\" cols=\"40\">". htmlspecialchars($description, ENT_QUOTES). "</textarea>
+               <textarea  name=\"beschreibung\" tabindex=\"2\" rows=\"10\" cols=\"40\">". htmlspecialchars($description, ENT_QUOTES). "</textarea>
             </div>
          </div>";
 
@@ -137,7 +137,7 @@ require("../../../adm_config/body_top.php");
             <div style=\"margin-top: 6px;\">
                <div style=\"text-align: right; width: 25%; float: left;\">&nbsp;</div>
                <div style=\"text-align: left; margin-left: 27%;\">
-                  <input type=\"checkbox\" id=\"global\" name=\"global\" ";
+                  <input type=\"checkbox\" id=\"global\" name=\"global\" tabindex=\"3\" ";
                   if($global == 1)
                      echo " checked=\"checked\" ";
                   echo " value=\"1\" />
@@ -151,11 +151,11 @@ require("../../../adm_config/body_top.php");
          echo "<hr width=\"85%\" />
 
          <div style=\"margin-top: 6px;\">
-            <button name=\"speichern\" type=\"submit\" value=\"speichern\">
+            <button name=\"speichern\" type=\"submit\" value=\"speichern\" tabindex=\"4\">
             <img src=\"$g_root_path/adm_program/images/save.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
             Speichern</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-            <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
+            <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\" tabindex=\"5\">
             <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
             Zur&uuml;ck</button>
          </div>";
