@@ -209,7 +209,7 @@ elseif($_GET["mode"] == 3)
          else
          {
             // Ordner erstellen
-            mkdir("$act_folder/$new_folder");
+            mkdir("$act_folder/$new_folder",0777);
             chmod("$act_folder/$new_folder", 0777);
 
             $err_code = "create_folder";
