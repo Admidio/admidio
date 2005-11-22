@@ -15,6 +15,8 @@
  *                  gesetzt, kann der Anwender nur noch in Unterordner und nicht
  *                  in hoehere Ordner des Default-Ordners navigieren
  * info   :  Ausgabe von verwaltungswalltungs Informationen
+ * sort	: Gibt die Art der Sortierung an. Default ist absteigend. Bei der Übergabe
+ *			  von "desc" wird aufsteigend sortiert.
  ******************************************************************************
  *
  * This program is free software; you can redistribute it and/or
@@ -76,17 +78,20 @@
       header($location);
       exit();
    }
-
-   $ordnerinhalt = dir($act_folder);
-   while ($inhalt = $ordnerinhalt->read()) {
-       if ($inhalt != "." AND $inhalt != ".."){
-           $ordnerarray[] = $inhalt;
-        }
-    }
-   //Falls Existent, Sortierung des Arrays aufsteigend nach Name
-   if(array_count_values($ordnerarray)!=0){
-      sort($ordnerarray);
+   
+    
+   If ($sort == "desc") {
+   	$inhalt= scandir($act_folder,1);
+   	$ordnerarray = array_slice ($inhalt,0,count($inhalt)-2);
+   	echo $ordnerarray[0];
    }
+   else {
+   	$inhalt = scandir($act_folder);
+   	$ordnerarray = array_slice ($inhalt,2);
+   	echo $ordnerarray[0];  	
+	};
+	
+	
    echo "
    <!-- (c) 2004 - 2005 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
    <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
@@ -158,7 +163,7 @@
 
 
    //falls der Ordner leer ist
-   if($ordnerarray==0){
+   if(Count($ordnerarray)==0){
       echo"
             <tr>
                <td colspan=\"2\">Dieser Ordner ist leer</td>
