@@ -141,10 +141,10 @@ while($row = mysql_fetch_object($result))
 
         $pubDate		= date(r,strtotime($row->at_timestamp));
 
-        $guid			= "$g_root_path/adm_program/modules/dates/dates.php?dateid=". $row->at_id;
+        $link			= "$g_root_path/adm_program/modules/dates/dates.php?dateid=". $row->at_id;
 
 		// Item hinzufuegen
-		$rss->add_Item($title,$description, $pubDate, $guid);
+		$rss->add_Item($title,$description, $pubDate, $link);
 
       }
 
