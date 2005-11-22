@@ -42,6 +42,42 @@ require("../../system/string.php");
 require("../../system/tbl_user.php");
 require("../../system/session_check_login.php");
 
+//Prüfrotine ob Ordner/Datei
+function file_or_folder ($act_dir,$file) {
+	if(strlen($file) > 0)
+		{
+   		if(is_file("$act_dir/$file"))
+      		return false;
+   		else
+   	{
+      	if(is_dir("$act_dir/$file"))
+         	return true;
+      	else
+         	return -1;
+   	}
+	}
+};
+
+remove_dir();
+
+//Rekursive Funktion
+function remove_dir ($dir) {
+	$folders = scandir("$dir");
+	if (!($folders == 2)) {
+		for ($i = 2; $i <= count($folders)-1; $i++){ 
+			If (file_or_folder ($dir,$folders[$i])) {
+				remove_dir ("$dir/$folders[$i]");
+			}
+			else {
+				unlink("$dir/$folders[$i]");
+			};
+		};
+	};
+	return rmdir ("$dir");
+	
+};
+
+
 // erst prüfen, ob der User auch die entsprechenden Rechte hat
 if(!editDownload())
 {
@@ -92,18 +128,7 @@ if(strlen($folder) > 0)
 }
 
 // pruefen, ob Datei oder Ordner uebergeben wurde
-if(strlen($file) > 0)
-{
-   if(is_file("$act_folder/$file"))
-      $is_folder = false;
-   else
-   {
-      if(is_dir("$act_folder/$file"))
-         $is_folder = true;
-      else
-         $is_folder = -1;
-   }
-}
+$is_folder = file_or_folder ($act_folder,$file);
 
 if($_GET["mode"] == 1)
 {
@@ -159,9 +184,10 @@ if($_GET["mode"] == 1)
 elseif($_GET["mode"] == 2)
 {
    //Löschen der Datei/Ordner
+   
    if($is_folder)
    {
-      If (rmdir ("$act_folder/$file"))
+      If ( remove_dir ("$act_folder/$file"))
       {
          $err_code = "delete_folder";
          $err_text = $file;
