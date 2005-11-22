@@ -39,8 +39,11 @@ require("../../system/date.php");
 require("../../system/tbl_user.php");
 require("../../system/session_check_login.php");
 
+//Übernahme der Rolle deren Mitgliederzuordnung bearbeitet werden soll
+$role_id=$_GET['ar_id'];
+
 // nur Webmaster & Moderatoren d&uuml;rfen Rollen zuweisen
-if(!isModerator() && !isGroupLeader() && !editUser())
+if(!isModerator() && !isGroupLeaderof($role_id) && !editUser())
 {
    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
    header($location);
@@ -58,8 +61,7 @@ if(array_key_exists('url', $_GET))
 else
    $url = "";
 
-//Übernahme der Rolle deren Mitgliederzuordnung bearbeitet werden soll
-$role_id=$_GET['ar_id'];
+//Erfassen der übergeben Rolle
 $sql	=	"SELECT *
 			FROM adm_rolle
 			WHERE ar_id = '$role_id'";
@@ -69,8 +71,7 @@ $role= mysql_fetch_array($result_role);
 
 //Übername ob nur Mitglieder oder alle User der Datenbank angezeigt werden sollen
 $restrict=$_GET["restrict"];
-if($restrict=="")$restrict="m";
-
+if($restrict=="" || !isModerator() || !editUser())$restrict="m";
 //Falls gefordert, nur Aufruf von inhabern der Rolle Mitglied
 if($restrict=="m"){
 	$sql = "
@@ -148,14 +149,17 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
 	<form action=\"members_save.php?role_id=".$role_id. "&amp;popup=". $_GET['popup']. "&amp;url=$url\" method=\"post\" name=\"Mitglieder\">
 	   <h2>Mitglieder zu $role[2] zuordnen</h2>";
      	//Button Alle bzw. nur Mitglieder anzeigen
-     	if($restrict=="m")
-     		echo"	<button name=\"back\" type=\"button\" value=\"back\" style=\"width: 140px;\" onclick=\"self.location.href='members.php?ar_id=role_id&amp;popup=1&amp;restrict=u'\">
+     	if($restrict=="m" && (isModerator() || editUser()))
+     		echo"	<button name=\"aller\" type=\"button\" value=\"back\" style=\"width: 140px;\" onclick=\"self.location.href='members.php?ar_id=$role_id&amp;popup=1&amp;restrict=u'\">
          			<img src=\"../../../adm_program/images/gruppe.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"\">&nbsp;Alle anzeigen
          		</button>";
-     	if($restrict=="u")
-     		echo"	<button name=\"back\" type=\"button\" value=\"back\" style=\"width: 140px;\" onclick=\"self.location.href='members.php?ar_id=role_id&amp;popup=1&amp;restrict=m'\">
+     	if($restrict=="u" && (isModerator() || editUser()))
+     		echo"	<button name=\"mitglieder\" type=\"button\" value=\"back\" style=\"width: 140px;\" onclick=\"self.location.href='members.php?ar_id=$role_id&amp;popup=1&amp;restrict=m'\">
          			<img src=\"../../../adm_program/images/person.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"\">&nbsp;Nur Mitglieder
-         		</button>";;
+         		</button>
+					<button name=\"neu\" type=\"button\" value=\"neu\" onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_edit.php?new_user=1&amp;popup=1'\">
+   					<img src=\"$g_root_path/adm_program/images/person_new.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer anlegen\">
+   				&nbsp;Benutzer anlegen</button></p>";
      	//Anfang Tabelle
      	echo"
 		<br><br>
