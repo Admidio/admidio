@@ -36,6 +36,10 @@ require("../../system/string.php");
 require("../../system/tbl_user.php");
 require("../../system/session_check_login.php");
 
+//prüfen ob in Popup angezeigt wird oder Normal (default)
+if($_GET['popup'] == 1)$popup=1;
+else $popup=0;
+
 // pruefen, ob Modus neues Mitglied erfassen
 if(!array_key_exists("new_user", $_GET))
    $a_new_user = false;
@@ -120,11 +124,11 @@ echo "
    <!--[if gte IE 5.5000]>
    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
    <![endif]-->";
-   
+if($popup == 0)   
    require("../../../adm_config/header.php");
 echo "</head>";
-
-require("../../../adm_config/body_top.php");
+if($popup == 0)
+	require("../../../adm_config/body_top.php");
    echo "
    <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
 
@@ -436,7 +440,7 @@ require("../../../adm_config/body_top.php");
       echo "</div>
    </form>
    </div>";
-
+if($popup == 0)
    require("../../../adm_config/body_bottom.php");
 echo "</body>
 </html>";
