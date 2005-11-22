@@ -19,7 +19,7 @@
  * Uebergaben:	$title			-	Titel des Items
  * 				$description	-	der Inhalt des Items
  * 				$date			-	Das Erstellungsdatum des Items
- * 				$guid			-	Ein eindeutiger Identifier des Items (z.B ein UnixTimestamp)
+ * 				$link			-	Ein Link zum Termin/Newsbeitrag etc.
  *
  * Wenn alle benoetigten Items zugeordnet sind, wird der RSSfeed generiert mit:
  * function build_feed()
@@ -59,9 +59,9 @@ function RSSfeed($homepage, $title, $description) {
        $this->feed="http://" . $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI'];
 }
 
-function add_Item($title, $description, $date, $guid) {
+function add_Item($title, $description, $date, $link) {
        $item=array("title" => $title, "description" => $description,
-               "pubDate" => $date, "guid" => $guid);
+               "pubDate" => $date, "link" => $link);
        $this->items[]=$item;
 }
 
@@ -102,12 +102,12 @@ function add_channel_infos()
 function build_items() {
        foreach ($this->items as $item) {
                echo "<item>\n";
-               foreach (array("title", "description", "pubDate") as $field) {
+               foreach (array("title", "description", "link", "pubDate") as $field) {
                        if (isset($item[$field])) {
                                echo "<${field}>" . htmlspecialchars($item[$field]). "</${field}>\n";
                        }
                }
-               echo "<guid>" .  $item["guid"] . "</guid>\n";
+               echo "<guid>" .  $item["link"] . "</guid>\n";
                echo "<source url=\"$this->feed\">". htmlspecialchars($this->channel[title]). "</source>";
                echo "</item>\n\n";
        }
