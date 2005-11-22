@@ -69,30 +69,54 @@ $role_id = $_GET["role_id"];
 		//Falls User Mitglied der Rolle ist oder schonmal war
 		if(array_key_exists($user["au_id"], $mitglieder_array)){
 			//Kontolle ob Zuweisung geändert wurde wen ja entsprechenden SQL-Befehl zusammensetzen
-			//Falls abgewählt wurde
-			if($mitglieder_array[$user["au_id"]][5]==1 && $_POST[$user["au_id"]]==false){
+			//Falls abgewählt wurde (automatisch auch als Leiter abmelden)
+			if($mitglieder_array[$user["au_id"]][5]==1 && $_POST["member_".$user["au_id"]]==false){
 				$am_id = $mitglieder_array[$user["au_id"]][0];
 				$sql ="	UPDATE adm_mitglieder SET am_valid  = 0
                                           , am_ende   = NOW()
+														, am_leiter = 0
 							WHERE am_id = '$am_id'";                             
 				$result = mysql_query($sql, $g_adm_con);
    			db_error($result);
 			}
 			//Falls wieder angemeldet wurde
-			if($mitglieder_array[$user["au_id"]][5]==0 && $_POST[$user["au_id"]]==true){
+			if($mitglieder_array[$user["au_id"]][5]==0 && $_POST["member_".$user["au_id"]]==true){
 				$am_id = $mitglieder_array[$user["au_id"]][0];
 				$sql ="	UPDATE adm_mitglieder SET am_valid  = 1
-                                          , am_ende   = '0000-00-00'
-							WHERE am_id = '$am_id'";
+                                          , am_ende   = '0000-00-00'";
+            //Falls jemand auch Leiter werden soll
+            if($_POST["leader_".$user["au_id"]]==true)$sql .=", am_leiter = 1 ";
+         	$sql .= "WHERE am_id = '$am_id'";
 				$result = mysql_query($sql, $g_adm_con);
    			db_error($result);			
 			}
+			//Falls nur Leiterfunktion hinzugefügt/entfernt werden soll under der user Mitglied ist/bleibt
+			if($mitglieder_array[$user["au_id"]][5]==1 && $_POST["member_".$user["au_id"]]==true){
+				$am_id = $mitglieder_array[$user["au_id"]][0];
+				//Falls Leiter hinzugefügt werden soll
+				if($_POST["leader_".$user["au_id"]]==true && $mitglieder_array[$user["au_id"]][6]==0){
+					$sql ="	UPDATE adm_mitglieder SET am_leiter  = 1 
+								WHERE am_id = '$am_id'";
+					$result = mysql_query($sql, $g_adm_con);
+   				db_error($result);
+				}
+				//Falls Leiter entfernt werden soll
+				if($_POST["leader_".$user["au_id"]]==false && $mitglieder_array[$user["au_id"]][6]==1){
+					$sql ="	UPDATE adm_mitglieder SET am_leiter  = 0 
+								WHERE am_id = '$am_id'";
+					$result = mysql_query($sql, $g_adm_con);
+   				db_error($result);
+				}
+			}
 		}
 		//Falls noch nie angemeldet gewesen aber jetzt werden soll
-		else if(!array_key_exists($user["au_id"], $mitglieder_array) && $_POST[$user["au_id"]]==true){
+		else if(!array_key_exists($user["au_id"], $mitglieder_array) && $_POST["member_".$user["au_id"]]==true){
 			$au_id = $user["au_id"];
-			$sql = "INSERT INTO adm_mitglieder (am_ar_id, am_au_id, am_start, am_valid)
-                 VALUES ($role_id, $au_id, NOW(), 1) ";
+			$sql = "INSERT INTO adm_mitglieder (am_ar_id, am_au_id, am_start, am_valid, am_leiter)
+                 VALUES ($role_id, $au_id, NOW(), 1";
+         //Falls jemand direkt Leiter werden soll
+         if($_POST["leader_".$user["au_id"]]==true)$sql .=", 1) ";
+         else $sql .=", 0) ";
 			$result = mysql_query($sql, $g_adm_con);
    		db_error($result);
 		}

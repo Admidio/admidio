@@ -69,6 +69,11 @@ $result_role = mysql_query($sql, $g_adm_con);
          	db_error($result, true);
 $role= mysql_fetch_array($result_role);
 
+//festlegen der Spaltenzahl er Tabelle
+$column=4;
+//Ist die Rolle eine Gruppe mit Leitern, dann 
+if($role["ar_gruppe"]==1 && isModerator() && editUser())$column++;
+
 //Übername ob nur Mitglieder oder alle User der Datenbank angezeigt werden sollen
 $restrict=$_GET["restrict"];
 if($restrict=="" || !isModerator() || !editUser())$restrict="m";
@@ -109,16 +114,19 @@ $user_anzahl = mysql_fetch_array($result_user_anzahl);
 
 //Erfassen wer die Rolle bereits hat oder schon mal hatte
 $sql = "
-	SELECT am_au_id, am_ar_id, am_valid
+	SELECT am_au_id, am_ar_id, am_valid, am_leiter
 	FROM adm_mitglieder
 	WHERE am_ar_id = '$role_id'";
 $result_role_member = mysql_query($sql, $g_adm_con);
 db_error($result_role_member);
          	
 //Schreiben der User-IDs die die Rolle bereits haben oder hatten in Array
-$role_member= array();
+//Schreiben der Leiter der Rolle in weiters arry
+$role_member = array();
+if($role["ar_gruppe"]==1)$group_leaders = array();
 for($y=0; $member = mysql_fetch_array($result_role_member); $y++){
 	if($member['am_valid']==1)$role_member[$y]= $member['am_au_id'];
+	if($role["ar_gruppe"]==1 && $member["am_leiter"]==1)$group_leaders[$y]= $member['am_au_id'];
 }
 
 
@@ -171,8 +179,11 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
             	<th class=\"tableHeader\" style=\"text-align: center;\">Name</th>
             	<th class=\"tableHeader\" style=\"text-align: center;\">Vorname</th>
 					<th class=\"tableHeader\" style=\"text-align: center;\">Geburtsdatum</th>
-					<th class=\"tableHeader\" style=\"text-align: center;\">Mitglied</th>
-         	</tr>";
+					<th class=\"tableHeader\" style=\"text-align: center;\">Mitglied</th>";
+         		if($role["ar_gruppe"]==1 && isModerator() && editUser())echo"
+         			<th class=\"tableHeader\" style=\"text-align: center;\">Leiter</th>";
+				echo"
+				</tr>";
  
   //Ausgabe der Tabellenzeilen, ggf. einfügen von Ankern
          	$user = mysql_fetch_array($result_user);
@@ -182,9 +193,9 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
            	if(in_array(ord($user['au_name']), $ascii)){
          		//große Anfangsbuchstaben werden erst ab 50 Personen angezeigt
          		if($user_anzahl[0]>50){
-         			echo "<tr><td style=\"text-align: center;\" colspan=\"4\">";           			
+         			echo "<tr><td style=\"text-align: center;\" colspan=\"$column\">";           			
       					//Aktueller Anfangsbuchstabe plus Anker
-     						$letter_string = chr($letter);          			
+     						$letter_string = "#";          			
            				echo"<a name=\"$letter_string\"></a><h2>$letter_string</h2>";
  						//Buchstaben Links zu Ankern wenn mehr als 100 Namen angezeigt werden sollen    			
 							if($user_anzahl[0]>100){     			
@@ -210,15 +221,26 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
 							<td style=\"text-align: center;\">". $user['au_vorname']."</td>
 							<td style=\"text-align: center;\">". $user['au_geburtstag']."</td>
 							<td style=\"text-align: center;\">";
+							//Häkchen setzen ob jemand Mitglied ist oder nicht
 							if(in_array($user['au_id'], $role_member)){
-								echo"<input type=\"checkbox\" id=\"$user[0]\" name=\"$user[0]\" checked value=\"1\">";
+								echo"<input type=\"checkbox\" id=\"member_$user[0]\" name=\"member_$user[0]\" checked value=\"1\">";
 							}
 							else{
-								echo"<input type=\"checkbox\" id=\"$user[0]\" name=\"$user[0]\" value=\"1\">";
+								echo"<input type=\"checkbox\" id=\"member_$user[0]\" name=\"member_$user[0]\" value=\"1\">";
 							}
-							echo"</td>
-						</tr>
-					";
+							echo"</td>";
+							//Häkchen setzen ob jemand Leiter ist oder nicht
+							if($role["ar_gruppe"]==1 && isModerator() && editUser()){
+							echo"<td style=\"text-align: center;\">";
+								if(in_array($user['au_id'], $group_leaders)){
+									echo"<input type=\"checkbox\" id=\"leader_$user[0]\" name=\"leader_$user[0]\" checked value=\"1\">";
+								}
+								else{
+									echo"<input type=\"checkbox\" id=\"leader_$user[0]\" name=\"leader_$user[0]\" value=\"1\">";
+								}
+							echo"</td>";
+							}
+						echo"</tr>";
 					$user = mysql_fetch_array($result_user);
          		}//Ende Whileschleife
 				}//Ende for-Schleife
@@ -228,7 +250,7 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
          	for($letter=65; $letter<=90; $letter++){
            	//große Anfangsbuchstaben werden erst ab 50 Personen angezeigt 
            		if($letter==ord($user['au_name']) && $user_anzahl[0]>50){
-         			echo "<tr><td style=\"text-align: center;\" colspan=\"4\">";           			
+         			echo "<tr><td style=\"text-align: center;\" colspan=\"$column\">";           			
       				//Aktueller Anfangsbuchstabe plus Anker
      					$letter_string = chr($letter);          			
            			echo"<a name=\"$letter_string\"></a><h2>$letter_string</h2>";
@@ -254,15 +276,26 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
 							<td style=\"text-align: center;\">". $user['au_vorname']."</td>
 							<td style=\"text-align: center;\">". $user['au_geburtstag']."</td>
 							<td style=\"text-align: center;\">";
+							//Häkchen setzen ob jemand Mitglied ist oder nicht
 							if(in_array($user['au_id'], $role_member)){
-								echo"<input type=\"checkbox\" id=\"$user[0]\" name=\"$user[0]\" checked value=\"1\">";
+								echo"<input type=\"checkbox\" id=\"member_$user[0]\" name=\"member_$user[0]\" checked value=\"1\">";
 							}
 							else{
-								echo"<input type=\"checkbox\" id=\"$user[0]\" name=\"$user[0]\" value=\"1\">";
+								echo"<input type=\"checkbox\" id=\"member__$user[0]\" name=\"member_$user[0]\" value=\"1\">";
 							}
-							echo"</td>
-						</tr>
-					";
+							echo"</td>";
+							//Häkchen setzen ob jemand Leiter ist oder nicht
+							if($role["ar_gruppe"]==1 && isModerator() && editUser()){
+							echo"<td style=\"text-align: center;\">";
+								if(in_array($user['au_id'], $group_leaders)){
+									echo"<input type=\"checkbox\" id=\"leader_$user[0]\" name=\"leader_$user[0]\" checked value=\"1\">";
+								}
+								else{
+									echo"<input type=\"checkbox\" id=\"leader_$user[0]\" name=\"leader_$user[0]\" value=\"1\">";
+								}
+							echo"</td>";
+							}
+						echo"</tr>";
 					$user = mysql_fetch_array($result_user);
          		}//Ende Whileschleife
          	}//Ende for-Schleife
