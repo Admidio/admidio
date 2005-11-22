@@ -102,20 +102,19 @@ while($row = mysql_fetch_object($result))
         // Die Attribute fuer das Item zusammenstellen
         $title			= mysqldatetime("d.m.y", $row->at_von). " ". $row->at_ueberschrift;
 
-        $description 	= "<b>$row->at_ueberschrift</b> <br />". mysqldatetime("d.m.y", $row->at_von). "<br />";
+        $link			= "$g_root_path/adm_program/modules/dates/dates.php?dateid=". $row->at_id;
+
+        $description 	= "<b>$row->at_ueberschrift</b> <br />". mysqldatetime("d.m.y", $row->at_von);
 
         if (mysqldatetime("h:i", $row->at_von) != "00:00")
                {
-                  $description =  $description. " Beginn:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".
-                     mysqldatetime("h:i", $row->at_von). " Uhr&nbsp;&nbsp;&nbsp;&nbsp;";
+                  $description =  $description. " um ".mysqldatetime("h:i", $row->at_von). " Uhr";
                }
 
         if($row->at_von != $row->at_bis)
                {
-                  if (mysqldatetime("h:i", $row->at_von) != "00:00")
-                     $description = $description. "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                  $description =  $description. "<br /> bis <br />";
 
-                  $description = $description. "Ende:&nbsp;";
                   if(mysqldatetime("d.m.y", $row->at_von) != mysqldatetime("d.m.y", $row->at_bis))
                   {
                      $description = $description. mysqldatetime("d.m.y", $row->at_bis);
@@ -130,21 +129,22 @@ while($row = mysql_fetch_object($result))
 
         if ($row->at_ort != "")
                {
-                  $description = $description. "<br />Treffpunkt:&nbsp;". strSpecialChars2Html($row->at_ort). "<br />";
+                  $description = $description. "<br /><br />Treffpunkt:&nbsp;". strSpecialChars2Html($row->at_ort);
                }
 
-        $description = $description. "<br>". nl2br(strSpecialChars2Html($row->at_beschreibung)). "<br />";
-        $description = $description. "<br>Angelegt von ". strSpecialChars2Html($user->au_vorname). " ". strSpecialChars2Html($user->au_name). "<br />";
+        $description = $description. "<br /><br />". nl2br(strSpecialChars2Html($row->at_beschreibung));
+        $description = $description. "<br /><br /><a href=\"$link\">Link auf $g_orga_property[ag_homepage]</a>";
+        $description = $description. "<br /><br /><i>Angelegt von ". strSpecialChars2Html($user->au_vorname). " ". strSpecialChars2Html($user->au_name). "</i>";
 
 
 
 
         $pubDate		= date(r,strtotime($row->at_timestamp));
 
-        $link			= "$g_root_path/adm_program/modules/dates/dates.php?dateid=". $row->at_id;
+
 
 		// Item hinzufuegen
-		$rss->add_Item($title,$description, $pubDate, $link);
+		$rss->add_Item($title, $description, $pubDate, $link);
 
       }
 
