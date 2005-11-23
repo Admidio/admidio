@@ -70,7 +70,7 @@ $result_role = mysql_query($sql, $g_adm_con);
 $role= mysql_fetch_array($result_role);
 
 //festlegen der Spaltenzahl er Tabelle
-$column=4;
+$column=5;
 //Ist die Rolle eine Gruppe mit Leitern, dann 
 if($role["ar_gruppe"]==1 && isModerator() && editUser())$column++;
 
@@ -81,7 +81,7 @@ if($restrict=="" || !isModerator() || !editUser())$restrict="m";
 //Falls gefordert, nur Aufruf von inhabern der Rolle Mitglied
 if($restrict=="m"){
 	$sql = "
-		SELECT DISTINCT au_id, au_name, au_vorname, au_geburtstag
+		SELECT DISTINCT au_id, au_name, au_vorname, au_geburtstag, au_ort, au_tel1, au_adresse, au_plz
 		FROM adm_user, adm_mitglieder, adm_rolle
 		WHERE au_id = am_au_id
 		AND ar_ag_shortname = '$g_organization'
@@ -98,7 +98,7 @@ if($restrict=="m"){
 //Falls gefordert, aufrufen alle Leute aus der Datenbank
 if($restrict=="u"){
 	$sql = "
-		SELECT au_id, au_name, au_vorname, au_geburtstag
+		SELECT au_id, au_name, au_vorname, au_geburtstag, au_ort, au_tel1, au_adresse, au_plz
 		FROM adm_user
 		ORDER BY au_name, au_vorname ASC ";
 	$result_user = mysql_query($sql, $g_adm_con);
@@ -178,7 +178,8 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
         	echo "style=\"width: 95%;\">";
          	echo "
 				<tr>
-            	<th class=\"tableHeader\" style=\"text-align: center;\">Name</th>
+            	<th class=\"tableHeader\" style=\"text-align: center;\">Info</th>
+					<th class=\"tableHeader\" style=\"text-align: center;\">Name</th>
             	<th class=\"tableHeader\" style=\"text-align: center;\">Vorname</th>
 					<th class=\"tableHeader\" style=\"text-align: center;\">Geburtsdatum</th>
 					<th class=\"tableHeader\" style=\"text-align: center;\">Mitglied</th>";
@@ -215,10 +216,18 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
            		}//Ende 
            	for($letter=48; $letter<=57; $letter++){
          		//Ausgabe aller Personen mit entsprechendem Anfangsbuchstaben
-	        		$user_name = $user['au_name'];
+	        		$user_name = $user['au_name'] ;
 	        		while(ord($user['au_name'])==$letter ||ord($user['au_name'])==$letter+32){
+         			$user_text= $user['au_vorname']."&nbsp;".$user['au_name']."&nbsp;&nbsp;&nbsp;"
+         							.$user['au_adresse']."&nbsp;&nbsp;&nbsp;"
+         							.$user['au_plz']."&nbsp;".$user['au_ort']."&nbsp;&nbsp;&nbsp;"
+         							.$user['au_tel1'];
          			echo"
 						<tr>
+							<td style=\"text-align: center;\">
+								<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/note.png\" alt=\"Userinformationen\"
+								 title=\"$user_text\">
+							</td>
 							<td style=\"text-align: center;\">". $user['au_name']."</td>
 							<td style=\"text-align: center;\">". $user['au_vorname']."</td>
 							<td style=\"text-align: center;\">";
@@ -274,8 +283,16 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
            		}//Ende $letter==$letter_int					
 	        	//Ausgabe aller Personen mit entsprechendem Anfangsbuchstaben
 	        		while(ord($user['au_name'])==$letter ||ord($user['au_name'])==$letter+32){
+         			$user_text= $user['au_vorname']."&nbsp;".$user['au_name']."&nbsp;&nbsp;&nbsp;"
+         							.$user['au_adresse']."&nbsp;&nbsp;&nbsp;"
+         							.$user['au_plz']."&nbsp;".$user['au_ort']."&nbsp;&nbsp;&nbsp;"
+         							.$user['au_tel1'];
          			echo"
 						<tr>
+							<td style=\"text-align: center;\">
+								<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/note.png\" alt=\"Userinformationen\"
+								 title=\"$user_text\">
+							</td>
 							<td style=\"text-align: center;\">". $user['au_name']."</td>
 							<td style=\"text-align: center;\">". $user['au_vorname']."</td>
 							<td style=\"text-align: center;\">";
