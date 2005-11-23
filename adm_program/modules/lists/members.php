@@ -43,7 +43,7 @@ require("../../system/session_check_login.php");
 $role_id=$_GET['ar_id'];
 
 // nur Webmaster & Moderatoren d&uuml;rfen Rollen zuweisen
-if(!isModerator() && !isGroupLeaderof($role_id) && !editUser())
+if(!isModerator() && !isGroupLeader($role_id) && !editUser())
 {
    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
    header($location);
@@ -77,6 +77,7 @@ if($role["ar_gruppe"]==1 && isModerator() && editUser())$column++;
 //‹bername ob nur Mitglieder oder alle User der Datenbank angezeigt werden sollen
 $restrict=$_GET["restrict"];
 if($restrict=="" || !isModerator() || !editUser())$restrict="m";
+
 //Falls gefordert, nur Aufruf von inhabern der Rolle Mitglied
 if($restrict=="m"){
 	$sql = "
@@ -106,11 +107,12 @@ if($restrict=="u"){
 	$user_anzahl = mysql_num_rows($result_user);
 }
 
-//Z‰hlen wieviele Leute in der Datenbank stehen
-$sql = "SELECT COUNT(*) FROM adm_user";
-$result_user_anzahl = mysql_query($sql, $g_adm_con);
-db_error($result_user_anzahl);
-$user_anzahl = mysql_fetch_array($result_user_anzahl);
+//Erfassen welche anfansgsbuchstaben bei Nachnamen Vorkommen
+$first_letter_array = array();
+for($x=0; $user = mysql_fetch_array($result_user); $x++){
+	if(!in_array(ord($user['au_name']), $first_letter_array))$first_letter_array[$x]= ord($user['au_name']);
+}
+mysql_data_seek ($result_user, 0);
 
 //Erfassen wer die Rolle bereits hat oder schon mal hatte
 $sql = "
@@ -192,20 +194,20 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
            	
            	if(in_array(ord($user['au_name']), $ascii)){
          		//groﬂe Anfangsbuchstaben werden erst ab 50 Personen angezeigt
-         		if($user_anzahl[0]>50){
+         		if($user_anzahl>50){
          			echo "<tr><td style=\"text-align: center;\" colspan=\"$column\">";           			
       					//Aktueller Anfangsbuchstabe plus Anker
      						$letter_string = "#";          			
            				echo"<a name=\"$letter_string\"></a><h2>$letter_string</h2>";
  						//Buchstaben Links zu Ankern wenn mehr als 100 Namen angezeigt werden sollen    			
-							if($user_anzahl[0]>100){     			
+							if($user_anzahl>100){     			
      							echo"<a href=\"#Anfang\">Anfang</a>&nbsp;";
      							for($menu_letter=65; $menu_letter<=90; $menu_letter++){
      							//Falls Aktueller Anfangsbuchstabe, Nur Buchstabe ausgeben
       							$menu_letter_string = chr($menu_letter);    					
-     								if($letter==$menu_letter)echo"$menu_letter_string&nbsp;";
+     								if($letter==$menu_letter || !in_array($menu_letter, $first_letter_array))echo"$menu_letter_string&nbsp;";
      							//Falls Nicht Link zu Anker
-     								if($letter!=$menu_letter)echo"<a href=\"#$menu_letter_string\">$menu_letter_string</a>&nbsp;";
+     								if(in_array($menu_letter, $first_letter_array))echo"<a href=\"#$menu_letter_string\">$menu_letter_string</a>&nbsp;";
      							}//for
          				echo"<a href=\"#Ende\">Ende</a>";
 							}//User_anzahl>100
@@ -219,7 +221,9 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
 						<tr>
 							<td style=\"text-align: center;\">". $user['au_name']."</td>
 							<td style=\"text-align: center;\">". $user['au_vorname']."</td>
-							<td style=\"text-align: center;\">". $user['au_geburtstag']."</td>
+							<td style=\"text-align: center;\">";
+								 if($user['au_geburtstag']!='0000-00-00')echo mysqldate("d.m.y", $user['au_geburtstag']);
+							echo"</td>
 							<td style=\"text-align: center;\">";
 							//H‰kchen setzen ob jemand Mitglied ist oder nicht
 							if(in_array($user['au_id'], $role_member)){
@@ -249,20 +253,20 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
          //F¸r alle Namen die mit Buchstaben beginnen egal ob klein oder Groﬂ
          	for($letter=65; $letter<=90; $letter++){
            	//groﬂe Anfangsbuchstaben werden erst ab 50 Personen angezeigt 
-           		if($letter==ord($user['au_name']) && $user_anzahl[0]>50){
+           		if(in_array($letter, $first_letter_array) && $user_anzahl>50){
          			echo "<tr><td style=\"text-align: center;\" colspan=\"$column\">";           			
       				//Aktueller Anfangsbuchstabe plus Anker
      					$letter_string = chr($letter);          			
            			echo"<a name=\"$letter_string\"></a><h2>$letter_string</h2>";
  					//Buchstaben Links zu Ankern wenn mehr als 100 Namen angezeigt werden sollen    			
-						if($user_anzahl[0]>100){     			
+						if($user_anzahl>100){     			
      						echo"<a href=\"#Anfang\">Anfang</a>&nbsp;";
      						for($menu_letter=65; $menu_letter<=90; $menu_letter++){
      						//Falls Aktueller Anfangsbuchstabe, Nur Buchstabe ausgeben
       						$menu_letter_string = chr($menu_letter);    					
-     							if($letter==$menu_letter)echo"$menu_letter_string&nbsp;";
+     							if($letter==$menu_letter || !in_array($menu_letter, $first_letter_array))echo"$menu_letter_string&nbsp;";
      						//Falls Nicht Link zu Anker
-     							if($letter!=$menu_letter)echo"<a href=\"#$menu_letter_string\">$menu_letter_string</a>&nbsp;";
+     							if($letter!=$menu_letter && in_array($menu_letter, $first_letter_array))echo"<a href=\"#$menu_letter_string\">$menu_letter_string</a>&nbsp;";
      						}//for
          			echo"<a href=\"#Ende\">Ende</a>";
 						}//User_anzahl>10
@@ -274,7 +278,9 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
 						<tr>
 							<td style=\"text-align: center;\">". $user['au_name']."</td>
 							<td style=\"text-align: center;\">". $user['au_vorname']."</td>
-							<td style=\"text-align: center;\">". $user['au_geburtstag']."</td>
+							<td style=\"text-align: center;\">";
+								 if($user['au_geburtstag']!='0000-00-00')echo mysqldate("d.m.y", $user['au_geburtstag']);
+							echo"</td>
 							<td style=\"text-align: center;\">";
 							//H‰kchen setzen ob jemand Mitglied ist oder nicht
 							if(in_array($user['au_id'], $role_member)){
@@ -299,30 +305,20 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
 					$user = mysql_fetch_array($result_user);
          		}//Ende Whileschleife
          	}//Ende for-Schleife
-         	//Buttons schlieﬂen oder Speichern
-         	echo"
-					<tr><td colspan=4><a name=\"Ende\"></a><hr width=\"85%\" /></td></tr>
-					<tr class=\"listMouseOut\">
-            		<td colspan=\"5\" style=\"text-align: center;\">
-               		<div style=\"margin: 8px;\">
-                  	<button name=\"speichern\" type=\"submit\" value=\"speichern\">
-                        <img src=\"$g_root_path/adm_program/images/save.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">&nbsp;Speichern
-							</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		               <button name=\"schliessen\" type=\"button\" value=\"schliessen\" onclick=\"window.close()\">
-                        <img src=\"$g_root_path/adm_program/images/error.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Schlie&szlig;en\">&nbsp;Schlie&szlig;en
-							</button>
-               		</div>
-            		</td>
-         		</tr>
-				";
-
-echo"
-     </table>
-   </form>
-   
-   </div>";
-   
-   if($_GET['popup'] == 0)
+      echo"</table>";
+      //Buttons schlieﬂen oder Speichern
+      echo"
+	  		<a name=\"Ende\"></a>
+			<div style=\"margin: 8px;\">
+   	     	<button name=\"speichern\" type=\"submit\" value=\"speichern\">
+            	<img src=\"$g_root_path/adm_program/images/save.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">&nbsp;Speichern
+				</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
+            <button name=\"schliessen\" type=\"button\" value=\"schliessen\" onclick=\"window.close()\">
+               <img src=\"$g_root_path/adm_program/images/error.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Schlie&szlig;en\">&nbsp;Schlie&szlig;en
+				</button>
+     		</div>
+   </form> </div>";//Ende Formular
+     if($_GET['popup'] == 0)
       require("../../../adm_config/body_bottom.php");
 
 echo "</body>
