@@ -14,9 +14,9 @@
  *                  Verzeichnisstruktur angezeigt wird. Wurde ein Default-Ordner
  *                  gesetzt, kann der Anwender nur noch in Unterordner und nicht
  *                  in hoehere Ordner des Default-Ordners navigieren
- * info   :  Ausgabe von verwaltungswalltungs Informationen
- * sort	: Gibt die Art der Sortierung an. Default ist absteigend. Bei der Übergabe
- *			  von "desc" wird aufsteigend sortiert.
+ * info   : Ausgabe von Verwaltungsinformationen
+ * sort	 : Gibt die Art der Sortierung an. Default ist aufsteigend. Bei der Übergabe
+ *			   von "desc" wird absteigend sortiert.
  ******************************************************************************
  *
  * This program is free software; you can redistribute it and/or
@@ -78,20 +78,18 @@
       header($location);
       exit();
    }
-   
-    
-   If ($sort == "desc") {
+
+	// Ordnerinhalt sortieren
+   if ($sort == "desc") {
    	$inhalt= scandir($act_folder,1);
    	$ordnerarray = array_slice ($inhalt,0,count($inhalt)-2);
-   	echo $ordnerarray[0];
    }
    else {
    	$inhalt = scandir($act_folder);
    	$ordnerarray = array_slice ($inhalt,2);
-   	echo $ordnerarray[0];  	
 	};
-	
-	
+
+
    echo "
    <!-- (c) 2004 - 2005 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
    <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
