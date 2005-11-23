@@ -176,8 +176,9 @@ function isModerator($user_id = 0)
 }
 
 // Funktion prueft, ob der angemeldete User Leiter einer Gruppe /Kurs ist
+// Otionaler Parameter rolr_id prueft ob der angemeldete User Leiter der übergebenen Gruppe / Kurs ist
 
-function isGroupLeader()
+function isGroupLeader($role_id=0)
 {
    global $g_user_id;
    global $g_adm_con;
@@ -191,7 +192,9 @@ function isGroupLeader()
                  AND am_ar_id             = ar_id
                  AND ar_ag_shortname      = '$g_organization'
                  AND ar_valid             = 1
-                   ";
+					";
+   if ($role_id!=0)
+   	$sql .= "  AND am_ar_id					= '$role_id'";
 
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
@@ -204,35 +207,6 @@ function isGroupLeader()
       return false;
 }
 
-// Funktion prueft, ob der angemeldete User Leiter einer Gruppe /Kurs ist
-
-function isGroupLeaderof($role_id)
-{
-   global $g_user_id;
-   global $g_adm_con;
-   global $g_organization;
-
-   $sql    = "SELECT *
-                FROM adm_mitglieder, adm_rolle
-               WHERE am_au_id             = $g_user_id
-                 AND am_valid             = 1
-                 AND am_leiter            = 1
-                 AND am_ar_id             = ar_id
-                 AND am_ar_id					= '$role_id'
-					  AND ar_ag_shortname      = '$g_organization'
-                 AND ar_valid             = 1
-                   ";
-
-   $result = mysql_query($sql, $g_adm_con);
-   db_error($result);
-
-   $edit_user = mysql_num_rows($result);
-
-   if($edit_user > 0)
-      return true;
-   else
-      return false;
-}
 // Funktion prueft, ob der angemeldete User Benutzerdaten bearbeiten darf
 
 function editUser()
