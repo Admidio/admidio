@@ -250,7 +250,8 @@ echo "
                   // alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
                   $sql = "SELECT * FROM adm_gruppierung
                            WHERE ag_shortname = '$g_organization'
-                              OR ag_mother    = '$g_organization' ";
+                              OR ag_mother    = '$g_organization'
+                           ORDER BY ag_longname ";
                   $result_bg = mysql_query($sql, $g_adm_con);
                   db_error($result_bg, true);
 
