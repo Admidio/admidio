@@ -41,13 +41,6 @@ require("../../system/session_check.php");
 
 // Prüfungen, ob die Seite regulaer aufgerufen wurde
 
-if(array_key_exists("au_id", $_GET) && !$g_session_valid)
-{
-   $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-   header($location);
-   exit();
-}
-
 if($g_orga_property['ag_mail_extern'] == 1)
 {
   // es duerfen oder koennen keine Mails ueber den Server verschickt werden
