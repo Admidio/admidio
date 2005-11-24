@@ -27,12 +27,12 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
-require("../../../adm_config/config.php");
-require("../../system/function.php");
-require("../../system/date.php");
-require("../../system/string.php");
-require("../../system/tbl_user.php");
-require("../../system/session_check_login.php");
+require_once("../../../adm_config/config.php");
+require_once("../../system/function.php");
+require_once("../../system/date.php");
+require_once("../../system/string.php");
+require_once("../../system/tbl_user.php");
+require_once("../../system/session_check_login.php");
 
 if(!editDate())
 {
@@ -99,7 +99,7 @@ echo "
 <head>
    <title>". $g_orga_property['ag_shortname']. " - Termin</title>
    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
-   
+
    <!--[if gte IE 5.5000]>
    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
    <![endif]-->";
@@ -117,7 +117,7 @@ require("../../../adm_config/body_top.php");
       else
          echo "1";
       echo "\" method=\"post\" name=\"TerminAnlegen\">
-      
+
       <div class=\"formHead\">";
          if($_GET["at_id"] > 0)
                echo strspace("Termin ändern", 2);
@@ -128,17 +128,17 @@ require("../../../adm_config/body_top.php");
          <div>
             <div style=\"text-align: right; width: 25%; float: left;\">&Uuml;berschrift:</div>
             <div style=\"text-align: left; margin-left: 27%;\">
-               <input type=\"text\" name=\"ueberschrift\" size=\"52\" maxlength=\"100\" value=\"". htmlspecialchars($headline, ENT_QUOTES). "\">
+               <input type=\"text\" name=\"ueberschrift\" size=\"53\" maxlength=\"100\" value=\"". htmlspecialchars($headline, ENT_QUOTES). "\">
             </div>
          </div>";
-         
+
          // bei mehr als einer Gruppierung, Checkbox anzeigen, ob, Termin bei anderen angezeigt werden soll
          $sql = "SELECT COUNT(1) FROM adm_gruppierung
                   WHERE ag_mother IS NOT NULL ";
          $result = mysql_query($sql, $g_adm_con);
          db_error($result);
          $row = mysql_fetch_array($result);
-         
+
          if($row[0] > 0)
          {
             echo "
@@ -151,13 +151,13 @@ require("../../../adm_config/body_top.php");
                   echo " value=\"1\" />
                   <label for=\"global\">Termin ist f&uuml;r mehrere Gruppierungen sichtbar</label>&nbsp;
                   <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" alt=\"Hilfe\" title=\"Hilfe\"
-                  onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=termin_global','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
+                  onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=termin_global','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\">
                </div>
             </div>";
          }
-         
+
          echo "<hr width=\"85%\" />
-         
+
          <div style=\"margin-top: 6px;\">
             <div style=\"text-align: right; width: 25%; float: left;\">Datum Beginn:</div>
             <div style=\"text-align: left; width: 75%; position: relative; left: 2%;\">
@@ -177,16 +177,22 @@ require("../../../adm_config/body_top.php");
          <div style=\"margin-top: 6px;\">
             <div style=\"text-align: right; width: 25%; float: left;\">Treffpunkt:</div>
             <div style=\"text-align: left; margin-left: 27%;\">
-               <input type=\"text\" name=\"treffpunkt\" size=\"52\" maxlength=\"50\" value=\"". htmlspecialchars($meeting_point, ENT_QUOTES). "\">
+               <input type=\"text\" name=\"treffpunkt\" size=\"53\" maxlength=\"50\" value=\"". htmlspecialchars($meeting_point, ENT_QUOTES). "\">
             </div>
          </div>
          <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 25%; float: left;\">Beschreibung:</div>
+            <div style=\"text-align: right; width: 25%; float: left;\">Beschreibung:";
+               if($g_orga_property['ag_bbcode'] == 1)
+               {
+                  echo "<br><br>
+                  <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=400,left=310,top=200,scrollbars=yes')\" tabindex=\"6\">Text formatieren</a>";
+               }
+            echo "</div>
             <div style=\"text-align: left; margin-left: 27%;\">
-               <textarea  name=\"beschreibung\" rows=\"7\" cols=\"40\">". htmlspecialchars($description, ENT_QUOTES). "</textarea>
+               <textarea  name=\"beschreibung\" rows=\"10\" cols=\"40\">". htmlspecialchars($description, ENT_QUOTES). "</textarea>
             </div>
          </div>
-         
+
          <hr width=\"85%\" />
 
          <div style=\"margin-top: 6px;\">
@@ -218,7 +224,7 @@ require("../../../adm_config/body_top.php");
 
       echo "</div>
    </form>
-   
+
    </div>";
 
    require("../../../adm_config/body_bottom.php");

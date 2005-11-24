@@ -31,11 +31,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
-require("../../../adm_config/config.php");
-require("../../system/function.php");
-require("../../system/string.php");
-require("../../system/date.php");
-require("../../system/session_check_login.php");
+require_once("../../../adm_config/config.php");
+require_once("../../system/function.php");
+require_once("../../system/string.php");
+require_once("../../system/date.php");
+require_once("../../system/session_check_login.php");
 
 // erst prüfen, ob der User auch die entsprechenden Rechte hat
 if(!editDate())
@@ -71,10 +71,13 @@ $err_text = "";
 
 if($_GET["mode"] == 1 || $_GET["mode"] == 3)
 {
-   $_POST['ueberschrift'] = trim($_POST['ueberschrift']);
+	$headline = strStripTags($_POST['ueberschrift']);
+	$content  = strStripTags($_POST['beschreibung']);
+	$place    = strStripTags($_POST['treffpunkt']);
    $_POST['datum_von']    = trim($_POST['datum_von']);
 
-   if(strlen($_POST['ueberschrift']) > 0
+   if(strlen($headline) > 0
+   && strlen($content)  > 0
    && strlen($_POST['datum_von'])    > 0 )
    {
       // wenn Datum gueltig, dann speichern
@@ -141,8 +144,7 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
                                              , at_last_change_id = $g_user_id
                         WHERE at_id = {3}";
             }
-            $sql    = prepareSQL($sql, array($_POST['ueberschrift'], $_POST['treffpunkt'],
-                        $_POST['beschreibung'], $_GET['at_id']));
+            $sql    = prepareSQL($sql, array($headline, $place, $content, $_GET['at_id']));
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
 
@@ -163,7 +165,13 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
    }
    else
    {
-      $err_code = "felder";
+   	if(strlen($headline) == 0)
+   		$err_text = "Überschrift";
+   	elseif(strlen($content) == 0)
+   		$err_text = "Beschreibung";
+   	else
+   		$err_text = "Datum von";
+      $err_code = "feld";
    }
 }
 elseif($_GET["mode"] == 2)
