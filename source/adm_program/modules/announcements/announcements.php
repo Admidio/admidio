@@ -11,6 +11,7 @@
  * start     - Angabe, ab welchem Datensatz Ankuendigungen angezeigt werden sollen
  * headline  - Ueberschrift, die ueber den Ankuendigungen steht
  *             (Default) Ankuendigungen
+ * id	       - Nur eine einzige Annkuendigung anzeigen lassen.
  *
  ******************************************************************************
  *
@@ -58,8 +59,15 @@ echo "
 <html>
 <head>
    <title>". $g_orga_property['ag_shortname']. " - ". $_GET["headline"]. "</title>
-   <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
+   <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">";
 
+if($g_orga_property['ag_enable_rss'] == 1)
+{
+echo "
+   <link type=\"application/rss+xml\" rel=\"alternate\" title=\"$g_orga_property[ag_homepage] - Die neuesten 10 Ankuendigungen\" href=\"$g_root_path/adm_program/modules/announcements/rss_announcements.php\">";
+};
+
+echo "
    <!--[if gte IE 5.5000]>
    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
    <![endif]-->";
@@ -71,8 +79,6 @@ require("../../../adm_config/body_top.php");
    echo "
    <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
    <h1>". strspace($_GET["headline"]). "</h1>";
-
-   $act_date = date("Y.m.d 00:00:00", time());
 
    // alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
    $sql = "SELECT * FROM adm_gruppierung
@@ -96,21 +102,14 @@ require("../../../adm_config/body_top.php");
       $i++;
    }
 
-   $sql    = "SELECT COUNT(*) FROM adm_ankuendigungen
-               WHERE (  aa_ag_shortname = '$g_organization'
-                     OR (   aa_global   = 1
-                        AND aa_ag_shortname IN ($organizations) ))
-               ORDER BY aa_timestamp ASC ";
-   $result = mysql_query($sql, $g_adm_con);
-   db_error($result);
 
-   $row = mysql_fetch_array($result);
-   $count_date = $row[0];
-
-   if($count_date == 0)
+   // falls eine id uebergeben worden ist...
+   if (array_key_exists("id", $_GET))
    {
-      echo "<p>Es sind keine Daten vorhanden.</p>";
+      $sql    = "SELECT * FROM adm_ankuendigungen
+                  WHERE aa_id = $_GET[id]";
    }
+   //...ansonsten alle fuer die Gruppierung passenden Ankuendigungen aus der DB holen.
    else
    {
       $sql    = "SELECT * FROM adm_ankuendigungen
@@ -119,8 +118,27 @@ require("../../../adm_config/body_top.php");
                            AND aa_ag_shortname IN ($organizations) ))
                   ORDER BY aa_timestamp DESC
                   LIMIT ". $_GET["start"]. ", 10 ";
-      $result = mysql_query($sql, $g_adm_con);
-      db_error($result);
+   }
+
+   $result = mysql_query($sql, $g_adm_con);
+   db_error($result);
+
+   // Gucken wieviele Datensaetze die Abfrage ermittelt hat...
+   $row_count = mysql_num_rows($result);
+
+   if ($row_count == 0)
+   {
+   	if (array_key_exists("id", $_GET))
+   	{
+   		echo "<p>Der angeforderte Eintrag exisitiert nicht (mehr) in der Datenbank.</p>";
+   	}
+   	else
+   	{
+   		echo "<p>Es sind keine Daten vorhanden.</p>";
+   	}
+   }
+   else
+   {
 
       // Tabelle mit den vor- und zurück und neu Buttons
 
@@ -149,7 +167,7 @@ require("../../../adm_config/body_top.php");
                }
             echo "</td>
             <td width=\"33%\" align=\"right\">";
-               if($count_date > $_GET["start"] + 10)
+               if($row_count > $_GET["start"] + 10)
                {
                   $start = $_GET["start"] + 10;
                   echo "<button name=\"forward\" type=\"button\" value=\"forward\" style=\"width: 152px;\"
@@ -219,9 +237,6 @@ require("../../../adm_config/body_top.php");
       }  // Ende While-Schleife
    }
 
-   // wenn nicht eingeloggt oder Termin editiert werden darf, dann anzeigen
-   if(!$g_session_valid || editDate())
-   {
       // Tabelle mit den vor- und zurück und neu Buttons
 
       echo "
@@ -239,7 +254,7 @@ require("../../../adm_config/body_top.php");
                }
             echo "</td>
             <td width=\"33%\" align=\"center\">";
-               // nur Webmaster darf neue Ankuendigungen erfassen
+               // nur Nutzer mit Moderatorenrechten duerfen neue Ankuendigungen erfassen
                if(isModerator())
                {
                   echo "<button name=\"new\" type=\"button\" value=\"new\" style=\"width: 152px;\"
@@ -249,7 +264,7 @@ require("../../../adm_config/body_top.php");
                }
             echo "</td>
             <td width=\"33%\" align=\"right\">";
-               if($count_date > $_GET["start"] + 10)
+               if($row_count > $_GET["start"] + 10)
                {
                   $start = $_GET["start"] + 10;
                   echo "<button name=\"forward\" type=\"button\" value=\"forward\" style=\"width: 152px;\"
@@ -259,7 +274,7 @@ require("../../../adm_config/body_top.php");
             echo "</td>
          </tr>
       </table>";
-   }
+
    echo "</div>";
 
    require("../../../adm_config/body_bottom.php");
