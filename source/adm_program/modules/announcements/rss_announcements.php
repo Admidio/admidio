@@ -90,7 +90,7 @@ db_error($result);
 // ab hier wird der RSS-Feed zusammengestellt
 
 // Ein RSSfeed-Objekt erstellen
-$rss=new RSSfeed("http://$g_orga_property[ag_homepage]","$g_orga_property[ag_homepage] - Die neuesten 10 Ankuendigungen","Die 10 neuesten Ankuendigungen");
+$rss=new RSSfeed("http://$g_orga_property[ag_homepage]","$g_orga_property[ag_longname] - Ankuendigungen","Die 10 neuesten Ankuendigungen");
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
 while($row = mysql_fetch_object($result))
@@ -119,7 +119,7 @@ while($row = mysql_fetch_object($result))
 
         $description = $description. "<br /><br /><a href=\"$link\">Link auf $g_orga_property[ag_homepage]</a>";
         $description = $description. "<br /><br /><i>Angelegt von ". strSpecialChars2Html($user->au_vorname). " ". strSpecialChars2Html($user->au_name);
-        $description = $description. " am ". mysqldatetime("d.m.y", $row->aa_timestamp). "</i>";
+        $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->aa_timestamp). "</i>";
 
         $pubDate		= date('r',strtotime($row->aa_timestamp));
 

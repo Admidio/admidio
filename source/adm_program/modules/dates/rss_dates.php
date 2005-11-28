@@ -29,12 +29,13 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
-require("../../../adm_config/config.php");
-require("../../system/function.php");
-require("../../system/date.php");
-require("../../system/string.php");
-require("../../system/session_check.php");
-require("../../system/rss_class.php");
+require_once("../../../adm_config/config.php");
+require_once("../../system/function.php");
+require_once("../../system/date.php");
+require_once("../../system/string.php");
+require_once("../../system/session_check.php");
+require_once("../../system/bbcode.php");
+require_once("../../system/rss_class.php");
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist...
 if($g_orga_property['ag_enable_rss'] != 1)
@@ -42,6 +43,13 @@ if($g_orga_property['ag_enable_rss'] != 1)
    $location = "location: $g_root_path/adm_program/system/err_msg.php?url=home&err_code=rss_disabled";
    header($location);
    exit();
+}
+
+// Nachschauen ob BB-Code aktiviert ist...
+if($g_orga_property['ag_bbcode'] == 1)
+{
+   //BB-Parser initialisieren
+   $bbcode = new ubbParser();
 }
 
 // alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
@@ -79,7 +87,6 @@ $sql = "SELECT * FROM adm_termine
                      ORDER BY at_von ASC
                      LIMIT 10 ";
 
-      $sql    = prepareSQL($sql, array($_GET['start']));
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
 
@@ -88,13 +95,13 @@ $sql = "SELECT * FROM adm_termine
 // ab hier wird der RSS-Feed zusammengestellt
 
 // Ein RSSfeed-Objekt erstellen
-$rss=new RSSfeed("http://$g_orga_property[ag_homepage]","$g_orga_property[ag_homepage] - Die naechsten 10 Termine","Die 10 nächsten Termine");
+$rss=new RSSfeed("http://$g_orga_property[ag_homepage]","$g_orga_property[ag_longname] - Termine","Die 10 naechsten Termine");
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
 while($row = mysql_fetch_object($result))
       {
         // Den Autor des Termins ermitteln
-      	$sql     = "SELECT * FROM adm_user WHERE au_id = $row->at_au_id";
+        $sql     = "SELECT * FROM adm_user WHERE au_id = $row->at_au_id";
         $result2 = mysql_query($sql, $g_adm_con);
         db_error($result2);
         $user = mysql_fetch_object($result2);
@@ -102,7 +109,7 @@ while($row = mysql_fetch_object($result))
         // Die Attribute fuer das Item zusammenstellen
         $title			= mysqldatetime("d.m.y", $row->at_von). " ". $row->at_ueberschrift;
 
-        $link			= "$g_root_path/adm_program/modules/dates/dates.php?dateid=". $row->at_id;
+        $link			= "$g_root_path/adm_program/modules/dates/dates.php?id=". $row->at_id;
 
         $description 	= "<b>$row->at_ueberschrift</b> <br />". mysqldatetime("d.m.y", $row->at_von);
 
@@ -132,14 +139,23 @@ while($row = mysql_fetch_object($result))
                   $description = $description. "<br /><br />Treffpunkt:&nbsp;". strSpecialChars2Html($row->at_ort);
                }
 
-        $description = $description. "<br /><br />". nl2br(strSpecialChars2Html($row->at_beschreibung));
+        if($g_orga_property['ag_bbcode'] == 1)
+        {
+        	  $description = $description. "<br /><br />". strSpecialChars2Html($bbcode->parse($row->at_beschreibung));
+        }
+        else
+        {
+           $description = $description. "<br /><br />". nl2br(strSpecialChars2Html($row->at_beschreibung));
+        }
+
         $description = $description. "<br /><br /><a href=\"$link\">Link auf $g_orga_property[ag_homepage]</a>";
-        $description = $description. "<br /><br /><i>Angelegt von ". strSpecialChars2Html($user->au_vorname). " ". strSpecialChars2Html($user->au_name). "</i>";
+        $description = $description. "<br /><br /><i>Angelegt von ". strSpecialChars2Html($user->au_vorname). " ". strSpecialChars2Html($user->au_name);
+        $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->at_timestamp). "</i>";
 
 
 
 
-        $pubDate		= date(r,strtotime($row->at_timestamp));
+        $pubDate		= date('r',strtotime($row->at_timestamp));
 
 
 

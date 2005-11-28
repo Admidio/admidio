@@ -11,7 +11,7 @@
  * mode: actual  - (Default) Alle aktuellen und zukuenftige Termine anzeigen
  *       old     - Alle bereits erledigten
  * start         - Angabe, ab welchem Datensatz Termine angezeigt werden sollen
- * dateid		 - Nur einen einzigen Termin anzeigen lassen.
+ * id		        - Nur einen einzigen Termin anzeigen lassen.
  *
  ******************************************************************************
  *
@@ -61,7 +61,7 @@ echo "
 if($g_orga_property['ag_enable_rss'] == 1)
 {
 echo "
-   <link type=\"application/rss+xml\" rel=\"alternate\" title=\"$g_orga_property[ag_homepage] - Die naechsten 10 Termine\" href=\"$g_root_path/adm_program/modules/dates/rss_dates.php\">";
+   <link type=\"application/rss+xml\" rel=\"alternate\" title=\"$g_orga_property[ag_longname] - Termine\" href=\"$g_root_path/adm_program/modules/dates/rss_dates.php\">";
 };
 
 echo "
@@ -82,7 +82,6 @@ require("../../../adm_config/body_top.php");
          echo strspace("Termine");
    echo "</h1>";
 
-   $act_date = date("Y.m.d 00:00:00", time());
 
    // alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
    $sql = "SELECT * FROM adm_gruppierung
@@ -106,71 +105,61 @@ require("../../../adm_config/body_top.php");
       $i++;
    }
 
-   if(strcmp($_GET['mode'], "old") == 0)
+   // falls eine id fuer ein bestimmtes Datum uebergeben worden ist...
+   if (array_key_exists("id", $_GET))
    {
-      $sql    = "SELECT COUNT(*) FROM adm_termine
-                  WHERE (  at_ag_shortname = '$g_organization'
-                        OR (   at_global   = 1
-                           AND at_ag_shortname IN ($organizations) ))
-                    AND at_von < '$act_date'
-                    AND at_bis < '$act_date'
-                  ORDER BY at_von DESC ";
+   	 $sql    = "SELECT * FROM adm_termine
+                  WHERE at_id = $_GET[id]";
    }
-   else
-   {
-      $sql    = "SELECT COUNT(*) FROM adm_termine
-                  WHERE (  at_ag_shortname = '$g_organization'
-                        OR (   at_global   = 1
-                           AND at_ag_shortname IN ($organizations) ))
-                    AND (  at_von >= '$act_date'
-                        OR at_bis >= '$act_date' )
-                  ORDER BY at_von ASC ";
-   }
-   $result = mysql_query($sql, $g_adm_con);
-   db_error($result);
-
-   $row = mysql_fetch_array($result);
-   $count_date = $row[0];
-
-   if($count_date == 0)
-   {
-      echo "<p>Es sind keine Termine vorhanden.</p>";
-   }
-   else
-   {
-      if(strcmp($_GET['mode'], "old") == 0)
-      {
+   //...ansonsten alle fuer die Gruppierung passenden Termine aus der DB holen.
+	else
+	{
+   	//fuer alter Termine...
+   	if(strcmp($_GET['mode'], "old") == 0)
+   	{
          $sql    = "SELECT * FROM adm_termine
                      WHERE (  at_ag_shortname = '$g_organization'
                         OR (   at_global   = 1
                            AND at_ag_shortname IN ($organizations) ))
-                       AND at_von < '$act_date'
-                       AND at_bis < '$act_date'
+                       AND at_von < sysdate()
+                       AND at_bis < sysdate()
                      ORDER BY at_von DESC
                      LIMIT {0}, 10 ";
       }
+      //... ansonsten fuer neue Termine
       else
       {
          $sql    = "SELECT * FROM adm_termine
                      WHERE (  at_ag_shortname = '$g_organization'
                         OR (   at_global   = 1
                            AND at_ag_shortname IN ($organizations) ))
-                       AND (  at_von >= '$act_date'
-                           OR at_bis >= '$act_date' )
+                       AND (  at_von >= sysdate
+                           OR at_bis >= sysdate
                      ORDER BY at_von ASC
                      LIMIT {0}, 10 ";
       }
+	}
 
-      // falls eine dateid uebergeben worden ist...
-      if (array_key_exists("dateid", $_GET))
-      {
-      	 $sql    = "SELECT * FROM adm_termine
-                     WHERE at_id = $_GET[dateid]";
-      }
-      $sql    = prepareSQL($sql, array($_GET['start']));
-      $result = mysql_query($sql, $g_adm_con);
-      db_error($result);
+   $sql    = prepareSQL($sql, array($_GET['start']));
+   $result = mysql_query($sql, $g_adm_con);
+   db_error($result);
 
+   // Gucken wieviele Datensaetze die Abfrage ermittelt hat...
+   $row_count = mysql_num_rows($result);
+
+   if($row_count == 0)
+   {
+      if (array_key_exists("id", $_GET))
+   	{
+   		echo "<p>Der angeforderte Eintrag exisitiert nicht (mehr) in der Datenbank.</p>";
+   	}
+   	else
+   	{
+   		echo "<p>Es sind keine Daten vorhanden.</p>";
+   	}
+   }
+   else
+   {
 
       // Tabelle mit den vor- und zurück und neu Buttons
 
@@ -178,7 +167,7 @@ require("../../../adm_config/body_top.php");
       <table style=\"margin-top: 10px; margin-bottom: 10px;\" border=\"0\">
          <tr>
             <td width=\"33%\" align=\"left\">";
-               if(($_GET["start"] > 0) && (!array_key_exists("dateid", $_GET)))
+               if($_GET["start"] > 0)
                {
                   $start = $_GET["start"] - 10;
                   if($start < 0) $start = 0;
@@ -199,7 +188,7 @@ require("../../../adm_config/body_top.php");
                }
             echo "</td>
             <td width=\"33%\" align=\"right\">";
-               if(($count_date > $_GET["start"] + 10) && (!array_key_exists("dateid", $_GET)))
+               if($row_count > $_GET["start"] + 10)
                {
                   $start = $_GET["start"] + 10;
                   echo "<button name=\"forward\" type=\"button\" value=\"forward\" style=\"width: 152px;\"
@@ -229,9 +218,7 @@ require("../../../adm_config/body_top.php");
                   &nbsp;". strSpecialChars2Html($row->at_ueberschrift). "</div>";
 
                // aendern & loeschen darf man nur eigene Termine, ausser Moderatoren
-               if (editDate()
-               && (  isModerator()
-                  || $row->at_au_id == $g_user_id ))
+               if (editDate() && (  isModerator() || $row->at_au_id == $g_user_id ))
                {
                   echo "<div style=\"text-align: right;\">
                      <img src=\"$g_root_path/adm_program/images/edit.png\" style=\"cursor: pointer\" width=\"16\" height=\"16\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"
@@ -304,7 +291,7 @@ require("../../../adm_config/body_top.php");
       <table style=\"margin-top: 10px; margin-bottom: 10px;\" border=\"0\">
          <tr>
             <td width=\"33%\" align=\"left\">";
-               if(($_GET["start"] > 0) && (!array_key_exists("dateid", $_GET)))
+               if($_GET["start"] > 0)
                {
                   $start = $_GET["start"] - 10;
                   if($start < 0) $start = 0;
@@ -325,7 +312,7 @@ require("../../../adm_config/body_top.php");
                }
             echo "</td>
             <td width=\"33%\" align=\"right\">";
-               if(($count_date > $_GET["start"] + 10) && (!array_key_exists("dateid", $_GET)))
+               if($row_count > $_GET["start"] + 10)
                {
                   $start = $_GET["start"] + 10;
                   echo "<button name=\"forward\" type=\"button\" value=\"forward\" style=\"width: 152px;\"

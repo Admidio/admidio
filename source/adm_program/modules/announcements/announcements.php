@@ -64,7 +64,7 @@ echo "
 if($g_orga_property['ag_enable_rss'] == 1)
 {
 echo "
-   <link type=\"application/rss+xml\" rel=\"alternate\" title=\"$g_orga_property[ag_homepage] - Die neuesten 10 Ankuendigungen\" href=\"$g_root_path/adm_program/modules/announcements/rss_announcements.php\">";
+   <link type=\"application/rss+xml\" rel=\"alternate\" title=\"$g_orga_property[ag_longname] - Ankuendigungen\" href=\"$g_root_path/adm_program/modules/announcements/rss_announcements.php\">";
 };
 
 echo "
@@ -103,7 +103,7 @@ require("../../../adm_config/body_top.php");
    }
 
 
-   // falls eine id uebergeben worden ist...
+   // falls eine id fuer eine bestimmte Ankuendigung uebergeben worden ist...
    if (array_key_exists("id", $_GET))
    {
       $sql    = "SELECT * FROM adm_ankuendigungen
@@ -196,7 +196,7 @@ require("../../../adm_config/body_top.php");
                   strSpecialChars2Html($row->aa_ueberschrift). "
                </div>";
 
-               // aendern & loeschen darf man nur eigene Termine, ausser Admins & Moderatoren
+               // aendern & loeschen duerfen nur Moderatoren
                if(isModerator())
                {
                   echo "<div style=\"text-align: right;\">" .
@@ -204,7 +204,7 @@ require("../../../adm_config/body_top.php");
                      <img src=\"$g_root_path/adm_program/images/edit.png\" style=\"cursor: pointer;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"
                      onclick=\"self.location.href='announcements_new.php?aa_id=$row->aa_id&amp;headline=". $_GET['headline']. "'\">";
 
-                  // Loeschen darf man nur Termine der eigenen Gliedgemeinschaft
+                  // Loeschen darf man nur Ankuendigungen der eigenen Gliedgemeinschaft
                   if($row->aa_ag_shortname == $g_organization)
                   {
                      echo "&nbsp;
