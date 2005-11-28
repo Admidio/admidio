@@ -52,16 +52,16 @@ class RSSfeed {
 //Konstruktor
 function RSSfeed($homepage, $title, $description) {
        $this->channel=array();
-       $this->channel["title"]=$title;
-       $this->channel["link"]=$homepage;
-       $this->channel["description"]=$description;
+       $this->channel['title']=$title;
+       $this->channel['link']=$homepage;
+       $this->channel['description']=$description;
        $this->items=array();
        $this->feed="http://" . $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI'];
 }
 
 function add_Item($title, $description, $date, $link) {
-       $item=array("title" => $title, "description" => $description,
-               "pubDate" => $date, "link" => $link);
+       $item=array('title' => $title, 'description' => $description,
+               'pubDate' => $date, 'link' => $link);
        $this->items[]=$item;
 }
 
@@ -88,27 +88,27 @@ function open_channel()
 
 function add_channel_infos()
 {
-       foreach (array("title", "link", "description") as $field) {
+       foreach (array('title', 'link', 'description') as $field) {
                if (isset($this->channel[$field])) {
                        echo "<${field}>" . htmlspecialchars($this->channel[$field]). "</${field}>\n";
                }
        }
        echo "<language>de</language>\n";
        echo "<generator>Admidio RSS-Class</generator>\n\n";
-       echo "<pubDate>". date(r). "</pubDate>\n\n";
+       echo "<pubDate>". date('r'). "</pubDate>\n\n";
 }
 
 
 function build_items() {
        foreach ($this->items as $item) {
                echo "<item>\n";
-               foreach (array("title", "description", "link", "pubDate") as $field) {
+               foreach (array('title', 'description', 'link', 'pubDate') as $field) {
                        if (isset($item[$field])) {
                                echo "<${field}>" . htmlspecialchars($item[$field]). "</${field}>\n";
                        }
                }
-               echo "<guid>" .  $item["link"] . "</guid>\n";
-               echo "<source url=\"$this->feed\">". htmlspecialchars($this->channel[title]). "</source>";
+               echo "<guid>" .  $item['link'] . "</guid>\n";
+               echo "<source url=\"$this->feed\">". htmlspecialchars($this->channel['title']). "</source>";
                echo "</item>\n\n";
        }
 }
