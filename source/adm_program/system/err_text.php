@@ -81,7 +81,7 @@ function getErrorText($error_code, $error_text)
          wurde erfolgreich beendet !";
          break;
 
-      case "email":
+      case "email_invalid":
          $error_str = "Die E-Mail-Adresse ist nicht g&uuml;ltig.";
          break;
 
@@ -213,7 +213,13 @@ function getErrorText($error_code, $error_text)
          break;
 
       case "send_login_mail":
-         $error_str = "Die Logindaten wurden erfolgreich zugeordnet und der Benutzer wurde dar&uuml;ber benachrichtigt.";
+         $error_str = "Die Logindaten wurden erfolgreich zugeordnet und der
+         		Benutzer wurde dar&uuml;ber benachrichtigt.";
+          break;
+
+      case "send_new_login":
+         $error_str = "Möchtest du <b>$error_text</b> eine E-Mail mit seinem Benutzernamen
+         		und einem neuen Passwort zumailen ?";
           break;
 
       case "write_access":
@@ -337,7 +343,7 @@ function getErrorText($error_code, $error_text)
 
 //Fehlermeldungen Mailmodul
 
-      case "mailSend":
+      case "mail_send":
          $error_str = "Deine Mail wurde erfolgreich an $error_text versendet.";
          break;
 
