@@ -11,6 +11,7 @@
  * mode: 1 - MsgBox, in der erklaert wird, welche Auswirkungen das Loeschen hat
  *       2 - User NUR aus der Gliedgemeinschaft entfernen
  *       3 - User aus der Datenbank l&ouml;schen
+ * 		4 - User E-Mail mit neuen Zugangsdaten schicken
  * user_id - Id des Benutzers, der bearbeitet werden soll
  *
  ******************************************************************************
@@ -38,6 +39,7 @@ require("../../system/tbl_user.php");
 require("../../system/session_check_login.php");
 
 $err_code = "";
+$err_text = "";
 
 // nur Moderatoren duerfen Mitgliedschaften beenden
 if(!isModerator())
@@ -183,7 +185,7 @@ elseif($_GET["mode"] == 2)
 }
 elseif($_GET["mode"] == 3)
 {
-   // nur Webmaster duerfen User physikalisch l&ouml;schen
+   // nur Webmaster duerfen User physikalisch loeschen
    if(!hasRole("Webmaster"))
    {
       $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
@@ -191,7 +193,7 @@ elseif($_GET["mode"] == 3)
       exit();
    }
 
-   // User aus der Datenbank l&ouml;schen
+   // User aus der Datenbank loeschen
 
    $sql = "SELECT au_login FROM adm_user WHERE au_id = {0}";
    $sql = prepareSQL($sql, array($_GET['user_id']));
@@ -234,16 +236,52 @@ elseif($_GET["mode"] == 3)
          // jetzt User loeschen
          $sql    = "DELETE FROM ". $g_forum_praefix. "_users WHERE user_id = $forum_user_id";
          $result = mysql_query($sql, $g_forum_con);
-         db_error($result);
+			db_error($result);
       }
 
-      mysql_select_db($g_adm_db, $g_adm_con);
+		mysql_select_db($g_adm_db, $g_adm_con);
    }
 
    $err_code = "delete";
 }
+elseif($_GET["mode"] == 4)
+{
+   // nur Webmaster duerfen User neue Zugangsdaten zuschicken
+   // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
+   if(!hasRole("Webmaster") || $g_orga_property['ag_mail_extern'] == 1)
+   {
+      $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
+      header($location);
+      exit();
+   }
 
-$location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&timer=2000&url=$g_root_path/adm_program/administration/members/members.php";
+   $user     = new CUser;
+   $user->GetUser($_GET['user_id'], $g_adm_con);
+
+	if($g_orga_property['ag_mail_extern'] != 1)
+	{
+		// neues Passwort generieren
+		$password = substr(md5(time()), 0, 8);
+		$password_md5 = md5($password);
+
+		// Passwort des Users updaten
+		$sql    = "UPDATE adm_user SET au_password = '$password_md5'
+				      WHERE au_id = $user->m_id ";
+		$result = mysql_query($sql, $g_adm_con);
+		db_error($result);
+
+		mail("$user->m_mail", "Logindaten für ". $g_orga_property['ag_homepage'], "Hallo $user->m_vorname,\n\ndu erhälst deine ".
+			"Logindaten für ". $g_orga_property['ag_homepage']. ".\n\nBenutzername: $user->m_login\nPasswort: $password\n\n" .
+			"Das Passwort wurde automatisch generiert.\nDu solltest es nach dem Login in deinem Profil ändern.\n\n" .
+			"Viele Grüße\nDie Webmaster", "From: webmaster@$g_domain");
+
+		$err_code = "mail_send";
+		$err_text = $user->m_mail;
+	}
+}
+
+$load_url = urlencode("$g_root_path/adm_program/administration/members/members.php");
+$location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text&timer=2000&url=$load_url";
 header($location);
 exit();
 ?>
