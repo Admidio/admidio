@@ -121,8 +121,8 @@ require("../../../adm_config/body_top.php");
                      WHERE (  at_ag_shortname = '$g_organization'
                         OR (   at_global   = 1
                            AND at_ag_shortname IN ($organizations) ))
-                       AND at_von < sysdate()
-                       AND at_bis < sysdate()
+                       AND at_von < SYSDATE()
+                       AND at_bis < SYSDATE()
                      ORDER BY at_von DESC
                      LIMIT {0}, 10 ";
       }
@@ -133,8 +133,8 @@ require("../../../adm_config/body_top.php");
                      WHERE (  at_ag_shortname = '$g_organization'
                         OR (   at_global   = 1
                            AND at_ag_shortname IN ($organizations) ))
-                       AND (  at_von >= sysdate
-                           OR at_bis >= sysdate
+                       AND (  at_von >= SYSDATE()
+                           OR at_bis >= SYSDATE() )
                      ORDER BY at_von ASC
                      LIMIT {0}, 10 ";
       }
