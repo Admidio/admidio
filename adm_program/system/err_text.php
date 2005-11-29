@@ -344,7 +344,7 @@ function getErrorText($error_code, $error_text)
 //Fehlermeldungen Mailmodul
 
       case "mail_send":
-         $error_str = "Deine Mail wurde erfolgreich an $error_text versendet.";
+         $error_str = "Deine Mail wurde erfolgreich an <b>$error_text</b> versendet.";
          break;
 
       case "attachment":
