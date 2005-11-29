@@ -192,12 +192,26 @@ require("../../../adm_config/body_top.php");
                   {
                      if($row_count[0] > 0)
                      {
+                       	if(strlen($row->au_login) > 0 && $g_orga_property['ag_mail_extern'] != 1)
+                       	{
+                       		// Link um E-Mail mit neuem Passwort zu zuschicken
+								   // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
+                        	$load_url = urlencode("$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->au_id&mode=4&url=$url");
+                           echo "<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=send_new_login&err_text=". urlencode("$row->au_vorname $row->au_name"). "&button=2&url=$load_url\">
+	                           <img src=\"$g_root_path/adm_program/images/key.png\" border=\"0\" alt=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\" title=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\"></a>&nbsp;";
+                       	}
+                       	else
+	                        echo "<img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">&nbsp;";
+
                         // Webmaster kann nur Mitglieder der eigenen Gliedgemeinschaft editieren
                         echo "<a href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=$row->au_id\">
-                           <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Benutzerdaten bearbeiten\" title=\"Benutzerdaten bearbeiten\"></a>&nbsp;&nbsp;";
+                           <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Benutzerdaten bearbeiten\" title=\"Benutzerdaten bearbeiten\"></a>&nbsp;";
                      }
                      else
-                        echo "<img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">&nbsp;&nbsp;";
+                     {
+                        echo "<img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">&nbsp;
+                        		<img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">&nbsp;";
+                     }
 
                      $sql    = "SELECT COUNT(*)
                                   FROM adm_rolle, adm_mitglieder
