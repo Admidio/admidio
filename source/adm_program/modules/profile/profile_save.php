@@ -101,7 +101,7 @@ if(strlen($_POST['name']) > 0)
       if(strlen($_POST["mail"]) != 0)
       {
          if(!isValidEmailAddress($_POST["mail"]))
-            $err_code = "email";
+            $err_code = "email_invalid";
       }
 
       if($_GET['user_id'] > 0 && $_GET['new_user'] == 0)

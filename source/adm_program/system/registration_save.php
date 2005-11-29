@@ -45,7 +45,7 @@ if ($_POST['passwort'] != $_POST['passwort2'])
 if(strlen($err_code) == 0)
 {
    if(!isValidEmailAddress($_POST['email']))
-      $err_code = "email";
+      $err_code = "email_invalid";
 }
  
 if(strlen($err_code) == 0)
