@@ -85,7 +85,7 @@ if(strlen($_POST['name']) > 0)
       }
    }
    else
-      $err_code = "email";
+      $err_code = "email_invalid";
 }
 else
 {
