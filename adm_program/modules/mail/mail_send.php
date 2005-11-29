@@ -259,7 +259,7 @@ if(strlen($_POST['rolle']) > 0)
 else
    $err_text = $_POST['mailto'];
 
-$location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=mailSend&err_text=$err_text&url=". urlencode($_GET["url"]);
+$location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=mail_send&err_text=$err_text&url=". urlencode($_GET["url"]);
 header($location);
 exit();
 
