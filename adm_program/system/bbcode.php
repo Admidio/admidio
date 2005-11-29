@@ -15,7 +15,7 @@ error_reporting(E_ALL);
   * should be skipped while parsing.
   * In order to add tags, you should edit this method,
   * Starting at line 119 of this file.
-  * 
+  *
   * Ubb Parsing Engine based on stacks.
   *
   * Add additional parse_ubbtag methods to the main class.
@@ -139,7 +139,7 @@ class ubbParser
       }
     }
 
-  }  
+  }
 
   function parse($text)
   {
@@ -148,7 +148,7 @@ class ubbParser
      $text = str_replace('[/*]','[/li]', $text);
      $basetree = new stackItem();
      $basetree->build(' '.trim($text));
-     // MFA 
+     // MFA
      $text = $basetree->parse($this, $this->usedTags);
      $text = $this->make_clickable($text);
      return $text;
@@ -167,7 +167,7 @@ class ubbParser
         return $f($tree, $this);
       }
     }
-    return $text;
+    return $this->text_handler;
   }
 
   /* base function to convert a [*]text[*] to <**>text</**> */
@@ -221,7 +221,7 @@ class ubbParser
   // MFA mail in email umbenannt
   function parse_email($tree, $params = array())
   {
-     /* [mail]email[/mail] as well as [mail=email]text[/mail] is supported */     
+     /* [mail]email[/mail] as well as [mail=email]text[/mail] is supported */
      $href = isset($params['email']) ? $params['email'] : $tree->toText();
      return $this->simple_parse($tree, '<a href="mailto:'.htmlspecialchars($href).'">', '</a>');
   }
