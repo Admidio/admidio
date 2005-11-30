@@ -6,6 +6,9 @@
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  *
+ * file : 0 (Default)
+ *        1 config.php erstellen und an Browser schicken
+ *
  ******************************************************************************
  *
  * This program is free software; you can redistribute it and/or
@@ -25,6 +28,45 @@
  *****************************************************************************/
 
 require("../adm_program/system/function.php");
+
+if($_POST['struktur'] == 1)
+{
+	$g_tbl_praefix = $_POST['praefix'];
+	if(strlen($g_tbl_praefix) == 0)
+		$g_tbl_praefix = "adm";
+	else
+	{
+		// wenn letztes Zeichen ein _ dann abschneiden
+		if(strrpos($g_tbl_praefix, "_")+1 == strlen($g_tbl_praefix))
+			$g_tbl_praefix = substr($g_tbl_praefix, 0, strlen($g_tbl_praefix)-1);
+
+      // nur gueltige Zeichen zulassen
+      $anz = strspn($g_tbl_praefix, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_");
+
+      if($anz != strlen($g_tbl_praefix))
+      	showError("Das Tabellenpr&auml;fix enth&auml;lt ung&uuml;ltige Zeichen !");
+	}
+}
+else
+	require("../adm_config/config.php");
+
+// Standard-Praefix ist adm auch wegen Kompatibilitaet zu alten Versionen
+if(strlen($g_tbl_praefix) == 0)
+	$g_tbl_praefix = "adm";
+
+// Defines fuer alle Datenbanktabellen
+define("TBL_ANNOUNCEMENTS", $g_tbl_praefix. "_ankuendigungen");
+define("TBL_PHOTOS", $g_tbl_praefix. "_photo");
+define("TBL_ORGANIZATIONS", $g_tbl_praefix. "_gruppierung");
+define("TBL_MEMBERS", $g_tbl_praefix. "_mitglieder");
+define("TBL_NEW_USER", $g_tbl_praefix. "_new_user");
+define("TBL_ROLES", $g_tbl_praefix. "_rolle");
+define("TBL_SESSIONS", $g_tbl_praefix. "_session");
+define("TBL_DATES", $g_tbl_praefix. "_termine");
+define("TBL_USERS", $g_tbl_praefix. "_user");
+define("TBL_USER_DATA", $g_tbl_praefix. "_user_data");
+define("TBL_USER_FIELDS", $g_tbl_praefix. "_user_field");
+define("TBL_ROLE_TYPES", $g_tbl_praefix. "_role_types");
 
 function showError($err_msg, $err_head = "Fehler", $finish = false)
 {
@@ -149,6 +191,7 @@ if($_GET['file'])
    if(!strpos($root_path, "http://"))
       $root_path = "http://". $root_path;
 
+	$file_content = str_replace("%PRAEFIX%", $_POST['praefix'], $file_content);
    $file_content = str_replace("%SERVER%", $_POST['server'], $file_content);
    $file_content = str_replace("%USER%",   $_POST['user'],   $file_content);
    $file_content = str_replace("%PASSWORD%",  $_POST['password'], $file_content);
