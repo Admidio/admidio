@@ -49,7 +49,7 @@ $i = 0;
 if(!array_key_exists("letter", $_GET))
 {
    // alle Mitglieder zur Auswahl selektieren
-   $sql    = "SELECT au_id FROM adm_user ";
+   $sql    = "SELECT au_id FROM ". TBL_USERS. " ";
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
 
@@ -65,7 +65,7 @@ else
 }
 
 // alle Mitglieder zur Auswahl selektieren
-$sql    = "SELECT * FROM adm_user
+$sql    = "SELECT * FROM ". TBL_USERS. "
             WHERE au_name LIKE {0}
             ORDER BY au_name, au_vorname ";
 $sql    = prepareSQL($sql, array($_GET['letter']));
@@ -107,7 +107,7 @@ require("../../../adm_config/body_top.php");
    for($i = 0; $i < 26;$i++)
    {
       // Anzahl Mitglieder zum entsprechenden Buchstaben ermitteln
-      $sql    = "SELECT COUNT(*) FROM adm_user
+      $sql    = "SELECT COUNT(*) FROM ". TBL_USERS. "
                   WHERE au_name LIKE '$letter_menu%' ";
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
@@ -145,7 +145,7 @@ require("../../../adm_config/body_top.php");
          $i++;
 
          $sql    = "SELECT COUNT(*)
-                      FROM adm_rolle, adm_mitglieder
+                      FROM ". TBL_ROLES. ", ". TBL_MEMBERS. "
                      WHERE ar_ag_shortname = '$g_organization'
                        AND ar_valid        = 1
                        AND am_ar_id        = ar_id
@@ -214,7 +214,7 @@ require("../../../adm_config/body_top.php");
                      }
 
                      $sql    = "SELECT COUNT(*)
-                                  FROM adm_rolle, adm_mitglieder
+                                  FROM ". TBL_ROLES. ", ". TBL_MEMBERS. "
                                  WHERE ar_ag_shortname <> '$g_organization'
                                    AND ar_valid         = 1
                                    AND am_ar_id         = ar_id

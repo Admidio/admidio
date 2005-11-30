@@ -81,7 +81,7 @@ require("../../../adm_config/body_top.php");
    <h1>". strspace($_GET["headline"]). "</h1>";
 
    // alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
-   $sql = "SELECT * FROM adm_gruppierung
+   $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. "
             WHERE ag_shortname = '$g_organization'
                OR ag_mother    = '$g_organization' ";
    $result = mysql_query($sql, $g_adm_con);
@@ -106,13 +106,13 @@ require("../../../adm_config/body_top.php");
    // falls eine id fuer eine bestimmte Ankuendigung uebergeben worden ist...
    if (array_key_exists("id", $_GET))
    {
-      $sql    = "SELECT * FROM adm_ankuendigungen
+      $sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
                   WHERE aa_id = $_GET[id]";
    }
    //...ansonsten alle fuer die Gruppierung passenden Ankuendigungen aus der DB holen.
    else
    {
-      $sql    = "SELECT * FROM adm_ankuendigungen
+      $sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
                   WHERE (  aa_ag_shortname = '$g_organization'
                         OR (   aa_global   = 1
                            AND aa_ag_shortname IN ($organizations) ))
@@ -182,7 +182,7 @@ require("../../../adm_config/body_top.php");
 
       while($row = mysql_fetch_object($result))
       {
-         $sql     = "SELECT * FROM adm_user WHERE au_id = $row->aa_au_id";
+         $sql     = "SELECT * FROM ". TBL_USERS. " WHERE au_id = $row->aa_au_id";
          $result2 = mysql_query($sql, $g_adm_con);
          db_error($result2);
 

@@ -42,7 +42,7 @@ if(!isModerator())
 }
 
 // Alle Rollen auflisten, die der Webmaster sehen darf
-$sql    = "SELECT * FROM adm_rolle
+$sql    = "SELECT * FROM ". TBL_ROLES. "
             WHERE ar_ag_shortname = '$g_organization'
               AND ar_valid        = 1
             ORDER BY ar_funktion ";

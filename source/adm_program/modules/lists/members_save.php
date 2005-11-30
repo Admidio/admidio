@@ -48,7 +48,7 @@ $role_id = $_GET["role_id"];
 //Veraarbeitung der Daten
 	//Abfrag aller Datensätze die mit der Rolle zu tun haben
 	$sql ="	SELECT *
-				FROM adm_mitglieder
+				FROM ". TBL_MEMBERS. "
 				WHERE am_ar_id = $role_id";
 	$result_role = mysql_query($sql, $g_adm_con);
    db_error($result, true);
@@ -61,7 +61,7 @@ $role_id = $_GET["role_id"];
    }
    //Aufrufen alle Leute aus der Datenbank
     $sql ="	SELECT *
-           	FROM adm_user";
+           	FROM ". TBL_USERS. "";
    			$result_user = mysql_query($sql, $g_adm_con);
    			db_error($result_user);
 	//Datensätze durchgehen und sehen ob für den Benutzer eine Änderung vorliegt
@@ -72,7 +72,7 @@ $role_id = $_GET["role_id"];
 			//Falls abgewählt wurde (automatisch auch als Leiter abmelden)
 			if($mitglieder_array[$user["au_id"]][5]==1 && $_POST["member_".$user["au_id"]]==false){
 				$am_id = $mitglieder_array[$user["au_id"]][0];
-				$sql ="	UPDATE adm_mitglieder SET am_valid  = 0
+				$sql ="	UPDATE ". TBL_MEMBERS. " SET am_valid  = 0
                                           , am_ende   = NOW()
 														, am_leiter = 0
 							WHERE am_id = '$am_id'";                             
@@ -82,7 +82,7 @@ $role_id = $_GET["role_id"];
 			//Falls wieder angemeldet wurde
 			if($mitglieder_array[$user["au_id"]][5]==0 && $_POST["member_".$user["au_id"]]==true){
 				$am_id = $mitglieder_array[$user["au_id"]][0];
-				$sql ="	UPDATE adm_mitglieder SET am_valid  = 1
+				$sql ="	UPDATE ". TBL_MEMBERS. " SET am_valid  = 1
                                           , am_ende   = '0000-00-00'";
             //Falls jemand auch Leiter werden soll
             if($_POST["leader_".$user["au_id"]]==true)$sql .=", am_leiter = 1 ";
@@ -95,14 +95,14 @@ $role_id = $_GET["role_id"];
 				$am_id = $mitglieder_array[$user["au_id"]][0];
 				//Falls Leiter hinzugefügt werden soll
 				if($_POST["leader_".$user["au_id"]]==true && $mitglieder_array[$user["au_id"]][6]==0){
-					$sql ="	UPDATE adm_mitglieder SET am_leiter  = 1 
+					$sql ="	UPDATE ". TBL_MEMBERS. " SET am_leiter  = 1 
 								WHERE am_id = '$am_id'";
 					$result = mysql_query($sql, $g_adm_con);
    				db_error($result);
 				}
 				//Falls Leiter entfernt werden soll
 				if($_POST["leader_".$user["au_id"]]==false && $mitglieder_array[$user["au_id"]][6]==1){
-					$sql ="	UPDATE adm_mitglieder SET am_leiter  = 0 
+					$sql ="	UPDATE ". TBL_MEMBERS. " SET am_leiter  = 0 
 								WHERE am_id = '$am_id'";
 					$result = mysql_query($sql, $g_adm_con);
    				db_error($result);
@@ -112,7 +112,7 @@ $role_id = $_GET["role_id"];
 		//Falls noch nie angemeldet gewesen aber jetzt werden soll
 		else if(!array_key_exists($user["au_id"], $mitglieder_array) && $_POST["member_".$user["au_id"]]==true){
 			$au_id = $user["au_id"];
-			$sql = "INSERT INTO adm_mitglieder (am_ar_id, am_au_id, am_start, am_valid, am_leiter)
+			$sql = "INSERT INTO ". TBL_MEMBERS. " (am_ar_id, am_au_id, am_start, am_valid, am_leiter)
                  VALUES ($role_id, $au_id, NOW(), 1";
          //Falls jemand direkt Leiter werden soll
          if($_POST["leader_".$user["au_id"]]==true)$sql .=", 1) ";

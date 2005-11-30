@@ -80,7 +80,7 @@ for($i = 0; $i < count($_POST); $i++)
       }
       elseif(substr_count($key, "condition") > 0)
       {
-         $sql = "SELECT $act_field FROM adm_user LIMIT 1, 1 ";
+         $sql = "SELECT $act_field FROM ". TBL_USERS. " LIMIT 1, 1 ";
          $result = mysql_query($sql, $g_adm_con);
          db_error($result);
          $type   = mysql_field_type($result, 0);
@@ -100,7 +100,7 @@ for($i = 0; $i < count($_POST); $i++)
 }
 
 $main_sql = "SELECT au_id, $sql_select
-               FROM adm_rolle, adm_mitglieder, adm_user
+               FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
               WHERE ar_ag_shortname = \'$g_organization\'
                 AND ar_funktion     = \'$rolle\'
                 AND ar_valid        = 1
@@ -115,7 +115,7 @@ if(strlen($sql_orderby) > 0)
 
 //echo $main_sql; exit();
 
-$sql    = "UPDATE adm_session SET as_list_sql = '$main_sql'
+$sql    = "UPDATE ". TBL_SESSIONS. " SET as_list_sql = '$main_sql'
             WHERE as_session = '$g_session_id' ";
 $result = mysql_query($sql, $g_adm_con);
 db_error($result);

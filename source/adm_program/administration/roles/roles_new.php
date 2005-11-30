@@ -66,7 +66,7 @@ $beitrag        = null;
 
 if ($_GET['ar_id'] != 0)
  {
-   $sql    = "SELECT * FROM adm_rolle WHERE ar_id = {0}";
+   $sql    = "SELECT * FROM ". TBL_ROLES. " WHERE ar_id = {0}";
    $sql    = prepareSQL($sql, array($_GET['ar_id']));
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
@@ -417,7 +417,7 @@ require("../../../adm_config/body_top.php");
          {
             // Angabe ueber die letzten Aenderungen
             $sql    = "SELECT au_vorname, au_name
-                         FROM adm_user
+                         FROM ". TBL_USERS. "
                         WHERE au_id = $row_ar->ar_last_change_id ";
             $result = mysql_query($sql, $g_adm_con);
             db_error($result, true);

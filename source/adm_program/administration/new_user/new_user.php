@@ -38,7 +38,7 @@ if(!hasRole("Webmaster"))
 }
 
 // Neue Mitglieder der Gruppierung selektieren
-$sql    = "SELECT * FROM adm_new_user ".
+$sql    = "SELECT * FROM ". TBL_NEW_USER. " ".
           " WHERE anu_ag_shortname = '$g_organization' ".
           " ORDER BY anu_name, anu_vorname ";
 $result = mysql_query($sql, $g_adm_con);

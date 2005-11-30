@@ -124,7 +124,7 @@ function hasRole($function, $user_id = 0)
       $user_id = $g_user_id;
    
    $sql    = "SELECT *
-                FROM adm_mitglieder, adm_rolle
+                FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
                WHERE am_au_id        = $user_id
                  AND am_valid        = 1
                  AND am_ar_id        = ar_id
@@ -155,7 +155,7 @@ function isModerator($user_id = 0)
       $user_id = $g_user_id;
 
    $sql    = "SELECT *
-                FROM adm_mitglieder, adm_rolle
+                FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
                WHERE am_au_id             = $user_id
                  AND am_valid             = 1
                  AND am_ar_id             = ar_id
@@ -185,7 +185,7 @@ function isGroupLeader($role_id=0)
    global $g_organization;
 
    $sql    = "SELECT *
-                FROM adm_mitglieder, adm_rolle
+                FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
                WHERE am_au_id             = $g_user_id
                  AND am_valid             = 1
                  AND am_leiter            = 1
@@ -216,7 +216,7 @@ function editUser()
    global $g_organization;
 
    $sql    = "SELECT *
-                FROM adm_mitglieder, adm_rolle
+                FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
                WHERE am_au_id             = $g_user_id
                  AND am_valid             = 1
                  AND am_ar_id             = ar_id
@@ -245,7 +245,7 @@ function editDate()
    global $g_organization;
 
    $sql    = "SELECT *
-                FROM adm_mitglieder, adm_rolle
+                FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
                WHERE am_au_id             = $g_user_id
                  AND am_ar_id             = ar_id
                  AND am_valid             = 1
@@ -273,7 +273,7 @@ function editPhoto()
    global $g_organization;
 
    $sql    = "SELECT *
-                FROM adm_mitglieder, adm_rolle
+                FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
                WHERE am_au_id             = $g_user_id
                  AND am_ar_id             = ar_id
                  AND am_valid             = 1
@@ -301,7 +301,7 @@ function editDownload()
    global $g_organization;
 
    $sql    = "SELECT *
-                FROM adm_mitglieder, adm_rolle
+                FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
                WHERE am_au_id             = $g_user_id
                  AND am_ar_id             = ar_id
                  AND am_valid             = 1

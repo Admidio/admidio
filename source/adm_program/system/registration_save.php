@@ -75,7 +75,7 @@ if(strlen($err_code) != 0)
 
 
 // pruefen, ob der Username bereits vergeben ist
-$sql    = "SELECT au_id FROM adm_user ".
+$sql    = "SELECT au_id FROM ". TBL_USERS. " ".
           " WHERE au_login LIKE {0}";
 $sql    = prepareSQL($sql, array($_POST["benutzername"]));
 $result = mysql_query($sql, $g_adm_con);
@@ -86,7 +86,7 @@ $count_user = mysql_num_rows($result);
 if ($count_user == 0)
 {
    // auch in der new_user-Tabelle pruefen
-   $sql    = "SELECT anu_id FROM adm_new_user ".
+   $sql    = "SELECT anu_id FROM ". TBL_NEW_USER. " ".
              " WHERE anu_login LIKE {0}";
    $sql    = prepareSQL($sql, array($_POST["benutzername"]));
    $result = mysql_query($sql, $g_adm_con);
@@ -114,7 +114,7 @@ if ($count_user == 0)
 {
    $password_crypt = md5($_POST["passwort"]);
 
-   $sql    = "INSERT INTO adm_new_user (anu_ag_shortname, anu_name, anu_vorname, anu_mail, anu_login, anu_password) ".
+   $sql    = "INSERT INTO ". TBL_NEW_USER. " (anu_ag_shortname, anu_name, anu_vorname, anu_mail, anu_login, anu_password) ".
              "VALUES ('$g_organization', {0}, {1}, {2}, {3}, '$password_crypt')";
    $sql    = prepareSQL($sql, array($_POST["nachname"], $_POST["vorname"], $_POST["email"], $_POST["benutzername"]));
    $result = mysql_query($sql, $g_adm_con);
@@ -122,7 +122,7 @@ if ($count_user == 0)
 
    // E-Mail an alle Webmaster schreiben
    $sql    = "SELECT au_mail
-                FROM adm_rolle, adm_mitglieder, adm_user
+                FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                WHERE ar_ag_shortname = '$g_organization'
                  AND ar_funktion     = 'Webmaster'
                  AND am_ar_id        = ar_id

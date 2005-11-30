@@ -73,7 +73,7 @@ else
    $a_user_id = $_GET['user_id'];
    // jetzt noch schauen, ob User überhaupt Mitglied in der Gliedgemeinschaft ist
    $sql = "SELECT am_id
-             FROM adm_mitglieder, adm_rolle
+             FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
             WHERE ar_ag_shortname = '$g_organization'
               AND ar_valid        = 1
               AND am_ar_id        = ar_id
@@ -99,7 +99,7 @@ if($a_user_id > 0)
    {
       // aus User-Account ein neues Mitglied erstellen
 
-      $sql    = "SELECT * FROM adm_new_user WHERE anu_id = $a_user_id";
+      $sql    = "SELECT * FROM ". TBL_NEW_USER. " WHERE anu_id = $a_user_id";
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
       $user_row = mysql_fetch_object($result);
@@ -312,7 +312,7 @@ if($popup == 0)
 
             // alle zugeordneten Messengerdaten einlesen
             $sql = "SELECT auf_name, aud_value
-                      FROM adm_user_field LEFT JOIN adm_user_data
+                      FROM ". TBL_USER_FIELDS. " LEFT JOIN ". TBL_USER_DATA. "
                         ON aud_auf_id = auf_id
                        AND aud_au_id         = $user->m_id
                      WHERE auf_ag_shortname IS NULL
@@ -354,14 +354,14 @@ if($popup == 0)
          if($a_new_user)
          {
             $sql = "SELECT *
-                      FROM adm_user_field
+                      FROM ". TBL_USER_FIELDS. "
                      WHERE auf_ag_shortname = '$g_organization'
                   ORDER BY auf_name ASC ";
          }
          else
          {
             $sql = "SELECT *
-                      FROM adm_user_field LEFT JOIN adm_user_data
+                      FROM ". TBL_USER_FIELDS. " LEFT JOIN ". TBL_USER_DATA. "
                         ON aud_auf_id = auf_id
                        AND aud_au_id = $user->m_id
                      WHERE auf_ag_shortname = '$g_organization' ";
@@ -425,7 +425,7 @@ if($popup == 0)
          {
             // Angabe über die letzten Aenderungen
             $sql    = "SELECT au_vorname, au_name
-                         FROM adm_user
+                         FROM ". TBL_USERS. "
                         WHERE au_id = $user->m_last_change_id ";
             $result = mysql_query($sql, $g_adm_con);
             db_error($result, true);

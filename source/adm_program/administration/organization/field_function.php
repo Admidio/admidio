@@ -57,7 +57,7 @@ if($_GET['mode'] == 1)
       if(!($_GET['auf_id'] > 0))
       {
          // Schauen, ob die Rolle bereits existiert
-         $sql    = "SELECT COUNT(*) FROM adm_user_field
+         $sql    = "SELECT COUNT(*) FROM ". TBL_USER_FIELDS. "
                      WHERE auf_ag_shortname LIKE '$g_organization'
                        AND auf_name         LIKE {0}";
          $sql    = prepareSQL($sql, array($_POST['name']));
@@ -80,7 +80,7 @@ if($_GET['mode'] == 1)
 
       if($_GET['auf_id'] > 0)
       {
-         $sql = "UPDATE adm_user_field
+         $sql = "UPDATE ". TBL_USER_FIELDS. "
                     SET auf_name        = {0}
                       , auf_description = {1}
                       , auf_type        = {2}
@@ -90,7 +90,7 @@ if($_GET['mode'] == 1)
       else
       {
          // Feld in Datenbank hinzufuegen
-         $sql    = "INSERT INTO adm_user_field (auf_ag_shortname, auf_name, auf_description,
+         $sql    = "INSERT INTO ". TBL_USER_FIELDS. " (auf_ag_shortname, auf_name, auf_description,
                                                 auf_type, auf_locked)
                     VALUES ('$g_organization', {0}, {1}, {2}, $locked) ";
       }
@@ -123,13 +123,13 @@ elseif($_GET['mode'] == 2)
    // Feld loeschen
 
    // erst die Userdaten zum Feld loeschen
-   $sql    = "DELETE FROM adm_user_data
+   $sql    = "DELETE FROM ". TBL_USER_DATA. "
                WHERE aud_auf_id = {0}";
    $sql    = prepareSQL($sql, array($_GET['auf_id']));
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
 
-   $sql    = "DELETE FROM adm_user_field
+   $sql    = "DELETE FROM ". TBL_USER_FIELDS. "
                WHERE auf_id = {0}";
    $sql    = prepareSQL($sql, array($_GET['auf_id']));
    $result = mysql_query($sql, $g_adm_con);

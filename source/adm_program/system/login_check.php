@@ -52,7 +52,7 @@ $password_crypt = md5($_POST["passwort"]);
 // Rolle muss mind. Mitglied sein
 
 $sql    = "SELECT *
-             FROM adm_user, adm_mitglieder, adm_rolle
+             FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. "
             WHERE au_login     LIKE {0}
               AND am_au_id        = au_id
               AND am_ar_id        = ar_id
@@ -84,7 +84,7 @@ if ($user_found >= 1)
    {
       // alte Sessions des Users loeschen
 
-      $sql    = "DELETE FROM adm_session ".
+      $sql    = "DELETE FROM ". TBL_SESSIONS. " ".
                 " WHERE as_au_id        LIKE '$user_row->au_id' ".
                 "   AND as_ag_shortname LIKE '$g_organization'  ";
       $result = mysql_query($sql, $g_adm_con);
@@ -106,7 +106,7 @@ if ($user_found >= 1)
 
       // Session-ID speichern
 
-      $sql = "INSERT INTO adm_session (as_au_id, as_session, as_datetime, as_long_login, as_ag_shortname) ".
+      $sql = "INSERT INTO ". TBL_SESSIONS. " (as_au_id, as_session, as_datetime, as_long_login, as_ag_shortname) ".
              "VALUES ('$user_row->au_id', '$user_session', '$login_datetime', $long_login, '$g_organization') ";
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
@@ -115,20 +115,20 @@ if ($user_found >= 1)
       if($_SERVER['HTTP_HOST'] == 'localhost')
       {
          // beim localhost darf keine Domaine uebergeben werden
-         setcookie("adm_session", "$user_session", 0, "/");
-         setcookie("adm_user_id", "$user_row->au_id" , 0, "/");
+         setcookie("". TBL_SESSIONS. "", "$user_session", 0, "/");
+         setcookie("". TBL_USERS. "_id", "$user_row->au_id" , 0, "/");
          setcookie("adm_login",   "$user_row->au_login" , 0, "/");
       }
       else
       {
-         setcookie("adm_session", "$user_session" , 0, "/", ".". $g_domain);
-         setcookie("adm_user_id", "$user_row->au_id"   , 0, "/", ".". $g_domain);
+         setcookie("". TBL_SESSIONS. "", "$user_session" , 0, "/", ".". $g_domain);
+         setcookie("". TBL_USERS. "_id", "$user_row->au_id"   , 0, "/", ".". $g_domain);
          setcookie("adm_login",   "$user_row->au_login", 0, "/", ".". $g_domain);
       }
 
       // Last-Login speichern
 
-      $sql = "UPDATE adm_user SET au_last_login = au_act_login 
+      $sql = "UPDATE ". TBL_USERS. " SET au_last_login = au_act_login 
                WHERE au_id = $user_row->au_id";
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
@@ -136,7 +136,7 @@ if ($user_found >= 1)
       // Logins zaehlen und aktuelles Login-Datum speichern
 
       $act_date = date("Y-m-d H:i:s", time());
-      $sql = "UPDATE adm_user SET au_num_login     = au_num_login + 1
+      $sql = "UPDATE ". TBL_USERS. " SET au_num_login     = au_num_login + 1
                                  , au_act_login     = '$act_date'
                                  , au_invalid_login = NULL
                                  , au_num_invalid   = 0
@@ -153,7 +153,7 @@ if ($user_found >= 1)
    else
    {
       // ungültige Logins werden mitgeloggt      
-      $sql    = "UPDATE adm_user SET au_invalid_login = NOW()
+      $sql    = "UPDATE ". TBL_USERS. " SET au_invalid_login = NOW()
                                     , au_num_invalid   = au_num_invalid + 1
                   WHERE au_id = $user_row->au_id ";
       $result = mysql_query($sql, $g_adm_con);

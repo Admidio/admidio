@@ -65,7 +65,7 @@ else
 // Webmaster und Moderatoren dürfen Listen zu allen Rollen sehen
 if(isModerator())
 {
-   $sql = "SELECT * FROM adm_rolle
+   $sql = "SELECT * FROM ". TBL_ROLES. "
             WHERE ar_ag_shortname = '$g_organization' 
               AND ar_valid        = 1 ";
    if($group >= 0)
@@ -75,7 +75,7 @@ if(isModerator())
 }
 else
 {
-   $sql = "SELECT * FROM adm_rolle
+   $sql = "SELECT * FROM ". TBL_ROLES. "
             WHERE ar_ag_shortname = '$g_organization'
               AND ar_r_locked     = 0
               AND ar_valid        = 1 ";
@@ -149,7 +149,7 @@ require("../../../adm_config/body_top.php");
       {
          // Anzahl Datensaetze ermitteln
          $sql = "SELECT COUNT(*)
-                   FROM adm_mitglieder
+                   FROM ". TBL_MEMBERS. "
                   WHERE am_ar_id = $row_lst->ar_id
                     AND am_valid = $member_valid ";
          $result = mysql_query($sql, $g_adm_con);

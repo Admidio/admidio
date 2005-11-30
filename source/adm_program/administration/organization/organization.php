@@ -91,7 +91,7 @@ require("../../../adm_config/body_top.php");
          </div>";
 
          // bei mehr als einer Gruppierung, Checkbox anzeigen, ob, Termin bei anderen angezeigt werden soll
-         $sql = "SELECT * FROM adm_gruppierung
+         $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. "
                   WHERE ag_shortname NOT LIKE '$g_organization' ";
          $result = mysql_query($sql, $g_adm_con);
          db_error($result);
@@ -176,7 +176,7 @@ require("../../../adm_config/body_top.php");
 
 
          // gruppierungsspezifische Felder anzeigen
-         $sql = "SELECT * FROM adm_user_field
+         $sql = "SELECT * FROM ". TBL_USER_FIELDS. "
                   WHERE auf_ag_shortname LIKE '$g_organization' ";
          $result = mysql_query($sql, $g_adm_con);
          db_error($result);

@@ -92,7 +92,7 @@ $leiter    = 0;    // Gruppe besitzt Leiter
 switch($_GET["typ"])
 {
    case "mylist":
-      $sql      = "SELECT as_list_sql FROM adm_session
+      $sql      = "SELECT as_list_sql FROM ". TBL_SESSIONS. "
                     WHERE as_session = '$g_session_id' ";
       $result   = mysql_query($sql, $g_adm_con);
       db_error($result);
@@ -102,7 +102,7 @@ switch($_GET["typ"])
 
    case "address":
       $main_sql = "SELECT au_id, au_name, au_vorname, au_geburtstag, au_adresse, au_plz, au_ort
-                     FROM adm_rolle, adm_mitglieder, adm_user
+                     FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                     WHERE ar_ag_shortname = '$g_organization'
                       AND ar_funktion     = {0}
                       AND ar_id     = am_ar_id
@@ -114,7 +114,7 @@ switch($_GET["typ"])
 
    case "telephone":
       $main_sql = "SELECT au_id, au_name, au_vorname, au_tel1, au_tel2, au_mobil, au_mail
-                     FROM adm_rolle, adm_mitglieder, adm_user
+                     FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                     WHERE ar_ag_shortname = '$g_organization'
                       AND ar_funktion     = {0}
                       AND ar_id     = am_ar_id
@@ -126,7 +126,7 @@ switch($_GET["typ"])
 
    case "former":
       $main_sql = "SELECT au_id, au_name, au_vorname, au_geburtstag, am_start, am_ende
-                     FROM adm_rolle, adm_mitglieder, adm_user
+                     FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                     WHERE ar_ag_shortname = '$g_organization'
                       AND ar_funktion     = {0}
                       AND ar_id     = am_ar_id
@@ -139,7 +139,7 @@ switch($_GET["typ"])
 
 // pruefen, ob die Rolle eine Gruppe ist und dann vorher ein SELECT für die Gruppenleiter erstellen
 $sql = "SELECT ar_id, ar_gruppe
-          FROM adm_rolle
+          FROM ". TBL_ROLES. "
          WHERE ar_ag_shortname = '$g_organization'
            AND ar_funktion     = {0} ";
 $sql      = prepareSQL($sql, array($_GET['rolle']));
@@ -158,7 +158,7 @@ if($gruppe == 1)
       $former = 1;
 
    $sql = "SELECT am_leiter
-             FROM adm_mitglieder
+             FROM ". TBL_MEMBERS. "
             WHERE am_ar_id  = ". $row[0]. "
               AND am_valid  = $former
               AND am_leiter = 1 ";

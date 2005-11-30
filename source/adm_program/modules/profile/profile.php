@@ -56,7 +56,7 @@ else
    {
       // jetzt noch schauen, ob User überhaupt Mitglied in der Gliedgemeinschaft ist
       $sql = "SELECT am_id
-                FROM adm_mitglieder, adm_rolle
+                FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
                WHERE ar_ag_shortname = '$g_organization'
                  AND ar_valid        = 1
                  AND am_ar_id        = ar_id
@@ -270,7 +270,7 @@ require("../../../adm_config/body_top.php");
          <div style=\"width: 34%; float: left\">";
             // alle zugeordneten Messengerdaten einlesen
             $sql = "SELECT auf_name, auf_description, aud_value
-                      FROM adm_user_data, adm_user_field
+                      FROM ". TBL_USER_DATA. ", ". TBL_USER_FIELDS. "
                      WHERE aud_au_id        = $user->m_id
                        AND aud_auf_id       = auf_id
                        AND auf_ag_shortname IS NULL
@@ -285,7 +285,7 @@ require("../../../adm_config/body_top.php");
             {
                // auch gesperrte Rollen, aber nur von dieser Gruppierung anzeigen
                $sql    = "SELECT ar_funktion, ar_ag_shortname, am_leiter
-                            FROM adm_mitglieder, adm_rolle
+                            FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
                            WHERE am_ar_id = ar_id
                              AND am_valid = 1
                              AND am_au_id = $a_user_id
@@ -299,7 +299,7 @@ require("../../../adm_config/body_top.php");
             {
                // kein Moderator, dann keine gesperrten Rollen anzeigen
                $sql    = "SELECT ar_funktion, ar_ag_shortname, am_leiter
-                            FROM adm_mitglieder, adm_rolle
+                            FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
                            WHERE am_ar_id    = ar_id
                              AND am_valid    = 1
                              AND am_au_id    = $a_user_id
@@ -349,7 +349,7 @@ require("../../../adm_config/body_top.php");
             if($count_role > 0)
             {
                // Rollen anzeigen
-               $sql = "SELECT ag_shortname FROM adm_gruppierung";
+               $sql = "SELECT ag_shortname FROM ". TBL_ORGANIZATIONS. "";
                $result = mysql_query($sql, $g_adm_con);
                db_error($result, true);
 
@@ -378,7 +378,7 @@ require("../../../adm_config/body_top.php");
 
          // gruppierungsspezifische Felder einlesen
          $sql = "SELECT *
-                   FROM adm_user_field LEFT JOIN adm_user_data
+                   FROM ". TBL_USER_FIELDS. " LEFT JOIN ". TBL_USER_DATA. "
                      ON aud_auf_id = auf_id
                     AND aud_au_id        = $user->m_id
                   WHERE auf_ag_shortname = '$g_organization' ";

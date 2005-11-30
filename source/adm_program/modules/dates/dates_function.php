@@ -50,7 +50,7 @@ if($_GET["mode"] == 2 || $_GET["mode"] == 3)
    // aendern & loeschen darf man nur eigene Termine, auﬂer Moderatoren
    if(!isModerator())
    {
-      $sql = "SELECT * FROM adm_termine WHERE at_id = {0}";
+      $sql = "SELECT * FROM ". TBL_DATES. " WHERE at_id = {0}";
       $sql = prepareSQL($sql, array($_GET['at_id']));
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
@@ -127,14 +127,14 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
 
             if ($_GET["at_id"] == 0)
             {
-               $sql = "INSERT INTO adm_termine (at_global, at_ag_shortname, at_au_id, at_timestamp, at_ueberschrift,
+               $sql = "INSERT INTO ". TBL_DATES. " (at_global, at_ag_shortname, at_au_id, at_timestamp, at_ueberschrift,
                                                  at_von, at_bis, at_ort, at_beschreibung)
                                          VALUES ($global, '$g_organization', '$g_user_id', '$act_date', {0},
                                                  '$dt_datum_von', '$dt_datum_bis', {1}, {2})";
             }
             else
             {
-               $sql = "UPDATE adm_termine SET at_global         = $global
+               $sql = "UPDATE ". TBL_DATES. " SET at_global         = $global
                                              , at_ueberschrift   = {0}
                                              , at_von            = '$dt_datum_von'
                                              , at_bis            = '$dt_datum_bis'
@@ -176,7 +176,7 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
 }
 elseif($_GET["mode"] == 2)
 {
-   $sql = "DELETE FROM adm_termine WHERE at_id = {0}";
+   $sql = "DELETE FROM ". TBL_DATES. " WHERE at_id = {0}";
    $sql = prepareSQL($sql, array($_GET['at_id']));
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);

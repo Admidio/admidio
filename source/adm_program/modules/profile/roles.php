@@ -93,7 +93,7 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
          {
             // Alle Rollen der Gruppierung auflisten
             $sql    = "SELECT ar_funktion, ar_beschreibung, ar_gruppe, am_au_id, am_leiter
-                         FROM adm_rolle LEFT JOIN adm_mitglieder
+                         FROM ". TBL_ROLES. " LEFT JOIN ". TBL_MEMBERS. "
                            ON ar_id    = am_ar_id
                           AND am_au_id = {0}
                           AND am_valid = 1
@@ -105,7 +105,7 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
          {
             // Alle Rollen auflisten, bei denen das Mitglied Leiter ist
             $sql    = "SELECT br.ar_funktion, br.ar_beschreibung, br.ar_gruppe, mgl.am_au_id, mgl.am_leiter
-                         FROM adm_mitglieder bm, adm_rolle br LEFT JOIN adm_mitglieder mgl
+                         FROM ". TBL_MEMBERS. " bm, ". TBL_ROLES. " br LEFT JOIN ". TBL_MEMBERS. " mgl
                            ON br.ar_id     = mgl.am_ar_id
                           AND mgl.am_au_id = {0}
                           AND mgl.am_valid = 1
@@ -122,7 +122,7 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
          {
             // Alle Rollen auflisten, die keinen Moderatorenstatus haben
             $sql    = "SELECT ar_funktion, ar_beschreibung, ar_gruppe, am_au_id, am_leiter
-                         FROM adm_rolle LEFT JOIN adm_mitglieder
+                         FROM ". TBL_ROLES. " LEFT JOIN ". TBL_MEMBERS. "
                            ON ar_id    = am_ar_id
                           AND am_au_id = {0}
                           AND am_valid = 1
