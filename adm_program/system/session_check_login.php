@@ -24,6 +24,24 @@
  *
  *****************************************************************************/
 
+// Standard-Praefix ist adm auch wegen Kompatibilitaet zu alten Versionen
+if(strlen($g_tbl_praefix) == 0)
+	$g_tbl_praefix = "adm";
+
+// Defines fuer alle Datenbanktabellen
+define("TBL_ANNOUNCEMENTS", $g_tbl_praefix. "_ankuendigungen");
+define("TBL_PHOTOS", $g_tbl_praefix. "_photo");
+define("TBL_ORGANIZATIONS", $g_tbl_praefix. "_gruppierung");
+define("TBL_MEMBERS", $g_tbl_praefix. "_mitglieder");
+define("TBL_NEW_USER", $g_tbl_praefix. "_new_user");
+define("TBL_ROLES", $g_tbl_praefix. "_rolle");
+define("TBL_SESSIONS", $g_tbl_praefix. "_session");
+define("TBL_DATES", $g_tbl_praefix. "_termine");
+define("TBL_USERS", $g_tbl_praefix. "_user");
+define("TBL_USER_DATA", $g_tbl_praefix. "_user_data");
+define("TBL_USER_FIELDS", $g_tbl_praefix. "_user_field");
+define("TBL_ROLE_TYPES", $g_tbl_praefix. "_role_types");
+
  // Verbindung zu Datenbank herstellen
 $g_adm_con = mysql_connect ($g_adm_srv, $g_adm_usr, $g_adm_pw);
 mysql_select_db($g_adm_db, $g_adm_con );
@@ -41,13 +59,13 @@ $g_nickname      = "";
 $g_session_valid = 0;
 
 // Cookies einlesen
-if(isset($_COOKIE["adm_session"]))
-   $g_session_id = $_COOKIE["adm_session"];
+if(isset($_COOKIE["". TBL_SESSIONS. ""]))
+   $g_session_id = $_COOKIE["". TBL_SESSIONS. ""];
 else
    $g_session_id = "";
 
-if(isset($_COOKIE["adm_user_id"]))
-   $g_user_id = $_COOKIE["adm_user_id"];
+if(isset($_COOKIE["". TBL_USERS. "_id"]))
+   $g_user_id = $_COOKIE["". TBL_USERS. "_id"];
 else
    $g_user_id = 0;
 
@@ -57,7 +75,7 @@ else
    $g_nickname = "";
 
 // Daten der Gruppierung in Variable einlesen
-$sql    = "SELECT * FROM adm_gruppierung
+$sql    = "SELECT * FROM ". TBL_ORGANIZATIONS. "
             WHERE ag_shortname LIKE '$g_organization' ";
 $sql    = prepareSQL($sql, array($g_session_id));
 $result = mysql_query($sql, $g_adm_con);
@@ -78,7 +96,7 @@ $g_orga_property = array(
 
 // Session auf Gueltigkeit pruefen
 
-$sql    = "SELECT * FROM adm_session WHERE as_session LIKE {0}";
+$sql    = "SELECT * FROM ". TBL_SESSIONS. " WHERE as_session LIKE {0}";
 $sql    = prepareSQL($sql, array($g_session_id));
 $result = mysql_query($sql, $g_adm_con);
 db_error($result);
@@ -108,7 +126,7 @@ if ($session_found == 1)
 
       $act_datetime   = date("Y.m.d H:i:s", time());
 
-      $sql    = "UPDATE adm_session SET as_datetime = '$act_datetime' WHERE as_session LIKE {0}";
+      $sql    = "UPDATE ". TBL_SESSIONS. " SET as_datetime = '$act_datetime' WHERE as_session LIKE {0}";
       $sql    = prepareSQL($sql, array($g_session_id));
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
@@ -120,7 +138,7 @@ if ($session_found == 1)
    {
       // User war zu lange inaktiv -> Session loeschen
 
-      $sql    = "DELETE FROM adm_session WHERE as_session LIKE {0}";
+      $sql    = "DELETE FROM ". TBL_SESSIONS. " WHERE as_session LIKE {0}";
       $sql    = prepareSQL($sql, array($g_session_id));
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
@@ -151,7 +169,7 @@ else
       $g_user_id       = 0;
       $g_nickname      = "";
 
-      $sql    = "DELETE FROM adm_session WHERE as_session LIKE {0}";
+      $sql    = "DELETE FROM ". TBL_SESSIONS. " WHERE as_session LIKE {0}";
       $sql    = prepareSQL($sql, array($g_session_id));
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);

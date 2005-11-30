@@ -53,7 +53,7 @@ if($g_orga_property['ag_bbcode'] == 1)
 }
 
 // alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
-$sql = "SELECT * FROM adm_gruppierung
+$sql = "SELECT * FROM ". TBL_ORGANIZATIONS. "
          WHERE ag_shortname = '$g_organization'
             OR ag_mother    = '$g_organization' ";
 $result = mysql_query($sql, $g_adm_con);
@@ -78,7 +78,7 @@ while($row = mysql_fetch_object($result))
 
 
 // aktuelle Termine aus DB holen die zur Orga passen
-$sql = "SELECT * FROM adm_termine
+$sql = "SELECT * FROM ". TBL_DATES. "
                      WHERE (  at_ag_shortname = '$g_organization'
                         OR (   at_global   = 1
                            AND at_ag_shortname IN ($organizations) ))
@@ -101,7 +101,7 @@ $rss=new RSSfeed("http://$g_orga_property[ag_homepage]","$g_orga_property[ag_lon
 while($row = mysql_fetch_object($result))
       {
         // Den Autor des Termins ermitteln
-        $sql     = "SELECT * FROM adm_user WHERE au_id = $row->at_au_id";
+        $sql     = "SELECT * FROM ". TBL_USERS. " WHERE au_id = $row->at_au_id";
         $result2 = mysql_query($sql, $g_adm_con);
         db_error($result2);
         $user = mysql_fetch_object($result2);

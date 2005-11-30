@@ -57,7 +57,7 @@ else
    {
       // jetzt noch schauen, ob User überhaupt Mitglied in der Gliedgemeinschaft ist
       $sql = "SELECT am_id
-                FROM adm_mitglieder, adm_rolle
+                FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
                WHERE ar_ag_shortname = '$g_organization'
                  AND ar_valid        = 1
                  AND am_ar_id        = ar_id
@@ -107,7 +107,7 @@ if(strlen($_POST['name']) > 0)
       if($_GET['user_id'] > 0 && $_GET['new_user'] == 0)
       {
          // pruefen, ob dem Benutzer Rollen zugewiesen wurden
-         $sql    = "SELECT ar_ag_shortname FROM adm_rolle, adm_mitglieder
+         $sql    = "SELECT ar_ag_shortname FROM ". TBL_ROLES. ", ". TBL_MEMBERS. "
                      WHERE ar_valid       = 1
                        AND am_ar_id       = ar_id
                        AND am_au_id       = {0}
@@ -123,7 +123,7 @@ if(strlen($_POST['name']) > 0)
       if(strlen($_POST['login']) > 0)
       {
          // pruefen, ob der Benutzername bereits vergeben ist
-         $sql = "SELECT au_id FROM adm_user
+         $sql = "SELECT au_id FROM ". TBL_USERS. "
                   WHERE au_login = {0} ";
          $sql    = prepareSQL($sql, array($_POST['login']));
          $result = mysql_query($sql, $g_adm_con);
@@ -149,7 +149,7 @@ if(strlen($_POST['name']) > 0)
 
       // Feldinhalt der gruppierungsspezifischen Felder pruefen
       $sql = "SELECT auf_name, auf_type
-                FROM adm_user_field
+                FROM ". TBL_USER_FIELDS. "
                WHERE auf_ag_shortname  = '$g_organization' ";
       if(!isModerator())
          $sql = $sql. " AND auf_locked = 0 ";
@@ -200,7 +200,7 @@ if($_GET['user_id'] != 0 && $_GET['new_user'] == 0)
    /*------------------------------------------------------------*/
    // Vorhandene Benutzerdaten updaten
    /*------------------------------------------------------------*/
-   $sql = " UPDATE adm_user SET au_name           = {0}
+   $sql = " UPDATE ". TBL_USERS. " SET au_name           = {0}
                               , au_vorname        = {1}
                               , au_adresse        = {2}
                               , au_plz            = {3}
@@ -236,7 +236,7 @@ else
    /*------------------------------------------------------------*/
    // einen neuen Benutzer anlegen
    /*------------------------------------------------------------*/
-   $sql = " INSERT INTO adm_user ( au_name, au_vorname, au_adresse, au_plz, au_ort, au_land, au_tel1, au_tel2,
+   $sql = " INSERT INTO ". TBL_USERS. " ( au_name, au_vorname, au_adresse, au_plz, au_ort, au_land, au_tel1, au_tel2,
                    au_mobil, au_fax, au_geburtstag, au_mail, au_weburl )
             VALUES ({0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, '$db_geburtstag',
                     {10}, {11} )";
@@ -255,7 +255,7 @@ else
 /*------------------------------------------------------------*/
 
 $sql = "SELECT auf_id, auf_name, aud_id, aud_value
-          FROM adm_user_field LEFT JOIN adm_user_data
+          FROM ". TBL_USER_FIELDS. " LEFT JOIN ". TBL_USER_DATA. "
             ON aud_auf_id = auf_id
            AND aud_au_id         = {0}
          WHERE (  auf_ag_shortname IS NULL
@@ -273,7 +273,7 @@ while($row = mysql_fetch_object($result_msg))
       // noch kein Wert vorhanden -> neu einfuegen
       if(strlen(trim($_POST[urlencode($row->auf_name)])) > 0)
       {
-         $sql = "INSERT INTO adm_user_data (aud_au_id, aud_auf_id, aud_value)
+         $sql = "INSERT INTO ". TBL_USER_DATA. " (aud_au_id, aud_auf_id, aud_value)
                                     VALUES ({0}, $row->auf_id, '". $_POST[urlencode($row->auf_name)]. "') ";
          $sql = prepareSQL($sql, array($row_id));
          $result = mysql_query($sql, $g_adm_con);
@@ -287,7 +287,7 @@ while($row = mysql_fetch_object($result_msg))
       {
          if($_POST[urlencode($row->auf_name)] != $row->aud_value)
          {
-            $sql = "UPDATE adm_user_data SET aud_value = {0}
+            $sql = "UPDATE ". TBL_USER_DATA. " SET aud_value = {0}
                      WHERE aud_id = $row->aud_id ";
             $sql = prepareSQL($sql, array($_POST[urlencode($row->auf_name)]));
             $result = mysql_query($sql, $g_adm_con);
@@ -296,7 +296,7 @@ while($row = mysql_fetch_object($result_msg))
       }
       else
       {
-         $sql = "DELETE FROM adm_user_data
+         $sql = "DELETE FROM ". TBL_USER_DATA. "
                   WHERE aud_id = $row->aud_id ";
          $result = mysql_query($sql, $g_adm_con);
          db_error($result);
@@ -311,7 +311,7 @@ if($_GET['new_user'] == 1 && $_GET['user_id'] > 0)
    /*------------------------------------------------------------*/
    if($g_forum == 1)
    {
-      $sql    = "SELECT * FROM adm_new_user WHERE anu_id = {0}";
+      $sql    = "SELECT * FROM ". TBL_NEW_USER. " WHERE anu_id = {0}";
       $sql    = prepareSQL($sql, array($_GET['anu_id']));
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
@@ -344,15 +344,15 @@ if($_GET['new_user'] == 1 && $_GET['user_id'] > 0)
    }
 
    // Login und Passwort eintragen
-   $sql = "UPDATE adm_user SET au_login    = {0}
+   $sql = "UPDATE ". TBL_USERS. " SET au_login    = {0}
                              , au_password = {1}
             WHERE au_id = $row_id ";
    $sql    = prepareSQL($sql, array($_POST['login'], $_GET['pw']));
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
 
-   // User wurde aus adm_new_user angelegt, dieser Satz kann jetzt gelöscht werden
-   $sql    = "DELETE FROM adm_new_user WHERE anu_id = {0}";
+   // User wurde aus ". TBL_NEW_USER. " angelegt, dieser Satz kann jetzt gelöscht werden
+   $sql    = "DELETE FROM ". TBL_NEW_USER. " WHERE anu_id = {0}";
    $sql    = prepareSQL($sql, array($_GET['user_id']));
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);

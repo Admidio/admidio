@@ -53,13 +53,13 @@ if(array_key_exists("rolle", $_GET))
 {
    if($g_session_valid)
    {
-      $sql    = "SELECT ar_r_mail_login FROM adm_rolle
+      $sql    = "SELECT ar_r_mail_login FROM ". TBL_ROLES. "
                   WHERE ar_ag_shortname    = '$g_organization'
                     AND UPPER(ar_funktion) = UPPER('". $_GET['rolle']. "') ";
    }
    else
    {
-      $sql    = "SELECT ar_r_mail_logout FROM adm_rolle
+      $sql    = "SELECT ar_r_mail_logout FROM ". TBL_ROLES. "
                   WHERE ar_ag_shortname    = '$g_organization'
                     AND UPPER(ar_funktion) = UPPER('". $_GET['rolle']. "') ";
    }
@@ -127,7 +127,7 @@ require("../../../adm_config/body_top.php");
                if(array_key_exists("au_id", $_GET))
                {
                   // au_id wurde uebergeben, dann E-Mail direkt an den User schreiben
-                  $sql    = "SELECT au_mail FROM adm_user WHERE au_id = '". $_GET['au_id']. "' ";
+                  $sql    = "SELECT au_mail FROM ". TBL_USERS. " WHERE au_id = '". $_GET['au_id']. "' ";
                   $result = mysql_query($sql, $g_adm_con);
                   db_error($result, true);
 
@@ -152,7 +152,7 @@ require("../../../adm_config/body_top.php");
                      // im eingeloggten Zustand duerfen nur Moderatoren an gelocked Rollen schreiben
                      if(isModerator())
                      {
-                        $sql    = "SELECT ar_funktion FROM adm_rolle
+                        $sql    = "SELECT ar_funktion FROM ". TBL_ROLES. "
                                     WHERE ar_ag_shortname = '$g_organization'
                                       AND ar_r_mail_login = 1
                                       AND ar_valid        = 1
@@ -160,7 +160,7 @@ require("../../../adm_config/body_top.php");
                      }
                      else
                      {
-                        $sql    = "SELECT ar_funktion FROM adm_rolle
+                        $sql    = "SELECT ar_funktion FROM ". TBL_ROLES. "
                                     WHERE ar_ag_shortname = '$g_organization'
                                       AND ar_r_mail_login = 1
                                       AND ar_r_locked     = 0
@@ -170,7 +170,7 @@ require("../../../adm_config/body_top.php");
                   }
                   else
                   {
-                     $sql    = "SELECT ar_funktion FROM adm_rolle
+                     $sql    = "SELECT ar_funktion FROM ". TBL_ROLES. "
                                  WHERE ar_ag_shortname  = '$g_organization'
                                    AND ar_r_mail_logout = 1
                                    AND ar_valid         = 1

@@ -74,14 +74,14 @@ require("../../../adm_config/body_top.php");
             // Webmaster und Moderatoren dürfen Listen zu allen Rollen sehen
             if(isModerator())
             {
-               $sql     = "SELECT * FROM adm_rolle
+               $sql     = "SELECT * FROM ". TBL_ROLES. "
                             WHERE ar_ag_shortname     = '$g_organization'
                               AND ar_valid            = 1
                             ORDER BY ar_funktion";
             }
             else
             {
-               $sql     = "SELECT * FROM adm_rolle
+               $sql     = "SELECT * FROM ". TBL_ROLES. "
                             WHERE ar_ag_shortname = '$g_organization'
                               AND ar_r_locked     = 0
                               AND ar_valid        = 1

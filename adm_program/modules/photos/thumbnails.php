@@ -43,16 +43,16 @@
 
 //erfassen der Veranstaltung
 	$sql = "	SELECT *
-				FROM adm_photo
+				FROM ". TBL_PHOTOS. "
 				WHERE (ap_id ='$ap_id')";
 	$result = mysql_query($sql, $g_adm_con);
 	db_error($result);
-	$adm_photo = mysql_fetch_array($result);
+	$". TBL_PHOTOS. " = mysql_fetch_array($result);
 
 //Aanzahl der Bilder
-   $bilder = $adm_photo[1];
+   $bilder = $". TBL_PHOTOS. "[1];
 //Speicherort
-	$ordner = "../../../adm_my_files/photos/"."$adm_photo[3]"."_$adm_photo[0]";
+	$ordner = "../../../adm_my_files/photos/"."$". TBL_PHOTOS. "[3]"."_$". TBL_PHOTOS. "[0]";
 
 //Ausrechnen der Seitenzahl, 25 Thumbnails  pro seiet
    If ($seite=='') $seite=1;
@@ -66,7 +66,7 @@
    <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
    <html>
    <head>
-      <title>". $g_orga_property['ag_shortname']. " - $adm_photo[2]</title>
+      <title>". $g_orga_property['ag_shortname']. " - $". TBL_PHOTOS. "[2]</title>
       <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">";
 
       // Javascript deffinition der Links zu den Thumbnails
@@ -94,10 +94,10 @@
    echo"<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">";
 
    //Ausgabe der &Uuml;berschrift
-   echo "<div class=\"formHead\" style=\"width: 90%\">". strspace($adm_photo[2]). "</div>
+   echo "<div class=\"formHead\" style=\"width: 90%\">". strspace($". TBL_PHOTOS. "[2]). "</div>
    <div class=\"formBody\" style=\"width: 90%\">";
-      $dt_date_von = mysqldate("d.m.y", $adm_photo[3]);
-		$dt_date_bis = mysqldate("d.m.y", $adm_photo[4]);
+      $dt_date_von = mysqldate("d.m.y", $". TBL_PHOTOS. "[3]);
+		$dt_date_bis = mysqldate("d.m.y", $". TBL_PHOTOS. "[4]);
 		echo"<b>Datum: $dt_date_von";
          if($dt_date_von != $dt_date_bis)echo " bis $dt_date_bis";
 		echo"

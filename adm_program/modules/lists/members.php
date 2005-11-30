@@ -63,7 +63,7 @@ else
 
 //Erfassen der übergeben Rolle
 $sql	=	"SELECT *
-			FROM adm_rolle
+			FROM ". TBL_ROLES. "
 			WHERE ar_id = '$role_id'";
 $result_role = mysql_query($sql, $g_adm_con);
          	db_error($result, true);
@@ -82,7 +82,7 @@ if($restrict=="" || !isModerator() || !editUser())$restrict="m";
 if($restrict=="m"){
 	$sql = "
 		SELECT DISTINCT au_id, au_name, au_vorname, au_geburtstag, au_ort, au_tel1, au_adresse, au_plz
-		FROM adm_user, adm_mitglieder, adm_rolle
+		FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. "
 		WHERE au_id = am_au_id
 		AND ar_ag_shortname = '$g_organization'
 		AND am_ar_id = ar_id
@@ -99,7 +99,7 @@ if($restrict=="m"){
 if($restrict=="u"){
 	$sql = "
 		SELECT au_id, au_name, au_vorname, au_geburtstag, au_ort, au_tel1, au_adresse, au_plz
-		FROM adm_user
+		FROM ". TBL_USERS. "
 		ORDER BY au_name, au_vorname ASC ";
 	$result_user = mysql_query($sql, $g_adm_con);
 	db_error($result_user);
@@ -117,7 +117,7 @@ mysql_data_seek ($result_user, 0);
 //Erfassen wer die Rolle bereits hat oder schon mal hatte
 $sql = "
 	SELECT am_au_id, am_ar_id, am_valid, am_leiter
-	FROM adm_mitglieder
+	FROM ". TBL_MEMBERS. "
 	WHERE am_ar_id = '$role_id'";
 $result_role_member = mysql_query($sql, $g_adm_con);
 db_error($result_role_member);

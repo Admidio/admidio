@@ -48,7 +48,7 @@ if($_GET["mode"] == 1)
 {
    // User-Account einem Mitglied zuordnen
 
-   $sql    = "SELECT * FROM adm_new_user WHERE anu_id = {0}";
+   $sql    = "SELECT * FROM ". TBL_NEW_USER. " WHERE anu_id = {0}";
    $sql    = prepareSQL($sql, array($_GET['anu_id']));
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
@@ -56,7 +56,7 @@ if($_GET["mode"] == 1)
    if($user_row = mysql_fetch_object($result))
    {
       $sql    = "SELECT au_login
-                   FROM adm_user
+                   FROM ". TBL_USERS. "
                   WHERE au_id = {0}";
       $sql    = prepareSQL($sql, array($_GET['au_id']));
       $result = mysql_query($sql, $g_adm_con);
@@ -66,7 +66,7 @@ if($_GET["mode"] == 1)
       $old_login = $row[0];
 
       // Mitgliedsdaten updaten
-      $sql    = "UPDATE adm_user SET au_mail     = '$user_row->anu_mail'
+      $sql    = "UPDATE ". TBL_USERS. " SET au_mail     = '$user_row->anu_mail'
                                     , au_login    = '$user_row->anu_login'
                                     , au_password = '$user_row->anu_password'
                   WHERE au_id = {0}";
@@ -90,7 +90,7 @@ if($_GET["mode"] == 1)
       }
 
       // nun kann der User-Account gel&ouml;scht werden
-      $sql    = "DELETE FROM adm_new_user WHERE anu_id = {0}";
+      $sql    = "DELETE FROM ". TBL_NEW_USER. " WHERE anu_id = {0}";
       $sql    = prepareSQL($sql, array($_GET['anu_id']));
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
@@ -177,7 +177,7 @@ elseif($_GET["mode"] == 4)
 {
    // User-Account loeschen
 
-   $sql    = "DELETE FROM adm_new_user WHERE anu_id = {0}";
+   $sql    = "DELETE FROM ". TBL_NEW_USER. " WHERE anu_id = {0}";
    $sql    = prepareSQL($sql, array($_GET['anu_id']));
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);

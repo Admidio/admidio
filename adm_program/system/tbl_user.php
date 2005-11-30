@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Klasse fuer adm_user
+ * Klasse fuer ". TBL_USERS. "
  *
  * Copyright    : (c) 2004 - 2005 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -50,7 +50,7 @@ class CUser
 
    function GetUser($id, $connection)
    {
-      $sql = "SELECT * FROM adm_user WHERE au_id = $id";
+      $sql = "SELECT * FROM ". TBL_USERS. " WHERE au_id = $id";
 
       $result = mysql_query($sql, $connection);
       

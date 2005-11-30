@@ -49,7 +49,7 @@ $i = 0;
 
 if($_GET['anu_id'] > 0)
 {
-   $sql      = "SELECT * FROM adm_new_user WHERE anu_id = {0}";
+   $sql      = "SELECT * FROM ". TBL_NEW_USER. " WHERE anu_id = {0}";
    $sql      = prepareSQL($sql, array($_GET['anu_id']));
    $result   = mysql_query($sql, $g_adm_con);
    $user_row = mysql_fetch_object($result);
@@ -67,7 +67,7 @@ if($_GET["all"] == 0)
 {
    // Mitglieder mit gleichem Nachname der Gruppierung zur Auswahl selektieren
    $sql    = "SELECT *
-                FROM adm_rolle, adm_mitglieder, adm_user
+                FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                WHERE ar_ag_shortname = '$g_organization'
                  AND ar_valid        = 1
                  AND am_ar_id        = ar_id
@@ -84,7 +84,7 @@ if($_GET["all"] == 0)
    {
       // alle Mitglieder der Gruppierung zur Auswahl selektieren
       $sql    = "SELECT *
-                   FROM adm_rolle, adm_mitglieder, adm_user
+                   FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                   WHERE ar_ag_shortname = '$g_organization'
                     AND ar_valid        = 1
                     AND am_ar_id        = ar_id
@@ -102,7 +102,7 @@ else
 {
    // alle Mitglieder der Gruppierung zur Auswahl selektieren
    $sql    = "SELECT *
-                FROM adm_rolle, adm_mitglieder, adm_user
+                FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                WHERE ar_ag_shortname = '$g_organization'
                  AND ar_valid        = 1
                  AND am_ar_id        = ar_id
@@ -148,7 +148,7 @@ if($_GET["all"] == 1 || $member_found == 0)
    {
       // Anzahl Mitglieder zum entsprechenden Buchstaben ermitteln
       $sql    = "SELECT COUNT(*)
-                   FROM adm_rolle, adm_mitglieder, adm_user
+                   FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                   WHERE ar_ag_shortname = '$g_organization'
                     AND ar_valid        = 1
                     AND am_ar_id        = ar_id

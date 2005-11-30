@@ -60,7 +60,7 @@ $field_locked      = 0;
 
 if ($_GET["auf_id"] != 0)
  {
-   $sql    = "SELECT * FROM adm_user_field WHERE auf_id = {0}";
+   $sql    = "SELECT * FROM ". TBL_USER_FIELDS. " WHERE auf_id = {0}";
    $sql    = prepareSQL($sql, array($_GET['auf_id']));
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);

@@ -31,7 +31,7 @@ require("session_check.php");
 
 // Session pruefen
 
-$sql    = "SELECT * FROM adm_session WHERE as_session = {0} ";
+$sql    = "SELECT * FROM ". TBL_SESSIONS. " WHERE as_session = {0} ";
 $sql    = prepareSQL($sql, array($g_session_id));
 $result = mysql_query($sql, $g_adm_con);
 db_error($result);
@@ -43,14 +43,14 @@ $session_found = mysql_num_rows($result);
 if($_SERVER['HTTP_HOST'] == 'localhost')
 {
    // beim localhost darf keine Domaine uebergeben werden
-   setcookie("adm_session", "", 0, "/");
-   setcookie("adm_user_id", "", 0, "/");
+   setcookie("". TBL_SESSIONS. "", "", 0, "/");
+   setcookie("". TBL_USERS. "_id", "", 0, "/");
    setcookie("adm_login",   "", 0, "/");
 }
 else
 {
-   setcookie("adm_session", "", 0, "/", ".". $g_domain);
-   setcookie("adm_user_id", "", 0, "/", ".". $g_domain);
+   setcookie("". TBL_SESSIONS. "", "", 0, "/", ".". $g_domain);
+   setcookie("". TBL_USERS. "_id", "", 0, "/", ".". $g_domain);
    setcookie("adm_login",   "", 0, "/", ".". $g_domain);
 }
 
@@ -58,7 +58,7 @@ if ($session_found > 0)
 {
    // Session loeschen
    
-   $sql    = "DELETE FROM adm_session WHERE as_session = {0}";
+   $sql    = "DELETE FROM ". TBL_SESSIONS. " WHERE as_session = {0}";
    $sql    = prepareSQL($sql, array($g_session_id));
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);

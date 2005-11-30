@@ -67,7 +67,7 @@ $longname = strStripTags($_POST['longname']);
 $homepage = strStripTags($_POST['homepage']);
 
 // Gruppierung updaten
-$sql = "UPDATE adm_gruppierung SET ag_longname    = {0}
+$sql = "UPDATE ". TBL_ORGANIZATIONS. " SET ag_longname    = {0}
                                  , ag_homepage    = {1}
                                  , ag_bbcode      = {2}
                                  , ag_mail_extern = {3}

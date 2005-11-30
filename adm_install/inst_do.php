@@ -188,32 +188,32 @@ if($_POST['struktur'] == 1)
    // Default-Daten anlegen
 
    // Messenger anlegen
-   $sql = "INSERT INTO adm_user_field (auf_ag_shortname, auf_type, auf_name, auf_description)
+   $sql = "INSERT INTO ". TBL_USER_FIELDS. " (auf_ag_shortname, auf_type, auf_name, auf_description)
                 VALUES (NULL, 'MESSENGER', 'AIM', 'AOL Instant Messenger') ";
    $result = mysql_query($sql, $connection);
    if(!$result) showError(mysql_error());
 
-   $sql = "INSERT INTO adm_user_field (auf_ag_shortname, auf_type, auf_name, auf_description)
+   $sql = "INSERT INTO ". TBL_USER_FIELDS. " (auf_ag_shortname, auf_type, auf_name, auf_description)
                 VALUES (NULL, 'MESSENGER', 'ICQ', 'ICQ') ";
    $result = mysql_query($sql, $connection);
    if(!$result) showError(mysql_error());
 
-   $sql = "INSERT INTO adm_user_field (auf_ag_shortname, auf_type, auf_name, auf_description)
+   $sql = "INSERT INTO ". TBL_USER_FIELDS. " (auf_ag_shortname, auf_type, auf_name, auf_description)
                 VALUES (NULL, 'MESSENGER', 'MSN', 'MSN Messenger') ";
    $result = mysql_query($sql, $connection);
    if(!$result) showError(mysql_error());
 
-   $sql = "INSERT INTO adm_user_field (auf_ag_shortname, auf_type, auf_name, auf_description)
+   $sql = "INSERT INTO ". TBL_USER_FIELDS. " (auf_ag_shortname, auf_type, auf_name, auf_description)
                 VALUES (NULL, 'MESSENGER', 'Yahoo', 'Yahoo! Messenger') ";
    $result = mysql_query($sql, $connection);
    if(!$result) showError(mysql_error());
 
-   $sql = "INSERT INTO adm_user_field (auf_ag_shortname, auf_type, auf_name, auf_description)
+   $sql = "INSERT INTO ". TBL_USER_FIELDS. " (auf_ag_shortname, auf_type, auf_name, auf_description)
                 VALUES (NULL, 'MESSENGER', 'Skype', 'Skype') ";
    $result = mysql_query($sql, $connection);
    if(!$result) showError(mysql_error());
 
-   $sql = "INSERT INTO adm_user_field (auf_ag_shortname, auf_type, auf_name, auf_description)
+   $sql = "INSERT INTO ". TBL_USER_FIELDS. " (auf_ag_shortname, auf_type, auf_name, auf_description)
                 VALUES (NULL, 'MESSENGER', 'Google Talk', 'Google Talk') ";
    $result = mysql_query($sql, $connection);
    if(!$result) showError(mysql_error());
@@ -258,7 +258,7 @@ if($_POST['verein'] == 1)
 {
    // neue Gruppierung anlegen
 
-   $sql = "SELECT * FROM adm_gruppierung WHERE ag_shortname = {0} ";
+   $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. " WHERE ag_shortname = {0} ";
    $sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
    $result = mysql_query($sql, $connection);
    if(!$result) showError(mysql_error());
@@ -269,7 +269,7 @@ if($_POST['verein'] == 1)
                  W&auml;hlen Sie bitte einen anderen kurzen Namen !");
    }
 
-   $sql = "INSERT INTO adm_gruppierung (ag_shortname, ag_longname)
+   $sql = "INSERT INTO ". TBL_ORGANIZATIONS. " (ag_shortname, ag_longname)
                 VALUES ({0}, {1}) ";
    $sql = prepareSQL($sql, array($_POST['verein-name-kurz'], $_POST['verein-name-lang']));
    $result = mysql_query($sql, $connection);
@@ -277,7 +277,7 @@ if($_POST['verein'] == 1)
 
    // nun die Default-Rollen anlegen
 
-   $sql = "INSERT INTO adm_rolle (ar_ag_shortname, ar_funktion, ar_beschreibung, ar_valid,
+   $sql = "INSERT INTO ". TBL_ROLES. " (ar_ag_shortname, ar_funktion, ar_beschreibung, ar_valid,
                                   ar_r_moderation, ar_r_termine, ar_r_foto, ar_r_download,
                                   ar_r_user_bearbeiten, ar_r_mail_logout, ar_r_mail_login)
                 VALUES ({0}, 'Webmaster', 'Gruppe der Administratoren des Systems', 1,
@@ -292,7 +292,7 @@ if($_POST['user-webmaster'] == 1)
    // User Webmaster anlegen
 
    $pw_md5 = md5($_POST['user-passwort']);
-   $sql = "INSERT INTO adm_user (au_name, au_vorname, au_login, au_password)
+   $sql = "INSERT INTO ". TBL_USERS. " (au_name, au_vorname, au_login, au_password)
                 VALUES ({0}, {1}, {2}, '$pw_md5' ) ";
    $sql = prepareSQL($sql, array($_POST['user-surname'], $_POST['user-firstname'], $_POST['user-login']));
    $result = mysql_query($sql, $connection);
@@ -300,7 +300,7 @@ if($_POST['user-webmaster'] == 1)
 
    $user_id = mysql_insert_id();
 
-   $sql = "SELECT ar_id FROM adm_rolle
+   $sql = "SELECT ar_id FROM ". TBL_ROLES. "
             WHERE ar_ag_shortname = {0}
               AND ar_funktion     = 'Webmaster' ";
    $sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
@@ -309,7 +309,7 @@ if($_POST['user-webmaster'] == 1)
    $row = mysql_fetch_array($result);
 
    // Mitgliedschaft anlegen
-   $sql = "INSERT INTO adm_mitglieder (am_ar_id, am_au_id, am_start, am_valid)
+   $sql = "INSERT INTO ". TBL_MEMBERS. " (am_ar_id, am_au_id, am_start, am_valid)
                 VALUES ($row[0], $user_id, NOW(), 1) ";
    $result = mysql_query($sql, $connection);
    if(!$result) showError(mysql_error());

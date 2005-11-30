@@ -52,7 +52,7 @@ if( ($_POST["old_password"] != "" || hasRole('Webmaster') )
       // pruefen, ob altes Passwort korrekt eingegeben wurde
       $old_password_crypt = md5($_POST["old_password"]);
 
-      $sql    = "SELECT au_login, au_password FROM adm_user WHERE au_id = {0}";
+      $sql    = "SELECT au_login, au_password FROM ". TBL_USERS. " WHERE au_id = {0}";
       $sql    = prepareSQL($sql, array($_GET['user_id']));
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
@@ -63,7 +63,7 @@ if( ($_POST["old_password"] != "" || hasRole('Webmaster') )
       {
          $password_crypt = md5($_POST["new_password"]);
 
-         $sql    = "UPDATE adm_user SET au_password = '$password_crypt' WHERE au_id = {0}";
+         $sql    = "UPDATE ". TBL_USERS. " SET au_password = '$password_crypt' WHERE au_id = {0}";
          $sql    = prepareSQL($sql, array($_GET['user_id']));
          $result = mysql_query($sql, $g_adm_con);
          db_error($result);

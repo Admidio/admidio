@@ -55,7 +55,7 @@ $description   = "";
 
 if ($_GET["at_id"] != 0)
  {
-   $sql    = "SELECT * FROM adm_termine WHERE at_id = {0}";
+   $sql    = "SELECT * FROM ". TBL_DATES. " WHERE at_id = {0}";
    $sql    = prepareSQL($sql, array($_GET['at_id']));
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
@@ -133,7 +133,7 @@ require("../../../adm_config/body_top.php");
          </div>";
 
          // bei mehr als einer Gruppierung, Checkbox anzeigen, ob, Termin bei anderen angezeigt werden soll
-         $sql = "SELECT COUNT(1) FROM adm_gruppierung
+         $sql = "SELECT COUNT(1) FROM ". TBL_ORGANIZATIONS. "
                   WHERE ag_mother IS NOT NULL ";
          $result = mysql_query($sql, $g_adm_con);
          db_error($result);
@@ -208,7 +208,7 @@ require("../../../adm_config/body_top.php");
          {
             // Angabe &uuml;ber die letzten Aenderungen
             $sql    = "SELECT au_vorname, au_name
-                         FROM adm_user
+                         FROM ". TBL_USERS. "
                         WHERE au_id = $row_bt->at_last_change_id ";
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);

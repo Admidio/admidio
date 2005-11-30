@@ -84,7 +84,7 @@ require("../../../adm_config/body_top.php");
 
 
    // alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
-   $sql = "SELECT * FROM adm_gruppierung
+   $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. "
             WHERE ag_shortname = '$g_organization'
                OR ag_mother    = '$g_organization' ";
    $result = mysql_query($sql, $g_adm_con);
@@ -108,7 +108,7 @@ require("../../../adm_config/body_top.php");
    // falls eine id fuer ein bestimmtes Datum uebergeben worden ist...
    if (array_key_exists("id", $_GET))
    {
-   	 $sql    = "SELECT * FROM adm_termine
+   	 $sql    = "SELECT * FROM ". TBL_DATES. "
                   WHERE at_id = $_GET[id]";
    }
    //...ansonsten alle fuer die Gruppierung passenden Termine aus der DB holen.
@@ -117,7 +117,7 @@ require("../../../adm_config/body_top.php");
    	//fuer alter Termine...
    	if(strcmp($_GET['mode'], "old") == 0)
    	{
-         $sql    = "SELECT * FROM adm_termine
+         $sql    = "SELECT * FROM ". TBL_DATES. "
                      WHERE (  at_ag_shortname = '$g_organization'
                         OR (   at_global   = 1
                            AND at_ag_shortname IN ($organizations) ))
@@ -129,7 +129,7 @@ require("../../../adm_config/body_top.php");
       //... ansonsten fuer neue Termine
       else
       {
-         $sql    = "SELECT * FROM adm_termine
+         $sql    = "SELECT * FROM ". TBL_DATES. "
                      WHERE (  at_ag_shortname = '$g_organization'
                         OR (   at_global   = 1
                            AND at_ag_shortname IN ($organizations) ))
@@ -203,7 +203,7 @@ require("../../../adm_config/body_top.php");
 
       while($row = mysql_fetch_object($result))
       {
-         $sql     = "SELECT * FROM adm_user WHERE au_id = $row->at_au_id";
+         $sql     = "SELECT * FROM ". TBL_USERS. " WHERE au_id = $row->at_au_id";
          $result2 = mysql_query($sql, $g_adm_con);
          db_error($result2);
 

@@ -104,13 +104,13 @@ if(array_key_exists("rolle", $_POST) && strlen($err_code) == 0)
    {
    		if($g_session_valid)
    		{
-      		$sql    = "SELECT ar_r_mail_login FROM adm_rolle
+      		$sql    = "SELECT ar_r_mail_login FROM ". TBL_ROLES. "
            		       WHERE ar_ag_shortname    = '$g_organization'
                		     AND UPPER(ar_funktion) = UPPER({0}) ";
    		}
    		else
    		{
-      		$sql    = "SELECT ar_r_mail_logout FROM adm_rolle
+      		$sql    = "SELECT ar_r_mail_logout FROM ". TBL_ROLES. "
            		       WHERE ar_ag_shortname    = '$g_organization'
                		     AND UPPER(ar_funktion) = UPPER({0}) ";
    		}
@@ -208,7 +208,7 @@ if(array_key_exists("au_id", $_GET))
    $mail_receivers = "";
 
    // au_id wurde uebergeben, dann E-Mail direkt an den User schreiben
-   $sql    = "SELECT au_mail FROM adm_user WHERE au_id = {0} ";
+   $sql    = "SELECT au_mail FROM ". TBL_USERS. " WHERE au_id = {0} ";
    $sql    = prepareSQL($sql, array($_GET['au_id']));
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
@@ -225,7 +225,7 @@ else
 
    // Rolle wurde uebergeben, dann an alle Mitglieder eine Mail schreiben
    $sql    = "SELECT au_vorname, au_name, au_mail, ar_funktion
-                FROM adm_rolle, adm_mitglieder, adm_user
+                FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                WHERE ar_ag_shortname = '$g_organization'
                  AND ar_funktion     = {0}
                  AND am_ar_id        = ar_id

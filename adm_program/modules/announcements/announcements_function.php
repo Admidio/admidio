@@ -72,7 +72,7 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
 
 		if ($_GET["aa_id"] == 0)
 		{
-		   $sql = "INSERT INTO adm_ankuendigungen (aa_global, aa_ag_shortname, aa_au_id, aa_timestamp,
+		   $sql = "INSERT INTO ". TBL_ANNOUNCEMENTS. " (aa_global, aa_ag_shortname, aa_au_id, aa_timestamp,
 		                                            aa_ueberschrift, aa_beschreibung)
 		                             VALUES ($global, '$g_organization', '$g_user_id', '$act_date',
 		                                     {0}, {1})";
@@ -82,7 +82,7 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
 		}
 		else
 		{
-		   $sql = "UPDATE adm_ankuendigungen SET aa_global         = $global
+		   $sql = "UPDATE ". TBL_ANNOUNCEMENTS. " SET aa_global         = $global
 		                                        , aa_ueberschrift   = {0}
 		                                        , aa_beschreibung   = {1}
 		                                        , aa_last_change    = '$act_date'
@@ -108,7 +108,7 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
 }
 elseif($_GET["mode"] == 2)
 {
-   $sql = "DELETE FROM adm_ankuendigungen WHERE aa_id = {0}";
+   $sql = "DELETE FROM ". TBL_ANNOUNCEMENTS. " WHERE aa_id = {0}";
    $sql    = prepareSQL($sql, array($_GET["aa_id"]));
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);

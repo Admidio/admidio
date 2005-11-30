@@ -58,7 +58,7 @@ elseif($_GET["mode"] == 2)
       if(!($_GET['ar_id'] > 0))
       {
          // Schauen, ob die Rolle bereits existiert
-         $sql    = "SELECT COUNT(*) FROM adm_rolle
+         $sql    = "SELECT COUNT(*) FROM ". TBL_ROLES. "
                      WHERE ar_ag_shortname LIKE '$g_organization'
                        AND ar_funktion     LIKE {0}";
          $sql    = prepareSQL($sql, array($_POST['funktion']));
@@ -198,7 +198,7 @@ elseif($_GET["mode"] == 2)
          if($_GET['ar_id'] > 0)
          {
             $act_date = date("Y.m.d G:i:s", time());
-            $sql = "UPDATE adm_rolle  SET ar_funktion          = {0}
+            $sql = "UPDATE ". TBL_ROLES. "  SET ar_funktion          = {0}
                                         , ar_beschreibung      = {1}
                                         , ar_r_moderation      = $moderation
                                         , ar_r_termine         = $termine
@@ -224,7 +224,7 @@ elseif($_GET["mode"] == 2)
          else
          {
             // Rolle in Datenbank hinzufuegen
-            $sql    = "INSERT INTO adm_rolle (ar_ag_shortname, ar_funktion, ar_beschreibung,
+            $sql    = "INSERT INTO ". TBL_ROLES. " (ar_ag_shortname, ar_funktion, ar_beschreibung,
                                                ar_r_moderation, ar_r_termine, ar_r_foto, ar_r_download,
                                                ar_r_user_bearbeiten, ar_r_mail_logout, ar_r_mail_login,
                                                ar_r_locked, ar_gruppe, ar_datum_von, ar_zeit_von,
@@ -261,7 +261,7 @@ elseif($_GET["mode"] == 2)
 }
 elseif($_GET["mode"] == 3)
 {
-   $sql = "SELECT ar_funktion FROM adm_rolle
+   $sql = "SELECT ar_funktion FROM ". TBL_ROLES. "
             WHERE ar_id = {0}";
    $sql    = prepareSQL($sql, array($_GET['ar_id']));
    $result = mysql_query($sql, $g_adm_con);
@@ -278,13 +278,13 @@ elseif($_GET["mode"] == 3)
 
    // Rolle ungueltig machen
 
-   $sql    = "UPDATE adm_mitglieder SET am_valid = 0
+   $sql    = "UPDATE ". TBL_MEMBERS. " SET am_valid = 0
                WHERE am_ar_id = {0}";
    $sql    = prepareSQL($sql, array($_GET['ar_id']));
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
 
-   $sql    = "UPDATE adm_rolle SET ar_valid = 0
+   $sql    = "UPDATE ". TBL_ROLES. " SET ar_valid = 0
                WHERE ar_id = {0}";
    $sql    = prepareSQL($sql, array($_GET['ar_id']));
    $result = mysql_query($sql, $g_adm_con);

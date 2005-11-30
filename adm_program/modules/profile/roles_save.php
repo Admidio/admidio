@@ -44,7 +44,7 @@ if(!isModerator() && !isGroupLeader() && !editUser())
 if(isModerator())
 {
    // Alle Rollen der Gruppierung auflisten
-   $sql    = "SELECT ar_id FROM adm_rolle
+   $sql    = "SELECT ar_id FROM ". TBL_ROLES. "
                WHERE ar_ag_shortname = '$g_organization'
                  AND ar_valid        = 1
                ORDER BY ar_funktion";
@@ -53,7 +53,7 @@ elseif(isGroupLeader())
 {
    // Alle Rollen auflisten, bei denen das Mitglied Leiter ist
    $sql    = "SELECT ar_id
-                FROM adm_mitglieder, adm_rolle
+                FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
                WHERE am_au_id  = $g_user_id
                  AND am_valid  = 1
                  AND am_leiter = 1
@@ -66,7 +66,7 @@ elseif(isGroupLeader())
 elseif(editUser())
 {
    // Alle Rollen auflisten, die keinen Moderatorenstatus haben
-   $sql    = "SELECT ar_id FROM adm_rolle
+   $sql    = "SELECT ar_id FROM ". TBL_ROLES. "
                WHERE ar_ag_shortname = '$g_organization'
                  AND ar_valid        = 1
                  AND ar_r_moderation = 0
@@ -101,7 +101,7 @@ while($row = mysql_fetch_object($result_rolle))
    else
       $leiter   = 0;
 
-   $sql    = "SELECT * FROM adm_mitglieder, adm_rolle
+   $sql    = "SELECT * FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
                WHERE am_ar_id = $row->ar_id
                  AND am_au_id = {0}
                  AND am_ar_id = ar_id ";
@@ -116,7 +116,7 @@ while($row = mysql_fetch_object($result_rolle))
       // neue Mitgliederdaten zurueckschreiben
       if($function == 1)
       {
-         $sql = "UPDATE adm_mitglieder SET am_valid  = 1
+         $sql = "UPDATE ". TBL_MEMBERS. " SET am_valid  = 1
                                           , am_ende   = '0000-00-00'
                                           , am_leiter = $leiter
                   WHERE am_ar_id = $row->ar_id
@@ -125,7 +125,7 @@ while($row = mysql_fetch_object($result_rolle))
       }
       else
       {
-         $sql = "UPDATE adm_mitglieder SET am_valid  = 0
+         $sql = "UPDATE ". TBL_MEMBERS. " SET am_valid  = 0
                                           , am_ende   = NOW()
                                           , am_leiter = $leiter
                   WHERE am_ar_id = $row->ar_id
@@ -137,7 +137,7 @@ while($row = mysql_fetch_object($result_rolle))
       // neue Mitgliederdaten einfuegen, aber nur, wenn auch ein Haeckchen da ist
       if($function == 1)
       {
-         $sql = "INSERT INTO adm_mitglieder (am_ar_id, am_au_id, am_start, am_valid, am_leiter)
+         $sql = "INSERT INTO ". TBL_MEMBERS. " (am_ar_id, am_au_id, am_start, am_valid, am_leiter)
                  VALUES ($row->ar_id, {0}, NOW(), 1, $leiter) ";
          $count_assigned++;
       }
