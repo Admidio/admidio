@@ -47,18 +47,18 @@ if($g_session_valid & editPhoto()){
 				WHERE (ap_id ='$ap_id')";
 	$result = mysql_query($sql, $g_adm_con);
 	db_error($result);
-	$". TBL_PHOTOS. " = mysql_fetch_array($result);
+	$adm_photo = mysql_fetch_array($result);
 //Speicherort
-	$ordner = "../../../adm_my_files/photos/"."$". TBL_PHOTOS. "[3]"."_$". TBL_PHOTOS. "[0]";
+	$ordner = "../../../adm_my_files/photos/"."$adm_photo[3]"."_$adm_photo[0]";
 
 //Bericht mit l&ouml;schen
-      $neuebilderzahl = $". TBL_PHOTOS. "[1]-1;
+      $neuebilderzahl = $adm_photo[1]-1;
 	//Bilder l&ouml;schen
         	chmod("$ordner/$bild.jpg", 0777);
          unlink("$ordner/$bild.jpg");
    //Umbennenen der Restbilder
          $neuenr=1;
-         for($x=1; $x<=$". TBL_PHOTOS. "[1]; $x++){
+         for($x=1; $x<=$adm_photo[1]; $x++){
             if(file_exists("$ordner/$x.jpg")){
                if($x>$neuenr){
                   chmod("$ordner/$x.jpg", 0777);
