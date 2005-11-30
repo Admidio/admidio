@@ -45,19 +45,19 @@ else
    <meta name="language" content="de">
 
    <link rel="stylesheet" type="text/css" href="../adm_config/main.css">
-   
+
    <script type="text/javascript">
       function createConfigFile() {
         document.server.action = 'inst_do.php?file=1';
         document.server.submit();
       }
-        
+
       function installDatabase() {
         document.server.action = 'inst_do.php?file=0';
         document.server.submit();
       }
    </script>
-   
+
    <!--[if gte IE 5.5000]>
    <script type="text/javascript" src="../adm_program/system/correct_png.js"></script>
    <![endif]-->
@@ -89,7 +89,7 @@ else
             </tr>
             <tr>
                <td width="120px">Passwort:</td>
-               <td><input type="text" name="password" size="25" maxlength="50" /></td>
+               <td><input type="password" name="password" size="25" maxlength="50" /></td>
             </tr>
             <tr>
                <td width="120px">Datenbank:</td>
@@ -109,6 +109,10 @@ else
                   />
                   <label for="struktur">Datenbankstruktur anlegen<br />
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(L&ouml;scht eine bereits vorhandene Datenbank)</label></td>
+            </tr>
+            <tr>
+               <td width="120px" align="right">Tabellenpr&auml;fix:</td>
+               <td><input type="text" name="praefix" value="adm" size="10" maxlength="10" /></td>
             </tr>
             <tr>
                <td colspan="2"><input type="checkbox" id="update" name="update" value="1"
@@ -169,7 +173,7 @@ else
             </tr>
             <tr>
                <td width="120px">Passwort:</td>
-               <td><input type="text" name="user-passwort" size="25" maxlength="50" /></td>
+               <td><input type="password" name="user-passwort" size="25" maxlength="50" /></td>
             </tr>
          </table>
 
