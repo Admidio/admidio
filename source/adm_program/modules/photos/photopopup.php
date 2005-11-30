@@ -36,20 +36,20 @@
 //&Uuml;bernahme der &Uuml;bergebenen variablen
    $ap_id= $_GET['ap_id'];
    $bild= $_GET['bild'];
-//erfassen der Veranstaltung 
-	$sql = "	SELECT * 
-				FROM ". TBL_PHOTOS. " 
+//erfassen der Veranstaltung
+	$sql = "	SELECT *
+				FROM ". TBL_PHOTOS. "
 				WHERE (ap_id ='$ap_id')";
 	$result = mysql_query($sql, $g_adm_con);
 	db_error($result);
-	$". TBL_PHOTOS. " = mysql_fetch_array($result);
+	$adm_photo = mysql_fetch_array($result);
 //Aanzahl der Bilder
-   $bilder = $". TBL_PHOTOS. "[1];
+   $bilder = $adm_photo[1];
 //Nächstes und Letztes Bild
 	$last=$bild-1;
 	$next=$bild+1;
 //Speicherort
-	$ordner = "../../../adm_my_files/photos/"."$". TBL_PHOTOS. "[3]"."_$". TBL_PHOTOS. "[0]";
+	$ordner = "../../../adm_my_files/photos/"."$adm_photo[3]"."_$adm_photo[0]";
 
    //Anfang HTML
    echo "
@@ -72,21 +72,21 @@
    //untere Zelle mit Buttons Bild und Fenster Schlie&szlig;en Button
    echo "<body>
    <div style=\"margin-top: 5px; margin-bottom: 5px;\" align=\"center\">
-   <div class=\"formHead\" style=\"width: 95%\">$". TBL_PHOTOS. "[2]</div>
+   <div class=\"formHead\" style=\"width: 95%\">$adm_photo[2]</div>
    <div class=\"formBody\" style=\"width: 95%; height: 520px;\">";
-      $dt_date_von = mysqldate("d.m.y", $". TBL_PHOTOS. "[3]);
-		$dt_date_bis = mysqldate("d.m.y", $". TBL_PHOTOS. "[4]);
+      $dt_date_von = mysqldate("d.m.y", $adm_photo[3]);
+		$dt_date_bis = mysqldate("d.m.y", $adm_photo[4]);
 		echo"<b>Datum: $dt_date_von";
          if($dt_date_von != $dt_date_bis)echo " bis $dt_date_bis";
-		echo "<br>Fotos von: $". TBL_PHOTOS. "[5]<br><br>";
+		echo "<br>Fotos von: $adm_photo[5]<br><br>";
      //Vor und zurück buttons
 	   if($last>0){
 			echo"<button name=\"back\" type=\"button\" value=\"back\" style=\"width: 130px;\" onclick=\"self.location.href='photopopup.php?bild=$last&ap_id=$ap_id'\">
               <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Letztes Bild\">  Letztes Bild
            </button>  ";
-		} 
-		if($next<=$bilder){	 
-		echo"<button name=\"forward\" type=\"button\" value=\"forward\" style=\"width: 130px;\" onclick=\"self.location.href='photopopup.php?bild=$next&ap_id=$ap_id'\"> N&auml;chstes Bild  
+		}
+		if($next<=$bilder){
+		echo"<button name=\"forward\" type=\"button\" value=\"forward\" style=\"width: 130px;\" onclick=\"self.location.href='photopopup.php?bild=$next&ap_id=$ap_id'\"> N&auml;chstes Bild
 		 			<img src=\"$g_root_path/adm_program/images/forward.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"N&auml;chstes Bild\">
            </button>";
 		}
