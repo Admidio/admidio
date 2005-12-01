@@ -1,6 +1,7 @@
 <?php
 /******************************************************************************
- * prueft, ob der User sich einloggen darf
+ * Meldet den User bei Admidio an, wenn sich dieser einloggen darf
+ * Cookies setzen
  *
  * Copyright    : (c) 2004 - 2005 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -27,15 +28,15 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
+
 require("../../adm_config/config.php");
-require("function.php");
-require("date.php");
+require("common.php");
 require("session_check.php");
 
 if(!array_key_exists("url", $_GET)
 || strlen($_GET['url']) == 0)
    $_GET['url'] = "home";
-   
+
 $_POST['loginname'] = trim($_POST['loginname']);
 
 if(strlen($_POST['loginname']) == 0)
@@ -96,9 +97,9 @@ if ($user_found >= 1)
       $login_datetime   = date("Y.m.d H:i:s", $login_timestamp);
       $login_timestamp += ip2long($REMOTE_ADDR);
       $user_session     = md5($login_timestamp);
-      
+
       // darf der User laenger eingeloggt sein
-      
+
       if(array_key_exists("long_login", $_POST))
          $long_login = 1;
       else
@@ -128,7 +129,7 @@ if ($user_found >= 1)
 
       // Last-Login speichern
 
-      $sql = "UPDATE ". TBL_USERS. " SET au_last_login = au_act_login 
+      $sql = "UPDATE ". TBL_USERS. " SET au_last_login = au_act_login
                WHERE au_id = $user_row->au_id";
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
@@ -152,7 +153,7 @@ if ($user_found >= 1)
    }
    else
    {
-      // ungültige Logins werden mitgeloggt      
+      // ungültige Logins werden mitgeloggt
       $sql    = "UPDATE ". TBL_USERS. " SET au_invalid_login = NOW()
                                     , au_num_invalid   = au_num_invalid + 1
                   WHERE au_id = $user_row->au_id ";

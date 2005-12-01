@@ -24,10 +24,7 @@
  *
  *****************************************************************************/
 require("../../adm_config/config.php");
-require("function.php");
-require("date.php");
-require("string.php");
-require("tbl_user.php");
+require("common.php");
 require("session_check.php");
 
 echo "

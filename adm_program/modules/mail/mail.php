@@ -32,12 +32,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
+ 
 require("../../../adm_config/config.php");
-require("../../system/function.php");
-require("../../system/date.php");
-require("../../system/string.php");
-require("../../system/tbl_user.php");
+require("../../system/common.php");
 require("../../system/session_check.php");
+require("../../system/tbl_user.php");
 
 // Prüfungen, ob die Seite regulaer aufgerufen wurde
 

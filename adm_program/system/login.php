@@ -28,9 +28,7 @@
  *
  *****************************************************************************/
 require("../../adm_config/config.php");
-require("function.php");
-require("date.php");
-require("string.php");
+require("common.php");
 require("session_check.php");
 
 if(!array_key_exists("url", $_GET))

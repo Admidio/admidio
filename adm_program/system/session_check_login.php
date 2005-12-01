@@ -24,40 +24,6 @@
  *
  *****************************************************************************/
 
-// Standard-Praefix ist adm auch wegen Kompatibilitaet zu alten Versionen
-if(strlen($g_tbl_praefix) == 0)
-	$g_tbl_praefix = "adm";
-
-// Defines fuer alle Datenbanktabellen
-define("TBL_ANNOUNCEMENTS", $g_tbl_praefix. "_ankuendigungen");
-define("TBL_PHOTOS", $g_tbl_praefix. "_photo");
-define("TBL_ORGANIZATIONS", $g_tbl_praefix. "_gruppierung");
-define("TBL_MEMBERS", $g_tbl_praefix. "_mitglieder");
-define("TBL_NEW_USER", $g_tbl_praefix. "_new_user");
-define("TBL_ROLES", $g_tbl_praefix. "_rolle");
-define("TBL_SESSIONS", $g_tbl_praefix. "_session");
-define("TBL_DATES", $g_tbl_praefix. "_termine");
-define("TBL_USERS", $g_tbl_praefix. "_user");
-define("TBL_USER_DATA", $g_tbl_praefix. "_user_data");
-define("TBL_USER_FIELDS", $g_tbl_praefix. "_user_field");
-define("TBL_ROLE_TYPES", $g_tbl_praefix. "_role_types");
-
- // Verbindung zu Datenbank herstellen
-$g_adm_con = mysql_connect ($g_adm_srv, $g_adm_usr, $g_adm_pw);
-mysql_select_db($g_adm_db, $g_adm_con );
-
-// Verbindung zur Forum-Datenbank herstellen
-if($g_forum)
-   $g_forum_con = mysql_connect ($g_forum_srv, $g_forum_usr, $g_forum_pw);
-else
-   $g_forum_con;
-
-// Globale Variablen
-$g_session_id    = "";
-$g_user_id       = 0;
-$g_nickname      = "";
-$g_session_valid = 0;
-
 // Cookies einlesen
 if(isset($_COOKIE["". TBL_SESSIONS. ""]))
    $g_session_id = $_COOKIE["". TBL_SESSIONS. ""];

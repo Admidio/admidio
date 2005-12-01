@@ -1,6 +1,7 @@
 <?php
 /******************************************************************************
  * User auf der Homepage und im Forum ausloggen
+ * Cookies loeschen
  *
  * Copyright    : (c) 2004 - 2005 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -23,10 +24,9 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
+
 require("../../adm_config/config.php");
-require("function.php");
-require("date.php");
-require("tbl_user.php");
+require("common.php");
 require("session_check.php");
 
 // Session pruefen
@@ -57,7 +57,7 @@ else
 if ($session_found > 0)
 {
    // Session loeschen
-   
+
    $sql    = "DELETE FROM ". TBL_SESSIONS. " WHERE as_session = {0}";
    $sql    = prepareSQL($sql, array($g_session_id));
    $result = mysql_query($sql, $g_adm_con);
@@ -67,7 +67,7 @@ if ($session_found > 0)
 if($g_forum == 1)
 {
    mysql_select_db($g_forum_db, $g_forum_con);
-   
+
    // User nun in Foren-Tabelle suchen und dort Session löschen
    $sql    = "SELECT user_id FROM ". $g_forum_praefix. "_users WHERE username LIKE {0} ";
    $sql    = prepareSQL($sql, array($g_nickname));
@@ -75,13 +75,13 @@ if($g_forum == 1)
    db_error($result);
 
    $row = mysql_fetch_array($result);
-   $forum_user_id = $row[0];   
+   $forum_user_id = $row[0];
 
    // User-Session im Forum löschen
    $sql    = "DELETE FROM ". $g_forum_praefix. "_sessions WHERE session_user_id = $forum_user_id ";
    $result = mysql_query($sql, $g_forum_con);
    db_error($result);
-   
+
    mysql_select_db($g_adm_db, $g_adm_con);
 }
 

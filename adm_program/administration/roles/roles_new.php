@@ -26,11 +26,9 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
+ 
 require("../../../adm_config/config.php");
-require("../../system/function.php");
-require("../../system/date.php");
-require("../../system/string.php");
-require("../../system/tbl_user.php");
+require("../../system/common.php");
 require("../../system/session_check_login.php");
 
 // nur Moderatoren duerfen Rollen erfassen & verwalten
