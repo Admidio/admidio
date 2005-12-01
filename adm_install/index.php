@@ -6,6 +6,12 @@
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  *
+ * mode : 0 (Default) Erster Dialog
+ *        1 Admidio installieren - Config-Datei
+ *        2 Datenbank installieren
+ *        3 Datenbank updaten
+ *        4 Neue Organisation anlegen
+ *
  ******************************************************************************
  *
  * This program is free software; you can redistribute it and/or
@@ -30,23 +36,25 @@ if(file_exists("../adm_config/config.php"))
    $first_install = false;
 else
    $first_install = true;
-?>
 
+if(!array_key_exists("mode", $_GET))
+   $_GET['mode'] = 0;
+
+echo "
 <!-- (c) 2004 - 2005 The Admidio Team - http://www.admidio.org -->
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
 <html>
 <head>
    <title>Admidio - Installation</title>
 
-   <meta http-equiv="content-type" content="text/html; charset=ISO-8859-15">
-   <meta name="author"   content="Markus Fassbender">
-   <meta name="robots"   content="index,follow">
-   <meta name="language" content="de">
+   <meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-15\">
+   <meta name=\"author\"   content=\"Markus Fassbender\">
+   <meta name=\"robots\"   content=\"index,follow\">
+   <meta name=\"language\" content=\"de\">
 
-   <link rel="stylesheet" type="text/css" href="../adm_config/main.css">
+   <link rel=\"stylesheet\" type=\"text/css\" href=\"../adm_config/main.css\">
 
-   <script type="text/javascript">
+   <script type=\"text/javascript\">
       function createConfigFile() {
         document.server.action = 'inst_do.php?file=1';
         document.server.submit();
@@ -59,126 +67,166 @@ else
    </script>
 
    <!--[if gte IE 5.5000]>
-   <script type="text/javascript" src="../adm_program/system/correct_png.js"></script>
+   <script type=\"text/javascript\" src=\"../adm_program/system/correct_png.js\"></script>
    <![endif]-->
 </head>
 <body>
-<div align="center">
-   <div class="formHead" style="text-align: left;">
-        <img style="float:left; padding: 5px 0px 0px 0px;" src="../adm_program/images/admidio_logo_50.png" border="0" alt="www.admidio.org" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <div style="font-size: 16pt; font-weight: bold; text-align: right; padding: 5px 10px 10px 0px;">Version <?php echo getVersion(); ?></div>
-        <div style="font-size: 11pt; padding: 0px 0px 5px 0px;">Das Online-Verwaltungssystem f&uuml;r Vereine, Gruppen und Organisationen</div>
+<div align=\"center\">
+   <div class=\"formHead\" style=\"text-align: left;\">
+        <img style=\"float:left; padding: 5px 0px 0px 0px;\" src=\"../adm_program/images/admidio_logo_50.png\" border=\"0\" alt=\"www.admidio.org\" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <div style=\"font-size: 16pt; font-weight: bold; text-align: right; padding: 5px 10px 10px 0px;\">Version ". getVersion(). "</div>
+        <div style=\"font-size: 11pt; padding: 0px 0px 5px 0px;\">Das Online-Verwaltungssystem f&uuml;r Vereine, Gruppen und Organisationen</div>
    </div>
 
-   <div class="formBody">
-      <div align="center">
-      <h1>Installation &amp; Einrichtung<br />der MySQL-Datenbank</h1>
+   <div class=\"formBody\">
+      <div align=\"center\">";
 
-      <form name="server" action="inst_do.php" method="post">
-         <table class="groupBox" width="350" cellpadding="5">
-            <tr>
-               <td class="groupBoxHeadline" colspan="2">Zugangsdaten MySql-Datenbank</td>
-            </tr>
-            <tr>
-               <td width="120px">Server:</td>
-               <td><input type="text" name="server" size="25" maxlength="50" /></td>
-            </tr>
-            <tr>
-               <td width="120px">Login:</td>
-               <td><input type="text" name="user" size="25" maxlength="50" /></td>
-            </tr>
-            <tr>
-               <td width="120px">Passwort:</td>
-               <td><input type="password" name="password" size="25" maxlength="50" /></td>
-            </tr>
-            <tr>
-               <td width="120px">Datenbank:</td>
-               <td><input type="text" name="database" size="25" maxlength="50" /></td>
-            </tr>
-         </table>
+      if($_GET['mode'] == 0)
+      	echo "<h1>Installation &amp; Einrichtung</h1>";
+      elseif($_GET['mode'] == 1)
+      	echo "<h1>Konfigurationsdatei erstellen</h1>";
+      elseif($_GET['mode'] == 2)
+      	echo "<h1>Datenbank installieren</h1>";
+      elseif($_GET['mode'] == 3)
+      	echo "<h1>Datenbank updaten</h1>";
+      elseif($_GET['mode'] == 4)
+      	echo "<h1>Neue Organisation hinzufügen</h1>";
 
-         <br />
+      if($_GET['mode'] == 0)
+      {
+      	echo "
+			<form name=\"server\" action=\"index.php\" method=\"post\">
+				<div class=\"groupBox\" style=\"width: 350px; text-align: left;\">
+					<div class=\"groupBoxHeadline\">Aktion auswählen</div>
+					<br>
+					<div>&nbsp;
+						<input type=\"radio\" id=\"install\" name=\"action\" value=\"install\" ";
+	               if($first_install) echo " checked ";
+	               echo "/>&nbsp;
+						<label for=\"install\">Admidio installieren und einrichten
+					</div>
+					<br>
+					<div>&nbsp;
+						<input type=\"radio\" id=\"update\" name=\"action\" value=\"update\" ";
+	               if(!$first_install) echo " checked ";
+	               echo "/>&nbsp;
+						<label for=\"update\">Admidio Datenbank updaten
+					</div>
+					<br>
+					<div>&nbsp;
+						<input type=\"radio\" id=\"orga\" name=\"action\" value=\"orga\" />&nbsp;
+						<label for=\"orga\">Neue Organisation hinzufügen
+					</div>
+					<br>
+				</div>";
+		}
+		else
+		{
+      	echo "<form name=\"server\" action=\"inst_do.php\" method=\"post\">";
 
-         <table class="groupBox" width="350" cellpadding="5">
-            <tr>
-               <td class="groupBoxHeadline" colspan="2">Optionen</td>
-            </tr>
-            <tr>
-               <td colspan="2"><input type="checkbox" id="struktur" name="struktur" value="1"
-                  <?php if($first_install) echo " checked "; ?>
-                  />
-                  <label for="struktur">Datenbankstruktur anlegen<br />
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(L&ouml;scht eine bereits vorhandene Datenbank)</label></td>
-            </tr>
-            <tr>
-               <td width="120px" align="right">Tabellenpr&auml;fix:</td>
-               <td><input type="text" name="praefix" value="adm" size="10" maxlength="10" /></td>
-            </tr>
-            <tr>
-               <td colspan="2"><input type="checkbox" id="update" name="update" value="1"
-                  <?php if(!$first_install) echo " checked "; ?>
-                  />
-                  <label for="update">Datenbankstruktur updaten</label></td>
-            </tr>
-            <tr>
-               <td width="120px" align="right">&nbsp;</td>
-               <td>
-                  <select size="1" name="version">
-                     <option value="0" selected="selected">bisherige Version</option>
-                     <option value="2">1.1.*</option>
-                     <option value="1">1.0.*</option>
-                  </select>
-               </td>
-            </tr>
-            <tr>
-               <td colspan="2"><input type="checkbox" id="verein" name="verein" value="1"
-                  <?php if($first_install) echo " checked "; ?>
-                  />
-                  <label for="verein">Neue Gruppierung / Verein anlegen</label>
-               </td>
-            </tr>
-            <tr>
-               <td width="120px" align="right">Name (Abk.):</td>
-               <td><input type="text" name="verein-name-kurz" size="10" maxlength="10" /></td>
-            </tr>
-            <tr>
-               <td width="120px" align="right">Name (lang):</td>
-               <td><input type="text" name="verein-name-lang" size="25" maxlength="60" /></td>
-            </tr>
-         </table>
+			// Verbindungsdaten zur Datenbank
+	      if($_GET['mode'] != 1)
+	      {
+				echo "
+	         <table class=\"groupBox\" width=\"350\" cellpadding=\"5\">
+	            <tr>
+	               <td class=\"groupBoxHeadline\" colspan=\"2\">Zugangsdaten MySql-Datenbank</td>
+	            </tr>
+	            <tr>
+	               <td width=\"120px\">Server:</td>
+	               <td><input type=\"text\" name=\"server\" size=\"25\" maxlength=\"50\" /></td>
+	            </tr>
+	            <tr>
+	               <td width=\"120px\">Login:</td>
+	               <td><input type=\"text\" name=\"user\" size=\"25\" maxlength=\"50\" /></td>
+	            </tr>
+	            <tr>
+	               <td width=\"120px\">Passwort:</td>
+	               <td><input type=\"password\" name=\"password\" size=\"25\" maxlength=\"50\" /></td>
+	            </tr>
+	            <tr>
+	               <td width=\"120px\">Datenbank:</td>
+	               <td><input type=\"text\" name=\"database\" size=\"25\" maxlength=\"50\" /></td>
+	            </tr>
+	         </table>
 
-         <br />
+	         <br />";
+	      }
 
-         <table class="groupBox" width="350" cellpadding="5">
-            <tr>
-               <td class="groupBoxHeadline" colspan="2">Benutzer anlegen</td>
-            </tr>
-            <tr>
-               <td colspan="2"><input type="checkbox" id="user-webmaster" name="user-webmaster" value="1"
-                  <?php if($first_install) echo " checked "; ?>
-                  />
-                  <label for="user-webmaster">Benutzer <i>Webmaster</i> anlegen</label></td>
-            </tr>
-            <tr>
-               <td width="120px">Nachname:</td>
-               <td><input type="text" name="user-surname" size="25" maxlength="50" /></td>
-            </tr>
-            <tr>
-               <td width="120px">Vorname:</td>
-               <td><input type="text" name="user-firstname" size="25" maxlength="50" /></td>
-            </tr>
-            <tr>
-               <td width="120px">Benutername:</td>
-               <td><input type="text" name="user-login" size="25" maxlength="50" /></td>
-            </tr>
-            <tr>
-               <td width="120px">Passwort:</td>
-               <td><input type="password" name="user-passwort" size="25" maxlength="50" /></td>
-            </tr>
-         </table>
+			// Updaten von Version
+			if($_GET['mode'] == 3)
+			{
+				echo "
+	         <table class=\"groupBox\" width=\"350\" cellpadding=\"5\">
+	            <tr>
+	               <td class=\"groupBoxHeadline\" colspan=\"2\">Optionen</td>
+	            </tr>
+	            <tr>
+	               <td width=\"120px\" align=\"right\">&nbsp;</td>
+	               <td>
+	                  <select size=\"1\" name=\"version\">
+	                     <option value=\"0\" selected=\"selected\">bisherige Version</option>
+	                     <option value=\"2\">1.1.*</option>
+	                     <option value=\"1\">1.0.*</option>
+	                  </select>
+	               </td>
+	            </tr>
+	         </table>
 
-         <br />
-         <?php
+	         <br />";
+			}
+
+			// Organisation anlegen
+			if($_GET['mode'] != 3)
+			{
+				echo "
+	         <table class=\"groupBox\" width=\"350\" cellpadding=\"5\">
+	            <tr>
+	               <td class=\"groupBoxHeadline\" colspan=\"2\">Gruppierung / Verein</td>
+	            </tr>
+	            <tr>
+	               <td width=\"120px\" align=\"right\">Name (Abk.):</td>
+	               <td><input type=\"text\" name=\"verein-name-kurz\" size=\"10\" maxlength=\"10\" /></td>
+	            </tr>
+	            <tr>
+	               <td width=\"120px\" align=\"right\">Name (lang):</td>
+	               <td><input type=\"text\" name=\"verein-name-lang\" size=\"25\" maxlength=\"60\" /></td>
+	            </tr>
+	         </table>
+
+	         <br />";
+			}
+
+			// Webmaster anlegen
+			if($_GET['mode'] == 2
+			|| $_GET['mode'] == 4)
+			{
+				echo "
+	         <table class=\"groupBox\" width=\"350\" cellpadding=\"5\">
+	            <tr>
+	               <td class=\"groupBoxHeadline\" colspan=\"2\">Benutzer anlegen</td>
+	            </tr>
+	            <tr>
+	               <td width=\"120px\">Nachname:</td>
+	               <td><input type=\"text\" name=\"user-surname\" size=\"25\" maxlength=\"50\" /></td>
+	            </tr>
+	            <tr>
+	               <td width=\"120px\">Vorname:</td>
+	               <td><input type=\"text\" name=\"user-firstname\" size=\"25\" maxlength=\"50\" /></td>
+	            </tr>
+	            <tr>
+	               <td width=\"120px\">Benutername:</td>
+	               <td><input type=\"text\" name=\"user-login\" size=\"25\" maxlength=\"50\" /></td>
+	            </tr>
+	            <tr>
+	               <td width=\"120px\">Passwort:</td>
+	               <td><input type=\"password\" name=\"user-passwort\" size=\"25\" maxlength=\"50\" /></td>
+	            </tr>
+	         </table>
+
+	         <br />";
+			}
+
          if($first_install)
          {
             echo "
@@ -209,13 +257,25 @@ else
             echo "
             <button name=\"updaten\" type=\"button\" value=\"updaten\" onclick=\"installDatabase()\">Datenbank updaten</button>";
          }
-         ?>
-      </form>
+		}
+	   echo "</form>
+		<div style=\"margin-top: 15px; margin-bottom: 5px;\">";
+			if($_GET['mode'] > 0)
+			{
+				echo "<button name=\"zurueck\" type=\"button\" value=\"zurueck\" >
+					<img src=\"../adm_program/images/back.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zurueck\">
+					&nbsp;Zurück</button>&nbsp;&nbsp;";
+			}
+			echo "<button name=\"zurueck\" type=\"submit\" value=\"zurueck\">Weiter&nbsp;
+				<img src=\"../adm_program/images/forward.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Weiter\">
+			</button>
+		</div>
       </div>
    </div>
-   <div class="formHead" style="font-size: 8pt; text-align: center; border-top-width: 0px;">
-      &copy; 2004 - 2005&nbsp;&nbsp;<a href="http://www.admidio.org" target="_blank">The Admidio Team</a>
+   <div class=\"formHead\" style=\"font-size: 8pt; text-align: center; border-top-width: 0px;\">
+      &copy; 2004 - 2005&nbsp;&nbsp;<a href=\"http://www.admidio.org\" target=\"_blank\">The Admidio Team</a>
    </div>
 </div>
 </body>
-</html>
+</html>";
+?>
