@@ -27,9 +27,12 @@
 
 $g_server_path = substr(__FILE__, 0, strpos(__FILE__, "adm_program")-1);
 
+require_once($g_server_path. "/adm_config/config.php");
 require_once($g_server_path. "/adm_program/system/function.php");
 require_once($g_server_path. "/adm_program/system/date.php");
 require_once($g_server_path. "/adm_program/system/string.php");
+require_once($g_server_path. "/adm_program/system/tbl_users.php");
+require_once($g_server_path. "/adm_program/system/tbl_organizations.php");
 
  // Standard-Praefix ist adm auch wegen Kompatibilitaet zu alten Versionen
 if(strlen($g_tbl_praefix) == 0)

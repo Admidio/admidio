@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Klasse fuer ". TBL_USERS. "
+ * Klasse fuer Datenbanktabelle adm_users
  *
  * Copyright    : (c) 2004 - 2005 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -23,7 +23,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
- 
+
 class CUser
 {
    var $m_id;
@@ -53,31 +53,31 @@ class CUser
       $sql = "SELECT * FROM ". TBL_USERS. " WHERE au_id = $id";
 
       $result = mysql_query($sql, $connection);
-      
+
       if($row = mysql_fetch_object($result))
       {
-         $this->m_id                 = $row->au_id;            
-         $this->m_name              = $row->au_name;            
-         $this->m_vorname           = $row->au_vorname;         
-         $this->m_adresse           = $row->au_adresse;         
-         $this->m_plz              = $row->au_plz;            
-         $this->m_ort              = $row->au_ort;            
-         $this->m_land              = $row->au_land;            
-         $this->m_tel1              = $row->au_tel1;            
-         $this->m_tel2              = $row->au_tel2;            
-         $this->m_mobil              = $row->au_mobil;         
-         $this->m_fax              = $row->au_fax;               
+         $this->m_id                 = $row->au_id;
+         $this->m_name              = $row->au_name;
+         $this->m_vorname           = $row->au_vorname;
+         $this->m_adresse           = $row->au_adresse;
+         $this->m_plz              = $row->au_plz;
+         $this->m_ort              = $row->au_ort;
+         $this->m_land              = $row->au_land;
+         $this->m_tel1              = $row->au_tel1;
+         $this->m_tel2              = $row->au_tel2;
+         $this->m_mobil              = $row->au_mobil;
+         $this->m_fax              = $row->au_fax;
          if($row->au_geburtstag == "0000-00-00")
             $this->m_geburtstag    = "";
           else
             $this->m_geburtstag    = $row->au_geburtstag;
-         $this->m_mail              = $row->au_mail;            
-         $this->m_weburl           = $row->au_weburl;         
+         $this->m_mail              = $row->au_mail;
+         $this->m_weburl           = $row->au_weburl;
          $this->m_login              = $row->au_login;
-         $this->m_password             = $row->au_password;      
-         $this->m_last_login        = $row->au_last_login;      
-         $this->m_act_login        = $row->au_act_login;      
-         $this->m_num_login        = $row->au_num_login;      
+         $this->m_password             = $row->au_password;
+         $this->m_last_login        = $row->au_last_login;
+         $this->m_act_login        = $row->au_act_login;
+         $this->m_num_login        = $row->au_num_login;
          $this->m_last_change      = $row->au_last_change;
          $this->m_last_change_id   = $row->au_last_change_id;
       }
