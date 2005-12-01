@@ -34,9 +34,7 @@
  *
  *****************************************************************************/
 require("../../../adm_config/config.php");
-require("../../system/function.php");
-require("../../system/date.php");
-require("../../system/tbl_user.php");
+require("../../system/common.php");
 require("../../system/session_check_login.php");
 
 //Übernahme der Rolle deren Mitgliederzuordnung bearbeitet werden soll

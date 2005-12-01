@@ -34,9 +34,7 @@
  *
  *****************************************************************************/
 require("../../../adm_config/config.php");
-require("../../system/function.php");
-require("../../system/string.php");
-require("../../system/date.php");
+require("../../system/common.php");
 require("../../system/session_check_login.php");
 
 // erst prüfen, ob der User auch die entsprechenden Rechte hat

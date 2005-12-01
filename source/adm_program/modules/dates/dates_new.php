@@ -27,12 +27,9 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
-require_once("../../../adm_config/config.php");
-require_once("../../system/function.php");
-require_once("../../system/date.php");
-require_once("../../system/string.php");
-require_once("../../system/tbl_user.php");
-require_once("../../system/session_check_login.php");
+require("../../../adm_config/config.php");
+require("../../system/common.php");
+require("../../system/session_check_login.php");
 
 if(!editDate())
 {

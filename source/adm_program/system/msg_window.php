@@ -26,8 +26,7 @@
  *
  *****************************************************************************/
 require("../../adm_config/config.php");
-require("function.php");
-require("date.php");
+require("common.php");
 require("session_check.php");
 
 echo "
