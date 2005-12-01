@@ -29,7 +29,6 @@
  *
  *****************************************************************************/
 
-require("../../adm_config/config.php");
 require("common.php");
 require("session_check.php");
 
