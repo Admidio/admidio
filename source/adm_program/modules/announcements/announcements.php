@@ -30,10 +30,10 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
-require("../../../adm_config/config.php");
+
 require("../../system/common.php");
-require($g_server_path. "/adm_program/system/session_check.php");
-require($g_server_path. "/adm_program/system/bbcode.php");
+require("../../system/session_check.php");
+require("../../system/bbcode.php");
 
 if(!array_key_exists("mode", $_GET))
    $_GET["mode"] = "all";

@@ -33,7 +33,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
-require("../../adm_config/config.php");
+
 require("common.php");
 require("session_check.php");
 require("err_text.php");
@@ -43,7 +43,7 @@ if(array_key_exists("err_code", $_GET))
    $inline = 0;
 else
    $inline = 1;
-   
+
 // Uebergaben vorbelegen, falls sie nicht uebergeben werden
 if(!isset($err_code))
 {
@@ -107,11 +107,11 @@ if($inline == 0)
    <head>
       <title>". $g_orga_property['ag_shortname']. " - Messagebox</title>
       <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
-      
+
       <!--[if gte IE 5.5000]>
       <script language=\"JavaScript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
       <![endif]-->";
-      
+
       if($_GET['timer'] > 0)
       {
          echo "<script language=\"JavaScript1.2\" type=\"text/javascript\"><!--\n
@@ -127,9 +127,9 @@ if($inline == 0)
 
 echo "
    <div align=\"center\"><br /><br /><br />
-   
+
    <div class=\"formHead\" style=\"width: 350px\">". strspace($_GET['err_head']). "</div>
-   
+
    <div class=\"formBody\" style=\"width: 350px\">
       <p>". getErrorText($err_code, $err_text). "</p>
       <p>";
