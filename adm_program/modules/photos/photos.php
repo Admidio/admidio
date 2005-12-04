@@ -83,24 +83,24 @@
 //durchlaufen des Result-Tabelle und Ausgabe in Tabelle
    $bildersumme=0;//Summe der Bilder in den Unterordnern
    for($x=0; $adm_photo = mysql_fetch_array($result); $x++){
-      If($adm_photo[8]==$g_organization){//Ausgabe nur bei entsprechender Gruppierung
+      If($adm_photo["ap_ag_shortname"]==$g_organization){//Ausgabe nur bei entsprechender Gruppierung
          $bildersumme=$bildersumme+$adm_photo[1];//erhöhen der Bildersumme
-         $ordner="$adm_photo[3]"."_"."$adm_photo[0]";
+         $ordner= $adm_photo["ap_begin"]."_".$adm_photo["ap_id"];
          echo "
          <tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\">
-            <td style=\"text-align: left;\">&nbsp;<a target=\"_self\" href=\"thumbnails.php?ap_id=$adm_photo[0]\">$adm_photo[2]</a></td>
-            <td style=\"text-align: center;\">"; $dt_date = mysqldate("d.m.y", $adm_photo[3]);echo"$dt_date </td>";//Anzeige beginn datum im deutschen Format
-       echo"<td style=\"text-align: center;\">$adm_photo[1]</td>
-            <td style=\"text-align: center;\">";$dt_date = mysqldate("d.m.y", $adm_photo[7]);echo"$dt_date </td>";//Anzeige online seitdatum im deutschen Format
+            <td style=\"text-align: left;\">&nbsp;<a target=\"_self\" href=\"thumbnails.php?ap_id=".$adm_photo["ap_id"]."\">".$adm_photo["ap_name"]."</a></td>
+            <td style=\"text-align: center;\">".mysqldate("d.m.y", $adm_photo["ap_begin"])."</td>";//Anzeige beginn datum im deutschen Format
+       echo"<td style=\"text-align: center;\">".$adm_photo["ap_number"]."</td>
+            <td style=\"text-align: center;\">".mysqldate("d.m.y", $adm_photo["ap_last_change"])."</td>";//Anzeige online seitdatum im deutschen Format
             if ($g_session_valid & editPhoto()){
                echo"<td style=\"text-align: center;\">
-                  <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?ap_id=$adm_photo[0]\">
+                  <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?ap_id=".$adm_photo["ap_id"]."\">
                      <img src=\"$g_root_path/adm_program/images/photo.png\" border=\"0\" alt=\"Photoupload\" title=\"Photoupload\"></a>&nbsp;
-                  <a href=\"$g_root_path/adm_program/modules/photos/event.php?ap_id=$adm_photo[0]&aufgabe=change\">
+                  <a href=\"$g_root_path/adm_program/modules/photos/event.php?ap_id=".$adm_photo["ap_id"]."&aufgabe=change\">
                      <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>&nbsp;";
-                  $err_text= "$adm_photo[2]"."("."Beginn: $adm_photo[3]".")";
+                  $err_text= $adm_photo["ap_name"]."(Beginn: ".mysqldate("d.m.y", $adm_photo["ap_begin"]).")";
                   echo"
-                  <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_veranst&err_text=$err_text&err_head=Veranstaltung L&ouml;schen&button=2&url=". urlencode("$g_root_path/adm_program/modules/photos/event.php?aufgabe=delete&ap_id=$adm_photo[0]"). "\">
+                  <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_veranst&err_text=$err_text&err_head=Veranstaltung L&ouml;schen&button=2&url=". urlencode("$g_root_path/adm_program/modules/photos/event.php?aufgabe=delete&ap_id=".$adm_photo["ap_id"].""). "\">
                      <img src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"Veranstaltung löschen\" title=\"Veranstaltung löschen\"></a>
                </td>";
             }

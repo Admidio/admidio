@@ -47,7 +47,7 @@ if($g_session_valid & editPhoto()){
 	db_error($result);
 	$adm_photo = mysql_fetch_array($result);
 //Speicherort
-	$ordner = "../../../adm_my_files/photos/"."$adm_photo[3]"."_$adm_photo[0]";
+	$ordner = "../../../adm_my_files/photos/".$adm_photo["ap_begin"]."_".$adm_photo["ap_id"];
 
 //Bericht mit l&ouml;schen
       $neuebilderzahl = $adm_photo[1]-1;
@@ -56,7 +56,7 @@ if($g_session_valid & editPhoto()){
          unlink("$ordner/$bild.jpg");
    //Umbennenen der Restbilder
          $neuenr=1;
-         for($x=1; $x<=$adm_photo[1]; $x++){
+         for($x=1; $x<=$adm_photo["ap_number"]; $x++){
             if(file_exists("$ordner/$x.jpg")){
                if($x>$neuenr){
                   chmod("$ordner/$x.jpg", 0777);
