@@ -46,9 +46,9 @@
 	$adm_photo = mysql_fetch_array($result);
 
 //Aanzahl der Bilder
-   $bilder = $adm_photo[1];
+   $bilder = $adm_photo["ap_number"];
 //Speicherort
-	$ordner = "../../../adm_my_files/photos/"."$adm_photo[3]"."_$adm_photo[0]";
+	$ordner = "../../../adm_my_files/photos/".$adm_photo["ap_begin"]."_".$adm_photo["ap_id"];
 
 //Ausrechnen der Seitenzahl, 25 Thumbnails  pro seiet
    If ($seite=='') $seite=1;
@@ -62,21 +62,8 @@
    <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
    <html>
    <head>
-      <title>". $g_orga_property['ag_shortname']. " - $adm_photo[2]</title>
-      <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">";
-
-      // Javascript deffinition der Links zu den Thumbnails
-      echo "<script type=\"text/javascript\"><!-- Begin ";
-      for($x=($seite-1)*25+1;$x<=($seite*25);$x++)
-      {
-         echo "
-         function win$x()
-         {
-            msg =
-         } ";
-      };
-      echo "// End --></script>
-
+      <title>". $g_orga_property['ag_shortname']. " - ".$adm_photo["ap_name"]."</title>
+      <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
       <!--[if gte IE 5.5000]>
       <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
       <![endif]-->";
@@ -90,12 +77,10 @@
    echo"<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">";
 
    //Ausgabe der &Uuml;berschrift
-   echo "<div class=\"formHead\" style=\"width: 90%\">". strspace($adm_photo[2]). "</div>
+   echo "<div class=\"formHead\" style=\"width: 90%\">". strspace($adm_photo["ap_name"]). "</div>
    <div class=\"formBody\" style=\"width: 90%\">";
-      $dt_date_von = mysqldate("d.m.y", $adm_photo[3]);
-		$dt_date_bis = mysqldate("d.m.y", $adm_photo[4]);
-		echo"<b>Datum: $dt_date_von";
-         if($dt_date_von != $dt_date_bis)echo " bis $dt_date_bis";
+		echo"Datum: ".mysqldate("d.m.y", $adm_photo["ap_begin"]);
+         if($adm_photo["ap_end"] != $adm_photo["ap_begin"])echo " bis ".mysqldate("d.m.y", $adm_photo["ap_end"]);
 		echo"
 		<br><br>
       Seite $seite / $seiten

@@ -48,7 +48,7 @@
 	$last=$bild-1;
 	$next=$bild+1;
 //Speicherort
-	$ordner = "../../../adm_my_files/photos/"."$adm_photo[3]"."_$adm_photo[0]";
+	$ordner = "../../../adm_my_files/photos/".$adm_photo["ap_begin"]."_".$adm_photo["ap_id"];
 
    //Anfang HTML
    echo "
@@ -73,11 +73,9 @@
    <div style=\"margin-top: 5px; margin-bottom: 5px;\" align=\"center\">
    <div class=\"formHead\" style=\"width: 95%\">$adm_photo[2]</div>
    <div class=\"formBody\" style=\"width: 95%; height: 520px;\">";
-      $dt_date_von = mysqldate("d.m.y", $adm_photo[3]);
-		$dt_date_bis = mysqldate("d.m.y", $adm_photo[4]);
-		echo"<b>Datum: $dt_date_von";
-         if($dt_date_von != $dt_date_bis)echo " bis $dt_date_bis";
-		echo "<br>Fotos von: $adm_photo[5]<br><br>";
+      echo"Datum: ".mysqldate("d.m.y", $adm_photo["ap_begin"]);
+         if($adm_photo["ap_end"] != $adm_photo["ap_begin"])echo " bis ".mysqldate("d.m.y", $adm_photo["ap_end"]);
+		echo "<br>Fotos von: ".$adm_photo["ap_photographers"]."<br><br>";
      //Vor und zurück buttons
 	   if($last>0){
 			echo"<button name=\"back\" type=\"button\" value=\"back\" style=\"width: 130px;\" onclick=\"self.location.href='photopopup.php?bild=$last&ap_id=$ap_id'\">

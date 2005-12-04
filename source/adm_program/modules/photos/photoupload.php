@@ -46,7 +46,7 @@ if($g_session_valid & editPhoto()){
 	db_error($result);
 	$adm_photo = mysql_fetch_array($result);
 //Speicherort
-	$ordner = "../../../adm_my_files/photos/"."$adm_photo[3]"."_$adm_photo[0]";
+	$ordner = "../../../adm_my_files/photos/".$adm_photo["ap_begin"]."_".$adm_photo["ap_id"];
 
 //kontrollmechanismen bei selbstaufruf
    if($_POST["upload"]){
@@ -95,9 +95,9 @@ if($_POST["upload"]){
 //bei selbstaufruf der Datei Hinweise zu hochgeladenen Dateien und Kopieren der Datei in Ordner
    //Anlegen des Berichts
       echo"<div style=\"width: 670px\" align=\"center\" class=\"formHead\">Bericht</div>";
-      echo"<div style=\"width: 670px\" align=\"center\" class=\"formBody\">Bitte einen Moment Geduld. Die Bilder wurden der Veranstaltung <br> - $adm_photo[2] - <br>erfolgreich hinzugefügt, wenn sie hier angezeigt werden.<br>";
+      echo"<div style=\"width: 670px\" align=\"center\" class=\"formBody\">Bitte einen Moment Geduld. Die Bilder wurden der Veranstaltung <br> - ".$adm_photo["ap_name"]." - <br>erfolgreich hinzugefügt, wenn sie hier angezeigt werden.<br>";
    //Verarbeitungsschleife für die einzelnen Bilder
-      $bildnr=$adm_photo[1];
+      $bildnr=$adm_photo["ap_number"];
 		for($x=0; $x<=4; $x=$x+1){
          $y=$x+1;
          if($_FILES["bilddatei"]["name"][$x]!="" && $ordner!="") {
@@ -133,11 +133,10 @@ if($_POST["upload"]){
    <form name=\"photoup\" method=\"post\" action=\"photoupload.php?ap_id=$ap_id\" enctype=\"multipart/form-data\">
       <div style=\"width: 410px\" align=\"center\" class=\"formHead\">Fotoupload</div>
       <div style=\"width: 410px\" align=\"center\" class=\"formBody\">
-         Bilder zu dieser Veranstaltung hinzufügen:<br>
-         $adm_photo[2] <br>";
-			$dt_date_von = mysqldate("d.m.y", $adm_photo[3]);
-			echo"(Beginn: $dt_date_von)
-			<hr width=\"85%\" />
+         Bilder zu dieser Veranstaltung hinzufügen:<br>"
+         .$adm_photo["ap_name"]."<br>"
+			."(Beginn: ". mysqldate("d.m.y", $adm_photo["ap_begin"]).")"
+			."<hr width=\"85%\" />
          <p>Bild 1:<input type='file' name='bilddatei[]' value='durchsuchen'></p>
          <p>Bild 2:<input type='file' name='bilddatei[]' value='durchsuchen'></p>
          <p>Bild 3:<input type='file' name='bilddatei[]' value='durchsuchen'></p>
