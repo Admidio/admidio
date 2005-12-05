@@ -317,6 +317,14 @@ echo "
          Danach auf Speichern klicken.
          ";
          break;
+            
+      case "folder_not_found":
+         echo " <h3>Warnung!!!</h3>
+			Der zugehörige Ordner wurde nicht Gefunden. Sollte er bewusst über FTP gelöscht worden sein
+			oder nicht mehr die Möglichkeit bestehen ihn wieder herzustellen, bitte
+			den Datensatz mit Button in der Bearbeitungsspalte löschen (rotes X).";
+         break;
+      
 
 
          default:
