@@ -95,7 +95,7 @@
                      <img onclick=\"window.open('photopopup.php?bild=$bild&ap_id=$ap_id','msg', 'height=600,width=580,left=162,top=5')\" style=\"vertical-align: middle; cursor: pointer;\" src=\"resize.php?bild=$ordner/$bild.jpg&amp;scal=100&amp;aufgabe=anzeigen\" border=\"0\" alt=\"$bild\">
 						<br>";
 						//Buttons für moderatoren
-						if ($g_session_valid & editPhoto()){
+						if ($g_session_valid && editPhoto()){
 							echo"
 							<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_photo&err_head=Foto L&ouml;schen&button=2&url=". urlencode("$g_root_path/adm_program/modules/photos/photodelete.php?ap_id=$ap_id&bild=$bild&seite=$seite"). "\">
 								<img src=\"$g_root_path/adm_program/images/photo_delete.png\" border=\"0\" alt=\"Photo löschen\" title=\"Photo löschen\">
