@@ -28,14 +28,14 @@
 	require("../../system/session_check_login.php");
 	
 //bei Seitenaufruf ohne Moderationsrechte
-if(!$g_session_valid || $g_session_valid & !editPhoto())
+if(!$g_session_valid || $g_session_valid && !editPhoto())
       {
         $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=photoverwaltunsrecht";
       header($location);
       exit();
       }
 //bei Seitenaufruf mit Moderationsrechten
-if($g_session_valid & editPhoto()){
+if($g_session_valid && editPhoto()){
 //Übernahme Variablen
 	 $ap_id= $_GET['ap_id'];
 	 $bild = $_GET["bild"];

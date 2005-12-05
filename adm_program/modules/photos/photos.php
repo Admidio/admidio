@@ -36,6 +36,7 @@
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
 
+   mysql_data_seek ($result, 0);
    //beginn HTML
    echo "
    <!-- (c) 2004 - 2005 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
@@ -57,7 +58,7 @@
    echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">";
    echo"<h1>Fotogalerien</h1>";
    //bei Seitenaufruf mit Moderationsrechten
-   if($g_session_valid & editPhoto()){
+   if($g_session_valid && editPhoto()){
       echo"
       <button name=\"verwaltung\" type=\"button\" value=\"up\" style=\"width: 187px;\"
          onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/event.php?aufgabe=new'\">
@@ -74,7 +75,7 @@
          <th class=\"tableHeader\" style=\"text-align: left;\">Datum</th>
          <th class=\"tableHeader\" style=\"text-align: center;\">Bilder</th>
          <th class=\"tableHeader\" style=\"text-align: center;\">Letze &Auml;nderung</th>";
-         if ($g_session_valid & editPhoto()){
+         if ($g_session_valid && editPhoto()){
             echo"<th class=\"tableHeader\" style=\"text-align: center;\">Bearbeiten</th>";
          }
       echo"</tr>
@@ -83,16 +84,18 @@
 //durchlaufen des Result-Tabelle und Ausgabe in Tabelle
    $bildersumme=0;//Summe der Bilder in den Unterordnern
    for($x=0; $adm_photo = mysql_fetch_array($result); $x++){
-      If($adm_photo["ap_ag_shortname"]==$g_organization){//Ausgabe nur bei entsprechender Gruppierung
          $bildersumme=$bildersumme+$adm_photo[1];//erhöhen der Bildersumme
-         $ordner= $adm_photo["ap_begin"]."_".$adm_photo["ap_id"];
+         $ordner = "../../../adm_my_files/photos/".$adm_photo["ap_begin"]."_".$adm_photo["ap_id"];
+         //Kontrollieren ob der entsprechende Ordner in adm_my_files existiert
+         //wenn ja Zeile ausgeben
+         if(file_exists($ordner)){
          echo "
          <tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\">
             <td style=\"text-align: left;\">&nbsp;<a target=\"_self\" href=\"thumbnails.php?ap_id=".$adm_photo["ap_id"]."\">".$adm_photo["ap_name"]."</a></td>
             <td style=\"text-align: center;\">".mysqldate("d.m.y", $adm_photo["ap_begin"])."</td>";//Anzeige beginn datum im deutschen Format
-       echo"<td style=\"text-align: center;\">".$adm_photo["ap_number"]."</td>
+       		echo"<td style=\"text-align: center;\">".$adm_photo["ap_number"]."</td>
             <td style=\"text-align: center;\">".mysqldate("d.m.y", $adm_photo["ap_last_change"])."</td>";//Anzeige online seitdatum im deutschen Format
-            if ($g_session_valid & editPhoto()){
+            if ($g_session_valid && editPhoto()){
                echo"<td style=\"text-align: center;\">
                   <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?ap_id=".$adm_photo["ap_id"]."\">
                      <img src=\"$g_root_path/adm_program/images/photo.png\" border=\"0\" alt=\"Photoupload\" title=\"Photoupload\"></a>&nbsp;
@@ -106,7 +109,7 @@
             }
          echo"</tr>
          ";
-      };//If
+         }//Ende Ordner existiert
    };//for
    // wenn keine Bilder vorhanden sind, dann eine Meldung ausgeben
    if($x==0)
@@ -119,7 +122,7 @@
          <th class=\"tableHeader\" style=\"text-align: right;\" colspan=\"2\">Bilder Gesamt:</th>
          <th class=\"tableHeader\" style=\"text-align: center;\">$bildersumme</th>
          <th class=\"tableHeader\">&nbsp;</th>";
-         if ($g_session_valid & editPhoto())echo"<th class=\"tableHeader\">&nbsp;</th>";
+         if ($g_session_valid && editPhoto())echo"<th class=\"tableHeader\">&nbsp;</th>";
          echo"
          </tr>
    </table>
