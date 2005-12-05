@@ -314,11 +314,13 @@ if($_GET["aufgabe"]=="change" || $_GET["aufgabe"]=="new"){
 if($_GET["aufgabe"]=="delete"){
    echo"<div style=\"width: 430px\" align=\"center\" class=\"formHead\">Bericht</div>";
    echo"<div style=\"width: 430px\" align=\"center\" class=\"formBody\">";
-      chmod("$ordner", 0777);
-      //Löschen der Bilder
-      for($x=1; $x<=$adm_photo["ap_number"]; $x++){
-         chmod("$ordner/$x.jpg", 0777);
-         if(unlink("$ordner/$x.jpg"))echo"Datei $x.jpg wurde erfolgreich GEL&Ouml;SCHT.<br>";
+      if(file_exists($ordner)){
+      	chmod("$ordner", 0777);
+      	//Löschen der Bilder
+      	for($x=1; $x<=$adm_photo["ap_number"]; $x++){
+        	 chmod("$ordner/$x.jpg", 0777);
+         	if(unlink("$ordner/$x.jpg"))echo"Datei $x.jpg wurde erfolgreich GEL&Ouml;SCHT.<br>";
+      	}	
       }
 
       //Löschen der Daten aus der Datenbank
@@ -330,7 +332,9 @@ if($_GET["aufgabe"]=="delete"){
       if($result)echo"Der zugehörige Datensatz wurde aus der Datenbank GEL&Ouml;SCHT.";
 
       //Löschen der Ordners
-       if(rmdir("$ordner"))echo"Die Veranstaltung Wurde erfolgreich GEL&Ouml;SCHT.<br>";
+       if(file_exists($ordner)){
+       	if(rmdir("$ordner"))echo"Die Veranstaltung Wurde erfolgreich GEL&Ouml;SCHT.<br>";
+       }
        echo"
        <hr width=\"85%\" />
          <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php'\">
