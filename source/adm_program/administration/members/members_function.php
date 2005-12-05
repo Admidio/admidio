@@ -54,7 +54,7 @@ if($_GET["mode"] == 1)
    <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
    <html>
    <head>
-      <title>". $g_orga_property['ag_shortname']. " - Messagebox</title>
+      <title>$g_current_organization->longname - Messagebox</title>
       <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
 
       <!--[if gte IE 5.5000]>
@@ -246,7 +246,7 @@ elseif($_GET["mode"] == 4)
 {
    // nur Webmaster duerfen User neue Zugangsdaten zuschicken
    // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
-   if(!hasRole("Webmaster") || $g_orga_property['ag_mail_extern'] == 1)
+   if(!hasRole("Webmaster") || $g_current_organization->mail_extern == 1)
    {
       $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
       header($location);
@@ -256,7 +256,7 @@ elseif($_GET["mode"] == 4)
    $user     = new CUser;
    $user->GetUser($_GET['user_id'], $g_adm_con);
 
-	if($g_orga_property['ag_mail_extern'] != 1)
+	if($g_current_organization->mail_extern != 1)
 	{
 		// neues Passwort generieren
 		$password = substr(md5(time()), 0, 8);
@@ -268,8 +268,8 @@ elseif($_GET["mode"] == 4)
 		$result = mysql_query($sql, $g_adm_con);
 		db_error($result);
 
-		mail("$user->m_mail", "Logindaten für ". $g_orga_property['ag_homepage'], "Hallo $user->m_vorname,\n\ndu erhälst deine ".
-			"Logindaten für ". $g_orga_property['ag_homepage']. ".\n\nBenutzername: $user->m_login\nPasswort: $password\n\n" .
+		mail("$user->m_mail", "Logindaten für ". $g_current_organization->homepage, "Hallo $user->m_vorname,\n\ndu erhälst deine ".
+			"Logindaten für $g_current_organization->homepage.\n\nBenutzername: $user->m_login\nPasswort: $password\n\n" .
 			"Das Passwort wurde automatisch generiert.\nDu solltest es nach dem Login in deinem Profil ändern.\n\n" .
 			"Viele Grüße\nDie Webmaster", "From: webmaster@$g_domain");
 

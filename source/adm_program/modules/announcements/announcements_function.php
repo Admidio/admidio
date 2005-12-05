@@ -72,7 +72,7 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
 		{
 		   $sql = "INSERT INTO ". TBL_ANNOUNCEMENTS. " (aa_global, aa_ag_shortname, aa_au_id, aa_timestamp,
 		                                            aa_ueberschrift, aa_beschreibung)
-		                             VALUES ($global, '$g_organization', '$g_user_id', '$act_date',
+		                             VALUES ($global, '$g_organization', '$g_current_user->id', '$act_date',
 		                                     {0}, {1})";
 		   $sql    = prepareSQL($sql, array($headline, $content));
 		   $result = mysql_query($sql, $g_adm_con);
@@ -84,7 +84,7 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
 		                                        , aa_ueberschrift   = {0}
 		                                        , aa_beschreibung   = {1}
 		                                        , aa_last_change    = '$act_date'
-		                                        , aa_last_change_id = $g_user_id
+		                                        , aa_last_change_id = $g_current_user->id
 		            WHERE aa_id = {2}";
 		   $sql    = prepareSQL($sql, array($headline, $content, $_GET['aa_id']));
 		   $result = mysql_query($sql, $g_adm_con);

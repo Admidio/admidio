@@ -93,7 +93,7 @@ if($_GET["mode"] == 1)
       db_error($result);
 
       // nur ausfuehren, wenn E-Mails auch unterstuetzt werden
-      if($g_orga_property['ag_mail_extern'] != 1)
+      if($g_current_organization->mail_extern != 1)
       {
          mail("$user_row->anu_mail", "Anmeldung auf $g_homepage", "Hallo $user_row->anu_vorname,\n\ndeine Anmeldung auf $g_homepage ".
               "wurde bestätigt.\n\nNun kannst du dich mit deinem Benutzernamen : $user_row->anu_login\nund dem Passwort auf der Homepage ".
@@ -113,7 +113,7 @@ elseif($_GET["mode"] == 3)
    <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
    <html>
    <head>
-      <title>". $g_orga_property['ag_shortname']. " - Messagebox</title>
+      <title>$g_current_organization->longname - Messagebox</title>
       <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
 
       <!--[if gte IE 5.5000]>

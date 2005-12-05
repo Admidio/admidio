@@ -43,7 +43,7 @@ if(!isset($_POST['login']))
 /*------------------------------------------------------------*/
 // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
 /*------------------------------------------------------------*/
-if(!editUser() && $_GET['user_id'] != $g_user_id)
+if(!editUser() && $_GET['user_id'] != $g_current_user->id)
 {
    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
    header($location);
@@ -219,7 +219,7 @@ if($_GET['user_id'] != 0 && $_GET['new_user'] == 0)
       $sql = $sql. " {12} ";
 
    $sql = $sql. "             , au_last_change    = '$act_date'
-                              , au_last_change_id = $g_user_id
+                              , au_last_change_id = $g_current_user->id
             WHERE au_id = {13}";
    $sql    = prepareSQL($sql, array($_POST['name'], $_POST['vorname'], $_POST['adresse'],
                $_POST['plz'], $_POST['ort'], $_POST['land'], $_POST['tel1'], $_POST['tel2'],
@@ -356,7 +356,7 @@ if($_GET['new_user'] == 1 && $_GET['user_id'] > 0)
    db_error($result);
 
    // nur ausfuehren, wenn E-Mails auch unterstuetzt werden
-   if($g_orga_property['ag_mail_extern'] != 1)
+   if($g_current_organization->mail_extern != 1)
    {
       mail($_POST['mail'], "Anmeldung auf $g_homepage", "Hallo ". $_POST['vorname']. ",\n\ndeine Anmeldung auf $g_homepage ".
            "wurde bestätigt.\n\nNun kannst du dich mit deinem Benutzernamen : ". $_POST['login']. "\nund dem Passwort auf der Homepage ".

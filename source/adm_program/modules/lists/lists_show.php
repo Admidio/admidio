@@ -222,7 +222,7 @@ if($_GET["mode"] != "csv")
    <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
    <html>
    <head>
-      <title>". $g_orga_property['ag_shortname']. " - Liste - ". $_GET["rolle"]. "</title>
+      <title>$g_current_organization->longname - Liste - ". $_GET["rolle"]. "</title>
       <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
 
       <!--[if gte IE 5.5000]>
@@ -379,7 +379,7 @@ for($j = 0; $j < $max_count; $j++)
                      case "au_mail":
                         if($_GET["mode"] == "html")
                         {
-                           if($g_orga_property['ag_mail_extern'] == 1)
+                           if($g_current_organization->mail_extern == 1)
                               $content = "<a href=\"mailto:". $row[$i]. "\">". $row[$i]. "</a>";
                            else
                               $content = "<a href=\"../../adm_program/modules/mail/mail.php?au_id=". $row[0]. "\">". $row[$i]. "</a>";

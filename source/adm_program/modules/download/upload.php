@@ -74,7 +74,7 @@ require("../../system/session_check_login.php");
    <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
    <html>
    <head>
-      <title>". $g_orga_property['ag_shortname']. " - Dateien hochladen</title>
+      <title>$g_current_organization->longname - Dateien hochladen</title>
       <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
 
       <!--[if gte IE 5.5000]>

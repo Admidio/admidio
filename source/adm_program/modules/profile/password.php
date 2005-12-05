@@ -32,7 +32,7 @@ require("../../system/common.php");
 require("../../system/session_check_login.php");
  
 // nur Webmaster d&uuml;rfen fremde Passwoerter aendern
-if(!hasRole("Webmaster") && $g_user_id != $_GET['user_id'])
+if(!hasRole("Webmaster") && $g_current_user->id != $_GET['user_id'])
 {
    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
    header($location);

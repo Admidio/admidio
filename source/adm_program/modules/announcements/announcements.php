@@ -44,7 +44,7 @@ if(!array_key_exists("start", $_GET))
 if(!array_key_exists("headline", $_GET))
    $_GET["headline"] = "Ankündigungen";
 
-if($g_orga_property['ag_bbcode'] == 1)
+if($g_current_organization->bbcode == 1)
 {
    // Klasse fuer BBCode
    $bbcode = new ubbParser();
@@ -55,13 +55,13 @@ echo "
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
 <html>
 <head>
-   <title>". $g_orga_property['ag_shortname']. " - ". $_GET["headline"]. "</title>
+   <title>$g_current_organization->longname - ". $_GET["headline"]. "</title>
    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">";
 
-if($g_orga_property['ag_enable_rss'] == 1)
+if($g_current_organization->enable_rss == 1)
 {
 echo "
-   <link type=\"application/rss+xml\" rel=\"alternate\" title=\"$g_orga_property[ag_longname] - Ankuendigungen\" href=\"$g_root_path/adm_program/modules/announcements/rss_announcements.php\">";
+   <link type=\"application/rss+xml\" rel=\"alternate\" title=\"$g_current_organization->longname - Ankuendigungen\" href=\"$g_root_path/adm_program/modules/announcements/rss_announcements.php\">";
 };
 
 echo "
@@ -219,7 +219,7 @@ require("../../../adm_config/body_top.php");
 
             <div style=\"margin: 8px 4px 4px 4px; text-align: left;\">";
                // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
-               if($g_orga_property['ag_bbcode'] == 1)
+               if($g_current_organization->bbcode == 1)
                   echo strSpecialChars2Html($bbcode->parse($row->aa_beschreibung));
                else
                   echo nl2br(strSpecialChars2Html($row->aa_beschreibung));

@@ -72,7 +72,7 @@ echo "
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
 <html>
 <head>
-   <title>". $g_orga_property['ag_shortname']. " - ". $_GET["headline"]. "</title>
+   <title>$g_current_organization->longname - ". $_GET["headline"]. "</title>
    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
 
    <!--[if gte IE 5.5000]>
@@ -110,7 +110,7 @@ require("../../../adm_config/body_top.php");
 
          <div style=\"margin-top: 6px;\">
             <div style=\"text-align: right; width: 25%; float: left;\">Beschreibung:";
-               if($g_orga_property['ag_bbcode'] == 1)
+               if($g_current_organization->bbcode == 1)
                {
                   echo "<br><br>
                   <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=400,left=310,top=200,scrollbars=yes')\" tabindex=\"6\">Text formatieren</a>";

@@ -43,7 +43,7 @@ else
 if(!array_key_exists('user_id', $_GET))
 {
    // wenn nichts uebergeben wurde, dann eigene Daten anzeigen
-   $a_user_id = $g_user_id;
+   $a_user_id = $g_current_user->id;
    $edit_user = true;
 }
 else
@@ -85,7 +85,7 @@ echo "
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
 <html>
 <head>
-   <title>". $g_orga_property['ag_shortname']. " - Profil</title>
+   <title>$g_current_organization->longname - Profil</title>
    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
 
    <!--[if gte IE 5.5000]>
@@ -100,7 +100,7 @@ require("../../../adm_config/body_top.php");
    <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
 
       <div class=\"formHead\">";
-         if($a_user_id == $g_user_id)
+         if($a_user_id == $g_current_user->id)
             echo strspace("Mein Profil", 2);
          else
             echo strspace("Profil von ". $user->m_vorname. " ". $user->m_name, 1);
@@ -152,10 +152,10 @@ require("../../../adm_config/body_top.php");
                      echo "<br />
                      <span style=\"font-size: 8pt;\">( <a href=\"$map_url\" target=\"_blank\">Stadtplan</a>";
 
-                     if($g_user_id != $a_user_id)
+                     if($g_current_user->id != $a_user_id)
                      {
                         $own_user = new CUser;
-                        $own_user->GetUser($g_user_id, $g_adm_con);
+                        $own_user->GetUser($g_current_user->id, $g_adm_con);
 
                         if(strlen($own_user->m_adresse) > 0
                         && (  strlen($own_user->m_plz)  > 0
@@ -235,7 +235,7 @@ require("../../../adm_config/body_top.php");
                <div style=\"margin-top: 10px; margin-left: 30%; text-align: left\">";
                   if(strlen($user->m_mail) > 0)
                   {
-                     if($g_orga_property['ag_mail_extern'] == 1)
+                     if($g_current_organization->mail_extern == 1)
                         $mail_link = "mailto:$user->m_mail";
                      else
                         $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?au_id=$user->m_id";

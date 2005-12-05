@@ -133,7 +133,7 @@ if ($count_user == 0)
    while($row = mysql_fetch_object($result))
    {
 		// nur ausfuehren, wenn E-Mails auch unterstuetzt werden
-		if($g_orga_property['ag_mail_extern'] != 1)
+		if($g_current_organization->mail_extern != 1)
       {
          mail("$row->au_mail", "Anmeldung", "Es hat sich ein neuer User auf ".
               "$g_homepage angemeldet\n\nNachname: ". $_POST["nachname"]. "\nVorname:  ". $_POST["vorname"]. "\n".

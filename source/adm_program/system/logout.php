@@ -69,7 +69,7 @@ if($g_forum == 1)
 
    // User nun in Foren-Tabelle suchen und dort Session löschen
    $sql    = "SELECT user_id FROM ". $g_forum_praefix. "_users WHERE username LIKE {0} ";
-   $sql    = prepareSQL($sql, array($g_nickname));
+   $sql    = prepareSQL($sql, array($g_current_user->login_name));
    $result = mysql_query($sql, $g_forum_con);
    db_error($result);
 
