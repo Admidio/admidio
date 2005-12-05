@@ -88,19 +88,27 @@
          $ordner = "../../../adm_my_files/photos/".$adm_photo["ap_begin"]."_".$adm_photo["ap_id"];
          //Kontrollieren ob der entsprechende Ordner in adm_my_files existiert
          //wenn ja Zeile ausgeben
-         if(file_exists($ordner)){
+         if(file_exists($ordner) || ($g_session_valid && editPhoto())){
          echo "
          <tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\">
-            <td style=\"text-align: left;\">&nbsp;<a target=\"_self\" href=\"thumbnails.php?ap_id=".$adm_photo["ap_id"]."\">".$adm_photo["ap_name"]."</a></td>
+            <td style=\"text-align: left;\">&nbsp;";
+				//Warnung für Für Leute mit Fotorechten
+				if(!file_exists($ordner) && ($g_session_valid && editPhoto()))
+					echo"<img src=\"$g_root_path/adm_program/images/warning16.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Warnhinweis\" title=\"Warnhinweis\"
+                     onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=folder_not_found','Message','width=500, height=230, left=310,top=200,scrollbars=no')\">&nbsp;";
+				echo"<a target=\"_self\" href=\"thumbnails.php?ap_id=".$adm_photo["ap_id"]."\">".$adm_photo["ap_name"]."</a></td>
             <td style=\"text-align: center;\">".mysqldate("d.m.y", $adm_photo["ap_begin"])."</td>";//Anzeige beginn datum im deutschen Format
        		echo"<td style=\"text-align: center;\">".$adm_photo["ap_number"]."</td>
             <td style=\"text-align: center;\">".mysqldate("d.m.y", $adm_photo["ap_last_change"])."</td>";//Anzeige online seitdatum im deutschen Format
             if ($g_session_valid && editPhoto()){
-               echo"<td style=\"text-align: center;\">
-                  <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?ap_id=".$adm_photo["ap_id"]."\">
+               echo"<td style=\"text-align: center;\">";
+                  if(file_exists($ordner)){
+                  echo"
+						<a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?ap_id=".$adm_photo["ap_id"]."\">
                      <img src=\"$g_root_path/adm_program/images/photo.png\" border=\"0\" alt=\"Photoupload\" title=\"Photoupload\"></a>&nbsp;
                   <a href=\"$g_root_path/adm_program/modules/photos/event.php?ap_id=".$adm_photo["ap_id"]."&aufgabe=change\">
                      <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>&nbsp;";
+            		}
                   $err_text= $adm_photo["ap_name"]."(Beginn: ".mysqldate("d.m.y", $adm_photo["ap_begin"]).")";
                   echo"
                   <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_veranst&err_text=$err_text&err_head=Veranstaltung L&ouml;schen&button=2&url=". urlencode("$g_root_path/adm_program/modules/photos/event.php?aufgabe=delete&ap_id=".$adm_photo["ap_id"].""). "\">
