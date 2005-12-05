@@ -223,7 +223,7 @@ function getErrorText($error_code, $error_text)
           break;
 
       case "write_access":
-       if($g_orga_property['ag_mail_extern'] == 1)
+       if($g_current_organization->mail_extern == 1)
          $mail_link = "mailto:webmaster@$g_domain";
        else
          $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?rolle=Webmaster";

@@ -75,7 +75,7 @@ if ($_GET['ar_id'] != 0)
       // Rolle Webmaster darf nur vom Webmaster selber erstellt oder gepflegt werden
       if($row_ar->ar_funktion == "Webmaster" && !hasRole("Webmaster"))
       {
-         if($g_user_id != $row_ar->ar_au_id)
+         if($g_current_user->id != $row_ar->ar_au_id)
          {
             $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
             header($location);
@@ -116,7 +116,7 @@ echo "
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
 <html>
 <head>
-   <title>". $g_orga_property['ag_shortname']. " - Rolle</title>
+   <title>$g_current_organization->longname - Rolle</title>
    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
 
    <!--[if gte IE 5.5000]>

@@ -38,9 +38,9 @@ class TblOrganizations
    var $enable_rss;
    var $bbcode;
 
-   function getOrganization($id, $connection)
+   function getOrganization($shortname, $connection)
    {
-      $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. " WHERE ag_id = $id";
+      $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. " WHERE ag_shortname = '$shortname'";
 
       $result = mysql_query($sql, $connection);
 

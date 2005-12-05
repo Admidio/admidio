@@ -74,7 +74,7 @@ echo "
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
 <html>
 <head>
-   <title>". $g_orga_property['ag_shortname']. " - Benutzerverwaltung</title>
+   <title>$g_current_organization->longname - Benutzerverwaltung</title>
    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
 
    <!--[if gte IE 5.5000]>
@@ -127,7 +127,7 @@ require("../../../adm_config/body_top.php");
       <table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\">
          <tr>
             <th class=\"tableHeader\" align=\"right\">Nr.</th>
-            <th class=\"tableHeader\" align=\"center\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/person.png\" alt=\"Mitglied bei ". $g_orga_property['ag_longname']. "\" title=\"Mitglied bei ". $g_orga_property['ag_longname']. "\" border=\"0\"></th>
+            <th class=\"tableHeader\" align=\"center\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/person.png\" alt=\"Mitglied bei $g_current_organization->longname\" title=\"Mitglied bei $g_current_organization->longname\" border=\"0\"></th>
             <th class=\"tableHeader\" align=\"left\">&nbsp;Name</th>
             <th class=\"tableHeader\" align=\"center\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/mail.png\" alt=\"E-Mail\" title=\"E-Mail\"></th>
             <th class=\"tableHeader\" align=\"center\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/globe.png\" alt=\"Homepage\" title=\"Homepage\"></th>
@@ -156,7 +156,7 @@ require("../../../adm_config/body_top.php");
                   <td align=\"right\">$i&nbsp;</td>
                   <td align=\"center\">";
                      if($row_count[0] > 0)
-                        echo "<a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->au_id\"><img src=\"$g_root_path/adm_program/images/person.png\" alt=\"Mitglied bei ". $g_orga_property['ag_longname']. "\" title=\"Mitglied bei ". $g_orga_property['ag_longname']. "\" border=\"0\"></a>";
+                        echo "<a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->au_id\"><img src=\"$g_root_path/adm_program/images/person.png\" alt=\"Mitglied bei $g_current_organization->longname\" title=\"Mitglied bei $g_current_organization->longname\" border=\"0\"></a>";
                      else
                         echo "&nbsp;";
                   echo "</td>
@@ -164,7 +164,7 @@ require("../../../adm_config/body_top.php");
                   <td align=\"center\">";
                      if(strlen($row->au_mail) > 0)
                      {
-                        if($g_orga_property['ag_mail_extern'] == 1)
+                        if($g_current_organization->mail_extern == 1)
                            $mail_link = "mailto:$row->au_mail";
                         else
                            $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?au_id=$row->au_id";
@@ -189,7 +189,7 @@ require("../../../adm_config/body_top.php");
                   {
                      if($row_count[0] > 0)
                      {
-                       	if(strlen($row->au_login) > 0 && $g_orga_property['ag_mail_extern'] != 1)
+                       	if(strlen($row->au_login) > 0 && $g_current_organization->mail_extern != 1)
                        	{
                        		// Link um E-Mail mit neuem Passwort zu zuschicken
 								   // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden

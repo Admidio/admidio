@@ -35,11 +35,11 @@ function db_error ($result, $inline = 0)
       $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=mysql&err_text=". mysql_error();
       header($location);
       exit();
-   }  
+   }
    elseif(!$result && $inline == 1)
    {
       echo "Error: ". mysql_error();
-      exit();   
+      exit();
    }
 }
 
@@ -81,30 +81,30 @@ function getHttpReferer()
 {
    global $g_root_path;
    global $g_main_page;
-  
+
    $exception = 0;
-   
+
    if($exception == 0)
       $exception = substr_count($_SERVER['HTTP_REFERER'], "menue.htm");
    if($exception == 0)
       $exception = substr_count($_SERVER['HTTP_REFERER'], "status.php");
    if($exception == 0)
-      $exception = substr_count($_SERVER['HTTP_REFERER'], "err_msg.php");      
+      $exception = substr_count($_SERVER['HTTP_REFERER'], "err_msg.php");
    if($exception == 0)
-      $exception = substr_count($_SERVER['HTTP_REFERER'], "web.htm");   
+      $exception = substr_count($_SERVER['HTTP_REFERER'], "web.htm");
    if($exception == 0)
-      $exception = substr_count($_SERVER['HTTP_REFERER'], "index.htm");       
+      $exception = substr_count($_SERVER['HTTP_REFERER'], "index.htm");
    if($exception == 0)
-      $exception = substr_count($_SERVER['HTTP_REFERER'], "login.php");       
+      $exception = substr_count($_SERVER['HTTP_REFERER'], "login.php");
    if($exception == 0)
-      $exception = substr_count($_SERVER['HTTP_REFERER'], "forum_hinweis.php");       
+      $exception = substr_count($_SERVER['HTTP_REFERER'], "forum_hinweis.php");
    if($exception == 0)
    {
       $tmp_url = $g_root_path. "/";
       if(strcmp($_SERVER['HTTP_REFERER'], $tmp_url) == 0)
-         $exception = 1;      
+         $exception = 1;
    }
-     
+
    if($exception == 0)
       return $_SERVER['HTTP_REFERER'];
    else
@@ -116,27 +116,26 @@ function getHttpReferer()
 
 function hasRole($function, $user_id = 0)
 {
-   global $g_user_id;
+   global $g_current_user_id;
    global $g_adm_con;
    global $g_organization;
-   
+
    if($user_id == 0)
-      $user_id = $g_user_id;
-   
+      $user_id = $g_current_user_id;
+
    $sql    = "SELECT *
                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
                WHERE am_au_id        = $user_id
                  AND am_valid        = 1
                  AND am_ar_id        = ar_id
                  AND ar_ag_shortname = '$g_organization'
-                 AND ar_funktion     = '$function' 
+                 AND ar_funktion     = '$function'
                  AND ar_valid        = 1 ";
-
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
-   
+
    $user_found = mysql_num_rows($result);
-   
+
    if($user_found == 1)
       return 1;
    else
@@ -147,12 +146,12 @@ function hasRole($function, $user_id = 0)
 
 function isModerator($user_id = 0)
 {
-   global $g_user_id;
+   global $g_current_user_id;
    global $g_adm_con;
    global $g_organization;
 
    if($user_id == 0)
-      $user_id = $g_user_id;
+      $user_id = $g_current_user_id;
 
    $sql    = "SELECT *
                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
@@ -161,9 +160,7 @@ function isModerator($user_id = 0)
                  AND am_ar_id             = ar_id
                  AND ar_ag_shortname      = '$g_organization'
                  AND ar_r_moderation      = 1
-                 AND ar_valid             = 1
-                   ";
-
+                 AND ar_valid             = 1 ";
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
 
@@ -180,19 +177,18 @@ function isModerator($user_id = 0)
 
 function isGroupLeader($role_id=0)
 {
-   global $g_user_id;
+   global $g_current_user_id;
    global $g_adm_con;
    global $g_organization;
 
    $sql    = "SELECT *
                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-               WHERE am_au_id             = $g_user_id
+               WHERE am_au_id             = $g_current_user_id
                  AND am_valid             = 1
                  AND am_leiter            = 1
                  AND am_ar_id             = ar_id
                  AND ar_ag_shortname      = '$g_organization'
-                 AND ar_valid             = 1
-					";
+                 AND ar_valid             = 1 ";
    if ($role_id!=0)
    	$sql .= "  AND am_ar_id					= '$role_id'";
 
@@ -211,20 +207,18 @@ function isGroupLeader($role_id=0)
 
 function editUser()
 {
-   global $g_user_id;
+   global $g_current_user_id;
    global $g_adm_con;
    global $g_organization;
 
    $sql    = "SELECT *
                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-               WHERE am_au_id             = $g_user_id
+               WHERE am_au_id             = $g_current_user_id
                  AND am_valid             = 1
                  AND am_ar_id             = ar_id
                  AND ar_ag_shortname      = '$g_organization'
                  AND ar_r_user_bearbeiten = 1
-                 AND ar_valid             = 1
-                   ";
-
+                 AND ar_valid             = 1 ";
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
 
@@ -240,19 +234,18 @@ function editUser()
 
 function editDate()
 {
-   global $g_user_id;
+   global $g_current_user_id;
    global $g_adm_con;
    global $g_organization;
 
    $sql    = "SELECT *
                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-               WHERE am_au_id             = $g_user_id
+               WHERE am_au_id             = $g_current_user_id
                  AND am_ar_id             = ar_id
                  AND am_valid             = 1
                  AND ar_ag_shortname      = '$g_organization'
                  AND ar_r_termine         = 1
                  AND ar_valid             = 1 ";
-
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
 
@@ -268,19 +261,18 @@ function editDate()
 
 function editPhoto()
 {
-   global $g_user_id;
+   global $g_current_user_id;
    global $g_adm_con;
    global $g_organization;
 
    $sql    = "SELECT *
                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-               WHERE am_au_id             = $g_user_id
+               WHERE am_au_id             = $g_current_user_id
                  AND am_ar_id             = ar_id
                  AND am_valid             = 1
                  AND ar_ag_shortname      = '$g_organization'
                  AND ar_r_foto            = 1
                  AND ar_valid             = 1 ";
-
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
 
@@ -296,19 +288,18 @@ function editPhoto()
 
 function editDownload()
 {
-   global $g_user_id;
+   global $g_current_user_id;
    global $g_adm_con;
    global $g_organization;
 
    $sql    = "SELECT *
                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-               WHERE am_au_id             = $g_user_id
+               WHERE am_au_id             = $g_current_user_id
                  AND am_ar_id             = ar_id
                  AND am_valid             = 1
                  AND ar_ag_shortname      = '$g_organization'
                  AND ar_r_download        = 1
                  AND ar_valid             = 1 ";
-
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
 

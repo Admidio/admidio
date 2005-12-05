@@ -55,7 +55,7 @@ if($_GET["mode"] == 2 || $_GET["mode"] == 3)
 
       $row_date = mysql_fetch_object($result);
 
-      if($g_user_id != $row_date->at_au_id)
+      if($g_current_user->id != $row_date->at_au_id)
       {
          $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=noforeigndel";
          header($location);
@@ -127,7 +127,7 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
             {
                $sql = "INSERT INTO ". TBL_DATES. " (at_global, at_ag_shortname, at_au_id, at_timestamp, at_ueberschrift,
                                                  at_von, at_bis, at_ort, at_beschreibung)
-                                         VALUES ($global, '$g_organization', '$g_user_id', '$act_date', {0},
+                                         VALUES ($global, '$g_organization', '$g_current_user->id', '$act_date', {0},
                                                  '$dt_datum_von', '$dt_datum_bis', {1}, {2})";
             }
             else
@@ -139,7 +139,7 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
                                              , at_ort            = {1}
                                              , at_beschreibung   = {2}
                                              , at_last_change    = '$act_date'
-                                             , at_last_change_id = $g_user_id
+                                             , at_last_change_id = $g_current_user->id
                         WHERE at_id = {3}";
             }
             $sql    = prepareSQL($sql, array($headline, $place, $content, $_GET['at_id']));

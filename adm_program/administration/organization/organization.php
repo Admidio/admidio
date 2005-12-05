@@ -50,7 +50,7 @@ echo "
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
 <html>
 <head>
-   <title>". $g_orga_property['ag_shortname']. " - bearbeiten</title>
+   <title>$g_current_organization->longname - bearbeiten</title>
    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
 
    <!--[if gte IE 5.5000]>
@@ -64,26 +64,26 @@ require("../../../adm_config/body_top.php");
    echo "
    <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
 
-   <form action=\"organization_function.php?ag_id=". $g_orga_property['ag_id']. "&amp;url=$url\" method=\"post\" name=\"Gruppierung bearbeiten\">
+   <form action=\"organization_function.php?ag_id=$g_current_organization->id&amp;url=$url\" method=\"post\" name=\"Gruppierung bearbeiten\">
 
-      <div class=\"formHead\">". $g_orga_property['ag_longname']. " bearbeiten</div>
+      <div class=\"formHead\">$g_current_organization->longname bearbeiten</div>
       <div class=\"formBody\">
       	 <div>
             <div style=\"text-align: right; width: 40%; float: left;\">Name (Abk.):</div>
             <div style=\"text-align: left; margin-left: 42%;\">
-               <input type=\"text\" name=\"shortname\" class=\"readonly\" readonly size=\"10\" maxlength=\"10\" value=\"". $g_orga_property['ag_shortname']. "\">
+               <input type=\"text\" name=\"shortname\" class=\"readonly\" readonly size=\"10\" maxlength=\"10\" value=\"$g_current_organization->longname\">
             </div>
          </div>
          <div style=\"margin-top: 6px;\">
             <div style=\"text-align: right; width: 40%; float: left;\">Name (lang):</div>
             <div style=\"text-align: left; margin-left: 42%;\">
-               <input type=\"text\" name=\"longname\" size=\"30\" maxlength=\"60\" value=\"". $g_orga_property['ag_longname']. "\">
+               <input type=\"text\" name=\"longname\" size=\"30\" maxlength=\"60\" value=\"$g_current_organization->longname\">
             </div>
          </div>
          <div style=\"margin-top: 6px;\">
             <div style=\"text-align: right; width: 40%; float: left;\">Homepage:</div>
             <div style=\"text-align: left; margin-left: 42%;\">
-               <input type=\"text\" name=\"homepage\" size=\"30\" maxlength=\"30\" value=\"". $g_orga_property['ag_homepage']. "\">
+               <input type=\"text\" name=\"homepage\" size=\"30\" maxlength=\"30\" value=\"$g_current_organization->homepage\">
             </div>
          </div>";
 
@@ -102,14 +102,14 @@ require("../../../adm_config/body_top.php");
                <div style=\"text-align: left; margin-left: 42%;\">
                   <select size=\"1\" name=\"mutter\">
                      <option value=\" \" ";
-                        if(strlen($g_orga_property['ag_mother']) == 0)
+                        if(strlen($g_current_organization->mother) == 0)
                            echo " selected ";
                      echo ">- Bitte w&auml;hlen -</option>";
 
                      while($row = mysql_fetch_object($result))
                      {
                         echo "<option value=\"$row->ag_shortname\"";
-                           if($g_orga_property['ag_mother'] == $row->ag_shortname)
+                           if($g_current_organization->mother == $row->ag_shortname)
                               echo " selected ";
                         echo ">";
 
@@ -128,7 +128,7 @@ require("../../../adm_config/body_top.php");
             <div style=\"text-align: right; width: 40%; float: left;\">BBCode zulassen:</div>
             <div style=\"text-align: left; margin-left: 42%;\">
                <input type=\"checkbox\" id=\"bbcode\" name=\"bbcode\" ";
-               if($g_orga_property['ag_bbcode'] == 1)
+               if($g_current_organization->bbcode == 1)
                   echo " checked ";
                echo " value=\"1\" />
                <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
@@ -140,7 +140,7 @@ require("../../../adm_config/body_top.php");
             <div style=\"text-align: right; width: 40%; float: left;\">Externes Mailprogramm:</div>
             <div style=\"text-align: left; margin-left: 42%;\">
                <input type=\"checkbox\" id=\"mail_extern\" name=\"mail_extern\" ";
-               if($g_orga_property['ag_mail_extern'] == 1)
+               if($g_current_organization->mail_extern == 1)
                   echo " checked ";
                echo " value=\"1\" />
                <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
@@ -151,7 +151,7 @@ require("../../../adm_config/body_top.php");
          <div style=\"margin-top: 6px;\">
             <div style=\"text-align: right; width: 40%; float: left;\">Max. Attachmentgr&ouml;&szlig;e:</div>
             <div style=\"text-align: left; margin-left: 42%;\">
-               <input type=\"text\" name=\"attachment_size\" size=\"4\" maxlength=\"4\" value=\"". $g_orga_property['ag_mail_attachment_size']. "\"> KB
+               <input type=\"text\" name=\"attachment_size\" size=\"4\" maxlength=\"4\" value=\"$g_current_organization->mail_attachement_size\"> KB
                <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=attachmentgroesse','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
             </div>
@@ -161,7 +161,7 @@ require("../../../adm_config/body_top.php");
             <div style=\"text-align: right; width: 40%; float: left;\">Aktiviere RSS-Feeds:</div>
             <div style=\"text-align: left; margin-left: 42%;\">
                <input type=\"checkbox\" id=\"enable_rss\" name=\"enable_rss\" ";
-               if($g_orga_property['ag_enable_rss'] == 1)
+               if($g_current_organization->enable_rss == 1)
                   echo " checked ";
                echo " value=\"1\" />
                <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"

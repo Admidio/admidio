@@ -51,7 +51,7 @@ else
    $url = urlencode(getHttpReferer());
 
 // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
-if(!editUser() && $_GET['user_id'] != $g_user_id)
+if(!editUser() && $_GET['user_id'] != $g_current_user->id)
 {
    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
    header($location);
@@ -116,7 +116,7 @@ echo "
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
 <html>
 <head>
-   <title>". $g_orga_property['ag_shortname']. " - Profil bearbeiten</title>
+   <title>$g_current_organization->longname - Profil bearbeiten</title>
    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
    
    <!--[if gte IE 5.5000]>
@@ -134,7 +134,7 @@ if($popup == 0)
       if($a_new_user && $a_user_id > 0) echo "&amp;pw=$user->m_password";
       echo "\" method=\"post\" name=\"ProfilAnzeigen\">
       <div class=\"formHead\">";
-         if($a_user_id == $g_user_id)
+         if($a_user_id == $g_current_user->id)
             echo strspace("Mein Profil", 2);
          else if($a_new_user)
             echo strspace("Neuer Benutzer", 2);
@@ -183,7 +183,7 @@ if($popup == 0)
             </div>";
 
             // eigenes Passwort aendern, nur Webmaster duerfen Passwoerter von anderen aendern
-            if(hasRole('Webmaster') || $g_user_id == $a_user_id )
+            if(hasRole('Webmaster') || $g_current_user->id == $a_user_id )
             {
                echo "<div style=\"margin-top: 6px;\">
                   <div style=\"text-align: right; width: 30%; float: left;\">Passwort:</div>

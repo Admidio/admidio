@@ -36,7 +36,7 @@ require("../../system/bbcode.php");
 require("../../system/rss_class.php");
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist...
-if($g_orga_property['ag_enable_rss'] != 1)
+if($g_current_organization->enable_rss != 1)
 {
    $location = "location: $g_root_path/adm_program/system/err_msg.php?url=home&err_code=rss_disabled";
    header($location);
@@ -44,7 +44,7 @@ if($g_orga_property['ag_enable_rss'] != 1)
 }
 
 // Nachschauen ob BB-Code aktiviert ist...
-if($g_orga_property['ag_bbcode'] == 1)
+if($g_current_organization->bbcode == 1)
 {
    //BB-Parser initialisieren
    $bbcode = new ubbParser();
@@ -93,7 +93,7 @@ $sql = "SELECT * FROM ". TBL_DATES. "
 // ab hier wird der RSS-Feed zusammengestellt
 
 // Ein RSSfeed-Objekt erstellen
-$rss=new RSSfeed("http://$g_orga_property[ag_homepage]","$g_orga_property[ag_longname] - Termine","Die 10 naechsten Termine");
+$rss=new RSSfeed("http://$g_current_organization->homepage","$g_current_organization->longname - Termine","Die 10 naechsten Termine");
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
 while($row = mysql_fetch_object($result))
@@ -137,7 +137,7 @@ while($row = mysql_fetch_object($result))
                   $description = $description. "<br /><br />Treffpunkt:&nbsp;". strSpecialChars2Html($row->at_ort);
                }
 
-        if($g_orga_property['ag_bbcode'] == 1)
+        if($g_current_organization->bbcode == 1)
         {
         	  $description = $description. "<br /><br />". strSpecialChars2Html($bbcode->parse($row->at_beschreibung));
         }
@@ -146,7 +146,7 @@ while($row = mysql_fetch_object($result))
            $description = $description. "<br /><br />". nl2br(strSpecialChars2Html($row->at_beschreibung));
         }
 
-        $description = $description. "<br /><br /><a href=\"$link\">Link auf $g_orga_property[ag_homepage]</a>";
+        $description = $description. "<br /><br /><a href=\"$link\">Link auf $g_current_organization->homepage</a>";
         $description = $description. "<br /><br /><i>Angelegt von ". strSpecialChars2Html($user->au_vorname). " ". strSpecialChars2Html($user->au_name);
         $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->at_timestamp). "</i>";
 

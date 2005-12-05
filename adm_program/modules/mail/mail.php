@@ -39,7 +39,7 @@ require("../../system/tbl_user.php");
 
 // Prüfungen, ob die Seite regulaer aufgerufen wurde
 
-if($g_orga_property['ag_mail_extern'] == 1)
+if($g_current_organization->mail_extern == 1)
 {
   // es duerfen oder koennen keine Mails ueber den Server verschickt werden
    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=mail_extern";
@@ -80,10 +80,10 @@ if(!array_key_exists("body", $_GET))
 if(!array_key_exists("kopie", $_GET))
    $_GET["kopie"] = "1";
 
-if($g_user_id != 0)
+if($g_current_user->id != 0)
 {
    $user     = new CUser;
-   $user->GetUser($g_user_id, $g_adm_con);
+   $user->GetUser($g_current_user->id, $g_adm_con);
 }
 
 echo "
@@ -91,7 +91,7 @@ echo "
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
 <html>
 <head>
-   <title>". $g_orga_property['ag_shortname']. " - E-Mail verschicken</title>
+   <title>$g_current_organization->longname - E-Mail verschicken</title>
    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
 
    <!--[if gte IE 5.5000]>
@@ -194,7 +194,7 @@ require("../../../adm_config/body_top.php");
          <div style=\"margin-top: 8px;\">
             <div style=\"text-align: right; width: 70px; float: left;\">Name:</div>
             <div style=\"text-align: left; margin-left: 80px;\">";
-               if($g_user_id != 0)
+               if($g_current_user->id != 0)
                   echo "<input class=\"readonly\" readonly type=\"text\" name=\"name\" size=\"30\" maxlength=\"50\" value=\"$user->m_vorname $user->m_name\">";
                else
                   echo "<input type=\"text\" name=\"name\" size=\"30\" maxlength=\"50\" value=\"\">";
@@ -203,7 +203,7 @@ require("../../../adm_config/body_top.php");
          <div style=\"margin-top: 8px;\">
             <div style=\"text-align: right; width: 70px; float: left;\">E-Mail:</div>
             <div style=\"text-align: left; margin-left: 80px;\">";
-               if($g_user_id != 0)
+               if($g_current_user->id != 0)
                   echo "<input class=\"readonly\" readonly type=\"text\" name=\"mailfrom\" size=\"50\" maxlength=\"50\" value=\"$user->m_mail\">";
                else
                   echo "<input type=\"text\" name=\"mailfrom\" size=\"50\" maxlength=\"50\" value=\"\">";
@@ -229,13 +229,13 @@ require("../../../adm_config/body_top.php");
          </div>";
 
          // Nur eingeloggte User duerfen Attachments mit max 3MB anhaengen...
-         if(($g_session_valid) && ($g_orga_property['ag_mail_attachment_size'] > 0))
+         if(($g_session_valid) && ($g_current_organization->mail_attachement_size > 0))
          {
            echo "
            <div style=\"margin-top: 8px;\">
               <div style=\"text-align: right; width: 70px; float: left;\">Anhang:</div>
               <div style=\"text-align: left; margin-left: 80px;\">
-                 <input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"" . ($g_orga_property['ag_mail_attachment_size'] * 1024) . "\">
+                 <input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"" . ($g_current_organization->mail_attachement_size * 1024) . "\">
                  <input name=\"userfile\" size=\"40\" type=\"file\">
               </div>
            </div>";

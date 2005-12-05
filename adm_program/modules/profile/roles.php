@@ -108,7 +108,7 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
                            ON br.ar_id     = mgl.am_ar_id
                           AND mgl.am_au_id = {0}
                           AND mgl.am_valid = 1
-                        WHERE bm.am_au_id  = $g_user_id
+                        WHERE bm.am_au_id  = $g_current_user->id
                           AND bm.am_valid  = 1
                           AND bm.am_leiter = 1
                           AND br.ar_id     = bm.am_ar_id

@@ -37,7 +37,7 @@ require("../../system/rss_class.php");
 
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist...
-if($g_orga_property['ag_enable_rss'] != 1)
+if($g_current_organization->enable_rss != 1)
 {
    $location = "location: $g_root_path/adm_program/system/err_msg.php?url=home&err_code=rss_disabled";
    header($location);
@@ -45,7 +45,7 @@ if($g_orga_property['ag_enable_rss'] != 1)
 }
 
 // Nachschauen ob BB-Code aktiviert ist...
-if($g_orga_property['ag_bbcode'] == 1)
+if($g_current_organization->bbcode == 1)
 {
    //BB-Parser initialisieren
    $bbcode = new ubbParser();
@@ -88,7 +88,7 @@ db_error($result);
 // ab hier wird der RSS-Feed zusammengestellt
 
 // Ein RSSfeed-Objekt erstellen
-$rss=new RSSfeed("http://$g_orga_property[ag_homepage]","$g_orga_property[ag_longname] - Ankuendigungen","Die 10 neuesten Ankuendigungen");
+$rss=new RSSfeed("http://$g_current_organization->homepage","$g_current_organization->longname - Ankuendigungen","Die 10 neuesten Ankuendigungen");
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
 while($row = mysql_fetch_object($result))
@@ -106,7 +106,7 @@ while($row = mysql_fetch_object($result))
 
         $description 	= "<b>". strSpecialChars2Html($row->aa_ueberschrift). "</b>";
 
-        if($g_orga_property['ag_bbcode'] == 1)
+        if($g_current_organization->bbcode == 1)
         {
         	  $description = $description. "<br /><br />". strSpecialChars2Html($bbcode->parse($row->aa_beschreibung));
         }
@@ -115,7 +115,7 @@ while($row = mysql_fetch_object($result))
            $description = $description. "<br /><br />". nl2br(strSpecialChars2Html($row->aa_beschreibung));
         }
 
-        $description = $description. "<br /><br /><a href=\"$link\">Link auf $g_orga_property[ag_homepage]</a>";
+        $description = $description. "<br /><br /><a href=\"$link\">Link auf $g_current_organization->homepage</a>";
         $description = $description. "<br /><br /><i>Angelegt von ". strSpecialChars2Html($user->au_vorname). " ". strSpecialChars2Html($user->au_name);
         $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->aa_timestamp). "</i>";
 

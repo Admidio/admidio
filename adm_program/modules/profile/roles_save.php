@@ -53,7 +53,7 @@ elseif(isGroupLeader())
    // Alle Rollen auflisten, bei denen das Mitglied Leiter ist
    $sql    = "SELECT ar_id
                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-               WHERE am_au_id  = $g_user_id
+               WHERE am_au_id  = $g_current_user->id
                  AND am_valid  = 1
                  AND am_leiter = 1
                  AND ar_id     = am_ar_id

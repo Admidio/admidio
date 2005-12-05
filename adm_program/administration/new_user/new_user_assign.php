@@ -117,7 +117,7 @@ echo "
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
 <html>
 <head>
-   <title>". $g_orga_property['ag_shortname']. " - Neue User zuordnen</title>
+   <title>$g_current_organization->longname - Neue User zuordnen</title>
    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
 
    <!--[if gte IE 5.5000]>
@@ -185,7 +185,7 @@ echo "
                <td style=\"text-align: left;\">&nbsp;<a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->au_id\">$row->au_name,&nbsp;$row->au_vorname</a></td>
                <td style=\"text-align: left;\">&nbsp;$row->au_login</td>
                <td style=\"text-align: left;\">&nbsp;";
-               if($g_orga_property['ag_mail_extern'] == 1)
+               if($g_current_organization->mail_extern == 1)
                   echo "<a href=\"mailto:$row->au_mail\">";
                else
                   echo "<a href=\"../adm_program/modules/mail/mail.php?au_id=$row->au_id\">";

@@ -116,14 +116,10 @@ if ($user_found >= 1)
       {
          // beim localhost darf keine Domaine uebergeben werden
          setcookie("". TBL_SESSIONS. "", "$user_session", 0, "/");
-         setcookie("". TBL_USERS. "_id", "$user_row->au_id" , 0, "/");
-         setcookie("adm_login",   "$user_row->au_login" , 0, "/");
       }
       else
       {
          setcookie("". TBL_SESSIONS. "", "$user_session" , 0, "/", ".". $g_domain);
-         setcookie("". TBL_USERS. "_id", "$user_row->au_id"   , 0, "/", ".". $g_domain);
-         setcookie("adm_login",   "$user_row->au_login", 0, "/", ".". $g_domain);
       }
 
       // Last-Login speichern

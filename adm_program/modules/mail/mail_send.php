@@ -53,7 +53,7 @@ if(empty($_POST))
    exit();
 }
 
-if($g_orga_property['ag_mail_extern'] == 1)
+if($g_current_organization->mail_extern == 1)
 {
 	// es duerfen oder koennen keine Mails ueber den Server verschickt werden
    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=mail_extern";
@@ -169,7 +169,7 @@ function sendMail($email, $rolle = "")
    else
       $mail_body = $mail_body. "Dir";
 
-   $mail_body = "$mail_body von ". $g_orga_property['ag_homepage']. " folgende Mail geschickt:\nEine Antwort kannst Du an ".
+   $mail_body = "$mail_body von $g_current_organization->homepage folgende Mail geschickt:\nEine Antwort kannst Du an ".
                       $_POST['mailfrom']. " schicken.";
 
    if(!$g_session_valid)

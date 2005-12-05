@@ -25,40 +25,10 @@
  *****************************************************************************/
 
 // Cookies einlesen
-if(isset($_COOKIE["". TBL_SESSIONS. ""]))
-   $g_session_id = $_COOKIE["". TBL_SESSIONS. ""];
+if(isset($_COOKIE['adm_session']))
+   $g_session_id = $_COOKIE['adm_session'];
 else
    $g_session_id = "";
-
-if(isset($_COOKIE["". TBL_USERS. "_id"]))
-   $g_user_id = $_COOKIE["". TBL_USERS. "_id"];
-else
-   $g_user_id = 0;
-
-if(isset($_COOKIE["adm_login"]))
-   $g_nickname = $_COOKIE["adm_login"];
-else
-   $g_nickname = "";
-
-// Daten der Gruppierung in Variable einlesen
-$sql    = "SELECT * FROM ". TBL_ORGANIZATIONS. "
-            WHERE ag_shortname LIKE '$g_organization' ";
-$sql    = prepareSQL($sql, array($g_session_id));
-$result = mysql_query($sql, $g_adm_con);
-db_error($result);
-
-$row = mysql_fetch_object($result);
-$g_orga_property = array(
-	'ag_id'          => $row->ag_id,
-	'ag_longname'    => $row->ag_longname,
-	'ag_shortname'   => $row->ag_shortname,
-	'ag_mother'      => $row->ag_mother,
-	'ag_bbcode'      => $row->ag_bbcode,
-	'ag_mail_extern' => $row->ag_mail_extern,
-	'ag_homepage'    => $row->ag_homepage,
-	'ag_mail_attachment_size' => $row->ag_mail_attachment_size,
-	'ag_enable_rss' => $row->ag_enable_rss
-	);
 
 // Session auf Gueltigkeit pruefen
 
@@ -97,7 +67,8 @@ if ($session_found == 1)
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
 
-      $g_user_id       = $row->as_au_id;
+		$g_current_user->getUser($row->as_au_id, $g_adm_con);
+		$g_current_user_id = $g_current_user->id;
       $g_session_valid = 1;
    }
    else
@@ -109,8 +80,8 @@ if ($session_found == 1)
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
 
-      $g_user_id       = 0;
-      $g_nickname      = "";
+		$g_current_user->clear();
+		$g_current_user_id = 0;
 
       // aufgerufene URL ermitteln, damit diese nach dem Einloggen sofort aufgerufen werden kann
       $url = $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI'];
@@ -128,21 +99,17 @@ if ($session_found == 1)
 }
 else
 {
+   $g_current_user->clear();
+   $g_current_user_id = 0;
+
    if ($session_found != 0)
    {
       // ID mehrfach vergeben -> Fehler und IDs loeschen
-
-      $g_user_id       = 0;
-      $g_nickname      = "";
-
       $sql    = "DELETE FROM ". TBL_SESSIONS. " WHERE as_session LIKE {0}";
       $sql    = prepareSQL($sql, array($g_session_id));
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
    }
-
-   $g_user_id       = 0;
-   $g_nickname      = "";
 
    // aufgerufene URL ermitteln, damit diese nach dem Einloggen sofort aufgerufen werden kann
    $url = $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI'];

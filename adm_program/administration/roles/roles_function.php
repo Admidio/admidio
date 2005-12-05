@@ -217,7 +217,7 @@ elseif($_GET["mode"] == 2)
                                         , ar_max_mitglieder    = {4}
                                         , ar_beitrag           = {5}
                                         , ar_last_change       = '$act_date'
-                                        , ar_last_change_id    = $g_user_id
+                                        , ar_last_change_id    = $g_current_user->id
                      WHERE ar_id = {6}";
          }
          else

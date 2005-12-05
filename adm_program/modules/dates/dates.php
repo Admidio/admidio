@@ -41,7 +41,7 @@ if(!array_key_exists("mode", $_GET))
 if(!array_key_exists("start", $_GET))
    $_GET["start"] = 0;
 
-if($g_orga_property['ag_bbcode'] == 1)
+if($g_current_organization->bbcode == 1)
 {
    // Klasse fuer BBCode
    $bbcode = new ubbParser();
@@ -52,13 +52,13 @@ echo "
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
 <html>
 <head>
-   <title>". $g_orga_property['ag_shortname']. " - Termine</title>
+   <title>$g_current_organization->longname - Termine</title>
    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">";
 
-if($g_orga_property['ag_enable_rss'] == 1)
+if($g_current_organization->enable_rss == 1)
 {
 echo "
-   <link type=\"application/rss+xml\" rel=\"alternate\" title=\"$g_orga_property[ag_longname] - Termine\" href=\"$g_root_path/adm_program/modules/dates/rss_dates.php\">";
+   <link type=\"application/rss+xml\" rel=\"alternate\" title=\"$g_current_organization->longname - Termine\" href=\"$g_root_path/adm_program/modules/dates/rss_dates.php\">";
 };
 
 echo "
@@ -215,7 +215,7 @@ require("../../../adm_config/body_top.php");
                   &nbsp;". strSpecialChars2Html($row->at_ueberschrift). "</div>";
 
                // aendern & loeschen darf man nur eigene Termine, ausser Moderatoren
-               if (editDate() && (  isModerator() || $row->at_au_id == $g_user_id ))
+               if (editDate() && (  isModerator() || $row->at_au_id == $g_current_user->id ))
                {
                   echo "<div style=\"text-align: right;\">
                      <img src=\"$g_root_path/adm_program/images/edit.png\" style=\"cursor: pointer\" width=\"16\" height=\"16\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"
@@ -267,7 +267,7 @@ require("../../../adm_config/body_top.php");
             echo "</div>
             <div style=\"margin: 8px 4px 4px 4px; text-align: left;\">";
                // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
-               if($g_orga_property['ag_bbcode'] == 1)
+               if($g_current_organization->bbcode == 1)
                   echo strSpecialChars2Html($bbcode->parse($row->at_beschreibung));
                else
                   echo nl2br(strSpecialChars2Html($row->at_beschreibung));
