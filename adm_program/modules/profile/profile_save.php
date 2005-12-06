@@ -75,8 +75,8 @@ else
 }
 
 // Userdaten aus Datenbank holen
-$user = new TblUsers();
-$user->getUser($user_id, $g_adm_con);
+$user = new TblUsers($g_adm_con);
+$user->getUser($user_id);
 
 // Feldinhalte saeubern und der User-Klasse zuordnen
 $user->last_name  = strStripTags($_POST['name']);
@@ -201,9 +201,9 @@ if(strlen($user->birthday) > 0)
 /*------------------------------------------------------------*/
 
 if($user_id != 0 && $_GET['new_user'] == 0)
-	$ret_code = $user->update($g_adm_con, $g_current_user_id);
+	$ret_code = $user->update($g_current_user_id);
 else
-	$ret_code = $user->insert($g_adm_con, $g_current_user_id);
+	$ret_code = $user->insert($g_current_user_id);
 
 if($ret_code != 0)
 {

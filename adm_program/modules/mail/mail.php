@@ -81,8 +81,8 @@ if(!array_key_exists("kopie", $_GET))
 
 if($g_current_user->id != 0)
 {
-   $user     = new TblUsers;
-   $user->GetUser($g_current_user->id, $g_adm_con);
+   $user     = new TblUsers($g_adm_con);
+   $user->GetUser($g_current_user->id);
 }
 
 echo "

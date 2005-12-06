@@ -72,7 +72,7 @@ if ($g_session_id != "")
          $result = mysql_query($sql, $g_adm_con);
          db_error($result);
 
-         $g_current_user->getUser($row->as_au_id, $g_adm_con);
+         $g_current_user->getUser($row->as_au_id);
          $g_current_user_id = $g_current_user->id;
       }
       else

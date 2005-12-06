@@ -75,8 +75,8 @@ else
 // User auslesen
 if($a_user_id > 0)
 {
-   $user     = new TblUsers;
-   $user->GetUser($a_user_id, $g_adm_con);
+   $user     = new TblUsers($g_adm_con);
+   $user->GetUser($a_user_id);
 }
 
 echo "
@@ -153,8 +153,8 @@ require("../../../adm_config/body_top.php");
 
                      if($g_current_user->id != $a_user_id)
                      {
-                        $own_user = new TblUsers;
-                        $own_user->GetUser($g_current_user->id, $g_adm_con);
+                        $own_user = new TblUsers($g_adm_con);
+                        $own_user->GetUser($g_current_user->id);
 
                         if(strlen($own_user->address) > 0
                         && (  strlen($own_user->zip_code)  > 0

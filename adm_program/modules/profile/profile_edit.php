@@ -91,7 +91,7 @@ else
 // User auslesen
 if($a_user_id > 0)
 {
-   $user     = new TblUsers;
+   $user     = new TblUsers($g_adm_con);
    if($a_new_user)
    {
       // aus User-Account ein neues Mitglied erstellen
@@ -107,7 +107,7 @@ if($a_user_id > 0)
       $user->password   = $user_row->anu_password;
    }
    else
-      $user->GetUser($a_user_id, $g_adm_con);
+      $user->GetUser($a_user_id);
 }
 
 echo "

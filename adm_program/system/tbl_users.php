@@ -26,6 +26,7 @@
 
 class TblUsers
 {
+	var $db_connection;
    var $id;
    var $last_name;
    var $first_name;
@@ -53,17 +54,18 @@ class TblUsers
    var $valid_shortname;
 
    // Konstruktor
-   function TblUsers()
+   function TblUsers($connection)
    {
+   	$this->db_connection = $connection;
    	$this->clear();
    }
 
 	// User mit der uebergebenen ID aus der Datenbank auslesen
-   function getUser($id, $connection)
+   function getUser($user_id)
    {
-      $sql = "SELECT * FROM ". TBL_USERS. " WHERE au_id = $id";
+      $sql = "SELECT * FROM ". TBL_USERS. " WHERE au_id = $user_id";
 
-      $result = mysql_query($sql, $connection);
+      $result = mysql_query($sql, $this->db_connection);
 
       if($row = mysql_fetch_object($result))
       {
@@ -133,7 +135,7 @@ class TblUsers
    // aktuelle Userdaten in der Datenbank updaten
    // Es muss die ID des eingeloggten Users uebergeben werden,
    // damit die Aenderung protokolliert werden kann
-   function update($connection, $login_user_id)
+   function update($login_user_id)
    {
    	if($this->id > 0 && $login_user_id > 0)
    	{
@@ -163,7 +165,7 @@ class TblUsers
 			else
 				$sql = $sql. ", au_login = '$this->login_name', au_password = '$this->password' ";
 			$sql = $sql. " WHERE au_id = $this->id ";
-			$result = mysql_query($sql, $connection);
+			$result = mysql_query($sql, $this->db_connection);
 		   if(!$result) { echo "Error: ". mysql_error(); exit(); }
 		   return 0;
      	}
@@ -173,7 +175,7 @@ class TblUsers
    // aktuelle Userdaten neu in der Datenbank schreiben
    // Es muss die ID des eingeloggten Users uebergeben werden,
    // damit die Aenderung protokolliert werden kann
-   function insert($connection, $login_user_id)
+   function insert($login_user_id)
    {
    	if($this->id == 0 && $login_user_id > 0)
    	{
@@ -192,10 +194,10 @@ class TblUsers
 				$sql = $sql. " NULL, NULL ) ";
 			else
 				$sql = $sql. " '$this->login_name', '$this->password' ) ";
-			$result = mysql_query($sql, $connection);
+			$result = mysql_query($sql, $this->db_connection);
 		   if(!$result) { echo "Error: ". mysql_error(); exit(); }
 
-		   $this->id = mysql_insert_id($connection);
+		   $this->id = mysql_insert_id($this->db_connection);
 		   return 0;
      	}
      	return -1;
