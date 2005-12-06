@@ -33,7 +33,6 @@
  
 require("../../system/common.php");
 require("../../system/session_check_login.php");
-require("../../system/tbl_user.php");
 
 // nur Webmaster & Moderatoren d&uuml;rfen Rollen zuweisen
 if(!isModerator() && !isGroupLeader() && !editUser())
@@ -54,7 +53,7 @@ if(array_key_exists('url', $_GET))
 else
    $url = "";
 
-$user     = new CUser;
+$user     = new TblUsers;
 $user->GetUser($_GET['user_id'], $g_adm_con);
 
 echo "
@@ -85,7 +84,7 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
          if($_GET['popup'] == 1)
             echo "style=\"width: 95%;\">";
          echo "<tr>
-            <th class=\"tableHeader\" width=\"100%\" colspan=\"5\">Rollen f&uuml;r $user->m_vorname $user->m_name zuordnen</th>
+            <th class=\"tableHeader\" width=\"100%\" colspan=\"5\">Rollen f&uuml;r $user->first_name $user->last_name zuordnen</th>
          </tr>";
 
          if(isModerator())

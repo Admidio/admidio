@@ -34,7 +34,6 @@
  
 require("../../system/common.php");
 require("../../system/session_check_login.php");
-require("../../system/tbl_user.php");
 
 $err_code = "";
 $err_text = "";
@@ -253,7 +252,7 @@ elseif($_GET["mode"] == 4)
       exit();
    }
 
-   $user     = new CUser;
+   $user     = new TblUsers;
    $user->GetUser($_GET['user_id'], $g_adm_con);
 
 	if($g_current_organization->mail_extern != 1)
@@ -264,17 +263,17 @@ elseif($_GET["mode"] == 4)
 
 		// Passwort des Users updaten
 		$sql    = "UPDATE ". TBL_USERS. " SET au_password = '$password_md5'
-				      WHERE au_id = $user->m_id ";
+				      WHERE au_id = $user->id ";
 		$result = mysql_query($sql, $g_adm_con);
 		db_error($result);
 
-		mail("$user->m_mail", "Logindaten für ". $g_current_organization->homepage, "Hallo $user->m_vorname,\n\ndu erhälst deine ".
-			"Logindaten für $g_current_organization->homepage.\n\nBenutzername: $user->m_login\nPasswort: $password\n\n" .
+		mail("$user->email", "Logindaten für ". $g_current_organization->homepage, "Hallo $user->first_name,\n\ndu erhälst deine ".
+			"Logindaten für $g_current_organization->homepage.\n\nBenutzername: $user->login_name\nPasswort: $password\n\n" .
 			"Das Passwort wurde automatisch generiert.\nDu solltest es nach dem Login in deinem Profil ändern.\n\n" .
 			"Viele Grüße\nDie Webmaster", "From: webmaster@$g_domain");
 
 		$err_code = "mail_send";
-		$err_text = $user->m_mail;
+		$err_text = $user->email;
 	}
 }
 

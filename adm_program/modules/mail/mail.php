@@ -35,7 +35,6 @@
  
 require("../../system/common.php");
 require("../../system/session_check.php");
-require("../../system/tbl_user.php");
 
 // Prüfungen, ob die Seite regulaer aufgerufen wurde
 
@@ -82,7 +81,7 @@ if(!array_key_exists("kopie", $_GET))
 
 if($g_current_user->id != 0)
 {
-   $user     = new CUser;
+   $user     = new TblUsers;
    $user->GetUser($g_current_user->id, $g_adm_con);
 }
 
@@ -195,7 +194,7 @@ require("../../../adm_config/body_top.php");
             <div style=\"text-align: right; width: 70px; float: left;\">Name:</div>
             <div style=\"text-align: left; margin-left: 80px;\">";
                if($g_current_user->id != 0)
-                  echo "<input class=\"readonly\" readonly type=\"text\" name=\"name\" size=\"30\" maxlength=\"50\" value=\"$user->m_vorname $user->m_name\">";
+                  echo "<input class=\"readonly\" readonly type=\"text\" name=\"name\" size=\"30\" maxlength=\"50\" value=\"$user->first_name $user->last_name\">";
                else
                   echo "<input type=\"text\" name=\"name\" size=\"30\" maxlength=\"50\" value=\"\">";
             echo "</div>
@@ -204,7 +203,7 @@ require("../../../adm_config/body_top.php");
             <div style=\"text-align: right; width: 70px; float: left;\">E-Mail:</div>
             <div style=\"text-align: left; margin-left: 80px;\">";
                if($g_current_user->id != 0)
-                  echo "<input class=\"readonly\" readonly type=\"text\" name=\"mailfrom\" size=\"50\" maxlength=\"50\" value=\"$user->m_mail\">";
+                  echo "<input class=\"readonly\" readonly type=\"text\" name=\"mailfrom\" size=\"50\" maxlength=\"50\" value=\"$user->email\">";
                else
                   echo "<input type=\"text\" name=\"mailfrom\" size=\"50\" maxlength=\"50\" value=\"\">";
             echo "</div>
