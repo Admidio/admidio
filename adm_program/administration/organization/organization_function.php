@@ -71,7 +71,7 @@ if ($err_code != "")
 }
 
 // Gruppierung updaten
-$ret_code = $g_current_organization->update($g_adm_con);
+$ret_code = $g_current_organization->update();
 if($ret_code != 0)
 {
    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=&err_text=$ret_code";

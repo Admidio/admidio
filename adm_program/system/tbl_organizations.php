@@ -26,6 +26,7 @@
 
 class TblOrganizations
 {
+	var $db_connection;
    var $id;
    var $longname;
    var $shortname;
@@ -39,17 +40,18 @@ class TblOrganizations
    var $bbcode;
 
    // Konstruktor
-   function TblOrganizations()
+   function TblOrganizations($connection)
    {
+   	$this->db_connection = $connection;
    	$this->clear();
    }
 
 	// User mit der uebergebenen ID aus der Datenbank auslesen
-   function getOrganization($shortname, $connection)
+   function getOrganization($shortname)
    {
       $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. " WHERE ag_shortname = '$shortname'";
 
-      $result = mysql_query($sql, $connection);
+      $result = mysql_query($sql, $this->db_connection);
 
       if($row = mysql_fetch_object($result))
       {
@@ -87,7 +89,7 @@ class TblOrganizations
 
 
    // aktuelle Userdaten in der Datenbank updaten
-   function update($connection)
+   function update()
    {
    	if($this->id > 0)
    	{
@@ -105,7 +107,7 @@ class TblOrganizations
 													, ag_enable_rss  = $this->enable_rss
 													, ag_bbcode      = $this->bbcode
 					   WHERE ag_id = $this->id ";
-			$result = mysql_query($sql, $connection);
+			$result = mysql_query($sql, $this->db_connection);
 		   if(!$result) { echo "Error: ". mysql_error(); exit(); }
 		   return 0;
      	}
@@ -113,7 +115,7 @@ class TblOrganizations
    }
 
    // aktuelle Userdaten neu in der Datenbank schreiben
-   function insert($connection)
+   function insert()
    {
    	if($this->id == 0)
    	{
@@ -127,10 +129,10 @@ class TblOrganizations
 							 VALUES ('$this->longname', '$this->shortname', '$this->org_shortname_mother',
 										'$this->homepage', $this->mail_size,
 										$this->mail_extern, $this->enable_rss, $this->ag_bbcode ) ";
-			$result = mysql_query($sql, $connection);
+			$result = mysql_query($sql, $this->db_connection);
 		   if(!$result) { echo "Error: ". mysql_error(); exit(); }
 
-		   $this->id = mysql_insert_id($connection);
+		   $this->id = mysql_insert_id($this->db_connection);
 		   return 0;
      	}
      	return -1;
