@@ -32,7 +32,6 @@
  
 require("../../system/common.php");
 require("../../system/session_check_login.php");
-require("../../system/tbl_user.php");
 
 // wenn URL uebergeben wurde zu dieser gehen, ansonsten zurueck
 if(array_key_exists('url', $_GET))
@@ -76,7 +75,7 @@ else
 // User auslesen
 if($a_user_id > 0)
 {
-   $user     = new CUser;
+   $user     = new TblUsers;
    $user->GetUser($a_user_id, $g_adm_con);
 }
 
@@ -103,73 +102,73 @@ require("../../../adm_config/body_top.php");
          if($a_user_id == $g_current_user->id)
             echo strspace("Mein Profil", 2);
          else
-            echo strspace("Profil von ". $user->m_vorname. " ". $user->m_name, 1);
+            echo strspace("Profil von ". $user->first_name. " ". $user->last_name, 1);
       echo "</div>
 
       <div class=\"formBody\">
          <div style=\"width: 63%; margin-right: 3%; float: left;\">
             <div class=\"groupBox\" style=\"margin-top: 4px; text-align: left;\">
-               <div class=\"groupBoxHeadline\">$user->m_vorname $user->m_name</div>
+               <div class=\"groupBoxHeadline\">$user->first_name $user->last_name</div>
 
                <div style=\"float: left; width: 28%; text-align: left\">Adresse:";
-                  if(strlen($user->m_plz) > 0 || strlen($user->m_ort) > 0)
+                  if(strlen($user->zip_code) > 0 || strlen($user->city) > 0)
                      echo "<br />&nbsp;";
-                  if(strlen($user->m_land) > 0)
+                  if(strlen($user->country) > 0)
                      echo "<br />&nbsp;";
-                  if(strlen($user->m_adresse) > 0
-                  && (  strlen($user->m_plz)  > 0
-                     || strlen($user->m_ort)  > 0 ))
+                  if(strlen($user->address) > 0
+                  && (  strlen($user->zip_code)  > 0
+                     || strlen($user->city)  > 0 ))
                      echo "<br /><span style=\"font-size: 8pt;\">&nbsp;</span>";
                echo "</div>
 
                <div style=\"margin-left: 30%; text-align: left\">";
-                  if(strlen($user->m_adresse) == 0 && strlen($user->m_plz) == 0 && strlen($user->m_ort) == 0)
+                  if(strlen($user->address) == 0 && strlen($user->zip_code) == 0 && strlen($user->city) == 0)
                      echo "<i>keine Daten vorhanden</i>";
-                  if(strlen($user->m_adresse) > 0)
-                     echo $user->m_adresse;
-                  if(strlen($user->m_plz) > 0 || strlen($user->m_ort) > 0)
+                  if(strlen($user->address) > 0)
+                     echo $user->address;
+                  if(strlen($user->zip_code) > 0 || strlen($user->city) > 0)
                   {
                      echo "<br />";
-                     if(strlen($user->m_plz) > 0)
-                        echo $user->m_plz. " ";
-                     if(strlen($user->m_ort) > 0)
-                        echo $user->m_ort;
+                     if(strlen($user->zip_code) > 0)
+                        echo $user->zip_code. " ";
+                     if(strlen($user->city) > 0)
+                        echo $user->city;
                   }
-                  if(strlen($user->m_land) > 0)
-                     echo "<br />". $user->m_land;
+                  if(strlen($user->country) > 0)
+                     echo "<br />". $user->country;
 
-                  if(strlen($user->m_adresse) > 0
-                  && (  strlen($user->m_plz)  > 0
-                     || strlen($user->m_ort)  > 0 ))
+                  if(strlen($user->address) > 0
+                  && (  strlen($user->zip_code)  > 0
+                     || strlen($user->city)  > 0 ))
                   {
                      // Button mit Karte anzeigen
-                     $map_url = "http://link2.map24.com/?lid=8a24364a&maptype=JAVA&street0=$user->m_adresse";
-                     if(strlen($user->m_plz)  > 0)
-                        $map_url = $map_url. "&zip0=$user->m_plz";
+                     $map_url = "http://link2.map24.com/?lid=8a24364a&maptype=JAVA&street0=$user->address";
+                     if(strlen($user->zip_code)  > 0)
+                        $map_url = $map_url. "&zip0=$user->zip_code";
                      if(strlen($user->m_ort)  > 0)
-                        $map_url = $map_url. "&city0=$user->m_ort";
+                        $map_url = $map_url. "&city0=$user->city";
 
                      echo "<br />
                      <span style=\"font-size: 8pt;\">( <a href=\"$map_url\" target=\"_blank\">Stadtplan</a>";
 
                      if($g_current_user->id != $a_user_id)
                      {
-                        $own_user = new CUser;
+                        $own_user = new TblUsers;
                         $own_user->GetUser($g_current_user->id, $g_adm_con);
 
-                        if(strlen($own_user->m_adresse) > 0
-                        && (  strlen($own_user->m_plz)  > 0
-                           || strlen($own_user->m_ort)  > 0 ))
+                        if(strlen($own_user->address) > 0
+                        && (  strlen($own_user->zip_code)  > 0
+                           || strlen($own_user->city)  > 0 ))
                         {
-                           $route_url = "http://link2.map24.com/?lid=8a24364a&maptype=JAVA&action=route&sstreet=$own_user->m_adresse&dstreet=$user->m_adresse";
-                           if(strlen($own_user->m_plz)  > 0)
-                              $route_url = $route_url. "&szip=$own_user->m_plz";
-                           if(strlen($own_user->m_ort)  > 0)
-                              $route_url = $route_url. "&scity=$own_user->m_ort";
-                           if(strlen($user->m_plz)  > 0)
-                              $route_url = $route_url. "&dzip=$user->m_plz";
-                           if(strlen($user->m_ort)  > 0)
-                              $route_url = $route_url. "&dcity=$user->m_ort";
+                           $route_url = "http://link2.map24.com/?lid=8a24364a&maptype=JAVA&action=route&sstreet=$own_user->address&dstreet=$user->address";
+                           if(strlen($own_user->zip_code)  > 0)
+                              $route_url = $route_url. "&szip=$own_user->zip_code";
+                           if(strlen($own_user->city)  > 0)
+                              $route_url = $route_url. "&scity=$own_user->city";
+                           if(strlen($user->zip_code)  > 0)
+                              $route_url = $route_url. "&dzip=$user->zip_code";
+                           if(strlen($user->city)  > 0)
+                              $route_url = $route_url. "&dcity=$user->city";
                            echo " - <a href=\"$route_url\" target=\"_blank\">Route berechnen</a>";
                         }
                      }
@@ -179,33 +178,27 @@ require("../../../adm_config/body_top.php");
                echo "</div>
 
                <div style=\"float: left; margin-top: 10px; width: 28%; text-align: left\">Telefon:</div>
-               <div style=\"margin-top: 10px; margin-left: 30%; text-align: left\">$user->m_tel1&nbsp;</div>";
-
-               if(strlen($user->m_tel2) > 0)
-               {
-                  echo "<div style=\"float: left; width: 28%; text-align: left\">2. Telefon:</div>
-                  <div style=\"margin-left: 30%; text-align: left\">$user->m_tel2</div>";
-               }
+               <div style=\"margin-top: 10px; margin-left: 30%; text-align: left\">$user->phone&nbsp;</div>";
 
                echo "<div style=\"float: left; width: 28%; text-align: left\">Handy:</div>
-               <div style=\"margin-left: 30%; text-align: left\">$user->m_mobil&nbsp;</div>";
+               <div style=\"margin-left: 30%; text-align: left\">$user->mobile&nbsp;</div>";
 
-               if(strlen($user->m_fax) > 0)
+               if(strlen($user->fax) > 0)
                {
                   echo "<div style=\"float: left; width: 28%; text-align: left\">Fax:</div>
-                  <div style=\"margin-left: 30%; text-align: left\">$user->m_fax</div>";
+                  <div style=\"margin-left: 30%; text-align: left\">$user->fax</div>";
                }
 
                // Block Geburtstag und Benutzer
 
                echo "<div style=\"float: left; margin-top: 10px; width: 28%; text-align: left\">Geburtstag:</div>
                <div style=\"margin-top: 10px; margin-left: 30%; text-align: left\">";
-                  if(strlen($user->m_geburtstag) > 0 && strcmp($user->m_geburtstag, "0000-00-00") != 0)
+                  if(strlen($user->birthday) > 0 && strcmp($user->birthday, "0000-00-00") != 0)
                   {
-                     echo mysqldatetime('d.m.y', $user->m_geburtstag);
+                     echo mysqldatetime('d.m.y', $user->birthday);
                      // Alter berechnen
                      $act_date = getDate(time());
-                     $geb_date = getDate(mysqlmaketimestamp($user->m_geburtstag));
+                     $geb_date = getDate(mysqlmaketimestamp($user->birthday));
                      $birthday = false;
 
                      if($act_date['mon'] >= $geb_date['mon'])
@@ -227,37 +220,37 @@ require("../../../adm_config/body_top.php");
                      echo "&nbsp;";
                echo "</div>
                <div style=\"float: left; width: 28%; text-align: left\">Benutzer:</div>
-               <div style=\"margin-left: 30%; text-align: left\">$user->m_login&nbsp;</div>";
+               <div style=\"margin-left: 30%; text-align: left\">$user->login_name&nbsp;</div>";
 
                // Block E-Mail und Homepage
 
                echo "<div style=\"float: left; margin-top: 10px; width: 28%; text-align: left\">E-Mail:</div>
                <div style=\"margin-top: 10px; margin-left: 30%; text-align: left\">";
-                  if(strlen($user->m_mail) > 0)
+                  if(strlen($user->email) > 0)
                   {
                      if($g_current_organization->mail_extern == 1)
-                        $mail_link = "mailto:$user->m_mail";
+                        $mail_link = "mailto:$user->email";
                      else
-                        $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?au_id=$user->m_id";
+                        $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?au_id=$user->id";
                      echo "<a href=\"$mail_link\">
-                        <img src=\"$g_root_path/adm_program/images/mail.png\" style=\"vertical-align: middle;\" alt=\"E-Mail an $user->m_mail schreiben\"
-                        title=\"E-Mail an $user->m_mail schreiben\" border=\"0\"></a>
-                     <a href=\"$mail_link\" style=\" overflow: visible; display: inline;\">$user->m_mail</a>";
+                        <img src=\"$g_root_path/adm_program/images/mail.png\" style=\"vertical-align: middle;\" alt=\"E-Mail an $user->email schreiben\"
+                        title=\"E-Mail an $user->email schreiben\" border=\"0\"></a>
+                     <a href=\"$mail_link\" style=\" overflow: visible; display: inline;\">$user->email</a>";
                   }
                   else
                      echo "&nbsp;";
                echo "</div>
                <div style=\"float: left; width: 28%; text-align: left\">Homepage:</div>
                <div style=\"margin-left: 30%; text-align: left\">";
-                  if(strlen($user->m_weburl) > 0)
+                  if(strlen($user->homepage) > 0)
                   {
-                     $user->m_weburl = stripslashes($user->m_weburl);
-                     $user->m_weburl = str_replace ("http://", "", $user->m_weburl);
+                     $user->homepage = stripslashes($user->homepage);
+                     $user->homepage = str_replace ("http://", "", $user->homepage);
                      echo "
-                     <a href=\"http://$user->m_weburl\" target=\"_blank\">
-                        <img src=\"$g_root_path/adm_program/images/globe.png\" style=\"vertical-align: middle;\" alt=\"Gehe zu $user->m_weburl\"
-                           title=\"Gehe zu $user->m_weburl\" border=\"0\"></a>
-                     <a href=\"http://$user->m_weburl\" target=\"_blank\">$user->m_weburl</a>";
+                     <a href=\"http://$user->homepage\" target=\"_blank\">
+                        <img src=\"$g_root_path/adm_program/images/globe.png\" style=\"vertical-align: middle;\" alt=\"Gehe zu $user->homepage\"
+                           title=\"Gehe zu $user->homepage\" border=\"0\"></a>
+                     <a href=\"http://$user->homepage\" target=\"_blank\">$user->homepage</a>";
                   }
                   else
                      echo "&nbsp;";
@@ -269,7 +262,7 @@ require("../../../adm_config/body_top.php");
             // alle zugeordneten Messengerdaten einlesen
             $sql = "SELECT auf_name, auf_description, aud_value
                       FROM ". TBL_USER_DATA. ", ". TBL_USER_FIELDS. "
-                     WHERE aud_au_id        = $user->m_id
+                     WHERE aud_au_id        = $user->id
                        AND aud_auf_id       = auf_id
                        AND auf_ag_shortname IS NULL
                        AND auf_type         = 'MESSENGER'
@@ -378,7 +371,7 @@ require("../../../adm_config/body_top.php");
          $sql = "SELECT *
                    FROM ". TBL_USER_FIELDS. " LEFT JOIN ". TBL_USER_DATA. "
                      ON aud_auf_id = auf_id
-                    AND aud_au_id        = $user->m_id
+                    AND aud_au_id        = $user->id
                   WHERE auf_ag_shortname = '$g_organization' ";
          if(!isModerator())
             $sql = $sql. " AND auf_locked = 0 ";

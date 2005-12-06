@@ -32,7 +32,6 @@
  
 require("../../system/common.php");
 require("../../system/session_check_login.php");
-require("../../system/tbl_user.php");
 
 //prüfen ob in Popup angezeigt wird oder Normal (default)
 if($_GET['popup'] == 1)$popup=1;
@@ -92,7 +91,7 @@ else
 // User auslesen
 if($a_user_id > 0)
 {
-   $user     = new CUser;
+   $user     = new TblUsers;
    if($a_new_user)
    {
       // aus User-Account ein neues Mitglied erstellen
@@ -101,11 +100,11 @@ if($a_user_id > 0)
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
       $user_row = mysql_fetch_object($result);
-      $user->m_name     = $user_row->anu_name;
-      $user->m_vorname  = $user_row->anu_vorname;
-      $user->m_mail     = $user_row->anu_mail;
-      $user->m_login    = $user_row->anu_login;
-      $user->m_password = $user_row->anu_password;
+      $user->last_name  = $user_row->anu_name;
+      $user->first_name = $user_row->anu_vorname;
+      $user->email      = $user_row->anu_mail;
+      $user->login_name = $user_row->anu_login;
+      $user->password   = $user_row->anu_password;
    }
    else
       $user->GetUser($a_user_id, $g_adm_con);
@@ -131,7 +130,7 @@ if($popup == 0)
    <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
 
    <form action=\"profile_save.php?user_id=$a_user_id&amp;new_user=$a_new_user&amp;url=$url";
-      if($a_new_user && $a_user_id > 0) echo "&amp;pw=$user->m_password";
+      if($a_new_user && $a_user_id > 0) echo "&amp;pw=$user->password";
       echo "\" method=\"post\" name=\"ProfilAnzeigen\">
       <div class=\"formHead\">";
          if($a_user_id == $g_current_user->id)
@@ -139,7 +138,7 @@ if($popup == 0)
          else if($a_new_user)
             echo strspace("Neuer Benutzer", 2);
          else
-            echo strspace("Profil von ". $user->m_vorname. " ". $user->m_name, 1);
+            echo strspace("Profil von ". $user->first_name. " ". $user->last_name, 1);
       echo "</div>
       <div class=\"formBody\">
          <div>
@@ -149,7 +148,7 @@ if($popup == 0)
                   echo "<input type=\"text\" name=\"name\" size=\"30\" maxlength=\"30\" />";
                else
                {
-                  echo "<input type=\"text\" name=\"name\" size=\"30\" maxlength=\"30\" value=\"$user->m_name\" ";
+                  echo "<input type=\"text\" name=\"name\" size=\"30\" maxlength=\"30\" value=\"$user->last_name\" ";
                   if(!hasRole('Webmaster'))
                      echo " class=\"readonly\" readonly ";
                   echo " />";
@@ -163,7 +162,7 @@ if($popup == 0)
                   echo "<input type=\"text\" name=\"vorname\" size=\"30\" maxlength=\"30\" />";
                else
                {
-                  echo "<input type=\"text\" name=\"vorname\" size=\"30\" maxlength=\"30\" value=\"$user->m_vorname\" ";
+                  echo "<input type=\"text\" name=\"vorname\" size=\"30\" maxlength=\"30\" value=\"$user->first_name\" ";
                   if(!hasRole('Webmaster'))
                      echo " class=\"readonly\" readonly ";
                   echo " />";
@@ -175,7 +174,7 @@ if($popup == 0)
             echo "<div style=\"margin-top: 6px;\">
                <div style=\"text-align: right; width: 30%; float: left;\">Benutzername:</div>
                <div style=\"text-align: left; margin-left: 32%;\">
-                  <input type=\"text\" name=\"login\" size=\"15\" maxlength=\"20\" value=\"$user->m_login\" ";
+                  <input type=\"text\" name=\"login\" size=\"15\" maxlength=\"20\" value=\"$user->login_name\" ";
                   if(!hasRole('Webmaster'))
                      echo " class=\"readonly\" readonly ";
                   echo " />
@@ -204,7 +203,7 @@ if($popup == 0)
                if($a_new_user)
                   echo "<input type=\"text\" name=\"adresse\" size=\"40\" maxlength=\"50\" />";
                else
-                  echo "<input type=\"text\" name=\"adresse\" size=\"40\" maxlength=\"50\" value=\"$user->m_adresse\" />";
+                  echo "<input type=\"text\" name=\"adresse\" size=\"40\" maxlength=\"50\" value=\"$user->address\" />";
             echo "</div>
          </div>
          <div style=\"margin-top: 6px;\">
@@ -213,7 +212,7 @@ if($popup == 0)
                if($a_new_user)
                   echo "<input type=\"text\" name=\"plz\" size=\"10\" maxlength=\"10\" />";
                else
-                  echo "<input type=\"text\" name=\"plz\" size=\"10\" maxlength=\"10\" value=\"$user->m_plz\" />";
+                  echo "<input type=\"text\" name=\"plz\" size=\"10\" maxlength=\"10\" value=\"$user->zip_code\" />";
             echo "</div>
          </div>
          <div style=\"margin-top: 6px;\">
@@ -222,7 +221,7 @@ if($popup == 0)
                if($a_new_user)
                   echo "<input type=\"text\" name=\"ort\" size=\"20\" maxlength=\"30\" />";
                else
-                  echo "<input type=\"text\" name=\"ort\" size=\"20\" maxlength=\"30\" value=\"$user->m_ort\" />";
+                  echo "<input type=\"text\" name=\"ort\" size=\"20\" maxlength=\"30\" value=\"$user->city\" />";
             echo "</div>
          </div>
          <div style=\"margin-top: 6px;\">
@@ -231,28 +230,19 @@ if($popup == 0)
                if($a_new_user)
                   echo "<input type=\"text\" name=\"land\" size=\"20\" maxlength=\"30\" />";
                else
-                  echo "<input type=\"text\" name=\"land\" size=\"20\" maxlength=\"30\" value=\"$user->m_land\" />";
+                  echo "<input type=\"text\" name=\"land\" size=\"20\" maxlength=\"30\" value=\"$user->country\" />";
             echo "</div>
          </div>
          
          <hr width=\"80%\" />
          
          <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 30%; float: left;\">Telefon 1:</div>
+            <div style=\"text-align: right; width: 30%; float: left;\">Telefon:</div>
             <div style=\"text-align: left; margin-left: 32%;\">";
                if($a_new_user)
                   echo "<input type=\"text\" name=\"tel1\" size=\"15\" maxlength=\"20\" />";
                else
-                  echo "<input type=\"text\" name=\"tel1\" size=\"15\" maxlength=\"20\" value=\"$user->m_tel1\" />";
-            echo "&nbsp;<span style=\"font-family: Courier;\">(Vorwahl-Tel.Nr.)</span></div>
-         </div>
-         <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 30%; float: left;\">Telefon 2:</div>
-            <div style=\"text-align: left; margin-left: 32%;\">";
-               if($a_new_user)
-                  echo "<input type=\"text\" name=\"tel2\" size=\"15\" maxlength=\"20\" />";
-               else
-                  echo "<input type=\"text\" name=\"tel2\" size=\"15\" maxlength=\"20\" value=\"$user->m_tel2\" />";
+                  echo "<input type=\"text\" name=\"tel1\" size=\"15\" maxlength=\"20\" value=\"$user->phone\" />";
             echo "&nbsp;<span style=\"font-family: Courier;\">(Vorwahl-Tel.Nr.)</span></div>
          </div>
          <div style=\"margin-top: 6px;\">
@@ -261,7 +251,7 @@ if($popup == 0)
                if($a_new_user)
                   echo "<input type=\"text\" name=\"mobil\" size=\"15\" maxlength=\"20\" />";
                else
-                  echo "<input type=\"text\" name=\"mobil\" size=\"15\" maxlength=\"20\" value=\"$user->m_mobil\" />";
+                  echo "<input type=\"text\" name=\"mobil\" size=\"15\" maxlength=\"20\" value=\"$user->mobile\" />";
             echo "&nbsp;<span style=\"font-family: Courier;\">(Vorwahl-Handynr.)</span></div>
          </div>
          <div style=\"margin-top: 6px;\">
@@ -270,7 +260,7 @@ if($popup == 0)
                if($a_new_user)
                   echo "<input type=\"text\" name=\"fax\" size=\"15\" maxlength=\"20\" />";
                else
-                  echo "<input type=\"text\" name=\"fax\" size=\"15\" maxlength=\"20\" value=\"$user->m_fax\" />";
+                  echo "<input type=\"text\" name=\"fax\" size=\"15\" maxlength=\"20\" value=\"$user->fax\" />";
             echo "&nbsp;<span style=\"font-family: Courier;\">(Vorwahl-Faxnr.)</span></div>
          </div>
          <div style=\"margin-top: 6px;\">
@@ -279,7 +269,7 @@ if($popup == 0)
                if($a_new_user)
                   echo "<input type=\"text\" name=\"geburtstag\" size=\"10\" maxlength=\"10\" />";
                else
-                  echo "<input type=\"text\" name=\"geburtstag\" size=\"10\" maxlength=\"10\" value=\"". mysqldatetime('d.m.y', $user->m_geburtstag). "\" />";
+                  echo "<input type=\"text\" name=\"geburtstag\" size=\"10\" maxlength=\"10\" value=\"". mysqldatetime('d.m.y', $user->birthday). "\" />";
             echo "</div>
          </div>
 
@@ -291,7 +281,7 @@ if($popup == 0)
                if($a_user_id == 0)
                   echo "<input type=\"text\" name=\"mail\" size=\"40\" maxlength=\"50\" />";
                else
-                  echo "<input type=\"text\" name=\"mail\" size=\"40\" maxlength=\"50\" value=\"$user->m_mail\" />";
+                  echo "<input type=\"text\" name=\"mail\" size=\"40\" maxlength=\"50\" value=\"$user->email\" />";
             echo "</div>
          </div>
          <div style=\"margin-top: 6px;\">
@@ -300,7 +290,7 @@ if($popup == 0)
                if($a_new_user)
                   echo "<input type=\"text\" name=\"weburl\" size=\"40\" maxlength=\"50\" />";
                else
-                  echo "<input type=\"text\" name=\"weburl\" size=\"40\" maxlength=\"50\" value=\"$user->m_weburl\" />";
+                  echo "<input type=\"text\" name=\"weburl\" size=\"40\" maxlength=\"50\" value=\"$user->homepage\" />";
             echo "</div>
          </div>";
          
@@ -312,7 +302,7 @@ if($popup == 0)
             $sql = "SELECT auf_name, aud_value
                       FROM ". TBL_USER_FIELDS. " LEFT JOIN ". TBL_USER_DATA. "
                         ON aud_auf_id = auf_id
-                       AND aud_au_id         = $user->m_id
+                       AND aud_au_id         = $user->id
                      WHERE auf_ag_shortname IS NULL
                        AND auf_type          = 'MESSENGER'
                      ORDER BY auf_name ASC ";
@@ -361,7 +351,7 @@ if($popup == 0)
             $sql = "SELECT *
                       FROM ". TBL_USER_FIELDS. " LEFT JOIN ". TBL_USER_DATA. "
                         ON aud_auf_id = auf_id
-                       AND aud_au_id = $user->m_id
+                       AND aud_au_id = $user->id
                      WHERE auf_ag_shortname = '$g_organization' ";
             if(!isModerator())
                $sql = $sql. " AND auf_locked = 0 ";
@@ -419,18 +409,18 @@ if($popup == 0)
               Zur&uuml;ck</button>
          </div>";
 
-         if($user->m_last_change_id > 0)
+         if($user->usr_id_change > 0)
          {
             // Angabe über die letzten Aenderungen
             $sql    = "SELECT au_vorname, au_name
                          FROM ". TBL_USERS. "
-                        WHERE au_id = $user->m_last_change_id ";
+                        WHERE au_id = $user->usr_id_change ";
             $result = mysql_query($sql, $g_adm_con);
             db_error($result, true);
             $row = mysql_fetch_array($result);
 
             echo "<div style=\"margin-top: 6px;\"><span style=\"font-size: 10pt\">
-                     Letzte &Auml;nderung am ". mysqldatetime("d.m.y h:i", $user->m_last_change).
+                     Letzte &Auml;nderung am ". mysqldatetime("d.m.y h:i", $user->last_change).
                      " durch $row[0] $row[1]</span>
                   </div>";
          }
