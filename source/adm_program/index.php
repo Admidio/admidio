@@ -32,19 +32,15 @@ if(!file_exists("../adm_config/config.php"))
    exit();
 }
 
-include("../adm_config/config.php");
-require("system/function.php");
-require("system/date.php");
-require("system/string.php");
-require("system/tbl_user.php");
-require("system/session_check.php");
+include("system/common.php");
+include("system/session_check.php");
 
 echo "
 <!-- (c) 2004 - 2005 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
 <html>
 <head>
-   <title>". $g_orga_property['ag_shortname']. " - Admidio &Uuml;bersicht</title>
+   <title>$g_current_organization->longname - Admidio &Uuml;bersicht</title>
    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
 
    <style type=\"text/css\">
