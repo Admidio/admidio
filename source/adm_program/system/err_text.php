@@ -374,6 +374,8 @@ function getErrorText($error_code, $error_text)
 
       default:
          $error_str = "Es ist ein Fehler aufgetreten.";
+         if(strlen($error_text) > 0)
+         	$error_str = $error_str. "<p><b>Fehler: $error_text</b></p>";
          break;
 
 
