@@ -67,8 +67,8 @@ $g_session_id      = "";
 $g_session_valid   = 0;
 $g_current_user_id = 0;
 
-$g_current_user  = new TblUsers();
+$g_current_user  = new TblUsers($g_adm_con);
 
-$g_current_organization = new TblOrganizations();
-$g_current_organization->getOrganization($g_organization, $g_adm_con);
+$g_current_organization = new TblOrganizations($g_adm_con);
+$g_current_organization->getOrganization($g_organization);
 ?>

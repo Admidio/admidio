@@ -27,12 +27,14 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
- 
+
 require("../../system/common.php");
 require("../../system/session_check_login.php");
 
-// nur Webmaster d&uuml;rfen fremde Passwoerter aendern
-if(!hasRole("Webmaster") && $g_current_user->id != $_GET['user_id'])
+$user_id = $_GET['user_id'];
+
+// nur Webmaster duerfen fremde Passwoerter aendern
+if(!hasRole("Webmaster") && $g_current_user->id != $user_id)
 {
    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
    header($location);
@@ -41,6 +43,9 @@ if(!hasRole("Webmaster") && $g_current_user->id != $_GET['user_id'])
 
 $err_code   = "";
 $count_user = 0;
+
+$user = new TblUsers($g_adm_con);
+$user->getUser($user_id);
 
 if( ($_POST["old_password"] != "" || hasRole('Webmaster') )
 && $_POST["new_password"] != ""
@@ -51,32 +56,22 @@ if( ($_POST["old_password"] != "" || hasRole('Webmaster') )
       // pruefen, ob altes Passwort korrekt eingegeben wurde
       $old_password_crypt = md5($_POST["old_password"]);
 
-      $sql    = "SELECT au_login, au_password FROM ". TBL_USERS. " WHERE au_id = {0}";
-      $sql    = prepareSQL($sql, array($_GET['user_id']));
-      $result = mysql_query($sql, $g_adm_con);
-      db_error($result);
-      $row_login = mysql_fetch_array($result);
-
       // Webmaster duerfen Passwort so aendern
-      if($row_login[1] == $old_password_crypt || hasRole('Webmaster'))
+      if($user->password == $old_password_crypt || hasRole('Webmaster'))
       {
-         $password_crypt = md5($_POST["new_password"]);
-
-         $sql    = "UPDATE ". TBL_USERS. " SET au_password = '$password_crypt' WHERE au_id = {0}";
-         $sql    = prepareSQL($sql, array($_GET['user_id']));
-         $result = mysql_query($sql, $g_adm_con);
-         db_error($result);
+         $user->password = md5($_POST["new_password"]);
+         $user->update($g_current_user_id);
 
          if($g_forum == 1)
          {
             mysql_select_db($g_forum_db, $g_forum_con);
-            
+
             // jetzt noch das Passwort im Forum aendern
-            $sql    = "UPDATE ". $g_forum_praefix. "_users SET user_password = '$password_crypt' 
+            $sql    = "UPDATE ". $g_forum_praefix. "_users SET user_password = '$password_crypt'
                         WHERE username = '". $row_login[0]. "' ";
             $result = mysql_query($sql, $g_forum_con);
             db_error($result);
-            
+
             mysql_select_db($g_adm_db, $g_adm_con);
          }
       }
@@ -103,7 +98,7 @@ echo "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?". ">
    <title>Passwort &auml;ndern</title>
    <meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\" />
    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\" />
-   
+
    <!--[if gte IE 5.5000]>
    <script language=\"JavaScript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
    <![endif]-->

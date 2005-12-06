@@ -53,8 +53,8 @@ if(array_key_exists('url', $_GET))
 else
    $url = "";
 
-$user     = new TblUsers;
-$user->GetUser($_GET['user_id'], $g_adm_con);
+$user     = new TblUsers($g_adm_con);
+$user->GetUser($_GET['user_id']);
 
 echo "
 <!-- (c) 2004 - 2005 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
