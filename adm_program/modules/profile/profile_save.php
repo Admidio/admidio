@@ -29,11 +29,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
- 
+
 require("../../system/common.php");
 require("../../system/session_check_login.php");
 
-$db_geburtstag = "";
+$user_id       = $_GET['user_id'];
 $err_code      = "";
 $err_text      = "";
 
@@ -43,7 +43,7 @@ if(!isset($_POST['login']))
 /*------------------------------------------------------------*/
 // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
 /*------------------------------------------------------------*/
-if(!editUser() && $_GET['user_id'] != $g_current_user->id)
+if(!editUser() && $user_id != $g_current_user->id)
 {
    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
    header($location);
@@ -61,7 +61,7 @@ else
                  AND am_ar_id        = ar_id
                  AND am_valid        = 1
                  AND am_au_id        = {0}";
-      $sql    = prepareSQL($sql, array($_GET['user_id']));
+      $sql    = prepareSQL($sql, array($user_id));
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
 
@@ -74,35 +74,39 @@ else
    }
 }
 
-// Leerzeichen entfernen
-$_POST['name']    = trim($_POST['name']);
-$_POST['vorname'] = trim($_POST['vorname']);
-$_POST['login']   = trim($_POST['login']);
-$_POST['adresse'] = trim($_POST['adresse']);
-$_POST['plz']     = trim($_POST['plz']);
-$_POST['ort']     = trim($_POST['ort']);
-$_POST['land']    = trim($_POST['land']);
-$_POST['tel1']    = trim($_POST['tel1']);
-$_POST['tel2']    = trim($_POST['tel2']);
-$_POST['mobil']   = trim($_POST['mobil']);
-$_POST['fax']     = trim($_POST['fax']);
-$_POST['mail']    = trim($_POST['mail']);
-$_POST['weburl']  = trim($_POST['weburl']);
+// Userdaten aus Datenbank holen
+$user = new TblUsers();
+$user->getUser($user_id, $g_adm_con);
+
+// Feldinhalte saeubern und der User-Klasse zuordnen
+$user->last_name  = strStripTags($_POST['name']);
+$user->first_name = strStripTags($_POST['vorname']);
+$user->login_name = strStripTags($_POST['login']);
+$user->address    = strStripTags($_POST['adresse']);
+$user->zip_code   = strStripTags($_POST['plz']);
+$user->city       = strStripTags($_POST['ort']);
+$user->country    = strStripTags($_POST['land']);
+$user->phone      = strStripTags($_POST['tel1']);
+$user->mobile     = strStripTags($_POST['mobil']);
+$user->fax        = strStripTags($_POST['fax']);
+$user->birthday   = strStripTags($_POST['geburtstag']);
+$user->email      = strStripTags($_POST['mail']);
+$user->homepge    = strStripTags($_POST['weburl']);
 
 /*------------------------------------------------------------*/
 // Felder prüfen
 /*------------------------------------------------------------*/
-if(strlen($_POST['name']) > 0)
+if(strlen($user->last_name) > 0)
 {
-   if(strlen($_POST['vorname']) > 0)
+   if(strlen($user->first_name) > 0)
    {
-      if(strlen($_POST["mail"]) != 0)
+      if(strlen($user->email) != 0)
       {
-         if(!isValidEmailAddress($_POST["mail"]))
+         if(!isValidEmailAddress($user->email))
             $err_code = "email_invalid";
       }
 
-      if($_GET['user_id'] > 0 && $_GET['new_user'] == 0)
+      if($user_id > 0 && $_GET['new_user'] == 0)
       {
          // pruefen, ob dem Benutzer Rollen zugewiesen wurden
          $sql    = "SELECT ar_ag_shortname FROM ". TBL_ROLES. ", ". TBL_MEMBERS. "
@@ -110,7 +114,7 @@ if(strlen($_POST['name']) > 0)
                        AND am_ar_id       = ar_id
                        AND am_au_id       = {0}
                        AND am_valid       = 1 ";
-         $sql    = prepareSQL($sql, array($_GET['user_id']));
+         $sql    = prepareSQL($sql, array($user_id));
          $result = mysql_query($sql, $g_adm_con);
          db_error($result, 1);
 
@@ -118,12 +122,12 @@ if(strlen($_POST['name']) > 0)
             $err_code = "norolle";
       }
 
-      if(strlen($_POST['login']) > 0)
+      if(strlen($user->login_name) > 0)
       {
          // pruefen, ob der Benutzername bereits vergeben ist
          $sql = "SELECT au_id FROM ". TBL_USERS. "
                   WHERE au_login = {0} ";
-         $sql    = prepareSQL($sql, array($_POST['login']));
+         $sql    = prepareSQL($sql, array($user->login_name));
          $result = mysql_query($sql, $g_adm_con);
          db_error($result, 1);
 
@@ -131,14 +135,14 @@ if(strlen($_POST['name']) > 0)
          {
             $row = mysql_fetch_array($result);
 
-            if(strcmp($row[0], $_GET['user_id']) != 0)
+            if(strcmp($row[0], $user_id) != 0)
                $err_code = "login_name";
          }
       }
 
-      if(strlen($_POST['geburtstag']) > 0)
+      if(strlen($user->birthday) > 0)
       {
-         if(!dtCheckDate($_POST['geburtstag']))
+         if(!dtCheckDate($user->birthday))
          {
             $err_code = "datum";
             $err_text = "Geburtstag";
@@ -188,64 +192,24 @@ if(strlen($err_code) > 0)
    exit();
 }
 
-$act_date      = date("Y-m-d H:i:s", time());
+// Geburtstag fuer die DB formatieren
+if(strlen($user->birthday) > 0)
+   $user->birthday = dtFormatDate($user->birthday, "Y-m-d");
 
-if(strlen($_POST['geburtstag']) > 0)
-   $db_geburtstag = dtFormatDate($_POST['geburtstag'], "Y-m-d");
+/*------------------------------------------------------------*/
+// Benutzerdaten in Datenbank schreiben
+/*------------------------------------------------------------*/
 
-if($_GET['user_id'] != 0 && $_GET['new_user'] == 0)
-{
-   /*------------------------------------------------------------*/
-   // Vorhandene Benutzerdaten updaten
-   /*------------------------------------------------------------*/
-   $sql = " UPDATE ". TBL_USERS. " SET au_name           = {0}
-                              , au_vorname        = {1}
-                              , au_adresse        = {2}
-                              , au_plz            = {3}
-                              , au_ort            = {4}
-                              , au_land           = {5}
-                              , au_tel1           = {6}
-                              , au_tel2           = {7}
-                              , au_mobil          = {8}
-                              , au_fax            = {9}
-                              , au_geburtstag     = '$db_geburtstag'
-                              , au_mail           = {10}
-                              , au_weburl         = {11}
-                              , au_login          = ";
-   // wenn Login-Feld leer, dann Login & Passwort auf NULL setzen
-   if(strlen($_POST['login']) == 0)
-      $sql = $sql. " NULL, au_password = NULL ";
-   else
-      $sql = $sql. " {12} ";
-
-   $sql = $sql. "             , au_last_change    = '$act_date'
-                              , au_last_change_id = $g_current_user->id
-            WHERE au_id = {13}";
-   $sql    = prepareSQL($sql, array($_POST['name'], $_POST['vorname'], $_POST['adresse'],
-               $_POST['plz'], $_POST['ort'], $_POST['land'], $_POST['tel1'], $_POST['tel2'],
-               $_POST['mobil'], $_POST['fax'], $_POST['mail'], $_POST['weburl'],
-               $_POST['login'], $_GET['user_id']));
-   $result = mysql_query($sql, $g_adm_con);
-   db_error($result);
-   $row_id = $_GET['user_id'];
-}
+if($user_id != 0 && $_GET['new_user'] == 0)
+	$ret_code = $user->update($g_adm_con, $g_current_user_id);
 else
-{
-   /*------------------------------------------------------------*/
-   // einen neuen Benutzer anlegen
-   /*------------------------------------------------------------*/
-   $sql = " INSERT INTO ". TBL_USERS. " ( au_name, au_vorname, au_adresse, au_plz, au_ort, au_land, au_tel1, au_tel2,
-                   au_mobil, au_fax, au_geburtstag, au_mail, au_weburl )
-            VALUES ({0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, '$db_geburtstag',
-                    {10}, {11} )";
-   $sql    = prepareSQL($sql, array($_POST['name'], $_POST['vorname'], $_POST['adresse'], $_POST['plz'],
-               $_POST['ort'], $_POST['land'], $_POST['tel1'], $_POST['tel2'], $_POST['mobil'],
-               $_POST['fax'], $_POST['mail'], $_POST['weburl']));
-   $result = mysql_query($sql, $g_adm_con);
-   db_error($result);
+	$ret_code = $user->insert($g_adm_con, $g_current_user_id);
 
-   // neue User-Id auslesen
-   $row_id = mysql_insert_id($g_adm_con);
+if($ret_code != 0)
+{
+   $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=&err_text=$ret_code";
+   header($location);
+   exit();
 }
 
 /*------------------------------------------------------------*/
@@ -260,7 +224,7 @@ $sql = "SELECT auf_id, auf_name, aud_id, aud_value
                OR auf_ag_shortname  = '$g_organization' ) ";
 if(!isModerator())
    $sql = $sql. " AND auf_locked = 0 ";
-$sql = prepareSQL($sql, array($row_id));
+$sql = prepareSQL($sql, array($user->id));
 $result_msg = mysql_query($sql, $g_adm_con);
 db_error($result_msg);
 
@@ -273,7 +237,7 @@ while($row = mysql_fetch_object($result_msg))
       {
          $sql = "INSERT INTO ". TBL_USER_DATA. " (aud_au_id, aud_auf_id, aud_value)
                                     VALUES ({0}, $row->auf_id, '". $_POST[urlencode($row->auf_name)]. "') ";
-         $sql = prepareSQL($sql, array($row_id));
+         $sql = prepareSQL($sql, array($user->id));
          $result = mysql_query($sql, $g_adm_con);
          db_error($result);
       }
@@ -302,7 +266,7 @@ while($row = mysql_fetch_object($result_msg))
    }
 }
 
-if($_GET['new_user'] == 1 && $_GET['user_id'] > 0)
+if($_GET['new_user'] == 1 && $user_id > 0)
 {
    /*------------------------------------------------------------*/
    // neuer Benutzer wurde ueber Webanmeldung angelegt
@@ -344,22 +308,22 @@ if($_GET['new_user'] == 1 && $_GET['user_id'] > 0)
    // Login und Passwort eintragen
    $sql = "UPDATE ". TBL_USERS. " SET au_login    = {0}
                              , au_password = {1}
-            WHERE au_id = $row_id ";
-   $sql    = prepareSQL($sql, array($_POST['login'], $_GET['pw']));
+            WHERE au_id = $user->id ";
+   $sql    = prepareSQL($sql, array($user->login_name, $_GET['pw']));
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
 
    // User wurde aus ". TBL_NEW_USER. " angelegt, dieser Satz kann jetzt gelöscht werden
    $sql    = "DELETE FROM ". TBL_NEW_USER. " WHERE anu_id = {0}";
-   $sql    = prepareSQL($sql, array($_GET['user_id']));
+   $sql    = prepareSQL($sql, array($user_id));
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
 
    // nur ausfuehren, wenn E-Mails auch unterstuetzt werden
    if($g_current_organization->mail_extern != 1)
    {
-      mail($_POST['mail'], "Anmeldung auf $g_homepage", "Hallo ". $_POST['vorname']. ",\n\ndeine Anmeldung auf $g_homepage ".
-           "wurde bestätigt.\n\nNun kannst du dich mit deinem Benutzernamen : ". $_POST['login']. "\nund dem Passwort auf der Homepage ".
+      mail($user->email, "Anmeldung auf $g_homepage", "Hallo $user->first_name,\n\ndeine Anmeldung auf $g_homepage ".
+           "wurde bestätigt.\n\nNun kannst du dich mit deinem Benutzernamen : $user->login_name\nund dem Passwort auf der Homepage ".
            "einloggen.\n\nSollten noch Fragen bestehen, schreib eine Mail an webmaster@$g_domain .\n\nViele Grüße\nDie Webmaster",
            "From: webmaster@$g_domain");
    }
@@ -372,13 +336,13 @@ if($_GET['new_user'] == 1 && $_GET['user_id'] > 0)
 if($_GET['new_user'] == 1)
 {
    // neuer User -> Rollen zuordnen
-   $location = "location: roles.php?user_id=$row_id&new_user=1&url=". $_GET['url'];
+   $location = "location: roles.php?user_id=$user->id&new_user=1&url=". $_GET['url'];
    header($location);
    exit();
 }
 
 // zur Profilseite zurueckkehren und die URL, von der die Profilseite aufgerufen wurde uebergeben
-$load_url = urlencode("$g_root_path/adm_program/modules/profile/profile.php?user_id=". $_GET['user_id']. "&url=". $_GET['url']);
+$load_url = urlencode("$g_root_path/adm_program/modules/profile/profile.php?user_id=$user_id&url=". $_GET['url']);
 $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=save&timer=2000&url=$load_url";
 header($location);
 exit();
