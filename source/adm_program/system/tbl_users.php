@@ -52,6 +52,13 @@ class TblUsers
    var $valid;
    var $valid_shortname;
 
+   // Konstruktor
+   function TblUsers()
+   {
+   	$this->clear();
+   }
+
+	// User mit der uebergebenen ID aus der Datenbank auslesen
    function getUser($id, $connection)
    {
       $sql = "SELECT * FROM ". TBL_USERS. " WHERE au_id = $id";
@@ -93,9 +100,10 @@ class TblUsers
       	$this->clear();
    }
 
+	// alle Klassenvariablen wieder zuruecksetzen
    function clear()
    {
-		$this->id            = "";
+		$this->id            = 0;
 		$this->last_name     = "";
 		$this->first_name    = "";
 		$this->address       = "";
@@ -109,17 +117,88 @@ class TblUsers
 		$this->gender        = "";
 		$this->email         = "";
 		$this->homepage      = "";
-		$this->login_name    = "";
-		$this->password      = "";
+		$this->login_name    = NULL;
+		$this->password      = NULL;
 		$this->last_login    = "";
 		$this->act_login     = "";
-		$this->num_login     = "";
+		$this->num_login     = 0;
 		$this->invalid_login = "";
-		$this->num_invalid   = "";
+		$this->num_invalid   = 0;
 		$this->last_change   = "";
-		$this->usr_id_change = "";
-		$this->valid         = "";
+		$this->usr_id_change = 0;
+		$this->valid         = 1;
 		$this->valid_shortname = "";
+   }
+
+   // aktuelle Userdaten in der Datenbank updaten
+   // Es muss die ID des eingeloggten Users uebergeben werden,
+   // damit die Aenderung protokolliert werden kann
+   function update($connection, $login_user_id)
+   {
+   	if($this->id > 0 && $login_user_id > 0)
+   	{
+   		$act_date = date("Y-m-d H:i:s", time());
+
+			$sql = "UPDATE ". TBL_USERS. " SET au_name    = '$this->last_name'
+                                          , au_vorname = '$this->first_name'
+														, au_adresse = '$this->address'
+														, au_plz     = '$this->zip_code'
+														, au_ort     = '$this->city'
+														, au_land    = '$this->country'
+														, au_tel1    = '$this->phone'
+        												, au_mobil   = '$this->mobile'
+                                          , au_fax     = '$this->fax'
+														, au_geburtstag = '$this->birthday'
+														, au_mail       = '$this->email'
+														, au_weburl     = '$this->homepage'
+														, au_last_login = '$this->last_login'
+														, au_act_login  = '$this->act_login'
+														, au_num_login  = $this->num_login
+														, au_invalid_login  = '$this->invalid_login'
+														, au_num_invalid    = $this->num_invalid
+														, au_last_change    = '$act_date'
+														, au_last_change_id = $login_user_id ";
+			if(strlen($this->login_name) == 0)
+				$sql = $sql. ", au_login = NULL, au_password = NULL ";
+			else
+				$sql = $sql. ", au_login = '$this->login_name', au_password = '$this->password' ";
+			$sql = $sql. " WHERE au_id = $this->id ";
+			$result = mysql_query($sql, $connection);
+		   if(!$result) { echo "Error: ". mysql_error(); exit(); }
+		   return 0;
+     	}
+     	return -1;
+   }
+
+   // aktuelle Userdaten neu in der Datenbank schreiben
+   // Es muss die ID des eingeloggten Users uebergeben werden,
+   // damit die Aenderung protokolliert werden kann
+   function insert($connection, $login_user_id)
+   {
+   	if($this->id == 0 && $login_user_id > 0)
+   	{
+   		$act_date = date("Y-m-d H:i:s", time());
+
+   		$sql = "INSERT INTO ". TBL_USERS. " (au_name, au_vorname, au_adresse, au_plz,
+									  au_ort, au_land, au_tel1, au_mobil, au_fax, au_geburtstag,
+									  au_mail, au_weburl, au_last_login, au_act_login, au_num_login,
+									  au_invalid_login, au_num_invalid, au_last_change, au_last_change_id,
+									  au_login, au_password )
+							 VALUES ('$this->last_name', '$this->first_name', '$this->address', '$this->zip_code',
+										'$this->city', '$this->country', '$this->phone', '$this->mobile', '$this->fax', '$this->birthday',
+										'$this->email', '$this->homepage', NULL, NULL, 0,
+										NULL, 0, '$act_date', $login_user_id, ";
+			if(strlen($this->login_name) == 0)
+				$sql = $sql. " NULL, NULL ) ";
+			else
+				$sql = $sql. " '$this->login_name', '$this->password' ) ";
+			$result = mysql_query($sql, $connection);
+		   if(!$result) { echo "Error: ". mysql_error(); exit(); }
+
+		   $this->id = mysql_insert_id($connection);
+		   return 0;
+     	}
+     	return -1;
    }
 }
 ?>
