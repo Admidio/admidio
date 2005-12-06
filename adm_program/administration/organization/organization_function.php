@@ -28,10 +28,10 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
- 
+
 require("../../system/common.php");
 require("../../system/session_check_login.php");
- 
+
 // nur Webmaster duerfen Gruppierungen bearbeiten
 if(!hasRole("Webmaster"))
 {
@@ -42,13 +42,25 @@ if(!hasRole("Webmaster"))
 
 $err_code   = "";
 
-if(strlen($_POST["longname"]) == 0)
+// Organisationsobjekt kopieren, damit im Fehlerfall nicht die Originaldaten veraender wurden
+$tmp_organization = $g_current_organization;
+
+$tmp_organization->longname  = strStripTags($_POST["longname"]);
+$tmp_organization->homepage  = strStripTags($_POST["homepage"]);
+$tmp_organization->org_shortname_mother = $_POST["mutter"];
+$tmp_organization->bbcode      = $_POST["bbcode"];
+$tmp_organization->mail_extern = $_POST["mail_extern"];
+$tmp_organization->mail_size   = $_POST["attachment_size"];
+$tmp_organization->enable_rss  = $_POST["enable_rss"];
+
+// Pruefen, ob alle notwendigen Felder gefuellt sind
+if(strlen($tmp_organization->longname) == 0)
 {
    $err_code = "feld";
    $err_text = "Name (lang)";
 }
 
-if(strlen($_POST["attachment_size"]) == 0)
+if(strlen($tmp_organization->mail_size) == 0)
 {
    $err_code = "feld";
    $err_text = "Max. Attachmentgr&ouml;&szlig;e";
@@ -61,27 +73,15 @@ if ($err_code != "")
    exit();
 }
 
-$longname = strStripTags($_POST['longname']);
-$homepage = strStripTags($_POST['homepage']);
-
 // Gruppierung updaten
-$sql = "UPDATE ". TBL_ORGANIZATIONS. " SET ag_longname    = {0}
-                                 , ag_homepage    = {1}
-                                 , ag_bbcode      = {2}
-                                 , ag_mail_extern = {3}
-                                 , ag_mail_attachment_size = {4}
-                                 , ag_enable_rss = {5}
-                                 , ag_mother      = ";
-if(strlen($_POST["mutter"]) > 0)
-   $sql = $sql. " {6} ";
-else
-   $sql = $sql. " NULL ";
-
-$sql = $sql. " WHERE ag_id = {7} ";
-$sql    = prepareSQL($sql, array($longname, $homepage, $_POST['bbcode'], $_POST['mail_extern'],
-                                 $_POST['attachment_size'], $_POST['enable_rss'] ,$_POST['mutter'], $_GET['ag_id']));
-$result = mysql_query($sql, $g_adm_con);
-db_error($result);
+$ret_code = $tmp_organization->update($g_adm_con);
+if($ret_code != 0)
+{
+   $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=&err_text=$ret_code";
+   header($location);
+   exit();
+}
+$g_current_organization = $tmp_organization;
 
 // zur Ausgangsseite zurueck
 $load_url = urlencode("$g_root_path/adm_program/administration/organization/organization.php?url=". $_GET['url']);
