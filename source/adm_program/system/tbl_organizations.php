@@ -38,6 +38,13 @@ class TblOrganizations
    var $enable_rss;
    var $bbcode;
 
+   // Konstruktor
+   function TblOrganizations()
+   {
+   	$this->clear();
+   }
+
+	// User mit der uebergebenen ID aus der Datenbank auslesen
    function getOrganization($shortname, $connection)
    {
       $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. " WHERE ag_shortname = '$shortname'";
@@ -56,25 +63,77 @@ class TblOrganizations
          $this->photo_size  = $row->ag_photo_size;
          $this->mail_extern = $row->ag_mail_extern;
          $this->enable_rss  = $row->ag_enable_rss;
-         $this->bb_code     = $row->ag_bbcode;
+         $this->bbcode      = $row->ag_bbcode;
       }
       else
       	$this->clear();
    }
 
+	// alle Klassenvariablen wieder zuruecksetzen
    function clear()
    {
-		$this->id          = "";
+		$this->id          = 0;
 		$this->longname    = "";
 		$this->shortname   = "";
 		$this->org_shortname_mother= "";
 		$this->homepage    = "";
-		$this->mail_size   = "";
-		$this->upload_size = "";
-		$this->photo_size  = "";
-		$this->mail_extern = "";
-		$this->enable_rss  = "";
-		$this->bb_code            = "";
+		$this->mail_size   = 0;
+		$this->upload_size = 0;
+		$this->photo_size  = 0;
+		$this->mail_extern = 0;
+		$this->enable_rss  = 1;
+		$this->bbcode     = 1;
+	}
+
+
+   // aktuelle Userdaten in der Datenbank updaten
+   function update($connection)
+   {
+   	if($this->id > 0)
+   	{
+   		if($this->mail_extern != 1) $this->mail_extern = 0;
+   		if($this->enable_rss != 1)  $this->enable_rss = 0;
+   		if($this->bbcode != 1)      $this->bbcode = 0;
+
+			$sql = "UPDATE ". TBL_ORGANIZATIONS. "
+												 SET ag_longname    = '$this->longname'
+                                    	, ag_shortname   = '$this->shortname'
+													, ag_mother      = '$this->org_shortname_mother'
+													, ag_homepage    = '$this->homepage'
+													, ag_mail_attachment_size = $this->mail_size
+													, ag_mail_extern = $this->mail_extern
+													, ag_enable_rss  = $this->enable_rss
+													, ag_bbcode      = $this->bbcode
+					   WHERE ag_id = $this->id ";
+			$result = mysql_query($sql, $connection);
+		   if(!$result) { echo "Error: ". mysql_error(); exit(); }
+		   return 0;
+     	}
+     	return -1;
+   }
+
+   // aktuelle Userdaten neu in der Datenbank schreiben
+   function insert($connection)
+   {
+   	if($this->id == 0)
+   	{
+   		if($this->mail_extern != 1) $this->mail_extern = 0;
+   		if($this->enable_rss != 1) $this->enable_rss = 0;
+   		if($this->bbcode != 1)     $this->bbcode = 0;
+
+   		$sql = "INSERT INTO ". TBL_ORGANIZATIONS. " (ag_longname, ag_shortname, ag_mother
+										ag_homepage, ag_mail_attachement_size,
+										ag_mail_extern, ag_enable_rss, ag_bbcode )
+							 VALUES ('$this->longname', '$this->shortname', '$this->org_shortname_mother',
+										'$this->homepage', $this->mail_size,
+										$this->mail_extern, $this->enable_rss, $this->ag_bbcode ) ";
+			$result = mysql_query($sql, $connection);
+		   if(!$result) { echo "Error: ". mysql_error(); exit(); }
+
+		   $this->id = mysql_insert_id($connection);
+		   return 0;
+     	}
+     	return -1;
    }
 }
 ?>
