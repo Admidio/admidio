@@ -56,9 +56,9 @@ class TblOrganizations
          $this->id          = $row->ag_id;
          $this->longname    = $row->ag_longname;
          $this->shortname   = $row->ag_shortname;
-         $this->org_shortname_mother= $row->ag_org_shortname_mother;
+         $this->org_shortname_mother= $row->ag_mother;
          $this->homepage    = $row->ag_homepage;
-         $this->mail_size   = $row->ag_mail_size;
+         $this->mail_size   = $row->ag_mail_attachment_size;
          $this->upload_size = $row->ag_upload_size;
          $this->photo_size  = $row->ag_photo_size;
          $this->mail_extern = $row->ag_mail_extern;

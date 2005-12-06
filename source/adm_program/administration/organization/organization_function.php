@@ -42,25 +42,22 @@ if(!hasRole("Webmaster"))
 
 $err_code   = "";
 
-// Organisationsobjekt kopieren, damit im Fehlerfall nicht die Originaldaten veraender wurden
-$tmp_organization = $g_current_organization;
-
-$tmp_organization->longname  = strStripTags($_POST["longname"]);
-$tmp_organization->homepage  = strStripTags($_POST["homepage"]);
-$tmp_organization->org_shortname_mother = $_POST["mutter"];
-$tmp_organization->bbcode      = $_POST["bbcode"];
-$tmp_organization->mail_extern = $_POST["mail_extern"];
-$tmp_organization->mail_size   = $_POST["attachment_size"];
-$tmp_organization->enable_rss  = $_POST["enable_rss"];
+$g_current_organization->longname  = strStripTags($_POST["longname"]);
+$g_current_organization->homepage  = strStripTags($_POST["homepage"]);
+$g_current_organization->org_shortname_mother = $_POST["mutter"];
+$g_current_organization->bbcode      = $_POST["bbcode"];
+$g_current_organization->mail_extern = $_POST["mail_extern"];
+$g_current_organization->mail_size   = $_POST["attachment_size"];
+$g_current_organization->enable_rss  = $_POST["enable_rss"];
 
 // Pruefen, ob alle notwendigen Felder gefuellt sind
-if(strlen($tmp_organization->longname) == 0)
+if(strlen($g_current_organization->longname) == 0)
 {
    $err_code = "feld";
    $err_text = "Name (lang)";
 }
 
-if(strlen($tmp_organization->mail_size) == 0)
+if(strlen($g_current_organization->mail_size) == 0)
 {
    $err_code = "feld";
    $err_text = "Max. Attachmentgr&ouml;&szlig;e";
@@ -74,14 +71,13 @@ if ($err_code != "")
 }
 
 // Gruppierung updaten
-$ret_code = $tmp_organization->update($g_adm_con);
+$ret_code = $g_current_organization->update($g_adm_con);
 if($ret_code != 0)
 {
    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=&err_text=$ret_code";
    header($location);
    exit();
 }
-$g_current_organization = $tmp_organization;
 
 // zur Ausgangsseite zurueck
 $load_url = urlencode("$g_root_path/adm_program/administration/organization/organization.php?url=". $_GET['url']);

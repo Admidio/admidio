@@ -27,7 +27,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
- 
+
 require("../../system/common.php");
 require("../../system/session_check_login.php");
 
@@ -102,14 +102,14 @@ require("../../../adm_config/body_top.php");
                <div style=\"text-align: left; margin-left: 42%;\">
                   <select size=\"1\" name=\"mutter\">
                      <option value=\" \" ";
-                        if(strlen($g_current_organization->mother) == 0)
+                        if(strlen($g_current_organization->org_shortname_mother) == 0)
                            echo " selected ";
                      echo ">- Bitte w&auml;hlen -</option>";
 
                      while($row = mysql_fetch_object($result))
                      {
                         echo "<option value=\"$row->ag_shortname\"";
-                           if($g_current_organization->mother == $row->ag_shortname)
+                           if($g_current_organization->org_shortname_mother == $row->ag_shortname)
                               echo " selected ";
                         echo ">";
 
@@ -151,7 +151,7 @@ require("../../../adm_config/body_top.php");
          <div style=\"margin-top: 6px;\">
             <div style=\"text-align: right; width: 40%; float: left;\">Max. Attachmentgr&ouml;&szlig;e:</div>
             <div style=\"text-align: left; margin-left: 42%;\">
-               <input type=\"text\" name=\"attachment_size\" size=\"4\" maxlength=\"4\" value=\"$g_current_organization->mail_attachement_size\"> KB
+               <input type=\"text\" name=\"attachment_size\" size=\"4\" maxlength=\"4\" value=\"$g_current_organization->mail_size\"> KB
                <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=attachmentgroesse','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
             </div>
