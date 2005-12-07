@@ -287,7 +287,7 @@ echo "
                Der Dateiname hat Einfluss auf die Anzeigereihenfolge. In einem Ordner in dem z.B. Sitzungsprotokolle
                gespeichert werden, sollten die Dateinamen immer mit dem Datum beginnen (jjjj-mm-tt).";
             break;
-      //Fotomodulehifen
+      //Fotomodulhifen
 
       case "photo_up_help":
          echo " <h3>Was ist zu tun?</h3>
@@ -322,7 +322,8 @@ echo "
          echo " <h3>Warnung!!!</h3>
 			Der zugehörige Ordner wurde nicht Gefunden. Sollte er bewusst über FTP gelöscht worden sein
 			oder nicht mehr die Möglichkeit bestehen ihn wieder herzustellen, bitte
-			den Datensatz mit Button in der Bearbeitungsspalte löschen (rotes X).";
+			den Datensatz mit Button in der Bearbeitungsspalte löschen (rotes X). Besuchern der Website
+			ohne Fotoverwaltungsrecht, wird diese Veranstaltung nich mehr angezeigt.";
          break;
       
 
