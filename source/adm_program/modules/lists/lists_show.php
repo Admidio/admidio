@@ -382,7 +382,7 @@ for($j = 0; $j < $max_count; $j++)
                            if($g_current_organization->mail_extern == 1)
                               $content = "<a href=\"mailto:". $row[$i]. "\">". $row[$i]. "</a>";
                            else
-                              $content = "<a href=\"../../adm_program/modules/mail/mail.php?au_id=". $row[0]. "\">". $row[$i]. "</a>";
+                              $content = "<a href=\"../mail/mail.php?au_id=". $row[0]. "\">". $row[$i]. "</a>";
                         }
                         else
                            $content = $row[$i];
