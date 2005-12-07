@@ -74,9 +74,35 @@ else
    }
 }
 
-// Userdaten aus Datenbank holen
 $user = new TblUsers($g_adm_con);
-$user->getUser($user_id);
+
+if($_GET['new_user'] == 1)
+{
+	if($user_id > 0)
+	{
+		// neuer User, dann PW aus Tabelle new_user holen
+		$sql = "SELECT anu_password 
+					 FROM ". TBL_NEW_USER. "
+					WHERE anu_id = $user_id ";
+		$sql    = prepareSQL($sql, array($user_id));
+		$result = mysql_query($sql, $g_adm_con);
+		db_error($result);
+		
+		$new_user_row = mysql_fetch_object($result);
+		$user->password = $new_user_row->anu_password;
+
+		// User wurde aus adm_new_user angelegt, dieser Satz kann jetzt gelöscht werden
+		$sql    = "DELETE FROM ". TBL_NEW_USER. " WHERE anu_id = {0}";
+		$sql    = prepareSQL($sql, array($user_id));
+		$result = mysql_query($sql, $g_adm_con);
+		db_error($result);
+	}
+}
+else
+{
+	// Userdaten aus Datenbank holen
+	$user->getUser($user_id);
+}
 
 // Feldinhalte saeubern und der User-Klasse zuordnen
 $user->last_name  = strStripTags($_POST['name']);
@@ -304,20 +330,6 @@ if($_GET['new_user'] == 1 && $user_id > 0)
          mysql_select_db($g_adm_db, $g_adm_con);
       }
    }
-
-   // Login und Passwort eintragen
-   $sql = "UPDATE ". TBL_USERS. " SET au_login    = {0}
-                             , au_password = {1}
-            WHERE au_id = $user->id ";
-   $sql    = prepareSQL($sql, array($user->login_name, $_GET['pw']));
-   $result = mysql_query($sql, $g_adm_con);
-   db_error($result);
-
-   // User wurde aus ". TBL_NEW_USER. " angelegt, dieser Satz kann jetzt gelöscht werden
-   $sql    = "DELETE FROM ". TBL_NEW_USER. " WHERE anu_id = {0}";
-   $sql    = prepareSQL($sql, array($user_id));
-   $result = mysql_query($sql, $g_adm_con);
-   db_error($result);
 
    // nur ausfuehren, wenn E-Mails auch unterstuetzt werden
    if($g_current_organization->mail_extern != 1)
