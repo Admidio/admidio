@@ -37,8 +37,17 @@ if(file_exists("../adm_config/config.php"))
 else
    $first_install = true;
 
-if(!array_key_exists("mode", $_GET))
-   $_GET['mode'] = 0;
+if(!array_key_exists("mode", $_POST))
+   $mode = 0;
+else
+{
+	if($_POST['mode'] == 'install')
+		$mode = 1;
+	if($_POST['mode'] == 'update')
+		$mode = 3;
+	if($_POST['mode'] == 'orga')
+		$mode = 4;
+}
 
 echo "
 <!-- (c) 2004 - 2005 The Admidio Team - http://www.admidio.org -->
@@ -81,18 +90,18 @@ echo "
    <div class=\"formBody\">
       <div align=\"center\">";
 
-      if($_GET['mode'] == 0)
+      if($mode == 0)
       	echo "<h1>Installation &amp; Einrichtung</h1>";
-      elseif($_GET['mode'] == 1)
+      elseif($mode == 1)
       	echo "<h1>Konfigurationsdatei erstellen</h1>";
-      elseif($_GET['mode'] == 2)
+      elseif($mode == 2)
       	echo "<h1>Datenbank installieren</h1>";
-      elseif($_GET['mode'] == 3)
+      elseif($mode == 3)
       	echo "<h1>Datenbank updaten</h1>";
-      elseif($_GET['mode'] == 4)
+      elseif($mode == 4)
       	echo "<h1>Neue Organisation hinzufügen</h1>";
 
-      if($_GET['mode'] == 0)
+      if($mode == 0)
       {
       	echo "
 			<form name=\"server\" action=\"index.php\" method=\"post\">
@@ -100,21 +109,21 @@ echo "
 					<div class=\"groupBoxHeadline\">Aktion auswählen</div>
 					<br>
 					<div>&nbsp;
-						<input type=\"radio\" id=\"install\" name=\"action\" value=\"install\" ";
+						<input type=\"radio\" id=\"install\" name=\"mode\" value=\"install\" ";
 	               if($first_install) echo " checked ";
 	               echo "/>&nbsp;
 						<label for=\"install\">Admidio installieren und einrichten
 					</div>
 					<br>
 					<div>&nbsp;
-						<input type=\"radio\" id=\"update\" name=\"action\" value=\"update\" ";
+						<input type=\"radio\" id=\"update\" name=\"mode\" value=\"update\" ";
 	               if(!$first_install) echo " checked ";
 	               echo "/>&nbsp;
 						<label for=\"update\">Admidio Datenbank updaten
 					</div>
 					<br>
 					<div>&nbsp;
-						<input type=\"radio\" id=\"orga\" name=\"action\" value=\"orga\" />&nbsp;
+						<input type=\"radio\" id=\"orga\" name=\"mode\" value=\"orga\" />&nbsp;
 						<label for=\"orga\">Neue Organisation hinzufügen
 					</div>
 					<br>
@@ -122,10 +131,10 @@ echo "
 		}
 		else
 		{
-      	echo "<form name=\"server\" action=\"inst_do.php\" method=\"post\">";
+      	echo "<form name=\"server\" action=\"inst_do.php?mode=$mode\" method=\"post\">";
 
 			// Verbindungsdaten zur Datenbank
-	      if($_GET['mode'] != 1)
+	      if($mode != 1)
 	      {
 				echo "
 	         <table class=\"groupBox\" width=\"350\" cellpadding=\"5\">
@@ -154,20 +163,20 @@ echo "
 	      }
 
 			// Updaten von Version
-			if($_GET['mode'] == 3)
+			if($mode == 3)
 			{
-				echo "
+				echo "<br />
 	         <table class=\"groupBox\" width=\"350\" cellpadding=\"5\">
 	            <tr>
 	               <td class=\"groupBoxHeadline\" colspan=\"2\">Optionen</td>
 	            </tr>
 	            <tr>
-	               <td width=\"120px\" align=\"right\">&nbsp;</td>
+	               <td width=\"120px\">Update von:</td>
 	               <td>
 	                  <select size=\"1\" name=\"version\">
-	                     <option value=\"0\" selected=\"selected\">bisherige Version</option>
-	                     <option value=\"2\">1.1.*</option>
-	                     <option value=\"1\">1.0.*</option>
+	                     <option value=\"0\" selected=\"selected\">- Bitte w&auml;hlen -</option>
+	                     <option value=\"2\">Version 1.1.*</option>
+	                     <option value=\"1\">Version 1.0.*</option>
 	                  </select>
 	               </td>
 	            </tr>
@@ -177,7 +186,7 @@ echo "
 			}
 
 			// Organisation anlegen
-			if($_GET['mode'] != 3)
+			if($mode != 3)
 			{
 				echo "
 	         <table class=\"groupBox\" width=\"350\" cellpadding=\"5\">
@@ -198,8 +207,8 @@ echo "
 			}
 
 			// Webmaster anlegen
-			if($_GET['mode'] == 2
-			|| $_GET['mode'] == 4)
+			if($mode == 2
+			|| $mode == 4)
 			{
 				echo "
 	         <table class=\"groupBox\" width=\"350\" cellpadding=\"5\">
@@ -252,24 +261,20 @@ echo "
             </table>
             ";
          }
-         else
-         {
-            echo "
-            <button name=\"updaten\" type=\"button\" value=\"updaten\" onclick=\"installDatabase()\">Datenbank updaten</button>";
-         }
 		}
-	   echo "</form>
+	   echo "
 		<div style=\"margin-top: 15px; margin-bottom: 5px;\">";
-			if($_GET['mode'] > 0)
+			if($mode > 0)
 			{
-				echo "<button name=\"zurueck\" type=\"button\" value=\"zurueck\" >
+				echo "<button name=\"back\" type=\"button\" value=\"back\" onclick=\"history.back()\">
 					<img src=\"../adm_program/images/back.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zurueck\">
 					&nbsp;Zurück</button>&nbsp;&nbsp;";
 			}
-			echo "<button name=\"zurueck\" type=\"submit\" value=\"zurueck\">Weiter&nbsp;
+			echo "<button name=\"forward\" type=\"submit\" value=\"forward\">Weiter&nbsp;
 				<img src=\"../adm_program/images/forward.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Weiter\">
 			</button>
 		</div>
+		</form>
       </div>
    </div>
    <div class=\"formHead\" style=\"font-size: 8pt; text-align: center; border-top-width: 0px;\">

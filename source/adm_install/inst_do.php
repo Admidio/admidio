@@ -29,7 +29,7 @@
 
 require("../adm_program/system/function.php");
 
-if($_POST['struktur'] == 1)
+if($_GET['mode'] == 1)
 {
 	$g_tbl_praefix = $_POST['praefix'];
 	if(strlen($g_tbl_praefix) == 0)
@@ -116,13 +116,7 @@ if(strlen($_POST['server'])    == 0
 if(!array_key_exists("file", $_GET))
    $_GET['file'] = 0;
 
-if(!array_key_exists("struktur", $_POST))
-   $_POST['struktur'] = 0;
-
-if(!array_key_exists("update", $_POST))
-   $_POST['update'] = 0;
-
-if($_POST['update'] == 1)
+if($_GET['mode'] == 3)
 {
    if($_POST['version'] == 0)
    {
@@ -262,7 +256,7 @@ if($_POST['struktur'] == 1)
    if(!$result) showError(mysql_error());
 }
 
-if($_POST['update'] == 1)
+if($_GET['mode'] == 3)
 {
    // Updatescripte fuer die Datenbank verarbeiten
    if($_POST['version'] > 0)
