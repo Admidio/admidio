@@ -223,8 +223,7 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
          			echo"
 						<tr>
 							<td style=\"text-align: center;\">
-								<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/note.png\" alt=\"Userinformationen\"
-								 title=\"$user_text\">
+								<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/note.png\" alt=\"Userinformationen\" title=\"$user_text\">
 							</td>
 							<td style=\"text-align: center;\">". $user['au_name']."</td>
 							<td style=\"text-align: center;\">". $user['au_vorname']."</td>
