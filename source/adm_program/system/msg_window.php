@@ -322,8 +322,8 @@ echo "
          echo " <h3>Warnung!!!</h3>
 			Der zugehörige Ordner wurde nicht Gefunden. Sollte er bewusst über FTP gelöscht worden sein
 			oder nicht mehr die Möglichkeit bestehen ihn wieder herzustellen, bitte
-			den Datensatz mit Button in der Bearbeitungsspalte löschen (rotes X). Besuchern der Website
-			ohne Fotoverwaltungsrecht, wird diese Veranstaltung nich mehr angezeigt.";
+			den Datensatz mit Button in der Bearbeitungsspalte löschen (<img src=\"$g_root_path/adm_program/images/delete.png\" style=\"vertical-align: top;\">).
+			Besuchern der Website ohne Fotoverwaltungsrecht, wird diese Veranstaltung nich mehr angezeigt.";
          break;
       
 
