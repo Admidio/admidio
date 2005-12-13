@@ -81,10 +81,13 @@
    <div class=\"formBody\" style=\"width: 90%\">";
 		echo"Datum: ".mysqldate("d.m.y", $adm_photo["ap_begin"]);
          if($adm_photo["ap_end"] != $adm_photo["ap_begin"])echo " bis ".mysqldate("d.m.y", $adm_photo["ap_end"]);
+		echo"<br><br> Seite:&nbsp;";
+      //Seiten links
+      for($s=1; $s<=$seiten; $s++){
+      	if($s==$seite)echo $seite."&nbsp;";
+      	if($s!=$seite)echo"<a href='thumbnails.php?seite=$s&ap_id=$ap_id'>$s</a>&nbsp;";
+      }
 		echo"
-		<br><br>
-      Seite $seite / $seiten
-
       <table cellspacing=10 cellpadding=0 border=0>";
          for($zeile=1;$zeile<=5;$zeile++){//durchlaufen der Tabellenzeilen
             echo "<tr>";
