@@ -27,7 +27,7 @@
 
 body {   
    color:            #85C226;
-   font-family:      Helvetica, Arial, Times; 
+   font-family:      arial, sans-serif; 
    font-size:        10pt;
 }
 
@@ -180,7 +180,7 @@ a:hover {
 
 .bodyPrint {
    color:            #000000;
-   font-family:      Helvetica, Arial, Times;
+   font-family:      arial, sans-serif; 
    font-size:        10pt;
    background-color: #ffffff;
 }
@@ -198,7 +198,7 @@ a:hover {
 
 .tableHeaderPrint {
    color:            #000000;
-   font-family:      Helvetica, Arial, Times;
+   font-family:      arial, sans-serif; 
    font-size:        10pt;
    background-color: #cccccc;
 }
