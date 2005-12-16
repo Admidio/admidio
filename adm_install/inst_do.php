@@ -29,45 +29,6 @@
 
 require("../adm_program/system/function.php");
 
-if($_GET['mode'] == 1)
-{
-	$g_tbl_praefix = $_POST['praefix'];
-	if(strlen($g_tbl_praefix) == 0)
-		$g_tbl_praefix = "adm";
-	else
-	{
-		// wenn letztes Zeichen ein _ dann abschneiden
-		if(strrpos($g_tbl_praefix, "_")+1 == strlen($g_tbl_praefix))
-			$g_tbl_praefix = substr($g_tbl_praefix, 0, strlen($g_tbl_praefix)-1);
-
-      // nur gueltige Zeichen zulassen
-      $anz = strspn($g_tbl_praefix, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_");
-
-      if($anz != strlen($g_tbl_praefix))
-      	showError("Das Tabellenpr&auml;fix enth&auml;lt ung&uuml;ltige Zeichen !");
-	}
-}
-else
-	require("../adm_config/config.php");
-
-// Standard-Praefix ist adm auch wegen Kompatibilitaet zu alten Versionen
-if(strlen($g_tbl_praefix) == 0)
-	$g_tbl_praefix = "adm";
-
-// Defines fuer alle Datenbanktabellen
-define("TBL_ANNOUNCEMENTS", $g_tbl_praefix. "_ankuendigungen");
-define("TBL_PHOTOS", $g_tbl_praefix. "_photo");
-define("TBL_ORGANIZATIONS", $g_tbl_praefix. "_gruppierung");
-define("TBL_MEMBERS", $g_tbl_praefix. "_mitglieder");
-define("TBL_NEW_USER", $g_tbl_praefix. "_new_user");
-define("TBL_ROLES", $g_tbl_praefix. "_rolle");
-define("TBL_SESSIONS", $g_tbl_praefix. "_session");
-define("TBL_DATES", $g_tbl_praefix. "_termine");
-define("TBL_USERS", $g_tbl_praefix. "_user");
-define("TBL_USER_DATA", $g_tbl_praefix. "_user_data");
-define("TBL_USER_FIELDS", $g_tbl_praefix. "_user_field");
-define("TBL_ROLE_TYPES", $g_tbl_praefix. "_role_types");
-
 function showError($err_msg, $err_head = "Fehler", $finish = false)
 {
    global $g_root_path;
@@ -93,9 +54,13 @@ function showError($err_msg, $err_head = "Fehler", $finish = false)
             <p>$err_msg</p>
             <p><button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"";
             if($finish)
-               echo "self.location.href='../adm_program/index.php'\">Admidio &Uuml;bersicht";
+               echo "self.location.href='../adm_program/index.php'\">
+					<img src=\"../adm_program/images/list.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zurueck\">
+					Admidio &Uuml;bersicht";
             else
-               echo "history.back()\">Zur&uuml;ck";
+               echo "history.back()\">
+					<img src=\"../adm_program/images/back.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zurueck\">
+					Zur&uuml;ck";
             echo "</button></p>
          </div>
       </div>
@@ -104,74 +69,41 @@ function showError($err_msg, $err_head = "Fehler", $finish = false)
    exit();
 }
 
-if(strlen($_POST['server'])    == 0
-|| strlen($_POST['user'])     == 0
-// bei localhost muss es kein Passwort geben
-//|| strlen($_POST['password'])  == 0
-|| strlen($_POST['database']) == 0 )
+if($_GET['mode'] == 1)
 {
-   showError("Es sind nicht alle Zugangsdaten zur MySql-Datenbank eingegeben worden !");
+	// Installation 1.Seite
+	session_start();
+
+	// Tabellenpraefix pruefen
+	$g_tbl_praefix = $_POST['praefix'];
+	if(strlen($g_tbl_praefix) == 0)
+		$g_tbl_praefix = "adm";
+	else
+	{
+		// wenn letztes Zeichen ein _ dann abschneiden
+		if(strrpos($g_tbl_praefix, "_")+1 == strlen($g_tbl_praefix))
+			$g_tbl_praefix = substr($g_tbl_praefix, 0, strlen($g_tbl_praefix)-1);
+
+      // nur gueltige Zeichen zulassen
+      $anz = strspn($g_tbl_praefix, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_");
+
+      if($anz != strlen($g_tbl_praefix))
+      	showError("Das Tabellenpr&auml;fix enth&auml;lt ung&uuml;ltige Zeichen !");
+	}
+
+	// Session-Variablen merken
+	$_SESSION['praefix']  = $g_tbl_praefix;
+	$_SESSION['server']   = $_POST['server'];
+	$_SESSION['user']     = $_POST['user'];
+	$_SESSION['password'] = $_POST['password'];
+	$_SESSION['database'] = $_POST['database'];
+	$_SESSION['verein-name-kurz'] = $_POST['verein-name-kurz'];
 }
-
-if(!array_key_exists("file", $_GET))
-   $_GET['file'] = 0;
-
-if($_GET['mode'] == 3)
+elseif($_GET['mode'] == 2)
 {
-   if($_POST['version'] == 0)
-   {
-      showError("Bei einem Update m&uuml;ssen Sie Ihre bisherige Version angeben !");
-   }
-}
+	// Installation 2.Seite
+	session_start();
 
-if(array_key_exists("user-webmaster", $_POST))
-{
-   if($_POST['user-webmaster'] == 1)
-   {
-      $_POST['user-surname']   = trim($_POST['user-surname']);
-      $_POST['user-firstname'] = trim($_POST['user-firstname']);
-      $_POST['user-login']     = trim($_POST['user-login']);
-
-      if(strlen($_POST['user-surname'])   == 0
-      || strlen($_POST['user-firstname']) == 0
-      || strlen($_POST['user-login'])     == 0
-      || strlen($_POST['user-passwort'])  == 0 )
-      {
-         showError("Es sind nicht alle Benutzerdaten eingegeben worden !");
-      }
-
-      if(strlen($_POST['verein-name-kurz']) == 0)
-      {
-         showError("Sie m&uuml;ssen den kurzen Namen der Gruppierung / des Vereins eingeben,
-                    dem der Benutzer zugeordnet werden kann.");
-      }
-   }
-}
-else
-   $_POST['user-webmaster'] = 0;
-
-if(array_key_exists("verein", $_POST))
-{
-   if($_POST['verein'] == 1
-   && (  strlen($_POST['verein-name-lang']) == 0
-      || strlen($_POST['verein-name-kurz']) == 0 ))
-   {
-      showError("Sie m&uuml;ssen einen Namen f&uuml;r die Gruppierung / den Verein eingeben !");
-   }
-}
-else
-   $_POST['verein'] = 0;
-
-// Verbindung zu Datenbank herstellen
-$connection = mysql_connect ($_POST['server'], $_POST['user'], $_POST['password'])
-              or showError("Es konnte keine Verbindung zur Datenbank hergestellt werden.<br /><br />
-                            Pr&uuml;fen Sie noch einmal Ihre MySql-Zugangsdaten !");
-
-if(!mysql_select_db($_POST['database'], $connection ))
-   showError("Die angegebene Datenbank <b>". $_POST['database']. "</b> konnte nicht gefunden werden !");
-
-if($_GET['file'])
-{
    // MySQL-Zugangsdaten in config.php schreiben
    // Datei auslesen
    $filename     = "config.php";
@@ -185,14 +117,14 @@ if($_GET['file'])
    if(!strpos($root_path, "http://"))
       $root_path = "http://". $root_path;
 
-	$file_content = str_replace("%PRAEFIX%", $_POST['praefix'], $file_content);
-   $file_content = str_replace("%SERVER%", $_POST['server'], $file_content);
-   $file_content = str_replace("%USER%",   $_POST['user'],   $file_content);
-   $file_content = str_replace("%PASSWORD%",  $_POST['password'], $file_content);
-   $file_content = str_replace("%DATABASE%",  $_POST['database'], $file_content);
+	$file_content = str_replace("%PRAEFIX%", $_SESSION['praefix'], $file_content);
+   $file_content = str_replace("%SERVER%",  $_SESSION['server'], $file_content);
+   $file_content = str_replace("%USER%",    $_SESSION['user'],   $file_content);
+   $file_content = str_replace("%PASSWORD%",  $_SESSION['password'], $file_content);
+   $file_content = str_replace("%DATABASE%",  $_SESSION['database'], $file_content);
    $file_content = str_replace("%ROOT_PATH%", $root_path,         $file_content);
    $file_content = str_replace("%DOMAIN%", $_SERVER['HTTP_HOST'], $file_content);
-   $file_content = str_replace("%ORGANIZATION%", $_POST['verein-name-kurz'], $file_content);
+   $file_content = str_replace("%ORGANIZATION%", $_SESSION['verein-name-kurz'], $file_content);
 
    // die erstellte Config-Datei an den User schicken
    $filename = "config.php";
@@ -203,8 +135,90 @@ if($_GET['file'])
    echo $file_content;
    exit();
 }
+elseif($_GET['mode'] == 5)
+{
+	if(file_exists("../adm_config/config.php"))
+		showError("Die Datenbank wurde erfolgreich angelegt und die Datei config.php erstellt.<br><br>Sie können nun mit Admidio arbeiten.", "Fertig", true);
+	else
+		showError("Die Datei <b>config.php</b> befindet sich nicht im Verzeichnis <b>adm_config</b> !");
+}
+else
+	require("../adm_config/config.php");
 
-if($_POST['struktur'] == 1)
+// Standard-Praefix ist adm auch wegen Kompatibilitaet zu alten Versionen
+if(strlen($g_tbl_praefix) == 0)
+	$g_tbl_praefix = "adm";
+
+// Defines fuer alle Datenbanktabellen
+define("TBL_ANNOUNCEMENTS", $g_tbl_praefix. "_ankuendigungen");
+define("TBL_PHOTOS", $g_tbl_praefix. "_photo");
+define("TBL_ORGANIZATIONS", $g_tbl_praefix. "_gruppierung");
+define("TBL_MEMBERS", $g_tbl_praefix. "_mitglieder");
+define("TBL_NEW_USER", $g_tbl_praefix. "_new_user");
+define("TBL_ROLES", $g_tbl_praefix. "_rolle");
+define("TBL_SESSIONS", $g_tbl_praefix. "_session");
+define("TBL_DATES", $g_tbl_praefix. "_termine");
+define("TBL_USERS", $g_tbl_praefix. "_user");
+define("TBL_USER_DATA", $g_tbl_praefix. "_user_data");
+define("TBL_USER_FIELDS", $g_tbl_praefix. "_user_field");
+define("TBL_ROLE_TYPES", $g_tbl_praefix. "_role_types");
+
+/*------------------------------------------------------------*/
+// Eingabefelder pruefen
+/*------------------------------------------------------------*/
+
+if(strlen($_POST['server'])    == 0
+|| strlen($_POST['user'])     == 0
+// bei localhost muss es kein Passwort geben
+//|| strlen($_POST['password'])  == 0
+|| strlen($_POST['database']) == 0 )
+{
+   showError("Es sind nicht alle Zugangsdaten zur MySql-Datenbank eingegeben worden !");
+}
+
+if($_GET['mode'] == 3)
+{
+   if($_POST['version'] == 0)
+   {
+      showError("Bei einem Update m&uuml;ssen Sie Ihre bisherige Version angeben !");
+   }
+}
+
+// bei Installation oder hinzufügen einer Organisation
+if($_GET['mode'] == 1 || $_GET['mode'] == 4)
+{
+	$_POST['user-surname']   = trim($_POST['user-surname']);
+	$_POST['user-firstname'] = trim($_POST['user-firstname']);
+	$_POST['user-login']     = trim($_POST['user-login']);
+
+	if(strlen($_POST['user-surname'])   == 0
+	|| strlen($_POST['user-firstname']) == 0
+	|| strlen($_POST['user-login'])     == 0
+	|| strlen($_POST['user-passwort'])  == 0 )
+	{
+		showError("Es sind nicht alle Benutzerdaten eingegeben worden !");
+	}
+
+   if(  strlen($_POST['verein-name-lang']) == 0
+   || strlen($_POST['verein-name-kurz']) == 0 )
+   {
+      showError("Sie m&uuml;ssen einen Namen f&uuml;r die Organisation / den Verein eingeben !");
+   }
+}
+
+/*------------------------------------------------------------*/
+// Daten verarbeiten
+/*------------------------------------------------------------*/
+
+// Verbindung zu Datenbank herstellen
+$connection = mysql_connect ($_POST['server'], $_POST['user'], $_POST['password'])
+              or showError("Es konnte keine Verbindung zur Datenbank hergestellt werden.<br /><br />
+                            Pr&uuml;fen Sie noch einmal Ihre MySql-Zugangsdaten !");
+
+if(!mysql_select_db($_POST['database'], $connection ))
+   showError("Die angegebene Datenbank <b>". $_POST['database']. "</b> konnte nicht gefunden werden !");
+
+if($_GET['mode'] == 1)
 {
    $filename = "db.sql";
    $file     = fopen($filename, "r")
@@ -291,7 +305,7 @@ if($_GET['mode'] == 3)
       showError("Sie haben Ihre bisherige Version nicht angegeben !");
 }
 
-if($_POST['verein'] == 1)
+if($_GET['mode'] == 1 || $_GET['mode'] == 4)
 {
    // neue Gruppierung anlegen
 
@@ -314,6 +328,7 @@ if($_POST['verein'] == 1)
 
    // nun die Default-Rollen anlegen
 
+	// Webmaster
    $sql = "INSERT INTO ". TBL_ROLES. " (ar_ag_shortname, ar_funktion, ar_beschreibung, ar_valid,
                                   ar_r_moderation, ar_r_termine, ar_r_foto, ar_r_download,
                                   ar_r_user_bearbeiten, ar_r_mail_logout, ar_r_mail_login)
@@ -322,9 +337,20 @@ if($_POST['verein'] == 1)
    $sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
    $result = mysql_query($sql, $connection);
    if(!$result) showError(mysql_error());
+
+	// Mitglied
+   $sql = "INSERT INTO ". TBL_ROLES. " (ar_ag_shortname, ar_funktion, ar_beschreibung, ar_valid,
+                                  ar_r_moderation, ar_r_termine, ar_r_foto, ar_r_download,
+                                  ar_r_user_bearbeiten, ar_r_mail_logout, ar_r_mail_login)
+                VALUES ({0}, 'Mitglied', 'Alle Mitglieder der Organisation', 1,
+                                   0, 0, 0, 0, 0, 0, 1) ";
+   $sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
+   $result = mysql_query($sql, $connection);
+   if(!$result) showError(mysql_error());
 }
 
-if($_POST['user-webmaster'] == 1)
+// bei Installation oder hinzufügen einer Organisation
+if($_GET['mode'] == 1 || $_GET['mode'] == 4)
 {
    // User Webmaster anlegen
 
@@ -337,6 +363,7 @@ if($_POST['user-webmaster'] == 1)
 
    $user_id = mysql_insert_id();
 
+   // Mitgliedschaft "Webmaster" anlegen
    $sql = "SELECT ar_id FROM ". TBL_ROLES. "
             WHERE ar_ag_shortname = {0}
               AND ar_funktion     = 'Webmaster' ";
@@ -345,12 +372,32 @@ if($_POST['user-webmaster'] == 1)
    if(!$result) showError(mysql_error());
    $row = mysql_fetch_array($result);
 
-   // Mitgliedschaft anlegen
+   $sql = "INSERT INTO ". TBL_MEMBERS. " (am_ar_id, am_au_id, am_start, am_valid)
+                VALUES ($row[0], $user_id, NOW(), 1) ";
+   $result = mysql_query($sql, $connection);
+   if(!$result) showError(mysql_error());
+
+   // Mitgliedschaft "Mitglied" anlegen
+   $sql = "SELECT ar_id FROM ". TBL_ROLES. "
+            WHERE ar_ag_shortname = {0}
+              AND ar_funktion     = 'Mitglied' ";
+   $sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
+   $result = mysql_query($sql, $connection);
+   if(!$result) showError(mysql_error());
+   $row = mysql_fetch_array($result);
+
    $sql = "INSERT INTO ". TBL_MEMBERS. " (am_ar_id, am_au_id, am_start, am_valid)
                 VALUES ($row[0], $user_id, NOW(), 1) ";
    $result = mysql_query($sql, $connection);
    if(!$result) showError(mysql_error());
 }
 
-showError("Die Einrichtung der Datenbank konnte erfolgreich abgeschlossen werden.", "Fertig", true);
+if($_GET['mode'] == 1)
+{
+   $location = "location: index.php?mode=2";
+   header($location);
+   exit();
+}
+else
+	showError("Die Einrichtung der Datenbank konnte erfolgreich abgeschlossen werden.", "Fertig", true);
 ?>

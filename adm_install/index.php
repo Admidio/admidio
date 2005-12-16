@@ -37,16 +37,19 @@ if(file_exists("../adm_config/config.php"))
 else
    $first_install = true;
 
-if(!array_key_exists("mode", $_POST))
+if(!array_key_exists("mode", $_GET)
+&& !array_key_exists("mode", $_POST))
    $mode = 0;
 else
 {
-	if($_POST['mode'] == 'install')
+	if($_POST['mode'] == "install")
 		$mode = 1;
-	if($_POST['mode'] == 'update')
+	elseif($_POST['mode'] == "update")
 		$mode = 3;
-	if($_POST['mode'] == 'orga')
+	elseif($_POST['mode'] == "orga")
 		$mode = 4;
+	else
+		$mode = $_GET['mode'];
 }
 
 echo "
@@ -62,18 +65,6 @@ echo "
    <meta name=\"language\" content=\"de\">
 
    <link rel=\"stylesheet\" type=\"text/css\" href=\"../adm_config/main.css\">
-
-   <script type=\"text/javascript\">
-      function createConfigFile() {
-        document.server.action = 'inst_do.php?file=1';
-        document.server.submit();
-      }
-
-      function installDatabase() {
-        document.server.action = 'inst_do.php?file=0';
-        document.server.submit();
-      }
-   </script>
 
    <!--[if gte IE 5.5000]>
    <script type=\"text/javascript\" src=\"../adm_program/system/correct_png.js\"></script>
@@ -93,9 +84,9 @@ echo "
       if($mode == 0)
       	echo "<h1>Installation &amp; Einrichtung</h1>";
       elseif($mode == 1)
-      	echo "<h1>Konfigurationsdatei erstellen</h1>";
-      elseif($mode == 2)
       	echo "<h1>Datenbank installieren</h1>";
+      elseif($mode == 2)
+      	echo "<h1>Konfigurationsdatei erstellen</h1>";
       elseif($mode == 3)
       	echo "<h1>Datenbank updaten</h1>";
       elseif($mode == 4)
@@ -104,7 +95,7 @@ echo "
       if($mode == 0)
       {
       	echo "
-			<form name=\"server\" action=\"index.php\" method=\"post\">
+			<form name=\"installation\" action=\"index.php\" method=\"post\">
 				<div class=\"groupBox\" style=\"width: 350px; text-align: left;\">
 					<div class=\"groupBoxHeadline\">Aktion auswählen</div>
 					<br>
@@ -124,43 +115,80 @@ echo "
 					<br>
 					<div>&nbsp;
 						<input type=\"radio\" id=\"orga\" name=\"mode\" value=\"orga\" />&nbsp;
-						<label for=\"orga\">Neue Organisation hinzufügen
+						<label for=\"orga\">Neue Organisation hinzuf&uuml;gen
 					</div>
 					<br>
 				</div>";
 		}
+		elseif($mode == 2)
+		{
+			echo "<br>
+			<form name=\"installation\" action=\"inst_do.php?mode=5\" method=\"post\">
+			<div class=\"groupBox\" style=\"width: 350px; text-align: left;\">
+				<div class=\"groupBoxHeadline\">Datei config.php anlegen</div>
+				<div>
+					<p>Laden Sie nun die Datei <b>config.php</b> herunter und kopieren Sie
+						diese in das Verzeichnis <b>adm_config</b>.</p>
+						<p>Klicken Sie erst danach auf <i>Weiter</i>.</p>
+		         <p align=\"center\">
+		         <button name=\"config_file\" type=\"button\" value=\"config_file\"  style=\"width: 190px;\"
+		            onclick=\"location.href='inst_do.php?mode=2'\">
+						<img src=\"../adm_program/images/download.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"config.php herunterladen\">
+						config.php herunterladen</button></p>
+			   </div>
+			</div>
+
+			<br />";
+		}
 		else
 		{
-      	echo "<form name=\"server\" action=\"inst_do.php?mode=$mode\" method=\"post\">";
+      	echo "<form name=\"installation\" action=\"inst_do.php?mode=$mode\" method=\"post\">";
 
 			// Verbindungsdaten zur Datenbank
-	      if($mode != 1)
-	      {
+			echo "
+         <table class=\"groupBox\" width=\"350\" cellpadding=\"5\">
+            <tr>
+               <td class=\"groupBoxHeadline\" colspan=\"2\">Zugangsdaten MySql-Datenbank</td>
+            </tr>
+            <tr>
+               <td width=\"120px\">Server:</td>
+               <td><input type=\"text\" name=\"server\" size=\"25\" maxlength=\"50\" /></td>
+            </tr>
+            <tr>
+               <td width=\"120px\">Login:</td>
+               <td><input type=\"text\" name=\"user\" size=\"25\" maxlength=\"50\" /></td>
+            </tr>
+            <tr>
+               <td width=\"120px\">Passwort:</td>
+               <td><input type=\"password\" name=\"password\" size=\"25\" maxlength=\"50\" /></td>
+            </tr>
+            <tr>
+               <td width=\"120px\">Datenbank:</td>
+               <td><input type=\"text\" name=\"database\" size=\"25\" maxlength=\"50\" /></td>
+            </tr>
+			</table>
+
+         <br />";
+
+			// Optionen fuer die Installation
+			if($mode == 1)
+			{
 				echo "
 	         <table class=\"groupBox\" width=\"350\" cellpadding=\"5\">
 	            <tr>
-	               <td class=\"groupBoxHeadline\" colspan=\"2\">Zugangsdaten MySql-Datenbank</td>
+	               <td class=\"groupBoxHeadline\" colspan=\"2\">Optionen</td>
 	            </tr>
 	            <tr>
-	               <td width=\"120px\">Server:</td>
-	               <td><input type=\"text\" name=\"server\" size=\"25\" maxlength=\"50\" /></td>
+	               <td colspan=\"2\">Hier können Sie ein Präfix für die Datenbank-Tabellen von Admidio angeben.</td>
 	            </tr>
 	            <tr>
-	               <td width=\"120px\">Login:</td>
-	               <td><input type=\"text\" name=\"user\" size=\"25\" maxlength=\"50\" /></td>
-	            </tr>
-	            <tr>
-	               <td width=\"120px\">Passwort:</td>
-	               <td><input type=\"password\" name=\"password\" size=\"25\" maxlength=\"50\" /></td>
-	            </tr>
-	            <tr>
-	               <td width=\"120px\">Datenbank:</td>
-	               <td><input type=\"text\" name=\"database\" size=\"25\" maxlength=\"50\" /></td>
+	               <td width=\"120px\">Tabellenpräfix:</td>
+	               <td><input type=\"text\" name=\"praefix\" size=\"10\" maxlength=\"10\" value=\"adm\" /></td>
 	            </tr>
 	         </table>
 
 	         <br />";
-	      }
+			}
 
 			// Updaten von Version
 			if($mode == 3)
@@ -191,14 +219,14 @@ echo "
 				echo "
 	         <table class=\"groupBox\" width=\"350\" cellpadding=\"5\">
 	            <tr>
-	               <td class=\"groupBoxHeadline\" colspan=\"2\">Gruppierung / Verein</td>
+	               <td class=\"groupBoxHeadline\" colspan=\"2\">Organisation / Verein</td>
 	            </tr>
 	            <tr>
-	               <td width=\"120px\" align=\"right\">Name (Abk.):</td>
+	               <td width=\"120px\">Name (Abk.):</td>
 	               <td><input type=\"text\" name=\"verein-name-kurz\" size=\"10\" maxlength=\"10\" /></td>
 	            </tr>
 	            <tr>
-	               <td width=\"120px\" align=\"right\">Name (lang):</td>
+	               <td width=\"120px\">Name (lang):</td>
 	               <td><input type=\"text\" name=\"verein-name-lang\" size=\"25\" maxlength=\"60\" /></td>
 	            </tr>
 	         </table>
@@ -207,13 +235,13 @@ echo "
 			}
 
 			// Webmaster anlegen
-			if($mode == 2
+			if($mode == 1
 			|| $mode == 4)
 			{
 				echo "
 	         <table class=\"groupBox\" width=\"350\" cellpadding=\"5\">
 	            <tr>
-	               <td class=\"groupBoxHeadline\" colspan=\"2\">Benutzer anlegen</td>
+	               <td class=\"groupBoxHeadline\" colspan=\"2\">Webmaster anlegen</td>
 	            </tr>
 	            <tr>
 	               <td width=\"120px\">Nachname:</td>
@@ -235,32 +263,6 @@ echo "
 
 	         <br />";
 			}
-
-         if($first_install)
-         {
-            echo "
-            <table class=\"groupBox\" width=\"350\" cellpadding=\"5\">
-               <tr>
-                  <td class=\"groupBoxHeadline\" colspan=\"2\">Installieren</td>
-               </tr>
-               <tr>
-                  <td colspan=\"2\">1. Erzeugen Sie die <i>config.php</i> Datei und kopieren diese
-                     in das <i>adm_config</i> Verzeichnis auf Ihrem Webserver:
-                     <p align=\"center\">
-                     <button name=\"config_file\" type=\"button\" value=\"config_file\"  style=\"width: 187px;\"
-                        onclick=\"createConfigFile()\">1. Config-Datei erzeugen</button></p>
-                  </td>
-               </tr>
-               <tr>
-                  <td>2. Installieren Sie die Datenbank:
-                     <p align=\"center\">
-                     <button name=\"installieren\" type=\"button\" value=\"installieren\"  style=\"width: 187px;\"
-                        onclick=\"installDatabase()\">2. Datenbank installieren</button></p>
-                  </td>
-               </tr>
-            </table>
-            ";
-         }
 		}
 	   echo "
 		<div style=\"margin-top: 15px; margin-bottom: 5px;\">";
