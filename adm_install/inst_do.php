@@ -320,8 +320,8 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
                  W&auml;hlen Sie bitte einen anderen kurzen Namen !");
    }
 
-   $sql = "INSERT INTO ". TBL_ORGANIZATIONS. " (ag_shortname, ag_longname)
-                VALUES ({0}, {1}) ";
+   $sql = "INSERT INTO ". TBL_ORGANIZATIONS. " (ag_shortname, ag_longname, ag_homepage)
+                VALUES ({0}, {1}, '". $_SERVER['HTTP_HOST']. "') ";
    $sql = prepareSQL($sql, array($_POST['verein-name-kurz'], $_POST['verein-name-lang']));
    $result = mysql_query($sql, $connection);
    if(!$result) showError(mysql_error());
