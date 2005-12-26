@@ -76,16 +76,19 @@
       exit();
    }
 
-	// Ordnerinhalt sortieren
-   if ($sort == "desc") {
-   	$inhalt= scandir($act_folder,1);
-   	$ordnerarray = array_slice ($inhalt,0,count($inhalt)-2);
-   }
-   else {
-   	$inhalt = scandir($act_folder);
-   	$ordnerarray = array_slice ($inhalt,2);
-	};
-
+// Ordnerinhalt sortieren
+$dh  = opendir($act_folder);
+while (false !== ($filename = readdir($dh))) {
+   $ordnerarray[] = $filename;
+}
+$ordnerarray = array_slice ($ordnerarray,2);
+if ($sort == "desc") {
+	sort($ordnerarray);
+} 
+else
+{
+	rsort($ordnerarray);
+};	
 
    echo "
    <!-- (c) 2004 - 2005 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
