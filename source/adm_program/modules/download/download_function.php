@@ -172,9 +172,11 @@ if($_GET["mode"] == 1)
          {
             $err_code = "invalid_file_name";
             $err_text = $file_name;
+            $url= "$g_root_path/adm_program/modules/download/download.php?default_folder=$default_folder&folder=$folder";
          }
          elseif($ret == -3)
             $err_code = "invalid_file_extension";
+            $url= "$g_root_path/adm_program/modules/download/download.php?default_folder=$default_folder&folder=$folder";
       }
    }
 }
@@ -188,6 +190,7 @@ elseif($_GET["mode"] == 2)
       {
          $err_code = "delete_folder";
          $err_text = $file;
+         $url= "$g_root_path/adm_program/modules/download/download.php?default_folder=$default_folder&folder=$folder";
       }
    }
    else
@@ -196,6 +199,7 @@ elseif($_GET["mode"] == 2)
       {
          $err_code = "delete_file";
          $err_text = $file;
+         $url= "$g_root_path/adm_program/modules/download/download.php?default_folder=$default_folder&folder=$folder";
       }
    }
    $url = urlencode("$g_root_path/adm_program/modules/download/download.php?folder=$folder&default_folder=$default_folder");
