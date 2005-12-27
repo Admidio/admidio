@@ -53,12 +53,12 @@ $password_crypt = md5($_POST["passwort"]);
 
 $sql    = "SELECT *
              FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. "
-            WHERE au_login     LIKE {0}
-              AND am_au_id        = au_id
-              AND am_ar_id        = ar_id
-              AND am_valid        = 1
-              AND ar_ag_shortname = '$g_organization'
-              AND ar_valid        = 1 ";
+            WHERE usr_login_name     LIKE {0}
+              AND mem_usr_id        = usr_id
+              AND mem_rol_id        = rol_id
+              AND mem_valid        = 1
+              AND rol_org_shortname = '$g_organization'
+              AND rol_valid        = 1 ";
 $sql    = prepareSQL($sql, array($_POST["loginname"]));
 $result = mysql_query($sql, $g_adm_con);
 db_error($result);
@@ -68,11 +68,11 @@ $user_row   = mysql_fetch_object($result);
 
 if ($user_found >= 1)
 {
-   if(strlen($user_row->au_invalid_login) > 0)
+   if(strlen($user_row->usr_invalid_login) > 0)
    {
       // wenn innerhalb 15 min. 3 falsche Logins stattfanden -> Konto 15 min. sperren
-      if(mktime() - mysqlmaketimestamp($user_row->au_invalid_login) < 900
-      && $user_row->au_num_invalid >= 3 )
+      if(mktime() - mysqlmaketimestamp($user_row->usr_invalid_login) < 900
+      && $user_row->usr_num_invalid >= 3 )
       {
          $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=login_failed";
          header($location);
@@ -80,13 +80,13 @@ if ($user_found >= 1)
       }
    }
 
-   if($user_row->au_password == $password_crypt)
+   if($user_row->usr_password == $password_crypt)
    {
       // alte Sessions des Users loeschen
 
       $sql    = "DELETE FROM ". TBL_SESSIONS. " ".
-                " WHERE as_au_id        LIKE '$user_row->au_id' ".
-                "   AND as_ag_shortname LIKE '$g_organization'  ";
+                " WHERE ses_usr_id        LIKE '$user_row->usr_id' ".
+                "   AND ses_org_shortname LIKE '$g_organization'  ";
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
 
@@ -106,8 +106,8 @@ if ($user_found >= 1)
 
       // Session-ID speichern
 
-      $sql = "INSERT INTO ". TBL_SESSIONS. " (as_au_id, as_session, as_datetime, as_long_login, as_ag_shortname) ".
-             "VALUES ('$user_row->au_id', '$user_session', '$login_datetime', $long_login, '$g_organization') ";
+      $sql = "INSERT INTO ". TBL_SESSIONS. " (ses_usr_id, ses_session, ses_timestamp, ses_longer_session, ses_org_shortname) ".
+             "VALUES ('$user_row->usr_id', '$user_session', '$login_datetime', $long_login, '$g_organization') ";
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
 
@@ -115,28 +115,28 @@ if ($user_found >= 1)
       if($_SERVER['HTTP_HOST'] == 'localhost')
       {
          // beim localhost darf keine Domaine uebergeben werden
-         setcookie("". TBL_SESSIONS. "", "$user_session", 0, "/");
+         setcookie("adm_session", "$user_session", 0, "/");
       }
       else
       {
-         setcookie("". TBL_SESSIONS. "", "$user_session" , 0, "/", ".". $g_domain);
+         setcookie("adm_session", "$user_session" , 0, "/", ".". $g_domain);
       }
 
       // Last-Login speichern
 
-      $sql = "UPDATE ". TBL_USERS. " SET au_last_login = au_act_login
-               WHERE au_id = $user_row->au_id";
+      $sql = "UPDATE ". TBL_USERS. " SET usr_last_login = usr_act_login
+               WHERE usr_id = $user_row->usr_id";
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
 
       // Logins zaehlen und aktuelles Login-Datum speichern
 
       $act_date = date("Y-m-d H:i:s", time());
-      $sql = "UPDATE ". TBL_USERS. " SET au_num_login     = au_num_login + 1
-                                 , au_act_login     = '$act_date'
-                                 , au_invalid_login = NULL
-                                 , au_num_invalid   = 0
-               WHERE au_id = $user_row->au_id";
+      $sql = "UPDATE ". TBL_USERS. " SET usr_num_login     = usr_num_login + 1
+                                 , usr_act_login     = '$act_date'
+                                 , usr_invalid_login = NULL
+                                 , usr_num_invalid   = 0
+               WHERE usr_id = $user_row->usr_id";
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
 
@@ -149,9 +149,9 @@ if ($user_found >= 1)
    else
    {
       // ungültige Logins werden mitgeloggt
-      $sql    = "UPDATE ". TBL_USERS. " SET au_invalid_login = NOW()
-                                    , au_num_invalid   = au_num_invalid + 1
-                  WHERE au_id = $user_row->au_id ";
+      $sql    = "UPDATE ". TBL_USERS. " SET usr_invalid_login = NOW()
+                                    , usr_num_invalid   = usr_num_invalid + 1
+                  WHERE usr_id = $user_row->usr_id ";
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
 

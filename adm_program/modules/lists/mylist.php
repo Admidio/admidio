@@ -72,26 +72,26 @@ require("../../../adm_config/body_top.php");
             if(isModerator())
             {
                $sql     = "SELECT * FROM ". TBL_ROLES. "
-                            WHERE ar_ag_shortname     = '$g_organization'
-                              AND ar_valid            = 1
-                            ORDER BY ar_funktion";
+                            WHERE rol_org_shortname     = '$g_organization'
+                              AND rol_valid            = 1
+                            ORDER BY rol_name";
             }
             else
             {
                $sql     = "SELECT * FROM ". TBL_ROLES. "
-                            WHERE ar_ag_shortname = '$g_organization'
-                              AND ar_r_locked     = 0
-                              AND ar_valid        = 1
-                            ORDER BY ar_funktion";
+                            WHERE rol_org_shortname = '$g_organization'
+                              AND rol_locked     = 0
+                              AND rol_valid        = 1
+                            ORDER BY rol_name";
             }
             $result_lst = mysql_query($sql, $g_adm_con);
             db_error($result_lst, true);
 
             while($row = mysql_fetch_object($result_lst))
             {
-               echo "<option value=\"$row->ar_funktion\" ";
-               if($_GET['rolle'] == $row->ar_funktion) echo " selected=\"selected\" ";
-               echo ">$row->ar_funktion</option>";
+               echo "<option value=\"$row->rol_name\" ";
+               if($_GET['rolle'] == $row->rol_name) echo " selected=\"selected\" ";
+               echo ">$row->rol_name</option>";
             }
          echo "</select>
          &nbsp;&nbsp;&nbsp;
@@ -119,23 +119,22 @@ require("../../../adm_config/body_top.php");
                   <td align=\"center\">
                      <select size=\"1\" name=\"column$i\">
                         <option value=\"\" selected=\"selected\"></option>
-                        <option value=\"au_name\" ";
+                        <option value=\"usr_last_name\" ";
                            if($i == 1) echo " selected=\"selected\" ";
                            echo ">Nachname</option>
-                        <option value=\"au_vorname\" ";
+                        <option value=\"usr_first_name\" ";
                            if($i == 2) echo " selected=\"selected\" ";
                            echo ">Vorname</option>
-                        <option value=\"au_adresse\">Adresse</option>
-                        <option value=\"au_plz\">PLZ</option>
-                        <option value=\"au_ort\">Ort</option>
-                        <option value=\"au_land\">Land</option>
-                        <option value=\"au_tel1\">Telefon</option>
-                        <option value=\"au_tel2\">Telefon 2</option>
-                        <option value=\"au_mobil\">Handy</option>
-                        <option value=\"au_mail\">E-Mail</option>
-                        <option value=\"au_fax\">Fax</option>
-                        <option value=\"au_geburtstag\">Geburtstag</option>
-                        <option value=\"au_weburl\">Homepage</option>
+                        <option value=\"usr_address\">Adresse</option>
+                        <option value=\"usr_zip_code\">PLZ</option>
+                        <option value=\"usr_city\">Ort</option>
+                        <option value=\"usr_country\">Land</option>
+                        <option value=\"usr_phone\">Telefon</option>
+                        <option value=\"usr_mobile\">Handy</option>
+                        <option value=\"usr_email\">E-Mail</option>
+                        <option value=\"usr_fax\">Fax</option>
+                        <option value=\"usr_birthday\">Geburtstag</option>
+                        <option value=\"usr_homepage\">Homepage</option>
                      </select>&nbsp;&nbsp;
                   </td>
                   <td align=\"center\">

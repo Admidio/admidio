@@ -116,45 +116,45 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
          if(isModerator())
          {
             // Alle Rollen der Gruppierung auflisten
-            $sql    = "SELECT ar_funktion, ar_beschreibung, ar_gruppe, am_au_id, am_leiter
+            $sql    = "SELECT rol_name, rol_description, rol_gruppe, mem_usr_id, mem_leader
                          FROM ". TBL_ROLES. " LEFT JOIN ". TBL_MEMBERS. "
-                           ON ar_id    = am_ar_id
-                          AND am_au_id = {0}
-                          AND am_valid = 1
-                        WHERE ar_ag_shortname = '$g_organization'
-                          AND ar_valid        = 1
-                        ORDER BY ar_funktion";
+                           ON rol_id    = mem_rol_id
+                          AND mem_usr_id = {0}
+                          AND mem_valid = 1
+                        WHERE rol_org_shortname = '$g_organization'
+                          AND rol_valid        = 1
+                        ORDER BY rol_name";
          }
          elseif(isGroupLeader())
          {
             // Alle Rollen auflisten, bei denen das Mitglied Leiter ist
-            $sql    = "SELECT br.ar_funktion, br.ar_beschreibung, br.ar_gruppe, mgl.am_au_id, mgl.am_leiter
+            $sql    = "SELECT br.rol_name, br.rol_description, br.rol_gruppe, mgl.mem_usr_id, mgl.mem_leader
                          FROM ". TBL_MEMBERS. " bm, ". TBL_ROLES. " br LEFT JOIN ". TBL_MEMBERS. " mgl
-                           ON br.ar_id     = mgl.am_ar_id
-                          AND mgl.am_au_id = {0}
-                          AND mgl.am_valid = 1
-                        WHERE bm.am_au_id  = $g_current_user->id
-                          AND bm.am_valid  = 1
-                          AND bm.am_leiter = 1
-                          AND br.ar_id     = bm.am_ar_id
-                          AND br.ar_ag_shortname = '$g_organization'
-                          AND br.ar_valid        = 1
-                          AND br.ar_r_locked     = 0
-                        ORDER BY br.ar_funktion";
+                           ON br.rol_id     = mgl.mem_rol_id
+                          AND mgl.mem_usr_id = {0}
+                          AND mgl.mem_valid = 1
+                        WHERE bm.mem_usr_id  = $g_current_user->id
+                          AND bm.mem_valid  = 1
+                          AND bm.mem_leader = 1
+                          AND br.rol_id     = bm.mem_rol_id
+                          AND br.rol_org_shortname = '$g_organization'
+                          AND br.rol_valid        = 1
+                          AND br.rol_locked     = 0
+                        ORDER BY br.rol_name";
          }
          elseif(editUser())
          {
             // Alle Rollen auflisten, die keinen Moderatorenstatus haben
-            $sql    = "SELECT ar_funktion, ar_beschreibung, ar_gruppe, am_au_id, am_leiter
+            $sql    = "SELECT rol_name, rol_description, rol_gruppe, mem_usr_id, mem_leader
                          FROM ". TBL_ROLES. " LEFT JOIN ". TBL_MEMBERS. "
-                           ON ar_id    = am_ar_id
-                          AND am_au_id = {0}
-                          AND am_valid = 1
-                        WHERE ar_ag_shortname = '$g_organization'
-                          AND ar_valid        = 1
-                          AND ar_r_moderation = 0
-                          AND ar_r_locked     = 0
-                        ORDER BY ar_funktion";
+                           ON rol_id    = mem_rol_id
+                          AND mem_usr_id = {0}
+                          AND mem_valid = 1
+                        WHERE rol_org_shortname = '$g_organization'
+                          AND rol_valid        = 1
+                          AND rol_moderation = 0
+                          AND rol_locked     = 0
+                        ORDER BY rol_name";
          }
          $sql    = prepareSQL($sql, array($_GET['user_id']));
          $result = mysql_query($sql, $g_adm_con);
@@ -166,22 +166,22 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
             echo "<tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
                <td style=\"text-align: center; vertical-align: top;\">
                   <input type=\"checkbox\" id=\"fkt-$i\" name=\"fkt-$i\" ";
-                     if($row->am_au_id > 0)
+                     if($row->mem_usr_id > 0)
                         echo " checked ";
                         
                      // die Funktion Webmaster darf nur von einem Webmaster vergeben werden
-                     if($row->ar_funktion == 'Webmaster' && !hasRole('Webmaster'))
+                     if($row->rol_name == 'Webmaster' && !hasRole('Webmaster'))
                         echo " disabled ";
                         
                      echo " onclick=\"unmarkLeader(this)\" value=\"1\" />
                </td>
-               <td style=\"text-align: left; vertical-align: top;\"><label for=\"fkt-$i\">$row->ar_funktion</label></td>
-               <td style=\"text-align: left; vertical-align: top;\">$row->ar_beschreibung</td>
+               <td style=\"text-align: left; vertical-align: top;\"><label for=\"fkt-$i\">$row->rol_name</label></td>
+               <td style=\"text-align: left; vertical-align: top;\">$row->rol_description</td>
                <td style=\"text-align: center; vertical-align: top;\">";
-                  if($row->ar_gruppe == 1)
+                  if($row->rol_gruppe == 1)
                   {
                      echo "<input type=\"checkbox\" id=\"leiter-$i\" name=\"leiter-$i\" ";
-                     if($row->am_leiter > 0)
+                     if($row->mem_leader > 0)
                         echo " checked ";
 
                      echo " onclick=\"markMember(this)\" value=\"1\" />";
@@ -190,7 +190,7 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
                      echo "&nbsp;";
                echo "</td>
                <td style=\"text-align: left; vertical-align: top;\">";
-                  if($row->ar_gruppe == 1)
+                  if($row->rol_gruppe == 1)
                   {
                      echo "<label for=\"leiter-$i\">Leiter</label>";
                   }

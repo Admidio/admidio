@@ -46,7 +46,7 @@ $i = 0;
 if(!array_key_exists("letter", $_GET))
 {
    // alle Mitglieder zur Auswahl selektieren
-   $sql    = "SELECT au_id FROM ". TBL_USERS. " ";
+   $sql    = "SELECT usr_id FROM ". TBL_USERS. " ";
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
 
@@ -63,8 +63,8 @@ else
 
 // alle Mitglieder zur Auswahl selektieren
 $sql    = "SELECT * FROM ". TBL_USERS. "
-            WHERE au_name LIKE {0}
-            ORDER BY au_name, au_vorname ";
+            WHERE usr_last_name LIKE {0}
+            ORDER BY usr_last_name, usr_first_name ";
 $sql    = prepareSQL($sql, array($_GET['letter']));
 $result_mgl = mysql_query($sql, $g_adm_con);
 db_error($result_mgl);
@@ -105,7 +105,7 @@ require("../../../adm_config/body_top.php");
    {
       // Anzahl Mitglieder zum entsprechenden Buchstaben ermitteln
       $sql    = "SELECT COUNT(*) FROM ". TBL_USERS. "
-                  WHERE au_name LIKE '$letter_menu%' ";
+                  WHERE usr_last_name LIKE '$letter_menu%' ";
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
       $row = mysql_fetch_array($result);
@@ -143,11 +143,11 @@ require("../../../adm_config/body_top.php");
 
          $sql    = "SELECT COUNT(*)
                       FROM ". TBL_ROLES. ", ". TBL_MEMBERS. "
-                     WHERE ar_ag_shortname = '$g_organization'
-                       AND ar_valid        = 1
-                       AND am_ar_id        = ar_id
-                       AND am_valid        = 1
-                       AND am_au_id        = $row->au_id ";
+                     WHERE rol_org_shortname = '$g_organization'
+                       AND rol_valid         = 1
+                       AND mem_rol_id        = rol_id
+                       AND mem_valid         = 1
+                       AND mem_usr_id         = $row->usr_id ";
          $result    = mysql_query($sql, $g_adm_con);
          db_error($result);
          $row_count = mysql_fetch_array($result);
@@ -156,52 +156,52 @@ require("../../../adm_config/body_top.php");
                   <td align=\"right\">$i&nbsp;</td>
                   <td align=\"center\">";
                      if($row_count[0] > 0)
-                        echo "<a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->au_id\"><img src=\"$g_root_path/adm_program/images/person.png\" alt=\"Mitglied bei $g_current_organization->longname\" title=\"Mitglied bei $g_current_organization->longname\" border=\"0\"></a>";
+                        echo "<a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->usr_id\"><img src=\"$g_root_path/adm_program/images/person.png\" alt=\"Mitglied bei $g_current_organization->longname\" title=\"Mitglied bei $g_current_organization->longname\" border=\"0\"></a>";
                      else
                         echo "&nbsp;";
                   echo "</td>
-                  <td align=\"left\">&nbsp;<a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->au_id\">$row->au_name,&nbsp;$row->au_vorname</a></td>
+                  <td align=\"left\">&nbsp;<a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->usr_id\">$row->usr_last_name,&nbsp;$row->usr_first_name</a></td>
                   <td align=\"center\">";
-                     if(strlen($row->au_mail) > 0)
+                     if(strlen($row->usr_mail) > 0)
                      {
                         if($g_current_organization->mail_extern == 1)
-                           $mail_link = "mailto:$row->au_mail";
+                           $mail_link = "mailto:$row->usr_mail";
                         else
-                           $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?au_id=$row->au_id";
+                           $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?usr_id=$row->usr_id";
                         echo "<a href=\"$mail_link\"><img src=\"$g_root_path/adm_program/images/mail.png\"
-                           alt=\"E-Mail an $row->au_mail schreiben\" title=\"E-Mail an $row->au_mail schreiben\" border=\"0\"></a>";
+                           alt=\"E-Mail an $row->usr_mail schreiben\" title=\"E-Mail an $row->usr_mail schreiben\" border=\"0\"></a>";
                      }
                   echo "</td>
                   <td align=\"center\">";
-                     if(strlen($row->au_weburl) > 0)
+                     if(strlen($row->usr_weburl) > 0)
                      {
-                        $row->au_weburl = stripslashes($row->au_weburl);
-                        if(substr_count(strtolower($row->au_weburl), "http://") == 0)
-                           $row->au_weburl = "http://". $row->au_weburl;
-                        echo "<a href=\"$row->au_weburl\" target=\"_blank\">
+                        $row->usr_weburl = stripslashes($row->usr_weburl);
+                        if(substr_count(strtolower($row->usr_weburl), "http://") == 0)
+                           $row->usr_weburl = "http://". $row->usr_weburl;
+                        echo "<a href=\"$row->usr_weburl\" target=\"_blank\">
                            <img src=\"$g_root_path/adm_program/images/globe.png\" alt=\"Homepage\" title=\"Homepage\" border=\"0\"></a>";
                      }
                   echo "</td>
-                  <td align=\"left\">&nbsp;$row->au_login</td>
-                  <td align=\"center\">&nbsp;". mysqldatetime("d.m.y h:i" , $row->au_last_change). "</td>
+                  <td align=\"left\">&nbsp;$row->usr_login_name</td>
+                  <td align=\"center\">&nbsp;". mysqldatetime("d.m.y h:i" , $row->usr_last_change). "</td>
                   <td align=\"center\">";
                   if(hasRole("Webmaster"))
                   {
                      if($row_count[0] > 0)
                      {
-                       	if(strlen($row->au_login) > 0 && $g_current_organization->mail_extern != 1)
+                       	if(strlen($row->usr_login_name) > 0 && $g_current_organization->mail_extern != 1)
                        	{
                        		// Link um E-Mail mit neuem Passwort zu zuschicken
 								   // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
-                        	$load_url = urlencode("$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->au_id&mode=4&url=$url");
-                           echo "<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=send_new_login&err_text=". urlencode("$row->au_vorname $row->au_name"). "&button=2&url=$load_url\">
+                        	$load_url = urlencode("$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->usr_id&mode=4&url=$url");
+                           echo "<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=send_new_login&err_text=". urlencode("$row->usr_first_name $row->usr_last_name"). "&button=2&url=$load_url\">
 	                           <img src=\"$g_root_path/adm_program/images/key.png\" border=\"0\" alt=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\" title=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\"></a>&nbsp;";
                        	}
                        	else
 	                        echo "<img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">&nbsp;";
 
                         // Webmaster kann nur Mitglieder der eigenen Gliedgemeinschaft editieren
-                        echo "<a href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=$row->au_id\">
+                        echo "<a href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=$row->usr_id\">
                            <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Benutzerdaten bearbeiten\" title=\"Benutzerdaten bearbeiten\"></a>&nbsp;";
                      }
                      else
@@ -212,11 +212,11 @@ require("../../../adm_config/body_top.php");
 
                      $sql    = "SELECT COUNT(*)
                                   FROM ". TBL_ROLES. ", ". TBL_MEMBERS. "
-                                 WHERE ar_ag_shortname <> '$g_organization'
-                                   AND ar_valid         = 1
-                                   AND am_ar_id         = ar_id
-                                   AND am_valid         = 1
-                                   AND am_au_id         = $row->au_id ";
+                                 WHERE rol_org_shortname <> '$g_organization'
+                                   AND rol_valid         = 1
+                                   AND mem_rol_id         = rol_id
+                                   AND mem_valid         = 1
+                                   AND mem_usr_id         = $row->usr_id ";
                      $result      = mysql_query($sql, $g_adm_con);
                      db_error($result);
                      $row_count_2 = mysql_fetch_array($result);
@@ -225,13 +225,13 @@ require("../../../adm_config/body_top.php");
                      {
                         // Webmaster duerfen Mitglieder nicht loeschen, wenn sie noch in anderen Gliedgemeinschaften aktiv sind
                         if($row_count[0] > 0)
-                           echo "<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_member&err_text=$row->au_vorname $row->au_name&err_head=Entfernen&button=2&url=". urlencode("$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->au_id&mode=2"). "\">
+                           echo "<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_member&err_text=$row->usr_first_name $row->usr_last_name&err_head=Entfernen&button=2&url=". urlencode("$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->usr_id&mode=2"). "\">
                               <img src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"Benutzer entfernen\" title=\"Benutzer entfernen\"></a>";
                      }
                      else
                      {
                         // Webmaster kann Mitglied aus der Datenbank loeschen
-                        echo "<a href=\"members_function.php?user_id=$row->au_id&amp;mode=1\">
+                        echo "<a href=\"members_function.php?user_id=$row->usr_id&amp;mode=1\">
                            <img src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"Benutzer l&ouml;schen\" title=\"Benutzer l&ouml;schen\"></a>";
                      }
                   }
@@ -239,12 +239,12 @@ require("../../../adm_config/body_top.php");
                   {
                      // Moderatoren duerfen nur Mitglieder der eigenen Gliedgemeinschaft entfernen,
                      // aber keine Webmaster !!!
-                     if($row_count[0] > 0 && !hasRole("Webmaster", $row->au_id))
+                     if($row_count[0] > 0 && !hasRole("Webmaster", $row->usr_id))
                      {
                         echo "
-                        <a href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=$row->au_id\">
+                        <a href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=$row->usr_id\">
                            <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Benutzerdaten bearbeiten\" title=\"Benutzerdaten bearbeiten\"></a>&nbsp;&nbsp;
-                        <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_member&err_text=$row->au_vorname $row->au_name&err_head=Entfernen&button=2&url=". urlencode("$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->au_id&mode=2"). "\">
+                        <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_member&err_text=$row->usr_first_name $row->usr_last_name&err_head=Entfernen&button=2&url=". urlencode("$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->usr_id&mode=2"). "\">
                            <img src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"Benutzer entfernen\" title=\"Benutzer entfernen\"></a>";
                      }
                   }

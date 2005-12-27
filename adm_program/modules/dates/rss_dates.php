@@ -52,8 +52,8 @@ if($g_current_organization->bbcode == 1)
 
 // alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
 $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. "
-         WHERE ag_shortname = '$g_organization'
-            OR ag_mother    = '$g_organization' ";
+         WHERE org_shortname = '$g_organization'
+            OR org_org_id_parent    = '$g_organization' ";
 $result = mysql_query($sql, $g_adm_con);
 db_error($result);
 
@@ -64,10 +64,10 @@ while($row = mysql_fetch_object($result))
    {
       if($i > 0) $organizations = $organizations. ", ";
 
-      if($row->ag_shortname == $g_organization)
-         $organizations = $organizations. "'$row->ag_mother'";
+      if($row->org_shortname == $g_organization)
+         $organizations = $organizations. "'$row->org_org_id_parent'";
       else
-         $organizations = $organizations. "'$row->ag_shortname'";
+         $organizations = $organizations. "'$row->org_shortname'";
 
       $i++;
    }
@@ -77,12 +77,12 @@ while($row = mysql_fetch_object($result))
 
 // aktuelle Termine aus DB holen die zur Orga passen
 $sql = "SELECT * FROM ". TBL_DATES. "
-                     WHERE (  at_ag_shortname = '$g_organization'
-                        OR (   at_global   = 1
-                           AND at_ag_shortname IN ($organizations) ))
-                       AND (  at_von >= sysdate()
-                           OR at_bis >= sysdate() )
-                     ORDER BY at_von ASC
+                     WHERE (  ddat_org_shortname = '$g_organization'
+                        OR (   ddat_global   = 1
+                           AND ddat_org_shortname IN ($organizations) ))
+                       AND (  ddat_begin >= sysdate()
+                           OR ddat_end >= sysdate() )
+                     ORDER BY ddat_begin ASC
                      LIMIT 10 ";
 
       $result = mysql_query($sql, $g_adm_con);
@@ -99,61 +99,61 @@ $rss=new RSSfeed("http://$g_current_organization->homepage","$g_current_organiza
 while($row = mysql_fetch_object($result))
       {
         // Den Autor des Termins ermitteln
-        $sql     = "SELECT * FROM ". TBL_USERS. " WHERE au_id = $row->at_au_id";
+        $sql     = "SELECT * FROM ". TBL_USERS. " WHERE usr_id = $row->ddat_usr_id";
         $result2 = mysql_query($sql, $g_adm_con);
         db_error($result2);
         $user = mysql_fetch_object($result2);
 
         // Die Attribute fuer das Item zusammenstellen
-        $title			= mysqldatetime("d.m.y", $row->at_von). " ". $row->at_ueberschrift;
+        $title			= mysqldatetime("d.m.y", $row->ddat_begin). " ". $row->ddat_headline;
 
-        $link			= "$g_root_path/adm_program/modules/dates/dates.php?id=". $row->at_id;
+        $link			= "$g_root_path/adm_program/modules/dates/dates.php?id=". $row->ddat_id;
 
-        $description 	= "<b>$row->at_ueberschrift</b> <br />". mysqldatetime("d.m.y", $row->at_von);
+        $description 	= "<b>$row->ddat_headline</b> <br />". mysqldatetime("d.m.y", $row->ddat_begin);
 
-        if (mysqldatetime("h:i", $row->at_von) != "00:00")
+        if (mysqldatetime("h:i", $row->ddat_begin) != "00:00")
                {
-                  $description =  $description. " um ".mysqldatetime("h:i", $row->at_von). " Uhr";
+                  $description =  $description. " um ".mysqldatetime("h:i", $row->ddat_begin). " Uhr";
                }
 
-        if($row->at_von != $row->at_bis)
+        if($row->ddat_begin != $row->ddat_end)
                {
                   $description =  $description. "<br /> bis <br />";
 
-                  if(mysqldatetime("d.m.y", $row->at_von) != mysqldatetime("d.m.y", $row->at_bis))
+                  if(mysqldatetime("d.m.y", $row->ddat_begin) != mysqldatetime("d.m.y", $row->ddat_end))
                   {
-                     $description = $description. mysqldatetime("d.m.y", $row->at_bis);
+                     $description = $description. mysqldatetime("d.m.y", $row->ddat_end);
 
-                     if (mysqldatetime("h:i", $row->at_bis) != "00:00")
+                     if (mysqldatetime("h:i", $row->ddat_end) != "00:00")
                         $description = $description. " um ";
                   }
 
-                  if (mysqldatetime("h:i", $row->at_bis) != "00:00")
-                     $description = $description. mysqldatetime("h:i", $row->at_bis). " Uhr";
+                  if (mysqldatetime("h:i", $row->ddat_end) != "00:00")
+                     $description = $description. mysqldatetime("h:i", $row->ddat_end). " Uhr";
                }
 
-        if ($row->at_ort != "")
+        if ($row->ddat_location != "")
                {
-                  $description = $description. "<br /><br />Treffpunkt:&nbsp;". strSpecialChars2Html($row->at_ort);
+                  $description = $description. "<br /><br />Treffpunkt:&nbsp;". strSpecialChars2Html($row->ddat_location);
                }
 
         if($g_current_organization->bbcode == 1)
         {
-        	  $description = $description. "<br /><br />". strSpecialChars2Html($bbcode->parse($row->at_beschreibung));
+        	  $description = $description. "<br /><br />". strSpecialChars2Html($bbcode->parse($row->ddat_description));
         }
         else
         {
-           $description = $description. "<br /><br />". nl2br(strSpecialChars2Html($row->at_beschreibung));
+           $description = $description. "<br /><br />". nl2br(strSpecialChars2Html($row->ddat_description));
         }
 
         $description = $description. "<br /><br /><a href=\"$link\">Link auf $g_current_organization->homepage</a>";
-        $description = $description. "<br /><br /><i>Angelegt von ". strSpecialChars2Html($user->au_vorname). " ". strSpecialChars2Html($user->au_name);
-        $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->at_timestamp). "</i>";
+        $description = $description. "<br /><br /><i>Angelegt von ". strSpecialChars2Html($user->usr_first_name). " ". strSpecialChars2Html($user->usr_last_name);
+        $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->ddat_timestamp). "</i>";
 
 
 
 
-        $pubDate		= date('r',strtotime($row->at_timestamp));
+        $pubDate		= date('r',strtotime($row->ddat_timestamp));
 
 
 

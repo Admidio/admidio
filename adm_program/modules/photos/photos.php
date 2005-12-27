@@ -31,8 +31,8 @@
 	//erfassen der Veranstaltungen die zur Gruppierung gehören
    $sql = "   SELECT *
             FROM ". TBL_PHOTOS. "
-            WHERE (ap_ag_shortname ='$g_organization')
-            ORDER BY ap_begin DESC ";
+            WHERE (pho_org_shortname ='$g_organization')
+            ORDER BY pho_begin DESC ";
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
 
@@ -85,7 +85,7 @@
    $bildersumme=0;//Summe der Bilder in den Unterordnern
    for($x=0; $adm_photo = mysql_fetch_array($result); $x++){
          $bildersumme=$bildersumme+$adm_photo[1];//erhöhen der Bildersumme
-         $ordner = "../../../adm_my_files/photos/".$adm_photo["ap_begin"]."_".$adm_photo["ap_id"];
+         $ordner = "../../../adm_my_files/photos/".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"];
          //Kontrollieren ob der entsprechende Ordner in adm_my_files existiert
          //wenn ja Zeile ausgeben
          if(file_exists($ordner) || ($g_session_valid && editPhoto())){
@@ -96,22 +96,22 @@
 				if(!file_exists($ordner) && ($g_session_valid && editPhoto()))
 					echo"<img src=\"$g_root_path/adm_program/images/warning16.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Warnhinweis\" title=\"Warnhinweis\"
                      onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=folder_not_found','Message','width=500, height=260, left=310,top=200,scrollbars=no')\">&nbsp;";
-				echo"<a target=\"_self\" href=\"thumbnails.php?ap_id=".$adm_photo["ap_id"]."\">".$adm_photo["ap_name"]."</a></td>
-            <td style=\"text-align: center;\">".mysqldate("d.m.y", $adm_photo["ap_begin"])."</td>";//Anzeige beginn datum im deutschen Format
-       		echo"<td style=\"text-align: center;\">".$adm_photo["ap_number"]."</td>
-            <td style=\"text-align: center;\">".mysqldate("d.m.y", $adm_photo["ap_last_change"])."</td>";//Anzeige online seitdatum im deutschen Format
+				echo"<a target=\"_self\" href=\"thumbnails.php?pho_id=".$adm_photo["pho_id"]."\">".$adm_photo["pho_name"]."</a></td>
+            <td style=\"text-align: center;\">".mysqldate("d.m.y", $adm_photo["pho_begin"])."</td>";//Anzeige beginn datum im deutschen Format
+       		echo"<td style=\"text-align: center;\">".$adm_photo["pho_number"]."</td>
+            <td style=\"text-align: center;\">".mysqldate("d.m.y", $adm_photo["pho_last_change"])."</td>";//Anzeige online seitdatum im deutschen Format
             if ($g_session_valid && editPhoto()){
                echo"<td style=\"text-align: center;\">";
                   if(file_exists($ordner)){
                   echo"
-						<a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?ap_id=".$adm_photo["ap_id"]."\">
+						<a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=".$adm_photo["pho_id"]."\">
                      <img src=\"$g_root_path/adm_program/images/photo.png\" border=\"0\" alt=\"Photoupload\" title=\"Photoupload\"></a>&nbsp;
-                  <a href=\"$g_root_path/adm_program/modules/photos/event.php?ap_id=".$adm_photo["ap_id"]."&aufgabe=change\">
+                  <a href=\"$g_root_path/adm_program/modules/photos/event.php?pho_id=".$adm_photo["pho_id"]."&aufgabe=change\">
                      <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>&nbsp;";
             		}
-                  $err_text= $adm_photo["ap_name"]."(Beginn: ".mysqldate("d.m.y", $adm_photo["ap_begin"]).")";
+                  $err_text= $adm_photo["pho_name"]."(Beginn: ".mysqldate("d.m.y", $adm_photo["pho_begin"]).")";
                   echo"
-                  <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_veranst&err_text=$err_text&err_head=Veranstaltung L&ouml;schen&button=2&url=". urlencode("$g_root_path/adm_program/modules/photos/event.php?aufgabe=delete&ap_id=".$adm_photo["ap_id"].""). "\">
+                  <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_veranst&err_text=$err_text&err_head=Veranstaltung L&ouml;schen&button=2&url=". urlencode("$g_root_path/adm_program/modules/photos/event.php?aufgabe=delete&pho_id=".$adm_photo["pho_id"].""). "\">
                      <img src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"Veranstaltung löschen\" title=\"Veranstaltung löschen\"></a>
                </td>";
             }

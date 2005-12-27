@@ -63,23 +63,23 @@ else
 if(isModerator())
 {
    $sql = "SELECT * FROM ". TBL_ROLES. "
-            WHERE ar_ag_shortname = '$g_organization' 
-              AND ar_valid        = 1 ";
+            WHERE rol_org_shortname = '$g_organization' 
+              AND rol_valid        = 1 ";
    if($group >= 0)
-      $sql .= " AND ar_gruppe = $group ";
+      $sql .= " AND rol_gruppe = $group ";
       
-   $sql .= " ORDER BY ar_funktion ";
+   $sql .= " ORDER BY rol_name ";
 }
 else
 {
    $sql = "SELECT * FROM ". TBL_ROLES. "
-            WHERE ar_ag_shortname = '$g_organization'
-              AND ar_r_locked     = 0
-              AND ar_valid        = 1 ";
+            WHERE rol_org_shortname = '$g_organization'
+              AND rol_locked     = 0
+              AND rol_valid        = 1 ";
    if($group >= 0)
-      $sql .= " AND ar_gruppe = $group ";
+      $sql .= " AND rol_gruppe = $group ";
 
-   $sql .= " ORDER BY ar_funktion ";
+   $sql .= " ORDER BY rol_name ";
 }
 $result_lst = mysql_query($sql, $g_adm_con);
 db_error($result_lst);
@@ -147,8 +147,8 @@ require("../../../adm_config/body_top.php");
          // Anzahl Datensaetze ermitteln
          $sql = "SELECT COUNT(*)
                    FROM ". TBL_MEMBERS. "
-                  WHERE am_ar_id = $row_lst->ar_id
-                    AND am_valid = $member_valid ";
+                  WHERE mem_rol_id = $row_lst->rol_id
+                    AND mem_valid = $member_valid ";
          $result = mysql_query($sql, $g_adm_con);
          db_error($result);
          $row     = mysql_fetch_array($result);
@@ -168,17 +168,17 @@ require("../../../adm_config/body_top.php");
                         echo "address";
                      else
                         echo "former";
-                     echo "&amp;mode=html&amp;rolle=". urlencode($row_lst->ar_funktion). "\">$row_lst->ar_funktion</a>";
+                     echo "&amp;mode=html&amp;rolle=". urlencode($row_lst->rol_name). "\">$row_lst->rol_name</a>";
                   }
                   else
-                     echo "<b>$row_lst->ar_funktion</b>";
+                     echo "<b>$row_lst->rol_name</b>";
                      
                   // Moderatoren duerfen Rollen editieren
                   if(isModerator()){
-                    echo "&nbsp;<a href=\"$g_root_path/adm_program/administration/roles/roles_new.php?ar_id=$row_lst->ar_id\"><img src=\"$g_root_path/adm_program/images/edit.png\" vspace=\"1\" style=\"vertical-align: middle;\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Einstellungen\" title=\"Einstellungen\"></a>";    
+                    echo "&nbsp;<a href=\"$g_root_path/adm_program/administration/roles/roles_new.php?rol_id=$row_lst->rol_id\"><img src=\"$g_root_path/adm_program/images/edit.png\" vspace=\"1\" style=\"vertical-align: middle;\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Einstellungen\" title=\"Einstellungen\"></a>";    
                   }
-                  if(isModerator() || isGroupLeader($row_lst->ar_id) || editUser()){
-            			echo "&nbsp;<img src=\"$g_root_path/adm_program/images/person_new.png\" vspace=\"1\" style=\"vertical-align: middle; cursor: pointer;\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Mitglieder zuordnen\" title=\"Mitglieder zuordnen\" onClick=\"window.open('$g_root_path/adm_program/modules/lists/members.php?ar_id=$row_lst->ar_id&amp;popup=1','Titel','width=550,height=550,left=310,top=100,scrollbars=yes,resizable=yes')\">";    
+                  if(isModerator() || isGroupLeader($row_lst->rol_id) || editUser()){
+            			echo "&nbsp;<img src=\"$g_root_path/adm_program/images/person_new.png\" vspace=\"1\" style=\"vertical-align: middle; cursor: pointer;\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Mitglieder zuordnen\" title=\"Mitglieder zuordnen\" onClick=\"window.open('$g_root_path/adm_program/modules/lists/members.php?rol_id=$row_lst->rol_id&amp;popup=1','Titel','width=550,height=550,left=310,top=100,scrollbars=yes,resizable=yes')\">";    
                   }
                   
                   
@@ -188,7 +188,7 @@ require("../../../adm_config/body_top.php");
                if($anz_mgl > 0)
                {
                      echo "
-                     <select size=\"1\" name=\"list$i\" onchange=\"showList(this, '". urlencode($row_lst->ar_funktion). "')\">
+                     <select size=\"1\" name=\"list$i\" onchange=\"showList(this, '". urlencode($row_lst->rol_name). "')\">
                         <option value=\"\" selected=\"selected\">Liste anzeigen ...</option>";
                         if(!$member_valid) echo "<option value=\"former\">Ehemaligenliste</option>";
                         echo "<option value=\"address\">Adressliste</option>
@@ -201,40 +201,40 @@ require("../../../adm_config/body_top.php");
             echo "</div>
          </div>";
 
-         if(strlen($row_lst->ar_beschreibung) > 0)
+         if(strlen($row_lst->rol_description) > 0)
          {
             echo "<div style=\"margin-top: 6px;\">
                      <div style=\"margin-left: 30px; width: 130px; text-align: left; float: left;\">Beschreibung:</div>
-                     <div style=\"margin-left: 160px; text-align: left;\">$row_lst->ar_beschreibung</div>
+                     <div style=\"margin-left: 160px; text-align: left;\">$row_lst->rol_description</div>
                   </div>";
          }
 
          if($member_valid)
          {
-            if(strlen(mysqldate("d.m.y", $row_lst->ar_datum_von)) > 0)
+            if(strlen(mysqldate("d.m.y", $row_lst->rol_datum_von)) > 0)
             {
                echo "<div style=\"margin-top: 6px;\">
                         <div style=\"margin-left: 30px; width: 130px; text-align: left; float: left;\">Zeitraum:</div>
-                        <div style=\"text-align: left;\">". mysqldate("d.m.y", $row_lst->ar_datum_von). " bis ". mysqldate("d.m.y", $row_lst->ar_datum_bis). "</div>";
+                        <div style=\"text-align: left;\">". mysqldate("d.m.y", $row_lst->rol_datum_von). " bis ". mysqldate("d.m.y", $row_lst->rol_datum_bis). "</div>";
                echo "</div>";
             }
-            if($row_lst->ar_wochentag > 0
-            || (  strcmp(mysqltime("h:i", $row_lst->ar_zeit_von), "00:00") != 0)
-               && $row_lst->ar_zeit_von != NULL )
+            if($row_lst->rol_wochentag > 0
+            || (  strcmp(mysqltime("h:i", $row_lst->rol_zeit_von), "00:00") != 0)
+               && $row_lst->rol_zeit_von != NULL )
             {
                echo "<div style=\"margin-top: 6px;\">
                         <div style=\"margin-left: 30px; width: 130px; text-align: left; float: left;\">Gruppenstunde:</div>
-                        <div style=\"text-align: left;\">". $arrDay[$row_lst->ar_wochentag-1];
-                        if(strcmp(mysqltime("h:i", $row_lst->ar_zeit_von), "00:00") != 0)
-                           echo " von ". mysqltime("h:i", $row_lst->ar_zeit_von). " bis ". mysqltime("h:i", $row_lst->ar_zeit_bis);
+                        <div style=\"text-align: left;\">". $arrDay[$row_lst->rol_wochentag-1];
+                        if(strcmp(mysqltime("h:i", $row_lst->rol_zeit_von), "00:00") != 0)
+                           echo " von ". mysqltime("h:i", $row_lst->rol_zeit_von). " bis ". mysqltime("h:i", $row_lst->rol_zeit_bis);
                         echo "</div>";
                echo "</div>";
             }
-            if(strlen($row_lst->ar_ort) > 0)
+            if(strlen($row_lst->rol_ort) > 0)
             {
                echo "<div style=\"margin-top: 6px;\">
                         <div style=\"margin-left: 30px; width: 130px; text-align: left; float: left;\">Treffpunkt:</div>
-                        <div style=\"text-align: left;\">$row_lst->ar_ort</div>
+                        <div style=\"text-align: left;\">$row_lst->rol_ort</div>
                      </div>";
             }
          }
@@ -242,15 +242,15 @@ require("../../../adm_config/body_top.php");
          <div style=\"margin-top: 6px;\">
             <div style=\"margin-left: 30px; width: 130px; text-align: left; float: left;\">Teilnehmer:</div>
             <div style=\"text-align: left;\">$anz_mgl";
-               if($row_lst->ar_max_mitglieder > 0)
-                  echo " von max. $row_lst->ar_max_mitglieder";
+               if($row_lst->rol_max_mitglieder > 0)
+                  echo " von max. $row_lst->rol_max_mitglieder";
             echo "</div>
          </div>";
-         if(strlen($row_lst->ar_beitrag) > 0)
+         if(strlen($row_lst->rol_beitrag) > 0)
          {
             echo "<div style=\"margin-top: 6px;\">
                      <div style=\"margin-left: 30px; width: 130px; text-align: left; float: left;\">Beitrag:</div>
-                     <div style=\"margin-left: 160px; text-align: left;\">$row_lst->ar_beitrag &euro;</div>
+                     <div style=\"margin-left: 160px; text-align: left;\">$row_lst->rol_beitrag &euro;</div>
                   </div>";
          }
          $i++;

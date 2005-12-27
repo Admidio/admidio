@@ -120,13 +120,13 @@ elseif($_GET["mode"] == 2)
       exit();
    }
 
-   $sql = "SELECT am_id
+   $sql = "SELECT mem_id
              FROM ". TBL_ROLES. ", ". TBL_MEMBERS. "
-            WHERE ar_ag_shortname = '$g_organization'
-              AND ar_valid        = 1
-              AND am_ar_id        = ar_id
-              AND am_valid        = 1
-              AND am_au_id        = {0}";
+            WHERE rol_org_shortname = '$g_organization'
+              AND rol_valid        = 1
+              AND mem_rol_id        = rol_id
+              AND mem_valid        = 1
+              AND mem_usr_id        = {0}";
    $sql        = prepareSQL($sql, array($_GET['user_id']));
    $result_mgl = mysql_query($sql, $g_adm_con);
    db_error($result_mgl);
@@ -134,8 +134,8 @@ elseif($_GET["mode"] == 2)
    while($row = mysql_fetch_object($result_mgl))
    {
       // alle Rollen der aktuellen Gliedgemeinschaft auf ungueltig setzen
-      $sql    = "UPDATE ". TBL_MEMBERS. " SET am_valid = 0
-                  WHERE am_id = $row->am_id ";
+      $sql    = "UPDATE ". TBL_MEMBERS. " SET mem_valid = 0
+                  WHERE mem_id = $row->mem_id ";
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
    }
@@ -145,7 +145,7 @@ elseif($_GET["mode"] == 2)
       mysql_select_db($g_forum_db, $g_forum_con);
 
       // Loginname auslesen
-      $sql = "SELECT au_login FROM ". TBL_USERS. " WHERE au_id = {0}";
+      $sql = "SELECT usr_login_name FROM ". TBL_USERS. " WHERE usr_id = {0}";
       $sql = prepareSQL($sql, array($_GET['user_id']));
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
@@ -192,7 +192,7 @@ elseif($_GET["mode"] == 3)
 
    // User aus der Datenbank loeschen
 
-   $sql = "SELECT au_login FROM ". TBL_USERS. " WHERE au_id = {0}";
+   $sql = "SELECT usr_login_name FROM ". TBL_USERS. " WHERE usr_id = {0}";
    $sql = prepareSQL($sql, array($_GET['user_id']));
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
@@ -200,12 +200,12 @@ elseif($_GET["mode"] == 3)
    $row = mysql_fetch_array($result);
    $login = $row[0];
 
-   $sql    = "DELETE FROM ". TBL_MEMBERS. " WHERE am_au_id = {0}";
+   $sql    = "DELETE FROM ". TBL_MEMBERS. " WHERE mem_usr_id = {0}";
    $sql    = prepareSQL($sql, array($_GET['user_id']));
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
 
-   $sql    = "DELETE FROM ". TBL_USERS. " WHERE au_id = {0}";
+   $sql    = "DELETE FROM ". TBL_USERS. " WHERE usr_id = {0}";
    $sql    = prepareSQL($sql, array($_GET['user_id']));
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
@@ -262,8 +262,8 @@ elseif($_GET["mode"] == 4)
 		$password_md5 = md5($password);
 
 		// Passwort des Users updaten
-		$sql    = "UPDATE ". TBL_USERS. " SET au_password = '$password_md5'
-				      WHERE au_id = $user->id ";
+		$sql    = "UPDATE ". TBL_USERS. " SET usr_password = '$password_md5'
+				      WHERE usr_id = $user->id ";
 		$result = mysql_query($sql, $g_adm_con);
 		db_error($result);
 

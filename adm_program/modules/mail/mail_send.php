@@ -8,7 +8,7 @@
  *
  * Uebergaben:
  *
- * au_id   - E-Mail an den entsprechenden Benutzer schreiben
+ * usr_id   - E-Mail an den entsprechenden Benutzer schreiben
  * rolle   - E-Mail an alle Mitglieder der Rolle schreiben
  *
  ******************************************************************************
@@ -37,7 +37,7 @@ $err_text = "";
 
 // Pruefungen, ob die Seite regulaer aufgerufen wurde
 
-if(array_key_exists("au_id", $_GET) && !$g_session_valid)
+if(array_key_exists("usr_id", $_GET) && !$g_session_valid)
 {
    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
    header($location);
@@ -102,15 +102,15 @@ if(array_key_exists("rolle", $_POST) && strlen($err_code) == 0)
    {
    		if($g_session_valid)
    		{
-      		$sql    = "SELECT ar_r_mail_login FROM ". TBL_ROLES. "
-           		       WHERE ar_ag_shortname    = '$g_organization'
-               		     AND UPPER(ar_funktion) = UPPER({0}) ";
+      		$sql    = "SELECT rol_mail_login FROM ". TBL_ROLES. "
+           		       WHERE rol_org_shortname    = '$g_organization'
+               		     AND UPPER(rol_name) = UPPER({0}) ";
    		}
    		else
    		{
-      		$sql    = "SELECT ar_r_mail_logout FROM ". TBL_ROLES. "
-           		       WHERE ar_ag_shortname    = '$g_organization'
-               		     AND UPPER(ar_funktion) = UPPER({0}) ";
+      		$sql    = "SELECT rol_mail_logout FROM ". TBL_ROLES. "
+           		       WHERE rol_org_shortname    = '$g_organization'
+               		     AND UPPER(rol_name) = UPPER({0}) ";
    		}
    		$sql    = prepareSQL($sql, array($_POST['rolle']));
    		$result = mysql_query($sql, $g_adm_con);
@@ -201,16 +201,16 @@ function sendMail($email, $rolle = "")
 	return mail($email, $_POST['subject'], $mail_body, $mail_properties);
 }
 
-if(array_key_exists("au_id", $_GET))
+if(array_key_exists("usr_id", $_GET))
 {
    $mail_receivers = "";
 
-   // au_id wurde uebergeben, dann E-Mail direkt an den User schreiben
-   $sql    = "SELECT au_mail FROM ". TBL_USERS. " WHERE au_id = {0} ";
-   $sql    = prepareSQL($sql, array($_GET['au_id']));
+   // usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
+   $sql    = "SELECT usr_mail FROM ". TBL_USERS. " WHERE usr_id = {0} ";
+   $sql    = prepareSQL($sql, array($_GET['usr_id']));
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
-   $mail_receivers = "- \"$row->au_mail\" ";
+   $mail_receivers = "- \"$row->usr_mail\" ";
    $row = mysql_fetch_array($result);
    if(sendMail($row[0]))
    {
@@ -222,23 +222,23 @@ else
    $mail_receivers = "";
 
    // Rolle wurde uebergeben, dann an alle Mitglieder eine Mail schreiben
-   $sql    = "SELECT au_vorname, au_name, au_mail, ar_funktion
+   $sql    = "SELECT usr_first_name, usr_last_name, usr_mail, rol_name
                 FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
-               WHERE ar_ag_shortname = '$g_organization'
-                 AND ar_funktion     = {0}
-                 AND am_ar_id        = ar_id
-                 AND am_valid        = 1
-                 AND am_au_id        = au_id
-                 AND LENGTH(au_mail) > 0 ";
+               WHERE rol_org_shortname = '$g_organization'
+                 AND rol_name     = {0}
+                 AND mem_rol_id        = rol_id
+                 AND mem_valid        = 1
+                 AND mem_usr_id        = usr_id
+                 AND LENGTH(usr_mail) > 0 ";
    $sql    = prepareSQL($sql, array($_POST['rolle']));
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
 
    while($row = mysql_fetch_object($result))
    {
-      if(sendMail($row->au_mail, $row->ar_funktion))
+      if(sendMail($row->usr_mail, $row->rol_name))
       {
-         $mail_receivers = $mail_receivers. "- \"$row->au_vorname $row->au_name $row->au_mail\" ";
+         $mail_receivers = $mail_receivers. "- \"$row->usr_first_name $row->usr_last_name $row->usr_mail\" ";
       }
    }
 }

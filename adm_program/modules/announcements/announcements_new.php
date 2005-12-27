@@ -8,7 +8,7 @@
  *
  * Uebergaben:
  *
- * aa_id         - ID der Ankuendigung, die bearbeitet werden soll
+ * ann_id         - ID der Ankuendigung, die bearbeitet werden soll
  * headline      - Ueberschrift, die ueber den Ankuendigungen steht
  *                 (Default) Ankuendigungen
  *
@@ -50,10 +50,10 @@ $description   = "";
 // Wenn eine Ankuendigungs-ID uebergeben wurde, soll die Ankuendigung geaendert werden
 // -> Felder mit Daten der Ankuendigung vorbelegen
 
-if ($_GET["aa_id"] != 0)
+if ($_GET["ann_id"] != 0)
 {
-   $sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. " WHERE aa_id = {0}";
-   $sql    = prepareSQL($sql, array($_GET['aa_id']));
+   $sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. " WHERE ann_id = {0}";
+   $sql    = prepareSQL($sql, array($_GET['ann_id']));
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
 
@@ -61,9 +61,9 @@ if ($_GET["aa_id"] != 0)
    {
       $row_ba = mysql_fetch_object($result);
 
-      $global        = $row_ba->aa_global;
-      $headline      = $row_ba->aa_ueberschrift;
-      $description   = $row_ba->aa_beschreibung;
+      $global        = $row_ba->ann_global;
+      $headline      = $row_ba->ann_headline;
+      $description   = $row_ba->ann_description;
    }
 }
 
@@ -86,15 +86,15 @@ require("../../../adm_config/body_top.php");
    echo "
    <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
 
-   <form action=\"announcements_function.php?aa_id=". $_GET["aa_id"]. "&amp;headline=". $_GET['headline']. "&amp;mode=";
-      if($_GET["aa_id"] > 0)
+   <form action=\"announcements_function.php?ann_id=". $_GET["ann_id"]. "&amp;headline=". $_GET['headline']. "&amp;mode=";
+      if($_GET["ann_id"] > 0)
          echo "3";
       else
          echo "1";
       echo "\" method=\"post\" name=\"AnkuendigungAnlegen\">
 
       <div class=\"formHead\">";
-         if($_GET["aa_id"] > 0)
+         if($_GET["ann_id"] > 0)
             $formHeadline = $_GET["headline"]. " ändern";
          else
             $formHeadline = $_GET["headline"]. " anlegen";
@@ -123,7 +123,7 @@ require("../../../adm_config/body_top.php");
 
          // bei mehr als einer Gruppierung, Checkbox anzeigen, ob, Termin bei anderen angezeigt werden soll
          $sql = "SELECT COUNT(1) FROM ". TBL_ORGANIZATIONS. "
-                  WHERE ag_mother IS NOT NULL ";
+                  WHERE org_org_id_parent IS NOT NULL ";
          $result = mysql_query($sql, $g_adm_con);
          db_error($result);
          $row = mysql_fetch_array($result);
@@ -156,19 +156,19 @@ require("../../../adm_config/body_top.php");
             <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
             Zur&uuml;ck</button>
          </div>";
-         if($row_ba->aa_last_change_id > 0)
+         if($row_ba->ann_usr_id_change > 0)
          {
             // Angabe &uuml;ber die letzten Aenderungen
-            $sql    = "SELECT au_vorname, au_name
+            $sql    = "SELECT usr_first_name, usr_last_name
                          FROM ". TBL_USERS. "
-                        WHERE au_id = $row_ba->aa_last_change_id ";
+                        WHERE usr_id = $row_ba->ann_usr_id_change ";
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
             $row = mysql_fetch_array($result);
 
             echo "<div style=\"margin-top: 6px;\">
                <span style=\"font-size: 10pt\">
-               Letzte &Auml;nderung am ". mysqldatetime("d.m.y h:i", $row_ba->aa_last_change).
+               Letzte &Auml;nderung am ". mysqldatetime("d.m.y h:i", $row_ba->ann_last_change).
                " durch $row[0] $row[1]
                </span>
             </div>";

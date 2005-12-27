@@ -37,16 +37,16 @@ if(!$g_session_valid || $g_session_valid & !editPhoto())
 //bei Seitenaufruf mit Moderationsrechten
 if($g_session_valid & editPhoto()){
 //Übernahme Variablen
-	 $ap_id= $_GET['ap_id'];
+	 $pho_id= $_GET['pho_id'];
 //erfassen der Veranstaltung
 	$sql = "	SELECT *
 				FROM ". TBL_PHOTOS. "
-				WHERE (ap_id ='$ap_id')";
+				WHERE (pho_id ='$pho_id')";
 	$result = mysql_query($sql, $g_adm_con);
 	db_error($result);
 	$adm_photo = mysql_fetch_array($result);
 //Speicherort
-	$ordner = "../../../adm_my_files/photos/".$adm_photo["ap_begin"]."_".$adm_photo["ap_id"];
+	$ordner = "../../../adm_my_files/photos/".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"];
 
 //kontrollmechanismen bei selbstaufruf
    if($_POST["upload"]){
@@ -95,9 +95,9 @@ if($_POST["upload"]){
 //bei selbstaufruf der Datei Hinweise zu hochgeladenen Dateien und Kopieren der Datei in Ordner
    //Anlegen des Berichts
       echo"<div style=\"width: 670px\" align=\"center\" class=\"formHead\">Bericht</div>";
-      echo"<div style=\"width: 670px\" align=\"center\" class=\"formBody\">Bitte einen Moment Geduld. Die Bilder wurden der Veranstaltung <br> - ".$adm_photo["ap_name"]." - <br>erfolgreich hinzugefügt, wenn sie hier angezeigt werden.<br>";
+      echo"<div style=\"width: 670px\" align=\"center\" class=\"formBody\">Bitte einen Moment Geduld. Die Bilder wurden der Veranstaltung <br> - ".$adm_photo["pho_name"]." - <br>erfolgreich hinzugefügt, wenn sie hier angezeigt werden.<br>";
    //Verarbeitungsschleife für die einzelnen Bilder
-      $bildnr=$adm_photo["ap_number"];
+      $bildnr=$adm_photo["pho_number"];
 		for($x=0; $x<=4; $x=$x+1){
          $y=$x+1;
          if($_FILES["bilddatei"]["name"][$x]!="" && $ordner!="") {
@@ -114,9 +114,9 @@ if($_POST["upload"]){
 	//Aendern der Datenbankeintaege
       $changedatetime= date("Y.m.d G:i:s", time());
 		$sql ="	UPDATE ". TBL_PHOTOS. "
-					SET ap_number = '$bildnr',
-						 ap_last_change = '$changedatetime'
-					WHERE ap_id = '$ap_id'";
+					SET pho_number = '$bildnr',
+						 pho_last_change = '$changedatetime'
+					WHERE pho_id = '$pho_id'";
 		$result = mysql_query($sql, $g_adm_con);
 		db_error($result, 1);
 	//Ende Bericht
@@ -130,12 +130,12 @@ if($_POST["upload"]){
 
 //Formular
    echo"
-   <form name=\"photoup\" method=\"post\" action=\"photoupload.php?ap_id=$ap_id\" enctype=\"multipart/form-data\">
+   <form name=\"photoup\" method=\"post\" action=\"photoupload.php?pho_id=$pho_id\" enctype=\"multipart/form-data\">
       <div style=\"width: 410px\" align=\"center\" class=\"formHead\">Fotoupload</div>
       <div style=\"width: 410px\" align=\"center\" class=\"formBody\">
          Bilder zu dieser Veranstaltung hinzufügen:<br>"
-         .$adm_photo["ap_name"]."<br>"
-			."(Beginn: ". mysqldate("d.m.y", $adm_photo["ap_begin"]).")"
+         .$adm_photo["pho_name"]."<br>"
+			."(Beginn: ". mysqldate("d.m.y", $adm_photo["pho_begin"]).")"
 			."<hr width=\"85%\" />
          <p>Bild 1:<input type='file' name='bilddatei[]' value='durchsuchen'></p>
          <p>Bild 2:<input type='file' name='bilddatei[]' value='durchsuchen'></p>

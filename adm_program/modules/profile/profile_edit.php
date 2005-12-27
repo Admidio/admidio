@@ -29,7 +29,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
- 
+
 require("../../system/common.php");
 require("../../system/session_check_login.php");
 
@@ -42,7 +42,7 @@ if(!array_key_exists("new_user", $_GET))
    $a_new_user = false;
 else
    $a_new_user = $_GET['new_user'];
-   
+
 // wenn URL uebergeben wurde zu dieser gehen, ansonsten zurueck
 if(array_key_exists('url', $_GET))
    $url = $_GET['url'];
@@ -69,17 +69,17 @@ else
 {
    $a_user_id = $_GET['user_id'];
    // jetzt noch schauen, ob User überhaupt Mitglied in der Gliedgemeinschaft ist
-   $sql = "SELECT am_id
+   $sql = "SELECT mem_id
              FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-            WHERE ar_ag_shortname = '$g_organization'
-              AND ar_valid        = 1
-              AND am_ar_id        = ar_id
-              AND am_valid        = 1
-              AND am_au_id        = {0}";
+            WHERE rol_org_shortname = '$g_organization'
+              AND rol_valid        = 1
+              AND mem_rol_id        = rol_id
+              AND mem_valid        = 1
+              AND mem_usr_id        = {0}";
    $sql    = prepareSQL($sql, array($_GET['user_id']));
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
-   
+
    if(mysql_num_rows($result) == 0)
    {
       $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
@@ -117,11 +117,11 @@ echo "
 <head>
    <title>$g_current_organization->longname - Profil bearbeiten</title>
    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
-   
+
    <!--[if gte IE 5.5000]>
    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
    <![endif]-->";
-if($popup == 0)   
+if($popup == 0)
    require("../../../adm_config/header.php");
 echo "</head>";
 if($popup == 0)
@@ -196,7 +196,7 @@ if($popup == 0)
          }
 
          echo "<hr width=\"80%\" />
-         
+
          <div style=\"margin-top: 6px;\">
             <div style=\"text-align: right; width: 30%; float: left;\">Adresse:</div>
             <div style=\"text-align: left; margin-left: 32%;\">";
@@ -233,9 +233,9 @@ if($popup == 0)
                   echo "<input type=\"text\" name=\"land\" size=\"20\" maxlength=\"30\" value=\"$user->country\" />";
             echo "</div>
          </div>
-         
+
          <hr width=\"80%\" />
-         
+
          <div style=\"margin-top: 6px;\">
             <div style=\"text-align: right; width: 30%; float: left;\">Telefon:</div>
             <div style=\"text-align: left; margin-left: 32%;\">";
@@ -274,7 +274,7 @@ if($popup == 0)
          </div>
 
          <hr width=\"80%\" />
-         
+
          <div style=\"margin-top: 6px;\">
             <div style=\"text-align: right; width: 30%; float: left;\">E-Mail:</div>
             <div style=\"text-align: left; margin-left: 32%;\">";
@@ -293,19 +293,19 @@ if($popup == 0)
                   echo "<input type=\"text\" name=\"weburl\" size=\"40\" maxlength=\"50\" value=\"$user->homepage\" />";
             echo "</div>
          </div>";
-         
+
          if(!$a_new_user)
          {
-            echo "<hr width=\"80%\" />";
+            //echo "<hr width=\"80%\" />";
 
             // alle zugeordneten Messengerdaten einlesen
-            $sql = "SELECT auf_name, aud_value
+            $sql = "SELECT usf_name, usd_value
                       FROM ". TBL_USER_FIELDS. " LEFT JOIN ". TBL_USER_DATA. "
-                        ON aud_auf_id = auf_id
-                       AND aud_au_id         = $user->id
-                     WHERE auf_ag_shortname IS NULL
-                       AND auf_type          = 'MESSENGER'
-                     ORDER BY auf_name ASC ";
+                        ON usd_usf_id = usf_id
+                       AND usd_usr_id         = $user->id
+                     WHERE usf_org_shortname IS NULL
+                       AND usf_type          = 'MESSENGER'
+                     ORDER BY usf_name ASC ";
             $result_msg = mysql_query($sql, $g_adm_con);
             db_error($result_msg, true);
 
@@ -313,26 +313,26 @@ if($popup == 0)
             {
                echo "<div style=\"margin-top: 6px;\">
                   <div style=\"text-align: right; width: 30%; float: left;\">
-                     $row->auf_name:
+                     $row->usf_name:
                      <img src=\"$g_root_path/adm_program/images/";
-                     if($row->auf_name == 'AIM')
+                     if($row->usf_name == 'AIM')
                          echo "aim.png";
-                     elseif($row->auf_name == 'Google Talk')
+                     elseif($row->usf_name == 'Google Talk')
                          echo "google.gif";
-                     elseif($row->auf_name == 'ICQ')
+                     elseif($row->usf_name == 'ICQ')
                          echo "icq.png";
-                     elseif($row->auf_name == 'MSN')
+                     elseif($row->usf_name == 'MSN')
                          echo "msn.png";
-                     elseif($row->auf_name == 'Skype')
+                     elseif($row->usf_name == 'Skype')
                          echo "skype.png";
-                     elseif($row->auf_name == 'Yahoo')
+                     elseif($row->usf_name == 'Yahoo')
                          echo "yahoo.png";
                      echo "\" style=\"vertical-align: middle;\" /></div>
                   <div style=\"text-align: left; margin-left: 32%;\">";
                      if($a_new_user)
-                        echo "<input type=\"text\" name=\"$row->auf_name\" size=\"20\" maxlength=\"50\" />";
+                        echo "<input type=\"text\" name=\"$row->usf_name\" size=\"20\" maxlength=\"50\" />";
                      else
-                        echo "<input type=\"text\" name=\"$row->auf_name\" size=\"20\" maxlength=\"50\" value=\"$row->aud_value\" />";
+                        echo "<input type=\"text\" name=\"$row->usf_name\" size=\"20\" maxlength=\"50\" value=\"$row->usd_value\" />";
                   echo "</div>
                </div>";
             }
@@ -343,23 +343,23 @@ if($popup == 0)
          {
             $sql = "SELECT *
                       FROM ". TBL_USER_FIELDS. "
-                     WHERE auf_ag_shortname = '$g_organization'
-                  ORDER BY auf_name ASC ";
+                     WHERE usf_org_shortname = '$g_organization'
+                  ORDER BY usf_name ASC ";
          }
          else
          {
             $sql = "SELECT *
                       FROM ". TBL_USER_FIELDS. " LEFT JOIN ". TBL_USER_DATA. "
-                        ON aud_auf_id = auf_id
-                       AND aud_au_id = $user->id
-                     WHERE auf_ag_shortname = '$g_organization' ";
+                        ON usd_usf_id = usf_id
+                       AND usd_usr_id = $user->id
+                     WHERE usf_org_shortname = '$g_organization' ";
             if(!isModerator())
-               $sql = $sql. " AND auf_locked = 0 ";
-            $sql = $sql. " ORDER BY auf_name ASC ";
+               $sql = $sql. " AND usf_locked = 0 ";
+            $sql = $sql. " ORDER BY usf_name ASC ";
          }
          $result_field = mysql_query($sql, $g_adm_con);
          db_error($result_field, true);
-         
+
          if(mysql_num_rows($result_field) > 0)
             echo "<hr width=\"80%\" />";
 
@@ -367,30 +367,30 @@ if($popup == 0)
          {
             echo "<div style=\"margin-top: 6px;\">
                <div style=\"text-align: right; width: 30%; float: left;\">
-                  $row->auf_name:</div>
+                  $row->usf_name:</div>
                <div style=\"text-align: left; margin-left: 32%;\">";
                   echo "<input type=\"";
-                  if($row->auf_type == "CHECKBOX")
+                  if($row->usf_type == "CHECKBOX")
                      echo "checkbox";
                   else
                      echo "text";
-                  echo "\" id=\"". urlencode($row->auf_name). "\" name=\"". urlencode($row->auf_name). "\" ";
-                  if($row->auf_type == "CHECKBOX")
+                  echo "\" id=\"". urlencode($row->usf_name). "\" name=\"". urlencode($row->usf_name). "\" ";
+                  if($row->usf_type == "CHECKBOX")
                   {
-                     if($row->aud_value == 1)
+                     if($row->usd_value == 1)
                         echo " checked ";
                      echo " value=\"1\" ";
                   }
                   else
                   {
-                     if($row->auf_type == "NUMERIC")
+                     if($row->usf_type == "NUMERIC")
                         echo " size=\"10\" maxlength=\"15\" ";
-                     elseif($row->auf_type == "TEXT")
+                     elseif($row->usf_type == "TEXT")
                         echo " size=\"30\" maxlength=\"30\" ";
-                     elseif($row->auf_type == "TEXT_BIG")
+                     elseif($row->usf_type == "TEXT_BIG")
                         echo " size=\"40\" maxlength=\"255\" ";
-                     if(strlen($row->aud_value) > 0)
-                        echo " value=\"$row->aud_value\" ";
+                     if(strlen($row->usd_value) > 0)
+                        echo " value=\"$row->usd_value\" ";
                   }
                   echo ">";
                echo "</div>
@@ -398,12 +398,12 @@ if($popup == 0)
          }
 
          echo "<hr width=\"80%\" />
-         
+
          <div style=\"margin-top: 6px;\">
             <button name=\"speichern\" type=\"submit\" value=\"speichern\">
                <img src=\"$g_root_path/adm_program/images/save.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
                  Speichern</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                 
+
             <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
             <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
               Zur&uuml;ck</button>
@@ -412,9 +412,9 @@ if($popup == 0)
          if($user->usr_id_change > 0)
          {
             // Angabe über die letzten Aenderungen
-            $sql    = "SELECT au_vorname, au_name
+            $sql    = "SELECT usr_first_name, usr_last_name
                          FROM ". TBL_USERS. "
-                        WHERE au_id = $user->usr_id_change ";
+                        WHERE usr_id = $user->usr_id_change ";
             $result = mysql_query($sql, $g_adm_con);
             db_error($result, true);
             $row = mysql_fetch_array($result);

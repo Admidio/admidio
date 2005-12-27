@@ -8,7 +8,7 @@
  *
  * Uebergaben:
  *
- * au_id   - E-Mail an den entsprechenden Benutzer schreiben
+ * usr_id   - E-Mail an den entsprechenden Benutzer schreiben
  * rolle   - E-Mail an alle Mitglieder der Rolle schreiben
  * subject - Betreff der E-Mail
  * body    - Inhalt der E-Mail
@@ -50,15 +50,15 @@ if(array_key_exists("rolle", $_GET))
 {
    if($g_session_valid)
    {
-      $sql    = "SELECT ar_r_mail_login FROM ". TBL_ROLES. "
-                  WHERE ar_ag_shortname    = '$g_organization'
-                    AND UPPER(ar_funktion) = UPPER('". $_GET['rolle']. "') ";
+      $sql    = "SELECT rol_mail_login FROM ". TBL_ROLES. "
+                  WHERE rol_org_shortname    = '$g_organization'
+                    AND UPPER(rol_name) = UPPER('". $_GET['rolle']. "') ";
    }
    else
    {
-      $sql    = "SELECT ar_r_mail_logout FROM ". TBL_ROLES. "
-                  WHERE ar_ag_shortname    = '$g_organization'
-                    AND UPPER(ar_funktion) = UPPER('". $_GET['rolle']. "') ";
+      $sql    = "SELECT rol_mail_logout FROM ". TBL_ROLES. "
+                  WHERE rol_org_shortname    = '$g_organization'
+                    AND UPPER(rol_name) = UPPER('". $_GET['rolle']. "') ";
    }
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
@@ -105,10 +105,10 @@ require("../../../adm_config/body_top.php");
    <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
 
    <form action=\"mail_send.php?";
-      // au_id wird mit GET uebergeben,
+      // usr_id wird mit GET uebergeben,
       // da keine E-Mail-Adresse von mail_send angenommen werden soll
-      if(array_key_exists("au_id", $_GET))
-         echo "au_id=". $_GET['au_id']. "&";
+      if(array_key_exists("usr_id", $_GET))
+         echo "usr_id=". $_GET['usr_id']. "&";
       echo "url=". urlencode(getHttpReferer()). "\" method=\"post\" name=\"Mail\" enctype=\"multipart/form-data\">
 
       <div class=\"formHead\">";
@@ -121,10 +121,10 @@ require("../../../adm_config/body_top.php");
          <div>
             <div style=\"text-align: right; width: 70px; float: left;\">an:</div>
             <div style=\"text-align: left; margin-left: 80px;\">";
-               if(array_key_exists("au_id", $_GET))
+               if(array_key_exists("usr_id", $_GET))
                {
-                  // au_id wurde uebergeben, dann E-Mail direkt an den User schreiben
-                  $sql    = "SELECT au_mail FROM ". TBL_USERS. " WHERE au_id = '". $_GET['au_id']. "' ";
+                  // usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
+                  $sql    = "SELECT usr_mail FROM ". TBL_USERS. " WHERE usr_id = '". $_GET['usr_id']. "' ";
                   $result = mysql_query($sql, $g_adm_con);
                   db_error($result, true);
 
@@ -149,29 +149,29 @@ require("../../../adm_config/body_top.php");
                      // im eingeloggten Zustand duerfen nur Moderatoren an gelocked Rollen schreiben
                      if(isModerator())
                      {
-                        $sql    = "SELECT ar_funktion FROM ". TBL_ROLES. "
-                                    WHERE ar_ag_shortname = '$g_organization'
-                                      AND ar_r_mail_login = 1
-                                      AND ar_valid        = 1
-                                    ORDER BY ar_funktion ";
+                        $sql    = "SELECT rol_name FROM ". TBL_ROLES. "
+                                    WHERE rol_org_shortname = '$g_organization'
+                                      AND rol_mail_login = 1
+                                      AND rol_valid        = 1
+                                    ORDER BY rol_name ";
                      }
                      else
                      {
-                        $sql    = "SELECT ar_funktion FROM ". TBL_ROLES. "
-                                    WHERE ar_ag_shortname = '$g_organization'
-                                      AND ar_r_mail_login = 1
-                                      AND ar_r_locked     = 0
-                                      AND ar_valid        = 1
-                                    ORDER BY ar_funktion ";
+                        $sql    = "SELECT rol_name FROM ". TBL_ROLES. "
+                                    WHERE rol_org_shortname = '$g_organization'
+                                      AND rol_mail_login = 1
+                                      AND rol_locked     = 0
+                                      AND rol_valid        = 1
+                                    ORDER BY rol_name ";
                      }
                   }
                   else
                   {
-                     $sql    = "SELECT ar_funktion FROM ". TBL_ROLES. "
-                                 WHERE ar_ag_shortname  = '$g_organization'
-                                   AND ar_r_mail_logout = 1
-                                   AND ar_valid         = 1
-                                 ORDER BY ar_funktion ";
+                     $sql    = "SELECT rol_name FROM ". TBL_ROLES. "
+                                 WHERE rol_org_shortname  = '$g_organization'
+                                   AND rol_mail_logout = 1
+                                   AND rol_valid         = 1
+                                 ORDER BY rol_name ";
                   }
                   $result = mysql_query($sql, $g_adm_con);
                   db_error($result, true);

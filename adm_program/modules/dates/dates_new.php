@@ -8,7 +8,7 @@
  *
  * Uebergaben:
  *
- * at_id: ID des Termins, der bearbeitet werden soll
+ * dat_id: ID des Termins, der bearbeitet werden soll
  *
  ******************************************************************************
  *
@@ -50,10 +50,10 @@ $description   = "";
 // Wenn eine Termin-ID uebergeben wurde, soll der Termin geaendert werden
 // -> Felder mit Daten des Termins vorbelegen
 
-if ($_GET["at_id"] != 0)
+if ($_GET["dat_id"] != 0)
  {
-   $sql    = "SELECT * FROM ". TBL_DATES. " WHERE at_id = {0}";
-   $sql    = prepareSQL($sql, array($_GET['at_id']));
+   $sql    = "SELECT * FROM ". TBL_DATES. " WHERE dat_id = {0}";
+   $sql    = prepareSQL($sql, array($_GET['dat_id']));
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
 
@@ -64,7 +64,7 @@ if ($_GET["at_id"] != 0)
       // Normale User duerfen nur ihre eigenen Termine aendern
       if(!isModerator())
       {
-         if($g_current_user->id != $row_bt->at_au_id)
+         if($g_current_user->id != $row_bt->dat_usr_id)
          {
             $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
             header($location);
@@ -72,20 +72,20 @@ if ($_GET["at_id"] != 0)
          }
       }
 
-      $global        = $row_bt->at_global;
-      $headline      = $row_bt->at_ueberschrift;
-      $date_from     = mysqldatetime("d.m.y", $row_bt->at_von);
-      $time_from     = mysqldatetime("h:i", $row_bt->at_von);
-      if($row_bt->at_von != $row_bt->at_bis)
+      $global        = $row_bt->dat_global;
+      $headline      = $row_bt->dat_headline;
+      $date_from     = mysqldatetime("d.m.y", $row_bt->dat_begin);
+      $time_from     = mysqldatetime("h:i", $row_bt->dat_begin);
+      if($row_bt->dat_begin != $row_bt->dat_end)
       {
          // Datum-Bis nur anzeigen, wenn es sich von Datum-Von unterscheidet
-         $date_to       = mysqldatetime("d.m.y", $row_bt->at_bis);
-         $time_to       = mysqldatetime("h:i", $row_bt->at_bis);
+         $date_to       = mysqldatetime("d.m.y", $row_bt->dat_end);
+         $time_to       = mysqldatetime("h:i", $row_bt->dat_end);
       }
       if ($time_from == "00:00") $time_from = "";
       if ($time_to == "00:00")   $time_to = "";
-      $meeting_point = $row_bt->at_ort;
-      $description   = $row_bt->at_beschreibung;
+      $meeting_point = $row_bt->dat_location;
+      $description   = $row_bt->dat_description;
    }
  }
 
@@ -108,15 +108,15 @@ require("../../../adm_config/body_top.php");
    echo "
    <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
 
-   <form action=\"dates_function.php?at_id=". $_GET["at_id"]. "&amp;mode=";
-      if($_GET["at_id"] > 0)
+   <form action=\"dates_function.php?dat_id=". $_GET["dat_id"]. "&amp;mode=";
+      if($_GET["dat_id"] > 0)
          echo "3";
       else
          echo "1";
       echo "\" method=\"post\" name=\"TerminAnlegen\">
 
       <div class=\"formHead\">";
-         if($_GET["at_id"] > 0)
+         if($_GET["dat_id"] > 0)
                echo strspace("Termin ändern", 2);
             else
                echo strspace("Termin anlegen", 2);
@@ -131,7 +131,7 @@ require("../../../adm_config/body_top.php");
 
          // bei mehr als einer Gruppierung, Checkbox anzeigen, ob, Termin bei anderen angezeigt werden soll
          $sql = "SELECT COUNT(1) FROM ". TBL_ORGANIZATIONS. "
-                  WHERE ag_mother IS NOT NULL ";
+                  WHERE org_org_id_parent IS NOT NULL ";
          $result = mysql_query($sql, $g_adm_con);
          db_error($result);
          $row = mysql_fetch_array($result);
@@ -201,19 +201,19 @@ require("../../../adm_config/body_top.php");
             <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
             Zur&uuml;ck</button>
          </div>";
-         if($row_bt->at_last_change_id > 0)
+         if($row_bt->dat_usr_id_change > 0)
          {
             // Angabe &uuml;ber die letzten Aenderungen
-            $sql    = "SELECT au_vorname, au_name
+            $sql    = "SELECT usr_first_name, usr_last_name
                          FROM ". TBL_USERS. "
-                        WHERE au_id = $row_bt->at_last_change_id ";
+                        WHERE usr_id = $row_bt->dat_usr_id_change ";
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
             $row = mysql_fetch_array($result);
 
             echo "<div style=\"margin-top: 6px;\">
                <span style=\"font-size: 10pt\">
-               Letzte &Auml;nderung am ". mysqldatetime("d.m.y h:i", $row_bt->at_last_change).
+               Letzte &Auml;nderung am ". mysqldatetime("d.m.y h:i", $row_bt->dat_last_change).
                " durch $row[0] $row[1]
                </span>
             </div>";

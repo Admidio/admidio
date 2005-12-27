@@ -43,34 +43,34 @@ if(!isModerator() && !isGroupLeader() && !editUser())
 if(isModerator())
 {
    // Alle Rollen der Gruppierung auflisten
-   $sql    = "SELECT ar_id FROM ". TBL_ROLES. "
-               WHERE ar_ag_shortname = '$g_organization'
-                 AND ar_valid        = 1
-               ORDER BY ar_funktion";
+   $sql    = "SELECT rol_id FROM ". TBL_ROLES. "
+               WHERE rol_org_shortname = '$g_organization'
+                 AND rol_valid        = 1
+               ORDER BY rol_name";
 }
 elseif(isGroupLeader())
 {
    // Alle Rollen auflisten, bei denen das Mitglied Leiter ist
-   $sql    = "SELECT ar_id
+   $sql    = "SELECT rol_id
                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-               WHERE am_au_id  = $g_current_user->id
-                 AND am_valid  = 1
-                 AND am_leiter = 1
-                 AND ar_id     = am_ar_id
-                 AND ar_ag_shortname = '$g_organization'
-                 AND ar_valid        = 1
-                 AND ar_r_locked     = 0
-               ORDER BY ar_funktion";
+               WHERE mem_usr_id  = $g_current_user->id
+                 AND mem_valid  = 1
+                 AND mem_leader = 1
+                 AND rol_id     = mem_rol_id
+                 AND rol_org_shortname = '$g_organization'
+                 AND rol_valid        = 1
+                 AND rol_locked     = 0
+               ORDER BY rol_name";
 }
 elseif(editUser())
 {
    // Alle Rollen auflisten, die keinen Moderatorenstatus haben
-   $sql    = "SELECT ar_id FROM ". TBL_ROLES. "
-               WHERE ar_ag_shortname = '$g_organization'
-                 AND ar_valid        = 1
-                 AND ar_r_moderation = 0
-                 AND ar_r_locked     = 0
-               ORDER BY ar_funktion";
+   $sql    = "SELECT rol_id FROM ". TBL_ROLES. "
+               WHERE rol_org_shortname = '$g_organization'
+                 AND rol_valid        = 1
+                 AND rol_moderation = 0
+                 AND rol_locked     = 0
+               ORDER BY rol_name";
 }
 $result_rolle = mysql_query($sql, $g_adm_con);
 db_error($result_rolle);
@@ -101,9 +101,9 @@ while($row = mysql_fetch_object($result_rolle))
       $leiter   = 0;
 
    $sql    = "SELECT * FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-               WHERE am_ar_id = $row->ar_id
-                 AND am_au_id = {0}
-                 AND am_ar_id = ar_id ";
+               WHERE mem_rol_id = $row->rol_id
+                 AND mem_usr_id = {0}
+                 AND mem_rol_id = rol_id ";
    $sql    = prepareSQL($sql, array($_GET['user_id']));
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
@@ -115,20 +115,20 @@ while($row = mysql_fetch_object($result_rolle))
       // neue Mitgliederdaten zurueckschreiben
       if($function == 1)
       {
-         $sql = "UPDATE ". TBL_MEMBERS. " SET am_valid  = 1
-                                          , am_ende   = '0000-00-00'
-                                          , am_leiter = $leiter
-                  WHERE am_ar_id = $row->ar_id
-                    AND am_au_id = {0}";
+         $sql = "UPDATE ". TBL_MEMBERS. " SET mem_valid  = 1
+                                          , mem_ende   = '0000-00-00'
+                                          , mem_leader = $leiter
+                  WHERE mem_rol_id = $row->rol_id
+                    AND mem_usr_id = {0}";
          $count_assigned++;
       }
       else
       {
-         $sql = "UPDATE ". TBL_MEMBERS. " SET am_valid  = 0
-                                          , am_ende   = NOW()
-                                          , am_leiter = $leiter
-                  WHERE am_ar_id = $row->ar_id
-                    AND am_au_id = {0}";
+         $sql = "UPDATE ". TBL_MEMBERS. " SET mem_valid  = 0
+                                          , mem_ende   = NOW()
+                                          , mem_leader = $leiter
+                  WHERE mem_rol_id = $row->rol_id
+                    AND mem_usr_id = {0}";
       }
    }
    else
@@ -136,8 +136,8 @@ while($row = mysql_fetch_object($result_rolle))
       // neue Mitgliederdaten einfuegen, aber nur, wenn auch ein Haeckchen da ist
       if($function == 1)
       {
-         $sql = "INSERT INTO ". TBL_MEMBERS. " (am_ar_id, am_au_id, am_start, am_valid, am_leiter)
-                 VALUES ($row->ar_id, {0}, NOW(), 1, $leiter) ";
+         $sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_start, mem_valid, mem_leader)
+                 VALUES ($row->rol_id, {0}, NOW(), 1, $leiter) ";
          $count_assigned++;
       }
    }

@@ -8,7 +8,7 @@
  *
  * Uebergaben:
  *
- * ar_id     - Rolle der Mitglieder hinzugefügt oder entfernt werden sollen
+ * rol_id     - Rolle der Mitglieder hinzugefügt oder entfernt werden sollen
  * popup   : 0 - (Default) Fenster wird normal mit Homepagerahmen angezeigt
  *           1 - Fenster wurde im Popupmodus aufgerufen
  * url:        - URL auf die danach weitergeleitet wird
@@ -38,7 +38,7 @@ require("../../system/common.php");
 require("../../system/session_check_login.php");
 
 //Übernahme der Rolle deren Mitgliederzuordnung bearbeitet werden soll
-$role_id=$_GET['ar_id'];
+$role_id=$_GET['rol_id'];
 
 // nur Webmaster & Moderatoren d&uuml;rfen Rollen zuweisen
 if(!isModerator() && !isGroupLeader($role_id) && !editUser())
@@ -62,7 +62,7 @@ else
 //Erfassen der übergeben Rolle
 $sql	=	"SELECT *
 			FROM ". TBL_ROLES. "
-			WHERE ar_id = '$role_id'";
+			WHERE rol_id = '$role_id'";
 $result_role = mysql_query($sql, $g_adm_con);
          	db_error($result, true);
 $role= mysql_fetch_array($result_role);
@@ -70,7 +70,7 @@ $role= mysql_fetch_array($result_role);
 //festlegen der Spaltenzahl er Tabelle
 $column=5;
 //Ist die Rolle eine Gruppe mit Leitern, dann 
-if($role["ar_gruppe"]==1 && isModerator() && editUser())$column++;
+if($role["rol_gruppe"]==1 && isModerator() && editUser())$column++;
 
 //Übername ob nur Mitglieder oder alle User der Datenbank angezeigt werden sollen
 $restrict=$_GET["restrict"];
@@ -79,14 +79,14 @@ if($restrict=="" || !isModerator() || !editUser())$restrict="m";
 //Falls gefordert, nur Aufruf von inhabern der Rolle Mitglied
 if($restrict=="m"){
 	$sql = "
-		SELECT DISTINCT au_id, au_name, au_vorname, au_geburtstag, au_ort, au_tel1, au_adresse, au_plz
+		SELECT DISTINCT usr_id, usr_last_name, usr_first_name, usr_birthday, usr_city, usr_phone, usr_address, usr_zip_code
 		FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. "
-		WHERE au_id = am_au_id
-		AND ar_ag_shortname = '$g_organization'
-		AND am_ar_id = ar_id
-		AND am_valid = 1
-		AND ar_valid = 1
-		ORDER BY au_name, au_vorname ASC ";
+		WHERE usr_id = mem_usr_id
+		AND rol_org_shortname = '$g_organization'
+		AND mem_rol_id = rol_id
+		AND mem_valid = 1
+		AND rol_valid = 1
+		ORDER BY usr_last_name, usr_first_name ASC ";
 	$result_user = mysql_query($sql, $g_adm_con);
 	db_error($result_user);
 	//Zählen wieviele Leute in der Datenbank stehen
@@ -96,9 +96,9 @@ if($restrict=="m"){
 //Falls gefordert, aufrufen alle Leute aus der Datenbank
 if($restrict=="u"){
 	$sql = "
-		SELECT au_id, au_name, au_vorname, au_geburtstag, au_ort, au_tel1, au_adresse, au_plz
+		SELECT usr_id, usr_last_name, usr_first_name, usr_birthday, usr_city, usr_phone, usr_address, usr_zip_code
 		FROM ". TBL_USERS. "
-		ORDER BY au_name, au_vorname ASC ";
+		ORDER BY usr_last_name, usr_first_name ASC ";
 	$result_user = mysql_query($sql, $g_adm_con);
 	db_error($result_user);
 	//Zählen wieviele Leute in der Datenbank stehen
@@ -108,25 +108,25 @@ if($restrict=="u"){
 //Erfassen welche anfansgsbuchstaben bei Nachnamen Vorkommen
 $first_letter_array = array();
 for($x=0; $user = mysql_fetch_array($result_user); $x++){
-	if(!in_array(ord($user['au_name']), $first_letter_array))$first_letter_array[$x]= ord($user['au_name']);
+	if(!in_array(ord($user['usr_last_name']), $first_letter_array))$first_letter_array[$x]= ord($user['usr_last_name']);
 }
 mysql_data_seek ($result_user, 0);
 
 //Erfassen wer die Rolle bereits hat oder schon mal hatte
 $sql = "
-	SELECT am_au_id, am_ar_id, am_valid, am_leiter
+	SELECT mem_usr_id, mem_rol_id, mem_valid, mem_leader
 	FROM ". TBL_MEMBERS. "
-	WHERE am_ar_id = '$role_id'";
+	WHERE mem_rol_id = '$role_id'";
 $result_role_member = mysql_query($sql, $g_adm_con);
 db_error($result_role_member);
          	
 //Schreiben der User-IDs die die Rolle bereits haben oder hatten in Array
 //Schreiben der Leiter der Rolle in weiters arry
 $role_member = array();
-if($role["ar_gruppe"]==1)$group_leaders = array();
+if($role["rol_gruppe"]==1)$group_leaders = array();
 for($y=0; $member = mysql_fetch_array($result_role_member); $y++){
-	if($member['am_valid']==1)$role_member[$y]= $member['am_au_id'];
-	if($role["ar_gruppe"]==1 && $member["am_leiter"]==1)$group_leaders[$y]= $member['am_au_id'];
+	if($member['mem_valid']==1)$role_member[$y]= $member['mem_usr_id'];
+	if($role["rol_gruppe"]==1 && $member["mem_leader"]==1)$group_leaders[$y]= $member['mem_usr_id'];
 }
 
 
@@ -158,11 +158,11 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
 	   <h2>Mitglieder zu $role[2] zuordnen</h2>";
      	//Button Alle bzw. nur Mitglieder anzeigen
      	if($restrict=="m" && (isModerator() || editUser()))
-     		echo"	<button name=\"aller\" type=\"button\" value=\"back\" style=\"width: 140px;\" onclick=\"self.location.href='members.php?ar_id=$role_id&amp;popup=1&amp;restrict=u'\">
+     		echo"	<button name=\"aller\" type=\"button\" value=\"back\" style=\"width: 140px;\" onclick=\"self.location.href='members.php?rol_id=$role_id&amp;popup=1&amp;restrict=u'\">
          			<img src=\"../../../adm_program/images/gruppe.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"\">&nbsp;Alle anzeigen
          		</button>";
      	if($restrict=="u" && (isModerator() || editUser()))
-     		echo"	<button name=\"mitglieder\" type=\"button\" value=\"back\" style=\"width: 140px;\" onclick=\"self.location.href='members.php?ar_id=$role_id&amp;popup=1&amp;restrict=m'\">
+     		echo"	<button name=\"mitglieder\" type=\"button\" value=\"back\" style=\"width: 140px;\" onclick=\"self.location.href='members.php?rol_id=$role_id&amp;popup=1&amp;restrict=m'\">
          			<img src=\"../../../adm_program/images/person.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"\">&nbsp;Nur Mitglieder
          		</button>
 					<button name=\"neu\" type=\"button\" value=\"neu\" onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_edit.php?new_user=1&amp;popup=1'\">
@@ -181,7 +181,7 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
             	<th class=\"tableHeader\" style=\"text-align: center;\">Vorname</th>
 					<th class=\"tableHeader\" style=\"text-align: center;\">Geburtsdatum</th>
 					<th class=\"tableHeader\" style=\"text-align: center;\">Mitglied</th>";
-         		if($role["ar_gruppe"]==1 && isModerator() && editUser())echo"
+         		if($role["rol_gruppe"]==1 && isModerator() && editUser())echo"
          			<th class=\"tableHeader\" style=\"text-align: center;\">Leiter</th>";
 				echo"
 				</tr>";
@@ -191,7 +191,7 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
          //Für alle Namen die mit Zahlen beginnen z.B. 123GmbH
          	$ascii = array(48, 49, 50, 51, 52, 53, 54, 55, 56, 57);
            	
-           	if(in_array(ord($user['au_name']), $ascii)){
+           	if(in_array(ord($user['usr_last_name']), $ascii)){
          		//große Anfangsbuchstaben werden erst ab 50 Personen angezeigt
          		if($user_anzahl>50){
          			echo "<tr><td style=\"text-align: center;\" colspan=\"$column\">";           			
@@ -214,25 +214,25 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
            		}//Ende 
            	for($letter=48; $letter<=57; $letter++){
          		//Ausgabe aller Personen mit entsprechendem Anfangsbuchstaben
-	        		$user_name = $user['au_name'] ;
-	        		while(ord($user['au_name'])==$letter ||ord($user['au_name'])==$letter+32){
-         			$user_text= $user['au_vorname']."&nbsp;".$user['au_name']."&nbsp;&nbsp;&nbsp;"
-         							.$user['au_adresse']."&nbsp;&nbsp;&nbsp;"
-         							.$user['au_plz']."&nbsp;".$user['au_ort']."&nbsp;&nbsp;&nbsp;"
-         							.$user['au_tel1'];
+	        		$user_name = $user['usr_last_name'] ;
+	        		while(ord($user['usr_last_name'])==$letter ||ord($user['usr_last_name'])==$letter+32){
+         			$user_text= $user['usr_first_name']."&nbsp;".$user['usr_last_name']."&nbsp;&nbsp;&nbsp;"
+         							.$user['usr_address']."&nbsp;&nbsp;&nbsp;"
+         							.$user['usr_plz']."&nbsp;".$user['usr_ort']."&nbsp;&nbsp;&nbsp;"
+         							.$user['usr_tel1'];
          			echo"
 						<tr>
 							<td style=\"text-align: center;\">
 								<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/note.png\" alt=\"Userinformationen\" title=\"$user_text\">
 							</td>
-							<td style=\"text-align: center;\">". $user['au_name']."</td>
-							<td style=\"text-align: center;\">". $user['au_vorname']."</td>
+							<td style=\"text-align: center;\">". $user['usr_last_name']."</td>
+							<td style=\"text-align: center;\">". $user['usr_first_name']."</td>
 							<td style=\"text-align: center;\">";
-								 if($user['au_geburtstag']!='0000-00-00')echo mysqldate("d.m.y", $user['au_geburtstag']);
+								 if($user['usr_geburtstag']!='0000-00-00')echo mysqldate("d.m.y", $user['usr_geburtstag']);
 							echo"</td>
 							<td style=\"text-align: center;\">";
 							//Häkchen setzen ob jemand Mitglied ist oder nicht
-							if(in_array($user['au_id'], $role_member)){
+							if(in_array($user['usr_id'], $role_member)){
 								echo"<input type=\"checkbox\" id=\"member_$user[0]\" name=\"member_$user[0]\" checked value=\"1\">";
 							}
 							else{
@@ -240,9 +240,9 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
 							}
 							echo"</td>";
 							//Häkchen setzen ob jemand Leiter ist oder nicht
-							if($role["ar_gruppe"]==1 && isModerator() && editUser()){
+							if($role["rol_gruppe"]==1 && isModerator() && editUser()){
 							echo"<td style=\"text-align: center;\">";
-								if(in_array($user['au_id'], $group_leaders)){
+								if(in_array($user['usr_id'], $group_leaders)){
 									echo"<input type=\"checkbox\" id=\"leader_$user[0]\" name=\"leader_$user[0]\" checked value=\"1\">";
 								}
 								else{
@@ -279,25 +279,25 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
          			echo"</td></tr>";
            		}//Ende $letter==$letter_int					
 	        	//Ausgabe aller Personen mit entsprechendem Anfangsbuchstaben
-	        		while(ord($user['au_name'])==$letter ||ord($user['au_name'])==$letter+32){
-         			$user_text= $user['au_vorname']."&nbsp;".$user['au_name']."&nbsp;&nbsp;&nbsp;"
-         							.$user['au_adresse']."&nbsp;&nbsp;&nbsp;"
-         							.$user['au_plz']."&nbsp;".$user['au_ort']."&nbsp;&nbsp;&nbsp;"
-         							.$user['au_tel1'];
+	        		while(ord($user['usr_last_name'])==$letter ||ord($user['usr_last_name'])==$letter+32){
+         			$user_text= $user['usr_first_name']."&nbsp;".$user['usr_last_name']."&nbsp;&nbsp;&nbsp;"
+         							.$user['usr_address']."&nbsp;&nbsp;&nbsp;"
+         							.$user['usr_plz']."&nbsp;".$user['usr_ort']."&nbsp;&nbsp;&nbsp;"
+         							.$user['usr_tel1'];
          			echo"
 						<tr>
 							<td style=\"text-align: center;\">
 								<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/note.png\" alt=\"Userinformationen\"
 								 title=\"$user_text\">
 							</td>
-							<td style=\"text-align: center;\">". $user['au_name']."</td>
-							<td style=\"text-align: center;\">". $user['au_vorname']."</td>
+							<td style=\"text-align: center;\">". $user['usr_last_name']."</td>
+							<td style=\"text-align: center;\">". $user['usr_first_name']."</td>
 							<td style=\"text-align: center;\">";
-								 if($user['au_geburtstag']!='0000-00-00')echo mysqldate("d.m.y", $user['au_geburtstag']);
+								 if($user['usr_geburtstag']!='0000-00-00')echo mysqldate("d.m.y", $user['usr_geburtstag']);
 							echo"</td>
 							<td style=\"text-align: center;\">";
 							//Häkchen setzen ob jemand Mitglied ist oder nicht
-							if(in_array($user['au_id'], $role_member)){
+							if(in_array($user['usr_id'], $role_member)){
 								echo"<input type=\"checkbox\" id=\"member_$user[0]\" name=\"member_$user[0]\" checked value=\"1\">";
 							}
 							else{
@@ -305,9 +305,9 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
 							}
 							echo"</td>";
 							//Häkchen setzen ob jemand Leiter ist oder nicht
-							if($role["ar_gruppe"]==1 && isModerator() && editUser()){
+							if($role["rol_gruppe"]==1 && isModerator() && editUser()){
 							echo"<td style=\"text-align: center;\">";
-								if(in_array($user['au_id'], $group_leaders)){
+								if(in_array($user['usr_id'], $group_leaders)){
 									echo"<input type=\"checkbox\" id=\"leader_$user[0]\" name=\"leader_$user[0]\" checked value=\"1\">";
 								}
 								else{

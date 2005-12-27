@@ -33,22 +33,22 @@
 	require("../../system/session_check.php");
 
 //&uuml;bernahme der &Uuml;bergebenen Variablen
-   $ap_id= $_GET['ap_id'];
+   $pho_id= $_GET['pho_id'];
    $seite= $_GET['seite'];//aktuelle Seite
 	if($seite=="")$seite=1;
 
 //erfassen der Veranstaltung
 	$sql = "	SELECT *
 				FROM ". TBL_PHOTOS. "
-				WHERE (ap_id ='$ap_id')";
+				WHERE (pho_id ='$pho_id')";
 	$result = mysql_query($sql, $g_adm_con);
 	db_error($result);
 	$adm_photo = mysql_fetch_array($result);
 
 //Aanzahl der Bilder
-   $bilder = $adm_photo["ap_number"];
+   $bilder = $adm_photo["pho_number"];
 //Speicherort
-	$ordner = "../../../adm_my_files/photos/".$adm_photo["ap_begin"]."_".$adm_photo["ap_id"];
+	$ordner = "../../../adm_my_files/photos/".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"];
 
 //Ausrechnen der Seitenzahl, 25 Thumbnails  pro seiet
    If ($seite=='') $seite=1;
@@ -62,7 +62,7 @@
    <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
    <html>
    <head>
-      <title>$g_current_organization->longname - ".$adm_photo["ap_name"]."</title>
+      <title>$g_current_organization->longname - ".$adm_photo["pho_name"]."</title>
       <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
       <!--[if gte IE 5.5000]>
       <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
@@ -77,15 +77,15 @@
    echo"<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">";
 
    //Ausgabe der &Uuml;berschrift
-   echo "<div class=\"formHead\" style=\"width: 90%\">". strspace($adm_photo["ap_name"]). "</div>
+   echo "<div class=\"formHead\" style=\"width: 90%\">". strspace($adm_photo["pho_name"]). "</div>
    <div class=\"formBody\" style=\"width: 90%\">";
-		echo"Datum: ".mysqldate("d.m.y", $adm_photo["ap_begin"]);
-         if($adm_photo["ap_end"] != $adm_photo["ap_begin"])echo " bis ".mysqldate("d.m.y", $adm_photo["ap_end"]);
+		echo"Datum: ".mysqldate("d.m.y", $adm_photo["pho_begin"]);
+         if($adm_photo["pho_end"] != $adm_photo["pho_begin"])echo " bis ".mysqldate("d.m.y", $adm_photo["pho_end"]);
 		echo"<br><br> Seite:&nbsp;";
       //Seiten links
       for($s=1; $s<=$seiten; $s++){
       	if($s==$seite)echo $seite."&nbsp;";
-      	if($s!=$seite)echo"<a href='thumbnails.php?seite=$s&ap_id=$ap_id'>$s</a>&nbsp;";
+      	if($s!=$seite)echo"<a href='thumbnails.php?seite=$s&pho_id=$pho_id'>$s</a>&nbsp;";
       }
 		echo"
       <table cellspacing=10 cellpadding=0 border=0>";
@@ -95,12 +95,12 @@
                $bild = ($seite*25)-25+($zeile*5)-5+$spalte;//Errechnug welches Bild ausgegeben wird
                if ($bild <= $bilder){
                   echo "<td align=\"center\">
-                     <img onclick=\"window.open('photopopup.php?bild=$bild&ap_id=$ap_id','msg', 'height=600,width=580,left=162,top=5')\" style=\"vertical-align: middle; cursor: pointer;\" src=\"resize.php?bild=$ordner/$bild.jpg&amp;scal=100&amp;aufgabe=anzeigen\" border=\"0\" alt=\"$bild\">
+                     <img onclick=\"window.open('photopopup.php?bild=$bild&pho_id=$pho_id','msg', 'height=600,width=580,left=162,top=5')\" style=\"vertical-align: middle; cursor: pointer;\" src=\"resize.php?bild=$ordner/$bild.jpg&amp;scal=100&amp;aufgabe=anzeigen\" border=\"0\" alt=\"$bild\">
 						<br>";
 						//Buttons für moderatoren
 						if ($g_session_valid && editPhoto()){
 							echo"
-							<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_photo&err_head=Foto L&ouml;schen&button=2&url=". urlencode("$g_root_path/adm_program/modules/photos/photodelete.php?ap_id=$ap_id&bild=$bild&seite=$seite"). "\">
+							<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_photo&err_head=Foto L&ouml;schen&button=2&url=". urlencode("$g_root_path/adm_program/modules/photos/photodelete.php?pho_id=$pho_id&bild=$bild&seite=$seite"). "\">
 								<img src=\"$g_root_path/adm_program/images/photo_delete.png\" border=\"0\" alt=\"Photo löschen\" title=\"Photo löschen\">
 							</a>";
 						}
@@ -117,7 +117,7 @@
 		//"Letzte Seite"
 		$vorseite=$seite-1;
 		if($vorseite>=1){
-			echo"	<button name=\"back\" type=\"button\" value=\"back\" style=\"width: 140px;\" onclick=\"self.location.href='thumbnails.php?seite=$vorseite&amp;ap_id=$ap_id'\">
+			echo"	<button name=\"back\" type=\"button\" value=\"back\" style=\"width: 140px;\" onclick=\"self.location.href='thumbnails.php?seite=$vorseite&amp;pho_id=$pho_id'\">
          	<img src=\"../../../adm_program/images/back.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Letzte Seite\">&nbsp;Vorherige Seite
          </button>";
 		}
@@ -128,7 +128,7 @@
 		//naechste Seite
 		$nachseite=$seite+1;
 		if($nachseite<=$seiten){
-		echo"	<button name=\"forward\" type=\"button\" value=\"forward\" style=\"width: 140px;\" onclick=\"self.location.href='thumbnails.php?seite=$nachseite&amp;ap_id=$ap_id'\">N&auml;chste Seite
+		echo"	<button name=\"forward\" type=\"button\" value=\"forward\" style=\"width: 140px;\" onclick=\"self.location.href='thumbnails.php?seite=$nachseite&amp;pho_id=$pho_id'\">N&auml;chste Seite
             	<img src=\"../../../adm_program/images/forward.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"N&auml;chste Seite\">
             </button>";
 		}

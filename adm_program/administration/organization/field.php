@@ -8,7 +8,7 @@
  *
  * Uebergaben:
  *
- * auf_id: ID des Feldes, das bearbeitet werden soll
+ * usf_id: ID des Feldes, das bearbeitet werden soll
  * url :   URL von der die aufrufende Seite aufgerufen wurde
  *         (muss uebergeben werden, damit der Zurueck-Button funktioniert)
  *
@@ -55,10 +55,10 @@ $field_locked      = 0;
 // Wenn eine Feld-ID uebergeben wurde, soll das Feld geaendert werden
 // -> Felder mit Daten des Feldes vorbelegen
 
-if ($_GET["auf_id"] != 0)
+if ($_GET["usf_id"] != 0)
  {
-   $sql    = "SELECT * FROM ". TBL_USER_FIELDS. " WHERE auf_id = {0}";
-   $sql    = prepareSQL($sql, array($_GET['auf_id']));
+   $sql    = "SELECT * FROM ". TBL_USER_FIELDS. " WHERE usf_id = {0}";
+   $sql    = prepareSQL($sql, array($_GET['usf_id']));
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
 
@@ -66,10 +66,10 @@ if ($_GET["auf_id"] != 0)
    {
       $row_auf = mysql_fetch_object($result);
 
-      $field_type        = $row_auf->auf_type;
-      $field_name        = $row_auf->auf_name;
-      $field_description = $row_auf->auf_description;
-      $field_locked      = $row_auf->auf_locked;
+      $field_type        = $row_auf->usf_type;
+      $field_name        = $row_auf->usf_name;
+      $field_description = $row_auf->usf_description;
+      $field_locked      = $row_auf->usf_locked;
    }
  }
 
@@ -92,9 +92,9 @@ require("../../../adm_config/body_top.php");
    echo "
    <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
 
-   <form action=\"field_function.php?auf_id=". $_GET['auf_id']. "&amp;mode=1&amp;url=$url\" method=\"post\" name=\"TerminAnlegen\">
+   <form action=\"field_function.php?usf_id=". $_GET['usf_id']. "&amp;mode=1&amp;url=$url\" method=\"post\" name=\"TerminAnlegen\">
       <div class=\"formHead\" style=\"width: 400px\">";
-         if($_GET['auf_id'] > 0)
+         if($_GET['usf_id'] > 0)
             echo strspace("Feld ändern", 2);
          else
             echo strspace("Feld anlegen", 2);

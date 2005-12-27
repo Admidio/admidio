@@ -248,9 +248,9 @@ echo "
 
                   // alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
                   $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. "
-                           WHERE ag_shortname = '$g_organization'
-                              OR ag_mother    = '$g_organization'
-                           ORDER BY ag_longname ";
+                           WHERE org_shortname = '$g_organization'
+                              OR org_org_id_parent    = '$g_organization'
+                           ORDER BY org_longname ";
                   $result_bg = mysql_query($sql, $g_adm_con);
                   db_error($result_bg, true);
 
@@ -260,14 +260,14 @@ echo "
                   while($row_bg = mysql_fetch_object($result_bg))
                   {
                      if($i > 0) $organizations = $organizations. ", ";
-                     $organizations = $organizations. $row_bg->ag_longname;
+                     $organizations = $organizations. $row_bg->org_longname;
 
-                     if($row_bg->ag_shortname == $g_organization
-                     && strlen($row_bg->ag_mother) > 0)
+                     if($row_bg->org_shortname == $g_organization
+                     && strlen($row_bg->org_org_id_parent) > 0)
                      {
                         // Muttergruppierung noch auflisten
-                        $sql = "SELECT ag_longname FROM ". TBL_ORGANIZATIONS. "
-                                 WHERE ag_shortname = '$row_bg->ag_mother' ";
+                        $sql = "SELECT org_longname FROM ". TBL_ORGANIZATIONS. "
+                                 WHERE org_shortname = '$row_bg->org_org_id_parent' ";
                         $result = mysql_query($sql, $g_adm_con);
                         db_error($result, true);
                         $row = mysql_fetch_array($result);

@@ -8,7 +8,7 @@
  *
  * Uebergaben:
  *
- * at_id: ID des Termins, der angezeigt werden soll
+ * dat_id: ID des Termins, der angezeigt werden soll
  * mode:  1 - Neuen Termin anlegen
  *        2 - Termin löschen
  *        3 - Termin ändern
@@ -48,14 +48,14 @@ if($_GET["mode"] == 2 || $_GET["mode"] == 3)
    // aendern & loeschen darf man nur eigene Termine, außer Moderatoren
    if(!isModerator())
    {
-      $sql = "SELECT * FROM ". TBL_DATES. " WHERE at_id = {0}";
-      $sql = prepareSQL($sql, array($_GET['at_id']));
+      $sql = "SELECT * FROM ". TBL_DATES. " WHERE dat_id = {0}";
+      $sql = prepareSQL($sql, array($_GET['dat_id']));
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
 
       $row_date = mysql_fetch_object($result);
 
-      if($g_current_user->id != $row_date->at_au_id)
+      if($g_current_user->id != $row_date->dat_usr_id)
       {
          $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=noforeigndel";
          header($location);
@@ -123,26 +123,26 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
 
             // Termin speichern
 
-            if ($_GET["at_id"] == 0)
+            if ($_GET["dat_id"] == 0)
             {
-               $sql = "INSERT INTO ". TBL_DATES. " (at_global, at_ag_shortname, at_au_id, at_timestamp, at_ueberschrift,
-                                                 at_von, at_bis, at_ort, at_beschreibung)
+               $sql = "INSERT INTO ". TBL_DATES. " (dat_global, dat_org_shortname, dat_usr_id, dat_timestamp, dat_headline,
+                                                 dat_begin, dat_end, dat_location, dat_description)
                                          VALUES ($global, '$g_organization', '$g_current_user->id', '$act_date', {0},
                                                  '$dt_datum_von', '$dt_datum_bis', {1}, {2})";
             }
             else
             {
-               $sql = "UPDATE ". TBL_DATES. " SET at_global         = $global
-                                             , at_ueberschrift   = {0}
-                                             , at_von            = '$dt_datum_von'
-                                             , at_bis            = '$dt_datum_bis'
-                                             , at_ort            = {1}
-                                             , at_beschreibung   = {2}
-                                             , at_last_change    = '$act_date'
-                                             , at_last_change_id = $g_current_user->id
-                        WHERE at_id = {3}";
+               $sql = "UPDATE ". TBL_DATES. " SET dat_global         = $global
+                                             , dat_headline   = {0}
+                                             , dat_begin            = '$dt_datum_von'
+                                             , dat_end            = '$dt_datum_bis'
+                                             , dat_location            = {1}
+                                             , dat_description   = {2}
+                                             , dat_last_change    = '$act_date'
+                                             , dat_usr_id_change = $g_current_user->id
+                        WHERE dat_id = {3}";
             }
-            $sql    = prepareSQL($sql, array($headline, $place, $content, $_GET['at_id']));
+            $sql    = prepareSQL($sql, array($headline, $place, $content, $_GET['dat_id']));
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
 
@@ -174,8 +174,8 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
 }
 elseif($_GET["mode"] == 2)
 {
-   $sql = "DELETE FROM ". TBL_DATES. " WHERE at_id = {0}";
-   $sql = prepareSQL($sql, array($_GET['at_id']));
+   $sql = "DELETE FROM ". TBL_DATES. " WHERE dat_id = {0}";
+   $sql = prepareSQL($sql, array($_GET['dat_id']));
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
 
