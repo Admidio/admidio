@@ -1,172 +1,549 @@
-DROP TABLE IF EXISTS `adm_ankuendigungen`;
-CREATE TABLE `adm_ankuendigungen` (
-  `aa_id` int(7) unsigned NOT NULL auto_increment,
-  `aa_ag_shortname` varchar(10) NOT NULL default '',
-  `aa_global` tinyint(1) unsigned NOT NULL default '0',
-  `aa_datum` datetime NOT NULL default '0000-00-00 00:00:00',
-  `aa_ueberschrift` varchar(50) NOT NULL default '',
-  `aa_beschreibung` text,
-  `aa_au_id` smallint(6) unsigned NOT NULL default '0',
-  `aa_timestamp` datetime NOT NULL default '0000-00-00 00:00:00',
-  `aa_last_change` datetime default NULL,
-  `aa_last_change_id` int(7) unsigned default NULL,
-  PRIMARY KEY  (`aa_id`)
-) TYPE=MyISAM AUTO_INCREMENT=1 ;
-DROP TABLE IF EXISTS `adm_gruppierung`;
-CREATE TABLE `adm_gruppierung` (
-  `ag_id` tinyint(4) NOT NULL auto_increment,
-  `ag_longname` varchar(60) NOT NULL default '',
-  `ag_shortname` varchar(10) NOT NULL default '',
-  `ag_mother` varchar(10) default NULL,
-  `ag_mail_extern` tinyint(1) unsigned NOT NULL default '0',
-  `ag_homepage` varchar(30) NULL default 'www.admidio.org',
-  `ag_mail_attachment_size` smallint unsigned NOT NULL default '1024',
-  `ag_enable_rss` tinyint(1) unsigned NOT NULL default '1',
-  `ag_bbcode` tinyint( 1 ) unsigned NOT NULL default '1',
-  PRIMARY KEY  (`ag_id`),
-  UNIQUE KEY `bg_shortname` (`ag_shortname`)
-) TYPE=MyISAM COMMENT='Gruppierung' AUTO_INCREMENT=1 ;
-DROP TABLE IF EXISTS `adm_mitglieder`;
-CREATE TABLE `adm_mitglieder` (
-  `am_id` int(11) NOT NULL auto_increment,
-  `am_ar_id` int(7) unsigned NOT NULL default '0',
-  `am_au_id` int(7) unsigned NOT NULL default '0',
-  `am_start` date NOT NULL default '0000-00-00',
-  `am_ende` date NOT NULL default '0000-00-00',
-  `am_valid` tinyint(1) unsigned NOT NULL default '0',
-  `am_leiter` tinyint(1) unsigned NOT NULL default '0',
-  PRIMARY KEY  (`am_id`),
-  UNIQUE KEY `am_ar_au_id` (`am_ar_id`,`am_au_id`),
-  KEY `am_ar_id` (`am_ar_id`),
-  KEY `am_au_id` (`am_au_id`)
-) TYPE=MyISAM COMMENT='Benutzer und Ihre Rollen' AUTO_INCREMENT=1 ;
-DROP TABLE IF EXISTS `adm_new_user`;
-CREATE TABLE `adm_new_user` (
-  `anu_id` int(7) unsigned NOT NULL auto_increment,
-  `anu_ag_shortname` varchar(10) NOT NULL default '',
-  `anu_name` varchar(30) NOT NULL default '',
-  `anu_vorname` varchar(30) NOT NULL default '',
-  `anu_mail` varchar(50) NOT NULL default '',
-  `anu_login` varchar(20) NOT NULL default '',
-  `anu_password` varchar(35) NOT NULL default '',
-  PRIMARY KEY  (`anu_id`)
-) TYPE=MyISAM AUTO_INCREMENT=1 ;
-DROP TABLE IF EXISTS `adm_photo`;
-CREATE TABLE `adm_photo` (
-  `ap_id` int(11) unsigned NOT NULL auto_increment,
-  `ap_number` int(11) NOT NULL default '0',
-  `ap_name` varchar(50) NOT NULL default '',
-  `ap_begin` date NOT NULL default '0000-00-00',
-  `ap_end` date NOT NULL default '0000-00-00',
-  `ap_photographers` varchar(100) default NULL,
-  `ap_online_since` datetime default NULL,
-  `ap_last_change` datetime default NULL,
-  `ap_ag_shortname` varchar(10) NOT NULL default '',
-  PRIMARY KEY  (`ap_id`)
-) TYPE=MyISAM AUTO_INCREMENT=1 ;
-DROP TABLE IF EXISTS `adm_rolle`;
-CREATE TABLE `adm_rolle` (
-  `ar_id` int(7) unsigned NOT NULL auto_increment,
-  `ar_ag_shortname` varchar(10) NOT NULL default '',
-  `ar_funktion` varchar(30) NOT NULL default '',
-  `ar_beschreibung` varchar(255) default NULL,
-  `ar_r_moderation` tinyint(1) unsigned NOT NULL default '0',
-  `ar_r_termine` tinyint(1) unsigned NOT NULL default '0',
-  `ar_r_user_bearbeiten` tinyint(1) unsigned NOT NULL default '0',
-  `ar_r_foto` tinyint(1) unsigned NOT NULL default '0',
-  `ar_r_download` tinyint(1) unsigned NOT NULL default '0',
-  `ar_r_mail_logout` tinyint(1) unsigned NOT NULL default '0',
-  `ar_r_mail_login` tinyint(1) unsigned NOT NULL default '0',
-  `ar_r_locked` tinyint(1) unsigned NOT NULL default '0',
-  `ar_gruppe` tinyint(1) unsigned NOT NULL default '0',
-  `ar_datum_von` date default NULL,
-  `ar_zeit_von` time default NULL,
-  `ar_datum_bis` date default NULL,
-  `ar_zeit_bis` time default NULL,
-  `ar_wochentag` tinyint(1) default NULL,
-  `ar_ort` varchar(30) default NULL,
-  `ar_max_mitglieder` smallint(3) unsigned default NULL,
-  `ar_beitrag` float unsigned default NULL,
-  `ar_last_change` datetime default NULL,
-  `ar_last_change_id` int(7) unsigned default NULL,
-  `ar_valid` tinyint(1) unsigned NOT NULL default '1',
-  PRIMARY KEY  (`ar_id`)
-) TYPE=MyISAM COMMENT='Funktionen die ein User haben kann' AUTO_INCREMENT=1 ;
-DROP TABLE IF EXISTS `adm_session`;
-CREATE TABLE `adm_session` (
-  `as_id` int(10) unsigned NOT NULL auto_increment,
-  `as_au_id` int(7) unsigned NOT NULL default '0',
-  `as_session` varchar(35) NOT NULL default '',
-  `as_datetime` datetime NOT NULL default '0000-00-00 00:00:00',
-  `as_long_login` tinyint(1) unsigned NOT NULL default '0',
-  `as_ag_shortname` varchar(10) NOT NULL default '',
-  `as_list_sql` text,
-  PRIMARY KEY  (`as_id`),
-  KEY `as_au_id` (`as_au_id`),
-  KEY `as_session` (`as_session`)
-) TYPE=MyISAM AUTO_INCREMENT=2986 ;
-DROP TABLE IF EXISTS `adm_termine`;
-CREATE TABLE `adm_termine` (
-  `at_id` int(7) unsigned NOT NULL auto_increment,
-  `at_ag_shortname` varchar(10) NOT NULL default '',
-  `at_global` tinyint(1) unsigned NOT NULL default '0',
-  `at_von` datetime NOT NULL default '0000-00-00 00:00:00',
-  `at_bis` datetime default '0000-00-00 00:00:00',
-  `at_beschreibung` text,
-  `at_ort` varchar(100) default NULL,
-  `at_ueberschrift` varchar(50) NOT NULL default '',
-  `at_au_id` smallint(6) unsigned NOT NULL default '0',
-  `at_timestamp` datetime NOT NULL default '0000-00-00 00:00:00',
-  `at_last_change` datetime default NULL,
-  `at_last_change_id` int(7) unsigned default NULL,
-  PRIMARY KEY  (`at_id`)
-) TYPE=MyISAM AUTO_INCREMENT=1 ;
-DROP TABLE IF EXISTS `adm_user`;
-CREATE TABLE `adm_user` (
-  `au_id` int(7) unsigned NOT NULL auto_increment,
-  `au_name` varchar(30) NOT NULL default '',
-  `au_vorname` varchar(30) NOT NULL default '',
-  `au_adresse` varchar(50) default NULL,
-  `au_plz` varchar(10) default NULL,
-  `au_ort` varchar(30) default NULL,
-  `au_land` varchar(30) default NULL,
-  `au_tel1` varchar(20) default NULL,
-  `au_tel2` varchar(20) default NULL,
-  `au_mobil` varchar(20) default NULL,
-  `au_fax` varchar(20) default NULL,
-  `au_geburtstag` date default NULL,
-  `au_mail` varchar(50) default NULL,
-  `au_weburl` varchar(50) default NULL,
-  `au_login` varchar(20) default NULL,
-  `au_password` varchar(35) default NULL,
-  `au_last_login` datetime default NULL,
-  `au_act_login` datetime default NULL,
-  `au_num_login` smallint(5) unsigned NOT NULL default '0',
-  `au_invalid_login` datetime default NULL,
-  `au_num_invalid` tinyint(3) unsigned NOT NULL default '0',
-  `au_last_change` datetime default NULL,
-  `au_last_change_id` int(7) unsigned default NULL,
-  PRIMARY KEY  (`au_id`),
-  UNIQUE KEY `au_login` (`au_login`)
-) TYPE=MyISAM COMMENT='Tabelle mit den Userinformationen' AUTO_INCREMENT=1 ;
-DROP TABLE IF EXISTS `adm_user_data`;
-CREATE TABLE `adm_user_data` (
-  `aud_id` int(11) NOT NULL auto_increment,
-  `aud_au_id` int(7) NOT NULL default '0',
-  `aud_auf_id` int(11) NOT NULL default '0',
-  `aud_value` varchar(255) default NULL,
-  PRIMARY KEY  (`aud_id`),
-  UNIQUE KEY `aud_au_auf_id` (`aud_au_id`,`aud_auf_id`),
-  KEY `aud_au_id` (`aud_au_id`),
-  KEY `aud_auf_id` (`aud_auf_id`)
-) TYPE=MyISAM AUTO_INCREMENT=1 ;
-DROP TABLE IF EXISTS `adm_user_field`;
-CREATE TABLE `adm_user_field` (
-  `auf_id` int(11) NOT NULL auto_increment,
-  `auf_ag_shortname` varchar(10) NULL default '',
-  `auf_type` varchar(10) NOT NULL default '',
-  `auf_name` varchar(100) NOT NULL default '',
-  `auf_description` varchar(255) default NULL,
-  `auf_locked` tinyint(1) unsigned NOT NULL default '0',
-  PRIMARY KEY  (`auf_id`)
-) TYPE=MyISAM AUTO_INCREMENT=1 ;
+/******************************************************************************
+ * Skript fuer die MySql-Datenbank
+ *
+ * Copyright    : (c) 2004 - 2005 The Admidio Team
+ * Homepage     : http://www.admidio.org
+ *
+ ******************************************************************************/
+
+drop table if exists %PRAEFIX%_announcements;
+
+drop table if exists %PRAEFIX%_dates;
+
+drop table if exists %PRAEFIX%_members;
+
+drop table if exists %PRAEFIX%_organizations;
+
+drop table if exists %PRAEFIX%_photos;
+
+drop table if exists %PRAEFIX%_role_categories;
+
+drop table if exists %PRAEFIX%_role_dependencies;
+
+drop table if exists %PRAEFIX%_roles;
+
+drop table if exists %PRAEFIX%_sessions;
+
+drop table if exists %PRAEFIX%_user_data;
+
+drop table if exists %PRAEFIX%_user_fields;
+
+drop table if exists %PRAEFIX%_users;
+
+/*==============================================================*/
+/* Table: adm_announcements                                     */
+/*==============================================================*/
+create table %PRAEFIX%_announcements
+(
+   ann_id                         int(11) unsigned               not null AUTO_INCREMENT,
+   ann_org_shortname              varchar(10)                    not null,
+   ann_global                     tinyint(1) unsigned            not null default 0,
+   ann_headline                   varchar(50)                    not null,
+   ann_description                text,
+   ann_usr_id                     int(11) unsigned               not null,
+   ann_timestamp                  datetime                       not null,
+   ann_last_change                datetime,
+   ann_usr_id_change              int(11) unsigned,
+   primary key (ann_id)
+)
+type = InnoDB
+auto_increment = 1;
+
+/*==============================================================*/
+/* Index: "ANN_ORG_FK"                                            */
+/*==============================================================*/
+create index ANN_ORG_FK on %PRAEFIX%_announcements
+(
+   ann_org_shortname
+);
+/*==============================================================*/
+/* Index: "ANN_USR_FK"                                            */
+/*==============================================================*/
+create index ANN_USR_FK on %PRAEFIX%_announcements
+(
+   ann_usr_id
+);
+/*==============================================================*/
+/* Index: "ANN_USR_CHANGE_FK"                                            */
+/*==============================================================*/
+create index ANN_USR_CHANGE_FK on %PRAEFIX%_announcements
+(
+   ann_usr_id_change
+);
+
+/*==============================================================*/
+/* Table: adm_dates                                             */
+/*==============================================================*/
+create table %PRAEFIX%_dates
+(
+   dat_id                         int(11) unsigned               not null AUTO_INCREMENT,
+   dat_org_shortname              varchar(10)                    not null,
+   dat_global                     tinyint(1) unsigned            not null default 0,
+   dat_begin                      datetime                       not null,
+   dat_end                        datetime,
+   dat_description                text,
+   dat_location                   varchar(100),
+   dat_headline                   varchar(50)                    not null,
+   dat_usr_id                     int(11) unsigned               not null,
+   dat_timestamp                  datetime                       not null,
+   dat_last_change                datetime,
+   dat_usr_id_change              int(11) unsigned,
+   primary key (dat_id)
+)
+type = InnoDB
+auto_increment = 1;
+
+/*==============================================================*/
+/* Index: "DAT_ORG_FK"                                            */
+/*==============================================================*/
+create index DAT_ORG_FK on %PRAEFIX%_dates
+(
+   dat_org_shortname
+);
+/*==============================================================*/
+/* Index: "DAT_USR_FK"                                            */
+/*==============================================================*/
+create index DAT_USR_FK on %PRAEFIX%_dates
+(
+   dat_usr_id
+);
+/*==============================================================*/
+/* Index: "DAT_USR_CHANGE_FK"                                            */
+/*==============================================================*/
+create index DAT_USR_CHANGE_FK on %PRAEFIX%_dates
+(
+   dat_usr_id_change
+);
+
+/*==============================================================*/
+/* Table: adm_members                                           */
+/*==============================================================*/
+create table %PRAEFIX%_members
+(
+   mem_id                         int(11)                        not null AUTO_INCREMENT,
+   mem_rol_id                     int(11) unsigned               not null,
+   mem_usr_id                     int(11) unsigned               not null,
+   mem_begin                      date                           not null,
+   mem_end                        date,
+   mem_valid                      tinyint(1) unsigned            not null default 1,
+   mem_leader                     tinyint(1) unsigned            not null default 0,
+   primary key (mem_id),
+   unique ak_rol_usr_id (mem_rol_id, mem_usr_id)
+)
+type = InnoDB
+auto_increment = 1;
+
+/*==============================================================*/
+/* Index: "MEM_ROL_FK"                                            */
+/*==============================================================*/
+create index MEM_ROL_FK on %PRAEFIX%_members
+(
+   mem_rol_id
+);
+/*==============================================================*/
+/* Index: "MEM_USR_FK"                                            */
+/*==============================================================*/
+create index MEM_USR_FK on %PRAEFIX%_members
+(
+   mem_usr_id
+);
+
+/*==============================================================*/
+/* Table: adm_organizations                                     */
+/*==============================================================*/
+create table %PRAEFIX%_organizations
+(
+   org_id                         tinyint(4)                     not null AUTO_INCREMENT,
+   org_longname                   varchar(60)                    not null,
+   org_shortname                  varchar(10)                    not null,
+   org_org_id_parent              tinyint(4),
+   org_homepage                   varchar(30)                    not null,
+   org_mail_size                  smallint                       default 1024,
+   org_upload_size                smallint                       default 3072,
+   org_photo_size                 smallint                       default 512,
+   org_mail_extern                tinyint                        not null default 0,
+   org_enable_rss                 tinyint                        not null default 1,
+   org_bbcode                     tinyint                        not null default 1,
+   org_font								 varchar(30)                    not null default 'mr_phone1.ttf',
+   primary key (org_id),
+   unique ak_shortname (org_shortname)
+)
+type = InnoDB
+auto_increment = 1;
+
+/*==============================================================*/
+/* Index: "ORG_ORG_PARENT_FK"                                            */
+/*==============================================================*/
+create index ORG_ORG_PARENT_FK on %PRAEFIX%_organizations
+(
+   org_org_id_parent
+);
+
+/*==============================================================*/
+/* Table: adm_photos                                            */
+/*==============================================================*/
+create table %PRAEFIX%_photos
+(
+   pho_id                         int(11) unsigned               not null AUTO_INCREMENT,
+   pho_org_shortname              varchar(10)                    not null,
+   pho_quantity                   int(11) unsigned               not null default 0,
+   pho_name                       varchar(50)                    not null,
+   pho_begin                      date                           not null default '0000-00-00',
+   pho_end                        date                           not null default '0000-00-00',
+   pho_photographers              varchar(100),
+   pho_usr_id                     int(11) unsigned               not null,
+   pho_timestamp                  datetime                       not null,
+   pho_approved                   tinyint(1) unsigned            not null default 0,
+   pho_pho_id_parent              int(11) unsigned,
+   pho_last_change                datetime,
+   pho_usr_id_change              int(11) unsigned,
+   primary key (pho_id)
+)
+type = InnoDB
+auto_increment = 1;
+
+/*==============================================================*/
+/* Index: "PHO_ORG_FK"                                            */
+/*==============================================================*/
+create index PHO_ORG_FK on %PRAEFIX%_photos
+(
+   pho_org_shortname
+);
+/*==============================================================*/
+/* Index: "PHO_USR_FK"                                            */
+/*==============================================================*/
+create index PHO_USR_FK on %PRAEFIX%_photos
+(
+   pho_usr_id
+);
+/*==============================================================*/
+/* Index: "PHO_USR_CHANGE_FK"                                            */
+/*==============================================================*/
+create index PHO_USR_CHANGE_FK on %PRAEFIX%_photos
+(
+   pho_usr_id_change
+);
+/*==============================================================*/
+/* Index: "FK_PHO_PHO_PARENT_FK"                                            */
+/*==============================================================*/
+create index FK_PHO_PHO_PARENT_FK on %PRAEFIX%_photos
+(
+   pho_pho_id_parent
+);
+
+/*==============================================================*/
+/* Table: adm_role_categories                                   */
+/*==============================================================*/
+create table %PRAEFIX%_role_categories
+(
+   rlc_id                         int (11) unsigned              not null AUTO_INCREMENT,
+   rlc_org_shortname              varchar(10)                    not null,
+   rlc_name                       varchar(30)                    not null,
+   primary key (rlc_id)
+)
+type = InnoDB;
+
+/*==============================================================*/
+/* Index: "RLC_ORG_FK"                                            */
+/*==============================================================*/
+create index RLC_ORG_FK on %PRAEFIX%_role_categories
+(
+   rlc_org_shortname
+);
+
+/*==============================================================*/
+/* Table: adm_role_dependencies                                 */
+/*==============================================================*/
+create table %PRAEFIX%_role_dependencies
+(
+   rld_rol_id_parent              int(11) unsigned               not null,
+   rld_rol_id_child               int(11) unsigned               not null,
+   rld_comment                    text,
+   rld_usr_id                     int(11) unsigned               not null,
+   rld_timestamp                  datetime                       not null,
+   primary key (rld_rol_id_parent, rld_rol_id_child)
+)
+type = InnoDB;
+
+/*==============================================================*/
+/* Index: "RLD_USR_FK"                                            */
+/*==============================================================*/
+create index RLD_USR_FK on %PRAEFIX%_role_dependencies
+(
+   rld_usr_id
+);
+
+/*==============================================================*/
+/* Index: "RLD_ROL_PARENT_FK"                                            */
+/*==============================================================*/
+create index RLD_ROL_PARENT_FK on %PRAEFIX%_role_dependencies
+(
+   rld_rol_id_parent
+);
+/*==============================================================*/
+/* Index: "RLD_ROL_CHILD_FK"                                            */
+/*==============================================================*/
+create index RLD_ROL_CHILD_FK on %PRAEFIX%_role_dependencies
+(
+   rld_rol_id_child
+);
+
+/*==============================================================*/
+/* Table: adm_roles                                             */
+/*==============================================================*/
+create table %PRAEFIX%_roles
+(
+   rol_id                         int(11) unsigned               not null AUTO_INCREMENT,
+   rol_org_shortname              varchar(10)                    not null,
+   rol_rlc_id                     int(11) unsigned               not null,
+   rol_name                       varchar(30)                    not null,
+   rol_description                varchar(255),
+   rol_moderation                 tinyint(1) unsigned            not null default 0,
+   rol_dates                      tinyint(1) unsigned            not null default 0,
+   rol_edit_user                  tinyint(1) unsigned            not null default 0,
+   rol_photo                      tinyint(1) unsigned            not null default 0,
+   rol_download                   tinyint(1) unsigned            not null default 0,
+   rol_mail_logout                tinyint(1) unsigned            not null default 0,
+   rol_mail_login                 tinyint(1) unsigned            not null default 0,
+   rol_locked                     tinyint(1) unsigned            not null default 0,
+   rol_start_date                 date,
+   rol_start_time                 time,
+   rol_end_date                   date,
+   rol_end_time                   time,
+   rol_weekday                    tinyint(1),
+   rol_location                   varchar(30),
+   rol_max_members                smallint(3) unsigned,
+   rol_cost                       float unsigned,
+   rol_last_change                datetime,
+   rol_usr_id_change              int(7) unsigned,
+   rol_valid                      tinyint(1) unsigned            not null default 1,
+   primary key (rol_id)
+)
+type = InnoDB
+auto_increment = 1;
+
+/*==============================================================*/
+/* Index: "ROL_ORG_FK"                                            */
+/*==============================================================*/
+create index ROL_ORG_FK on %PRAEFIX%_roles
+(
+   rol_org_shortname
+);
+/*==============================================================*/
+/* Index: "ROL_RLC_FK"                                            */
+/*==============================================================*/
+create index ROL_RLC_FK on %PRAEFIX%_roles
+(
+   rol_rlc_id
+);
+/*==============================================================*/
+/* Index: "ROL_USR_FK"                                            */
+/*==============================================================*/
+create index ROL_USR_FK on %PRAEFIX%_roles
+(
+   rol_usr_id_change
+);
+
+/*==============================================================*/
+/* Table: adm_sessions                                          */
+/*==============================================================*/
+create table %PRAEFIX%_sessions
+(
+   ses_id                         int(11) unsigned               not null AUTO_INCREMENT,
+   ses_usr_id                     int(11) unsigned               not null,
+   ses_org_shortname              varchar(10)                    not null,
+   ses_session                    varchar(35)                    not null,
+   ses_timestamp                  datetime                       not null,
+   ses_ip_address                 varchar(15),
+   ses_longer_session             tinyint(1) unsigned            not null default 0,
+   primary key (ses_id),
+   key ak_session (ses_session)
+)
+type = InnoDB
+auto_increment = 2986;
+
+/*==============================================================*/
+/* Index: "SES_USR_FK"                                            */
+/*==============================================================*/
+create index SES_USR_FK on %PRAEFIX%_sessions
+(
+   ses_usr_id
+);
+/*==============================================================*/
+/* Index: "SES_ORG_FK"                                            */
+/*==============================================================*/
+create index SES_ORG_FK on %PRAEFIX%_sessions
+(
+   ses_org_shortname
+);
+
+/*==============================================================*/
+/* Table: adm_user_data                                         */
+/*==============================================================*/
+create table %PRAEFIX%_user_data
+(
+   usd_id                         int(11)                        not null AUTO_INCREMENT,
+   usd_usr_id                     int(7)                         not null,
+   usd_usf_id                     int(11)                        not null,
+   usd_value                      varchar(255),
+   primary key (usd_id),
+   unique ak_usr_usf_id (usd_usr_id, usd_usf_id)
+)
+type = InnoDB
+auto_increment = 1;
+
+/*==============================================================*/
+/* Index: "USD_USF_FK"                                            */
+/*==============================================================*/
+create index USD_USF_FK on %PRAEFIX%_user_data
+(
+   usd_usf_id
+);
+/*==============================================================*/
+/* Index: "USD_USR_FK"                                            */
+/*==============================================================*/
+create index USD_USR_FK on %PRAEFIX%_user_data
+(
+   usd_usr_id
+);
+
+/*==============================================================*/
+/* Table: adm_user_fields                                       */
+/*==============================================================*/
+create table %PRAEFIX%_user_fields
+(
+   usf_id                         int(11)                        not null AUTO_INCREMENT,
+   usf_org_shortname              varchar(10),
+   usf_type                       varchar(10)                    not null,
+   usf_name                       varchar(100)                   not null,
+   usf_description                varchar(255),
+   usf_locked                     tinyint(1) unsigned            not null default 0,
+   primary key (usf_id)
+)
+type = InnoDB
+auto_increment = 1;
+
+/*==============================================================*/
+/* Index: "USF_ORG_FK"                                            */
+/*==============================================================*/
+create index USF_ORG_FK on %PRAEFIX%_user_fields
+(
+   usf_org_shortname
+);
+
+/*==============================================================*/
+/* Table: adm_users                                             */
+/*==============================================================*/
+create table %PRAEFIX%_users
+(
+   usr_id                         int(11) unsigned               not null AUTO_INCREMENT,
+   usr_last_name                  varchar(30)                    not null,
+   usr_first_name                 varchar(30)                    not null,
+   usr_address                    varchar(50),
+   usr_zip_code                   varchar(10),
+   usr_city                       varchar(30),
+   usr_country                    varchar(30),
+   usr_phone                      varchar(20),
+   usr_mobile                     varchar(20),
+   usr_fax                        varchar(20),
+   usr_birthday                   date,
+   usr_gender                     tinyint(1) unsigned,
+   usr_email                      varchar(50),
+   usr_homepage                   varchar(50),
+   usr_login_name                 varchar(20),
+   usr_password                   varchar(35),
+   usr_last_login                 datetime,
+   usr_act_login                  datetime,
+   usr_num_login                  smallint(5) unsigned           not null default 0,
+   usr_invalid_login              datetime,
+   usr_num_invalid                tinyint(3) unsigned            not null default 0,
+   usr_last_change                datetime,
+   usr_usr_id_change              int(11) unsigned,
+   usr_valid                      tinyint(1) unsigned            not null default 0,
+   usr_reg_org_shortname          varchar(10),
+   primary key (usr_id),
+   unique ak_usr_login (usr_login_name)
+)
+type = InnoDB
+auto_increment = 1;
+
+/*==============================================================*/
+/* Index: "USR_USR_CHANGE_FK"                                            */
+/*==============================================================*/
+create index USR_USR_CHANGE_FK on %PRAEFIX%_users
+(
+   usr_usr_id_change
+);
+
+alter table %PRAEFIX%_announcements add constraint FK_ANN_ORG foreign key (ann_org_shortname)
+      references %PRAEFIX%_organizations (org_shortname) on delete restrict on update restrict;
+
+alter table %PRAEFIX%_announcements add constraint FK_ANN_USR foreign key (ann_usr_id)
+      references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
+
+alter table %PRAEFIX%_announcements add constraint FK_ANN_USR_CHANGE foreign key (ann_usr_id_change)
+      references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
+
+alter table %PRAEFIX%_dates add constraint FK_DAT_ORG foreign key (dat_org_shortname)
+      references %PRAEFIX%_organizations (org_shortname) on delete restrict on update restrict;
+
+alter table %PRAEFIX%_dates add constraint FK_DAT_USR foreign key (dat_usr_id)
+      references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
+
+alter table %PRAEFIX%_dates add constraint FK_DAT_USR_CHANGE foreign key (dat_usr_id_change)
+      references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
+
+alter table %PRAEFIX%_members add constraint FK_MEM_ROL foreign key (mem_rol_id)
+      references %PRAEFIX%_roles (rol_id) on delete restrict on update restrict;
+
+alter table %PRAEFIX%_members add constraint FK_MEM_USR foreign key (mem_usr_id)
+      references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
+
+alter table %PRAEFIX%_organizations add constraint FK_ORG_ORG_PARENT foreign key (org_org_id_parent)
+      references %PRAEFIX%_organizations (org_id) on delete restrict on update restrict;
+
+alter table %PRAEFIX%_photos add constraint FK_PHO_PHO_PARENT foreign key (pho_pho_id_parent)
+      references %PRAEFIX%_photos (pho_id) on delete restrict on update restrict;
+
+alter table %PRAEFIX%_photos add constraint FK_PHO_ORG foreign key (pho_org_shortname)
+      references %PRAEFIX%_organizations (org_shortname) on delete restrict on update restrict;
+
+alter table %PRAEFIX%_photos add constraint FK_PHO_USR foreign key (pho_usr_id)
+      references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
+
+alter table %PRAEFIX%_photos add constraint FK_PHO_USR_CHANGE foreign key (pho_usr_id_change)
+      references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
+
+alter table %PRAEFIX%_role_categories add constraint FK_RLC_ORG foreign key (rlc_org_shortname)
+      references %PRAEFIX%_organizations (org_shortname) on delete restrict on update restrict;
+
+alter table %PRAEFIX%_roles add constraint FK_ROL_ORG foreign key (rol_org_shortname)
+      references %PRAEFIX%_organizations (org_shortname) on delete restrict on update restrict;
+
+alter table %PRAEFIX%_roles add constraint FK_ROL_RLC foreign key (rol_rlc_id)
+      references %PRAEFIX%_role_categories (rlc_id) on delete restrict on update restrict;
+
+alter table %PRAEFIX%_roles add constraint FK_ROL_USR foreign key (rol_usr_id_change)
+      references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
+
+alter table %PRAEFIX%_sessions add constraint FK_SES_ORG foreign key (ses_org_shortname)
+      references %PRAEFIX%_organizations (org_shortname) on delete restrict on update restrict;
+
+alter table %PRAEFIX%_sessions add constraint FK_SES_USR foreign key (ses_usr_id)
+      references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
+
+alter table %PRAEFIX%_user_data add constraint FK_USD_USF foreign key (usd_usf_id)
+      references %PRAEFIX%_user_fields (usf_id) on delete restrict on update restrict;
+
+alter table %PRAEFIX%_user_data add constraint FK_USD_USR foreign key (usd_usr_id)
+      references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
+
+alter table %PRAEFIX%_user_fields add constraint FK_USF_ORG foreign key (usf_org_shortname)
+      references %PRAEFIX%_organizations (org_shortname) on delete restrict on update restrict;
+
+alter table %PRAEFIX%_users add constraint FK_USR_USR_CHANGE foreign key (usr_usr_id_change)
+      references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
+
+alter table %PRAEFIX%_users add constraint FK_USR_ORG_REG foreign key (usr_reg_org_shortname)
+      references %PRAEFIX%_organizations (org_shortname) on delete restrict on update restrict;
+      
