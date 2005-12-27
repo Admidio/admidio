@@ -241,7 +241,8 @@ create table %PRAEFIX%_role_categories
    rlc_name                       varchar(30)                    not null,
    primary key (rlc_id)
 )
-type = InnoDB;
+type = InnoDB
+auto_increment = 1;
 
 /*==============================================================*/
 /* Index: "RLC_ORG_FK"                                            */
@@ -360,7 +361,7 @@ create table %PRAEFIX%_sessions
    key ak_session (ses_session)
 )
 type = InnoDB
-auto_increment = 2986;
+auto_increment = 1;
 
 /*==============================================================*/
 /* Index: "SES_USR_FK"                                            */
