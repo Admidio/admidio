@@ -65,6 +65,32 @@ echo "
    <meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\">
    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
    
+   <script type=\"text/javascript\">
+   	function markMember(element)
+   	{
+   		if(element.checked == true)
+   		{
+				var name   = element.name;
+				var pos_number = name.search('-') + 1;
+				var number = name.substr(pos_number, name.length - pos_number);
+				var role_name = 'fkt-' + number;
+				document.getElementById(role_name).checked = true;
+			}
+   	}
+
+   	function unmarkLeader(element)
+   	{
+   		if(element.checked == false)
+   		{
+				var name   = element.name;
+				var pos_number = name.search('-') + 1;
+				var number = name.substr(pos_number, name.length - pos_number);
+				var role_name = 'leiter-' + number;
+				document.getElementById(role_name).checked = false;
+			}
+   	}
+   </script>
+   
    <!--[if gte IE 5.5000]>
    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
    <![endif]-->";
@@ -147,7 +173,7 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
                      if($row->ar_funktion == 'Webmaster' && !hasRole('Webmaster'))
                         echo " disabled ";
                         
-                     echo " value=\"1\" />
+                     echo " onclick=\"unmarkLeader(this)\" value=\"1\" />
                </td>
                <td style=\"text-align: left; vertical-align: top;\"><label for=\"fkt-$i\">$row->ar_funktion</label></td>
                <td style=\"text-align: left; vertical-align: top;\">$row->ar_beschreibung</td>
@@ -158,7 +184,7 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
                      if($row->am_leiter > 0)
                         echo " checked ";
 
-                     echo " value=\"1\" />";
+                     echo " onclick=\"markMember(this)\" value=\"1\" />";
                   }
                   else
                      echo "&nbsp;";
