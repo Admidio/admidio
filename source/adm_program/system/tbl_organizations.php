@@ -49,23 +49,23 @@ class TblOrganizations
 	// User mit der uebergebenen ID aus der Datenbank auslesen
    function getOrganization($shortname)
    {
-      $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. " WHERE ag_shortname = '$shortname'";
+      $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. " WHERE org_shortname = '$shortname'";
 
       $result = mysql_query($sql, $this->db_connection);
 
       if($row = mysql_fetch_object($result))
       {
-         $this->id          = $row->ag_id;
-         $this->longname    = $row->ag_longname;
-         $this->shortname   = $row->ag_shortname;
-         $this->org_shortname_mother= $row->ag_mother;
-         $this->homepage    = $row->ag_homepage;
-         $this->mail_size   = $row->ag_mail_attachment_size;
-         $this->upload_size = $row->ag_upload_size;
-         $this->photo_size  = $row->ag_photo_size;
-         $this->mail_extern = $row->ag_mail_extern;
-         $this->enable_rss  = $row->ag_enable_rss;
-         $this->bbcode      = $row->ag_bbcode;
+         $this->id          = $row->org_id;
+         $this->longname    = $row->org_longname;
+         $this->shortname   = $row->org_shortname;
+         $this->org_shortname_mother= $row->org_org_id_parent;
+         $this->homepage    = $row->org_homepage;
+         $this->mail_size   = $row->org_mail_attachment_size;
+         $this->upload_size = $row->org_upload_size;
+         $this->photo_size  = $row->org_photo_size;
+         $this->mail_extern = $row->org_mail_extern;
+         $this->enable_rss  = $row->org_enable_rss;
+         $this->bbcode      = $row->org_bbcode;
       }
       else
       	$this->clear();
@@ -98,15 +98,15 @@ class TblOrganizations
    		if($this->bbcode != 1)      $this->bbcode = 0;
 
 			$sql = "UPDATE ". TBL_ORGANIZATIONS. "
-												 SET ag_longname    = '$this->longname'
-                                    	, ag_shortname   = '$this->shortname'
-													, ag_mother      = '$this->org_shortname_mother'
-													, ag_homepage    = '$this->homepage'
-													, ag_mail_attachment_size = $this->mail_size
-													, ag_mail_extern = $this->mail_extern
-													, ag_enable_rss  = $this->enable_rss
-													, ag_bbcode      = $this->bbcode
-					   WHERE ag_id = $this->id ";
+												 SET org_longname    = '$this->longname'
+                                    	, org_shortname   = '$this->shortname'
+													, org_org_id_parent      = '$this->org_shortname_mother'
+													, org_homepage    = '$this->homepage'
+													, org_mail_attachment_size = $this->mail_size
+													, org_mail_extern = $this->mail_extern
+													, org_enable_rss  = $this->enable_rss
+													, org_bbcode      = $this->bbcode
+					   WHERE org_id = $this->id ";
 			$result = mysql_query($sql, $this->db_connection);
 		   if(!$result) { echo "Error: ". mysql_error(); exit(); }
 		   return 0;
@@ -123,12 +123,12 @@ class TblOrganizations
    		if($this->enable_rss != 1) $this->enable_rss = 0;
    		if($this->bbcode != 1)     $this->bbcode = 0;
 
-   		$sql = "INSERT INTO ". TBL_ORGANIZATIONS. " (ag_longname, ag_shortname, ag_mother
-										ag_homepage, ag_mail_attachement_size,
-										ag_mail_extern, ag_enable_rss, ag_bbcode )
+   		$sql = "INSERT INTO ". TBL_ORGANIZATIONS. " (org_longname, org_shortname, org_org_id_parent
+										org_homepage, org_mail_attachement_size,
+										org_mail_extern, org_enable_rss, org_bbcode )
 							 VALUES ('$this->longname', '$this->shortname', '$this->org_shortname_mother',
 										'$this->homepage', $this->mail_size,
-										$this->mail_extern, $this->enable_rss, $this->ag_bbcode ) ";
+										$this->mail_extern, $this->enable_rss, $this->org_bbcode ) ";
 			$result = mysql_query($sql, $this->db_connection);
 		   if(!$result) { echo "Error: ". mysql_error(); exit(); }
 

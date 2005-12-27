@@ -54,13 +54,13 @@ else
    if($_GET['new_user'] == 0)
    {
       // jetzt noch schauen, ob User überhaupt Mitglied in der Gliedgemeinschaft ist
-      $sql = "SELECT am_id
+      $sql = "SELECT mem_id
                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-               WHERE ar_ag_shortname = '$g_organization'
-                 AND ar_valid        = 1
-                 AND am_ar_id        = ar_id
-                 AND am_valid        = 1
-                 AND am_au_id        = {0}";
+               WHERE rol_org_shortname = '$g_organization'
+                 AND rol_valid        = 1
+                 AND mem_rol_id        = rol_id
+                 AND mem_valid        = 1
+                 AND mem_usr_id        = {0}";
       $sql    = prepareSQL($sql, array($user_id));
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
@@ -135,11 +135,11 @@ if(strlen($user->last_name) > 0)
       if($user_id > 0 && $_GET['new_user'] == 0)
       {
          // pruefen, ob dem Benutzer Rollen zugewiesen wurden
-         $sql    = "SELECT ar_ag_shortname FROM ". TBL_ROLES. ", ". TBL_MEMBERS. "
-                     WHERE ar_valid       = 1
-                       AND am_ar_id       = ar_id
-                       AND am_au_id       = {0}
-                       AND am_valid       = 1 ";
+         $sql    = "SELECT rol_org_shortname FROM ". TBL_ROLES. ", ". TBL_MEMBERS. "
+                     WHERE rol_valid       = 1
+                       AND mem_rol_id       = rol_id
+                       AND mem_usr_id       = {0}
+                       AND mem_valid       = 1 ";
          $sql    = prepareSQL($sql, array($user_id));
          $result = mysql_query($sql, $g_adm_con);
          db_error($result, 1);
@@ -151,8 +151,8 @@ if(strlen($user->last_name) > 0)
       if(strlen($user->login_name) > 0)
       {
          // pruefen, ob der Benutzername bereits vergeben ist
-         $sql = "SELECT au_id FROM ". TBL_USERS. "
-                  WHERE au_login = {0} ";
+         $sql = "SELECT usr_id FROM ". TBL_USERS. "
+                  WHERE usr_login_name = {0} ";
          $sql    = prepareSQL($sql, array($user->login_name));
          $result = mysql_query($sql, $g_adm_con);
          db_error($result, 1);
@@ -176,11 +176,11 @@ if(strlen($user->last_name) > 0)
       }
 
       // Feldinhalt der gruppierungsspezifischen Felder pruefen
-      $sql = "SELECT auf_name, auf_type
+      $sql = "SELECT usf_name, usf_type
                 FROM ". TBL_USER_FIELDS. "
-               WHERE auf_ag_shortname  = '$g_organization' ";
+               WHERE usf_org_shortname  = '$g_organization' ";
       if(!isModerator())
-         $sql = $sql. " AND auf_locked = 0 ";
+         $sql = $sql. " AND usf_locked = 0 ";
       $sql = prepareSQL($sql, array($row_id));
       $result_msg = mysql_query($sql, $g_adm_con);
       db_error($result_msg);
@@ -188,13 +188,13 @@ if(strlen($user->last_name) > 0)
       while($row = mysql_fetch_object($result_msg))
       {
          // ein neuer Wert vorhanden
-         if(strlen($_POST[urlencode($row->auf_name)]) > 0)
+         if(strlen($_POST[urlencode($row->usf_name)]) > 0)
          {
-            if($row->auf_type == "NUMERIC"
-            && !is_numeric($_POST[urlencode($row->auf_name)]))
+            if($row->usf_type == "NUMERIC"
+            && !is_numeric($_POST[urlencode($row->usf_name)]))
             {
                $err_code = "field_numeric";
-               $err_text = $row->auf_name;
+               $err_text = $row->usf_name;
             }
          }
       }
@@ -242,27 +242,27 @@ if($ret_code != 0)
 // Messenger-Daten und gruppierungsspezifische Felder anlegen / updaten
 /*------------------------------------------------------------*/
 
-$sql = "SELECT auf_id, auf_name, aud_id, aud_value
+$sql = "SELECT usf_id, usf_name, usd_id, usd_value
           FROM ". TBL_USER_FIELDS. " LEFT JOIN ". TBL_USER_DATA. "
-            ON aud_auf_id = auf_id
-           AND aud_au_id         = {0}
-         WHERE (  auf_ag_shortname IS NULL
-               OR auf_ag_shortname  = '$g_organization' ) ";
+            ON usd_usf_id = usf_id
+           AND usd_usr_id         = {0}
+         WHERE (  usf_org_shortname IS NULL
+               OR usf_org_shortname  = '$g_organization' ) ";
 if(!isModerator())
-   $sql = $sql. " AND auf_locked = 0 ";
+   $sql = $sql. " AND usf_locked = 0 ";
 $sql = prepareSQL($sql, array($user->id));
 $result_msg = mysql_query($sql, $g_adm_con);
 db_error($result_msg);
 
 while($row = mysql_fetch_object($result_msg))
 {
-   if(is_null($row->aud_value))
+   if(is_null($row->usd_value))
    {
       // noch kein Wert vorhanden -> neu einfuegen
-      if(strlen(trim($_POST[urlencode($row->auf_name)])) > 0)
+      if(strlen(trim($_POST[urlencode($row->usf_name)])) > 0)
       {
-         $sql = "INSERT INTO ". TBL_USER_DATA. " (aud_au_id, aud_auf_id, aud_value)
-                                    VALUES ({0}, $row->auf_id, '". $_POST[urlencode($row->auf_name)]. "') ";
+         $sql = "INSERT INTO ". TBL_USER_DATA. " (usd_usr_id, usd_usf_id, usd_value)
+                                    VALUES ({0}, $row->usf_id, '". $_POST[urlencode($row->usf_name)]. "') ";
          $sql = prepareSQL($sql, array($user->id));
          $result = mysql_query($sql, $g_adm_con);
          db_error($result);
@@ -271,13 +271,13 @@ while($row = mysql_fetch_object($result_msg))
    else
    {
       // auch ein neuer Wert vorhanden
-      if(strlen(trim($_POST[urlencode($row->auf_name)])) > 0)
+      if(strlen(trim($_POST[urlencode($row->usf_name)])) > 0)
       {
-         if($_POST[urlencode($row->auf_name)] != $row->aud_value)
+         if($_POST[urlencode($row->usf_name)] != $row->usd_value)
          {
-            $sql = "UPDATE ". TBL_USER_DATA. " SET aud_value = {0}
-                     WHERE aud_id = $row->aud_id ";
-            $sql = prepareSQL($sql, array($_POST[urlencode($row->auf_name)]));
+            $sql = "UPDATE ". TBL_USER_DATA. " SET usd_value = {0}
+                     WHERE usd_id = $row->usd_id ";
+            $sql = prepareSQL($sql, array($_POST[urlencode($row->usf_name)]));
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
          }
@@ -285,7 +285,7 @@ while($row = mysql_fetch_object($result_msg))
       else
       {
          $sql = "DELETE FROM ". TBL_USER_DATA. "
-                  WHERE aud_id = $row->aud_id ";
+                  WHERE usd_id = $row->usd_id ";
          $result = mysql_query($sql, $g_adm_con);
          db_error($result);
       }

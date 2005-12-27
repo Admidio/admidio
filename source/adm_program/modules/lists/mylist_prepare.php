@@ -97,15 +97,15 @@ for($i = 0; $i < count($_POST); $i++)
    $key      = key($_POST);
 }
 
-$main_sql = "SELECT au_id, $sql_select
+$main_sql = "SELECT usr_id, $sql_select
                FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
-              WHERE ar_ag_shortname = \'$g_organization\'
-                AND ar_funktion     = \'$rolle\'
-                AND ar_valid        = 1
-                AND am_ar_id        = ar_id
-                AND am_valid        = $act_members
-                AND am_leiter       = 0
-                AND am_au_id        = au_id
+              WHERE rol_org_shortname = \'$g_organization\'
+                AND rol_name     = \'$rolle\'
+                AND rol_valid        = 1
+                AND mem_rol_id        = rol_id
+                AND mem_valid        = $act_members
+                AND mem_leader       = 0
+                AND mem_usr_id        = usr_id
                     $sql_where ";
 
 if(strlen($sql_orderby) > 0)
@@ -113,8 +113,8 @@ if(strlen($sql_orderby) > 0)
 
 //echo $main_sql; exit();
 
-$sql    = "UPDATE ". TBL_SESSIONS. " SET as_list_sql = '$main_sql'
-            WHERE as_session = '$g_session_id' ";
+$sql    = "UPDATE ". TBL_SESSIONS. " SET ses_list_sql = '$main_sql'
+            WHERE ses_session = '$g_session_id' ";
 $result = mysql_query($sql, $g_adm_con);
 db_error($result);
 

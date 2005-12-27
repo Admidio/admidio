@@ -79,8 +79,8 @@ require("../../../adm_config/body_top.php");
 
    // alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
    $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. "
-            WHERE ag_shortname = '$g_organization'
-               OR ag_mother    = '$g_organization' ";
+            WHERE org_shortname = '$g_organization'
+               OR org_org_id_parent    = '$g_organization' ";
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
 
@@ -91,10 +91,10 @@ require("../../../adm_config/body_top.php");
    {
       if($i > 0) $organizations = $organizations. ", ";
 
-      if($row->ag_shortname == $g_organization)
-         $organizations = $organizations. "'$row->ag_mother'";
+      if($row->org_shortname == $g_organization)
+         $organizations = $organizations. "'$row->org_org_id_parent'";
       else
-         $organizations = $organizations. "'$row->ag_shortname'";
+         $organizations = $organizations. "'$row->org_shortname'";
 
       $i++;
    }
@@ -104,16 +104,16 @@ require("../../../adm_config/body_top.php");
    if (array_key_exists("id", $_GET))
    {
       $sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
-                  WHERE aa_id = $_GET[id]";
+                  WHERE ann_id = $_GET[id]";
    }
    //...ansonsten alle fuer die Gruppierung passenden Ankuendigungen aus der DB holen.
    else
    {
       $sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
-                  WHERE (  aa_ag_shortname = '$g_organization'
-                        OR (   aa_global   = 1
-                           AND aa_ag_shortname IN ($organizations) ))
-                  ORDER BY aa_timestamp DESC
+                  WHERE (  ann_org_shortname = '$g_organization'
+                        OR (   ann_global   = 1
+                           AND ann_org_shortname IN ($organizations) ))
+                  ORDER BY ann_timestamp DESC
                   LIMIT ". $_GET["start"]. ", 10 ";
    }
 
@@ -179,7 +179,7 @@ require("../../../adm_config/body_top.php");
 
       while($row = mysql_fetch_object($result))
       {
-         $sql     = "SELECT * FROM ". TBL_USERS. " WHERE au_id = $row->aa_au_id";
+         $sql     = "SELECT * FROM ". TBL_USERS. " WHERE usr_id = $row->ann_usr_id";
          $result2 = mysql_query($sql, $g_adm_con);
          db_error($result2);
 
@@ -189,44 +189,44 @@ require("../../../adm_config/body_top.php");
          <div class=\"boxBody\" style=\"overflow: hidden;\">
             <div class=\"boxHead\">
                <div style=\"text-align: left; float: left;\">
-                  <img src=\"$g_root_path/adm_program/images/note.png\" style=\"vertical-align: top;\" alt=\"". strSpecialChars2Html($row->aa_ueberschrift). "\">&nbsp;".
-                  strSpecialChars2Html($row->aa_ueberschrift). "
+                  <img src=\"$g_root_path/adm_program/images/note.png\" style=\"vertical-align: top;\" alt=\"". strSpecialChars2Html($row->ann_headline). "\">&nbsp;".
+                  strSpecialChars2Html($row->ann_headline). "
                </div>";
 
                // aendern & loeschen duerfen nur Moderatoren
                if(isModerator())
                {
                   echo "<div style=\"text-align: right;\">" .
-                     mysqldatetime("d.m.y", $row->aa_timestamp). "&nbsp;
+                     mysqldatetime("d.m.y", $row->ann_timestamp). "&nbsp;
                      <img src=\"$g_root_path/adm_program/images/edit.png\" style=\"cursor: pointer;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"
-                     onclick=\"self.location.href='announcements_new.php?aa_id=$row->aa_id&amp;headline=". $_GET['headline']. "'\">";
+                     onclick=\"self.location.href='announcements_new.php?ann_id=$row->ann_id&amp;headline=". $_GET['headline']. "'\">";
 
                   // Loeschen darf man nur Ankuendigungen der eigenen Gliedgemeinschaft
-                  if($row->aa_ag_shortname == $g_organization)
+                  if($row->ann_org_shortname == $g_organization)
                   {
                      echo "&nbsp;
                      <img src=\"$g_root_path/adm_program/images/delete.png\" style=\"cursor: pointer;\" width=\"16\" height=\"16\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" ";
-                     $load_url = urlencode("$g_root_path/adm_program/modules/announcements/announcements_function.php?aa_id=$row->aa_id&amp;mode=2&amp;url=$g_root_path/adm_program/modules/announcements/announcements.php");
-                     echo " onclick=\"self.location.href='$g_root_path/adm_program/system/err_msg.php?err_code=delete_announcement&amp;err_text=". urlencode($row->aa_ueberschrift). "&amp;err_head=L&ouml;schen&amp;button=2&amp;url=$load_url'\">";
+                     $load_url = urlencode("$g_root_path/adm_program/modules/announcements/announcements_function.php?ann_id=$row->ann_id&amp;mode=2&amp;url=$g_root_path/adm_program/modules/announcements/announcements.php");
+                     echo " onclick=\"self.location.href='$g_root_path/adm_program/system/err_msg.php?err_code=delete_announcement&amp;err_text=". urlencode($row->ann_headline). "&amp;err_head=L&ouml;schen&amp;button=2&amp;url=$load_url'\">";
                   }
                   echo "&nbsp;</div>";
                }
                else
                {
-                  echo "<div style=\"text-align: right;\">". mysqldatetime("d.m.y", $row->aa_timestamp). "&nbsp;</div>";
+                  echo "<div style=\"text-align: right;\">". mysqldatetime("d.m.y", $row->ann_timestamp). "&nbsp;</div>";
                }
             echo "</div>
 
             <div style=\"margin: 8px 4px 4px 4px; text-align: left;\">";
                // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
                if($g_current_organization->bbcode == 1)
-                  echo strSpecialChars2Html($bbcode->parse($row->aa_beschreibung));
+                  echo strSpecialChars2Html($bbcode->parse($row->ann_description));
                else
-                  echo nl2br(strSpecialChars2Html($row->aa_beschreibung));
+                  echo nl2br(strSpecialChars2Html($row->ann_description));
             echo "</div>
             <div style=\"margin: 8px 4px 4px 4px; font-size: 8pt; text-align: left;\">
-                  Angelegt von ". strSpecialChars2Html($user->au_vorname). " ". strSpecialChars2Html($user->au_name).
-                  " am ". mysqldatetime("d.m.y h:i", $row->aa_timestamp). "
+                  Angelegt von ". strSpecialChars2Html($user->usr_first_name). " ". strSpecialChars2Html($user->usr_last_name).
+                  " am ". mysqldatetime("d.m.y h:i", $row->ann_timestamp). "
             </div>
          </div>
 

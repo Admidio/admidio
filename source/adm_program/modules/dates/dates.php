@@ -82,8 +82,8 @@ require("../../../adm_config/body_top.php");
 
    // alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
    $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. "
-            WHERE ag_shortname = '$g_organization'
-               OR ag_mother    = '$g_organization' ";
+            WHERE org_shortname = '$g_organization'
+               OR org_org_id_parent    = '$g_organization' ";
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
 
@@ -94,10 +94,10 @@ require("../../../adm_config/body_top.php");
    {
       if($i > 0) $organizations = $organizations. ", ";
 
-      if($row->ag_shortname == $g_organization)
-         $organizations = $organizations. "'$row->ag_mother'";
+      if($row->org_shortname == $g_organization)
+         $organizations = $organizations. "'$row->org_org_id_parent'";
       else
-         $organizations = $organizations. "'$row->ag_shortname'";
+         $organizations = $organizations. "'$row->org_shortname'";
 
       $i++;
    }
@@ -106,7 +106,7 @@ require("../../../adm_config/body_top.php");
    if (array_key_exists("id", $_GET))
    {
    	 $sql    = "SELECT * FROM ". TBL_DATES. "
-                  WHERE at_id = $_GET[id]";
+                  WHERE dat_id = $_GET[id]";
    }
    //...ansonsten alle fuer die Gruppierung passenden Termine aus der DB holen.
 	else
@@ -115,24 +115,24 @@ require("../../../adm_config/body_top.php");
    	if(strcmp($_GET['mode'], "old") == 0)
    	{
          $sql    = "SELECT * FROM ". TBL_DATES. "
-                     WHERE (  at_ag_shortname = '$g_organization'
-                        OR (   at_global   = 1
-                           AND at_ag_shortname IN ($organizations) ))
-                       AND at_von < SYSDATE()
-                       AND at_bis < SYSDATE()
-                     ORDER BY at_von DESC
+                     WHERE (  dat_org_shortname = '$g_organization'
+                        OR (   dat_global   = 1
+                           AND dat_org_shortname IN ($organizations) ))
+                       AND dat_begin < SYSDATE()
+                       AND dat_end < SYSDATE()
+                     ORDER BY dat_begin DESC
                      LIMIT {0}, 10 ";
       }
       //... ansonsten fuer neue Termine
       else
       {
          $sql    = "SELECT * FROM ". TBL_DATES. "
-                     WHERE (  at_ag_shortname = '$g_organization'
-                        OR (   at_global   = 1
-                           AND at_ag_shortname IN ($organizations) ))
-                       AND (  at_von >= SYSDATE()
-                           OR at_bis >= SYSDATE() )
-                     ORDER BY at_von ASC
+                     WHERE (  dat_org_shortname = '$g_organization'
+                        OR (   dat_global   = 1
+                           AND dat_org_shortname IN ($organizations) ))
+                       AND (  dat_begin >= SYSDATE()
+                           OR dat_end >= SYSDATE() )
+                     ORDER BY dat_begin ASC
                      LIMIT {0}, 10 ";
       }
 	}
@@ -200,7 +200,7 @@ require("../../../adm_config/body_top.php");
 
       while($row = mysql_fetch_object($result))
       {
-         $sql     = "SELECT * FROM ". TBL_USERS. " WHERE au_id = $row->at_au_id";
+         $sql     = "SELECT * FROM ". TBL_USERS. " WHERE usr_id = $row->dat_usr_id";
          $result2 = mysql_query($sql, $g_adm_con);
          db_error($result2);
 
@@ -210,24 +210,24 @@ require("../../../adm_config/body_top.php");
          <div class=\"boxBody\" style=\"overflow: hidden;\">
             <div class=\"boxHead\">
                <div style=\"text-align: left; float: left;\">
-                  <img src=\"$g_root_path/adm_program/images/history.png\" style=\"vertical-align: middle;\" alt=\"". strSpecialChars2Html($row->at_ueberschrift). "\">
-                  ". mysqldatetime("d.m.y", $row->at_von). "
-                  &nbsp;". strSpecialChars2Html($row->at_ueberschrift). "</div>";
+                  <img src=\"$g_root_path/adm_program/images/history.png\" style=\"vertical-align: middle;\" alt=\"". strSpecialChars2Html($row->dat_headline). "\">
+                  ". mysqldatetime("d.m.y", $row->dat_begin). "
+                  &nbsp;". strSpecialChars2Html($row->dat_headline). "</div>";
 
                // aendern & loeschen darf man nur eigene Termine, ausser Moderatoren
-               if (editDate() && (  isModerator() || $row->at_au_id == $g_current_user->id ))
+               if (editDate() && (  isModerator() || $row->dat_usr_id == $g_current_user->id ))
                {
                   echo "<div style=\"text-align: right;\">
                      <img src=\"$g_root_path/adm_program/images/edit.png\" style=\"cursor: pointer\" width=\"16\" height=\"16\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"
-                     onclick=\"self.location.href='dates_new.php?at_id=$row->at_id'\">";
+                     onclick=\"self.location.href='dates_new.php?dat_id=$row->dat_id'\">";
 
                   // Loeschen darf man nur Termine der eigenen Gliedgemeinschaft
-                  if($row->at_ag_shortname == $g_organization)
+                  if($row->dat_org_shortname == $g_organization)
                   {
                      echo "&nbsp;
                      <img src=\"$g_root_path/adm_program/images/delete.png\" style=\"cursor: pointer\" width=\"16\" height=\"16\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" ";
-                     $load_url = urlencode("$g_root_path/adm_program/modules/dates/dates_function.php?at_id=$row->at_id&amp;mode=2&amp;url=$g_root_path/adm_program/modules/dates/dates.php");
-                     echo " onclick=\"self.location.href='$g_root_path/adm_program/system/err_msg.php?err_code=delete_date&amp;err_text=". urlencode($row->at_ueberschrift). "&amp;err_head=L&ouml;schen&amp;button=2&amp;url=$load_url'\">";
+                     $load_url = urlencode("$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=$row->dat_id&amp;mode=2&amp;url=$g_root_path/adm_program/modules/dates/dates.php");
+                     echo " onclick=\"self.location.href='$g_root_path/adm_program/system/err_msg.php?err_code=delete_date&amp;err_text=". urlencode($row->dat_headline). "&amp;err_head=L&ouml;schen&amp;button=2&amp;url=$load_url'\">";
                   }
 
                   echo "&nbsp;</div>";
@@ -235,46 +235,46 @@ require("../../../adm_config/body_top.php");
             echo "</div>
 
             <div style=\"margin: 8px 4px 4px 4px; text-align: left;\">";
-               if (mysqldatetime("h:i", $row->at_von) != "00:00")
+               if (mysqldatetime("h:i", $row->dat_begin) != "00:00")
                {
                   echo "Beginn:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>".
-                     mysqldatetime("h:i", $row->at_von). "</b> Uhr&nbsp;&nbsp;&nbsp;&nbsp;";
+                     mysqldatetime("h:i", $row->dat_begin). "</b> Uhr&nbsp;&nbsp;&nbsp;&nbsp;";
                }
 
-               if($row->at_von != $row->at_bis)
+               if($row->dat_begin != $row->dat_end)
                {
-                  if (mysqldatetime("h:i", $row->at_von) != "00:00")
+                  if (mysqldatetime("h:i", $row->dat_begin) != "00:00")
                      echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 
                   echo "Ende:&nbsp;";
-                  if(mysqldatetime("d.m.y", $row->at_von) != mysqldatetime("d.m.y", $row->at_bis))
+                  if(mysqldatetime("d.m.y", $row->dat_begin) != mysqldatetime("d.m.y", $row->dat_end))
                   {
-                     echo "<b>". mysqldatetime("d.m.y", $row->at_bis). "</b>";
+                     echo "<b>". mysqldatetime("d.m.y", $row->dat_end). "</b>";
 
-                     if (mysqldatetime("h:i", $row->at_bis) != "00:00")
+                     if (mysqldatetime("h:i", $row->dat_end) != "00:00")
                         echo " um ";
                   }
 
-                  if (mysqldatetime("h:i", $row->at_bis) != "00:00")
-                     echo "<b>". mysqldatetime("h:i", $row->at_bis). "</b> Uhr";
+                  if (mysqldatetime("h:i", $row->dat_end) != "00:00")
+                     echo "<b>". mysqldatetime("h:i", $row->dat_end). "</b> Uhr";
                }
 
-               if ($row->at_ort != "")
+               if ($row->dat_location != "")
                {
-                  echo "<br />Treffpunkt:&nbsp;<b>". strSpecialChars2Html($row->at_ort). "</b>";
+                  echo "<br />Treffpunkt:&nbsp;<b>". strSpecialChars2Html($row->dat_location). "</b>";
                }
 
             echo "</div>
             <div style=\"margin: 8px 4px 4px 4px; text-align: left;\">";
                // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
                if($g_current_organization->bbcode == 1)
-                  echo strSpecialChars2Html($bbcode->parse($row->at_beschreibung));
+                  echo strSpecialChars2Html($bbcode->parse($row->dat_description));
                else
-                  echo nl2br(strSpecialChars2Html($row->at_beschreibung));
+                  echo nl2br(strSpecialChars2Html($row->dat_description));
             echo "</div>
             <div style=\"margin: 8px 4px 4px 4px; font-size: 8pt; text-align: left;\">
-                  Angelegt von ". strSpecialChars2Html($user->au_vorname). " ". strSpecialChars2Html($user->au_name).
-                  " am ". mysqldatetime("d.m.y h:i", $row->at_timestamp). "
+                  Angelegt von ". strSpecialChars2Html($user->usr_first_name). " ". strSpecialChars2Html($user->usr_last_name).
+                  " am ". mysqldatetime("d.m.y h:i", $row->dat_timestamp). "
             </div>
          </div>
 

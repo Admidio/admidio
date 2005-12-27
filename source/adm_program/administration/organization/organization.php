@@ -64,7 +64,7 @@ require("../../../adm_config/body_top.php");
    echo "
    <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
 
-   <form action=\"organization_function.php?ag_id=$g_current_organization->id&amp;url=$url\" method=\"post\" name=\"Gruppierung bearbeiten\">
+   <form action=\"organization_function.php?org_id=$g_current_organization->id&amp;url=$url\" method=\"post\" name=\"Gruppierung bearbeiten\">
 
       <div class=\"formHead\">$g_current_organization->longname bearbeiten</div>
       <div class=\"formBody\">
@@ -89,7 +89,7 @@ require("../../../adm_config/body_top.php");
 
          // bei mehr als einer Gruppierung, Checkbox anzeigen, ob, Termin bei anderen angezeigt werden soll
          $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. "
-                  WHERE ag_shortname NOT LIKE '$g_organization' ";
+                  WHERE org_shortname NOT LIKE '$g_organization' ";
          $result = mysql_query($sql, $g_adm_con);
          db_error($result);
 
@@ -108,15 +108,15 @@ require("../../../adm_config/body_top.php");
 
                      while($row = mysql_fetch_object($result))
                      {
-                        echo "<option value=\"$row->ag_shortname\"";
-                           if($g_current_organization->org_shortname_mother == $row->ag_shortname)
+                        echo "<option value=\"$row->org_shortname\"";
+                           if($g_current_organization->org_shortname_mother == $row->org_shortname)
                               echo " selected ";
                         echo ">";
 
-                        if(strlen($row->ag_longname) > 2)
-                           echo $row->ag_longname;
+                        if(strlen($row->org_longname) > 2)
+                           echo $row->org_longname;
                         else
-                           echo $row->ag_shortname;
+                           echo $row->org_shortname;
                         echo "</option>";
                      }
                   echo "</select>
@@ -174,7 +174,7 @@ require("../../../adm_config/body_top.php");
 
          // gruppierungsspezifische Felder anzeigen
          $sql = "SELECT * FROM ". TBL_USER_FIELDS. "
-                  WHERE auf_ag_shortname LIKE '$g_organization' ";
+                  WHERE usf_org_shortname LIKE '$g_organization' ";
          $result = mysql_query($sql, $g_adm_con);
          db_error($result);
 
@@ -197,29 +197,29 @@ require("../../../adm_config/body_top.php");
             {
                echo "
                <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
-                  <td style=\"text-align: left;\"><a href=\"$g_root_path/adm_program/administration/organization/field.php?auf_id=$row->auf_id\">$row->auf_name</a></td>
-                  <td style=\"text-align: left;\">$row->auf_description</td>
+                  <td style=\"text-align: left;\"><a href=\"$g_root_path/adm_program/administration/organization/field.php?usf_id=$row->usf_id\">$row->usf_name</a></td>
+                  <td style=\"text-align: left;\">$row->usf_description</td>
                   <td style=\"text-align: left;\">";
-                  if($row->auf_type == "TEXT")
+                  if($row->usf_type == "TEXT")
                      echo "Text (30)";
-                  elseif($row->auf_type == "TEXT_BIG")
+                  elseif($row->usf_type == "TEXT_BIG")
                      echo "Text (255)";
-                  elseif($row->auf_type == "NUMERIC")
+                  elseif($row->usf_type == "NUMERIC")
                      echo "Zahl";
-                  elseif($row->auf_type == "CHECKBOX")
+                  elseif($row->usf_type == "CHECKBOX")
                      echo "Ja / Nein";
                   echo "</td>
                   <td style=\"text-align: center;\">";
-                  if($row->auf_locked == 1)
+                  if($row->usf_locked == 1)
                      echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Feld nur für Moderatoren sichtbar\" title=\"Feld nur für Moderatoren sichtbar\">";
                   else
                      echo "&nbsp;";
                   echo "</td>
                   <td style=\"text-align: right;\">
-                     <a href=\"$g_root_path/adm_program/administration/organization/field.php?auf_id=$row->auf_id&amp;url=$url\">
+                     <a href=\"$g_root_path/adm_program/administration/organization/field.php?usf_id=$row->usf_id&amp;url=$url\">
                         <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>&nbsp;";
-                        $load_url = urlencode("$g_root_path/adm_program/administration/organization/field_function.php?auf_id=$row->auf_id&mode=2&url=$url");
-                     echo "<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_field&err_text=$row->auf_name&err_head=Profilfeld l&ouml;schen&button=2&url=$load_url\">
+                        $load_url = urlencode("$g_root_path/adm_program/administration/organization/field_function.php?usf_id=$row->usf_id&mode=2&url=$url");
+                     echo "<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_field&err_text=$row->usf_name&err_head=Profilfeld l&ouml;schen&button=2&url=$load_url\">
                         <img src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"Veranstaltung löschen\" title=\"Veranstaltung löschen\"></a>
                   </td>
                </tr>";

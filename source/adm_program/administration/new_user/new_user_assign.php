@@ -65,14 +65,14 @@ if($_GET["all"] == 0)
    // Mitglieder mit gleichem Nachname der Gruppierung zur Auswahl selektieren
    $sql    = "SELECT *
                 FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
-               WHERE ar_ag_shortname = '$g_organization'
-                 AND ar_valid        = 1
-                 AND am_ar_id        = ar_id
-                 AND am_valid        = 1
-                 AND am_au_id        = au_id
-                 AND au_name LIKE '$user_row->anu_name'
-               GROUP BY au_name, au_vorname
-               ORDER BY au_name, au_vorname ";
+               WHERE rol_org_shortname = '$g_organization'
+                 AND rol_valid        = 1
+                 AND mem_rol_id        = rol_id
+                 AND mem_valid        = 1
+                 AND mem_usr_id        = usr_id
+                 AND usr_last_name LIKE '$user_row->anu_name'
+               GROUP BY usr_last_name, usr_first_name
+               ORDER BY usr_last_name, usr_first_name ";
    $result_all = mysql_query($sql, $g_adm_con);
    $member_found = mysql_num_rows($result_all);
 
@@ -82,14 +82,14 @@ if($_GET["all"] == 0)
       // alle Mitglieder der Gruppierung zur Auswahl selektieren
       $sql    = "SELECT *
                    FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
-                  WHERE ar_ag_shortname = '$g_organization'
-                    AND ar_valid        = 1
-                    AND am_ar_id        = ar_id
-                    AND am_valid        = 1
-                    AND am_au_id        = au_id
-                    AND au_name LIKE {0}
-                  GROUP BY au_name, au_vorname
-                  ORDER BY au_name, au_vorname ";
+                  WHERE rol_org_shortname = '$g_organization'
+                    AND rol_valid        = 1
+                    AND mem_rol_id        = rol_id
+                    AND mem_valid        = 1
+                    AND mem_usr_id        = usr_id
+                    AND usr_last_name LIKE {0}
+                  GROUP BY usr_last_name, usr_first_name
+                  ORDER BY usr_last_name, usr_first_name ";
       $sql    = prepareSQL($sql, array($_GET['letter']));
       $result_all = mysql_query($sql, $g_adm_con);
       $all    = 1;
@@ -100,14 +100,14 @@ else
    // alle Mitglieder der Gruppierung zur Auswahl selektieren
    $sql    = "SELECT *
                 FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
-               WHERE ar_ag_shortname = '$g_organization'
-                 AND ar_valid        = 1
-                 AND am_ar_id        = ar_id
-                 AND am_valid        = 1
-                 AND am_au_id        = au_id
-                 AND au_name LIKE {0}
-               GROUP BY au_name, au_vorname
-               ORDER BY au_name, au_vorname ";
+               WHERE rol_org_shortname = '$g_organization'
+                 AND rol_valid        = 1
+                 AND mem_rol_id        = rol_id
+                 AND mem_valid        = 1
+                 AND mem_usr_id        = usr_id
+                 AND usr_last_name LIKE {0}
+               GROUP BY usr_last_name, usr_first_name
+               ORDER BY usr_last_name, usr_first_name ";
    $sql    = prepareSQL($sql, array($_GET['letter']));
    $result_all = mysql_query($sql, $g_adm_con);
 }
@@ -146,13 +146,13 @@ if($_GET["all"] == 1 || $member_found == 0)
       // Anzahl Mitglieder zum entsprechenden Buchstaben ermitteln
       $sql    = "SELECT COUNT(*)
                    FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
-                  WHERE ar_ag_shortname = '$g_organization'
-                    AND ar_valid        = 1
-                    AND am_ar_id        = ar_id
-                    AND am_valid        = 1
-                    AND am_au_id        = au_id
-                    AND au_name LIKE '$letter_menu%'
-                  GROUP BY au_name, au_vorname ";
+                  WHERE rol_org_shortname = '$g_organization'
+                    AND rol_valid        = 1
+                    AND mem_rol_id        = rol_id
+                    AND mem_valid        = 1
+                    AND mem_usr_id        = usr_id
+                    AND usr_last_name LIKE '$letter_menu%'
+                  GROUP BY usr_last_name, usr_first_name ";
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
       $row = mysql_fetch_array($result);
@@ -182,21 +182,21 @@ echo "
    while($row = mysql_fetch_object($result_all))
    {
       echo "<tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\">
-               <td style=\"text-align: left;\">&nbsp;<a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->au_id\">$row->au_name,&nbsp;$row->au_vorname</a></td>
-               <td style=\"text-align: left;\">&nbsp;$row->au_login</td>
+               <td style=\"text-align: left;\">&nbsp;<a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->usr_id\">$row->usr_last_name,&nbsp;$row->usr_first_name</a></td>
+               <td style=\"text-align: left;\">&nbsp;$row->usr_login_name</td>
                <td style=\"text-align: left;\">&nbsp;";
                if($g_current_organization->mail_extern == 1)
-                  echo "<a href=\"mailto:$row->au_mail\">";
+                  echo "<a href=\"mailto:$row->usr_mail\">";
                else
-                  echo "<a href=\"../adm_program/modules/mail/mail.php?au_id=$row->au_id\">";
-               echo "$row->au_mail</a></td>
+                  echo "<a href=\"../adm_program/modules/mail/mail.php?usr_id=$row->usr_id\">";
+               echo "$row->usr_mail</a></td>
                <td style=\"text-align: left;\">&nbsp;";
-      if(strlen($row->au_login) > 0)
+      if(strlen($row->usr_login_name) > 0)
          echo "Angemeldet";
       else
       {
-         $load_url = urlencode("$g_root_path/adm_program/administration/new_user/new_user_function.php?anu_id=". $_GET['anu_id']. "&amp;au_id=$row->au_id&amp;mode=1");
-         echo "<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=zuordnen&amp;err_text=$row->au_vorname $row->au_name&amp;err_head=Webanmeldung zuordnen&amp;button=2&amp;url=$load_url\">Zuordnen</a>";
+         $load_url = urlencode("$g_root_path/adm_program/administration/new_user/new_user_function.php?anu_id=". $_GET['anu_id']. "&amp;usr_id=$row->usr_id&amp;mode=1");
+         echo "<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=zuordnen&amp;err_text=$row->usr_first_name $row->usr_last_name&amp;err_head=Webanmeldung zuordnen&amp;button=2&amp;url=$load_url\">Zuordnen</a>";
       }
 
       echo "</td></tr>";

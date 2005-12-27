@@ -10,7 +10,7 @@
  *       3 - Abfrage, wie der Datensatz zugeordnet werden soll
  *       4 - User-Account loeschen
  * anu_id:   Id des Logins, das verarbeitet werden soll
- * au_id:    Id des Benutzers, dem das neue Login zugeordnet werden soll
+ * usr_id:    Id des Benutzers, dem das neue Login zugeordnet werden soll
  *
  ******************************************************************************
  *
@@ -52,10 +52,10 @@ if($_GET["mode"] == 1)
 
    if($user_row = mysql_fetch_object($result))
    {
-      $sql    = "SELECT au_login
+      $sql    = "SELECT usr_login_name
                    FROM ". TBL_USERS. "
-                  WHERE au_id = {0}";
-      $sql    = prepareSQL($sql, array($_GET['au_id']));
+                  WHERE usr_id = {0}";
+      $sql    = prepareSQL($sql, array($_GET['usr_id']));
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
 
@@ -63,11 +63,11 @@ if($_GET["mode"] == 1)
       $old_login = $row[0];
 
       // Mitgliedsdaten updaten
-      $sql    = "UPDATE ". TBL_USERS. " SET au_mail     = '$user_row->anu_mail'
-                                    , au_login    = '$user_row->anu_login'
-                                    , au_password = '$user_row->anu_password'
-                  WHERE au_id = {0}";
-      $sql    = prepareSQL($sql, array($_GET['au_id']));
+      $sql    = "UPDATE ". TBL_USERS. " SET usr_mail     = '$user_row->anu_mail'
+                                    , usr_login_name    = '$user_row->anu_login'
+                                    , usr_password = '$user_row->anu_password'
+                  WHERE usr_id = {0}";
+      $sql    = prepareSQL($sql, array($_GET['usr_id']));
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
 

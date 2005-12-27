@@ -8,7 +8,7 @@
  *
  * Uebergaben:
  *
- * aa_id:    ID der Ankuendigung, die angezeigt werden soll
+ * ann_id:    ID der Ankuendigung, die angezeigt werden soll
  * mode:     1 - Neue Ankuendigung anlegen
  *           2 - Ankuendigung löschen
  *           3 - Ankuendigung ändern
@@ -68,10 +68,10 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
 
 		// Termin speichern
 
-		if ($_GET["aa_id"] == 0)
+		if ($_GET["ann_id"] == 0)
 		{
-		   $sql = "INSERT INTO ". TBL_ANNOUNCEMENTS. " (aa_global, aa_ag_shortname, aa_au_id, aa_timestamp,
-		                                            aa_ueberschrift, aa_beschreibung)
+		   $sql = "INSERT INTO ". TBL_ANNOUNCEMENTS. " (ann_global, ann_org_shortname, ann_usr_id, ann_timestamp,
+		                                            ann_headline, ann_description)
 		                             VALUES ($global, '$g_organization', '$g_current_user->id', '$act_date',
 		                                     {0}, {1})";
 		   $sql    = prepareSQL($sql, array($headline, $content));
@@ -80,13 +80,13 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
 		}
 		else
 		{
-		   $sql = "UPDATE ". TBL_ANNOUNCEMENTS. " SET aa_global         = $global
-		                                        , aa_ueberschrift   = {0}
-		                                        , aa_beschreibung   = {1}
-		                                        , aa_last_change    = '$act_date'
-		                                        , aa_last_change_id = $g_current_user->id
-		            WHERE aa_id = {2}";
-		   $sql    = prepareSQL($sql, array($headline, $content, $_GET['aa_id']));
+		   $sql = "UPDATE ". TBL_ANNOUNCEMENTS. " SET ann_global         = $global
+		                                        , ann_headline   = {0}
+		                                        , ann_description   = {1}
+		                                        , ann_last_change    = '$act_date'
+		                                        , ann_usr_id_change = $g_current_user->id
+		            WHERE ann_id = {2}";
+		   $sql    = prepareSQL($sql, array($headline, $content, $_GET['ann_id']));
 		   $result = mysql_query($sql, $g_adm_con);
 		   db_error($result);
 		}
@@ -106,8 +106,8 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
 }
 elseif($_GET["mode"] == 2)
 {
-   $sql = "DELETE FROM ". TBL_ANNOUNCEMENTS. " WHERE aa_id = {0}";
-   $sql    = prepareSQL($sql, array($_GET["aa_id"]));
+   $sql = "DELETE FROM ". TBL_ANNOUNCEMENTS. " WHERE ann_id = {0}";
+   $sql    = prepareSQL($sql, array($_GET["ann_id"]));
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
 

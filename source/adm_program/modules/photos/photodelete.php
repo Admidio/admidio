@@ -37,17 +37,17 @@ if(!$g_session_valid || $g_session_valid && !editPhoto())
 //bei Seitenaufruf mit Moderationsrechten
 if($g_session_valid && editPhoto()){
 //Übernahme Variablen
-	 $ap_id= $_GET['ap_id'];
+	 $pho_id= $_GET['pho_id'];
 	 $bild = $_GET["bild"];
 //erfassen der Veranstaltung
 	$sql = "	SELECT *
 				FROM ". TBL_PHOTOS. "
-				WHERE (ap_id ='$ap_id')";
+				WHERE (pho_id ='$pho_id')";
 	$result = mysql_query($sql, $g_adm_con);
 	db_error($result);
 	$adm_photo = mysql_fetch_array($result);
 //Speicherort
-	$ordner = "../../../adm_my_files/photos/".$adm_photo["ap_begin"]."_".$adm_photo["ap_id"];
+	$ordner = "../../../adm_my_files/photos/".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"];
 
 //Bericht mit l&ouml;schen
       $neuebilderzahl = $adm_photo[1]-1;
@@ -56,7 +56,7 @@ if($g_session_valid && editPhoto()){
          unlink("$ordner/$bild.jpg");
    //Umbennenen der Restbilder
          $neuenr=1;
-         for($x=1; $x<=$adm_photo["ap_number"]; $x++){
+         for($x=1; $x<=$adm_photo["pho_number"]; $x++){
             if(file_exists("$ordner/$x.jpg")){
                if($x>$neuenr){
                   chmod("$ordner/$x.jpg", 0777);
@@ -68,14 +68,14 @@ if($g_session_valid && editPhoto()){
    //&Auml;ndern der Datenbankeintaege
         $changedatetime= date("Y.m.d G:i:s", time());
 		  $sql = "UPDATE ". TBL_PHOTOS. "
-		 			SET ap_number = '$neuebilderzahl', ap_last_change = '$changedatetime'
-					WHERE ap_id = '$ap_id'";
+		 			SET pho_number = '$neuebilderzahl', pho_last_change = '$changedatetime'
+					WHERE pho_id = '$pho_id'";
 		 $result = mysql_query($sql, $g_adm_con);
 		 db_error($result);
 
 // zur Ausgangsseite zurueck
 $seite=$_GET["seite"];
-$location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=photo_deleted&timer=2000&url=". urlencode("$g_root_path/adm_program/modules/photos/thumbnails.php?ap_id=$ap_id&seite=$seite");
+$location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=photo_deleted&timer=2000&url=". urlencode("$g_root_path/adm_program/modules/photos/thumbnails.php?pho_id=$pho_id&seite=$seite");
 header($location);
 exit();
 }//if Moderator

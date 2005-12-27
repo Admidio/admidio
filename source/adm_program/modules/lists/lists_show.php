@@ -48,22 +48,21 @@ else
    $separator = ",";   // für CSV-Dateien
 
 // Array um den Namen der Tabellen sinnvolle Texte zuzuweisen
-$arr_col_name = array('au_name'     => 'Nachname',
-                      'au_vorname'  => 'Vorname',
-                      'au_adresse'  => 'Adresse',
-                      'au_plz'      => 'PLZ',
-                      'au_ort'      => 'Ort',
-                      'au_land'      => 'Land',
-                      'au_tel1'     => 'Telefon',
-                      'au_tel2'     => 'Telefon 2',
-                      'au_mobil'    => 'Handy',
-                      'au_fax'      => 'Fax',
-                      'au_mail'     => 'E-Mail',
-                      'au_geburtstag'   => 'Geburtstag',
-                      'au_weburl'       => 'Homepage',
-                      'am_start'        => 'Beginn',
-                      'am_ende'         => 'Ende',
-                      'am_leiter'       => 'Leiter'
+$arr_col_name = array('usr_last_name'  => 'Nachname',
+                      'usr_first_name' => 'Vorname',
+                      'usr_address'    => 'Adresse',
+                      'usr_zip_code'   => 'PLZ',
+                      'usr_city'       => 'Ort',
+                      'usr_country'    => 'Land',
+                      'usr_phone'      => 'Telefon',
+                      'usr_mobile'     => 'Handy',
+                      'usr_fax'        => 'Fax',
+                      'usr_email'      => 'E-Mail',
+                      'usr_birthday'   => 'Geburtstag',
+                      'usr_homepage'   => 'Homepage',
+                      'mem_start'      => 'Beginn',
+                      'mem_ende'       => 'Ende',
+                      'mem_leader'     => 'Leiter'
                       );
 
 if($_GET["mode"] == "html")
@@ -84,14 +83,14 @@ $str_csv   = "";   // enthält die komplette CSV-Datei als String
 $leiter    = 0;    // Gruppe besitzt Leiter
 
 // das geweilige Sql-Statement zusammenbauen
-// !!!! Das erste Feld muss immer au_id sein !!!!
-// !!!! wenn Gruppen angezeigt werden, muss am_leiter = 0 gesetzt sein !!!!
+// !!!! Das erste Feld muss immer usr_id sein !!!!
+// !!!! wenn Gruppen angezeigt werden, muss mem_leader = 0 gesetzt sein !!!!
 
 switch($_GET["typ"])
 {
    case "mylist":
-      $sql      = "SELECT as_list_sql FROM ". TBL_SESSIONS. "
-                    WHERE as_session = '$g_session_id' ";
+      $sql      = "SELECT ses_list_sql FROM ". TBL_SESSIONS. "
+                    WHERE ses_session = '$g_session_id' ";
       $result   = mysql_query($sql, $g_adm_con);
       db_error($result);
       $row      = mysql_fetch_array($result);
@@ -99,47 +98,47 @@ switch($_GET["typ"])
       break;
 
    case "address":
-      $main_sql = "SELECT au_id, au_name, au_vorname, au_geburtstag, au_adresse, au_plz, au_ort
+      $main_sql = "SELECT usr_id, usr_last_name, usr_first_name, usr_geburtstag, usr_address, usr_plz, usr_ort
                      FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
-                    WHERE ar_ag_shortname = '$g_organization'
-                      AND ar_funktion     = {0}
-                      AND ar_id     = am_ar_id
-                      AND am_valid  = 1
-                      AND am_leiter = 0
-                      AND am_au_id  = au_id
-                    ORDER BY au_name, au_vorname ";
+                    WHERE rol_org_shortname = '$g_organization'
+                      AND rol_name     = {0}
+                      AND rol_id     = mem_rol_id
+                      AND mem_valid  = 1
+                      AND mem_leader = 0
+                      AND mem_usr_id  = usr_id
+                    ORDER BY usr_last_name, usr_first_name ";
       break;
 
    case "telephone":
-      $main_sql = "SELECT au_id, au_name, au_vorname, au_tel1, au_tel2, au_mobil, au_mail
+      $main_sql = "SELECT usr_id, usr_last_name, usr_first_name, usr_tel1, usr_tel2, usr_mobil, usr_mail
                      FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
-                    WHERE ar_ag_shortname = '$g_organization'
-                      AND ar_funktion     = {0}
-                      AND ar_id     = am_ar_id
-                      AND am_valid  = 1
-                      AND am_leiter = 0
-                      AND am_au_id  = au_id
-                    ORDER BY au_name, au_vorname ";
+                    WHERE rol_org_shortname = '$g_organization'
+                      AND rol_name     = {0}
+                      AND rol_id     = mem_rol_id
+                      AND mem_valid  = 1
+                      AND mem_leader = 0
+                      AND mem_usr_id  = usr_id
+                    ORDER BY usr_last_name, usr_first_name ";
       break;
 
    case "former":
-      $main_sql = "SELECT au_id, au_name, au_vorname, au_geburtstag, am_start, am_ende
+      $main_sql = "SELECT usr_id, usr_last_name, usr_first_name, usr_geburtstag, mem_start, mem_ende
                      FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
-                    WHERE ar_ag_shortname = '$g_organization'
-                      AND ar_funktion     = {0}
-                      AND ar_id     = am_ar_id
-                      AND am_valid  = 0
-                      AND am_leiter = 0
-                      AND am_au_id  = au_id
-                    ORDER BY am_ende DESC, au_name, au_vorname ";
+                    WHERE rol_org_shortname = '$g_organization'
+                      AND rol_name     = {0}
+                      AND rol_id     = mem_rol_id
+                      AND mem_valid  = 0
+                      AND mem_leader = 0
+                      AND mem_usr_id  = usr_id
+                    ORDER BY mem_ende DESC, usr_last_name, usr_first_name ";
       break;
 }
 
 // pruefen, ob die Rolle eine Gruppe ist und dann vorher ein SELECT für die Gruppenleiter erstellen
-$sql = "SELECT ar_id, ar_gruppe
+$sql = "SELECT rol_id, rol_gruppe
           FROM ". TBL_ROLES. "
-         WHERE ar_ag_shortname = '$g_organization'
-           AND ar_funktion     = {0} ";
+         WHERE rol_org_shortname = '$g_organization'
+           AND rol_name     = {0} ";
 $sql      = prepareSQL($sql, array($_GET['rolle']));
 $result   = mysql_query($sql, $g_adm_con);
 db_error($result);
@@ -150,32 +149,32 @@ if($gruppe == 1)
 {
    // pruefen, ob die Gruppe Leiter hat, wenn nicht, dann Standardliste anzeigen
 
-   if(substr_count(str_replace(" ", "", $main_sql), "am_valid=0") > 0)
+   if(substr_count(str_replace(" ", "", $main_sql), "mem_valid=0") > 0)
       $former = 0;
    else
       $former = 1;
 
-   $sql = "SELECT am_leiter
+   $sql = "SELECT mem_leader
              FROM ". TBL_MEMBERS. "
-            WHERE am_ar_id  = ". $row[0]. "
-              AND am_valid  = $former
-              AND am_leiter = 1 ";
+            WHERE mem_rol_id  = ". $row[0]. "
+              AND mem_valid  = $former
+              AND mem_leader = 1 ";
    $result   = mysql_query($sql, $g_adm_con);
    db_error($result);
 
    if(mysql_num_rows($result) > 0)
    {
       // Gruppe besitzt Leiter
-      $pos = strpos($main_sql, "am_leiter");
+      $pos = strpos($main_sql, "mem_leader");
       if($pos > 0)
       {
          $leiter   = 1;
-         // am_leiter = 0 durch am_leiter = 1 ersetzen
+         // mem_leader = 0 durch mem_leader = 1 ersetzen
          $tmp_sql  = strtolower($main_sql);
          $next_pos = strpos($tmp_sql, "and", $pos);
          if($next_pos === false)
             $next_pos = strpos($tmp_sql, "order", $pos);
-         $leiter_sql = substr($main_sql, 0, $pos). " am_leiter = 1 ". substr($main_sql, $next_pos);
+         $leiter_sql = substr($main_sql, 0, $pos). " mem_leader = 1 ". substr($main_sql, $next_pos);
       }
    }
    else
@@ -376,27 +375,27 @@ for($j = 0; $j < $max_count; $j++)
                   // Felder nachformatieren
                   switch($arr_fields[$i])
                   {
-                     case "au_mail":
+                     case "usr_mail":
                         if($_GET["mode"] == "html")
                         {
                            if($g_current_organization->mail_extern == 1)
                               $content = "<a href=\"mailto:". $row[$i]. "\">". $row[$i]. "</a>";
                            else
-                              $content = "<a href=\"../mail/mail.php?au_id=". $row[0]. "\">". $row[$i]. "</a>";
+                              $content = "<a href=\"../mail/mail.php?usr_id=". $row[0]. "\">". $row[$i]. "</a>";
                         }
                         else
                            $content = $row[$i];
                         break;
 
-                     case "au_geburtstag":
-                     case "am_start":
-                     case "am_ende":
+                     case "usr_geburtstag":
+                     case "mem_start":
+                     case "mem_ende":
                         $content = mysqldatetime("d.m.y", $row[$i]);
                         if($content == "00.00.0000")
                            $content = "";
                         break;
 
-                     case "au_weburl":
+                     case "usr_weburl":
                         $row[$i] = stripslashes($row[$i]);
                         if(substr_count(strtolower($row[$i]), "http://") == 0)
                            $row[$i] = "http://". $row[$i];

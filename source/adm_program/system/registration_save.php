@@ -73,8 +73,8 @@ if(strlen($err_code) != 0)
 
 
 // pruefen, ob der Username bereits vergeben ist
-$sql    = "SELECT au_id FROM ". TBL_USERS. " ".
-          " WHERE au_login LIKE {0}";
+$sql    = "SELECT usr_id FROM ". TBL_USERS. " ".
+          " WHERE usr_login_name LIKE {0}";
 $sql    = prepareSQL($sql, array($_POST["benutzername"]));
 $result = mysql_query($sql, $g_adm_con);
 db_error($result);      
@@ -112,21 +112,21 @@ if ($count_user == 0)
 {
    $password_crypt = md5($_POST["passwort"]);
 
-   $sql    = "INSERT INTO ". TBL_NEW_USER. " (anu_ag_shortname, anu_name, anu_vorname, anu_mail, anu_login, anu_password) ".
+   $sql    = "INSERT INTO ". TBL_NEW_USER. " (anu_org_shortname, anu_name, anu_vorname, anu_mail, anu_login, anu_password) ".
              "VALUES ('$g_organization', {0}, {1}, {2}, {3}, '$password_crypt')";
    $sql    = prepareSQL($sql, array($_POST["nachname"], $_POST["vorname"], $_POST["email"], $_POST["benutzername"]));
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
 
    // E-Mail an alle Webmaster schreiben
-   $sql    = "SELECT au_mail
+   $sql    = "SELECT usr_mail
                 FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
-               WHERE ar_ag_shortname = '$g_organization'
-                 AND ar_funktion     = 'Webmaster'
-                 AND am_ar_id        = ar_id
-                 AND am_valid        = 1
-                 AND am_au_id        = au_id
-                 AND LENGTH(au_mail) > 0 ";
+               WHERE rol_org_shortname = '$g_organization'
+                 AND rol_name     = 'Webmaster'
+                 AND mem_rol_id        = rol_id
+                 AND mem_valid        = 1
+                 AND mem_usr_id        = usr_id
+                 AND LENGTH(usr_mail) > 0 ";
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
 
@@ -135,7 +135,7 @@ if ($count_user == 0)
 		// nur ausfuehren, wenn E-Mails auch unterstuetzt werden
 		if($g_current_organization->mail_extern != 1)
       {
-         mail("$row->au_mail", "Anmeldung", "Es hat sich ein neuer User auf ".
+         mail("$row->usr_mail", "Anmeldung", "Es hat sich ein neuer User auf ".
               "$g_homepage angemeldet\n\nNachname: ". $_POST["nachname"]. "\nVorname:  ". $_POST["vorname"]. "\n".
               "E-Mail:   ". $_POST["email"]. "\n\n\nDiese Nachricht wurde automatisch erzeugt.",
               "From: webmaster@$g_domain");

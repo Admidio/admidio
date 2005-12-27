@@ -8,7 +8,7 @@
  *
  * Uebergaben:
  *
- * ar_id: ID der Rolle, die bearbeitet werden soll
+ * rol_id: ID der Rolle, die bearbeitet werden soll
  ******************************************************************************
  *
  * This program is free software; you can redistribute it and/or
@@ -61,10 +61,10 @@ $beitrag        = null;
 // Wenn eine Rollen-ID uebergeben wurde, soll die Rolle geaendert werden
 // -> Felder mit Daten der Rolle vorbelegen
 
-if ($_GET['ar_id'] != 0)
+if ($_GET['rol_id'] != 0)
  {
-   $sql    = "SELECT * FROM ". TBL_ROLES. " WHERE ar_id = {0}";
-   $sql    = prepareSQL($sql, array($_GET['ar_id']));
+   $sql    = "SELECT * FROM ". TBL_ROLES. " WHERE rol_id = {0}";
+   $sql    = prepareSQL($sql, array($_GET['rol_id']));
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
 
@@ -73,9 +73,9 @@ if ($_GET['ar_id'] != 0)
       $row_ar = mysql_fetch_object($result);
 
       // Rolle Webmaster darf nur vom Webmaster selber erstellt oder gepflegt werden
-      if($row_ar->ar_funktion == "Webmaster" && !hasRole("Webmaster"))
+      if($row_ar->rol_name == "Webmaster" && !hasRole("Webmaster"))
       {
-         if($g_current_user->id != $row_ar->ar_au_id)
+         if($g_current_user->id != $row_ar->rol_usr_id)
          {
             $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
             header($location);
@@ -83,30 +83,30 @@ if ($_GET['ar_id'] != 0)
          }
       }
 
-      $rolle         = $row_ar->ar_funktion;
-      $beschreibung  = $row_ar->ar_beschreibung;
-      $r_moderation  = $row_ar->ar_r_moderation;
-      $r_termin      = $row_ar->ar_r_termine;
-      $r_foto        = $row_ar->ar_r_foto;
-      $r_download    = $row_ar->ar_r_download;
-      $r_user        = $row_ar->ar_r_user_bearbeiten;
-      $r_locked      = $row_ar->ar_r_locked;
-      $r_mail_logout = $row_ar->ar_r_mail_logout;
-      $r_mail_login  = $row_ar->ar_r_mail_login;
-      $r_gruppe      = $row_ar->ar_gruppe;
+      $rolle         = $row_ar->rol_name;
+      $beschreibung  = $row_ar->rol_description;
+      $r_moderation  = $row_ar->rol_moderation;
+      $r_termin      = $row_ar->rol_dates;
+      $r_foto        = $row_ar->rol_photo;
+      $r_download    = $row_ar->rol_download;
+      $r_user        = $row_ar->rol_edit_user;
+      $r_locked      = $row_ar->rol_locked;
+      $r_mail_logout = $row_ar->rol_mail_logout;
+      $r_mail_login  = $row_ar->rol_mail_login;
+      $r_gruppe      = $row_ar->rol_gruppe;
       if($r_gruppe == 1)
       {
          // Daten nur fuellen, wenn die Rolle eine Gruppe ist
-         $datum_von      = mysqldate("d.m.y", $row_ar->ar_datum_von);
-         $uhrzeit_von    = mysqltime("h:i",   $row_ar->ar_zeit_von);
-         $datum_bis      = mysqldate("d.m.y", $row_ar->ar_datum_bis);
-         $uhrzeit_bis    = mysqltime("h:i",   $row_ar->ar_zeit_bis);
+         $datum_von      = mysqldate("d.m.y", $row_ar->rol_datum_von);
+         $uhrzeit_von    = mysqltime("h:i",   $row_ar->rol_zeit_von);
+         $datum_bis      = mysqldate("d.m.y", $row_ar->rol_datum_bis);
+         $uhrzeit_bis    = mysqltime("h:i",   $row_ar->rol_zeit_bis);
          if ($uhrzeit_von == "00:00") $uhrzeit_von = "";
          if ($uhrzeit_bis == "00:00") $uhrzeit_bis = "";
-         $wochentag      = $row_ar->ar_wochentag;
-         $ort            = $row_ar->ar_ort;
-         $max_mitglieder = $row_ar->ar_max_mitglieder;
-         $beitrag        = $row_ar->ar_beitrag;
+         $wochentag      = $row_ar->rol_wochentag;
+         $ort            = $row_ar->rol_ort;
+         $max_mitglieder = $row_ar->rol_max_mitglieder;
+         $beitrag        = $row_ar->rol_beitrag;
       }
    }
  }
@@ -174,9 +174,9 @@ require("../../../adm_config/body_top.php");
    echo "
    <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
 
-   <form action=\"roles_function.php?ar_id=". $_GET['ar_id']. "&amp;mode=2\" method=\"post\" name=\"TerminAnlegen\">
+   <form action=\"roles_function.php?rol_id=". $_GET['rol_id']. "&amp;mode=2\" method=\"post\" name=\"TerminAnlegen\">
       <div class=\"formHead\">";
-         if($_GET['ar_id'] > 0)
+         if($_GET['rol_id'] > 0)
             echo strspace("Rolle ändern", 2);
          else
             echo strspace("Rolle anlegen", 2);
@@ -410,19 +410,19 @@ require("../../../adm_config/body_top.php");
             <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
             Zur&uuml;ck</button>
          </div>";
-         if($row_ar->ar_last_change_id > 0)
+         if($row_ar->rol_last_change_id > 0)
          {
             // Angabe ueber die letzten Aenderungen
-            $sql    = "SELECT au_vorname, au_name
+            $sql    = "SELECT usr_first_name, usr_last_name
                          FROM ". TBL_USERS. "
-                        WHERE au_id = $row_ar->ar_last_change_id ";
+                        WHERE usr_id = $row_ar->rol_last_change_id ";
             $result = mysql_query($sql, $g_adm_con);
             db_error($result, true);
             $row = mysql_fetch_array($result);
 
             echo "<div style=\"margin-top: 6px;\">
                <span style=\"font-size: 10pt\">
-               Letzte &Auml;nderung am ". mysqldatetime("d.m.y h:i", $row_ar->ar_last_change).
+               Letzte &Auml;nderung am ". mysqldatetime("d.m.y h:i", $row_ar->rol_last_change).
                " durch $row[0] $row[1]
                </span>
             </div>";

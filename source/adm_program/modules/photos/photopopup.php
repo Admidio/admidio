@@ -33,12 +33,12 @@
 	require("../../system/session_check.php");
 	
 //&Uuml;bernahme der &Uuml;bergebenen variablen
-   $ap_id= $_GET['ap_id'];
+   $pho_id= $_GET['pho_id'];
    $bild= $_GET['bild'];
 //erfassen der Veranstaltung
 	$sql = "	SELECT *
 				FROM ". TBL_PHOTOS. "
-				WHERE (ap_id ='$ap_id')";
+				WHERE (pho_id ='$pho_id')";
 	$result = mysql_query($sql, $g_adm_con);
 	db_error($result);
 	$adm_photo = mysql_fetch_array($result);
@@ -48,7 +48,7 @@
 	$last=$bild-1;
 	$next=$bild+1;
 //Speicherort
-	$ordner = "../../../adm_my_files/photos/".$adm_photo["ap_begin"]."_".$adm_photo["ap_id"];
+	$ordner = "../../../adm_my_files/photos/".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"];
 
    //Anfang HTML
    echo "
@@ -73,17 +73,17 @@
    <div style=\"margin-top: 5px; margin-bottom: 5px;\" align=\"center\">
    <div class=\"formHead\" style=\"width: 95%\">$adm_photo[2]</div>
    <div class=\"formBody\" style=\"width: 95%; height: 520px;\">";
-      echo"Datum: ".mysqldate("d.m.y", $adm_photo["ap_begin"]);
-         if($adm_photo["ap_end"] != $adm_photo["ap_begin"])echo " bis ".mysqldate("d.m.y", $adm_photo["ap_end"]);
-		echo "<br>Fotos von: ".$adm_photo["ap_photographers"]."<br><br>";
+      echo"Datum: ".mysqldate("d.m.y", $adm_photo["pho_begin"]);
+         if($adm_photo["pho_end"] != $adm_photo["pho_begin"])echo " bis ".mysqldate("d.m.y", $adm_photo["pho_end"]);
+		echo "<br>Fotos von: ".$adm_photo["pho_photographers"]."<br><br>";
      //Vor und zurück buttons
 	   if($last>0){
-			echo"<button name=\"back\" type=\"button\" value=\"back\" style=\"width: 130px;\" onclick=\"self.location.href='photopopup.php?bild=$last&ap_id=$ap_id'\">
+			echo"<button name=\"back\" type=\"button\" value=\"back\" style=\"width: 130px;\" onclick=\"self.location.href='photopopup.php?bild=$last&pho_id=$pho_id'\">
               <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Letztes Bild\">  Letztes Bild
            </button>  ";
 		}
 		if($next<=$bilder){
-		echo"<button name=\"forward\" type=\"button\" value=\"forward\" style=\"width: 130px;\" onclick=\"self.location.href='photopopup.php?bild=$next&ap_id=$ap_id'\"> N&auml;chstes Bild
+		echo"<button name=\"forward\" type=\"button\" value=\"forward\" style=\"width: 130px;\" onclick=\"self.location.href='photopopup.php?bild=$next&pho_id=$pho_id'\"> N&auml;chstes Bild
 		 			<img src=\"$g_root_path/adm_program/images/forward.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"N&auml;chstes Bild\">
            </button>";
 		}

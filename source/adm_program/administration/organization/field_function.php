@@ -8,7 +8,7 @@
  *
  * Uebergaben:
  *
- * auf_id: ID des Feldes
+ * usf_id: ID des Feldes
  * mode:   1 - Feld anlegen oder updaten
  *         2 - Feld loeschen
  * url :   URL von der die aufrufende Seite aufgerufen wurde
@@ -53,12 +53,12 @@ if($_GET['mode'] == 1)
    if(strlen(trim($_POST['name'])) > 0
    && strlen(trim($_POST['typ'])) > 0)
    {
-      if(!($_GET['auf_id'] > 0))
+      if(!($_GET['usf_id'] > 0))
       {
          // Schauen, ob die Rolle bereits existiert
          $sql    = "SELECT COUNT(*) FROM ". TBL_USER_FIELDS. "
-                     WHERE auf_ag_shortname LIKE '$g_organization'
-                       AND auf_name         LIKE {0}";
+                     WHERE usf_org_shortname LIKE '$g_organization'
+                       AND usf_name         LIKE {0}";
          $sql    = prepareSQL($sql, array($_POST['name']));
          $result = mysql_query($sql, $g_adm_con);
          db_error($result);
@@ -77,24 +77,24 @@ if($_GET['mode'] == 1)
       else
          $locked = 0;
 
-      if($_GET['auf_id'] > 0)
+      if($_GET['usf_id'] > 0)
       {
          $sql = "UPDATE ". TBL_USER_FIELDS. "
-                    SET auf_name        = {0}
-                      , auf_description = {1}
-                      , auf_type        = {2}
-                      , auf_locked      = $locked
-                  WHERE auf_id = {3}";
+                    SET usf_name        = {0}
+                      , usf_description = {1}
+                      , usf_type        = {2}
+                      , usf_locked      = $locked
+                  WHERE usf_id = {3}";
       }
       else
       {
          // Feld in Datenbank hinzufuegen
-         $sql    = "INSERT INTO ". TBL_USER_FIELDS. " (auf_ag_shortname, auf_name, auf_description,
-                                                auf_type, auf_locked)
+         $sql    = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_shortname, usf_name, usf_description,
+                                                usf_type, usf_locked)
                     VALUES ('$g_organization', {0}, {1}, {2}, $locked) ";
       }
       $sql    = prepareSQL($sql, array(trim($_POST['name']), trim($_POST['description']),
-                                       trim($_POST['typ']), $_GET['auf_id']));
+                                       trim($_POST['typ']), $_GET['usf_id']));
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
    }
@@ -123,14 +123,14 @@ elseif($_GET['mode'] == 2)
 
    // erst die Userdaten zum Feld loeschen
    $sql    = "DELETE FROM ". TBL_USER_DATA. "
-               WHERE aud_auf_id = {0}";
-   $sql    = prepareSQL($sql, array($_GET['auf_id']));
+               WHERE usd_usf_id = {0}";
+   $sql    = prepareSQL($sql, array($_GET['usf_id']));
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
 
    $sql    = "DELETE FROM ". TBL_USER_FIELDS. "
-               WHERE auf_id = {0}";
-   $sql    = prepareSQL($sql, array($_GET['auf_id']));
+               WHERE usf_id = {0}";
+   $sql    = prepareSQL($sql, array($_GET['usf_id']));
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
 

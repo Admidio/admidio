@@ -63,40 +63,40 @@ class TblUsers
 	// User mit der uebergebenen ID aus der Datenbank auslesen
    function getUser($user_id)
    {
-      $sql = "SELECT * FROM ". TBL_USERS. " WHERE au_id = $user_id";
+      $sql = "SELECT * FROM ". TBL_USERS. " WHERE usr_id = $user_id";
 
       $result = mysql_query($sql, $this->db_connection);
 
       if($row = mysql_fetch_object($result))
       {
-         $this->id         = $row->au_id;
-         $this->last_name  = $row->au_name;
-         $this->first_name = $row->au_vorname;
-         $this->address    = $row->au_adresse;
-         $this->zip_code   = $row->au_plz;
-         $this->city       = $row->au_ort;
-         $this->country    = $row->au_land;
-         $this->phone      = $row->au_tel1;
-         $this->mobil      = $row->au_mobil;
-         $this->fax        = $row->au_fax;
-         if($row->au_geburtstag == "0000-00-00")
+         $this->id         = $row->usr_id;
+         $this->last_name  = $row->usr_last_name;
+         $this->first_name = $row->usr_first_name;
+         $this->address    = $row->usr_address;
+         $this->zip_code   = $row->usr_zip_code;
+         $this->city       = $row->usr_city;
+         $this->country    = $row->usr_country;
+         $this->phone      = $row->usr_phone;
+         $this->mobile     = $row->usr_mobile;
+         $this->fax        = $row->usr_fax;
+         if($row->usr_birthday == "0000-00-00")
             $this->birthday = "";
           else
-            $this->birthday = $row->au_geburtstag;
-         $this->gender        = "";
-         $this->email         = $row->au_mail;
-         $this->homepage      = $row->au_weburl;
-         $this->login_name    = $row->au_login;
-         $this->password      = $row->au_password;
-         $this->last_login    = $row->au_last_login;
-         $this->act_login     = $row->au_act_login;
-         $this->num_login     = $row->au_num_login;
-         $this->invalid_login = $row->au_invalid_login;
-         $this->num_invalid   = $row->au_num_invalid;
-         $this->last_change   = $row->au_last_change;
-         $this->usr_id_change = $row->au_last_change_id;
-   		$this->valid         = "";
-   		$this->valid_shortname = "";
+            $this->birthday = $row->usr_birthday;
+         $this->gender        = $row->usr_gender;
+         $this->email         = $row->usr_email;
+         $this->homepage      = $row->usr_homepage;
+         $this->login_name    = $row->usr_login_name;
+         $this->password      = $row->usr_password;
+         $this->last_login    = $row->usr_last_login;
+         $this->act_login     = $row->usr_act_login;
+         $this->num_login     = $row->usr_num_login;
+         $this->invalid_login = $row->usr_invalid_login;
+         $this->num_invalid   = $row->usr_num_invalid;
+         $this->last_change   = $row->usr_last_change;
+         $this->usr_id_change = $row->usr_usr_id_change;
+   		$this->valid         = $row->usr_valid;
+   		$this->reg_org_shortname = $row->usr_reg_org_shortname;
       }
       else
       	$this->clear();
@@ -129,7 +129,7 @@ class TblUsers
 		$this->last_change   = "";
 		$this->usr_id_change = 0;
 		$this->valid         = 1;
-		$this->valid_shortname = "";
+		$this->reg_org_shortname = "";
    }
 
    // aktuelle Userdaten in der Datenbank updaten
@@ -141,30 +141,31 @@ class TblUsers
    	{
    		$act_date = date("Y-m-d H:i:s", time());
 
-			$sql = "UPDATE ". TBL_USERS. " SET au_name    = '$this->last_name'
-                                          , au_vorname = '$this->first_name'
-														, au_adresse = '$this->address'
-														, au_plz     = '$this->zip_code'
-														, au_ort     = '$this->city'
-														, au_land    = '$this->country'
-														, au_tel1    = '$this->phone'
-        												, au_mobil   = '$this->mobile'
-                                          , au_fax     = '$this->fax'
-														, au_geburtstag = '$this->birthday'
-														, au_mail       = '$this->email'
-														, au_weburl     = '$this->homepage'
-														, au_last_login = '$this->last_login'
-														, au_act_login  = '$this->act_login'
-														, au_num_login  = $this->num_login
-														, au_invalid_login  = '$this->invalid_login'
-														, au_num_invalid    = $this->num_invalid
-														, au_last_change    = '$act_date'
-														, au_last_change_id = $login_user_id ";
+			$sql = "UPDATE ". TBL_USERS. " SET usr_last_name  = '$this->last_name'
+                                          , usr_first_name = '$this->first_name'
+														, usr_address    = '$this->address'
+														, usr_zip_code   = '$this->zip_code'
+														, usr_city       = '$this->city'
+														, usr_country    = '$this->country'
+														, usr_phone      = '$this->phone'
+        												, usr_mobile     = '$this->mobile'
+                                          , usr_fax        = '$this->fax'
+														, usr_birthday   = '$this->birthday'
+														, usr_gender     = '$this->gender'
+														, usr_email      = '$this->email'
+														, usr_homepage   = '$this->homepage'
+														, usr_last_login = '$this->last_login'
+														, usr_act_login  = '$this->act_login'
+														, usr_num_login  = $this->num_login
+														, usr_invalid_login = '$this->invalid_login'
+														, usr_num_invalid   = $this->num_invalid
+														, usr_last_change   = '$act_date'
+														, usr_usr_id_change = $login_user_id ";
 			if(strlen($this->login_name) == 0)
-				$sql = $sql. ", au_login = NULL, au_password = NULL ";
+				$sql = $sql. ", usr_login_name = NULL, usr_password = NULL ";
 			else
-				$sql = $sql. ", au_login = '$this->login_name', au_password = '$this->password' ";
-			$sql = $sql. " WHERE au_id = $this->id ";
+				$sql = $sql. ", usr_login_name = '$this->login_name', usr_password = '$this->password' ";
+			$sql = $sql. " WHERE usr_id = $this->id ";
 			$result = mysql_query($sql, $this->db_connection);
 		   if(!$result) { echo "Error: ". mysql_error(); exit(); }
 		   return 0;
@@ -181,15 +182,15 @@ class TblUsers
    	{
    		$act_date = date("Y-m-d H:i:s", time());
 
-   		$sql = "INSERT INTO ". TBL_USERS. " (au_name, au_vorname, au_adresse, au_plz,
-									  au_ort, au_land, au_tel1, au_mobil, au_fax, au_geburtstag,
-									  au_mail, au_weburl, au_last_login, au_act_login, au_num_login,
-									  au_invalid_login, au_num_invalid, au_last_change, au_last_change_id,
-									  au_login, au_password )
+   		$sql = "INSERT INTO ". TBL_USERS. " (usr_last_name, usr_first_name, usr_address, usr_zip_code,
+									  usr_city, usr_country, usr_phone, usr_mobile, usr_fax, usr_birthday, 
+									  usr_gender, usr_email, usr_homepage, usr_last_login, usr_act_login, 
+									  usr_num_login, usr_invalid_login, usr_num_invalid, usr_last_change, 
+									  usr_usr_id_change, usr_login_name, usr_password )
 							 VALUES ('$this->last_name', '$this->first_name', '$this->address', '$this->zip_code',
-										'$this->city', '$this->country', '$this->phone', '$this->mobile', '$this->fax', '$this->birthday',
-										'$this->email', '$this->homepage', NULL, NULL, 0,
-										NULL, 0, '$act_date', $login_user_id, ";
+										'$this->city', '$this->country', '$this->phone', '$this->mobile', '$this->fax', '$this->birthday', 
+										'$this->gender', '$this->email', '$this->homepage', NULL, NULL, 
+										0,	NULL, 0, '$act_date', $login_user_id, ";
 			if(strlen($this->login_name) == 0)
 				$sql = $sql. " NULL, NULL ) ";
 			else

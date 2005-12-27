@@ -41,9 +41,9 @@ if(!isModerator())
 
 // Alle Rollen auflisten, die der Webmaster sehen darf
 $sql    = "SELECT * FROM ". TBL_ROLES. "
-            WHERE ar_ag_shortname = '$g_organization'
-              AND ar_valid        = 1
-            ORDER BY ar_funktion ";
+            WHERE rol_org_shortname = '$g_organization'
+              AND rol_valid        = 1
+            ORDER BY rol_name ";
 $result = mysql_query($sql, $g_adm_con);
 db_error($result, 1);
 
@@ -90,54 +90,54 @@ require("../../../adm_config/body_top.php");
       while($row = mysql_fetch_object($result))
       {
          echo "<tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
-                  <td align=\"left\">&nbsp;<a href=\"$g_root_path/adm_program/modules/lists/lists_show.php?typ=address&amp;mode=html&amp;rolle=". urlencode($row->ar_funktion). "\">$row->ar_funktion</a></td>
+                  <td align=\"left\">&nbsp;<a href=\"$g_root_path/adm_program/modules/lists/lists_show.php?typ=address&amp;mode=html&amp;rolle=". urlencode($row->rol_name). "\">$row->rol_name</a></td>
                   <td align=\"center\">";
-                     if($row->ar_r_moderation == 1)
+                     if($row->rol_moderation == 1)
                         echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/wand.png\" alt=\"Moderation (Benutzer &amp; Rollen verwalten uvm.)\" title=\"Moderation (Benutzer &amp; Rollen verwalten uvm.)\">";
                   echo "</td>
                   <td align=\"center\">";
-                     if($row->ar_r_user_bearbeiten == 1)
+                     if($row->rol_edit_user == 1)
                         echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/person.png\" alt=\"Daten aller Benutzer bearbeiten\" title=\"Daten aller Benutzer bearbeiten\">";
                   echo "</td>
                   <td align=\"center\">";
-                     if($row->ar_r_termine == 1)
+                     if($row->rol_dates == 1)
                         echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/history.png\" alt=\"Termine erfassen und bearbeiten\" title=\"Termine erfassen und bearbeiten\">";
                   echo "</td>
                   <td align=\"center\">";
-                     if($row->ar_r_foto == 1)
+                     if($row->rol_photo == 1)
                         echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/photo.png\" alt=\"Fotos hochladen und bearbeiten\" title=\"Fotos hochladen und bearbeiten\">";
                   echo "</td>
                   <td align=\"center\">";
-                     if($row->ar_r_download == 1)
+                     if($row->rol_download == 1)
                         echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/download.png\" alt=\"Downloads hochladen und bearbeiten\" title=\"Downloads hochladen und bearbeiten\">";
                   echo "</td>
                   <td align=\"center\">";
-                     if($row->ar_r_mail_logout == 1)
+                     if($row->rol_mail_logout == 1)
                         echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/mail-open.png\" alt=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\" title=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\">";
                   echo "</td>
                   <td align=\"center\">";
-                     if($row->ar_r_mail_login == 1)
+                     if($row->rol_mail_login == 1)
                         echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/mail-open-key.png\" alt=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\" title=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\">";
                   echo "</td>
                   <td align=\"center\">";
-                     if($row->ar_r_locked == 1)
+                     if($row->rol_locked == 1)
                         echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Rolle nur für Moderatoren sichtbar\" title=\"Rolle nur für Moderatoren sichtbar\">";
                   echo "</td>
                   <td align=\"center\">";
-                     if($row->ar_gruppe == 1)
+                     if($row->rol_gruppe == 1)
                         echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/gruppe.png\" alt=\"Diese Rolle ist eine Gruppe\" title=\"Diese Rolle ist eine Gruppe\">";
                   echo "</td>
                   <td align=\"center\">
-                     <a href=\"$g_root_path/adm_program/administration/roles/roles_new.php?ar_id=$row->ar_id\">
+                     <a href=\"$g_root_path/adm_program/administration/roles/roles_new.php?rol_id=$row->rol_id\">
                         <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Rolle bearbeiten\" title=\"Rolle bearbeiten\"></a>";
 
-                     if($row->ar_funktion == "Webmaster")
+                     if($row->rol_name == "Webmaster")
                         echo "&nbsp;";
                      else
                      {
-                        $load_url = urlencode("$g_root_path/adm_program/administration/roles/roles_function.php?ar_id=$row->ar_id&amp;mode=3");
+                        $load_url = urlencode("$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$row->rol_id&amp;mode=3");
                         echo "&nbsp;
-                        <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=remove_rolle&amp;err_text=$row->ar_funktion&amp;err_head=Löschen&amp;button=2&amp;url=$load_url\">
+                        <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=remove_rolle&amp;err_text=$row->rol_name&amp;err_head=Löschen&amp;button=2&amp;url=$load_url\">
                            <img src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"Rolle l&ouml;schen\" title=\"Rolle l&ouml;schen\"></a>";
                      }
                   echo "</td>

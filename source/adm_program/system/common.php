@@ -39,18 +39,18 @@ if(strlen($g_tbl_praefix) == 0)
 	$g_tbl_praefix = "adm";
 
 // Defines fuer alle Datenbanktabellen
-define("TBL_ANNOUNCEMENTS", $g_tbl_praefix. "_ankuendigungen");
-define("TBL_PHOTOS", $g_tbl_praefix. "_photo");
-define("TBL_ORGANIZATIONS", $g_tbl_praefix. "_gruppierung");
-define("TBL_MEMBERS", $g_tbl_praefix. "_mitglieder");
-define("TBL_NEW_USER", $g_tbl_praefix. "_new_user");
-define("TBL_ROLES", $g_tbl_praefix. "_rolle");
-define("TBL_SESSIONS", $g_tbl_praefix. "_session");
-define("TBL_DATES", $g_tbl_praefix. "_termine");
-define("TBL_USERS", $g_tbl_praefix. "_user");
-define("TBL_USER_DATA", $g_tbl_praefix. "_user_data");
-define("TBL_USER_FIELDS", $g_tbl_praefix. "_user_field");
-define("TBL_ROLE_TYPES", $g_tbl_praefix. "_role_types");
+define("TBL_ANNOUNCEMENTS",    $g_tbl_praefix. "_announcements");
+define("TBL_DATES",            $g_tbl_praefix. "_dates");
+define("TBL_MEMBERS",          $g_tbl_praefix. "_members");
+define("TBL_ORGANIZATIONS",    $g_tbl_praefix. "_organizations");
+define("TBL_PHOTOS",           $g_tbl_praefix. "_photos");
+define("TBL_ROLE_DEPENDENCIES",$g_tbl_praefix. "_role_dependencies");
+define("TBL_ROLE_TYPES",       $g_tbl_praefix. "_role_categories");
+define("TBL_ROLES",            $g_tbl_praefix. "_roles");
+define("TBL_SESSIONS",         $g_tbl_praefix. "_sessions");
+define("TBL_USERS",            $g_tbl_praefix. "_users");
+define("TBL_USER_DATA",        $g_tbl_praefix. "_user_data");
+define("TBL_USER_FIELDS",      $g_tbl_praefix. "_user_fields");
 
  // Verbindung zu Datenbank herstellen
 $g_adm_con = mysql_connect ($g_adm_srv, $g_adm_usr, $g_adm_pw);

@@ -8,7 +8,7 @@
  *
  * Uebergaben:
  *
- * ag_id: ID der Gruppierung, die bearbeitet werden soll
+ * org_id: ID der Gruppierung, die bearbeitet werden soll
  * url:   URL auf die danach weitergeleitet wird
  *
  ******************************************************************************

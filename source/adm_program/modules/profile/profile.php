@@ -52,13 +52,13 @@ else
    if(editUser())
    {
       // jetzt noch schauen, ob User überhaupt Mitglied in der Gliedgemeinschaft ist
-      $sql = "SELECT am_id
+      $sql = "SELECT mem_id
                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-               WHERE ar_ag_shortname = '$g_organization'
-                 AND ar_valid        = 1
-                 AND am_ar_id        = ar_id
-                 AND am_valid        = 1
-                 AND am_au_id        = {0}";
+               WHERE rol_org_shortname = '$g_organization'
+                 AND rol_valid        = 1
+                 AND mem_rol_id        = rol_id
+                 AND mem_valid        = 1
+                 AND mem_usr_id        = {0}";
       $sql    = prepareSQL($sql, array($_GET['user_id']));
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
@@ -142,14 +142,14 @@ require("../../../adm_config/body_top.php");
                      || strlen($user->city)  > 0 ))
                   {
                      // Button mit Karte anzeigen
-                     $map_url = "http://link2.map24.com/?lid=8a24364a&maptype=JAVA&street0=$user->address";
+                     $mpho_url = "http://link2.map24.com/?lid=8a24364a&maptype=JAVA&street0=$user->address";
                      if(strlen($user->zip_code)  > 0)
-                        $map_url = $map_url. "&zip0=$user->zip_code";
+                        $mpho_url = $mpho_url. "&zip0=$user->zip_code";
                      if(strlen($user->m_ort)  > 0)
-                        $map_url = $map_url. "&city0=$user->city";
+                        $mpho_url = $mpho_url. "&city0=$user->city";
 
                      echo "<br />
-                     <span style=\"font-size: 8pt;\">( <a href=\"$map_url\" target=\"_blank\">Stadtplan</a>";
+                     <span style=\"font-size: 8pt;\">( <a href=\"$mpho_url\" target=\"_blank\">Stadtplan</a>";
 
                      if($g_current_user->id != $a_user_id)
                      {
@@ -231,7 +231,7 @@ require("../../../adm_config/body_top.php");
                      if($g_current_organization->mail_extern == 1)
                         $mail_link = "mailto:$user->email";
                      else
-                        $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?au_id=$user->id";
+                        $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?usr_id=$user->id";
                      echo "<a href=\"$mail_link\">
                         <img src=\"$g_root_path/adm_program/images/mail.png\" style=\"vertical-align: middle;\" alt=\"E-Mail an $user->email schreiben\"
                         title=\"E-Mail an $user->email schreiben\" border=\"0\"></a>
@@ -260,13 +260,13 @@ require("../../../adm_config/body_top.php");
 
          <div style=\"width: 34%; float: left\">";
             // alle zugeordneten Messengerdaten einlesen
-            $sql = "SELECT auf_name, auf_description, aud_value
+            $sql = "SELECT usf_name, usf_description, usd_value
                       FROM ". TBL_USER_DATA. ", ". TBL_USER_FIELDS. "
-                     WHERE aud_au_id        = $user->id
-                       AND aud_auf_id       = auf_id
-                       AND auf_ag_shortname IS NULL
-                       AND auf_type         = 'MESSENGER'
-                     ORDER BY auf_name ASC ";
+                     WHERE usd_usr_id        = $user->id
+                       AND usd_usf_id       = usf_id
+                       AND usf_org_shortname IS NULL
+                       AND usf_type         = 'MESSENGER'
+                     ORDER BY usf_name ASC ";
             $result_msg = mysql_query($sql, $g_adm_con);
             db_error($result_msg, true);
             $count_msg = mysql_num_rows($result_msg);
@@ -275,28 +275,28 @@ require("../../../adm_config/body_top.php");
             if(isModerator())
             {
                // auch gesperrte Rollen, aber nur von dieser Gruppierung anzeigen
-               $sql    = "SELECT ar_funktion, ar_ag_shortname, am_leiter
+               $sql    = "SELECT rol_name, rol_org_shortname, mem_leader
                             FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-                           WHERE am_ar_id = ar_id
-                             AND am_valid = 1
-                             AND am_au_id = $a_user_id
-                             AND ar_valid = 1
-                             AND (  ar_ag_shortname LIKE '$g_organization'
-                                 OR (   ar_ag_shortname NOT LIKE '$g_organization'
-                                    AND ar_r_locked = 0 ))
-                           ORDER BY ar_ag_shortname, ar_funktion ";
+                           WHERE mem_rol_id = rol_id
+                             AND mem_valid = 1
+                             AND mem_usr_id = $a_user_id
+                             AND rol_valid = 1
+                             AND (  rol_org_shortname LIKE '$g_organization'
+                                 OR (   rol_org_shortname NOT LIKE '$g_organization'
+                                    AND rol_locked = 0 ))
+                           ORDER BY rol_org_shortname, rol_name ";
             }
             else
             {
                // kein Moderator, dann keine gesperrten Rollen anzeigen
-               $sql    = "SELECT ar_funktion, ar_ag_shortname, am_leiter
+               $sql    = "SELECT rol_name, rol_org_shortname, mem_leader
                             FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-                           WHERE am_ar_id    = ar_id
-                             AND am_valid    = 1
-                             AND am_au_id    = $a_user_id
-                             AND ar_valid    = 1
-                             AND ar_r_locked = 0
-                           ORDER BY ar_ag_shortname, ar_funktion";
+                           WHERE mem_rol_id    = rol_id
+                             AND mem_valid    = 1
+                             AND mem_usr_id    = $a_user_id
+                             AND rol_valid    = 1
+                             AND rol_locked = 0
+                           ORDER BY rol_org_shortname, rol_name";
             }
             $result_role = mysql_query($sql, $g_adm_con);
             db_error($result_role, true);
@@ -316,23 +316,23 @@ require("../../../adm_config/body_top.php");
                {
                   if($i > 0) echo "<br />";
                   echo "<img src=\"$g_root_path/adm_program/images/";
-                  if($row->auf_name == 'AIM')
+                  if($row->usf_name == 'AIM')
                       echo "aim.png";
-                  elseif($row->auf_name == 'Google Talk')
+                  elseif($row->usf_name == 'Google Talk')
                       echo "google.gif";
-                  elseif($row->auf_name == 'ICQ')
+                  elseif($row->usf_name == 'ICQ')
                       echo "icq.png";
-                  elseif($row->auf_name == 'MSN')
+                  elseif($row->usf_name == 'MSN')
                       echo "msn.png";
-                  elseif($row->auf_name == 'Skype')
+                  elseif($row->usf_name == 'Skype')
                       echo "skype.png";
-                  elseif($row->auf_name == 'Yahoo')
+                  elseif($row->usf_name == 'Yahoo')
                       echo "yahoo.png";
-                  echo "\" style=\"vertical-align: middle;\" alt=\"$row->auf_description\" title=\"$row->auf_description\" />";
-                  if(strlen($row->aud_value) > 20)
-                     echo "<span style=\"font-size: 8pt;\">&nbsp;&nbsp;$row->aud_value</span>";
+                  echo "\" style=\"vertical-align: middle;\" alt=\"$row->usf_description\" title=\"$row->usf_description\" />";
+                  if(strlen($row->usd_value) > 20)
+                     echo "<span style=\"font-size: 8pt;\">&nbsp;&nbsp;$row->usd_value</span>";
                   else
-                     echo "&nbsp;&nbsp;$row->aud_value";
+                     echo "&nbsp;&nbsp;$row->usd_value";
                   $i++;
                }
                echo "</div>";
@@ -340,7 +340,7 @@ require("../../../adm_config/body_top.php");
             if($count_role > 0)
             {
                // Rollen anzeigen
-               $sql = "SELECT ag_shortname FROM ". TBL_ORGANIZATIONS. "";
+               $sql = "SELECT org_shortname FROM ". TBL_ORGANIZATIONS. "";
                $result = mysql_query($sql, $g_adm_con);
                db_error($result, true);
 
@@ -358,9 +358,9 @@ require("../../../adm_config/body_top.php");
                   if($i > 0) echo "<br />";
 
                   if($count_grp > 1)
-                     echo "$row->ar_ag_shortname, ";
-                  echo $row->ar_funktion;
-                  if($row->am_leiter == 1) echo ", Leiter";
+                     echo "$row->rol_org_shortname, ";
+                  echo $row->rol_name;
+                  if($row->mem_leader == 1) echo ", Leiter";
                   $i++;
                }
                echo "</div>";
@@ -370,12 +370,12 @@ require("../../../adm_config/body_top.php");
          // gruppierungsspezifische Felder einlesen
          $sql = "SELECT *
                    FROM ". TBL_USER_FIELDS. " LEFT JOIN ". TBL_USER_DATA. "
-                     ON aud_auf_id = auf_id
-                    AND aud_au_id        = $user->id
-                  WHERE auf_ag_shortname = '$g_organization' ";
+                     ON usd_usf_id = usf_id
+                    AND usd_usr_id        = $user->id
+                  WHERE usf_org_shortname = '$g_organization' ";
          if(!isModerator())
-            $sql = $sql. " AND auf_locked = 0 ";
-         $sql = $sql. " ORDER BY auf_name ASC ";
+            $sql = $sql. " AND usf_locked = 0 ";
+         $sql = $sql. " ORDER BY usf_name ASC ";
          $result_field = mysql_query($sql, $g_adm_con);
          db_error($result_field, true);
          $count_field = mysql_num_rows($result_field);
@@ -395,7 +395,7 @@ require("../../../adm_config/body_top.php");
                   {
                      // 1. Spalte
                      echo "<div style=\"max-height: 25px;\">
-                        <div style=\"float: left; width: 20%; text-align: left\">$row_field->auf_name:</div>
+                        <div style=\"float: left; width: 20%; text-align: left\">$row_field->usf_name:</div>
                         <div style=\"";
                            if($i < $count_field) echo " float: left;  width: 30%; ";
                         echo "  position: relative; text-align: left\">";
@@ -403,21 +403,21 @@ require("../../../adm_config/body_top.php");
                   else
                   {
                      // 2. Spalte
-                        echo "<div style=\"float: left; width: 20%; position: relative; text-align: left\">$row_field->auf_name:</div>
+                        echo "<div style=\"float: left; width: 20%; position: relative; text-align: left\">$row_field->usf_name:</div>
                         <div style=\"text-align: left; position: relative;\">";
                   }
 
                   // Feldinhalt ausgeben
-                  if($row_field->auf_type == 'CHECKBOX')
+                  if($row_field->usf_type == 'CHECKBOX')
                   {
-                     if($row_field->aud_value == 1)
+                     if($row_field->usd_value == 1)
                         echo "&nbsp;<img src=\"$g_root_path/adm_program/images/checkbox_checked.gif\">";
                      else
                         echo "&nbsp;<img src=\"$g_root_path/adm_program/images/checkbox.gif\">";
                   }
                   else
                   {
-                     echo "$row_field->aud_value&nbsp;";
+                     echo "$row_field->usd_value&nbsp;";
                   }
 
                   echo "</div>";
