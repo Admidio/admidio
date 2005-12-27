@@ -118,12 +118,12 @@ elseif($_GET['mode'] == 2)
       $root_path = "http://". $root_path;
 
 	$file_content = str_replace("%PRAEFIX%", $_SESSION['praefix'], $file_content);
-   $file_content = str_replace("%SERVER%",  $_SESSION['server'], $file_content);
-   $file_content = str_replace("%USER%",    $_SESSION['user'],   $file_content);
+   $file_content = str_replace("%SERVER%",  $_SESSION['server'],  $file_content);
+   $file_content = str_replace("%USER%",    $_SESSION['user'],    $file_content);
    $file_content = str_replace("%PASSWORD%",  $_SESSION['password'], $file_content);
    $file_content = str_replace("%DATABASE%",  $_SESSION['database'], $file_content);
-   $file_content = str_replace("%ROOT_PATH%", $root_path,         $file_content);
-   $file_content = str_replace("%DOMAIN%", $_SERVER['HTTP_HOST'], $file_content);
+   $file_content = str_replace("%ROOT_PATH%", $root_path,            $file_content);
+   $file_content = str_replace("%DOMAIN%",    $_SERVER['HTTP_HOST'], $file_content);
    $file_content = str_replace("%ORGANIZATION%", $_SESSION['verein-name-kurz'], $file_content);
 
    // die erstellte Config-Datei an den User schicken
@@ -150,18 +150,17 @@ if(strlen($g_tbl_praefix) == 0)
 	$g_tbl_praefix = "adm";
 
 // Defines fuer alle Datenbanktabellen
-define("TBL_ANNOUNCEMENTS", $g_tbl_praefix. "_ankuendigungen");
-define("TBL_PHOTOS", $g_tbl_praefix. "_photo");
-define("TBL_ORGANIZATIONS", $g_tbl_praefix. "_gruppierung");
-define("TBL_MEMBERS", $g_tbl_praefix. "_mitglieder");
-define("TBL_NEW_USER", $g_tbl_praefix. "_new_user");
-define("TBL_ROLES", $g_tbl_praefix. "_rolle");
-define("TBL_SESSIONS", $g_tbl_praefix. "_session");
-define("TBL_DATES", $g_tbl_praefix. "_termine");
-define("TBL_USERS", $g_tbl_praefix. "_user");
-define("TBL_USER_DATA", $g_tbl_praefix. "_user_data");
-define("TBL_USER_FIELDS", $g_tbl_praefix. "_user_field");
-define("TBL_ROLE_TYPES", $g_tbl_praefix. "_role_types");
+define("TBL_ANNOUNCEMENTS",  $g_tbl_praefix. "_announcements");
+define("TBL_DATES",          $g_tbl_praefix. "_dates");
+define("TBL_MEMBERS",        $g_tbl_praefix. "_members");
+define("TBL_ORGANIZATIONS",  $g_tbl_praefix. "_organizations");
+define("TBL_PHOTOS",         $g_tbl_praefix. "_photos");
+define("TBL_ROLE_CATEGORIES",$g_tbl_praefix. "_role_categories");
+define("TBL_ROLES",          $g_tbl_praefix. "_roles");
+define("TBL_SESSIONS",       $g_tbl_praefix. "_sessions");
+define("TBL_USERS",          $g_tbl_praefix. "_users");
+define("TBL_USER_DATA",      $g_tbl_praefix. "_user_data");
+define("TBL_USER_FIELDS",    $g_tbl_praefix. "_user_fields");
 
 /*------------------------------------------------------------*/
 // Eingabefelder pruefen
@@ -224,13 +223,15 @@ if($_GET['mode'] == 1)
    $file     = fopen($filename, "r")
                or showError("Die Datei <b>db.sql</b> konnte nicht im Verzeichnis <b>adm_install</b> gefunden werden.");
    $content  = fread($file, filesize($filename));
-   $sql_arr = explode(";", $content);
+   $sql_arr  = explode(";", $content);
    fclose($file);
 
    foreach($sql_arr as $sql)
    {
-      if(strlen($sql) > 0)
+      if(strlen(trim($sql)) > 0)
       {
+			// Praefix fuer die Tabellen einsetzen und SQL-Statement ausfuehren
+			$sql = str_replace("%PRAEFIX%", $g_tbl_praefix, $sql);
          $result = mysql_query($sql, $connection);
          if(!$result) showError(mysql_error());
       }
@@ -239,32 +240,32 @@ if($_GET['mode'] == 1)
    // Default-Daten anlegen
 
    // Messenger anlegen
-   $sql = "INSERT INTO ". TBL_USER_FIELDS. " (auf_ag_shortname, auf_type, auf_name, auf_description)
+   $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_shortname, usf_type, usf_name, usf_description)
                 VALUES (NULL, 'MESSENGER', 'AIM', 'AOL Instant Messenger') ";
    $result = mysql_query($sql, $connection);
    if(!$result) showError(mysql_error());
 
-   $sql = "INSERT INTO ". TBL_USER_FIELDS. " (auf_ag_shortname, auf_type, auf_name, auf_description)
+   $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_shortname, usf_type, usf_name, usf_description)
                 VALUES (NULL, 'MESSENGER', 'ICQ', 'ICQ') ";
    $result = mysql_query($sql, $connection);
    if(!$result) showError(mysql_error());
 
-   $sql = "INSERT INTO ". TBL_USER_FIELDS. " (auf_ag_shortname, auf_type, auf_name, auf_description)
+   $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_shortname, usf_type, usf_name, usf_description)
                 VALUES (NULL, 'MESSENGER', 'MSN', 'MSN Messenger') ";
    $result = mysql_query($sql, $connection);
    if(!$result) showError(mysql_error());
 
-   $sql = "INSERT INTO ". TBL_USER_FIELDS. " (auf_ag_shortname, auf_type, auf_name, auf_description)
+   $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_shortname, usf_type, usf_name, usf_description)
                 VALUES (NULL, 'MESSENGER', 'Yahoo', 'Yahoo! Messenger') ";
    $result = mysql_query($sql, $connection);
    if(!$result) showError(mysql_error());
 
-   $sql = "INSERT INTO ". TBL_USER_FIELDS. " (auf_ag_shortname, auf_type, auf_name, auf_description)
+   $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_shortname, usf_type, usf_name, usf_description)
                 VALUES (NULL, 'MESSENGER', 'Skype', 'Skype') ";
    $result = mysql_query($sql, $connection);
    if(!$result) showError(mysql_error());
 
-   $sql = "INSERT INTO ". TBL_USER_FIELDS. " (auf_ag_shortname, auf_type, auf_name, auf_description)
+   $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_shortname, usf_type, usf_name, usf_description)
                 VALUES (NULL, 'MESSENGER', 'Google Talk', 'Google Talk') ";
    $result = mysql_query($sql, $connection);
    if(!$result) showError(mysql_error());
@@ -279,26 +280,33 @@ if($_GET['mode'] == 3)
       {
          if($i == 1)
             $filename = "upd_1_1_db.sql";
-         elseif($i == 2)
-            $filename = "upd_1_2_db.sql";
+        	else
+        		$filename = "";
 
-         $file     = fopen($filename, "r")
-                     or showError("Die Datei <b>$filename</b> konnte nicht im Verzeichnis <b>adm_install</b> gefunden werden.");
-         $content  = fread($file, filesize($filename));
-         $sql_arr = explode(";", $content);
-         fclose($file);
+			if(strlen($filename) > 0)
+			{
+				$file    = fopen($filename, "r")
+							  or showError("Die Datei <b>$filename</b> konnte nicht im Verzeichnis <b>adm_install</b> gefunden werden.");
+				$content = fread($file, filesize($filename));
+				$sql_arr = explode(";", $content);
+				fclose($file);
 
-         foreach($sql_arr as $sql)
-         {
-            if(strlen($sql) > 0)
-            {
-               $result = mysql_query($sql, $connection);
-               if(!$result) showError(mysql_error());
-            }
-         }
+				foreach($sql_arr as $sql)
+				{
+					if(strlen(trim($sql)) > 0)
+					{
+						// Praefix fuer die Tabellen einsetzen und SQL-Statement ausfuehren
+						$sql = str_replace("%PRAEFIX%", $g_tbl_praefix, $sql);
+						$result = mysql_query($sql, $connection);
+						if(!$result) showError(mysql_error());
+					}
+				}
+			}
 
          if($i == 1)
             include("upd_1_1_konv.php");
+         if($i == 2)
+            include("upd_1_2_konv.php");
       }
    }
    else
@@ -309,7 +317,7 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
 {
    // neue Gruppierung anlegen
 
-   $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. " WHERE ag_shortname = {0} ";
+   $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. " WHERE org_shortname = {0} ";
    $sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
    $result = mysql_query($sql, $connection);
    if(!$result) showError(mysql_error());
@@ -320,7 +328,7 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
                  W&auml;hlen Sie bitte einen anderen kurzen Namen !");
    }
 
-   $sql = "INSERT INTO ". TBL_ORGANIZATIONS. " (ag_shortname, ag_longname, ag_homepage)
+   $sql = "INSERT INTO ". TBL_ORGANIZATIONS. " (org_shortname, org_longname, org_homepage)
                 VALUES ({0}, {1}, '". $_SERVER['HTTP_HOST']. "') ";
    $sql = prepareSQL($sql, array($_POST['verein-name-kurz'], $_POST['verein-name-lang']));
    $result = mysql_query($sql, $connection);
@@ -329,9 +337,9 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
    // nun die Default-Rollen anlegen
 
 	// Webmaster
-   $sql = "INSERT INTO ". TBL_ROLES. " (ar_ag_shortname, ar_funktion, ar_beschreibung, ar_valid,
-                                  ar_r_moderation, ar_r_termine, ar_r_foto, ar_r_download,
-                                  ar_r_user_bearbeiten, ar_r_mail_logout, ar_r_mail_login)
+   $sql = "INSERT INTO ". TBL_ROLES. " (rol_org_shortname, rol_name, rol_description, rol_valid,
+                                  rol_moderation, rol_dates, rol_photo, rol_download,
+                                  rol_edit_user, rol_mail_logout, rol_mail_login)
                 VALUES ({0}, 'Webmaster', 'Gruppe der Administratoren des Systems', 1,
                                    1, 1, 1, 1, 1, 1, 1) ";
    $sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
@@ -339,9 +347,9 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
    if(!$result) showError(mysql_error());
 
 	// Mitglied
-   $sql = "INSERT INTO ". TBL_ROLES. " (ar_ag_shortname, ar_funktion, ar_beschreibung, ar_valid,
-                                  ar_r_moderation, ar_r_termine, ar_r_foto, ar_r_download,
-                                  ar_r_user_bearbeiten, ar_r_mail_logout, ar_r_mail_login)
+   $sql = "INSERT INTO ". TBL_ROLES. " (rol_org_shortname, rol_name, rol_description, rol_valid,
+                                  rol_moderation, rol_dates, rol_photo, rol_download,
+                                  rol_edit_user, rol_mail_logout, rol_mail_login)
                 VALUES ({0}, 'Mitglied', 'Alle Mitglieder der Organisation', 1,
                                    0, 0, 0, 0, 0, 0, 1) ";
    $sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
@@ -355,7 +363,7 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
    // User Webmaster anlegen
 
    $pw_md5 = md5($_POST['user-passwort']);
-   $sql = "INSERT INTO ". TBL_USERS. " (au_name, au_vorname, au_login, au_password)
+   $sql = "INSERT INTO ". TBL_USERS. " (usr_last_name, usr_first_name, usr_login_name, usr_password)
                 VALUES ({0}, {1}, {2}, '$pw_md5' ) ";
    $sql = prepareSQL($sql, array($_POST['user-surname'], $_POST['user-firstname'], $_POST['user-login']));
    $result = mysql_query($sql, $connection);
@@ -364,29 +372,29 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
    $user_id = mysql_insert_id();
 
    // Mitgliedschaft "Webmaster" anlegen
-   $sql = "SELECT ar_id FROM ". TBL_ROLES. "
-            WHERE ar_ag_shortname = {0}
-              AND ar_funktion     = 'Webmaster' ";
+   $sql = "SELECT rol_id FROM ". TBL_ROLES. "
+            WHERE rol_org_shortname = {0}
+              AND rol_name          = 'Webmaster' ";
    $sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
    $result = mysql_query($sql, $connection);
    if(!$result) showError(mysql_error());
    $row = mysql_fetch_array($result);
 
-   $sql = "INSERT INTO ". TBL_MEMBERS. " (am_ar_id, am_au_id, am_start, am_valid)
+   $sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin, mem_valid)
                 VALUES ($row[0], $user_id, NOW(), 1) ";
    $result = mysql_query($sql, $connection);
    if(!$result) showError(mysql_error());
 
    // Mitgliedschaft "Mitglied" anlegen
-   $sql = "SELECT ar_id FROM ". TBL_ROLES. "
-            WHERE ar_ag_shortname = {0}
-              AND ar_funktion     = 'Mitglied' ";
+   $sql = "SELECT rol_id FROM ". TBL_ROLES. "
+            WHERE rol_org_shortname = {0}
+              AND rol_name          = 'Mitglied' ";
    $sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
    $result = mysql_query($sql, $connection);
    if(!$result) showError(mysql_error());
    $row = mysql_fetch_array($result);
 
-   $sql = "INSERT INTO ". TBL_MEMBERS. " (am_ar_id, am_au_id, am_start, am_valid)
+   $sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin, mem_valid)
                 VALUES ($row[0], $user_id, NOW(), 1) ";
    $result = mysql_query($sql, $connection);
    if(!$result) showError(mysql_error());
