@@ -99,24 +99,20 @@ for($i = 0; $i < count($_POST); $i++)
 
 $main_sql = "SELECT usr_id, $sql_select
                FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
-              WHERE rol_org_shortname = \'$g_organization\'
-                AND rol_name     = \'$rolle\'
-                AND rol_valid        = 1
-                AND mem_rol_id        = rol_id
-                AND mem_valid        = $act_members
-                AND mem_leader       = 0
-                AND mem_usr_id        = usr_id
+              WHERE rol_org_shortname = '$g_organization'
+                AND rol_name   = '$rolle'
+                AND rol_valid  = 1
+                AND mem_rol_id = rol_id
+                AND mem_valid  = $act_members
+                AND mem_leader = 0
+                AND mem_usr_id = usr_id
                     $sql_where ";
 
 if(strlen($sql_orderby) > 0)
    $main_sql = $main_sql. " ORDER BY $sql_orderby ";
 
-//echo $main_sql; exit();
-
-$sql    = "UPDATE ". TBL_SESSIONS. " SET ses_list_sql = '$main_sql'
-            WHERE ses_session = '$g_session_id' ";
-$result = mysql_query($sql, $g_adm_con);
-db_error($result);
+// SQL-Statement in Session-Variable schreiben
+$_SESSION['mylist_sql'] = $main_sql;
 
 // weiterleiten zur allgemeinen Listeseite
 $location = "location: $g_root_path/adm_program/modules/lists/lists_show.php?typ=mylist&mode=html&rolle=$rolle";
