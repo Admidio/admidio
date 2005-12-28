@@ -77,12 +77,12 @@ while($row = mysql_fetch_object($result))
 
 // aktuelle Termine aus DB holen die zur Orga passen
 $sql = "SELECT * FROM ". TBL_DATES. "
-                     WHERE (  ddat_org_shortname = '$g_organization'
-                        OR (   ddat_global   = 1
-                           AND ddat_org_shortname IN ($organizations) ))
-                       AND (  ddat_begin >= sysdate()
-                           OR ddat_end >= sysdate() )
-                     ORDER BY ddat_begin ASC
+                     WHERE (  dat_org_shortname = '$g_organization'
+                        OR (   dat_global   = 1
+                           AND dat_org_shortname IN ($organizations) ))
+                       AND (  dat_begin >= sysdate()
+                           OR dat_end >= sysdate() )
+                     ORDER BY dat_begin ASC
                      LIMIT 10 ";
 
       $result = mysql_query($sql, $g_adm_con);
@@ -99,61 +99,61 @@ $rss=new RSSfeed("http://$g_current_organization->homepage","$g_current_organiza
 while($row = mysql_fetch_object($result))
       {
         // Den Autor des Termins ermitteln
-        $sql     = "SELECT * FROM ". TBL_USERS. " WHERE usr_id = $row->ddat_usr_id";
+        $sql     = "SELECT * FROM ". TBL_USERS. " WHERE usr_id = $row->dat_usr_id";
         $result2 = mysql_query($sql, $g_adm_con);
         db_error($result2);
         $user = mysql_fetch_object($result2);
 
         // Die Attribute fuer das Item zusammenstellen
-        $title			= mysqldatetime("d.m.y", $row->ddat_begin). " ". $row->ddat_headline;
+        $title			= mysqldatetime("d.m.y", $row->dat_begin). " ". $row->dat_headline;
 
-        $link			= "$g_root_path/adm_program/modules/dates/dates.php?id=". $row->ddat_id;
+        $link			= "$g_root_path/adm_program/modules/dates/dates.php?id=". $row->dat_id;
 
-        $description 	= "<b>$row->ddat_headline</b> <br />". mysqldatetime("d.m.y", $row->ddat_begin);
+        $description 	= "<b>$row->dat_headline</b> <br />". mysqldatetime("d.m.y", $row->dat_begin);
 
-        if (mysqldatetime("h:i", $row->ddat_begin) != "00:00")
+        if (mysqldatetime("h:i", $row->dat_begin) != "00:00")
                {
-                  $description =  $description. " um ".mysqldatetime("h:i", $row->ddat_begin). " Uhr";
+                  $description =  $description. " um ".mysqldatetime("h:i", $row->dat_begin). " Uhr";
                }
 
-        if($row->ddat_begin != $row->ddat_end)
+        if($row->dat_begin != $row->dat_end)
                {
                   $description =  $description. "<br /> bis <br />";
 
-                  if(mysqldatetime("d.m.y", $row->ddat_begin) != mysqldatetime("d.m.y", $row->ddat_end))
+                  if(mysqldatetime("d.m.y", $row->dat_begin) != mysqldatetime("d.m.y", $row->dat_end))
                   {
-                     $description = $description. mysqldatetime("d.m.y", $row->ddat_end);
+                     $description = $description. mysqldatetime("d.m.y", $row->dat_end);
 
-                     if (mysqldatetime("h:i", $row->ddat_end) != "00:00")
+                     if (mysqldatetime("h:i", $row->dat_end) != "00:00")
                         $description = $description. " um ";
                   }
 
-                  if (mysqldatetime("h:i", $row->ddat_end) != "00:00")
-                     $description = $description. mysqldatetime("h:i", $row->ddat_end). " Uhr";
+                  if (mysqldatetime("h:i", $row->dat_end) != "00:00")
+                     $description = $description. mysqldatetime("h:i", $row->dat_end). " Uhr";
                }
 
-        if ($row->ddat_location != "")
+        if ($row->dat_location != "")
                {
-                  $description = $description. "<br /><br />Treffpunkt:&nbsp;". strSpecialChars2Html($row->ddat_location);
+                  $description = $description. "<br /><br />Treffpunkt:&nbsp;". strSpecialChars2Html($row->dat_location);
                }
 
         if($g_current_organization->bbcode == 1)
         {
-        	  $description = $description. "<br /><br />". strSpecialChars2Html($bbcode->parse($row->ddat_description));
+        	  $description = $description. "<br /><br />". strSpecialChars2Html($bbcode->parse($row->dat_description));
         }
         else
         {
-           $description = $description. "<br /><br />". nl2br(strSpecialChars2Html($row->ddat_description));
+           $description = $description. "<br /><br />". nl2br(strSpecialChars2Html($row->dat_description));
         }
 
         $description = $description. "<br /><br /><a href=\"$link\">Link auf $g_current_organization->homepage</a>";
         $description = $description. "<br /><br /><i>Angelegt von ". strSpecialChars2Html($user->usr_first_name). " ". strSpecialChars2Html($user->usr_last_name);
-        $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->ddat_timestamp). "</i>";
+        $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->dat_timestamp). "</i>";
 
 
 
 
-        $pubDate		= date('r',strtotime($row->ddat_timestamp));
+        $pubDate		= date('r',strtotime($row->dat_timestamp));
 
 
 
