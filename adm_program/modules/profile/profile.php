@@ -183,13 +183,10 @@ require("../../../adm_config/body_top.php");
                echo "<div style=\"float: left; width: 28%; text-align: left\">Handy:</div>
                <div style=\"margin-left: 30%; text-align: left\">$user->mobile&nbsp;</div>";
 
-               if(strlen($user->fax) > 0)
-               {
-                  echo "<div style=\"float: left; width: 28%; text-align: left\">Fax:</div>
-                  <div style=\"margin-left: 30%; text-align: left\">$user->fax</div>";
-               }
+					echo "<div style=\"float: left; width: 28%; text-align: left\">Fax:</div>
+					<div style=\"margin-left: 30%; text-align: left\">$user->fax&nbsp;</div>";
 
-               // Block Geburtstag und Benutzer
+               // Block Geburtstag, Geschlecht und Benutzer
 
                echo "<div style=\"float: left; margin-top: 10px; width: 28%; text-align: left\">Geburtstag:</div>
                <div style=\"margin-top: 10px; margin-left: 30%; text-align: left\">";
@@ -219,6 +216,15 @@ require("../../../adm_config/body_top.php");
                   else
                      echo "&nbsp;";
                echo "</div>
+					<div style=\"float: left; width: 28%; text-align: left\">Geschlecht:</div>
+					<div style=\"margin-left: 30%; text-align: left\">";
+						if($user->gender == 1)
+							echo "m&auml;nnlich";
+						elseif($user->gender == 2)
+							echo "weiblich";
+						else
+							echo "&nbsp;";
+					echo "</div>
                <div style=\"float: left; width: 28%; text-align: left\">Benutzer:</div>
                <div style=\"margin-left: 30%; text-align: left\">$user->login_name&nbsp;</div>";
 
