@@ -106,8 +106,8 @@ if ($user_found >= 1)
 
       // Session-ID speichern
 
-      $sql = "INSERT INTO ". TBL_SESSIONS. " (ses_usr_id, ses_session, ses_timestamp, ses_longer_session, ses_org_shortname) ".
-             "VALUES ('$user_row->usr_id', '$user_session', '$login_datetime', $long_login, '$g_organization') ";
+      $sql = "INSERT INTO ". TBL_SESSIONS. " (ses_usr_id, ses_org_shortname, ses_session, ses_timestamp, ses_ip_address, ses_longer_session) ".
+             "VALUES ('$user_row->usr_id', '$g_organization', '$user_session', '$login_datetime', '". $_SERVER['REMOTE_ADDR']. "', $long_login) ";
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
 
