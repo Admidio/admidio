@@ -27,7 +27,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
- 
+
  require("../../system/common.php");
  require("../../system/session_check_login.php");
 
@@ -82,7 +82,6 @@ require("../../../adm_config/body_top.php");
          <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/mail-open.png\" alt=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\" title=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\"></th>
          <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/mail-open-key.png\" alt=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\" title=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\"></th>
          <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Rolle nur für Moderatoren sichtbar\" title=\"Rolle nur für Moderatoren sichtbar\"></th>
-         <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/gruppe.png\" alt=\"Diese Rolle ist eine Gruppe\" title=\"Diese Rolle ist eine Gruppe\"></th>
          <th class=\"tableHeader\">Bearbeiten</th>
       </tr>";
 
@@ -122,10 +121,6 @@ require("../../../adm_config/body_top.php");
                   <td align=\"center\">";
                      if($row->rol_locked == 1)
                         echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Rolle nur für Moderatoren sichtbar\" title=\"Rolle nur für Moderatoren sichtbar\">";
-                  echo "</td>
-                  <td align=\"center\">";
-                     if($row->rol_gruppe == 1)
-                        echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/gruppe.png\" alt=\"Diese Rolle ist eine Gruppe\" title=\"Diese Rolle ist eine Gruppe\">";
                   echo "</td>
                   <td align=\"center\">
                      <a href=\"$g_root_path/adm_program/administration/roles/roles_new.php?rol_id=$row->rol_id\">

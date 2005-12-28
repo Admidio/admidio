@@ -70,7 +70,7 @@ $role_id = $_GET["role_id"];
 			if($mitglieder_array[$user["usr_id"]][5]==1 && $_POST["member_".$user["usr_id"]]==false){
 				$mem_id = $mitglieder_array[$user["usr_id"]][0];
 				$sql ="	UPDATE ". TBL_MEMBERS. " SET mem_valid  = 0
-                                          , mem_ende   = NOW()
+                                          , mem_end   = NOW()
 														, mem_leader = 0
 							WHERE mem_id = '$mem_id'";                             
 				$result = mysql_query($sql, $g_adm_con);
@@ -80,7 +80,7 @@ $role_id = $_GET["role_id"];
 			if($mitglieder_array[$user["usr_id"]][5]==0 && $_POST["member_".$user["usr_id"]]==true){
 				$mem_id = $mitglieder_array[$user["usr_id"]][0];
 				$sql ="	UPDATE ". TBL_MEMBERS. " SET mem_valid  = 1
-                                          , mem_ende   = '0000-00-00'";
+                                          , mem_end   = '0000-00-00'";
             //Falls jemand auch Leiter werden soll
             if($_POST["leader_".$user["usr_id"]]==true)$sql .=", mem_leader = 1 ";
          	$sql .= "WHERE mem_id = '$mem_id'";
@@ -109,7 +109,7 @@ $role_id = $_GET["role_id"];
 		//Falls noch nie angemeldet gewesen aber jetzt werden soll
 		else if(!array_key_exists($user["usr_id"], $mitglieder_array) && $_POST["member_".$user["usr_id"]]==true){
 			$usr_id = $user["usr_id"];
-			$sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_start, mem_valid, mem_leader)
+			$sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin, mem_valid, mem_leader)
                  VALUES ($role_id, $usr_id, NOW(), 1";
          //Falls jemand direkt Leiter werden soll
          if($_POST["leader_".$user["usr_id"]]==true)$sql .=", 1) ";

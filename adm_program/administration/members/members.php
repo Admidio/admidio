@@ -162,23 +162,23 @@ require("../../../adm_config/body_top.php");
                   echo "</td>
                   <td align=\"left\">&nbsp;<a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->usr_id\">$row->usr_last_name,&nbsp;$row->usr_first_name</a></td>
                   <td align=\"center\">";
-                     if(strlen($row->usr_mail) > 0)
+                     if(strlen($row->usr_email) > 0)
                      {
                         if($g_current_organization->mail_extern == 1)
-                           $mail_link = "mailto:$row->usr_mail";
+                           $mail_link = "mailto:$row->usr_email";
                         else
                            $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?usr_id=$row->usr_id";
                         echo "<a href=\"$mail_link\"><img src=\"$g_root_path/adm_program/images/mail.png\"
-                           alt=\"E-Mail an $row->usr_mail schreiben\" title=\"E-Mail an $row->usr_mail schreiben\" border=\"0\"></a>";
+                           alt=\"E-Mail an $row->usr_email schreiben\" title=\"E-Mail an $row->usr_email schreiben\" border=\"0\"></a>";
                      }
                   echo "</td>
                   <td align=\"center\">";
-                     if(strlen($row->usr_weburl) > 0)
+                     if(strlen($row->usr_homepage) > 0)
                      {
-                        $row->usr_weburl = stripslashes($row->usr_weburl);
-                        if(substr_count(strtolower($row->usr_weburl), "http://") == 0)
-                           $row->usr_weburl = "http://". $row->usr_weburl;
-                        echo "<a href=\"$row->usr_weburl\" target=\"_blank\">
+                        $row->usr_homepage = stripslashes($row->usr_homepage);
+                        if(substr_count(strtolower($row->usr_homepage), "http://") == 0)
+                           $row->usr_homepage = "http://". $row->usr_homepage;
+                        echo "<a href=\"$row->usr_homepage\" target=\"_blank\">
                            <img src=\"$g_root_path/adm_program/images/globe.png\" alt=\"Homepage\" title=\"Homepage\" border=\"0\"></a>";
                      }
                   echo "</td>

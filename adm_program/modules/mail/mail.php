@@ -52,14 +52,15 @@ if(array_key_exists("rolle", $_GET))
    {
       $sql    = "SELECT rol_mail_login FROM ". TBL_ROLES. "
                   WHERE rol_org_shortname    = '$g_organization'
-                    AND UPPER(rol_name) = UPPER('". $_GET['rolle']. "') ";
+                    AND UPPER(rol_name) = UPPER('{0}') ";
    }
    else
    {
       $sql    = "SELECT rol_mail_logout FROM ". TBL_ROLES. "
                   WHERE rol_org_shortname    = '$g_organization'
-                    AND UPPER(rol_name) = UPPER('". $_GET['rolle']. "') ";
+                    AND UPPER(rol_name) = UPPER('{0}') ";
    }
+   $sql    = prepareSQL($sql, array($_GET['rolle']));
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
    $row = mysql_fetch_array($result);
@@ -124,7 +125,8 @@ require("../../../adm_config/body_top.php");
                if(array_key_exists("usr_id", $_GET))
                {
                   // usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
-                  $sql    = "SELECT usr_mail FROM ". TBL_USERS. " WHERE usr_id = '". $_GET['usr_id']. "' ";
+                  $sql    = "SELECT usr_email FROM ". TBL_USERS. " WHERE usr_id = '{0}' ";
+                  $sql    = prepareSQL($sql, array($_GET['usr_id']));
                   $result = mysql_query($sql, $g_adm_con);
                   db_error($result, true);
 
@@ -152,7 +154,7 @@ require("../../../adm_config/body_top.php");
                         $sql    = "SELECT rol_name FROM ". TBL_ROLES. "
                                     WHERE rol_org_shortname = '$g_organization'
                                       AND rol_mail_login = 1
-                                      AND rol_valid        = 1
+                                      AND rol_valid      = 1
                                     ORDER BY rol_name ";
                      }
                      else
@@ -161,7 +163,7 @@ require("../../../adm_config/body_top.php");
                                     WHERE rol_org_shortname = '$g_organization'
                                       AND rol_mail_login = 1
                                       AND rol_locked     = 0
-                                      AND rol_valid        = 1
+                                      AND rol_valid      = 1
                                     ORDER BY rol_name ";
                      }
                   }
@@ -170,7 +172,7 @@ require("../../../adm_config/body_top.php");
                      $sql    = "SELECT rol_name FROM ". TBL_ROLES. "
                                  WHERE rol_org_shortname  = '$g_organization'
                                    AND rol_mail_logout = 1
-                                   AND rol_valid         = 1
+                                   AND rol_valid       = 1
                                  ORDER BY rol_name ";
                   }
                   $result = mysql_query($sql, $g_adm_con);

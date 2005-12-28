@@ -73,7 +73,7 @@ echo "
 				var name   = element.name;
 				var pos_number = name.search('-') + 1;
 				var number = name.substr(pos_number, name.length - pos_number);
-				var role_name = 'fkt-' + number;
+				var role_name = 'role-' + number;
 				document.getElementById(role_name).checked = true;
 			}
    	}
@@ -85,7 +85,7 @@ echo "
 				var name   = element.name;
 				var pos_number = name.search('-') + 1;
 				var number = name.substr(pos_number, name.length - pos_number);
-				var role_name = 'leiter-' + number;
+				var role_name = 'leader-' + number;
 				document.getElementById(role_name).checked = false;
 			}
    	}
@@ -116,42 +116,42 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
          if(isModerator())
          {
             // Alle Rollen der Gruppierung auflisten
-            $sql    = "SELECT rol_name, rol_description, rol_gruppe, mem_usr_id, mem_leader
+            $sql    = "SELECT rol_name, rol_description, mem_usr_id, mem_leader
                          FROM ". TBL_ROLES. " LEFT JOIN ". TBL_MEMBERS. "
-                           ON rol_id    = mem_rol_id
+                           ON rol_id     = mem_rol_id
                           AND mem_usr_id = {0}
-                          AND mem_valid = 1
+                          AND mem_valid  = 1
                         WHERE rol_org_shortname = '$g_organization'
-                          AND rol_valid        = 1
+                          AND rol_valid  = 1
                         ORDER BY rol_name";
          }
          elseif(isGroupLeader())
          {
             // Alle Rollen auflisten, bei denen das Mitglied Leiter ist
-            $sql    = "SELECT br.rol_name, br.rol_description, br.rol_gruppe, mgl.mem_usr_id, mgl.mem_leader
+            $sql    = "SELECT br.rol_name, br.rol_description, mgl.mem_usr_id, mgl.mem_leader
                          FROM ". TBL_MEMBERS. " bm, ". TBL_ROLES. " br LEFT JOIN ". TBL_MEMBERS. " mgl
-                           ON br.rol_id     = mgl.mem_rol_id
+                           ON br.rol_id      = mgl.mem_rol_id
                           AND mgl.mem_usr_id = {0}
-                          AND mgl.mem_valid = 1
+                          AND mgl.mem_valid  = 1
                         WHERE bm.mem_usr_id  = $g_current_user->id
-                          AND bm.mem_valid  = 1
-                          AND bm.mem_leader = 1
-                          AND br.rol_id     = bm.mem_rol_id
+                          AND bm.mem_valid   = 1
+                          AND bm.mem_leader  = 1
+                          AND br.rol_id      = bm.mem_rol_id
                           AND br.rol_org_shortname = '$g_organization'
-                          AND br.rol_valid        = 1
-                          AND br.rol_locked     = 0
+                          AND br.rol_valid   = 1
+                          AND br.rol_locked  = 0
                         ORDER BY br.rol_name";
          }
          elseif(editUser())
          {
             // Alle Rollen auflisten, die keinen Moderatorenstatus haben
-            $sql    = "SELECT rol_name, rol_description, rol_gruppe, mem_usr_id, mem_leader
+            $sql    = "SELECT rol_name, rol_description, mem_usr_id, mem_leader
                          FROM ". TBL_ROLES. " LEFT JOIN ". TBL_MEMBERS. "
-                           ON rol_id    = mem_rol_id
+                           ON rol_id     = mem_rol_id
                           AND mem_usr_id = {0}
-                          AND mem_valid = 1
+                          AND mem_valid  = 1
                         WHERE rol_org_shortname = '$g_organization'
-                          AND rol_valid        = 1
+                          AND rol_valid      = 1
                           AND rol_moderation = 0
                           AND rol_locked     = 0
                         ORDER BY rol_name";
@@ -165,7 +165,7 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
          {
             echo "<tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
                <td style=\"text-align: center; vertical-align: top;\">
-                  <input type=\"checkbox\" id=\"fkt-$i\" name=\"fkt-$i\" ";
+                  <input type=\"checkbox\" id=\"role-$i\" name=\"role-$i\" ";
                      if($row->mem_usr_id > 0)
                         echo " checked ";
                         
@@ -175,28 +175,17 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
                         
                      echo " onclick=\"unmarkLeader(this)\" value=\"1\" />
                </td>
-               <td style=\"text-align: left; vertical-align: top;\"><label for=\"fkt-$i\">$row->rol_name</label></td>
+               <td style=\"text-align: left; vertical-align: top;\"><label for=\"role-$i\">$row->rol_name</label></td>
                <td style=\"text-align: left; vertical-align: top;\">$row->rol_description</td>
-               <td style=\"text-align: center; vertical-align: top;\">";
-                  if($row->rol_gruppe == 1)
-                  {
-                     echo "<input type=\"checkbox\" id=\"leiter-$i\" name=\"leiter-$i\" ";
-                     if($row->mem_leader > 0)
-                        echo " checked ";
-
-                     echo " onclick=\"markMember(this)\" value=\"1\" />";
-                  }
-                  else
-                     echo "&nbsp;";
-               echo "</td>
-               <td style=\"text-align: left; vertical-align: top;\">";
-                  if($row->rol_gruppe == 1)
-                  {
-                     echo "<label for=\"leiter-$i\">Leiter</label>";
-                  }
-                  else
-                     echo "&nbsp;";
-               echo "</td>
+               <td style=\"text-align: center; vertical-align: top;\">
+						<input type=\"checkbox\" id=\"leader-$i\" name=\"leader-$i\" ";
+						if($row->mem_leader > 0)
+							echo " checked ";
+						echo " onclick=\"markMember(this)\" value=\"1\" />
+               </td>
+               <td style=\"text-align: left; vertical-align: top;\">
+                  <label for=\"leader-$i\">Leiter</label>
+               </td>
             </tr>";
             $i++;
          }

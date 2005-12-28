@@ -37,18 +37,6 @@ require("../../system/session_check.php");
 
 // Rollen selektieren
 
-if(!isset($_GET["show"]))
-   $group = -1;
-else
-{
-   if($_GET["show"] == "all")
-      $group = -1;
-   elseif($_GET["show"] == "group")
-      $group = 1;
-   elseif($_GET["show"] == "nogroup")
-      $group = 0;
-}
-
 if(!isset($_GET["type"]))
    $member_valid = 1;
 else
@@ -64,22 +52,16 @@ if(isModerator())
 {
    $sql = "SELECT * FROM ". TBL_ROLES. "
             WHERE rol_org_shortname = '$g_organization' 
-              AND rol_valid        = 1 ";
-   if($group >= 0)
-      $sql .= " AND rol_gruppe = $group ";
-      
-   $sql .= " ORDER BY rol_name ";
+              AND rol_valid        = 1 
+            ORDER BY rol_name ";
 }
 else
 {
    $sql = "SELECT * FROM ". TBL_ROLES. "
             WHERE rol_org_shortname = '$g_organization'
               AND rol_locked     = 0
-              AND rol_valid        = 1 ";
-   if($group >= 0)
-      $sql .= " AND rol_gruppe = $group ";
-
-   $sql .= " ORDER BY rol_name ";
+              AND rol_valid        = 1 
+            ORDER BY rol_name ";
 }
 $result_lst = mysql_query($sql, $g_adm_con);
 db_error($result_lst);
@@ -211,30 +193,30 @@ require("../../../adm_config/body_top.php");
 
          if($member_valid)
          {
-            if(strlen(mysqldate("d.m.y", $row_lst->rol_datum_von)) > 0)
+            if(strlen(mysqldate("d.m.y", $row_lst->rol_start_date)) > 0)
             {
                echo "<div style=\"margin-top: 6px;\">
                         <div style=\"margin-left: 30px; width: 130px; text-align: left; float: left;\">Zeitraum:</div>
-                        <div style=\"text-align: left;\">". mysqldate("d.m.y", $row_lst->rol_datum_von). " bis ". mysqldate("d.m.y", $row_lst->rol_datum_bis). "</div>";
+                        <div style=\"text-align: left;\">". mysqldate("d.m.y", $row_lst->rol_start_date). " bis ". mysqldate("d.m.y", $row_lst->rol_end_date). "</div>";
                echo "</div>";
             }
-            if($row_lst->rol_wochentag > 0
-            || (  strcmp(mysqltime("h:i", $row_lst->rol_zeit_von), "00:00") != 0)
-               && $row_lst->rol_zeit_von != NULL )
+            if($row_lst->rol_weekday > 0
+            || (  strcmp(mysqltime("h:i", $row_lst->rol_start_time), "00:00") != 0)
+               && $row_lst->rol_start_time != NULL )
             {
                echo "<div style=\"margin-top: 6px;\">
                         <div style=\"margin-left: 30px; width: 130px; text-align: left; float: left;\">Gruppenstunde:</div>
-                        <div style=\"text-align: left;\">". $arrDay[$row_lst->rol_wochentag-1];
-                        if(strcmp(mysqltime("h:i", $row_lst->rol_zeit_von), "00:00") != 0)
-                           echo " von ". mysqltime("h:i", $row_lst->rol_zeit_von). " bis ". mysqltime("h:i", $row_lst->rol_zeit_bis);
+                        <div style=\"text-align: left;\">". $arrDay[$row_lst->rol_weekday-1];
+                        if(strcmp(mysqltime("h:i", $row_lst->rol_start_time), "00:00") != 0)
+                           echo " von ". mysqltime("h:i", $row_lst->rol_start_time). " bis ". mysqltime("h:i", $row_lst->rol_end_time);
                         echo "</div>";
                echo "</div>";
             }
-            if(strlen($row_lst->rol_ort) > 0)
+            if(strlen($row_lst->rol_location) > 0)
             {
                echo "<div style=\"margin-top: 6px;\">
                         <div style=\"margin-left: 30px; width: 130px; text-align: left; float: left;\">Treffpunkt:</div>
-                        <div style=\"text-align: left;\">$row_lst->rol_ort</div>
+                        <div style=\"text-align: left;\">$row_lst->rol_location</div>
                      </div>";
             }
          }
@@ -242,15 +224,15 @@ require("../../../adm_config/body_top.php");
          <div style=\"margin-top: 6px;\">
             <div style=\"margin-left: 30px; width: 130px; text-align: left; float: left;\">Teilnehmer:</div>
             <div style=\"text-align: left;\">$anz_mgl";
-               if($row_lst->rol_max_mitglieder > 0)
-                  echo " von max. $row_lst->rol_max_mitglieder";
+               if($row_lst->rol_max_members > 0)
+                  echo " von max. $row_lst->rol_max_members";
             echo "</div>
          </div>";
-         if(strlen($row_lst->rol_beitrag) > 0)
+         if(strlen($row_lst->rol_cost) > 0)
          {
             echo "<div style=\"margin-top: 6px;\">
                      <div style=\"margin-left: 30px; width: 130px; text-align: left; float: left;\">Beitrag:</div>
-                     <div style=\"margin-left: 160px; text-align: left;\">$row_lst->rol_beitrag &euro;</div>
+                     <div style=\"margin-left: 160px; text-align: left;\">$row_lst->rol_cost &euro;</div>
                   </div>";
          }
          $i++;
