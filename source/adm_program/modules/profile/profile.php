@@ -321,20 +321,26 @@ require("../../../adm_config/body_top.php");
                while($row = mysql_fetch_object($result_msg))
                {
                   if($i > 0) echo "<br />";
-                  echo "<img src=\"$g_root_path/adm_program/images/";
-                  if($row->usf_name == 'AIM')
-                      echo "aim.png";
-                  elseif($row->usf_name == 'Google Talk')
-                      echo "google.gif";
-                  elseif($row->usf_name == 'ICQ')
-                      echo "icq.png";
-                  elseif($row->usf_name == 'MSN')
-                      echo "msn.png";
-                  elseif($row->usf_name == 'Skype')
-                      echo "skype.png";
-                  elseif($row->usf_name == 'Yahoo')
-                      echo "yahoo.png";
+                  if($row->usf_name == 'ICQ') {
+                  	echo "<a href=\"http://www.icq.com/whitepages/cmd.php?uin=$row->usd_value&amp;action=add\"  class=\"wpaction\"><img border=\"0\" src=\"http://status.icq.com/online.gif?icq=$row->usd_value&img=5";
+                  }
+                  else {
+                  	echo "<img src=\"$g_root_path/adm_program/images/";
+                  	if($row->usf_name == 'AIM')
+                      	echo "aim.png";
+                  	elseif($row->usf_name == 'Google Talk')
+                      	echo "google.gif";
+                  	elseif($row->usf_name == 'ICQ')
+                      	echo "icq.png";
+                  	elseif($row->usf_name == 'MSN')
+                     	 echo "msn.png";
+                  	elseif($row->usf_name == 'Skype')
+                  	    echo "skype.png";
+                 	 	elseif($row->usf_name == 'Yahoo')
+                	       echo "yahoo.png";
+                	};
                   echo "\" style=\"vertical-align: middle;\" alt=\"$row->usf_description\" title=\"$row->usf_description\" />";
+                  if($row->usf_name == 'ICQ') echo "</a>";
                   if(strlen($row->usd_value) > 20)
                      echo "<span style=\"font-size: 8pt;\">&nbsp;&nbsp;$row->usd_value</span>";
                   else
