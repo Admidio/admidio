@@ -144,7 +144,7 @@ require("../../../adm_config/body_top.php");
                {
                   // keine Uebergabe, dann alle Rollen entsprechend Login/Logout auflisten
                   echo "<select size=\"1\" name=\"rolle\">";
-                  echo "<option value=\"\" selected=\"selected\">- Bitte wählen -</option>";
+                  echo "<option value=\"\" selected=\"selected\">- Bitte w&auml;hlen -</option>";
 
                   if($g_session_valid)
                   {
