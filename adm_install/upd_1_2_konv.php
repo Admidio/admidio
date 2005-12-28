@@ -235,8 +235,12 @@ if(!$result_org) showError(mysql_error());
 while($row = mysql_fetch_object($result_org))
 {
 	// Sessions in neue Tabelle schreiben
-	$sql = "INSERT INTO adm_user_fields (usf_id, usf_org_shortname, usf_type, usf_name, usf_description, usf_locked)
-	             VALUES ($row->auf_id, '$row->auf_ag_shortname', '$row->auf_type', '$row->auf_name', '$row->auf_description', $row->auf_locked)";
+	$sql = "INSERT INTO adm_user_fields (usf_id, usf_type, usf_name, usf_description, usf_locked, usf_org_shortname)
+	             VALUES ($row->auf_id, '$row->auf_type', '$row->auf_name', '$row->auf_description', $row->auf_locked, ";
+	if(strlen($row->auf_ag_shortname) > 0)
+		$sql .= "'$row->auf_ag_shortname' )";
+	else
+		$sql .= "NULL )";
 	$result = mysql_query($sql, $connection);
 	if(!$result) showError(mysql_error());
 }
