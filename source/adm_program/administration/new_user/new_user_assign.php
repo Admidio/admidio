@@ -186,10 +186,10 @@ echo "
                <td style=\"text-align: left;\">&nbsp;$row->usr_login_name</td>
                <td style=\"text-align: left;\">&nbsp;";
                if($g_current_organization->mail_extern == 1)
-                  echo "<a href=\"mailto:$row->usr_mail\">";
+                  echo "<a href=\"mailto:$row->usr_email\">";
                else
                   echo "<a href=\"../adm_program/modules/mail/mail.php?usr_id=$row->usr_id\">";
-               echo "$row->usr_mail</a></td>
+               echo "$row->usr_email</a></td>
                <td style=\"text-align: left;\">&nbsp;";
       if(strlen($row->usr_login_name) > 0)
          echo "Angemeldet";

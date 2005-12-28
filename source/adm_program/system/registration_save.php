@@ -119,14 +119,14 @@ if ($count_user == 0)
    db_error($result);
 
    // E-Mail an alle Webmaster schreiben
-   $sql    = "SELECT usr_mail
+   $sql    = "SELECT usr_email
                 FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                WHERE rol_org_shortname = '$g_organization'
                  AND rol_name     = 'Webmaster'
                  AND mem_rol_id        = rol_id
                  AND mem_valid        = 1
                  AND mem_usr_id        = usr_id
-                 AND LENGTH(usr_mail) > 0 ";
+                 AND LENGTH(usr_email) > 0 ";
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
 
@@ -135,7 +135,7 @@ if ($count_user == 0)
 		// nur ausfuehren, wenn E-Mails auch unterstuetzt werden
 		if($g_current_organization->mail_extern != 1)
       {
-         mail("$row->usr_mail", "Anmeldung", "Es hat sich ein neuer User auf ".
+         mail("$row->usr_email", "Anmeldung", "Es hat sich ein neuer User auf ".
               "$g_homepage angemeldet\n\nNachname: ". $_POST["nachname"]. "\nVorname:  ". $_POST["vorname"]. "\n".
               "E-Mail:   ". $_POST["email"]. "\n\n\nDiese Nachricht wurde automatisch erzeugt.",
               "From: webmaster@$g_domain");

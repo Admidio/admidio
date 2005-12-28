@@ -11,7 +11,6 @@
  * typ   : Listenselect (mylist, address, telephone, former)
  * mode  : Ausgabeart   (html, print, csv)
  * rolle : Rolle, für die die Funktion dargestellt werden soll
- *         (bei myList ist diese Variable nicht belegt)
  *
  ******************************************************************************
  *
@@ -34,15 +33,38 @@
 require("../../system/common.php");
 require("../../system/session_check_login.php");
 
-if($_GET["mode"] == "csv-ms")
+$mode = strStripTags($_GET["mode"]);
+$type = strStripTags($_GET["typ"]);
+$role = strStripTags($_GET["rolle"]);
+
+if($mode != "csv-ms"
+&& $mode != "csv-oo"
+&& $mode != "html"
+&& $mode != "print")
+{
+	// Dem aufgerufenen Skript wurde die notwendige Variable nicht richtig übergeben !
+   $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=mode";
+   header($location);
+   exit();
+}
+
+if(strlen($role) == 0)
+{
+	// Dem aufgerufenen Skript wurde die notwendige Variable nicht richtig übergeben !
+   $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=rolle";
+   header($location);
+   exit();
+}
+
+if($mode == "csv-ms")
 {
    $separator = ";";   // Microsoft braucht ein Semicolon
-   $_GET["mode"] = "csv";
+   $mode = "csv";
 }
-else if($_GET["mode"] == "csv-oo")
+else if($mode == "csv-oo")
 {
    $separator = ",";   // für CSV-Dateien
-   $_GET["mode"] = "csv";
+   $mode = "csv";
 }
 else
    $separator = ",";   // für CSV-Dateien
@@ -60,18 +82,18 @@ $arr_col_name = array('usr_last_name'  => 'Nachname',
                       'usr_email'      => 'E-Mail',
                       'usr_birthday'   => 'Geburtstag',
                       'usr_homepage'   => 'Homepage',
-                      'mem_start'      => 'Beginn',
-                      'mem_ende'       => 'Ende',
+                      'mem_begin'      => 'Beginn',
+                      'mem_end'        => 'Ende',
                       'mem_leader'     => 'Leiter'
                       );
 
-if($_GET["mode"] == "html")
+if($mode == "html")
 {
    $class_table  = "tableList";
    $class_header = "tableHeader";
    $class_row    = "";
 }
-else if($_GET["mode"] == "print")
+else if($mode == "print")
 {
    $class_table  = "tableListPrint";
    $class_header = "tableHeaderPrint";
@@ -86,7 +108,7 @@ $leiter    = 0;    // Gruppe besitzt Leiter
 // !!!! Das erste Feld muss immer usr_id sein !!!!
 // !!!! wenn Gruppen angezeigt werden, muss mem_leader = 0 gesetzt sein !!!!
 
-switch($_GET["typ"])
+switch($type)
 {
    case "mylist":
       $sql      = "SELECT ses_list_sql FROM ". TBL_SESSIONS. "
@@ -98,87 +120,79 @@ switch($_GET["typ"])
       break;
 
    case "address":
-      $main_sql = "SELECT usr_id, usr_last_name, usr_first_name, usr_geburtstag, usr_address, usr_plz, usr_ort
+      $main_sql = "SELECT usr_id, usr_last_name, usr_first_name, usr_birthday, usr_address, usr_zip_code, usr_city
                      FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                     WHERE rol_org_shortname = '$g_organization'
-                      AND rol_name     = {0}
+                      AND rol_name   = {0}
                       AND rol_id     = mem_rol_id
                       AND mem_valid  = 1
                       AND mem_leader = 0
-                      AND mem_usr_id  = usr_id
+                      AND mem_usr_id = usr_id
                     ORDER BY usr_last_name, usr_first_name ";
       break;
 
    case "telephone":
-      $main_sql = "SELECT usr_id, usr_last_name, usr_first_name, usr_tel1, usr_tel2, usr_mobil, usr_mail
+      $main_sql = "SELECT usr_id, usr_last_name, usr_first_name, usr_phone, usr_mobile, usr_email, usr_fax
                      FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                     WHERE rol_org_shortname = '$g_organization'
-                      AND rol_name     = {0}
+                      AND rol_name   = {0}
                       AND rol_id     = mem_rol_id
                       AND mem_valid  = 1
                       AND mem_leader = 0
-                      AND mem_usr_id  = usr_id
+                      AND mem_usr_id = usr_id
                     ORDER BY usr_last_name, usr_first_name ";
       break;
 
    case "former":
-      $main_sql = "SELECT usr_id, usr_last_name, usr_first_name, usr_geburtstag, mem_start, mem_ende
+      $main_sql = "SELECT usr_id, usr_last_name, usr_first_name, usr_birthday, mem_begin, mem_end
                      FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                     WHERE rol_org_shortname = '$g_organization'
-                      AND rol_name     = {0}
+                      AND rol_name   = {0}
                       AND rol_id     = mem_rol_id
                       AND mem_valid  = 0
                       AND mem_leader = 0
-                      AND mem_usr_id  = usr_id
-                    ORDER BY mem_ende DESC, usr_last_name, usr_first_name ";
+                      AND mem_usr_id = usr_id
+                    ORDER BY mem_end DESC, usr_last_name, usr_first_name ";
       break;
+      
+	default:
+		// Dem aufgerufenen Skript wurde die notwendige Variable nicht richtig übergeben !
+		$location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=typ";
+		header($location);
+		exit();
 }
 
-// pruefen, ob die Rolle eine Gruppe ist und dann vorher ein SELECT für die Gruppenleiter erstellen
-$sql = "SELECT rol_id, rol_gruppe
-          FROM ". TBL_ROLES. "
-         WHERE rol_org_shortname = '$g_organization'
-           AND rol_name     = {0} ";
-$sql      = prepareSQL($sql, array($_GET['rolle']));
-$result   = mysql_query($sql, $g_adm_con);
+// pruefen, ob die Rolle Leiter hat, wenn nicht, dann Standardliste anzeigen
+
+if(substr_count(str_replace(" ", "", $main_sql), "mem_valid=0") > 0)
+	$former = 0;
+else
+	$former = 1;
+
+$sql = "SELECT mem_leader
+			 FROM ". TBL_ROLES. ", ". TBL_MEMBERS. "
+			WHERE rol_name   = {0}
+			  AND mem_rol_id = rol_id
+			  AND mem_valid  = $former
+			  AND mem_leader = 1 ";
+$sql    = prepareSQL($sql, array($role));
+$result = mysql_query($sql, $g_adm_con);
 db_error($result);
-$row      = mysql_fetch_array($result);
-$gruppe   = $row[1];
 
-if($gruppe == 1)
+if(mysql_num_rows($result) > 0)
 {
-   // pruefen, ob die Gruppe Leiter hat, wenn nicht, dann Standardliste anzeigen
-
-   if(substr_count(str_replace(" ", "", $main_sql), "mem_valid=0") > 0)
-      $former = 0;
-   else
-      $former = 1;
-
-   $sql = "SELECT mem_leader
-             FROM ". TBL_MEMBERS. "
-            WHERE mem_rol_id  = ". $row[0]. "
-              AND mem_valid  = $former
-              AND mem_leader = 1 ";
-   $result   = mysql_query($sql, $g_adm_con);
-   db_error($result);
-
-   if(mysql_num_rows($result) > 0)
-   {
-      // Gruppe besitzt Leiter
-      $pos = strpos($main_sql, "mem_leader");
-      if($pos > 0)
-      {
-         $leiter   = 1;
-         // mem_leader = 0 durch mem_leader = 1 ersetzen
-         $tmp_sql  = strtolower($main_sql);
-         $next_pos = strpos($tmp_sql, "and", $pos);
-         if($next_pos === false)
-            $next_pos = strpos($tmp_sql, "order", $pos);
-         $leiter_sql = substr($main_sql, 0, $pos). " mem_leader = 1 ". substr($main_sql, $next_pos);
-      }
-   }
-   else
-      $gruppe = 0;
+	// Gruppe besitzt Leiter
+	$pos = strpos($main_sql, "mem_leader");
+	if($pos > 0)
+	{
+		$leiter   = 1;
+		// mem_leader = 0 durch mem_leader = 1 ersetzen
+		$tmp_sql  = strtolower($main_sql);
+		$next_pos = strpos($tmp_sql, "and", $pos);
+		if($next_pos === false)
+			$next_pos = strpos($tmp_sql, "order", $pos);
+		$leiter_sql = substr($main_sql, 0, $pos). " mem_leader = 1 ". substr($main_sql, $next_pos);
+	}
 }
 
 // aus main_sql alle Felder ermitteln und in ein Array schreiben
@@ -213,7 +227,7 @@ if($leiter == 0)
    }
 }
 
-if($_GET["mode"] != "csv")
+if($mode != "csv")
 {
    // Html-Kopf wird geschrieben
    echo "
@@ -221,49 +235,49 @@ if($_GET["mode"] != "csv")
    <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
    <html>
    <head>
-      <title>$g_current_organization->longname - Liste - ". $_GET["rolle"]. "</title>
+      <title>$g_current_organization->longname - Liste - $role</title>
       <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
 
       <!--[if gte IE 5.5000]>
       <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
       <![endif]-->";
 
-      if($_GET["mode"] == "print")
+      if($mode == "print")
       {
          echo "<style type=\"text/css\">
                   @page { size:landscape; }
                </style>";
       }
-      if($_GET["mode"] != "print")
+      if($mode != "print")
          require("../../../adm_config/header.php");
    echo "</head>";
 
-   if($_GET["mode"] == "print")
+   if($mode == "print")
       echo "<body class=\"bodyPrint\">";
    else
       require("../../../adm_config/body_top.php");
 
    echo "
    <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-   <h1>". $_GET["rolle"]. "</h1>";
+   <h1>$role</h1>";
 
-   if($_GET["mode"] != "print")
+   if($mode != "print")
    {
       echo "<p>
       <button name=\"print\" type=\"button\" value=\"print\" style=\"width: 140px;\"
-      onclick=\"window.open('lists_show.php?typ=". $_GET["typ"]. "&amp;mode=print&amp;rolle=". $_GET["rolle"]."', '_blank')\">
+      onclick=\"window.open('lists_show.php?typ=$type&amp;mode=print&amp;rolle=$role', '_blank')\">
       <img src=\"$g_root_path/adm_program/images/print.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Druckvorschau\">
       &nbsp;Druckvorschau</button>
 
       &nbsp;&nbsp;&nbsp;
       <button name=\"download-oo\" type=\"button\" value=\"download-oo\" style=\"width: 187px;\"
-         onclick=\"self.location.href='lists_show.php?typ=". $_GET["typ"]. "&amp;mode=csv-oo&amp;rolle=". $_GET["rolle"]."'\">
+         onclick=\"self.location.href='lists_show.php?typ=$type&amp;mode=csv-oo&amp;rolle=$role'\">
          <img src=\"$g_root_path/adm_program/images/oo.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Open-Office &amp; Staroffice\">
          &nbsp;Open-Office &amp; Staroffice</button>
 
       &nbsp;&nbsp;&nbsp;
       <button name=\"download-excel\" type=\"button\" value=\"download-excel\" style=\"width: 140px;\"
-         onclick=\"self.location.href='lists_show.php?typ=". $_GET["typ"]. "&amp;mode=csv-ms&amp;rolle=". $_GET["rolle"]."'\">
+         onclick=\"self.location.href='lists_show.php?typ=$type&amp;mode=csv-ms&amp;rolle=$role'\">
          <img src=\"$g_root_path/adm_program/images/excel.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"MS-Excel\">
          &nbsp;MS-Excel</button></p>";
    }
@@ -271,7 +285,7 @@ if($_GET["mode"] != "csv")
 
 // bei einer Gruppe muessen 2 Tabellen angezeigt werden
 // erst die der Leiter und dann die der Gruppenmitglieder
-if($gruppe)
+if($leiter == 1)
    $max_count = 2;
 else
    $max_count = 1;
@@ -281,7 +295,7 @@ for($j = 0; $j < $max_count; $j++)
    if($leiter == 1)
    {
       // wenn Leiter vorhanden, dann müssen SQL-Statements hier getrennt aufgerufen werden
-      if($j == 0 && $gruppe == 1)   // Leiter
+      if($j == 0)   // Leiter
       {
          $leiter_sql = prepareSQL($leiter_sql, array($_GET['rolle']));
          $result_lst = mysql_query($leiter_sql, $g_adm_con);
@@ -296,14 +310,14 @@ for($j = 0; $j < $max_count; $j++)
 
    if(mysql_num_rows($result_lst) > 0)
    {
-      if($_GET["mode"] == "csv")
+      if($mode == "csv")
       {
-         if($j == 0 && $gruppe == 1) $str_csv = $str_csv. "Leiter\n\n";
+         if($j == 0 && $leiter == 1) $str_csv = $str_csv. "Leiter\n\n";
          if($j == 1) $str_csv = $str_csv. "\n\nTeilnehmer\n\n";
       }
       else
       {
-         if($j == 0 && $gruppe == 1) echo "<h2>Leiter</h2>";
+         if($j == 0 && $leiter == 1) echo "<h2>Leiter</h2>";
          // erste Tabelle abschliessen
          if($j == 1) echo "</table><br /><h2>Teilnehmer</h2>";
 
@@ -315,7 +329,7 @@ for($j = 0; $j < $max_count; $j++)
       // Spalten-Überschriften
       for($i = 0; $i < count($arr_fields); $i++)
       {
-         if($_GET["mode"] == "csv")
+         if($mode == "csv")
          {
             if($i > 0) $str_csv = $str_csv. $separator;
             if($i == 0)
@@ -334,7 +348,7 @@ for($j = 0; $j < $max_count; $j++)
          }
       }  // End-For
 
-      if($_GET["mode"] == "csv")
+      if($mode == "csv")
          $str_csv = $str_csv. "\n";
       else
          echo "</tr>\n";
@@ -343,12 +357,12 @@ for($j = 0; $j < $max_count; $j++)
 
       while($row = mysql_fetch_array($result_lst))
       {
-         if($_GET["mode"] == "html")
+         if($mode == "html")
          {
             echo "<tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\"
                style=\"cursor: pointer\" onClick=\"window.location.href='$g_root_path/adm_program/modules/profile/profile.php?user_id=$row[0]'\">\n";
          }
-         else if($_GET["mode"] == "print")
+         else if($mode == "print")
          {
             echo "<tr>\n";
          }
@@ -356,13 +370,13 @@ for($j = 0; $j < $max_count; $j++)
          // Felder zu Datensatz
          for($i = 0; $i < count($arr_fields); $i++)
          {
-            if($_GET["mode"] != "csv")
+            if($mode != "csv")
                echo "<td  class=\"$class_row\" align=\"left\">&nbsp;";
 
             if($i == 0)
             {
                // erste Spalte zeigt lfd. Nummer an
-               if($_GET["mode"] == "csv")
+               if($mode == "csv")
                   $str_csv = $str_csv. "\"$irow\"";
                else
                   echo $irow. "</td>\n";
@@ -375,8 +389,8 @@ for($j = 0; $j < $max_count; $j++)
                   // Felder nachformatieren
                   switch($arr_fields[$i])
                   {
-                     case "usr_mail":
-                        if($_GET["mode"] == "html")
+                     case "usr_email":
+                        if($mode == "html")
                         {
                            if($g_current_organization->mail_extern == 1)
                               $content = "<a href=\"mailto:". $row[$i]. "\">". $row[$i]. "</a>";
@@ -387,20 +401,20 @@ for($j = 0; $j < $max_count; $j++)
                            $content = $row[$i];
                         break;
 
-                     case "usr_geburtstag":
-                     case "mem_start":
-                     case "mem_ende":
+                     case "usr_birthday":
+                     case "mem_begin":
+                     case "mem_end":
                         $content = mysqldatetime("d.m.y", $row[$i]);
                         if($content == "00.00.0000")
                            $content = "";
                         break;
 
-                     case "usr_weburl":
+                     case "usr_homepage":
                         $row[$i] = stripslashes($row[$i]);
                         if(substr_count(strtolower($row[$i]), "http://") == 0)
                            $row[$i] = "http://". $row[$i];
 
-                        if($_GET["mode"] == "html")
+                        if($mode == "html")
                            $content = "<a href=\"". $row[$i]. "\" target=\"_top\">". substr($row[$i], 7). "</a>";
                         else
                            $content = substr($row[$i], 7);
@@ -412,7 +426,7 @@ for($j = 0; $j < $max_count; $j++)
                   }
                }
 
-               if($_GET["mode"] == "csv")
+               if($mode == "csv")
                {
                   if($i > 0) $str_csv = $str_csv. $separator;
                   $str_csv = $str_csv. "\"$content\"";
@@ -422,7 +436,7 @@ for($j = 0; $j < $max_count; $j++)
             }
          }
 
-         if($_GET["mode"] == "csv")
+         if($mode == "csv")
             $str_csv = $str_csv. "\n";
          else
             echo "</tr>\n";
@@ -432,10 +446,10 @@ for($j = 0; $j < $max_count; $j++)
    }  // End-If (Rows > 0)
 }  // End-For (Leiter, Teilnehmer)
 
-if($_GET["mode"] == "csv")
+if($mode == "csv")
 {
    // nun die erstellte CSV-Datei an den User schicken
-   $filename = $g_organization. "-". str_replace(" ", "_", str_replace(".", "", $_GET["rolle"])). ".csv";
+   $filename = $g_organization. "-". str_replace(" ", "_", str_replace(".", "", $role)). ".csv";
    header("Content-Type: application/force-download");
    header("Content-Type: application/download");
    header("Content-Type: text/csv; charset=ISO-8859-1");
@@ -446,9 +460,9 @@ else
 {
    echo "</table>";
 
-   if($_GET["mode"] == "print")
+   if($mode == "print")
    {
-      if(!$_GET["typ"] == "mylist")
+      if(!$type == "mylist")
       {
          echo "<p><button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
                <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\">
@@ -459,25 +473,25 @@ else
    {
       echo "<p>
       <button name=\"print\" type=\"button\" value=\"print\" style=\"width: 140px;\"
-      onclick=\"window.open('lists_show.php?typ=". $_GET["typ"]. "&amp;mode=print&amp;rolle=". $_GET["rolle"]."', '_blank')\">
+      onclick=\"window.open('lists_show.php?typ=$type&amp;mode=print&amp;rolle=$role', '_blank')\">
       <img src=\"$g_root_path/adm_program/images/print.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Druckvorschau\">
       &nbsp;Druckvorschau</button>
 
       &nbsp;&nbsp;&nbsp;
       <button name=\"download-oo\" type=\"button\" value=\"download-oo\" style=\"width: 187px;\"
-         onclick=\"self.location.href='lists_show.php?typ=". $_GET["typ"]. "&amp;mode=csv-oo&amp;rolle=". $_GET["rolle"]."'\">
+         onclick=\"self.location.href='lists_show.php?typ=$type&amp;mode=csv-oo&amp;rolle=$role'\">
          <img src=\"$g_root_path/adm_program/images/oo.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Open-Office &amp; Staroffice\">
          &nbsp;Open-Office &amp; Staroffice</button>
 
       &nbsp;&nbsp;&nbsp;
       <button name=\"download-excel\" type=\"button\" value=\"download-excel\" style=\"width: 140px;\"
-         onclick=\"self.location.href='lists_show.php?typ=". $_GET["typ"]. "&amp;mode=csv-ms&amp;rolle=". $_GET["rolle"]."'\">
+         onclick=\"self.location.href='lists_show.php?typ=$type&amp;mode=csv-ms&amp;rolle=$role'\">
          <img src=\"$g_root_path/adm_program/images/excel.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"MS-Excel\">
          &nbsp;MS-Excel</button></p>";
    }
 
    echo "</div>";
-   if($_GET["mode"] != "print")
+   if($mode != "print")
       require("../../../adm_config/body_bottom.php");
 echo "</body>
 </html>";

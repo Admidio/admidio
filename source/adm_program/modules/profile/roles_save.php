@@ -82,7 +82,7 @@ $key   = key($_POST);
 
 while($row = mysql_fetch_object($result_rolle))
 {
-   if($key == "fkt-$i")
+   if($key == "role-$i")
    {
       $function = 1;
       $value    = next($_POST);
@@ -91,7 +91,7 @@ while($row = mysql_fetch_object($result_rolle))
    else
       $function = 0;
 
-   if($key == "leiter-$i")
+   if($key == "leader-$i")
    {
       $leiter   = 1;
       $value    = next($_POST);
@@ -116,7 +116,7 @@ while($row = mysql_fetch_object($result_rolle))
       if($function == 1)
       {
          $sql = "UPDATE ". TBL_MEMBERS. " SET mem_valid  = 1
-                                          , mem_ende   = '0000-00-00'
+                                          , mem_end   = '0000-00-00'
                                           , mem_leader = $leiter
                   WHERE mem_rol_id = $row->rol_id
                     AND mem_usr_id = {0}";
@@ -125,7 +125,7 @@ while($row = mysql_fetch_object($result_rolle))
       else
       {
          $sql = "UPDATE ". TBL_MEMBERS. " SET mem_valid  = 0
-                                          , mem_ende   = NOW()
+                                          , mem_end   = NOW()
                                           , mem_leader = $leiter
                   WHERE mem_rol_id = $row->rol_id
                     AND mem_usr_id = {0}";
@@ -136,7 +136,7 @@ while($row = mysql_fetch_object($result_rolle))
       // neue Mitgliederdaten einfuegen, aber nur, wenn auch ein Haeckchen da ist
       if($function == 1)
       {
-         $sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_start, mem_valid, mem_leader)
+         $sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin, mem_valid, mem_leader)
                  VALUES ($row->rol_id, {0}, NOW(), 1, $leiter) ";
          $count_assigned++;
       }

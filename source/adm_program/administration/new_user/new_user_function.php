@@ -63,7 +63,7 @@ if($_GET["mode"] == 1)
       $old_login = $row[0];
 
       // Mitgliedsdaten updaten
-      $sql    = "UPDATE ". TBL_USERS. " SET usr_mail     = '$user_row->anu_mail'
+      $sql    = "UPDATE ". TBL_USERS. " SET usr_email     = '$user_row->anu_mail'
                                     , usr_login_name    = '$user_row->anu_login'
                                     , usr_password = '$user_row->anu_password'
                   WHERE usr_id = {0}";

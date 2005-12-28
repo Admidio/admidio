@@ -48,7 +48,6 @@ $r_user         = 0;
 $r_locked       = 0;
 $r_mail_logout  = 0;
 $r_mail_login   = 0;
-$r_gruppe       = 0;
 $datum_von      = "";
 $uhrzeit_von    = "";
 $datum_bis      = "";
@@ -93,21 +92,17 @@ if ($_GET['rol_id'] != 0)
       $r_locked      = $row_ar->rol_locked;
       $r_mail_logout = $row_ar->rol_mail_logout;
       $r_mail_login  = $row_ar->rol_mail_login;
-      $r_gruppe      = $row_ar->rol_gruppe;
-      if($r_gruppe == 1)
-      {
-         // Daten nur fuellen, wenn die Rolle eine Gruppe ist
-         $datum_von      = mysqldate("d.m.y", $row_ar->rol_datum_von);
-         $uhrzeit_von    = mysqltime("h:i",   $row_ar->rol_zeit_von);
-         $datum_bis      = mysqldate("d.m.y", $row_ar->rol_datum_bis);
-         $uhrzeit_bis    = mysqltime("h:i",   $row_ar->rol_zeit_bis);
-         if ($uhrzeit_von == "00:00") $uhrzeit_von = "";
-         if ($uhrzeit_bis == "00:00") $uhrzeit_bis = "";
-         $wochentag      = $row_ar->rol_wochentag;
-         $ort            = $row_ar->rol_ort;
-         $max_mitglieder = $row_ar->rol_max_mitglieder;
-         $beitrag        = $row_ar->rol_beitrag;
-      }
+      
+		$datum_von      = mysqldate("d.m.y", $row_ar->rol_start_date);
+		$uhrzeit_von    = mysqltime("h:i",   $row_ar->rol_start_time);
+		$datum_bis      = mysqldate("d.m.y", $row_ar->rol_end_date);
+		$uhrzeit_bis    = mysqltime("h:i",   $row_ar->rol_end_time);
+		if ($uhrzeit_von == "00:00") $uhrzeit_von = "";
+		if ($uhrzeit_bis == "00:00") $uhrzeit_bis = "";
+		$wochentag      = $row_ar->rol_weekday;
+		$ort            = $row_ar->rol_location;
+		$max_mitglieder = $row_ar->rol_max_members;
+		$beitrag        = $row_ar->rol_cost;
    }
  }
 
@@ -121,51 +116,7 @@ echo "
 
    <!--[if gte IE 5.5000]>
    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
-   <![endif]-->
-
-   <script language=\"JavaScript1.2\" type=\"text/javascript\"><!--\n
-      function setDisabled()
-      {
-         if(document.TerminAnlegen.gruppe.checked == true)
-         {
-            document.TerminAnlegen.datum_von.disabled       = false;
-            document.TerminAnlegen.datum_von.className      = '';
-            document.TerminAnlegen.datum_bis.disabled       = false;
-            document.TerminAnlegen.datum_bis.className      = '';
-            document.TerminAnlegen.uhrzeit_von.disabled     = false;
-            document.TerminAnlegen.uhrzeit_von.className    = '';
-            document.TerminAnlegen.uhrzeit_bis.disabled     = false;
-            document.TerminAnlegen.uhrzeit_bis.className    = '';
-            document.TerminAnlegen.wochentag.disabled       = false;
-            document.TerminAnlegen.wochentag.className      = '';
-            document.TerminAnlegen.ort.disabled             = false;
-            document.TerminAnlegen.ort.className            = '';
-            document.TerminAnlegen.max_mitglieder.disabled  = false;
-            document.TerminAnlegen.max_mitglieder.className = '';
-            document.TerminAnlegen.beitrag.disabled         = false;
-            document.TerminAnlegen.beitrag.className        = '';
-         }
-         else
-         {
-            document.TerminAnlegen.datum_von.disabled        = true;
-            document.TerminAnlegen.datum_von.className      = 'disabled';
-            document.TerminAnlegen.datum_bis.disabled       = true;
-            document.TerminAnlegen.datum_bis.className      = 'disabled';
-            document.TerminAnlegen.uhrzeit_von.disabled     = true;
-            document.TerminAnlegen.uhrzeit_von.className    = 'disabled';
-            document.TerminAnlegen.uhrzeit_bis.disabled     = true;
-            document.TerminAnlegen.uhrzeit_bis.className    = 'disabled';
-            document.TerminAnlegen.wochentag.disabled       = true;
-            document.TerminAnlegen.wochentag.className      = 'disabled';
-            document.TerminAnlegen.ort.disabled             = true;
-            document.TerminAnlegen.ort.className            = 'disabled';
-            document.TerminAnlegen.max_mitglieder.disabled  = true;
-            document.TerminAnlegen.max_mitglieder.className = 'disabled';
-            document.TerminAnlegen.beitrag.disabled         = true;
-            document.TerminAnlegen.beitrag.className        = 'disabled';
-         }
-      }
-   //--></script>";
+   <![endif]-->";
 
    require("../../../adm_config/header.php");
 echo "</head>";
@@ -320,60 +271,30 @@ require("../../../adm_config/body_top.php");
          <div style=\"clear: left;\"><hr width=\"85%\" /></div>
 
          <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 28%; float: left;\"><label for=\"gruppe\">Gruppe:</label></div>
-            <div style=\"text-align: left; margin-left: 30%;\">
-               <input type=\"checkbox\" id=\"gruppe\" name=\"gruppe\" ";
-               if($r_gruppe == 1)
-                  echo " checked ";
-               echo " value=\"1\" onclick=\"setDisabled()\" />&nbsp;
-               <img src=\"$g_root_path/adm_program/images/gruppe.png\" alt=\"Gruppe\">&nbsp;
-               <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-               onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_gruppe','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
-            </div>
-         </div>
-         <div style=\"margin-top: 6px;\">
             <div style=\"text-align: right; width: 28%; float: left;\">Anzahl Mitglieder:</div>
             <div style=\"text-align: left; margin-left: 30%;\">
-               <input ";
-               if($r_gruppe == 0)
-                  echo "class=\"disabled\" disabled";
-               echo " type=\"text\" name=\"max_mitglieder\" size=\"3\" maxlength=\"3\" value=\""; if($max_mitglieder > 0) echo $max_mitglieder; echo "\">&nbsp;(inkl. Leiter)</div>
+               <input type=\"text\" name=\"max_mitglieder\" size=\"3\" maxlength=\"3\" value=\""; if($max_mitglieder > 0) echo $max_mitglieder; echo "\">&nbsp;(inkl. Leiter)</div>
          </div>
          <div style=\"margin-top: 6px;\">
             <div style=\"text-align: right; width: 28%; float: left;\">Datum von:</div>
             <div style=\"text-align: left; margin-left: 30%;\">
-               <input ";
-               if($r_gruppe == 0)
-                  echo "class=\"disabled\" disabled";
-               echo " type=\"text\" name=\"datum_von\" size=\"10\" maxlength=\"10\" value=\"$datum_von\">
+               <input type=\"text\" name=\"datum_von\" size=\"10\" maxlength=\"10\" value=\"$datum_von\">
                bis
-               <input ";
-               if($r_gruppe == 0)
-                  echo "class=\"disabled\" disabled";
-               echo " type=\"text\" name=\"datum_bis\" size=\"10\" maxlength=\"10\" value=\"$datum_bis\">
+               <input type=\"text\" name=\"datum_bis\" size=\"10\" maxlength=\"10\" value=\"$datum_bis\">
             </div>
          </div>
          <div style=\"margin-top: 6px;\">
             <div style=\"text-align: right; width: 28%; float: left;\">Uhrzeit:</div>
             <div style=\"text-align: left; margin-left: 30%;\">
-               <input ";
-               if($r_gruppe == 0)
-                  echo "class=\"disabled\" disabled";
-               echo " type=\"text\" name=\"uhrzeit_von\" size=\"5\" maxlength=\"5\" value=\"$uhrzeit_von\">
+               <input type=\"text\" name=\"uhrzeit_von\" size=\"5\" maxlength=\"5\" value=\"$uhrzeit_von\">
                bis
-               <input ";
-               if($r_gruppe == 0)
-                  echo "class=\"disabled\" disabled";
-               echo " type=\"text\" name=\"uhrzeit_bis\" size=\"5\" maxlength=\"5\" value=\"$uhrzeit_bis\">
+               <input type=\"text\" name=\"uhrzeit_bis\" size=\"5\" maxlength=\"5\" value=\"$uhrzeit_bis\">
             </div>
          </div>
          <div style=\"margin-top: 6px;\">
             <div style=\"text-align: right; width: 28%; float: left;\">Wochentag:</div>
             <div style=\"text-align: left; margin-left: 30%;\">
-               <select ";
-               if($r_gruppe == 0)
-                  echo " class=\"disabled\" disabled ";
-               echo " size=\"1\" name=\"wochentag\">
+               <select size=\"1\" name=\"wochentag\">
                <option value=\"0\""; if($wochentag == 0) echo " selected=\"selected\""; echo ">&nbsp;</option>\n";
                for($i = 1; $i < 8; $i++)
                {
@@ -385,18 +306,12 @@ require("../../../adm_config/body_top.php");
          <div style=\"margin-top: 6px;\">
             <div style=\"text-align: right; width: 28%; float: left;\">Ort:</div>
             <div style=\"text-align: left; margin-left: 30%;\">
-               <input ";
-               if($r_gruppe == 0)
-                  echo "class=\"disabled\" disabled";
-               echo " type=\"text\" name=\"ort\" size=\"30\" maxlength=\"30\" value=\"". htmlspecialchars($ort, ENT_QUOTES). "\"></div>
+               <input type=\"text\" name=\"ort\" size=\"30\" maxlength=\"30\" value=\"". htmlspecialchars($ort, ENT_QUOTES). "\"></div>
          </div>
          <div style=\"margin-top: 6px;\">
             <div style=\"text-align: right; width: 28%; float: left;\">Beitrag:</div>
             <div style=\"text-align: left; margin-left: 30%;\">
-               <input ";
-               if($r_gruppe == 0)
-                  echo "class=\"disabled\" disabled";
-               echo " type=\"text\" name=\"beitrag\" size=\"6\" maxlength=\"6\" value=\"$beitrag\"> &euro;</div>
+               <input type=\"text\" name=\"beitrag\" size=\"6\" maxlength=\"6\" value=\"$beitrag\"> &euro;</div>
          </div>
 
          <hr width=\"85%\" />
@@ -410,12 +325,12 @@ require("../../../adm_config/body_top.php");
             <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
             Zur&uuml;ck</button>
          </div>";
-         if($row_ar->rol_last_change_id > 0)
+         if($row_ar->rol_usr_id_change > 0)
          {
             // Angabe ueber die letzten Aenderungen
             $sql    = "SELECT usr_first_name, usr_last_name
                          FROM ". TBL_USERS. "
-                        WHERE usr_id = $row_ar->rol_last_change_id ";
+                        WHERE usr_id = $row_ar->rol_usr_id_change ";
             $result = mysql_query($sql, $g_adm_con);
             db_error($result, true);
             $row = mysql_fetch_array($result);

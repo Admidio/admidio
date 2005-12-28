@@ -177,11 +177,6 @@ elseif($_GET["mode"] == 2)
          else
             $locked = 0;
 
-         if(array_key_exists("gruppe", $_POST))
-            $gruppe = 1;
-         else
-            $gruppe = 0;
-
          if(!array_key_exists("max_mitglieder", $_POST)
          || strlen($_POST['max_mitglieder']) == 0)
             $_POST['max_mitglieder'] = "NULL";
@@ -207,17 +202,16 @@ elseif($_GET["mode"] == 2)
                                         , rol_mail_logout     = $mail_logout
                                         , rol_mail_login      = $mail_login
                                         , rol_locked          = $locked
-                                        , rol_gruppe            = $gruppe
-                                        , rol_datum_von         = '$d_datum_von'
-                                        , rol_zeit_von          = '$t_uhrzeit_von'
-                                        , rol_datum_bis         = '$d_datum_bis'
-                                        , rol_zeit_bis          = '$t_uhrzeit_bis'
-                                        , rol_wochentag         = {2}
-                                        , rol_ort               = {3}
-                                        , rol_max_mitglieder    = {4}
-                                        , rol_beitrag           = {5}
+                                        , rol_start_date         = '$d_datum_von'
+                                        , rol_start_time          = '$t_uhrzeit_von'
+                                        , rol_end_date         = '$d_datum_bis'
+                                        , rol_end_time          = '$t_uhrzeit_bis'
+                                        , rol_weekday         = {2}
+                                        , rol_location               = {3}
+                                        , rol_max_members    = {4}
+                                        , rol_cost           = {5}
                                         , rol_last_change       = '$act_date'
-                                        , rol_last_change_id    = $g_current_user->id
+                                        , rol_usr_id_change    = $g_current_user->id
                      WHERE rol_id = {6}";
          }
          else
@@ -226,13 +220,13 @@ elseif($_GET["mode"] == 2)
             $sql    = "INSERT INTO ". TBL_ROLES. " (rol_org_shortname, rol_name, rol_description,
                                                rol_moderation, rol_dates, rol_photo, rol_download,
                                                rol_edit_user, rol_mail_logout, rol_mail_login,
-                                               rol_locked, rol_gruppe, rol_datum_von, rol_zeit_von,
-                                               rol_datum_bis, rol_zeit_bis, rol_wochentag, rol_ort,
-                                               rol_max_mitglieder, rol_beitrag, rol_valid)
+                                               rol_locked, rol_start_date, rol_start_time,
+                                               rol_end_date, rol_end_time, rol_weekday, rol_location,
+                                               rol_max_members, rol_cost, rol_valid)
                        VALUES ('$g_organization', {0}, {1},
                                $moderation, $termine, $foto, $download,
                                $user, $mail_logout, $mail_login,
-                               $locked, $gruppe, '$d_datum_von', '$t_uhrzeit_von',
+                               $locked, '$d_datum_von', '$t_uhrzeit_von',
                                '$d_datum_bis','$t_uhrzeit_bis', {2}, {3},
                                {4}, {5}, 1) ";
          }
