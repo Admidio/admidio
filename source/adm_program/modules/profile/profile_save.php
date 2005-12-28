@@ -105,19 +105,20 @@ else
 }
 
 // Feldinhalte saeubern und der User-Klasse zuordnen
-$user->last_name  = strStripTags($_POST['name']);
-$user->first_name = strStripTags($_POST['vorname']);
-$user->login_name = strStripTags($_POST['login']);
-$user->address    = strStripTags($_POST['adresse']);
-$user->zip_code   = strStripTags($_POST['plz']);
-$user->city       = strStripTags($_POST['ort']);
-$user->country    = strStripTags($_POST['land']);
-$user->phone      = strStripTags($_POST['tel1']);
-$user->mobile     = strStripTags($_POST['mobil']);
+$user->last_name  = strStripTags($_POST['last_name']);
+$user->first_name = strStripTags($_POST['first_name']);
+$user->login_name = strStripTags($_POST['login_name']);
+$user->address    = strStripTags($_POST['address']);
+$user->zip_code   = strStripTags($_POST['zip_code']);
+$user->city       = strStripTags($_POST['city']);
+$user->country    = strStripTags($_POST['country']);
+$user->phone      = strStripTags($_POST['phone']);
+$user->mobile     = strStripTags($_POST['mobile']);
 $user->fax        = strStripTags($_POST['fax']);
-$user->birthday   = strStripTags($_POST['geburtstag']);
-$user->email      = strStripTags($_POST['mail']);
-$user->homepge    = strStripTags($_POST['weburl']);
+$user->email      = strStripTags($_POST['email']);
+$user->homepge    = strStripTags($_POST['homepage']);
+$user->birthday   = strStripTags($_POST['birthday']);
+$user->gender     = $_POST['gender'];
 
 /*------------------------------------------------------------*/
 // Felder prüfen

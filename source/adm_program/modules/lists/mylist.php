@@ -131,10 +131,11 @@ require("../../../adm_config/body_top.php");
                         <option value=\"usr_country\">Land</option>
                         <option value=\"usr_phone\">Telefon</option>
                         <option value=\"usr_mobile\">Handy</option>
-                        <option value=\"usr_email\">E-Mail</option>
                         <option value=\"usr_fax\">Fax</option>
-                        <option value=\"usr_birthday\">Geburtstag</option>
+                        <option value=\"usr_email\">E-Mail</option>
                         <option value=\"usr_homepage\">Homepage</option>
+                        <option value=\"usr_birthday\">Geburtstag</option>
+                        <option value=\"usr_gender\">Geschlecht</option>
                      </select>&nbsp;&nbsp;
                   </td>
                   <td align=\"center\">
