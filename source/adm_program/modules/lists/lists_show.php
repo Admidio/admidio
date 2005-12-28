@@ -80,8 +80,9 @@ $arr_col_name = array('usr_last_name'  => 'Nachname',
                       'usr_mobile'     => 'Handy',
                       'usr_fax'        => 'Fax',
                       'usr_email'      => 'E-Mail',
-                      'usr_birthday'   => 'Geburtstag',
                       'usr_homepage'   => 'Homepage',
+                      'usr_birthday'   => 'Geburtstag',
+                      'usr_gender'     => 'Geschlecht',
                       'mem_begin'      => 'Beginn',
                       'mem_end'        => 'Ende',
                       'mem_leader'     => 'Leiter'
@@ -111,12 +112,7 @@ $leiter    = 0;    // Gruppe besitzt Leiter
 switch($type)
 {
    case "mylist":
-      $sql      = "SELECT ses_list_sql FROM ". TBL_SESSIONS. "
-                    WHERE ses_session = '$g_session_id' ";
-      $result   = mysql_query($sql, $g_adm_con);
-      db_error($result);
-      $row      = mysql_fetch_array($result);
-      $main_sql = $row[0];
+      $main_sql = $_SESSION['mylist_sql'];
       break;
 
    case "address":
@@ -390,6 +386,7 @@ for($j = 0; $j < $max_count; $j++)
                   switch($arr_fields[$i])
                   {
                      case "usr_email":
+                     	// E-Mail als Link darstellen
                         if($mode == "html")
                         {
                            if($g_current_organization->mail_extern == 1)
@@ -404,12 +401,14 @@ for($j = 0; $j < $max_count; $j++)
                      case "usr_birthday":
                      case "mem_begin":
                      case "mem_end":
+                     	// Datum 00.00.0000 unterdruecken
                         $content = mysqldatetime("d.m.y", $row[$i]);
                         if($content == "00.00.0000")
                            $content = "";
                         break;
 
                      case "usr_homepage":
+                     	// Homepage als Link darstellen
                         $row[$i] = stripslashes($row[$i]);
                         if(substr_count(strtolower($row[$i]), "http://") == 0)
                            $row[$i] = "http://". $row[$i];
@@ -419,6 +418,21 @@ for($j = 0; $j < $max_count; $j++)
                         else
                            $content = substr($row[$i], 7);
                         break;
+                        
+                     case "usr_gender":
+                     	// Geschlecht anzeigen
+                     	if($row[$i] == 1)
+                     	{
+                     		if($mode == "csv")
+                     			$content = "männlich";
+                     		else
+                     			$content = "m&auml;nnlich";
+                     	}
+                     	elseif($row[$i] == 2)
+                     		$content = "weiblich";
+                     	else
+                     		$content = "&nbsp;";
+                     	break;
 
                      default:
                         $content = $row[$i];
