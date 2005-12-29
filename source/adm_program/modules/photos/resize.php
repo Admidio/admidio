@@ -71,7 +71,7 @@
       	$font_s = $scal/40;
       	$font_x = $font_s;
       	$font_y = $neubildsize[1]-$font_s;
-      	$text=$g_homepage;
+      	$text="&#169;&#32;".$g_homepage;
       	imagettftext($neubild, $font_s, 0, $font_x, $font_y, $font_c, $font_ttf, $text);
       }
 		//Rückgabe des Neuen Bildes
