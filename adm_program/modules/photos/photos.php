@@ -98,7 +98,7 @@
                      onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=folder_not_found','Message','width=500, height=260, left=310,top=200,scrollbars=no')\">&nbsp;";
 				echo"<a target=\"_self\" href=\"thumbnails.php?pho_id=".$adm_photo["pho_id"]."\">".$adm_photo["pho_name"]."</a></td>
             <td style=\"text-align: center;\">".mysqldate("d.m.y", $adm_photo["pho_begin"])."</td>";//Anzeige beginn datum im deutschen Format
-       		echo"<td style=\"text-align: center;\">".$adm_photo["pho_number"]."</td>
+       		echo"<td style=\"text-align: center;\">".$adm_photo["pho_quantity"]."</td>
             <td style=\"text-align: center;\">".mysqldate("d.m.y", $adm_photo["pho_last_change"])."</td>";//Anzeige online seitdatum im deutschen Format
             if ($g_session_valid && editPhoto()){
                echo"<td style=\"text-align: center;\">";

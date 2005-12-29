@@ -97,7 +97,7 @@ if($_POST["upload"]){
       echo"<div style=\"width: 670px\" align=\"center\" class=\"formHead\">Bericht</div>";
       echo"<div style=\"width: 670px\" align=\"center\" class=\"formBody\">Bitte einen Moment Geduld. Die Bilder wurden der Veranstaltung <br> - ".$adm_photo["pho_name"]." - <br>erfolgreich hinzugefügt, wenn sie hier angezeigt werden.<br>";
    //Verarbeitungsschleife für die einzelnen Bilder
-      $bildnr=$adm_photo["pho_number"];
+      $bildnr=$adm_photo["pho_quantity"];
 		for($x=0; $x<=4; $x=$x+1){
          $y=$x+1;
          if($_FILES["bilddatei"]["name"][$x]!="" && $ordner!="") {
@@ -114,7 +114,7 @@ if($_POST["upload"]){
 	//Aendern der Datenbankeintaege
       $changedatetime= date("Y.m.d G:i:s", time());
 		$sql ="	UPDATE ". TBL_PHOTOS. "
-					SET pho_number = '$bildnr',
+					SET pho_quantity = '$bildnr',
 						 pho_last_change = '$changedatetime'
 					WHERE pho_id = '$pho_id'";
 		$result = mysql_query($sql, $g_adm_con);

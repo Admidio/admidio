@@ -46,7 +46,7 @@
 	$adm_photo = mysql_fetch_array($result);
 
 //Aanzahl der Bilder
-   $bilder = $adm_photo["pho_number"];
+   $bilder = $adm_photo["pho_quantity"];
 //Speicherort
 	$ordner = "../../../adm_my_files/photos/".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"];
 

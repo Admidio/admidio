@@ -56,7 +56,7 @@ if($g_session_valid && editPhoto()){
          unlink("$ordner/$bild.jpg");
    //Umbennenen der Restbilder
          $neuenr=1;
-         for($x=1; $x<=$adm_photo["pho_number"]; $x++){
+         for($x=1; $x<=$adm_photo["pho_quantity"]; $x++){
             if(file_exists("$ordner/$x.jpg")){
                if($x>$neuenr){
                   chmod("$ordner/$x.jpg", 0777);
@@ -68,7 +68,7 @@ if($g_session_valid && editPhoto()){
    //&Auml;ndern der Datenbankeintaege
         $changedatetime= date("Y.m.d G:i:s", time());
 		  $sql = "UPDATE ". TBL_PHOTOS. "
-		 			SET pho_number = '$neuebilderzahl', pho_last_change = '$changedatetime'
+		 			SET pho_quantity = '$neuebilderzahl', pho_last_change = '$changedatetime'
 					WHERE pho_id = '$pho_id'";
 		 $result = mysql_query($sql, $g_adm_con);
 		 db_error($result);
