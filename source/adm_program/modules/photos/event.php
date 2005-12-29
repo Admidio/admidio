@@ -87,8 +87,8 @@ if($g_session_valid && editPhoto()){
          if($photographen=="")$photographen="leider unbekannt";
    //NeuenDatensatz anlegen falls makenew
    if ($aufgabe=="makenew"){
-      $sql="INSERT INTO ". TBL_PHOTOS. " (pho_number, pho_name, pho_begin,
-                         pho_end, pho_photographers, pho_online_since, pho_last_change, pho_org_shortname)
+      $sql="INSERT INTO ". TBL_PHOTOS. " (pho_quantity, pho_name, pho_begin,
+                         pho_end, pho_photographers, pho_timestamp, pho_last_change, pho_org_shortname)
                VALUES(0, 'neu', '0000-00-00', '0000-00-00', 'leider unbekannt',
                       '$act_datetime', '$act_datetime', '$g_organization')
       ";
@@ -131,7 +131,7 @@ if($g_session_valid && editPhoto()){
          $ordnererstellt = mkdir("../../../adm_my_files/photos/$ordnerneu",0777);
          chmod("../../../adm_my_files/photos/$ordnerneu", 0777);
          //Dateien verschieben
-         for($x=1; $x<=$adm_photo["pho_number"]; $x++){
+         for($x=1; $x<=$adm_photo["pho_quantity"]; $x++){
             chmod("$ordner/$x.jpg", 0777);
             copy("$ordner/$x.jpg", "../../../adm_my_files/photos/$ordnerneu/$x.jpg");
             unlink("$ordner/$x.jpg");
@@ -191,12 +191,12 @@ if($g_session_valid && editPhoto()){
       <div style=\"width: 430px\" align=\"center\" class=\"formBody\">
           <table cellspacing=3 cellpadding=0 border=\"0\">
             <tr><td colspan=\"2\" align=\"center\">Die Veranstaltung Wurde erfolgreich angelegt/ge&auml;ndert:</td></tr>
-            <tr><td align=\"right\" width=\"50%\">Aktuelle Bilderzahl:</td><td align=\"left\">".$neudaten["pho_number"]."</td></tr>
+            <tr><td align=\"right\" width=\"50%\">Aktuelle Bilderzahl:</td><td align=\"left\">".$neudaten["pho_quantity"]."</td></tr>
             <tr><td align=\"right\">Veranstaltung:</td><td align=\"left\">".$neudaten["pho_name"]."</td></tr>
             <tr><td align=\"right\">Anfangsdatum:</td><td align=\"left\">".mysqldate("d.m.y", $neudaten["pho_begin"])."</td></tr>
             <tr><td align=\"right\">Enddatum:</td><td align=\"left\">".mysqldate("d.m.y", $neudaten["pho_end"])."</td></tr>
             <tr><td align=\"right\">Fotografen:</td><td align=\"left\">".$neudaten["pho_photographers"]."</td></tr>
-            <tr><td align=\"right\">Online seit:</td><td align=\"left\">".mysqldatetime("d.m.y h:i", $neudaten["pho_online_since"])."</td></tr>
+            <tr><td align=\"right\">Online seit:</td><td align=\"left\">".mysqldatetime("d.m.y h:i", $neudaten["pho_timestamp"])."</td></tr>
             <tr><td align=\"right\">Letze &Auml;nderung:</td><td align=\"left\">".mysqldatetime("d.m.y h:i", $neudaten["pho_last_change"])."</td></tr>
             <tr><td align=\"right\">Gruppierung:</td><td align=\"left\">".$neudaten["pho_org_shortname"]."</td></tr>
          </table>
@@ -263,7 +263,7 @@ if($_GET["aufgabe"]=="change" || $_GET["aufgabe"]=="new"){
             <div style=\"text-align: left; margin-left: 180px;\">";
                if($_GET["aufgabe"]=="new")echo "<input type=\"text\" name=\"onlineseit\" size=\"10\" tabindex=\"1\" value=\"(Auto)\" class=\"readonly\" readonly=\"readonly\">";
                if($_GET["aufgabe"]=="change")
-                  echo "<input type=\"text\" name=\"onlineseit\" size=\"15\" tabindex=\"1\" value=\"".mysqldatetime("d.m.y h:i", $adm_photo["pho_online_since"])."\" class=\"readonly\" readonly=\"readonly\">";
+                  echo "<input type=\"text\" name=\"onlineseit\" size=\"15\" tabindex=\"1\" value=\"".mysqldatetime("d.m.y h:i", $adm_photo["pho_timestamp"])."\" class=\"readonly\" readonly=\"readonly\">";
             echo"</div></div>";
             //Letzte &Auml;nderung
             echo"
@@ -288,7 +288,7 @@ if($_GET["aufgabe"]=="change" || $_GET["aufgabe"]=="new"){
               <div style=\"text-align: right; width: 170px; float: left;\">Enthaltene Bilder:</div>
             <div style=\"text-align: left; margin-left: 180px;\">";
                if($_GET["aufgabe"]=="new")echo "<input type=\"text\" name=\"bilderzahl\" size=\"5\" tabindex=\"1\" value=\"0\" class=\"readonly\" readonly=\"readonly\">";
-               if($_GET["aufgabe"]=="change")echo "<input type=\"text\" name=\"bilderzahl\" size=\"5\" tabindex=\"1\" value=\"".$adm_photo["pho_number"]."\" class=\"readonly\" readonly=\"readonly\">";
+               if($_GET["aufgabe"]=="change")echo "<input type=\"text\" name=\"bilderzahl\" size=\"5\" tabindex=\"1\" value=\"".$adm_photo["pho_quantity"]."\" class=\"readonly\" readonly=\"readonly\">";
             echo"</div></div>";
             //Submit
             echo"
@@ -317,7 +317,7 @@ if($_GET["aufgabe"]=="delete"){
       if(file_exists($ordner)){
       	chmod("$ordner", 0777);
       	//Löschen der Bilder
-      	for($x=1; $x<=$adm_photo["pho_number"]; $x++){
+      	for($x=1; $x<=$adm_photo["pho_quantity"]; $x++){
         	 chmod("$ordner/$x.jpg", 0777);
          	if(unlink("$ordner/$x.jpg"))echo"Datei $x.jpg wurde erfolgreich GEL&Ouml;SCHT.<br>";
       	}	
