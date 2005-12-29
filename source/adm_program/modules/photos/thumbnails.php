@@ -83,10 +83,19 @@
          if($adm_photo["pho_end"] != $adm_photo["pho_begin"])echo " bis ".mysqldate("d.m.y", $adm_photo["pho_end"]);
 		echo"<br><br> Seite:&nbsp;";
       //Seiten links
+      //"Letzte Seite"
+		$vorseite=$seite-1;
+		if($vorseite>=1)
+			echo"	<a href=\"thumbnails.php?seite=$vorseite&amp;pho_id=$pho_id\">Letzte</a>&nbsp;&nbsp;";
+		//Seitenzahlen
       for($s=1; $s<=$seiten; $s++){
       	if($s==$seite)echo $seite."&nbsp;";
       	if($s!=$seite)echo"<a href='thumbnails.php?seite=$s&pho_id=$pho_id'>$s</a>&nbsp;";
       }
+      //naechste Seite
+		$nachseite=$seite+1;
+		if($nachseite<=$seiten)
+			echo"	<a href=\"thumbnails.php?seite=$nachseite&amp;pho_id=$pho_id\">Nächste</a>";
 		echo"
       <table cellspacing=10 cellpadding=0 border=0>";
          for($zeile=1;$zeile<=5;$zeile++){//durchlaufen der Tabellenzeilen
@@ -113,25 +122,11 @@
       echo "</table>
 		<hr width=\"85%\" />
       <br>";
-		//definition der Buttons vor zur&uuml;ck &Uuml;bersich die nur angezeigt werden sollen wenn sie ben&ouml;tigt werden
-		//"Letzte Seite"
-		$vorseite=$seite-1;
-		if($vorseite>=1){
-			echo"	<button name=\"back\" type=\"button\" value=\"back\" style=\"width: 140px;\" onclick=\"self.location.href='thumbnails.php?seite=$vorseite&amp;pho_id=$pho_id'\">
-         	<img src=\"../../../adm_program/images/back.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Letzte Seite\">&nbsp;Vorherige Seite
-         </button>";
-		}
 		//Uebersicht
 		echo"	<button name=\"up\" type=\"button\" value=\"up\" style=\"width: 135px;\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php'\">
            		<img src=\"../../../adm_program/images/list.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"&Uuml;bersicht\">  &Uuml;bersicht
            	</button>";
-		//naechste Seite
-		$nachseite=$seite+1;
-		if($nachseite<=$seiten){
-		echo"	<button name=\"forward\" type=\"button\" value=\"forward\" style=\"width: 140px;\" onclick=\"self.location.href='thumbnails.php?seite=$nachseite&amp;pho_id=$pho_id'\">N&auml;chste Seite
-            	<img src=\"../../../adm_program/images/forward.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"N&auml;chste Seite\">
-            </button>";
-		}
+		
    echo"
 	</div>
    </div>";
