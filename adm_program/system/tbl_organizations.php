@@ -31,6 +31,7 @@ class TblOrganizations
    var $longname;
    var $shortname;
    var $org_shortname_mother;
+   var $org_org_id_parent;
    var $homepage;
    var $mail_size;
    var $upload_size;
@@ -58,9 +59,9 @@ class TblOrganizations
          $this->id          = $row->org_id;
          $this->longname    = $row->org_longname;
          $this->shortname   = $row->org_shortname;
-         $this->org_shortname_mother= $row->org_org_id_parent;
+         $this->org_org_id_parent = $row->org_org_id_parent;
          $this->homepage    = $row->org_homepage;
-         $this->mail_size   = $row->org_mail_attachment_size;
+         $this->mail_size   = $row->org_mail_size;
          $this->upload_size = $row->org_upload_size;
          $this->photo_size  = $row->org_photo_size;
          $this->mail_extern = $row->org_mail_extern;
@@ -69,7 +70,22 @@ class TblOrganizations
       }
       else
       	$this->clear();
+      	
+      if ($this->org_org_id_parent != "")
+      {
+      	$sql = "SELECT org_shortname FROM ". TBL_ORGANIZATIONS. " WHERE org_id = '$this->org_org_id_parent'";
+
+      	$result = mysql_query($sql, $this->db_connection);
+      	
+      	if($row = mysql_fetch_object($result))
+      	{  
+        	 $this->org_shortname_mother = $row->org_shortname;      
+      	}
+      	
+      }	
    }
+   
+
 
 	// alle Klassenvariablen wieder zuruecksetzen
    function clear()
@@ -100,9 +116,9 @@ class TblOrganizations
 			$sql = "UPDATE ". TBL_ORGANIZATIONS. "
 												 SET org_longname    = '$this->longname'
                                     	, org_shortname   = '$this->shortname'
-													, org_org_id_parent      = '$this->org_shortname_mother'
+													, org_org_id_parent      = '$this->org_org_id_parent'
 													, org_homepage    = '$this->homepage'
-													, org_mail_attachment_size = $this->mail_size
+													, org_mail_size = $this->mail_size
 													, org_mail_extern = $this->mail_extern
 													, org_enable_rss  = $this->enable_rss
 													, org_bbcode      = $this->bbcode
@@ -126,7 +142,7 @@ class TblOrganizations
    		$sql = "INSERT INTO ". TBL_ORGANIZATIONS. " (org_longname, org_shortname, org_org_id_parent
 										org_homepage, org_mail_attachement_size,
 										org_mail_extern, org_enable_rss, org_bbcode )
-							 VALUES ('$this->longname', '$this->shortname', '$this->org_shortname_mother',
+							 VALUES ('$this->longname', '$this->shortname', '$this->org_org_id_parent',
 										'$this->homepage', $this->mail_size,
 										$this->mail_extern, $this->enable_rss, $this->org_bbcode ) ";
 			$result = mysql_query($sql, $this->db_connection);

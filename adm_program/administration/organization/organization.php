@@ -108,7 +108,7 @@ require("../../../adm_config/body_top.php");
 
                      while($row = mysql_fetch_object($result))
                      {
-                        echo "<option value=\"$row->org_shortname\"";
+                        echo "<option value=\"$row->org_id\"";
                            if($g_current_organization->org_shortname_mother == $row->org_shortname)
                               echo " selected ";
                         echo ">";
