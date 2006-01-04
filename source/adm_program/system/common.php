@@ -3,7 +3,7 @@
  * Script beinhaltet allgemeine Daten / Variablen, die fuer alle anderen
  * Scripte notwendig sind
  *
- * Copyright    : (c) 2004 - 2005 The Admidio Team
+ * Copyright    : (c) 2004 - 2006 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  *

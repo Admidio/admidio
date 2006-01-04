@@ -2,7 +2,7 @@
 /******************************************************************************
  * Funktionen des Benutzers speichern
  *
- * Copyright    : (c) 2004 - 2005 The Admidio Team
+ * Copyright    : (c) 2004 - 2006 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  *
@@ -163,7 +163,7 @@ if($_GET['popup'] == 1)
    <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 TRANSITIONAL//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
    <html xmlns=\"http://www.w3.org/1999/xhtml\">
    <head>
-      <!-- (c) 2004 - 2005 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->
+      <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->
       <title>Funktionen zuordnen</title>
       <meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\" />
       <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\" />

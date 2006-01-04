@@ -2,7 +2,7 @@
 /******************************************************************************
  * Neuen User zuordnen - Funktionen
  *
- * Copyright    : (c) 2004 - 2005 The Admidio Team
+ * Copyright    : (c) 2004 - 2006 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  *
@@ -94,7 +94,7 @@ if($_GET["mode"] == 1)
 elseif($_GET["mode"] == 3)
 {
    echo "
-   <!-- (c) 2004 - 2005 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
+   <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
    <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
    <html>
    <head>
