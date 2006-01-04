@@ -2,7 +2,7 @@
 /******************************************************************************
  * Installationsdialog fuer die MySql-Datenbank
  *
- * Copyright    : (c) 2004 - 2005 The Admidio Team
+ * Copyright    : (c) 2004 - 2006 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  *
@@ -53,7 +53,7 @@ else
 }
 
 echo "
-<!-- (c) 2004 - 2005 The Admidio Team - http://www.admidio.org -->
+<!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org -->
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
 <html>
 <head>
@@ -280,7 +280,7 @@ echo "
       </div>
    </div>
    <div class=\"formHead\" style=\"font-size: 8pt; text-align: center; border-top-width: 0px;\">
-      &copy; 2004 - 2005&nbsp;&nbsp;<a href=\"http://www.admidio.org\" target=\"_blank\">The Admidio Team</a>
+      &copy; 2004 - 2006&nbsp;&nbsp;<a href=\"http://www.admidio.org\" target=\"_blank\">The Admidio Team</a>
    </div>
 </div>
 </body>

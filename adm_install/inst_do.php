@@ -2,7 +2,7 @@
 /******************************************************************************
  * Einrichtungsscript fuer die MySql-Datenbank
  *
- * Copyright    : (c) 2004 - 2005 The Admidio Team
+ * Copyright    : (c) 2004 - 2006 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  *
@@ -34,7 +34,7 @@ function showError($err_msg, $err_head = "Fehler", $finish = false)
    global $g_root_path;
 
    echo "
-   <!-- (c) 2004 - 2005 The Admidio Team - http://www.admidio.org -->\n
+   <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org -->\n
    <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
    <html>
    <head>

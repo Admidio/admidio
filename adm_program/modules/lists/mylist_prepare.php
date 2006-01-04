@@ -3,7 +3,7 @@
  * Dieses Script setzt das SQL-Statement für die myList zusammen und
  * übergibt es an das allgemeine Listen-Script
  *
- * Copyright    : (c) 2004 - 2005 The Admidio Team
+ * Copyright    : (c) 2004 - 2006 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  *
