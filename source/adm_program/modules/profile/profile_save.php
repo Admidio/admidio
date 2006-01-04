@@ -228,9 +228,9 @@ if(strlen($user->birthday) > 0)
 /*------------------------------------------------------------*/
 
 if($user_id != 0 && $_GET['new_user'] == 0)
-	$ret_code = $user->update($g_current_user_id);
+	$ret_code = $user->update($g_current_user->usr_id);
 else
-	$ret_code = $user->insert($g_current_user_id);
+	$ret_code = $user->insert($g_current_user->usr_id);
 
 if($ret_code != 0)
 {
