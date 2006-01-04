@@ -142,6 +142,22 @@ while($row = mysql_fetch_object($result_org))
 	if(!$result) showError(mysql_error());
 }
 
+// neue Benutzer
+
+$sql = "SELECT * FROM adm_new_user";
+$result_org = mysql_query($sql, $connection);
+if(!$result_org) showError(mysql_error());
+
+while($row = mysql_fetch_object($result_org))
+{
+	// Foto in neue Tabelle schreiben
+	$sql = "INSERT INTO adm_users (usr_last_name, usr_first_name, usr_email, usr_login_name, usr_password, usr_reg_org_shortname, usr_valid)
+	             VALUES ('$row->anu_name', '$row->anu_vorname', '$row->anu_mail', '$row->anu_login', '$row->anu_password', '$row->anu_ag_shortname', 0)";
+	$result = mysql_query($sql, $connection);
+	if(!$result) showError(mysql_error());
+}
+
+
 // Rollen
 
 $sql = "SELECT * FROM adm_rolle";
