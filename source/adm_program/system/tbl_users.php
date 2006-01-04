@@ -51,7 +51,7 @@ class TblUsers
    var $last_change;
    var $usr_id_change;
    var $valid;
-   var $valid_shortname;
+   var $reg_org_shortname;
 
    // Konstruktor
    function TblUsers($connection)
@@ -160,7 +160,9 @@ class TblUsers
 														, usr_invalid_login = '$this->invalid_login'
 														, usr_num_invalid   = $this->num_invalid
 														, usr_last_change   = '$act_date'
-														, usr_usr_id_change = $login_user_id ";
+														, usr_usr_id_change = $login_user_id 
+														, usr_valid         = $this->valid
+														, usr_reg_org_shortname = '$this->reg_org_shortname' ";
 			if(strlen($this->login_name) == 0)
 				$sql = $sql. ", usr_login_name = NULL, usr_password = NULL ";
 			else
@@ -186,11 +188,11 @@ class TblUsers
 									  usr_city, usr_country, usr_phone, usr_mobile, usr_fax, usr_birthday, 
 									  usr_gender, usr_email, usr_homepage, usr_last_login, usr_act_login, 
 									  usr_num_login, usr_invalid_login, usr_num_invalid, usr_last_change, 
-									  usr_usr_id_change, usr_login_name, usr_password )
+									  usr_usr_id_change, usr_valid, usr_reg_org_shortname, usr_login_name, usr_password )
 							 VALUES ('$this->last_name', '$this->first_name', '$this->address', '$this->zip_code',
 										'$this->city', '$this->country', '$this->phone', '$this->mobile', '$this->fax', '$this->birthday', 
 										'$this->gender', '$this->email', '$this->homepage', NULL, NULL, 
-										0,	NULL, 0, '$act_date', $login_user_id, ";
+										0,	NULL, 0, '$act_date', $login_user_id, $this->valid, '$this->reg_org_shortname', ";
 			if(strlen($this->login_name) == 0)
 				$sql = $sql. " NULL, NULL ) ";
 			else
@@ -202,6 +204,17 @@ class TblUsers
 		   return 0;
      	}
      	return -1;
+   }
+
+	// aktuellen Benutzer loeschen   
+   function delete()
+   {
+   	$sql    = "DELETE FROM ". TBL_USERS. " 
+   	            WHERE usr_id = $this->id ";
+		$result = mysql_query($sql, $this->db_connection);
+		if(!$result) { echo "Error: ". mysql_error(); exit(); }
+		
+		$this->clear();
    }
 }
 ?>
