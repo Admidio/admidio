@@ -68,7 +68,6 @@ if ($session_found == 1)
       db_error($result);
 
 		$g_current_user->getUser($row->ses_usr_id);
-		$g_current_user_id = $g_current_user->id;
       $g_session_valid = 1;
    }
    else
@@ -81,7 +80,6 @@ if ($session_found == 1)
       db_error($result);
 
 		$g_current_user->clear();
-		$g_current_user_id = 0;
 
       // aufgerufene URL ermitteln, damit diese nach dem Einloggen sofort aufgerufen werden kann
       $url = $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI'];
@@ -100,7 +98,6 @@ if ($session_found == 1)
 else
 {
    $g_current_user->clear();
-   $g_current_user_id = 0;
 
    if ($session_found != 0)
    {

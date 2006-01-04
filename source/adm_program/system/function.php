@@ -116,12 +116,12 @@ function getHttpReferer()
 
 function hasRole($function, $user_id = 0)
 {
-   global $g_current_user_id;
+   global $g_current_user;
    global $g_adm_con;
    global $g_organization;
 
    if($user_id == 0)
-      $user_id = $g_current_user_id;
+      $user_id = $g_current_user->id;
 
    $sql    = "SELECT *
                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
@@ -146,12 +146,12 @@ function hasRole($function, $user_id = 0)
 
 function isModerator($user_id = 0)
 {
-   global $g_current_user_id;
+   global $g_current_user;
    global $g_adm_con;
    global $g_organization;
 
    if($user_id == 0)
-      $user_id = $g_current_user_id;
+      $user_id = $g_current_user->id;
 
    $sql    = "SELECT *
                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
@@ -177,13 +177,13 @@ function isModerator($user_id = 0)
 
 function isGroupLeader($role_id=0)
 {
-   global $g_current_user_id;
+   global $g_current_user;
    global $g_adm_con;
    global $g_organization;
 
    $sql    = "SELECT *
                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-               WHERE mem_usr_id             = $g_current_user_id
+               WHERE mem_usr_id             = $g_current_user->id
                  AND mem_valid             = 1
                  AND mem_leader            = 1
                  AND mem_rol_id             = rol_id
@@ -207,13 +207,13 @@ function isGroupLeader($role_id=0)
 
 function editUser()
 {
-   global $g_current_user_id;
+   global $g_current_user;
    global $g_adm_con;
    global $g_organization;
 
    $sql    = "SELECT *
                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-               WHERE mem_usr_id             = $g_current_user_id
+               WHERE mem_usr_id             = $g_current_user->id
                  AND mem_valid             = 1
                  AND mem_rol_id             = rol_id
                  AND rol_org_shortname      = '$g_organization'
@@ -234,13 +234,13 @@ function editUser()
 
 function editDate()
 {
-   global $g_current_user_id;
+   global $g_current_user;
    global $g_adm_con;
    global $g_organization;
 
    $sql    = "SELECT *
                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-               WHERE mem_usr_id             = $g_current_user_id
+               WHERE mem_usr_id             = $g_current_user->id
                  AND mem_rol_id             = rol_id
                  AND mem_valid             = 1
                  AND rol_org_shortname      = '$g_organization'
@@ -261,13 +261,13 @@ function editDate()
 
 function editPhoto()
 {
-   global $g_current_user_id;
+   global $g_current_user;
    global $g_adm_con;
    global $g_organization;
 
    $sql    = "SELECT *
                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-               WHERE mem_usr_id             = $g_current_user_id
+               WHERE mem_usr_id             = $g_current_user->id
                  AND mem_rol_id             = rol_id
                  AND mem_valid             = 1
                  AND rol_org_shortname      = '$g_organization'
@@ -288,13 +288,13 @@ function editPhoto()
 
 function editDownload()
 {
-   global $g_current_user_id;
+   global $g_current_user;
    global $g_adm_con;
    global $g_organization;
 
    $sql    = "SELECT *
                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-               WHERE mem_usr_id             = $g_current_user_id
+               WHERE mem_usr_id             = $g_current_user->id
                  AND mem_rol_id             = rol_id
                  AND mem_valid             = 1
                  AND rol_org_shortname      = '$g_organization'
