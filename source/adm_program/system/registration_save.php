@@ -31,10 +31,10 @@ $err_code   = "";
 $err_text   = "";
 $count_user = 0;
 
-$_POST['benutzername'] = trim($_POST['benutzername']);
-$_POST['nachname']     = trim($_POST['nachname']);
-$_POST['vorname']      = trim($_POST['vorname']);
-$_POST['email']      = trim($_POST['email']);
+$_POST['benutzername'] = strStripTags($_POST['benutzername']);
+$_POST['nachname']     = strStripTags($_POST['nachname']);
+$_POST['vorname']      = strStripTags($_POST['vorname']);
+$_POST['email']        = strStripTags($_POST['email']);
 
 // Felder prüfen
 if ($_POST['passwort'] != $_POST['passwort2'])
@@ -81,18 +81,6 @@ db_error($result);
 
 $count_user = mysql_num_rows($result);
 
-if ($count_user == 0)
-{
-   // auch in der new_user-Tabelle pruefen
-   $sql    = "SELECT anu_id FROM ". TBL_NEW_USER. " ".
-             " WHERE anu_login LIKE {0}";
-   $sql    = prepareSQL($sql, array($_POST["benutzername"]));
-   $result = mysql_query($sql, $g_adm_con);
-   db_error($result);      
-
-   $count_user = mysql_num_rows($result);      
-}
-
 if ($count_user == 0 && $g_forum == 1)
 {
    mysql_select_db($g_forum_db, $g_forum_con);
@@ -112,8 +100,8 @@ if ($count_user == 0)
 {
    $password_crypt = md5($_POST["passwort"]);
 
-   $sql    = "INSERT INTO ". TBL_NEW_USER. " (anu_org_shortname, anu_name, anu_vorname, anu_mail, anu_login, anu_password) ".
-             "VALUES ('$g_organization', {0}, {1}, {2}, {3}, '$password_crypt')";
+   $sql    = "INSERT INTO ". TBL_USERS. " (usr_reg_org_shortname, usr_last_name, usr_first_name, usr_email, usr_login_name, usr_password, usr_valid) ".
+             "                     VALUES ('$g_organization', {0}, {1}, {2}, {3}, '$password_crypt', 0)";
    $sql    = prepareSQL($sql, array($_POST["nachname"], $_POST["vorname"], $_POST["email"], $_POST["benutzername"]));
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
