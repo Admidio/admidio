@@ -60,7 +60,7 @@ if( ($_POST["old_password"] != "" || hasRole('Webmaster') )
       if($user->password == $old_password_crypt || hasRole('Webmaster'))
       {
          $user->password = md5($_POST["new_password"]);
-         $user->update($g_current_user_id);
+         $user->update($g_current_user->usr_id);
 
          if($g_forum == 1)
          {
