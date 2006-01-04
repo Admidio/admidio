@@ -73,13 +73,11 @@ if ($g_session_id != "")
          db_error($result);
 
          $g_current_user->getUser($row->ses_usr_id);
-         $g_current_user_id = $g_current_user->id;
       }
       else
       {
          // User war zu lange inaktiv -> Session loeschen
          $g_current_user->clear();
-         $g_current_user_id = 0;
 
          $sql    = "DELETE FROM ". TBL_SESSIONS. " WHERE ses_session LIKE {0}";
          $sql    = prepareSQL($sql, array($g_session_id));
@@ -91,7 +89,6 @@ if ($g_session_id != "")
    else
    {
    	$g_current_user->clear();
-   	$g_current_user_id = 0;
 
       if ($session_found != 0)
       {
