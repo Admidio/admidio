@@ -58,7 +58,8 @@ $role_id = $_GET["role_id"];
    }
    //Aufrufen alle Leute aus der Datenbank
     $sql ="	SELECT *
-           	FROM ". TBL_USERS. "";
+           	  FROM ". TBL_USERS. "
+           	 WHERE usr_valid = 1 ";
    			$result_user = mysql_query($sql, $g_adm_con);
    			db_error($result_user);
 	//Datensätze durchgehen und sehen ob für den Benutzer eine Änderung vorliegt

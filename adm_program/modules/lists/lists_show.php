@@ -124,6 +124,7 @@ switch($type)
                       AND mem_valid  = 1
                       AND mem_leader = 0
                       AND mem_usr_id = usr_id
+                      AND usr_id     = 1
                     ORDER BY usr_last_name, usr_first_name ";
       break;
 
@@ -136,6 +137,7 @@ switch($type)
                       AND mem_valid  = 1
                       AND mem_leader = 0
                       AND mem_usr_id = usr_id
+                      AND usr_id     = 1
                     ORDER BY usr_last_name, usr_first_name ";
       break;
 
@@ -148,6 +150,7 @@ switch($type)
                       AND mem_valid  = 0
                       AND mem_leader = 0
                       AND mem_usr_id = usr_id
+                      AND usr_id     = 1
                     ORDER BY mem_end DESC, usr_last_name, usr_first_name ";
       break;
       

@@ -8,8 +8,8 @@
  *
  * Uebergaben:
  *
- * anu_id: ID des Users, der angezeigt werden soll
- * letter: Anfangsbuchstabe, der Nachnamen, die angezeigt werden sollen
+ * new_user_id: ID des Users, der angezeigt werden soll
+ * letter:      Anfangsbuchstabe, der Nachnamen, die angezeigt werden sollen
  *
  ******************************************************************************
  *
@@ -44,15 +44,13 @@ $restrict = "";
 $listname = "";
 $i = 0;
 
-if($_GET['anu_id'] > 0)
+if($_GET['new_user_id'] > 0)
 {
-   $sql      = "SELECT * FROM ". TBL_NEW_USER. " WHERE anu_id = {0}";
-   $sql      = prepareSQL($sql, array($_GET['anu_id']));
-   $result   = mysql_query($sql, $g_adm_con);
-   $user_row = mysql_fetch_object($result);
+   $new_user = new TblUsers($g_adm_con);
+   $new_user->getUser($_GET['new_user_id']);
 
    if(!array_key_exists("letter", $_GET))
-      $_GET["letter"] = substr($user_row->anu_name, 0, 1);
+      $_GET["letter"] = substr($new_user->last_name, 0, 1);
 }
 
 if(!array_key_exists("letter", $_GET))
@@ -66,11 +64,12 @@ if($_GET["all"] == 0)
    $sql    = "SELECT *
                 FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                WHERE rol_org_shortname = '$g_organization'
-                 AND rol_valid        = 1
+                 AND rol_valid         = 1
                  AND mem_rol_id        = rol_id
-                 AND mem_valid        = 1
+                 AND mem_valid         = 1
                  AND mem_usr_id        = usr_id
-                 AND usr_last_name LIKE '$user_row->anu_name'
+                 AND usr_last_name LIKE '$new_user->last_name'
+                 AND usr_valid         = 1
                GROUP BY usr_last_name, usr_first_name
                ORDER BY usr_last_name, usr_first_name ";
    $result_all = mysql_query($sql, $g_adm_con);
@@ -83,11 +82,12 @@ if($_GET["all"] == 0)
       $sql    = "SELECT *
                    FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                   WHERE rol_org_shortname = '$g_organization'
-                    AND rol_valid        = 1
+                    AND rol_valid         = 1
                     AND mem_rol_id        = rol_id
-                    AND mem_valid        = 1
+                    AND mem_valid         = 1
                     AND mem_usr_id        = usr_id
                     AND usr_last_name LIKE {0}
+                    AND usr_valid         = 1
                   GROUP BY usr_last_name, usr_first_name
                   ORDER BY usr_last_name, usr_first_name ";
       $sql    = prepareSQL($sql, array($_GET['letter']));
@@ -101,11 +101,12 @@ else
    $sql    = "SELECT *
                 FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                WHERE rol_org_shortname = '$g_organization'
-                 AND rol_valid        = 1
+                 AND rol_valid         = 1
                  AND mem_rol_id        = rol_id
-                 AND mem_valid        = 1
+                 AND mem_valid         = 1
                  AND mem_usr_id        = usr_id
                  AND usr_last_name LIKE {0}
+                 AND usr_valid         = 1
                GROUP BY usr_last_name, usr_first_name
                ORDER BY usr_last_name, usr_first_name ";
    $sql    = prepareSQL($sql, array($_GET['letter']));
@@ -130,8 +131,8 @@ echo "</head>";
 require("../../../adm_config/body_top.php");
 echo "<div align=\"center\">";
 
-if($_GET['anu_id'] > 0)
-   echo "<h1>Anmeldung von $user_row->anu_vorname $user_row->anu_name zuordnen</h1>";
+if($_GET['new_user_id'] > 0)
+   echo "<h1>Anmeldung von $new_user->first_name $new_user->last_name zuordnen</h1>";
 echo "
 <h1>- ". str_replace("%", "", $_GET["letter"]). " -</h1>";
 
@@ -147,18 +148,19 @@ if($_GET["all"] == 1 || $member_found == 0)
       $sql    = "SELECT COUNT(*)
                    FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                   WHERE rol_org_shortname = '$g_organization'
-                    AND rol_valid        = 1
+                    AND rol_valid         = 1
                     AND mem_rol_id        = rol_id
-                    AND mem_valid        = 1
+                    AND mem_valid         = 1
                     AND mem_usr_id        = usr_id
                     AND usr_last_name LIKE '$letter_menu%'
+                    AND usr_valid         = 1
                   GROUP BY usr_last_name, usr_first_name ";
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
       $row = mysql_fetch_array($result);
 
       if($row[0] > 0)
-         echo "<a href=\"new_user_assign.php?anu_id=$user_row->anu_id&amp;all=1&amp;letter=$letter_menu\">$letter_menu</a>";
+         echo "<a href=\"new_user_assign.php?new_user_id=$new_user->id&amp;all=1&amp;letter=$letter_menu\">$letter_menu</a>";
       else
          echo $letter_menu;
 
@@ -195,7 +197,7 @@ echo "
          echo "Angemeldet";
       else
       {
-         $load_url = urlencode("$g_root_path/adm_program/administration/new_user/new_user_function.php?anu_id=". $_GET['anu_id']. "&amp;usr_id=$row->usr_id&amp;mode=1");
+         $load_url = urlencode("$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=". $_GET['new_user_id']. "&amp;user_id=$row->usr_id&amp;mode=1");
          echo "<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=zuordnen&amp;err_text=$row->usr_first_name $row->usr_last_name&amp;err_head=Webanmeldung zuordnen&amp;button=2&amp;url=$load_url\">Zuordnen</a>";
       }
 
@@ -206,7 +208,7 @@ echo "
 
 <p>Falls der Benutzer noch nicht existiert:</p>
 <p><button name=\"neu\" type=\"button\" value=\"neu\"
-   onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=". $_GET['anu_id']. "&amp;new_user=1&amp;url=". urlencode("$g_root_path/adm_program/new_user_list.php"). "'\">
+   onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=". $_GET['new_user_id']. "&amp;new_user=1&amp;url=". urlencode("$g_root_path/adm_program/new_user_list.php"). "'\">
 <img src=\"$g_root_path/adm_program/images/person_new.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Neuer Benutzer\">
 &nbsp;Neuer Benutzer</button></p>
 

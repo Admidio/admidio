@@ -54,11 +54,12 @@ $password_crypt = md5($_POST["passwort"]);
 $sql    = "SELECT *
              FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. "
             WHERE usr_login_name     LIKE {0}
+              AND usr_valid         = 1
               AND mem_usr_id        = usr_id
               AND mem_rol_id        = rol_id
-              AND mem_valid        = 1
+              AND mem_valid         = 1
               AND rol_org_shortname = '$g_organization'
-              AND rol_valid        = 1 ";
+              AND rol_valid         = 1 ";
 $sql    = prepareSQL($sql, array($_POST["loginname"]));
 $result = mysql_query($sql, $g_adm_con);
 db_error($result);

@@ -225,10 +225,11 @@ else
    $sql    = "SELECT usr_first_name, usr_last_name, usr_email, rol_name
                 FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                WHERE rol_org_shortname = '$g_organization'
-                 AND rol_name     = {0}
+                 AND rol_name          = {0}
                  AND mem_rol_id        = rol_id
-                 AND mem_valid        = 1
+                 AND mem_valid         = 1
                  AND mem_usr_id        = usr_id
+                 AND usr_valid         = 1
                  AND LENGTH(usr_email) > 0 ";
    $sql    = prepareSQL($sql, array($_POST['rolle']));
    $result = mysql_query($sql, $g_adm_con);

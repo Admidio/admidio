@@ -46,7 +46,7 @@ $i = 0;
 if(!array_key_exists("letter", $_GET))
 {
    // alle Mitglieder zur Auswahl selektieren
-   $sql    = "SELECT usr_id FROM ". TBL_USERS. " ";
+   $sql    = "SELECT usr_id FROM ". TBL_USERS. " WHERE usr_valid = 1 ";
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
 
@@ -64,6 +64,7 @@ else
 // alle Mitglieder zur Auswahl selektieren
 $sql    = "SELECT * FROM ". TBL_USERS. "
             WHERE usr_last_name LIKE {0}
+              AND usr_valid = 1
             ORDER BY usr_last_name, usr_first_name ";
 $sql    = prepareSQL($sql, array($_GET['letter']));
 $result_mgl = mysql_query($sql, $g_adm_con);
@@ -105,7 +106,8 @@ require("../../../adm_config/body_top.php");
    {
       // Anzahl Mitglieder zum entsprechenden Buchstaben ermitteln
       $sql    = "SELECT COUNT(*) FROM ". TBL_USERS. "
-                  WHERE usr_last_name LIKE '$letter_menu%' ";
+                  WHERE usr_last_name LIKE '$letter_menu%' 
+                    AND usr_valid = 1 ";
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
       $row = mysql_fetch_array($result);

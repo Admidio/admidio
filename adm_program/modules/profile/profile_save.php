@@ -9,7 +9,6 @@
  * Uebergaben:
  *
  * user_id : ID des Benutzers, der bearbeitet werden soll
- * new_user - 1 : Neuen Benutzer hinzuzufügen.
  * url :     URL auf die danach weitergeleitet wird
  *
  ******************************************************************************
@@ -49,59 +48,35 @@ if(!editUser() && $user_id != $g_current_user->id)
    header($location);
    exit();
 }
-else
-{
-   if($_GET['new_user'] == 0)
-   {
-      // jetzt noch schauen, ob User überhaupt Mitglied in der Gliedgemeinschaft ist
-      $sql = "SELECT mem_id
-                FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-               WHERE rol_org_shortname = '$g_organization'
-                 AND rol_valid        = 1
-                 AND mem_rol_id        = rol_id
-                 AND mem_valid        = 1
-                 AND mem_usr_id        = {0}";
-      $sql    = prepareSQL($sql, array($user_id));
-      $result = mysql_query($sql, $g_adm_con);
-      db_error($result);
-
-      if(mysql_num_rows($result) == 0)
-      {
-         $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-         header($location);
-         exit();
-      }
-   }
-}
 
 $user = new TblUsers($g_adm_con);
 
-if($_GET['new_user'] == 1)
-{
-	if($user_id > 0)
-	{
-		// neuer User, dann PW aus Tabelle new_user holen
-		$sql = "SELECT anu_password 
-					 FROM ". TBL_NEW_USER. "
-					WHERE anu_id = $user_id ";
-		$sql    = prepareSQL($sql, array($user_id));
-		$result = mysql_query($sql, $g_adm_con);
-		db_error($result);
-		
-		$new_user_row = mysql_fetch_object($result);
-		$user->password = $new_user_row->anu_password;
-
-		// User wurde aus adm_new_user angelegt, dieser Satz kann jetzt gelöscht werden
-		$sql    = "DELETE FROM ". TBL_NEW_USER. " WHERE anu_id = {0}";
-		$sql    = prepareSQL($sql, array($user_id));
-		$result = mysql_query($sql, $g_adm_con);
-		db_error($result);
-	}
-}
-else
+if($user_id > 0)
 {
 	// Userdaten aus Datenbank holen
 	$user->getUser($user_id);
+	
+	if($user->valid == 1)
+	{
+		// keine Webanmeldung, dann schauen, ob User überhaupt Mitglied in der Gliedgemeinschaft ist
+		$sql = "SELECT mem_id
+					 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
+					WHERE rol_org_shortname = '$g_organization'
+					  AND rol_valid        = 1
+					  AND mem_rol_id        = rol_id
+					  AND mem_valid        = 1
+					  AND mem_usr_id        = {0}";
+		$sql    = prepareSQL($sql, array($user_id));
+		$result = mysql_query($sql, $g_adm_con);
+		db_error($result);
+
+		if(mysql_num_rows($result) == 0)
+		{
+			$location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norolle";
+			header($location);
+			exit();
+		}
+	}
 }
 
 // Feldinhalte saeubern und der User-Klasse zuordnen
@@ -131,22 +106,6 @@ if(strlen($user->last_name) > 0)
       {
          if(!isValidEmailAddress($user->email))
             $err_code = "email_invalid";
-      }
-
-      if($user_id > 0 && $_GET['new_user'] == 0)
-      {
-         // pruefen, ob dem Benutzer Rollen zugewiesen wurden
-         $sql    = "SELECT rol_org_shortname FROM ". TBL_ROLES. ", ". TBL_MEMBERS. "
-                     WHERE rol_valid       = 1
-                       AND mem_rol_id       = rol_id
-                       AND mem_usr_id       = {0}
-                       AND mem_valid       = 1 ";
-         $sql    = prepareSQL($sql, array($user_id));
-         $result = mysql_query($sql, $g_adm_con);
-         db_error($result, 1);
-
-         if(mysql_num_rows($result) == 0)
-            $err_code = "norolle";
       }
 
       if(strlen($user->login_name) > 0)
@@ -227,7 +186,7 @@ if(strlen($user->birthday) > 0)
 // Benutzerdaten in Datenbank schreiben
 /*------------------------------------------------------------*/
 
-if($user_id != 0 && $_GET['new_user'] == 0)
+if($user_id > 0)
 	$ret_code = $user->update($g_current_user->id);
 else
 	$ret_code = $user->insert($g_current_user->id);
@@ -293,44 +252,41 @@ while($row = mysql_fetch_object($result_msg))
    }
 }
 
-if($_GET['new_user'] == 1 && $user_id > 0)
+if($user->valid == 0)
 {
    /*------------------------------------------------------------*/
    // neuer Benutzer wurde ueber Webanmeldung angelegt
    /*------------------------------------------------------------*/
    if($g_forum == 1)
    {
-      $sql    = "SELECT * FROM ". TBL_NEW_USER. " WHERE anu_id = {0}";
-      $sql    = prepareSQL($sql, array($_GET['anu_id']));
-      $result = mysql_query($sql, $g_adm_con);
-      db_error($result);
+		mysql_select_db($g_forum_db, $g_forum_con);
 
-      if($user_row = mysql_fetch_object($result))
-      {
-         mysql_select_db($g_forum_db, $g_forum_con);
+		// jetzt noch den neuen User ins Forum eintragen
+		$sql    = "SELECT MAX(user_id) as anzahl FROM ". $g_forum_praefix. "_users";
+		$result = mysql_query($sql, $g_forum_con);
+		db_error($result);
+		$row    = mysql_fetch_array($result);
+		$new_user_id = $row[0] + 1;
 
-         // jetzt noch den neuen User ins Forum eintragen
-         $sql    = "SELECT MAX(user_id) as anzahl FROM ". $g_forum_praefix. "_users";
-         $result = mysql_query($sql, $g_forum_con);
-         db_error($result);
-         $row    = mysql_fetch_array($result);
-         $new_user_id = $row[0] + 1;
+		$sql    = "INSERT INTO ". $g_forum_praefix. "_users
+												 (user_id, username, user_password, user_regdate, user_timezone,
+												  user_style, user_lang, user_viewemail, user_attachsig, user_allowhtml,
+												  user_dateformat, user_email, user_notify, user_notify_pm, user_popup_pm,
+												  user_avatar)
+							VALUES ($user->id, '$user->login_name', '$user->password', ". time(). ", 1.00,
+									  2, 'german', 0, 1, 0,
+									  'd.m.Y, H:i', '$user->email', 0, 1, 1,
+									  '') ";
+		$result = mysql_query($sql, $g_forum_con);
+		db_error($result);
 
-         $sql    = "INSERT INTO ". $g_forum_praefix. "_users
-                                        (user_id, username, user_password, user_regdate, user_timezone,
-                                         user_style, user_lang, user_viewemail, user_attachsig, user_allowhtml,
-                                         user_dateformat, user_email, user_notify, user_notify_pm, user_popup_pm,
-                                         user_avatar)
-                        VALUES ($new_user_id, '$user_row->anu_login', '$user_row->anu_password', ". time(). ", 1.00,
-                                2, 'german', 0, 1, 0,
-                                'd.m.Y, H:i', '$user_row->anu_mail', 0, 1, 1,
-                                '') ";
-         $result = mysql_query($sql, $g_forum_con);
-         db_error($result);
-
-         mysql_select_db($g_adm_db, $g_adm_con);
-      }
+		mysql_select_db($g_adm_db, $g_adm_con);
    }
+   
+   // User auf aktiv setzen
+   $user->valid = 1;
+   $user->reg_org_shortname = "";
+   $user->update($g_current_user->id);
 
    // nur ausfuehren, wenn E-Mails auch unterstuetzt werden
    if($g_current_organization->mail_extern != 1)
@@ -340,23 +296,28 @@ if($_GET['new_user'] == 1 && $user_id > 0)
            "einloggen.\n\nSollten noch Fragen bestehen, schreib eine Mail an webmaster@$g_domain .\n\nViele Grüße\nDie Webmaster",
            "From: webmaster@$g_domain");
    }
-}
 
-/*------------------------------------------------------------*/
-// auf die richtige Seite weiterleiten
-/*------------------------------------------------------------*/
-
-if($_GET['new_user'] == 1)
-{
    // neuer User -> Rollen zuordnen
    $location = "location: roles.php?user_id=$user->id&new_user=1&url=". $_GET['url'];
    header($location);
    exit();
 }
 
-// zur Profilseite zurueckkehren und die URL, von der die Profilseite aufgerufen wurde uebergeben
-$load_url = urlencode("$g_root_path/adm_program/modules/profile/profile.php?user_id=$user_id&url=". $_GET['url']);
-$location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=save&timer=2000&url=$load_url";
+/*------------------------------------------------------------*/
+// auf die richtige Seite weiterleiten
+/*------------------------------------------------------------*/
+
+if($user_id == 0)
+{
+   // neuer User -> Rollen zuordnen
+   $location = "location: roles.php?user_id=$user->id&new_user=1&url=". $_GET['url'];
+}
+else
+{
+	// zur Profilseite zurueckkehren und die URL, von der die Profilseite aufgerufen wurde uebergeben
+	$load_url = urlencode("$g_root_path/adm_program/modules/profile/profile.php?user_id=$user_id&url=". $_GET['url']);
+	$location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=save&timer=2000&url=$load_url";
+}
 header($location);
 exit();
 ?>
