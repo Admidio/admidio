@@ -110,10 +110,11 @@ if ($count_user == 0)
    $sql    = "SELECT usr_email
                 FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                WHERE rol_org_shortname = '$g_organization'
-                 AND rol_name     = 'Webmaster'
+                 AND rol_name          = 'Webmaster'
                  AND mem_rol_id        = rol_id
-                 AND mem_valid        = 1
+                 AND mem_valid         = 1
                  AND mem_usr_id        = usr_id
+                 AND usr_valid         = 1
                  AND LENGTH(usr_email) > 0 ";
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);

@@ -36,9 +36,10 @@ if(!hasRole("Webmaster"))
 }
 
 // Neue Mitglieder der Gruppierung selektieren
-$sql    = "SELECT * FROM ". TBL_NEW_USER. " ".
-          " WHERE anu_org_shortname = '$g_organization' ".
-          " ORDER BY anu_name, anu_vorname ";
+$sql    = "SELECT * FROM ". TBL_USERS. " 
+            WHERE usr_valid = 0
+              AND usr_reg_org_shortname = '$g_organization' 
+            ORDER BY usr_last_name, usr_first_name ";
 $result = mysql_query($sql, $g_adm_con);
 db_error($result, 1);
 $member_found = mysql_num_rows($result);
@@ -81,14 +82,14 @@ require("../../../adm_config/body_top.php");
       while($row = mysql_fetch_object($result))
       {
          echo "<tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
-                  <td style=\"text-align: left;\">&nbsp;$row->anu_name</td>
-                  <td style=\"text-align: left;\">&nbsp;$row->anu_vorname</td>
-                  <td style=\"text-align: left;\">&nbsp;$row->anu_login</td>
-                  <td style=\"text-align: left;\">&nbsp;<a href=\"mailto:$row->anu_mail\">$row->anu_mail</a></td>
+                  <td style=\"text-align: left;\">&nbsp;$row->usr_last_name</td>
+                  <td style=\"text-align: left;\">&nbsp;$row->usr_first_name</td>
+                  <td style=\"text-align: left;\">&nbsp;$row->usr_login_name</td>
+                  <td style=\"text-align: left;\">&nbsp;<a href=\"mailto:$row->usr_email\">$row->usr_email</a></td>
                   <td style=\"text-align: center;\">
-                     <a href=\"new_user_function.php?mode=3&amp;anu_id=$row->anu_id\">
+                     <a href=\"new_user_function.php?mode=3&amp;new_user_id=$row->usr_id\">
                         <img src=\"$g_root_path/adm_program/images/properties.png\" border=\"0\" alt=\"Anmeldung zuordnen\" title=\"Anmeldung zuordnen\"></a>&nbsp;&nbsp;
-                     <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_new_user&amp;err_text=$row->anu_vorname $row->anu_name&amp;err_head=L&ouml;schen&amp;button=2&amp;url=". urlencode("$g_root_path/adm_program/administration/new_user/new_user_function.php?anu_id=$row->anu_id&amp;mode=4"). "\">
+                     <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_new_user&amp;err_text=$row->usr_first_name $row->usr_last_name&amp;err_head=L&ouml;schen&amp;button=2&amp;url=". urlencode("$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$row->usr_id&amp;mode=4"). "\">
                         <img src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"Anmeldung l&ouml;schen\" title=\"Anmeldung l&ouml;schen\"></a>
                   </td>
                </tr>";

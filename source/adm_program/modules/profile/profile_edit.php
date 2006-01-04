@@ -91,23 +91,8 @@ else
 // User auslesen
 if($a_user_id > 0)
 {
-   $user     = new TblUsers($g_adm_con);
-   if($a_new_user)
-   {
-      // aus User-Account ein neues Mitglied erstellen
-
-      $sql    = "SELECT * FROM ". TBL_NEW_USER. " WHERE anu_id = $a_user_id";
-      $result = mysql_query($sql, $g_adm_con);
-      db_error($result);
-      $user_row = mysql_fetch_object($result);
-      $user->last_name  = $user_row->anu_name;
-      $user->first_name = $user_row->anu_vorname;
-      $user->email      = $user_row->anu_mail;
-      $user->login_name = $user_row->anu_login;
-      $user->password   = $user_row->anu_password;
-   }
-   else
-      $user->GetUser($a_user_id);
+   $user = new TblUsers($g_adm_con);
+	$user->GetUser($a_user_id);
 }
 
 echo "
@@ -340,9 +325,9 @@ if($popup == 0)
                      echo "\" style=\"vertical-align: middle;\" /></div>
                   <div style=\"text-align: left; margin-left: 32%;\">";
                      if($a_new_user)
-                        echo "<input type=\"text\" name=\"$row->usf_name\" size=\"20\" maxlength=\"50\" />";
+                        echo "<input type=\"text\" name=\"". urlencode($row->usf_name). "\" size=\"20\" maxlength=\"50\" />";
                      else
-                        echo "<input type=\"text\" name=\"$row->usf_name\" size=\"20\" maxlength=\"50\" value=\"$row->usd_value\" />";
+                        echo "<input type=\"text\" name=\"". urlencode($row->usf_name). "\" size=\"20\" maxlength=\"50\" value=\"$row->usd_value\" />";
                   echo "</div>
                </div>";
             }

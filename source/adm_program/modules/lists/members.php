@@ -77,13 +77,14 @@ if($restrict=="" || !isModerator() || !editUser())$restrict="m";
 if($restrict=="m"){
 	$sql = "
 		SELECT DISTINCT usr_id, usr_last_name, usr_first_name, usr_birthday, usr_city, usr_phone, usr_address, usr_zip_code
-		FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. "
-		WHERE usr_id   = mem_usr_id
-		AND rol_org_shortname = '$g_organization'
-		AND mem_rol_id = rol_id
-		AND mem_valid  = 1
-		AND rol_valid  = 1
-		ORDER BY usr_last_name, usr_first_name ASC ";
+		  FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. "
+		 WHERE usr_id   = mem_usr_id
+		   AND rol_org_shortname = '$g_organization'
+		   AND mem_rol_id = rol_id
+	   	AND mem_valid  = 1
+		   AND rol_valid  = 1
+		   AND usr_valid  = 1
+		 ORDER BY usr_last_name, usr_first_name ASC ";
 	$result_user = mysql_query($sql, $g_adm_con);
 	db_error($result_user);
 	//Zählen wieviele Leute in der Datenbank stehen
@@ -94,7 +95,8 @@ if($restrict=="m"){
 if($restrict=="u"){
 	$sql = "
 		SELECT usr_id, usr_last_name, usr_first_name, usr_birthday, usr_city, usr_phone, usr_address, usr_zip_code
-		FROM ". TBL_USERS. "
+		  FROM ". TBL_USERS. "
+		 WHERE usr_valid = 1
 		ORDER BY usr_last_name, usr_first_name ASC ";
 	$result_user = mysql_query($sql, $g_adm_con);
 	db_error($result_user);

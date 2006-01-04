@@ -9,8 +9,8 @@
  * mode: 1 - User-Account einem Benutzer zuordnen
  *       3 - Abfrage, wie der Datensatz zugeordnet werden soll
  *       4 - User-Account loeschen
- * anu_id:   Id des Logins, das verarbeitet werden soll
- * usr_id:    Id des Benutzers, dem das neue Login zugeordnet werden soll
+ * new_user_id: Id des Logins, das verarbeitet werden soll
+ * user_id:     Id des Benutzers, dem das neue Login zugeordnet werden soll
  *
  ******************************************************************************
  *
@@ -44,67 +44,52 @@ if(!hasRole("Webmaster"))
 if($_GET["mode"] == 1)
 {
    // User-Account einem Mitglied zuordnen
+   
+   $new_user = new TblUsers($g_adm_con);
+   $new_user->getUser($_GET['new_user_id']);
 
-   $sql    = "SELECT * FROM ". TBL_NEW_USER. " WHERE anu_id = {0}";
-   $sql    = prepareSQL($sql, array($_GET['anu_id']));
-   $result = mysql_query($sql, $g_adm_con);
-   db_error($result);
+   $user = new TblUsers($g_adm_con);
+   $user->getUser($_GET['user_id']);
+   
+   $old_login = $user->login_name;
+   
+   // Daten kopieren
+   $user->email      = $new_user->email;
+   $user->login_name = $new_user->login_name;
+   $user->password   = $new_user->password;
+   
+	// zuerst den neuen Usersatz loeschen, dann den alten Updaten,
+	// damit kein Duplicate-Key wegen dem Loginnamen entsteht
+	$new_user->delete();
+   $user->update($g_current_user->id);
 
-   if($user_row = mysql_fetch_object($result))
-   {
-      $sql    = "SELECT usr_login_name
-                   FROM ". TBL_USERS. "
-                  WHERE usr_id = {0}";
-      $sql    = prepareSQL($sql, array($_GET['usr_id']));
-      $result = mysql_query($sql, $g_adm_con);
-      db_error($result);
+	if($g_forum == 1)
+	{
+		mysql_select_db($g_forum_db, $g_forum_con);
 
-      $row = mysql_fetch_array($result);
-      $old_login = $row[0];
+		// jetzt den User im Forum updaten
+		$sql    = "UPDATE ". $g_forum_praefix. "_users SET username      = '$user->login_name'
+																		 , user_password = '$user->password'
+																		 , user_email    = '$user->email'
+						WHERE username = '$old_login' ";
+		$result = mysql_query($sql, $g_forum_con);
+		db_error($result);
 
-      // Mitgliedsdaten updaten
-      $sql    = "UPDATE ". TBL_USERS. " SET usr_email     = '$user_row->anu_mail'
-                                    , usr_login_name    = '$user_row->anu_login'
-                                    , usr_password = '$user_row->anu_password'
-                  WHERE usr_id = {0}";
-      $sql    = prepareSQL($sql, array($_GET['usr_id']));
-      $result = mysql_query($sql, $g_adm_con);
-      db_error($result);
+		mysql_select_db($g_adm_db, $g_adm_con);
+	}
 
-      if($g_forum == 1)
-      {
-         mysql_select_db($g_forum_db, $g_forum_con);
+	// nur ausfuehren, wenn E-Mails auch unterstuetzt werden
+	if($g_current_organization->mail_extern != 1)
+	{
+		mail("$user->email", "Anmeldung auf $g_homepage", "Hallo $user->first_name,\n\ndeine Anmeldung auf $g_homepage ".
+			  "wurde bestätigt.\n\nNun kannst du dich mit deinem Benutzernamen : $user->login_name\nund dem Passwort auf der Homepage ".
+			  "einloggen.\n\nSollten noch Fragen bestehen, schreib eine Mail an webmaster@$g_domain .\n\nViele Grüße\nDie Webmaster",
+			  "From: webmaster@$g_domain");
+	}
 
-         // jetzt den User im Forum updaten
-         $sql    = "UPDATE ". $g_forum_praefix. "_users SET username      = '$user_row->anu_login'
-                                                          , user_password = '$user_row->anu_password'
-                                                          , user_email    = '$user_row->anu_mail'
-                     WHERE username = '$old_login' ";
-         $result = mysql_query($sql, $g_forum_con);
-         db_error($result);
-
-         mysql_select_db($g_adm_db, $g_adm_con);
-      }
-
-      // nun kann der User-Account gel&ouml;scht werden
-      $sql    = "DELETE FROM ". TBL_NEW_USER. " WHERE anu_id = {0}";
-      $sql    = prepareSQL($sql, array($_GET['anu_id']));
-      $result = mysql_query($sql, $g_adm_con);
-      db_error($result);
-
-      // nur ausfuehren, wenn E-Mails auch unterstuetzt werden
-      if($g_current_organization->mail_extern != 1)
-      {
-         mail("$user_row->anu_mail", "Anmeldung auf $g_homepage", "Hallo $user_row->anu_vorname,\n\ndeine Anmeldung auf $g_homepage ".
-              "wurde bestätigt.\n\nNun kannst du dich mit deinem Benutzernamen : $user_row->anu_login\nund dem Passwort auf der Homepage ".
-              "einloggen.\n\nSollten noch Fragen bestehen, schreib eine Mail an webmaster@$g_domain .\n\nViele Grüße\nDie Webmaster",
-              "From: webmaster@$g_domain");
-      }
-
-      $load_url = urlencode("$g_root_path/adm_program/administration/new_user/new_user.php");
-      $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=send_login_mail&url=$load_url";
-      header($location);
-   }
+	$load_url = urlencode("$g_root_path/adm_program/administration/new_user/new_user.php");
+	$location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=send_login_mail&url=$load_url";
+	header($location);
 }
 elseif($_GET["mode"] == 3)
 {
@@ -150,12 +135,12 @@ elseif($_GET["mode"] == 3)
          </p>
 
             <button name=\"zuordnen\" type=\"button\" value=\"zuordnen\"
-               onclick=\"self.location.href='$g_root_path/adm_program/administration/new_user/new_user_assign.php?anu_id=". $_GET['anu_id']. "&amp;all=0'\">
+               onclick=\"self.location.href='$g_root_path/adm_program/administration/new_user/new_user_assign.php?new_user_id=". $_GET['new_user_id']. "&amp;all=0'\">
                <img src=\"$g_root_path/adm_program/images/properties.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer anlegen\">
                &nbsp;Zuordnen</button>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <button name=\"anlegen\" type=\"button\" value=\"anlegen\"
-               onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=". $_GET['anu_id']. "&amp;new_user=1&amp;url=". urlencode("$g_root_path/adm_program/administration/new_user/new_user.php"). "'\">
+               onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=". $_GET['new_user_id']. "&amp;new_user=1&amp;url=". urlencode("$g_root_path/adm_program/administration/new_user/new_user.php"). "'\">
                <img src=\"$g_root_path/adm_program/images/person_new.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer anlegen\">
                &nbsp;Anlegen</button>
             &nbsp;&nbsp;&nbsp;&nbsp;
@@ -174,8 +159,8 @@ elseif($_GET["mode"] == 4)
 {
    // User-Account loeschen
 
-   $sql    = "DELETE FROM ". TBL_NEW_USER. " WHERE anu_id = {0}";
-   $sql    = prepareSQL($sql, array($_GET['anu_id']));
+   $sql    = "DELETE FROM ". TBL_USERS. " WHERE usr_id = {0}";
+   $sql    = prepareSQL($sql, array($_GET['new_user_id']));
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
 

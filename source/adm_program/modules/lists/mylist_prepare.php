@@ -106,6 +106,7 @@ $main_sql = "SELECT usr_id, $sql_select
                 AND mem_valid  = $act_members
                 AND mem_leader = 0
                 AND mem_usr_id = usr_id
+                AND usr_valid  = 1
                     $sql_where ";
 
 if(strlen($sql_orderby) > 0)
