@@ -40,9 +40,10 @@ if(!isModerator())
 }
 
 // Alle Rollen auflisten, die der Webmaster sehen darf
-$sql    = "SELECT * FROM ". TBL_ROLES. "
+$sql    = "SELECT * FROM ". TBL_ROLES. ", ". TBL_ROLE_CATEGORIES. "
             WHERE rol_org_shortname = '$g_organization'
-              AND rol_valid        = 1
+              AND rol_valid         = 1
+              AND rol_rlc_id        = rlc_id
             ORDER BY rol_name ";
 $result = mysql_query($sql, $g_adm_con);
 db_error($result, 1);
@@ -74,6 +75,7 @@ require("../../../adm_config/body_top.php");
    <table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\">
       <tr>
          <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;Rolle</th>
+         <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;Kategorie</th>
          <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/wand.png\" alt=\"Moderation (Benutzer &amp; Rollen verwalten uvm.)\" title=\"Moderation (Benutzer &amp; Rollen verwalten uvm.)\"></th>
          <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/person.png\" alt=\"Daten aller Benutzer bearbeiten\" title=\"Daten aller Benutzer bearbeiten\"></th>
          <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/history.png\" alt=\"Termine erfassen und bearbeiten\" title=\"Termine erfassen und bearbeiten\"></th>
@@ -89,40 +91,41 @@ require("../../../adm_config/body_top.php");
       while($row = mysql_fetch_object($result))
       {
          echo "<tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
-                  <td align=\"left\">&nbsp;<a href=\"$g_root_path/adm_program/modules/lists/lists_show.php?typ=address&amp;mode=html&amp;rolle=". urlencode($row->rol_name). "\">$row->rol_name</a></td>
-                  <td align=\"center\">";
+                  <td style=\"text-align: left;\">&nbsp;<a href=\"$g_root_path/adm_program/modules/lists/lists_show.php?typ=address&amp;mode=html&amp;rolle=". urlencode($row->rol_name). "\">$row->rol_name</a></td>
+                  <td style=\"text-align: left;\">&nbsp;$row->rlc_name</td>
+                  <td style=\"text-align: center;\">";
                      if($row->rol_moderation == 1)
                         echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/wand.png\" alt=\"Moderation (Benutzer &amp; Rollen verwalten uvm.)\" title=\"Moderation (Benutzer &amp; Rollen verwalten uvm.)\">";
                   echo "</td>
-                  <td align=\"center\">";
+                  <td style=\"text-align: center;\">";
                      if($row->rol_edit_user == 1)
                         echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/person.png\" alt=\"Daten aller Benutzer bearbeiten\" title=\"Daten aller Benutzer bearbeiten\">";
                   echo "</td>
-                  <td align=\"center\">";
+                  <td style=\"text-align: center;\">";
                      if($row->rol_dates == 1)
                         echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/history.png\" alt=\"Termine erfassen und bearbeiten\" title=\"Termine erfassen und bearbeiten\">";
                   echo "</td>
-                  <td align=\"center\">";
+                  <td style=\"text-align: center;\">";
                      if($row->rol_photo == 1)
                         echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/photo.png\" alt=\"Fotos hochladen und bearbeiten\" title=\"Fotos hochladen und bearbeiten\">";
                   echo "</td>
-                  <td align=\"center\">";
+                  <td style=\"text-align: center;\">";
                      if($row->rol_download == 1)
                         echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/download.png\" alt=\"Downloads hochladen und bearbeiten\" title=\"Downloads hochladen und bearbeiten\">";
                   echo "</td>
-                  <td align=\"center\">";
+                  <td style=\"text-align: center;\">";
                      if($row->rol_mail_logout == 1)
                         echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/mail-open.png\" alt=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\" title=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\">";
                   echo "</td>
-                  <td align=\"center\">";
+                  <td style=\"text-align: center;\">";
                      if($row->rol_mail_login == 1)
                         echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/mail-open-key.png\" alt=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\" title=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\">";
                   echo "</td>
-                  <td align=\"center\">";
+                  <td style=\"text-align: center;\">";
                      if($row->rol_locked == 1)
                         echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Rolle nur für Moderatoren sichtbar\" title=\"Rolle nur für Moderatoren sichtbar\">";
                   echo "</td>
-                  <td align=\"center\">
+                  <td style=\"text-align: center;\">
                      <a href=\"$g_root_path/adm_program/administration/roles/roles_new.php?rol_id=$row->rol_id\">
                         <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Rolle bearbeiten\" title=\"Rolle bearbeiten\"></a>";
 
