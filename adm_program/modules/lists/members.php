@@ -254,8 +254,8 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
 							<td style=\"text-align: center;\">
 								<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/note.png\" alt=\"Userinformationen\" title=\"$user_text\">
 							</td>
-							<td style=\"text-align: center;\">". $user['usr_last_name']."</td>
-							<td style=\"text-align: center;\">". $user['usr_first_name']."</td>
+							<td style=\"text-align: left;\">". $user['usr_last_name']."</td>
+							<td style=\"text-align: left;\">". $user['usr_first_name']."</td>
 							<td style=\"text-align: center;\">";
 								 if($user['usr_birthday']!='0000-00-00')echo mysqldate("d.m.y", $user['usr_birthday']);
 							echo"</td>
@@ -317,8 +317,8 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
 								<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/note.png\" alt=\"Userinformationen\"
 								 title=\"$user_text\">
 							</td>
-							<td style=\"text-align: center;\">". $user['usr_last_name']."</td>
-							<td style=\"text-align: center;\">". $user['usr_first_name']."</td>
+							<td style=\"text-align: left;\">". $user['usr_last_name']."</td>
+							<td style=\"text-align: left;\">". $user['usr_first_name']."</td>
 							<td style=\"text-align: center;\">";
 								 if($user['usr_birthday']!='0000-00-00')echo mysqldate("d.m.y", $user['usr_birthday']);
 							echo"</td>
