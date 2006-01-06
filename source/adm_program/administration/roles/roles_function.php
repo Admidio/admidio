@@ -192,45 +192,46 @@ elseif($_GET["mode"] == 2)
          if($_GET['rol_id'] > 0)
          {
             $act_date = date("Y.m.d G:i:s", time());
-            $sql = "UPDATE ". TBL_ROLES. "  SET rol_name          = {0}
-                                        , rol_description      = {1}
-                                        , rol_moderation      = $moderation
+            $sql = "UPDATE ". TBL_ROLES. "  SET rol_name    = {0}
+                                        , rol_description   = {1}
+                                        , rol_rlc_id        = {2}
+                                        , rol_moderation    = $moderation
                                         , rol_dates         = $termine
-                                        , rol_photo            = $foto
-                                        , rol_download        = $download
-                                        , rol_edit_user = $user
-                                        , rol_mail_logout     = $mail_logout
-                                        , rol_mail_login      = $mail_login
-                                        , rol_locked          = $locked
-                                        , rol_start_date         = '$d_datum_von'
-                                        , rol_start_time          = '$t_uhrzeit_von'
-                                        , rol_end_date         = '$d_datum_bis'
-                                        , rol_end_time          = '$t_uhrzeit_bis'
-                                        , rol_weekday         = {2}
-                                        , rol_location               = {3}
-                                        , rol_max_members    = {4}
-                                        , rol_cost           = {5}
-                                        , rol_last_change       = '$act_date'
-                                        , rol_usr_id_change    = $g_current_user->id
-                     WHERE rol_id = {6}";
+                                        , rol_photo         = $foto
+                                        , rol_download      = $download
+                                        , rol_edit_user     = $user
+                                        , rol_mail_logout   = $mail_logout
+                                        , rol_mail_login    = $mail_login
+                                        , rol_locked        = $locked
+                                        , rol_start_date    = '$d_datum_von'
+                                        , rol_start_time    = '$t_uhrzeit_von'
+                                        , rol_end_date      = '$d_datum_bis'
+                                        , rol_end_time      = '$t_uhrzeit_bis'
+                                        , rol_weekday       = {3}
+                                        , rol_location      = {4}
+                                        , rol_max_members   = {5}
+                                        , rol_cost          = {6}
+                                        , rol_last_change   = '$act_date'
+                                        , rol_usr_id_change = $g_current_user->id
+                     WHERE rol_id = {7}";
          }
          else
          {
             // Rolle in Datenbank hinzufuegen
-            $sql    = "INSERT INTO ". TBL_ROLES. " (rol_org_shortname, rol_name, rol_description,
+            $sql    = "INSERT INTO ". TBL_ROLES. " (rol_org_shortname, rol_name, rol_description, rol_rlc_id,
                                                rol_moderation, rol_dates, rol_photo, rol_download,
                                                rol_edit_user, rol_mail_logout, rol_mail_login,
                                                rol_locked, rol_start_date, rol_start_time,
                                                rol_end_date, rol_end_time, rol_weekday, rol_location,
                                                rol_max_members, rol_cost, rol_valid)
-                       VALUES ('$g_organization', {0}, {1},
+                       VALUES ('$g_organization', {0}, {1}, {2},
                                $moderation, $termine, $foto, $download,
                                $user, $mail_logout, $mail_login,
                                $locked, '$d_datum_von', '$t_uhrzeit_von',
-                               '$d_datum_bis','$t_uhrzeit_bis', {2}, {3},
-                               {4}, {5}, 1) ";
+                               '$d_datum_bis','$t_uhrzeit_bis', {3}, {4},
+                               {5}, {6}, 1) ";
          }
-         $sql    = prepareSQL($sql, array(trim($_POST['rolle']), trim($_POST['beschreibung']), $_POST['wochentag'],
+         $sql    = prepareSQL($sql, array(trim($_POST['rolle']), trim($_POST['beschreibung']), $_POST['category'], $_POST['wochentag'],
                      trim($_POST['ort']), $_POST['max_mitglieder'], $_POST['beitrag'], $_GET['rol_id']));
          $result = mysql_query($sql, $g_adm_con);
          db_error($result);
