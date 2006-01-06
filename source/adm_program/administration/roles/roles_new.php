@@ -136,7 +136,7 @@ require("../../../adm_config/body_top.php");
       echo "</div>
       <div class=\"formBody\">
          <div>
-            <div style=\"text-align: right; width: 28%; float: left;\">Rolle:</div>
+            <div style=\"text-align: right; width: 28%; float: left;\">Name:</div>
             <div style=\"text-align: left; margin-left: 30%;\">
                <input type=\"text\" name=\"rolle\" ";
                // bei bestimmte Rollen darf der Name nicht geaendert werden
