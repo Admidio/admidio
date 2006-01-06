@@ -150,17 +150,18 @@ if(strlen($g_tbl_praefix) == 0)
 	$g_tbl_praefix = "adm";
 
 // Defines fuer alle Datenbanktabellen
-define("TBL_ANNOUNCEMENTS",  $g_tbl_praefix. "_announcements");
-define("TBL_DATES",          $g_tbl_praefix. "_dates");
-define("TBL_MEMBERS",        $g_tbl_praefix. "_members");
-define("TBL_ORGANIZATIONS",  $g_tbl_praefix. "_organizations");
-define("TBL_PHOTOS",         $g_tbl_praefix. "_photos");
-define("TBL_ROLE_CATEGORIES",$g_tbl_praefix. "_role_categories");
-define("TBL_ROLES",          $g_tbl_praefix. "_roles");
-define("TBL_SESSIONS",       $g_tbl_praefix. "_sessions");
-define("TBL_USERS",          $g_tbl_praefix. "_users");
-define("TBL_USER_DATA",      $g_tbl_praefix. "_user_data");
-define("TBL_USER_FIELDS",    $g_tbl_praefix. "_user_fields");
+define("TBL_ANNOUNCEMENTS",    $g_tbl_praefix. "_announcements");
+define("TBL_DATES",            $g_tbl_praefix. "_dates");
+define("TBL_MEMBERS",          $g_tbl_praefix. "_members");
+define("TBL_ORGANIZATIONS",    $g_tbl_praefix. "_organizations");
+define("TBL_PHOTOS",           $g_tbl_praefix. "_photos");
+define("TBL_ROLE_CATEGORIES",  $g_tbl_praefix. "_role_categories");
+define("TBL_ROLE_DEPENDENCIES",$g_tbl_praefix. "_role_dependencies");
+define("TBL_ROLES",            $g_tbl_praefix. "_roles");
+define("TBL_SESSIONS",         $g_tbl_praefix. "_sessions");
+define("TBL_USERS",            $g_tbl_praefix. "_users");
+define("TBL_USER_DATA",        $g_tbl_praefix. "_user_data");
+define("TBL_USER_FIELDS",      $g_tbl_praefix. "_user_fields");
 
 /*------------------------------------------------------------*/
 // Eingabefelder pruefen
@@ -238,6 +239,24 @@ if($_GET['mode'] == 1)
    }
 
    // Default-Daten anlegen
+
+	// Rollen-Kategorie eintragen
+	$sql = "INSERT INTO ". TBL_ROLE_CATEGORIES. " (rlc_org_shortname, rlc_name)
+	             VALUES ('$row->ag_shortname', 'Allgemein')";
+	$result = mysql_query($sql, $connection);
+	if(!$result) showError(mysql_error());
+	$sql = "INSERT INTO ". TBL_ROLE_CATEGORIES. " (rlc_org_shortname, rlc_name)
+	             VALUES ('$row->ag_shortname', 'Gruppe')";
+	$result = mysql_query($sql, $connection);
+	if(!$result) showError(mysql_error());
+	$sql = "INSERT INTO ". TBL_ROLE_CATEGORIES. " (rlc_org_shortname, rlc_name)
+	             VALUES ('$row->ag_shortname', 'Kurs')";
+	$result = mysql_query($sql, $connection);
+	if(!$result) showError(mysql_error());
+	$sql = "INSERT INTO ". TBL_ROLE_CATEGORIES. " (rlc_org_shortname, rlc_name)
+	             VALUES ('$row->ag_shortname', 'Mannschaft')";
+	$result = mysql_query($sql, $connection);
+	if(!$result) showError(mysql_error());
 
    // Messenger anlegen
    $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_shortname, usf_type, usf_name, usf_description)
