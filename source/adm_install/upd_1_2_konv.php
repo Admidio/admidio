@@ -80,15 +80,15 @@ while($row = mysql_fetch_object($result_org))
 	$result = mysql_query($sql, $connection);
 	if(!$result) showError(mysql_error());
 	$sql = "INSERT INTO adm_role_categories (rlc_org_shortname, rlc_name)
-	             VALUES ('$row->ag_shortname', 'Gruppe')";
+	             VALUES ('$row->ag_shortname', 'Gruppen')";
 	$result = mysql_query($sql, $connection);
 	if(!$result) showError(mysql_error());
 	$sql = "INSERT INTO adm_role_categories (rlc_org_shortname, rlc_name)
-	             VALUES ('$row->ag_shortname', 'Kurs')";
+	             VALUES ('$row->ag_shortname', 'Kurse')";
 	$result = mysql_query($sql, $connection);
 	if(!$result) showError(mysql_error());
 	$sql = "INSERT INTO adm_role_categories (rlc_org_shortname, rlc_name)
-	             VALUES ('$row->ag_shortname', 'Mannschaft')";
+	             VALUES ('$row->ag_shortname', 'Mannschaften')";
 	$result = mysql_query($sql, $connection);
 	if(!$result) showError(mysql_error());
 }

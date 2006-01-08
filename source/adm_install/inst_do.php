@@ -240,24 +240,6 @@ if($_GET['mode'] == 1)
 
    // Default-Daten anlegen
 
-	// Rollen-Kategorie eintragen
-	$sql = "INSERT INTO ". TBL_ROLE_CATEGORIES. " (rlc_org_shortname, rlc_name)
-	             VALUES ('$row->ag_shortname', 'Allgemein')";
-	$result = mysql_query($sql, $connection);
-	if(!$result) showError(mysql_error());
-	$sql = "INSERT INTO ". TBL_ROLE_CATEGORIES. " (rlc_org_shortname, rlc_name)
-	             VALUES ('$row->ag_shortname', 'Gruppe')";
-	$result = mysql_query($sql, $connection);
-	if(!$result) showError(mysql_error());
-	$sql = "INSERT INTO ". TBL_ROLE_CATEGORIES. " (rlc_org_shortname, rlc_name)
-	             VALUES ('$row->ag_shortname', 'Kurs')";
-	$result = mysql_query($sql, $connection);
-	if(!$result) showError(mysql_error());
-	$sql = "INSERT INTO ". TBL_ROLE_CATEGORIES. " (rlc_org_shortname, rlc_name)
-	             VALUES ('$row->ag_shortname', 'Mannschaft')";
-	$result = mysql_query($sql, $connection);
-	if(!$result) showError(mysql_error());
-
    // Messenger anlegen
    $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_shortname, usf_type, usf_name, usf_description)
                 VALUES (NULL, 'MESSENGER', 'AIM', 'AOL Instant Messenger') ";
@@ -343,7 +325,7 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
 
    if(mysql_num_rows($result) > 0)
    {
-      showError("Eine Gruppierung / ein Verein mit dem angegebenen kurzen Namen <b>21.01.2005". $_POST['verein-name-kurz']. "</b> existiert bereits.<br /><br />
+      showError("Eine Gruppierung / ein Verein mit dem angegebenen kurzen Namen <b>". $_POST['verein-name-kurz']. "</b> existiert bereits.<br /><br />
                  W&auml;hlen Sie bitte einen anderen kurzen Namen !");
    }
 
@@ -353,23 +335,47 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
    $result = mysql_query($sql, $connection);
    if(!$result) showError(mysql_error());
 
+	// Rollen-Kategorie eintragen
+	$sql = "INSERT INTO ". TBL_ROLE_CATEGORIES. " (rlc_org_shortname, rlc_name)
+	             VALUES ({0}, 'Allgemein')";
+	$sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
+	$result = mysql_query($sql, $connection);
+	$category_common = mysql_insert_id();
+	
+	if(!$result) showError(mysql_error());
+	$sql = "INSERT INTO ". TBL_ROLE_CATEGORIES. " (rlc_org_shortname, rlc_name)
+	             VALUES ({0}, 'Gruppen')";
+	$sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
+	$result = mysql_query($sql, $connection);
+	if(!$result) showError(mysql_error());
+	$sql = "INSERT INTO ". TBL_ROLE_CATEGORIES. " (rlc_org_shortname, rlc_name)
+	             VALUES ({0}, 'Kurse')";
+	$sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
+	$result = mysql_query($sql, $connection);
+	if(!$result) showError(mysql_error());
+	$sql = "INSERT INTO ". TBL_ROLE_CATEGORIES. " (rlc_org_shortname, rlc_name)
+	             VALUES ({0}, 'Mannschaften')";
+	$sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
+	$result = mysql_query($sql, $connection);
+	if(!$result) showError(mysql_error());
+
    // nun die Default-Rollen anlegen
 
 	// Webmaster
-   $sql = "INSERT INTO ". TBL_ROLES. " (rol_org_shortname, rol_name, rol_description, rol_valid,
+   $sql = "INSERT INTO ". TBL_ROLES. " (rol_org_shortname, rol_rlc_id, rol_name, rol_description, rol_valid,
                                   rol_moderation, rol_dates, rol_photo, rol_download,
                                   rol_edit_user, rol_mail_logout, rol_mail_login)
-                VALUES ({0}, 'Webmaster', 'Gruppe der Administratoren des Systems', 1,
+                VALUES ({0}, $category_common, 'Webmaster', 'Gruppe der Administratoren des Systems', 1,
                                    1, 1, 1, 1, 1, 1, 1) ";
    $sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
    $result = mysql_query($sql, $connection);
    if(!$result) showError(mysql_error());
 
 	// Mitglied
-   $sql = "INSERT INTO ". TBL_ROLES. " (rol_org_shortname, rol_name, rol_description, rol_valid,
+   $sql = "INSERT INTO ". TBL_ROLES. " (rol_org_shortname, rol_rlc_id, rol_name, rol_description, rol_valid,
                                   rol_moderation, rol_dates, rol_photo, rol_download,
                                   rol_edit_user, rol_mail_logout, rol_mail_login)
-                VALUES ({0}, 'Mitglied', 'Alle Mitglieder der Organisation', 1,
+                VALUES ({0}, $category_common, 'Mitglied', 'Alle Mitglieder der Organisation', 1,
                                    0, 0, 0, 0, 0, 0, 1) ";
    $sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
    $result = mysql_query($sql, $connection);
@@ -382,8 +388,8 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
    // User Webmaster anlegen
 
    $pw_md5 = md5($_POST['user-passwort']);
-   $sql = "INSERT INTO ". TBL_USERS. " (usr_last_name, usr_first_name, usr_login_name, usr_password)
-                VALUES ({0}, {1}, {2}, '$pw_md5' ) ";
+   $sql = "INSERT INTO ". TBL_USERS. " (usr_last_name, usr_first_name, usr_login_name, usr_password, usr_valid)
+                VALUES ({0}, {1}, {2}, '$pw_md5', 1) ";
    $sql = prepareSQL($sql, array($_POST['user-surname'], $_POST['user-firstname'], $_POST['user-login']));
    $result = mysql_query($sql, $connection);
    if(!$result) showError(mysql_error());
