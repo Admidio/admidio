@@ -181,6 +181,11 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
 						<input type=\"checkbox\" id=\"leader-$i\" name=\"leader-$i\" ";
 						if($row->mem_leader > 0)
 							echo " checked ";
+
+						// die Funktion Webmaster darf nur von einem Webmaster vergeben werden
+						if($row->rol_name == 'Webmaster' && !hasRole('Webmaster'))
+							echo " disabled ";
+							
 						echo " onclick=\"markMember(this)\" value=\"1\" />
                </td>
                <td style=\"text-align: left; vertical-align: top;\">
