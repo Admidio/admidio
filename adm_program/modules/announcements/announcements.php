@@ -79,8 +79,11 @@ require("../../../adm_config/body_top.php");
 
    // alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
    $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. "
-            WHERE org_shortname = '$g_organization'
-               OR org_org_id_parent    = '$g_organization' ";
+            WHERE org_org_id_parent = $g_current_organization->id ";
+   if($g_current_organization->org_id_parent > 0)
+   {
+   	$sql = $sql. " OR org_id = $g_current_organization->org_id_parent ";
+	}
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
 
@@ -90,12 +93,7 @@ require("../../../adm_config/body_top.php");
    while($row = mysql_fetch_object($result))
    {
       if($i > 0) $organizations = $organizations. ", ";
-
-      if($row->org_shortname == $g_organization)
-         $organizations = $organizations. "'$row->org_org_id_parent'";
-      else
-         $organizations = $organizations. "'$row->org_shortname'";
-
+		$organizations = $organizations. "'$row->org_shortname'";
       $i++;
    }
 
@@ -117,11 +115,19 @@ require("../../../adm_config/body_top.php");
                   LIMIT ". $_GET["start"]. ", 10 ";
    }
 
+   $announcements_result = mysql_query($sql, $g_adm_con);
+   db_error($announcements_result);
+
+   // Gucken wieviele Datensaetze die Abfrage ermittelt kann...
+	$sql    = "SELECT COUNT(*) FROM ". TBL_ANNOUNCEMENTS. "
+					WHERE (  ann_org_shortname = '$g_organization'
+							OR (   ann_global   = 1
+								AND ann_org_shortname IN ($organizations) ))
+					ORDER BY ann_timestamp ASC ";
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
-
-   // Gucken wieviele Datensaetze die Abfrage ermittelt hat...
-   $row_count = mysql_num_rows($result);
+   $row = mysql_fetch_array($result);
+   $row_count = $row[0];
 
    if ($row_count == 0)
    {
@@ -177,7 +183,7 @@ require("../../../adm_config/body_top.php");
 
       // Ankuendigungen auflisten
 
-      while($row = mysql_fetch_object($result))
+      while($row = mysql_fetch_object($announcements_result))
       {
          $sql     = "SELECT * FROM ". TBL_USERS. " WHERE usr_id = $row->ann_usr_id";
          $result2 = mysql_query($sql, $g_adm_con);
