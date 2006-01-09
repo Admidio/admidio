@@ -84,13 +84,8 @@ $key   = key($_POST);
 
 while($row = mysql_fetch_object($result_rolle))
 {
-	if($row->rol_name == 'Webmaster' && !hasRole('Webmaster'))
-	{
-		// keine Berechtigung, diese Rolle zuzuweisen
-		$function = 0;
-		$leiter   = 0;
-	}
-	else
+	// der Webmaster-Rolle duerfen nur Webmaster neue Mitglieder zuweisen
+	if($row->rol_name != 'Webmaster' || hasRole('Webmaster'))
 	{
 		if($key == "role-$i")
 		{
