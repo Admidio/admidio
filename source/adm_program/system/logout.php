@@ -42,15 +42,11 @@ $session_found = mysql_num_rows($result);
 if($_SERVER['HTTP_HOST'] == 'localhost')
 {
    // beim localhost darf keine Domaine uebergeben werden
-   setcookie("". TBL_SESSIONS. "", "", 0, "/");
-   setcookie("". TBL_USERS. "_id", "", 0, "/");
-   setcookie("adm_login",   "", 0, "/");
+   setcookie("adm_session", "", 0, "/");
 }
 else
 {
-   setcookie("". TBL_SESSIONS. "", "", 0, "/", ".". $g_domain);
-   setcookie("". TBL_USERS. "_id", "", 0, "/", ".". $g_domain);
-   setcookie("adm_login",   "", 0, "/", ".". $g_domain);
+   setcookie("adm_session", "", 0, "/", ".". $g_domain);
 }
 
 if ($session_found > 0)
