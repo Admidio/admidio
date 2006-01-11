@@ -383,9 +383,9 @@ create index SES_ORG_FK on %PRAEFIX%_sessions
 /*==============================================================*/
 create table %PRAEFIX%_user_data
 (
-   usd_id                         int(11)                        not null AUTO_INCREMENT,
-   usd_usr_id                     int(7)                         not null,
-   usd_usf_id                     int(11)                        not null,
+   usd_id                         int(11) unsigned               not null AUTO_INCREMENT,
+   usd_usr_id                     int(11) unsigned               not null,
+   usd_usf_id                     int(11) unsigned               not null,
    usd_value                      varchar(255),
    primary key (usd_id),
    unique ak_usr_usf_id (usd_usr_id, usd_usf_id)
@@ -413,7 +413,7 @@ create index USD_USR_FK on %PRAEFIX%_user_data
 /*==============================================================*/
 create table %PRAEFIX%_user_fields
 (
-   usf_id                         int(11)                        not null AUTO_INCREMENT,
+   usf_id                         int(11) unsigned               not null AUTO_INCREMENT,
    usf_org_shortname              varchar(10),
    usf_type                       varchar(10)                    not null,
    usf_name                       varchar(100)                   not null,
@@ -463,18 +463,31 @@ create table %PRAEFIX%_users
    usr_valid                      tinyint(1) unsigned            not null default 0,
    usr_reg_org_shortname          varchar(10),
    primary key (usr_id),
-   unique ak_usr_login (usr_login_name)
+   unique ak_usr_login_name (usr_login_name)
 )
 type = InnoDB
 auto_increment = 1;
 
 /*==============================================================*/
-/* Index: "USR_USR_CHANGE_FK"                                            */
+/* Index: "USR_USR_CHANGE_FK"                                   */
 /*==============================================================*/
 create index USR_USR_CHANGE_FK on %PRAEFIX%_users
 (
    usr_usr_id_change
 );
+
+/*==============================================================*/
+/* Index: "USR_ORG_REG_FK"                                      */
+/*==============================================================*/
+create index USR_ORG_REG_FK on %PRAEFIX%_users
+(
+   usr_reg_org_shortname
+);
+
+
+/*==============================================================*/
+/* Constraints between tables                                   */
+/*==============================================================*/
 
 alter table %PRAEFIX%_announcements add constraint FK_ANN_ORG foreign key (ann_org_shortname)
       references %PRAEFIX%_organizations (org_shortname) on delete restrict on update restrict;
