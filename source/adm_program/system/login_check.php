@@ -69,11 +69,10 @@ $user_row   = mysql_fetch_object($result);
 
 if ($user_found >= 1)
 {
-   if(strlen($user_row->usr_invalid_login) > 0)
+   if($user_row->usr_num_invalid >= 3)
    {
       // wenn innerhalb 15 min. 3 falsche Logins stattfanden -> Konto 15 min. sperren
-      if(mktime() - mysqlmaketimestamp($user_row->usr_invalid_login) < 900
-      && $user_row->usr_num_invalid >= 3 )
+      if(mktime() - mysqlmaketimestamp($user_row->usr_invalid_login) < 900)
       {
          $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=login_failed";
          header($location);
