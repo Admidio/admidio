@@ -69,10 +69,10 @@ $user_row   = mysql_fetch_object($result);
 
 if ($user_found >= 1)
 {
-   if($user_row->usr_num_invalid >= 3)
+   if($user_row->usr_number_invalid >= 3)
    {
       // wenn innerhalb 15 min. 3 falsche Logins stattfanden -> Konto 15 min. sperren
-      if(mktime() - mysqlmaketimestamp($user_row->usr_invalid_login) < 900)
+      if(mktime() - mysqlmaketimestamp($user_row->usr_date_invalid) < 900)
       {
          $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=login_failed";
          header($location);
@@ -94,7 +94,7 @@ if ($user_found >= 1)
 
       $login_timestamp  = time();
       $login_datetime   = date("Y.m.d H:i:s", $login_timestamp);
-      $login_timestamp += ip2long($REMOTE_ADDR);
+      $login_timestamp += ip2long($_SERVER['REMOTE_ADDR']);
       $user_session     = md5($login_timestamp);
 
       // darf der User laenger eingeloggt sein
@@ -124,7 +124,7 @@ if ($user_found >= 1)
 
       // Last-Login speichern
 
-      $sql = "UPDATE ". TBL_USERS. " SET usr_last_login = usr_act_login
+      $sql = "UPDATE ". TBL_USERS. " SET usr_last_login = usr_actual_login
                WHERE usr_id = $user_row->usr_id";
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
@@ -132,10 +132,10 @@ if ($user_found >= 1)
       // Logins zaehlen und aktuelles Login-Datum speichern
 
       $act_date = date("Y-m-d H:i:s", time());
-      $sql = "UPDATE ". TBL_USERS. " SET usr_num_login     = usr_num_login + 1
-                                 , usr_act_login     = '$act_date'
-                                 , usr_invalid_login = NULL
-                                 , usr_num_invalid   = 0
+      $sql = "UPDATE ". TBL_USERS. " SET usr_number_login   = usr_number_login + 1
+                                 	   , usr_actual_login   = '$act_date'
+                                 	   , usr_date_invalid   = NULL
+                                		   , usr_number_invalid = 0
                WHERE usr_id = $user_row->usr_id";
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
@@ -149,8 +149,8 @@ if ($user_found >= 1)
    else
    {
       // ungültige Logins werden mitgeloggt
-      $sql    = "UPDATE ". TBL_USERS. " SET usr_invalid_login = NOW()
-                                    , usr_num_invalid   = usr_num_invalid + 1
+      $sql    = "UPDATE ". TBL_USERS. " SET usr_date_invalid = NOW()
+                                          , usr_number_invalid   = usr_number_invalid + 1
                   WHERE usr_id = $user_row->usr_id ";
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);

@@ -44,10 +44,10 @@ class TblUsers
    var $login_name;
    var $password;
    var $last_login;
-   var $act_login;
-   var $num_login;
-   var $invalid_login;
-   var $num_invalid;
+   var $actual_login;
+   var $number_login;
+   var $date_invalid;
+   var $number_invalid;
    var $last_change;
    var $usr_id_change;
    var $valid;
@@ -83,19 +83,19 @@ class TblUsers
             $this->birthday = "";
           else
             $this->birthday = $row->usr_birthday;
-         $this->gender        = $row->usr_gender;
-         $this->email         = $row->usr_email;
-         $this->homepage      = $row->usr_homepage;
-         $this->login_name    = $row->usr_login_name;
-         $this->password      = $row->usr_password;
-         $this->last_login    = $row->usr_last_login;
-         $this->act_login     = $row->usr_act_login;
-         $this->num_login     = $row->usr_num_login;
-         $this->invalid_login = $row->usr_invalid_login;
-         $this->num_invalid   = $row->usr_num_invalid;
-         $this->last_change   = $row->usr_last_change;
-         $this->usr_id_change = $row->usr_usr_id_change;
-   		$this->valid         = $row->usr_valid;
+         $this->gender         = $row->usr_gender;
+         $this->email          = $row->usr_email;
+         $this->homepage       = $row->usr_homepage;
+         $this->login_name     = $row->usr_login_name;
+         $this->password       = $row->usr_password;
+         $this->last_login     = $row->usr_last_login;
+         $this->actual_login   = $row->usr_actual_login;
+         $this->number_login   = $row->usr_number_login;
+         $this->date_invalid   = $row->usr_date_invalid;
+         $this->number_invalid = $row->usr_number_invalid;
+         $this->last_change    = $row->usr_last_change;
+         $this->usr_id_change  = $row->usr_usr_id_change;
+   		$this->valid          = $row->usr_valid;
    		$this->reg_org_shortname = $row->usr_reg_org_shortname;
       }
       else
@@ -105,30 +105,30 @@ class TblUsers
 	// alle Klassenvariablen wieder zuruecksetzen
    function clear()
    {
-		$this->id            = 0;
-		$this->last_name     = "";
-		$this->first_name    = "";
-		$this->address       = "";
-		$this->zip_code      = "";
-		$this->city          = "";
-		$this->country       = "";
-		$this->phone         = "";
-		$this->mobile        = "";
-		$this->fax           = "";
-		$this->birthday      = "";
-		$this->gender        = "";
-		$this->email         = "";
-		$this->homepage      = "";
-		$this->login_name    = NULL;
-		$this->password      = NULL;
-		$this->last_login    = "";
-		$this->act_login     = "";
-		$this->num_login     = 0;
-		$this->invalid_login = "";
-		$this->num_invalid   = 0;
-		$this->last_change   = "";
-		$this->usr_id_change = 0;
-		$this->valid         = 1;
+		$this->id             = 0;
+		$this->last_name      = "";
+		$this->first_name     = "";
+		$this->address        = "";
+		$this->zip_code       = "";
+		$this->city           = "";
+		$this->country        = "";
+		$this->phone          = "";
+		$this->mobile         = "";
+		$this->fax            = "";
+		$this->birthday       = "";
+		$this->gender         = "";
+		$this->email          = "";
+		$this->homepage       = "";
+		$this->login_name     = NULL;
+		$this->password       = NULL;
+		$this->last_login     = "";
+		$this->actual_login   = "";
+		$this->number_login   = 0;
+		$this->date_invalid   = "";
+		$this->number_invalid = 0;
+		$this->last_change    = "";
+		$this->usr_id_change  = 0;
+		$this->valid          = 1;
 		$this->reg_org_shortname = "";
    }
 
@@ -155,13 +155,13 @@ class TblUsers
 														, usr_email      = '$this->email'
 														, usr_homepage   = '$this->homepage'
 														, usr_last_login = '$this->last_login'
-														, usr_act_login  = '$this->act_login'
-														, usr_num_login  = $this->num_login
-														, usr_invalid_login = '$this->invalid_login'
-														, usr_num_invalid   = $this->num_invalid
-														, usr_last_change   = '$act_date'
-														, usr_usr_id_change = $login_user_id 
-														, usr_valid         = $this->valid
+														, usr_actual_login   = '$this->actual_login'
+														, usr_number_login   = $this->number_login
+														, usr_date_invalid   = '$this->date_invalid'
+														, usr_number_invalid = $this->number_invalid
+														, usr_last_change    = '$act_date'
+														, usr_usr_id_change  = $login_user_id 
+														, usr_valid          = $this->valid
 														, usr_reg_org_shortname = '$this->reg_org_shortname' ";
 			if(strlen($this->login_name) == 0)
 				$sql = $sql. ", usr_login_name = NULL, usr_password = NULL ";
@@ -186,8 +186,8 @@ class TblUsers
 
    		$sql = "INSERT INTO ". TBL_USERS. " (usr_last_name, usr_first_name, usr_address, usr_zip_code,
 									  usr_city, usr_country, usr_phone, usr_mobile, usr_fax, usr_birthday, 
-									  usr_gender, usr_email, usr_homepage, usr_last_login, usr_act_login, 
-									  usr_num_login, usr_invalid_login, usr_num_invalid, usr_last_change, 
+									  usr_gender, usr_email, usr_homepage, usr_last_login, usr_actual_login, 
+									  usr_number_login, usr_date_invalid, usr_number_invalid, usr_last_change, 
 									  usr_usr_id_change, usr_valid, usr_reg_org_shortname, usr_login_name, usr_password )
 							 VALUES ('$this->last_name', '$this->first_name', '$this->address', '$this->zip_code',
 										'$this->city', '$this->country', '$this->phone', '$this->mobile', '$this->fax', '$this->birthday', 
