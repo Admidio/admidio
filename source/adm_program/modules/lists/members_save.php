@@ -32,16 +32,25 @@
 
 require("../../system/common.php");
 require("../../system/session_check_login.php");
+//Übernahme der Rolle die bearbeitet werden soll
+$role_id = $_GET["role_id"];
 
-// nur Webmaster & Moderatoren duerfen Rollen zuweisen
-if(!isModerator() && !isGroupLeader() && !editUser())
- {
+//Erfassen der übergeben Rolle
+$sql	=	"SELECT * FROM ". TBL_ROLES. "
+			  WHERE rol_id = '$role_id'";
+$result_role = mysql_query($sql, $g_adm_con);
+         	db_error($result, true);
+$role = mysql_fetch_object($result_role);
+// nur Moderatoren dürfen Rollen zuweisen
+// nur Webmaster duerfen die Rolle Webmaster zuweisen
+// beide müssen mitglied der richtigen Gliedgemeinschaft sein
+if((!isModerator() && !isGroupLeader($role_id) && !editUser()) || (!hasRole("Webmaster") && $role->rol_name=="Webmaster") || $role->rol_org_shortname!=$g_organization)
+{
    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
    header($location);
    exit();
- }
-//Übernahme der Rolle die bearbeitet werden soll
-$role_id = $_GET["role_id"];
+}
+
 //Veraarbeitung der Daten
 	//Abfrag aller Datensätze die mit der Rolle zu tun haben
 	$sql ="	SELECT *
