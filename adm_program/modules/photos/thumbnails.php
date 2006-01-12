@@ -58,7 +58,7 @@
 
 //Beginn HTML
    echo "
-   <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
+   <!-- (c) 2004 - 2005 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
    <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
    <html>
    <head>
@@ -95,7 +95,7 @@
       //naechste Seite
 		$nachseite=$seite+1;
 		if($nachseite<=$seiten)
-			echo"	<a href=\"thumbnails.php?seite=$nachseite&amp;pho_id=$pho_id\">Nächste</a>";
+			echo"	<a href=\"thumbnails.php?seite=$nachseite&amp;pho_id=$pho_id\">N&auml;chste</a>";
 		echo"
       <table cellspacing=10 cellpadding=0 border=0>";
          for($zeile=1;$zeile<=5;$zeile++){//durchlaufen der Tabellenzeilen

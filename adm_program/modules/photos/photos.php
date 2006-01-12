@@ -28,6 +28,18 @@
 	require("../../system/common.php");
 	require("../../system/session_check.php");
 
+	//Falls gefordert und Photoeditrechet, ändern der Freigabe
+	if($g_session_valid && editPhoto()&& ($_GET["approved"]=="1" || $_GET["approved"]=="0")){
+		$pho_id=$_GET["pho_id"];
+		$approved=$_GET["approved"];
+				$sql= "UPDATE ". TBL_PHOTOS. "
+                SET 	pho_approved = '$approved'
+					WHERE pho_id = '$pho_id'";
+      //SQL Befehl ausführen
+      $result = mysql_query($sql, $g_adm_con);
+      db_error($result);
+	}
+	
 	//erfassen der Veranstaltungen die zur Gruppierung gehören
    $sql = "   SELECT *
             FROM ". TBL_PHOTOS. "
@@ -35,11 +47,11 @@
             ORDER BY pho_begin DESC ";
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
-
+	
    mysql_data_seek ($result, 0);
    //beginn HTML
    echo "
-   <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
+   <!-- (c) 2004 - 2005 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
    <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
    <html>
    <head>
@@ -76,7 +88,7 @@
          <th class=\"tableHeader\" style=\"text-align: center;\">Bilder</th>
          <th class=\"tableHeader\" style=\"text-align: center;\">Letze &Auml;nderung</th>";
          if ($g_session_valid && editPhoto()){
-            echo"<th class=\"tableHeader\" style=\"text-align: center;\">Bearbeiten</th>";
+            echo"<th class=\"tableHeader\" style=\"text-align: center; width: 90px;\">Bearbeiten</th>";
          }
       echo"</tr>
    ";
@@ -88,7 +100,7 @@
          $ordner = "../../../adm_my_files/photos/".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"];
          //Kontrollieren ob der entsprechende Ordner in adm_my_files existiert
          //wenn ja Zeile ausgeben
-         if(file_exists($ordner) || ($g_session_valid && editPhoto())){
+         if(file_exists($ordner) && ($adm_photo["pho_approved"]==1) || ($g_session_valid && editPhoto())){
          echo "
          <tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\">
             <td style=\"text-align: left;\">&nbsp;";
@@ -112,9 +124,14 @@
                   $err_text= $adm_photo["pho_name"]."(Beginn: ".mysqldate("d.m.y", $adm_photo["pho_begin"]).")";
                   echo"
                   <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_veranst&err_text=$err_text&err_head=Veranstaltung L&ouml;schen&button=2&url=". urlencode("$g_root_path/adm_program/modules/photos/event.php?aufgabe=delete&pho_id=".$adm_photo["pho_id"].""). "\">
-                     <img src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"Veranstaltung löschen\" title=\"Veranstaltung löschen\"></a>
-               </td>";
-            }
+                     <img src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"Veranstaltung löschen\" title=\"Veranstaltung löschen\"></a>";
+						
+						if($adm_photo["pho_approved"]==0 && file_exists($ordner)) echo "<a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$adm_photo["pho_id"]."&approved=1\">
+                     <img src=\"$g_root_path/adm_program/images/ok.png\" border=\"0\" alt=\"Freigeben\" title=\"Freigeben\"></a>&nbsp;";
+						if($adm_photo["pho_approved"]==1 && file_exists($ordner)) echo "<a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$adm_photo["pho_id"]."&approved=0\">
+                     <img src=\"$g_root_path/adm_program/images/no.png\" border=\"0\" alt=\"Sperren\" title=\"Sperren\"></a>&nbsp;";
+					echo"</td>";
+             }
          echo"</tr>
          ";
          }//Ende Ordner existiert
@@ -130,7 +147,7 @@
          <th class=\"tableHeader\" style=\"text-align: right;\" colspan=\"2\">Bilder Gesamt:</th>
          <th class=\"tableHeader\" style=\"text-align: center;\">$bildersumme</th>
          <th class=\"tableHeader\">&nbsp;</th>";
-         if ($g_session_valid && editPhoto())echo"<th class=\"tableHeader\">&nbsp;</th>";
+         if ($g_session_valid && editPhoto())echo"<th class=\"tableHeader\" colspan=\"2\">&nbsp;</th>";
          echo"
          </tr>
    </table>
