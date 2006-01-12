@@ -191,7 +191,7 @@ create table %PRAEFIX%_photos
    pho_begin                      date                           not null default '0000-00-00',
    pho_end                        date                           not null default '0000-00-00',
    pho_photographers              varchar(100),
-   pho_usr_id                     int(11) unsigned               not null,
+   pho_usr_id                     int(11) unsigned,
    pho_timestamp                  datetime                       not null,
    pho_approved                   tinyint(1) unsigned            not null default 0,
    pho_pho_id_parent              int(11) unsigned,
