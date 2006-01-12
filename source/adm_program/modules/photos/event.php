@@ -85,12 +85,17 @@ if($g_session_valid && editPhoto()){
       //Photographen
       $photographen =  $_POST["photographen"];
          if($photographen=="")$photographen="leider unbekannt";
+         
+      //Freigabe
+   	$approved=$_POST["approved"];
    //NeuenDatensatz anlegen falls makenew
    if ($aufgabe=="makenew"){
       $sql="INSERT INTO ". TBL_PHOTOS. " (pho_quantity, pho_name, pho_begin,
-                         pho_end, pho_photographers, pho_timestamp, pho_last_change, pho_org_shortname)
+                         pho_end, pho_photographers, pho_timestamp, pho_last_change, pho_org_shortname,
+									pho_usr_id, pho_approved, pho_pho_id_parent)
                VALUES(0, 'neu', '0000-00-00', '0000-00-00', 'leider unbekannt',
-                      '$act_datetime', '$act_datetime', '$g_organization')
+                      '$act_datetime', '$act_datetime', '$g_organization',
+								'0', '$approved', 'NULL')
       ";
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
@@ -146,8 +151,9 @@ if($g_session_valid && editPhoto()){
                      pho_begin ='$beginn',
                      pho_end ='$ende',
                      pho_photographers ='$photographen',
-                     pho_last_change ='$act_datetime'
-               WHERE pho_id = '$pho_id'";
+                     pho_last_change ='$act_datetime',
+               		pho_approved = '$approved'
+					WHERE pho_id = '$pho_id'";
       //SQL Befehl ausführen
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
@@ -167,7 +173,7 @@ if($g_session_valid && editPhoto()){
 //*************************************************************************************
 //Beginn HTML
    echo "
-   <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
+   <!-- (c) 2004 - 2005 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
    <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
    <html>
    <head>
@@ -196,7 +202,11 @@ if($g_session_valid && editPhoto()){
             <tr><td align=\"right\">Anfangsdatum:</td><td align=\"left\">".mysqldate("d.m.y", $neudaten["pho_begin"])."</td></tr>
             <tr><td align=\"right\">Enddatum:</td><td align=\"left\">".mysqldate("d.m.y", $neudaten["pho_end"])."</td></tr>
             <tr><td align=\"right\">Fotografen:</td><td align=\"left\">".$neudaten["pho_photographers"]."</td></tr>
-            <tr><td align=\"right\">Online seit:</td><td align=\"left\">".mysqldatetime("d.m.y h:i", $neudaten["pho_timestamp"])."</td></tr>
+            <tr><td align=\"right\">&Ouml;ffentliche Freigabe:</td><td align=\"left\">";
+            	if($neudaten["pho_approved"]==1) echo"Ja";
+            	if($neudaten["pho_approved"]==0) echo"Nein";
+            echo"</td></tr>
+				<tr><td align=\"right\">Online seit:</td><td align=\"left\">".mysqldatetime("d.m.y h:i", $neudaten["pho_timestamp"])."</td></tr>
             <tr><td align=\"right\">Letze &Auml;nderung:</td><td align=\"left\">".mysqldatetime("d.m.y h:i", $neudaten["pho_last_change"])."</td></tr>
             <tr><td align=\"right\">Gruppierung:</td><td align=\"left\">".$neudaten["pho_org_shortname"]."</td></tr>
          </table>
@@ -255,6 +265,17 @@ if($_GET["aufgabe"]=="change" || $_GET["aufgabe"]=="new"){
             <div style=\"text-align: left; margin-left: 180px;\">";
                if($_GET["aufgabe"]=="new")echo "<input type=\"text\" name=\"photographen\" size=\"30\" tabindex=\"1\">";
                if($_GET["aufgabe"]=="change")echo "<input type=\"text\" name=\"photographen\" size=\"30\" tabindex=\"1\" value=\"".$adm_photo["pho_photographers"]."\">";
+            echo"</div></div>";
+            //Freigabe
+            echo"
+            <div style=\"margin-top: 6px;\">
+              <div style=\"text-align: right; width: 170px; float: left;\">&Ouml;ffentliche Freigabe:</div>
+            <div style=\"text-align: left; margin-left: 180px;\">";
+               if($_GET["aufgabe"]=="new")echo "<input type=\"checkbox\" name=\"approved\" id=\"approved\" checked value=\"1\">";
+               if($_GET["aufgabe"]=="change"){
+                 	if($adm_photo["pho_approved"]==1) echo "<input type=\"checkbox\" name=\"approved\" id=\"approved\" checked value=\"1\">";
+						if($adm_photo["pho_approved"]==0) echo "<input type=\"checkbox\" name=\"approved\" id=\"approved\" value=\"1\">";
+               }           
             echo"</div></div>";
             //Online seit
             echo"
