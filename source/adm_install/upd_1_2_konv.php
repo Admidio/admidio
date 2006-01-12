@@ -171,7 +171,7 @@ if(!$result_org) showError(mysql_error());
 while($row = mysql_fetch_object($result_org))
 {
 	if($row->ar_gruppe == 1)
-		$cat_name = "Gruppe";
+		$cat_name = "Gruppen";
 	else
 		$cat_name = "Allgemein";
 		
@@ -213,7 +213,7 @@ while($row = mysql_fetch_object($result_org))
 	else
 		$sql .= "NULL,$row->ar_valid)";
 	$result = mysql_query($sql, $connection);
-	if(!$result) showError(mysql_error());
+	if(!$result) showError(mysql_error());	
 }
 
 // Mitglieder
