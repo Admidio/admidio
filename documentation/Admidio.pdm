@@ -4851,22 +4851,22 @@ auto_increment = 1
 </o:Column>
 <o:Column Id="o194">
 <a:ObjectID>FE5406D4-F4D6-4E9F-9F06-289A331EC5BE</a:ObjectID>
-<a:Name>usr_act_login</a:Name>
-<a:Code>usr_act_login</a:Code>
+<a:Name>usr_actual_login</a:Name>
+<a:Code>usr_actual_login</a:Code>
 <a:CreationDate>1131445048</a:CreationDate>
 <a:Creator>Fasse</a:Creator>
-<a:ModificationDate>1132921362</a:ModificationDate>
-<a:Modifier>Meuthen.Elmar</a:Modifier>
+<a:ModificationDate>1137062549</a:ModificationDate>
+<a:Modifier>Fasse</a:Modifier>
 <a:DataType>datetime</a:DataType>
 </o:Column>
 <o:Column Id="o195">
 <a:ObjectID>56C21027-299A-41C1-80DE-7E8DA9B230EE</a:ObjectID>
-<a:Name>usr_num_login</a:Name>
-<a:Code>usr_num_login</a:Code>
+<a:Name>usr_number_login</a:Name>
+<a:Code>usr_number_login</a:Code>
 <a:CreationDate>1131445048</a:CreationDate>
 <a:Creator>Fasse</a:Creator>
-<a:ModificationDate>1132865841</a:ModificationDate>
-<a:Modifier>Elmar</a:Modifier>
+<a:ModificationDate>1137062737</a:ModificationDate>
+<a:Modifier>Fasse</a:Modifier>
 <a:DefaultValue>0</a:DefaultValue>
 <a:DataType>smallint(5) unsigned</a:DataType>
 <a:Length>5</a:Length>
@@ -4874,22 +4874,22 @@ auto_increment = 1
 </o:Column>
 <o:Column Id="o196">
 <a:ObjectID>8E7E8894-EA20-4F16-990B-24B7384AA732</a:ObjectID>
-<a:Name>usr_invalid_login</a:Name>
-<a:Code>usr_invalid_login</a:Code>
+<a:Name>usr_date_invalid</a:Name>
+<a:Code>usr_date_invalid</a:Code>
 <a:CreationDate>1131445048</a:CreationDate>
 <a:Creator>Fasse</a:Creator>
-<a:ModificationDate>1132921362</a:ModificationDate>
-<a:Modifier>Meuthen.Elmar</a:Modifier>
+<a:ModificationDate>1137062372</a:ModificationDate>
+<a:Modifier>Fasse</a:Modifier>
 <a:DataType>datetime</a:DataType>
 </o:Column>
 <o:Column Id="o197">
 <a:ObjectID>019CA8F8-0B5C-4422-9B1B-B196AE0ABFA6</a:ObjectID>
-<a:Name>usr_num_invalid</a:Name>
-<a:Code>usr_num_invalid</a:Code>
+<a:Name>usr_number_invalid</a:Name>
+<a:Code>usr_number_invalid</a:Code>
 <a:CreationDate>1131445048</a:CreationDate>
 <a:Creator>Fasse</a:Creator>
-<a:ModificationDate>1132865841</a:ModificationDate>
-<a:Modifier>Elmar</a:Modifier>
+<a:ModificationDate>1137062737</a:ModificationDate>
+<a:Modifier>Fasse</a:Modifier>
 <a:DefaultValue>0</a:DefaultValue>
 <a:DataType>tinyint(3) unsigned</a:DataType>
 <a:Length>3</a:Length>
