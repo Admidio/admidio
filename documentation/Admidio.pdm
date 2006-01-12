@@ -3960,11 +3960,10 @@ auto_increment = 1
 <a:Code>pho_usr_id</a:Code>
 <a:CreationDate>1132868991</a:CreationDate>
 <a:Creator>Elmar</a:Creator>
-<a:ModificationDate>1132921497</a:ModificationDate>
-<a:Modifier>Meuthen.Elmar</a:Modifier>
+<a:ModificationDate>1137080046</a:ModificationDate>
+<a:Modifier>Fasse</a:Modifier>
 <a:DataType>int(11) unsigned</a:DataType>
 <a:Length>11</a:Length>
-<a:Mandatory>1</a:Mandatory>
 </o:Column>
 <o:Column Id="o124">
 <a:ObjectID>993FF41A-C3D5-4D14-8DD3-4EB2BB837ADE</a:ObjectID>
