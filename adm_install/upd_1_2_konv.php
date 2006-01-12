@@ -118,7 +118,7 @@ while($row = mysql_fetch_object($result_org))
 {
 	// Foto in neue Tabelle schreiben
 	$sql = "INSERT INTO adm_users (usr_id, usr_last_name, usr_first_name, usr_address, usr_zip_code, usr_city, usr_country, usr_phone, usr_mobile, usr_fax, usr_birthday,
-							  usr_email, usr_homepage, usr_login_name, usr_password, usr_last_login, usr_act_login, usr_num_login,
+							  usr_email, usr_homepage, usr_login_name, usr_password, usr_last_login, usr_actual_login, usr_number_login,
 							  usr_last_change, usr_usr_id_change, usr_valid)
 	             VALUES ($row->au_id, '$row->au_name', '$row->au_vorname', '$row->au_adresse', '$row->au_plz', '$row->au_ort', '$row->au_land', '$row->au_tel1', '$row->au_mobil', '$row->au_fax', '$row->au_geburtstag', 
 	             		  '$row->au_mail', '$row->au_weburl', ";
