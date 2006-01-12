@@ -101,16 +101,16 @@ require("../../../adm_config/body_top.php");
             <div style=\"margin-top: 6px;\">
                <div style=\"text-align: right; width: 40%; float: left;\">Übergeordnete Gruppierung:</div>
                <div style=\"text-align: left; margin-left: 42%;\">
-                  <select size=\"1\" name=\"mutter\">
-                     <option value=\" \" ";
-                        if(strlen($g_current_organization->org_shortname_mother) == 0)
+                  <select size=\"1\" name=\"parent\">
+                     <option value=\"0\" ";
+                        if(strlen($g_current_organization->org_org_id_parent) == 0)
                            echo " selected ";
                      echo ">- Bitte w&auml;hlen -</option>";
 
                      while($row = mysql_fetch_object($result))
                      {
                         echo "<option value=\"$row->org_id\"";
-                           if($g_current_organization->org_shortname_mother == $row->org_shortname)
+                           if($g_current_organization->org_id_parent == $row->org_id)
                               echo " selected ";
                         echo ">";
 

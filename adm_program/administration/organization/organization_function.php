@@ -44,11 +44,11 @@ $err_code   = "";
 
 $g_current_organization->longname  = strStripTags($_POST["longname"]);
 $g_current_organization->homepage  = strStripTags($_POST["homepage"]);
-$g_current_organization->org_shortname_mother = $_POST["mutter"];
-$g_current_organization->bbcode      = $_POST["bbcode"];
-$g_current_organization->mail_extern = $_POST["mail_extern"];
-$g_current_organization->mail_size   = $_POST["attachment_size"];
-$g_current_organization->enable_rss  = $_POST["enable_rss"];
+$g_current_organization->org_id_parent = $_POST["parent"];
+$g_current_organization->bbcode        = $_POST["bbcode"];
+$g_current_organization->mail_extern   = $_POST["mail_extern"];
+$g_current_organization->mail_size     = $_POST["attachment_size"];
+$g_current_organization->enable_rss    = $_POST["enable_rss"];
 
 // Pruefen, ob alle notwendigen Felder gefuellt sind
 if(strlen($g_current_organization->longname) == 0)

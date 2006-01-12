@@ -102,13 +102,16 @@ class TblOrganizations
 			$sql = "UPDATE ". TBL_ORGANIZATIONS. "
 												 SET org_longname    = '$this->longname'
                                     	, org_shortname   = '$this->shortname'
-													, org_org_id_parent = $this->org_id_parent
 													, org_homepage    = '$this->homepage'
 													, org_mail_size   = $this->mail_size
 													, org_mail_extern = $this->mail_extern
 													, org_enable_rss  = $this->enable_rss
-													, org_bbcode      = $this->bbcode
-					   WHERE org_id = $this->id ";
+													, org_bbcode      = $this->bbcode ";
+			if($this->org_id_parent == 0)
+				$sql = $sql. ", org_org_id_parent = NULL ";
+			else
+				$sql = $sql. ", org_org_id_parent = $this->org_id_parent ";
+			$sql = $sql. " WHERE org_id = $this->id ";
 			$result = mysql_query($sql, $this->db_connection);
 		   if(!$result) { echo "Error: ". mysql_error(); exit(); }
 		   return 0;
