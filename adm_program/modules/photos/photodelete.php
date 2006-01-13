@@ -26,16 +26,7 @@
 
 	require("../../system/common.php");
 	require("../../system/session_check_login.php");
-	
-//bei Seitenaufruf ohne Moderationsrechte
-if(!$g_session_valid || $g_session_valid && !editPhoto())
-      {
-        $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=photoverwaltunsrecht";
-      header($location);
-      exit();
-      }
-//bei Seitenaufruf mit Moderationsrechten
-if($g_session_valid && editPhoto()){
+
 //Übernahme Variablen
 	 $pho_id= $_GET['pho_id'];
 	 $bild = $_GET["bild"];
@@ -45,7 +36,18 @@ if($g_session_valid && editPhoto()){
 				WHERE (pho_id ='$pho_id')";
 	$result = mysql_query($sql, $g_adm_con);
 	db_error($result);
-	$adm_photo = mysql_fetch_array($result);
+	$adm_photo = mysql_fetch_array($result);	
+
+//bei Seitenaufruf ohne Moderationsrechte
+if(!$g_session_valid || $g_session_valid && !editPhoto($adm_photo["pho_org_shortname"]))
+      {
+        $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=photoverwaltunsrecht";
+      header($location);
+      exit();
+      }
+//bei Seitenaufruf mit Moderationsrechten
+if($g_session_valid && editPhoto($adm_photo["pho_org_shortname"])){
+
 //Speicherort
 	$ordner = "../../../adm_my_files/photos/".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"];
 

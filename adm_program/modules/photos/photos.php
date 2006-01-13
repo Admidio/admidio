@@ -27,19 +27,34 @@
  
 	require("../../system/common.php");
 	require("../../system/session_check.php");
-
-	//Falls gefordert und Photoeditrechet, ändern der Freigabe
-	if($g_session_valid && editPhoto()&& ($_GET["approved"]=="1" || $_GET["approved"]=="0")){
-		$pho_id=$_GET["pho_id"];
-		$approved=$_GET["approved"];
-				$sql= "UPDATE ". TBL_PHOTOS. "
-                SET 	pho_approved = '$approved'
-					WHERE pho_id = '$pho_id'";
-      //SQL Befehl ausführen
-      $result = mysql_query($sql, $g_adm_con);
-      db_error($result);
-	}
 	
+	//Falls gefordert und Photoeditrechet, ändern der Freigabe
+	//erfassen der Veranstaltung
+	if($_GET["approved"]=="1" || $_GET["approved"]=="0"){
+		$sql = "	SELECT *
+					FROM ". TBL_PHOTOS. "
+					WHERE (pho_id ='$pho_id')";
+		$result = mysql_query($sql, $g_adm_con);
+		db_error($result);
+		$adm_photo = mysql_fetch_array($result);
+		//bei Seitenaufruf ohne Moderationsrechte
+		if(!$g_session_valid || $g_session_valid && !editPhoto($adm_photo["pho_org_shortname"])){
+        	$location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=photoverwaltunsrecht";
+      	header($location);
+      	exit();
+      }
+		//bei Seitenaufruf mit Moderationsrechten
+		if($g_session_valid && editPhoto($adm_photo["pho_org_shortname"])){
+			$pho_id=$_GET["pho_id"];
+			$approved=$_GET["approved"];
+					$sql= "UPDATE ". TBL_PHOTOS. "
+            	   SET 	pho_approved = '$approved'
+						WHERE pho_id = '$pho_id'";
+      	//SQL Befehl ausführen
+      	$result = mysql_query($sql, $g_adm_con);
+      	db_error($result);
+		}
+	}
 	//erfassen der Veranstaltungen die zur Gruppierung gehören
    $sql = "   SELECT *
             FROM ". TBL_PHOTOS. "
@@ -49,7 +64,7 @@
    db_error($result);
 	
    mysql_data_seek ($result, 0);
-   //beginn HTML
+    //beginn HTML
    echo "
    <!-- (c) 2004 - 2005 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
    <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
@@ -70,7 +85,7 @@
    echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">";
    echo"<h1>Fotogalerien</h1>";
    //bei Seitenaufruf mit Moderationsrechten
-   if($g_session_valid && editPhoto()){
+   if($g_session_valid && editPhoto($g_organization)){
       echo"
       <button name=\"verwaltung\" type=\"button\" value=\"up\" style=\"width: 187px;\"
          onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/event.php?aufgabe=new'\">
@@ -87,7 +102,7 @@
          <th class=\"tableHeader\" style=\"text-align: left;\">Datum</th>
          <th class=\"tableHeader\" style=\"text-align: center;\">Bilder</th>
          <th class=\"tableHeader\" style=\"text-align: center;\">Letze &Auml;nderung</th>";
-         if ($g_session_valid && editPhoto()){
+         if ($g_session_valid && editPhoto($g_organization)){
             echo"<th class=\"tableHeader\" style=\"text-align: center; width: 90px;\">Bearbeiten</th>";
          }
       echo"</tr>
@@ -100,19 +115,19 @@
          $ordner = "../../../adm_my_files/photos/".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"];
          //Kontrollieren ob der entsprechende Ordner in adm_my_files existiert
          //wenn ja Zeile ausgeben
-         if(file_exists($ordner) && ($adm_photo["pho_approved"]==1) || ($g_session_valid && editPhoto())){
+         if(file_exists($ordner) && ($adm_photo["pho_approved"]==1) || ($g_session_valid && editPhoto($adm_photo["pho_org_shortname"]))){
          echo "
          <tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\">
             <td style=\"text-align: left;\">&nbsp;";
 				//Warnung für Für Leute mit Fotorechten
-				if(!file_exists($ordner) && ($g_session_valid && editPhoto()))
+				if(!file_exists($ordner) && ($g_session_valid && editPhoto($adm_photo["pho_org_shortname"])))
 					echo"<img src=\"$g_root_path/adm_program/images/warning16.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Warnhinweis\" title=\"Warnhinweis\"
                      onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=folder_not_found','Message','width=500, height=260, left=310,top=200,scrollbars=no')\">&nbsp;";
 				echo"<a target=\"_self\" href=\"thumbnails.php?pho_id=".$adm_photo["pho_id"]."\">".$adm_photo["pho_name"]."</a></td>
             <td style=\"text-align: center;\">".mysqldate("d.m.y", $adm_photo["pho_begin"])."</td>";//Anzeige beginn datum im deutschen Format
        		echo"<td style=\"text-align: center;\">".$adm_photo["pho_quantity"]."</td>
             <td style=\"text-align: center;\">".mysqldate("d.m.y", $adm_photo["pho_last_change"])."</td>";//Anzeige online seitdatum im deutschen Format
-            if ($g_session_valid && editPhoto()){
+            if ($g_session_valid && editPhoto($adm_photo["pho_org_shortname"])){
                echo"<td style=\"text-align: center;\">";
                   if(file_exists($ordner)){
                   echo"
@@ -147,7 +162,7 @@
          <th class=\"tableHeader\" style=\"text-align: right;\" colspan=\"2\">Bilder Gesamt:</th>
          <th class=\"tableHeader\" style=\"text-align: center;\">$bildersumme</th>
          <th class=\"tableHeader\">&nbsp;</th>";
-         if ($g_session_valid && editPhoto())echo"<th class=\"tableHeader\" colspan=\"2\">&nbsp;</th>";
+         if ($g_session_valid && editPhoto($g_organization))echo"<th class=\"tableHeader\" colspan=\"2\">&nbsp;</th>";
          echo"
          </tr>
    </table>
