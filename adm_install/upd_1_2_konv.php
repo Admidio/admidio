@@ -102,8 +102,8 @@ if(!$result_org) showError(mysql_error());
 while($row = mysql_fetch_object($result_org))
 {
 	// Foto in neue Tabelle schreiben
-	$sql = "INSERT INTO adm_photos (pho_id, pho_org_shortname, pho_quantity, pho_name, pho_begin, pho_end, pho_photographers, pho_timestamp, pho_last_change)
-	             VALUES ($row->ap_id, '$row->ap_ag_shortname', '$row->ap_number', '$row->ap_name', '$row->ap_begin', '$row->ap_end', '$row->ap_photographers', '$row->ap_online_since', '$row->ap_last_change')";
+	$sql = "INSERT INTO adm_photos (pho_id, pho_org_shortname, pho_quantity, pho_name, pho_begin, pho_end, pho_photographers, pho_timestamp, pho_approved, pho_last_change)
+	             VALUES ($row->ap_id, '$row->ap_ag_shortname', '$row->ap_number', '$row->ap_name', '$row->ap_begin', '$row->ap_end', '$row->ap_photographers', '$row->ap_online_since', 1, '$row->ap_last_change')";
 	$result = mysql_query($sql, $connection);
 	if(!$result) showError(mysql_error());
 }
@@ -118,8 +118,7 @@ while($row = mysql_fetch_object($result_org))
 {
 	// Foto in neue Tabelle schreiben
 	$sql = "INSERT INTO adm_users (usr_id, usr_last_name, usr_first_name, usr_address, usr_zip_code, usr_city, usr_country, usr_phone, usr_mobile, usr_fax, usr_birthday,
-							  usr_email, usr_homepage, usr_login_name, usr_password, usr_last_login, usr_actual_login, usr_number_login,
-							  usr_last_change, usr_usr_id_change, usr_valid)
+							  usr_email, usr_homepage, usr_login_name, usr_password, usr_last_login, usr_actual_login, usr_number_login, usr_valid)
 	             VALUES ($row->au_id, '$row->au_name', '$row->au_vorname', '$row->au_adresse', '$row->au_plz', '$row->au_ort', '$row->au_land', '$row->au_tel1', '$row->au_mobil', '$row->au_fax', '$row->au_geburtstag', 
 	             		  '$row->au_mail', '$row->au_weburl', ";
 	if(strlen($row->au_login) > 0)
@@ -137,11 +136,7 @@ while($row = mysql_fetch_object($result_org))
 	else
 		$sql .= "NULL, ";
 	             		  
-	$sql .= "$row->au_num_login, '$row->au_last_change', ";
-	if($row->au_last_change_id > 0)
-		$sql .= "$row->au_last_change_id, 1)";
-	else
-		$sql .= "NULL, 1)";
+	$sql .= "$row->au_num_login, 1)";
 	$result = mysql_query($sql, $connection);
 	if(!$result) showError(mysql_error());
 }
@@ -231,21 +226,6 @@ while($row = mysql_fetch_object($result_org))
 	if(!$result) showError(mysql_error());
 }
 
-// Sessions
-
-$sql = "SELECT * FROM adm_session";
-$result_org = mysql_query($sql, $connection);
-if(!$result_org) showError(mysql_error());
-
-while($row = mysql_fetch_object($result_org))
-{
-	// Sessions in neue Tabelle schreiben
-	$sql = "INSERT INTO adm_sessions (ses_id, ses_usr_id, ses_org_shortname, ses_session, ses_timestamp, ses_longer_session)
-	             VALUES ($row->as_id, $row->as_au_id, '$row->as_ag_shortname', '$row->as_session', '$row->as_datetime', $row->as_long_login)";
-	$result = mysql_query($sql, $connection);
-	if(!$result) showError(mysql_error());
-}
-
 // Benutzerdefinierte Felder
 
 $sql = "SELECT * FROM adm_user_field";
@@ -290,9 +270,13 @@ while($row = mysql_fetch_object($result_org))
 {
 	// Termine in neue Tabelle schreiben
 	$sql = "INSERT INTO adm_dates (dat_id, dat_org_shortname, dat_global, dat_begin, dat_end, dat_description, 
-								dat_location, dat_headline, dat_usr_id, dat_timestamp, dat_last_change, dat_usr_id_change)
+								dat_location, dat_headline, dat_timestamp, dat_usr_id, dat_last_change, dat_usr_id_change)
 	             VALUES ($row->at_id, '$row->at_ag_shortname', $row->at_global, '$row->at_von', '$row->at_bis', '$row->at_beschreibung',
-	             			'$row->at_ort', '$row->at_ueberschrift', $row->at_au_id, '$row->at_timestamp', ";
+	             			'$row->at_ort', '$row->at_ueberschrift', '$row->at_timestamp', ";
+	if(strlen($row->at_au_id) > 0)
+		$sql .= "$row->at_au_id, ";
+	else
+		$sql .= "NULL, ";
 	if(strlen($row->at_last_change) > 0)
 		$sql .= "'$row->at_last_change', ";
 	else
@@ -315,9 +299,13 @@ while($row = mysql_fetch_object($result_org))
 {
 	// Ankuendigungen in neue Tabelle schreiben
 	$sql = "INSERT INTO adm_announcements (ann_id, ann_org_shortname, ann_global, ann_description, 
-								ann_headline, ann_usr_id, ann_timestamp, ann_last_change, ann_usr_id_change)
+								ann_headline, ann_timestamp, ann_usr_id, ann_last_change, ann_usr_id_change)
 	             VALUES ($row->aa_id, '$row->aa_ag_shortname', $row->aa_global, '$row->aa_beschreibung',
-	             			'$row->aa_ueberschrift', $row->aa_au_id, '$row->aa_timestamp', ";
+	             			'$row->aa_ueberschrift', '$row->aa_timestamp', ";
+	if(strlen($row->aa_au_id) > 0)
+		$sql .= "$row->aa_au_id, ";
+	else
+		$sql .= "NULL, ";
 	if(strlen($row->aa_last_change) > 0)
 		$sql .= "'$row->aa_last_change', ";
 	else
