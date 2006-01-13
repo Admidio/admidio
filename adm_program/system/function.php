@@ -290,7 +290,7 @@ function editDate()
 
 // Funktion prueft, ob der angemeldete User Fotos hochladen und verwalten darf
 
-function editPhoto()
+function editPhoto($organization)
 {
    global $g_current_user;
    global $g_adm_con;
@@ -301,7 +301,7 @@ function editPhoto()
                WHERE mem_usr_id        = $g_current_user->id
                  AND mem_rol_id        = rol_id
                  AND mem_valid         = 1
-                 AND rol_org_shortname = '$g_organization'
+                 AND rol_org_shortname = '$organization'
                  AND rol_photo         = 1
                  AND rol_valid         = 1 ";
    $result = mysql_query($sql, $g_adm_con);
