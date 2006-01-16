@@ -206,7 +206,7 @@ function isMember($user_id, $organization = "")
 // Funktion prueft, ob der angemeldete User Leiter einer Gruppe /Kurs ist
 // Optionaler Parameter role_id prueft ob der angemeldete User Leiter der übergebenen Gruppe / Kurs ist
 
-function isGroupLeader($role_id=0)
+function isGroupLeader($role_id = 0)
 {
    global $g_current_user;
    global $g_adm_con;
@@ -290,11 +290,14 @@ function editDate()
 
 // Funktion prueft, ob der angemeldete User Fotos hochladen und verwalten darf
 
-function editPhoto($organization)
+function editPhoto($organization = "")
 {
    global $g_current_user;
    global $g_adm_con;
    global $g_organization;
+   
+   if(strlen($organization) == 0)
+   	$organization = $g_organization;
 
    $sql    = "SELECT *
                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
