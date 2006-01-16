@@ -292,6 +292,10 @@ function getErrorText($error_code, $error_text)
       case "invalid_folder":
          $error_str = "Sie haben einen ung&uuml;ltigen Ordner aufgerufen !";
          break;
+         
+      case "invalid_folder":
+         $error_str = "Sie haben eine ung&uuml;ltigen Datei aufgerufen !";
+         break;
 
       case "invalid_file_name":
          $error_str = "Du kannst die Datei <b>$error_text</b> nicht hochladen,

@@ -238,8 +238,8 @@ else
 
             //Link und Dateiinfo Ausgabe
             echo "<tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\">
-                     <td style=\"text-align: center;\"><a href=\"$act_folder/$ordnerarray[$i]\"><img src=\"$g_root_path/adm_program/images/$dateiendung.gif\" border=\"0\" alt=\"Datei\" title=\"Datei\"></a></td>
-                     <td style=\"text-align: left;\"><a href=\"$act_folder/$ordnerarray[$i]\">$ordnerarray[$i]</a></td>
+                     <td style=\"text-align: center;\"><a href=\"get_file.php?file=$folder/$ordnerarray[$i]\"><img src=\"$g_root_path/adm_program/images/$dateiendung.gif\" border=\"0\" alt=\"Datei\" title=\"Datei\"></a></td>
+                     <td style=\"text-align: left;\"><a href=\"get_file.php?file=$folder/$ordnerarray[$i]\">$ordnerarray[$i]</a></td>
                      <td style=\"text-align: center;\">$dateidatum</td>
                      <td style=\"text-align: right;\">$dateigroesse kB&nbsp;</td>";
 
