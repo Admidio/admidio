@@ -100,39 +100,38 @@ if(!isset($_GET['err_head']))
 
 if($inline == 0)
 {
-   echo "
-   <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
-   <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
+   echo '
+   <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: '. getVersion(). ' -->n
+   <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
    <html>
    <head>
-      <title>$g_current_organization->longname - Messagebox</title>
-      <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
+      <title>'. $g_current_organization->longname. ' - Messagebox</title>
+      <link rel="stylesheet" type="text/css" href="'. $g_root_path. '/adm_config/main.css">
 
       <!--[if gte IE 5.5000]>
-      <script language=\"JavaScript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
-      <![endif]-->";
+      <script language="JavaScript" src="'. $g_root_path. '/adm_program/system/correct_png.js"></script>
+      <![endif]-->';
 
       if($_GET['timer'] > 0)
       {
-         echo "<script language=\"JavaScript1.2\" type=\"text/javascript\"><!--\n
-               window.setTimeout(\"window.location.href='$load_url'\", ". $_GET['timer']. ");\n
-               //--></script>";
+         echo '<script language="JavaScript1.2" type="text/javascript"><!--n
+               window.setTimeout("window.location.href=\''. $load_url. '\'", '. $_GET['timer']. ');n
+               //--></script>';
       }
 
       require("../../adm_config/header.php");
-   echo "</head>";
+   echo '</head>';
 
    require("../../adm_config/body_top.php");
 }
 
-echo "
-   <div align=\"center\"><br /><br /><br />
+echo '
+<div style="margin-top: 10px; margin-bottom: 10px;" align="center"><br /><br />
+   <div class="formHead" style="width: 350px">'. strspace($_GET['err_head']). '</div>
 
-   <div class=\"formHead\" style=\"width: 350px\">". strspace($_GET['err_head']). "</div>
-
-   <div class=\"formBody\" style=\"width: 350px\">
-      <p>". getErrorText($err_code, $err_text). "</p>
-      <p>";
+   <div class="formBody" style="width: 350px">
+      <p>'. getErrorText($err_code, $err_text). '</p>
+      <p>';
          if($_GET['timer'] > 0)
          {
             echo "&nbsp;";
@@ -143,34 +142,34 @@ echo "
             {
                if($_GET['button'] == 1)
                {
-                  echo "<button name=\"weiter\" type=\"button\" value=\"weiter\" onclick=\"window.location.href='$load_url'\">
-                  <img src=\"$g_root_path/adm_program/images/forward.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Weiter\">
-                  &nbsp;Weiter</button>";
+                  echo '<button id="weiter" type="button" value="weiter" onclick="window.location.href=\''. $load_url. '\'">
+                  <img src="'. $g_root_path. '/adm_program/images/forward.png" style="vertical-align: middle;" align="top" vspace="1" width="16" height="16" border="0" alt="Weiter">
+                  &nbsp;Weiter</button>';
                }
                else
                {
-                  echo "<button name=\"ja\" type=\"button\" value=\"ja\"
-                     onclick=\"self.location.href='$load_url'\">
-                     <img src=\"$g_root_path/adm_program/images/ok.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Ja\">
+                  echo '<button id="ja" type="button" value="ja"
+                     onclick="self.location.href=\''. $load_url. '\'">
+                     <img src="'. $g_root_path. '/adm_program/images/ok.png" style="vertical-align: middle;" align="top" vspace="1" width="16" height="16" border="0" alt="Ja">
                      &nbsp;&nbsp;Ja&nbsp;&nbsp;&nbsp;</button>
                   &nbsp;&nbsp;&nbsp;&nbsp;
-                  <button name=\"nein\" type=\"button\" value=\"nein\"
-                     onclick=\"history.back()\">
-                     <img src=\"$g_root_path/adm_program/images/error.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Nein\">
-                     &nbsp;Nein</button>";
+                  <button id="nein" type="button" value="nein"
+                     onclick="history.back()">
+                     <img src="'. $g_root_path. '/adm_program/images/error.png" style="vertical-align: middle;" align="top" vspace="1" width="16" height="16" border="0" alt="Nein">
+                     &nbsp;Nein</button>';
                }
             }
             else
             {
-               echo "<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
-               <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
-               &nbsp;Zur&uuml;ck</button>";
+               echo '<button id="zurueck" type="button" value="zurueck" onclick="history.back()">
+               <img src="'. $g_root_path. '/adm_program/images/back.png" style="vertical-align: middle;" align="top" vspace="1" width="16" height="16" border="0" alt="Zurueck">
+               &nbsp;Zur&uuml;ck</button>';
             }
          }
-      echo "</p>
+      echo '</p>
    </div>
-   </div>";
+</div>';
 
-   require("../../adm_config/body_bottom.php");
-echo "</body></html>";
+require("../../adm_config/body_bottom.php");
+echo '</body></html>';
 ?>
