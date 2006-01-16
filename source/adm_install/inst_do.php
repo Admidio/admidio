@@ -29,44 +29,63 @@
 
 require("../adm_program/system/function.php");
 
-function showError($err_msg, $err_head = "Fehler", $finish = false)
+// Diese Funktion zeigt eine Fehlerausgabe an
+// mode = 0 (Default) Fehlerausgabe
+// mode = 1 Aktion wird durchgefuehrt (Abbrechen)
+// mode = 2 Aktion erfolgreich durchgefuehrt
+function showError($err_msg, $err_head = "Fehler", $mode = 0)
 {
    global $g_root_path;
 
-   echo "
-   <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org -->\n
-   <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
+   echo '
+   <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org -->
+   <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
    <html>
    <head>
       <title>Admidio - Installation</title>
 
-      <meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-15\">
-      <meta name=\"author\"   content=\"Markus Fassbender\">
-      <meta name=\"robots\"   content=\"index,follow\">
-      <meta name=\"language\" content=\"de\">
+      <meta http-equiv="content-type" content="text/html; charset=ISO-8859-15">
+      <meta name="author"   content="Markus Fassbender">
+      <meta name="robots"   content="index,follow">
+      <meta name="language" content="de">
 
-      <link rel=\"stylesheet\" type=\"text/css\" href=\"../adm_config/main.css\">
+      <link rel="stylesheet" type="text/css" href="../adm_config/main.css">
    </head>
    <body>
-      <div align=\"center\"><br /><br />
-         <div class=\"formHead\" style=\"width: 300px;\">$err_head</div>
-         <div class=\"formBody\" style=\"width: 300px;\">
-            <p>$err_msg</p>
-            <p><button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"";
-            if($finish)
-               echo "self.location.href='../adm_program/index.php'\">
-					<img src=\"../adm_program/images/list.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zurueck\">
-					Admidio &Uuml;bersicht";
+      <div style="margin-top: 10px; margin-bottom: 10px;" align="center"><br />
+         <div class="formHead" style="width: 300px;">'. $err_head. '</div>
+         <div class="formBody" style="width: 300px;">
+            <p>'. $err_msg. '</p>
+            <p><button id="zurueck" type="button" value="zurueck" onclick="';
+            if($mode == 2)
+            {
+            	// Erfolgreich durchgefuehrt
+               echo 'self.location.href=\'../adm_program/index.php\'">
+					<img src="../adm_program/images/list.png" style="vertical-align: middle;" align="top" vspace="1" width="16" height="16" border="0" alt="Zurueck"> Admidio &Uuml;bersicht';
+				}
+				elseif($mode == 1)
+				{
+					// In Bearbeitung (Zurueckgehen)
+               echo 'history.back()">
+					<img src="../adm_program/images/error.png" style="vertical-align: middle;" align="top" vspace="1" width="16" height="16" border="0" alt="Zurueck">
+					Abbrechen';
+				}
             else
-               echo "history.back()\">
-					<img src=\"../adm_program/images/back.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zurueck\">
-					Zur&uuml;ck";
-            echo "</button></p>
+            {
+            	// Fehlermeldung (Zurueckgehen)
+               echo 'history.back()">
+					<img src="../adm_program/images/back.png" style="vertical-align: middle;" align="top" vspace="1" width="16" height="16" border="0" alt="Zurueck">
+					Zur&uuml;ck';
+				}
+            echo '</button></p>
          </div>
       </div>
    </body>
-   </html>";
-   exit();
+   </html>';
+   if($mode == 1)
+   	flush();
+   else
+	   exit();
 }
 
 if($_GET['mode'] == 1)
@@ -138,7 +157,7 @@ elseif($_GET['mode'] == 2)
 elseif($_GET['mode'] == 5)
 {
 	if(file_exists("../adm_config/config.php"))
-		showError("Die Datenbank wurde erfolgreich angelegt und die Datei config.php erstellt.<br><br>Sie können nun mit Admidio arbeiten.", "Fertig", true);
+		showError("Die Datenbank wurde erfolgreich angelegt und die Datei config.php erstellt.<br><br>Sie können nun mit Admidio arbeiten.", "Fertig", 2);
 	else
 		showError("Die Datei <b>config.php</b> befindet sich nicht im Verzeichnis <b>adm_config</b> !");
 }
@@ -226,7 +245,7 @@ if($_GET['mode'] == 1)
    $content  = fread($file, filesize($filename));
    $sql_arr  = explode(";", $content);
    fclose($file);
-
+   
    foreach($sql_arr as $sql)
    {
       if(strlen(trim($sql)) > 0)
@@ -277,6 +296,8 @@ if($_GET['mode'] == 3)
    // Updatescripte fuer die Datenbank verarbeiten
    if($_POST['version'] > 0)
    {
+		showError("Die Datenbank wird aktualisiert ...", "In Bearbeitung", 1);
+
       for($i = $_POST['version']; $i <= 2; $i++)
       {
          if($i == 1)
@@ -432,5 +453,5 @@ if($_GET['mode'] == 1)
    exit();
 }
 else
-	showError("Die Einrichtung der Datenbank konnte erfolgreich abgeschlossen werden.", "Fertig", true);
+	showError("Die Einrichtung der Datenbank konnte erfolgreich abgeschlossen werden.", "Fertig", 2);
 ?>
