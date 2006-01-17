@@ -101,7 +101,7 @@ if(!isset($_GET['err_head']))
 if($inline == 0)
 {
    echo '
-   <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: '. getVersion(). ' -->n
+   <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: '. getVersion(). ' -->
    <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
    <html>
    <head>
