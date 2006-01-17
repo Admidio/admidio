@@ -8,7 +8,12 @@
  *
  * Uebergaben:
  *
- * file	: 
+ * folder :  relativer Pfad zu der Datei / Ordners
+ * default_folder : gibt den Ordner in adm_my_files/download an, ab dem die
+ *                  Verzeichnisstruktur angezeigt wird. Wurde ein Default-Ordner
+ *                  gesetzt, kann der Anwender nur noch in Unterordner und nicht
+ *                  in hoehere Ordner des Default-Ordners navigieren
+ * file   :  die Datei / der Ordner der / die verarbeitet wird
  ******************************************************************************
  *
  * This program is free software; you can redistribute it and/or
@@ -27,49 +32,43 @@
  *
  *****************************************************************************/
 
-	require("../../system/common.php");
-// $download sei der Bezeichner für die zu ladende Datei
-// etwa: 
-$file = $_GET['file'];
+require("../../system/common.php");
+require("../../system/session_check.php");
 
-// Dieses Verzeichnis liegt außerhalb des Document Root und
-// ist nicht per URL erreichbar.
-$basedir = "$g_root_path/adm_my_files/download";
+$folder = urldecode($_GET['folder']);
+$file   = urldecode($_GET['file']);
+$default_folder = urldecode($_GET['default_folder']);
+$act_folder     = "../../../adm_my_files/download";
 
 // uebergebene Ordner auf Gueltigkeit pruefen
 // und Ordnerpfad zusammensetzen
-   if(strlen($file) > 0)
+if(strlen($default_folder) > 0)
+{
+   if(strpos($default_folder, "..") !== false)
    {
-      if(strpos($file, "..") !== false)
-      {
-         $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_file";
-         header($location);
-         exit();
-      }
-      $act_folder = "$act_folder/$default_folder";
+      $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_folder";
+      header($location);
+      exit();
    }
+   $act_folder = "$act_folder/$default_folder";
+}
 
-   if(strlen($file) > 0)
+if(strlen($folder) > 0)
+{
+   if(strpos($folder, "..") !== false)
    {
-      if(strpos($file, "..") !== false)
-      {
-         $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_file";
-         header($location);
-         exit();
-      }
-      $act_folder = "$act_folder/$folder";
+      $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_folder";
+      header($location);
+      exit();
    }
+   $act_folder = "$act_folder/$folder";
+}
 
-// Vertrauenswürdigen Dateinamen basteln.
-$filename = sprintf("%s/%s", $basedir, $file);
+$filename = "$act_folder/$file";
 
 // Passenden Datentyp erzeugen.
 header("Content-Type: application/octet-stream");
-
-// Passenden Dateinamen im Download-Requester vorgeben,
-// z. B. den Original-Dateinamen
-$save_as_name = basename($file);
-header("Content-Disposition: attachment; filename=\"$save_as_name\"");
+header("Content-Disposition: attachment; filename=\"$file\"");
 
 // Datei ausgeben.
 readfile($filename);

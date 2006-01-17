@@ -55,8 +55,6 @@ function file_or_folder ($act_dir,$file) {
 	}
 };
 
-remove_dir();
-
 //Rekursive Funktion
 function remove_dir ($dir) {
 	$folders = scandir("$dir");
