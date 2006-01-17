@@ -467,10 +467,8 @@ if($mode == "csv")
 {
    // nun die erstellte CSV-Datei an den User schicken
    $filename = $g_organization. "-". str_replace(" ", "_", str_replace(".", "", $role)). ".csv";
-   header("Content-Type: application/force-download");
-   header("Content-Type: application/download");
-   header("Content-Type: text/csv; charset=ISO-8859-1");
-   header("Content-Disposition: attachment; filename=$filename");
+   header("Content-Type: text/comma-separated-values; charset=ISO-8859-1");
+   header("Content-Disposition: attachment; filename=\"$filename\"");
    echo $str_csv;
 }
 else
