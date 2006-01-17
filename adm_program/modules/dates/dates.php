@@ -41,6 +41,9 @@ if(!array_key_exists("mode", $_GET))
 if(!array_key_exists("start", $_GET))
    $_GET["start"] = 0;
 
+if(!array_key_exists("id", $_GET))
+   $_GET["id"] = 0;
+
 if($g_current_organization->bbcode == 1)
 {
    // Klasse fuer BBCode
@@ -103,10 +106,10 @@ require("../../../adm_config/body_top.php");
    }
 
    // falls eine id fuer ein bestimmtes Datum uebergeben worden ist...
-   if (array_key_exists("id", $_GET))
+   if($_GET['id'] > 0)
    {
    	 $sql    = "SELECT * FROM ". TBL_DATES. "
-                  WHERE dat_id = $_GET[id]";
+                  WHERE dat_id = ". $_GET['id'];
    }
    //...ansonsten alle fuer die Gruppierung passenden Termine aus der DB holen.
 	else
@@ -169,7 +172,7 @@ require("../../../adm_config/body_top.php");
 
    if($row_count == 0)
    {
-      if (array_key_exists("id", $_GET))
+      if($_GET['id'] > 0)
    	{
    		echo "<p>Der angeforderte Eintrag exisitiert nicht (mehr) in der Datenbank.</p>";
    	}
@@ -180,44 +183,45 @@ require("../../../adm_config/body_top.php");
    }
    else
    {
-
-      // Tabelle mit den vor- und zurück und neu Buttons
-
-      echo "
-      <table style=\"margin-top: 10px; margin-bottom: 10px;\" border=\"0\">
-         <tr>
-            <td width=\"33%\" align=\"left\">";
-               if($_GET["start"] > 0)
-               {
-                  $start = $_GET["start"] - 10;
-                  if($start < 0) $start = 0;
-                  echo "<button name=\"back\" type=\"button\" value=\"back\" style=\"width: 152px;\"
-                           onclick=\"self.location.href='dates.php?mode=". $_GET["mode"]. "&amp;start=$start'\">
-                           <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Vorherige Termine\">
-                           vorherige Termine</button>";
-               }
-            echo "</td>
-            <td width=\"33%\" align=\"center\">";
-               // wenn Termine editiert werden duerfen, dann anzeigen
-               if(editDate())
-               {
-                  echo "<button name=\"new\" type=\"button\" value=\"new\" style=\"width: 152px;\"
-                           onclick=\"self.location.href='dates_new.php'\">
-                           <img src=\"$g_root_path/adm_program/images/write.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Neuer Termin\">
-                           &nbsp;Termin anlegen</button>";
-               }
-            echo "</td>
-            <td width=\"33%\" align=\"right\">";
-               if($row_count > $_GET["start"] + 10)
-               {
-                  $start = $_GET["start"] + 10;
-                  echo "<button name=\"forward\" type=\"button\" value=\"forward\" style=\"width: 152px;\"
-                           onclick=\"self.location.href='dates.php?mode=". $_GET["mode"]. "&amp;start=$start'\">n&auml;chsten Termine
-                           <img src=\"$g_root_path/adm_program/images/forward.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"N&auml;chste Termine\"></button>";
-               }
-            echo "</td>
-         </tr>
-      </table>";
+		if($_GET['id'] == 0)
+		{
+			// Tabelle mit den vor- und zurück und neu Buttons
+			echo "
+			<table style=\"margin-top: 10px; margin-bottom: 10px;\" border=\"0\">
+				<tr>
+					<td width=\"33%\" align=\"left\">";
+						if($_GET["start"] > 0)
+						{
+							$start = $_GET["start"] - 10;
+							if($start < 0) $start = 0;
+							echo "<button name=\"back\" type=\"button\" value=\"back\" style=\"width: 152px;\"
+										onclick=\"self.location.href='dates.php?mode=". $_GET["mode"]. "&amp;start=$start'\">
+										<img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Vorherige Termine\">
+										vorherige Termine</button>";
+						}
+					echo "</td>
+					<td width=\"33%\" align=\"center\">";
+						// wenn Termine editiert werden duerfen, dann anzeigen
+						if(editDate())
+						{
+							echo "<button name=\"new\" type=\"button\" value=\"new\" style=\"width: 152px;\"
+										onclick=\"self.location.href='dates_new.php'\">
+										<img src=\"$g_root_path/adm_program/images/write.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Neuer Termin\">
+										&nbsp;Termin anlegen</button>";
+						}
+					echo "</td>
+					<td width=\"33%\" align=\"right\">";
+						if($row_count > $_GET["start"] + 10)
+						{
+							$start = $_GET["start"] + 10;
+							echo "<button name=\"forward\" type=\"button\" value=\"forward\" style=\"width: 152px;\"
+										onclick=\"self.location.href='dates.php?mode=". $_GET["mode"]. "&amp;start=$start'\">n&auml;chsten Termine
+										<img src=\"$g_root_path/adm_program/images/forward.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"N&auml;chste Termine\"></button>";
+						}
+					echo "</td>
+				</tr>
+			</table>";
+		}
 
       // Termine auflisten
 
@@ -305,8 +309,9 @@ require("../../../adm_config/body_top.php");
       }  // Ende While-Schleife
    }
 
-   // Tabelle mit den vor- und zurück und neu Buttons
-
+	if($_GET['id'] == 0)
+	{
+   	// Tabelle mit den vor- und zurück und neu Buttons
       echo "
       <table style=\"margin-top: 10px; margin-bottom: 10px;\" border=\"0\">
          <tr>
@@ -342,6 +347,7 @@ require("../../../adm_config/body_top.php");
             echo "</td>
          </tr>
       </table>";
+   }
 
    echo "</div>";
 
