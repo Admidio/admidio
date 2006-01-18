@@ -154,7 +154,7 @@ function getErrorText($error_code, $error_text)
          break;
 
       case "nolist":
-         $error_str = "Es sind noch keine Rollen f&uuml;r diese Listen erstellt worden.<br /><br />
+         $error_str = "Es sind noch keine Rollen f&uuml;r diese Kategorie erstellt worden.<br /><br />
             Rollen k&ouml;nnen <a href=\"$g_root_path/adm_program/administration/roles/roles.php\">hier</a>
             erstellt und gepflegt werden.";
          break;
