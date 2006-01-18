@@ -32,7 +32,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
- 
+
 require("../../system/common.php");
 require("../../system/session_check.php");
 
@@ -42,6 +42,14 @@ if($g_current_organization->mail_extern == 1)
 {
   // es duerfen oder koennen keine Mails ueber den Server verschickt werden
    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=mail_extern";
+   header($location);
+   exit();
+}
+
+if(array_key_exists("usr_id", $_GET) && !$g_session_valid)
+{
+  //in ausgeloggtem Zustand duerfen nie direkt usr_ids uebergeben werden...
+   $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
    header($location);
    exit();
 }
