@@ -8,9 +8,9 @@
  *
  * Uebergaben:
  *
- * typ   : Listenselect (mylist, address, telephone, former)
- * mode  : Ausgabeart   (html, print, csv)
- * rolle : Rolle, für die die Funktion dargestellt werden soll
+ * typ    : Listenselect (mylist, address, telephone, former)
+ * mode   : Ausgabeart   (html, print, csv)
+ * rol_id : Rolle, für die die Funktion dargestellt werden soll
  *
  ******************************************************************************
  *
@@ -33,9 +33,9 @@
 require("../../system/common.php");
 require("../../system/session_check_login.php");
 
-$mode = strStripTags($_GET["mode"]);
-$type = strStripTags($_GET["typ"]);
-$role = strStripTags($_GET["rolle"]);
+$mode   = strStripTags($_GET["mode"]);
+$type   = strStripTags($_GET["typ"]);
+$rol_id = strStripTags($_GET["rol_id"]);
 
 if($mode != "csv-ms"
 && $mode != "csv-oo"
@@ -48,7 +48,7 @@ if($mode != "csv-ms"
    exit();
 }
 
-if(strlen($role) == 0)
+if($rol_id <= 0)
 {
 	// Dem aufgerufenen Skript wurde die notwendige Variable nicht richtig übergeben !
    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=rolle";
@@ -105,6 +105,16 @@ $main_sql  = "";   // enthält das Haupt-Sql-Statement für die Liste
 $str_csv   = "";   // enthält die komplette CSV-Datei als String
 $leiter    = 0;    // Gruppe besitzt Leiter
 
+// Rollenname auslesen
+$sql = "SELECT *
+			 FROM ". TBL_ROLES. "
+			WHERE rol_id     = {0} ";
+$sql    = prepareSQL($sql, array($rol_id));
+$result = mysql_query($sql, $g_adm_con);
+db_error($result);
+
+$role_row = mysql_fetch_object($result);
+
 // das geweilige Sql-Statement zusammenbauen
 // !!!! Das erste Feld muss immer usr_id sein !!!!
 // !!!! wenn Gruppen angezeigt werden, muss mem_leader = 0 gesetzt sein !!!!
@@ -119,9 +129,9 @@ switch($type)
       $main_sql = "SELECT usr_id, usr_last_name, usr_first_name, usr_birthday, usr_address, usr_zip_code, usr_city
                      FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                     WHERE rol_org_shortname = '$g_organization'
-                      AND rol_name   = {0}
+                      AND rol_id     = {0}
                       AND rol_id     = mem_rol_id
-                      AND mem_valid  = 1
+                      AND mem_valid  = $role_row->rol_valid
                       AND mem_leader = 0
                       AND mem_usr_id = usr_id
                       AND usr_valid  = 1
@@ -132,9 +142,9 @@ switch($type)
       $main_sql = "SELECT usr_id, usr_last_name, usr_first_name, usr_phone, usr_mobile, usr_email, usr_fax
                      FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                     WHERE rol_org_shortname = '$g_organization'
-                      AND rol_name   = {0}
+                      AND rol_id     = {0}
                       AND rol_id     = mem_rol_id
-                      AND mem_valid  = 1
+                      AND mem_valid  = $role_row->rol_valid
                       AND mem_leader = 0
                       AND mem_usr_id = usr_id
                       AND usr_valid  = 1
@@ -145,7 +155,7 @@ switch($type)
       $main_sql = "SELECT usr_id, usr_last_name, usr_first_name, usr_birthday, mem_begin, mem_end
                      FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                     WHERE rol_org_shortname = '$g_organization'
-                      AND rol_name   = {0}
+                      AND rol_id     = {0}
                       AND rol_id     = mem_rol_id
                       AND mem_valid  = 0
                       AND mem_leader = 0
@@ -170,11 +180,11 @@ else
 
 $sql = "SELECT mem_leader
 			 FROM ". TBL_ROLES. ", ". TBL_MEMBERS. "
-			WHERE rol_name   = {0}
+			WHERE rol_id     = {0}
 			  AND mem_rol_id = rol_id
 			  AND mem_valid  = $former
 			  AND mem_leader = 1 ";
-$sql    = prepareSQL($sql, array($role));
+$sql    = prepareSQL($sql, array($rol_id));
 $result = mysql_query($sql, $g_adm_con);
 db_error($result);
 
@@ -213,7 +223,7 @@ for($i = 0; $i < count($arr_fields); $i++)
 if($leiter == 0)
 {
    // keine Leiter vorhanden -> SQL-Statement ausfuehren
-   $main_sql = prepareSQL($main_sql, array($_GET['rolle']));
+   $main_sql = prepareSQL($main_sql, array($rol_id));
    $result_lst = mysql_query($main_sql, $g_adm_con);
    db_error($result_lst);
 
@@ -234,7 +244,7 @@ if($mode != "csv")
    <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
    <html>
    <head>
-      <title>$g_current_organization->longname - Liste - $role</title>
+      <title>$g_current_organization->longname - Liste - $role_row->rol_name</title>
       <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
 
       <!--[if gte IE 5.5000]>
@@ -258,25 +268,25 @@ if($mode != "csv")
 
    echo "
    <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-   <h1>$role</h1>";
+   <h1>$role_row->rol_name</h1>";
 
    if($mode != "print")
    {
       echo "<p>
       <button name=\"print\" type=\"button\" value=\"print\" style=\"width: 140px;\"
-      onclick=\"window.open('lists_show.php?typ=$type&amp;mode=print&amp;rolle=$role', '_blank')\">
+      onclick=\"window.open('lists_show.php?typ=$type&amp;mode=print&amp;rol_id=$rol_id', '_blank')\">
       <img src=\"$g_root_path/adm_program/images/print.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Druckvorschau\">
       &nbsp;Druckvorschau</button>
 
       &nbsp;&nbsp;&nbsp;
       <button name=\"download-oo\" type=\"button\" value=\"download-oo\" style=\"width: 187px;\"
-         onclick=\"self.location.href='lists_show.php?typ=$type&amp;mode=csv-oo&amp;rolle=$role'\">
+         onclick=\"self.location.href='lists_show.php?typ=$type&amp;mode=csv-oo&amp;rol_id=$rol_id'\">
          <img src=\"$g_root_path/adm_program/images/oo.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Open-Office &amp; Staroffice\">
          &nbsp;Open-Office &amp; Staroffice</button>
 
       &nbsp;&nbsp;&nbsp;
       <button name=\"download-excel\" type=\"button\" value=\"download-excel\" style=\"width: 140px;\"
-         onclick=\"self.location.href='lists_show.php?typ=$type&amp;mode=csv-ms&amp;rolle=$role'\">
+         onclick=\"self.location.href='lists_show.php?typ=$type&amp;mode=csv-ms&amp;rol_id=$rol_id'\">
          <img src=\"$g_root_path/adm_program/images/excel.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"MS-Excel\">
          &nbsp;MS-Excel</button></p>";
    }
@@ -296,17 +306,17 @@ for($j = 0; $j < $max_count; $j++)
       // wenn Leiter vorhanden, dann müssen SQL-Statements hier getrennt aufgerufen werden
       if($j == 0)   // Leiter
       {
-         $leiter_sql = prepareSQL($leiter_sql, array($_GET['rolle']));
+         $leiter_sql = prepareSQL($leiter_sql, array($rol_id));
          $result_lst = mysql_query($leiter_sql, $g_adm_con);
       }
       else
       {
-         $main_sql = prepareSQL($main_sql, array($_GET['rolle']));
+         $main_sql = prepareSQL($main_sql, array($rol_id));
          $result_lst = mysql_query($main_sql, $g_adm_con);
       }
       db_error($result_lst, true);
    }
-
+   
    if(mysql_num_rows($result_lst) > 0)
    {
       if($mode == "csv")
@@ -466,7 +476,7 @@ for($j = 0; $j < $max_count; $j++)
 if($mode == "csv")
 {
    // nun die erstellte CSV-Datei an den User schicken
-   $filename = $g_organization. "-". str_replace(" ", "_", str_replace(".", "", $role)). ".csv";
+   $filename = $g_organization. "-". str_replace(" ", "_", str_replace(".", "", $role_row->rol_name)). ".csv";
    header("Content-Type: text/comma-separated-values; charset=ISO-8859-1");
    header("Content-Disposition: attachment; filename=\"$filename\"");
    echo $str_csv;
@@ -488,19 +498,19 @@ else
    {
       echo "<p>
       <button name=\"print\" type=\"button\" value=\"print\" style=\"width: 140px;\"
-      onclick=\"window.open('lists_show.php?typ=$type&amp;mode=print&amp;rolle=$role', '_blank')\">
+      onclick=\"window.open('lists_show.php?typ=$type&amp;mode=print&amp;rol_id=$rol_id', '_blank')\">
       <img src=\"$g_root_path/adm_program/images/print.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Druckvorschau\">
       &nbsp;Druckvorschau</button>
 
       &nbsp;&nbsp;&nbsp;
       <button name=\"download-oo\" type=\"button\" value=\"download-oo\" style=\"width: 187px;\"
-         onclick=\"self.location.href='lists_show.php?typ=$type&amp;mode=csv-oo&amp;rolle=$role'\">
+         onclick=\"self.location.href='lists_show.php?typ=$type&amp;mode=csv-oo&amp;rol_id=$rol_id'\">
          <img src=\"$g_root_path/adm_program/images/oo.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Open-Office &amp; Staroffice\">
          &nbsp;Open-Office &amp; Staroffice</button>
 
       &nbsp;&nbsp;&nbsp;
       <button name=\"download-excel\" type=\"button\" value=\"download-excel\" style=\"width: 140px;\"
-         onclick=\"self.location.href='lists_show.php?typ=$type&amp;mode=csv-ms&amp;rolle=$role'\">
+         onclick=\"self.location.href='lists_show.php?typ=$type&amp;mode=csv-ms&amp;rol_id=$rol_id'\">
          <img src=\"$g_root_path/adm_program/images/excel.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"MS-Excel\">
          &nbsp;MS-Excel</button></p>";
    }

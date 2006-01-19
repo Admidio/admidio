@@ -8,11 +8,13 @@
  *
  * Uebergaben:
  *
- * show: all     - (Default) Alle Rollen (auch Gruppen anzeigen)
- *       group   - Nur Gruppen anzeigen
- *       nogroup - Keine Gruppen anzeigen
- * type: normal  - (Default) aktuelle Mitglieder anzeigen
- *       former  - Ehemaligenlisten der Rollen anzeigen
+ * category - Kategorie der Rollen, die angezeigt werden sollen
+ *            Wird keine Kategorie uebergeben, werden alle Rollen angezeigt
+ * category-selection: yes - (Default) Anzeige der Combobox mit den verschiedenen 
+ *                           Rollen-Kategorien
+ *                     no  - Combobox nicht anzeigen
+ * active_role : 1 - (Default) aktive Rollen auflisten
+ *               0 - Ehemalige Rollen auflisten
  *
  ******************************************************************************
  *
@@ -35,34 +37,53 @@
 require("../../system/common.php");
 require("../../system/session_check.php");
 
-// Rollen selektieren
+// Uebergabevariablen pruefen und ggf. vorbelegen
 
-if(!isset($_GET["type"]))
-   $member_valid = 1;
+if(isset($_GET['category']))
+	$category = strStripTags($_GET['category']);
+else
+	$category = "";
+
+if(!isset($_GET['category-selection']))
+   $show_ctg_sel = 1;
 else
 {
-   if($_GET["type"] == "former")
-      $member_valid = 0;
+	if($_GET['category-selection'] == "yes")
+		$show_ctg_sel = 1;
+	else
+		$show_ctg_sel = 0;
+}
+
+if(!isset($_GET['active_role']))
+   $active_role = 1;
+else
+{
+   if($_GET['active_role'] != 0
+   && $_GET['active_role'] != 1)
+      $active_role = 1;
    else
-      $member_valid = 1;
-}
+      $active_role = $_GET['active_role'];
+}   
 
-// Webmaster und Moderatoren dürfen Listen zu allen Rollen sehen
-if(isModerator())
+// SQL-Statement zusammensetzen
+
+$sql = "SELECT * FROM ". TBL_ROLES. ", ". TBL_ROLE_CATEGORIES. "
+			WHERE rol_org_shortname = '$g_organization' 
+			  AND rol_valid  = $active_role 
+			  AND rol_rlc_id = rlc_id ";
+if(!isModerator()) 
 {
-   $sql = "SELECT * FROM ". TBL_ROLES. "
-            WHERE rol_org_shortname = '$g_organization' 
-              AND rol_valid        = 1 
-            ORDER BY rol_name ";
+	// wenn nicht Moderator, dann keine versteckten Rollen anzeigen
+	$sql .= " AND rol_locked = 0 ";
 }
-else
+if(strlen($category) > 0 && $category != "Alle")
 {
-   $sql = "SELECT * FROM ". TBL_ROLES. "
-            WHERE rol_org_shortname = '$g_organization'
-              AND rol_locked     = 0
-              AND rol_valid        = 1 
-            ORDER BY rol_name ";
+	// wenn eine Kategorie uebergeben wurde, dann nur Rollen dieser anzeigen
+	$sql .= " AND rlc_org_shortname = '$g_organization' 
+				 AND rlc_name          = '$category' ";
 }
+$sql .= "ORDER BY rol_name ";
+
 $result_lst = mysql_query($sql, $g_adm_con);
 db_error($result_lst);
 $list_found = mysql_num_rows($result_lst);
@@ -87,23 +108,29 @@ echo "
    <![endif]-->
    
    <script language=\"JavaScript\" type=\"text/javascript\"><!--\n
-      function showList(element, role)
+      function showCategory()
+      {
+      	var category = document.getElementById('category').value;
+			self.location.href = 'lists.php?category=' + category + '&type=". $_GET['type']. "';	
+      }
+      
+      function showList(element, rol_id)
       {
          var sel_list = element.value;
 
          if(sel_list == 'address')
-            self.location.href = 'lists_show.php?typ=address&mode=html&rolle=' + role;
+            self.location.href = 'lists_show.php?typ=address&mode=html&rol_id=' + rol_id;
          else if(sel_list == 'telefon')
-            self.location.href = 'lists_show.php?typ=telephone&mode=html&rolle=' + role;
+            self.location.href = 'lists_show.php?typ=telephone&mode=html&rol_id=' + rol_id;
          else if(sel_list == 'mylist')
-            self.location.href = 'mylist.php?rolle=' + role";
-            if($member_valid)
+            self.location.href = 'mylist.php?rol_id=' + rol_id";
+            if($active_role)
                echo ";";
             else
-               echo " + '&former=1';";
+               echo " + '&active_role=0&active_member=0';";
          echo "
          else if(sel_list == 'former')
-            self.location.href = 'lists_show.php?typ=former&mode=html&rolle=' + role;
+            self.location.href = 'lists_show.php?typ=former&mode=html&rol_id=' + rol_id;
       }
    //--></script>";
                
@@ -111,14 +138,48 @@ echo "
 echo "</head>";
 
 require("../../../adm_config/body_top.php");
-   echo "
-   <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
+   echo '<div style="margin-top: 10px; margin-bottom: 10px;" align="center">
+   <h1>';
+		if($active_role)
+			echo strspace("Aktive Rollen");
+		else
+			echo strspace("Ehemalige Rollen");
+   echo '</h1>';
    
-   <div class=\"formHead\">";
-      if($member_valid)
-         echo strspace("Listen", 2);
-      else
-         echo strspace("Ehemalige", 2);
+   if($show_ctg_sel == 1)
+   {
+   	// Combobox mit allen Kategorien anzeigen
+		$sql = "SELECT * FROM ". TBL_ROLE_CATEGORIES. "
+					WHERE rlc_org_shortname = '$g_organization' 
+					ORDER BY rlc_name ASC ";
+		$result = mysql_query($sql, $g_adm_con);
+		db_error($result);
+
+		if(mysql_num_rows($result) > 0)
+		{   
+			echo '<p>Kategorie w&auml;hlen:&nbsp;&nbsp;
+			<select size="1" id="category" onchange="showCategory()">
+				<option value="Alle" '; 
+				if(strlen($category) == 0)
+					echo " selected ";
+				echo '>Alle</option>';
+
+				while($row = mysql_fetch_object($result))
+				{
+					echo '<option value="'. urlencode($row->rlc_name). '"';
+					if($category == $row->rlc_name)
+						echo " selected ";
+					echo ">$row->rlc_name</option>";
+				}
+			echo '</select></p>';
+		}
+   }
+   
+   echo "<div class=\"formHead\">";
+		if(strlen($category) > 0)
+			echo strspace($category);
+		else
+			echo strspace("Alle");
    echo "</div>
    
    <div class=\"formBody\">";
@@ -126,15 +187,28 @@ require("../../../adm_config/body_top.php");
 
       while($row_lst = mysql_fetch_object($result_lst))
       {
-         // Anzahl Datensaetze ermitteln
+         // Anzahl Mitglieder ermitteln
          $sql = "SELECT COUNT(*)
                    FROM ". TBL_MEMBERS. "
                   WHERE mem_rol_id = $row_lst->rol_id
-                    AND mem_valid = $member_valid ";
+                    AND mem_valid  = $active_role ";
          $result = mysql_query($sql, $g_adm_con);
          db_error($result);
-         $row     = mysql_fetch_array($result);
-         $anz_mgl = $row[0];
+         $row    = mysql_fetch_array($result);
+         $num_member = $row[0];
+
+			if($active_role)
+			{
+				// Anzahl ehemaliger Mitglieder ermitteln
+				$sql = "SELECT COUNT(*)
+							 FROM ". TBL_MEMBERS. "
+							WHERE mem_rol_id = $row_lst->rol_id
+							  AND mem_valid  = 0 ";
+				$result = mysql_query($sql, $g_adm_con);
+				db_error($result);
+				$row    = mysql_fetch_array($result);
+				$num_former = $row[0];
+			}
 
          if($i > 0)
             echo"<hr width=\"98%\" />";
@@ -143,42 +217,51 @@ require("../../../adm_config/body_top.php");
          <div style=\"margin-top: 6px;\">
             <div style=\"text-align: left; float: left;\">&nbsp;";
                   // Link nur anzeigen, wenn Rolle auch Mitglieder hat
-                  if($anz_mgl > 0)
+                  if($num_member > 0)
                   {
                      echo "<a href=\"lists_show.php?typ=";
-                     if($member_valid)
+                     if($active_role)
                         echo "address";
                      else
                         echo "former";
-                     echo "&amp;mode=html&amp;rolle=". urlencode($row_lst->rol_name). "\">$row_lst->rol_name</a>";
+                     echo "&amp;mode=html&amp;rol_id=$row_lst->rol_id\">$row_lst->rol_name</a>";
                   }
                   else
                      echo "<b>$row_lst->rol_name</b>";
-                     
-                  // Moderatoren duerfen Rollen editieren
-                  if(isModerator()){
-                    echo "&nbsp;<a href=\"$g_root_path/adm_program/administration/roles/roles_new.php?rol_id=$row_lst->rol_id\"><img src=\"$g_root_path/adm_program/images/edit.png\" vspace=\"1\" style=\"vertical-align: middle;\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Einstellungen\" title=\"Einstellungen\"></a>";    
-                  }
-                  if(isModerator() || isGroupLeader($row_lst->rol_id) || editUser()){
-            			if($row_lst->rol_name!="Webmaster" && $row_lst->rol_org_shortname==$g_organization)
-            			 echo "&nbsp;<img src=\"$g_root_path/adm_program/images/person_new.png\" vspace=\"1\" style=\"vertical-align: middle; cursor: pointer;\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Mitglieder zuordnen\" title=\"Mitglieder zuordnen\" onClick=\"window.open('$g_root_path/adm_program/modules/lists/members.php?rol_id=$row_lst->rol_id&amp;popup=1','Titel','width=550,height=550,left=310,top=100,scrollbars=yes,resizable=yes')\">";    
-                  	if(hasRole("Webmaster") && $row_lst->rol_name=="Webmaster" && $row_lst->rol_org_shortname==$g_organization)
-            			 echo "&nbsp;<img src=\"$g_root_path/adm_program/images/person_new.png\" vspace=\"1\" style=\"vertical-align: middle; cursor: pointer;\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Mitglieder zuordnen\" title=\"Mitglieder zuordnen\" onClick=\"window.open('$g_root_path/adm_program/modules/lists/members.php?rol_id=$row_lst->rol_id&amp;popup=1','Titel','width=550,height=550,left=310,top=100,scrollbars=yes,resizable=yes')\">";    
+                                       
+                  if(isModerator() || isGroupLeader($row_lst->rol_id) || editUser())
+                  {
+            			if($row_lst->rol_name != "Webmaster"
+            			|| ($row_lst->rol_name == "Webmaster" && hasRole("Webmaster")))
+            			{
+								if(isModerator())
+								{
+									// nur Moderatoren duerfen Rollen editieren
+									echo "&nbsp;<a href=\"$g_root_path/adm_program/administration/roles/roles_new.php?rol_id=$row_lst->rol_id\">
+									<img src=\"$g_root_path/adm_program/images/edit.png\" vspace=\"1\" style=\"vertical-align: middle;\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Einstellungen\" title=\"Einstellungen\"></a>";    
+								}
+								
+								// Gruppenleiter und Moderatoren duerfen Mitglieder zuordnen oder entfernen
+            				echo "&nbsp;<img src=\"$g_root_path/adm_program/images/person_new.png\" vspace=\"1\" 
+            					style=\"vertical-align: middle; cursor: pointer;\" align=\"top\" width=\"16\" height=\"16\" 
+            					border=\"0\" alt=\"Mitglieder zuordnen\" title=\"Mitglieder zuordnen\" 
+            					onclick=\"window.open('$g_root_path/adm_program/modules/lists/members.php?rol_id=$row_lst->rol_id&amp;popup=1','Titel','width=550,height=550,left=310,top=100,scrollbars=yes,resizable=yes')\">";    
+            			}
                   }
                   
                   
             echo "</div>
             <div style=\"text-align: right;\">";
                // Kombobox mit Listen nur anzeigen, wenn die Rolle Mitglieder hat
-               if($anz_mgl > 0)
+               if($num_member > 0)
                {
                      echo "
-                     <select size=\"1\" name=\"list$i\" onchange=\"showList(this, '". urlencode($row_lst->rol_name). "')\">
-                        <option value=\"\" selected=\"selected\">Liste anzeigen ...</option>";
-                        if(!$member_valid) echo "<option value=\"former\">Ehemaligenliste</option>";
-                        echo "<option value=\"address\">Adressliste</option>
-                        <option value=\"telefon\">Telefonliste</option>
-                        <option value=\"mylist\">Eigene Liste ...</option>
+                     <select size=\"1\" name=\"list$i\" onchange=\"showList(this, $row_lst->rol_id)\">
+                        <option value=\"\" selected=\"selected\">Liste anzeigen ...</option>
+                        <option value=\"address\">Adressliste</option>
+                        <option value=\"telefon\">Telefonliste</option>";
+                        if($active_role && $num_former > 0) echo "<option value=\"former\">Ehemaligenliste</option>";
+                        echo "<option value=\"mylist\">Eigene Liste ...</option>
                      </select>";
                }
                else
@@ -188,52 +271,57 @@ require("../../../adm_config/body_top.php");
 
          if(strlen($row_lst->rol_description) > 0)
          {
-            echo "<div style=\"margin-top: 6px;\">
+            echo "<div style=\"margin-top: 3px;\">
                      <div style=\"margin-left: 30px; width: 130px; text-align: left; float: left;\">Beschreibung:</div>
                      <div style=\"margin-left: 160px; text-align: left;\">$row_lst->rol_description</div>
                   </div>";
          }
 
-         if($member_valid)
-         {
-            if(strlen(mysqldate("d.m.y", $row_lst->rol_start_date)) > 0)
-            {
-               echo "<div style=\"margin-top: 6px;\">
-                        <div style=\"margin-left: 30px; width: 130px; text-align: left; float: left;\">Zeitraum:</div>
-                        <div style=\"text-align: left;\">". mysqldate("d.m.y", $row_lst->rol_start_date). " bis ". mysqldate("d.m.y", $row_lst->rol_end_date). "</div>";
-               echo "</div>";
-            }
-            if($row_lst->rol_weekday > 0
-            || (  strcmp(mysqltime("h:i", $row_lst->rol_start_time), "00:00") != 0)
-               && $row_lst->rol_start_time != NULL )
-            {
-               echo "<div style=\"margin-top: 6px;\">
-                        <div style=\"margin-left: 30px; width: 130px; text-align: left; float: left;\">Gruppenstunde:</div>
-                        <div style=\"text-align: left;\">". $arrDay[$row_lst->rol_weekday-1];
-                        if(strcmp(mysqltime("h:i", $row_lst->rol_start_time), "00:00") != 0)
-                           echo " von ". mysqltime("h:i", $row_lst->rol_start_time). " bis ". mysqltime("h:i", $row_lst->rol_end_time);
-                        echo "</div>";
-               echo "</div>";
-            }
-            if(strlen($row_lst->rol_location) > 0)
-            {
-               echo "<div style=\"margin-top: 6px;\">
-                        <div style=\"margin-left: 30px; width: 130px; text-align: left; float: left;\">Treffpunkt:</div>
-                        <div style=\"text-align: left;\">$row_lst->rol_location</div>
-                     </div>";
-            }
-         }
+			if(strlen(mysqldate("d.m.y", $row_lst->rol_start_date)) > 0)
+			{
+				echo "<div style=\"margin-top: 3px;\">
+							<div style=\"margin-left: 30px; width: 130px; text-align: left; float: left;\">Zeitraum:</div>
+							<div style=\"text-align: left;\">". mysqldate("d.m.y", $row_lst->rol_start_date). " bis ". mysqldate("d.m.y", $row_lst->rol_end_date). "</div>";
+				echo "</div>";
+			}
+			if($row_lst->rol_weekday > 0
+			|| (  strcmp(mysqltime("h:i", $row_lst->rol_start_time), "00:00") != 0)
+				&& $row_lst->rol_start_time != NULL )
+			{
+				echo "<div style=\"margin-top: 3px;\">
+							<div style=\"margin-left: 30px; width: 130px; text-align: left; float: left;\">Gruppenstunde:</div>
+							<div style=\"text-align: left;\">". $arrDay[$row_lst->rol_weekday-1];
+							if(strcmp(mysqltime("h:i", $row_lst->rol_start_time), "00:00") != 0)
+								echo " von ". mysqltime("h:i", $row_lst->rol_start_time). " bis ". mysqltime("h:i", $row_lst->rol_end_time);
+							echo "</div>";
+				echo "</div>";
+			}
+			if(strlen($row_lst->rol_location) > 0)
+			{
+				echo "<div style=\"margin-top: 3px;\">
+							<div style=\"margin-left: 30px; width: 130px; text-align: left; float: left;\">Treffpunkt:</div>
+							<div style=\"text-align: left;\">$row_lst->rol_location</div>
+						</div>";
+			}
          echo "
-         <div style=\"margin-top: 6px;\">
+         <div style=\"margin-top: 3px;\">
             <div style=\"margin-left: 30px; width: 130px; text-align: left; float: left;\">Teilnehmer:</div>
-            <div style=\"text-align: left;\">$anz_mgl";
+            <div style=\"text-align: left;\">$num_member";
                if($row_lst->rol_max_members > 0)
                   echo " von max. $row_lst->rol_max_members";
+               if($active_role && $num_former > 0)
+               {
+               	// Anzahl Ehemaliger anzeigen
+               	if($num_former == 1)
+	               	echo "&nbsp;&nbsp;($num_former Ehemaliger) ";
+	               else
+	               	echo "&nbsp;&nbsp;($num_former Ehemalige) ";
+               }
             echo "</div>
          </div>";
          if(strlen($row_lst->rol_cost) > 0)
          {
-            echo "<div style=\"margin-top: 6px;\">
+            echo "<div style=\"margin-top: 3px;\">
                      <div style=\"margin-left: 30px; width: 130px; text-align: left; float: left;\">Beitrag:</div>
                      <div style=\"margin-left: 160px; text-align: left;\">$row_lst->rol_cost &euro;</div>
                   </div>";

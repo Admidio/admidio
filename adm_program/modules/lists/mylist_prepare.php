@@ -37,7 +37,7 @@ $sql_orderby = "";
 if(strlen($_POST["column1"]) == 0)
    $err_text = "Feld 1";
 
-if(strlen($_POST["rolle"]) == 0)
+if(strlen($_POST["role"]) == 0)
    $err_text = "Rolle";
 
 if(strlen($err_text) != 0)
@@ -48,7 +48,7 @@ if(strlen($err_text) != 0)
 }
 
 // als erstes wird die Rolle übergeben
-$rolle = $_POST["rolle"];
+$rol_id = $_POST["role"];
 
 // Ehemalige
 if(!array_key_exists("former", $_POST))
@@ -100,7 +100,7 @@ for($i = 0; $i < count($_POST); $i++)
 $main_sql = "SELECT usr_id, $sql_select
                FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
               WHERE rol_org_shortname = '$g_organization'
-                AND rol_name   = '$rolle'
+                AND rol_id     = $rol_id
                 AND rol_valid  = 1
                 AND mem_rol_id = rol_id
                 AND mem_valid  = $act_members
@@ -116,7 +116,7 @@ if(strlen($sql_orderby) > 0)
 $_SESSION['mylist_sql'] = $main_sql;
 
 // weiterleiten zur allgemeinen Listeseite
-$location = "location: $g_root_path/adm_program/modules/lists/lists_show.php?typ=mylist&mode=html&rolle=$rolle";
+$location = "location: $g_root_path/adm_program/modules/lists/lists_show.php?typ=mylist&mode=html&rol_id=$rol_id";
 header($location);
 exit();
 
