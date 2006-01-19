@@ -273,7 +273,9 @@ elseif($_GET["mode"] == 3)
    // Rolle ungueltig machen
 
    $sql    = "UPDATE ". TBL_MEMBERS. " SET mem_valid = 0
-               WHERE mem_rol_id = {0}";
+                                         , mem_end   = SYSDATE()
+               WHERE mem_rol_id = {0}
+                 AND mem_valid  = 1 ";
    $sql    = prepareSQL($sql, array($_GET['rol_id']));
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);

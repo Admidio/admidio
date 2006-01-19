@@ -8,9 +8,11 @@
  *
  * Uebergaben:
  *
- * rolle  : das Feld Rolle kann mit der entsprechenden Rolle vorbelegt werden
- * former : 0 - (Default) aktuelle Mitglieder der Rolle anzeigen
- *          1 - Ehemalige Mitglieder der Rolle anzeigen
+ * rol_id : das Feld Rolle kann mit der entsprechenden Rolle vorbelegt werden
+ * active_role   : 1 - (Default) aktive Rollen auflisten
+ *                 0 - Ehemalige Rollen auflisten
+ * active_member : 1 - (Default) aktive Mitglieder der Rolle anzeigen
+ *                 0 - Ehemalige Mitglieder der Rolle anzeigen
  *
  ******************************************************************************
  *
@@ -33,11 +35,39 @@
 require("../../system/common.php");
 require("../../system/session_check_login.php");
 
-if(!isset($_GET['rolle']))
-   $_GET['rolle'] = "";
+// Uebergabevariablen pruefen und ggf. vorbelegen
 
-if(!isset($_GET['former']))
-   $_GET['former'] = 0;
+if(!isset($_GET['rol_id']))
+   $rol_id = 0;
+else
+{
+   if(is_numeric($_GET['rol_id']))
+      $rol_id = $_GET['rol_id'];
+   else
+      $rol_id = 0;
+}    
+
+if(!isset($_GET['active_role']))
+   $active_role = 1;
+else
+{
+   if($_GET['active_role'] != 0
+   && $_GET['active_role'] != 1)
+      $active_role = 1;
+   else
+      $active_role = $_GET['active_role'];
+}   
+
+if(!isset($_GET['active_member']))
+   $active_member = 1;
+else
+{
+   if($_GET['active_member'] != 0
+   && $_GET['active_member'] != 1)
+      $active_member = 1;
+   else
+      $active_member = $_GET['active_member'];
+}   
 
 echo "
 <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
@@ -64,24 +94,24 @@ require("../../../adm_config/body_top.php");
       <div class=\"formBody\">
       <b>1.</b> Wähle eine Rolle aus von der du eine Mitgliederliste erstellen willst:
       <p><b>Rolle :</b>&nbsp;&nbsp;
-         <select size=\"1\" name=\"rolle\">
-            <option value=\"\" selected=\"selected\"></option>";
+         <select size=\"1\" name=\"role\">
+            <option value=\"\" selected=\"selected\">- Bitte w&auml;hlen -</option>";
             // Rollen selektieren
 
             // Webmaster und Moderatoren dürfen Listen zu allen Rollen sehen
             if(isModerator())
             {
                $sql     = "SELECT * FROM ". TBL_ROLES. "
-                            WHERE rol_org_shortname     = '$g_organization'
-                              AND rol_valid            = 1
+                            WHERE rol_org_shortname = '$g_organization'
+                              AND rol_valid         = $active_role
                             ORDER BY rol_name";
             }
             else
             {
                $sql     = "SELECT * FROM ". TBL_ROLES. "
                             WHERE rol_org_shortname = '$g_organization'
-                              AND rol_locked     = 0
-                              AND rol_valid        = 1
+                              AND rol_locked        = 0
+                              AND rol_valid         = $active_role
                             ORDER BY rol_name";
             }
             $result_lst = mysql_query($sql, $g_adm_con);
@@ -89,14 +119,14 @@ require("../../../adm_config/body_top.php");
 
             while($row = mysql_fetch_object($result_lst))
             {
-               echo "<option value=\"$row->rol_name\" ";
-               if($_GET['rolle'] == $row->rol_name) echo " selected=\"selected\" ";
+               echo "<option value=\"$row->rol_id\" ";
+               if($rol_id == $row->rol_id) echo " selected=\"selected\" ";
                echo ">$row->rol_name</option>";
             }
          echo "</select>
          &nbsp;&nbsp;&nbsp;
          <input type=\"checkbox\" id=\"former\" name=\"former\" value=\"1\" ";
-         if($_GET['former'] == 1) echo " checked=\"checked\" ";
+         if(!$active_member) echo " checked=\"checked\" ";
          echo " /> <label for=\"former\">nur Ehemalige</label></p>
          
          <p><b>2.</b> Bestimme die Felder, die in der Liste angezeigt werden sollen:</p>
