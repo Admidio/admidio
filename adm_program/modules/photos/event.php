@@ -41,7 +41,7 @@
    $adm_photo = mysql_fetch_array($result);
 //bei Seitenaufruf ohne Moderationsrechte
 
-if(!$g_session_valid || $g_session_valid && !editPhoto($adm_photo["pho_org_shortname"]))
+if(!$g_session_valid || $g_session_valid && (!editPhoto($adm_photo["pho_org_shortname"] && $aufgabe="change") || (!editPhoto($g_organization) && $aufgabe="new")))
       {
         $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=photoverwaltunsrecht";
       header($location);
@@ -49,7 +49,7 @@ if(!$g_session_valid || $g_session_valid && !editPhoto($adm_photo["pho_org_short
       }
 
 //bei Seitenaufruf mit Moderationsrechten
-if($g_session_valid && editPhoto($adm_photo["pho_org_shortname"])){
+if($g_session_valid && editPhoto($adm_photo["$g_organization"])){
 
 //Speicherort
    $ordner = "../../../adm_my_files/photos/".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"];

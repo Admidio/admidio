@@ -43,7 +43,7 @@
 	db_error($result);
 	$adm_photo = mysql_fetch_array($result);
 //Aanzahl der Bilder
-   $bilder = $adm_photo[1];
+   $bilder = $adm_photo["pho_quantity"];
 //Nächstes und Letztes Bild
 	$last=$bild-1;
 	$next=$bild+1;
@@ -71,7 +71,7 @@
    //untere Zelle mit Buttons Bild und Fenster Schlie&szlig;en Button
    echo "<body>
    <div style=\"margin-top: 5px; margin-bottom: 5px;\" align=\"center\">
-   <div class=\"formHead\" style=\"width: 95%\">$adm_photo[2]</div>
+   <div class=\"formHead\" style=\"width: 95%\">".$adm_photo["pho_name"]."</div>
    <div class=\"formBody\" style=\"width: 95%; height: 520px;\">";
       echo"Datum: ".mysqldate("d.m.y", $adm_photo["pho_begin"]);
          if($adm_photo["pho_end"] != $adm_photo["pho_begin"])echo " bis ".mysqldate("d.m.y", $adm_photo["pho_end"]);
