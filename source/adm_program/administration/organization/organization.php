@@ -69,20 +69,20 @@ require("../../../adm_config/body_top.php");
       <div class=\"formHead\">$g_current_organization->longname bearbeiten</div>
       <div class=\"formBody\">
       	 <div>
-            <div style=\"text-align: right; width: 40%; float: left;\">Name (Abk.):</div>
-            <div style=\"text-align: left; margin-left: 42%;\">
+            <div style=\"text-align: right; width: 45%; float: left;\">Name (Abk.):</div>
+            <div style=\"text-align: left; margin-left: 47%;\">
                <input type=\"text\" name=\"shortname\" class=\"readonly\" readonly size=\"10\" maxlength=\"10\" value=\"$g_current_organization->longname\">
             </div>
          </div>
          <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 40%; float: left;\">Name (lang):</div>
-            <div style=\"text-align: left; margin-left: 42%;\">
+            <div style=\"text-align: right; width: 45%; float: left;\">Name (lang):</div>
+            <div style=\"text-align: left; margin-left: 47%;\">
                <input type=\"text\" name=\"longname\" size=\"30\" maxlength=\"60\" value=\"$g_current_organization->longname\">
             </div>
          </div>
          <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 40%; float: left;\">Homepage:</div>
-            <div style=\"text-align: left; margin-left: 42%;\">
+            <div style=\"text-align: right; width: 45%; float: left;\">Homepage:</div>
+            <div style=\"text-align: left; margin-left: 47%;\">
                <input type=\"text\" name=\"homepage\" size=\"30\" maxlength=\"30\" value=\"$g_current_organization->homepage\">
             </div>
          </div>";
@@ -99,13 +99,13 @@ require("../../../adm_config/body_top.php");
             // Auswahlfeld fuer die uebergeordnete Gruppierung
             echo "
             <div style=\"margin-top: 6px;\">
-               <div style=\"text-align: right; width: 40%; float: left;\">Übergeordnete Gruppierung:</div>
-               <div style=\"text-align: left; margin-left: 42%;\">
+               <div style=\"text-align: right; width: 45%; float: left;\">Übergeordnete Gruppierung:</div>
+               <div style=\"text-align: left; margin-left: 47%;\">
                   <select size=\"1\" name=\"parent\">
                      <option value=\"0\" ";
                         if(strlen($g_current_organization->org_org_id_parent) == 0)
                            echo " selected ";
-                     echo ">- Bitte w&auml;hlen -</option>";
+                     echo ">keine</option>";
 
                      while($row = mysql_fetch_object($result))
                      {
@@ -126,8 +126,8 @@ require("../../../adm_config/body_top.php");
          }
 
          echo "<div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 40%; float: left;\">BBCode zulassen:</div>
-            <div style=\"text-align: left; margin-left: 42%;\">
+            <div style=\"text-align: right; width: 45%; float: left;\">BBCode zulassen:</div>
+            <div style=\"text-align: left; margin-left: 47%;\">
                <input type=\"checkbox\" id=\"bbcode\" name=\"bbcode\" ";
                if($g_current_organization->bbcode == 1)
                   echo " checked ";
@@ -138,8 +138,8 @@ require("../../../adm_config/body_top.php");
          </div>
 
          <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 40%; float: left;\">Externes Mailprogramm:</div>
-            <div style=\"text-align: left; margin-left: 42%;\">
+            <div style=\"text-align: right; width: 45%; float: left;\">Externes Mailprogramm:</div>
+            <div style=\"text-align: left; margin-left: 47%;\">
                <input type=\"checkbox\" id=\"mail_extern\" name=\"mail_extern\" ";
                if($g_current_organization->mail_extern == 1)
                   echo " checked ";
@@ -150,8 +150,8 @@ require("../../../adm_config/body_top.php");
          </div>
 
          <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 40%; float: left;\">Max. Attachmentgr&ouml;&szlig;e:</div>
-            <div style=\"text-align: left; margin-left: 42%;\">
+            <div style=\"text-align: right; width: 45%; float: left;\">Max. Attachmentgr&ouml;&szlig;e:</div>
+            <div style=\"text-align: left; margin-left: 47%;\">
                <input type=\"text\" name=\"attachment_size\" size=\"4\" maxlength=\"4\" value=\"$g_current_organization->mail_size\"> KB
                <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=attachmentgroesse','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
@@ -159,8 +159,8 @@ require("../../../adm_config/body_top.php");
          </div>
 
          <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 40%; float: left;\">Aktiviere RSS-Feeds:</div>
-            <div style=\"text-align: left; margin-left: 42%;\">
+            <div style=\"text-align: right; width: 45%; float: left;\">Aktiviere RSS-Feeds:</div>
+            <div style=\"text-align: left; margin-left: 47%;\">
                <input type=\"checkbox\" id=\"enable_rss\" name=\"enable_rss\" ";
                if($g_current_organization->enable_rss == 1)
                   echo " checked ";
@@ -181,10 +181,10 @@ require("../../../adm_config/body_top.php");
 
          if(mysql_num_rows($result) > 0)
          {
-            echo "<p>Gruppierungsspezifische Profilfelder:
+            echo "<div style=\"margin-top: 3px; margin-bottom: 7px;\">Gruppierungsspezifische Profilfelder:
             <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=profil_felder','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
-            </p>
+            </div>
             <table class=\"tableList\" style=\"width: 95%;\" cellpadding=\"2\" cellspacing=\"0\">
                <tr>
                   <th class=\"tableHeader\" style=\"text-align: left;\">Feld</th>
@@ -237,7 +237,7 @@ require("../../../adm_config/body_top.php");
          }
 
          echo "
-         <button name=\"field\" type=\"button\" value=\"field\"
+         <button id=\"field\" type=\"button\" value=\"field\" style=\"margin-top: 3px;\"
             onClick=\"self.location.href='$g_root_path/adm_program/administration/organization/field.php?url=$url'\">
             <img src=\"$g_root_path/adm_program/images/wand.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Rollen zuordnen\">
             &nbsp;Feld hinzuf&uuml;gen</button>
