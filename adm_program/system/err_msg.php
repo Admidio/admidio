@@ -114,8 +114,8 @@ if($inline == 0)
 
       if($_GET['timer'] > 0)
       {
-         echo '<script language="JavaScript1.2" type="text/javascript"><!--n
-               window.setTimeout("window.location.href=\''. $load_url. '\'", '. $_GET['timer']. ');n
+         echo '<script language="JavaScript1.2" type="text/javascript"><!--
+               window.setTimeout("window.location.href=\''. $load_url. '\'", '. $_GET['timer']. ');
                //--></script>';
       }
 
