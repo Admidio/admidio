@@ -291,7 +291,7 @@ if($user->valid == 0)
    // nur ausfuehren, wenn E-Mails auch unterstuetzt werden
    if($g_current_organization->mail_extern != 1)
    {
-      mail($user->email, "Anmeldung auf $g_homepage", "Hallo $user->first_name,\n\ndeine Anmeldung auf $g_homepage ".
+      mail($user->email, "Anmeldung auf $g_homepage", "Hallo $user->first_name,\n\ndeine Anmeldung auf $g_current_organization->homepage ".
            "wurde bestätigt.\n\nNun kannst du dich mit deinem Benutzernamen : $user->login_name\nund dem Passwort auf der Homepage ".
            "einloggen.\n\nSollten noch Fragen bestehen, schreib eine Mail an webmaster@$g_domain .\n\nViele Grüße\nDie Webmaster",
            "From: webmaster@$g_domain");
