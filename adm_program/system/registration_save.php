@@ -125,7 +125,7 @@ if ($count_user == 0)
 		if($g_current_organization->mail_extern != 1)
       {
          mail("$row->usr_email", "Anmeldung", "Es hat sich ein neuer User auf ".
-              "$g_homepage angemeldet\n\nNachname: ". $_POST["nachname"]. "\nVorname:  ". $_POST["vorname"]. "\n".
+              "$g_current_organization->homepage angemeldet\n\nNachname: ". $_POST["nachname"]. "\nVorname:  ". $_POST["vorname"]. "\n".
               "E-Mail:   ". $_POST["email"]. "\n\n\nDiese Nachricht wurde automatisch erzeugt.",
               "From: webmaster@$g_domain");
       }
