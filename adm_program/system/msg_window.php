@@ -312,8 +312,10 @@ echo "
 
       case "veranst_help":
          echo " <h3>Was ist zu tun?</h3>
-         Alle offenen Felder ausf&uuml;llen. Die Felder Veranstaltung und Beginn sind Pflichtfelder.
-         Die Felder Ende und Fotografen sind optional. Alle &uuml;brigen Felder werden automatisch ausgef&uuml;llt.
+         Alle offenen Felder ausf&uuml;llen. Die Felder Veranstaltung und Beginn sind Pflichtfelder. Ggf. Ausw&auml;hlen
+			welcher Veranstaltung die Neue untergeordnet werden soll, z.B. &bdquo;Tag 3&ldquo; in &bdquo;Turnier 2010&ldquo; (solche Unterteilungen sind empfehlenswert bei vielen Bildern).
+         Die Felder Ende und Fotografen sind optional. Nur Freigegebene Veranstaltungen sind für Homepagebesucher sichtbar. Möchte man z.B. erst alle Bilder Hochladen
+			oder auch nur schon mal alle Daten eingetragen haben, kann man die Freigabe einfach sp&auml;ter setzen. Alle &uuml;brigen Felder werden automatisch ausgef&uuml;llt.
          Danach auf Speichern klicken.
          ";
          break;
@@ -325,8 +327,6 @@ echo "
 			den Datensatz mit Button in der Bearbeitungsspalte löschen (<img src=\"$g_root_path/adm_program/images/delete.png\" style=\"vertical-align: top;\">).
 			Besuchern der Website ohne Fotoverwaltungsrecht, wird diese Veranstaltung nich mehr angezeigt.";
          break;
-      
-
 
          default:
             echo "Es ist ein Fehler aufgetreten.";
