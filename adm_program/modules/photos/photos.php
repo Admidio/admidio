@@ -31,6 +31,7 @@ require("../../system/session_check.php");
 //Übername der übergebenen Variablen
 //ID einer bestimmten Veranstaltung
 $pho_id=$_GET["pho_id"];
+if($pho_id=="")$pho_id=NULL;
 //aktuelle Seite
 $seite= $_GET['seite'];
 if($seite=="")$seite=1;
@@ -43,7 +44,31 @@ $result_event = mysql_query($sql, $g_adm_con);
 db_error($result_event);
 $adm_photo = mysql_fetch_array($result_event);
 
-		
+//Erfassen der Eltern Veranstaltung
+if($adm_photo["pho_pho_id_parent"]!=NULL){
+   $pho_parent_id=$adm_photo["pho_pho_id_parent"];
+   $sql = "   SELECT *
+            FROM ". TBL_PHOTOS. "
+            WHERE pho_id ='$pho_parent_id'";
+   $result = mysql_query($sql, $g_adm_con);
+   db_error($result);
+   $adm_photo_parent = mysql_fetch_array($result);
+}
+	
+//Erfassen des Anlegers der Ubergebenen Veranstaltung
+if($pho_id!=NULL && $adm_photo["pho_usr_id"]!=NULL){
+	$sql     = "SELECT * FROM ". TBL_USERS. " WHERE usr_id =".$adm_photo["pho_usr_id"];
+         $result_u1 = mysql_query($sql, $g_adm_con);
+         db_error($result_u1);
+         $user1 = mysql_fetch_object($result_u1);
+}
+//Erfassen des Veraenderers der Ubergebenen Veranstaltung
+if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL){
+	$sql     = "SELECT * FROM ". TBL_USERS. " WHERE usr_id =".$adm_photo["pho_usr_id_change"];
+         $result_u2 = mysql_query($sql, $g_adm_con);
+         db_error($result_u2);
+         $user2 = mysql_fetch_object($result_u2);
+}
 /*********************APPROVED************************************/		
 //Falls gefordert und Photoeditrechet, ändern der Freigabe
 	//erfassen der Veranstaltung
@@ -63,6 +88,14 @@ $adm_photo = mysql_fetch_array($result_event);
       	//SQL Befehl ausführen
       	$result_approved = mysql_query($sql, $g_adm_con);
       	db_error($result_approved);
+      	//Zurück zur Elternveranstaltung
+      	$pho_id=NULL;
+      	$sql = "	SELECT *
+						FROM ". TBL_PHOTOS. "
+						WHERE (pho_id ='$pho_id')";
+			$result_event = mysql_query($sql, $g_adm_con);
+			db_error($result_event);
+			$adm_photo = mysql_fetch_array($result_event);
 		}
 	}
 /*********************HTML_TEIL*******************************/	
@@ -86,18 +119,22 @@ $adm_photo = mysql_fetch_array($result_event);
    require("../../../adm_config/body_top.php");
 
    echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">";
-   echo"<h1>Fotogalerien</h1>";
+   echo"<h1>Fotogalerien";
+	if($pho_id!="")echo "&#47".$adm_photo["pho_name"];
+	if($pho_id!="" && $adm_photo["pho_pho_id_parent"]!=NULL)echo"&#47".$adm_photo_parent["pho_name"];
+	echo"</h1>";
    //bei Seitenaufruf mit Moderationsrechten
-   if($g_session_valid && editPhoto()){
+   if($g_session_valid && editPhoto() && $adm_photo["pho_pho_id_parent"]==NULL){
       echo"
       <button name=\"verwaltung\" type=\"button\" value=\"up\" style=\"width: 187px;\"
-         onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/event.php?aufgabe=new'\">
+         onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/event.php?aufgabe=new&amp;pho_id=$pho_id'\">
          <img src=\"$g_root_path/adm_program/images/edit.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Veranstaltung anlegen\">  Veranstaltung anlegen
         </button><br><br>";
    }
+   
 /*************************THUMBNAILS**********************************/	  
  //Nur wenn Veranstaltung übergeben wurde
- if($pho_id!=""){
+ if($adm_photo["pho_quantity"]>0){
   	//Aanzahl der Bilder
    $bilder = $adm_photo["pho_quantity"];
 	//Speicherort
@@ -112,8 +149,8 @@ $adm_photo = mysql_fetch_array($result_event);
 	//Rahmung der Galerie
    echo"<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">";
    //Ausgabe der &Uuml;berschrift
-   echo "<div class=\"formHead\" style=\"width: 90%\">". strspace($adm_photo["pho_name"]). "</div>
-   <div class=\"formBody\" style=\"width: 90%\">";
+   echo "<div class=\"formHead\" style=\"width: 560px\">". strspace($adm_photo["pho_name"]). "</div>
+   <div class=\"formBody\" style=\"width: 560px\">";
 		
 		echo"Datum: ".mysqldate("d.m.y", $adm_photo["pho_begin"]);
          if($adm_photo["pho_end"] != $adm_photo["pho_begin"])echo " bis ".mysqldate("d.m.y", $adm_photo["pho_end"]);
@@ -155,26 +192,30 @@ $adm_photo = mysql_fetch_array($result_event);
             }//for
             echo "</tr>";//Zeilenende
          }//for
-      echo "</table>
-		<hr width=\"85%\" />
-      <br>";
-		//Uebersicht
-		echo"	<button name=\"up\" type=\"button\" value=\"up\" style=\"width: 135px;\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php'\">
-           		<img src=\"../../../adm_program/images/list.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"&Uuml;bersicht\">  &Uuml;bersicht
-           	</button>";
-		
+      	echo"<tr><td colspan=\"5\">
+			<div style=\"margin: 8px 4px 4px 4px; font-size: 8pt; text-align: center;\">";
+				if($adm_photo["pho_usr_id"]!=NULL)
+					echo"Angelegt von ". strSpecialChars2Html($user1->usr_first_name). " ". strSpecialChars2Html($user1->usr_last_name).
+            	" am ". mysqldatetime("d.m.y h:i", $adm_photo["pho_timestamp"]);
+         	if($adm_photo["pho_usr_id_change"]!=NULL)
+					echo"<br>	
+					Letztes Update durch ". strSpecialChars2Html($user2->usr_first_name). " ". strSpecialChars2Html($user2->usr_last_name).
+            	" am ". mysqldatetime("d.m.y h:i", $adm_photo["pho_last_change"]);
+			echo"</div>
+			</td></tr>";
+      echo "</table>";
    echo"
 	</div>
    </div>";
   }
-/************************TABELLE*************************************/	
+/************************Veranstaltungsliste*************************************/	
 
 	//erfassen der Veranstaltungen die in der Veranstaltungstabelle ausgegeben werden sollen
    $sql = "   SELECT *
             FROM ". TBL_PHOTOS. "
             WHERE pho_org_shortname ='$g_organization'";
-            if($pho_id=="")$sql=$sql."AND (pho_pho_id_parent IS NULL)";
-            if($pho_id!="")$sql=$sql."AND pho_pho_id_parent = '$pho_id'";
+            if($pho_id==NULL)$sql=$sql."AND (pho_pho_id_parent IS NULL)";
+            if($pho_id!=NULL)$sql=$sql."AND pho_pho_id_parent = '$pho_id'";
 				$sql=$sql."ORDER BY pho_begin DESC ";
    $result_list = mysql_query($sql, $g_adm_con);
    db_error($result_list);
@@ -182,7 +223,7 @@ $adm_photo = mysql_fetch_array($result_event);
    //anlegen der Veranstaltungstabelle und ausgeb der Kopfzeile wenn Ergbnis vorliegt
    if(mysql_num_rows($result_list)>0 || $pho_id==""){
    	echo "
-   	<table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\">
+   	<table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\" style=\"width: 580px\">
       	<tr>
          	<th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;Veranstaltung</th>
          	<th class=\"tableHeader\" style=\"text-align: left;\">Datum</th>
@@ -195,7 +236,18 @@ $adm_photo = mysql_fetch_array($result_event);
 //durchlaufen des Result-Tabelle und Ausgabe in Veranstaltungstabelle
    	$bildersumme=0;//Summe der Bilder in den Unterordnern
    	for($x=0; $adm_photo_list = mysql_fetch_array($result_list); $x++){
-         $bildersumme=$bildersumme+$adm_photo_list["pho_quantity"];//erhöhen der Bildersumme
+         //suchen nach Summe der Bilder in Kinderveranstaltungen
+         $sql = "   SELECT SUM(pho_quantity)
+				FROM ". TBL_PHOTOS. "
+            WHERE pho_org_shortname ='$g_organization'
+            AND pho_pho_id_parent = '".$adm_photo_list["pho_id"]."'
+				GROUP BY 'pho_pho_id_parent'
+				";
+   		$result_kibisu = mysql_query($sql, $g_adm_con);
+  			db_error($result_kibisu, 1);
+  			$kibiesu=mysql_fetch_array($result_kibisu);
+  			$veranst_bilder_summe=$kibiesu[0]+$adm_photo_list["pho_quantity"];
+         $bildersumme=$bildersumme+$veranst_bilder_summe;//erhöhen der Bildersumme
          $ordner = "../../../adm_my_files/photos/".$adm_photo_list["pho_begin"]."_".$adm_photo_list["pho_id"];
          //Kontrollieren ob der entsprechende Ordner in adm_my_files existiert und freigegeben ist oder Photoeditrechte bestehen
          //wenn ja Zeile ausgeben
@@ -209,7 +261,7 @@ $adm_photo = mysql_fetch_array($result_event);
                      onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=folder_not_found','Message','width=500, height=260, left=310,top=200,scrollbars=no')\">&nbsp;";
 				echo"<a target=\"_self\" href=\"photos.php?pho_id=".$adm_photo_list["pho_id"]."\">".$adm_photo_list["pho_name"]."</a></td>
             <td style=\"text-align: center;\">".mysqldate("d.m.y", $adm_photo_list["pho_begin"])."</td>";//Anzeige beginn datum im deutschen Format
-       		echo"<td style=\"text-align: center;\">".$adm_photo_list["pho_quantity"]."</td>
+       		echo"<td style=\"text-align: center;\">".$veranst_bilder_summe."</td>
             <td style=\"text-align: center;\">".mysqldate("d.m.y", $adm_photo_list["pho_last_change"])."</td>";//Anzeige online seitdatum im deutschen Format
             //Bearbeitungsbuttons für Leute mit Photoeditrechten
             if ($g_session_valid && editPhoto($adm_photo_list["pho_org_shortname"])){
@@ -236,9 +288,6 @@ $adm_photo = mysql_fetch_array($result_event);
          ";
          }//Ende Ordner existiert
    	};//for
-   	// wenn keine Bilder vorhanden sind, dann eine Meldung ausgeben
-   	if(mysql_num_rows($result_list)==0)
-      	echo "<tr><td>&nbsp;Es sind keine Veranstaltungen vorhanden.</td></tr>";
 //tabbelen Ende mit Ausgabe der Gesammtbilderzahl
    		echo"<tr>
          	<th class=\"tableHeader\" style=\"text-align: right;\" colspan=\"2\">Bilder Gesamt:</th>
@@ -248,11 +297,24 @@ $adm_photo = mysql_fetch_array($result_event);
          echo"</tr>
    	</table>";
    }//if mehr als ein Ergebnis
-  
+/****************************Leere Veranstaltung****************/
+//Falls die Veranstaltung weder Bilder noch Unterordner enthält
+   if($adm_photo["pho_quantity"]=="0" && mysql_num_rows($result_list)==0)
+   echo"Diese Veranstaltung enth&auml;lt leider noch keine Bilder.<br><br>";
+/************************Buttons********************************/
+	//Uebersicht
+	if($adm_photo["pho_id"]!=NULL)
+	echo"<br>
+	<button name=\"up\" type=\"button\" value=\"up\" style=\"width: 135px;\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php'\">
+   	<img src=\"../../../adm_program/images/list.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Haupt&uuml;bersicht\">  Haupt&uuml;bersicht
+    </button>";
+   if($adm_photo["pho_pho_id_parent"]!=NULL)
+   echo"&nbsp;&nbsp;
+	<button name=\"up\" type=\"button\" value=\"up\" style=\"width: 135px;\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$adm_photo["pho_pho_id_parent"]."'\">
+   	<img src=\"../../../adm_program/images/list.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"&Uuml;bersicht\">  &Uuml;bersicht
+    </button>";
 
-
-
-//Seitenende
+/***************************Seitenende***************************/
 echo"</div>";
 require("../../../adm_config/body_bottom.php");
 echo "</body>

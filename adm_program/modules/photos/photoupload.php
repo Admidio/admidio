@@ -112,10 +112,10 @@ if($_POST["upload"]){
       }//for
    //Ende der Bildverarbeitunsschleife
 	//Aendern der Datenbankeintaege
-      $changedatetime= date("Y.m.d G:i:s", time());
 		$sql ="	UPDATE ". TBL_PHOTOS. "
 					SET pho_quantity = '$bildnr',
-						 pho_last_change = '$changedatetime'
+						 pho_last_change ='$act_datetime',
+						 pho_usr_id_change = $g_current_user->id
 					WHERE pho_id = '$pho_id'";
 		$result = mysql_query($sql, $g_adm_con);
 		db_error($result, 1);
