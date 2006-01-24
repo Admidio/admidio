@@ -32,29 +32,45 @@
 	$aufgabe=$_GET['aufgabe'];
 //Aktueller Timestamp
    $act_datetime= date("Y.m.d G:i:s", time());
-//erfassen der Veranstaltung bei Änderungsaufruf
+//Erfassen der Veranstaltung bei Änderungsaufruf
    $sql = "   SELECT *
             FROM ". TBL_PHOTOS. "
             WHERE (pho_id ='$pho_id')";
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
    $adm_photo = mysql_fetch_array($result);
+
+//Erfassen der Eltern Veranstaltung
+   $pho_parent_id=$adm_photo["pho_pho_id_parent"];
+   $sql = "   SELECT *
+            FROM ". TBL_PHOTOS. "
+            WHERE pho_id ='$pho_parent_id'";
+   $result = mysql_query($sql, $g_adm_con);
+   db_error($result);
+   $adm_photo_parent = mysql_fetch_array($result);
+   
+//erfassen der Veranstaltungsliste
+   $sql = "   SELECT *
+            FROM ". TBL_PHOTOS. "
+            WHERE pho_org_shortname ='$g_organization'
+				ORDER BY pho_begin DESC ";
+   $result_list = mysql_query($sql, $g_adm_con);
+   db_error($result_list);
+
 //bei Seitenaufruf ohne Moderationsrechte
 
-if(!$g_session_valid || $g_session_valid && (!editPhoto($adm_photo["pho_org_shortname"] && $aufgabe="change") || (!editPhoto($g_organization) && $aufgabe="new")))
+if(!$g_session_valid || $g_session_valid && (!editPhoto($adm_photo["pho_org_shortname"]) && $aufgabe="change") || !editPhoto())
       {
-        $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=photoverwaltunsrecht";
+      $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=photoverwaltunsrecht";
       header($location);
       exit();
       }
-
 //bei Seitenaufruf mit Moderationsrechten
 if($g_session_valid && editPhoto($adm_photo["$g_organization"])){
 
 //Speicherort
    $ordner = "../../../adm_my_files/photos/".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"];
-//*************************************************************************************
-//Änderungen oder Neueintäge speichern
+/********************Änderungen oder Neueintäge speichern***********************************/
    if($_POST["submit"]){
    //Gesendete Variablen übernehmen und kontollieren
       //Veranstaltung
@@ -64,6 +80,8 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"])){
          header($location);
          exit();
       }
+      //Parent-Ordner
+      $parent_id = $_POST["parent"];
       //Beginn
       $beginn =  $_POST["beginn"];
          if($beginn=="" || !dtCheckDate($beginn)){
@@ -93,10 +111,10 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"])){
    if ($aufgabe=="makenew"){
       $sql="INSERT INTO ". TBL_PHOTOS. " (pho_quantity, pho_name, pho_begin,
                          pho_end, pho_photographers, pho_timestamp, pho_last_change, pho_org_shortname,
-									pho_usr_id, pho_approved, pho_pho_id_parent)
+									pho_usr_id, pho_approved)
                VALUES(0, 'neu', '0000-00-00', '0000-00-00', 'leider unbekannt',
                       '$act_datetime', '$act_datetime', '$g_organization',
-								'0', '$approved', 'NULL')
+								'$g_current_user->id', '$approved')
       ";
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
@@ -148,12 +166,16 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"])){
       }//if
 //&Auml;ndern  der Daten in der Datenbank
          $sql= "UPDATE ". TBL_PHOTOS. "
-                SET   pho_name = '$veranstaltung',
-                     pho_begin ='$beginn',
+                SET  pho_name = '$veranstaltung',";
+                if($parent_id!="0")$sql=$sql."pho_pho_id_parent = '$parent_id',";
+                if($parent_id=="0")$sql=$sql."pho_pho_id_parent = NULL,";
+                $sql=$sql." 
+							pho_begin ='$beginn',
                      pho_end ='$ende',
                      pho_photographers ='$photographen',
-                     pho_last_change ='$act_datetime',
-               		pho_approved = '$approved'
+							pho_last_change ='$act_datetime',
+							pho_usr_id_change = $g_current_user->id,
+							pho_approved = '$approved'
 					WHERE pho_id = '$pho_id'";
       //SQL Befehl ausführen
       $result = mysql_query($sql, $g_adm_con);
@@ -166,13 +188,34 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"])){
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
    $neudaten = mysql_fetch_array($result);
-//Speicherort
+	//Speicherort
    $ordner = "../../../adm_my_files/photos/".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"];
-
+	//Erfassen der Eltern Veranstaltung
+   $pho_parent_id=$neudaten["pho_pho_id_parent"];
+   $sql = "   SELECT *
+            FROM ". TBL_PHOTOS. "
+            WHERE pho_id ='$pho_parent_id'";
+   $result = mysql_query($sql, $g_adm_con);
+   db_error($result);
+   $neudaten_parent = mysql_fetch_array($result);
+   
+   //Erfassen des Anlegers der Ubergebenen Veranstaltung
+	if($pho_id!=NULL){
+		$sql     = "SELECT * FROM ". TBL_USERS. " WHERE usr_id =".$neudaten["pho_usr_id"];
+         $result_u1 = mysql_query($sql, $g_adm_con);
+         db_error($result_u1);
+         $user1 = mysql_fetch_object($result_u1);
+	}
+	//Erfassen des Veraenderers der Ubergebenen Veranstaltung
+	if($pho_id!=NULL){
+		$sql     = "SELECT * FROM ". TBL_USERS. " WHERE usr_id =".$neudaten["pho_usr_id_change"];
+         $result_u2 = mysql_query($sql, $g_adm_con);
+         db_error($result_u2);
+         $user2 = mysql_fetch_object($result_u2);
+	}
    }// If submit
 
-//*************************************************************************************
-//Beginn HTML
+/******************************HTML-Teil******************************************/
    echo "
    <!-- (c) 2004 - 2005 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
    <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
@@ -190,8 +233,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"])){
 
    require("../../../adm_config/body_top.php");
    echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">";
-//*************************************************************************************
-//Bericht
+/*******************************Bericht*********************************************/
    if($_POST["submit"]){
       echo"<div style=\"width: 430px\" align=\"center\" class=\"formHead\">Bericht</div>";
       echo"
@@ -199,17 +241,23 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"])){
           <table cellspacing=3 cellpadding=0 border=\"0\">
             <tr><td colspan=\"2\" align=\"center\">Die Veranstaltung Wurde erfolgreich angelegt/ge&auml;ndert:</td></tr>
             <tr><td align=\"right\" width=\"50%\">Aktuelle Bilderzahl:</td><td align=\"left\">".$neudaten["pho_quantity"]."</td></tr>
-            <tr><td align=\"right\">Veranstaltung:</td><td align=\"left\">".$neudaten["pho_name"]."</td></tr>
-            <tr><td align=\"right\">Anfangsdatum:</td><td align=\"left\">".mysqldate("d.m.y", $neudaten["pho_begin"])."</td></tr>
+				<tr><td align=\"right\">Veranstaltung:</td><td align=\"left\">".$neudaten["pho_name"]."</td></tr>
+				<tr><td align=\"right\" width=\"50%\">in Ordner:</td><td align=\"left\">";
+            	if($pho_parent_id!=NULL)echo $neudaten_parent["pho_name"];
+					if($pho_parent_id==NULL)echo "Fotogalerien(Hauptordner)";
+				echo"</td></tr>
+				<tr><td align=\"right\">Anfangsdatum:</td><td align=\"left\">".mysqldate("d.m.y", $neudaten["pho_begin"])."</td></tr>
             <tr><td align=\"right\">Enddatum:</td><td align=\"left\">".mysqldate("d.m.y", $neudaten["pho_end"])."</td></tr>
             <tr><td align=\"right\">Fotografen:</td><td align=\"left\">".$neudaten["pho_photographers"]."</td></tr>
             <tr><td align=\"right\">&Ouml;ffentliche Freigabe:</td><td align=\"left\">";
             	if($neudaten["pho_approved"]==1) echo"Ja";
             	if($neudaten["pho_approved"]==0) echo"Nein";
             echo"</td></tr>
-				<tr><td align=\"right\">Online seit:</td><td align=\"left\">".mysqldatetime("d.m.y h:i", $neudaten["pho_timestamp"])."</td></tr>
-            <tr><td align=\"right\">Letze &Auml;nderung:</td><td align=\"left\">".mysqldatetime("d.m.y h:i", $neudaten["pho_last_change"])."</td></tr>
-            <tr><td align=\"right\">Gruppierung:</td><td align=\"left\">".$neudaten["pho_org_shortname"]."</td></tr>
+				<tr><td align=\"right\">Gruppierung:</td><td align=\"left\">".$neudaten["pho_org_shortname"]."</td></tr>
+				<tr><td align=\"right\">angelegt von:</td><td align=\"left\">". strSpecialChars2Html($user1->usr_first_name). " ". strSpecialChars2Html($user1->usr_last_name)."</td></tr>
+				<tr><td align=\"right\">angelegt am:</td><td align=\"left\">".mysqldatetime("d.m.y h:i", $neudaten["pho_timestamp"])."</td></tr>
+				<tr><td align=\"right\">letztes Update durch:</td><td align=\"left\">". strSpecialChars2Html($user2->usr_first_name). " ". strSpecialChars2Html($user2->usr_last_name)."</td></tr>
+				<tr><td align=\"right\">letztes Update am:</td><td align=\"left\">".mysqldatetime("d.m.y h:i", $neudaten["pho_timestamp"])."</td></tr>
          </table>
          <hr width=\"85%\" />
          <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php'\">
@@ -219,17 +267,16 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"])){
       <br><br>
       ";
    }//submit
-//*************************************************************************************
-//Formular Veranstaltung anlegen oder ändern
+/****************************Formular***********************************************/
 if($_GET["aufgabe"]=="change" || $_GET["aufgabe"]=="new"){
    //Kopfzeile
-   echo"<div class=\"formHead\" style=\"width: 430px\">";
+   echo"<div class=\"formHead\" style=\"width: 460px\">";
       if($_GET["aufgabe"]=="new") echo "Neue Veranstaltung anlegen";
       if($_GET["aufgabe"]=="change") echo "Veranstaltung bearbeiten";
    echo"</div>";
    //Body
    echo"
-      <div style=\"width: 430px\" align=\"center\" class=\"formBody\">
+      <div style=\"width: 460px\" align=\"center\" class=\"formBody\">
          <form method=\"POST\" action=\"event.php?pho_id=$pho_id";
             if($_GET["aufgabe"]=="new")echo "&aufgabe=makenew\">";
             if($_GET["aufgabe"]=="change")echo "&aufgabe=makechange\">";
@@ -240,6 +287,21 @@ if($_GET["aufgabe"]=="change" || $_GET["aufgabe"]=="new"){
             <div style=\"text-align: left; margin-left: 180px;\">";
                if($_GET["aufgabe"]=="new")echo "<input type=\"text\" name=\"veranstaltung\" size=\"30\" maxlength=\"40\" tabindex=\"1\">";
                if($_GET["aufgabe"]=="change")echo "<input type=\"text\" name=\"veranstaltung\" size=\"30\" maxlength=\"40\" tabindex=\"1\" value=\"".$adm_photo["pho_name"]."\">";
+            echo"</div></div>";
+            //Parent
+            echo"
+            <div style=\"margin-top: 6px;\">
+            <div style=\"text-align: right; width: 170px; float: left;\">in Ordner:</div>
+            <div style=\"text-align: left; margin-left: 180px;\">";
+               echo"<select size=\"1\" name=\"parent\">";
+               if($_GET["aufgabe"]=="new" && $pho_id!="")echo"<option value=\"".$adm_photo["pho_id"]."\">".$adm_photo["pho_name"]."&nbsp(".mysqldate("y", $adm_photo["pho_begin"]).")</option>";
+					if($_GET["aufgabe"]=="change" && $adm_photo["pho_pho_id_parent"]!=NULL)echo"<option value=\"".$adm_photo_parent["pho_pho_id_parent"]."\">".$adm_photo_parent["pho_name"]."&nbsp(".mysqldate("y", $adm_photo_parent["pho_begin"]).")</option>";
+               echo"<option value=\"0\">Fotogalerien(Hauptordner)</option>";
+	            for($x=0; $adm_photo_list = mysql_fetch_array($result_list); $x++){
+	            	if($adm_photo_list["pho_id"]!=$pho_id_parent && $adm_photo_list["pho_id"]!=$pho_id)
+	            		echo"<option value=\"".$adm_photo_list["pho_id"]."\">".$adm_photo_list["pho_name"]."&nbsp(".mysqldate("y", $adm_photo_list["pho_begin"]).")</option>";
+	            }//for
+	            echo"</select>";
             echo"</div></div>";
             //Beginn
             echo"
@@ -331,32 +393,43 @@ if($_GET["aufgabe"]=="change" || $_GET["aufgabe"]=="new"){
       </div>
    ";
 }//Ende Formular
-//*************************************************************************************
-//Veranstaltung Löschen
+/***********************Veranstaltung Löschen*******************************************/
+
 if($_GET["aufgabe"]=="delete"){
-   echo"<div style=\"width: 430px\" align=\"center\" class=\"formHead\">Bericht</div>";
-   echo"<div style=\"width: 430px\" align=\"center\" class=\"formBody\">";
+   //Erfasse der zu löschenden VEranstaltung bzw. Unterveranstaltungen
+   //Erfassen der Veranstaltung bei Änderungsaufruf
+   $sql = "   SELECT *
+            FROM ". TBL_PHOTOS. "
+            WHERE (pho_id ='$pho_id') OR (pho_pho_id_parent ='$pho_id')";
+   $result = mysql_query($sql, $g_adm_con);
+   db_error($result, 1);
+   
+   echo"<div style=\"width: 500px\" align=\"center\" class=\"formHead\">Bericht</div>";
+   echo"<div style=\"width: 500px\" align=\"center\" class=\"formBody\">";
+   for($x=0; $adm_photo = mysql_fetch_array($result); $x++){ 
+      $ordner = "../../../adm_my_files/photos/".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"];
       if(file_exists($ordner)){
       	chmod("$ordner", 0777);
       	//Löschen der Bilder
       	for($x=1; $x<=$adm_photo["pho_quantity"]; $x++){
         	 chmod("$ordner/$x.jpg", 0777);
-         	if(unlink("$ordner/$x.jpg"))echo"Datei $x.jpg wurde erfolgreich GEL&Ouml;SCHT.<br>";
+         	if(unlink("$ordner/$x.jpg"))echo"Datei &bdquo;".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"]."/$x.jpg&rdquo; wurde erfolgreich GEL&Ouml;SCHT.<br>";
       	}	
       }
-
-      //Löschen der Daten aus der Datenbank
+		//Löschen der Daten aus der Datenbank
       $sql ="DELETE
             FROM ". TBL_PHOTOS. "
-            WHERE (pho_id ='$pho_id')";
-      $result = mysql_query($sql, $g_adm_con);
-      db_error($result);
-      if($result)echo"Der zugehörige Datensatz wurde aus der Datenbank GEL&Ouml;SCHT.";
+            WHERE (pho_id ='".$adm_photo["pho_id"]."')";
+      $result_delet = mysql_query($sql, $g_adm_con);
+      db_error($result_delet);
+      if($result_delet)echo"Der Datensatz zu &bdquo;".$adm_photo["pho_name"]."&rdquo; wurde aus der Datenbank GEL&Ouml;SCHT.";
 
       //Löschen der Ordners
        if(file_exists($ordner)){
-       	if(rmdir("$ordner"))echo"Die Veranstaltung Wurde erfolgreich GEL&Ouml;SCHT.<br>";
+       	if(rmdir("$ordner"))echo"<br>Die Veranstaltung Wurde erfolgreich GEL&Ouml;SCHT.<br>";
        }
+	}//for
+      
        echo"
        <hr width=\"85%\" />
          <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php'\">
@@ -365,8 +438,7 @@ if($_GET["aufgabe"]=="delete"){
       </div>";
 }
 //Ende Veranstaltung loeschen
-//*************************************************************************************
-//Ende der Seite
+/***********************************Ende********************************************/
    echo"</div>";
    require("../../../adm_config/body_bottom.php");
    echo "</body>

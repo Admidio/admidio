@@ -52,7 +52,7 @@ if($g_session_valid && editPhoto($adm_photo["pho_org_shortname"])){
 	$ordner = "../../../adm_my_files/photos/".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"];
 
 //Bericht mit l&ouml;schen
-      $neuebilderzahl = $adm_photo[1]-1;
+      $neuebilderzahl = $adm_photo["pho_quantity"]-1;
 	//Bilder l&ouml;schen
         	chmod("$ordner/$bild.jpg", 0777);
          unlink("$ordner/$bild.jpg");
@@ -68,16 +68,17 @@ if($g_session_valid && editPhoto($adm_photo["pho_org_shortname"])){
             }//if
          }//for
    //&Auml;ndern der Datenbankeintaege
-        $changedatetime= date("Y.m.d G:i:s", time());
 		  $sql = "UPDATE ". TBL_PHOTOS. "
-		 			SET pho_quantity = '$neuebilderzahl', pho_last_change = '$changedatetime'
+		 			SET pho_quantity = '$neuebilderzahl',
+					pho_last_change ='$act_datetime',
+					pho_usr_id_change = $g_current_user->id
 					WHERE pho_id = '$pho_id'";
 		 $result = mysql_query($sql, $g_adm_con);
 		 db_error($result);
 
 // zur Ausgangsseite zurueck
 $seite=$_GET["seite"];
-$location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=photo_deleted&timer=2000&url=". urlencode("$g_root_path/adm_program/modules/photos/thumbnails.php?pho_id=$pho_id&seite=$seite");
+$location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=photo_deleted&timer=2000&url=". urlencode("$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id&seite=$seite");
 header($location);
 exit();
 }//if Moderator
