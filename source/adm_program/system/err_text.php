@@ -252,10 +252,6 @@ function getErrorText($error_code, $error_text)
          $error_str = "Die ausgew&auml;hlte Datei ist nicht im JPG-Format gespeichert.<br />";
           break;
 
-      case "ordnereing":
-         $error_str = "Es muss ein Kurzname f&uuml;r die Veranstaltung eingegeben weden. (z.B. Sola f&uuml;r Sommerlager)<br />";
-          break;
-
       case "startdatum":
          $error_str = "Es muss ein g&uuml;ltiges  Startdatum f&uuml;r die Veranstalltung eingegeben werden.<br />";
           break;
@@ -268,13 +264,9 @@ function getErrorText($error_code, $error_text)
          $error_str = "Es muss ein Name f&uuml;r die Veranstaltung eingegeben weden.<br />";
           break;
 
-      case "ordnerexistiert":
-         $error_str = "Eine Versnstaltung mit gleichem Anfangsdatum und gleichem Kurznamen existiert bereits.<br />";
-          break;
-
       case "delete_veranst":
          $error_str = "Willst du die Veranstaltung:<br />
-         <b>$error_text</b><br />wirklich l&ouml;schen ?<br> Alle enthaltenen Bilder gehen verloren.";
+         <b>$error_text</b><br />wirklich l&ouml;schen ?<br> Alle enthaltenen  Unterveranstaltungen und Bilder gehen verloren.";
          break;
 
       case "delete_photo":
