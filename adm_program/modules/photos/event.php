@@ -101,6 +101,12 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"])){
             }
             if(dtCheckDate($ende))$ende = dtFormatDate($ende, "Y-m-d");
          }
+      //Anfang muss vor oder gleich Ende sein
+      if($ende<$beginn){
+      	$location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=startvorend";
+               header($location);
+               exit();
+      }
       //Photographen
       $photographen =  $_POST["photographen"];
          if($photographen=="")$photographen="leider unbekannt";
