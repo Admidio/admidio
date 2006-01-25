@@ -304,7 +304,7 @@ if($_GET["aufgabe"]=="change" || $_GET["aufgabe"]=="new"){
 					if($_GET["aufgabe"]=="change" && $adm_photo["pho_pho_id_parent"]!=NULL)echo"<option value=\"".$adm_photo_parent["pho_pho_id_parent"]."\">".$adm_photo_parent["pho_name"]."&nbsp(".mysqldate("y", $adm_photo_parent["pho_begin"]).")</option>";
                echo"<option value=\"0\">Fotogalerien(Hauptordner)</option>";
 	            for($x=0; $adm_photo_list = mysql_fetch_array($result_list); $x++){
-	            	if($adm_photo_list["pho_id"]!=$pho_id_parent && $adm_photo_list["pho_id"]!=$pho_id)
+	            	if($adm_photo_list["pho_id"]!=$pho_id_parent && $adm_photo_list["pho_id"]!=$pho_id && $adm_photo_list["pho_pho_id_parent"]==NULL)
 	            		echo"<option value=\"".$adm_photo_list["pho_id"]."\">".$adm_photo_list["pho_name"]."&nbsp(".mysqldate("y", $adm_photo_list["pho_begin"]).")</option>";
 	            }//for
 	            echo"</select>";

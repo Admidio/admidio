@@ -120,8 +120,8 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL){
 
    echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">";
    echo"<h1>Fotogalerien";
-	if($pho_id!="")echo "&#47".$adm_photo["pho_name"];
 	if($pho_id!="" && $adm_photo["pho_pho_id_parent"]!=NULL)echo"&#47".$adm_photo_parent["pho_name"];
+	if($pho_id!="")echo "&#47".$adm_photo["pho_name"];
 	echo"</h1>";
    //bei Seitenaufruf mit Moderationsrechten
    if($g_session_valid && editPhoto() && $adm_photo["pho_pho_id_parent"]==NULL){
@@ -226,7 +226,7 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL){
    	<table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\" style=\"width: 580px\">
       	<tr>
          	<th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;Veranstaltung</th>
-         	<th class=\"tableHeader\" style=\"text-align: left;\">Datum</th>
+         	<th class=\"tableHeader\" style=\"text-align: center;\">Datum</th>
          	<th class=\"tableHeader\" style=\"text-align: center;\">Bilder</th>
          	<th class=\"tableHeader\" style=\"text-align: center;\">Letze &Auml;nderung</th>";
          	if ($g_session_valid && editPhoto())
@@ -241,13 +241,14 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL){
 				FROM ". TBL_PHOTOS. "
             WHERE pho_org_shortname ='$g_organization'
             AND pho_pho_id_parent = '".$adm_photo_list["pho_id"]."'
+				AND pho_approved = '1'
 				GROUP BY 'pho_pho_id_parent'
 				";
    		$result_kibisu = mysql_query($sql, $g_adm_con);
   			db_error($result_kibisu, 1);
   			$kibiesu=mysql_fetch_array($result_kibisu);
   			$veranst_bilder_summe=$kibiesu[0]+$adm_photo_list["pho_quantity"];
-         $bildersumme=$bildersumme+$veranst_bilder_summe;//erhöhen der Bildersumme
+        	$bildersumme=$bildersumme+$veranst_bilder_summe;//erhöhen der Bildersumme
          $ordner = "../../../adm_my_files/photos/".$adm_photo_list["pho_begin"]."_".$adm_photo_list["pho_id"];
          //Kontrollieren ob der entsprechende Ordner in adm_my_files existiert und freigegeben ist oder Photoeditrechte bestehen
          //wenn ja Zeile ausgeben
