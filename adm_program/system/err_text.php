@@ -259,7 +259,11 @@ function getErrorText($error_code, $error_text)
       case "enddatum":
          $error_str = "Das eingegebene Enddatum ist ung&uuml;ltig.<br />";
           break;
-
+		
+		case "startvorend":
+         $error_str = "Das eingegebene Enddatum liegt vor dem Anfangsdatum.<br />";
+          break;
+            
       case "veranstaltung":
          $error_str = "Es muss ein Name f&uuml;r die Veranstaltung eingegeben weden.<br />";
           break;
