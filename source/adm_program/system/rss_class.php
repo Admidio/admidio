@@ -47,10 +47,12 @@
 
 
 // RSS-Klasse
-class RSSfeed {
+class RSSfeed
+{
 
 //Konstruktor
-function RSSfeed($homepage, $title, $description) {
+function RSSfeed($homepage, $title, $description)
+{
        $this->channel=array();
        $this->channel['title']=$title;
        $this->channel['link']=$homepage;
@@ -59,13 +61,15 @@ function RSSfeed($homepage, $title, $description) {
        $this->feed="http://" . $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI'];
 }
 
-function add_Item($title, $description, $date, $link) {
-       $item=array('title' => $title, 'description' => $description,
-               'pubDate' => $date, 'link' => $link);
+function add_Item($title, $description, $date, $link)
+{
+       $item=array(	'title' => $title, 'description' => $description,
+               		'pubDate' => $date, 'link' => $link);
        $this->items[]=$item;
 }
 
-function build_feed() {
+function build_feed()
+{
        $this->rss_header();
        $this->open_channel();
        $this->add_channel_infos();
@@ -88,9 +92,11 @@ function open_channel()
 
 function add_channel_infos()
 {
-       foreach (array('title', 'link', 'description') as $field) {
-               if (isset($this->channel[$field])) {
-                       echo "<${field}>" . htmlspecialchars($this->channel[$field]). "</${field}>\n";
+       foreach (array('title', 'link', 'description') as $field)
+       {
+               if (isset($this->channel[$field]))
+               {
+               	echo "<${field}>" . htmlspecialchars($this->channel[$field]). "</${field}>\n";
                }
        }
        echo "<language>de</language>\n";
@@ -99,12 +105,16 @@ function add_channel_infos()
 }
 
 
-function build_items() {
-       foreach ($this->items as $item) {
+function build_items()
+{
+       foreach ($this->items as $item)
+       {
                echo "<item>\n";
-               foreach (array('title', 'description', 'link', 'pubDate') as $field) {
-                       if (isset($item[$field])) {
-                               echo "<${field}>" . htmlspecialchars($item[$field]). "</${field}>\n";
+               foreach (array('title', 'description', 'link', 'pubDate') as $field)
+               {
+                       if (isset($item[$field]))
+                       {
+                       	echo "<${field}>" . htmlspecialchars($item[$field]). "</${field}>\n";
                        }
                }
                echo "<guid>" .  $item['link'] . "</guid>\n";
@@ -123,6 +133,7 @@ function rss_footer()
        echo '</rss>'. chr(10);
 }
 
-}
+
+} //Ende der Klasse
 
 ?>
