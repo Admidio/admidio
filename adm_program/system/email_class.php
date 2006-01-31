@@ -49,18 +49,20 @@
 // Email - Klasse
 class newEmail
 {
+	var $headerOptions;
+	var $mailBoundary;
+	var $text;
+	var $attachments;
+	var $copyToSender;
 
 
-
-//Konstruktor
+//Konstruktor der Klasse. Hier werden auch automatisch Encoding-Optionen etc. gesetzt
 function newEmail()
 {
-	$this->headerOptions = array();
-	$this->is_built    = false;
-
-	// Wichtig ist es als erstes die MIME-Version zu setzen
-	$this->headers['MIME-Version'] = '1.0';
+	$this->headerOptions['MIME-Version'] = '1.0';
 	$this->mailBoundary = "--NextPart_AdmidioMailSystem_". md5(uniqid(rand()));
+	$this->copyToSender = FALSE;
+
 }
 
 function addSender($sender)
@@ -73,22 +75,43 @@ function addSubject($subject)
 	$this->headerOptions['Subject'] = $subject;
 }
 
-function addReceiver($receiver)
+function addRecipient($to)
 {
-	$this->headerOptions['Cc'] = $receiver;
+	if (!isset($this->headerOptions['To']))
+	{
+		$this->headerOptions['To'] = $to;
+	}
+	else
+	{
+		$this->headerOptions['To'] = $this->headerOptions['To']. ", " .$to;
+	}
 }
 
-function addCc($cc)
+function addCopy($cc)
 {
-	$this->headerOptions['Cc'] = $cc;
+	if (!isset($this->headerOptions['Cc']))
+	{
+		$this->headerOptions['Cc'] = $cc;
+	}
+	else
+	{
+		$this->headerOptions['Cc'] = $this->headerOptions['Cc']. ", " .$cc;
+	}
 }
 
-function addBcc($bcc)
+function addBlindCopy($bcc)
 {
-	$this->headerOptions['Bcc'] = $bcc;
+	if (!isset($this->headerOptions['Bcc']))
+	{
+		$this->headerOptions['Bcc'] = $bcc;
+	}
+	else
+	{
+		$this->headerOptions['Bcc'] = $this->headerOptions['Bcc']. ", " .$bcc;
+	}
 }
 
-function setText($text = '')
+function setText($text)
 {
 	$this->text = $text;
 }
@@ -104,7 +127,7 @@ function addAttachment($file, $name = '', $c_type='application/octet-stream', $e
 
 function setCopyToSenderFlag()
 {
-	$this->copyToSender = 'TRUE';
+	$this->copyToSender = TRUE;
 }
 
 function buildEmail()
@@ -117,6 +140,9 @@ function sendEmail()
 
 }
 
+
+
 } // Ende der Klasse
+
 
 ?>
