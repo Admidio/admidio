@@ -141,20 +141,19 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL){
 	$ordner = "../../../adm_my_files/photos/".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"];
 
 	//Ausrechnen der Seitenzahl, 25 Thumbnails  pro seiet
-   If ($seite=='') $seite=1;
-   If (settype($bilder,integer) || settype($seiten,integer))
+   if ($seite=='') $seite=1;
+   if (settype($bilder,integer) || settype($seiten,integer))
             $seiten = round($bilder / 25);
-   If ($seiten * 25 < $bilder) $seiten++; 
+   if ($seiten * 25 < $bilder) $seiten++; 
 
 	//Rahmung der Galerie
-   echo"<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">";
-   //Ausgabe der &Uuml;berschrift
-   echo "<div class=\"formHead\" style=\"width: 560px\">". strspace($adm_photo["pho_name"]). "</div>
-   <div class=\"formBody\" style=\"width: 560px\">";
-		
+   echo"
+	<table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\" style=\"width: 580px\">
+		<tr><th class=\"tableHeader\" style=\"text-align: center; font-size: 12pt;\">". strspace($adm_photo["pho_name"]). "</th></tr>
+		<tr style=\"text-align: center;\"><td>";
 		echo"Datum: ".mysqldate("d.m.y", $adm_photo["pho_begin"]);
          if($adm_photo["pho_end"] != $adm_photo["pho_begin"])echo " bis ".mysqldate("d.m.y", $adm_photo["pho_end"]);
-		echo"<br><br> Seite:&nbsp;";
+		echo"<br> Seite:&nbsp;";
       //Seiten links
       //"Letzte Seite"
 		$vorseite=$seite-1;
@@ -205,8 +204,7 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL){
 			</td></tr>";
       echo "</table>";
    echo"
-	</div>
-   </div>";
+	</td></tr></table>";
   }
 /************************Veranstaltungsliste*************************************/	
 
@@ -279,14 +277,17 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL){
                   <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_veranst&err_text=$err_text&err_head=Veranstaltung L&ouml;schen&button=2&url=". urlencode("$g_root_path/adm_program/modules/photos/event.php?aufgabe=delete&pho_id=".$adm_photo_list["pho_id"].""). "\">
                      <img src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"Veranstaltung löschen\" title=\"Veranstaltung löschen\"></a>";
 						
-						if($adm_photo_list["pho_approved"]==0 && file_exists($ordner)) echo "<a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$adm_photo_list["pho_id"]."&approved=1\">
-                     <img src=\"$g_root_path/adm_program/images/ok.png\" border=\"0\" alt=\"Freigeben\" title=\"Freigeben\"></a>&nbsp;";
-						if($adm_photo_list["pho_approved"]==1 && file_exists($ordner)) echo "<a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$adm_photo_list["pho_id"]."&approved=0\">
-                     <img src=\"$g_root_path/adm_program/images/no.png\" border=\"0\" alt=\"Sperren\" title=\"Sperren\"></a>&nbsp;";
+						if($adm_photo_list["pho_approved"]==0 && file_exists($ordner))echo"
+							<a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$adm_photo_list["pho_id"]."&approved=1\">
+								<img src=\"$g_root_path/adm_program/images/ok.png\" border=\"0\" alt=\"Freigeben\" title=\"Freigeben\">
+							</a>";
+						if($adm_photo_list["pho_approved"]==1 && file_exists($ordner)) echo"
+							<a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$adm_photo_list["pho_id"]."&approved=0\">
+								<img src=\"$g_root_path/adm_program/images/no.png\" border=\"0\" alt=\"Sperren\" title=\"Sperren\">
+							</a>";
 					echo"</td>";
              }
-         echo"</tr>
-         ";
+         echo"</tr>";
          }//Ende Ordner existiert
    	};//for
 //tabbelen Ende mit Ausgabe der Gesammtbilderzahl
