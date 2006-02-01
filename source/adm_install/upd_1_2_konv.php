@@ -271,8 +271,8 @@ while($row = mysql_fetch_object($result_org))
 	// Termine in neue Tabelle schreiben
 	$sql = "INSERT INTO adm_dates (dat_id, dat_org_shortname, dat_global, dat_begin, dat_end, dat_description, 
 								dat_location, dat_headline, dat_timestamp, dat_usr_id, dat_last_change, dat_usr_id_change)
-	             VALUES ($row->at_id, '$row->at_ag_shortname', $row->at_global, '$row->at_von', '$row->at_bis', '$row->at_beschreibung',
-	             			'$row->at_ort', '$row->at_ueberschrift', '$row->at_timestamp', ";
+	             VALUES ($row->at_id, '$row->at_ag_shortname', $row->at_global, '$row->at_von', '$row->at_bis', '". strip_tags($row->at_beschreibung). "',
+	             			'$row->at_ort', '". strip_tags($row->at_ueberschrift). "', '$row->at_timestamp', ";
 	if($row->at_au_id > 0)
 		$sql .= "$row->at_au_id, ";
 	else
@@ -300,8 +300,8 @@ while($row = mysql_fetch_object($result_org))
 	// Ankuendigungen in neue Tabelle schreiben
 	$sql = "INSERT INTO adm_announcements (ann_id, ann_org_shortname, ann_global, ann_description, 
 								ann_headline, ann_timestamp, ann_usr_id, ann_last_change, ann_usr_id_change)
-	             VALUES ($row->aa_id, '$row->aa_ag_shortname', $row->aa_global, '$row->aa_beschreibung',
-	             			'$row->aa_ueberschrift', '$row->aa_timestamp', ";
+	             VALUES ($row->aa_id, '$row->aa_ag_shortname', $row->aa_global, '". strip_tags($row->aa_beschreibung). "',
+	             			'". strip_tags($row->aa_ueberschrift). "', '$row->aa_timestamp', ";
 	if($row->aa_au_id > 0)
 		$sql .= "$row->aa_au_id, ";
 	else
