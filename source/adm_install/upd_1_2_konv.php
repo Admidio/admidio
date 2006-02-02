@@ -79,10 +79,12 @@ while($row = mysql_fetch_object($result_org))
 	             VALUES ('$row->ag_shortname', 'Allgemein')";
 	$result = mysql_query($sql, $connection);
 	if(!$result) showError(mysql_error());
+	$rlc_id_common = mysql_insert_id();
 	$sql = "INSERT INTO adm_role_categories (rlc_org_shortname, rlc_name)
 	             VALUES ('$row->ag_shortname', 'Gruppen')";
 	$result = mysql_query($sql, $connection);
 	if(!$result) showError(mysql_error());
+	$rlc_id_groups = mysql_insert_id();
 	$sql = "INSERT INTO adm_role_categories (rlc_org_shortname, rlc_name)
 	             VALUES ('$row->ag_shortname', 'Kurse')";
 	$result = mysql_query($sql, $connection);
@@ -95,170 +97,76 @@ while($row = mysql_fetch_object($result_org))
 
 // Fotos
 
-$sql = "SELECT * FROM adm_photo";
-$result_org = mysql_query($sql, $connection);
-if(!$result_org) showError(mysql_error());
-
-while($row = mysql_fetch_object($result_org))
-{
-	// Foto in neue Tabelle schreiben
-	$sql = "INSERT INTO adm_photos (pho_id, pho_org_shortname, pho_quantity, pho_name, pho_begin, pho_end, pho_photographers, pho_timestamp, pho_approved, pho_last_change)
-	             VALUES ($row->ap_id, '$row->ap_ag_shortname', '$row->ap_number', '$row->ap_name', '$row->ap_begin', '$row->ap_end', '$row->ap_photographers', '$row->ap_online_since', 1, '$row->ap_last_change')";
-	$result = mysql_query($sql, $connection);
-	if(!$result) showError(mysql_error());
-}
+$sql = "INSERT INTO adm_photos (pho_id, pho_org_shortname, pho_quantity, pho_name, pho_begin, pho_end, pho_photographers, pho_timestamp, pho_approved, pho_last_change)
+				             SELECT ap_id, ap_ag_shortname, ap_number, ap_name, ap_begin, ap_end, ap_photographers, ap_online_since, 1, ap_last_change
+				               FROM adm_photo ";
+$result = mysql_query($sql, $connection);
+if(!$result) showError(mysql_error());
 
 // Benutzer
 
-$sql = "SELECT * FROM adm_user";
-$result_org = mysql_query($sql, $connection);
-if(!$result_org) showError(mysql_error());
-
-while($row = mysql_fetch_object($result_org))
-{
-	// Foto in neue Tabelle schreiben
-	$sql = "INSERT INTO adm_users (usr_id, usr_last_name, usr_first_name, usr_address, usr_zip_code, usr_city, usr_country, usr_phone, usr_mobile, usr_fax, usr_birthday,
-							  usr_email, usr_homepage, usr_login_name, usr_password, usr_last_login, usr_actual_login, usr_number_login, usr_valid)
-	             VALUES ($row->au_id, '$row->au_name', '$row->au_vorname', '$row->au_adresse', '$row->au_plz', '$row->au_ort', '$row->au_land', '$row->au_tel1', '$row->au_mobil', '$row->au_fax', '$row->au_geburtstag', 
-	             		  '$row->au_mail', '$row->au_weburl', ";
-	if(strlen($row->au_login) > 0)
-		$sql .= "'$row->au_login', '$row->au_password', ";
-	else
-		$sql .= "NULL, NULL, ";
-
-	if(strlen($row->au_last_login) > 0)
-		$sql .= "'$row->au_last_login', ";
-	else
-		$sql .= "NULL, ";
-
-	if(strlen($row->au_act_login) > 0)
-		$sql .= "'$row->au_act_login', ";
-	else
-		$sql .= "NULL, ";
-	             		  
-	$sql .= "$row->au_num_login, 1)";
-	$result = mysql_query($sql, $connection);
-	if(!$result) showError(mysql_error());
-}
+$sql = "INSERT INTO adm_users (usr_id, usr_last_name, usr_first_name, usr_address, usr_zip_code, usr_city, usr_country, usr_phone, usr_mobile, usr_fax, usr_birthday,
+						  				 usr_email, usr_homepage, usr_login_name, usr_password, usr_last_login, usr_actual_login, usr_number_login, usr_valid)
+				            SELECT au_id, au_name, au_vorname, au_adresse, au_plz, au_ort, au_land, au_tel1, au_mobil, au_fax, au_geburtstag,
+				                   au_mail, au_weburl, au_login, au_password, au_last_login, au_act_login, au_num_login, 1 
+				              FROM adm_user ";
+$result = mysql_query($sql, $connection);
+if(!$result) showError(mysql_error());
 
 // neue Benutzer
 
-$sql = "SELECT * FROM adm_new_user";
-$result_org = mysql_query($sql, $connection);
-if(!$result_org) showError(mysql_error());
-
-while($row = mysql_fetch_object($result_org))
-{
-	// Foto in neue Tabelle schreiben
-	$sql = "INSERT INTO adm_users (usr_last_name, usr_first_name, usr_email, usr_login_name, usr_password, usr_reg_org_shortname, usr_valid)
-	             VALUES ('$row->anu_name', '$row->anu_vorname', '$row->anu_mail', '$row->anu_login', '$row->anu_password', '$row->anu_ag_shortname', 0)";
-	$result = mysql_query($sql, $connection);
-	if(!$result) showError(mysql_error());
-}
-
+$sql = "INSERT INTO adm_users (usr_last_name, usr_first_name, usr_email, usr_login_name, usr_password, usr_reg_org_shortname, usr_valid)
+                        SELECT anu_name, anu_vorname, anu_mail, anu_login, anu_password, anu_ag_shortname, 0
+                          FROM adm_new_user ";
+$result = mysql_query($sql, $connection);
+if(!$result) showError(mysql_error());
 
 // Rollen
 
-$sql = "SELECT * FROM adm_rolle";
-$result_org = mysql_query($sql, $connection);
-if(!$result_org) showError(mysql_error());
+$sql = "INSERT INTO adm_roles (rol_id, rol_org_shortname, rol_rlc_id, rol_name, rol_description, rol_moderation, rol_dates, rol_edit_user, rol_photo,
+										 rol_download, rol_mail_logout, rol_mail_login, rol_locked, rol_start_date, rol_start_time, rol_end_date, rol_end_time, 
+										 rol_weekday, rol_location, rol_max_members, rol_cost, rol_last_change, rol_usr_id_change, rol_valid)
+							  SELECT ar_id, ar_ag_shortname, $rlc_id_common, ar_funktion, ar_beschreibung, ar_r_moderation, ar_r_termine, ar_r_user_bearbeiten, ar_r_foto,
+							  			ar_r_download, ar_r_mail_logout, ar_r_mail_login, ar_r_locked, ar_datum_von, ar_zeit_von, ar_datum_bis, ar_zeit_bis, 
+							  			ar_wochentag, ar_ort, ar_max_mitglieder, ar_beitrag, ar_last_change, ar_last_change_id, ar_valid
+							  	 FROM adm_rolle
+							  	WHERE ar_gruppe = 0 ";
+$result = mysql_query($sql, $connection);
+if(!$result) showError(mysql_error());	
 
-while($row = mysql_fetch_object($result_org))
-{
-	if($row->ar_gruppe == 1)
-		$cat_name = "Gruppen";
-	else
-		$cat_name = "Allgemein";
-		
-	$sql = "SELECT rlc_id FROM adm_role_categories
-				WHERE rlc_org_shortname = '$row->ar_ag_shortname'
-				  AND rlc_name          = '$cat_name'";
-	$result = mysql_query($sql, $connection);
-	if(!$result) showError(mysql_error());
-	$row_cat = mysql_fetch_object($result);	        
-
-	// Foto in neue Tabelle schreiben
-	$sql = "INSERT INTO adm_roles (rol_id, rol_org_shortname, rol_rlc_id, rol_name, rol_description, rol_moderation, rol_dates, rol_edit_user, rol_photo,
-										 	 rol_download, rol_mail_logout, rol_mail_login, rol_locked, rol_start_date, rol_start_time, rol_end_date, rol_end_time, 
-											 rol_weekday, rol_location, rol_max_members, rol_cost, rol_last_change, rol_usr_id_change, rol_valid)
-	             VALUES ($row->ar_id, '$row->ar_ag_shortname', $row_cat->rlc_id, '$row->ar_funktion', '". mysql_escape_string($row->ar_beschreibung). "', $row->ar_r_moderation, $row->ar_r_termine, $row->ar_r_user_bearbeiten, $row->ar_r_foto,
-	             			$row->ar_r_download, $row->ar_r_mail_logout, $row->ar_r_mail_login, $row->ar_r_locked, '$row->ar_datum_von', '$row->ar_zeit_von', '$row->ar_datum_bis', '$row->ar_zeit_bis', ";
-	if($row->ar_wochentag > 0)
-		$sql .= "$row->ar_wochentag, ";
-	else
-		$sql .= "NULL, ";
-	if(strlen($row->ar_ort) > 0)
-		$sql .= "'$row->ar_ort', ";
-	else
-		$sql .= "NULL, ";
-	if($row->ar_max_mitglieder > 0)
-		$sql .= "$row->ar_max_mitglieder, ";
-	else
-		$sql .= "NULL, ";
-	if($row->ar_beitrag > 0)
-		$sql .= "$row->ar_beitrag, ";
-	else
-		$sql .= "NULL, ";
-	if(strlen($row->ar_last_change) > 0)
-		$sql .= "'$row->ar_last_change', ";
-	else
-		$sql .= "NULL, ";
-	if($row->ar_last_change_id > 0)
-		$sql .= "$row->ar_last_change_id, $row->ar_valid)";
-	else
-		$sql .= "NULL,$row->ar_valid)";
-	$result = mysql_query($sql, $connection);
-	if(!$result) showError(mysql_error());	
-}
+$sql = "INSERT INTO adm_roles (rol_id, rol_org_shortname, rol_rlc_id, rol_name, rol_description, rol_moderation, rol_dates, rol_edit_user, rol_photo,
+										 rol_download, rol_mail_logout, rol_mail_login, rol_locked, rol_start_date, rol_start_time, rol_end_date, rol_end_time, 
+										 rol_weekday, rol_location, rol_max_members, rol_cost, rol_last_change, rol_usr_id_change, rol_valid)
+							  SELECT ar_id, ar_ag_shortname, $rlc_id_groups, ar_funktion, ar_beschreibung, ar_r_moderation, ar_r_termine, ar_r_user_bearbeiten, ar_r_foto,
+							  			ar_r_download, ar_r_mail_logout, ar_r_mail_login, ar_r_locked, ar_datum_von, ar_zeit_von, ar_datum_bis, ar_zeit_bis, 
+							  			ar_wochentag, ar_ort, ar_max_mitglieder, ar_beitrag, ar_last_change, ar_last_change_id, ar_valid
+							  	 FROM adm_rolle
+							  	WHERE ar_gruppe = 1 ";
+$result = mysql_query($sql, $connection);
+if(!$result) showError(mysql_error());	
 
 // Mitglieder
 
-$sql = "SELECT * FROM adm_mitglieder";
-$result_org = mysql_query($sql, $connection);
-if(!$result_org) showError(mysql_error());
+$sql = "INSERT INTO adm_members (mem_id, mem_rol_id, mem_usr_id, mem_begin, mem_end, mem_valid, mem_leader)
+								 SELECT am_id, am_ar_id, am_au_id, am_start, am_ende, am_valid, am_leiter 
+								   FROM adm_mitglieder ";
+$result = mysql_query($sql, $connection);
+if(!$result) showError(mysql_error());
 
-while($row = mysql_fetch_object($result_org))
-{
-	// Mitglieder in neue Tabelle schreiben
-	$sql = "INSERT INTO adm_members (mem_id, mem_rol_id, mem_usr_id, mem_begin, mem_end, mem_valid, mem_leader)
-	             VALUES ($row->am_id, $row->am_ar_id, $row->am_au_id, '$row->am_start', '$row->am_ende', $row->am_valid, $row->am_leiter)";
-	$result = mysql_query($sql, $connection);
-	if(!$result) showError(mysql_error());
-}
+// Benutzerdefinierte Felder
+$sql = "INSERT INTO adm_user_fields (usf_id, usf_type, usf_name, usf_description, usf_locked, usf_org_shortname)
+                             SELECT auf_id, auf_type, auf_name, auf_description, auf_locked, auf_ag_shortname
+                               FROM adm_user_field ";
+$result = mysql_query($sql, $connection);
+if(!$result) showError(mysql_error());
 
 // Benutzerdefinierte Felder
 
-$sql = "SELECT * FROM adm_user_field";
-$result_org = mysql_query($sql, $connection);
-if(!$result_org) showError(mysql_error());
-
-while($row = mysql_fetch_object($result_org))
-{
-	// Sessions in neue Tabelle schreiben
-	$sql = "INSERT INTO adm_user_fields (usf_id, usf_type, usf_name, usf_description, usf_locked, usf_org_shortname)
-	             VALUES ($row->auf_id, '$row->auf_type', '$row->auf_name', '$row->auf_description', $row->auf_locked, ";
-	if(strlen($row->auf_ag_shortname) > 0)
-		$sql .= "'$row->auf_ag_shortname' )";
-	else
-		$sql .= "NULL )";
-	$result = mysql_query($sql, $connection);
-	if(!$result) showError(mysql_error());
-}
-
-// Benutzerdefinierte Felder
-
-$sql = "SELECT * FROM tmp_user_data";
-$result_org = mysql_query($sql, $connection);
-if(!$result_org) showError(mysql_error());
-
-while($row = mysql_fetch_object($result_org))
-{
-	// Sessions in neue Tabelle schreiben
-	$sql = "INSERT INTO adm_user_data (usd_id, usd_usr_id, usd_usf_id, usd_value)
-	             VALUES ($row->aud_id, $row->aud_au_id, $row->aud_auf_id, '$row->aud_value')";
-	$result = mysql_query($sql, $connection);
-	if(!$result) showError(mysql_error());
-}
+$sql = "INSERT INTO adm_user_data (usd_id, usd_usr_id, usd_usf_id, usd_value)
+                            SELECT aud_id, aud_au_id, aud_auf_id, aud_value
+                              FROM tmp_user_data ";
+$result = mysql_query($sql, $connection);
+if(!$result) showError(mysql_error());
 
 // Termine
 
