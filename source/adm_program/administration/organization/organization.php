@@ -168,14 +168,50 @@ require("../../../adm_config/body_top.php");
                <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=enable_rss','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
             </div>
-         </div>
+         </div>";
 
-         <hr width=\"85%\" />";
+			/*------------------------------------------------------------*/
+         // Rollen-Kategorien
+         /*------------------------------------------------------------*/
+         
+         $sql = "SELECT * FROM ". TBL_ROLE_CATEGORIES. "
+                  WHERE rlc_org_shortname LIKE '$g_organization' 
+                  ORDER BY rlc_name ASC ";
+         $result = mysql_query($sql, $g_adm_con);
+         db_error($result);
 
+			echo "<br>
+			<table class=\"tableList\" style=\"width: 280px;\" cellpadding=\"2\" cellspacing=\"0\">
+				<tr>
+					<th class=\"tableHeader\" style=\"text-align: left;\">Rollen-Kategorien</th>
+					<th class=\"tableHeader\">&nbsp;</th>
+				</tr>";
 
+			while($row = mysql_fetch_object($result))
+			{
+				echo "
+				<tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
+					<td style=\"text-align: left;\"><a href=\"$g_root_path/adm_program/administration/roles/categories.php?rlc_id=$row->rlc_id\">$row->rlc_name</a></td>
+					<td style=\"text-align: right; width: 40px;\">
+						<a href=\"$g_root_path/adm_program/administration/roles/categories.php?rlc_id=$row->rlc_id&amp;url=$url\">
+							<img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>&nbsp;";
+							$load_url = urlencode("$g_root_path/adm_program/administration/roles/categories_function.php?rlc_id=$row->rlc_id&mode=2&url=$url");
+						echo "<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_category&err_text=$row->rlc_name&err_head=Kategorie l&ouml;schen&button=2&url=$load_url\">
+							<img src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"Kategorie l&ouml;schen\" title=\"Kategorie l&ouml;schen\"></a>
+					</td>
+				</tr>";
+			}
+			echo "</table>
+
+         <br>";
+
+			/*------------------------------------------------------------*/
          // gruppierungsspezifische Felder anzeigen
+         /*------------------------------------------------------------*/
+         
          $sql = "SELECT * FROM ". TBL_USER_FIELDS. "
-                  WHERE usf_org_shortname LIKE '$g_organization' ";
+                  WHERE usf_org_shortname LIKE '$g_organization' 
+                  ORDER BY usf_name ASC ";
          $result = mysql_query($sql, $g_adm_con);
          db_error($result);
 
@@ -216,12 +252,12 @@ require("../../../adm_config/body_top.php");
                   else
                      echo "&nbsp;";
                   echo "</td>
-                  <td style=\"text-align: right;\">
+                  <td style=\"text-align: right; width: 40px;\">
                      <a href=\"$g_root_path/adm_program/administration/organization/field.php?usf_id=$row->usf_id&amp;url=$url\">
                         <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>&nbsp;";
                         $load_url = urlencode("$g_root_path/adm_program/administration/organization/field_function.php?usf_id=$row->usf_id&mode=2&url=$url");
                      echo "<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_field&err_text=$row->usf_name&err_head=Profilfeld l&ouml;schen&button=2&url=$load_url\">
-                        <img src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"Veranstaltung löschen\" title=\"Veranstaltung löschen\"></a>
+                        <img src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"Feld '$row->usf_name' l&ouml;schen\" title=\"Feld '$row->usf_name' l&ouml;schen\"></a>
                   </td>
                </tr>";
             }
