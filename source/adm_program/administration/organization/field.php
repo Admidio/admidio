@@ -64,12 +64,12 @@ if ($_GET["usf_id"] != 0)
 
    if (mysql_num_rows($result) > 0)
    {
-      $row_auf = mysql_fetch_object($result);
+      $row_usf = mysql_fetch_object($result);
 
-      $field_type        = $row_auf->usf_type;
-      $field_name        = $row_auf->usf_name;
-      $field_description = $row_auf->usf_description;
-      $field_locked      = $row_auf->usf_locked;
+      $field_type        = $row_usf->usf_type;
+      $field_name        = $row_usf->usf_name;
+      $field_description = $row_usf->usf_description;
+      $field_locked      = $row_usf->usf_locked;
    }
  }
 
@@ -92,7 +92,7 @@ require("../../../adm_config/body_top.php");
    echo "
    <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
 
-   <form action=\"field_function.php?usf_id=". $_GET['usf_id']. "&amp;mode=1&amp;url=$url\" method=\"post\" name=\"TerminAnlegen\">
+   <form action=\"field_function.php?usf_id=". $_GET['usf_id']. "&amp;mode=1&amp;url=$url\" method=\"post\" id=\"edit_field\">
       <div class=\"formHead\" style=\"width: 400px\">";
          if($_GET['usf_id'] > 0)
             echo strspace("Feld ändern", 2);
