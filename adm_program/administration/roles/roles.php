@@ -91,7 +91,7 @@ require("../../../adm_config/body_top.php");
       while($row = mysql_fetch_object($result))
       {
          echo "<tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
-                  <td style=\"text-align: left;\">&nbsp;<a href=\"$g_root_path/adm_program/modules/lists/lists_show.php?typ=address&amp;mode=html&amp;rolle=". urlencode($row->rol_name). "\">$row->rol_name</a></td>
+                  <td style=\"text-align: left;\">&nbsp;<a href=\"$g_root_path/adm_program/modules/lists/lists_show.php?typ=address&amp;mode=html&amp;rol_id=$row->rol_id\">$row->rol_name</a></td>
                   <td style=\"text-align: left;\">&nbsp;$row->rlc_name</td>
                   <td style=\"text-align: center;\">";
                      if($row->rol_moderation == 1)
