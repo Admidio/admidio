@@ -105,17 +105,27 @@ if($_GET['mode'] == 1)
 
    $err_code = "save";
 }
-elseif($_GET['mode'] == 2)
+elseif($_GET['mode'] == 2)	// Feld loeschen
 {
-   // Feld loeschen
-
-   $sql    = "DELETE FROM ". TBL_ROLE_CATEGORIES. "
-               WHERE rlc_id = {0}";
+	// schauen, ob Rollen dieser Kategorie zugeordnet sind
+	$sql    = "SELECT * FROM ". TBL_ROLES. "
+		  		   WHERE rol_rlc_id = {0} ";
    $sql    = prepareSQL($sql, array($_GET['rlc_id']));
-   $result = mysql_query($sql, $g_adm_con);
-   db_error($result);
+	$result = mysql_query($sql, $g_adm_con);
+	db_error($result);				
+	$row_num = mysql_num_rows($result);
 
-   $err_code = "delete";
+	if($row_num == 0)
+	{
+		// Feld loeschen
+		$sql    = "DELETE FROM ". TBL_ROLE_CATEGORIES. "
+						WHERE rlc_id = {0}";
+		$sql    = prepareSQL($sql, array($_GET['rlc_id']));
+		$result = mysql_query($sql, $g_adm_con);
+		db_error($result);
+
+		$err_code = "delete";
+	}
 }
          
 // zur Gruppierungsseite zurueck
