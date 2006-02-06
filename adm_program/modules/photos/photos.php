@@ -130,7 +130,7 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL){
       echo"
       <button name=\"verwaltung\" type=\"button\" value=\"up\" style=\"width: 187px;\"
          onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/event.php?aufgabe=new&amp;pho_id=$pho_id'\">
-         <img src=\"$g_root_path/adm_program/images/edit.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Veranstaltung anlegen\">  Veranstaltung anlegen
+         <img src=\"$g_root_path/adm_program/images/folder_create.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Veranstaltung anlegen\">  Veranstaltung anlegen
         </button><br><br>";
    }
    
@@ -269,7 +269,7 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL){
 				
 				//Hinweis fur Leute mit Photorechten: Veranstaltung ist gesperrt
 				if($adm_photo_list["pho_approved"]==0 && file_exists($ordner))
-					echo"<img src=\"$g_root_path/adm_program/images/no.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Veranstaltung ist gesperrt\" title=\"Veranstaltung ist gesperrt\"
+					echo"<img src=\"$g_root_path/adm_program/images/lock.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Veranstaltung ist gesperrt\" title=\"Veranstaltung ist gesperrt\"
                      onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=not_approved','Message','width=500, height=200, left=310,top=200,scrollbars=no')\">&nbsp;";
 				//Veranstaltungsname mit Link zu Thumbnails
 				echo"<a target=\"_self\" href=\"photos.php?pho_id=".$adm_photo_list["pho_id"]."\">".$adm_photo_list["pho_name"]."</a></td>";
@@ -297,11 +297,11 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL){
 						
 						if($adm_photo_list["pho_approved"]==0 && file_exists($ordner))echo"
 							<a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$adm_photo_list["pho_id"]."&approved=1\">
-								<img src=\"$g_root_path/adm_program/images/ok.png\" border=\"0\" alt=\"Freigeben\" title=\"Freigeben\">
+								<img src=\"$g_root_path/adm_program/images/key.png\" border=\"0\" alt=\"Freigeben\" title=\"Freigeben\">
 							</a>";
 						if($adm_photo_list["pho_approved"]==1 && file_exists($ordner)) echo"
 							<a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$adm_photo_list["pho_id"]."&approved=0\">
-								<img src=\"$g_root_path/adm_program/images/no.png\" border=\"0\" alt=\"Sperren\" title=\"Sperren\">
+								<img src=\"$g_root_path/adm_program/images/key.png\" border=\"0\" alt=\"Sperren\" title=\"Sperren\">
 							</a>";
 					echo"</td>";
              }
