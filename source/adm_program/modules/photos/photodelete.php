@@ -54,8 +54,10 @@ if($g_session_valid && editPhoto($adm_photo["pho_org_shortname"])){
 //Bericht mit l&ouml;schen
       $neuebilderzahl = $adm_photo["pho_quantity"]-1;
 	//Bilder l&ouml;schen
+		if(file_exists("$ordner/$bild.jpg")){    
         	chmod("$ordner/$bild.jpg", 0777);
          unlink("$ordner/$bild.jpg");
+		}
    //Umbennenen der Restbilder
          $neuenr=1;
          for($x=1; $x<=$adm_photo["pho_quantity"]; $x++){
