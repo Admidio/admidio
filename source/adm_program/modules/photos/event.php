@@ -302,9 +302,16 @@ if($_GET["aufgabe"]=="change" || $_GET["aufgabe"]=="new"){
                if($_GET["aufgabe"]=="new" && $pho_id!="")echo"<option value=\"".$adm_photo["pho_id"]."\">".$adm_photo["pho_name"]."&nbsp(".mysqldate("y", $adm_photo["pho_begin"]).")</option>";
 					if($_GET["aufgabe"]=="change" && $adm_photo["pho_pho_id_parent"]!=NULL)echo"<option value=\"".$adm_photo_parent["pho_pho_id_parent"]."\">".$adm_photo_parent["pho_name"]."&nbsp(".mysqldate("y", $adm_photo_parent["pho_begin"]).")</option>";
                echo"<option value=\"0\">Fotogalerien(Hauptordner)</option>";
-	            for($x=0; $adm_photo_list = mysql_fetch_array($result_list); $x++){
-	            	if($adm_photo_list["pho_id"]!=$pho_id_parent && $adm_photo_list["pho_id"]!=$pho_id && $adm_photo_list["pho_pho_id_parent"]==NULL)
-	            		echo"<option value=\"".$adm_photo_list["pho_id"]."\">".$adm_photo_list["pho_name"]."&nbsp(".mysqldate("y", $adm_photo_list["pho_begin"]).")</option>";
+	            //Erfassen ob die Veranstaltung Kinder hat
+	            $sql = "   SELECT *
+            					FROM ". TBL_PHOTOS. "
+            					WHERE (pho_pho_id_parent ='$pho_id')";
+   				$result_child = mysql_query($sql, $g_adm_con);
+   				db_error($result_child, 1);
+	         	//Auswahlmöglichkeit nur wenn Veranst. nicht selbst Kinder hat
+	           	for($x=0; $adm_photo_list = mysql_fetch_array($result_list); $x++){
+	           		if(mysql_num_rows($result_child)==0 && $adm_photo_list["pho_id"]!=$pho_id_parent && $adm_photo_list["pho_id"]!=$pho_id && $adm_photo_list["pho_pho_id_parent"]==NULL)
+	           			echo"<option value=\"".$adm_photo_list["pho_id"]."\">".$adm_photo_list["pho_name"]."&nbsp(".mysqldate("y", $adm_photo_list["pho_begin"]).")</option>";
 	            }//for
 	            echo"</select>";
             echo"</div></div>";
