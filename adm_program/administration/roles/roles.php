@@ -44,7 +44,7 @@ $sql    = "SELECT * FROM ". TBL_ROLES. ", ". TBL_ROLE_CATEGORIES. "
             WHERE rol_org_shortname = '$g_organization'
               AND rol_valid         = 1
               AND rol_rlc_id        = rlc_id
-            ORDER BY rol_name ";
+            ORDER BY rlc_name, rol_name ";
 $result = mysql_query($sql, $g_adm_con);
 db_error($result, 1);
 
