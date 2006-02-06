@@ -483,17 +483,21 @@ if($mode == "csv")
 }
 else
 {
-   echo "</table>
+   echo "</table>";
 
-	<p>
-		<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
-		<img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\">
-		Zur&uuml;ck</button>
-	</p>
-
-   </div>";
-   if($mode != "print")
-      require("../../../adm_config/body_bottom.php");
+	if($mode != "print")
+	{
+		echo "<p>
+			<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
+			<img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\">
+			Zur&uuml;ck</button>
+		</p>
+		</div>";		
+		require("../../../adm_config/body_bottom.php");
+	}
+	else
+		echo "</div>";
+		
 echo "</body>
 </html>";
 }
