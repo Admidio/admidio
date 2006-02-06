@@ -246,7 +246,6 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"])){
       <div style=\"width: 430px\" align=\"center\" class=\"formBody\">
           <table cellspacing=3 cellpadding=0 border=\"0\">
             <tr><td colspan=\"2\" align=\"center\">Die Veranstaltung Wurde erfolgreich angelegt/ge&auml;ndert:</td></tr>
-            <tr><td align=\"right\" width=\"50%\">Aktuelle Bilderzahl:</td><td align=\"left\">".$neudaten["pho_quantity"]."</td></tr>
 				<tr><td align=\"right\">Veranstaltung:</td><td align=\"left\">".$neudaten["pho_name"]."</td></tr>
 				<tr><td align=\"right\" width=\"50%\">in Ordner:</td><td align=\"left\">";
             	if($pho_parent_id!=NULL)echo $neudaten_parent["pho_name"];
@@ -259,7 +258,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"])){
             	if($neudaten["pho_approved"]==1) echo"Ja";
             	if($neudaten["pho_approved"]==0) echo"Nein";
             echo"</td></tr>
-				<tr><td align=\"right\">Gruppierung:</td><td align=\"left\">".$neudaten["pho_org_shortname"]."</td></tr>
+            <tr><td align=\"right\" width=\"50%\">Aktuelle Bilderzahl:</td><td align=\"left\">".$neudaten["pho_quantity"]."</td></tr>				
 				<tr><td align=\"right\">angelegt von:</td><td align=\"left\">". strSpecialChars2Html($user1->usr_first_name). " ". strSpecialChars2Html($user1->usr_last_name)."</td></tr>
 				<tr><td align=\"right\">angelegt am:</td><td align=\"left\">".mysqldatetime("d.m.y h:i", $neudaten["pho_timestamp"])."</td></tr>
 				<tr><td align=\"right\">letztes Update durch:</td><td align=\"left\">". strSpecialChars2Html($user2->usr_first_name). " ". strSpecialChars2Html($user2->usr_last_name)."</td></tr>
@@ -345,40 +344,6 @@ if($_GET["aufgabe"]=="change" || $_GET["aufgabe"]=="new"){
                  	if($adm_photo["pho_approved"]==1) echo "<input type=\"checkbox\" name=\"approved\" id=\"approved\" checked value=\"1\">";
 						if($adm_photo["pho_approved"]==0) echo "<input type=\"checkbox\" name=\"approved\" id=\"approved\" value=\"1\">";
                }           
-            echo"</div></div>";
-            //Online seit
-            echo"
-            <div style=\"margin-top: 6px;\">
-              <div style=\"text-align: right; width: 170px; float: left;\">Online seit:</div>
-            <div style=\"text-align: left; margin-left: 180px;\">";
-               if($_GET["aufgabe"]=="new")echo "<input type=\"text\" name=\"onlineseit\" size=\"10\" tabindex=\"1\" value=\"(Auto)\" class=\"readonly\" readonly=\"readonly\">";
-               if($_GET["aufgabe"]=="change")
-                  echo "<input type=\"text\" name=\"onlineseit\" size=\"15\" tabindex=\"1\" value=\"".mysqldatetime("d.m.y h:i", $adm_photo["pho_timestamp"])."\" class=\"readonly\" readonly=\"readonly\">";
-            echo"</div></div>";
-            //Letzte &Auml;nderung
-            echo"
-            <div style=\"margin-top: 6px;\">
-              <div style=\"text-align: right; width: 170px; float: left;\">Letzte &Auml;nderung:</div>
-            <div style=\"text-align: left; margin-left: 180px;\">";
-               if($_GET["aufgabe"]=="new")echo "<input type=\"text\" name=\"onlineseit\" size=\"10\" tabindex=\"1\" value=\"(Auto)\" class=\"readonly\" readonly=\"readonly\">";
-               if($_GET["aufgabe"]=="change")
-                  echo "<input type=\"text\" name=\"onlineseit\" size=\"15\" tabindex=\"1\" value=\"".mysqldatetime("d.m.y h:i", $adm_photo["pho_last_change"])."\" class=\"readonly\" readonly=\"readonly\">";
-            echo"</div></div>";
-            //Gruppiereung
-            echo"
-            <div style=\"margin-top: 6px;\">
-              <div style=\"text-align: right; width: 170px; float: left;\">Gruppierung:</div>
-            <div style=\"text-align: left; margin-left: 180px;\">";
-               if($_GET["aufgabe"]=="new")echo "<input type=\"text\" name=\"gruppierung\" size=\"10\" tabindex=\"1\" value=\"$g_organization\" class=\"readonly\" readonly=\"readonly\">";
-               if($_GET["aufgabe"]=="change")echo "<input type=\"text\" name=\"gruppierung\" size=\"10\" tabindex=\"1\" value=\"".$adm_photo["pho_org_shortname"]."\" class=\"readonly\" readonly=\"readonly\">";
-            echo"</div></div>";
-            //Enthaltene Bilder
-            echo"
-            <div style=\"margin-top: 6px;\">
-              <div style=\"text-align: right; width: 170px; float: left;\">Enthaltene Bilder:</div>
-            <div style=\"text-align: left; margin-left: 180px;\">";
-               if($_GET["aufgabe"]=="new")echo "<input type=\"text\" name=\"bilderzahl\" size=\"5\" tabindex=\"1\" value=\"0\" class=\"readonly\" readonly=\"readonly\">";
-               if($_GET["aufgabe"]=="change")echo "<input type=\"text\" name=\"bilderzahl\" size=\"5\" tabindex=\"1\" value=\"".$adm_photo["pho_quantity"]."\" class=\"readonly\" readonly=\"readonly\">";
             echo"</div></div>";
             //Submit
             echo"
