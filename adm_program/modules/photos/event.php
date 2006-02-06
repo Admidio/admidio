@@ -390,8 +390,10 @@ if($_GET["aufgabe"]=="delete"){
       	chmod("$ordner", 0777);
       	//Löschen der Bilder
       	for($x=1; $x<=$adm_photo["pho_quantity"]; $x++){
-        	 chmod("$ordner/$x.jpg", 0777);
-         	if(unlink("$ordner/$x.jpg"))echo"Datei &bdquo;".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"]."/$x.jpg&rdquo; wurde erfolgreich GEL&Ouml;SCHT.<br>";
+        		if(file_exists("$ordner/$x.jpg")){
+        			chmod("$ordner/$x.jpg", 0777);
+         		if(unlink("$ordner/$x.jpg"))echo"Datei &bdquo;".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"]."/$x.jpg&rdquo; wurde erfolgreich GEL&Ouml;SCHT.<br>";
+        		}
       	}	
       }
 		//Löschen der Daten aus der Datenbank
