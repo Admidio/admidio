@@ -50,6 +50,10 @@ function getErrorText($error_code, $error_text)
          <b>$error_text</b><br />wirklich l&ouml;schen ?";
          break;
 
+      case "delete_category":
+         $error_str = "<p>Willst du die Kategorie <b>$error_text</b> wirklich l&ouml;schen ?</p>";
+         break;
+
       case "delete_date":
          $error_str = "Willst du den Termin<br />
          <b>$error_text</b><br />wirklich l&ouml;schen ?";

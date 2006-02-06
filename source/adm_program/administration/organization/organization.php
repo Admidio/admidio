@@ -177,8 +177,8 @@ require("../../../adm_config/body_top.php");
          $sql = "SELECT * FROM ". TBL_ROLE_CATEGORIES. "
                   WHERE rlc_org_shortname LIKE '$g_organization' 
                   ORDER BY rlc_name ASC ";
-         $result = mysql_query($sql, $g_adm_con);
-         db_error($result);
+         $cat_result = mysql_query($sql, $g_adm_con);
+         db_error($cat_result);
 
 			echo "<br>
 			<table class=\"tableList\" style=\"width: 280px;\" cellpadding=\"2\" cellspacing=\"0\">
@@ -187,23 +187,40 @@ require("../../../adm_config/body_top.php");
 					<th class=\"tableHeader\">&nbsp;</th>
 				</tr>";
 
-			while($row = mysql_fetch_object($result))
+			while($cat_row = mysql_fetch_object($cat_result))
 			{
+				// schauen, ob Rollen zu dieser Kategorie existieren
+				$sql = "SELECT * FROM ". TBL_ROLES. "
+							WHERE rol_rlc_id = $cat_row->rlc_id ";
+				$result = mysql_query($sql, $g_adm_con);
+				db_error($result);				
+				$row_num = mysql_num_rows($result);
+			
 				echo "
 				<tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
-					<td style=\"text-align: left;\"><a href=\"$g_root_path/adm_program/administration/roles/categories.php?rlc_id=$row->rlc_id\">$row->rlc_name</a></td>
+					<td style=\"text-align: left;\"><a href=\"$g_root_path/adm_program/administration/roles/categories.php?rlc_id=$cat_row->rlc_id\">$cat_row->rlc_name</a></td>
 					<td style=\"text-align: right; width: 40px;\">
-						<a href=\"$g_root_path/adm_program/administration/roles/categories.php?rlc_id=$row->rlc_id&amp;url=$url\">
-							<img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>&nbsp;";
-							$load_url = urlencode("$g_root_path/adm_program/administration/roles/categories_function.php?rlc_id=$row->rlc_id&mode=2&url=$url");
-						echo "<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_category&err_text=$row->rlc_name&err_head=Kategorie l&ouml;schen&button=2&url=$load_url\">
-							<img src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"Kategorie l&ouml;schen\" title=\"Kategorie l&ouml;schen\"></a>
-					</td>
+						<a href=\"$g_root_path/adm_program/administration/roles/categories.php?rlc_id=$cat_row->rlc_id&amp;url=$url\">
+							<img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>";
+						// nur Kategorien loeschen, die keine Rollen zugeordnet sind
+						if($row_num == 0)
+						{
+							$load_url = urlencode("$g_root_path/adm_program/administration/roles/categories_function.php?rlc_id=$cat_row->rlc_id&mode=2&url=$url");
+							echo "&nbsp;<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_category&err_text=$cat_row->rlc_name&err_head=Kategorie l&ouml;schen&button=2&url=$load_url\">
+								<img src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"Kategorie l&ouml;schen\" title=\"Kategorie l&ouml;schen\"></a>";
+						}
+						else
+							echo "&nbsp;&nbsp;<img src=\"$g_root_path/adm_program/images/dummy.gif\" width=\"16\" border=\"0\" alt=\"Dummy\">";
+					echo "</td>
 				</tr>";
 			}
 			echo "</table>
 
-         <br>";
+         <button id=\"new_category\" type=\"button\" value=\"new_category\" style=\"margin-top: 3px;\"
+            onClick=\"self.location.href='$g_root_path/adm_program/administration/roles/categories.php?url=$url'\">
+            <img src=\"$g_root_path/adm_program/images/write.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Kategorie hinzuf&uuml;gen\">
+            &nbsp;Kategorie hinzuf&uuml;gen</button>
+         <br><br>";
 
 			/*------------------------------------------------------------*/
          // gruppierungsspezifische Felder anzeigen
@@ -273,9 +290,9 @@ require("../../../adm_config/body_top.php");
          }
 
          echo "
-         <button id=\"field\" type=\"button\" value=\"field\" style=\"margin-top: 3px;\"
+         <button id=\"new_field\" type=\"button\" value=\"new_field\" style=\"margin-top: 3px;\"
             onClick=\"self.location.href='$g_root_path/adm_program/administration/organization/field.php?url=$url'\">
-            <img src=\"$g_root_path/adm_program/images/wand.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Rollen zuordnen\">
+            <img src=\"$g_root_path/adm_program/images/wand.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Feld hinzuf&uuml;gen\">
             &nbsp;Feld hinzuf&uuml;gen</button>
 
          <hr width=\"85%\" />
