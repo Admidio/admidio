@@ -47,6 +47,16 @@ if($g_session_valid & editPhoto()){
 	$adm_photo = mysql_fetch_array($result);
 //Speicherort
 	$ordner = "../../../adm_my_files/photos/".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"];
+//Erfassen der Eltern Veranstaltung
+if($adm_photo["pho_pho_id_parent"]!=NULL){
+   $pho_parent_id=$adm_photo["pho_pho_id_parent"];
+   $sql = "   SELECT *
+            FROM ". TBL_PHOTOS. "
+            WHERE pho_id ='$pho_parent_id'";
+   $result = mysql_query($sql, $g_adm_con);
+   db_error($result);
+   $adm_photo_parent = mysql_fetch_array($result);
+}
 
 //kontrollmechanismen bei selbstaufruf
    if($_POST["upload"]){
@@ -91,8 +101,8 @@ if($g_session_valid & editPhoto()){
 
    require("../../../adm_config/body_top.php");
    echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">";
-if($_POST["upload"]){
-//bei selbstaufruf der Datei Hinweise zu hochgeladenen Dateien und Kopieren der Datei in Ordner
+	if($_POST["upload"]){
+	//bei selbstaufruf der Datei Hinweise zu hochgeladenen Dateien und Kopieren der Datei in Ordner
    //Anlegen des Berichts
       echo"<div style=\"width: 670px\" align=\"center\" class=\"formHead\">Bericht</div>";
       echo"<div style=\"width: 670px\" align=\"center\" class=\"formBody\">Bitte einen Moment Geduld. Die Bilder wurden der Veranstaltung <br> - ".$adm_photo["pho_name"]." - <br>erfolgreich hinzugefügt, wenn sie hier angezeigt werden.<br>";
@@ -122,13 +132,19 @@ if($_POST["upload"]){
 	//Ende Bericht
       echo"
 		<hr width=\"85%\" />
-		<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php'\">
-   		<img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">Zur&uuml;ck
-		</button>
+		<div style=\"margin-top: 6px;\">
+   	   <button name=\"moreupload\" type=\"button\" value=\"moreupload\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id'\">
+      	   <img src=\"$g_root_path/adm_program/images/photo.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">&nbsp;Weitere Uploads
+			</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	      <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$adm_photo_parent["pho_id"]."'\">
+   		   <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">&nbsp;Zur&uuml;ck
+			</button>
+       </div>
 		</div><br><br>";
    }//if($upload)
 
 //Formular
+   if(!$_POST["upload"]){
    echo"
    <form name=\"photoup\" method=\"post\" action=\"photoupload.php?pho_id=$pho_id\" enctype=\"multipart/form-data\">
       <div style=\"width: 410px\" align=\"center\" class=\"formHead\">Fotoupload</div>
@@ -150,11 +166,14 @@ if($_POST["upload"]){
    	   <button name=\"upload\" type=\"submit\" value=\"speichern\">
       	   <img src=\"$g_root_path/adm_program/images/save.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">Bilder Speichern
 			</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	      <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php'\">
+	      <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$adm_photo_parent["pho_id"]."'\">
    		   <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">Zur&uuml;ck
 			</button>
-         	</div></div>
+         </div>
+		</div>
    </form>";
+   }//Ende Formular
+   //Seitenende
    echo"
    </div>
    ";
