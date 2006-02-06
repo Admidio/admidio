@@ -483,39 +483,15 @@ if($mode == "csv")
 }
 else
 {
-   echo "</table>";
+   echo "</table>
 
-   if($mode == "print")
-   {
-      if(!$type == "mylist")
-      {
-         echo "<p><button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
-               <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\">
-               Zur&uuml;ck</button></p>";
-      }
-   }
-   else
-   {
-      echo "<p>
-      <button name=\"print\" type=\"button\" value=\"print\" style=\"width: 140px;\"
-      onclick=\"window.open('lists_show.php?typ=$type&amp;mode=print&amp;rol_id=$rol_id', '_blank')\">
-      <img src=\"$g_root_path/adm_program/images/print.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Druckvorschau\">
-      &nbsp;Druckvorschau</button>
+	<p>
+		<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
+		<img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\">
+		Zur&uuml;ck</button>
+	</p>
 
-      &nbsp;&nbsp;&nbsp;
-      <button name=\"download-oo\" type=\"button\" value=\"download-oo\" style=\"width: 187px;\"
-         onclick=\"self.location.href='lists_show.php?typ=$type&amp;mode=csv-oo&amp;rol_id=$rol_id'\">
-         <img src=\"$g_root_path/adm_program/images/oo.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Open-Office &amp; Staroffice\">
-         &nbsp;Open-Office &amp; Staroffice</button>
-
-      &nbsp;&nbsp;&nbsp;
-      <button name=\"download-excel\" type=\"button\" value=\"download-excel\" style=\"width: 140px;\"
-         onclick=\"self.location.href='lists_show.php?typ=$type&amp;mode=csv-ms&amp;rol_id=$rol_id'\">
-         <img src=\"$g_root_path/adm_program/images/excel.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"MS-Excel\">
-         &nbsp;MS-Excel</button></p>";
-   }
-
-   echo "</div>";
+   </div>";
    if($mode != "print")
       require("../../../adm_config/body_bottom.php");
 echo "</body>
