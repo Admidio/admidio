@@ -331,7 +331,7 @@ echo "
        case "not_approved":
          echo " <h3>Warnung!!!</h3>
 			Die Veranstaltung ist z.Zt. gesperrt und wird Hompagebesuchern deswegen nicht angezeigt. Zum Freigeben bitte 
-			das entsprechende Button (<img src=\"$g_root_path/adm_program/images/ok.png\" border=\"0\">)
+			das entsprechende Button (<img src=\"$g_root_path/adm_program/images/key.png\" border=\"0\">)
 			 in der Bearbeitungsspalte nutzen.";
          break;
 
