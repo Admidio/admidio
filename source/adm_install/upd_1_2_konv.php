@@ -97,8 +97,8 @@ while($row = mysql_fetch_object($result_org))
 
 // Fotos
 
-$sql = "INSERT INTO adm_photos (pho_id, pho_org_shortname, pho_quantity, pho_name, pho_begin, pho_end, pho_photographers, pho_timestamp, pho_approved, pho_last_change)
-				             SELECT ap_id, ap_ag_shortname, ap_number, ap_name, ap_begin, ap_end, ap_photographers, ap_online_since, 1, ap_last_change
+$sql = "INSERT INTO adm_photos (pho_id, pho_org_shortname, pho_quantity, pho_name, pho_begin, pho_end, pho_photographers, pho_timestamp, pho_last_change)
+				             SELECT ap_id, ap_ag_shortname, ap_number, ap_name, ap_begin, ap_end, ap_photographers, ap_online_since, ap_last_change
 				               FROM adm_photo ";
 $result = mysql_query($sql, $connection);
 if(!$result) showError(mysql_error());
