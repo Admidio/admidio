@@ -69,10 +69,10 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL){
          db_error($result_u2);
          $user2 = mysql_fetch_object($result_u2);
 }
-/*********************APPROVED************************************/		
+/*********************LOCKED************************************/		
 //Falls gefordert und Photoeditrechet, ändern der Freigabe
 	//erfassen der Veranstaltung
-	if($_GET["approved"]=="1" || $_GET["approved"]=="0"){
+	if($_GET["locked"]=="1" || $_GET["locked"]=="0"){
 		//bei Seitenaufruf ohne Moderationsrechte
 		if(!$g_session_valid || $g_session_valid && !editPhoto($adm_photo["pho_org_shortname"])){
         	$location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=photoverwaltunsrecht";
@@ -81,9 +81,9 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL){
       }
 		//bei Seitenaufruf mit Moderationsrechten
 		if($g_session_valid && editPhoto($adm_photo["pho_org_shortname"])){
-			$approved=$_GET["approved"];
+			$locked=$_GET["locked"];
 					$sql= "UPDATE ". TBL_PHOTOS. "
-            	   SET 	pho_approved = '$approved'
+            	   SET 	pho_locked = '$locked'
 						WHERE pho_id = '$pho_id'";
       	//SQL Befehl ausführen
       	$result_approved = mysql_query($sql, $g_adm_con);
@@ -160,7 +160,7 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL){
       //"Letzte Seite"
 		$vorseite=$seite-1;
 		if($vorseite>=1)
-			echo"	<a href=\"thumbnails.php?seite=$vorseite&amp;pho_id=$pho_id\">Letzte</a>&nbsp;&nbsp;";
+			echo"	<a href=\"photos.php?seite=$vorseite&amp;pho_id=$pho_id\">Letzte</a>&nbsp;&nbsp;";
 		//Seitenzahlen
       for($s=1; $s<=$seiten; $s++){
       	if($s==$seite)echo $seite."&nbsp;";
@@ -242,7 +242,7 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL){
 				FROM ". TBL_PHOTOS. "
             WHERE pho_org_shortname ='$g_organization'
             AND pho_pho_id_parent = '".$adm_photo_list["pho_id"]."'
-				AND pho_approved = '1'
+				AND pho_locked = '0'
 				GROUP BY 'pho_pho_id_parent'
 				";
    		$result_kibisu = mysql_query($sql, $g_adm_con);
@@ -250,7 +250,7 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL){
   			$kibiesu=mysql_fetch_array($result_kibisu);
   			$veranst_bilder_summe=$kibiesu[0]+$adm_photo_list["pho_quantity"];
         	//Nur hinzurechen wenn Veranstaltung freigegeben ist oder der besucher Photoverwaltungsrechte hat
-        	if($adm_photo_list["pho_approved"]=="1" || ($g_session_valid && editPhoto()))
+        	if($adm_photo_list["pho_locked"]=="0" || ($g_session_valid && editPhoto()))
         		$bildersumme=$bildersumme+$veranst_bilder_summe;
      
          //Speicherort der Bilder
@@ -258,7 +258,7 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL){
          
          //Kontrollieren ob der entsprechende Ordner in adm_my_files existiert und freigegeben ist oder Photoeditrechte bestehen
          //wenn ja Zeile ausgeben
-         if(file_exists($ordner) && ($adm_photo_list["pho_approved"]==1) || ($g_session_valid && editPhoto($adm_photo_list["pho_org_shortname"]))){
+         if(file_exists($ordner) && ($adm_photo_list["pho_locked"]==0) || ($g_session_valid && editPhoto($adm_photo_list["pho_org_shortname"]))){
          echo "
          <tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\">
             <td style=\"text-align: left;\">&nbsp;";
@@ -268,7 +268,7 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL){
                      onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=folder_not_found','Message','width=500, height=260, left=310,top=200,scrollbars=no')\">&nbsp;";
 				
 				//Hinweis fur Leute mit Photorechten: Veranstaltung ist gesperrt
-				if($adm_photo_list["pho_approved"]==0 && file_exists($ordner))
+				if($adm_photo_list["pho_locked"]==1 && file_exists($ordner))
 					echo"<img src=\"$g_root_path/adm_program/images/lock.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Veranstaltung ist gesperrt\" title=\"Veranstaltung ist gesperrt\"
                      onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=not_approved','Message','width=500, height=200, left=310,top=200,scrollbars=no')\">&nbsp;";
 				//Veranstaltungsname mit Link zu Thumbnails
@@ -295,12 +295,12 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL){
                   <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_veranst&err_text=$err_text&err_head=Veranstaltung L&ouml;schen&button=2&url=". urlencode("$g_root_path/adm_program/modules/photos/event.php?aufgabe=delete&pho_id=".$adm_photo_list["pho_id"].""). "\">
                      <img src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"Veranstaltung löschen\" title=\"Veranstaltung löschen\"></a>";
 						
-						if($adm_photo_list["pho_approved"]==0 && file_exists($ordner))echo"
-							<a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$adm_photo_list["pho_id"]."&approved=1\">
+						if($adm_photo_list["pho_locked"]==1 && file_exists($ordner))echo"
+							<a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$adm_photo_list["pho_id"]."&locked=0\">
 								<img src=\"$g_root_path/adm_program/images/key.png\" border=\"0\" alt=\"Freigeben\" title=\"Freigeben\">
 							</a>";
-						if($adm_photo_list["pho_approved"]==1 && file_exists($ordner)) echo"
-							<a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$adm_photo_list["pho_id"]."&approved=0\">
+						if($adm_photo_list["pho_locked"]==0 && file_exists($ordner)) echo"
+							<a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$adm_photo_list["pho_id"]."&locked=1\">
 								<img src=\"$g_root_path/adm_program/images/key.png\" border=\"0\" alt=\"Sperren\" title=\"Sperren\">
 							</a>";
 					echo"</td>";
