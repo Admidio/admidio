@@ -95,8 +95,8 @@ require("../../../adm_config/body_top.php");
       echo "</div>
       <div class=\"formBody\" style=\"width: 300px\">
          <div>
-            <div style=\"text-align: right; width: 28%; float: left;\">Name:</div>
-            <div style=\"text-align: left; margin-left: 29%;\">
+            <div style=\"text-align: right; width: 23%; float: left;\">Name:</div>
+            <div style=\"text-align: left; margin-left: 24%;\">
                <input type=\"text\" name=\"name\" size=\"30\" maxlength=\"100\" value=\"". htmlspecialchars($category_name, ENT_QUOTES). "\">
             </div>
          </div>
