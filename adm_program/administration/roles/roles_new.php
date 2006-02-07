@@ -297,29 +297,29 @@ require("../../../adm_config/body_top.php");
 				<div class=\"groupBoxHeadline\">Eigenschaften&nbsp;&nbsp;(optional)</div>
 
 				<div style=\"margin-top: 6px;\">
-					<div style=\"text-align: right; width: 30%; float: left;\">Anzahl Mitglieder:</div>
-					<div style=\"text-align: left; margin-left: 32%;\">
+					<div style=\"text-align: right; width: 33%; float: left;\">Anzahl Mitglieder:</div>
+					<div style=\"text-align: left; margin-left: 35%;\">
 						<input type=\"text\" name=\"max_mitglieder\" size=\"3\" maxlength=\"3\" value=\""; if($max_mitglieder > 0) echo $max_mitglieder; echo "\">&nbsp;(inkl. Leiter)</div>
 				</div>
 				<div style=\"margin-top: 6px;\">
-					<div style=\"text-align: right; width: 30%; float: left;\">G&uuml;ltig von:</div>
-					<div style=\"text-align: left; margin-left: 32%;\">
+					<div style=\"text-align: right; width: 33%; float: left;\">G&uuml;ltig von:</div>
+					<div style=\"text-align: left; margin-left: 35%;\">
 						<input type=\"text\" name=\"datum_von\" size=\"10\" maxlength=\"10\" value=\"$datum_von\">
 						bis
 						<input type=\"text\" name=\"datum_bis\" size=\"10\" maxlength=\"10\" value=\"$datum_bis\">&nbsp;(Datum)
 					</div>
 				</div>
 				<div style=\"margin-top: 6px;\">
-					<div style=\"text-align: right; width: 30%; float: left;\">Uhrzeit:</div>
-					<div style=\"text-align: left; margin-left: 32%;\">
+					<div style=\"text-align: right; width: 33%; float: left;\">Uhrzeit:</div>
+					<div style=\"text-align: left; margin-left: 35%;\">
 						<input type=\"text\" name=\"uhrzeit_von\" size=\"5\" maxlength=\"5\" value=\"$uhrzeit_von\">
 						bis
 						<input type=\"text\" name=\"uhrzeit_bis\" size=\"5\" maxlength=\"5\" value=\"$uhrzeit_bis\">
 					</div>
 				</div>
 				<div style=\"margin-top: 6px;\">
-					<div style=\"text-align: right; width: 30%; float: left;\">Wochentag:</div>
-					<div style=\"text-align: left; margin-left: 32%;\">
+					<div style=\"text-align: right; width: 33%; float: left;\">Wochentag:</div>
+					<div style=\"text-align: left; margin-left: 35%;\">
 						<select size=\"1\" name=\"wochentag\">
 						<option value=\"0\""; if($wochentag == 0) echo " selected=\"selected\""; echo ">&nbsp;</option>\n";
 						for($i = 1; $i < 8; $i++)
@@ -330,13 +330,13 @@ require("../../../adm_config/body_top.php");
 					</div>
 				</div>
 				<div style=\"margin-top: 6px;\">
-					<div style=\"text-align: right; width: 30%; float: left;\">Ort:</div>
-					<div style=\"text-align: left; margin-left: 32%;\">
+					<div style=\"text-align: right; width: 33%; float: left;\">Ort:</div>
+					<div style=\"text-align: left; margin-left: 35%;\">
 						<input type=\"text\" name=\"ort\" size=\"30\" maxlength=\"30\" value=\"". htmlspecialchars($ort, ENT_QUOTES). "\"></div>
 				</div>
 				<div style=\"margin-top: 6px;\">
-					<div style=\"text-align: right; width: 30%; float: left;\">Beitrag:</div>
-					<div style=\"text-align: left; margin-left: 32%;\">
+					<div style=\"text-align: right; width: 33%; float: left;\">Beitrag:</div>
+					<div style=\"text-align: left; margin-left: 35%;\">
 						<input type=\"text\" name=\"beitrag\" size=\"6\" maxlength=\"6\" value=\"$beitrag\"> &euro;</div>
 				</div>
 			</div>
