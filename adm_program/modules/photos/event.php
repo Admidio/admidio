@@ -112,15 +112,15 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"])){
          if($photographen=="")$photographen="leider unbekannt";
          
       //Freigabe
-   	$approved=$_POST["approved"];
+   	$locked=$_POST["locked"];
    //NeuenDatensatz anlegen falls makenew
    if ($aufgabe=="makenew"){
       $sql="INSERT INTO ". TBL_PHOTOS. " (pho_quantity, pho_name, pho_begin,
                          pho_end, pho_photographers, pho_timestamp, pho_last_change, pho_org_shortname,
-									pho_usr_id, pho_approved)
+									pho_usr_id, pho_locked)
                VALUES(0, 'neu', '0000-00-00', '0000-00-00', 'leider unbekannt',
                       '$act_datetime', '$act_datetime', '$g_organization',
-								'$g_current_user->id', '$approved')
+								'$g_current_user->id', '$locked')
       ";
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
@@ -181,7 +181,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"])){
                      pho_photographers ='$photographen',
 							pho_last_change ='$act_datetime',
 							pho_usr_id_change = $g_current_user->id,
-							pho_approved = '$approved'
+							pho_locked = '$locked'
 					WHERE pho_id = '$pho_id'";
       //SQL Befehl ausführen
       $result = mysql_query($sql, $g_adm_con);
@@ -254,9 +254,9 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"])){
 				<tr><td align=\"right\">Anfangsdatum:</td><td align=\"left\">".mysqldate("d.m.y", $neudaten["pho_begin"])."</td></tr>
             <tr><td align=\"right\">Enddatum:</td><td align=\"left\">".mysqldate("d.m.y", $neudaten["pho_end"])."</td></tr>
             <tr><td align=\"right\">Fotografen:</td><td align=\"left\">".$neudaten["pho_photographers"]."</td></tr>
-            <tr><td align=\"right\">&Ouml;ffentliche Freigabe:</td><td align=\"left\">";
-            	if($neudaten["pho_approved"]==1) echo"Ja";
-            	if($neudaten["pho_approved"]==0) echo"Nein";
+            <tr><td align=\"right\">Gesperrt:</td><td align=\"left\">";
+            	if($neudaten["pho_locked"]==1) echo"Ja";
+            	if($neudaten["pho_locked"]==0) echo"Nein";
             echo"</td></tr>
             <tr><td align=\"right\" width=\"50%\">Aktuelle Bilderzahl:</td><td align=\"left\">".$neudaten["pho_quantity"]."</td></tr>				
 				<tr><td align=\"right\">angelegt von:</td><td align=\"left\">". strSpecialChars2Html($user1->usr_first_name). " ". strSpecialChars2Html($user1->usr_last_name)."</td></tr>
@@ -344,12 +344,12 @@ if($_GET["aufgabe"]=="change" || $_GET["aufgabe"]=="new"){
             //Freigabe
             echo"
             <div style=\"margin-top: 6px;\">
-              <div style=\"text-align: right; width: 170px; float: left;\">&Ouml;ffentliche Freigabe:</div>
+              <div style=\"text-align: right; width: 170px; float: left;\">Sperren:</div>
             <div style=\"text-align: left; margin-left: 180px;\">";
-               if($_GET["aufgabe"]=="new")echo "<input type=\"checkbox\" name=\"approved\" id=\"approved\" checked value=\"1\">";
+               if($_GET["aufgabe"]=="new")echo "<input type=\"checkbox\" name=\"locked\" id=\"locked\" value=\"1\">";
                if($_GET["aufgabe"]=="change"){
-                 	if($adm_photo["pho_approved"]==1) echo "<input type=\"checkbox\" name=\"approved\" id=\"approved\" checked value=\"1\">";
-						if($adm_photo["pho_approved"]==0) echo "<input type=\"checkbox\" name=\"approved\" id=\"approved\" value=\"1\">";
+                 	if($adm_photo["pho_locked"]==1) echo "<input type=\"checkbox\" name=\"locked\" id=\"locked\" checked value=\"1\">";
+						if($adm_photo["pho_locked"]==0) echo "<input type=\"checkbox\" name=\"locked\" id=\"locked\" value=\"1\">";
                }           
             echo"</div></div>";
             //Submit
