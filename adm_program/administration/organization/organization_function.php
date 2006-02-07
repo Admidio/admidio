@@ -48,6 +48,8 @@ $g_current_organization->org_id_parent = $_POST["parent"];
 $g_current_organization->bbcode        = $_POST["bbcode"];
 $g_current_organization->mail_extern   = $_POST["mail_extern"];
 $g_current_organization->mail_size     = $_POST["attachment_size"];
+$g_current_organization->upload_size   = $_POST["upload_size"];
+$g_current_organization->photo_size    = $_POST["photo_size"];
 $g_current_organization->enable_rss    = $_POST["enable_rss"];
 
 // Pruefen, ob alle notwendigen Felder gefuellt sind
@@ -59,8 +61,17 @@ if(strlen($g_current_organization->longname) == 0)
 
 if(strlen($g_current_organization->mail_size) == 0)
 {
-   $err_code = "feld";
-   $err_text = "Max. Attachmentgr&ouml;&szlig;e";
+	$g_current_organization->mail_size = 0;
+}
+
+if(strlen($g_current_organization->upload_size) == 0)
+{
+	$g_current_organization->upload_size = 0;
+}
+
+if(strlen($g_current_organization->photo_size) == 0)
+{
+	$g_current_organization->photo_size = 0;
 }
 
 if ($err_code != "")
