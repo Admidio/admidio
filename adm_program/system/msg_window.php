@@ -47,14 +47,9 @@ echo "
    <div class=\"groupBox\" align=\"left\" style=\"padding: 10px\">";
       switch ($_GET['err_code'])
       {
-         case "attachmentgroesse":
-            echo "Hier kannst Du die maximal zul&auml;ssige Gr&ouml;&szlig;e der Email-Attachments in Kilobyte definieren.<br /><br />
-                  Wenn Du das Verschicken von Attachments komplett unterbinden m&ouml;chtest, solltest Du 0 eintragen.";
-            break;
-
          case "bbcode":
-            echo "Die Beschreibung von Terminen und Ankündigungen kannst du mit " .
-                  "verschiedenen Tags (BBCode) formatieren. Dafür musst du die hier aufgelisteten " .
+            echo "Die Beschreibung von Terminen und Ank&uuml;ndigungen kannst du mit " .
+                  "verschiedenen Tags (BBCode) formatieren. Daf&uuml;r musst du die hier aufgelisteten " .
                   "Tags um den entsprechenden Text setzen.<br /><br />
                   Beispiele:<br /><br />
                   <table class=\"tableList\" style=\"width: 100%;\" cellpadding=\"5\" cellspacing=\"0\">
@@ -80,8 +75,8 @@ echo "
                         "   oder <b>[color=#ff0000]</b>rot<b>[/color]</b></td>
                      </tr>
                      <tr>
-                        <td valign=\"top\">Text <span style=\"font-size: 14pt;\">groß</span> darstellen</td>
-                        <td valign=\"top\">Text <b>[big]</b>groß<b>[/big]</b> darstellen</td>
+                        <td valign=\"top\">Text <span style=\"font-size: 14pt;\">gro&szlig;</span> darstellen</td>
+                        <td valign=\"top\">Text <b>[big]</b>gro&szlig;<b>[/big]</b> darstellen</td>
                      </tr>
                      <tr>
                         <td valign=\"top\">Text <span style=\"font-size: 8pt;\">klein</span> darstellen</td>
@@ -159,6 +154,14 @@ echo "
                   k&ouml;nnen den Inhalt der Felder weder sehen noch bearbeiten.";
             break;
 
+         case "file_size":
+            echo "Hier kannst Du die maximal zul&auml;ssige Gr&ouml;&szlig;e einer Datei f&uuml;r das
+                  jeweilige Modul in Kilobyte definieren.<br /><br />
+                  Wenn du 0 als Dateigr&ouml;&szlig;e eintr&auml;gst, deaktivierst du die entsprechende
+                  Funktion f&uuml;r alle Benutzer.";
+            break;
+
+
          case "login":
             echo "Normalerweise wirst du aus Sicherheitsgr&uuml;nden nach 30 Minuten, in denen du
                   nichts auf der Homepage gemacht hast, automatisch abgemeldet.<br /><br />
@@ -168,8 +171,8 @@ echo "
             break;
 
          case "mail_extern":
-            echo "E-Mails werden in der Regel über den Webserver verschickt auf dem Admidio eingerichtet
-                  ist. Sollte dein Webserver keinen E-Mailversand unterstützen, kannst du diese Option
+            echo "E-Mails werden in der Regel &uuml;ber den Webserver verschickt auf dem Admidio eingerichtet
+                  ist. Sollte dein Webserver keinen E-Mailversand unterst&uuml;tzen, kannst du diese Option
                   aktivieren. Dadurch wird versucht, das lokale E-Mail-Programm des Benutzers zu starten,
                   sobald dieser auf einen E-Mail-Link klickt.<br /><br />
                   Allerdings funktioniert dann die automatische Benachrichtigung bei Neuanmeldungen nicht
@@ -195,8 +198,8 @@ echo "
 
          case "rolle_termine":
             echo "Benutzer der Rollen, die diese Option aktiviert haben,
-                  können eigene Termine anlegen (keine Ankündigungen) und diese
-                  später auch bearbeiten oder löschen.";
+                  k&ouml;nnen eigene Termine anlegen (keine Ank&uuml;ndigungen) und diese
+                  sp&auml;ter auch bearbeiten oder l&ouml;schen.";
             break;
 
          case "rolle_benutzer":
@@ -219,7 +222,7 @@ echo "
             break;
 
          case "rolle_login":
-            echo "Benutzer, die sich angemeldet haben, können E-Mails an diese Rolle schreiben, die
+            echo "Benutzer, die sich angemeldet haben, k&ouml;nnen E-Mails an diese Rolle schreiben, die
                   dann automatisch an alle Mitglieder weitergeleitet wird.";
             break;
 
@@ -291,20 +294,20 @@ echo "
 
       case "photo_up_help":
          echo " <h3>Was ist zu tun?</h3>
-         Auf das &bdquo;Durchsuchen&ldquo; Button klicken und die gew&uuml;nschte Bilddatei auf der
+         Auf den &bdquo;Durchsuchen&ldquo; Button klicken und die gew&uuml;nschte Bilddatei auf der
          Festplatte ausw&auml;hlen. Den Vorgang ggf. bis zu f&uuml;nfmal wiederholen,
          bis alle Felder gef&uuml;llt sind. Dann auf &bdquo;Bilder Speichern&ldquo; klicken und ein wenig Geduld haben.
          <br>
          <h3>Hinweise:</h3>
          Die Bilder m&uuml;ssen im JPG Format gespeichert sein.
          Die Bilder werden automatisch auf eine Aufl&ouml;sung von 640Pixel der
-         l&auml;ngeren Seite skaliert (andere Seite im Verh&auml;ltnis), bevor sie gespeichert werden.
+         l&auml;ngeren Seite skaliert (andere Seite im Verh&auml;ltnis) bevor sie gespeichert werden.
          Der Name der Dateien spielt keine Rolle, da sie automatisch mit fortlaufender
-         Nummer benannt werden.
+         Nummer benannt werden.<br>
          Da auch bei schnellen Internetanbindungen das Hochladen von gr&ouml;&szlig;eren Dateien einige
          Zeit in Anspruch nehmen kann, empfehlen wir zun&auml;chst alle hoch zu ladenden Bilder in einen
-         Sammelordner zu kopieren und diese dann mit einer Bildbearbeitungssoftware auf 640Pixel
-         (l&auml;ngere Bildseite) zu skalieren. Die JPG-Qualit&auml;t sollte beim abspeichern auf 100%
+         Sammelordner zu kopieren und diese dann mit einer Bildbearbeitungssoftware auf 640 Pixel
+         (l&auml;ngere Bildseite) zu skalieren. Die JPG-Qualit&auml;t sollte beim Abspeichern auf 100%
          (also keine Komprimierung) gestellt werden.
          Nat&uuml;rlich ist auch das direkte Upload m&ouml;glich.
          ";
@@ -312,27 +315,27 @@ echo "
 
       case "veranst_help":
          echo " <h3>Was ist zu tun?</h3>
-         Alle offenen Felder ausf&uuml;llen. Die Felder Veranstaltung und Beginn sind Pflichtfelder. Ggf. Ausw&auml;hlen
-			welcher Veranstaltung die Neue untergeordnet werden soll, z.B. &bdquo;Tag 3&ldquo; in &bdquo;Turnier 2010&ldquo; (solche Unterteilungen sind empfehlenswert bei vielen Bildern).
-         Die Felder Ende und Fotografen sind optional. Nur Freigegebene Veranstaltungen sind für Homepagebesucher sichtbar. Möchte man z.B. erst alle Bilder Hochladen
-			oder auch nur schon mal alle Daten eingetragen haben, kann man die Freigabe einfach sp&auml;ter setzen. Alle &uuml;brigen Felder werden automatisch ausgef&uuml;llt.
+         Alle offenen Felder ausf&uuml;llen. Die Felder Veranstaltung und Beginn sind Pflichtfelder. Ggf. ausw&auml;hlen
+         welcher Veranstaltung der Neuen untergeordnet werden soll, z.B. &bdquo;Tag 3&ldquo; in &bdquo;Turnier 2010&ldquo; (solche Unterteilungen sind empfehlenswert bei vielen Bildern).
+         Die Felder Ende und Fotografen sind optional. Nur Freigegebene Veranstaltungen sind f&uuml;r Homepagebesucher sichtbar. M&ouml;chte man z.B. erst alle Bilder hochladen
+         oder auch nur schon mal alle Daten eintragen, kann man die Freigabe einfach sp&auml;ter setzen. Alle &uuml;brigen Felder werden automatisch ausgef&uuml;llt.
          Danach auf Speichern klicken.
          ";
          break;
-            
+
       case "folder_not_found":
          echo " <h3>Warnung!!!</h3>
-			Der zugehörige Ordner wurde nicht Gefunden. Sollte er bewusst über FTP gelöscht worden sein
-			oder nicht mehr die Möglichkeit bestehen ihn wieder herzustellen, bitte
-			den Datensatz mit Button in der Bearbeitungsspalte löschen (<img src=\"$g_root_path/adm_program/images/delete.png\" style=\"vertical-align: top;\">).
-			Besuchern der Website ohne Fotoverwaltungsrecht, wird diese Veranstaltung nich mehr angezeigt.";
+         Der zugeh&ouml;rige Ordner wurde nicht gefunden. Sollte er bewusst &uuml;ber FTP gel&ouml;scht worden sein
+         oder nicht mehr die M&ouml;glichkeit bestehen ihn wieder herzustellen, bitte
+         den Datensatz mit Button in der Bearbeitungsspalte l&ouml;schen (<img src=\"$g_root_path/adm_program/images/delete.png\" style=\"vertical-align: top;\">).
+         Besuchern der Website ohne Fotoverwaltungsrecht, wird diese Veranstaltung nicht mehr angezeigt.";
          break;
-         
+
        case "not_approved":
          echo " <h3>Warnung!!!</h3>
-			Die Veranstaltung ist z.Zt. gesperrt und wird Hompagebesuchern deswegen nicht angezeigt. Zum Freigeben bitte 
-			das entsprechende Button (<img src=\"$g_root_path/adm_program/images/key.png\" border=\"0\">)
-			 in der Bearbeitungsspalte nutzen.";
+         Die Veranstaltung ist z.Zt. gesperrt und wird Homepagebesuchern deswegen nicht angezeigt. Zum Freigeben bitte
+         den entsprechende Button (<img src=\"$g_root_path/adm_program/images/key.png\" border=\"0\">)
+          in der Bearbeitungsspalte nutzen.";
          break;
 
          default:
