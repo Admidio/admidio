@@ -104,6 +104,8 @@ class TblOrganizations
                                     	, org_shortname   = '$this->shortname'
 													, org_homepage    = '$this->homepage'
 													, org_mail_size   = $this->mail_size
+													, org_upload_size = $this->upload_size
+													, org_photo_size  = $this->photo_size
 													, org_mail_extern = $this->mail_extern
 													, org_enable_rss  = $this->enable_rss
 													, org_bbcode      = $this->bbcode ";
@@ -129,10 +131,10 @@ class TblOrganizations
    		if($this->bbcode != 1)     $this->bbcode = 0;
 
    		$sql = "INSERT INTO ". TBL_ORGANIZATIONS. " (org_longname, org_shortname, org_org_id_parent
-										org_homepage, org_mail_attachement_size,
+										org_homepage, org_mail_size, org_upload_size, org_photo_size,
 										org_mail_extern, org_enable_rss, org_bbcode )
 							 VALUES ('$this->longname', '$this->shortname', $this->org_id_parent,
-										'$this->homepage', $this->mail_size,
+										'$this->homepage', $this->mail_size, $this->upload_size, $this->photo_size, 
 										$this->mail_extern, $this->enable_rss, $this->bbcode ) ";
 			$result = mysql_query($sql, $this->db_connection);
 		   if(!$result) { echo "Error: ". mysql_error(); exit(); }

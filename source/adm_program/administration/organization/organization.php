@@ -69,20 +69,20 @@ require("../../../adm_config/body_top.php");
       <div class=\"formHead\">$g_current_organization->longname bearbeiten</div>
       <div class=\"formBody\">
       	 <div>
-            <div style=\"text-align: right; width: 45%; float: left;\">Name (Abk.):</div>
-            <div style=\"text-align: left; margin-left: 47%;\">
+            <div style=\"text-align: right; width: 48%; float: left;\">Name (Abk.):</div>
+            <div style=\"text-align: left; margin-left: 50%;\">
                <input type=\"text\" name=\"shortname\" class=\"readonly\" readonly size=\"10\" maxlength=\"10\" value=\"$g_current_organization->longname\">
             </div>
          </div>
          <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 45%; float: left;\">Name (lang):</div>
-            <div style=\"text-align: left; margin-left: 47%;\">
+            <div style=\"text-align: right; width: 48%; float: left;\">Name (lang):</div>
+            <div style=\"text-align: left; margin-left: 50%;\">
                <input type=\"text\" name=\"longname\" size=\"30\" maxlength=\"60\" value=\"$g_current_organization->longname\">
             </div>
          </div>
          <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 45%; float: left;\">Homepage:</div>
-            <div style=\"text-align: left; margin-left: 47%;\">
+            <div style=\"text-align: right; width: 48%; float: left;\">Homepage:</div>
+            <div style=\"text-align: left; margin-left: 50%;\">
                <input type=\"text\" name=\"homepage\" size=\"30\" maxlength=\"30\" value=\"$g_current_organization->homepage\">
             </div>
          </div>";
@@ -99,8 +99,8 @@ require("../../../adm_config/body_top.php");
             // Auswahlfeld fuer die uebergeordnete Gruppierung
             echo "
             <div style=\"margin-top: 6px;\">
-               <div style=\"text-align: right; width: 45%; float: left;\">Übergeordnete Gruppierung:</div>
-               <div style=\"text-align: left; margin-left: 47%;\">
+               <div style=\"text-align: right; width: 48%; float: left;\">Übergeordnete Gruppierung:</div>
+               <div style=\"text-align: left; margin-left: 50%;\">
                   <select size=\"1\" name=\"parent\">
                      <option value=\"0\" ";
                         if(strlen($g_current_organization->org_org_id_parent) == 0)
@@ -125,49 +125,72 @@ require("../../../adm_config/body_top.php");
             </div>";
          }
 
-         echo "<div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 45%; float: left;\">BBCode zulassen:</div>
-            <div style=\"text-align: left; margin-left: 47%;\">
-               <input type=\"checkbox\" id=\"bbcode\" name=\"bbcode\" ";
-               if($g_current_organization->bbcode == 1)
-                  echo " checked ";
-               echo " value=\"1\" />
-               <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-               onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=350,left=310,top=200,scrollbars=yes')\">
-            </div>
-         </div>
+			echo "
+			<div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 95%;\">
+				<div class=\"groupBoxHeadline\">Einstellungen</div>
+				<div style=\"margin-top: 6px;\">
+					<div style=\"text-align: right; width: 47%; float: left;\">Externes Mailprogramm:</div>
+					<div style=\"text-align: left; margin-left: 50%;\">
+						<input type=\"checkbox\" id=\"mail_extern\" name=\"mail_extern\" ";
+						if($g_current_organization->mail_extern == 1)
+							echo " checked ";
+						echo " value=\"1\" />
+						<img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+						onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=mail_extern','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
+					</div>
+				</div>
 
-         <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 45%; float: left;\">Externes Mailprogramm:</div>
-            <div style=\"text-align: left; margin-left: 47%;\">
-               <input type=\"checkbox\" id=\"mail_extern\" name=\"mail_extern\" ";
-               if($g_current_organization->mail_extern == 1)
-                  echo " checked ";
-               echo " value=\"1\" />
-               <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-               onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=mail_extern','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
-            </div>
-         </div>
+				<div style=\"margin-top: 6px;\">
+					<div style=\"text-align: right; width: 47%; float: left;\">BBCode zulassen:</div>
+					<div style=\"text-align: left; margin-left: 50%;\">
+						<input type=\"checkbox\" id=\"bbcode\" name=\"bbcode\" ";
+						if($g_current_organization->bbcode == 1)
+							echo " checked ";
+						echo " value=\"1\" />
+						<img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+						onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=350,left=310,top=200,scrollbars=yes')\">
+					</div>
+				</div>
 
-         <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 45%; float: left;\">Max. Attachmentgr&ouml;&szlig;e:</div>
-            <div style=\"text-align: left; margin-left: 47%;\">
-               <input type=\"text\" name=\"attachment_size\" size=\"4\" maxlength=\"4\" value=\"$g_current_organization->mail_size\"> KB
-               <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-               onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=attachmentgroesse','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
-            </div>
-         </div>
+				<div style=\"margin-top: 6px;\">
+					<div style=\"text-align: right; width: 47%; float: left;\">RSS-Feeds aktivieren:</div>
+					<div style=\"text-align: left; margin-left: 50%;\">
+						<input type=\"checkbox\" id=\"enable_rss\" name=\"enable_rss\" ";
+						if($g_current_organization->enable_rss == 1)
+							echo " checked ";
+						echo " value=\"1\" />
+						<img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+						onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=enable_rss','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
+					</div>
+				</div>
+			</div>
 
-         <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 45%; float: left;\">Aktiviere RSS-Feeds:</div>
-            <div style=\"text-align: left; margin-left: 47%;\">
-               <input type=\"checkbox\" id=\"enable_rss\" name=\"enable_rss\" ";
-               if($g_current_organization->enable_rss == 1)
-                  echo " checked ";
-               echo " value=\"1\" />
-               <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-               onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=enable_rss','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
-            </div>
+			<div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 95%;\">
+				<div class=\"groupBoxHeadline\">Maximale Dateigr&ouml;&szlig;e f&uuml;r&nbsp;&nbsp;
+					<img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+					onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=file_size','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
+				</div>
+
+				<div style=\"margin-top: 6px;\">
+					<div style=\"text-align: right; width: 47%; float: left;\">E-Mail-Attachments:</div>
+					<div style=\"text-align: left; margin-left: 50%;\">
+						<input type=\"text\" name=\"attachment_size\" size=\"4\" maxlength=\"4\" value=\"$g_current_organization->mail_size\"> KB
+					</div>
+				</div>
+
+				<div style=\"margin-top: 6px;\">
+					<div style=\"text-align: right; width: 47%; float: left;\">Downloads:</div>
+					<div style=\"text-align: left; margin-left: 50%;\">
+						<input type=\"text\" name=\"upload_size\" size=\"4\" maxlength=\"4\" value=\"$g_current_organization->upload_size\"> KB
+					</div>
+				</div>
+
+				<div style=\"margin-top: 6px;\">
+					<div style=\"text-align: right; width: 47%; float: left;\">Fotos:</div>
+					<div style=\"text-align: left; margin-left: 50%;\">
+						<input type=\"text\" name=\"photo_size\" size=\"4\" maxlength=\"4\" value=\"$g_current_organization->photo_size\"> KB
+					</div>
+				</div>
          </div>";
 
 			/*------------------------------------------------------------*/
@@ -181,7 +204,7 @@ require("../../../adm_config/body_top.php");
          db_error($cat_result);
 
 			echo "<br>
-			<table class=\"tableList\" style=\"width: 280px;\" cellpadding=\"2\" cellspacing=\"0\">
+			<table class=\"tableList\" style=\"width: 95%;\" cellpadding=\"2\" cellspacing=\"0\">
 				<tr>
 					<th class=\"tableHeader\" style=\"text-align: left;\">Rollen-Kategorien</th>
 					<th class=\"tableHeader\">&nbsp;</th>
@@ -199,24 +222,24 @@ require("../../../adm_config/body_top.php");
 				echo "
 				<tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
 					<td style=\"text-align: left;\"><a href=\"$g_root_path/adm_program/administration/roles/categories.php?rlc_id=$cat_row->rlc_id\">$cat_row->rlc_name</a></td>
-					<td style=\"text-align: right; width: 40px;\">
+					<td style=\"text-align: right; width: 45px;\">
 						<a href=\"$g_root_path/adm_program/administration/roles/categories.php?rlc_id=$cat_row->rlc_id&amp;url=$url\">
 							<img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>";
 						// nur Kategorien loeschen, die keine Rollen zugeordnet sind
 						if($row_num == 0)
 						{
 							$load_url = urlencode("$g_root_path/adm_program/administration/roles/categories_function.php?rlc_id=$cat_row->rlc_id&mode=2&url=$url");
-							echo "&nbsp;<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_category&err_text=$cat_row->rlc_name&err_head=Kategorie l&ouml;schen&button=2&url=$load_url\">
-								<img src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"Kategorie l&ouml;schen\" title=\"Kategorie l&ouml;schen\"></a>";
+							echo "&nbsp;<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_category&err_text=$cat_row->rlc_name&err_head=Kategorie l&ouml;schen&button=2&url=$load_url\"><img 
+							src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>";
 						}
 						else
-							echo "&nbsp;&nbsp;<img src=\"$g_root_path/adm_program/images/dummy.gif\" width=\"16\" border=\"0\" alt=\"Dummy\">";
+							echo "&nbsp;<img src=\"$g_root_path/adm_program/images/dummy.gif\" width=\"16\" border=\"0\" alt=\"Dummy\">";
 					echo "</td>
 				</tr>";
 			}
 			echo "</table>
 
-         <button id=\"new_category\" type=\"button\" value=\"new_category\" style=\"margin-top: 3px;\"
+         <button id=\"new_category\" type=\"button\" value=\"new_category\" style=\"margin-top: 3px; width: 180px;\"
             onClick=\"self.location.href='$g_root_path/adm_program/administration/roles/categories.php?url=$url'\">
             <img src=\"$g_root_path/adm_program/images/write.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Kategorie hinzuf&uuml;gen\">
             &nbsp;Kategorie hinzuf&uuml;gen</button>
@@ -269,12 +292,12 @@ require("../../../adm_config/body_top.php");
                   else
                      echo "&nbsp;";
                   echo "</td>
-                  <td style=\"text-align: right; width: 40px;\">
+                  <td style=\"text-align: right; width: 45px;\">
                      <a href=\"$g_root_path/adm_program/administration/organization/field.php?usf_id=$row->usf_id&amp;url=$url\">
                         <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>&nbsp;";
                         $load_url = urlencode("$g_root_path/adm_program/administration/organization/field_function.php?usf_id=$row->usf_id&mode=2&url=$url");
-                     echo "<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_field&err_text=$row->usf_name&err_head=Profilfeld l&ouml;schen&button=2&url=$load_url\">
-                        <img src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"Feld '$row->usf_name' l&ouml;schen\" title=\"Feld '$row->usf_name' l&ouml;schen\"></a>
+                     echo "<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_field&err_text=$row->usf_name&err_head=Profilfeld l&ouml;schen&button=2&url=$load_url\"><img 
+                     src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>
                   </td>
                </tr>";
             }
@@ -290,7 +313,7 @@ require("../../../adm_config/body_top.php");
          }
 
          echo "
-         <button id=\"new_field\" type=\"button\" value=\"new_field\" style=\"margin-top: 3px;\"
+         <button id=\"new_field\" type=\"button\" value=\"new_field\" style=\"margin-top: 3px; width: 180px;\"
             onClick=\"self.location.href='$g_root_path/adm_program/administration/organization/field.php?url=$url'\">
             <img src=\"$g_root_path/adm_program/images/wand.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Feld hinzuf&uuml;gen\">
             &nbsp;Feld hinzuf&uuml;gen</button>
