@@ -91,11 +91,8 @@ if ($user_found >= 1)
       db_error($result);
 
       // Session-ID erzeugen
-
-      $login_timestamp  = time();
-      $login_datetime   = date("Y.m.d H:i:s", $login_timestamp);
-      $login_timestamp += ip2long($_SERVER['REMOTE_ADDR']);
-      $user_session     = md5($login_timestamp);
+      $user_session   = md5(uniqid(rand()));      
+      $login_datetime = date("Y.m.d H:i:s", time());
 
       // darf der User laenger eingeloggt sein
 
