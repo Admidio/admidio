@@ -72,12 +72,19 @@ if($adm_photo["pho_pho_id_parent"]!=NULL){
          header($location);
          exit();
       }
-   //Kontrolle des Dateityps
+   //Kontrolle des Dateityps und der Dateigroesse
       $erlaubt=array(".jpg", ".jpeg", ".JPG", ".JPEG");
 		for($x=0; $x<=4; $x=$x+1){
+         //Dateiendung
          $endung=strrchr($_FILES["bilddatei"]["name"][$x], ".");
-			if ($_FILES["bilddatei"]["name"][$x]!="" && !in_array($endung, $erlaubt)) {
+			if ($_FILES["bilddatei"]["name"][$x]!=NULL && !in_array($endung, $erlaubt)) {
             $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=dateiendungphotoup";
+            header($location);
+            exit();
+         }
+         //Dateigroesse
+         if ($_FILES["bilddatei"]["size"][$x]>($g_current_organization->photo_size)*1000){
+            $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=photo_2big";
             header($location);
             exit();
          }
@@ -110,12 +117,12 @@ if($adm_photo["pho_pho_id_parent"]!=NULL){
       $bildnr=$adm_photo["pho_quantity"];
 		for($x=0; $x<=4; $x=$x+1){
          $y=$x+1;
-         if($_FILES["bilddatei"]["name"][$x]!="" && $ordner!="") {
+         if($_FILES["bilddatei"]["name"][$x]!=NULL && $ordner!=NULL) {
          //errechnen der neuen Bilderzahl
                $bildnr++;
          echo "<br>Bild $bildnr:<br>";
          //Größenanpassung Bild und Bericht
-               if(copy($_FILES["bilddatei"]["tmp_name"][$x], "../../../adm_my_files/photos/temp$y.jpg"));
+               if(move_uploaded_file($_FILES["bilddatei"]["tmp_name"][$x], "../../../adm_my_files/photos/temp$y.jpg"));
                echo"<img src=\"resize.php?scal=640&ziel=$ordner/$bildnr&aufgabe=speichern&nr=$y\"><br><br>";
          unset($y);
          }//if($bilddatei!= "")
