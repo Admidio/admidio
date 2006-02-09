@@ -284,6 +284,11 @@ function getErrorText($error_code, $error_text)
       case "photo_deleted":
          $error_str = "Das Foto wurde erfolgreich gel&ouml;scht.";
          break;
+         
+     case "photo_2big":
+         $error_str = "Eins der hochgeladenen Fotos &uuml;bersteigt die zulässige 
+							Deateigr&ouml;&szlig; von $g_current_organization->photo_size.";
+         break;
 
 //Ende Fehlermeldungen Fotomodul
 
