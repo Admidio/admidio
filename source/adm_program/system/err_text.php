@@ -286,8 +286,8 @@ function getErrorText($error_code, $error_text)
          break;
          
      case "photo_2big":
-         $error_str = "Eins der hochgeladenen Fotos &uuml;bersteigt die zulässige 
-							Deateigr&ouml;&szlig; von $g_current_organization->photo_size.";
+         $error_str = "Mindestens eins der hochgeladenen Fotos &uuml;bersteigt die zulässige 
+							Dateigr&ouml;&szlig;e von ".$g_current_organization->photo_size."KB.";
          break;
 
 //Ende Fehlermeldungen Fotomodul
