@@ -54,9 +54,10 @@ class newEmail
 
 
 
-//Konstruktor der Klasse. Hier werden auch automatisch Encoding-Optionen etc. gesetzt
+//Konstruktor der Klasse.
 function newEmail()
 {
+	//Wichtig ist das die MimeVersion das erste Element im Header ist...
 	$this->headerOptions['MIME-Version'] = '1.0';
 	$this->mailBoundary = "--NextPart_AdmidioMailSystem_". md5(uniqid(rand()));
 	$this->copyToSender = FALSE;
@@ -138,9 +139,9 @@ function addAttachment($file, $name = '', $c_type='application/octet-stream', $e
 {
 	$this->attachments[] = array(
 			'body'		=> $file,
-            'name'		=> $name,
-            'c_type'	=> $c_type,
-            'encoding'	=> $encoding);
+			'name'		=> $name,
+			'c_type'	=> $c_type,
+			'encoding'	=> $encoding);
     $this->headerOptions['Content-Type'] = "multipart/mixed;\n\tboundary=\"$mailBoundary\"";
 }
 
@@ -190,11 +191,14 @@ function sendEmail()
 		$mail_properties = $mail_properties. $key. ": ". $value. "\r\n";
 	}
 
+	//Eventuelle Attachments werden hinzugefuegt...
+	if (isset ($this->attachments))
+
 	// Eigentlichen Mail-Text hinzufügen...
 	$mail_body = $this->text;
 
 
-	// Mail wir jetzt versendet...
+	// Mail wird jetzt versendet...
 	mail($recipient, $subject, $mail_body, $mail_properties);
 
 	// Eventuell noch eine Kopie an den Absender:
