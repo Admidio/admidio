@@ -10,23 +10,44 @@
  * und anschliessend verschickt werden.
  *
  * Das Objekt wird erzeugt durch Aufruf des Konstruktors:
- * function newEmail($homepage, $title, $description)
- * Uebergaben: 	$homepage		-	Link zur Homepage
- * 				$title			-	Titel des RSS-Feeds
- * 				$description	-	Ergaenzende Beschreibung zum Titel
+ * function newEmail()
  *
- * Dem RSSfeed koennen ueber die Funktion addItem Inhalt zugeordnet werden:
- * function addItem($title, $description, $date, $guid)
- * Uebergaben:	$title			-	Titel des Items
- * 				$description	-	der Inhalt des Items
- * 				$date			-	Das Erstellungsdatum des Items
- * 				$link			-	Ein Link zum Termin/Newsbeitrag etc.
+ * Nun wird der Absender gesetzt:
+ * function setSender($address, $name='')
+ * Uebergaben: 	$address		-	Die Emailadresse
+ * 				$name			-	Der Name des Absenders (optional)
  *
- * Wenn alle benoetigten Items zugeordnet sind, wird der RSSfeed generiert mit:
- * function build_feed()
+ * Nun können in beliebiger Reihenfolge und Anzahl Adressaten (To,Cc,Bcc)
+ * der Mail hinzugefuegt werden:
+ * (optional und mehrfach aufrufbar, es muss jedoch mindestens
+ * ein Empfänger mittels einer der drei Funktionen gesetzt werden)
  *
+ * function addRecipient($address, $name='')
+ * function addCopy($address, $name='')
+ * function addBlindCopy($address, $name='')
+ * Uebergaben: 	$address		-	Die Emailadresse
+ * 				$name			-	Der Name des Absenders (optional)
  *
+ * Nun noch ein Subject setzen (optional):
+ * function setSubject($subject)
+ * Uebergaben: 	$subject		-	Der Text des Betreffs
  *
+ * Der Email einen Text geben:
+ * function setText($text)
+ * Uebergaben: 	$text		-	Der Text der Mail
+ *
+ * Nun kann man ein Attachment hinzufuegen:
+ * (optional und mehrfach aufrufbar)
+ * function addAttachment($tmp_filename, $orig_filename = '', $file_type='application/octet-stream')
+ * Uebergaben: 	$tmp_filename	-	Der Pfad und Name der Datei auf dem Server
+ * 				$orig_filename	-	Der Name der datei auf dem Rechner des Users
+ * 				$file_type		-	Den Contenttype der Datei. (optional)
+ *
+ * Bei Bedarf kann man sich eine Kopie zuschicken lassen (optional):
+ * function setCopyToSenderFlag()
+ *
+ * Am Ende muss die Mail natürlich noch gesendet werden:
+ * function sendEmail();
  *
  ******************************************************************************
  *
@@ -52,18 +73,21 @@ require("./common.php");
 class newEmail
 {
 
-
-
 //Konstruktor der Klasse.
 function newEmail()
 {
 	//Wichtig ist das die MimeVersion das erste Element im Header ist...
 	$this->headerOptions['MIME-Version'] = '1.0';
+
 	$this->mailBoundary = "--NextPart_AdmidioMailSystem_". md5(uniqid(rand()));
 	$this->copyToSender = FALSE;
 
+	//Hier werden noch mal alle Empfänger der Mail reingeschrieben,
+	//für den Fall das eine Kopie der Mail angefordert wird...
+	$this->addresses = '';
 }
 
+// Funktion um den Absender zu setzen
 function setSender($address, $name='')
 {
 	if (isValidEmailAddress($address))
@@ -74,11 +98,13 @@ function setSender($address, $name='')
 	return FALSE;
 }
 
-function addSubject($subject)
+// Funktion um den Betreff zu setzen
+function setSubject($subject)
 {
 	$this->headerOptions['Subject'] = $subject;
 }
 
+// Funktion um Hauptempfaenger hinzuzufuegen
 function addRecipient($address, $name='')
 {
 	if (isValidEmailAddress($address))
@@ -91,11 +117,13 @@ function addRecipient($address, $name='')
 		{
 		$this->headerOptions['To'] = $this->headerOptions['To']. ", ". $name. " <". $address. ">";
 		}
+		$this->addresses = $this->addresses. $name. " <". $address. ">\r\n";
 		return TRUE;
 	}
 	return FALSE;
 }
 
+// Funktion um Ccs hinzuzufuegen
 function addCopy($address, $name='')
 {
 	if (isValidEmailAddress($address))
@@ -108,11 +136,13 @@ function addCopy($address, $name='')
 		{
 		$this->headerOptions['Cc'] = $this->headerOptions['Cc']. ", ". $name. " <". $address. ">";
 		}
+		$this->addresses = $this->addresses. $name. " <". $address. ">\r\n";
 		return TRUE;
 	}
 	return FALSE;
 }
 
+// Funktion um Bccs hinzuzufuegen
 function addBlindCopy($address, $name='')
 {
 	if (isValidEmailAddress($address))
@@ -125,26 +155,29 @@ function addBlindCopy($address, $name='')
 		{
 		$this->headerOptions['Bcc'] = $this->headerOptions['Bcc']. ", ". $name. " <". $address. ">";
 		}
+		$this->addresses = $this->addresses. $name. " <". $address. ">\r\n";
 		return TRUE;
 	}
 	return FALSE;
 }
 
+// Funktion um den Nachrichtentext an die Mail uebergeben
 function setText($text)
 {
 	$this->text = $text;
 }
 
-function addAttachment($file, $name = '', $c_type='application/octet-stream', $encoding = 'base64')
+// Funktion um ein Attachment an die Mail zu uebergeben...
+function addAttachment($tmp_filename, $orig_filename = '', $file_type='application/octet-stream')
 {
 	$this->attachments[] = array(
-			'body'		=> $file,
-			'name'		=> $name,
-			'c_type'	=> $c_type,
-			'encoding'	=> $encoding);
-    $this->headerOptions['Content-Type'] = "multipart/mixed;\n\tboundary=\"$mailBoundary\"";
+			'orig_filename'	=> $orig_filename,
+			'tmp_filename'	=> $tmp_filename,
+			'file_type'	=> $file_type);
+    $this->headerOptions['Content-Type'] = "multipart/mixed;\n\tboundary=\"". $this->mailBoundary. "\"";
 }
 
+// Funktion um das Flag zu setzen, dass eine Kopie verschickt werden soll...
 function setCopyToSenderFlag()
 {
 	$this->copyToSender = TRUE;
@@ -162,13 +195,13 @@ function sendEmail()
 		return FALSE;
 	}
 
-	// Wenn keine Empfänger gesetzt wurde, ist hier auch Ende...
+	// Wenn keine Empfänger gesetzt wurden, ist hier auch Ende...
 	if (!isset($this->headerOptions['To']) and !isset($this->headerOptions['Cc']) and !isset($this->headerOptions['Bcc']))
 	{
 		return FALSE;
 	}
 
-	//Hier werden die HauptMailempfänger gesetzt und aus dem Header genommen...
+	//Hier werden die HauptMailempfänger gesetzt und aus den HeaderOptions entfernt...
 	$recipient = '';
 	if (isset($this->headerOptions['To']))
 	{
@@ -176,7 +209,7 @@ function sendEmail()
 		unset($this->headerOptions['To']);
 	}
 
-	// Hier wird das MailSubject gesetzt und aus dem Header genommen...
+	// Hier wird das MailSubject gesetzt und aus den HeaderOptions entfernt...
 	$subject = '';
 	if (isset($this->headerOptions['Subject']))
 	{
@@ -191,12 +224,45 @@ function sendEmail()
 		$mail_properties = $mail_properties. $key. ": ". $value. "\r\n";
 	}
 
-	//Eventuelle Attachments werden hinzugefuegt...
+	//Für die Attachments alles vorbereiten...
 	if (isset ($this->attachments))
+	{
+		$mail_body	= $mail_body. "This message is in MIME format.\r\n";
+		$mail_body	= $mail_body. "Since your mail reader does not understand this format,\r\n";
+    	$mail_body	= $mail_body. "some or all of this message may not be legible.\r\n\r\n";
+    	$mail_body	= $mail_body. "--". $this->mailBoundary. "\nContent-Type: text/plain; charset=\"iso-8859-1\"\r\n\r\n";
+	}
 
 	// Eigentlichen Mail-Text hinzufügen...
-	$mail_body = $this->text;
+	$mail_body = $mail_body. $this->text. "\r\n\r\n";
 
+	//Jetzt die Attachments hinzufuegen...
+	if (isset ($this->attachments))
+	{
+		for($i = 0; $i < count($this->attachments); $i++)
+		{
+			$thefile = '';
+			$fileContent = '';
+
+			$mail_body = $mail_body. "--". $this->mailBoundary. "\r\n";
+			$mail_body = $mail_body. "Content-Type: ". $this->attachments[$i]['file_type']. ";\r\n";
+			$mail_body = $mail_body. "\tname=\"". $this->attachments[$i]['orig_filename']. "\"\r\n";
+			$mail_body = $mail_body. "Content-Transfer-Encoding: base64\r\n";
+			$mail_body = $mail_body. "Content-Disposition: attachment;\r\n";
+			$mail_body = $mail_body. "\tfilename=\"". $this->attachments[$i]['orig_filename']. "\"\r\n\r\n";
+			$theFile = fopen($this->attachments[$i]['tmp_filename'], "rb");
+			$fileContent = fread($theFile, filesize($this->attachments[$i]['tmp_filename']));
+			fclose($theFile);
+
+			// Attachment encodieren und splitten...
+			$fileContent = chunk_split(base64_encode($fileContent));
+
+			// Attachment inden Body einfuegen...
+			$mail_body = $mail_body. $fileContent. "\r\n\r\n";
+		}
+		// Das Ende der Mail mit der Boundary kennzeichnen...
+		$mail_body = $mail_body. "--". $this->mailBoundary. "--";
+	}
 
 	// Mail wird jetzt versendet...
 	mail($recipient, $subject, $mail_body, $mail_properties);
@@ -204,13 +270,22 @@ function sendEmail()
 	// Eventuell noch eine Kopie an den Absender:
 	if ($this->copyToSender)
 	{
-		//TODO!!!!
+		$mail_body = "Hier ist Deine angeforderte Kopie der Nachricht:\r\n\r\n". $mail_body;
+	 	$mail_body = $this->addresses. "\r\n\r\n". $mail_body;
+	 	$mail_body = "Diese Nachricht ging an:\r\n\r\n". $mail_body;
+	 	unset($this->headerOptions['To']);
+	 	unset($this->headerOptions['Cc']);
+	 	unset($this->headerOptions['Bcc']);
+
+	 	// Header für die Kopie aufbereiten...
+	 	$mail_properties = '';
+		foreach ($this->headerOptions as $key => $value)
+		{
+			$mail_properties = $mail_properties. $key. ": ". $value. "\r\n";
+		}
+	 	// Kopie versenden an den originalen Absender...
+	 	mail($this->headerOptions['From'], $subject, $mail_body, $mail_properties);
 	}
-
-	//DebugKrempel von Elmar
-	echo "$mail_properties";
-
-	//Ende DebugKrempel von Elmar
 	return TRUE;
 }
 
