@@ -14,8 +14,8 @@
  *
  * Nun wird der Absender gesetzt:
  * function setSender($address, $name='')
- * Uebergaben: 	$address		-	Die Emailadresse
- * 				$name			-	Der Name des Absenders (optional)
+ * Uebergaben: 	$address	-	Die Emailadresse
+ * 					$name		-	Der Name des Absenders (optional)
  *
  * Nun können in beliebiger Reihenfolge und Anzahl Adressaten (To,Cc,Bcc)
  * der Mail hinzugefuegt werden:
@@ -25,12 +25,12 @@
  * function addRecipient($address, $name='')
  * function addCopy($address, $name='')
  * function addBlindCopy($address, $name='')
- * Uebergaben: 	$address		-	Die Emailadresse
- * 				$name			-	Der Name des Absenders (optional)
+ * Uebergaben: 	$address	-	Die Emailadresse
+ * 					$name		-	Der Name des Absenders (optional)
  *
  * Nun noch ein Subject setzen (optional):
  * function setSubject($subject)
- * Uebergaben: 	$subject		-	Der Text des Betreffs
+ * Uebergaben: 	$subject	-	Der Text des Betreffs
  *
  * Der Email einen Text geben:
  * function setText($text)
@@ -40,10 +40,10 @@
  * (optional und mehrfach aufrufbar)
  * function addAttachment($tmp_filename, $orig_filename = '', $file_type='application/octet-stream')
  * Uebergaben: 	$tmp_filename	-	Der Pfad und Name der Datei auf dem Server
- * 				$orig_filename	-	Der Name der datei auf dem Rechner des Users
- * 				$file_type		-	Den Contenttype der Datei. (optional)
+ * 				$orig_filename		-	Der Name der datei auf dem Rechner des Users
+ * 				$file_type			-	Den Contenttype der Datei. (optional)
  *
- * Bei Bedarf kann man sich eine Kopie zuschicken lassen (optional):
+ * Bei Bedarf kann man sich eine Kopie der Mail zuschicken lassen (optional):
  * function setCopyToSenderFlag()
  *
  * Am Ende muss die Mail natürlich noch gesendet werden:
@@ -201,7 +201,7 @@ function sendEmail()
 		return FALSE;
 	}
 
-	//Hier werden die HauptMailempfänger gesetzt und aus den HeaderOptions entfernt...
+	//Hier werden die Haupt-Mailempfänger gesetzt und aus den HeaderOptions entfernt...
 	$recipient = '';
 	if (isset($this->headerOptions['To']))
 	{
@@ -224,7 +224,7 @@ function sendEmail()
 		$mail_properties = $mail_properties. $key. ": ". $value. "\r\n";
 	}
 
-	//Für die Attachments alles vorbereiten...
+	// Für die Attachments alles vorbereiten...
 	if (isset ($this->attachments))
 	{
 		$mail_body	= $mail_body. "This message is in MIME format.\r\n";
@@ -236,7 +236,7 @@ function sendEmail()
 	// Eigentlichen Mail-Text hinzufügen...
 	$mail_body = $mail_body. $this->text. "\r\n\r\n";
 
-	//Jetzt die Attachments hinzufuegen...
+	// Jetzt die Attachments hinzufuegen...
 	if (isset ($this->attachments))
 	{
 		for($i = 0; $i < count($this->attachments); $i++)
@@ -257,7 +257,7 @@ function sendEmail()
 			// Attachment encodieren und splitten...
 			$fileContent = chunk_split(base64_encode($fileContent));
 
-			// Attachment inden Body einfuegen...
+			// Attachment in den Body einfuegen...
 			$mail_body = $mail_body. $fileContent. "\r\n\r\n";
 		}
 		// Das Ende der Mail mit der Boundary kennzeichnen...
@@ -265,7 +265,10 @@ function sendEmail()
 	}
 
 	// Mail wird jetzt versendet...
-	mail($recipient, $subject, $mail_body, $mail_properties);
+	if (!mail($recipient, $subject, $mail_body, $mail_properties))
+	{
+	 	return FALSE;
+	}
 
 	// Eventuell noch eine Kopie an den Absender:
 	if ($this->copyToSender)
@@ -284,7 +287,10 @@ function sendEmail()
 			$mail_properties = $mail_properties. $key. ": ". $value. "\r\n";
 		}
 	 	// Kopie versenden an den originalen Absender...
-	 	mail($this->headerOptions['From'], $subject, $mail_body, $mail_properties);
+	 	if (!mail($this->headerOptions['From'], $subject, $mail_body, $mail_properties))
+	 	{
+	 		return FALSE;
+	 	}
 	}
 	return TRUE;
 }
