@@ -238,13 +238,13 @@ require("../../../adm_config/body_top.php");
          </div>";
 
          // Nur eingeloggte User duerfen Attachments mit max 3MB anhaengen...
-         if(($g_session_valid) && ($g_current_organization->mail_attachement_size > 0))
+         if(($g_session_valid) && ($g_current_organization->mail_size > 0))
          {
            echo "
            <div style=\"margin-top: 8px;\">
               <div style=\"text-align: right; width: 70px; float: left;\">Anhang:</div>
               <div style=\"text-align: left; margin-left: 80px;\">
-                 <input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"" . ($g_current_organization->mail_attachement_size * 1024) . "\">
+                 <input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"" . ($g_current_organization->mail_size * 1024) . "\">
                  <input name=\"userfile\" size=\"40\" type=\"file\">
               </div>
            </div>";
