@@ -31,6 +31,7 @@
 
 require("../../system/common.php");
 require("../../system/session_check.php");
+require_once("../../system/email_class.php");
 
 $err_code = "";
 $err_text = "";
@@ -49,14 +50,14 @@ if(array_key_exists("usr_id", $_GET) && !$g_session_valid)
 // Deswegen muss dies überprüft werden...
 if(empty($_POST))
 {
-   $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=attachment";
+   $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=attachment_or_invalid";
    header($location);
    exit();
 }
 
 if($g_current_organization->mail_extern == 1)
 {
-	// es duerfen oder koennen keine Mails ueber den Server verschickt werden
+   // es duerfen oder koennen keine Mails ueber den Server verschickt werden
    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=mail_extern";
    header($location);
    exit();
@@ -66,25 +67,49 @@ $_POST['mailfrom'] = trim($_POST['mailfrom']);
 $_POST['name']     = trim($_POST['name']);
 $_POST['subject']  = trim($_POST['subject']);
 
+//Erst mal ein neues Emailobjekt erstellen...
+$email = new newEmail();
+
+
+//Nun der Mail die Absenderangaben,den Betreff und das Attachment hinzufuegen...
 if(strlen($_POST['name']) > 0)
 {
-   if(isValidEmailAddress($_POST["mailfrom"]))
+   //Absenderangaben setzen
+   if ($email->setSender($_POST['mailfrom'],$_POST['name']))
    {
-      if(strlen($_POST['subject']) == 0)
-      {
-         $err_code = "feld";
-         $err_text = "Betreff";
-      }
-      else
-      {
-      	 if (($_FILES['userfile']['error'] != 0) &&  ($_FILES['userfile']['error'] != 4))
-      	 {
-      	 	$err_code = "attachment";
-     	 }
-      }
+		//Betreff setzen
+		if($email->setSubject($_POST['subject']))
+      	{
+      		//Prüfen ob ein Attachment bzw. ein Fehler beim Upload vorliegt
+      		if (($_FILES['userfile']['error'] != 0) &&  ($_FILES['userfile']['error'] != 4))
+      	 	{
+      	 		$err_code = "attachment";
+     	 	}
+     	 	//Wenn ein Attachment vorliegt dieses der Mail hinzufuegen
+   	 		if ($_FILES['userfile']['error'] == 0)
+   	 		{
+   	 			if (strlen($_FILES['userfile']['type']) > 0)
+   	 			{
+   	 				$email->addAttachment($_FILES['userfile']['tmp_name'], $_FILES['userfile']['name'], $_FILES['userfile']['type']);
+   	 			}
+   	 			// Falls kein ContentType vom Browser uebertragen wird,
+   	 			// setzt die MailKlasse automatisch "application/octet-stream" als FileTyp
+   	 			else
+   	 			{
+   	 				$email->addAttachment($_FILES['userfile']['tmp_name'], $_FILES['userfile']['name']);
+   	 			}
+   	 		}
+      	}
+      	else
+      	{
+      		$err_code = "feld";
+         	$err_text = "Betreff";
+      	}
    }
    else
-      $err_code = "email_invalid";
+   {
+   		$err_code = "email_invalid";
+   }
 }
 else
 {
@@ -125,6 +150,7 @@ if(array_key_exists("rolle", $_POST) && strlen($err_code) == 0)
    }
 }
 
+//Pruefen ob bis hier Fehler aufgetreten sind
 if(strlen($err_code) > 0)
 {
    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text";
@@ -132,97 +158,22 @@ if(strlen($err_code) > 0)
    exit();
 }
 
-// Funktion versendet die Mail an die uebergebene E-Mail-Adresse
-
-function sendMail($email, $rolle = "")
-{
-   global $g_orga_property;
-   global $g_session_valid;
-
-   $mail_body = "";
-
-   //Zufaelliges Trennzeichen zwischen MessageParts generieren
-   $mailBoundary = "--NextPart_AdmidioMailSystem_". md5(uniqid(rand()));
-
-
-   // E-Mail-Header zusammenbauen
-   $mail_properties = "From: ". $_POST['name']. " <". $_POST['mailfrom']. ">\n";
-   $mail_properties = $mail_properties. "MIME-Version: 1.0\n";
-
-
-   // Im Falle eines Attachments Header und Body um Zusaetze ergaenzen
-   if ($_FILES['userfile']['error'] != 4)
-   {
-      $mail_properties = $mail_properties. "Content-Type: multipart/mixed;\n\tboundary=\"$mailBoundary\"\n";
-
- 	  // E-Mail-Body fuer Attachment vorbereiten
-      $mail_body	= "This message is in MIME format.\n";
-      $mail_body	= $mail_body. "Since your mail reader does not understand this format,\n";
-      $mail_body	= $mail_body. "some or all of this message may not be legible.\n\n";
-
-      $mail_body = $mail_body. "--". $mailBoundary. "\nContent-Type: text/plain; charset=\"iso-8859-1\"\n\n";
-   }
-
-   // Eigentliche Nachricht an den Body anfuegen
-   $mail_body		= $mail_body. $_POST['name']. " hat ";
-   if(strlen($rolle) > 0)
-      $mail_body = $mail_body. "an die Rolle \"$rolle\"";
-   else
-      $mail_body = $mail_body. "Dir";
-
-   $mail_body = "$mail_body von $g_current_organization->homepage folgende Mail geschickt:\nEine Antwort kannst Du an ".
-                      $_POST['mailfrom']. " schicken.";
-
-   if(!$g_session_valid)
-   {
-      $mail_body = $mail_body. "\n(Der Absender war nicht eingeloggt. Deshalb könnten die Absenderangaben fehlerhaft sein.)";
-   }
-
-   $mail_body = $mail_body. "\n\n\n". $_POST['body']. "\n\n";
-
-
-   // Eventuell noch ein Attachment an die Mail haengen
-   if ($_FILES['userfile']['error'] != 4)
-   {
-      $mail_body = $mail_body. "--". $mailBoundary. "\nContent-Type: ". $_FILES['userfile']['type']. ";\n";
-      $mail_body = $mail_body. "\tname=\"". $_FILES['userfile']['name']. "\"\nContent-Transfer-Encoding: base64\n";
-      $mail_body = $mail_body. "Content-Disposition: attachment;\n\tfilename=\"". $_FILES['userfile']['name']. "\"\n\n";
-	  $theFile = fopen($_FILES['userfile']['tmp_name'], "rb");
-	  $fileContent = fread($theFile, $_FILES['userfile']['size']);
-
-	  // Attachment encodieren und splitten
-	  $fileContent = chunk_split(base64_encode($fileContent));
-
-	  $mail_body = $mail_body. $fileContent. "\n\n";
-
-	  // Das Ende der Mail mit der Boundary kennzeichnen...
-	  $mail_body = $mail_body. "--". $mailBoundary. "--";
-   }
-
-	return mail($email, $_POST['subject'], $mail_body, $mail_properties);
-}
-
+//Nun die Empfänger zusammensuchen und an das Mailobjekt uebergeben
 if(array_key_exists("usr_id", $_GET))
 {
-   $mail_receivers = "";
-
-   // usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
-   $sql    = "SELECT usr_email FROM ". TBL_USERS. " WHERE usr_id = {0} ";
+   //usr_id wurde uebergeben, dann Kontaktdaten des Users aus der DB fischen
+   $sql    = "SELECT usr_first_name, usr_last_name, usr_email FROM ". TBL_USERS. " WHERE usr_id = {0} ";
    $sql    = prepareSQL($sql, array($_GET['usr_id']));
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
-   $mail_receivers = "- \"$row->usr_email\" ";
-   $row = mysql_fetch_array($result);
-   if(sendMail($row[0]))
-   {
-   	 $mail_receivers = "- \"$row[0]\" ";
-   }
+   $row = mysql_fetch_row($result);
+
+   //den gefundenen User dem Mailobjekt hinzufuegen...
+   $email->addRecipient($row[2], "$row[0] $row[1]");
 }
 else
 {
-   $mail_receivers = "";
-
-   // Rolle wurde uebergeben, dann an alle Mitglieder eine Mail schreiben
+   //Rolle wurde uebergeben, dann an alle Mitglieder aus der DB fischen
    $sql    = "SELECT usr_first_name, usr_last_name, usr_email, rol_name
                 FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                WHERE rol_org_shortname = '$g_organization'
@@ -238,28 +189,69 @@ else
 
    while($row = mysql_fetch_object($result))
    {
-      if(sendMail($row->usr_email, $row->rol_name))
-      {
-         $mail_receivers = $mail_receivers. "- \"$row->usr_first_name $row->usr_last_name $row->usr_email\" ";
-      }
+      $email->addBlindCopy($row->usr_email, "$row->usr_first_name $row->usr_last_name");
+      $rolle = $row->rol_name;
    }
 }
 
-// jetzt noch eventuell eine Kopie der Mail an den Versender schicken...
+// Falls eine Kopie benoetigt wird, das entsprechende Flag im Mailobjekt setzen
 if($_POST[kopie])
 {
-	 $_POST['body'] = "Hier ist Deine angeforderte Kopie der Nachricht:\n\n". $_POST['body'];
-	 $_POST['body'] = $mail_receivers. "\n\n". $_POST['body'];
-	 $_POST['body'] = "Die Nachricht ging an:\n". $_POST['body'];
-	 sendMail($_POST['mailfrom']);
+	 $email->setCopyToSenderFlag();
 }
 
-if(strlen($_POST['rolle']) > 0)
-   $err_text = $_POST['rolle'];
-else
-   $err_text = $_POST['mailto'];
 
-$location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=mail_send&err_text=$err_text&url=". urlencode($_GET["url"]);
+//Den Text fuer die Mail aufbereiten
+$mail_body = $mail_body. $_POST['name']. " hat ";
+if(strlen($rolle) > 0)
+{
+	$mail_body = $mail_body. "an die Rolle \"$rolle\"";
+}
+else
+{
+	$mail_body = $mail_body. "Dir";
+}
+$mail_body = $mail_body. " von $g_current_organization->homepage folgende Mail geschickt:\n";
+$mail_body = $mail_body. "Eine Antwort kannst Du an ". $_POST['mailfrom']. " schicken.";
+
+if(!$g_session_valid)
+{
+    $mail_body = $mail_body. "\n(Der Absender war nicht eingeloggt. Deshalb könnten die Absenderangaben fehlerhaft sein.)";
+}
+$mail_body = $mail_body. "\n\n\n". $_POST['body'];
+
+//Den Text an das Mailobjekt uebergeben
+$email->setText($mail_body);
+
+
+//Nun kann die Mail endgueltig versendet werden...
+if ($email->sendEmail())
+{
+	if(strlen($_POST['rolle']) > 0)
+	{
+   		$err_text = "die Rolle ". $_POST['rolle'];
+	}
+	else
+	{
+		$err_text = $_POST['mailto'];
+	}
+	$err_code="mail_send";
+}
+else
+{
+	if(strlen($_POST['rolle']) > 0)
+	{
+   		$err_text = "die Rolle ". $_POST['rolle'];
+	}
+	else
+	{
+		$err_text = $_POST['mailto'];
+	}
+	$err_code="mail_not_send";
+}
+
+
+$location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text&url=". urlencode($_GET["url"]);
 header($location);
 exit();
 

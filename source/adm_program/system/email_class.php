@@ -67,8 +67,6 @@
  *
  *****************************************************************************/
 
-require("./common.php");
-
 // Email - Klasse
 class newEmail
 {
@@ -101,7 +99,12 @@ function setSender($address, $name='')
 // Funktion um den Betreff zu setzen
 function setSubject($subject)
 {
-	$this->headerOptions['Subject'] = $subject;
+	if (strlen($subject) > 0)
+	{
+		$this->headerOptions['Subject'] = $subject;
+		return TRUE;
+	}
+	return FALSE;
 }
 
 // Funktion um Hauptempfaenger hinzuzufuegen
@@ -183,13 +186,68 @@ function setCopyToSenderFlag()
 	$this->copyToSender = TRUE;
 }
 
+// Funktion um den Header aufzubereiten
+function prepareHeader()
+{
+	$this->mail_properties = '';
+	foreach ($this->headerOptions as $key => $value)
+	{
+		$this->mail_properties = $this->mail_properties. $key. ": ". $value. "\n";
+	}
+	//Den letzten Zeilenumbruch im Header entsorgen.
+	$this->mail_properties = substr($this->mail_properties,0,strlen($this->mail_properties)-1);
+}
+
+// Funktion um den Body zusammenzusetzen
+function prepareBody()
+{
+	$this->mail_body = '';
+
+	// Für die Attachments alles vorbereiten...
+	if (isset ($this->attachments))
+	{
+		$this->mail_body	= $this->mail_body. "This message is in MIME format.\n";
+		$this->mail_body	= $this->mail_body. "Since your mail reader does not understand this format,\n";
+    	$this->mail_body	= $this->mail_body. "some or all of this message may not be legible.\n\n";
+    	$this->mail_body	= $this->mail_body. "--". $this->mailBoundary. "\nContent-Type: text/plain; charset=\"iso-8859-1\"\n\n";
+	}
+
+	// Eigentlichen Mail-Text hinzufügen...
+	$this->mail_body = $this->mail_body. $this->text. "\n\n";
+
+	// Jetzt die Attachments hinzufuegen...
+	if (isset ($this->attachments))
+	{
+		for($i = 0; $i < count($this->attachments); $i++)
+		{
+			$thefile = '';
+			$fileContent = '';
+
+			$this->mail_body = $this->mail_body. "--". $this->mailBoundary. "\n";
+			$this->mail_body = $this->mail_body. "Content-Type: ". $this->attachments[$i]['file_type']. ";\n";
+			$this->mail_body = $this->mail_body. "\tname=\"". $this->attachments[$i]['orig_filename']. "\"\n";
+			$this->mail_body = $this->mail_body. "Content-Transfer-Encoding: base64\n";
+			$this->mail_body = $this->mail_body. "Content-Disposition: attachment;\n";
+			$this->mail_body = $this->mail_body. "\tfilename=\"". $this->attachments[$i]['orig_filename']. "\"\n\n";
+			$theFile = fopen($this->attachments[$i]['tmp_filename'], "rb");
+			$fileContent = fread($theFile, filesize($this->attachments[$i]['tmp_filename']));
+			fclose($theFile);
+
+			// Attachment encodieren und splitten...
+			$fileContent = chunk_split(base64_encode($fileContent));
+
+			// Attachment in den Body einfuegen...
+			$this->mail_body = $this->mail_body. $fileContent. "\n\n";
+		}
+		// Das Ende der Mail mit der Boundary kennzeichnen...
+		$this->mail_body = $this->mail_body. "--". $this->mailBoundary. "--";
+	}
+
+}
+
 // Funktion um die Email endgueltig zu versenden...
 function sendEmail()
 {
-	// Erst mal einen leeren Mailbody erstellen...
-	$mail_body = '';
-
-
 	// Wenn keine Absenderadresse gesetzt wurde, ist hier Ende im Gelände...
 	if (!isset($this->headerOptions['From']))
 	{
@@ -219,81 +277,39 @@ function sendEmail()
 	}
 
 	// Hier wird der Header für die Mail aufbereitet...
-	$mail_properties = '';
-	foreach ($this->headerOptions as $key => $value)
-	{
-		$mail_properties = $mail_properties. $key. ": ". $value. "\n";
-	}
-	//Den letzten Zeilenumbruch im Header entsorgen.
-	$mail_properties = substr($mail_properties,0,strlen($mail_properties)-1);
+	$this->prepareHeader();
 
-	// Für die Attachments alles vorbereiten...
-	if (isset ($this->attachments))
-	{
-		$mail_body	= $mail_body. "This message is in MIME format.\n";
-		$mail_body	= $mail_body. "Since your mail reader does not understand this format,\n";
-    	$mail_body	= $mail_body. "some or all of this message may not be legible.\n\n";
-    	$mail_body	= $mail_body. "--". $this->mailBoundary. "\nContent-Type: text/plain; charset=\"iso-8859-1\"\r\n\r\n";
-	}
-
-	// Eigentlichen Mail-Text hinzufügen...
-	$mail_body = $mail_body. $this->text. "\n\n";
-
-	// Jetzt die Attachments hinzufuegen...
-	if (isset ($this->attachments))
-	{
-		for($i = 0; $i < count($this->attachments); $i++)
-		{
-			$thefile = '';
-			$fileContent = '';
-
-			$mail_body = $mail_body. "--". $this->mailBoundary. "\r\n";
-			$mail_body = $mail_body. "Content-Type: ". $this->attachments[$i]['file_type']. ";\r\n";
-			$mail_body = $mail_body. "\tname=\"". $this->attachments[$i]['orig_filename']. "\"\r\n";
-			$mail_body = $mail_body. "Content-Transfer-Encoding: base64\r\n";
-			$mail_body = $mail_body. "Content-Disposition: attachment;\r\n";
-			$mail_body = $mail_body. "\tfilename=\"". $this->attachments[$i]['orig_filename']. "\"\r\n\r\n";
-			$theFile = fopen($this->attachments[$i]['tmp_filename'], "rb");
-			$fileContent = fread($theFile, filesize($this->attachments[$i]['tmp_filename']));
-			fclose($theFile);
-
-			// Attachment encodieren und splitten...
-			$fileContent = chunk_split(base64_encode($fileContent));
-
-			// Attachment in den Body einfuegen...
-			$mail_body = $mail_body. $fileContent. "\r\n\r\n";
-		}
-		// Das Ende der Mail mit der Boundary kennzeichnen...
-		$mail_body = $mail_body. "--". $this->mailBoundary. "--";
-	}
+	// Hier wird der Body für die Mail aufbereitet...
+	$this->prepareBody();
 
 	// Mail wird jetzt versendet...
-	if (!mail($recipient, $subject, $mail_body, $mail_properties))
+	if (!mail($recipient, $subject, $this->mail_body, $this->mail_properties))
 	{
 	 	return FALSE;
 	}
 
-	// Eventuell noch eine Kopie an den Absender:
+	// Eventuell noch eine Kopie an den Absender verschicken:
 	if ($this->copyToSender)
 	{
-		$mail_body = "Hier ist Deine angeforderte Kopie der Nachricht:\n\n". $mail_body;
-	 	$mail_body = $this->addresses. "\n". $mail_body;
-	 	$mail_body = "Diese Nachricht ging an:\n\n". $mail_body;
+		$this->text = "*******************************************************************\n\n". $this->text;
+		$this->text = "Hier ist Deine angeforderte Kopie der Nachricht:\n". $this->text;
+	 	$this->text = $this->addresses. "\n". $this->text;
+	 	$this->text = "Diese Nachricht ging an:\n\n". $this->text;
 	 	unset($this->headerOptions['To']);
 	 	unset($this->headerOptions['Cc']);
 	 	unset($this->headerOptions['Bcc']);
 
 	 	// Header für die Kopie aufbereiten...
-	 	$mail_properties = '';
-		foreach ($this->headerOptions as $key => $value)
-		{
-			$mail_properties = $mail_properties. $key. ": ". $value. "\n";
-		}
-		//Den letzten Zeilenumbruch im Header entsorgen.
-		$mail_properties = substr($mail_properties,0,strlen($mail_properties)-1);
+	 	$this->prepareHeader();
+
+	 	// Body für die Kopie aufbereiten...
+		$this->prepareBody();
+
+		//Das Subject modifizieren
+		$subject = "Kopie: ". $subject;
 
 	 	// Kopie versenden an den originalen Absender...
-	 	if (!mail($this->headerOptions['From'], $subject, $mail_body, $mail_properties))
+	 	if (!mail($this->headerOptions['From'], $subject, $this->mail_body, $this->mail_properties))
 	 	{
 	 		return FALSE;
 	 	}
