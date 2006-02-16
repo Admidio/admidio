@@ -117,7 +117,7 @@ function addRecipient($address, $name='')
 		{
 		$this->headerOptions['To'] = $this->headerOptions['To']. ", ". $name. " <". $address. ">";
 		}
-		$this->addresses = $this->addresses. $name. " <". $address. ">\r\n";
+		$this->addresses = $this->addresses. $name. " <". $address. ">\n";
 		return TRUE;
 	}
 	return FALSE;
@@ -136,7 +136,7 @@ function addCopy($address, $name='')
 		{
 		$this->headerOptions['Cc'] = $this->headerOptions['Cc']. ", ". $name. " <". $address. ">";
 		}
-		$this->addresses = $this->addresses. $name. " <". $address. ">\r\n";
+		$this->addresses = $this->addresses. $name. " <". $address. ">\n";
 		return TRUE;
 	}
 	return FALSE;
@@ -155,7 +155,7 @@ function addBlindCopy($address, $name='')
 		{
 		$this->headerOptions['Bcc'] = $this->headerOptions['Bcc']. ", ". $name. " <". $address. ">";
 		}
-		$this->addresses = $this->addresses. $name. " <". $address. ">\r\n";
+		$this->addresses = $this->addresses. $name. " <". $address. ">\n";
 		return TRUE;
 	}
 	return FALSE;
@@ -221,20 +221,22 @@ function sendEmail()
 	$mail_properties = '';
 	foreach ($this->headerOptions as $key => $value)
 	{
-		$mail_properties = $mail_properties. $key. ": ". $value. "\r\n";
+		$mail_properties = $mail_properties. $key. ": ". $value. "\n";
 	}
+	//Den letzten Zeilenumbruch im Header entsorgen.
+	$mail_properties = substr($mail_properties,0,strlen($mail_properties)-1);
 
 	// Für die Attachments alles vorbereiten...
 	if (isset ($this->attachments))
 	{
-		$mail_body	= $mail_body. "This message is in MIME format.\r\n";
-		$mail_body	= $mail_body. "Since your mail reader does not understand this format,\r\n";
-    	$mail_body	= $mail_body. "some or all of this message may not be legible.\r\n\r\n";
+		$mail_body	= $mail_body. "This message is in MIME format.\n";
+		$mail_body	= $mail_body. "Since your mail reader does not understand this format,\n";
+    	$mail_body	= $mail_body. "some or all of this message may not be legible.\n\n";
     	$mail_body	= $mail_body. "--". $this->mailBoundary. "\nContent-Type: text/plain; charset=\"iso-8859-1\"\r\n\r\n";
 	}
 
 	// Eigentlichen Mail-Text hinzufügen...
-	$mail_body = $mail_body. $this->text. "\r\n\r\n";
+	$mail_body = $mail_body. $this->text. "\n\n";
 
 	// Jetzt die Attachments hinzufuegen...
 	if (isset ($this->attachments))
@@ -273,9 +275,9 @@ function sendEmail()
 	// Eventuell noch eine Kopie an den Absender:
 	if ($this->copyToSender)
 	{
-		$mail_body = "Hier ist Deine angeforderte Kopie der Nachricht:\r\n\r\n". $mail_body;
-	 	$mail_body = $this->addresses. "\r\n\r\n". $mail_body;
-	 	$mail_body = "Diese Nachricht ging an:\r\n\r\n". $mail_body;
+		$mail_body = "Hier ist Deine angeforderte Kopie der Nachricht:\n\n". $mail_body;
+	 	$mail_body = $this->addresses. "\n". $mail_body;
+	 	$mail_body = "Diese Nachricht ging an:\n\n". $mail_body;
 	 	unset($this->headerOptions['To']);
 	 	unset($this->headerOptions['Cc']);
 	 	unset($this->headerOptions['Bcc']);
@@ -284,8 +286,11 @@ function sendEmail()
 	 	$mail_properties = '';
 		foreach ($this->headerOptions as $key => $value)
 		{
-			$mail_properties = $mail_properties. $key. ": ". $value. "\r\n";
+			$mail_properties = $mail_properties. $key. ": ". $value. "\n";
 		}
+		//Den letzten Zeilenumbruch im Header entsorgen.
+		$mail_properties = substr($mail_properties,0,strlen($mail_properties)-1);
+
 	 	// Kopie versenden an den originalen Absender...
 	 	if (!mail($this->headerOptions['From'], $subject, $mail_body, $mail_properties))
 	 	{
