@@ -263,11 +263,11 @@ function getErrorText($error_code, $error_text)
       case "enddatum":
          $error_str = "Das eingegebene Enddatum ist ung&uuml;ltig.<br />";
           break;
-		
+
 		case "startvorend":
          $error_str = "Das eingegebene Enddatum liegt vor dem Anfangsdatum.<br />";
           break;
-            
+
       case "veranstaltung":
          $error_str = "Es muss ein Name f&uuml;r die Veranstaltung eingegeben weden.<br />";
           break;
@@ -284,9 +284,9 @@ function getErrorText($error_code, $error_text)
       case "photo_deleted":
          $error_str = "Das Foto wurde erfolgreich gel&ouml;scht.";
          break;
-         
+
      case "photo_2big":
-         $error_str = "Mindestens eins der hochgeladenen Fotos &uuml;bersteigt die zulässige 
+         $error_str = "Mindestens eins der hochgeladenen Fotos &uuml;bersteigt die zulässige
 							Dateigr&ouml;&szlig;e von ".$g_current_organization->photo_size."KB.";
          break;
 
@@ -297,7 +297,7 @@ function getErrorText($error_code, $error_text)
       case "invalid_folder":
          $error_str = "Sie haben einen ung&uuml;ltigen Ordner aufgerufen !";
          break;
-         
+
       case "invalid_folder":
          $error_str = "Sie haben eine ung&uuml;ltigen Datei aufgerufen !";
          break;
@@ -360,8 +360,17 @@ function getErrorText($error_code, $error_text)
          $error_str = "Deine Mail wurde erfolgreich an <b>$error_text</b> versendet.";
          break;
 
+      case "mail_not_send":
+         $error_str = "Deine Mail konnte leider nicht an <b>$error_text</b> gesendet werden.";
+         break;
+
       case "attachment":
          $error_str = "Dein Dateinanhang konnte nicht hochgeladen werden.<br />
+         Vermutlich ist das Attachment zu groß!";
+         break;
+
+      case "attachment_or_invalid":
+         $error_str = "Die Seite wurde ungültig aufgerufen oder Dein Dateinanhang konnte nicht hochgeladen werden.<br />
          Vermutlich ist das Attachment zu groß!";
          break;
 
