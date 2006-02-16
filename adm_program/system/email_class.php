@@ -183,6 +183,7 @@ function setCopyToSenderFlag()
 	$this->copyToSender = TRUE;
 }
 
+// Funktion um die Email endgueltig zu versenden...
 function sendEmail()
 {
 	// Erst mal einen leeren Mailbody erstellen...
@@ -299,7 +300,6 @@ function sendEmail()
 	}
 	return TRUE;
 }
-
 
 
 } // Ende der Klasse
