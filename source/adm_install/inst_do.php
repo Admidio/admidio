@@ -33,7 +33,7 @@ require("../adm_program/system/function.php");
 // mode = 0 (Default) Fehlerausgabe
 // mode = 1 Aktion wird durchgefuehrt (Abbrechen)
 // mode = 2 Aktion erfolgreich durchgefuehrt
-function showError($err_msg, $err_head = "Fehler", $mode = 0)
+function showError($err_msg, $err_head = "Fehler", $mode = 1)
 {
    global $g_root_path;
 
@@ -57,25 +57,18 @@ function showError($err_msg, $err_head = "Fehler", $mode = 0)
          <div class="formBody" style="width: 300px;">
             <p>'. $err_msg. '</p>
             <p><button id="zurueck" type="button" value="zurueck" onclick="';
-            if($mode == 2)
-            {
-            	// Erfolgreich durchgefuehrt
-               echo 'self.location.href=\'../adm_program/index.php\'">
-					<img src="../adm_program/images/list.png" style="vertical-align: middle;" align="top" vspace="1" width="16" height="16" border="0" alt="Zurueck"> Admidio &Uuml;bersicht';
-				}
-				elseif($mode == 1)
-				{
-					// In Bearbeitung (Zurueckgehen)
-               echo 'history.back()">
-					<img src="../adm_program/images/error.png" style="vertical-align: middle;" align="top" vspace="1" width="16" height="16" border="0" alt="Zurueck">
-					Abbrechen';
-				}
-            else
+            if($mode == 1)
             {
             	// Fehlermeldung (Zurueckgehen)
                echo 'history.back()">
 					<img src="../adm_program/images/back.png" style="vertical-align: middle;" align="top" vspace="1" width="16" height="16" border="0" alt="Zurueck">
 					Zur&uuml;ck';
+				}
+            elseif($mode == 2)
+            {
+            	// Erfolgreich durchgefuehrt
+               echo 'self.location.href=\'../adm_program/index.php\'">
+					<img src="../adm_program/images/list.png" style="vertical-align: middle;" align="top" vspace="1" width="16" height="16" border="0" alt="Zurueck"> Admidio &Uuml;bersicht';
 				}
             echo '</button></p>
          </div>
@@ -296,8 +289,6 @@ if($_GET['mode'] == 3)
    // Updatescripte fuer die Datenbank verarbeiten
    if($_POST['version'] > 0)
    {
-		showError("Die Datenbank wird aktualisiert ...", "In Bearbeitung", 1);
-
       for($i = $_POST['version']; $i <= 2; $i++)
       {
          if($i == 1)
