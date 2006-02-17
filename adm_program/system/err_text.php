@@ -24,10 +24,9 @@
  *
  *****************************************************************************/
 
-function getErrorText($error_code, $error_text)
+function getErrorText($error_code, $error_text, $g_current_organization)
 {
    global $g_root_path;
-   global $g_organization;
 
    switch ($error_code)
    {
@@ -77,11 +76,11 @@ function getErrorText($error_code, $error_text)
          break;
 
       case "delete_member":
-         $error_str = "Wollen Sie die Mitgliedschaft des Benutzers $error_text bei $g_organization beenden ?";
+         $error_str = "Wollen Sie die Mitgliedschaft des Benutzers $error_text bei $g_current_organization->longname beenden ?";
          break;
 
       case "delete_member_ok":
-         $error_str = "Die Mitgliedschaft des Benutzers bei $g_organization
+         $error_str = "Die Mitgliedschaft des Benutzers bei $g_current_organization->longname
          wurde erfolgreich beendet !";
          break;
 
