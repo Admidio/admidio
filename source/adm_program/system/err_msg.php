@@ -130,7 +130,7 @@ echo '
    <div class="formHead" style="width: 350px">'. strspace($_GET['err_head']). '</div>
 
    <div class="formBody" style="width: 350px">
-      <p>'. getErrorText($err_code, $err_text). '</p>
+      <p>'. getErrorText($err_code, $err_text, $g_current_organization). '</p>
       <p>';
          if($_GET['timer'] > 0)
          {
