@@ -31,7 +31,7 @@
 
 require("../../system/common.php");
 require("../../system/session_check.php");
-require_once("../../system/email_class.php");
+require("../../system/email_class.php");
 
 $err_code = "";
 $err_text = "";
@@ -79,13 +79,16 @@ if(strlen($_POST['name']) > 0)
    {
 		//Betreff setzen
 		if($email->setSubject($_POST['subject']))
+      {
+      	//Pruefen ob moeglicher Weise ein Attachment vorliegt
+      	if (isset($_FILES['userfile']))
       	{
-      		//Prüfen ob ein Attachment bzw. ein Fehler beim Upload vorliegt
-      		if (($_FILES['userfile']['error'] != 0) &&  ($_FILES['userfile']['error'] != 4))
-      	 	{
-      	 		$err_code = "attachment";
-     	 	}
-     	 	//Wenn ein Attachment vorliegt dieses der Mail hinzufuegen
+      		//Prüfen ob ein Fehler beim Upload vorliegt
+  		    	if (($_FILES['userfile']['error'] != 0) &&  ($_FILES['userfile']['error'] != 4))
+      		{
+      			$err_code = "attachment";
+     	 		}
+     	 		//Wenn ein Attachment vorliegt dieses der Mail hinzufuegen
    	 		if ($_FILES['userfile']['error'] == 0)
    	 		{
    	 			if (strlen($_FILES['userfile']['type']) > 0)
@@ -100,11 +103,12 @@ if(strlen($_POST['name']) > 0)
    	 			}
    	 		}
       	}
-      	else
-      	{
-      		$err_code = "feld";
-         	$err_text = "Betreff";
-      	}
+      }
+      else
+      {
+      	$err_code = "feld";
+        	$err_text = "Betreff";
+      }
    }
    else
    {
