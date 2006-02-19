@@ -133,6 +133,12 @@ if($_GET["mode"] == 1)
    else
    {
       $local_file = $_FILES['userfile']['name'];
+      //Dateigroesse ueberpruefen
+      if ($_FILES['userfile']['size']>($g_current_organization->upload_size)*1000){
+      	$location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=file_2big";
+      	header($location);
+      	exit();
+      }
       // Datei-Extension ermitteln
       if(strpos($local_file, ".") !== false)
       {
@@ -146,7 +152,7 @@ if($_GET["mode"] == 1)
       }
 
       // wenn neuer Name uebergeben wurde, dann diesen nehmen
-      IF(strlen($_POST['new_name']) > 0)
+      if(strlen($_POST['new_name']) > 0)
          $file_name = $_POST['new_name'];
 
       // Zielpfad mit Dateinamen zusammensetzen
