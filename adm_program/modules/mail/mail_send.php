@@ -202,8 +202,13 @@ else
 if($_POST[kopie])
 {
 	 $email->setCopyToSenderFlag();
-}
 
+	 //Falls der User eingeloggt ist, werden die Empfänger der Mail in der Kopie aufgelistet
+	 if($g_session_valid)
+	 {
+	 	$email->setListRecipientsFlag();
+	 }
+}
 
 //Den Text fuer die Mail aufbereiten
 $mail_body = $mail_body. $_POST['name']. " hat ";

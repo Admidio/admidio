@@ -46,6 +46,10 @@
  * Bei Bedarf kann man sich eine Kopie der Mail zuschicken lassen (optional):
  * function setCopyToSenderFlag()
  *
+ * Sollen in der Kopie zusaetzlich noch alle Empfaenger aufgelistet werden,
+ * muss folgende Funktion auch noch aufgerufen werden (optional):
+ * function setListRecipientsFlag()
+ *
  * Am Ende muss die Mail natürlich noch gesendet werden:
  * function sendEmail();
  *
@@ -79,6 +83,7 @@ function newEmail()
 
 	$this->mailBoundary = "--NextPart_AdmidioMailSystem_". md5(uniqid(rand()));
 	$this->copyToSender = FALSE;
+	$this->listRecipients = FALSE;
 
 	//Hier werden noch mal alle Empfänger der Mail reingeschrieben,
 	//für den Fall das eine Kopie der Mail angefordert wird...
@@ -184,6 +189,12 @@ function addAttachment($tmp_filename, $orig_filename = '', $file_type='applicati
 function setCopyToSenderFlag()
 {
 	$this->copyToSender = TRUE;
+}
+
+// Funktion um das Flag zu setzen, dass in der Kopie alle Empfänger der Mail aufgelistet werden
+function setListRecipientsFlag()
+{
+	$this->listRecipients = TRUE;
 }
 
 // Funktion um den Header aufzubereiten
@@ -293,8 +304,15 @@ function sendEmail()
 	{
 		$this->text = "*******************************************************************\n\n". $this->text;
 		$this->text = "Hier ist Deine angeforderte Kopie der Nachricht:\n". $this->text;
-	 	$this->text = $this->addresses. "\n". $this->text;
-	 	$this->text = "Diese Nachricht ging an:\n\n". $this->text;
+
+	 	//Falls das listRecipientsFlag gesetzt ist werden in der Kopie
+	 	//die einzelnen Empfaenger aufgelistet:
+	 	if ($this->listRecipients)
+	 	{
+	 		$this->text = $this->addresses. "\n". $this->text;
+	 		$this->text = "Diese Nachricht ging an:\n\n". $this->text;
+	 	}
+
 	 	unset($this->headerOptions['To']);
 	 	unset($this->headerOptions['Cc']);
 	 	unset($this->headerOptions['Bcc']);
