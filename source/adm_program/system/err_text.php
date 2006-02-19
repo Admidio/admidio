@@ -285,7 +285,7 @@ function getErrorText($error_code, $error_text, $g_current_organization)
          break;
 
      case "photo_2big":
-         $error_str = "Mindestens eins der hochgeladenen Fotos &uuml;bersteigt die zulässige
+         $error_str = "Mindestens eins der hochgeladenen Fotos &uuml;bersteigt die zul&auml;ssige
 							Dateigr&ouml;&szlig;e von ".$g_current_organization->photo_size."KB.";
          break;
 
@@ -349,6 +349,11 @@ function getErrorText($error_code, $error_text, $g_current_organization)
 
       case "rename_file":
          $error_str = "Die Datei <b>$error_text</b> wurde umbenannt.";
+         break;
+         
+      case "file_2big":
+         $error_str = "Die hochgeladene Datei &uuml;bersteigt die zul&auml;ssige
+							Dateigr&ouml;&szlig;e von ".$g_current_organization->upload_size."KB.";
          break;
 
 //Ende Fehlermeldungen Downloadmodul
