@@ -396,6 +396,16 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
    $sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
    $result = mysql_query($sql, $connection);
    if(!$result) showError(mysql_error());
+   
+	// Vorstand
+   $sql = "INSERT INTO ". TBL_ROLES. " (rol_org_shortname, rol_rlc_id, rol_name, rol_description, rol_valid,
+                                  rol_moderation, rol_dates, rol_photo, rol_download,
+                                  rol_edit_user, rol_mail_logout, rol_mail_login)
+                VALUES ({0}, $category_common, 'Vorstand', 'Vorstand des Vereins', 1,
+                                   0, 1, 0, 0, 1, 1, 1) ";
+   $sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
+   $result = mysql_query($sql, $connection);
+   if(!$result) showError(mysql_error());
 }
 
 // bei Installation oder hinzufügen einer Organisation
