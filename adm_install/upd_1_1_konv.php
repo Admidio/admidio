@@ -31,25 +31,25 @@ $yahoo_id = 0;
 
 // IDs der einzelnen Messenger auslesen
 
-$sql = "SELECT auf_id FROM ". TBL_USER_FIELDS. " WHERE auf_type = 'MESSENGER' AND auf_name = 'AIM' ";
+$sql = "SELECT auf_id FROM adm_user_field WHERE auf_type = 'MESSENGER' AND auf_name = 'AIM' ";
 $result = mysql_query($sql, $connection);
 if(!$result) showError(mysql_error());
 $row = mysql_fetch_object($result);
 $aim_id = $row->auf_id;
 
-$sql = "SELECT auf_id FROM ". TBL_USER_FIELDS. " WHERE auf_type = 'MESSENGER' AND auf_name = 'ICQ' ";
+$sql = "SELECT auf_id FROM adm_user_field WHERE auf_type = 'MESSENGER' AND auf_name = 'ICQ' ";
 $result = mysql_query($sql, $connection);
 if(!$result) showError(mysql_error());
 $row = mysql_fetch_object($result);
 $icq_id = $row->auf_id;
 
-$sql = "SELECT auf_id FROM ". TBL_USER_FIELDS. " WHERE auf_type = 'MESSENGER' AND auf_name = 'MSN' ";
+$sql = "SELECT auf_id FROM adm_user_field WHERE auf_type = 'MESSENGER' AND auf_name = 'MSN' ";
 $result = mysql_query($sql, $connection);
 if(!$result) showError(mysql_error());
 $row = mysql_fetch_object($result);
 $msn_id = $row->auf_id;
 
-$sql = "SELECT auf_id FROM ". TBL_USER_FIELDS. " WHERE auf_type = 'MESSENGER' AND auf_name = 'YAHOO' ";
+$sql = "SELECT auf_id FROM adm_user_field WHERE auf_type = 'MESSENGER' AND auf_name = 'YAHOO' ";
 $result = mysql_query($sql, $connection);
 if(!$result) showError(mysql_error());
 $row = mysql_fetch_object($result);
@@ -57,7 +57,7 @@ $yahoo_id = $row->auf_id;
 
 // alle User selektieren, die einen Messenger zugeordnet haben
 
-$sql = "SELECT au_id, au_messenger, au_messenger_id FROM ". TBL_USERS. " WHERE au_messenger > 0 ";
+$sql = "SELECT au_id, au_messenger, au_messenger_id FROM adm_user WHERE au_messenger > 0 ";
 $result_user = mysql_query($sql, $connection);
 if(!$result_user) showError(mysql_error());
 
@@ -80,14 +80,14 @@ while($row_usr = mysql_fetch_object($result_user))
          break;
    }
    
-   // neuen Satz in ". TBL_USER_DATA. " einfuegen
-   $sql = "INSERT INTO ". TBL_USER_DATA. " (aud_au_id, aud_auf_id, aud_value) VALUES ($row_usr->au_id, $messenger_id, '$row_usr->au_messenger_id') ";
+   // neuen Satz in adm_user_data einfuegen
+   $sql = "INSERT INTO adm_user_data (aud_au_id, aud_auf_id, aud_value) VALUES ($row_usr->au_id, $messenger_id, '$row_usr->au_messenger_id') ";
    $result = mysql_query($sql, $connection);
    if(!$result) showError(mysql_error());
 }
 
-// die beiden alten Messengerfelder in ". TBL_USERS. " loeschen
-$sql = "ALTER TABLE `". TBL_USERS. "` DROP `au_messenger`, DROP `au_messenger_id` ";
+// die beiden alten Messengerfelder in adm_user loeschen
+$sql = "ALTER TABLE adm_user DROP au_messenger, DROP au_messenger_id ";
 $result = mysql_query($sql, $connection);
 if(!$result) showError(mysql_error());
 

@@ -292,7 +292,7 @@ if($_GET['mode'] == 3)
       for($i = $_POST['version']; $i <= 2; $i++)
       {
          if($i == 1)
-            $filename = "upd_1_1_db.sql";
+            $filename = "upd_1_1_db.sql";            
         	else
         		$filename = "";
 
@@ -317,9 +317,13 @@ if($_GET['mode'] == 3)
 			}
 
          if($i == 1)
+         {
             include("upd_1_1_konv.php");
-         if($i == 2)
+         }
+         elseif($i == 2)
+         {
             include("upd_1_2_konv.php");
+         }
       }
    }
    else
@@ -341,8 +345,8 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
                  W&auml;hlen Sie bitte einen anderen kurzen Namen !");
    }
 
-   $sql = "INSERT INTO ". TBL_ORGANIZATIONS. " (org_shortname, org_longname, org_homepage)
-                VALUES ({0}, {1}, '". $_SERVER['HTTP_HOST']. "') ";
+   $sql = "INSERT INTO ". TBL_ORGANIZATIONS. " (org_shortname, org_longname, org_homepage, org_font)
+                VALUES ({0}, {1}, '". $_SERVER['HTTP_HOST']. "', 'mr_phone1.ttf') ";
    $sql = prepareSQL($sql, array($_POST['verein-name-kurz'], $_POST['verein-name-lang']));
    $result = mysql_query($sql, $connection);
    if(!$result) showError(mysql_error());
