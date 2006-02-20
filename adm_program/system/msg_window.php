@@ -70,11 +70,6 @@ echo "
                         <td valign=\"top\">Text <b>[i]</b>kursiv<b>[/i]</b> darstellen</td>
                      </tr>
                      <tr>
-                        <td valign=\"top\">Text <span style=\"color: #ff0000\">rot</span> darstellen</td>
-                        <td valign=\"top\">Text <b>[color=red]</b>rot<b>[/color]</b> darstellen<br>" .
-                        "   oder <b>[color=#ff0000]</b>rot<b>[/color]</b></td>
-                     </tr>
-                     <tr>
                         <td valign=\"top\">Text <span style=\"font-size: 14pt;\">gro&szlig;</span> darstellen</td>
                         <td valign=\"top\">Text <b>[big]</b>gro&szlig;<b>[/big]</b> darstellen</td>
                      </tr>
