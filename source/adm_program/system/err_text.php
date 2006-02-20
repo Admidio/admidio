@@ -210,7 +210,7 @@ function getErrorText($error_code, $error_text, $g_current_organization)
 
       case "uhrzeit":
          $error_str = "Es wurde keine sinnvolle Uhrzeit eingegeben.<br /><br />
-               Die Uhrzeit muss zwischen 00:00 und 23:55 liegen !";
+               Die Uhrzeit muss zwischen 00:00 und 23:59 liegen !";
          break;
 
       case "zuordnen":
