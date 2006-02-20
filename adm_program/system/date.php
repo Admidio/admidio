@@ -227,40 +227,52 @@ function dtFormatDate($date, $format = "")
    $day   = "";
    $month = "";
    $year  = "";
-   $arrDate = explode(".", $date);
-
-	if(count($arrDate) == 3)
+   
+   // String auf gueltige Zeichen pruefen
+	$anz = strspn($date, "0123456789. ");
+	if($anz == strlen($date))
 	{
-		// Tag
-		if($arrDate[0] < 10 && strlen($arrDate[0]) == 1)
-			$day = "0". $arrDate[0];
-		else
-			$day = $arrDate[0];
-		// Monat
-		if($arrDate[1] < 10 && strlen($arrDate[1]) == 1)
-			$month = "0". $arrDate[1];
-		else
-			$month = $arrDate[1];
-		// Jahr
-		if($arrDate[2] < 100)
+		$arrDate = explode(".", $date);
+		
+		// wenn Jahr nicht angegeben wurde, dann aktuelles Jahr nehmen
+		if(count($arrDate) == 2 || strlen($arrDate[2]) == 0)
+			$arrDate[2] = date('Y', time());
+
+		if(count($arrDate) == 3)
 		{
-			if(strlen($arrDate[2]) == 0)
-				$year = date("Y");
+			// Tag
+			if($arrDate[0] < 10 && strlen($arrDate[0]) == 1)
+				$day = "0". $arrDate[0];
 			else
+				$day = $arrDate[0];
+			// Monat
+			if($arrDate[1] < 10 && strlen($arrDate[1]) == 1)
+				$month = "0". $arrDate[1];
+			else
+				$month = $arrDate[1];
+			// Jahr
+			if($arrDate[2] < 100)
 			{
-				if($arrDate[2] > 30)
-					$year = "19". $arrDate[2];
+				if(strlen($arrDate[2]) == 0)
+					$year = date("Y");
 				else
-					$year = "20". $arrDate[2];
+				{
+					if($arrDate[2] > 30)
+						$year = "19". $arrDate[2];
+					else
+						$year = "20". $arrDate[2];
+				}
 			}
+			else
+				$year = $arrDate[2];
+
+			if(strlen($format) > 0)
+				return date($format, mktime(0, 0, 0, $month, $day, $year));
+			else
+				return "$day.$month.$year";
 		}
 		else
-			$year = $arrDate[2];
-
-		if(strlen($format) > 0)
-			return date($format, mktime(0, 0, 0, $month, $day, $year));
-		else
-			return "$day.$month.$year";
+			return "";
 	}
 	else
 		return "";
@@ -271,7 +283,7 @@ function dtFormatDate($date, $format = "")
 
 function dtCheckTime($time)
 {
-   $formatTime = dtFormatDate($time);
+   $formatTime = dtFormatTime($time);
 
 	if(strlen($formatTime) > 0)
 	{
@@ -304,10 +316,13 @@ function dtFormatTime($time, $format = "")
    $hour   = "";
    $minute = "";
    $second = "";
-   $arrTime = explode(":", $time);
-
-	if(count($arrTime) == 3)
+   
+   // String auf gueltige Zeichen pruefen
+	$anz = strspn($time, "0123456789: ");
+	if($anz == strlen($time))
 	{
+		$arrTime = explode(":", $time);
+
 		// Stunde
 		if(count($arrTime) > 0)
 		{
@@ -333,7 +348,7 @@ function dtFormatTime($time, $format = "")
 			$second = $arrTime[2];
 		else
 			$second = "00";
-
+			
 		if(strlen($format) > 0)
 			return date($format, mktime($hour, $minute, $second));
 		else

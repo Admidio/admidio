@@ -81,8 +81,8 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
       // wenn Datum gueltig, dann speichern
       if(dtCheckDate($_POST['datum_von']))
       {
-         if(dtCheckTime($_POST['uhrzeit_von'])
-         || $_POST['uhrzeit_von'] == "")
+         if(strlen($_POST['uhrzeit_von']) == 0
+         || dtCheckTime($_POST['uhrzeit_von']) == true)
          {
             $dt_datum_von = dtFormatDate($_POST['datum_von'], "Y-m-d"). " ". dtFormatTime($_POST['uhrzeit_von']);
 
@@ -90,7 +90,7 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
             if(strlen($_POST['datum_bis'])   == 0)
                $_POST['datum_bis']   = $_POST['datum_von'];
             if(strlen($_POST['uhrzeit_bis']) == 0)
-               $_POST['uhrzeit_bis'] = $_POST['uhrzeit_von'];
+               $_POST['uhrzeit_bis'] = "00:00:00";
 
             if(dtCheckDate($_POST['datum_bis']))
             {
