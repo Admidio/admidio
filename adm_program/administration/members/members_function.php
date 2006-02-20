@@ -252,8 +252,8 @@ elseif($_GET["mode"] == 4)
       exit();
    }
 
-   $user     = new TblUsers;
-   $user->GetUser($_GET['user_id'], $g_adm_con);
+   $user     = new TblUsers($g_adm_con);
+   $user->GetUser($_GET['user_id']);
 
 	if($g_current_organization->mail_extern != 1)
 	{
