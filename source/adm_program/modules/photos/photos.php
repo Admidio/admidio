@@ -133,7 +133,11 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL){
          <img src=\"$g_root_path/adm_program/images/folder_create.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Veranstaltung anlegen\">  Veranstaltung anlegen
         </button><br><br>";
    }
-   
+  //Haupttabelle
+  	//Spaltenzahl je nach Photoedit oder nicht
+  	$colums=4;
+  	if($g_session_valid && editPhoto())$colums=5;
+  echo"<table class=\"tableList\" cellpadding=\"4\" cellspacing=\"0\">"; 
 /*************************THUMBNAILS**********************************/	  
  //Nur wenn Veranstaltung übergeben wurde
  if($adm_photo["pho_quantity"]>0){
@@ -150,9 +154,8 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL){
 
 	//Rahmung der Galerie
    echo"
-	<table class=\"tableList\" cellpadding=\"5\" cellspacing=\"0\" style=\"width: 580px\">
-		<tr><th class=\"tableHeader\" style=\"text-align: center; font-size: 12pt;\">". strspace($adm_photo["pho_name"]). "</th></tr>
-		<tr style=\"text-align: center;\"><td>";
+		<tr><th td colspan=\"$colums\" class=\"tableHeader\" style=\"text-align: center; font-size: 12pt;\">". strspace($adm_photo["pho_name"]). "</th></tr>
+		<tr style=\"text-align: center;\"><td colspan=\"$colums\">";
 		echo"Datum: ".mysqldate("d.m.y", $adm_photo["pho_begin"]);
          if($adm_photo["pho_end"] != $adm_photo["pho_begin"])echo " bis ".mysqldate("d.m.y", $adm_photo["pho_end"]);
 		echo"<br> Seite:&nbsp;";
@@ -170,8 +173,9 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL){
 		$nachseite=$seite+1;
 		if($nachseite<=$seiten)
 			echo"	<a href=\"photos.php?seite=$nachseite&amp;pho_id=$pho_id\">N&auml;chste</a>";
-		echo"
-      <table cellpadding=\"5\" cellspacing=\"0\" border=\"0\" style=\"width: 100%\">";
+		echo"</td></tr>
+		<tr style=\"text-align: center;\"><td td colspan=\"$colums\">
+      <table cellpadding=\"4\" cellspacing=\"0\" border=\"0\" style=\"width: 100%\">";
          for($zeile=1;$zeile<=5;$zeile++){//durchlaufen der Tabellenzeilen
             echo "<tr>";
             for($spalte=1;$spalte<=5;$spalte++){//durchlaufen der Tabellenzeilen
@@ -206,7 +210,7 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL){
 			</td></tr>";
       echo "</table>";
    echo"
-	</td></tr></table>";
+	</td></tr>";
   }
 /************************Veranstaltungsliste*************************************/	
 
@@ -223,15 +227,14 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL){
    //anlegen der Veranstaltungstabelle und ausgeb der Kopfzeile wenn Ergbnis vorliegt
    if(mysql_num_rows($result_list)>0 || $pho_id==""){
    	echo "
-   	<table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\" style=\"width: 580px\">
-      	<tr>
-         	<th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;Veranstaltung</th>
-         	<th class=\"tableHeader\" style=\"text-align: center;\">Datum</th>
-         	<th class=\"tableHeader\" style=\"text-align: center;\">Bilder</th>
-         	<th class=\"tableHeader\" style=\"text-align: center;\">Letze &Auml;nderung</th>";
-         	if ($g_session_valid && editPhoto())
-            	echo"<th class=\"tableHeader\" style=\"text-align: center; width: 90px;\">Bearbeiten</th>";
-     			 echo"</tr>";
+     	<tr>
+        	<th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;Veranstaltung</th>
+        	<th class=\"tableHeader\" style=\"text-align: center;\">Datum</th>
+        	<th class=\"tableHeader\" style=\"text-align: center;\">Bilder</th>
+        	<th class=\"tableHeader\" style=\"text-align: center;\">Letze &Auml;nderung</th>";
+        	if ($g_session_valid && editPhoto())
+           	echo"<th class=\"tableHeader\" style=\"text-align: center; width: 90px;\">Bearbeiten</th>";
+ 			 echo"</tr>";
 
 	//durchlaufen des Result-Tabelle und Ausgabe in Veranstaltungstabelle
    	$bildersumme=0;//Summe der Bilder in den Unterordnern
@@ -314,13 +317,16 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL){
          	<th class=\"tableHeader\" style=\"text-align: center;\">$bildersumme</th>
          	<th class=\"tableHeader\">&nbsp;</th>";
          	if ($g_session_valid && editPhoto($g_organization))echo"<th class=\"tableHeader\" colspan=\"2\">&nbsp;</th>";
-         echo"</tr>
-   	</table>";
+         echo"</tr>";
    }//if mehr als ein Ergebnis
 /****************************Leere Veranstaltung****************/
 //Falls die Veranstaltung weder Bilder noch Unterordner enthält
    if($adm_photo["pho_quantity"]=="0" && mysql_num_rows($result_list)==0)
-   echo"Diese Veranstaltung enth&auml;lt leider noch keine Bilder.<br><br>";
+   echo"<tr style=\"text-align: center;\"><td td colspan=\"$colums\">
+				Diese Veranstaltung enth&auml;lt leider noch keine Bilder.
+			</td></tr>";
+/************************Ende Haupttabelle**********************/
+echo"</table>";
 /************************Buttons********************************/
 	//Uebersicht
 	if($adm_photo["pho_id"]!=NULL)
