@@ -100,7 +100,7 @@ while($row = mysql_fetch_object($result))
         $user = mysql_fetch_object($result2);
 
         // Die Attribute fuer das Item zusammenstellen
-        $title			= mysqldatetime("d.m.y", $row->ann_timestamp). " ". $row->ann_headline;
+        $title			= $row->ann_headline;
 
         $link			= "$g_root_path/adm_program/modules/announcements/announcements.php?id=". $row->ann_id;
 
