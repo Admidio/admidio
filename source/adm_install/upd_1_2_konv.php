@@ -63,8 +63,8 @@ while($row = mysql_fetch_object($result_org))
 	$row_mother = mysql_fetch_object($result);	        
 
 	// Organisation in neue Tabelle schreiben
-	$sql = "INSERT INTO adm_organizations (org_id, org_longname, org_shortname, org_org_id_parent, org_homepage)
-	             VALUES ($row->ag_id, '$row->ag_longname', '$row->ag_shortname', ";
+	$sql = "INSERT INTO adm_organizations (org_id, org_longname, org_shortname, org_font, org_org_id_parent, org_homepage)
+	             VALUES ($row->ag_id, '$row->ag_longname', '$row->ag_shortname', 'mr_phone1.ttf', ";
 	if($row_mother->ag_id > 0)
 		$sql .= $row_mother->ag_id;
 	else
