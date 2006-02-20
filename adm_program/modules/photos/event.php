@@ -180,7 +180,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"])){
                      pho_end ='$ende',
                      pho_photographers ='$photographen',
 							pho_last_change ='$act_datetime',
-							pho_usr_id_change = $g_current_user->id,
+							pho_usr_id_change = '$g_current_user->id',
 							pho_locked = '$locked'
 					WHERE pho_id = '$pho_id'";
       //SQL Befehl ausführen
@@ -206,7 +206,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"])){
    $neudaten_parent = mysql_fetch_array($result);
    
    //Erfassen des Anlegers der Ubergebenen Veranstaltung
-	if($pho_id!=NULL){
+	if($neudaten["pho_usr_id"]!=NULL){
 		$sql     = "SELECT * FROM ". TBL_USERS. " WHERE usr_id =".$neudaten["pho_usr_id"];
          $result_u1 = mysql_query($sql, $g_adm_con);
          db_error($result_u1);
