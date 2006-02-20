@@ -209,9 +209,8 @@ function getErrorText($error_code, $error_text, $g_current_organization)
          break;
 
       case "uhrzeit":
-         $error_str = "Es wurde keine g&uuml;ltige Uhrzeit eingegeben.<br /><br />
-               Die Uhrzeit muss dem Format mm:ss entsprechen.<br />
-               Beispiele: 13:05 ; 04:30 ; 23:55";
+         $error_str = "Es wurde keine sinnvolle Uhrzeit eingegeben.<br /><br />
+               Die Uhrzeit muss zwischen 00:00 und 23:55 liegen !";
          break;
 
       case "zuordnen":
