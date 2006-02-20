@@ -31,6 +31,7 @@
  
 require("../../system/common.php");
 require("../../system/session_check_login.php");
+require("../../system/tbl_role_dependencies.php");
 
 // nur Webmaster & Moderatoren duerfen Rollen zuweisen
 if(!isModerator() && !isGroupLeader() && !editUser())
@@ -81,6 +82,7 @@ $count_assigned = 0;
 $i     = 0;
 $value = reset($_POST);
 $key   = key($_POST);
+$parentRoles = array();
 
 while($row = mysql_fetch_object($result_rolle))
 {
@@ -141,18 +143,45 @@ while($row = mysql_fetch_object($result_rolle))
 			// neue Mitgliederdaten einfuegen, aber nur, wenn auch ein Haeckchen da ist
 			if($function == 1)
 			{
-				$sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin, mem_valid, mem_leader)
-						  VALUES ($row->rol_id, {0}, NOW(), 1, $leiter) ";
+				$sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin,mem_end, mem_valid, mem_leader)
+						  VALUES ($row->rol_id, {0}, NOW(),0000-00-00, 1, $leiter) ";
 				$count_assigned++;
 			}
 		}
 		$sql    = prepareSQL($sql, array($_GET['user_id']));
 		$result = mysql_query($sql, $g_adm_con);
 		db_error($result);
+		
+		//find the parent roles
+		if($function == 1 && $user_found < 1)
+		{
+			//$roleDepSrc = new TblRoleDependencies($g_adm_con);
+			$tmpRoles = TblRoleDependencies::getParentRoles($g_adm_con,$row->rol_id);
+			
+			foreach($tmpRoles as $tmpRole)
+			{
+				if(!in_array($tmpRole,$parentRoles))
+				$parentRoles[] = $tmpRole;
+			} 		
+			
+		}
+		
 	}
 
    $i++;
 }
+
+foreach($parentRoles as $actRole)
+			{
+				$sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin,mem_end, mem_valid, mem_leader)
+						  VALUES ($actRole, {0}, NOW(), 0000-00-00, 1, $leiter)
+						  		 ON DUPLICATE KEY UPDATE mem_end = 0000-00-00";
+						  
+						  
+				$sql    = prepareSQL($sql, array($_GET['user_id']));
+				$result = mysql_query($sql, $g_adm_con);				
+				db_error($result);
+			}
 
 if($_GET['new_user'] == 1 && $count_assigned == 0)
 {
@@ -180,7 +209,7 @@ if($_GET['popup'] == 1)
    </head>
 
    <body>
-      <div align=\"center\"><br />
+   	  <div align=\"center\"><br />
          <div class=\"groupBox\" align=\"left\" style=\"padding: 10px\">
             <p>Die &Auml;nderungen wurden erfolgreich gespeichert.</p>
             <p>Bitte denk daran, das Profil im Browser neu zu laden,
