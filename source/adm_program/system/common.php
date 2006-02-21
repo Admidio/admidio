@@ -61,9 +61,6 @@ if($g_forum)
    $g_forum_con = mysql_connect ($g_forum_srv, $g_forum_usr, $g_forum_pw);
 else
    $g_forum_con;
-   
-// die PHP-Session starten
-session_start();
 
 // Globale Variablen
 $g_session_id      = "";
