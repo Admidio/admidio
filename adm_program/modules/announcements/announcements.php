@@ -100,6 +100,9 @@ require("../../../adm_config/body_top.php");
       $i++;
    }
 
+	// damit das SQL-Statement nachher nicht auf die Nase faellt, muss $organizations gefuellt sein   
+   if(strlen($organizations) == 0)
+   	$organizations = "'$g_current_organization->shortname'";
 
    // falls eine id fuer eine bestimmte Ankuendigung uebergeben worden ist...
    if($_GET['id'] > 0)
