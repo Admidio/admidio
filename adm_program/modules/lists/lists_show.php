@@ -122,6 +122,7 @@ $role_row = mysql_fetch_object($result);
 switch($type)
 {
    case "mylist":
+   	session_start();
       $main_sql = $_SESSION['mylist_sql'];
       break;
 
