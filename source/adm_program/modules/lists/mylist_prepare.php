@@ -113,6 +113,7 @@ if(strlen($sql_orderby) > 0)
    $main_sql = $main_sql. " ORDER BY $sql_orderby ";
 
 // SQL-Statement in Session-Variable schreiben
+session_start();
 $_SESSION['mylist_sql'] = $main_sql;
 
 // weiterleiten zur allgemeinen Listeseite
