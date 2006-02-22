@@ -237,6 +237,7 @@ elseif($_GET["mode"] == 3)
          {
             $err_code = "folder_exists";
             $err_text = $new_folder;
+            $url = urlencode("$g_root_path/adm_program/modules/download/folder_new.php?folder=&default_folder=");
          }
          else
          {
