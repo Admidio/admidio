@@ -225,6 +225,7 @@ elseif($_GET["mode"] == 3)
       else
       {
          //Test ob der Ordner schon existiert
+         $ordnerarray = array();
          $ordnerinhalt = dir($act_folder);
          while ($inhalt = $ordnerinhalt->read())
          {
