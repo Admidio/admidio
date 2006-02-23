@@ -304,16 +304,17 @@ echo "
          Sammelordner zu kopieren und diese dann mit einer Bildbearbeitungssoftware auf 640 Pixel
          (l&auml;ngere Bildseite) zu skalieren. Die JPG-Qualit&auml;t sollte beim Abspeichern auf 100%
          (also keine Komprimierung) gestellt werden.
-         Nat&uuml;rlich ist auch das direkte Upload m&ouml;glich.
+         Die maximale Dateigr&ouml;ße eines hochgeladenen Bildes kann durch den Webmaster eingeschr&ankt werden
+			(Standart 512KB).
          ";
          break;
 
       case "veranst_help":
          echo " <h3>Was ist zu tun?</h3>
          Alle offenen Felder ausf&uuml;llen. Die Felder Veranstaltung und Beginn sind Pflichtfelder. Ggf. ausw&auml;hlen
-         welcher Veranstaltung der Neuen untergeordnet werden soll, z.B. &bdquo;Tag 3&ldquo; in &bdquo;Turnier 2010&ldquo; (solche Unterteilungen sind empfehlenswert bei vielen Bildern).
+         welcher Veranstaltung die Neue untergeordnet werden soll, z.B. &bdquo;Tag 3&ldquo; in &bdquo;Turnier 2010&ldquo; (solche Unterteilungen sind empfehlenswert bei vielen Bildern).
          Die Felder Ende und Fotografen sind optional. Nur Freigegebene Veranstaltungen sind f&uuml;r Homepagebesucher sichtbar. M&ouml;chte man z.B. erst alle Bilder hochladen
-         oder auch nur schon mal alle Daten eintragen, kann man die Freigabe einfach sp&auml;ter setzen. Alle &uuml;brigen Felder werden automatisch ausgef&uuml;llt.
+         oder auch nur schon mal alle Daten eintragen, kann man die Freigabe einfach sp&auml;ter setzen.
          Danach auf Speichern klicken.
          ";
          break;
