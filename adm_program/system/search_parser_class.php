@@ -83,7 +83,7 @@ class CParser
       
       // Bedingungen fuer das Feld immer mit UND starten
       if($field_type == "string")
-         $this->m_dest = " AND ( UPPER($field_name) LIKE \'";
+         $this->m_dest = " AND ( UPPER($field_name) LIKE '";
       else
          $this->m_dest = " AND ( $field_name ";
       
@@ -102,7 +102,7 @@ class CParser
 
                // Feldname noch dahinter
                if($field_type == "string")
-                  $this->m_dest = $this->m_dest. " UPPER($field_name) LIKE \'";
+                  $this->m_dest = $this->m_dest. " UPPER($field_name) LIKE '";
                else
                   $this->m_dest = $this->m_dest. " $field_name ";
 
@@ -138,12 +138,12 @@ class CParser
                && $b_new_cond == false )
                {
                   if($field_type == "string")
-                     $this->m_dest = $this->m_dest. "\' ";
+                     $this->m_dest = $this->m_dest. "' ";
                   elseif($field_type == "date"
                   &&     strlen($date) >= 8 )
                   {
                         $dateArray    = split("[- :.]", $date);
-                        $this->m_dest = $this->m_dest. "\'$dateArray[2]-$dateArray[1]-$dateArray[0]\'";
+                        $this->m_dest = $this->m_dest. "'$dateArray[2]-$dateArray[1]-$dateArray[0]'";
                         $date = "";
                   }
                   $b_new_cond = true;
@@ -154,7 +154,7 @@ class CParser
                   if($b_new_cond && !$b_cond_start)
                   {
                      if($field_type == "string")
-                        $this->m_dest = $this->m_dest. " AND UPPER($field_name) LIKE \'";
+                        $this->m_dest = $this->m_dest. " AND UPPER($field_name) LIKE '";
                      else
                         $this->m_dest = $this->m_dest. " AND $field_name = ";
                   }
@@ -182,11 +182,11 @@ class CParser
       && strlen($date) >= 8 )
       {
             $dateArray    = split("[- :.]", $date);
-            $this->m_dest = $this->m_dest. "\'$dateArray[2]-$dateArray[1]-$dateArray[0]\'";
+            $this->m_dest = $this->m_dest. "'$dateArray[2]-$dateArray[1]-$dateArray[0]'";
       }
 
       if($field_type == "string")
-         $this->m_dest = $this->m_dest. "\' ";
+         $this->m_dest = $this->m_dest. "' ";
          
       // Anfangsklammer wieder schliessen
       $this->m_dest = $this->m_dest. ") ";
