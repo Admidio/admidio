@@ -26,7 +26,6 @@
  *****************************************************************************/
 
 require("common.php");
-require("session_check.php");
 
 // Session pruefen
 

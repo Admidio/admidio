@@ -30,7 +30,6 @@
  *****************************************************************************/
 
 require("../../system/common.php");
-require("../../system/session_check.php");
 require("../../system/email_class.php");
 
 $err_code = "";

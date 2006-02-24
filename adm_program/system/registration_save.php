@@ -25,7 +25,6 @@
  *****************************************************************************/
 
 require("common.php");
-require("session_check.php");
 
 $err_code   = "";
 $err_text   = "";

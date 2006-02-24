@@ -29,8 +29,10 @@ if(isset($_COOKIE['adm_session']))
    $g_session_id = $_COOKIE['adm_session'];
 else
    $g_session_id = "";
+   
+$g_session_valid = false;
 
-if ($g_session_id != "")
+if(strlen($g_session_id) > 0)
 {
    // Session auf Gueltigkeit pruefen
 
@@ -44,7 +46,7 @@ if ($g_session_id != "")
    $row           = mysql_fetch_object($result);
 
    if ($session_found == 1)
-   {
+   {   	
       $valid    = false;
       $time_gap = time() - mysqlmaketimestamp($row->ses_timestamp);
 
@@ -61,7 +63,8 @@ if ($g_session_id != "")
 
       if($valid)
       {
-         $g_session_valid = 1;
+         $g_session_valid = true;
+         $g_current_user->getUser($row->ses_usr_id);
 
          // Datetime der Session muss aktualisiert werden
 
@@ -71,8 +74,6 @@ if ($g_session_id != "")
          $sql    = prepareSQL($sql, array($g_session_id));
          $result = mysql_query($sql, $g_adm_con);
          db_error($result);
-
-         $g_current_user->getUser($row->ses_usr_id);
       }
       else
       {

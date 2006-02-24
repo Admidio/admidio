@@ -33,7 +33,7 @@
  *****************************************************************************/
 
 require("../../system/common.php");
-require("../../system/session_check_login.php");
+require("../../system/login_valid.php");
 
 // erst prüfen, ob der User auch die entsprechenden Rechte hat
 if(!editDate())

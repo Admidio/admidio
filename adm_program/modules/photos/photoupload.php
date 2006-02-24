@@ -25,7 +25,7 @@
  *****************************************************************************/
  
 require("../../system/common.php");
-require("../../system/session_check_login.php");
+require("../../system/login_valid.php");
 
 //bei Seitenaufruf ohne Moderationsrechte
 if(!$g_session_valid || $g_session_valid & !editPhoto())

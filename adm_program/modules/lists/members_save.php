@@ -31,7 +31,7 @@
  *****************************************************************************/
 
 require("../../system/common.php");
-require("../../system/session_check_login.php");
+require("../../system/login_valid.php");
 //Übernahme der Rolle die bearbeitet werden soll
 $role_id = $_GET["role_id"];
 

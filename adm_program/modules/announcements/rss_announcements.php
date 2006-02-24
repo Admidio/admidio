@@ -31,7 +31,6 @@
  *****************************************************************************/
 
 require("../../system/common.php");
-require("../../system/session_check.php");
 require("../../system/bbcode.php");
 require("../../system/rss_class.php");
 

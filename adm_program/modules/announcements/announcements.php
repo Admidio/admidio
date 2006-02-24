@@ -32,7 +32,6 @@
  *****************************************************************************/
 
 require("../../system/common.php");
-require("../../system/session_check.php");
 require("../../system/bbcode.php");
 
 if(!array_key_exists("mode", $_GET))

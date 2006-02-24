@@ -30,7 +30,6 @@
  *****************************************************************************/
  
 	require("../../system/common.php");
-	require("../../system/session_check.php");
 	
 //&Uuml;bernahme der &Uuml;bergebenen variablen
    $pho_id= $_GET['pho_id'];

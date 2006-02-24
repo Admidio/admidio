@@ -25,7 +25,7 @@
  *****************************************************************************/
 
 	require("../../system/common.php");
-	require("../../system/session_check_login.php");
+	require("../../system/login_valid.php");
 
 //Übernahme Variablen
 	 $pho_id= $_GET['pho_id'];

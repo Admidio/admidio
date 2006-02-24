@@ -33,7 +33,6 @@
  *****************************************************************************/
 
 require("../../system/common.php");
-require("../../system/session_check.php");
 
 $folder = urldecode($_GET['folder']);
 $file   = urldecode($_GET['file']);

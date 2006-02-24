@@ -31,7 +31,7 @@
  *****************************************************************************/
 
 require("../../system/common.php");
-require("../../system/session_check_login.php");
+require("../../system/login_valid.php");
 
 //prüfen ob in Popup angezeigt wird oder Normal (default)
 if($_GET['popup'] == 1)$popup=1;

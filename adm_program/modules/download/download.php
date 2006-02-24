@@ -36,7 +36,6 @@
  *****************************************************************************/
 
 	require("../../system/common.php");
-	require("../../system/session_check.php");
 
    $default_folder = urldecode($_GET['default_folder']);
    $folder     = urldecode($_GET['folder']);

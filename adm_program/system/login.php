@@ -29,7 +29,6 @@
  *****************************************************************************/
 
 require("common.php");
-require("session_check.php");
 
 if(!array_key_exists("url", $_GET))
    $_GET['url'] = "";
