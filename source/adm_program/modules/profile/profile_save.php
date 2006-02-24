@@ -30,7 +30,7 @@
  *****************************************************************************/
 
 require("../../system/common.php");
-require("../../system/session_check_login.php");
+require("../../system/login_valid.php");
 
 $user_id       = $_GET['user_id'];
 $err_code      = "";

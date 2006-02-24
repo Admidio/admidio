@@ -37,7 +37,7 @@
  *****************************************************************************/
 
 	require("../../system/common.php");
-	require("../../system/session_check_login.php");
+	require("../../system/login_valid.php");
 
 //Prüfrotine ob Ordner/Datei
 function file_or_folder ($act_dir,$file) {

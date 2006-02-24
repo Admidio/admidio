@@ -31,7 +31,7 @@
  *****************************************************************************/
  
 require("../../system/common.php");
-require("../../system/session_check_login.php");
+require("../../system/login_valid.php");
 
 // nur Moderatoren duerfen Rollen erfassen & verwalten
 if(!isModerator())

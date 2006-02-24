@@ -35,7 +35,6 @@
  *****************************************************************************/
 
 require("common.php");
-require("session_check.php");
 require("err_text.php");
 
 // Pruefung, ob die Datei ueber eine Header-Umleitung oder als include aufgerufen wurde

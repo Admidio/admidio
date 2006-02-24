@@ -30,7 +30,7 @@
  *****************************************************************************/
  
 require("../../system/common.php");
-require("../../system/session_check_login.php");
+require("../../system/login_valid.php");
 require("../../system/tbl_role_dependencies.php");
 
 // nur Webmaster & Moderatoren duerfen Rollen zuweisen

@@ -27,6 +27,7 @@
 
 $g_server_path = substr(__FILE__, 0, strpos(__FILE__, "adm_program")-1);
 
+// includes OHNE Datenbankverbindung
 require_once($g_server_path. "/adm_config/config.php");
 require_once($g_server_path. "/adm_program/system/function.php");
 require_once($g_server_path. "/adm_program/system/date.php");
@@ -64,10 +65,14 @@ else
 
 // Globale Variablen
 $g_session_id      = "";
-$g_session_valid   = 0;
+$g_session_valid   = false;
 
 $g_current_user  = new TblUsers($g_adm_con);
 
 $g_current_organization = new TblOrganizations($g_adm_con);
 $g_current_organization->getOrganization($g_organization);
+
+// includes MIT Datenbankverbindung   
+require_once($g_server_path. "/adm_program/system/session_check.php");   
+
 ?>

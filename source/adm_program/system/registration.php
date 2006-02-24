@@ -25,7 +25,6 @@
  *****************************************************************************/
 
 require("common.php");
-require("session_check.php");
 
 echo "
 <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n

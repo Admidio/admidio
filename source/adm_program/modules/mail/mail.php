@@ -34,7 +34,6 @@
  *****************************************************************************/
 
 require("../../system/common.php");
-require("../../system/session_check.php");
 
 // Prüfungen, ob die Seite regulaer aufgerufen wurde
 

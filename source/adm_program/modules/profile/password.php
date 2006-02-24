@@ -29,7 +29,7 @@
  *****************************************************************************/
  
 require("../../system/common.php");
-require("../../system/session_check_login.php");
+require("../../system/login_valid.php");
  
 // nur Webmaster d&uuml;rfen fremde Passwoerter aendern
 if(!hasRole("Webmaster") && $g_current_user->id != $_GET['user_id'])

@@ -26,7 +26,6 @@
  *****************************************************************************/
  
 require("../../system/common.php");
-require("../../system/session_check.php");
 
 //Übername der übergebenen Variablen
 //ID einer bestimmten Veranstaltung

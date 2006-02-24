@@ -35,7 +35,6 @@
  *****************************************************************************/
 
 require("../../system/common.php");
-require("../../system/session_check.php");
 
 // Uebergabevariablen pruefen und ggf. vorbelegen
 

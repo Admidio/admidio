@@ -29,7 +29,7 @@
  *****************************************************************************/
  
 require("../../system/common.php");
-require("../../system/session_check_login.php");
+require("../../system/login_valid.php");
 
 // nur Moderatoren duerfen alle User sehen & Mitgliedschaften l&ouml;schen
 if(!isModerator())

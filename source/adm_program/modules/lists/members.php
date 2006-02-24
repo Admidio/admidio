@@ -35,7 +35,7 @@
  *****************************************************************************/
 
 require("../../system/common.php");
-require("../../system/session_check_login.php");
+require("../../system/login_valid.php");
 
 //Übernahme der Rolle deren Mitgliederzuordnung bearbeitet werden soll
 $role_id=$_GET['rol_id'];
