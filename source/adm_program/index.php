@@ -33,7 +33,6 @@ if(!file_exists("../adm_config/config.php"))
 }
 
 include("system/common.php");
-include("system/session_check.php");
 
 echo "
 <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
