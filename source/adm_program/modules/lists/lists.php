@@ -44,7 +44,10 @@ else
 	$category = "";
 
 if(!isset($_GET['category-selection']))
+{
+	$_GET['category-selection'] = "yes";
    $show_ctg_sel = 1;
+}
 else
 {
 	if($_GET['category-selection'] == "yes")
@@ -110,7 +113,7 @@ echo "
       function showCategory()
       {
       	var category = document.getElementById('category').value;
-			self.location.href = 'lists.php?category=' + category + '&type=". $_GET['type']. "';	
+			self.location.href = 'lists.php?category=' + category + '&category-selection=". $_GET['category-selection']. "&active_role=$active_role';	
       }
       
       function showList(element, rol_id)
