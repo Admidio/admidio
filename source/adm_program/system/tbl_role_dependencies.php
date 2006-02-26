@@ -121,7 +121,7 @@ class TblRoleDependencies
 		$this->clear();
    }
    
-   static function getParentRoles($dbConnection,$childId)
+   function getParentRoles($dbConnection,$childId)
    {
    	$allParentIds = array();
    	
