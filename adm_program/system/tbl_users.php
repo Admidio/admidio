@@ -161,13 +161,17 @@ class TblUsers
 														, usr_number_invalid = $this->number_invalid
 														, usr_last_change    = '$act_date'
 														, usr_usr_id_change  = $login_user_id 
-														, usr_valid          = $this->valid
-														, usr_reg_org_shortname = '$this->reg_org_shortname' ";
+														, usr_valid          = $this->valid ";
+			if(strlen($this->reg_org_shortname) == 0)
+				$sql = $sql. ", usr_reg_org_shortname = NULL ";
+			else
+				$sql = $sql. ", usr_reg_org_shortname = '$this->reg_org_shortname' ";
 			if(strlen($this->login_name) == 0)
 				$sql = $sql. ", usr_login_name = NULL, usr_password = NULL ";
 			else
 				$sql = $sql. ", usr_login_name = '$this->login_name', usr_password = '$this->password' ";
 			$sql = $sql. " WHERE usr_id = $this->id ";
+
 			$result = mysql_query($sql, $this->db_connection);
 		   if(!$result) { echo "Error: ". mysql_error(); exit(); }
 		   return 0;
