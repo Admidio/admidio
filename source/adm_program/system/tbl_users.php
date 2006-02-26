@@ -196,7 +196,11 @@ class TblUsers
 							 VALUES ('$this->last_name', '$this->first_name', '$this->address', '$this->zip_code',
 										'$this->city', '$this->country', '$this->phone', '$this->mobile', '$this->fax', '$this->birthday', 
 										'$this->gender', '$this->email', '$this->homepage', NULL, NULL, 
-										0,	NULL, 0, '$act_date', $login_user_id, $this->valid, '$this->reg_org_shortname', ";
+										0,	NULL, 0, '$act_date', $login_user_id, $this->valid, ";
+			if(strlen($this->reg_org_shortname) == 0)
+				$sql = $sql. ", NULL ";
+			else
+				$sql = $sql. ", '$this->reg_org_shortname' ";
 			if(strlen($this->login_name) == 0)
 				$sql = $sql. " NULL, NULL ) ";
 			else
