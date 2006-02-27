@@ -51,8 +51,8 @@ if($g_current_organization->bbcode == 1)
 
 // alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
 $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. "
-         WHERE org_shortname = '$g_organization'
-            OR org_org_id_parent    = '$g_organization' ";
+         WHERE org_id = '$g_current_organization->org_id_parent'
+            OR org_org_id_parent    = '$g_current_organization->id' ";
 $result = mysql_query($sql, $g_adm_con);
 db_error($result);
 
@@ -61,22 +61,23 @@ $i             = 0;
 
 while($row = mysql_fetch_object($result))
    {
-      if($i > 0) $organizations = $organizations. ", ";
-
-      if($row->org_shortname == $g_organization)
-         $organizations = $organizations. "'$row->org_org_id_parent'";
-      else
-         $organizations = $organizations. "'$row->org_shortname'";
-
+      if($i > 0)
+      {
+         $organizations = $organizations. ", ";
+      }
+      $organizations = $organizations. "'$row->org_shortname'";
       $i++;
    }
 
-
-
+// damit das SQL-Statement nachher nicht auf die Nase faellt, muss $organizations gefuellt sein
+if(strlen($organizations) == 0)
+{
+	$organizations = "'$g_current_organization->shortname'";
+}
 
 // aktuelle Termine aus DB holen die zur Orga passen
 $sql = "SELECT * FROM ". TBL_DATES. "
-                     WHERE (  dat_org_shortname = '$g_organization'
+                     WHERE (  dat_org_shortname = '$g_current_organization->shortname'
                         OR (   dat_global   = 1
                            AND dat_org_shortname IN ($organizations) ))
                        AND (  dat_begin >= sysdate()
