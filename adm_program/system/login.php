@@ -82,7 +82,7 @@ require("../../adm_config/body_top.php");
       
       <div class=\"formHead\" style=\"width: 260px\">". strspace("Registrieren"). "</div>
       <div class=\"formBody\" style=\"width: 260px\">
-         <div style=\"margin-bottom: 7px;\">Du bist noch nicht registriert ???</div>
+         <div style=\"margin-bottom: 7px;\">Du bist noch nicht registriert ?</div>
          <button name=\"Registrieren\" type=\"button\" value=\"Registrieren\"
             onclick=\"self.location.href='registration.php'\">
             <img src=\"$g_root_path/adm_program/images/write.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Registrieren\">
