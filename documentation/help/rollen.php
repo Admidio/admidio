@@ -1,5 +1,5 @@
 
-<?php include("help/help_menu.php"); ?>
+<?php include("help_menu.php"); ?>
 
 <td style="background-color: #ffffff; padding-left: 15px;">
    <h2>Was sind Rollen ?</h2>
@@ -33,22 +33,22 @@
          <span style="font-family: Courier New, Courier">adm_program/administration/roles/roles.php</span></p>
       </li>
       <li>
-         <p>Hier sehen Sie im Moment nur die Rolle <i>Webmaster</i> deren Mitglied Sie automatisch durch die
-         Installation geworden sind. Diese Rolle wird bei der Installation angelegt und
-         kann nicht mehr gel&ouml;scht werden.</p>
+         <p>Hier sehen Sie im Moment nur die Rollen <i>Mitglied</i> und <i>Webmaster</i> denen Sie automatisch
+         durch die Installation zugeordnet geworden sind.</p>
 
          <img style="border: 0px;" src="help/images/rollen_liste.png" alt="Liste aller angelegten Rollen und ihrer Berechtigungen" title="Liste aller angelegten Rollen und ihrer Berechtigungen" />
 
          <p>Klicken Sie nun auf <b>Rolle anlegen</b>.</p>
       </li>
       <li>
-         <p>Nun erscheint ein Dialog mit dem Sie neue Rollen anlegen und diesen auch Rechte zuordnen k&ouml;nnen. Geben Sie
-         zun&auml;chst eine Bezeichnung und eine Beschreibung f&uuml;r die Rolle ein.</p>
+         <p>Nun erscheint ein Dialog mit dem Sie neue Rollen anlegen und diesen auch Berechtigungen zuordnen
+         k&ouml;nnen. Geben Sie zun&auml;chst eine Bezeichnung, Beschreibung und eine Kategorie f&uuml;r die Rolle
+         ein.<br>(Kategorien k&ouml;nnen Sie im Dialog <i>Gruppierung bearbeiten</i> anlegen, bearbeiten und l&ouml;schen.)</p>
 
-         <p><a style="target-new: tab;" href="help/images/rolle_erstellen.png"><img style="border: 0px;" src="help/rolle_erstellen_thumb.png" alt="Rolle anlegen"/></a></p>
+         <p><a style="target-new: tab;" href="help/images/rolle_erstellen.png"><img style="border: 0px;" src="help/images/rolle_erstellen_thumb.png" alt="Rolle anlegen"/></a></p>
       </li>
       <li>
-         <p>Nun k&ouml;nnen Sie jeder Rolle und damit auch den zugeordneten Benutzern verschiedene Rechte zuweisen:</p>
+         <p>Nun k&ouml;nnen Sie jeder Rolle und damit auch den zugeordneten Benutzern verschiedene <b>Berechtigungen</b> zuweisen:</p>
          <p><img style="vertical-align: bottom;" src="images/wand.png" alt="Moderation" />&nbsp;
          Benutzer dieser Rolle bekommen erweiterte Rechte. Sie k&ouml;nnen Rollen erstellen,
          verwalten und anderen Benutzern Rollen zuordnen. Au&szlig;erdem k&ouml;nnen Sie
@@ -80,10 +80,10 @@
          k&ouml;nnen keine E-Mails an diese Rolle schreiben, keine Listen dieser Rolle
          aufrufen und sehen auch nicht im Profil einer Person, dass diese Mitglied
          dieser Rolle ist.</p>
-         <p><img style="vertical-align: bottom;" src="images/gruppe.png" alt="Gruppe" />&nbsp;
-         Rollen, die diese Option aktiviert haben, haben erweiterte Funktionalit&auml;ten.
-         Zu diesen Rollen k&ouml;nnen weitere Daten der Gruppe (Zeitraum, Uhrzeit, Ort)
-         erfasst und jeder Gruppe Gruppenleiter zugeordnet werden.</p>
+      </li>
+      <li>
+         <p>Die <b>Einstellungen</b> sind optional und sollten nur bei Bedarf gef&uuml;llt werden. Hier k&ouml;nnen Termine
+         f&uuml;r regelm&auml;&szlig;ige Treffen, Preise f&uuml;r Kurse oder die maximale Anzahl an Teilnehmern definiert werden.</p>
       </li>
       <li>
          <p>Klicken Sie nun auf <b>Speichern</b> und die neue Rolle wird im System angelegt.

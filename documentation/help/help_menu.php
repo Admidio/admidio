@@ -8,5 +8,6 @@
            padding-right:        5px;">
    <p><a class="menu" href="index.php?help/installation.php">Installation</a></p>
    <p><a class="menu" href="index.php?help/integrieren.php">Integrieren</a></p>
+   <p><a class="menu" href="index.php?help/update.php">Updaten</a></p>
    <p><a class="menu" href="index.php?help/rollen.php">Rollen</a></p>
 </td>
