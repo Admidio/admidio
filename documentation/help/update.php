@@ -34,7 +34,7 @@
    <p>Falls Sie wiederholt auf Weiter klicken oder die Seite schlie&szlig;en, kann das
    Datenbank update fehlschlagen und das Update eventuell auch nicht mehr erfolgreich wiederholt werden.</p></li>
    
-   <li>Nachdem das Update erfolgreich durchgelaufen ist, sollten Sie nun das Verzeichnis <b>adm_install</b> auf
+   <li>Nachdem das Update erfolgreich durchgelaufen ist, sollten Sie das Verzeichnis <b>adm_install</b> auf
    Ihrem Webserver l&ouml;schen.</li>
    </ul>
 
