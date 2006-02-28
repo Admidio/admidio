@@ -127,8 +127,8 @@ require("../../../adm_config/body_top.php");
       echo "</div>
       <div class=\"formBody\">
          <div>
-            <div style=\"text-align: right; width: 70px; float: left;\">an:</div>
-            <div style=\"text-align: left; margin-left: 80px;\">";
+            <div style=\"text-align: right; width: 15%; float: left;\">an:</div>
+            <div style=\"text-align: left; margin-left: 17%;\">";
                if(array_key_exists("usr_id", $_GET))
                {
                   // usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
@@ -200,8 +200,8 @@ require("../../../adm_config/body_top.php");
          <hr width=\"90%\" />
 
          <div style=\"margin-top: 8px;\">
-            <div style=\"text-align: right; width: 70px; float: left;\">Name:</div>
-            <div style=\"text-align: left; margin-left: 80px;\">";
+            <div style=\"text-align: right; width: 15%; float: left;\">Name:</div>
+            <div style=\"text-align: left; margin-left: 17%;\">";
                if($g_current_user->id != 0)
                   echo "<input class=\"readonly\" readonly type=\"text\" name=\"name\" size=\"30\" maxlength=\"50\" value=\"$user->first_name $user->last_name\">";
                else
@@ -209,8 +209,8 @@ require("../../../adm_config/body_top.php");
             echo "</div>
          </div>
          <div style=\"margin-top: 8px;\">
-            <div style=\"text-align: right; width: 70px; float: left;\">E-Mail:</div>
-            <div style=\"text-align: left; margin-left: 80px;\">";
+            <div style=\"text-align: right; width: 15%; float: left;\">E-Mail:</div>
+            <div style=\"text-align: left; margin-left: 17%;\">";
                if($g_current_user->id != 0)
                   echo "<input class=\"readonly\" readonly type=\"text\" name=\"mailfrom\" size=\"50\" maxlength=\"50\" value=\"$user->email\">";
                else
@@ -221,8 +221,8 @@ require("../../../adm_config/body_top.php");
          <hr width=\"90%\" />
 
          <div style=\"margin-top: 8px;\">
-            <div style=\"text-align: right; width: 70px; float: left;\">Betreff:</div>
-            <div style=\"text-align: left; margin-left: 80px;\">";
+            <div style=\"text-align: right; width: 15%; float: left;\">Betreff:</div>
+            <div style=\"text-align: left; margin-left: 17%;\">";
                if($_GET["subject"] == "")
                   echo "<input type=\"text\" name=\"subject\" size=\"50\" maxlength=\"50\">";
                else
@@ -230,8 +230,8 @@ require("../../../adm_config/body_top.php");
             echo "</div>
          </div>
          <div style=\"margin-top: 8px;\">
-            <div style=\"text-align: right; width: 70px; float: left;\">Nachricht:</div>
-            <div style=\"text-align: left; margin-left: 80px;\">
+            <div style=\"text-align: right; width: 15%; float: left;\">Nachricht:</div>
+            <div style=\"text-align: left; margin-left: 17%;\">
                <textarea name=\"body\" rows=\"10\" cols=\"45\">". $_GET["body"]. "</textarea>
             </div>
          </div>";
@@ -241,8 +241,8 @@ require("../../../adm_config/body_top.php");
          {
            echo "
            <div style=\"margin-top: 8px;\">
-              <div style=\"text-align: right; width: 70px; float: left;\">Anhang:</div>
-              <div style=\"text-align: left; margin-left: 80px;\">
+              <div style=\"text-align: right; width: 15%; float: left;\">Anhang:</div>
+              <div style=\"text-align: left; margin-left: 17%;\">
                  <input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"" . ($g_current_organization->mail_size * 1024) . "\">
                  <input name=\"userfile\" size=\"40\" type=\"file\">
               </div>
@@ -251,7 +251,7 @@ require("../../../adm_config/body_top.php");
 
          echo "
          <div style=\"margin-top: 8px;\">
-            <div style=\"text-align: left; margin-left: 80px;\">
+            <div style=\"text-align: left; margin-left: 17%;\">
                <input type=\"checkbox\" id=\"kopie\" name=\"kopie\" value=\"1\" ";
                if($_GET["kopie"] == 1) echo " checked=\"checked\" ";
                echo "> <label for=\"kopie\">Kopie der E-Mail an mich senden</label>
