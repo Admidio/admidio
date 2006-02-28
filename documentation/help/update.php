@@ -33,6 +33,9 @@
    Datenbank erfolgreich installiert wurde. </p>
    <p>Falls Sie wiederholt auf Weiter klicken oder die Seite schlie&szlig;en, kann das
    Datenbank update fehlschlagen und das Update eventuell auch nicht mehr erfolgreich wiederholt werden.</p></li>
+   
+   <li>Nachdem das Update erfolgreich durchgelaufen ist, sollten Sie nun das Verzeichnis <b>adm_install</b> auf
+   Ihrem Webserver l&ouml;schen.</li>
    </ul>
 
    <b>Nun haben Sie Admidio erfolgreich aktualisiert und k&ouml;nnen mit der neuen Version arbeiten !</b>
