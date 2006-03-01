@@ -34,6 +34,9 @@ if($pho_id=="")$pho_id=NULL;
 //aktuelle Seite
 $seite= $_GET['seite'];
 if($seite=="")$seite=1;
+//Ansicht
+$view=$_GET["view"];
+if($view==NULL)$view="preview";
 
 //Aufruf der ggf. Übergebenen Veranstaltung
 $sql = "	SELECT *
@@ -53,7 +56,14 @@ if($adm_photo["pho_pho_id_parent"]!=NULL){
    db_error($result);
    $adm_photo_parent = mysql_fetch_array($result);
 }
-	
+//erfassen ob Unterveranstaltungen existieren
+$sql = "	SELECT *
+			FROM ". TBL_PHOTOS. "
+			WHERE pho_pho_id_parent ='$pho_id'";
+$result_children = mysql_query($sql, $g_adm_con);
+db_error($result_event);
+$children = mysql_num_rows($result_children);
+
 //Erfassen des Anlegers der Ubergebenen Veranstaltung
 if($pho_id!=NULL && $adm_photo["pho_usr_id"]!=NULL){
 	$sql     = "SELECT * FROM ". TBL_USERS. " WHERE usr_id =".$adm_photo["pho_usr_id"];
@@ -124,6 +134,9 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL){
 	if($pho_id!="" && $adm_photo["pho_pho_id_parent"]!=NULL)echo"&#47<a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$adm_photo["pho_pho_id_parent"]."\">".$adm_photo_parent["pho_name"]."</a>";
 	if($pho_id!="")echo "&#47".$adm_photo["pho_name"];
 	echo"</h1>";
+   //Ansichtwechsel
+   if($view=="preview" && ($children>0 || $pho_id==NULL))echo"<a href=\"$g_root_path/adm_program/modules/photos/photos.php?view=list&amp;pho_id=$pho_id\">Listenansicht</a><br><br>";
+   if($view=="list" && ($children>0 || $pho_id==NULL))echo"<a href=\"$g_root_path/adm_program/modules/photos/photos.php?view=preview&amp;pho_id=$pho_id\">Vorschauansicht</a><br><br>";
    //bei Seitenaufruf mit Moderationsrechten
    if($g_session_valid && editPhoto() && $adm_photo["pho_pho_id_parent"]==NULL){
       echo"
@@ -162,7 +175,7 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL){
       //"Letzte Seite"
 		$vorseite=$seite-1;
 		if($vorseite>=1)
-			echo"	<a href=\"photos.php?seite=$vorseite&amp;pho_id=$pho_id\">Letzte</a>&nbsp;&nbsp;";
+			echo"	<a href=\"photos.php?seite=$vorseite&amp;pho_id=$pho_id\">Zur&uuml;ck</a>&nbsp;&nbsp;";
 		//Seitenzahlen
       for($s=1; $s<=$seiten; $s++){
       	if($s==$seite)echo $seite."&nbsp;";
@@ -171,7 +184,7 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL){
       //naechste Seite
 		$nachseite=$seite+1;
 		if($nachseite<=$seiten)
-			echo"	<a href=\"photos.php?seite=$nachseite&amp;pho_id=$pho_id\">N&auml;chste</a>";
+			echo"	<a href=\"photos.php?seite=$nachseite&amp;pho_id=$pho_id\">Vorw&auml;rts</a>";
 		echo"</td></tr>
 		<tr style=\"text-align: center;\"><td td colspan=\"$colums\">
       <table cellpadding=\"4\" cellspacing=\"0\" border=\"0\" style=\"width: 100%\">";
@@ -181,7 +194,8 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL){
                $bild = ($seite*25)-25+($zeile*5)-5+$spalte;//Errechnug welches Bild ausgegeben wird
                if ($bild <= $bilder){
                   echo"<td style=\"width: 20%\">
-                     <img onclick=\"window.open('photopopup.php?bild=$bild&pho_id=$pho_id','msg', 'height=600,width=580,left=162,top=5')\" style=\"vertical-align: middle; cursor: pointer;\" src=\"resize.php?bild=$ordner/$bild.jpg&amp;scal=100&amp;aufgabe=anzeigen\" border=\"0\" alt=\"$bild\">
+                     <img onclick=\"window.open('photopopup.php?bild=$bild&pho_id=$pho_id','msg', 'height=600,width=580,left=162,top=5')\" style=\"vertical-align: middle; cursor: pointer;\"
+								 src=\"resize.php?bild=$ordner/$bild.jpg&amp;scal=100&amp;aufgabe=anzeigen\" border=\"0\" alt=\"$bild\">
 						<br>";
 						//Buttons für moderatoren
 						if ($g_session_valid && editPhoto($adm_photo["pho_org_shortname"])){
@@ -211,7 +225,7 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL){
    echo"
 	</td></tr>";
   }
-/************************Veranstaltungsliste*************************************/	
+/************************Veranstaltungsliste/Preview*************************************/	
 
 	//erfassen der Veranstaltungen die in der Veranstaltungstabelle ausgegeben werden sollen
    $sql = "   SELECT *
@@ -222,9 +236,10 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL){
 				$sql=$sql."ORDER BY pho_begin DESC ";
    $result_list = mysql_query($sql, $g_adm_con);
    db_error($result_list);
-   
+
+/***************nur Listenansicht********************/  
    //anlegen der Veranstaltungstabelle und ausgeb der Kopfzeile wenn Ergbnis vorliegt
-   if(mysql_num_rows($result_list)>0 || $pho_id==""){
+   if((mysql_num_rows($result_list)>0 || $pho_id=="") && $view=="list"){
    	echo "
      	<tr>
         	<th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;Veranstaltung</th>
@@ -234,7 +249,8 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL){
         	if ($g_session_valid && editPhoto())
            	echo"<th class=\"tableHeader\" style=\"text-align: center; width: 90px;\">Bearbeiten</th>";
  			 echo"</tr>";
-
+   }
+/***beides******/
 	//durchlaufen des Result-Tabelle und Ausgabe in Veranstaltungstabelle
    	$bildersumme=0;//Summe der Bilder in den Unterordnern
    	for($x=0; $adm_photo_list = mysql_fetch_array($result_list); $x++){
@@ -261,6 +277,69 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL){
          //Kontrollieren ob der entsprechende Ordner in adm_my_files existiert und freigegeben ist oder Photoeditrechte bestehen
          //wenn ja Zeile ausgeben
          if(file_exists($ordner) && ($adm_photo_list["pho_locked"]==0) || ($g_session_valid && editPhoto($adm_photo_list["pho_org_shortname"]))){
+/***************nur Vorschauansicht******************/
+			if($view=="preview"){
+				//Bild aus Veranstaltung als Vorschau auswählen wenn sie Bilder enthält sonst ggf. Auf unterveranst zurückgreifen
+				if($adm_photo_list["pho_quantity"]>0)
+					$previewpic=mt_rand(1, $adm_photo_list["pho_quantity"]);
+					$previewordner=$ordner;
+				if($adm_photo_list["pho_quantity"]==0){
+					 $sql = "   SELECT *
+								FROM ". TBL_PHOTOS. "
+            				WHERE pho_pho_id_parent = '".$adm_photo_list["pho_id"]."'
+								AND pho_locked = '0'
+								AND pho_quantity > '0'
+					";
+   				$result_preview = mysql_query($sql, $g_adm_con);
+  					db_error($result_preview, 1);
+  					$adm_photo_preview=mysql_fetch_array($result_preview);
+  					$previewpic=mt_rand(1, $adm_photo_preview["pho_quantity"]);
+					$previewordner="../../../adm_my_files/photos/".$adm_photo_preview["pho_begin"]."_".$adm_photo_preview["pho_id"];
+				}
+				echo"<tr>
+					<td><a target=\"_self\" href=\"photos.php?pho_id=".$adm_photo_list["pho_id"]."\">
+							<img src=\"resize.php?bild=$previewordner/$previewpic.jpg&amp;scal=150&amp;aufgabe=anzeigen\" border=\"0\" alt=\"$previewpic\"
+						  style=\"vertical-align: middle;\"></a></td>
+					<td>
+						<a target=\"_self\" href=\"photos.php?pho_id=".$adm_photo_list["pho_id"]."\">".$adm_photo_list["pho_name"]."</a><br>
+						<div style=\"margin: 8px 4px 4px 4px; font-size: 8pt; text-align: left;\">
+							Bilder: ".$veranst_bilder_summe." <br>
+							Datum: ".mysqldate("d.m.y", $adm_photo_list["pho_begin"]);
+										if($adm_photo["pho_end"] != $adm_photo["pho_begin"])echo " bis ".mysqldate("d.m.y", $adm_photo["pho_end"]);
+							echo "<br>Fotos von: ".$adm_photo_list["pho_photographers"]."<br>";
+						 	if ($g_session_valid && editPhoto($adm_photo_list["pho_org_shortname"])){
+                  		if(file_exists($ordner)){
+                  			echo"
+									<a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=".$adm_photo_list["pho_id"]."\">
+                     			<img src=\"$g_root_path/adm_program/images/photo.png\" border=\"0\" alt=\"Photoupload\" title=\"Photoupload\"></a>&nbsp;
+                  			<a href=\"$g_root_path/adm_program/modules/photos/event.php?pho_id=".$adm_photo_list["pho_id"]."&aufgabe=change\">
+                     			<img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>&nbsp;";
+            				}
+                  		$err_text= $adm_photo_list["pho_name"]."(Beginn: ".mysqldate("d.m.y", $adm_photo_list["pho_begin"]).")";
+                  		echo"
+                  		<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_veranst&err_text=$err_text&err_head=Veranstaltung L&ouml;schen&button=2&url=". urlencode("$g_root_path/adm_program/modules/photos/event.php?aufgabe=delete&pho_id=".$adm_photo_list["pho_id"].""). "\">
+                     		<img src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"Veranstaltung löschen\" title=\"Veranstaltung löschen\"></a>";
+								if($adm_photo_list["pho_locked"]==1 && file_exists($ordner))echo"
+									<a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$adm_photo_list["pho_id"]."&locked=0\">
+										<img src=\"$g_root_path/adm_program/images/key.png\" border=\"0\" alt=\"Freigeben\" title=\"Freigeben\">
+									</a>";
+								if($adm_photo_list["pho_locked"]==0 && file_exists($ordner)) echo"
+									<a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$adm_photo_list["pho_id"]."&locked=1\">
+										<img src=\"$g_root_path/adm_program/images/key.png\" border=\"0\" alt=\"Sperren\" title=\"Sperren\">
+									</a>";
+						 	}
+					echo"
+            
+						</div>
+					</td>
+				</tr>";
+
+				 
+			
+			
+			}//Ende nur Vorschauansicht
+/***************nur Listenansicht********************/    
+         if($view=="list"){
          echo "
          <tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\">
             <td style=\"text-align: left;\">&nbsp;";
@@ -308,16 +387,20 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL){
 					echo"</td>";
              }
          echo"</tr>";
+         }//Ende nur Listenansicht
+/***beides***/
          }//Ende Ordner existiert
    	};//for
+/***************nur Listenansicht********************/	
 	//tabbelen Ende mit Ausgabe der Gesammtbilderzahl
+   	if($view=="list"){
    		echo"<tr>
          	<th class=\"tableHeader\" style=\"text-align: right;\" colspan=\"2\">Bilder Gesamt:</th>
          	<th class=\"tableHeader\" style=\"text-align: center;\">$bildersumme</th>
          	<th class=\"tableHeader\">&nbsp;</th>";
          	if ($g_session_valid && editPhoto($g_organization))echo"<th class=\"tableHeader\" colspan=\"2\">&nbsp;</th>";
          echo"</tr>";
-   }//if mehr als ein Ergebnis
+   	}
 /****************************Leere Veranstaltung****************/
 //Falls die Veranstaltung weder Bilder noch Unterordner enthält
    if($adm_photo["pho_quantity"]=="0" && mysql_num_rows($result_list)==0)
