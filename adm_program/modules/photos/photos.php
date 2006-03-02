@@ -222,8 +222,8 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL){
 			echo"</div>
 			</td></tr>";
       echo "</table>";
-   echo"
-	</td></tr>";
+   if($view=="preview" && $children>0)echo"<hr width=\"90%\" />";
+	echo"</td></tr>";
   }
 /************************Veranstaltungsliste/Preview*************************************/	
 
@@ -297,9 +297,9 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL){
 					$previewordner="../../../adm_my_files/photos/".$adm_photo_preview["pho_begin"]."_".$adm_photo_preview["pho_id"];
 				}
 				echo"<tr>
-					<td><a target=\"_self\" href=\"photos.php?pho_id=".$adm_photo_list["pho_id"]."\">
-							<img src=\"resize.php?bild=$previewordner/$previewpic.jpg&amp;scal=150&amp;aufgabe=anzeigen\" border=\"0\" alt=\"$previewpic\"
-						  style=\"vertical-align: middle;\"></a></td>
+					<td style=\"width: 200px\"><div align=\"center\"><a target=\"_self\" href=\"photos.php?pho_id=".$adm_photo_list["pho_id"]."\">
+							<img src=\"resize.php?bild=$previewordner/$previewpic.jpg&amp;scal=130&amp;aufgabe=anzeigen\" border=\"0\" alt=\"$previewpic\"
+						  style=\"vertical-align: middle; align: right;\"></a></div></td>
 					<td>
 						<a target=\"_self\" href=\"photos.php?pho_id=".$adm_photo_list["pho_id"]."\">".$adm_photo_list["pho_name"]."</a><br>
 						<div style=\"margin: 8px 4px 4px 4px; font-size: 8pt; text-align: left;\">
@@ -333,10 +333,6 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL){
 						</div>
 					</td>
 				</tr>";
-
-				 
-			
-			
 			}//Ende nur Vorschauansicht
 /***************nur Listenansicht********************/    
          if($view=="list"){
