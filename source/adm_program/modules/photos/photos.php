@@ -200,9 +200,16 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL){
 						//Buttons für moderatoren
 						if ($g_session_valid && editPhoto($adm_photo["pho_org_shortname"])){
 							echo"
-							<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_photo&err_head=Foto L&ouml;schen&button=2&url=". urlencode("$g_root_path/adm_program/modules/photos/photodelete.php?pho_id=$pho_id&bild=$bild&seite=$seite"). "\">
+							<a href=\"photo_function.php?pho_id=$pho_id&bild=$bild&seite=$seite&job=rotate&direction=left\">
+								<img src=\"$g_root_path/adm_program/images/arrow_turn_left.png\" border=\"0\" alt=\"nach links drehen\" title=\"nach links drehen\">
+							</a>
+							<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_photo&err_head=Foto L&ouml;schen&button=2&url=". urlencode("$g_root_path/adm_program/modules/photos/photo_function.php?pho_id=$pho_id&bild=$bild&seite=$seite&job=delete"). "\">
 								<img src=\"$g_root_path/adm_program/images/photo_delete.png\" border=\"0\" alt=\"Photo löschen\" title=\"Photo löschen\">
+							</a>
+							<a href=\"photo_function.php?pho_id=$pho_id&bild=$bild&seite=$seite&job=rotate&direction=right\">
+								<img src=\"$g_root_path/adm_program/images/arrow_turn_right.png\" border=\"0\" alt=\"nach rechts drehen\" title=\"nach rechts drehen\">
 							</a>";
+						
 						}
 					echo"</td>";
 					}//if
@@ -298,7 +305,7 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL){
 				}
 				echo"<tr>
 					<td style=\"width: 200px\"><div align=\"center\"><a target=\"_self\" href=\"photos.php?pho_id=".$adm_photo_list["pho_id"]."\">
-							<img src=\"resize.php?bild=$previewordner/$previewpic.jpg&amp;scal=130&amp;aufgabe=anzeigen\" border=\"0\" alt=\"$previewpic\"
+							<img src=\"resize.php?bild=$previewordner/$previewpic.jpg&amp;scal=100&amp;aufgabe=anzeigen&amp;side=y\" border=\"0\" alt=\"$previewpic\"
 						  style=\"vertical-align: middle; align: right;\"></a></div></td>
 					<td>
 						<a target=\"_self\" href=\"photos.php?pho_id=".$adm_photo_list["pho_id"]."\">".$adm_photo_list["pho_name"]."</a><br>
