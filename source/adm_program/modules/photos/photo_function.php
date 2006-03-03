@@ -51,9 +51,9 @@ function right_rotate ($pho_id, $bild){
    $bilddaten = imagecreatefromjpeg("$ordner/$bild.jpg");
 	//kopieren der Daten in neues Bild
    //Rechtsdrehung
-    for($y=0; $y<=$bildgroesse[1]; $y++){
-   	for($x=0; $x<=$bildgroesse[0]; $x++){
-   		imagecopy($neubild, $bilddaten, $bildgroesse[1]-$y, $x, $x, $y, 1,1 );
+    for($y=0; $y<$bildgroesse[1]; $y++){
+   	for($x=0; $x<$bildgroesse[0]; $x++){
+   		imagecopy($neubild, $bilddaten, $bildgroesse[1]-$y-1, $x, $x, $y, 1,1 );
    	}
 	 }
    //ursprungsdatei löschen
@@ -89,9 +89,9 @@ function left_rotate ($pho_id, $bild){
    $bilddaten = imagecreatefromjpeg("$ordner/$bild.jpg");
 	//kopieren der Daten in neues Bild
    //Linksdrehung
-   for($y=0; $y<=$bildgroesse[1]; $y++){
-   	for($x=0; $x<=$bildgroesse[0]; $x++){
-   		imagecopy($neubild, $bilddaten, $y, $bildgroesse[0]-$x, $x, $y, 1,1 );
+   for($y=0; $y<$bildgroesse[1]; $y++){
+   	for($x=0; $x<$bildgroesse[0]; $x++){
+   		imagecopy($neubild, $bilddaten, $y, $bildgroesse[0]-$x-1, $x, $y, 1,1 );
    	}
    }
    //ursprungsdatei löschen
@@ -162,7 +162,8 @@ if($_GET["job"]=="rotate"){
 	if($_GET["direction"]=="left")left_rotate($_GET["pho_id"], $_GET["bild"]);
 	// zur Ausgangsseite zurueck
 	$seite=$_GET["seite"];
-	$location = "location: photos.php?pho_id=$pho_id&seite=$seite";
+	$pho_id=$_GET["pho_id"];
+	$location = "location: $g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id&seite=$seite";
 	header($location);
 	exit();
 }
