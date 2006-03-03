@@ -150,7 +150,12 @@ else
                         echo $default_folder;
                   }
                   else
-                     echo $folder;
+                  {
+                  	if(strlen($default_folder) == 0)
+                        echo "Download/".$folder;
+                     else
+                        echo $default_folder."/".$folder;	
+                  }
                echo "</th>
                <th class=\"tableHeader\" style=\"text-align: center;\">Erstellungsdatum</th>
                <th class=\"tableHeader\" style=\"text-align: right;\">Gr&ouml;&szlig;e&nbsp;</th>";
