@@ -310,7 +310,7 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL){
   					}
 				}
 				echo"<tr>
-					<td style=\"width: 200px\"><div align=\"center\"><a target=\"_self\" href=\"photos.php?pho_id=".$adm_photo_list["pho_id"]."\">
+					<td style=\"width: 35%\"><div align=\"center\"><a target=\"_self\" href=\"photos.php?pho_id=".$adm_photo_list["pho_id"]."\">
 							<img src=\"resize.php?bild=$previewordner/$previewpic.jpg&amp;scal=100&amp;aufgabe=anzeigen&amp;side=y\" border=\"0\" alt=\"$previewpic\"
 						  style=\"vertical-align: middle; align: right;\"></a></div></td>
 					<td>
