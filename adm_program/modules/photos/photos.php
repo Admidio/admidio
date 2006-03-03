@@ -300,8 +300,14 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL){
    				$result_preview = mysql_query($sql, $g_adm_con);
   					db_error($result_preview, 1);
   					$adm_photo_preview=mysql_fetch_array($result_preview);
-  					$previewpic=mt_rand(1, $adm_photo_preview["pho_quantity"]);
-					$previewordner="../../../adm_my_files/photos/".$adm_photo_preview["pho_begin"]."_".$adm_photo_preview["pho_id"];
+  					if(mysql_num_rows($result_preview)!=0){
+  						$previewpic=mt_rand(1, $adm_photo_preview["pho_quantity"]);
+						$previewordner="../../../adm_my_files/photos/".$adm_photo_preview["pho_begin"]."_".$adm_photo_preview["pho_id"];
+  					}
+  					if(mysql_num_rows($result_preview)==0){
+  						$previewpic="nopix";
+						$previewordner="../../images/";
+  					}
 				}
 				echo"<tr>
 					<td style=\"width: 200px\"><div align=\"center\"><a target=\"_self\" href=\"photos.php?pho_id=".$adm_photo_list["pho_id"]."\">
