@@ -73,11 +73,10 @@ if($adm_photo["pho_pho_id_parent"]!=NULL){
          exit();
       }
    //Kontrolle des Dateityps und der Dateigroesse
-      $erlaubt=array(".jpg", ".jpeg", ".JPG", ".JPEG");
 		for($x=0; $x<=4; $x=$x+1){
          //Dateiendung
-         $endung=strrchr($_FILES["bilddatei"]["name"][$x], ".");
-			if ($_FILES["bilddatei"]["name"][$x]!=NULL && !in_array($endung, $erlaubt)) {
+         $bildinfo=getimagesize($_FILES["bilddatei"]["tmp_name"][$x]);
+			if ($_FILES["bilddatei"]["name"][$x]!=NULL && $bildinfo['mime']!="image/jpeg") {
             $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=dateiendungphotoup";
             header($location);
             exit();
