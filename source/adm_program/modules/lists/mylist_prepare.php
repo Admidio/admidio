@@ -115,7 +115,6 @@ if(strlen($sql_orderby) > 0)
 // SQL-Statement in Session-Variable schreiben
 session_start();
 $_SESSION['mylist_sql'] = $main_sql;
-echo $main_sql; exit();
 
 // weiterleiten zur allgemeinen Listeseite
 $location = "location: $g_root_path/adm_program/modules/lists/lists_show.php?typ=mylist&mode=html&rol_id=$rol_id";
