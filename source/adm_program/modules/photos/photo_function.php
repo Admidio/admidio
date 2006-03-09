@@ -30,7 +30,8 @@
  *****************************************************************************/
    require("../../../adm_config/config.php");
    require("../../system/common.php");
-   
+
+//Rechtsdrehung eines Bildes
 function right_rotate ($pho_id, $bild){ 
 	global $g_adm_con;
 	header("Content-Type: image/jpeg");
@@ -67,8 +68,10 @@ function right_rotate ($pho_id, $bild){
 	//Löschen des Bildes aus Arbeitsspeicher
   imagedestroy($neubild);
   imagedestroy($bilddaten);
+	//Datenbankupdate
 };
 
+//Linksdrehung eines Bildes
 function left_rotate ($pho_id, $bild){ 
 	global $g_adm_con;
 	header("Content-Type: image/jpeg");
@@ -106,11 +109,13 @@ function left_rotate ($pho_id, $bild){
   imagedestroy($neubild);
   imagedestroy($bilddaten);
 };
+
+//Loeschen eines Bildes
 function delete ($pho_id, $bild){
 	global $g_current_user;
    global $g_adm_con;
    global $g_organization;
-	
+	global $act_datetime;
 	//erfassen der Veranstaltung
 	$sql = "	SELECT *
 				FROM ". TBL_PHOTOS. "

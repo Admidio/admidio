@@ -25,7 +25,7 @@
  *****************************************************************************/
 
 	require("../../system/common.php");
-
+		
 //Übernahme Variablen
    $pho_id= $_GET['pho_id'];
 	$aufgabe=$_GET['aufgabe'];
@@ -38,15 +38,6 @@
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
    $adm_photo = mysql_fetch_array($result);
-
-//Erfassen der Eltern Veranstaltung
-   $pho_parent_id=$adm_photo["pho_pho_id_parent"];
-   $sql = "   SELECT *
-            FROM ". TBL_PHOTOS. "
-            WHERE pho_id ='$pho_parent_id'";
-   $result = mysql_query($sql, $g_adm_con);
-   db_error($result);
-   $adm_photo_parent = mysql_fetch_array($result);
    
 //erfassen der Veranstaltungsliste
    $sql = "   SELECT *
@@ -298,20 +289,67 @@ if($_GET["aufgabe"]=="change" || $_GET["aufgabe"]=="new"){
             <div style=\"text-align: right; width: 170px; float: left;\">in Ordner:</div>
             <div style=\"text-align: left; margin-left: 180px;\">";
                echo"<select size=\"1\" name=\"parent\">";
-               if($_GET["aufgabe"]=="new" && $pho_id!="")echo"<option value=\"".$adm_photo["pho_id"]."\">".$adm_photo["pho_name"]."&nbsp(".mysqldate("y", $adm_photo["pho_begin"]).")</option>";
-					if($_GET["aufgabe"]=="change" && $adm_photo["pho_pho_id_parent"]!=NULL)echo"<option value=\"".$adm_photo_parent["pho_pho_id_parent"]."\">".$adm_photo_parent["pho_name"]."&nbsp(".mysqldate("y", $adm_photo_parent["pho_begin"]).")</option>";
+               //if($_GET["aufgabe"]=="new" && $pho_id!="")echo"<option value=\"".$adm_photo["pho_id"]."\">".$adm_photo["pho_name"]."&nbsp(".mysqldate("y", $adm_photo["pho_begin"]).")</option>";
+					//if($_GET["aufgabe"]=="change" && $adm_photo["pho_pho_id_parent"]!=NULL)echo"<option value=\"".$adm_photo_parent["pho_pho_id_parent"]."\">".$adm_photo_parent["pho_name"]."&nbsp(".mysqldate("y", $adm_photo_parent["pho_begin"]).")</option>";
                echo"<option value=\"0\">Fotogalerien(Hauptordner)</option>";
-	            //Erfassen ob die Veranstaltung Kinder hat
-	            $sql = "   SELECT *
-            					FROM ". TBL_PHOTOS. "
-            					WHERE (pho_pho_id_parent ='$pho_id')";
-   				$result_child = mysql_query($sql, $g_adm_con);
-   				db_error($result_child, 1);
-	         	//Auswahlmöglichkeit nur wenn Veranst. nicht selbst Kinder hat
-	           	for($x=0; $adm_photo_list = mysql_fetch_array($result_list); $x++){
-	           		if(mysql_num_rows($result_child)==0 && $adm_photo_list["pho_id"]!=$pho_id_parent && $adm_photo_list["pho_id"]!=$pho_id && $adm_photo_list["pho_pho_id_parent"]==NULL)
-	           			echo"<option value=\"".$adm_photo_list["pho_id"]."\">".$adm_photo_list["pho_name"]."&nbsp(".mysqldate("y", $adm_photo_list["pho_begin"]).")</option>";
-	            }//for
+
+	           //Suchen nach Kindern Funktion mit selbstaufruf
+	           	function subfolder($parent_id, $vorschub, $pho_id, $adm_photo, $option){	
+	           		global $g_adm_con;
+	           		$vorschub=$vorschub."&nbsp;&nbsp;&nbsp;&nbsp;";
+	           		
+	           		//Erfassen der auszugebenden Veranstaltung
+	           		$sql = "   SELECT *
+            				FROM ". TBL_PHOTOS. "
+            				WHERE (pho_pho_id_parent ='$parent_id')";
+   					$result_child = mysql_query($sql, $g_adm_con);
+   					db_error($result_child, 1);
+
+	           		while($adm_photo_child=mysql_fetch_array($result_child)){
+							if($adm_photo_child["pho_id"]!=NULL){
+								if($adm_photo_child["pho_id"]!=$adm_photo["pho_pho_id_parent"] && $adm_photo_child["pho_id"]!=$pho_id && $option!=false)
+									echo"<option value=\"".$adm_photo_child["pho_id"]."\">".$vorschub."&#151;".$adm_photo_child["pho_name"]
+	           					."&nbsp(".mysqldate("y", $adm_photo_child["pho_begin"]).")</option>";
+								if($adm_photo_child["pho_id"]==$adm_photo["pho_pho_id_parent"] && $option!=false)
+									echo"<option value=\"".$adm_photo_child["pho_id"]."\" selected=\"selected\">".$vorschub."&#151;".$adm_photo_child["pho_name"]
+	           					."&nbsp(".mysqldate("y", $adm_photo_child["pho_begin"]).")</option>";
+	           				//Versnstaltung selbst darf nicht ausgewählt werden
+	           				if($adm_photo_child["pho_id"]!=$adm_photo["pho_pho_id_parent"] && $adm_photo_child["pho_id"]==$pho_id && $_GET["aufgabe"]=="change" || $option==false ){
+									echo"<option value=\"".$adm_photo_child["pho_id"]."\" disabled=\"disabled\">".$vorschub."&#151;".$adm_photo_child["pho_name"]
+	           					."&nbsp(".mysqldate("y", $adm_photo_child["pho_begin"]).")</option>";
+	           					$option=false;
+	           				}
+	           				//if($adm_photo_child["pho_id"]==$pho_id);
+								$parent_id = $adm_photo_child["pho_id"];
+								subfolder($parent_id, $vorschub, $pho_id, $adm_photo, $option);
+							}//if
+						}//while	           		
+	           	}//function
+	           
+	           while($adm_photo_list = mysql_fetch_array($result_list)){
+	           		if($adm_photo_list["pho_pho_id_parent"]==NULL){
+	           			//Wenn die Elternveranstaltung von pho_id dann selectet
+	           			if($adm_photo_list["pho_id"]==$adm_photo["pho_pho_id_parent"] || ($_GET["aufgabe"]=="new" && $pho_id==$adm_photo_list["pho_id"])){
+	           				echo"<option value=\"".$adm_photo_list["pho_id"]."\" selected=\"selected\">".$adm_photo_list["pho_name"]
+	           				."&nbsp;(".mysqldate("y", $adm_photo_list["pho_begin"]).")</option>";        			
+	           				$option=true;
+	           			}
+	           			//Normal
+	           			if($pho_id!=$adm_photo_list["pho_id"] && $adm_photo_list["pho_id"]!=$adm_photo["pho_pho_id_parent"]){
+	           				echo"<option value=\"".$adm_photo_list["pho_id"]."\">".$adm_photo_list["pho_name"]
+	           				."&nbsp;(".mysqldate("y", $adm_photo_list["pho_begin"]).")</option>";        			
+	           				$option=true;
+	           			}
+	           			//Versnstaltung selbst darf nicht ausgewählt werden
+	           			if($pho_id==$adm_photo_list["pho_id"] && $_GET["aufgabe"]=="change"){
+								echo"<option value=\"".$adm_photo_list["pho_id"]."\" disabled=\"disabled\">".$adm_photo_list["pho_name"]
+	           				."&nbsp;(".mysqldate("y", $adm_photo_list["pho_begin"]).")</option>"; 
+	           				$option=false;
+	           			}
+	           			$parent_id = $adm_photo_list["pho_id"];
+	           			subfolder($parent_id, $vorschub, $pho_id, $adm_photo, $option);
+	           	  	}//if
+	            }//while
 	            echo"</select>";
             echo"</div></div>";
             //Beginn
@@ -374,34 +412,56 @@ if($_GET["aufgabe"]=="change" || $_GET["aufgabe"]=="new"){
 
 if($_GET["aufgabe"]=="delete"){
    //Erfasse der zu löschenden VEranstaltung bzw. Unterveranstaltungen
-   //Erfassen der Veranstaltung bei Änderungsaufruf
-   $sql = "   SELECT *
+   //Erfassen der Veranstaltung bei Änderungsaufruf und schreiben in array
+   $delete_ids = array(0=>$pho_id);
+   $counter=1;
+   function event_delete ($delete_id){
+   	global $g_adm_con;
+   	global $delete_ids;
+   	global $counter;
+   	$sql = "   SELECT *
             FROM ". TBL_PHOTOS. "
-            WHERE (pho_id ='$pho_id') OR (pho_pho_id_parent ='$pho_id')";
-   $result = mysql_query($sql, $g_adm_con);
-   db_error($result, 1);
-   
+            WHERE (pho_pho_id_parent ='$delete_id')";
+		$result = mysql_query($sql, $g_adm_con);
+   	db_error($result, 1);
+		while($adm_photo_delete_collect  = mysql_fetch_array($result)){
+			$delete_ids["$counter"]=$adm_photo_delete_collect["pho_id"];
+			$counter++;
+			event_delete($adm_photo_delete_collect["pho_id"]);
+		}  	
+   }
+	//Funktion starten
+	event_delete($pho_id);
+   //Bericht
    echo"<div style=\"width: 500px\" align=\"center\" class=\"formHead\">Bericht</div>";
    echo"<div style=\"width: 500px\" align=\"center\" class=\"formBody\">";
-   for($x=0; $adm_photo = mysql_fetch_array($result); $x++){ 
-      $ordner = "../../../adm_my_files/photos/".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"];
+   //Alle veranstaltungen aufrufen und sie selbst und ihre Bilder löschen
+   for($x=0; $x<$counter; $x++){ 
+  		$pho_id_delete=$delete_ids[$x];
+  		$sql = "   SELECT *
+            FROM ". TBL_PHOTOS. "
+            WHERE (pho_id ='$pho_id_delete')";
+		$result = mysql_query($sql, $g_adm_con);
+   	db_error($result, 1);
+  		$adm_photo_delete = mysql_fetch_array($result);
+    	$ordner = "../../../adm_my_files/photos/".$adm_photo_delete["pho_begin"]."_".$adm_photo_delete["pho_id"];
       if(file_exists($ordner)){
       	chmod("$ordner", 0777);
       	//Löschen der Bilder
-      	for($x=1; $x<=$adm_photo["pho_quantity"]; $x++){
-        		if(file_exists("$ordner/$x.jpg")){
-        			chmod("$ordner/$x.jpg", 0777);
-         		if(unlink("$ordner/$x.jpg"))echo"Datei &bdquo;".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"]."/$x.jpg&rdquo; wurde erfolgreich GEL&Ouml;SCHT.<br>";
+      	for($y=1; $y<=$adm_photo_delete["pho_quantity"]; $y++){
+        		if(file_exists("$ordner/$y.jpg")){
+        			chmod("$ordner/$y.jpg", 0777);
+         		if(unlink("$ordner/$y.jpg"))echo"Datei &bdquo;".$adm_photo_delete["pho_begin"]."_".$adm_photo_delete["pho_id"]."/$y.jpg&rdquo; wurde erfolgreich GEL&Ouml;SCHT.<br>";
         		}
       	}	
       }
 		//Löschen der Daten aus der Datenbank
       $sql ="DELETE
             FROM ". TBL_PHOTOS. "
-            WHERE (pho_id ='".$adm_photo["pho_id"]."')";
+            WHERE (pho_id ='".$adm_photo_delete["pho_id"]."')";
       $result_delet = mysql_query($sql, $g_adm_con);
       db_error($result_delet);
-      if($result_delet)echo"Der Datensatz zu &bdquo;".$adm_photo["pho_name"]."&rdquo; wurde aus der Datenbank GEL&Ouml;SCHT.";
+      if($result_delet)echo"Der Datensatz zu &bdquo;".$adm_photo_delete["pho_name"]."&rdquo; wurde aus der Datenbank GEL&Ouml;SCHT.";
 
       //Löschen der Ordners
        if(file_exists($ordner)){
