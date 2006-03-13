@@ -75,7 +75,26 @@ require("../adm_config/body_top.php");
           <td align=\"right\"><img src=\"../adm_program/images/admidio_logo_50.png\" border=\"0\" alt=\"Admidio\" /></td>
           <td align=\"left\"><span style=\"font-size: 22pt; font-weight: bold;\">&nbsp;-&nbsp;&Uuml;bersicht</span></td>
       </tr>
-   </table>";
+   </table>
+   
+   <div style=\"padding-top: 15px; padding-bottom: 5px;\">";
+   
+   if($g_session_valid == 1)
+   {
+      echo "
+      <a href=\"$g_root_path/adm_program/system/logout.php\"><img src=\"$g_root_path/adm_program/images/error.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Logout\"></a>
+      <a href=\"$g_root_path/adm_program/system/logout.php\">Logout</a>";
+   }
+   else
+   {
+      echo "
+      <a href=\"$g_root_path/adm_program/system/login.php\"><img src=\"$g_root_path/adm_program/images/key.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Login\"></a>
+      <a href=\"$g_root_path/adm_program/system/login.php\">Login</a>&nbsp;&nbsp;&nbsp;&nbsp;
+      <a href=\"$g_root_path/adm_program/system/registration.php\"><img src=\"$g_root_path/adm_program/images/write.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Registrieren\"></a>
+      <a href=\"$g_root_path/adm_program/system/registration.php\">Registrieren</a>";
+   }
+   
+   echo "</div>";
 
    if(isModerator())
    {
@@ -178,18 +197,6 @@ require("../adm_config/body_top.php");
       <div style=\"margin-top: 7px;\"></div>
 
       <div style=\"text-align: left; width: 40; float: left;\">
-         <a href=\"$g_root_path/adm_program/modules/lists/mylist.php\">
-            <img style=\"position: relative; top: 5px;\" src=\"$g_root_path/adm_program/images/list_big.png\" border=\"0\" alt=\"Eigene Liste\" />
-         </a>
-      </div>
-      <div style=\"text-align: left; margin-left: 45px;\">
-         <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/lists/mylist.php\">Eigene Liste</a></span><br />
-         <span class=\"textDescription\">Kriterien einer Benutzerliste selber zusammensetzen und anzeigen.</span>
-      </div>
-
-      <div style=\"margin-top: 7px;\"></div>
-
-      <div style=\"text-align: left; width: 40; float: left;\">
          <a href=\"$g_root_path/adm_program/modules/mail/mail.php\">
             <img style=\"position: relative; top: 5px;\" src=\"$g_root_path/adm_program/images/mail_open_big.png\" border=\"0\" alt=\"E-Mail\" />
          </a>
@@ -208,32 +215,9 @@ require("../adm_config/body_top.php");
       </div>
       <div style=\"text-align: left; margin-left: 45px;\">
          <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/lists/lists.php\">Listen</a></span>&nbsp;&nbsp;
-         <span class=\"textHeadSmall\">&#91; <a href=\"$g_root_path/adm_program/modules/lists/lists.php?active_role=0\">Ehemalige</a> &#93;</span><br />
+         <span class=\"textHeadSmall\">&#91; <a href=\"$g_root_path/adm_program/modules/lists/mylist.php\">Eigene Liste</a>&nbsp;&nbsp;|&nbsp;
+            <a href=\"$g_root_path/adm_program/modules/lists/lists.php?active_role=0\">Ehemalige</a> &#93;</span><br />
          <span class=\"textDescription\">Verschiedene Benutzerlisten der Rollen (Gruppen / Kurse / Abteilungen) anzeigen.</span>
-      </div>
-
-      <div style=\"margin-top: 7px;\"></div>
-
-      <div style=\"text-align: left; width: 40; float: left;\">
-         <a href=\"$g_root_path/adm_program/system/login.php\">
-            <img style=\"position: relative; top: 5px;\" src=\"$g_root_path/adm_program/images/key_big.png\" border=\"0\" alt=\"Login\" />
-         </a>
-      </div>
-      <div style=\"text-align: left; margin-left: 45px;\">
-         <span class=\"textHead\"><a href=\"$g_root_path/adm_program/system/login.php\">Login</a></span><br />
-         <span class=\"textDescription\">Einen Benutzer am System anmelden.</span>
-      </div>
-
-      <div style=\"margin-top: 7px;\"></div>
-
-      <div style=\"text-align: left; width: 40; float: left;\">
-         <a href=\"$g_root_path/adm_program/system/logout.php\">
-            <img style=\"position: relative; top: 5px;\" src=\"$g_root_path/adm_program/images/error_big.png\" border=\"0\" alt=\"Logout\" />
-         </a>
-      </div>
-      <div style=\"text-align: left; margin-left: 45px;\">
-         <span class=\"textHead\"><a href=\"$g_root_path/adm_program/system/logout.php\">Logout</a></span><br />
-         <span class=\"textDescription\">Den angemeldeten Benutzer vom System abmelden.</span>
       </div>
 
       <div style=\"margin-top: 7px;\"></div>
@@ -246,18 +230,6 @@ require("../adm_config/body_top.php");
       <div style=\"text-align: left; margin-left: 45px;\">
          <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/profile/profile.php\">Profil</a></span><br />
          <span class=\"textDescription\">Das eigene Profil anschauen und bearbeiten.</span>
-      </div>
-
-      <div style=\"margin-top: 7px;\"></div>
-
-      <div style=\"text-align: left; width: 40; float: left;\">
-         <a href=\"$g_root_path/adm_program/system/registration.php\">
-            <img style=\"position: relative; top: 5px;\" src=\"$g_root_path/adm_program/images/write_big.png\" border=\"0\" alt=\"Registrieren\" />
-         </a>
-      </div>
-      <div style=\"text-align: left; margin-left: 45px;\">
-         <span class=\"textHead\"><a href=\"$g_root_path/adm_program/system/registration.php\">Registrieren</a></span><br />
-         <span class=\"textDescription\">Ein Besucher kann sich am System registrieren.</span>
       </div>
 
       <div style=\"margin-top: 7px;\"></div>
