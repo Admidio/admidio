@@ -29,7 +29,7 @@ if(!file_exists("../adm_config/config.php"))
 {
    $location = "location: ../adm_install/index.php";
    header($location);
-   exit();
+   exit(); 
 }
 
 include("system/common.php");
