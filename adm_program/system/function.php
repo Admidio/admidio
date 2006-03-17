@@ -189,7 +189,6 @@ function isMember($user_id, $organization = "")
                  AND mem_valid         = 1
                  AND mem_rol_id        = rol_id
                  AND rol_org_shortname = '$organization'
-                 AND rol_moderation    = 1
                  AND rol_valid         = 1 ";
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
