@@ -9,7 +9,7 @@
  * Uebergaben:
  *
  * Bild: welches Bild soll angezeigt werden
- * scal: Pixelanzahl auf die die längere Bildseite scaliert werden soll  
+ * scal: Pixelanzahl auf die die längere Bildseite scaliert werden soll
  * Ziel: wo soll es gspeichert werden
  ******************************************************************************
  *
@@ -28,9 +28,9 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
-   require("../../../adm_config/config.php");
    require("../../system/common.php");
-   
+   require("../../system/login_valid.php");
+
 	header("Content-Type: image/jpeg");
 	//Übernahme welches Bild umgerechnet werden soll
    $aufgabe = $_GET['aufgabe'];
@@ -41,7 +41,7 @@
 	$side = $_GET["side"];
    if($bild=='') $bild="../../../adm_my_files/photos/temp$nr.jpg";
 	//Ermittlung der Original Bildgröße
-   $bildgroesse = getimagesize("$bild"); 
+   $bildgroesse = getimagesize("$bild");
 	//Errechnung seitenverhältniss
    $seitenverhältnis = $bildgroesse[0]/$bildgroesse[1];
 	//x-Seite soll scalliert werden
@@ -61,8 +61,8 @@
    $bilddaten = imagecreatefromjpeg("$bild");
 	//kopieren der Daten in neues Bild
    imagecopyresampled($neubild, $bilddaten, 0, 0, 0, 0, $neubildsize[0], $neubildsize[1], $bildgroesse[0], $bildgroesse[1]);
-   
-	//Falls Aufgabe=anzeigen nur rückgabe des Bildes   
+
+	//Falls Aufgabe=anzeigen nur rückgabe des Bildes
    if($aufgabe=="anzeigen"){
       //Einfügen des textes bei bilder die in der Ausgabe größer al 200px sind
 		if ($scal>200){
