@@ -185,6 +185,13 @@ function getErrorText($error_code, $error_text, $g_current_organization)
                Dem Benutzer sind keine Rollen zugeordnet.";
          break;
 
+      case "no_cookie":
+         $error_str = "Der Login kann nicht durchgeführt werden, da dein Browser
+            das Setzen von Cookies verbietet !<br><br>
+            Damit du dich erfolgreich anmelden kannst, musst du in deinem Browser 
+            einstellen, dass dieser Cookies von $g_current_organization->homepage akzeptiert.";
+         break;
+
       case "passwort":
          $error_str = "Das Passwort stimmt nicht mit der Wiederholung &uuml;berein.";
          break;
