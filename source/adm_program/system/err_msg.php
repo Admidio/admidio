@@ -97,6 +97,17 @@ if(!isset($_GET['err_head']))
       $_GET['err_head'] = "Fehlermeldung";
 }
 
+// bei Login die Pruefung, ob Cookies gesetzt wurden, ansonsten Fehlermeldung anzeigen
+if($err_code == "login"
+&& !isset($_COOKIE['adm_session']) )
+{
+   $err_code = "no_cookie";
+   $load_url = "";
+   $_GET["button"] = 1;
+   $_GET['timer']  = 0;
+   
+}
+
 if($inline == 0)
 {
    echo '
