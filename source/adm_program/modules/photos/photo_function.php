@@ -9,7 +9,7 @@
  * Uebergaben:
  *
  * Bild: welches Bild soll angezeigt werden
- * scal: Pixelanzahl auf die die längere Bildseite scaliert werden soll  
+ * scal: Pixelanzahl auf die die längere Bildseite scaliert werden soll
  * Ziel: wo soll es gspeichert werden
  ******************************************************************************
  *
@@ -28,11 +28,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
-   require("../../../adm_config/config.php");
    require("../../system/common.php");
+   require("../../system/login_valid.php");
 
 //Rechtsdrehung eines Bildes
-function right_rotate ($pho_id, $bild){ 
+function right_rotate ($pho_id, $bild){
 	global $g_adm_con;
 	header("Content-Type: image/jpeg");
 		//Aufruf der ggf. Übergebenen Veranstaltung
@@ -45,7 +45,7 @@ function right_rotate ($pho_id, $bild){
 	//Ordner
 	$ordner = "../../../adm_my_files/photos/".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"];
 	//Ermittlung der Original Bildgröße
-   $bildgroesse = getimagesize("$ordner/$bild.jpg"); 
+   $bildgroesse = getimagesize("$ordner/$bild.jpg");
 	// Erzeugung neues Bild
    $neubild = imagecreatetruecolor($bildgroesse[1], $bildgroesse[0]);
 	//Aufrufen des Originalbildes
@@ -58,7 +58,7 @@ function right_rotate ($pho_id, $bild){
    	}
 	 }
    //ursprungsdatei löschen
-	if(file_exists("$ordner/$bild.jpg")){    
+	if(file_exists("$ordner/$bild.jpg")){
    	chmod("$ordner/$bild.jpg", 0777);
    	unlink("$ordner/$bild.jpg");
 	}
@@ -72,7 +72,7 @@ function right_rotate ($pho_id, $bild){
 };
 
 //Linksdrehung eines Bildes
-function left_rotate ($pho_id, $bild){ 
+function left_rotate ($pho_id, $bild){
 	global $g_adm_con;
 	header("Content-Type: image/jpeg");
 		//Aufruf der ggf. Übergebenen Veranstaltung
@@ -85,7 +85,7 @@ function left_rotate ($pho_id, $bild){
 	//Ordner
 	$ordner = "../../../adm_my_files/photos/".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"];
 	//Ermittlung der Original Bildgröße
-   $bildgroesse = getimagesize("$ordner/$bild.jpg"); 
+   $bildgroesse = getimagesize("$ordner/$bild.jpg");
 	// Erzeugung neues Bild
    $neubild = imagecreatetruecolor($bildgroesse[1], $bildgroesse[0]);
 	//Aufrufen des Originalbildes
@@ -98,7 +98,7 @@ function left_rotate ($pho_id, $bild){
    	}
    }
    //ursprungsdatei löschen
-	if(file_exists("$ordner/$bild.jpg")){    
+	if(file_exists("$ordner/$bild.jpg")){
    	chmod("$ordner/$bild.jpg", 0777);
    	unlink("$ordner/$bild.jpg");
 	}
@@ -122,7 +122,7 @@ function delete ($pho_id, $bild){
 				WHERE (pho_id ='$pho_id')";
 	$result = mysql_query($sql, $g_adm_con);
 	db_error($result);
-	$adm_photo = mysql_fetch_array($result);	
+	$adm_photo = mysql_fetch_array($result);
 
 	//Speicherort
 	$ordner = "../../../adm_my_files/photos/".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"];
@@ -130,7 +130,7 @@ function delete ($pho_id, $bild){
 	//Bericht mit l&ouml;schen
    $neuebilderzahl = $adm_photo["pho_quantity"]-1;
 	//Bilder l&ouml;schen
-	if(file_exists("$ordner/$bild.jpg")){    
+	if(file_exists("$ordner/$bild.jpg")){
    	chmod("$ordner/$bild.jpg", 0777);
       unlink("$ordner/$bild.jpg");
 	}
