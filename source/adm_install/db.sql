@@ -10,6 +10,10 @@ drop table if exists %PRAEFIX%_announcements;
 
 drop table if exists %PRAEFIX%_dates;
 
+drop table if exists %PRAEFIX%_folders;
+
+drop table if exists %PRAEFIX%_folder_roles;
+
 drop table if exists %PRAEFIX%_members;
 
 drop table if exists %PRAEFIX%_organizations;
@@ -113,6 +117,60 @@ create index DAT_USR_FK on %PRAEFIX%_dates
 create index DAT_USR_CHANGE_FK on %PRAEFIX%_dates
 (
    dat_usr_id_change
+);
+
+/*==============================================================*/
+/* Table: adm_folders                                           */
+/*==============================================================*/
+create table %PRAEFIX%_folders
+(
+   fol_id                         int(11) unsigned               not null,
+   fol_org_shortname              varchar(10)                    not null,
+   fol_fol_id_parent              int(11) unsigned,
+   fol_type                       varchar(10)                    not null,
+   fol_name                       varchar(255)                   not null,
+   primary key (fol_id)
+)
+type = InnoDB;
+
+/*==============================================================*/
+/* Index: "FOL_ORG_FK"                                            */
+/*==============================================================*/
+create index FOL_ORG_FK on %PRAEFIX%_folders
+(
+   fol_org_shortname
+);
+/*==============================================================*/
+/* Index: "FOL_FOL_PARENT_FK"                                            */
+/*==============================================================*/
+create index FOL_FOL_PARENT_FK on %PRAEFIX%_folders
+(
+   fol_fol_id_parent
+);
+
+/*==============================================================*/
+/* Table: adm_folder_roles                                      */
+/*==============================================================*/
+create table %PRAEFIX%_folder_roles
+(
+   flr_fol_id                     int(11) unsigned               not null,
+   flr_rol_id                     int(11) unsigned               not null
+)
+type = InnoDB;
+
+/*==============================================================*/
+/* Index: "FLR_FOL_FK"                                            */
+/*==============================================================*/
+create index FLR_FOL_FK on %PRAEFIX%_folder_roles
+(
+   flr_fol_id
+);
+/*==============================================================*/
+/* Index: "FOL_ROL_FK"                                            */
+/*==============================================================*/
+create index FOL_ROL_FK on %PRAEFIX%_folder_roles
+(
+   flr_rol_id
 );
 
 /*==============================================================*/
