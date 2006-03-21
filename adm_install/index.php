@@ -203,8 +203,9 @@ echo "
 	               <td>
 	                  <select size=\"1\" name=\"version\">
 	                     <option value=\"0\" selected=\"selected\">- Bitte w&auml;hlen -</option>
+	                     <option value=\"3\">Version 1.2.*</option>
 	                     <option value=\"2\">Version 1.1.*</option>
-	                     <option value=\"1\">Version 1.0.*</option>
+                        <option value=\"1\">Version 1.0.*</option>
 	                  </select>
 	               </td>
 	            </tr>
