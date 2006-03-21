@@ -289,10 +289,13 @@ if($_GET['mode'] == 3)
    // Updatescripte fuer die Datenbank verarbeiten
    if($_POST['version'] > 0)
    {
-      for($i = $_POST['version']; $i <= 2; $i++)
+      for($i = $_POST['version']; $i <= 3; $i++)
       {
+         $error = 0;
          if($i == 1)
             $filename = "upd_1_1_db.sql";            
+         elseif($i == 3)
+            $filename = "upd_1_3_db.sql";            
         	else
         		$filename = "";
 
@@ -311,9 +314,14 @@ if($_GET['mode'] == 3)
 						// Praefix fuer die Tabellen einsetzen und SQL-Statement ausfuehren
 						$sql = str_replace("%PRAEFIX%", $g_tbl_praefix, $sql);
 						$result = mysql_query($sql, $connection);
-						if(!$result) showError(mysql_error());
+						if(!$result) 
+                  {
+                     showError(mysql_error());
+                     $error++;
+                  }
 					}
 				}
+            if($error > 0) exit();
 			}
 
          if($i == 1)
