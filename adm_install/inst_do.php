@@ -232,6 +232,7 @@ if(!mysql_select_db($_POST['database'], $connection ))
 
 if($_GET['mode'] == 1)
 {
+   $error    = 0;
    $filename = "db.sql";
    $file     = fopen($filename, "r")
                or showError("Die Datei <b>db.sql</b> konnte nicht im Verzeichnis <b>adm_install</b> gefunden werden.");
@@ -246,9 +247,14 @@ if($_GET['mode'] == 1)
 			// Praefix fuer die Tabellen einsetzen und SQL-Statement ausfuehren
 			$sql = str_replace("%PRAEFIX%", $g_tbl_praefix, $sql);
          $result = mysql_query($sql, $connection);
-         if(!$result) showError(mysql_error());
+         if(!$result) 
+         {
+            showError(mysql_error());
+            $error++;
+         }
       }
    }
+   if($error > 0) exit();
 
    // Default-Daten anlegen
 

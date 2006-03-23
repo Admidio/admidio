@@ -124,14 +124,15 @@ create index DAT_USR_CHANGE_FK on %PRAEFIX%_dates
 /*==============================================================*/
 create table %PRAEFIX%_folders
 (
-   fol_id                         int(11) unsigned               not null,
+   fol_id                         int(11) unsigned               not null AUTO_INCREMENT,
    fol_org_shortname              varchar(10)                    not null,
    fol_fol_id_parent              int(11) unsigned,
    fol_type                       varchar(10)                    not null,
    fol_name                       varchar(255)                   not null,
    primary key (fol_id)
 )
-type = InnoDB;
+type = InnoDB
+auto_increment = 1;
 
 /*==============================================================*/
 /* Index: "FOL_ORG_FK"                                            */
