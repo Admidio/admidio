@@ -56,24 +56,17 @@ auto_increment = 1;
 /*==============================================================*/
 /* Index: "ANN_ORG_FK"                                            */
 /*==============================================================*/
-create index ANN_ORG_FK on %PRAEFIX%_announcements
-(
-   ann_org_shortname
-);
+alter table %PRAEFIX%_announcements add index ANN_ORG_FK (ann_org_shortname);
+
 /*==============================================================*/
 /* Index: "ANN_USR_FK"                                            */
 /*==============================================================*/
-create index ANN_USR_FK on %PRAEFIX%_announcements
-(
-   ann_usr_id
-);
+alter table %PRAEFIX%_announcements add index ANN_USR_FK(ann_usr_id);
+
 /*==============================================================*/
 /* Index: "ANN_USR_CHANGE_FK"                                            */
 /*==============================================================*/
-create index ANN_USR_CHANGE_FK on %PRAEFIX%_announcements
-(
-   ann_usr_id_change
-);
+alter table %PRAEFIX%_announcements add index ANN_USR_CHANGE_FK (ann_usr_id_change);
 
 /*==============================================================*/
 /* Table: adm_dates                                             */
@@ -100,24 +93,17 @@ auto_increment = 1;
 /*==============================================================*/
 /* Index: "DAT_ORG_FK"                                            */
 /*==============================================================*/
-create index DAT_ORG_FK on %PRAEFIX%_dates
-(
-   dat_org_shortname
-);
+alter table %PRAEFIX%_dates add index DAT_ORG_FK (dat_org_shortname);
+
 /*==============================================================*/
 /* Index: "DAT_USR_FK"                                            */
 /*==============================================================*/
-create index DAT_USR_FK on %PRAEFIX%_dates
-(
-   dat_usr_id
-);
+alter table %PRAEFIX%_dates add index DAT_USR_FK (dat_usr_id);
+
 /*==============================================================*/
 /* Index: "DAT_USR_CHANGE_FK"                                            */
 /*==============================================================*/
-create index DAT_USR_CHANGE_FK on %PRAEFIX%_dates
-(
-   dat_usr_id_change
-);
+alter table %PRAEFIX%_dates add index DAT_USR_CHANGE_FK (dat_usr_id_change);
 
 /*==============================================================*/
 /* Table: adm_folders                                           */
@@ -137,17 +123,12 @@ auto_increment = 1;
 /*==============================================================*/
 /* Index: "FOL_ORG_FK"                                            */
 /*==============================================================*/
-create index FOL_ORG_FK on %PRAEFIX%_folders
-(
-   fol_org_shortname
-);
+alter table %PRAEFIX%_folders add index FOL_ORG_FK (fol_org_shortname);
+
 /*==============================================================*/
 /* Index: "FOL_FOL_PARENT_FK"                                            */
 /*==============================================================*/
-create index FOL_FOL_PARENT_FK on %PRAEFIX%_folders
-(
-   fol_fol_id_parent
-);
+alter table %PRAEFIX%_folders add index FOL_FOL_PARENT_FK (fol_fol_id_parent);
 
 /*==============================================================*/
 /* Table: adm_folder_roles                                      */
@@ -162,17 +143,12 @@ type = InnoDB;
 /*==============================================================*/
 /* Index: "FLR_FOL_FK"                                            */
 /*==============================================================*/
-create index FLR_FOL_FK on %PRAEFIX%_folder_roles
-(
-   flr_fol_id
-);
+alter table %PRAEFIX%_folder_roles add index FLR_FOL_FK (flr_fol_id);
+
 /*==============================================================*/
 /* Index: "FOL_ROL_FK"                                            */
 /*==============================================================*/
-create index FOL_ROL_FK on %PRAEFIX%_folder_roles
-(
-   flr_rol_id
-);
+alter table %PRAEFIX%_folder_roles add index FOL_ROL_FK (flr_rol_id);
 
 /*==============================================================*/
 /* Table: adm_members                                           */
@@ -195,17 +171,12 @@ auto_increment = 1;
 /*==============================================================*/
 /* Index: "MEM_ROL_FK"                                            */
 /*==============================================================*/
-create index MEM_ROL_FK on %PRAEFIX%_members
-(
-   mem_rol_id
-);
+alter table %PRAEFIX%_members add index MEM_ROL_FK (mem_rol_id);
+
 /*==============================================================*/
 /* Index: "MEM_USR_FK"                                            */
 /*==============================================================*/
-create index MEM_USR_FK on %PRAEFIX%_members
-(
-   mem_usr_id
-);
+alter table %PRAEFIX%_members add index MEM_USR_FK (mem_usr_id);
 
 /*==============================================================*/
 /* Table: adm_organizations                                     */
@@ -233,10 +204,7 @@ auto_increment = 1;
 /*==============================================================*/
 /* Index: "ORG_ORG_PARENT_FK"                                            */
 /*==============================================================*/
-create index ORG_ORG_PARENT_FK on %PRAEFIX%_organizations
-(
-   org_org_id_parent
-);
+alter table %PRAEFIX%_organizations add index ORG_ORG_PARENT_FK (org_org_id_parent);
 
 /*==============================================================*/
 /* Table: adm_photos                                            */
@@ -264,31 +232,22 @@ auto_increment = 1;
 /*==============================================================*/
 /* Index: "PHO_ORG_FK"                                            */
 /*==============================================================*/
-create index PHO_ORG_FK on %PRAEFIX%_photos
-(
-   pho_org_shortname
-);
+alter table %PRAEFIX%_photos add index PHO_ORG_FK (pho_org_shortname);
+
 /*==============================================================*/
 /* Index: "PHO_USR_FK"                                            */
 /*==============================================================*/
-create index PHO_USR_FK on %PRAEFIX%_photos
-(
-   pho_usr_id
-);
+alter table %PRAEFIX%_photos add index PHO_USR_FK (pho_usr_id);
+
 /*==============================================================*/
 /* Index: "PHO_USR_CHANGE_FK"                                            */
 /*==============================================================*/
-create index PHO_USR_CHANGE_FK on %PRAEFIX%_photos
-(
-   pho_usr_id_change
-);
+alter table %PRAEFIX%_photos add index PHO_USR_CHANGE_FK (pho_usr_id_change);
+
 /*==============================================================*/
 /* Index: "FK_PHO_PHO_PARENT_FK"                                            */
 /*==============================================================*/
-create index FK_PHO_PHO_PARENT_FK on %PRAEFIX%_photos
-(
-   pho_pho_id_parent
-);
+alter table %PRAEFIX%_photos add index FK_PHO_PHO_PARENT_FK (pho_pho_id_parent);
 
 /*==============================================================*/
 /* Table: adm_role_categories                                   */
@@ -306,10 +265,7 @@ auto_increment = 1;
 /*==============================================================*/
 /* Index: "RLC_ORG_FK"                                            */
 /*==============================================================*/
-create index RLC_ORG_FK on %PRAEFIX%_role_categories
-(
-   rlc_org_shortname
-);
+alter table %PRAEFIX%_role_categories add index RLC_ORG_FK (rlc_org_shortname);
 
 /*==============================================================*/
 /* Table: adm_role_dependencies                                 */
@@ -328,25 +284,17 @@ type = InnoDB;
 /*==============================================================*/
 /* Index: "RLD_USR_FK"                                            */
 /*==============================================================*/
-create index RLD_USR_FK on %PRAEFIX%_role_dependencies
-(
-   rld_usr_id
-);
+alter table %PRAEFIX%_role_dependencies add index RLD_USR_FK (rld_usr_id);
 
 /*==============================================================*/
 /* Index: "RLD_ROL_PARENT_FK"                                            */
 /*==============================================================*/
-create index RLD_ROL_PARENT_FK on %PRAEFIX%_role_dependencies
-(
-   rld_rol_id_parent
-);
+alter table %PRAEFIX%_role_dependencies add index RLD_ROL_PARENT_FK (rld_rol_id_parent);
+
 /*==============================================================*/
 /* Index: "RLD_ROL_CHILD_FK"                                            */
 /*==============================================================*/
-create index RLD_ROL_CHILD_FK on %PRAEFIX%_role_dependencies
-(
-   rld_rol_id_child
-);
+alter table %PRAEFIX%_role_dependencies add index RLD_ROL_CHILD_FK (rld_rol_id_child);
 
 /*==============================================================*/
 /* Table: adm_roles                                             */
@@ -385,24 +333,17 @@ auto_increment = 1;
 /*==============================================================*/
 /* Index: "ROL_ORG_FK"                                            */
 /*==============================================================*/
-create index ROL_ORG_FK on %PRAEFIX%_roles
-(
-   rol_org_shortname
-);
+alter table %PRAEFIX%_roles add index ROL_ORG_FK (rol_org_shortname);
+
 /*==============================================================*/
 /* Index: "ROL_RLC_FK"                                            */
 /*==============================================================*/
-create index ROL_RLC_FK on %PRAEFIX%_roles
-(
-   rol_rlc_id
-);
+alter table %PRAEFIX%_roles add index ROL_RLC_FK (rol_rlc_id);
+
 /*==============================================================*/
 /* Index: "ROL_USR_FK"                                            */
 /*==============================================================*/
-create index ROL_USR_FK on %PRAEFIX%_roles
-(
-   rol_usr_id_change
-);
+alter table %PRAEFIX%_roles add index ROL_USR_FK (rol_usr_id_change);
 
 /*==============================================================*/
 /* Table: adm_sessions                                          */
@@ -425,17 +366,12 @@ auto_increment = 1;
 /*==============================================================*/
 /* Index: "SES_USR_FK"                                            */
 /*==============================================================*/
-create index SES_USR_FK on %PRAEFIX%_sessions
-(
-   ses_usr_id
-);
+alter table %PRAEFIX%_sessions add index SES_USR_FK (ses_usr_id);
+
 /*==============================================================*/
 /* Index: "SES_ORG_FK"                                            */
 /*==============================================================*/
-create index SES_ORG_FK on %PRAEFIX%_sessions
-(
-   ses_org_shortname
-);
+alter table %PRAEFIX%_sessions add index SES_ORG_FK (ses_org_shortname);
 
 /*==============================================================*/
 /* Table: adm_user_data                                         */
@@ -455,17 +391,11 @@ auto_increment = 1;
 /*==============================================================*/
 /* Index: "USD_USF_FK"                                            */
 /*==============================================================*/
-create index USD_USF_FK on %PRAEFIX%_user_data
-(
-   usd_usf_id
-);
+alter table %PRAEFIX%_user_data add index USD_USF_FK (usd_usf_id);
 /*==============================================================*/
 /* Index: "USD_USR_FK"                                            */
 /*==============================================================*/
-create index USD_USR_FK on %PRAEFIX%_user_data
-(
-   usd_usr_id
-);
+alter table %PRAEFIX%_user_data add index USD_USR_FK (usd_usr_id);
 
 /*==============================================================*/
 /* Table: adm_user_fields                                       */
@@ -486,10 +416,7 @@ auto_increment = 1;
 /*==============================================================*/
 /* Index: "USF_ORG_FK"                                            */
 /*==============================================================*/
-create index USF_ORG_FK on %PRAEFIX%_user_fields
-(
-   usf_org_shortname
-);
+alter table %PRAEFIX%_user_fields add index USF_ORG_FK (usf_org_shortname);
 
 /*==============================================================*/
 /* Table: adm_users                                             */
@@ -530,18 +457,12 @@ auto_increment = 1;
 /*==============================================================*/
 /* Index: "USR_USR_CHANGE_FK"                                   */
 /*==============================================================*/
-create index USR_USR_CHANGE_FK on %PRAEFIX%_users
-(
-   usr_usr_id_change
-);
+alter table %PRAEFIX%_users add index USR_USR_CHANGE_FK (usr_usr_id_change);
 
 /*==============================================================*/
 /* Index: "USR_ORG_REG_FK"                                      */
 /*==============================================================*/
-create index USR_ORG_REG_FK on %PRAEFIX%_users
-(
-   usr_reg_org_shortname
-);
+alter table %PRAEFIX%_users add index USR_ORG_REG_FK (usr_reg_org_shortname);
 
 
 /*==============================================================*/
