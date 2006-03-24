@@ -548,84 +548,96 @@ create index USR_ORG_REG_FK on %PRAEFIX%_users
 /* Constraints between tables                                   */
 /*==============================================================*/
 
-alter table %PRAEFIX%_announcements add constraint FK_ANN_ORG foreign key (ann_org_shortname)
+alter table %PRAEFIX%_announcements add constraint %PRAEFIX%_FK_ANN_ORG foreign key (ann_org_shortname)
       references %PRAEFIX%_organizations (org_shortname) on delete restrict on update restrict;
 
-alter table %PRAEFIX%_announcements add constraint FK_ANN_USR foreign key (ann_usr_id)
+alter table %PRAEFIX%_announcements add constraint %PRAEFIX%_FK_ANN_USR foreign key (ann_usr_id)
       references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
 
-alter table %PRAEFIX%_announcements add constraint FK_ANN_USR_CHANGE foreign key (ann_usr_id_change)
+alter table %PRAEFIX%_announcements add constraint %PRAEFIX%_FK_ANN_USR_CHANGE foreign key (ann_usr_id_change)
       references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
 
-alter table %PRAEFIX%_dates add constraint FK_DAT_ORG foreign key (dat_org_shortname)
+alter table %PRAEFIX%_dates add constraint %PRAEFIX%_FK_DAT_ORG foreign key (dat_org_shortname)
       references %PRAEFIX%_organizations (org_shortname) on delete restrict on update restrict;
 
-alter table %PRAEFIX%_dates add constraint FK_DAT_USR foreign key (dat_usr_id)
+alter table %PRAEFIX%_dates add constraint %PRAEFIX%_FK_DAT_USR foreign key (dat_usr_id)
       references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
 
-alter table %PRAEFIX%_dates add constraint FK_DAT_USR_CHANGE foreign key (dat_usr_id_change)
+alter table %PRAEFIX%_dates add constraint %PRAEFIX%_FK_DAT_USR_CHANGE foreign key (dat_usr_id_change)
       references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
 
-alter table %PRAEFIX%_members add constraint FK_MEM_ROL foreign key (mem_rol_id)
+alter table adm_folder_roles add constraint %PRAEFIX%_FK_FOL_ROL foreign key (flr_rol_id)
+      references adm_roles (rol_id) on delete restrict on update restrict;
+
+alter table adm_folder_roles add constraint %PRAEFIX%_FK_FLR_FOL foreign key (flr_fol_id)
+      references adm_folders (fol_id) on delete restrict on update restrict;
+
+alter table adm_folders add constraint %PRAEFIX%_FK_FOL_FOL_PARENT foreign key (fol_fol_id_parent)
+      references adm_folders (fol_id) on delete restrict on update restrict;
+
+alter table adm_folders add constraint %PRAEFIX%_FK_FOL_ORG foreign key (fol_org_shortname)
+      references adm_organizations (org_shortname) on delete restrict on update restrict;
+
+alter table %PRAEFIX%_members add constraint %PRAEFIX%_FK_MEM_ROL foreign key (mem_rol_id)
       references %PRAEFIX%_roles (rol_id) on delete restrict on update restrict;
 
-alter table %PRAEFIX%_members add constraint FK_MEM_USR foreign key (mem_usr_id)
+alter table %PRAEFIX%_members add constraint %PRAEFIX%_FK_MEM_USR foreign key (mem_usr_id)
       references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
 
-alter table %PRAEFIX%_organizations add constraint FK_ORG_ORG_PARENT foreign key (org_org_id_parent)
+alter table %PRAEFIX%_organizations add constraint %PRAEFIX%_FK_ORG_ORG_PARENT foreign key (org_org_id_parent)
       references %PRAEFIX%_organizations (org_id) on delete set null on update restrict;
 
-alter table %PRAEFIX%_photos add constraint FK_PHO_PHO_PARENT foreign key (pho_pho_id_parent)
+alter table %PRAEFIX%_photos add constraint %PRAEFIX%_FK_PHO_PHO_PARENT foreign key (pho_pho_id_parent)
       references %PRAEFIX%_photos (pho_id) on delete set null on update restrict;
 
-alter table %PRAEFIX%_photos add constraint FK_PHO_ORG foreign key (pho_org_shortname)
+alter table %PRAEFIX%_photos add constraint %PRAEFIX%_FK_PHO_ORG foreign key (pho_org_shortname)
       references %PRAEFIX%_organizations (org_shortname) on delete restrict on update restrict;
 
-alter table %PRAEFIX%_photos add constraint FK_PHO_USR foreign key (pho_usr_id)
+alter table %PRAEFIX%_photos add constraint %PRAEFIX%_FK_PHO_USR foreign key (pho_usr_id)
       references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
 
-alter table %PRAEFIX%_photos add constraint FK_PHO_USR_CHANGE foreign key (pho_usr_id_change)
+alter table %PRAEFIX%_photos add constraint %PRAEFIX%_FK_PHO_USR_CHANGE foreign key (pho_usr_id_change)
       references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
 
-alter table %PRAEFIX%_role_categories add constraint FK_RLC_ORG foreign key (rlc_org_shortname)
+alter table %PRAEFIX%_role_categories add constraint %PRAEFIX%_FK_RLC_ORG foreign key (rlc_org_shortname)
       references %PRAEFIX%_organizations (org_shortname) on delete restrict on update restrict;
 
-alter table %PRAEFIX%_role_dependencies add constraint FK_RLD_ROL_CHILD foreign key (rld_rol_id_child)
+alter table %PRAEFIX%_role_dependencies add constraint %PRAEFIX%_FK_RLD_ROL_CHILD foreign key (rld_rol_id_child)
       references %PRAEFIX%_roles (rol_id) on delete restrict on update restrict;
 
-alter table %PRAEFIX%_role_dependencies add constraint FK_RLD_ROL_PARENT foreign key (rld_rol_id_parent)
+alter table %PRAEFIX%_role_dependencies add constraint %PRAEFIX%_FK_RLD_ROL_PARENT foreign key (rld_rol_id_parent)
       references %PRAEFIX%_roles (rol_id) on delete restrict on update restrict;
 
-alter table %PRAEFIX%_role_dependencies add constraint FK_RLD_USR foreign key (rld_usr_id)
+alter table %PRAEFIX%_role_dependencies add constraint %PRAEFIX%_FK_RLD_USR foreign key (rld_usr_id)
       references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
 
-alter table %PRAEFIX%_roles add constraint FK_ROL_ORG foreign key (rol_org_shortname)
+alter table %PRAEFIX%_roles add constraint %PRAEFIX%_FK_ROL_ORG foreign key (rol_org_shortname)
       references %PRAEFIX%_organizations (org_shortname) on delete restrict on update restrict;
 
-alter table %PRAEFIX%_roles add constraint FK_ROL_RLC foreign key (rol_rlc_id)
+alter table %PRAEFIX%_roles add constraint %PRAEFIX%_FK_ROL_RLC foreign key (rol_rlc_id)
       references %PRAEFIX%_role_categories (rlc_id) on delete restrict on update restrict;
 
-alter table %PRAEFIX%_roles add constraint FK_ROL_USR foreign key (rol_usr_id_change)
+alter table %PRAEFIX%_roles add constraint %PRAEFIX%_FK_ROL_USR foreign key (rol_usr_id_change)
       references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
 
-alter table %PRAEFIX%_sessions add constraint FK_SES_ORG foreign key (ses_org_shortname)
+alter table %PRAEFIX%_sessions add constraint %PRAEFIX%_FK_SES_ORG foreign key (ses_org_shortname)
       references %PRAEFIX%_organizations (org_shortname) on delete restrict on update restrict;
 
-alter table %PRAEFIX%_sessions add constraint FK_SES_USR foreign key (ses_usr_id)
+alter table %PRAEFIX%_sessions add constraint %PRAEFIX%_FK_SES_USR foreign key (ses_usr_id)
       references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
 
-alter table %PRAEFIX%_user_data add constraint FK_USD_USF foreign key (usd_usf_id)
+alter table %PRAEFIX%_user_data add constraint %PRAEFIX%_FK_USD_USF foreign key (usd_usf_id)
       references %PRAEFIX%_user_fields (usf_id) on delete restrict on update restrict;
 
-alter table %PRAEFIX%_user_data add constraint FK_USD_USR foreign key (usd_usr_id)
+alter table %PRAEFIX%_user_data add constraint %PRAEFIX%_FK_USD_USR foreign key (usd_usr_id)
       references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
 
-alter table %PRAEFIX%_user_fields add constraint FK_USF_ORG foreign key (usf_org_shortname)
+alter table %PRAEFIX%_user_fields add constraint %PRAEFIX%_FK_USF_ORG foreign key (usf_org_shortname)
       references %PRAEFIX%_organizations (org_shortname) on delete restrict on update restrict;
 
-alter table %PRAEFIX%_users add constraint FK_USR_USR_CHANGE foreign key (usr_usr_id_change)
+alter table %PRAEFIX%_users add constraint %PRAEFIX%_FK_USR_USR_CHANGE foreign key (usr_usr_id_change)
       references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
 
-alter table %PRAEFIX%_users add constraint FK_USR_ORG_REG foreign key (usr_reg_org_shortname)
+alter table %PRAEFIX%_users add constraint %PRAEFIX%_FK_USR_ORG_REG foreign key (usr_reg_org_shortname)
       references %PRAEFIX%_organizations (org_shortname) on delete restrict on update restrict;
       
