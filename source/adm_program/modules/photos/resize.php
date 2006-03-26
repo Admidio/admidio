@@ -43,17 +43,17 @@
 	//Ermittlung der Original Bildgröße
    $bildgroesse = getimagesize("$bild");
 	//Errechnung seitenverhältniss
-   $seitenverhältnis = $bildgroesse[0]/$bildgroesse[1];
+   $seitenverhaeltnis = $bildgroesse[0]/$bildgroesse[1];
 	//x-Seite soll scalliert werden
-	if($side=="x")$neubildsize = array ($scal, round($scal/$seitenverhältnis));
+	if($side=="x")$neubildsize = array ($scal, round($scal/$seitenverhaeltnis));
 	//y-Seite soll scalliert werden
-	if($side=="y")$neubildsize =  array (round($scal*$seitenverhältnis), $scal);
+	if($side=="y")$neubildsize =  array (round($scal*$seitenverhaeltnis), $scal);
 	//längere seite soll scallirt werden
 	if($side==''){
 		//Errechnug neuen Bildgröße Querformat
-   	if($bildgroesse[0]>=$bildgroesse[1])$neubildsize = array ($scal, round($scal/$seitenverhältnis));
+   	if($bildgroesse[0]>=$bildgroesse[1])$neubildsize = array ($scal, round($scal/$seitenverhaeltnis));
 		//Errechnug neuen Bildgröße Hochformat
-   	if($bildgroesse[0]<$bildgroesse[1])$neubildsize = array (round($scal*$seitenverhältnis), $scal);
+   	if($bildgroesse[0]<$bildgroesse[1])$neubildsize = array (round($scal*$seitenverhaeltnis), $scal);
 	}
 	// Erzeugung neues Bild
    $neubild = imagecreatetruecolor($neubildsize[0], $neubildsize[1]);
