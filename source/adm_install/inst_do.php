@@ -61,14 +61,15 @@ function showError($err_msg, $err_head = "Fehler", $mode = 1)
             {
             	// Fehlermeldung (Zurueckgehen)
                echo 'history.back()">
-					<img src="../adm_program/images/back.png" style="vertical-align: middle;" align="top" vspace="1" width="16" height="16" border="0" alt="Zurueck">
-					Zur&uuml;ck';
+					<img src="../adm_program/images/back.png" style=\"vertical-align: middle; padding-bottom: 1px;\" width="16" height="16" border="0" alt="Zurueck">
+					&nbsp;Zur&uuml;ck';
 				}
             elseif($mode == 2)
             {
             	// Erfolgreich durchgefuehrt
                echo 'self.location.href=\'../adm_program/index.php\'">
-					<img src="../adm_program/images/list.png" style="vertical-align: middle;" align="top" vspace="1" width="16" height="16" border="0" alt="Zurueck"> Admidio &Uuml;bersicht';
+					<img src="../adm_program/images/list.png" style=\"vertical-align: middle; padding-bottom: 1px;\" width="16" height="16" border="0" alt="Zurueck">
+					&nbsp;Admidio &Uuml;bersicht';
 				}
             echo '</button></p>
          </div>
