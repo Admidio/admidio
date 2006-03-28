@@ -129,7 +129,7 @@ echo "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?". ">
       <div style=\"padding-top: 10px;\" align=\"center\">";
          if($err_code == "")
             echo "<button name=\"schliessen\" type=\"button\" value=\"schliessen\" onclick=\"window.close()\">
-            <img src=\"$g_root_path/adm_program/images/error.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\">
+            <img src=\"$g_root_path/adm_program/images/door_in.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\">
             &nbsp;Schlie&szlig;en</button>";
          else
             echo "<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
