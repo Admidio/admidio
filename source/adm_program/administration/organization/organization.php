@@ -241,7 +241,7 @@ require("../../../adm_config/body_top.php");
 
          <button id=\"new_category\" type=\"button\" value=\"new_category\" style=\"margin-top: 3px; width: 180px;\"
             onClick=\"self.location.href='$g_root_path/adm_program/administration/roles/categories.php?url=$url'\">
-            <img src=\"$g_root_path/adm_program/images/write.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Kategorie hinzuf&uuml;gen\">
+            <img src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Kategorie hinzuf&uuml;gen\">
             &nbsp;Kategorie hinzuf&uuml;gen</button>
          <br><br>";
 
@@ -315,14 +315,14 @@ require("../../../adm_config/body_top.php");
          echo "
          <button id=\"new_field\" type=\"button\" value=\"new_field\" style=\"margin-top: 3px; width: 180px;\"
             onClick=\"self.location.href='$g_root_path/adm_program/administration/organization/field.php?url=$url'\">
-            <img src=\"$g_root_path/adm_program/images/wand.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Feld hinzuf&uuml;gen\">
+            <img src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Feld hinzuf&uuml;gen\">
             &nbsp;Feld hinzuf&uuml;gen</button>
 
          <hr width=\"85%\" />
 
          <div style=\"margin-top: 6px;\">
             <button name=\"speichern\" type=\"submit\" value=\"speichern\">
-            <img src=\"$g_root_path/adm_program/images/save.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
+            <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
             Speichern</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
             <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='". urldecode($url). "'\">

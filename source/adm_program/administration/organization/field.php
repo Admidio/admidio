@@ -132,7 +132,7 @@ require("../../../adm_config/body_top.php");
                <input type=\"checkbox\" id=\"locked\" name=\"locked\" ";
                if($field_locked == 1)
                   echo " checked ";
-               echo " value=\"1\" />&nbsp;
+               echo " value=\"1\" />
                <label for=\"locked\">Feld nur für Moderatoren sichtbar&nbsp;</label>
                <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: middle;\" vspace=\"1\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=field_locked','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
@@ -143,7 +143,7 @@ require("../../../adm_config/body_top.php");
 
          <div style=\"margin-top: 6px;\">
             <button name=\"speichern\" type=\"submit\" value=\"speichern\">
-            <img src=\"$g_root_path/adm_program/images/save.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
+            <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
             Speichern</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
             <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
