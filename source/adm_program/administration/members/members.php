@@ -129,7 +129,7 @@ require("../../../adm_config/body_top.php");
       <table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\">
          <tr>
             <th class=\"tableHeader\" align=\"right\">Nr.</th>
-            <th class=\"tableHeader\" align=\"center\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/person.png\" alt=\"Mitglied bei $g_current_organization->longname\" title=\"Mitglied bei $g_current_organization->longname\" border=\"0\"></th>
+            <th class=\"tableHeader\" align=\"center\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/user.png\" alt=\"Mitglied bei $g_current_organization->longname\" title=\"Mitglied bei $g_current_organization->longname\" border=\"0\"></th>
             <th class=\"tableHeader\" align=\"left\">&nbsp;Name</th>
             <th class=\"tableHeader\" align=\"center\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/mail.png\" alt=\"E-Mail\" title=\"E-Mail\"></th>
             <th class=\"tableHeader\" align=\"center\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/globe.png\" alt=\"Homepage\" title=\"Homepage\"></th>
@@ -158,7 +158,7 @@ require("../../../adm_config/body_top.php");
                   <td align=\"right\">$i&nbsp;</td>
                   <td align=\"center\">";
                      if($row_count[0] > 0)
-                        echo "<a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->usr_id\"><img src=\"$g_root_path/adm_program/images/person.png\" alt=\"Mitglied bei $g_current_organization->longname\" title=\"Mitglied bei $g_current_organization->longname\" border=\"0\"></a>";
+                        echo "<a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->usr_id\"><img src=\"$g_root_path/adm_program/images/user.png\" alt=\"Mitglied bei $g_current_organization->longname\" title=\"Mitglied bei $g_current_organization->longname\" border=\"0\"></a>";
                      else
                         echo "&nbsp;";
                   echo "</td>
@@ -262,7 +262,7 @@ require("../../../adm_config/body_top.php");
    }
    echo "<p>Falls der gesuchte Benutzer noch nicht existiert:</p>
    <p><button name=\"neu\" type=\"button\" value=\"neu\" onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_edit.php?new_user=1'\">
-   <img src=\"$g_root_path/adm_program/images/person_new.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer anlegen\">
+   <img src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer anlegen\">
    &nbsp;Benutzer anlegen</button></p>
 
    </div>";
