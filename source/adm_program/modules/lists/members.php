@@ -189,14 +189,14 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
      	//Button Alle bzw. nur Mitglieder anzeigen
      	if($restrict=="m" && (isModerator() || editUser()))
      		echo"	<button name=\"aller\" type=\"button\" value=\"back\" style=\"width: 140px;\" onclick=\"self.location.href='members.php?rol_id=$role_id&amp;popup=1&amp;restrict=u'\">
-         			<img src=\"../../../adm_program/images/gruppe.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"\">&nbsp;Alle anzeigen
+         			<img src=\"../../../adm_program/images/group.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"\">&nbsp;Alle anzeigen
          		</button>";
      	if($restrict=="u" && (isModerator() || editUser()))
      		echo"	<button name=\"mitglieder\" type=\"button\" value=\"back\" style=\"width: 140px;\" onclick=\"self.location.href='members.php?rol_id=$role_id&amp;popup=1&amp;restrict=m'\">
-         			<img src=\"../../../adm_program/images/person.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"\">&nbsp;Nur Mitglieder
+         			<img src=\"../../../adm_program/images/user.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"\">&nbsp;Nur Mitglieder
          		</button>
 					<button name=\"neu\" type=\"button\" value=\"neu\" onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_edit.php?new_user=1&amp;popup=1'\">
-   					<img src=\"$g_root_path/adm_program/images/person_new.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer anlegen\">
+   					<img src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer anlegen\">
    				&nbsp;Benutzer anlegen</button></p>";
      	//Anfang Tabelle
      	echo"
@@ -351,10 +351,10 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
 	  		<a name=\"Ende\"></a>
 			<div style=\"margin: 8px;\">
    	     	<button name=\"speichern\" type=\"submit\" value=\"speichern\">
-            	<img src=\"$g_root_path/adm_program/images/save.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">&nbsp;Speichern
+            	<img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">&nbsp;Speichern
 				</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
             <button name=\"schliessen\" type=\"button\" value=\"schliessen\" onclick=\"window.close()\">
-               <img src=\"$g_root_path/adm_program/images/error.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Schlie&szlig;en\">&nbsp;Schlie&szlig;en
+               <img src=\"$g_root_path/adm_program/images/door_in.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Schlie&szlig;en\">&nbsp;Schlie&szlig;en
 				</button>
      		</div>
    </form> </div>";//Ende Formular
