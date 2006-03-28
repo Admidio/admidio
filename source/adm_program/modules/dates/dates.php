@@ -209,7 +209,7 @@ require("../../../adm_config/body_top.php");
 						{
 							echo "<button name=\"new\" type=\"button\" value=\"new\" style=\"width: 152px;\"
 										onclick=\"self.location.href='dates_new.php'\">
-										<img src=\"$g_root_path/adm_program/images/write.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Neuer Termin\">
+										<img src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Neuer Termin\">
 										&nbsp;Termin anlegen</button>";
 						}
 					echo "</td>
@@ -240,7 +240,7 @@ require("../../../adm_config/body_top.php");
          <div class=\"boxBody\" style=\"overflow: hidden;\">
             <div class=\"boxHead\">
                <div style=\"text-align: left; float: left;\">
-                  <img src=\"$g_root_path/adm_program/images/history.png\" style=\"vertical-align: middle;\" alt=\"". strSpecialChars2Html($row->dat_headline). "\">
+                  <img src=\"$g_root_path/adm_program/images/date.png\" style=\"vertical-align: middle;\" alt=\"". strSpecialChars2Html($row->dat_headline). "\">
                   ". mysqldatetime("d.m.y", $row->dat_begin). "
                   &nbsp;". strSpecialChars2Html($row->dat_headline). "</div>";
 
@@ -335,7 +335,7 @@ require("../../../adm_config/body_top.php");
                {
                   echo "<button name=\"new\" type=\"button\" value=\"new\" style=\"width: 152px;\"
                            onclick=\"self.location.href='dates_new.php'\">
-                           <img src=\"$g_root_path/adm_program/images/write.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Neuer Termin\">
+                           <img src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Neuer Termin\">
                            &nbsp;Termin anlegen</button>";
                }
             echo "</td>
