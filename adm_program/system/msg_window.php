@@ -341,7 +341,7 @@ echo "
    echo "</div>
       <div style=\"padding-top: 10px;\" align=\"center\">
       <button name=\"schliessen\" type=\"button\" value=\"schliessen\" onclick=\"window.close()\">
-      <img src=\"$g_root_path/adm_program/images/error.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Schlie&szlig;en\">
+      <img src=\"$g_root_path/adm_program/images/door_in.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Schlie&szlig;en\">
       &nbsp;Schlie&szlig;en</button>
       </div>
 </body>

@@ -85,7 +85,7 @@ require("../../adm_config/body_top.php");
          <div style=\"margin-bottom: 7px;\">Du bist noch nicht registriert ?</div>
          <button name=\"Registrieren\" type=\"button\" value=\"Registrieren\"
             onclick=\"self.location.href='registration.php'\">
-            <img src=\"$g_root_path/adm_program/images/write.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Registrieren\">
+            <img src=\"$g_root_path/adm_program/images/register.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Registrieren\">
             Registrieren</button>
          <div style=\"font-size: 8pt; margin-top: 5px;\">
             Powered by <a href=\"http://www.admidio.org\" target=\"_blank\">Admidio ". getVersion(). "</a>
