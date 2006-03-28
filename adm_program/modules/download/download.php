@@ -211,12 +211,11 @@ else
    for($i=0; $i<count($ordnerarray); $i++){
            if(filetype("$act_folder/$ordnerarray[$i]")=="file"){
             //ermittlung der Dateigröße
-            $dateigroesse=round(filesize("$act_folder/$ordnerarray[$i]")/1024);
+            $dateigroesse = round(filesize("$act_folder/$ordnerarray[$i]")/1024);
             // Ermittlung des Datums
-            $dateidatum = date ("d.m.Y", filemtime("$act_folder/$ordnerarray[$i]"));
+            $dateidatum   = date ("d.m.Y", filemtime("$act_folder/$ordnerarray[$i]"));
             //Ermittlung der dateiendung
-            $datei = explode(".","$ordnerarray[$i]");
-            $dateiendung = strtolower($datei[1]);
+            $dateiendung  = substr($ordnerarray[$i], strrpos($ordnerarray[$i], ".")+1);
 
             //Auszugebendes Icon
             if($dateiendung=="gif"
@@ -224,25 +223,31 @@ else
             || $dateiendung=="jpg"
             || $dateiendung=="png"
             || $dateiendung=="bmp" )
-               $dateiendung = "img";
+               $dateiendung = "page_white_camera";
             elseif($dateiendung=="doc")
-               $dateiendung = "doc";
+               $dateiendung = "page_white_word";
             elseif($dateiendung=="xls"
             ||     $dateiendung=="csv")
-               $dateiendung = "xls";
+               $dateiendung = "page_white_excel";
             elseif($dateiendung=="pps"
             ||     $dateiendung=="ppt")
-               $dateiendung = "ppt";
-            elseif($dateiendung=="txt")
-               $dateiendung = "txt";
+               $dateiendung = "page_white_powerpoint";
+            elseif($dateiendung=="txt"
+            ||     $dateiendung=="php"
+            ||     $dateiendung=="sql")
+               $dateiendung = "page_white_text";
             elseif($dateiendung=="pdf")
-               $dateiendung = "pdf";
+               $dateiendung = "page_white_acrobat";
+            elseif($dateiendung=="zip"
+            ||     $dateiendung=="gz"
+            ||     $dateiendung=="tar")
+               $dateiendung = "page_white_compressed";
             else
-               $dateiendung = "file";
+               $dateiendung = "page_white_question";
 
             //Link und Dateiinfo Ausgabe
             echo "<tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\">
-                     <td style=\"text-align: center;\"><a href=\"get_file.php?folder=". urlencode($folder). "&amp;file=". urlencode($ordnerarray[$i]). "&amp;default_folder=". urlencode($default_folder). "\"><img src=\"$g_root_path/adm_program/images/$dateiendung.gif\" border=\"0\" alt=\"Datei\" title=\"Datei\"></a></td>
+                     <td style=\"text-align: center;\"><a href=\"get_file.php?folder=". urlencode($folder). "&amp;file=". urlencode($ordnerarray[$i]). "&amp;default_folder=". urlencode($default_folder). "\"><img src=\"$g_root_path/adm_program/images/$dateiendung.png\" border=\"0\" alt=\"Datei\" title=\"Datei\"></a></td>
                      <td style=\"text-align: left;\"><a href=\"get_file.php?folder=". urlencode($folder). "&amp;file=". urlencode($ordnerarray[$i]). "&amp;default_folder=". urlencode($default_folder). "\">$ordnerarray[$i]</a></td>
                      <td style=\"text-align: center;\">$dateidatum</td>
                      <td style=\"text-align: right;\">$dateigroesse kB&nbsp;</td>";
