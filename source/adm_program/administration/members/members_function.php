@@ -88,18 +88,18 @@ if($_GET["mode"] == 1)
 
             <button name=\"former\" type=\"button\" value=\"former\"
                onclick=\"self.location.href='$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET['user_id']. "&mode=2'\">
-               <img src=\"$g_root_path/adm_program/images/user.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\">
-               Ehemaliger</button>
+               <img src=\"$g_root_path/adm_program/images/user.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\">
+               &nbsp;Ehemaliger</button>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <button name=\"delete\" type=\"button\" value=\"delete\"
                onclick=\"self.location.href='$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET['user_id']. "&mode=3'\">
-               <img src=\"$g_root_path/adm_program/images/delete.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\">
-               L&ouml;schen</button>
+               <img src=\"$g_root_path/adm_program/images/delete.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\">
+               &nbsp;L&ouml;schen</button>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <button name=\"back\" type=\"button\" value=\"back\"
                onclick=\"history.back()\">
-               <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\">
-               Zur&uuml;ck</button>
+               <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\">
+               &nbsp;Zur&uuml;ck</button>
 
       </div>
       </div>";
