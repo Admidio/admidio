@@ -109,7 +109,7 @@
       </div>
       <div style=\"align: center; margin-top: 10px;\">
 		<button name=\"close\" type=\"button\" value=\"close\" style=\"width: 150px;\" onClick=\"parent.window.close()\">
-         	<img src=\"$g_root_path/adm_program/images/error.png\" style=\" vertical-align: bottom;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Fenster schlie&szlig;en\">
+         	<img src=\"$g_root_path/adm_program/images/door_in.png\" style=\" vertical-align: bottom;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Fenster schlie&szlig;en\">
          	Fenster schlie&szlig;en
       </button>
 		</div>
