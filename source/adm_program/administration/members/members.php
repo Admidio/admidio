@@ -8,6 +8,8 @@
  *
  * Uebergaben:
  *
+ * members - 1 : (Default) Nur Mitglieder der Gliedgemeinschaft anzeigen
+ *           0 : Mitglieder, Ehemalige, Mitglieder anderer Gliedgemeinschaften
  * letter: alle User deren Nachnamen mit dem Buchstaben beginnt, werden angezeigt
  *
  ******************************************************************************
@@ -39,6 +41,11 @@ if(!isModerator())
    exit();
 }
 
+if(!isset($_GET['members']))
+   $members = 1;
+else
+	$members = $_GET['members'];
+
 $restrict = "";
 $listname = "";
 $i = 0;
@@ -51,22 +58,24 @@ if(!array_key_exists("letter", $_GET))
    db_error($result);
 
    if(mysql_num_rows($result) > 50)
-      $_GET["letter"] = "A%";
+      $letter = "A%";
    else
-      $_GET["letter"] = "%";
+      $letter = "%";
 }
 else
 {
    if($_GET["letter"] != "%")
-      $_GET["letter"] = $_GET["letter"]. "%";
+      $letter = $_GET["letter"]. "%";
+   else
+   	$letter = "%";
 }
 
 // alle Mitglieder zur Auswahl selektieren
 $sql    = "SELECT * FROM ". TBL_USERS. "
-            WHERE usr_last_name LIKE {0}
-              AND usr_valid = 1
-            ORDER BY usr_last_name, usr_first_name ";
-$sql    = prepareSQL($sql, array($_GET['letter']));
+				WHERE usr_last_name LIKE {0}
+				  AND usr_valid = 1
+				ORDER BY usr_last_name, usr_first_name ";
+$sql    = prepareSQL($sql, array($letter));
 $result_mgl = mysql_query($sql, $g_adm_con);
 db_error($result_mgl);
 
@@ -87,20 +96,36 @@ echo "</head>";
 
 require("../../../adm_config/body_top.php");
    echo "<div align=\"center\">
+   
+   <h1>Benutzerverwaltung</h1>";
 
-   <h1>Benutzerverwaltung</h1>
+   echo "<p>
+      <a href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?new_user=1\"><img src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Login\"></a>
+      <a href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?new_user=1\">Benutzer anlegen</a>&nbsp;&nbsp;&nbsp;&nbsp;";
+      
+      // Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
+      if($members == 1)
+      {
+      	echo "<a href=\"$g_root_path/adm_program/administration/members/members.php?members=0&letter=$letter\"><img src=\"$g_root_path/adm_program/images/group.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Benutzer anzeigen\"></a>
+      	<a href=\"$g_root_path/adm_program/administration/members/members.php?members=0&letter=$letter\">Alle Benutzer anzeigen</a>";
+      }
+      else
+      {
+      	echo "<a href=\"$g_root_path/adm_program/administration/members/members.php?members=1&letter=$letter\"><img src=\"$g_root_path/adm_program/images/user.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Benutzer anzeigen\"></a>
+      	<a href=\"$g_root_path/adm_program/administration/members/members.php?members=1&letter=$letter\">Nur Mitglieder anzeigen</a>";
+      }
+   echo "</p>";   	
 
-   <h1>- ";
-
-   if($_GET["letter"] == "%")
-      echo "Alle";
+   if($members == 1)
+   	echo "<p>Alle Mitglieder ";
    else
-      echo str_replace("%", "", $_GET["letter"]);
-
-   echo " -</h1>
-   <p>W&auml;hle den Anfangsbuchstaben des Nachnamens aus:</p>
-   <p>
-      <a href=\"members.php?letter=%\">Alle</a>&nbsp;&nbsp;&nbsp;";
+   	echo "<p>Alle Benutzer (Mitglieder, Ehemalige) ";
+   	
+	if($letter != "%")
+		echo " mit Nachnamen ". str_replace("%", "", "$letter</h1>"). "*";
+   echo " werden angezeigt</p>";
+   	   	   
+   echo "<p><a href=\"members.php?letter=%\">Alle</a>&nbsp;&nbsp;&nbsp;";
    $letter_menu = "A";
    for($i = 0; $i < 26;$i++)
    {
@@ -111,9 +136,9 @@ require("../../../adm_config/body_top.php");
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
       $row = mysql_fetch_array($result);
-
+      
       if($row[0] > 0)
-         echo "<a href=\"members.php?letter=$letter_menu\">$letter_menu</a>";
+         echo "<a href=\"members.php?members=$members&letter=$letter_menu\">$letter_menu</a>";
       else
          echo $letter_menu;
 
@@ -137,27 +162,22 @@ require("../../../adm_config/body_top.php");
             <th class=\"tableHeader\" align=\"center\">&nbsp;Aktualisiert am</th>
             <th class=\"tableHeader\" align=\"center\">Bearbeiten</th>
          </tr>";
-      $i = 0;
+      $i = 0;	
 
       while($row = mysql_fetch_object($result_mgl))
       {
          $i++;
 
-         $sql    = "SELECT COUNT(*)
-                      FROM ". TBL_ROLES. ", ". TBL_MEMBERS. "
-                     WHERE rol_org_shortname = '$g_organization'
-                       AND rol_valid         = 1
-                       AND mem_rol_id        = rol_id
-                       AND mem_valid         = 1
-                       AND mem_usr_id         = $row->usr_id ";
-         $result    = mysql_query($sql, $g_adm_con);
-         db_error($result);
-         $row_count = mysql_fetch_array($result);
+			$is_member = isMember($row->usr_id);
 
-         echo "<tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
+			if(($members == 1 && $is_member == true)
+			||  $members == 0)
+			{
+         	echo "
+         	<tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
                   <td align=\"right\">$i&nbsp;</td>
                   <td align=\"center\">";
-                     if($row_count[0] > 0)
+                     if($is_member == true)
                         echo "<a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->usr_id\"><img src=\"$g_root_path/adm_program/images/user.png\" alt=\"Mitglied bei $g_current_organization->longname\" title=\"Mitglied bei $g_current_organization->longname\" border=\"0\"></a>";
                      else
                         echo "&nbsp;";
@@ -252,6 +272,7 @@ require("../../../adm_config/body_top.php");
                   }
                   echo "</td>
                </tr>";
+      	}
       }
 
       echo "</table>";
@@ -260,12 +281,8 @@ require("../../../adm_config/body_top.php");
    {
       echo "<p>Es wurde keine Daten gefunden !</p><br />";
    }
-   echo "<p>Falls der gesuchte Benutzer noch nicht existiert:</p>
-   <p><button name=\"neu\" type=\"button\" value=\"neu\" onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_edit.php?new_user=1'\">
-   <img src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer anlegen\">
-   &nbsp;Benutzer anlegen</button></p>
 
-   </div>";
+   echo "</div>";
 
    require("../../../adm_config/body_bottom.php");
 echo "</body>
