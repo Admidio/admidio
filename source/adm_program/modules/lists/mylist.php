@@ -137,7 +137,7 @@ require("../../../adm_config/body_top.php");
                <th class=\"tableHeader\">Feld</th>
                <th class=\"tableHeader\">Sortierung</th>
                <th class=\"tableHeader\">Bedingung
-                  <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                  <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                   onClick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=condition','Message','width=450,height=250,left=310,top=200,scrollbars=yes')\">
                </th>
             </tr>";
@@ -184,11 +184,11 @@ require("../../../adm_config/body_top.php");
          
          <p>
             <button name=\"anzeigen\" type=\"submit\" value=\"anzeigen\">
-            <img src=\"$g_root_path/adm_program/images/list.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Liste anzeigen\">
+            <img src=\"$g_root_path/adm_program/images/list.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Liste anzeigen\">
             &nbsp;Liste anzeigen</button>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
-            <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
+            <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
             Zur&uuml;ck</button>
          </p>
       </div>

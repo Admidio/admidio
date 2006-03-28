@@ -240,15 +240,14 @@ require("../../../adm_config/body_top.php");
 								{
 									// nur Moderatoren duerfen Rollen editieren
 									echo "&nbsp;<a href=\"$g_root_path/adm_program/administration/roles/roles_new.php?rol_id=$row_lst->rol_id\">
-									<img src=\"$g_root_path/adm_program/images/edit.png\" vspace=\"1\" style=\"vertical-align: middle;\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Einstellungen\" title=\"Einstellungen\"></a>";    
+									<img src=\"$g_root_path/adm_program/images/edit.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Einstellungen\" title=\"Einstellungen\"></a>";    
 								}
 								
 								// Gruppenleiter und Moderatoren duerfen Mitglieder zuordnen oder entfernen (nicht bei Ehemaligen Rollen)
             				if($row_lst->rol_valid==1)
             				{
-            				echo "&nbsp;<img src=\"$g_root_path/adm_program/images/add.png\" vspace=\"1\" 
-            					style=\"vertical-align: middle; cursor: pointer;\" align=\"top\" width=\"16\" height=\"16\" 
-            					border=\"0\" alt=\"Mitglieder zuordnen\" title=\"Mitglieder zuordnen\" 
+            				echo "&nbsp;<img src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle; padding-bottom: 1px; cursor: pointer;\" 
+            					width=\"16\" height=\"16\" border=\"0\" alt=\"Mitglieder zuordnen\" title=\"Mitglieder zuordnen\" 
             					onclick=\"window.open('$g_root_path/adm_program/modules/lists/members.php?rol_id=$row_lst->rol_id&amp;popup=1','Titel','width=550,height=550,left=310,top=100,scrollbars=yes,resizable=yes')\">";    
             				}
             			}
