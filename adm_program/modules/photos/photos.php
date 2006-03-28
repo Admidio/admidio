@@ -147,7 +147,8 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL){
       echo"
       <button name=\"verwaltung\" type=\"button\" value=\"up\" style=\"width: 187px;\"
          onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/event.php?aufgabe=new&amp;pho_id=$pho_id'\">
-         <img src=\"$g_root_path/adm_program/images/folder_create.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Veranstaltung anlegen\">  Veranstaltung anlegen
+         <img src=\"$g_root_path/adm_program/images/folder_create.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Veranstaltung anlegen\">
+         &nbsp;Veranstaltung anlegen
         </button><br><br>";
    }
   //Haupttabelle
@@ -416,7 +417,8 @@ echo"</table>";
 	if($adm_photo["pho_id"]!=NULL)
 	echo"<br>
 	<button name=\"up\" type=\"button\" value=\"up\" style=\"width: 135px;\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php'\">
-   	<img src=\"../../../adm_program/images/list.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Haupt&uuml;bersicht\">  &Uuml;bersicht
+   	<img src=\"../../../adm_program/images/list.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Haupt&uuml;bersicht\">
+   	&nbsp;&Uuml;bersicht
     </button>";
 
 /***************************Seitenende***************************/
