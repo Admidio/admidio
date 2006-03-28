@@ -88,7 +88,7 @@ if($_GET["mode"] == 1)
 
             <button name=\"former\" type=\"button\" value=\"former\"
                onclick=\"self.location.href='$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET['user_id']. "&mode=2'\">
-               <img src=\"$g_root_path/adm_program/images/person.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\">
+               <img src=\"$g_root_path/adm_program/images/user.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\">
                Ehemaliger</button>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <button name=\"delete\" type=\"button\" value=\"delete\"
