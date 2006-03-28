@@ -69,7 +69,7 @@ require("../../../adm_config/body_top.php");
    <h1>Rollenverwaltung</h1>
 
    <p><button name=\"neu\" type=\"button\" value=\"neu\" onclick=\"self.location.href='roles_new.php'\">
-   <img src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Rolle anlegen\">
+   <img src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Rolle anlegen\">
    &nbsp;Rolle anlegen</button></p>
 
    <table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\">
