@@ -133,8 +133,8 @@ echo "
 		         <p align=\"center\">
 		         <button name=\"config_file\" type=\"button\" value=\"config_file\"  style=\"width: 190px;\"
 		            onclick=\"location.href='inst_do.php?mode=2'\">
-						<img src=\"../adm_program/images/folder_down.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"config.php herunterladen\">
-						config.php herunterladen</button></p>
+						<img src=\"../adm_program/images/folder_down.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"config.php herunterladen\">
+						&nbsp;config.php herunterladen</button></p>
 			   </div>
 			</div>
 
@@ -270,11 +270,11 @@ echo "
 			if($mode > 0)
 			{
 				echo "<button name=\"back\" type=\"button\" value=\"back\" onclick=\"history.back()\">
-					<img src=\"../adm_program/images/back.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zurueck\">
+					<img src=\"../adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zurueck\">
 					&nbsp;Zurück</button>&nbsp;&nbsp;";
 			}
 			echo "<button name=\"forward\" type=\"submit\" value=\"forward\">Weiter&nbsp;
-				<img src=\"../adm_program/images/forward.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Weiter\">
+				<img src=\"../adm_program/images/forward.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Weiter\">
 			</button>
 		</div>
 		</form>
