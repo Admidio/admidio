@@ -129,7 +129,7 @@ elseif($_GET["mode"] == 3)
             Benutzer anlegen.
          </p>
          <p style=\"text-align: left;\">
-            <img src=\"$g_root_path/adm_program/images/person_new.png\" style=\"vertical-align: bottom;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer anlegen\">
+            <img src=\"$g_root_path/adm_program/images/user_add.png\" style=\"vertical-align: bottom;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer anlegen\">
             Existiert dieser Benutzer noch nicht, kannst du aus der vorhandenen
             Anmeldung einen neuen Benutzer <b>anlegen</b>.
          </p>
@@ -141,7 +141,7 @@ elseif($_GET["mode"] == 3)
             &nbsp;&nbsp;&nbsp;&nbsp;
             <button name=\"anlegen\" type=\"button\" value=\"anlegen\"
                onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=". $_GET['new_user_id']. "&amp;new_user=1&amp;url=". urlencode("$g_root_path/adm_program/administration/new_user/new_user.php"). "'\">
-               <img src=\"$g_root_path/adm_program/images/person_new.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer anlegen\">
+               <img src=\"$g_root_path/adm_program/images/user_add.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer anlegen\">
                &nbsp;Anlegen</button>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <button name=\"back\" type=\"button\" value=\"back\"
