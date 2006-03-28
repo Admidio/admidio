@@ -82,7 +82,7 @@ require("../adm_config/body_top.php");
    if($g_session_valid == 1)
    {
       echo "
-      <a href=\"$g_root_path/adm_program/system/logout.php\"><img src=\"$g_root_path/adm_program/images/error.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Logout\"></a>
+      <a href=\"$g_root_path/adm_program/system/logout.php\"><img src=\"$g_root_path/adm_program/images/door_in.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Logout\"></a>
       <a href=\"$g_root_path/adm_program/system/logout.php\">Logout</a>";
    }
    else
@@ -90,7 +90,7 @@ require("../adm_config/body_top.php");
       echo "
       <a href=\"$g_root_path/adm_program/system/login.php\"><img src=\"$g_root_path/adm_program/images/key.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Login\"></a>
       <a href=\"$g_root_path/adm_program/system/login.php\">Login</a>&nbsp;&nbsp;&nbsp;&nbsp;
-      <a href=\"$g_root_path/adm_program/system/registration.php\"><img src=\"$g_root_path/adm_program/images/write.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Registrieren\"></a>
+      <a href=\"$g_root_path/adm_program/system/registration.php\"><img src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Registrieren\"></a>
       <a href=\"$g_root_path/adm_program/system/registration.php\">Registrieren</a>";
    }
    
