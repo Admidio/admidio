@@ -170,7 +170,7 @@ require("../../../adm_config/body_top.php");
 						{
 							echo "<button name=\"new\" type=\"button\" value=\"new\" style=\"width: 152px;\"
 										onclick=\"self.location.href='announcements_new.php?headline=". $_GET["headline"]. "'\">
-										<img src=\"$g_root_path/adm_program/images/write.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Neu anlegen\">
+										<img src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Neu anlegen\">
 										&nbsp;Neu anlegen</button>";
 						}
 					echo "</td>
@@ -269,7 +269,7 @@ require("../../../adm_config/body_top.php");
                {
                   echo "<button name=\"new\" type=\"button\" value=\"new\" style=\"width: 152px;\"
                            onclick=\"self.location.href='announcements_new.php?headline=". $_GET["headline"]. "'\">
-                           <img src=\"$g_root_path/adm_program/images/write.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Neu anlegen\">
+                           <img src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Neu anlegen\">
                            &nbsp;Neu anlegen</button>";
                }
             echo "</td>
