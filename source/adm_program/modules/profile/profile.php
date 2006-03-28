@@ -450,7 +450,7 @@ require("../../../adm_config/body_top.php");
             {
                echo "<button style=\"width: 150px;\" type=\"button\" name=\"bearbeiten\" value=\"bearbeiten\"
                   onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=$a_user_id&amp;url=$url'\">
-                  <img src=\"$g_root_path/adm_program/images/edit.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Profil bearbeiten\">
+                  <img src=\"$g_root_path/adm_program/images/edit.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Profil bearbeiten\">
                   &nbsp;Profil bearbeiten</button>";
             }
 
@@ -459,14 +459,14 @@ require("../../../adm_config/body_top.php");
             {
                   echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button name=\"funktionen\" type=\"button\" value=\"funktionen\"
                      onClick=\"window.open('roles.php?user_id=$a_user_id&amp;popup=1','Titel','width=550,height=450,left=310,top=100,scrollbars=yes,resizable=yes')\">
-                     <img src=\"$g_root_path/adm_program/images/wand.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Rollen zuordnen\">
+                     <img src=\"$g_root_path/adm_program/images/wand.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Rollen zuordnen\">
                      &nbsp;Rollen zuordnen</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
             }
             else
                echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 
             echo "<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='". urldecode($url). "'\">
-               <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
+               <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
                &nbsp;Zur&uuml;ck</button>
          </div>
       </div>
