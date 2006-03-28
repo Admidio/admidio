@@ -69,7 +69,7 @@ require("../../../adm_config/body_top.php");
    <h1>Rollenverwaltung</h1>
 
    <p><button name=\"neu\" type=\"button\" value=\"neu\" onclick=\"self.location.href='roles_new.php'\">
-   <img src=\"$g_root_path/adm_program/images/write.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Rolle anlegen\">
+   <img src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Rolle anlegen\">
    &nbsp;Rolle anlegen</button></p>
 
    <table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\">
@@ -77,10 +77,10 @@ require("../../../adm_config/body_top.php");
          <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;Rolle</th>
          <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;Kategorie</th>
          <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/wand.png\" alt=\"Moderation (Benutzer &amp; Rollen verwalten uvm.)\" title=\"Moderation (Benutzer &amp; Rollen verwalten uvm.)\"></th>
-         <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/person.png\" alt=\"Daten aller Benutzer bearbeiten\" title=\"Daten aller Benutzer bearbeiten\"></th>
-         <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/history.png\" alt=\"Termine erfassen und bearbeiten\" title=\"Termine erfassen und bearbeiten\"></th>
+         <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/user.png\" alt=\"Daten aller Benutzer bearbeiten\" title=\"Daten aller Benutzer bearbeiten\"></th>
+         <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/date.png\" alt=\"Termine erfassen und bearbeiten\" title=\"Termine erfassen und bearbeiten\"></th>
          <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/photo.png\" alt=\"Fotos hochladen und bearbeiten\" title=\"Fotos hochladen und bearbeiten\"></th>
-         <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/download.png\" alt=\"Downloads hochladen und bearbeiten\" title=\"Downloads hochladen und bearbeiten\"></th>
+         <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/folder_down.png\" alt=\"Downloads hochladen und bearbeiten\" title=\"Downloads hochladen und bearbeiten\"></th>
          <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/mail-open.png\" alt=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\" title=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\"></th>
          <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/mail-open-key.png\" alt=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\" title=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\"></th>
          <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Rolle nur für Moderatoren sichtbar\" title=\"Rolle nur für Moderatoren sichtbar\"></th>
@@ -99,11 +99,11 @@ require("../../../adm_config/body_top.php");
 				echo "</td>
 				<td style=\"text-align: center;\">";
 					if($row->rol_edit_user == 1)
-						echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/person.png\" alt=\"Daten aller Benutzer bearbeiten\" title=\"Daten aller Benutzer bearbeiten\">";
+						echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/user.png\" alt=\"Daten aller Benutzer bearbeiten\" title=\"Daten aller Benutzer bearbeiten\">";
 				echo "</td>
 				<td style=\"text-align: center;\">";
 					if($row->rol_dates == 1)
-						echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/history.png\" alt=\"Termine erfassen und bearbeiten\" title=\"Termine erfassen und bearbeiten\">";
+						echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/date.png\" alt=\"Termine erfassen und bearbeiten\" title=\"Termine erfassen und bearbeiten\">";
 				echo "</td>
 				<td style=\"text-align: center;\">";
 					if($row->rol_photo == 1)
@@ -111,7 +111,7 @@ require("../../../adm_config/body_top.php");
 				echo "</td>
 				<td style=\"text-align: center;\">";
 					if($row->rol_download == 1)
-						echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/download.png\" alt=\"Downloads hochladen und bearbeiten\" title=\"Downloads hochladen und bearbeiten\">";
+						echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/folder_down.png\" alt=\"Downloads hochladen und bearbeiten\" title=\"Downloads hochladen und bearbeiten\">";
 				echo "</td>
 				<td style=\"text-align: center;\">";
 					if($row->rol_mail_logout == 1)
