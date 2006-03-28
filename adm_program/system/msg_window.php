@@ -303,7 +303,7 @@ echo "
          Sammelordner zu kopieren und diese dann mit einer Bildbearbeitungssoftware auf 640 Pixel
          (l&auml;ngere Bildseite) zu skalieren. Die JPG-Qualit&auml;t sollte beim Abspeichern auf 100%
          (also keine Komprimierung) gestellt werden.
-         Die maximale Dateigr&ouml;ße eines hochgeladenen Bildes kann durch den Webmaster eingeschr&ankt werden
+         Die maximale Dateigr&ouml;ße eines hochgeladenen Bildes kann durch den Webmaster eingeschr&auml;nkt werden
 			(Standart 512KB).
          ";
          break;
