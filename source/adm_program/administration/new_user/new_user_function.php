@@ -136,17 +136,17 @@ elseif($_GET["mode"] == 3)
 
             <button name=\"zuordnen\" type=\"button\" value=\"zuordnen\"
                onclick=\"self.location.href='$g_root_path/adm_program/administration/new_user/new_user_assign.php?new_user_id=". $_GET['new_user_id']. "&amp;all=0'\">
-               <img src=\"$g_root_path/adm_program/images/properties.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer anlegen\">
+               <img src=\"$g_root_path/adm_program/images/properties.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer anlegen\">
                &nbsp;Zuordnen</button>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <button name=\"anlegen\" type=\"button\" value=\"anlegen\"
                onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=". $_GET['new_user_id']. "&amp;new_user=1&amp;url=". urlencode("$g_root_path/adm_program/administration/new_user/new_user.php"). "'\">
-               <img src=\"$g_root_path/adm_program/images/user_add.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer anlegen\">
+               <img src=\"$g_root_path/adm_program/images/user_add.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer anlegen\">
                &nbsp;Anlegen</button>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <button name=\"back\" type=\"button\" value=\"back\"
                onclick=\"history.back()\">
-               <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer anlegen\">
+               <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer anlegen\">
                &nbsp;Zur&uuml;ck</button>
 
       </div>
