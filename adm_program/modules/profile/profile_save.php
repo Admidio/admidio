@@ -91,7 +91,7 @@ $user->phone      = strStripTags($_POST['phone']);
 $user->mobile     = strStripTags($_POST['mobile']);
 $user->fax        = strStripTags($_POST['fax']);
 $user->email      = strStripTags($_POST['email']);
-$user->homepge    = strStripTags($_POST['homepage']);
+$user->homepage   = strStripTags($_POST['homepage']);
 $user->birthday   = strStripTags($_POST['birthday']);
 $user->gender     = $_POST['gender'];
 
