@@ -199,7 +199,7 @@ require("../../../adm_config/body_top.php");
 						if($r_user == 1)
 							echo " checked ";
 						echo " value=\"1\" />&nbsp;
-						<label for=\"benutzer\"><img src=\"$g_root_path/adm_program/images/person.png\" alt=\"Daten aller Benutzer bearbeiten\"></label>
+						<label for=\"benutzer\"><img src=\"$g_root_path/adm_program/images/user.png\" alt=\"Daten aller Benutzer bearbeiten\"></label>
 					</div>
 					<div style=\"text-align: left; margin-left: 12%;\">
 						<label for=\"benutzer\">Daten aller Benutzer bearbeiten&nbsp;</label>
@@ -213,7 +213,7 @@ require("../../../adm_config/body_top.php");
 						if($r_termin == 1)
 							echo " checked ";
 						echo " value=\"1\" />&nbsp;
-						<label for=\"termine\"><img src=\"$g_root_path/adm_program/images/history.png\" alt=\"Termine erfassen und bearbeiten\"></label>
+						<label for=\"termine\"><img src=\"$g_root_path/adm_program/images/date.png\" alt=\"Termine erfassen und bearbeiten\"></label>
 					</div>
 					<div style=\"text-align: left; margin-left: 12%;\">
 						<label for=\"termine\">Termine erfassen und bearbeiten&nbsp;</label>
@@ -241,7 +241,7 @@ require("../../../adm_config/body_top.php");
 						if($r_download == 1)
 							echo " checked ";
 						echo " value=\"1\" />&nbsp;
-						<label for=\"download\"><img src=\"$g_root_path/adm_program/images/download.png\" alt=\"Downloads hochladen und bearbeiten\"></label>
+						<label for=\"download\"><img src=\"$g_root_path/adm_program/images/folder_down.png\" alt=\"Downloads hochladen und bearbeiten\"></label>
 					</div>
 					<div style=\"text-align: left; margin-left: 12%;\">
 						<label for=\"download\">Downloads hochladen und bearbeiten&nbsp;</label>
@@ -343,7 +343,7 @@ require("../../../adm_config/body_top.php");
 
          <div style=\"margin-top: 15px;\">
             <button name=\"speichern\" type=\"submit\" value=\"speichern\">
-            <img src=\"$g_root_path/adm_program/images/save.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
+            <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
             Speichern</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
             <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
