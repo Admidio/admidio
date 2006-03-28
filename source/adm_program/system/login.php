@@ -70,12 +70,12 @@ require("../../adm_config/body_top.php");
          <div style=\"margin-top: 10px;\">
             <input type=\"checkbox\" style=\"vertical-align: middle;\" id=\"long_login\" name=\"long_login\" value=\"1\" />
             <label for=\"long_login\">nach 8 Stunden ausloggen</label>
-            <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+            <img src=\"$g_root_path/adm_program/images/help.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
             onClick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=login','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
          </div>
          <div style=\"margin-top: 5px;\">
             <button name=\"login\" type=\"submit\" value=\"login\">
-            <img src=\"$g_root_path/adm_program/images/key.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Login\">
+            <img src=\"$g_root_path/adm_program/images/key.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Login\">
             &nbsp;Login</button>
          </div>
       </div>
@@ -85,8 +85,8 @@ require("../../adm_config/body_top.php");
          <div style=\"margin-bottom: 7px;\">Du bist noch nicht registriert ?</div>
          <button name=\"Registrieren\" type=\"button\" value=\"Registrieren\"
             onclick=\"self.location.href='registration.php'\">
-            <img src=\"$g_root_path/adm_program/images/register.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Registrieren\">
-            Registrieren</button>
+            <img src=\"$g_root_path/adm_program/images/register.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Registrieren\">
+            &nbsp;Registrieren</button>
          <div style=\"font-size: 8pt; margin-top: 5px;\">
             Powered by <a href=\"http://www.admidio.org\" target=\"_blank\">Admidio ". getVersion(). "</a>
          </div>

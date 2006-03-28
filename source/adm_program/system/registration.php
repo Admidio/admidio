@@ -96,12 +96,12 @@ require("../../adm_config/body_top.php");
 
          <div style=\"margin-top: 8px;\">
             <button name=\"abschicken\" type=\"submit\" value=\"abschicken\">
-                 <img src=\"$g_root_path/adm_program/images/mail.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Abschicken\">
-                 Abschicken</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                 <img src=\"$g_root_path/adm_program/images/mail.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Abschicken\">
+                 &nbsp;Abschicken</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
             <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
-                 <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
-                 Zur&uuml;ck</button>
+                 <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
+                 &nbsp;Zur&uuml;ck</button>
          </div>
       </div>
    </form>
