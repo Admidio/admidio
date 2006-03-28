@@ -257,7 +257,8 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"])){
          </table>
          <hr width=\"85%\" />
          <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php'\">
-            <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">Zur&uuml;ck
+            <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
+            &nbsp;Zur&uuml;ck
          </button>
       </div>
       <br><br>
@@ -399,10 +400,12 @@ if($_GET["aufgabe"]=="change" || $_GET["aufgabe"]=="new"){
             <hr width=\"85%\" />
             <div style=\"margin-top: 6px;\">
                <button name=\"submit\" type=\"submit\" value=\"speichern\">
-                  <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">Speichern
+                  <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
+                  &nbsp;Speichern
                </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
-                  <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">Zur&uuml;ck
+                  <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
+                  &nbsp;Zur&uuml;ck
                </button>
             </div></div>
          </form>
@@ -473,7 +476,8 @@ if($_GET["aufgabe"]=="delete"){
        echo"
        <hr width=\"85%\" />
          <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php'\">
-            <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">Zur&uuml;ck
+            <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
+            &nbsp;Zur&uuml;ck
          </button>
       </div>";
 }

@@ -78,12 +78,13 @@
      //Vor und zurück buttons
 	   if($last>0){
 			echo"<button name=\"back\" type=\"button\" value=\"back\" style=\"width: 130px;\" onclick=\"self.location.href='photopopup.php?bild=$last&pho_id=$pho_id'\">
-              <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Letztes Bild\">  Letztes Bild
+              <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Letztes Bild\">
+              &nbsp;Letztes Bild
            </button>  ";
 		}
 		if($next<=$bilder){
-		echo"<button name=\"forward\" type=\"button\" value=\"forward\" style=\"width: 130px;\" onclick=\"self.location.href='photopopup.php?bild=$next&pho_id=$pho_id'\"> N&auml;chstes Bild
-		 			<img src=\"$g_root_path/adm_program/images/forward.png\" style=\"vertical-align: middle;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"N&auml;chstes Bild\">
+		echo"<button name=\"forward\" type=\"button\" value=\"forward\" style=\"width: 130px;\" onclick=\"self.location.href='photopopup.php?bild=$next&pho_id=$pho_id'\">N&auml;chstes Bild&nbsp;
+		 			<img src=\"$g_root_path/adm_program/images/forward.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"N&auml;chstes Bild\">
            </button>";
 		}
 		echo"<br><br>";
@@ -109,8 +110,8 @@
       </div>
       <div style=\"align: center; margin-top: 10px;\">
 		<button name=\"close\" type=\"button\" value=\"close\" style=\"width: 150px;\" onClick=\"parent.window.close()\">
-         	<img src=\"$g_root_path/adm_program/images/door_in.png\" style=\" vertical-align: bottom;\" align=\"top\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Fenster schlie&szlig;en\">
-         	Fenster schlie&szlig;en
+         	<img src=\"$g_root_path/adm_program/images/door_in.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Fenster schlie&szlig;en\">
+         	&nbsp;Fenster schlie&szlig;en
       </button>
 		</div>
    </div>
