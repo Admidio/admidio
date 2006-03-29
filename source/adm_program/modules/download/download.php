@@ -126,7 +126,7 @@ else
       <img src=\"$g_root_path/adm_program/images/folder_create.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Ordner erstellen\">
       &nbsp;Ordner anlegen</button>
       <button name=\"down\" type=\"button\" value=\"down\" style=\"width: 150px;\" onclick=\"self.location.href='$g_root_path/adm_program/modules/download/upload.php?folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "'\">
-      <img src=\"$g_root_path/adm_program/images/upload.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hochladen\">
+      <img src=\"$g_root_path/adm_program/images/page_white_get.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hochladen\">
       &nbsp;Datei hochladen</button>";
    };
    echo "</p>";
