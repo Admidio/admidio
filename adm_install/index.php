@@ -133,7 +133,7 @@ echo "
 		         <p align=\"center\">
 		         <button name=\"config_file\" type=\"button\" value=\"config_file\"  style=\"width: 190px;\"
 		            onclick=\"location.href='inst_do.php?mode=2'\">
-						<img src=\"../adm_program/images/folder_down.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"config.php herunterladen\">
+						<img src=\"../adm_program/images/page_white_put.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"config.php herunterladen\">
 						&nbsp;config.php herunterladen</button></p>
 			   </div>
 			</div>
