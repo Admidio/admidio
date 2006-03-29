@@ -172,7 +172,7 @@ if($adm_photo["pho_pho_id_parent"]!=NULL){
 			<hr width=\"85%\" />
 	      <div style=\"margin-top: 6px;\">
    	   <button name=\"upload\" type=\"submit\" value=\"speichern\">
-      	   <img src=\"$g_root_path/adm_program/images/upload.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
+      	   <img src=\"$g_root_path/adm_program/images/page_white_get.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
       	   &nbsp;Bilder Hochladen
 			</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	      <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$adm_photo_parent["pho_id"]."'\">
