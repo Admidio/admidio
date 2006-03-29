@@ -123,7 +123,7 @@ require("../../system/login_valid.php");
 
             <div style=\"margin-top: 6px;\">
                <button name=\"hochladen\" type=\"submit\" value=\"hochladen\" tabindex=\"2\">
-               <img src=\"$g_root_path/adm_program/images/upload.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hochladen\">
+               <img src=\"$g_root_path/adm_program/images/page_white_get.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hochladen\">
                &nbsp;Hochladen</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
                <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
