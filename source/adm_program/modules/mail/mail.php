@@ -59,13 +59,13 @@ if(array_key_exists("rolle", $_GET))
    {
       $sql    = "SELECT rol_mail_login FROM ". TBL_ROLES. "
                   WHERE rol_org_shortname    = '$g_organization'
-                    AND UPPER(rol_name) = UPPER('{0}') ";
+                    AND UPPER(rol_name) = UPPER({0}) ";
    }
    else
    {
       $sql    = "SELECT rol_mail_logout FROM ". TBL_ROLES. "
                   WHERE rol_org_shortname    = '$g_organization'
-                    AND UPPER(rol_name) = UPPER('{0}') ";
+                    AND UPPER(rol_name) = UPPER({0}) ";
    }
    $sql    = prepareSQL($sql, array($_GET['rolle']));
    $result = mysql_query($sql, $g_adm_con);
