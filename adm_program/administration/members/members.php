@@ -106,13 +106,13 @@ require("../../../adm_config/body_top.php");
       // Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
       if($members == 1)
       {
-      	echo "<a href=\"$g_root_path/adm_program/administration/members/members.php?members=0&letter=$letter\"><img src=\"$g_root_path/adm_program/images/group.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Benutzer anzeigen\"></a>
-      	<a href=\"$g_root_path/adm_program/administration/members/members.php?members=0&letter=$letter\">Alle Benutzer anzeigen</a>";
+      	echo "<a href=\"$g_root_path/adm_program/administration/members/members.php?members=0&letter=". str_replace("%", "", $letter). "\"><img src=\"$g_root_path/adm_program/images/group.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Benutzer anzeigen\"></a>
+         <a href=\"$g_root_path/adm_program/administration/members/members.php?members=0&letter=". str_replace("%", "", $letter). "\">Alle Benutzer anzeigen</a>";
       }
       else
       {
-      	echo "<a href=\"$g_root_path/adm_program/administration/members/members.php?members=1&letter=$letter\"><img src=\"$g_root_path/adm_program/images/user.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Benutzer anzeigen\"></a>
-      	<a href=\"$g_root_path/adm_program/administration/members/members.php?members=1&letter=$letter\">Nur Mitglieder anzeigen</a>";
+         echo "<a href=\"$g_root_path/adm_program/administration/members/members.php?members=1&letter=". str_replace("%", "", $letter). "\"><img src=\"$g_root_path/adm_program/images/user.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Benutzer anzeigen\"></a>
+         <a href=\"$g_root_path/adm_program/administration/members/members.php?members=1&letter=". str_replace("%", "", $letter). "\">Nur Mitglieder anzeigen</a>";
       }
    echo "</p>";   	
 
@@ -122,22 +122,46 @@ require("../../../adm_config/body_top.php");
    	echo "<p>Alle Benutzer (Mitglieder, Ehemalige) ";
    	
 	if($letter != "%")
-		echo " mit Nachnamen ". str_replace("%", "", "$letter</h1>"). "*";
+      echo " mit Nachnamen ". str_replace("%", "*", $letter);
    echo " werden angezeigt</p>";
    	   	   
-   echo "<p><a href=\"members.php?letter=%\">Alle</a>&nbsp;&nbsp;&nbsp;";
+   echo "<p>"; 
+   
+   // Leiste mit allen Buchstaben des Alphabets anzeigen
+   
+   if($letter == "%")
+      echo "<b>Alle</b>&nbsp;&nbsp;&nbsp;";
+   else
+      echo "<a href=\"members.php?letter=%\">Alle</a>&nbsp;&nbsp;&nbsp;";
+      
    $letter_menu = "A";
    for($i = 0; $i < 26;$i++)
    {
       // Anzahl Mitglieder zum entsprechenden Buchstaben ermitteln
-      $sql    = "SELECT COUNT(*) FROM ". TBL_USERS. "
-                  WHERE usr_last_name LIKE '$letter_menu%' 
-                    AND usr_valid = 1 ";
+      if($members == 1)
+      {
+         $sql    = "SELECT COUNT(usr_id) FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
+                     WHERE rol_org_shortname = '$g_organization'
+                       AND rol_valid  = 1
+                       AND mem_rol_id = rol_id 
+                       AND mem_usr_id = usr_id
+                       AND mem_valid  = 1
+                       AND usr_last_name LIKE '$letter_menu%' 
+                       AND usr_valid  = 1 ";
+      }
+      else
+      {
+         $sql    = "SELECT COUNT(usr_id) FROM ". TBL_USERS. "
+                     WHERE usr_last_name LIKE '$letter_menu%' 
+                       AND usr_valid  = 1 ";
+      }
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
       $row = mysql_fetch_array($result);
       
-      if($row[0] > 0)
+      if($letter_menu == substr($letter, 0, 1))
+         echo "<b>$letter_menu</b>";
+      elseif($row[0] > 0)
          echo "<a href=\"members.php?members=$members&letter=$letter_menu\">$letter_menu</a>";
       else
          echo $letter_menu;
@@ -166,13 +190,12 @@ require("../../../adm_config/body_top.php");
 
       while($row = mysql_fetch_object($result_mgl))
       {
-         $i++;
-
 			$is_member = isMember($row->usr_id);
 
 			if(($members == 1 && $is_member == true)
 			||  $members == 0)
 			{
+            $i++;
          	echo "
          	<tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
                   <td align=\"right\">$i&nbsp;</td>
@@ -209,7 +232,7 @@ require("../../../adm_config/body_top.php");
                   <td align=\"center\">";
                   if(hasRole("Webmaster"))
                   {
-                     if($row_count[0] > 0)
+                     if($is_member == true)
                      {
                        	if(strlen($row->usr_login_name) > 0 && $g_current_organization->mail_extern != 1)
                        	{
@@ -246,7 +269,7 @@ require("../../../adm_config/body_top.php");
                      if($row_count_2[0] > 0)
                      {
                         // Webmaster duerfen Mitglieder nicht loeschen, wenn sie noch in anderen Gliedgemeinschaften aktiv sind
-                        if($row_count[0] > 0)
+                        if($is_member == true)
                            echo "<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_member&err_text=$row->usr_first_name $row->usr_last_name&err_head=Entfernen&button=2&url=". urlencode("$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->usr_id&mode=2"). "\">
                               <img src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"Benutzer entfernen\" title=\"Benutzer entfernen\"></a>";
                      }
@@ -261,7 +284,7 @@ require("../../../adm_config/body_top.php");
                   {
                      // Moderatoren duerfen nur Mitglieder der eigenen Gliedgemeinschaft entfernen,
                      // aber keine Webmaster !!!
-                     if($row_count[0] > 0 && !hasRole("Webmaster", $row->usr_id))
+                     if($is_member == true && !hasRole("Webmaster", $row->usr_id))
                      {
                         echo "
                         <a href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=$row->usr_id\">
