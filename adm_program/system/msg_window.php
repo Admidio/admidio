@@ -155,6 +155,11 @@ echo "
                   Funktion f&uuml;r alle Benutzer.";
             break;
 
+         case "leader":
+            echo "Leiter werden in den Mitgliederlisten dieser Rolle gesondert aufgeführt. Sie haben 
+                  außerdem die Möglichkeit neue Mitglieder aus der Gruppierung der Rolle zu zuordnen 
+                  oder vorhandene Mitglieder zu entfernen.";
+            break;
 
          case "login":
             echo "Normalerweise wirst du aus Sicherheitsgr&uuml;nden nach 30 Minuten, in denen du
@@ -218,12 +223,6 @@ echo "
          case "rolle_login":
             echo "Benutzer, die sich angemeldet haben, k&ouml;nnen E-Mails an diese Rolle schreiben, die
                   dann automatisch an alle Mitglieder weitergeleitet wird.";
-            break;
-
-         case "rolle_gruppe":
-            echo "Rollen, die diese Option aktiviert haben, haben erweiterte Funktionalit&auml;ten.
-                  Zu diesen Rollen k&ouml;nnen weitere Daten der Gruppe (Zeitraum, Uhrzeit, Ort)
-                  erfasst und jeder Gruppe Gruppenleiter zugeordnet werden.";
             break;
 
          case "rolle_moderation":
