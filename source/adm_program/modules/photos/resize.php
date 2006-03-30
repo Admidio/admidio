@@ -29,8 +29,6 @@
  *
  *****************************************************************************/
    require("../../system/common.php");
-   require("../../system/login_valid.php");
-
 	header("Content-Type: image/jpeg");
 	//Übernahme welches Bild umgerechnet werden soll
    $aufgabe = $_GET['aufgabe'];
@@ -39,6 +37,7 @@
    $ziel = $_GET['ziel'];
    $nr = $_GET['nr'];
 	$side = $_GET["side"];
+ 
    if($bild=='') $bild="../../../adm_my_files/photos/temp$nr.jpg";
 	//Ermittlung der Original Bildgröße
    $bildgroesse = getimagesize("$bild");
@@ -79,6 +78,7 @@
    };
 	//Falls Aufgabe=speichern rückgabe und speichern
       if($aufgabe=="speichern"){
+      	require("../../system/login_valid.php");
          imagejpeg($neubild, "$ziel.jpg", 90);
          imagejpeg($neubild,"",90);
          chmod("$ziel.jpg",0777);
