@@ -63,7 +63,6 @@
       <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
       <![endif]-->";
 
-      require("../../../adm_config/header.php");
    echo "</head>";
 
    //Ausgabe der Eine Tabelle Kopfzelle mit &Uuml;berschrift, Photographen und Datum
