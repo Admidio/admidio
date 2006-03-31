@@ -238,7 +238,7 @@ require("../../../adm_config/body_top.php");
                         {
                             $load_url = urlencode("$g_root_path/adm_program/administration/roles/categories_function.php?rlc_id=$cat_row->rlc_id&mode=2&url=$url");
                             echo "&nbsp;<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_category&err_text=$cat_row->rlc_name&err_head=Kategorie l&ouml;schen&button=2&url=$load_url\"><img
-                            src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>";
+                            src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>";
                         }
                         else
                             echo "&nbsp;<img src=\"$g_root_path/adm_program/images/dummy.gif\" width=\"16\" border=\"0\" alt=\"Dummy\">";
@@ -305,7 +305,7 @@ require("../../../adm_config/body_top.php");
                         <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>&nbsp;";
                         $load_url = urlencode("$g_root_path/adm_program/administration/organization/field_function.php?usf_id=$row->usf_id&mode=2&url=$url");
                      echo "<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_field&err_text=$row->usf_name&err_head=Profilfeld l&ouml;schen&button=2&url=$load_url\"><img
-                     src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>
+                     src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>
                   </td>
                </tr>";
             }
