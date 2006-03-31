@@ -296,7 +296,7 @@ require("../../../adm_config/body_top.php");
                   echo "</td>
                   <td style=\"text-align: center;\">";
                   if($row->usf_locked == 1)
-                     echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Feld nur f�r Moderatoren sichtbar\" title=\"Feld nur f�r Moderatoren sichtbar\">";
+                     echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Feld nur f&uuml;r Moderatoren sichtbar\" title=\"Feld nur f&uuml;r Moderatoren sichtbar\">";
                   else
                      echo "&nbsp;";
                   echo "</td>
