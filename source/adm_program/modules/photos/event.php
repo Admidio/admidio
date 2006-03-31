@@ -121,13 +121,18 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
         
         //Photographen
         $photographen =  $_POST["photographen"];
-        if($photographen==""){
+        if($photographen=="")
+        {
             $photographen="leider unbekannt";
         }
 
         //Freigabe
         $locked=$_POST["locked"];
-
+        if($locked==NULL)
+        {
+            $locked=0;
+        }
+        
 /********************neuen Datensatz anlegen***********************************/
         if ($aufgabe=="makenew")
         {
@@ -202,21 +207,21 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
 /********************Aenderung der Datenbankeinträge***********************************/
         //Aendern  der Daten in der Datenbank
         $sql= " UPDATE ". TBL_PHOTOS. "
-                SET  pho_name = '$veranstaltung',";
+                SET     pho_name = '$veranstaltung',";
         if($parent_id!="0"){
-            $sql=$sql."pho_pho_id_parent = '$parent_id',";
+            $sql=$sql." pho_pho_id_parent = '$parent_id',";
         }
         if($parent_id=="0"){
                 $sql=$sql."pho_pho_id_parent = NULL,";
-                $sql=$sql."
-                    pho_begin ='$beginn',
-                    pho_end ='$ende',
-                    pho_photographers ='$photographen',
-                    pho_last_change ='$act_datetime',
-                    pho_usr_id_change = '$g_current_user->id',
-                    pho_locked = '$locked'
-                WHERE pho_id = '$pho_id'";
-        }
+        }        
+        $sql=$sql."     pho_begin ='$beginn',
+                        pho_end ='$ende',
+                        pho_photographers ='$photographen',
+                        pho_last_change ='$act_datetime',
+                        pho_usr_id_change = '$g_current_user->id',
+                        pho_locked = '$locked'
+                WHERE   pho_id = '$pho_id'";
+
         //SQL Befehl ausfuehren
         $result = mysql_query($sql, $g_adm_con);
         db_error($result);
