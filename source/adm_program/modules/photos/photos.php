@@ -288,7 +288,7 @@ echo "
 								                <img src=\"$g_root_path/adm_program/images/arrow_turn_left.png\" border=\"0\" alt=\"nach links drehen\" title=\"nach links drehen\">
 							                </a>
 							                <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_photo&err_head=Foto L&ouml;schen&button=2&url=". urlencode("$g_root_path/adm_program/modules/photos/photo_function.php?pho_id=$pho_id&bild=$bild&thumb_seite=$thumb_seite&job=delete"). "\">
-							                 	<img src=\"$g_root_path/adm_program/images/photo_delete.png\" border=\"0\" alt=\"Photo l&ouml;schen\" title=\"Photo l&ouml;schen\">
+							                 	<img src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Photo l&ouml;schen\" title=\"Photo l&ouml;schen\">
 						                  	</a>
 							                <a href=\"photo_function.php?pho_id=$pho_id&bild=$bild&thumb_seite=$thumb_seite&job=rotate&direction=right\">
 							                 	<img src=\"$g_root_path/adm_program/images/arrow_turn_right.png\" border=\"0\" alt=\"nach rechts drehen\" title=\"nach rechts drehen\">
@@ -329,7 +329,7 @@ echo "
            	                        $err_text= $adm_photo_list["pho_name"]."(Beginn: ".mysqldate("d.m.y", $adm_photo["pho_begin"]).")";
                                     echo"
                                     <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_veranst&err_text=$err_text&err_head=Veranstaltung L&ouml;schen&button=2&url=". urlencode("$g_root_path/adm_program/modules/photos/event.php?aufgabe=delete&pho_id=".$adm_photo_list["pho_id"].""). "\">
-               	                        <img src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"Veranstaltung l�schen\" title=\"Veranstaltung l�schen\">
+               	                        <img src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Veranstaltung l&oumlschen\" title=\"Veranstaltung l&ouml;schen\">
 					                </a>";
 			 	                }
 						
@@ -555,7 +555,7 @@ echo "
                   		        $err_text= $adm_photo_list["pho_name"]."(Beginn: ".mysqldate("d.m.y", $adm_photo_list["pho_begin"]).")";
                   		        echo"
                   		        <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_veranst&err_text=$err_text&err_head=Veranstaltung L&ouml;schen&button=2&url=". urlencode("$g_root_path/adm_program/modules/photos/event.php?aufgabe=delete&pho_id=".$adm_photo_list["pho_id"].""). "\">
-                     		         <img src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"Veranstaltung l�schen\" title=\"Veranstaltung l�schen\"></a>";
+                     		         <img src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Veranstaltung l&ouml;schen\" title=\"Veranstaltung l&ouml;schen\"></a>";
 								if($adm_photo_list["pho_locked"]==1 && file_exists($ordner))
                                 {
                                     echo"
