@@ -55,21 +55,29 @@ function file_or_folder ($act_dir,$file) {
 	}
 };
 
-//Rekursive Funktion
-function remove_dir ($dir) {
-	$folders = scandir("$dir");
-	if (!($folders == 2)) {
-		for ($i = 2; $i <= count($folders)-1; $i++){ 
-			If (file_or_folder ($dir,$folders[$i])) {
-				remove_dir ("$dir/$folders[$i]");
-			}
-			else {
-				unlink("$dir/$folders[$i]");
-			};
-		};
+// rekursive Funktion um ganze Ordner mit Unterordnern zu loeschen
+function removeDir ($dir) 
+{
+   $fHandle = opendir($dir);
+	if($fHandle > 0) 
+   {
+      while (false !== ($fName = readdir($fHandle))) 
+      {     
+         if($fName != "." && $fName != "..")
+         {
+            if(is_dir("$dir/$fName"))
+            {
+               removeDir("$dir/$fName");               
+            }
+            else
+            {
+               unlink("$dir/$fName");
+            }
+         }
+      }
+      return rmdir($dir);      
 	};
-	return rmdir ("$dir");
-	
+   return false;
 };
 
 
@@ -193,7 +201,7 @@ elseif($_GET["mode"] == 2)
    
    if($is_folder)
    {
-      If ( remove_dir ("$act_folder/$file"))
+      If ( removeDir ("$act_folder/$file"))
       {
          $err_code = "delete_folder";
          $err_text = $file;
