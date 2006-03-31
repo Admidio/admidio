@@ -156,9 +156,9 @@ echo "
             break;
 
          case "leader":
-            echo "Leiter werden in den Mitgliederlisten dieser Rolle gesondert aufgeführt. Sie haben 
-                  außerdem die Möglichkeit neue Mitglieder aus der Gruppierung der Rolle zu zuordnen 
-                  oder vorhandene Mitglieder zu entfernen.";
+            echo "Leiter werden in den Mitgliederlisten dieser Rolle gesondert aufgef&uuml;hrt.<br><br>
+                  Leiter haben au&szlig;erdem die M&ouml;glichkeit neue Mitglieder aus der Gruppierung 
+                  der Rolle zu zuordnen oder vorhandene Mitglieder zu entfernen.";
             break;
 
          case "login":
@@ -303,7 +303,7 @@ echo "
          (l&auml;ngere Bildseite) zu skalieren. Die JPG-Qualit&auml;t sollte beim Abspeichern auf 100%
          (also keine Komprimierung) gestellt werden.
          Die maximale Dateigr&ouml;ße eines hochgeladenen Bildes kann durch den Webmaster eingeschr&auml;nkt werden
-			(Standart 512KB).
+            (Standart 512KB).
          ";
          break;
 
