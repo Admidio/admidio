@@ -1,0 +1,49 @@
+@CHARSET "UTF-8";
+
+body {
+   color:            #444444;
+   font-family:      Arial,Verdana,Helvetica,sans-serif;
+   font-size:        9pt;
+   background-color: #eeeeee;
+}
+
+
+/* Links */
+
+a:link {
+   color:            #E0791F;
+   font-weight:      bold;
+   text-decoration:  none;
+}
+
+a:visited {
+   color:            #E0791F;
+   font-weight:      bold;
+   text-decoration:  none;
+}
+
+a:hover {
+   color:            #E0791F;
+   font-weight:      bold;
+   text-decoration:  underline;
+}
+
+h1 {
+   color:            #333333;
+   text-align:       center;
+}
+
+h2 {
+   color:            #85C226;
+   text-align:       left;
+}
+
+/* preformatierter Text (z.B CodeBlöcke) */
+pre {
+    padding: 1em;
+    border: 1px dashed black;
+    color: black;
+    background-color: #f9f9f9;
+    line-height: 1.1em;
+    text-align: left;
+}
