@@ -156,8 +156,8 @@ echo "
             break;
 
          case "leader":
-            echo "Leiter werden in den Mitgliederlisten dieser Rolle gesondert aufgeführt. Sie haben 
-                  außerdem die Möglichkeit neue Mitglieder aus der Gruppierung der Rolle zu zuordnen 
+            echo "Leiter werden in den Mitgliederlisten dieser Rolle gesondert aufgefÃ¼hrt. Sie haben 
+                  auÃŸerdem die MÃ¶glichkeit neue Mitglieder aus der Gruppierung der Rolle zu zuordnen 
                   oder vorhandene Mitglieder zu entfernen.";
             break;
 
@@ -302,7 +302,7 @@ echo "
          Sammelordner zu kopieren und diese dann mit einer Bildbearbeitungssoftware auf 640 Pixel
          (l&auml;ngere Bildseite) zu skalieren. Die JPG-Qualit&auml;t sollte beim Abspeichern auf 100%
          (also keine Komprimierung) gestellt werden.
-         Die maximale Dateigr&ouml;ße eines hochgeladenen Bildes kann durch den Webmaster eingeschr&auml;nkt werden
+         Die maximale Dateigr&ouml;ÃŸe eines hochgeladenen Bildes kann durch den Webmaster eingeschr&auml;nkt werden
 			(Standart 512KB).
          ";
          break;
@@ -321,7 +321,7 @@ echo "
          echo " <h3>Warnung!!!</h3>
          Der zugeh&ouml;rige Ordner wurde nicht gefunden. Sollte er bewusst &uuml;ber FTP gel&ouml;scht worden sein
          oder nicht mehr die M&ouml;glichkeit bestehen ihn wieder herzustellen, bitte
-         den Datensatz mit Button in der Bearbeitungsspalte l&ouml;schen (<img src=\"$g_root_path/adm_program/images/delete.png\" style=\"vertical-align: top;\">).
+         den Datensatz mit Button in der Bearbeitungsspalte l&ouml;schen (<img src=\"$g_root_path/adm_program/images/cross.png\" style=\"vertical-align: top;\">).
          Besuchern der Website ohne Fotoverwaltungsrecht, wird diese Veranstaltung nicht mehr angezeigt.";
          break;
 

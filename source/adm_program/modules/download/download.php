@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2006 The Admidio Team
  * Homepage     : http://www.admidio.org
- * Module-Owner : Martin Günzler
+ * Module-Owner : Martin GÃ¼nzler
  *
  * Uebergaben:
  *
@@ -15,7 +15,7 @@
  *                  gesetzt, kann der Anwender nur noch in Unterordner und nicht
  *                  in hoehere Ordner des Default-Ordners navigieren
  * info   : Ausgabe von Verwaltungsinformationen
- * sort	 : Gibt die Art der Sortierung an. Default ist aufsteigend. Bei der Übergabe
+ * sort	 : Gibt die Art der Sortierung an. Default ist aufsteigend. Bei der Ãœbergabe
  *			   von "desc" wird absteigend sortiert.
  ******************************************************************************
  *
@@ -109,7 +109,7 @@ else
    <h1>Downloadbereich</h1>
    <p>";
 
-   //Button zurück zur Downloadübersicht & Eins zurück
+   //Button zurÃ¼ck zur DownloadÃ¼bersicht & Eins zurÃ¼ck
    if(strlen($folder) > 0)
    {
       $pfad = strrev(substr(strchr(strrev($folder),"/"),1));
@@ -198,7 +198,7 @@ else
                      <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Umbenennen\"></a>&nbsp;&nbsp;&nbsp;";
                   $load_url = urlencode("$g_root_path/adm_program/modules/download/download_function.php?mode=2&amp;folder=$folder&amp;file=$ordnerarray[$i]&amp;default_folder=$default_folder");
                   echo "<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_file_folder&amp;err_text=". urlencode($ordnerarray[$i]). "&amp;err_head=". urlencode("L&ouml;schen"). "&amp;button=2&amp;url=$load_url\">
-                    <img src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>
+                    <img src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>
                </td>";
             }
             echo "</tr>";
@@ -207,7 +207,7 @@ else
    //durchlaufen des Ordnerarrays und Dateilinkausgabe in Tabellenzeilen
    for($i=0; $i<count($ordnerarray); $i++){
            if(filetype("$act_folder/$ordnerarray[$i]")=="file"){
-            //ermittlung der Dateigröße
+            //ermittlung der DateigrÃ¶ÃŸe
             $dateigroesse = round(filesize("$act_folder/$ordnerarray[$i]")/1024);
             // Ermittlung des Datums
             $dateidatum   = date ("d.m.Y", filemtime("$act_folder/$ordnerarray[$i]"));
@@ -258,7 +258,7 @@ else
                      <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Umbenennen\"></a>&nbsp;&nbsp;&nbsp;";
                   $load_url = urlencode("$g_root_path/adm_program/modules/download/download_function.php?mode=2&amp;folder=$folder&amp;file=$ordnerarray[$i]&amp;default_folder=$default_folder");
                   echo "<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_file_folder&amp;err_text=". urlencode($ordnerarray[$i]). "&amp;err_head=". urlencode("L&ouml;schen"). "&amp;button=2&amp;url=$load_url\">
-                     <img src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>
+                     <img src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>
                </td>";
             }
             echo "</tr>";

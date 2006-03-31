@@ -73,7 +73,7 @@ if($_GET["mode"] == 1)
    require("../../../adm_config/body_top.php");
       echo "<div align=\"center\"><br /><br /><br />
 
-      <div class=\"formHead\" style=\"width: 400px\">". strspace("Mitglied löschen"). "</div>
+      <div class=\"formHead\" style=\"width: 400px\">". strspace("Mitglied lÃ¶schen"). "</div>
 
       <div class=\"formBody\" style=\"width: 400px\">
          <p align=\"left\">
@@ -93,7 +93,7 @@ if($_GET["mode"] == 1)
             &nbsp;&nbsp;&nbsp;&nbsp;
             <button name=\"delete\" type=\"button\" value=\"delete\"
                onclick=\"self.location.href='$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET['user_id']. "&mode=3'\">
-               <img src=\"$g_root_path/adm_program/images/delete.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\">
+               <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\">
                &nbsp;L&ouml;schen</button>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <button name=\"back\" type=\"button\" value=\"back\"
@@ -267,10 +267,10 @@ elseif($_GET["mode"] == 4)
 		$result = mysql_query($sql, $g_adm_con);
 		db_error($result);
 
-		mail("$user->email", "Logindaten für ". $g_current_organization->homepage, "Hallo $user->first_name,\n\ndu erhälst deine ".
-			"Logindaten für $g_current_organization->homepage.\n\nBenutzername: $user->login_name\nPasswort: $password\n\n" .
-			"Das Passwort wurde automatisch generiert.\nDu solltest es nach dem Login in deinem Profil ändern.\n\n" .
-			"Viele Grüße\nDie Webmaster", "From: webmaster@$g_domain");
+		mail("$user->email", "Logindaten fÃ¼r ". $g_current_organization->homepage, "Hallo $user->first_name,\n\ndu erhÃ¤lst deine ".
+			"Logindaten fÃ¼r $g_current_organization->homepage.\n\nBenutzername: $user->login_name\nPasswort: $password\n\n" .
+			"Das Passwort wurde automatisch generiert.\nDu solltest es nach dem Login in deinem Profil Ã¤ndern.\n\n" .
+			"Viele GrÃ¼ÃŸe\nDie Webmaster", "From: webmaster@$g_domain");
 
 		$err_code = "mail_send";
 		$err_text = $user->email;
