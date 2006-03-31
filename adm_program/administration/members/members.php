@@ -271,13 +271,13 @@ require("../../../adm_config/body_top.php");
                         // Webmaster duerfen Mitglieder nicht loeschen, wenn sie noch in anderen Gliedgemeinschaften aktiv sind
                         if($is_member == true)
                            echo "<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_member&err_text=$row->usr_first_name $row->usr_last_name&err_head=Entfernen&button=2&url=". urlencode("$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->usr_id&mode=2"). "\">
-                              <img src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"Benutzer entfernen\" title=\"Benutzer entfernen\"></a>";
+                              <img src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Benutzer entfernen\" title=\"Benutzer entfernen\"></a>";
                      }
                      else
                      {
                         // Webmaster kann Mitglied aus der Datenbank loeschen
                         echo "<a href=\"members_function.php?user_id=$row->usr_id&amp;mode=1\">
-                           <img src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"Benutzer l&ouml;schen\" title=\"Benutzer l&ouml;schen\"></a>";
+                           <img src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Benutzer l&ouml;schen\" title=\"Benutzer l&ouml;schen\"></a>";
                      }
                   }
                   else
@@ -290,7 +290,7 @@ require("../../../adm_config/body_top.php");
                         <a href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=$row->usr_id\">
                            <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Benutzerdaten bearbeiten\" title=\"Benutzerdaten bearbeiten\"></a>&nbsp;&nbsp;
                         <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_member&err_text=$row->usr_first_name $row->usr_last_name&err_head=Entfernen&button=2&url=". urlencode("$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->usr_id&mode=2"). "\">
-                           <img src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"Benutzer entfernen\" title=\"Benutzer entfernen\"></a>";
+                           <img src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Benutzer entfernen\" title=\"Benutzer entfernen\"></a>";
                      }
                   }
                   echo "</td>

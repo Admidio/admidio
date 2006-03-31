@@ -27,7 +27,7 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
-// nur Webmaster dürfen User bestätigen, ansonsten Seite verlassen
+// nur Webmaster dÃ¼rfen User bestÃ¤tigen, ansonsten Seite verlassen
 if(!hasRole("Webmaster"))
 {
    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
@@ -90,7 +90,7 @@ require("../../../adm_config/body_top.php");
                      <a href=\"new_user_function.php?mode=3&amp;new_user_id=$row->usr_id\">
                         <img src=\"$g_root_path/adm_program/images/properties.png\" border=\"0\" alt=\"Anmeldung zuordnen\" title=\"Anmeldung zuordnen\"></a>&nbsp;&nbsp;
                      <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_new_user&amp;err_text=$row->usr_first_name $row->usr_last_name&amp;err_head=L&ouml;schen&amp;button=2&amp;url=". urlencode("$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$row->usr_id&amp;mode=4"). "\">
-                        <img src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"Anmeldung l&ouml;schen\" title=\"Anmeldung l&ouml;schen\"></a>
+                        <img src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Anmeldung l&ouml;schen\" title=\"Anmeldung l&ouml;schen\"></a>
                   </td>
                </tr>";
       }

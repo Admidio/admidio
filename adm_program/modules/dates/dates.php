@@ -188,7 +188,7 @@ require("../../../adm_config/body_top.php");
    {
 		if($_GET['id'] == 0)
 		{
-			// Tabelle mit den vor- und zurück und neu Buttons
+			// Tabelle mit den vor- und zurÃ¼ck und neu Buttons
 			echo "
 			<table style=\"margin-top: 10px; margin-bottom: 10px;\" border=\"0\">
 				<tr>
@@ -254,8 +254,8 @@ require("../../../adm_config/body_top.php");
                   // Loeschen darf man nur Termine der eigenen Gliedgemeinschaft
                   if($row->dat_org_shortname == $g_organization)
                   {
-                     echo "&nbsp;
-                     <img src=\"$g_root_path/adm_program/images/delete.png\" style=\"cursor: pointer\" width=\"16\" height=\"16\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" ";
+                     echo "
+                     <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer\" width=\"16\" height=\"16\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" ";
                      $load_url = urlencode("$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=$row->dat_id&amp;mode=2&amp;url=$g_root_path/adm_program/modules/dates/dates.php");
                      echo " onclick=\"self.location.href='$g_root_path/adm_program/system/err_msg.php?err_code=delete_date&amp;err_text=". urlencode($row->dat_headline). "&amp;err_head=L&ouml;schen&amp;button=2&amp;url=$load_url'\">";
                   }
@@ -314,7 +314,7 @@ require("../../../adm_config/body_top.php");
 
 	if($_GET['id'] == 0)
 	{
-   	// Tabelle mit den vor- und zurück und neu Buttons
+   	// Tabelle mit den vor- und zurÃ¼ck und neu Buttons
       echo "
       <table style=\"margin-top: 10px; margin-bottom: 10px;\" border=\"0\">
          <tr>

@@ -149,7 +149,7 @@ require("../../../adm_config/body_top.php");
    {
 		if($_GET['id'] == 0)
 		{
-			// Tabelle mit den vor- und zurück und neu Buttons
+			// Tabelle mit den vor- und zurueck und neu Buttons
 			echo "
 			<table style=\"margin-top: 10px; margin-bottom: 10px;\" border=\"0\">
 				<tr>
@@ -216,8 +216,8 @@ require("../../../adm_config/body_top.php");
                   // Loeschen darf man nur Ankuendigungen der eigenen Gliedgemeinschaft
                   if($row->ann_org_shortname == $g_organization)
                   {
-                     echo "&nbsp;
-                     <img src=\"$g_root_path/adm_program/images/delete.png\" style=\"cursor: pointer;\" width=\"16\" height=\"16\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" ";
+                     echo "
+                     <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer;\" width=\"16\" height=\"16\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" ";
                      $load_url = urlencode("$g_root_path/adm_program/modules/announcements/announcements_function.php?ann_id=$row->ann_id&amp;mode=2&amp;url=$g_root_path/adm_program/modules/announcements/announcements.php");
                      echo " onclick=\"self.location.href='$g_root_path/adm_program/system/err_msg.php?err_code=delete_announcement&amp;err_text=". urlencode($row->ann_headline). "&amp;err_head=L&ouml;schen&amp;button=2&amp;url=$load_url'\">";
                   }
@@ -248,7 +248,7 @@ require("../../../adm_config/body_top.php");
 
 	if($_GET['id'] == 0)
 	{
-      // Tabelle mit den vor- und zurück und neu Buttons
+      // Tabelle mit den vor- und zurÃ¼ck und neu Buttons
       echo "
       <table style=\"margin-top: 10px; margin-bottom: 10px;\" width=\"500\" border=\"0\">
          <tr>

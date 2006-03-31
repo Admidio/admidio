@@ -83,7 +83,7 @@ require("../../../adm_config/body_top.php");
          <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/folder_down.png\" alt=\"Downloads hochladen und bearbeiten\" title=\"Downloads hochladen und bearbeiten\"></th>
          <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/mail-open.png\" alt=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\" title=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\"></th>
          <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/mail-open-key.png\" alt=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\" title=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\"></th>
-         <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Rolle nur für Moderatoren sichtbar\" title=\"Rolle nur für Moderatoren sichtbar\"></th>
+         <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Rolle nur fÃ¼r Moderatoren sichtbar\" title=\"Rolle nur fÃ¼r Moderatoren sichtbar\"></th>
          <th class=\"tableHeader\">Bearbeiten</th>
       </tr>";
 
@@ -123,7 +123,7 @@ require("../../../adm_config/body_top.php");
 				echo "</td>
 				<td style=\"text-align: center;\">";
 					if($row->rol_locked == 1)
-						echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Rolle nur für Moderatoren sichtbar\" title=\"Rolle nur für Moderatoren sichtbar\">";
+						echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Rolle nur fÃ¼r Moderatoren sichtbar\" title=\"Rolle nur fÃ¼r Moderatoren sichtbar\">";
 				echo "</td>
 				<td style=\"text-align: center;\">
 					<a href=\"$g_root_path/adm_program/administration/roles/roles_new.php?rol_id=$row->rol_id\">
@@ -135,8 +135,8 @@ require("../../../adm_config/body_top.php");
 					{
 						$load_url = urlencode("$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$row->rol_id&amp;mode=3");
 						echo "&nbsp;
-						<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=remove_rolle&amp;err_text=$row->rol_name&amp;err_head=Löschen&amp;button=2&amp;url=$load_url\">
-							<img src=\"$g_root_path/adm_program/images/delete.png\" border=\"0\" alt=\"Rolle l&ouml;schen\" title=\"Rolle l&ouml;schen\"></a>";
+						<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=remove_rolle&amp;err_text=$row->rol_name&amp;err_head=LÃ¶schen&amp;button=2&amp;url=$load_url\">
+							<img src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Rolle l&ouml;schen\" title=\"Rolle l&ouml;schen\"></a>";
 					}
 				echo "</td>
 			</tr>";
