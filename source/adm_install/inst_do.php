@@ -61,14 +61,14 @@ function showError($err_msg, $err_head = "Fehler", $mode = 1)
             {
             	// Fehlermeldung (Zurueckgehen)
                echo 'history.back()">
-					<img src="../adm_program/images/back.png" style=\"vertical-align: middle; padding-bottom: 1px;\" width="16" height="16" border="0" alt="Zurueck">
+					<img src="../adm_program/images/back.png" style="vertical-align: middle; padding-bottom: 1px;" width="16" height="16" border="0" alt="Zurueck">
 					&nbsp;Zur&uuml;ck';
 				}
             elseif($mode == 2)
             {
             	// Erfolgreich durchgefuehrt
                echo 'self.location.href=\'../adm_program/index.php\'">
-					<img src="../adm_program/images/list.png" style=\"vertical-align: middle; padding-bottom: 1px;\" width="16" height="16" border="0" alt="Zurueck">
+					<img src="../adm_program/images/list.png" style="vertical-align: middle; padding-bottom: 1px;" width="16" height="16" border="0" alt="Zurueck">
 					&nbsp;Admidio &Uuml;bersicht';
 				}
             echo '</button></p>
@@ -76,10 +76,7 @@ function showError($err_msg, $err_head = "Fehler", $mode = 1)
       </div>
    </body>
    </html>';
-   if($mode == 1)
-   	flush();
-   else
-	   exit();
+   exit();
 }
 
 if($_GET['mode'] == 1)
@@ -151,7 +148,7 @@ elseif($_GET['mode'] == 2)
 elseif($_GET['mode'] == 5)
 {
 	if(file_exists("../adm_config/config.php"))
-		showError("Die Datenbank wurde erfolgreich angelegt und die Datei config.php erstellt.<br><br>Sie können nun mit Admidio arbeiten.", "Fertig", 2);
+		showError("Die Datenbank wurde erfolgreich angelegt und die Datei config.php erstellt.<br><br>Sie kï¿½nnen nun mit Admidio arbeiten.", "Fertig", 2);
 	else
 		showError("Die Datei <b>config.php</b> befindet sich nicht im Verzeichnis <b>adm_config</b> !");
 }
@@ -197,7 +194,7 @@ if($_GET['mode'] == 3)
    }
 }
 
-// bei Installation oder hinzufügen einer Organisation
+// bei Installation oder hinzufï¿½gen einer Organisation
 if($_GET['mode'] == 1 || $_GET['mode'] == 4)
 {
 	$_POST['user-surname']   = trim($_POST['user-surname']);
@@ -240,7 +237,7 @@ if($_GET['mode'] == 1)
    $content  = fread($file, filesize($filename));
    $sql_arr  = explode(";", $content);
    fclose($file);
-   
+
    foreach($sql_arr as $sql)
    {
       if(strlen(trim($sql)) > 0)
@@ -248,7 +245,7 @@ if($_GET['mode'] == 1)
 			// Praefix fuer die Tabellen einsetzen und SQL-Statement ausfuehren
 			$sql = str_replace("%PRAEFIX%", $g_tbl_praefix, $sql);
          $result = mysql_query($sql, $connection);
-         if(!$result) 
+         if(!$result)
          {
             showError(mysql_error());
             $error++;
@@ -300,9 +297,9 @@ if($_GET['mode'] == 3)
       {
          $error = 0;
          if($i == 1)
-            $filename = "upd_1_1_db.sql";            
+            $filename = "upd_1_1_db.sql";
          elseif($i == 3)
-            $filename = "upd_1_3_db.sql";            
+            $filename = "upd_1_3_db.sql";
         	else
         		$filename = "";
 
@@ -321,7 +318,7 @@ if($_GET['mode'] == 3)
 						// Praefix fuer die Tabellen einsetzen und SQL-Statement ausfuehren
 						$sql = str_replace("%PRAEFIX%", $g_tbl_praefix, $sql);
 						$result = mysql_query($sql, $connection);
-						if(!$result) 
+						if(!$result)
                   {
                      showError(mysql_error());
                      $error++;
@@ -372,7 +369,7 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
 	$sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
 	$result = mysql_query($sql, $connection);
 	$category_common = mysql_insert_id();
-	
+
 	if(!$result) showError(mysql_error());
 	$sql = "INSERT INTO ". TBL_ROLE_CATEGORIES. " (rlc_org_shortname, rlc_name)
 	             VALUES ({0}, 'Gruppen')";
@@ -411,7 +408,7 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
    $sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
    $result = mysql_query($sql, $connection);
    if(!$result) showError(mysql_error());
-   
+
 	// Vorstand
    $sql = "INSERT INTO ". TBL_ROLES. " (rol_org_shortname, rol_rlc_id, rol_name, rol_description, rol_valid,
                                   rol_moderation, rol_dates, rol_photo, rol_download,
@@ -423,7 +420,7 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
    if(!$result) showError(mysql_error());
 }
 
-// bei Installation oder hinzufügen einer Organisation
+// bei Installation oder hinzufï¿½gen einer Organisation
 if($_GET['mode'] == 1 || $_GET['mode'] == 4)
 {
    // User Webmaster anlegen
