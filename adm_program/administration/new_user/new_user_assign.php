@@ -32,7 +32,7 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
-// nur Webmaster dürfen User zuordnen, ansonsten Seite verlassen
+// nur Webmaster dï¿½rfen User zuordnen, ansonsten Seite verlassen
 if(!hasRole("Webmaster"))
 {
    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
@@ -190,7 +190,7 @@ echo "
                if($g_current_organization->mail_extern == 1)
                   echo "<a href=\"mailto:$row->usr_email\">";
                else
-                  echo "<a href=\"../adm_program/modules/mail/mail.php?usr_id=$row->usr_id\">";
+                  echo "<a href=\"../../modules/mail/mail.php?usr_id=$row->usr_id\">";
                echo "$row->usr_email</a></td>
                <td style=\"text-align: left;\">&nbsp;";
       if(strlen($row->usr_login_name) > 0)
