@@ -326,9 +326,11 @@ echo "
                                         <img src=\"$g_root_path/adm_program/images/photo.png\" border=\"0\" alt=\"Photoupload\" title=\"Photoupload\"></a>&nbsp;
                                     <a href=\"$g_root_path/adm_program/modules/photos/event.php?pho_id=".$adm_photo["pho_id"]."&aufgabe=change\">
                                         <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>&nbsp;";
-           	                        $err_text= $adm_photo_list["pho_name"]."(Beginn: ".mysqldate("d.m.y", $adm_photo["pho_begin"]).")";
+           	                        //Loeschbutton
+                                    $err_text= $adm_photo["pho_name"]."&nbsp;(Beginn: ".mysqldate("d.m.y", $adm_photo["pho_begin"]).")";
                                     echo"
-                                    <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_veranst&err_text=$err_text&err_head=Veranstaltung L&ouml;schen&button=2&url=". urlencode("$g_root_path/adm_program/modules/photos/event.php?aufgabe=delete&pho_id=".$adm_photo_list["pho_id"].""). "\">
+                                    <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_veranst&err_text=$err_text&err_head=Veranstaltung L&ouml;schen&button=2&url="
+                                        .urlencode("$g_root_path/adm_program/modules/photos/event.php?aufgabe=delete&pho_id=".$adm_photo["pho_id"].""). "\">
                	                        <img src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Veranstaltung l&oumlschen\" title=\"Veranstaltung l&ouml;schen\">
 					                </a>";
 			 	                }
