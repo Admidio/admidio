@@ -12,77 +12,407 @@
 
 <body>
 
-<h1>Admidio Coding Standards</h1>
-<h2><a name="Inhalt">Inhaltsverzeichnis</a></h2>
+    <h1>Admidio Coding Standards</h1>
 
-<ol>
-  <li><h3><a href="#Vorwort">Vorwort</a></h3></li>
-  <li><h3><a href="#Einrueckung">Einr&uuml;ckung</a></h3></li>
-  <li><h3><a href="#Kontrollstrukturen">Kontrollstrukturen und Schleifen</a></h3></li>
-  <li><h3><a href="#Funktionsaufrufe">Funktionsaufrufe</a></h3></li>
-  <li><h3><a href="#Funktionsdefinitionen">Definieren von Funktionen</a></h3></li>
-  <li><h3><a href="#Kommentare">Kommentare</a></h3></li>
-  <li><h3><a href="#CodeTags">PHP Code Tags</a></h3></li>
-  <li><h3><a href="#Header">Header von Dateien</a></h3></li>
-  <li><h3><a href="#SVN">SVN Vorgaben</a></h3></li>
-  <li><h3><a href="#Namen">Namenskonventionen</a></h3></li>
-  <li><h3><a href="#Dateiformat">Dateiformate</a></h3></li>
-</ol>
+    <h2><a name="Inhalt">Inhaltsverzeichnis</a></h2>
 
-<div>
-    <h2><a name="Vorwort">Vorwort</a></h2>
-    <a href="#Inhalt">Zur&uuml;ck zum Inhaltsverzeichnis</a>
-</div>
+    <ol>
+        <li><h3><a href="#Vorwort">Vorwort</a></h3></li>
+        <li><h3><a href="#Einrueckung">Einr&uuml;ckung</a></h3></li>
+        <li><h3><a href="#Kontrollstrukturen">Kontrollstrukturen</a></h3></li>
+        <li><h3><a href="#Funktionsaufrufe">Funktionsaufrufe</a></h3></li>
+        <li><h3><a href="#Funktionsdefinitionen">Definieren von Funktionen</a></h3></li>
+        <li><h3><a href="#Kommentare">Kommentare</a></h3></li>
+        <li><h3><a href="#CodeTags">PHP Code Tags</a></h3></li>
+        <li><h3><a href="#Header">Header von Dateien</a></h3></li>
+        <li><h3><a href="#SVN">SVN Vorgaben</a></h3></li>
+        <li><h3><a href="#Namen">Namenskonventionen</a></h3></li>
+        <li><h3><a href="#Dateiformat">Dateiformate</a></h3></li>
+    </ol>
 
-<div>
-    <h2><a name="Einrueckung">Einr&uuml;ckung</a></h2>
-    <a href="#Inhalt">Zur&uuml;ck zum Inhaltsverzeichnis</a>
-</div>
+    <hr/>
 
-<div>
-    <h2><a name="Kontrollstrukturen">Kontrollstrukturen und Schleifen</a></h2>
-    <a href="#Inhalt">Zur&uuml;ck zum Inhaltsverzeichnis</a>
-</div>
+    <div>
+        <h2><a name="Vorwort">Vorwort</a></h2>
 
-<div>
-    <h2><a name="Funktionsaufrufe">Funktionsaufrufe</a></h2>
-    <a href="#Inhalt">Zur&uuml;ck zum Inhaltsverzeichnis</a>
-</div>
+        <h3>Hallo liebe Freunde der Vereinsverwaltung!</h3>
 
-<div>
-    <h2><a name="Funktionsdefinitionen">Definieren von Funktionen</a></h2>
-    <a href="#Inhalt">Zur&uuml;ck zum Inhaltsverzeichnis</a>
-</div>
+        <p>
+            Das vorliegende Dokument soll dabei helfen, sauberen, f&uuml;r andere
+            nachvollziehbaren, Code zu generieren. Die hier aufgef&uuml;hrten Punkte sind
+            lediglich als Umsetzungsvorschl&auml;ge zu verstehen. Im Zweifelsfall sollte man
+            einfach den Verstand einschalten und nachdenken, ob das alles
+            wirklich so uebersichtlich ist, wie man sich das vorgestellt hat.
+        </p>
 
-<div>
-    <h2><a name="Kommentare">Kommentare</a></h2>
-    <a href="#Inhalt">Zur&uuml;ck zum Inhaltsverzeichnis</a>
-</div>
+        <p>
+            Man sollte beim Programmieren schon gewisse Disziplin walten
+            lassen. Dazu geh&ouml;rt das Vermeiden von Umlauten, einheitliche
+            Codeeinr&uuml;ckungen und noch viel mehr. Aber dazu mehr in den
+            anderen Kapiteln...
+        </p>
 
-<div>
-    <h2><a name="CodeTags">PHP Code Tags</a></h2>
-    <a href="#Inhalt">Zur&uuml;ck zum Inhaltsverzeichnis</a>
-</div>
+        <p>
+            Dieses Dokument ist &uuml;brigens noch nicht fertig. Wer m&ouml;chte kann gerne
+            eigene Kapitel oder Anmerkungen hinzufuegen. Aus diesem Grund habe ich das
+            Dokument in SVN eingecheckt.
+        </p>
 
-<div>
-    <h2><a name="Header">Header von Dateien</a></h2>
-    <a href="#Inhalt">Zur&uuml;ck zum Inhaltsverzeichnis</a>
-</div>
+        <a href="#Inhalt">Zur&uuml;ck zum Inhaltsverzeichnis</a>
+    </div>
 
-<div>
-    <h2><a name="SVN">SVN Vorgaben</a></h2>
-    <a href="#Inhalt">Zur&uuml;ck zum Inhaltsverzeichnis</a>
-</div>
+    <hr/>
 
-<div>
-    <h2><a name="Namen">Namenskonventionen</a></h2>
-    <a href="#Inhalt">Zur&uuml;ck zum Inhaltsverzeichnis</a>
-</div>
+    <div>
+        <h2><a name="Einrueckung">Einr&uuml;ckung</a></h2>
 
-<div>
-    <h2><a name="Dateiformat">Dateiformate</a></h2>
-    <a href="#Inhalt">Zur&uuml;ck zum Inhaltsverzeichnis</a>
-</div>
+        <p>
+            Einr&uuml;ckungen geh&ouml;ren zu den wichtigsten Mitteln um den Code strukturiert zu halten.
+        </p>
+
+        <p>
+            Wir haben uns f&uuml;r Einr&uuml;ckungen in H&ouml;he von vier Leerzeichen entschieden.
+            Das hei&szlig;t, in der Entwicklungsumgebung muss eingestellt sein, dass ein Tab vier
+            Leerzeichen entspricht. In Eclipse muss man, wenn man mit PHPeclipse arbeitet,
+            dies sogar an zwei Stellen tun.
+        </p>
+
+        <ul>
+            <li>Preferences -&gt; Editors -&gt; TextEditors</li>
+            <li>Preferences -&gt; PHPeclipse Web Development -&gt; PHP</li>
+        </ul>
+
+        <p>
+            Das ist aber erst die halbe Miete. Beim Abspeichern sollte man n&auml;mlich darauf
+            achten, dass die Tabs die man eingef&uuml;gt hat wieder in Blanks umgewandelt werden.
+            Dies erledigt in Eclipse das praktische Plugin AnyEditTools. Einmal installiert,
+            muss es nat&uuml;rlich auch entsprechend konfiguriert werden.
+            Anbei ein Screenshot der Einstellungen:
+        </p>
+
+        <p>
+            <img src="./images/anyedit.png" alt="AnyEditEinstellungen" border="0">
+        </p>
+
+        <a href="#Inhalt">Zur&uuml;ck zum Inhaltsverzeichnis</a>
+    </div>
+
+    <hr/>
+
+    <div>
+        <h2><a name="Kontrollstrukturen">Kontrollstrukturen</a></h2>
+
+        <p>
+            Mit Kontrollstrukturen sind folgende Elemente gemeint:
+            <ul>
+                <li>if</li>
+                <li>for</li>
+                <li>while</li>
+                <li>switch</li>
+            </ul>
+            Hier ein Beispiel f&uuml;r eine verschachtelte if-Anweisung:
+
+            <pre>
+if ((bedingung1) and (bedingung2))
+{
+    action1;
+    if (bedingung3)
+    {
+        action2;
+    }
+}
+elseif ((bedingung4) or (bedingung5))
+{
+    action3;
+    action4;
+}
+else
+{
+    defaultaction;
+}
+            </pre>
+
+            Hier die Erl&auml;uterung:
+
+            <ul>
+                    <li>1 Leerzeichen zwischen ControlKeyword (if) und der Bedingung,
+                        um sie von Methodenaufrufen abzugrenzen</li>
+                    <li>auch wenn nur eine Action definiert ist immer geschweifte Klammern nutzen</li>
+            </ul>
+
+            Hier noch ein Beispiel für eine switch/case-Anweisung:
+
+            <pre>
+switch (bedingung)
+{
+    case 1:
+        action1;
+        break;
+
+    case 2:
+        action2;
+        break;
+
+    default:
+        defaultaction;
+        break;
+}
+            </pre>
+
+        </p>
+
+        <a href="#Inhalt">Zur&uuml;ck zum Inhaltsverzeichnis</a>
+    </div>
+
+    <hr/>
+
+    <div>
+        <h2><a name="Funktionsaufrufe">Funktionsaufrufe</a></h2>
+
+        <p>
+            Ein Funktionsaufruf geschieht immer ohne Leerzeichen zwischen dem Funktionsnamen,
+            der &ouml;ffnenden Klammer und dem ersten &Uuml;bergabeparameter. Die einzelnen Parameter
+            werden mit Komma und Leerzeichen von einander getrennt. Hinter dem letztem Parameter
+            wird ebenfalls kein Leerzeichen mehr eingesetzt. Anbei wieder ein Beispiel:
+        </p>
+
+        <pre>$var = funktion($para1, $para2, $para3);</pre>
+
+        <p>
+            Wie oben gezeigt steht auf der linken und rechten Seite des Gleichheitszeichen
+            jeweils ein Leerzeichen. Wenn mehrere Funktionsaufrufe und damit Variablenzuweisungen
+            im Block untereinander stehen, kann, um die Lesbarkeit des Codes zu gew&auml;hrleisten,
+            davon abgewichen werden:
+        </p>
+
+        <pre>
+$kurz        = foo($para1);
+$langer_name = foo($para2);
+        </pre>
+
+        <a href="#Inhalt">Zur&uuml;ck zum Inhaltsverzeichnis</a>
+    </div>
+
+    <hr/>
+
+    <div>
+        <h2><a name="Funktionsdefinitionen">Definieren von Funktionen</a></h2>
+
+        <p>
+            Beim Definieren von Funktionen wandern die Argumente mit Default-Werten
+            ans Ende der Deklaration. Funktionsnamen, Argumente und Rückgabewerte sollten
+            selbsterklärend sein. Hier ein Beispiel:
+        </p>
+
+        <pre>
+function addition($wert1, $wert2, $wert3 = '')
+{
+    if (length(wert3) == 0)
+    {
+        $ergebnis = $wert1 + $wert2;
+    }
+    else
+    {
+        $ergebnis = $wert1 + $wert2 + $wert3;
+    }
+    return $ergebnis;
+}
+        </pre>
+
+        <a href="#Inhalt">Zur&uuml;ck zum Inhaltsverzeichnis</a>
+    </div>
+
+    <hr/>
+
+    <div>
+        <h2><a name="Kommentare">Kommentare</a></h2>
+
+        <p>
+            Damit auch andere die eventuell vorhanden Bugs in Eurem Code fixen k&ouml;nnen,
+            muss dieser nicht nur &uuml;bersichtlich, sondern auch verst&auml;ndlich sein. Daher ist
+            der ein oder andere Kommentar unumg&auml;nglich. Hier ist der richtige Mittelweg zu
+            w&auml;hlen. Zu viel Kommentar verschr&auml;nkt den Blick auf das wesentliche (den Code),
+            zu wenig Kommentar l&auml;sst Ihn undurchdringbar erscheinen...
+        </p>
+
+        <p>
+            Kommentare m&uuml;ssen ebenfalls einger&uuml;ckt werden. So dass sie auf der selben
+            Ebene wie das zu kommentierende Konstrukt stehen. Ein- bis zweizeilige
+            Kommentare werden wie folgt dargestellt:
+        </p>
+
+        <pre>
+//Dies ist die erste Zeile ueberfluessiger Kommentar
+//Dies ist die weite Zeile ueberfluessiger Kommentar
+        </pre>
+
+        <p>
+            Wie oben zu sehen ist, sollte auch in Kommentaren von Umlauten abgesehen werden.
+            Erstreckt sich ein Kommentar &uuml;ber mehr als 2 Zeilen sollten Block-Kommentare eingesetzt
+            werden:
+        </p>
+
+        <pre>
+/*
+*
+* Dieser Kommentar koennte jetzt noch ewig weitergehen...
+* Dieser Kommentar koennte jetzt noch ewig weitergehen...
+* Dieser Kommentar koennte jetzt noch ewig weitergehen...
+* Dieser Kommentar koennte jetzt noch ewig weitergehen...
+* Aber soviel Spass habe ich auch nicht beim kommentieren!
+*
+*/
+        </pre>
+
+        <a href="#Inhalt">Zur&uuml;ck zum Inhaltsverzeichnis</a>
+    </div>
+
+    <hr/>
+
+    <div>
+        <h2><a name="CodeTags">PHP Code Tags</a></h2>
+
+        <p>
+            Man sollte um den PHP-Code herum immer die Tags <b>&lt;?php</b> und <b>?&gt;</b> setzen und
+            nicht die Kurzform <b>&lt;? ?&gt;</b>. Dies ist die einzige M&ouml;glichkeit zu gew&auml;hrleisten,
+            dass der Code auf allen Plattformen auch als PHP-Code interpretiert wird.
+        </p>
+
+        <a href="#Inhalt">Zur&uuml;ck zum Inhaltsverzeichnis</a>
+    </div>
+
+    <hr/>
+
+    <div>
+        <h2><a name="Header">Header von Dateien</a></h2>
+
+        <p>
+            Jede Datei des Admidio-Projekts sollte am Anfang der Datei einen DocBlock
+            enthalten. Dieser muss eine kurze Erklärung des PHP-Scripts enthalten. Außerdem sind
+            hier fein säuberlich alle möglichen Übergabewerte des Scripts aufgelistet...
+        </p>
+
+        <p>
+            Hier ein Beispiel aus der Datei dates_function.php:
+        </p>
+
+        <pre>
+ /******************************************************************************
+ * Verschiedene Funktionen fuer Termine
+ *
+ * Copyright    : (c) 2004 - 2006 The Admidio Team
+ * Homepage     : http://www.admidio.org
+ * Module-Owner : Markus Fassbender
+ *
+ * Uebergaben:
+ *
+ * dat_id: ID des Termins, der angezeigt werden soll
+ * mode:  1 - Neuen Termin anlegen
+ *        2 - Termin löschen
+ *        3 - Termin ändern
+ * url:   kann beim Loeschen mit uebergeben werden
+ *
+ ******************************************************************************
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *
+ *****************************************************************************/
+        </pre>
+
+        <a href="#Inhalt">Zur&uuml;ck zum Inhaltsverzeichnis</a>
+    </div>
+
+    <hr/>
+
+    <div>
+        <h2><a name="SVN">SVN Vorgaben</a></h2>
+
+        <p>
+            Wenn Dateien in SVN eingecheckt werden, muss auch eine Commit-Message verfasst werden.
+            Bei einem Bugfix geh&ouml;rt in die Messages auf jeden Fall die zugeh&ouml;rige Bugnummer und
+            und eine kurze Beschreibung der verrichteten T&auml;tigkeiten...
+        </p>
+
+        <a href="#Inhalt">Zur&uuml;ck zum Inhaltsverzeichnis</a>
+    </div>
+
+    <hr/>
+
+    <div>
+        <h2><a name="Namen">Namenskonventionen</a></h2>
+
+        <h3>Klassen</h3>
+
+        <p>
+            Klassen sollen selbstsprechende Namen erhalten. Kryptische Abk&uuml;rzungen sollte
+            man wenn m&ouml;glich vermeiden. Klassen sollten immer mit einem Gro&szlig;buchstaben beginnen.
+        </p>
+
+        <h3>Funktionen</h3>
+
+        <p>
+            Funktionsnamen sollten im camelStyle (vielen auch als camelCaps oder laOlaStyle bekannt)
+            geschrieben werden. Dies soll hei&szlig;en, dass der erste Buchstabe klein geschrieben ist
+            und der erste Buchstabe des n&auml;chsten Wortes gro&szlig;. Beispiel:
+        </p>
+
+        <pre>getData();</pre>
+
+        <h3>Konstanten</h3>
+
+        <p>
+            Bei Konstanten werden alle Buchstaben gro&szlig; geschrieben und die einlenen Worte innerhalb de
+            Namens durch Unterstriche getrennt. Beispiel:
+        </p>
+
+        <pre>TBL_ORGANIZATIONS</pre>
+
+        <a href="#Inhalt">Zur&uuml;ck zum Inhaltsverzeichnis</a>
+    </div>
+
+    <hr/>
+
+    <div>
+        <h2><a name="Dateiformat">Dateiformate</a></h2>
+
+        <p>
+            Um die Entwicklung auf verschiedenen Systemen zu gew&auml;hrleisten muss ein einheitliches
+            Format genutzt werden:
+        <p>
+
+        <ul>
+            <li>Zeichensatz UTF-8</li>
+            <li>Zeilenumbruch Windows (CRLF)</li>
+        </ul>
+
+        <p>
+            In Eclipse kann man dies entweder global konfigurieren, oder aber auf Projektbasis(Was in meinen Augen mehr Sinn macht.).
+            Hier ein Screenshot von den Projekteinstellungen:
+        </p>
+
+        <p>
+            <img src="./images/project_props.png" alt="ProjectProperties" border="0">
+        </p>
+
+        <p>
+            Besonders wenn man vorher in einem anderen Zeichensatz gearbeitet hat, ist es wichtig, dass
+            man kontrolliert ob seine eingegeben Sonderzeichen nach dem Umstieg noch vorhanden sind...
+        </p>
+
+        <a href="#Inhalt">Zur&uuml;ck zum Inhaltsverzeichnis</a>
+    </div>
 
 </body>
 

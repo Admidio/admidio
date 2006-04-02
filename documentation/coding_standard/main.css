@@ -14,31 +14,36 @@ a:link {
    color:            #E0791F;
    font-weight:      bold;
    text-decoration:  none;
+   background-color: inherit;
 }
 
 a:visited {
    color:            #E0791F;
    font-weight:      bold;
    text-decoration:  none;
+   background-color: inherit;
 }
 
 a:hover {
    color:            #E0791F;
    font-weight:      bold;
    text-decoration:  underline;
+   background-color: inherit;
 }
 
 h1 {
    color:            #333333;
    text-align:       center;
+   background-color: inherit;
 }
 
 h2 {
    color:            #85C226;
    text-align:       left;
+   background-color: inherit;
 }
 
-/* preformatierter Text (z.B CodeBlöcke) */
+/* preformatierter Text (z.B CodeBloecke) */
 pre {
     padding: 1em;
     border: 1px dashed black;
