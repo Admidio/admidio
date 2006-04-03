@@ -35,9 +35,13 @@ require("../../system/login_valid.php");
 
 // wenn URL uebergeben wurde zu dieser gehen, ansonsten zurueck
 if(array_key_exists('url', $_GET))
-   $url = $_GET['url'];
+{
+    $url = urlencode($_GET['url']);
+}
 else
-   $url = urlencode(getHttpReferer());
+{
+    $url = urlencode(getHttpReferer());
+}
 
 if(!array_key_exists('user_id', $_GET))
 {
@@ -183,8 +187,8 @@ require("../../../adm_config/body_top.php");
                echo "<div style=\"float: left; width: 28%; text-align: left\">Handy:</div>
                <div style=\"margin-left: 30%; text-align: left\">$user->mobile&nbsp;</div>";
 
-					echo "<div style=\"float: left; width: 28%; text-align: left\">Fax:</div>
-					<div style=\"margin-left: 30%; text-align: left\">$user->fax&nbsp;</div>";
+                    echo "<div style=\"float: left; width: 28%; text-align: left\">Fax:</div>
+                    <div style=\"margin-left: 30%; text-align: left\">$user->fax&nbsp;</div>";
 
                // Block Geburtstag, Geschlecht und Benutzer
 
@@ -216,15 +220,15 @@ require("../../../adm_config/body_top.php");
                   else
                      echo "&nbsp;";
                echo "</div>
-					<div style=\"float: left; width: 28%; text-align: left\">Geschlecht:</div>
-					<div style=\"margin-left: 30%; text-align: left\">";
-						if($user->gender == 1)
-							echo "m&auml;nnlich";
-						elseif($user->gender == 2)
-							echo "weiblich";
-						else
-							echo "&nbsp;";
-					echo "</div>
+                    <div style=\"float: left; width: 28%; text-align: left\">Geschlecht:</div>
+                    <div style=\"margin-left: 30%; text-align: left\">";
+                        if($user->gender == 1)
+                            echo "m&auml;nnlich";
+                        elseif($user->gender == 2)
+                            echo "weiblich";
+                        else
+                            echo "&nbsp;";
+                    echo "</div>
                <div style=\"float: left; width: 28%; text-align: left\">Benutzer:</div>
                <div style=\"margin-left: 30%; text-align: left\">$user->login_name&nbsp;</div>";
 
@@ -323,25 +327,25 @@ require("../../../adm_config/body_top.php");
                   if($i > 0) echo "<br />";
                   if($row->usf_name == 'ICQ') 
                   {
-                  	echo "<a href=\"http://www.icq.com/whitepages/cmd.php?uin=$row->usd_value&amp;action=add\"  class=\"wpaction\">
-                  		<img border=\"0\" src=\"http://status.icq.com/online.gif?icq=$row->usd_value&img=5\" 
-                  			style=\"vertical-align: middle;\" alt=\"$row->usf_description\" title=\"$row->usf_description\" /></a>&nbsp;";
+                    echo "<a href=\"http://www.icq.com/whitepages/cmd.php?uin=$row->usd_value&amp;action=add\"  class=\"wpaction\">
+                        <img border=\"0\" src=\"http://status.icq.com/online.gif?icq=$row->usd_value&img=5\" 
+                            style=\"vertical-align: middle;\" alt=\"$row->usf_description\" title=\"$row->usf_description\" /></a>&nbsp;";
                   }
                   else 
                   {
-                  	echo "<img src=\"$g_root_path/adm_program/images/";
-                  	if($row->usf_name == 'AIM')
-                      	echo "aim.png";
-                  	elseif($row->usf_name == 'Google Talk')
-                      	echo "google.gif";
-                  	elseif($row->usf_name == 'MSN')
-                     	 echo "msn.png";
-                  	elseif($row->usf_name == 'Skype')
-                  	    echo "skype.png";
-                 	 	elseif($row->usf_name == 'Yahoo')
-                	       echo "yahoo.png";
-	                  echo "\" style=\"vertical-align: middle;\" alt=\"$row->usf_description\" title=\"$row->usf_description\" />&nbsp;&nbsp;";
-                	};
+                    echo "<img src=\"$g_root_path/adm_program/images/";
+                    if($row->usf_name == 'AIM')
+                        echo "aim.png";
+                    elseif($row->usf_name == 'Google Talk')
+                        echo "google.gif";
+                    elseif($row->usf_name == 'MSN')
+                         echo "msn.png";
+                    elseif($row->usf_name == 'Skype')
+                        echo "skype.png";
+                        elseif($row->usf_name == 'Yahoo')
+                           echo "yahoo.png";
+                      echo "\" style=\"vertical-align: middle;\" alt=\"$row->usf_description\" title=\"$row->usf_description\" />&nbsp;&nbsp;";
+                    };
                   if(strlen($row->usd_value) > 20)
                      echo "<span style=\"font-size: 8pt;\">$row->usd_value</span>";
                   else

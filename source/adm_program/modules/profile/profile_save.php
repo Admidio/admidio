@@ -32,12 +32,24 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
-$user_id       = $_GET['user_id'];
-$err_code      = "";
-$err_text      = "";
+$user_id  = $_GET['user_id'];
+$err_code = "";
+$err_text = "";
 
 if(!isset($_POST['login']))
-   $_POST['login'] = "";
+{
+    $_POST['login'] = "";
+}
+   
+// wenn URL uebergeben wurde zu dieser gehen, ansonsten zurueck
+if(array_key_exists('url', $_GET))
+{
+    $url = urlencode($_GET['url']);
+}
+else
+{
+    $url = "";
+}   
 
 /*------------------------------------------------------------*/
 // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
@@ -53,30 +65,30 @@ $user = new TblUsers($g_adm_con);
 
 if($user_id > 0)
 {
-	// Userdaten aus Datenbank holen
-	$user->getUser($user_id);
-	
-	if($user->valid == 1)
-	{
-		// keine Webanmeldung, dann schauen, ob User überhaupt Mitglied in der Gliedgemeinschaft ist
-		$sql = "SELECT mem_id
-					 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-					WHERE rol_org_shortname = '$g_organization'
-					  AND rol_valid        = 1
-					  AND mem_rol_id        = rol_id
-					  AND mem_valid        = 1
-					  AND mem_usr_id        = {0}";
-		$sql    = prepareSQL($sql, array($user_id));
-		$result = mysql_query($sql, $g_adm_con);
-		db_error($result);
+    // Userdaten aus Datenbank holen
+    $user->getUser($user_id);
+    
+    if($user->valid == 1)
+    {
+        // keine Webanmeldung, dann schauen, ob User überhaupt Mitglied in der Gliedgemeinschaft ist
+        $sql = "SELECT mem_id
+                     FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
+                    WHERE rol_org_shortname = '$g_organization'
+                      AND rol_valid        = 1
+                      AND mem_rol_id        = rol_id
+                      AND mem_valid        = 1
+                      AND mem_usr_id        = {0}";
+        $sql    = prepareSQL($sql, array($user_id));
+        $result = mysql_query($sql, $g_adm_con);
+        db_error($result);
 
-		if(mysql_num_rows($result) == 0)
-		{
-			$location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norolle";
-			header($location);
-			exit();
-		}
-	}
+        if(mysql_num_rows($result) == 0)
+        {
+            $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norolle";
+            header($location);
+            exit();
+        }
+    }
 }
 
 // Feldinhalte saeubern und der User-Klasse zuordnen
@@ -187,9 +199,9 @@ if(strlen($user->birthday) > 0)
 /*------------------------------------------------------------*/
 
 if($user_id > 0)
-	$ret_code = $user->update($g_current_user->id);
+    $ret_code = $user->update($g_current_user->id);
 else
-	$ret_code = $user->insert($g_current_user->id);
+    $ret_code = $user->insert($g_current_user->id);
 
 if($ret_code != 0)
 {
@@ -259,28 +271,28 @@ if($user->valid == 0)
    /*------------------------------------------------------------*/
    if($g_forum == 1)
    {
-		mysql_select_db($g_forum_db, $g_forum_con);
+        mysql_select_db($g_forum_db, $g_forum_con);
 
-		// jetzt noch den neuen User ins Forum eintragen
-		$sql    = "SELECT MAX(user_id) as anzahl FROM ". $g_forum_praefix. "_users";
-		$result = mysql_query($sql, $g_forum_con);
-		db_error($result);
-		$row    = mysql_fetch_array($result);
-		$new_user_id = $row[0] + 1;
+        // jetzt noch den neuen User ins Forum eintragen
+        $sql    = "SELECT MAX(user_id) as anzahl FROM ". $g_forum_praefix. "_users";
+        $result = mysql_query($sql, $g_forum_con);
+        db_error($result);
+        $row    = mysql_fetch_array($result);
+        $new_user_id = $row[0] + 1;
 
-		$sql    = "INSERT INTO ". $g_forum_praefix. "_users
-												 (user_id, username, user_password, user_regdate, user_timezone,
-												  user_style, user_lang, user_viewemail, user_attachsig, user_allowhtml,
-												  user_dateformat, user_email, user_notify, user_notify_pm, user_popup_pm,
-												  user_avatar)
-							VALUES ($user->id, '$user->login_name', '$user->password', ". time(). ", 1.00,
-									  2, 'german', 0, 1, 0,
-									  'd.m.Y, H:i', '$user->email', 0, 1, 1,
-									  '') ";
-		$result = mysql_query($sql, $g_forum_con);
-		db_error($result);
+        $sql    = "INSERT INTO ". $g_forum_praefix. "_users
+                                                 (user_id, username, user_password, user_regdate, user_timezone,
+                                                  user_style, user_lang, user_viewemail, user_attachsig, user_allowhtml,
+                                                  user_dateformat, user_email, user_notify, user_notify_pm, user_popup_pm,
+                                                  user_avatar)
+                            VALUES ($user->id, '$user->login_name', '$user->password', ". time(). ", 1.00,
+                                      2, 'german', 0, 1, 0,
+                                      'd.m.Y, H:i', '$user->email', 0, 1, 1,
+                                      '') ";
+        $result = mysql_query($sql, $g_forum_con);
+        db_error($result);
 
-		mysql_select_db($g_adm_db, $g_adm_con);
+        mysql_select_db($g_adm_db, $g_adm_con);
    }
    
    // User auf aktiv setzen
@@ -298,7 +310,7 @@ if($user->valid == 0)
    }
 
    // neuer User -> Rollen zuordnen
-   $location = "location: roles.php?user_id=$user->id&new_user=1&url=". $_GET['url'];
+   $location = "location: roles.php?user_id=$user->id&new_user=1&url=$url";
    header($location);
    exit();
 }
@@ -310,13 +322,13 @@ if($user->valid == 0)
 if($user_id == 0)
 {
    // neuer User -> Rollen zuordnen
-   $location = "location: roles.php?user_id=$user->id&new_user=1&url=". $_GET['url'];
+   $location = "location: roles.php?user_id=$user->id&new_user=1&url=$url";
 }
 else
 {
-	// zur Profilseite zurueckkehren und die URL, von der die Profilseite aufgerufen wurde uebergeben
-	$load_url = urlencode("$g_root_path/adm_program/modules/profile/profile.php?user_id=$user_id&url=". $_GET['url']);
-	$location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=save&timer=2000&url=$load_url";
+    // zur Profilseite zurueckkehren und die URL, von der die Profilseite aufgerufen wurde uebergeben
+    $load_url = urlencode("$g_root_path/adm_program/modules/profile/profile.php?user_id=$user_id&url=$url");
+    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=save&timer=2000&url=$load_url";
 }
 header($location);
 exit();
