@@ -34,20 +34,34 @@ require("../../system/common.php");
 require("../../system/login_valid.php");
 
 //prüfen ob in Popup angezeigt wird oder Normal (default)
-if($_GET['popup'] == 1)$popup=1;
-else $popup=0;
+if($_GET['popup'] == 1)
+{
+    $popup = 1;
+}
+else 
+{
+    $popup = 0;
+}
 
 // pruefen, ob Modus neues Mitglied erfassen
 if(!array_key_exists("new_user", $_GET))
-   $a_new_user = false;
+{
+    $a_new_user = false;
+}
 else
-   $a_new_user = $_GET['new_user'];
+{
+    $a_new_user = $_GET['new_user'];
+}
 
 // wenn URL uebergeben wurde zu dieser gehen, ansonsten zurueck
 if(array_key_exists('url', $_GET))
-   $url = $_GET['url'];
+{
+    $url = urlencode($_GET['url']);
+}
 else
-   $url = urlencode(getHttpReferer());
+{
+    $url = urlencode(getHttpReferer());
+}
 
 // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
 if(!editUser() && $_GET['user_id'] != $g_current_user->id)
@@ -92,7 +106,7 @@ else
 if($a_user_id > 0)
 {
    $user = new TblUsers($g_adm_con);
-	$user->GetUser($a_user_id);
+    $user->GetUser($a_user_id);
 }
 
 echo "
@@ -110,7 +124,7 @@ if($popup == 0)
    require("../../../adm_config/header.php");
 echo "</head>";
 if($popup == 0)
-	require("../../../adm_config/body_top.php");
+    require("../../../adm_config/body_top.php");
    echo "
    <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
 
@@ -282,9 +296,9 @@ if($popup == 0)
             <div style=\"text-align: right; width: 30%; float: left;\">Geschlecht:</div>
             <div style=\"text-align: left; margin-left: 32%;\">
                <select size=\"1\" name=\"gender\">
-               	<option value=\"0\""; if($user->gender < 1 || $user->gender > 2) echo " selected=\"selected\""; echo ">&nbsp;</option>
-               	<option value=\"1\""; if($user->gender == 1) echo " selected=\"selected\""; echo ">m&auml;nnlich</option>
-               	<option value=\"2\""; if($user->gender == 2) echo " selected=\"selected\""; echo ">weiblich</option>
+                <option value=\"0\""; if($user->gender < 1 || $user->gender > 2) echo " selected=\"selected\""; echo ">&nbsp;</option>
+                <option value=\"1\""; if($user->gender == 1) echo " selected=\"selected\""; echo ">m&auml;nnlich</option>
+                <option value=\"2\""; if($user->gender == 2) echo " selected=\"selected\""; echo ">weiblich</option>
                </select>
             </div>
          </div>";
