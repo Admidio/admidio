@@ -8,8 +8,8 @@
  *
  * Uebergaben:
  *
- * user_id: zeigt das Profil der übergebenen user_id an
- *          (wird keine user_id übergeben, dann Profil des eingeloggten Users anzeigen)
+ * user_id: zeigt das Profil der ï¿½bergebenen user_id an
+ *          (wird keine user_id ï¿½bergeben, dann Profil des eingeloggten Users anzeigen)
  * url:     URL auf die danach weitergeleitet wird
  *
  ******************************************************************************
@@ -29,7 +29,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
- 
+
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
@@ -55,7 +55,7 @@ else
    $a_user_id = $_GET['user_id'];
    if(editUser())
    {
-      // jetzt noch schauen, ob User überhaupt Mitglied in der Gliedgemeinschaft ist
+      // jetzt noch schauen, ob User ï¿½berhaupt Mitglied in der Gliedgemeinschaft ist
       $sql = "SELECT mem_id
                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
                WHERE rol_org_shortname = '$g_organization'
@@ -324,33 +324,54 @@ require("../../../adm_config/body_top.php");
 
                while($row = mysql_fetch_object($result_msg))
                {
-                  if($i > 0) echo "<br />";
-                  if($row->usf_name == 'ICQ') 
-                  {
-                    echo "<a href=\"http://www.icq.com/whitepages/cmd.php?uin=$row->usd_value&amp;action=add\"  class=\"wpaction\">
-                        <img border=\"0\" src=\"http://status.icq.com/online.gif?icq=$row->usd_value&img=5\" 
-                            style=\"vertical-align: middle;\" alt=\"$row->usf_description\" title=\"$row->usf_description\" /></a>&nbsp;";
-                  }
-                  else 
-                  {
-                    echo "<img src=\"$g_root_path/adm_program/images/";
-                    if($row->usf_name == 'AIM')
-                        echo "aim.png";
-                    elseif($row->usf_name == 'Google Talk')
-                        echo "google.gif";
-                    elseif($row->usf_name == 'MSN')
-                         echo "msn.png";
-                    elseif($row->usf_name == 'Skype')
-                        echo "skype.png";
-                        elseif($row->usf_name == 'Yahoo')
-                           echo "yahoo.png";
-                      echo "\" style=\"vertical-align: middle;\" alt=\"$row->usf_description\" title=\"$row->usf_description\" />&nbsp;&nbsp;";
-                    };
-                  if(strlen($row->usd_value) > 20)
-                     echo "<span style=\"font-size: 8pt;\">$row->usd_value</span>";
-                  else
-                     echo "$row->usd_value";
-                  $i++;
+					if($i > 0)
+					{
+						echo "<br />";
+					}
+					if($row->usf_name == 'ICQ')
+					{
+						// ICQ Onlinestatus anzeigen
+						echo "<a href=\"http://www.icq.com/whitepages/cmd.php?uin=$row->usd_value&amp;action=add\"  class=\"wpaction\">
+						<img border=\"0\" src=\"http://status.icq.com/online.gif?icq=$row->usd_value&img=5\"
+						style=\"vertical-align: middle;\" alt=\"$row->usf_description\" title=\"$row->usf_description\" /></a>&nbsp;";
+					}
+					elseif($row->usf_name == 'Skype')
+					{
+						// Skype Onlinestatus anzeigen
+						echo "<script type=\"text/javascript\" src=\"http://download.skype.com/share/skypebuttons/js/skypeCheck.js\"></script>
+						<a href=\"skype:$row->usd_value?add\"><img src=\"http://mystatus.skype.com/smallicon/$row->usd_value\"
+						style=\"border: none; vertical-align: middle;\" width=\"16\" height=\"16\" title=\"$row->usf_description\" alt=\"$row->usf_description\" /></a>&nbsp;&nbsp;";
+					}
+					else
+					{
+						echo "<img src=\"$g_root_path/adm_program/images/";
+						if($row->usf_name == 'AIM')
+						{
+							echo "aim.png";
+						}
+						elseif($row->usf_name == 'Google Talk')
+						{
+							echo "google.gif";
+						}
+						elseif($row->usf_name == 'MSN')
+						{
+							echo "msn.png";
+						}
+						elseif($row->usf_name == 'Yahoo')
+						{
+							echo "yahoo.png";
+						}
+						echo "\" style=\"vertical-align: middle;\" alt=\"$row->usf_description\" title=\"$row->usf_description\" />&nbsp;&nbsp;";
+					};
+					if(strlen($row->usd_value) > 20)
+					{
+						echo "<span style=\"font-size: 8pt;\">$row->usd_value</span>";
+					}
+					else
+					{
+						echo "$row->usd_value";
+					}
+					$i++;
                }
                echo "</div>";
             }
