@@ -36,15 +36,19 @@ require("../../system/login_valid.php");
 // nur Moderatoren duerfen alle User sehen & Mitgliedschaften l&ouml;schen
 if(!isModerator())
 {
-   $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-   header($location);
-   exit();
+    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
+    header($location);
+    exit();
 }
 
 if(!isset($_GET['members']))
-   $members = 1;
+{
+    $members = 1;
+}
 else
-	$members = $_GET['members'];
+{
+    $members = $_GET['members'];
+}
 
 $restrict = "";
 $listname = "";
@@ -52,46 +56,54 @@ $i = 0;
 
 if(!array_key_exists("letter", $_GET))
 {
-   // alle Mitglieder zur Auswahl selektieren
-   if($members == 1)
-   {
-      $sql = "SELECT COUNT(usr_id) as anzahl 
-                FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
-               WHERE rol_org_shortname = '$g_organization'
-                 AND rol_valid  = 1
-                 AND mem_rol_id = rol_id 
-                 AND mem_usr_id = usr_id
-                 AND mem_valid  = 1
-                 AND usr_valid  = 1 ";
-   }
-   else
-   {
-      $sql = "SELECT COUNT(usr_id) as anzahl 
-                FROM ". TBL_USERS. "
-               WHERE usr_valid  = 1 ";
-   }
-   $result = mysql_query($sql, $g_adm_con);
-   db_error($result);
-   $row = mysql_fetch_object($result);
+    // alle Mitglieder zur Auswahl selektieren
+    if($members == 1)
+    {
+        $sql = "SELECT COUNT(usr_id) as anzahl 
+                  FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
+                 WHERE rol_org_shortname = '$g_organization'
+                   AND rol_valid  = 1
+                   AND mem_rol_id = rol_id 
+                   AND mem_usr_id = usr_id
+                   AND mem_valid  = 1
+                   AND usr_valid  = 1 ";
+    }
+    else
+    {
+        $sql = "SELECT COUNT(usr_id) as anzahl 
+                  FROM ". TBL_USERS. "
+                 WHERE usr_valid  = 1 ";
+    }
+    $result = mysql_query($sql, $g_adm_con);
+    db_error($result);
+    $row = mysql_fetch_object($result);
 
-   if($row->anzahl > 50)
-      $letter = "A%";
-   else
-      $letter = "%";
+    if($row->anzahl > 50)
+    {
+        $letter = "A%";
+    }
+    else
+    {
+        $letter = "%";
+    }
 }
 else
 {
-   if($_GET["letter"] != "%")
-      $letter = $_GET["letter"]. "%";
-   else
-   	$letter = "%";
+    if($_GET["letter"] != "%")
+    {
+        $letter = $_GET["letter"]. "%";
+    }
+    else
+    {
+        $letter = "%";
+    }
 }
 
 // alle Mitglieder zur Auswahl selektieren
 $sql    = "SELECT * FROM ". TBL_USERS. "
-				WHERE usr_last_name LIKE {0}
-				  AND usr_valid = 1
-				ORDER BY usr_last_name, usr_first_name ";
+                WHERE usr_last_name LIKE {0}
+                  AND usr_valid = 1
+                ORDER BY usr_last_name, usr_first_name ";
 $sql    = prepareSQL($sql, array($letter));
 $result_mgl = mysql_query($sql, $g_adm_con);
 db_error($result_mgl);
@@ -101,47 +113,55 @@ echo "
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
 <html>
 <head>
-   <title>$g_current_organization->longname - Benutzerverwaltung</title>
-   <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
+    <title>$g_current_organization->longname - Benutzerverwaltung</title>
+    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
 
-   <!--[if gte IE 5.5000]>
-   <script language=\"JavaScript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
-   <![endif]-->";
+    <!--[if gte IE 5.5000]>
+    <script language=\"JavaScript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
+    <![endif]-->";
 
-   require("../../../adm_config/header.php");
+    require("../../../adm_config/header.php");
 echo "</head>";
 
 require("../../../adm_config/body_top.php");
-   echo "<div align=\"center\">
-   
-   <h1>Benutzerverwaltung</h1>";
+    echo "<div align=\"center\">
 
-   echo "<p>
-      <a href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?new_user=1\"><img src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Login\"></a>
-      <a href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?new_user=1\">Benutzer anlegen</a>&nbsp;&nbsp;&nbsp;&nbsp;";
-      
-      // Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
-      if($members == 1)
-      {
-      	echo "<a href=\"$g_root_path/adm_program/administration/members/members.php?members=0&letter=". str_replace("%", "", $letter). "\"><img src=\"$g_root_path/adm_program/images/group.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Benutzer anzeigen\"></a>
-         <a href=\"$g_root_path/adm_program/administration/members/members.php?members=0&letter=". str_replace("%", "", $letter). "\">Alle Benutzer anzeigen</a>";
-      }
-      else
-      {
-         echo "<a href=\"$g_root_path/adm_program/administration/members/members.php?members=1&letter=". str_replace("%", "", $letter). "\"><img src=\"$g_root_path/adm_program/images/user.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Benutzer anzeigen\"></a>
-         <a href=\"$g_root_path/adm_program/administration/members/members.php?members=1&letter=". str_replace("%", "", $letter). "\">Nur Mitglieder anzeigen</a>";
-      }
-   echo "</p>";   	
+    <h1>Benutzerverwaltung</h1>";
 
-   if($members == 1)
-   	echo "<p>Alle Mitglieder ";
-   else
-   	echo "<p>Alle Benutzer (Mitglieder, Ehemalige) ";
-   	
-	if($letter != "%")
-      echo " mit Nachnamen ". str_replace("%", "*", $letter);
-   echo " werden angezeigt</p>";
-   	   	   
+    echo "<p>
+    <a href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?new_user=1\"><img src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Login\"></a>
+    <a href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?new_user=1\">Benutzer anlegen</a>&nbsp;&nbsp;&nbsp;&nbsp;";
+
+    // Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
+    if($members == 1)
+    {
+        echo "<a href=\"$g_root_path/adm_program/administration/members/members.php?members=0&letter=". str_replace("%", "", $letter). "\"><img 
+            src=\"$g_root_path/adm_program/images/group.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Benutzer anzeigen\"></a>
+        <a href=\"$g_root_path/adm_program/administration/members/members.php?members=0&letter=". str_replace("%", "", $letter). "\">Alle Benutzer anzeigen</a>";
+    }
+    else
+    {
+        echo "<a href=\"$g_root_path/adm_program/administration/members/members.php?members=1&letter=". str_replace("%", "", $letter). "\"><img 
+            src=\"$g_root_path/adm_program/images/user.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Benutzer anzeigen\"></a>
+        <a href=\"$g_root_path/adm_program/administration/members/members.php?members=1&letter=". str_replace("%", "", $letter). "\">Nur Mitglieder anzeigen</a>";
+    }
+    echo "</p>";    
+
+    if($members == 1)
+    {
+        echo "<p>Alle Mitglieder ";
+    }
+    else
+    {
+        echo "<p>Alle Benutzer (Mitglieder, Ehemalige) ";
+    }
+    
+    if($letter != "%")
+    {
+        echo " mit Nachnamen ". str_replace("%", "*", $letter);
+    }
+    echo " werden angezeigt</p>";
+           
    echo "<p>"; 
    
    // Leiste mit allen Buchstaben des Alphabets anzeigen
@@ -203,18 +223,18 @@ require("../../../adm_config/body_top.php");
             <th class=\"tableHeader\" align=\"center\">&nbsp;Aktualisiert am</th>
             <th class=\"tableHeader\" align=\"center\">Bearbeiten</th>
          </tr>";
-      $i = 0;	
+      $i = 0;   
 
       while($row = mysql_fetch_object($result_mgl))
       {
-			$is_member = isMember($row->usr_id);
+            $is_member = isMember($row->usr_id);
 
-			if(($members == 1 && $is_member == true)
-			||  $members == 0)
-			{
+            if(($members == 1 && $is_member == true)
+            ||  $members == 0)
+            {
             $i++;
-         	echo "
-         	<tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
+            echo "
+            <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
                   <td align=\"right\">$i&nbsp;</td>
                   <td align=\"center\">";
                      if($is_member == true)
@@ -251,16 +271,16 @@ require("../../../adm_config/body_top.php");
                   {
                      if($is_member == true)
                      {
-                       	if(strlen($row->usr_login_name) > 0 && $g_current_organization->mail_extern != 1)
-                       	{
-                       		// Link um E-Mail mit neuem Passwort zu zuschicken
-								   // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
-                        	$load_url = urlencode("$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->usr_id&mode=4&url=$url");
+                        if(strlen($row->usr_login_name) > 0 && $g_current_organization->mail_extern != 1)
+                        {
+                            // Link um E-Mail mit neuem Passwort zu zuschicken
+                                   // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
+                            $load_url = urlencode("$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->usr_id&mode=4&url=$url");
                            echo "<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=send_new_login&err_text=". urlencode("$row->usr_first_name $row->usr_last_name"). "&button=2&url=$load_url\">
-	                           <img src=\"$g_root_path/adm_program/images/key.png\" border=\"0\" alt=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\" title=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\"></a>&nbsp;";
-                       	}
-                       	else
-	                        echo "<img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">&nbsp;";
+                               <img src=\"$g_root_path/adm_program/images/key.png\" border=\"0\" alt=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\" title=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\"></a>&nbsp;";
+                        }
+                        else
+                            echo "<img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">&nbsp;";
 
                         // Webmaster kann nur Mitglieder der eigenen Gliedgemeinschaft editieren
                         echo "<a href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=$row->usr_id\">
@@ -269,7 +289,7 @@ require("../../../adm_config/body_top.php");
                      else
                      {
                         echo "<img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">&nbsp;
-                        		<img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">&nbsp;";
+                                <img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">&nbsp;";
                      }
 
                      $sql    = "SELECT COUNT(*)
@@ -312,7 +332,7 @@ require("../../../adm_config/body_top.php");
                   }
                   echo "</td>
                </tr>";
-      	}
+        }
       }
 
       echo "</table>";
