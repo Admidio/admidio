@@ -8,7 +8,7 @@
  *
  * Uebergaben:
  *
- * rol_id     - Rolle der Mitglieder hinzugefügt oder entfernt werden sollen
+ * rol_id     - Rolle der Mitglieder hinzugefuegt oder entfernt werden sollen
  * popup   : 0 - (Default) Fenster wird normal mit Homepagerahmen angezeigt
  *           1 - Fenster wurde im Popupmodus aufgerufen
  * url:        - URL auf die danach weitergeleitet wird
@@ -37,7 +37,7 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
-//Übernahme der Rolle deren Mitgliederzuordnung bearbeitet werden soll
+//uebernahme der Rolle deren Mitgliederzuordnung bearbeitet werden soll
 $role_id=$_GET['rol_id'];
 
 if(!array_key_exists("popup", $_GET))
@@ -51,15 +51,15 @@ if(array_key_exists('url', $_GET))
 else
    $url = "";
 
-//Erfassen der übergeben Rolle
+//Erfassen der uebergeben Rolle
 $sql	=	"SELECT * FROM ". TBL_ROLES. "
 			  WHERE rol_id = '$role_id'";
 $result_role = mysql_query($sql, $g_adm_con);
          	db_error($result, true);
 $role = mysql_fetch_object($result_role);
-// nur Moderatoren dürfen Rollen zuweisen
+// nur Moderatoren duerfen Rollen zuweisen
 // nur Webmaster duerfen die Rolle Webmaster zuweisen
-// beide müssen mitglied der richtigen Gliedgemeinschaft sein
+// beide mï¿½ssen mitglied der richtigen Gliedgemeinschaft sein
 if((!isModerator() && !isGroupLeader($role_id) && !editUser()) || (!hasRole("Webmaster") && $role->rol_name=="Webmaster") || $role->rol_org_shortname!=$g_organization)
 {
    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
@@ -70,7 +70,7 @@ if((!isModerator() && !isGroupLeader($role_id) && !editUser()) || (!hasRole("Web
 //festlegen der Spaltenzahl er Tabelle
 $column=6;
 
-//Übername ob nur Mitglieder oder alle User der Datenbank angezeigt werden sollen
+//uebername ob nur Mitglieder oder alle User der Datenbank angezeigt werden sollen
 $restrict=$_GET["restrict"];
 if($restrict=="" || !isModerator() || !editUser())$restrict="m";
 
@@ -88,7 +88,7 @@ if($restrict=="m"){
 		 ORDER BY usr_last_name, usr_first_name ASC ";
 	$result_user = mysql_query($sql, $g_adm_con);
 	db_error($result_user);
-	//Zählen wieviele Leute in der Datenbank stehen
+	//Zaehlen wieviele Leute in der Datenbank stehen
 	$user_anzahl = mysql_num_rows($result_user);
 }
 
@@ -101,7 +101,7 @@ if($restrict=="u"){
 		ORDER BY usr_last_name, usr_first_name ASC ";
 	$result_user = mysql_query($sql, $g_adm_con);
 	db_error($result_user);
-	//Zählen wieviele Leute in der Datenbank stehen
+	//Zï¿½hlen wieviele Leute in der Datenbank stehen
 	$user_anzahl = mysql_num_rows($result_user);
 }
 
@@ -217,13 +217,13 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
 				echo"
 				</tr>";
  
-  //Ausgabe der Tabellenzeilen, ggf. einfügen von Ankern
+  //Ausgabe der Tabellenzeilen, ggf. einfuegen von Ankern
          	$user = mysql_fetch_array($result_user);
-         //Für alle Namen die mit Zahlen beginnen z.B. 123GmbH
+         //Fï¿½r alle Namen die mit Zahlen beginnen z.B. 123GmbH
          	$ascii = array(48, 49, 50, 51, 52, 53, 54, 55, 56, 57);
            	
            	if(in_array(ord($user['usr_last_name']), $ascii)){
-         		//große Anfangsbuchstaben werden erst ab 50 Personen angezeigt
+         		//groï¿½e Anfangsbuchstaben werden erst ab 50 Personen angezeigt
          		if($user_anzahl>50){
          			echo "<tr><td style=\"text-align: center;\" colspan=\"$column\">";           			
       					//Aktueller Anfangsbuchstabe plus Anker
@@ -263,7 +263,7 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
 								 if($user['usr_birthday']!='0000-00-00')echo mysqldate("d.m.y", $user['usr_birthday']);
 							echo"</td>
 							<td style=\"text-align: center;\">";
-							//Häkchen setzen ob jemand Mitglied ist oder nicht
+							//Hï¿½kchen setzen ob jemand Mitglied ist oder nicht
 							if(in_array($user['usr_id'], $role_member)){
 								echo"<input type=\"checkbox\" onclick=\"unmarkLeader(this)\" id=\"member_$user[0]\" name=\"member_$user[0]\" checked value=\"1\">";
 							}
@@ -272,7 +272,7 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
 							}
 							echo"</td>
 							<td style=\"text-align: center;\">";
-								//Häkchen setzen ob jemand Leiter ist oder nicht
+								//Hï¿½kchen setzen ob jemand Leiter ist oder nicht
 								if(in_array($user['usr_id'], $group_leaders)){
 									echo"<input type=\"checkbox\" onclick=\"markMember(this)\" id=\"leader_$user[0]\" name=\"leader_$user[0]\" checked value=\"1\">";
 								}
@@ -286,9 +286,9 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
 				}//Ende for-Schleife
          }//Ende Namen mit Zahlen 	
          	
-         //Für alle Namen die mit Buchstaben beginnen egal ob klein oder Groß
+         //Fuer alle Namen die mit Buchstaben beginnen egal ob klein oder Gross
          	for($letter=65; $letter<=90; $letter++){
-           	//große Anfangsbuchstaben werden erst ab 50 Personen angezeigt 
+           	//grosse Anfangsbuchstaben werden erst ab 50 Personen angezeigt 
            		if(in_array($letter, $first_letter_array) && $user_anzahl>50){
          			echo "<tr><td style=\"text-align: center;\" colspan=\"$column\">";           			
       				//Aktueller Anfangsbuchstabe plus Anker
@@ -326,7 +326,7 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
 								 if($user['usr_birthday']!='0000-00-00')echo mysqldate("d.m.y", $user['usr_birthday']);
 							echo"</td>
 							<td style=\"text-align: center;\">";
-							//Häkchen setzen ob jemand Mitglied ist oder nicht
+							//Haekchen setzen ob jemand Mitglied ist oder nicht
 							if(in_array($user['usr_id'], $role_member)){
 								echo"<input type=\"checkbox\" onclick=\"unmarkLeader(this)\" id=\"member_$user[0]\" name=\"member_$user[0]\" checked value=\"1\">";
 							}
@@ -335,7 +335,7 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
 							}
 							echo"</td>
 							<td style=\"text-align: center;\">";
-								//Häkchen setzen ob jemand Leiter ist oder nicht
+								//Haekchen setzen ob jemand Leiter ist oder nicht
 								if(in_array($user['usr_id'], $group_leaders)){
 									echo"<input type=\"checkbox\" onclick=\"markMember(this)\" id=\"leader_$user[0]\" name=\"leader_$user[0]\" checked value=\"1\">";
 								}
@@ -348,7 +348,7 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
          		}//Ende Whileschleife
          	}//Ende for-Schleife
       echo"</table>";
-      //Buttons schließen oder Speichern
+      //Buttons schliessen oder Speichern
       echo"
 	  		<a name=\"Ende\"></a>
 			<div style=\"margin: 8px;\">
