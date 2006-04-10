@@ -8,7 +8,7 @@
  *
  * Uebergaben:
  *
- * usr_id   - E-Mail an den entsprechenden Benutzer schreiben
+ * usr_id  - E-Mail an den entsprechenden Benutzer schreiben
  * rolle   - E-Mail an alle Mitglieder der Rolle schreiben
  * subject - Betreff der E-Mail
  * body    - Inhalt der E-Mail
@@ -35,62 +35,70 @@
 
 require("../../system/common.php");
 
-// Prüfungen, ob die Seite regulaer aufgerufen wurde
+// Pruefungen, ob die Seite regulaer aufgerufen wurde
 
-if($g_current_organization->mail_extern == 1)
+if ($g_current_organization->mail_extern == 1)
 {
-  // es duerfen oder koennen keine Mails ueber den Server verschickt werden
-   $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=mail_extern";
-   header($location);
-   exit();
+    // es duerfen oder koennen keine Mails ueber den Server verschickt werden
+    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=mail_extern";
+    header($location);
+    exit();
 }
 
-if(array_key_exists("usr_id", $_GET) && !$g_session_valid)
+if (array_key_exists("usr_id", $_GET) && !$g_session_valid)
 {
-  //in ausgeloggtem Zustand duerfen nie direkt usr_ids uebergeben werden...
-   $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-   header($location);
-   exit();
+    //in ausgeloggtem Zustand duerfen nie direkt usr_ids uebergeben werden...
+    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
+    header($location);
+    exit();
 }
 
-if(array_key_exists("rolle", $_GET))
+if (array_key_exists("rolle", $_GET))
 {
-   if($g_session_valid)
-   {
-      $sql    = "SELECT rol_mail_login FROM ". TBL_ROLES. "
-                  WHERE rol_org_shortname    = '$g_organization'
-                    AND UPPER(rol_name) = UPPER({0}) ";
-   }
-   else
-   {
-      $sql    = "SELECT rol_mail_logout FROM ". TBL_ROLES. "
-                  WHERE rol_org_shortname    = '$g_organization'
-                    AND UPPER(rol_name) = UPPER({0}) ";
-   }
-   $sql    = prepareSQL($sql, array($_GET['rolle']));
-   $result = mysql_query($sql, $g_adm_con);
-   db_error($result);
-   $row = mysql_fetch_array($result);
+    if ($g_session_valid)
+    {
+        $sql    = "SELECT rol_mail_login FROM ". TBL_ROLES. "
+                   WHERE rol_org_shortname    = '$g_organization'
+                   AND UPPER(rol_name) = UPPER({0}) ";
+    }
+    else
+    {
+        $sql    = "SELECT rol_mail_logout FROM ". TBL_ROLES. "
+                   WHERE rol_org_shortname    = '$g_organization'
+                   AND UPPER(rol_name) = UPPER({0}) ";
+    }
+    $sql    = prepareSQL($sql, array($_GET['rolle']));
+    $result = mysql_query($sql, $g_adm_con);
+    db_error($result);
+    $row = mysql_fetch_array($result);
 
-   if($row[0] != 1)
-   {
-      $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-      header($location);
-      exit();
-   }
+    if ($row[0] != 1)
+    {
+        $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
+        header($location);
+        exit();
+    }
 }
 
-if(!array_key_exists("subject", $_GET))
-   $_GET["subject"] = "";
-if(!array_key_exists("body", $_GET))
-   $_GET["body"]  = "";
-if(!array_key_exists("kopie", $_GET))
-   $_GET["kopie"] = "1";
-
-if($g_current_user->id != 0)
+if (!array_key_exists("subject", $_GET))
 {
-   $user     = new TblUsers($g_adm_con);
-   $user->GetUser($g_current_user->id);
+    $_GET["subject"] = "";
+}
+
+if (!array_key_exists("body", $_GET))
+{
+    $_GET["body"]  = "";
+}
+
+if (!array_key_exists("kopie", $_GET))
+{
+    $_GET["kopie"] = "1";
+}
+
+if ($g_current_user->id != 0)
+{
+    $user     = new TblUsers($g_adm_con);
+    $user->GetUser($g_current_user->id);
 }
 
 echo "
@@ -98,101 +106,107 @@ echo "
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
 <html>
 <head>
-   <title>$g_current_organization->longname - E-Mail verschicken</title>
-   <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
+    <title>$g_current_organization->longname - E-Mail verschicken</title>
+    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
 
-   <!--[if gte IE 5.5000]>
-   <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
-   <![endif]-->";
+    <!--[if gte IE 5.5000]>
+    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
+    <![endif]-->";
 
-   require("../../../adm_config/header.php");
+    require("../../../adm_config/header.php");
 echo "</head>";
 
 require("../../../adm_config/body_top.php");
-   echo "
-   <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
+    echo "
+    <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
 
-   <form action=\"mail_send.php?";
+    <form action=\"mail_send.php?";
       // usr_id wird mit GET uebergeben,
       // da keine E-Mail-Adresse von mail_send angenommen werden soll
-      if(array_key_exists("usr_id", $_GET))
-         echo "usr_id=". $_GET['usr_id']. "&";
+      if (array_key_exists("usr_id", $_GET))
+      {
+          echo "usr_id=". $_GET['usr_id']. "&";
+      }
       echo "url=". urlencode(getHttpReferer()). "\" method=\"post\" name=\"Mail\" enctype=\"multipart/form-data\">
 
       <div class=\"formHead\">";
-         if($_GET["subject"] == "")
-            echo strspace("E-Mail verschicken");
-         else
-            echo strspace($_GET["subject"]);
+      if ($_GET["subject"] == "")
+      {
+          echo strspace("E-Mail verschicken");
+      }
+      else
+      {
+          echo strspace($_GET["subject"]);
+      }
       echo "</div>
       <div class=\"formBody\">
          <div>
             <div style=\"text-align: right; width: 15%; float: left;\">an:</div>
             <div style=\"text-align: left; margin-left: 17%;\">";
-               if(array_key_exists("usr_id", $_GET))
+               if (array_key_exists("usr_id", $_GET))
                {
-                  // usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
-                  $sql    = "SELECT usr_email FROM ". TBL_USERS. " WHERE usr_id = '{0}' ";
-                  $sql    = prepareSQL($sql, array($_GET['usr_id']));
-                  $result = mysql_query($sql, $g_adm_con);
-                  db_error($result, true);
+                   // usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
+                   $sql    = "SELECT usr_email FROM ". TBL_USERS. " WHERE usr_id = '{0}' ";
+                   $sql    = prepareSQL($sql, array($_GET['usr_id']));
+                   $result = mysql_query($sql, $g_adm_con);
+                   db_error($result, true);
 
-                  $row = mysql_fetch_array($result);
-                  echo "<input class=\"readonly\" readonly type=\"text\" name=\"mailto\" size=\"35\" maxlength=\"50\" value=\"". $row[0]. "\">";
+                   $row = mysql_fetch_array($result);
+                   echo "<input class=\"readonly\" readonly type=\"text\" name=\"mailto\" size=\"35\" maxlength=\"50\" value=\"". $row[0]. "\">";
                }
-               elseif(array_key_exists("rolle", $_GET))
+               elseif (array_key_exists("rolle", $_GET))
                {
-                  // Rolle wurde uebergeben, dann E-Mails nur an diese Rolle schreiben
-                  echo "<input class=\"readonly\" readonly type=\"text\" name=\"rolle\" size=\"28\" maxlength=\"30\" value=\"". $_GET['rolle']. "\">
-                     &nbsp;<img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" alt=\"Hilfe\" title=\"Hilfe\"
-                     onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_mail','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">";
+                   // Rolle wurde uebergeben, dann E-Mails nur an diese Rolle schreiben
+                   echo "<input class=\"readonly\" readonly type=\"text\" name=\"rolle\" size=\"28\" maxlength=\"30\" value=\"". $_GET['rolle']. "\">
+                      &nbsp;<img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" alt=\"Hilfe\" title=\"Hilfe\"
+                      onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_mail','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">";
                }
                else
                {
-                  // keine Uebergabe, dann alle Rollen entsprechend Login/Logout auflisten
-                  echo "<select size=\"1\" name=\"rolle\">";
-                  echo "<option value=\"\" selected=\"selected\">- Bitte w&auml;hlen -</option>";
+                   // keine Uebergabe, dann alle Rollen entsprechend Login/Logout auflisten
+                   echo "<select size=\"1\" name=\"rolle\">";
+                   echo "<option value=\"\" selected=\"selected\">- Bitte w&auml;hlen -</option>";
 
-                  if($g_session_valid)
-                  {
-                     // im eingeloggten Zustand duerfen nur Moderatoren an gelocked Rollen schreiben
-                     if(isModerator())
-                     {
-                        $sql    = "SELECT rol_name FROM ". TBL_ROLES. "
-                                    WHERE rol_org_shortname = '$g_organization'
+                   if ($g_session_valid)
+                   {
+                       // im eingeloggten Zustand duerfen nur Moderatoren an gelocked Rollen schreiben
+                       if (isModerator())
+                       {
+                           $sql    = "SELECT rol_name FROM ". TBL_ROLES. "
+                                      WHERE rol_org_shortname = '$g_organization'
                                       AND rol_mail_login = 1
                                       AND rol_valid      = 1
-                                    ORDER BY rol_name ";
-                     }
-                     else
-                     {
-                        $sql    = "SELECT rol_name FROM ". TBL_ROLES. "
-                                    WHERE rol_org_shortname = '$g_organization'
+                                      ORDER BY rol_name ";
+                       }
+                       else
+                       {
+                           $sql    = "SELECT rol_name FROM ". TBL_ROLES. "
+                                      WHERE rol_org_shortname = '$g_organization'
                                       AND rol_mail_login = 1
                                       AND rol_locked     = 0
                                       AND rol_valid      = 1
-                                    ORDER BY rol_name ";
-                     }
-                  }
-                  else
-                  {
-                     $sql    = "SELECT rol_name FROM ". TBL_ROLES. "
-                                 WHERE rol_org_shortname  = '$g_organization'
-                                   AND rol_mail_logout = 1
-                                   AND rol_valid       = 1
-                                 ORDER BY rol_name ";
-                  }
-                  $result = mysql_query($sql, $g_adm_con);
-                  db_error($result, true);
+                                      ORDER BY rol_name ";
+                       }
+                   }
+                   else
+                   {
+                       $sql    = "SELECT rol_name FROM ". TBL_ROLES. "
+                                  WHERE rol_org_shortname  = '$g_organization'
+                                  AND rol_mail_logout = 1
+                                  AND rol_valid       = 1
+                                  ORDER BY rol_name ";
+                   }
+                   $result = mysql_query($sql, $g_adm_con);
+                   db_error($result, true);
 
-                  while($row = mysql_fetch_array($result))
-                  {
-                     echo "<option value=\"$row[0]\">$row[0]</option>";
-                  }
+                   while ($row = mysql_fetch_array($result))
+                   {
+                       echo "<option value=\"$row[0]\">$row[0]</option>";
+                   }
 
-                  echo "</select>&nbsp;
-                  <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" alt=\"Hilfe\" title=\"Hilfe\"
-                  onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_mail','Message','width=400,height=200,left=310,top=200')\">";
+                   echo "</select>&nbsp;
+                   <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" alt=\"Hilfe\" title=\"Hilfe\"
+                   onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_mail','Message','width=400,height=200,left=310,top=200')\">";
                }
             echo "</div>
          </div>
@@ -202,19 +216,27 @@ require("../../../adm_config/body_top.php");
          <div style=\"margin-top: 8px;\">
             <div style=\"text-align: right; width: 15%; float: left;\">Name:</div>
             <div style=\"text-align: left; margin-left: 17%;\">";
-               if($g_current_user->id != 0)
-                  echo "<input class=\"readonly\" readonly type=\"text\" name=\"name\" size=\"30\" maxlength=\"50\" value=\"$user->first_name $user->last_name\">";
+               if ($g_current_user->id != 0)
+               {
+                   echo "<input class=\"readonly\" readonly type=\"text\" name=\"name\" size=\"30\" maxlength=\"50\" value=\"$user->first_name $user->last_name\">";
+               }
                else
-                  echo "<input type=\"text\" name=\"name\" size=\"30\" maxlength=\"50\" value=\"\">";
+               {
+                   echo "<input type=\"text\" name=\"name\" size=\"30\" maxlength=\"50\" value=\"\">";
+               }
             echo "</div>
          </div>
          <div style=\"margin-top: 8px;\">
             <div style=\"text-align: right; width: 15%; float: left;\">E-Mail:</div>
             <div style=\"text-align: left; margin-left: 17%;\">";
-               if($g_current_user->id != 0)
-                  echo "<input class=\"readonly\" readonly type=\"text\" name=\"mailfrom\" size=\"50\" maxlength=\"50\" value=\"$user->email\">";
+               if ($g_current_user->id != 0)
+               {
+                   echo "<input class=\"readonly\" readonly type=\"text\" name=\"mailfrom\" size=\"50\" maxlength=\"50\" value=\"$user->email\">";
+               }
                else
-                  echo "<input type=\"text\" name=\"mailfrom\" size=\"50\" maxlength=\"50\" value=\"\">";
+               {
+                   echo "<input type=\"text\" name=\"mailfrom\" size=\"50\" maxlength=\"50\" value=\"\">";
+               }
             echo "</div>
          </div>
 
@@ -223,10 +245,14 @@ require("../../../adm_config/body_top.php");
          <div style=\"margin-top: 8px;\">
             <div style=\"text-align: right; width: 15%; float: left;\">Betreff:</div>
             <div style=\"text-align: left; margin-left: 17%;\">";
-               if($_GET["subject"] == "")
-                  echo "<input type=\"text\" name=\"subject\" size=\"50\" maxlength=\"50\">";
+               if ($_GET["subject"] == "")
+               {
+                   echo "<input type=\"text\" name=\"subject\" size=\"50\" maxlength=\"50\">";
+               }
                else
-                  echo "<input class=\"readonly\" readonly type=\"text\" name=\"subject\" size=\"50\" maxlength=\"50\" value=\"". $_GET["subject"]. "\">";
+               {
+                   echo "<input class=\"readonly\" readonly type=\"text\" name=\"subject\" size=\"50\" maxlength=\"50\" value=\"". $_GET["subject"]. "\">";
+               }
             echo "</div>
          </div>
          <div style=\"margin-top: 8px;\">
@@ -237,23 +263,26 @@ require("../../../adm_config/body_top.php");
          </div>";
 
          // Nur eingeloggte User duerfen Attachments mit max 3MB anhaengen...
-         if(($g_session_valid) && ($g_current_organization->mail_size > 0))
+         if (($g_session_valid) && ($g_current_organization->mail_size > 0))
          {
-           echo "
-           <div style=\"margin-top: 8px;\">
-              <div style=\"text-align: right; width: 15%; float: left;\">Anhang:</div>
-              <div style=\"text-align: left; margin-left: 17%;\">
-                 <input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"" . ($g_current_organization->mail_size * 1024) . "\">
-                 <input name=\"userfile\" size=\"40\" type=\"file\">
-              </div>
-           </div>";
+             echo "
+             <div style=\"margin-top: 8px;\">
+                 <div style=\"text-align: right; width: 15%; float: left;\">Anhang:</div>
+                 <div style=\"text-align: left; margin-left: 17%;\">
+                     <input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"" . ($g_current_organization->mail_size * 1024) . "\">
+                     <input name=\"userfile\" size=\"40\" type=\"file\">
+                 </div>
+             </div>";
          }
 
          echo "
          <div style=\"margin-top: 8px;\">
             <div style=\"text-align: left; margin-left: 17%;\">
                <input type=\"checkbox\" id=\"kopie\" name=\"kopie\" value=\"1\" ";
-               if($_GET["kopie"] == 1) echo " checked=\"checked\" ";
+               if ($_GET["kopie"] == 1)
+               {
+                   echo " checked=\"checked\" ";
+               }
                echo "> <label for=\"kopie\">Kopie der E-Mail an mich senden</label>
             </div>
          </div>
