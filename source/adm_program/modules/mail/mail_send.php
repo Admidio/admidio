@@ -8,7 +8,7 @@
  *
  * Uebergaben:
  *
- * usr_id   - E-Mail an den entsprechenden Benutzer schreiben
+ * usr_id  - E-Mail an den entsprechenden Benutzer schreiben
  * rolle   - E-Mail an alle Mitglieder der Rolle schreiben
  *
  ******************************************************************************
@@ -152,6 +152,7 @@ if (array_key_exists("rolle", $_POST) && strlen($err_code) == 0)
         }
     }
 }
+
 
 //Pruefen ob bis hier Fehler aufgetreten sind
 if (strlen($err_code) > 0)

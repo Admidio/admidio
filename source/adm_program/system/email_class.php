@@ -14,8 +14,8 @@
  *
  * Nun wird der Absender gesetzt:
  * function setSender($address, $name='')
- * Uebergaben: 	$address		-	Die Emailadresse
- *               $name		-	Der Name des Absenders (optional)
+ * Uebergaben: $address	- Die Emailadresse
+ *             $name    - Der Name des Absenders (optional)
  *
  * Nun koennen in beliebiger Reihenfolge und Anzahl Adressaten (To,Cc,Bcc)
  * der Mail hinzugefuegt werden:
@@ -25,23 +25,23 @@
  * function addRecipient($address, $name='')
  * function addCopy($address, $name='')
  * function addBlindCopy($address, $name='')
- * Uebergaben:	$address		-	Die Emailadresse
- * 				$name		-	Der Name des Absenders (optional)
+ * Uebergaben: $address - Die Emailadresse
+ *             $name    - Der Name des Absenders (optional)
  *
  * Nun noch ein Subject setzen (optional):
  * function setSubject($subject)
- * Uebergaben: 	$subject	-	Der Text des Betreffs
+ * Uebergaben: $subject - Der Text des Betreffs
  *
  * Der Email einen Text geben:
  * function setText($text)
- * Uebergaben:	$text		-	Der Text der Mail
+ * Uebergaben: $text - Der Text der Mail
  *
  * Nun kann man ein Attachment hinzufuegen:
  * (optional und mehrfach aufrufbar)
  * function addAttachment($tmp_filename, $orig_filename = '', $file_type='application/octet-stream')
- * Uebergaben: 	$tmp_filename	-	Der Pfad und Name der Datei auf dem Server
- * 				$orig_filename	-	Der Name der datei auf dem Rechner des Users
- * 				$file_type		-	Den Contenttype der Datei. (optional)
+ * Uebergaben: $tmp_filename  - Der Pfad und Name der Datei auf dem Server
+ *             $orig_filename - Der Name der datei auf dem Rechner des Users
+ *             $file_type     - Den Contenttype der Datei. (optional)
  *
  * Bei Bedarf kann man sich eine Kopie der Mail zuschicken lassen (optional):
  * function setCopyToSenderFlag()
