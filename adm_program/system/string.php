@@ -31,29 +31,29 @@
 
 function strspace($srcString, $count = 1)
 {
-   $html_special = false;
-   $dest_string  = "";
-   for($i = 0; $i < strlen($srcString); $i++)
-   {
-      $dest_string = $dest_string. substr($srcString, $i, 1);
-      if($html_special == true)
-      {
-         if(substr($srcString, $i, 1) == ";")
+    $html_special = false;
+    $dest_string  = "";
+    for($i = 0; $i < strlen($srcString); $i++)
+    {
+        $dest_string = $dest_string. substr($srcString, $i, 1);
+        if($html_special == true)
+        {
+            if(substr($srcString, $i, 1) == ";")
             $html_special = false;
-      }
+        }
 
-      if($html_special == false)
-      {
-         if(substr($srcString, $i, 1) == "&")
+        if($html_special == false)
+        {
+            if(substr($srcString, $i, 1) == "&")
             $html_special = true;
-         else
-         {
-            for($j = 0; $j < $count; $j++)
-               $dest_string = $dest_string. "&nbsp;";
-         }
-      }
-   }
-   return $dest_string;
+            else
+            {
+                for($j = 0; $j < $count; $j++)
+                $dest_string = $dest_string. "&nbsp;";
+            }
+        }
+    }
+    return $dest_string;
 }
 
 
@@ -77,9 +77,9 @@ function strSpecialChars2Html($srcString)
 
 function strStripTags($srcString)
 {
-	// Spaces vorne und hinten entfernen
-	$srcString = trim($srcString);
-	// HTML und PHP Tags entfernen
+    // Spaces vorne und hinten entfernen
+    $srcString = trim($srcString);
+    // HTML und PHP Tags entfernen
    $srcString = strip_tags($srcString);
 
    return $srcString;
