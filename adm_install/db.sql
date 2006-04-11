@@ -487,17 +487,17 @@ alter table %PRAEFIX%_dates add constraint %PRAEFIX%_FK_DAT_USR foreign key (dat
 alter table %PRAEFIX%_dates add constraint %PRAEFIX%_FK_DAT_USR_CHANGE foreign key (dat_usr_id_change)
       references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
 
-alter table adm_folder_roles add constraint %PRAEFIX%_FK_FOL_ROL foreign key (flr_rol_id)
-      references adm_roles (rol_id) on delete restrict on update restrict;
+alter table %PRAEFIX%_folder_roles add constraint %PRAEFIX%_FK_FOL_ROL foreign key (flr_rol_id)
+      references %PRAEFIX%_roles (rol_id) on delete restrict on update restrict;
 
-alter table adm_folder_roles add constraint %PRAEFIX%_FK_FLR_FOL foreign key (flr_fol_id)
-      references adm_folders (fol_id) on delete restrict on update restrict;
+alter table %PRAEFIX%_folder_roles add constraint %PRAEFIX%_FK_FLR_FOL foreign key (flr_fol_id)
+      references %PRAEFIX%_folders (fol_id) on delete restrict on update restrict;
 
-alter table adm_folders add constraint %PRAEFIX%_FK_FOL_FOL_PARENT foreign key (fol_fol_id_parent)
-      references adm_folders (fol_id) on delete restrict on update restrict;
+alter table %PRAEFIX%_folders add constraint %PRAEFIX%_FK_FOL_FOL_PARENT foreign key (fol_fol_id_parent)
+      references %PRAEFIX%_folders (fol_id) on delete restrict on update restrict;
 
-alter table adm_folders add constraint %PRAEFIX%_FK_FOL_ORG foreign key (fol_org_shortname)
-      references adm_organizations (org_shortname) on delete restrict on update restrict;
+alter table %PRAEFIX%_folders add constraint %PRAEFIX%_FK_FOL_ORG foreign key (fol_org_shortname)
+      references %PRAEFIX%_organizations (org_shortname) on delete restrict on update restrict;
 
 alter table %PRAEFIX%_members add constraint %PRAEFIX%_FK_MEM_ROL foreign key (mem_rol_id)
       references %PRAEFIX%_roles (rol_id) on delete restrict on update restrict;
