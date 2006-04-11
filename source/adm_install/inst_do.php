@@ -59,18 +59,18 @@ function showError($err_msg, $err_head = "Fehler", $mode = 1)
             <p><button id="zurueck" type="button" value="zurueck" onclick="';
             if($mode == 1)
             {
-            	// Fehlermeldung (Zurueckgehen)
+                // Fehlermeldung (Zurueckgehen)
                echo 'history.back()">
-					<img src="../adm_program/images/back.png" style="vertical-align: middle; padding-bottom: 1px;" width="16" height="16" border="0" alt="Zurueck">
-					&nbsp;Zur&uuml;ck';
-				}
+                    <img src="../adm_program/images/back.png" style="vertical-align: middle; padding-bottom: 1px;" width="16" height="16" border="0" alt="Zurueck">
+                    &nbsp;Zur&uuml;ck';
+                }
             elseif($mode == 2)
             {
-            	// Erfolgreich durchgefuehrt
+                // Erfolgreich durchgefuehrt
                echo 'self.location.href=\'../adm_program/index.php\'">
-					<img src="../adm_program/images/list.png" style="vertical-align: middle; padding-bottom: 1px;" width="16" height="16" border="0" alt="Zurueck">
-					&nbsp;Admidio &Uuml;bersicht';
-				}
+                    <img src="../adm_program/images/list.png" style="vertical-align: middle; padding-bottom: 1px;" width="16" height="16" border="0" alt="Zurueck">
+                    &nbsp;Admidio &Uuml;bersicht';
+                }
             echo '</button></p>
          </div>
       </div>
@@ -81,38 +81,38 @@ function showError($err_msg, $err_head = "Fehler", $mode = 1)
 
 if($_GET['mode'] == 1)
 {
-	// Installation 1.Seite
-	session_start();
+    // Installation 1.Seite
+    session_start();
 
-	// Tabellenpraefix pruefen
-	$g_tbl_praefix = $_POST['praefix'];
-	if(strlen($g_tbl_praefix) == 0)
-		$g_tbl_praefix = "adm";
-	else
-	{
-		// wenn letztes Zeichen ein _ dann abschneiden
-		if(strrpos($g_tbl_praefix, "_")+1 == strlen($g_tbl_praefix))
-			$g_tbl_praefix = substr($g_tbl_praefix, 0, strlen($g_tbl_praefix)-1);
+    // Tabellenpraefix pruefen
+    $g_tbl_praefix = $_POST['praefix'];
+    if(strlen($g_tbl_praefix) == 0)
+        $g_tbl_praefix = "adm";
+    else
+    {
+        // wenn letztes Zeichen ein _ dann abschneiden
+        if(strrpos($g_tbl_praefix, "_")+1 == strlen($g_tbl_praefix))
+            $g_tbl_praefix = substr($g_tbl_praefix, 0, strlen($g_tbl_praefix)-1);
 
       // nur gueltige Zeichen zulassen
-      $anz = strspn($g_tbl_praefix, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_");
+      $anz = strspn($g_tbl_praefix, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_");
 
       if($anz != strlen($g_tbl_praefix))
-      	showError("Das Tabellenpr&auml;fix enth&auml;lt ung&uuml;ltige Zeichen !");
-	}
+        showError("Das Tabellenpr&auml;fix enth&auml;lt ung&uuml;ltige Zeichen !");
+    }
 
-	// Session-Variablen merken
-	$_SESSION['praefix']  = $g_tbl_praefix;
-	$_SESSION['server']   = $_POST['server'];
-	$_SESSION['user']     = $_POST['user'];
-	$_SESSION['password'] = $_POST['password'];
-	$_SESSION['database'] = $_POST['database'];
-	$_SESSION['verein-name-kurz'] = $_POST['verein-name-kurz'];
+    // Session-Variablen merken
+    $_SESSION['praefix']  = $g_tbl_praefix;
+    $_SESSION['server']   = $_POST['server'];
+    $_SESSION['user']     = $_POST['user'];
+    $_SESSION['password'] = $_POST['password'];
+    $_SESSION['database'] = $_POST['database'];
+    $_SESSION['verein-name-kurz'] = $_POST['verein-name-kurz'];
 }
 elseif($_GET['mode'] == 2)
 {
-	// Installation 2.Seite
-	session_start();
+    // Installation 2.Seite
+    session_start();
 
    // MySQL-Zugangsdaten in config.php schreiben
    // Datei auslesen
@@ -127,7 +127,7 @@ elseif($_GET['mode'] == 2)
    if(!strpos($root_path, "http://"))
       $root_path = "http://". $root_path;
 
-	$file_content = str_replace("%PRAEFIX%", $_SESSION['praefix'], $file_content);
+    $file_content = str_replace("%PRAEFIX%", $_SESSION['praefix'], $file_content);
    $file_content = str_replace("%SERVER%",  $_SESSION['server'],  $file_content);
    $file_content = str_replace("%USER%",    $_SESSION['user'],    $file_content);
    $file_content = str_replace("%PASSWORD%",  $_SESSION['password'], $file_content);
@@ -147,17 +147,18 @@ elseif($_GET['mode'] == 2)
 }
 elseif($_GET['mode'] == 5)
 {
-	if(file_exists("../adm_config/config.php"))
-		showError("Die Datenbank wurde erfolgreich angelegt und die Datei config.php erstellt.<br><br>Sie k�nnen nun mit Admidio arbeiten.", "Fertig", 2);
-	else
-		showError("Die Datei <b>config.php</b> befindet sich nicht im Verzeichnis <b>adm_config</b> !");
+    if(file_exists("../adm_config/config.php"))
+        showError("Die Datenbank wurde erfolgreich angelegt und die Datei config.php erstellt.<br><br>
+            Sie k&ouml;nnen nun mit Admidio arbeiten.", "Fertig", 2);
+    else
+        showError("Die Datei <b>config.php</b> befindet sich nicht im Verzeichnis <b>adm_config</b> !");
 }
 else
-	require("../adm_config/config.php");
+    require("../adm_config/config.php");
 
 // Standard-Praefix ist adm auch wegen Kompatibilitaet zu alten Versionen
 if(strlen($g_tbl_praefix) == 0)
-	$g_tbl_praefix = "adm";
+    $g_tbl_praefix = "adm";
 
 // Defines fuer alle Datenbanktabellen
 define("TBL_ANNOUNCEMENTS",    $g_tbl_praefix. "_announcements");
@@ -194,20 +195,20 @@ if($_GET['mode'] == 3)
    }
 }
 
-// bei Installation oder hinzuf�gen einer Organisation
+// bei Installation oder hinzufuegen einer Organisation
 if($_GET['mode'] == 1 || $_GET['mode'] == 4)
 {
-	$_POST['user-surname']   = trim($_POST['user-surname']);
-	$_POST['user-firstname'] = trim($_POST['user-firstname']);
-	$_POST['user-login']     = trim($_POST['user-login']);
+    $_POST['user-surname']   = trim($_POST['user-surname']);
+    $_POST['user-firstname'] = trim($_POST['user-firstname']);
+    $_POST['user-login']     = trim($_POST['user-login']);
 
-	if(strlen($_POST['user-surname'])   == 0
-	|| strlen($_POST['user-firstname']) == 0
-	|| strlen($_POST['user-login'])     == 0
-	|| strlen($_POST['user-passwort'])  == 0 )
-	{
-		showError("Es sind nicht alle Benutzerdaten eingegeben worden !");
-	}
+    if(strlen($_POST['user-surname'])   == 0
+    || strlen($_POST['user-firstname']) == 0
+    || strlen($_POST['user-login'])     == 0
+    || strlen($_POST['user-passwort'])  == 0 )
+    {
+        showError("Es sind nicht alle Benutzerdaten eingegeben worden !");
+    }
 
    if(  strlen($_POST['verein-name-lang']) == 0
    || strlen($_POST['verein-name-kurz']) == 0 )
@@ -242,8 +243,8 @@ if($_GET['mode'] == 1)
    {
       if(strlen(trim($sql)) > 0)
       {
-			// Praefix fuer die Tabellen einsetzen und SQL-Statement ausfuehren
-			$sql = str_replace("%PRAEFIX%", $g_tbl_praefix, $sql);
+            // Praefix fuer die Tabellen einsetzen und SQL-Statement ausfuehren
+            $sql = str_replace("%PRAEFIX%", $g_tbl_praefix, $sql);
          $result = mysql_query($sql, $connection);
          if(!$result)
          {
@@ -300,33 +301,33 @@ if($_GET['mode'] == 3)
             $filename = "upd_1_1_db.sql";
          elseif($i == 3)
             $filename = "upd_1_3_db.sql";
-        	else
-        		$filename = "";
+            else
+                $filename = "";
 
-			if(strlen($filename) > 0)
-			{
-				$file    = fopen($filename, "r")
-							  or showError("Die Datei <b>$filename</b> konnte nicht im Verzeichnis <b>adm_install</b> gefunden werden.");
-				$content = fread($file, filesize($filename));
-				$sql_arr = explode(";", $content);
-				fclose($file);
+            if(strlen($filename) > 0)
+            {
+                $file    = fopen($filename, "r")
+                              or showError("Die Datei <b>$filename</b> konnte nicht im Verzeichnis <b>adm_install</b> gefunden werden.");
+                $content = fread($file, filesize($filename));
+                $sql_arr = explode(";", $content);
+                fclose($file);
 
-				foreach($sql_arr as $sql)
-				{
-					if(strlen(trim($sql)) > 0)
-					{
-						// Praefix fuer die Tabellen einsetzen und SQL-Statement ausfuehren
-						$sql = str_replace("%PRAEFIX%", $g_tbl_praefix, $sql);
-						$result = mysql_query($sql, $connection);
-						if(!$result)
+                foreach($sql_arr as $sql)
+                {
+                    if(strlen(trim($sql)) > 0)
+                    {
+                        // Praefix fuer die Tabellen einsetzen und SQL-Statement ausfuehren
+                        $sql = str_replace("%PRAEFIX%", $g_tbl_praefix, $sql);
+                        $result = mysql_query($sql, $connection);
+                        if(!$result)
                   {
                      showError(mysql_error());
                      $error++;
                   }
-					}
-				}
+                    }
+                }
             if($error > 0) exit();
-			}
+            }
 
          if($i == 1)
          {
@@ -363,33 +364,33 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
    $result = mysql_query($sql, $connection);
    if(!$result) showError(mysql_error());
 
-	// Rollen-Kategorie eintragen
-	$sql = "INSERT INTO ". TBL_ROLE_CATEGORIES. " (rlc_org_shortname, rlc_name)
-	             VALUES ({0}, 'Allgemein')";
-	$sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
-	$result = mysql_query($sql, $connection);
-	$category_common = mysql_insert_id();
+    // Rollen-Kategorie eintragen
+    $sql = "INSERT INTO ". TBL_ROLE_CATEGORIES. " (rlc_org_shortname, rlc_name)
+                 VALUES ({0}, 'Allgemein')";
+    $sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
+    $result = mysql_query($sql, $connection);
+    $category_common = mysql_insert_id();
 
-	if(!$result) showError(mysql_error());
-	$sql = "INSERT INTO ". TBL_ROLE_CATEGORIES. " (rlc_org_shortname, rlc_name)
-	             VALUES ({0}, 'Gruppen')";
-	$sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
-	$result = mysql_query($sql, $connection);
-	if(!$result) showError(mysql_error());
-	$sql = "INSERT INTO ". TBL_ROLE_CATEGORIES. " (rlc_org_shortname, rlc_name)
-	             VALUES ({0}, 'Kurse')";
-	$sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
-	$result = mysql_query($sql, $connection);
-	if(!$result) showError(mysql_error());
-	$sql = "INSERT INTO ". TBL_ROLE_CATEGORIES. " (rlc_org_shortname, rlc_name)
-	             VALUES ({0}, 'Mannschaften')";
-	$sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
-	$result = mysql_query($sql, $connection);
-	if(!$result) showError(mysql_error());
+    if(!$result) showError(mysql_error());
+    $sql = "INSERT INTO ". TBL_ROLE_CATEGORIES. " (rlc_org_shortname, rlc_name)
+                 VALUES ({0}, 'Gruppen')";
+    $sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
+    $result = mysql_query($sql, $connection);
+    if(!$result) showError(mysql_error());
+    $sql = "INSERT INTO ". TBL_ROLE_CATEGORIES. " (rlc_org_shortname, rlc_name)
+                 VALUES ({0}, 'Kurse')";
+    $sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
+    $result = mysql_query($sql, $connection);
+    if(!$result) showError(mysql_error());
+    $sql = "INSERT INTO ". TBL_ROLE_CATEGORIES. " (rlc_org_shortname, rlc_name)
+                 VALUES ({0}, 'Mannschaften')";
+    $sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
+    $result = mysql_query($sql, $connection);
+    if(!$result) showError(mysql_error());
 
    // nun die Default-Rollen anlegen
 
-	// Webmaster
+    // Webmaster
    $sql = "INSERT INTO ". TBL_ROLES. " (rol_org_shortname, rol_rlc_id, rol_name, rol_description, rol_valid,
                                   rol_moderation, rol_dates, rol_photo, rol_download,
                                   rol_edit_user, rol_mail_logout, rol_mail_login)
@@ -399,7 +400,7 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
    $result = mysql_query($sql, $connection);
    if(!$result) showError(mysql_error());
 
-	// Mitglied
+    // Mitglied
    $sql = "INSERT INTO ". TBL_ROLES. " (rol_org_shortname, rol_rlc_id, rol_name, rol_description, rol_valid,
                                   rol_moderation, rol_dates, rol_photo, rol_download,
                                   rol_edit_user, rol_mail_logout, rol_mail_login)
@@ -409,7 +410,7 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
    $result = mysql_query($sql, $connection);
    if(!$result) showError(mysql_error());
 
-	// Vorstand
+    // Vorstand
    $sql = "INSERT INTO ". TBL_ROLES. " (rol_org_shortname, rol_rlc_id, rol_name, rol_description, rol_valid,
                                   rol_moderation, rol_dates, rol_photo, rol_download,
                                   rol_edit_user, rol_mail_logout, rol_mail_login)
@@ -420,7 +421,7 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
    if(!$result) showError(mysql_error());
 }
 
-// bei Installation oder hinzuf�gen einer Organisation
+// bei Installation oder hinzufuegen einer Organisation
 if($_GET['mode'] == 1 || $_GET['mode'] == 4)
 {
    // User Webmaster anlegen
@@ -470,5 +471,5 @@ if($_GET['mode'] == 1)
    exit();
 }
 else
-	showError("Die Einrichtung der Datenbank konnte erfolgreich abgeschlossen werden.", "Fertig", 2);
+    showError("Die Einrichtung der Datenbank konnte erfolgreich abgeschlossen werden.", "Fertig", 2);
 ?>
