@@ -10,19 +10,19 @@
  *
  * Das Objekt wird erzeugt durch Aufruf des Konstruktors:
  * function RSSfeed($homepage, $title, $description)
- * Uebergaben: 	$homepage		-	Link zur Homepage
- * 				$title			-	Titel des RSS-Feeds
- * 				$description	-	Ergaenzende Beschreibung zum Titel
+ * Uebergaben:  $homepage       - Link zur Homepage
+ *              $title          - Titel des RSS-Feeds
+ *              $description    - Ergaenzende Beschreibung zum Titel
  *
  * Dem RSSfeed koennen ueber die Funktion addItem Inhalt zugeordnet werden:
  * function addItem($title, $description, $date, $guid)
- * Uebergaben:	$title			-	Titel des Items
- * 				$description	-	der Inhalt des Items
- * 				$date			-	Das Erstellungsdatum des Items
- * 				$link			-	Ein Link zum Termin/Newsbeitrag etc.
+ * Uebergaben:  $title          - Titel des Items
+ *              $description    - der Inhalt des Items
+ *              $date           - Das Erstellungsdatum des Items
+ *              $link           - Ein Link zum Termin/Newsbeitrag etc.
  *
  * Wenn alle benoetigten Items zugeordnet sind, wird der RSSfeed generiert mit:
- * function build_feed()
+ * function buildFeed()
  *
  * Spezifikation von RSS 2.0: http://www.feedvalidator.org/docs/rss2.html
  *
@@ -53,84 +53,83 @@ class RSSfeed
 //Konstruktor
 function RSSfeed($homepage, $title, $description)
 {
-       $this->channel=array();
-       $this->channel['title']=$title;
-       $this->channel['link']=$homepage;
-       $this->channel['description']=$description;
-       $this->items=array();
-       $this->feed="http://" . $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI'];
+    $this->channel=array();
+    $this->channel['title']=$title;
+    $this->channel['link']=$homepage;
+    $this->channel['description']=$description;
+    $this->items=array();
+    $this->feed="http://". $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI'];
 }
 
-function add_Item($title, $description, $date, $link)
+function addItem($title, $description, $date, $link)
 {
-       $item=array(	'title' => $title, 'description' => $description,
-               		'pubDate' => $date, 'link' => $link);
-       $this->items[]=$item;
+    $item=array('title' => $title, 'description' => $description, 'pubDate' => $date, 'link' => $link);
+    $this->items[]=$item;
 }
 
-function build_feed()
+function buildFeed()
 {
-       $this->rss_header();
-       $this->open_channel();
-       $this->add_channel_infos();
-       $this->build_items();
-       $this->close_channel();
-       $this->rss_footer();
+    $this->rssHeader();
+    $this->openChannel();
+    $this->addChannelInfos();
+    $this->buildItems();
+    $this->closeChannel();
+    $this->rssFooter();
 }
 
-function rss_header()
+function rssHeader()
 {
-       header("Content-type: application/xml");
-       echo '<?xml version="1.0" encoding="iso-8859-1"?>'. chr(10). '<rss version="2.0">'. chr(10);
+    header("Content-type: application/xml");
+    echo '<?xml version="1.0" encoding="iso-8859-1"?>'. chr(10). '<rss version="2.0">'. chr(10);
 }
 
-function open_channel()
+function openChannel()
 {
-       echo '<channel>'. chr(10);
-}
-
-
-function add_channel_infos()
-{
-       foreach (array('title', 'link', 'description') as $field)
-       {
-               if (isset($this->channel[$field]))
-               {
-               	echo "<${field}>" . htmlspecialchars($this->channel[$field]). "</${field}>\n";
-               }
-       }
-       echo "<language>de</language>\n";
-       echo "<generator>Admidio RSS-Class</generator>\n\n";
-       echo "<pubDate>". date('r'). "</pubDate>\n\n";
+    echo '<channel>'. chr(10);
 }
 
 
-function build_items()
+function addChannelInfos()
 {
-       foreach ($this->items as $item)
-       {
-               echo "<item>\n";
-               foreach (array('title', 'description', 'link', 'pubDate') as $field)
-               {
-                       if (isset($item[$field]))
-                       {
-                       	echo "<${field}>" . htmlspecialchars($item[$field]). "</${field}>\n";
-                       }
-               }
-               echo "<guid>" .  $item['link'] . "</guid>\n";
-               echo "<source url=\"$this->feed\">". htmlspecialchars($this->channel['title']). "</source>";
-               echo "</item>\n\n";
-       }
+    foreach (array('title', 'link', 'description') as $field)
+    {
+        if (isset($this->channel[$field]))
+        {
+            echo "<${field}>". htmlspecialchars($this->channel[$field]). "</${field}>\n";
+        }
+    }
+    echo "<language>de</language>\n";
+    echo "<generator>Admidio RSS-Class</generator>\n\n";
+    echo "<pubDate>". date('r'). "</pubDate>\n\n";
 }
 
-function close_channel()
+
+function buildItems()
 {
-       echo '</channel>'. chr(10);
+    foreach ($this->items as $item)
+    {
+        echo "<item>\n";
+        foreach (array('title', 'description', 'link', 'pubDate') as $field)
+        {
+            if (isset($item[$field]))
+            {
+                echo "<${field}>". htmlspecialchars($item[$field]). "</${field}>\n";
+            }
+        }
+        echo "<guid>". $item['link']. "</guid>\n";
+        echo "<source url=\"$this->feed\">". htmlspecialchars($this->channel['title']). "</source>";
+        echo "</item>\n\n";
+    }
 }
 
-function rss_footer()
+function closeChannel()
 {
-       echo '</rss>'. chr(10);
+    echo '</channel>'. chr(10);
+}
+
+function rssFooter()
+{
+    echo '</rss>'. chr(10);
 }
 
 
