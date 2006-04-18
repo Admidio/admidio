@@ -11,7 +11,7 @@
  * start     - Angabe, ab welchem Datensatz Ankuendigungen angezeigt werden sollen
  * headline  - Ueberschrift, die ueber den Ankuendigungen steht
  *             (Default) Ankuendigungen
- * id	       - Nur eine einzige Annkuendigung anzeigen lassen.
+ * id          - Nur eine einzige Annkuendigung anzeigen lassen.
  *
  ******************************************************************************
  *
@@ -35,21 +35,29 @@ require("../../system/common.php");
 require("../../system/bbcode.php");
 
 if(!array_key_exists("mode", $_GET))
-   $_GET["mode"] = "all";
+{
+    $_GET["mode"] = "all";
+}
 
 if(!array_key_exists("start", $_GET))
-   $_GET["start"] = 0;
+{
+    $_GET["start"] = 0;
+}
 
 if(!array_key_exists("headline", $_GET))
-   $_GET["headline"] = "Ank&uuml;ndigungen";
+{
+    $_GET["headline"] = "Ank&uuml;ndigungen";
+}
 
 if(!array_key_exists("id", $_GET))
-   $_GET["id"] = 0;
+{
+    $_GET["id"] = 0;
+}
 
 if($g_current_organization->bbcode == 1)
 {
-   // Klasse fuer BBCode
-   $bbcode = new ubbParser();
+    // Klasse fuer BBCode
+    $bbcode = new ubbParser();
 }
 
 echo "
@@ -57,135 +65,132 @@ echo "
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
 <html>
 <head>
-   <title>$g_current_organization->longname - ". $_GET["headline"]. "</title>
-   <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">";
+    <title>$g_current_organization->longname - ". $_GET["headline"]. "</title>
+    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">";
 
-if($g_current_organization->enable_rss == 1)
-{
-echo "
-   <link type=\"application/rss+xml\" rel=\"alternate\" title=\"$g_current_organization->longname - Ankuendigungen\" href=\"$g_root_path/adm_program/modules/announcements/rss_announcements.php\">";
-};
+    if($g_current_organization->enable_rss == 1)
+    {
+        echo "<link type=\"application/rss+xml\" rel=\"alternate\" title=\"$g_current_organization->longname - Ankuendigungen\" 
+        href=\"$g_root_path/adm_program/modules/announcements/rss_announcements.php\">";
+    };
 
-echo "
-   <!--[if gte IE 5.5000]>
-   <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
-   <![endif]-->";
+    echo "
+    <!--[if gte IE 5.5000]>
+    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
+    <![endif]-->";
 
-   require("../../../adm_config/header.php");
+    require("../../../adm_config/header.php");
 echo "</head>";
 
 require("../../../adm_config/body_top.php");
-   echo "
-   <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-   <h1>". strspace($_GET["headline"]). "</h1>";
+    echo "
+    <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
+    <h1>". strspace($_GET["headline"]). "</h1>";
 
-   // alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
-   $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. "
-            WHERE org_org_id_parent = $g_current_organization->id ";
-   if($g_current_organization->org_id_parent > 0)
-   {
-   	$sql = $sql. " OR org_id = $g_current_organization->org_id_parent ";
-	}
-   $result = mysql_query($sql, $g_adm_con);
-   db_error($result);
+    // alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
+    $arr_ref_orgas = $g_current_organization->getReferenceOrganizations();
+    $organizations = "";
+    $i             = 0;
 
-   $organizations = "";
-   $i             = 0;
+    while($orga = current($arr_ref_orgas))
+    {
+        if($i > 0) 
+        {
+            $organizations = $organizations. ", ";
+        }
+        $organizations = $organizations. "'$orga'";
+        next($arr_ref_orgas);
+    }
 
-   while($row = mysql_fetch_object($result))
-   {
-      if($i > 0) $organizations = $organizations. ", ";
-		$organizations = $organizations. "'$row->org_shortname'";
-      $i++;
-   }
+    // damit das SQL-Statement nachher nicht auf die Nase faellt, muss $organizations gefuellt sein   
+    if(strlen($organizations) == 0)
+    {
+        $organizations = "'$g_current_organization->shortname'";
+    }
 
-	// damit das SQL-Statement nachher nicht auf die Nase faellt, muss $organizations gefuellt sein   
-   if(strlen($organizations) == 0)
-   	$organizations = "'$g_current_organization->shortname'";
+    // falls eine id fuer eine bestimmte Ankuendigung uebergeben worden ist...
+    if($_GET['id'] > 0)
+    {
+        $sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
+                    WHERE ann_id = $_GET[id]";
+    }
+    //...ansonsten alle fuer die Gruppierung passenden Ankuendigungen aus der DB holen.
+    else
+    {
+        $sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
+                    WHERE (  ann_org_shortname = '$g_organization'
+                          OR (   ann_global   = 1
+                             AND ann_org_shortname IN ($organizations) ))
+                    ORDER BY ann_timestamp DESC
+                    LIMIT ". $_GET["start"]. ", 10 ";
+    }
 
-   // falls eine id fuer eine bestimmte Ankuendigung uebergeben worden ist...
-   if($_GET['id'] > 0)
-   {
-      $sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
-                  WHERE ann_id = $_GET[id]";
-   }
-   //...ansonsten alle fuer die Gruppierung passenden Ankuendigungen aus der DB holen.
-   else
-   {
-      $sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
-                  WHERE (  ann_org_shortname = '$g_organization'
-                        OR (   ann_global   = 1
-                           AND ann_org_shortname IN ($organizations) ))
-                  ORDER BY ann_timestamp DESC
-                  LIMIT ". $_GET["start"]. ", 10 ";
-   }
+    $announcements_result = mysql_query($sql, $g_adm_con);
+    db_error($announcements_result);
 
-   $announcements_result = mysql_query($sql, $g_adm_con);
-   db_error($announcements_result);
+    // Gucken wieviele Datensaetze die Abfrage ermittelt kann...
+    $sql    = "SELECT COUNT(*) FROM ". TBL_ANNOUNCEMENTS. "
+                WHERE (  ann_org_shortname = '$g_organization'
+                      OR (   ann_global   = 1
+                         AND ann_org_shortname IN ($organizations) ))
+                ORDER BY ann_timestamp ASC ";
+    $result = mysql_query($sql, $g_adm_con);
+    db_error($result);
+    $row = mysql_fetch_array($result);
+    $row_count = $row[0];
 
-   // Gucken wieviele Datensaetze die Abfrage ermittelt kann...
-	$sql    = "SELECT COUNT(*) FROM ". TBL_ANNOUNCEMENTS. "
-					WHERE (  ann_org_shortname = '$g_organization'
-							OR (   ann_global   = 1
-								AND ann_org_shortname IN ($organizations) ))
-					ORDER BY ann_timestamp ASC ";
-   $result = mysql_query($sql, $g_adm_con);
-   db_error($result);
-   $row = mysql_fetch_array($result);
-   $row_count = $row[0];
-
-   if ($row_count == 0)
-   {
-   	if($_GET['id'] > 0)
-   	{
-   		echo "<p>Der angeforderte Eintrag exisitiert nicht (mehr) in der Datenbank.</p>";
-   	}
-   	else
-   	{
-   		echo "<p>Es sind keine Daten vorhanden.</p>";
-   	}
-   }
-   else
-   {
-		if($_GET['id'] == 0)
-		{
-			// Tabelle mit den vor- und zurueck und neu Buttons
-			echo "
-			<table style=\"margin-top: 10px; margin-bottom: 10px;\" border=\"0\">
-				<tr>
-					<td width=\"33%\" align=\"left\">";
-						if($_GET["start"] > 0)
-						{
-							$start = $_GET["start"] - 10;
-							if($start < 0) $start = 0;
-							echo "<button name=\"back\" type=\"button\" value=\"back\" style=\"width: 152px;\"
-										onclick=\"self.location.href='announcements.php?mode=". $_GET["mode"]. "&amp;start=$start&amp;headline=". $_GET["headline"]. "'\">
-										<img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Vorherige\">
-										&nbsp;Vorherige</button>";
-						}
-					echo "</td>
-					<td width=\"33%\" align=\"center\">";
-						// nur Webmaster darf neue Ankuendigungen erfassen
-						if(isModerator())
-						{
-							echo "<button name=\"new\" type=\"button\" value=\"new\" style=\"width: 152px;\"
-										onclick=\"self.location.href='announcements_new.php?headline=". $_GET["headline"]. "'\">
-										<img src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Neu anlegen\">
-										&nbsp;Neu anlegen</button>";
-						}
-					echo "</td>
-					<td width=\"33%\" align=\"right\">";
-						if($row_count > $_GET["start"] + 10)
-						{
-							$start = $_GET["start"] + 10;
-							echo "<button name=\"forward\" type=\"button\" value=\"forward\" style=\"width: 152px;\"
-										onclick=\"self.location.href='announcements.php?mode=". $_GET["mode"]. "&amp;start=$start&amp;headline=". $_GET["headline"]. "'\">N&auml;chsten&nbsp;
-										<img src=\"$g_root_path/adm_program/images/forward.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"N&auml;chsten\"></button>";
-						}
-					echo "</td>
-				</tr>
-			</table>";
-		}
+    if ($row_count == 0)
+    {
+        if($_GET['id'] > 0)
+        {
+            echo "<p>Der angeforderte Eintrag exisitiert nicht (mehr) in der Datenbank.</p>";
+        }
+        else
+        {
+            echo "<p>Es sind keine Daten vorhanden.</p>";
+        }
+    }
+    else
+    {
+        if($_GET['id'] == 0)
+        {
+            // Tabelle mit den vor- und zurueck und neu Buttons
+            echo "
+            <table style=\"margin-top: 10px; margin-bottom: 10px;\" border=\"0\">
+                <tr>
+                    <td width=\"33%\" align=\"left\">";
+                        if($_GET["start"] > 0)
+                        {
+                            $start = $_GET["start"] - 10;
+                            if($start < 0) $start = 0;
+                            echo "<button name=\"back\" type=\"button\" value=\"back\" style=\"width: 152px;\"
+                                        onclick=\"self.location.href='announcements.php?mode=". $_GET["mode"]. "&amp;start=$start&amp;headline=". $_GET["headline"]. "'\">
+                                        <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Vorherige\">
+                                        &nbsp;Vorherige</button>";
+                        }
+                    echo "</td>
+                    <td width=\"33%\" align=\"center\">";
+                        // nur Webmaster darf neue Ankuendigungen erfassen
+                        if(isModerator())
+                        {
+                            echo "<button name=\"new\" type=\"button\" value=\"new\" style=\"width: 152px;\"
+                                        onclick=\"self.location.href='announcements_new.php?headline=". $_GET["headline"]. "'\">
+                                        <img src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Neu anlegen\">
+                                        &nbsp;Neu anlegen</button>";
+                        }
+                    echo "</td>
+                    <td width=\"33%\" align=\"right\">";
+                        if($row_count > $_GET["start"] + 10)
+                        {
+                            $start = $_GET["start"] + 10;
+                            echo "<button name=\"forward\" type=\"button\" value=\"forward\" style=\"width: 152px;\"
+                                        onclick=\"self.location.href='announcements.php?mode=". $_GET["mode"]. "&amp;start=$start&amp;headline=". $_GET["headline"]. "'\">N&auml;chsten&nbsp;
+                                        <img src=\"$g_root_path/adm_program/images/forward.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"N&auml;chsten\"></button>";
+                        }
+                    echo "</td>
+                </tr>
+            </table>";
+        }
 
       // Ankuendigungen auflisten
 
@@ -246,8 +251,8 @@ require("../../../adm_config/body_top.php");
       }  // Ende While-Schleife
    }
 
-	if($_GET['id'] == 0)
-	{
+    if($_GET['id'] == 0)
+    {
       // Tabelle mit den vor- und zurück und neu Buttons
       echo "
       <table style=\"margin-top: 10px; margin-bottom: 10px;\" width=\"500\" border=\"0\">
