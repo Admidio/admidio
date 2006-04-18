@@ -260,7 +260,7 @@ require("../../../adm_config/body_top.php");
                             <img src=\"$g_root_path/adm_program/images/mail.png\" style=\"vertical-align: middle;\" alt=\"E-Mail an $user->email schreiben\"
                             title=\"E-Mail an $user->email schreiben\" border=\"0\"></a>
                             <a href=\"$mail_link\" style=\" overflow: visible; display: inline;\">";
-                            if(strlen($user->email) > 28)
+                            if(strlen($user->email) > 25)
                             {
                                 echo "<span style=\"font-size: 8pt;\">$user->email</span>";
                             }
@@ -284,7 +284,7 @@ require("../../../adm_config/body_top.php");
                             <img src=\"$g_root_path/adm_program/images/globe.png\" style=\"vertical-align: middle;\" alt=\"Gehe zu $user->homepage\"
                             title=\"Gehe zu $user->homepage\" border=\"0\"></a>
                             <a href=\"http://$user->homepage\" target=\"_blank\">";
-                            if(strlen($user->homepage) > 28)
+                            if(strlen($user->homepage) > 25)
                             {
                                 echo "<span style=\"font-size: 8pt;\">$user->homepage</span>";
                             }
@@ -430,7 +430,7 @@ require("../../../adm_config/body_top.php");
                                 }
                                 echo "\" style=\"vertical-align: middle;\" alt=\"$row->usf_description\" title=\"$row->usf_description\" />&nbsp;&nbsp;";
                             };
-                            if(strlen($row->usd_value) > 28)
+                            if(strlen($row->usd_value) > 25)
                             {
                                 echo "<span style=\"font-size: 8pt;\">$row->usd_value</span>";
                             }
