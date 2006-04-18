@@ -42,15 +42,15 @@ if($g_session_valid & editPhoto())
     $pho_id= $_GET['pho_id'];
 
     //erfassen der Veranstaltung
-	$sql = "	SELECT *
-				FROM ". TBL_PHOTOS. "
-				WHERE (pho_id ='$pho_id')";
-	$result = mysql_query($sql, $g_adm_con);
-	db_error($result);
-	$adm_photo = mysql_fetch_array($result);
+    $sql = "    SELECT *
+                FROM ". TBL_PHOTOS. "
+                WHERE (pho_id ='$pho_id')";
+    $result = mysql_query($sql, $g_adm_con);
+    db_error($result);
+    $adm_photo = mysql_fetch_array($result);
     
     //Ordnerpfad
-	$ordner = "../../../adm_my_files/photos/".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"];
+    $ordner = "../../../adm_my_files/photos/".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"];
 
     //Erfassen der Eltern Veranstaltung
     if($adm_photo["pho_pho_id_parent"]!=NULL)
@@ -74,7 +74,7 @@ if($g_session_valid & editPhoto())
             if($_FILES["bilddatei"]["name"]["$x"]!="")$counter++;
         }
 
-        //Kontrolle ob Bilder ausgew�hlt wurden
+        //Kontrolle ob Bilder ausgewaehlt wurden
         if($counter==0)
         {
             $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=photodateiphotoup";
@@ -83,11 +83,11 @@ if($g_session_valid & editPhoto())
         }
    
         //Kontrolle des Dateityps und der Dateigroesse
-		for($x=0; $x<=4; $x=$x+1)
+        for($x=0; $x<=4; $x=$x+1)
         {
             //Dateiendung
             $bildinfo=getimagesize($_FILES["bilddatei"]["tmp_name"][$x]);
-			if ($_FILES["bilddatei"]["name"][$x]!=NULL && $bildinfo['mime']!="image/jpeg") 
+            if ($_FILES["bilddatei"]["name"][$x]!=NULL && $bildinfo['mime']!="image/jpeg") 
             {
                 $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=dateiendungphotoup";
                 header($location);
@@ -124,7 +124,7 @@ if($g_session_valid & editPhoto())
         require("../../../adm_config/body_top.php");
         echo "
         <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">";
-	      
+          
 /*****************************Verarbeitung******************************************/          
            if($_POST["upload"])
            {
@@ -136,7 +136,7 @@ if($g_session_valid & editPhoto())
   
                      //Verarbeitungsschleife fuer die einzelnen Bilder
                         $bildnr=$adm_photo["pho_quantity"];
-		                for($x=0; $x<=4; $x=$x+1)
+                        for($x=0; $x<=4; $x=$x+1)
                         {
                             $y=$x+1;
                             if($_FILES["bilddatei"]["name"][$x]!=NULL && $ordner!=NULL)
@@ -157,15 +157,15 @@ if($g_session_valid & editPhoto())
                                 unset($y);
                             }//if($bilddatei!= "")
                         }//for
-	               
+                   
                     //Aendern der Datenbankeintaege
-		            $sql=" UPDATE ". TBL_PHOTOS. "
+                    $sql=" UPDATE ". TBL_PHOTOS. "
                            SET   pho_quantity = '$bildnr',
-					             pho_last_change ='$act_datetime',
-					             pho_usr_id_change = $g_current_user->id
-					       WHERE pho_id = '$pho_id'";
-		            $result = mysql_query($sql, $g_adm_con);
-		            db_error($result, 1);
+                                 pho_last_change ='$act_datetime',
+                                 pho_usr_id_change = $g_current_user->id
+                           WHERE pho_id = '$pho_id'";
+                    $result = mysql_query($sql, $g_adm_con);
+                    db_error($result, 1);
 
                     //Buttons 
                     echo"
@@ -174,9 +174,9 @@ if($g_session_valid & editPhoto())
                         <button name=\"moreupload\" type=\"button\" value=\"moreupload\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id'\">
                             <img src=\"$g_root_path/adm_program/images/photo.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
                             &nbsp;Weitere Uploads
-			            </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <button name=\"uebersicht\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$adm_photo_parent["pho_id"]."'\">
-                            <img src=\"$g_root_path/adm_program/images/list.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
+                            <img src=\"$g_root_path/adm_program/images/table.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
                             &nbsp;&Uuml;bersicht
                         </button>
                     </div>
