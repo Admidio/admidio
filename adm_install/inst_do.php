@@ -68,7 +68,7 @@ function showError($err_msg, $err_head = "Fehler", $mode = 1)
                 {
                     // Erfolgreich durchgefuehrt
                     echo 'self.location.href=\'../adm_program/index.php\'">
-                    <img src="../adm_program/images/list.png" style="vertical-align: middle; padding-bottom: 1px;" width="16" height="16" border="0" alt="Zurueck">
+                    <img src="../adm_program/images/table.png" style="vertical-align: middle; padding-bottom: 1px;" width="16" height="16" border="0" alt="Zurueck">
                     &nbsp;Admidio &Uuml;bersicht';
                 }
                 echo '</button></p>
