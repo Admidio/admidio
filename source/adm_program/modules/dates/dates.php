@@ -11,7 +11,7 @@
  * mode: actual  - (Default) Alle aktuellen und zukuenftige Termine anzeigen
  *       old     - Alle bereits erledigten
  * start         - Angabe, ab welchem Datensatz Termine angezeigt werden sollen
- * id		        - Nur einen einzigen Termin anzeigen lassen.
+ * id               - Nur einen einzigen Termin anzeigen lassen.
  *
  ******************************************************************************
  *
@@ -35,18 +35,24 @@ require("../../system/common.php");
 require("../../system/bbcode.php");
 
 if(!array_key_exists("mode", $_GET))
-   $_GET["mode"] = "actual";
+{
+    $_GET["mode"] = "actual";
+}
 
 if(!array_key_exists("start", $_GET))
-   $_GET["start"] = 0;
+{
+    $_GET["start"] = 0;
+}
 
 if(!array_key_exists("id", $_GET))
-   $_GET["id"] = 0;
+{
+    $_GET["id"] = 0;
+}
 
 if($g_current_organization->bbcode == 1)
 {
-   // Klasse fuer BBCode
-   $bbcode = new ubbParser();
+    // Klasse fuer BBCode
+    $bbcode = new ubbParser();
 }
 
 $act_date = date("Y.m.d 00:00:00", time());
@@ -61,87 +67,88 @@ echo "
 
 if($g_current_organization->enable_rss == 1)
 {
-echo "
-   <link type=\"application/rss+xml\" rel=\"alternate\" title=\"$g_current_organization->longname - Termine\" href=\"$g_root_path/adm_program/modules/dates/rss_dates.php\">";
+    echo "<link type=\"application/rss+xml\" rel=\"alternate\" title=\"$g_current_organization->longname - Termine\" 
+    href=\"$g_root_path/adm_program/modules/dates/rss_dates.php\">";
 };
 
 echo "
-   <!--[if gte IE 5.5000]>
-   <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
-   <![endif]-->";
+    <!--[if gte IE 5.5000]>
+    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
+    <![endif]-->";
 
-   require("../../../adm_config/header.php");
+    require("../../../adm_config/header.php");
 echo "</head>";
 
 require("../../../adm_config/body_top.php");
-   echo "
-   <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-   <h1>";
-      if(strcmp($_GET['mode'], "old") == 0)
-         echo strspace("Alte Termine");
-      else
-         echo strspace("Termine");
-   echo "</h1>";
+    echo "
+    <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
+    <h1>";
+        if(strcmp($_GET['mode'], "old") == 0)
+        {
+            echo strspace("Alte Termine");
+        }
+        else
+        {
+            echo strspace("Termine");
+        }
+    echo "</h1>";
 
 
-   // alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
-   $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. "
-            WHERE org_org_id_parent = $g_current_organization->id ";
-   if($g_current_organization->org_id_parent > 0)
-   {
-   	$sql = $sql. " OR org_id = $g_current_organization->org_id_parent ";
-	}
-   $result = mysql_query($sql, $g_adm_con);
-   db_error($result);
+    // alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
+    $arr_ref_orgas = $g_current_organization->getReferenceOrganizations();
+    $organizations = "";
+    $i             = 0;
 
-   $organizations = "";
-   $i             = 0;
+    while($orga = current($arr_ref_orgas))
+    {
+        if($i > 0) 
+        {
+            $organizations = $organizations. ", ";
+        }
+        $organizations = $organizations. "'$orga'";
+        next($arr_ref_orgas);
+    }
 
-   while($row = mysql_fetch_object($result))
-   {
-      if($i > 0) $organizations = $organizations. ", ";
-		$organizations = $organizations. "'$row->org_shortname'";
-      $i++;
-   }
+    // damit das SQL-Statement nachher nicht auf die Nase faellt, muss $organizations gefuellt sein   
+    if(strlen($organizations) == 0)
+    {
+        $organizations = "'$g_current_organization->shortname'";
+    }
 
-	// damit das SQL-Statement nachher nicht auf die Nase faellt, muss $organizations gefuellt sein   
-   if(strlen($organizations) == 0)
-   	$organizations = "'$g_current_organization->shortname'";
-
-   // falls eine id fuer ein bestimmtes Datum uebergeben worden ist...
-   if($_GET['id'] > 0)
-   {
-   	 $sql    = "SELECT * FROM ". TBL_DATES. "
-                  WHERE dat_id = ". $_GET['id'];
-   }
-   //...ansonsten alle fuer die Gruppierung passenden Termine aus der DB holen.
-	else
-	{
-   	//fuer alter Termine...
-   	if(strcmp($_GET['mode'], "old") == 0)
-   	{
-         $sql    = "SELECT * FROM ". TBL_DATES. "
-                     WHERE (  dat_org_shortname = '$g_organization'
-                        OR (   dat_global   = 1
-                           AND dat_org_shortname IN ($organizations) ))
-                       AND dat_begin < '$act_date'
-                       AND dat_end   < '$act_date'
-                     ORDER BY dat_begin DESC
-                     LIMIT {0}, 10 ";
-      }
-      //... ansonsten fuer neue Termine
-      else
-      {
-         $sql    = "SELECT * FROM ". TBL_DATES. "
-                     WHERE (  dat_org_shortname = '$g_organization'
-                        OR (   dat_global   = 1
-                           AND dat_org_shortname IN ($organizations) ))
-                       AND (  dat_begin >= '$act_date'
-                           OR dat_end   >= '$act_date' )
-                     ORDER BY dat_begin ASC
-                     LIMIT {0}, 10 ";
-      }
-	}
+    // falls eine id fuer ein bestimmtes Datum uebergeben worden ist...
+    if($_GET['id'] > 0)
+    {
+        $sql = "SELECT * FROM ". TBL_DATES. "
+                 WHERE dat_id = ". $_GET['id'];
+    }
+    //...ansonsten alle fuer die Gruppierung passenden Termine aus der DB holen.
+    else
+    {
+        //fuer alter Termine...
+        if(strcmp($_GET['mode'], "old") == 0)
+        {
+            $sql    = "SELECT * FROM ". TBL_DATES. "
+                        WHERE (  dat_org_shortname = '$g_organization'
+                           OR (   dat_global   = 1
+                              AND dat_org_shortname IN ($organizations) ))
+                          AND dat_begin < '$act_date'
+                          AND dat_end   < '$act_date'
+                        ORDER BY dat_begin DESC
+                        LIMIT {0}, 10 ";
+        }
+        //... ansonsten fuer neue Termine
+        else
+        {
+            $sql    = "SELECT * FROM ". TBL_DATES. "
+                        WHERE (  dat_org_shortname = '$g_organization'
+                           OR (   dat_global   = 1
+                              AND dat_org_shortname IN ($organizations) ))
+                          AND (  dat_begin >= '$act_date'
+                              OR dat_end   >= '$act_date' )
+                        ORDER BY dat_begin ASC
+                        LIMIT {0}, 10 ";
+        }
+    }
 
    $sql    = prepareSQL($sql, array($_GET['start']));
    $date_result = mysql_query($sql, $g_adm_con);
@@ -176,55 +183,55 @@ require("../../../adm_config/body_top.php");
    if($row_count == 0)
    {
       if($_GET['id'] > 0)
-   	{
-   		echo "<p>Der angeforderte Eintrag exisitiert nicht (mehr) in der Datenbank.</p>";
-   	}
-   	else
-   	{
-   		echo "<p>Es sind keine Daten vorhanden.</p>";
-   	}
+    {
+        echo "<p>Der angeforderte Eintrag exisitiert nicht (mehr) in der Datenbank.</p>";
+    }
+    else
+    {
+        echo "<p>Es sind keine Daten vorhanden.</p>";
+    }
    }
    else
    {
-		if($_GET['id'] == 0)
-		{
-			// Tabelle mit den vor- und zurück und neu Buttons
-			echo "
-			<table style=\"margin-top: 10px; margin-bottom: 10px;\" border=\"0\">
-				<tr>
-					<td width=\"33%\" align=\"left\">";
-						if($_GET["start"] > 0)
-						{
-							$start = $_GET["start"] - 10;
-							if($start < 0) $start = 0;
-							echo "<button name=\"back\" type=\"button\" value=\"back\" style=\"width: 152px;\"
-										onclick=\"self.location.href='dates.php?mode=". $_GET["mode"]. "&amp;start=$start'\">
-										<img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Vorherige Termine\">
-										&nbsp;Vorherige</button>";
-						}
-					echo "</td>
-					<td width=\"33%\" align=\"center\">";
-						// wenn Termine editiert werden duerfen, dann anzeigen
-						if(editDate())
-						{
-							echo "<button name=\"new\" type=\"button\" value=\"new\" style=\"width: 152px;\"
-										onclick=\"self.location.href='dates_new.php'\">
-										<img src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Neuer Termin\">
-										&nbsp;Termin anlegen</button>";
-						}
-					echo "</td>
-					<td width=\"33%\" align=\"right\">";
-						if($row_count > $_GET["start"] + 10)
-						{
-							$start = $_GET["start"] + 10;
-							echo "<button name=\"forward\" type=\"button\" value=\"forward\" style=\"width: 152px;\"
-										onclick=\"self.location.href='dates.php?mode=". $_GET["mode"]. "&amp;start=$start'\">N&auml;chsten&nbsp;
-										<img src=\"$g_root_path/adm_program/images/forward.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"N&auml;chste Termine\"></button>";
-						}
-					echo "</td>
-				</tr>
-			</table>";
-		}
+        if($_GET['id'] == 0)
+        {
+            // Tabelle mit den vor- und zurück und neu Buttons
+            echo "
+            <table style=\"margin-top: 10px; margin-bottom: 10px;\" border=\"0\">
+                <tr>
+                    <td width=\"33%\" align=\"left\">";
+                        if($_GET["start"] > 0)
+                        {
+                            $start = $_GET["start"] - 10;
+                            if($start < 0) $start = 0;
+                            echo "<button name=\"back\" type=\"button\" value=\"back\" style=\"width: 152px;\"
+                                        onclick=\"self.location.href='dates.php?mode=". $_GET["mode"]. "&amp;start=$start'\">
+                                        <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Vorherige Termine\">
+                                        &nbsp;Vorherige</button>";
+                        }
+                    echo "</td>
+                    <td width=\"33%\" align=\"center\">";
+                        // wenn Termine editiert werden duerfen, dann anzeigen
+                        if(editDate())
+                        {
+                            echo "<button name=\"new\" type=\"button\" value=\"new\" style=\"width: 152px;\"
+                                        onclick=\"self.location.href='dates_new.php'\">
+                                        <img src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Neuer Termin\">
+                                        &nbsp;Termin anlegen</button>";
+                        }
+                    echo "</td>
+                    <td width=\"33%\" align=\"right\">";
+                        if($row_count > $_GET["start"] + 10)
+                        {
+                            $start = $_GET["start"] + 10;
+                            echo "<button name=\"forward\" type=\"button\" value=\"forward\" style=\"width: 152px;\"
+                                        onclick=\"self.location.href='dates.php?mode=". $_GET["mode"]. "&amp;start=$start'\">N&auml;chsten&nbsp;
+                                        <img src=\"$g_root_path/adm_program/images/forward.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"N&auml;chste Termine\"></button>";
+                        }
+                    echo "</td>
+                </tr>
+            </table>";
+        }
 
       // Termine auflisten
 
@@ -312,9 +319,9 @@ require("../../../adm_config/body_top.php");
       }  // Ende While-Schleife
    }
 
-	if($_GET['id'] == 0)
-	{
-   	// Tabelle mit den vor- und zurück und neu Buttons
+    if($_GET['id'] == 0)
+    {
+    // Tabelle mit den vor- und zurück und neu Buttons
       echo "
       <table style=\"margin-top: 10px; margin-bottom: 10px;\" border=\"0\">
          <tr>
