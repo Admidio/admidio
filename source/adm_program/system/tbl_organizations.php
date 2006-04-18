@@ -22,6 +22,8 @@
  *            zurueckgeschrieben
  * insert() - Eine neue Organisation wird in die Datenbank geschrieben
  * clear()  - Die Klassenvariablen werden neu initialisiert
+ * getReferenceOrganizations($child = true, $parent = true)
+ *          - Gibt ein Array mit allen Kinder- bzw. Elternorganisationen zurueck
  *
  ******************************************************************************
  *
@@ -192,6 +194,40 @@ class TblOrganizations
             return 0;
         }
         return -1;
+    }
+    
+    // gibt ein Array mit allen Kinder- bzw. Elternorganisationen zurueck
+    // Ueber die Variablen $child und $parent kann die ermittlen der 
+    // Eltern bzw. Kinderorgas deaktiviert werden
+    //
+    // org_id ist der Schluessel und org_shortname der Wert des Arrays
+    function getReferenceOrganizations($child = true, $parent = true)
+    {
+        $arr_child_orgas = array();
+    
+        $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. "
+                 WHERE ";
+        if($child == true)
+        {
+            $sql .= " org_org_id_parent = $this->id ";
+        }
+        if($parent == true
+        && $this->org_id_parent > 0)
+        {
+            if($child == true)
+            {
+                $sql .= " OR ";
+            }
+            $sql .= " org_id = $this->org_id_parent ";
+        }
+        $result = mysql_query($sql, $this->db_connection);
+        db_error($result);
+        
+        while($row = mysql_fetch_object($result))
+        {
+            $arr_child_orgas[$row->org_id] = $row->org_shortname;
+        }
+        return $arr_child_orgas;
     }
 }
 ?>
