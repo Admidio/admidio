@@ -184,7 +184,7 @@ require("../../../adm_config/body_top.php");
          
          <p>
             <button name=\"anzeigen\" type=\"submit\" value=\"anzeigen\">
-            <img src=\"$g_root_path/adm_program/images/list.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Liste anzeigen\">
+            <img src=\"$g_root_path/adm_program/images/table.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Liste anzeigen\">
             &nbsp;Liste anzeigen</button>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
