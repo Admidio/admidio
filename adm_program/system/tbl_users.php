@@ -6,6 +6,25 @@
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  *
+ * Diese Klasse dient dazu einen Userobjekt zu erstellen. 
+ * Ein User kann ueber diese Klasse in der Datenbank verwaltet werden
+ *
+ * Das Objekt wird erzeugt durch Aufruf des Konstruktors und der Uebergabe der
+ * aktuellen Datenbankverbindung:
+ * $user = new TblUsers($g_adm_con);
+ *
+ * Mit der Funktion getUser($user_id) kann nun der gewuenschte User ausgelesen
+ * werden.
+ *
+ * Folgende Funktionen stehen nun zur Verfuegung:
+ *
+ * update($login_user_id) - User wird mit den geaenderten Daten in die Datenbank 
+ *                          zurueckgeschrieben
+ * insert($login_user_id) - Ein neuer User wird in die Datenbank geschrieben
+ * delete()               - Der gewaehlte User wird aus der Datenbank geloescht
+ * clear()                - Die Klassenvariablen werden neu initialisiert
+ * getVCard()             - Es wird eine vCard des Users als String zurueckgegeben
+ *
  ******************************************************************************
  *
  * This program is free software; you can redistribute it and/or
