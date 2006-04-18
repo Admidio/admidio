@@ -409,13 +409,13 @@ if($popup == 0)
          echo "<hr width=\"80%\" />
 
          <div style=\"margin-top: 6px;\">
-            <button name=\"speichern\" type=\"submit\" value=\"speichern\">
-               <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
-                 &nbsp;Speichern</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
             <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
             <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
-              &nbsp;Zur&uuml;ck</button>
+              &nbsp;Zur&uuml;ck</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              
+            <button name=\"speichern\" type=\"submit\" value=\"speichern\">
+               <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
+                 &nbsp;Speichern</button>
          </div>";
 
          if($user->usr_id_change > 0)
