@@ -201,7 +201,8 @@ class TblOrganizations
     // Eltern bzw. Kinderorgas deaktiviert werden
     //
     // org_id ist der Schluessel und org_shortname der Wert des Arrays
-    function getReferenceOrganizations($child = true, $parent = true)
+    // falls $longname = true gesetzt ist, ist org_longname der Wert des Arrays
+    function getReferenceOrganizations($child = true, $parent = true, $longname = false)
     {
         $arr_child_orgas = array();
     
@@ -225,7 +226,14 @@ class TblOrganizations
         
         while($row = mysql_fetch_object($result))
         {
-            $arr_child_orgas[$row->org_id] = $row->org_shortname;
+            if($longname == true)
+            {
+                $arr_child_orgas[$row->org_id] = $row->org_longname;
+            }
+            else
+            {
+                $arr_child_orgas[$row->org_id] = $row->org_shortname;
+            }
         }
         return $arr_child_orgas;
     }

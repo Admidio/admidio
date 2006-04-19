@@ -100,6 +100,7 @@ require("../../../adm_config/body_top.php");
         }
         $organizations = $organizations. "'$orga'";
         next($arr_ref_orgas);
+        $i++;
     }
 
     // damit das SQL-Statement nachher nicht auf die Nase faellt, muss $organizations gefuellt sein   
