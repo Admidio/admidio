@@ -84,13 +84,13 @@ echo "
          <hr width=\"80%\" />
          
          <div style=\"margin-top: 6px;\">
-            <button name=\"speichern\" type=\"submit\" value=\"speichern\">
-                  <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
-                  &nbsp;Speichern</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
             <button name=\"schliessen\" type=\"button\" value=\"schliessen\" onclick=\"window.close()\">
                   <img src=\"$g_root_path/adm_program/images/door_in.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Schlie&szlig;en\">
                   &nbsp;Schlie&szlig;en</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button name=\"speichern\" type=\"submit\" value=\"speichern\">
+                  <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
+                  &nbsp;Speichern</button>
          </div>
       </div>
    </form>

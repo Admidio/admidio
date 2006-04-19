@@ -58,38 +58,38 @@ if($_GET["mode"] == 1)
    $user->login_name = $new_user->login_name;
    $user->password   = $new_user->password;
    
-	// zuerst den neuen Usersatz loeschen, dann den alten Updaten,
-	// damit kein Duplicate-Key wegen dem Loginnamen entsteht
-	$new_user->delete();
+    // zuerst den neuen Usersatz loeschen, dann den alten Updaten,
+    // damit kein Duplicate-Key wegen dem Loginnamen entsteht
+    $new_user->delete();
    $user->update($g_current_user->id);
 
-	if($g_forum == 1)
-	{
-		mysql_select_db($g_forum_db, $g_forum_con);
+    if($g_forum == 1)
+    {
+        mysql_select_db($g_forum_db, $g_forum_con);
 
-		// jetzt den User im Forum updaten
-		$sql    = "UPDATE ". $g_forum_praefix. "_users SET username      = '$user->login_name'
-																		 , user_password = '$user->password'
-																		 , user_email    = '$user->email'
-						WHERE username = '$old_login' ";
-		$result = mysql_query($sql, $g_forum_con);
-		db_error($result);
+        // jetzt den User im Forum updaten
+        $sql    = "UPDATE ". $g_forum_praefix. "_users SET username      = '$user->login_name'
+                                                                         , user_password = '$user->password'
+                                                                         , user_email    = '$user->email'
+                        WHERE username = '$old_login' ";
+        $result = mysql_query($sql, $g_forum_con);
+        db_error($result);
 
-		mysql_select_db($g_adm_db, $g_adm_con);
-	}
+        mysql_select_db($g_adm_db, $g_adm_con);
+    }
 
-	// nur ausfuehren, wenn E-Mails auch unterstuetzt werden
-	if($g_current_organization->mail_extern != 1)
-	{
-		mail("$user->email", "Anmeldung auf $g_current_organization->homepage", "Hallo $user->first_name,\n\ndeine Anmeldung auf $g_current_organization->homepage ".
-			  "wurde bestätigt.\n\nNun kannst du dich mit deinem Benutzernamen : $user->login_name\nund dem Passwort auf der Homepage ".
-			  "einloggen.\n\nSollten noch Fragen bestehen, schreib eine Mail an webmaster@$g_domain .\n\nViele Grüße\nDie Webmaster",
-			  "From: webmaster@$g_domain");
-	}
+    // nur ausfuehren, wenn E-Mails auch unterstuetzt werden
+    if($g_current_organization->mail_extern != 1)
+    {
+        mail("$user->email", "Anmeldung auf $g_current_organization->homepage", "Hallo $user->first_name,\n\ndeine Anmeldung auf $g_current_organization->homepage ".
+              "wurde bestätigt.\n\nNun kannst du dich mit deinem Benutzernamen : $user->login_name\nund dem Passwort auf der Homepage ".
+              "einloggen.\n\nSollten noch Fragen bestehen, schreib eine Mail an webmaster@$g_domain .\n\nViele Grüße\nDie Webmaster",
+              "From: webmaster@$g_domain");
+    }
 
-	$load_url = urlencode("$g_root_path/adm_program/administration/new_user/new_user.php");
-	$location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=send_login_mail&url=$load_url";
-	header($location);
+    $load_url = urlencode("$g_root_path/adm_program/administration/new_user/new_user.php");
+    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=send_login_mail&url=$load_url";
+    header($location);
 }
 elseif($_GET["mode"] == 3)
 {
@@ -133,22 +133,20 @@ elseif($_GET["mode"] == 3)
             Existiert dieser Benutzer noch nicht, kannst du aus der vorhandenen
             Anmeldung einen neuen Benutzer <b>anlegen</b>.
          </p>
-
-            <button name=\"zuordnen\" type=\"button\" value=\"zuordnen\"
-               onclick=\"self.location.href='$g_root_path/adm_program/administration/new_user/new_user_assign.php?new_user_id=". $_GET['new_user_id']. "&amp;all=0'\">
-               <img src=\"$g_root_path/adm_program/images/properties.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer anlegen\">
-               &nbsp;Zuordnen</button>
+            <button name=\"back\" type=\"button\" value=\"back\"
+               onclick=\"history.back()\">
+               <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer anlegen\">
+               &nbsp;Zur&uuml;ck</button>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <button name=\"anlegen\" type=\"button\" value=\"anlegen\"
                onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=". $_GET['new_user_id']. "&amp;new_user=1&amp;url=". urlencode("$g_root_path/adm_program/administration/new_user/new_user.php"). "'\">
                <img src=\"$g_root_path/adm_program/images/user_add.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer anlegen\">
                &nbsp;Anlegen</button>
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <button name=\"back\" type=\"button\" value=\"back\"
-               onclick=\"history.back()\">
-               <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer anlegen\">
-               &nbsp;Zur&uuml;ck</button>
-
+            <button name=\"zuordnen\" type=\"button\" value=\"zuordnen\"
+               onclick=\"self.location.href='$g_root_path/adm_program/administration/new_user/new_user_assign.php?new_user_id=". $_GET['new_user_id']. "&amp;all=0'\">
+               <img src=\"$g_root_path/adm_program/images/properties.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer anlegen\">
+               &nbsp;Zuordnen</button>
       </div>
       </div>";
 
