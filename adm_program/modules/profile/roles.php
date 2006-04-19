@@ -182,7 +182,7 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
             }
             $sql    = prepareSQL($sql, array($_GET['user_id']));
             $result = mysql_query($sql, $g_adm_con);
-            db_error($result, true);
+            db_error($result);
             $i = 0;
 
             while($row = mysql_fetch_object($result))

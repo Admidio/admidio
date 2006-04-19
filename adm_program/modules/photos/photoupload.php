@@ -165,7 +165,7 @@ if($g_session_valid & editPhoto())
                                  pho_usr_id_change = $g_current_user->id
                            WHERE pho_id = '$pho_id'";
                     $result = mysql_query($sql, $g_adm_con);
-                    db_error($result, 1);
+                    db_error($result);
 
                     //Buttons 
                     echo"

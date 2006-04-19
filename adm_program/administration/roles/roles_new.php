@@ -95,16 +95,16 @@ if ($_GET['rol_id'] != 0)
       $r_mail_logout = $row_ar->rol_mail_logout;
       $r_mail_login  = $row_ar->rol_mail_login;
       
-		$datum_von      = mysqldate("d.m.y", $row_ar->rol_start_date);
-		$uhrzeit_von    = mysqltime("h:i",   $row_ar->rol_start_time);
-		$datum_bis      = mysqldate("d.m.y", $row_ar->rol_end_date);
-		$uhrzeit_bis    = mysqltime("h:i",   $row_ar->rol_end_time);
-		if ($uhrzeit_von == "00:00") $uhrzeit_von = "";
-		if ($uhrzeit_bis == "00:00") $uhrzeit_bis = "";
-		$wochentag      = $row_ar->rol_weekday;
-		$ort            = $row_ar->rol_location;
-		$max_mitglieder = $row_ar->rol_max_members;
-		$beitrag        = $row_ar->rol_cost;
+        $datum_von      = mysqldate("d.m.y", $row_ar->rol_start_date);
+        $uhrzeit_von    = mysqltime("h:i",   $row_ar->rol_start_time);
+        $datum_bis      = mysqldate("d.m.y", $row_ar->rol_end_date);
+        $uhrzeit_bis    = mysqltime("h:i",   $row_ar->rol_end_time);
+        if ($uhrzeit_von == "00:00") $uhrzeit_von = "";
+        if ($uhrzeit_bis == "00:00") $uhrzeit_bis = "";
+        $wochentag      = $row_ar->rol_weekday;
+        $ort            = $row_ar->rol_location;
+        $max_mitglieder = $row_ar->rol_max_members;
+        $beitrag        = $row_ar->rol_cost;
    }
  }
 
@@ -152,194 +152,194 @@ require("../../../adm_config/body_top.php");
                <input type=\"text\" name=\"beschreibung\" size=\"48\" maxlength=\"255\" value=\"". htmlspecialchars($beschreibung, ENT_QUOTES). "\">
             </div>
          </div>
-			<div style=\"margin-top: 6px;\">
-				<div style=\"text-align: right; width: 28%; float: left;\">Kategorie:</div>
-				<div style=\"text-align: left; margin-left: 30%;\">
-					<select size=\"1\" name=\"category\">";
-						$sql = "SELECT * FROM ". TBL_ROLE_CATEGORIES. "
-									WHERE rlc_org_shortname LIKE '$g_organization' 
-								   ORDER BY rlc_name ASC ";
-						$result = mysql_query($sql, $g_adm_con);
-						db_error($result);
-						
-						while($row = mysql_fetch_object($result))
-						{
-							echo "<option value=\"$row->rlc_id\"";
-								if($act_rlc_id == $row->rlc_id
-								|| ($act_rlc_id == 0 && $row->rlc_name == 'Allgemein'))
-									echo " selected ";
-							echo ">$row->rlc_name</option>";
-						}
-					echo "</select>
-				</div>
-			</div>
+            <div style=\"margin-top: 6px;\">
+                <div style=\"text-align: right; width: 28%; float: left;\">Kategorie:</div>
+                <div style=\"text-align: left; margin-left: 30%;\">
+                    <select size=\"1\" name=\"category\">";
+                        $sql = "SELECT * FROM ". TBL_ROLE_CATEGORIES. "
+                                    WHERE rlc_org_shortname LIKE '$g_organization' 
+                                   ORDER BY rlc_name ASC ";
+                        $result = mysql_query($sql, $g_adm_con);
+                        db_error($result);
+                        
+                        while($row = mysql_fetch_object($result))
+                        {
+                            echo "<option value=\"$row->rlc_id\"";
+                                if($act_rlc_id == $row->rlc_id
+                                || ($act_rlc_id == 0 && $row->rlc_name == 'Allgemein'))
+                                    echo " selected ";
+                            echo ">$row->rlc_name</option>";
+                        }
+                    echo "</select>
+                </div>
+            </div>
 
-			<div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 90%;\">
-				<div class=\"groupBoxHeadline\">Berechtigungen</div>
+            <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 90%;\">
+                <div class=\"groupBoxHeadline\">Berechtigungen</div>
 
-				<div style=\"margin-top: 6px;\">
-					<div style=\"text-align: right; width: 10%; float: left;\">
-						<input type=\"checkbox\" id=\"moderation\" name=\"moderation\" ";
-						if($r_moderation == 1)
-							echo " checked ";
-						if(strcmp($rolle, "Webmaster") == 0)
-							echo " disabled ";
-						echo " value=\"1\" />&nbsp;
-						<label for=\"moderation\"><img src=\"$g_root_path/adm_program/images/wand.png\" alt=\"Moderation (Benutzer &amp; Rollen verwalten uvm.)\"></label>
-					</div>
-					<div style=\"text-align: left; margin-left: 12%;\">
-						<label for=\"moderation\">Moderation (Benutzer &amp; Rollen verwalten uvm.)&nbsp;</label>
-						<img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-						onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_moderation','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
-					</div>
-				</div>
-				<div style=\"margin-top: 6px;\">
-					<div style=\"text-align: right; width: 10%; float: left;\">
-						<input type=\"checkbox\" id=\"benutzer\" name=\"benutzer\" ";
-						if($r_user == 1)
-							echo " checked ";
-						echo " value=\"1\" />&nbsp;
-						<label for=\"benutzer\"><img src=\"$g_root_path/adm_program/images/user.png\" alt=\"Daten aller Benutzer bearbeiten\"></label>
-					</div>
-					<div style=\"text-align: left; margin-left: 12%;\">
-						<label for=\"benutzer\">Daten aller Benutzer bearbeiten&nbsp;</label>
-						<img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-						onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_benutzer','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
-					</div>
-				</div>
-				<div style=\"margin-top: 6px;\">
-					<div style=\"text-align: right; width: 10%; float: left;\">
-						<input type=\"checkbox\" id=\"termine\" name=\"termine\" ";
-						if($r_termin == 1)
-							echo " checked ";
-						echo " value=\"1\" />&nbsp;
-						<label for=\"termine\"><img src=\"$g_root_path/adm_program/images/date.png\" alt=\"Termine erfassen und bearbeiten\"></label>
-					</div>
-					<div style=\"text-align: left; margin-left: 12%;\">
-						<label for=\"termine\">Termine erfassen und bearbeiten&nbsp;</label>
-						<img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-						onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_termine','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
-					</div>
-				</div>
-				<div style=\"margin-top: 6px;\">
-					<div style=\"text-align: right; width: 10%; float: left;\">
-						<input type=\"checkbox\" id=\"foto\" name=\"foto\" ";
-						if($r_foto == 1)
-							echo " checked ";
-						echo " value=\"1\" />&nbsp;
-						<label for=\"foto\"><img src=\"$g_root_path/adm_program/images/photo.png\" alt=\"Fotos hochladen und bearbeiten\"></label>
-					</div>
-					<div style=\"text-align: left; margin-left: 12%;\">
-						<label for=\"foto\">Fotos hochladen und bearbeiten&nbsp;</label>
-						<img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-						onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_foto','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
-					</div>
-				</div>
-				<div style=\"margin-top: 6px;\">
-					<div style=\"text-align: right; width: 10%; float: left;\">
-						<input type=\"checkbox\" id=\"download\" name=\"download\" ";
-						if($r_download == 1)
-							echo " checked ";
-						echo " value=\"1\" />&nbsp;
-						<label for=\"download\"><img src=\"$g_root_path/adm_program/images/folder_down.png\" alt=\"Downloads hochladen und bearbeiten\"></label>
-					</div>
-					<div style=\"text-align: left; margin-left: 12%;\">
-						<label for=\"download\">Downloads hochladen und bearbeiten&nbsp;</label>
-						<img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-						onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_download','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
-					</div>
-				</div>
-				<div style=\"margin-top: 6px;\">
-					<div style=\"text-align: right; width: 10%; float: left;\">
-						<input type=\"checkbox\" id=\"mail_logout\" name=\"mail_logout\" ";
-						if($r_mail_logout == 1)
-							echo " checked ";
-						echo " value=\"1\" />&nbsp;
-						<label for=\"mail_logout\"><img src=\"$g_root_path/adm_program/images/mail-open.png\" alt=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\"></label>
-					</div>
-					<div style=\"text-align: left; margin-left: 12%;\">
-						<label for=\"mail_logout\">Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben&nbsp;</label>
-						<img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-						onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_logout','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
-					</div>
-				</div>
-				<div style=\"margin-top: 6px;\">
-					<div style=\"text-align: right; width: 10%; float: left;\">
-						<input type=\"checkbox\" id=\"mail_login\" name=\"mail_login\" ";
-						if($r_mail_login == 1)
-							echo " checked ";
-						echo " value=\"1\" />&nbsp;
-						<label for=\"mail_login\"><img src=\"$g_root_path/adm_program/images/mail-open-key.png\" alt=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\"></label>
-					</div>
-					<div style=\"text-align: left; margin-left: 12%;\">
-						<label for=\"mail_login\">Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben&nbsp;</label>
-						<img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-						onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_login','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
-					</div>
-				</div>
-				<div style=\"margin-top: 6px;\">
-					<div style=\"text-align: right; width: 10%; float: left;\">
-						<input type=\"checkbox\" id=\"locked\" name=\"locked\" ";
-						if($r_locked == 1)
-							echo " checked ";
-						echo " value=\"1\" />&nbsp;
-						<label for=\"locked\"><img src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Rolle nur für Moderatoren sichtbar\"></label>
-					</div>
-					<div style=\"text-align: left; margin-left: 12%;\">
-						<label for=\"locked\">Rolle nur für Moderatoren sichtbar&nbsp;</label>
-						<img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-						onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_locked','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
-					</div>
-				</div>
-			</div>
+                <div style=\"margin-top: 6px;\">
+                    <div style=\"text-align: right; width: 10%; float: left;\">
+                        <input type=\"checkbox\" id=\"moderation\" name=\"moderation\" ";
+                        if($r_moderation == 1)
+                            echo " checked ";
+                        if(strcmp($rolle, "Webmaster") == 0)
+                            echo " disabled ";
+                        echo " value=\"1\" />&nbsp;
+                        <label for=\"moderation\"><img src=\"$g_root_path/adm_program/images/wand.png\" alt=\"Moderation (Benutzer &amp; Rollen verwalten uvm.)\"></label>
+                    </div>
+                    <div style=\"text-align: left; margin-left: 12%;\">
+                        <label for=\"moderation\">Moderation (Benutzer &amp; Rollen verwalten uvm.)&nbsp;</label>
+                        <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_moderation','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
+                    </div>
+                </div>
+                <div style=\"margin-top: 6px;\">
+                    <div style=\"text-align: right; width: 10%; float: left;\">
+                        <input type=\"checkbox\" id=\"benutzer\" name=\"benutzer\" ";
+                        if($r_user == 1)
+                            echo " checked ";
+                        echo " value=\"1\" />&nbsp;
+                        <label for=\"benutzer\"><img src=\"$g_root_path/adm_program/images/user.png\" alt=\"Daten aller Benutzer bearbeiten\"></label>
+                    </div>
+                    <div style=\"text-align: left; margin-left: 12%;\">
+                        <label for=\"benutzer\">Daten aller Benutzer bearbeiten&nbsp;</label>
+                        <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_benutzer','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
+                    </div>
+                </div>
+                <div style=\"margin-top: 6px;\">
+                    <div style=\"text-align: right; width: 10%; float: left;\">
+                        <input type=\"checkbox\" id=\"termine\" name=\"termine\" ";
+                        if($r_termin == 1)
+                            echo " checked ";
+                        echo " value=\"1\" />&nbsp;
+                        <label for=\"termine\"><img src=\"$g_root_path/adm_program/images/date.png\" alt=\"Termine erfassen und bearbeiten\"></label>
+                    </div>
+                    <div style=\"text-align: left; margin-left: 12%;\">
+                        <label for=\"termine\">Termine erfassen und bearbeiten&nbsp;</label>
+                        <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_termine','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
+                    </div>
+                </div>
+                <div style=\"margin-top: 6px;\">
+                    <div style=\"text-align: right; width: 10%; float: left;\">
+                        <input type=\"checkbox\" id=\"foto\" name=\"foto\" ";
+                        if($r_foto == 1)
+                            echo " checked ";
+                        echo " value=\"1\" />&nbsp;
+                        <label for=\"foto\"><img src=\"$g_root_path/adm_program/images/photo.png\" alt=\"Fotos hochladen und bearbeiten\"></label>
+                    </div>
+                    <div style=\"text-align: left; margin-left: 12%;\">
+                        <label for=\"foto\">Fotos hochladen und bearbeiten&nbsp;</label>
+                        <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_foto','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
+                    </div>
+                </div>
+                <div style=\"margin-top: 6px;\">
+                    <div style=\"text-align: right; width: 10%; float: left;\">
+                        <input type=\"checkbox\" id=\"download\" name=\"download\" ";
+                        if($r_download == 1)
+                            echo " checked ";
+                        echo " value=\"1\" />&nbsp;
+                        <label for=\"download\"><img src=\"$g_root_path/adm_program/images/folder_down.png\" alt=\"Downloads hochladen und bearbeiten\"></label>
+                    </div>
+                    <div style=\"text-align: left; margin-left: 12%;\">
+                        <label for=\"download\">Downloads hochladen und bearbeiten&nbsp;</label>
+                        <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_download','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
+                    </div>
+                </div>
+                <div style=\"margin-top: 6px;\">
+                    <div style=\"text-align: right; width: 10%; float: left;\">
+                        <input type=\"checkbox\" id=\"mail_logout\" name=\"mail_logout\" ";
+                        if($r_mail_logout == 1)
+                            echo " checked ";
+                        echo " value=\"1\" />&nbsp;
+                        <label for=\"mail_logout\"><img src=\"$g_root_path/adm_program/images/mail-open.png\" alt=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\"></label>
+                    </div>
+                    <div style=\"text-align: left; margin-left: 12%;\">
+                        <label for=\"mail_logout\">Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben&nbsp;</label>
+                        <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_logout','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
+                    </div>
+                </div>
+                <div style=\"margin-top: 6px;\">
+                    <div style=\"text-align: right; width: 10%; float: left;\">
+                        <input type=\"checkbox\" id=\"mail_login\" name=\"mail_login\" ";
+                        if($r_mail_login == 1)
+                            echo " checked ";
+                        echo " value=\"1\" />&nbsp;
+                        <label for=\"mail_login\"><img src=\"$g_root_path/adm_program/images/mail-open-key.png\" alt=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\"></label>
+                    </div>
+                    <div style=\"text-align: left; margin-left: 12%;\">
+                        <label for=\"mail_login\">Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben&nbsp;</label>
+                        <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_login','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
+                    </div>
+                </div>
+                <div style=\"margin-top: 6px;\">
+                    <div style=\"text-align: right; width: 10%; float: left;\">
+                        <input type=\"checkbox\" id=\"locked\" name=\"locked\" ";
+                        if($r_locked == 1)
+                            echo " checked ";
+                        echo " value=\"1\" />&nbsp;
+                        <label for=\"locked\"><img src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Rolle nur für Moderatoren sichtbar\"></label>
+                    </div>
+                    <div style=\"text-align: left; margin-left: 12%;\">
+                        <label for=\"locked\">Rolle nur für Moderatoren sichtbar&nbsp;</label>
+                        <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_locked','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
+                    </div>
+                </div>
+            </div>
 
-			<div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 90%;\">
-				<div class=\"groupBoxHeadline\">Eigenschaften&nbsp;&nbsp;(optional)</div>
+            <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 90%;\">
+                <div class=\"groupBoxHeadline\">Eigenschaften&nbsp;&nbsp;(optional)</div>
 
-				<div style=\"margin-top: 6px;\">
-					<div style=\"text-align: right; width: 33%; float: left;\">Anzahl Mitglieder:</div>
-					<div style=\"text-align: left; margin-left: 35%;\">
-						<input type=\"text\" name=\"max_mitglieder\" size=\"3\" maxlength=\"3\" value=\""; if($max_mitglieder > 0) echo $max_mitglieder; echo "\">&nbsp;(inkl. Leiter)</div>
-				</div>
-				<div style=\"margin-top: 6px;\">
-					<div style=\"text-align: right; width: 33%; float: left;\">G&uuml;ltig von:</div>
-					<div style=\"text-align: left; margin-left: 35%;\">
-						<input type=\"text\" name=\"datum_von\" size=\"10\" maxlength=\"10\" value=\"$datum_von\">
-						bis
-						<input type=\"text\" name=\"datum_bis\" size=\"10\" maxlength=\"10\" value=\"$datum_bis\">&nbsp;(Datum)
-					</div>
-				</div>
-				<div style=\"margin-top: 6px;\">
-					<div style=\"text-align: right; width: 33%; float: left;\">Uhrzeit:</div>
-					<div style=\"text-align: left; margin-left: 35%;\">
-						<input type=\"text\" name=\"uhrzeit_von\" size=\"5\" maxlength=\"5\" value=\"$uhrzeit_von\">
-						bis
-						<input type=\"text\" name=\"uhrzeit_bis\" size=\"5\" maxlength=\"5\" value=\"$uhrzeit_bis\">
-					</div>
-				</div>
-				<div style=\"margin-top: 6px;\">
-					<div style=\"text-align: right; width: 33%; float: left;\">Wochentag:</div>
-					<div style=\"text-align: left; margin-left: 35%;\">
-						<select size=\"1\" name=\"wochentag\">
-						<option value=\"0\""; if($wochentag == 0) echo " selected=\"selected\""; echo ">&nbsp;</option>\n";
-						for($i = 1; $i < 8; $i++)
-						{
-							echo "<option value=\"$i\""; if($wochentag == $i) echo " selected=\"selected\""; echo ">". $arrDay[$i-1]. "</option>\n";
-						}
-						echo "</select>
-					</div>
-				</div>
-				<div style=\"margin-top: 6px;\">
-					<div style=\"text-align: right; width: 33%; float: left;\">Ort:</div>
-					<div style=\"text-align: left; margin-left: 35%;\">
-						<input type=\"text\" name=\"ort\" size=\"30\" maxlength=\"30\" value=\"". htmlspecialchars($ort, ENT_QUOTES). "\"></div>
-				</div>
-				<div style=\"margin-top: 6px;\">
-					<div style=\"text-align: right; width: 33%; float: left;\">Beitrag:</div>
-					<div style=\"text-align: left; margin-left: 35%;\">
-						<input type=\"text\" name=\"beitrag\" size=\"6\" maxlength=\"6\" value=\"$beitrag\"> &euro;</div>
-				</div>
-			</div>
+                <div style=\"margin-top: 6px;\">
+                    <div style=\"text-align: right; width: 33%; float: left;\">Anzahl Mitglieder:</div>
+                    <div style=\"text-align: left; margin-left: 35%;\">
+                        <input type=\"text\" name=\"max_mitglieder\" size=\"3\" maxlength=\"3\" value=\""; if($max_mitglieder > 0) echo $max_mitglieder; echo "\">&nbsp;(inkl. Leiter)</div>
+                </div>
+                <div style=\"margin-top: 6px;\">
+                    <div style=\"text-align: right; width: 33%; float: left;\">G&uuml;ltig von:</div>
+                    <div style=\"text-align: left; margin-left: 35%;\">
+                        <input type=\"text\" name=\"datum_von\" size=\"10\" maxlength=\"10\" value=\"$datum_von\">
+                        bis
+                        <input type=\"text\" name=\"datum_bis\" size=\"10\" maxlength=\"10\" value=\"$datum_bis\">&nbsp;(Datum)
+                    </div>
+                </div>
+                <div style=\"margin-top: 6px;\">
+                    <div style=\"text-align: right; width: 33%; float: left;\">Uhrzeit:</div>
+                    <div style=\"text-align: left; margin-left: 35%;\">
+                        <input type=\"text\" name=\"uhrzeit_von\" size=\"5\" maxlength=\"5\" value=\"$uhrzeit_von\">
+                        bis
+                        <input type=\"text\" name=\"uhrzeit_bis\" size=\"5\" maxlength=\"5\" value=\"$uhrzeit_bis\">
+                    </div>
+                </div>
+                <div style=\"margin-top: 6px;\">
+                    <div style=\"text-align: right; width: 33%; float: left;\">Wochentag:</div>
+                    <div style=\"text-align: left; margin-left: 35%;\">
+                        <select size=\"1\" name=\"wochentag\">
+                        <option value=\"0\""; if($wochentag == 0) echo " selected=\"selected\""; echo ">&nbsp;</option>\n";
+                        for($i = 1; $i < 8; $i++)
+                        {
+                            echo "<option value=\"$i\""; if($wochentag == $i) echo " selected=\"selected\""; echo ">". $arrDay[$i-1]. "</option>\n";
+                        }
+                        echo "</select>
+                    </div>
+                </div>
+                <div style=\"margin-top: 6px;\">
+                    <div style=\"text-align: right; width: 33%; float: left;\">Ort:</div>
+                    <div style=\"text-align: left; margin-left: 35%;\">
+                        <input type=\"text\" name=\"ort\" size=\"30\" maxlength=\"30\" value=\"". htmlspecialchars($ort, ENT_QUOTES). "\"></div>
+                </div>
+                <div style=\"margin-top: 6px;\">
+                    <div style=\"text-align: right; width: 33%; float: left;\">Beitrag:</div>
+                    <div style=\"text-align: left; margin-left: 35%;\">
+                        <input type=\"text\" name=\"beitrag\" size=\"6\" maxlength=\"6\" value=\"$beitrag\"> &euro;</div>
+                </div>
+            </div>
 
          <div style=\"margin-top: 15px;\">
             <button name=\"speichern\" type=\"submit\" value=\"speichern\">
@@ -357,7 +357,7 @@ require("../../../adm_config/body_top.php");
                          FROM ". TBL_USERS. "
                         WHERE usr_id = $row_ar->rol_usr_id_change ";
             $result = mysql_query($sql, $g_adm_con);
-            db_error($result, true);
+            db_error($result);
             $row = mysql_fetch_array($result);
 
             echo "<div style=\"margin-top: 6px;\">

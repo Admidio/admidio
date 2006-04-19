@@ -425,7 +425,7 @@ if($popup == 0)
                          FROM ". TBL_USERS. "
                         WHERE usr_id = $user->usr_id_change ";
             $result = mysql_query($sql, $g_adm_con);
-            db_error($result, true);
+            db_error($result);
             $row = mysql_fetch_array($result);
 
             echo "<div style=\"margin-top: 6px;\"><span style=\"font-size: 10pt\">
