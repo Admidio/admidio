@@ -69,8 +69,8 @@ class TblOrganizations
     function getOrganization($shortname)
     {
         $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. " WHERE org_shortname = '$shortname'";
-
         $result = mysql_query($sql, $this->db_connection);
+        db_error($result);
 
         if($row = mysql_fetch_object($result))
         {
@@ -149,11 +149,7 @@ class TblOrganizations
             }
             $sql = $sql. " WHERE org_id = $this->id ";
             $result = mysql_query($sql, $this->db_connection);
-            if(!$result) 
-            { 
-                echo "Error: ". mysql_error(); 
-                exit(); 
-            }
+            db_error($result);
             return 0;
         }
         return -1;
@@ -184,11 +180,7 @@ class TblOrganizations
                                     '$this->homepage', $this->mail_size, $this->upload_size, $this->photo_size, 
                                     $this->mail_extern, $this->enable_rss, $this->bbcode ) ";
             $result = mysql_query($sql, $this->db_connection);
-            if(!$result) 
-            { 
-                echo "Error: ". mysql_error(); 
-                exit(); 
-            }
+            db_error($result);
 
             $this->id = mysql_insert_id($this->db_connection);
             return 0;
