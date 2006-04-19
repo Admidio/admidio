@@ -247,17 +247,23 @@ elseif($_GET["mode"] == 3)
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
 
+    $sql    = "UPDATE ". TBL_USERS. " SET usr_usr_id_change = NULL
+                WHERE usr_usr_id_change = {0}";
+    $sql    = prepareSQL($sql, array($_GET['user_id']));
+    $result = mysql_query($sql, $g_adm_con);
+    db_error($result);
+
+    $sql    = "DELETE FROM ". TBL_MEMBERS. " WHERE mem_usr_id = {0}";
+    $sql    = prepareSQL($sql, array($_GET['user_id']));
+    $result = mysql_query($sql, $g_adm_con);
+    db_error($result);
+
     $sql    = "DELETE FROM ". TBL_SESSIONS. " WHERE ses_usr_id = {0}";
     $sql    = prepareSQL($sql, array($_GET['user_id']));
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
 
     $sql    = "DELETE FROM ". TBL_USER_DATA. " WHERE usd_usr_id = {0}";
-    $sql    = prepareSQL($sql, array($_GET['user_id']));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
-
-    $sql    = "DELETE FROM ". TBL_MEMBERS. " WHERE mem_usr_id = {0}";
     $sql    = prepareSQL($sql, array($_GET['user_id']));
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
