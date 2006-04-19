@@ -149,7 +149,7 @@ require("../../../adm_config/body_top.php");
                    $sql    = "SELECT usr_email FROM ". TBL_USERS. " WHERE usr_id = '{0}' ";
                    $sql    = prepareSQL($sql, array($_GET['usr_id']));
                    $result = mysql_query($sql, $g_adm_con);
-                   db_error($result, true);
+                   db_error($result);
 
                    $row = mysql_fetch_array($result);
                    echo "<input class=\"readonly\" readonly type=\"text\" name=\"mailto\" size=\"35\" maxlength=\"50\" value=\"". $row[0]. "\">";
@@ -197,7 +197,7 @@ require("../../../adm_config/body_top.php");
                                   ORDER BY rol_name ";
                    }
                    $result = mysql_query($sql, $g_adm_con);
-                   db_error($result, true);
+                   db_error($result);
 
                    while ($row = mysql_fetch_array($result))
                    {

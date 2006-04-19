@@ -26,28 +26,30 @@
 
 // Funktion fuer das Error-Handling der Datenbank
 
-function db_error ($result, $inline = 0)
+function db_error($result)
 {
-   global $g_root_path;
+    global $g_root_path;
 
-   if(!$result && $inline == 0)
-   {
-      $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=mysql&err_text=". mysql_error();
-      header($location);
-      exit();
-   }
-   elseif(!$result && $inline == 1)
-   {
-      echo "Error: ". mysql_error();
-      exit();
-   }
+    if($result == false)
+    {
+        if(headers_sent() == false)
+        {
+            $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=mysql&err_text=". mysql_error();
+            header($location);
+        }
+        else
+        {
+            echo "<div style=\"color: #CC0000;\">Error: ". mysql_error(). "</div>";
+        }
+        exit();
+    }
 }
 
 // die Versionsnummer bitte nicht aendern !!!
 
 function getVersion()
 {
-   return "1.3 Beta";
+    return "1.3 Beta";
 }
 
 // die Übergebenen Variablen für den SQL-Code werden geprueft
@@ -57,21 +59,25 @@ function getVersion()
 // $sqlQuery = 'SELECT col1, col2 FROM tab1 WHERE col1 = {1} AND col3 = {2} LIMIT {3}';
 // $stm = mysql_query(prepareSQL($sqlQuery, array('username', 24.3, 20);
 
-function prepareSQL($queryString, $paramArr) {
-   foreach (array_keys($paramArr) as $paramName) {
-       if (is_int($paramArr[$paramName])) {
-           $paramArr[$paramName] = (int)$paramArr[$paramName];
-       }
-       elseif (is_numeric($paramArr[$paramName])) {
-           $paramArr[$paramName] = (float)$paramArr[$paramName];
-       }
-       elseif (($paramArr[$paramName] != 'NULL') and ($paramArr[$paramName] != 'NOT NULL')) {
-           $paramArr[$paramName] = mysql_escape_string(stripslashes($paramArr[$paramName]));
-           $paramArr[$paramName] = '\''.$paramArr[$paramName].'\'';
-       }
-   }
-
-   return preg_replace('/\{(.*?)\}/ei','$paramArr[\'$1\']', $queryString);
+function prepareSQL($queryString, $paramArr) 
+{
+    foreach (array_keys($paramArr) as $paramName) 
+    {
+        if (is_int($paramArr[$paramName])) 
+        {
+            $paramArr[$paramName] = (int)$paramArr[$paramName];
+        }
+        elseif (is_numeric($paramArr[$paramName])) 
+        {
+            $paramArr[$paramName] = (float)$paramArr[$paramName];
+        }
+        elseif (($paramArr[$paramName] != 'NULL') and ($paramArr[$paramName] != 'NOT NULL')) 
+        {
+            $paramArr[$paramName] = mysql_escape_string(stripslashes($paramArr[$paramName]));
+            $paramArr[$paramName] = '\''.$paramArr[$paramName].'\'';
+        }
+    }
+    return preg_replace('/\{(.*?)\}/ei','$paramArr[\'$1\']', $queryString);
 }
 
 // HTTP_REFERER wird gesetzt. Bei Ausnahmen geht es zurueck zur Startseite
@@ -79,36 +85,38 @@ function prepareSQL($queryString, $paramArr) {
 
 function getHttpReferer()
 {
-   global $g_root_path;
-   global $g_main_page;
+    global $g_root_path;
+    global $g_main_page;
 
-   $exception = 0;
+    $exception = 0;
 
-   if($exception == 0)
-      $exception = substr_count($_SERVER['HTTP_REFERER'], "menue.htm");
-   if($exception == 0)
-      $exception = substr_count($_SERVER['HTTP_REFERER'], "status.php");
-   if($exception == 0)
-      $exception = substr_count($_SERVER['HTTP_REFERER'], "err_msg.php");
-   if($exception == 0)
-      $exception = substr_count($_SERVER['HTTP_REFERER'], "web.htm");
-   if($exception == 0)
-      $exception = substr_count($_SERVER['HTTP_REFERER'], "index.htm");
-   if($exception == 0)
-      $exception = substr_count($_SERVER['HTTP_REFERER'], "login.php");
-   if($exception == 0)
-      $exception = substr_count($_SERVER['HTTP_REFERER'], "forum_hinweis.php");
-   if($exception == 0)
-   {
-      $tmp_url = $g_root_path. "/";
-      if(strcmp($_SERVER['HTTP_REFERER'], $tmp_url) == 0)
-         $exception = 1;
-   }
+    if($exception == 0)
+        $exception = substr_count($_SERVER['HTTP_REFERER'], "menue.htm");
+    if($exception == 0)
+        $exception = substr_count($_SERVER['HTTP_REFERER'], "status.php");
+    if($exception == 0)
+        $exception = substr_count($_SERVER['HTTP_REFERER'], "err_msg.php");
+    if($exception == 0)
+        $exception = substr_count($_SERVER['HTTP_REFERER'], "index.htm");
+    if($exception == 0)
+        $exception = substr_count($_SERVER['HTTP_REFERER'], "login.php");
+    if($exception == 0)
+    {
+        $tmp_url = $g_root_path. "/";
+        if(strcmp($_SERVER['HTTP_REFERER'], $tmp_url) == 0)
+        {
+            $exception = 1;
+        }
+    }
 
-   if($exception == 0)
-      return $_SERVER['HTTP_REFERER'];
-   else
-      return $g_root_path. "/". $g_main_page;
+    if($exception == 0)
+    {
+        return $_SERVER['HTTP_REFERER'];
+    }
+    else
+    {
+        return $g_root_path. "/". $g_main_page;
+    }
 }
 
 // Funktion prueft, ob ein User die uebergebene Rolle besitzt
@@ -116,30 +124,36 @@ function getHttpReferer()
 
 function hasRole($function, $user_id = 0)
 {
-   global $g_current_user;
-   global $g_adm_con;
-   global $g_organization;
+    global $g_current_user;
+    global $g_adm_con;
+    global $g_organization;
 
-   if($user_id == 0)
-      $user_id = $g_current_user->id;
+    if($user_id == 0)
+    {
+        $user_id = $g_current_user->id;
+    }
 
-   $sql    = "SELECT *
-                FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-               WHERE mem_usr_id        = $user_id
-                 AND mem_valid         = 1
-                 AND mem_rol_id        = rol_id
-                 AND rol_org_shortname = '$g_organization'
-                 AND rol_name          = '$function'
-                 AND rol_valid         = 1 ";
-   $result = mysql_query($sql, $g_adm_con);
-   db_error($result);
+    $sql    = "SELECT *
+                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
+                WHERE mem_usr_id        = $user_id
+                  AND mem_valid         = 1
+                  AND mem_rol_id        = rol_id
+                  AND rol_org_shortname = '$g_organization'
+                  AND rol_name          = '$function'
+                  AND rol_valid         = 1 ";
+    $result = mysql_query($sql, $g_adm_con);
+    db_error($result);
 
-   $user_found = mysql_num_rows($result);
+    $user_found = mysql_num_rows($result);
 
-   if($user_found == 1)
-      return 1;
-   else
-      return 0;
+    if($user_found == 1)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 // Funktion prueft, ob der angemeldete User Moderatorenrechte hat
@@ -220,7 +234,7 @@ function isGroupLeader($role_id = 0)
                  AND rol_org_shortname = '$g_organization'
                  AND rol_valid         = 1 ";
    if ($role_id!=0)
-   	$sql .= "  AND mem_rol_id			= '$role_id'";
+    $sql .= "  AND mem_rol_id           = '$role_id'";
 
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
@@ -296,7 +310,7 @@ function editPhoto($organization = "")
    global $g_organization;
    
    if(strlen($organization) == 0)
-   	$organization = $g_organization;
+    $organization = $g_organization;
 
    $sql    = "SELECT *
                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "

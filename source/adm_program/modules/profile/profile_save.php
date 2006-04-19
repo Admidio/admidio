@@ -127,7 +127,7 @@ if(strlen($user->last_name) > 0)
                   WHERE usr_login_name = {0} ";
          $sql    = prepareSQL($sql, array($user->login_name));
          $result = mysql_query($sql, $g_adm_con);
-         db_error($result, 1);
+         db_error($result);
 
          if(mysql_num_rows($result) > 0)
          {

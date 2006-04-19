@@ -571,7 +571,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
                     FROM ". TBL_PHOTOS. "
                     WHERE (pho_pho_id_parent ='$delete_id')";
             $result = mysql_query($sql, $g_adm_con);
-            db_error($result, 1);
+            db_error($result);
             
             while($adm_photo_delete_collect  = mysql_fetch_array($result))
             {
@@ -596,7 +596,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
                     FROM ". TBL_PHOTOS. "
                     WHERE (pho_id ='$pho_id_delete')";
             $result = mysql_query($sql, $g_adm_con);
-            db_error($result, 1);
+            db_error($result);
             $adm_photo_delete = mysql_fetch_array($result);
             
             //Ordnerpfad zusammensetzen

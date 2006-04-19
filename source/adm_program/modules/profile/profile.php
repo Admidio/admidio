@@ -521,7 +521,7 @@ require("../../../adm_config/body_top.php");
             
             $sql = "SELECT org_shortname FROM ". TBL_ORGANIZATIONS. "";
             $result = mysql_query($sql, $g_adm_con);
-            db_error($result, true);
+            db_error($result);
 
             $count_grp = mysql_num_rows($result);
             $i = 0;
