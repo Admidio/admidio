@@ -83,8 +83,8 @@ class TblUsers
     function getUser($user_id)
     {
         $sql = "SELECT * FROM ". TBL_USERS. " WHERE usr_id = $user_id";
-
         $result = mysql_query($sql, $this->db_connection);
+        db_error($result);
 
         if($row = mysql_fetch_object($result))
         {
@@ -198,11 +198,7 @@ class TblUsers
             $sql = $sql. " WHERE usr_id = $this->id ";
 
             $result = mysql_query($sql, $this->db_connection);
-            if(!$result) 
-            { 
-                echo "Error: ". mysql_error(); 
-                exit(); 
-            }
+            db_error($result);
             return 0;
         }
         return -1;
@@ -235,11 +231,7 @@ class TblUsers
             else
                 $sql = $sql. ", '$this->login_name', '$this->password' ) ";
             $result = mysql_query($sql, $this->db_connection);
-            if(!$result) 
-            { 
-                echo "Error: ". mysql_error(); 
-                exit(); 
-            }
+            db_error($result);
 
             $this->id = mysql_insert_id($this->db_connection);
             return 0;
@@ -251,9 +243,9 @@ class TblUsers
     function delete()
     {
         $sql    = "DELETE FROM ". TBL_USERS. " 
-                WHERE usr_id = $this->id ";
+                    WHERE usr_id = $this->id ";
         $result = mysql_query($sql, $this->db_connection);
-        if(!$result) { echo "Error: ". mysql_error(); exit(); }
+        db_error($result);
 
         $this->clear();
     }
