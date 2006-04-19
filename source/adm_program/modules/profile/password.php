@@ -34,68 +34,71 @@ require("../../system/login_valid.php");
 // nur Webmaster d&uuml;rfen fremde Passwoerter aendern
 if(!hasRole("Webmaster") && $g_current_user->id != $_GET['user_id'])
 {
-   $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-   header($location);
-   exit();
+    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
+    header($location);
+    exit();
 }
 
 echo "
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
 <html>
 <head>
-   <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
-   <title>Passwort &auml;ndern</title>
-   <meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\">
-   <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
-   
-   <!--[if gte IE 5.5000]>
-   <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
-   <![endif]-->
+    <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
+    <title>Passwort &auml;ndern</title>
+    <meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\">
+    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
+
+    <!--[if gte IE 5.5000]>
+    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
+    <![endif]-->
 </head>
 
 <body>
-   <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
+    <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
+        <form action=\"password_save.php?user_id=". $_GET['user_id']. "\" method=\"post\" name=\"Anmeldung\">
+            <div class=\"formHead\" style=\"width: 300px\">". strspace("Passwort ändern"). "</div>
+            <div class=\"formBody\" style=\"width: 300px\">
+                <div style=\"margin-top: 6px;\">
+                    <div style=\"text-align: right; width: 150px; float: left;\">Altes Passwort:</div>
+                    <div style=\"text-align: left; margin-left: 160px;\">
+                        <input type=\"password\" id=\"old_password\" name=\"old_password\" size=\"10\" maxlength=\"20\" />
+                    </div>
+                </div>
 
-   <form action=\"password_save.php?user_id=". $_GET['user_id']. "\" method=\"post\" name=\"Anmeldung\">
-      <div class=\"formHead\" style=\"width: 300px\">". strspace("Passwort ändern"). "</div>
-      <div class=\"formBody\" style=\"width: 300px\">
-         <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 150px; float: left;\">Altes Passwort:</div>
-            <div style=\"text-align: left; margin-left: 160px;\">
-               <input type=\"password\" name=\"old_password\" size=\"10\" maxlength=\"20\" />
-            </div>
-         </div>
-         
-         <hr width=\"80%\" />
-         
-         <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 150px; float: left;\">Neues Passwort:</div>
-            <div style=\"text-align: left; margin-left: 160px;\">
-               <input type=\"password\" name=\"new_password\" size=\"10\" maxlength=\"20\" />
-            </div>
-         </div>
-         <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 150px; float: left;\">Wiederholen:</div>
-            <div style=\"text-align: left; margin-left: 160px;\">
-               <input type=\"password\" name=\"new_password2\" size=\"10\" maxlength=\"20\" />
-            </div>
-         </div>
-         
-         <hr width=\"80%\" />
-         
-         <div style=\"margin-top: 6px;\">
-            <button name=\"schliessen\" type=\"button\" value=\"schliessen\" onclick=\"window.close()\">
-                  <img src=\"$g_root_path/adm_program/images/door_in.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Schlie&szlig;en\">
-                  &nbsp;Schlie&szlig;en</button>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button name=\"speichern\" type=\"submit\" value=\"speichern\">
-                  <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
-                  &nbsp;Speichern</button>
-         </div>
-      </div>
-   </form>
+                <hr width=\"80%\" />
 
-   </div>
+                <div style=\"margin-top: 6px;\">
+                    <div style=\"text-align: right; width: 150px; float: left;\">Neues Passwort:</div>
+                    <div style=\"text-align: left; margin-left: 160px;\">
+                        <input type=\"password\" name=\"new_password\" size=\"10\" maxlength=\"20\" />
+                    </div>
+                </div>
+                <div style=\"margin-top: 6px;\">
+                    <div style=\"text-align: right; width: 150px; float: left;\">Wiederholen:</div>
+                    <div style=\"text-align: left; margin-left: 160px;\">
+                        <input type=\"password\" name=\"new_password2\" size=\"10\" maxlength=\"20\" />
+                    </div>
+                </div>
+
+                <hr width=\"80%\" />
+
+                <div style=\"margin-top: 6px;\">
+                    <button name=\"schliessen\" type=\"button\" value=\"schliessen\" onclick=\"window.close()\">
+                        <img src=\"$g_root_path/adm_program/images/door_in.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" 
+                        width=\"16\" height=\"16\" border=\"0\" alt=\"Schlie&szlig;en\">
+                        &nbsp;Schlie&szlig;en</button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button name=\"speichern\" type=\"submit\" value=\"speichern\">
+                        <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" 
+                        width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
+                        &nbsp;Speichern</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script type=\"text/javascript\"><!--
+        document.getElementById('old_password').focus();
+    --></script>
 </body>
 </html>";
 ?>
