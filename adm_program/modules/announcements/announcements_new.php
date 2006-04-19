@@ -148,13 +148,13 @@ require("../../../adm_config/body_top.php");
          echo "<hr width=\"85%\" />
 
          <div style=\"margin-top: 6px;\">
-            <button name=\"speichern\" type=\"submit\" value=\"speichern\" tabindex=\"4\">
-            <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
-            &nbsp;Speichern</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
             <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\" tabindex=\"5\">
             <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
             &nbsp;Zur&uuml;ck</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button name=\"speichern\" type=\"submit\" value=\"speichern\" tabindex=\"4\">
+            <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
+            &nbsp;Speichern</button>
          </div>";
          if($row_ba->ann_usr_id_change > 0)
          {

@@ -274,7 +274,7 @@ require("../../../adm_config/body_top.php");
                   <th class=\"tableHeader\" style=\"text-align: left;\">Feld</th>
                   <th class=\"tableHeader\" style=\"text-align: left;\">Beschreibung</th>
                   <th class=\"tableHeader\" style=\"text-align: left;\">Datentyp</th>
-                  <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Feld nur f�r Moderatoren sichtbar\" title=\"Feld nur f�r Moderatoren sichtbar\"></th>
+                  <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Feld nur f&uuml;r Moderatoren sichtbar\" title=\"Feld nur f&uuml;r Moderatoren sichtbar\"></th>
                   <th class=\"tableHeader\">&nbsp;</th>
                </tr>";
 
@@ -329,13 +329,13 @@ require("../../../adm_config/body_top.php");
          <hr width=\"85%\" />
 
          <div style=\"margin-top: 6px;\">
-            <button name=\"speichern\" type=\"submit\" value=\"speichern\">
-            <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
-            &nbsp;Speichern</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
             <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='". urldecode($url). "'\">
             <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
             &nbsp;Zur&uuml;ck</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button name=\"speichern\" type=\"submit\" value=\"speichern\">
+            <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
+            &nbsp;Speichern</button>
          </div>
       </div>
    </form>
