@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /******************************************************************************
  * Verwaltung der aller Mitglieder in der Datenbank
  *
@@ -54,40 +54,7 @@ $restrict = "";
 $listname = "";
 $i = 0;
 
-if(!array_key_exists("letter", $_GET))
-{
-    // alle Mitglieder zur Auswahl selektieren
-    if($members == 1)
-    {
-        $sql = "SELECT COUNT(usr_id) as anzahl 
-                  FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
-                 WHERE rol_org_shortname = '$g_organization'
-                   AND rol_valid  = 1
-                   AND mem_rol_id = rol_id 
-                   AND mem_usr_id = usr_id
-                   AND mem_valid  = 1
-                   AND usr_valid  = 1 ";
-    }
-    else
-    {
-        $sql = "SELECT COUNT(usr_id) as anzahl 
-                  FROM ". TBL_USERS. "
-                 WHERE usr_valid  = 1 ";
-    }
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
-    $row = mysql_fetch_object($result);
-
-    if($row->anzahl > 50)
-    {
-        $letter = "A%";
-    }
-    else
-    {
-        $letter = "%";
-    }
-}
-else
+if(array_key_exists("letter", $_GET))
 {
     if($_GET["letter"] != "%")
     {
@@ -97,6 +64,10 @@ else
     {
         $letter = "%";
     }
+}
+else
+{
+    $letter = "%";
 }
 
 // alle Mitglieder zur Auswahl selektieren
