@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /******************************************************************************
  * Verwaltung der aller Mitglieder in der Datenbank
  *
