@@ -118,11 +118,6 @@ require("../../../adm_config/body_top.php");
         echo "<a href=\"$g_root_path/adm_program/modules/download/download.php?folder=". urlencode($pfad). "&amp;default_folder=". urlencode($default_folder). "\">
         <img src=\"$g_root_path/adm_program/images/folder.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Ordner schlie&szlig;en\"></a>
         <a class=\"headLink\" href=\"$g_root_path/adm_program/modules/download/download.php?folder=". urlencode($pfad). "&amp;default_folder=". urlencode($default_folder). "\">Ordner schlie&szlig;en</a>";
-      /*
-      echo "<button name=\"uebersicht\" type=\"button\" value=\"uebersicht\" style=\"width: 165px;\" onclick=\"self.location.href='$g_root_path/adm_program/modules/download/download.php?folder=". urlencode($pfad). "&amp;default_folder=". urlencode($default_folder). "'\">
-               <img src=\"$g_root_path/adm_program/images/folder.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Download&uuml;bersicht\">
-               &nbsp;Ordner schlie&szlig;en</button>
-      ";*/
     };
 
     //Button Upload und Neuer Ordner
@@ -136,13 +131,6 @@ require("../../../adm_config/body_top.php");
         <a href=\"$g_root_path/adm_program/modules/download/upload.php?folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\">
         <img src=\"$g_root_path/adm_program/images/page_white_get.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Hochladen\"></a>
         <a class=\"headLink\" href=\"$g_root_path/adm_program/modules/download/upload.php?folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\">Datei hochladen</a>";
-/*
-        echo "<button name=\"down\" type=\"button\" value=\"down\" style=\"width: 150px;\" onclick=\"self.location.href='$g_root_path/adm_program/modules/download/folder_new.php?folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "'\">
-        <img src=\"$g_root_path/adm_program/images/folder_create.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Ordner erstellen\">
-        &nbsp;Ordner anlegen</button>
-        <button name=\"down\" type=\"button\" value=\"down\" style=\"width: 150px;\" onclick=\"self.location.href='$g_root_path/adm_program/modules/download/upload.php?folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "'\">
-        <img src=\"$g_root_path/adm_program/images/page_white_get.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hochladen\">
-        &nbsp;Datei hochladen</button>";*/
     };
     echo "</p>";
 

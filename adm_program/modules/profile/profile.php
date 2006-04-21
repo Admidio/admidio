@@ -312,7 +312,7 @@ require("../../../adm_config/body_top.php");
                 <div style=\"margin-top: 12px;\">
                     <a href=\"$g_root_path/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id=$user->id\"><img 
                     src=\"$g_root_path/adm_program/images/vcard.png\" style=\"vertical-align: middle;\" border=\"0\" title=\"Benutzer als vCard exportieren\" alt=\"Benutzer als vCard exportieren\"></a>
-                    <a href=\"$g_root_path/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id=$user->id\">vCard exportieren</a>
+                    <a class=\"headLink\" href=\"$g_root_path/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id=$user->id\">vCard exportieren</a>
                 </div>";
                 
                 // Moderatoren & Gruppenleiter duerfen neue Rollen zuordnen
@@ -321,7 +321,7 @@ require("../../../adm_config/body_top.php");
                     echo "<div style=\"margin-top: 10px;\">
                         <a href=\"roles.php?user_id=$a_user_id&amp;url=". urlencode("$g_root_path/adm_program/modules/profile/profile.php?user_id=$a_user_id&url=$url"). "\"><img 
                         src=\"$g_root_path/adm_program/images/wand.png\" style=\"vertical-align: middle;\" border=\"0\" title=\"Rollen &auml;ndern\" alt=\"Rollen &auml;ndern\"></a>
-                        <a href=\"roles.php?user_id=$a_user_id&amp;url=". urlencode("$g_root_path/adm_program/modules/profile/profile.php?user_id=$a_user_id&url=$url"). "\">Rollen &auml;ndern</a>
+                        <a class=\"headLink\" href=\"roles.php?user_id=$a_user_id&amp;url=". urlencode("$g_root_path/adm_program/modules/profile/profile.php?user_id=$a_user_id&url=$url"). "\">Rollen &auml;ndern</a>
                     </div>";
                 }
                 
@@ -330,7 +330,7 @@ require("../../../adm_config/body_top.php");
                     echo "<div style=\"margin-top: 10px;\">
                         <a href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=$a_user_id&amp;url=$url\"><img 
                         src=\"$g_root_path/adm_program/images/edit.png\" style=\"vertical-align: middle;\" border=\"0\" title=\"Profildaten &auml;ndern\" alt=\"Profildaten &auml;ndern\"></a>
-                        <a href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=$a_user_id&amp;url=$url\">Profildaten &auml;ndern</a>
+                        <a class=\"headLink\" href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=$a_user_id&amp;url=$url\">Profildaten &auml;ndern</a>
                     </div>";
                 }
             echo "</div>
