@@ -15,8 +15,8 @@
  *                  gesetzt, kann der Anwender nur noch in Unterordner und nicht
  *                  in hoehere Ordner des Default-Ordners navigieren
  * info   : Ausgabe von Verwaltungsinformationen
- * sort	 : Gibt die Art der Sortierung an. Default ist aufsteigend. Bei der Übergabe
- *			   von "desc" wird absteigend sortiert.
+ * sort  : Gibt die Art der Sortierung an. Default ist aufsteigend. Bei der Übergabe
+ *             von "desc" wird absteigend sortiert.
  ******************************************************************************
  *
  * This program is free software; you can redistribute it and/or
@@ -35,107 +35,122 @@
  *
  *****************************************************************************/
 
-	require("../../system/common.php");
+    require("../../system/common.php");
 
-   $default_folder = urldecode($_GET['default_folder']);
-   $folder     = urldecode($_GET['folder']);
-   $act_folder = "../../../adm_my_files/download";
+    $default_folder = urldecode($_GET['default_folder']);
+    $folder     = urldecode($_GET['folder']);
+    $act_folder = "../../../adm_my_files/download";
 
-   // uebergebene Ordner auf Gueltigkeit pruefen
-   // und Ordnerpfad zusammensetzen
-   if(strlen($default_folder) > 0)
-   {
-      if(strpos($default_folder, "..") !== false)
-      {
-         $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_folder";
-         header($location);
-         exit();
-      }
-      $act_folder = "$act_folder/$default_folder";
-   }
+    // uebergebene Ordner auf Gueltigkeit pruefen
+    // und Ordnerpfad zusammensetzen
+    if(strlen($default_folder) > 0)
+    {
+        if(strpos($default_folder, "..") !== false)
+        {
+            $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_folder";
+            header($location);
+            exit();
+        }
+        $act_folder = "$act_folder/$default_folder";
+    }
 
-   if(strlen($folder) > 0)
-   {
-      if(strpos($folder, "..") !== false)
-      {
-         $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_folder";
-         header($location);
-         exit();
-      }
-      $act_folder = "$act_folder/$folder";
-   }
+    if(strlen($folder) > 0)
+    {
+        if(strpos($folder, "..") !== false)
+        {
+            $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_folder";
+            header($location);
+            exit();
+        }
+        $act_folder = "$act_folder/$folder";
+    }
 
-   $info= $_GET['info'];
+    $info= $_GET['info'];
 
-   //Auslesen des Ordners und schreiben in array
-   if(!is_dir($act_folder))
-   {
-      $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=folder_not_exist";
-      header($location);
-      exit();
-   }
+    //Auslesen des Ordners und schreiben in array
+    if(!is_dir($act_folder))
+    {
+        $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=folder_not_exist";
+        header($location);
+        exit();
+    }
 
 // Ordnerinhalt sortieren
 $dh  = opendir($act_folder);
-while (false !== ($filename = readdir($dh))) {
-   $ordnerarray[] = $filename;
+while (false !== ($filename = readdir($dh))) 
+{
+    $ordnerarray[] = $filename;
 }
 $ordnerarray = array_slice ($ordnerarray,2);
-if ($sort == "desc") {
-	sort($ordnerarray);
+if ($sort == "desc") 
+{
+    sort($ordnerarray);
 } 
 else
 {
-	rsort($ordnerarray);
-};	
+    rsort($ordnerarray);
+};  
 
-   echo "
-   <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
-   <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
-   <html>
-   <head>
-      <title>$g_current_organization->longname - Downloadbereich</title>
-      <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
+echo "
+<!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
+<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
+<html>
+<head>
+    <title>$g_current_organization->longname - Downloadbereich</title>
+    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
 
-      <!--[if gte IE 5.5000]>
-      <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
-      <![endif]-->";
+    <!--[if gte IE 5.5000]>
+    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
+    <![endif]-->";
 
-      require("../../../adm_config/header.php");
-   echo "</head>";
+    require("../../../adm_config/header.php");
+echo "</head>";
 
-   require("../../../adm_config/body_top.php");
-   echo"<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-   <h1>Downloadbereich</h1>
-   <p>";
+require("../../../adm_config/body_top.php");
+    echo"<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
+    <h1>Downloadbereich</h1>
+    <p>";
 
-   //Button zurück zur Downloadübersicht & Eins zurück
-   if(strlen($folder) > 0)
-   {
-      $pfad = strrev(substr(strchr(strrev($folder),"/"),1));
+    //Button zurück zur Downloadübersicht & Eins zurück
+    if(strlen($folder) > 0)
+    {
+        $pfad = strrev(substr(strchr(strrev($folder),"/"),1));
+        echo "<a href=\"$g_root_path/adm_program/modules/download/download.php?folder=". urlencode($pfad). "&amp;default_folder=". urlencode($default_folder). "\">
+        <img src=\"$g_root_path/adm_program/images/folder.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Ordner schlie&szlig;en\"></a>
+        <a class=\"headLink\" href=\"$g_root_path/adm_program/modules/download/download.php?folder=". urlencode($pfad). "&amp;default_folder=". urlencode($default_folder). "\">Ordner schlie&szlig;en</a>";
+      /*
       echo "<button name=\"uebersicht\" type=\"button\" value=\"uebersicht\" style=\"width: 165px;\" onclick=\"self.location.href='$g_root_path/adm_program/modules/download/download.php?folder=". urlencode($pfad). "&amp;default_folder=". urlencode($default_folder). "'\">
                <img src=\"$g_root_path/adm_program/images/folder.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Download&uuml;bersicht\">
                &nbsp;Ordner schlie&szlig;en</button>
-      ";
-   };
+      ";*/
+    };
 
-   //Button Upload und Neuer Ordner
-   if ($g_session_valid && editDownload())
-   {
-      echo "<button name=\"down\" type=\"button\" value=\"down\" style=\"width: 150px;\" onclick=\"self.location.href='$g_root_path/adm_program/modules/download/folder_new.php?folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "'\">
-      <img src=\"$g_root_path/adm_program/images/folder_create.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Ordner erstellen\">
-      &nbsp;Ordner anlegen</button>
-      <button name=\"down\" type=\"button\" value=\"down\" style=\"width: 150px;\" onclick=\"self.location.href='$g_root_path/adm_program/modules/download/upload.php?folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "'\">
-      <img src=\"$g_root_path/adm_program/images/page_white_get.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hochladen\">
-      &nbsp;Datei hochladen</button>";
-   };
-   echo "</p>";
+    //Button Upload und Neuer Ordner
+    if ($g_session_valid && editDownload())
+    {
+        echo "&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href=\"$g_root_path/adm_program/modules/download/folder_new.php?folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\">
+        <img src=\"$g_root_path/adm_program/images/folder_create.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Ordner erstellen\"></a>
+        <a class=\"headLink\" href=\"$g_root_path/adm_program/modules/download/folder_new.php?folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\">Ordner anlegen</a>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <a href=\"$g_root_path/adm_program/modules/download/upload.php?folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\">
+        <img src=\"$g_root_path/adm_program/images/page_white_get.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Hochladen\"></a>
+        <a class=\"headLink\" href=\"$g_root_path/adm_program/modules/download/upload.php?folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\">Datei hochladen</a>";
+/*
+        echo "<button name=\"down\" type=\"button\" value=\"down\" style=\"width: 150px;\" onclick=\"self.location.href='$g_root_path/adm_program/modules/download/folder_new.php?folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "'\">
+        <img src=\"$g_root_path/adm_program/images/folder_create.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Ordner erstellen\">
+        &nbsp;Ordner anlegen</button>
+        <button name=\"down\" type=\"button\" value=\"down\" style=\"width: 150px;\" onclick=\"self.location.href='$g_root_path/adm_program/modules/download/upload.php?folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "'\">
+        <img src=\"$g_root_path/adm_program/images/page_white_get.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hochladen\">
+        &nbsp;Datei hochladen</button>";*/
+    };
+    echo "</p>";
 
-   // Ausgabe von Verwaltungsinfos
-   echo "$info";
+    // Ausgabe von Verwaltungsinfos
+    echo "$info";
 
-   //Anlegen der Tabelle
-   echo" <table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\">
+    //Anlegen der Tabelle
+    echo" <table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\">
             <tr>
                <th class=\"tableHeader\" width=\"25\" style=\"text-align: center;\"><img src=\"$g_root_path/adm_program/images/folder.png\" border=\"0\" alt=\"Ordner\"></th>
                <th class=\"tableHeader\" style=\"text-align: left;\">";
@@ -148,10 +163,10 @@ else
                   }
                   else
                   {
-                  	if(strlen($default_folder) == 0)
+                    if(strlen($default_folder) == 0)
                         echo "Download/".$folder;
                      else
-                        echo $default_folder."/".$folder;	
+                        echo $default_folder."/".$folder;   
                   }
                echo "</th>
                <th class=\"tableHeader\" style=\"text-align: center;\">Erstellungsdatum</th>
@@ -161,8 +176,8 @@ else
             echo "</tr>";
 
 
-   //falls der Ordner leer ist
-   if(Count($ordnerarray)==0){
+    //falls der Ordner leer ist
+    if(Count($ordnerarray)==0){
       echo"
             <tr>
                <td colspan=\"2\">Dieser Ordner ist leer</td>
@@ -170,12 +185,12 @@ else
                <td></td>";
                if ($g_session_valid && editDownload()) echo "<td></td>";
       echo "</tr>";
-   }
+    }
 
 
-   //durchlafen des Ordnerarrays und Ordnerlinkausgabe in Tabellenzeilen, ruft erneut die download.txt auf nur mit neuem Ordner
-   for($i=0; $i<count($ordnerarray); $i++)
-   {
+    //durchlafen des Ordnerarrays und Ordnerlinkausgabe in Tabellenzeilen, ruft erneut die download.txt auf nur mit neuem Ordner
+    for($i=0; $i<count($ordnerarray); $i++)
+    {
          if(filetype("$act_folder/$ordnerarray[$i]")=="dir")
          {
             if(strlen($folder) > 0)
@@ -203,9 +218,9 @@ else
             }
             echo "</tr>";
          };
-   };
-   //durchlaufen des Ordnerarrays und Dateilinkausgabe in Tabellenzeilen
-   for($i=0; $i<count($ordnerarray); $i++){
+    };
+    //durchlaufen des Ordnerarrays und Dateilinkausgabe in Tabellenzeilen
+    for($i=0; $i<count($ordnerarray); $i++){
            if(filetype("$act_folder/$ordnerarray[$i]")=="file"){
             //ermittlung der Dateigröße
             $dateigroesse = round(filesize("$act_folder/$ordnerarray[$i]")/1024);
@@ -263,11 +278,11 @@ else
             }
             echo "</tr>";
          };
-   };
-   //Ende der Tabelle
-   echo"</table>
-   </div>";
-   require("../../../adm_config/body_bottom.php");
-   echo "</body>
-   </html>";
+    };
+    //Ende der Tabelle
+    echo"</table>
+    </div>";
+    require("../../../adm_config/body_bottom.php");
+echo "</body>
+</html>";
 ?>
