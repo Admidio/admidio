@@ -106,7 +106,7 @@ function getErrorText($error_code, $error_text, $g_current_organization)
             break;
 
         case "invalid_variable":
-            $error_str = "Dem aufgerufenen Skript wurde die notwendige Variable ($error_text) nicht richtig �bergeben !";
+            $error_str = "Dem aufgerufenen Skript wurde die notwendige Variable ($error_text) nicht richtig &uuml;bergeben !";
             break;
 
         case "login_failed":
@@ -186,7 +186,7 @@ function getErrorText($error_code, $error_text, $g_current_organization)
             break;
 
         case "no_cookie":
-            $error_str = "Der Login kann nicht durchgef�hrt werden, da dein Browser
+            $error_str = "Der Login kann nicht durchgef&uuml;hrt werden, da dein Browser
             das Setzen von Cookies verbietet !<br><br>
             Damit du dich erfolgreich anmelden kannst, musst du in deinem Browser
             einstellen, dass dieser Cookies von $g_current_organization->homepage akzeptiert.";
@@ -231,7 +231,7 @@ function getErrorText($error_code, $error_text, $g_current_organization)
             break;
 
         case "send_new_login":
-            $error_str = "M&ouml;chtest du <b>$error_text</b> eine E-Mail mit seinem Benutzernamen
+            $error_str = "M&ouml;chtest du <b>$error_text</b> eine E-Mail mit dem Benutzernamen
             und einem neuen Passwort zumailen ?";
             break;
 
@@ -246,7 +246,7 @@ function getErrorText($error_code, $error_text, $g_current_organization)
             }
             $error_str = "Der Ordner <b>$error_text</b> konnte nicht angelegt werden. Du musst dich an
             den <a href=\"$mail_link\">Webmaster</a>
-            wenden, damit dieser <acronym title=\"�ber FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen.\">
+            wenden, damit dieser <acronym title=\"&uuml;ber FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen.\">
             Schreibrechte</acronym> f&uuml;r den Ordner setzen kann.";
             break;
 
