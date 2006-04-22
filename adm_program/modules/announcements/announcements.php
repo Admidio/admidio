@@ -70,7 +70,7 @@ echo "
 
     if($g_current_organization->enable_rss == 1)
     {
-        echo "<link type=\"application/rss+xml\" rel=\"alternate\" title=\"$g_current_organization->longname - Ankuendigungen\" 
+        echo "<link type=\"application/rss+xml\" rel=\"alternate\" title=\"$g_current_organization->longname - Ankuendigungen\"
         href=\"$g_root_path/adm_program/modules/announcements/rss_announcements.php\">";
     };
 
@@ -83,218 +83,176 @@ echo "
 echo "</head>";
 
 require("../../../adm_config/body_top.php");
-    echo "
-    <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-    <h1>". strspace($_GET["headline"]). "</h1>";
+    echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
+        <h1>". strspace($_GET["headline"]). "</h1>";
 
-    // alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
-    $arr_ref_orgas = $g_current_organization->getReferenceOrganizations();
-    $organizations = "";
-    $i             = 0;
+        // alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
+        $arr_ref_orgas = $g_current_organization->getReferenceOrganizations();
+        $organizations = "";
+        $i             = 0;
 
-    while($orga = current($arr_ref_orgas))
-    {
-        if($i > 0) 
+        while($orga = current($arr_ref_orgas))
         {
-            $organizations = $organizations. ", ";
+            if($i > 0)
+            {
+                $organizations = $organizations. ", ";
+            }
+            $organizations = $organizations. "'$orga'";
+            next($arr_ref_orgas);
+            $i++;
         }
-        $organizations = $organizations. "'$orga'";
-        next($arr_ref_orgas);
-        $i++;
-    }
 
-    // damit das SQL-Statement nachher nicht auf die Nase faellt, muss $organizations gefuellt sein   
-    if(strlen($organizations) == 0)
-    {
-        $organizations = "'$g_current_organization->shortname'";
-    }
+        // damit das SQL-Statement nachher nicht auf die Nase faellt, muss $organizations gefuellt sein
+        if(strlen($organizations) == 0)
+        {
+            $organizations = "'$g_current_organization->shortname'";
+        }
 
-    // falls eine id fuer eine bestimmte Ankuendigung uebergeben worden ist...
-    if($_GET['id'] > 0)
-    {
-        $sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
-                    WHERE ann_id = $_GET[id]";
-    }
-    //...ansonsten alle fuer die Gruppierung passenden Ankuendigungen aus der DB holen.
-    else
-    {
-        $sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
+        // falls eine id fuer eine bestimmte Ankuendigung uebergeben worden ist...
+        if($_GET['id'] > 0)
+        {
+            $sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
+                        WHERE ann_id = $_GET[id]";
+        }
+        //...ansonsten alle fuer die Gruppierung passenden Ankuendigungen aus der DB holen.
+        else
+        {
+            $sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
+                        WHERE (  ann_org_shortname = '$g_organization'
+                              OR (   ann_global   = 1
+                                 AND ann_org_shortname IN ($organizations) ))
+                        ORDER BY ann_timestamp DESC
+                        LIMIT ". $_GET["start"]. ", 10 ";
+        }
+
+        $announcements_result = mysql_query($sql, $g_adm_con);
+        db_error($announcements_result);
+
+        // Gucken wieviele Datensaetze die Abfrage ermittelt kann...
+        $sql    = "SELECT COUNT(*) FROM ". TBL_ANNOUNCEMENTS. "
                     WHERE (  ann_org_shortname = '$g_organization'
                           OR (   ann_global   = 1
                              AND ann_org_shortname IN ($organizations) ))
-                    ORDER BY ann_timestamp DESC
-                    LIMIT ". $_GET["start"]. ", 10 ";
-    }
+                    ORDER BY ann_timestamp ASC ";
+        $result = mysql_query($sql, $g_adm_con);
+        db_error($result);
+        $row = mysql_fetch_array($result);
+        $num_announcements = $row[0];
 
-    $announcements_result = mysql_query($sql, $g_adm_con);
-    db_error($announcements_result);
-
-    // Gucken wieviele Datensaetze die Abfrage ermittelt kann...
-    $sql    = "SELECT COUNT(*) FROM ". TBL_ANNOUNCEMENTS. "
-                WHERE (  ann_org_shortname = '$g_organization'
-                      OR (   ann_global   = 1
-                         AND ann_org_shortname IN ($organizations) ))
-                ORDER BY ann_timestamp ASC ";
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
-    $row = mysql_fetch_array($result);
-    $row_count = $row[0];
-
-    if ($row_count == 0)
-    {
-        if($_GET['id'] > 0)
+        if ($num_announcements == 0)
         {
-            echo "<p>Der angeforderte Eintrag exisitiert nicht (mehr) in der Datenbank.</p>";
+            if($_GET['id'] > 0)
+            {
+                echo "<p>Der angeforderte Eintrag exisitiert nicht (mehr) in der Datenbank.</p>";
+            }
+            else
+            {
+                echo "<p>Es sind keine Daten vorhanden.</p>";
+            }
         }
         else
         {
-            echo "<p>Es sind keine Daten vorhanden.</p>";
-        }
-    }
-    else
-    {
-        if($_GET['id'] == 0)
-        {
-            // Tabelle mit den vor- und zurueck und neu Buttons
-            echo "
-            <table style=\"margin-top: 10px; margin-bottom: 10px;\" border=\"0\">
-                <tr>
-                    <td width=\"33%\" align=\"left\">";
-                        if($_GET["start"] > 0)
-                        {
-                            $start = $_GET["start"] - 10;
-                            if($start < 0) $start = 0;
-                            echo "<button name=\"back\" type=\"button\" value=\"back\" style=\"width: 152px;\"
-                                        onclick=\"self.location.href='announcements.php?mode=". $_GET["mode"]. "&amp;start=$start&amp;headline=". $_GET["headline"]. "'\">
-                                        <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Vorherige\">
-                                        &nbsp;Vorherige</button>";
-                        }
-                    echo "</td>
-                    <td width=\"33%\" align=\"center\">";
-                        // nur Webmaster darf neue Ankuendigungen erfassen
+            if($_GET['id'] == 0)
+            {
+                // Neue Ankuendigung anlegen
+                if(isModerator())
+                {
+                    echo "<a class=\"headLink\" href=\"announcements_new.php?headline=". $_GET["headline"]. "\">
+                    <img class=\"headLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Neu anlegen\"></a>
+                    <a class=\"headLink\" href=\"announcements_new.php?headline=". $_GET["headline"]. "\">Neu anlegen</a>";
+                }
+                if(isModerator() && $g_current_organization->enable_rss == true)
+                {
+                    echo "&nbsp;&nbsp;&nbsp;&nbsp;";
+                }
+
+                // Feed abonnieren
+                if($g_current_organization->enable_rss == true)
+                {
+                    echo "<a class=\"headLink\" href=\"$g_root_path/adm_program/modules/announcements/rss_announcements.php\">
+                    <img class=\"headLink\" src=\"$g_root_path/adm_program/images/feed.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"". $_GET["headline"]. "-Feed abonnieren\"></a>
+                    <a class=\"headLink\" href=\"$g_root_path/adm_program/modules/announcements/rss_announcements.php\">". $_GET["headline"]. "-Feed abonnieren</a>";
+                }
+
+                // Navigation mit Vor- und Zurueck-Buttons
+                $base_url = "$g_root_path/adm_program/modules/announcements/announcements.php?headline=". $_GET["headline"];
+                echo generatePagination($base_url, $num_announcements, 10, $_GET["start"], TRUE);
+            }
+
+            // Ankuendigungen auflisten
+            $i = 0;
+
+            while($row = mysql_fetch_object($announcements_result))
+            {
+                $sql     = "SELECT * FROM ". TBL_USERS. " WHERE usr_id = $row->ann_usr_id";
+                $result2 = mysql_query($sql, $g_adm_con);
+                db_error($result2);
+
+                $user = mysql_fetch_object($result2);
+
+                echo "
+                <div class=\"boxBody\" style=\"overflow: hidden;\">
+                    <div class=\"boxHead\">
+                        <div style=\"text-align: left; float: left;\">
+                            <img src=\"$g_root_path/adm_program/images/note.png\" style=\"vertical-align: top;\" alt=\"". strSpecialChars2Html($row->ann_headline). "\">&nbsp;".
+                            strSpecialChars2Html($row->ann_headline). "
+                        </div>";
+
+                        // aendern & loeschen duerfen nur Moderatoren
                         if(isModerator())
                         {
-                            echo "<button name=\"new\" type=\"button\" value=\"new\" style=\"width: 152px;\"
-                                        onclick=\"self.location.href='announcements_new.php?headline=". $_GET["headline"]. "'\">
-                                        <img src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Neu anlegen\">
-                                        &nbsp;Neu anlegen</button>";
+                            echo "<div style=\"text-align: right;\">" .
+                                mysqldatetime("d.m.y", $row->ann_timestamp). "&nbsp;
+                                <img src=\"$g_root_path/adm_program/images/edit.png\" style=\"cursor: pointer;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"
+                                onclick=\"self.location.href='announcements_new.php?ann_id=$row->ann_id&amp;headline=". $_GET['headline']. "'\">";
+
+                                // Loeschen darf man nur Ankuendigungen der eigenen Gliedgemeinschaft
+                                if($row->ann_org_shortname == $g_organization)
+                                {
+                                    echo "
+                                    <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer;\" width=\"16\" height=\"16\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" ";
+                                    $load_url = urlencode("$g_root_path/adm_program/modules/announcements/announcements_function.php?ann_id=$row->ann_id&amp;mode=2&amp;url=$g_root_path/adm_program/modules/announcements/announcements.php");
+                                    echo " onclick=\"self.location.href='$g_root_path/adm_program/system/err_msg.php?err_code=delete_announcement&amp;err_text=". urlencode($row->ann_headline). "&amp;err_head=L&ouml;schen&amp;button=2&amp;url=$load_url'\">";
+                                }
+                            echo "&nbsp;</div>";
                         }
-                    echo "</td>
-                    <td width=\"33%\" align=\"right\">";
-                        if($row_count > $_GET["start"] + 10)
+                        else
                         {
-                            $start = $_GET["start"] + 10;
-                            echo "<button name=\"forward\" type=\"button\" value=\"forward\" style=\"width: 152px;\"
-                                        onclick=\"self.location.href='announcements.php?mode=". $_GET["mode"]. "&amp;start=$start&amp;headline=". $_GET["headline"]. "'\">N&auml;chsten&nbsp;
-                                        <img src=\"$g_root_path/adm_program/images/forward.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"N&auml;chsten\"></button>";
+                            echo "<div style=\"text-align: right;\">". mysqldatetime("d.m.y", $row->ann_timestamp). "&nbsp;</div>";
                         }
-                    echo "</td>
-                </tr>
-            </table>";
+                    echo "</div>
+
+                    <div style=\"margin: 8px 4px 4px 4px; text-align: left;\">";
+                        // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
+                        if($g_current_organization->bbcode == 1)
+                        {
+                            echo strSpecialChars2Html($bbcode->parse($row->ann_description));
+                        }
+                        else
+                        {
+                            echo nl2br(strSpecialChars2Html($row->ann_description));
+                        }
+                    echo "</div>
+                    <div style=\"margin: 8px 4px 4px 4px; font-size: 8pt; text-align: left;\">
+                        Angelegt von ". strSpecialChars2Html($user->usr_first_name). " ". strSpecialChars2Html($user->usr_last_name).
+                        " am ". mysqldatetime("d.m.y h:i", $row->ann_timestamp). "
+                    </div>
+                </div>
+
+                <br />";
+                $i++;
+            }  // Ende While-Schleife
         }
 
-      // Ankuendigungen auflisten
+        if($_GET['id'] == 0 && $i > 2)
+        {
+            // Navigation mit Vor- und Zurueck-Buttons
+            $base_url = "$g_root_path/adm_program/modules/announcements/announcements.php?headline=". $_GET["headline"];
+            echo generatePagination($base_url, $num_announcements, 10, $_GET["start"], TRUE);
+        }
+    echo "</div>";
 
-      while($row = mysql_fetch_object($announcements_result))
-      {
-         $sql     = "SELECT * FROM ". TBL_USERS. " WHERE usr_id = $row->ann_usr_id";
-         $result2 = mysql_query($sql, $g_adm_con);
-         db_error($result2);
-
-         $user = mysql_fetch_object($result2);
-
-         echo "
-         <div class=\"boxBody\" style=\"overflow: hidden;\">
-            <div class=\"boxHead\">
-               <div style=\"text-align: left; float: left;\">
-                  <img src=\"$g_root_path/adm_program/images/note.png\" style=\"vertical-align: top;\" alt=\"". strSpecialChars2Html($row->ann_headline). "\">&nbsp;".
-                  strSpecialChars2Html($row->ann_headline). "
-               </div>";
-
-               // aendern & loeschen duerfen nur Moderatoren
-               if(isModerator())
-               {
-                  echo "<div style=\"text-align: right;\">" .
-                     mysqldatetime("d.m.y", $row->ann_timestamp). "&nbsp;
-                     <img src=\"$g_root_path/adm_program/images/edit.png\" style=\"cursor: pointer;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"
-                     onclick=\"self.location.href='announcements_new.php?ann_id=$row->ann_id&amp;headline=". $_GET['headline']. "'\">";
-
-                  // Loeschen darf man nur Ankuendigungen der eigenen Gliedgemeinschaft
-                  if($row->ann_org_shortname == $g_organization)
-                  {
-                     echo "
-                     <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer;\" width=\"16\" height=\"16\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" ";
-                     $load_url = urlencode("$g_root_path/adm_program/modules/announcements/announcements_function.php?ann_id=$row->ann_id&amp;mode=2&amp;url=$g_root_path/adm_program/modules/announcements/announcements.php");
-                     echo " onclick=\"self.location.href='$g_root_path/adm_program/system/err_msg.php?err_code=delete_announcement&amp;err_text=". urlencode($row->ann_headline). "&amp;err_head=L&ouml;schen&amp;button=2&amp;url=$load_url'\">";
-                  }
-                  echo "&nbsp;</div>";
-               }
-               else
-               {
-                  echo "<div style=\"text-align: right;\">". mysqldatetime("d.m.y", $row->ann_timestamp). "&nbsp;</div>";
-               }
-            echo "</div>
-
-            <div style=\"margin: 8px 4px 4px 4px; text-align: left;\">";
-               // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
-               if($g_current_organization->bbcode == 1)
-                  echo strSpecialChars2Html($bbcode->parse($row->ann_description));
-               else
-                  echo nl2br(strSpecialChars2Html($row->ann_description));
-            echo "</div>
-            <div style=\"margin: 8px 4px 4px 4px; font-size: 8pt; text-align: left;\">
-                  Angelegt von ". strSpecialChars2Html($user->usr_first_name). " ". strSpecialChars2Html($user->usr_last_name).
-                  " am ". mysqldatetime("d.m.y h:i", $row->ann_timestamp). "
-            </div>
-         </div>
-
-         <br />";
-      }  // Ende While-Schleife
-   }
-
-    if($_GET['id'] == 0)
-    {
-      // Tabelle mit den vor- und zurück und neu Buttons
-      echo "
-      <table style=\"margin-top: 10px; margin-bottom: 10px;\" width=\"500\" border=\"0\">
-         <tr>
-            <td width=\"33%\" align=\"left\">";
-               if($_GET["start"] > 0)
-               {
-                  $start = $_GET["start"] - 10;
-                  if($start < 0) $start = 0;
-                  echo "<button name=\"back\" type=\"button\" value=\"back\" style=\"width: 152px;\"
-                           onclick=\"self.location.href='announcements.php?mode=". $_GET["mode"]. "&amp;start=$start&amp;headline=". $_GET["headline"]. "'\">
-                           <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Vorherige\">
-                           &nbsp;Vorherige</button>";
-               }
-            echo "</td>
-            <td width=\"33%\" align=\"center\">";
-               // nur Nutzer mit Moderatorenrechten duerfen neue Ankuendigungen erfassen
-               if(isModerator())
-               {
-                  echo "<button name=\"new\" type=\"button\" value=\"new\" style=\"width: 152px;\"
-                           onclick=\"self.location.href='announcements_new.php?headline=". $_GET["headline"]. "'\">
-                           <img src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Neu anlegen\">
-                           &nbsp;Neu anlegen</button>";
-               }
-            echo "</td>
-            <td width=\"33%\" align=\"right\">";
-               if($row_count > $_GET["start"] + 10)
-               {
-                  $start = $_GET["start"] + 10;
-                  echo "<button name=\"forward\" type=\"button\" value=\"forward\" style=\"width: 152px;\"
-                           onclick=\"self.location.href='announcements.php?mode=". $_GET["mode"]. "&amp;start=$start&amp;headline=". $_GET["headline"]. "'\">N&auml;chsten&nbsp;
-                           <img src=\"$g_root_path/adm_program/images/forward.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"N&auml;chsten\"></button>";
-               }
-            echo "</td>
-         </tr>
-      </table>";
-   }
-
-   echo "</div>";
-
-   require("../../../adm_config/body_bottom.php");
+    require("../../../adm_config/body_bottom.php");
 echo "</body>
 </html>";
 ?>
