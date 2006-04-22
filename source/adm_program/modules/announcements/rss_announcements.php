@@ -53,7 +53,7 @@ if ($g_current_organization->bbcode == 1)
 // alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
 $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. "
         WHERE org_id = '$g_current_organization->org_id_parent'
-        OR org_org_id_parent s= '$g_current_organization->id' ";
+        OR org_org_id_parent = '$g_current_organization->id' ";
 $result = mysql_query($sql, $g_adm_con);
 db_error($result);
 
