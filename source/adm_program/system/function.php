@@ -52,26 +52,26 @@ function getVersion()
     return "1.3 Beta";
 }
 
-// die Übergebenen Variablen für den SQL-Code werden geprueft
+// die ï¿½bergebenen Variablen fï¿½r den SQL-Code werden geprueft
 // dadurch soll es nicht mehr moeglich sein, Code in ein Statement einzuschleusen
 //
 // Anwendungsbeispiel:
 // $sqlQuery = 'SELECT col1, col2 FROM tab1 WHERE col1 = {1} AND col3 = {2} LIMIT {3}';
 // $stm = mysql_query(prepareSQL($sqlQuery, array('username', 24.3, 20);
 
-function prepareSQL($queryString, $paramArr) 
+function prepareSQL($queryString, $paramArr)
 {
-    foreach (array_keys($paramArr) as $paramName) 
+    foreach (array_keys($paramArr) as $paramName)
     {
-        if (is_int($paramArr[$paramName])) 
+        if (is_int($paramArr[$paramName]))
         {
             $paramArr[$paramName] = (int)$paramArr[$paramName];
         }
-        elseif (is_numeric($paramArr[$paramName])) 
+        elseif (is_numeric($paramArr[$paramName]))
         {
             $paramArr[$paramName] = (float)$paramArr[$paramName];
         }
-        elseif (($paramArr[$paramName] != 'NULL') and ($paramArr[$paramName] != 'NOT NULL')) 
+        elseif (($paramArr[$paramName] != 'NULL') and ($paramArr[$paramName] != 'NOT NULL'))
         {
             $paramArr[$paramName] = mysql_escape_string(stripslashes($paramArr[$paramName]));
             $paramArr[$paramName] = '\''.$paramArr[$paramName].'\'';
@@ -217,7 +217,7 @@ function isMember($user_id, $organization = "")
 }
 
 // Funktion prueft, ob der angemeldete User Leiter einer Gruppe /Kurs ist
-// Optionaler Parameter role_id prueft ob der angemeldete User Leiter der übergebenen Gruppe / Kurs ist
+// Optionaler Parameter role_id prueft ob der angemeldete User Leiter der ï¿½bergebenen Gruppe / Kurs ist
 
 function isGroupLeader($role_id = 0)
 {
@@ -308,7 +308,7 @@ function editPhoto($organization = "")
    global $g_current_user;
    global $g_adm_con;
    global $g_organization;
-   
+
    if(strlen($organization) == 0)
     $organization = $g_organization;
 
@@ -356,6 +356,112 @@ function editDownload()
       return true;
    else
       return false;
+}
+
+// diese Funktion gibt eine Seitennavigation in Anhaengigkeit der Anzahl Seiten zurueck
+// Beispiel:
+//              Seite: < Vorherige 1 , 2 , 3 ... 9 , 10 , 11 Naechste >
+// Uebergaben:
+// base_url   : Basislink zum Modul (auch schon mit notwendigen Uebergabevariablen)
+// num_items  : Gesamtanzahl an Elementen
+// per_page   : Anzahl Elemente pro Seite
+// start_item : Mit dieser Elementnummer beginnt die aktuelle Seite
+// add_prevnext_text : Links mit "Vorherige" "Naechste" anzeigen
+
+function generatePagination($base_url, $num_items, $per_page, $start_item, $add_prevnext_text = true)
+{
+	global $g_root_path;
+    $total_pages = ceil($num_items/$per_page);
+
+    if ( $total_pages == 1 )
+    {
+        return '';
+    }
+
+    $on_page = floor($start_item / $per_page) + 1;
+
+    $page_string = '';
+    if ( $total_pages > 5 )
+    {
+        $init_page_max = ( $total_pages > 3 ) ? 3 : $total_pages;
+
+        for($i = 1; $i < $init_page_max + 1; $i++)
+        {
+            $page_string .= ( $i == $on_page ) ? '<b>' . $i . '</b>' : '<a class="headLink" href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
+            if ( $i <  $init_page_max )
+            {
+                $page_string .= " , ";
+            }
+        }
+
+        if ( $total_pages > 3 )
+        {
+            if ( $on_page > 1  && $on_page < $total_pages )
+            {
+                $page_string .= ( $on_page > 5 ) ? ' ... ' : ' , ';
+
+                $init_page_min = ( $on_page > 4 ) ? $on_page : 5;
+                $init_page_max = ( $on_page < $total_pages - 4 ) ? $on_page : $total_pages - 4;
+
+                for($i = $init_page_min - 1; $i < $init_page_max + 2; $i++)
+                {
+                    $page_string .= ($i == $on_page) ? '<b>' . $i . '</b>' : '<a class="headLink" href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
+                    if ( $i <  $init_page_max + 1 )
+                    {
+                        $page_string .= ' , ';
+                    }
+                }
+
+                $page_string .= ( $on_page < $total_pages - 4 ) ? ' ... ' : ' , ';
+            }
+            else
+            {
+                $page_string .= ' ... ';
+            }
+
+            for($i = $total_pages - 2; $i < $total_pages + 1; $i++)
+            {
+                $page_string .= ( $i == $on_page ) ? '<b>' . $i . '</b>'  : '<a class="headLink" href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
+                if( $i <  $total_pages )
+                {
+                    $page_string .= " , ";
+                }
+            }
+        }
+    }
+    else
+    {
+        for($i = 1; $i < $total_pages + 1; $i++)
+        {
+            $page_string .= ( $i == $on_page ) ? '<b>' . $i . '</b>' : '<a class="headLink" href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
+            if ( $i <  $total_pages )
+            {
+                $page_string .= ' , ';
+            }
+        }
+    }
+
+    if ( $add_prevnext_text )
+    {
+        if ( $on_page > 1 )
+        {
+            $page_string = '<a class="headLink" href="' . $base_url . "&amp;start=" . ( ( $on_page - 2 ) * $per_page ) . '">
+							<img class="headLink" src="'. $g_root_path. '/adm_program/images/back.png" style="vertical-align: middle;" border="0" alt="Vorherige"></a>
+							<a class="headLink" href="' . $base_url . "&amp;start=" . ( ( $on_page - 2 ) * $per_page ) . '">Vorherige</a>&nbsp;&nbsp;' . $page_string;
+        }
+
+        if ( $on_page < $total_pages )
+        {
+            $page_string .= '&nbsp;&nbsp;<a class="headLink" href="' . $base_url . "&amp;start=" . ( $on_page * $per_page ) . '">N&auml;chste</a>
+            	            <a class="headLink" href="' . $base_url . "&amp;start=" . ( $on_page * $per_page ) . '">
+							<img class="headLink" src="'. $g_root_path. '/adm_program/images/forward.png" style="vertical-align: middle;" border="0" alt="N&auml;chste"></a>';
+        }
+
+    }
+
+    $page_string = '<p class="headLink">Seite:&nbsp;&nbsp;' . $page_string. '</p>';
+
+    return $page_string;
 }
 
 ?>
