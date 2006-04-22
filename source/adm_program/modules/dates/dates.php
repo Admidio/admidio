@@ -198,8 +198,8 @@ require("../../../adm_config/body_top.php");
                 // Neue Ankuendigung anlegen
                 if(isModerator())
                 {
-                    echo "<a class=\"headLink\" href=\"dates_new.php\">
-                    <img class=\"headLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Termin anlegen\"></a>
+                    echo "<a class=\"headLink\" href=\"dates_new.php\"><img
+					class=\"headLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Termin anlegen\"></a>
                     <a class=\"headLink\" href=\"dates_new.php\">Termin anlegen</a>";
                 }
                 if(isModerator() && $g_current_organization->enable_rss == true)
@@ -210,8 +210,8 @@ require("../../../adm_config/body_top.php");
                 // Feed abonnieren
                 if($g_current_organization->enable_rss == true)
                 {
-                    echo "<a class=\"headLink\" href=\"$g_root_path/adm_program/modules/dates/rss_dates.php\">
-                    <img class=\"headLink\" src=\"$g_root_path/adm_program/images/feed.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Termine-Feed abonnieren\"></a>
+                    echo "<a class=\"headLink\" href=\"$g_root_path/adm_program/modules/dates/rss_dates.php\"><img
+					class=\"headLink\" src=\"$g_root_path/adm_program/images/feed.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Termine-Feed abonnieren\"></a>
                     <a class=\"headLink\" href=\"$g_root_path/adm_program/modules/dates/rss_dates.php\">Termine-Feed abonnieren</a>";
                 }
 

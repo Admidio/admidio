@@ -77,19 +77,19 @@
 
 // Ordnerinhalt sortieren
 $dh  = opendir($act_folder);
-while (false !== ($filename = readdir($dh))) 
+while (false !== ($filename = readdir($dh)))
 {
     $ordnerarray[] = $filename;
 }
 $ordnerarray = array_slice ($ordnerarray,2);
-if ($sort == "desc") 
+if ($sort == "desc")
 {
     sort($ordnerarray);
-} 
+}
 else
 {
     rsort($ordnerarray);
-};  
+};
 
 echo "
 <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
@@ -115,8 +115,8 @@ require("../../../adm_config/body_top.php");
     if(strlen($folder) > 0)
     {
         $pfad = strrev(substr(strchr(strrev($folder),"/"),1));
-        echo "<a href=\"$g_root_path/adm_program/modules/download/download.php?folder=". urlencode($pfad). "&amp;default_folder=". urlencode($default_folder). "\">
-        <img src=\"$g_root_path/adm_program/images/folder.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Ordner schlie&szlig;en\"></a>
+        echo "<a class=\"headLink\" href=\"$g_root_path/adm_program/modules/download/download.php?folder=". urlencode($pfad). "&amp;default_folder=". urlencode($default_folder). "\"><img
+		class=\"headLink\" src=\"$g_root_path/adm_program/images/folder.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Ordner schlie&szlig;en\"></a>
         <a class=\"headLink\" href=\"$g_root_path/adm_program/modules/download/download.php?folder=". urlencode($pfad). "&amp;default_folder=". urlencode($default_folder). "\">Ordner schlie&szlig;en</a>";
     };
 
@@ -124,12 +124,12 @@ require("../../../adm_config/body_top.php");
     if ($g_session_valid && editDownload())
     {
         echo "&nbsp;&nbsp;&nbsp;&nbsp;
-        <a href=\"$g_root_path/adm_program/modules/download/folder_new.php?folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\">
-        <img src=\"$g_root_path/adm_program/images/folder_create.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Ordner erstellen\"></a>
+        <a class=\"headLink\" href=\"$g_root_path/adm_program/modules/download/folder_new.php?folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\"><img
+		class=\"headLink\" src=\"$g_root_path/adm_program/images/folder_create.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Ordner erstellen\"></a>
         <a class=\"headLink\" href=\"$g_root_path/adm_program/modules/download/folder_new.php?folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\">Ordner anlegen</a>
         &nbsp;&nbsp;&nbsp;&nbsp;
-        <a href=\"$g_root_path/adm_program/modules/download/upload.php?folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\">
-        <img src=\"$g_root_path/adm_program/images/page_white_get.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Hochladen\"></a>
+        <a class=\"headLink\" href=\"$g_root_path/adm_program/modules/download/upload.php?folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\"><img
+		class=\"headLink\" src=\"$g_root_path/adm_program/images/page_white_get.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Hochladen\"></a>
         <a class=\"headLink\" href=\"$g_root_path/adm_program/modules/download/upload.php?folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\">Datei hochladen</a>";
     };
     echo "</p>";
@@ -154,7 +154,7 @@ require("../../../adm_config/body_top.php");
                     if(strlen($default_folder) == 0)
                         echo "Download/".$folder;
                      else
-                        echo $default_folder."/".$folder;   
+                        echo $default_folder."/".$folder;
                   }
                echo "</th>
                <th class=\"tableHeader\" style=\"text-align: center;\">Erstellungsdatum</th>

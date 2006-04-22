@@ -29,7 +29,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
- 
+
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
@@ -106,17 +106,17 @@ require("../../../adm_config/body_top.php");
     // Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
     if($members == 1)
     {
-        echo "<a href=\"$g_root_path/adm_program/administration/members/members.php?members=0&letter=". str_replace("%", "", $letter). "\"><img 
-            src=\"$g_root_path/adm_program/images/group.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Benutzer anzeigen\"></a>
+        echo "<a class=\"headLink\" href=\"$g_root_path/adm_program/administration/members/members.php?members=0&letter=". str_replace("%", "", $letter). "\"><img
+            class=\"headLink\" src=\"$g_root_path/adm_program/images/group.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Benutzer anzeigen\"></a>
         <a class=\"headLink\" href=\"$g_root_path/adm_program/administration/members/members.php?members=0&letter=". str_replace("%", "", $letter). "\">Alle Benutzer anzeigen</a>";
     }
     else
     {
-        echo "<a href=\"$g_root_path/adm_program/administration/members/members.php?members=1&letter=". str_replace("%", "", $letter). "\"><img 
-            src=\"$g_root_path/adm_program/images/user.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Benutzer anzeigen\"></a>
+        echo "<a class=\"headLink\" href=\"$g_root_path/adm_program/administration/members/members.php?members=1&letter=". str_replace("%", "", $letter). "\"><img
+             class=\"headLink\" src=\"$g_root_path/adm_program/images/user.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Benutzer anzeigen\"></a>
         <a class=\"headLink\" href=\"$g_root_path/adm_program/administration/members/members.php?members=1&letter=". str_replace("%", "", $letter). "\">Nur Mitglieder anzeigen</a>";
     }
-    echo "</p>";    
+    echo "</p>";
 
     if($members == 1)
     {
@@ -126,22 +126,22 @@ require("../../../adm_config/body_top.php");
     {
         echo "<p>Alle Benutzer (Mitglieder, Ehemalige) ";
     }
-    
+
     if($letter != "%")
     {
         echo " mit Nachnamen ". str_replace("%", "*", $letter);
     }
     echo " werden angezeigt</p>";
-           
-   echo "<p>"; 
-   
+
+   echo "<p>";
+
    // Leiste mit allen Buchstaben des Alphabets anzeigen
-   
+
    if($letter == "%")
       echo "<b>Alle</b>&nbsp;&nbsp;&nbsp;";
    else
       echo "<a href=\"members.php?letter=%\">Alle</a>&nbsp;&nbsp;&nbsp;";
-      
+
    $letter_menu = "A";
    for($i = 0; $i < 26;$i++)
    {
@@ -151,22 +151,22 @@ require("../../../adm_config/body_top.php");
          $sql    = "SELECT COUNT(usr_id) FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                      WHERE rol_org_shortname = '$g_organization'
                        AND rol_valid  = 1
-                       AND mem_rol_id = rol_id 
+                       AND mem_rol_id = rol_id
                        AND mem_usr_id = usr_id
                        AND mem_valid  = 1
-                       AND usr_last_name LIKE '$letter_menu%' 
+                       AND usr_last_name LIKE '$letter_menu%'
                        AND usr_valid  = 1 ";
       }
       else
       {
          $sql    = "SELECT COUNT(usr_id) FROM ". TBL_USERS. "
-                     WHERE usr_last_name LIKE '$letter_menu%' 
+                     WHERE usr_last_name LIKE '$letter_menu%'
                        AND usr_valid  = 1 ";
       }
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
       $row = mysql_fetch_array($result);
-      
+
       if($letter_menu == substr($letter, 0, 1))
          echo "<b>$letter_menu</b>";
       elseif($row[0] > 0)
@@ -194,7 +194,7 @@ require("../../../adm_config/body_top.php");
             <th class=\"tableHeader\" align=\"center\">&nbsp;Aktualisiert am</th>
             <th class=\"tableHeader\" align=\"center\">Bearbeiten</th>
          </tr>";
-      $i = 0;   
+      $i = 0;
 
       while($row = mysql_fetch_object($result_mgl))
       {
