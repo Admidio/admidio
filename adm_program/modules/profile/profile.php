@@ -118,13 +118,13 @@ require("../../../adm_config/body_top.php");
                 echo strspace("Profil von ". $user->first_name. " ". $user->last_name, 1);
             }
         echo "</div>
-        
+
         <div class=\"formBody\">";
-        
+
             // *******************************************************************************
             // Userdaten-Block
             // *******************************************************************************
-            
+
             echo "<div style=\"width: 66%; margin-right: 10px; float: left;\">
                 <div class=\"groupBox\" style=\"margin-top: 4px; text-align: left;\">
                     <div class=\"groupBoxHeadline\">$user->first_name $user->last_name&nbsp;&nbsp;";
@@ -301,46 +301,46 @@ require("../../../adm_config/body_top.php");
             </div>";
 
             echo "<div style=\"width: 32%; float: left\">";
-            
+
             // *******************************************************************************
             // Bild-Block
             // *******************************************************************************
 
             echo "<div style=\"margin-top: 4px; text-align: center;\">
                 <img src=\"$g_root_path/adm_program/images/excel.png\" width=\"125px\" height=\"150px;\">
-                
+
                 <div style=\"margin-top: 12px;\">
-                    <a href=\"$g_root_path/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id=$user->id\"><img 
-                    src=\"$g_root_path/adm_program/images/vcard.png\" style=\"vertical-align: middle;\" border=\"0\" title=\"Benutzer als vCard exportieren\" alt=\"Benutzer als vCard exportieren\"></a>
+                    <a class=\"headLink\" href=\"$g_root_path/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id=$user->id\"><img
+                     class=\"headLink\" src=\"$g_root_path/adm_program/images/vcard.png\" style=\"vertical-align: middle;\" border=\"0\" title=\"Benutzer als vCard exportieren\" alt=\"Benutzer als vCard exportieren\"></a>
                     <a class=\"headLink\" href=\"$g_root_path/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id=$user->id\">vCard exportieren</a>
                 </div>";
-                
+
                 // Moderatoren & Gruppenleiter duerfen neue Rollen zuordnen
                 if(isModerator() || isGroupLeader() || editUser())
                 {
                     echo "<div style=\"margin-top: 10px;\">
-                        <a href=\"roles.php?user_id=$a_user_id&amp;url=". urlencode("$g_root_path/adm_program/modules/profile/profile.php?user_id=$a_user_id&url=$url"). "\"><img 
-                        src=\"$g_root_path/adm_program/images/wand.png\" style=\"vertical-align: middle;\" border=\"0\" title=\"Rollen &auml;ndern\" alt=\"Rollen &auml;ndern\"></a>
+                        <a class=\"headLink\" href=\"roles.php?user_id=$a_user_id&amp;url=". urlencode("$g_root_path/adm_program/modules/profile/profile.php?user_id=$a_user_id&url=$url"). "\"><img
+                         class=\"headLink\" src=\"$g_root_path/adm_program/images/wand.png\" style=\"vertical-align: middle;\" border=\"0\" title=\"Rollen &auml;ndern\" alt=\"Rollen &auml;ndern\"></a>
                         <a class=\"headLink\" href=\"roles.php?user_id=$a_user_id&amp;url=". urlencode("$g_root_path/adm_program/modules/profile/profile.php?user_id=$a_user_id&url=$url"). "\">Rollen &auml;ndern</a>
                     </div>";
                 }
-                
+
                 if($edit_user)
                 {
                     echo "<div style=\"margin-top: 10px;\">
-                        <a href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=$a_user_id&amp;url=$url\"><img 
-                        src=\"$g_root_path/adm_program/images/edit.png\" style=\"vertical-align: middle;\" border=\"0\" title=\"Profildaten &auml;ndern\" alt=\"Profildaten &auml;ndern\"></a>
+                        <a class=\"headLink\" href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=$a_user_id&amp;url=$url\"><img
+                         class=\"headLink\" src=\"$g_root_path/adm_program/images/edit.png\" style=\"vertical-align: middle;\" border=\"0\" title=\"Profildaten &auml;ndern\" alt=\"Profildaten &auml;ndern\"></a>
                         <a class=\"headLink\" href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=$a_user_id&amp;url=$url\">Profildaten &auml;ndern</a>
                     </div>";
                 }
             echo "</div>
-            
+
         </div>
-            
+
         <div style=\"clear: left;\"><br /></div>
-            
+
         <div style=\"width: 66%; margin-right: 10px; float: left;\">";
-            
+
             // *******************************************************************************
             // zusaetzliche Daten-Block
             // *******************************************************************************
@@ -379,7 +379,7 @@ require("../../../adm_config/body_top.php");
                 <div class=\"groupBoxHeadline\">Zus&auml;tzliche Daten:</div>
                     <table style=\"border-width: 0px; width: 100%;\" cellpadding=\"0\" cellspacing=\"0\">";
 
-                    if($count_msg > 0)          
+                    if($count_msg > 0)
                     {
                         // Messengerdaten anzeigen
                         mysql_data_seek($result_msg, 0);
@@ -442,12 +442,12 @@ require("../../../adm_config/body_top.php");
                             $i++;
                         }
                     }
-                    
+
                     if($count_field > 0)
                     {
                         // gruppierungsspezifische Felder anzeigen
-                        $i = 1;                        
-                        
+                        $i = 1;
+
                         while($row_field = mysql_fetch_object($result_field))
                         {
                             echo "<tr><td style=\"text-align: left; vertical-align: top; width: 30%;\">
@@ -474,12 +474,12 @@ require("../../../adm_config/body_top.php");
                             echo "</td></tr>";
                             $i++;
                         }
-                        
+
                     }
                 echo "</table>";
                 echo "</div>";
             }
-            
+
         echo "</div>
 
         <div style=\"width: 32%; float: left;\">";
@@ -487,7 +487,7 @@ require("../../../adm_config/body_top.php");
             // *******************************************************************************
             // Rollen-Block
             // *******************************************************************************
-            
+
             // Alle Rollen auflisten, die dem Mitglied zugeordnet sind
             if(isModerator())
             {
@@ -518,7 +518,7 @@ require("../../../adm_config/body_top.php");
             $result_role = mysql_query($sql, $g_adm_con);
             db_error($result_role, true);
             $count_role = mysql_num_rows($result_role);
-            
+
             $sql = "SELECT org_shortname FROM ". TBL_ORGANIZATIONS. "";
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
@@ -532,7 +532,7 @@ require("../../../adm_config/body_top.php");
                 while($row = mysql_fetch_object($result_role))
                 {
                     // jede einzelne Rolle anzeigen
-                    if($i > 0) 
+                    if($i > 0)
                     {
                         echo "<br />";
                     }
@@ -542,15 +542,15 @@ require("../../../adm_config/body_top.php");
                         echo "$row->rol_org_shortname - ";
                     }
                     echo $row->rol_name;
-                    if($row->mem_leader == 1) 
+                    if($row->mem_leader == 1)
                     {
                         echo " - Leiter";
                     }
                     $i++;
-                }            
+                }
             echo "</div>
         </div>
-            
+
         <div style=\"clear: left;\"><br /></div>
 
         <div>

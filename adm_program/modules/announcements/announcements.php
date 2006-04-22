@@ -157,8 +157,8 @@ require("../../../adm_config/body_top.php");
                 // Neue Ankuendigung anlegen
                 if(isModerator())
                 {
-                    echo "<a class=\"headLink\" href=\"announcements_new.php?headline=". $_GET["headline"]. "\">
-                    <img class=\"headLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Neu anlegen\"></a>
+                    echo "<a class=\"headLink\" href=\"announcements_new.php?headline=". $_GET["headline"]. "\"><img
+					class=\"headLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Neu anlegen\"></a>
                     <a class=\"headLink\" href=\"announcements_new.php?headline=". $_GET["headline"]. "\">Neu anlegen</a>";
                 }
                 if(isModerator() && $g_current_organization->enable_rss == true)
@@ -169,8 +169,8 @@ require("../../../adm_config/body_top.php");
                 // Feed abonnieren
                 if($g_current_organization->enable_rss == true)
                 {
-                    echo "<a class=\"headLink\" href=\"$g_root_path/adm_program/modules/announcements/rss_announcements.php\">
-                    <img class=\"headLink\" src=\"$g_root_path/adm_program/images/feed.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"". $_GET["headline"]. "-Feed abonnieren\"></a>
+                    echo "<a class=\"headLink\" href=\"$g_root_path/adm_program/modules/announcements/rss_announcements.php\"><img
+					class=\"headLink\" src=\"$g_root_path/adm_program/images/feed.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"". $_GET["headline"]. "-Feed abonnieren\"></a>
                     <a class=\"headLink\" href=\"$g_root_path/adm_program/modules/announcements/rss_announcements.php\">". $_GET["headline"]. "-Feed abonnieren</a>";
                 }
 
