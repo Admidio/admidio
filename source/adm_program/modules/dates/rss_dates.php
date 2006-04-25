@@ -50,22 +50,18 @@ if ($g_current_organization->bbcode == 1)
 }
 
 // alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
-$sql = "SELECT * FROM ". TBL_ORGANIZATIONS. "
-        WHERE org_id = '$g_current_organization->org_id_parent'
-        OR org_org_id_parent = '$g_current_organization->id' ";
-$result = mysql_query($sql, $g_adm_con);
-db_error($result);
-
+$arr_ref_orgas = $g_current_organization->getReferenceOrganizations();
 $organizations = "";
 $i             = 0;
 
-while ($row = mysql_fetch_object($result))
+while ($orga = current($arr_ref_orgas))
 {
     if ($i > 0)
     {
         $organizations = $organizations. ", ";
     }
-    $organizations = $organizations. "'$row->org_shortname'";
+    $organizations = $organizations. "'$orga'";
+    next($arr_ref_orgas);
     $i++;
 }
 
