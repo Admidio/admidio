@@ -67,7 +67,7 @@ $_POST['name']     = trim($_POST['name']);
 $_POST['subject']  = trim($_POST['subject']);
 
 //Erst mal ein neues Emailobjekt erstellen...
-$email = new newEmail();
+$email = new Email();
 
 
 //Nun der Mail die Absenderangaben,den Betreff und das Attachment hinzufuegen...

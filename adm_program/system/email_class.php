@@ -10,7 +10,7 @@
  * und anschliessend verschickt werden.
  *
  * Das Objekt wird erzeugt durch Aufruf des Konstruktors:
- * function newEmail()
+ * function Email()
  *
  * Nun wird der Absender gesetzt:
  * function setSender($address, $name='')
@@ -72,11 +72,11 @@
  *****************************************************************************/
 
 // Email - Klasse
-class newEmail
+class Email
 {
 
 //Konstruktor der Klasse.
-function newEmail()
+function Email()
 {
     //Wichtig ist das die MimeVersion das erste Element im Header ist...
     $this->headerOptions['MIME-Version'] = '1.0';
