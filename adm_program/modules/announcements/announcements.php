@@ -128,6 +128,14 @@ require("../../../adm_config/body_top.php");
         $announcements_result = mysql_query($sql, $g_adm_con);
         db_error($announcements_result);
 
+        // Neue Ankuendigung anlegen
+        if(isModerator())
+        {
+            echo "<a class=\"headLink\" href=\"announcements_new.php?headline=". $_GET["headline"]. "\"><img
+                    class=\"headLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Neu anlegen\"></a>
+            <a class=\"headLink\" href=\"announcements_new.php?headline=". $_GET["headline"]. "\">Neu anlegen</a>";
+        }
+        
         // Gucken wieviele Datensaetze die Abfrage ermittelt kann...
         $sql    = "SELECT COUNT(*) FROM ". TBL_ANNOUNCEMENTS. "
                     WHERE (  ann_org_shortname = '$g_organization'
@@ -138,7 +146,7 @@ require("../../../adm_config/body_top.php");
         db_error($result);
         $row = mysql_fetch_array($result);
         $num_announcements = $row[0];
-
+        
         if ($num_announcements == 0)
         {
             if($_GET['id'] > 0)
@@ -147,20 +155,13 @@ require("../../../adm_config/body_top.php");
             }
             else
             {
-                echo "<p>Es sind keine Daten vorhanden.</p>";
+                echo "<p>Es sind keine ". $_GET["headline"]. " vorhanden.</p>";
             }
         }
         else
         {
             if($_GET['id'] == 0)
             {
-                // Neue Ankuendigung anlegen
-                if(isModerator())
-                {
-                    echo "<a class=\"headLink\" href=\"announcements_new.php?headline=". $_GET["headline"]. "\"><img
-					class=\"headLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Neu anlegen\"></a>
-                    <a class=\"headLink\" href=\"announcements_new.php?headline=". $_GET["headline"]. "\">Neu anlegen</a>";
-                }
                 if(isModerator() && $g_current_organization->enable_rss == true)
                 {
                     echo "&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -170,7 +171,7 @@ require("../../../adm_config/body_top.php");
                 if($g_current_organization->enable_rss == true)
                 {
                     echo "<a class=\"headLink\" href=\"$g_root_path/adm_program/modules/announcements/rss_announcements.php\"><img
-					class=\"headLink\" src=\"$g_root_path/adm_program/images/feed.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"". $_GET["headline"]. "-Feed abonnieren\"></a>
+                    class=\"headLink\" src=\"$g_root_path/adm_program/images/feed.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"". $_GET["headline"]. "-Feed abonnieren\"></a>
                     <a class=\"headLink\" href=\"$g_root_path/adm_program/modules/announcements/rss_announcements.php\">". $_GET["headline"]. "-Feed abonnieren</a>";
                 }
 
@@ -181,6 +182,7 @@ require("../../../adm_config/body_top.php");
 
             // Ankuendigungen auflisten
             $i = 0;
+            echo "<br><br>";
 
             while($row = mysql_fetch_object($announcements_result))
             {
