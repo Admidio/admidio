@@ -153,6 +153,14 @@ require("../../../adm_config/body_top.php");
         $sql    = prepareSQL($sql, array($_GET['start']));
         $date_result = mysql_query($sql, $g_adm_con);
         db_error($date_result);
+        
+        // Neue Ankuendigung anlegen
+        if(isModerator())
+        {
+            echo "<a class=\"headLink\" href=\"dates_new.php\"><img
+            class=\"headLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Termin anlegen\"></a>
+            <a class=\"headLink\" href=\"dates_new.php\">Termin anlegen</a>";
+        }
 
         // Gucken wieviele Datensaetze die Abfrage ermittelt kann...
         if(strcmp($_GET['mode'], "old") == 0)
@@ -188,20 +196,13 @@ require("../../../adm_config/body_top.php");
             }
             else
             {
-                echo "<p>Es sind keine Daten vorhanden.</p>";
+                echo "<p>Es sind keine Termine vorhanden.</p>";
             }
         }
         else
         {
             if($_GET['id'] == 0)
             {
-                // Neue Ankuendigung anlegen
-                if(isModerator())
-                {
-                    echo "<a class=\"headLink\" href=\"dates_new.php\"><img
-					class=\"headLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Termin anlegen\"></a>
-                    <a class=\"headLink\" href=\"dates_new.php\">Termin anlegen</a>";
-                }
                 if(isModerator() && $g_current_organization->enable_rss == true)
                 {
                     echo "&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -211,7 +212,7 @@ require("../../../adm_config/body_top.php");
                 if($g_current_organization->enable_rss == true)
                 {
                     echo "<a class=\"headLink\" href=\"$g_root_path/adm_program/modules/dates/rss_dates.php\"><img
-					class=\"headLink\" src=\"$g_root_path/adm_program/images/feed.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Termine-Feed abonnieren\"></a>
+                    class=\"headLink\" src=\"$g_root_path/adm_program/images/feed.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Termine-Feed abonnieren\"></a>
                     <a class=\"headLink\" href=\"$g_root_path/adm_program/modules/dates/rss_dates.php\">Termine-Feed abonnieren</a>";
                 }
 
@@ -222,6 +223,7 @@ require("../../../adm_config/body_top.php");
 
             // Termine auflisten
             $i = 0;
+            echo "<br><br>";
 
             while($row = mysql_fetch_object($date_result))
             {
