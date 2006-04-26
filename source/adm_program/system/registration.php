@@ -43,7 +43,7 @@ echo "</head>";
 
 require("../../adm_config/body_top.php");
     echo "
-    <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
+    <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\"><br>
         <form action=\"registration_save.php\" method=\"post\" name=\"Anmeldung\">
             <div class=\"formHead\" style=\"width: 360px\">". strspace("Registrieren"). "</div>
             <div class=\"formBody\" style=\"width: 360px\">
