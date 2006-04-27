@@ -381,7 +381,7 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
     $on_page = floor($start_item / $per_page) + 1;
 
     $page_string = '';
-    if ( $total_pages > 5 )
+    if ( $total_pages > 7 )
     {
         $init_page_max = ( $total_pages > 3 ) ? 3 : $total_pages;
 
