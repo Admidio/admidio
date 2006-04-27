@@ -115,22 +115,22 @@ require("../../../adm_config/body_top.php");
     if(strlen($folder) > 0)
     {
         $pfad = strrev(substr(strchr(strrev($folder),"/"),1));
-        echo "<a class=\"headLink\" href=\"$g_root_path/adm_program/modules/download/download.php?folder=". urlencode($pfad). "&amp;default_folder=". urlencode($default_folder). "\"><img
-		class=\"headLink\" src=\"$g_root_path/adm_program/images/folder.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Ordner schlie&szlig;en\"></a>
-        <a class=\"headLink\" href=\"$g_root_path/adm_program/modules/download/download.php?folder=". urlencode($pfad). "&amp;default_folder=". urlencode($default_folder). "\">Ordner schlie&szlig;en</a>";
+        echo "<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/download.php?folder=". urlencode($pfad). "&amp;default_folder=". urlencode($default_folder). "\"><img
+        class=\"iconLink\" src=\"$g_root_path/adm_program/images/folder.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Ordner schlie&szlig;en\"></a>
+        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/download.php?folder=". urlencode($pfad). "&amp;default_folder=". urlencode($default_folder). "\">Ordner schlie&szlig;en</a>";
     };
 
     //Button Upload und Neuer Ordner
     if ($g_session_valid && editDownload())
     {
         echo "&nbsp;&nbsp;&nbsp;&nbsp;
-        <a class=\"headLink\" href=\"$g_root_path/adm_program/modules/download/folder_new.php?folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\"><img
-		class=\"headLink\" src=\"$g_root_path/adm_program/images/folder_create.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Ordner erstellen\"></a>
-        <a class=\"headLink\" href=\"$g_root_path/adm_program/modules/download/folder_new.php?folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\">Ordner anlegen</a>
+        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/folder_new.php?folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\"><img
+        class=\"iconLink\" src=\"$g_root_path/adm_program/images/folder_create.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Ordner erstellen\"></a>
+        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/folder_new.php?folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\">Ordner anlegen</a>
         &nbsp;&nbsp;&nbsp;&nbsp;
-        <a class=\"headLink\" href=\"$g_root_path/adm_program/modules/download/upload.php?folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\"><img
-		class=\"headLink\" src=\"$g_root_path/adm_program/images/page_white_get.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Hochladen\"></a>
-        <a class=\"headLink\" href=\"$g_root_path/adm_program/modules/download/upload.php?folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\">Datei hochladen</a>";
+        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/upload.php?folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\"><img
+        class=\"iconLink\" src=\"$g_root_path/adm_program/images/page_white_get.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Hochladen\"></a>
+        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/upload.php?folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\">Datei hochladen</a>";
     };
     echo "</p>";
 

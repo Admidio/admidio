@@ -52,7 +52,7 @@ function getVersion()
     return "1.3 Beta";
 }
 
-// die �bergebenen Variablen f�r den SQL-Code werden geprueft
+// die uebergebenen Variablen fuer den SQL-Code werden geprueft
 // dadurch soll es nicht mehr moeglich sein, Code in ein Statement einzuschleusen
 //
 // Anwendungsbeispiel:
@@ -217,7 +217,7 @@ function isMember($user_id, $organization = "")
 }
 
 // Funktion prueft, ob der angemeldete User Leiter einer Gruppe /Kurs ist
-// Optionaler Parameter role_id prueft ob der angemeldete User Leiter der �bergebenen Gruppe / Kurs ist
+// Optionaler Parameter role_id prueft ob der angemeldete User Leiter der uebergebenen Gruppe / Kurs ist
 
 function isGroupLeader($role_id = 0)
 {
@@ -370,10 +370,10 @@ function editDownload()
 
 function generatePagination($base_url, $num_items, $per_page, $start_item, $add_prevnext_text = true)
 {
-	global $g_root_path;
+    global $g_root_path;
     $total_pages = ceil($num_items/$per_page);
 
-    if ( $total_pages == 1 )
+    if ( $total_pages <= 1 )
     {
         return '';
     }
@@ -387,7 +387,7 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
 
         for($i = 1; $i < $init_page_max + 1; $i++)
         {
-            $page_string .= ( $i == $on_page ) ? '<b>' . $i . '</b>' : '<a class="headLink" href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
+            $page_string .= ( $i == $on_page ) ? '<b>' . $i . '</b>' : '<a class="iconLink" href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
             if ( $i <  $init_page_max )
             {
                 $page_string .= " , ";
@@ -405,7 +405,7 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
 
                 for($i = $init_page_min - 1; $i < $init_page_max + 2; $i++)
                 {
-                    $page_string .= ($i == $on_page) ? '<b>' . $i . '</b>' : '<a class="headLink" href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
+                    $page_string .= ($i == $on_page) ? '<b>' . $i . '</b>' : '<a class="iconLink" href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
                     if ( $i <  $init_page_max + 1 )
                     {
                         $page_string .= ' , ';
@@ -421,7 +421,7 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
 
             for($i = $total_pages - 2; $i < $total_pages + 1; $i++)
             {
-                $page_string .= ( $i == $on_page ) ? '<b>' . $i . '</b>'  : '<a class="headLink" href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
+                $page_string .= ( $i == $on_page ) ? '<b>' . $i . '</b>'  : '<a class="iconLink" href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
                 if( $i <  $total_pages )
                 {
                     $page_string .= " , ";
@@ -433,7 +433,7 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
     {
         for($i = 1; $i < $total_pages + 1; $i++)
         {
-            $page_string .= ( $i == $on_page ) ? '<b>' . $i . '</b>' : '<a class="headLink" href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
+            $page_string .= ( $i == $on_page ) ? '<b>' . $i . '</b>' : '<a class="iconLink" href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
             if ( $i <  $total_pages )
             {
                 $page_string .= ' , ';
@@ -445,21 +445,21 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
     {
         if ( $on_page > 1 )
         {
-            $page_string = '<a class="headLink" href="' . $base_url . "&amp;start=" . ( ( $on_page - 2 ) * $per_page ) . '">
-							<img class="headLink" src="'. $g_root_path. '/adm_program/images/back.png" style="vertical-align: middle;" border="0" alt="Vorherige"></a>
-							<a class="headLink" href="' . $base_url . "&amp;start=" . ( ( $on_page - 2 ) * $per_page ) . '">Vorherige</a>&nbsp;&nbsp;' . $page_string;
+            $page_string = '<a class="iconLink" href="' . $base_url . "&amp;start=" . ( ( $on_page - 2 ) * $per_page ) . '">
+                            <img class="iconLink" src="'. $g_root_path. '/adm_program/images/back.png" style="vertical-align: middle;" border="0" alt="Vorherige"></a>
+                            <a class="iconLink" href="' . $base_url . "&amp;start=" . ( ( $on_page - 2 ) * $per_page ) . '">Vorherige</a>&nbsp;&nbsp;' . $page_string;
         }
 
         if ( $on_page < $total_pages )
         {
-            $page_string .= '&nbsp;&nbsp;<a class="headLink" href="' . $base_url . "&amp;start=" . ( $on_page * $per_page ) . '">N&auml;chste</a>
-            	            <a class="headLink" href="' . $base_url . "&amp;start=" . ( $on_page * $per_page ) . '">
-							<img class="headLink" src="'. $g_root_path. '/adm_program/images/forward.png" style="vertical-align: middle;" border="0" alt="N&auml;chste"></a>';
+            $page_string .= '&nbsp;&nbsp;<a class="iconLink" href="' . $base_url . "&amp;start=" . ( $on_page * $per_page ) . '">N&auml;chste</a>
+                            <a class="iconLink" href="' . $base_url . "&amp;start=" . ( $on_page * $per_page ) . '">
+                            <img class="iconLink" src="'. $g_root_path. '/adm_program/images/forward.png" style="vertical-align: middle;" border="0" alt="N&auml;chste"></a>';
         }
 
     }
 
-    $page_string = '<p class="headLink">Seite:&nbsp;&nbsp;' . $page_string. '</p>';
+    $page_string = '<p class="iconLink">Seite:&nbsp;&nbsp;' . $page_string. '</p>';
 
     return $page_string;
 }
