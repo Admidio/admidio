@@ -136,7 +136,8 @@ alter table %PRAEFIX%_folders add index FOL_FOL_PARENT_FK (fol_fol_id_parent);
 create table %PRAEFIX%_folder_roles
 (
    flr_fol_id                     int(11) unsigned               not null,
-   flr_rol_id                     int(11) unsigned               not null
+   flr_rol_id                     int(11) unsigned               not null,
+   primary key (flr_fol_id, flr_rol_id)
 )
 type = InnoDB;
 
