@@ -127,14 +127,6 @@ require("../../../adm_config/body_top.php");
 
         $announcements_result = mysql_query($sql, $g_adm_con);
         db_error($announcements_result);
-
-        // Neue Ankuendigung anlegen
-        if(isModerator())
-        {
-            echo "<a class=\"headLink\" href=\"announcements_new.php?headline=". $_GET["headline"]. "\"><img
-                    class=\"headLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Neu anlegen\"></a>
-            <a class=\"headLink\" href=\"announcements_new.php?headline=". $_GET["headline"]. "\">Neu anlegen</a>";
-        }
         
         // Gucken wieviele Datensaetze die Abfrage ermittelt kann...
         $sql    = "SELECT COUNT(*) FROM ". TBL_ANNOUNCEMENTS. "
@@ -146,43 +138,58 @@ require("../../../adm_config/body_top.php");
         db_error($result);
         $row = mysql_fetch_array($result);
         $num_announcements = $row[0];
+
+        // Icon-Links und Navigation anzeigen
+
+        if($_GET['id'] == 0 
+        && (isModerator() || $g_current_organization->enable_rss == true))
+        {
+            echo "<p>";
+            
+            // Neue Ankuendigung anlegen
+            if(isModerator())
+            {
+                echo "<a class=\"iconLink\" href=\"announcements_new.php?headline=". $_GET["headline"]. "\"><img
+                class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Neu anlegen\"></a>
+                <a class=\"iconLink\" href=\"announcements_new.php?headline=". $_GET["headline"]. "\">Neu anlegen</a>";
+            }
+            
+            if(isModerator() && $g_current_organization->enable_rss == true && $num_announcements > 0)
+            {
+                echo "&nbsp;&nbsp;&nbsp;&nbsp;";
+            }
+
+            // Feed abonnieren
+            if($g_current_organization->enable_rss == true && $num_announcements > 0)
+            {
+                echo "<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/announcements/rss_announcements.php\"><img
+                class=\"iconLink\" src=\"$g_root_path/adm_program/images/feed.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"". $_GET["headline"]. "-Feed abonnieren\"></a>
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/announcements/rss_announcements.php\">". $_GET["headline"]. "-Feed abonnieren</a>";
+            }
+
+            echo "</p>";
+            
+            // Navigation mit Vor- und Zurueck-Buttons
+            $base_url = "$g_root_path/adm_program/modules/announcements/announcements.php?headline=". $_GET["headline"];
+            echo generatePagination($base_url, $num_announcements, 10, $_GET["start"], TRUE);
+        }
         
         if ($num_announcements == 0)
         {
+            // Keine Ankuendigungen gefunden
             if($_GET['id'] > 0)
             {
                 echo "<p>Der angeforderte Eintrag exisitiert nicht (mehr) in der Datenbank.</p>";
             }
             else
             {
-                echo "<p>Es sind keine ". $_GET["headline"]. " vorhanden.</p>";
+                echo "<p>Es sind keine Eintr&auml;ge vorhanden.</p>";
             }
         }
         else
         {
-            if($_GET['id'] == 0)
-            {
-                if(isModerator() && $g_current_organization->enable_rss == true)
-                {
-                    echo "&nbsp;&nbsp;&nbsp;&nbsp;";
-                }
-
-                // Feed abonnieren
-                if($g_current_organization->enable_rss == true)
-                {
-                    echo "<a class=\"headLink\" href=\"$g_root_path/adm_program/modules/announcements/rss_announcements.php\"><img
-                    class=\"headLink\" src=\"$g_root_path/adm_program/images/feed.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"". $_GET["headline"]. "-Feed abonnieren\"></a>
-                    <a class=\"headLink\" href=\"$g_root_path/adm_program/modules/announcements/rss_announcements.php\">". $_GET["headline"]. "-Feed abonnieren</a>";
-                }
-
-                // Navigation mit Vor- und Zurueck-Buttons
-                $base_url = "$g_root_path/adm_program/modules/announcements/announcements.php?headline=". $_GET["headline"];
-                echo generatePagination($base_url, $num_announcements, 10, $_GET["start"], TRUE);
-            }
-
             // Ankuendigungen auflisten
             $i = 0;
-            echo "<br><br>";
 
             while($row = mysql_fetch_object($announcements_result))
             {
