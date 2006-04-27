@@ -39,17 +39,23 @@ function strspace($srcString, $count = 1)
         if($html_special == true)
         {
             if(substr($srcString, $i, 1) == ";")
-            $html_special = false;
+            {
+                $html_special = false;
+            }
         }
 
         if($html_special == false)
         {
             if(substr($srcString, $i, 1) == "&")
-            $html_special = true;
+            {
+                $html_special = true;
+            }
             else
             {
                 for($j = 0; $j < $count; $j++)
-                $dest_string = $dest_string. "&nbsp;";
+                {
+                    $dest_string = $dest_string. "&nbsp;";
+                }
             }
         }
     }
@@ -65,12 +71,12 @@ function strspace($srcString, $count = 1)
 
 function strSpecialChars2Html($srcString)
 {
-   $srcString = htmlentities($srcString, ENT_NOQUOTES);
-   $srcString = str_replace("&lt;", "<", $srcString);
-   $srcString = str_replace("&gt;", ">", $srcString);
-   $srcString = str_replace("&amp;", "&", $srcString);
+    $srcString = htmlentities($srcString, ENT_NOQUOTES);
+    $srcString = str_replace("&lt;", "<", $srcString);
+    $srcString = str_replace("&gt;", ">", $srcString);
+    $srcString = str_replace("&amp;", "&", $srcString);
 
-   return $srcString;
+    return $srcString;
 }
 
 // entfernt Html-, PHP-Codes und Spaces am Anfang und Ende des Strings
@@ -80,9 +86,9 @@ function strStripTags($srcString)
     // Spaces vorne und hinten entfernen
     $srcString = trim($srcString);
     // HTML und PHP Tags entfernen
-   $srcString = strip_tags($srcString);
+    $srcString = strip_tags($srcString);
 
-   return $srcString;
+    return $srcString;
 }
 
 
@@ -92,24 +98,28 @@ function strStripTags($srcString)
 
 function numWithoutZero($number)
 {
-   $pos = strpos($number, ".");
+    $pos = strpos($number, ".");
 
-   if($pos === false)
-      return $number;
-   else
-   {
-      $divideNum = explode(".", $number);
+    if($pos === false)
+    {
+        return $number;
+    }
+    else
+    {
+        $divideNum = explode(".", $number);
 
-      if(substr($divideNum[1], 1, 1) == 0)
-      {
-         if(substr($divideNum[1], 0, 1) == 0)
-            return $divideNum[0];
+        if(substr($divideNum[1], 1, 1) == 0)
+        {
+            if(substr($divideNum[1], 0, 1) == 0)
+            {
+                return $divideNum[0];
+            }
 
-         return $divideNum[0]. ".". substr($divideNum[1], 0, 1);
-      }
+            return $divideNum[0]. ".". substr($divideNum[1], 0, 1);
+        }
 
-      return $number;
-   }
+        return $number;
+    }
 }
 
 // ermittelt den vorherigen oder nächsten Buchstaben im Alphabet
@@ -120,52 +130,62 @@ function numWithoutZero($number)
 
 function strNextLetter($letter, $mode = 0)
 {
-   $ascii  = ord($letter);
-   $aSmall = ord("a");
-   $zSmall = ord("z");
-   $aBig   = ord("A");
-   $zBig   = ord("Z");
+    $ascii  = ord($letter);
+    $aSmall = ord("a");
+    $zSmall = ord("z");
+    $aBig   = ord("A");
+    $zBig   = ord("Z");
 
-   if ($ascii == $aSmall || $ascii == $zSmall || $ascii == $aBig || $ascii == $zBig)
-   {
-      if (($ascii == $aSmall || $ascii == $aBig) && $mode == 0)
-         $ascii++;
+    if ($ascii == $aSmall || $ascii == $zSmall || $ascii == $aBig || $ascii == $zBig)
+    {
+        if (($ascii == $aSmall || $ascii == $aBig) && $mode == 0)
+        {
+            $ascii++;
+        }
 
-      if (($ascii == $zSmall || $ascii == $zBig) && $mode == 1)
-         $ascii--;
-   }
-   else
-   {
-      if ($mode == 1)
-         $ascii--;
-      else
-         $ascii++;
-   }
+        if (($ascii == $zSmall || $ascii == $zBig) && $mode == 1)
+        {
+            $ascii--;
+        }
+    }
+    else
+    {
+        if ($mode == 1)
+        {
+            $ascii--;
+        }
+        else
+        {
+            $ascii++;
+        }
+    }
 
-   return chr($ascii);
+    return chr($ascii);
 }
 
 // Tests if an email address is valid
 function isValidEmailAddress($emailAddress)
 {
-   // If the email address was not empty
-   if(strlen(trim($emailAddress)) > 0)
-   {
-      // nur gueltige Zeichen zulassen
-      $anz = strspn($emailAddress, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@.-_+");
+    // If the email address was not empty
+    if(strlen(trim($emailAddress)) > 0)
+    {
+        // nur gueltige Zeichen zulassen
+        $anz = strspn($emailAddress, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@.-_+");
 
-      if($anz == strlen($emailAddress))
-      {
-         // Aufbau der E-Mail-Adresse pruefen
-         return preg_match("/^[^@]+@[^@]+\.[^@]{2,}$/", trim($emailAddress));
-      }
-      else
-         return false;
-   }
-   else
-   {
-      return false;
-   }
+        if($anz == strlen($emailAddress))
+        {
+            // Aufbau der E-Mail-Adresse pruefen
+            return preg_match("/^[^@]+@[^@]+\.[^@]{2,}$/", trim($emailAddress));
+        }
+        else
+        {
+            return false;
+        }
+    }
+    else
+    {
+        return false;
+    }
 }
 
 // prueft, ob der Dateiname gueltig ist
@@ -177,46 +197,52 @@ function isValidEmailAddress($emailAddress)
 
 function isValidFileName($file_name, $check_ext = false)
 {
-   // If the email address was not empty
-   if(strlen(trim($file_name)) > 0)
-   {
-      // nur gueltige Zeichen zulassen
-      $anz = strspn($file_name, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_+ ");
+    // If the email address was not empty
+    if(strlen(trim($file_name)) > 0)
+    {
+        // nur gueltige Zeichen zulassen
+        $anz = strspn($file_name, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_+ ");
 
-      if($anz == strlen($file_name))
-      {
-         if($check_ext)
-         {
-            // auf gueltige Endungen pruefen
-            $arr_invalid_ext = array("php", "php3", "php4", "php5", "html", "htm", "htaccess", "htpasswd", "pl");
-            $file_ext  = substr($file_name, strrpos($file_name, ".")+1);
+        if($anz == strlen($file_name))
+        {
+            if($check_ext)
+            {
+                // auf gueltige Endungen pruefen
+                $arr_invalid_ext = array("php", "php3", "php4", "php5", "html", "htm", "htaccess", "htpasswd", "pl");
+                $file_ext  = substr($file_name, strrpos($file_name, ".")+1);
 
-            if(in_array($file_ext, $arr_invalid_ext))
-               return -3;
-            else
-               return 0;
-         }
-         return 0;
-      }
-      else
-         return -2;
-   }
-   else
-   {
-      return -1;
-   }
+                if(in_array($file_ext, $arr_invalid_ext))
+                {
+                    return -3;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            return 0;
+        }
+        else
+        {
+            return -2;
+        }
+    }
+    else
+    {
+        return -1;
+    }
 }
 
 // wie die PHP-Funktion str_split, aber schon für PHP4
 
 function strsplit($string)
 {
-   for($i = 0; $i < strlen($string); $i++)
-   {
-      $new_arr[$i] = substr($string, $i, 1);
-   }
+    for($i = 0; $i < strlen($string); $i++)
+    {
+        $new_arr[$i] = substr($string, $i, 1);
+    }
 
-   return $new_arr;
+    return $new_arr;
 }
 
 ?>
