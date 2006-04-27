@@ -153,14 +153,6 @@ require("../../../adm_config/body_top.php");
         $sql    = prepareSQL($sql, array($_GET['start']));
         $date_result = mysql_query($sql, $g_adm_con);
         db_error($date_result);
-        
-        // Neue Ankuendigung anlegen
-        if(isModerator())
-        {
-            echo "<a class=\"headLink\" href=\"dates_new.php\"><img
-            class=\"headLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Termin anlegen\"></a>
-            <a class=\"headLink\" href=\"dates_new.php\">Termin anlegen</a>";
-        }
 
         // Gucken wieviele Datensaetze die Abfrage ermittelt kann...
         if(strcmp($_GET['mode'], "old") == 0)
@@ -188,42 +180,57 @@ require("../../../adm_config/body_top.php");
         $row = mysql_fetch_array($result);
         $num_dates = $row[0];
 
+        // Icon-Links und Navigation anzeigen
+
+        if($_GET['id'] == 0
+        && (isModerator() || $g_current_organization->enable_rss == true))
+        {
+            echo "<p>";
+            
+            // Neue Ankuendigung anlegen
+            if(isModerator())
+            {
+                echo "<a class=\"iconLink\" href=\"dates_new.php\"><img
+                class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Termin anlegen\"></a>
+                <a class=\"iconLink\" href=\"dates_new.php\">Termin anlegen</a>";
+            }
+            
+            if(isModerator() && $g_current_organization->enable_rss == true && $num_dates > 0)
+            {
+                echo "&nbsp;&nbsp;&nbsp;&nbsp;";
+            }
+
+            // Feed abonnieren
+            if($g_current_organization->enable_rss == true && $num_dates > 0)
+            {
+                echo "<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/dates/rss_dates.php\"><img
+                class=\"iconLink\" src=\"$g_root_path/adm_program/images/feed.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Termine-Feed abonnieren\"></a>
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/dates/rss_dates.php\">Termine-Feed abonnieren</a>";
+            }
+
+            echo "</p>";
+            
+            // Navigation mit Vor- und Zurueck-Buttons
+            $base_url = "$g_root_path/adm_program/modules/dates/dates.php?mode=". $_GET["mode"];
+            echo generatePagination($base_url, $num_dates, 10, $_GET["start"], TRUE);
+        }
+
         if($num_dates == 0)
         {
+            // Keine Termine gefunden
             if($_GET['id'] > 0)
             {
                 echo "<p>Der angeforderte Eintrag exisitiert nicht (mehr) in der Datenbank.</p>";
             }
             else
             {
-                echo "<p>Es sind keine Termine vorhanden.</p>";
+                echo "<p>Es sind keine Eintr&auml;ge vorhanden.</p>";
             }
         }
         else
         {
-            if($_GET['id'] == 0)
-            {
-                if(isModerator() && $g_current_organization->enable_rss == true)
-                {
-                    echo "&nbsp;&nbsp;&nbsp;&nbsp;";
-                }
-
-                // Feed abonnieren
-                if($g_current_organization->enable_rss == true)
-                {
-                    echo "<a class=\"headLink\" href=\"$g_root_path/adm_program/modules/dates/rss_dates.php\"><img
-                    class=\"headLink\" src=\"$g_root_path/adm_program/images/feed.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Termine-Feed abonnieren\"></a>
-                    <a class=\"headLink\" href=\"$g_root_path/adm_program/modules/dates/rss_dates.php\">Termine-Feed abonnieren</a>";
-                }
-
-                // Navigation mit Vor- und Zurueck-Buttons
-                $base_url = "$g_root_path/adm_program/modules/dates/dates.php?mode=". $_GET["mode"];
-                echo generatePagination($base_url, $num_dates, 10, $_GET["start"], TRUE);
-            }
-
             // Termine auflisten
             $i = 0;
-            echo "<br><br>";
 
             while($row = mysql_fetch_object($date_result))
             {
