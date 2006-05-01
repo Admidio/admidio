@@ -76,7 +76,26 @@ $sql =" SELECT *
         WHERE usr_valid = 1 ";
 $result_user = mysql_query($sql, $g_adm_con);
 db_error($result_user);
-    
+
+
+//Kontrolle ob nicht am ende die Mitgliederzahl ueberstigen wird
+$counter=0;
+while($user= mysql_fetch_array($result_user))
+{    
+    if ($_POST["member_".$user["usr_id"]]==true)
+    {
+        $counter++;
+    }
+}
+if($counter>$role["rol_max_members"])
+{
+   $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=max_members";
+   header($location);
+   exit();
+}    
+//Dateizeiger zurueck zum Anfang
+mysql_data_seek($result_user,0);
+
 //Datensaetze durchgehen und sehen ob faer den Benutzer eine aenderung vorliegt
 while($user= mysql_fetch_array($result_user))
 {
