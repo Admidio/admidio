@@ -238,7 +238,11 @@ echo "
                         $vorseite=$thumb_seite-1;
                         if($vorseite>=1)
                         {
-                            echo"<a href=\"photos.php?thumb_seite=$vorseite&amp;pho_id=$pho_id\">Zur&uuml;ck</a>&nbsp;&nbsp;";
+                            echo"
+                            <a href=\"photos.php?thumb_seite=$vorseite&amp;pho_id=$pho_id\">
+                                <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Vorherige\">
+                            </a>
+                            <a href=\"photos.php?thumb_seite=$vorseite&amp;pho_id=$pho_id\">Vorherige</a>&nbsp;&nbsp;";
                         }
                         
                         //Seitenzahlen
@@ -256,7 +260,11 @@ echo "
                         //naechste thumb_seite
                         $nachseite=$thumb_seite+1;
                         if($nachseite<=$thumb_seiten){
-                            echo"   <a href=\"photos.php?thumb_seite=$nachseite&amp;pho_id=$pho_id\">Vorw&auml;rts</a>";
+                            echo"
+                            <a href=\"photos.php?thumb_seite=$nachseite&amp;pho_id=$pho_id\">N&auml;chste</a>
+                            <a href=\"photos.php?thumb_seite=$nachseite&amp;pho_id=$pho_id\">
+                                <img src=\"$g_root_path/adm_program/images/forward.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"N&auml;chste\">
+                            </a>";
                         }
                     echo"
                     </td>
@@ -384,7 +392,11 @@ echo "
                 $vorseite=$event_seite-1;
                 if($vorseite>=1)
                 {
-                    echo"   <a href=\"photos.php?event_seite=$vorseite&amp;pho_id=$pho_id\">Zur&uuml;ck</a>&nbsp;&nbsp;";
+                    echo"
+                    <a href=\"photos.php?event_seite=$vorseite&amp;pho_id=$pho_id\">
+                        <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Vorherige\">
+                    </a>
+                    <a href=\"photos.php?event_seite=$vorseite&amp;pho_id=$pho_id\">Vorherige</a>&nbsp;&nbsp;";
                 }
                 
                 //Seitenzahlen
@@ -403,7 +415,12 @@ echo "
                 $nachseite=$event_seite+1;
                 if($nachseite<=$event_seiten)
                 {
-                     echo"&nbsp;<a href=\"photos.php?event_seite=$nachseite&amp;pho_id=$pho_id\">Vorw&auml;rts</a>";
+                    echo"&nbsp;
+                    <a href=\"photos.php?event_seite=$nachseite&amp;pho_id=$pho_id\">N&auml;chste</a>
+                    <a href=\"photos.php?event_seite=$nachseite&amp;pho_id=$pho_id\">
+                        <img src=\"$g_root_path/adm_program/images/forward.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"N&auml;chste\">
+                    </a>
+                    ";
                 }   
                 echo"<br><br>";
             }
