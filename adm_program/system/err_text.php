@@ -234,6 +234,10 @@ function getErrorText($error_code, $error_text, $g_current_organization)
             $error_str = "M&ouml;chtest du <b>$error_text</b> eine E-Mail mit dem Benutzernamen
             und einem neuen Passwort zumailen ?";
             break;
+            
+        case "max_members":
+            $error_str = "Speichern nicht m&ouml;glich, die maximale Mitgliederzahl wurde &uuml;berschritten.";
+            break;
 
         case "write_access":
             if ($g_current_organization->mail_extern == 1)
