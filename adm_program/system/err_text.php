@@ -208,7 +208,7 @@ function getErrorText($error_code, $error_text, $g_current_organization)
             break;
 
         case "roleexist":
-            $error_str = " Es existiert bereits eine Rolle in Gruppierung mit dieser Funktion.";
+            $error_str = " Es existiert bereits eine Rolle in der Organisation mit dieser Funktion.";
             break;
 
         case "save":

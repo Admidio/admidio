@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Gruppierung bearbeiten
+ * Organisationseinstellungen
  *
  * Copyright    : (c) 2004 - 2006 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -31,7 +31,7 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
-// nur Webmaster duerfen Gruppierungen bearbeiten
+// nur Webmaster duerfen Organisationen bearbeiten
 if(!hasRole("Webmaster"))
 {
    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
@@ -64,9 +64,9 @@ require("../../../adm_config/body_top.php");
    echo "
    <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
 
-   <form action=\"organization_function.php?org_id=$g_current_organization->id&amp;url=$url\" method=\"post\" name=\"Gruppierung bearbeiten\">
+   <form action=\"organization_function.php?org_id=$g_current_organization->id&amp;url=$url\" method=\"post\" name=\"Organisationseinstellungen\">
 
-      <div class=\"formHead\">$g_current_organization->longname bearbeiten</div>
+      <div class=\"formHead\">Organisationseinstellungen</div>
       <div class=\"formBody\">
            <div>
             <div style=\"text-align: right; width: 48%; float: left;\">Name (Abk.):</div>
@@ -104,10 +104,10 @@ require("../../../adm_config/body_top.php");
 
              if(mysql_num_rows($result) > 0)
              {
-                // Auswahlfeld fuer die uebergeordnete Gruppierung
+                // Auswahlfeld fuer die uebergeordnete Organisation
                 echo "
                 <div style=\"margin-top: 6px;\">
-                   <div style=\"text-align: right; width: 48%; float: left;\">&Uuml;bergeordnete Gruppierung:</div>
+                   <div style=\"text-align: right; width: 48%; float: left;\">&Uuml;bergeordnete Organisation:</div>
                    <div style=\"text-align: left; margin-left: 50%;\">
                       <select size=\"1\" name=\"parent\">
                          <option value=\"0\" ";
@@ -254,7 +254,7 @@ require("../../../adm_config/body_top.php");
          <br><br>";
 
          /*------------------------------------------------------------*/
-         // gruppierungsspezifische Felder anzeigen
+         // organisationsspezifische Felder anzeigen
          /*------------------------------------------------------------*/
 
          $sql = "SELECT * FROM ". TBL_USER_FIELDS. "
@@ -265,7 +265,7 @@ require("../../../adm_config/body_top.php");
 
          if(mysql_num_rows($result) > 0)
          {
-            echo "<div style=\"margin-top: 3px; margin-bottom: 7px;\">Gruppierungsspezifische Profilfelder:
+            echo "<div style=\"margin-top: 3px; margin-bottom: 7px;\">Organisationsspezifische Profilfelder:
             <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=profil_felder','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
             </div>
