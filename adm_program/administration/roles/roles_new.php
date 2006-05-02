@@ -255,7 +255,7 @@ require("../../../adm_config/body_top.php");
                         if($r_mail_logout == 1)
                             echo " checked ";
                         echo " value=\"1\" />&nbsp;
-                        <label for=\"mail_logout\"><img src=\"$g_root_path/adm_program/images/mail-open.png\" alt=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\"></label>
+                        <label for=\"mail_logout\"><img src=\"$g_root_path/adm_program/images/mail.png\" alt=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\"></label>
                     </div>
                     <div style=\"text-align: left; margin-left: 12%;\">
                         <label for=\"mail_logout\">Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben&nbsp;</label>
@@ -269,7 +269,7 @@ require("../../../adm_config/body_top.php");
                         if($r_mail_login == 1)
                             echo " checked ";
                         echo " value=\"1\" />&nbsp;
-                        <label for=\"mail_login\"><img src=\"$g_root_path/adm_program/images/mail-open-key.png\" alt=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\"></label>
+                        <label for=\"mail_login\"><img src=\"$g_root_path/adm_program/images/mail_key.png\" alt=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\"></label>
                     </div>
                     <div style=\"text-align: left; margin-left: 12%;\">
                         <label for=\"mail_login\">Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben&nbsp;</label>
