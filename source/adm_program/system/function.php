@@ -360,7 +360,7 @@ function editDownload()
 
 // diese Funktion gibt eine Seitennavigation in Anhaengigkeit der Anzahl Seiten zurueck
 // Beispiel:
-//              Seite: < Vorherige 1 , 2 , 3 ... 9 , 10 , 11 Naechste >
+//              Seite: < Vorherige 1  2  3 ... 9  10  11 Naechste >
 // Uebergaben:
 // base_url   : Basislink zum Modul (auch schon mit notwendigen Uebergabevariablen)
 // num_items  : Gesamtanzahl an Elementen
@@ -390,7 +390,7 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
             $page_string .= ( $i == $on_page ) ? '<b>' . $i . '</b>' : '<a class="iconLink" href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
             if ( $i <  $init_page_max )
             {
-                $page_string .= " , ";
+                $page_string .= "&nbsp;&nbsp;";
             }
         }
 
@@ -398,7 +398,7 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
         {
             if ( $on_page > 1  && $on_page < $total_pages )
             {
-                $page_string .= ( $on_page > 5 ) ? ' ... ' : ' , ';
+                $page_string .= ( $on_page > 5 ) ? ' ... ' : '&nbsp;&nbsp;';
 
                 $init_page_min = ( $on_page > 4 ) ? $on_page : 5;
                 $init_page_max = ( $on_page < $total_pages - 4 ) ? $on_page : $total_pages - 4;
@@ -408,11 +408,11 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
                     $page_string .= ($i == $on_page) ? '<b>' . $i . '</b>' : '<a class="iconLink" href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
                     if ( $i <  $init_page_max + 1 )
                     {
-                        $page_string .= ' , ';
+                        $page_string .= '&nbsp;&nbsp;';
                     }
                 }
 
-                $page_string .= ( $on_page < $total_pages - 4 ) ? ' ... ' : ' , ';
+                $page_string .= ( $on_page < $total_pages - 4 ) ? ' ... ' : '&nbsp;&nbsp;';
             }
             else
             {
@@ -424,7 +424,7 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
                 $page_string .= ( $i == $on_page ) ? '<b>' . $i . '</b>'  : '<a class="iconLink" href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
                 if( $i <  $total_pages )
                 {
-                    $page_string .= " , ";
+                    $page_string .= "&nbsp;&nbsp;";
                 }
             }
         }
@@ -436,7 +436,7 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
             $page_string .= ( $i == $on_page ) ? '<b>' . $i . '</b>' : '<a class="iconLink" href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
             if ( $i <  $total_pages )
             {
-                $page_string .= ' , ';
+                $page_string .= '&nbsp;&nbsp;';
             }
         }
     }

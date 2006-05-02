@@ -195,13 +195,13 @@ require("../../../adm_config/body_top.php");
                 <a class=\"iconLink\" href=\"dates_new.php\">Termin anlegen</a>";
             }
             
-            if(isModerator() && $g_current_organization->enable_rss == true && $num_dates > 0)
+            if(isModerator() && $g_current_organization->enable_rss == true)
             {
                 echo "&nbsp;&nbsp;&nbsp;&nbsp;";
             }
 
             // Feed abonnieren
-            if($g_current_organization->enable_rss == true && $num_dates > 0)
+            if($g_current_organization->enable_rss == true)
             {
                 echo "<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/dates/rss_dates.php\"><img
                 class=\"iconLink\" src=\"$g_root_path/adm_program/images/feed.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Termine-Feed abonnieren\"></a>

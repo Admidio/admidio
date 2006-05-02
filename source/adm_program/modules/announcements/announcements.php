@@ -154,13 +154,13 @@ require("../../../adm_config/body_top.php");
                 <a class=\"iconLink\" href=\"announcements_new.php?headline=". $_GET["headline"]. "\">Neu anlegen</a>";
             }
             
-            if(isModerator() && $g_current_organization->enable_rss == true && $num_announcements > 0)
+            if(isModerator() && $g_current_organization->enable_rss == true)
             {
                 echo "&nbsp;&nbsp;&nbsp;&nbsp;";
             }
 
             // Feed abonnieren
-            if($g_current_organization->enable_rss == true && $num_announcements > 0)
+            if($g_current_organization->enable_rss == true)
             {
                 echo "<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/announcements/rss_announcements.php\"><img
                 class=\"iconLink\" src=\"$g_root_path/adm_program/images/feed.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"". $_GET["headline"]. "-Feed abonnieren\"></a>
