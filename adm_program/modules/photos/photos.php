@@ -37,16 +37,20 @@ if($pho_id=="")
 
 //aktuelle thumb_seite
 $thumb_seite= $_GET['thumb_seite'];
-if($thumb_seite==""){
+if($thumb_seite=="")
+{
     $thumb_seite=1;
 }
 
-//aktuelle event_seite
-$event_seite= $_GET['event_seite'];
-if($event_seite==""){
-    $event_seite=1;
+//aktuelle event_element
+$event_element= $_GET['start'];
+if($event_element==NULL)
+{
+    $event_element=0;
 }
 
+$event_element=$event_element+$_GET['ignored'];
+echo $ignored;
 //Aufruf der ggf. uebergebenen Veranstaltung
 $sql="  SELECT *
         FROM ". TBL_PHOTOS. "
@@ -367,6 +371,11 @@ echo "
             {
                 $sql=$sql."AND pho_pho_id_parent = '$pho_id'";
             }
+            if (!editPhoto($adm_photo_list["pho_org_shortname"]))
+            {
+                $sql=$sql."AND pho_locked = '0'";
+            }
+            
             $sql=$sql." ORDER BY pho_begin DESC ";
             
             $result_list = mysql_query($sql, $g_adm_con);
@@ -375,58 +384,13 @@ echo "
             //Gesamtzahl der auszugebenden Veranstaltungen
             $events=mysql_num_rows($result_list);
 
-            //Ausrechnen der Seitenzahl, 10 Events pro seite
-            if (settype($events,integer) || settype($event_seiten,integer))
-            {
-                $event_seiten = round($events / 10);
-            }
-            if ($event_seiten * 10 < $events){
-                 $event_seiten++; 
-            }
-    
-            //Links zum Seitendurchblaetern
-            if($event_seiten>1)
-            {
-                echo"Seite:&nbsp;";
-                //"Letzte event_seite"
-                $vorseite=$event_seite-1;
-                if($vorseite>=1)
-                {
-                    echo"
-                    <a href=\"photos.php?event_seite=$vorseite&amp;pho_id=$pho_id\">
-                        <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Vorherige\">
-                    </a>
-                    <a href=\"photos.php?event_seite=$vorseite&amp;pho_id=$pho_id\">Vorherige</a>&nbsp;&nbsp;";
-                }
-                
-                //Seitenzahlen
-                for($s=1; $s<=$event_seiten; $s++)
-                {
-                    if($s==$event_seite)
-                    {
-                        echo $event_seite."&nbsp;";
-                    }
-                    if($s!=$event_seite){
-                        echo"<a href='photos.php?event_seite=$s&pho_id=$pho_id'>$s</a>&nbsp;";
-                    }
-                }
-    
-                //naechste event_seite
-                $nachseite=$event_seite+1;
-                if($nachseite<=$event_seiten)
-                {
-                    echo"&nbsp;
-                    <a href=\"photos.php?event_seite=$nachseite&amp;pho_id=$pho_id\">N&auml;chste</a>
-                    <a href=\"photos.php?event_seite=$nachseite&amp;pho_id=$pho_id\">
-                        <img src=\"$g_root_path/adm_program/images/forward.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"N&auml;chste\">
-                    </a>
-                    ";
-                }   
-                echo"<br><br>";
-            }
-    
-            //Sehen ob der Sql aufruf ergebnisse bereit haelt
-            if($events>0)mysql_data_seek($result_list, ($event_seite*10)-10);
+                     
+            // Navigation mit Vor- und Zurueck-Buttons
+            $base_url = "$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$pho_id."&&ignored=$ignored";
+            echo generatePagination($base_url, $events, 10, $event_element, TRUE);
+
+            //Dateizeiger auf erstes auszugebendes Element setzen
+            if($events>0)mysql_data_seek($result_list, $event_element);
     
             //Funktion mit selbstaufruf zum erfassen der Bilder in Unterveranstaltungen
             function bildersumme($pho_id_parent){
@@ -470,14 +434,13 @@ echo "
                     else beispielbild($adm_photo_child["pho_id"]);
                 };      
             }//function
-    
-            for($x=($event_seite*10)-9; $x<=($event_seite*10) && $x<=$events; $x++){
+            
+            for($x=$event_element; $x<=$event_element+9+$ignored && $x<=$events; $x++){
                 $adm_photo_list = mysql_fetch_array($result_list);
          
                 //Hauptordner
                 $ordner = "../../../adm_my_files/photos/".$adm_photo_list["pho_begin"]."_".$adm_photo_list["pho_id"];
-         
-                //Kontrollieren ob der entsprechende Ordner in adm_my_files existiert und freigegeben ist oder Photoeditrechte bestehen
+                
                 //wenn ja Zeile ausgeben
                 if(file_exists($ordner) && ($adm_photo_list["pho_locked"]==0) || ($g_session_valid && editPhoto($adm_photo_list["pho_org_shortname"])))
                 {
@@ -594,9 +557,10 @@ echo "
                         </div>
                         </td>
                         </tr>";
+                 
                 }//Ende Ordner existiert
             };//for
-
+            
 /****************************Leere Veranstaltung****************/
             //Falls die Veranstaltung weder Bilder noch Unterordner enthaelt
             if($adm_photo["pho_quantity"]=="0" && mysql_num_rows($result_list)==0)
@@ -606,7 +570,10 @@ echo "
 
 /************************Ende Haupttabelle**********************/
     echo"</table>";
-
+    
+    // Navigation mit Vor- und Zurueck-Buttons
+            $base_url = "$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$pho_id;
+            echo generatePagination($base_url, $events, 10, $event_element, TRUE);
 /************************Buttons********************************/
     //Uebersicht
     if($adm_photo["pho_id"]!=NULL){
