@@ -86,17 +86,18 @@ echo "
                 if($last>0)
                 {
                     echo"
-                    <button name=\"back\" type=\"button\" value=\"back\" style=\"width: 130px;\" onclick=\"self.location.href='photopopup.php?bild=$last&pho_id=$pho_id'\">
-                        <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Letztes Bild\">
-                        &nbsp;Letztes Bild
-                    </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                    <a href=\"photopopup.php?bild=$last&pho_id=$pho_id\">
+                        <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Vorheriges Bild\">
+                    </a>
+                    <a href=\"photopopup.php?bild=$last&pho_id=$pho_id\">Vorheriges Bild</a>&nbsp;&nbsp;&nbsp;&nbsp;";
                 }
                 if($next<=$bilder)
                 {
                     echo"
-                    <button name=\"forward\" type=\"button\" value=\"forward\" style=\"width: 130px;\" onclick=\"self.location.href='photopopup.php?bild=$next&pho_id=$pho_id'\">N&auml;chstes Bild&nbsp;
-                        <img src=\"$g_root_path/adm_program/images/forward.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"N&auml;chstes Bild\">
-                    </button>";
+                    <a href=\"photopopup.php?bild=$next&pho_id=$pho_id\">N&auml;chstes Bild</a>
+                    <a href=\"photopopup.php?bild=$next&pho_id=$pho_id\">
+                        <img src=\"$g_root_path/adm_program/images/forward.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"N&auml;chstes Bild\">
+                    </a>";
                 }
                 echo"<br><br>";
 
