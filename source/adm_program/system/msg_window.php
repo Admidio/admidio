@@ -157,7 +157,7 @@ echo "
 
             case "leader":
                 echo "Leiter werden in den Mitgliederlisten dieser Rolle gesondert aufgef&uuml;hrt.<br><br>
-                      Leiter haben au&szlig;erdem die M&ouml;glichkeit neue Mitglieder aus der Gruppierung 
+                      Leiter haben au&szlig;erdem die M&ouml;glichkeit neue Mitglieder aus der Organisation 
                       der Rolle zu zuordnen oder vorhandene Mitglieder zu entfernen.";
                 break;
 
@@ -240,9 +240,9 @@ echo "
 
             case "termin_global":
                 echo "Termine / Ank&uuml;ndigungen, die diese Option aktiviert haben, erscheinen auf den Webseiten
-                      folgender Gruppierungen:<br /><b>";
+                      folgender Organisationen:<br /><b>";
 
-                // alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
+                // alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist
                 $organizations = $g_current_organization->longname;
                 $arr_ref_orgas = $g_current_organization->getReferenceOrganizations(true, true, true);
 
@@ -253,7 +253,7 @@ echo "
                 }
 
                 echo "$organizations</b><br /><br />
-                      Moderatoren dieser Gruppierungen k&ouml;nnen den Termin / Nachricht dann bearbeiten
+                      Moderatoren dieser Organisationen k&ouml;nnen den Termin / Nachricht dann bearbeiten
                       bzw. die Option zur&uuml;cksetzen.";
                 break;
 

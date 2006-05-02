@@ -377,7 +377,7 @@ if($_GET['mode'] == 3)
 
 if($_GET['mode'] == 1 || $_GET['mode'] == 4)
 {
-    // neue Gruppierung anlegen
+    // neue Organisation anlegen
 
     $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. " WHERE org_shortname = {0} ";
     $sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
@@ -389,7 +389,7 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
 
     if(mysql_num_rows($result) > 0)
     {
-        showError("Eine Gruppierung / ein Verein mit dem angegebenen kurzen Namen <b>". $_POST['verein-name-kurz']. "</b> existiert bereits.<br /><br />
+        showError("Eine Organisation mit dem angegebenen kurzen Namen <b>". $_POST['verein-name-kurz']. "</b> existiert bereits.<br /><br />
                    W&auml;hlen Sie bitte einen anderen kurzen Namen !");
     }
 
