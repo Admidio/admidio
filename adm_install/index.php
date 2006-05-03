@@ -253,6 +253,10 @@ echo "
 	               <td><input type=\"text\" name=\"user-firstname\" size=\"25\" maxlength=\"50\" /></td>
 	            </tr>
 	            <tr>
+	               <td width=\"120px\">E-Mail:</td>
+	               <td><input type=\"text\" name=\"user-email\" size=\"25\" maxlength=\"50\" /></td>
+	            </tr>
+	            <tr>
 	               <td width=\"120px\">Benutzername:</td>
 	               <td><input type=\"text\" name=\"user-login\" size=\"25\" maxlength=\"50\" /></td>
 	            </tr>
