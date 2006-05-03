@@ -28,6 +28,7 @@
  *****************************************************************************/
 
 require("../adm_program/system/function.php");
+require("../adm_program/system/string.php");
 
 // Diese Funktion zeigt eine Fehlerausgabe an
 // mode = 0 (Default) Fehlerausgabe
@@ -214,16 +215,23 @@ if($_GET['mode'] == 3)
 // bei Installation oder hinzufuegen einer Organisation
 if($_GET['mode'] == 1 || $_GET['mode'] == 4)
 {
-    $_POST['user-surname']   = trim($_POST['user-surname']);
-    $_POST['user-firstname'] = trim($_POST['user-firstname']);
-    $_POST['user-login']     = trim($_POST['user-login']);
+    $_POST['user-surname']   = strStripTags($_POST['user-surname']);
+    $_POST['user-firstname'] = strStripTags($_POST['user-firstname']);
+    $_POST['user-email']     = strStripTags($_POST['user-email']);
+    $_POST['user-login']     = strStripTags($_POST['user-login']);
 
     if(strlen($_POST['user-surname'])   == 0
     || strlen($_POST['user-firstname']) == 0
+    || strlen($_POST['user-email']) == 0
     || strlen($_POST['user-login'])     == 0
     || strlen($_POST['user-passwort'])  == 0 )
     {
         showError("Es sind nicht alle Benutzerdaten eingegeben worden !");
+    }
+
+    if(isValidEmailAddress($_POST['user-email']) == false)
+    {
+    	showError("Die E-Mail-Adresse ist nicht g&uuml;ltig.");
     }
 
     if(  strlen($_POST['verein-name-lang']) == 0
@@ -271,7 +279,7 @@ if($_GET['mode'] == 1)
             }
         }
     }
-    if($error > 0) 
+    if($error > 0)
     {
         exit();
     }
@@ -353,7 +361,7 @@ if($_GET['mode'] == 3)
                         }
                     }
                 }
-                if($error > 0) 
+                if($error > 0)
                 {
                     exit();
                 }
@@ -382,7 +390,7 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
     $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. " WHERE org_shortname = {0} ";
     $sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
     $result = mysql_query($sql, $connection);
-    if(!$result) 
+    if(!$result)
     {
         showError(mysql_error());
     }
@@ -462,9 +470,9 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
     // User Webmaster anlegen
 
     $pw_md5 = md5($_POST['user-passwort']);
-    $sql = "INSERT INTO ". TBL_USERS. " (usr_last_name, usr_first_name, usr_login_name, usr_password, usr_valid)
-                                 VALUES ({0}, {1}, {2}, '$pw_md5', 1) ";
-    $sql = prepareSQL($sql, array($_POST['user-surname'], $_POST['user-firstname'], $_POST['user-login']));
+    $sql = "INSERT INTO ". TBL_USERS. " (usr_last_name, usr_first_name, usr_email, usr_login_name, usr_password, usr_valid)
+                                 VALUES ({0}, {1}, {2}, {3}, '$pw_md5', 1) ";
+    $sql = prepareSQL($sql, array($_POST['user-surname'], $_POST['user-firstname'], $_POST['user-email'], $_POST['user-login']));
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
 
