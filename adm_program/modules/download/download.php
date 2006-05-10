@@ -222,11 +222,15 @@ require("../../../adm_config/body_top.php");
             || $dateiendung=="cdr"
             || $dateiendung=="jpg"
             || $dateiendung=="png"
-            || $dateiendung=="bmp" )
+            || $dateiendung=="bmp"
+            || $dateiendung=="wmf" )
                $dateiendung = "page_white_camera";
-            elseif($dateiendung=="doc")
+            elseif($dateiendung=="doc"
+            ||     $dateiendung=="dot"
+            ||     $dateiendung=="rtf")
                $dateiendung = "page_white_word";
             elseif($dateiendung=="xls"
+            ||     $dateiendung=="xlt"
             ||     $dateiendung=="csv")
                $dateiendung = "page_white_excel";
             elseif($dateiendung=="pps"
@@ -240,6 +244,7 @@ require("../../../adm_config/body_top.php");
                $dateiendung = "page_white_acrobat";
             elseif($dateiendung=="zip"
             ||     $dateiendung=="gz"
+            ||     $dateiendung=="rar"
             ||     $dateiendung=="tar")
                $dateiendung = "page_white_compressed";
             else
