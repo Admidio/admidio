@@ -34,6 +34,7 @@
  
 require("../../system/common.php");
 require("../../system/login_valid.php");
+require("../../system/email_class.php");
 
 $err_code = "";
 $err_text = "";
@@ -329,14 +330,21 @@ elseif($_GET["mode"] == 4)
                     WHERE usr_id = $user->id ";
         $result = mysql_query($sql, $g_adm_con);
         db_error($result);
-
-        mail("$user->email", "Logindaten für ". $g_current_organization->homepage, "Hallo $user->first_name,\n\ndu erhälst deine ".
-             "Logindaten für $g_current_organization->homepage.\n\nBenutzername: $user->login_name\nPasswort: $password\n\n" .
-             "Das Passwort wurde automatisch generiert.\nDu solltest es nach dem Login in deinem Profil ändern.\n\n" .
-             "Viele Grüße\nDie Webmaster", "From: webmaster@$g_domain");
-
-        $err_code = "mail_send";
-        $err_text = $user->email;
+        
+        // Mail an den User mit den Loginaten schicken
+        $email = new Email();
+        $email->setSender("webmaster@$g_domain");
+        $email->addRecipient($user->email, "$user->first_name $user->last_name");
+        $email->setSubject("Logindaten für $g_current_organization->homepage");
+        $email->setText("Hallo $user->first_name,\n\ndu erhaelst deine ".
+             "Logindaten fuer $g_current_organization->homepage.\n\nBenutzername: $user->login_name\nPasswort: $password\n\n" .
+             "Das Passwort wurde automatisch generiert.\nDu solltest es nach dem Login in deinem Profil aendern.\n\n" .
+             "Viele Gruesse\nDie Webmaster");
+        if($email->sendEmail() == true)
+        {
+            $err_code = "mail_send";
+            $err_text = $user->email;
+        }
     }
 }
 
