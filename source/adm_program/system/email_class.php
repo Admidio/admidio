@@ -12,6 +12,12 @@
  * Das Objekt wird erzeugt durch Aufruf des Konstruktors:
  * function Email()
  *
+ * Bei Bedarf kann nun der ContentType der Mail auf UTF8 gesetzt werden (optional).
+ * Dies muss auf jeden Fall an zweiter Stelle durchgefuehrt werden.
+ * Wird die Funktion nicht aufgerufen, dann wird automatisch der ContentType
+ * auf ISO-8859-1 gesetzt:
+ * function setUTF8()
+ *
  * Nun wird der Absender gesetzt:
  * function setSender($address, $name='')
  * Uebergaben: $address	- Die Emailadresse
@@ -84,6 +90,7 @@ function Email()
     //Jetzt wird noch der ContentType der Mail gesetzt.
     //Dieser wird im Falle eines Attachments spaeter ersetzt.
     $this->headerOptions['Content-Type'] = "text/plain; charset=\"ISO-8859-1\"";
+    $this->contentType = "text/plain; charset=\"ISO-8859-1\"";
 
     $this->mailBoundary = "--NextPart_AdmidioMailSystem_". md5(uniqid(rand()));
     $this->copyToSender = false;
@@ -92,6 +99,13 @@ function Email()
     //Hier werden noch mal alle Empfaenger der Mail reingeschrieben,
     //fuer den Fall das eine Kopie der Mail angefordert wird...
     $this->addresses = '';
+}
+
+// Funktion um den ContentType auf UTF-8 umzusetzen
+function setUTF8()
+{
+    $this->headerOptions['Content-Type'] = "text/plain; charset=\"UTF-8\"";
+    $this->contentType = "text/plain; charset=\"UTF-8\"";
 }
 
 // Funktion um den Absender zu setzen
@@ -229,7 +243,7 @@ function prepareBody()
         $this->mail_body	= $this->mail_body. "This message is in MIME format.\n";
         $this->mail_body	= $this->mail_body. "Since your mail reader does not understand this format,\n";
         $this->mail_body	= $this->mail_body. "some or all of this message may not be legible.\n\n";
-        $this->mail_body	= $this->mail_body. "--". $this->mailBoundary. "\nContent-Type: text/plain; charset=\"iso-8859-1\"\n\n";
+        $this->mail_body	= $this->mail_body. "--". $this->mailBoundary. "\nContent-Type: ". $this->contentType. "\n\n";
     }
 
     // Eigentlichen Mail-Text hinzufuegen...
