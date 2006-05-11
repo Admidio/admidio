@@ -32,6 +32,7 @@
  
 require("../../system/common.php");
 require("../../system/login_valid.php");
+require("../../system/email_class.php");
 
 // nur Webmaster duerfen User bestaetigen, ansonsten Seite verlassen
 if(!hasRole("Webmaster"))
@@ -41,27 +42,29 @@ if(!hasRole("Webmaster"))
    exit();
 }
 
+$err_code = "";
+
 if($_GET["mode"] == 1)
 {
-   // User-Account einem Mitglied zuordnen
-   
-   $new_user = new TblUsers($g_adm_con);
-   $new_user->getUser($_GET['new_user_id']);
+    // User-Account einem Mitglied zuordnen
 
-   $user = new TblUsers($g_adm_con);
-   $user->getUser($_GET['user_id']);
-   
-   $old_login = $user->login_name;
-   
-   // Daten kopieren
-   $user->email      = $new_user->email;
-   $user->login_name = $new_user->login_name;
-   $user->password   = $new_user->password;
-   
+    $new_user = new TblUsers($g_adm_con);
+    $new_user->getUser($_GET['new_user_id']);
+
+    $user = new TblUsers($g_adm_con);
+    $user->getUser($_GET['user_id']);
+
+    $old_login = $user->login_name;
+
+    // Daten kopieren
+    $user->email      = $new_user->email;
+    $user->login_name = $new_user->login_name;
+    $user->password   = $new_user->password;
+
     // zuerst den neuen Usersatz loeschen, dann den alten Updaten,
     // damit kein Duplicate-Key wegen dem Loginnamen entsteht
     $new_user->delete();
-   $user->update($g_current_user->id);
+    $user->update($g_current_user->id);
 
     if($g_forum == 1)
     {
@@ -81,14 +84,22 @@ if($_GET["mode"] == 1)
     // nur ausfuehren, wenn E-Mails auch unterstuetzt werden
     if($g_current_organization->mail_extern != 1)
     {
-        mail("$user->email", "Anmeldung auf $g_current_organization->homepage", "Hallo $user->first_name,\n\ndeine Anmeldung auf $g_current_organization->homepage ".
-              "wurde bestätigt.\n\nNun kannst du dich mit deinem Benutzernamen : $user->login_name\nund dem Passwort auf der Homepage ".
-              "einloggen.\n\nSollten noch Fragen bestehen, schreib eine Mail an webmaster@$g_domain .\n\nViele Grüße\nDie Webmaster",
-              "From: webmaster@$g_domain");
+        // Mail an den User schicken, um die Anmeldung zu bestaetigen
+        $email = new Email();
+        $email->setSender("webmaster@$g_domain");
+        $email->addRecipient($user->email, "$user->first_name $user->last_name");
+        $email->setSubject("Anmeldung auf $g_current_organization->homepage");
+        $email->setText("Hallo $user->first_name,\n\ndeine Anmeldung auf $g_current_organization->homepage ".
+              "wurde bestaetigt.\n\nNun kannst du dich mit deinem Benutzernamen : $user->login_name\nund dem Passwort auf der Homepage ".
+              "einloggen.\n\nSollten noch Fragen bestehen, schreib eine E-Mail an webmaster@$g_domain .\n\nViele Gruesse\nDie Webmaster");
+        if($email->sendEmail() == true)
+        {
+            $err_code = "send_login_mail";
+        }
     }
 
     $load_url = urlencode("$g_root_path/adm_program/administration/new_user/new_user.php");
-    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=send_login_mail&url=$load_url";
+    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&url=$load_url";
     header($location);
 }
 elseif($_GET["mode"] == 3)
