@@ -164,7 +164,7 @@ require("../../../adm_config/body_top.php");
                else
                {
                    // keine Uebergabe, dann alle Rollen entsprechend Login/Logout auflisten
-                   echo "<select size=\"1\" id=\"role\ name=\"rolle\">";
+                   echo "<select size=\"1\" id=\"role\" name=\"rolle\">";
                    echo "<option value=\"\" selected=\"selected\">- Bitte w&auml;hlen -</option>";
 
                    if ($g_session_valid)
@@ -307,7 +307,7 @@ require("../../../adm_config/body_top.php");
     if(!array_key_exists("usr_id", $_GET)
     && !array_key_exists("rolle", $_GET))
     {
-        $focus_field = "rolle";
+        $focus_field = "role";
     }
     else if($g_current_user->id == 0)
     {
