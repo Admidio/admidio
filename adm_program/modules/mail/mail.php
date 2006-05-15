@@ -164,7 +164,7 @@ require("../../../adm_config/body_top.php");
                else
                {
                    // keine Uebergabe, dann alle Rollen entsprechend Login/Logout auflisten
-                   echo "<select size=\"1\" name=\"rolle\">";
+                   echo "<select size=\"1\" id=\"role\ name=\"rolle\">";
                    echo "<option value=\"\" selected=\"selected\">- Bitte w&auml;hlen -</option>";
 
                    if ($g_session_valid)
@@ -222,7 +222,7 @@ require("../../../adm_config/body_top.php");
                }
                else
                {
-                   echo "<input type=\"text\" name=\"name\" size=\"30\" maxlength=\"50\" value=\"\">";
+                   echo "<input type=\"text\" id=\"name\" name=\"name\" size=\"30\" maxlength=\"50\" value=\"\">";
                }
             echo "</div>
          </div>
@@ -247,7 +247,7 @@ require("../../../adm_config/body_top.php");
             <div style=\"text-align: left; margin-left: 17%;\">";
                if ($_GET["subject"] == "")
                {
-                   echo "<input type=\"text\" name=\"subject\" size=\"50\" maxlength=\"50\">";
+                   echo "<input type=\"text\" id=\"subject\" name=\"subject\" size=\"50\" maxlength=\"50\">";
                }
                else
                {
@@ -302,8 +302,27 @@ require("../../../adm_config/body_top.php");
    </form>
 
    </div>";
+   
+    // Focus auf das erste Eingabefeld setzen
+    if(!array_key_exists("usr_id", $_GET)
+    && !array_key_exists("rolle", $_GET))
+    {
+        $focus_field = "rolle";
+    }
+    else if($g_current_user->id == 0)
+    {
+        $focus_field = "name";
+    }
+    else
+    {
+        $focus_field = "subject";
+    }
 
-   require("../../../adm_config/body_bottom.php");
+    echo "<script type=\"text/javascript\"><!--
+        document.getElementById('$focus_field').focus();
+    --></script>";
+
+    require("../../../adm_config/body_bottom.php");
 echo "</body>
 </html>";
 ?>
