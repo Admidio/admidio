@@ -38,36 +38,48 @@ $type   = strStripTags($_GET["typ"]);
 $rol_id = strStripTags($_GET["rol_id"]);
 
 if($mode != "csv-ms"
+&& $mode != "csv-ms-2k"
 && $mode != "csv-oo"
 && $mode != "html"
 && $mode != "print")
 {
-	// Dem aufgerufenen Skript wurde die notwendige Variable nicht richtig übergeben !
-   $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=mode";
-   header($location);
-   exit();
+    // Dem aufgerufenen Skript wurde die notwendige Variable nicht richtig übergeben !
+    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=mode";
+    header($location);
+    exit();
 }
 
 if($rol_id <= 0)
 {
-	// Dem aufgerufenen Skript wurde die notwendige Variable nicht richtig übergeben !
-   $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=rolle";
-   header($location);
-   exit();
+    // Dem aufgerufenen Skript wurde die notwendige Variable nicht richtig übergeben !
+    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=rolle";
+    header($location);
+    exit();
 }
 
 if($mode == "csv-ms")
 {
-   $separator = ";";   // Microsoft braucht ein Semicolon
-   $mode = "csv";
+    $separator    = ";"; // Microsoft XP und neuer braucht ein Semicolon
+    $value_quotes = "\"";
+    $mode         = "csv";
+}
+else if($mode == "csv-ms-2k")
+{
+    $separator    = ","; // Microsoft 2000 und aelter braucht ein Komma
+    $value_quotes = "\"";
+    $mode         = "csv";
 }
 else if($mode == "csv-oo")
 {
-   $separator = ",";   // für CSV-Dateien
-   $mode = "csv";
+    $separator    = ",";    // für CSV-Dateien
+    $value_quotes = "\"";   // Werte muessen mit Anfuehrungszeichen eingeschlossen sein
+    $mode         = "csv";
 }
 else
-   $separator = ",";   // für CSV-Dateien
+{
+    $separator    = ",";    // für CSV-Dateien
+    $value_quotes = "";
+}
 
 // Array um den Namen der Tabellen sinnvolle Texte zuzuweisen
 $arr_col_name = array('usr_last_name'  => 'Nachname',
@@ -90,15 +102,15 @@ $arr_col_name = array('usr_last_name'  => 'Nachname',
 
 if($mode == "html")
 {
-   $class_table  = "tableList";
-   $class_header = "tableHeader";
-   $class_row    = "";
+    $class_table  = "tableList";
+    $class_header = "tableHeader";
+    $class_row    = "";
 }
 else if($mode == "print")
 {
-   $class_table  = "tableListPrint";
-   $class_header = "tableHeaderPrint";
-   $class_row    = "tableRowPrint";
+    $class_table  = "tableListPrint";
+    $class_header = "tableHeaderPrint";
+    $class_row    = "tableRowPrint";
 }
 
 $main_sql  = "";   // enthält das Haupt-Sql-Statement für die Liste
@@ -107,8 +119,8 @@ $leiter    = 0;    // Gruppe besitzt Leiter
 
 // Rollenname auslesen
 $sql = "SELECT *
-			 FROM ". TBL_ROLES. "
-			WHERE rol_id     = {0} ";
+          FROM ". TBL_ROLES. "
+         WHERE rol_id     = {0} ";
 $sql    = prepareSQL($sql, array($rol_id));
 $result = mysql_query($sql, $g_adm_con);
 db_error($result);
@@ -121,13 +133,13 @@ $role_row = mysql_fetch_object($result);
 
 switch($type)
 {
-   case "mylist":
-   	session_start();
-      $main_sql = $_SESSION['mylist_sql'];
-      break;
+    case "mylist":
+        session_start();
+        $main_sql = $_SESSION['mylist_sql'];
+        break;
 
-   case "address":
-      $main_sql = "SELECT usr_id, usr_last_name, usr_first_name, usr_birthday, usr_address, usr_zip_code, usr_city
+    case "address":
+        $main_sql = "SELECT usr_id, usr_last_name, usr_first_name, usr_birthday, usr_address, usr_zip_code, usr_city
                      FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                     WHERE rol_org_shortname = '$g_organization'
                       AND rol_id     = {0}
@@ -139,8 +151,8 @@ switch($type)
                     ORDER BY usr_last_name, usr_first_name ";
       break;
 
-   case "telephone":
-      $main_sql = "SELECT usr_id, usr_last_name, usr_first_name, usr_phone, usr_mobile, usr_email, usr_fax
+    case "telephone":
+        $main_sql = "SELECT usr_id, usr_last_name, usr_first_name, usr_phone, usr_mobile, usr_email, usr_fax
                      FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                     WHERE rol_org_shortname = '$g_organization'
                       AND rol_id     = {0}
@@ -152,8 +164,8 @@ switch($type)
                     ORDER BY usr_last_name, usr_first_name ";
       break;
 
-   case "former":
-      $main_sql = "SELECT usr_id, usr_last_name, usr_first_name, usr_birthday, mem_begin, mem_end
+    case "former":
+        $main_sql = "SELECT usr_id, usr_last_name, usr_first_name, usr_birthday, mem_begin, mem_end
                      FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                     WHERE rol_org_shortname = '$g_organization'
                       AND rol_id     = {0}
@@ -165,44 +177,48 @@ switch($type)
                     ORDER BY mem_end DESC, usr_last_name, usr_first_name ";
       break;
       
-	default:
-		// Dem aufgerufenen Skript wurde die notwendige Variable nicht richtig übergeben !
-		$location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=typ";
-		header($location);
-		exit();
+    default:
+        // Dem aufgerufenen Skript wurde die notwendige Variable nicht richtig übergeben !
+        $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=typ";
+        header($location);
+        exit();
 }
 
 // pruefen, ob die Rolle Leiter hat, wenn nicht, dann Standardliste anzeigen
 
 if(substr_count(str_replace(" ", "", $main_sql), "mem_valid=0") > 0)
-	$former = 0;
+{
+    $former = 0;
+}
 else
-	$former = 1;
+{
+    $former = 1;
+}
 
 $sql = "SELECT mem_leader
-			 FROM ". TBL_ROLES. ", ". TBL_MEMBERS. "
-			WHERE rol_id     = {0}
-			  AND mem_rol_id = rol_id
-			  AND mem_valid  = $former
-			  AND mem_leader = 1 ";
+             FROM ". TBL_ROLES. ", ". TBL_MEMBERS. "
+            WHERE rol_id     = {0}
+              AND mem_rol_id = rol_id
+              AND mem_valid  = $former
+              AND mem_leader = 1 ";
 $sql    = prepareSQL($sql, array($rol_id));
 $result = mysql_query($sql, $g_adm_con);
 db_error($result);
 
 if(mysql_num_rows($result) > 0)
 {
-	// Gruppe besitzt Leiter
-	$pos = strpos($main_sql, "mem_leader");
-	if($pos > 0)
-	{
-		$leiter   = 1;
-		// mem_leader = 0 durch mem_leader = 1 ersetzen
-		$tmp_sql  = strtolower($main_sql);
-		$next_pos = strpos($tmp_sql, "and", $pos);
-		if($next_pos === false)
-			$next_pos = strpos($tmp_sql, "order", $pos);
-		$leiter_sql = substr($main_sql, 0, $pos). " mem_leader = 1 ". substr($main_sql, $next_pos);
-	}
+    // Gruppe besitzt Leiter
+    $pos = strpos($main_sql, "mem_leader");
+    if($pos > 0)
+    {
+        $leiter   = 1;
+        // mem_leader = 0 durch mem_leader = 1 ersetzen
+        $tmp_sql  = strtolower($main_sql);
+        $next_pos = strpos($tmp_sql, "and", $pos);
+        if($next_pos === false)
+            $next_pos = strpos($tmp_sql, "order", $pos);
+        $leiter_sql = substr($main_sql, 0, $pos). " mem_leader = 1 ". substr($main_sql, $next_pos);
+    }
 }
 
 // aus main_sql alle Felder ermitteln und in ein Array schreiben
@@ -217,290 +233,378 @@ $arr_fields = explode(",", $str_fields);
 // Spaces entfernen
 for($i = 0; $i < count($arr_fields); $i++)
 {
-   $arr_fields[$i] = trim($arr_fields[$i]);
+    $arr_fields[$i] = trim($arr_fields[$i]);
 }
 
 // wenn die Gruppe keine Leiter besitzt, dann pruefen, ob ueberhaupt Datensaetze vorhanden sind
 if($leiter == 0)
 {
-   // keine Leiter vorhanden -> SQL-Statement ausfuehren
-   $main_sql = prepareSQL($main_sql, array($rol_id));
-   $result_lst = mysql_query($main_sql, $g_adm_con);
-   db_error($result_lst);
+    // keine Leiter vorhanden -> SQL-Statement ausfuehren
+    $main_sql = prepareSQL($main_sql, array($rol_id));
+    $result_lst = mysql_query($main_sql, $g_adm_con);
+    db_error($result_lst);
 
-   if(mysql_num_rows($result_lst) == 0)
-   {
-      // Es sind keine Daten vorhanden !
-      $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=nodata";
-      header($location);
-      exit();
-   }
+    if(mysql_num_rows($result_lst) == 0)
+    {
+        // Es sind keine Daten vorhanden !
+        $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=nodata";
+        header($location);
+        exit();
+    }
 }
 
 if($mode != "csv")
 {
-   // Html-Kopf wird geschrieben
-   echo "
-   <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
-   <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
-   <html>
-   <head>
-      <title>$g_current_organization->longname - Liste - $role_row->rol_name</title>
-      <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
+    // Html-Kopf wird geschrieben
+    echo "
+    <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
+    <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
+    <html>
+    <head>
+        <title>$g_current_organization->longname - Liste - $role_row->rol_name</title>
+        <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
 
-      <!--[if gte IE 5.5000]>
-      <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
-      <![endif]-->";
+        <!--[if gte IE 5.5000]>
+        <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
+        <![endif]-->
 
-      if($mode == "print")
-      {
-         echo "<style type=\"text/css\">
-                  @page { size:landscape; }
-               </style>";
-      }
-      if($mode != "print")
-         require("../../../adm_config/header.php");
-   echo "</head>";
+        <script language=\"JavaScript\" type=\"text/javascript\"><!--\n
+            function exportList(element)
+            {
+                var sel_list = element.value;
 
-   if($mode == "print")
-      echo "<body class=\"bodyPrint\">";
-   else
-      require("../../../adm_config/body_top.php");
+                if(sel_list.length > 1)
+                {
+                    self.location.href = 'lists_show.php?typ=$type&rol_id=$rol_id&mode=' + sel_list;
+                }
+            }
+        //--></script>";
 
-   echo "
-   <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-   <h1>$role_row->rol_name</h1>";
+        if($mode == "print")
+        {
+            echo "<style type=\"text/css\">
+                @page { size:landscape; }
+            </style>";
+        }
+        else
+        {
+            require("../../../adm_config/header.php");
+        }
+    echo "</head>";
 
-   if($mode != "print")
-   {
-      echo "<p>
-      <button name=\"print\" type=\"button\" value=\"print\" style=\"width: 140px;\"
-      onclick=\"window.open('lists_show.php?typ=$type&amp;mode=print&amp;rol_id=$rol_id', '_blank')\">
-      <img src=\"$g_root_path/adm_program/images/print.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Druckvorschau\">
-      &nbsp;Druckvorschau</button>
+    if($mode == "print")
+    {
+        echo "<body class=\"bodyPrint\">";
+    }
+    else
+    {
+        require("../../../adm_config/body_top.php");
+    }
 
-      &nbsp;&nbsp;&nbsp;
-      <button name=\"download-oo\" type=\"button\" value=\"download-oo\" style=\"width: 187px;\"
-         onclick=\"self.location.href='lists_show.php?typ=$type&amp;mode=csv-oo&amp;rol_id=$rol_id'\">
-         <img src=\"$g_root_path/adm_program/images/oo.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Open-Office &amp; Staroffice\">
-         &nbsp;Open-Office &amp; Staroffice</button>
+    echo "
+    <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
+    <h1>$role_row->rol_name</h1>";
 
-      &nbsp;&nbsp;&nbsp;
-      <button name=\"download-excel\" type=\"button\" value=\"download-excel\" style=\"width: 140px;\"
-         onclick=\"self.location.href='lists_show.php?typ=$type&amp;mode=csv-ms&amp;rol_id=$rol_id'\">
-         <img src=\"$g_root_path/adm_program/images/excel.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"MS-Excel\">
-         &nbsp;MS-Excel</button></p>";
-   }
+    if($mode != "print")
+    {
+        echo "<p>
+        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/mail/mail.php?rolle=$role_row->rol_name\"><img
+        class=\"iconLink\" src=\"$g_root_path/adm_program/images/mail.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"". $_GET["headline"]. "-Feed abonnieren\"></a>
+        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/mail/mail.php?rolle=$role_row->rol_name\">E-Mail an Mitglieder</a>
+        &nbsp;&nbsp;
+        <a class=\"iconLink\" href=\"#\" onclick=\"window.open('lists_show.php?typ=$type&amp;mode=print&amp;rol_id=$rol_id', '_blank')\"><img
+        class=\"iconLink\" src=\"$g_root_path/adm_program/images/print.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"". $_GET["headline"]. "-Feed abonnieren\"></a>
+        <a class=\"iconLink\" href=\"#\" onclick=\"window.open('lists_show.php?typ=$type&amp;mode=print&amp;rol_id=$rol_id', '_blank')\">Druckvorschau</a>
+        &nbsp;&nbsp;
+        <img  class=\"iconLink\" src=\"$g_root_path/adm_program/images/database_out.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"". $_GET["headline"]. "-Feed abonnieren\">
+        <select size=\"1\" name=\"list$i\" onchange=\"exportList(this)\">
+            <option value=\"\" selected=\"selected\">Exportieren nach ...</option>
+            <option value=\"csv-ms\">Microsoft Excel</option>
+            <option value=\"csv-ms-2k\">Microsoft Excel 97/2000</option>
+            <option value=\"csv-oo\">CSV-Datei (OpenOffice)</option>
+        </select>
+        </p>";
+    }
 }
 
 // bei einer Gruppe muessen 2 Tabellen angezeigt werden
 // erst die der Leiter und dann die der Gruppenmitglieder
 if($leiter == 1)
-   $max_count = 2;
+{
+    $max_count = 2;
+}
 else
-   $max_count = 1;
+{
+    $max_count = 1;
+}
 
 for($j = 0; $j < $max_count; $j++)
 {
-   if($leiter == 1)
-   {
-      // wenn Leiter vorhanden, dann müssen SQL-Statements hier getrennt aufgerufen werden
-      if($j == 0)   // Leiter
-      {
-         $leiter_sql = prepareSQL($leiter_sql, array($rol_id));
-         $result_lst = mysql_query($leiter_sql, $g_adm_con);
-      }
-      else
-      {
-         $main_sql = prepareSQL($main_sql, array($rol_id));
-         $result_lst = mysql_query($main_sql, $g_adm_con);
-      }
-      db_error($result_lst, true);
-   }
-   
-   if(mysql_num_rows($result_lst) > 0)
-   {
-      if($mode == "csv")
-      {
-         if($j == 0 && $leiter == 1) $str_csv = $str_csv. "Leiter\n\n";
-         if($j == 1) $str_csv = $str_csv. "\n\nTeilnehmer\n\n";
-      }
-      else
-      {
-         if($j == 0 && $leiter == 1) echo "<h2>Leiter</h2>";
-         // erste Tabelle abschliessen
-         if($j == 1) echo "</table><br /><h2>Teilnehmer</h2>";
+    if($leiter == 1)
+    {
+        // wenn Leiter vorhanden, dann müssen SQL-Statements hier getrennt aufgerufen werden
+        if($j == 0)   // Leiter
+        {
+            $leiter_sql = prepareSQL($leiter_sql, array($rol_id));
+            $result_lst = mysql_query($leiter_sql, $g_adm_con);
+        }
+        else
+        {
+            $main_sql = prepareSQL($main_sql, array($rol_id));
+            $result_lst = mysql_query($main_sql, $g_adm_con);
+        }
+        db_error($result_lst, true);
+    }
 
-         // Tabellenkopf schreiben
-         echo "<table class=\"$class_table\" style=\"width: 95%;\" cellpadding=\"2\" cellspacing=\"0\">
-                  <tr>";
-      }
-
-      // Spalten-Überschriften
-      for($i = 0; $i < count($arr_fields); $i++)
-      {
-         if($mode == "csv")
-         {
-            if($i > 0) $str_csv = $str_csv. $separator;
-            if($i == 0)
-               $str_csv = $str_csv. "\"Nr.\"";
-            else
-               $str_csv = $str_csv. "\"". $arr_col_name[$arr_fields[$i]]. "\"";
-         }
-         else
-         {
-            echo "<th class=\"$class_header\" align=\"left\">&nbsp;";
-            if($i == 0)
-               echo "Nr.";
-            else
-               echo $arr_col_name[$arr_fields[$i]];
-            echo "</th>\n";
-         }
-      }  // End-For
-
-      if($mode == "csv")
-         $str_csv = $str_csv. "\n";
-      else
-         echo "</tr>\n";
-
-      $irow       = 1;
-
-      while($row = mysql_fetch_array($result_lst))
-      {
-         if($mode == "html")
-         {
-            echo "<tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\"
-               style=\"cursor: pointer\" onClick=\"window.location.href='$g_root_path/adm_program/modules/profile/profile.php?user_id=$row[0]'\">\n";
-         }
-         else if($mode == "print")
-         {
-            echo "<tr>\n";
-         }
-
-         // Felder zu Datensatz
-         for($i = 0; $i < count($arr_fields); $i++)
-         {
-            if($mode != "csv")
-               echo "<td  class=\"$class_row\" align=\"left\">&nbsp;";
-
-            if($i == 0)
+    if(mysql_num_rows($result_lst) > 0)
+    {
+        if($mode == "csv")
+        {
+            if($j == 0 && $leiter == 1) 
             {
-               // erste Spalte zeigt lfd. Nummer an
-               if($mode == "csv")
-                  $str_csv = $str_csv. "\"$irow\"";
-               else
-                  echo $irow. "</td>\n";
+                $str_csv = $str_csv. "Leiter\n\n";
+            }
+            if($j == 1) 
+            {
+                $str_csv = $str_csv. "\n\nTeilnehmer\n\n";
+            }
+        }
+        else
+        {
+            if($j == 0 && $leiter == 1) 
+            {
+                echo "<h2>Leiter</h2>";
+            }
+            // erste Tabelle abschliessen
+            if($j == 1) 
+            {
+                echo "</table><br /><h2>Teilnehmer</h2>";
+            }
+
+            // Tabellenkopf schreiben
+            echo "<table class=\"$class_table\" style=\"width: 95%;\" cellpadding=\"2\" cellspacing=\"0\">
+            <tr>";
+        }
+
+        // Spalten-Überschriften
+        for($i = 0; $i < count($arr_fields); $i++)
+        {
+            if($mode == "csv")
+            {
+                if($i > 0) 
+                {
+                    $str_csv = $str_csv. $separator;
+                }
+                if($i == 0)
+                {
+                    $str_csv = $str_csv. $value_quotes. "Nr.". $value_quotes;
+                }
+                else
+                {
+                    $str_csv = $str_csv. $value_quotes. $arr_col_name[$arr_fields[$i]]. $value_quotes;
+                }
             }
             else
             {
-               $content = "";
-               if(strlen($row[$i]) > 0)
-               {
-                  // Felder nachformatieren
-                  switch($arr_fields[$i])
-                  {
-                     case "usr_email":
-                     	// E-Mail als Link darstellen
-                        if($mode == "html")
-                        {
-                           if($g_current_organization->mail_extern == 1)
-                              $content = "<a href=\"mailto:". $row[$i]. "\">". $row[$i]. "</a>";
-                           else
-                              $content = "<a href=\"../mail/mail.php?usr_id=". $row[0]. "\">". $row[$i]. "</a>";
-                        }
-                        else
-                           $content = $row[$i];
-                        break;
-
-                     case "usr_birthday":
-                     case "mem_begin":
-                     case "mem_end":
-                     	// Datum 00.00.0000 unterdruecken
-                        $content = mysqldatetime("d.m.y", $row[$i]);
-                        if($content == "00.00.0000")
-                           $content = "";
-                        break;
-
-                     case "usr_homepage":
-                     	// Homepage als Link darstellen
-                        $row[$i] = stripslashes($row[$i]);
-                        if(substr_count(strtolower($row[$i]), "http://") == 0)
-                           $row[$i] = "http://". $row[$i];
-
-                        if($mode == "html")
-                           $content = "<a href=\"". $row[$i]. "\" target=\"_top\">". substr($row[$i], 7). "</a>";
-                        else
-                           $content = substr($row[$i], 7);
-                        break;
-                        
-                     case "usr_gender":
-                     	// Geschlecht anzeigen
-                     	if($row[$i] == 1)
-                     	{
-                     		if($mode == "csv")
-                     			$content = "männlich";
-                     		else
-                     			$content = "m&auml;nnlich";
-                     	}
-                     	elseif($row[$i] == 2)
-                     		$content = "weiblich";
-                     	else
-                     		$content = "&nbsp;";
-                     	break;
-
-                     default:
-                        $content = $row[$i];
-                        break;
-                  }
-               }
-
-               if($mode == "csv")
-               {
-                  if($i > 0) $str_csv = $str_csv. $separator;
-                  $str_csv = $str_csv. "\"$content\"";
-               }
-               else
-                  echo $content. "</td>\n";
+                echo "<th class=\"$class_header\" align=\"left\">&nbsp;";
+                if($i == 0)
+                {
+                    echo "Nr.";
+                }
+                else
+                {
+                    echo $arr_col_name[$arr_fields[$i]];
+                }
+                echo "</th>\n";
             }
-         }
+        }  // End-For
 
-         if($mode == "csv")
+        if($mode == "csv")
+        {
             $str_csv = $str_csv. "\n";
-         else
+        }
+        else
+        {
             echo "</tr>\n";
+        }
 
-         $irow++;
-      }  // End-While (jeder gefundene User)
-   }  // End-If (Rows > 0)
+        $irow       = 1;
+
+        while($row = mysql_fetch_array($result_lst))
+        {
+            if($mode == "html")
+            {
+                echo "<tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\"
+                style=\"cursor: pointer\" onClick=\"window.location.href='$g_root_path/adm_program/modules/profile/profile.php?user_id=$row[0]'\">\n";
+            }
+            else if($mode == "print")
+            {
+                echo "<tr>\n";
+            }
+
+            // Felder zu Datensatz
+            for($i = 0; $i < count($arr_fields); $i++)
+            {
+                if($mode != "csv")
+                {
+                    echo "<td  class=\"$class_row\" align=\"left\">&nbsp;";
+                }
+
+                if($i == 0)
+                {
+                    // erste Spalte zeigt lfd. Nummer an
+                    if($mode == "csv")
+                    {
+                        $str_csv = $str_csv. $value_quotes. "$irow". $value_quotes;
+                    }
+                    else
+                    {
+                        echo $irow. "</td>\n";
+                    }
+                }
+                else
+                {
+                    $content = "";
+                    if(strlen($row[$i]) > 0)
+                    {
+                        // Felder nachformatieren
+                        switch($arr_fields[$i])
+                        {
+                            case "usr_email":
+                                // E-Mail als Link darstellen
+                                if($mode == "html")
+                                {
+                                    if($g_current_organization->mail_extern == 1)
+                                    {
+                                        $content = "<a href=\"mailto:". $row[$i]. "\">". $row[$i]. "</a>";
+                                    }
+                                    else
+                                    {
+                                        $content = "<a href=\"../mail/mail.php?usr_id=". $row[0]. "\">". $row[$i]. "</a>";
+                                    }
+                                }
+                                else
+                                {
+                                    $content = $row[$i];
+                                }
+                                break;
+
+                            case "usr_birthday":
+                            case "mem_begin":
+                            case "mem_end":
+                                // Datum 00.00.0000 unterdruecken
+                                $content = mysqldatetime("d.m.y", $row[$i]);
+                                if($content == "00.00.0000")
+                                {
+                                    $content = "";
+                                }
+                                break;
+
+                            case "usr_homepage":
+                                // Homepage als Link darstellen
+                                $row[$i] = stripslashes($row[$i]);
+                                if(substr_count(strtolower($row[$i]), "http://") == 0)
+                                {
+                                    $row[$i] = "http://". $row[$i];
+                                }
+
+                                if($mode == "html")
+                                {
+                                    $content = "<a href=\"". $row[$i]. "\" target=\"_top\">". substr($row[$i], 7). "</a>";
+                                }
+                                else
+                                {
+                                    $content = substr($row[$i], 7);
+                                }
+                                break;
+
+                            case "usr_gender":
+                                // Geschlecht anzeigen
+                                if($row[$i] == 1)
+                                {
+                                    if($mode == "csv")
+                                    {
+                                        $content = "männlich";
+                                    }
+                                    else
+                                    {
+                                        $content = "m&auml;nnlich";
+                                    }
+                                }
+                                elseif($row[$i] == 2)
+                                {
+                                    $content = "weiblich";
+                                }
+                                else
+                                {
+                                    $content = "&nbsp;";
+                                }
+                                break;
+
+                            default:
+                                $content = $row[$i];
+                                break;
+                        }
+                    }
+
+                    if($mode == "csv")
+                    {
+                        if($i > 0) 
+                        {
+                            $str_csv = $str_csv. $separator;
+                        }
+                        $str_csv = $str_csv. $value_quotes. "$content". $value_quotes;
+                    }
+                    else
+                    {
+                        echo $content. "</td>\n";
+                    }
+                }
+            }
+
+            if($mode == "csv")
+            {
+                $str_csv = $str_csv. "\n";
+            }
+            else
+            {
+                echo "</tr>\n";
+            }
+
+            $irow++;
+        }  // End-While (jeder gefundene User)
+    }  // End-If (Rows > 0)
 }  // End-For (Leiter, Teilnehmer)
 
 if($mode == "csv")
 {
-   // nun die erstellte CSV-Datei an den User schicken
-   $filename = $g_organization. "-". str_replace(" ", "_", str_replace(".", "", $role_row->rol_name)). ".csv";
-   header("Content-Type: text/comma-separated-values; charset=ISO-8859-1");
-   header("Content-Disposition: attachment; filename=\"$filename\"");
-   echo $str_csv;
+    // nun die erstellte CSV-Datei an den User schicken
+    $filename = $g_organization. "-". str_replace(" ", "_", str_replace(".", "", $role_row->rol_name)). ".csv";
+    header("Content-Type: text/comma-separated-values; charset=ISO-8859-1");
+    header("Content-Disposition: attachment; filename=\"$filename\"");
+    echo $str_csv;
 }
 else
 {
-   echo "</table>";
+    echo "</table>";
 
-	if($mode != "print")
-	{
-		echo "<p>
-			<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
-			<img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\">
-			Zur&uuml;ck</button>
-		</p>
-		</div>";		
-		require("../../../adm_config/body_bottom.php");
-	}
-	else
-		echo "</div>";
-		
-echo "</body>
-</html>";
+    if($mode != "print")
+    {
+        echo "<p>
+        <a class=\"iconLink\" href=\"javascript:history.back()\"><img
+        class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"". $_GET["headline"]. "-Feed abonnieren\"></a>
+        <a class=\"iconLink\" href=\"javascript:history.back()\">Zur&uuml;ck</a>
+        </p>
+        </div>";        
+        require("../../../adm_config/body_bottom.php");
+    }
+    else
+    {
+        echo "</div>";
+    }
+        
+    echo "</body>
+    </html>";
 }
 
 ?>
