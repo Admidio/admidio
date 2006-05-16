@@ -321,13 +321,13 @@ if($mode != "csv")
         
         echo "<span class=\"iconLink\">
             <a class=\"iconLink\" href=\"#\" onclick=\"window.open('lists_show.php?typ=$type&amp;mode=print&amp;rol_id=$rol_id', '_blank')\"><img
-            class=\"iconLink\" src=\"$g_root_path/adm_program/images/print.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"". $_GET["headline"]. "-Feed abonnieren\"></a>
+            class=\"iconLink\" src=\"$g_root_path/adm_program/images/print.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Druckvorschau\"></a>
             <a class=\"iconLink\" href=\"#\" onclick=\"window.open('lists_show.php?typ=$type&amp;mode=print&amp;rol_id=$rol_id', '_blank')\">Druckvorschau</a>
         </span>
         
         &nbsp;&nbsp;
         
-        <img class=\"iconLink\" src=\"$g_root_path/adm_program/images/database_out.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"". $_GET["headline"]. "-Feed abonnieren\">
+        <img class=\"iconLink\" src=\"$g_root_path/adm_program/images/database_out.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Exportieren\">
         <select size=\"1\" name=\"list$i\" onchange=\"exportList(this)\">
             <option value=\"\" selected=\"selected\">Exportieren nach ...</option>
             <option value=\"csv-ms\">Microsoft Excel</option>
@@ -604,7 +604,7 @@ else
         echo "<p>
             <span class=\"iconLink\">
                 <a class=\"iconLink\" href=\"javascript:history.back()\"><img
-                class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"". $_GET["headline"]. "-Feed abonnieren\"></a>
+                class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Zur&uuml;ck\"></a>
                 <a class=\"iconLink\" href=\"javascript:history.back()\">Zur&uuml;ck</a>
             </span>
         </p>
