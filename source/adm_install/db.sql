@@ -14,11 +14,19 @@ drop table if exists %PRAEFIX%_folders;
 
 drop table if exists %PRAEFIX%_folder_roles;
 
+drop table if exists %PRAEFIX%_guestbook;
+
+drop table if exists %PRAEFIX%_guestbook_comments;
+
+drop table if exists %PRAEFIX%_links;
+
 drop table if exists %PRAEFIX%_members;
 
 drop table if exists %PRAEFIX%_organizations;
 
 drop table if exists %PRAEFIX%_photos;
+
+drop table if exists %PRAEFIX%_preferences;
 
 drop table if exists %PRAEFIX%_role_categories;
 
@@ -152,6 +160,91 @@ alter table %PRAEFIX%_folder_roles add index FLR_FOL_FK (flr_fol_id);
 alter table %PRAEFIX%_folder_roles add index FOL_ROL_FK (flr_rol_id);
 
 /*==============================================================*/
+/* Table: adm_guestbook                                         */
+/*==============================================================*/
+create table %PRAEFIX%_guestbook
+(
+   gbo_id                         int(11) unsigned               not null AUTO_INCREMENT,
+   gbo_org_id                     int(4) unsigned                not null,
+   gbo_usr_id                     int(11) unsigned,
+   gbo_name                       varchar(60)                    not null,
+   gbo_text                       text                           not null,
+   gbo_email                      varchar(50),
+   gbo_homepage                   varchar(50),
+   gbo_timestamp                  datetime                       not null,
+   gbo_ip_address                 varchar(15)                    not null,
+   gbo_last_change                datetime,
+   gbo_usr_id_change              int(11) unsigned,
+   primary key (gbo_id)
+)
+type = InnoDB;
+
+/*==============================================================*/
+/* Index: "GBO_ORG_FK"                                            */
+/*==============================================================*/
+alter table %PRAEFIX%_guestbook add index GBO_ORG_FK (gbo_org_id);
+
+/*==============================================================*/
+/* Index: "GBO_USR_FK"                                            */
+/*==============================================================*/
+alter table %PRAEFIX%_guestbook add index GBO_USR_FK (gbo_usr_id);
+
+/*==============================================================*/
+/* Index: "GBO_USR_CHANGE_FK"                                            */
+/*==============================================================*/
+alter table %PRAEFIX%_guestbook add index GBO_USR_CHANGE_FK (gbo_usr_id_change);
+
+/*==============================================================*/
+/* Table: adm_guestbook_comments                                */
+/*==============================================================*/
+create table %PRAEFIX%_guestbook_comments
+(
+   gbc_id                         int(11) unsigned               not null AUTO_INCREMENT,
+   gbc_gbo_id                     int(11) unsigned               not null,
+   gbc_usr_id                     int(11) unsigned               not null,
+   gbc_text                       text                           not null,
+   gbc_timestamp                  datetime                       not null,
+   primary key (gbc_id)
+)
+type = InnoDB;
+
+/*==============================================================*/
+/* Index: "GBC_GBO_FK"                                            */
+/*==============================================================*/
+alter table %PRAEFIX%_guestbook_comments add index GBC_GBO_FK (gbc_gbo_id);
+
+/*==============================================================*/
+/* Index: "GBC_USR_FK"                                            */
+/*==============================================================*/
+alter table %PRAEFIX%_guestbook_comments add index GBC_USR_FK (gbc_usr_id);
+
+/*==============================================================*/
+/* Table: adm_links                                             */
+/*==============================================================*/
+create table %PRAEFIX%_links
+(
+   lnk_id                         int(11) unsigned               not null AUTO_INCREMENT,
+   lnk_org_id                     int(4) unsigned                not null,
+   lnk_name                       varchar(255)                   not null,
+   lnk_description                text,
+   lnk_url                        varchar(255)                   not null,
+   lnk_usr_id                     int(11) unsigned               not null,
+   lnk_timestamp                  datetime                       not null,
+   primary key (lnk_id)
+)
+type = InnoDB;
+
+/*==============================================================*/
+/* Index: "LNK_ORG_FK"                                            */
+/*==============================================================*/
+alter table %PRAEFIX%_links add index LNK_ORG_FK (lnk_org_id);
+
+/*==============================================================*/
+/* Index: "LNK_USR_FK"                                            */
+/*==============================================================*/
+alter table %PRAEFIX%_links add index LNK_USR_FK (lnk_usr_id);
+
+/*==============================================================*/
 /* Table: adm_members                                           */
 /*==============================================================*/
 create table %PRAEFIX%_members
@@ -251,6 +344,24 @@ alter table %PRAEFIX%_photos add index PHO_USR_CHANGE_FK (pho_usr_id_change);
 alter table %PRAEFIX%_photos add index FK_PHO_PHO_PARENT_FK (pho_pho_id_parent);
 
 /*==============================================================*/
+/* Table: adm_preferences                                       */
+/*==============================================================*/
+create table %PRAEFIX%_preferences
+(
+   prf_id                         int(11) unsigned               not null AUTO_INCREMENT,
+   prf_org_id                     int(4) unsigned                not null,
+   prf_name                       varchar(30)                    not null,
+   prf_value                      varchar(255),
+   primary key (prf_id)
+)
+type = InnoDB;
+
+/*==============================================================*/
+/* Index: "PRF_ORG_FK"                                            */
+/*==============================================================*/
+alter table %PRAEFIX%_preferences add index PRF_ORG_FK (prf_org_id);
+
+/*==============================================================*/
 /* Table: adm_role_categories                                   */
 /*==============================================================*/
 create table %PRAEFIX%_role_categories
@@ -308,6 +419,7 @@ create table %PRAEFIX%_roles
    rol_name                       varchar(30)                    not null,
    rol_description                varchar(255),
    rol_moderation                 tinyint(1) unsigned            not null default 0,
+   rol_announcements              tinyint(1) unsigned            not null default 0,
    rol_dates                      tinyint(1) unsigned            not null default 0,
    rol_edit_user                  tinyint(1) unsigned            not null default 0,
    rol_photo                      tinyint(1) unsigned            not null default 0,
@@ -500,6 +612,27 @@ alter table %PRAEFIX%_folders add constraint %PRAEFIX%_FK_FOL_FOL_PARENT foreign
 alter table %PRAEFIX%_folders add constraint %PRAEFIX%_FK_FOL_ORG foreign key (fol_org_shortname)
       references %PRAEFIX%_organizations (org_shortname) on delete restrict on update restrict;
 
+alter table %PRAEFIX%_guestbook add constraint FK_GBO_ORG foreign key (gbo_org_id)
+      references %PRAEFIX%_organizations (org_id) on delete restrict on update restrict;
+
+alter table %PRAEFIX%_guestbook add constraint FK_GBO_USR foreign key (gbo_usr_id)
+      references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
+
+alter table %PRAEFIX%_guestbook add constraint FK_GBO_USR_CHANGE foreign key (gbo_usr_id_change)
+      references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
+
+alter table %PRAEFIX%_guestbook_comments add constraint FK_GBC_GBO foreign key (gbc_gbo_id)
+      references %PRAEFIX%_guestbook (gbo_id) on delete restrict on update restrict;
+
+alter table %PRAEFIX%_guestbook_comments add constraint FK_GBC_USR foreign key (gbc_usr_id)
+      references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
+
+alter table %PRAEFIX%_links add constraint FK_LNK_ORG foreign key (lnk_org_id)
+      references %PRAEFIX%_organizations (org_id) on delete restrict on update restrict;
+
+alter table %PRAEFIX%_links add constraint FK_LNK_USR foreign key (lnk_usr_id)
+      references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
+
 alter table %PRAEFIX%_members add constraint %PRAEFIX%_FK_MEM_ROL foreign key (mem_rol_id)
       references %PRAEFIX%_roles (rol_id) on delete restrict on update restrict;
 
@@ -520,6 +653,9 @@ alter table %PRAEFIX%_photos add constraint %PRAEFIX%_FK_PHO_USR foreign key (ph
 
 alter table %PRAEFIX%_photos add constraint %PRAEFIX%_FK_PHO_USR_CHANGE foreign key (pho_usr_id_change)
       references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
+
+alter table %PRAEFIX%_preferences add constraint FK_PRF_ORG foreign key (prf_org_id)
+      references %PRAEFIX%_organizations (org_id) on delete restrict on update restrict;
 
 alter table %PRAEFIX%_role_categories add constraint %PRAEFIX%_FK_RLC_ORG foreign key (rlc_org_shortname)
       references %PRAEFIX%_organizations (org_shortname) on delete restrict on update restrict;
@@ -562,4 +698,3 @@ alter table %PRAEFIX%_users add constraint %PRAEFIX%_FK_USR_USR_CHANGE foreign k
 
 alter table %PRAEFIX%_users add constraint %PRAEFIX%_FK_USR_ORG_REG foreign key (usr_reg_org_shortname)
       references %PRAEFIX%_organizations (org_shortname) on delete restrict on update restrict;
-      
