@@ -40,18 +40,24 @@ if(strlen($g_tbl_praefix) == 0)
 	$g_tbl_praefix = "adm";
 
 // Defines fuer alle Datenbanktabellen
-define("TBL_ANNOUNCEMENTS",    $g_tbl_praefix. "_announcements");
-define("TBL_DATES",            $g_tbl_praefix. "_dates");
-define("TBL_MEMBERS",          $g_tbl_praefix. "_members");
-define("TBL_ORGANIZATIONS",    $g_tbl_praefix. "_organizations");
-define("TBL_PHOTOS",           $g_tbl_praefix. "_photos");
-define("TBL_ROLE_CATEGORIES",  $g_tbl_praefix. "_role_categories");
-define("TBL_ROLE_DEPENDENCIES",$g_tbl_praefix. "_role_dependencies");
-define("TBL_ROLES",            $g_tbl_praefix. "_roles");
-define("TBL_SESSIONS",         $g_tbl_praefix. "_sessions");
-define("TBL_USERS",            $g_tbl_praefix. "_users");
-define("TBL_USER_DATA",        $g_tbl_praefix. "_user_data");
-define("TBL_USER_FIELDS",      $g_tbl_praefix. "_user_fields");
+define("TBL_ANNOUNCEMENTS",     $g_tbl_praefix. "_announcements");
+define("TBL_DATES",             $g_tbl_praefix. "_dates");
+define("TBL_FOLDERS",           $g_tbl_praefix. "_folders");
+define("TBL_FOLDER_ROLES",      $g_tbl_praefix. "_folder_roles");
+define("TBL_GUESTBOOK",         $g_tbl_praefix. "_guestbook");
+define("TBL_GUESTBOOK_COMMENTS",$g_tbl_praefix. "_guestbook_comments");
+define("TBL_LINKS",             $g_tbl_praefix. "_links");
+define("TBL_MEMBERS",           $g_tbl_praefix. "_members");
+define("TBL_ORGANIZATIONS",     $g_tbl_praefix. "_organizations");
+define("TBL_PHOTOS",            $g_tbl_praefix. "_photos");
+define("TBL_PREFERENCES",       $g_tbl_praefix. "_preferences");
+define("TBL_ROLE_CATEGORIES",   $g_tbl_praefix. "_role_categories");
+define("TBL_ROLE_DEPENDENCIES", $g_tbl_praefix. "_role_dependencies");
+define("TBL_ROLES",             $g_tbl_praefix. "_roles");
+define("TBL_SESSIONS",          $g_tbl_praefix. "_sessions");
+define("TBL_USERS",             $g_tbl_praefix. "_users");
+define("TBL_USER_DATA",         $g_tbl_praefix. "_user_data");
+define("TBL_USER_FIELDS",       $g_tbl_praefix. "_user_fields");
 
  // Verbindung zu Datenbank herstellen
 $g_adm_con = mysql_connect ($g_adm_srv, $g_adm_usr, $g_adm_pw);
@@ -72,7 +78,7 @@ $g_current_user  = new TblUsers($g_adm_con);
 $g_current_organization = new TblOrganizations($g_adm_con);
 $g_current_organization->getOrganization($g_organization);
 
-// includes MIT Datenbankverbindung   
-require_once($g_server_path. "/adm_program/system/session_check.php");   
+// includes MIT Datenbankverbindung
+require_once($g_server_path. "/adm_program/system/session_check.php");
 
 ?>
