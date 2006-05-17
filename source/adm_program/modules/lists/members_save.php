@@ -57,16 +57,16 @@ if((!isModerator() && !isGroupLeader($role_id) && !editUser()) || (!hasRole("Web
 $sql =" SELECT *
         FROM ". TBL_MEMBERS. "
         WHERE mem_rol_id = $role_id";
-$result_role = mysql_query($sql, $g_adm_con);
-db_error($result);
+$result_mem_role = mysql_query($sql, $g_adm_con);
+db_error($result_mem_role);
    
 //Schreiben der Datensaetze in Array sortiert nach zugewiesenen Benutzern (id)
 $mitglieder_array= array(array());
-for($x=0; $role= mysql_fetch_array($result_role); $x++)
+for($x=0; $mem_role= mysql_fetch_array($result_mem_role); $x++)
 {
     for($y=0; $y<=6; $y++)
     {
-        $mitglieder_array["$role[2]"][$y]=$role[$y];
+        $mitglieder_array["$mem_role[2]"][$y]=$mem_role[$y];
     }
 }
 
@@ -77,24 +77,27 @@ $sql =" SELECT *
 $result_user = mysql_query($sql, $g_adm_con);
 db_error($result_user);
 
-
 //Kontrolle ob nicht am ende die Mitgliederzahl ueberstigen wird
-$counter=0;
-while($user= mysql_fetch_array($result_user))
-{    
-    if ($_POST["member_".$user["usr_id"]]==true)
-    {
-        $counter++;
+if($role->rol_max_members!=NULL)
+{   
+    $counter=0;
+    while($user= mysql_fetch_array($result_user))
+    {    
+        if ($_POST["member_".$user["usr_id"]]==true)
+        {
+            $counter++;
+        }
     }
+    if($counter>$role->rol_max_members)
+    {
+        $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=max_members";
+        header($location);
+        exit();
+    }  
+    
+    //Dateizeiger zurueck zum Anfang
+    mysql_data_seek($result_user,0);
 }
-if($counter>$role["rol_max_members"])
-{
-   $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=max_members";
-   header($location);
-   exit();
-}    
-//Dateizeiger zurueck zum Anfang
-mysql_data_seek($result_user,0);
 
 //Datensaetze durchgehen und sehen ob faer den Benutzer eine aenderung vorliegt
 while($user= mysql_fetch_array($result_user))
