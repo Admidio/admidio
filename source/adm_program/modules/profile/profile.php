@@ -252,7 +252,7 @@ require("../../../adm_config/body_top.php");
                     <div style=\"margin-top: 10px; margin-left: 30%; text-align: left\">";
                         if(strlen($user->email) > 0)
                         {
-                            if($g_current_organization->mail_extern == 1)
+                            if($g_preferences['send_mail_extern'] == 1)
                                 $mail_link = "mailto:$user->email";
                             else
                                 $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?usr_id=$user->id";

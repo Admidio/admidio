@@ -45,12 +45,6 @@ $err_code   = "";
 $g_current_organization->longname  = strStripTags($_POST["longname"]);
 $g_current_organization->homepage  = strStripTags($_POST["homepage"]);
 $g_current_organization->org_id_parent = $_POST["parent"];
-$g_current_organization->bbcode        = $_POST["bbcode"];
-$g_current_organization->mail_extern   = $_POST["mail_extern"];
-$g_current_organization->mail_size     = $_POST["attachment_size"];
-$g_current_organization->upload_size   = $_POST["upload_size"];
-$g_current_organization->photo_size    = $_POST["photo_size"];
-$g_current_organization->enable_rss    = $_POST["enable_rss"];
 
 // Pruefen, ob alle notwendigen Felder gefuellt sind
 if(strlen($g_current_organization->longname) == 0)
@@ -59,19 +53,19 @@ if(strlen($g_current_organization->longname) == 0)
    $err_text = "Name (lang)";
 }
 
-if(strlen($g_current_organization->mail_size) == 0)
+if(strlen($_POST["attachment_size"]) == 0)
 {
-	$g_current_organization->mail_size = 0;
+    $_POST["attachment_size"] = 0;
 }
 
-if(strlen($g_current_organization->upload_size) == 0)
+if(strlen($_POST["upload_size"]) == 0)
 {
-	$g_current_organization->upload_size = 0;
+    $_POST["upload_size"] = 0;
 }
 
-if(strlen($g_current_organization->photo_size) == 0)
+if(strlen($_POST["photo_size"]) == 0)
 {
-	$g_current_organization->photo_size = 0;
+    $_POST["photo_size"] = 0;
 }
 
 if ($err_code != "")
@@ -89,6 +83,44 @@ if($ret_code != 0)
    header($location);
    exit();
 }
+
+// Einstellungen speichern
+
+$sql = "UPDATE ". TBL_PREFERENCES. " SET prf_value = {0}
+         WHERE prf_name = 'send_mail_extern' ";
+$sql = prepareSQL($sql, array($_POST['mail_extern']));
+$result = mysql_query($sql, $g_adm_con);
+db_error($result);
+
+$sql = "UPDATE ". TBL_PREFERENCES. " SET prf_value = {0}
+         WHERE prf_name = 'enable_bbcode' ";
+$sql = prepareSQL($sql, array($_POST['bbcode']));
+$result = mysql_query($sql, $g_adm_con);
+db_error($result);         
+         
+$sql = "UPDATE ". TBL_PREFERENCES. " SET prf_value = {0}
+         WHERE prf_name = 'enable_rss' ";
+$sql = prepareSQL($sql, array($_POST['enable_rss']));
+$result = mysql_query($sql, $g_adm_con);
+db_error($result);
+
+$sql = "UPDATE ". TBL_PREFERENCES. " SET prf_value = {0}
+         WHERE prf_name = 'max_mail_attachment_size' ";
+$sql = prepareSQL($sql, array($_POST['attachment_size']));
+$result = mysql_query($sql, $g_adm_con);
+db_error($result);
+
+$sql = "UPDATE ". TBL_PREFERENCES. " SET prf_value = {0}
+         WHERE prf_name = 'max_file_upload_size' ";
+$sql = prepareSQL($sql, array($_POST['upload_size']));
+$result = mysql_query($sql, $g_adm_con);
+db_error($result);
+
+$sql = "UPDATE ". TBL_PREFERENCES. " SET prf_value = {0}
+         WHERE prf_name = 'max_photo_size' ";
+$sql = prepareSQL($sql, array($_POST['photo_size']));
+$result = mysql_query($sql, $g_adm_con);
+db_error($result);
 
 // zur Ausgangsseite zurueck
 $load_url = urlencode("$g_root_path/adm_program/administration/organization/organization.php?url=". $_GET['url']);

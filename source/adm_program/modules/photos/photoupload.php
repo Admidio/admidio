@@ -95,7 +95,7 @@ if($g_session_valid & editPhoto())
             }
    
             //Dateigroesse
-            if ($_FILES["bilddatei"]["size"][$x]>($g_current_organization->photo_size)*1000)
+            if ($_FILES["bilddatei"]["size"][$x]>($g_preferences['max_photo_size'])*1000)
             {
                 $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=photo_2big";
                 header($location);

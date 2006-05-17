@@ -136,7 +136,7 @@ if ($count_user == 0)
     while($row = mysql_fetch_object($result))
     {
         // nur ausfuehren, wenn E-Mails auch unterstuetzt werden
-        if($g_current_organization->mail_extern != 1)
+        if($g_preferences['send_mail_extern'] != 1)
         {
             // Mail an den User mit den Loginaten schicken
             $email = new Email();
@@ -150,12 +150,6 @@ if ($count_user == 0)
             {
                 $err_code = "anmeldung";
             }      
-            /*
-            mail("$row->usr_email", "Anmeldung", "Es hat sich ein neuer User auf ".
-            "$g_current_organization->homepage angemeldet\n\nNachname: ". $_POST["nachname"]. "\nVorname:  ". $_POST["vorname"]. "\n".
-            "E-Mail:   ". $_POST["email"]. "\n\n\nDiese Nachricht wurde automatisch erzeugt.",
-            "From: webmaster@$g_domain");
-            */
         }
     }
 

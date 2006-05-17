@@ -49,7 +49,7 @@ if(!array_key_exists("id", $_GET))
     $_GET["id"] = 0;
 }
 
-if($g_current_organization->bbcode == 1)
+if($g_preferences['enable_bbcode'] == 1)
 {
     // Klasse fuer BBCode
     $bbcode = new ubbParser();
@@ -65,7 +65,7 @@ echo "
    <title>$g_current_organization->longname - Termine</title>
    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">";
 
-if($g_current_organization->enable_rss == 1)
+if($g_preferences['enable_rss'] == 1)
 {
     echo "<link type=\"application/rss+xml\" rel=\"alternate\" title=\"$g_current_organization->longname - Termine\"
     href=\"$g_root_path/adm_program/modules/dates/rss_dates.php\">";
@@ -183,7 +183,7 @@ require("../../../adm_config/body_top.php");
         // Icon-Links und Navigation anzeigen
 
         if($_GET['id'] == 0
-        && (isModerator() || $g_current_organization->enable_rss == true))
+        && (isModerator() || $g_preferences['enable_rss'] == true))
         {
             echo "<p>";
             
@@ -197,13 +197,13 @@ require("../../../adm_config/body_top.php");
                 </span>";
             }
             
-            if(isModerator() && $g_current_organization->enable_rss == true)
+            if(isModerator() && $g_preferences['enable_rss'] == true)
             {
                 echo "&nbsp;&nbsp;&nbsp;&nbsp;";
             }
 
             // Feed abonnieren
-            if($g_current_organization->enable_rss == true)
+            if($g_preferences['enable_rss'] == true)
             {
                 echo "<span class=\"iconLink\">
                     <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/dates/rss_dates.php\"><img
@@ -310,7 +310,7 @@ require("../../../adm_config/body_top.php");
                     echo "</div>
                     <div style=\"margin: 8px 4px 4px 4px; text-align: left;\">";
                         // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
-                        if($g_current_organization->bbcode == 1)
+                        if($g_preferences['enable_bbcode'] == 1)
                         {
                             echo strSpecialChars2Html($bbcode->parse($row->dat_description));
                         }

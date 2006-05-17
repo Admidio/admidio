@@ -37,7 +37,7 @@ require_once($g_server_path. "/adm_program/system/tbl_organizations.php");
 
  // Standard-Praefix ist adm auch wegen Kompatibilitaet zu alten Versionen
 if(strlen($g_tbl_praefix) == 0)
-	$g_tbl_praefix = "adm";
+    $g_tbl_praefix = "adm";
 
 // Defines fuer alle Datenbanktabellen
 define("TBL_ANNOUNCEMENTS",     $g_tbl_praefix. "_announcements");
@@ -77,6 +77,18 @@ $g_current_user  = new TblUsers($g_adm_con);
 
 $g_current_organization = new TblOrganizations($g_adm_con);
 $g_current_organization->getOrganization($g_organization);
+
+// Einstellungen der Organisation auslesen
+$sql    = "SELECT * FROM ". TBL_PREFERENCES. "
+            WHERE prf_org_id = $g_current_organization->id ";
+$result = mysql_query($sql, $g_adm_con);
+db_error($result);
+
+$g_preferences = array();
+while($prf_row = mysql_fetch_object($result))
+{
+    $g_preferences[$prf_row->prf_name] = $prf_row->prf_value;
+}
 
 // includes MIT Datenbankverbindung
 require_once($g_server_path. "/adm_program/system/session_check.php");

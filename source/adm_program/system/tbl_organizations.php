@@ -51,12 +51,6 @@ class TblOrganizations
     var $shortname;
     var $org_id_parent;
     var $homepage;
-    var $mail_size;
-    var $upload_size;
-    var $photo_size;
-    var $mail_extern;
-    var $enable_rss;
-    var $bbcode;
 
     // Konstruktor
     function TblOrganizations($connection)
@@ -79,12 +73,6 @@ class TblOrganizations
             $this->shortname   = $row->org_shortname;
             $this->org_id_parent = $row->org_org_id_parent;
             $this->homepage    = $row->org_homepage;
-            $this->mail_size   = $row->org_mail_size;
-            $this->upload_size = $row->org_upload_size;
-            $this->photo_size  = $row->org_photo_size;
-            $this->mail_extern = $row->org_mail_extern;
-            $this->enable_rss  = $row->org_enable_rss;
-            $this->bbcode      = $row->org_bbcode;
         }
         else
         {
@@ -102,12 +90,6 @@ class TblOrganizations
         $this->shortname   = "";
         $this->org_id_parent = 0;
         $this->homepage    = "";
-        $this->mail_size   = 0;
-        $this->upload_size = 0;
-        $this->photo_size  = 0;
-        $this->mail_extern = 0;
-        $this->enable_rss  = 1;
-        $this->bbcode      = 1;
     }
 
 
@@ -116,29 +98,10 @@ class TblOrganizations
     {
         if($this->id > 0)
         {
-            if($this->mail_extern != 1) 
-            {
-                $this->mail_extern = 0;
-            }
-            if($this->enable_rss != 1)  
-            {
-                $this->enable_rss = 0;
-            }
-            if($this->bbcode != 1)      
-            {
-                $this->bbcode = 0;
-            }
-
             $sql = "UPDATE ". TBL_ORGANIZATIONS. "
                              SET org_longname    = '$this->longname'
                                , org_shortname   = '$this->shortname'
-                               , org_homepage    = '$this->homepage'
-                               , org_mail_size   = $this->mail_size
-                               , org_upload_size = $this->upload_size
-                               , org_photo_size  = $this->photo_size
-                               , org_mail_extern = $this->mail_extern
-                               , org_enable_rss  = $this->enable_rss
-                               , org_bbcode      = $this->bbcode ";
+                               , org_homepage    = '$this->homepage' ";
             if($this->org_id_parent == 0)
             {
                 $sql = $sql. ", org_org_id_parent = NULL ";
@@ -160,25 +123,8 @@ class TblOrganizations
     {
         if($this->id == 0)
         {
-            if($this->mail_extern != 1) 
-            {
-                $this->mail_extern = 0;
-            }
-            if($this->enable_rss != 1) 
-            {
-                $this->enable_rss = 0;
-            }
-            if($this->bbcode != 1)     
-            {
-                $this->bbcode = 0;
-            }
-
-            $sql = "INSERT INTO ". TBL_ORGANIZATIONS. " (org_longname, org_shortname, org_org_id_parent
-                                    org_homepage, org_mail_size, org_upload_size, org_photo_size,
-                                    org_mail_extern, org_enable_rss, org_bbcode )
-                         VALUES ('$this->longname', '$this->shortname', $this->org_id_parent,
-                                    '$this->homepage', $this->mail_size, $this->upload_size, $this->photo_size, 
-                                    $this->mail_extern, $this->enable_rss, $this->bbcode ) ";
+            $sql = "INSERT INTO ". TBL_ORGANIZATIONS. " (org_longname, org_shortname, org_org_id_parent, org_homepage)
+                         VALUES ('$this->longname', '$this->shortname', $this->org_id_parent, '$this->homepage' ) ";
             $result = mysql_query($sql, $this->db_connection);
             db_error($result);
 

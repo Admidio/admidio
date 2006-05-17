@@ -27,6 +27,7 @@
 function getErrorText($error_code, $error_text, $g_current_organization)
 {
     global $g_root_path;
+    global $g_preferences;
 
     switch ($error_code)
     {
@@ -240,7 +241,7 @@ function getErrorText($error_code, $error_text, $g_current_organization)
             break;
 
         case "write_access":
-            if ($g_current_organization->mail_extern == 1)
+            if ($g_preferences['send_mail_extern'] == 1)
             {
                 $mail_link = "mailto:webmaster@$g_domain";
             }
@@ -300,7 +301,7 @@ function getErrorText($error_code, $error_text, $g_current_organization)
 
         case "photo_2big":
             $error_str = "Mindestens eins der hochgeladenen Fotos &uuml;bersteigt die zul&auml;ssige
-            Dateigr&ouml;&szlig;e von ".$g_current_organization->photo_size."KB.";
+            Dateigr&ouml;&szlig;e von ".$g_preferences['max_photo_size']."KB.";
             break;
         //Ende Fehlermeldungen Fotomodul
 
@@ -366,7 +367,7 @@ function getErrorText($error_code, $error_text, $g_current_organization)
 
         case "file_2big":
             $error_str = "Die hochgeladene Datei &uuml;bersteigt die zul&auml;ssige
-            Dateigr&ouml;&szlig;e von ".$g_current_organization->upload_size."KB.";
+            Dateigr&ouml;&szlig;e von ".$g_preferences['max_file_upload_size']."KB.";
             break;
         //Ende Fehlermeldungen Downloadmodul
 

@@ -82,7 +82,7 @@ if($_GET["mode"] == 1)
     }
 
     // nur ausfuehren, wenn E-Mails auch unterstuetzt werden
-    if($g_current_organization->mail_extern != 1)
+    if($g_preferences['send_mail_extern'] != 1)
     {
         // Mail an den User schicken, um die Anmeldung zu bestaetigen
         $email = new Email();

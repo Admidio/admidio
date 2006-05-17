@@ -237,7 +237,7 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
 
     if(isValidEmailAddress($_POST['user-email']) == false)
     {
-    	showError("Die E-Mail-Adresse ist nicht g&uuml;ltig.");
+        showError("Die E-Mail-Adresse ist nicht g&uuml;ltig.");
     }
 
     if(  strlen($_POST['verein-name-lang']) == 0
@@ -411,11 +411,48 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
                    W&auml;hlen Sie bitte einen anderen kurzen Namen !");
     }
 
-    $sql = "INSERT INTO ". TBL_ORGANIZATIONS. " (org_shortname, org_longname, org_homepage, org_font)
-                                         VALUES ({0}, {1}, '". $_SERVER['HTTP_HOST']. "', 'mr_phone1.ttf') ";
+    $sql = "INSERT INTO ". TBL_ORGANIZATIONS. " (org_shortname, org_longname, org_homepage)
+                                         VALUES ({0}, {1}, '". $_SERVER['HTTP_HOST']. "') ";
     $sql = prepareSQL($sql, array($_POST['verein-name-kurz'], $_POST['verein-name-lang']));
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
+    $org_id = mysql_insert_id($connection);
+
+    // Einstellungen anlegen
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+                                       VALUES ($org_id, 'max_mail_attachment_size', '1024') ";
+    $result = mysql_query($sql, $connection);
+    db_error($result);
+
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+                                       VALUES ($org_id, 'max_file_upload_size', '3072') ";
+    $result = mysql_query($sql, $connection);
+    db_error($result);
+
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+                                       VALUES ($org_id, 'max_photo_size', '512') ";
+    $result = mysql_query($sql, $connection);
+    db_error($result);
+
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+                                       VALUES ($org_id, 'send_mail_extern', '0') ";
+    $result = mysql_query($sql, $connection);
+    db_error($result);
+
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+                                       VALUES ($org_id, 'enable_rss', '1') ";
+    $result = mysql_query($sql, $connection);
+    db_error($result);
+
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+                                       VALUES ($org_id, 'enable_bbcode', '1') ";
+    $result = mysql_query($sql, $connection);
+    db_error($result);
+
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+                                       VALUES ($org_id, 'font', 'mr_phone1.ttf') ";
+    $result = mysql_query($sql, $connection);
+    db_error($result);
 
     // Rollen-Kategorie eintragen
     $sql = "INSERT INTO ". TBL_ROLE_CATEGORIES. " (rlc_org_shortname, rlc_name)
