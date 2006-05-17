@@ -80,17 +80,24 @@ require("../adm_config/body_top.php");
         <div style=\"padding-top: 15px; padding-bottom: 5px;\">";
             if($g_session_valid == 1)
             {
-                echo "
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/logout.php\"><img src=\"$g_root_path/adm_program/images/door_in.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Logout\"></a>
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/logout.php\">Logout</a>";
+                echo "<span class=\"iconLink\">
+                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/logout.php\"><img 
+                    src=\"$g_root_path/adm_program/images/door_in.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Logout\"></a>
+                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/logout.php\">Logout</a>
+                </span>";
             }
             else
             {
-                echo "
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/login.php\"><img src=\"$g_root_path/adm_program/images/key.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Login\"></a>
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/login.php\">Login</a>&nbsp;&nbsp;&nbsp;&nbsp;
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/registration.php\"><img src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Registrieren\"></a>
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/registration.php\">Registrieren</a>";
+                echo "<span class=\"iconLink\">
+                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/login.php\"><img 
+                    src=\"$g_root_path/adm_program/images/key.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Login\"></a>
+                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/login.php\">Login</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                </span>
+                <span class=\"iconLink\">
+                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/registration.php\"><img 
+                    src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Registrieren\"></a>
+                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/registration.php\">Registrieren</a>
+                </span>";
             }
         echo "</div>";
 

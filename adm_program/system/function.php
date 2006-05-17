@@ -459,7 +459,7 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
 
     }
 
-    $page_string = '<p class="iconLink">Seite:&nbsp;&nbsp;' . $page_string. '</p>';
+    $page_string = '<p><span class="iconLink">Seite:&nbsp;&nbsp;' . $page_string. '</span></p>';
 
     return $page_string;
 }

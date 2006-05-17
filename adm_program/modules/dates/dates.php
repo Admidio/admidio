@@ -190,9 +190,11 @@ require("../../../adm_config/body_top.php");
             // Neue Ankuendigung anlegen
             if(isModerator())
             {
-                echo "<a class=\"iconLink\" href=\"dates_new.php\"><img
-                class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Termin anlegen\"></a>
-                <a class=\"iconLink\" href=\"dates_new.php\">Termin anlegen</a>";
+                echo "<span class=\"iconLink\">
+                    <a class=\"iconLink\" href=\"dates_new.php\"><img
+                    class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Termin anlegen\"></a>
+                    <a class=\"iconLink\" href=\"dates_new.php\">Termin anlegen</a>
+                </span>";
             }
             
             if(isModerator() && $g_current_organization->enable_rss == true)
@@ -203,9 +205,11 @@ require("../../../adm_config/body_top.php");
             // Feed abonnieren
             if($g_current_organization->enable_rss == true)
             {
-                echo "<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/dates/rss_dates.php\"><img
-                class=\"iconLink\" src=\"$g_root_path/adm_program/images/feed.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Termine-Feed abonnieren\"></a>
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/dates/rss_dates.php\">Termine-Feed abonnieren</a>";
+                echo "<span class=\"iconLink\">
+                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/dates/rss_dates.php\"><img
+                    class=\"iconLink\" src=\"$g_root_path/adm_program/images/feed.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Termine-Feed abonnieren\"></a>
+                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/dates/rss_dates.php\">Termine-Feed abonnieren</a>
+                </span>";
             }
 
             echo "</p>";
