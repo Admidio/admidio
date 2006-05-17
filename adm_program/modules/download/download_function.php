@@ -36,30 +36,30 @@
  *
  *****************************************************************************/
 
-	require("../../system/common.php");
-	require("../../system/login_valid.php");
+    require("../../system/common.php");
+    require("../../system/login_valid.php");
 
 //Prüfrotine ob Ordner/Datei
 function file_or_folder ($act_dir,$file) {
-	if(strlen($file) > 0)
-		{
-   		if(is_file("$act_dir/$file"))
-      		return false;
-   		else
-   	{
-      	if(is_dir("$act_dir/$file"))
-         	return true;
-      	else
-         	return -1;
-   	}
-	}
+    if(strlen($file) > 0)
+        {
+        if(is_file("$act_dir/$file"))
+            return false;
+        else
+    {
+        if(is_dir("$act_dir/$file"))
+            return true;
+        else
+            return -1;
+    }
+    }
 };
 
 // rekursive Funktion um ganze Ordner mit Unterordnern zu loeschen
 function removeDir ($dir) 
 {
    $fHandle = opendir($dir);
-	if($fHandle > 0) 
+    if($fHandle > 0) 
    {
       while (false !== ($fName = readdir($fHandle))) 
       {     
@@ -76,7 +76,7 @@ function removeDir ($dir)
          }
       }
       return rmdir($dir);      
-	};
+    };
    return false;
 };
 
@@ -142,10 +142,10 @@ if($_GET["mode"] == 1)
    {
       $local_file = $_FILES['userfile']['name'];
       //Dateigroesse ueberpruefen
-      if ($_FILES['userfile']['size']>($g_current_organization->upload_size)*1000){
-      	$location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=file_2big";
-      	header($location);
-      	exit();
+      if ($_FILES['userfile']['size']>($g_preferences['max_file_upload_size'])*1000){
+        $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=file_2big";
+        header($location);
+        exit();
       }
       // Datei-Extension ermitteln
       if(strpos($local_file, ".") !== false)

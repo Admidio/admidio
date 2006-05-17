@@ -37,7 +37,7 @@ require("../../system/common.php");
 
 // Pruefungen, ob die Seite regulaer aufgerufen wurde
 
-if ($g_current_organization->mail_extern == 1)
+if ($g_preferences['send_mail_extern'] == 1)
 {
     // es duerfen oder koennen keine Mails ueber den Server verschickt werden
     $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=mail_extern";
@@ -263,13 +263,13 @@ require("../../../adm_config/body_top.php");
          </div>";
 
          // Nur eingeloggte User duerfen Attachments mit max 3MB anhaengen...
-         if (($g_session_valid) && ($g_current_organization->mail_size > 0))
+         if (($g_session_valid) && ($g_preferences['max_mail_attachment_size'] > 0))
          {
              echo "
              <div style=\"margin-top: 8px;\">
                  <div style=\"text-align: right; width: 15%; float: left;\">Anhang:</div>
                  <div style=\"text-align: left; margin-left: 17%;\">
-                     <input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"" . ($g_current_organization->mail_size * 1024) . "\">
+                     <input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"" . ($g_preferences['max_mail_attachment_size'] * 1024) . "\">
                      <input name=\"userfile\" size=\"40\" type=\"file\">
                  </div>
              </div>";

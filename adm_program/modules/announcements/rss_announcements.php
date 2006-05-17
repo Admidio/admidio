@@ -36,7 +36,7 @@ require("../../system/rss_class.php");
 
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist...
-if ($g_current_organization->enable_rss != 1)
+if ($g_preferences['enable_rss'] != 1)
 {
     $location = "location: $g_root_path/adm_program/system/err_msg.php?url=home&err_code=rss_disabled";
     header($location);
@@ -44,7 +44,7 @@ if ($g_current_organization->enable_rss != 1)
 }
 
 // Nachschauen ob BB-Code aktiviert ist...
-if ($g_current_organization->bbcode == 1)
+if ($g_preferences['enable_bbcode'] == 1)
 {
     //BB-Parser initialisieren
     $bbcode = new ubbParser();
@@ -106,7 +106,7 @@ while ($row = mysql_fetch_object($result))
 
 
     // Die Ankuendigungen eventuell durch den UBB-Parser schicken
-    if ($g_current_organization->bbcode == 1)
+    if ($g_preferences['enable_bbcode'] == 1)
     {
         $description = $description. "<br /><br />". strSpecialChars2Html($bbcode->parse($row->ann_description));
     }

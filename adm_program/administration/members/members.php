@@ -225,7 +225,7 @@ require("../../../adm_config/body_top.php");
                   <td align=\"center\">";
                      if(strlen($row->usr_email) > 0)
                      {
-                        if($g_current_organization->mail_extern == 1)
+                        if($g_preferences['send_mail_extern'] == 1)
                            $mail_link = "mailto:$row->usr_email";
                         else
                            $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?usr_id=$row->usr_id";
@@ -250,7 +250,7 @@ require("../../../adm_config/body_top.php");
                   {
                      if($is_member == true)
                      {
-                        if(strlen($row->usr_login_name) > 0 && $g_current_organization->mail_extern != 1)
+                        if(strlen($row->usr_login_name) > 0 && $g_preferences['send_mail_extern'] != 1)
                         {
                             // Link um E-Mail mit neuem Passwort zu zuschicken
                                    // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden

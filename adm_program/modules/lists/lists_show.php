@@ -485,7 +485,7 @@ for($j = 0; $j < $max_count; $j++)
                                 // E-Mail als Link darstellen
                                 if($mode == "html")
                                 {
-                                    if($g_current_organization->mail_extern == 1)
+                                    if($g_preferences['send_mail_extern'] == 1)
                                     {
                                         $content = "<a href=\"mailto:". $row[$i]. "\">". $row[$i]. "</a>";
                                     }

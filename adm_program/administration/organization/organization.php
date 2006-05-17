@@ -142,7 +142,7 @@ require("../../../adm_config/body_top.php");
                  <div style=\"text-align: right; width: 47%; float: left;\">Externes Mailprogramm:</div>
                  <div style=\"text-align: left; margin-left: 50%;\">
                      <input type=\"checkbox\" id=\"mail_extern\" name=\"mail_extern\" ";
-                     if($g_current_organization->mail_extern == 1)
+                     if($g_preferences['send_mail_extern'] == 1)
                          echo " checked ";
                      echo " value=\"1\" />
                      <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
@@ -154,7 +154,7 @@ require("../../../adm_config/body_top.php");
                  <div style=\"text-align: right; width: 47%; float: left;\">BBCode zulassen:</div>
                  <div style=\"text-align: left; margin-left: 50%;\">
                      <input type=\"checkbox\" id=\"bbcode\" name=\"bbcode\" ";
-                     if($g_current_organization->bbcode == 1)
+                     if($g_preferences['enable_bbcode'] == 1)
                          echo " checked ";
                      echo " value=\"1\" />
                      <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
@@ -166,7 +166,7 @@ require("../../../adm_config/body_top.php");
                  <div style=\"text-align: right; width: 47%; float: left;\">RSS-Feeds aktivieren:</div>
                  <div style=\"text-align: left; margin-left: 50%;\">
                      <input type=\"checkbox\" id=\"enable_rss\" name=\"enable_rss\" ";
-                     if($g_current_organization->enable_rss == 1)
+                     if($g_preferences['enable_rss'] == 1)
                          echo " checked ";
                      echo " value=\"1\" />
                      <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
@@ -183,20 +183,20 @@ require("../../../adm_config/body_top.php");
              <div style=\"margin-top: 6px;\">
                  <div style=\"text-align: right; width: 47%; float: left;\">E-Mail-Attachments:</div>
                  <div style=\"text-align: left; margin-left: 50%;\">
-                     <input type=\"text\" name=\"attachment_size\" size=\"4\" maxlength=\"4\" value=\"$g_current_organization->mail_size\"> KB
+                     <input type=\"text\" name=\"attachment_size\" size=\"4\" maxlength=\"4\" value=\"". $g_preferences['max_mail_attachment_size']. "\"> KB
                  </div>
              </div>
 
              <div style=\"margin-top: 6px;\">
                  <div style=\"text-align: right; width: 47%; float: left;\">Downloads:</div>
                  <div style=\"text-align: left; margin-left: 50%;\">
-                     <input type=\"text\" name=\"upload_size\" size=\"4\" maxlength=\"4\" value=\"$g_current_organization->upload_size\"> KB
+                     <input type=\"text\" name=\"upload_size\" size=\"4\" maxlength=\"4\" value=\"". $g_preferences['max_file_upload_size']. "\"> KB
                  </div>
              </div>
              <div style=\"margin-top: 6px;\">
                  <div style=\"text-align: right; width: 47%; float: left;\">Fotos:</div>
                  <div style=\"text-align: left; margin-left: 50%;\">
-                     <input type=\"text\" name=\"photo_size\" size=\"4\" maxlength=\"4\" value=\"$g_current_organization->photo_size\"> KB
+                     <input type=\"text\" name=\"photo_size\" size=\"4\" maxlength=\"4\" value=\"". $g_preferences['max_photo_size']. "\"> KB
                  </div>
              </div>
          </div>";
