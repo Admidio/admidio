@@ -552,6 +552,8 @@ create table %PRAEFIX%_users
    usr_homepage                   varchar(50),
    usr_login_name                 varchar(20),
    usr_password                   varchar(35),
+   usr_photo                      blob,
+   usr_photo_upload               blob,
    usr_last_login                 datetime,
    usr_actual_login               datetime,
    usr_number_login               smallint(5) unsigned           not null default 0,
