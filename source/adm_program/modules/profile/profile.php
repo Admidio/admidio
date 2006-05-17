@@ -128,17 +128,17 @@ require("../../../adm_config/body_top.php");
             echo "<div style=\"width: 66%; margin-right: 10px; float: left;\">
                 <div class=\"groupBox\" style=\"margin-top: 4px; text-align: left;\">
                     <div class=\"groupBoxHeadline\">$user->first_name $user->last_name&nbsp;&nbsp;";
-                    if($user->gender == 1)
-                    {
-                        echo "<img src=\"$g_root_path/adm_program/images/male.png\" title=\"m&auml;nnlich\" alt=\"m&auml;nnlich\">";
-                    }
-                    elseif($user->gender == 2)
-                    {
-                        echo "<img src=\"$g_root_path/adm_program/images/female.png\" title=\"weiblich\"> alt=\"weiblich\">";
-                    }
+                        if($user->gender == 1)
+                        {
+                            echo "<img src=\"$g_root_path/adm_program/images/male.png\" title=\"m&auml;nnlich\" alt=\"m&auml;nnlich\">";
+                        }
+                        elseif($user->gender == 2)
+                        {
+                            echo "<img src=\"$g_root_path/adm_program/images/female.png\" title=\"weiblich\"> alt=\"weiblich\">";
+                        }
                     echo "</div>
 
-                    <div style=\"float: left; width: 28%; text-align: left\">Adresse:";
+                    <div style=\"float: left; width: 30%; text-align: left\">Adresse:";
                         if(strlen($user->zip_code) > 0 || strlen($user->city) > 0)
                             echo "<br />&nbsp;";
                         if(strlen($user->country) > 0)
@@ -204,18 +204,18 @@ require("../../../adm_config/body_top.php");
                         }
                     echo "</div>
 
-                    <div style=\"float: left; margin-top: 10px; width: 28%; text-align: left\">Telefon:</div>
+                    <div style=\"float: left; margin-top: 10px; width: 30%; text-align: left\">Telefon:</div>
                     <div style=\"margin-top: 10px; margin-left: 30%; text-align: left\">$user->phone&nbsp;</div>";
 
-                    echo "<div style=\"float: left; width: 28%; text-align: left\">Handy:</div>
+                    echo "<div style=\"float: left; width: 30%; text-align: left\">Handy:</div>
                     <div style=\"margin-left: 30%; text-align: left\">$user->mobile&nbsp;</div>";
 
-                    echo "<div style=\"float: left; width: 28%; text-align: left\">Fax:</div>
+                    echo "<div style=\"float: left; width: 30%; text-align: left\">Fax:</div>
                     <div style=\"margin-left: 30%; text-align: left\">$user->fax&nbsp;</div>";
 
                     // Block Geburtstag, Geschlecht und Benutzer
 
-                    echo "<div style=\"float: left; margin-top: 10px; width: 28%; text-align: left\">Geburtstag:</div>
+                    echo "<div style=\"float: left; margin-top: 10px; width: 30%; text-align: left\">Geburtstag:</div>
                     <div style=\"margin-top: 10px; margin-left: 30%; text-align: left\">";
                         if(strlen($user->birthday) > 0 && strcmp($user->birthday, "0000-00-00") != 0)
                         {
@@ -243,12 +243,12 @@ require("../../../adm_config/body_top.php");
                         else
                             echo "&nbsp;";
                     echo "</div>
-                    <div style=\"float: left; width: 28%; text-align: left\">Benutzer:</div>
+                    <div style=\"float: left; width: 30%; text-align: left\">Benutzer:</div>
                     <div style=\"margin-left: 30%; text-align: left\">$user->login_name&nbsp;</div>";
 
                     // Block E-Mail und Homepage
 
-                    echo "<div style=\"float: left; margin-top: 10px; width: 28%; text-align: left\">E-Mail:</div>
+                    echo "<div style=\"float: left; margin-top: 10px; width: 30%; text-align: left\">E-Mail:</div>
                     <div style=\"margin-top: 10px; margin-left: 30%; text-align: left\">";
                         if(strlen($user->email) > 0)
                         {
@@ -273,7 +273,7 @@ require("../../../adm_config/body_top.php");
                         else
                             echo "&nbsp;";
                     echo "</div>
-                    <div style=\"float: left; width: 28%; text-align: left\">Homepage:</div>
+                    <div style=\"float: left; width: 30%; text-align: left\">Homepage:</div>
                     <div style=\"margin-left: 30%; text-align: left\">";
                         if(strlen($user->homepage) > 0)
                         {
@@ -302,261 +302,265 @@ require("../../../adm_config/body_top.php");
 
             echo "<div style=\"width: 32%; float: left\">";
 
-            // *******************************************************************************
-            // Bild-Block
-            // *******************************************************************************
+                // *******************************************************************************
+                // Bild-Block
+                // *******************************************************************************
 
-            echo "<div style=\"margin-top: 4px; text-align: center;\">
-                <img src=\"$g_root_path/adm_program/images/excel.png\" width=\"125px\" height=\"150px;\">
+                echo "<div style=\"margin-top: 4px; text-align: center;\">
+                    <img src=\"$g_root_path/adm_program/images/admidio_logo_100.png\" width=\"125px\" height=\"150px;\">
 
-                <div style=\"margin-top: 12px;\">
-                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id=$user->id\"><img
-                     class=\"iconLink\" src=\"$g_root_path/adm_program/images/vcard.png\" style=\"vertical-align: middle;\" border=\"0\" title=\"Benutzer als vCard exportieren\" alt=\"Benutzer als vCard exportieren\"></a>
-                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id=$user->id\">vCard exportieren</a>
-                </div>";
-
-                // Moderatoren & Gruppenleiter duerfen neue Rollen zuordnen
-                if(isModerator() || isGroupLeader() || editUser())
-                {
-                    echo "<div style=\"margin-top: 10px;\">
-                        <a class=\"iconLink\" href=\"roles.php?user_id=$a_user_id&amp;url=". urlencode("$g_root_path/adm_program/modules/profile/profile.php?user_id=$a_user_id&url=$url"). "\"><img
-                         class=\"iconLink\" src=\"$g_root_path/adm_program/images/wand.png\" style=\"vertical-align: middle;\" border=\"0\" title=\"Rollen &auml;ndern\" alt=\"Rollen &auml;ndern\"></a>
-                        <a class=\"iconLink\" href=\"roles.php?user_id=$a_user_id&amp;url=". urlencode("$g_root_path/adm_program/modules/profile/profile.php?user_id=$a_user_id&url=$url"). "\">Rollen &auml;ndern</a>
+                    <div style=\"margin-top: 12px;\">
+                        <span class=\"iconLink\">
+                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id=$user->id\"><img
+                             class=\"iconLink\" src=\"$g_root_path/adm_program/images/vcard.png\" style=\"vertical-align: middle;\" border=\"0\" title=\"Benutzer als vCard exportieren\" alt=\"Benutzer als vCard exportieren\"></a>
+                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id=$user->id\">vCard exportieren</a>
+                        </span>
                     </div>";
-                }
 
-                if($edit_user)
-                {
-                    echo "<div style=\"margin-top: 10px;\">
-                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=$a_user_id&amp;url=$url\"><img
-                         class=\"iconLink\" src=\"$g_root_path/adm_program/images/edit.png\" style=\"vertical-align: middle;\" border=\"0\" title=\"Profildaten &auml;ndern\" alt=\"Profildaten &auml;ndern\"></a>
-                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=$a_user_id&amp;url=$url\">Profildaten &auml;ndern</a>
-                    </div>";
-                }
-            echo "</div>
-
-        </div>
-
-        <div style=\"clear: left;\"><br /></div>
-
-        <div style=\"width: 66%; margin-right: 10px; float: left;\">";
-
-            // *******************************************************************************
-            // zusaetzliche Daten-Block
-            // *******************************************************************************
-
-            // alle zugeordneten Messengerdaten einlesen
-            $sql = "SELECT usf_name, usf_description, usd_value
-                      FROM ". TBL_USER_DATA. ", ". TBL_USER_FIELDS. "
-                     WHERE usd_usr_id        = $user->id
-                       AND usd_usf_id       = usf_id
-                       AND usf_org_shortname IS NULL
-                       AND usf_type         = 'MESSENGER'
-                     ORDER BY usf_name ASC ";
-            $result_msg = mysql_query($sql, $g_adm_con);
-            db_error($result_msg, true);
-            $count_msg = mysql_num_rows($result_msg);
-
-            // alle gruppierungsspezifischen Felder auslesen
-            $sql = "SELECT *
-                      FROM ". TBL_USER_FIELDS. " LEFT JOIN ". TBL_USER_DATA. "
-                        ON usd_usf_id = usf_id
-                       AND usd_usr_id        = $user->id
-                     WHERE usf_org_shortname = '$g_organization' ";
-            if(!isModerator())
-            {
-                $sql = $sql. " AND usf_locked = 0 ";
-            }
-            $sql = $sql. " ORDER BY usf_name ASC ";
-            $result_field = mysql_query($sql, $g_adm_con);
-            db_error($result_field, true);
-            $count_field = mysql_num_rows($result_field);
-
-            // wenn Daten vorhanden, dann diese anzeigen
-            if($count_field > 0 || $count_msg > 0)
-            {
-                echo "<div class=\"groupBox\" style=\"margin-top: 4px; text-align: left;\">
-                <div class=\"groupBoxHeadline\">Zus&auml;tzliche Daten:</div>
-                    <table style=\"border-width: 0px; width: 100%;\" cellpadding=\"0\" cellspacing=\"0\">";
-
-                    if($count_msg > 0)
+                    // Moderatoren & Gruppenleiter duerfen neue Rollen zuordnen
+                    if(isModerator() || isGroupLeader() || editUser())
                     {
-                        // Messengerdaten anzeigen
-                        mysql_data_seek($result_msg, 0);
-                        $i = 1;
-
-                        while($row = mysql_fetch_object($result_msg))
-                        {
-                            echo "<tr><td style=\"text-align: left; vertical-align: top; width: 30%;\">";
-                            if($i == 1)
-                                echo "Messenger:";
-                            else
-                                echo "&nbsp;";
-                            echo "</td>
-                            <td style=\"text-align: left; vertical-align: top;\">";
-
-                            if($row->usf_name == 'ICQ')
-                            {
-                                // ICQ Onlinestatus anzeigen
-                                echo "<a href=\"http://www.icq.com/whitepages/cmd.php?uin=$row->usd_value&amp;action=add\"  class=\"wpaction\">
-                                <img border=\"0\" src=\"http://status.icq.com/online.gif?icq=$row->usd_value&img=5\"
-                                style=\"vertical-align: middle;\" alt=\"$row->usd_value zu $row->usf_description hinzuf&uuml;gen\" title=\"$row->usd_value zu $row->usf_description hinzuf&uuml;gen\" /></a>&nbsp;";
-                            }
-                            elseif($row->usf_name == 'Skype')
-                            {
-                                // Skype Onlinestatus anzeigen
-                                echo "<script type=\"text/javascript\" src=\"http://download.skype.com/share/skypebuttons/js/skypeCheck.js\"></script>
-                                <a href=\"skype:$row->usd_value?add\"><img src=\"http://mystatus.skype.com/smallicon/$row->usd_value\"
-                                style=\"border: none; vertical-align: middle;\" width=\"16\" height=\"16\" title=\"$row->usd_value zu $row->usf_description hinzuf&uuml;gen\" alt=\"$row->usd_value zu $row->usf_description hinzuf&uuml;gen\" /></a>&nbsp;&nbsp;";
-                            }
-                            else
-                            {
-                                echo "<img src=\"$g_root_path/adm_program/images/";
-                                if($row->usf_name == 'AIM')
-                                {
-                                    echo "aim.png";
-                                }
-                                elseif($row->usf_name == 'Google Talk')
-                                {
-                                    echo "google.gif";
-                                }
-                                elseif($row->usf_name == 'MSN')
-                                {
-                                    echo "msn.png";
-                                }
-                                elseif($row->usf_name == 'Yahoo')
-                                {
-                                    echo "yahoo.png";
-                                }
-                                echo "\" style=\"vertical-align: middle;\" alt=\"$row->usf_description\" title=\"$row->usf_description\" />&nbsp;&nbsp;";
-                            };
-                            if(strlen($row->usd_value) > 25)
-                            {
-                                echo "<span style=\"font-size: 8pt;\">$row->usd_value</span>";
-                            }
-                            else
-                            {
-                                echo "$row->usd_value";
-                            }
-                            echo "</tr>";
-                            $i++;
-                        }
+                        echo "<div style=\"margin-top: 10px;\">
+                            <span class=\"iconLink\">
+                                <a class=\"iconLink\" href=\"roles.php?user_id=$a_user_id&amp;url=". urlencode("$g_root_path/adm_program/modules/profile/profile.php?user_id=$a_user_id&url=$url"). "\"><img
+                                 class=\"iconLink\" src=\"$g_root_path/adm_program/images/wand.png\" style=\"vertical-align: middle;\" border=\"0\" title=\"Rollen &auml;ndern\" alt=\"Rollen &auml;ndern\"></a>
+                                <a class=\"iconLink\" href=\"roles.php?user_id=$a_user_id&amp;url=". urlencode("$g_root_path/adm_program/modules/profile/profile.php?user_id=$a_user_id&url=$url"). "\">Rollen &auml;ndern</a>
+                            </span>
+                        </div>";
                     }
+                echo "</div>
+            </div>
 
-                    if($count_field > 0)
-                    {
-                        // gruppierungsspezifische Felder anzeigen
-                        $i = 1;
+            <div style=\"clear: left;\"><br /></div>
 
-                        while($row_field = mysql_fetch_object($result_field))
+            <div style=\"width: 66%; margin-right: 10px; float: left;\">";
+
+                // *******************************************************************************
+                // zusaetzliche Daten-Block
+                // *******************************************************************************
+
+                // alle zugeordneten Messengerdaten einlesen
+                $sql = "SELECT usf_name, usf_description, usd_value
+                          FROM ". TBL_USER_DATA. ", ". TBL_USER_FIELDS. "
+                         WHERE usd_usr_id        = $user->id
+                           AND usd_usf_id       = usf_id
+                           AND usf_org_shortname IS NULL
+                           AND usf_type         = 'MESSENGER'
+                         ORDER BY usf_name ASC ";
+                $result_msg = mysql_query($sql, $g_adm_con);
+                db_error($result_msg, true);
+                $count_msg = mysql_num_rows($result_msg);
+
+                // alle gruppierungsspezifischen Felder auslesen
+                $sql = "SELECT *
+                          FROM ". TBL_USER_FIELDS. " LEFT JOIN ". TBL_USER_DATA. "
+                            ON usd_usf_id = usf_id
+                           AND usd_usr_id        = $user->id
+                         WHERE usf_org_shortname = '$g_organization' ";
+                if(!isModerator())
+                {
+                    $sql = $sql. " AND usf_locked = 0 ";
+                }
+                $sql = $sql. " ORDER BY usf_name ASC ";
+                $result_field = mysql_query($sql, $g_adm_con);
+                db_error($result_field, true);
+                $count_field = mysql_num_rows($result_field);
+
+                // wenn Daten vorhanden, dann diese anzeigen
+                if($count_field > 0 || $count_msg > 0)
+                {
+                    echo "<div class=\"groupBox\" style=\"margin-top: 4px; text-align: left;\">
+                        <div class=\"groupBoxHeadline\">Zus&auml;tzliche Daten:</div>";
+
+                        if($count_msg > 0)
                         {
-                            echo "<tr><td style=\"text-align: left; vertical-align: top; width: 30%;\">
-                                $row_field->usf_name:</td>
-                            <td style=\"text-align: left; vertical-align: top;\">";
+                            // Messengerdaten anzeigen
+                            mysql_data_seek($result_msg, 0);
+                            $i = 1;
 
-                            // Feldinhalt ausgeben
-                            if($row_field->usf_type == 'CHECKBOX')
+                            while($row = mysql_fetch_object($result_msg))
                             {
-                                if($row_field->usd_value == 1)
+                                echo "<div style=\"float: left; width: 30%; text-align: left\">";
+                                if($i == 1)
+                                    echo "Messenger:";
+                                else
+                                    echo "&nbsp;";
+                                echo "</div>
+                                <div style=\"margin-left: 30%; text-align: left\">";
+
+                                if($row->usf_name == 'ICQ')
                                 {
-                                    echo "&nbsp;<img src=\"$g_root_path/adm_program/images/checkbox_checked.gif\">";
+                                    // ICQ Onlinestatus anzeigen
+                                    echo "<a href=\"http://www.icq.com/whitepages/cmd.php?uin=$row->usd_value&amp;action=add\"  class=\"wpaction\">
+                                    <img border=\"0\" src=\"http://status.icq.com/online.gif?icq=$row->usd_value&img=5\"
+                                    style=\"vertical-align: middle;\" alt=\"$row->usd_value zu $row->usf_description hinzuf&uuml;gen\" title=\"$row->usd_value zu $row->usf_description hinzuf&uuml;gen\" /></a>&nbsp;";
+                                }
+                                elseif($row->usf_name == 'Skype')
+                                {
+                                    // Skype Onlinestatus anzeigen
+                                    echo "<script type=\"text/javascript\" src=\"http://download.skype.com/share/skypebuttons/js/skypeCheck.js\"></script>
+                                    <a href=\"skype:$row->usd_value?add\"><img src=\"http://mystatus.skype.com/smallicon/$row->usd_value\"
+                                    style=\"border: none; vertical-align: middle;\" width=\"16\" height=\"16\" title=\"$row->usd_value zu $row->usf_description hinzuf&uuml;gen\" alt=\"$row->usd_value zu $row->usf_description hinzuf&uuml;gen\" /></a>&nbsp;&nbsp;";
                                 }
                                 else
                                 {
-                                    echo "&nbsp;<img src=\"$g_root_path/adm_program/images/checkbox.gif\">";
+                                    echo "<img src=\"$g_root_path/adm_program/images/";
+                                    if($row->usf_name == 'AIM')
+                                    {
+                                        echo "aim.png";
+                                    }
+                                    elseif($row->usf_name == 'Google Talk')
+                                    {
+                                        echo "google.gif";
+                                    }
+                                    elseif($row->usf_name == 'MSN')
+                                    {
+                                        echo "msn.png";
+                                    }
+                                    elseif($row->usf_name == 'Yahoo')
+                                    {
+                                        echo "yahoo.png";
+                                    }
+                                    echo "\" style=\"vertical-align: middle;\" alt=\"$row->usf_description\" title=\"$row->usf_description\" />&nbsp;&nbsp;";
+                                };
+                                if(strlen($row->usd_value) > 25)
+                                {
+                                    echo "<span style=\"font-size: 8pt;\">$row->usd_value</span>";
                                 }
+                                else
+                                {
+                                    echo "$row->usd_value";
+                                }
+                                echo "</div>";
+                                $i++;
                             }
-                            else
-                            {
-                                echo "$row_field->usd_value&nbsp;";
-                            }
-
-                            echo "</td></tr>";
-                            $i++;
                         }
 
-                    }
-                echo "</table>";
-                echo "</div>";
-            }
+                        if($count_field > 0)
+                        {
+                            // gruppierungsspezifische Felder anzeigen
+                            $i = 1;
 
-        echo "</div>
+                            while($row_field = mysql_fetch_object($result_field))
+                            {
+                                echo "<div style=\"float: left; width: 30%; text-align: left\">
+                                    $row_field->usf_name:</div>
+                                <div style=\"margin-left: 30%; text-align: left\">";
 
-        <div style=\"width: 32%; float: left;\">";
+                                // Feldinhalt ausgeben
+                                if($row_field->usf_type == 'CHECKBOX')
+                                {
+                                    if($row_field->usd_value == 1)
+                                    {
+                                        echo "&nbsp;<img src=\"$g_root_path/adm_program/images/checkbox_checked.gif\">";
+                                    }
+                                    else
+                                    {
+                                        echo "&nbsp;<img src=\"$g_root_path/adm_program/images/checkbox.gif\">";
+                                    }
+                                }
+                                else
+                                {
+                                    echo "$row_field->usd_value&nbsp;";
+                                }
 
-            // *******************************************************************************
-            // Rollen-Block
-            // *******************************************************************************
+                                echo "</div>";
+                                $i++;
+                            }
 
-            // Alle Rollen auflisten, die dem Mitglied zugeordnet sind
-            if(isModerator())
-            {
-               // auch gesperrte Rollen, aber nur von dieser Gruppierung anzeigen
-               $sql    = "SELECT rol_name, rol_org_shortname, mem_leader
-                            FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-                           WHERE mem_rol_id = rol_id
-                             AND mem_valid = 1
-                             AND mem_usr_id = $a_user_id
-                             AND rol_valid = 1
-                             AND (  rol_org_shortname LIKE '$g_organization'
-                                 OR (   rol_org_shortname NOT LIKE '$g_organization'
-                                    AND rol_locked = 0 ))
-                           ORDER BY rol_org_shortname, rol_name ";
-            }
-            else
-            {
-               // kein Moderator, dann keine gesperrten Rollen anzeigen
-               $sql    = "SELECT rol_name, rol_org_shortname, mem_leader
-                            FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-                           WHERE mem_rol_id    = rol_id
-                             AND mem_valid    = 1
-                             AND mem_usr_id    = $a_user_id
-                             AND rol_valid    = 1
-                             AND rol_locked = 0
-                           ORDER BY rol_org_shortname, rol_name";
-            }
-            $result_role = mysql_query($sql, $g_adm_con);
-            db_error($result_role, true);
-            $count_role = mysql_num_rows($result_role);
-
-            $sql = "SELECT org_shortname FROM ". TBL_ORGANIZATIONS. "";
-            $result = mysql_query($sql, $g_adm_con);
-            db_error($result);
-
-            $count_grp = mysql_num_rows($result);
-            $i = 0;
-
-            echo "<div class=\"groupBox\" style=\"margin-top: 4px; text-align: left; height: 100%;\">
-                <div class=\"groupBoxHeadline\">Rollen</div>";
-
-                while($row = mysql_fetch_object($result_role))
-                {
-                    // jede einzelne Rolle anzeigen
-                    if($i > 0)
-                    {
-                        echo "<br />";
-                    }
-
-                    if($count_grp > 1)
-                    {
-                        echo "$row->rol_org_shortname - ";
-                    }
-                    echo $row->rol_name;
-                    if($row->mem_leader == 1)
-                    {
-                        echo " - Leiter";
-                    }
-                    $i++;
+                        }
+                    echo "</div>";
                 }
+
             echo "</div>
-        </div>
 
-        <div style=\"clear: left;\"><br /></div>
+            <div style=\"width: 32%; float: left;\">";
 
-        <div>
-            <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='". urldecode($url). "'\">
-                <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
-                &nbsp;Zur&uuml;ck</button>
+                // *******************************************************************************
+                // Rollen-Block
+                // *******************************************************************************
+
+                // Alle Rollen auflisten, die dem Mitglied zugeordnet sind
+                if(isModerator())
+                {
+                   // auch gesperrte Rollen, aber nur von dieser Gruppierung anzeigen
+                   $sql    = "SELECT rol_name, rol_org_shortname, mem_leader
+                                FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
+                               WHERE mem_rol_id = rol_id
+                                 AND mem_valid = 1
+                                 AND mem_usr_id = $a_user_id
+                                 AND rol_valid = 1
+                                 AND (  rol_org_shortname LIKE '$g_organization'
+                                     OR (   rol_org_shortname NOT LIKE '$g_organization'
+                                        AND rol_locked = 0 ))
+                               ORDER BY rol_org_shortname, rol_name ";
+                }
+                else
+                {
+                   // kein Moderator, dann keine gesperrten Rollen anzeigen
+                   $sql    = "SELECT rol_name, rol_org_shortname, mem_leader
+                                FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
+                               WHERE mem_rol_id    = rol_id
+                                 AND mem_valid    = 1
+                                 AND mem_usr_id    = $a_user_id
+                                 AND rol_valid    = 1
+                                 AND rol_locked = 0
+                               ORDER BY rol_org_shortname, rol_name";
+                }
+                $result_role = mysql_query($sql, $g_adm_con);
+                db_error($result_role, true);
+                $count_role = mysql_num_rows($result_role);
+
+                $sql = "SELECT org_shortname FROM ". TBL_ORGANIZATIONS. "";
+                $result = mysql_query($sql, $g_adm_con);
+                db_error($result);
+
+                $count_grp = mysql_num_rows($result);
+                $i = 0;
+
+                echo "<div class=\"groupBox\" style=\"margin-top: 4px; text-align: left; height: 100%;\">
+                    <div class=\"groupBoxHeadline\">Rollen</div>";
+
+                    while($row = mysql_fetch_object($result_role))
+                    {
+                        // jede einzelne Rolle anzeigen
+                        if($i > 0)
+                        {
+                            echo "<br />";
+                        }
+
+                        if($count_grp > 1)
+                        {
+                            echo "$row->rol_org_shortname - ";
+                        }
+                        echo $row->rol_name;
+                        if($row->mem_leader == 1)
+                        {
+                            echo " - Leiter";
+                        }
+                        $i++;
+                    }
+                echo "</div>
+            </div>
+
+            <div style=\"clear: left;\"><br /></div>
+
+            <div>
+                <span class=\"iconLink\">
+                    <a class=\"iconLink\" href=\"javascript:self.location.href='". urldecode($url). "'\"><img
+                     class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Zur&uuml;ck\"></a>
+                    <a class=\"iconLink\" href=\"javascript:self.location.href='". urldecode($url). "'\">Zur&uuml;ck</a>
+                </span>";
+                if($edit_user)
+                {
+                    echo "&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span class=\"iconLink\">
+                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=$a_user_id&amp;url=$url\"><img
+                         class=\"iconLink\" src=\"$g_root_path/adm_program/images/edit.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Profildaten &auml;ndern\"></a>
+                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=$a_user_id&amp;url=$url\">Profildaten &auml;ndern</a>
+                    </span>";
+                }                
+            echo "</div>
         </div>
     </div>";
 
