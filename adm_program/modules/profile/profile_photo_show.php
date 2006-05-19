@@ -1,0 +1,55 @@
+<?php
+   /******************************************************************************
+ * Photoresizer
+ *
+ * Copyright    : (c) 2004 - 2006 The Admidio Team
+ * Homepage     : http://www.admidio.org
+ * Module-Owner : Jochen Erkens
+ *
+ * Uebergaben:
+ *
+ * ID: die ID des Users dessen Bild angezeigt werden soll
+ * Photo: Welches Bild soll angezeigt werden
+ ******************************************************************************
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *
+ *****************************************************************************/
+require("../../system/common.php");
+require("../../system/login_valid.php");
+header("Content-Type: image/jpeg");
+
+$a_user_id=$_GET["a_user_id"];
+$photo=$_GET["photo"];
+if($photo==NULL)
+{
+    $photo="photo";
+}
+
+$sql="  SELECT usr_photo, usr_photo_upload 
+        FROM ".TBL_USERS."
+        WHERE usr_id=$a_user_id";
+$result_photo = mysql_query($sql, $g_adm_con);
+
+if($photo=="photo")
+{
+    echo @MYSQL_RESULT($result_photo,0,"usr_photo");
+}
+if($photo=="upload")
+{
+    echo @MYSQL_RESULT($result_photo,0,"usr_photo_upload");
+}
+
+?>
