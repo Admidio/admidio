@@ -235,7 +235,7 @@ function getErrorText($error_code, $error_text, $g_current_organization)
             $error_str = "M&ouml;chtest du <b>$error_text</b> eine E-Mail mit dem Benutzernamen
             und einem neuen Passwort zumailen ?";
             break;
-            
+
         case "max_members":
             $error_str = "Speichern nicht m&ouml;glich, die maximale Mitgliederzahl wurde &uuml;berschritten.";
             break;
@@ -255,6 +255,19 @@ function getErrorText($error_code, $error_text, $g_current_organization)
             Schreibrechte</acronym> f&uuml;r den Ordner setzen kann.";
             break;
 
+        //Fehlermeldungen Profilfoto    
+        case "profile_photo_update":
+            $error_str = "Neues Profilfoto wurde erfolgreich gespeichert.";
+            break;            
+            
+        case "profile_photo_nopic":
+            $error_str = "Es wurde keine Bilddatei ausgew&auml;hlt.";
+            break;
+            
+        case "profile_photo_2big":
+            $error_str = "Das hochgeladene hochgeladenen Foto &uuml;bersteigt die zul&auml;ssige
+            Dateigr&ouml;&szlig;e von ".$g_preferences['max_photo_size']."KB.";
+            break;
 
         //Fehlermeldungen Fotomodul
         case "photodateiphotoup":
