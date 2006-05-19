@@ -305,10 +305,30 @@ require("../../../adm_config/body_top.php");
                 // *******************************************************************************
                 // Bild-Block
                 // *******************************************************************************
-
-                echo "<div style=\"margin-top: 4px; text-align: center;\">
-                    <img src=\"$g_root_path/adm_program/images/admidio_logo_100.png\" width=\"125px\" height=\"150px;\">
-
+                
+                //Nachsehen ob fuer den User ein Photo gespeichert wurde
+                $sql =" SELECT usr_photo
+                        FROM ".TBL_USERS."
+                        WHERE usr_id = '$a_user_id'";
+                $result_photo = mysql_query($sql, $g_adm_con);
+                db_error($result_photo);
+                
+                echo"
+                <div style=\"margin-top: 4px; text-align: center;\">
+                    <div class=\"groupBox\">";
+                    
+                        //Falls vorhanden Bild ausgeben
+                        if(@MYSQL_RESULT($result_photo,0,"usr_photo")!=NULL)
+                        {
+                            echo"<img src=\"profile_photo_show.php?a_user_id=$a_user_id\"\">";
+                        }
+                        //wenn nicht Schattenkopf
+                        else
+                        {
+                            echo"<img src=\"$g_root_path/adm_program/images/no_profile_pic.png\">";
+                        }
+                    echo"</div>";
+                    echo"
                     <div style=\"margin-top: 12px;\">
                         <span class=\"iconLink\">
                             <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id=$user->id\"><img
@@ -452,11 +472,11 @@ require("../../../adm_config/body_top.php");
                                 {
                                     if($row_field->usd_value == 1)
                                     {
-                                        echo "&nbsp;<img src=\"$g_root_path/adm_program/images/checkbox_checked.gif\">";
+                                        echo "&nbsp;<img src=\"$g_root_path/adm_program/images/checkbox_checked.gif\" style=\"vertical-align: middle;\">";
                                     }
                                     else
                                     {
-                                        echo "&nbsp;<img src=\"$g_root_path/adm_program/images/checkbox.gif\">";
+                                        echo "&nbsp;<img src=\"$g_root_path/adm_program/images/checkbox.gif\" style=\"vertical-align: middle;\">";
                                     }
                                 }
                                 else
@@ -558,6 +578,13 @@ require("../../../adm_config/body_top.php");
                         <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=$a_user_id&amp;url=$url\"><img
                          class=\"iconLink\" src=\"$g_root_path/adm_program/images/edit.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Profildaten &auml;ndern\"></a>
                         <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=$a_user_id&amp;url=$url\">Profildaten &auml;ndern</a>
+                    </span>";
+                    
+                    echo "&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span class=\"iconLink\">
+                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?user_id=$a_user_id&amp;url=$url\"><img
+                         class=\"iconLink\" src=\"$g_root_path/adm_program/images/photo.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Profildaten &auml;ndern\"></a>
+                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?user_id=$a_user_id&amp;url=$url\">Profilfoto &auml;ndern</a>
                     </span>";
                 }                
             echo "</div>
