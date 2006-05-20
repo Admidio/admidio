@@ -260,6 +260,10 @@ function getErrorText($error_code, $error_text, $g_current_organization)
             $error_str = "Neues Profilfoto wurde erfolgreich gespeichert.";
             break;            
             
+        case "profile_photo_update_cancel":
+            $error_str = "Der Vorgang wurde abgebrochen.";
+            break;            
+            
         case "profile_photo_nopic":
             $error_str = "Es wurde keine Bilddatei ausgew&auml;hlt.";
             break;
