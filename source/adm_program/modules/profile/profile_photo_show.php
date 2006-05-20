@@ -9,7 +9,6 @@
  * Uebergaben:
  *
  * ID: die ID des Users dessen Bild angezeigt werden soll
- * Photo: Welches Bild soll angezeigt werden
  ******************************************************************************
  *
  * This program is free software; you can redistribute it and/or
@@ -32,24 +31,13 @@ require("../../system/login_valid.php");
 header("Content-Type: image/jpeg");
 
 $a_user_id=$_GET["a_user_id"];
-$photo=$_GET["photo"];
-if($photo==NULL)
-{
-    $photo="photo";
-}
 
-$sql="  SELECT usr_photo, usr_photo_upload 
+
+$sql="  SELECT usr_photo
         FROM ".TBL_USERS."
         WHERE usr_id=$a_user_id";
 $result_photo = mysql_query($sql, $g_adm_con);
 
-if($photo=="photo")
-{
-    echo @MYSQL_RESULT($result_photo,0,"usr_photo");
-}
-if($photo=="upload")
-{
-    echo @MYSQL_RESULT($result_photo,0,"usr_photo_upload");
-}
+echo @MYSQL_RESULT($result_photo,0,"usr_photo");
 
 ?>
