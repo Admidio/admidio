@@ -37,40 +37,35 @@ if(!$result_orga) showError(mysql_error());
 
 while($row_orga = mysql_fetch_object($result_orga))
 {
-	$sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
             VALUES ($row_orga->org_id, 'max_mail_attachment_size', $row_orga->org_mail_size)";
-	$result = mysql_query($sql, $connection);
-	if(!$result) showError(mysql_error());
+    $result = mysql_query($sql, $connection);
+    if(!$result) showError(mysql_error());
 
-	$sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
             VALUES ($row_orga->org_id, 'max_file_upload_size', $row_orga->org_upload_size)";
-	$result = mysql_query($sql, $connection);
-	if(!$result) showError(mysql_error());
+    $result = mysql_query($sql, $connection);
+    if(!$result) showError(mysql_error());
 
-	$sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
             VALUES ($row_orga->org_id, 'max_photo_size', $row_orga->org_photo_size)";
-	$result = mysql_query($sql, $connection);
-	if(!$result) showError(mysql_error());
+    $result = mysql_query($sql, $connection);
+    if(!$result) showError(mysql_error());
 
-	$sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
             VALUES ($row_orga->org_id, 'send_mail_extern', $row_orga->org_mail_extern)";
-	$result = mysql_query($sql, $connection);
-	if(!$result) showError(mysql_error());
+    $result = mysql_query($sql, $connection);
+    if(!$result) showError(mysql_error());
 
-	$sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
             VALUES ($row_orga->org_id, 'enable_rss', $row_orga->org_enable_rss)";
-	$result = mysql_query($sql, $connection);
-	if(!$result) showError(mysql_error());
+    $result = mysql_query($sql, $connection);
+    if(!$result) showError(mysql_error());
 
-	$sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
             VALUES ($row_orga->org_id, 'enable_bbcode', $row_orga->org_bbcode)";
-	$result = mysql_query($sql, $connection);
-	if(!$result) showError(mysql_error());
-
-	$sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-            VALUES ($row_orga->org_id, 'font', '$row_orga->org_font')";
-	$result = mysql_query($sql, $connection);
-	if(!$result) showError(mysql_error());
+    $result = mysql_query($sql, $connection);
+    if(!$result) showError(mysql_error());
 }
 
 // unnoetige Orga-Felder koennen jetzt geloescht werden

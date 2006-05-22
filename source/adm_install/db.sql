@@ -119,7 +119,7 @@ alter table %PRAEFIX%_dates add index DAT_USR_CHANGE_FK (dat_usr_id_change);
 create table %PRAEFIX%_folders
 (
    fol_id                         int(11) unsigned               not null AUTO_INCREMENT,
-   fol_org_shortname              varchar(10)                    not null,
+   fol_org_id                     tinyint(4)                     not null,
    fol_fol_id_parent              int(11) unsigned,
    fol_type                       varchar(10)                    not null,
    fol_name                       varchar(255)                   not null,
@@ -131,7 +131,7 @@ auto_increment = 1;
 /*==============================================================*/
 /* Index: "FOL_ORG_FK"                                            */
 /*==============================================================*/
-alter table %PRAEFIX%_folders add index FOL_ORG_FK (fol_org_shortname);
+alter table %PRAEFIX%_folders add index FOL_ORG_FK (fol_org_id);
 
 /*==============================================================*/
 /* Index: "FOL_FOL_PARENT_FK"                                            */
@@ -165,7 +165,7 @@ alter table %PRAEFIX%_folder_roles add index FOL_ROL_FK (flr_rol_id);
 create table %PRAEFIX%_guestbook
 (
    gbo_id                         int(11) unsigned               not null AUTO_INCREMENT,
-   gbo_org_id                     int(4) unsigned                not null,
+   gbo_org_id                     tinyint(4)                     not null,
    gbo_usr_id                     int(11) unsigned,
    gbo_name                       varchar(60)                    not null,
    gbo_text                       text                           not null,
@@ -224,7 +224,7 @@ alter table %PRAEFIX%_guestbook_comments add index GBC_USR_FK (gbc_usr_id);
 create table %PRAEFIX%_links
 (
    lnk_id                         int(11) unsigned               not null AUTO_INCREMENT,
-   lnk_org_id                     int(4) unsigned                not null,
+   lnk_org_id                     tinyint(4)                     not null,
    lnk_name                       varchar(255)                   not null,
    lnk_description                text,
    lnk_url                        varchar(255)                   not null,
@@ -349,7 +349,7 @@ alter table %PRAEFIX%_photos add index FK_PHO_PHO_PARENT_FK (pho_pho_id_parent);
 create table %PRAEFIX%_preferences
 (
    prf_id                         int(11) unsigned               not null AUTO_INCREMENT,
-   prf_org_id                     int(4) unsigned                not null,
+   prf_org_id                     tinyint(4)                     not null,
    prf_name                       varchar(30)                    not null,
    prf_value                      varchar(255),
    primary key (prf_id)
@@ -553,7 +553,6 @@ create table %PRAEFIX%_users
    usr_login_name                 varchar(20),
    usr_password                   varchar(35),
    usr_photo                      blob,
-   usr_photo_upload               blob,
    usr_last_login                 datetime,
    usr_actual_login               datetime,
    usr_number_login               smallint(5) unsigned           not null default 0,
@@ -611,28 +610,28 @@ alter table %PRAEFIX%_folder_roles add constraint %PRAEFIX%_FK_FLR_FOL foreign k
 alter table %PRAEFIX%_folders add constraint %PRAEFIX%_FK_FOL_FOL_PARENT foreign key (fol_fol_id_parent)
       references %PRAEFIX%_folders (fol_id) on delete restrict on update restrict;
 
-alter table %PRAEFIX%_folders add constraint %PRAEFIX%_FK_FOL_ORG foreign key (fol_org_shortname)
-      references %PRAEFIX%_organizations (org_shortname) on delete restrict on update restrict;
-
-alter table %PRAEFIX%_guestbook add constraint FK_GBO_ORG foreign key (gbo_org_id)
+alter table %PRAEFIX%_folders add constraint %PRAEFIX%_FK_FOL_ORG foreign key (fol_org_id)
       references %PRAEFIX%_organizations (org_id) on delete restrict on update restrict;
 
-alter table %PRAEFIX%_guestbook add constraint FK_GBO_USR foreign key (gbo_usr_id)
+alter table %PRAEFIX%_guestbook add constraint %PRAEFIX%_FK_GBO_ORG foreign key (gbo_org_id)
+      references %PRAEFIX%_organizations (org_id) on delete restrict on update restrict;
+
+alter table %PRAEFIX%_guestbook add constraint %PRAEFIX%_FK_GBO_USR foreign key (gbo_usr_id)
       references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
 
-alter table %PRAEFIX%_guestbook add constraint FK_GBO_USR_CHANGE foreign key (gbo_usr_id_change)
+alter table %PRAEFIX%_guestbook add constraint %PRAEFIX%_FK_GBO_USR_CHANGE foreign key (gbo_usr_id_change)
       references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
 
-alter table %PRAEFIX%_guestbook_comments add constraint FK_GBC_GBO foreign key (gbc_gbo_id)
+alter table %PRAEFIX%_guestbook_comments add constraint %PRAEFIX%_FK_GBC_GBO foreign key (gbc_gbo_id)
       references %PRAEFIX%_guestbook (gbo_id) on delete restrict on update restrict;
 
-alter table %PRAEFIX%_guestbook_comments add constraint FK_GBC_USR foreign key (gbc_usr_id)
+alter table %PRAEFIX%_guestbook_comments add constraint %PRAEFIX%_FK_GBC_USR foreign key (gbc_usr_id)
       references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
 
-alter table %PRAEFIX%_links add constraint FK_LNK_ORG foreign key (lnk_org_id)
+alter table %PRAEFIX%_links add constraint %PRAEFIX%_FK_LNK_ORG foreign key (lnk_org_id)
       references %PRAEFIX%_organizations (org_id) on delete restrict on update restrict;
 
-alter table %PRAEFIX%_links add constraint FK_LNK_USR foreign key (lnk_usr_id)
+alter table %PRAEFIX%_links add constraint %PRAEFIX%_FK_LNK_USR foreign key (lnk_usr_id)
       references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
 
 alter table %PRAEFIX%_members add constraint %PRAEFIX%_FK_MEM_ROL foreign key (mem_rol_id)
@@ -656,7 +655,7 @@ alter table %PRAEFIX%_photos add constraint %PRAEFIX%_FK_PHO_USR foreign key (ph
 alter table %PRAEFIX%_photos add constraint %PRAEFIX%_FK_PHO_USR_CHANGE foreign key (pho_usr_id_change)
       references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
 
-alter table %PRAEFIX%_preferences add constraint FK_PRF_ORG foreign key (prf_org_id)
+alter table %PRAEFIX%_preferences add constraint %PRAEFIX%_FK_PRF_ORG foreign key (prf_org_id)
       references %PRAEFIX%_organizations (org_id) on delete restrict on update restrict;
 
 alter table %PRAEFIX%_role_categories add constraint %PRAEFIX%_FK_RLC_ORG foreign key (rlc_org_shortname)

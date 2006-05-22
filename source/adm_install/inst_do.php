@@ -449,11 +449,6 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
     $result = mysql_query($sql, $connection);
     db_error($result);
 
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-                                       VALUES ($org_id, 'font', 'mr_phone1.ttf') ";
-    $result = mysql_query($sql, $connection);
-    db_error($result);
-
     // Rollen-Kategorie eintragen
     $sql = "INSERT INTO ". TBL_ROLE_CATEGORIES. " (rlc_org_shortname, rlc_name)
                                            VALUES ({0}, 'Allgemein')";
