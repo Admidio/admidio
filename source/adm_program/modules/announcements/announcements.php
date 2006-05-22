@@ -147,7 +147,7 @@ require("../../../adm_config/body_top.php");
             echo "<p>";
             
             // Neue Ankuendigung anlegen
-            if(isModerator())
+            if(editAnnouncements())
             {
                 echo "<span class=\"iconLink\">
                     <a class=\"iconLink\" href=\"announcements_new.php?headline=". $_GET["headline"]. "\"><img
@@ -211,8 +211,8 @@ require("../../../adm_config/body_top.php");
                             strSpecialChars2Html($row->ann_headline). "
                         </div>";
 
-                        // aendern & loeschen duerfen nur Moderatoren
-                        if(isModerator())
+                        // aendern & loeschen duerfen nur User mit den gesetzten Rechten
+                        if(editAnnouncements())
                         {
                             echo "<div style=\"text-align: right;\">" .
                                 mysqldatetime("d.m.y", $row->ann_timestamp). "&nbsp;
