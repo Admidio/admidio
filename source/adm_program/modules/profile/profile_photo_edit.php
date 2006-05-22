@@ -1,4 +1,3 @@
-
 <?php
 /******************************************************************************
  * Profil bearbeiten
@@ -112,7 +111,6 @@ $bild="../../../adm_my_files/photos/".$a_user_id.".jpg";
         }
         
         // zur Ausgangsseite zurueck
-        $seite=$_GET["seite"];
         $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=profile_photo_update&timer=2000&url=". 
                     urlencode("$g_root_path/adm_program/modules/profile/profile.php?user_id=".$a_user_id."");
         header($location);
@@ -129,7 +127,6 @@ $bild="../../../adm_my_files/photos/".$a_user_id.".jpg";
         }
         
         // zur Ausgangsseite zurueck
-        $seite=$_GET["seite"];
         $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=profile_photo_update_cancel&timer=2000&url=". 
                     urlencode("$g_root_path/adm_program/modules/profile/profile.php?user_id=".$a_user_id."");
         header($location);
