@@ -142,6 +142,11 @@ elseif($_GET["mode"] == 2)
                $moderation = 0;
          }
 
+         if(array_key_exists("announcements", $_POST))
+            $announcements = 1;
+         else
+            $announcements = 0;
+
          if(array_key_exists("termine", $_POST))
             $termine = 1;
          else
@@ -196,6 +201,7 @@ elseif($_GET["mode"] == 2)
                                         , rol_description   = {1}
                                         , rol_rlc_id        = {2}
                                         , rol_moderation    = $moderation
+                                        , rol_announcements = $announcements
                                         , rol_dates         = $termine
                                         , rol_photo         = $foto
                                         , rol_download      = $download
@@ -219,13 +225,13 @@ elseif($_GET["mode"] == 2)
          {
             // Rolle in Datenbank hinzufuegen
             $sql    = "INSERT INTO ". TBL_ROLES. " (rol_org_shortname, rol_name, rol_description, rol_rlc_id,
-                                               rol_moderation, rol_dates, rol_photo, rol_download,
+                                               rol_moderation, rol_announcements, rol_dates, rol_photo, rol_download,
                                                rol_edit_user, rol_mail_logout, rol_mail_login,
                                                rol_locked, rol_start_date, rol_start_time,
                                                rol_end_date, rol_end_time, rol_weekday, rol_location,
                                                rol_max_members, rol_cost, rol_valid)
                        VALUES ('$g_organization', {0}, {1}, {2},
-                               $moderation, $termine, $foto, $download,
+                               $moderation, $announcements, $termine, $foto, $download,
                                $user, $mail_logout, $mail_login,
                                $locked, '$d_datum_von', '$t_uhrzeit_von',
                                '$d_datum_bis','$t_uhrzeit_bis', {3}, {4},
