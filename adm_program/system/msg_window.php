@@ -197,7 +197,13 @@ echo "
 
             case "rolle_termine":
                 echo "Benutzer der Rollen, die diese Option aktiviert haben,
-                      k&ouml;nnen eigene Termine anlegen (keine Ank&uuml;ndigungen) und diese
+                      k&ouml;nnen eigene Termine anlegen (keine Ank&uuml;ndigungen !) und diese
+                      sp&auml;ter auch bearbeiten oder l&ouml;schen.";
+                break;
+
+            case "rolle_announcements":
+                echo "Benutzer der Rollen, die diese Option aktiviert haben,
+                      k&ouml;nnen eigene Ank&uuml;ndigungen (keine Termine !) anlegen und diese
                       sp&auml;ter auch bearbeiten oder l&ouml;schen.";
                 break;
 

@@ -42,6 +42,7 @@ $rolle          = "";
 $beschreibung   = "";
 $rlc_id         = 0;
 $r_moderation   = 0;
+$r_announcements= 0;
 $r_termin       = 0;
 $r_foto         = 0;
 $r_download     = 0;
@@ -83,17 +84,18 @@ if ($_GET['rol_id'] != 0)
          }
       }
 
-      $rolle         = $row_ar->rol_name;
-      $beschreibung  = $row_ar->rol_description;
-      $act_rlc_id    = $row_ar->rol_rlc_id;
-      $r_moderation  = $row_ar->rol_moderation;
-      $r_termin      = $row_ar->rol_dates;
-      $r_foto        = $row_ar->rol_photo;
-      $r_download    = $row_ar->rol_download;
-      $r_user        = $row_ar->rol_edit_user;
-      $r_locked      = $row_ar->rol_locked;
-      $r_mail_logout = $row_ar->rol_mail_logout;
-      $r_mail_login  = $row_ar->rol_mail_login;
+      $rolle           = $row_ar->rol_name;
+      $beschreibung    = $row_ar->rol_description;
+      $act_rlc_id      = $row_ar->rol_rlc_id;
+      $r_moderation    = $row_ar->rol_moderation;
+      $r_announcements = $row_ar->rol_announcements;
+      $r_termin        = $row_ar->rol_dates;
+      $r_foto          = $row_ar->rol_photo;
+      $r_download      = $row_ar->rol_download;
+      $r_user          = $row_ar->rol_edit_user;
+      $r_locked        = $row_ar->rol_locked;
+      $r_mail_logout   = $row_ar->rol_mail_logout;
+      $r_mail_login    = $row_ar->rol_mail_login;
       
         $datum_von      = mysqldate("d.m.y", $row_ar->rol_start_date);
         $uhrzeit_von    = mysqltime("h:i",   $row_ar->rol_start_time);
@@ -205,6 +207,20 @@ require("../../../adm_config/body_top.php");
                         <label for=\"benutzer\">Daten aller Benutzer bearbeiten&nbsp;</label>
                         <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                         onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_benutzer','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
+                    </div>
+                </div>
+                <div style=\"margin-top: 6px;\">
+                    <div style=\"text-align: right; width: 10%; float: left;\">
+                        <input type=\"checkbox\" id=\"announcements\" name=\"announcements\" ";
+                        if($r_announcements == 1)
+                            echo " checked ";
+                        echo " value=\"1\" />&nbsp;
+                        <label for=\"announcements\"><img src=\"$g_root_path/adm_program/images/note.png\" alt=\"Ank&uuml;ndigungen erfassen und bearbeiten\"></label>
+                    </div>
+                    <div style=\"text-align: left; margin-left: 12%;\">
+                        <label for=\"announcements\">Ank&uuml;ndigungen erfassen und bearbeiten&nbsp;</label>
+                        <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_announcements','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
                     </div>
                 </div>
                 <div style=\"margin-top: 6px;\">
