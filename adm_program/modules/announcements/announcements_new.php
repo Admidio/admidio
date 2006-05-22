@@ -33,7 +33,7 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
-if(!isModerator())
+if(!editAnnouncements())
 {
     $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
     header($location);

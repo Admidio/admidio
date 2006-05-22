@@ -187,8 +187,8 @@ require("../../../adm_config/body_top.php");
         {
             echo "<p>";
             
-            // Neue Ankuendigung anlegen
-            if(isModerator())
+            // Neue Termine anlegen
+            if(editDate())
             {
                 echo "<span class=\"iconLink\">
                     <a class=\"iconLink\" href=\"dates_new.php\"><img
