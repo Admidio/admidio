@@ -82,7 +82,12 @@ $g_current_organization->getOrganization($g_organization);
 $sql    = "SELECT * FROM ". TBL_PREFERENCES. "
             WHERE prf_org_id = $g_current_organization->id ";
 $result = mysql_query($sql, $g_adm_con);
-db_error($result);
+if($result == false)
+{
+    // Fehler direkt ausgeben, da hier sonst Endlosschleifen entstehen
+    echo "<div style=\"color: #CC0000;\">Error: ". mysql_error(). "</div>";
+    exit();
+}
 
 $g_preferences = array();
 while($prf_row = mysql_fetch_object($result))
