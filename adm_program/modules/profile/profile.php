@@ -134,7 +134,7 @@ require("../../../adm_config/body_top.php");
                         }
                         elseif($user->gender == 2)
                         {
-                            echo "<img src=\"$g_root_path/adm_program/images/female.png\" title=\"weiblich\"> alt=\"weiblich\">";
+                            echo "<img src=\"$g_root_path/adm_program/images/female.png\" title=\"weiblich\" alt=\"weiblich\">";
                         }
                     echo "</div>
 
