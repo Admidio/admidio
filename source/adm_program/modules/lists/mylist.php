@@ -145,8 +145,8 @@ require("../../../adm_config/body_top.php");
             for($i = 1; $i < 9; $i++)
             {
                echo"<tr>
-                  <td align=\"center\">&nbsp;$i. Feld :&nbsp;</td>
-                  <td align=\"center\">
+                  <td style=\"text-align: center;\">&nbsp;$i. Feld :&nbsp;</td>
+                  <td style=\"text-align: center;\">
                      <select size=\"1\" name=\"column$i\">
                         <option value=\"\" selected=\"selected\"></option>
                         <option value=\"usr_last_name\" ";
@@ -168,14 +168,14 @@ require("../../../adm_config/body_top.php");
                         <option value=\"usr_gender\">Geschlecht</option>
                      </select>&nbsp;&nbsp;
                   </td>
-                  <td align=\"center\">
+                  <td style=\"text-align: center;\">
                      <select size=\"1\" name=\"sort$i\">
                         <option value=\"\" selected=\"selected\">&nbsp;</option>
                         <option value=\"ASC\">A bis Z</option>
                         <option value=\"DESC\">Z bis A</option>
                      </select>
                   </td>
-                  <td align=\"center\">
+                  <td style=\"text-align: center;\">
                      <input type=\"text\" name=\"condition$i\" size=\"15\" maxlength=\"30\" />
                   </td>
                </tr>";
