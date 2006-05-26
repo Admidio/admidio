@@ -125,320 +125,429 @@ if($popup == 0)
 echo "</head>";
 if($popup == 0)
     require("../../../adm_config/body_top.php");
-   echo "
-   <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-
-   <form action=\"profile_save.php?user_id=$a_user_id&amp;new_user=$a_new_user&amp;url=$url";
-      if($a_new_user && $a_user_id > 0) echo "&amp;pw=$user->password";
-      echo "\" method=\"post\" name=\"ProfilAnzeigen\">
-      <div class=\"formHead\">";
-         if($a_user_id == $g_current_user->id)
-            echo strspace("Mein Profil", 2);
-         else if($a_new_user)
-            echo strspace("Neuer Benutzer", 2);
-         else
-            echo strspace("Profil von ". $user->first_name. " ". $user->last_name, 1);
-      echo "</div>
-      <div class=\"formBody\">
-         <div>
-            <div style=\"text-align: right; width: 30%; float: left;\">Nachname:</div>
-            <div style=\"text-align: left; margin-left: 32%;\">";
-               if($a_user_id == 0)
-                  echo "<input type=\"text\" name=\"last_name\" size=\"30\" maxlength=\"30\" />";
-               else
-               {
-                  echo "<input type=\"text\" name=\"last_name\" size=\"30\" maxlength=\"30\" value=\"$user->last_name\" ";
-                  if(!hasRole('Webmaster'))
-                     echo " class=\"readonly\" readonly ";
-                  echo " />";
-               }
+    echo "
+    <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
+        <form action=\"profile_save.php?user_id=$a_user_id&amp;new_user=$a_new_user&amp;url=$url";
+        if($a_new_user && $a_user_id > 0) 
+        {
+            echo "&amp;pw=$user->password";
+        }
+        echo "\" method=\"post\" name=\"ProfilAnzeigen\">
+            <div class=\"formHead\">";
+                if($a_user_id == $g_current_user->id)
+                {
+                    echo strspace("Mein Profil", 2);
+                }
+                else if($a_new_user)
+                {
+                    echo strspace("Neuer Benutzer", 2);
+                }
+                else
+                {
+                    echo strspace("Profil von ". $user->first_name. " ". $user->last_name, 1);
+                }
             echo "</div>
-         </div>
-         <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 30%; float: left;\">Vorname:</div>
-            <div style=\"text-align: left; margin-left: 32%;\">";
-               if($a_user_id == 0)
-                  echo "<input type=\"text\" name=\"first_name\" size=\"30\" maxlength=\"30\" />";
-               else
-               {
-                  echo "<input type=\"text\" name=\"first_name\" size=\"30\" maxlength=\"30\" value=\"$user->first_name\" ";
-                  if(!hasRole('Webmaster'))
-                     echo " class=\"readonly\" readonly ";
-                  echo " />";
-               }
+            <div class=\"formBody\">
+                <div>
+                    <div style=\"text-align: right; width: 30%; float: left;\">Nachname:</div>
+                    <div style=\"text-align: left; margin-left: 32%;\">";
+                        if($a_user_id == 0)
+                        {
+                            echo "<input type=\"text\" id=\"last_name\" name=\"last_name\" size=\"30\" maxlength=\"30\" />";
+                        }
+                        else
+                        {
+                            echo "<input type=\"text\" id=\"last_name\" name=\"last_name\" size=\"30\" maxlength=\"30\" value=\"$user->last_name\" ";
+                            if(!hasRole('Webmaster'))
+                            {
+                                echo " class=\"readonly\" readonly ";
+                            }
+                            echo " />";
+                        }
+                    echo "</div>
+                </div>
+                <div style=\"margin-top: 6px;\">
+                    <div style=\"text-align: right; width: 30%; float: left;\">Vorname:</div>
+                    <div style=\"text-align: left; margin-left: 32%;\">";
+                        if($a_user_id == 0)
+                        {
+                            echo "<input type=\"text\" name=\"first_name\" size=\"30\" maxlength=\"30\" />";
+                        }
+                        else
+                        {
+                            echo "<input type=\"text\" name=\"first_name\" size=\"30\" maxlength=\"30\" value=\"$user->first_name\" ";
+                            if(!hasRole('Webmaster'))
+                            {
+                                echo " class=\"readonly\" readonly ";
+                            }
+                            echo " />";
+                        }
+                    echo "</div>
+                </div>";
+                if(!$a_user_id == 0)
+                {
+                    echo "<div style=\"margin-top: 6px;\">
+                        <div style=\"text-align: right; width: 30%; float: left;\">Benutzername:</div>
+                        <div style=\"text-align: left; margin-left: 32%;\">
+                            <input type=\"text\" name=\"login_name\" size=\"15\" maxlength=\"20\" value=\"$user->login_name\" ";
+                            if(!hasRole('Webmaster'))
+                            {
+                                echo " class=\"readonly\" readonly ";
+                            }
+                            echo " />
+                        </div>
+                    </div>";
+
+                    // eigenes Passwort aendern, nur Webmaster duerfen Passwoerter von anderen aendern
+                    if(hasRole('Webmaster') || $g_current_user->id == $a_user_id )
+                    {
+                        echo "<div style=\"margin-top: 6px;\">
+                            <div style=\"text-align: right; width: 30%; float: left;\">Passwort:</div>
+                            <div style=\"text-align: left; margin-left: 32%;\">
+                                <button name=\"password\" type=\"button\" value=\"Passwort &auml;ndern\" onclick=\"window.open('password.php?user_id=$a_user_id','Titel','width=350,height=260,left=310,top=200')\">
+                                <img src=\"$g_root_path/adm_program/images/key.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Passwort &auml;ndern\">
+                                &nbsp;Passwort &auml;ndern</button>
+                            </div>
+                        </div>";
+                    }
+                }
+
+                echo "<hr width=\"80%\" />
+
+                <div style=\"margin-top: 6px;\">
+                    <div style=\"text-align: right; width: 30%; float: left;\">Adresse:</div>
+                    <div style=\"text-align: left; margin-left: 32%;\">";
+                        if($a_new_user)
+                        {
+                            echo "<input type=\"text\" id=\"address\" name=\"address\" size=\"40\" maxlength=\"50\" />";
+                        }
+                        else
+                        {
+                            echo "<input type=\"text\" id=\"address\" name=\"address\" size=\"40\" maxlength=\"50\" value=\"$user->address\" />";
+                        }
+                    echo "</div>
+                </div>
+                <div style=\"margin-top: 6px;\">
+                    <div style=\"text-align: right; width: 30%; float: left;\">Postleitzahl:</div>
+                    <div style=\"text-align: left; margin-left: 32%;\">";
+                        if($a_new_user)
+                        {
+                            echo "<input type=\"text\" name=\"zip_code\" size=\"10\" maxlength=\"10\" />";
+                        }
+                        else
+                        {
+                            echo "<input type=\"text\" name=\"zip_code\" size=\"10\" maxlength=\"10\" value=\"$user->zip_code\" />";
+                        }
+                    echo "</div>
+                </div>
+                <div style=\"margin-top: 6px;\">
+                    <div style=\"text-align: right; width: 30%; float: left;\">Ort:</div>
+                    <div style=\"text-align: left; margin-left: 32%;\">";
+                        if($a_new_user)
+                        {
+                            echo "<input type=\"text\" name=\"city\" size=\"20\" maxlength=\"30\" />";
+                        }
+                        else
+                        {
+                            echo "<input type=\"text\" name=\"city\" size=\"20\" maxlength=\"30\" value=\"$user->city\" />";
+                        }
+                    echo "</div>
+                </div>
+                <div style=\"margin-top: 6px;\">
+                    <div style=\"text-align: right; width: 30%; float: left;\">Land:</div>
+                    <div style=\"text-align: left; margin-left: 32%;\">";
+                        if($a_new_user)
+                        {
+                            echo "<input type=\"text\" name=\"country\" size=\"20\" maxlength=\"30\" />";
+                        }
+                        else
+                        {
+                            echo "<input type=\"text\" name=\"country\" size=\"20\" maxlength=\"30\" value=\"$user->country\" />";
+                        }
+                    echo "</div>
+                </div>
+
+                <hr width=\"80%\" />
+
+                <div style=\"margin-top: 6px;\">
+                    <div style=\"text-align: right; width: 30%; float: left;\">Telefon:</div>
+                    <div style=\"text-align: left; margin-left: 32%;\">";
+                        if($a_new_user)
+                        {
+                            echo "<input type=\"text\" name=\"phone\" size=\"15\" maxlength=\"20\" />";
+                        }
+                        else
+                        {
+                            echo "<input type=\"text\" name=\"phone\" size=\"15\" maxlength=\"20\" value=\"$user->phone\" />";
+                        }
+                        echo "&nbsp;<span style=\"font-family: Courier;\">(Vorwahl-Tel.Nr.)</span>
+                    </div>
+                </div>
+                <div style=\"margin-top: 6px;\">
+                    <div style=\"text-align: right; width: 30%; float: left;\">Handy:</div>
+                    <div style=\"text-align: left; margin-left: 32%;\">";
+                        if($a_new_user)
+                        {
+                            echo "<input type=\"text\" name=\"mobile\" size=\"15\" maxlength=\"20\" />";
+                        }
+                        else
+                        {
+                            echo "<input type=\"text\" name=\"mobile\" size=\"15\" maxlength=\"20\" value=\"$user->mobile\" />";
+                        }
+                        echo "&nbsp;<span style=\"font-family: Courier;\">(Vorwahl-Handynr.)</span>
+                     </div>
+                </div>
+                <div style=\"margin-top: 6px;\">
+                    <div style=\"text-align: right; width: 30%; float: left;\">Fax:</div>
+                    <div style=\"text-align: left; margin-left: 32%;\">";
+                        if($a_new_user)
+                        {
+                            echo "<input type=\"text\" name=\"fax\" size=\"15\" maxlength=\"20\" />";
+                        }
+                        else
+                        {
+                            echo "<input type=\"text\" name=\"fax\" size=\"15\" maxlength=\"20\" value=\"$user->fax\" />";
+                        }
+                        echo "&nbsp;<span style=\"font-family: Courier;\">(Vorwahl-Faxnr.)</span>
+                    </div>
+                </div>
+                <div style=\"margin-top: 6px;\">
+                    <div style=\"text-align: right; width: 30%; float: left;\">E-Mail:</div>
+                    <div style=\"text-align: left; margin-left: 32%;\">";
+                        if($a_user_id == 0)
+                        {
+                            echo "<input type=\"text\" name=\"email\" size=\"40\" maxlength=\"50\" />";
+                        }
+                        else
+                        {
+                            echo "<input type=\"text\" name=\"email\" size=\"40\" maxlength=\"50\" value=\"$user->email\" />";
+                        }
+                    echo "</div>
+                </div>
+                <div style=\"margin-top: 6px;\">
+                    <div style=\"text-align: right; width: 30%; float: left;\">Homepage:</div>
+                    <div style=\"text-align: left; margin-left: 32%;\">";
+                        if($a_new_user)
+                        {
+                            echo "<input type=\"text\" name=\"homepage\" size=\"40\" maxlength=\"50\" />";
+                        }
+                        else
+                        {
+                            echo "<input type=\"text\" name=\"homepage\" size=\"40\" maxlength=\"50\" value=\"$user->homepage\" />";
+                        }
+                    echo "</div>
+                </div>
+
+                <hr width=\"80%\" />
+
+                <div style=\"margin-top: 6px;\">
+                    <div style=\"text-align: right; width: 30%; float: left;\">Geburtstag:</div>
+                    <div style=\"text-align: left; margin-left: 32%;\">";
+                        if($a_new_user)
+                        {
+                            echo "<input type=\"text\" name=\"birthday\" size=\"10\" maxlength=\"10\" />";
+                        }
+                        else
+                        {
+                            echo "<input type=\"text\" name=\"birthday\" size=\"10\" maxlength=\"10\" value=\"". mysqldatetime('d.m.y', $user->birthday). "\" />";
+                        }
+                    echo "</div>
+                </div>
+                <div style=\"margin-top: 6px;\">
+                    <div style=\"text-align: right; width: 30%; float: left;\">Geschlecht:</div>
+                    <div style=\"text-align: left; margin-left: 32%;\">
+                        <select size=\"1\" name=\"gender\">
+                            <option value=\"0\""; if($user->gender < 1 || $user->gender > 2) echo " selected=\"selected\""; echo ">&nbsp;</option>
+                            <option value=\"1\""; if($user->gender == 1) echo " selected=\"selected\""; echo ">m&auml;nnlich</option>
+                            <option value=\"2\""; if($user->gender == 2) echo " selected=\"selected\""; echo ">weiblich</option>
+                        </select>
+                    </div>
+                </div>";
+
+                if(!$a_new_user)
+                {
+                    echo "<hr width=\"80%\" />";
+
+                    // alle zugeordneten Messengerdaten einlesen
+                    $sql = "SELECT usf_name, usd_value
+                              FROM ". TBL_USER_FIELDS. " LEFT JOIN ". TBL_USER_DATA. "
+                                ON usd_usf_id = usf_id
+                               AND usd_usr_id = $user->id
+                             WHERE usf_org_shortname IS NULL
+                               AND usf_type   = 'MESSENGER'
+                             ORDER BY usf_name ASC ";
+                    $result_msg = mysql_query($sql, $g_adm_con);
+                    db_error($result_msg, true);
+
+                    while($row = mysql_fetch_object($result_msg))
+                    {
+                        echo "<div style=\"margin-top: 6px;\">
+                            <div style=\"text-align: right; width: 30%; float: left;\">
+                                $row->usf_name:
+                                <img src=\"$g_root_path/adm_program/images/";
+                                if($row->usf_name == 'AIM')
+                                {
+                                    echo "aim.png";
+                                }
+                                elseif($row->usf_name == 'Google Talk')
+                                {
+                                    echo "google.gif";
+                                }
+                                elseif($row->usf_name == 'ICQ')
+                                {
+                                    echo "icq.png";
+                                }
+                                elseif($row->usf_name == 'MSN')
+                                {
+                                    echo "msn.png";
+                                }
+                                elseif($row->usf_name == 'Skype')
+                                {
+                                    echo "skype.png";
+                                }
+                                elseif($row->usf_name == 'Yahoo')
+                                {
+                                    echo "yahoo.png";
+                                }
+                                echo "\" style=\"vertical-align: middle;\" />
+                            </div>
+                            <div style=\"text-align: left; margin-left: 32%;\">";
+                                if($a_new_user)
+                                {
+                                    echo "<input type=\"text\" name=\"". urlencode($row->usf_name). "\" size=\"20\" maxlength=\"50\" />";
+                                }
+                                else
+                                {
+                                    echo "<input type=\"text\" name=\"". urlencode($row->usf_name). "\" size=\"20\" maxlength=\"50\" value=\"$row->usd_value\" />";
+                                }
+                            echo "</div>
+                        </div>";
+                    }
+                }
+
+                // gruppierungsspezifische Felder einlesen
+                if($a_new_user)
+                {
+                    $sql = "SELECT *
+                              FROM ". TBL_USER_FIELDS. "
+                             WHERE usf_org_shortname = '$g_organization'
+                             ORDER BY usf_name ASC ";
+                }
+                else
+                {
+                    $sql = "SELECT *
+                              FROM ". TBL_USER_FIELDS. " LEFT JOIN ". TBL_USER_DATA. "
+                                ON usd_usf_id = usf_id
+                               AND usd_usr_id = $user->id
+                             WHERE usf_org_shortname = '$g_organization' ";
+                    if(!isModerator())
+                    {
+                        $sql = $sql. " AND usf_locked = 0 ";
+                    }
+                    $sql = $sql. " ORDER BY usf_name ASC ";
+                }
+                $result_field = mysql_query($sql, $g_adm_con);
+                db_error($result_field, true);
+
+                if(mysql_num_rows($result_field) > 0)
+                {
+                    echo "<hr width=\"80%\" />";
+                }
+
+                while($row = mysql_fetch_object($result_field))
+                {
+                    echo "<div style=\"margin-top: 6px;\">
+                        <div style=\"text-align: right; width: 30%; float: left;\">
+                            $row->usf_name:
+                        </div>
+                        <div style=\"text-align: left; margin-left: 32%;\">";
+                            echo "<input type=\"";
+                            if($row->usf_type == "CHECKBOX")
+                            {
+                                echo "checkbox";
+                            }
+                            else
+                            {
+                                echo "text";
+                            }
+                            echo "\" id=\"". urlencode($row->usf_name). "\" name=\"". urlencode($row->usf_name). "\" ";
+                            if($row->usf_type == "CHECKBOX")
+                            {
+                                if($row->usd_value == 1)
+                                {
+                                    echo " checked ";
+                                }
+                                echo " value=\"1\" ";
+                            }
+                            else
+                            {
+                                if($row->usf_type == "NUMERIC")
+                                {
+                                    echo " size=\"10\" maxlength=\"15\" ";
+                                }
+                                elseif($row->usf_type == "TEXT")
+                                {
+                                    echo " size=\"30\" maxlength=\"30\" ";
+                                }
+                                elseif($row->usf_type == "TEXT_BIG")
+                                {
+                                    echo " size=\"40\" maxlength=\"255\" ";
+                                }
+                                
+                                if(strlen($row->usd_value) > 0)
+                                {
+                                    echo " value=\"$row->usd_value\" ";
+                                }
+                            }
+                            echo ">";
+                        echo "</div>
+                    </div>";
+                }
+
+                echo "<hr width=\"80%\" />
+
+                <div style=\"margin-top: 6px;\">
+                    <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
+                    <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
+                    &nbsp;Zur&uuml;ck</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                    <button name=\"speichern\" type=\"submit\" value=\"speichern\">
+                    <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
+                    &nbsp;Speichern</button>
+                </div>";
+
+                if($user->usr_id_change > 0)
+                {
+                    // Angabe über die letzten Aenderungen
+                    $sql    = "SELECT usr_first_name, usr_last_name
+                                 FROM ". TBL_USERS. "
+                                WHERE usr_id = $user->usr_id_change ";
+                    $result = mysql_query($sql, $g_adm_con);
+                    db_error($result);
+                    $row = mysql_fetch_array($result);
+
+                    echo "<div style=\"margin-top: 6px;\"><span style=\"font-size: 10pt\">
+                        Letzte &Auml;nderung am ". mysqldatetime("d.m.y h:i", $user->last_change).
+                        " durch $row[0] $row[1]</span>
+                    </div>";
+                }
             echo "</div>
-         </div>";
-         if(!$a_user_id == 0)
-         {
-            echo "<div style=\"margin-top: 6px;\">
-               <div style=\"text-align: right; width: 30%; float: left;\">Benutzername:</div>
-               <div style=\"text-align: left; margin-left: 32%;\">
-                  <input type=\"text\" name=\"login_name\" size=\"15\" maxlength=\"20\" value=\"$user->login_name\" ";
-                  if(!hasRole('Webmaster'))
-                     echo " class=\"readonly\" readonly ";
-                  echo " />
-               </div>
-            </div>";
-
-            // eigenes Passwort aendern, nur Webmaster duerfen Passwoerter von anderen aendern
-            if(hasRole('Webmaster') || $g_current_user->id == $a_user_id )
-            {
-               echo "<div style=\"margin-top: 6px;\">
-                  <div style=\"text-align: right; width: 30%; float: left;\">Passwort:</div>
-                  <div style=\"text-align: left; margin-left: 32%;\">
-                     <button name=\"password\" type=\"button\" value=\"Passwort &auml;ndern\" onclick=\"window.open('password.php?user_id=$a_user_id','Titel','width=350,height=260,left=310,top=200')\">
-                     <img src=\"$g_root_path/adm_program/images/key.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Passwort &auml;ndern\">
-                     &nbsp;Passwort &auml;ndern</button>
-                  </div>
-               </div>";
-            }
-         }
-
-         echo "<hr width=\"80%\" />
-
-         <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 30%; float: left;\">Adresse:</div>
-            <div style=\"text-align: left; margin-left: 32%;\">";
-               if($a_new_user)
-                  echo "<input type=\"text\" name=\"address\" size=\"40\" maxlength=\"50\" />";
-               else
-                  echo "<input type=\"text\" name=\"address\" size=\"40\" maxlength=\"50\" value=\"$user->address\" />";
-            echo "</div>
-         </div>
-         <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 30%; float: left;\">Postleitzahl:</div>
-            <div style=\"text-align: left; margin-left: 32%;\">";
-               if($a_new_user)
-                  echo "<input type=\"text\" name=\"zip_code\" size=\"10\" maxlength=\"10\" />";
-               else
-                  echo "<input type=\"text\" name=\"zip_code\" size=\"10\" maxlength=\"10\" value=\"$user->zip_code\" />";
-            echo "</div>
-         </div>
-         <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 30%; float: left;\">Ort:</div>
-            <div style=\"text-align: left; margin-left: 32%;\">";
-               if($a_new_user)
-                  echo "<input type=\"text\" name=\"city\" size=\"20\" maxlength=\"30\" />";
-               else
-                  echo "<input type=\"text\" name=\"city\" size=\"20\" maxlength=\"30\" value=\"$user->city\" />";
-            echo "</div>
-         </div>
-         <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 30%; float: left;\">Land:</div>
-            <div style=\"text-align: left; margin-left: 32%;\">";
-               if($a_new_user)
-                  echo "<input type=\"text\" name=\"country\" size=\"20\" maxlength=\"30\" />";
-               else
-                  echo "<input type=\"text\" name=\"country\" size=\"20\" maxlength=\"30\" value=\"$user->country\" />";
-            echo "</div>
-         </div>
-
-         <hr width=\"80%\" />
-
-         <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 30%; float: left;\">Telefon:</div>
-            <div style=\"text-align: left; margin-left: 32%;\">";
-               if($a_new_user)
-                  echo "<input type=\"text\" name=\"phone\" size=\"15\" maxlength=\"20\" />";
-               else
-                  echo "<input type=\"text\" name=\"phone\" size=\"15\" maxlength=\"20\" value=\"$user->phone\" />";
-            echo "&nbsp;<span style=\"font-family: Courier;\">(Vorwahl-Tel.Nr.)</span></div>
-         </div>
-         <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 30%; float: left;\">Handy:</div>
-            <div style=\"text-align: left; margin-left: 32%;\">";
-               if($a_new_user)
-                  echo "<input type=\"text\" name=\"mobile\" size=\"15\" maxlength=\"20\" />";
-               else
-                  echo "<input type=\"text\" name=\"mobile\" size=\"15\" maxlength=\"20\" value=\"$user->mobile\" />";
-            echo "&nbsp;<span style=\"font-family: Courier;\">(Vorwahl-Handynr.)</span></div>
-         </div>
-         <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 30%; float: left;\">Fax:</div>
-            <div style=\"text-align: left; margin-left: 32%;\">";
-               if($a_new_user)
-                  echo "<input type=\"text\" name=\"fax\" size=\"15\" maxlength=\"20\" />";
-               else
-                  echo "<input type=\"text\" name=\"fax\" size=\"15\" maxlength=\"20\" value=\"$user->fax\" />";
-            echo "&nbsp;<span style=\"font-family: Courier;\">(Vorwahl-Faxnr.)</span></div>
-         </div>
-         <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 30%; float: left;\">E-Mail:</div>
-            <div style=\"text-align: left; margin-left: 32%;\">";
-               if($a_user_id == 0)
-                  echo "<input type=\"text\" name=\"email\" size=\"40\" maxlength=\"50\" />";
-               else
-                  echo "<input type=\"text\" name=\"email\" size=\"40\" maxlength=\"50\" value=\"$user->email\" />";
-            echo "</div>
-         </div>
-         <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 30%; float: left;\">Homepage:</div>
-            <div style=\"text-align: left; margin-left: 32%;\">";
-               if($a_new_user)
-                  echo "<input type=\"text\" name=\"homepage\" size=\"40\" maxlength=\"50\" />";
-               else
-                  echo "<input type=\"text\" name=\"homepage\" size=\"40\" maxlength=\"50\" value=\"$user->homepage\" />";
-            echo "</div>
-         </div>
-
-         <hr width=\"80%\" />
-
-         <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 30%; float: left;\">Geburtstag:</div>
-            <div style=\"text-align: left; margin-left: 32%;\">";
-               if($a_new_user)
-                  echo "<input type=\"text\" name=\"birthday\" size=\"10\" maxlength=\"10\" />";
-               else
-                  echo "<input type=\"text\" name=\"birthday\" size=\"10\" maxlength=\"10\" value=\"". mysqldatetime('d.m.y', $user->birthday). "\" />";
-            echo "</div>
-         </div>
-         <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 30%; float: left;\">Geschlecht:</div>
-            <div style=\"text-align: left; margin-left: 32%;\">
-               <select size=\"1\" name=\"gender\">
-                <option value=\"0\""; if($user->gender < 1 || $user->gender > 2) echo " selected=\"selected\""; echo ">&nbsp;</option>
-                <option value=\"1\""; if($user->gender == 1) echo " selected=\"selected\""; echo ">m&auml;nnlich</option>
-                <option value=\"2\""; if($user->gender == 2) echo " selected=\"selected\""; echo ">weiblich</option>
-               </select>
-            </div>
-         </div>";
-
-         if(!$a_new_user)
-         {
-            echo "<hr width=\"80%\" />";
-
-            // alle zugeordneten Messengerdaten einlesen
-            $sql = "SELECT usf_name, usd_value
-                      FROM ". TBL_USER_FIELDS. " LEFT JOIN ". TBL_USER_DATA. "
-                        ON usd_usf_id = usf_id
-                       AND usd_usr_id = $user->id
-                     WHERE usf_org_shortname IS NULL
-                       AND usf_type   = 'MESSENGER'
-                     ORDER BY usf_name ASC ";
-            $result_msg = mysql_query($sql, $g_adm_con);
-            db_error($result_msg, true);
-
-            while($row = mysql_fetch_object($result_msg))
-            {
-               echo "<div style=\"margin-top: 6px;\">
-                  <div style=\"text-align: right; width: 30%; float: left;\">
-                     $row->usf_name:
-                     <img src=\"$g_root_path/adm_program/images/";
-                     if($row->usf_name == 'AIM')
-                         echo "aim.png";
-                     elseif($row->usf_name == 'Google Talk')
-                         echo "google.gif";
-                     elseif($row->usf_name == 'ICQ')
-                         echo "icq.png";
-                     elseif($row->usf_name == 'MSN')
-                         echo "msn.png";
-                     elseif($row->usf_name == 'Skype')
-                         echo "skype.png";
-                     elseif($row->usf_name == 'Yahoo')
-                         echo "yahoo.png";
-                     echo "\" style=\"vertical-align: middle;\" /></div>
-                  <div style=\"text-align: left; margin-left: 32%;\">";
-                     if($a_new_user)
-                        echo "<input type=\"text\" name=\"". urlencode($row->usf_name). "\" size=\"20\" maxlength=\"50\" />";
-                     else
-                        echo "<input type=\"text\" name=\"". urlencode($row->usf_name). "\" size=\"20\" maxlength=\"50\" value=\"$row->usd_value\" />";
-                  echo "</div>
-               </div>";
-            }
-         }
-
-         // gruppierungsspezifische Felder einlesen
-         if($a_new_user)
-         {
-            $sql = "SELECT *
-                      FROM ". TBL_USER_FIELDS. "
-                     WHERE usf_org_shortname = '$g_organization'
-                  ORDER BY usf_name ASC ";
-         }
-         else
-         {
-            $sql = "SELECT *
-                      FROM ". TBL_USER_FIELDS. " LEFT JOIN ". TBL_USER_DATA. "
-                        ON usd_usf_id = usf_id
-                       AND usd_usr_id = $user->id
-                     WHERE usf_org_shortname = '$g_organization' ";
-            if(!isModerator())
-               $sql = $sql. " AND usf_locked = 0 ";
-            $sql = $sql. " ORDER BY usf_name ASC ";
-         }
-         $result_field = mysql_query($sql, $g_adm_con);
-         db_error($result_field, true);
-
-         if(mysql_num_rows($result_field) > 0)
-            echo "<hr width=\"80%\" />";
-
-         while($row = mysql_fetch_object($result_field))
-         {
-            echo "<div style=\"margin-top: 6px;\">
-               <div style=\"text-align: right; width: 30%; float: left;\">
-                  $row->usf_name:</div>
-               <div style=\"text-align: left; margin-left: 32%;\">";
-                  echo "<input type=\"";
-                  if($row->usf_type == "CHECKBOX")
-                     echo "checkbox";
-                  else
-                     echo "text";
-                  echo "\" id=\"". urlencode($row->usf_name). "\" name=\"". urlencode($row->usf_name). "\" ";
-                  if($row->usf_type == "CHECKBOX")
-                  {
-                     if($row->usd_value == 1)
-                        echo " checked ";
-                     echo " value=\"1\" ";
-                  }
-                  else
-                  {
-                     if($row->usf_type == "NUMERIC")
-                        echo " size=\"10\" maxlength=\"15\" ";
-                     elseif($row->usf_type == "TEXT")
-                        echo " size=\"30\" maxlength=\"30\" ";
-                     elseif($row->usf_type == "TEXT_BIG")
-                        echo " size=\"40\" maxlength=\"255\" ";
-                     if(strlen($row->usd_value) > 0)
-                        echo " value=\"$row->usd_value\" ";
-                  }
-                  echo ">";
-               echo "</div>
-            </div>";
-         }
-
-         echo "<hr width=\"80%\" />
-
-         <div style=\"margin-top: 6px;\">
-            <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
-            <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
-              &nbsp;Zur&uuml;ck</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              
-            <button name=\"speichern\" type=\"submit\" value=\"speichern\">
-               <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
-                 &nbsp;Speichern</button>
-         </div>";
-
-         if($user->usr_id_change > 0)
-         {
-            // Angabe über die letzten Aenderungen
-            $sql    = "SELECT usr_first_name, usr_last_name
-                         FROM ". TBL_USERS. "
-                        WHERE usr_id = $user->usr_id_change ";
-            $result = mysql_query($sql, $g_adm_con);
-            db_error($result);
-            $row = mysql_fetch_array($result);
-
-            echo "<div style=\"margin-top: 6px;\"><span style=\"font-size: 10pt\">
-                     Letzte &Auml;nderung am ". mysqldatetime("d.m.y h:i", $user->last_change).
-                     " durch $row[0] $row[1]</span>
-                  </div>";
-         }
-
-      echo "</div>
-   </form>
-   </div>";
+        </form>
+    </div>
+    <script type=\"text/javascript\"><!--\n";
+        if(hasRole('Webmaster') || $a_new_user)
+        {
+            echo "document.getElementById('last_name').focus();";
+        }
+        else
+        {
+            echo "document.getElementById('address').focus();";
+        }
+    echo "\n--></script>";    
 if($popup == 0)
-   require("../../../adm_config/body_bottom.php");
+{
+    require("../../../adm_config/body_bottom.php");
+}
 echo "</body>
 </html>";
 
