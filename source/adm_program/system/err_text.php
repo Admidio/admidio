@@ -341,8 +341,12 @@ function getErrorText($error_code, $error_text, $g_current_organization)
             $error_str = "Du kannst keine PHP, HTML oder Perl Dateien hochladen.";
             break;
 
+        case "file_not_exist":
+            $error_str = "Die ausgew&auml;hlte Datei existiert nicht.";
+            break;
+
         case "folder_not_exist":
-            $error_str = "Der von Ihnen aufgerufene Ordner existiert nicht.";
+            $error_str = "Der aufgerufene Ordner existiert nicht.";
             break;
 
         case "delete_file_folder":
