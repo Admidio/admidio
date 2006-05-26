@@ -71,7 +71,7 @@ if($g_session_valid & editPhoto())
         $counter=0;
         for($x=0; $x<=4; $x++)
         {
-            if($_FILES["bilddatei"]["name"]["$x"]!="")$counter++;
+            if(isset($_FILES["bilddatei"]["name"]["$x"]))$counter++;
         }
 
         //Kontrolle ob Bilder ausgewaehlt wurden
