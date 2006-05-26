@@ -383,14 +383,16 @@ echo "
             
             //Gesamtzahl der auszugebenden Veranstaltungen
             $events=mysql_num_rows($result_list);
-
                      
             // Navigation mit Vor- und Zurueck-Buttons
             $base_url = "$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$pho_id."&&ignored=$ignored";
             echo generatePagination($base_url, $events, 10, $event_element, TRUE);
 
             //Dateizeiger auf erstes auszugebendes Element setzen
-            if($events>0)mysql_data_seek($result_list, $event_element);
+            if($events>0)
+            {
+                mysql_data_seek($result_list, $event_element);
+            }
     
             //Funktion mit selbstaufruf zum erfassen der Bilder in Unterveranstaltungen
             function bildersumme($pho_id_parent){
@@ -435,7 +437,7 @@ echo "
                 };      
             }//function
             
-            for($x=$event_element; $x<=$event_element+9+$ignored && $x<=$events; $x++){
+            for($x=$event_element; $x<=$event_element+9+$ignored && $x<$events; $x++){
                 $adm_photo_list = mysql_fetch_array($result_list);
          
                 //Hauptordner
