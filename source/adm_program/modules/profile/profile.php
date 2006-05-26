@@ -43,7 +43,8 @@ else
     $url = urlencode(getHttpReferer());
 }
 
-if(!array_key_exists('user_id', $_GET))
+if(!array_key_exists('user_id', $_GET)
+|| $_GET['user_id'] == $g_current_user->id)
 {
     // wenn nichts uebergeben wurde, dann eigene Daten anzeigen
     $a_user_id = $g_current_user->id;
@@ -575,16 +576,15 @@ require("../../../adm_config/body_top.php");
                 {
                     echo "&nbsp;&nbsp;&nbsp;&nbsp;
                     <span class=\"iconLink\">
-                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=$a_user_id&amp;url=$url\"><img
-                         class=\"iconLink\" src=\"$g_root_path/adm_program/images/edit.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Profildaten &auml;ndern\"></a>
-                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=$a_user_id&amp;url=$url\">Profildaten &auml;ndern</a>
-                    </span>";
-                    
-                    echo "&nbsp;&nbsp;&nbsp;&nbsp;
-                    <span class=\"iconLink\">
                         <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?user_id=$a_user_id&amp;url=$url\"><img
                          class=\"iconLink\" src=\"$g_root_path/adm_program/images/photo.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Profildaten &auml;ndern\"></a>
                         <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?user_id=$a_user_id&amp;url=$url\">Profilfoto &auml;ndern</a>
+                    </span>
+                    &nbsp;&nbsp;&nbsp;&nbsp;                    
+                    <span class=\"iconLink\">
+                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=$a_user_id&amp;url=$url\"><img
+                         class=\"iconLink\" src=\"$g_root_path/adm_program/images/edit.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Profildaten &auml;ndern\"></a>
+                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=$a_user_id&amp;url=$url\">Profildaten &auml;ndern</a>
                     </span>";
                 }                
             echo "</div>
