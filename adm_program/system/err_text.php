@@ -102,6 +102,10 @@ function getErrorText($error_code, $error_text, $g_current_organization)
             $error_str = "Es sind nicht alle Felder aufgef&uuml;llt worden.";
             break;
 
+        case "import":
+            $error_str = "Alle Datens&auml;tze wurden erfolgreich importiert !";
+            break;
+
         case "invalid":
             $error_str = "Ung&uuml;ltiger Seitenaufruf !";
             break;
