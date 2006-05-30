@@ -532,37 +532,40 @@ require("../../../adm_config/body_top.php");
                 db_error($result_role, true);
                 $count_role = mysql_num_rows($result_role);
 
-                $sql = "SELECT org_shortname FROM ". TBL_ORGANIZATIONS. "";
-                $result = mysql_query($sql, $g_adm_con);
-                db_error($result);
+                if($count_role > 0)
+                {
+                    $sql = "SELECT org_shortname FROM ". TBL_ORGANIZATIONS. "";
+                    $result = mysql_query($sql, $g_adm_con);
+                    db_error($result);
 
-                $count_grp = mysql_num_rows($result);
-                $i = 0;
+                    $count_grp = mysql_num_rows($result);
+                    $i = 0;
 
-                echo "<div class=\"groupBox\" style=\"margin-top: 4px; text-align: left; height: 100%;\">
-                    <div class=\"groupBoxHeadline\">Rollen</div>";
+                    echo "<div class=\"groupBox\" style=\"margin-top: 4px; text-align: left; height: 100%;\">
+                        <div class=\"groupBoxHeadline\">Rollen</div>";
 
-                    while($row = mysql_fetch_object($result_role))
-                    {
-                        // jede einzelne Rolle anzeigen
-                        if($i > 0)
+                        while($row = mysql_fetch_object($result_role))
                         {
-                            echo "<br />";
-                        }
+                            // jede einzelne Rolle anzeigen
+                            if($i > 0)
+                            {
+                                echo "<br />";
+                            }
 
-                        if($count_grp > 1)
-                        {
-                            echo "$row->rol_org_shortname - ";
+                            if($count_grp > 1)
+                            {
+                                echo "$row->rol_org_shortname - ";
+                            }
+                            echo $row->rol_name;
+                            if($row->mem_leader == 1)
+                            {
+                                echo " - Leiter";
+                            }
+                            $i++;
                         }
-                        echo $row->rol_name;
-                        if($row->mem_leader == 1)
-                        {
-                            echo " - Leiter";
-                        }
-                        $i++;
-                    }
-                echo "</div>
-            </div>
+                    echo "</div>";
+                }
+            echo "</div>
 
             <div style=\"clear: left;\"><br /></div>
 
