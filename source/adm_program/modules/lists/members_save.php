@@ -8,9 +8,9 @@
  *
  * Uebergaben:
  *
- * user_id: Benutzer deren zuordnung ge�ndert werden soll
+ * user_id: Benutzer deren zuordnung ge?ndert werden soll
  * url:     URL auf die danach weitergeleitet wird
- * role_id: Rolle zu denen die Zuordnug ge�ndert werden soll
+ * role_id: Rolle zu denen die Zuordnug ge?ndert werden soll
  *
  ******************************************************************************
  *
@@ -193,7 +193,7 @@ while($user= mysql_fetch_array($result_user))
       <meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\" />
       <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\" />
       
-      <!--[if gte IE 5.5000]>
+      <!--[if lt IE 7]>
       <script language=\"JavaScript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
       <![endif]-->
    </head>

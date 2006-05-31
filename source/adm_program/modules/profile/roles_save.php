@@ -207,7 +207,7 @@ if($_GET['popup'] == 1)
         <meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\" />
         <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\" />
 
-        <!--[if gte IE 5.5000]>
+        <!--[if lt IE 7]>
         <script language=\"JavaScript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
         <![endif]-->
     </head>
