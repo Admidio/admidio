@@ -278,7 +278,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
             <title>$g_current_organization->longname - Veranstaltungsverwaltung</title>
             <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
 
-            <!--[if gte IE 5.5000]>
+            <!--[if lt IE 7]>
                 <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
             <![endif]-->";
 
