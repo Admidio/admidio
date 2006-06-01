@@ -156,49 +156,55 @@ echo "
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
 <html>
 <head>
-   <title>Mitglieder zuordnen</title>
-   <meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\">
-   <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
-      
-   <script type=\"text/javascript\">
-    function markMember(element)
-    {
-        if(element.checked == true)
+    <title>Mitglieder zuordnen</title>
+    <meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\">
+    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
+
+    <script type=\"text/javascript\"><!--
+        function markMember(element)
         {
+            if(element.checked == true)
+            {
                 var name   = element.name;
                 var pos_number = name.search('_') + 1;
                 var number = name.substr(pos_number, name.length - pos_number);
                 var role_name = 'member_' + number;
                 document.getElementById(role_name).checked = true;
             }
-    }
+        }
 
-    function unmarkLeader(element)
-    {
-        if(element.checked == false)
+        function unmarkLeader(element)
         {
+            if(element.checked == false)
+            {
                 var name   = element.name;
                 var pos_number = name.search('_') + 1;
                 var number = name.substr(pos_number, name.length - pos_number);
                 var role_name = 'leader_' + number; 
                 document.getElementById(role_name).checked = false;
             }
+        }
+    --></script>
+
+    <!--[if lt IE 7]>
+        <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
+    <![endif]-->";
+    
+    if($_GET['popup'] == 0)
+    {
+        require("../../../adm_config/header.php");
     }
-   </script>
-   
-   <!--[if lt IE 7]>
-   <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
-   <![endif]-->";
-   if($_GET['popup'] == 0)
-      require("../../../adm_config/header.php");
 echo "</head>";
 
 if($_GET['popup'] == 0)
-   require("../../../adm_config/body_top.php");
+{
+    require("../../../adm_config/body_top.php");
+}
 else
-   echo "<body>";
-   
-   
+{
+    echo "<body>";
+}
+
 //Beginn Formular
 echo"
 <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
