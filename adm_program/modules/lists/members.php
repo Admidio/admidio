@@ -140,6 +140,15 @@ for($y=0; $member = mysql_fetch_array($result_role_member); $y++)
     }
 }
 
+// User zaehlen, die mind. einer Rolle zugeordnet sind
+$sql    = "SELECT COUNT(*) 
+             FROM ". TBL_USERS. "
+            WHERE usr_valid = 1 ";
+$result = mysql_query($sql, $g_adm_con);
+db_error($result);
+
+$row = mysql_fetch_array($result);
+$count_valid_users = $row[0];
 
 //Beginn HTML
 echo "
@@ -197,25 +206,31 @@ echo"
     <form action=\"members_save.php?role_id=".$role_id. "&amp;popup=". $_GET['popup']. "&amp;url=$url\" method=\"post\" name=\"Mitglieder\">
        <h2>Mitglieder zu $role->rol_name zuordnen</h2>";
         
-        //Button Alle bzw. nur Mitglieder anzeigen
-        if($restrict=="m" && (isModerator() || editUser()))
-        {
-            echo"   <button name=\"aller\" type=\"button\" value=\"back\" style=\"width: 140px;\" onclick=\"self.location.href='members.php?rol_id=$role_id&amp;popup=1&amp;restrict=u'\">
-                        <img src=\"../../../adm_program/images/group.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"\">
-                        &nbsp;Alle anzeigen
-                    </button>";
-        }
-        if($restrict=="u" && (isModerator() || editUser()))
-        {
-            echo"   <button name=\"mitglieder\" type=\"button\" value=\"back\" style=\"width: 140px;\" onclick=\"self.location.href='members.php?rol_id=$role_id&amp;popup=1&amp;restrict=m'\">
-                        <img src=\"../../../adm_program/images/user.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"\">
-                        &nbsp;Nur Mitglieder
-                    </button>";
+        if($count_valid_users != $user_anzahl || $restrict == "u")
+        {   
+            //Button Alle bzw. nur Mitglieder anzeigen
+            echo "<p>";            
+            if($restrict=="m" && (isModerator() || editUser()))
+            {
+                echo "<span class=\"iconLink\">
+                    <a class=\"iconLink\" href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=u\"><img
+                    class=\"iconLink\" src=\"$g_root_path/adm_program/images/group.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Alle Benutzer anzeigen\"></a>
+                    <a class=\"iconLink\" href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=u\">Alle Benutzer anzeigen</a>
+                </span>";
+            }
+            else if($restrict=="u" && (isModerator() || editUser()))
+            {
+                echo "<span class=\"iconLink\">
+                    <a class=\"iconLink\" href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=m\"><img
+                    class=\"iconLink\" src=\"$g_root_path/adm_program/images/user.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Nur Mitglieder anzeigen\"></a>
+                    <a class=\"iconLink\" href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=m\">Nur Mitglieder anzeigen</a>
+                </span>";
+            }
+            echo "</p>";
         }
         
         //Anfang Tabelle
         echo"
-        <br><br>
         <table class=\"tableList\" cellpadding=\"3\" cellspacing=\"0\" style=\"width: 95%;\">
             <tr>
                 <th class=\"tableHeader\" style=\"text-align: center;\">Info</th>
