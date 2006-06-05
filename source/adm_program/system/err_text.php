@@ -432,7 +432,17 @@ function getErrorText($error_code, $error_text, $g_current_organization)
             $error_str = "Die RSS-Funktion wurde vom Webmaster deaktiviert";
             break;
         //Ende Fehlermeldungen RSSmodul
-
+        
+        
+        //Fehlermeldungen Servereinstellungen
+        case "no_file_upload_server":
+            $error_str = "Der Server l&auml;sst keine Dateiuploads zu.";
+            break;
+            
+        case "no_file_upload_server":
+            $error_str = "Der Server l&auml;sst keine Dateiuploads zu.";
+            break;
+        //Fehlermeldungen Servereinstellungen
 
         default:
             $error_str = "Es ist ein Fehler aufgetreten.";
