@@ -259,19 +259,19 @@ function getErrorText($error_code, $error_text, $g_current_organization)
             Schreibrechte</acronym> f&uuml;r den Ordner setzen kann.";
             break;
 
-        //Fehlermeldungen Profilfoto    
+        //Fehlermeldungen Profilfoto
         case "profile_photo_update":
             $error_str = "Neues Profilfoto wurde erfolgreich gespeichert.";
-            break;            
-            
+            break;
+
         case "profile_photo_update_cancel":
             $error_str = "Der Vorgang wurde abgebrochen.";
-            break;            
-            
+            break;
+
         case "profile_photo_nopic":
             $error_str = "Es wurde keine Bilddatei ausgew&auml;hlt.";
             break;
-            
+
         case "profile_photo_2big":
             $error_str = "Das hochgeladene hochgeladenen Foto &uuml;bersteigt die zul&auml;ssige
             Dateigr&ouml;&szlig;e von ".$g_preferences['max_photo_size']."KB.";
@@ -432,15 +432,11 @@ function getErrorText($error_code, $error_text, $g_current_organization)
             $error_str = "Die RSS-Funktion wurde vom Webmaster deaktiviert";
             break;
         //Ende Fehlermeldungen RSSmodul
-        
-        
+
+
         //Fehlermeldungen Servereinstellungen
         case "no_file_upload_server":
-            $error_str = "Der Server l&auml;sst keine Dateiuploads zu.";
-            break;
-            
-        case "no_file_upload_server":
-            $error_str = "Der Server l&auml;sst keine Dateiuploads zu.";
+            $error_str = "Die Servereinstellungen lassen keine Dateiuploads zu.";
             break;
         //Fehlermeldungen Servereinstellungen
 
