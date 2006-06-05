@@ -32,6 +32,14 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
+//pruefen ob in den aktuellen Servereinstellungen file_uploads auf ON gesetzt ist...
+if (ini_get('file_uploads') != '1')
+{
+    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=no_file_upload_server";
+    header($location);
+    exit();
+}
+
 if(!array_key_exists('user_id', $_GET))
 {
     // wenn nichts uebergeben wurde, dann eigene Daten anzeigen
@@ -94,44 +102,44 @@ $bild="../../../adm_my_files/photos/".$a_user_id.".jpg";
     /*****************************Bild speichern*************************************/
     if($_GET["job"]=="save")
     {
-                
+
         //Bilddaten in Datenbank schreiben
         $database_pic = addslashes(fread(fopen($bild, "r"), filesize($bild)));
-                    
-        $sql="  UPDATE ". TBL_USERS. " 
+
+        $sql="  UPDATE ". TBL_USERS. "
                 SET usr_photo = '$database_pic'
                 WHERE usr_id = $a_user_id ";
         $result = mysql_query($sql, $g_adm_con);
         db_error($result);
-                    
+
         //Zwischenspeicher leeren
         if(file_exists("$bild"))
         {
             unlink("$bild");
         }
-        
+
         // zur Ausgangsseite zurueck
-        $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=profile_photo_update&timer=2000&url=". 
+        $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=profile_photo_update&timer=2000&url=".
                     urlencode("$g_root_path/adm_program/modules/profile/profile.php?user_id=".$a_user_id."");
         header($location);
         exit();
-        
+
     }
         /*****************************Bild nicht speichern*************************************/
     if($_GET["job"]=="dont_save")
-    {                    
+    {
         //Zwischenspeicher leeren
         if(file_exists("$bild"))
         {
             unlink("$bild");
         }
-        
+
         // zur Ausgangsseite zurueck
-        $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=profile_photo_update_cancel&timer=2000&url=". 
+        $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=profile_photo_update_cancel&timer=2000&url=".
                     urlencode("$g_root_path/adm_program/modules/profile/profile.php?user_id=".$a_user_id."");
         header($location);
         exit();
-        
+
     }
     /***********************Kontrollmechanismen*********************************/
     //kontrollmechanismen
@@ -144,16 +152,16 @@ $bild="../../../adm_my_files/photos/".$a_user_id.".jpg";
             header($location);
             exit();
         }
-   
+
         //Dateiendung
         $bildinfo=getimagesize($_FILES["bilddatei"]["tmp_name"]);
-        if ($_FILES["bilddatei"]["name"]!=NULL && $bildinfo['mime']!="image/jpeg") 
+        if ($_FILES["bilddatei"]["name"]!=NULL && $bildinfo['mime']!="image/jpeg")
         {
             $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=dateiendungphotoup";
             header($location);
             exit();
         }
-        
+
         //Dateigroesse
         if ($_FILES["bilddatei"]["size"]>($g_preferences['max_photo_size'])*1000)
         {
@@ -162,8 +170,8 @@ $bild="../../../adm_my_files/photos/".$a_user_id.".jpg";
             exit();
         }
    }//Kontrollmechanismen
-    
-    
+
+
     /*****************************HTML-Teil*************************************/
 echo "
 <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
@@ -181,9 +189,9 @@ echo "
 echo "</head>";
 
 require("../../../adm_config/body_top.php");
-    
-   
-   
+
+
+
    /*****************************Bild hochladen*************************************/
     if($_GET["job"]==NULL)
     {
@@ -203,14 +211,14 @@ require("../../../adm_config/body_top.php");
 
             <div class=\"formBody\">";
                 echo"Aktuelles Bild:<br>";
-                
+
                 //Nachsehen ob fuer den User ein Photo gespeichert wurde
                 $sql =" SELECT usr_photo
                         FROM ".TBL_USERS."
                         WHERE usr_id = '$a_user_id'";
                 $result_photo = mysql_query($sql, $g_adm_con);
                 db_error($result_photo);
-                 
+
                 //Falls vorhanden Bild ausgeben
                 if(@MYSQL_RESULT($result_photo,0,"usr_photo")!=NULL)
                 {
@@ -222,7 +230,7 @@ require("../../../adm_config/body_top.php");
                     echo"<img src=\"$g_root_path/adm_program/images/no_profile_pic.png\">";
                 }
                 echo"<br><br>";
-            
+
             //Bildupload
             echo"
             <form name=\"photoup\" method=\"post\" action=\"profile_photo_edit.php?job=upload&user_id=".$a_user_id."\" enctype=\"multipart/form-data\">
@@ -240,12 +248,12 @@ require("../../../adm_config/body_top.php");
                     </button>
                  </div>
             </form>";
-        
+
             echo"
             </div>
         </div>";
     }
-    
+
     /*****************************Bild zwischenspeichern bestaetigen***********************************/
     if($_GET["job"]=="upload")
     {
@@ -266,8 +274,8 @@ require("../../../adm_config/body_top.php");
             <div class=\"formBody\">";
             //Groessnanpassung Bild und Bericht
                 if(move_uploaded_file($_FILES["bilddatei"]["tmp_name"], "../../../adm_my_files/photos/".$a_user_id.".jpg"))
-                {   
-                   
+                {
+
                     //Ermittlung der Original Bildgroesse
                     $bildgroesse = getimagesize("$bild");
 
@@ -278,7 +286,7 @@ require("../../../adm_config/body_top.php");
                     if(($bildgroesse[0]/130)>=($bildgroesse[1]/170))
                     {
                         $neubildsize = array (130, round(130/$seitenverhaeltnis));
-   
+
                     }
 
                     //y-Seite soll scalliert werden
@@ -295,21 +303,21 @@ require("../../../adm_config/body_top.php");
 
                     //kopieren der Daten in neues Bild
                     imagecopyresampled($neubild, $bilddaten, 0, 0, 0, 0, $neubildsize[0], $neubildsize[1], $bildgroesse[0], $bildgroesse[1]);
-    
+
                     //Zwischenspeichern des neuen Bildes
                     require("../../system/login_valid.php");
                     imagejpeg($neubild, $bild, 95);
                     chmod($bild, 0777);
-                    
+
                     imagedestroy($neubild);
-                
+
                     //Nachsehen ob fuer den User ein Photo gespeichert war
                     $sql =" SELECT usr_photo
                             FROM ".TBL_USERS."
                             WHERE usr_id = '$a_user_id'";
                     $result_photo = mysql_query($sql, $g_adm_con);
                     db_error($result_photo);
-        
+
                     //neues und altes Bild anzeigen
                     echo"
                     <table cellpadding=\"4\" cellspacing=\"0\" border=\"0\" style=\"width: 100%\">
@@ -330,7 +338,7 @@ require("../../../adm_config/body_top.php");
                             <td>Neues Bild:<br><img src=\"".$bild."\"\"></td>
                         </tr>
                     </table>
-                    
+
                     <hr width=\"85%\" />
                     <div style=\"margin-top: 6px;\">
                         <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=dont_save&user_id=".$a_user_id."'\">
@@ -342,11 +350,11 @@ require("../../../adm_config/body_top.php");
                             &nbsp;Neues Bild &uuml;bernehmen
                         </button>
                  </div>";
-                }      
+                }
             echo"
             </div>
         </div>";
     }
-    
+
 
 ?>

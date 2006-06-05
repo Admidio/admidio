@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2006 The Admidio Team
  * Homepage     : http://www.admidio.org
- * Module-Owner : Martin Günzler
+ * Module-Owner : Martin GÃ¼nzler
  *
  * Uebergaben:
  *
@@ -35,13 +35,22 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
-// erst prüfen, ob der User auch die entsprechenden Rechte hat
+// erst pruefen, ob der User auch die entsprechenden Rechte hat
 if(!editDownload())
 {
-    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
+    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=no_file_upload_server";
     header($location);
     exit();
 }
+
+//pruefen ob in den aktuellen Servereinstellungen ueberhaupt file_uploads auf ON gesetzt ist...
+if (ini_get('file_uploads') != '1')
+{
+    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=no_fileuploads";
+    header($location);
+    exit();
+}
+
 
 $default_folder = urldecode($_GET['default_folder']);
 $folder     = urldecode($_GET['folder']);
@@ -140,7 +149,7 @@ require("../../../adm_config/body_top.php");
     </div>
     <script type=\"text/javascript\"><!--
         document.getElementById('userfile').focus();
-    --></script>";  
+    --></script>";
     require("../../../adm_config/body_bottom.php");
 echo "</body>
 </html>";

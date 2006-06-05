@@ -263,7 +263,11 @@ require("../../../adm_config/body_top.php");
          </div>";
 
          // Nur eingeloggte User duerfen Attachments mit max 3MB anhaengen...
-         if (($g_session_valid) && ($g_preferences['max_mail_attachment_size'] > 0))
+
+
+
+
+         if (($g_session_valid) && ($g_preferences['max_mail_attachment_size'] > 0) && (ini_get('file_uploads') == '1'))
          {
              echo "
              <div style=\"margin-top: 8px;\">
@@ -302,7 +306,7 @@ require("../../../adm_config/body_top.php");
    </form>
 
    </div>";
-   
+
     // Focus auf das erste Eingabefeld setzen
     if(!array_key_exists("usr_id", $_GET)
     && !array_key_exists("rolle", $_GET))
