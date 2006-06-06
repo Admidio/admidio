@@ -186,7 +186,7 @@ require("../../../adm_config/body_top.php");
         && (isModerator() || $g_preferences['enable_rss'] == true))
         {
             echo "<p>";
-            
+
             // Neue Termine anlegen
             if(editDate())
             {
@@ -196,7 +196,7 @@ require("../../../adm_config/body_top.php");
                     <a class=\"iconLink\" href=\"dates_new.php\">Termin anlegen</a>
                 </span>";
             }
-            
+
             if(isModerator() && $g_preferences['enable_rss'] == true)
             {
                 echo "&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -213,13 +213,13 @@ require("../../../adm_config/body_top.php");
             }
 
             echo "</p>";
-            
+
             // Navigation mit Vor- und Zurueck-Buttons
             $base_url = "$g_root_path/adm_program/modules/dates/dates.php?mode=". $_GET["mode"];
             echo generatePagination($base_url, $num_dates, 10, $_GET["start"], TRUE);
         }
 
-        if($num_dates == 0)
+        if(mysql_num_rows($date_result) == 0)
         {
             // Keine Termine gefunden
             if($_GET['id'] > 0)
