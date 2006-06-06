@@ -127,7 +127,7 @@ require("../../../adm_config/body_top.php");
 
         $announcements_result = mysql_query($sql, $g_adm_con);
         db_error($announcements_result);
-        
+
         // Gucken wieviele Datensaetze die Abfrage ermittelt kann...
         $sql    = "SELECT COUNT(*) FROM ". TBL_ANNOUNCEMENTS. "
                     WHERE (  ann_org_shortname = '$g_organization'
@@ -141,11 +141,11 @@ require("../../../adm_config/body_top.php");
 
         // Icon-Links und Navigation anzeigen
 
-        if($_GET['id'] == 0 
+        if($_GET['id'] == 0
         && (isModerator() || $g_preferences['enable_rss'] == true))
         {
             echo "<p>";
-            
+
             // Neue Ankuendigung anlegen
             if(editAnnouncements())
             {
@@ -155,7 +155,7 @@ require("../../../adm_config/body_top.php");
                     <a class=\"iconLink\" href=\"announcements_new.php?headline=". $_GET["headline"]. "\">Neu anlegen</a>
                 </span>";
             }
-            
+
             if(isModerator() && $g_preferences['enable_rss'] == true)
             {
                 echo "&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -172,13 +172,13 @@ require("../../../adm_config/body_top.php");
             }
 
             echo "</p>";
-            
+
             // Navigation mit Vor- und Zurueck-Buttons
             $base_url = "$g_root_path/adm_program/modules/announcements/announcements.php?headline=". $_GET["headline"];
             echo generatePagination($base_url, $num_announcements, 10, $_GET["start"], TRUE);
         }
-        
-        if ($num_announcements == 0)
+
+        if (mysql_num_rows($announcements_result) == 0)
         {
             // Keine Ankuendigungen gefunden
             if($_GET['id'] > 0)
