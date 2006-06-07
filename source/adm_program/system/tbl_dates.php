@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Klasse fuer Datenbanktabelle adm_users
+ * Klasse fuer Datenbanktabelle adm_dates
  *
  * Copyright    : (c) 2004 - 2006 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -126,31 +126,36 @@ class TblDates
     {
         $iCal  = (string) "BEGIN:VCALENDAR\r\n";
         $iCal .= (string) "VERSION:2.0\r\n";
-        $iCal .= (string) "PRODID:-//www.admidio.org//Admidio" . getVersion() . "\r\n";
-        $iCal  = (string) "BEGIN:VEVENT\r\n";
+        $iCal .= (string) "PRODID:-//www.admidio.org//Admidio" . getVersion() . "//DE\r\n";
+        $iCal .= (string) "METHOD:PUBLISH\r\n";
+        $iCal .= (string) "BEGIN:VEVENT\r\n";
         if (strlen(trim($this->begin)) > 0) 
         {
-            $iCal .= (string) "DTSTART:" . mysqldatetime("ymdThis", $this->begin) . "\r\n";
+            $iCal .= (string) "DTSTART:" . mysqldatetime("ymdThisZ", $this->begin) . "\r\n";
         }
-        if (strlen(trim($this->end)) > 0) 
+        if (strlen(trim($this->end)) > 0 ) 
         {
-           $iCal .= (string) "DTEND:" . mysqldatetime("ymdThis", $this->end) . "\r\n";
+           $iCal .= (string) "DTEND:" . mysqldatetime("ymdThisZ", $this->end) . "\r\n";
         }
-        //if (strlen(trim($this->headline)) > 0) 
-        //{
-        //   $iCal .= (string) "SUMMARY:" . this->headline . "\r\n";
-        //}
-        //if (strlen(trim($this->description)) > 0) 
-        //{
-        //    $iCal .= (string) "DESCRIPTION:" . this->description . "\r\n";
-        //}
-        //if (strlen(trim($this->location)) > 0) 
-        //{
-        //    $iCal .= (string) "LOCATION:" . this->location . "\r\n";
-        //}
-        
+        if (strlen(trim($this->headline)) > 0) 
+        {
+           $iCal .= (string) "SUMMARY:" . $this->headline . "\r\n";
+        }
+        if (strlen(trim($this->description)) > 0) 
+        {
+            $iCal .= (string) "DESCRIPTION:" . $this->description . "\r\n";
+        }
+        if (strlen(trim($this->location)) > 0) 
+        {
+            $iCal .= (string) "LOCATION:" . $this->location . "\r\n";
+        }
+        if (strlen(trim($this->timestamp)) > 0) 
+        {
+            $iCal .= (string) "DTSTAMP:" . mysqldatetime("ymdThisZ", $this->timestamp) . "\r\n";
+        }
+        $iCal .= (string) "UID:" . mysqldatetime("ymdThisZ", $this->timestamp) . "+" . $this->usr_id . "@" . $g_domain . "\r\n";
         $iCal .= (string) "END:VEVENT\r\n";
-        $iCal.= (string) "END:VCALENDAR\r\n";
+        $iCal .= (string) "END:VCALENDAR\r\n";
         return $iCal;
     }
 }
