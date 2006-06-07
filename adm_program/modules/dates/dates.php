@@ -252,8 +252,9 @@ require("../../../adm_config/body_top.php");
                             ". mysqldatetime("d.m.y", $row->dat_begin). "
                             &nbsp;". strSpecialChars2Html($row->dat_headline). "
                         </div>";
+                        // Link zum iCal export
                         echo "<div style=\"text-align: right;\">";
-                        echo "<img src=\"$g_root_path/adm_program/images/edit.png\" style=\"cursor: pointer\" width=\"16\" height=\"16\" border=\"0\" alt=\"iCal\" title=\"iCal\"
+                        echo "<img src=\"$g_root_path/adm_program/images/database_out.png\" style=\"cursor: pointer\" width=\"16\" height=\"16\" border=\"0\" alt=\"iCal export\" title=\"iCal export\"
                                 onclick=\"self.location.href='$g_root_path/adm_program/modules/dates/ical_function.php?dat_id=$row->dat_id&mode=1'\">";
 
                         // aendern & loeschen darf man nur eigene Termine, ausser Moderatoren
