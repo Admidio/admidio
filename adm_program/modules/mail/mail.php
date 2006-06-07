@@ -45,6 +45,17 @@ if ($g_preferences['send_mail_extern'] == 1)
     exit();
 }
 
+
+if ($g_session_valid && !isValidEmailAddress($g_current_user->email))
+{
+    // der eingeloggte Benutzer hat in seinem Profil keine gueltige Mailadresse hinterlegt,
+    // die als Absender genutzt werden kann...
+    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=profile_mail";
+    header($location);
+    exit();
+}
+
+
 if (array_key_exists("usr_id", $_GET) && !$g_session_valid)
 {
     //in ausgeloggtem Zustand duerfen nie direkt usr_ids uebergeben werden...
@@ -93,12 +104,6 @@ if (!array_key_exists("body", $_GET))
 if (!array_key_exists("kopie", $_GET))
 {
     $_GET["kopie"] = "1";
-}
-
-if ($g_current_user->id != 0)
-{
-    $user     = new TblUsers($g_adm_con);
-    $user->GetUser($g_current_user->id);
 }
 
 echo "
@@ -218,7 +223,7 @@ require("../../../adm_config/body_top.php");
             <div style=\"text-align: left; margin-left: 17%;\">";
                if ($g_current_user->id != 0)
                {
-                   echo "<input class=\"readonly\" readonly type=\"text\" name=\"name\" size=\"30\" maxlength=\"50\" value=\"$user->first_name $user->last_name\">";
+                   echo "<input class=\"readonly\" readonly type=\"text\" name=\"name\" size=\"30\" maxlength=\"50\" value=\"$g_current_user->first_name $g_current_user->last_name\">";
                }
                else
                {
@@ -231,7 +236,7 @@ require("../../../adm_config/body_top.php");
             <div style=\"text-align: left; margin-left: 17%;\">";
                if ($g_current_user->id != 0)
                {
-                   echo "<input class=\"readonly\" readonly type=\"text\" name=\"mailfrom\" size=\"50\" maxlength=\"50\" value=\"$user->email\">";
+                   echo "<input class=\"readonly\" readonly type=\"text\" name=\"mailfrom\" size=\"50\" maxlength=\"50\" value=\"$g_current_user->email\">";
                }
                else
                {
@@ -262,11 +267,9 @@ require("../../../adm_config/body_top.php");
             </div>
          </div>";
 
+
+
          // Nur eingeloggte User duerfen Attachments mit max 3MB anhaengen...
-
-
-
-
          if (($g_session_valid) && ($g_preferences['max_mail_attachment_size'] > 0) && (ini_get('file_uploads') == '1'))
          {
              echo "
