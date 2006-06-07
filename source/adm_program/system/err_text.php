@@ -424,6 +424,10 @@ function getErrorText($error_code, $error_text, $g_current_organization)
         case "mail_rolle":
             $error_str = "Bitte w&auml;hle eine Rolle als Adressat der Mail aus!";
             break;
+
+        case "profile_mail":
+            $error_str = "In Ihrem <a href=\"$g_root_path/adm_program/modules/profile/profile.php\">Profil</a> ist keine g&uuml;ltige Emailadresse hinterlegt!";
+            break;
         //Ende Fehlermeldungen Mailmodul
 
 
