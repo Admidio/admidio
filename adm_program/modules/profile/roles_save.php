@@ -44,7 +44,7 @@ if(!isModerator() && !isGroupLeader() && !editUser())
 if(isModerator())
 {
     // Alle Rollen der Gruppierung auflisten
-    $sql    = "SELECT rol_id, rol_name 
+    $sql    = "SELECT rol_id, rol_name, rol_max_members
                  FROM ". TBL_ROLES. "
                 WHERE rol_org_shortname = '$g_organization'
                   AND rol_valid        = 1
@@ -53,7 +53,7 @@ if(isModerator())
 elseif(isGroupLeader())
 {
     // Alle Rollen auflisten, bei denen das Mitglied Leiter ist
-    $sql    = "SELECT rol_id, rol_name 
+    $sql    = "SELECT rol_id, rol_name, rol_max_members 
                  FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
                 WHERE mem_usr_id  = $g_current_user->id
                   AND mem_valid  = 1
@@ -67,7 +67,7 @@ elseif(isGroupLeader())
 elseif(editUser())
 {
     // Alle Rollen auflisten, die keinen Moderatorenstatus haben
-    $sql    = "SELECT rol_id, rol_name 
+    $sql    = "SELECT rol_id, rol_name, rol_max_members
                  FROM ". TBL_ROLES. "
                 WHERE rol_org_shortname = '$g_organization'
                   AND rol_valid        = 1
@@ -83,7 +83,50 @@ $i     = 0;
 $value = reset($_POST);
 $key   = key($_POST);
 $parentRoles = array();
+        
 
+//Ergebnisse durchlaufen und Kontrollieren ob Maximale Teilnehmerzahl ueberschritten wuerde
+while($row = mysql_fetch_object($result_rolle))
+{
+    //Aufruf von allen die die Rolle bereits haben
+    $sql    =   "SELECT mem_usr_id, mem_valid 
+                 FROM ". TBL_MEMBERS. "
+                 WHERE mem_rol_id = $row->rol_id
+                 AND mem_valid  = 1";
+    $sql    = prepareSQL($sql, array($_GET['user_id']));
+    $result_valid_members = mysql_query($sql, $g_adm_con);
+    db_error($result_valid_members);
+    $valid_members = mysql_num_rows($result_valid_members);
+    
+    //alle die die Rolle haben in Array schreiben
+    $valid_members_array = array();
+    for($x=0; $row2 = mysql_fetch_object($result_valid_members); $x++)
+    {
+        $valid_members_array[$x]="$row2->mem_usr_id";
+    }
+    
+    //Bedingungen fuer Abbruch und Abbruch
+    if ($valid_members>=$row->rol_max_members 
+        &&  $row->rol_max_members!=NULL
+        &&  !in_array($_GET['user_id'], $valid_members_array)
+        &&  $_POST["role-$i"]==true)
+    {
+        $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=max_members_profile&err_text=$row->rol_name";
+        header($location);
+        exit();
+    }
+    $i++;
+
+}
+
+//Dateizeiger auf erstes Element zurueck setzen
+if(mysql_num_rows($result_rolle)>0)
+{
+    mysql_data_seek($result_rolle, 0);
+}
+$i     = 0;
+
+//Ergebnisse durchlaufen und Datenbankupdate durchfuehren      
 while($row = mysql_fetch_object($result_rolle))
 {
     // der Webmaster-Rolle duerfen nur Webmaster neue Mitglieder zuweisen
@@ -152,6 +195,9 @@ while($row = mysql_fetch_object($result_rolle))
                 $count_assigned++;
             }
         }
+
+        
+        //Update aufueren
         $sql    = prepareSQL($sql, array($_GET['user_id']));
         $result = mysql_query($sql, $g_adm_con);
         db_error($result);
