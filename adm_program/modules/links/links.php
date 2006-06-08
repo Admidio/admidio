@@ -6,6 +6,11 @@
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
  *
+ * start     - Angabe, ab welchem Datensatz Links angezeigt werden sollen
+ * headline  - Ueberschrift, die ueber den Links steht
+ *             (Default) Links
+ * id        - Nur einen einzigen Link anzeigen lassen.
+ *
  *
  ******************************************************************************
  *
@@ -134,9 +139,9 @@ require("../../../adm_config/body_top.php");
             if($g_preferences['enable_rss'] == true)
             {
                 echo "<span class=\"iconLink\">
-                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/announcements/rss_announcements.php\"><img
+                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/links/rss_links.php\"><img
                     class=\"iconLink\" src=\"$g_root_path/adm_program/images/feed.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"". $_GET["headline"]. "-Feed abonnieren\"></a>
-                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/announcements/rss_announcements.php\">". $_GET["headline"]. "-Feed abonnieren</a>
+                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/links/rss_links.php\">". $_GET["headline"]. "-Feed abonnieren</a>
                 </span>";
             }
 
@@ -176,8 +181,19 @@ require("../../../adm_config/body_top.php");
                 <div class=\"boxBody\" style=\"overflow: hidden;\">
                     <div class=\"boxHead\">
                         <div style=\"text-align: left; float: left;\">
-                            <img src=\"$g_root_path/adm_program/images/globe.png\" style=\"vertical-align: top;\" alt=\"". strSpecialChars2Html($row->lnk_name). "\">&nbsp;".
-                            strSpecialChars2Html($row->lnk_name). "
+                            <a href=\"$row->lnk_url\" target=\"_blank\">
+                            <img src=\"$g_root_path/adm_program/images/globe.png\" style=\"vertical-align: middle;\" alt=\"Gehe zu $row->lnk_name\"
+                            title=\"Gehe zu $row->lnk_name\" border=\"0\"></a>
+                            <a href=\"$row->lnk_url\" target=\"_blank\">";
+                            if(strlen($row->lnk_name) > 25)
+                            {
+                                echo "<span style=\"font-size: 8pt;\">$row->lnk_name</span>";
+                            }
+                            else
+                            {
+                                echo "$row->lnk_name";
+                            }
+                            echo "</a>
                         </div>";
 
                         // aendern & loeschen duerfen nur User mit den gesetzten Rechten
