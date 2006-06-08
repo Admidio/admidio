@@ -165,7 +165,7 @@ require("../adm_config/body_top.php");
             <div style=\"text-align: left; margin-left: 45px;\">
                 <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/lists/lists.php\">Listen</a></span>&nbsp;&nbsp;
                 <span class=\"textHeadSmall\">&#91; <a href=\"$g_root_path/adm_program/modules/lists/mylist.php\">Eigene Liste</a>&nbsp;&nbsp;|&nbsp;
-                <a href=\"$g_root_path/adm_program/modules/lists/lists.php?active_role=0\">Ehemalige</a> &#93;</span><br />
+                <a href=\"$g_root_path/adm_program/modules/lists/lists.php?active_role=0\">Entfernte Rollen</a> &#93;</span><br />
                 <span class=\"textDescription\">Verschiedene Benutzerlisten der Rollen (Gruppen / Kurse / Abteilungen) anzeigen.</span>
             </div>
 
