@@ -323,10 +323,10 @@ function getErrorText($error_code, $error_text, $g_current_organization)
         case "photo_deleted":
             $error_str = "Das Foto wurde erfolgreich gel&ouml;scht.";
             break;
-
+            
         case "photo_2big":
-            $error_str = "Mindestens eins der hochgeladenen Fotos &uuml;bersteigt die zul&auml;ssige
-            Dateigr&ouml;&szlig;e von ".$g_preferences['max_photo_size']."KB.";
+            $error_str = "Mindestens eins der hochgeladenen Fotos &uuml;bersteigt die vom Server zugelassene
+            Dateigr&ouml;&szlig;e von ".ini_get(upload_max_filesize)."Byte.";
             break;
         //Ende Fehlermeldungen Fotomodul
 
