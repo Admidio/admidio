@@ -243,6 +243,10 @@ function getErrorText($error_code, $error_text, $g_current_organization)
         case "max_members":
             $error_str = "Speichern nicht m&ouml;glich, die maximale Mitgliederzahl wurde &uuml;berschritten.";
             break;
+            
+        case "max_members_profile":
+            $error_str = "Speichern nicht m&ouml;glich, bei der Rolle &bdquo;".$error_text."&rdquo; w&uuml;rde die maximale Mitgliederzahl &uuml;berschritten.";
+            break;
 
         case "write_access":
             if ($g_preferences['send_mail_extern'] == 1)
