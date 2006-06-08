@@ -133,12 +133,6 @@ function getErrorText($error_code, $error_text, $g_current_organization)
             $error_str = "Du hast dich erfolgreich angemeldet.";
             break;
 
-        case "loginNew":
-            $error_str = "Du warst l&auml;nger als 30 Minuten inaktiv.<p>
-            Aus diesem Grund wurdest du vom System abgemeldet.<br />
-            Melde dich bitte erneut an.";
-            break;
-
         case "logout":
             $error_str = "Du wurdest erfolgreich abgemeldet.";
             break;
@@ -161,10 +155,16 @@ function getErrorText($error_code, $error_text, $g_current_organization)
             $error_str = "Es sind keine Daten vorhanden !";
             break;
 
-        case "nolist":
+        case "no_category_roles":
             $error_str = "Es sind noch keine Rollen f&uuml;r diese Kategorie erstellt worden.<br /><br />
             Rollen k&ouml;nnen <a href=\"$g_root_path/adm_program/administration/roles/roles.php\">hier</a>
             erstellt und gepflegt werden.";
+            break;
+            
+        case "no_old_roles":
+            $error_str = "Es sind noch keine Rollen aus dem System entfernt worden.<br /><br />
+            Erst wenn du in der Rollenverwaltung Rollen l&ouml;schst, erscheinen diese automatisch bei 
+            den \"Entfernten Rollen\".";
             break;
 
         case "norights":

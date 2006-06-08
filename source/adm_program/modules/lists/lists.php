@@ -92,9 +92,17 @@ $list_found = mysql_num_rows($result_lst);
 
 if($list_found == 0)
 {
-   $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=nolist";
-   header($location);
-   exit();
+    if($active_role == 0)
+    {
+        $err_code = "no_old_roles";    
+    }
+    else
+    {
+        $err_code = "no_category_roles";    
+    }
+    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_head=Hinweis";
+    header($location);
+    exit();
 }
 
 echo "
