@@ -73,14 +73,40 @@ if($g_session_valid & editPhoto())
         $adm_photo_parent = mysql_fetch_array($result);
     }
 
-    //kontrollmechanismen bei selbstaufruf
+    //Kontrollmechanismen bei Upload
     if($_POST["upload"])
     {
-        //zaehlen wieviele Bilder hochgeladen werden sollen
+        //zaehlen wieviele Bilder hochgeladen werden sollen und ob alle Uploads Fehlerfrei sind 
         $counter=0;
         for($x=0; $x<=4; $x++)
         {
-            if(isset($_FILES["bilddatei"]["name"]["$x"]))$counter++;
+            //Datei wurde hochgeladen
+            if(isset($_FILES["bilddatei"]["name"]["$x"]))
+            {
+                //Es liegt kein Fehler vor, die Datei wurde erfolgreich hochgeladen.
+                if($_FILES["bilddatei"]["error"]["$x"]==0)
+                {
+                    $counter++;
+                    
+                    //Dateiendungskontrolle
+                    $bildinfo=getimagesize($_FILES["bilddatei"]["tmp_name"][$x]);
+                    if ($_FILES["bilddatei"]["name"][$x]!=NULL && $bildinfo['mime']!="image/jpeg") 
+                    {
+                        $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=dateiendungphotoup";
+                        header($location);
+                        exit();
+                    }
+                }
+                
+                //Die hochgeladene Datei ueberschreitet die in der Anweisung upload_max_filesize in php.ini festgelegte Groesse.
+                if($_FILES["bilddatei"]["error"]["$x"]==1)
+                {
+                    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=photo_2big";
+                    header($location);
+                    exit();
+                }
+            }
+            
         }
 
         //Kontrolle ob Bilder ausgewaehlt wurden
@@ -91,26 +117,6 @@ if($g_session_valid & editPhoto())
             exit();
         }
    
-        //Kontrolle des Dateityps und der Dateigroesse
-        for($x=0; $x<=4; $x=$x+1)
-        {
-            //Dateiendung
-            $bildinfo=getimagesize($_FILES["bilddatei"]["tmp_name"][$x]);
-            if ($_FILES["bilddatei"]["name"][$x]!=NULL && $bildinfo['mime']!="image/jpeg") 
-            {
-                $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=dateiendungphotoup";
-                header($location);
-                exit();
-            }
-   
-            //Dateigroesse
-            if ($_FILES["bilddatei"]["size"][$x]>($g_preferences['max_photo_size'])*1000)
-            {
-                $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=photo_2big";
-                header($location);
-                exit();
-            }
-        }//for
    }//Kontrollmechanismen
 
 //Beginn HTML
