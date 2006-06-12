@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2006 The Admidio Team
  * Homepage     : http://www.admidio.org
- * Module-Owner : Martin Günzler
+ * Module-Owner : Martin Gï¿½nzler
  *
  * Uebergaben:
  *
@@ -39,7 +39,7 @@
     require("../../system/common.php");
     require("../../system/login_valid.php");
 
-//Prüfrotine ob Ordner/Datei
+//Prï¿½frotine ob Ordner/Datei
 function file_or_folder ($act_dir,$file) {
     if(strlen($file) > 0)
         {
@@ -81,7 +81,7 @@ function removeDir ($dir)
 };
 
 
-// erst prüfen, ob der User auch die entsprechenden Rechte hat
+// erst prï¿½fen, ob der User auch die entsprechenden Rechte hat
 if(!editDownload())
 {
    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
@@ -89,7 +89,7 @@ if(!editDownload())
    exit();
 }
 
-//testen ob Schreibrechte für adm_my_files bestehen
+//testen ob Schreibrechte fï¿½r adm_my_files bestehen
 if (decoct(fileperms("../../../adm_my_files/download"))!=40777)
 {
    $load_url = urlencode("$g_root_path/adm_program/modules/download/download.php");
@@ -135,13 +135,26 @@ $is_folder = file_or_folder ($act_folder,$file);
 
 if($_GET["mode"] == 1)
 {
+    if (empty($_POST))
+    {
+        $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=empty_upload_post";
+        header($location);
+        exit();
+    }
+   
    // Dateien hochladen
    if(strpos($_POST['new_name'], "..") !== false)
       $err_code = "invalid_file";
    else
    {
       $local_file = $_FILES['userfile']['name'];
-      //Dateigroesse ueberpruefen
+      //Dateigroesse ueberpruefen Servereinstellungen
+      if ($_FILES['userfile']['error']==1){
+        $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=file_2big_server";
+        header($location);
+        exit();
+      }
+      //Dateigroesse ueberpruefen Administratoreinstellungen
       if ($_FILES['userfile']['size']>($g_preferences['max_file_upload_size'])*1000){
         $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=file_2big";
         header($location);
@@ -197,7 +210,7 @@ if($_GET["mode"] == 1)
 }
 elseif($_GET["mode"] == 2)
 {
-   //Löschen der Datei/Ordner
+   //Lï¿½schen der Datei/Ordner
    
    if($is_folder)
    {

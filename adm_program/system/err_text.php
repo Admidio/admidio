@@ -326,7 +326,7 @@ function getErrorText($error_code, $error_text, $g_current_organization)
             
         case "photo_2big":
             $error_str = "Mindestens eins der hochgeladenen Fotos &uuml;bersteigt die vom Server zugelassene
-            Dateigr&ouml;&szlig;e von ".ini_get(upload_max_filesize)."Byte.";
+            Dateigr&ouml;&szlig;e von ".ini_get(upload_max_filesize)."B.";
             break;
 
         case "empty_photo_post":
@@ -403,6 +403,16 @@ function getErrorText($error_code, $error_text, $g_current_organization)
             $error_str = "Die hochgeladene Datei &uuml;bersteigt die zul&auml;ssige
             Dateigr&ouml;&szlig;e von ".$g_preferences['max_file_upload_size']."KB.";
             break;
+                    
+        case "file_2big_server":
+            $error_str = "Die hochgeladene Datei &uuml;bersteigt die vom Server zugelassene
+            Dateigr&ouml;&szlig;e von ".ini_get(upload_max_filesize)."B.";
+            break;
+            
+        case "empty_upload_post":
+            $error_str = "Die Seite wurde ung&uuml;ltig aufgerufen oder die Datei konnte nicht hochgeladen werden.<br />
+            Vermutlich wurde die vom Server vorgegebene, maximale Uploadgr&ouml;&szlig;e, von ". ini_get(post_max_size)."B &uuml;bersteigen!";
+            break;  
         //Ende Fehlermeldungen Downloadmodul
 
 
