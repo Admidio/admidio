@@ -90,9 +90,9 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
             if(strlen($_POST['datum_bis'])   == 0)
                $_POST['datum_bis']   = $_POST['datum_von'];
             if(strlen($_POST['uhrzeit_bis']) == 0)
-               $_POST['uhrzeit_bis'] = "00:00:00";
+               $_POST['uhrzeit_bis'] = $_POST['uhrzeit_von'];
 
-            if(dtCheckDate($_POST['datum_bis']))
+	    if(dtCheckDate($_POST['datum_bis']))
             {
                if(dtCheckTime($_POST['uhrzeit_bis'])
                || $_POST['uhrzeit_bis'] == "")
@@ -109,6 +109,15 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
             else
             {
             	$err_text = "Datum Ende";
+               $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=datum&err_text=$err_text";
+               header($location);
+               exit();
+            }
+            
+            // Enddatum muss groesser oder gleich dem Startdatum sein
+            if(strcmp($dt_datum_von,$dt_datum_bis) > 0)
+            {
+            	$err_text = "Datum Ende oder Uhrzeit Ende";
                $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=datum&err_text=$err_text";
                header($location);
                exit();
