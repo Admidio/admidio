@@ -73,53 +73,8 @@ if($g_session_valid & editPhoto())
         $adm_photo_parent = mysql_fetch_array($result);
     }
 
-    //Kontrollmechanismen bei Upload
-    if($_POST["upload"])
-    {
-        //zaehlen wieviele Bilder hochgeladen werden sollen und ob alle Uploads Fehlerfrei sind 
-        $counter=0;
-        for($x=0; $x<=4; $x++)
-        {
-            //Datei wurde hochgeladen
-            if(isset($_FILES["bilddatei"]["name"]["$x"]))
-            {
-                //Es liegt kein Fehler vor, die Datei wurde erfolgreich hochgeladen.
-                if($_FILES["bilddatei"]["error"]["$x"]==0)
-                {
-                    $counter++;
-                    
-                    //Dateiendungskontrolle
-                    $bildinfo=getimagesize($_FILES["bilddatei"]["tmp_name"][$x]);
-                    if ($_FILES["bilddatei"]["name"][$x]!=NULL && $bildinfo['mime']!="image/jpeg") 
-                    {
-                        $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=dateiendungphotoup";
-                        header($location);
-                        exit();
-                    }
-                }
-                
-                //Die hochgeladene Datei ueberschreitet die in der Anweisung upload_max_filesize in php.ini festgelegte Groesse.
-                if($_FILES["bilddatei"]["error"]["$x"]==1)
-                {
-                    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=photo_2big";
-                    header($location);
-                    exit();
-                }
-            }
-            
-        }
-
-        //Kontrolle ob Bilder ausgewaehlt wurden
-        if($counter==0)
-        {
-            $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=photodateiphotoup";
-            header($location);
-            exit();
-        }
-   
-   }//Kontrollmechanismen
-
-//Beginn HTML
+ 
+    //Beginn HTML
    echo "
    <!-- (c) 2004 - 2005 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
    <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
@@ -140,100 +95,39 @@ if($g_session_valid & editPhoto())
         echo "
         <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">";
           
-/*****************************Verarbeitung******************************************/          
-           if($_POST["upload"])
-           {
-                //bei selbstaufruf der Datei Hinweise zu hochgeladenen Dateien und Kopieren der Datei in Ordner
-                //Anlegen des Berichts
-                echo"
-                <div style=\"width: 670px\" align=\"center\" class=\"formHead\">Bericht</div>
-                <div style=\"width: 670px\" align=\"center\" class=\"formBody\">Bitte einen Moment Geduld. Die Bilder wurden der Veranstaltung <br> - ".$adm_photo["pho_name"]." - <br>erfolgreich hinzugef&uuml;gt, wenn sie hier angezeigt werden.<br>";
-  
-                     //Verarbeitungsschleife fuer die einzelnen Bilder
-                        $bildnr=$adm_photo["pho_quantity"];
-                        for($x=0; $x<=4; $x=$x+1)
-                        {
-                            $y=$x+1;
-                            if($_FILES["bilddatei"]["name"][$x]!=NULL && $ordner!=NULL)
-                            {
-                                //errechnen der neuen Bilderzahl
-                                $bildnr++;
-                                echo "<br>Bild $bildnr:<br>";
-                                
-                                //Groessnanpassung Bild und Bericht
-                                if(move_uploaded_file($_FILES["bilddatei"]["tmp_name"][$x], "../../../adm_my_files/photos/temp$y.jpg"))
-                                {
-                                    echo"<img src=\"resize.php?scal=640&ziel=$ordner/$bildnr&aufgabe=speichern&nr=$y\"><br><br>";
-                                }
-                                else
-                                {
-                                    echo"Das Bild konnte nicht verarbeitet werden.";
-                                }
-                                unset($y);
-                            }//if($bilddatei!= "")
-                        }//for
-                   
-                    //Aendern der Datenbankeintaege
-                    $sql=" UPDATE ". TBL_PHOTOS. "
-                           SET   pho_quantity = '$bildnr',
-                                 pho_last_change ='$act_datetime',
-                                 pho_usr_id_change = $g_current_user->id
-                           WHERE pho_id = '$pho_id'";
-                    $result = mysql_query($sql, $g_adm_con);
-                    db_error($result);
-
-                    //Buttons 
-                    echo"
-                    <hr width=\"85%\" />
-                    <div style=\"margin-top: 6px;\">
-                        <button name=\"moreupload\" type=\"button\" value=\"moreupload\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id'\">
-                            <img src=\"$g_root_path/adm_program/images/photo.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
-                            &nbsp;Weitere Uploads
-                        </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <button name=\"uebersicht\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$adm_photo_parent["pho_id"]."'\">
-                            <img src=\"$g_root_path/adm_program/images/table.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
-                            &nbsp;&Uuml;bersicht
-                        </button>
-                    </div>
-                </div><br><br>";
-            }//if($upload)
-
 
 /**************************Formular********************************************************/
-            if(!$_POST["upload"])
-            {
-                echo"
-                <form name=\"photoup\" method=\"post\" action=\"photoupload.php?pho_id=$pho_id\" enctype=\"multipart/form-data\">
-                    <div style=\"width: 410px\" align=\"center\" class=\"formHead\">Fotoupload</div>
-                    <div style=\"width: 410px\" align=\"center\" class=\"formBody\">
-                        Bilder zu dieser Veranstaltung hinzuf&uuml;gen:<br>"
-                        .$adm_photo["pho_name"]."<br>"
-                        ."(Beginn: ". mysqldate("d.m.y", $adm_photo["pho_begin"]).")"
-                        ."<hr width=\"85%\" />
-                        <p>Bild 1:<input type='file' name='bilddatei[]' value='durchsuchen'></p>
-                        <p>Bild 2:<input type='file' name='bilddatei[]' value='durchsuchen'></p>
-                        <p>Bild 3:<input type='file' name='bilddatei[]' value='durchsuchen'></p>
-                        <p>Bild 4:<input type='file' name='bilddatei[]' value='durchsuchen'></p>
-                        <p>Bild 5:<input type='file' name='bilddatei[]' value='durchsuchen'></p>
+        echo"
+        <form name=\"photoup\" method=\"post\" action=\"photoupload_do.php?pho_id=$pho_id\" enctype=\"multipart/form-data\">
+            <div style=\"width: 410px\" align=\"center\" class=\"formHead\">Fotoupload</div>
+            <div style=\"width: 410px\" align=\"center\" class=\"formBody\">
+                Bilder zu dieser Veranstaltung hinzuf&uuml;gen:<br>"
+                .$adm_photo["pho_name"]."<br>"
+                ."(Beginn: ". mysqldate("d.m.y", $adm_photo["pho_begin"]).")"
+                ."<hr width=\"85%\" />
+                <p>Bild 1:<input type='file' name='bilddatei[]' value='durchsuchen'></p>
+                <p>Bild 2:<input type='file' name='bilddatei[]' value='durchsuchen'></p>
+                <p>Bild 3:<input type='file' name='bilddatei[]' value='durchsuchen'></p>
+                <p>Bild 4:<input type='file' name='bilddatei[]' value='durchsuchen'></p>
+                <p>Bild 5:<input type='file' name='bilddatei[]' value='durchsuchen'></p>
                             
-                        <hr width=\"85%\" />
-                        Hilfe: <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                <hr width=\"85%\" />
+                Hilfe: <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                             onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_up_help','Message','width=500,height=550,left=310,top=200,scrollbars=yes')\">
-                        <hr width=\"85%\" />
+                <hr width=\"85%\" />
 
-                        <div style=\"margin-top: 6px;\">
-                            <button name=\"upload\" type=\"submit\" value=\"speichern\">
-                                <img src=\"$g_root_path/adm_program/images/page_white_get.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
-                                    &nbsp;Bilder Hochladen
-                            </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$adm_photo_parent["pho_id"]."'\">
-                                <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
-                                    &nbsp;Zur&uuml;ck
-                            </button>
-                        </div>
-                   </div> 
-                </form>";
-            }
+                <div style=\"margin-top: 6px;\">
+                    <button name=\"upload\" type=\"submit\" value=\"speichern\">
+                        <img src=\"$g_root_path/adm_program/images/page_white_get.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
+                        &nbsp;Bilder Hochladen
+                    </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$adm_photo_parent["pho_id"]."'\">
+                        <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
+                        &nbsp;Zur&uuml;ck
+                    </button>
+                </div>
+           </div> 
+        </form>";
 
         //Seitenende
         echo"
