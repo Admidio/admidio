@@ -145,6 +145,15 @@ $bild="../../../adm_my_files/photos/".$a_user_id.".jpg";
     //kontrollmechanismen
     if($_POST["upload"])
     {
+        
+        //Dateigroesse
+        if ($_FILES["bilddatei"]["error"]==1)
+        {
+            $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=profile_photo_2big";
+            header($location);
+            exit();
+        }
+        
         //Kontrolle ob Bilder ausgewaehlt wurden
         if(!file_exists($_FILES["bilddatei"]["tmp_name"]))
         {
@@ -162,13 +171,6 @@ $bild="../../../adm_my_files/photos/".$a_user_id.".jpg";
             exit();
         }
 
-        //Dateigroesse
-        if ($_FILES["bilddatei"]["size"]>($g_preferences['max_photo_size'])*1000)
-        {
-            $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=profile_photo_2big";
-            header($location);
-            exit();
-        }
    }//Kontrollmechanismen
 
 

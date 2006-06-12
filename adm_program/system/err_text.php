@@ -277,8 +277,8 @@ function getErrorText($error_code, $error_text, $g_current_organization)
             break;
 
         case "profile_photo_2big":
-            $error_str = "Das hochgeladene hochgeladenen Foto &uuml;bersteigt die zul&auml;ssige
-            Dateigr&ouml;&szlig;e von ".$g_preferences['max_photo_size']."KB.";
+            $error_str = "Das hochgeladene hochgeladenen Foto &uuml;bersteigt die vom Server zugelassene
+            Dateigr&ouml;&szlig;e von ".ini_get(upload_max_filesize)."B.";
             break;
 
         //Fehlermeldungen Fotomodul
