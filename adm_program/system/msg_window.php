@@ -243,6 +243,10 @@ echo "
                       Wenn du eingeloggt bist stehen dir weitere Rollen zur Verf&uuml;gung, an die du E-Mails
                       schreiben kannst.";
                 break;
+                
+            case "role_assign":
+                echo "W&auml;hle bitte eine Rolle aus, der alle importierten Benutzer automatisch zugeordnet werden.";
+                break;
 
             case "termin_global":
                 echo "Termine / Ank&uuml;ndigungen, die diese Option aktiviert haben, erscheinen auf den Webseiten
