@@ -103,7 +103,7 @@ function getErrorText($error_code, $error_text, $g_current_organization)
             break;
 
         case "import":
-            $error_str = "Alle Datens&auml;tze wurden erfolgreich importiert !";
+            $error_str = "$error_text Datens&auml;tze wurden erfolgreich importiert !";
             break;
 
         case "invalid":
