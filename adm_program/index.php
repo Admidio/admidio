@@ -203,7 +203,7 @@ require("../adm_config/body_top.php");
             </div>
             <div style=\"text-align: left; margin-left: 45px;\">
                 <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/links/links.php\">Weblinks</a></span><br />
-                <span class=\"textDescription\">Hier k&ouml;nnen Links zu befreundeten Gruppierungen abgelegt werden.</span>
+                <span class=\"textDescription\">Hier k&ouml;nnen Links zu interessanten Webseiten abgelegt werden.</span>
             </div>
         </div>
         <br /><br />";
