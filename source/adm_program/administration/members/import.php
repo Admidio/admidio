@@ -89,7 +89,7 @@ require("../../../adm_config/body_top.php");
             <div class=\"formBody\">
                 <div style=\"margin-top: 15px;\">
                     <div style=\"text-align: right; width: 30%; float: left;\">Format:</div>
-                    <div style=\"text-align: left; margin-left: 32%;\">CVS
+                    <div style=\"text-align: left; margin-left: 32%;\">CSV
                     </div>
                 </div>
                 <div style=\"margin-top: 15px;\">
