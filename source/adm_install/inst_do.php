@@ -430,11 +430,6 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
     db_error($result);
 
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-                                       VALUES ($org_id, 'max_photo_size', '512') ";
-    $result = mysql_query($sql, $connection);
-    db_error($result);
-
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
                                        VALUES ($org_id, 'send_mail_extern', '0') ";
     $result = mysql_query($sql, $connection);
     db_error($result);
