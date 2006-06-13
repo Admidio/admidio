@@ -29,7 +29,7 @@ if(!file_exists("../adm_config/config.php"))
 {
     $location = "location: ../adm_install/index.php";
     header($location);
-    exit(); 
+    exit();
 }
 
 include("system/common.php");
@@ -81,7 +81,7 @@ require("../adm_config/body_top.php");
             if($g_session_valid == 1)
             {
                 echo "<span class=\"iconLink\">
-                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/logout.php\"><img 
+                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/logout.php\"><img
                     src=\"$g_root_path/adm_program/images/door_in.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Logout\"></a>
                     <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/logout.php\">Logout</a>
                 </span>";
@@ -89,13 +89,13 @@ require("../adm_config/body_top.php");
             else
             {
                 echo "<span class=\"iconLink\">
-                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/login.php\"><img 
+                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/login.php\"><img
                     src=\"$g_root_path/adm_program/images/key.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Login\"></a>
                     <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/login.php\">Login</a>
                 </span>
                 &nbsp;&nbsp;&nbsp;
                 <span class=\"iconLink\">
-                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/registration.php\"><img 
+                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/registration.php\"><img
                     src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Registrieren\"></a>
                     <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/registration.php\">Registrieren</a>
                 </span>";
@@ -192,6 +192,18 @@ require("../adm_config/body_top.php");
                 <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/dates/dates.php\">Termine</a></span>&nbsp;&nbsp;
                 <span class=\"textHeadSmall\">&#91; <a href=\"$g_root_path/adm_program/modules/dates/dates.php?mode=old\">Vergangene Termine</a> &#93;</span><br />
                 <span class=\"textDescription\">Hier k&ouml;nnen Termine angeschaut, erstellt und bearbeitet werden.</span>
+            </div>
+
+            <div style=\"margin-top: 7px;\"></div>
+
+            <div style=\"text-align: left; width: 40; float: left;\">
+                <a href=\"$g_root_path/adm_program/modules/links/links.php\">
+                <img style=\"position: relative; top: 5px;\" src=\"$g_root_path/adm_program/images/globe_big.png\" border=\"0\" alt=\"Weblinks\" />
+                </a>
+            </div>
+            <div style=\"text-align: left; margin-left: 45px;\">
+                <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/links/links.php\">Weblinks</a></span><br />
+                <span class=\"textDescription\">Hier k&ouml;nnen Links zu befreundeten Gruppierungen abgelegt werden.</span>
             </div>
         </div>
         <br /><br />";
