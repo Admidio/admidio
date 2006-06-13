@@ -33,7 +33,7 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
-// nur Moderatoren duerfen alle User sehen & Mitgliedschaften l&ouml;schen
+// nur Moderatoren duerfen alle User sehen & Mitgliedschaften loeschen
 if(!isModerator())
 {
     $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
@@ -71,13 +71,44 @@ else
 }
 
 // alle Mitglieder zur Auswahl selektieren
-$sql    = "SELECT * FROM ". TBL_USERS. "
+// unbestaetigte User werden dabei nicht angezeigt
+if($members == true)
+{
+    $sql    = "SELECT DISTINCT usr_id, usr_last_name, usr_first_name, usr_email, usr_homepage, 
+                      usr_login_name, usr_last_change
+                 FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. "
+                WHERE usr_last_name LIKE {0}
+                  AND usr_valid = 1
+                  AND mem_usr_id = usr_id
+                  AND mem_rol_id = rol_id
+                  AND mem_valid  = 1
+                  AND rol_org_shortname = '$g_current_organization->shortname'
+                  AND rol_valid  = 1
+                ORDER BY usr_last_name, usr_first_name ";
+}
+else
+{
+    $sql    = "SELECT usr_id, usr_last_name, usr_first_name, usr_email, usr_homepage, 
+                      usr_login_name, usr_last_change
+                 FROM ". TBL_USERS. "
                 WHERE usr_last_name LIKE {0}
                   AND usr_valid = 1
                 ORDER BY usr_last_name, usr_first_name ";
+}
 $sql    = prepareSQL($sql, array($letter));
 $result_mgl = mysql_query($sql, $g_adm_con);
 db_error($result_mgl);
+
+
+// User zaehlen, die mind. einer Rolle zugeordnet sind
+$sql    = "SELECT COUNT(*) 
+             FROM ". TBL_USERS. "
+            WHERE usr_valid = 1 ";
+$result = mysql_query($sql, $g_adm_con);
+db_error($result);
+
+$row = mysql_fetch_array($result);
+$count_mem_rol = $row[0];
 
 echo "
 <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
@@ -87,7 +118,7 @@ echo "
     <title>$g_current_organization->longname - Benutzerverwaltung</title>
     <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
 
-    <!--[if gte IE 5.5000]>
+    <!--[if lt IE 7]>
     <script language=\"JavaScript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
     <![endif]-->";
 
@@ -96,234 +127,271 @@ echo "</head>";
 
 require("../../../adm_config/body_top.php");
     echo "<div align=\"center\">
+        <h1>Benutzerverwaltung</h1>";
 
-    <h1>Benutzerverwaltung</h1>";
+        echo "<p>
+            <span class=\"iconLink\">
+                <a href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?new_user=1\"><img 
+                class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Login\"></a>
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?new_user=1\">Benutzer anlegen</a>
+            </span>
+            &nbsp;&nbsp;&nbsp;&nbsp;";
 
-    echo "<p>
-    <span class=\"iconLink\">
-        <a href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?new_user=1\"><img 
-        class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Login\"></a>
-        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?new_user=1\">Benutzer anlegen</a>
-    </span>
-    &nbsp;&nbsp;&nbsp;&nbsp;";
-
-    // Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
-    if($members == 1)
-    {
-        echo "<span class=\"iconLink\">
-            <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members.php?members=0&letter=". str_replace("%", "", $letter). "\"><img
-            class=\"iconLink\" src=\"$g_root_path/adm_program/images/group.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Benutzer anzeigen\"></a>
-            <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members.php?members=0&letter=". str_replace("%", "", $letter). "\">Alle Benutzer anzeigen</a>
-        </span>";
-    }
-    else
-    {
-        echo "<span class=\"iconLink\">
-            <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members.php?members=1&letter=". str_replace("%", "", $letter). "\"><img
-             class=\"iconLink\" src=\"$g_root_path/adm_program/images/user.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Benutzer anzeigen\"></a>
-            <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members.php?members=1&letter=". str_replace("%", "", $letter). "\">Nur Mitglieder anzeigen</a>
-        </span>";
-    }
-    echo "</p>";
-
-    if($members == 1)
-    {
-        echo "<p>Alle Mitglieder ";
-    }
-    else
-    {
-        echo "<p>Alle Benutzer (Mitglieder, Ehemalige) ";
-    }
-
-    if($letter != "%")
-    {
-        echo " mit Nachnamen ". str_replace("%", "*", $letter);
-    }
-    echo " werden angezeigt</p>";
-
-   echo "<p>";
-
-   // Leiste mit allen Buchstaben des Alphabets anzeigen
-
-   if($letter == "%")
-      echo "<b>Alle</b>&nbsp;&nbsp;&nbsp;";
-   else
-      echo "<a href=\"members.php?letter=%\">Alle</a>&nbsp;&nbsp;&nbsp;";
-
-   $letter_menu = "A";
-   for($i = 0; $i < 26;$i++)
-   {
-      // Anzahl Mitglieder zum entsprechenden Buchstaben ermitteln
-      if($members == 1)
-      {
-         $sql    = "SELECT COUNT(usr_id) FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
-                     WHERE rol_org_shortname = '$g_organization'
-                       AND rol_valid  = 1
-                       AND mem_rol_id = rol_id
-                       AND mem_usr_id = usr_id
-                       AND mem_valid  = 1
-                       AND usr_last_name LIKE '$letter_menu%'
-                       AND usr_valid  = 1 ";
-      }
-      else
-      {
-         $sql    = "SELECT COUNT(usr_id) FROM ". TBL_USERS. "
-                     WHERE usr_last_name LIKE '$letter_menu%'
-                       AND usr_valid  = 1 ";
-      }
-      $result = mysql_query($sql, $g_adm_con);
-      db_error($result);
-      $row = mysql_fetch_array($result);
-
-      if($letter_menu == substr($letter, 0, 1))
-         echo "<b>$letter_menu</b>";
-      elseif($row[0] > 0)
-         echo "<a href=\"members.php?members=$members&letter=$letter_menu\">$letter_menu</a>";
-      else
-         echo $letter_menu;
-
-      echo "&nbsp;&nbsp;";
-      // naechsten Buchstaben anwaehlen
-      $letter_menu = strNextLetter($letter_menu);
-   }
-   echo "</p>";
-
-   if(mysql_num_rows($result_mgl) > 0)
-   {
-      echo "
-      <table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\">
-         <tr>
-            <th class=\"tableHeader\" align=\"right\">Nr.</th>
-            <th class=\"tableHeader\" align=\"center\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/user.png\" alt=\"Mitglied bei $g_current_organization->longname\" title=\"Mitglied bei $g_current_organization->longname\" border=\"0\"></th>
-            <th class=\"tableHeader\" align=\"left\">&nbsp;Name</th>
-            <th class=\"tableHeader\" align=\"center\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/mail.png\" alt=\"E-Mail\" title=\"E-Mail\"></th>
-            <th class=\"tableHeader\" align=\"center\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/globe.png\" alt=\"Homepage\" title=\"Homepage\"></th>
-            <th class=\"tableHeader\" align=\"left\">&nbsp;Benutzer</th>
-            <th class=\"tableHeader\" align=\"center\">&nbsp;Aktualisiert am</th>
-            <th class=\"tableHeader\" align=\"center\">Bearbeiten</th>
-         </tr>";
-      $i = 0;
-
-      while($row = mysql_fetch_object($result_mgl))
-      {
-            $is_member = isMember($row->usr_id);
-
-            if(($members == 1 && $is_member == true)
-            ||  $members == 0)
+            if($count_mem_rol != mysql_num_rows($result_mgl) || $members == false)
             {
-            $i++;
+                // Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
+                if($members == 1)
+                {
+                    echo "<span class=\"iconLink\">
+                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members.php?members=0&letter=". str_replace("%", "", $letter). "\"><img
+                        class=\"iconLink\" src=\"$g_root_path/adm_program/images/group.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Benutzer anzeigen\"></a>
+                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members.php?members=0&letter=". str_replace("%", "", $letter). "\">Alle Benutzer anzeigen</a>
+                    </span>
+                    &nbsp;&nbsp;&nbsp;&nbsp;";
+                }
+                else
+                {
+                    echo "<span class=\"iconLink\">
+                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members.php?members=1&letter=". str_replace("%", "", $letter). "\"><img
+                         class=\"iconLink\" src=\"$g_root_path/adm_program/images/user.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Benutzer anzeigen\"></a>
+                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members.php?members=1&letter=". str_replace("%", "", $letter). "\">Nur Mitglieder anzeigen</a>
+                    </span>
+                    &nbsp;&nbsp;&nbsp;&nbsp;";
+                }
+            }
             echo "
-            <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
-                  <td align=\"right\">$i&nbsp;</td>
-                  <td align=\"center\">";
-                     if($is_member == true)
-                        echo "<a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->usr_id\"><img src=\"$g_root_path/adm_program/images/user.png\" alt=\"Mitglied bei $g_current_organization->longname\" title=\"Mitglied bei $g_current_organization->longname\" border=\"0\"></a>";
-                     else
-                        echo "&nbsp;";
-                  echo "</td>
-                  <td align=\"left\">&nbsp;<a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->usr_id\">$row->usr_last_name,&nbsp;$row->usr_first_name</a></td>
-                  <td align=\"center\">";
-                     if(strlen($row->usr_email) > 0)
-                     {
-                        if($g_preferences['send_mail_extern'] == 1)
-                           $mail_link = "mailto:$row->usr_email";
-                        else
-                           $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?usr_id=$row->usr_id";
-                        echo "<a href=\"$mail_link\"><img src=\"$g_root_path/adm_program/images/mail.png\"
-                           alt=\"E-Mail an $row->usr_email schreiben\" title=\"E-Mail an $row->usr_email schreiben\" border=\"0\"></a>";
-                     }
-                  echo "</td>
-                  <td align=\"center\">";
-                     if(strlen($row->usr_homepage) > 0)
-                     {
-                        $row->usr_homepage = stripslashes($row->usr_homepage);
-                        if(substr_count(strtolower($row->usr_homepage), "http://") == 0)
-                           $row->usr_homepage = "http://". $row->usr_homepage;
-                        echo "<a href=\"$row->usr_homepage\" target=\"_blank\">
-                           <img src=\"$g_root_path/adm_program/images/globe.png\" alt=\"Homepage\" title=\"Homepage\" border=\"0\"></a>";
-                     }
-                  echo "</td>
-                  <td align=\"left\">&nbsp;$row->usr_login_name</td>
-                  <td align=\"center\">&nbsp;". mysqldatetime("d.m.y h:i" , $row->usr_last_change). "</td>
-                  <td align=\"center\">";
-                  if(hasRole("Webmaster"))
-                  {
-                     if($is_member == true)
-                     {
-                        if(strlen($row->usr_login_name) > 0 && $g_preferences['send_mail_extern'] != 1)
-                        {
-                            // Link um E-Mail mit neuem Passwort zu zuschicken
-                                   // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
-                            $load_url = urlencode("$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->usr_id&mode=4&url=$url");
-                           echo "<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=send_new_login&err_text=". urlencode("$row->usr_first_name $row->usr_last_name"). "&button=2&url=$load_url\">
-                               <img src=\"$g_root_path/adm_program/images/key.png\" border=\"0\" alt=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\" title=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\"></a>&nbsp;";
-                        }
-                        else
-                            echo "<img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">&nbsp;";
+            <span class=\"iconLink\">
+                <a href=\"import.php\"><img 
+                class=\"iconLink\" src=\"$g_root_path/adm_program/images/database_in.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Login\"></a>
+                <a class=\"iconLink\" href=\"import.php\">Benutzer importieren</a>
+            </span>    
+        </p>";
 
-                        // Webmaster kann nur Mitglieder der eigenen Gliedgemeinschaft editieren
-                        echo "<a href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=$row->usr_id\">
-                           <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Benutzerdaten bearbeiten\" title=\"Benutzerdaten bearbeiten\"></a>&nbsp;";
-                     }
-                     else
-                     {
-                        echo "<img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">&nbsp;
-                                <img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">&nbsp;";
-                     }
-
-                     $sql    = "SELECT COUNT(*)
-                                  FROM ". TBL_ROLES. ", ". TBL_MEMBERS. "
-                                 WHERE rol_org_shortname <> '$g_organization'
-                                   AND rol_valid         = 1
-                                   AND mem_rol_id         = rol_id
-                                   AND mem_valid         = 1
-                                   AND mem_usr_id         = $row->usr_id ";
-                     $result      = mysql_query($sql, $g_adm_con);
-                     db_error($result);
-                     $row_count_2 = mysql_fetch_array($result);
-
-                     if($row_count_2[0] > 0)
-                     {
-                        // Webmaster duerfen Mitglieder nicht loeschen, wenn sie noch in anderen Gliedgemeinschaften aktiv sind
-                        if($is_member == true)
-                           echo "<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_member&err_text=$row->usr_first_name $row->usr_last_name&err_head=Entfernen&button=2&url=". urlencode("$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->usr_id&mode=2"). "\">
-                              <img src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Benutzer entfernen\" title=\"Benutzer entfernen\"></a>";
-                     }
-                     else
-                     {
-                        // Webmaster kann Mitglied aus der Datenbank loeschen
-                        echo "<a href=\"members_function.php?user_id=$row->usr_id&amp;mode=1\">
-                           <img src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Benutzer l&ouml;schen\" title=\"Benutzer l&ouml;schen\"></a>";
-                     }
-                  }
-                  else
-                  {
-                     // Moderatoren duerfen nur Mitglieder der eigenen Gliedgemeinschaft entfernen,
-                     // aber keine Webmaster !!!
-                     if($is_member == true && !hasRole("Webmaster", $row->usr_id))
-                     {
-                        echo "
-                        <a href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=$row->usr_id\">
-                           <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Benutzerdaten bearbeiten\" title=\"Benutzerdaten bearbeiten\"></a>&nbsp;&nbsp;
-                        <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_member&err_text=$row->usr_first_name $row->usr_last_name&err_head=Entfernen&button=2&url=". urlencode("$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->usr_id&mode=2"). "\">
-                           <img src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Benutzer entfernen\" title=\"Benutzer entfernen\"></a>";
-                     }
-                  }
-                  echo "</td>
-               </tr>";
+        if($members == 1)
+        {
+            echo "<p>Alle Mitglieder ";
         }
-      }
+        else
+        {
+            echo "<p>Alle Benutzer (Mitglieder, Ehemalige) ";
+        }
 
-      echo "</table>";
-   }
-   else
-   {
-      echo "<p>Es wurde keine Daten gefunden !</p><br />";
-   }
+        if($letter != "%")
+        {
+            echo " mit Nachnamen ". str_replace("%", "*", $letter);
+        }
+        echo " werden angezeigt</p>";
 
-   echo "</div>";
+        echo "<p>";
 
-   require("../../../adm_config/body_bottom.php");
+            // Leiste mit allen Buchstaben des Alphabets anzeigen
+
+            if($letter == "%")
+            {
+                echo "<b>Alle</b>&nbsp;&nbsp;&nbsp;";
+            }
+            else
+            {
+                echo "<a href=\"members.php?letter=%\">Alle</a>&nbsp;&nbsp;&nbsp;";
+            }
+
+            $letter_menu = "A";
+            for($i = 0; $i < 26;$i++)
+            {
+                // Anzahl Mitglieder zum entsprechenden Buchstaben ermitteln
+                if($members == 1)
+                {
+                    $sql    = "SELECT COUNT(usr_id) FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
+                                WHERE rol_org_shortname = '$g_organization'
+                                  AND rol_valid  = 1
+                                  AND mem_rol_id = rol_id
+                                  AND mem_usr_id = usr_id
+                                  AND mem_valid  = 1
+                                  AND usr_last_name LIKE '$letter_menu%'
+                                  AND usr_valid  = 1 ";
+                }
+                else
+                {
+                    $sql    = "SELECT COUNT(usr_id) FROM ". TBL_USERS. "
+                                WHERE usr_last_name LIKE '$letter_menu%'
+                                  AND usr_valid  = 1 ";
+                }
+                $result = mysql_query($sql, $g_adm_con);
+                db_error($result);
+                $row = mysql_fetch_array($result);
+
+                if($letter_menu == substr($letter, 0, 1))
+                {
+                    echo "<b>$letter_menu</b>";
+                }
+                elseif($row[0] > 0)
+                {
+                    echo "<a href=\"members.php?members=$members&letter=$letter_menu\">$letter_menu</a>";
+                }
+                else
+                {
+                    echo $letter_menu;
+                }
+
+                echo "&nbsp;&nbsp;";
+                // naechsten Buchstaben anwaehlen
+                $letter_menu = strNextLetter($letter_menu);
+            }
+        echo "</p>";
+
+        if(mysql_num_rows($result_mgl) > 0)
+        {
+            echo "<table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\">
+                <tr>
+                    <th class=\"tableHeader\" align=\"right\">Nr.</th>
+                    <th class=\"tableHeader\" align=\"center\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/user.png\" alt=\"Mitglied bei $g_current_organization->longname\" title=\"Mitglied bei $g_current_organization->longname\" border=\"0\"></th>
+                    <th class=\"tableHeader\" align=\"left\">&nbsp;Name</th>
+                    <th class=\"tableHeader\" align=\"center\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/mail.png\" alt=\"E-Mail\" title=\"E-Mail\"></th>
+                    <th class=\"tableHeader\" align=\"center\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/globe.png\" alt=\"Homepage\" title=\"Homepage\"></th>
+                    <th class=\"tableHeader\" align=\"left\">&nbsp;Benutzer</th>
+                    <th class=\"tableHeader\" align=\"center\">&nbsp;Aktualisiert am</th>
+                    <th class=\"tableHeader\" align=\"center\">Bearbeiten</th>
+                </tr>";
+                $i = 0;
+
+                while($row = mysql_fetch_object($result_mgl))
+                {
+                    if($members == true)
+                    {
+                        $is_member = true;
+                    }
+                    else
+                    {
+                        $is_member = isMember($row->usr_id);
+                    }
+                    
+                    $i++;
+                    echo "
+                    <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
+                        <td align=\"right\">$i&nbsp;</td>
+                        <td align=\"center\">";
+                            if($is_member == true)
+                            {
+                                echo "<a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->usr_id\"><img 
+                                    src=\"$g_root_path/adm_program/images/user.png\" alt=\"Mitglied bei $g_current_organization->longname\" 
+                                    title=\"Mitglied bei $g_current_organization->longname\" border=\"0\"></a>";
+                            }
+                            else
+                            {
+                                echo "&nbsp;";
+                            }
+                        echo "</td>
+                        <td align=\"left\">&nbsp;<a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->usr_id\">$row->usr_last_name,&nbsp;$row->usr_first_name</a></td>
+                        <td align=\"center\">";
+                            if(strlen($row->usr_email) > 0)
+                            {
+                                if($g_preferences['send_mail_extern'] == 1)
+                                {
+                                    $mail_link = "mailto:$row->usr_email";
+                                }
+                                else
+                                {
+                                    $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?usr_id=$row->usr_id";
+                                }
+                                echo "<a href=\"$mail_link\"><img src=\"$g_root_path/adm_program/images/mail.png\"
+                                    alt=\"E-Mail an $row->usr_email schreiben\" title=\"E-Mail an $row->usr_email schreiben\" border=\"0\"></a>";
+                            }
+                        echo "</td>
+                        <td align=\"center\">";
+                            if(strlen($row->usr_homepage) > 0)
+                            {
+                                $row->usr_homepage = stripslashes($row->usr_homepage);
+                                if(substr_count(strtolower($row->usr_homepage), "http://") == 0)
+                                {
+                                    $row->usr_homepage = "http://". $row->usr_homepage;
+                                }
+                                echo "<a href=\"$row->usr_homepage\" target=\"_blank\"><img 
+                                    src=\"$g_root_path/adm_program/images/globe.png\" alt=\"Homepage\" title=\"Homepage\" border=\"0\"></a>";
+                            }
+                        echo "</td>
+                        <td align=\"left\">&nbsp;$row->usr_login_name</td>
+                        <td align=\"center\">&nbsp;". mysqldatetime("d.m.y h:i" , $row->usr_last_change). "</td>
+                        <td align=\"center\">";
+                            if(hasRole("Webmaster"))
+                            {
+                                if($is_member == true)
+                                {
+                                    if(strlen($row->usr_login_name) > 0 && $g_preferences['send_mail_extern'] != 1)
+                                    {
+                                        // Link um E-Mail mit neuem Passwort zu zuschicken
+                                        // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
+                                        $load_url = urlencode("$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->usr_id&mode=4&url=$url");
+                                        echo "<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=send_new_login&err_text=". urlencode("$row->usr_first_name $row->usr_last_name"). "&button=2&url=$load_url\"><img 
+                                            src=\"$g_root_path/adm_program/images/key.png\" border=\"0\" alt=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\" 
+                                            title=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\"></a>&nbsp;";
+                                    }
+                                    else
+                                    {
+                                        echo "<img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">&nbsp;";
+                                    }
+
+                                    // Webmaster kann nur Mitglieder der eigenen Gliedgemeinschaft editieren
+                                    echo "<a href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=$row->usr_id\"><img 
+                                        src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Benutzerdaten bearbeiten\" title=\"Benutzerdaten bearbeiten\"></a>&nbsp;";
+                                }
+                                else
+                                {
+                                    echo "<img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">&nbsp;
+                                    <img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">&nbsp;";
+                                }
+
+                                $sql    = "SELECT COUNT(*)
+                                             FROM ". TBL_ROLES. ", ". TBL_MEMBERS. "
+                                            WHERE rol_org_shortname <> '$g_organization'
+                                              AND rol_valid          = 1
+                                              AND mem_rol_id         = rol_id
+                                              AND mem_valid          = 1
+                                              AND mem_usr_id         = $row->usr_id ";
+                                $result      = mysql_query($sql, $g_adm_con);
+                                db_error($result);
+                                $row_count_2 = mysql_fetch_array($result);
+
+                                if($row_count_2[0] > 0)
+                                {
+                                    // Webmaster duerfen Mitglieder nicht loeschen, wenn sie noch in anderen Gliedgemeinschaften aktiv sind
+                                    if($is_member == true)
+                                    {
+                                        $load_url = urlencode("$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->usr_id&mode=2");
+                                        echo "<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_member&err_text=$row->usr_first_name $row->usr_last_name&err_head=Entfernen&button=2&url=$load_url\"><img 
+                                            src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Benutzer entfernen\" title=\"Benutzer entfernen\"></a>";
+                                    }
+                                }
+                                else
+                                {
+                                    // Webmaster kann Mitglied aus der Datenbank loeschen
+                                    echo "<a href=\"members_function.php?user_id=$row->usr_id&amp;mode=3\"><img 
+                                        src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Benutzer l&ouml;schen\" title=\"Benutzer l&ouml;schen\"></a>";
+                                }
+                            }
+                            else
+                            {
+                                // Moderatoren duerfen nur Mitglieder der eigenen Gliedgemeinschaft entfernen,
+                                // aber keine Webmaster !!!
+                                if($is_member == true && !hasRole("Webmaster", $row->usr_id))
+                                {
+                                    $load_url = urlencode("$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->usr_id&mode=2");
+                                    echo "<a href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=$row->usr_id\"><img 
+                                        src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Benutzerdaten bearbeiten\" title=\"Benutzerdaten bearbeiten\"></a>&nbsp;&nbsp;
+                                    <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_member&err_text=$row->usr_first_name $row->usr_last_name&err_head=Entfernen&button=2&url=$load_url\"><img 
+                                        src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Benutzer entfernen\" title=\"Benutzer entfernen\"></a>";
+                                }
+                            }
+                        echo "</td>
+                    </tr>";
+                }
+            echo "</table>";
+        }
+        else
+        {
+            echo "<p>Es wurde keine Daten gefunden !</p><br />";
+        }
+    echo "</div>";
+    require("../../../adm_config/body_bottom.php");
 echo "</body>
 </html>";
 ?>
