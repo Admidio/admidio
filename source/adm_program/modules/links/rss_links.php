@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * RSS - Feed fuer Ankuendigungen
+ * RSS - Feed fuer Links
  *
  * Copyright    : (c) 2004 - 2006 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -63,6 +63,7 @@ db_error($result);
 
 // Ein RSSfeed-Objekt erstellen
 $rss = new RSSfeed("http://$g_current_organization->homepage", "$g_current_organization->longname - Links", "Linksammlung von $g_current_organization->longname");
+
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
 while ($row = mysql_fetch_object($result))

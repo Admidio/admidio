@@ -160,10 +160,10 @@ function getErrorText($error_code, $error_text, $g_current_organization)
             Rollen k&ouml;nnen <a href=\"$g_root_path/adm_program/administration/roles/roles.php\">hier</a>
             erstellt und gepflegt werden.";
             break;
-            
+
         case "no_old_roles":
             $error_str = "Es sind noch keine Rollen aus dem System entfernt worden.<br /><br />
-            Erst wenn du in der Rollenverwaltung Rollen l&ouml;schst, erscheinen diese automatisch bei 
+            Erst wenn du in der Rollenverwaltung Rollen l&ouml;schst, erscheinen diese automatisch bei
             den \"Entfernten Rollen\".";
             break;
 
@@ -243,7 +243,7 @@ function getErrorText($error_code, $error_text, $g_current_organization)
         case "max_members":
             $error_str = "Speichern nicht m&ouml;glich, die maximale Mitgliederzahl wurde &uuml;berschritten.";
             break;
-            
+
         case "max_members_profile":
             $error_str = "Speichern nicht m&ouml;glich, bei der Rolle &bdquo;".$error_text."&rdquo; w&uuml;rde die maximale Mitgliederzahl &uuml;berschritten.";
             break;
@@ -263,6 +263,14 @@ function getErrorText($error_code, $error_text, $g_current_organization)
             Schreibrechte</acronym> f&uuml;r den Ordner setzen kann.";
             break;
 
+
+        //Fehlermeldungen Linkmodul
+        case "delete_link":
+            $error_str = "Willst Du den Link<br />
+            <b>$error_text</b><br />wirklich l&ouml;schen ?";
+            break;
+
+
         //Fehlermeldungen Profilfoto
         case "profile_photo_update":
             $error_str = "Neues Profilfoto wurde erfolgreich gespeichert.";
@@ -280,6 +288,7 @@ function getErrorText($error_code, $error_text, $g_current_organization)
             $error_str = "Das hochgeladene hochgeladenen Foto &uuml;bersteigt die vom Server zugelassene
             Dateigr&ouml;&szlig;e von ".ini_get(upload_max_filesize)."B.";
             break;
+
 
         //Fehlermeldungen Fotomodul
         case "photodateiphotoup":
@@ -323,7 +332,7 @@ function getErrorText($error_code, $error_text, $g_current_organization)
         case "photo_deleted":
             $error_str = "Das Foto wurde erfolgreich gel&ouml;scht.";
             break;
-            
+
         case "photo_2big":
             $error_str = "Mindestens eins der hochgeladenen Fotos &uuml;bersteigt die vom Server zugelassene
             Dateigr&ouml;&szlig;e von ".ini_get(upload_max_filesize)."B.";
@@ -332,7 +341,7 @@ function getErrorText($error_code, $error_text, $g_current_organization)
         case "empty_photo_post":
             $error_str = "Die Seite wurde ung&uuml;ltig aufgerufen oder die Datei(en) konnte nicht hochgeladen werden.<br />
             Vermutlich wurde die vom Server vorgegebene, maximale Uploadgr&ouml;&szlig;e, von ". ini_get(post_max_size)."B &uuml;bersteigen!";
-            break;        
+            break;
         //Ende Fehlermeldungen Fotomodul
 
 
@@ -403,16 +412,16 @@ function getErrorText($error_code, $error_text, $g_current_organization)
             $error_str = "Die hochgeladene Datei &uuml;bersteigt die zul&auml;ssige
             Dateigr&ouml;&szlig;e von ".$g_preferences['max_file_upload_size']."KB.";
             break;
-                    
+
         case "file_2big_server":
             $error_str = "Die hochgeladene Datei &uuml;bersteigt die vom Server zugelassene
             Dateigr&ouml;&szlig;e von ".ini_get(upload_max_filesize)."B.";
             break;
-            
+
         case "empty_upload_post":
             $error_str = "Die Seite wurde ung&uuml;ltig aufgerufen oder die Datei konnte nicht hochgeladen werden.<br />
             Vermutlich wurde die vom Server vorgegebene, maximale Uploadgr&ouml;&szlig;e, von ". ini_get(post_max_size)."B &uuml;bersteigen!";
-            break;  
+            break;
         //Ende Fehlermeldungen Downloadmodul
 
 
