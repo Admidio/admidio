@@ -242,6 +242,81 @@ class TblUsers
     // aktuellen Benutzer loeschen   
     function delete()
     {
+        $sql    = "UPDATE ". TBL_ANNOUNCEMENTS. " SET ann_usr_id = NULL
+                    WHERE ann_usr_id = $this->id";
+        $result = mysql_query($sql, $this->db_connection);
+        db_error($result);
+
+        $sql    = "UPDATE ". TBL_ANNOUNCEMENTS. " SET ann_usr_id_change = NULL
+                    WHERE ann_usr_id_change = $this->id";
+        $result = mysql_query($sql, $this->db_connection);
+        db_error($result);
+
+        $sql    = "UPDATE ". TBL_DATES. " SET dat_usr_id = NULL
+                    WHERE dat_usr_id = $this->id";
+        $result = mysql_query($sql, $this->db_connection);
+        db_error($result);
+
+        $sql    = "UPDATE ". TBL_DATES. " SET dat_usr_id_change = NULL
+                    WHERE dat_usr_id_change = $this->id";
+        $result = mysql_query($sql, $this->db_connection);
+        db_error($result);
+
+        $sql    = "UPDATE ". TBL_GUESTBOOK. " SET gbo_usr_id = NULL
+                    WHERE gbo_usr_id = $this->id";
+        $result = mysql_query($sql, $this->db_connection);
+        db_error($result);
+
+        $sql    = "UPDATE ". TBL_GUESTBOOK. " SET gbo_usr_id_change = NULL
+                    WHERE gbo_usr_id_change = $this->id";
+        $result = mysql_query($sql, $this->db_connection);
+        db_error($result);
+
+        $sql    = "UPDATE ". TBL_PHOTOS. " SET pho_usr_id = NULL
+                    WHERE pho_usr_id = $this->id";
+        $result = mysql_query($sql, $this->db_connection);
+        db_error($result);
+
+        $sql    = "UPDATE ". TBL_PHOTOS. " SET pho_usr_id_change = NULL
+                    WHERE pho_usr_id_change = $this->id";
+        $result = mysql_query($sql, $this->db_connection);
+        db_error($result);
+
+        $sql    = "UPDATE ". TBL_ROLES. " SET rol_usr_id_change = NULL
+                    WHERE rol_usr_id_change = $this->id";
+        $result = mysql_query($sql, $this->db_connection);
+        db_error($result);
+
+        $sql    = "UPDATE ". TBL_ROLE_DEPENDENCIES. " SET rld_usr_id = NULL
+                    WHERE rld_usr_id = $this->id";
+        $result = mysql_query($sql, $this->db_connection);
+        db_error($result);
+
+        $sql    = "UPDATE ". TBL_USERS. " SET usr_usr_id_change = NULL
+                    WHERE usr_usr_id_change = $this->id";
+        $result = mysql_query($sql, $this->db_connection);
+        db_error($result);
+
+        $sql    = "DELETE FROM ". TBL_GUESTBOOK_COMMENTS. " WHERE gbc_usr_id = $this->id";
+        $result = mysql_query($sql, $this->db_connection);
+        db_error($result);
+
+        $sql    = "DELETE FROM ". TBL_LINKS. " WHERE lnk_usr_id = $this->id";
+        $result = mysql_query($sql, $this->db_connection);
+        db_error($result);
+
+        $sql    = "DELETE FROM ". TBL_MEMBERS. " WHERE mem_usr_id = $this->id";
+        $result = mysql_query($sql, $this->db_connection);
+        db_error($result);
+
+        $sql    = "DELETE FROM ". TBL_SESSIONS. " WHERE ses_usr_id = $this->id";
+        $result = mysql_query($sql, $this->db_connection);
+        db_error($result);
+
+        $sql    = "DELETE FROM ". TBL_USER_DATA. " WHERE usd_usr_id = $this->id";
+        $result = mysql_query($sql, $this->db_connection);
+        db_error($result);
+    
         $sql    = "DELETE FROM ". TBL_USERS. " 
                     WHERE usr_id = $this->id ";
         $result = mysql_query($sql, $this->db_connection);
