@@ -45,6 +45,23 @@ if (!editAnnouncements())
     exit();
 }
 
+// jetzt wird noch geprueft ob die eventuell uebergebene lnk_id uberhaupt zur Orga gehoert oder existiert...
+if ($_GET["lnk_id"] != 0)
+{
+    $sql    = "SELECT * FROM ". TBL_LINKS. " WHERE lnk_id = {0} and lnk_org_id = $g_current_organization->id";
+    $sql    = prepareSQL($sql, array($_GET['lnk_id']));
+    $result = mysql_query($sql, $g_adm_con);
+    db_error($result);
+
+    if (mysql_num_rows($result) == 0)
+    {
+        //Wenn keine Daten zu der ID gefunden worden bzw. die ID einer anderen Orga gehört ist Schluss mit lustig...
+        $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
+        header($location);
+        exit();
+    }
+}
+
 if (!array_key_exists("headline", $_GET))
 {
     $_GET["headline"] = "Links";
