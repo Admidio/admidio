@@ -33,29 +33,29 @@
 require("../../system/common.php");
 require("../../system/bbcode.php");
 
-if(!array_key_exists("mode", $_GET))
+if (!array_key_exists("mode", $_GET))
 {
     $_GET["mode"] = "all";
 }
 
-if(!array_key_exists("start", $_GET))
+if (!array_key_exists("start", $_GET))
 {
     $_GET["start"] = 0;
 }
 
-if(!array_key_exists("headline", $_GET))
+if (!array_key_exists("headline", $_GET))
 {
     $_GET["headline"] = "Links";
 }
 
-if(!array_key_exists("id", $_GET))
+if (!array_key_exists("id", $_GET))
 {
     $_GET["id"] = 0;
 }
 
-if($g_preferences['enable_bbcode'] == 1)
+if ($g_preferences['enable_bbcode'] == 1)
 {
-    // Klasse fuer BBCode
+    // Klasse fuer BBCode initialisieren
     $bbcode = new ubbParser();
 }
 
@@ -67,11 +67,11 @@ echo "
     <title>$g_current_organization->longname - ". $_GET["headline"]. "</title>
     <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">";
 
-    if($g_preferences['enable_rss'] == 1)
+    if ($g_preferences['enable_rss'] == 1)
     {
         echo "<link type=\"application/rss+xml\" rel=\"alternate\" title=\"$g_current_organization->longname - Links\"
         href=\"$g_root_path/adm_program/modules/links/rss_links.php\">";
-    };
+    }
 
     echo "
     <!--[if lt IE 7]>
@@ -87,18 +87,18 @@ require("../../../adm_config/body_top.php");
 
 
         // falls eine id fuer einen bestimmten Link uebergeben worden ist...
-        if($_GET['id'] > 0)
+        if ($_GET['id'] > 0)
         {
             $sql    = "SELECT * FROM ". TBL_LINKS. "
-                        WHERE lnk_id = $_GET[id]";
+                       WHERE lnk_id = $_GET[id]";
         }
         //...ansonsten alle fuer die Gruppierung passenden Links aus der DB holen.
         else
         {
             $sql    = "SELECT * FROM ". TBL_LINKS. "
-                        WHERE lnk_org_id = '$g_current_organization->id'
-                        ORDER BY lnk_timestamp DESC
-                        LIMIT ". $_GET["start"]. ", 10 ";
+                       WHERE lnk_org_id = '$g_current_organization->id'
+                       ORDER BY lnk_timestamp DESC
+                       LIMIT ". $_GET["start"]. ", 10 ";
         }
 
         $links_result = mysql_query($sql, $g_adm_con);
@@ -107,36 +107,35 @@ require("../../../adm_config/body_top.php");
         // Gucken wieviele Linkdatensaetze insgesamt fuer die Gruppierung vorliegen...
         // Das wird naemlich noch fuer die Seitenanzeige benoetigt...
         $sql    = "SELECT COUNT(*) FROM ". TBL_LINKS. "
-                    WHERE lnk_org_id = '$g_current_organization->id'";
+                   WHERE lnk_org_id = '$g_current_organization->id'";
         $result = mysql_query($sql, $g_adm_con);
         db_error($result);
         $row = mysql_fetch_array($result);
-        $num_announcements = $row[0];
+        $numLinks = $row[0];
 
         // Icon-Links und Navigation anzeigen
 
-        if($_GET['id'] == 0
-        && (isModerator() || $g_preferences['enable_rss'] == true))
+        if ($_GET['id'] == 0 && (editAnnouncements() || $g_preferences['enable_rss'] == true))
         {
             echo "<p>";
 
             // Neuen Link anlegen
-            if(editAnnouncements())
+            if (editAnnouncements())
             {
                 echo "<span class=\"iconLink\">
-                    <a class=\"iconLink\" href=\"announcements_new.php?headline=". $_GET["headline"]. "\"><img
+                    <a class=\"iconLink\" href=\"links_new.php?headline=". $_GET["headline"]. "\"><img
                     class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Neu anlegen\"></a>
-                    <a class=\"iconLink\" href=\"announcements_new.php?headline=". $_GET["headline"]. "\">Neu anlegen</a>
+                    <a class=\"iconLink\" href=\"links_new.php?headline=". $_GET["headline"]. "\">Neu anlegen</a>
                 </span>";
             }
 
-            if(isModerator() && $g_preferences['enable_rss'] == true)
+            if (editAnnouncements() && $g_preferences['enable_rss'] == true)
             {
                 echo "&nbsp;&nbsp;&nbsp;&nbsp;";
             }
 
             // Feed abonnieren
-            if($g_preferences['enable_rss'] == true)
+            if ($g_preferences['enable_rss'] == true)
             {
                 echo "<span class=\"iconLink\">
                     <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/links/rss_links.php\"><img
@@ -148,14 +147,14 @@ require("../../../adm_config/body_top.php");
             echo "</p>";
 
             // Navigation mit Vor- und Zurueck-Buttons
-            $base_url = "$g_root_path/adm_program/modules/announcements/announcements.php?headline=". $_GET["headline"];
-            echo generatePagination($base_url, $num_announcements, 10, $_GET["start"], TRUE);
+            $baseUrl = "$g_root_path/adm_program/modules/links/links.php?headline=". $_GET["headline"];
+            echo generatePagination($baseUrl, $numLinks, 10, $_GET["start"], TRUE);
         }
 
         if (mysql_num_rows($links_result) == 0)
         {
             // Keine Links gefunden
-            if($_GET['id'] > 0)
+            if ($_GET['id'] > 0)
             {
                 echo "<p>Der angeforderte Eintrag exisitiert nicht (mehr) in der Datenbank.</p>";
             }
@@ -169,7 +168,7 @@ require("../../../adm_config/body_top.php");
             // Links auflisten
             $i = 0;
 
-            while($row = mysql_fetch_object($links_result))
+            while ($row = mysql_fetch_object($links_result))
             {
                 $sql     = "SELECT * FROM ". TBL_USERS. " WHERE usr_id = $row->lnk_usr_id";
                 $result2 = mysql_query($sql, $g_adm_con);
@@ -185,7 +184,7 @@ require("../../../adm_config/body_top.php");
                             <img src=\"$g_root_path/adm_program/images/globe.png\" style=\"vertical-align: middle;\" alt=\"Gehe zu $row->lnk_name\"
                             title=\"Gehe zu $row->lnk_name\" border=\"0\"></a>
                             <a href=\"$row->lnk_url\" target=\"_blank\">";
-                            if(strlen($row->lnk_name) > 25)
+                            if (strlen($row->lnk_name) > 25)
                             {
                                 echo "<span style=\"font-size: 8pt;\">$row->lnk_name</span>";
                             }
@@ -197,18 +196,18 @@ require("../../../adm_config/body_top.php");
                         </div>";
 
                         // aendern & loeschen duerfen nur User mit den gesetzten Rechten
-                        if(editAnnouncements())
+                        if (editAnnouncements())
                         {
                             echo "<div style=\"text-align: right;\">" .
                                 mysqldatetime("d.m.y", $row->lnk_timestamp). "&nbsp;
                                 <img src=\"$g_root_path/adm_program/images/edit.png\" style=\"cursor: pointer;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"
-                                onclick=\"self.location.href='announcements_new.php?ann_id=$row->lnk_id&amp;headline=". $_GET['headline']. "'\">";
+                                onclick=\"self.location.href='links_new.php?lnk_id=$row->lnk_id&amp;headline=". $_GET['headline']. "'\">";
 
 
                                 echo "
                                 <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer;\" width=\"16\" height=\"16\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" ";
-                                $load_url = urlencode("$g_root_path/adm_program/modules/announcements/announcements_function.php?ann_id=$row->lnk_id&amp;mode=2&amp;url=$g_root_path/adm_program/modules/announcements/announcements.php");
-                                echo " onclick=\"self.location.href='$g_root_path/adm_program/system/err_msg.php?err_code=delete_announcement&amp;err_text=". urlencode($row->lnk_name). "&amp;err_head=L&ouml;schen&amp;button=2&amp;url=$load_url'\">";
+                                $load_url = urlencode("$g_root_path/adm_program/modules/links/links_function.php?lnk_id=$row->lnk_id&amp;mode=2&amp;url=$g_root_path/adm_program/modules/links/links.php");
+                                echo " onclick=\"self.location.href='$g_root_path/adm_program/system/err_msg.php?err_code=delete_link&amp;err_text=". urlencode($row->lnk_name). "&amp;err_head=L&ouml;schen&amp;button=2&amp;url=$load_url'\">";
 
                             echo "&nbsp;</div>";
                         }
@@ -220,7 +219,7 @@ require("../../../adm_config/body_top.php");
 
                     <div style=\"margin: 8px 4px 4px 4px; text-align: left;\">";
                         // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
-                        if($g_preferences['enable_bbcode'] == 1)
+                        if ($g_preferences['enable_bbcode'] == 1)
                         {
                             echo strSpecialChars2Html($bbcode->parse($row->lnk_description));
                         }
@@ -240,11 +239,11 @@ require("../../../adm_config/body_top.php");
             }  // Ende While-Schleife
         }
 
-        if($_GET['id'] == 0)
+        if ($_GET['id'] == 0)
         {
             // Navigation mit Vor- und Zurueck-Buttons
-            $base_url = "$g_root_path/adm_program/modules/announcements/announcements.php?headline=". $_GET["headline"];
-            echo generatePagination($base_url, $num_announcements, 10, $_GET["start"], TRUE);
+            $baseUrl = "$g_root_path/adm_program/modules/links/links.php?headline=". $_GET["headline"];
+            echo generatePagination($baseUrl, $numLinks, 10, $_GET["start"], TRUE);
         }
     echo "</div>";
 
