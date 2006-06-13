@@ -63,11 +63,6 @@ if(strlen($_POST["upload_size"]) == 0)
     $_POST["upload_size"] = 0;
 }
 
-if(strlen($_POST["photo_size"]) == 0)
-{
-    $_POST["photo_size"] = 0;
-}
-
 if ($err_code != "")
 {
    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text";
@@ -113,12 +108,6 @@ db_error($result);
 $sql = "UPDATE ". TBL_PREFERENCES. " SET prf_value = {0}
          WHERE prf_name = 'max_file_upload_size' ";
 $sql = prepareSQL($sql, array($_POST['upload_size']));
-$result = mysql_query($sql, $g_adm_con);
-db_error($result);
-
-$sql = "UPDATE ". TBL_PREFERENCES. " SET prf_value = {0}
-         WHERE prf_name = 'max_photo_size' ";
-$sql = prepareSQL($sql, array($_POST['photo_size']));
 $result = mysql_query($sql, $g_adm_con);
 db_error($result);
 

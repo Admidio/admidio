@@ -193,12 +193,6 @@ require("../../../adm_config/body_top.php");
                      <input type=\"text\" name=\"upload_size\" size=\"4\" maxlength=\"4\" value=\"". $g_preferences['max_file_upload_size']. "\"> KB
                  </div>
              </div>
-             <div style=\"margin-top: 6px;\">
-                 <div style=\"text-align: right; width: 47%; float: left;\">Fotos:</div>
-                 <div style=\"text-align: left; margin-left: 50%;\">
-                     <input type=\"text\" name=\"photo_size\" size=\"4\" maxlength=\"4\" value=\"". $g_preferences['max_photo_size']. "\"> KB
-                 </div>
-             </div>
          </div>";
 
          /*------------------------------------------------------------*/

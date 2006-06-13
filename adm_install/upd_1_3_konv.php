@@ -48,11 +48,6 @@ while($row_orga = mysql_fetch_object($result_orga))
     if(!$result) showError(mysql_error());
 
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-            VALUES ($row_orga->org_id, 'max_photo_size', $row_orga->org_photo_size)";
-    $result = mysql_query($sql, $connection);
-    if(!$result) showError(mysql_error());
-
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
             VALUES ($row_orga->org_id, 'send_mail_extern', $row_orga->org_mail_extern)";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
