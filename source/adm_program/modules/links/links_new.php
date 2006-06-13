@@ -54,7 +54,7 @@ $linkurl     = "";
 
 if ($_GET["lnk_id"] != 0)
 {
-    $sql    = "SELECT * FROM ". TBL_LINKS. " WHERE lnk_id = {0}";
+    $sql    = "SELECT * FROM ". TBL_LINKS. " WHERE lnk_id = {0} and lnk_org_id = $g_current_organization->id";
     $sql    = prepareSQL($sql, array($_GET['lnk_id']));
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
@@ -67,6 +67,15 @@ if ($_GET["lnk_id"] != 0)
         $description   = $row_ba->lnk_description;
         $linkurl	   = $row_ba->lnk_url;
     }
+    elseif (mysql_num_rows($result) == 0)
+    {
+        //Wenn keine Daten zu der ID gefunden worden bzw. die ID einer anderen Orga gehört ist Schluss mit lustig...
+        $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
+        header($location);
+        exit();
+    }
+
+
 }
 
 echo "
