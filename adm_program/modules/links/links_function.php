@@ -57,12 +57,17 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
 {
     $linkName = strStripTags($_POST['linkname']);
     $description  = strStripTags($_POST['beschreibung']);
-    $linkUrl = $_POST['linkadresse'];
+    $linkUrl = trim($_POST['linkadresse']);
 
     if (strlen($linkName) > 0 && strlen($description)  > 0 && strlen($linkUrl) > 0)
     {
         $act_date = date("Y.m.d G:i:s", time());
 
+        //Die Webadresse wird jetzt falls sie nicht mit http:// oder https:// beginnt entsprechend aufbereitet
+        if (substr($linkUrl, 0, 7) != 'http://' && substr($linkUrl, 0, 8) != 'https://' )
+        {
+            $linkUrl = "http://". $linkUrl;
+        }
 
         //Link wird jetzt in der DB gespeichert
         if ($_GET["lnk_id"] == 0)
