@@ -47,6 +47,16 @@ if(!isModerator())
     exit();
 }
 
+// wenn URL uebergeben wurde zu dieser gehen, ansonsten zurueck
+if(array_key_exists('url', $_GET))
+{
+    $url = urlencode($_GET['url']);
+}
+else
+{
+    $url = urlencode(getHttpReferer());
+}
+
 if($_GET["mode"] == 1)
 {
     echo "
@@ -57,7 +67,7 @@ if($_GET["mode"] == 1)
         <title>$g_current_organization->longname - Messagebox</title>
         <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
 
-        <!--[if gte IE 5.5000]>
+        <!--[if lt IE 7]>
         <script language=\"JavaScript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
         <![endif]-->";
 
@@ -93,12 +103,12 @@ if($_GET["mode"] == 1)
                     &nbsp;Zur&uuml;ck</button>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <button name=\"delete\" type=\"button\" value=\"delete\"
-                    onclick=\"self.location.href='$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET['user_id']. "&mode=3'\">
+                    onclick=\"self.location.href='$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET['user_id']. "&mode=3&url=$url'\">
                     <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\">
                     &nbsp;L&ouml;schen</button>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <button name=\"former\" type=\"button\" value=\"former\"
-                    onclick=\"self.location.href='$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET['user_id']. "&mode=2'\">
+                    onclick=\"self.location.href='$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET['user_id']. "&mode=2&url=$url'\">
                     <img src=\"$g_root_path/adm_program/images/user.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\">
                     &nbsp;Ehemaliger</button>
             </div>
@@ -191,91 +201,20 @@ elseif($_GET["mode"] == 3)
     }
 
     // User aus der Datenbank loeschen
-
-    $sql = "SELECT usr_login_name FROM ". TBL_USERS. " WHERE usr_id = {0}";
-    $sql = prepareSQL($sql, array($_GET['user_id']));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
-
-    $row = mysql_fetch_array($result);
-    $login = $row[0];
-
-    $sql    = "UPDATE ". TBL_ANNOUNCEMENTS. " SET ann_usr_id = NULL
-                WHERE ann_usr_id = {0}";
-    $sql    = prepareSQL($sql, array($_GET['user_id']));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
-
-    $sql    = "UPDATE ". TBL_ANNOUNCEMENTS. " SET ann_usr_id_change = NULL
-                WHERE ann_usr_id_change = {0}";
-    $sql    = prepareSQL($sql, array($_GET['user_id']));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
-
-    $sql    = "UPDATE ". TBL_DATES. " SET dat_usr_id = NULL
-                WHERE dat_usr_id = {0}";
-    $sql    = prepareSQL($sql, array($_GET['user_id']));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
-
-    $sql    = "UPDATE ". TBL_DATES. " SET dat_usr_id_change = NULL
-                WHERE dat_usr_id_change = {0}";
-    $sql    = prepareSQL($sql, array($_GET['user_id']));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
-
-    $sql    = "UPDATE ". TBL_PHOTOS. " SET pho_usr_id = NULL
-                WHERE pho_usr_id = {0}";
-    $sql    = prepareSQL($sql, array($_GET['user_id']));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
-
-    $sql    = "UPDATE ". TBL_PHOTOS. " SET pho_usr_id_change = NULL
-                WHERE pho_usr_id_change = {0}";
-    $sql    = prepareSQL($sql, array($_GET['user_id']));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
-
-    $sql    = "UPDATE ". TBL_ROLES. " SET rol_usr_id_change = NULL
-                WHERE rol_usr_id_change = {0}";
-    $sql    = prepareSQL($sql, array($_GET['user_id']));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
-
-    $sql    = "UPDATE ". TBL_ROLE_DEPENDENCIES. " SET rld_usr_id = NULL
-                WHERE rld_usr_id = {0}";
-    $sql    = prepareSQL($sql, array($_GET['user_id']));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
-
-    $sql    = "UPDATE ". TBL_USERS. " SET usr_usr_id_change = NULL
-                WHERE usr_usr_id_change = {0}";
-    $sql    = prepareSQL($sql, array($_GET['user_id']));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
-
-    $sql    = "DELETE FROM ". TBL_MEMBERS. " WHERE mem_usr_id = {0}";
-    $sql    = prepareSQL($sql, array($_GET['user_id']));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
-
-    $sql    = "DELETE FROM ". TBL_SESSIONS. " WHERE ses_usr_id = {0}";
-    $sql    = prepareSQL($sql, array($_GET['user_id']));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
-
-    $sql    = "DELETE FROM ". TBL_USER_DATA. " WHERE usd_usr_id = {0}";
-    $sql    = prepareSQL($sql, array($_GET['user_id']));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
-
-    $sql    = "DELETE FROM ". TBL_USERS. " WHERE usr_id = {0}";
-    $sql    = prepareSQL($sql, array($_GET['user_id']));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    $user = new TblUsers($g_adm_con);
+    $user->GetUser($_GET['user_id']);
+    $user->delete();
 
     if($g_forum)
     {
+        $sql = "SELECT usr_login_name FROM ". TBL_USERS. " WHERE usr_id = {0}";
+        $sql = prepareSQL($sql, array($_GET['user_id']));
+        $result = mysql_query($sql, $g_adm_con);
+        db_error($result);
+
+        $row = mysql_fetch_array($result);
+        $login = $row[0];
+        
         mysql_select_db($g_forum_db, $g_forum_con);
 
         // User in Foren-Tabelle suchen
@@ -348,8 +287,7 @@ elseif($_GET["mode"] == 4)
     }
 }
 
-$load_url = urlencode("$g_root_path/adm_program/administration/members/members.php");
-$location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text&timer=2000&url=$load_url";
+$location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text&timer=2000&url=$url";
 header($location);
 exit();
 ?>
