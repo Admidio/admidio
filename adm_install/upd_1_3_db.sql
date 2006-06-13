@@ -65,7 +65,7 @@ create table %PRAEFIX%_links
    lnk_name                       varchar(255)                   not null,
    lnk_description                text,
    lnk_url                        varchar(255)                   not null,
-   lnk_usr_id                     int(11) unsigned               not null,
+   lnk_usr_id                     int(11) unsigned,
    lnk_timestamp                  datetime                       not null,
    primary key (lnk_id)
 )

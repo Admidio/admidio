@@ -272,6 +272,11 @@ class TblUsers
         $result = mysql_query($sql, $this->db_connection);
         db_error($result);
 
+        $sql    = "UPDATE ". TBL_LINKS. " SET lnk_usr_id = NULL
+                    WHERE lnk_usr_id = $this->id";
+        $result = mysql_query($sql, $this->db_connection);
+        db_error($result);
+
         $sql    = "UPDATE ". TBL_PHOTOS. " SET pho_usr_id = NULL
                     WHERE pho_usr_id = $this->id";
         $result = mysql_query($sql, $this->db_connection);
@@ -298,10 +303,6 @@ class TblUsers
         db_error($result);
 
         $sql    = "DELETE FROM ". TBL_GUESTBOOK_COMMENTS. " WHERE gbc_usr_id = $this->id";
-        $result = mysql_query($sql, $this->db_connection);
-        db_error($result);
-
-        $sql    = "DELETE FROM ". TBL_LINKS. " WHERE lnk_usr_id = $this->id";
         $result = mysql_query($sql, $this->db_connection);
         db_error($result);
 
