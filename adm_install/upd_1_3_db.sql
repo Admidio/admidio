@@ -1,4 +1,7 @@
 ALTER TABLE %PRAEFIX%_roles ADD rol_announcements TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 AFTER rol_moderation;
+ALTER TABLE %PRAEFIX%_roles ADD rol_guestbook_comments TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 AFTER rol_edit_user;
+ALTER TABLE %PRAEFIX%_roles ADD rol_guestbook     TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 AFTER rol_edit_user;
+ALTER TABLE %PRAEFIX%_roles ADD rol_weblinks      TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 AFTER rol_photo;
 ALTER TABLE %PRAEFIX%_users ADD usr_photo blob AFTER usr_password;
 
 create table %PRAEFIX%_folders

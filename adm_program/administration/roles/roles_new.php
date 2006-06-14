@@ -30,12 +30,12 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
-// nur Moderatoren duerfen Rollen erfassen & verwalten
+// nur Moderatoren duerfen Rollen anlegen und verwalten
 if(!isModerator())
 {
-   $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-   header($location);
-   exit();
+    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
+    header($location);
+    exit();
 }
 
 $rolle          = "";
@@ -43,13 +43,16 @@ $beschreibung   = "";
 $rlc_id         = 0;
 $r_moderation   = 0;
 $r_announcements= 0;
-$r_termin       = 0;
-$r_foto         = 0;
+$r_dates        = 0;
 $r_download     = 0;
-$r_user         = 0;
-$r_locked       = 0;
+$r_guestbook    = 0;
+$r_guestbook_comments = 0;
 $r_mail_logout  = 0;
 $r_mail_login   = 0;
+$r_photo        = 0;
+$r_weblinks     = 0;
+$r_user         = 0;
+$r_locked       = 0;
 $datum_von      = "";
 $uhrzeit_von    = "";
 $datum_bis      = "";
@@ -63,66 +66,75 @@ $beitrag        = null;
 // -> Felder mit Daten der Rolle vorbelegen
 
 if ($_GET['rol_id'] != 0)
- {
-   $sql    = "SELECT * FROM ". TBL_ROLES. " WHERE rol_id = {0}";
-   $sql    = prepareSQL($sql, array($_GET['rol_id']));
-   $result = mysql_query($sql, $g_adm_con);
-   db_error($result);
+{
+    $sql    = "SELECT * FROM ". TBL_ROLES. " WHERE rol_id = {0}";
+    $sql    = prepareSQL($sql, array($_GET['rol_id']));
+    $result = mysql_query($sql, $g_adm_con);
+    db_error($result);
 
-   if (mysql_num_rows($result) > 0)
-   {
-      $row_ar = mysql_fetch_object($result);
+    if (mysql_num_rows($result) > 0)
+    {
+        $row_ar = mysql_fetch_object($result);
 
-      // Rolle Webmaster darf nur vom Webmaster selber erstellt oder gepflegt werden
-      if($row_ar->rol_name == "Webmaster" && !hasRole("Webmaster"))
-      {
-         if($g_current_user->id != $row_ar->rol_usr_id)
-         {
-            $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-            header($location);
-            exit();
-         }
-      }
+        // Rolle Webmaster darf nur vom Webmaster selber erstellt oder gepflegt werden
+        if($row_ar->rol_name == "Webmaster" && !hasRole("Webmaster"))
+        {
+            if($g_current_user->id != $row_ar->rol_usr_id)
+            {
+                $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
+                header($location);
+                exit();
+            }
+        }
 
-      $rolle           = $row_ar->rol_name;
-      $beschreibung    = $row_ar->rol_description;
-      $act_rlc_id      = $row_ar->rol_rlc_id;
-      $r_moderation    = $row_ar->rol_moderation;
-      $r_announcements = $row_ar->rol_announcements;
-      $r_termin        = $row_ar->rol_dates;
-      $r_foto          = $row_ar->rol_photo;
-      $r_download      = $row_ar->rol_download;
-      $r_user          = $row_ar->rol_edit_user;
-      $r_locked        = $row_ar->rol_locked;
-      $r_mail_logout   = $row_ar->rol_mail_logout;
-      $r_mail_login    = $row_ar->rol_mail_login;
-      
+        $rolle           = $row_ar->rol_name;
+        $beschreibung    = $row_ar->rol_description;
+        $act_rlc_id      = $row_ar->rol_rlc_id;
+        $r_moderation    = $row_ar->rol_moderation;
+        $r_announcements = $row_ar->rol_announcements;
+        $r_dates         = $row_ar->rol_dates;
+        $r_download      = $row_ar->rol_download;
+        $r_guestbook     = $row_ar->rol_guestbook;
+        $r_guestbook_comments = $row_ar->rol_guestbook_comments;        
+        $r_mail_logout   = $row_ar->rol_mail_logout;
+        $r_mail_login    = $row_ar->rol_mail_login;
+        $r_photo         = $row_ar->rol_photo;
+        $r_weblinks      = $row_ar->rol_weblinks;
+        $r_user          = $row_ar->rol_edit_user;
+        $r_locked        = $row_ar->rol_locked;
+
         $datum_von      = mysqldate("d.m.y", $row_ar->rol_start_date);
         $uhrzeit_von    = mysqltime("h:i",   $row_ar->rol_start_time);
         $datum_bis      = mysqldate("d.m.y", $row_ar->rol_end_date);
         $uhrzeit_bis    = mysqltime("h:i",   $row_ar->rol_end_time);
-        if ($uhrzeit_von == "00:00") $uhrzeit_von = "";
-        if ($uhrzeit_bis == "00:00") $uhrzeit_bis = "";
+        if ($uhrzeit_von == "00:00") 
+        {
+            $uhrzeit_von = "";
+        }
+        if ($uhrzeit_bis == "00:00") 
+        {
+            $uhrzeit_bis = "";
+        }
         $wochentag      = $row_ar->rol_weekday;
         $ort            = $row_ar->rol_location;
         $max_mitglieder = $row_ar->rol_max_members;
         $beitrag        = $row_ar->rol_cost;
-   }
- }
+    }
+}
 
 echo "
 <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
 <html>
 <head>
-   <title>$g_current_organization->longname - Rolle</title>
-   <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
+    <title>$g_current_organization->longname - Rolle</title>
+    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
 
-   <!--[if lt IE 7]>
-   <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
-   <![endif]-->";
+    <!--[if lt IE 7]>
+    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
+    <![endif]-->";
 
-   require("../../../adm_config/header.php");
+    require("../../../adm_config/header.php");
 echo "</head>";
 
 require("../../../adm_config/body_top.php");
@@ -175,6 +187,22 @@ require("../../../adm_config/body_top.php");
                     echo "</select>
                 </div>
             </div>
+            <div style=\"margin-top: 6px;\">
+                <div style=\"text-align: right; width: 28%; float: left;\">
+                    <label for=\"locked\"><img src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Rolle nur für Moderatoren sichtbar\"></label>
+                </div>
+                <div style=\"text-align: left; margin-left: 30%;\">
+                    <input type=\"checkbox\" id=\"locked\" name=\"locked\" ";
+                        if($r_locked == 1)
+                        {
+                            echo " checked ";
+                        }
+                        echo " value=\"1\" />
+                    <label for=\"locked\">Rolle nur für Moderatoren sichtbar&nbsp;</label>
+                    <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_locked','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
+                </div>
+            </div>
 
             <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 90%;\">
                 <div class=\"groupBoxHeadline\">Berechtigungen</div>
@@ -197,14 +225,14 @@ require("../../../adm_config/body_top.php");
                 </div>
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 10%; float: left;\">
-                        <input type=\"checkbox\" id=\"benutzer\" name=\"benutzer\" ";
+                        <input type=\"checkbox\" id=\"user\" name=\"user\" ";
                         if($r_user == 1)
                             echo " checked ";
                         echo " value=\"1\" />&nbsp;
-                        <label for=\"benutzer\"><img src=\"$g_root_path/adm_program/images/user.png\" alt=\"Daten aller Benutzer bearbeiten\"></label>
+                        <label for=\"user\"><img src=\"$g_root_path/adm_program/images/user.png\" alt=\"Daten aller Benutzer bearbeiten\"></label>
                     </div>
                     <div style=\"text-align: left; margin-left: 12%;\">
-                        <label for=\"benutzer\">Daten aller Benutzer bearbeiten&nbsp;</label>
+                        <label for=\"user\">Daten aller Benutzer bearbeiten&nbsp;</label>
                         <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                         onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_benutzer','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
                     </div>
@@ -215,38 +243,38 @@ require("../../../adm_config/body_top.php");
                         if($r_announcements == 1)
                             echo " checked ";
                         echo " value=\"1\" />&nbsp;
-                        <label for=\"announcements\"><img src=\"$g_root_path/adm_program/images/note.png\" alt=\"Ank&uuml;ndigungen erfassen und bearbeiten\"></label>
+                        <label for=\"announcements\"><img src=\"$g_root_path/adm_program/images/note.png\" alt=\"Ank&uuml;ndigungen anlegen und bearbeiten\"></label>
                     </div>
                     <div style=\"text-align: left; margin-left: 12%;\">
-                        <label for=\"announcements\">Ank&uuml;ndigungen erfassen und bearbeiten&nbsp;</label>
+                        <label for=\"announcements\">Ank&uuml;ndigungen anlegen und bearbeiten&nbsp;</label>
                         <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                         onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_announcements','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
                     </div>
                 </div>
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 10%; float: left;\">
-                        <input type=\"checkbox\" id=\"termine\" name=\"termine\" ";
-                        if($r_termin == 1)
+                        <input type=\"checkbox\" id=\"dates\" name=\"dates\" ";
+                        if($r_dates == 1)
                             echo " checked ";
                         echo " value=\"1\" />&nbsp;
-                        <label for=\"termine\"><img src=\"$g_root_path/adm_program/images/date.png\" alt=\"Termine erfassen und bearbeiten\"></label>
+                        <label for=\"dates\"><img src=\"$g_root_path/adm_program/images/date.png\" alt=\"Termine anlegen und bearbeiten\"></label>
                     </div>
                     <div style=\"text-align: left; margin-left: 12%;\">
-                        <label for=\"termine\">Termine erfassen und bearbeiten&nbsp;</label>
+                        <label for=\"dates\">Termine anlegen und bearbeiten&nbsp;</label>
                         <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                         onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_termine','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
                     </div>
                 </div>
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 10%; float: left;\">
-                        <input type=\"checkbox\" id=\"foto\" name=\"foto\" ";
-                        if($r_foto == 1)
+                        <input type=\"checkbox\" id=\"photo\" name=\"photo\" ";
+                        if($r_photo == 1)
                             echo " checked ";
                         echo " value=\"1\" />&nbsp;
-                        <label for=\"foto\"><img src=\"$g_root_path/adm_program/images/photo.png\" alt=\"Fotos hochladen und bearbeiten\"></label>
+                        <label for=\"photo\"><img src=\"$g_root_path/adm_program/images/photo.png\" alt=\"Fotos hochladen und bearbeiten\"></label>
                     </div>
                     <div style=\"text-align: left; margin-left: 12%;\">
-                        <label for=\"foto\">Fotos hochladen und bearbeiten&nbsp;</label>
+                        <label for=\"photo\">Fotos hochladen und bearbeiten&nbsp;</label>
                         <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                         onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_foto','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
                     </div>
@@ -261,6 +289,34 @@ require("../../../adm_config/body_top.php");
                     </div>
                     <div style=\"text-align: left; margin-left: 12%;\">
                         <label for=\"download\">Downloads hochladen und bearbeiten&nbsp;</label>
+                        <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_download','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
+                    </div>
+                </div>
+                <div style=\"margin-top: 6px;\">
+                    <div style=\"text-align: right; width: 10%; float: left;\">
+                        <input type=\"checkbox\" id=\"guestbook\" name=\"guestbook\" ";
+                        if($r_guestbook == 1)
+                            echo " checked ";
+                        echo " value=\"1\" />&nbsp;
+                        <label for=\"guestbook\"><img src=\"$g_root_path/adm_program/images/comment.png\" alt=\"G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen\"></label>
+                    </div>
+                    <div style=\"text-align: left; margin-left: 12%;\">
+                        <label for=\"guestbook\">G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen&nbsp;</label>
+                        <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_download','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
+                    </div>
+                </div>
+                <div style=\"margin-top: 6px;\">
+                    <div style=\"text-align: right; width: 10%; float: left;\">
+                        <input type=\"checkbox\" id=\"guestbook_comments\" name=\"guestbook_comments\" ";
+                        if($r_guestbook_comments == 1)
+                            echo " checked ";
+                        echo " value=\"1\" />&nbsp;
+                        <label for=\"guestbook_comments\"><img src=\"$g_root_path/adm_program/images/comments.png\" alt=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\"></label>
+                    </div>
+                    <div style=\"text-align: left; margin-left: 12%;\">
+                        <label for=\"guestbook_comments\">Kommentare zu G&auml;stebucheintr&auml;gen anlegen&nbsp;</label>
                         <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                         onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_download','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
                     </div>
@@ -295,18 +351,18 @@ require("../../../adm_config/body_top.php");
                 </div>
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 10%; float: left;\">
-                        <input type=\"checkbox\" id=\"locked\" name=\"locked\" ";
-                        if($r_locked == 1)
+                        <input type=\"checkbox\" id=\"weblinks\" name=\"weblinks\" ";
+                        if($r_weblinks == 1)
                             echo " checked ";
                         echo " value=\"1\" />&nbsp;
-                        <label for=\"locked\"><img src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Rolle nur für Moderatoren sichtbar\"></label>
+                        <label for=\"weblinks\"><img src=\"$g_root_path/adm_program/images/globe.png\" alt=\"Weblinks anlegen und bearbeiten\"></label>
                     </div>
                     <div style=\"text-align: left; margin-left: 12%;\">
-                        <label for=\"locked\">Rolle nur für Moderatoren sichtbar&nbsp;</label>
+                        <label for=\"weblinks\">Weblinks anlegen und bearbeiten&nbsp;</label>
                         <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_locked','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
+                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_foto','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
                     </div>
-                </div>
+                </div>                
             </div>
 
             <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 90%;\">
