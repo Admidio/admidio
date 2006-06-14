@@ -147,12 +147,12 @@ elseif($_GET["mode"] == 2)
          else
             $announcements = 0;
 
-         if(array_key_exists("termine", $_POST))
+         if(array_key_exists("dates", $_POST))
             $termine = 1;
          else
             $termine = 0;
 
-         if(array_key_exists("foto", $_POST))
+         if(array_key_exists("photo", $_POST))
             $foto = 1;
          else
             $foto = 0;
@@ -162,7 +162,17 @@ elseif($_GET["mode"] == 2)
          else
             $download = 0;
 
-         if(array_key_exists("benutzer", $_POST))
+         if(array_key_exists("guestbook", $_POST))
+            $guestbook = 1;
+         else
+            $guestbook = 0;
+
+         if(array_key_exists("guestbook_comments", $_POST))
+            $guestbook_comments = 1;
+         else
+            $guestbook_comments = 0;
+
+         if(array_key_exists("user", $_POST))
             $user = 1;
          else
             $user = 0;
@@ -176,6 +186,11 @@ elseif($_GET["mode"] == 2)
             $mail_login = 1;
          else
             $mail_login = 0;
+
+         if(array_key_exists("weblinks", $_POST))
+            $weblinks = 1;
+         else
+            $weblinks = 0;
 
          if(array_key_exists("locked", $_POST))
             $locked = 1;
@@ -206,8 +221,11 @@ elseif($_GET["mode"] == 2)
                                         , rol_photo         = $foto
                                         , rol_download      = $download
                                         , rol_edit_user     = $user
+                                        , rol_guestbook     = $guestbook
+                                        , rol_guestbook_comments = $guestbook_comments
                                         , rol_mail_logout   = $mail_logout
                                         , rol_mail_login    = $mail_login
+                                        , rol_weblinks      = $weblinks
                                         , rol_locked        = $locked
                                         , rol_start_date    = '$d_datum_von'
                                         , rol_start_time    = '$t_uhrzeit_von'
@@ -226,14 +244,14 @@ elseif($_GET["mode"] == 2)
             // Rolle in Datenbank hinzufuegen
             $sql    = "INSERT INTO ". TBL_ROLES. " (rol_org_shortname, rol_name, rol_description, rol_rlc_id,
                                                rol_moderation, rol_announcements, rol_dates, rol_photo, rol_download,
-                                               rol_edit_user, rol_mail_logout, rol_mail_login,
-                                               rol_locked, rol_start_date, rol_start_time,
+                                               rol_edit_user, rol_guestbook, rol_guestbook_comments, rol_mail_logout, 
+                                               rol_mail_login, rol_weblinks,  rol_locked, rol_start_date, rol_start_time,
                                                rol_end_date, rol_end_time, rol_weekday, rol_location,
                                                rol_max_members, rol_cost, rol_valid)
                        VALUES ('$g_organization', {0}, {1}, {2},
                                $moderation, $announcements, $termine, $foto, $download,
-                               $user, $mail_logout, $mail_login,
-                               $locked, '$d_datum_von', '$t_uhrzeit_von',
+                               $user, $guestbook, $guestbook_comments, $mail_logout, 
+                               $mail_login, $weblinks, $locked, '$d_datum_von', '$t_uhrzeit_von',
                                '$d_datum_bis','$t_uhrzeit_bis', {3}, {4},
                                {5}, {6}, 1) ";
          }
