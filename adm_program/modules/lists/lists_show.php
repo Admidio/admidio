@@ -560,6 +560,10 @@ for($j = 0; $j < $max_count; $j++)
                                     $content = "<img src=\"../profile/profile_photo_show.php?a_user_id=$row[0]\"
                                                 style=\"vertical-align: middle;\">";
                                 }     
+                                if ($mode == "csv" && $row[$i] != NULL)
+                                {
+                                    $content = "Profilfoto Online";
+                                }
                                 break;
                                 
                             default:
