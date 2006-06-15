@@ -10,7 +10,7 @@
  *
  * typ    : Listenselect (mylist, address, telephone, former)
  * mode   : Ausgabeart   (html, print, csv)
- * rol_id : Rolle, für die die Funktion dargestellt werden soll
+ * rol_id : Rolle, fï¿½r die die Funktion dargestellt werden soll
  *
  ******************************************************************************
  *
@@ -43,7 +43,7 @@ if($mode != "csv-ms"
 && $mode != "html"
 && $mode != "print")
 {
-    // Dem aufgerufenen Skript wurde die notwendige Variable nicht richtig übergeben !
+    // Dem aufgerufenen Skript wurde die notwendige Variable nicht richtig ï¿½bergeben !
     $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=mode";
     header($location);
     exit();
@@ -51,7 +51,7 @@ if($mode != "csv-ms"
 
 if($rol_id <= 0)
 {
-    // Dem aufgerufenen Skript wurde die notwendige Variable nicht richtig übergeben !
+    // Dem aufgerufenen Skript wurde die notwendige Variable nicht richtig ï¿½bergeben !
     $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=rolle";
     header($location);
     exit();
@@ -71,13 +71,13 @@ else if($mode == "csv-ms-2k")
 }
 else if($mode == "csv-oo")
 {
-    $separator    = ",";    // für CSV-Dateien
+    $separator    = ",";    // fï¿½r CSV-Dateien
     $value_quotes = "\"";   // Werte muessen mit Anfuehrungszeichen eingeschlossen sein
     $mode         = "csv";
 }
 else
 {
-    $separator    = ",";    // für CSV-Dateien
+    $separator    = ",";    // fï¿½r CSV-Dateien
     $value_quotes = "";
 }
 
@@ -95,6 +95,8 @@ $arr_col_name = array('usr_last_name'  => 'Nachname',
                       'usr_homepage'   => 'Homepage',
                       'usr_birthday'   => 'Geburtstag',
                       'usr_gender'     => 'Geschlecht',
+                      'usr_login_name' => 'Loginname',
+                      'usr_photo'      => 'Foto',
                       'mem_begin'      => 'Beginn',
                       'mem_end'        => 'Ende',
                       'mem_leader'     => 'Leiter'
@@ -113,8 +115,8 @@ else if($mode == "print")
     $class_row    = "tableRowPrint";
 }
 
-$main_sql  = "";   // enthält das Haupt-Sql-Statement für die Liste
-$str_csv   = "";   // enthält die komplette CSV-Datei als String
+$main_sql  = "";   // enthï¿½lt das Haupt-Sql-Statement fï¿½r die Liste
+$str_csv   = "";   // enthï¿½lt die komplette CSV-Datei als String
 $leiter    = 0;    // Gruppe besitzt Leiter
 
 // Rollenname auslesen
@@ -178,7 +180,7 @@ switch($type)
       break;
       
     default:
-        // Dem aufgerufenen Skript wurde die notwendige Variable nicht richtig übergeben !
+        // Dem aufgerufenen Skript wurde die notwendige Variable nicht richtig ï¿½bergeben !
         $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=typ";
         header($location);
         exit();
@@ -353,7 +355,7 @@ for($j = 0; $j < $max_count; $j++)
 {
     if($leiter == 1)
     {
-        // wenn Leiter vorhanden, dann müssen SQL-Statements hier getrennt aufgerufen werden
+        // wenn Leiter vorhanden, dann muessen SQL-Statements hier getrennt aufgerufen werden
         if($j == 0)   // Leiter
         {
             $leiter_sql = prepareSQL($leiter_sql, array($rol_id));
@@ -397,7 +399,7 @@ for($j = 0; $j < $max_count; $j++)
             <tr>";
         }
 
-        // Spalten-Überschriften
+        // Spalten-Ueberschriften
         for($i = 0; $i < count($arr_fields); $i++)
         {
             if($mode == "csv")
@@ -535,7 +537,7 @@ for($j = 0; $j < $max_count; $j++)
                                 {
                                     if($mode == "csv")
                                     {
-                                        $content = "männlich";
+                                        $content = "mÃ¤nnlich";
                                     }
                                     else
                                     {
@@ -551,7 +553,15 @@ for($j = 0; $j < $max_count; $j++)
                                     $content = "&nbsp;";
                                 }
                                 break;
-
+                            
+                            case "usr_photo":
+                                if(($mode == "html" || $mode == "print") && $row[$i] != NULL)
+                                {
+                                    $content = "<img src=\"../profile/profile_photo_show.php?a_user_id=$row[0]\"
+                                                style=\"vertical-align: middle;\">";
+                                }     
+                                break;
+                                
                             default:
                                 $content = $row[$i];
                                 break;
@@ -566,6 +576,7 @@ for($j = 0; $j < $max_count; $j++)
                         }
                         $str_csv = $str_csv. $value_quotes. "$content". $value_quotes;
                     }
+                    
                     else
                     {
                         echo $content. "</td>\n";
