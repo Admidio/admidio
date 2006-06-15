@@ -321,7 +321,7 @@ require("../../../adm_config/body_top.php");
                         //Falls vorhanden Bild ausgeben
                         if(@MYSQL_RESULT($result_photo,0,"usr_photo")!=NULL)
                         {
-                            echo"<img src=\"profile_photo_show.php?a_user_id=$a_user_id\"\">";
+                            echo"<img src=\"profile_photo_show.php?a_user_id=$a_user_id\">";
                         }
                         //wenn nicht Schattenkopf
                         else
