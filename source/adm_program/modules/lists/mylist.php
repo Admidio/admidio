@@ -92,13 +92,13 @@ require("../../../adm_config/body_top.php");
          echo strspace("Eigene Liste", 1);
       echo "</div>
       <div class=\"formBody\">
-      <b>1.</b> Wähle eine Rolle aus von der du eine Mitgliederliste erstellen willst:
+      <b>1.</b> Wï¿½hle eine Rolle aus von der du eine Mitgliederliste erstellen willst:
       <p><b>Rolle :</b>&nbsp;&nbsp;
          <select size=\"1\" name=\"role\">
             <option value=\"\" selected=\"selected\">- Bitte w&auml;hlen -</option>";
             // Rollen selektieren
 
-            // Webmaster und Moderatoren dürfen Listen zu allen Rollen sehen
+            // Webmaster und Moderatoren duerfen Listen zu allen Rollen sehen
             if(isModerator())
             {
                $sql     = "SELECT * FROM ". TBL_ROLES. "
@@ -142,6 +142,15 @@ require("../../../adm_config/body_top.php");
                </th>
             </tr>";
 
+            //Liste der Zusatzfelder erstellen
+            $sql    =  "SELECT * 
+                        FROM ". TBL_USER_FIELDS. "
+                        WHERE   usf_org_shortname IS NULL
+                        OR      usf_org_shortname = '$g_organization'";
+            
+            $result_user_fields = mysql_query($sql, $g_adm_con);
+            db_error($result_user_fields, true);
+            
             for($i = 1; $i < 9; $i++)
             {
                echo"<tr>
@@ -166,6 +175,21 @@ require("../../../adm_config/body_top.php");
                         <option value=\"usr_homepage\">Homepage</option>
                         <option value=\"usr_birthday\">Geburtstag</option>
                         <option value=\"usr_gender\">Geschlecht</option>
+                        <option value=\"usr_login_name\">Loginname</option>
+                        <option value=\"usr_photo\">Foto</option>";
+
+                        //ggf zusaetzliche Felder Auslesen und bereitstellen
+                        while($uf_row = mysql_fetch_object($result_user_fields))
+                        {
+                            //Nur Moderatoren duerfen sich gelockte Felder anzeigen lassen 
+                            if($uf_row->usf_locked==0 || isModerator())
+                            {
+                                echo"<option value=\"$uf_row->usf_id\">$uf_row->usf_name</option>";
+                            }
+                        }    
+                        mysql_data_seek($result_user_fields, 0);
+                        
+                        echo"
                      </select>&nbsp;&nbsp;
                   </td>
                   <td style=\"text-align: center;\">
