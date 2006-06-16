@@ -43,6 +43,11 @@ if(strlen($_FILES['userfile']['tmp_name']) == 0)
     $err_code = "feld";
     $err_text = "Datei";
 }
+else if($_FILES['userfile']['error'] == 1)
+{
+    //Dateigroesse ueberpruefen Servereinstellungen
+    $err_code = "file_2big_server";
+}
 else if(strlen($_POST['role']) == 0)
 {
     $err_code = "feld";
