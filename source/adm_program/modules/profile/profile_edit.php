@@ -8,8 +8,8 @@
  *
  * Uebergaben:
  *
- * user_id : zeigt das Profil der übergebenen user_id an
- * new_user - 1 : Dialog um neue Benutzer hinzuzufügen.
+ * user_id : zeigt das Profil der ï¿½bergebenen user_id an
+ * new_user - 1 : Dialog um neue Benutzer hinzuzufï¿½gen.
  * url :     URL auf die danach weitergeleitet wird
  *
  ******************************************************************************
@@ -33,7 +33,7 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
-//prüfen ob in Popup angezeigt wird oder Normal (default)
+//prï¿½fen ob in Popup angezeigt wird oder Normal (default)
 if($_GET['popup'] == 1)
 {
     $popup = 1;
@@ -82,7 +82,7 @@ if($a_new_user)
 else
 {
    $a_user_id = $_GET['user_id'];
-   // jetzt noch schauen, ob User überhaupt Mitglied in der Gliedgemeinschaft ist
+   // jetzt noch schauen, ob User ï¿½berhaupt Mitglied in der Gliedgemeinschaft ist
    $sql = "SELECT mem_id
              FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
             WHERE rol_org_shortname = '$g_organization'
@@ -256,14 +256,27 @@ if($popup == 0)
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 30%; float: left;\">Land:</div>
                     <div style=\"text-align: left; margin-left: 32%;\">";
-                        if($a_new_user)
-                        {
-                            echo "<input type=\"text\" name=\"country\" size=\"20\" maxlength=\"30\" />";
-                        }
-                        else
-                        {
-                            echo "<input type=\"text\" name=\"country\" size=\"20\" maxlength=\"30\" value=\"$user->country\" />";
-                        }
+                        //Laenderliste oeffnen
+                        $landlist = fopen("../../system/staaten.txt", "r");
+                        echo "
+                        <select size=\"1\" name=\"country\" />";
+                            while (!feof($landlist))
+                            {
+                                $land = trim(fgets($landlist));
+                                echo"<option value=\"$land\"";
+                                     if($a_new_user && $land=="Deutschland")
+                                     {
+                                        echo " selected=\"selected\" ";
+                                     }
+                                     if(!$a_new_user && $land==$user->country)
+                                     {
+                                        echo " selected=\"selected\" ";
+                                     }
+                                echo">$land</option>";
+                            }    
+                        
+                        echo"
+                        </select>";
                     echo "</div>
                 </div>
 
@@ -518,7 +531,7 @@ if($popup == 0)
 
                 if($user->usr_id_change > 0)
                 {
-                    // Angabe über die letzten Aenderungen
+                    // Angabe ï¿½ber die letzten Aenderungen
                     $sql    = "SELECT usr_first_name, usr_last_name
                                  FROM ". TBL_USERS. "
                                 WHERE usr_id = $user->usr_id_change ";
