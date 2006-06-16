@@ -195,18 +195,6 @@ echo "
                 angezeigt und von diesen bearbeitet werden k&ouml;nnen.";
                 break;
 
-            case "rolle_termine":
-                echo "Benutzer der Rollen, die diese Option aktiviert haben,
-                      k&ouml;nnen eigene Termine anlegen (keine Ank&uuml;ndigungen !) und diese
-                      sp&auml;ter auch bearbeiten oder l&ouml;schen.";
-                break;
-
-            case "rolle_announcements":
-                echo "Benutzer der Rollen, die diese Option aktiviert haben,
-                      k&ouml;nnen eigene Ank&uuml;ndigungen (keine Termine !) anlegen und diese
-                      sp&auml;ter auch bearbeiten oder l&ouml;schen.";
-                break;
-
             case "rolle_benutzer":
                 echo "Rollen, die diese Option aktiviert haben, haben die Berechtigung
                       Benutzerdaten (au&szlig;er Passw&ouml;rter) und Rollenzugeh&ouml;rigkeiten
@@ -232,9 +220,8 @@ echo "
                 break;
 
             case "rolle_moderation":
-                echo "Benutzer dieser Rolle bekommen erweiterte Rechte. Sie k&ouml;nnen Rollen erstellen,
-                      verwalten und anderen Benutzern Rollen zuordnen. Au&szlig;erdem k&ouml;nnen Sie
-                      Ank&uuml;ndigungen und Termine erfassen, bearbeiten und l&ouml;schen.";
+                echo "Benutzer dieser Rolle bekommen erweiterte Rechte. Sie haben Zugriff auf die Rollenverwaltung
+                      und k&ouml;nnen neue Rollen erstellen, verwalten und anderen Benutzern Rollen zuordnen.";
                 break;
 
             case "rolle_mail":
