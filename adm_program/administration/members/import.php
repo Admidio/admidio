@@ -35,6 +35,14 @@ if(!isModerator())
     exit();
 }
 
+//pruefen ob in den aktuellen Servereinstellungen ueberhaupt file_uploads auf ON gesetzt ist...
+if (ini_get('file_uploads') != '1')
+{
+    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=no_fileuploads";
+    header($location);
+    exit();
+}
+
 if($_GET['mode'] == 2)
 {
     if(strlen($_FILES['userfile']['tmp_name']) == 0)
@@ -43,7 +51,7 @@ if($_GET['mode'] == 2)
         header($location);
         exit();
     }
-     
+
     session_start();
     $_SESSION["file_lines"] = file($_FILES['userfile']['tmp_name']);
     $_SESSION["value_separator"] = ",";
@@ -64,11 +72,11 @@ echo "
 <head>
     <title>$g_current_organization->longname - Benutzer importieren</title>
     <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
-    
+
     <script type=\"text/javascript\"><!--
         function submitForm()
         {
-            document.forms.form_import.action = 'import_csv_config.php';            
+            document.forms.form_import.action = 'import_csv_config.php';
             document.forms.form_import.submit();
         }
     --></script>
@@ -144,7 +152,7 @@ require("../../../adm_config/body_top.php");
     </div>
     <script type=\"text/javascript\"><!--
         document.getElementById('userfile').focus();
-    --></script>";  
+    --></script>";
     require("../../../adm_config/body_bottom.php");
 echo "</body>
 </html>";
