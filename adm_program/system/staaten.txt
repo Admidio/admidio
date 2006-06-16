@@ -82,18 +82,18 @@ Kiribati
 Kolumbien
 Komoren
 Kongo
-Kongo, Demokratische Republik
-Korea, Demokratische Volksrepublik
+Kongo, Dem. Republik
+Korea, Dem. Volksrepublik
 Korea, Republik
 Kroatien
 Kuba
 Kuwait
-Laos, Demokratische Volksrepublik
+Laos, Dem. Volksrepublik
 Lesotho
 Lettland
 Libanon
 Liberia
-Libysch-Arabische Dschamahirija
+Libysch-Arab. Dschamahirija
 Liechtenstein
 Litauen
 Luxemburg
@@ -109,7 +109,7 @@ Mauretanien
 Mauritius
 Mazedonien
 Mexiko
-Mikronesien, Föderierte Staaten von
+Mikronesien, Föd. Staaten von
 Moldau, Republik
 Monaco
 Mongolei
@@ -160,7 +160,7 @@ Spanien
 Sri Lanka
 St. Kitts und Nevis
 St. Lucia
-St. Vincent und die Grenadinen
+St. Vincent u. die Grenadinen
 Südafrika
 Sudan
 Suriname
