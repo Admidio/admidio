@@ -247,8 +247,6 @@ require("../../../adm_config/body_top.php");
                     </div>
                     <div style=\"text-align: left; margin-left: 12%;\">
                         <label for=\"announcements\">Ank&uuml;ndigungen anlegen und bearbeiten&nbsp;</label>
-                        <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_announcements','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
                     </div>
                 </div>
                 <div style=\"margin-top: 6px;\">
@@ -261,8 +259,6 @@ require("../../../adm_config/body_top.php");
                     </div>
                     <div style=\"text-align: left; margin-left: 12%;\">
                         <label for=\"dates\">Termine anlegen und bearbeiten&nbsp;</label>
-                        <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_termine','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
                     </div>
                 </div>
                 <div style=\"margin-top: 6px;\">
@@ -275,8 +271,6 @@ require("../../../adm_config/body_top.php");
                     </div>
                     <div style=\"text-align: left; margin-left: 12%;\">
                         <label for=\"photo\">Fotos hochladen und bearbeiten&nbsp;</label>
-                        <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_foto','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
                     </div>
                 </div>
                 <div style=\"margin-top: 6px;\">
@@ -289,8 +283,6 @@ require("../../../adm_config/body_top.php");
                     </div>
                     <div style=\"text-align: left; margin-left: 12%;\">
                         <label for=\"download\">Downloads hochladen und bearbeiten&nbsp;</label>
-                        <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_download','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
                     </div>
                 </div>
                 <div style=\"margin-top: 6px;\">
@@ -303,8 +295,6 @@ require("../../../adm_config/body_top.php");
                     </div>
                     <div style=\"text-align: left; margin-left: 12%;\">
                         <label for=\"guestbook\">G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen&nbsp;</label>
-                        <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_download','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
                     </div>
                 </div>
                 <div style=\"margin-top: 6px;\">
@@ -317,8 +307,6 @@ require("../../../adm_config/body_top.php");
                     </div>
                     <div style=\"text-align: left; margin-left: 12%;\">
                         <label for=\"guestbook_comments\">Kommentare zu G&auml;stebucheintr&auml;gen anlegen&nbsp;</label>
-                        <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_download','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
                     </div>
                 </div>
                 <div style=\"margin-top: 6px;\">
@@ -359,8 +347,6 @@ require("../../../adm_config/body_top.php");
                     </div>
                     <div style=\"text-align: left; margin-left: 12%;\">
                         <label for=\"weblinks\">Weblinks anlegen und bearbeiten&nbsp;</label>
-                        <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_foto','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
                     </div>
                 </div>                
             </div>
