@@ -115,12 +115,12 @@ require("../../../adm_config/body_top.php");
 
         // Icon-Links und Navigation anzeigen
 
-        if ($_GET['id'] == 0 && (editAnnouncements() || $g_preferences['enable_rss'] == true))
+        if ($_GET['id'] == 0 && (editWeblinks() || $g_preferences['enable_rss'] == true))
         {
             echo "<p>";
 
             // Neuen Link anlegen
-            if (editAnnouncements())
+            if (editWeblinks())
             {
                 echo "<span class=\"iconLink\">
                     <a class=\"iconLink\" href=\"links_new.php?headline=". $_GET["headline"]. "\"><img
@@ -129,7 +129,7 @@ require("../../../adm_config/body_top.php");
                 </span>";
             }
 
-            if (editAnnouncements() && $g_preferences['enable_rss'] == true)
+            if (editWeblinks() && $g_preferences['enable_rss'] == true)
             {
                 echo "&nbsp;&nbsp;&nbsp;&nbsp;";
             }
@@ -196,7 +196,7 @@ require("../../../adm_config/body_top.php");
                         </div>";
 
                         // aendern & loeschen duerfen nur User mit den gesetzten Rechten
-                        if (editAnnouncements())
+                        if (editWeblinks())
                         {
                             echo "<div style=\"text-align: right;\">" .
                                 mysqldatetime("d.m.y", $row->lnk_timestamp). "&nbsp;
