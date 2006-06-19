@@ -253,29 +253,32 @@ require("../../../adm_config/body_top.php");
                             &nbsp;". strSpecialChars2Html($row->dat_headline). "
                         </div>";
                         // Link zum iCal export
-                        echo "<div style=\"text-align: right;\">";
-                        echo "<img src=\"$g_root_path/adm_program/images/database_out.png\" style=\"cursor: pointer\" width=\"16\" height=\"16\" border=\"0\" alt=\"iCal export\" title=\"iCal export\"
+                        echo "<div style=\"text-align: right;\">
+                            <img src=\"$g_root_path/adm_program/images/database_out.png\" style=\"cursor: pointer\" 
+                                width=\"16\" height=\"16\" border=\"0\" alt=\"iCal export\" title=\"iCal export\"
                                 onclick=\"self.location.href='$g_root_path/adm_program/modules/dates/ical_function.php?dat_id=$row->dat_id&mode=1'\">";
 
-                        // aendern & loeschen darf man nur eigene Termine, ausser Moderatoren
-                        if (editDate() && (  isModerator() || $row->dat_usr_id == $g_current_user->id ))
-                        {
-                            
-                            echo "<img src=\"$g_root_path/adm_program/images/edit.png\" style=\"cursor: pointer\" width=\"16\" height=\"16\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"
-                                onclick=\"self.location.href='dates_new.php?dat_id=$row->dat_id'\">";
+                            // aendern & loeschen darf man nur eigene Termine, ausser Moderatoren
+                            if (editDate() && (  isModerator() || $row->dat_usr_id == $g_current_user->id ))
+                            {
 
-                                // Loeschen darf man nur Termine der eigenen Gliedgemeinschaft
-                                if($row->dat_org_shortname == $g_organization)
-                                {
-                                    echo "
-                                    <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer\" width=\"16\" height=\"16\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" ";
-                                    $load_url = urlencode("$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=$row->dat_id&amp;mode=2&amp;url=$g_root_path/adm_program/modules/dates/dates.php");
-                                    echo " onclick=\"self.location.href='$g_root_path/adm_program/system/err_msg.php?err_code=delete_date&amp;err_text=". urlencode($row->dat_headline). "&amp;err_head=L&ouml;schen&amp;button=2&amp;url=$load_url'\">";
-                                }
-                            
-                        }
-                    echo "&nbsp;</div>";
-                    echo "</div>
+                                echo "&nbsp;<img src=\"$g_root_path/adm_program/images/edit.png\" style=\"cursor: pointer\" 
+                                    width=\"16\" height=\"16\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"
+                                    onclick=\"self.location.href='dates_new.php?dat_id=$row->dat_id'\">";
+
+                                    // Loeschen darf man nur Termine der eigenen Gliedgemeinschaft
+                                    if($row->dat_org_shortname == $g_organization)
+                                    {
+                                        echo "
+                                        <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer\" 
+                                            width=\"16\" height=\"16\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" ";
+                                            $load_url = urlencode("$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=$row->dat_id&amp;mode=2&amp;url=$g_root_path/adm_program/modules/dates/dates.php");
+                                            echo " onclick=\"self.location.href='$g_root_path/adm_program/system/err_msg.php?err_code=delete_date&amp;err_text=". urlencode($row->dat_headline). "&amp;err_head=L&ouml;schen&amp;button=2&amp;url=$load_url'\">";
+                                    }
+
+                            }
+                        echo "&nbsp;</div>
+                    </div>
 
                     <div style=\"margin: 8px 4px 4px 4px; text-align: left;\">";
                         if (mysqldatetime("h:i", $row->dat_begin) != "00:00")

@@ -64,7 +64,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
     //Speicherort
     $ordner = "../../../adm_my_files/photos/".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"];
 
-/********************Aenderungen oder Neueintraege kontrollieren***********************************/
+    /********************Aenderungen oder Neueintraege kontrollieren***********************************/
     if($_POST["submit"])
     {
     //Gesendete Variablen Uebernehmen und kontollieren
@@ -133,7 +133,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
             $locked=0;
         }
         
-/********************neuen Datensatz anlegen***********************************/
+        /********************neuen Datensatz anlegen***********************************/
         if ($aufgabe=="makenew")
         {
             $sql="  INSERT INTO ". TBL_PHOTOS. "(pho_quantity, pho_name, pho_begin, pho_end, pho_photographers,
@@ -171,7 +171,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
             }
         }//if
 
-/********************Aenderung des Ordners***********************************/
+        /********************Aenderung des Ordners***********************************/
         //Bearbeiten Anfangsdatum und Ordner ge&auml;ndert
         if ($aufgabe=="makechange" && $ordner!="../../../adm_my_files/photos/"."$beginn"."_"."$pho_id")
         {
@@ -204,7 +204,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
             rmdir("$ordner");
         }//if
 
-/********************Aenderung der Datenbankeinträge***********************************/
+        /********************Aenderung der Datenbankeinträge***********************************/
         //Aendern  der Daten in der Datenbank
         $sql= " UPDATE ". TBL_PHOTOS. "
                 SET     pho_name = '$veranstaltung',";
@@ -226,7 +226,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
         $result = mysql_query($sql, $g_adm_con);
         db_error($result);
 
-/********************Daten aus Datenbank neu laden***********************************/
+        /********************Daten aus Datenbank neu laden***********************************/
 
         //erfassen der Veranstaltung
         $sql="  SELECT *
@@ -269,7 +269,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
         }
     }// if submit
 
-/******************************HTML-Teil******************************************/
+    /******************************HTML-Teil******************************************/
     echo"
     <!-- (c) 2004 - 2005 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
     <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
@@ -289,7 +289,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
     require("../../../adm_config/body_top.php");
     echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">";
 
-/*******************************Bericht*********************************************/
+    /*******************************Bericht*********************************************/
     if($_POST["submit"])
     {
         echo"<div style=\"width: 430px\" align=\"center\" class=\"formHead\">Bericht</div>";
@@ -334,12 +334,12 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
         </div><br><br>";
     }//submit
 
-/****************************Formular***********************************************/
+    /****************************Formular***********************************************/
     if($_GET["aufgabe"]=="change" || $_GET["aufgabe"]=="new")
     {
         //Kopfzeile
         echo"
-        <div class=\"formHead\" style=\"width: 460px\">";
+        <div class=\"formHead\">";
             if($_GET["aufgabe"]=="new"){
                 echo "Neue Veranstaltung anlegen";
             }
@@ -351,7 +351,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
         
         //Body
         echo"
-        <div style=\"width: 460px\" align=\"center\" class=\"formBody\">
+        <div class=\"formBody\" align=\"center\">
             <form method=\"POST\" action=\"event.php?pho_id=$pho_id";
                 if($_GET["aufgabe"]=="new")
                 {
@@ -367,10 +367,10 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
                     <div style=\"text-align: right; width: 170px; float: left;\">Veranstaltung:</div>
                     <div style=\"text-align: left; margin-left: 180px;\">";
                         if($_GET["aufgabe"]=="new"){
-                            echo "<input type=\"text\" name=\"veranstaltung\" size=\"30\" maxlength=\"40\" tabindex=\"1\">";
+                            echo "<input type=\"text\" id=\"veranstaltung\" name=\"veranstaltung\" size=\"30\" maxlength=\"40\" tabindex=\"1\">";
                         }
                         if($_GET["aufgabe"]=="change"){
-                            echo "<input type=\"text\" name=\"veranstaltung\" size=\"30\" maxlength=\"40\" tabindex=\"1\" value=\"".$adm_photo["pho_name"]."\">";
+                            echo "<input type=\"text\" id=\"veranstaltung\" name=\"veranstaltung\" size=\"30\" maxlength=\"40\" tabindex=\"1\" value=\"".$adm_photo["pho_name"]."\">";
                         }
                     echo"
                     </div>
@@ -539,18 +539,23 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
                         onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=veranst_help','Message','width=500, height=350, left=310,top=200,scrollbars=no')\">
                     <hr width=\"85%\" />
                     <div style=\"margin-top: 6px;\">
-                        <button name=\"submit\" type=\"submit\" value=\"speichern\">
-                            <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
-                            &nbsp;Speichern
-                        </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
                             <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
                             &nbsp;Zur&uuml;ck
                         </button>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <button name=\"submit\" type=\"submit\" value=\"speichern\">
+                            <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
+                            &nbsp;Speichern
+                        </button>
                     </div>
                 </div>
             </form>
-        </div>";
+        </div>
+        
+        <script type=\"text/javascript\"><!--
+            document.getElementById('veranstaltung').focus();
+        --></script>";
     }//Ende Formular
 
 /***********************Veranstaltung Loeschen*******************************************/
@@ -651,8 +656,9 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
     </div>";
     }//Ende Veranstaltung loeschen
     
-/***********************************Ende********************************************/
+    /***********************************Ende********************************************/
         echo"</div>";
+            
         require("../../../adm_config/body_bottom.php");
         echo "</body>
     </html>";

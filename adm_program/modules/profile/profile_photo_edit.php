@@ -8,8 +8,8 @@
  *
  * Uebergaben:
  *
- *User_ID: id des Users dessen Bild geaendert werden soll
- *Job: Welcher Teil des Skriptes soll ausgeführt werden
+ * user_id: id des Users dessen Bild geaendert werden soll
+ * job:     Welcher Teil des Skriptes soll ausgeführt werden
  *
  ******************************************************************************
  *
@@ -53,18 +53,7 @@ else
     if(editUser())
     {
         // jetzt noch schauen, ob User ueberhaupt Mitglied in der Gliedgemeinschaft ist
-        $sql = "SELECT mem_id
-                  FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-                 WHERE rol_org_shortname = '$g_organization'
-                   AND rol_valid        = 1
-                   AND mem_rol_id        = rol_id
-                   AND mem_valid        = 1
-                   AND mem_usr_id        = {0}";
-        $sql    = prepareSQL($sql, array($_GET['user_id']));
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
-
-        if(mysql_num_rows($result) > 0)
+        if(isMember($_GET['user_id']))      
         {
             $edit_user = true;
         }
@@ -237,7 +226,7 @@ require("../../../adm_config/body_top.php");
             echo"
             <form name=\"photoup\" method=\"post\" action=\"profile_photo_edit.php?job=upload&user_id=".$a_user_id."\" enctype=\"multipart/form-data\">
                 Bitte hier neues Bild ausw&auml;hlen:
-                <p><input type='file' name='bilddatei' value='durchsuchen'></p>
+                <p><input type=\"file\" id=\"bilddatei\" name=\"bilddatei\" value=\"durchsuchen\"></p>
                 <hr width=\"85%\" />
                 <div style=\"margin-top: 6px;\">
                     <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile.php?user_id=".$a_user_id."'\">
@@ -358,5 +347,13 @@ require("../../../adm_config/body_top.php");
         </div>";
     }
 
+    echo "
+    <script type=\"text/javascript\"><!--
+        document.getElementById('bilddatei').focus();
+    --></script>";
+
+    require("../../../adm_config/body_bottom.php");
+echo "</body>
+</html>";
 
 ?>

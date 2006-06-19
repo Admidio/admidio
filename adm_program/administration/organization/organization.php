@@ -77,7 +77,7 @@ require("../../../adm_config/body_top.php");
          <div style=\"margin-top: 6px;\">
             <div style=\"text-align: right; width: 48%; float: left;\">Name (lang):</div>
             <div style=\"text-align: left; margin-left: 50%;\">
-               <input type=\"text\" name=\"longname\" size=\"30\" maxlength=\"60\" value=\"$g_current_organization->longname\">
+               <input type=\"text\" id=\"longname\" name=\"longname\" size=\"30\" maxlength=\"60\" value=\"$g_current_organization->longname\">
             </div>
          </div>
          <div style=\"margin-top: 6px;\">
@@ -334,7 +334,11 @@ require("../../../adm_config/body_top.php");
       </div>
    </form>
 
-   </div>";
+   </div>
+   
+    <script type=\"text/javascript\"><!--
+        document.getElementById('longname').focus();
+    --></script>";
 
    require("../../../adm_config/body_bottom.php");
 echo "</body>

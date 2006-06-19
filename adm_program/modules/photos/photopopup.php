@@ -85,19 +85,22 @@ echo "
                 //Vor und zurueck buttons
                 if($last>0)
                 {
-                    echo"
-                    <a href=\"photopopup.php?bild=$last&pho_id=$pho_id\">
-                        <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Vorheriges Bild\">
-                    </a>
-                    <a href=\"photopopup.php?bild=$last&pho_id=$pho_id\">Vorheriges Bild</a>&nbsp;&nbsp;&nbsp;&nbsp;";
+                    echo"<span class=\"iconLink\">
+                        <a class=\"iconLink\" href=\"photopopup.php?bild=$last&pho_id=$pho_id\">
+                            <img class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Vorheriges Bild\">
+                        </a>
+                        <a class=\"iconLink\" href=\"photopopup.php?bild=$last&pho_id=$pho_id\">Vorheriges Bild</a>
+                    </span>
+                    &nbsp;&nbsp;&nbsp;&nbsp;";
                 }
                 if($next<=$bilder)
                 {
-                    echo"
-                    <a href=\"photopopup.php?bild=$next&pho_id=$pho_id\">N&auml;chstes Bild</a>
-                    <a href=\"photopopup.php?bild=$next&pho_id=$pho_id\">
-                        <img src=\"$g_root_path/adm_program/images/forward.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"N&auml;chstes Bild\">
-                    </a>";
+                    echo"<span class=\"iconLink\">
+                        <a class=\"iconLink\" href=\"photopopup.php?bild=$next&pho_id=$pho_id\">N&auml;chstes Bild</a>
+                        <a class=\"iconLink\" href=\"photopopup.php?bild=$next&pho_id=$pho_id\">
+                            <img class=\"iconLink\" src=\"$g_root_path/adm_program/images/forward.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"N&auml;chstes Bild\">
+                        </a>
+                    </span>";
                 }
                 echo"<br><br>";
 
@@ -137,13 +140,13 @@ echo "
                 </div>";
                 
                 //Fenster schliessen Button
-                echo"
-                <div style=\"align: center; margin-top: 10px;\">
-                    <button name=\"close\" type=\"button\" value=\"close\" style=\"width: 150px;\" onClick=\"parent.window.close()\">
-                        <img src=\"$g_root_path/adm_program/images/door_in.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Fenster schlie&szlig;en\">
-                        &nbsp;Fenster schlie&szlig;en
-                    </button>
-                </div>
+                echo"<p>
+                    <span class=\"iconLink\">
+                        <a href=\"javascript:parent.window.close()\"><img 
+                        class=\"iconLink\" src=\"$g_root_path/adm_program/images/door_in.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Login\"></a>
+                        <a class=\"iconLink\" href=\"javascript:parent.window.close()\">Fenster schlie&szlig;en</a>
+                    </span>
+                </p>
             </div>
         </div>";
     //Seitenende

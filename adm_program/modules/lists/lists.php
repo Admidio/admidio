@@ -342,8 +342,12 @@ require("../../../adm_config/body_top.php");
       }
    echo "</div>
    
-   </div>";
+   </div>
    
+   <script type=\"text/javascript\"><!--
+      document.getElementById('category').focus();
+   --></script>";
+    
    require("../../../adm_config/body_bottom.php");
 echo "</body>
 </html>";
