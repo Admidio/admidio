@@ -65,7 +65,7 @@ if ($_GET["lnk_id"] != 0)
 
         $linkname      = $row_ba->lnk_name;
         $description   = $row_ba->lnk_description;
-        $linkurl	   = $row_ba->lnk_url;
+        $linkurl       = $row_ba->lnk_url;
     }
     elseif (mysql_num_rows($result) == 0)
     {
@@ -126,23 +126,23 @@ require("../../../adm_config/body_top.php");
                     </div>
                 </div>
 
-                <div>
+                <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 25%; float: left;\">Linkadresse:</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <input type=\"text\" id=\"linkadresse\" name=\"linkadresse\" tabindex=\"1\" size=\"53\" maxlength=\"250\" value=\"". htmlspecialchars($linkurl, ENT_QUOTES). "\">
+                        <input type=\"text\" id=\"linkadresse\" name=\"linkadresse\" tabindex=\"2\" size=\"53\" maxlength=\"250\" value=\"". htmlspecialchars($linkurl, ENT_QUOTES). "\">
                     </div>
                 </div>
 
                 <div style=\"margin-top: 6px;\">
-                <div style=\"text-align: right; width: 25%; float: left;\">Beschreibung:";
-                    if($g_preferences['enable_bbcode'] == 1)
-                    {
-                      echo "<br><br>
-                      <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=400,left=310,top=200,scrollbars=yes')\" tabindex=\"6\">Text formatieren</a>";
-                    }
+                    <div style=\"text-align: right; width: 25%; float: left;\">Beschreibung:";
+                        if($g_preferences['enable_bbcode'] == 1)
+                        {
+                          echo "<br><br>
+                          <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=400,left=310,top=200,scrollbars=yes')\" tabindex=\"6\">Text formatieren</a>";
+                        }
                     echo "</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <textarea  name=\"beschreibung\" tabindex=\"2\" rows=\"10\" cols=\"40\">". htmlspecialchars($description, ENT_QUOTES). "</textarea>
+                        <textarea  name=\"beschreibung\" tabindex=\"3\" rows=\"10\" cols=\"40\">". htmlspecialchars($description, ENT_QUOTES). "</textarea>
                     </div>
                 </div>";
 
@@ -164,8 +164,9 @@ require("../../../adm_config/body_top.php");
             echo "</div>
         </form>
     </div>
+    
     <script type=\"text/javascript\"><!--
-        document.getElementById('headline').focus();
+        document.getElementById('linkname').focus();
     --></script>";
 
    require("../../../adm_config/body_bottom.php");

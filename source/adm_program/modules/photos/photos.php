@@ -189,12 +189,13 @@ echo "
         //bei Seitenaufruf mit Moderationsrechten
         if($g_session_valid && editPhoto())
         {
-            echo"
-            <button name=\"verwaltung\" type=\"button\" value=\"up\" style=\"width: 187px;\"
-                onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/event.php?aufgabe=new&amp;pho_id=$pho_id'\">
-                <img src=\"$g_root_path/adm_program/images/folder_create.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Veranstaltung anlegen\">
-                &nbsp;Veranstaltung anlegen
-            </button><br><br>";
+            echo"<p>
+                <span class=\"iconLink\">
+                    <a href=\"$g_root_path/adm_program/modules/photos/event.php?aufgabe=new&amp;pho_id=$pho_id\"><img 
+                    class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Login\"></a>
+                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/event.php?aufgabe=new&amp;pho_id=$pho_id\">Veranstaltung anlegen</a>
+                </span>
+            </p>";
         }
 
         //Anlegender Tabelle
