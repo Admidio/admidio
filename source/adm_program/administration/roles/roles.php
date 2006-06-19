@@ -80,15 +80,8 @@ require("../../../adm_config/body_top.php");
             <tr>
                 <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;Rolle</th>
                 <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;Kategorie</th>
-                <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/wand.png\" alt=\"Moderation (Benutzer &amp; Rollen verwalten uvm.)\" title=\"Moderation (Benutzer &amp; Rollen verwalten uvm.)\"></th>
-                <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/user.png\" alt=\"Daten aller Benutzer bearbeiten\" title=\"Daten aller Benutzer bearbeiten\"></th>
-                <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/note.png\" alt=\"Ank&uuml;ndigungen erfassen und bearbeiten\" title=\"Ank&uuml;ndigungen erfassen und bearbeiten\"></th>
-                <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/date.png\" alt=\"Termine erfassen und bearbeiten\" title=\"Termine erfassen und bearbeiten\"></th>
-                <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/photo.png\" alt=\"Fotos hochladen und bearbeiten\" title=\"Fotos hochladen und bearbeiten\"></th>
-                <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/folder_down.png\" alt=\"Downloads hochladen und bearbeiten\" title=\"Downloads hochladen und bearbeiten\"></th>
-                <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/mail.png\" alt=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\" title=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\"></th>
-                <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/mail_key.png\" alt=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\" title=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\"></th>
-                <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Rolle nur für Moderatoren sichtbar\" title=\"Rolle nur für Moderatoren sichtbar\"></th>
+                <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;Berechtigungen</th>
+                <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Rolle nur f&uuml;r Moderatoren sichtbar\" title=\"Rolle nur f&uuml;r Moderatoren sichtbar\"></th>
                 <th class=\"tableHeader\">Funktionen</th>
             </tr>";
 
@@ -98,67 +91,68 @@ require("../../../adm_config/body_top.php");
                 <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
                     <td style=\"text-align: left;\">&nbsp;<a href=\"$g_root_path/adm_program/administration/roles/roles_new.php?rol_id=$row->rol_id\">$row->rol_name</a></td>
                     <td style=\"text-align: left;\">&nbsp;$row->rlc_name</td>
-                    <td style=\"text-align: center;\">";
+                    <td style=\"text-align: left;\">";
                         if($row->rol_moderation == 1)
                         {
-                            echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/wand.png\" 
+                            echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/wand.png\" 
                             alt=\"Moderation (Benutzer &amp; Rollen verwalten uvm.)\" title=\"Moderation (Benutzer &amp; Rollen verwalten uvm.)\">";
                         }
-                    echo "</td>
-                    <td style=\"text-align: center;\">";
                         if($row->rol_edit_user == 1)
                         {
-                            echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/user.png\" 
+                            echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/user.png\" 
                             alt=\"Daten aller Benutzer bearbeiten\" title=\"Daten aller Benutzer bearbeiten\">";
                         }
-                    echo "</td>
-                    <td style=\"text-align: center;\">";
                         if($row->rol_announcements == 1)
                         {
-                            echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/note.png\" 
-                            alt=\"Ank&uuml;ndigungen erfassen und bearbeiten\" title=\"Ank&uuml;ndigungen erfassen und bearbeiten\">";
+                            echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/note.png\" 
+                            alt=\"Ank&uuml;ndigungen anlegen und bearbeiten\" title=\"Ank&uuml;ndigungen anlegen und bearbeiten\">";
                         }
-                    echo "</td>
-                    <td style=\"text-align: center;\">";
                         if($row->rol_dates == 1)
                         {
-                            echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/date.png\" 
-                            alt=\"Termine erfassen und bearbeiten\" title=\"Termine erfassen und bearbeiten\">";
+                            echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/date.png\" 
+                            alt=\"Termine anlegen und bearbeiten\" title=\"Termine anlegen und bearbeiten\">";
                         }
-                    echo "</td>
-                    <td style=\"text-align: center;\">";
                         if($row->rol_photo == 1)
                         {
-                            echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/photo.png\" 
+                            echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/photo.png\" 
                             alt=\"Fotos hochladen und bearbeiten\" title=\"Fotos hochladen und bearbeiten\">";
                         }
-                    echo "</td>
-                    <td style=\"text-align: center;\">";
                         if($row->rol_download == 1)
                         {
-                            echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/folder_down.png\" 
+                            echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/folder_down.png\" 
                             alt=\"Downloads hochladen und bearbeiten\" title=\"Downloads hochladen und bearbeiten\">";
                         }
-                    echo "</td>
-                    <td style=\"text-align: center;\">";
+                        if($row->rol_guestbook == 1)
+                        {
+                            echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/comment.png\" 
+                            alt=\"G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen\" title=\"G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen\">";
+                        }
+                        if($row->rol_guestbook_comments == 1)
+                        {
+                            echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/comments.png\" 
+                            alt=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\" title=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\">";
+                        }
                         if($row->rol_mail_logout == 1)
                         {
-                            echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/mail.png\" 
+                            echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/mail.png\" 
                             alt=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\" title=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\">";
                         }
-                    echo "</td>
-                    <td style=\"text-align: center;\">";
                         if($row->rol_mail_login == 1)
                         {
-                            echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/mail_key.png\" 
+                            echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/mail_key.png\" 
                             alt=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\" title=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\">";
+                        }
+                        if($row->rol_weblinks == 1)
+                        {
+                            echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/globe.png\" 
+                            alt=\"Weblinks anlegen und bearbeiten\" title=\"Weblinks anlegen und bearbeiten\">";
                         }
                     echo "</td>
                     <td style=\"text-align: center;\">";
                         if($row->rol_locked == 1)
                         {
                             echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/lock.png\" 
-                            alt=\"Rolle nur für Moderatoren sichtbar\" title=\"Rolle nur für Moderatoren sichtbar\">";
+                            alt=\"Rolle nur f&uuml;r Moderatoren sichtbar\" title=\"Rolle nur f&uuml;r Moderatoren sichtbar\">";
                         }
                     echo "</td>
                     <td style=\"text-align: center;\">
