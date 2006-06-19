@@ -336,7 +336,7 @@ echo "
                                 {
                                     echo"
                                     <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=".$adm_photo["pho_id"]."\">
-                                        <img src=\"$g_root_path/adm_program/images/photo.png\" border=\"0\" alt=\"Photoupload\" title=\"Photoupload\"></a>&nbsp;
+                                        <img src=\"$g_root_path/adm_program/images/photo.png\" border=\"0\" alt=\"Bilder hochladen\" title=\"Bilder hochladen\"></a>&nbsp;
                                     <a href=\"$g_root_path/adm_program/modules/photos/event.php?pho_id=".$adm_photo["pho_id"]."&aufgabe=change\">
                                         <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>&nbsp;";
                                     //Loeschbutton
@@ -533,7 +533,7 @@ echo "
                                 {
                                     echo"
                                     <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=".$adm_photo_list["pho_id"]."\">
-                                        <img src=\"$g_root_path/adm_program/images/photo.png\" border=\"0\" alt=\"Photoupload\" title=\"Photoupload\"></a>&nbsp;
+                                        <img src=\"$g_root_path/adm_program/images/photo.png\" border=\"0\" alt=\"Bilder hochladen\" title=\"Bilder hochladen\"></a>&nbsp;
                                     <a href=\"$g_root_path/adm_program/modules/photos/event.php?pho_id=".$adm_photo_list["pho_id"]."&aufgabe=change\">
                                         <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>&nbsp;";
                                 }

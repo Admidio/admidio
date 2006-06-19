@@ -92,49 +92,52 @@ if($g_session_valid & editPhoto())
         </head>";
 
         require("../../../adm_config/body_top.php");
-        echo "
-        <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">";
-          
+            echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">";
 
-/**************************Formular********************************************************/
-        echo"
-        <form name=\"photoup\" method=\"post\" action=\"photoupload_do.php?pho_id=$pho_id\" enctype=\"multipart/form-data\">
-            <div style=\"width: 410px\" align=\"center\" class=\"formHead\">Fotoupload</div>
-            <div style=\"width: 410px\" align=\"center\" class=\"formBody\">
-                Bilder zu dieser Veranstaltung hinzuf&uuml;gen:<br>"
-                .$adm_photo["pho_name"]."<br>"
-                ."(Beginn: ". mysqldate("d.m.y", $adm_photo["pho_begin"]).")"
-                ."<hr width=\"85%\" />
-                <p>Bild 1:<input type='file' name='bilddatei[]' value='durchsuchen'></p>
-                <p>Bild 2:<input type='file' name='bilddatei[]' value='durchsuchen'></p>
-                <p>Bild 3:<input type='file' name='bilddatei[]' value='durchsuchen'></p>
-                <p>Bild 4:<input type='file' name='bilddatei[]' value='durchsuchen'></p>
-                <p>Bild 5:<input type='file' name='bilddatei[]' value='durchsuchen'></p>
-                            
-                <hr width=\"85%\" />
-                Hilfe: <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_up_help','Message','width=500,height=550,left=310,top=200,scrollbars=yes')\">
-                <hr width=\"85%\" />
 
-                <div style=\"margin-top: 6px;\">
-                    <button name=\"upload\" type=\"submit\" value=\"speichern\">
-                        <img src=\"$g_root_path/adm_program/images/page_white_get.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
-                        &nbsp;Bilder Hochladen
-                    </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$adm_photo_parent["pho_id"]."'\">
-                        <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
-                        &nbsp;Zur&uuml;ck
-                    </button>
-                </div>
-           </div> 
-        </form>";
+            /**************************Formular********************************************************/
+            echo"
+            <form name=\"photoup\" method=\"post\" action=\"photoupload_do.php?pho_id=$pho_id\" enctype=\"multipart/form-data\">
+                <div style=\"width: 410px\" align=\"center\" class=\"formHead\">Bilder hochladen</div>
+                <div style=\"width: 410px\" align=\"center\" class=\"formBody\">
+                    Bilder zu dieser Veranstaltung hinzuf&uuml;gen:<br>"
+                    .$adm_photo["pho_name"]."<br>"
+                    ."(Beginn: ". mysqldate("d.m.y", $adm_photo["pho_begin"]).")"
+                    ."<hr width=\"85%\" />
+                    <p>Bild 1:<input type=\"file\" id=\"bilddatei1\" name=\"bilddatei[]\" value=\"durchsuchen\"></p>
+                    <p>Bild 2:<input type=\"file\" name=\"bilddatei[]\" value=\"durchsuchen\"></p>
+                    <p>Bild 3:<input type=\"file\" name=\"bilddatei[]\" value=\"durchsuchen\"></p>
+                    <p>Bild 4:<input type=\"file\" name=\"bilddatei[]\" value=\"durchsuchen\"></p>
+                    <p>Bild 5:<input type=\"file\" name=\"bilddatei[]\" value=\"durchsuchen\"></p>
 
-        //Seitenende
-        echo"
-        </div>";
-        require("../../../adm_config/body_bottom.php");
-    echo"
-    </body>
-</html>";
+                    <hr width=\"85%\" />
+                    Hilfe: <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_up_help','Message','width=500,height=550,left=310,top=200,scrollbars=yes')\">
+                    <hr width=\"85%\" />
+
+                    <div style=\"margin-top: 6px;\">
+                        <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$adm_photo_parent["pho_id"]."'\">
+                            <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
+                            &nbsp;Zur&uuml;ck
+                        </button>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <button name=\"upload\" type=\"submit\" value=\"speichern\">
+                            <img src=\"$g_root_path/adm_program/images/page_white_get.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
+                            &nbsp;Bilder hochladen
+                        </button>
+                    </div>
+               </div> 
+            </form>";
+
+            //Seitenende
+            echo"
+            </div>
+            <script type=\"text/javascript\"><!--
+                    document.getElementById('bilddatei1').focus();
+            --></script>";
+
+            require("../../../adm_config/body_bottom.php");
+        echo"</body>
+    </html>";
 }//if Moderator
 ?>
