@@ -39,7 +39,9 @@ require_once($g_server_path. "/adm_program/system/tbl_dates.php");
 
  // Standard-Praefix ist adm auch wegen Kompatibilitaet zu alten Versionen
 if(strlen($g_tbl_praefix) == 0)
+{
     $g_tbl_praefix = "adm";
+}
 
 // Defines fuer alle Datenbanktabellen
 define("TBL_ANNOUNCEMENTS",     $g_tbl_praefix. "_announcements");
@@ -66,14 +68,19 @@ $g_adm_con = mysql_connect ($g_adm_srv, $g_adm_usr, $g_adm_pw);
 mysql_select_db($g_adm_db, $g_adm_con );
 
 // Verbindung zur Forum-Datenbank herstellen
-if($g_forum)
-   $g_forum_con = mysql_connect ($g_forum_srv, $g_forum_usr, $g_forum_pw);
+
+if($g_forum == true)
+{
+    $g_forum_con = mysql_connect ($g_forum_srv, $g_forum_usr, $g_forum_pw);
+}
 else
-   $g_forum_con;
+{
+    $g_forum_con = false;
+}
 
 // Globale Variablen
-$g_session_id      = "";
-$g_session_valid   = false;
+$g_session_id    = "";
+$g_session_valid = false;
 
 $g_current_user  = new TblUsers($g_adm_con);
 
