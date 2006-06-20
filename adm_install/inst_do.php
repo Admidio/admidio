@@ -29,6 +29,7 @@
 
 require("../adm_program/system/function.php");
 require("../adm_program/system/string.php");
+require("../adm_program/system/date.php");
 
 // Diese Funktion zeigt eine Fehlerausgabe an
 // mode = 0 (Default) Fehlerausgabe
