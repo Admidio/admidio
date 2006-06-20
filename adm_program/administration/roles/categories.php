@@ -51,7 +51,8 @@ else
     $url = urlencode(getHttpReferer());
 }
 
-$category_name = "";
+$category_name   = "";
+$category_locked = 0;
 
 // Wenn eine Feld-ID uebergeben wurde, soll das Feld geaendert werden
 // -> Felder mit Daten des Feldes vorbelegen
@@ -66,7 +67,8 @@ if ($_GET["rlc_id"] != 0)
     if (mysql_num_rows($result) > 0)
     {
         $row_rlc = mysql_fetch_object($result);
-        $category_name = $row_rlc->rlc_name;
+        $category_name   = $row_rlc->rlc_name;
+        $category_locked = $row_rlc->rlc_locked;
     }
 }
 
@@ -88,7 +90,7 @@ echo "</head>";
 require("../../../adm_config/body_top.php");
     echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
         <form action=\"categories_function.php?rlc_id=". $_GET['rlc_id']. "&amp;mode=1&amp;url=$url\" method=\"post\" id=\"edit_category\">
-            <div class=\"formHead\" style=\"width: 300px\">";
+            <div class=\"formHead\">";
                 if($_GET['rlc_id'] > 0)
                 {
                     echo strspace("Kategorie ändern");
@@ -98,11 +100,25 @@ require("../../../adm_config/body_top.php");
                     echo strspace("Kategorie anlegen");
                 }
             echo "</div>
-            <div class=\"formBody\" style=\"width: 300px\">
+            <div class=\"formBody\">
                 <div>
                     <div style=\"text-align: right; width: 23%; float: left;\">Name:</div>
                     <div style=\"text-align: left; margin-left: 24%;\">
                         <input type=\"text\" id=\"name\" name=\"name\" size=\"30\" maxlength=\"100\" value=\"". htmlspecialchars($category_name, ENT_QUOTES). "\">
+                    </div>
+                </div>
+                <div style=\"margin-top: 6px;\">
+                    <div style=\"text-align: right; width: 23%; float: left;\">
+                        <label for=\"locked\"><img src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\"></label>
+                    </div>
+                    <div style=\"text-align: left; margin-left: 24%;\">
+                        <input type=\"checkbox\" id=\"locked\" name=\"locked\" ";
+                            if($category_locked == 1)
+                            {
+                                echo " checked ";
+                            }
+                            echo " value=\"1\" />
+                        <label for=\"locked\">Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar&nbsp;</label>
                     </div>
                 </div>
 

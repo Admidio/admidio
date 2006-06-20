@@ -209,6 +209,7 @@ require("../../../adm_config/body_top.php");
             <table class=\"tableList\" style=\"width: 95%;\" cellpadding=\"2\" cellspacing=\"0\">
                 <tr>
                     <th class=\"tableHeader\" style=\"text-align: left;\">Rollen-Kategorien</th>
+                    <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\" title=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\"></th>
                     <th class=\"tableHeader\">&nbsp;</th>
                 </tr>";
 
@@ -224,6 +225,16 @@ require("../../../adm_config/body_top.php");
                 echo "
                 <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
                     <td style=\"text-align: left;\"><a href=\"$g_root_path/adm_program/administration/roles/categories.php?rlc_id=$cat_row->rlc_id\">$cat_row->rlc_name</a></td>
+                      <td style=\"text-align: center;\">";
+                          if($cat_row->rlc_locked == 1)
+                          {
+                             echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\" title=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\">";
+                          }
+                          else
+                          {
+                             echo "&nbsp;";
+                          }
+                      echo "</td>
                     <td style=\"text-align: right; width: 45px;\">
                         <a href=\"$g_root_path/adm_program/administration/roles/categories.php?rlc_id=$cat_row->rlc_id&amp;url=$url\">
                             <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>";

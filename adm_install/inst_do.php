@@ -445,8 +445,8 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
     db_error($result);
 
     // Rollen-Kategorie eintragen
-    $sql = "INSERT INTO ". TBL_ROLE_CATEGORIES. " (rlc_org_shortname, rlc_name)
-                                           VALUES ({0}, 'Allgemein')";
+    $sql = "INSERT INTO ". TBL_ROLE_CATEGORIES. " (rlc_org_shortname, rlc_name, rlc_locked)
+                                           VALUES ({0}, 'Allgemein', 1)";
     $sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
     $result = mysql_query($sql, $connection);
     $category_common = mysql_insert_id();
