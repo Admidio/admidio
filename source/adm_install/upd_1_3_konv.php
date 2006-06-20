@@ -29,6 +29,29 @@ $sql = "UPDATE ". TBL_ROLES. " SET rol_announcements = 1
          WHERE rol_moderation = 1 ";
 $result = mysql_query($sql, $connection);
 if(!$result) showError(mysql_error());
+    
+// die Uhrzeit bei dat_end wurde nicht immer korrekt gesetzt
+$sql = "SELECT * FROM ". TBL_DATES. "
+         WHERE (   HOUR(dat_end)   = 0
+               AND MINUTE(dat_end) = 0
+               AND SECOND(dat_end) = 0 )
+           AND (  HOUR(dat_begin)   <> 0
+               OR MINUTE(dat_begin) <> 0
+               OR SECOND(dat_begin) <> 0 ) ";
+$dat_result = mysql_query($sql, $connection);
+if(!$dat_result) showError(mysql_error());
+
+while($dat_row = mysql_fetch_object($dat_result))
+{
+    $date = mysqldatetime("y-m-d", $dat_row->dat_end);
+    $time = mysqldatetime("h:i:s", $dat_row->dat_begin);
+    $datetime = "$date $time";
+    
+    $sql = "UPDATE ". TBL_DATES. " SET dat_end = '$datetime'
+             WHERE dat_id = $dat_row->dat_id ";
+    $result = mysql_query($sql, $connection);
+    if(!$result) showError(mysql_error());
+}
 
 // Orga-Felder in adm_preferences umwandeln
 $sql = "SELECT * FROM ". TBL_ORGANIZATIONS;
