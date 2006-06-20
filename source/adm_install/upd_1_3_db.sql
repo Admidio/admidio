@@ -1,3 +1,4 @@
+ALTER TABLE %PRAEFIX%_role_categories ADD rlc_locked TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 AFTER rlc_name;
 ALTER TABLE %PRAEFIX%_roles ADD rol_announcements TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 AFTER rol_moderation;
 ALTER TABLE %PRAEFIX%_roles ADD rol_guestbook_comments TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 AFTER rol_edit_user;
 ALTER TABLE %PRAEFIX%_roles ADD rol_guestbook     TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 AFTER rol_edit_user;

@@ -38,9 +38,9 @@ require("../../system/login_valid.php");
 // nur Moderatoren duerfen Kategorien erfassen & verwalten
 if(!isModerator())
 {
-   $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-   header($location);
-   exit();
+    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
+    header($location);
+    exit();
 }
 
 $err_code = "";
@@ -48,84 +48,94 @@ $err_text = "";
 
 if($_GET['mode'] == 1)
 {
-   // Feld anlegen oder updaten
-   
-   $category_name = strStripTags($_POST['name']);
+    // Feld anlegen oder updaten
 
-   if(strlen($category_name) > 0)
-   {
-      if(!($_GET['rlc_id'] > 0))
-      {
-         // Schauen, ob die Kategorie bereits existiert
-         $sql    = "SELECT COUNT(*) FROM ". TBL_ROLE_CATEGORIES. "
-                     WHERE rlc_org_shortname LIKE '$g_organization'
-                       AND rlc_name          LIKE {0}";
-         $sql    = prepareSQL($sql, array($category_name));
-         $result = mysql_query($sql, $g_adm_con);
-         db_error($result);
-         $row = mysql_fetch_array($result);
-      
-         if($row[0] > 0)
-         {
-            $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=roleexist";
-            header($location);
-            exit();
-         }      
-      }
+    $category_name = strStripTags($_POST['name']);
 
-      if($_GET['rlc_id'] > 0)
-      {
-         $sql = "UPDATE ". TBL_ROLE_CATEGORIES. "
-                    SET rlc_name = {0}
-                  WHERE rlc_id   = {1}";
-      }
-      else
-      {
-         // Feld in Datenbank hinzufuegen
-         $sql    = "INSERT INTO ". TBL_ROLE_CATEGORIES. " (rlc_org_shortname, rlc_name)
-                                                   VALUES ('$g_organization', {0}) ";
-      }
-      $sql    = prepareSQL($sql, array(trim($category_name), $_GET['rlc_id']));
-      $result = mysql_query($sql, $g_adm_con);
-      db_error($result);
-   }
-   else
-   {
-      // es sind nicht alle Felder gefuellt
-		$err_text = "Name";
-      $err_code = "feld";
-   }
-   
-   if(strlen($err_code) > 0)
-   {
-      $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text";
-      header($location);
-      exit();
-   }
+    if(strlen($category_name) > 0)
+    {
+        if(!($_GET['rlc_id'] > 0))
+        {
+            // Schauen, ob die Kategorie bereits existiert
+            $sql    = "SELECT COUNT(*) FROM ". TBL_ROLE_CATEGORIES. "
+                        WHERE rlc_org_shortname LIKE '$g_organization'
+                          AND rlc_name          LIKE {0}";
+            $sql    = prepareSQL($sql, array($category_name));
+            $result = mysql_query($sql, $g_adm_con);
+            db_error($result);
+            $row = mysql_fetch_array($result);
 
-   $err_code = "save";
+            if($row[0] > 0)
+            {
+                $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=roleexist";
+                header($location);
+                exit();
+            }      
+        }
+
+        if(array_key_exists("locked", $_POST))
+        {
+            $locked = 1;
+        }
+        else
+        {
+            $locked = 0;
+        }
+
+        if($_GET['rlc_id'] > 0)
+        {
+            $sql = "UPDATE ". TBL_ROLE_CATEGORIES. "
+                       SET rlc_name   = {0}
+                         , rlc_locked = $locked
+                     WHERE rlc_id     = {1}";
+        }
+        else
+        {
+            // Feld in Datenbank hinzufuegen
+            $sql    = "INSERT INTO ". TBL_ROLE_CATEGORIES. " (rlc_org_shortname, rlc_name, rlc_locked)
+                                                      VALUES ('$g_organization', {0}, $locked) ";
+        }
+        $sql    = prepareSQL($sql, array(trim($category_name), $_GET['rlc_id']));
+        $result = mysql_query($sql, $g_adm_con);
+        db_error($result);
+    }
+    else
+    {
+        // es sind nicht alle Felder gefuellt
+        $err_text = "Name";
+        $err_code = "feld";
+    }
+
+    if(strlen($err_code) > 0)
+    {
+        $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text";
+        header($location);
+        exit();
+    }
+
+    $err_code = "save";
 }
-elseif($_GET['mode'] == 2)	// Feld loeschen
+elseif($_GET['mode'] == 2)  // Feld loeschen
 {
-	// schauen, ob Rollen dieser Kategorie zugeordnet sind
-	$sql    = "SELECT * FROM ". TBL_ROLES. "
-		  		   WHERE rol_rlc_id = {0} ";
-   $sql    = prepareSQL($sql, array($_GET['rlc_id']));
-	$result = mysql_query($sql, $g_adm_con);
-	db_error($result);				
-	$row_num = mysql_num_rows($result);
+    // schauen, ob Rollen dieser Kategorie zugeordnet sind
+    $sql    = "SELECT * FROM ". TBL_ROLES. "
+                WHERE rol_rlc_id = {0} ";
+    $sql    = prepareSQL($sql, array($_GET['rlc_id']));
+    $result = mysql_query($sql, $g_adm_con);
+    db_error($result);              
+    $row_num = mysql_num_rows($result);
 
-	if($row_num == 0)
-	{
-		// Feld loeschen
-		$sql    = "DELETE FROM ". TBL_ROLE_CATEGORIES. "
-						WHERE rlc_id = {0}";
-		$sql    = prepareSQL($sql, array($_GET['rlc_id']));
-		$result = mysql_query($sql, $g_adm_con);
-		db_error($result);
+    if($row_num == 0)
+    {
+        // Feld loeschen
+        $sql    = "DELETE FROM ". TBL_ROLE_CATEGORIES. "
+                    WHERE rlc_id = {0}";
+        $sql    = prepareSQL($sql, array($_GET['rlc_id']));
+        $result = mysql_query($sql, $g_adm_con);
+        db_error($result);
 
-		$err_code = "delete";
-	}
+        $err_code = "delete";
+    }
 }
          
 // zur Gruppierungsseite zurueck

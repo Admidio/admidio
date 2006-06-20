@@ -369,6 +369,7 @@ create table %PRAEFIX%_role_categories
    rlc_id                         int (11) unsigned              not null AUTO_INCREMENT,
    rlc_org_shortname              varchar(10)                    not null,
    rlc_name                       varchar(30)                    not null,
+   rlc_locked                     tinyint(1) unsigned            not null default 0,
    primary key (rlc_id)
 )
 type = InnoDB
