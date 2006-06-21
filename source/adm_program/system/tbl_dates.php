@@ -40,6 +40,9 @@
  *
  *****************************************************************************/
 
+include($g_server_path. "/adm_program/libs/bennu/bennu.inc.php");
+
+
 class TblDates
 {
     var $db_connection;
@@ -120,43 +123,58 @@ class TblDates
 
         $this->clear();
     }
-   
-    // gibt die Userdaten als VCard zurueck   
-    function getIcal() 
+    
+    function prepareIcalText($text)
     {
-        $iCal  = (string) "BEGIN:VCALENDAR\r\n";
-        $iCal .= (string) "VERSION:2.0\r\n";
-        $iCal .= (string) "PRODID:-//www.admidio.org//Admidio" . getVersion() . "//DE\r\n";
-        $iCal .= (string) "METHOD:PUBLISH\r\n";
-        $iCal .= (string) "BEGIN:VEVENT\r\n";
-        if (strlen(trim($this->begin)) > 0) 
-        {
-            $iCal .= (string) "DTSTART:" . mysqldatetime("ymdThis", $this->begin) . "\r\n";
-        }
-        if (strlen(trim($this->end)) > 0 ) 
-        {
-           $iCal .= (string) "DTEND:" . mysqldatetime("ymdThis", $this->end) . "\r\n";
-        }
-        if (strlen(trim($this->headline)) > 0) 
-        {
-           $iCal .= (string) "SUMMARY:" . $this->headline . "\r\n";
-        }
-        if (strlen(trim($this->description)) > 0) 
-        {
-            $iCal .= (string) "DESCRIPTION:" . $this->description . "\r\n";
-        }
-        if (strlen(trim($this->location)) > 0) 
-        {
-            $iCal .= (string) "LOCATION:" . $this->location . "\r\n";
-        }
-        if (strlen(trim($this->timestamp)) > 0) 
-        {
-            $iCal .= (string) "DTSTAMP:" . mysqldatetime("ymdThisZ", $this->timestamp) . "\r\n";
-        }
-        $iCal .= (string) "UID:" . mysqldatetime("ymdThis", $this->timestamp) . "+" . $this->usr_id . "@" . $g_domain . "\r\n";
-        $iCal .= (string) "END:VEVENT\r\n";
-        $iCal .= (string) "END:VCALENDAR\r\n";
-        return $iCal;
+    
+ 	//$retval = $text;
+    	
+    	//$text = ereg_replace("(\r\n|\n|\r)","\\n",$text);
+    	
+    	// substitute special characters
+    	$text = strtr($text, array("\n" => '\\n', '\\' => '\\\\', ',' => '\\,', ';' => '\\;'));
+    	
+    	//fold text
+    	while(strlen($text) > 75) 
+    	{
+        	$retval .= substr($text, 0, 74) . '\n' . ' ';
+        	$text  = substr($retval, 74);
+    	}
+    	$retval .= $text;
+    	
+    	return $retval;
+    	
+    	
     }
+   
+    
+    
+    function getIcal($domain)
+    {
+    
+    	$a = new iCalendar;
+        $ev = new iCalendar_event;
+        $a->add_property('METHOD','PUBLISH');
+        $prodid = "-//www.admidio.org//Admidio" . getVersion() . "//DE";
+        $a->add_property('PRODID',$prodid);
+        $uid = mysqldatetime("ymdThis", $this->timestamp) . "+" . $this->usr_id . "@" . $domain;
+        $ev->add_property('uid', $uid);
+	
+        $ev->add_property('summary', $this->headline);
+	$ev->add_property('description', $this->description);
+	
+	$ev->add_property('dtstart', mysqldatetime("ymdThis", $this->begin));
+	$ev->add_property('dtend', mysqldatetime("ymdThis", $this->end));
+	$ev->add_property('dtstamp', mysqldatetime("ymdThisZ", $this->timestamp));
+	
+	$ev->add_property('location', $this->location);
+	
+	$a->add_component($ev);
+	return $a->serialize();
+	
+    
+    }
+    
+    
 }
 ?>

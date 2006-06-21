@@ -41,7 +41,7 @@ if($_GET["mode"] == 1)
     header('Content-Type: text/calendar');
     header('Content-Disposition: attachment; filename="'. $date->begin. '.ics"');
 
-    echo $date->getIcal();
+    echo $date->getIcal($g_domain);
 }
 
 ?>
