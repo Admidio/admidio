@@ -171,14 +171,22 @@ require("../../../adm_config/body_top.php");
                         || strlen($user->city)  > 0 ))
                         {
                             // Button mit Karte anzeigen
-                            $mpho_url = "http://link2.map24.com/?lid=8a24364a&maptype=JAVA&street0=$user->address";
+                            $map_url = "http://maps.google.com/?q=". urlencode($user->address);
                             if(strlen($user->zip_code)  > 0)
-                                $mpho_url = $mpho_url. "&zip0=$user->zip_code";
-                            if(strlen($user->m_ort)  > 0)
-                                $mpho_url = $mpho_url. "&city0=$user->city";
+                            {
+                                $map_url .= ",%20$user->zip_code";
+                            }
+                            if(strlen($user->city)  > 0)
+                            {
+                                $map_url .= ",%20$user->city";
+                            }
+                            if(strlen($user->country)  > 0)
+                            {
+                                $map_url .= ",%20$user->country";
+                            }
 
                             echo "<br />
-                            <span style=\"font-size: 8pt;\">( <a href=\"$mpho_url\" target=\"_blank\">Stadtplan</a>";
+                            <span style=\"font-size: 8pt;\">( <a href=\"$map_url\" target=\"_blank\">Stadtplan</a>";
 
                             if($g_current_user->id != $a_user_id)
                             {
@@ -189,15 +197,34 @@ require("../../../adm_config/body_top.php");
                                 && (  strlen($own_user->zip_code)  > 0
                                 || strlen($own_user->city)  > 0 ))
                                 {
-                                    $route_url = "http://link2.map24.com/?lid=8a24364a&maptype=JAVA&action=route&sstreet=$own_user->address&dstreet=$user->address";
+                                    // Link fuer die Routenplanung
+                                    $route_url = "http://maps.google.com/?f=d&saddr=". urlencode($own_user->address);
                                     if(strlen($own_user->zip_code)  > 0)
-                                        $route_url = $route_url. "&szip=$own_user->zip_code";
+                                    {
+                                        $route_url .= ",%20$own_user->zip_code";
+                                    }
                                     if(strlen($own_user->city)  > 0)
-                                        $route_url = $route_url. "&scity=$own_user->city";
+                                    {
+                                        $route_url .= ",%20$own_user->city";
+                                    }
+                                    if(strlen($own_user->country)  > 0)
+                                    {
+                                        $route_url .= ",%20$own_user->country";
+                                    }
+                                    
+                                    $route_url .= "&daddr=". urlencode($user->address);
                                     if(strlen($user->zip_code)  > 0)
-                                        $route_url = $route_url. "&dzip=$user->zip_code";
+                                    {
+                                        $route_url .= ",%20$user->zip_code";
+                                    }
                                     if(strlen($user->city)  > 0)
-                                        $route_url = $route_url. "&dcity=$user->city";
+                                    {
+                                        $route_url .= ",%20$user->city";
+                                    }
+                                    if(strlen($user->country)  > 0)
+                                    {
+                                        $route_url .= ",%20$user->country";
+                                    }
                                     echo " - <a href=\"$route_url\" target=\"_blank\">Route berechnen</a>";
                                 }
                             }
