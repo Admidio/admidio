@@ -132,7 +132,7 @@ require("../../../adm_config/body_top.php");
                                      ORDER BY rol_name";
                     }
                     $result_lst = mysql_query($sql, $g_adm_con);
-                    db_error($result_lst, true);
+                    db_error($result_lst);
 
                     while($row = mysql_fetch_object($result_lst))
                     {
@@ -169,10 +169,11 @@ require("../../../adm_config/body_top.php");
                     $sql    =  "SELECT * 
                                   FROM ". TBL_USER_FIELDS. "
                                  WHERE usf_org_shortname IS NULL
-                                    OR usf_org_shortname = '$g_organization'";
+                                    OR usf_org_shortname = '$g_organization'
+                                 ORDER BY usf_org_shortname DESC, usf_name ASC";
 
                     $result_user_fields = mysql_query($sql, $g_adm_con);
-                    db_error($result_user_fields, true);
+                    db_error($result_user_fields);
 
                     for($i = 1; $i < 9; $i++)
                     {

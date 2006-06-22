@@ -10,7 +10,7 @@
  *
  * typ    : Listenselect (mylist, address, telephone, former)
  * mode   : Ausgabeart   (html, print, csv)
- * rol_id : Rolle, f�r die die Funktion dargestellt werden soll
+ * rol_id : Rolle, fuer die die Funktion dargestellt werden soll
  *
  ******************************************************************************
  *
@@ -43,7 +43,7 @@ if($mode != "csv-ms"
 && $mode != "html"
 && $mode != "print")
 {
-    // Dem aufgerufenen Skript wurde die notwendige Variable nicht richtig �bergeben !
+    // Dem aufgerufenen Skript wurde die notwendige Variable nicht richtig uebergeben !
     $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=mode";
     header($location);
     exit();
@@ -51,7 +51,7 @@ if($mode != "csv-ms"
 
 if($rol_id <= 0)
 {
-    // Dem aufgerufenen Skript wurde die notwendige Variable nicht richtig �bergeben !
+    // Dem aufgerufenen Skript wurde die notwendige Variable nicht richtig uebergeben !
     $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=rolle";
     header($location);
     exit();
@@ -71,13 +71,13 @@ else if($mode == "csv-ms-2k")
 }
 else if($mode == "csv-oo")
 {
-    $separator    = ",";    // f�r CSV-Dateien
+    $separator    = ",";    // fuer CSV-Dateien
     $value_quotes = "\"";   // Werte muessen mit Anfuehrungszeichen eingeschlossen sein
     $mode         = "csv";
 }
 else
 {
-    $separator    = ",";    // f�r CSV-Dateien
+    $separator    = ",";    // fuer CSV-Dateien
     $value_quotes = "";
 }
 
@@ -115,8 +115,8 @@ else if($mode == "print")
     $class_row    = "tableRowPrint";
 }
 
-$main_sql  = "";   // enth�lt das Haupt-Sql-Statement f�r die Liste
-$str_csv   = "";   // enth�lt die komplette CSV-Datei als String
+$main_sql  = "";   // enthaelt das Haupt-Sql-Statement fuer die Liste
+$str_csv   = "";   // enthaelt die komplette CSV-Datei als String
 $leiter    = 0;    // Gruppe besitzt Leiter
 
 // Rollenname auslesen
@@ -180,7 +180,7 @@ switch($type)
       break;
       
     default:
-        // Dem aufgerufenen Skript wurde die notwendige Variable nicht richtig �bergeben !
+        // Dem aufgerufenen Skript wurde die notwendige Variable nicht richtig uebergeben !
         $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=typ";
         header($location);
         exit();
@@ -402,31 +402,69 @@ for($j = 0; $j < $max_count; $j++)
         // Spalten-Ueberschriften
         for($i = 0; $i < count($arr_fields); $i++)
         {
+            $align = "left";
+            
+            // den Namen des Feldes ermitteln
+            if(strpos($arr_fields[$i], ".") > 0)
+            {
+                // benutzerdefiniertes Feld
+                // die usf_id steht im Tabellen-Alias hinter dem f
+                $usf_id = substr($arr_fields[$i], 1, strpos($arr_fields[$i], "."));
+                $sql = "SELECT usf_name, usf_type FROM ". TBL_USER_FIELDS. "
+                         WHERE usf_id = $usf_id ";
+                $result_user_fields = mysql_query($sql, $g_adm_con);
+                db_error($result_user_fields);
+                
+                $row = mysql_fetch_object($result_user_fields);
+                $col_name = $row->usf_name;
+                $arr_usf_types[$usf_id] = $row->usf_type;
+                
+                if($arr_usf_types[$usf_id] == "CHECKBOX")
+                {
+                    $align = "center";
+                }
+                elseif($arr_usf_types[$usf_id] == "NUMERIC")
+                {
+                    $align = "right";
+                }                
+            }
+            else
+            {
+                $col_name = $arr_col_name[$arr_fields[$i]];
+                
+                if($arr_fields[$i] == "usr_gender")
+                {
+                    // Icon des Geschlechts zentriert darstellen
+                    $align = "center";
+                }
+            }
+            
             if($mode == "csv")
             {
                 if($i > 0) 
                 {
                     $str_csv = $str_csv. $separator;
                 }
+                
                 if($i == 0)
                 {
                     $str_csv = $str_csv. $value_quotes. "Nr.". $value_quotes;
                 }
                 else
                 {
-                    $str_csv = $str_csv. $value_quotes. $arr_col_name[$arr_fields[$i]]. $value_quotes;
+                    $str_csv = $str_csv. $value_quotes. $col_name. $value_quotes;
                 }
             }
             else
             {
-                echo "<th class=\"$class_header\" align=\"left\">&nbsp;";
+                echo "<th class=\"$class_header\" style=\"text-align: $align;\">&nbsp;";
                 if($i == 0)
                 {
                     echo "Nr.";
                 }
                 else
                 {
-                    echo $arr_col_name[$arr_fields[$i]];
+                    echo $col_name;
                 }
                 echo "</th>\n";
             }
@@ -458,9 +496,42 @@ for($j = 0; $j < $max_count; $j++)
             // Felder zu Datensatz
             for($i = 0; $i < count($arr_fields); $i++)
             {
+                if(strpos($arr_fields[$i], ".") > 0)
+                {
+                    // pruefen, ob ein benutzerdefiniertes Feld und Kennzeichen merken
+                    $b_user_field = true;
+
+                    // die usf_id steht im Tabellen-Alias hinter dem f
+                    $usf_id = substr($arr_fields[$i], 1, strpos($arr_fields[$i], "."));
+                }
+                else
+                {
+                    $b_user_field = false;
+                    $usf_id = 0;
+                }
+            
                 if($mode != "csv")
                 {
-                    echo "<td  class=\"$class_row\" align=\"left\">&nbsp;";
+                    $align = "left";
+                    if($b_user_field == true)
+                    {
+                        if($arr_usf_types[$usf_id] == "CHECKBOX")
+                        {
+                            $align = "center";
+                        }
+                        elseif($arr_usf_types[$usf_id] == "NUMERIC")
+                        {
+                            $align = "right";
+                        }
+                    }
+                    else
+                    {
+                        if($arr_fields[$i] == "usr_gender")
+                        {
+                            $align = "center";
+                        }
+                    }
+                    echo "<td  class=\"$class_row\" style=\"text-align: $align;\">&nbsp;";
                 }
 
                 if($i == 0)
@@ -478,13 +549,14 @@ for($j = 0; $j < $max_count; $j++)
                 else
                 {
                     $content = "";
-                    if(strlen($row[$i]) > 0)
+                    
+                    // Felder nachformatieren
+                    switch($arr_fields[$i])
                     {
-                        // Felder nachformatieren
-                        switch($arr_fields[$i])
-                        {
-                            case "usr_email":
-                                // E-Mail als Link darstellen
+                        case "usr_email":
+                            // E-Mail als Link darstellen
+                            if(strlen($row[$i]) > 0)
+                            {
                                 if($mode == "html")
                                 {
                                     if($g_preferences['send_mail_extern'] == 1)
@@ -500,21 +572,27 @@ for($j = 0; $j < $max_count; $j++)
                                 {
                                     $content = $row[$i];
                                 }
-                                break;
+                            }
+                            break;
 
-                            case "usr_birthday":
-                            case "mem_begin":
-                            case "mem_end":
+                        case "usr_birthday":
+                        case "mem_begin":
+                        case "mem_end":
+                            if(strlen($row[$i]) > 0)
+                            {
                                 // Datum 00.00.0000 unterdruecken
                                 $content = mysqldatetime("d.m.y", $row[$i]);
                                 if($content == "00.00.0000")
                                 {
                                     $content = "";
                                 }
-                                break;
+                            }
+                            break;
 
-                            case "usr_homepage":
-                                // Homepage als Link darstellen
+                        case "usr_homepage":
+                            // Homepage als Link darstellen
+                            if(strlen($row[$i]) > 0)
+                            {                                
                                 $row[$i] = stripslashes($row[$i]);
                                 if(substr_count(strtolower($row[$i]), "http://") == 0)
                                 {
@@ -529,47 +607,99 @@ for($j = 0; $j < $max_count; $j++)
                                 {
                                     $content = substr($row[$i], 7);
                                 }
-                                break;
+                            }
+                            break;
 
-                            case "usr_gender":
-                                // Geschlecht anzeigen
-                                if($row[$i] == 1)
+                        case "usr_gender":
+                            // Geschlecht anzeigen
+                            if($row[$i] == 1)
+                            {
+                                if($mode == "csv")
                                 {
-                                    if($mode == "csv")
-                                    {
-                                        $content = "männlich";
-                                    }
-                                    else
-                                    {
-                                        $content = "m&auml;nnlich";
-                                    }
-                                }
-                                elseif($row[$i] == 2)
-                                {
-                                    $content = "weiblich";
+                                    $content = utf8_decode("männlich");
                                 }
                                 else
                                 {
+                                    $content = "<img src=\"$g_root_path/adm_program/images/male.png\" 
+                                                style=\"vertical-align: middle;\" alt=\"m&auml;nnlich\">";
+                                }
+                            }
+                            elseif($row[$i] == 2)
+                            {
+                                if($mode == "csv")
+                                {
+                                    $content = utf8_decode("weiblich");
+                                }
+                                else
+                                {
+                                    $content = "<img src=\"$g_root_path/adm_program/images/female.png\" 
+                                                style=\"vertical-align: middle;\" alt=\"weiblich\">";
+                                }
+                            }
+                            else
+                            {
+                                if($mode != "csv")
+                                {
                                     $content = "&nbsp;";
                                 }
-                                break;
-                            
-                            case "usr_photo":
-                                if(($mode == "html" || $mode == "print") && $row[$i] != NULL)
+                            }
+                            break;
+
+                        case "usr_photo":
+                            // Benutzerfoto anzeigen
+                            if(($mode == "html" || $mode == "print") && $row[$i] != NULL)
+                            {
+                                $content = "<img src=\"../profile/profile_photo_show.php?a_user_id=$row[0]\"
+                                            style=\"vertical-align: middle;\" alt=\"Benutzerfoto\">";
+                            }     
+                            if ($mode == "csv" && $row[$i] != NULL)
+                            {
+                                $content = "Profilfoto Online";
+                            }
+                            break;
+
+                        default:
+                            if($b_user_field == true)
+                            {
+                                // benutzerdefiniertes Feld
+                                if($arr_usf_types[$usf_id] == "CHECKBOX")
                                 {
-                                    $content = "<img src=\"../profile/profile_photo_show.php?a_user_id=$row[0]\"
-                                                style=\"vertical-align: middle;\">";
-                                }     
-                                if ($mode == "csv" && $row[$i] != NULL)
-                                {
-                                    $content = "Profilfoto Online";
+                                    // Checkboxen werden durch ein Bildchen dargestellt
+                                    if($row[$i] == 1)
+                                    {
+                                        if($mode == "csv")
+                                        {
+                                            $content = "ja";
+                                        }
+                                        else
+                                        {
+                                            echo "<img src=\"$g_root_path/adm_program/images/checkbox_checked.gif\" 
+                                                style=\"vertical-align: middle;\" alt=\"on\">";
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if($mode == "csv")
+                                        {
+                                            $content = "nein";
+                                        }
+                                        else
+                                        {
+                                            echo "<img src=\"$g_root_path/adm_program/images/checkbox.gif\" 
+                                                style=\"vertical-align: middle;\" alt=\"off\">";
+                                        }
+                                    }
                                 }
-                                break;
-                                
-                            default:
+                                else
+                                {
+                                    $content = $row[$i];
+                                }
+                            }
+                            else
+                            {
                                 $content = $row[$i];
-                                break;
-                        }
+                            }
+                            break;
                     }
 
                     if($mode == "csv")
