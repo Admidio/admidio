@@ -127,54 +127,46 @@ class TblDates
     function prepareIcalText($text)
     {
     
- 	//$retval = $text;
-    	
-    	//$text = ereg_replace("(\r\n|\n|\r)","\\n",$text);
-    	
-    	// substitute special characters
-    	$text = strtr($text, array("\n" => '\\n', '\\' => '\\\\', ',' => '\\,', ';' => '\\;'));
-    	
-    	//fold text
-    	while(strlen($text) > 75) 
-    	{
-        	$retval .= substr($text, 0, 74) . '\n' . ' ';
-        	$text  = substr($retval, 74);
-    	}
-    	$retval .= $text;
-    	
-    	return $retval;
-    	
-    	
+    //$retval = $text;
+        
+        //$text = ereg_replace("(\r\n|\n|\r)","\\n",$text);
+        
+        // substitute special characters
+        $text = strtr($text, array("\n" => '\\n', '\\' => '\\\\', ',' => '\\,', ';' => '\\;'));
+        
+        //fold text
+        while(strlen($text) > 75) 
+        {
+            $retval .= substr($text, 0, 74) . '\n' . ' ';
+            $text  = substr($retval, 74);
+        }
+        $retval .= $text;
+        
+        return $retval;
     }
    
-    
-    
+    // gibt einen Termin im iCal-Format zurueck
     function getIcal($domain)
     {
-    
-    	$a = new iCalendar;
+        $a = new iCalendar;
         $ev = new iCalendar_event;
         $a->add_property('METHOD','PUBLISH');
         $prodid = "-//www.admidio.org//Admidio" . getVersion() . "//DE";
         $a->add_property('PRODID',$prodid);
         $uid = mysqldatetime("ymdThis", $this->timestamp) . "+" . $this->usr_id . "@" . $domain;
         $ev->add_property('uid', $uid);
-	
-        $ev->add_property('summary', $this->headline);
-	$ev->add_property('description', $this->description);
-	
-	$ev->add_property('dtstart', mysqldatetime("ymdThis", $this->begin));
-	$ev->add_property('dtend', mysqldatetime("ymdThis", $this->end));
-	$ev->add_property('dtstamp', mysqldatetime("ymdThisZ", $this->timestamp));
-	
-	$ev->add_property('location', $this->location);
-	
-	$a->add_component($ev);
-	return $a->serialize();
-	
     
-    }
-    
-    
+        $ev->add_property('summary',     utf8_encode($this->headline));
+        $ev->add_property('description', utf8_encode($this->description));
+
+        $ev->add_property('dtstart', mysqldatetime("ymdThis", $this->begin));
+        $ev->add_property('dtend',   mysqldatetime("ymdThis", $this->end));
+        $ev->add_property('dtstamp', mysqldatetime("ymdThisZ", $this->timestamp));
+
+        $ev->add_property('location', utf8_encode($this->location));
+
+        $a->add_component($ev);
+        return $a->serialize();    
+    }    
 }
 ?>
