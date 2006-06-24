@@ -29,6 +29,7 @@ body {
     color:            #85C226;
     font-family:      arial, sans-serif;
     font-size:        10pt;
+    background-color: #ffffff;
 }
 
 hr {
@@ -210,14 +211,4 @@ a:hover {
     border-right-color:  #ffffff;
     border-width:        1px;
     border-style:        solid;
-}
-
-/* Bilder */
-
-.bildRand {
-    border: 2px groove #000000;
-}
-
-.bildLink {
-    border-width: 0px;
 }
