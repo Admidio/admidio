@@ -225,8 +225,8 @@ require("../../../adm_config/body_top.php");
             //Bildupload
             echo"
             <form name=\"photoup\" method=\"post\" action=\"profile_photo_edit.php?job=upload&user_id=".$a_user_id."\" enctype=\"multipart/form-data\">
-                Bitte hier neues Bild ausw&auml;hlen:
-                <p><input type=\"file\" id=\"bilddatei\" name=\"bilddatei\" value=\"durchsuchen\"></p>
+                Bitte hier ein neues Bild ausw&auml;hlen:
+                <p><input type=\"file\" id=\"bilddatei\" name=\"bilddatei\" size=\"40\" value=\"durchsuchen\"></p>
                 <hr width=\"85%\" />
                 <div style=\"margin-top: 6px;\">
                     <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile.php?user_id=".$a_user_id."'\">
