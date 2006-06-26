@@ -182,44 +182,62 @@ require("../../../adm_config/body_top.php");
                             <td style=\"text-align: center;\">
                                 <select size=\"1\" name=\"column$i\">
                                     <option value=\"\" selected=\"selected\"></option>
-                                    <option value=\"usr_last_name\" ";
-                                        if($i == 1) 
-                                        {
-                                            echo " selected=\"selected\" ";
-                                        }
-                                        echo ">Nachname</option>
-                                    <option value=\"usr_first_name\" ";
-                                        if($i == 2) 
-                                        {
-                                            echo " selected=\"selected\" ";
-                                        }
-                                        echo ">Vorname</option>
-                                    <option value=\"usr_address\">Adresse</option>
-                                    <option value=\"usr_zip_code\">PLZ</option>
-                                    <option value=\"usr_city\">Ort</option>
-                                    <option value=\"usr_country\">Land</option>
-                                    <option value=\"usr_phone\">Telefon</option>
-                                    <option value=\"usr_mobile\">Handy</option>
-                                    <option value=\"usr_fax\">Fax</option>
-                                    <option value=\"usr_email\">E-Mail</option>
-                                    <option value=\"usr_homepage\">Homepage</option>
-                                    <option value=\"usr_birthday\">Geburtstag</option>
-                                    <option value=\"usr_gender\">Geschlecht</option>
-                                    <option value=\"usr_login_name\">Loginname</option>
-                                    <option value=\"usr_photo\">Foto</option>";
+                                    <optgroup label=\"Stammdaten\">
+                                        <option value=\"usr_last_name\" ";
+                                            if($i == 1) 
+                                            {
+                                                echo " selected=\"selected\" ";
+                                            }
+                                            echo ">Nachname</option>
+                                        <option value=\"usr_first_name\" ";
+                                            if($i == 2) 
+                                            {
+                                                echo " selected=\"selected\" ";
+                                            }
+                                            echo ">Vorname</option>
+                                        <option value=\"usr_address\">Adresse</option>
+                                        <option value=\"usr_zip_code\">PLZ</option>
+                                        <option value=\"usr_city\">Ort</option>
+                                        <option value=\"usr_country\">Land</option>
+                                        <option value=\"usr_phone\">Telefon</option>
+                                        <option value=\"usr_mobile\">Handy</option>
+                                        <option value=\"usr_fax\">Fax</option>
+                                        <option value=\"usr_email\">E-Mail</option>
+                                        <option value=\"usr_homepage\">Homepage</option>
+                                        <option value=\"usr_birthday\">Geburtstag</option>
+                                        <option value=\"usr_gender\">Geschlecht</option>
+                                        <option value=\"usr_login_name\">Loginname</option>
+                                        <option value=\"usr_photo\">Foto</option>";
 
-                                    //ggf zusaetzliche Felder Auslesen und bereitstellen
-                                    while($uf_row = mysql_fetch_object($result_user_fields))
-                                    {
-                                        //Nur Moderatoren duerfen sich gelockte Felder anzeigen lassen 
-                                        if($uf_row->usf_locked==0 || isModerator())
-                                        {
-                                            echo"<option value=\"$uf_row->usf_id\">$uf_row->usf_name</option>";
-                                        }
-                                    }    
-                                    mysql_data_seek($result_user_fields, 0);
+                                        //ggf zusaetzliche Felder auslesen und bereitstellen
+                                        $field_header = false;
+                                        $msg_header   = false;
 
-                                echo"</select>&nbsp;&nbsp;
+                                        while($uf_row = mysql_fetch_object($result_user_fields))
+                                        {     
+                                            if($uf_row->usf_org_shortname != NULL
+                                            && $field_header == false)
+                                            {
+                                                echo "</optgroup>
+                                                <optgroup label=\"Zus&auml;tzliche Felder\">";
+                                                $field_header = true;
+                                            }
+                                            if($uf_row->usf_org_shortname == NULL
+                                            && $msg_header == false)
+                                            {
+                                                echo "</optgroup>
+                                                <optgroup label=\"Messenger\">";
+                                                $msg_header = true;
+                                            }
+                                            //Nur Moderatoren duerfen sich gelockte Felder anzeigen lassen 
+                                            if($uf_row->usf_locked==0 || isModerator())
+                                            {
+                                                echo"<option value=\"$uf_row->usf_id\">$uf_row->usf_name</option>";
+                                            }
+                                        }    
+                                        mysql_data_seek($result_user_fields, 0);                                    
+                                    echo "</optgroup>
+                                </select>&nbsp;&nbsp;
                             </td>
                             <td style=\"text-align: center;\">
                                 <select size=\"1\" name=\"sort$i\">
