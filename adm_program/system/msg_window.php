@@ -169,6 +169,13 @@ echo "
                       du diesen Zeitraum auf maximal 8 Stunden erh&ouml;hen.";
                 break;
 
+            case "mail_admin":
+                echo "Die E-Mail-Adresse des Administrators wird als Absenderadresse f&uuml;r Systemnachrichten
+                      benutzt. (z.B. bei der Registierungsbest&auml;tigung)<br><br>
+                      Gib hier eine Adresse ein unter der du selber auch Nachrichten empfangen kannst, falls
+                      jemand auf eine Systemnachricht antwortet.";
+                break;
+
             case "mail_extern":
                 echo "E-Mails werden in der Regel &uuml;ber den Webserver verschickt auf dem Admidio eingerichtet
                       ist. Sollte dein Webserver keinen E-Mailversand unterst&uuml;tzen, kannst du diese Option
@@ -192,7 +199,8 @@ echo "
 
             case "profil_felder":
                 echo "Du kannst beliebig viele neue Felder definieren, die im Profil der einzelnen Benutzer
-                angezeigt und von diesen bearbeitet werden k&ouml;nnen.";
+                      angezeigt und von diesen bearbeitet werden k&ouml;nnen. Au&szlig;erdem stehen dir diese
+                      Felder bei den Eigenen Listen zur Verf&uuml;gung.";
                 break;
 
             case "rolle_benutzer":
