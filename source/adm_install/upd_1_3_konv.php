@@ -61,7 +61,7 @@ if(!$result_orga) showError(mysql_error());
 while($row_orga = mysql_fetch_object($result_orga))
 {
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-            VALUES ($row_orga->org_id, 'max_mail_attachment_size', $row_orga->org_mail_size)";
+            VALUES ($row_orga->org_id, 'max_email_attachment_size', $row_orga->org_mail_size)";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
 
@@ -71,7 +71,7 @@ while($row_orga = mysql_fetch_object($result_orga))
     if(!$result) showError(mysql_error());
 
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-            VALUES ($row_orga->org_id, 'send_mail_extern', $row_orga->org_mail_extern)";
+            VALUES ($row_orga->org_id, 'send_email_extern', $row_orga->org_mail_extern)";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
 
@@ -82,6 +82,16 @@ while($row_orga = mysql_fetch_object($result_orga))
 
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
             VALUES ($row_orga->org_id, 'enable_bbcode', $row_orga->org_bbcode)";
+    $result = mysql_query($sql, $connection);
+    if(!$result) showError(mysql_error());
+    
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+            VALUES ($row_orga->org_id, 'email_administrator', 'webmaster@". $_SERVER['HTTP_HOST']. "')";
+    $result = mysql_query($sql, $connection);
+    if(!$result) showError(mysql_error());
+    
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+            VALUES ($row_orga->org_id, 'default_country', 'Deutschland')";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
 }

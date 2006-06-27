@@ -421,7 +421,7 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
 
     // Einstellungen anlegen
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-                                       VALUES ($org_id, 'max_mail_attachment_size', '1024') ";
+                                       VALUES ($org_id, 'max_email_attachment_size', '1024') ";
     $result = mysql_query($sql, $connection);
     db_error($result);
 
@@ -431,7 +431,7 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
     db_error($result);
 
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-                                       VALUES ($org_id, 'send_mail_extern', '0') ";
+                                       VALUES ($org_id, 'send_email_extern', '0') ";
     $result = mysql_query($sql, $connection);
     db_error($result);
 
@@ -442,6 +442,11 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
 
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
                                        VALUES ($org_id, 'enable_bbcode', '1') ";
+    $result = mysql_query($sql, $connection);
+    db_error($result);
+
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+                                       VALUES ($org_id, 'email_administrator', 'webmaster@". $_SERVER['HTTP_HOST']. "') ";
     $result = mysql_query($sql, $connection);
     db_error($result);
 

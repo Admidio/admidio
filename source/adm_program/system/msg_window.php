@@ -81,7 +81,7 @@ echo "
                             <td valign=\"top\">Einen <b>[url=</b>http://www.beispiel.de<b>]</b>Link<b>[/url]</b> setzen</td>
                          </tr>
                          <tr>
-                            <td valign=\"top\">Eine <a href=\"mailto:webmaster@$g_domain\">Mailadresse</a> angeben</td>
+                            <td valign=\"top\">Eine <a href=\"mailto:". $g_preferences['email_administrator']. "\">Mailadresse</a> angeben</td>
                             <td valign=\"top\">Eine <b>[email=</b>webmaster@demo.de<b>]</b> Mailadresse<b>[/email]</b> angeben</td>
                          </tr>
                          <tr>

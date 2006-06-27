@@ -140,7 +140,7 @@ if ($count_user == 0)
         {
             // Mail an den User mit den Loginaten schicken
             $email = new Email();
-            $email->setSender("webmaster@$g_domain");
+            $email->setSender($g_preferences['email_administrator']);
             $email->addRecipient($row->usr_email, "$row->first_name $row->last_name");
             $email->setSubject("Neue Registrierung");
             $email->setText("Es hat sich ein neuer User auf $g_current_organization->homepage registriert.\n\n".

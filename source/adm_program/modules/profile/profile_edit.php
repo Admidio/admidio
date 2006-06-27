@@ -8,8 +8,8 @@
  *
  * Uebergaben:
  *
- * user_id : zeigt das Profil der �bergebenen user_id an
- * new_user - 1 : Dialog um neue Benutzer hinzuzuf�gen.
+ * user_id : zeigt das Profil der ?bergebenen user_id an
+ * new_user - 1 : Dialog um neue Benutzer hinzuzuf?gen.
  * url :     URL auf die danach weitergeleitet wird
  *
  ******************************************************************************
@@ -33,7 +33,7 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
-//pr�fen ob in Popup angezeigt wird oder Normal (default)
+//pr?fen ob in Popup angezeigt wird oder Normal (default)
 if($_GET['popup'] == 1)
 {
     $popup = 1;
@@ -82,7 +82,7 @@ if($a_new_user)
 else
 {
    $a_user_id = $_GET['user_id'];
-   // jetzt noch schauen, ob User �berhaupt Mitglied in der Gliedgemeinschaft ist
+   // jetzt noch schauen, ob User ?berhaupt Mitglied in der Gliedgemeinschaft ist
    $sql = "SELECT mem_id
              FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
             WHERE rol_org_shortname = '$g_organization'
@@ -259,20 +259,34 @@ if($popup == 0)
                         //Laenderliste oeffnen
                         $landlist = fopen("../../system/staaten.txt", "r");
                         echo "
-                        <select size=\"1\" name=\"country\" />";
+                        <select size=\"1\" name=\"country\" />
+                            <option value=\"\"";
+                                if(strlen($g_preferences['default_country']) == 0
+                                && strlen($user->country) == 0)
+                                {
+                                    echo " selected ";
+                                }
+                            echo "></option>";
+                            if(strlen($g_preferences['default_country']) > 0)
+                            {
+                                echo "<option value=\"". $g_preferences['default_country']. "\">". $g_preferences['default_country']. "</option>
+                                <option value=\"\">--------------------------------</option>\n";
+                            }
+                            
+                            $land = trim(fgets($landlist));
                             while (!feof($landlist))
                             {
-                                $land = trim(fgets($landlist));
                                 echo"<option value=\"$land\"";
-                                     if($a_new_user && $land=="Deutschland")
+                                     if($a_new_user && $land == $g_preferences['default_country'])
                                      {
-                                        echo " selected=\"selected\" ";
+                                        echo " selected ";
                                      }
-                                     if(!$a_new_user && $land==$user->country)
+                                     if(!$a_new_user && $land == $user->country)
                                      {
-                                        echo " selected=\"selected\" ";
+                                        echo " selected ";
                                      }
-                                echo">$land</option>";
+                                echo">$land</option>\n";
+                                $land = trim(fgets($landlist));
                             }    
                         
                         echo"
@@ -531,7 +545,7 @@ if($popup == 0)
 
                 if($user->usr_id_change > 0)
                 {
-                    // Angabe �ber die letzten Aenderungen
+                    // Angabe ?ber die letzten Aenderungen
                     $sql    = "SELECT usr_first_name, usr_last_name
                                  FROM ". TBL_USERS. "
                                 WHERE usr_id = $user->usr_id_change ";

@@ -251,7 +251,7 @@ function getErrorText($error_code, $error_text, $g_current_organization)
         case "write_access":
             if ($g_preferences['send_mail_extern'] == 1)
             {
-                $mail_link = "mailto:webmaster@$g_domain";
+                $mail_link = "mailto:". $g_preferences['email_administrator'];
             }
             else
             {

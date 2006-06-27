@@ -85,6 +85,39 @@ require("../../../adm_config/body_top.php");
             <div style=\"text-align: left; margin-left: 50%;\">
                <input type=\"text\" name=\"homepage\" size=\"30\" maxlength=\"30\" value=\"$g_current_organization->homepage\">
             </div>
+         </div>
+         <div style=\"margin-top: 6px;\">
+            <div style=\"text-align: right; width: 48%; float: left;\">E-Mail Adresse des Administrator:</div>
+            <div style=\"text-align: left; margin-left: 50%;\">
+               <input type=\"text\" name=\"email_administrator\" size=\"30\" maxlength=\"30\" value=\"". $g_preferences['email_administrator']. "\">
+            </div>
+         </div>
+         <div style=\"margin-top: 6px;\">
+            <div style=\"text-align: right; width: 48%; float: left;\">Standard-Land:</div>
+            <div style=\"text-align: left; margin-left: 50%;\">";
+                //Laenderliste oeffnen
+                $landlist = fopen("../../system/staaten.txt", "r");
+                echo "
+                <select size=\"1\" name=\"default_country\">
+                    <option value=\"\"";
+                    if(strlen($g_preferences['default_country']) == 0)
+                    {
+                        echo " selected ";
+                    }
+                    echo ">- Bitte w&auml;hlen -</option>";
+                    $land = trim(fgets($landlist));
+                    while (!feof($landlist))
+                    {    
+                        echo"<option value=\"$land\"";
+                            if($land == $g_preferences['default_country'])
+                            {
+                                echo " selected ";
+                            }
+                        echo">$land</option>";
+                        $land = trim(fgets($landlist));
+                    }    
+                echo"</select>
+            </div>
          </div>";
 
          // Pruefung ob dieser Orga bereits andere Orgas untergeordnet sind
@@ -142,7 +175,7 @@ require("../../../adm_config/body_top.php");
                  <div style=\"text-align: right; width: 47%; float: left;\">Externes Mailprogramm:</div>
                  <div style=\"text-align: left; margin-left: 50%;\">
                      <input type=\"checkbox\" id=\"mail_extern\" name=\"mail_extern\" ";
-                     if($g_preferences['send_mail_extern'] == 1)
+                     if($g_preferences['send_email_extern'] == 1)
                          echo " checked ";
                      echo " value=\"1\" />
                      <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
@@ -183,7 +216,7 @@ require("../../../adm_config/body_top.php");
              <div style=\"margin-top: 6px;\">
                  <div style=\"text-align: right; width: 47%; float: left;\">E-Mail-Attachments:</div>
                  <div style=\"text-align: left; margin-left: 50%;\">
-                     <input type=\"text\" name=\"attachment_size\" size=\"4\" maxlength=\"4\" value=\"". $g_preferences['max_mail_attachment_size']. "\"> KB
+                     <input type=\"text\" name=\"attachment_size\" size=\"4\" maxlength=\"4\" value=\"". $g_preferences['max_email_attachment_size']. "\"> KB
                  </div>
              </div>
 
@@ -319,7 +352,7 @@ require("../../../adm_config/body_top.php");
          else
          {
             echo "
-            Es wurden keine Profilfelder erstellt !
+            Es wurden noch keine organisationsspezifischen Profilfelder angelegt !
             <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=profil_felder','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
             <br />";
