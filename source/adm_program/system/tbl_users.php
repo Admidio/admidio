@@ -339,17 +339,14 @@ class TblUsers
         }
         if (strlen(trim($this->phone)) > 0) 
         {
-            $phonenumber = ereg_replace("[^[:digit:]]", "", $this->phone);
             $vcard .= (string) "TEL;HOME;VOICE:" . $phonenumber . "\r\n";
         }
         if (strlen(trim($this->mobile)) > 0) 
         {
-            $mobilenumber = ereg_replace("[^[:digit:]]", "", $this->mobile);
             $vcard .= (string) "TEL;CELL;VOICE:" . $mobilenumber . "\r\n";
         }
         if (strlen(trim($this->fax)) > 0) 
         {
-            $faxnumber = ereg_replace("[^[:digit:]]", "", $this->fax);
             $vcard .= (string) "TEL;HOME;FAX:" . $faxnumber . "\r\n";
         }
         $vcard .= (string) "ADR;HOME:;;" . $this->address . ";" . $this->city . ";;" . $this->zip_code . ";" . $this->country . "\r\n";
