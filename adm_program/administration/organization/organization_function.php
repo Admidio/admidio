@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Verschiedene Funktionen fuer Gruppierungen
+ * Verschiedene Funktionen fuer Organisationen
  *
  * Copyright    : (c) 2004 - 2006 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -8,8 +8,8 @@
  *
  * Uebergaben:
  *
- * org_id: ID der Gruppierung, die bearbeitet werden soll
- * url:   URL auf die danach weitergeleitet wird
+ * org_id: ID der Organisation, die bearbeitet werden soll
+ * url:    URL auf die danach weitergeleitet wird
  *
  ******************************************************************************
  *
@@ -32,12 +32,12 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
-// nur Webmaster duerfen Gruppierungen bearbeiten
+// nur Webmaster duerfen Organisationen bearbeiten
 if(!hasRole("Webmaster"))
 {
-   $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-   header($location);
-   exit();
+    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
+    header($location);
+    exit();
 }
 
 $err_code   = "";
@@ -46,11 +46,29 @@ $g_current_organization->longname  = strStripTags($_POST["longname"]);
 $g_current_organization->homepage  = strStripTags($_POST["homepage"]);
 $g_current_organization->org_id_parent = $_POST["parent"];
 
+// *******************************************************************************
 // Pruefen, ob alle notwendigen Felder gefuellt sind
+// *******************************************************************************
 if(strlen($g_current_organization->longname) == 0)
 {
-   $err_code = "feld";
-   $err_text = "Name (lang)";
+    $err_code = "feld";
+    $err_text = "Name (lang)";
+}
+
+if(strlen($err_code) == 0)
+{
+    if(strlen($_POST['email_administrator']) == 0)
+    {
+        $err_code = "feld";
+        $err_text = "E-Mail Adresse des Administrator";
+    }
+    else
+    {
+        if(!isValidEmailAddress($_POST['email_administrator']))
+        {
+            $err_code = "email_invalid";
+        }
+    }
 }
 
 if(strlen($_POST["attachment_size"]) == 0)
@@ -65,51 +83,31 @@ if(strlen($_POST["upload_size"]) == 0)
 
 if ($err_code != "")
 {
-   $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text";
-   header($location);
-   exit();
+    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text";
+    header($location);
+    exit();
 }
 
-// Gruppierung updaten
+// *******************************************************************************
+// Organisation updaten
+// *******************************************************************************
 $ret_code = $g_current_organization->update();
 if($ret_code != 0)
 {
-   $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=&err_text=$ret_code";
-   header($location);
-   exit();
+    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=&err_text=$ret_code";
+    header($location);
+    exit();
 }
 
 // Einstellungen speichern
 
-$sql = "UPDATE ". TBL_PREFERENCES. " SET prf_value = {0}
-         WHERE prf_name = 'send_mail_extern' ";
-$sql = prepareSQL($sql, array($_POST['mail_extern']));
-$result = mysql_query($sql, $g_adm_con);
-db_error($result);
-
-$sql = "UPDATE ". TBL_PREFERENCES. " SET prf_value = {0}
-         WHERE prf_name = 'enable_bbcode' ";
-$sql = prepareSQL($sql, array($_POST['bbcode']));
-$result = mysql_query($sql, $g_adm_con);
-db_error($result);         
-         
-$sql = "UPDATE ". TBL_PREFERENCES. " SET prf_value = {0}
-         WHERE prf_name = 'enable_rss' ";
-$sql = prepareSQL($sql, array($_POST['enable_rss']));
-$result = mysql_query($sql, $g_adm_con);
-db_error($result);
-
-$sql = "UPDATE ". TBL_PREFERENCES. " SET prf_value = {0}
-         WHERE prf_name = 'max_mail_attachment_size' ";
-$sql = prepareSQL($sql, array($_POST['attachment_size']));
-$result = mysql_query($sql, $g_adm_con);
-db_error($result);
-
-$sql = "UPDATE ". TBL_PREFERENCES. " SET prf_value = {0}
-         WHERE prf_name = 'max_file_upload_size' ";
-$sql = prepareSQL($sql, array($_POST['upload_size']));
-$result = mysql_query($sql, $g_adm_con);
-db_error($result);
+writeOrgaPreferences('email_administrator', $_POST['email_administrator']);
+writeOrgaPreferences('default_country',     $_POST['default_country']);
+writeOrgaPreferences('send_email_extern',   $_POST['mail_extern']);
+writeOrgaPreferences('enable_bbcode',       $_POST['bbcode']);
+writeOrgaPreferences('enable_rss',          $_POST['enable_rss']);
+writeOrgaPreferences('max_email_attachment_size', $_POST['attachment_size']);
+writeOrgaPreferences('max_file_upload_size', $_POST['upload_size']);
 
 // zur Ausgangsseite zurueck
 $load_url = urlencode("$g_root_path/adm_program/administration/organization/organization.php?url=". $_GET['url']);

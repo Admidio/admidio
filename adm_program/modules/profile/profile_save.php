@@ -306,12 +306,12 @@ if($user->valid == 0)
    {
         // Mail an den User schicken, um die Anmeldung zu bestaetigen
         $email = new Email();
-        $email->setSender("webmaster@$g_domain");
+        $email->setSender($g_preferences['email_administrator']);
         $email->addRecipient($user->email, "$user->first_name $user->last_name");
         $email->setSubject("Anmeldung auf $g_current_organization->homepage");
         $email->setText("Hallo $user->first_name,\n\ndeine Anmeldung auf $g_current_organization->homepage ".
               "wurde bestaetigt.\n\nNun kannst du dich mit deinem Benutzernamen : $user->login_name\nund dem Passwort auf der Homepage ".
-              "einloggen.\n\nSollten noch Fragen bestehen, schreib eine E-Mail an webmaster@$g_domain .\n\nViele Gruesse\nDie Webmaster");
+              "einloggen.\n\nSollten noch Fragen bestehen, schreib eine E-Mail an ". $g_preferences['email_administrator']. " .\n\nViele Gruesse\nDie Webmaster");
         $email->sendEmail();
    }
 

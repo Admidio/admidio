@@ -272,7 +272,7 @@ elseif($_GET["mode"] == 4)
         
         // Mail an den User mit den Loginaten schicken
         $email = new Email();
-        $email->setSender("webmaster@$g_domain");
+        $email->setSender($g_preferences['email_administrator']);
         $email->addRecipient($user->email, "$user->first_name $user->last_name");
         $email->setSubject("Logindaten für $g_current_organization->homepage");
         $email->setText("Hallo $user->first_name,\n\ndu erhaelst deine ".

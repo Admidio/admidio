@@ -584,4 +584,35 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
     return $page_string;
 }
 
+function writeOrgaPreferences($name, $value)
+{
+    global $g_adm_con;
+    global $g_current_organization;
+
+    $sql = "SELECT * FROM ". TBL_PREFERENCES. "
+             WHERE prf_name   = {0}
+               AND prf_org_id = $g_current_organization->id ";
+    $sql = prepareSQL($sql, array($name));
+    $result = mysql_query($sql, $g_adm_con);
+    db_error($result);    
+    
+    if(mysql_num_rows($result) > 0)
+    {
+        $sql = "UPDATE ". TBL_PREFERENCES. " SET prf_value = {0}
+                 WHERE prf_name   = {1}
+                   AND prf_org_id = $g_current_organization->id ";
+        $sql = prepareSQL($sql, array($value, $name));
+        $result = mysql_query($sql, $g_adm_con);
+        db_error($result);    
+    }
+    else
+    {
+        $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+                                           VALUES ($g_current_organization->id, {0}, {1}) ";
+        $sql = prepareSQL($sql, array($name, $value));
+        $result = mysql_query($sql, $g_adm_con);
+        db_error($result);    
+    }
+}
+
 ?>
