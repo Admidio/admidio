@@ -118,31 +118,44 @@ require("../../../adm_config/body_top.php");
                     // Webmaster und Moderatoren duerfen Listen zu allen Rollen sehen
                     if(isModerator())
                     {
-                        $sql     = "SELECT * FROM ". TBL_ROLES. "
+                        $sql     = "SELECT * FROM ". TBL_ROLES. ", ". TBL_ROLE_CATEGORIES. "
                                      WHERE rol_org_shortname = '$g_organization'
                                        AND rol_valid         = $active_role
-                                     ORDER BY rol_name";
+                                       AND rol_rlc_id        = rlc_id
+                                     ORDER BY rlc_name, rol_name";
                     }
                     else
                     {
-                        $sql     = "SELECT * FROM ". TBL_ROLES. "
+                        $sql     = "SELECT * FROM ". TBL_ROLES. ", ". TBL_ROLE_CATEGORIES. "
                                      WHERE rol_org_shortname = '$g_organization'
                                        AND rol_locked        = 0
                                        AND rol_valid         = $active_role
-                                     ORDER BY rol_name";
+                                       AND rol_rlc_id        = rlc_id
+                                     ORDER BY rlc_name, rol_name";
                     }
                     $result_lst = mysql_query($sql, $g_adm_con);
                     db_error($result_lst);
+                    $act_category = "";
 
                     while($row = mysql_fetch_object($result_lst))
                     {
+                        if($act_category != $row->rlc_name)
+                        {
+                            if(strlen($act_category) > 0)
+                            {
+                                echo "</optgroup>";
+                            }
+                            echo "<optgroup label=\"$row->rlc_name\">";
+                            $act_category = $row->rlc_name;
+                        }
                         echo "<option value=\"$row->rol_id\" ";
                         if($rol_id == $row->rol_id) echo " selected=\"selected\" ";
                         {
                             echo ">$row->rol_name</option>";
                         }
                     }
-                echo "</select>
+                    echo "</optgroup>
+                </select>
                 &nbsp;&nbsp;&nbsp;
                 <input type=\"checkbox\" id=\"former\" name=\"former\" value=\"1\" ";
                     if(!$active_member) 
