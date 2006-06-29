@@ -1,12 +1,9 @@
 
 <body>
 
-<!-- Hier wird der HTML-Code eingebaut, der am Anfang des <body> Bereich
-     einer System-Seite erscheinen soll.
+<!-- Hier koennen Sie Ihren HTML-Code einbauen, der am Anfang des <body> Bereich
+     einer Admidio-Modul-Seite erscheinen soll.
 
-     !!! Das <body> Anfangs-tag darf nicht entfernt, sondern nur angepasst werden !!!
-
-<div align=\"center\">
+     !!! Das hier verwendete <body> Anfangs-tag darf nicht entfernt, 
+     Sie koennen es aber Ihren Beduerfnissen anpassen !!!
 -->
-
-
