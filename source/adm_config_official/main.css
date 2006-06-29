@@ -26,10 +26,14 @@
 /* Allgemeine Anpassungen */
 
 body {
-    color:            #85C226;
+    color:            #555555;
     font-family:      arial, sans-serif;
     font-size:        10pt;
     background-color: #ffffff;
+}
+
+h1 {
+	 color:			    #85C226;
 }
 
 hr {
@@ -70,9 +74,9 @@ a:hover {
 
 .groupBox {
     color:            #555555;
-    background-color: #6CA7A8;
+    background-color: #cccccc;
     border-width:     1px;
-    border-color:     #555555;
+    border-color:     #999999;
     border-style:     solid;
     border-collapse:  collapse;
     padding:          5px;
@@ -81,6 +85,7 @@ a:hover {
 /* Ueberschrift der rechteckigen Groupbox */
 
 .groupBoxHeadline {
+	 color:            #333333;
     font-weight:      bold;
     padding-bottom:   5px;
 }
@@ -91,7 +96,7 @@ a:hover {
 
 .formHead {
     width:            550px;         /* Maximale Breite von Formularen */
-    color:            #555555;
+    color:            #333333;
     background-color: #85C226;
     font-size:        13pt;
     font-weight:      bold;
@@ -104,7 +109,7 @@ a:hover {
 
 .formBody {
     width:            550px;         /* Maximale Breite von Formularen */
-    color:            #74B115;
+    color:            #555555;
     font-size:        11pt;
     background-color: #eaeaea;
     border-width:     0px 1px 1px 1px;
@@ -120,7 +125,7 @@ a:hover {
    Beispiele: Ankuendigungen, Termine */
 
 .boxHead {
-    color:            #555555;
+    color:            #333333;
     background-color: #85C226;
     width:            100%;
     min-height:       20px;
@@ -130,7 +135,7 @@ a:hover {
 }
 
 .boxBody {
-    color:            #74B115;
+    color:            #555555;
     width:            550px;
     font-size:        11pt;
     background-color: #eaeaea;
@@ -171,7 +176,7 @@ a:hover {
 }
 
 .listMouseOver {
-    background-color: #6CA7A8;
+    background-color: #cccccc;
     color:            #555555;
 }
 

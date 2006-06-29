@@ -1,4 +1,4 @@
 
-<!-- Hier wird der HTML-Code eingebaut, der in jedem <head></head> Bereich
-     einer System-Seite erscheinen soll.
+<!-- Hier koennen Sie Ihren HTML-Code einbauen, der in jedem <head></head> Bereich
+     einer Admidio-Modul-Seite erscheinen soll.
 -->
