@@ -107,6 +107,11 @@ $user->email      = strStripTags($_POST['email']);
 $user->homepage   = strStripTags($_POST['homepage']);
 $user->birthday   = strStripTags($_POST['birthday']);
 $user->gender     = $_POST['gender'];
+if($user->gender != 1 && $user->gender != 2)
+{
+    // falls das Geschlecht nicht angegeben wurde, dann neutralen Wert eintragen
+    $user->gender = 0;
+}
 
 /*------------------------------------------------------------*/
 // Felder prüfen

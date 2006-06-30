@@ -383,11 +383,15 @@ if($popup == 0)
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 30%; float: left;\">Geschlecht:</div>
                     <div style=\"text-align: left; margin-left: 32%;\">
-                        <select size=\"1\" name=\"gender\">
-                            <option value=\"0\""; if($user->gender < 1 || $user->gender > 2) echo " selected=\"selected\""; echo ">&nbsp;</option>
-                            <option value=\"1\""; if($user->gender == 1) echo " selected=\"selected\""; echo ">m&auml;nnlich</option>
-                            <option value=\"2\""; if($user->gender == 2) echo " selected=\"selected\""; echo ">weiblich</option>
-                        </select>
+                        <input type=\"radio\" id=\"female\" name=\"gender\" value=\"2\"";
+                            if($user->gender == 2)
+                                echo " checked ";
+                            echo "><label for=\"female\"><img src=\"$g_root_path/adm_program/images/female.png\" title=\"weiblich\" alt=\"weiblich\"></label>
+                        &nbsp;
+                        <input type=\"radio\" id=\"male\" name=\"gender\" value=\"1\"";
+                            if($user->gender == 1)
+                                echo " checked ";
+                            echo "><label for=\"male\"><img src=\"$g_root_path/adm_program/images/male.png\" title=\"m&auml;nnlich\" alt=\"m&auml;nnlich\"></label>
                     </div>
                 </div>";
 
