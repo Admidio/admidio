@@ -418,7 +418,7 @@ require("../../../adm_config/body_top.php");
                 if($count_field > 0 || $count_msg > 0)
                 {
                     echo "<div class=\"groupBox\" style=\"margin-top: 4px; text-align: left;\">
-                        <div class=\"groupBoxHeadline\">Zus&auml;tzliche Daten:</div>";
+                        <div class=\"groupBoxHeadline\">Zus&auml;tzliche Daten</div>";
 
                         if($count_msg > 0)
                         {
