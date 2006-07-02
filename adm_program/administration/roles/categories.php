@@ -36,7 +36,7 @@ require("../../system/login_valid.php");
 // nur Moderatoren duerfen Kategorien erfassen & verwalten
 if(!isModerator())
 {
-    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
     header($location);
     exit();
 }

@@ -34,7 +34,7 @@ require("../../system/login_valid.php");
 // nur Webmaster d&uuml;rfen fremde Passwoerter aendern
 if(!hasRole("Webmaster") && $g_current_user->id != $_GET['user_id'])
 {
-    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
     header($location);
     exit();
 }

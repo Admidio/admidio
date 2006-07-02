@@ -39,7 +39,7 @@ $_POST['loginname'] = trim($_POST['loginname']);
 
 if(strlen($_POST['loginname']) == 0)
 {
-   $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=feld&err_text=Benutzername";
+   $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=feld&err_text=Benutzername";
    header($location);
    exit();
 }
@@ -73,7 +73,7 @@ if ($user_found >= 1)
       // wenn innerhalb 15 min. 3 falsche Logins stattfanden -> Konto 15 min. sperren
       if(mktime() - mysqlmaketimestamp($user_row->usr_date_invalid) < 900)
       {
-         $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=login_failed";
+         $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=login_failed";
          header($location);
          exit();
       }
@@ -129,16 +129,16 @@ if ($user_found >= 1)
 
       $act_date = date("Y-m-d H:i:s", time());
       $sql = "UPDATE ". TBL_USERS. " SET usr_number_login   = usr_number_login + 1
-                                 	   , usr_actual_login   = '$act_date'
-                                 	   , usr_date_invalid   = NULL
-                                		   , usr_number_invalid = 0
+                                       , usr_actual_login   = '$act_date'
+                                       , usr_date_invalid   = NULL
+                                           , usr_number_invalid = 0
                WHERE usr_id = $user_row->usr_id";
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
 
       // Eingeloggt, weiter zur Main - Seite
 
-      $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=login&url=". urlencode($_GET['url']). "&timer=2000&status_refresh=1";
+      $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=login&url=". urlencode($_GET['url']). "&timer=2000&status_refresh=1";
       header($location);
       exit();
    }
@@ -151,14 +151,14 @@ if ($user_found >= 1)
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
 
-      $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=password_unknown";
+      $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=password_unknown";
       header($location);
       exit();
    }
 }
 else
 {
-   $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=login_unknown";
+   $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=login_unknown";
    header($location);
    exit();
 }

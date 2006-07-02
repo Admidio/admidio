@@ -30,7 +30,7 @@ require("../../system/login_valid.php");
 // nur Moderatoren duerfen User importieren
 if(!isModerator())
 {
-    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
     header($location);
     exit();
 }
@@ -38,7 +38,7 @@ if(!isModerator())
 //pruefen ob in den aktuellen Servereinstellungen ueberhaupt file_uploads auf ON gesetzt ist...
 if (ini_get('file_uploads') != '1')
 {
-    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=no_fileuploads";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=no_fileuploads";
     header($location);
     exit();
 }
@@ -47,7 +47,7 @@ if($_GET['mode'] == 2)
 {
     if(strlen($_FILES['userfile']['tmp_name']) == 0)
     {
-        $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=feld&err_text=Datei";
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=feld&err_text=Datei";
         header($location);
         exit();
     }
@@ -58,7 +58,7 @@ if($_GET['mode'] == 2)
 
     if(count($_SESSION["file_lines"]) == 0)
     {
-        $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=file_not_exist";
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=file_not_exist";
         header($location);
         exit();
     }

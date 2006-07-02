@@ -27,7 +27,7 @@
 // wenn noch nicht installiert, dann Install-Dialog anzeigen
 if(!file_exists("../adm_config/config.php"))
 {
-    $location = "location: ../adm_install/index.php";
+    $location = "Location: ../adm_install/index.php";
     header($location);
     exit();
 }

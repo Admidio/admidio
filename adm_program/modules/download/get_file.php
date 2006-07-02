@@ -45,7 +45,7 @@ if(strlen($default_folder) > 0)
 {
    if(strpos($default_folder, "..") !== false)
    {
-      $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_folder";
+      $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_folder";
       header($location);
       exit();
    }
@@ -56,7 +56,7 @@ if(strlen($folder) > 0)
 {
    if(strpos($folder, "..") !== false)
    {
-      $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_folder";
+      $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_folder";
       header($location);
       exit();
    }

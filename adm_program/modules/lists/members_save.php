@@ -47,7 +47,7 @@ $role = mysql_fetch_object($result_role);
 // beide muessen mitglied der richtigen Gliedgemeinschaft sein
 if((!isModerator() && !isGroupLeader($role_id) && !editUser()) || (!hasRole("Webmaster") && $role->rol_name=="Webmaster") || $role->rol_org_shortname!=$g_organization)
 {
-   $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
+   $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
    header($location);
    exit();
 }
@@ -90,7 +90,7 @@ if($role->rol_max_members!=NULL)
     }
     if($counter>$role->rol_max_members)
     {
-        $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=max_members";
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=max_members";
         header($location);
         exit();
     }  

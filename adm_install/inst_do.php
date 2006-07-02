@@ -555,7 +555,7 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
 
 if($_GET['mode'] == 1)
 {
-    $location = "location: index.php?mode=2";
+    $location = "Location: index.php?mode=2";
     header($location);
     exit();
 }

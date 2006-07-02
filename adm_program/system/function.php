@@ -34,7 +34,7 @@ function db_error($result)
     {
         if(headers_sent() == false)
         {
-            $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=mysql&err_text=". mysql_error();
+            $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=mysql&err_text=". mysql_error();
             header($location);
         }
         else

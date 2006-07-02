@@ -33,7 +33,7 @@ require("../../system/login_valid.php");
 // nur Moderatoren duerfen Rollen anlegen und verwalten
 if(!isModerator())
 {
-    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
     header($location);
     exit();
 }
@@ -81,7 +81,7 @@ if ($_GET['rol_id'] != 0)
         {
             if($g_current_user->id != $row_ar->rol_usr_id)
             {
-                $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
+                $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
                 header($location);
                 exit();
             }

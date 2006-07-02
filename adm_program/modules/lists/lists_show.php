@@ -44,7 +44,7 @@ if($mode != "csv-ms"
 && $mode != "print")
 {
     // Dem aufgerufenen Skript wurde die notwendige Variable nicht richtig uebergeben !
-    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=mode";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=mode";
     header($location);
     exit();
 }
@@ -52,7 +52,7 @@ if($mode != "csv-ms"
 if($rol_id <= 0)
 {
     // Dem aufgerufenen Skript wurde die notwendige Variable nicht richtig uebergeben !
-    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=rolle";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=rolle";
     header($location);
     exit();
 }
@@ -181,7 +181,7 @@ switch($type)
       
     default:
         // Dem aufgerufenen Skript wurde die notwendige Variable nicht richtig uebergeben !
-        $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=typ";
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=typ";
         header($location);
         exit();
 }
@@ -249,7 +249,7 @@ if($leiter == 0)
     if(mysql_num_rows($result_lst) == 0)
     {
         // Es sind keine Daten vorhanden !
-        $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=nodata";
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=nodata";
         header($location);
         exit();
     }

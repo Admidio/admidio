@@ -36,7 +36,7 @@ $user_id = $_GET['user_id'];
 // nur Webmaster duerfen fremde Passwoerter aendern
 if(!hasRole("Webmaster") && $g_current_user->id != $user_id)
 {
-   $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
+   $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
    header($location);
    exit();
 }

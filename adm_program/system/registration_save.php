@@ -80,7 +80,7 @@ if(strlen($err_code) == 0)
 
 if(strlen($err_code) != 0)
 {
-    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text";
     header($location);
     exit();
 }
@@ -153,13 +153,13 @@ if ($count_user == 0)
         }
     }
 
-    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&url=home&timer=";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&url=home&timer=";
     header($location);
     exit();
 }
 else
 {
-    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=login_name";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=login_name";
     header($location);
     exit();
 }

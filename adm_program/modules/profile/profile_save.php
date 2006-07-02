@@ -57,7 +57,7 @@ else
 /*------------------------------------------------------------*/
 if(!editUser() && $user_id != $g_current_user->id)
 {
-   $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
+   $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
    header($location);
    exit();
 }
@@ -85,7 +85,7 @@ if($user_id > 0)
 
         if(mysql_num_rows($result) == 0)
         {
-            $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norolle";
+            $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norolle";
             header($location);
             exit();
         }
@@ -191,7 +191,7 @@ else
 
 if(strlen($err_code) > 0)
 {
-   $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text";
+   $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text";
    header($location);
    exit();
 }
@@ -211,7 +211,7 @@ else
 
 if($ret_code != 0)
 {
-   $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=&err_text=$ret_code";
+   $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=&err_text=$ret_code";
    header($location);
    exit();
 }
@@ -321,7 +321,7 @@ if($user->valid == 0)
    }
 
    // neuer User -> Rollen zuordnen
-   $location = "location: roles.php?user_id=$user->id&new_user=1&url=$url";
+   $location = "Location: roles.php?user_id=$user->id&new_user=1&url=$url";
    header($location);
    exit();
 }
@@ -333,13 +333,13 @@ if($user->valid == 0)
 if($user_id == 0)
 {
    // neuer User -> Rollen zuordnen
-   $location = "location: roles.php?user_id=$user->id&new_user=1&url=$url";
+   $location = "Location: roles.php?user_id=$user->id&new_user=1&url=$url";
 }
 else
 {
     // zur Profilseite zurueckkehren und die URL, von der die Profilseite aufgerufen wurde uebergeben
     $load_url = urlencode("$g_root_path/adm_program/modules/profile/profile.php?user_id=$user_id&url=$url");
-    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=save&timer=2000&url=$load_url";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=save&timer=2000&url=$load_url";
 }
 header($location);
 exit();

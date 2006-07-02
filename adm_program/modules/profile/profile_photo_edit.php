@@ -35,7 +35,7 @@ require("../../system/login_valid.php");
 //pruefen ob in den aktuellen Servereinstellungen file_uploads auf ON gesetzt ist...
 if (ini_get('file_uploads') != '1')
 {
-    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=no_file_upload_server";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=no_file_upload_server";
     header($location);
     exit();
 }
@@ -72,7 +72,7 @@ else
 // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
 if(!editUser() && $user_id != $g_current_user->id)
 {
-   $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
+   $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
    header($location);
    exit();
 }
@@ -108,7 +108,7 @@ $bild="../../../adm_my_files/photos/".$a_user_id.".jpg";
         }
 
         // zur Ausgangsseite zurueck
-        $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=profile_photo_update&timer=2000&url=".
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=profile_photo_update&timer=2000&url=".
                     urlencode("$g_root_path/adm_program/modules/profile/profile.php?user_id=".$a_user_id."");
         header($location);
         exit();
@@ -124,7 +124,7 @@ $bild="../../../adm_my_files/photos/".$a_user_id.".jpg";
         }
 
         // zur Ausgangsseite zurueck
-        $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=profile_photo_update_cancel&timer=2000&url=".
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=profile_photo_update_cancel&timer=2000&url=".
                     urlencode("$g_root_path/adm_program/modules/profile/profile.php?user_id=".$a_user_id."");
         header($location);
         exit();
@@ -138,7 +138,7 @@ $bild="../../../adm_my_files/photos/".$a_user_id.".jpg";
         //Dateigroesse
         if ($_FILES["bilddatei"]["error"]==1)
         {
-            $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=profile_photo_2big";
+            $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=profile_photo_2big";
             header($location);
             exit();
         }
@@ -146,7 +146,7 @@ $bild="../../../adm_my_files/photos/".$a_user_id.".jpg";
         //Kontrolle ob Bilder ausgewaehlt wurden
         if(!file_exists($_FILES["bilddatei"]["tmp_name"]))
         {
-            $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=profile_photo_nopic";
+            $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=profile_photo_nopic";
             header($location);
             exit();
         }
@@ -155,7 +155,7 @@ $bild="../../../adm_my_files/photos/".$a_user_id.".jpg";
         $bildinfo=getimagesize($_FILES["bilddatei"]["tmp_name"]);
         if ($_FILES["bilddatei"]["name"]!=NULL && $bildinfo['mime']!="image/jpeg")
         {
-            $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=dateiendungphotoup";
+            $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=dateiendungphotoup";
             header($location);
             exit();
         }

@@ -66,7 +66,7 @@ else
 // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
 if(!editUser() && $_GET['user_id'] != $g_current_user->id)
 {
-   $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
+   $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
    header($location);
    exit();
 }
@@ -96,7 +96,7 @@ else
 
    if(mysql_num_rows($result) == 0)
    {
-      $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
+      $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
       header($location);
       exit();
    }
