@@ -171,16 +171,6 @@ function getErrorText($error_code, $error_text, $g_current_organization)
             $error_str = "Du hast keine Rechte diese Aktion auszuf&uuml;hren";
             break;
 
-        case "noforeign":
-            $error_str = "Du darfst nur Termine &auml;ndern<br />
-            die von dir angelegt wurden";
-            break;
-
-        case "noforeigndel":
-            $error_str = "Du darfst nur Termine l&ouml;schen<br />
-            die von dir angelegt wurden";
-            break;
-
         case "nomembers":
             $error_str = "Es sind keine Anmeldungen vorhanden.";
             break;
