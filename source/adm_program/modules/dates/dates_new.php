@@ -33,7 +33,7 @@ require("../../system/login_valid.php");
 
 if(!editDate())
 {
-    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
     header($location);
     exit();
 }
@@ -52,7 +52,10 @@ $description   = "";
 
 if ($_GET["dat_id"] != 0)
 {
-    $sql    = "SELECT * FROM ". TBL_DATES. " WHERE dat_id = {0}";
+    $sql    = "SELECT * FROM ". TBL_DATES. " 
+                WHERE dat_id = {0}
+                  AND (  dat_org_shortname = '$g_organization'
+                      OR dat_global = 1) ";
     $sql    = prepareSQL($sql, array($_GET['dat_id']));
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
@@ -60,17 +63,6 @@ if ($_GET["dat_id"] != 0)
     if (mysql_num_rows($result) > 0)
     {
         $row_bt = mysql_fetch_object($result);
-
-        // Normale User duerfen nur ihre eigenen Termine aendern
-        if(!isModerator())
-        {
-            if($g_current_user->id != $row_bt->dat_usr_id)
-            {
-                $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-                header($location);
-                exit();
-            }
-        }
 
         $global        = $row_bt->dat_global;
         $headline      = $row_bt->dat_headline;
@@ -92,6 +84,12 @@ if ($_GET["dat_id"] != 0)
         }
         $meeting_point = $row_bt->dat_location;
         $description   = $row_bt->dat_description;
+    }
+    else
+    {
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
+        header($location);
+        exit();
     }
 }
 
