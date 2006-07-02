@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2006 The Admidio Team
  * Homepage     : http://www.admidio.org
- * Module-Owner : Martin G�nzler
+ * Module-Owner : Martin G?nzler
  *
  * Uebergaben:
  *
@@ -39,7 +39,7 @@
     require("../../system/common.php");
     require("../../system/login_valid.php");
 
-//Pr�frotine ob Ordner/Datei
+//Pr?frotine ob Ordner/Datei
 function file_or_folder ($act_dir,$file) {
     if(strlen($file) > 0)
         {
@@ -81,19 +81,19 @@ function removeDir ($dir)
 };
 
 
-// erst pr�fen, ob der User auch die entsprechenden Rechte hat
+// erst pr?fen, ob der User auch die entsprechenden Rechte hat
 if(!editDownload())
 {
-   $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
+   $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
    header($location);
    exit();
 }
 
-//testen ob Schreibrechte f�r adm_my_files bestehen
+//testen ob Schreibrechte f?r adm_my_files bestehen
 if (decoct(fileperms("../../../adm_my_files/download"))!=40777)
 {
    $load_url = urlencode("$g_root_path/adm_program/modules/download/download.php");
-   $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=write_access&err_text=adm_my_files/download&url=$load_url";
+   $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=write_access&err_text=adm_my_files/download&url=$load_url";
    header($location);
    exit();
 }
@@ -113,7 +113,7 @@ if(strlen($default_folder) > 0)
 {
    if(strpos($default_folder, "..") !== false)
    {
-      $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_folder";
+      $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_folder";
       header($location);
       exit();
    }
@@ -123,7 +123,7 @@ if(strlen($folder) > 0)
 {
    if(strpos($folder, "..") !== false)
    {
-      $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_folder";
+      $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_folder";
       header($location);
       exit();
    }
@@ -137,7 +137,7 @@ if($_GET["mode"] == 1)
 {
     if (empty($_POST))
     {
-        $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=empty_upload_post";
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=empty_upload_post";
         header($location);
         exit();
     }
@@ -150,13 +150,13 @@ if($_GET["mode"] == 1)
       $local_file = $_FILES['userfile']['name'];
       //Dateigroesse ueberpruefen Servereinstellungen
       if ($_FILES['userfile']['error']==1){
-        $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=file_2big_server";
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=file_2big_server";
         header($location);
         exit();
       }
       //Dateigroesse ueberpruefen Administratoreinstellungen
       if ($_FILES['userfile']['size']>($g_preferences['max_file_upload_size'])*1000){
-        $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=file_2big";
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=file_2big";
         header($location);
         exit();
       }
@@ -210,7 +210,7 @@ if($_GET["mode"] == 1)
 }
 elseif($_GET["mode"] == 2)
 {
-   //L�schen der Datei/Ordner
+   //L?schen der Datei/Ordner
    
    if($is_folder)
    {
@@ -362,7 +362,7 @@ elseif($_GET["mode"] == 4)
    }
 }
 
-$location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text&url=$url";
+$location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text&url=$url";
 header($location);
 exit();
 ?>

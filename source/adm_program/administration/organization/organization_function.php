@@ -35,7 +35,7 @@ require("../../system/login_valid.php");
 // nur Webmaster duerfen Organisationen bearbeiten
 if(!hasRole("Webmaster"))
 {
-    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
     header($location);
     exit();
 }
@@ -83,7 +83,7 @@ if(strlen($_POST["upload_size"]) == 0)
 
 if ($err_code != "")
 {
-    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text";
     header($location);
     exit();
 }
@@ -94,7 +94,7 @@ if ($err_code != "")
 $ret_code = $g_current_organization->update();
 if($ret_code != 0)
 {
-    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=&err_text=$ret_code";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=&err_text=$ret_code";
     header($location);
     exit();
 }
@@ -111,7 +111,7 @@ writeOrgaPreferences('max_file_upload_size', $_POST['upload_size']);
 
 // zur Ausgangsseite zurueck
 $load_url = urlencode("$g_root_path/adm_program/administration/organization/organization.php?url=". $_GET['url']);
-$location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=save&timer=2000&url=$load_url";
+$location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=save&timer=2000&url=$load_url";
 header($location);
 exit();
 ?>

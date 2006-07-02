@@ -33,7 +33,7 @@ $err_text = "";
 // nur Moderatoren duerfen User importieren
 if(!isModerator())
 {
-    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
     header($location);
     exit();
 }
@@ -185,7 +185,7 @@ $_SESSION["file_lines"]      = "";
 $_SESSION["value_separator"] = "";
 
 $load_url = urlencode("$g_root_path/adm_program/administration/members/members.php");
-$location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=import&err_text=$count_import&timer=2000&url=$load_url";
+$location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=import&err_text=$count_import&timer=2000&url=$load_url";
 header($location);
 exit();
 ?>

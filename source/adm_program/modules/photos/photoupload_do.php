@@ -30,14 +30,14 @@ require("../../system/login_valid.php");
 //bei Seitenaufruf ohne Moderationsrechte
 if(!$g_session_valid || $g_session_valid & !editPhoto())
 {
-    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=photoverwaltunsrecht";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=photoverwaltunsrecht";
     header($location);
     exit();
 }
 
 if (empty($_POST))
 {
-    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=empty_photo_post";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=empty_photo_post";
     header($location);
     exit();
 }
@@ -91,7 +91,7 @@ if($g_session_valid & editPhoto())
                     $bildinfo=getimagesize($_FILES["bilddatei"]["tmp_name"][$x]);
                     if ($_FILES["bilddatei"]["name"][$x]!=NULL && $bildinfo['mime']!="image/jpeg") 
                     {
-                        $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=dateiendungphotoup";
+                        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=dateiendungphotoup";
                         header($location);
                         exit();
                     }
@@ -100,7 +100,7 @@ if($g_session_valid & editPhoto())
                 //Die hochgeladene Datei ueberschreitet die in der Anweisung upload_max_filesize in php.ini festgelegte Groesse.
                 if($_FILES["bilddatei"]["error"]["$x"]==1)
                 {
-                    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=photo_2big";
+                    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=photo_2big";
                     header($location);
                     exit();
                 }
@@ -111,7 +111,7 @@ if($g_session_valid & editPhoto())
         //Kontrolle ob Bilder ausgewaehlt wurden
         if($counter==0)
         {
-            $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=photodateiphotoup";
+            $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=photodateiphotoup";
             header($location);
             exit();
         }

@@ -40,7 +40,7 @@ $err_text = "";
 //in ausgeloggtem Zustand duerfen nie direkt usr_ids uebergeben werden...
 if (array_key_exists("usr_id", $_GET) && !$g_session_valid)
 {
-    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
     header($location);
     exit();
 }
@@ -49,7 +49,7 @@ if (array_key_exists("usr_id", $_GET) && !$g_session_valid)
 // Deswegen muss dies ueberprueft werden...
 if (empty($_POST))
 {
-    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=attachment_or_invalid";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=attachment_or_invalid";
     header($location);
     exit();
 }
@@ -57,7 +57,7 @@ if (empty($_POST))
 if ($g_preferences['send_mail_extern'] == 1)
 {
     // es duerfen oder koennen keine Mails ueber den Server verschickt werden
-    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=mail_extern";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=mail_extern";
     header($location);
     exit();
 }
@@ -157,7 +157,7 @@ if (array_key_exists("rolle", $_POST) && strlen($err_code) == 0)
 //Pruefen ob bis hier Fehler aufgetreten sind
 if (strlen($err_code) > 0)
 {
-    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text";
     header($location);
     exit();
 }
@@ -260,7 +260,7 @@ else
 }
 
 
-$location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text&url=". urlencode($_GET["url"]);
+$location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text&url=". urlencode($_GET["url"]);
 header($location);
 exit();
 

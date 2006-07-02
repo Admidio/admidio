@@ -40,7 +40,7 @@ require("../../system/login_valid.php");
 // erst pruefen, ob der User auch die entsprechenden Rechte hat
 if (!editWeblinks())
 {
-    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
     header($location);
     exit();
 }
@@ -56,7 +56,7 @@ if ($_GET["lnk_id"] != 0)
     if (mysql_num_rows($result) == 0)
     {
         //Wenn keine Daten zu der ID gefunden worden bzw. die ID einer anderen Orga gehört ist Schluss mit lustig...
-        $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
         header($location);
         exit();
     }
@@ -100,7 +100,7 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
         else
         {
             $sql = "UPDATE ". TBL_LINKS. " SET   lnk_name   = {0},
-                                                 lnk_url	= {1},
+                                                 lnk_url    = {1},
                                                  lnk_description  = {2},
                                                  lnk_timestamp    = '$act_date',
                                                  lnk_usr_id       = '$g_current_user->id'
@@ -110,7 +110,7 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
             db_error($result);
         }
 
-        $location = "location: $g_root_path/adm_program/modules/links/links.php?headline=". $_GET['headline'];
+        $location = "Location: $g_root_path/adm_program/modules/links/links.php?headline=". $_GET['headline'];
         header($location);
         exit();
     }
@@ -144,14 +144,14 @@ elseif ($_GET["mode"] == 2)
         $_GET["url"] = "$g_root_path/$g_main_page";
     }
 
-    $location = "location: $g_root_path/adm_program/system/err_msg.php?id=$id&err_code=delete&url=". urlencode($_GET["url"]);
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?id=$id&err_code=delete&url=". urlencode($_GET["url"]);
     header($location);
     exit();
 }
 
 if ($err_code != "")
 {
-    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text";
     header($location);
     exit();
 }

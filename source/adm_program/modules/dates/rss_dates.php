@@ -37,7 +37,7 @@ require("../../system/rss_class.php");
 // Nachschauen ob RSS ueberhaupt aktiviert ist...
 if ($g_preferences['enable_rss'] != 1)
 {
-    $location = "location: $g_root_path/adm_program/system/err_msg.php?url=home&err_code=rss_disabled";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?url=home&err_code=rss_disabled";
     header($location);
     exit();
 }

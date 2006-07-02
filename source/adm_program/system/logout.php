@@ -79,7 +79,7 @@ if($g_forum == 1)
    mysql_select_db($g_adm_db, $g_adm_con);
 }
 
-$location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=logout&url=home&timer=2000&status_refresh=1";
+$location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=logout&url=home&timer=2000&status_refresh=1";
 header($location);
 exit();
 

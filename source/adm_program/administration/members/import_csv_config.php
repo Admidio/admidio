@@ -33,7 +33,7 @@ $err_text = "";
 // nur Moderatoren duerfen User importieren
 if(!isModerator())
 {
-    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
     header($location);
     exit();
 }
@@ -42,7 +42,7 @@ session_start();
 
 if(count($_SESSION['file_lines']) == 0)
 {
-    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=file_not_exist";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=file_not_exist";
     header($location);
     exit();
 }

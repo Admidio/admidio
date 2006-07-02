@@ -35,7 +35,7 @@ require("../../system/login_valid.php");
 
 if (!editWeblinks())
 {
-    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
     header($location);
     exit();
 }
@@ -70,7 +70,7 @@ if ($_GET["lnk_id"] != 0)
     elseif (mysql_num_rows($result) == 0)
     {
         //Wenn keine Daten zu der ID gefunden worden bzw. die ID einer anderen Orga gehört ist Schluss mit lustig...
-        $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
         header($location);
         exit();
     }

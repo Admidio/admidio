@@ -42,7 +42,7 @@ $err_text = "";
 // nur Moderatoren duerfen Mitgliedschaften beenden
 if(!isModerator())
 {
-    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
     header($location);
     exit();
 }
@@ -125,7 +125,7 @@ elseif($_GET["mode"] == 2)
     // Moderatoren duerfen keine Webmaster entfernen
     if(isModerator() && hasRole("Webmaster", $_GET['user_id']))
     {
-        $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
         header($location);
         exit();
     }
@@ -195,7 +195,7 @@ elseif($_GET["mode"] == 3)
     // nur Webmaster duerfen User physikalisch loeschen
     if(!hasRole("Webmaster"))
     {
-        $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
         header($location);
         exit();
     }
@@ -250,7 +250,7 @@ elseif($_GET["mode"] == 4)
     // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
     if(!hasRole("Webmaster") || $g_preferences['send_mail_extern'] == 1)
     {
-        $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
         header($location);
         exit();
     }
@@ -287,7 +287,7 @@ elseif($_GET["mode"] == 4)
     }
 }
 
-$location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text&timer=2000&url=$url";
+$location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text&timer=2000&url=$url";
 header($location);
 exit();
 ?>

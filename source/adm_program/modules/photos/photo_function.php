@@ -9,7 +9,7 @@
  * Uebergaben:
  *
  * Bild: welches Bild soll angezeigt werden
- * scal: Pixelanzahl auf die die l�ngere Bildseite scaliert werden soll
+ * scal: Pixelanzahl auf die die l?ngere Bildseite scaliert werden soll
  * Ziel: wo soll es gspeichert werden
  ******************************************************************************
  *
@@ -192,7 +192,7 @@ if($_GET["job"]=="rotate")
     //bei Seitenaufruf ohne Moderationsrechte
     if(!$g_session_valid || $g_session_valid && !editPhoto($adm_photo["pho_org_shortname"]))
     {
-        $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=photoverwaltunsrecht";
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=photoverwaltunsrecht";
         header($location);
         exit();
     }
@@ -208,7 +208,7 @@ if($_GET["job"]=="rotate")
     // zur Ausgangsseite zurueck
     $seite=$_GET["seite"];
     $pho_id=$_GET["pho_id"];
-    $location = "location: $g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id&seite=$seite";
+    $location = "Location: $g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id&seite=$seite";
     header($location);
     exit();
 }
@@ -219,7 +219,7 @@ if($_GET["job"]=="delete")
     //bei Seitenaufruf ohne Moderationsrechte
     if(!$g_session_valid || $g_session_valid && !editPhoto($adm_photo["pho_org_shortname"]))
     {
-        $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=photoverwaltunsrecht";
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=photoverwaltunsrecht";
         header($location);
         exit();
     }
@@ -229,7 +229,7 @@ if($_GET["job"]=="delete")
     
     // zur Ausgangsseite zurueck
     $seite=$_GET["seite"];
-    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=photo_deleted&timer=2000&url=". urlencode("$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id&seite=$seite");
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=photo_deleted&timer=2000&url=". urlencode("$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id&seite=$seite");
     header($location);
     exit();
 }

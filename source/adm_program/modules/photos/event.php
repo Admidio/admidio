@@ -53,7 +53,7 @@ db_error($result_list);
 //bei Seitenaufruf ohne Moderationsrechte
 if(!$g_session_valid || $g_session_valid && (!editPhoto($adm_photo["pho_org_shortname"]) && $aufgabe="change") || !editPhoto())
 {
-    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=photoverwaltunsrecht";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=photoverwaltunsrecht";
     header($location);
     exit();
 }
@@ -72,7 +72,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
         $veranstaltung = $_POST["veranstaltung"];
         if($veranstaltung=="")
         {
-            $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=veranstaltung";
+            $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=veranstaltung";
             header($location);
             exit();
         }
@@ -84,7 +84,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
         $beginn =  $_POST["beginn"];
         if($beginn=="" || !dtCheckDate($beginn))
         {
-            $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=startdatum";
+            $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=startdatum";
             header($location);
             exit();
         }
@@ -101,7 +101,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
         {
             if(!dtCheckDate($ende))
             {
-                $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=enddatum";
+                $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=enddatum";
                 header($location);
                 exit();
             }
@@ -114,7 +114,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
         //Anfang muss vor oder gleich Ende sein
         if($ende<$beginn)
         {
-            $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=startvorend";
+            $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=startvorend";
             header($location);
             exit();
         }
@@ -159,7 +159,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
                 $result = mysql_query($sql, $g_adm_con);
                 db_error($result);
                 $load_url = urlencode("$g_root_path/adm_program/modules/photos/photos.php");
-                $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=write_access&err_text=adm_my_files/photos&url=$load_url";
+                $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=write_access&err_text=adm_my_files/photos&url=$load_url";
                 header($location);
                 exit();
             }
@@ -180,7 +180,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
             if (decoct(fileperms("../../../adm_my_files/photos"))!=40777)
             {
                 $load_url = urlencode("$g_root_path/adm_program/modules/photos/photos.php");
-                $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=write_access&err_text=adm_my_files/photos&url=$load_url";
+                $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=write_access&err_text=adm_my_files/photos&url=$load_url";
                 header($location);
                 exit();
             }

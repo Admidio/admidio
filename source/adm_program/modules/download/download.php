@@ -47,7 +47,7 @@
     {
         if(strpos($default_folder, "..") !== false)
         {
-            $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_folder";
+            $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_folder";
             header($location);
             exit();
         }
@@ -58,7 +58,7 @@
     {
         if(strpos($folder, "..") !== false)
         {
-            $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_folder";
+            $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_folder";
             header($location);
             exit();
         }
@@ -70,7 +70,7 @@
     //Auslesen des Ordners und schreiben in array
     if(!is_dir($act_folder))
     {
-        $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=folder_not_exist";
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=folder_not_exist";
         header($location);
         exit();
     }

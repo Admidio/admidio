@@ -38,7 +38,7 @@ require("../../system/login_valid.php");
 // nur Moderatoren duerfen Felder erfassen & verwalten
 if(!isModerator())
 {
-   $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
+   $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
    header($location);
    exit();
 }
@@ -66,7 +66,7 @@ if($_GET['mode'] == 1)
       
          if($row[0] > 0)
          {
-            $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=roleexist";
+            $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=roleexist";
             header($location);
             exit();
          }      
@@ -110,7 +110,7 @@ if($_GET['mode'] == 1)
    
    if(strlen($err_code) > 0)
    {
-      $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text";
+      $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text";
       header($location);
       exit();
    }
@@ -139,7 +139,7 @@ elseif($_GET['mode'] == 2)
          
 // zur Gruppierungsseite zurueck
 $load_url = urlencode("$g_root_path/adm_program/administration/organization/organization.php?url=". $_GET['url']);
-$location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&timer=2000&url=$load_url";
+$location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&timer=2000&url=$load_url";
 header($location);
 exit();
 ?>

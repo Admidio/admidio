@@ -36,7 +36,7 @@ require("../../system/tbl_role_dependencies.php");
 // nur Webmaster & Moderatoren duerfen Rollen zuweisen
 if(!isModerator() && !isGroupLeader() && !editUser())
 {
-    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
     header($location);
     exit();
 }
@@ -111,7 +111,7 @@ while($row = mysql_fetch_object($result_rolle))
         &&  !in_array($_GET['user_id'], $valid_members_array)
         &&  $_POST["role-$i"]==true)
     {
-        $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=max_members_profile&err_text=$row->rol_name";
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=max_members_profile&err_text=$row->rol_name";
         header($location);
         exit();
     }
@@ -236,7 +236,7 @@ foreach($parentRoles as $actRole)
 if($_GET['new_user'] == 1 && $count_assigned == 0)
 {
     // Neuem User wurden keine Rollen zugewiesen
-    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norolle";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norolle";
     header($location);
     exit();
 }
@@ -277,7 +277,7 @@ if($_GET['popup'] == 1)
 else
 {
     // zur Ausgangsseite zurueck
-    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=save&url=". urlencode($_GET['url']). "&timer=2000";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=save&url=". urlencode($_GET['url']). "&timer=2000";
     header($location);
     exit();
 }

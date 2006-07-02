@@ -30,7 +30,7 @@ require("../../system/login_valid.php");
 //bei Seitenaufruf ohne Moderationsrechte
 if(!$g_session_valid || $g_session_valid & !editPhoto())
 {
-    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=photoverwaltunsrecht";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=photoverwaltunsrecht";
     header($location);
     exit();
 }
@@ -38,7 +38,7 @@ if(!$g_session_valid || $g_session_valid & !editPhoto())
 //Kontrolle ob Server Dateiuploads zulaesst
 if(ini_get(file_uploads)==0)
 {
-    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=no_file_upload_server";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=no_file_upload_server";
     header($location);
     exit();
 }
