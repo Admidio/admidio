@@ -35,7 +35,7 @@ require("../../system/login_valid.php");
 
 if(!editAnnouncements())
 {
-    $location = "location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
     header($location);
     exit();
 }
@@ -54,7 +54,10 @@ $description   = "";
 
 if ($_GET["ann_id"] != 0)
 {
-    $sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. " WHERE ann_id = {0}";
+    $sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. " 
+                WHERE ann_id = {0}
+                  AND (  ann_org_shortname = '$g_organization'
+                      OR ann_global = 1) ";
     $sql    = prepareSQL($sql, array($_GET['ann_id']));
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
@@ -66,6 +69,12 @@ if ($_GET["ann_id"] != 0)
         $global        = $row_ba->ann_global;
         $headline      = $row_ba->ann_headline;
         $description   = $row_ba->ann_description;
+    }
+    else
+    {
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
+        header($location);
+        exit();
     }
 }
 
