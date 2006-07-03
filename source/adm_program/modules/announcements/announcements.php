@@ -11,7 +11,7 @@
  * start     - Angabe, ab welchem Datensatz Ankuendigungen angezeigt werden sollen
  * headline  - Ueberschrift, die ueber den Ankuendigungen steht
  *             (Default) Ankuendigungen
- * id          - Nur eine einzige Annkuendigung anzeigen lassen.
+ * id        - Nur eine einzige Annkuendigung anzeigen lassen.
  *
  ******************************************************************************
  *
@@ -33,11 +33,6 @@
 
 require("../../system/common.php");
 require("../../system/bbcode.php");
-
-if(!array_key_exists("mode", $_GET))
-{
-    $_GET["mode"] = "all";
-}
 
 if(!array_key_exists("start", $_GET))
 {
@@ -142,7 +137,7 @@ require("../../../adm_config/body_top.php");
         // Icon-Links und Navigation anzeigen
 
         if($_GET['id'] == 0
-        && (isModerator() || $g_preferences['enable_rss'] == true))
+        && (editAnnouncements() || $g_preferences['enable_rss'] == true))
         {
             echo "<p>";
 
@@ -156,7 +151,7 @@ require("../../../adm_config/body_top.php");
                 </span>";
             }
 
-            if(isModerator() && $g_preferences['enable_rss'] == true)
+            if(editAnnouncements() && $g_preferences['enable_rss'] == true)
             {
                 echo "&nbsp;&nbsp;&nbsp;&nbsp;";
             }
