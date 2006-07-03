@@ -175,7 +175,7 @@ require("../../../adm_config/body_top.php");
                     <div class=\"boxHead\">
                         <div style=\"text-align: left; float: left;\">
                             <a href=\"$row->lnk_url\" target=\"_blank\">
-                            <img src=\"$g_root_path/adm_program/images/globe.png\" style=\"vertical-align: middle;\" alt=\"Gehe zu $row->lnk_name\"
+                            <img src=\"$g_root_path/adm_program/images/globe.png\" style=\"vertical-align: top;\" alt=\"Gehe zu $row->lnk_name\"
                             title=\"Gehe zu $row->lnk_name\" border=\"0\"></a>
                             <a href=\"$row->lnk_url\" target=\"_blank\">";
                             if (strlen($row->lnk_name) > 25)
