@@ -183,7 +183,7 @@ require("../../../adm_config/body_top.php");
         // Icon-Links und Navigation anzeigen
 
         if($_GET['id'] == 0
-        && (isModerator() || $g_preferences['enable_rss'] == true))
+        && (editDate() || $g_preferences['enable_rss'] == true))
         {
             echo "<p>";
 
@@ -197,7 +197,7 @@ require("../../../adm_config/body_top.php");
                 </span>";
             }
 
-            if(isModerator() && $g_preferences['enable_rss'] == true)
+            if(editDate() && $g_preferences['enable_rss'] == true)
             {
                 echo "&nbsp;&nbsp;&nbsp;&nbsp;";
             }
@@ -238,12 +238,6 @@ require("../../../adm_config/body_top.php");
 
             while($row = mysql_fetch_object($date_result))
             {
-                $sql     = "SELECT * FROM ". TBL_USERS. " WHERE usr_id = $row->dat_usr_id";
-                $result2 = mysql_query($sql, $g_adm_con);
-                db_error($result2);
-
-                $user = mysql_fetch_object($result2);
-
                 echo "
                 <div class=\"boxBody\" style=\"overflow: hidden;\">
                     <div class=\"boxHead\">
@@ -259,9 +253,8 @@ require("../../../adm_config/body_top.php");
                                 onclick=\"self.location.href='$g_root_path/adm_program/modules/dates/ical_function.php?dat_id=$row->dat_id&mode=1'\">";
 
                             // aendern & loeschen darf man nur eigene Termine, ausser Moderatoren
-                            if (editDate() && (  isModerator() || $row->dat_usr_id == $g_current_user->id ))
+                            if (editDate())
                             {
-
                                 echo "&nbsp;<img src=\"$g_root_path/adm_program/images/edit.png\" style=\"cursor: pointer\" 
                                     width=\"16\" height=\"16\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"
                                     onclick=\"self.location.href='dates_new.php?dat_id=$row->dat_id'\">";
@@ -275,7 +268,6 @@ require("../../../adm_config/body_top.php");
                                             $load_url = urlencode("$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=$row->dat_id&amp;mode=2&amp;url=$g_root_path/adm_program/modules/dates/dates.php");
                                             echo " onclick=\"self.location.href='$g_root_path/adm_program/system/err_msg.php?err_code=delete_date&amp;err_text=". urlencode($row->dat_headline). "&amp;err_head=L&ouml;schen&amp;button=2&amp;url=$load_url'\">";
                                     }
-
                             }
                         echo "&nbsp;</div>
                     </div>
@@ -327,10 +319,20 @@ require("../../../adm_config/body_top.php");
                             echo nl2br(strSpecialChars2Html($row->dat_description));
                         }
                     echo "</div>
-                    <div style=\"margin: 8px 4px 4px 4px; font-size: 8pt; text-align: left;\">
-                        Angelegt von ". strSpecialChars2Html($user->usr_first_name). " ". strSpecialChars2Html($user->usr_last_name).
-                        " am ". mysqldatetime("d.m.y h:i", $row->dat_timestamp). "
-                    </div>                    
+                    <div style=\"margin: 8px 4px 4px 4px; font-size: 8pt; text-align: left;\">";
+                        $user_create = new TblUsers($g_adm_con);
+                        $user_create->getUser($row->dat_usr_id);
+                        echo "Angelegt von ". strSpecialChars2Html($user_create->first_name). " ". strSpecialChars2Html($user_create->last_name).
+                        " am ". mysqldatetime("d.m.y h:i", $row->dat_timestamp);
+                        
+                        if($row->dat_usr_id_change > 0)
+                        {
+                            $user_change = new TblUsers($g_adm_con);
+                            $user_change->getUser($row->dat_usr_id_change);
+                            echo "<br>Zuletzt bearbeitet von ". strSpecialChars2Html($user_change->first_name). " ". strSpecialChars2Html($user_change->last_name).
+                            " am ". mysqldatetime("d.m.y h:i", $row->dat_last_change);
+                        }
+                    echo "</div>                    
                 </div>
 
                 <br />";
