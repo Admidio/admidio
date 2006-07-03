@@ -192,12 +192,6 @@ require("../../../adm_config/body_top.php");
 
             while($row = mysql_fetch_object($announcements_result))
             {
-                $sql     = "SELECT * FROM ". TBL_USERS. " WHERE usr_id = $row->ann_usr_id";
-                $result2 = mysql_query($sql, $g_adm_con);
-                db_error($result2);
-
-                $user = mysql_fetch_object($result2);
-
                 echo "
                 <div class=\"boxBody\" style=\"overflow: hidden;\">
                     <div class=\"boxHead\">
@@ -241,10 +235,20 @@ require("../../../adm_config/body_top.php");
                             echo nl2br(strSpecialChars2Html($row->ann_description));
                         }
                     echo "</div>
-                    <div style=\"margin: 8px 4px 4px 4px; font-size: 8pt; text-align: left;\">
-                        Angelegt von ". strSpecialChars2Html($user->usr_first_name). " ". strSpecialChars2Html($user->usr_last_name).
-                        " am ". mysqldatetime("d.m.y h:i", $row->ann_timestamp). "
-                    </div>
+                    <div style=\"margin: 8px 4px 4px 4px; font-size: 8pt; text-align: left;\">";
+                        $user_create = new TblUsers($g_adm_con);
+                        $user_create->getUser($row->ann_usr_id);
+                        echo "Angelegt von ". strSpecialChars2Html($user_create->first_name). " ". strSpecialChars2Html($user_create->last_name).
+                        " am ". mysqldatetime("d.m.y h:i", $row->ann_timestamp);
+                        
+                        if($row->ann_usr_id_change > 0)
+                        {
+                            $user_change = new TblUsers($g_adm_con);
+                            $user_change->getUser($row->ann_usr_id_change);
+                            echo "<br>Zuletzt bearbeitet von ". strSpecialChars2Html($user_change->first_name). " ". strSpecialChars2Html($user_change->last_name).
+                            " am ". mysqldatetime("d.m.y h:i", $row->ann_last_change);
+                        }
+                    echo "</div>
                 </div>
 
                 <br />";

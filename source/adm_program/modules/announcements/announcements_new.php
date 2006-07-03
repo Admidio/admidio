@@ -177,25 +177,8 @@ require("../../../adm_config/body_top.php");
                         <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" 
                         width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
                         &nbsp;Speichern</button>
-                </div>";
-                if($row_ba->ann_usr_id_change > 0)
-                {
-                    // Angabe &uuml;ber die letzten Aenderungen
-                    $sql    = "SELECT usr_first_name, usr_last_name
-                                 FROM ". TBL_USERS. "
-                                WHERE usr_id = $row_ba->ann_usr_id_change ";
-                    $result = mysql_query($sql, $g_adm_con);
-                    db_error($result);
-                    $row = mysql_fetch_array($result);
-
-                    echo "<div style=\"margin-top: 6px;\">
-                        <span style=\"font-size: 10pt\">
-                            Letzte &Auml;nderung am ". mysqldatetime("d.m.y h:i", $row_ba->ann_last_change).
-                            " durch $row[0] $row[1]
-                        </span>
-                    </div>";
-                }
-            echo "</div>
+                </div>
+            </div>
         </form>
     </div>
     <script type=\"text/javascript\"><!--
