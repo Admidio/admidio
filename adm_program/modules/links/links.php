@@ -160,9 +160,8 @@ require("../../../adm_config/body_top.php");
         }
         else
         {
-            // Links auflisten
-            $i = 0;
 
+            // Links auflisten
             while ($row = mysql_fetch_object($links_result))
             {
                 $sql     = "SELECT * FROM ". TBL_USERS. " WHERE usr_id = $row->lnk_usr_id";
@@ -230,11 +229,11 @@ require("../../../adm_config/body_top.php");
                 </div>
 
                 <br />";
-                $i++;
-            }  // Ende While-Schleife
+             }  // Ende While-Schleife
         }
 
-        if ($_GET['id'] == 0)
+        // Die untere Navigationsleiste wird nur angezeigt wenn die Seite mehr als 2 Elemente enthaelt...
+        if ($_GET['id'] == 0 && mysql_num_rows($links_result) > 2)
         {
             // Navigation mit Vor- und Zurueck-Buttons
             $baseUrl = "$g_root_path/adm_program/modules/links/links.php?headline=". $_GET["headline"];
