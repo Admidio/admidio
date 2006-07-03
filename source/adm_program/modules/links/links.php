@@ -33,11 +33,6 @@
 require("../../system/common.php");
 require("../../system/bbcode.php");
 
-if (!array_key_exists("mode", $_GET))
-{
-    $_GET["mode"] = "all";
-}
-
 if (!array_key_exists("start", $_GET))
 {
     $_GET["start"] = 0;
