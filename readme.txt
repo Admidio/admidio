@@ -121,6 +121,10 @@ Jon Papaioannou
 Roönaän Webdevelopment
 	http://www.roonaan.nl
 	quickerUbb Klasse
+	
+phpBB bulletin board
+	http://www.phpbb.com
+	Diverse Funktionen
 
 -------------------------------------------------------------------------
        	      Copyright (c) 2004 - 2006 The Admidio Team
