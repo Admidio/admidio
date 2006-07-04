@@ -112,10 +112,10 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
 {
     //Daten fuer die DB werden nun aufbereitet...
 
-    $name      = strStripTags($_POST['name']);
-    $text      = strStripTags($_POST['text']);
+    $name      = strStripTags($_POST['Name']);
+    $text      = strStripTags($_POST['Text']);
 
-    $email     = strStripTags($_POST['email']);
+    $email     = strStripTags($_POST['Email']);
     if (!isValidEmailAddress($email))
     {
         //falls die Email ein ungueltiges Format aufweist wird sie einfach auf null gesetzt
@@ -123,9 +123,11 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
     }
 
 
-    $homepage  = strStripTags($_POST['homepage']);
-    if (strlen($homepage != 0))
+    $homepage  = strStripTags($_POST['Homepage']);
+    if (strlen($homepage) != 0)
     {
+
+
         //Die Webadresse wird jetzt falls sie nicht mit http:// oder https:// beginnt entsprechend aufbereitet
         if (substr($homepage, 0, 7) != 'http://' && substr($homepage, 0, 8) != 'https://' )
         {
@@ -136,6 +138,17 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
     $ipAddress = $_SERVER['REMOTE_ADDR'];
     $actDate   = date("Y.m.d G:i:s", time());
 
+    if ($g_session_valid)
+    {
+        // Falls der User eingeloggt ist wird die aktuelle UserId mitabgespeichert...
+        $usr_id = $g_current_user->id;
+    }
+    else
+    {
+        // Wenn nicht sind die Tueddel um die null wichtig...
+        $usr_id = 'null';
+    }
+
     if (strlen($name) > 0 && strlen($text)  > 0)
     {
 
@@ -145,11 +158,14 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
         {
             $sql = "INSERT INTO ". TBL_GUESTBOOK. " (gbo_org_id, gbo_usr_id, gbo_name, gbo_text, gbo_email,
                                                  gbo_homepage, gbo_timestamp, gbo_ip_address)
-                                         VALUES ('$g_current_organization->id', '$g_current_user->id', {0}, {1}, {2},
-                                                 {3}, $actDate, $ipAddress)";
+                                         VALUES ($g_current_organization->id, $usr_id, {0}, {1}, {2},
+                                                 {3}, '$actDate', '$ipAddress')";
             $sql    = prepareSQL($sql, array($name, $text, $email, $homepage));
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
+            //echo $sql;
+
+
         }
         else
         {
@@ -157,7 +173,7 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
                                                   , gbo_text     = {1}
                                                   , gbo_email    = {2}
                                                   , gbo_homepage = {3}
-                                                  , gbo_last_change    = '$act_date'
+                                                  , gbo_last_change    = '$actDate'
                                                   , gbo_usr_id_change = $g_current_user->id
                      WHERE gbo_id = {4}";
             $sql    = prepareSQL($sql, array($name, $text, $email, $homepage, $_GET['id']));
