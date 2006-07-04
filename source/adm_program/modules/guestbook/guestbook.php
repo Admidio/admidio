@@ -118,7 +118,7 @@ require("../../../adm_config/body_top.php");
             echo "<span class=\"iconLink\">
                 <a class=\"iconLink\" href=\"guestbook_new.php?headline=". $_GET["headline"]. "\"><img
                 class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Neuen Eintrag anlegen\"></a>
-                <a class=\"iconLink\" href=\"announcements_new.php?headline=". $_GET["headline"]. "\">Neuen Eintrag anlegen</a>
+                <a class=\"iconLink\" href=\"guestbook_new.php?headline=". $_GET["headline"]. "\">Neuen Eintrag anlegen</a>
             </span>";
 
 
@@ -194,11 +194,11 @@ require("../../../adm_config/body_top.php");
                             {
                                     echo "
                                     <img src=\"$g_root_path/adm_program/images/edit.png\" style=\"cursor: pointer;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"
-                                    onclick=\"self.location.href='guestbook_new_entry.php?gbo_id=$row->gbo_id&amp;headline=". $_GET['headline']. "'\">";
+                                    onclick=\"self.location.href='guestbook_new.php?id=$row->gbo_id&amp;headline=". $_GET['headline']. "'\">";
 
                                     echo "
                                     <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer;\" width=\"16\" height=\"16\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" ";
-                                    $load_url = urlencode("$g_root_path/adm_program/modules/guestbook/guestbook_function.php?gbo_id=$row->gbo_id&amp;mode=2&amp;url=$g_root_path/adm_program/modules/guestbook/guestbook.php");
+                                    $load_url = urlencode("$g_root_path/adm_program/modules/guestbook/guestbook_function.php?id=$row->gbo_id&amp;mode=2&amp;url=$g_root_path/adm_program/modules/guestbook/guestbook.php");
                                     echo " onclick=\"self.location.href='$g_root_path/adm_program/system/err_msg.php?err_code=delete_gbook_entry&amp;err_text=". urlencode($row->gbo_name). "&amp;err_head=L&ouml;schen&amp;button=2&amp;url=$load_url'\">";
 
                             }
@@ -208,7 +208,7 @@ require("../../../adm_config/body_top.php");
                         echo "</div>
 
                         <div style=\"margin: 8px 4px 4px 4px; text-align: left;\">";
-                            // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
+                            // wenn BBCode aktiviert ist, den Text noch parsen, ansonsten direkt ausgeben
                             if ($g_preferences['enable_bbcode'] == 1)
                             {
                                 echo strSpecialChars2Html($bbcode->parse($row->gbo_text));
@@ -308,7 +308,7 @@ require("../../../adm_config/body_top.php");
                             {
                                     echo "
                                     <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer;\" width=\"16\" height=\"16\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" ";
-                                    $load_url = urlencode("$g_root_path/adm_program/modules/guestbook/guestbook_function.php?gbc_id=$row->gbc_id&amp;mode=2&amp;url=$g_root_path/adm_program/modules/guestbook/guestbook.php");
+                                    $load_url = urlencode("$g_root_path/adm_program/modules/guestbook/guestbook_function.php?id=$row->gbc_id&amp;mode=5&amp;url=$g_root_path/adm_program/modules/guestbook/guestbook.php");
                                     echo " onclick=\"self.location.href='$g_root_path/adm_program/system/err_msg.php?err_code=delete_gbook_comment&amp;err_text=". urlencode(strSpecialChars2Html($commentWriter->first_name). " ". strSpecialChars2Html($commentWriter->last_name)). "&amp;err_head=L&ouml;schen&amp;button=2&amp;url=$load_url'\">";
 
                             }
@@ -317,7 +317,7 @@ require("../../../adm_config/body_top.php");
                     echo "</div>
 
                     <div style=\"margin: 8px 4px 4px 4px; text-align: left;\">";
-                        // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
+                        // wenn BBCode aktiviert ist, den Text noch parsen, ansonsten direkt ausgeben
                         if ($g_preferences['enable_bbcode'] == 1)
                         {
                             echo strSpecialChars2Html($bbcode->parse($row->gbc_text));
