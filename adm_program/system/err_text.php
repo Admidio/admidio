@@ -261,6 +261,18 @@ function getErrorText($error_code, $error_text, $g_current_organization)
             break;
 
 
+        //Fehlermeldungen Gaestebuchmodul
+        case "delete_gbook_entry":
+            $error_str = "Willst Du den Eintrag von<br />
+            <b>$error_text</b><br />wirklich l&ouml;schen ?";
+            break;
+
+        case "delete_gbook_comment":
+            $error_str = "Willst Du den Kommentar von<br />
+            <b>$error_text</b><br />wirklich l&ouml;schen ?";
+            break;
+
+
         //Fehlermeldungen Profilfoto
         case "profile_photo_update":
             $error_str = "Neues Profilfoto wurde erfolgreich gespeichert.";

@@ -187,7 +187,7 @@ require("../../../adm_config/body_top.php");
                         echo "</div>";
 
 
-                        echo "<div style=\"text-align: right;\">". mysqldatetime("d.m.y h:m", $row->gbo_timestamp). "&nbsp;";
+                        echo "<div style=\"text-align: right;\">". mysqldatetime("d.m.y h:i", $row->gbo_timestamp). "&nbsp;";
 
                             // aendern & loeschen duerfen nur User mit den gesetzten Rechten
                             if (editGuestbook())
@@ -203,14 +203,6 @@ require("../../../adm_config/body_top.php");
 
                             }
 
-                            // kommentieren duerfen nur User mit den gesetzten Rechten
-                            if (commentGuestbook())
-                            {
-                                    echo "
-                                    <img src=\"$g_root_path/adm_program/images/comments.png\" style=\"cursor: pointer;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Kommentieren\" title=\"Kommentieren\"
-                                    onclick=\"self.location.href='guestbook_new_comment.php?gbo_id=$row->gbo_id&amp;headline=". $_GET['headline']. "'\">";
-
-                            }
 
                             echo "&nbsp;</div>";
                         echo "</div>
@@ -238,24 +230,38 @@ require("../../../adm_config/body_top.php");
                             }
                         echo "</div>";
 
-                        // Die Anzahl der Kommentare zu diesem Eintrag wird nun ermittelt
-                        $sql    = "SELECT count(*) FROM ". TBL_GUESTBOOK_COMMENTS. "
-                                   WHERE gbc_gbo_id = '$row->gbo_id'";
+                        // Alle Kommentare zu diesem Eintrag werden nun aus der DB geholt...
+                        $sql    = "SELECT * FROM ". TBL_GUESTBOOK_COMMENTS. "
+                                   WHERE gbc_gbo_id = '$row->gbo_id'
+                                   ORDER by gbc_timestamp asc";
 
-                        $result = mysql_query($sql, $g_adm_con);
-                        db_error($result);
-                        $record = mysql_fetch_array($result);
-                        $num_comments = $record[0];
+                        $comment_result = mysql_query($sql, $g_adm_con);
+                        db_error($comment_result);
 
-                        if ($num_comments > 0)
+
+                        if ($_GET['id'] == 0 && mysql_num_rows($comment_result) > 0)
                         {
                             // Falls Kommentare vorhanden sind, wird der Link zur Kommentarseite angezeigt...
+                            $load_url = "$g_root_path/adm_program/modules/guestbook/guestbook.php?id=$row->gbo_id";
                             echo
                             "<div style=\"margin: 8px 4px 4px 4px; font-size: 8pt; text-align: left;\">
-                                <a href=\"guestbook_comments\">
-                                <img src=\"$g_root_path/adm_program/images/comments.png\" style=\"vertical-align: middle;\" alt=\"Gehe zur Kommentarseite\"
-                                title=\"Gehe zur Kommentarseite\" border=\"0\"></a>
-                                <a href=\"guestbook_comments\">$num_comments Kommentar(e) zu diesem Eintrag</a>
+                                <a href=\"$load_url\">
+                                <img src=\"$g_root_path/adm_program/images/comments.png\" style=\"vertical-align: middle;\" alt=\"Kommentare anzeigen\"
+                                title=\"Kommentare anzeigen\" border=\"0\"></a>
+                                <a href=\"$load_url\">". mysql_num_rows($comment_result). " Kommentar(e) zu diesem Eintrag</a>
+                            </div>";
+                        }
+
+                        if ($_GET['id'] == 0 && mysql_num_rows($comment_result) == 0 && commentGuestbook())
+                        {
+                            // Falls keine Kommentare vorhanden sind, aber das Recht zur Kommentierung, wird der Link zur Kommentarseite angezeigt...
+                            $load_url = "$g_root_path/adm_program/modules/guestbook/guestbook.php?id=$row->gbo_id";
+                            echo
+                            "<div style=\"margin: 8px 4px 4px 4px; font-size: 8pt; text-align: left;\">
+                                <a href=\"$load_url\">
+                                <img src=\"$g_root_path/adm_program/images/comments.png\" style=\"vertical-align: middle;\" alt=\"Kommentieren\"
+                                title=\"Kommentieren\" border=\"0\"></a>
+                                <a href=\"$load_url\">Einen Kommentar zu diesem Beitrag schreiben.</a>
                             </div>";
                         }
 
@@ -266,10 +272,80 @@ require("../../../adm_config/body_top.php");
             }  // Ende While-Schleife
         }
 
+
+        // Falls eine ID uebergeben wurde, werden unter dem Eintrag die dazugehoerigen Kommetare angezeigt
+        if ($_GET['id'] > 0)
+        {
+
+            echo "<p>Kommentare:</p>";
+
+            //Kommentarnummer auf 1 setzen
+            $commentNumber = 1;
+
+
+            // Die Kommetare liegen bereits im MysqlResultset $comment_result vor
+            // also nur noch auflisten...
+            while ($row = mysql_fetch_object($comment_result))
+            {
+                // Die Userdaten des Kommentarschreibers aus der DB holen
+                $commentWriter = new TblUsers($g_adm_con);
+                $commentWriter->getUser($row->gbc_usr_id);
+
+                echo "
+                <div class=\"commentBody\" style=\"overflow: hidden;\">
+                    <div class=\"commentHead\">
+                        <div style=\"text-align: left; float: left;\">
+                            <img src=\"$g_root_path/adm_program/images/comments.png\" style=\"vertical-align: top;\" alt=\"Kommentar ". $commentNumber. "\">&nbsp;".
+                            "Kommentar ". $commentNumber. " von ". strSpecialChars2Html($commentWriter->first_name). " ". strSpecialChars2Html($commentWriter->last_name);
+
+                        echo "</div>";
+
+
+                        echo "<div style=\"text-align: right;\">". mysqldatetime("d.m.y h:i", $row->gbc_timestamp). "&nbsp;";
+
+                            // loeschen von Kommentaren duerfen nur User mit den gesetzten Rechten
+                            if (editGuestbook())
+                            {
+                                    echo "
+                                    <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer;\" width=\"16\" height=\"16\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" ";
+                                    $load_url = urlencode("$g_root_path/adm_program/modules/guestbook/guestbook_function.php?gbc_id=$row->gbc_id&amp;mode=2&amp;url=$g_root_path/adm_program/modules/guestbook/guestbook.php");
+                                    echo " onclick=\"self.location.href='$g_root_path/adm_program/system/err_msg.php?err_code=delete_gbook_comment&amp;err_text=". urlencode(strSpecialChars2Html($commentWriter->first_name). " ". strSpecialChars2Html($commentWriter->last_name)). "&amp;err_head=L&ouml;schen&amp;button=2&amp;url=$load_url'\">";
+
+                            }
+
+                        echo "&nbsp;</div>";
+                    echo "</div>
+
+                    <div style=\"margin: 8px 4px 4px 4px; text-align: left;\">";
+                        // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
+                        if ($g_preferences['enable_bbcode'] == 1)
+                        {
+                            echo strSpecialChars2Html($bbcode->parse($row->gbc_text));
+                        }
+                        else
+                        {
+                            echo nl2br(strSpecialChars2Html($row->gbc_text));
+                        }
+                    echo "</div>
+
+                </div>
+
+                <br />";
+
+                // Kommentarnummer um 1 erhoehen
+                $commentNumber = $commentNumber + 1;
+
+            }
+
+        }
+
+
+
+
         if ($_GET['id'] == 0 && mysql_num_rows($guestbook_result) > 2)
         {
             // Navigation mit Vor- und Zurueck-Buttons
-            $base_url = "$g_root_path/adm_program/modules/announcements/announcements.php?headline=". $_GET["headline"];
+            $base_url = "$g_root_path/adm_program/modules/guestbook/guestbook.php?headline=". $_GET["headline"];
             echo generatePagination($base_url, $num_guestbook, 10, $_GET["start"], TRUE);
         }
     echo "</div>";
