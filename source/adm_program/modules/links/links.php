@@ -164,11 +164,6 @@ require("../../../adm_config/body_top.php");
             // Links auflisten
             while ($row = mysql_fetch_object($links_result))
             {
-                $sql     = "SELECT * FROM ". TBL_USERS. " WHERE usr_id = $row->lnk_usr_id";
-                $result2 = mysql_query($sql, $g_adm_con);
-                db_error($result2);
-
-                $user = mysql_fetch_object($result2);
 
                 echo "
                 <div class=\"boxBody\" style=\"overflow: hidden;\">
@@ -222,8 +217,10 @@ require("../../../adm_config/body_top.php");
                             echo nl2br(strSpecialChars2Html($row->lnk_description));
                         }
                     echo "</div>
-                    <div style=\"margin: 8px 4px 4px 4px; font-size: 8pt; text-align: left;\">
-                        Angelegt von ". strSpecialChars2Html($user->usr_first_name). " ". strSpecialChars2Html($user->usr_last_name).
+                    <div style=\"margin: 8px 4px 4px 4px; font-size: 8pt; text-align: left;\">";
+                        $user_create = new TblUsers($g_adm_con);
+                        $user_create->getUser($row->lnk_usr_id);
+                        echo "Angelegt von ". strSpecialChars2Html($user_create->first_name). " ". strSpecialChars2Html($user_create->last_name).
                         " am ". mysqldatetime("d.m.y h:i", $row->lnk_timestamp). "
                     </div>
                 </div>
