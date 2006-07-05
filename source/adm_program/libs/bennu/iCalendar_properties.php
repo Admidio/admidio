@@ -733,7 +733,7 @@ class iCalendar_property_freebusy extends iCalendar_property {
             // Start time MUST be in UTC
             return false;
         }
-        if($value{$pos + 1} != 'P' && $substr($value, -1) != 'Z') {
+        if($value{$pos + 1} != 'P' && substr($value, -1) != 'Z') {
             // If the second part is not a period, it MUST be in UTC
             return false;
         }
