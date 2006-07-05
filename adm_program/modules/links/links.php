@@ -85,7 +85,7 @@ require("../../../adm_config/body_top.php");
         if ($_GET['id'] > 0)
         {
             $sql    = "SELECT * FROM ". TBL_LINKS. "
-                       WHERE lnk_id = $_GET[id]";
+                       WHERE lnk_id = '$_GET[id]' and lnk_org_id = '$g_current_organization->id'";
         }
         //...ansonsten alle fuer die Gruppierung passenden Links aus der DB holen.
         else
