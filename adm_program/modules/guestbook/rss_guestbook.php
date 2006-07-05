@@ -50,7 +50,7 @@ if ($g_preferences['enable_bbcode'] == 1)
     $bbcode = new ubbParser();
 }
 
-// alle Links aus der DB fischen...
+// die 10 letzten Eintraege aus der DB fischen...
 $sql = "SELECT * FROM ". TBL_GUESTBOOK. "
         WHERE gbo_org_id = '$g_current_organization->id'
         ORDER BY gbo_timestamp DESC
