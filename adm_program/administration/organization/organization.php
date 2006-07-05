@@ -185,21 +185,21 @@ require("../../../adm_config/body_top.php");
                     <div style=\"margin-top: 6px;\">
                         <div style=\"text-align: right; width: 47%; float: left;\">Externes Mailprogramm:</div>
                         <div style=\"text-align: left; margin-left: 50%;\">
-                            <input type=\"checkbox\" id=\"mail_extern\" name=\"mail_extern\" ";
+                            <input type=\"checkbox\" id=\"send_email_extern\" name=\"send_email_extern\" ";
                             if($g_preferences['send_email_extern'] == 1)
                             {
                                 echo " checked ";
                             }
                             echo " value=\"1\" />
                             <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=mail_extern','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
+                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=send_email_extern','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
                         </div>
                     </div>
 
                     <div style=\"margin-top: 6px;\">
                         <div style=\"text-align: right; width: 47%; float: left;\">BBCode zulassen:</div>
                         <div style=\"text-align: left; margin-left: 50%;\">
-                            <input type=\"checkbox\" id=\"bbcode\" name=\"bbcode\" ";
+                            <input type=\"checkbox\" id=\"enable_bbcode\" name=\"enable_bbcode\" ";
                             if($g_preferences['enable_bbcode'] == 1)
                             {
                                 echo " checked ";
@@ -233,14 +233,14 @@ require("../../../adm_config/body_top.php");
                     <div style=\"margin-top: 6px;\">
                         <div style=\"text-align: right; width: 47%; float: left;\">E-Mail-Attachments:</div>
                         <div style=\"text-align: left; margin-left: 50%;\">
-                            <input type=\"text\" name=\"attachment_size\" size=\"4\" maxlength=\"4\" value=\"". $g_preferences['max_email_attachment_size']. "\"> KB
+                            <input type=\"text\" name=\"max_email_attachment_size\" size=\"4\" maxlength=\"4\" value=\"". $g_preferences['max_email_attachment_size']. "\"> KB
                         </div>
                     </div>
 
                     <div style=\"margin-top: 6px;\">
                         <div style=\"text-align: right; width: 47%; float: left;\">Downloads:</div>
                         <div style=\"text-align: left; margin-left: 50%;\">
-                            <input type=\"text\" name=\"upload_size\" size=\"4\" maxlength=\"4\" value=\"". $g_preferences['max_file_upload_size']. "\"> KB
+                            <input type=\"text\" name=\"max_file_upload_size\" size=\"4\" maxlength=\"4\" value=\"". $g_preferences['max_file_upload_size']. "\"> KB
                         </div>
                     </div>
                 </div>";

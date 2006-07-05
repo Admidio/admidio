@@ -176,7 +176,7 @@ echo "
                       jemand auf eine Systemnachricht antwortet.";
                 break;
 
-            case "mail_extern":
+            case "send_email_extern":
                 echo "E-Mails werden in der Regel &uuml;ber den Webserver verschickt auf dem Admidio eingerichtet
                       ist. Sollte dein Webserver keinen E-Mailversand unterst&uuml;tzen, kannst du diese Option
                       aktivieren. Dadurch wird versucht, das lokale E-Mail-Programm des Benutzers zu starten,

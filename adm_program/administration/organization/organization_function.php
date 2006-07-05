@@ -71,14 +71,29 @@ if(strlen($err_code) == 0)
     }
 }
 
-if(strlen($_POST["attachment_size"]) == 0)
+if($_POST["send_email_extern"] != 1)
 {
-    $_POST["attachment_size"] = 0;
+    $_POST["send_email_extern"] = 0;
 }
 
-if(strlen($_POST["upload_size"]) == 0)
+if($_POST["enable_bbcode"] != 1)
 {
-    $_POST["upload_size"] = 0;
+    $_POST["enable_bbcode"] = 0;
+}
+
+if($_POST["enable_rss"] != 1)
+{
+    $_POST["enable_rss"] = 0;
+}
+
+if(strlen($_POST["max_email_attachment_size"]) == 0)
+{
+    $_POST["max_email_attachment_size"] = 0;
+}
+
+if(strlen($_POST["max_file_upload_size"]) == 0)
+{
+    $_POST["max_file_upload_size"] = 0;
 }
 
 if ($err_code != "")
@@ -103,11 +118,11 @@ if($ret_code != 0)
 
 writeOrgaPreferences('email_administrator', $_POST['email_administrator']);
 writeOrgaPreferences('default_country',     $_POST['default_country']);
-writeOrgaPreferences('send_email_extern',   $_POST['mail_extern']);
-writeOrgaPreferences('enable_bbcode',       $_POST['bbcode']);
+writeOrgaPreferences('send_email_extern',   $_POST['send_email_extern']);
+writeOrgaPreferences('enable_bbcode',       $_POST['enable_bbcode']);
 writeOrgaPreferences('enable_rss',          $_POST['enable_rss']);
-writeOrgaPreferences('max_email_attachment_size', $_POST['attachment_size']);
-writeOrgaPreferences('max_file_upload_size', $_POST['upload_size']);
+writeOrgaPreferences('max_email_attachment_size', $_POST['max_email_attachment_size']);
+writeOrgaPreferences('max_file_upload_size', $_POST['max_file_upload_size']);
 
 // zur Ausgangsseite zurueck
 $load_url = urlencode("$g_root_path/adm_program/administration/organization/organization.php?url=". $_GET['url']);
