@@ -107,7 +107,9 @@ require("../../../adm_config/body_top.php");
         if($_GET['id'] > 0)
         {
             $sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
-                        WHERE ann_id = $_GET[id]";
+                        WHERE ( ann_id = '$_GET[id]'
+                              AND ((ann_global   = 1 AND ann_org_shortname IN ($organizations))
+                                   OR ann_org_shortname = '$g_organization'))";
         }
         //...ansonsten alle fuer die Gruppierung passenden Ankuendigungen aus der DB holen.
         else
@@ -240,7 +242,7 @@ require("../../../adm_config/body_top.php");
                         $user_create->getUser($row->ann_usr_id);
                         echo "Angelegt von ". strSpecialChars2Html($user_create->first_name). " ". strSpecialChars2Html($user_create->last_name).
                         " am ". mysqldatetime("d.m.y h:i", $row->ann_timestamp);
-                        
+
                         if($row->ann_usr_id_change > 0)
                         {
                             $user_change = new TblUsers($g_adm_con);
