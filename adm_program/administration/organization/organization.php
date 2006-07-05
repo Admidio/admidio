@@ -73,7 +73,7 @@ require("../../../adm_config/body_top.php");
                 <div>
                     <div style=\"text-align: right; width: 48%; float: left;\">Name (Abk.):</div>
                     <div style=\"text-align: left; margin-left: 50%;\">
-                        <input type=\"text\" name=\"shortname\" class=\"readonly\" readonly size=\"10\" maxlength=\"10\" value=\"$g_current_organization->longname\">
+                        <input type=\"text\" name=\"shortname\" class=\"readonly\" readonly size=\"10\" maxlength=\"10\" value=\"$g_current_organization->shortname\">
                     </div>
                 </div>
                 <div style=\"margin-top: 6px;\">
