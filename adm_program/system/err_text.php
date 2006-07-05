@@ -263,7 +263,7 @@ function getErrorText($error_code, $error_text, $g_current_organization)
 
         //Fehlermeldungen Gaestebuchmodul
         case "delete_gbook_entry":
-            $error_str = "Willst Du den Eintrag von<br />
+            $error_str = "Willst Du den G&auml;stebucheintrag von<br />
             <b>$error_text</b><br />wirklich l&ouml;schen ?";
             break;
 
