@@ -85,7 +85,7 @@ require("../../../adm_config/body_top.php");
         if ($_GET['id'] > 0)
         {
             $sql    = "SELECT * FROM ". TBL_GUESTBOOK. "
-                       WHERE gbo_id = $_GET[id]";
+                       WHERE gbo_id = '$_GET[id]' and gbo_org_id = '$g_current_organization->id'";
         }
         //...ansonsten alle fuer die Gruppierung passenden Gaestebucheintraege aus der DB holen.
         else
@@ -273,8 +273,9 @@ require("../../../adm_config/body_top.php");
         }
 
 
-        // Falls eine ID uebergeben wurde, werden unter dem Eintrag die dazugehoerigen Kommetare angezeigt
-        if ($_GET['id'] > 0)
+        // Falls eine ID uebergeben wurde und der dazugehoerige Eintrag existiert,
+        // werden unter dem Eintrag die dazugehoerigen Kommetare angezeigt.
+        if (mysql_num_rows($guestbook_result) > 0 && $_GET['id'] > 0)
         {
 
             echo "<p>Kommentare:</p>";
