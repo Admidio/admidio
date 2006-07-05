@@ -96,7 +96,7 @@ if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mod
 
     if (mysql_num_rows($result) == 0)
     {
-        //Wenn keine Daten zu der ID gefunden worden bzw. die ID einer anderen Orga gehört ist Schluss mit lustig...
+        // Wenn keine Daten zu der ID gefunden worden bzw. die ID einer anderen Orga gehört ist Schluss mit lustig...
         $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
         header($location);
         exit();
@@ -110,25 +110,23 @@ $err_text = "";
 
 if($_GET["mode"] == 1 || $_GET["mode"] == 3)
 {
-    //Daten fuer die DB werden nun aufbereitet...
+    // Daten fuer die DB werden nun aufbereitet...
 
-    $name      = strStripTags($_POST['Name']);
-    $text      = strStripTags($_POST['Text']);
+    $name      = strStripTags($_POST['name']);
+    $text      = strStripTags($_POST['text']);
 
-    $email     = strStripTags($_POST['Email']);
+    $email     = strStripTags($_POST['email']);
     if (!isValidEmailAddress($email))
     {
-        //falls die Email ein ungueltiges Format aufweist wird sie einfach auf null gesetzt
+        // falls die Email ein ungueltiges Format aufweist wird sie einfach auf null gesetzt
         $email = null;
     }
 
 
-    $homepage  = strStripTags($_POST['Homepage']);
+    $homepage  = strStripTags($_POST['homepage']);
     if (strlen($homepage) != 0)
     {
-
-
-        //Die Webadresse wird jetzt falls sie nicht mit http:// oder https:// beginnt entsprechend aufbereitet
+        // Die Webadresse wird jetzt, falls sie nicht mit http:// oder https:// beginnt, entsprechend aufbereitet
         if (substr($homepage, 0, 7) != 'http://' && substr($homepage, 0, 8) != 'https://' )
         {
             $homepage = "http://". $homepage;
@@ -163,8 +161,6 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
             $sql    = prepareSQL($sql, array($name, $text, $email, $homepage));
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
-            //echo $sql;
-
 
         }
         else
@@ -213,15 +209,70 @@ elseif($_GET["mode"] == 2)
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
 
+    if (!isset($_GET["url"]))
+    {
+        $_GET["url"] = "$g_root_path/$g_main_page";
+    }
+
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=delete&url=". urlencode($_GET["url"]);
+    header($location);
+    exit();
+}
+
+elseif($_GET["mode"] == 4)
+{
+    //Daten fuer die DB vorbereiten
+    $text      = strStripTags($_POST['text']);
+    $actDate   = date("Y.m.d G:i:s", time());
+
+    if (strlen($text)  > 0)
+    {
+        $sql = "INSERT INTO ". TBL_GUESTBOOK_COMMENTS. " (gbc_gbo_id, gbc_usr_id, gbc_text, gbc_timestamp)
+                                                 VALUES ({0}, $g_current_user->id, {1}, '$actDate')";
+        $sql    = prepareSQL($sql, array($_GET['id'], $text));
+        $result = mysql_query($sql, $g_adm_con);
+        db_error($result);
+
+        $location = "Location: $g_root_path/adm_program/modules/guestbook/guestbook.php?id=". $_GET['id']. "&headline=". $_GET['headline'];
+        header($location);
+        exit();
+
+    }
+    else
+    {
+        $err_text = "Text";
+        $err_code = "feld";
+    }
+
+
+}
+
+elseif($_GET["mode"] == 5)
+{
+    //Gaestebuchkommentar loeschen...
+    $sql = "DELETE FROM ". TBL_GUESTBOOK_COMMENTS. " WHERE gbc_id = {0}";
+    $sql    = prepareSQL($sql, array($_GET['id']));
+    $result = mysql_query($sql, $g_adm_con);
+    db_error($result);
+
     if(!isset($_GET["url"]))
     {
         $_GET["url"] = "$g_root_path/$g_main_page";
     }
 
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?id=$id&err_code=delete&url=". urlencode($_GET["url"]);
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=delete&url=". urlencode($_GET["url"]);
     header($location);
     exit();
 }
+
+else
+{
+    // Falls der mode unbekannt ist, ist natürlich auch Ende...
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
+    header($location);
+    exit();
+}
+
 
 $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text";
 header($location);

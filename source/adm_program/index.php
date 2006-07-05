@@ -134,6 +134,18 @@ require("../adm_config/body_top.php");
             <div style=\"margin-top: 7px;\"></div>
 
             <div style=\"text-align: left; width: 40; float: left;\">
+                <a href=\"$g_root_path/adm_program/modules/mail/mail.php\">
+                <img style=\"position: relative; top: 5px;\" src=\"$g_root_path/adm_program/images/mail_open_big.png\" border=\"0\" alt=\"E-Mail\" />
+                </a>
+            </div>
+            <div style=\"text-align: left; margin-left: 45px;\">
+                <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/mail/mail.php\">E-Mail</a></span><br />
+                <span class=\"textDescription\">E-Mails an Rollen (Gruppen / Kurse / Abteilungen) schreiben.</span>
+            </div>
+
+            <div style=\"margin-top: 7px;\"></div>
+
+            <div style=\"text-align: left; width: 40; float: left;\">
                 <a href=\"$g_root_path/adm_program/modules/photos/photos.php\">
                 <img style=\"position: relative; top: 2px;\" src=\"$g_root_path/adm_program/images/photo_big.png\" border=\"0\" alt=\"Fotos\" />
                 </a>
@@ -146,13 +158,13 @@ require("../adm_config/body_top.php");
             <div style=\"margin-top: 7px;\"></div>
 
             <div style=\"text-align: left; width: 40; float: left;\">
-                <a href=\"$g_root_path/adm_program/modules/mail/mail.php\">
-                <img style=\"position: relative; top: 5px;\" src=\"$g_root_path/adm_program/images/mail_open_big.png\" border=\"0\" alt=\"E-Mail\" />
+                <a href=\"$g_root_path/adm_program/modules/guestbook/guestbook.php\">
+                <img style=\"position: relative; top: 2px;\" src=\"$g_root_path/adm_program/images/guestbook_big.png\" border=\"0\" alt=\"G&auml;stebuch\" />
                 </a>
             </div>
             <div style=\"text-align: left; margin-left: 45px;\">
-                <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/mail/mail.php\">E-Mail</a></span><br />
-                <span class=\"textDescription\">E-Mails an Rollen (Gruppen / Kurse / Abteilungen) schreiben.</span>
+                <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/guestbook/guestbook.php\">G&auml;stebuch</a></span><br />
+                <span class=\"textDescription\">Hier k&ouml;nnen Besucher ihre Gr&uuml;&szlig;e und Anmerkungen eintragen.</span>
             </div>
 
             <div style=\"margin-top: 7px;\"></div>

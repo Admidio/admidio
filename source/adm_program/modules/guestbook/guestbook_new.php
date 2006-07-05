@@ -145,34 +145,34 @@ require("../../../adm_config/body_top.php");
                 <div>
                     <div style=\"text-align: right; width: 25%; float: left;\">Name:*</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <input type=\"text\" id=\"Name\" name=\"Name\" tabindex=\"1\" size=\"53\" maxlength=\"60\" value=\"". htmlspecialchars($name, ENT_QUOTES). "\">
+                        <input type=\"text\" id=\"name\" name=\"name\" tabindex=\"1\" size=\"53\" maxlength=\"60\" value=\"". htmlspecialchars($name, ENT_QUOTES). "\">
                     </div>
                 </div>
 
-                <div>
+                <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 25%; float: left;\">Emailadresse:</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <input type=\"text\" id=\"Email\" name=\"Email\" tabindex=\"1\" size=\"53\" maxlength=\"50\" value=\"". htmlspecialchars($email, ENT_QUOTES). "\">
+                        <input type=\"text\" id=\"email\" name=\"email\" tabindex=\"1\" size=\"53\" maxlength=\"50\" value=\"". htmlspecialchars($email, ENT_QUOTES). "\">
                     </div>
                 </div>
 
-                <div>
+                <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 25%; float: left;\">Homepage:</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <input type=\"text\" id=\"Homepage\" name=\"Homepage\" tabindex=\"1\" size=\"53\" maxlength=\"50\" value=\"". htmlspecialchars($homepage, ENT_QUOTES). "\">
+                        <input type=\"text\" id=\"homepage\" name=\"homepage\" tabindex=\"1\" size=\"53\" maxlength=\"50\" value=\"". htmlspecialchars($homepage, ENT_QUOTES). "\">
                     </div>
                 </div>
 
                 <div style=\"margin-top: 6px;\">
                 <div style=\"text-align: right; width: 25%; float: left;\">Text:*";
-                    if($g_preferences['enable_bbcode'] == 1)
+                    if ($g_preferences['enable_bbcode'] == 1)
                     {
                       echo "<br><br>
                       <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=400,left=310,top=200,scrollbars=yes')\" tabindex=\"6\">Text formatieren</a>";
                     }
                     echo "</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <textarea  name=\"Text\" tabindex=\"2\" rows=\"10\" cols=\"40\">". htmlspecialchars($text, ENT_QUOTES). "</textarea>
+                        <textarea  name=\"text\" tabindex=\"2\" rows=\"10\" cols=\"40\">". htmlspecialchars($text, ENT_QUOTES). "</textarea>
                     </div>
                 </div>";
 
