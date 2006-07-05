@@ -282,13 +282,6 @@ create table %PRAEFIX%_organizations
    org_shortname                  varchar(10)                    not null,
    org_org_id_parent              tinyint(4),
    org_homepage                   varchar(30)                    not null,
-   org_mail_size                  smallint                       default 1024,
-   org_upload_size                smallint                       default 3072,
-   org_photo_size                 smallint                       default 512,
-   org_mail_extern                tinyint                        not null default 0,
-   org_enable_rss                 tinyint                        not null default 1,
-   org_bbcode                     tinyint                        not null default 1,
-   org_font								 varchar(30)                    not null default 'mr_phone1.ttf',
    primary key (org_id),
    unique ak_shortname (org_shortname)
 )
