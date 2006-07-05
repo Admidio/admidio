@@ -119,7 +119,9 @@ require("../../../adm_config/body_top.php");
         if($_GET['id'] > 0)
         {
             $sql = "SELECT * FROM ". TBL_DATES. "
-                     WHERE dat_id = ". $_GET['id'];
+                     WHERE ( dat_id = '$_GET[id]'
+                           AND ((dat_global   = 1 AND dat_org_shortname IN ($organizations))
+                                OR dat_org_shortname = '$g_organization'))";
         }
         //...ansonsten alle fuer die Gruppierung passenden Termine aus der DB holen.
         else
@@ -248,14 +250,14 @@ require("../../../adm_config/body_top.php");
                         </div>";
                         // Link zum iCal export
                         echo "<div style=\"text-align: right;\">
-                            <img src=\"$g_root_path/adm_program/images/database_out.png\" style=\"cursor: pointer\" 
+                            <img src=\"$g_root_path/adm_program/images/database_out.png\" style=\"cursor: pointer\"
                                 width=\"16\" height=\"16\" border=\"0\" alt=\"Exportieren (iCal)\" title=\"Exportieren (iCal)\"
                                 onclick=\"self.location.href='$g_root_path/adm_program/modules/dates/ical_function.php?dat_id=$row->dat_id&mode=1'\">";
 
                             // aendern & loeschen darf man nur eigene Termine, ausser Moderatoren
                             if (editDate())
                             {
-                                echo "&nbsp;<img src=\"$g_root_path/adm_program/images/edit.png\" style=\"cursor: pointer\" 
+                                echo "&nbsp;<img src=\"$g_root_path/adm_program/images/edit.png\" style=\"cursor: pointer\"
                                     width=\"16\" height=\"16\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"
                                     onclick=\"self.location.href='dates_new.php?dat_id=$row->dat_id'\">";
 
@@ -263,7 +265,7 @@ require("../../../adm_config/body_top.php");
                                     if($row->dat_org_shortname == $g_organization)
                                     {
                                         echo "
-                                        <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer\" 
+                                        <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer\"
                                             width=\"16\" height=\"16\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" ";
                                             $load_url = urlencode("$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=$row->dat_id&amp;mode=2&amp;url=$g_root_path/adm_program/modules/dates/dates.php");
                                             echo " onclick=\"self.location.href='$g_root_path/adm_program/system/err_msg.php?err_code=delete_date&amp;err_text=". urlencode($row->dat_headline). "&amp;err_head=L&ouml;schen&amp;button=2&amp;url=$load_url'\">";
@@ -324,7 +326,7 @@ require("../../../adm_config/body_top.php");
                         $user_create->getUser($row->dat_usr_id);
                         echo "Angelegt von ". strSpecialChars2Html($user_create->first_name). " ". strSpecialChars2Html($user_create->last_name).
                         " am ". mysqldatetime("d.m.y h:i", $row->dat_timestamp);
-                        
+
                         if($row->dat_usr_id_change > 0)
                         {
                             $user_change = new TblUsers($g_adm_con);
@@ -332,7 +334,7 @@ require("../../../adm_config/body_top.php");
                             echo "<br>Zuletzt bearbeitet von ". strSpecialChars2Html($user_change->first_name). " ". strSpecialChars2Html($user_change->last_name).
                             " am ". mysqldatetime("d.m.y h:i", $row->dat_last_change);
                         }
-                    echo "</div>                    
+                    echo "</div>
                 </div>
 
                 <br />";
