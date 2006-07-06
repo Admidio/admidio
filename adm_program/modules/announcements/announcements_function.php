@@ -45,6 +45,23 @@ if(!editAnnouncements())
     exit();
 }
 
+// Uebergabevariablen pruefen
+
+if(is_numeric($_GET["ann_id"]) == false)
+{
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=ann_id";
+    header($location);
+    exit();
+}
+
+if(is_numeric($_GET["mode"]) == false
+|| $_GET["mode"] < 1 || $_GET["mode"] > 3)
+{
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=mode";
+    header($location);
+    exit();
+}
+
 if($_GET["mode"] == 2 || $_GET["mode"] == 3)
 {
     // pruefen, ob man die Ankuendigung bearbeiten darf

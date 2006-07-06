@@ -9,10 +9,11 @@
  * Uebergaben:
  *
  * dat_id: ID des Termins, der angezeigt werden soll
- * mode:  1 - Neuen Termin anlegen
- *        2 - Termin löschen
- *        3 - Termin ändern
- * url:   kann beim Loeschen mit uebergeben werden
+ * mode:   1 - Neuen Termin anlegen
+ *         2 - Termin löschen
+ *         3 - Termin ändern
+ *         4 - Termin im iCal-Format exportieren
+ * url:    kann beim Loeschen mit uebergeben werden
  *
  ******************************************************************************
  *
@@ -33,12 +34,34 @@
  *****************************************************************************/
 
 require("../../system/common.php");
-require("../../system/login_valid.php");
+
+if($_GET["mode"] != 4)
+{
+    // Alle Funktionen, ausser Exportieren, duerfen nur eingeloggte User
+    require("../../system/login_valid.php");
+}
 
 // erst prüfen, ob der User auch die entsprechenden Rechte hat
-if(!editDate())
+if(!editDate() && $_GET["mode"] != 4)
 {
     $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
+    header($location);
+    exit();
+}
+
+// Uebergabevariablen pruefen
+
+if(is_numeric($_GET["dat_id"]) == false)
+{
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=dat_id";
+    header($location);
+    exit();
+}
+
+if(is_numeric($_GET["mode"]) == false
+|| $_GET["mode"] < 1 || $_GET["mode"] > 4)
+{
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=mode";
     header($location);
     exit();
 }
@@ -203,6 +226,18 @@ elseif($_GET["mode"] == 2)
 
     $location = "Location: $g_root_path/adm_program/system/err_msg.php?id=$id&err_code=delete&url=". urlencode($_GET["url"]);
     header($location);
+    exit();
+}
+elseif($_GET["mode"] == 4)
+{
+    // Termindaten aus Datenbank holen
+    $date = new TblDates($g_adm_con);
+    $date->getDate($_GET["dat_id"]);
+
+    header('Content-Type: text/calendar');
+    header('Content-Disposition: attachment; filename="'. $date->begin. '.ics"');
+
+    echo $date->getIcal($g_domain);
     exit();
 }
 
