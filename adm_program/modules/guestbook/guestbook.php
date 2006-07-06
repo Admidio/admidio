@@ -278,7 +278,7 @@ require("../../../adm_config/body_top.php");
         if (mysql_num_rows($guestbook_result) > 0 && $_GET['id'] > 0)
         {
 
-            echo "<p>Kommentare:</p>";
+            echo "<p>Kommentare zu diesem Eintrag:</p>";
 
             //Kommentarnummer auf 1 setzen
             $commentNumber = 1;
