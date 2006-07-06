@@ -217,30 +217,3 @@ a:hover {
     border-width:        1px;
     border-style:        solid;
 }
-
-
-/* Layout fuer die Kommentarboxen (wird im Gaestebuch genutzt)
-   Es ist in einen Kopf (commentHead) und einen Inhalt (commentBody),
-   der aber den Kopfbereich umschliesst, unterteilt
-   Beispiele: Ankuendigungen, Termine */
-
-.commentHead {
-    color:            #333333;
-    background-color: #eaeaea;
-    width:            100%;
-    min-height:       20px;
-    font-size:        12pt;
-    padding:          2px;
-}
-
-.commentBody {
-    color:            #555555;
-    width:            550px;
-    font-size:        11pt;
-    background-color: #eaeaea;
-    border-width:     1px;
-    border-color:     #555555;
-    border-style:     dotted;
-    border-collapse:  collapse;
-    padding:          0px;
-}
