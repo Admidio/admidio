@@ -82,19 +82,9 @@ if($a_new_user)
 else
 {
    $a_user_id = $_GET['user_id'];
-   // jetzt noch schauen, ob User ?berhaupt Mitglied in der Gliedgemeinschaft ist
-   $sql = "SELECT mem_id
-             FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-            WHERE rol_org_shortname = '$g_organization'
-              AND rol_valid        = 1
-              AND mem_rol_id        = rol_id
-              AND mem_valid        = 1
-              AND mem_usr_id        = {0}";
-   $sql    = prepareSQL($sql, array($_GET['user_id']));
-   $result = mysql_query($sql, $g_adm_con);
-   db_error($result);
-
-   if(mysql_num_rows($result) == 0)
+   
+   // jetzt noch schauen, ob User ueberhaupt Mitglied in der Gliedgemeinschaft ist
+   if(isMember($a_user_id) == false)
    {
       $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
       header($location);

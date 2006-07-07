@@ -57,18 +57,8 @@ else
     if(editUser())
     {
         // jetzt noch schauen, ob User ueberhaupt Mitglied in der Gliedgemeinschaft ist
-        $sql = "SELECT mem_id
-                  FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-                 WHERE rol_org_shortname = '$g_organization'
-                   AND rol_valid        = 1
-                   AND mem_rol_id        = rol_id
-                   AND mem_valid        = 1
-                   AND mem_usr_id        = {0}";
-        $sql    = prepareSQL($sql, array($_GET['user_id']));
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
 
-        if(mysql_num_rows($result) > 0)
+        if(isMember($a_user_id) == true)
         {
             $edit_user = true;
         }

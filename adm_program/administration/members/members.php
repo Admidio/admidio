@@ -33,8 +33,8 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
-// nur Moderatoren duerfen alle User sehen & Mitgliedschaften loeschen
-if(!isModerator())
+// nur berechtigte User duerfen die Mitgliederverwaltung aufrufen
+if(!editUser())
 {
     $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
     header($location);

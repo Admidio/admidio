@@ -135,12 +135,13 @@ function hasRole($function, $user_id = 0)
 
     $sql    = "SELECT *
                  FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-                WHERE mem_usr_id        = $user_id
+                WHERE mem_usr_id        = {0}
                   AND mem_valid         = 1
                   AND mem_rol_id        = rol_id
                   AND rol_org_shortname = '$g_organization'
-                  AND rol_name          = '$function'
+                  AND rol_name          = {1}
                   AND rol_valid         = 1 ";
+    $sql    = prepareSQL($sql, array($user_id, $function));
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
 
@@ -160,229 +161,272 @@ function hasRole($function, $user_id = 0)
 
 function isModerator($user_id = 0)
 {
-   global $g_current_user;
-   global $g_adm_con;
-   global $g_organization;
+    global $g_current_user;
+    global $g_adm_con;
+    global $g_organization;
 
-   if($user_id == 0)
-      $user_id = $g_current_user->id;
+    if($user_id == 0)
+    {
+        $user_id = $g_current_user->id;
+    }
 
-   $sql    = "SELECT *
-                FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-               WHERE mem_usr_id        = $user_id
-                 AND mem_valid         = 1
-                 AND mem_rol_id        = rol_id
-                 AND rol_org_shortname = '$g_organization'
-                 AND rol_moderation    = 1
-                 AND rol_valid         = 1 ";
-   $result = mysql_query($sql, $g_adm_con);
-   db_error($result);
+    $sql    = "SELECT *
+                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
+                WHERE mem_usr_id        = {0}
+                  AND mem_valid         = 1
+                  AND mem_rol_id        = rol_id
+                  AND rol_org_shortname = '$g_organization'
+                  AND rol_moderation    = 1
+                  AND rol_valid         = 1 ";
+    $sql    = prepareSQL($sql, array($user_id));
+    $result = mysql_query($sql, $g_adm_con);
+    db_error($result);
 
-   $edit_user = mysql_num_rows($result);
+    $edit_user = mysql_num_rows($result);
 
-   if($edit_user > 0)
-      return true;
-   else
-      return false;
+    if($edit_user > 0)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 // Funktion prueft, ob der uebergebene User Mitglied in einer Rolle der Gruppierung ist
 
 function isMember($user_id, $organization = "")
 {
-   global $g_current_user;
-   global $g_adm_con;
-   global $g_organization;
+    global $g_current_user;
+    global $g_adm_con;
+    global $g_organization;
 
-   if(strlen($organization) == 0)
-      $organization = $g_organization;
+    if(strlen($organization) == 0)
+    {
+        $organization = $g_organization;
+    }
 
-   $sql    = "SELECT COUNT(*)
-                FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-               WHERE mem_usr_id        = $user_id
-                 AND mem_valid         = 1
-                 AND mem_rol_id        = rol_id
-                 AND rol_org_shortname = '$organization'
-                 AND rol_valid         = 1 ";
-   $result = mysql_query($sql, $g_adm_con);
-   db_error($result);
+    $sql    = "SELECT COUNT(*)
+                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
+                WHERE mem_usr_id        = {0}
+                  AND mem_valid         = 1
+                  AND mem_rol_id        = rol_id
+                  AND rol_org_shortname = {1}
+                  AND rol_valid         = 1 ";
+    $sql    = prepareSQL($sql, array($user_id, $organization));
+    $result = mysql_query($sql, $g_adm_con);
+    db_error($result);
 
-   $row = mysql_fetch_row($result);
-   $row_count = $row[0];
+    $row = mysql_fetch_row($result);
+    $row_count = $row[0];
 
-   if($row_count > 0)
-      return true;
-   else
-      return false;
+    if($row_count > 0)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 // Funktion prueft, ob der angemeldete User Leiter einer Gruppe /Kurs ist
 // Optionaler Parameter role_id prueft ob der angemeldete User Leiter der uebergebenen Gruppe / Kurs ist
 
-function isGroupLeader($role_id = 0)
+function isGroupLeader($rol_id = 0)
 {
-   global $g_current_user;
-   global $g_adm_con;
-   global $g_organization;
+    global $g_current_user;
+    global $g_adm_con;
+    global $g_organization;
 
-   $sql    = "SELECT *
-                FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-               WHERE mem_usr_id        = $g_current_user->id
-                 AND mem_valid         = 1
-                 AND mem_leader        = 1
-                 AND mem_rol_id        = rol_id
-                 AND rol_org_shortname = '$g_organization'
-                 AND rol_valid         = 1 ";
-   if ($role_id!=0)
-    $sql .= "  AND mem_rol_id           = '$role_id'";
+    $sql    = "SELECT *
+                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
+                WHERE mem_usr_id        = $g_current_user->id
+                  AND mem_valid         = 1
+                  AND mem_leader        = 1
+                  AND mem_rol_id        = rol_id
+                  AND rol_org_shortname = '$g_organization'
+                  AND rol_valid         = 1 ";
+    if ($rol_id != 0)
+    {
+        $sql .= "  AND mem_rol_id           = {0}";
+    }
+    $sql    = prepareSQL($sql, array($rol_id));
+    $result = mysql_query($sql, $g_adm_con);
+    db_error($result);
 
-   $result = mysql_query($sql, $g_adm_con);
-   db_error($result);
+    $edit_user = mysql_num_rows($result);
 
-   $edit_user = mysql_num_rows($result);
-
-   if($edit_user > 0)
-      return true;
-   else
-      return false;
+    if($edit_user > 0)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 // Funktion prueft, ob der angemeldete User Benutzerdaten bearbeiten darf
 
 function editUser()
 {
-   global $g_current_user;
-   global $g_adm_con;
-   global $g_organization;
+    global $g_current_user;
+    global $g_adm_con;
+    global $g_organization;
 
-   $sql    = "SELECT *
-                FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-               WHERE mem_usr_id        = $g_current_user->id
-                 AND mem_valid         = 1
-                 AND mem_rol_id        = rol_id
-                 AND rol_org_shortname = '$g_organization'
-                 AND rol_edit_user     = 1
-                 AND rol_valid         = 1 ";
-   $result = mysql_query($sql, $g_adm_con);
-   db_error($result);
+    $sql    = "SELECT *
+                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
+                WHERE mem_usr_id        = $g_current_user->id
+                  AND mem_valid         = 1
+                  AND mem_rol_id        = rol_id
+                  AND rol_org_shortname = '$g_organization'
+                  AND rol_edit_user     = 1
+                  AND rol_valid         = 1 ";
+    $result = mysql_query($sql, $g_adm_con);
+    db_error($result);
 
-   $edit_user = mysql_num_rows($result);
+    $edit_user = mysql_num_rows($result);
 
-   if($edit_user > 0)
-      return true;
-   else
-      return false;
+    if($edit_user > 0)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 // Funktion prueft, ob der angemeldete User Ankuendigungen anlegen darf
 
 function editAnnouncements()
 {
-   global $g_current_user;
-   global $g_adm_con;
-   global $g_organization;
+    global $g_current_user;
+    global $g_adm_con;
+    global $g_organization;
 
-   $sql    = "SELECT *
-                FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-               WHERE mem_usr_id        = $g_current_user->id
-                 AND mem_rol_id        = rol_id
-                 AND mem_valid         = 1
-                 AND rol_org_shortname = '$g_organization'
-                 AND rol_announcements = 1
-                 AND rol_valid         = 1 ";
-   $result = mysql_query($sql, $g_adm_con);
-   db_error($result);
+    $sql    = "SELECT *
+                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
+                WHERE mem_usr_id        = $g_current_user->id
+                  AND mem_rol_id        = rol_id
+                  AND mem_valid         = 1
+                  AND rol_org_shortname = '$g_organization'
+                  AND rol_announcements = 1
+                  AND rol_valid         = 1 ";
+    $result = mysql_query($sql, $g_adm_con);
+    db_error($result);
 
-   $edit_user = mysql_num_rows($result);
+    $edit_user = mysql_num_rows($result);
 
-   if($edit_user > 0)
-      return true;
-   else
-      return false;
+    if($edit_user > 0)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 // Funktion prueft, ob der angemeldete User Termine anlegen darf
 
 function editDate()
 {
-   global $g_current_user;
-   global $g_adm_con;
-   global $g_organization;
+    global $g_current_user;
+    global $g_adm_con;
+    global $g_organization;
 
-   $sql    = "SELECT *
-                FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-               WHERE mem_usr_id        = $g_current_user->id
-                 AND mem_rol_id        = rol_id
-                 AND mem_valid         = 1
-                 AND rol_org_shortname = '$g_organization'
-                 AND rol_dates         = 1
-                 AND rol_valid         = 1 ";
-   $result = mysql_query($sql, $g_adm_con);
-   db_error($result);
+    $sql    = "SELECT *
+                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
+                WHERE mem_usr_id        = $g_current_user->id
+                  AND mem_rol_id        = rol_id
+                  AND mem_valid         = 1
+                  AND rol_org_shortname = '$g_organization'
+                  AND rol_dates         = 1
+                  AND rol_valid         = 1 ";
+    $result = mysql_query($sql, $g_adm_con);
+    db_error($result);
 
-   $edit_user = mysql_num_rows($result);
+    $edit_user = mysql_num_rows($result);
 
-   if($edit_user > 0)
-      return true;
-   else
-      return false;
+    if($edit_user > 0)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 // Funktion prueft, ob der angemeldete User Fotos hochladen und verwalten darf
 
 function editPhoto($organization = "")
 {
-   global $g_current_user;
-   global $g_adm_con;
-   global $g_organization;
+    global $g_current_user;
+    global $g_adm_con;
+    global $g_organization;
 
-   if(strlen($organization) == 0)
-    $organization = $g_organization;
+    if(strlen($organization) == 0)
+    {
+        $organization = $g_organization;
+    }
 
-   $sql    = "SELECT *
-                FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-               WHERE mem_usr_id        = $g_current_user->id
-                 AND mem_rol_id        = rol_id
-                 AND mem_valid         = 1
-                 AND rol_org_shortname = '$organization'
-                 AND rol_photo         = 1
-                 AND rol_valid         = 1 ";
-   $result = mysql_query($sql, $g_adm_con);
-   db_error($result);
+    $sql    = "SELECT *
+                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
+                WHERE mem_usr_id        = $g_current_user->id
+                  AND mem_rol_id        = rol_id
+                  AND mem_valid         = 1
+                  AND rol_org_shortname = {0}
+                  AND rol_photo         = 1
+                  AND rol_valid         = 1 ";
+    $sql    = prepareSQL($sql, array($organization));
+    $result = mysql_query($sql, $g_adm_con);
+    db_error($result);
 
-   $edit_user = mysql_num_rows($result);
+    $edit_user = mysql_num_rows($result);
 
-   if($edit_user > 0)
-      return true;
-   else
-      return false;
+    if($edit_user > 0)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 // Funktion prueft, ob der angemeldete User Downloads hochladen und verwalten darf
 
 function editDownload()
 {
-   global $g_current_user;
-   global $g_adm_con;
-   global $g_organization;
+    global $g_current_user;
+    global $g_adm_con;
+    global $g_organization;
 
-   $sql    = "SELECT *
-                FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-               WHERE mem_usr_id        = $g_current_user->id
-                 AND mem_rol_id        = rol_id
-                 AND mem_valid         = 1
-                 AND rol_org_shortname = '$g_organization'
-                 AND rol_download      = 1
-                 AND rol_valid         = 1 ";
-   $result = mysql_query($sql, $g_adm_con);
-   db_error($result);
+    $sql    = "SELECT *
+                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
+                WHERE mem_usr_id        = $g_current_user->id
+                  AND mem_rol_id        = rol_id
+                  AND mem_valid         = 1
+                  AND rol_org_shortname = '$g_organization'
+                  AND rol_download      = 1
+                  AND rol_valid         = 1 ";
+    $result = mysql_query($sql, $g_adm_con);
+    db_error($result);
 
-   $edit_user = mysql_num_rows($result);
+    $edit_user = mysql_num_rows($result);
 
-   if($edit_user > 0)
-      return true;
-   else
-      return false;
+    if($edit_user > 0)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 
