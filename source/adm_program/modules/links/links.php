@@ -92,21 +92,13 @@ require("../../../adm_config/body_top.php");
         {
             $sql    = "SELECT * FROM ". TBL_LINKS. "
                        WHERE lnk_org_id = '$g_current_organization->id'
-                       ORDER BY lnk_timestamp DESC
-                       LIMIT ". $_GET["start"]. ", 10 ";
+                       ORDER BY lnk_timestamp DESC";
         }
 
         $links_result = mysql_query($sql, $g_adm_con);
         db_error($links_result);
 
-        // Gucken wieviele Linkdatensaetze insgesamt fuer die Gruppierung vorliegen...
-        // Das wird naemlich noch fuer die Seitenanzeige benoetigt...
-        $sql    = "SELECT COUNT(*) FROM ". TBL_LINKS. "
-                   WHERE lnk_org_id = '$g_current_organization->id'";
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
-        $row = mysql_fetch_array($result);
-        $numLinks = $row[0];
+
 
         // Icon-Links und Navigation anzeigen
 
@@ -141,9 +133,6 @@ require("../../../adm_config/body_top.php");
 
             echo "</p>";
 
-            // Navigation mit Vor- und Zurueck-Buttons
-            $baseUrl = "$g_root_path/adm_program/modules/links/links.php?headline=". $_GET["headline"];
-            echo generatePagination($baseUrl, $numLinks, 10, $_GET["start"], TRUE);
         }
 
         if (mysql_num_rows($links_result) == 0)
@@ -161,52 +150,40 @@ require("../../../adm_config/body_top.php");
         else
         {
 
+            echo "
+            <table class=\"tableList\" style=\"width: 750px;\"cellpadding=\"2\" cellspacing=\"0\">
+            <tr>
+                <th class=\"tableHeader\" style=\"text-align: left;\">
+                     <img src=\"$g_root_path/adm_program/images/globe.png\" style=\"vertical-align: top;\" alt=\"Weblinks\">&nbsp;Weblinks
+                </th>
+
+                <th class=\"tableHeader\" style=\"text-align: left;\">
+                </th>
+
+                <th class=\"tableHeader\" style=\"text-align: left;\">
+                </th>
+
+            </tr>";
+
+
             // Links auflisten
             while ($row = mysql_fetch_object($links_result))
             {
 
+
+
                 echo "
-                <div class=\"boxBody\" style=\"overflow: hidden;\">
-                    <div class=\"boxHead\">
-                        <div style=\"text-align: left; float: left;\">
-                            <a href=\"$row->lnk_url\" target=\"_blank\">
-                            <img src=\"$g_root_path/adm_program/images/globe.png\" style=\"vertical-align: top;\" alt=\"Gehe zu $row->lnk_name\"
-                            title=\"Gehe zu $row->lnk_name\" border=\"0\"></a>
-                            <a href=\"$row->lnk_url\" target=\"_blank\">";
-                            if (strlen($row->lnk_name) > 25)
-                            {
-                                echo "<span style=\"font-size: 8pt;\">$row->lnk_name</span>";
-                            }
-                            else
-                            {
-                                echo "$row->lnk_name";
-                            }
-                            echo "</a>
-                        </div>";
-
-                        // aendern & loeschen duerfen nur User mit den gesetzten Rechten
-                        if (editWeblinks())
-                        {
-                            echo "<div style=\"text-align: right;\">" .
-                                mysqldatetime("d.m.y", $row->lnk_timestamp). "&nbsp;
-                                <img src=\"$g_root_path/adm_program/images/edit.png\" style=\"cursor: pointer;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"
-                                onclick=\"self.location.href='links_new.php?lnk_id=$row->lnk_id&amp;headline=". $_GET['headline']. "'\">";
+                <tr>
+                    <td align=\"left\" valign=\"top\" nowrap>
+                        <a href=\"$row->lnk_url\" target=\"_blank\">
+                        <img src=\"$g_root_path/adm_program/images/globe.png\" style=\"vertical-align: top;\" alt=\"Gehe zu $row->lnk_name\"
+                        title=\"Gehe zu $row->lnk_name\" border=\"0\"></a>
+                        <a href=\"$row->lnk_url\" target=\"_blank\"><span style=\"font-size: 10pt;\">$row->lnk_name</span></a>
+                    </td>";
 
 
-                                echo "
-                                <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer;\" width=\"16\" height=\"16\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" ";
-                                $load_url = urlencode("$g_root_path/adm_program/modules/links/links_function.php?lnk_id=$row->lnk_id&amp;mode=2&amp;url=$g_root_path/adm_program/modules/links/links.php");
-                                echo " onclick=\"self.location.href='$g_root_path/adm_program/system/err_msg.php?err_code=delete_link&amp;err_text=". urlencode($row->lnk_name). "&amp;err_head=L&ouml;schen&amp;button=2&amp;url=$load_url'\">";
-
-                            echo "&nbsp;</div>";
-                        }
-                        else
-                        {
-                            echo "<div style=\"text-align: right;\">". mysqldatetime("d.m.y", $row->lnk_timestamp). "&nbsp;</div>";
-                        }
-                    echo "</div>
-
-                    <div style=\"margin: 8px 4px 4px 4px; text-align: left;\">";
+                    echo "
+                    <td align=\"left\" valign=\"top\">";
                         // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
                         if ($g_preferences['enable_bbcode'] == 1)
                         {
@@ -216,28 +193,40 @@ require("../../../adm_config/body_top.php");
                         {
                             echo nl2br(strSpecialChars2Html($row->lnk_description));
                         }
-                    echo "</div>
-                    <div style=\"margin: 8px 4px 4px 4px; font-size: 8pt; text-align: left;\">";
-                        $user_create = new TblUsers($g_adm_con);
-                        $user_create->getUser($row->lnk_usr_id);
-                        echo "Angelegt von ". strSpecialChars2Html($user_create->first_name). " ". strSpecialChars2Html($user_create->last_name).
-                        " am ". mysqldatetime("d.m.y h:i", $row->lnk_timestamp). "
-                    </div>
-                </div>
+                    echo "<br /><br /></td>";
 
-                <br />";
+                    // aendern & loeschen duerfen nur User mit den gesetzten Rechten
+                    if (editWeblinks())
+                    {
+                        echo "<td align=\"right\" valign=\"top\" nowrap>" .
+                            mysqldatetime("d.m.y", $row->lnk_timestamp). "&nbsp;
+                            <img src=\"$g_root_path/adm_program/images/edit.png\" style=\"cursor: pointer;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"
+                            onclick=\"self.location.href='links_new.php?lnk_id=$row->lnk_id&amp;headline=". $_GET['headline']. "'\">";
+
+
+                            echo "
+                            <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer;\" width=\"16\" height=\"16\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" ";
+                            $load_url = urlencode("$g_root_path/adm_program/modules/links/links_function.php?lnk_id=$row->lnk_id&amp;mode=2&amp;url=$g_root_path/adm_program/modules/links/links.php");
+                            echo " onclick=\"self.location.href='$g_root_path/adm_program/system/err_msg.php?err_code=delete_link&amp;err_text=". urlencode($row->lnk_name). "&amp;err_head=L&ouml;schen&amp;button=2&amp;url=$load_url'\">";
+
+                        echo "&nbsp;</td>";
+                    }
+                    else
+                    {
+                        echo "<td align=\"right\" valign=\"top\">". mysqldatetime("d.m.y", $row->lnk_timestamp). "&nbsp;</td>";
+                    }
+
+                echo "
+                </tr>";
+
              }  // Ende While-Schleife
+
+             echo "
+            </table>";
+
         }
 
-        // Die untere Navigationsleiste wird nur angezeigt wenn die Seite mehr als 2 Elemente enthaelt...
-        if ($_GET['id'] == 0 && mysql_num_rows($links_result) > 2)
-        {
-            // Navigation mit Vor- und Zurueck-Buttons
-            $baseUrl = "$g_root_path/adm_program/modules/links/links.php?headline=". $_GET["headline"];
-            echo generatePagination($baseUrl, $numLinks, 10, $_GET["start"], TRUE);
-        }
     echo "</div>";
-
     require("../../../adm_config/body_bottom.php");
 echo "</body>
 </html>";
