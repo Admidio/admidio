@@ -220,25 +220,30 @@ require("../adm_config/body_top.php");
         </div>
         <br /><br />";
 
-        if(isModerator())
+        if(isModerator() || editUser())
         {
             echo "
             <div class=\"formHead\">";
                 echo strspace("Administration", 1);
             echo "</div>
-            <div class=\"formBody\">
-                <div style=\"text-align: left; width: 40; float: left;\">
-                    <a href=\"$g_root_path/adm_program/administration/new_user/new_user.php\">
-                    <img style=\"position: relative; top: 5px;\" src=\"$g_root_path/adm_program/images/ok_big.png\" border=\"0\" alt=\"Neue Web-Anmeldungen verwalten\" />
-                    </a>
-                </div>
-                <div style=\"text-align: left; margin-left: 45px;\">
-                    <span class=\"textHead\"><a href=\"$g_root_path/adm_program/administration/new_user/new_user.php\">Neue Web-Anmeldungen verwalten</a></span><br />
-                    <span class=\"textDescription\">Besucher, die sich auf der Homepage registriert haben, k&ouml;nnen hier freigeschaltet oder abgelehnt werden.</span>
-                </div>
+            <div class=\"formBody\">";
+                if(isModerator())
+                {
+                    echo "
+                    <div style=\"text-align: left; width: 40; float: left;\">
+                        <a href=\"$g_root_path/adm_program/administration/new_user/new_user.php\">
+                        <img style=\"position: relative; top: 5px;\" src=\"$g_root_path/adm_program/images/ok_big.png\" border=\"0\" alt=\"Neue Web-Anmeldungen verwalten\" />
+                        </a>
+                    </div>
+                    <div style=\"text-align: left; margin-left: 45px;\">
+                        <span class=\"textHead\"><a href=\"$g_root_path/adm_program/administration/new_user/new_user.php\">Neue Web-Anmeldungen verwalten</a></span><br />
+                        <span class=\"textDescription\">Besucher, die sich auf der Homepage registriert haben, k&ouml;nnen hier freigeschaltet oder abgelehnt werden.</span>
+                    </div>
 
-                <div style=\"margin-top: 7px;\"></div>
+                    <div style=\"margin-top: 7px;\"></div>";
+                }
 
+                echo "
                 <div style=\"text-align: left; width: 40; float: left;\">
                     <a href=\"$g_root_path/adm_program/administration/members/members.php\">
                     <img style=\"position: relative; top: 5px;\" src=\"$g_root_path/adm_program/images/person_admin_big.png\" border=\"0\" alt=\"Benutzerverwaltung\" />
@@ -247,32 +252,36 @@ require("../adm_config/body_top.php");
                 <div style=\"text-align: left; margin-left: 45px;\">
                     <span class=\"textHead\"><a href=\"$g_root_path/adm_program/administration/members/members.php\">Benutzerverwaltung</a></span><br />
                     <span class=\"textDescription\">Mitglieder (Benutzer) k&ouml;nnen entfernt und neue Mitglieder (Benutzer) k&ouml;nnen in der Datenbank anlegt werden.</span>
-                </div>
+                </div>";
 
-                <div style=\"margin-top: 7px;\"></div>
+                if(isModerator())
+                {
+                    echo "
+                    <div style=\"margin-top: 7px;\"></div>
 
-                <div style=\"text-align: left; width: 40; float: left;\">
-                    <a href=\"$g_root_path/adm_program/administration/roles/roles.php\">
-                    <img style=\"position: relative; top: 5px;\" src=\"$g_root_path/adm_program/images/wand_big.png\" border=\"0\" alt=\"Rollenverwaltung\" />
-                    </a>
-                </div>
-                <div style=\"text-align: left; margin-left: 45px;\">
-                    <span class=\"textHead\"><a href=\"$g_root_path/adm_program/administration/roles/roles.php\">Rollenverwaltung</a></span><br />
-                    <span class=\"textDescription\">Rollen (Gruppen / Kurse / Abteilungen) k&ouml;nnen hier erstellt oder bearbeitet werden.</span>
-                </div>
+                    <div style=\"text-align: left; width: 40; float: left;\">
+                        <a href=\"$g_root_path/adm_program/administration/roles/roles.php\">
+                        <img style=\"position: relative; top: 5px;\" src=\"$g_root_path/adm_program/images/wand_big.png\" border=\"0\" alt=\"Rollenverwaltung\" />
+                        </a>
+                    </div>
+                    <div style=\"text-align: left; margin-left: 45px;\">
+                        <span class=\"textHead\"><a href=\"$g_root_path/adm_program/administration/roles/roles.php\">Rollenverwaltung</a></span><br />
+                        <span class=\"textDescription\">Rollen (Gruppen / Kurse / Abteilungen) k&ouml;nnen hier erstellt oder bearbeitet werden.</span>
+                    </div>
 
-                <div style=\"margin-top: 7px;\"></div>
+                    <div style=\"margin-top: 7px;\"></div>
 
-                <div style=\"text-align: left; width: 40; float: left;\">
-                    <a href=\"$g_root_path/adm_program/administration/organization/organization.php\">
-                    <img style=\"position: relative; top: 5px;\" src=\"$g_root_path/adm_program/images/options_big.png\" border=\"0\" alt=\"Organisationseinstellungen\" />
-                    </a>
-                </div>
-                <div style=\"text-align: left; margin-left: 45px;\">
-                    <span class=\"textHead\"><a href=\"$g_root_path/adm_program/administration/organization/organization.php\">Organisationseinstellungen</a></span><br />
-                    <span class=\"textDescription\">Einstellungen f&uuml;r die Organisation, spezifische Profilfelder und Rollenkategorien k&ouml;nnen hier bearbeitet werden.</span>
-                </div>
-            </div>";
+                    <div style=\"text-align: left; width: 40; float: left;\">
+                        <a href=\"$g_root_path/adm_program/administration/organization/organization.php\">
+                        <img style=\"position: relative; top: 5px;\" src=\"$g_root_path/adm_program/images/options_big.png\" border=\"0\" alt=\"Organisationseinstellungen\" />
+                        </a>
+                    </div>
+                    <div style=\"text-align: left; margin-left: 45px;\">
+                        <span class=\"textHead\"><a href=\"$g_root_path/adm_program/administration/organization/organization.php\">Organisationseinstellungen</a></span><br />
+                        <span class=\"textDescription\">Einstellungen f&uuml;r die Organisation, spezifische Profilfelder und Rollenkategorien k&ouml;nnen hier bearbeitet werden.</span>
+                    </div>";
+                }
+            echo "</div>";
         }
     echo "</div>";
 
