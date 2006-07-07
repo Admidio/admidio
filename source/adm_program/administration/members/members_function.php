@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * User auf der Homepage und im Forum ausloggen
+ * User-Funktionen
  *
  * Copyright    : (c) 2004 - 2006 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -39,8 +39,8 @@ require("../../system/email_class.php");
 $err_code = "";
 $err_text = "";
 
-// nur Moderatoren duerfen Mitgliedschaften beenden
-if(!isModerator())
+// nur berechtigte User duerfen Funktionen aufrufen
+if(!editUser())
 {
     $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
     header($location);
@@ -122,8 +122,9 @@ elseif($_GET["mode"] == 2)
 {
     // User NUR aus der Gliedgemeinschaft entfernen
 
-    // Moderatoren duerfen keine Webmaster entfernen
-    if(isModerator() && hasRole("Webmaster", $_GET['user_id']))
+    // Es duerfen keine Webmaster entfernt werden
+    if(hasRole("Webmaster", $g_current_user->id) == false
+    && hasRole("Webmaster", $_GET['user_id']) == true)
     {
         $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
         header($location);

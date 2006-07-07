@@ -206,7 +206,9 @@ echo "
             case "rolle_benutzer":
                 echo "Rollen, die diese Option aktiviert haben, haben die Berechtigung
                       Benutzerdaten (au&szlig;er Passw&ouml;rter) und Rollenzugeh&ouml;rigkeiten
-                      anderer Mitglieder zu bearbeiten.";
+                      anderer Mitglieder zu bearbeiten.<br>
+                      Au&szlig;erdem haben sie Zugriff auf die Benutzerverwaltung und k&ouml;nnen 
+                      dort neue Benutzer anlegen oder alte Benutzer l&ouml;schen.";
                 break;
 
             case "rolle_locked":
