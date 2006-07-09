@@ -70,24 +70,31 @@ class Date
     // User mit der uebergebenen ID aus der Datenbank auslesen
     function getDate($dat_id)
     {
-        $sql = "SELECT * FROM ". TBL_DATES. " WHERE dat_id = $dat_id";
-        $result = mysql_query($sql, $this->db_connection);
-        db_error($result);
-
-        if($row = mysql_fetch_object($result))
-        {
-            $this->id             = $row->dat_id;
-            $this->org_shortname  = $row->dat_org_shortname;
-            $this->global         = $row->dat_global;
-            $this->begin          = $row->dat_begin;
-            $this->end            = $row->dat_end;
-            $this->description    = $row->dat_description;
-            $this->location       = $row->dat_location;
-            $this->headline       = $row->dat_headline;
-            $this->usr_id         = $row->dat_usr_id;
-            $this->timestamp      = $row->dat_timestamp;
-            $this->last_change    = $row->dat_last_change;
-            $this->usr_id_change  = $row->dat_usr_id_change;            
+    	if($dat_id > 0)
+    	{
+	        $sql = "SELECT * FROM ". TBL_DATES. " WHERE dat_id = $dat_id";
+	        $result = mysql_query($sql, $this->db_connection);
+	        db_error($result);
+	
+	        if($row = mysql_fetch_object($result))
+	        {
+	            $this->id             = $row->dat_id;
+	            $this->org_shortname  = $row->dat_org_shortname;
+	            $this->global         = $row->dat_global;
+	            $this->begin          = $row->dat_begin;
+	            $this->end            = $row->dat_end;
+	            $this->description    = $row->dat_description;
+	            $this->location       = $row->dat_location;
+	            $this->headline       = $row->dat_headline;
+	            $this->usr_id         = $row->dat_usr_id;
+	            $this->timestamp      = $row->dat_timestamp;
+	            $this->last_change    = $row->dat_last_change;
+	            $this->usr_id_change  = $row->dat_usr_id_change;            
+	        }
+	        else
+	        {
+	            $this->clear();
+	        }
         }
         else
         {

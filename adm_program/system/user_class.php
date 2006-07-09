@@ -82,45 +82,53 @@ class User
     // User mit der uebergebenen ID aus der Datenbank auslesen
     function getUser($user_id)
     {
-        $sql = "SELECT * FROM ". TBL_USERS. " WHERE usr_id = $user_id";
-        $result = mysql_query($sql, $this->db_connection);
-        db_error($result);
-
-        if($row = mysql_fetch_object($result))
-        {
-            $this->id         = $row->usr_id;
-            $this->last_name  = $row->usr_last_name;
-            $this->first_name = $row->usr_first_name;
-            $this->address    = $row->usr_address;
-            $this->zip_code   = $row->usr_zip_code;
-            $this->city       = $row->usr_city;
-            $this->country    = $row->usr_country;
-            $this->phone      = $row->usr_phone;
-            $this->mobile     = $row->usr_mobile;
-            $this->fax        = $row->usr_fax;
-            if($row->usr_birthday == "0000-00-00")
-            {
-                $this->birthday = "";
-            }
-            else
-            {
-                $this->birthday = $row->usr_birthday;
-            }
-            $this->gender         = $row->usr_gender;
-            $this->email          = $row->usr_email;
-            $this->homepage       = $row->usr_homepage;
-            $this->login_name     = $row->usr_login_name;
-            $this->password       = $row->usr_password;
-            $this->last_login     = $row->usr_last_login;
-            $this->actual_login   = $row->usr_actual_login;
-            $this->number_login   = $row->usr_number_login;
-            $this->date_invalid   = $row->usr_date_invalid;
-            $this->number_invalid = $row->usr_number_invalid;
-            $this->last_change    = $row->usr_last_change;
-            $this->usr_id_change  = $row->usr_usr_id_change;
-            $this->valid          = $row->usr_valid;
-            $this->reg_org_shortname = $row->usr_reg_org_shortname;
-        }
+    	if($user_id > 0)
+    	{
+	        $sql = "SELECT * FROM ". TBL_USERS. " WHERE usr_id = $user_id";
+	        $result = mysql_query($sql, $this->db_connection);
+	        db_error($result);
+	
+	        if($row = mysql_fetch_object($result))
+	        {
+	        	// Variablen fuellen
+	            $this->id         = $row->usr_id;
+	            $this->last_name  = $row->usr_last_name;
+	            $this->first_name = $row->usr_first_name;
+	            $this->address    = $row->usr_address;
+	            $this->zip_code   = $row->usr_zip_code;
+	            $this->city       = $row->usr_city;
+	            $this->country    = $row->usr_country;
+	            $this->phone      = $row->usr_phone;
+	            $this->mobile     = $row->usr_mobile;
+	            $this->fax        = $row->usr_fax;
+	            if($row->usr_birthday == "0000-00-00")
+	            {
+	                $this->birthday = "";
+	            }
+	            else
+	            {
+	                $this->birthday = $row->usr_birthday;
+	            }
+	            $this->gender         = $row->usr_gender;
+	            $this->email          = $row->usr_email;
+	            $this->homepage       = $row->usr_homepage;
+	            $this->login_name     = $row->usr_login_name;
+	            $this->password       = $row->usr_password;
+	            $this->last_login     = $row->usr_last_login;
+	            $this->actual_login   = $row->usr_actual_login;
+	            $this->number_login   = $row->usr_number_login;
+	            $this->date_invalid   = $row->usr_date_invalid;
+	            $this->number_invalid = $row->usr_number_invalid;
+	            $this->last_change    = $row->usr_last_change;
+	            $this->usr_id_change  = $row->usr_usr_id_change;
+	            $this->valid          = $row->usr_valid;
+	            $this->reg_org_shortname = $row->usr_reg_org_shortname;
+	        }
+	        else
+	        {
+	            $this->clear();
+	        }
+    	}
         else
         {
             $this->clear();
