@@ -48,10 +48,10 @@ if($_GET["mode"] == 1)
 {
     // User-Account einem Mitglied zuordnen
 
-    $new_user = new TblUsers($g_adm_con);
+    $new_user = new User($g_adm_con);
     $new_user->getUser($_GET['new_user_id']);
 
-    $user = new TblUsers($g_adm_con);
+    $user = new User($g_adm_con);
     $user->getUser($_GET['user_id']);
 
     $old_login = $user->login_name;

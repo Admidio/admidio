@@ -36,7 +36,7 @@ $user_id  = $_GET['user_id'];
 if($_GET["mode"] == 1)
 {
     // Userdaten aus Datenbank holen
-    $user = new TblUsers($g_adm_con);
+    $user = new User($g_adm_con);
     $user->getUser($user_id);
 
     header('Content-Type: text/x-vcard');

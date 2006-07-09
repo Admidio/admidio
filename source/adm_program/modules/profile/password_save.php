@@ -44,7 +44,7 @@ if(!hasRole("Webmaster") && $g_current_user->id != $user_id)
 $err_code   = "";
 $count_user = 0;
 
-$user = new TblUsers($g_adm_con);
+$user = new User($g_adm_con);
 $user->getUser($user_id);
 
 if( ($_POST["old_password"] != "" || hasRole('Webmaster') )

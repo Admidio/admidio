@@ -34,6 +34,7 @@
  *****************************************************************************/
 
 require("../../system/common.php");
+require_once("../../system/dates_class.php");
 
 if($_GET["mode"] != 4)
 {
@@ -231,7 +232,7 @@ elseif($_GET["mode"] == 2)
 elseif($_GET["mode"] == 4)
 {
     // Termindaten aus Datenbank holen
-    $date = new TblDates($g_adm_con);
+    $date = new Date($g_adm_con);
     $date->getDate($_GET["dat_id"]);
 
     header('Content-Type: text/calendar');

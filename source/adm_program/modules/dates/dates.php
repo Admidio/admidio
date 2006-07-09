@@ -322,14 +322,14 @@ require("../../../adm_config/body_top.php");
                         }
                     echo "</div>
                     <div style=\"margin: 8px 4px 4px 4px; font-size: 8pt; text-align: left;\">";
-                        $user_create = new TblUsers($g_adm_con);
+                        $user_create = new User($g_adm_con);
                         $user_create->getUser($row->dat_usr_id);
                         echo "Angelegt von ". strSpecialChars2Html($user_create->first_name). " ". strSpecialChars2Html($user_create->last_name).
                         " am ". mysqldatetime("d.m.y h:i", $row->dat_timestamp);
 
                         if($row->dat_usr_id_change > 0)
                         {
-                            $user_change = new TblUsers($g_adm_con);
+                            $user_change = new User($g_adm_con);
                             $user_change->getUser($row->dat_usr_id_change);
                             echo "<br>Zuletzt bearbeitet von ". strSpecialChars2Html($user_change->first_name). " ". strSpecialChars2Html($user_change->last_name).
                             " am ". mysqldatetime("d.m.y h:i", $row->dat_last_change);

@@ -202,7 +202,7 @@ elseif($_GET["mode"] == 3)
     }
 
     // User aus der Datenbank loeschen
-    $user = new TblUsers($g_adm_con);
+    $user = new User($g_adm_con);
     $user->GetUser($_GET['user_id']);
     $user->delete();
 
@@ -256,7 +256,7 @@ elseif($_GET["mode"] == 4)
         exit();
     }
 
-    $user = new TblUsers($g_adm_con);
+    $user = new User($g_adm_con);
     $user->GetUser($_GET['user_id']);
 
     if($g_preferences['send_mail_extern'] != 1)

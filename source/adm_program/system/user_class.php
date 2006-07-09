@@ -11,7 +11,7 @@
  *
  * Das Objekt wird erzeugt durch Aufruf des Konstruktors und der Uebergabe der
  * aktuellen Datenbankverbindung:
- * $user = new TblUsers($g_adm_con);
+ * $user = new User($g_adm_con);
  *
  * Mit der Funktion getUser($user_id) kann nun der gewuenschte User ausgelesen
  * werden.
@@ -43,7 +43,7 @@
  *
  *****************************************************************************/
 
-class TblUsers
+class User
 {
     var $db_connection;
     var $id;
@@ -73,7 +73,7 @@ class TblUsers
     var $reg_org_shortname;
 
     // Konstruktor
-    function TblUsers($connection)
+    function User($connection)
     {
         $this->db_connection = $connection;
         $this->clear();

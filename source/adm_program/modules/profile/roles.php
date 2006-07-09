@@ -61,7 +61,7 @@ else
     $url = "";
 }
 
-$user     = new TblUsers($g_adm_con);
+$user     = new User($g_adm_con);
 $user->GetUser($_GET['user_id']);
 
 echo "

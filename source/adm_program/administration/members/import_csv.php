@@ -38,7 +38,7 @@ if(!editUser())
     exit();
 }
 
-$user = new TblUsers($g_adm_con);
+$user = new User($g_adm_con);
 session_start();
 
 // rol_id von der zuweisenden Rolle auslesen
@@ -155,7 +155,7 @@ for($i = $start_row; $i < count($_SESSION["file_lines"]); $i++)
         // alle vorhandene User mit dem Namen loeschen
         while($row = mysql_fetch_object($result))
         {            
-            $duplicate_user = new TblUsers($g_adm_con);
+            $duplicate_user = new User($g_adm_con);
             $duplicate_user->GetUser($row->usr_id);
             $duplicate_user->delete();
         }
