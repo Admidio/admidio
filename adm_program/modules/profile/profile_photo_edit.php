@@ -80,7 +80,7 @@ if(!editUser() && $user_id != $g_current_user->id)
 // User auslesen
 if($a_user_id > 0)
 {
-    $user = new TblUsers($g_adm_con);
+    $user = new User($g_adm_con);
     $user->GetUser($a_user_id);
 }
 

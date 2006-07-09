@@ -11,7 +11,7 @@
  *
  * Das Objekt wird erzeugt durch Aufruf des Konstruktors und der Uebergabe der
  * aktuellen Datenbankverbindung:
- * $date = new TblDates($g_adm_con);
+ * $date = new Date($g_adm_con);
  *
  * Mit der Funktion getDate($dat_id) kann nun der gewuenschte Termin ausgelesen
  * werden.
@@ -43,7 +43,7 @@
 include($g_server_path. "/adm_program/libs/bennu/bennu.inc.php");
 
 
-class TblDates
+class Date
 {
     var $db_connection;
     var $id;
@@ -61,7 +61,7 @@ class TblDates
     
     
     // Konstruktor
-    function TblDates($connection)
+    function Date($connection)
     {
         $this->db_connection = $connection;
         $this->clear();

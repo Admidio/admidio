@@ -224,7 +224,7 @@ require("../../../adm_config/body_top.php");
                         if($row->gbo_usr_id_change > 0)
                         {
                             // Userdaten des Editors holen...
-                            $user_change = new TblUsers($g_adm_con);
+                            $user_change = new User($g_adm_con);
                             $user_change->getUser($row->gbo_usr_id_change);
 
                             echo "
@@ -287,7 +287,7 @@ require("../../../adm_config/body_top.php");
                             while ($row = mysql_fetch_object($comment_result))
                             {
                                 // Die Userdaten des Kommentarschreibers aus der DB holen
-                                $commentWriter = new TblUsers($g_adm_con);
+                                $commentWriter = new User($g_adm_con);
                                 $commentWriter->getUser($row->gbc_usr_id);
 
                                 echo "

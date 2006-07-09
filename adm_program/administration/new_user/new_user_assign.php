@@ -46,7 +46,7 @@ $i = 0;
 
 if($_GET['new_user_id'] > 0)
 {
-   $new_user = new TblUsers($g_adm_con);
+   $new_user = new User($g_adm_con);
    $new_user->getUser($_GET['new_user_id']);
 
    if(!array_key_exists("letter", $_GET))

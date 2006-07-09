@@ -207,7 +207,7 @@ require("../../../adm_config/body_top.php");
                                         echo " onclick=\"self.location.href='$g_root_path/adm_program/system/err_msg.php?err_code=delete_link&amp;err_text=". urlencode($row->lnk_name). "&amp;err_head=L&ouml;schen&amp;button=2&amp;url=$load_url'\">
                                         &nbsp;";
                                 }
-                                $user_create = new TblUsers($g_adm_con);
+                                $user_create = new User($g_adm_con);
                                 $user_create->getUser($row->lnk_usr_id);
                                 echo "Angelegt von ". strSpecialChars2Html($user_create->first_name). " ". strSpecialChars2Html($user_create->last_name).
                                 " am ". mysqldatetime("d.m.y h:i", $row->lnk_timestamp);

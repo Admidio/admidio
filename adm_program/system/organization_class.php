@@ -43,7 +43,7 @@
  *
  *****************************************************************************/
 
-class TblOrganizations
+class Organization
 {
     var $db_connection;
     var $id;
@@ -53,7 +53,7 @@ class TblOrganizations
     var $homepage;
 
     // Konstruktor
-    function TblOrganizations($connection)
+    function Organization($connection)
     {
         $this->db_connection = $connection;
         $this->clear();

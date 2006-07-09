@@ -32,9 +32,8 @@ require_once($g_server_path. "/adm_config/config.php");
 require_once($g_server_path. "/adm_program/system/function.php");
 require_once($g_server_path. "/adm_program/system/date.php");
 require_once($g_server_path. "/adm_program/system/string.php");
-require_once($g_server_path. "/adm_program/system/tbl_users.php");
-require_once($g_server_path. "/adm_program/system/tbl_organizations.php");
-require_once($g_server_path. "/adm_program/system/tbl_dates.php");
+require_once($g_server_path. "/adm_program/system/user_class.php");
+require_once($g_server_path. "/adm_program/system/organization_class.php");
 
 
  // Standard-Praefix ist adm auch wegen Kompatibilitaet zu alten Versionen
@@ -82,9 +81,9 @@ else
 $g_session_id    = "";
 $g_session_valid = false;
 
-$g_current_user  = new TblUsers($g_adm_con);
+$g_current_user  = new User($g_adm_con);
 
-$g_current_organization = new TblOrganizations($g_adm_con);
+$g_current_organization = new Organization($g_adm_con);
 $g_current_organization->getOrganization($g_organization);
 
 // Einstellungen der Organisation auslesen

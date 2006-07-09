@@ -31,7 +31,7 @@
  
 require("../../system/common.php");
 require("../../system/login_valid.php");
-require("../../system/tbl_role_dependencies.php");
+require("../../system/role_dependency_class.php");
 
 // nur Webmaster & Moderatoren duerfen Rollen zuweisen
 if(!isModerator() && !isGroupLeader() && !editUser())
@@ -205,8 +205,8 @@ while($row = mysql_fetch_object($result_rolle))
         //find the parent roles
         if($function == 1 && $user_found < 1)
         {
-            //$roleDepSrc = new TblRoleDependencies($g_adm_con);
-            $tmpRoles = TblRoleDependencies::getParentRoles($g_adm_con,$row->rol_id);
+            //$roleDepSrc = new RoleDependency($g_adm_con);
+            $tmpRoles = RoleDependency::getParentRoles($g_adm_con,$row->rol_id);
             
             foreach($tmpRoles as $tmpRole)
             {

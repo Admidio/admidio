@@ -62,7 +62,7 @@ if(!editUser() && $user_id != $g_current_user->id)
     exit();
 }
 
-$user = new TblUsers($g_adm_con);
+$user = new User($g_adm_con);
 
 if($user_id > 0)
 {
