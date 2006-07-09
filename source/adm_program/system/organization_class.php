@@ -62,17 +62,24 @@ class Organization
     // User mit der uebergebenen ID aus der Datenbank auslesen
     function getOrganization($shortname)
     {
-        $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. " WHERE org_shortname = '$shortname'";
-        $result = mysql_query($sql, $this->db_connection);
-        db_error($result);
-
-        if($row = mysql_fetch_object($result))
-        {
-            $this->id          = $row->org_id;
-            $this->longname    = $row->org_longname;
-            $this->shortname   = $row->org_shortname;
-            $this->org_id_parent = $row->org_org_id_parent;
-            $this->homepage    = $row->org_homepage;
+    	if(strlen($shortname) > 0)
+    	{
+	        $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. " WHERE org_shortname = '$shortname'";
+	        $result = mysql_query($sql, $this->db_connection);
+	        db_error($result);
+	
+	        if($row = mysql_fetch_object($result))
+	        {
+	            $this->id          = $row->org_id;
+	            $this->longname    = $row->org_longname;
+	            $this->shortname   = $row->org_shortname;
+	            $this->org_id_parent = $row->org_org_id_parent;
+	            $this->homepage    = $row->org_homepage;
+	        }
+	        else
+	        {
+	            $this->clear();
+	        }
         }
         else
         {

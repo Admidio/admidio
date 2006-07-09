@@ -45,25 +45,32 @@ class RoleDependency
         $this->clear();
     }
 
-    // Rollenabhängigkeit aus der Datenbank auslesen
+    // Rollenabhï¿½ngigkeit aus der Datenbank auslesen
     function get($childRoleId,$parentRoleId)
     {
-        $sql = "SELECT * FROM ". TBL_ROLE_DEPENDENCIES. 
-               " WHERE rld_role_id_child = $childRoleId 
-                   AND rld_role_id_parent = $parentRoleId";
-        $result = mysql_query($sql, $this->db_connection);
-        db_error($result);
-
-        if($row = mysql_fetch_object($result))
-        {
-            $this->role_id_parent      = $row->rld_rol_id_parent;
-            $this->role_id_child       = $row->rld_rol_id_child;
-            $this->comment             = $row->rld_comment;
-            $this->timestamp           = $row->rld_timestamp;
-            $this->usr_id              = $row->rld_usr_id;
-
-            $this->role_id_parent_orig = $row->rld_rol_id_parent;
-            $this->role_id_child_orig  = $row->rld_rol_id_child;
+    	if($childRoleId > 0 && $parentRoleId > 0)
+    	{
+	        $sql = "SELECT * FROM ". TBL_ROLE_DEPENDENCIES. 
+	               " WHERE rld_role_id_child = $childRoleId 
+	                   AND rld_role_id_parent = $parentRoleId";
+	        $result = mysql_query($sql, $this->db_connection);
+	        db_error($result);
+	
+	        if($row = mysql_fetch_object($result))
+	        {
+	            $this->role_id_parent      = $row->rld_rol_id_parent;
+	            $this->role_id_child       = $row->rld_rol_id_child;
+	            $this->comment             = $row->rld_comment;
+	            $this->timestamp           = $row->rld_timestamp;
+	            $this->usr_id              = $row->rld_usr_id;
+	
+	            $this->role_id_parent_orig = $row->rld_rol_id_parent;
+	            $this->role_id_child_orig  = $row->rld_rol_id_child;
+	        }
+	        else
+	        {
+	            $this->clear();
+	        }
         }
         else
         {
