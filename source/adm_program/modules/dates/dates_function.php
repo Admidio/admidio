@@ -34,7 +34,7 @@
  *****************************************************************************/
 
 require("../../system/common.php");
-require_once("../../system/dates_class.php");
+require_once("../../system/date_class.php");
 
 if($_GET["mode"] != 4)
 {
