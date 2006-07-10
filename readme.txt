@@ -89,6 +89,10 @@ Bevor Sie Admidio beutzen, sollten Sie unbedingt die gpl-de.html durchlesen.
 Mit der Installation und Benutzung der Admidio Mitgliederverwaltung 
 akteptieren Sie die Bedingungen der GNU General Public License.
 
+Teile von Admidio stehen unter der Creative Commons Lizenz. Dies sind die 
+Icons der Tango-Bibliothek (Creative Commons Attribution Share-Alike license)
+und die Icons der Silk-Bibliothek (Creative Commons Attribution 2.5 License).
+
  6. Copyright
 -------------------------------------------------------------------------
 Damit sich die Admidio Mitgliederverwaltung möglichst weit verbreitet, 
