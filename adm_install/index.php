@@ -111,13 +111,14 @@ echo "
                    if(!$first_install) echo " checked ";
                    echo "/>&nbsp;
                         <label for=\"update\">Admidio Datenbank updaten
-                    </div>
+                    </div>";
+                    /* vorlaefig ausgebaut, da die Einrichtung noch nicht komfortabel genug ist
                     <br>
                     <div>&nbsp;
                         <input type=\"radio\" id=\"orga\" name=\"mode\" value=\"orga\" />&nbsp;
                         <label for=\"orga\">Neue Organisation hinzuf&uuml;gen
-                    </div>
-                    <br>
+                    </div>*/
+                    echo "<br>
                 </div>";
         }
         elseif($mode == 2)
