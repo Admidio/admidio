@@ -28,8 +28,8 @@ require("../../system/common.php");
 require("../../system/login_valid.php");
 
 //Uebernahme Variablen
-$pho_id= $_GET['pho_id'];
-$aufgabe=$_GET['aufgabe'];
+$pho_id  = $_GET['pho_id'];
+$aufgabe = $_GET['aufgabe'];
 
 //Aktueller Timestamp
 $act_datetime= date("Y.m.d G:i:s", time());
@@ -296,7 +296,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
         echo"
         <div style=\"width: 430px\" align=\"center\" class=\"formBody\">
             <table cellspacing=3 cellpadding=0 border=\"0\">
-                <tr><td colspan=\"2\" align=\"center\">Die Veranstaltung Wurde erfolgreich angelegt/ge&auml;ndert:</td></tr>
+                <tr><td colspan=\"2\" align=\"center\">Die Veranstaltung wurde erfolgreich angelegt / ge&auml;ndert:<br>&nbsp;</td></tr>
                 <tr><td align=\"right\">Veranstaltung:</td><td align=\"left\">".$neudaten["pho_name"]."</td></tr>
                 <tr><td align=\"right\" width=\"50%\">in Ordner:</td><td align=\"left\">";
                     if($pho_parent_id!=NULL)
@@ -321,15 +321,10 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
                 echo"
                 </td></tr>
                 <tr><td align=\"right\" width=\"50%\">Aktuelle Bilderzahl:</td><td align=\"left\">".$neudaten["pho_quantity"]."</td></tr>
-                <tr><td align=\"right\">angelegt von:</td><td align=\"left\">". strSpecialChars2Html($user1->usr_first_name). " ". strSpecialChars2Html($user1->usr_last_name)."</td></tr>
-                <tr><td align=\"right\">angelegt am:</td><td align=\"left\">".mysqldatetime("d.m.y h:i", $neudaten["pho_timestamp"])."</td></tr>
-                <tr><td align=\"right\">letztes Update durch:</td><td align=\"left\">". strSpecialChars2Html($user2->usr_first_name). " ". strSpecialChars2Html($user2->usr_last_name)."</td></tr>
-                <tr><td align=\"right\">letztes Update am:</td><td align=\"left\">".mysqldatetime("d.m.y h:i", $neudaten["pho_timestamp"])."</td></tr>
             </table>
             <hr width=\"85%\" />
-            <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php'\">
-                <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
-                &nbsp;Zur&uuml;ck
+            <button name=\"weiter\" type=\"button\" value=\"weiter\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id'\">Weiter&nbsp;
+                <img src=\"$g_root_path/adm_program/images/forward.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Weiter\">
             </button>
         </div><br><br>";
     }//submit
@@ -619,7 +614,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
                             chmod("$ordner/$y.jpg", 0777);
                                 if(unlink("$ordner/$y.jpg"))
                                 {
-                                    echo"Datei &bdquo;".$adm_photo_delete["pho_begin"]."_".$adm_photo_delete["pho_id"]."/$y.jpg&rdquo; wurde erfolgreich GEL&Ouml;SCHT.<br>";
+                                    echo"Datei &bdquo;".$adm_photo_delete["pho_begin"]."_".$adm_photo_delete["pho_id"]."/$y.jpg&rdquo; wurde erfolgreich gel&ouml;scht.<br>";
                                 }
                         }
                 }
@@ -633,7 +628,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
             db_error($result_delet);
             if($result_delet)
             {
-                echo"Der Datensatz zu &bdquo;".$adm_photo_delete["pho_name"]."&rdquo; wurde aus der Datenbank GEL&Ouml;SCHT.";
+                echo"Der Datensatz zu &bdquo;".$adm_photo_delete["pho_name"]."&rdquo; wurde aus der Datenbank gel&ouml;scht.";
             }
             
             //Loeschen der Ordners
@@ -641,7 +636,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
                 {
                     if(rmdir("$ordner"))
                     {
-                        echo"<br>Die Veranstaltung Wurde erfolgreich GEL&Ouml;SCHT.<br>";
+                        echo"<br>Die Veranstaltung wurde erfolgreich gel&ouml;scht.<br>";
                     }
             }
         }//for
@@ -649,10 +644,9 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
     //Zurueckbutton
     echo"
     <hr width=\"85%\" />
-    <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php'\">
-        <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
-        &nbsp;Zur&uuml;ck
-        </button>
+    <button name=\"weiter\" type=\"button\" value=\"weiter\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php'\">Weiter&nbsp;
+        <img src=\"$g_root_path/adm_program/images/forward.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Weiter\">
+    </button>
     </div>";
     }//Ende Veranstaltung loeschen
     

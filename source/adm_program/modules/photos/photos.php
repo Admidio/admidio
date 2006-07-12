@@ -68,7 +68,7 @@ $result_children = mysql_query($sql, $g_adm_con);
 db_error($result_event);
 $children = mysql_num_rows($result_children);
 
-//Erfassen des Anlegers der Ubergebenen Veranstaltung
+//Erfassen des Anlegers der uebergebenen Veranstaltung
 if($pho_id!=NULL && $adm_photo["pho_usr_id"]!=NULL)
 {
     $sql="  SELECT * 
@@ -79,7 +79,7 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id"]!=NULL)
     $user1 = mysql_fetch_object($result_u1);
 }
 
-//Erfassen des Veraenderers der Ubergebenen Veranstaltung
+//Erfassen des Veraenderers der uebergebenen Veranstaltung
 if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL)
 {
     $sql="  SELECT * 
@@ -91,7 +91,7 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL)
 }
 
 /*********************LOCKED************************************/       
-//Falls gefordert und Photoeditrechet, aendern der Freigabe
+//Falls gefordert und Foto-edit-rechte, aendern der Freigabe
 if($_GET["locked"]=="1" || $_GET["locked"]=="0")
 {
     //bei Seitenaufruf ohne Moderationsrechte
@@ -161,14 +161,14 @@ echo "
         echo "</h1>";
         
         //solange nach Unterveranstaltungen suchen bis es keine mehr gibt
-        $navilink="";
-        $pho_parent_id=$adm_photo["pho_pho_id_parent"];
-        while ($pho_parent_id != NULL)
+        $navilink = "";
+        $pho_parent_id = $adm_photo["pho_pho_id_parent"];
+        while ($pho_parent_id > 0)
         {
             //Erfassen der Eltern Veranstaltung
             $sql=" SELECT *
-                   FROM ". TBL_PHOTOS. "
-                   WHERE pho_id ='$pho_parent_id'";
+                     FROM ". TBL_PHOTOS. "
+                    WHERE pho_id ='$pho_parent_id'";
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
             $adm_photo_parent = mysql_fetch_array($result);
@@ -180,7 +180,7 @@ echo "
             $pho_parent_id=$adm_photo_parent["pho_pho_id_parent"];
         }
         
-        if($pho_id!=NULL)
+        if($pho_id > 0)
         {
             //Ausgabe des Linkpfads
             echo "<p>
@@ -201,7 +201,7 @@ echo "
                     class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Veranstaltung anlegen\"></a>
                     <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/event.php?aufgabe=new&amp;pho_id=$pho_id\">Veranstaltung anlegen</a>
                 </span>";
-                if($adm_photo["pho_quantity"]>0)
+                if($pho_id > 0)
                 {
                     echo "&nbsp;&nbsp;&nbsp;&nbsp;
                     <span class=\"iconLink\">
@@ -218,7 +218,7 @@ echo "
             <table style=\"border-width: 0px;\" cellpadding=\"4\" cellspacing=\"0\">";
             /*************************THUMBNAILS**********************************/   
             //Nur wenn uebergeben Veranstaltung Bilder enthaelt
-                if($adm_photo["pho_quantity"]>0)
+                if($adm_photo["pho_quantity"] > 0)
                 {
                     //Aanzahl der Bilder
                     $bilder = $adm_photo["pho_quantity"];
@@ -577,9 +577,9 @@ echo "
     {
         echo "<p>
             <span class=\"iconLink\">
-                <a class=\"iconLink\" href=\"javascript:history.back()\"><img
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=". $adm_photo["pho_pho_id_parent"]. "\"><img
                 class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Zur&uuml;ck\"></a>
-                <a class=\"iconLink\" href=\"javascript:history.back()\">Zur&uuml;ck</a>
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=". $adm_photo["pho_pho_id_parent"]. "\">Zur&uuml;ck</a>
             </span>
         </p>";
     }
