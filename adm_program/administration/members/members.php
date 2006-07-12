@@ -312,74 +312,61 @@ require("../../../adm_config/body_top.php");
                         <td align=\"left\">&nbsp;$row->usr_login_name</td>
                         <td align=\"center\">&nbsp;". mysqldatetime("d.m.y h:i" , $row->usr_last_change). "</td>
                         <td align=\"center\">";
-                            if(hasRole("Webmaster"))
+                            if($is_member == true)
                             {
+                                if(hasRole("Webmaster") 
+                                && strlen($row->usr_login_name) > 0 
+                                && $g_preferences['send_mail_extern'] != 1)
+                                {
+                                    // Link um E-Mail mit neuem Passwort zu zuschicken
+                                    // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
+                                    $load_url = urlencode("$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->usr_id&mode=4&url=$url");
+                                    echo "<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=send_new_login&err_text=". urlencode("$row->usr_first_name $row->usr_last_name"). "&button=2&url=$load_url\"><img 
+                                        src=\"$g_root_path/adm_program/images/key.png\" border=\"0\" alt=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\" 
+                                        title=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\"></a>&nbsp;";
+                                }
+                                else
+                                {
+                                    echo "<img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">&nbsp;";
+                                }
+
+                                // nur Mitglieder der eigenen Organisation editieren
+                                echo "<a href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=$row->usr_id\"><img 
+                                    src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Benutzerdaten bearbeiten\" title=\"Benutzerdaten bearbeiten\"></a>&nbsp;";
+                            }
+                            else
+                            {
+                                echo "<img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">
+                                <img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">&nbsp;";
+                            }
+
+                            // pruefen, ob der User noch in anderen Organisationen aktiv ist
+                            $sql    = "SELECT COUNT(*)
+                                         FROM ". TBL_ROLES. ", ". TBL_MEMBERS. "
+                                        WHERE rol_org_shortname <> '$g_organization'
+                                          AND rol_valid          = 1
+                                          AND mem_rol_id         = rol_id
+                                          AND mem_valid          = 1
+                                          AND mem_usr_id         = $row->usr_id ";
+                            $result      = mysql_query($sql, $g_adm_con);
+                            db_error($result);
+                            $row_count_2 = mysql_fetch_array($result);
+
+                            if($row_count_2[0] > 0)
+                            {
+                                // Mitglieder nicht loeschen, wenn sie noch in anderen Organisationen aktiv sind
                                 if($is_member == true)
                                 {
-                                    if(strlen($row->usr_login_name) > 0 && $g_preferences['send_mail_extern'] != 1)
-                                    {
-                                        // Link um E-Mail mit neuem Passwort zu zuschicken
-                                        // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
-                                        $load_url = urlencode("$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->usr_id&mode=4&url=$url");
-                                        echo "<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=send_new_login&err_text=". urlencode("$row->usr_first_name $row->usr_last_name"). "&button=2&url=$load_url\"><img 
-                                            src=\"$g_root_path/adm_program/images/key.png\" border=\"0\" alt=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\" 
-                                            title=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\"></a>&nbsp;";
-                                    }
-                                    else
-                                    {
-                                        echo "<img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">&nbsp;";
-                                    }
-
-                                    // Webmaster kann nur Mitglieder der eigenen Gliedgemeinschaft editieren
-                                    echo "<a href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=$row->usr_id\"><img 
-                                        src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Benutzerdaten bearbeiten\" title=\"Benutzerdaten bearbeiten\"></a>&nbsp;";
-                                }
-                                else
-                                {
-                                    echo "<img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">
-                                    <img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">&nbsp;";
-                                }
-
-                                $sql    = "SELECT COUNT(*)
-                                             FROM ". TBL_ROLES. ", ". TBL_MEMBERS. "
-                                            WHERE rol_org_shortname <> '$g_organization'
-                                              AND rol_valid          = 1
-                                              AND mem_rol_id         = rol_id
-                                              AND mem_valid          = 1
-                                              AND mem_usr_id         = $row->usr_id ";
-                                $result      = mysql_query($sql, $g_adm_con);
-                                db_error($result);
-                                $row_count_2 = mysql_fetch_array($result);
-
-                                if($row_count_2[0] > 0)
-                                {
-                                    // Webmaster duerfen Mitglieder nicht loeschen, wenn sie noch in anderen Gliedgemeinschaften aktiv sind
-                                    if($is_member == true)
-                                    {
-                                        $load_url = urlencode("$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->usr_id&mode=2");
-                                        echo "<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_member&err_text=$row->usr_first_name $row->usr_last_name&err_head=Entfernen&button=2&url=$load_url\"><img 
-                                            src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Benutzer entfernen\" title=\"Benutzer entfernen\"></a>";
-                                    }
-                                }
-                                else
-                                {
-                                    // Webmaster kann Mitglied aus der Datenbank loeschen
-                                    echo "<a href=\"members_function.php?user_id=$row->usr_id&amp;mode=3\"><img 
-                                        src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Benutzer l&ouml;schen\" title=\"Benutzer l&ouml;schen\"></a>";
+                                    $load_url = urlencode("$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->usr_id&mode=2");
+                                    echo "<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_member&err_text=$row->usr_first_name $row->usr_last_name&err_head=Entfernen&button=2&url=$load_url\"><img 
+                                        src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Benutzer entfernen\" title=\"Benutzer entfernen\"></a>";
                                 }
                             }
                             else
                             {
-                                // Moderatoren duerfen nur Mitglieder der eigenen Gliedgemeinschaft entfernen,
-                                // aber keine Webmaster !!!
-                                if($is_member == true && !hasRole("Webmaster", $row->usr_id))
-                                {
-                                    $load_url = urlencode("$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->usr_id&mode=2");
-                                    echo "<a href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=$row->usr_id\"><img 
-                                        src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Benutzerdaten bearbeiten\" title=\"Benutzerdaten bearbeiten\"></a>&nbsp;&nbsp;
-                                    <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_member&err_text=$row->usr_first_name $row->usr_last_name&err_head=Entfernen&button=2&url=$load_url\"><img 
-                                        src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Benutzer entfernen\" title=\"Benutzer entfernen\"></a>";
-                                }
+                                // Mitglied kann aus der Datenbank geloescht oder zu einem Ehemaligen gemacht werden
+                                echo "<a href=\"members_function.php?user_id=$row->usr_id&amp;mode=1\"><img 
+                                    src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Benutzer l&ouml;schen\" title=\"Benutzer l&ouml;schen\"></a>";
                             }
                         echo "</td>
                     </tr>";
