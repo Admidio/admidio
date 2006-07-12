@@ -428,9 +428,13 @@ require("../../../adm_config/body_top.php");
 
                                 if($row->usf_name == 'ICQ')
                                 {
+                                    // Sonderzeichen aus der ICQ-Nummer entfernen (damit kommt www.icq.com nicht zurecht)
+                                    preg_match_all("/\d+/", $row->usd_value, $matches);
+                                    $icq_number = implode("", reset($matches));
+                                    
                                     // ICQ Onlinestatus anzeigen
-                                    echo "<a href=\"http://www.icq.com/whitepages/cmd.php?uin=$row->usd_value&amp;action=add\"  class=\"wpaction\">
-                                    <img border=\"0\" src=\"http://status.icq.com/online.gif?icq=$row->usd_value&img=5\"
+                                    echo "<a href=\"http://www.icq.com/whitepages/cmd.php?uin=$icq_number&amp;action=add\"  class=\"wpaction\">
+                                    <img border=\"0\" src=\"http://status.icq.com/online.gif?icq=$icq_number&img=5\"
                                     style=\"vertical-align: middle;\" alt=\"$row->usd_value zu $row->usf_description hinzuf&uuml;gen\" title=\"$row->usd_value zu $row->usf_description hinzuf&uuml;gen\" /></a>&nbsp;";
                                 }
                                 elseif($row->usf_name == 'Skype')
