@@ -100,7 +100,7 @@ a:hover {
     background-color: #85C226;
     font-size:        13pt;
     font-weight:      bold;
-    border-width:     1px;
+    border-width:     1px 1px 0px 1px;
     border-color:     #555555;
     border-style:     solid;
     border-collapse:  collapse;
@@ -112,7 +112,7 @@ a:hover {
     color:            #555555;
     font-size:        11pt;
     background-color: #eaeaea;
-    border-width:     0px 1px 1px 1px;
+    border-width:     1px;
     border-color:     #555555;
     border-style:     solid;
     border-collapse:  collapse;
