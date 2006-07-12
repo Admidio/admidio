@@ -44,7 +44,8 @@ session_start();
 // rol_id von der zuweisenden Rolle auslesen
 $sql = "SELECT rol_id FROM ". TBL_ROLES. "
          WHERE rol_org_shortname = '$g_organization'
-           AND rol_name          = {0} ";
+           AND rol_name          = {0} 
+           AND rol_valid         = 1 ";
 $sql = prepareSQL($sql, array($_SESSION['role']));
 $result = mysql_query($sql, $g_adm_con);
 db_error($result);
@@ -79,7 +80,8 @@ for($i = $start_row; $i < count($_SESSION["file_lines"]); $i++)
 
     for($j = 1; $j <= count($arr_columns); $j++)
     {
-        $value = str_replace("\"", "", $value);
+        // Hochkomma und Spaces entfernen
+        $value = trim(str_replace("\"", "", $value));
         
         if($j == $_POST["usr_last_name"])
         {
