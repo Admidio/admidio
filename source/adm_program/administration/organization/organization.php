@@ -161,17 +161,7 @@ require("../../../adm_config/body_top.php");
                                             {
                                                 echo " selected ";
                                             }
-                                            echo ">";
-
-                                            if(strlen($row->org_longname) > 2)
-                                            {
-                                                echo $row->org_longname;
-                                            }
-                                            else
-                                            {
-                                                echo $row->org_shortname;
-                                            }
-                                        echo "</option>";
+                                            echo ">$row->org_shortname</option>";
                                     }
                                 echo "</select>
                             </div>
