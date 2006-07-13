@@ -122,7 +122,7 @@ require("../../../adm_config/body_top.php");
                 <div>
                     <div style=\"text-align: right; width: 25%; float: left;\">&Uuml;berschrift:</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <input type=\"text\" id=\"headline\" name=\"ueberschrift\" tabindex=\"1\" size=\"53\" maxlength=\"100\" value=\"". htmlspecialchars($headline, ENT_QUOTES). "\">
+                        <input type=\"text\" id=\"headline\" name=\"ueberschrift\" style=\"width: 350px;\" tabindex=\"1\" maxlength=\"100\" value=\"". htmlspecialchars($headline, ENT_QUOTES). "\">
                     </div>
                 </div>
 
@@ -135,7 +135,7 @@ require("../../../adm_config/body_top.php");
                     }
                     echo "</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <textarea  name=\"beschreibung\" tabindex=\"2\" rows=\"10\" cols=\"40\">". htmlspecialchars($description, ENT_QUOTES). "</textarea>
+                        <textarea  name=\"beschreibung\" style=\"width: 350px;\" tabindex=\"2\" rows=\"10\" cols=\"40\">". htmlspecialchars($description, ENT_QUOTES). "</textarea>
                     </div>
                 </div>";
 
@@ -168,12 +168,12 @@ require("../../../adm_config/body_top.php");
                 echo "<hr width=\"85%\" />
 
                 <div style=\"margin-top: 6px;\">
-                    <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\" tabindex=\"5\">
+                    <button name=\"zurueck\" type=\"button\" tabindex=\"4\" value=\"zurueck\" onclick=\"history.back()\" tabindex=\"5\">
                         <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" 
                         width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
                         &nbsp;Zur&uuml;ck</button>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <button name=\"speichern\" type=\"submit\" value=\"speichern\" tabindex=\"4\">
+                    <button name=\"speichern\" type=\"submit\" tabindex=\"5\" value=\"speichern\" tabindex=\"4\">
                         <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" 
                         width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
                         &nbsp;Speichern</button>

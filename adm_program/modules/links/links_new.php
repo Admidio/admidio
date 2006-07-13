@@ -122,14 +122,14 @@ require("../../../adm_config/body_top.php");
                 <div>
                     <div style=\"text-align: right; width: 25%; float: left;\">Linkname:</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <input type=\"text\" id=\"linkname\" name=\"linkname\" tabindex=\"1\" size=\"53\" maxlength=\"250\" value=\"". htmlspecialchars($linkname, ENT_QUOTES). "\">
+                        <input type=\"text\" id=\"linkname\" name=\"linkname\" tabindex=\"1\" style=\"width: 350px;\" maxlength=\"250\" value=\"". htmlspecialchars($linkname, ENT_QUOTES). "\">
                     </div>
                 </div>
 
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 25%; float: left;\">Linkadresse:</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <input type=\"text\" id=\"linkadresse\" name=\"linkadresse\" tabindex=\"2\" size=\"53\" maxlength=\"250\" value=\"". htmlspecialchars($linkurl, ENT_QUOTES). "\">
+                        <input type=\"text\" id=\"linkadresse\" name=\"linkadresse\" tabindex=\"2\" style=\"width: 350px;\" maxlength=\"250\" value=\"". htmlspecialchars($linkurl, ENT_QUOTES). "\">
                     </div>
                 </div>
 
@@ -142,7 +142,7 @@ require("../../../adm_config/body_top.php");
                         }
                     echo "</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <textarea  name=\"beschreibung\" tabindex=\"3\" rows=\"10\" cols=\"40\">". htmlspecialchars($description, ENT_QUOTES). "</textarea>
+                        <textarea  name=\"beschreibung\" tabindex=\"3\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". htmlspecialchars($description, ENT_QUOTES). "</textarea>
                     </div>
                 </div>";
 

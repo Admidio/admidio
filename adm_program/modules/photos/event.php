@@ -362,10 +362,10 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
                     <div style=\"text-align: right; width: 170px; float: left;\">Veranstaltung:</div>
                     <div style=\"text-align: left; margin-left: 180px;\">";
                         if($_GET["aufgabe"]=="new"){
-                            echo "<input type=\"text\" id=\"veranstaltung\" name=\"veranstaltung\" size=\"30\" maxlength=\"40\" tabindex=\"1\">";
+                            echo "<input type=\"text\" id=\"veranstaltung\" name=\"veranstaltung\" style=\"width: 300px;\" maxlength=\"50\" tabindex=\"1\">";
                         }
                         if($_GET["aufgabe"]=="change"){
-                            echo "<input type=\"text\" id=\"veranstaltung\" name=\"veranstaltung\" size=\"30\" maxlength=\"40\" tabindex=\"1\" value=\"".$adm_photo["pho_name"]."\">";
+                            echo "<input type=\"text\" id=\"veranstaltung\" name=\"veranstaltung\" style=\"width: 300px;\" maxlength=\"50\" tabindex=\"1\" value=\"".$adm_photo["pho_name"]."\">";
                         }
                     echo"
                     </div>
@@ -417,7 +417,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 170px; float: left;\">in Ordner:</div>
                     <div style=\"text-align: left; margin-left: 180px;\">
-                        <select size=\"1\" name=\"parent\">
+                        <select size=\"1\" name=\"parent\" tabindex=\"2\">
                             <option value=\"0\">Fotogalerien(Hauptordner)</option>";
 
                      while($adm_photo_list = mysql_fetch_array($result_list)){
@@ -461,10 +461,10 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
                     <div style=\"text-align: left; margin-left: 180px;\">";
                         if($_GET["aufgabe"]=="new")
                         {
-                            echo "<input type=\"text\" name=\"beginn\" size=\"10\" tabindex=\"1\" maxlength=\"10\" >";
+                            echo "<input type=\"text\" name=\"beginn\" size=\"10\" tabindex=\"3\" maxlength=\"10\" >";
                         }
                         if($_GET["aufgabe"]=="change"){
-                            echo "<input type=\"text\" name=\"beginn\" size=\"10\" tabindex=\"1\" maxlength=\"10\" value=\"".mysqldate("d.m.y", $adm_photo["pho_begin"])."\">";
+                            echo "<input type=\"text\" name=\"beginn\" size=\"10\" tabindex=\"3\" maxlength=\"10\" value=\"".mysqldate("d.m.y", $adm_photo["pho_begin"])."\">";
                         }
                     echo"
                     </div>
@@ -477,10 +477,10 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
                     <div style=\"text-align: left; margin-left: 180px;\">";
                         if($_GET["aufgabe"]=="new")
                         {
-                            echo "<input type=\"text\" name=\"ende\" size=\"10\" tabindex=\"1\" maxlength=\"10\">";
+                            echo "<input type=\"text\" name=\"ende\" size=\"10\" tabindex=\"4\" maxlength=\"10\">";
                         }
                         if($_GET["aufgabe"]=="change"){
-                            echo "<input type=\"text\" name=\"ende\" size=\"10\" tabindex=\"1\" maxlength=\"10\" value=\"".mysqldate("d.m.y", $adm_photo["pho_end"])."\">";
+                            echo "<input type=\"text\" name=\"ende\" size=\"10\" tabindex=\"4\" maxlength=\"10\" value=\"".mysqldate("d.m.y", $adm_photo["pho_end"])."\">";
                         }
                     echo"
                     </div>
@@ -493,11 +493,11 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
                     <div style=\"text-align: left; margin-left: 180px;\">";
                         if($_GET["aufgabe"]=="new")
                         {
-                            echo "<input type=\"text\" name=\"photographen\" size=\"30\" tabindex=\"1\">";
+                            echo "<input type=\"text\" name=\"photographen\" style=\"width: 300px;\" tabindex=\"5\" maxlength=\"100\">";
                         }
                         if($_GET["aufgabe"]=="change")
                         {
-                            echo "<input type=\"text\" name=\"photographen\" size=\"30\" tabindex=\"1\" value=\"".$adm_photo["pho_photographers"]."\">";
+                            echo "<input type=\"text\" name=\"photographen\" style=\"width: 300px;\" tabindex=\"5\" maxlength=\"100\" value=\"".$adm_photo["pho_photographers"]."\">";
                         }
                     echo"
                     </div>
@@ -510,16 +510,16 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
                     <div style=\"text-align: left; margin-left: 180px;\">";
                     if($_GET["aufgabe"]=="new")
                     {
-                        echo "<input type=\"checkbox\" name=\"locked\" id=\"locked\" value=\"1\">";
+                        echo "<input type=\"checkbox\" name=\"locked\" id=\"locked\" tabindex=\"6\" value=\"1\">";
                     }
                     if($_GET["aufgabe"]=="change")
                     {
                         if($adm_photo["pho_locked"]==1)
                         {
-                            echo "<input type=\"checkbox\" name=\"locked\" id=\"locked\" checked value=\"1\">";
+                            echo "<input type=\"checkbox\" name=\"locked\" id=\"locked\" tabindex=\"6\" checked value=\"1\">";
                         }
                         if($adm_photo["pho_locked"]==0){
-                            echo "<input type=\"checkbox\" name=\"locked\" id=\"locked\" value=\"1\">";
+                            echo "<input type=\"checkbox\" name=\"locked\" id=\"locked\" tabindex=\"6\" value=\"1\">";
                         }
                     }
                     echo"
@@ -534,12 +534,12 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
                         onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=veranst_help','Message','width=500, height=350, left=310,top=200,scrollbars=no')\">
                     <hr width=\"85%\" />
                     <div style=\"margin-top: 6px;\">
-                        <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
+                        <button name=\"zurueck\" type=\"button\" tabindex=\"7\" value=\"zurueck\" onclick=\"history.back()\">
                             <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
                             &nbsp;Zur&uuml;ck
                         </button>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <button name=\"submit\" type=\"submit\" value=\"speichern\">
+                        <button name=\"submit\" type=\"submit\" tabindex=\"8\" value=\"speichern\">
                             <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
                             &nbsp;Speichern
                         </button>

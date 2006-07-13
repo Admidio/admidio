@@ -143,11 +143,11 @@ if($popup == 0)
                     <div style=\"text-align: left; margin-left: 32%;\">";
                         if($a_user_id == 0)
                         {
-                            echo "<input type=\"text\" id=\"last_name\" name=\"last_name\" size=\"30\" maxlength=\"30\" />";
+                            echo "<input type=\"text\" id=\"last_name\" name=\"last_name\" style=\"width: 200px;\" maxlength=\"30\" />";
                         }
                         else
                         {
-                            echo "<input type=\"text\" id=\"last_name\" name=\"last_name\" size=\"30\" maxlength=\"30\" value=\"$user->last_name\" ";
+                            echo "<input type=\"text\" id=\"last_name\" name=\"last_name\" style=\"width: 200px;\" maxlength=\"30\" value=\"$user->last_name\" ";
                             if(!hasRole('Webmaster'))
                             {
                                 echo " class=\"readonly\" readonly ";
@@ -161,11 +161,11 @@ if($popup == 0)
                     <div style=\"text-align: left; margin-left: 32%;\">";
                         if($a_user_id == 0)
                         {
-                            echo "<input type=\"text\" name=\"first_name\" size=\"30\" maxlength=\"30\" />";
+                            echo "<input type=\"text\" name=\"first_name\" style=\"width: 200px;\" maxlength=\"30\" />";
                         }
                         else
                         {
-                            echo "<input type=\"text\" name=\"first_name\" size=\"30\" maxlength=\"30\" value=\"$user->first_name\" ";
+                            echo "<input type=\"text\" name=\"first_name\" style=\"width: 200px;\" maxlength=\"30\" value=\"$user->first_name\" ";
                             if(!hasRole('Webmaster'))
                             {
                                 echo " class=\"readonly\" readonly ";
@@ -179,7 +179,7 @@ if($popup == 0)
                     echo "<div style=\"margin-top: 6px;\">
                         <div style=\"text-align: right; width: 30%; float: left;\">Benutzername:</div>
                         <div style=\"text-align: left; margin-left: 32%;\">
-                            <input type=\"text\" name=\"login_name\" size=\"15\" maxlength=\"20\" value=\"$user->login_name\" ";
+                            <input type=\"text\" name=\"login_name\" style=\"width: 130px;\" maxlength=\"20\" value=\"$user->login_name\" ";
                             if(!hasRole('Webmaster'))
                             {
                                 echo " class=\"readonly\" readonly ";
@@ -209,11 +209,11 @@ if($popup == 0)
                     <div style=\"text-align: left; margin-left: 32%;\">";
                         if($a_new_user)
                         {
-                            echo "<input type=\"text\" id=\"address\" name=\"address\" size=\"40\" maxlength=\"50\" />";
+                            echo "<input type=\"text\" id=\"address\" name=\"address\" style=\"width: 300px;\" maxlength=\"50\" />";
                         }
                         else
                         {
-                            echo "<input type=\"text\" id=\"address\" name=\"address\" size=\"40\" maxlength=\"50\" value=\"$user->address\" />";
+                            echo "<input type=\"text\" id=\"address\" name=\"address\" style=\"width: 300px;\" maxlength=\"50\" value=\"$user->address\" />";
                         }
                     echo "</div>
                 </div>
@@ -222,11 +222,11 @@ if($popup == 0)
                     <div style=\"text-align: left; margin-left: 32%;\">";
                         if($a_new_user)
                         {
-                            echo "<input type=\"text\" name=\"zip_code\" size=\"10\" maxlength=\"10\" />";
+                            echo "<input type=\"text\" name=\"zip_code\" style=\"width: 80px;\" maxlength=\"10\" />";
                         }
                         else
                         {
-                            echo "<input type=\"text\" name=\"zip_code\" size=\"10\" maxlength=\"10\" value=\"$user->zip_code\" />";
+                            echo "<input type=\"text\" name=\"zip_code\" style=\"width: 80px;\" maxlength=\"10\" value=\"$user->zip_code\" />";
                         }
                     echo "</div>
                 </div>
@@ -235,11 +235,11 @@ if($popup == 0)
                     <div style=\"text-align: left; margin-left: 32%;\">";
                         if($a_new_user)
                         {
-                            echo "<input type=\"text\" name=\"city\" size=\"20\" maxlength=\"30\" />";
+                            echo "<input type=\"text\" name=\"city\" style=\"width: 200px;\" maxlength=\"30\" />";
                         }
                         else
                         {
-                            echo "<input type=\"text\" name=\"city\" size=\"20\" maxlength=\"30\" value=\"$user->city\" />";
+                            echo "<input type=\"text\" name=\"city\" style=\"width: 200px;\" maxlength=\"30\" value=\"$user->city\" />";
                         }
                     echo "</div>
                 </div>
@@ -291,11 +291,11 @@ if($popup == 0)
                     <div style=\"text-align: left; margin-left: 32%;\">";
                         if($a_new_user)
                         {
-                            echo "<input type=\"text\" name=\"phone\" size=\"15\" maxlength=\"20\" />";
+                            echo "<input type=\"text\" name=\"phone\" style=\"width: 130px;\" maxlength=\"20\" />";
                         }
                         else
                         {
-                            echo "<input type=\"text\" name=\"phone\" size=\"15\" maxlength=\"20\" value=\"$user->phone\" />";
+                            echo "<input type=\"text\" name=\"phone\" style=\"width: 130px;\" maxlength=\"20\" value=\"$user->phone\" />";
                         }
                         echo "&nbsp;<span style=\"font-family: Courier;\">(Vorwahl-Tel.Nr.)</span>
                     </div>
@@ -305,11 +305,11 @@ if($popup == 0)
                     <div style=\"text-align: left; margin-left: 32%;\">";
                         if($a_new_user)
                         {
-                            echo "<input type=\"text\" name=\"mobile\" size=\"15\" maxlength=\"20\" />";
+                            echo "<input type=\"text\" name=\"mobile\" style=\"width: 130px;\" maxlength=\"20\" />";
                         }
                         else
                         {
-                            echo "<input type=\"text\" name=\"mobile\" size=\"15\" maxlength=\"20\" value=\"$user->mobile\" />";
+                            echo "<input type=\"text\" name=\"mobile\" style=\"width: 130px;\" maxlength=\"20\" value=\"$user->mobile\" />";
                         }
                         echo "&nbsp;<span style=\"font-family: Courier;\">(Vorwahl-Handynr.)</span>
                      </div>
@@ -319,11 +319,11 @@ if($popup == 0)
                     <div style=\"text-align: left; margin-left: 32%;\">";
                         if($a_new_user)
                         {
-                            echo "<input type=\"text\" name=\"fax\" size=\"15\" maxlength=\"20\" />";
+                            echo "<input type=\"text\" name=\"fax\" style=\"width: 130px;\" maxlength=\"20\" />";
                         }
                         else
                         {
-                            echo "<input type=\"text\" name=\"fax\" size=\"15\" maxlength=\"20\" value=\"$user->fax\" />";
+                            echo "<input type=\"text\" name=\"fax\" style=\"width: 130px;\" maxlength=\"20\" value=\"$user->fax\" />";
                         }
                         echo "&nbsp;<span style=\"font-family: Courier;\">(Vorwahl-Faxnr.)</span>
                     </div>
@@ -333,11 +333,11 @@ if($popup == 0)
                     <div style=\"text-align: left; margin-left: 32%;\">";
                         if($a_user_id == 0)
                         {
-                            echo "<input type=\"text\" name=\"email\" size=\"40\" maxlength=\"50\" />";
+                            echo "<input type=\"text\" name=\"email\" style=\"width: 300px;\" maxlength=\"50\" />";
                         }
                         else
                         {
-                            echo "<input type=\"text\" name=\"email\" size=\"40\" maxlength=\"50\" value=\"$user->email\" />";
+                            echo "<input type=\"text\" name=\"email\" style=\"width: 300px;\" maxlength=\"50\" value=\"$user->email\" />";
                         }
                     echo "</div>
                 </div>
@@ -346,11 +346,11 @@ if($popup == 0)
                     <div style=\"text-align: left; margin-left: 32%;\">";
                         if($a_new_user)
                         {
-                            echo "<input type=\"text\" name=\"homepage\" size=\"40\" maxlength=\"50\" />";
+                            echo "<input type=\"text\" name=\"homepage\" style=\"width: 300px;\" maxlength=\"50\" />";
                         }
                         else
                         {
-                            echo "<input type=\"text\" name=\"homepage\" size=\"40\" maxlength=\"50\" value=\"$user->homepage\" />";
+                            echo "<input type=\"text\" name=\"homepage\" style=\"width: 300px;\" maxlength=\"50\" value=\"$user->homepage\" />";
                         }
                     echo "</div>
                 </div>
@@ -362,11 +362,11 @@ if($popup == 0)
                     <div style=\"text-align: left; margin-left: 32%;\">";
                         if($a_new_user)
                         {
-                            echo "<input type=\"text\" name=\"birthday\" size=\"10\" maxlength=\"10\" />";
+                            echo "<input type=\"text\" name=\"birthday\" style=\"width: 80px;\" maxlength=\"10\" />";
                         }
                         else
                         {
-                            echo "<input type=\"text\" name=\"birthday\" size=\"10\" maxlength=\"10\" value=\"". mysqldatetime('d.m.y', $user->birthday). "\" />";
+                            echo "<input type=\"text\" name=\"birthday\" style=\"width: 80px;\" maxlength=\"10\" value=\"". mysqldatetime('d.m.y', $user->birthday). "\" />";
                         }
                     echo "</div>
                 </div>
@@ -435,11 +435,11 @@ if($popup == 0)
                             <div style=\"text-align: left; margin-left: 32%;\">";
                                 if($a_new_user)
                                 {
-                                    echo "<input type=\"text\" name=\"". urlencode($row->usf_name). "\" size=\"20\" maxlength=\"50\" />";
+                                    echo "<input type=\"text\" name=\"". urlencode($row->usf_name). "\" style=\"width: 200px;\" maxlength=\"50\" />";
                                 }
                                 else
                                 {
-                                    echo "<input type=\"text\" name=\"". urlencode($row->usf_name). "\" size=\"20\" maxlength=\"50\" value=\"$row->usd_value\" />";
+                                    echo "<input type=\"text\" name=\"". urlencode($row->usf_name). "\" style=\"width: 200px;\" maxlength=\"50\" value=\"$row->usd_value\" />";
                                 }
                             echo "</div>
                         </div>";
@@ -504,15 +504,15 @@ if($popup == 0)
                             {
                                 if($row->usf_type == "NUMERIC")
                                 {
-                                    echo " size=\"10\" maxlength=\"15\" ";
+                                    echo " style=\"width: 80px;\" maxlength=\"15\" ";
                                 }
                                 elseif($row->usf_type == "TEXT")
                                 {
-                                    echo " size=\"30\" maxlength=\"30\" ";
+                                    echo " style=\"width: 200px;\" maxlength=\"30\" ";
                                 }
                                 elseif($row->usf_type == "TEXT_BIG")
                                 {
-                                    echo " size=\"40\" maxlength=\"255\" ";
+                                    echo " style=\"width: 300px;\" maxlength=\"255\" ";
                                 }
                                 
                                 if(strlen($row->usd_value) > 0)

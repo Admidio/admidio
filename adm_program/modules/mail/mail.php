@@ -157,7 +157,7 @@ require("../../../adm_config/body_top.php");
                    db_error($result);
 
                    $row = mysql_fetch_array($result);
-                   echo "<input class=\"readonly\" readonly type=\"text\" name=\"mailto\" size=\"35\" maxlength=\"50\" value=\"". $row[0]. "\">";
+                   echo "<input class=\"readonly\" readonly type=\"text\" name=\"mailto\" style=\"width: 350px;\" maxlength=\"50\" value=\"". $row[0]. "\">";
                }
                elseif (array_key_exists("rolle", $_GET))
                {
@@ -223,11 +223,11 @@ require("../../../adm_config/body_top.php");
             <div style=\"text-align: left; margin-left: 17%;\">";
                if ($g_current_user->id != 0)
                {
-                   echo "<input class=\"readonly\" readonly type=\"text\" name=\"name\" size=\"30\" maxlength=\"50\" value=\"$g_current_user->first_name $g_current_user->last_name\">";
+                   echo "<input class=\"readonly\" readonly type=\"text\" name=\"name\" style=\"width: 200px;\" maxlength=\"50\" value=\"$g_current_user->first_name $g_current_user->last_name\">";
                }
                else
                {
-                   echo "<input type=\"text\" id=\"name\" name=\"name\" size=\"30\" maxlength=\"50\" value=\"\">";
+                   echo "<input type=\"text\" id=\"name\" name=\"name\" style=\"width: 200px;\" maxlength=\"50\" value=\"\">";
                }
             echo "</div>
          </div>
@@ -236,11 +236,11 @@ require("../../../adm_config/body_top.php");
             <div style=\"text-align: left; margin-left: 17%;\">";
                if ($g_current_user->id != 0)
                {
-                   echo "<input class=\"readonly\" readonly type=\"text\" name=\"mailfrom\" size=\"50\" maxlength=\"50\" value=\"$g_current_user->email\">";
+                   echo "<input class=\"readonly\" readonly type=\"text\" name=\"mailfrom\" style=\"width: 350px;\" maxlength=\"50\" value=\"$g_current_user->email\">";
                }
                else
                {
-                   echo "<input type=\"text\" name=\"mailfrom\" size=\"50\" maxlength=\"50\" value=\"\">";
+                   echo "<input type=\"text\" name=\"mailfrom\" style=\"width: 350px;\" maxlength=\"50\" value=\"\">";
                }
             echo "</div>
          </div>
@@ -252,18 +252,18 @@ require("../../../adm_config/body_top.php");
             <div style=\"text-align: left; margin-left: 17%;\">";
                if ($_GET["subject"] == "")
                {
-                   echo "<input type=\"text\" id=\"subject\" name=\"subject\" size=\"50\" maxlength=\"50\">";
+                   echo "<input type=\"text\" id=\"subject\" name=\"subject\" style=\"width: 350px;\" maxlength=\"50\">";
                }
                else
                {
-                   echo "<input class=\"readonly\" readonly type=\"text\" name=\"subject\" size=\"50\" maxlength=\"50\" value=\"". $_GET["subject"]. "\">";
+                   echo "<input class=\"readonly\" readonly type=\"text\" name=\"subject\" style=\"width: 350px;\" maxlength=\"50\" value=\"". $_GET["subject"]. "\">";
                }
             echo "</div>
          </div>
          <div style=\"margin-top: 8px;\">
             <div style=\"text-align: right; width: 15%; float: left;\">Nachricht:</div>
             <div style=\"text-align: left; margin-left: 17%;\">
-               <textarea name=\"body\" rows=\"10\" cols=\"45\">". $_GET["body"]. "</textarea>
+               <textarea name=\"body\" style=\"width: 350px;\" rows=\"10\" cols=\"45\">". $_GET["body"]. "</textarea>
             </div>
          </div>";
 

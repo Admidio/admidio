@@ -362,7 +362,7 @@ require("../../../adm_config/body_top.php");
                         <div>
                             <div style=\"text-align: right; width: 25%; float: left;\">Name:</div>
                             <div style=\"text-align: left; margin-left: 27%;\">
-                                <input class=\"readonly\" readonly type=\"text\" id=\"name\" name=\"name\" tabindex=\"1\" size=\"53\" maxlength=\"60\" value=\"". htmlspecialchars($g_current_user->first_name. " ". $g_current_user->last_name, ENT_QUOTES). "\">
+                                <input class=\"readonly\" readonly type=\"text\" id=\"name\" name=\"name\" tabindex=\"1\" style=\"width: 350px;\" maxlength=\"60\" value=\"". htmlspecialchars($g_current_user->first_name. " ". $g_current_user->last_name, ENT_QUOTES). "\">
                             </div>
                         </div>
 
@@ -375,7 +375,7 @@ require("../../../adm_config/body_top.php");
                                 }
                             echo "</div>
                             <div style=\"text-align: left; margin-left: 27%;\">
-                                <textarea  name=\"text\" tabindex=\"3\" rows=\"10\" cols=\"40\"></textarea>
+                                <textarea  name=\"text\" tabindex=\"3\" style=\"width: 350px;\" rows=\"10\" cols=\"40\"></textarea>
                             </div>
                         </div>";
 

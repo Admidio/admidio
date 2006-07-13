@@ -136,7 +136,7 @@ require("../../../adm_config/body_top.php");
                 <div>
                     <div style=\"text-align: right; width: 25%; float: left;\">&Uuml;berschrift:</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <input type=\"text\" id=\"headline\" name=\"ueberschrift\" size=\"53\" maxlength=\"100\" value=\"". htmlspecialchars($headline, ENT_QUOTES). "\">
+                        <input type=\"text\" id=\"headline\" name=\"ueberschrift\" style=\"width: 350px;\" maxlength=\"100\" value=\"". htmlspecialchars($headline, ENT_QUOTES). "\">
                     </div>
                 </div>";
 
@@ -187,7 +187,7 @@ require("../../../adm_config/body_top.php");
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 25%; float: left;\">Treffpunkt:</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <input type=\"text\" name=\"treffpunkt\" size=\"53\" maxlength=\"50\" value=\"". htmlspecialchars($meeting_point, ENT_QUOTES). "\">
+                        <input type=\"text\" name=\"treffpunkt\" style=\"width: 350px;\" maxlength=\"50\" value=\"". htmlspecialchars($meeting_point, ENT_QUOTES). "\">
                     </div>
                 </div>
                 <div style=\"margin-top: 6px;\">
@@ -199,7 +199,7 @@ require("../../../adm_config/body_top.php");
                         }
                     echo "</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <textarea  name=\"beschreibung\" rows=\"10\" cols=\"40\">". htmlspecialchars($description, ENT_QUOTES). "</textarea>
+                        <textarea  name=\"beschreibung\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". htmlspecialchars($description, ENT_QUOTES). "</textarea>
                     </div>
                 </div>
 

@@ -145,21 +145,21 @@ require("../../../adm_config/body_top.php");
                 <div>
                     <div style=\"text-align: right; width: 25%; float: left;\">Name:*</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <input type=\"text\" id=\"name\" name=\"name\" tabindex=\"1\" size=\"53\" maxlength=\"60\" value=\"". htmlspecialchars($name, ENT_QUOTES). "\">
+                        <input type=\"text\" id=\"name\" name=\"name\" tabindex=\"1\" style=\"width: 350px;\" maxlength=\"60\" value=\"". htmlspecialchars($name, ENT_QUOTES). "\">
                     </div>
                 </div>
 
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 25%; float: left;\">Emailadresse:</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <input type=\"text\" id=\"email\" name=\"email\" tabindex=\"1\" size=\"53\" maxlength=\"50\" value=\"". htmlspecialchars($email, ENT_QUOTES). "\">
+                        <input type=\"text\" id=\"email\" name=\"email\" tabindex=\"2\" style=\"width: 350px;\" maxlength=\"50\" value=\"". htmlspecialchars($email, ENT_QUOTES). "\">
                     </div>
                 </div>
 
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 25%; float: left;\">Homepage:</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <input type=\"text\" id=\"homepage\" name=\"homepage\" tabindex=\"1\" size=\"53\" maxlength=\"50\" value=\"". htmlspecialchars($homepage, ENT_QUOTES). "\">
+                        <input type=\"text\" id=\"homepage\" name=\"homepage\" tabindex=\"3\" style=\"width: 350px;\" maxlength=\"50\" value=\"". htmlspecialchars($homepage, ENT_QUOTES). "\">
                     </div>
                 </div>
 
@@ -172,7 +172,7 @@ require("../../../adm_config/body_top.php");
                     }
                     echo "</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <textarea  name=\"text\" tabindex=\"2\" rows=\"10\" cols=\"40\">". htmlspecialchars($text, ENT_QUOTES). "</textarea>
+                        <textarea  name=\"text\" tabindex=\"4\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". htmlspecialchars($text, ENT_QUOTES). "</textarea>
                     </div>
                 </div>";
 

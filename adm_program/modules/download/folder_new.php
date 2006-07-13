@@ -107,7 +107,7 @@ require("../../../adm_config/body_top.php");
                 <div style=\"margin-top: 15px;\">
                     <div style=\"text-align: right; width: 33%; float: left;\">Name:</div>
                     <div style=\"text-align: left; margin-left: 35%;\">
-                        <input type=\"text\" id=\"new_folder\" name=\"new_folder\" size=\"20\" tabindex=\"1\">
+                        <input type=\"text\" id=\"new_folder\" name=\"new_folder\" style=\"width: 200px;\" maxlength=\"255\">
                     </div>
                 </div>
 
@@ -118,7 +118,7 @@ require("../../../adm_config/body_top.php");
                     <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
                     &nbsp;Zur&uuml;ck</button>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <button name=\"erstellen\" type=\"submit\" value=\"erstellen\" tabindex=\"2\">
+                    <button name=\"erstellen\" type=\"submit\" value=\"erstellen\">
                     <img src=\"$g_root_path/adm_program/images/folder_create.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Ordner erstellen\">
                     &nbsp;Ordner erstellen</button>
                 </div>
