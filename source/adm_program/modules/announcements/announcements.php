@@ -141,34 +141,17 @@ require("../../../adm_config/body_top.php");
         if($_GET['id'] == 0
         && (editAnnouncements() || $g_preferences['enable_rss'] == true))
         {
-            echo "<p>";
-
             // Neue Ankuendigung anlegen
             if(editAnnouncements())
             {
-                echo "<span class=\"iconLink\">
-                    <a class=\"iconLink\" href=\"announcements_new.php?headline=". $_GET["headline"]. "\"><img
-                    class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Neu anlegen\"></a>
-                    <a class=\"iconLink\" href=\"announcements_new.php?headline=". $_GET["headline"]. "\">Neu anlegen</a>
-                </span>";
+                echo "<p>
+					<span class=\"iconLink\">
+	                    <a class=\"iconLink\" href=\"announcements_new.php?headline=". $_GET["headline"]. "\"><img
+	                    class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Neu anlegen\"></a>
+	                    <a class=\"iconLink\" href=\"announcements_new.php?headline=". $_GET["headline"]. "\">Neu anlegen</a>
+	                </span>
+				</p>";
             }
-
-            if(editAnnouncements() && $g_preferences['enable_rss'] == true)
-            {
-                echo "&nbsp;&nbsp;&nbsp;&nbsp;";
-            }
-
-            // Feed abonnieren
-            if($g_preferences['enable_rss'] == true)
-            {
-                echo "<span class=\"iconLink\">
-                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/announcements/rss_announcements.php\"><img
-                    class=\"iconLink\" src=\"$g_root_path/adm_program/images/feed.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"". $_GET["headline"]. "-Feed abonnieren\"></a>
-                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/announcements/rss_announcements.php\">". $_GET["headline"]. "-Feed abonnieren</a>
-                </span>";
-            }
-
-            echo "</p>";
 
             // Navigation mit Vor- und Zurueck-Buttons
             $base_url = "$g_root_path/adm_program/modules/announcements/announcements.php?headline=". $_GET["headline"];
@@ -190,8 +173,6 @@ require("../../../adm_config/body_top.php");
         else
         {
             // Ankuendigungen auflisten
-            $i = 0;
-
             while($row = mysql_fetch_object($announcements_result))
             {
                 echo "
@@ -254,16 +235,12 @@ require("../../../adm_config/body_top.php");
                 </div>
 
                 <br />";
-                $i++;
             }  // Ende While-Schleife
         }
 
-        if($_GET['id'] == 0 && $i > 2)
-        {
-            // Navigation mit Vor- und Zurueck-Buttons
-            $base_url = "$g_root_path/adm_program/modules/announcements/announcements.php?headline=". $_GET["headline"];
-            echo generatePagination($base_url, $num_announcements, 10, $_GET["start"], TRUE);
-        }
+        // Navigation mit Vor- und Zurueck-Buttons
+        $base_url = "$g_root_path/adm_program/modules/announcements/announcements.php?headline=". $_GET["headline"];
+        echo generatePagination($base_url, $num_announcements, 10, $_GET["start"], TRUE);
     echo "</div>";
 
     require("../../../adm_config/body_bottom.php");
