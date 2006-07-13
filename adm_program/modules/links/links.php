@@ -112,34 +112,17 @@ require("../../../adm_config/body_top.php");
 
         if ($_GET['id'] == 0 && (editWeblinks() || $g_preferences['enable_rss'] == true))
         {
-            echo "<p>";
-
             // Neuen Link anlegen
             if (editWeblinks())
             {
-                echo "<span class=\"iconLink\">
-                    <a class=\"iconLink\" href=\"links_new.php?headline=". $_GET["headline"]. "\"><img
-                    class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Neu anlegen\"></a>
-                    <a class=\"iconLink\" href=\"links_new.php?headline=". $_GET["headline"]. "\">Neu anlegen</a>
-                </span>";
+                echo "<p>
+					<span class=\"iconLink\">
+	                    <a class=\"iconLink\" href=\"links_new.php?headline=". $_GET["headline"]. "\"><img
+	                    class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Neu anlegen\"></a>
+	                    <a class=\"iconLink\" href=\"links_new.php?headline=". $_GET["headline"]. "\">Neu anlegen</a>
+	                </span>
+				</p>";
             }
-
-            if (editWeblinks() && $g_preferences['enable_rss'] == true)
-            {
-                echo "&nbsp;&nbsp;&nbsp;&nbsp;";
-            }
-
-            // Feed abonnieren
-            if ($g_preferences['enable_rss'] == true)
-            {
-                echo "<span class=\"iconLink\">
-                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/links/rss_links.php\"><img
-                    class=\"iconLink\" src=\"$g_root_path/adm_program/images/feed.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"". $_GET["headline"]. "-Feed abonnieren\"></a>
-                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/links/rss_links.php\">". $_GET["headline"]. "-Feed abonnieren</a>
-                </span>";
-            }
-
-            echo "</p>";
 
             // Navigation mit Vor- und Zurueck-Buttons
             $baseUrl = "$g_root_path/adm_program/modules/links/links.php?headline=". $_GET["headline"];
@@ -219,13 +202,9 @@ require("../../../adm_config/body_top.php");
              echo "</div>";
         }
 
-        // Die untere Navigationsleiste wird nur angezeigt wenn die Seite mehr als 2 Elemente enthaelt...
-        if ($_GET['id'] == 0 && mysql_num_rows($links_result) > 2)
-        {
-            // Navigation mit Vor- und Zurueck-Buttons
-            $baseUrl = "$g_root_path/adm_program/modules/links/links.php?headline=". $_GET["headline"];
-            echo generatePagination($baseUrl, $numLinks, 10, $_GET["start"], TRUE);
-        }
+        // Navigation mit Vor- und Zurueck-Buttons
+        $baseUrl = "$g_root_path/adm_program/modules/links/links.php?headline=". $_GET["headline"];
+        echo generatePagination($baseUrl, $numLinks, 10, $_GET["start"], TRUE);
     echo "</div>";
 
     require("../../../adm_config/body_bottom.php");
