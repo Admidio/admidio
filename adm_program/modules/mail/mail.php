@@ -270,13 +270,13 @@ require("../../../adm_config/body_top.php");
 
 
          // Nur eingeloggte User duerfen Attachments mit max 3MB anhaengen...
-         if (($g_session_valid) && ($g_preferences['max_mail_attachment_size'] > 0) && (ini_get('file_uploads') == '1'))
+         if (($g_session_valid) && ($g_preferences['max_email_attachment_size'] > 0) && (ini_get('file_uploads') == '1'))
          {
              echo "
              <div style=\"margin-top: 8px;\">
                  <div style=\"text-align: right; width: 15%; float: left;\">Anhang:</div>
                  <div style=\"text-align: left; margin-left: 17%;\">
-                     <input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"" . ($g_preferences['max_mail_attachment_size'] * 1024) . "\">
+                     <input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"" . ($g_preferences['max_email_attachment_size'] * 1024) . "\">
                      <input name=\"userfile\" size=\"40\" type=\"file\">
                  </div>
              </div>";
