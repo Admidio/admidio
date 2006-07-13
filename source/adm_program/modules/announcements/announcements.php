@@ -238,9 +238,13 @@ require("../../../adm_config/body_top.php");
             }  // Ende While-Schleife
         }
 
-        // Navigation mit Vor- und Zurueck-Buttons
-        $base_url = "$g_root_path/adm_program/modules/announcements/announcements.php?headline=". $_GET["headline"];
-        echo generatePagination($base_url, $num_announcements, 10, $_GET["start"], TRUE);
+		if(mysql_num_rows($announcements_result) > 2)
+		{
+	        // Navigation mit Vor- und Zurueck-Buttons
+	        // erst anzeigen, wenn mehr als 2 Eintraege (letzte Navigationsseite) vorhanden sind
+	        $base_url = "$g_root_path/adm_program/modules/announcements/announcements.php?headline=". $_GET["headline"];
+	        echo generatePagination($base_url, $num_announcements, 10, $_GET["start"], TRUE);
+		}
     echo "</div>";
 
     require("../../../adm_config/body_bottom.php");

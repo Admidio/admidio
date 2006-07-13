@@ -566,9 +566,13 @@ echo "
         /************************Ende Haupttabelle**********************/
         echo"</table>";
         
-        // Navigation mit Vor- und Zurueck-Buttons
-        $base_url = "$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$pho_id;
-        echo generatePagination($base_url, $events, 10, $event_element, TRUE);
+		if(mysql_num_rows($result_list) > 2)
+		{
+	        // Navigation mit Vor- und Zurueck-Buttons
+	        // erst anzeigen, wenn mehr als 2 Eintraege (letzte Navigationsseite) vorhanden sind
+	        $base_url = "$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$pho_id;
+	        echo generatePagination($base_url, $events, 10, $event_element, TRUE);
+		}
     echo "</div>";
     
 /************************Buttons********************************/

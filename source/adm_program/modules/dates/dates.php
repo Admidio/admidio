@@ -153,8 +153,8 @@ require("../../../adm_config/body_top.php");
         }
 
         $sql    = prepareSQL($sql, array($_GET['start']));
-        $date_result = mysql_query($sql, $g_adm_con);
-        db_error($date_result);
+        $dates_result = mysql_query($sql, $g_adm_con);
+        db_error($dates_result);
 
         // Gucken wieviele Datensaetze die Abfrage ermittelt kann...
         if(strcmp($_GET['mode'], "old") == 0)
@@ -204,7 +204,7 @@ require("../../../adm_config/body_top.php");
             echo generatePagination($base_url, $num_dates, 10, $_GET["start"], TRUE);
         }
 
-        if(mysql_num_rows($date_result) == 0)
+        if(mysql_num_rows($dates_result) == 0)
         {
             // Keine Termine gefunden
             if($_GET['id'] > 0)
@@ -219,7 +219,7 @@ require("../../../adm_config/body_top.php");
         else
         {
             // Termine auflisten
-            while($row = mysql_fetch_object($date_result))
+            while($row = mysql_fetch_object($dates_result))
             {
                 echo "
                 <div class=\"boxBody\" style=\"overflow: hidden;\">
@@ -322,9 +322,13 @@ require("../../../adm_config/body_top.php");
             }  // Ende While-Schleife
         }
 
-        // Navigation mit Vor- und Zurueck-Buttons
-        $base_url = "$g_root_path/adm_program/modules/dates/dates.php?mode=". $_GET["mode"];
-        echo generatePagination($base_url, $num_dates, 10, $_GET["start"], TRUE);
+		if(mysql_num_rows($dates_result) > 2)
+		{
+	        // Navigation mit Vor- und Zurueck-Buttons
+	        // erst anzeigen, wenn mehr als 2 Eintraege (letzte Navigationsseite) vorhanden sind
+	        $base_url = "$g_root_path/adm_program/modules/dates/dates.php?mode=". $_GET["mode"];
+	        echo generatePagination($base_url, $num_dates, 10, $_GET["start"], TRUE);
+		}
     echo "</div>";
 
     require("../../../adm_config/body_bottom.php");

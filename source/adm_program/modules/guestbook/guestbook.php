@@ -384,9 +384,13 @@ require("../../../adm_config/body_top.php");
             </div>";
         }
 
-        // Navigation mit Vor- und Zurueck-Buttons
-        $base_url = "$g_root_path/adm_program/modules/guestbook/guestbook.php?headline=". $_GET["headline"];
-        echo generatePagination($base_url, $num_guestbook, 10, $_GET["start"], TRUE);
+		if(mysql_num_rows($guestbook_result) > 2)
+		{
+	        // Navigation mit Vor- und Zurueck-Buttons
+	        // erst anzeigen, wenn mehr als 2 Eintraege (letzte Navigationsseite) vorhanden sind
+	        $base_url = "$g_root_path/adm_program/modules/guestbook/guestbook.php?headline=". $_GET["headline"];
+	        echo generatePagination($base_url, $num_guestbook, 10, $_GET["start"], TRUE);
+		}
     echo "</div>";
 
     require("../../../adm_config/body_bottom.php");
