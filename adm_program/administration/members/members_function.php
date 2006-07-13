@@ -48,7 +48,7 @@ if(!editUser())
 }
 
 // wenn URL uebergeben wurde zu dieser gehen, ansonsten zurueck
-if(array_key_exists('url', $_GET))
+if(array_key_exists('url', $_GET) && strlen($_GET['url']) > 0)
 {
     $url = urlencode($_GET['url']);
 }
