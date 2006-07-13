@@ -96,7 +96,7 @@ und die Icons der Silk-Bibliothek (Creative Commons Attribution 2.5 License).
  6. Copyright
 -------------------------------------------------------------------------
 Damit sich die Admidio Mitgliederverwaltung möglichst weit verbreitet, 
-wären wir sehr froh, wenn Sie den sichtbaren Copyrighthinweis im Logindialog
+wären wir sehr froh, wenn Sie den sichtbaren Hinweis mit Link im Logindialog
 stehen lassen würden.
 
 Es ist nicht gestattet den Copyrighthinweis im Quellcode zu entfernen.
