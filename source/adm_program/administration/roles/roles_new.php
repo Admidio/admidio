@@ -152,18 +152,18 @@ require("../../../adm_config/body_top.php");
          <div>
             <div style=\"text-align: right; width: 28%; float: left;\">Name:</div>
             <div style=\"text-align: left; margin-left: 30%;\">
-               <input type=\"text\" name=\"rolle\" ";
+               <input type=\"text\" id=\"name\" name=\"name\" ";
                // bei bestimmte Rollen darf der Name nicht geaendert werden
                if(strcmp($rolle, "Webmaster") == 0)
                      echo " class=\"readonly\" readonly ";
 
-               echo " size=\"48\" maxlength=\"50\" value=\"". htmlspecialchars($rolle, ENT_QUOTES). "\">
+               echo " style=\"width: 330px;\" maxlength=\"50\" value=\"". htmlspecialchars($rolle, ENT_QUOTES). "\">
             </div>
          </div>
          <div style=\"margin-top: 6px;\">
             <div style=\"text-align: right; width: 28%; float: left;\">Beschreibung:</div>
             <div style=\"text-align: left; margin-left: 30%;\">
-               <input type=\"text\" name=\"beschreibung\" size=\"48\" maxlength=\"255\" value=\"". htmlspecialchars($beschreibung, ENT_QUOTES). "\">
+               <input type=\"text\" name=\"beschreibung\" style=\"width: 330px;\" maxlength=\"255\" value=\"". htmlspecialchars($beschreibung, ENT_QUOTES). "\">
             </div>
          </div>
             <div style=\"margin-top: 6px;\">
@@ -426,11 +426,14 @@ require("../../../adm_config/body_top.php");
             </div>";
          }
       echo "</div>
-   </form>
+    </form>
 
-   </div>";
+    </div>
+    <script type=\"text/javascript\"><!--\n
+        document.getElementById('name').focus();
+    \n--></script>";    
 
-   require("../../../adm_config/body_bottom.php");
+    require("../../../adm_config/body_bottom.php");
 echo "</body>
 </html>";
 ?>

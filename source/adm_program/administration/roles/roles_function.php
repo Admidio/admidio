@@ -52,7 +52,7 @@ elseif($_GET["mode"] == 2)
 {
    // Rolle anlegen oder updaten
 
-   if(strlen(trim($_POST["rolle"])) > 0)
+   if(strlen(trim($_POST["name"])) > 0)
    {
       if(!($_GET['rol_id'] > 0))
       {
@@ -132,7 +132,7 @@ elseif($_GET["mode"] == 2)
 
       if(strlen($err_code) == 0)
       {
-         if(strcmp($_POST["rolle"], "Webmaster") == 0)
+         if(strcmp($_POST["name"], "Webmaster") == 0)
             $moderation = 1;
          else
          {
@@ -255,7 +255,7 @@ elseif($_GET["mode"] == 2)
                                '$d_datum_bis','$t_uhrzeit_bis', {3}, {4},
                                {5}, {6}, 1) ";
          }
-         $sql    = prepareSQL($sql, array(trim($_POST['rolle']), trim($_POST['beschreibung']), $_POST['category'], $_POST['wochentag'],
+         $sql    = prepareSQL($sql, array(trim($_POST['name']), trim($_POST['beschreibung']), $_POST['category'], $_POST['wochentag'],
                      trim($_POST['ort']), $_POST['max_mitglieder'], $_POST['beitrag'], $_GET['rol_id']));
          $result = mysql_query($sql, $g_adm_con);
          db_error($result);

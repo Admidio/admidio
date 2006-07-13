@@ -79,19 +79,19 @@ require("../../../adm_config/body_top.php");
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 48%; float: left;\">Name (lang):</div>
                     <div style=\"text-align: left; margin-left: 50%;\">
-                        <input type=\"text\" id=\"longname\" name=\"longname\" size=\"30\" maxlength=\"60\" value=\"$g_current_organization->longname\">
+                        <input type=\"text\" id=\"longname\" name=\"longname\" style=\"width: 200px;\" maxlength=\"60\" value=\"$g_current_organization->longname\">
                     </div>
                 </div>
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 48%; float: left;\">Homepage:</div>
                     <div style=\"text-align: left; margin-left: 50%;\">
-                        <input type=\"text\" name=\"homepage\" size=\"30\" maxlength=\"30\" value=\"$g_current_organization->homepage\">
+                        <input type=\"text\" name=\"homepage\" style=\"width: 200px;\" maxlength=\"50\" value=\"$g_current_organization->homepage\">
                     </div>
                 </div>
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 48%; float: left;\">E-Mail Adresse des Administrator:</div>
                     <div style=\"text-align: left; margin-left: 50%;\">
-                        <input type=\"text\" name=\"email_administrator\" size=\"30\" maxlength=\"30\" value=\"". $g_preferences['email_administrator']. "\">
+                        <input type=\"text\" name=\"email_administrator\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $g_preferences['email_administrator']. "\">
                         <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                             onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=mail_admin','Message','width=400,height=220,left=310,top=200,scrollbars=yes')\">
                     </div>
