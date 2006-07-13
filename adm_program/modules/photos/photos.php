@@ -336,7 +336,8 @@ echo "
                                         echo"Angelegt von ". strSpecialChars2Html($user1->usr_first_name). " ". strSpecialChars2Html($user1->usr_last_name)
                                         ." am ". mysqldatetime("d.m.y h:i", $adm_photo["pho_timestamp"]);
                                     }
-                                    if($adm_photo["pho_usr_id_change"]!=NULL){
+                                    if($adm_photo["pho_usr_id_change"]!=NULL && strtotime($adm_photo["pho_last_change"])>(strtotime($adm_photo["pho_timestamp"])+ 3600))
+                                    {
                                         echo"<br>
                                         Letztes Update durch ". strSpecialChars2Html($user2->usr_first_name). " ". strSpecialChars2Html($user2->usr_last_name)
                                         ." am ". mysqldatetime("d.m.y h:i", $adm_photo["pho_last_change"]);
