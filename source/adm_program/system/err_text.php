@@ -275,7 +275,7 @@ function getErrorText($error_code, $error_text, $g_current_organization)
 
         //Fehlermeldungen Profilfoto
         case "profile_photo_update":
-            $error_str = "Neues Profilfoto wurde erfolgreich gespeichert.";
+            $error_str = "Das neue Profilfoto wurde erfolgreich gespeichert.";
             break;
 
         case "profile_photo_update_cancel":
@@ -299,7 +299,7 @@ function getErrorText($error_code, $error_text, $g_current_organization)
             break;
 
         case "photoverwaltunsrecht":
-            $error_str = "Nur eingeloggte Benutzer mit Moderationsrechten d&uuml;rfen Fotos verwalten.<br />";
+            $error_str = "Nur eingeloggte Benutzer mit Fotoverwaltungsrecht d&uuml;rfen Fotos verwalten.<br />";
             break;
 
         case "dateiendungphotoup":
