@@ -34,12 +34,13 @@ function db_error($result)
     {
         if(headers_sent() == false)
         {
-            $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=mysql&err_text=". mysql_error();
+        	$error = urlencode("Errorcode: ". mysql_errno(). "<br>". mysql_error());
+            $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=mysql&err_text=$error";
             header($location);
         }
         else
         {
-            echo "<div style=\"color: #CC0000;\">Error: ". mysql_error(). "</div>";
+            echo "<div style=\"color: #CC0000;\">Error: ". mysql_errno(). " ". mysql_error(). "</div>";
         }
         exit();
     }
