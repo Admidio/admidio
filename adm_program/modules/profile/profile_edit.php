@@ -8,8 +8,8 @@
  *
  * Uebergaben:
  *
- * user_id : zeigt das Profil der ?bergebenen user_id an
- * new_user - 1 : Dialog um neue Benutzer hinzuzuf?gen.
+ * user_id : zeigt das Profil der uebergebenen user_id an
+ * new_user - 1 : Dialog um neue Benutzer hinzuzufuegen.
  * url :     URL auf die danach weitergeleitet wird
  *
  ******************************************************************************
@@ -33,7 +33,7 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
-//pr?fen ob in Popup angezeigt wird oder Normal (default)
+//pruefen ob in Popup angezeigt wird oder Normal (default)
 if($_GET['popup'] == 1)
 {
     $popup = 1;
@@ -398,7 +398,7 @@ if($popup == 0)
                                AND usf_type   = 'MESSENGER'
                              ORDER BY usf_name ASC ";
                     $result_msg = mysql_query($sql, $g_adm_con);
-                    db_error($result_msg, true);
+                    db_error($result_msg);
 
                     while($row = mysql_fetch_object($result_msg))
                     {
@@ -468,7 +468,7 @@ if($popup == 0)
                     $sql = $sql. " ORDER BY usf_name ASC ";
                 }
                 $result_field = mysql_query($sql, $g_adm_con);
-                db_error($result_field, true);
+                db_error($result_field);
 
                 if(mysql_num_rows($result_field) > 0)
                 {
@@ -481,7 +481,8 @@ if($popup == 0)
                         <div style=\"text-align: right; width: 30%; float: left;\">
                             $row->usf_name:
                         </div>
-                        <div style=\"text-align: left; margin-left: 32%;\">";
+                        <div style=\"text-align: left; margin-left: 32%;\">";                        
+                            // in Abhaengigkeit des Feldtypes wird das Eingabefeld erstellt
                             echo "<input type=\"";
                             if($row->usf_type == "CHECKBOX")
                             {
@@ -492,6 +493,7 @@ if($popup == 0)
                                 echo "text";
                             }
                             echo "\" id=\"". urlencode($row->usf_name). "\" name=\"". urlencode($row->usf_name). "\" ";
+                            
                             if($row->usf_type == "CHECKBOX")
                             {
                                 if($row->usd_value == 1)
@@ -521,6 +523,13 @@ if($popup == 0)
                                 }
                             }
                             echo ">";
+                            // Fragezeichen mit Feldbeschreibung anzeigen, wenn diese hinterlegt ist
+                            if(strlen($row->usf_description) > 0)
+                            {
+                                echo "&nbsp;<img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" 
+                                vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=user_field_description&err_text=". urlencode($row->usf_name). "','Message','width=400,height=220,left=310,top=200,scrollbars=yes')\">";
+                            }
                         echo "</div>
                     </div>";
                 }
@@ -539,7 +548,7 @@ if($popup == 0)
 
                 if($user->usr_id_change > 0)
                 {
-                    // Angabe ?ber die letzten Aenderungen
+                    // Angabe ueber die letzten Aenderungen
                     $sql    = "SELECT usr_first_name, usr_last_name
                                  FROM ". TBL_USERS. "
                                 WHERE usr_id = $user->usr_id_change ";

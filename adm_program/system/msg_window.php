@@ -47,9 +47,9 @@ echo "
         switch ($_GET['err_code'])
         {
             case "bbcode":
-                echo "Die Beschreibung von Terminen und Ank&uuml;ndigungen kannst du mit " .
-                      "verschiedenen Tags (BBCode) formatieren. Daf&uuml;r musst du die hier aufgelisteten " .
-                      "Tags um den entsprechenden Text setzen.<br /><br />
+                echo "Die Beschreibung bei einigen Modulen (Ank&uuml;ndigungen, Terminen, G&auml;stebuch und Weblinks)
+                      k&ouml;nnen mit verschiedenen Tags (BBCode) formatiert werden. Daf&uuml;r m&uuml;ssen die 
+                      hier aufgelisteten Tags um den entsprechenden Textabschnitt gesetzt werden.<br /><br />
                       Beispiele:<br /><br />
                       <table class=\"tableList\" style=\"width: 100%;\" cellpadding=\"5\" cellspacing=\"0\">
                          <tr>
@@ -132,8 +132,10 @@ echo "
                 break;
 
             case "enable_rss":
-                echo "Admidio kann RSS-Feeds f&uuml;r Termine und
-                     Ank&uuml;ndigungen auf den jeweiligen &Uuml;bersichtsseiten bereitstellen.";
+                echo "Admidio kann RSS-Feeds f&uuml;r verschiedene Module (Ank&uuml;ndigungen, 
+                      Termine, G&auml;stebuch und Weblinks) auf den jeweiligen &Uuml;bersichtsseiten 
+                      bereitstellen, die dann &uuml;ber den Browser einem Feedreader zugeordnet
+                      werden k&ouml;nnen.";
                 break;
 
             case "email":
@@ -262,6 +264,18 @@ echo "
                 echo "$organizations</b><br /><br />
                       Moderatoren dieser Organisationen k&ouml;nnen den Termin / Nachricht dann bearbeiten
                       bzw. die Option zur&uuml;cksetzen.";
+                break;
+                
+            case "user_field_description":
+                $sql = "SELECT usf_description FROM ". TBL_USER_FIELDS. "
+                         WHERE usf_org_shortname = '$g_organization'
+                           AND usf_name          = {0} ";
+                $sql = prepareSQL($sql, array($_GET['err_text']));
+                $result_field = mysql_query($sql, $g_adm_con);
+                db_error($result_field);
+                
+                $row = mysql_fetch_object($result_field);
+                echo $row->usf_description;
                 break;
 
             case "dateiname":

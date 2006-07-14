@@ -109,7 +109,7 @@ require("../../../adm_config/body_top.php");
                 <div>
                     <div style=\"text-align: right; width: 28%; float: left;\">Name:</div>
                     <div style=\"text-align: left; margin-left: 29%;\">
-                        <input type=\"text\" id=\"name\" name=\"name\" size=\"30\" maxlength=\"100\" value=\"". htmlspecialchars($field_name, ENT_QUOTES). "\">
+                        <input type=\"text\" id=\"name\" name=\"name\" size=\"20\" maxlength=\"13\" value=\"". htmlspecialchars($field_name, ENT_QUOTES). "\">
                     </div>
                 </div>
                 <div style=\"margin-top: 6px;\">
