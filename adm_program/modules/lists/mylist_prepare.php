@@ -1,7 +1,7 @@
 <?
 /******************************************************************************
- * Dieses Script setzt das SQL-Statement für die myList zusammen und
- * übergibt es an das allgemeine Listen-Script
+ * Dieses Script setzt das SQL-Statement fï¿½r die myList zusammen und
+ * ï¿½bergibt es an das allgemeine Listen-Script
  *
  * Copyright    : (c) 2004 - 2006 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -161,7 +161,7 @@ session_start();
 $_SESSION['mylist_sql'] = $main_sql;
 
 // weiterleiten zur allgemeinen Listeseite
-$location = "Location: $g_root_path/adm_program/modules/lists/lists_show.php?typ=mylist&mode=html&rol_id=$rol_id";
+$location = "Location: $g_root_path/adm_program/modules/lists/lists_show.php?type=mylist&mode=html&rol_id=$rol_id";
 header($location);
 exit();
 

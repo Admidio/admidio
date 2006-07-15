@@ -156,7 +156,7 @@ require("../../../adm_config/body_top.php");
                         }
                     echo "</td>
                     <td style=\"text-align: center;\">
-                        <a href=\"$g_root_path/adm_program/modules/lists/lists_show.php?typ=address&amp;mode=html&amp;rol_id=$row->rol_id\"><img 
+                        <a href=\"$g_root_path/adm_program/modules/lists/lists_show.php?type=address&amp;mode=html&amp;rol_id=$row->rol_id\"><img 
                         src=\"$g_root_path/adm_program/images/table.png\" border=\"0\" alt=\"Mitglieder anzeigen\" title=\"Mitglieder anzeigen\"></a>
                         
                         <a href=\"#\"><img src=\"$g_root_path/adm_program/images/add.png\" border=\"0\" alt=\"Mitglieder zuordnen\" title=\"Mitglieder zuordnen\" 
