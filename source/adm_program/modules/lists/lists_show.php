@@ -8,9 +8,10 @@
  *
  * Uebergaben:
  *
- * typ    : Listenselect (mylist, address, telephone, former)
- * mode   : Ausgabeart   (html, print, csv)
+ * type   : Listenselect (mylist, address, telephone, former)
+ * mode   : Ausgabeart   (html, print, csv-ms, csv-ms-2k, csv-oo)
  * rol_id : Rolle, fuer die die Funktion dargestellt werden soll
+ * url    : URL auf die danach weitergeleitet wird
  *
  ******************************************************************************
  *
@@ -34,8 +35,18 @@ require("../../system/common.php");
 require("../../system/login_valid.php");
 
 $mode   = strStripTags($_GET["mode"]);
-$type   = strStripTags($_GET["typ"]);
+$type   = strStripTags($_GET["type"]);
 $rol_id = strStripTags($_GET["rol_id"]);
+
+// wenn URL uebergeben wurde zu dieser gehen, ansonsten zurueck
+if(array_key_exists('url', $_GET))
+{
+    $url = urlencode($_GET['url']);
+}
+else
+{
+    $url = urlencode(getHttpReferer());
+}
 
 if($mode != "csv-ms"
 && $mode != "csv-ms-2k"
@@ -49,7 +60,7 @@ if($mode != "csv-ms"
     exit();
 }
 
-if($rol_id <= 0)
+if($rol_id <= 0 || is_numeric($rol_id) == false)
 {
     // Dem aufgerufenen Skript wurde die notwendige Variable nicht richtig uebergeben !
     $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=rolle";
@@ -181,7 +192,7 @@ switch($type)
       
     default:
         // Dem aufgerufenen Skript wurde die notwendige Variable nicht richtig uebergeben !
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=typ";
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=type";
         header($location);
         exit();
 }
@@ -277,7 +288,7 @@ if($mode != "csv")
 
                 if(sel_list.length > 1)
                 {
-                    self.location.href = 'lists_show.php?typ=$type&rol_id=$rol_id&mode=' + sel_list;
+                    self.location.href = 'lists_show.php?type=$type&rol_id=$rol_id&mode=' + sel_list;
                 }
             }
         //--></script>";
@@ -322,9 +333,9 @@ if($mode != "csv")
         }
         
         echo "<span class=\"iconLink\">
-            <a class=\"iconLink\" href=\"#\" onclick=\"window.open('lists_show.php?typ=$type&amp;mode=print&amp;rol_id=$rol_id', '_blank')\"><img
+            <a class=\"iconLink\" href=\"#\" onclick=\"window.open('lists_show.php?type=$type&amp;mode=print&amp;rol_id=$rol_id', '_blank')\"><img
             class=\"iconLink\" src=\"$g_root_path/adm_program/images/print.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Druckvorschau\"></a>
-            <a class=\"iconLink\" href=\"#\" onclick=\"window.open('lists_show.php?typ=$type&amp;mode=print&amp;rol_id=$rol_id', '_blank')\">Druckvorschau</a>
+            <a class=\"iconLink\" href=\"#\" onclick=\"window.open('lists_show.php?type=$type&amp;mode=print&amp;rol_id=$rol_id', '_blank')\">Druckvorschau</a>
         </span>
         
         &nbsp;&nbsp;
@@ -485,8 +496,10 @@ for($j = 0; $j < $max_count; $j++)
         {
             if($mode == "html")
             {
-                echo "<tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\"
-                style=\"cursor: pointer\" onClick=\"window.location.href='$g_root_path/adm_program/modules/profile/profile.php?user_id=$row[0]'\">\n";
+            	$load_url = urlencode("$g_root_path/adm_program/modules/lists/lists_show.php?mode=$mode&type=$type&rol_id=$rol_id&url=$url");
+                echo "<tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" 
+				onMouseOut=\"this.className='listMouseOut'\" style=\"cursor: pointer\" 
+				onClick=\"window.location.href='$g_root_path/adm_program/modules/profile/profile.php?user_id=$row[0]&url=$load_url'\">\n";
             }
             else if($mode == "print")
             {
@@ -748,9 +761,9 @@ else
     {
         echo "<p>
             <span class=\"iconLink\">
-                <a class=\"iconLink\" href=\"javascript:history.back()\"><img
+                <a class=\"iconLink\" href=\"javascript:self.location.href='". urldecode($url). "'\"><img
                 class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Zur&uuml;ck\"></a>
-                <a class=\"iconLink\" href=\"javascript:history.back()\">Zur&uuml;ck</a>
+                <a class=\"iconLink\" href=\"javascript:self.location.href='". urldecode($url). "'\">Zur&uuml;ck</a>
             </span>
         </p>
         </div>";        

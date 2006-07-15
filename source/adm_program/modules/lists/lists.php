@@ -157,11 +157,11 @@ echo "
 
             if(sel_list == 'address')
             {
-                self.location.href = 'lists_show.php?typ=address&mode=html&rol_id=' + rol_id;
+                self.location.href = 'lists_show.php?type=address&mode=html&rol_id=' + rol_id;
             }
             else if(sel_list == 'telefon')
             {
-                self.location.href = 'lists_show.php?typ=telephone&mode=html&rol_id=' + rol_id;
+                self.location.href = 'lists_show.php?type=telephone&mode=html&rol_id=' + rol_id;
             }
             else if(sel_list == 'mylist')
             {
@@ -174,7 +174,7 @@ echo "
             }
             else if(sel_list == 'former')
             {
-                self.location.href = 'lists_show.php?typ=former&mode=html&rol_id=' + rol_id;
+                self.location.href = 'lists_show.php?type=former&mode=html&rol_id=' + rol_id;
             }
         }
     //--></script>";
@@ -282,7 +282,7 @@ require("../../../adm_config/body_top.php");
                         // Link nur anzeigen, wenn Rolle auch Mitglieder hat
                         if($num_member > 0)
                         {
-                            echo "<a href=\"lists_show.php?typ=";
+                            echo "<a href=\"lists_show.php?type=";
                             if($active_role)
                             {
                                 echo "address";
@@ -412,11 +412,7 @@ require("../../../adm_config/body_top.php");
                 $i++;
             }
         echo "</div>
-    </div>
-
-    <script type=\"text/javascript\"><!--
-        document.getElementById('category').focus();
-    --></script>";
+    </div>";
 
     require("../../../adm_config/body_bottom.php");
 echo "</body>
