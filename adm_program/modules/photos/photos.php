@@ -186,7 +186,7 @@ echo "
             echo "<p>
                 <span class=\"iconLink\">
                     <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photos.php\"><img 
-                    class=\"iconLink\" src=\"$g_root_path/adm_program/images/table.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Fotogalerien\"></a>
+                    class=\"iconLink\" src=\"$g_root_path/adm_program/images/application_view_tile.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Fotogalerien\"></a>
                     <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photos.php\">Fotogalerien</a>$navilink
                 </span>
             </p>";
@@ -567,13 +567,13 @@ echo "
         /************************Ende Haupttabelle**********************/
         echo"</table>";
         
-		if(mysql_num_rows($result_list) > 2)
-		{
-	        // Navigation mit Vor- und Zurueck-Buttons
-	        // erst anzeigen, wenn mehr als 2 Eintraege (letzte Navigationsseite) vorhanden sind
-	        $base_url = "$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$pho_id;
-	        echo generatePagination($base_url, $events, 10, $event_element, TRUE);
-		}
+        if(mysql_num_rows($result_list) > 2)
+        {
+            // Navigation mit Vor- und Zurueck-Buttons
+            // erst anzeigen, wenn mehr als 2 Eintraege (letzte Navigationsseite) vorhanden sind
+            $base_url = "$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$pho_id;
+            echo generatePagination($base_url, $events, 10, $event_element, TRUE);
+        }
     echo "</div>";
     
 /************************Buttons********************************/
