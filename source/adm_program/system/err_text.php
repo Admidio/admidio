@@ -37,6 +37,10 @@ function getErrorText($error_code, $error_text, $g_current_organization)
             Sobald deine Anmeldung vom Administrator best&auml;tigt wurde, erh&auml;lst du eine E-Mail.</p>";
             break;
 
+        case "category_exist":
+            $error_str = " Es existiert bereits eine Kategorie in dieser Organisation mit dem Namen.";
+            break;
+
         case "datum":
             $error_str = "Es wurde kein g&uuml;ltiges Datum in das Feld <b>$error_text</b> eingegeben.";
             break;
@@ -94,6 +98,10 @@ function getErrorText($error_code, $error_text, $g_current_organization)
             Korrigier bitte deine Eingabe.";
             break;
 
+        case "field_exist":
+            $error_str = " Es existiert bereits ein Feld in dieser Organisation mit dem Namen.";
+            break;
+            
         case "feld":
             $error_str = "Das Feld <b>$error_text</b> ist nicht gef&uuml;llt.";
             break;
@@ -197,13 +205,16 @@ function getErrorText($error_code, $error_text, $g_current_organization)
             &Uuml;berpr&uuml;f bitte dein Passwort und gib dieses dann erneut ein.";
             break;
 
-        case "remove_rolle":
-            $error_str = "<p>Willst du die Rolle <b>$error_text</b> wirklich entfernen ?</p>
-            <p>Die Rolle und alle Mitgliedschaften werden dadurch ung&uuml;ltig !</p>";
+        case "role_active":
+            $error_str = "Die Rolle <b>$error_text</b> wurde wieder auf <b>aktiv</b> gesetzt.";
             break;
 
-        case "roleexist":
-            $error_str = " Es existiert bereits eine Rolle in der Organisation mit dieser Funktion.";
+        case "role_inactive":
+            $error_str = "Die Rolle <b>$error_text</b> wurde auf <b>inaktiv</b> gesetzt.";
+            break;
+
+        case "role_exist":
+            $error_str = " Es existiert bereits eine Rolle in dieser Organisation mit dem Namen.";
             break;
 
         case "save":

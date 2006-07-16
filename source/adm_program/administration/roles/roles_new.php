@@ -189,7 +189,7 @@ require("../../../adm_config/body_top.php");
             </div>
             <div style=\"margin-top: 6px;\">
                 <div style=\"text-align: right; width: 28%; float: left;\">
-                    <label for=\"locked\"><img src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Rolle nur f�r Moderatoren sichtbar\"></label>
+                    <label for=\"locked\"><img src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Rolle nur f&uuml;r Moderatoren sichtbar\"></label>
                 </div>
                 <div style=\"text-align: left; margin-left: 30%;\">
                     <input type=\"checkbox\" id=\"locked\" name=\"locked\" ";
@@ -198,7 +198,7 @@ require("../../../adm_config/body_top.php");
                             echo " checked ";
                         }
                         echo " value=\"1\" />
-                    <label for=\"locked\">Rolle nur f�r Moderatoren sichtbar&nbsp;</label>
+                    <label for=\"locked\">Rolle nur f&uuml;r Moderatoren sichtbar&nbsp;</label>
                     <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                     onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_locked','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
                 </div>
