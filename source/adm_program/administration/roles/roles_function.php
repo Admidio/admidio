@@ -9,7 +9,7 @@
  * Uebergaben:
  *
  * rol_id: ID der Rolle, die angezeigt werden soll
- * mode:  1 - nicht mehr benötigt
+ * mode:  1 - nicht mehr benï¿½tigt
  *        2 - Rolle anlegen oder updaten
  *        3 - Rolle loeschen
  ******************************************************************************
@@ -43,6 +43,7 @@ if(!isModerator())
 
 $err_code = "";
 $err_text = "";
+$rol_id = $_GET['rol_id'];
 
 if($_GET["mode"] == 1)
 {
@@ -72,7 +73,7 @@ elseif($_GET["mode"] == 2)
             exit();
          }      
       }
-
+      
       // Zeitraum von/bis auf Gueltigkeit pruefen
 
       if(strlen($_POST['datum_von']) > 0)
@@ -202,6 +203,28 @@ elseif($_GET["mode"] == 2)
             $_POST['max_mitglieder'] = "NULL";
          elseif($_POST['max_mitglieder'] == 0)
             $_POST['max_mitglieder'] = "0";
+
+         //Kontrollieren ob bei nachtraeglicher aenderung der amimalen Mitgleiderzahl diese nicht bereits ueberschritten wurde
+         
+         //Zaehlen wieviele Leute die Rolle bereits haben, ohne Leiter
+         if($_GET['rol_id'] > 0)
+         {
+             $sql    = "SELECT COUNT(*) FROM ". TBL_MEMBERS. "
+                        WHERE mem_rol_id= $rol_id
+                        AND mem_leader = 0
+                        AND mem_valid  = 1";
+             $result = mysql_query($sql, $g_adm_con);
+             db_error($result);
+             $role_members = mysql_fetch_array($result);
+             //echo $role_members[0]."<br>".$_POST['max_mitglieder']; exit();
+             
+             if($_POST['max_mitglieder']!= 0 && ($role_members[0] > $_POST['max_mitglieder']))
+             {
+                 $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=max_members_roles_change";
+                 header($location);
+                 exit();
+             }
+         }
 
          if(!array_key_exists("beitrag", $_POST)
          || strlen($_POST['beitrag']) == 0)
