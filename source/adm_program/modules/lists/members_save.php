@@ -83,7 +83,7 @@ if($role->rol_max_members!=NULL)
     $counter=0;
     while($user= mysql_fetch_array($result_user))
     {    
-        if ($_POST["member_".$user["usr_id"]]==true)
+        if ($_POST["member_".$user["usr_id"]]==true && $_POST["leader_".$user["usr_id"]]==false)
         {
             $counter++;
         }
