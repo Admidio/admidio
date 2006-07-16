@@ -71,13 +71,6 @@ if($_GET["mode"] == 1)
         <script language=\"JavaScript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
         <![endif]-->";
 
-        if($_GET['timer'] > 0)
-        {
-            echo "<script language=\"JavaScript1.2\" type=\"text/javascript\"><!--\n
-            window.setTimeout(\"window.location.href='". $_GET['url']. "'\", ". $_GET['timer']. ");\n
-            //--></script>";
-        }
-
         require("../../../adm_config/header.php");
     echo "</head>";
 
