@@ -8,9 +8,12 @@
  *
  * Uebergaben:
  *
- * Bild: welches Bild soll angezeigt werden
- * scal: Pixelanzahl auf die die l�ngere Bildseite scaliert werden soll
- * Ziel: wo soll es gspeichert werden
+ * bild: welches Bild soll angezeigt werden
+ * scal: Pixelanzahl auf die die laengere Bildseite scaliert werden soll
+ * ziel: wo soll es gspeichert werden
+ * aufgabe: anzeigen oder speichern
+ * nr: Nummer des hochgeladenen bildes
+ * side: Seite des Bildes die scaliert werden soll 
  ******************************************************************************
  *
  * This program is free software; you can redistribute it and/or

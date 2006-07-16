@@ -8,9 +8,9 @@
  *
  * Uebergaben:
  *
- * Bild: welches Bild soll angezeigt werden
- * scal: Pixelanzahl auf die die l?ngere Bildseite scaliert werden soll
- * Ziel: wo soll es gspeichert werden
+ * pho_id: id der Veranstaltung
+ * job: loeschen oder drehen
+ * direction: drehrichtung links oder rechts
  ******************************************************************************
  *
  * This program is free software; you can redistribute it and/or
@@ -32,6 +32,8 @@ require("../../system/common.php");
 require("../../system/login_valid.php");
 
 //Rechtsdrehung eines Bildes
+//pho_id: Veranstaltungsid
+//bild: nr des Bildes das gedreht werden soll
 function right_rotate ($pho_id, $bild)
 {
     global $g_adm_con;
@@ -83,6 +85,8 @@ function right_rotate ($pho_id, $bild)
 };
 
 //Linksdrehung eines Bildes
+//pho_id: Veranstaltungsid
+//bild: nr des Bildes das gedreht werden soll
 function left_rotate ($pho_id, $bild)
 {
     global $g_adm_con;

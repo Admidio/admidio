@@ -5,7 +5,9 @@
  * Copyright    : (c) 2004 - 2006 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Jochen Erkens
- *
+ * Uebergaben:
+ * 
+ * pho_id: id der Veranstaltung zu der die Bilder hinzugefuegt werden sollen
  ******************************************************************************
  *
  * This program is free software; you can redistribute it and/or
