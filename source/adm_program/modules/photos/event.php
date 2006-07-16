@@ -5,6 +5,13 @@
  * Copyright    : (c) 2004 - 2006 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Jochen Erkens
+ * 
+ * Uebergaben:
+ * pho_id: id der Veranstaltung die bearbeitet werden soll
+ * aufgabe: - new (neues Formular)
+ *          - makenew (neue eingaben speichern)
+ *          - change (Formular fuer Aenderunmgen)
+ *          - makechange (Aenderungen ausfuehren)
  *
  ******************************************************************************
  *

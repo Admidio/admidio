@@ -9,7 +9,7 @@
  * Uebergaben:
  *
  * Bild: welches Bild soll angezeigt werden
- * Ordner : aus welchem Ordner stammt das Bild welches angezeigt werden soll
+ * pho_id: Id der Veranstaltung aus der das Bild stammt 
  *
  ******************************************************************************
  *
