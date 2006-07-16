@@ -248,15 +248,27 @@ require("../../../adm_config/body_top.php");
 
             while($row_lst = mysql_fetch_object($result_lst))
             {
-                // Anzahl Mitglieder ermitteln
+                // Anzahl Mitglieder ermitteln die keine Leiter sind
                 $sql = "SELECT COUNT(*)
                           FROM ". TBL_MEMBERS. "
                          WHERE mem_rol_id = $row_lst->rol_id
-                           AND mem_valid  = $active_role ";
+                           AND mem_valid  = $active_role
+                           AND mem_leader = 0";
                 $result = mysql_query($sql, $g_adm_con);
                 db_error($result);
                 $row    = mysql_fetch_array($result);
                 $num_member = $row[0];
+                
+                 // Anzahl Mitglieder ermitteln die Leiter sind
+                $sql = "SELECT COUNT(*)
+                          FROM ". TBL_MEMBERS. "
+                         WHERE mem_rol_id = $row_lst->rol_id
+                           AND mem_valid  = $active_role
+                           AND mem_leader = 1";
+                $result = mysql_query($sql, $g_adm_con);
+                db_error($result);
+                $row    = mysql_fetch_array($result);
+                $num_leader = $row[0];
 
                 if($active_role)
                 {
@@ -373,6 +385,7 @@ require("../../../adm_config/body_top.php");
                         echo "</div>";
                     echo "</div>";
                 }
+                //Treffpunkt
                 if(strlen($row_lst->rol_location) > 0)
                 {
                     echo "<div style=\"margin-top: 3px;\">
@@ -380,6 +393,7 @@ require("../../../adm_config/body_top.php");
                         <div style=\"text-align: left;\">$row_lst->rol_location</div>
                     </div>";
                 }
+                //Teinehmer
                 echo "
                 <div style=\"margin-top: 3px;\">
                     <div style=\"margin-left: 30px; width: 130px; text-align: left; float: left;\">Teilnehmer:</div>
@@ -402,6 +416,14 @@ require("../../../adm_config/body_top.php");
                         }
                     echo "</div>
                 </div>";
+                //Leiter
+                if($num_leader>0){
+                    echo "<div style=\"margin-top: 3px;\">
+                        <div style=\"margin-left: 30px; width: 130px; text-align: left; float: left;\">Leiter:</div>
+                        <div style=\"text-align: left;\">$num_leader</div>
+                    </div>";
+                }
+                //Beitrag
                 if(strlen($row_lst->rol_cost) > 0)
                 {
                     echo "<div style=\"margin-top: 3px;\">
