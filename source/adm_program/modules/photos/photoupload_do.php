@@ -186,7 +186,7 @@ if($g_session_valid & editPhoto())
                     <hr width=\"85%\" />
                     <div style=\"margin-top: 6px;\">
                         <button name=\"uebersicht\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id'\">
-                            <img src=\"$g_root_path/adm_program/images/table.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
+                            <img src=\"$g_root_path/adm_program/images/application_view_tile.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
                             &nbsp;&Uuml;bersicht
                         </button>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

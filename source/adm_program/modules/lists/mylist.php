@@ -272,7 +272,7 @@ require("../../../adm_config/body_top.php");
                         Zur&uuml;ck</button>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <button name=\"anzeigen\" type=\"submit\" value=\"anzeigen\">
-                        <img src=\"$g_root_path/adm_program/images/table.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Liste anzeigen\">
+                        <img src=\"$g_root_path/adm_program/images/application_view_columns.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Liste anzeigen\">
                         &nbsp;Liste anzeigen</button>            
                 </p>
             </div>

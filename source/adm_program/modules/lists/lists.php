@@ -14,7 +14,7 @@
  *                           Rollen-Kategorien
  *                     no  - Combobox nicht anzeigen
  * active_role : 1 - (Default) aktive Rollen auflisten
- *               0 - Ehemalige Rollen auflisten
+ *               0 - inaktive Rollen auflisten
  *
  ******************************************************************************
  *
@@ -191,7 +191,7 @@ require("../../../adm_config/body_top.php");
             }
             else
             {
-                echo strspace("Ehemalige Rollen");
+                echo strspace("Inaktive Rollen");
             }
         echo '</h1>';
 
