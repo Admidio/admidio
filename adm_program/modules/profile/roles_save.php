@@ -88,10 +88,11 @@ $parentRoles = array();
 //Ergebnisse durchlaufen und Kontrollieren ob Maximale Teilnehmerzahl ueberschritten wuerde
 while($row = mysql_fetch_object($result_rolle))
 {
-    //Aufruf von allen die die Rolle bereits haben
-    $sql    =   "SELECT mem_usr_id, mem_valid 
+    //Aufruf von allen die die Rolle bereits haben und keine Leiter sind
+    $sql    =   "SELECT mem_usr_id, mem_valid, mem_leader
                  FROM ". TBL_MEMBERS. "
                  WHERE mem_rol_id = $row->rol_id
+                 AND mem_leader = 0
                  AND mem_valid  = 1";
     $sql    = prepareSQL($sql, array($_GET['user_id']));
     $result_valid_members = mysql_query($sql, $g_adm_con);
@@ -109,6 +110,7 @@ while($row = mysql_fetch_object($result_rolle))
     if ($valid_members>=$row->rol_max_members 
         &&  $row->rol_max_members!=NULL
         &&  !in_array($_GET['user_id'], $valid_members_array)
+        &&  $_POST["leader-$i"]==false 
         &&  $_POST["role-$i"]==true)
     {
         $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=max_members_profile&err_text=$row->rol_name";
