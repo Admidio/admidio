@@ -67,7 +67,7 @@ if($_GET['mode'] == 1)
 
             if($row[0] > 0)
             {
-                $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=roleexist";
+                $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=category_exist";
                 header($location);
                 exit();
             }      

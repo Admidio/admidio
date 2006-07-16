@@ -8,8 +8,8 @@
  *
  * Uebergaben:
  *
- * mode: actual  - (Default) Alle aktuellen und zukuenftige Termine anzeigen
- *       old     - Alle bereits erledigten
+ * inactive: 0 - (Default) alle aktiven Rollen anzeigen
+ *           1 - alle inaktiven Rollen anzeigen
  ******************************************************************************
  *
  * This program is free software; you can redistribute it and/or
@@ -39,10 +39,20 @@ if(!isModerator())
     exit();
 }
 
+if(isset($_GET['inactive'])
+&& $_GET['inactive'] == 1)
+{
+    $valid = 0;
+}
+else
+{
+	$valid = 1;	
+}
+
 // Alle Rollen auflisten, die der Webmaster sehen darf
 $sql    = "SELECT * FROM ". TBL_ROLES. ", ". TBL_ROLE_CATEGORIES. "
-            WHERE rol_org_shortname = '$g_organization'
-              AND rol_valid         = 1
+            WHERE rol_org_shortname = '$g_organization' 
+              AND rol_valid         = $valid
               AND rol_rlc_id        = rlc_id
             ORDER BY rlc_name, rol_name ";
 $result = mysql_query($sql, $g_adm_con);
@@ -73,6 +83,20 @@ require("../../../adm_config/body_top.php");
                 <a class=\"iconLink\" href=\"roles_new.php\"><img 
                 src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Rolle anlegen\"></a>
                 <a class=\"iconLink\" href=\"roles_new.php\">Rolle anlegen</a>
+            </span>
+			&nbsp;&nbsp;&nbsp;&nbsp;";
+			if($valid == true)
+			{
+				$description = "Inaktive Rollen";
+			}
+			else
+			{
+				$description = "Aktive Rollen";
+			}
+            echo "<span class=\"iconLink\">
+                <a class=\"iconLink\" href=\"roles.php?inactive=$valid\"><img 
+                src=\"$g_root_path/adm_program/images/dummy.gif\" style=\"vertical-align: middle;\" border=\"0\" alt=\"$description\"></a>
+                <a class=\"iconLink\" href=\"roles.php?inactive=$valid\">$description</a>
             </span>
         </p>
 
@@ -157,11 +181,19 @@ require("../../../adm_config/body_top.php");
                     echo "</td>
                     <td style=\"text-align: center;\">
                         <a href=\"$g_root_path/adm_program/modules/lists/lists_show.php?type=address&amp;mode=html&amp;rol_id=$row->rol_id\"><img 
-                        src=\"$g_root_path/adm_program/images/table.png\" border=\"0\" alt=\"Mitglieder anzeigen\" title=\"Mitglieder anzeigen\"></a>
+                        src=\"$g_root_path/adm_program/images/application_view_columns.png\" border=\"0\" alt=\"Mitglieder anzeigen\" title=\"Mitglieder anzeigen\"></a>&nbsp;";
                         
-                        <a href=\"#\"><img src=\"$g_root_path/adm_program/images/add.png\" border=\"0\" alt=\"Mitglieder zuordnen\" title=\"Mitglieder zuordnen\" 
-                            onclick=\"window.open('$g_root_path/adm_program/modules/lists/members.php?rol_id=$row->rol_id&amp;popup=1','Titel','width=550,height=550,left=310,top=100,scrollbars=yes,resizable=yes')\">
-                        </a>";
+                        if($valid == true)
+                        {
+	                        echo "<a href=\"#\"><img src=\"$g_root_path/adm_program/images/add.png\" border=\"0\" alt=\"Mitglieder zuordnen\" title=\"Mitglieder zuordnen\" 
+	                            onclick=\"window.open('$g_root_path/adm_program/modules/lists/members.php?rol_id=$row->rol_id&amp;popup=1','Titel','width=550,height=550,left=310,top=100,scrollbars=yes,resizable=yes')\">
+	                        </a>";
+                        }
+                        else
+                        {
+	                        echo "<a href=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$row->rol_id&amp;mode=5\"><img 
+								src=\"$g_root_path/adm_program/images/ok.png\" border=\"0\" alt=\"Rolle aktivieren\" title=\"Rolle aktivieren\"></a>";
+                        }
 
                         if($row->rol_name == "Webmaster")
                         {
@@ -169,9 +201,15 @@ require("../../../adm_config/body_top.php");
                         }
                         else
                         {
-                            $load_url = urlencode("$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$row->rol_id&amp;mode=3");
-                            echo "
-                            <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=remove_rolle&amp;err_text=$row->rol_name&amp;err_head=Löschen&amp;button=2&amp;url=$load_url\">
+                        	if($valid == true)
+                        	{
+                        		$mode = 1;
+                        	}
+                        	else
+                        	{
+                        		$mode = 4;
+                        	}
+                            echo "<a href=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$row->rol_id&amp;mode=$mode\">
                             <img src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Rolle l&ouml;schen\" title=\"Rolle l&ouml;schen\"></a>";
                         }
                     echo "</td>

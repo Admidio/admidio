@@ -55,7 +55,7 @@ if($_GET['mode'] == 1)
    {
       if(!($_GET['usf_id'] > 0))
       {
-         // Schauen, ob die Rolle bereits existiert
+         // Schauen, ob das Feld bereits existiert
          $sql    = "SELECT COUNT(*) FROM ". TBL_USER_FIELDS. "
                      WHERE usf_org_shortname LIKE '$g_organization'
                        AND usf_name         LIKE {0}";
@@ -66,7 +66,7 @@ if($_GET['mode'] == 1)
       
          if($row[0] > 0)
          {
-            $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=roleexist";
+            $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=field_exist";
             header($location);
             exit();
          }      
