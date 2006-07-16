@@ -450,7 +450,6 @@ echo "
                 
                 for($x=$event_element+$ignored-$ignore; $x<=$event_element+$ignored+9 && $x<$events; $x++){
                     $adm_photo_list = mysql_fetch_array($result_list);
-                    echo $x;
                     //Hauptordner
                     $ordner = "../../../adm_my_files/photos/".$adm_photo_list["pho_begin"]."_".$adm_photo_list["pho_id"];
 
