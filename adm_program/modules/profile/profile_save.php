@@ -71,7 +71,7 @@ if($user_id > 0)
     
     if($user->valid == 1)
     {
-        // keine Webanmeldung, dann schauen, ob User �berhaupt Mitglied in der Gliedgemeinschaft ist
+        // keine Webanmeldung, dann schauen, ob User überhaupt Mitglied in der Gliedgemeinschaft ist
         if(isMember($user_id) == false)
         {
             $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norolle";
@@ -103,7 +103,7 @@ if($user->gender != 1 && $user->gender != 2)
 }
 
 /*------------------------------------------------------------*/
-// Felder pr�fen
+// Felder prüfen
 /*------------------------------------------------------------*/
 if(strlen($user->last_name) > 0)
 {
@@ -318,9 +318,11 @@ if($user->valid == 0)
         $email->setSender($g_preferences['email_administrator']);
         $email->addRecipient($user->email, "$user->first_name $user->last_name");
         $email->setSubject("Anmeldung auf $g_current_organization->homepage");
-        $email->setText("Hallo $user->first_name,\n\ndeine Anmeldung auf $g_current_organization->homepage ".
-              "wurde bestaetigt.\n\nNun kannst du dich mit deinem Benutzernamen : $user->login_name\nund dem Passwort auf der Homepage ".
-              "einloggen.\n\nSollten noch Fragen bestehen, schreib eine E-Mail an ". $g_preferences['email_administrator']. " .\n\nViele Gruesse\nDie Webmaster");
+        $email->setText(utf8_decode("Hallo "). $user->first_name. utf8_decode(",\n\ndeine Anmeldung auf "). 
+            $g_current_organization->homepage. utf8_decode("wurde bestätigt.\n\nNun kannst du dich mit deinem Benutzernamen : ").
+            $user->login_name. utf8_decode("\nund dem Passwort auf der Homepage einloggen.\n\n".
+            "Sollten noch Fragen bestehen, schreib eine E-Mail an "). $g_preferences['email_administrator'].
+            utf8_decode(" .\n\nViele Grüße\nDie Webmaster"));
         $email->sendEmail();
     }
 

@@ -268,11 +268,13 @@ elseif($_GET["mode"] == 4)
         $email = new Email();
         $email->setSender($g_preferences['email_administrator']);
         $email->addRecipient($user->email, "$user->first_name $user->last_name");
-        $email->setSubject("Logindaten für $g_current_organization->homepage");
-        $email->setText("Hallo $user->first_name,\n\ndu erhaelst deine ".
-             "Logindaten fuer $g_current_organization->homepage.\n\nBenutzername: $user->login_name\nPasswort: $password\n\n" .
-             "Das Passwort wurde automatisch generiert.\nDu solltest es nach dem Login in deinem Profil aendern.\n\n" .
-             "Viele Gruesse\nDie Webmaster");
+        $email->setSubject(utf8_decode("Logindaten für "). $g_current_organization->homepage);
+        $email->setText(utf8_decode("Hallo "). $user->first_name. utf8_decode(",\n\ndu erhälst deine Logindaten für ").
+            $g_current_organization->homepage. utf8_decode(".\n\nBenutzername: ").
+            $user->login_name. utf8_decode("\nPasswort: $password\n\n".
+            "Das Passwort wurde automatisch generiert.\n".
+            "Du solltest es nach dem Login in deinem Profil ändern.\n\n" .
+            "Viele Grüße\nDie Webmaster"));
         if($email->sendEmail() == true)
         {
             $err_code = "mail_send";

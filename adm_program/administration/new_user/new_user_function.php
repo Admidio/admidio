@@ -89,9 +89,11 @@ if($_GET["mode"] == 1)
         $email->setSender($g_preferences['email_administrator']);
         $email->addRecipient($user->email, "$user->first_name $user->last_name");
         $email->setSubject("Anmeldung auf $g_current_organization->homepage");
-        $email->setText("Hallo $user->first_name,\n\ndeine Anmeldung auf $g_current_organization->homepage ".
-              "wurde bestaetigt.\n\nNun kannst du dich mit deinem Benutzernamen : $user->login_name\nund dem Passwort auf der Homepage ".
-              "einloggen.\n\nSollten noch Fragen bestehen, schreib eine E-Mail an ". $g_preferences['email_administrator']. " .\n\nViele Gruesse\nDie Webmaster");
+        $email->setText(utf8_decode("Hallo "). $user->first_name. utf8_decode(",\n\ndeine Anmeldung auf ").
+            $g_current_organization->homepage. utf8_decode("wurde bestätigt.\n\nNun kannst du dich mit deinem Benutzernamen : ").
+            $user->login_name. utf8_decode("\nund dem Passwort auf der Homepage einloggen.\n\n".
+            "Sollten noch Fragen bestehen, schreib eine E-Mail an "). $g_preferences['email_administrator']. 
+            utf8_decode(" .\n\nViele Grüße\nDie Webmaster"));
         if($email->sendEmail() == true)
         {
             $err_code = "send_login_mail";
