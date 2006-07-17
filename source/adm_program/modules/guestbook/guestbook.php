@@ -114,16 +114,26 @@ require("../../../adm_config/body_top.php");
         {
             // Neuen Gaestebucheintrag anlegen
             echo "<p>
-				<span class=\"iconLink\">
-	                <a class=\"iconLink\" href=\"guestbook_new.php?headline=". $_GET["headline"]. "\"><img
-	                class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Neuen Eintrag anlegen\"></a>
-	                <a class=\"iconLink\" href=\"guestbook_new.php?headline=". $_GET["headline"]. "\">Neuen Eintrag anlegen</a>
-	            </span>";
-            echo "</p>";
+                <span class=\"iconLink\">
+                    <a class=\"iconLink\" href=\"guestbook_new.php?headline=". $_GET["headline"]. "\"><img
+                    class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Neuen Eintrag anlegen\"></a>
+                    <a class=\"iconLink\" href=\"guestbook_new.php?headline=". $_GET["headline"]. "\">Neuen Eintrag anlegen</a>
+                </span>
+            </p>";
 
             // Navigation mit Vor- und Zurueck-Buttons
             $base_url = "$g_root_path/adm_program/modules/guestbook/guestbook.php?headline=". $_GET["headline"];
             echo generatePagination($base_url, $num_guestbook, 10, $_GET["start"], TRUE);
+        }
+        else
+        {
+            echo "<p>
+                <span class=\"iconLink\">
+                    <a class=\"iconLink\" href=\"guestbook.php?headline=". $_GET["headline"]. "&start=". $_GET["start"] ."\"><img
+                    class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Zur&uuml;ck zum G&auml;stebuch\"></a>
+                    <a class=\"iconLink\" href=\"guestbook.php?headline=". $_GET["headline"]. "&start=". $_GET["start"] ."\"\">Zur&uuml;ck zum G&auml;stebuch</a>
+                </span>
+            </p>";
         }
 
         if (mysql_num_rows($guestbook_result) == 0)
@@ -231,7 +241,7 @@ require("../../../adm_config/body_top.php");
                         if ($_GET['id'] == 0 && mysql_num_rows($comment_result) > 0)
                         {
                             // Falls Kommentare vorhanden sind, wird der Link zur Kommentarseite angezeigt...
-                            $load_url = "$g_root_path/adm_program/modules/guestbook/guestbook.php?id=$row->gbo_id";
+                            $load_url = "$g_root_path/adm_program/modules/guestbook/guestbook.php?id=$row->gbo_id&start=". $_GET["start"]. "&headline=". $_GET["headline"];
                             echo "
                             <div style=\"margin: 8px 4px 4px 4px; font-size: 10pt; text-align: left;\">
                                 <a href=\"$load_url\">
@@ -384,13 +394,13 @@ require("../../../adm_config/body_top.php");
             </div>";
         }
 
-		if(mysql_num_rows($guestbook_result) > 2)
-		{
-	        // Navigation mit Vor- und Zurueck-Buttons
-	        // erst anzeigen, wenn mehr als 2 Eintraege (letzte Navigationsseite) vorhanden sind
-	        $base_url = "$g_root_path/adm_program/modules/guestbook/guestbook.php?headline=". $_GET["headline"];
-	        echo generatePagination($base_url, $num_guestbook, 10, $_GET["start"], TRUE);
-		}
+        if(mysql_num_rows($guestbook_result) > 2)
+        {
+            // Navigation mit Vor- und Zurueck-Buttons
+            // erst anzeigen, wenn mehr als 2 Eintraege (letzte Navigationsseite) vorhanden sind
+            $base_url = "$g_root_path/adm_program/modules/guestbook/guestbook.php?headline=". $_GET["headline"];
+            echo generatePagination($base_url, $num_guestbook, 10, $_GET["start"], TRUE);
+        }
     echo "</div>";
 
     require("../../../adm_config/body_bottom.php");
