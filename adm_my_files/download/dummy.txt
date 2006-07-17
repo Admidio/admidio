@@ -1,3 +1,0 @@
-
-Diese Textdatei kann entfernt werden. 
-Sie ist nur noetig, damit man den Ordner einchecken kann !
