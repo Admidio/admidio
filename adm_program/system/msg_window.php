@@ -40,10 +40,13 @@ echo "
     <!--[if lt IE 7]>
     <script language=\"JavaScript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
     <![endif]-->
+    
+    
 </head>
 
-<body>
-    <div class=\"groupBox\" align=\"left\" style=\"padding: 10px\">";
+<body onLoad=\"windowresize()\">
+    <script language=\"JavaScript\" src=\"$g_root_path/adm_program/system/window_resize.js\"></script>
+    <div class=\"groupBox\" align=\"left\" style=\"padding: 10px\" id=\"Inhalt\">";
         switch ($_GET['err_code'])
         {
             case "bbcode":
@@ -303,8 +306,7 @@ echo "
                     Sammelordner zu kopieren und diese dann mit einer Bildbearbeitungssoftware auf 640 Pixel
                     (l&auml;ngere Bildseite) zu skalieren. Die JPG-Qualit&auml;t sollte beim Abspeichern auf 100%
                     (also keine Komprimierung) gestellt werden.
-                    Die maximale Dateigr&ouml;ße eines hochgeladenen Bildes kann durch den Webmaster eingeschr&auml;nkt werden
-                       (Standart 512KB).
+                    Die maximale Dateigr&ouml;&szlig;e eines hochgeladenen Bildes wird nur durch die Servereinstellungen beschr&auml;nkt.
                     ";
                 break;
 
