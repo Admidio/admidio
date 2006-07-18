@@ -65,7 +65,7 @@ function getErrorText($error_code, $error_text, $g_current_organization)
 
         case "delete_role":
             $error_str = "Willst du die Rolle <b>$error_text</b>wirklich l&ouml;schen ?<br><br>
-			Es werden damit auch alle Mitgliedschaften entg&uuml;tig entfernt.";
+            Es werden damit auch alle Mitgliedschaften entg&uuml;tig entfernt.";
             break;
 
         case "delete_field":
@@ -495,11 +495,8 @@ function getErrorText($error_code, $error_text, $g_current_organization)
         //Fehlermeldungen Servereinstellungen
 
         default:
-            $error_str = "Es ist ein Fehler aufgetreten.";
-            if (strlen($error_text) > 0)
-            {
-                $error_str = $error_str. "<p><b>Fehler: $error_text</b></p>";
-            }
+            $error_str = "Es ist ein Fehler aufgetreten.<br><br>
+            Der gesuchte Hinweis ($error_code) konnte nicht gefunden werden !";
             break;
 
 
