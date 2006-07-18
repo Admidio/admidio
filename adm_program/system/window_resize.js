@@ -28,7 +28,7 @@ function windowresize()
 {
 	if(document.all)
 	{
-		hoehe = self.document.body.scrollHeight+50;
+		hoehe = self.document.body.scrollHeight+80;
 		breite = self.document.body.scrollWidth;
 	}
 	
