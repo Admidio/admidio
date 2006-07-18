@@ -70,7 +70,7 @@ $column=6;
 
 //uebername ob nur Mitglieder oder alle User der Datenbank angezeigt werden sollen
 $restrict=$_GET["restrict"];
-if($restrict=="" || !isModerator() || !editUser())
+if(strlen($restrict) == 0 || !isModerator() || !editUser())
 {
     $restrict="m";
 }
@@ -246,24 +246,26 @@ echo"
                 <th class=\"tableHeader\" style=\"text-align: center;\">Mitglied</th>
                 <th class=\"tableHeader\" style=\"text-align: center;\">Leiter</th>
             </tr>";
+ 			$letter_merker = "";
  
             //Ausgabe der Tabellenzeilen, ggf. einfuegen von Ankern
-            $user = mysql_fetch_array($result_user);
-            for($letter=48; $letter<=90; $letter++)
+            while($user = mysql_fetch_array($result_user))
             {
-                //Ueberspringen der nicht genutzten Ascizeichen
-                if($letter==57)
+                $letter = ord(strtoupper($user['usr_last_name']));
+                if(strlen($letter_merker) > 0 && $letter < 65)
                 {
-                    $letter=65;
+                	// die ersten Ascii-Zeichen alle unter # anzeigen
+					$letter_merker = $letter;                	
                 }
-                                        
-                //grosse Anfangsbuchstaben werden erst ab 50 Personen angezeigt
-                if(in_array($letter, $first_letter_array) && $user_anzahl>50)
-                {
+ 
+ 				//grosse Anfangsbuchstaben werden erst ab 50 Personen angezeigt
+ 				if( $user_anzahl > 50
+ 				&& ($letter_merker != $letter || strlen($letter_merker) == 0))
+ 				{                                       
                     echo "<tr><td style=\"text-align: center;\" colspan=\"$column\">";                      
                     
                     //Zahlen werden unter # zusammengefasst
-                    if($letter>=48 && $letter<=57 && $letter_string!="#")
+                    if($letter < 65)
                     {
                         $letter_string = "#";
                         echo"<h2>$letter_string</h2>";
@@ -276,13 +278,13 @@ echo"
                     }
                     
                     //Buchstaben Links zu Ankern wenn mehr als 100 Namen angezeigt werden sollen                
-                    if($user_anzahl>100 && (($letter>=48 && $letter<=57 && $first_linkline!=true) || $letter>=65))
+                    if($user_anzahl>100 && (($letter < 65 && $first_linkline!=true) || $letter>=65))
                     {               
                         $first_linkline=true;
                         echo"<a href=\"#Anfang\">Anfang</a>&nbsp;";
                         for($menu_letter=65; $menu_letter<=90; $menu_letter++)
                         {
-                            //Falls Aktueller Anfangsbuchstabe, Nur Buchstabe ausgebe
+                            //Falls Aktueller Anfangsbuchstabe, Nur Buchstabe ausgeben
                             $menu_letter_string = chr($menu_letter);                        
                             if($letter==$menu_letter || !in_array($menu_letter, $first_letter_array))
                             {
@@ -298,60 +300,55 @@ echo"
                         echo"<a href=\"#Ende\">Ende</a>";
                     }// if User_anzahl>100
                     
-                    echo"</td></tr>";
-                    
-                }         
+                    echo"</td></tr>";	                             
+	                $letter_merker = $letter;
+ 				}
                 
                 //Ausgabe aller Personen mit entsprechendem Anfangsbuchstaben
-                while(ord($user['usr_last_name'])==$letter ||ord($user['usr_last_name'])==$letter+32)
-                {
-                    $user_text= $user['usr_first_name']."&nbsp;".$user['usr_last_name']."&nbsp;&nbsp;&nbsp;"
-                                .$user['usr_address']."&nbsp;&nbsp;&nbsp;"
-                                .$user['usr_plz']."&nbsp;".$user['usr_ort']."&nbsp;&nbsp;&nbsp;"
-                                .$user['usr_tel1'];
-                    echo"
-                    <tr>
-                        <td style=\"text-align: center;\">
-                            <img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/note.png\" alt=\"Userinformationen\" title=\"$user_text\">
-                        </td>
-                        <td style=\"text-align: left;\">". $user['usr_last_name']."</td>
-                        <td style=\"text-align: left;\">". $user['usr_first_name']."</td>
-                        
-                        <td style=\"text-align: center;\">";
-                            //Geburtstag nur ausgeben wenn bekannt
-                            if($user['usr_birthday']!='0000-00-00')
-                            {
-                                echo mysqldate("d.m.y", $user['usr_birthday']);
-                            }
-                        echo"</td>
+                $user_text= $user['usr_first_name']."&nbsp;".$user['usr_last_name']."&nbsp;&nbsp;&nbsp;"
+                            .$user['usr_address']."&nbsp;&nbsp;&nbsp;"
+                            .$user['usr_plz']."&nbsp;".$user['usr_ort']."&nbsp;&nbsp;&nbsp;"
+                            .$user['usr_tel1'];
+                echo"
+                <tr>
+                    <td style=\"text-align: center;\">
+                        <img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/note.png\" alt=\"Userinformationen\" title=\"$user_text\">
+                    </td>
+                    <td style=\"text-align: left;\">". $user['usr_last_name']."</td>
+                    <td style=\"text-align: left;\">". $user['usr_first_name']."</td>
+                    
+                    <td style=\"text-align: center;\">";
+                        //Geburtstag nur ausgeben wenn bekannt
+                        if($user['usr_birthday']!='0000-00-00')
+                        {
+                            echo mysqldate("d.m.y", $user['usr_birthday']);
+                        }
+                    echo"</td>
 
-                        <td style=\"text-align: center;\">";
-                            //Haekchen setzen ob jemand Mitglied ist oder nicht
-                            if(in_array($user['usr_id'], $role_member))
-                            {
-                                echo"<input type=\"checkbox\" onclick=\"unmarkLeader(this)\" id=\"member_$user[0]\" name=\"member_$user[0]\" checked value=\"1\">";
-                            }
-                            else
-                            {
-                                echo"<input type=\"checkbox\" onclick=\"unmarkLeader(this)\" id=\"member_$user[0]\" name=\"member_$user[0]\" value=\"1\">";
-                            }
-                        echo"</td>
-                            
-                        <td style=\"text-align: center;\">";
-                            //Haekchen setzen ob jemand Leiter ist oder nicht
-                            if(in_array($user['usr_id'], $group_leaders))
-                            {
-                                echo"<input type=\"checkbox\" onclick=\"markMember(this)\" id=\"leader_$user[0]\" name=\"leader_$user[0]\" checked value=\"1\">";
-                            }
-                            else
-                            {
-                                echo"<input type=\"checkbox\" onclick=\"markMember(this)\" id=\"leader_$user[0]\" name=\"leader_$user[0]\" value=\"1\">";
-                            }
-                        echo"</td>
-                    </tr>";
-                    $user = mysql_fetch_array($result_user);
-                
-                }//Ende Whileschleife
+                    <td style=\"text-align: center;\">";
+                        //Haekchen setzen ob jemand Mitglied ist oder nicht
+                        if(in_array($user['usr_id'], $role_member))
+                        {
+                            echo"<input type=\"checkbox\" onclick=\"unmarkLeader(this)\" id=\"member_$user[0]\" name=\"member_$user[0]\" checked value=\"1\">";
+                        }
+                        else
+                        {
+                            echo"<input type=\"checkbox\" onclick=\"unmarkLeader(this)\" id=\"member_$user[0]\" name=\"member_$user[0]\" value=\"1\">";
+                        }
+                    echo"</td>
+                        
+                    <td style=\"text-align: center;\">";
+                        //Haekchen setzen ob jemand Leiter ist oder nicht
+                        if(in_array($user['usr_id'], $group_leaders))
+                        {
+                            echo"<input type=\"checkbox\" onclick=\"markMember(this)\" id=\"leader_$user[0]\" name=\"leader_$user[0]\" checked value=\"1\">";
+                        }
+                        else
+                        {
+                            echo"<input type=\"checkbox\" onclick=\"markMember(this)\" id=\"leader_$user[0]\" name=\"leader_$user[0]\" value=\"1\">";
+                        }
+                    echo"</td>
+                </tr>";
             }//Ende for-Schleife
         echo"</table>";
       
