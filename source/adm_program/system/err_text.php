@@ -63,6 +63,11 @@ function getErrorText($error_code, $error_text, $g_current_organization)
             <b>$error_text</b><br />wirklich l&ouml;schen ?";
             break;
 
+        case "delete_role":
+            $error_str = "Willst du die Rolle <b>$error_text</b>wirklich l&ouml;schen ?<br><br>
+			Es werden damit auch alle Mitgliedschaften entg&uuml;tig entfernt.";
+            break;
+
         case "delete_field":
             $error_str = "<p>Willst du das Feld <b>$error_text</b> wirklich l&ouml;schen ?</p>
             <p>Es werden alle Daten, die Benutzer in diesem Feld gespeichert haben, gel&ouml;scht.</p>";
@@ -214,7 +219,7 @@ function getErrorText($error_code, $error_text, $g_current_organization)
             break;
 
         case "role_exist":
-            $error_str = " Es existiert bereits eine Rolle in dieser Organisation mit dem Namen.";
+            $error_str = " Es existiert bereits eine Rolle in dieser Kategorie mit demselben Namen.";
             break;
 
         case "save":

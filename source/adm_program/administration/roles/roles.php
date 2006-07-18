@@ -203,14 +203,16 @@ require("../../../adm_config/body_top.php");
                         {
                         	if($valid == true)
                         	{
-                        		$mode = 1;
+	                            echo "<a href=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$row->rol_id&amp;mode=1\">
+	                            <img src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Rolle l&ouml;schen\" title=\"Rolle l&ouml;schen\"></a>";
                         	}
                         	else
                         	{
-                        		$mode = 4;
+	                            $load_url = urlencode("$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$row->rol_id&amp;mode=4&amp;inactive=1");
+	                            echo "
+	                            <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_role&amp;err_text=$row->rol_name&amp;err_head=L&ouml;schen&amp;button=2&amp;url=$load_url\">
+	                            <img src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Rolle l&ouml;schen\" title=\"Rolle l&ouml;schen\"></a>";
                         	}
-                            echo "<a href=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$row->rol_id&amp;mode=$mode\">
-                            <img src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Rolle l&ouml;schen\" title=\"Rolle l&ouml;schen\"></a>";
                         }
                     echo "</td>
                 </tr>";
