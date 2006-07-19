@@ -80,7 +80,7 @@ if($_GET["mode"] == 1)
 
             <div class=\"formBody\" style=\"width: 400px\">
                 <p align=\"left\">
-                    <img src=\"$g_root_path/adm_program/images/dummy.gif\" style=\"vertical-align: bottom;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Inaktive Rolle\">
+                    <img src=\"$g_root_path/adm_program/images/wand_gray.png\" style=\"vertical-align: bottom;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Inaktive Rolle\">
                     Du kannst die Rolle zu einer <b>inaktiven Rolle</b> machen. Dies hat den Vorteil, dass die Daten
                     (Mitgliederzuordnung) erhalten bleiben und du sp&auml;ter immer wieder sehen kannst, welche Personen dieser Rolle
                     zugeordnet waren. Allerdings erscheint die Rolle nicht mehr in den &uuml;blichen &Uuml;bersichten.
@@ -102,7 +102,7 @@ if($_GET["mode"] == 1)
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <button name=\"inactive\" type=\"button\" value=\"inactive\"
                     onclick=\"self.location.href='$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=". $_GET['rol_id']. "&mode=3&url=$url'\">
-                    <img src=\"$g_root_path/adm_program/images/dummy.gif\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Inaktive Rolle\">
+                    <img src=\"$g_root_path/adm_program/images/wand_gray.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Inaktive Rolle\">
                     &nbsp;Inaktive Rolle</button>
             </div>
         </div>";
