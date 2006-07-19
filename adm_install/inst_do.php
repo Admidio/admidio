@@ -452,6 +452,11 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
                                        VALUES ($org_id, 'email_administrator', 'webmaster@". $_SERVER['HTTP_HOST']. "') ";
     $result = mysql_query($sql, $connection);
     db_error($result);
+    
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+            VALUES ($row_orga->org_id, 'photo_save_scale', '640')";
+    $result = mysql_query($sql, $connection);
+    if(!$result) showError(mysql_error());
 
     // Rollen-Kategorie eintragen
     $sql = "INSERT INTO ". TBL_ROLE_CATEGORIES. " (rlc_org_shortname, rlc_name, rlc_locked)
