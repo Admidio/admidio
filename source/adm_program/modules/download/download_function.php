@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2006 The Admidio Team
  * Homepage     : http://www.admidio.org
- * Module-Owner : Martin G?nzler
+ * Module-Owner : Martin Guenzler
  *
  * Uebergaben:
  *
@@ -36,66 +36,73 @@
  *
  *****************************************************************************/
 
-    require("../../system/common.php");
-    require("../../system/login_valid.php");
+require("../../system/common.php");
+require("../../system/login_valid.php");
 
-//Pr?frotine ob Ordner/Datei
-function file_or_folder ($act_dir,$file) {
+//Pruefrotine ob Ordner/Datei
+function file_or_folder ($act_dir,$file) 
+{
     if(strlen($file) > 0)
-        {
-        if(is_file("$act_dir/$file"))
-            return false;
-        else
     {
-        if(is_dir("$act_dir/$file"))
-            return true;
+        if(is_file("$act_dir/$file"))
+        {
+            return false;
+        }
         else
-            return -1;
-    }
+        {
+            if(is_dir("$act_dir/$file"))
+            {
+                return true;
+            }
+            else
+            {
+                return -1;
+            }
+        }
     }
 };
 
 // rekursive Funktion um ganze Ordner mit Unterordnern zu loeschen
 function removeDir ($dir) 
 {
-   $fHandle = opendir($dir);
+    $fHandle = opendir($dir);
     if($fHandle > 0) 
-   {
-      while (false !== ($fName = readdir($fHandle))) 
-      {     
-         if($fName != "." && $fName != "..")
-         {
-            if(is_dir("$dir/$fName"))
+    {
+        while (false !== ($fName = readdir($fHandle))) 
+        {     
+            if($fName != "." && $fName != "..")
             {
-               removeDir("$dir/$fName");               
+                if(is_dir("$dir/$fName"))
+                {
+                    removeDir("$dir/$fName");               
+                }
+                else
+                {
+                    unlink("$dir/$fName");
+                }
             }
-            else
-            {
-               unlink("$dir/$fName");
-            }
-         }
-      }
-      return rmdir($dir);      
+        }
+        return rmdir($dir);      
     };
-   return false;
+    return false;
 };
 
 
-// erst pr?fen, ob der User auch die entsprechenden Rechte hat
+// erst pruefen, ob der User auch die entsprechenden Rechte hat
 if(!editDownload())
 {
-   $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-   header($location);
-   exit();
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
+    header($location);
+    exit();
 }
 
-//testen ob Schreibrechte f?r adm_my_files bestehen
+//testen ob Schreibrechte fuer adm_my_files bestehen
 if (decoct(fileperms("../../../adm_my_files/download"))!=40777)
 {
-   $load_url = urlencode("$g_root_path/adm_program/modules/download/download.php");
-   $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=write_access&err_text=adm_my_files/download&url=$load_url";
-   header($location);
-   exit();
+    $load_url = urlencode("$g_root_path/adm_program/modules/download/download.php");
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=write_access&err_text=adm_my_files/download&url=$load_url";
+    header($location);
+    exit();
 }
 
 $folder = urldecode($_GET['folder']);
@@ -111,23 +118,23 @@ $act_folder = "../../../adm_my_files/download";
 // und Ordnerpfad zusammensetzen
 if(strlen($default_folder) > 0)
 {
-   if(strpos($default_folder, "..") !== false)
-   {
-      $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_folder";
-      header($location);
-      exit();
-   }
-   $act_folder = "$act_folder/$default_folder";
+    if(strpos($default_folder, "..") !== false)
+    {
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_folder";
+        header($location);
+        exit();
+    }
+    $act_folder = "$act_folder/$default_folder";
 }
 if(strlen($folder) > 0)
 {
-   if(strpos($folder, "..") !== false)
-   {
-      $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_folder";
-      header($location);
-      exit();
-   }
-   $act_folder = "$act_folder/$folder";
+    if(strpos($folder, "..") !== false)
+    {
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_folder";
+        header($location);
+        exit();
+    }
+    $act_folder = "$act_folder/$folder";
 }
 
 // pruefen, ob Datei oder Ordner uebergeben wurde
@@ -141,96 +148,112 @@ if($_GET["mode"] == 1)
         header($location);
         exit();
     }
-   
-   // Dateien hochladen
-   if(strpos($_POST['new_name'], "..") !== false)
-      $err_code = "invalid_file";
-   else
-   {
-      $local_file = $_FILES['userfile']['name'];
-      //Dateigroesse ueberpruefen Servereinstellungen
-      if ($_FILES['userfile']['error']==1){
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=file_2big_server";
-        header($location);
-        exit();
-      }
-      //Dateigroesse ueberpruefen Administratoreinstellungen
-      if ($_FILES['userfile']['size']>($g_preferences['max_file_upload_size'])*1000){
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=file_2big";
-        header($location);
-        exit();
-      }
-      // Datei-Extension ermitteln
-      if(strpos($local_file, ".") !== false)
-      {
-         $file_ext  = substr($local_file, strrpos($local_file, ".")+1);
-         $file_name = substr($local_file, 0, strrpos($local_file, "."));
-      }
-      else
-      {
-         $file_ext  = "";
-         $file_name = $local_file;
-      }
+    
+    // Dateien hochladen
+    if(strpos($_POST['new_name'], "..") !== false)
+    {
+        $err_code = "invalid_file";
+    }
+    else
+    {
+        $local_file = $_FILES['userfile']['name'];
+        //Dateigroesse ueberpruefen Servereinstellungen
+        if ($_FILES['userfile']['error']==1)
+        {
+            $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=file_2big_server";
+            header($location);
+            exit();
+        }
+        
+        //Dateigroesse ueberpruefen Administratoreinstellungen
+        if ($_FILES['userfile']['size']>($g_preferences['max_file_upload_size'])*1000)
+        {
+            $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=file_2big";
+            header($location);
+            exit();
+        }
+        
+        // Datei-Extension ermitteln
+        if(strpos($local_file, ".") !== false)
+        {
+            $file_ext  = substr($local_file, strrpos($local_file, ".")+1);
+            $file_name = substr($local_file, 0, strrpos($local_file, "."));
+        }
+        else
+        {
+            $file_ext  = "";
+            $file_name = $local_file;
+        }
 
-      // wenn neuer Name uebergeben wurde, dann diesen nehmen
-      if(strlen($_POST['new_name']) > 0)
-         $file_name = $_POST['new_name'];
+        // wenn neuer Name uebergeben wurde, dann diesen nehmen
+        if(strlen($_POST['new_name']) > 0)
+        {
+            $file_name = $_POST['new_name'];
+        }
 
-      // Zielpfad mit Dateinamen zusammensetzen
-      if(strlen($file_ext) > 0)
-         $file_name = "$file_name.$file_ext";
-
-      $ret = isValidFileName($file_name, true);
-      if($ret == 0)
-      {
-         // Datei hochladen
-         if(move_uploaded_file($_FILES['userfile']['tmp_name'], "$act_folder/$file_name"))
-         {
-            $err_code = "upload_file";
-            $err_text = $file_name;
-            $url = urlencode("$g_root_path/adm_program/modules/download/download.php?folder=$folder&default_folder=$default_folder");
-         }
-         else
-            $url= "$g_root_path/adm_program/modules/download/download.php?default_folder=$default_folder&folder=$folder";
-      }
-      else
-      {
-         if($ret == -2)
-         {
-            $err_code = "invalid_file_name";
-            $err_text = $file_name;
-         }
-         elseif($ret == -3)
-         {
-            $err_code = "invalid_file_extension";            
-         }
-         $url= "$g_root_path/adm_program/modules/download/download.php?default_folder=$default_folder&folder=$folder";
-      }
-   }
+        // Zielpfad mit Dateinamen zusammensetzen
+        if(strlen($file_ext) > 0)
+        {
+            $file_name = "$file_name.$file_ext";
+        }
+		
+        $ret = isValidFileName($file_name, true);
+        if($ret == 0)
+        {
+            // Datei hochladen
+            if(move_uploaded_file($_FILES['userfile']['tmp_name'], "$act_folder/$file_name"))
+            {
+                $err_code = "upload_file";
+                $err_text = $file_name;
+                $url = urlencode("$g_root_path/adm_program/modules/download/download.php?folder=$folder&default_folder=$default_folder");
+            }
+            else
+            {
+                $url= "$g_root_path/adm_program/modules/download/download.php?default_folder=$default_folder&folder=$folder";
+            }
+        }
+        else
+        {
+        	if($ret == -1)
+        	{
+        		$err_code = "feld";
+        		$err_text = urlencode("Datei ausw&auml;hlen");
+        	}
+            elseif($ret == -2)
+            {
+                $err_code = "invalid_file_name";
+                $err_text = $file_name;
+            }
+            elseif($ret == -3)
+            {
+                $err_code = "invalid_file_extension";            
+            }
+        }
+    }
 }
 elseif($_GET["mode"] == 2)
 {
-   //L?schen der Datei/Ordner
+   // Loeschen der Datei/Ordner
    
-   if($is_folder)
-   {
-      If ( removeDir ("$act_folder/$file"))
-      {
-         $err_code = "delete_folder";
-         $err_text = $file;
-         $url= "$g_root_path/adm_program/modules/download/download.php?default_folder=$default_folder&folder=$folder";
-      }
-   }
-   else
-   {
-      IF (unlink("$act_folder/$file"))
-      {
-         $err_code = "delete_file";
-         $err_text = $file;
-         $url= "$g_root_path/adm_program/modules/download/download.php?default_folder=$default_folder&folder=$folder";
-      }
-   }
-   $url = urlencode("$g_root_path/adm_program/modules/download/download.php?folder=$folder&default_folder=$default_folder");
+    if($is_folder)
+    {
+        if( removeDir ("$act_folder/$file"))
+        {
+            $err_code = "delete_folder";
+            $err_text = $file;
+            $url= "$g_root_path/adm_program/modules/download/download.php?default_folder=$default_folder&folder=$folder";
+        }
+    }
+    else
+    {
+        if(unlink("$act_folder/$file"))
+        {
+            $err_code = "delete_file";
+            $err_text = $file;
+            $url= "$g_root_path/adm_program/modules/download/download.php?default_folder=$default_folder&folder=$folder";
+        }
+    }
+    $url = urlencode("$g_root_path/adm_program/modules/download/download.php?folder=$folder&default_folder=$default_folder");
 }
 elseif($_GET["mode"] == 3)
 {
