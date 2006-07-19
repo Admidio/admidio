@@ -538,7 +538,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
                 <div style=\"margin-top: 6px;\">
                     <hr width=\"85%\" />
                     Hilfe: <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=veranst_help','Message','width=500, height=350, left=310,top=200,scrollbars=no')\">
+                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=veranst_help','Message','width=500, height=400, left=310,top=200,scrollbars=no')\">
                     <hr width=\"85%\" />
                     <div style=\"margin-top: 6px;\">
                         <button name=\"zurueck\" type=\"button\" tabindex=\"7\" value=\"zurueck\" onclick=\"history.back()\">

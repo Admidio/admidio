@@ -131,7 +131,7 @@ require("../../../adm_config/body_top.php");
                     if($g_preferences['enable_bbcode'] == 1)
                     {
                       echo "<br><br>
-                      <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=400,left=310,top=200,scrollbars=yes')\" tabindex=\"6\">Text formatieren</a>";
+                      <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=500,left=310,top=200,scrollbars=yes')\" tabindex=\"6\">Text formatieren</a>";
                     }
                     echo "</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
@@ -160,7 +160,7 @@ require("../../../adm_config/body_top.php");
                             echo " value=\"1\" />
                             <label for=\"global\">". $_GET["headline"]. " f&uuml;r mehrere Organisationen sichtbar</label>&nbsp;
                             <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=termin_global','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\">
+                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=termin_global','Message','width=400,height=350,left=310,top=200,scrollbars=yes')\">
                         </div>
                     </div>";
                 }

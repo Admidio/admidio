@@ -93,7 +93,7 @@ require("../../../adm_config/body_top.php");
                     <div style=\"text-align: left; margin-left: 50%;\">
                         <input type=\"text\" name=\"email_administrator\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $g_preferences['email_administrator']. "\">
                         <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=mail_admin','Message','width=400,height=220,left=310,top=200,scrollbars=yes')\">
+                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=mail_admin','Message','width=400,height=320,left=310,top=200,scrollbars=yes')\">
                     </div>
                 </div>
                 <div style=\"margin-top: 6px;\">
@@ -182,7 +182,7 @@ require("../../../adm_config/body_top.php");
                             }
                             echo " value=\"1\" />
                             <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=send_email_extern','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
+                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=send_email_extern','Message','width=400,height=400,left=310,top=200,scrollbars=yes')\">
                         </div>
                     </div>
 
@@ -196,7 +196,7 @@ require("../../../adm_config/body_top.php");
                             }
                             echo " value=\"1\" />
                             <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=350,left=310,top=200,scrollbars=yes')\">
+                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\">
                         </div>
                     </div>
 
@@ -210,7 +210,7 @@ require("../../../adm_config/body_top.php");
                             }
                             echo " value=\"1\" />
                             <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=enable_rss','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
+                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=enable_rss','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\">
                         </div>
                     </div>
                 </div>
@@ -218,7 +218,7 @@ require("../../../adm_config/body_top.php");
                 <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 95%;\">
                     <div class=\"groupBoxHeadline\">Maximale Dateigr&ouml;&szlig;e f&uuml;r&nbsp;&nbsp;
                         <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=file_size','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
+                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=file_size','Message','width=400,height=350,left=310,top=200,scrollbars=yes')\">
                     </div>
                     <div style=\"margin-top: 6px;\">
                         <div style=\"text-align: right; width: 47%; float: left;\">E-Mail-Attachments:</div>
@@ -244,7 +244,7 @@ require("../../../adm_config/body_top.php");
                         <div style=\"text-align: left; margin-left: 50%;\">
                             <input type=\"text\" name=\"photo_save_scale\" size=\"4\" maxlength=\"4\" value=\"". $g_preferences['photo_save_scale']. "\"> Pixel
                             <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_save_scale','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
+                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_save_scale','Message','width=400,height=350,left=310,top=200,scrollbars=yes')\">
                          </div>
                     </div>
                 </div>";

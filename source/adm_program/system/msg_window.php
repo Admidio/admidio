@@ -299,19 +299,19 @@ echo "
                 echo " <h3>Was ist zu tun?</h3>
                     Auf den &bdquo;Durchsuchen&ldquo; Button klicken und die gew&uuml;nschte Bilddatei auf der
                     Festplatte ausw&auml;hlen. Den Vorgang ggf. bis zu f&uuml;nfmal wiederholen,
-                    bis alle Felder gef&uuml;llt sind. Dann auf &bdquo;Bilder Speichern&ldquo; klicken und ein wenig Geduld haben.
+                    bis alle Felder gef&uuml;llt sind. Dann auf &bdquo;Bilder hochladen&ldquo; klicken und ein wenig Geduld haben.
                     <br>
                     <h3>Hinweise:</h3>
                     Die Bilder m&uuml;ssen im JPG Format gespeichert sein.
-                    Die Bilder werden automatisch auf eine Aufl&ouml;sung von 640Pixel der
+                    Die Bilder werden automatisch auf eine Aufl&ouml;sung von ".$g_preferences['photo_save_scale']." Pixel der
                     l&auml;ngeren Seite skaliert (andere Seite im Verh&auml;ltnis) bevor sie gespeichert werden.
                     Der Name der Dateien spielt keine Rolle, da sie automatisch mit fortlaufender
                     Nummer benannt werden.<br>
                     Da auch bei schnellen Internetanbindungen das Hochladen von gr&ouml;&szlig;eren Dateien einige
                     Zeit in Anspruch nehmen kann, empfehlen wir zun&auml;chst alle hoch zu ladenden Bilder in einen
-                    Sammelordner zu kopieren und diese dann mit einer Bildbearbeitungssoftware auf 640 Pixel
-                    (l&auml;ngere Bildseite) zu skalieren. Die JPG-Qualit&auml;t sollte beim Abspeichern auf 100%
-                    (also keine Komprimierung) gestellt werden.
+                    Sammelordner zu kopieren und diese dann mit einer Bildbearbeitungssoftware auf ".$g_preferences['photo_save_scale']." Pixel
+                    (l&auml;ngere Bildseite) zu skalieren. Die JPG-Qualit&auml;t sollte beim Abspeichern auf mindestens 90%
+                    (also geringe Komprimierung) gestellt werden.
                     Die maximale Dateigr&ouml;&szlig;e eines hochgeladenen Bildes wird nur durch die Servereinstellungen beschr&auml;nkt.
                     ";
                 break;
@@ -330,15 +330,15 @@ echo "
                 echo " <h3>Warnung!!!</h3>
                     Der zugeh&ouml;rige Ordner wurde nicht gefunden. Sollte er bewusst &uuml;ber FTP gel&ouml;scht worden sein
                     oder nicht mehr die M&ouml;glichkeit bestehen ihn wieder herzustellen, bitte
-                    den Datensatz mit Button in der Bearbeitungsspalte l&ouml;schen (<img src=\"$g_root_path/adm_program/images/cross.png\" style=\"vertical-align: top;\">).
+                    den Datensatz mit klick auf das (<img src=\"$g_root_path/adm_program/images/cross.png\" style=\"vertical-align: top;\">)Icon l&ouml;schen.
                     Besuchern der Website ohne Fotoverwaltungsrecht, wird diese Veranstaltung nicht mehr angezeigt.";
                 break;
 
             case "not_approved":
                 echo " <h3>Warnung!!!</h3>
                     Die Veranstaltung ist z.Zt. gesperrt und wird Homepagebesuchern deswegen nicht angezeigt. Zum Freigeben bitte
-                    den entsprechende Button (<img src=\"$g_root_path/adm_program/images/key.png\" border=\"0\">)
-                    in der Bearbeitungsspalte nutzen.";
+                    den entsprechende Icon (<img src=\"$g_root_path/adm_program/images/key.png\" border=\"0\">)
+                    in der Bearbeitungszeile nutzen.";
                 break;
 
             default:

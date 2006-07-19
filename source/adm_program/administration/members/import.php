@@ -125,7 +125,7 @@ require("../../../adm_config/body_top.php");
                             }
                         echo "</select>&nbsp;
                         <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                        onClick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=role_assign','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
+                        onClick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=role_assign','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\">
                     </div>
                 </div>
                 <div style=\"margin-top: 15px;\">
