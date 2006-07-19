@@ -164,7 +164,7 @@ require("../../../adm_config/body_top.php");
                    // Rolle wurde uebergeben, dann E-Mails nur an diese Rolle schreiben
                    echo "<input class=\"readonly\" readonly type=\"text\" name=\"rolle\" size=\"28\" maxlength=\"30\" value=\"". $_GET['rolle']. "\">
                       &nbsp;<img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" alt=\"Hilfe\" title=\"Hilfe\"
-                      onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_mail','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">";
+                      onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_mail','Message','width=400,height=400,left=310,top=200,scrollbars=yes')\">";
                }
                else
                {
@@ -211,7 +211,7 @@ require("../../../adm_config/body_top.php");
 
                    echo "</select>&nbsp;
                    <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" alt=\"Hilfe\" title=\"Hilfe\"
-                   onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_mail','Message','width=400,height=200,left=310,top=200')\">";
+                   onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_mail','Message','width=400,height=400,left=310,top=200')\">";
                }
             echo "</div>
          </div>
