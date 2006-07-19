@@ -238,7 +238,7 @@ require("../../../adm_config/body_top.php");
                 //Einstellungen Photomodul
                 echo"
                 <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 95%;\">
-                    <div class=\"groupBoxHeadline\">Einstellungen Photomodul&nbsp;&nbsp; </div>
+                    <div class=\"groupBoxHeadline\">Einstellungen Fotomodul&nbsp;&nbsp; </div>
                     <div style=\"margin-top: 6px;\">
                         <div style=\"text-align: right; width: 47%; float: left;\">Skalierung beim Speichern:</div>
                         <div style=\"text-align: left; margin-left: 50%;\">
