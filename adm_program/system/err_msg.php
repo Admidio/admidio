@@ -82,7 +82,7 @@ if (!isset($_GET['timer']))
     $_GET['timer'] = 0;
 }
 
-if (!isset($_GET['url']))
+if (!isset($_GET['url']) || strlen($_GET['url']) == 0)
 {
     $load_url = "";
 }
