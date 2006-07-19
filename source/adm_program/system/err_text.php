@@ -64,7 +64,7 @@ function getErrorText($error_code, $error_text, $g_current_organization)
             break;
 
         case "delete_role":
-            $error_str = "Willst du die Rolle <b>$error_text</b>wirklich l&ouml;schen ?<br><br>
+            $error_str = "Willst du die Rolle <b>$error_text</b> wirklich l&ouml;schen ?<br><br>
             Es werden damit auch alle Mitgliedschaften entg&uuml;tig entfernt.";
             break;
 
