@@ -91,7 +91,7 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
         {
             $sql = "INSERT INTO ". TBL_LINKS. " ( lnk_org_id, lnk_usr_id, lnk_timestamp,
                                                   lnk_name, lnk_url, lnk_description)
-                                     VALUES ('$g_current_organization->id', '$g_current_user->id', '$act_date',
+                                     VALUES ($g_current_organization->id, $g_current_user->id, '$act_date',
                                              {0}, {1}, {2})";
             $sql    = prepareSQL($sql, array($linkName, $linkUrl, $description));
             $result = mysql_query($sql, $g_adm_con);
@@ -101,9 +101,9 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
         {
             $sql = "UPDATE ". TBL_LINKS. " SET   lnk_name   = {0},
                                                  lnk_url    = {1},
-                                                 lnk_description  = {2},
-                                                 lnk_timestamp    = '$act_date',
-                                                 lnk_usr_id       = '$g_current_user->id'
+                                                 lnk_description   = {2},
+                                                 lnk_last_change   = '$act_date',
+                                                 lnk_usr_id_change = $g_current_user->id
                     WHERE lnk_id = {3}";
             $sql    = prepareSQL($sql, array($linkName, $linkUrl, $description, $_GET['lnk_id']));
             $result = mysql_query($sql, $g_adm_con);
