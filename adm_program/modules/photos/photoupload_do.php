@@ -164,7 +164,7 @@ if($g_session_valid & editPhoto())
                                 //Groessnanpassung Bild und Bericht
                                 if(move_uploaded_file($_FILES["bilddatei"]["tmp_name"][$x], "../../../adm_my_files/photos/temp$y.jpg"))
                                 {
-                                    echo"<img src=\"resize.php?scal=640&ziel=$ordner/$bildnr&aufgabe=speichern&nr=$y\"><br><br>";
+                                    echo"<img src=\"resize.php?scal=".$g_preferences['photo_save_scale']."&ziel=$ordner/$bildnr&aufgabe=speichern&nr=$y\"><br><br>";
                                 }
                                 else
                                 {
