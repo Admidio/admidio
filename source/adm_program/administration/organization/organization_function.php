@@ -123,6 +123,7 @@ writeOrgaPreferences('enable_bbcode',       $_POST['enable_bbcode']);
 writeOrgaPreferences('enable_rss',          $_POST['enable_rss']);
 writeOrgaPreferences('max_email_attachment_size', $_POST['max_email_attachment_size']);
 writeOrgaPreferences('max_file_upload_size', $_POST['max_file_upload_size']);
+writeOrgaPreferences('photo_save_scale', $_POST['photo_save_scale']);
 
 // zur Ausgangsseite zurueck
 $load_url = urlencode("$g_root_path/adm_program/administration/organization/organization.php?url=". $_GET['url']);

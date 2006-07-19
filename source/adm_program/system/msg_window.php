@@ -159,7 +159,13 @@ echo "
                       Wenn du 0 als Dateigr&ouml;&szlig;e eintr&auml;gst, deaktivierst du die entsprechende
                       Funktion f&uuml;r alle Benutzer.";
                 break;
-
+            
+            case "photo_save_scale":
+                echo "Beim hochladen werden alle Bilder neu Skalliert. Der hier eingegeben Pixelwert
+                      ist der Parameter f&uuml;r die l&auml;ngere Seite des Bildes, egal ob das Bild im Hoch-
+                      oder Querformat &uuml;bergeben wurde. Die ander Seite wird im Verh&auml;tnis berechnet.";
+                break;
+            
             case "leader":
                 echo "Leiter werden in den Mitgliederlisten dieser Rolle gesondert aufgef&uuml;hrt.<br><br>
                       Leiter haben au&szlig;erdem die M&ouml;glichkeit neue Mitglieder aus der Organisation 
