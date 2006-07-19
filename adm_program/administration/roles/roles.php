@@ -87,22 +87,26 @@ require("../../../adm_config/body_top.php");
 			&nbsp;&nbsp;&nbsp;&nbsp;";
 			if($valid == true)
 			{
-				$description = "Inaktive Rollen";
+				$description_lnk = "Inaktive Rollen";
+				$description_lst = "Aktive Rollen";
+				$image       = "wand_gray.png";
 			}
 			else
 			{
-				$description = "Aktive Rollen";
+				$description_lnk = "Aktive Rollen";
+				$description_lst = "Inaktive Rollen";
+				$image       = "wand.png";
 			}
             echo "<span class=\"iconLink\">
                 <a class=\"iconLink\" href=\"roles.php?inactive=$valid\"><img 
-                src=\"$g_root_path/adm_program/images/dummy.gif\" style=\"vertical-align: middle;\" border=\"0\" alt=\"$description\"></a>
-                <a class=\"iconLink\" href=\"roles.php?inactive=$valid\">$description</a>
+                src=\"$g_root_path/adm_program/images/$image\" style=\"vertical-align: middle;\" border=\"0\" alt=\"$description_lnk\"></a>
+                <a class=\"iconLink\" href=\"roles.php?inactive=$valid\">$description_lnk</a>
             </span>
         </p>
 
         <table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\">
             <tr>
-                <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;Rolle</th>
+                <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;$description_lst</th>
                 <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;Kategorie</th>
                 <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;Berechtigungen</th>
                 <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Rolle nur f&uuml;r Moderatoren sichtbar\" title=\"Rolle nur f&uuml;r Moderatoren sichtbar\"></th>
