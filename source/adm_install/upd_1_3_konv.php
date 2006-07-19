@@ -94,6 +94,11 @@ while($row_orga = mysql_fetch_object($result_orga))
             VALUES ($row_orga->org_id, 'default_country', 'Deutschland')";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
+    
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+            VALUES ($row_orga->org_id, 'photo_save_scale', '640')";
+    $result = mysql_query($sql, $connection);
+    if(!$result) showError(mysql_error());
 }
 
 // unnoetige Orga-Felder koennen jetzt geloescht werden
