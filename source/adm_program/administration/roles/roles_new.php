@@ -144,7 +144,7 @@ require("../../../adm_config/body_top.php");
    <form action=\"roles_function.php?rol_id=". $_GET['rol_id']. "&amp;mode=2\" method=\"post\" name=\"TerminAnlegen\">
       <div class=\"formHead\">";
          if($_GET['rol_id'] > 0)
-            echo strspace("Rolle �ndern", 2);
+            echo strspace("Rolle &auml;ndern", 2);
          else
             echo strspace("Rolle anlegen", 2);
       echo "</div>
