@@ -122,9 +122,10 @@ elseif($_GET["mode"] == 2)
             // Schauen, ob die Rolle bereits existiert
             $sql    = "SELECT COUNT(*) FROM ". TBL_ROLES. "
                         WHERE rol_org_shortname LIKE '$g_organization'
-                          AND rol_name          LIKE {0}
-                          AND rol_rlc_id        =    {1} ";
-            $sql    = prepareSQL($sql, array($_POST['name'], $_POST['category']));
+                          AND rol_name          LIKE {0} ";
+                          // erst einmal rausgenommen, noch sind keine doppelten Namen moeglich
+                          //AND rol_rlc_id        =    {1} ";
+            $sql    = prepareSQL($sql, array($_POST['name']/*, $_POST['category']*/));
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
             $row = mysql_fetch_array($result);
