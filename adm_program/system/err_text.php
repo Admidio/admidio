@@ -255,7 +255,7 @@ function getErrorText($error_code, $error_text, $g_current_organization)
             break;
             
         case "max_members_roles_change":
-            $error_str = "Speichern nicht m&ouml;glich, die Rolle hat bereits mehr Mitgleider als die von Dir eingegeben Begrenzung.";
+            $error_str = "Speichern nicht m&ouml;glich, die Rolle hat bereits mehr Mitglieder als die von Dir eingegeben Begrenzung.";
             break;
 
         case "write_access":
