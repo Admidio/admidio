@@ -73,7 +73,7 @@ function showError($err_msg, $err_head = "Fehler", $mode = 1)
                 {
                     // Erfolgreich durchgefuehrt
                     echo 'self.location.href=\'../adm_program/index.php\'">
-                    <img src="../adm_program/images/application_list_view.png" style="vertical-align: middle; padding-bottom: 1px;" width="16" height="16" border="0" alt="Zurueck">
+                    <img src="../adm_program/images/application_view_list.png" style="vertical-align: middle; padding-bottom: 1px;" width="16" height="16" border="0" alt="Zurueck">
                     &nbsp;Admidio &Uuml;bersicht';
                 }
                 echo '</button></p>
@@ -454,9 +454,9 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
     db_error($result);
     
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-            VALUES ($row_orga->org_id, 'photo_save_scale', '640')";
+                                       VALUES ($org_id, 'photo_save_scale', '640')";
     $result = mysql_query($sql, $connection);
-    if(!$result) showError(mysql_error());
+    db_error($result);
 
     // Rollen-Kategorie eintragen
     $sql = "INSERT INTO ". TBL_ROLE_CATEGORIES. " (rlc_org_shortname, rlc_name, rlc_locked)
