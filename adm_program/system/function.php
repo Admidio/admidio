@@ -34,7 +34,7 @@ function db_error($result)
     {
         if(headers_sent() == false)
         {
-        	$error = urlencode("Errorcode: ". mysql_errno(). "<br>". mysql_error());
+            $error = urlencode("Errorcode: ". mysql_errno(). "<br>". mysql_error());
             $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=mysql&err_text=$error";
             header($location);
         }
@@ -50,7 +50,7 @@ function db_error($result)
 
 function getVersion()
 {
-    return "1.3 Beta";
+    return "1.4 Beta";
 }
 
 // die uebergebenen Variablen fuer den SQL-Code werden geprueft
