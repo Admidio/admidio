@@ -221,7 +221,7 @@ require("../../../adm_config/body_top.php");
             // Ermittlung des Datums
             $dateidatum   = date ("d.m.Y", filemtime("$act_folder/$ordnerarray[$i]"));
             //Ermittlung der dateiendung
-            $dateiendung  = substr($ordnerarray[$i], strrpos($ordnerarray[$i], ".")+1);
+            $dateiendung  = strtolower(substr($ordnerarray[$i], strrpos($ordnerarray[$i], ".")+1));
 
             //Auszugebendes Icon
             if($dateiendung=="gif"
