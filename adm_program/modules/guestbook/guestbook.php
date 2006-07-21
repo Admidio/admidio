@@ -158,7 +158,7 @@ require("../../../adm_config/body_top.php");
                 <div class=\"boxBody\" style=\"overflow: hidden;\">
                     <div class=\"boxHead\">
                         <div style=\"text-align: left; float: left;\">
-                            <img src=\"$g_root_path/adm_program/images/comment.png\" style=\"vertical-align: top;\" alt=\"". strSpecialChars2Html($row->gbo_name). "\">&nbsp;".
+                            <img src=\"$g_root_path/adm_program/images/comment.png\" style=\"vertical-align: middle;\" alt=\"". strSpecialChars2Html($row->gbo_name). "\">&nbsp;".
                             strSpecialChars2Html($row->gbo_name);
 
                             // Falls eine Homepage des Users angegeben wurde, soll der Link angezeigt werden...
@@ -166,7 +166,7 @@ require("../../../adm_config/body_top.php");
                             {
                                 echo "
                                 <a href=\"$row->gbo_homepage\" target=\"_blank\">
-                                <img src=\"$g_root_path/adm_program/images/globe.png\" style=\"vertical-align: top;\" alt=\"Gehe zu $row->gbo_homepage\"
+                                <img src=\"$g_root_path/adm_program/images/globe.png\" style=\"vertical-align: middle;\" alt=\"Gehe zu $row->gbo_homepage\"
                                 title=\"Gehe zu $row->gbo_homepage\" border=\"0\"></a>";
                             }
 
@@ -175,7 +175,7 @@ require("../../../adm_config/body_top.php");
                             {
                                 echo "
                                 <a href=\"mailto:$row->gbo_email\">
-                                <img src=\"$g_root_path/adm_program/images/mail.png\" style=\"vertical-align: top;\" alt=\"Mail an $row->gbo_email\"
+                                <img src=\"$g_root_path/adm_program/images/mail.png\" style=\"vertical-align: middle;\" alt=\"Mail an $row->gbo_email\"
                                 title=\"Mail an $row->gbo_email\" border=\"0\"></a>";
                             }
 
@@ -188,11 +188,11 @@ require("../../../adm_config/body_top.php");
                             if (editGuestbook())
                             {
                                     echo "
-                                    <img src=\"$g_root_path/adm_program/images/edit.png\" style=\"cursor: pointer;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"
+                                    <img src=\"$g_root_path/adm_program/images/edit.png\" style=\"cursor: pointer; vertical-align: middle;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"
                                     onclick=\"self.location.href='guestbook_new.php?id=$row->gbo_id&amp;headline=". $_GET['headline']. "'\">";
 
                                     echo "
-                                    <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer;\" width=\"16\" height=\"16\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" ";
+                                    <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer; vertical-align: middle;\" width=\"16\" height=\"16\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" ";
                                     $load_url = urlencode("$g_root_path/adm_program/modules/guestbook/guestbook_function.php?id=$row->gbo_id&amp;mode=2&amp;url=$g_root_path/adm_program/modules/guestbook/guestbook.php");
                                     echo " onclick=\"self.location.href='$g_root_path/adm_program/system/err_msg.php?err_code=delete_gbook_entry&amp;err_text=". urlencode($row->gbo_name). "&amp;err_head=L&ouml;schen&amp;button=2&amp;url=$load_url'\">";
 
