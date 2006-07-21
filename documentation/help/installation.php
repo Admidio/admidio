@@ -70,7 +70,7 @@
 
    <div style="text-align: right;">
       <b>N&auml;chster Artikel:</b>&nbsp;
-      <a href="index.php?help/integrieren.php">Admidio in die bestehende Homepage integrieren</a>&nbsp;
-      <a href="index.php?help/integrieren.php"><img src="images/forward.png" style="vertical-align: bottom; border: 0px;" alt="Admidio in die bestehende Homepage integrieren" title="Admidio in die bestehende Homepage integrieren" /></a>
+      <a href="index.php?help/module_einbauen.php">Aufruf der Module einbauen</a>&nbsp;
+      <a href="index.php?help/module_einbauen.php"><img src="help/images/forward.png" style="vertical-align: bottom; border: 0px;" alt="Aufruf der Module einbauen" title="Aufruf der Module einbauen" /></a>
    </div>
 </td>

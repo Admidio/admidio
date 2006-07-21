@@ -2,7 +2,7 @@
 <?php include("help_menu.php"); ?>
 
 <td style="background-color: #ffffff; padding-left: 15px;">
-   <h2>Admidio in die bestehende Homepage integrieren:</h2>
+   <h2>Admidio dem eigenen Layout anpassen:</h2>
 
    <p>Nachdem Sie Admidio erfolgreich installiert haben, m&ouml;chten Sie anfangen
       bestimmte Module in Ihre Homepage zu integrieren. Admidio liefert von
@@ -71,11 +71,11 @@
    <br />
 
    <div style="text-align: left; float: left;">
-      <a href="index.php?help/installation.php"><img src="images/back.png" style="vertical-align: bottom; border: 0px;" alt="Datenbank installieren und Basisdaten anlegen" title="Datenbank installieren und Basisdaten anlegen" /></a>
+      <a href="index.php?help/module_einbauen.php"><img src="help/images/back.png" style="vertical-align: bottom; border: 0px;" alt="Aufruf der Module einbauen" title="Aufruf der Module einbauen" /></a>
    </div>
    <div style="text-align: right;">
       <b>N&auml;chster Artikel:</b>&nbsp;
       <a href="index.php?help/rollen.php">Rollen anlegen und pflegen</a>&nbsp;
-      <a href="index.php?help/rollen.php"><img src="images/forward.png" style="vertical-align: bottom; border: 0px;" alt="Rollen anlegen und pflegen" title="Rollen anlegen und pflegen" /></a>
+      <a href="index.php?help/rollen.php"><img src="help/images/forward.png" style="vertical-align: bottom; border: 0px;" alt="Rollen anlegen und pflegen" title="Rollen anlegen und pflegen" /></a>
    </div>
 </td>
