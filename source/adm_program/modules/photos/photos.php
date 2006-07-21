@@ -529,9 +529,9 @@ echo "
                             <div style=\"margin: 8px 4px 4px 4px; font-size: 8pt; text-align: left;\">
                                 Bilder: ".$bildersumme." <br>
                                 Datum: ".mysqldate("d.m.y", $adm_photo_list["pho_begin"]);
-                                if($adm_photo["pho_end"] != $adm_photo["pho_begin"])
+                                if($adm_photo_list["pho_end"] != $adm_photo_list["pho_begin"])
                                 {
-                                    echo " bis ".mysqldate("d.m.y", $adm_photo["pho_end"]);
+                                    echo " bis ".mysqldate("d.m.y", $adm_photo_list["pho_end"]);
                                 }
                                 echo "<br>Fotos von: ".$adm_photo_list["pho_photographers"]."<br>";
 
