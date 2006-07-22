@@ -5,7 +5,7 @@
    <h2>Admidio auf eine neue Version updaten:</h2>
 
    <ul style="padding-left: 15px;">
-   <li><p>Nachdem Sie Admidio von <a href="index.php?download.html">dieser Seite</a> heruntergeladen haben,
+   <li><p>Nachdem Sie Admidio von <a href="index.php?download.php">dieser Seite</a> heruntergeladen haben,
    entpacken Sie die Zip-Datei lokal auf Ihrem Rechner. L&ouml;schen Sie auf Ihrem Webspace die Ordner
    <b>adm_install</b> (wenn nicht schon geschehen) und <b>adm_program</b>.</p>
    <p>( Die Ordner <i>adm_config</i> und <i>adm_my_files</i> d&uuml;rfen Sie auf keinen Fall l&ouml;schen, da hier Ihre Einstellungen,
