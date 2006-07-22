@@ -69,7 +69,7 @@ Kurzanleitung bei einen Versionswechsel:
   und adm_program der bisherigen Version
 - Kopieren Sie die Ordner adm_install und adm_program der neuen Version
   an diese Stelle
-- Rufen Sie die Datei index.html im Verzeichnis adm_install auf und
+- Rufen Sie die Datei index.php im Verzeichnis adm_install auf und
   gehen dort das Update Schritt für Schritt durch
 
  4. Bugs
