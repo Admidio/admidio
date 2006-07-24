@@ -217,12 +217,12 @@ require("../adm_config/body_top.php");
                 <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/links/links.php\">Weblinks</a></span><br />
                 <span class=\"textDescription\">Hier k&ouml;nnen Links zu interessanten Webseiten abgelegt werden.</span>
             </div>
-        </div>
-        <br /><br />";
+        </div>";
 
         if(isModerator() || editUser())
         {
-            echo "
+            echo "<br /><br />
+            
             <div class=\"formHead\">";
                 echo strspace("Administration", 1);
             echo "</div>
