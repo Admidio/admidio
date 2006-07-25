@@ -2,18 +2,12 @@
 <?php include("help_menu.php"); ?>
 
 <td style="background-color: #ffffff; padding-left: 15px;">
-   <h2>Admidio dem eigenen Layout anpassen:</h2>
+	<h2>Admidio dem eigenen Layout anpassen:</h2>
 
-   <p>Nachdem Sie Admidio erfolgreich installiert haben, m&ouml;chten Sie anfangen
-      bestimmte Module in Ihre Homepage zu integrieren. Admidio liefert von
-      Haus aus eine Reihe Module (Ank&uuml;ndigungen, Termine, Listen, Profile ...) mit.
-      Sie k&ouml;nnen selber entscheiden, welche Module Sie benutzen wollen. Vielleicht
-      fangen Sie auch erst einmal mit ein oder zwei an und erg&auml;nzen sp&auml;ter weitere
-      Module zu Ihrer Homepage.</p>
-
-   <p>Egal, wie weit Sie Admidio in Ihre Homepage integrieren, m&uuml;ssen Sie Admidio an
-      Ihre Homepage anpassen. Dazu gibt es vier Dateien im Ordner adm_config, die
-      Sie ab&auml;ndern m&uuml;ssen und mit denen Sie Admidio sehr flexibel ver&auml;ndern k&ouml;nnen.</p>
+	<p>Nachdem Sie nun die Admidio-Module erfolgreich auf Ihrer Homepage verlinkt haben, 
+   		m&ouml;chten Sie nun das Layout der Module Ihrer Homepage anpassen.
+		Dazu gibt es vier Dateien im Ordner adm_config, die Sie ab&auml;ndern m&uuml;ssen 
+		und mit denen Sie Admidio sehr flexibel ver&auml;ndern k&ouml;nnen.</p>
 
    <p>Um Ihnen zu zeigen, wie einfach diese Anpassung sein kann, haben wir ein
       <a style="target-new: tab;" href="http://de.selfhtml.org/layouts/nr02/index.htm">fertiges
