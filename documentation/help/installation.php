@@ -65,9 +65,9 @@
    der Installation das Verzeichnis <b>adm_install</b> auf Ihrem Webspace um einem Mi&szlig;brauch dieser
    Scripte vorzubeugen!</p></li>
 
-   <li><p>Um das Foto- oder das Downloadmodul nutzen zu können, müssen Sie den Ordnern <b>download</b>
-   und <b>photos</b> im Ordner <i>adm_my_files</i> über Ihr FTP-Programm die Dateirechte 777 geben, 
-   damit die Scripte dort Dateien ablegen können.</li>
+   <li><p>Um das Foto- oder das Downloadmodul nutzen zu k&ouml;nnen, m&uuml;ssen Sie den Ordnern <b>download</b>
+   und <b>photos</b> im Ordner <i>adm_my_files</i> &uuml;ber Ihr FTP-Programm die Dateirechte 777 geben,
+   damit die Scripte dort Dateien ablegen k&ouml;nnen.</li>
    </ul>
 
    <br />

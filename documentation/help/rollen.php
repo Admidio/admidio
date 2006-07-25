@@ -33,12 +33,12 @@
          <span style="font-family: Courier New, Courier">adm_program/administration/roles/roles.php</span></p>
       </li>
       <li>
-         <p>Hier sehen Sie im Moment nur die Rollen <i>Mitglied</i>, <i>Vorstand</i> und <i>Webmaster</i>. 
-         Der Rolle <i>Mitglied</i> und <i>Webmaster</i> sind Sie automatisch durch die Installation zugeordnet 
+         <p>Hier sehen Sie im Moment nur die Rollen <i>Mitglied</i>, <i>Vorstand</i> und <i>Webmaster</i>.
+         Der Rolle <i>Mitglied</i> und <i>Webmaster</i> sind Sie automatisch durch die Installation zugeordnet
          geworden sind.</p>
 
-         <a style="target-new: tab;" href="help/images/rollen_liste.png"><img 
-            style="border: 0px;" src="help/images/rollen_liste_thumb.png" alt="Liste aller angelegten Rollen und ihrer Berechtigungen" 
+         <a style="target-new: tab;" href="help/images/rollen_liste.png"><img
+            style="border: 0px;" src="help/images/rollen_liste_thumb.png" alt="Liste aller angelegten Rollen und ihrer Berechtigungen"
             title="Liste aller angelegten Rollen und ihrer Berechtigungen" /></a>
 
          <p>Klicken Sie nun auf <b>Rolle anlegen</b>.</p>
@@ -55,7 +55,7 @@
          aufrufen und sehen auch nicht im Profil einer Person, dass diese Mitglied
          dieser Rolle ist.</p>
 
-         <p><a style="target-new: tab;" href="help/images/rolle_erstellen.png"><img 
+         <p><a style="target-new: tab;" href="help/images/rolle_erstellen.png"><img
             style="border: 0px;" src="help/images/rolle_erstellen_thumb.png" alt="Rolle anlegen"/></a></p>
       </li>
       <li>

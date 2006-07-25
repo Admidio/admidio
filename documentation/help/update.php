@@ -10,11 +10,11 @@
    <b>adm_install</b> (wenn nicht schon geschehen) und <b>adm_program</b>.</p>
    <p>( Die Ordner <i>adm_config</i> und <i>adm_my_files</i> d&uuml;rfen Sie auf keinen Fall l&ouml;schen, da hier Ihre Einstellungen,
    Fotos und Downloads gespeichert werden! )</p></li>
-   
-   <li><p><i>Wichtig !<br />Falls Sie ein Bugfix-Update einspielen (diese ändern nur die 3. Stelle der Versionsnummer z.B. 1.2.0 nach 1.2.1)
+
+   <li><p><i>Wichtig !<br />Falls Sie ein Bugfix-Update einspielen (diese &auml;ndern nur die 3. Stelle der Versionsnummer z.B. 1.2.0 nach 1.2.1)
    brauchen Sie nur das Verzeichnis <b>adm_program</b> auf Ihrem Webserver zu ersetzen und haben damit das Update erfolgreich
-   durchgeführt.</p>
-   <p>Bei größeren Versionswechseln z.B. von 1.1 auf 1.2 müssen Sie noch die nachfolgenden 
+   durchgef&uuml;hrt.</p>
+   <p>Bei gr&ouml;&szlig;eren Versionswechseln z.B. von 1.1 auf 1.2 m&uuml;ssen Sie noch die nachfolgenden
    Punkte durchgehen:</i></p></li>
 
    <li><p>Kopieren Sie <b>nur</b> die Verzeichnisse <b>adm_install</b> und <b>adm_program</b> mit Ihrem
@@ -26,7 +26,7 @@
    <li><p>Rufen Sie nun in Ihrem Browser die Datei <b>index.php</b> aus dem Verzeichnis <b>adm_install</b>
    auf Ihrer Homepage auf.</p>
    <p>Beispiel: <span style="font-family: Courier New, Courier">http://www.ihre-domain.de/adm_install/index.php</span></p></li>
-   
+
    <li>
    <p>Nun erscheint folgende Seite auf der Sie ausw&auml;hlen k&ouml;nnen, ob Sie Admidio installieren, updaten oder eine
    neue Gruppierung hinzuf&uuml;gen wollen. Klicken Sie auf <b>Admidio Datenbank updaten</b>, falls diese
@@ -39,7 +39,7 @@
    Datenbank erfolgreich installiert wurde. </p>
    <p>Falls Sie wiederholt auf Weiter klicken oder die Seite schlie&szlig;en, kann das
    Datenbank update fehlschlagen und das Update eventuell auch nicht mehr erfolgreich wiederholt werden.</p></li>
-   
+
    <li>Nachdem das Update erfolgreich durchgelaufen ist, sollten Sie das Verzeichnis <b>adm_install</b> auf
    Ihrem Webserver l&ouml;schen.</li>
    </ul>
