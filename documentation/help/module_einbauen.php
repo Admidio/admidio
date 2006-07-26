@@ -2,50 +2,50 @@
 <?php include("help_menu.php"); ?>
 
 <td style="background-color: #ffffff; padding-left: 15px;">
-   <h2>Aufruf der Module einbauen:</h2>
+    <h2>Aufruf der Module einbauen:</h2>
 
-   <p>Nachdem Sie Admidio erfolgreich installiert haben, m&ouml;chten Sie
-   verschiedene Module in Ihre Homepage zu integrieren. Admidio liefert von
-   Haus aus eine Reihe Module (Ank&uuml;ndigungen, Termine, Listen, Profile ...) mit.
-   Diese k&ouml;nnen Sie alle auf der &Uuml;bersichtsseite sehen.</p>
+    <p>Nachdem Sie Admidio erfolgreich installiert haben, m&ouml;chten Sie
+    verschiedene Module in Ihre Homepage zu integrieren. Admidio liefert von
+    Haus aus eine Reihe Module (Ank&uuml;ndigungen, Termine, Listen, Profile ...) mit.
+    Diese k&ouml;nnen Sie alle auf der &Uuml;bersichtsseite sehen.</p>
 
-   <a style="target-new: tab;" href="help/images/uebersicht.png"><img
-      style="border: 0px;" src="help/images/uebersicht_thumb.png" alt="&Uuml;bersicht der Module"
-      title="&Uuml;bersicht der Module" /></a>
+    <a style="target-new: tab;" href="help/images/uebersicht.png"><img
+    style="border: 0px;" src="help/images/uebersicht_thumb.png" alt="&Uuml;bersicht der Module"
+    title="&Uuml;bersicht der Module" /></a>
 
-   <p>Dazu kommen noch verschiedene Administrationsdialoge.</p>
+    <p>Dazu kommen noch verschiedene Administrationsdialoge.</p>
 
-   <p>Jedes dieser Module funktioniert eigenst&auml;ndig. Das hei&szlig;t, Sie k&ouml;nnen einen Link zu diesem
-   Modul an jeder beliebigen Stelle von Ihrer Homepage aus setzen. Sollte eine Benutzeranmeldung
-   erforderlich sein, so wird die Loginseite automatisch aufgerufen. Ist der Benutzer einmal
-   angemeldet, so kann er zwischen den Admidio-Modulen und Ihren eigenen Seiten beliebig
-   navigieren und muss sich nicht noch einmal anmelden.</p>
+    <p>Jedes dieser Module funktioniert eigenst&auml;ndig. Das hei&szlig;t, Sie k&ouml;nnen einen Link zu diesem
+    Modul an jeder beliebigen Stelle von Ihrer Homepage aus setzen. Sollte eine Benutzeranmeldung
+    erforderlich sein, so wird die Loginseite automatisch aufgerufen. Ist der Benutzer einmal
+    angemeldet, so kann er zwischen den Admidio-Modulen und Ihren eigenen Seiten beliebig
+    navigieren und muss sich nicht noch einmal anmelden.</p>
 
-   <p>Um die Sicherheit zu erh&ouml;hen sollten Sie aber einen Link zur Loginseite und zum Logout
-   auf Ihrer Homepage einbauen.</p>
+    <p>Um die Sicherheit zu erh&ouml;hen sollten Sie aber einen Link zur Loginseite und zum Logout
+    auf Ihrer Homepage einbauen.</p>
 
-   <h2>Links zu den Modulen:</h2>
+    <h2>Links zu den Modulen:</h2>
 
-   <p>Die folgenden Links zu den Modulen sind hier aus Platzgr&uuml;nden zweizeilig dargestellt.
-      Sie m&uuml;ssen diese dann nat&uuml;rlich zusammengeschrieben verlinken.</p>
+    <p>Die folgenden Links zu den Modulen sind hier aus Platzgr&uuml;nden zweizeilig dargestellt.
+    Sie m&uuml;ssen diese dann nat&uuml;rlich zusammengeschrieben verlinken.</p>
 
-   <p>Alle Paramter, die hier angegeben werden, sind optional. Jedes Modul kann ohne die
-      jeweiligen Paramter aufgerufen werden. Sie sollten diese nur &uuml;bergeben, falls sie
-      die gew&uuml;nschte &Auml;nderung ben&ouml;tigen.</p>
+    <p>Alle Paramter, die hier angegeben werden, sind optional. Jedes Modul kann ohne die
+    jeweiligen Paramter aufgerufen werden. Sie sollten diese nur &uuml;bergeben, falls sie
+    die gew&uuml;nschte &Auml;nderung ben&ouml;tigen.</p>
 
-   <p>Parameter werden direkt an den URL angehangen. Sie m&uuml;ssen einfach ein <b>?</b>
-      hinter die URL setzen und k&ouml;nnen dann den Parameter schreiben. Nach einem <b>=</b>
-      folgt dann der Wert. Wollen Sie mehr als einen Parameter anh&auml;ngen, so m&uuml;ssen sie
-      die Parameter durch ein <b>&</b> voneinander trennen.</p>
+    <p>Parameter werden direkt an den URL angehangen. Sie m&uuml;ssen einfach ein <b>?</b>
+    hinter die URL setzen und k&ouml;nnen dann den Parameter schreiben. Nach einem <b>=</b>
+    folgt dann der Wert. Wollen Sie mehr als einen Parameter anh&auml;ngen, so m&uuml;ssen sie
+    die Parameter durch ein <b>&</b> voneinander trennen.</p>
 
-   <p class="code">Beispiel:<br />http://www.test.de/.../mail.php?rolle=Webmaster&subject=Test</p>
+    <p class="code">Beispiel:<br />http://www.test.de/.../mail.php?rolle=Webmaster&subject=Test</p>
 
-   <p>Bitte beachten Sie, dass in der kompletten URL kein Leerzeichen und Sonderzeichen
-      vorkommen darf. Dies gilt auch f&uuml;r die Parameter. Falls Sie dennoch einen Wert mit
-      Leerzeichen &uuml;bergeben wollen, k&ouml;nnen Sie anstatt dem Leerzeichen einfach <b>%20</b>
-      schreiben.</p>
+    <p>Bitte beachten Sie, dass in der kompletten URL kein Leerzeichen und Sonderzeichen
+    vorkommen darf. Dies gilt auch f&uuml;r die Parameter. Falls Sie dennoch einen Wert mit
+    Leerzeichen &uuml;bergeben wollen, k&ouml;nnen Sie anstatt dem Leerzeichen einfach <b>%20</b>
+    schreiben.</p>
 
-   <ul style="padding-left: 15px;">
+    <ul style="padding-left: 15px;">
       <li>
           <p><b>Loginseite</b></p>
           <p>Aufruf der Loginseite mit Link zur Registrierung und sp&auml;teren Weiterleitung
@@ -86,37 +86,44 @@
              </table>
           </p>
       </li>
-      <li>
-         <p><b>Downloads</b></p>
-         <p>Auflisten von verschiedenen Dateidownloads in einer frei w&auml;hlbaren Ordnerstruktur</p>
-         <p>Link :<br />
-             <span class="code">http://www.ihre-domain.de/admidio-ordner/
-                adm_program/modules/downloads/downloads.php</span>
-         </p>
-         <p>
-            <table class="parameter">
+        <li>
+            <p><b>Downloads</b></p>
+            <p>Auflisten von verschiedenen Dateidownloads in einer frei w&auml;hlbaren Ordnerstruktur</p>
+            <p>Link :<br />
+                <span class="code">http://www.ihre-domain.de/admidio-ordner/
+                    adm_program/modules/downloads/downloads.php</span>
+            </p>
+            <p>
+                <table class="parameter">
                 <tr>
-                   <th class="parameter">Parameter</th>
-                   <th class="parameter">Wert</th>
-                   <th class="parameter">Beschreibung</th>
+                    <th class="parameter">Parameter</th>
+                    <th class="parameter">Wert</th>
+                    <th class="parameter">Beschreibung</th>
                 </tr>
                 <tr>
-                   <td class="parameter"><b>default_folder</b></td>
-                   <td class="parameter"><i>Ordnername</i></td>
-                   <td class="parameter">Angabe des Downloadordners, der direkt angezeigt werden soll.
-                      Die Angabe ist relativ zum Basisordner und kann Unterordner beinhalten.<br />
-                      Beispiel: <i>Dokumente/Protokolle</i></td>
+                    <td class="parameter"><b>folder</b></td>
+                    <td class="parameter"><i>Ordnername</i></td>
+                    <td class="parameter">Angabe des Downloadordners, der direkt angezeigt werden soll.
+                        Die Angabe ist relativ zum Basisordner und kann Unterordner beinhalten.<br />
+                        Beispiel: <i>Dokumente/Protokolle</i></td>
                 </tr>
                 <tr>
-                   <td class="parameter"><b>sort</b></td>
-                   <td class="parameter"><i>asc</i> (default)<br /><i>desc</i></td>
-                   <td class="parameter">Angabe zur Sortierung der Dateien und Ordner.<br />
-                      Es wird normalerweise aufsteigend (A-Z) sortiert. &Uuml;bergibt man sort=desc
-                      so wird absteigend (Z-A) sortiert.</i></td>
+                    <td class="parameter"><b>default_folder</b></td>
+                    <td class="parameter"><i>Ordnername</i></td>
+                    <td class="parameter">Funktioniert &auml;hnlich der Variable folder, allerdings
+                        ist eine Navigation in &uuml;bergeordnete Ordner nicht m&ouml;glich
+                </td>
                 </tr>
-             </table>
-         </p>
-      </li>
+                <tr>
+                    <td class="parameter"><b>sort</b></td>
+                    <td class="parameter"><i>asc</i> (default)<br /><i>desc</i></td>
+                    <td class="parameter">Angabe zur Sortierung der Dateien und Ordner.<br />
+                        Es wird normalerweise aufsteigend (A-Z) sortiert. &Uuml;bergibt man sort=desc
+                        so wird absteigend (Z-A) sortiert.</i></td>
+                </tr>
+                </table>
+            </p>
+        </li>
       <li>
           <p><b>E-Mail</b></p>
           <p>Verschicken von E-Mails an alle Mitglieder bestimmter Rollen. Ohne
