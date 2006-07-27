@@ -268,9 +268,9 @@ if(!mysql_select_db($_POST['database'], $connection ))
 if($_GET['mode'] == 1)
 {
     $error    = 0;
-    $filename = "db.sql";
+    $filename = "db_scripts/db.sql";
     $file     = fopen($filename, "r")
-                or showError("Die Datei <b>db.sql</b> konnte nicht im Verzeichnis <b>adm_install</b> gefunden werden.");
+                or showError("Die Datei <b>db.sql</b> konnte nicht im Verzeichnis <b>adm_install/db_scripts</b> gefunden werden.");
     $content  = fread($file, filesize($filename));
     $sql_arr  = explode(";", $content);
     fclose($file);
@@ -333,16 +333,20 @@ if($_GET['mode'] == 3)
     // Updatescripte fuer die Datenbank verarbeiten
     if($_POST['version'] > 0)
     {
-        for($i = $_POST['version']; $i <= 3; $i++)
+        for($i = $_POST['version']; $i <= 4; $i++)
         {
             $error = 0;
             if($i == 1)
             {
-                $filename = "upd_1_1_db.sql";
+                $filename = "db_scripts/upd_1_1_db.sql";
             }
             elseif($i == 3)
             {
-                $filename = "upd_1_3_db.sql";
+                $filename = "db_scripts/upd_1_3_db.sql";
+            }
+            elseif($i == 4)
+            {
+                $filename = "db_scripts/upd_1_4_db.sql";
             }
             else
             {
@@ -379,15 +383,19 @@ if($_GET['mode'] == 3)
 
             if($i == 1)
             {
-                include("upd_1_1_konv.php");
+                include("db_scripts/upd_1_1_conv.php");
             }
             elseif($i == 2)
             {
-                include("upd_1_2_konv.php");
+                include("db_scripts/upd_1_2_conv.php");
             }
             elseif($i == 3)
             {
-                include("upd_1_3_konv.php");
+                include("db_scripts/upd_1_3_conv.php");
+            }
+            elseif($i == 4)
+            {
+                include("db_scripts/upd_1_4_conv.php");
             }
         }
     }

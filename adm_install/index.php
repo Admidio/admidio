@@ -97,7 +97,7 @@ echo "
         echo "
             <form name=\"installation\" action=\"index.php\" method=\"post\">
                 <div class=\"groupBox\" style=\"width: 350px; text-align: left;\">
-                    <div class=\"groupBoxHeadline\">Aktion auswählen</div>
+                    <div class=\"groupBoxHeadline\">Aktion ausw&auml;hlen</div>
                     <br>
                     <div>&nbsp;
                         <input type=\"radio\" id=\"install\" name=\"mode\" value=\"install\" ";
@@ -134,7 +134,8 @@ echo "
                  <p align=\"center\">
                  <button name=\"config_file\" type=\"button\" value=\"config_file\"  style=\"width: 190px;\"
                     onclick=\"location.href='inst_do.php?mode=2'\">
-                        <img src=\"../adm_program/images/page_white_put.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"config.php herunterladen\">
+                        <img src=\"../adm_program/images/page_white_put.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" 
+						width=\"16\" height=\"16\" border=\"0\" alt=\"config.php herunterladen\">
                         config.php herunterladen</button></p>
                </div>
             </div>
@@ -180,10 +181,10 @@ echo "
                    <td class=\"groupBoxHeadline\" colspan=\"2\">Optionen</td>
                 </tr>
                 <tr>
-                   <td colspan=\"2\">Hier können Sie ein Präfix für die Datenbank-Tabellen von Admidio angeben.</td>
+                   <td colspan=\"2\">Hier k&ouml;nnen Sie ein Pr&auml;fix f&uuml;r die Datenbank-Tabellen von Admidio angeben.</td>
                 </tr>
                 <tr>
-                   <td width=\"120px\">Tabellenpräfix:</td>
+                   <td width=\"120px\">Tabellenpr&auml;fix:</td>
                    <td><input type=\"text\" name=\"praefix\" size=\"10\" maxlength=\"10\" value=\"adm\" /></td>
                 </tr>
              </table>
@@ -204,6 +205,7 @@ echo "
                    <td>
                       <select size=\"1\" name=\"version\">
                          <option value=\"0\" selected=\"selected\">- Bitte w&auml;hlen -</option>
+                         <option value=\"4\">Version 1.3.*</option>
                          <option value=\"3\">Version 1.2.*</option>
                          <option value=\"2\">Version 1.1.*</option>
                         <option value=\"1\">Version 1.0.*</option>
@@ -276,7 +278,7 @@ echo "
             {
                 echo "<button name=\"back\" type=\"button\" value=\"back\" onclick=\"history.back()\">
                     <img src=\"../adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zurueck\">
-                    &nbsp;Zurück</button>&nbsp;&nbsp;";
+                    &nbsp;Zur&uuml;ck</button>&nbsp;&nbsp;";
             }
             echo "<button name=\"forward\" type=\"submit\" value=\"forward\">Weiter&nbsp;
                 <img src=\"../adm_program/images/forward.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Weiter\">
