@@ -98,7 +98,7 @@ require("../../../adm_config/body_top.php");
             <div class=\"formHead\" style=\"width: 400px\">";
                 if($_GET['usf_id'] > 0)
                 {
-                    echo strspace("Feld ändern", 2);
+                    echo strspace("Feld Ã¤ndern", 2);
                 }
                 else
                 {
@@ -157,7 +157,7 @@ require("../../../adm_config/body_top.php");
                 </div>
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 28%; float: left;\">
-                        <img src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Feld nur für Moderatoren sichtbar\">
+                        <img src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Feld nur fÃ¼r Moderatoren sichtbar\">
                     </div>
                     <div style=\"text-align: left; margin-left: 29%;\">
                         <input type=\"checkbox\" id=\"locked\" name=\"locked\" ";
@@ -166,7 +166,7 @@ require("../../../adm_config/body_top.php");
                             echo " checked ";
                         }
                         echo " value=\"1\" />
-                        <label for=\"locked\">Feld nur für Moderatoren sichtbar&nbsp;</label>
+                        <label for=\"locked\">Feld nur fÃ¼r Moderatoren sichtbar&nbsp;</label>
                         <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: middle;\" vspace=\"1\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                         onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=field_locked','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
                     </div>

@@ -109,7 +109,7 @@ require("../../../adm_config/body_top.php");
                                 echo " selected ";
                             }
                             echo ">- Bitte w&auml;hlen -</option>";
-                            $land = trim(fgets($landlist));
+                            $land = utf8_decode(trim(fgets($landlist)));
                             while (!feof($landlist))
                             {    
                                 echo"<option value=\"$land\"";
@@ -118,7 +118,7 @@ require("../../../adm_config/body_top.php");
                                     echo " selected ";
                                 }
                                 echo">$land</option>";
-                                $land = trim(fgets($landlist));
+                                $land = utf8_decode(trim(fgets($landlist)));
                             }    
                         echo"</select>
                     </div>

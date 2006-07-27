@@ -263,7 +263,7 @@ if($popup == 0)
                                 <option value=\"\">--------------------------------</option>\n";
                             }
                             
-                            $land = trim(fgets($landlist));
+                            $land = utf8_decode(trim(fgets($landlist)));
                             while (!feof($landlist))
                             {
                                 echo"<option value=\"$land\"";
@@ -276,7 +276,7 @@ if($popup == 0)
                                         echo " selected ";
                                      }
                                 echo">$land</option>\n";
-                                $land = trim(fgets($landlist));
+                                $land = utf8_decode(trim(fgets($landlist)));
                             }    
                         
                         echo"

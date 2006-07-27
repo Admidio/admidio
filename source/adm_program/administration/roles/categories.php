@@ -93,7 +93,7 @@ require("../../../adm_config/body_top.php");
             <div class=\"formHead\">";
                 if($_GET['rlc_id'] > 0)
                 {
-                    echo strspace("Kategorie ändern");
+                    echo strspace("Kategorie Ã¤ndern");
                 }
                 else
                 {

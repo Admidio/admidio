@@ -63,11 +63,11 @@ function strspace($srcString, $count = 1)
 }
 
 
-// alle Sonderzeichen werden in Html-Standard übersetzt
+// alle Sonderzeichen werden in Html-Standard Ã¼bersetzt
 // Diese Funktion unterscheidet sich von htmlentities(), da HTML-Tags
 // hierdurch immer noch funktionieren
 //
-// z.B.: ü -> &uuml;  ä -> &auml;  ö -> &ouml;  ß -> &szlig;
+// z.B.: Ã¼ -> &uuml;  Ã¤ -> &auml;  Ã¶ -> &ouml;  ÃŸ -> &szlig;
 
 function strSpecialChars2Html($srcString)
 {
@@ -92,7 +92,7 @@ function strStripTags($srcString)
 }
 
 
-// sind die Nachkommastellen 0, dann werden sie unterdrückt
+// sind die Nachkommastellen 0, dann werden sie unterdrÃ¼ckt
 //
 // Bsp:   153.00 -> 153   153.50 -> 153.5   153.54 -> 153.54
 
@@ -122,7 +122,7 @@ function numWithoutZero($number)
     }
 }
 
-// ermittelt den vorherigen oder nächsten Buchstaben im Alphabet
+// ermittelt den vorherigen oder nÃ¤chsten Buchstaben im Alphabet
 // mode = 0  -> naechster Buchstabe
 // mode = 1  -> vorheriger Buchstabe
 //
@@ -233,7 +233,7 @@ function isValidFileName($file_name, $check_ext = false)
     }
 }
 
-// wie die PHP-Funktion str_split, aber schon für PHP4
+// wie die PHP-Funktion str_split, aber schon fÃ¼r PHP4
 
 function strsplit($string)
 {

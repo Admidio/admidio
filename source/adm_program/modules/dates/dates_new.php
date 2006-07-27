@@ -125,7 +125,7 @@ require("../../../adm_config/body_top.php");
             <div class=\"formHead\">";
                 if($_GET["dat_id"] > 0)
                 {
-                    echo strspace("Termin �ndern", 2);
+                    echo strspace("Termin &auml;ndern", 2);
                 }
                 else
                 {

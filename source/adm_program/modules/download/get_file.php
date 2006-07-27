@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2006 The Admidio Team
  * Homepage     : http://www.admidio.org
- * Module-Owner : Martin Günzler
+ * Module-Owner : Martin GÃ¼nzler
  *
  * Uebergaben:
  *

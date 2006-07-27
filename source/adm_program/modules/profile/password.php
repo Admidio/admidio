@@ -8,7 +8,7 @@
  *
  * Uebergaben:
  *
- * user_id     -   Passwort der übergebenen user_id aendern
+ * user_id     -   Passwort der Ã¼bergebenen user_id aendern
  *
  ******************************************************************************
  *
@@ -56,7 +56,7 @@ echo "
 <body>
     <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
         <form action=\"password_save.php?user_id=". $_GET['user_id']. "\" method=\"post\" name=\"Anmeldung\">
-            <div class=\"formHead\" style=\"width: 300px\">". strspace("Passwort ändern"). "</div>
+            <div class=\"formHead\" style=\"width: 300px\">". strspace("Passwort Ã¤ndern"). "</div>
             <div class=\"formBody\" style=\"width: 300px\">
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 150px; float: left;\">Altes Passwort:</div>

@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Script pr¸ft, ob man eingeloggt ist und setzt die Zeitstempel neu
+ * Script pr√ºft, ob man eingeloggt ist und setzt die Zeitstempel neu
  *
  * Copyright    : (c) 2004 - 2006 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -46,7 +46,7 @@ if(strlen($g_session_id) > 0)
    $row           = mysql_fetch_object($result);
 
    if ($session_found == 1)
-   {   	
+   {    
       $valid    = false;
       $time_gap = time() - mysqlmaketimestamp($row->ses_timestamp);
 
@@ -57,7 +57,7 @@ if(strlen($g_session_id) > 0)
       }
       else
       {
-         // wenn l‰nger als 30 min. nichts gemacht, dann ausloggen
+         // wenn l√§nger als 30 min. nichts gemacht, dann ausloggen
          if ($time_gap < 1800) $valid = true;
       }
 
@@ -89,7 +89,7 @@ if(strlen($g_session_id) > 0)
    }
    else
    {
-   	$g_current_user->clear();
+    $g_current_user->clear();
 
       if ($session_found != 0)
       {

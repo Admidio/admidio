@@ -144,7 +144,7 @@ if ($user_found >= 1)
    }
    else
    {
-      // ungültige Logins werden mitgeloggt
+      // ungÃ¼ltige Logins werden mitgeloggt
       $sql    = "UPDATE ". TBL_USERS. " SET usr_date_invalid = NOW()
                                           , usr_number_invalid   = usr_number_invalid + 1
                   WHERE usr_id = $user_row->usr_id ";
