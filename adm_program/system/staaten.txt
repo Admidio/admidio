@@ -1,15 +1,15 @@
 Afghanistan
-Ägypten
+Ã„gypten
 Albanien
 Algerien
 Andorra
 Angola
 Antigua und Barbuda
-Äquatorialguinea
+Ã„quatorialguinea
 Argentinien
 Armenien
 Aserbaidschan
-Äthiopien
+Ã„thiopien
 Australien
 Bahamas
 Bahrain
@@ -32,8 +32,8 @@ Chile
 China
 Cookinseln
 Costa Rica
-Côte d'Ivoire
-Dänemark
+CÃ´te d'Ivoire
+DÃ¤nemark
 Deutschland
 Dominica
 Dominikanische Republik
@@ -109,7 +109,7 @@ Mauretanien
 Mauritius
 Mazedonien
 Mexiko
-Mikronesien, Föd. Staaten von
+Mikronesien, FÃ¶d. Staaten von
 Moldau, Republik
 Monaco
 Mongolei
@@ -126,7 +126,7 @@ Nigeria
 Niue
 Norwegen
 Oman
-Österreich
+Ã–sterreich
 Pakistan
 Palau
 Panama
@@ -137,13 +137,13 @@ Philippinen
 Polen
 Portugal
 Ruanda
-Rumänien
-Russische Föderation
+RumÃ¤nien
+Russische FÃ¶deration
 Salomonen
 Sambia
 Samoa
 San Marino
-São Tomé und Príncipe
+SÃ£o TomÃ© und PrÃ­ncipe
 Saudi-Arabien
 Schweden
 Schweiz
@@ -161,7 +161,7 @@ Sri Lanka
 St. Kitts und Nevis
 St. Lucia
 St. Vincent u. die Grenadinen
-Südafrika
+SÃ¼dafrika
 Sudan
 Suriname
 Swasiland
@@ -176,7 +176,7 @@ Trinidad und Tobago
 Tschad
 Tschechische Republik
 Tunesien
-Türkei
+TÃ¼rkei
 Turkmenistan
 Tuvalu
 Uganda
@@ -189,8 +189,8 @@ Vatikanstadt
 Venezuela
 Vereinigte Arabische Emirate
 Vereinigte Staaten (USA)
-Vereinigtes Königreich
+Vereinigtes KÃ¶nigreich
 Vietnam
-Weißrussland
+WeiÃŸrussland
 Zentralafrikanische Republik
 Zypern

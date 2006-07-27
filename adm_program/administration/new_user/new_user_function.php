@@ -90,10 +90,10 @@ if($_GET["mode"] == 1)
         $email->addRecipient($user->email, "$user->first_name $user->last_name");
         $email->setSubject("Anmeldung auf $g_current_organization->homepage");
         $email->setText(utf8_decode("Hallo "). $user->first_name. utf8_decode(",\n\ndeine Anmeldung auf ").
-            $g_current_organization->homepage. utf8_decode("wurde bestätigt.\n\nNun kannst du dich mit deinem Benutzernamen : ").
+            $g_current_organization->homepage. utf8_decode("wurde bestÃ¤tigt.\n\nNun kannst du dich mit deinem Benutzernamen : ").
             $user->login_name. utf8_decode("\nund dem Passwort auf der Homepage einloggen.\n\n".
             "Sollten noch Fragen bestehen, schreib eine E-Mail an "). $g_preferences['email_administrator']. 
-            utf8_decode(" .\n\nViele Grüße\nDie Webmaster"));
+            utf8_decode(" .\n\nViele GrÃ¼ÃŸe\nDie Webmaster"));
         if($email->sendEmail() == true)
         {
             $err_code = "send_login_mail";
@@ -137,7 +137,7 @@ elseif($_GET["mode"] == 3)
          <p style=\"text-align: left;\">
             <img src=\"$g_root_path/adm_program/images/properties.png\" style=\"vertical-align: bottom;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer anlegen\">
             Existiert der Benutzer bereits in der Datenbank oder bist du dir nicht sicher,
-            wähle erst einmal <b>zuordnen</b> aus. Dort werden dir alle vorhandenen Benutzer
+            wÃ¤hle erst einmal <b>zuordnen</b> aus. Dort werden dir alle vorhandenen Benutzer
             angezeigt und du kannst die Anmeldung einem vorhandenen Benutzer zuordnen oder einen neuen
             Benutzer anlegen.
          </p>

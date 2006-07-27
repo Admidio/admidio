@@ -36,7 +36,7 @@ $_POST['nachname']     = strStripTags($_POST['nachname']);
 $_POST['vorname']      = strStripTags($_POST['vorname']);
 $_POST['email']        = strStripTags($_POST['email']);
 
-// Felder prüfen
+// Felder prÃ¼fen
 if ($_POST['passwort'] != $_POST['passwort2'])
 {
     $err_code = "passwort";
@@ -142,10 +142,11 @@ if ($count_user == 0)
             $email = new Email();
             $email->setSender($g_preferences['email_administrator']);
             $email->addRecipient($row->usr_email, "$row->first_name $row->last_name");
-            $email->setSubject("Neue Registrierung");
-            $email->setText("Es hat sich ein neuer User auf $g_current_organization->homepage registriert.\n\n".
-                "Nachname: ". $_POST["nachname"]. "\nVorname:  ". $_POST["vorname"]. "\n".
-                "E-Mail:   ". $_POST["email"]. "\n\n\nDiese Nachricht wurde automatisch erzeugt.");
+            $email->setSubject(utf8_decode("Neue Registrierung"));
+            $email->setText(utf8_decode("Es hat sich ein neuer User auf "). $g_current_organization->homepage. 
+                utf8_decode(" registriert.\n\nNachname: "). $_POST["nachname"]. utf8_decode("\nVorname:  "). 
+                $_POST["vorname"]. utf8_decode("\nE-Mail:   "). $_POST["email"]. 
+                utf8_decode("\n\n\nDiese Nachricht wurde automatisch erzeugt."));
             if($email->sendEmail() == true)
             {
                 $err_code = "anmeldung";

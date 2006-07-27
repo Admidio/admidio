@@ -10,8 +10,8 @@
  *
  * dat_id: ID des Termins, der angezeigt werden soll
  * mode:   1 - Neuen Termin anlegen
- *         2 - Termin löschen
- *         3 - Termin ändern
+ *         2 - Termin lÃ¶schen
+ *         3 - Termin Ã¤ndern
  *         4 - Termin im iCal-Format exportieren
  * url:    kann beim Loeschen mit uebergeben werden
  *
@@ -42,7 +42,7 @@ if($_GET["mode"] != 4)
     require("../../system/login_valid.php");
 }
 
-// erst prüfen, ob der User auch die entsprechenden Rechte hat
+// erst prÃ¼fen, ob der User auch die entsprechenden Rechte hat
 if(!editDate() && $_GET["mode"] != 4)
 {
     $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
@@ -109,7 +109,7 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
             {
                 $dt_datum_von = dtFormatDate($_POST['datum_von'], "Y-m-d"). " ". dtFormatTime($_POST['uhrzeit_von']);
 
-                // wenn Datum-bis nicht gefüllt ist, dann mit Datum-von nehmen
+                // wenn Datum-bis nicht gefÃ¼llt ist, dann mit Datum-von nehmen
                 if(strlen($_POST['datum_bis'])   == 0)
                 $_POST['datum_bis']   = $_POST['datum_von'];
                 if(strlen($_POST['uhrzeit_bis']) == 0)
@@ -201,7 +201,7 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
     {
         if(strlen($headline) == 0)
         {
-            $err_text = "Überschrift";
+            $err_text = "Ãœberschrift";
         }
         elseif(strlen($content) == 0)
         {

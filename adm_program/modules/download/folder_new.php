@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2006 The Admidio Team
  * Homepage     : http://www.admidio.org
- * Module-Owner : Martin Günzler
+ * Module-Owner : Martin GÃ¼nzler
  *
  * Uebergaben:
  *
@@ -31,7 +31,7 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
-// erst prüfen, ob der User auch die entsprechenden Rechte hat
+// erst prÃ¼fen, ob der User auch die entsprechenden Rechte hat
 if(!editDownload())
 {
   $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";

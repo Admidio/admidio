@@ -90,14 +90,14 @@ echo "
       elseif($mode == 3)
         echo "<h1>Datenbank updaten</h1>";
       elseif($mode == 4)
-        echo "<h1>Neue Organisation hinzufügen</h1>";
+        echo "<h1>Neue Organisation hinzuf&uuml;gen</h1>";
 
       if($mode == 0)
       {
         echo "
             <form name=\"installation\" action=\"index.php\" method=\"post\">
                 <div class=\"groupBox\" style=\"width: 350px; text-align: left;\">
-                    <div class=\"groupBoxHeadline\">Aktion auswählen</div>
+                    <div class=\"groupBoxHeadline\">Aktion auswÃ¤hlen</div>
                     <br>
                     <div>&nbsp;
                         <input type=\"radio\" id=\"install\" name=\"mode\" value=\"install\" ";
@@ -180,10 +180,10 @@ echo "
                    <td class=\"groupBoxHeadline\" colspan=\"2\">Optionen</td>
                 </tr>
                 <tr>
-                   <td colspan=\"2\">Hier können Sie ein Präfix für die Datenbank-Tabellen von Admidio angeben.</td>
+                   <td colspan=\"2\">Hier kÃ¶nnen Sie ein PrÃ¤fix fÃ¼r die Datenbank-Tabellen von Admidio angeben.</td>
                 </tr>
                 <tr>
-                   <td width=\"120px\">Tabellenpräfix:</td>
+                   <td width=\"120px\">TabellenprÃ¤fix:</td>
                    <td><input type=\"text\" name=\"praefix\" size=\"10\" maxlength=\"10\" value=\"adm\" /></td>
                 </tr>
              </table>
@@ -276,7 +276,7 @@ echo "
             {
                 echo "<button name=\"back\" type=\"button\" value=\"back\" onclick=\"history.back()\">
                     <img src=\"../adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zurueck\">
-                    &nbsp;Zurück</button>&nbsp;&nbsp;";
+                    &nbsp;ZurÃ¼ck</button>&nbsp;&nbsp;";
             }
             echo "<button name=\"forward\" type=\"submit\" value=\"forward\">Weiter&nbsp;
                 <img src=\"../adm_program/images/forward.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Weiter\">

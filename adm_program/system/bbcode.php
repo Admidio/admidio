@@ -1,7 +1,7 @@
 <?php
 error_reporting(E_ALL);
   /**********************************************
-  * quickerUbb (c)2004 Roönaän
+  * quickerUbb (c)2004 RoÃ¶naÃ¤n
   *
   * with enhancements of:
   *

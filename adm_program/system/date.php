@@ -35,8 +35,8 @@ $arrDayShort = array('Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So');
 // y = Jahr; m = Monat; d = Tag; h = Stunde; i = Minute; s = Sekunde
 //
 // Bsp: MySql-Datenfeld    "2001-05-11 15:30:15"
-//      Übergabe           "h:i d.m.y"      
-//      Rückgabe           "15:30 11.05.2001"
+//      Ãœbergabe           "h:i d.m.y"      
+//      RÃ¼ckgabe           "15:30 11.05.2001"
 
 function mysqldatetime($dateFormat, $dateTime)
 {
@@ -47,7 +47,7 @@ function mysqldatetime($dateFormat, $dateTime)
    {
       if($dateArray[0] == "0000")
       {
-         // wenn das Jahr 0 ist, dann ist das Feld nicht gefüllt
+         // wenn das Jahr 0 ist, dann ist das Feld nicht gefÃ¼llt
          $destStr = "";
       }
       else
@@ -100,8 +100,8 @@ function mysqldatetime($dateFormat, $dateTime)
 // y = Jahr; m = Monat; d = Tag
 //
 // Bsp: MySql-Datenfeld    "2001-05-11"
-//      Übergabe           "d.m.y"
-//      Rückgabe           "11.05.2001"
+//      Ãœbergabe           "d.m.y"
+//      RÃ¼ckgabe           "11.05.2001"
 
 function mysqldate($dateFormat, $date)
 {
@@ -112,7 +112,7 @@ function mysqldate($dateFormat, $date)
    {
       if($dateArray[0] == "0000")
       {
-         // wenn das Jahr 0 ist, dann ist das Feld nicht gefüllt
+         // wenn das Jahr 0 ist, dann ist das Feld nicht gefÃ¼llt
          $destStr = "";
       }
       else
@@ -153,8 +153,8 @@ function mysqldate($dateFormat, $date)
 // h = Stunde; i = Minute; s = Sekunde
 //
 // Bsp: MySql-Datenfeld    "15:30:15"
-//      Übergabe           "h:i"
-//      Rückgabe           "15:30"
+//      Ãœbergabe           "h:i"
+//      RÃ¼ckgabe           "15:30"
 
 function mysqltime($dateFormat, $time)
 {
@@ -210,16 +210,16 @@ function dtCheckDate($date)
    $formatDate = dtFormatDate($date);
    $arrDate    = explode(".", $formatDate);
    
-	if(count($arrDate) == 3)
-   	return checkdate($arrDate[1],$arrDate[0],$arrDate[2]);
+    if(count($arrDate) == 3)
+    return checkdate($arrDate[1],$arrDate[0],$arrDate[2]);
    else
-   	return false;
+    return false;
 }
 
 // formatiert ein Datum
 // gibt normalerweise deutsches Format aus
 // Beispiel:  1.1.05 -> 01.01.2005
-// ansonsten kann aber auch über $format jedes beliebige Format angenommen werden
+// ansonsten kann aber auch Ã¼ber $format jedes beliebige Format angenommen werden
 // Es gelten dieselben Formatzeichen wie bei der Funktion date()
 
 function dtFormatDate($date, $format = "")
@@ -229,53 +229,53 @@ function dtFormatDate($date, $format = "")
    $year  = "";
    
    // String auf gueltige Zeichen pruefen
-	$anz = strspn($date, "0123456789. ");
-	if($anz == strlen($date))
-	{
-		$arrDate = explode(".", $date);
-		
-		// wenn Jahr nicht angegeben wurde, dann aktuelles Jahr nehmen
-		if(count($arrDate) == 2 || strlen($arrDate[2]) == 0)
-			$arrDate[2] = date('Y', time());
+    $anz = strspn($date, "0123456789. ");
+    if($anz == strlen($date))
+    {
+        $arrDate = explode(".", $date);
+        
+        // wenn Jahr nicht angegeben wurde, dann aktuelles Jahr nehmen
+        if(count($arrDate) == 2 || strlen($arrDate[2]) == 0)
+            $arrDate[2] = date('Y', time());
 
-		if(count($arrDate) == 3)
-		{
-			// Tag
-			if($arrDate[0] < 10 && strlen($arrDate[0]) == 1)
-				$day = "0". $arrDate[0];
-			else
-				$day = $arrDate[0];
-			// Monat
-			if($arrDate[1] < 10 && strlen($arrDate[1]) == 1)
-				$month = "0". $arrDate[1];
-			else
-				$month = $arrDate[1];
-			// Jahr
-			if($arrDate[2] < 100)
-			{
-				if(strlen($arrDate[2]) == 0)
-					$year = date("Y");
-				else
-				{
-					if($arrDate[2] > 30)
-						$year = "19". $arrDate[2];
-					else
-						$year = "20". $arrDate[2];
-				}
-			}
-			else
-				$year = $arrDate[2];
+        if(count($arrDate) == 3)
+        {
+            // Tag
+            if($arrDate[0] < 10 && strlen($arrDate[0]) == 1)
+                $day = "0". $arrDate[0];
+            else
+                $day = $arrDate[0];
+            // Monat
+            if($arrDate[1] < 10 && strlen($arrDate[1]) == 1)
+                $month = "0". $arrDate[1];
+            else
+                $month = $arrDate[1];
+            // Jahr
+            if($arrDate[2] < 100)
+            {
+                if(strlen($arrDate[2]) == 0)
+                    $year = date("Y");
+                else
+                {
+                    if($arrDate[2] > 30)
+                        $year = "19". $arrDate[2];
+                    else
+                        $year = "20". $arrDate[2];
+                }
+            }
+            else
+                $year = $arrDate[2];
 
-			if(strlen($format) > 0)
-				return date($format, mktime(0, 0, 0, $month, $day, $year));
-			else
-				return "$day.$month.$year";
-		}
-		else
-			return "";
-	}
-	else
-		return "";
+            if(strlen($format) > 0)
+                return date($format, mktime(0, 0, 0, $month, $day, $year));
+            else
+                return "$day.$month.$year";
+        }
+        else
+            return "";
+    }
+    else
+        return "";
 }
 
 // prueft eine Uhrzeit auf Gueltigkeit
@@ -285,30 +285,30 @@ function dtCheckTime($time)
 {
    $formatTime = dtFormatTime($time);
 
-	if(strlen($formatTime) > 0)
-	{
-		$hour   = (int) substr($formatTime, 0, 2);
-		$minute = (int) substr($formatTime, 3, 2);
-		$second = (int) substr($formatTime, 6, 2);
+    if(strlen($formatTime) > 0)
+    {
+        $hour   = (int) substr($formatTime, 0, 2);
+        $minute = (int) substr($formatTime, 3, 2);
+        $second = (int) substr($formatTime, 6, 2);
 
-		$valid = true;
-		if($hour < 0 || $hour > 24)
-			$valid = false;
-		if($minute < 0 || $minute > 60)
-			$valid = false;
-		if($second < 0 || $second > 60)
-			$valid = false;
-	}
-	else
-		$valid = false;
-		
-	return $valid;
+        $valid = true;
+        if($hour < 0 || $hour > 24)
+            $valid = false;
+        if($minute < 0 || $minute > 60)
+            $valid = false;
+        if($second < 0 || $second > 60)
+            $valid = false;
+    }
+    else
+        $valid = false;
+        
+    return $valid;
 }
 
 // formatiert eine Uhrzeit
 // gibt normalerweise deutsches Format aus
 // Beispiel:  4:35:11 -> 04:35:11 oder 14:04 -> 14:04:00
-// ansonsten kann aber auch über $format jedes beliebige Format angenommen werden
+// ansonsten kann aber auch Ã¼ber $format jedes beliebige Format angenommen werden
 // Es gelten dieselben Formatzeichen wie bei der Funktion date()
 
 function dtFormatTime($time, $format = "")
@@ -318,44 +318,44 @@ function dtFormatTime($time, $format = "")
    $second = "";
    
    // String auf gueltige Zeichen pruefen
-	$anz = strspn($time, "0123456789: ");
-	if($anz == strlen($time))
-	{
-		$arrTime = explode(":", $time);
+    $anz = strspn($time, "0123456789: ");
+    if($anz == strlen($time))
+    {
+        $arrTime = explode(":", $time);
 
-		// Stunde
-		if(count($arrTime) > 0)
-		{
-			if($arrTime[0] < 10 && strlen($arrTime[0]) == 1)
-				$hour = "0". $arrTime[0];
-			else
-				$hour = $arrTime[0];
-		}
-		else
-			$hour = "00";
-		// Minute
-		if(count($arrTime) > 1)
-		{
-			if($arrTime[1] < 10 && strlen($arrTime[1]) == 1)
-				$minute = "0". $arrTime[1];
-			else
-				$minute = $arrTime[1];
-		}
-		else
-			$minute = "00";
-		// Sekunde
-		if(count($arrTime) > 2)
-			$second = $arrTime[2];
-		else
-			$second = "00";
-			
-		if(strlen($format) > 0)
-			return date($format, mktime($hour, $minute, $second));
-		else
-			return "$hour:$minute:$second";
-	}
-	else
-		return "";
+        // Stunde
+        if(count($arrTime) > 0)
+        {
+            if($arrTime[0] < 10 && strlen($arrTime[0]) == 1)
+                $hour = "0". $arrTime[0];
+            else
+                $hour = $arrTime[0];
+        }
+        else
+            $hour = "00";
+        // Minute
+        if(count($arrTime) > 1)
+        {
+            if($arrTime[1] < 10 && strlen($arrTime[1]) == 1)
+                $minute = "0". $arrTime[1];
+            else
+                $minute = $arrTime[1];
+        }
+        else
+            $minute = "00";
+        // Sekunde
+        if(count($arrTime) > 2)
+            $second = $arrTime[2];
+        else
+            $second = "00";
+            
+        if(strlen($format) > 0)
+            return date($format, mktime($hour, $minute, $second));
+        else
+            return "$hour:$minute:$second";
+    }
+    else
+        return "";
 }
 
 ?>

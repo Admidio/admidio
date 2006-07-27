@@ -62,7 +62,7 @@ if($g_forum == 1)
 {
    mysql_select_db($g_forum_db, $g_forum_con);
 
-   // User nun in Foren-Tabelle suchen und dort Session löschen
+   // User nun in Foren-Tabelle suchen und dort Session lÃ¶schen
    $sql    = "SELECT user_id FROM ". $g_forum_praefix. "_users WHERE username LIKE {0} ";
    $sql    = prepareSQL($sql, array($g_current_user->login_name));
    $result = mysql_query($sql, $g_forum_con);
@@ -71,7 +71,7 @@ if($g_forum == 1)
    $row = mysql_fetch_array($result);
    $forum_user_id = $row[0];
 
-   // User-Session im Forum löschen
+   // User-Session im Forum lÃ¶schen
    $sql    = "DELETE FROM ". $g_forum_praefix. "_sessions WHERE session_user_id = $forum_user_id ";
    $result = mysql_query($sql, $g_forum_con);
    db_error($result);

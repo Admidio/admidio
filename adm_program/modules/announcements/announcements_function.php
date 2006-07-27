@@ -10,8 +10,8 @@
  *
  * ann_id:    ID der Ankuendigung, die angezeigt werden soll
  * mode:     1 - Neue Ankuendigung anlegen
- *           2 - Ankuendigung löschen
- *           3 - Ankuendigung ändern
+ *           2 - Ankuendigung lÃ¶schen
+ *           3 - Ankuendigung Ã¤ndern
  * url:      kann beim Loeschen mit uebergeben werden
  * headline: Ueberschrift, die ueber den Ankuendigungen steht
  *           (Default) Ankuendigungen
@@ -37,7 +37,7 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
-// erst prüfen, ob der User auch die entsprechenden Rechte hat
+// erst prÃ¼fen, ob der User auch die entsprechenden Rechte hat
 if(!editAnnouncements())
 {
     $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
@@ -84,7 +84,7 @@ if($_GET["mode"] == 2 || $_GET["mode"] == 3)
 
 if(!array_key_exists("headline", $_GET))
 {
-    $_GET["headline"] = "Ankündigungen";
+    $_GET["headline"] = "AnkÃ¼ndigungen";
 }
 
 $err_code = "";
@@ -142,7 +142,7 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
         }
         else
         {
-            $err_text = "Überschrift";
+            $err_text = "Ãœberschrift";
         }
         $err_code = "feld";
     }

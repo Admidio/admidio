@@ -1,7 +1,7 @@
 <?
 /******************************************************************************
- * Dieses Script setzt das SQL-Statement f�r die myList zusammen und
- * �bergibt es an das allgemeine Listen-Script
+ * Dieses Script setzt das SQL-Statement fuer die myList zusammen und
+ * uebergibt es an das allgemeine Listen-Script
  *
  * Copyright    : (c) 2004 - 2006 The Admidio Team
  * Homepage     : http://www.admidio.org
