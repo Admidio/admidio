@@ -461,11 +461,53 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
     $result = mysql_query($sql, $connection);
     db_error($result);
     
+     //Fotomoduleinstellungen
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
                                        VALUES ($org_id, 'photo_save_scale', '640')";
     $result = mysql_query($sql, $connection);
     db_error($result);
-
+    
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+            VALUES ($org_id, 'photo_thumbs_column', '5')";
+    $result = mysql_query($sql, $connection);
+    db_error($result);
+    
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+            VALUES ($org_id, 'photo_thumbs_row', '5')";
+    $result = mysql_query($sql, $connection);
+    db_error($result);
+    
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+            VALUES ($org_id, 'photo_thumbs_scale', '100')";
+    $result = mysql_query($sql, $connection);
+    db_error($result);
+    
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+            VALUES ($org_id, 'photo_show_width', '500')";
+    $result = mysql_query($sql, $connection);
+    db_error($result);
+    
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+            VALUES ($org_id, 'photo_show_height', '380')";
+    $result = mysql_query($sql, $connection);
+    db_error($result);
+    
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+            VALUES ($org_id, 'photo_popup_width', '580')";
+    $result = mysql_query($sql, $connection);
+    db_error($result);
+    
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+            VALUES ($org_id, 'photo_popup_height', '600')";
+    $result = mysql_query($sql, $connection);
+    db_error($result);
+    
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+            VALUES ($org_id, 'photo_image_text', '1')";
+    $result = mysql_query($sql, $connection);
+    db_error($result);
+    
+    
     // Rollen-Kategorie eintragen
     $sql = "INSERT INTO ". TBL_ROLE_CATEGORIES. " (rlc_org_shortname, rlc_name, rlc_locked)
                                            VALUES ({0}, 'Allgemein', 1)";
