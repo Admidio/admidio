@@ -228,13 +228,23 @@ echo "
                     //Ordnerpfad
                     $ordner = "../../../adm_my_files/photos/".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"];
 
-                    //Ausrechnen der Seitenzahl, 25 Thumbnails  pro seiet
+                    //Thumbnails pro Seite
+                    $thumbs_per_side = $g_preferences['photo_thumbs_row']*$g_preferences['photo_thumbs_column'];
+
+                    //Differenz
+                    $difference = $g_preferences['photo_thumbs_row']-$g_preferences['photo_thumbs_column'];
+                    
+                    //Popupfenstergröße
+                    $popup_height = $g_preferences['photo_show_height']+210;
+                    $popup_width  = $g_preferences['photo_show_width']+70;
+                    
+                    //Ausrechnen der Seitenzahl
                     if (settype($bilder,integer) || settype($thumb_seiten,integer))
                     {
-                        $thumb_seiten = round($bilder / 25);
+                        $thumb_seiten = round($bilder / $thumbs_per_side);
                     }
 
-                    if ($thumb_seiten * 25 < $bilder)
+                    if ($thumb_seiten * $thumbs_per_side < $bilder)
                     {
                         $thumb_seiten++; 
                     }
@@ -294,18 +304,18 @@ echo "
                     echo"
                     <tr style=\"text-align: center;\"><td td colspan=\"2\">
                         <table cellpadding=\"4\" cellspacing=\"0\" border=\"0\" style=\"width: 100%\">";
-                            for($zeile=1;$zeile<=5;$zeile++)//durchlaufen der Tabellenzeilen
+                            for($zeile=1;$zeile<=$g_preferences['photo_thumbs_row'];$zeile++)//durchlaufen der Tabellenzeilen
                             {
                                 echo "<tr>";
-                                for($spalte=1;$spalte<=5;$spalte++)//durchlaufen der Tabellenzeilen
+                                for($spalte=1;$spalte<=$g_preferences['photo_thumbs_column'];$spalte++)//durchlaufen der Tabellenzeilen
                                 {
-                                    $bild = ($thumb_seite*25)-25+($zeile*5)-5+$spalte;//Errechnug welches Bild ausgegeben wird
+                                    $bild = ($thumb_seite*$thumbs_per_side)-$thumbs_per_side+($zeile*$g_preferences['photo_thumbs_column'])-$g_preferences['photo_thumbs_row']+$spalte+$difference;//Errechnug welches Bild ausgegeben wird
                                     if ($bild <= $bilder)
                                     {
                                         echo"
-                                        <td style=\"width: 20%\">
-                                            <img onclick=\"window.open('photopopup.php?bild=$bild&pho_id=$pho_id','msg', 'height=600,width=580,left=162,top=5')\" style=\"vertical-align: middle; cursor: pointer;\"
-                                            src=\"resize.php?bild=$ordner/$bild.jpg&amp;scal=100&amp;aufgabe=anzeigen\" border=\"0\" alt=\"$bild\">
+                                        <td>
+                                            <img onclick=\"window.open('photopopup.php?bild=$bild&pho_id=$pho_id','msg', 'height=".$popup_height.", width=".$popup_width.",left=162,top=5')\" style=\"vertical-align: middle; cursor: pointer;\"
+                                            src=\"resize.php?bild=$ordner/$bild.jpg&amp;scal=".$g_preferences['photo_thumbs_scale']."&amp;aufgabe=anzeigen\" border=\"0\" alt=\"$bild\">
                                             <br>";
 
                                             //Buttons fuer moderatoren
@@ -332,7 +342,7 @@ echo "
 
                             //Anleger und Veraendererinfos
                             echo"
-                            <tr><td colspan=\"5\">
+                            <tr><td colspan=\"".$g_preferences['photo_thumbs_column']."\">
                                 <div style=\"margin: 8px 4px 4px 4px; font-size: 8pt; text-align: center;\">";
                                     if($adm_photo["pho_usr_id"]!=NULL)
                                     {
@@ -446,7 +456,7 @@ echo "
                 
                 // Navigation mit Vor- und Zurueck-Buttons
                 $base_url = "$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$pho_id;
-                echo generatePagination($base_url, $events-$ignored, 10, $event_element, TRUE);
+                echo "<div align=\"center\">".generatePagination($base_url, $events-$ignored, 10, $event_element, TRUE)."</div>";
                 
                 for($x=$event_element+$ignored-$ignore; $x<=$event_element+$ignored+9 && $x<$events; $x++){
                     $adm_photo_list = mysql_fetch_array($result_list);
@@ -494,7 +504,7 @@ echo "
                             {
                                 echo"
                                 <a target=\"_self\" href=\"photos.php?pho_id=".$adm_photo_list["pho_id"]."\">
-                                    <img src=\"resize.php?bild=$bsp_pic_path&amp;scal=100&amp;aufgabe=anzeigen&amp;side=y\" border=\"0\" alt=\"$previewpic\"
+                                    <img src=\"resize.php?bild=$bsp_pic_path&amp;scal=".$g_preferences['photo_preview_scale']."&amp;aufgabe=anzeigen&amp;side=y\" border=\"0\" alt=\"$previewpic\"
                                     style=\"vertical-align: middle; align: right;\"></a></div>";
                             }
                             echo"

@@ -159,13 +159,7 @@ echo "
                       Wenn du 0 als Dateigr&ouml;&szlig;e eintr&auml;gst, deaktivierst du die entsprechende
                       Funktion f&uuml;r alle Benutzer.";
                 break;
-            
-            case "photo_save_scale":
-                echo "Beim hochladen werden alle Bilder neu Skalliert. Der hier eingegeben Pixelwert
-                      ist der Parameter f&uuml;r die l&auml;ngere Seite des Bildes, egal ob das Bild im Hoch-
-                      oder Querformat &uuml;bergeben wurde. Die ander Seite wird im Verh&auml;tnis berechnet.";
-                break;
-            
+
             case "leader":
                 echo "Leiter werden in den Mitgliederlisten dieser Rolle gesondert aufgef&uuml;hrt.<br><br>
                       Leiter haben au&szlig;erdem die M&ouml;glichkeit neue Mitglieder aus der Organisation 
@@ -293,6 +287,46 @@ echo "
                    gespeichert werden, sollten die Dateinamen immer mit dem Datum beginnen (jjjj-mm-tt).";
                 break;
                 
+            //Fotomoduleinstellungen
+                    
+            case "photo_thumbs_row":
+                echo "Der hier angegebene Wert bestimmt wieviele Zeilen an Thumbnails auf einer Seite angezeigt werden.";
+                break;
+            
+            case "photo_thumbs_column":
+                echo "Der hier angegebene Wert bestimmt wieviele Zeilen an Thumbnails auf einer Seite angezeigt werden.
+                      Vorsicht: zuviele Thumbnails nebeneinander passen nicht ins Layout. Ggf. die Thumbnailskalierung
+                        herunter setzen. ";
+                break;
+                
+           case "photo_thumbs_scale":
+                echo "Hier kann festgelegt werden auf welchen Wert die l&auml;ngere Bildseite in der Thumbnailanzeige
+                      skaliert werden soll. Vorsicht: Werden die Thumbnails zu breit, passen weniger nebeneinander.
+                      Ggf. weniger Thumbnailspalten einstellen.";
+                break;
+           
+           case "photo_save_scale":
+                echo "Beim hochladen werden alle Bilder neu Skaliert. Der hier eingegeben Pixelwert
+                      ist der Parameter f&uuml;r die l&auml;ngere Seite des Bildes, egal ob das Bild im Hoch-
+                      oder Querformat &uuml;bergeben wurde. Die ander Seite wird im Verh&auml;tnis berechnet.";
+                break;
+           case "photo_show_size":
+                echo "Die hier angegeben Werte bestimmen die maximale Breite und H&ouml;he die ein Bild im Anzeigefenster
+                      haben darf. Das Fenster wird automatisch entsprechend gr&ouml;&szlig;er. Besonders bei der H&ouml;he
+                      ist Vorsicht angebracht, da &uuml;ber und unter dem Bild noch genug Platz f&uuml;r Layout und Browser
+                      sein muss. ";
+                break;
+                
+           case "photo_image_text":
+                echo "Ist diese Funktion aktivier, wird in jedes angezeigte Bild das &#169;-Symbol und die Homepage
+                      eingeblendet. Der Schriftzug wird nicht beim hochladen mit abgespeichert. Die Einblendung
+                      erfolgt nur bei Bildern mit einer Skalierung &uuml;ber 200 Pixel der l&auml;ngeren Seite, also in der Regl nicht bei Thumbnails.";
+                break;
+                
+           case "photo_preview_scale":
+                echo "Hier wird die H&ouml;he des jeweiligen Vorschaubildes in der Veranstaltungs&uuml;bersicht festgelegt.";
+                break;
+                        
             //Fotomodulhifen
 
             case "photo_up_help":

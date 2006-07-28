@@ -123,7 +123,16 @@ writeOrgaPreferences('enable_bbcode',       $_POST['enable_bbcode']);
 writeOrgaPreferences('enable_rss',          $_POST['enable_rss']);
 writeOrgaPreferences('max_email_attachment_size', $_POST['max_email_attachment_size']);
 writeOrgaPreferences('max_file_upload_size', $_POST['max_file_upload_size']);
+//Einstellungen Photomodul
+writeOrgaPreferences('photo_thumbs_column', $_POST['photo_thumbs_column']);
+writeOrgaPreferences('photo_thumbs_row', $_POST['photo_thumbs_row']);
+writeOrgaPreferences('photo_thumbs_scale', $_POST['photo_thumbs_scale']);
 writeOrgaPreferences('photo_save_scale', $_POST['photo_save_scale']);
+writeOrgaPreferences('photo_show_width', $_POST['photo_show_width']);
+writeOrgaPreferences('photo_show_height', $_POST['photo_show_height']);
+writeOrgaPreferences('photo_image_text', $_POST['photo_image_text']);
+writeOrgaPreferences('photo_preview_scale', $_POST['photo_preview_scale']);
+
 
 // zur Ausgangsseite zurueck
 $load_url = urlencode("$g_root_path/adm_program/administration/organization/organization.php?url=". $_GET['url']);
