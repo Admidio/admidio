@@ -56,7 +56,8 @@ if($g_session_valid & editPhoto())
     //erfassen der Veranstaltung
     $sql = "    SELECT *
                 FROM ". TBL_PHOTOS. "
-                WHERE (pho_id ='$pho_id')";
+                WHERE pho_id ={0}";
+    $sql    = prepareSQL($sql, array($pho_id));
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
     $adm_photo = mysql_fetch_array($result);
