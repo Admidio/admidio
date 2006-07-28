@@ -292,7 +292,7 @@ require("../../../adm_config/body_top.php");
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: left; float: left;\">&nbsp;";
                         // Link nur anzeigen, wenn Rolle auch Mitglieder hat
-                        if($num_member > 0)
+                        if($num_member > 0 || $num_leader > 0)
                         {
                             echo "<a href=\"lists_show.php?type=";
                             if($active_role)
@@ -335,7 +335,7 @@ require("../../../adm_config/body_top.php");
                     echo "</div>
                     <div style=\"text-align: right;\">";
                         // Kombobox mit Listen nur anzeigen, wenn die Rolle Mitglieder hat
-                        if($num_member > 0)
+                        if($num_member > 0 || $num_leader > 0)
                         {
                             echo "
                             <select size=\"1\" name=\"list$i\" onchange=\"showList(this, $row_lst->rol_id)\">
