@@ -57,7 +57,8 @@ if($event_element==NULL)
 //Aufruf der ggf. uebergebenen Veranstaltung
 $sql="  SELECT *
         FROM ". TBL_PHOTOS. "
-        WHERE (pho_id ='$pho_id')";
+        WHERE pho_id ={0}";
+$sql    = prepareSQL($sql, array($pho_id));
 $result_event = mysql_query($sql, $g_adm_con);
 db_error($result_event);
 $adm_photo = mysql_fetch_array($result_event);
@@ -66,7 +67,8 @@ $adm_photo = mysql_fetch_array($result_event);
 //erfassen ob Unterveranstaltungen existieren
 $sql="  SELECT *
         FROM ". TBL_PHOTOS. "
-        WHERE pho_pho_id_parent ='$pho_id'";
+        WHERE pho_pho_id_parent ={0}";
+$sql    = prepareSQL($sql, array($pho_id));
 $result_children = mysql_query($sql, $g_adm_con);
 db_error($result_event);
 $children = mysql_num_rows($result_children);
@@ -111,9 +113,8 @@ if($_GET["locked"]=="1" || $_GET["locked"]=="0")
         $locked=$_GET["locked"];
         $sql="  UPDATE ". TBL_PHOTOS. "
                SET  pho_locked = '$locked'
-               WHERE pho_id = '$pho_id'";
-        
-        //SQL Befehl ausfuehren
+               WHERE pho_id = {0}";
+        $sql    = prepareSQL($sql, array($pho_id));
         $result_approved = mysql_query($sql, $g_adm_con);
         db_error($result_approved);
         
@@ -121,12 +122,14 @@ if($_GET["locked"]=="1" || $_GET["locked"]=="0")
         $pho_id=$adm_photo_parent["pho_id"];
         $sql="   SELECT *
                  FROM ". TBL_PHOTOS. "
-                 WHERE (pho_id ='$pho_id')";
+                 WHERE pho_id ={0}";
+        $sql    = prepareSQL($sql, array($pho_id));
         $result_event = mysql_query($sql, $g_adm_con);
         db_error($result_event);
         $adm_photo = mysql_fetch_array($result_event);
     }
 }
+
 
 /*********************HTML_TEIL*******************************/ 
 
@@ -376,7 +379,7 @@ echo "
                 }
                 if($pho_id!=NULL)
                 {
-                    $sql=$sql."AND pho_pho_id_parent = '$pho_id'";
+                    $sql=$sql."AND pho_pho_id_parent = {0}";
                 }
                 if (!editPhoto($adm_photo_list["pho_org_shortname"]))
                 {
@@ -385,6 +388,7 @@ echo "
 
                 $sql=$sql." ORDER BY pho_begin DESC ";
 
+                $sql    = prepareSQL($sql, array($pho_id));
                 $result_list = mysql_query($sql, $g_adm_con);
                 db_error($result_list);
 
