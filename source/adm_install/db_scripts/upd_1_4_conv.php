@@ -57,17 +57,12 @@ while($row_orga = mysql_fetch_object($result_orga))
     if(!$result) showError(mysql_error());
     
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-            VALUES ($row_orga->org_id, 'photo_popup_width', '580')";
-    $result = mysql_query($sql, $connection);
-    if(!$result) showError(mysql_error());
-    
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-            VALUES ($row_orga->org_id, 'photo_popup_height', '600')";
-    $result = mysql_query($sql, $connection);
-    if(!$result) showError(mysql_error());
-    
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
             VALUES ($row_orga->org_id, 'photo_image_text', '1')";
+    $result = mysql_query($sql, $connection);
+    if(!$result) showError(mysql_error());
+        
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+            VALUES ($row_orga->org_id, 'photo_preview_scale', '100')";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
 }
