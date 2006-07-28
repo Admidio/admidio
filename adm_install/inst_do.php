@@ -493,17 +493,12 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
     db_error($result);
     
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-            VALUES ($org_id, 'photo_popup_width', '580')";
-    $result = mysql_query($sql, $connection);
-    db_error($result);
-    
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-            VALUES ($org_id, 'photo_popup_height', '600')";
-    $result = mysql_query($sql, $connection);
-    db_error($result);
-    
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
             VALUES ($org_id, 'photo_image_text', '1')";
+    $result = mysql_query($sql, $connection);
+    db_error($result);    
+        
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+            VALUES ($org_id, 'photo_preview_scale', '100')";
     $result = mysql_query($sql, $connection);
     db_error($result);
     
