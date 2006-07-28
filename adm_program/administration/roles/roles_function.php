@@ -338,9 +338,10 @@ elseif($_GET["mode"] == 2)
             if($_GET['rol_id'] > 0)
             {
                 $sql    = "SELECT COUNT(*) FROM ". TBL_MEMBERS. "
-                            WHERE mem_rol_id= $rol_id
+                            WHERE mem_rol_id= {0}
                               AND mem_leader = 0
                               AND mem_valid  = 1";
+                $sql    = prepareSQL($sql, array($_GET['rol_id']));
                 $result = mysql_query($sql, $g_adm_con);
                 db_error($result);
                 $role_members = mysql_fetch_array($result);
