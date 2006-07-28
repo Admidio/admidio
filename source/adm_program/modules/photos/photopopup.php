@@ -70,11 +70,14 @@ echo "
 
     //Ausgabe der Eine Tabelle Kopfzelle mit &Uuml;berschrift, Photographen und Datum
     //untere Zelle mit Buttons Bild und Fenster Schlie&szlig;en Button
+    $body_height = $g_preferences['photo_show_height']+ 130;
+    $body_with = $g_preferences['photo_show_width']+20;
+    
     echo "
     <body>
         <div style=\"margin-top: 5px; margin-bottom: 5px;\" align=\"center\">
-            <div class=\"formHead\" style=\"width: 95%\">".$adm_photo["pho_name"]."</div>
-            <div class=\"formBody\" style=\"width: 95%; height: 520px;\">";
+            <div class=\"formHead\" style=\"width:".$body_with."px\">".$adm_photo["pho_name"]."</div>
+            <div class=\"formBody\" style=\"width:".$body_with."px; height: ".$body_height."px;\">";
                 echo"Datum: ".mysqldate("d.m.y", $adm_photo["pho_begin"]);
                 if($adm_photo["pho_end"] != $adm_photo["pho_begin"])
                 {
@@ -111,8 +114,8 @@ echo "
                 if ($bildgroesse[0]<=$bildgroesse[1])
                 {
                     $side=y;
-                    if ($bildgroesse[1]>380){
-                        $scal=380;
+                    if ($bildgroesse[1]>$g_preferences['photo_show_height']){
+                        $scal=$g_preferences['photo_show_height'];
                     }
                     else
                     {
@@ -124,9 +127,9 @@ echo "
                 if ($bildgroesse[0]>$bildgroesse[1])
                 {
                     $side=x;
-                    if ($bildgroesse[0]>500)
+                    if ($bildgroesse[0]>$g_preferences['photo_show_width'])
                     {
-                        $scal=500;
+                        $scal=$g_preferences['photo_show_width'];
                     }
                     else{
                         $scal=$bildgroesse[0];

@@ -239,6 +239,34 @@ require("../../../adm_config/body_top.php");
                 echo"
                 <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 95%;\">
                     <div class=\"groupBoxHeadline\">Einstellungen Fotomodul&nbsp;&nbsp; </div>
+                    
+                    <div style=\"margin-top: 6px;\">
+                        <div style=\"text-align: right; width: 47%; float: left;\">Thumbnailzeilen:</div>
+                        <div style=\"text-align: left; margin-left: 50%;\">
+                            <input type=\"text\" name=\"photo_thumbs_row\" size=\"2\" maxlength=\"2\" value=\"". $g_preferences['photo_thumbs_row']. "\"> St&uuml;ck 
+                            <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_thumbs_row','Message','width=400,height=350,left=310,top=200,scrollbars=yes')\">
+                         </div>
+                    </div>
+
+                    <div style=\"margin-top: 6px;\">
+                        <div style=\"text-align: right; width: 47%; float: left;\">Thumbnailspalten:</div>
+                        <div style=\"text-align: left; margin-left: 50%;\">
+                            <input type=\"text\" name=\"photo_thumbs_column\" size=\"2\" maxlength=\"2\" value=\"". $g_preferences['photo_thumbs_column']. "\"> St&uuml;ck 
+                            <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_thumbs_column','Message','width=400,height=350,left=310,top=200,scrollbars=yes')\">
+                         </div>
+                    </div>
+                    
+                    <div style=\"margin-top: 6px;\">
+                        <div style=\"text-align: right; width: 47%; float: left;\">Skalierung Thumbnails:</div>
+                        <div style=\"text-align: left; margin-left: 50%;\">
+                            <input type=\"text\" name=\"photo_thumbs_scale\" size=\"4\" maxlength=\"4\" value=\"". $g_preferences['photo_thumbs_scale']. "\"> Pixel
+                            <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_thumbs_scale','Message','width=400,height=350,left=310,top=200,scrollbars=yes')\">
+                         </div>
+                    </div>
+                                   
                     <div style=\"margin-top: 6px;\">
                         <div style=\"text-align: right; width: 47%; float: left;\">Skalierung beim Hochladen:</div>
                         <div style=\"text-align: left; margin-left: 50%;\">
@@ -247,6 +275,48 @@ require("../../../adm_config/body_top.php");
                                 onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_save_scale','Message','width=400,height=350,left=310,top=200,scrollbars=yes')\">
                          </div>
                     </div>
+                    
+                    <div style=\"margin-top: 6px;\">
+                        <div style=\"text-align: right; width: 47%; float: left;\">H&ouml;he der Vorschaubilder:</div>
+                        <div style=\"text-align: left; margin-left: 50%;\">
+                            <input type=\"text\" name=\"photo_preview_scale\" size=\"4\" maxlength=\"4\" value=\"". $g_preferences['photo_preview_scale']. "\"> Pixel
+                            <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_preview_scale','Message','width=400,height=350,left=310,top=200,scrollbars=yes')\">
+                         </div>
+                    </div>
+                    
+                    <div style=\"margin-top: 6px;\">
+                        <div style=\"text-align: right; width: 47%; float: left;\">Max. Bildanzeigebreite:</div>
+                        <div style=\"text-align: left; margin-left: 50%;\">
+                            <input type=\"text\" name=\"photo_show_width\" size=\"4\" maxlength=\"4\" value=\"". $g_preferences['photo_show_width']. "\"> Pixel
+                            <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_show_size','Message','width=400,height=350,left=310,top=200,scrollbars=yes')\">
+                         </div>
+                    </div>
+
+                    <div style=\"margin-top: 6px;\">
+                        <div style=\"text-align: right; width: 47%; float: left;\">Max. Bildanzeigeh&ouml;he:</div>
+                        <div style=\"text-align: left; margin-left: 50%;\">
+                            <input type=\"text\" name=\"photo_show_height\" size=\"4\" maxlength=\"4\" value=\"". $g_preferences['photo_show_height']. "\"> Pixel
+                            <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_show_size','Message','width=400,height=350,left=310,top=200,scrollbars=yes')\">
+                         </div>
+                    </div>
+
+                    <div style=\"margin-top: 6px;\">
+                        <div style=\"text-align: right; width: 47%; float: left;\">Bildtext einblenden:</div>
+                        <div style=\"text-align: left; margin-left: 50%;\">
+                            <input type=\"checkbox\" id=\"photo_image_text\" name=\"photo_image_text\" ";
+                            if($g_preferences['photo_image_text'] == 1)
+                            {
+                                echo " checked ";
+                            }
+                            echo " value=\"1\" />
+                            <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_image_text','Message','width=400,height=400,left=310,top=200,scrollbars=yes')\">
+                        </div>
+                    </div>
+
                 </div>";
                 /*------------------------------------------------------------*/
                 // Rollen-Kategorien

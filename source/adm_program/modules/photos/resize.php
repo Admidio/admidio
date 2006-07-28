@@ -92,7 +92,7 @@ imagecopyresampled($neubild, $bilddaten, 0, 0, 0, 0, $neubildsize[0], $neubildsi
 if($aufgabe=="anzeigen")
 {
     //Einfuegen des textes bei bilder die in der Ausgabe groesser als 200px sind
-    if ($scal>200)
+    if ($scal>200 && $g_preferences['photo_image_text'] == 1)
     {
         $font_c = imagecolorallocate($neubild,255,255,255);
         $font_ttf=$g_server_path."/adm_program/system/mr_phone1.ttf";
