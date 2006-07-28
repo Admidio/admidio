@@ -37,7 +37,8 @@ $role_id = $_GET["role_id"];
 
 //Erfassen der uebergeben Rolle
 $sql="SELECT * FROM ". TBL_ROLES. "
-      WHERE rol_id = '$role_id'";
+      WHERE rol_id = {0}";
+$sql    = prepareSQL($sql, array($role_id));
 $result_role = mysql_query($sql, $g_adm_con);
 db_error($result);
 $role = mysql_fetch_object($result_role);
@@ -56,7 +57,8 @@ if((!isModerator() && !isGroupLeader($role_id) && !editUser()) || (!hasRole("Web
 //Abfrag aller Datensaetze die mit der Rolle zu tun haben
 $sql =" SELECT *
         FROM ". TBL_MEMBERS. "
-        WHERE mem_rol_id = $role_id";
+        WHERE mem_rol_id = {0}";
+$sql    = prepareSQL($sql, array($role_id));
 $result_mem_role = mysql_query($sql, $g_adm_con);
 db_error($result_mem_role);
    
@@ -115,7 +117,8 @@ while($user= mysql_fetch_array($result_user))
                     SET mem_valid  = 0, 
                         mem_end   = NOW(), 
                         mem_leader = 0
-                    WHERE mem_id = '$mem_id'";                             
+                    WHERE mem_id = {0}";                             
+            $sql    = prepareSQL($sql, array($mem_id));
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
         }
@@ -134,7 +137,8 @@ while($user= mysql_fetch_array($result_user))
                 $sql .=", mem_leader = 1 ";
             }
             
-            $sql .= "WHERE mem_id = '$mem_id'";
+            $sql .= "WHERE mem_id = {0}";
+            $sql    = prepareSQL($sql, array($mem_id));
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);          
         }
@@ -148,7 +152,8 @@ while($user= mysql_fetch_array($result_user))
                 if($_POST["leader_".$user["usr_id"]]==true && $mitglieder_array[$user["usr_id"]][6]==0)
                 {
                     $sql =" UPDATE ". TBL_MEMBERS. " SET mem_leader  = 1 
-                            WHERE mem_id = '$mem_id'";
+                            WHERE mem_id = {0}";
+                    $sql    = prepareSQL($sql, array($mem_id));
                     $result = mysql_query($sql, $g_adm_con);
                     db_error($result);
                 }
@@ -157,7 +162,8 @@ while($user= mysql_fetch_array($result_user))
                 if($_POST["leader_".$user["usr_id"]]==false && $mitglieder_array[$user["usr_id"]][6]==1)
                 {
                     $sql =" UPDATE ". TBL_MEMBERS. " SET mem_leader  = 0 
-                            WHERE mem_id = '$mem_id'";
+                            WHERE mem_id = {0}";
+                    $sql    = prepareSQL($sql, array($mem_id));
                     $result = mysql_query($sql, $g_adm_con);
                 db_error($result);
                 }
@@ -169,7 +175,7 @@ while($user= mysql_fetch_array($result_user))
     {
         $usr_id = $user["usr_id"];
         $sql="  INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin, mem_valid, mem_leader)
-                VALUES ($role_id, $usr_id, NOW(), 1";
+                VALUES ({0}, {1}, NOW(), 1";
         
         //Falls jemand direkt Leiter werden soll
         if($_POST["leader_".$user["usr_id"]]==true)
@@ -177,6 +183,7 @@ while($user= mysql_fetch_array($result_user))
             $sql .=", 1) ";
         }
         else $sql .=", 0) ";
+        $sql    = prepareSQL($sql, array($role_id, $usr_id));
         $result = mysql_query($sql, $g_adm_con);
         db_error($result);
     }
