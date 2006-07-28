@@ -50,7 +50,8 @@ if(!array_key_exists("new_user", $_GET))
 //Erfassen der uebergeben Rolle
 $sql="  SELECT * 
         FROM ". TBL_ROLES. "
-        WHERE rol_id = '$role_id'";
+        WHERE rol_id = {0}";
+$sql    = prepareSQL($sql, array($role_id));
 $result_role = mysql_query($sql, $g_adm_con);
 db_error($result);
 $role = mysql_fetch_object($result_role);
@@ -120,7 +121,8 @@ mysql_data_seek ($result_user, 0);
 //Erfassen wer die Rolle bereits hat oder schon mal hatte
 $sql="  SELECT mem_usr_id, mem_rol_id, mem_valid, mem_leader
         FROM ". TBL_MEMBERS. "
-        WHERE mem_rol_id = '$role_id'";
+        WHERE mem_rol_id = {0}";
+$sql    = prepareSQL($sql, array($role_id));
 $result_role_member = mysql_query($sql, $g_adm_con);
 db_error($result_role_member);
             
