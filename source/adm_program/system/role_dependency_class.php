@@ -48,7 +48,8 @@ class RoleDependency
     // Rollenabh�ngigkeit aus der Datenbank auslesen
     function get($childRoleId,$parentRoleId)
     {
-    	if($childRoleId > 0 && $parentRoleId > 0)
+    	if($childRoleId > 0 && $parentRoleId > 0
+    	&& is_numeric($childRoleId) && is_numeric($parentRoleId))
     	{
 	        $sql = "SELECT * FROM ". TBL_ROLE_DEPENDENCIES. 
 	               " WHERE rld_role_id_child = $childRoleId 
@@ -96,7 +97,7 @@ class RoleDependency
     // damit die Aenderung protokolliert werden kann
     function update($login_user_id)
     {
-        if($this->id > 0 && $login_user_id > 0)
+        if($this->id > 0 && $login_user_id > 0 && is_numeric($login_user_id))
         {
             $act_date = date("Y-m-d H:i:s", time());
 
@@ -129,23 +130,27 @@ class RoleDependency
 
     function getParentRoles($dbConnection,$childId)
     {
-        $allParentIds = array();
-
-        $sql = "SELECT rld_rol_id_parent FROM ". TBL_ROLE_DEPENDENCIES. 
-               " WHERE rld_rol_id_child = $childId ";
-        $result = mysql_query($sql, $dbConnection);
-        db_error($result);
-
-        $num_rows = mysql_num_rows($result);
-        if ($num_rows)
-        {
-            while ($row = mysql_fetch_object($result))
-            {
-                $allParentIds[] = $row->rld_rol_id_parent;                      
-            }
-        }
-
-        return  $allParentIds;
+    	if($childId > 0 && is_numeric($childId))
+    	{
+	        $allParentIds = array();
+	
+	        $sql = "SELECT rld_rol_id_parent FROM ". TBL_ROLE_DEPENDENCIES. 
+	               " WHERE rld_rol_id_child = $childId ";
+	        $result = mysql_query($sql, $dbConnection);
+	        db_error($result);
+	
+	        $num_rows = mysql_num_rows($result);
+	        if ($num_rows)
+	        {
+	            while ($row = mysql_fetch_object($result))
+	            {
+	                $allParentIds[] = $row->rld_rol_id_parent;                      
+	            }
+	        }
+	
+	        return  $allParentIds;
+    	}
+    	return -1;
     }
 }
 ?>

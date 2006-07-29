@@ -35,7 +35,7 @@ if(!array_key_exists("url", $_GET)
 || strlen($_GET['url']) == 0)
    $_GET['url'] = "home";
 
-$_POST['loginname'] = trim($_POST['loginname']);
+$_POST['loginname'] = strStripTags($_POST['loginname']);
 
 if(strlen($_POST['loginname']) == 0)
 {

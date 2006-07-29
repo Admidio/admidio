@@ -70,9 +70,9 @@ class Date
     // User mit der uebergebenen ID aus der Datenbank auslesen
     function getDate($dat_id)
     {
-    	if($dat_id > 0)
+    	if($dat_id > 0 && is_numeric($dat_id))
     	{
-	        $sql = "SELECT * FROM ". TBL_DATES. " WHERE dat_id = $dat_id";
+	        $sql    = "SELECT * FROM ". TBL_DATES. " WHERE dat_id = $dat_id";
 	        $result = mysql_query($sql, $this->db_connection);
 	        db_error($result);
 	

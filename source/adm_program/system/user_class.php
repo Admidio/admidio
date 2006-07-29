@@ -82,7 +82,7 @@ class User
     // User mit der uebergebenen ID aus der Datenbank auslesen
     function getUser($user_id)
     {
-    	if($user_id > 0)
+    	if($user_id > 0 && is_numeric($user_id))
     	{
 	        $sql = "SELECT * FROM ". TBL_USERS. " WHERE usr_id = $user_id";
 	        $result = mysql_query($sql, $this->db_connection);
@@ -170,7 +170,7 @@ class User
     // damit die Aenderung protokolliert werden kann
     function update($login_user_id)
     {
-        if($this->id > 0 && $login_user_id > 0)
+        if($this->id > 0 && $login_user_id > 0 && is_numeric($login_user_id))
         {
             $act_date = date("Y-m-d H:i:s", time());
 
@@ -217,7 +217,7 @@ class User
     // damit die Aenderung protokolliert werden kann
     function insert($login_user_id)
     {
-        if($this->id == 0 && $login_user_id > 0)
+        if($this->id == 0 && $login_user_id > 0 && is_numeric($login_user_id))
         {
             $act_date = date("Y-m-d H:i:s", time());
 

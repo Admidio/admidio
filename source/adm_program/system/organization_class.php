@@ -64,7 +64,9 @@ class Organization
     {
     	if(strlen($shortname) > 0)
     	{
-	        $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. " WHERE org_shortname = '$shortname'";
+    		$shortname = strStripTags($shortname);
+	        $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. " WHERE org_shortname = {0}";
+	        $sql = prepareSQL($sql, array($shortname));
 	        $result = mysql_query($sql, $this->db_connection);
 	        db_error($result);
 	

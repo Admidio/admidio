@@ -40,6 +40,15 @@ if(!hasRole("Webmaster"))
     exit();
 }
 
+// Uebergabevariablen pruefen
+
+if(isset($_GET["org_id"]) && is_numeric($_GET["org_id"]) == false)
+{
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=org_id";
+    header($location);
+    exit();
+}
+
 $err_code   = "";
 
 $g_current_organization->longname  = strStripTags($_POST["longname"]);

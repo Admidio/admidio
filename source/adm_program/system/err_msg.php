@@ -48,36 +48,30 @@ else
 }
 
 // Uebergaben vorbelegen, falls sie nicht uebergeben werden
-if (!isset($err_code))
+if (isset($_GET['err_code']))
 {
-    if (isset($_GET['err_code']))
-    {
-        $err_code = $_GET['err_code'];
-    }
-    else
-    {
-        $err_code = "";
-    }
+    $err_code = strStripTags($_GET['err_code']);
+}
+else
+{
+    $err_code = "";
 }
 
-if (!isset($err_text))
+if(isset($_GET['err_text']))
 {
-    if(isset($_GET['err_text']))
-    {
-        $err_text = $_GET['err_text'];
-    }
-    else
-    {
-        $err_text = "";
-    }
+    $err_text = strStripTags($_GET['err_text']);
+}
+else
+{
+    $err_text = "";
 }
 
-if (!isset($_GET['button']))
+if(!isset($_GET['button']) || !is_numeric($_GET['button']))
 {
     $_GET['button'] = 1;
 }
 
-if (!isset($_GET['timer']))
+if (!isset($_GET['timer']) || !is_numeric($_GET['timer']))
 {
     $_GET['timer'] = 0;
 }
@@ -116,7 +110,11 @@ else
     }
 }
 
-if (!isset($_GET['err_head']))
+if(isset($_GET['err_head']))
+{
+    $_GET['err_head'] = strStripTags($_GET['err_head']);
+}
+else
 {
     if(strlen($load_url) > 0)
     {
