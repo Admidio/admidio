@@ -38,6 +38,15 @@ if(!editDate())
     exit();
 }
 
+// Uebergabevariablen pruefen
+
+if(isset($_GET["dat_id"]) && is_numeric($_GET["dat_id"]) == false)
+{
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=dat_id";
+    header($location);
+    exit();
+}
+
 $global        = 0;
 $headline      = "";
 $date_from     = "";

@@ -38,12 +38,34 @@
 
 require("../../system/common.php");
 
+// Uebergabevariablen pruefen
+
+if($_GET["mode"] != 1 
+&& is_numeric($_GET["id"]) == false)
+{
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=id";
+    header($location);
+    exit();
+}
+
+if(is_numeric($_GET["mode"]) == false
+|| $_GET["mode"] < 1 || $_GET["mode"] > 5)
+{
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=mode";
+    header($location);
+    exit();
+}
+
 if (!array_key_exists("id", $_GET))
 {
     $_GET["id"] = 0;
 }
 
-if (!array_key_exists("headline", $_GET))
+if(array_key_exists("headline", $_GET))
+{
+	$_GET["headline"] = strStripTags($_GET["headline"]);
+}
+else
 {
     $_GET["headline"] = "G&auml;stebuch";
 }

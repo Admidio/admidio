@@ -33,6 +33,15 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
+// Uebergabevariablen pruefen
+
+if(isset($_GET["user_id"]) && is_numeric($_GET["user_id"]) == false)
+{
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=user_id";
+    header($location);
+    exit();
+}
+
 // wenn URL uebergeben wurde zu dieser gehen, ansonsten zurueck
 if(array_key_exists('url', $_GET))
 {
@@ -338,7 +347,7 @@ require("../../../adm_config/body_top.php");
                         //Falls vorhanden Bild ausgeben
                         if(@MYSQL_RESULT($result_photo,0,"usr_photo")!=NULL)
                         {
-                            echo"<img src=\"profile_photo_show.php?a_user_id=$a_user_id\">";
+                            echo"<img src=\"profile_photo_show.php?a_user_id=$usr_id\">";
                         }
                         //wenn nicht Schattenkopf
                         else
@@ -600,9 +609,9 @@ require("../../../adm_config/body_top.php");
                 {
                     echo "&nbsp;&nbsp;&nbsp;&nbsp;
                     <span class=\"iconLink\">
-                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?user_id=$a_user_id&amp;url=$url\"><img
+                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$a_user_id&amp;url=$url\"><img
                          class=\"iconLink\" src=\"$g_root_path/adm_program/images/photo.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Profildaten &auml;ndern\"></a>
-                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?user_id=$a_user_id&amp;url=$url\">Profilfoto &auml;ndern</a>
+                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$a_user_id&amp;url=$url\">Profilfoto &auml;ndern</a>
                     </span>
                     &nbsp;&nbsp;&nbsp;&nbsp;                    
                     <span class=\"iconLink\">

@@ -8,7 +8,7 @@
  *
  * Uebergaben:
  *
- * ID: die ID des Users dessen Bild angezeigt werden soll
+ * usr_id : die ID des Users dessen Bild angezeigt werden soll
  ******************************************************************************
  *
  * This program is free software; you can redistribute it and/or
@@ -28,16 +28,25 @@
  *****************************************************************************/
 require("../../system/common.php");
 require("../../system/login_valid.php");
-header("Content-Type: image/jpeg");
 
-$a_user_id=$_GET["a_user_id"];
+// Uebergabevariablen pruefen
 
+if(isset($_GET["usr_id"]) && is_numeric($_GET["usr_id"]) == false)
+{
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=usr_id";
+    header($location);
+    exit();
+}
 
-$sql="  SELECT usr_photo
+// Foto aus der Datenbank lesen und ausgeben
+
+$sql = "SELECT usr_photo
         FROM ".TBL_USERS."
-        WHERE usr_id=$a_user_id";
+        WHERE usr_id= {0}";
+$sql = prepareSQL($sql, array($_GET["usr_id"]));        
 $result_photo = mysql_query($sql, $g_adm_con);
 
+header("Content-Type: image/jpeg");
 echo @MYSQL_RESULT($result_photo,0,"usr_photo");
 
 ?>

@@ -39,6 +39,15 @@ if(!hasRole("Webmaster") && $g_current_user->id != $_GET['user_id'])
     exit();
 }
 
+// Uebergabevariablen pruefen
+
+if(isset($_GET["user_id"]) && is_numeric($_GET["user_id"]) == false)
+{
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=user_id";
+    header($location);
+    exit();
+}
+
 echo "
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
 <html>

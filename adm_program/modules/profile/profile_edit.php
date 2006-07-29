@@ -33,24 +33,30 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
-//pruefen ob in Popup angezeigt wird oder Normal (default)
-if($_GET['popup'] == 1)
+// Uebergabevariablen pruefen
+
+if(isset($_GET["user_id"]) && is_numeric($_GET["user_id"]) == false)
 {
-    $popup = 1;
-}
-else 
-{
-    $popup = 0;
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=user_id";
+    header($location);
+    exit();
 }
 
 // pruefen, ob Modus neues Mitglied erfassen
-if(!array_key_exists("new_user", $_GET))
+if(array_key_exists("new_user", $_GET))
 {
-    $a_new_user = false;
+	if(is_numeric($_GET['new_user']))
+	{
+    	$a_new_user = $_GET['new_user'];
+	}
+	else
+	{
+		$a_new_user = false;
+	}
 }
 else
 {
-    $a_new_user = $_GET['new_user'];
+    $a_new_user = false;
 }
 
 // wenn URL uebergeben wurde zu dieser gehen, ansonsten zurueck
@@ -110,11 +116,10 @@ echo "
    <!--[if lt IE 7]>
    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
    <![endif]-->";
-if($popup == 0)
+
    require("../../../adm_config/header.php");
 echo "</head>";
-if($popup == 0)
-    require("../../../adm_config/body_top.php");
+require("../../../adm_config/body_top.php");
     echo "
     <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
         <form action=\"profile_save.php?user_id=$a_user_id&amp;new_user=$a_new_user&amp;url=$url";
@@ -574,10 +579,8 @@ if($popup == 0)
             echo "document.getElementById('address').focus();";
         }
     echo "\n--></script>";    
-if($popup == 0)
-{
+
     require("../../../adm_config/body_bottom.php");
-}
 echo "</body>
 </html>";
 

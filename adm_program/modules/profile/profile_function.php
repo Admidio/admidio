@@ -31,13 +31,28 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
-$user_id  = $_GET['user_id'];
+// Uebergabevariablen pruefen
+
+if(isset($_GET["user_id"]) && is_numeric($_GET["user_id"]) == false)
+{
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=user_id";
+    header($location);
+    exit();
+}
+
+if(is_numeric($_GET["mode"]) == false
+|| $_GET["mode"] < 1 || $_GET["mode"] > 1)
+{
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=mode";
+    header($location);
+    exit();
+}
 
 if($_GET["mode"] == 1)
 {
     // Userdaten aus Datenbank holen
     $user = new User($g_adm_con);
-    $user->getUser($user_id);
+    $user->getUser($_GET['user_id']);
 
     header('Content-Type: text/x-vcard');
     header('Content-Disposition: attachment; filename="'. $user->first_name. ' '. $user->last_name. '.vcf"');
