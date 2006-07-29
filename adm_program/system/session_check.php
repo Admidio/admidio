@@ -26,81 +26,92 @@
 
 // Cookies einlesen
 if(isset($_COOKIE['adm_session']))
-   $g_session_id = $_COOKIE['adm_session'];
+{
+    $g_session_id = $_COOKIE['adm_session'];
+}
 else
-   $g_session_id = "";
+{
+    $g_session_id = "";
+}
    
 $g_session_valid = false;
 
 if(strlen($g_session_id) > 0)
 {
-   // Session auf Gueltigkeit pruefen
+    // Session auf Gueltigkeit pruefen
 
-   $sql    = "SELECT * FROM ". TBL_SESSIONS. " WHERE ses_session LIKE {0}";
-   $sql    = prepareSQL($sql, array($g_session_id));
-   $result = mysql_query($sql, $g_adm_con);
+    $sql    = "SELECT * FROM ". TBL_SESSIONS. " WHERE ses_session LIKE {0}";
+    $sql    = prepareSQL($sql, array($g_session_id));
+    $result = mysql_query($sql, $g_adm_con);
 
-   db_error($result);
+    db_error($result);
 
-   $session_found = mysql_num_rows($result);
-   $row           = mysql_fetch_object($result);
+    $session_found = mysql_num_rows($result);
+    $row           = mysql_fetch_object($result);
 
-   if ($session_found == 1)
-   {    
-      $valid    = false;
-      $time_gap = time() - mysqlmaketimestamp($row->ses_timestamp);
+    if ($session_found == 1)
+    {    
+        $valid    = false;
+        $time_gap = time() - mysqlmaketimestamp($row->ses_timestamp);
 
-      if($row->ses_longer_session == 1)
-      {
-         // User will erst nach 10 Stunden ausgeloggt werden
-         if ($time_gap < 28800) $valid = true;
-      }
-      else
-      {
-         // wenn länger als 30 min. nichts gemacht, dann ausloggen
-         if ($time_gap < 1800) $valid = true;
-      }
+        if($row->ses_longer_session == 1)
+        {
+            // User will erst nach 10 Stunden ausgeloggt werden
+            if ($time_gap < 28800) 
+            {
+                $valid = true;
+            }
+        }
+        else
+        {
+            // wenn länger als 30 min. nichts gemacht, dann ausloggen
+            if ($time_gap < 1800) 
+            {
+                $valid = true;
+            }
+        }
 
-      if($valid)
-      {
-         $g_session_valid = true;
-         $g_current_user->getUser($row->ses_usr_id);
+        if($valid)
+        {
+            $g_session_valid = true;
+            $g_current_user->getUser($row->ses_usr_id);
 
-         // Datetime der Session muss aktualisiert werden
+            // Datetime der Session muss aktualisiert werden
 
-         $act_datetime   = date("Y-m-d H:i:s", time());
+            $act_datetime   = date("Y-m-d H:i:s", time());
 
-         $sql    = "UPDATE ". TBL_SESSIONS. " SET ses_timestamp = '$act_datetime' WHERE ses_session LIKE {0}";
-         $sql    = prepareSQL($sql, array($g_session_id));
-         $result = mysql_query($sql, $g_adm_con);
-         db_error($result);
-      }
-      else
-      {
-         // User war zu lange inaktiv -> Session loeschen
-         $g_current_user->clear();
+            $sql    = "UPDATE ". TBL_SESSIONS. " SET ses_timestamp = '$act_datetime' 
+                        WHERE ses_session LIKE {0}";
+            $sql    = prepareSQL($sql, array($g_session_id));
+            $result = mysql_query($sql, $g_adm_con);
+            db_error($result);
+        }
+        else
+        {
+            // User war zu lange inaktiv -> Session loeschen
+            $g_current_user->clear();
 
-         $sql    = "DELETE FROM ". TBL_SESSIONS. " WHERE ses_session LIKE {0}";
-         $sql    = prepareSQL($sql, array($g_session_id));
-         $result = mysql_query($sql, $g_adm_con);
+            $sql    = "DELETE FROM ". TBL_SESSIONS. " WHERE ses_session LIKE {0}";
+            $sql    = prepareSQL($sql, array($g_session_id));
+            $result = mysql_query($sql, $g_adm_con);
 
-         db_error($result);
-      }
-   }
-   else
-   {
-    $g_current_user->clear();
+            db_error($result);
+        }
+    }
+    else
+    {
+        $g_current_user->clear();
 
-      if ($session_found != 0)
-      {
-         // ID mehrfach vergeben -> Fehler und IDs loeschen
-         $sql    = "DELETE FROM ". TBL_SESSIONS. " WHERE ses_session LIKE {0}";
-         $sql    = prepareSQL($sql, array($g_session_id));
-         $result = mysql_query($sql, $g_adm_con);
+        if ($session_found != 0)
+        {
+            // ID mehrfach vergeben -> Fehler und IDs loeschen
+            $sql    = "DELETE FROM ". TBL_SESSIONS. " WHERE ses_session LIKE {0}";
+            $sql    = prepareSQL($sql, array($g_session_id));
+            $result = mysql_query($sql, $g_adm_con);
 
-         db_error($result);
-      }
-   }
+            db_error($result);
+        }
+    }
 }
 
 ?>

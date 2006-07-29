@@ -42,6 +42,30 @@ if(!hasRole("Webmaster"))
    exit();
 }
 
+// Uebergabevariablen pruefen
+
+if(isset($_GET["user_id"]) && is_numeric($_GET["user_id"]) == false)
+{
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=user_id";
+    header($location);
+    exit();
+}
+
+if(isset($_GET["new_user_id"]) && is_numeric($_GET["new_user_id"]) == false)
+{
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=new_user_id";
+    header($location);
+    exit();
+}
+
+if(is_numeric($_GET["mode"]) == false
+|| $_GET["mode"] < 1 || $_GET["mode"] > 4)
+{
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=mode";
+    header($location);
+    exit();
+}
+
 $err_code = "";
 
 if($_GET["mode"] == 1)

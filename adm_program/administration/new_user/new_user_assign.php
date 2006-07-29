@@ -40,6 +40,20 @@ if(!hasRole("Webmaster"))
    exit();
 }
 
+if(isset($_GET['new_user_id']) && is_numeric($_GET['new_user_id']) == false)
+{
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=new_user_id";
+    header($location);
+    exit();
+}
+
+if(isset($_GET['letter']) && strlen($_GET["letter"]) > 2)
+{
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=letter";
+    header($location);
+    exit();
+}
+
 $restrict = "";
 $listname = "";
 $i = 0;

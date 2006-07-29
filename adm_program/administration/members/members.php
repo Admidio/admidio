@@ -41,13 +41,20 @@ if(!editUser())
     exit();
 }
 
-if(!isset($_GET['members']))
+if(isset($_GET['members']) && is_numeric($_GET['members']))
 {
-    $members = 1;
+    $members = $_GET['members'];
 }
 else
 {
-    $members = $_GET['members'];
+    $members = 1;
+}
+
+if(isset($_GET['letter']) && strlen($_GET["letter"]) > 2)
+{
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=letter";
+    header($location);
+    exit();
 }
 
 $restrict = "";
