@@ -34,7 +34,7 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
-// nur Webmaster & Moderatoren d&uuml;rfen Rollen zuweisen
+// nur Webmaster & Moderatoren duerfen Rollen zuweisen
 if(!isModerator() && !isGroupLeader() && !editUser())
 {
     $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
@@ -42,13 +42,41 @@ if(!isModerator() && !isGroupLeader() && !editUser())
     exit();
 }
 
-if(!array_key_exists("popup", $_GET))
+// Uebergabevariablen pruefen
+
+if(isset($_GET["user_id"]) && is_numeric($_GET["user_id"]) == false)
 {
-    $_GET['popup']    = 0;
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=user_id";
+    header($location);
+    exit();
 }
-if(!array_key_exists("new_user", $_GET))
+
+if(array_key_exists("popup", $_GET))
 {
-    $_GET['new_user'] = 0;
+	if(is_numeric($_GET["popup"]) == false)
+	{
+	    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=popup";
+	    header($location);
+	    exit();
+	}
+}
+else
+{
+    $_GET["popup"] = 0;
+}
+
+if(array_key_exists("new_user", $_GET))
+{
+	if(is_numeric($_GET["new_user"]) == false)
+	{
+	    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=new_user";
+	    header($location);
+	    exit();
+	}
+}
+else
+{
+    $_GET["new_user"] = 0;
 }
 
 // wenn URL uebergeben wurde zu dieser gehen, ansonsten zurueck

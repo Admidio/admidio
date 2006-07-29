@@ -8,8 +8,10 @@
  *
  * Uebergaben:
  *
- * user_id: id des Users dessen Bild geaendert werden soll
- * job:     Welcher Teil des Skriptes soll ausgeführt werden
+ * usr_id: id des Users dessen Bild geaendert werden soll
+ * job - save :   Welcher Teil des Skriptes soll ausgeführt werden
+ *     - dont_save :
+ *     - upload :
  *
  ******************************************************************************
  *
@@ -40,20 +42,37 @@ if (ini_get('file_uploads') != '1')
     exit();
 }
 
-if(!array_key_exists('user_id', $_GET))
+// Uebergabevariablen pruefen
+
+if(isset($_GET["usr_id"]) && is_numeric($_GET["usr_id"]) == false)
+{
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=usr_id";
+    header($location);
+    exit();
+}
+
+if(isset($_GET["job"]) && $_GET["job"] != "save" 
+&& $_GET["job"] != "dont_save" && $_GET["job"] != "upload")
+{
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=job";
+    header($location);
+    exit(); 
+}
+
+if(!array_key_exists('usr_id', $_GET))
 {
     // wenn nichts uebergeben wurde, dann eigene Daten anzeigen
-    $a_user_id = $g_current_user->id;
+    $user_id = $g_current_user->id;
     $edit_user = true;
 }
 else
 {
     // Daten eines anderen Users anzeigen und pruefen, ob editiert werden darf
-    $a_user_id = $_GET['user_id'];
+    $user_id = $_GET['usr_id'];
     if(editUser())
     {
         // jetzt noch schauen, ob User ueberhaupt Mitglied in der Gliedgemeinschaft ist
-        if(isMember($_GET['user_id']))      
+        if(isMember($_GET['usr_id']))      
         {
             $edit_user = true;
         }
@@ -78,15 +97,15 @@ if(!editUser() && $user_id != $g_current_user->id)
 }
 
 // User auslesen
-if($a_user_id > 0)
+if($user_id > 0)
 {
     $user = new User($g_adm_con);
-    $user->GetUser($a_user_id);
+    $user->GetUser($user_id);
 }
 
 
 //Pfad fuer zwischenspeicherung des Bildes
-$bild="../../../adm_my_files/photos/".$a_user_id.".jpg";
+$bild="../../../adm_my_files/photos/".$user_id.".jpg";
 
     /*****************************Bild speichern*************************************/
     if($_GET["job"]=="save")
@@ -97,7 +116,7 @@ $bild="../../../adm_my_files/photos/".$a_user_id.".jpg";
 
         $sql="  UPDATE ". TBL_USERS. "
                 SET usr_photo = '$database_pic'
-                WHERE usr_id = $a_user_id ";
+                WHERE usr_id = $user_id ";
         $result = mysql_query($sql, $g_adm_con);
         db_error($result);
 
@@ -109,7 +128,7 @@ $bild="../../../adm_my_files/photos/".$a_user_id.".jpg";
 
         // zur Ausgangsseite zurueck
         $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=profile_photo_update&timer=2000&url=".
-                    urlencode("$g_root_path/adm_program/modules/profile/profile.php?user_id=".$a_user_id."");
+                    urlencode("$g_root_path/adm_program/modules/profile/profile.php?user_id=".$user_id."");
         header($location);
         exit();
 
@@ -125,7 +144,7 @@ $bild="../../../adm_my_files/photos/".$a_user_id.".jpg";
 
         // zur Ausgangsseite zurueck
         $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=profile_photo_update_cancel&timer=2000&url=".
-                    urlencode("$g_root_path/adm_program/modules/profile/profile.php?user_id=".$a_user_id."");
+                    urlencode("$g_root_path/adm_program/modules/profile/profile.php?user_id=".$user_id."");
         header($location);
         exit();
 
@@ -190,7 +209,7 @@ require("../../../adm_config/body_top.php");
         <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
 
             <div class=\"formHead\">";
-                if($a_user_id == $g_current_user->id)
+                if($user_id == $g_current_user->id)
                 {
                     echo strspace("Mein Profilfoto &auml;ndern", 2);
                 }
@@ -206,14 +225,14 @@ require("../../../adm_config/body_top.php");
                 //Nachsehen ob fuer den User ein Photo gespeichert wurde
                 $sql =" SELECT usr_photo
                         FROM ".TBL_USERS."
-                        WHERE usr_id = '$a_user_id'";
+                        WHERE usr_id = '$user_id'";
                 $result_photo = mysql_query($sql, $g_adm_con);
                 db_error($result_photo);
 
                 //Falls vorhanden Bild ausgeben
                 if(@MYSQL_RESULT($result_photo,0,"usr_photo")!=NULL)
                 {
-                    echo"<img src=\"profile_photo_show.php?a_user_id=$a_user_id\"\">";
+                    echo"<img src=\"profile_photo_show.php?usr_id=$user_id\"\">";
                 }
                 //wenn nicht Schattenkopf
                 else
@@ -224,12 +243,12 @@ require("../../../adm_config/body_top.php");
 
             //Bildupload
             echo"
-            <form name=\"photoup\" method=\"post\" action=\"profile_photo_edit.php?job=upload&user_id=".$a_user_id."\" enctype=\"multipart/form-data\">
+            <form name=\"photoup\" method=\"post\" action=\"profile_photo_edit.php?job=upload&usr_id=".$user_id."\" enctype=\"multipart/form-data\">
                 Bitte hier ein neues Bild ausw&auml;hlen:
                 <p><input type=\"file\" id=\"bilddatei\" name=\"bilddatei\" size=\"40\" value=\"durchsuchen\"></p>
                 <hr width=\"85%\" />
                 <div style=\"margin-top: 6px;\">
-                    <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile.php?user_id=".$a_user_id."'\">
+                    <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile.php?user_id=".$user_id."'\">
                         <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
                         &nbsp;Zur&uuml;ck
                     </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -252,7 +271,7 @@ require("../../../adm_config/body_top.php");
         <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
 
             <div class=\"formHead\">";
-                if($a_user_id == $g_current_user->id)
+                if($user_id == $g_current_user->id)
                 {
                     echo strspace("Mein Profilfoto", 2);
                 }
@@ -264,7 +283,7 @@ require("../../../adm_config/body_top.php");
 
             <div class=\"formBody\">";
             //Groessnanpassung Bild und Bericht
-                if(move_uploaded_file($_FILES["bilddatei"]["tmp_name"], "../../../adm_my_files/photos/".$a_user_id.".jpg"))
+                if(move_uploaded_file($_FILES["bilddatei"]["tmp_name"], "../../../adm_my_files/photos/".$user_id.".jpg"))
                 {
 
                     //Ermittlung der Original Bildgroesse
@@ -305,7 +324,7 @@ require("../../../adm_config/body_top.php");
                     //Nachsehen ob fuer den User ein Photo gespeichert war
                     $sql =" SELECT usr_photo
                             FROM ".TBL_USERS."
-                            WHERE usr_id = '$a_user_id'";
+                            WHERE usr_id = '$user_id'";
                     $result_photo = mysql_query($sql, $g_adm_con);
                     db_error($result_photo);
 
@@ -317,7 +336,7 @@ require("../../../adm_config/body_top.php");
                                 //Falls vorhanden Bild ausgeben
                                 if(@MYSQL_RESULT($result_photo,0,"usr_photo")!=NULL)
                                 {
-                                    echo"<img src=\"profile_photo_show.php?a_user_id=$a_user_id\"\">";
+                                    echo"<img src=\"profile_photo_show.php?usr_id=$user_id\"\">";
                                 }
                                 //wenn nicht Schattenkopf
                                 else
@@ -332,11 +351,11 @@ require("../../../adm_config/body_top.php");
 
                     <hr width=\"85%\" />
                     <div style=\"margin-top: 6px;\">
-                        <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=dont_save&user_id=".$a_user_id."'\">
+                        <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=dont_save&usr_id=".$user_id."'\">
                             <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
                             &nbsp;Abbrechen
                         </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <button name=\"update\" type=\"button\" value=\"update\" onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=save&user_id=".$a_user_id."'\">
+                        <button name=\"update\" type=\"button\" value=\"update\" onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=save&usr_id=".$user_id."'\">
                             <img src=\"$g_root_path/adm_program/images/database_in.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
                             &nbsp;Neues Bild &uuml;bernehmen
                         </button>

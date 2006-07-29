@@ -32,6 +32,20 @@
 require("../../system/common.php");
 require("../../system/email_class.php");
 
+// Uebergabevariablen pruefen
+
+if(isset($_GET["usr_id"]) && is_numeric($_GET["usr_id"]) == false)
+{
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=usr_id";
+    header($location);
+    exit();
+}
+
+if(isset($_GET["rolle"]))
+{
+    $_GET["rolle"] = strStripTags($_GET["rolle"]); 
+}
+
 $err_code = "";
 $err_text = "";
 

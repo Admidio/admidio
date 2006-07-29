@@ -496,10 +496,10 @@ for($j = 0; $j < $max_count; $j++)
         {
             if($mode == "html")
             {
-            	$load_url = urlencode("$g_root_path/adm_program/modules/lists/lists_show.php?mode=$mode&type=$type&rol_id=$rol_id&url=$url");
+                $load_url = urlencode("$g_root_path/adm_program/modules/lists/lists_show.php?mode=$mode&type=$type&rol_id=$rol_id&url=$url");
                 echo "<tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" 
-				onMouseOut=\"this.className='listMouseOut'\" style=\"cursor: pointer\" 
-				onClick=\"window.location.href='$g_root_path/adm_program/modules/profile/profile.php?user_id=$row[0]&url=$load_url'\">\n";
+                onMouseOut=\"this.className='listMouseOut'\" style=\"cursor: pointer\" 
+                onClick=\"window.location.href='$g_root_path/adm_program/modules/profile/profile.php?user_id=$row[0]&url=$load_url'\">\n";
             }
             else if($mode == "print")
             {
@@ -662,7 +662,7 @@ for($j = 0; $j < $max_count; $j++)
                             // Benutzerfoto anzeigen
                             if(($mode == "html" || $mode == "print") && $row[$i] != NULL)
                             {
-                                $content = "<img src=\"../profile/profile_photo_show.php?a_user_id=$row[0]\"
+                                $content = "<img src=\"../profile/profile_photo_show.php?usr_id=$row[0]\"
                                             style=\"vertical-align: middle;\" alt=\"Benutzerfoto\">";
                             }     
                             if ($mode == "csv" && $row[$i] != NULL)

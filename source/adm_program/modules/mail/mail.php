@@ -55,6 +55,12 @@ if ($g_session_valid && !isValidEmailAddress($g_current_user->email))
     exit();
 }
 
+if(isset($_GET["usr_id"]) && is_numeric($_GET["usr_id"]) == false)
+{
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=usr_id";
+    header($location);
+    exit();
+}
 
 if (array_key_exists("usr_id", $_GET) && !$g_session_valid)
 {
@@ -66,6 +72,8 @@ if (array_key_exists("usr_id", $_GET) && !$g_session_valid)
 
 if (array_key_exists("rolle", $_GET))
 {
+	$_GET["rolle"] = strStripTags($_GET["rolle"]); 
+	
     if ($g_session_valid)
     {
         $sql    = "SELECT rol_mail_login FROM ". TBL_ROLES. "
@@ -91,17 +99,25 @@ if (array_key_exists("rolle", $_GET))
     }
 }
 
-if (!array_key_exists("subject", $_GET))
+if (array_key_exists("subject", $_GET))
+{
+	$_GET["subject"] = strStripTags($_GET["subject"]); 
+}
+else
 {
     $_GET["subject"] = "";
 }
 
-if (!array_key_exists("body", $_GET))
+if (array_key_exists("body", $_GET))
+{
+	$_GET["body"] = strStripTags($_GET["body"]); 
+}
+else
 {
     $_GET["body"]  = "";
 }
 
-if (!array_key_exists("kopie", $_GET))
+if (!array_key_exists("kopie", $_GET) || !is_numeric($_GET["kopie"]))
 {
     $_GET["kopie"] = "1";
 }

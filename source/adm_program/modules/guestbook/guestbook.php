@@ -34,17 +34,41 @@
 require("../../system/common.php");
 require("../../system/bbcode.php");
 
-if (!array_key_exists("start", $_GET))
+// Uebergabevariablen pruefen
+
+if(array_key_exists("start", $_GET))
+{
+	if(is_numeric($_GET["start"]) == false)
+	{
+	    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=ann_id";
+	    header($location);
+	    exit();
+	}
+}
+else
 {
     $_GET["start"] = 0;
 }
 
-if (!array_key_exists("headline", $_GET))
+if(array_key_exists("headline", $_GET))
+{
+	$_GET["headline"] = strStripTags($_GET["headline"]);
+}
+else
 {
     $_GET["headline"] = "G&auml;stebuch";
 }
 
-if (!array_key_exists("id", $_GET))
+if(array_key_exists("id", $_GET))
+{
+	if(is_numeric($_GET["id"]) == false)
+	{
+	    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=id";
+	    header($location);
+	    exit();
+	}	
+}
+else
 {
     $_GET["id"] = 0;
 }

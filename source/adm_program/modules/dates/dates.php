@@ -34,17 +34,46 @@
 require("../../system/common.php");
 require("../../system/bbcode.php");
 
-if(!array_key_exists("mode", $_GET))
+// Uebergabevariablen pruefen
+
+if(array_key_exists("mode", $_GET))
+{
+	if($_GET["mode"] != "actual" && $_GET["mode"] != "old")
+	{
+	    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=mode";
+	    header($location);
+	    exit();
+	}	
+}
+else
 {
     $_GET["mode"] = "actual";
 }
 
-if(!array_key_exists("start", $_GET))
+if(array_key_exists("start", $_GET))
+{
+	if(is_numeric($_GET["start"]) == false)
+	{
+	    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=ann_id";
+	    header($location);
+	    exit();
+	}
+}
+else
 {
     $_GET["start"] = 0;
 }
 
-if(!array_key_exists("id", $_GET))
+if(array_key_exists("id", $_GET))
+{
+	if(is_numeric($_GET["id"]) == false)
+	{
+	    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=id";
+	    header($location);
+	    exit();
+	}	
+}
+else
 {
     $_GET["id"] = 0;
 }

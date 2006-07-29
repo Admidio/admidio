@@ -82,9 +82,13 @@ if($_GET["mode"] == 2 || $_GET["mode"] == 3)
     }
 }
 
-if(!array_key_exists("headline", $_GET))
+if(array_key_exists("headline", $_GET))
 {
-    $_GET["headline"] = "Ankündigungen";
+	$_GET["headline"] = strStripTags($_GET["headline"]);
+}
+else
+{
+    $_GET["headline"] = "Ank&uuml;ndigungen";
 }
 
 $err_code = "";
@@ -101,9 +105,13 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
         $act_date = date("Y.m.d G:i:s", time());
 
         if(array_key_exists("global", $_POST))
-        $global = 1;
+        {
+        	$global = 1;
+        }
         else
-        $global = 0;
+        {
+        	$global = 0;
+        }
 
         // Termin speichern
 
