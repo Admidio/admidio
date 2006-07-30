@@ -35,37 +35,37 @@ require("../../system/bbcode.php");
 
 // Uebergabevariablen pruefen
 
-if(array_key_exists("start", $_GET))
+if (array_key_exists("start", $_GET))
 {
-	if(is_numeric($_GET["start"]) == false)
-	{
-	    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=ann_id";
-	    header($location);
-	    exit();
-	}
+    if (is_numeric($_GET["start"]) == false)
+    {
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=ann_id";
+        header($location);
+        exit();
+    }
 }
 else
 {
     $_GET["start"] = 0;
 }
 
-if(array_key_exists("id", $_GET))
+if (array_key_exists("id", $_GET))
 {
-	if(is_numeric($_GET["id"]) == false)
-	{
-	    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=id";
-	    header($location);
-	    exit();
-	}	
+    if (is_numeric($_GET["id"]) == false)
+    {
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=id";
+        header($location);
+        exit();
+    }
 }
 else
 {
     $_GET["id"] = 0;
 }
 
-if(array_key_exists("headline", $_GET))
+if (array_key_exists("headline", $_GET))
 {
-	$_GET["headline"] = strStripTags($_GET["headline"]);
+    $_GET["headline"] = strStripTags($_GET["headline"]);
 }
 else
 {
@@ -109,7 +109,9 @@ require("../../../adm_config/body_top.php");
         if ($_GET['id'] > 0)
         {
             $sql    = "SELECT * FROM ". TBL_LINKS. "
-                       WHERE lnk_id = '$_GET[id]' and lnk_org_id = '$g_current_organization->id'";
+                       WHERE lnk_id = {0} and lnk_org_id = '$g_current_organization->id'";
+
+            $sql    = prepareSQL($sql, array($_GET['id']));
         }
         //...ansonsten alle fuer die Gruppierung passenden Links aus der DB holen.
         else
@@ -117,7 +119,9 @@ require("../../../adm_config/body_top.php");
             $sql    = "SELECT * FROM ". TBL_LINKS. "
                        WHERE lnk_org_id = '$g_current_organization->id'
                        ORDER BY lnk_timestamp DESC
-                       LIMIT ". $_GET["start"]. ", 10 ";
+                       LIMIT {0}, 10 ";
+
+            $sql    = prepareSQL($sql, array($_GET['start']));
         }
 
         $links_result = mysql_query($sql, $g_adm_con);
@@ -140,12 +144,12 @@ require("../../../adm_config/body_top.php");
             if (editWeblinks())
             {
                 echo "<p>
-					<span class=\"iconLink\">
-	                    <a class=\"iconLink\" href=\"links_new.php?headline=". $_GET["headline"]. "\"><img
-	                    class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Neu anlegen\"></a>
-	                    <a class=\"iconLink\" href=\"links_new.php?headline=". $_GET["headline"]. "\">Neu anlegen</a>
-	                </span>
-				</p>";
+                    <span class=\"iconLink\">
+                        <a class=\"iconLink\" href=\"links_new.php?headline=". $_GET["headline"]. "\"><img
+                        class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Neu anlegen\"></a>
+                        <a class=\"iconLink\" href=\"links_new.php?headline=". $_GET["headline"]. "\">Neu anlegen</a>
+                    </span>
+                </p>";
             }
 
             // Navigation mit Vor- und Zurueck-Buttons
@@ -171,7 +175,7 @@ require("../../../adm_config/body_top.php");
             // Links auflisten
             echo "<div class=\"formHead\">Weblinks</div>
             <div class=\"formBody\" style=\"overflow: hidden;\">";
-                
+
                 $i = 0;
                 while ($row = mysql_fetch_object($links_result))
                 {
@@ -183,7 +187,7 @@ require("../../../adm_config/body_top.php");
                     <div style=\"text-align: left;\">
                         <div style=\"text-align: left;\">
                             <a href=\"$row->lnk_url\" target=\"_blank\">
-                                <img src=\"$g_root_path/adm_program/images/globe.png\" style=\"vertical-align: top;\" 
+                                <img src=\"$g_root_path/adm_program/images/globe.png\" style=\"vertical-align: top;\"
                                     alt=\"Gehe zu $row->lnk_name\" title=\"Gehe zu $row->lnk_name\" border=\"0\"></a>
                             <a href=\"$row->lnk_url\" target=\"_blank\">$row->lnk_name</a>
                         </div>
@@ -218,29 +222,29 @@ require("../../../adm_config/body_top.php");
                                 $user_create->getUser($row->lnk_usr_id);
                                 echo "Angelegt von ". strSpecialChars2Html($user_create->first_name). " ". strSpecialChars2Html($user_create->last_name).
                                 " am ". mysqldatetime("d.m.y h:i", $row->lnk_timestamp);
-                                
-		                        if($row->lnk_usr_id_change > 0)
-		                        {
-		                            $user_change = new User($g_adm_con);
-		                            $user_change->getUser($row->lnk_usr_id_change);
-		                            echo "<br>Zuletzt bearbeitet von ". strSpecialChars2Html($user_change->first_name). " ". strSpecialChars2Html($user_change->last_name).
-		                            " am ". mysqldatetime("d.m.y h:i", $row->lnk_last_change);
-		                        }                                
+
+                                if($row->lnk_usr_id_change > 0)
+                                {
+                                    $user_change = new User($g_adm_con);
+                                    $user_change->getUser($row->lnk_usr_id_change);
+                                    echo "<br>Zuletzt bearbeitet von ". strSpecialChars2Html($user_change->first_name). " ". strSpecialChars2Html($user_change->last_name).
+                                    " am ". mysqldatetime("d.m.y h:i", $row->lnk_last_change);
+                                }
                             echo "</div>";
                         }
-                    echo "</div>";                    
+                    echo "</div>";
                     $i++;
                  }  // Ende While-Schleife
              echo "</div>";
         }
 
-		if(mysql_num_rows($links_result) > 2)
-		{
-	        // Navigation mit Vor- und Zurueck-Buttons
-	        // erst anzeigen, wenn mehr als 2 Eintraege (letzte Navigationsseite) vorhanden sind
-	        $baseUrl = "$g_root_path/adm_program/modules/links/links.php?headline=". $_GET["headline"];
-	        echo generatePagination($baseUrl, $numLinks, 10, $_GET["start"], TRUE);
-		}
+        if(mysql_num_rows($links_result) > 2)
+        {
+            // Navigation mit Vor- und Zurueck-Buttons
+            // erst anzeigen, wenn mehr als 2 Eintraege (letzte Navigationsseite) vorhanden sind
+            $baseUrl = "$g_root_path/adm_program/modules/links/links.php?headline=". $_GET["headline"];
+            echo generatePagination($baseUrl, $numLinks, 10, $_GET["start"], TRUE);
+        }
     echo "</div>";
 
     require("../../../adm_config/body_bottom.php");
