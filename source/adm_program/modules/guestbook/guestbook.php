@@ -36,37 +36,37 @@ require("../../system/bbcode.php");
 
 // Uebergabevariablen pruefen
 
-if(array_key_exists("start", $_GET))
+if (array_key_exists("start", $_GET))
 {
-	if(is_numeric($_GET["start"]) == false)
-	{
-	    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=ann_id";
-	    header($location);
-	    exit();
-	}
+    if (is_numeric($_GET["start"]) == false)
+    {
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=ann_id";
+        header($location);
+        exit();
+    }
 }
 else
 {
     $_GET["start"] = 0;
 }
 
-if(array_key_exists("headline", $_GET))
+if (array_key_exists("headline", $_GET))
 {
-	$_GET["headline"] = strStripTags($_GET["headline"]);
+    $_GET["headline"] = strStripTags($_GET["headline"]);
 }
 else
 {
     $_GET["headline"] = "G&auml;stebuch";
 }
 
-if(array_key_exists("id", $_GET))
+if (array_key_exists("id", $_GET))
 {
-	if(is_numeric($_GET["id"]) == false)
-	{
-	    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=id";
-	    header($location);
-	    exit();
-	}	
+    if (is_numeric($_GET["id"]) == false)
+    {
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=id";
+        header($location);
+        exit();
+    }
 }
 else
 {
@@ -109,7 +109,9 @@ require("../../../adm_config/body_top.php");
         if ($_GET['id'] > 0)
         {
             $sql    = "SELECT * FROM ". TBL_GUESTBOOK. "
-                       WHERE gbo_id = '$_GET[id]' and gbo_org_id = '$g_current_organization->id'";
+                       WHERE gbo_id = {0} and gbo_org_id = '$g_current_organization->id'";
+
+            $sql    = prepareSQL($sql, array($_GET['id']));
         }
         //...ansonsten alle fuer die Gruppierung passenden Gaestebucheintraege aus der DB holen.
         else
@@ -117,7 +119,9 @@ require("../../../adm_config/body_top.php");
             $sql    = "SELECT * FROM ". TBL_GUESTBOOK. "
                        WHERE gbo_org_id = '$g_current_organization->id'
                        ORDER BY gbo_timestamp DESC
-                       LIMIT ". $_GET["start"]. ", 10 ";
+                       LIMIT {0}, 10 ";
+
+            $sql    = prepareSQL($sql, array($_GET['start']));
         }
 
         $guestbook_result = mysql_query($sql, $g_adm_con);
@@ -299,7 +303,6 @@ require("../../../adm_config/body_top.php");
 
                             //Kommentarnummer auf 1 setzen
                             $commentNumber = 1;
-
 
                             // Die Kommetare liegen bereits im MysqlResultset $comment_result vor
                             // also nur noch auflisten...

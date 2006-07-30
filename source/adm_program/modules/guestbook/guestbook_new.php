@@ -34,23 +34,23 @@ require("../../system/common.php");
 
 // Uebergabevariablen pruefen
 
-if(array_key_exists("id", $_GET))
+if (array_key_exists("id", $_GET))
 {
-	if(is_numeric($_GET["id"]) == false)
-	{
-	    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=id";
-	    header($location);
-	    exit();
-	}	
+    if (is_numeric($_GET["id"]) == false)
+    {
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=id";
+        header($location);
+        exit();
+    }
 }
 else
 {
     $_GET["id"] = 0;
 }
 
-if(array_key_exists("headline", $_GET))
+if (array_key_exists("headline", $_GET))
 {
-	$_GET["headline"] = strStripTags($_GET["headline"]);
+    $_GET["headline"] = strStripTags($_GET["headline"]);
 }
 else
 {
@@ -110,9 +110,9 @@ if ($_GET['id'] != 0)
 // Name, Emailadresse und Homepgae vorbelegt werden...
 if ($_GET['id'] == 0 && $g_session_valid)
 {
-    $name  = $g_current_user->first_name. " ". $g_current_user->last_name;
-    $email = $g_current_user->email;
-    $homepage = $g_current_user->homepage;
+    $name       = $g_current_user->first_name. " ". $g_current_user->last_name;
+    $email      = $g_current_user->email;
+    $homepage   = $g_current_user->homepage;
 }
 
 
