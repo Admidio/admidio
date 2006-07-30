@@ -40,7 +40,20 @@ if (!editWeblinks())
     exit();
 }
 
-if (!array_key_exists("headline", $_GET))
+// Uebergabevariablen pruefen
+
+if(isset($_GET["lnk_id"]) && is_numeric($_GET["lnk_id"]) == false)
+{
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=lnk_id";
+    header($location);
+    exit();
+}
+
+if(array_key_exists("headline", $_GET))
+{
+	$_GET["headline"] = strStripTags($_GET["headline"]);
+}
+else
 {
     $_GET["headline"] = "Links";
 }

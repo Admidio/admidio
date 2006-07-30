@@ -45,6 +45,23 @@ if (!editWeblinks())
     exit();
 }
 
+// Uebergabevariablen pruefen
+
+if(isset($_GET["lnk_id"]) && is_numeric($_GET["lnk_id"]) == false)
+{
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=lnk_id";
+    header($location);
+    exit();
+}
+
+if(is_numeric($_GET["mode"]) == false
+|| $_GET["mode"] < 1 || $_GET["mode"] > 3)
+{
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=mode";
+    header($location);
+    exit();
+}
+
 // jetzt wird noch geprueft ob die eventuell uebergebene lnk_id uberhaupt zur Orga gehoert oder existiert...
 if ($_GET["lnk_id"] != 0)
 {
@@ -62,7 +79,11 @@ if ($_GET["lnk_id"] != 0)
     }
 }
 
-if (!array_key_exists("headline", $_GET))
+if(array_key_exists("headline", $_GET))
+{
+	$_GET["headline"] = strStripTags($_GET["headline"]);
+}
+else
 {
     $_GET["headline"] = "Links";
 }

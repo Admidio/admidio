@@ -37,21 +37,19 @@ require("../../system/login_valid.php");
 
 // Uebergabevariablen pruefen und ggf. vorbelegen
 
-if(!isset($_GET['rol_id']))
+if(array_key_exists("rol_id", $_GET))
 {
-    $rol_id = 0;
+	if(is_numeric($_GET["rol_id"]) == false)
+	{
+	    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=rol_id";
+	    header($location);
+	    exit();
+	}	
 }
 else
 {
-    if(is_numeric($_GET['rol_id']))
-    {
-        $rol_id = $_GET['rol_id'];
-    }
-    else
-    {
-        $rol_id = 0;
-    }
-}    
+    $_GET["rol_id"] = 0;
+}   
 
 if(!isset($_GET['active_role']))
 {

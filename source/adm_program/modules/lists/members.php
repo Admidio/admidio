@@ -12,6 +12,8 @@
  * restrict:    Begrenzte Userzahl:
  *              m - (Default) nur Mitglieder
  *              u - alle in der Datenbank gespeicherten user
+ * popup   :    0 - (Default) Fenster wird normal mit Homepagerahmen angezeigt
+ *              1 - Fenster wurde im Popupmodus aufgerufen
  * 
  ******************************************************************************
  *
@@ -34,17 +36,38 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
-//uebernahme der Rolle der Variablen
-$role_id=$_GET['rol_id'];
+// Uebergabevariablen pruefen
 
-if(!array_key_exists("popup", $_GET))
+if(isset($_GET["rol_id"]) && is_numeric($_GET["rol_id"]) == false)
 {
-    $_GET['popup']    = 0;
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=rol_id";
+    header($location);
+    exit();
+}
+else
+{
+	$role_id = $_GET["rol_id"];	
 }
 
-if(!array_key_exists("new_user", $_GET))
-{    
-   $_GET['new_user'] = 0;
+if($_GET["restrict"] != "m" && $_GET["restrict"] != "u")
+{
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=restrict";
+    header($location);
+    exit();
+}
+
+if(array_key_exists("popup", $_GET))
+{
+	if(is_numeric($_GET["popup"]) == false)
+	{
+	    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=popup";
+	    header($location);
+	    exit();
+	}
+}
+else
+{
+    $_GET["popup"] = 0;
 }
 
 //Erfassen der uebergeben Rolle
