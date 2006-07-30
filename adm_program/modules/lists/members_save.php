@@ -8,9 +8,9 @@
  *
  * Uebergaben:
  *
- * user_id: Benutzer deren zuordnung ge?ndert werden soll
+ * user_id: Benutzer deren Zuordnung geaendert werden soll
  * url:     URL auf die danach weitergeleitet wird
- * role_id: Rolle zu denen die Zuordnug ge?ndert werden soll
+ * role_id: Rolle zu denen die Zuordnug geaendert werden soll
  *
  ******************************************************************************
  *
@@ -32,8 +32,26 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
-//Uebernahme der Rolle die bearbeitet werden soll
-$role_id = $_GET["role_id"];
+
+// Uebergabevariablen pruefen
+
+if(isset($_GET["user_id"]) && is_numeric($_GET["user_id"]) == false)
+{
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=user_id";
+    header($location);
+    exit();
+}
+
+if(isset($_GET["role_id"]) && is_numeric($_GET["role_id"]) == false)
+{
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=role_id";
+    header($location);
+    exit();
+}
+else
+{
+	$role_id = $_GET["role_id"];	
+}
 
 //Erfassen der uebergeben Rolle
 $sql="SELECT * FROM ". TBL_ROLES. "
