@@ -40,30 +40,35 @@ require("../../system/common.php");
 
 // Uebergabevariablen pruefen
 
-if($_GET["mode"] != 1 
-&& is_numeric($_GET["id"]) == false)
+if (array_key_exists("id", $_GET))
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=id";
-    header($location);
-    exit();
+    if (is_numeric($_GET["id"]) == false)
+    {
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=id";
+        header($location);
+        exit();
+    }
 }
-
-if(is_numeric($_GET["mode"]) == false
-|| $_GET["mode"] < 1 || $_GET["mode"] > 5)
-{
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=mode";
-    header($location);
-    exit();
-}
-
-if (!array_key_exists("id", $_GET))
+else
 {
     $_GET["id"] = 0;
 }
 
-if(array_key_exists("headline", $_GET))
+
+if (array_key_exists("mode", $_GET))
 {
-	$_GET["headline"] = strStripTags($_GET["headline"]);
+    if (is_numeric($_GET["mode"]) == false)
+    {
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=mode";
+        header($location);
+        exit();
+    }
+}
+
+
+if (array_key_exists("headline", $_GET))
+{
+    $_GET["headline"] = strStripTags($_GET["headline"]);
 }
 else
 {
@@ -90,7 +95,7 @@ if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mod
 
     if ($_GET['mode'] == 4)
     {
-        // Fuer den modes 4 werden commentGuestbook-Rechte benoetigt
+        // Fuer den mode 4 werden commentGuestbook-Rechte benoetigt
         if(!commentGuestbook())
         {
             $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
@@ -130,7 +135,7 @@ if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mod
 $err_code = "";
 $err_text = "";
 
-if($_GET["mode"] == 1 || $_GET["mode"] == 3)
+if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
 {
     // Daten fuer die DB werden nun aufbereitet...
 
@@ -158,16 +163,6 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
     $ipAddress = $_SERVER['REMOTE_ADDR'];
     $actDate   = date("Y.m.d G:i:s", time());
 
-    if ($g_session_valid)
-    {
-        // Falls der User eingeloggt ist wird die aktuelle UserId mitabgespeichert...
-        $usr_id = $g_current_user->id;
-    }
-    else
-    {
-        // Wenn nicht sind die Tueddel um die null wichtig...
-        $usr_id = 'null';
-    }
 
     if (strlen($name) > 0 && strlen($text)  > 0)
     {
@@ -176,10 +171,23 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
 
         if ($_GET['id'] == 0)
         {
-            $sql = "INSERT INTO ". TBL_GUESTBOOK. " (gbo_org_id, gbo_usr_id, gbo_name, gbo_text, gbo_email,
-                                                 gbo_homepage, gbo_timestamp, gbo_ip_address)
-                                         VALUES ($g_current_organization->id, $usr_id, {0}, {1}, {2},
+            if ($g_session_valid)
+            {
+                // Falls der User eingeloggt ist wird die aktuelle UserId mitabgespeichert...
+                $sql = "INSERT INTO ". TBL_GUESTBOOK. " (gbo_org_id, gbo_usr_id, gbo_name, gbo_text, gbo_email,
+                                                         gbo_homepage, gbo_timestamp, gbo_ip_address)
+                                         VALUES ($g_current_organization->id, $g_current_user->id, {0}, {1}, {2},
                                                  {3}, '$actDate', '$ipAddress')";
+            }
+            else
+            {
+                // Falls er nicht engeloggt ist, gibt es das sql-Statement natürlich ohnr die UserID
+                $sql = "INSERT INTO ". TBL_GUESTBOOK. " (gbo_org_id, gbo_name, gbo_text, gbo_email,
+                                                         gbo_homepage, gbo_timestamp, gbo_ip_address)
+                                         VALUES ($g_current_organization->id, {0}, {1}, {2},
+                                                 {3}, '$actDate', '$ipAddress')";
+            }
+
             $sql    = prepareSQL($sql, array($name, $text, $email, $homepage));
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
@@ -269,7 +277,7 @@ elseif($_GET["mode"] == 4)
 
 }
 
-elseif($_GET["mode"] == 5)
+elseif ($_GET["mode"] == 5)
 {
     //Gaestebuchkommentar loeschen...
     $sql = "DELETE FROM ". TBL_GUESTBOOK_COMMENTS. " WHERE gbc_id = {0}";
@@ -277,7 +285,7 @@ elseif($_GET["mode"] == 5)
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
 
-    if(!isset($_GET["url"]))
+    if (!isset($_GET["url"]))
     {
         $_GET["url"] = "$g_root_path/$g_main_page";
     }
