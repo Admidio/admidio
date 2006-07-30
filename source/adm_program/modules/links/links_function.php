@@ -46,24 +46,33 @@ if (!editWeblinks())
 }
 
 // Uebergabevariablen pruefen
-
-if(isset($_GET["lnk_id"]) && is_numeric($_GET["lnk_id"]) == false)
+if (array_key_exists("lnk_id", $_GET))
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=lnk_id";
-    header($location);
-    exit();
+    if (is_numeric($_GET["lnk_id"]) == false)
+    {
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=lnk_id";
+        header($location);
+        exit();
+    }
+}
+else
+{
+    $_GET["lnk_id"] = 0;
 }
 
-if(is_numeric($_GET["mode"]) == false
-|| $_GET["mode"] < 1 || $_GET["mode"] > 3)
+
+if (array_key_exists("mode", $_GET))
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=mode";
-    header($location);
-    exit();
+    if (is_numeric($_GET["mode"]) == false)
+    {
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=mode";
+        header($location);
+        exit();
+    }
 }
 
 // jetzt wird noch geprueft ob die eventuell uebergebene lnk_id uberhaupt zur Orga gehoert oder existiert...
-if ($_GET["lnk_id"] != 0)
+if ($_GET["lnk_id"] > 0)
 {
     $sql    = "SELECT * FROM ". TBL_LINKS. " WHERE lnk_id = {0} and lnk_org_id = $g_current_organization->id";
     $sql    = prepareSQL($sql, array($_GET['lnk_id']));
@@ -79,9 +88,9 @@ if ($_GET["lnk_id"] != 0)
     }
 }
 
-if(array_key_exists("headline", $_GET))
+if (array_key_exists("headline", $_GET))
 {
-	$_GET["headline"] = strStripTags($_GET["headline"]);
+    $_GET["headline"] = strStripTags($_GET["headline"]);
 }
 else
 {
@@ -153,8 +162,10 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
         $err_code = "feld";
     }
 }
+
 elseif ($_GET["mode"] == 2)
 {
+    // Loeschen von Weblinks...
     $sql = "DELETE FROM ". TBL_LINKS. " WHERE lnk_id = {0}";
     $sql    = prepareSQL($sql, array($_GET["lnk_id"]));
     $result = mysql_query($sql, $g_adm_con);
@@ -166,6 +177,14 @@ elseif ($_GET["mode"] == 2)
     }
 
     $location = "Location: $g_root_path/adm_program/system/err_msg.php?id=$id&err_code=delete&url=". urlencode($_GET["url"]);
+    header($location);
+    exit();
+}
+
+else
+{
+    // Falls der mode unbekannt ist, ist natürlich Ende...
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
     header($location);
     exit();
 }
