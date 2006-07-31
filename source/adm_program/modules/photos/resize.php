@@ -34,17 +34,47 @@
 require("../../system/common.php");
 header("Content-Type: image/jpeg");
 
+// Uebergabevariablen pruefen
+
+if(isset($_GET["aufgabe"]) && $_GET["aufgabe"] != "anzeigen" && $_GET["aufgabe"] != "speichern")
+{
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
+    header($location);
+    exit(); 
+}
+
+if(isset($_GET["nr"]) && is_numeric($_GET["nr"]) == false)
+{
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
+    header($location);
+    exit();
+}
+
+if(isset($_GET["scal"]) && is_numeric($_GET["scal"]) == false)
+{
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
+    header($location);
+    exit();
+}
+
+if(strlen($_GET["side"]) > 0 && $_GET["side"] != "y" && $_GET["side"] != "x")
+{
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
+    header($location);
+    exit(); 
+}
+
 //Uebernahme welches Bild umgerechnet werden soll
 $aufgabe = $_GET['aufgabe'];
-$bild = $_GET['bild'];
+$bild = strStripTags($_GET['bild']);
 $scal = $_GET['scal'];
-$ziel = $_GET['ziel'];
-$nr = $_GET['nr'];
+$ziel = strStripTags($_GET['ziel']);
+$nr   = $_GET['nr'];
 $side = $_GET["side"];
 
-if($bild=='')
+if(strlen($bild) == 0)
 {
-    $bild="../../../adm_my_files/photos/temp$nr.jpg";
+    $bild = "../../../adm_my_files/photos/temp$nr.jpg";
 }
 
 //Ermittlung der Original Bildgroesse

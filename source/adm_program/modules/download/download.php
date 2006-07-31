@@ -35,45 +35,54 @@
  *
  *****************************************************************************/
 
-    require("../../system/common.php");
+require("../../system/common.php");
 
-    $default_folder = urldecode($_GET['default_folder']);
-    $folder     = urldecode($_GET['folder']);
-    $act_folder = "../../../adm_my_files/download";
+// Uebergabevariablen pruefen
 
-    // uebergebene Ordner auf Gueltigkeit pruefen
-    // und Ordnerpfad zusammensetzen
-    if(strlen($default_folder) > 0)
+if(isset($_GET["sort"]) && $_GET["sort"] != "asc" && $_GET["sort"] != "desc")
+{
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
+    header($location);
+    exit(); 
+}
+
+$default_folder = strStripTags(urldecode($_GET['default_folder']));
+$folder     = strStripTags(urldecode($_GET['folder']));
+$act_folder = "../../../adm_my_files/download";
+
+// uebergebene Ordner auf Gueltigkeit pruefen
+// und Ordnerpfad zusammensetzen
+if(strlen($default_folder) > 0)
+{
+    if(strpos($default_folder, "..") !== false)
     {
-        if(strpos($default_folder, "..") !== false)
-        {
-            $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_folder";
-            header($location);
-            exit();
-        }
-        $act_folder = "$act_folder/$default_folder";
-    }
-
-    if(strlen($folder) > 0)
-    {
-        if(strpos($folder, "..") !== false)
-        {
-            $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_folder";
-            header($location);
-            exit();
-        }
-        $act_folder = "$act_folder/$folder";
-    }
-
-    $info= $_GET['info'];
-
-    //Auslesen des Ordners und schreiben in array
-    if(!is_dir($act_folder))
-    {
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=folder_not_exist";
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_folder";
         header($location);
         exit();
     }
+    $act_folder = "$act_folder/$default_folder";
+}
+
+if(strlen($folder) > 0)
+{
+    if(strpos($folder, "..") !== false)
+    {
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_folder";
+        header($location);
+        exit();
+    }
+    $act_folder = "$act_folder/$folder";
+}
+
+$info= strStripTags($_GET['info']);
+
+//Auslesen des Ordners und schreiben in array
+if(!is_dir($act_folder))
+{
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=folder_not_exist";
+    header($location);
+    exit();
+}
 
 // Ordnerinhalt sortieren
 $dh  = opendir($act_folder);

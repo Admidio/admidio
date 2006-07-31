@@ -52,8 +52,8 @@ if (ini_get('file_uploads') != '1')
 }
 
 
-$default_folder = urldecode($_GET['default_folder']);
-$folder     = urldecode($_GET['folder']);
+$default_folder = strStripTags(urldecode($_GET['default_folder']));
+$folder     = strStripTags(urldecode($_GET['folder']));
 
 // uebergebene Ordner auf Gueltigkeit pruefen
 // und Ordnerpfad zusammensetzen

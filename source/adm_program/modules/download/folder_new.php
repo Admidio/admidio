@@ -8,8 +8,12 @@
  *
  * Uebergaben:
  *
- * ordner   download - (Default) Der Stammordner der Downloads
- *          download/XXX - Unterordner
+ * folder : akuteller Ordner (relativer Pfad in Abhaengigkeit adm_my_files/download
+ *          und default_folder
+ * default_folder : gibt den Ordner in adm_my_files/download an, ab dem die
+ *                  Verzeichnisstruktur angezeigt wird. Wurde ein Default-Ordner
+ *                  gesetzt, kann der Anwender nur noch in Unterordner und nicht
+ *                  in hoehere Ordner des Default-Ordners navigieren
  ******************************************************************************
  *
  * This program is free software; you can redistribute it and/or
@@ -39,8 +43,8 @@ if(!editDownload())
   exit();
 }
 
-$default_folder = urldecode($_GET['default_folder']);
-$folder = urldecode($_GET['folder']);
+$default_folder = strStripTags(urldecode($_GET['default_folder']));
+$folder = strStripTags(urldecode($_GET['folder']));
 
 // uebergebene Ordner auf Gueltigkeit pruefen
 // und Ordnerpfad zusammensetzen
