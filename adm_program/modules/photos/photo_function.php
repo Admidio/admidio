@@ -256,6 +256,7 @@ if($_GET["job"]=="delete")
     
     // zur Ausgangsseite zurueck
     $seite=$_GET["seite"];
+    $pho_id=$_GET["pho_id"];
     $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=photo_deleted&timer=2000&url=". urlencode("$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id&seite=$seite");
     header($location);
     exit();
