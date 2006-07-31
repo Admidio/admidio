@@ -123,10 +123,6 @@ function getErrorText($error_code, $error_text, $g_current_organization)
             $error_str = "Ung&uuml;ltiger Seitenaufruf !";
             break;
 
-        case "invalid_variable":
-            $error_str = "Dem aufgerufenen Skript wurde die notwendige Variable ($error_text) nicht richtig &uuml;bergeben !";
-            break;
-
         case "login_failed":
             $error_str = "Du hast dich innerhalb kurzer Zeit mehrmals mit einem
             falschen Passwort versucht einzuloggen.<br />Aus Sicherheitsgr&uuml;nden

@@ -40,30 +40,30 @@ require("../../system/login_valid.php");
 
 if(isset($_GET["rol_id"]) && is_numeric($_GET["rol_id"]) == false)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=rol_id";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
     header($location);
     exit();
 }
 else
 {
-	$role_id = $_GET["rol_id"];	
+    $role_id = $_GET["rol_id"]; 
 }
 
 if($_GET["restrict"] != "m" && $_GET["restrict"] != "u")
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=restrict";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
     header($location);
     exit();
 }
 
 if(array_key_exists("popup", $_GET))
 {
-	if(is_numeric($_GET["popup"]) == false)
-	{
-	    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=popup";
-	    header($location);
-	    exit();
-	}
+    if(is_numeric($_GET["popup"]) == false)
+    {
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
+        header($location);
+        exit();
+    }
 }
 else
 {
@@ -271,7 +271,7 @@ echo"
                 <th class=\"tableHeader\" style=\"text-align: center;\">Mitglied</th>
                 <th class=\"tableHeader\" style=\"text-align: center;\">Leiter</th>
             </tr>";
- 			$letter_merker = "";
+            $letter_merker = "";
  
             //Ausgabe der Tabellenzeilen, ggf. einfuegen von Ankern
             while($user = mysql_fetch_array($result_user))
@@ -279,14 +279,14 @@ echo"
                 $letter = ord(strtoupper($user['usr_last_name']));
                 if(strlen($letter_merker) > 0 && $letter < 65)
                 {
-                	// die ersten Ascii-Zeichen alle unter # anzeigen
-					$letter_merker = $letter;                	
+                    // die ersten Ascii-Zeichen alle unter # anzeigen
+                    $letter_merker = $letter;                   
                 }
  
- 				//grosse Anfangsbuchstaben werden erst ab 50 Personen angezeigt
- 				if( $user_anzahl > 50
- 				&& ($letter_merker != $letter || strlen($letter_merker) == 0))
- 				{                                       
+                //grosse Anfangsbuchstaben werden erst ab 50 Personen angezeigt
+                if( $user_anzahl > 50
+                && ($letter_merker != $letter || strlen($letter_merker) == 0))
+                {                                       
                     echo "<tr><td style=\"text-align: center;\" colspan=\"$column\">";                      
                     
                     //Zahlen werden unter # zusammengefasst
@@ -325,9 +325,9 @@ echo"
                         echo"<a href=\"#Ende\">Ende</a>";
                     }// if User_anzahl>100
                     
-                    echo"</td></tr>";	                             
-	                $letter_merker = $letter;
- 				}
+                    echo"</td></tr>";                                
+                    $letter_merker = $letter;
+                }
                 
                 //Ausgabe aller Personen mit entsprechendem Anfangsbuchstaben
                 $user_text= $user['usr_first_name']."&nbsp;".$user['usr_last_name']."&nbsp;&nbsp;&nbsp;"

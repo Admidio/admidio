@@ -52,14 +52,14 @@ if(!editUser())
 if(is_numeric($_GET["mode"]) == false
 || $_GET["mode"] < 1 || $_GET["mode"] > 4)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=mode";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
     header($location);
     exit();
 }
 
 if(isset($_GET["user_id"]) && is_numeric($_GET["user_id"]) == false)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=user_id";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
     header($location);
     exit();
 }

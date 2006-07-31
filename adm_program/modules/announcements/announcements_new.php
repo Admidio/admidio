@@ -44,14 +44,14 @@ if(!editAnnouncements())
 
 if(isset($_GET["ann_id"]) && is_numeric($_GET["ann_id"]) == false)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=ann_id";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
     header($location);
     exit();
 }
 
 if(array_key_exists("headline", $_GET))
 {
-	$_GET["headline"] = strStripTags($_GET["headline"]);
+    $_GET["headline"] = strStripTags($_GET["headline"]);
 }
 else
 {

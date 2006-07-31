@@ -38,12 +38,12 @@ require("../../system/bbcode.php");
 
 if(array_key_exists("start", $_GET))
 {
-	if(is_numeric($_GET["start"]) == false)
-	{
-	    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=ann_id";
-	    header($location);
-	    exit();
-	}
+    if(is_numeric($_GET["start"]) == false)
+    {
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
+        header($location);
+        exit();
+    }
 }
 else
 {
@@ -52,7 +52,7 @@ else
 
 if(array_key_exists("headline", $_GET))
 {
-	$_GET["headline"] = strStripTags($_GET["headline"]);
+    $_GET["headline"] = strStripTags($_GET["headline"]);
 }
 else
 {
@@ -61,12 +61,12 @@ else
 
 if(array_key_exists("id", $_GET))
 {
-	if(is_numeric($_GET["id"]) == false)
-	{
-	    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=id";
-	    header($location);
-	    exit();
-	}	
+    if(is_numeric($_GET["id"]) == false)
+    {
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
+        header($location);
+        exit();
+    }   
 }
 else
 {
@@ -169,12 +169,12 @@ require("../../../adm_config/body_top.php");
             if(editAnnouncements())
             {
                 echo "<p>
-					<span class=\"iconLink\">
-	                    <a class=\"iconLink\" href=\"announcements_new.php?headline=". $_GET["headline"]. "\"><img
-	                    class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Neu anlegen\"></a>
-	                    <a class=\"iconLink\" href=\"announcements_new.php?headline=". $_GET["headline"]. "\">Neu anlegen</a>
-	                </span>
-				</p>";
+                    <span class=\"iconLink\">
+                        <a class=\"iconLink\" href=\"announcements_new.php?headline=". $_GET["headline"]. "\"><img
+                        class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Neu anlegen\"></a>
+                        <a class=\"iconLink\" href=\"announcements_new.php?headline=". $_GET["headline"]. "\">Neu anlegen</a>
+                    </span>
+                </p>";
             }
 
             // Navigation mit Vor- und Zurueck-Buttons
@@ -262,13 +262,13 @@ require("../../../adm_config/body_top.php");
             }  // Ende While-Schleife
         }
 
-		if(mysql_num_rows($announcements_result) > 2)
-		{
-	        // Navigation mit Vor- und Zurueck-Buttons
-	        // erst anzeigen, wenn mehr als 2 Eintraege (letzte Navigationsseite) vorhanden sind
-	        $base_url = "$g_root_path/adm_program/modules/announcements/announcements.php?headline=". $_GET["headline"];
-	        echo generatePagination($base_url, $num_announcements, 10, $_GET["start"], TRUE);
-		}
+        if(mysql_num_rows($announcements_result) > 2)
+        {
+            // Navigation mit Vor- und Zurueck-Buttons
+            // erst anzeigen, wenn mehr als 2 Eintraege (letzte Navigationsseite) vorhanden sind
+            $base_url = "$g_root_path/adm_program/modules/announcements/announcements.php?headline=". $_GET["headline"];
+            echo generatePagination($base_url, $num_announcements, 10, $_GET["start"], TRUE);
+        }
     echo "</div>";
 
     require("../../../adm_config/body_bottom.php");
