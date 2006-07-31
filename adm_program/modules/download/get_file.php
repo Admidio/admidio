@@ -34,9 +34,9 @@
 
 require("../../system/common.php");
 
-$folder = urldecode($_GET['folder']);
-$file   = urldecode($_GET['file']);
-$default_folder = urldecode($_GET['default_folder']);
+$folder = strStripTags(urldecode($_GET['folder']));
+$file   = strStripTags(urldecode($_GET['file']));
+$default_folder = strStripTags(urldecode($_GET['default_folder']));
 $act_folder     = "../../../adm_my_files/download";
 
 // uebergebene Ordner auf Gueltigkeit pruefen

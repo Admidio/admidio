@@ -39,6 +39,16 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
+// Uebergabevariablen pruefen
+
+if(is_numeric($_GET["mode"]) == false
+|| $_GET["mode"] < 1 || $_GET["mode"] > 4)
+{
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
+    header($location);
+    exit();
+}
+
 //Pruefrotine ob Ordner/Datei
 function file_or_folder ($act_dir,$file) 
 {
@@ -105,9 +115,9 @@ if (decoct(fileperms("../../../adm_my_files/download"))!=40777)
     exit();
 }
 
-$folder = urldecode($_GET['folder']);
-$file   = urldecode($_GET['file']);
-$default_folder = urldecode($_GET['default_folder']);
+$folder = strStripTags(urldecode($_GET['folder']));
+$file   = strStripTags(urldecode($_GET['file']));
+$default_folder = strStripTags(urldecode($_GET['default_folder']));
 
 $url        = "";
 $err_code   = "";

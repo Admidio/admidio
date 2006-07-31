@@ -32,26 +32,59 @@
  
 require("../../system/common.php");
 
+// Uebergabevariablen pruefen
+
+if(isset($_GET["pho_id"]) && is_numeric($_GET["pho_id"]) == false)
+{
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
+    header($location);
+    exit();
+}
+
+//aktuelle event_element
+if(array_key_exists("start", $_GET))
+{
+	if(is_numeric($_GET["start"]) == false)
+	{
+	    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
+	    header($location);
+	    exit();
+	}
+	$event_element = $_GET['start'];
+}
+else
+{
+    $event_element = 0;
+}
+
+if(array_key_exists("thumb_seite", $_GET))
+{
+	if(is_numeric($_GET["thumb_seite"]) == false)
+	{
+	    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
+	    header($location);
+	    exit();
+	}
+	$thumb_seite = $_GET['thumb_seite'];
+}
+else
+{
+    $thumb_seite = 1;
+}
+
+if(isset($_GET["locked"]) && is_numeric($_GET["locked"]) == false)
+{
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
+    header($location);
+    exit();
+}
+
 //Uebername der uebergebenen Variablen
 //ID einer bestimmten Veranstaltung
 $pho_id=$_GET["pho_id"];
 if($pho_id=="")
 {
     $pho_id=NULL;
-}
-
-//aktuelle thumb_seite
-$thumb_seite= $_GET['thumb_seite'];
-if($thumb_seite=="")
-{
-    $thumb_seite=1;
-}
-
-//aktuelle event_element
-$event_element= $_GET['start'];
-if($event_element==NULL)
-{
-    $event_element=0;
 }
 
 //Aufruf der ggf. uebergebenen Veranstaltung
