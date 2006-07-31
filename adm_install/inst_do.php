@@ -6,9 +6,6 @@
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  *
- * file : 0 (Default)
- *        1 config.php erstellen und an Browser schicken
- *
  ******************************************************************************
  *
  * This program is free software; you can redistribute it and/or
