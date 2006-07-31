@@ -39,7 +39,7 @@ if (array_key_exists("start", $_GET))
 {
     if (is_numeric($_GET["start"]) == false)
     {
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=ann_id";
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
         header($location);
         exit();
     }
@@ -53,7 +53,7 @@ if (array_key_exists("id", $_GET))
 {
     if (is_numeric($_GET["id"]) == false)
     {
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=id";
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
         header($location);
         exit();
     }

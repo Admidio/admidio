@@ -46,19 +46,19 @@ if(!isModerator() && !isGroupLeader() && !editUser())
 
 if(isset($_GET["user_id"]) && is_numeric($_GET["user_id"]) == false)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=user_id";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
     header($location);
     exit();
 }
 
 if(array_key_exists("popup", $_GET))
 {
-	if(is_numeric($_GET["popup"]) == false)
-	{
-	    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=popup";
-	    header($location);
-	    exit();
-	}
+    if(is_numeric($_GET["popup"]) == false)
+    {
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
+        header($location);
+        exit();
+    }
 }
 else
 {
@@ -67,12 +67,12 @@ else
 
 if(array_key_exists("new_user", $_GET))
 {
-	if(is_numeric($_GET["new_user"]) == false)
-	{
-	    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=new_user";
-	    header($location);
-	    exit();
-	}
+    if(is_numeric($_GET["new_user"]) == false)
+    {
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
+        header($location);
+        exit();
+    }
 }
 else
 {

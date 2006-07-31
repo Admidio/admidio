@@ -37,20 +37,20 @@ require("../../system/login_valid.php");
 
 if(isset($_GET["user_id"]) && is_numeric($_GET["user_id"]) == false)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=user_id";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
     header($location);
     exit();
 }
 
 if(isset($_GET["role_id"]) && is_numeric($_GET["role_id"]) == false)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=role_id";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
     header($location);
     exit();
 }
 else
 {
-	$role_id = $_GET["role_id"];	
+    $role_id = $_GET["role_id"];    
 }
 
 //Erfassen der uebergeben Rolle

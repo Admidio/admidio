@@ -38,12 +38,12 @@ require("../../system/bbcode.php");
 
 if(array_key_exists("mode", $_GET))
 {
-	if($_GET["mode"] != "actual" && $_GET["mode"] != "old")
-	{
-	    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=mode";
-	    header($location);
-	    exit();
-	}	
+    if($_GET["mode"] != "actual" && $_GET["mode"] != "old")
+    {
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
+        header($location);
+        exit();
+    }   
 }
 else
 {
@@ -52,12 +52,12 @@ else
 
 if(array_key_exists("start", $_GET))
 {
-	if(is_numeric($_GET["start"]) == false)
-	{
-	    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=ann_id";
-	    header($location);
-	    exit();
-	}
+    if(is_numeric($_GET["start"]) == false)
+    {
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
+        header($location);
+        exit();
+    }
 }
 else
 {
@@ -66,12 +66,12 @@ else
 
 if(array_key_exists("id", $_GET))
 {
-	if(is_numeric($_GET["id"]) == false)
-	{
-	    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=id";
-	    header($location);
-	    exit();
-	}	
+    if(is_numeric($_GET["id"]) == false)
+    {
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
+        header($location);
+        exit();
+    }   
 }
 else
 {
@@ -220,12 +220,12 @@ require("../../../adm_config/body_top.php");
             if(editDate())
             {
                 echo "<p>
-					<span class=\"iconLink\">
-	                    <a class=\"iconLink\" href=\"dates_new.php\"><img
-	                    class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Termin anlegen\"></a>
-	                    <a class=\"iconLink\" href=\"dates_new.php\">Termin anlegen</a>
-	                </span>
-				</p>";
+                    <span class=\"iconLink\">
+                        <a class=\"iconLink\" href=\"dates_new.php\"><img
+                        class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Termin anlegen\"></a>
+                        <a class=\"iconLink\" href=\"dates_new.php\">Termin anlegen</a>
+                    </span>
+                </p>";
             }
 
             // Navigation mit Vor- und Zurueck-Buttons
@@ -351,13 +351,13 @@ require("../../../adm_config/body_top.php");
             }  // Ende While-Schleife
         }
 
-		if(mysql_num_rows($dates_result) > 2)
-		{
-	        // Navigation mit Vor- und Zurueck-Buttons
-	        // erst anzeigen, wenn mehr als 2 Eintraege (letzte Navigationsseite) vorhanden sind
-	        $base_url = "$g_root_path/adm_program/modules/dates/dates.php?mode=". $_GET["mode"];
-	        echo generatePagination($base_url, $num_dates, 10, $_GET["start"], TRUE);
-		}
+        if(mysql_num_rows($dates_result) > 2)
+        {
+            // Navigation mit Vor- und Zurueck-Buttons
+            // erst anzeigen, wenn mehr als 2 Eintraege (letzte Navigationsseite) vorhanden sind
+            $base_url = "$g_root_path/adm_program/modules/dates/dates.php?mode=". $_GET["mode"];
+            echo generatePagination($base_url, $num_dates, 10, $_GET["start"], TRUE);
+        }
     echo "</div>";
 
     require("../../../adm_config/body_bottom.php");

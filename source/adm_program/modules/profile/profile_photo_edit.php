@@ -46,7 +46,7 @@ if (ini_get('file_uploads') != '1')
 
 if(isset($_GET["usr_id"]) && is_numeric($_GET["usr_id"]) == false)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=usr_id";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
     header($location);
     exit();
 }
@@ -54,7 +54,7 @@ if(isset($_GET["usr_id"]) && is_numeric($_GET["usr_id"]) == false)
 if(isset($_GET["job"]) && $_GET["job"] != "save" 
 && $_GET["job"] != "dont_save" && $_GET["job"] != "upload")
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=job";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
     header($location);
     exit(); 
 }

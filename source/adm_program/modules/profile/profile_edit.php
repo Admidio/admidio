@@ -37,7 +37,7 @@ require("../../system/login_valid.php");
 
 if(isset($_GET["user_id"]) && is_numeric($_GET["user_id"]) == false)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_variable&err_text=user_id";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
     header($location);
     exit();
 }
@@ -45,14 +45,14 @@ if(isset($_GET["user_id"]) && is_numeric($_GET["user_id"]) == false)
 // pruefen, ob Modus neues Mitglied erfassen
 if(array_key_exists("new_user", $_GET))
 {
-	if(is_numeric($_GET['new_user']))
-	{
-    	$a_new_user = $_GET['new_user'];
-	}
-	else
-	{
-		$a_new_user = false;
-	}
+    if(is_numeric($_GET['new_user']))
+    {
+        $a_new_user = $_GET['new_user'];
+    }
+    else
+    {
+        $a_new_user = false;
+    }
 }
 else
 {
