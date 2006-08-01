@@ -34,7 +34,7 @@ require("../../system/common.php");
 
 // Uebergabevariablen pruefen
 
-if(isset($_GET["pho_id"]) && is_numeric($_GET["pho_id"]) == false)
+if(isset($_GET["pho_id"]) && is_numeric($_GET["pho_id"]) == false && $_GET["pho_id"]!=NULL)
 {
     $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
     header($location);
@@ -608,10 +608,10 @@ echo "
 
             /****************************Leere Veranstaltung****************/
             //Falls die Veranstaltung weder Bilder noch Unterordner enthaelt
-            if($adm_photo["pho_quantity"]=="0" && mysql_num_rows($result_list)==0)
-            {
-                echo"Diese Veranstaltung enth&auml;lt leider noch keine Bilder.";
-            }
+                if(($adm_photo["pho_quantity"]=="0" || !isset($adm_photo["pho_quantity"])) && mysql_num_rows($result_list)==0)
+                {
+                    echo"<tr style=\"text-align: center;\"><td td colspan=\"$colums\">Diese Veranstaltung enth&auml;lt leider noch keine Bilder.</td></tr>";
+                }
         
 	        if(mysql_num_rows($result_list) > 2)
 	        {
