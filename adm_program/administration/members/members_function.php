@@ -297,6 +297,11 @@ elseif($_GET["mode"] == 4)
             $err_code = "mail_send";
             $err_text = $user->email;
         }
+        else
+        {
+            $err_code = "mail_not_send";    
+            $err_text = $user->email;
+        }
     }
 }
 
