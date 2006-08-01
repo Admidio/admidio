@@ -151,10 +151,15 @@ if ($count_user == 0)
             {
                 $err_code = "anmeldung";
             }      
+            else
+            {
+            	$err_code = "mail_not_send";	
+            	$err_text = $row->usr_email;
+            }
         }
     }
 
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&url=home&timer=";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text&url=home";
     header($location);
     exit();
 }

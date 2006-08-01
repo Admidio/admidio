@@ -445,11 +445,11 @@ function getErrorText($error_code, $error_text, $g_current_organization)
 
         //Fehlermeldungen Mailmodul
         case "mail_send":
-            $error_str = "Deine Mail wurde erfolgreich an <b>$error_text</b> versendet.";
+            $error_str = "Die E-Mail wurde erfolgreich an <b>$error_text</b> versendet.";
             break;
 
         case "mail_not_send":
-            $error_str = "Deine Mail konnte leider nicht an <b>$error_text</b> gesendet werden.";
+            $error_str = "Die E-Mail konnte leider nicht an <b>$error_text</b> gesendet werden.";
             break;
 
         case "attachment":
