@@ -49,14 +49,14 @@ else
     $role_id = $_GET["rol_id"]; 
 }
 
-if($_GET["restrict"] != "m" && $_GET["restrict"] != "u")
+if(isset($_GET["restrict"]) && $_GET["restrict"] != "m" && $_GET["restrict"] != "u")
 {
     $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
     header($location);
     exit();
 }
 
-if(array_key_exists("popup", $_GET))
+if(isset($_GET["popup"]))
 {
     if(is_numeric($_GET["popup"]) == false)
     {
