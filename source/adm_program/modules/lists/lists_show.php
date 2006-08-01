@@ -46,6 +46,12 @@ if(array_key_exists('url', $_GET))
 else
 {
     $url = urlencode(getHttpReferer());
+    if(strlen($url) == 0)
+    {
+        // Fehler im IE, dort wird Referrer nicht uebergeben, wenn Seite 
+        // ueber Javascript mittels window.location.href aufgerufen wurde
+        $url = "$g_root_path/adm_program/modules/lists/lists.php";  
+    }
 }
 
 if($mode != "csv-ms"

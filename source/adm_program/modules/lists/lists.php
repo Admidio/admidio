@@ -157,15 +157,15 @@ echo "
 
             if(sel_list == 'address')
             {
-                self.location.href = 'lists_show.php?type=address&mode=html&rol_id=' + rol_id;
+                self.location.href = '$g_root_path/adm_program/modules/lists/lists_show.php?type=address&mode=html&rol_id=' + rol_id;
             }
             else if(sel_list == 'telefon')
             {
-                self.location.href = 'lists_show.php?type=telephone&mode=html&rol_id=' + rol_id;
+                self.location.href = '$g_root_path/adm_program/modules/lists/lists_show.php?type=telephone&mode=html&rol_id=' + rol_id;
             }
             else if(sel_list == 'mylist')
             {
-                self.location.href = 'mylist.php?rol_id=' + rol_id";
+                self.location.href = '$g_root_path/adm_program/modules/lists/mylist.php?rol_id=' + rol_id";
             if($active_role)
                 echo ";";
             else
@@ -174,7 +174,7 @@ echo "
             }
             else if(sel_list == 'former')
             {
-                self.location.href = 'lists_show.php?type=former&mode=html&rol_id=' + rol_id;
+                self.location.href = '$g_root_path/adm_program/modules/lists/lists_show.php?type=former&mode=html&rol_id=' + rol_id;
             }
         }
     //--></script>";
