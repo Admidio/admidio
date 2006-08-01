@@ -67,6 +67,7 @@ if(is_numeric($_GET["mode"]) == false
 }
 
 $err_code = "";
+$err_text = "";
 
 if($_GET["mode"] == 1)
 {
@@ -122,10 +123,15 @@ if($_GET["mode"] == 1)
         {
             $err_code = "send_login_mail";
         }
+        else
+        {
+        	$err_code = "mail_not_send";	
+            $err_text = $user->email;
+        }
     }
 
     $load_url = urlencode("$g_root_path/adm_program/administration/new_user/new_user.php");
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&url=$load_url";
+    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text&url=$load_url";
     header($location);
 }
 elseif($_GET["mode"] == 3)
