@@ -43,7 +43,7 @@ if(array_key_exists("mode", $_GET))
         $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
         header($location);
         exit();
-    }   
+    }
 }
 else
 {
@@ -71,7 +71,7 @@ if(array_key_exists("id", $_GET))
         $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
         header($location);
         exit();
-    }   
+    }
 }
 else
 {
@@ -151,6 +151,7 @@ require("../../../adm_config/body_top.php");
                      WHERE ( dat_id = '$_GET[id]'
                            AND ((dat_global   = 1 AND dat_org_shortname IN ($organizations))
                                 OR dat_org_shortname = '$g_organization'))";
+            $sql    = prepareSQL($sql, array($_GET['id']));
         }
         //...ansonsten alle fuer die Gruppierung passenden Termine aus der DB holen.
         else
@@ -166,6 +167,7 @@ require("../../../adm_config/body_top.php");
                               AND dat_end   < '$act_date'
                             ORDER BY dat_begin DESC
                             LIMIT {0}, 10 ";
+                $sql    = prepareSQL($sql, array($_GET['start']));
             }
             //... ansonsten fuer neue Termine
             else
@@ -178,10 +180,11 @@ require("../../../adm_config/body_top.php");
                                   OR dat_end   >= '$act_date' )
                             ORDER BY dat_begin ASC
                             LIMIT {0}, 10 ";
+                $sql    = prepareSQL($sql, array($_GET['start']));
             }
         }
 
-        $sql    = prepareSQL($sql, array($_GET['start']));
+
         $dates_result = mysql_query($sql, $g_adm_con);
         db_error($dates_result);
 
