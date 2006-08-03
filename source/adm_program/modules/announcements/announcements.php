@@ -66,7 +66,7 @@ if(array_key_exists("id", $_GET))
         $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
         header($location);
         exit();
-    }   
+    }
 }
 else
 {
@@ -131,9 +131,10 @@ require("../../../adm_config/body_top.php");
         if($_GET['id'] > 0)
         {
             $sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
-                        WHERE ( ann_id = '$_GET[id]'
+                        WHERE ( ann_id = {0}
                               AND ((ann_global   = 1 AND ann_org_shortname IN ($organizations))
                                    OR ann_org_shortname = '$g_organization'))";
+            $sql    = prepareSQL($sql, array($_GET['id']));
         }
         //...ansonsten alle fuer die Gruppierung passenden Ankuendigungen aus der DB holen.
         else
@@ -143,7 +144,9 @@ require("../../../adm_config/body_top.php");
                               OR (   ann_global   = 1
                                  AND ann_org_shortname IN ($organizations) ))
                         ORDER BY ann_timestamp DESC
-                        LIMIT ". $_GET["start"]. ", 10 ";
+                        LIMIT {0}, 10 ";
+
+            $sql    = prepareSQL($sql, array($_GET['start']));
         }
 
         $announcements_result = mysql_query($sql, $g_adm_con);
