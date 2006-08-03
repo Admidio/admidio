@@ -70,7 +70,7 @@ if(is_numeric($_GET["mode"]) == false
 if($_GET["mode"] == 2 || $_GET["mode"] == 3)
 {
     // pruefen, ob man den Termin bearbeiten darf
-    $sql = "SELECT * FROM ". TBL_DATES. " 
+    $sql = "SELECT * FROM ". TBL_DATES. "
              WHERE dat_id = {0}
                AND (  dat_org_shortname = '$g_organization'
                    OR dat_global = 1 ) ";
@@ -200,7 +200,7 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
     {
         if(strlen($headline) == 0)
         {
-            $err_text = "Überschrift";
+            $err_text = "&Uuml;berschrift";
         }
         elseif(strlen($content) == 0)
         {
