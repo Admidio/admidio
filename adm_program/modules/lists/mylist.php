@@ -85,6 +85,36 @@ else
     }
 }   
 
+session_start();
+$b_history = false;		// History-Funktion bereits aktiviert ja/nein
+$default_fields = 6;	// Anzahl der Felder, die beim Aufruf angezeigt werden
+
+if(isset($_SESSION['mylist_request']))
+{
+	$request = $_SESSION['mylist_request'];
+	$rol_id  = $request['role'];
+	if($request['former'] == 1)
+	{
+		$active_member = 0;
+	}
+	
+	// falls vorher schon Felder manuell hinzugefuegt wurden, 
+	// muessen diese nun direkt angelegt werden
+	for($i = $default_fields+1; $i > 0; $i++)
+	{
+		if(isset($request["column$i"]))
+		{
+			$default_fields++;			
+		}	
+		else
+		{
+			$i = -1;
+		}
+	}
+	
+	$b_history = true;
+}
+
 echo "
 <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
@@ -92,6 +122,29 @@ echo "
 <head>
     <title>$g_current_organization->longname - Eigene Liste - Einstellungen</title>
     <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
+	<script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/ajax.js\"></script>
+	
+	<script type=\"text/javascript\">
+		var actFieldCount = $default_fields;
+		var resObject     = createXMLHttpRequest();
+
+		function addField() 
+		{
+			actFieldCount++;
+			resObject.open('get', 'mylist_field_list.php?field_number=' + actFieldCount, true);
+			resObject.onreadystatechange = handleResponse;
+			resObject.send(null);
+		}
+
+		function handleResponse() 
+		{
+			if(resObject.readyState == 4) 
+			{
+				var objectId = 'next_field_' + actFieldCount;
+				document.getElementById(objectId).innerHTML += resObject.responseText;
+			}
+		}
+	</script>
 
     <!--[if lt IE 7]>
     <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
@@ -165,104 +218,35 @@ require("../../../adm_config/body_top.php");
 
                 <p><b>2.</b> Bestimme die Felder, die in der Liste angezeigt werden sollen:</p>
 
-                <table class=\"tableList\" style=\"width: 90%;\" cellpadding=\"2\" cellspacing=\"0\">
+                <table class=\"tableList\" style=\"width: 90%;\" cellpadding=\"0\" cellspacing=\"0\">
                     <tr>
-                        <th class=\"tableHeader\">Nr.</th>
-                        <th class=\"tableHeader\">Feld</th>
-                        <th class=\"tableHeader\">Sortierung</th>
-                        <th class=\"tableHeader\">Bedingung
+                        <th class=\"tableHeader\" style=\"width: 18%;\">Nr.</th>
+                        <th class=\"tableHeader\" style=\"width: 37%;\">Feld</th>
+                        <th class=\"tableHeader\" style=\"width: 18%;\">Sortierung</th>
+                        <th class=\"tableHeader\" style=\"width: 27%;\">Bedingung
                             <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                             onClick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=condition','Message','width=450,height=600,left=310,top=200,scrollbars=yes')\">
                         </th>
-                    </tr>";
-
-                    //Liste der Zusatzfelder erstellen
-                    $sql    =  "SELECT * 
-                                  FROM ". TBL_USER_FIELDS. "
-                                 WHERE usf_org_shortname IS NULL
-                                    OR usf_org_shortname = '$g_organization'
-                                 ORDER BY usf_org_shortname DESC, usf_name ASC";
-
-                    $result_user_fields = mysql_query($sql, $g_adm_con);
-                    db_error($result_user_fields);
-
-                    for($i = 1; $i < 9; $i++)
-                    {
-                        echo"<tr>
-                            <td style=\"text-align: center;\">&nbsp;$i. Feld :&nbsp;</td>
-                            <td style=\"text-align: center;\">
-                                <select size=\"1\" name=\"column$i\">
-                                    <option value=\"\" selected=\"selected\"></option>
-                                    <optgroup label=\"Stammdaten\">
-                                        <option value=\"usr_last_name\" ";
-                                            if($i == 1) 
-                                            {
-                                                echo " selected=\"selected\" ";
-                                            }
-                                            echo ">Nachname</option>
-                                        <option value=\"usr_first_name\" ";
-                                            if($i == 2) 
-                                            {
-                                                echo " selected=\"selected\" ";
-                                            }
-                                            echo ">Vorname</option>
-                                        <option value=\"usr_address\">Adresse</option>
-                                        <option value=\"usr_zip_code\">PLZ</option>
-                                        <option value=\"usr_city\">Ort</option>
-                                        <option value=\"usr_country\">Land</option>
-                                        <option value=\"usr_phone\">Telefon</option>
-                                        <option value=\"usr_mobile\">Handy</option>
-                                        <option value=\"usr_fax\">Fax</option>
-                                        <option value=\"usr_email\">E-Mail</option>
-                                        <option value=\"usr_homepage\">Homepage</option>
-                                        <option value=\"usr_birthday\">Geburtstag</option>
-                                        <option value=\"usr_gender\">Geschlecht</option>
-                                        <option value=\"usr_login_name\">Loginname</option>
-                                        <option value=\"usr_photo\">Foto</option>";
-
-                                        //ggf zusaetzliche Felder auslesen und bereitstellen
-                                        $field_header = false;
-                                        $msg_header   = false;
-
-                                        while($uf_row = mysql_fetch_object($result_user_fields))
-                                        {     
-                                            if($uf_row->usf_org_shortname != NULL
-                                            && $field_header == false)
-                                            {
-                                                echo "</optgroup>
-                                                <optgroup label=\"Zus&auml;tzliche Felder\">";
-                                                $field_header = true;
-                                            }
-                                            if($uf_row->usf_org_shortname == NULL
-                                            && $msg_header == false)
-                                            {
-                                                echo "</optgroup>
-                                                <optgroup label=\"Messenger\">";
-                                                $msg_header = true;
-                                            }
-                                            //Nur Moderatoren duerfen sich gelockte Felder anzeigen lassen 
-                                            if($uf_row->usf_locked==0 || isModerator())
-                                            {
-                                                echo"<option value=\"$uf_row->usf_id\">$uf_row->usf_name</option>";
-                                            }
-                                        }    
-                                        mysql_data_seek($result_user_fields, 0);                                    
-                                    echo "</optgroup>
-                                </select>&nbsp;&nbsp;
-                            </td>
-                            <td style=\"text-align: center;\">
-                                <select size=\"1\" name=\"sort$i\">
-                                    <option value=\"\" selected=\"selected\">&nbsp;</option>
-                                    <option value=\"ASC\">A bis Z</option>
-                                    <option value=\"DESC\">Z bis A</option>
-                                </select>
-                            </td>
-                            <td style=\"text-align: center;\">
-                                <input type=\"text\" name=\"condition$i\" size=\"15\" maxlength=\"30\" />
-                            </td>
-                        </tr>";
-                    }
-                echo "</table>
+                    </tr>
+					<tr>
+						<td colspan=\"4\">";
+							// Zeilen mit den einzelnen Feldern anzeigen
+		                    for($i = 1; $i <= $default_fields; $i++)
+		                    {
+		                    	include("mylist_field_list.php");
+		                    }
+						echo "</td>
+					</tr>
+					<tr>
+						<td colspan=\"4\" style=\"padding: 4px;\">&nbsp;
+							<span class=\"iconLink\">
+			                    <a class=\"iconLink\" href=\"javascript:addField()\"><img
+			                    class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Feld hinzuf&uuml;gen\"></a>
+			                    <a class=\"iconLink\" href=\"javascript:addField()\">Feld hinzuf&uuml;gen</a>
+			                </span>
+						</td>
+					</tr>
+                </table>
 
                 <p>
                     <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
@@ -275,11 +259,7 @@ require("../../../adm_config/body_top.php");
                 </p>
             </div>
         </form>
-    </div>
-   
-    <script type=\"text/javascript\"><!--
-        document.getElementById('role').focus();
-    --></script>";
+    </div>";
     
     require("../../../adm_config/body_bottom.php");
 echo "</body>

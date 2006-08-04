@@ -29,6 +29,10 @@ require("../../system/common.php");
 require("../../system/login_valid.php");
 require("../../system/search_parser_class.php");
 
+session_start();
+
+$_SESSION['mylist_request'] = $_REQUEST;
+
 $err_text    = "";
 $sql_select  = "";
 $sql_join    = "";
@@ -67,7 +71,6 @@ else
 
 $value = reset($_POST);
 $key   = key($_POST);
-$i     = 0;
 
 // Felder zusammenstringen
 for($i = 0; $i < count($_POST); $i++)
@@ -157,7 +160,6 @@ if(strlen($sql_orderby) > 0)
 }
 
 // SQL-Statement in Session-Variable schreiben
-session_start();
 $_SESSION['mylist_sql'] = $main_sql;
 
 // weiterleiten zur allgemeinen Listeseite
