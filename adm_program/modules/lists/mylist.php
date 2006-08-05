@@ -90,9 +90,9 @@ $default_fields = 6;	// Anzahl der Felder, die beim Aufruf angezeigt werden
 
 if(isset($_SESSION['mylist_request']))
 {
-	$request = $_SESSION['mylist_request'];
-	$rol_id  = $request['role'];
-	if($request['former'] == 1)
+	$prev_values = $_SESSION['mylist_request'];
+	$rol_id = $prev_values['role'];
+	if($prev_values['former'] == 1)
 	{
 		$active_member = 0;
 	}
@@ -101,7 +101,7 @@ if(isset($_SESSION['mylist_request']))
 	// muessen diese nun direkt angelegt werden
 	for($i = $default_fields+1; $i > 0; $i++)
 	{
-		if(isset($request["column$i"]))
+		if(isset($prev_values["column$i"]))
 		{
 			$default_fields++;			
 		}	
