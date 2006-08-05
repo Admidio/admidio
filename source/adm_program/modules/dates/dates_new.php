@@ -47,59 +47,75 @@ if(isset($_GET["dat_id"]) && is_numeric($_GET["dat_id"]) == false)
     exit();
 }
 
-$global        = 0;
-$headline      = "";
-$date_from     = "";
-$time_from     = "";
-$date_to       = "";
-$time_to       = "";
-$meeting_point = "";
-$description   = "";
-
-// Wenn eine Termin-ID uebergeben wurde, soll der Termin geaendert werden
-// -> Felder mit Daten des Termins vorbelegen
-
-if ($_GET["dat_id"] != 0)
+if(isset($_SESSION['dates_request']))
 {
-    $sql    = "SELECT * FROM ". TBL_DATES. " 
-                WHERE dat_id = {0}
-                  AND (  dat_org_shortname = '$g_organization'
-                      OR dat_global = 1) ";
-    $sql    = prepareSQL($sql, array($_GET['dat_id']));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
-
-    if (mysql_num_rows($result) > 0)
-    {
-        $row_bt = mysql_fetch_object($result);
-
-        $global        = $row_bt->dat_global;
-        $headline      = $row_bt->dat_headline;
-        $date_from     = mysqldatetime("d.m.y", $row_bt->dat_begin);
-        $time_from     = mysqldatetime("h:i", $row_bt->dat_begin);
-        if($row_bt->dat_begin != $row_bt->dat_end)
-        {
-            // Datum-Bis nur anzeigen, wenn es sich von Datum-Von unterscheidet
-            $date_to       = mysqldatetime("d.m.y", $row_bt->dat_end);
-            $time_to       = mysqldatetime("h:i", $row_bt->dat_end);
-        }
-        if ($time_from == "00:00") 
-        {
-            $time_from = "";
-        }
-        if ($time_to == "00:00")   
-        {
-            $time_to = "";
-        }
-        $meeting_point = $row_bt->dat_location;
-        $description   = $row_bt->dat_description;
-    }
-    else
-    {
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-        header($location);
-        exit();
-    }
+	// alte Werte nach Fehlermeldung wiederherstellen
+	$prev_values = $_SESSION['dates_request'];
+	$field_headline      = $prev_values['headline'];
+	$field_global        = $prev_values['global'];
+	$field_date_from     = $prev_values['date_from'];
+	$field_time_from     = $prev_values['time_from'];
+	$field_date_to       = $prev_values['date_to'];
+	$field_time_to       = $prev_values['time_to'];
+	$field_meeting_point = $prev_values['meeting_point'];
+	$field_description   = $prev_values['description'];
+}
+else
+{
+	$field_headline      = "";
+	$field_global        = 0;
+	$field_date_from     = "";
+	$field_time_from     = "";
+	$field_date_to       = "";
+	$field_time_to       = "";
+	$field_meeting_point = "";
+	$field_description   = "";
+	
+	// Wenn eine Termin-ID uebergeben wurde, soll der Termin geaendert werden
+	// -> Felder mit Daten des Termins vorbelegen
+	
+	if ($_GET["dat_id"] != 0)
+	{
+	    $sql    = "SELECT * FROM ". TBL_DATES. " 
+	                WHERE dat_id = {0}
+	                  AND (  dat_org_shortname = '$g_organization'
+	                      OR dat_global = 1) ";
+	    $sql    = prepareSQL($sql, array($_GET['dat_id']));
+	    $result = mysql_query($sql, $g_adm_con);
+	    db_error($result);
+	
+	    if (mysql_num_rows($result) > 0)
+	    {
+	        $row_bt = mysql_fetch_object($result);
+	
+	        $field_global    = $row_bt->dat_global;
+	        $field_headline  = $row_bt->dat_headline;
+	        $field_date_from = mysqldatetime("d.m.y", $row_bt->dat_begin);
+	        $field_time_from = mysqldatetime("h:i", $row_bt->dat_begin);
+	        if($row_bt->dat_begin != $row_bt->dat_end)
+	        {
+	            // Datum-Bis nur anzeigen, wenn es sich von Datum-Von unterscheidet
+	            $field_date_to = mysqldatetime("d.m.y", $row_bt->dat_end);
+	            $field_time_to = mysqldatetime("h:i", $row_bt->dat_end);
+	        }
+	        if ($field_time_from == "00:00") 
+	        {
+	            $field_time_from = "";
+	        }
+	        if ($field_time_to == "00:00")   
+	        {
+	            $field_time_to = "";
+	        }
+	        $field_meeting_point = $row_bt->dat_location;
+	        $field_description   = $row_bt->dat_description;
+	    }
+	    else
+	    {
+	        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
+	        header($location);
+	        exit();
+	    }
+	}
 }
 
 echo "
@@ -120,7 +136,7 @@ echo "</head>";
 require("../../../adm_config/body_top.php");
     echo "
     <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-        <form action=\"dates_function.php?dat_id=". $_GET["dat_id"]. "&amp;mode=";
+        <form name=\"form\" action=\"dates_function.php?dat_id=". $_GET["dat_id"]. "&amp;mode=";
             if($_GET["dat_id"] > 0)
             {
                 echo "3";
@@ -145,7 +161,7 @@ require("../../../adm_config/body_top.php");
                 <div>
                     <div style=\"text-align: right; width: 25%; float: left;\">&Uuml;berschrift:</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <input type=\"text\" id=\"headline\" name=\"ueberschrift\" style=\"width: 350px;\" maxlength=\"100\" value=\"". htmlspecialchars($headline, ENT_QUOTES). "\">
+                        <input type=\"text\" name=\"headline\" style=\"width: 350px;\" maxlength=\"100\" value=\"". htmlspecialchars($field_headline, ENT_QUOTES). "\">
                     </div>
                 </div>";
 
@@ -163,7 +179,7 @@ require("../../../adm_config/body_top.php");
                         <div style=\"text-align: right; width: 25%; float: left;\">&nbsp;</div>
                         <div style=\"text-align: left; margin-left: 27%;\">
                             <input type=\"checkbox\" id=\"global\" name=\"global\" ";
-                            if($global == 1)
+                            if($field_global == 1)
                             {
                                 echo " checked=\"checked\" ";
                             }
@@ -180,23 +196,23 @@ require("../../../adm_config/body_top.php");
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 25%; float: left;\">Datum Beginn:</div>
                     <div style=\"text-align: left; width: 75%; position: relative; left: 2%;\">
-                        <input type=\"text\" name=\"datum_von\" size=\"10\" maxlength=\"10\" value=\"$date_from\">
+                        <input type=\"text\" name=\"date_from\" size=\"10\" maxlength=\"10\" value=\"$field_date_from\">
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Uhrzeit Beginn:&nbsp;
-                        <input type=\"text\" name=\"uhrzeit_von\" size=\"5\" maxlength=\"5\" value=\"$time_from\">
+                        <input type=\"text\" name=\"time_from\" size=\"5\" maxlength=\"5\" value=\"$field_time_from\">
                     </div>
                 </div>
                 <div style=\"margin-top: 6px;\">
                 <div style=\"text-align: right; width: 25%; float: left;\">Datum Ende:</div>
                     <div style=\"text-align: left; width: 75%; position: relative; left: 2%;\">
-                        <input type=\"text\" name=\"datum_bis\" size=\"10\" maxlength=\"10\" value=\"$date_to\">
+                        <input type=\"text\" name=\"date_to\" size=\"10\" maxlength=\"10\" value=\"$field_date_to\">
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Uhrzeit Ende:&nbsp;
-                        <input type=\"text\" name=\"uhrzeit_bis\" size=\"5\" maxlength=\"5\" value=\"$time_to\">
+                        <input type=\"text\" name=\"time_to\" size=\"5\" maxlength=\"5\" value=\"$field_time_to\">
                     </div>
                 </div>
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 25%; float: left;\">Treffpunkt:</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <input type=\"text\" name=\"treffpunkt\" style=\"width: 350px;\" maxlength=\"50\" value=\"". htmlspecialchars($meeting_point, ENT_QUOTES). "\">
+                        <input type=\"text\" name=\"meeting_point\" style=\"width: 350px;\" maxlength=\"50\" value=\"". htmlspecialchars($field_meeting_point, ENT_QUOTES). "\">
                     </div>
                 </div>
                 <div style=\"margin-top: 6px;\">
@@ -208,7 +224,7 @@ require("../../../adm_config/body_top.php");
                         }
                     echo "</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <textarea  name=\"beschreibung\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". htmlspecialchars($description, ENT_QUOTES). "</textarea>
+                        <textarea  name=\"description\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". htmlspecialchars($field_description, ENT_QUOTES). "</textarea>
                     </div>
                 </div>
 
@@ -229,7 +245,7 @@ require("../../../adm_config/body_top.php");
         </form>
     </div>
     <script type=\"text/javascript\"><!--
-        document.getElementById('headline').focus();
+        document.form.headline.focus();
     --></script>";
 
    require("../../../adm_config/body_bottom.php");

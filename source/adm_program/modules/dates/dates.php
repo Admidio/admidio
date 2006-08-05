@@ -84,6 +84,7 @@ if($g_preferences['enable_bbcode'] == 1)
     $bbcode = new ubbParser();
 }
 
+unset($_SESSION['dates_request']);
 $act_date = date("Y.m.d 00:00:00", time());
 
 echo "
