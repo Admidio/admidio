@@ -83,9 +83,8 @@ else
     {
         $active_member = $_GET['active_member'];
     }
-}   
+}  
 
-session_start();
 $b_history = false;		// History-Funktion bereits aktiviert ja/nein
 $default_fields = 6;	// Anzahl der Felder, die beim Aufruf angezeigt werden
 
