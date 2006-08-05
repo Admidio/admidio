@@ -90,13 +90,15 @@ else
     $_GET["headline"] = "Ank&uuml;ndigungen";
 }
 
+$_SESSION['announcements_request'] = $_REQUEST;
+
 $err_code = "";
 $err_text = "";
 
 if($_GET["mode"] == 1 || $_GET["mode"] == 3)
 {
-    $headline = strStripTags($_POST['ueberschrift']);
-    $content  = strStripTags($_POST['beschreibung']);
+    $headline = strStripTags($_POST['headline']);
+    $content  = strStripTags($_POST['description']);
 
     if(strlen($headline) > 0
     && strlen($content)  > 0)
@@ -136,7 +138,8 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
         }
-
+		unset($_SESSION['announcements_request']);
+		
         $location = "Location: $g_root_path/adm_program/modules/announcements/announcements.php?headline=". $_GET['headline'];
         header($location);
         exit();
@@ -149,7 +152,7 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
         }
         else
         {
-            $err_text = "Überschrift";
+            $err_text = "&Uuml;berschrift";
         }
         $err_code = "feld";
     }

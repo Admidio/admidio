@@ -8,7 +8,7 @@
  *
  * Uebergaben:
  *
- * ann_id         - ID der Ankuendigung, die bearbeitet werden soll
+ * ann_id        - ID der Ankuendigung, die bearbeitet werden soll
  * headline      - Ueberschrift, die ueber den Ankuendigungen steht
  *                 (Default) Ankuendigungen
  *
@@ -58,37 +58,46 @@ else
     $_GET["headline"] = "Ank&uuml;ndigungen";
 }
 
-$global        = 0;
-$headline      = "";
-$description   = "";
-
+if(isset($_SESSION['announcements_request']))
+{
+	$prev_values = $_SESSION['announcements_request'];
+	$field_headline    = $prev_values['headline'];
+	$field_description = $prev_values['description'];
+	$field_global      = $prev_values['global'];
+}
+else
+{
+	$field_headline    = "";
+	$field_description = "";
+	$field_global      = 0;	
 // Wenn eine Ankuendigungs-ID uebergeben wurde, soll die Ankuendigung geaendert werden
 // -> Felder mit Daten der Ankuendigung vorbelegen
 
-if ($_GET["ann_id"] != 0)
-{
-    $sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. " 
-                WHERE ann_id = {0}
-                  AND (  ann_org_shortname = '$g_organization'
-                      OR ann_global = 1) ";
-    $sql    = prepareSQL($sql, array($_GET['ann_id']));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
-
-    if (mysql_num_rows($result) > 0)
-    {
-        $row_ba = mysql_fetch_object($result);
-
-        $global        = $row_ba->ann_global;
-        $headline      = $row_ba->ann_headline;
-        $description   = $row_ba->ann_description;
-    }
-    else
-    {
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-        header($location);
-        exit();
-    }
+	if ($_GET["ann_id"] != 0)
+	{
+	    $sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. " 
+	                WHERE ann_id = {0}
+	                  AND (  ann_org_shortname = '$g_organization'
+	                      OR ann_global = 1) ";
+	    $sql    = prepareSQL($sql, array($_GET['ann_id']));
+	    $result = mysql_query($sql, $g_adm_con);
+	    db_error($result);
+	
+	    if (mysql_num_rows($result) > 0)
+	    {
+	        $row_ba = mysql_fetch_object($result);
+	
+	        $field_global      = $row_ba->ann_global;
+	        $field_headline    = $row_ba->ann_headline;
+	        $field_description = $row_ba->ann_description;
+	    }
+	    else
+	    {
+	        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
+	        header($location);
+	        exit();
+	    }
+	}
 }
 
 echo "
@@ -109,7 +118,7 @@ echo "</head>";
 require("../../../adm_config/body_top.php");
     echo "
     <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-        <form action=\"announcements_function.php?ann_id=". $_GET["ann_id"]. "&amp;headline=". $_GET['headline']. "&amp;mode=";
+        <form name=\"form\" action=\"announcements_function.php?ann_id=". $_GET["ann_id"]. "&amp;headline=". $_GET['headline']. "&amp;mode=";
             if($_GET["ann_id"] > 0)
             {
                 echo "3";
@@ -135,7 +144,7 @@ require("../../../adm_config/body_top.php");
                 <div>
                     <div style=\"text-align: right; width: 25%; float: left;\">&Uuml;berschrift:</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <input type=\"text\" id=\"headline\" name=\"ueberschrift\" style=\"width: 350px;\" tabindex=\"1\" maxlength=\"100\" value=\"". htmlspecialchars($headline, ENT_QUOTES). "\">
+                        <input type=\"text\" name=\"headline\" style=\"width: 350px;\" tabindex=\"1\" maxlength=\"100\" value=\"". htmlspecialchars($field_headline, ENT_QUOTES). "\">
                     </div>
                 </div>
 
@@ -148,7 +157,7 @@ require("../../../adm_config/body_top.php");
                     }
                     echo "</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <textarea  name=\"beschreibung\" style=\"width: 350px;\" tabindex=\"2\" rows=\"10\" cols=\"40\">". htmlspecialchars($description, ENT_QUOTES). "</textarea>
+                        <textarea  name=\"description\" style=\"width: 350px;\" tabindex=\"2\" rows=\"10\" cols=\"40\">". htmlspecialchars($field_description, ENT_QUOTES). "</textarea>
                     </div>
                 </div>";
 
@@ -166,7 +175,7 @@ require("../../../adm_config/body_top.php");
                         <div style=\"text-align: right; width: 25%; float: left;\">&nbsp;</div>
                         <div style=\"text-align: left; margin-left: 27%;\">
                             <input type=\"checkbox\" id=\"global\" name=\"global\" tabindex=\"3\" ";
-                            if($global == 1)
+                            if($field_global == 1)
                             {
                                 echo " checked=\"checked\" ";
                             }
@@ -195,7 +204,7 @@ require("../../../adm_config/body_top.php");
         </form>
     </div>
     <script type=\"text/javascript\"><!--
-        document.getElementById('headline').focus();
+        document.form.headline.focus();
     --></script>";
 
    require("../../../adm_config/body_bottom.php");

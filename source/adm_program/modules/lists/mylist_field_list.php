@@ -89,7 +89,7 @@ echo "<div style=\"text-align: center; width: 18%; float: left; margin-top: 5px;
                     {
 	                    // wenn Zurueck gewaehlt wurde, dann Felder mit den alten
 	                    // Werten vorbelegen
-	                    if($request["column$i"] == $key)
+	                    if($prev_values["column$i"] == $key)
 	                    {
 							echo " selected ";                        	
 	                    }
@@ -136,7 +136,7 @@ echo "<div style=\"text-align: center; width: 18%; float: left; margin-top: 5px;
                         // wenn Zurueck gewaehlt wurde, dann Felder mit den alten
                         // Werten vorbelegen
                         if($b_ajax == false && $b_history == true
-                        && $request["column$i"] == $uf_row->usf_id)
+                        && $prev_values["column$i"] == $uf_row->usf_id)
                         {
 							echo " selected ";                        	
                         }
@@ -150,21 +150,21 @@ echo "<div style=\"text-align: center; width: 18%; float: left; margin-top: 5px;
     <div style=\"text-align: center; width: 18%; float: left; margin-top: 5px;\">
         <select size=\"1\" name=\"sort$i\">
             <option value=\"\" ";
-            	if($b_ajax == true || isset($request["sort$i"]) == false)
+            	if($b_ajax == true || isset($prev_values["sort$i"]) == false)
             	{
             		echo " selected ";
             	}
 				echo ">&nbsp;</option>
             <option value=\"ASC\" ";
             	if($b_ajax == false && $b_history == true
-            	&& $request["sort$i"] == "ASC")
+            	&& $prev_values["sort$i"] == "ASC")
             	{
             		echo " selected ";
             	}
             	echo ">A bis Z</option>
             <option value=\"DESC\" ";
             	if($b_ajax == false && $b_history == true
-            	&& $request["sort$i"] == "DESC")
+            	&& $prev_values["sort$i"] == "DESC")
             	{
             		echo " selected ";
             	}
@@ -173,7 +173,7 @@ echo "<div style=\"text-align: center; width: 18%; float: left; margin-top: 5px;
     </div>";
 	if($b_ajax == false && $b_history == true)
 	{
-		$condition = $request["condition$i"];
+		$condition = $prev_values["condition$i"];
 	}
 	else
 	{
