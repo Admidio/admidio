@@ -36,8 +36,6 @@
 
 require("../../system/common.php");
 
-session_start();
-
 unset($_SESSION['mylist_request']);
 
 // Uebergabevariablen pruefen und ggf. vorbelegen

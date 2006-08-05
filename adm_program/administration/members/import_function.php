@@ -61,7 +61,6 @@ if(strlen($err_code) > 0)
     exit();
 }
 
-session_start();
 $_SESSION["role"]             = $_POST["role"];
 $_SESSION["user_import_mode"] = $_POST["user_import_mode"];
 $_SESSION["file_lines"]       = file($_FILES['userfile']['tmp_name']);

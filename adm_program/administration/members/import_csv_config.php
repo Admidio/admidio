@@ -38,8 +38,6 @@ if(!editUser())
     exit();
 }
 
-session_start();
-
 if(count($_SESSION['file_lines']) == 0)
 {
     $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=file_not_exist";

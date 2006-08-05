@@ -29,8 +29,6 @@ require("../../system/common.php");
 require("../../system/login_valid.php");
 require("../../system/search_parser_class.php");
 
-session_start();
-
 $_SESSION['mylist_request'] = $_REQUEST;
 
 $err_text    = "";

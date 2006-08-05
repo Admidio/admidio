@@ -52,7 +52,6 @@ if($_GET['mode'] == 2)
         exit();
     }
 
-    session_start();
     $_SESSION["file_lines"] = file($_FILES['userfile']['tmp_name']);
     $_SESSION["value_separator"] = ",";
 

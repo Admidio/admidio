@@ -77,10 +77,13 @@ else
     $g_forum_con = false;
 }
 
+// PHP-Session starten
+session_start();
+
 // Globale Variablen
 $g_session_id    = "";
 $g_session_valid = false;
-
+$g_current_url   = "http://". $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI'];
 $g_current_user  = new User($g_adm_con);
 
 $g_current_organization = new Organization($g_adm_con);

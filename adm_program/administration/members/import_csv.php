@@ -39,7 +39,6 @@ if(!editUser())
 }
 
 $user = new User($g_adm_con);
-session_start();
 
 // rol_id von der zuweisenden Rolle auslesen
 $sql = "SELECT rol_id FROM ". TBL_ROLES. "
