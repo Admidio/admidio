@@ -86,40 +86,45 @@ if($_GET["mode"] == 2 || $_GET["mode"] == 3)
     }
 }
 
+$_SESSION['dates_request'] = $_REQUEST;
 $err_code = "";
 $err_text = "";
 
 if($_GET["mode"] == 1 || $_GET["mode"] == 3)
 {
-    $headline = strStripTags($_POST['ueberschrift']);
-    $content  = strStripTags($_POST['beschreibung']);
-    $place    = strStripTags($_POST['treffpunkt']);
-    $_POST['datum_von']    = trim($_POST['datum_von']);
+    $headline = strStripTags($_POST['headline']);
+    $content  = strStripTags($_POST['description']);
+    $place    = strStripTags($_POST['meeting_point']);
+    $_POST['date_from']    = trim($_POST['date_from']);
 
     if(strlen($headline) > 0
     && strlen($content)  > 0
-    && strlen($_POST['datum_von'])    > 0 )
+    && strlen($_POST['date_from'])    > 0 )
     {
         // wenn Datum gueltig, dann speichern
-        if(dtCheckDate($_POST['datum_von']))
+        if(dtCheckDate($_POST['date_from']))
         {
-            if(strlen($_POST['uhrzeit_von']) == 0
-            || dtCheckTime($_POST['uhrzeit_von']) == true)
+            if(strlen($_POST['time_from']) == 0
+            || dtCheckTime($_POST['time_from']) == true)
             {
-                $dt_datum_von = dtFormatDate($_POST['datum_von'], "Y-m-d"). " ". dtFormatTime($_POST['uhrzeit_von']);
+                $dt_datum_von = dtFormatDate($_POST['date_from'], "Y-m-d"). " ". dtFormatTime($_POST['time_from']);
 
                 // wenn Datum-bis nicht gefüllt ist, dann mit Datum-von nehmen
-                if(strlen($_POST['datum_bis'])   == 0)
-                $_POST['datum_bis']   = $_POST['datum_von'];
-                if(strlen($_POST['uhrzeit_bis']) == 0)
-                $_POST['uhrzeit_bis'] = $_POST['uhrzeit_von'];
-
-                if(dtCheckDate($_POST['datum_bis']))
+                if(strlen($_POST['date_to'])   == 0)
                 {
-                    if(dtCheckTime($_POST['uhrzeit_bis'])
-                    || $_POST['uhrzeit_bis'] == "")
+                	$_POST['date_to']   = $_POST['date_from'];
+                }
+                if(strlen($_POST['time_to']) == 0)
+                {
+                	$_POST['time_to'] = $_POST['time_from'];
+                }
+
+                if(dtCheckDate($_POST['date_to']))
+                {
+                    if(dtCheckTime($_POST['time_to'])
+                    || $_POST['time_to'] == "")
                     {
-                        $dt_datum_bis = dtFormatDate($_POST['datum_bis'], "Y-m-d"). " ". dtFormatTime($_POST['uhrzeit_bis']);
+                        $dt_datum_bis = dtFormatDate($_POST['date_to'], "Y-m-d"). " ". dtFormatTime($_POST['time_to']);
                     }
                     else
                     {
@@ -180,6 +185,8 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
                 $sql    = prepareSQL($sql, array($headline, $place, $content, $_GET['dat_id']));
                 $result = mysql_query($sql, $g_adm_con);
                 db_error($result);
+                
+                unset($_SESSION['dates_request']);
 
                 $location = "Location: $g_root_path/adm_program/modules/dates/dates.php";
                 header($location);
