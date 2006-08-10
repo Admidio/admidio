@@ -80,9 +80,7 @@ if(strlen($err_code) == 0)
 
 if(strlen($err_code) != 0)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text";
-    header($location);
-    exit();
+    $g_message->show($err_code, $err_text);
 }
 
 
@@ -136,7 +134,7 @@ if ($count_user == 0)
     while($row = mysql_fetch_object($result))
     {
         // nur ausfuehren, wenn E-Mails auch unterstuetzt werden
-        if($g_preferences['send_mail_extern'] != 1)
+        if($g_preferences['send_email_extern'] != 1)
         {
             // Mail an den User mit den Loginaten schicken
             $email = new Email();
@@ -153,20 +151,17 @@ if ($count_user == 0)
             }      
             else
             {
-            	$err_code = "mail_not_send";	
-            	$err_text = $row->usr_email;
+                $err_code = "mail_not_send";    
+                $err_text = $row->usr_email;
             }
         }
     }
 
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text&url=home";
-    header($location);
-    exit();
+    $g_message->setForwardUrl("home");
+    $g_message->show($err_code, $err_text);
 }
 else
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=login_name";
-    header($location);
-    exit();
+    $g_message->show("login_name");
 }
 ?>

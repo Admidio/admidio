@@ -40,26 +40,20 @@ require("../../system/login_valid.php");
 // erst prüfen, ob der User auch die entsprechenden Rechte hat
 if(!editAnnouncements())
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-    header($location);
-    exit();
+    $g_message->show("norights");
 }
 
 // Uebergabevariablen pruefen
 
 if(isset($_GET["ann_id"]) && is_numeric($_GET["ann_id"]) == false && $_GET["ann_id"]!=NULL)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit();
+    $g_message->show("invalid");
 }
 
 if(is_numeric($_GET["mode"]) == false
 || $_GET["mode"] < 1 || $_GET["mode"] > 3)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit();
+    $g_message->show("invalid");
 }
 
 if($_GET["mode"] == 2 || $_GET["mode"] == 3)
@@ -75,9 +69,7 @@ if($_GET["mode"] == 2 || $_GET["mode"] == 3)
 
     if(mysql_num_rows($result) == 0)
     {
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-        header($location);
-        exit();
+        $g_message->show("norights");
     }
 }
 
@@ -174,8 +166,5 @@ elseif($_GET["mode"] == 2)
     exit();
 }
 
-$location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text";
-header($location);
-exit();
-
+$g_message->show($err_code, $err_text);
 ?>

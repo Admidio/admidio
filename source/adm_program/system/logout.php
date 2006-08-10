@@ -40,47 +40,25 @@ $session_found = mysql_num_rows($result);
 
 if($_SERVER['HTTP_HOST'] == 'localhost')
 {
-   // beim localhost darf keine Domaine uebergeben werden
-   setcookie("adm_session", "", 0, "/");
+    // beim localhost darf keine Domaine uebergeben werden
+    setcookie("adm_session", "", 0, "/");
 }
 else
 {
-   setcookie("adm_session", "", 0, "/", ".". $g_domain);
+    setcookie("adm_session", "", 0, "/", ".". $g_domain);
 }
 
 if ($session_found > 0)
 {
-   // Session loeschen
+    // Session loeschen
 
-   $sql    = "DELETE FROM ". TBL_SESSIONS. " WHERE ses_session = {0}";
-   $sql    = prepareSQL($sql, array($g_session_id));
-   $result = mysql_query($sql, $g_adm_con);
-   db_error($result);
+    $sql    = "DELETE FROM ". TBL_SESSIONS. " WHERE ses_session = {0}";
+    $sql    = prepareSQL($sql, array($g_session_id));
+    $result = mysql_query($sql, $g_adm_con);
+    db_error($result);
 }
 
-if($g_forum == 1)
-{
-   mysql_select_db($g_forum_db, $g_forum_con);
-
-   // User nun in Foren-Tabelle suchen und dort Session löschen
-   $sql    = "SELECT user_id FROM ". $g_forum_praefix. "_users WHERE username LIKE {0} ";
-   $sql    = prepareSQL($sql, array($g_current_user->login_name));
-   $result = mysql_query($sql, $g_forum_con);
-   db_error($result);
-
-   $row = mysql_fetch_array($result);
-   $forum_user_id = $row[0];
-
-   // User-Session im Forum löschen
-   $sql    = "DELETE FROM ". $g_forum_praefix. "_sessions WHERE session_user_id = $forum_user_id ";
-   $result = mysql_query($sql, $g_forum_con);
-   db_error($result);
-
-   mysql_select_db($g_adm_db, $g_adm_con);
-}
-
-$location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=logout&url=home&timer=2000&status_refresh=1";
-header($location);
-exit();
-
+// Hinweis auf erfolgreiches Ausloggen und weiter zur Startseite
+$g_message->setForwardUrl("home", 2000);
+$g_message->show("logout");
 ?>

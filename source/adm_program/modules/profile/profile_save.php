@@ -320,7 +320,7 @@ if($user->valid == 0)
     $user->update($g_current_user->id);
 
     // nur ausfuehren, wenn E-Mails auch unterstuetzt werden
-    if($g_preferences['send_mail_extern'] != 1)
+    if($g_preferences['send_email_extern'] != 1)
     {
         // Mail an den User schicken, um die Anmeldung zu bestaetigen
         $email = new Email();

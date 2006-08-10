@@ -35,18 +35,14 @@ require("../../system/login_valid.php");
 
 if(!editAnnouncements())
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-    header($location);
-    exit();
+	$g_message->show("norights");
 }
 
 // Uebergabevariablen pruefen
 
 if(isset($_GET["ann_id"]) && is_numeric($_GET["ann_id"]) == false)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit();
+	$g_message->show("invalid");
 }
 
 if(array_key_exists("headline", $_GET))
@@ -93,9 +89,7 @@ else
 	    }
 	    else
 	    {
-	        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-	        header($location);
-	        exit();
+	        $g_message->show("norights");
 	    }
 	}
 }

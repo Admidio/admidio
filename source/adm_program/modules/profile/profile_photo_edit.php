@@ -157,9 +157,7 @@ $bild="../../../adm_my_files/photos/".$user_id.".jpg";
         //Dateigroesse
         if ($_FILES["bilddatei"]["error"]==1)
         {
-            $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=profile_photo_2big";
-            header($location);
-            exit();
+            $g_message->show("profile_photo_2big", ini_get(upload_max_filesize));
         }
         
         //Kontrolle ob Bilder ausgewaehlt wurden

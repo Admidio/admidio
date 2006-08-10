@@ -292,7 +292,7 @@ require("../../../adm_config/body_top.php");
                         <td align=\"center\">";
                             if(strlen($row->usr_email) > 0)
                             {
-                                if($g_preferences['send_mail_extern'] == 1)
+                                if($g_preferences['send_email_extern'] == 1)
                                 {
                                     $mail_link = "mailto:$row->usr_email";
                                 }
@@ -324,7 +324,7 @@ require("../../../adm_config/body_top.php");
                                 if(hasRole("Webmaster") 
                                 && strlen($row->usr_login_name) > 0 
                                 && strlen($row->usr_email) > 0
-                                && $g_preferences['send_mail_extern'] != 1)
+                                && $g_preferences['send_email_extern'] != 1)
                                 {
                                     // Link um E-Mail mit neuem Passwort zu zuschicken
                                     // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
