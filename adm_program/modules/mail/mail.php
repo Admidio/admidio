@@ -36,8 +36,7 @@
 require("../../system/common.php");
 
 // Pruefungen, ob die Seite regulaer aufgerufen wurde
-
-if ($g_preferences['send_mail_extern'] == 1)
+if ($g_preferences['send_email_extern'] == 1)
 {
     // es duerfen oder koennen keine Mails ueber den Server verschickt werden
     $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=mail_extern";
@@ -50,9 +49,7 @@ if ($g_session_valid && !isValidEmailAddress($g_current_user->email))
 {
     // der eingeloggte Benutzer hat in seinem Profil keine gueltige Mailadresse hinterlegt,
     // die als Absender genutzt werden kann...
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=profile_mail";
-    header($location);
-    exit();
+    $g_message->show("profile_mail", "$g_root_path/adm_program/modules/profile/profile.php");
 }
 
 if (isset($_GET["usr_id"]) && is_numeric($_GET["usr_id"]) == false)

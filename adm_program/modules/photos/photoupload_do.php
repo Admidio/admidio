@@ -48,9 +48,7 @@ if(!$g_session_valid || $g_session_valid & !editPhoto())
 
 if (empty($_POST))
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=empty_photo_post";
-    header($location);
-    exit();
+    $g_message->show("empty_photo_post", ini_get(post_max_size));
 }
 
 
@@ -112,9 +110,7 @@ if($g_session_valid & editPhoto())
                 //Die hochgeladene Datei ueberschreitet die in der Anweisung upload_max_filesize in php.ini festgelegte Groesse.
                 if($_FILES["bilddatei"]["error"]["$x"]==1)
                 {
-                    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=photo_2big";
-                    header($location);
-                    exit();
+                    $g_message->show("photo_2big", ini_get(upload_max_filesize));
                 }
             }
             

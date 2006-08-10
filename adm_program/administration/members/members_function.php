@@ -259,7 +259,7 @@ elseif($_GET["mode"] == 4)
 {
     // nur Webmaster duerfen User neue Zugangsdaten zuschicken
     // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
-    if(!hasRole("Webmaster") || $g_preferences['send_mail_extern'] == 1)
+    if(!hasRole("Webmaster") || $g_preferences['send_email_extern'] == 1)
     {
         $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
         header($location);
@@ -269,7 +269,7 @@ elseif($_GET["mode"] == 4)
     $user = new User($g_adm_con);
     $user->GetUser($_GET['user_id']);
 
-    if($g_preferences['send_mail_extern'] != 1)
+    if($g_preferences['send_email_extern'] != 1)
     {
         // neues Passwort generieren
         $password = substr(md5(time()), 0, 8);

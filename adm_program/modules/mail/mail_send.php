@@ -68,7 +68,7 @@ if (empty($_POST))
     exit();
 }
 
-if ($g_preferences['send_mail_extern'] == 1)
+if ($g_preferences['send_email_extern'] == 1)
 {
     // es duerfen oder koennen keine Mails ueber den Server verschickt werden
     $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=mail_extern";

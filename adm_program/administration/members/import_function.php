@@ -33,9 +33,7 @@ $err_text = "";
 // nur berechtigte User duerfen User importieren
 if(!editUser())
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-    header($location);
-    exit();
+    $g_message->show("norights");
 }
 
 if(strlen($_FILES['userfile']['tmp_name']) == 0)
@@ -47,6 +45,7 @@ else if($_FILES['userfile']['error'] == 1)
 {
     //Dateigroesse ueberpruefen Servereinstellungen
     $err_code = "file_2big_server";
+    $err_text = $g_preferences['max_file_upload_size'];
 }
 else if(strlen($_POST['role']) == 0)
 {
@@ -56,9 +55,7 @@ else if(strlen($_POST['role']) == 0)
 
 if(strlen($err_code) > 0)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text";
-    header($location);
-    exit();
+    $g_message->show($err_code, $err_text);
 }
 
 $_SESSION["role"]             = $_POST["role"];

@@ -109,10 +109,10 @@ if(!editDownload())
 //testen ob Schreibrechte fuer adm_my_files bestehen
 if (decoct(fileperms("../../../adm_my_files/download"))!=40777)
 {
-    $load_url = urlencode("$g_root_path/adm_program/modules/download/download.php");
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=write_access&err_text=adm_my_files/download&url=$load_url";
-    header($location);
-    exit();
+    $g_message->addVariableContent("adm_my_files/download", 1);
+    $g_message->addVariableContent($g_preferences['email_administrator'], 2);
+    $g_message->setForwardUrl("$g_root_path/adm_program/modules/download/download.php");
+    $g_message->show("write_access");
 }
 
 $folder = strStripTags(urldecode($_GET['folder']));
@@ -154,9 +154,7 @@ if($_GET["mode"] == 1)
 {
     if (empty($_POST))
     {
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=empty_upload_post";
-        header($location);
-        exit();
+        $g_message->show("empty_upload_post", ini_get(post_max_size));
     }
     
     // Dateien hochladen
@@ -170,17 +168,13 @@ if($_GET["mode"] == 1)
         //Dateigroesse ueberpruefen Servereinstellungen
         if ($_FILES['userfile']['error']==1)
         {
-            $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=file_2big_server";
-            header($location);
-            exit();
+            $g_message->show("file_2big_server", $g_preferences['max_file_upload_size']);
         }
         
         //Dateigroesse ueberpruefen Administratoreinstellungen
         if ($_FILES['userfile']['size']>($g_preferences['max_file_upload_size'])*1000)
         {
-            $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=file_2big";
-            header($location);
-            exit();
+            $g_message->show("file_2big", ini_get(upload_max_filesize));
         }
         
         // Datei-Extension ermitteln
@@ -206,7 +200,7 @@ if($_GET["mode"] == 1)
         {
             $file_name = "$file_name.$file_ext";
         }
-		
+        
         $ret = isValidFileName($file_name, true);
         if($ret == 0)
         {
@@ -224,11 +218,11 @@ if($_GET["mode"] == 1)
         }
         else
         {
-        	if($ret == -1)
-        	{
-        		$err_code = "feld";
-        		$err_text = urlencode("Datei ausw&auml;hlen");
-        	}
+            if($ret == -1)
+            {
+                $err_code = "feld";
+                $err_text = urlencode("Datei ausw&auml;hlen");
+            }
             elseif($ret == -2)
             {
                 $err_code = "invalid_file_name";

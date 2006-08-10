@@ -142,6 +142,8 @@ writeOrgaPreferences('photo_show_height', $_POST['photo_show_height']);
 writeOrgaPreferences('photo_image_text', $_POST['photo_image_text']);
 writeOrgaPreferences('photo_preview_scale', $_POST['photo_preview_scale']);
 
+unset($_SESSION['g_current_organizsation']);
+unset($_SESSION['g_preferences']);
 
 // zur Ausgangsseite zurueck
 $load_url = urlencode("$g_root_path/adm_program/administration/organization/organization.php?url=". $_GET['url']);

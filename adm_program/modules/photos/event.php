@@ -183,10 +183,11 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
                         WHERE (pho_id ='$pho_id')";
                 $result = mysql_query($sql, $g_adm_con);
                 db_error($result);
-                $load_url = urlencode("$g_root_path/adm_program/modules/photos/photos.php");
-                $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=write_access&err_text=adm_my_files/photos&url=$load_url";
-                header($location);
-                exit();
+
+                $g_message->addVariableContent("adm_my_files/photos", 1);
+                $g_message->addVariableContent($g_preferences['email_administrator'], 2);
+                $g_message->setForwardUrl("$g_root_path/adm_program/modules/photos/photos.php");
+                $g_message->show("write_access");
             }
             //wenn Rechte OK, Ordner erstellen
             else
@@ -204,10 +205,10 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
             //testen ob Schreibrechte fuer adm_my_files bestehen
             if (decoct(fileperms("../../../adm_my_files/photos"))!=40777)
             {
-                $load_url = urlencode("$g_root_path/adm_program/modules/photos/photos.php");
-                $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=write_access&err_text=adm_my_files/photos&url=$load_url";
-                header($location);
-                exit();
+                $g_message->addVariableContent("adm_my_files/photos", 1);
+                $g_message->addVariableContent($g_preferences['email_administrator'], 2);
+                $g_message->setForwardUrl("$g_root_path/adm_program/modules/photos/photos.php");
+                $g_message->show("write_access");                
             }
             //wenn Rechte OK, Ordner erstellen
             else
