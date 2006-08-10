@@ -29,18 +29,14 @@
 
 if($g_session_valid == false)
 {
-    // aufgerufene URL ermitteln, damit diese nach dem Einloggen sofort aufgerufen werden kann
-    $url = $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI'];
+	if(isset($_SESSION['login_forward_url']) == false)
+	{
+	    // aufgerufene URL merken, damit diese nach dem Einloggen sofort aufgerufen werden kann
+	    $_SESSION['login_forward_url'] = $g_current_url;
+	}
     
-    if(strpos($url, "http://") > 0
-    || strpos($url, "http://") === false)
-    {
-        // wenn http nicht am Anfang der URL steht, dann noch einfuegen
-        $url = "http://". $url;
-    }
-
-    // User nicht eingeloggt
-    $location = "Location: $g_root_path/adm_program/system/login.php?url=". urlencode($url);
+    // User nicht eingeloggt -> Loginseite aufrufen
+    $location = "Location: $g_root_path/adm_program/system/login.php";
     header($location);
     exit();
 }
