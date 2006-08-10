@@ -7,10 +7,6 @@
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  *
- * Uebergaben:
- *
- * url: Seite, die nach erfolgreichem Login aufgerufen wird
- *
  ******************************************************************************
  *
  * This program is free software; you can redistribute it and/or
@@ -30,12 +26,6 @@
  *****************************************************************************/
 
 require("common.php");
-
-if(!array_key_exists("url", $_GET)
-|| strlen($_GET['url']) == 0)
-{
-    $_GET['url'] = "home";
-}
 
 $_POST['loginname'] = strStripTags($_POST['loginname']);
 
@@ -138,9 +128,18 @@ if ($user_found >= 1)
         $result = mysql_query($sql, $g_adm_con);
         db_error($result);
 
-        // Eingeloggt, weiter zur angewaehlten Seite
-        $g_message->setForwardUrl(urlencode($_GET['url']), 2000);
-        $g_message->show("login");
+        // falls noch keine Forward-Url gesetzt wurde, dann nach dem Login auf 
+        // die Startseite verweisen
+        if(isset($_SESSION['login_forward_url']) == false)
+        {
+        	$_SESSION['login_forward_url'] = home;
+        }
+        
+        // bevor zur entsprechenden Seite weitergeleitet wird, muss noch geprueft werden,
+        // ob der Browser Cookies setzen darf -> sonst kein Login moeglich
+	    $location = "Location: $g_root_path/adm_program/system/cookie_check.php";
+	    header($location);
+	    exit();
     }
     else
     {

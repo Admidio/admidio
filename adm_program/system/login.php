@@ -6,10 +6,6 @@
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  *
- * Uebergaben:
- *
- * url: Seite, die nach erfolgreichem Login aufgerufen wird
- *
  ******************************************************************************
  *
  * This program is free software; you can redistribute it and/or
@@ -30,11 +26,6 @@
 
 require("common.php");
 
-if(!array_key_exists("url", $_GET))
-{
-    $_GET['url'] = "";
-}
-
 echo "
 <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
@@ -53,7 +44,7 @@ echo "</head>";
 require("../../adm_config/body_top.php");
     echo "<div align=\"center\">
         <br /><br /><br />
-        <form action=\"login_check.php?url=". urlencode($_GET['url']). "\" name=\"Login\" method=\"post\">
+        <form action=\"login_check.php\" name=\"Login\" method=\"post\">
             <div class=\"formHead\" style=\"width: 260px\">". strspace("Login"). "</div>
             <div class=\"formBody\" style=\"width: 260px\">
                 <div style=\"margin-top: 7px;\">
