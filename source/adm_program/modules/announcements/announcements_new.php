@@ -56,18 +56,17 @@ else
 
 if(isset($_SESSION['announcements_request']))
 {
-	$prev_values = $_SESSION['announcements_request'];
-	$field_headline    = $prev_values['headline'];
-	$field_description = $prev_values['description'];
-	$field_global      = $prev_values['global'];
+	$form_values = $_SESSION['announcements_request'];
+	unset($_SESSION['announcements_request']);
 }
 else
 {
-	$field_headline    = "";
-	$field_description = "";
-	$field_global      = 0;	
-// Wenn eine Ankuendigungs-ID uebergeben wurde, soll die Ankuendigung geaendert werden
-// -> Felder mit Daten der Ankuendigung vorbelegen
+	$form_values['headline']    = "";
+	$form_values['description'] = "";
+	$form_values['global']      = 0;	
+	
+	// Wenn eine Ankuendigungs-ID uebergeben wurde, soll die Ankuendigung geaendert werden
+	// -> Felder mit Daten der Ankuendigung vorbelegen
 
 	if ($_GET["ann_id"] != 0)
 	{
@@ -83,9 +82,9 @@ else
 	    {
 	        $row_ba = mysql_fetch_object($result);
 	
-	        $field_global      = $row_ba->ann_global;
-	        $field_headline    = $row_ba->ann_headline;
-	        $field_description = $row_ba->ann_description;
+	        $form_values['headline']    = $row_ba->ann_headline;
+	        $form_values['description'] = $row_ba->ann_description;
+	        $form_values['global']      = $row_ba->ann_global;
 	    }
 	    else
 	    {
@@ -138,7 +137,7 @@ require("../../../adm_config/body_top.php");
                 <div>
                     <div style=\"text-align: right; width: 25%; float: left;\">&Uuml;berschrift:</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <input type=\"text\" name=\"headline\" style=\"width: 350px;\" tabindex=\"1\" maxlength=\"100\" value=\"". htmlspecialchars($field_headline, ENT_QUOTES). "\">
+                        <input type=\"text\" name=\"headline\" style=\"width: 350px;\" tabindex=\"1\" maxlength=\"100\" value=\"". htmlspecialchars($form_values['headline'], ENT_QUOTES). "\">
                     </div>
                 </div>
 
@@ -151,7 +150,7 @@ require("../../../adm_config/body_top.php");
                     }
                     echo "</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <textarea  name=\"description\" style=\"width: 350px;\" tabindex=\"2\" rows=\"10\" cols=\"40\">". htmlspecialchars($field_description, ENT_QUOTES). "</textarea>
+                        <textarea  name=\"description\" style=\"width: 350px;\" tabindex=\"2\" rows=\"10\" cols=\"40\">". htmlspecialchars($form_values['description'], ENT_QUOTES). "</textarea>
                     </div>
                 </div>";
 
@@ -169,7 +168,7 @@ require("../../../adm_config/body_top.php");
                         <div style=\"text-align: right; width: 25%; float: left;\">&nbsp;</div>
                         <div style=\"text-align: left; margin-left: 27%;\">
                             <input type=\"checkbox\" id=\"global\" name=\"global\" tabindex=\"3\" ";
-                            if($field_global == 1)
+                            if($form_values['global'] == 1)
                             {
                                 echo " checked=\"checked\" ";
                             }

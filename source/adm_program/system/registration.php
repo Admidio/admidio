@@ -26,6 +26,19 @@
 
 require("common.php");
 
+if(isset($_SESSION['registration_request']))
+{
+   $form_values = $_SESSION['registration_request'];
+   unset($_SESSION['registration_request']);
+}
+else
+{
+	$form_values['last_name']  = "";
+	$form_values['first_name'] = "";
+	$form_values['email']      = "";
+	$form_values['login_name'] = "";
+}
+
 echo "
 <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
@@ -50,19 +63,19 @@ require("../../adm_config/body_top.php");
                 <div>
                     <div style=\"text-align: right; width: 130; float: left;\">Nachname:</div>
                     <div style=\"text-align: left; margin-left: 140px;\">
-                        <input type=\"text\" id=\"last_name\" name=\"nachname\" size=\"20\" maxlength=\"30\" />
+                        <input type=\"text\" id=\"last_name\" name=\"last_name\" size=\"20\" maxlength=\"30\" value=\"". $form_values['last_name']. "\">
                     </div>
                 </div>
                 <div style=\"margin-top: 8px;\">
                     <div style=\"text-align: right; width: 130; float: left;\">Vorname:</div>
                     <div style=\"text-align: left; margin-left: 140px;\">
-                        <input type=\"text\" name=\"vorname\" size=\"20\" maxlength=\"30\" />
+                        <input type=\"text\" name=\"first_name\" size=\"20\" maxlength=\"30\" value=\"". $form_values['first_name']. "\">
                     </div>
                 </div>
                 <div style=\"margin-top: 8px;\">
                     <div style=\"text-align: right; width: 130; float: left;\">E-Mail:</div>
                     <div style=\"text-align: left; margin-left: 140px;\">
-                        <input type=\"text\" name=\"email\" size=\"24\" maxlength=\"50\" />&nbsp;
+                        <input type=\"text\" name=\"email\" size=\"24\" maxlength=\"50\" value=\"". $form_values['email']. "\">&nbsp;
                         <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                         onClick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=email','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\">
                     </div>
@@ -73,7 +86,7 @@ require("../../adm_config/body_top.php");
                 <div style=\"margin-top: 8px;\">
                     <div style=\"text-align: right; width: 130; float: left;\">Benutzername:</div>
                     <div style=\"text-align: left; margin-left: 140px;\">
-                        <input type=\"text\" name=\"benutzername\" size=\"20\" maxlength=\"20\" />&nbsp;
+                        <input type=\"text\" name=\"login_name\" size=\"20\" maxlength=\"20\" value=\"". $form_values['login_name']. "\">&nbsp;
                         <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                         onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=nickname','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\">
                     </div>
@@ -81,7 +94,7 @@ require("../../adm_config/body_top.php");
                 <div style=\"margin-top: 8px;\">
                     <div style=\"text-align: right; width: 130; float: left;\">Passwort:</div>
                     <div style=\"text-align: left; margin-left: 140px;\">
-                        <input type=\"password\" name=\"passwort\" size=\"10\" maxlength=\"20\" />&nbsp;
+                        <input type=\"password\" name=\"password\" size=\"10\" maxlength=\"20\" />&nbsp;
                         <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                         onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=password','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\">
                     </div>
@@ -89,7 +102,7 @@ require("../../adm_config/body_top.php");
                 <div style=\"margin-top: 8px;\">
                     <div style=\"text-align: right; width: 130; float: left;\">Passwort (Wdh):</div>
                     <div style=\"text-align: left; margin-left: 140px;\">
-                        <input type=\"password\" name=\"passwort2\" size=\"10\" maxlength=\"20\" />
+                        <input type=\"password\" name=\"password2\" size=\"10\" maxlength=\"20\" />
                     </div>
                 </div>
 
