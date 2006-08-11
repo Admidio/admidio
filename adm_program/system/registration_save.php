@@ -27,17 +27,19 @@
 require("common.php");
 require("email_class.php");
 
+$_SESSION['registration_request'] = $_REQUEST;
+
 $err_code   = "";
 $err_text   = "";
 $count_user = 0;
 
-$_POST['benutzername'] = strStripTags($_POST['benutzername']);
-$_POST['nachname']     = strStripTags($_POST['nachname']);
-$_POST['vorname']      = strStripTags($_POST['vorname']);
-$_POST['email']        = strStripTags($_POST['email']);
+$_POST['login_name'] = strStripTags($_POST['login_name']);
+$_POST['last_name']  = strStripTags($_POST['last_name']);
+$_POST['first_name'] = strStripTags($_POST['first_name']);
+$_POST['email']      = strStripTags($_POST['email']);
 
 // Felder prüfen
-if ($_POST['passwort'] != $_POST['passwort2'])
+if ($_POST['password'] != $_POST['password2'])
 {
     $err_code = "passwort";
 }
@@ -52,22 +54,22 @@ if(strlen($err_code) == 0)
  
 if(strlen($err_code) == 0)
 {
-    if(strlen($_POST["benutzername"]) == 0)
+    if(strlen($_POST['login_name']) == 0)
     {
         $err_text = "Benutzername";
     }
 
-    if(strlen($_POST["passwort"]) == 0)
+    if(strlen($_POST['password']) == 0)
     {
         $err_text = "Passwort";
     }
 
-    if(strlen($_POST["nachname"]) == 0)
+    if(strlen($_POST['last_name']) == 0)
     {
         $err_text = "Nachname";
     }
 
-    if(strlen($_POST["vorname"]) == 0)
+    if(strlen($_POST['first_name']) == 0)
     {
         $err_text = "Vorname";
     }
@@ -87,36 +89,23 @@ if(strlen($err_code) != 0)
 // pruefen, ob der Username bereits vergeben ist
 $sql    = "SELECT usr_id FROM ". TBL_USERS. " 
             WHERE usr_login_name LIKE {0}";
-$sql    = prepareSQL($sql, array($_POST["benutzername"]));
+$sql    = prepareSQL($sql, array($_POST['login_name']));
 $result = mysql_query($sql, $g_adm_con);
 db_error($result);      
 
 $count_user = mysql_num_rows($result);
 
-if ($count_user == 0 && $g_forum == 1)
-{
-    mysql_select_db($g_forum_db, $g_forum_con);
-
-    // auch im Forum pruefen
-    $sql    = "SELECT user_id FROM ". $g_forum_praefix. "_users 
-                WHERE username LIKE {0}";
-    $sql    = prepareSQL($sql, array($_POST["benutzername"]));
-    $result = mysql_query($sql, $g_forum_con);
-    db_error($result);      
-
-    $count_user = mysql_num_rows($result);
-    mysql_select_db($g_adm_db, $g_adm_con);
-}
-
 if ($count_user == 0)
 {
-    $password_crypt = md5($_POST["passwort"]);
+    $password_crypt = md5($_POST['password']);
 
     $sql    = "INSERT INTO ". TBL_USERS. " (usr_reg_org_shortname, usr_last_name, usr_first_name, usr_email, usr_login_name, usr_password, usr_valid) ".
     "                               VALUES ('$g_organization', {0}, {1}, {2}, {3}, '$password_crypt', 0)";
-    $sql    = prepareSQL($sql, array($_POST["nachname"], $_POST["vorname"], $_POST["email"], $_POST["benutzername"]));
+    $sql    = prepareSQL($sql, array($_POST['last_name'], $_POST['first_name'], $_POST['email'], $_POST['login_name']));
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
+    
+    unset($_SESSION['registration_request']);
 
     // E-Mail an alle Webmaster schreiben
     $sql    = "SELECT usr_first_name, usr_last_name, usr_email
@@ -142,8 +131,8 @@ if ($count_user == 0)
             $email->addRecipient($row->usr_email, "$row->first_name $row->last_name");
             $email->setSubject(utf8_decode("Neue Registrierung"));
             $email->setText(utf8_decode("Es hat sich ein neuer User auf "). $g_current_organization->homepage. 
-                utf8_decode(" registriert.\n\nNachname: "). $_POST["nachname"]. utf8_decode("\nVorname:  "). 
-                $_POST["vorname"]. utf8_decode("\nE-Mail:   "). $_POST["email"]. 
+                utf8_decode(" registriert.\n\nNachname: "). $_POST['last_name']. utf8_decode("\nVorname:  "). 
+                $_POST['first_name']. utf8_decode("\nE-Mail:   "). $_POST['email']. 
                 utf8_decode("\n\n\nDiese Nachricht wurde automatisch erzeugt."));
             if($email->sendEmail() == true)
             {
