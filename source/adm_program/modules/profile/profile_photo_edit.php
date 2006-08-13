@@ -46,17 +46,13 @@ if (ini_get('file_uploads') != '1')
 
 if(isset($_GET["usr_id"]) && is_numeric($_GET["usr_id"]) == false)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit();
+    $g_message->show("invalid");
 }
 
 if(isset($_GET["job"]) && $_GET["job"] != "save" 
 && $_GET["job"] != "dont_save" && $_GET["job"] != "upload")
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit(); 
+    $g_message->show("invalid");
 }
 
 if(!array_key_exists('usr_id', $_GET))
@@ -91,9 +87,7 @@ else
 // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
 if(!editUser() && $user_id != $g_current_user->id)
 {
-   $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-   header($location);
-   exit();
+    $g_message->show("norights");
 }
 
 // User auslesen

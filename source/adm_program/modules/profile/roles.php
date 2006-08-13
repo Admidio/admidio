@@ -37,27 +37,21 @@ require("../../system/login_valid.php");
 // nur Webmaster & Moderatoren duerfen Rollen zuweisen
 if(!isModerator() && !isGroupLeader() && !editUser())
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-    header($location);
-    exit();
+    $g_message->show("norights");
 }
 
 // Uebergabevariablen pruefen
 
 if(isset($_GET["user_id"]) && is_numeric($_GET["user_id"]) == false)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit();
+    $g_message->show("invalid");
 }
 
 if(array_key_exists("popup", $_GET))
 {
     if(is_numeric($_GET["popup"]) == false)
     {
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-        header($location);
-        exit();
+        $g_message->show("invalid");
     }
 }
 else
@@ -69,9 +63,7 @@ if(array_key_exists("new_user", $_GET))
 {
     if(is_numeric($_GET["new_user"]) == false)
     {
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-        header($location);
-        exit();
+        $g_message->show("invalid");
     }
 }
 else

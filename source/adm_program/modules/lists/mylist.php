@@ -41,9 +41,7 @@ if(array_key_exists("rol_id", $_GET))
 {
     if(is_numeric($_GET["rol_id"]) == false)
     {
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-        header($location);
-        exit();
+        $g_message->show("invalid");
     }   
 }
 else
@@ -85,33 +83,33 @@ else
     }
 }  
 
-$b_history = false;		// History-Funktion bereits aktiviert ja/nein
-$default_fields = 6;	// Anzahl der Felder, die beim Aufruf angezeigt werden
+$b_history = false;     // History-Funktion bereits aktiviert ja/nein
+$default_fields = 6;    // Anzahl der Felder, die beim Aufruf angezeigt werden
 
 if(isset($_SESSION['mylist_request']))
 {
-	$prev_values = $_SESSION['mylist_request'];
-	$rol_id = $prev_values['role'];
-	if($prev_values['former'] == 1)
-	{
-		$active_member = 0;
-	}
-	
-	// falls vorher schon Felder manuell hinzugefuegt wurden, 
-	// muessen diese nun direkt angelegt werden
-	for($i = $default_fields+1; $i > 0; $i++)
-	{
-		if(isset($prev_values["column$i"]))
-		{
-			$default_fields++;			
-		}	
-		else
-		{
-			$i = -1;
-		}
-	}
-	
-	$b_history = true;
+    $prev_values = $_SESSION['mylist_request'];
+    $rol_id = $prev_values['role'];
+    if($prev_values['former'] == 1)
+    {
+        $active_member = 0;
+    }
+    
+    // falls vorher schon Felder manuell hinzugefuegt wurden, 
+    // muessen diese nun direkt angelegt werden
+    for($i = $default_fields+1; $i > 0; $i++)
+    {
+        if(isset($prev_values["column$i"]))
+        {
+            $default_fields++;          
+        }   
+        else
+        {
+            $i = -1;
+        }
+    }
+    
+    $b_history = true;
 }
 
 echo "
@@ -121,29 +119,29 @@ echo "
 <head>
     <title>$g_current_organization->longname - Eigene Liste - Einstellungen</title>
     <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
-	<script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/ajax.js\"></script>
-	
-	<script type=\"text/javascript\">
-		var actFieldCount = $default_fields;
-		var resObject     = createXMLHttpRequest();
+    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/ajax.js\"></script>
+    
+    <script type=\"text/javascript\">
+        var actFieldCount = $default_fields;
+        var resObject     = createXMLHttpRequest();
 
-		function addField() 
-		{
-			actFieldCount++;
-			resObject.open('get', 'mylist_field_list.php?field_number=' + actFieldCount, true);
-			resObject.onreadystatechange = handleResponse;
-			resObject.send(null);
-		}
+        function addField() 
+        {
+            actFieldCount++;
+            resObject.open('get', 'mylist_field_list.php?field_number=' + actFieldCount, true);
+            resObject.onreadystatechange = handleResponse;
+            resObject.send(null);
+        }
 
-		function handleResponse() 
-		{
-			if(resObject.readyState == 4) 
-			{
-				var objectId = 'next_field_' + actFieldCount;
-				document.getElementById(objectId).innerHTML += resObject.responseText;
-			}
-		}
-	</script>
+        function handleResponse() 
+        {
+            if(resObject.readyState == 4) 
+            {
+                var objectId = 'next_field_' + actFieldCount;
+                document.getElementById(objectId).innerHTML += resObject.responseText;
+            }
+        }
+    </script>
 
     <!--[if lt IE 7]>
     <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
@@ -227,24 +225,24 @@ require("../../../adm_config/body_top.php");
                             onClick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=condition','Message','width=450,height=600,left=310,top=200,scrollbars=yes')\">
                         </th>
                     </tr>
-					<tr>
-						<td colspan=\"4\">";
-							// Zeilen mit den einzelnen Feldern anzeigen
-		                    for($i = 1; $i <= $default_fields; $i++)
-		                    {
-		                    	include("mylist_field_list.php");
-		                    }
-						echo "</td>
-					</tr>
-					<tr>
-						<td colspan=\"4\" style=\"padding: 4px;\">&nbsp;
-							<span class=\"iconLink\">
-			                    <a class=\"iconLink\" href=\"javascript:addField()\"><img
-			                    class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Feld hinzuf&uuml;gen\"></a>
-			                    <a class=\"iconLink\" href=\"javascript:addField()\">Feld hinzuf&uuml;gen</a>
-			                </span>
-						</td>
-					</tr>
+                    <tr>
+                        <td colspan=\"4\">";
+                            // Zeilen mit den einzelnen Feldern anzeigen
+                            for($i = 1; $i <= $default_fields; $i++)
+                            {
+                                include("mylist_field_list.php");
+                            }
+                        echo "</td>
+                    </tr>
+                    <tr>
+                        <td colspan=\"4\" style=\"padding: 4px;\">&nbsp;
+                            <span class=\"iconLink\">
+                                <a class=\"iconLink\" href=\"javascript:addField()\"><img
+                                class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Feld hinzuf&uuml;gen\"></a>
+                                <a class=\"iconLink\" href=\"javascript:addField()\">Feld hinzuf&uuml;gen</a>
+                            </span>
+                        </td>
+                    </tr>
                 </table>
 
                 <p>

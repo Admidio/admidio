@@ -41,9 +41,7 @@ require("../../system/common.php");
 
 if(isset($_GET["sort"]) && $_GET["sort"] != "asc" && $_GET["sort"] != "desc")
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit(); 
+    $g_message->show("invalid");
 }
 
 $default_folder = strStripTags(urldecode($_GET['default_folder']));

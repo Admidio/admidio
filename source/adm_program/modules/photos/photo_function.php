@@ -35,23 +35,17 @@ require("../../system/login_valid.php");
 
 if(isset($_GET["pho_id"]) && is_numeric($_GET["pho_id"]) == false)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit();
+    $g_message->show("invalid");
 }
 
 if(isset($_GET["job"]) && $_GET["job"] != "rotate" && $_GET["job"] != "delete")
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit(); 
+    $g_message->show("invalid");
 }
 
 if(isset($_GET["direction"]) && $_GET["direction"] != "left" && $_GET["direction"] != "right")
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit(); 
+    $g_message->show("invalid");
 }
 
 //Rechtsdrehung eines Bildes

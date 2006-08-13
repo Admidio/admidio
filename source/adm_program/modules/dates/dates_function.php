@@ -45,26 +45,20 @@ if($_GET["mode"] != 4)
 // erst prüfen, ob der User auch die entsprechenden Rechte hat
 if(!editDate() && $_GET["mode"] != 4)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-    header($location);
-    exit();
+    $g_message->show("norights");
 }
 
 // Uebergabevariablen pruefen
 
 if(isset($_GET["dat_id"]) && is_numeric($_GET["dat_id"]) == false && $_GET["dat_id"]!=NULL)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit();
+    $g_message->show("invalid");
 }
 
 if(is_numeric($_GET["mode"]) == false
 || $_GET["mode"] < 1 || $_GET["mode"] > 4)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit();
+    $g_message->show("invalid");
 }
 
 if($_GET["mode"] == 2 || $_GET["mode"] == 3)
@@ -80,9 +74,7 @@ if($_GET["mode"] == 2 || $_GET["mode"] == 3)
 
     if(mysql_num_rows($result) == 0)
     {
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-        header($location);
-        exit();
+        $g_message->show("norights");
     }
 }
 
@@ -112,11 +104,11 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
                 // wenn Datum-bis nicht gefüllt ist, dann mit Datum-von nehmen
                 if(strlen($_POST['date_to'])   == 0)
                 {
-                	$_POST['date_to']   = $_POST['date_from'];
+                    $_POST['date_to']   = $_POST['date_from'];
                 }
                 if(strlen($_POST['time_to']) == 0)
                 {
-                	$_POST['time_to'] = $_POST['time_from'];
+                    $_POST['time_to'] = $_POST['time_from'];
                 }
 
                 if(dtCheckDate($_POST['date_to']))

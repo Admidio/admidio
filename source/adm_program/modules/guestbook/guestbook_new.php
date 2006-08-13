@@ -38,9 +38,7 @@ if (array_key_exists("id", $_GET))
 {
     if (is_numeric($_GET["id"]) == false)
     {
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-        header($location);
-        exit();
+        $g_message->show("invalid");
     }
 }
 else
@@ -65,9 +63,7 @@ if ($_GET["id"] != 0)
 
     if (!editGuestbook())
     {
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-        header($location);
-        exit();
+        $g_message->show("norights");
     }
 }
 
@@ -99,9 +95,7 @@ if ($_GET['id'] != 0)
     elseif (mysql_num_rows($result) == 0)
     {
         //Wenn keine Daten zu der ID gefunden worden bzw. die ID einer anderen Orga gehört ist Schluss mit lustig...
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-        header($location);
-        exit();
+        $g_message->show("invalid");
     }
 
 }

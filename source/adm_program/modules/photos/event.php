@@ -39,17 +39,13 @@ require("../../system/login_valid.php");
 
 if(isset($_GET["pho_id"]) && is_numeric($_GET["pho_id"]) == false)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit();
+    $g_message->show("invalid");
 }
 
 if(isset($_GET["aufgabe"]) && $_GET["aufgabe"] != "new" && $_GET["aufgabe"] != "change"
 && $_GET["aufgabe"] != "makenew" && $_GET["aufgabe"] != "change" && $_GET["aufgabe"] != "makechange")
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit(); 
+    $g_message->show("invalid");
 }
 
 //Uebernahme Variablen

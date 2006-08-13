@@ -38,30 +38,22 @@ header("Content-Type: image/jpeg");
 
 if(isset($_GET["aufgabe"]) && $_GET["aufgabe"] != "anzeigen" && $_GET["aufgabe"] != "speichern")
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit(); 
+    $g_message->show("invalid");
 }
 
 if(isset($_GET["nr"]) && is_numeric($_GET["nr"]) == false)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit();
+    $g_message->show("invalid");
 }
 
 if(isset($_GET["scal"]) && is_numeric($_GET["scal"]) == false)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit();
+    $g_message->show("invalid");
 }
 
 if(strlen($_GET["side"]) > 0 && $_GET["side"] != "y" && $_GET["side"] != "x")
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit(); 
+    $g_message->show("invalid");
 }
 
 //Uebernahme welches Bild umgerechnet werden soll

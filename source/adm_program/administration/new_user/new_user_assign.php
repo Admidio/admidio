@@ -35,23 +35,17 @@ require("../../system/login_valid.php");
 // nur Webmaster duerfen User zuordnen, ansonsten Seite verlassen
 if(!hasRole("Webmaster"))
 {
-   $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-   header($location);
-   exit();
+   $g_message->show("norights");
 }
 
 if(isset($_GET['new_user_id']) && is_numeric($_GET['new_user_id']) == false)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit();
+    $g_message->show("invalid");
 }
 
 if(isset($_GET['letter']) && strlen($_GET["letter"]) > 2)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit();
+    $g_message->show("invalid");
 }
 
 $restrict = "";

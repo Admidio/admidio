@@ -38,9 +38,7 @@ require("../../system/login_valid.php");
 // erst prüfen, ob der User auch die entsprechenden Rechte hat
 if(!editDownload())
 {
-  $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-  header($location);
-  exit();
+    $g_message->show("norights");
 }
 
 $default_folder = strStripTags(urldecode($_GET['default_folder']));
@@ -50,22 +48,22 @@ $folder = strStripTags(urldecode($_GET['folder']));
 // und Ordnerpfad zusammensetzen
 if(strlen($default_folder) > 0)
 {
-  if(strpos($default_folder, "..") !== false)
-  {
-     $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_folder";
-     header($location);
-     exit();
-  }
+    if(strpos($default_folder, "..") !== false)
+    {
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_folder";
+        header($location);
+        exit();
+    }
 }
 
 if(strlen($folder) > 0)
 {
-  if(strpos($folder, "..") !== false)
-  {
-     $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_folder";
-     header($location);
-     exit();
-  }
+    if(strpos($folder, "..") !== false)
+    {
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_folder";
+        header($location);
+        exit();
+    }
 }
 
 //Beginn der Seite

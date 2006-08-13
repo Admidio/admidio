@@ -44,9 +44,7 @@ require("../../system/login_valid.php");
 if(is_numeric($_GET["mode"]) == false
 || $_GET["mode"] < 1 || $_GET["mode"] > 4)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit();
+    $g_message->show("invalid");
 }
 
 //Pruefrotine ob Ordner/Datei
@@ -101,9 +99,7 @@ function removeDir ($dir)
 // erst pruefen, ob der User auch die entsprechenden Rechte hat
 if(!editDownload())
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-    header($location);
-    exit();
+    $g_message->show("norights");
 }
 
 //testen ob Schreibrechte fuer adm_my_files bestehen

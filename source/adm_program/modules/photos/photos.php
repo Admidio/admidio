@@ -36,21 +36,17 @@ require("../../system/common.php");
 
 if(isset($_GET["pho_id"]) && is_numeric($_GET["pho_id"]) == false && $_GET["pho_id"]!=NULL)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit();
+    $g_message->show("invalid");
 }
 
 //aktuelle event_element
 if(array_key_exists("start", $_GET))
 {
-	if(is_numeric($_GET["start"]) == false)
-	{
-	    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-	    header($location);
-	    exit();
-	}
-	$event_element = $_GET['start'];
+    if(is_numeric($_GET["start"]) == false)
+    {
+        $g_message->show("invalid");
+    }
+    $event_element = $_GET['start'];
 }
 else
 {
@@ -59,13 +55,11 @@ else
 
 if(array_key_exists("thumb_seite", $_GET))
 {
-	if(is_numeric($_GET["thumb_seite"]) == false)
-	{
-	    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-	    header($location);
-	    exit();
-	}
-	$thumb_seite = $_GET['thumb_seite'];
+    if(is_numeric($_GET["thumb_seite"]) == false)
+    {
+        $g_message->show("invalid");
+    }
+    $thumb_seite = $_GET['thumb_seite'];
 }
 else
 {
@@ -74,9 +68,7 @@ else
 
 if(isset($_GET["locked"]) && is_numeric($_GET["locked"]) == false)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit();
+    $g_message->show("invalid");
 }
 
 //Uebername der uebergebenen Variablen
@@ -349,11 +341,11 @@ echo "
                                     {
                                         echo"
                                         <a href=\"photo_function.php?pho_id=$pho_id&bild=$bild&thumb_seite=$thumb_seite&job=rotate&direction=left\"><img 
-											src=\"$g_root_path/adm_program/images/arrow_turn_left.png\" border=\"0\" alt=\"nach links drehen\" title=\"nach links drehen\"></a>
+                                            src=\"$g_root_path/adm_program/images/arrow_turn_left.png\" border=\"0\" alt=\"nach links drehen\" title=\"nach links drehen\"></a>
                                         <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_photo&err_head=Foto L&ouml;schen&button=2&url=". urlencode("$g_root_path/adm_program/modules/photos/photo_function.php?pho_id=$pho_id&bild=$bild&thumb_seite=$thumb_seite&job=delete"). "\"><img 
-											src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Photo l&ouml;schen\" title=\"Photo l&ouml;schen\"></a>
+                                            src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Photo l&ouml;schen\" title=\"Photo l&ouml;schen\"></a>
                                         <a href=\"photo_function.php?pho_id=$pho_id&bild=$bild&thumb_seite=$thumb_seite&job=rotate&direction=right\"><img 
-											src=\"$g_root_path/adm_program/images/arrow_turn_right.png\" border=\"0\" alt=\"nach rechts drehen\" title=\"nach rechts drehen\"></a>";
+                                            src=\"$g_root_path/adm_program/images/arrow_turn_right.png\" border=\"0\" alt=\"nach rechts drehen\" title=\"nach rechts drehen\"></a>";
                                     }
                                 echo"
                                 </td>";
@@ -362,7 +354,7 @@ echo "
                         echo "
                         </tr>";//Zeilenende
                     }//for
-               	echo "</table>";
+                echo "</table>";
 
                 //Anleger und Veraendererinfos
                 echo"
@@ -479,7 +471,7 @@ echo "
             // Navigation mit Vor- und Zurueck-Buttons
             $base_url = "$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$pho_id;
             echo "<div align=\"center\">".generatePagination($base_url, $events-$ignored, 10, $event_element, TRUE)."</div>
-			<table style=\"border-width: 0px;\" cellpadding=\"4\" cellspacing=\"0\">";
+            <table style=\"border-width: 0px;\" cellpadding=\"4\" cellspacing=\"0\">";
                 for($x=$event_element+$ignored-$ignore; $x<=$event_element+$ignored+9 && $x<$events; $x++)
                 {
                     $adm_photo_list = mysql_fetch_array($result_list);
@@ -600,10 +592,10 @@ echo "
                                 }
                             echo"
                             </div>
-							</td>
-						</tr>";
-					}//Ende Ordner existiert
-				};//for
+                            </td>
+                        </tr>";
+                    }//Ende Ordner existiert
+                };//for
             echo "</table>";
 
             /****************************Leere Veranstaltung****************/
@@ -613,30 +605,30 @@ echo "
                     echo"<tr style=\"text-align: center;\"><td td colspan=\"$colums\">Diese Veranstaltung enth&auml;lt leider noch keine Bilder.</td></tr>";
                 }
         
-	        if(mysql_num_rows($result_list) > 2)
-	        {
-	            // Navigation mit Vor- und Zurueck-Buttons
-	            // erst anzeigen, wenn mehr als 2 Eintraege (letzte Navigationsseite) vorhanden sind
-	            echo generatePagination($base_url, $events-$ignored, 10, $event_element, TRUE);
-	        }
-    	echo "</div>";
+            if(mysql_num_rows($result_list) > 2)
+            {
+                // Navigation mit Vor- und Zurueck-Buttons
+                // erst anzeigen, wenn mehr als 2 Eintraege (letzte Navigationsseite) vorhanden sind
+                echo generatePagination($base_url, $events-$ignored, 10, $event_element, TRUE);
+            }
+        echo "</div>";
     
-		/************************Buttons********************************/
-	    //Uebersicht
-	    if($adm_photo["pho_id"]!=NULL)
-	    {
-	        echo "<p>
-	            <span class=\"iconLink\">
-	                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=". $adm_photo["pho_pho_id_parent"]. "\"><img
-	                class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Zur&uuml;ck\"></a>
-	                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=". $adm_photo["pho_pho_id_parent"]. "\">Zur&uuml;ck</a>
-	            </span>
-	        </p>";
-	    }
-	
-		/***************************Seitenende***************************/
-	echo"</div>";
-	require("../../../adm_config/body_bottom.php");
+        /************************Buttons********************************/
+        //Uebersicht
+        if($adm_photo["pho_id"]!=NULL)
+        {
+            echo "<p>
+                <span class=\"iconLink\">
+                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=". $adm_photo["pho_pho_id_parent"]. "\"><img
+                    class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Zur&uuml;ck\"></a>
+                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=". $adm_photo["pho_pho_id_parent"]. "\">Zur&uuml;ck</a>
+                </span>
+            </p>";
+        }
+    
+        /***************************Seitenende***************************/
+    echo"</div>";
+    require("../../../adm_config/body_bottom.php");
 echo "</body>
 </html>";
 ?>

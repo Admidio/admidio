@@ -130,8 +130,8 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
         }
-		unset($_SESSION['announcements_request']);
-		
+        unset($_SESSION['announcements_request']);
+        
         $location = "Location: $g_root_path/adm_program/modules/announcements/announcements.php?headline=". $_GET['headline'];
         header($location);
         exit();
@@ -161,9 +161,8 @@ elseif($_GET["mode"] == 2)
         $_GET["url"] = "$g_root_path/$g_main_page";
     }
 
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?id=$id&err_code=delete&url=". urlencode($_GET["url"]);
-    header($location);
-    exit();
+    $g_message->setForwardUrl($_GET["url"]);
+    $g_message->show("delete");
 }
 
 $g_message->show($err_code, $err_text);

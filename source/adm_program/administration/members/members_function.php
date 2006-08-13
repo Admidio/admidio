@@ -42,9 +42,7 @@ $err_text = "";
 // nur berechtigte User duerfen Funktionen aufrufen
 if(!editUser())
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-    header($location);
-    exit();
+    $g_message->show("norights");
 }
 
 // Uebergabevariablen pruefen
@@ -52,16 +50,12 @@ if(!editUser())
 if(is_numeric($_GET["mode"]) == false
 || $_GET["mode"] < 1 || $_GET["mode"] > 4)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit();
+    $g_message->show("invalid");
 }
 
 if(isset($_GET["user_id"]) && is_numeric($_GET["user_id"]) == false)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit();
+    $g_message->show("invalid");
 }
 
 // wenn URL uebergeben wurde zu dieser gehen, ansonsten zurueck
@@ -136,9 +130,7 @@ elseif($_GET["mode"] == 2)
     if(hasRole("Webmaster", $g_current_user->id) == false
     && hasRole("Webmaster", $_GET['user_id']) == true)
     {
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-        header($location);
-        exit();
+        $g_message->show("norights");
     }
 
     $sql = "SELECT mem_id
@@ -206,9 +198,7 @@ elseif($_GET["mode"] == 3)
     // nur Webmaster duerfen User physikalisch loeschen
     if(!hasRole("Webmaster"))
     {
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-        header($location);
-        exit();
+        $g_message->show("norights");
     }
 
     // User aus der Datenbank loeschen
@@ -261,9 +251,7 @@ elseif($_GET["mode"] == 4)
     // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
     if(!hasRole("Webmaster") || $g_preferences['send_email_extern'] == 1)
     {
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-        header($location);
-        exit();
+        $g_message->show("norights");
     }
 
     $user = new User($g_adm_con);

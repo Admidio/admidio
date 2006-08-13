@@ -29,14 +29,13 @@
 function db_error($result)
 {
     global $g_root_path;
+    global $g_message;
 
     if($result == false)
     {
         if(headers_sent() == false)
         {
-            $error = urlencode("Errorcode: ". mysql_errno(). "<br>". mysql_error());
-            $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=mysql&err_text=$error";
-            header($location);
+            $g_message->show("mysql", "Errorcode: ". mysql_errno(). "<br>". mysql_error());
         }
         else
         {

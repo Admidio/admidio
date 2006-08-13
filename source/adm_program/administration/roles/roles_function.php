@@ -38,9 +38,7 @@ require("../../system/login_valid.php");
 // nur Moderatoren duerfen Rollen erfassen & verwalten
 if(!isModerator())
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-    header($location);
-    exit();
+    $g_message->show("norights");
 }
 
 // Uebergabevariablen pruefen
@@ -48,16 +46,12 @@ if(!isModerator())
 if(is_numeric($_GET["mode"]) == false
 || $_GET["mode"] < 1 || $_GET["mode"] > 5)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit();
+    $g_message->show("invalid");
 }
 
 if(isset($_GET["rol_id"]) && is_numeric($_GET["rol_id"]) == false && $_GET["rol_id"] != NULL)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit();
+    $g_message->show("invalid");
 }
 
 // wenn URL uebergeben wurde zu dieser gehen, ansonsten zurueck
@@ -464,9 +458,7 @@ elseif($_GET["mode"] == 3)
 
     if($row[0] == "Webmaster")
     {
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-        header($location);
-        exit();
+        $g_message->show("norights");
     }
 
     // Rolle ungueltig machen

@@ -61,17 +61,13 @@ if($mode != "csv-ms"
 && $mode != "print")
 {
     // Dem aufgerufenen Skript wurde die notwendige Variable nicht richtig uebergeben !
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit();
+    $g_message->show("invalid");
 }
 
 if($rol_id <= 0 || is_numeric($rol_id) == false)
 {
     // Dem aufgerufenen Skript wurde die notwendige Variable nicht richtig uebergeben !
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit();
+    $g_message->show("invalid");
 }
 
 if($mode == "csv-ms")
@@ -197,9 +193,7 @@ switch($type)
       
     default:
         // Dem aufgerufenen Skript wurde die notwendige Variable nicht richtig uebergeben !
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-        header($location);
-        exit();
+        $g_message->show("invalid");
 }
 
 // pruefen, ob die Rolle Leiter hat, wenn nicht, dann Standardliste anzeigen

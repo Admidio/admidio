@@ -37,33 +37,25 @@ require("../../system/email_class.php");
 // nur Webmaster duerfen User bestaetigen, ansonsten Seite verlassen
 if(!hasRole("Webmaster"))
 {
-   $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights&err_text=";
-   header($location);
-   exit();
+   $g_message->show("norights");
 }
 
 // Uebergabevariablen pruefen
 
 if(isset($_GET["user_id"]) && is_numeric($_GET["user_id"]) == false)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit();
+    $g_message->show("invalid");
 }
 
 if(isset($_GET["new_user_id"]) && is_numeric($_GET["new_user_id"]) == false)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit();
+    $g_message->show("invalid");
 }
 
 if(is_numeric($_GET["mode"]) == false
 || $_GET["mode"] < 1 || $_GET["mode"] > 4)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit();
+    $g_message->show("invalid");
 }
 
 $err_code = "";

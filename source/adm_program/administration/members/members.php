@@ -36,9 +36,7 @@ require("../../system/login_valid.php");
 // nur berechtigte User duerfen die Mitgliederverwaltung aufrufen
 if(!editUser())
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-    header($location);
-    exit();
+    $g_message->show("norights");
 }
 
 if(isset($_GET['members']) && is_numeric($_GET['members']))
@@ -52,9 +50,7 @@ else
 
 if(isset($_GET['letter']) && strlen($_GET["letter"]) > 2)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit();
+    $g_message->show("invalid");
 }
 
 $restrict = "";
