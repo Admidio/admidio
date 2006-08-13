@@ -33,82 +33,76 @@ require("../../system/login_valid.php");
 
 if(!editDate())
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-    header($location);
-    exit();
+    $g_message->show("norights");
 }
 
 // Uebergabevariablen pruefen
 
 if(isset($_GET["dat_id"]) && is_numeric($_GET["dat_id"]) == false)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit();
+    $g_message->show("invalid");
 }
 
 if(isset($_SESSION['dates_request']))
 {
-	// alte Werte nach Fehlermeldung wiederherstellen
-	$form_values = $_SESSION['dates_request'];
-	unset($_SESSION['dates_request']);
+    // alte Werte nach Fehlermeldung wiederherstellen
+    $form_values = $_SESSION['dates_request'];
+    unset($_SESSION['dates_request']);
 }
 else
 {
-	$form_values['headline']      = "";
-	$form_values['global']        = 0;
-	$form_values['date_from']     = "";
-	$form_values['time_from']     = "";
-	$form_values['date_to']       = "";
-	$form_values['time_to']       = "";
-	$form_values['meeting_point'] = "";
-	$form_values['description']   = "";
-	
-	// Wenn eine Termin-ID uebergeben wurde, soll der Termin geaendert werden
-	// -> Felder mit Daten des Termins vorbelegen
-	
-	if ($_GET["dat_id"] != 0)
-	{
-	    $sql    = "SELECT * FROM ". TBL_DATES. " 
-	                WHERE dat_id = {0}
-	                  AND (  dat_org_shortname = '$g_organization'
-	                      OR dat_global = 1) ";
-	    $sql    = prepareSQL($sql, array($_GET['dat_id']));
-	    $result = mysql_query($sql, $g_adm_con);
-	    db_error($result);
-	
-	    if (mysql_num_rows($result) > 0)
-	    {
-	        $row_bt = mysql_fetch_object($result);
-	
-	        $form_values['global']    = $row_bt->dat_global;
-	        $form_values['headline']  = $row_bt->dat_headline;
-	        $form_values['date_from'] = mysqldatetime("d.m.y", $row_bt->dat_begin);
-	        $form_values['time_from'] = mysqldatetime("h:i", $row_bt->dat_begin);
-	        if($row_bt->dat_begin != $row_bt->dat_end)
-	        {
-	            // Datum-Bis nur anzeigen, wenn es sich von Datum-Von unterscheidet
-	            $form_values['date_to'] = mysqldatetime("d.m.y", $row_bt->dat_end);
-	            $form_values['time_to'] = mysqldatetime("h:i", $row_bt->dat_end);
-	        }
-	        if ($form_values['time_from'] == "00:00") 
-	        {
-	            $form_values['time_from'] = "";
-	        }
-	        if ($form_values['time_to'] == "00:00")   
-	        {
-	            $form_values['time_to'] = "";
-	        }
-	        $form_values['meeting_point'] = $row_bt->dat_location;
-	        $form_values['description']   = $row_bt->dat_description;
-	    }
-	    else
-	    {
-	        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-	        header($location);
-	        exit();
-	    }
-	}
+    $form_values['headline']      = "";
+    $form_values['global']        = 0;
+    $form_values['date_from']     = "";
+    $form_values['time_from']     = "";
+    $form_values['date_to']       = "";
+    $form_values['time_to']       = "";
+    $form_values['meeting_point'] = "";
+    $form_values['description']   = "";
+    
+    // Wenn eine Termin-ID uebergeben wurde, soll der Termin geaendert werden
+    // -> Felder mit Daten des Termins vorbelegen
+    
+    if ($_GET["dat_id"] != 0)
+    {
+        $sql    = "SELECT * FROM ". TBL_DATES. " 
+                    WHERE dat_id = {0}
+                      AND (  dat_org_shortname = '$g_organization'
+                          OR dat_global = 1) ";
+        $sql    = prepareSQL($sql, array($_GET['dat_id']));
+        $result = mysql_query($sql, $g_adm_con);
+        db_error($result);
+    
+        if (mysql_num_rows($result) > 0)
+        {
+            $row_bt = mysql_fetch_object($result);
+    
+            $form_values['global']    = $row_bt->dat_global;
+            $form_values['headline']  = $row_bt->dat_headline;
+            $form_values['date_from'] = mysqldatetime("d.m.y", $row_bt->dat_begin);
+            $form_values['time_from'] = mysqldatetime("h:i", $row_bt->dat_begin);
+            if($row_bt->dat_begin != $row_bt->dat_end)
+            {
+                // Datum-Bis nur anzeigen, wenn es sich von Datum-Von unterscheidet
+                $form_values['date_to'] = mysqldatetime("d.m.y", $row_bt->dat_end);
+                $form_values['time_to'] = mysqldatetime("h:i", $row_bt->dat_end);
+            }
+            if ($form_values['time_from'] == "00:00") 
+            {
+                $form_values['time_from'] = "";
+            }
+            if ($form_values['time_to'] == "00:00")   
+            {
+                $form_values['time_to'] = "";
+            }
+            $form_values['meeting_point'] = $row_bt->dat_location;
+            $form_values['description']   = $row_bt->dat_description;
+        }
+        else
+        {
+            $g_message->show("norights");
+        }
+    }
 }
 
 echo "

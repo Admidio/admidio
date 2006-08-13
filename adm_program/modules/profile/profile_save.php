@@ -37,9 +37,7 @@ require("../../system/email_class.php");
 
 if(isset($_GET["user_id"]) && is_numeric($_GET["user_id"]) == false)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit();
+    $g_message->show("invalid");
 }
 
 $user_id  = $_GET['user_id'];
@@ -66,9 +64,7 @@ else
 /*------------------------------------------------------------*/
 if(!editUser() && $user_id != $g_current_user->id)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-    header($location);
-    exit();
+    $g_message->show("norights");
 }
 
 $user = new User($g_adm_con);

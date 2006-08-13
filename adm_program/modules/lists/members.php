@@ -40,9 +40,7 @@ require("../../system/login_valid.php");
 
 if(isset($_GET["rol_id"]) && is_numeric($_GET["rol_id"]) == false)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit();
+    $g_message->show("invalid");
 }
 else
 {
@@ -51,18 +49,14 @@ else
 
 if(isset($_GET["restrict"]) && $_GET["restrict"] != "m" && $_GET["restrict"] != "u")
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit();
+    $g_message->show("invalid");
 }
 
 if(isset($_GET["popup"]))
 {
     if(is_numeric($_GET["popup"]) == false)
     {
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-        header($location);
-        exit();
+        $g_message->show("invalid");
     }
 }
 else
@@ -84,9 +78,7 @@ $role = mysql_fetch_object($result_role);
 // beide muessen mitglied der richtigen Gliedgemeinschaft sein
 if((!isModerator() && !isGroupLeader($role_id) && !editUser()) || (!hasRole("Webmaster") && $role->rol_name=="Webmaster") || $role->rol_org_shortname!=$g_organization)
 {
-   $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-   header($location);
-   exit();
+    $g_message->show("norights");
 }
 
 //festlegen der Spaltenzahl er Tabelle

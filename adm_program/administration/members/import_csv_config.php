@@ -33,9 +33,7 @@ $err_text = "";
 // nur berechtigte User duerfen User importieren
 if(!editUser())
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-    header($location);
-    exit();
+    $g_message->show("norights");
 }
 
 if(count($_SESSION['file_lines']) == 0)

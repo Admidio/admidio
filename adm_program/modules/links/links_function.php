@@ -40,9 +40,7 @@ require("../../system/login_valid.php");
 // erst pruefen, ob der User auch die entsprechenden Rechte hat
 if (!editWeblinks())
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-    header($location);
-    exit();
+    $g_message->show("norights");
 }
 
 // Uebergabevariablen pruefen
@@ -50,9 +48,7 @@ if (array_key_exists("lnk_id", $_GET))
 {
     if (is_numeric($_GET["lnk_id"]) == false)
     {
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-        header($location);
-        exit();
+        $g_message->show("invalid");
     }
 }
 else
@@ -65,9 +61,7 @@ if (array_key_exists("mode", $_GET))
 {
     if (is_numeric($_GET["mode"]) == false)
     {
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-        header($location);
-        exit();
+        $g_message->show("invalid");
     }
 }
 
@@ -82,9 +76,7 @@ if ($_GET["lnk_id"] > 0)
     if (mysql_num_rows($result) == 0)
     {
         //Wenn keine Daten zu der ID gefunden worden bzw. die ID einer anderen Orga gehört ist Schluss mit lustig...
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-        header($location);
-        exit();
+        $g_message->show("invalid");
     }
 }
 
@@ -184,9 +176,7 @@ elseif ($_GET["mode"] == 2)
 else
 {
     // Falls der mode unbekannt ist, ist natürlich Ende...
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit();
+    $g_message->show("invalid");
 }
 
 if ($err_code != "")

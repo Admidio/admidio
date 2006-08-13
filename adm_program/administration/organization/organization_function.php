@@ -35,18 +35,14 @@ require("../../system/login_valid.php");
 // nur Webmaster duerfen Organisationen bearbeiten
 if(!hasRole("Webmaster"))
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-    header($location);
-    exit();
+    $g_message->show("norights");
 }
 
 // Uebergabevariablen pruefen
 
 if(isset($_GET["org_id"]) && is_numeric($_GET["org_id"]) == false)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit();
+    $g_message->show("invalid");
 }
 
 $err_code   = "";

@@ -44,9 +44,7 @@ if (array_key_exists("id", $_GET))
 {
     if (is_numeric($_GET["id"]) == false)
     {
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-        header($location);
-        exit();
+        $g_message->show("invalid");
     }
 }
 else
@@ -59,9 +57,7 @@ if (array_key_exists("mode", $_GET))
 {
     if (is_numeric($_GET["mode"]) == false)
     {
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-        header($location);
-        exit();
+        $g_message->show("invalid");
     }
 }
 
@@ -87,9 +83,7 @@ if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mod
         // Fuer die modes 2,3 und 5 werden editGuestbook-Rechte benoetigt
         if(!editGuestbook())
         {
-            $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-            header($location);
-            exit();
+            $g_message->show("norights");
         }
     }
 
@@ -98,9 +92,7 @@ if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mod
         // Fuer den mode 4 werden commentGuestbook-Rechte benoetigt
         if(!commentGuestbook())
         {
-            $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-            header($location);
-            exit();
+            $g_message->show("norights");
         }
     }
 

@@ -37,9 +37,7 @@ require("../../system/login_valid.php");
 
 if(isset($_GET["user_id"]) && is_numeric($_GET["user_id"]) == false)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit();
+    $g_message->show("invalid");
 }
 
 // pruefen, ob Modus neues Mitglied erfassen
@@ -72,9 +70,7 @@ else
 // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
 if(!editUser() && $_GET['user_id'] != $g_current_user->id)
 {
-   $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-   header($location);
-   exit();
+    $g_message->show("norights");
 }
 
 // user_id und edit-Modus ermitteln
@@ -92,9 +88,7 @@ else
    // jetzt noch schauen, ob User ueberhaupt Mitglied in der Gliedgemeinschaft ist
    if(isMember($a_user_id) == false)
    {
-      $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-      header($location);
-      exit();
+        $g_message->show("norights");
    }
 }
 

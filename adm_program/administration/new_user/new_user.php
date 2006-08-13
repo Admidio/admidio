@@ -30,9 +30,7 @@ require("../../system/login_valid.php");
 // nur Webmaster dürfen User bestätigen, ansonsten Seite verlassen
 if(!hasRole("Webmaster"))
 {
-   $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-   header($location);
-   exit();
+   $g_message->show("norights");
 }
 
 // Neue Mitglieder der Gruppierung selektieren

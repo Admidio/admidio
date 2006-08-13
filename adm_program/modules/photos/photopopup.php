@@ -35,16 +35,12 @@ require("../../system/common.php");
 
 if(isset($_GET["pho_id"]) && is_numeric($_GET["pho_id"]) == false)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit();
+    $g_message->show("invalid");
 }
 
 if(isset($_GET["bild"]) && is_numeric($_GET["bild"]) == false)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit();
+    $g_message->show("invalid");
 }
 
 //Uebernahme der uebergebenen variablen

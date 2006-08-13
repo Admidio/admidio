@@ -36,18 +36,14 @@ require("../../system/login_valid.php");
 // nur Moderatoren duerfen Kategorien erfassen & verwalten
 if(!isModerator())
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norights";
-    header($location);
-    exit();
+    $g_message->show("norights");
 }
 
 // Uebergabevariablen pruefen
 
 if(isset($_GET["rlc_id"]) && is_numeric($_GET["rlc_id"]) == false)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit();
+    $g_message->show("invalid");
 }
 
 // wenn URL uebergeben wurde zu dieser gehen, ansonsten zurueck
