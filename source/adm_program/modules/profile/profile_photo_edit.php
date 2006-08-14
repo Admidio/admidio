@@ -49,7 +49,7 @@ if(isset($_GET["usr_id"]) && is_numeric($_GET["usr_id"]) == false)
     $g_message->show("invalid");
 }
 
-if(isset($_GET["job"]) && $_GET["job"] != "save" 
+if(isset($_GET["job"]) && $_GET["job"] != "save" && $_GET["job"]!="delete"
 && $_GET["job"] != "dont_save" && $_GET["job"] != "upload")
 {
     $g_message->show("invalid");
@@ -143,6 +143,24 @@ $bild="../../../adm_my_files/photos/".$user_id.".jpg";
         exit();
 
     }
+    
+        /*****************************Bild loeschen*************************************/
+    if($_GET["job"]=="delete")
+    {
+        $sql="  UPDATE ". TBL_USERS. "
+                SET usr_photo = NULL
+                WHERE usr_id = $user_id ";
+        $result = mysql_query($sql, $g_adm_con);
+        db_error($result);
+        
+        // zur Ausgangsseite zurueck
+        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=profile_photo_deleted&timer=2000&url=".
+                    urlencode("$g_root_path/adm_program/modules/profile/profile.php?user_id=".$user_id."");
+        header($location);
+        exit();
+
+    }
+    
     /***********************Kontrollmechanismen*********************************/
     //kontrollmechanismen
     if($_POST["upload"])
@@ -222,9 +240,12 @@ require("../../../adm_config/body_top.php");
                 db_error($result_photo);
 
                 //Falls vorhanden Bild ausgeben
-                if(@MYSQL_RESULT($result_photo,0,"usr_photo")!=NULL)
+                if(mysql_result($result_photo,0,"usr_photo")!=NULL)
                 {
-                    echo"<img src=\"profile_photo_show.php?usr_id=$user_id\"\">";
+                    echo"<img src=\"profile_photo_show.php?usr_id=$user_id\"\"><br>
+                    <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_photo&err_head=Foto L&ouml;schen&button=2&url=". urlencode("$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$user_id&job=delete"). "\"><img 
+                        src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Foto l&ouml;schen\" title=\"Foto l&ouml;schen\"></a>";
+                
                 }
                 //wenn nicht Schattenkopf
                 else
@@ -232,7 +253,6 @@ require("../../../adm_config/body_top.php");
                     echo"<img src=\"$g_root_path/adm_program/images/no_profile_pic.png\">";
                 }
                 echo"<br><br>";
-
             //Bildupload
             echo"
             <form name=\"photoup\" method=\"post\" action=\"profile_photo_edit.php?job=upload&usr_id=".$user_id."\" enctype=\"multipart/form-data\">
