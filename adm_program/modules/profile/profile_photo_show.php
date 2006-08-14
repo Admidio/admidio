@@ -45,6 +45,6 @@ $sql = prepareSQL($sql, array($_GET["usr_id"]));
 $result_photo = mysql_query($sql, $g_adm_con);
 
 header("Content-Type: image/jpeg");
-echo @MYSQL_RESULT($result_photo,0,"usr_photo");
+echo mysql_result($result_photo,0,"usr_photo");
 
 ?>

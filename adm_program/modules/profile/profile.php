@@ -343,9 +343,9 @@ require("../../../adm_config/body_top.php");
                     <div class=\"groupBox\">";
                     
                         //Falls vorhanden Bild ausgeben
-                        if(@MYSQL_RESULT($result_photo,0,"usr_photo")!=NULL)
+                        if(mysql_result($result_photo,0,"usr_photo")!=NULL)
                         {
-                            echo"<img src=\"profile_photo_show.php?a_user_id=$usr_id\">";
+                            echo"<img src=\"profile_photo_show.php?usr_id=$a_user_id\">";
                         }
                         //wenn nicht Schattenkopf
                         else
