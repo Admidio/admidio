@@ -232,7 +232,10 @@ $message_text = array(
 
     "profile_photo_nopic" =>
         "Es wurde keine Bilddatei ausgewählt.",
-
+        
+    "profile_photo_deleted" =>
+          "Das Profilfoto wurde gel&ouml;scht.",
+    
     "profile_photo_2big" =>
         "Das hochgeladene Foto übersteigt die vom Server zugelassene
         Dateigröße von %VAR1%B.",
