@@ -39,9 +39,7 @@ if(isset($_GET["pho_id"]) && is_numeric($_GET["pho_id"]) == false)
 //bei Seitenaufruf ohne Moderationsrechte
 if(!$g_session_valid || $g_session_valid & !editPhoto())
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=photoverwaltunsrecht";
-    header($location);
-    exit();
+     $g_message->show("photoverwaltunsrecht");
 }
 
 if (empty($_POST))
@@ -99,9 +97,7 @@ if($g_session_valid & editPhoto())
                     $bildinfo=getimagesize($_FILES["bilddatei"]["tmp_name"][$x]);
                     if ($_FILES["bilddatei"]["name"][$x]!=NULL && $bildinfo['mime']!="image/jpeg") 
                     {
-                        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=dateiendungphotoup";
-                        header($location);
-                        exit();
+                        $g_message->show("dateiendungphotoup");
                     }
                 }
                 
@@ -117,9 +113,7 @@ if($g_session_valid & editPhoto())
         //Kontrolle ob Bilder ausgewaehlt wurden
         if($counter==0)
         {
-            $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=photodateiphotoup";
-            header($location);
-            exit();
+            $g_message->show("photodateiphotoup");
         }
    
    }//Kontrollmechanismen
