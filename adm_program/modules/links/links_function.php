@@ -168,9 +168,8 @@ elseif ($_GET["mode"] == 2)
         $_GET["url"] = "$g_root_path/$g_main_page";
     }
 
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?id=$id&err_code=delete&url=". urlencode($_GET["url"]);
-    header($location);
-    exit();
+    $g_message->setForwardUrl($_GET["url"]);
+    $g_message->show("delete");
 }
 
 else
@@ -179,10 +178,5 @@ else
     $g_message->show("invalid");
 }
 
-if ($err_code != "")
-{
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text";
-    header($location);
-    exit();
-}
+$g_message->show($err_code, $err_text);
 ?>
