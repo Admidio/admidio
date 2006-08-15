@@ -78,45 +78,44 @@ else
     $form_values['email']	 = "";
     $form_values['homepage'] = "";
     $form_values['text']     = "";
-}
 
+    // Wenn eine ID uebergeben wurde, soll der Eintrag geaendert werden
+    // -> Felder mit Daten des Eintrages vorbelegen
 
-// Wenn eine ID uebergeben wurde, soll der Eintrag geaendert werden
-// -> Felder mit Daten des Eintrages vorbelegen
-
-if ($_GET['id'] != 0)
-{
-    $sql    = "SELECT * FROM ". TBL_GUESTBOOK. " WHERE gbo_id = {0} and gbo_org_id = $g_current_organization->id";
-    $sql    = prepareSQL($sql, array($_GET['id']));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
-
-    if (mysql_num_rows($result) > 0)
+    if ($_GET['id'] != 0)
     {
-        $row_ba = mysql_fetch_object($result);
+        $sql    = "SELECT * FROM ". TBL_GUESTBOOK. " WHERE gbo_id = {0} and gbo_org_id = $g_current_organization->id";
+        $sql    = prepareSQL($sql, array($_GET['id']));
+        $result = mysql_query($sql, $g_adm_con);
+        db_error($result);
 
-        $form_values['name']     = $row_ba->gbo_name;
-        $form_values['text']     = $row_ba->gbo_text;
-        $form_values['email']    = $row_ba->gbo_email;
-        $form_values['homepage'] = $row_ba->gbo_homepage;
+        if (mysql_num_rows($result) > 0)
+        {
+            $row_ba = mysql_fetch_object($result);
+
+            $form_values['name']     = $row_ba->gbo_name;
+            $form_values['text']     = $row_ba->gbo_text;
+            $form_values['email']    = $row_ba->gbo_email;
+            $form_values['homepage'] = $row_ba->gbo_homepage;
+        }
+        elseif (mysql_num_rows($result) == 0)
+        {
+            //Wenn keine Daten zu der ID gefunden worden bzw. die ID einer anderen Orga gehört ist Schluss mit lustig...
+            $g_message->show("invalid");
+        }
+
     }
-    elseif (mysql_num_rows($result) == 0)
+
+    // Wenn keine ID uebergeben wurde, der User aber eingeloggt ist koennen zumindest
+    // Name, Emailadresse und Homepage vorbelegt werden...
+    if ($_GET['id'] == 0 && $g_session_valid)
     {
-        //Wenn keine Daten zu der ID gefunden worden bzw. die ID einer anderen Orga gehört ist Schluss mit lustig...
-        $g_message->show("invalid");
+        $form_values['name']     = $g_current_user->first_name. " ". $g_current_user->last_name;
+        $form_values['email']    = $g_current_user->email;
+        $form_values['homepage'] = $g_current_user->homepage;
     }
 
 }
-
-// Wenn keine ID uebergeben wurde, der User aber eingeloggt ist koennen zumindest
-// Name, Emailadresse und Homepage vorbelegt werden...
-if ($_GET['id'] == 0 && $g_session_valid)
-{
-    $form_values['name']     = $g_current_user->first_name. " ". $g_current_user->last_name;
-    $form_values['email']    = $g_current_user->email;
-    $form_values['homepage'] = $g_current_user->homepage;
-}
-
 
 echo "
 <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
