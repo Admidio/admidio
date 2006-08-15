@@ -571,7 +571,7 @@ for($j = 0; $j < $max_count; $j++)
                             {
                                 if($mode == "html")
                                 {
-                                    if($g_preferences['send_mail_extern'] == 1)
+                                    if($g_preferences['send_email_extern'] == 1)
                                     {
                                         $content = "<a href=\"mailto:". $row[$i]. "\">". $row[$i]. "</a>";
                                     }
