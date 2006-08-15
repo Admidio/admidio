@@ -205,7 +205,7 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
         }
-        unset($_SESSION['announcements_request']);
+        unset($_SESSION['guestbook_entry_request']);
 
         $location = "Location: $g_root_path/adm_program/modules/guestbook/guestbook.php?headline=". $_GET['headline'];
         header($location);
