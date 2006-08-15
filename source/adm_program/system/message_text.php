@@ -23,7 +23,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
- 
+
 $message_text = array(
     "anmeldung" =>
         "<p>Deine Daten wurden gespeichert.</p>
@@ -84,7 +84,7 @@ $message_text = array(
 
     "field_exist" =>
         " Es existiert bereits ein Feld in dieser Organisation mit dem Namen.",
-            
+
     "feld" =>
         "Das Feld <b>%VAR1%</b> ist nicht gefüllt.",
 
@@ -195,9 +195,9 @@ $message_text = array(
         "Speichern nicht möglich, die maximale Mitgliederzahl würde überschritten.",
 
     "max_members_profile" =>
-        "Speichern nicht möglich, bei der Rolle &bdquo;%VAR1%&rdquo; 
+        "Speichern nicht möglich, bei der Rolle &bdquo;%VAR1%&rdquo;
         würde die maximale Mitgliederzahl überschritten.",
-            
+
     "max_members_roles_change" =>
         "Speichern nicht möglich, die Rolle hat bereits mehr Mitglieder als die von Dir eingegeben Begrenzung.",
 
@@ -232,10 +232,10 @@ $message_text = array(
 
     "profile_photo_nopic" =>
         "Es wurde keine Bilddatei ausgewählt.",
-        
+
     "profile_photo_deleted" =>
           "Das Profilfoto wurde gel&ouml;scht.",
-    
+
     "profile_photo_2big" =>
         "Das hochgeladene Foto übersteigt die vom Server zugelassene
         Dateigröße von %VAR1%B.",
@@ -266,7 +266,7 @@ $message_text = array(
 
     "delete_veranst" =>
         "Willst du die Veranstaltung:<br />
-        <b>%VAR1%</b><br />wirklich löschen ?<br> 
+        <b>%VAR1%</b><br />wirklich löschen ?<br>
         Alle enthaltenen Unterveranstaltungen und Bilder gehen verloren.",
 
     "delete_photo" =>
@@ -281,7 +281,7 @@ $message_text = array(
 
     "empty_photo_post" =>
         "Die Seite wurde ungültig aufgerufen oder die Datei(en) konnte nicht hochgeladen werden.<br />
-        Vermutlich wurde die vom Server vorgegebene, maximale Uploadgröße, 
+        Vermutlich wurde die vom Server vorgegebene, maximale Uploadgröße,
         von %VAR1%B übersteigen!",
     //Ende Fehlermeldungen Fotomodul
 
@@ -371,7 +371,7 @@ $message_text = array(
         "Bitte wähle eine Rolle als Adressat der Mail aus!",
 
     "profile_mail" =>
-        "In Ihrem <a href=\"%VAR1%\">Profil</a> 
+        "In Ihrem <a href=\"%VAR1%\">Profil</a>
         ist keine gültige Emailadresse hinterlegt!",
     //Ende Fehlermeldungen Mailmodul
 
@@ -380,6 +380,11 @@ $message_text = array(
     "rss_disabled" =>
         "Die RSS-Funktion wurde vom Webmaster deaktiviert",
     //Ende Fehlermeldungen RSSmodul
+
+    //Fehlermeldungen Capcha-Klasse
+    "captcha_code" =>
+        "Der Best&auml;tigungscode wurde falsch eingegeben.",
+    //Ende Fehlermeldungen Capcha-Klasse
 
 
     //Fehlermeldungen Servereinstellungen
