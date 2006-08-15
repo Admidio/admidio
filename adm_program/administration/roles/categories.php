@@ -1,16 +1,10 @@
 <?php
 /******************************************************************************
- * Rollen-Kategorien anlegen und bearbeiten
+ * Uebersicht und Pflege aller Rollen-Kategorien
  *
  * Copyright    : (c) 2004 - 2006 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- *
- * Uebergaben:
- *
- * rlc_id: ID der Rollen-Kategorien, die bearbeitet werden soll
- * url :   URL von der die aufrufende Seite aufgerufen wurde
- *         (muss uebergeben werden, damit der Zurueck-Button funktioniert)
  *
  ******************************************************************************
  *
@@ -39,13 +33,6 @@ if(!isModerator())
     $g_message->show("norights");
 }
 
-// Uebergabevariablen pruefen
-
-if(isset($_GET["rlc_id"]) && is_numeric($_GET["rlc_id"]) == false)
-{
-    $g_message->show("invalid");
-}
-
 // wenn URL uebergeben wurde zu dieser gehen, ansonsten zurueck
 if(array_key_exists('url', $_GET))
 {
@@ -54,27 +41,6 @@ if(array_key_exists('url', $_GET))
 else
 {
     $url = urlencode(getHttpReferer());
-}
-
-$category_name   = "";
-$category_locked = 0;
-
-// Wenn eine Feld-ID uebergeben wurde, soll das Feld geaendert werden
-// -> Felder mit Daten des Feldes vorbelegen
-
-if ($_GET["rlc_id"] != 0)
-{
-    $sql    = "SELECT * FROM ". TBL_ROLE_CATEGORIES. " WHERE rlc_id = {0}";
-    $sql    = prepareSQL($sql, array($_GET['rlc_id']));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
-
-    if (mysql_num_rows($result) > 0)
-    {
-        $row_rlc = mysql_fetch_object($result);
-        $category_name   = $row_rlc->rlc_name;
-        $category_locked = $row_rlc->rlc_locked;
-    }
 }
 
 echo "
@@ -94,56 +60,78 @@ echo "</head>";
 
 require("../../../adm_config/body_top.php");
     echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-        <form action=\"categories_function.php?rlc_id=". $_GET['rlc_id']. "&amp;mode=1&amp;url=$url\" method=\"post\" id=\"edit_category\">
-            <div class=\"formHead\">";
-                if($_GET['rlc_id'] > 0)
-                {
-                    echo strspace("Kategorie ändern");
-                }
-                else
-                {
-                    echo strspace("Kategorie anlegen");
-                }
-            echo "</div>
-            <div class=\"formBody\">
-                <div>
-                    <div style=\"text-align: right; width: 23%; float: left;\">Name:</div>
-                    <div style=\"text-align: left; margin-left: 24%;\">
-                        <input type=\"text\" id=\"name\" name=\"name\" size=\"30\" maxlength=\"100\" value=\"". htmlspecialchars($category_name, ENT_QUOTES). "\">
-                    </div>
-                </div>
-                <div style=\"margin-top: 6px;\">
-                    <div style=\"text-align: right; width: 23%; float: left;\">
-                        <label for=\"locked\"><img src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\"></label>
-                    </div>
-                    <div style=\"text-align: left; margin-left: 24%;\">
-                        <input type=\"checkbox\" id=\"locked\" name=\"locked\" ";
-                            if($category_locked == 1)
-                            {
-                                echo " checked ";
-                            }
-                            echo " value=\"1\" />
-                        <label for=\"locked\">Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar&nbsp;</label>
-                    </div>
-                </div>
+		<h1>Kategorien</h1>
 
-                <hr width=\"85%\" />
+        <p>
+            <span class=\"iconLink\">
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/categories_new.php?url=$url\"><img 
+                src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Kategorie anlegen\"></a>
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/categories_new.php?url=$url\">Kategorie anlegen</a>
+            </span>
+		</p>
 
-                <div style=\"margin-top: 6px;\">
-                    <button id=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
-                    <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
-                    &nbsp;Zur&uuml;ck</button>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <button id=\"speichern\" type=\"submit\" value=\"speichern\">
-                    <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
-                    &nbsp;Speichern</button>
-                </div>";
-            echo "</div>
-        </form>
-    </div>
-    <script type=\"text/javascript\"><!--
-        document.getElementById('name').focus();
-    --></script>";
+        <table class=\"tableList\" style=\"width: 300px;\" cellpadding=\"2\" cellspacing=\"0\">
+            <tr>
+                <th class=\"tableHeader\" style=\"text-align: left;\">Bezeichnung</th>
+                <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\" title=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\"></th>
+                <th class=\"tableHeader\">&nbsp;</th>
+            </tr>";
+            
+	        $sql = "SELECT * FROM ". TBL_ROLE_CATEGORIES. "
+	                 WHERE rlc_org_shortname LIKE '$g_organization'
+	                 ORDER BY rlc_name ASC ";
+	        $cat_result = mysql_query($sql, $g_adm_con);
+	        db_error($cat_result);
+
+            while($cat_row = mysql_fetch_object($cat_result))
+            {
+                // schauen, ob Rollen zu dieser Kategorie existieren
+                $sql = "SELECT * FROM ". TBL_ROLES. "
+                         WHERE rol_rlc_id = $cat_row->rlc_id ";
+                $result = mysql_query($sql, $g_adm_con);
+                db_error($result);
+                $row_num = mysql_num_rows($result);
+
+                echo "
+                <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
+                    <td style=\"text-align: left;\"><a href=\"$g_root_path/adm_program/administration/roles/categories_new.php?rlc_id=$cat_row->rlc_id\">$cat_row->rlc_name</a></td>
+                    <td style=\"text-align: center;\">";
+                        if($cat_row->rlc_locked == 1)
+                        {
+                            echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\" title=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\">";
+                        }
+                        else
+                        {
+                            echo "&nbsp;";
+                        }
+                    echo "</td>
+                    <td style=\"text-align: right; width: 45px;\">
+                        <a href=\"$g_root_path/adm_program/administration/roles/categories_new.php?rlc_id=$cat_row->rlc_id&amp;url=$url\">
+                        <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>";
+                        // nur Kategorien loeschen, die keine Rollen zugeordnet sind
+                        if($row_num == 0)
+                        {
+                            $load_url = urlencode("$g_root_path/adm_program/administration/roles/categories_function.php?rlc_id=$cat_row->rlc_id&mode=2&url=$url");
+                            echo "&nbsp;<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_category&err_text=$cat_row->rlc_name&err_head=Kategorie l&ouml;schen&button=2&url=$load_url\"><img
+                            src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>";
+                        }
+                        else
+                        {
+                            echo "&nbsp;<img src=\"$g_root_path/adm_program/images/dummy.gif\" width=\"16\" border=\"0\" alt=\"Dummy\">";
+                        }
+                    echo "</td>
+                </tr>";
+            }
+        echo "</table>
+
+        <p>
+            <span class=\"iconLink\">
+                <a class=\"iconLink\" href=\"javascript:self.location.href='". urldecode($url). "'\"><img
+                class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Zur&uuml;ck\"></a>
+                <a class=\"iconLink\" href=\"javascript:self.location.href='". urldecode($url). "'\">Zur&uuml;ck</a>
+            </span>
+        </p>
+    </div>";
 
     require("../../../adm_config/body_bottom.php");
 echo "</body>
