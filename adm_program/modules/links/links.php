@@ -74,6 +74,8 @@ if ($g_preferences['enable_bbcode'] == 1)
     $bbcode = new ubbParser();
 }
 
+unset($_SESSION['links_request']);
+
 echo "
 <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
