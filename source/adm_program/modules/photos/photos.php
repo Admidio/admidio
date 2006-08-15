@@ -32,8 +32,14 @@
  
 require("../../system/common.php");
 
-// Uebergabevariablen pruefen
+if(isset($_SESSION['photo_event_request']))
+{
+    $form_values = $_SESSION['photo_event_request'];
+    unset($_SESSION['photo_event_request']);
+}
 
+
+// Uebergabevariablen pruefen
 if(isset($_GET["pho_id"]) && is_numeric($_GET["pho_id"]) == false && $_GET["pho_id"]!=NULL)
 {
     $g_message->show("invalid");
@@ -227,9 +233,9 @@ echo "
         {
             echo"<p>
                 <span class=\"iconLink\">
-                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/event.php?aufgabe=new&amp;pho_id=$pho_id\"><img 
+                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photo_event_new.php?aufgabe=new&amp;pho_id=$pho_id\"><img 
                     class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Veranstaltung anlegen\"></a>
-                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/event.php?aufgabe=new&amp;pho_id=$pho_id\">Veranstaltung anlegen</a>
+                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photo_event_new.php?aufgabe=new&amp;pho_id=$pho_id\">Veranstaltung anlegen</a>
                 </span>";
                 if($pho_id > 0)
                 {
@@ -568,12 +574,12 @@ echo "
                                         echo"
                                         <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=".$adm_photo_list["pho_id"]."\">
                                             <img src=\"$g_root_path/adm_program/images/photo.png\" border=\"0\" alt=\"Bilder hochladen\" title=\"Bilder hochladen\"></a>&nbsp;
-                                        <a href=\"$g_root_path/adm_program/modules/photos/event.php?pho_id=".$adm_photo_list["pho_id"]."&aufgabe=change\">
+                                        <a href=\"$g_root_path/adm_program/modules/photos/photo_event_new.php?pho_id=".$adm_photo_list["pho_id"]."&aufgabe=change\">
                                             <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>&nbsp;";
                                     }
                                     $err_text= $adm_photo_list["pho_name"]."(Beginn: ".mysqldate("d.m.y", $adm_photo_list["pho_begin"]).")";
                                     echo"
-                                    <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_veranst&err_text=$err_text&err_head=Veranstaltung L&ouml;schen&button=2&url=". urlencode("$g_root_path/adm_program/modules/photos/event.php?aufgabe=delete&pho_id=".$adm_photo_list["pho_id"].""). "\">
+                                    <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_veranst&err_text=$err_text&err_head=Veranstaltung L&ouml;schen&button=2&url=". urlencode("$g_root_path/adm_program/modules/photos/photo_event_function.php?aufgabe=delete&pho_id=".$adm_photo_list["pho_id"].""). "\">
                                          <img src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Veranstaltung l&ouml;schen\" title=\"Veranstaltung l&ouml;schen\"></a>";
                                     if($adm_photo_list["pho_locked"]==1 && file_exists($ordner))
                                     {
