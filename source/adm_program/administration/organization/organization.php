@@ -316,70 +316,6 @@ require("../../../adm_config/body_top.php");
                     </div>
 
                 </div>";
-                /*------------------------------------------------------------*/
-                // Rollen-Kategorien
-                /*------------------------------------------------------------*/
-
-                $sql = "SELECT * FROM ". TBL_ROLE_CATEGORIES. "
-                         WHERE rlc_org_shortname LIKE '$g_organization'
-                         ORDER BY rlc_name ASC ";
-                $cat_result = mysql_query($sql, $g_adm_con);
-                db_error($cat_result);
-
-                echo "<br>
-                <table class=\"tableList\" style=\"width: 95%;\" cellpadding=\"2\" cellspacing=\"0\">
-                    <tr>
-                        <th class=\"tableHeader\" style=\"text-align: left;\">Rollen-Kategorien</th>
-                        <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\" title=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\"></th>
-                        <th class=\"tableHeader\">&nbsp;</th>
-                    </tr>";
-
-                    while($cat_row = mysql_fetch_object($cat_result))
-                    {
-                        // schauen, ob Rollen zu dieser Kategorie existieren
-                        $sql = "SELECT * FROM ". TBL_ROLES. "
-                                 WHERE rol_rlc_id = $cat_row->rlc_id ";
-                        $result = mysql_query($sql, $g_adm_con);
-                        db_error($result);
-                        $row_num = mysql_num_rows($result);
-
-                        echo "
-                        <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
-                            <td style=\"text-align: left;\"><a href=\"$g_root_path/adm_program/administration/roles/categories.php?rlc_id=$cat_row->rlc_id\">$cat_row->rlc_name</a></td>
-                            <td style=\"text-align: center;\">";
-                                if($cat_row->rlc_locked == 1)
-                                {
-                                    echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\" title=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\">";
-                                }
-                                else
-                                {
-                                    echo "&nbsp;";
-                                }
-                            echo "</td>
-                            <td style=\"text-align: right; width: 45px;\">
-                                <a href=\"$g_root_path/adm_program/administration/roles/categories.php?rlc_id=$cat_row->rlc_id&amp;url=$url\">
-                                <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>";
-                                // nur Kategorien loeschen, die keine Rollen zugeordnet sind
-                                if($row_num == 0)
-                                {
-                                    $load_url = urlencode("$g_root_path/adm_program/administration/roles/categories_function.php?rlc_id=$cat_row->rlc_id&mode=2&url=$url");
-                                    echo "&nbsp;<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_category&err_text=$cat_row->rlc_name&err_head=Kategorie l&ouml;schen&button=2&url=$load_url\"><img
-                                    src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>";
-                                }
-                                else
-                                {
-                                    echo "&nbsp;<img src=\"$g_root_path/adm_program/images/dummy.gif\" width=\"16\" border=\"0\" alt=\"Dummy\">";
-                                }
-                            echo "</td>
-                        </tr>";
-                    }
-                echo "</table>
-
-                <button id=\"new_category\" type=\"button\" value=\"new_category\" style=\"margin-top: 3px; width: 180px;\"
-                    onClick=\"self.location.href='$g_root_path/adm_program/administration/roles/categories.php?url=$url'\">
-                    <img src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Kategorie hinzuf&uuml;gen\">
-                    &nbsp;Kategorie hinzuf&uuml;gen</button>
-                <br><br>";
 
                 /*------------------------------------------------------------*/
                 // organisationsspezifische Felder anzeigen
@@ -393,7 +329,7 @@ require("../../../adm_config/body_top.php");
 
                 if(mysql_num_rows($result) > 0)
                 {
-                    echo "<div style=\"margin-top: 3px; margin-bottom: 7px;\">Organisationsspezifische Profilfelder:
+                    echo "<div style=\"margin-top: 20px; margin-bottom: 7px;\">Organisationsspezifische Profilfelder:
                         <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                         onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=profil_felder','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
                     </div>

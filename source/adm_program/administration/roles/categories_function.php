@@ -49,7 +49,7 @@ if(is_numeric($_GET["mode"]) == false
     $g_message->show("invalid");
 }
 
-if(isset($_GET["rlc_id"]) && is_numeric($_GET["rlc_id"]) == false)
+if(isset($_GET["rlc_id"]) && is_numeric($_GET["rlc_id"]) == false && $_GET["rlc_id"] != NULL)
 {
     $g_message->show("invalid");
 }
@@ -146,6 +146,6 @@ elseif($_GET['mode'] == 2)  // Feld loeschen
 }
          
 // zu den Organisationseinstellungen zurueck
-$g_message->setForwardUrl("$g_root_path/adm_program/administration/organization/organization.php?url=". $_GET['url'], 2000);
+$g_message->setForwardUrl("$g_root_path/adm_program/administration/roles/categories.php?url=". $_GET['url'], 2000);
 $g_message->show($err_code);
 ?>

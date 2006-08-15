@@ -100,6 +100,12 @@ require("../../../adm_config/body_top.php");
                 src=\"$g_root_path/adm_program/images/$image\" style=\"vertical-align: middle;\" border=\"0\" alt=\"$description_lnk\"></a>
                 <a class=\"iconLink\" href=\"roles.php?inactive=$valid\">$description_lnk</a>
             </span>
+			&nbsp;&nbsp;&nbsp;&nbsp;
+            <span class=\"iconLink\">
+                <a class=\"iconLink\" href=\"categories.php\"><img 
+                src=\"$g_root_path/adm_program/images/application_double.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Kategorien pflegen\"></a>
+                <a class=\"iconLink\" href=\"categories.php\">Kategorien pflegen</a>
+            </span>
         </p>
 
         <table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\">
