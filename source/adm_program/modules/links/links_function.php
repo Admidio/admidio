@@ -89,14 +89,17 @@ else
     $_GET["headline"] = "Links";
 }
 
+$_SESSION['links_request'] = $_REQUEST;
+
+
 $err_code = "";
 $err_text = "";
 
 if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
 {
     $linkName = strStripTags($_POST['linkname']);
-    $description  = strStripTags($_POST['beschreibung']);
-    $linkUrl = trim($_POST['linkadresse']);
+    $description  = strStripTags($_POST['description']);
+    $linkUrl = trim($_POST['linkurl']);
 
     if (strlen($linkName) > 0 && strlen($description)  > 0 && strlen($linkUrl) > 0)
     {
@@ -131,6 +134,8 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
         }
+
+        unset($_SESSION['links_request']);
 
         $location = "Location: $g_root_path/adm_program/modules/links/links.php?headline=". $_GET['headline'];
         header($location);

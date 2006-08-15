@@ -61,35 +61,41 @@ else
     $_GET["headline"] = "Links";
 }
 
-$linkname    = "";
-$description = "";
-$linkurl     = "";
 
-// Wenn eine Link-ID uebergeben wurde, soll der Link geaendert werden
-// -> Felder mit Daten des Links vorbelegen
-
-if ($_GET["lnk_id"] != 0)
+if (isset($_SESSION['links_request']))
 {
-    $sql    = "SELECT * FROM ". TBL_LINKS. " WHERE lnk_id = {0} and lnk_org_id = $g_current_organization->id";
-    $sql    = prepareSQL($sql, array($_GET['lnk_id']));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    $form_values = $_SESSION['links_request'];
+    unset($_SESSION['links_request']);
+}
+else
+{
+    $form_values['linkname']	= "";
+    $form_values['description']	= "";
+    $form_values['linkurl']     = "";
 
-    if (mysql_num_rows($result) > 0)
+    // Wenn eine Link-ID uebergeben wurde, soll der Link geaendert werden
+    // -> Felder mit Daten des Links vorbelegen
+    if ($_GET["lnk_id"] != 0)
     {
-        $row_ba = mysql_fetch_object($result);
+        $sql    = "SELECT * FROM ". TBL_LINKS. " WHERE lnk_id = {0} and lnk_org_id = $g_current_organization->id";
+        $sql    = prepareSQL($sql, array($_GET['lnk_id']));
+        $result = mysql_query($sql, $g_adm_con);
+        db_error($result);
 
-        $linkname      = $row_ba->lnk_name;
-        $description   = $row_ba->lnk_description;
-        $linkurl       = $row_ba->lnk_url;
+        if (mysql_num_rows($result) > 0)
+        {
+            $row_ba = mysql_fetch_object($result);
+
+            $form_values['linkname']    = $row_ba->lnk_name;
+            $form_values['description']	= $row_ba->lnk_description;
+            $form_values['linkurl']     = $row_ba->lnk_url;
+        }
+        elseif (mysql_num_rows($result) == 0)
+        {
+            //Wenn keine Daten zu der ID gefunden worden bzw. die ID einer anderen Orga gehört ist Schluss mit lustig...
+            $g_message->show("invalid");
+        }
     }
-    elseif (mysql_num_rows($result) == 0)
-    {
-        //Wenn keine Daten zu der ID gefunden worden bzw. die ID einer anderen Orga gehört ist Schluss mit lustig...
-        $g_message->show("invalid");
-    }
-
-
 }
 
 echo "
@@ -136,14 +142,14 @@ require("../../../adm_config/body_top.php");
                 <div>
                     <div style=\"text-align: right; width: 25%; float: left;\">Linkname:</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <input type=\"text\" id=\"linkname\" name=\"linkname\" tabindex=\"1\" style=\"width: 350px;\" maxlength=\"250\" value=\"". htmlspecialchars($linkname, ENT_QUOTES). "\">
+                        <input type=\"text\" id=\"linkname\" name=\"linkname\" tabindex=\"1\" style=\"width: 350px;\" maxlength=\"250\" value=\"". htmlspecialchars($form_values['linkname'], ENT_QUOTES). "\">
                     </div>
                 </div>
 
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 25%; float: left;\">Linkadresse:</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <input type=\"text\" id=\"linkadresse\" name=\"linkadresse\" tabindex=\"2\" style=\"width: 350px;\" maxlength=\"250\" value=\"". htmlspecialchars($linkurl, ENT_QUOTES). "\">
+                        <input type=\"text\" id=\"linkurl\" name=\"linkurl\" tabindex=\"2\" style=\"width: 350px;\" maxlength=\"250\" value=\"". htmlspecialchars($form_values['linkurl'], ENT_QUOTES). "\">
                     </div>
                 </div>
 
@@ -156,7 +162,7 @@ require("../../../adm_config/body_top.php");
                         }
                     echo "</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <textarea  name=\"beschreibung\" tabindex=\"3\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". htmlspecialchars($description, ENT_QUOTES). "</textarea>
+                        <textarea  name=\"description\" tabindex=\"3\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". htmlspecialchars($form_values['description'], ENT_QUOTES). "</textarea>
                     </div>
                 </div>";
 
