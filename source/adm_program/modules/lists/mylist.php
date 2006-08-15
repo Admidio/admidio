@@ -88,9 +88,10 @@ $default_fields = 6;    // Anzahl der Felder, die beim Aufruf angezeigt werden
 
 if(isset($_SESSION['mylist_request']))
 {
-    $prev_values = $_SESSION['mylist_request'];
-    $rol_id = $prev_values['role'];
-    if($prev_values['former'] == 1)
+    $form_values = $_SESSION['mylist_request'];
+    unset($_SESSION['mylist_request']);
+    $rol_id = $form_values['role'];
+    if($form_values['former'] == 1)
     {
         $active_member = 0;
     }
@@ -99,7 +100,7 @@ if(isset($_SESSION['mylist_request']))
     // muessen diese nun direkt angelegt werden
     for($i = $default_fields+1; $i > 0; $i++)
     {
-        if(isset($prev_values["column$i"]))
+        if(isset($form_values["column$i"]))
         {
             $default_fields++;          
         }   
@@ -197,10 +198,11 @@ require("../../../adm_config/body_top.php");
                             $act_category = $row->rlc_name;
                         }
                         echo "<option value=\"$row->rol_id\" ";
-                        if($rol_id == $row->rol_id) echo " selected=\"selected\" ";
+                        if($rol_id == $row->rol_id)
                         {
-                            echo ">$row->rol_name</option>";
+                            echo " selected ";
                         }
+                        echo ">$row->rol_name</option>";
                     }
                     echo "</optgroup>
                 </select>
@@ -208,7 +210,7 @@ require("../../../adm_config/body_top.php");
                 <input type=\"checkbox\" id=\"former\" name=\"former\" value=\"1\" ";
                     if(!$active_member) 
                     {
-                        echo " checked=\"checked\" ";
+                        echo " checked ";
                     }
                     echo " />
                 <label for=\"former\">nur Ehemalige</label></p>
