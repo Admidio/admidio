@@ -185,8 +185,29 @@ require("../../../adm_config/body_top.php");
                     </div>
                 </div>";
 
+                // Nicht eingeloggte User bekommen jetzt noch das Captcha praesentiert...
+                if (!$g_session_valid)
+                {
+                    echo "
 
-                echo "<hr width=\"85%\" />
+                    <div style=\"margin-top: 6px;\">
+                        <div style=\"text-align: left; margin-left: 27%;\">
+                            <img src=\"$g_root_path/adm_program/system/captcha_class.php\" border=\"0\" alt=\"Captcha\" />
+                        </div>
+                    </div>
+
+                    <div style=\"margin-top: 6px;\">
+                           <div style=\"text-align: right; width: 25%; float: left;\">Best&auml;tigungscode:*</div>
+                           <div style=\"text-align: left; margin-left: 27%;\">
+                               <input type=\"text\" id=\"captcha\" name=\"captcha\" tabindex=\"5\" style=\"width: 200px;\" maxlength=\"8\" value=\"\">
+                           </div>
+                    </div>";
+                }
+
+
+                echo "
+
+                <hr width=\"85%\" />
 
                 <div style=\"margin-top: 6px;\">
                     <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\" tabindex=\"5\">

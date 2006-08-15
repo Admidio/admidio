@@ -38,6 +38,9 @@
 
 require("../../system/common.php");
 
+// Fuer das Captcha muss auf jeden Fall auf die Session zugegriffen werden.
+session_start();
+
 // Uebergabevariablen pruefen
 
 if (array_key_exists("id", $_GET))
@@ -126,6 +129,14 @@ if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mod
 
 $err_code = "";
 $err_text = "";
+
+// Falls der User nicht eingeloggt ist, aber ein Captcha geschaltet ist,
+// muss natuerlich der Code ueberprueft werden
+if ($_GET["mode"] == 1 && !$g_session_valid && strtoupper($_SESSION['captchacode']) != strtoupper($_POST['captcha']))
+{
+    $g_message->show("captcha_code");
+}
+
 
 if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
 {
