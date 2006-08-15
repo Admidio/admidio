@@ -115,10 +115,7 @@ if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mod
 
     if (mysql_num_rows($result) == 0)
     {
-        // Wenn keine Daten zu der ID gefunden worden bzw. die ID einer anderen Orga gehört ist Schluss mit lustig...
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-        header($location);
-        exit();
+        $g_message->show("invalid");
     }
 
 
@@ -247,9 +244,8 @@ elseif($_GET["mode"] == 2)
         $_GET["url"] = "$g_root_path/$g_main_page";
     }
 
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=delete&url=". urlencode($_GET["url"]);
-    header($location);
-    exit();
+    $g_message->setForwardUrl($_GET["url"]);
+    $g_message->show("delete");
 }
 
 elseif($_GET["mode"] == 4)
@@ -293,22 +289,17 @@ elseif ($_GET["mode"] == 5)
         $_GET["url"] = "$g_root_path/$g_main_page";
     }
 
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=delete&url=". urlencode($_GET["url"]);
-    header($location);
-    exit();
+    $g_message->setForwardUrl($_GET["url"]);
+    $g_message->show("delete");
 }
 
 else
 {
-    // Falls der mode unbekannt ist, ist natürlich auch Ende...
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid";
-    header($location);
-    exit();
+    // Falls der Mode unbekannt ist, ist natürlich auch Ende...
+    $g_message->show("invalid");
 }
 
 
-$location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text";
-header($location);
-exit();
+$g_message->show($err_code, $err_text);
 
 ?>
