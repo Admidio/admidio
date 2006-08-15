@@ -44,9 +44,8 @@ $member_found = mysql_num_rows($result);
 
 if ($member_found == 0)
 {
-   $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=nomembers&err_head=Anmeldungen&url=home";
-   header($location);
-   exit();
+   $g_message->setForwardUrl("home");
+   $g_message->show("nomembers", "", "Anmeldungen");
 }
 
 echo "

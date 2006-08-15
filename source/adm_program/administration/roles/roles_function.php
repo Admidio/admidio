@@ -143,9 +143,7 @@ elseif($_GET["mode"] == 2)
 
             if($row[0] > 0)
             {
-                $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=role_exist";
-                header($location);
-                exit();
+                $g_message->show("role_exist");
             }      
         }
 
@@ -343,9 +341,9 @@ elseif($_GET["mode"] == 2)
                 $_POST['max_mitglieder'] = "0";
             }
 
-            //Kontrollieren ob bei nachtraeglicher aenderung der amimalen Mitgleiderzahl diese nicht bereits ueberschritten wurde
+            // Kontrollieren ob bei nachtraeglicher Aenderung der maximalen Mitgliederzahl diese nicht bereits ueberschritten wurde
 
-            //Zaehlen wieviele Leute die Rolle bereits haben, ohne Leiter
+            // Zaehlen wieviele Leute die Rolle bereits haben, ohne Leiter
             if($_GET['rol_id'] > 0)
             {
                 $sql    = "SELECT COUNT(*) FROM ". TBL_MEMBERS. "
@@ -360,9 +358,7 @@ elseif($_GET["mode"] == 2)
 
                 if($_POST['max_mitglieder']!= 0 && ($role_members[0] > $_POST['max_mitglieder']))
                 {
-                    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=max_members_roles_change";
-                    header($location);
-                    exit();
+                    $g_message->show("max_members_roles_change");
                 }
             }
 
@@ -437,9 +433,7 @@ elseif($_GET["mode"] == 2)
 
     if(strlen($err_code) > 0)
     {
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text";
-        header($location);
-        exit();
+        $g_message->show($err_code, $err_text);
     }
 
     $err_code = "save";
@@ -515,7 +509,6 @@ elseif($_GET["mode"] == 5)
     $err_code = "role_active";
 }
          
-$location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&timer=2000&url=$g_root_path/adm_program/administration/roles/roles.php";
-header($location);
-exit();
+$g_message->setForwardUrl("$g_root_path/adm_program/administration/roles/roles.php", 2000);
+$g_message->show($err_code);
 ?>

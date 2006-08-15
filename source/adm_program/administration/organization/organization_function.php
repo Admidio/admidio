@@ -103,9 +103,7 @@ if(strlen($_POST["max_file_upload_size"]) == 0)
 
 if ($err_code != "")
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text";
-    header($location);
-    exit();
+    $g_message->show($err_code, $err_text);
 }
 
 // *******************************************************************************
@@ -114,9 +112,7 @@ if ($err_code != "")
 $ret_code = $g_current_organization->update();
 if($ret_code != 0)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=&err_text=$ret_code";
-    header($location);
-    exit();
+    $g_message->show("mysql", $ret_code);
 }
 
 // Einstellungen speichern
@@ -142,8 +138,6 @@ unset($_SESSION['g_current_organizsation']);
 unset($_SESSION['g_preferences']);
 
 // zur Ausgangsseite zurueck
-$load_url = urlencode("$g_root_path/adm_program/administration/organization/organization.php?url=". $_GET['url']);
-$location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=save&timer=2000&url=$load_url";
-header($location);
-exit();
+$g_message->setForwardUrl("$g_root_path/adm_program/administration/organization/organization.php?url=". $_GET['url'], 2000);
+$g_message->show("save");
 ?>

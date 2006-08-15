@@ -183,8 +183,6 @@ $_SESSION["user_import_mode"] = "";
 $_SESSION["file_lines"]      = "";
 $_SESSION["value_separator"] = "";
 
-$load_url = urlencode("$g_root_path/adm_program/administration/members/members.php");
-$location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=import&err_text=$count_import&timer=2000&url=$load_url";
-header($location);
-exit();
+$g_message->setForwardUrl("$g_root_path/adm_program/administration/members/members.php");
+$g_message->show("import", $count_import);
 ?>

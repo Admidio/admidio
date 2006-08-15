@@ -122,9 +122,8 @@ if($_GET["mode"] == 1)
         }
     }
 
-    $load_url = urlencode("$g_root_path/adm_program/administration/new_user/new_user.php");
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text&url=$load_url";
-    header($location);
+    $g_message->setForwardUrl("$g_root_path/adm_program/administration/new_user/new_user.php");
+    $g_message->show($err_code, $err_text);
 }
 elseif($_GET["mode"] == 3)
 {
@@ -199,6 +198,7 @@ elseif($_GET["mode"] == 4)
 
    $location = "Location: $g_root_path/adm_program/administration/new_user/new_user.php";
    header($location);
+   exit();
 }
 
 ?>
