@@ -133,9 +133,7 @@ if($_GET["locked"]=="1" || $_GET["locked"]=="0")
     //bei Seitenaufruf ohne Moderationsrechte
     if(!$g_session_valid || $g_session_valid && !editPhoto($adm_photo["pho_org_shortname"]))
     {
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=photoverwaltunsrecht";
-        header($location);
-        exit();
+        $g_message->show("photoverwaltungsrecht");
     }
     
     //bei Seitenaufruf mit Moderationsrechten
