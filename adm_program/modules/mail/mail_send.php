@@ -65,9 +65,7 @@ if (empty($_POST))
 if ($g_preferences['send_email_extern'] == 1)
 {
     // es duerfen oder koennen keine Mails ueber den Server verschickt werden
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=mail_extern";
-    header($location);
-    exit();
+    $g_message->show("mail_extern");
 }
 
 $_POST['mailfrom'] = trim($_POST['mailfrom']);
@@ -165,9 +163,7 @@ if (array_key_exists("rolle", $_POST) && strlen($err_code) == 0)
 //Pruefen ob bis hier Fehler aufgetreten sind
 if (strlen($err_code) > 0)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text";
-    header($location);
-    exit();
+    $g_message->show($err_code, $err_text);
 }
 
 //Nun die Empfaenger zusammensuchen und an das Mailobjekt uebergeben
@@ -268,8 +264,5 @@ else
 }
 
 
-$location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text&url=". urlencode($_GET["url"]);
-header($location);
-exit();
-
+$g_message->show($err_code, $err_text);
 ?>
