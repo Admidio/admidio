@@ -299,7 +299,5 @@ else
     $g_message->show("invalid");
 }
 
-
 $g_message->show($err_code, $err_text);
-
 ?>
