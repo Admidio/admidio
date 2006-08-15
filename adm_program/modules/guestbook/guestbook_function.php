@@ -38,9 +38,6 @@
 
 require("../../system/common.php");
 
-// Fuer das Captcha muss auf jeden Fall auf die Session zugegriffen werden.
-session_start();
-
 // Uebergabevariablen pruefen
 
 if (array_key_exists("id", $_GET))
