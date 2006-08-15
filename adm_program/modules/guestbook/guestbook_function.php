@@ -124,6 +124,8 @@ if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mod
 
 }
 
+$_SESSION['guestbook_entry_request'] = $_REQUEST;
+
 $err_code = "";
 $err_text = "";
 
@@ -206,6 +208,7 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
         }
+        unset($_SESSION['announcements_request']);
 
         $location = "Location: $g_root_path/adm_program/modules/guestbook/guestbook.php?headline=". $_GET['headline'];
         header($location);
