@@ -383,7 +383,7 @@ $message_text = array(
 
     //Fehlermeldungen Capcha-Klasse
     "captcha_code" =>
-        "Der Best&auml;tigungscode wurde falsch eingegeben.",
+        "Der Bestätigungscode wurde falsch eingegeben.",
     //Ende Fehlermeldungen Capcha-Klasse
 
 
