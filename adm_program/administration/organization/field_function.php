@@ -77,9 +77,7 @@ if($_GET['mode'] == 1)
       
          if($row[0] > 0)
          {
-            $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=field_exist";
-            header($location);
-            exit();
+            $g_message->show("field_exist");
          }      
       }
 
@@ -121,9 +119,7 @@ if($_GET['mode'] == 1)
    
    if(strlen($err_code) > 0)
    {
-      $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text";
-      header($location);
-      exit();
+      $g_message->show($err_code, $err_text);
    }
 
    $err_code = "save";
@@ -148,9 +144,7 @@ elseif($_GET['mode'] == 2)
    $err_code = "delete";
 }
          
-// zur Gruppierungsseite zurueck
-$load_url = urlencode("$g_root_path/adm_program/administration/organization/organization.php?url=". $_GET['url']);
-$location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&timer=2000&url=$load_url";
-header($location);
-exit();
+// zu den Organisationseinstellungen zurueck
+$g_message->setForwardUrl("$g_root_path/adm_program/administration/organization/organization.php?url=". $_GET['url'], 2000);
+$g_message->show($err_code);
 ?>

@@ -38,9 +38,7 @@ if(!editUser())
 
 if(count($_SESSION['file_lines']) == 0)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=file_not_exist";
-    header($location);
-    exit();
+    $g_message->show("file_not_exist");
 }
 
 // feststellen, welches Trennzeichen in der Datei verwendet wurde

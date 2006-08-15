@@ -293,7 +293,6 @@ elseif($_GET["mode"] == 4)
     }
 }
 
-$location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text&timer=2000&url=$url";
-header($location);
-exit();
+$g_message->setForwardUrl($url, 2000);
+$g_message->show($err_code, $err_text);
 ?>
