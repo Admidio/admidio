@@ -67,10 +67,18 @@ if ($_GET["id"] != 0)
     }
 }
 
-$name      = "";
-$text      = "";
-$email     = "";
-$homepage  = "";
+if (isset($_SESSION['guestbook_entry_request']))
+{
+    $form_values = $_SESSION['guestbook_entry_request'];
+    unset($_SESSION['guestbook_entry_request']);
+}
+else
+{
+    $form_values['name']	 = "";
+    $form_values['email']	 = "";
+    $form_values['homepage'] = "";
+    $form_values['text']     = "";
+}
 
 
 // Wenn eine ID uebergeben wurde, soll der Eintrag geaendert werden
@@ -87,10 +95,10 @@ if ($_GET['id'] != 0)
     {
         $row_ba = mysql_fetch_object($result);
 
-        $name     = $row_ba->gbo_name;
-        $text     = $row_ba->gbo_text;
-        $email    = $row_ba->gbo_email;
-        $homepage = $row_ba->gbo_homepage;
+        $form_values['name']     = $row_ba->gbo_name;
+        $form_values['text']     = $row_ba->gbo_text;
+        $form_values['email']    = $row_ba->gbo_email;
+        $form_values['homepage'] = $row_ba->gbo_homepage;
     }
     elseif (mysql_num_rows($result) == 0)
     {
@@ -101,12 +109,12 @@ if ($_GET['id'] != 0)
 }
 
 // Wenn keine ID uebergeben wurde, der User aber eingeloggt ist koennen zumindest
-// Name, Emailadresse und Homepgae vorbelegt werden...
+// Name, Emailadresse und Homepage vorbelegt werden...
 if ($_GET['id'] == 0 && $g_session_valid)
 {
-    $name       = $g_current_user->first_name. " ". $g_current_user->last_name;
-    $email      = $g_current_user->email;
-    $homepage   = $g_current_user->homepage;
+    $form_values['name']     = $g_current_user->first_name. " ". $g_current_user->last_name;
+    $form_values['email']    = $g_current_user->email;
+    $form_values['homepage'] = $g_current_user->homepage;
 }
 
 
@@ -154,21 +162,21 @@ require("../../../adm_config/body_top.php");
                 <div>
                     <div style=\"text-align: right; width: 25%; float: left;\">Name:*</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <input type=\"text\" id=\"name\" name=\"name\" tabindex=\"1\" style=\"width: 350px;\" maxlength=\"60\" value=\"". htmlspecialchars($name, ENT_QUOTES). "\">
+                        <input type=\"text\" id=\"name\" name=\"name\" tabindex=\"1\" style=\"width: 350px;\" maxlength=\"60\" value=\"". htmlspecialchars($form_values['name'], ENT_QUOTES). "\">
                     </div>
                 </div>
 
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 25%; float: left;\">Emailadresse:</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <input type=\"text\" id=\"email\" name=\"email\" tabindex=\"2\" style=\"width: 350px;\" maxlength=\"50\" value=\"". htmlspecialchars($email, ENT_QUOTES). "\">
+                        <input type=\"text\" id=\"email\" name=\"email\" tabindex=\"2\" style=\"width: 350px;\" maxlength=\"50\" value=\"". htmlspecialchars($form_values['email'], ENT_QUOTES). "\">
                     </div>
                 </div>
 
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 25%; float: left;\">Homepage:</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <input type=\"text\" id=\"homepage\" name=\"homepage\" tabindex=\"3\" style=\"width: 350px;\" maxlength=\"50\" value=\"". htmlspecialchars($homepage, ENT_QUOTES). "\">
+                        <input type=\"text\" id=\"homepage\" name=\"homepage\" tabindex=\"3\" style=\"width: 350px;\" maxlength=\"50\" value=\"". htmlspecialchars($form_values['homepage'], ENT_QUOTES). "\">
                     </div>
                 </div>
 
@@ -181,7 +189,7 @@ require("../../../adm_config/body_top.php");
                     }
                     echo "</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <textarea  name=\"text\" tabindex=\"4\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". htmlspecialchars($text, ENT_QUOTES). "</textarea>
+                        <textarea  name=\"text\" tabindex=\"4\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". htmlspecialchars($form_values['text'], ENT_QUOTES). "</textarea>
                     </div>
                 </div>";
 
