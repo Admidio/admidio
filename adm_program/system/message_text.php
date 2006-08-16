@@ -222,6 +222,10 @@ $message_text = array(
         "Willst Du den Kommentar von<br />
         <b>%VAR1%</b><br />wirklich löschen ?",
 
+    "flooding_protection" =>
+        "Dein letzter Eintrag im Gästebuch <br />
+            liegt weniger als 3 Minuten zurück.",
+    //Ende Fehlermeldungen Gaestebuchmodul
 
         //Fehlermeldungen Profilfoto
     "profile_photo_update" =>

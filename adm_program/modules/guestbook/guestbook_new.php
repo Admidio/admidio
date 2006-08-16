@@ -117,6 +117,27 @@ else
 
 }
 
+if (!$g_session_valid)
+{
+    // Falls er nicht eingeloggt ist, wird vor dem Ausfuellen des Formulars noch geprueft ob der
+    // User innerhalb einer festgelegten Zeitspanne unter seiner IP-Adresse schon einmal
+    // einen GB-Eintrag erzeugt hat...
+    $ipAddress = $_SERVER['REMOTE_ADDR'];
+
+    $sql = "SELECT count(*) FROM ". TBL_GUESTBOOK. "
+            where unix_timestamp(gbo_timestamp) > unix_timestamp()-180
+              and gbo_org_id = $g_current_organization->id
+              and gbo_ip_address = '$ipAddress' ";
+    $result = mysql_query($sql, $g_adm_con);
+    db_error($result);
+    $row = mysql_fetch_array($result);
+    if($row[0] > 0)
+    {
+          //Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
+          $g_message->show("flooding_protection");
+    }
+}
+
 echo "
 <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
@@ -160,9 +181,17 @@ require("../../../adm_config/body_top.php");
             <div class=\"formBody\">
                 <div>
                     <div style=\"text-align: right; width: 25%; float: left;\">Name:*</div>
-                    <div style=\"text-align: left; margin-left: 27%;\">
-                        <input type=\"text\" id=\"name\" name=\"name\" tabindex=\"1\" style=\"width: 350px;\" maxlength=\"60\" value=\"". htmlspecialchars($form_values['name'], ENT_QUOTES). "\">
-                    </div>
+                    <div style=\"text-align: left; margin-left: 27%;\">";
+                    if ($g_current_user->id != 0)
+                    {
+                        // Eingeloggte User sollen ihren Namen nicht aendern duerfen
+                        echo "<input class=\"readonly\" readonly type=\"text\" id=\"name\" name=\"name\" tabindex=\"1\" style=\"width: 350px;\" maxlength=\"60\" value=\"". htmlspecialchars($form_values['name'], ENT_QUOTES). "\">";
+                    }
+                    else
+                    {
+                        echo "<input type=\"text\" id=\"name\" name=\"name\" tabindex=\"1\" style=\"width: 350px;\" maxlength=\"60\" value=\"". htmlspecialchars($form_values['name'], ENT_QUOTES). "\">";
+                    }
+                    echo "</div>
                 </div>
 
                 <div style=\"margin-top: 6px;\">
