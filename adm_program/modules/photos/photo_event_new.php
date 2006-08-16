@@ -34,7 +34,7 @@ require("../../system/login_valid.php");
 
 // Uebergabevariablen pruefen
 
-if(isset($_GET["pho_id"]) && is_numeric($_GET["pho_id"]) == false)
+if(isset($_GET["pho_id"]) && is_numeric($_GET["pho_id"]) == false && $_GET["pho_id"]!=NULL)
 {
     $g_message->show("invalid");
 }
