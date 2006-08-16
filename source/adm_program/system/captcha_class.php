@@ -20,14 +20,20 @@
  *
  * if ( strtoupper($_SESSION['captchacode']) != strtoupper($_POST['captcha']) )
  * {
- * 		echo "Das Captcha wurde nicht richtig geloest...";
+ *     echo "Das Captcha wurde nicht richtig geloest...";
  * }
  * else
  * {
- *		echo "Das Captcha wurde richtig geloest!";
+ *	   echo "Das Captcha wurde richtig geloest!";
  * }
  *
+ * Nach erfolgreichem Eintragen (z.B. eines Gästebucheintrages) in die DB
+ * muss der CaptchaCode natuerlich aus der Session geloescht werden:
  *
+ * if (isset($_SESSION['captchacode']))
+ * {
+ *     unset($_SESSION['captchacode']);
+ * }
  *
  ******************************************************************************
  *
