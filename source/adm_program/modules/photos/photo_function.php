@@ -38,12 +38,17 @@ if(isset($_GET["pho_id"]) && is_numeric($_GET["pho_id"]) == false)
     $g_message->show("invalid");
 }
 
-if(isset($_GET["job"]) && $_GET["job"] != "rotate" && $_GET["job"] != "delete")
+if(isset($_GET["job"]) && $_GET["job"] != "rotate" && $_GET["job"] != "delete_request" && $_GET["job"] != "do_delete")
 {
     $g_message->show("invalid");
 }
 
 if(isset($_GET["direction"]) && $_GET["direction"] != "left" && $_GET["direction"] != "right")
+{
+    $g_message->show("invalid");
+}
+
+if($_GET["job"] == "delete" && !isset($_GET["bild"]))
 {
     $g_message->show("invalid");
 }
@@ -232,8 +237,15 @@ if($_GET["job"]=="rotate")
     exit();
 }
 
+//Nachfrage ob geloescht werden soll
+if($_GET["job"]=="delete_request")
+{
+   $g_message->setForwardUrl("$g_root_path/adm_program/modules/photos/photo_function.php?pho_id=$pho_id&bild=$bild&thumb_seite=$thumb_seite&job=do_delete",0, true);
+   $g_message->show("delete_photo");
+}
+
 //Nutzung der Loeschfunktion
-if($_GET["job"]=="delete")
+if($_GET["job"]=="do_delete")
 {
     //bei Seitenaufruf ohne Moderationsrechte
     if(!$g_session_valid || $g_session_valid && !editPhoto($adm_photo["pho_org_shortname"]))
@@ -247,8 +259,8 @@ if($_GET["job"]=="delete")
     // zur Ausgangsseite zurueck
     $seite=$_GET["seite"];
     $pho_id=$_GET["pho_id"];
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=photo_deleted&timer=2000&url=". urlencode("$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id&seite=$seite");
-    header($location);
-    exit();
+    
+    $g_message->setForwardUrl("$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id&seite=$seite", 2000);
+    $g_message->show("photo_deleted");
 }
 ?>

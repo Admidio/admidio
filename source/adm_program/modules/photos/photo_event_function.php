@@ -35,12 +35,13 @@ require("../../system/login_valid.php");
 
 // Uebergabevariablen pruefen
 
-if(isset($_GET["pho_id"]) && is_numeric($_GET["pho_id"]) == false)
+if(isset($_GET["pho_id"]) && is_numeric($_GET["pho_id"]) == false && $_GET["pho_id"]!=NULL)
 {
     $g_message->show("invalid");
 }
 
-if(isset($_GET["aufgabe"]) && $_GET["aufgabe"] != "makenew" && $_GET["aufgabe"] != "delete" && $_GET["aufgabe"] != "makechange")
+if(isset($_GET["aufgabe"]) && $_GET["aufgabe"] != "makenew" && $_GET["aufgabe"] != "do_delete" 
+    && $_GET["aufgabe"] != "makechange" && $_GET["aufgabe"] != "delete_request")
 {
     $g_message->show("invalid");
 }
@@ -343,7 +344,15 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
  
 /***********************Veranstaltung Loeschen*******************************************/
 
-    if($_GET["aufgabe"]=="delete")
+    //Nachfrage ob geloescht werden soll
+    if($_GET["job"]=="delete_request")
+    {
+        $g_message->setForwardUrl("$g_root_path/adm_program/modules/photos/photo_event_function.php?job=do_delete&pho_id=$pho_id", 0, true);
+        $g_message->show("delete_veranst", $adm_photo["pho_name"]);
+    }
+    
+    
+    if($_GET["job"]=="do_delete")
     {
         //Erfasse der zu loeschenden Veranstaltung bzw. Unterveranstaltungen
         //Erfassen der Veranstaltung bei Aenderungsaufruf und schreiben in array

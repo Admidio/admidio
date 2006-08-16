@@ -80,10 +80,6 @@ if(isset($_GET["locked"]) && is_numeric($_GET["locked"]) == false)
 //Uebername der uebergebenen Variablen
 //ID einer bestimmten Veranstaltung
 $pho_id=$_GET["pho_id"];
-if($pho_id == "")
-{
-    $pho_id = 0;
-}
 
 //Aufruf der ggf. uebergebenen Veranstaltung
 $sql="  SELECT *
@@ -344,12 +340,12 @@ echo "
                                     if ($g_session_valid && editPhoto($adm_photo["pho_org_shortname"]))
                                     {
                                         echo"
-                                        <a href=\"photo_function.php?pho_id=$pho_id&bild=$bild&thumb_seite=$thumb_seite&job=rotate&direction=left\"><img 
-                                            src=\"$g_root_path/adm_program/images/arrow_turn_left.png\" border=\"0\" alt=\"nach links drehen\" title=\"nach links drehen\"></a>
-                                        <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_photo&err_head=Foto L&ouml;schen&button=2&url=". urlencode("$g_root_path/adm_program/modules/photos/photo_function.php?pho_id=$pho_id&bild=$bild&thumb_seite=$thumb_seite&job=delete"). "\"><img 
-                                            src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Photo l&ouml;schen\" title=\"Photo l&ouml;schen\"></a>
-                                        <a href=\"photo_function.php?pho_id=$pho_id&bild=$bild&thumb_seite=$thumb_seite&job=rotate&direction=right\"><img 
-                                            src=\"$g_root_path/adm_program/images/arrow_turn_right.png\" border=\"0\" alt=\"nach rechts drehen\" title=\"nach rechts drehen\"></a>";
+                                        <img src=\"$g_root_path/adm_program/images/arrow_turn_left.png\" style=\"cursor: pointer; vertical-align: middle;\" width=\"16\" height=\"16\" border=\"0\" alt=\"nach links drehen\" title=\"nach links drehen\"
+                                            onclick=\"self.location.href='photo_function.php?pho_id=$pho_id&bild=$bild&thumb_seite=$thumb_seite&job=rotate&direction=left'\">
+                                        <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer; vertical-align: middle;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Foto l&ouml;schen\" title=\"Foto l&ouml;schen\"
+                                            onclick=\"self.location.href='photo_function.php?pho_id=$pho_id&bild=$bild&thumb_seite=$thumb_seite&job=delete_request'\">
+                                        <img src=\"$g_root_path/adm_program/images/arrow_turn_right.png\" style=\"cursor: pointer; vertical-align: middle;\" width=\"16\" height=\"16\" border=\"0\" alt=\"nach rechts drehen\" title=\"nach rechts drehen\"
+                                            onclick=\"self.location.href='photo_function.php?pho_id=$pho_id&bild=$bild&thumb_seite=$thumb_seite&job=rotate&direction=right'\">";
                                     }
                                 echo"
                                 </td>";
@@ -567,31 +563,38 @@ echo "
                                 //bei Moderationrecheten
                                 if ($g_session_valid && editPhoto($adm_photo_list["pho_org_shortname"]))
                                 {
+                                    $this_pho_id = $adm_photo_list["pho_id"];
                                     if(file_exists($ordner))
                                     {
                                         echo"
-                                        <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=".$adm_photo_list["pho_id"]."\">
-                                            <img src=\"$g_root_path/adm_program/images/photo.png\" border=\"0\" alt=\"Bilder hochladen\" title=\"Bilder hochladen\"></a>&nbsp;
-                                        <a href=\"$g_root_path/adm_program/modules/photos/photo_event_new.php?pho_id=".$adm_photo_list["pho_id"]."&aufgabe=change\">
-                                            <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>&nbsp;";
+                                        <img src=\"$g_root_path/adm_program/images/photo.png\" style=\"cursor: pointer; vertical-align: middle;\" 
+                                            width=\"16\" height=\"16\" border=\"0\" alt=\"Bilder hochladen\" title=\"Bilder hochladen\"
+                                            onclick=\"self.location.href='photoupload.php?pho_id=$this_pho_id'\">&nbsp;
+                                     
+                                        <img src=\"$g_root_path/adm_program/images/edit.png\"style=\"cursor: pointer; vertical-align: middle;\" 
+                                            width=\"16\" height=\"16\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\" 
+                                            onclick=\"self.location.href='photo_event_new.php?pho_id=$this_pho_id&aufgabe=change'\">&nbsp;";
                                     }
-                                    $err_text= $adm_photo_list["pho_name"]."(Beginn: ".mysqldate("d.m.y", $adm_photo_list["pho_begin"]).")";
+                                    
                                     echo"
-                                    <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_veranst&err_text=$err_text&err_head=Veranstaltung L&ouml;schen&button=2&url=". urlencode("$g_root_path/adm_program/modules/photos/photo_event_function.php?aufgabe=delete&pho_id=".$adm_photo_list["pho_id"].""). "\">
-                                         <img src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Veranstaltung l&ouml;schen\" title=\"Veranstaltung l&ouml;schen\"></a>";
+                                    <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer; vertical-align: middle;\" width=\"16\" height=\"16\" border=\"0\"
+                                         alt=\"Veranstaltung L&oumlschen\" title=\"Veranstaltung L&oumlschen\"
+                                         onclick=\"self.location.href='photo_event_function.php?job=delete_request&pho_id=$this_pho_id'\">";
+          
                                     if($adm_photo_list["pho_locked"]==1 && file_exists($ordner))
                                     {
                                         echo"
-                                        <a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$adm_photo_list["pho_id"]."&locked=0\">
-                                            <img src=\"$g_root_path/adm_program/images/key.png\" border=\"0\" alt=\"Freigeben\" title=\"Freigeben\">
-                                        </a>";
+                                        <img src=\"$g_root_path/adm_program/images/key.png\"  alt=\"Freigeben\" title=\"Freigeben\"
+                                            style=\"cursor: pointer; vertical-align: middle;\" width=\"16\" height=\"16\" border=\"0\"
+                                            onclick=\"self.location.href='photos.php?pho_id=$this_pho_id&locked=0'\">";
                                     }
+                                    
                                     if($adm_photo_list["pho_locked"]==0 && file_exists($ordner))
                                     {
                                         echo"
-                                        <a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$adm_photo_list["pho_id"]."&locked=1\">
-                                            <img src=\"$g_root_path/adm_program/images/key.png\" border=\"0\" alt=\"Sperren\" title=\"Sperren\">
-                                        </a>";
+                                        <img src=\"$g_root_path/adm_program/images/key.png\" alt=\"Sperren\" title=\"Sperren\"
+                                            style=\"cursor: pointer; vertical-align: middle;\" width=\"16\" height=\"16\" border=\"0\"
+                                            onclick=\"self.location.href='photos.php?pho_id=$this_pho_id&locked=1'\">";
                                     }
                                 }
                             echo"
