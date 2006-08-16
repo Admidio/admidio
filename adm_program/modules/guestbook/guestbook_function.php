@@ -121,21 +121,25 @@ if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mod
 
 }
 
-$_SESSION['guestbook_entry_request'] = $_REQUEST;
 
 $err_code = "";
 $err_text = "";
 
-// Falls der User nicht eingeloggt ist, aber ein Captcha geschaltet ist,
-// muss natuerlich der Code ueberprueft werden
-if ($_GET["mode"] == 1 && !$g_session_valid && strtoupper($_SESSION['captchacode']) != strtoupper($_POST['captcha']))
-{
-    $g_message->show("captcha_code");
-}
-
 
 if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
 {
+    // Der Inhalt des Formulars wird nun in der Session gespeichert...
+    $_SESSION['guestbook_entry_request'] = $_REQUEST;
+
+
+    // Falls der User nicht eingeloggt ist, aber ein Captcha geschaltet ist,
+    // muss natuerlich der Code ueberprueft werden
+    if ($_GET["mode"] == 1 && !$g_session_valid && strtoupper($_SESSION['captchacode']) != strtoupper($_POST['captcha']))
+    {
+        $g_message->show("captcha_code");
+    }
+
+
     // Daten fuer die DB werden nun aufbereitet...
 
     $name      = strStripTags($_POST['name']);
@@ -205,7 +209,16 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
         }
+
+        // Der Inhalt des Formulars wird bei erfolgreichem insert/update aus der Session geloescht
         unset($_SESSION['guestbook_entry_request']);
+
+        // Der CaptchaCode wird bei erfolgreichem insert/update aus der Session geloescht
+        if (isset($_SESSION['captchacode']))
+        {
+            unset($_SESSION['captchacode']);
+        }
+
 
         $location = "Location: $g_root_path/adm_program/modules/guestbook/guestbook.php?headline=". $_GET['headline'];
         header($location);
