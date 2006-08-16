@@ -176,24 +176,47 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
         {
             if ($g_session_valid)
             {
-                // Falls der User eingeloggt ist wird die aktuelle UserId mitabgespeichert...
+                // Falls der User eingeloggt ist wird die aktuelle UserId und der korrekte Name mitabgespeichert...
+                $realName = $g_current_user->first_name. " ". $g_current_user->last_name;
+
                 $sql = "INSERT INTO ". TBL_GUESTBOOK. " (gbo_org_id, gbo_usr_id, gbo_name, gbo_text, gbo_email,
                                                          gbo_homepage, gbo_timestamp, gbo_ip_address)
-                                         VALUES ($g_current_organization->id, $g_current_user->id, {0}, {1}, {2},
-                                                 {3}, '$actDate', '$ipAddress')";
+                                         VALUES ($g_current_organization->id, $g_current_user->id, '$realName', {0}, {1},
+                                                 {2}, '$actDate', '$ipAddress')";
+
+                $sql    = prepareSQL($sql, array($text, $email, $homepage));
+                $result = mysql_query($sql, $g_adm_con);
+                db_error($result);
+
             }
             else
             {
-                // Falls er nicht engeloggt ist, gibt es das sql-Statement natürlich ohnr die UserID
+                // Falls er nicht eingeloggt ist, wird vor dem Abspeichern noch geprueft ob der
+                // User innerhalb einer festgelegten Zeitspanne unter seiner IP-Adresse schon einmal
+                // einen GB-Eintrag erzeugt hat...
+                $sql = "SELECT count(*) FROM ". TBL_GUESTBOOK. "
+                        where unix_timestamp(gbo_timestamp) > unix_timestamp()-180
+                          and gbo_org_id = $g_current_organization->id
+                          and gbo_ip_address = '$ipAddress' ";
+                $result = mysql_query($sql, $g_adm_con);
+                db_error($result);
+                $row = mysql_fetch_array($result);
+                if($row[0] > 0)
+                {
+                    //Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
+                    $g_message->show("flooding_protection");
+                }
+
+                // Falls er nicht eingeloggt ist, gibt es das sql-Statement natürlich ohnr die UserID
                 $sql = "INSERT INTO ". TBL_GUESTBOOK. " (gbo_org_id, gbo_name, gbo_text, gbo_email,
                                                          gbo_homepage, gbo_timestamp, gbo_ip_address)
                                          VALUES ($g_current_organization->id, {0}, {1}, {2},
                                                  {3}, '$actDate', '$ipAddress')";
-            }
 
-            $sql    = prepareSQL($sql, array($name, $text, $email, $homepage));
-            $result = mysql_query($sql, $g_adm_con);
-            db_error($result);
+                $sql    = prepareSQL($sql, array($name, $text, $email, $homepage));
+                $result = mysql_query($sql, $g_adm_con);
+                db_error($result);
+            }
 
         }
         else
