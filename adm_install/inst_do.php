@@ -29,7 +29,8 @@ require("../adm_program/system/string.php");
 require("../adm_program/system/date.php");
 
 // setzt die Ausfuehrungszeit des Scripts auf 2 Min., da hier teilweise sehr viel gemacht wird
-set_time_limit(120);
+// allerdings darf hier keine Fehlermeldung wg. dem safe_mode kommen
+@set_time_limit(120);
 
 // Diese Funktion zeigt eine Fehlerausgabe an
 // mode = 0 (Default) Fehlerausgabe
