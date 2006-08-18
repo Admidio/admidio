@@ -71,7 +71,7 @@ class Captcha
         $this->backgroundColourB = 196;
 
         // Hier wird die Schriftgroesse des CaptchaCodes festgelegt...
-        $this->codeSize = 23;
+        $this->codeSize = 15;
 
         // Hier wird der Untertitel festgelegt.
         $this->backgroundWriting = "POWERED  BY   A D M I D I O . O R G";
@@ -149,7 +149,7 @@ class Captcha
                 $xPosition = intval($xStartPosition + $i * ($this->width / ($this->charCount +1)));
 
                 $text	= substr($this->captchaCode, $i, 1);
-                $color	=  imagecolorallocate($image, $this->backgroundColourR - 150, $this->backgroundColourG - 150, $this->backgroundColourB - 150);
+                $color	=  imagecolorallocate($image, $this->backgroundColourR - 125, $this->backgroundColourG - 55, $this->backgroundColourB - 90);
                 ImageTTFText($image, $this->codeSize, 0, $xPosition, 35, $color, $this->font, $text);
         }
 
