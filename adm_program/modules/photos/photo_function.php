@@ -53,6 +53,8 @@ if($_GET["job"] == "delete" && !isset($_GET["bild"]))
     $g_message->show("invalid");
 }
 
+$pho_id = $_GET["pho_id"];
+
 //Rechtsdrehung eines Bildes
 //pho_id: Veranstaltungsid
 //bild: nr des Bildes das gedreht werden soll
@@ -223,15 +225,14 @@ if($_GET["job"]=="rotate")
     
     //Aufruf der entsprechenden Funktion
     if($_GET["direction"]=="right"){
-        right_rotate($_GET["pho_id"], $_GET["bild"]);
+        right_rotate($pho_id, $_GET["bild"]);
     }
     if($_GET["direction"]=="left"){
-        left_rotate($_GET["pho_id"], $_GET["bild"]);
+        left_rotate($pho_id, $_GET["bild"]);
     }
     
     // zur Ausgangsseite zurueck
     $seite=$_GET["seite"];
-    $pho_id=$_GET["pho_id"];
     $location = "Location: $g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id&seite=$seite";
     header($location);
     exit();
@@ -240,7 +241,7 @@ if($_GET["job"]=="rotate")
 //Nachfrage ob geloescht werden soll
 if($_GET["job"]=="delete_request")
 {
-   $g_message->setForwardUrl("$g_root_path/adm_program/modules/photos/photo_function.php?pho_id=$pho_id&bild=$bild&thumb_seite=$thumb_seite&job=do_delete",0, true);
+   $g_message->setForwardYesNo("$g_root_path/adm_program/modules/photos/photo_function.php?pho_id=$pho_id&bild=$bild&thumb_seite=$thumb_seite&job=do_delete");
    $g_message->show("delete_photo");
 }
 
@@ -254,11 +255,10 @@ if($_GET["job"]=="do_delete")
     }
     
     //Aufruf der entsprechenden Funktion
-    delete($_GET["pho_id"], $_GET["bild"]);
+    delete($pho_id, $_GET["bild"]);
     
     // zur Ausgangsseite zurueck
     $seite=$_GET["seite"];
-    $pho_id=$_GET["pho_id"];
     
     $g_message->setForwardUrl("$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id&seite=$seite", 2000);
     $g_message->show("photo_deleted");
