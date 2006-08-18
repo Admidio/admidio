@@ -56,11 +56,9 @@ class Message
 		}
 	}
 	
-	// URL kann uebergeben werden, auf die danach automatisch weitergeleitet wird
+	// URL muss uebergeben werden, auf die danach automatisch weitergeleitet wird
 	// ist timer > 0 wird nach x Millisec. automatisch auf die URL weitergeleitet
-	// wenn Timer 0 kann yes_no_buttons auf true gesetzt werden und dann ueber ja/nein auf die 
-	// URL weitergeleitet werden
-	function setForwardUrl($url, $timer = 0, $yes_no_buttons = false)
+	function setForwardUrl($url, $timer = 0)
 	{
 		if ($url == "home")
     	{
@@ -80,15 +78,23 @@ class Message
 		{
 			$this->timer = 0;
 		}
-		
-		if($yes_no_buttons == true)
-		{
-			$this->yes_no_buttons = true;
-		}
-		else
-		{
-			$this->yes_no_buttons = false;
-		}
+	}
+	
+	// URL muss uebergeben werden
+	// es werden dann 2 Buttons angezeigt, klickt der User auf "Ja", so wird auf die
+	// uebergebene Url weitergeleitet, bei "Nein" geht es zurueck
+	function setForwardYesNo($url)
+	{
+		if ($url == "home")
+    	{
+    		// auf die Startseite verweisen
+        	$this->forward_url = $GLOBALS['g_root_path']. "/". $GLOBALS['g_main_page'];
+    	}
+    	else
+    	{
+			$this->forward_url = $url;
+    	}		
+    	$this->yes_no_buttons = true;
 	}
 	
 	// die Meldung wird ausgegeben

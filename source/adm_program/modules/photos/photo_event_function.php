@@ -347,7 +347,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
     //Nachfrage ob geloescht werden soll
     if($_GET["job"]=="delete_request")
     {
-        $g_message->setForwardUrl("$g_root_path/adm_program/modules/photos/photo_event_function.php?job=do_delete&pho_id=$pho_id", 0, true);
+        $g_message->setForwardYesNo("$g_root_path/adm_program/modules/photos/photo_event_function.php?job=do_delete&pho_id=$pho_id");
         $g_message->show("delete_veranst", $adm_photo["pho_name"]);
     }
     
