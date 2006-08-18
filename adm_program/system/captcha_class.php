@@ -156,6 +156,7 @@ class Captcha
         // Jetzt noch das finale Bild ausgeben...
         header('Content-type: image/png');
         ImagePNG($image);
+        ImageDestroy($image);
 
     }
 
