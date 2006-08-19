@@ -40,8 +40,8 @@ echo "
     <!--[if lt IE 7]>
     <script language=\"JavaScript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
     <![endif]-->
-    
-    
+
+
 </head>
 
 <body onLoad=\"windowresize()\">
@@ -51,7 +51,7 @@ echo "
         {
             case "bbcode":
                 echo "Die Beschreibung bei einigen Modulen (Ank&uuml;ndigungen, Terminen, G&auml;stebuch und Weblinks)
-                      k&ouml;nnen mit verschiedenen Tags (BBCode) formatiert werden. Daf&uuml;r m&uuml;ssen die 
+                      k&ouml;nnen mit verschiedenen Tags (BBCode) formatiert werden. Daf&uuml;r m&uuml;ssen die
                       hier aufgelisteten Tags um den entsprechenden Textabschnitt gesetzt werden.<br /><br />
                       Beispiele:<br /><br />
                       <table class=\"tableList\" style=\"width: 100%;\" cellpadding=\"5\" cellspacing=\"0\">
@@ -135,8 +135,8 @@ echo "
                 break;
 
             case "enable_rss":
-                echo "Admidio kann RSS-Feeds f&uuml;r verschiedene Module (Ank&uuml;ndigungen, 
-                      Termine, G&auml;stebuch und Weblinks) auf den jeweiligen &Uuml;bersichtsseiten 
+                echo "Admidio kann RSS-Feeds f&uuml;r verschiedene Module (Ank&uuml;ndigungen,
+                      Termine, G&auml;stebuch und Weblinks) auf den jeweiligen &Uuml;bersichtsseiten
                       bereitstellen, die dann &uuml;ber den Browser einem Feedreader zugeordnet
                       werden k&ouml;nnen.";
                 break;
@@ -162,7 +162,7 @@ echo "
 
             case "leader":
                 echo "Leiter werden in den Mitgliederlisten dieser Rolle gesondert aufgef&uuml;hrt.<br><br>
-                      Leiter haben au&szlig;erdem die M&ouml;glichkeit neue Mitglieder aus der Organisation 
+                      Leiter haben au&szlig;erdem die M&ouml;glichkeit neue Mitglieder aus der Organisation
                       der Rolle zu zuordnen oder vorhandene Mitglieder zu entfernen.";
                 break;
 
@@ -212,7 +212,7 @@ echo "
                 echo "Rollen, die diese Option aktiviert haben, haben die Berechtigung
                       Benutzerdaten (au&szlig;er Passw&ouml;rter) und Rollenzugeh&ouml;rigkeiten
                       anderer Mitglieder zu bearbeiten.<br>
-                      Au&szlig;erdem haben sie Zugriff auf die Benutzerverwaltung und k&ouml;nnen 
+                      Au&szlig;erdem haben sie Zugriff auf die Benutzerverwaltung und k&ouml;nnen
                       dort neue Benutzer anlegen oder alte Benutzer l&ouml;schen.";
                 break;
 
@@ -245,7 +245,7 @@ echo "
                       Wenn du eingeloggt bist stehen dir weitere Rollen zur Verf&uuml;gung, an die du E-Mails
                       schreiben kannst.";
                 break;
-                
+
             case "role_assign":
                 echo "W&auml;hle bitte eine Rolle aus, der alle importierten Benutzer automatisch zugeordnet werden.";
                 break;
@@ -268,7 +268,7 @@ echo "
                       Moderatoren dieser Organisationen k&ouml;nnen den Termin / Nachricht dann bearbeiten
                       bzw. die Option zur&uuml;cksetzen.";
                 break;
-                
+
             case "user_field_description":
                 $sql = "SELECT usf_description FROM ". TBL_USER_FIELDS. "
                          WHERE usf_org_shortname = '$g_organization'
@@ -276,7 +276,7 @@ echo "
                 $sql = prepareSQL($sql, array($_GET['err_text']));
                 $result_field = mysql_query($sql, $g_adm_con);
                 db_error($result_field);
-                
+
                 $row = mysql_fetch_object($result_field);
                 echo $row->usf_description;
                 break;
@@ -286,25 +286,25 @@ echo "
                    Der Dateiname hat Einfluss auf die Anzeigereihenfolge. In einem Ordner in dem z.B. Sitzungsprotokolle
                    gespeichert werden, sollten die Dateinamen immer mit dem Datum beginnen (jjjj-mm-tt).";
                 break;
-                
+
             //Fotomoduleinstellungen
-                    
+
             case "photo_thumbs_row":
                 echo "Der hier angegebene Wert bestimmt wieviele Zeilen an Thumbnails auf einer Seite angezeigt werden.";
                 break;
-            
+
             case "photo_thumbs_column":
                 echo "Der hier angegebene Wert bestimmt wieviele Zeilen an Thumbnails auf einer Seite angezeigt werden.
                       Vorsicht: zuviele Thumbnails nebeneinander passen nicht ins Layout. Ggf. die Thumbnailskalierung
                         herunter setzen. ";
                 break;
-                
+
            case "photo_thumbs_scale":
                 echo "Hier kann festgelegt werden auf welchen Wert die l&auml;ngere Bildseite in der Thumbnailanzeige
                       skaliert werden soll. Vorsicht: Werden die Thumbnails zu breit, passen weniger nebeneinander.
                       Ggf. weniger Thumbnailspalten einstellen.";
                 break;
-           
+
            case "photo_save_scale":
                 echo "Beim hochladen werden alle Bilder neu Skaliert. Der hier eingegeben Pixelwert
                       ist der Parameter f&uuml;r die l&auml;ngere Seite des Bildes, egal ob das Bild im Hoch-
@@ -316,17 +316,17 @@ echo "
                       ist Vorsicht angebracht, da &uuml;ber und unter dem Bild noch genug Platz f&uuml;r Layout und Browser
                       sein muss. ";
                 break;
-                
+
            case "photo_image_text":
                 echo "Ist diese Funktion aktivier, wird in jedes angezeigte Bild das &#169;-Symbol und die Homepage
                       eingeblendet. Der Schriftzug wird nicht beim hochladen mit abgespeichert. Die Einblendung
                       erfolgt nur bei Bildern mit einer Skalierung &uuml;ber 200 Pixel der l&auml;ngeren Seite, also in der Regl nicht bei Thumbnails.";
                 break;
-                
+
            case "photo_preview_scale":
                 echo "Hier wird die H&ouml;he des jeweiligen Vorschaubildes in der Veranstaltungs&uuml;bersicht festgelegt.";
                 break;
-                        
+
             //Fotomodulhifen
 
             case "photo_up_help":
@@ -373,6 +373,14 @@ echo "
                     Die Veranstaltung ist z.Zt. gesperrt und wird Homepagebesuchern deswegen nicht angezeigt. Zum Freigeben bitte
                     den entsprechende Icon (<img src=\"$g_root_path/adm_program/images/key.png\" border=\"0\">)
                     in der Bearbeitungszeile nutzen.";
+                break;
+
+            //Captcha-Hilfen
+            case "captcha_help":
+                echo " <h3>Was ist das f&uuml;r ein Best&auml;tigungscode?</h3>
+                    Hierbei handelt es sich um ein Captcha. Ein Captcha dient zur Spamerkennung. Mit Hilfe des Bildes wird versucht festzustellen, ob das
+                    Formular von einem User oder einem Script/Spambot ausgef&uuml;llt wurde. <br /> Bitte trage den im Bild angezeigten
+                    4- bis 6-stelligen Code in das Formularfeld ein.";
                 break;
 
             default:
