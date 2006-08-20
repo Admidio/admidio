@@ -134,9 +134,12 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
 
     // Falls der User nicht eingeloggt ist, aber ein Captcha geschaltet ist,
     // muss natuerlich der Code ueberprueft werden
-    if ($_GET["mode"] == 1 && !$g_session_valid && strtoupper($_SESSION['captchacode']) != strtoupper($_POST['captcha']))
+    if ($_GET["mode"] == 1 && !$g_session_valid)
     {
-        $g_message->show("captcha_code");
+        if ( !isset($_SESSION['captchacode']) || strtoupper($_SESSION['captchacode']) != strtoupper($_POST['captcha']) )
+        {
+            $g_message->show("captcha_code");
+        }
     }
 
 
