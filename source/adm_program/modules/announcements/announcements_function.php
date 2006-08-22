@@ -8,10 +8,11 @@
  *
  * Uebergaben:
  *
- * ann_id:    ID der Ankuendigung, die angezeigt werden soll
+ * ann_id:   ID der Ankuendigung, die angezeigt werden soll
  * mode:     1 - Neue Ankuendigung anlegen
- *           2 - Ankuendigung löschen
- *           3 - Ankuendigung ändern
+ *           2 - Ankuendigung loeschen
+ *           3 - Ankuendigung aendern
+ *           4 - Frage, ob Ankuendigung geloescht werden soll
  * url:      kann beim Loeschen mit uebergeben werden
  * headline: Ueberschrift, die ueber den Ankuendigungen steht
  *           (Default) Ankuendigungen
@@ -51,12 +52,12 @@ if(isset($_GET["ann_id"]) && is_numeric($_GET["ann_id"]) == false && $_GET["ann_
 }
 
 if(is_numeric($_GET["mode"]) == false
-|| $_GET["mode"] < 1 || $_GET["mode"] > 3)
+|| $_GET["mode"] < 1 || $_GET["mode"] > 4)
 {
     $g_message->show("invalid");
 }
 
-if($_GET["mode"] == 2 || $_GET["mode"] == 3)
+if($_GET["mode"] == 2 || $_GET["mode"] == 3 || $_GET["mode"] == 4)
 {
     // pruefen, ob man die Ankuendigung bearbeiten darf
     $sql = "SELECT * FROM ". TBL_ANNOUNCEMENTS. " 
@@ -67,7 +68,7 @@ if($_GET["mode"] == 2 || $_GET["mode"] == 3)
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
 
-    if(mysql_num_rows($result) == 0)
+    if(!$row_ann = mysql_fetch_object($result))
     {
         $g_message->show("norights");
     }
@@ -163,6 +164,11 @@ elseif($_GET["mode"] == 2)
 
     $g_message->setForwardUrl($_GET["url"]);
     $g_message->show("delete");
+}
+elseif($_GET["mode"] == 4)
+{
+    $g_message->setForwardYesNo("$g_root_path/adm_program/modules/announcements/announcements_function.php?ann_id=". $_GET["ann_id"]. "&amp;mode=2&amp;url=$g_root_path/adm_program/modules/announcements/announcements.php");
+    $g_message->show("delete_announcement", $row_ann->ann_headline, "Löschen");
 }
 
 $g_message->show($err_code, $err_text);
