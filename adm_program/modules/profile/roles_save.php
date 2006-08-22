@@ -118,7 +118,7 @@ while($row = mysql_fetch_object($result_rolle))
         &&  $_POST["leader-$i"]==false 
         &&  $_POST["role-$i"]==true)
     {
-        $g_message->show("max_members_profile", $row->rol_name);
+        $g_message->show("max_members_profile", utf8_encode($row->rol_name));
     }
     $i++;
 

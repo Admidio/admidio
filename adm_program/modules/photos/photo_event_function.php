@@ -348,7 +348,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
     if($_GET["job"]=="delete_request")
     {
         $g_message->setForwardYesNo("$g_root_path/adm_program/modules/photos/photo_event_function.php?job=do_delete&pho_id=$pho_id");
-        $g_message->show("delete_veranst", $adm_photo["pho_name"]);
+        $g_message->show("delete_veranst", utf8_encode($adm_photo["pho_name"]));
     }
     
     
