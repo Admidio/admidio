@@ -104,9 +104,7 @@ if($role->rol_max_members!=NULL)
     }
     if($counter>$role->rol_max_members)
     {
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=max_members";
-        header($location);
-        exit();
+        $g_message->show("max_members");
     }  
     
     //Dateizeiger zurueck zum Anfang

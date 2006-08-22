@@ -39,9 +39,7 @@ require("../../system/common.php");
 if ($g_preferences['send_email_extern'] == 1)
 {
     // es duerfen oder koennen keine Mails ueber den Server verschickt werden
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=mail_extern";
-    header($location);
-    exit();
+    $g_message->show("mail_extern");
 }
 
 

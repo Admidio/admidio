@@ -118,9 +118,7 @@ while($row = mysql_fetch_object($result_rolle))
         &&  $_POST["leader-$i"]==false 
         &&  $_POST["role-$i"]==true)
     {
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=max_members_profile&err_text=$row->rol_name";
-        header($location);
-        exit();
+        $g_message->show("max_members_profile", $row->rol_name);
     }
     $i++;
 
@@ -243,9 +241,7 @@ foreach($parentRoles as $actRole)
 if($_GET['new_user'] == 1 && $count_assigned == 0)
 {
     // Neuem User wurden keine Rollen zugewiesen
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norolle";
-    header($location);
-    exit();
+    $g_message->show("norolle");
 }
 
 if($_GET['popup'] == 1)
@@ -284,7 +280,6 @@ if($_GET['popup'] == 1)
 else
 {
     // zur Ausgangsseite zurueck
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=save&url=". urlencode($_GET['url']). "&timer=2000";
-    header($location);
-    exit();
+    $g_message->setForwardUrl($_GET['url'], 2000);
+    $g_message->show("save");
 }

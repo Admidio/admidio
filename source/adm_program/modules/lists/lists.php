@@ -123,9 +123,7 @@ if($list_found == 0)
         {
             $err_code = "no_category_roles";    
         }
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_head=Hinweis";
-        header($location);
-        exit();
+        $g_message->show($err_code, "", "Hinweis");
     }
     else
     {
