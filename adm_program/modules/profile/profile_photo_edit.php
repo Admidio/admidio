@@ -12,6 +12,7 @@
  * job - save :   Welcher Teil des Skriptes soll ausgeführt werden
  *     - dont_save :
  *     - upload :
+ *     - msg_delete : Nachfrage, ob Profilfoto wirklich geloescht werden soll
  *
  ******************************************************************************
  *
@@ -48,7 +49,7 @@ if(isset($_GET["usr_id"]) && is_numeric($_GET["usr_id"]) == false)
 }
 
 if(isset($_GET["job"]) && $_GET["job"] != "save" && $_GET["job"]!="delete"
-&& $_GET["job"] != "dont_save" && $_GET["job"] != "upload")
+&& $_GET["job"] != "dont_save" && $_GET["job"] != "upload" && $_GET["job"] != "msg_delete")
 {
     $g_message->show("invalid");
 }
@@ -136,7 +137,14 @@ $bild="../../../adm_my_files/photos/".$user_id.".jpg";
         $g_message->show("profile_photo_update_cancel");
     }
     
-        /*****************************Bild loeschen*************************************/
+    /*********************** Nachfrage Bild loeschen *************************************/
+    if($_GET["job"]=="msg_delete")
+    {
+        $g_message->setForwardYesNo("$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$user_id&job=delete");
+        $g_message->show("delete_photo", "", "Löschen");
+    }    
+    
+    /***************************** Bild loeschen *************************************/
     if($_GET["job"]=="delete")
     {
         $sql="  UPDATE ". TBL_USERS. "
@@ -150,7 +158,7 @@ $bild="../../../adm_my_files/photos/".$user_id.".jpg";
         $g_message->show("profile_photo_deleted");
     }
     
-    /***********************Kontrollmechanismen*********************************/
+    /*********************** Kontrollmechanismen *********************************/
     //kontrollmechanismen
     if($_POST["upload"])
     {
@@ -228,7 +236,7 @@ require("../../../adm_config/body_top.php");
                 if(mysql_result($result_photo,0,"usr_photo")!=NULL)
                 {
                     echo"<img src=\"profile_photo_show.php?usr_id=$user_id\"\"><br>
-                    <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_photo&err_head=Foto L&ouml;schen&button=2&url=". urlencode("$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$user_id&job=delete"). "\"><img 
+                    <a href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=msg_delete&usr_id=$user_id\"><img 
                         src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Foto l&ouml;schen\" title=\"Foto l&ouml;schen\"></a>";
                 
                 }

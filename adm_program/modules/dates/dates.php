@@ -274,9 +274,8 @@ require("../../../adm_config/body_top.php");
                                     {
                                         echo "
                                         <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer\"
-                                            width=\"16\" height=\"16\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" ";
-                                            $load_url = urlencode("$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=$row->dat_id&amp;mode=2&amp;url=$g_root_path/adm_program/modules/dates/dates.php");
-                                            echo " onclick=\"self.location.href='$g_root_path/adm_program/system/err_msg.php?err_code=delete_date&amp;err_text=". urlencode($row->dat_headline). "&amp;err_head=L&ouml;schen&amp;button=2&amp;url=$load_url'\">";
+                                            width=\"16\" height=\"16\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"
+                                            onclick=\"self.location.href='$g_root_path/adm_program/modules/dates/dates_function.php?mode=5&dat_id=$row->dat_id'\">";
                                     }
                             }
                         echo "&nbsp;</div>

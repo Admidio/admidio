@@ -10,9 +10,10 @@
  *
  * dat_id: ID des Termins, der angezeigt werden soll
  * mode:   1 - Neuen Termin anlegen
- *         2 - Termin löschen
- *         3 - Termin ändern
+ *         2 - Termin loeschen
+ *         3 - Termin aendern
  *         4 - Termin im iCal-Format exportieren
+ *         5 - Frage, ob Termin geloescht werden soll
  * url:    kann beim Loeschen mit uebergeben werden
  *
  ******************************************************************************
@@ -56,12 +57,12 @@ if(isset($_GET["dat_id"]) && is_numeric($_GET["dat_id"]) == false && $_GET["dat_
 }
 
 if(is_numeric($_GET["mode"]) == false
-|| $_GET["mode"] < 1 || $_GET["mode"] > 4)
+|| $_GET["mode"] < 1 || $_GET["mode"] > 5)
 {
     $g_message->show("invalid");
 }
 
-if($_GET["mode"] == 2 || $_GET["mode"] == 3)
+if($_GET["mode"] == 2 || $_GET["mode"] == 3 || $_GET["mode"] == 5)
 {
     // pruefen, ob man den Termin bearbeiten darf
     $sql = "SELECT * FROM ". TBL_DATES. "
@@ -72,7 +73,7 @@ if($_GET["mode"] == 2 || $_GET["mode"] == 3)
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
 
-    if(mysql_num_rows($result) == 0)
+    if(!$row_dat = mysql_fetch_object($result))
     {
         $g_message->show("norights");
     }
@@ -216,9 +217,8 @@ elseif($_GET["mode"] == 2)
         $_GET["url"] = "$g_root_path/$g_main_page";
     }
 
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?id=$id&err_code=delete&url=". urlencode($_GET["url"]);
-    header($location);
-    exit();
+    $g_message->setForwardUrl($_GET["url"]);
+    $g_message->show("delete");
 }
 elseif($_GET["mode"] == 4)
 {
@@ -231,6 +231,11 @@ elseif($_GET["mode"] == 4)
 
     echo $date->getIcal($g_domain);
     exit();
+}
+elseif($_GET["mode"] == 5)
+{
+    $g_message->setForwardYesNo("$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=". $_GET["dat_id"]. "&amp;mode=2&amp;url=$g_root_path/adm_program/modules/dates/dates.php");
+    $g_message->show("delete_date", $row_dat->dat_headline, "Löschen");
 }
 
 $g_message->show($err_code, $err_text);
