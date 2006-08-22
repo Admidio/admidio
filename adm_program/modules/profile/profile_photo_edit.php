@@ -37,9 +37,7 @@ require("../../system/login_valid.php");
 //pruefen ob in den aktuellen Servereinstellungen file_uploads auf ON gesetzt ist...
 if (ini_get('file_uploads') != '1')
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=no_file_upload_server";
-    header($location);
-    exit();
+    $g_message->show("no_file_upload_server");
 }
 
 // Uebergabevariablen pruefen
@@ -121,11 +119,8 @@ $bild="../../../adm_my_files/photos/".$user_id.".jpg";
         }
 
         // zur Ausgangsseite zurueck
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=profile_photo_update&timer=2000&url=".
-                    urlencode("$g_root_path/adm_program/modules/profile/profile.php?user_id=".$user_id."");
-        header($location);
-        exit();
-
+        $g_message->setForwardUrl("$g_root_path/adm_program/modules/profile/profile.php?user_id=$user_id", 2000);
+        $g_message->show("profile_photo_update");
     }
         /*****************************Bild nicht speichern*************************************/
     if($_GET["job"]=="dont_save")
@@ -137,11 +132,8 @@ $bild="../../../adm_my_files/photos/".$user_id.".jpg";
         }
 
         // zur Ausgangsseite zurueck
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=profile_photo_update_cancel&timer=2000&url=".
-                    urlencode("$g_root_path/adm_program/modules/profile/profile.php?user_id=".$user_id."");
-        header($location);
-        exit();
-
+        $g_message->setForwardUrl("$g_root_path/adm_program/modules/profile/profile.php?user_id=$user_id", 2000);
+        $g_message->show("profile_photo_update_cancel");
     }
     
         /*****************************Bild loeschen*************************************/
@@ -154,11 +146,8 @@ $bild="../../../adm_my_files/photos/".$user_id.".jpg";
         db_error($result);
         
         // zur Ausgangsseite zurueck
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=profile_photo_deleted&timer=2000&url=".
-                    urlencode("$g_root_path/adm_program/modules/profile/profile.php?user_id=".$user_id."");
-        header($location);
-        exit();
-
+        $g_message->setForwardUrl("$g_root_path/adm_program/modules/profile/profile.php?user_id=$user_id", 2000);
+        $g_message->show("profile_photo_deleted");
     }
     
     /***********************Kontrollmechanismen*********************************/
@@ -175,18 +164,14 @@ $bild="../../../adm_my_files/photos/".$user_id.".jpg";
         //Kontrolle ob Bilder ausgewaehlt wurden
         if(!file_exists($_FILES["bilddatei"]["tmp_name"]))
         {
-            $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=profile_photo_nopic";
-            header($location);
-            exit();
+            $g_message->show("profile_photo_nopic");
         }
 
         //Dateiendung
         $bildinfo=getimagesize($_FILES["bilddatei"]["tmp_name"]);
         if ($_FILES["bilddatei"]["name"]!=NULL && $bildinfo['mime']!="image/jpeg")
         {
-            $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=dateiendungphotoup";
-            header($location);
-            exit();
+            $g_message->show("dateiendungphotoup");
         }
 
    }//Kontrollmechanismen

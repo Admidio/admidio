@@ -259,9 +259,7 @@ if($leiter == 0)
     if(mysql_num_rows($result_lst) == 0)
     {
         // Es sind keine Daten vorhanden !
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=nodata";
-        header($location);
-        exit();
+        $g_message->show("nodata");
     }
 }
 

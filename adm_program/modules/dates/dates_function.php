@@ -120,26 +120,18 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
                     }
                     else
                     {
-                        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=uhrzeit";
-                        header($location);
-                        exit();
+                        $g_message->show("uhrzeit");
                     }
                 }
                 else
                 {
-                    $err_text = "Datum Ende";
-                    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=datum&err_text=$err_text";
-                    header($location);
-                    exit();
+                    $g_message->show("datum", "Datum Ende");
                 }
 
                 // Enddatum muss groesser oder gleich dem Startdatum sein
                 if(strcmp($dt_datum_von,$dt_datum_bis) > 0)
                 {
-                    $err_text = "Datum Ende oder Uhrzeit Ende";
-                    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=datum&err_text=$err_text";
-                    header($location);
-                    exit();
+                    $g_message->show("datum", "Datum Ende oder Uhrzeit Ende");
                 }
 
                 $act_date = date("Y.m.d G:i:s", time());
@@ -241,8 +233,5 @@ elseif($_GET["mode"] == 4)
     exit();
 }
 
-$location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text";
-header($location);
-exit();
-
+$g_message->show($err_code, $err_text);
 ?>

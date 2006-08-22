@@ -79,9 +79,7 @@ if($user_id > 0)
         // keine Webanmeldung, dann schauen, ob User überhaupt Mitglied in der Gliedgemeinschaft ist
         if(isMember($user_id) == false)
         {
-            $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=norolle";
-            header($location);
-            exit();
+            $g_message->show("norolle");
         }
     }
 }
@@ -191,9 +189,7 @@ else
 
 if(strlen($err_code) > 0)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text";
-    header($location);
-    exit();
+    $g_message->show($err_code, $err_text);
 }
 
 // Geburtstag fuer die DB formatieren
@@ -217,9 +213,7 @@ else
 
 if($ret_code != 0)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=&err_text=$ret_code";
-    header($location);
-    exit();
+    $g_message->show("mysql", $ret_code);
 }
 
 /*------------------------------------------------------------*/
@@ -349,8 +343,8 @@ if($user_id == 0)
 else
 {
     // zur Profilseite zurueckkehren und die URL, von der die Profilseite aufgerufen wurde uebergeben
-    $load_url = urlencode("$g_root_path/adm_program/modules/profile/profile.php?user_id=$user_id&url=$url");
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=save&timer=2000&url=$load_url";
+    $g_message->setForwardUrl("$g_root_path/adm_program/modules/profile/profile.php?user_id=$user_id&url=$url", 2000):
+    $g_message->show("save");
 }
 header($location);
 exit();

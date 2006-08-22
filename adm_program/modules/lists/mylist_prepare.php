@@ -49,9 +49,7 @@ if(strlen($_POST["role"]) == 0)
 
 if(strlen($err_text) != 0)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=feld&err_text=$err_text";
-    header($location);
-    exit();
+    $g_message->show("feld", $err_text);
 }
 
 // als erstes wird die Rolle uebergeben
