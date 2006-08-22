@@ -168,7 +168,7 @@ elseif($_GET["mode"] == 2)
 elseif($_GET["mode"] == 4)
 {
     $g_message->setForwardYesNo("$g_root_path/adm_program/modules/announcements/announcements_function.php?ann_id=". $_GET["ann_id"]. "&amp;mode=2&amp;url=$g_root_path/adm_program/modules/announcements/announcements.php");
-    $g_message->show("delete_announcement", $row_ann->ann_headline, "Löschen");
+    $g_message->show("delete_announcement", utf8_encode($row_ann->ann_headline), "Löschen");
 }
 
 $g_message->show($err_code, $err_text);
