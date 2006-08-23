@@ -20,20 +20,14 @@
  *
  * if ( strtoupper($_SESSION['captchacode']) != strtoupper($_POST['captcha']) )
  * {
- *     echo "Das Captcha wurde nicht richtig geloest...";
+ * 		echo "Das Captcha wurde nicht richtig geloest...";
  * }
  * else
  * {
- *	   echo "Das Captcha wurde richtig geloest!";
+ *		echo "Das Captcha wurde richtig geloest!";
  * }
  *
- * Nach erfolgreichem Eintragen (z.B. eines Gästebucheintrages) in die DB
- * muss der CaptchaCode natuerlich aus der Session geloescht werden:
  *
- * if (isset($_SESSION['captchacode']))
- * {
- *     unset($_SESSION['captchacode']);
- * }
  *
  ******************************************************************************
  *
@@ -58,8 +52,11 @@ class Captcha
 
     function Captcha()
     {
-        // Erst einmal die Schriftart fuer das Captcha festlegen
-        $this->font = "mr_phone1.ttf";
+        $absolute_path = substr(__FILE__, 0, strpos(__FILE__, "captcha_class.php"));
+
+        // Hier wird jetzt die Schriftart festgelegt...
+        $this->font = $absolute_path. "mr_phone1.ttf";
+
 
         // Nun die Bildgroesse des Captchas festlegen
         $this->width = 200;
