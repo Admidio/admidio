@@ -12,7 +12,12 @@
  *       2 - User NUR aus der Gliedgemeinschaft entfernen
  *       3 - User aus der Datenbank loeschen
  *       4 - User E-Mail mit neuen Zugangsdaten schicken
+ *       5 - Frage, ob Zugangsdaten geschickt werden soll
+ *       6 - Frage, ob Mitglied geloescht werden soll
  * user_id - Id des Benutzers, der bearbeitet werden soll
+ * members - 1 : (Default) Nur Mitglieder der Gliedgemeinschaft anzeigen
+ *           0 : Mitglieder, Ehemalige, Mitglieder anderer Gliedgemeinschaften
+ * letter: alle User deren Nachnamen mit dem Buchstaben beginnt, werden angezeigt 
  *
  ******************************************************************************
  *
@@ -48,7 +53,7 @@ if(!editUser())
 // Uebergabevariablen pruefen
 
 if(is_numeric($_GET["mode"]) == false
-|| $_GET["mode"] < 1 || $_GET["mode"] > 4)
+|| $_GET["mode"] < 1 || $_GET["mode"] > 6)
 {
     $g_message->show("invalid");
 }
@@ -66,6 +71,20 @@ if(array_key_exists('url', $_GET) && strlen($_GET['url']) > 0)
 else
 {
     $url = urlencode(getHttpReferer());
+}
+
+if(isset($_GET['members']) && is_numeric($_GET['members']))
+{
+    $members = $_GET['members'];
+}
+else
+{
+    $members = 1;
+}
+
+if(isset($_GET['letter']) && strlen($_GET["letter"]) > 2)
+{
+    $g_message->show("invalid");
 }
 
 if($_GET["mode"] == 1)
@@ -292,7 +311,25 @@ elseif($_GET["mode"] == 4)
         }
     }
 }
+elseif($_GET["mode"] == 5)
+{
+    // Fragen, ob Zugangsdaten verschickt werden sollen
+    $user = new User($g_adm_con);
+    $user->GetUser($_GET['user_id']);
+    $load_url = urlencode("$g_root_path/adm_program/administration/members/members.php?members=". $_GET['members']. "&letter=". $_GET['letter']);
+    $g_message->setForwardYesNo("$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET["user_id"]. "&mode=4&url=$load_url");
+    $g_message->show("send_new_login", utf8_encode("$user->first_name $user->last_name"));
+}
+elseif($_GET["mode"] == 6)
+{
+    // Frage, ob Mitglied geloescht werden soll
+    $user = new User($g_adm_con);
+    $user->GetUser($_GET['user_id']);
+    $load_url = urlencode("$g_root_path/adm_program/administration/members/members.php?members=". $_GET['members']. "&letter=". $_GET['letter']);
+    $g_message->setForwardYesNo("$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET["user_id"]. "&mode=2&url=$load_url");
+    $g_message->show("delete_member", utf8_encode("$user->first_name $user->last_name"), "Entfernen");
+}
 
-$g_message->setForwardUrl($url, 2000);
+$g_message->setForwardUrl(urldecode($url), 2000);
 $g_message->show($err_code, $err_text);
 ?>
