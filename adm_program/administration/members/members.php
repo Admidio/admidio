@@ -324,8 +324,7 @@ require("../../../adm_config/body_top.php");
                                 {
                                     // Link um E-Mail mit neuem Passwort zu zuschicken
                                     // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
-                                    $load_url = urlencode("$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->usr_id&mode=4&url=$g_root_path/adm_program/administration/members/members.php?members=$members&letter=$letter");
-                                    echo "<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=send_new_login&err_text=". urlencode("$row->usr_first_name $row->usr_last_name"). "&button=2&url=$load_url\"><img 
+                                    echo "<a href=\"$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->usr_id&mode=5&members=$members&letter=$letter\"><img 
                                         src=\"$g_root_path/adm_program/images/key.png\" border=\"0\" alt=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\" 
                                         title=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\"></a>&nbsp;";
                                 }
@@ -361,8 +360,7 @@ require("../../../adm_config/body_top.php");
                                 // Mitglieder nicht loeschen, wenn sie noch in anderen Organisationen aktiv sind
                                 if($is_member == true)
                                 {
-                                    $load_url = urlencode("$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->usr_id&mode=2");
-                                    echo "<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_member&err_text=$row->usr_first_name $row->usr_last_name&err_head=Entfernen&button=2&url=$load_url\"><img 
+                                    echo "<a href=\"$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->usr_id&mode=6&members=$members&letter=$letter\"><img 
                                         src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Benutzer entfernen\" title=\"Benutzer entfernen\"></a>";
                                 }
                             }
