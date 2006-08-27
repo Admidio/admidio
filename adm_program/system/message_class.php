@@ -100,6 +100,10 @@ class Message
     // die Meldung wird ausgegeben
     function show($msg_key = "" , $msg_variable1 = "", $msg_headline = "")
     {
+    	// noetig, da dies bei den includes benoetigt wird
+    	global $g_session_valid;
+    	global $g_root_path;
+    	
         // Uebergabevariablen auswerten
         if(strlen($msg_key) > 0)
         {
