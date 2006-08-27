@@ -343,7 +343,7 @@ if($user_id == 0)
 else
 {
     // zur Profilseite zurueckkehren und die URL, von der die Profilseite aufgerufen wurde uebergeben
-    $g_message->setForwardUrl("$g_root_path/adm_program/modules/profile/profile.php?user_id=$user_id&url=$url", 2000):
+    $g_message->setForwardUrl("$g_root_path/adm_program/modules/profile/profile.php?user_id=$user_id&url=$url", 2000);
     $g_message->show("save");
 }
 header($location);
