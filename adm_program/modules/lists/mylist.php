@@ -43,10 +43,11 @@ if(array_key_exists("rol_id", $_GET))
     {
         $g_message->show("invalid");
     }   
+    $rol_id = $_GET["rol_id"];
 }
 else
 {
-    $_GET["rol_id"] = 0;
+    $rol_id = 0;
 }   
 
 if(!isset($_GET['active_role']))
@@ -91,7 +92,7 @@ if(isset($_SESSION['mylist_request']))
     $form_values = $_SESSION['mylist_request'];
     unset($_SESSION['mylist_request']);
     $rol_id = $form_values['role'];
-    if($form_values['former'] == 1)
+    if(isset($form_values['former']) && $form_values['former'] == 1)
     {
         $active_member = 0;
     }

@@ -38,9 +38,17 @@ if(!isModerator())
 
 // Uebergabevariablen pruefen
 
-if(isset($_GET["rol_id"]) && is_numeric($_GET["rol_id"]) == false)
+if(isset($_GET["rol_id"]))
 {
-    $g_message->show("invalid");
+	if(is_numeric($_GET["rol_id"]) == false)
+	{
+    	$g_message->show("invalid");
+	}
+	$rol_id = $_GET["rol_id"];
+}
+else
+{
+	$rol_id = 0;
 }
 
 $rolle          = "";
@@ -70,10 +78,10 @@ $beitrag        = null;
 // Wenn eine Rollen-ID uebergeben wurde, soll die Rolle geaendert werden
 // -> Felder mit Daten der Rolle vorbelegen
 
-if ($_GET['rol_id'] != 0)
+if ($rol_id > 0)
 {
     $sql    = "SELECT * FROM ". TBL_ROLES. " WHERE rol_id = {0}";
-    $sql    = prepareSQL($sql, array($_GET['rol_id']));
+    $sql    = prepareSQL($sql, array($rol_id));
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
 
@@ -144,9 +152,9 @@ require("../../../adm_config/body_top.php");
    echo "
    <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
 
-   <form action=\"roles_function.php?rol_id=". $_GET['rol_id']. "&amp;mode=2\" method=\"post\" name=\"TerminAnlegen\">
+   <form action=\"roles_function.php?rol_id=$rol_id&amp;mode=2\" method=\"post\" name=\"TerminAnlegen\">
       <div class=\"formHead\">";
-         if($_GET['rol_id'] > 0)
+         if($rol_id > 0)
             echo strspace("Rolle &auml;ndern", 2);
          else
             echo strspace("Rolle anlegen", 2);
@@ -411,7 +419,7 @@ require("../../../adm_config/body_top.php");
             <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
             &nbsp;Speichern</button>
          </div>";
-         if($row_ar->rol_usr_id_change > 0)
+         if($rol_id > 0 && $row_ar->rol_usr_id_change > 0)
          {
             // Angabe ueber die letzten Aenderungen
             $sql    = "SELECT usr_first_name, usr_last_name

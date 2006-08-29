@@ -157,7 +157,6 @@ if(strlen($user->last_name) > 0)
         {
             $sql = $sql. " AND usf_locked = 0 ";
         }
-        $sql = prepareSQL($sql, array($row_id));
         $result_msg = mysql_query($sql, $g_adm_con);
         db_error($result_msg);
 

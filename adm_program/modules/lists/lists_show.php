@@ -438,12 +438,15 @@ for($j = 0; $j < $max_count; $j++)
             }
             else
             {
-                $col_name = $arr_col_name[$arr_fields[$i]];
+            	if($i > 0)	// usr_id wird nicht angezeigt
+            	{
+                	$col_name = $arr_col_name[$arr_fields[$i]];
                 
-                if($arr_fields[$i] == "usr_gender")
-                {
-                    // Icon des Geschlechts zentriert darstellen
-                    $align = "center";
+	                if($arr_fields[$i] == "usr_gender")
+	                {
+	                    // Icon des Geschlechts zentriert darstellen
+	                    $align = "center";
+	                }
                 }
             }
             
