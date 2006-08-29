@@ -211,6 +211,7 @@ elseif($_GET["mode"] == 2)
     }
 
     $err_code = "delete_member_ok";
+    $err_text = utf8_encode($g_current_organization->longname);
 }
 elseif($_GET["mode"] == 3)
 {
@@ -327,7 +328,9 @@ elseif($_GET["mode"] == 6)
     $user->GetUser($_GET['user_id']);
     $load_url = urlencode("$g_root_path/adm_program/administration/members/members.php?members=". $_GET['members']. "&letter=". $_GET['letter']);
     $g_message->setForwardYesNo("$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET["user_id"]. "&mode=2&url=$load_url");
-    $g_message->show("delete_member", utf8_encode("$user->first_name $user->last_name"), "Entfernen");
+    $g_message->addVariableContent(utf8_encode("$user->first_name $user->last_name"));
+    $g_message->addVariableContent(utf8_encode($g_current_organization->longname));
+    $g_message->show("delete_member", "", "Entfernen");
 }
 
 $g_message->setForwardUrl(urldecode($url), 2000);

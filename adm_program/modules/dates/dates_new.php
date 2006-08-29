@@ -38,9 +38,17 @@ if(!editDate())
 
 // Uebergabevariablen pruefen
 
-if(isset($_GET["dat_id"]) && is_numeric($_GET["dat_id"]) == false)
+if(isset($_GET["dat_id"]))
 {
-    $g_message->show("invalid");
+	if(is_numeric($_GET["dat_id"]) == false)
+	{
+    	$g_message->show("invalid");
+	}
+	$dat_id = $_GET["dat_id"];
+}
+else
+{
+	$dat_id = 0;		
 }
 
 if(isset($_SESSION['dates_request']))
@@ -63,13 +71,13 @@ else
     // Wenn eine Termin-ID uebergeben wurde, soll der Termin geaendert werden
     // -> Felder mit Daten des Termins vorbelegen
     
-    if ($_GET["dat_id"] != 0)
+    if ($dat_id > 0)
     {
         $sql    = "SELECT * FROM ". TBL_DATES. " 
                     WHERE dat_id = {0}
                       AND (  dat_org_shortname = '$g_organization'
                           OR dat_global = 1) ";
-        $sql    = prepareSQL($sql, array($_GET['dat_id']));
+        $sql    = prepareSQL($sql, array($dat_id));
         $result = mysql_query($sql, $g_adm_con);
         db_error($result);
     
@@ -123,8 +131,8 @@ echo "</head>";
 require("../../../adm_config/body_top.php");
     echo "
     <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-        <form name=\"form\" action=\"dates_function.php?dat_id=". $_GET["dat_id"]. "&amp;mode=";
-            if($_GET["dat_id"] > 0)
+        <form name=\"form\" action=\"dates_function.php?dat_id=$dat_id&amp;mode=";
+            if($dat_id > 0)
             {
                 echo "3";
             }
@@ -135,7 +143,7 @@ require("../../../adm_config/body_top.php");
             echo "\" method=\"post\" name=\"TerminAnlegen\">
 
             <div class=\"formHead\">";
-                if($_GET["dat_id"] > 0)
+                if($dat_id > 0)
                 {
                     echo strspace("Termin &auml;ndern", 2);
                 }
@@ -166,7 +174,7 @@ require("../../../adm_config/body_top.php");
                         <div style=\"text-align: right; width: 25%; float: left;\">&nbsp;</div>
                         <div style=\"text-align: left; margin-left: 27%;\">
                             <input type=\"checkbox\" id=\"global\" name=\"global\" ";
-                            if($form_values['global'] == 1)
+                            if(isset($form_values['global']) && $form_values['global'] == 1)
                             {
                                 echo " checked=\"checked\" ";
                             }

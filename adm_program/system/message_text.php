@@ -69,11 +69,10 @@ $message_text = array(
         <b>%VAR1%</b> wirklich löschen ?</p>",
 
     "delete_member" =>
-        "Wollen Sie die Mitgliedschaft des Benutzers %VAR1% bei $g_current_organization->longname beenden ?",
+        "Wollen Sie die Mitgliedschaft des Benutzers %VAR1% bei %VAR2% beenden ?",
 
     "delete_member_ok" =>
-        "Die Mitgliedschaft des Benutzers bei $g_current_organization->longname
-        wurde erfolgreich beendet !",
+        "Die Mitgliedschaft des Benutzers bei %VAR1% wurde erfolgreich beendet !",
 
     "email_invalid" =>
         "Die E-Mail-Adresse ist nicht gültig.",
