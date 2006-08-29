@@ -90,33 +90,33 @@ function getHttpReferer()
 
     $exception = 0;
 
-    if($exception == 0)
-        $exception = substr_count($_SERVER['HTTP_REFERER'], "menue.htm");
-    if($exception == 0)
-        $exception = substr_count($_SERVER['HTTP_REFERER'], "status.php");
-    if($exception == 0)
-        $exception = substr_count($_SERVER['HTTP_REFERER'], "err_msg.php");
-    if($exception == 0)
-        $exception = substr_count($_SERVER['HTTP_REFERER'], "index.htm");
-    if($exception == 0)
-        $exception = substr_count($_SERVER['HTTP_REFERER'], "login.php");
-    if($exception == 0)
-    {
-        $tmp_url = $g_root_path. "/";
-        if(strcmp($_SERVER['HTTP_REFERER'], $tmp_url) == 0)
-        {
-            $exception = 1;
-        }
-    }
-
-    if($exception == 0)
-    {
-        return $_SERVER['HTTP_REFERER'];
-    }
-    else
-    {
-        return $g_root_path. "/". $g_main_page;
-    }
+	if(isset($_SERVER['HTTP_REFERER']))
+	{
+	    if($exception == 0)
+	        $exception = substr_count($_SERVER['HTTP_REFERER'], "menue.htm");
+	    if($exception == 0)
+	        $exception = substr_count($_SERVER['HTTP_REFERER'], "status.php");
+	    if($exception == 0)
+	        $exception = substr_count($_SERVER['HTTP_REFERER'], "err_msg.php");
+	    if($exception == 0)
+	        $exception = substr_count($_SERVER['HTTP_REFERER'], "index.htm");
+	    if($exception == 0)
+	        $exception = substr_count($_SERVER['HTTP_REFERER'], "login.php");
+	    if($exception == 0)
+	    {
+	        $tmp_url = $g_root_path. "/";
+	        if(strcmp($_SERVER['HTTP_REFERER'], $tmp_url) == 0)
+	        {
+	            $exception = 1;
+	        }
+	    }
+	
+	    if($exception == 0)
+	    {
+	        return $_SERVER['HTTP_REFERER'];
+	    }
+	}
+	return $g_root_path. "/". $g_main_page;
 }
 
 // Funktion prueft, ob ein User die uebergebene Rolle besitzt
