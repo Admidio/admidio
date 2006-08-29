@@ -132,7 +132,7 @@ if ($user_found >= 1)
         // die Startseite verweisen
         if(isset($_SESSION['login_forward_url']) == false)
         {
-        	$_SESSION['login_forward_url'] = home;
+        	$_SESSION['login_forward_url'] = "home";
         }
         
         // bevor zur entsprechenden Seite weitergeleitet wird, muss noch geprueft werden,

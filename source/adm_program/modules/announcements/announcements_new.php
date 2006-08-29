@@ -40,9 +40,17 @@ if(!editAnnouncements())
 
 // Uebergabevariablen pruefen
 
-if(isset($_GET["ann_id"]) && is_numeric($_GET["ann_id"]) == false)
+if(isset($_GET["ann_id"]))
 {
-	$g_message->show("invalid");
+	if(is_numeric($_GET["ann_id"]) == false)
+	{
+		$g_message->show("invalid");
+	}
+	$ann_id = $_GET["ann_id"];
+}
+else
+{
+	$ann_id = 0;
 }
 
 if(array_key_exists("headline", $_GET))
@@ -68,7 +76,7 @@ else
 	// Wenn eine Ankuendigungs-ID uebergeben wurde, soll die Ankuendigung geaendert werden
 	// -> Felder mit Daten der Ankuendigung vorbelegen
 
-	if ($_GET["ann_id"] != 0)
+	if ($ann_id > 0)
 	{
 	    $sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. " 
 	                WHERE ann_id = {0}
@@ -111,8 +119,8 @@ echo "</head>";
 require("../../../adm_config/body_top.php");
     echo "
     <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-        <form name=\"form\" action=\"announcements_function.php?ann_id=". $_GET["ann_id"]. "&amp;headline=". $_GET['headline']. "&amp;mode=";
-            if($_GET["ann_id"] > 0)
+        <form name=\"form\" action=\"announcements_function.php?ann_id=$ann_id&amp;headline=". $_GET['headline']. "&amp;mode=";
+            if($ann_id > 0)
             {
                 echo "3";
             }
@@ -123,7 +131,7 @@ require("../../../adm_config/body_top.php");
             echo "\" method=\"post\" name=\"AnkuendigungAnlegen\">
 
             <div class=\"formHead\">";
-                if($_GET["ann_id"] > 0)
+                if($ann_id > 0)
                 {
                     $formHeadline = $_GET["headline"]. " &auml;ndern";
                 }
@@ -168,7 +176,7 @@ require("../../../adm_config/body_top.php");
                         <div style=\"text-align: right; width: 25%; float: left;\">&nbsp;</div>
                         <div style=\"text-align: left; margin-left: 27%;\">
                             <input type=\"checkbox\" id=\"global\" name=\"global\" tabindex=\"3\" ";
-                            if($form_values['global'] == 1)
+                            if(isset($form_values['global']) && $form_values['global'] == 1)
                             {
                                 echo " checked=\"checked\" ";
                             }
