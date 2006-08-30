@@ -245,6 +245,9 @@ $message_text = array(
 
 
     //Fehlermeldungen Fotomodul
+    "no_photo_folder"=>
+        "Der Ordner adm_my_files/photos wurde nicht gefunden.",
+
     "photodateiphotoup" =>
         "Du hast keine Bilddatei ausgewählt, die hinzugefügt
         werden sollen.<br />",
