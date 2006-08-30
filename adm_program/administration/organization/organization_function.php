@@ -49,7 +49,14 @@ $err_code   = "";
 
 $g_current_organization->longname  = strStripTags($_POST["longname"]);
 $g_current_organization->homepage  = strStripTags($_POST["homepage"]);
-$g_current_organization->org_id_parent = $_POST["parent"];
+if(isset($_POST["parent"]))
+{
+	$g_current_organization->org_id_parent = $_POST["parent"];
+}
+else
+{
+	$g_current_organization->org_id_parent = null;
+}
 
 // *******************************************************************************
 // Pruefen, ob alle notwendigen Felder gefuellt sind
@@ -76,17 +83,17 @@ if(strlen($err_code) == 0)
     }
 }
 
-if($_POST["send_email_extern"] != 1)
+if(isset($_POST["send_email_extern"]) == false)
 {
     $_POST["send_email_extern"] = 0;
 }
 
-if($_POST["enable_bbcode"] != 1)
+if(isset($_POST["enable_bbcode"]) == false)
 {
     $_POST["enable_bbcode"] = 0;
 }
 
-if($_POST["enable_rss"] != 1)
+if(isset($_POST["enable_rss"]) == false)
 {
     $_POST["enable_rss"] = 0;
 }
@@ -99,6 +106,11 @@ if(strlen($_POST["max_email_attachment_size"]) == 0)
 if(strlen($_POST["max_file_upload_size"]) == 0)
 {
     $_POST["max_file_upload_size"] = 0;
+}
+
+if(isset($_POST["photo_image_text"]) == false)
+{
+    $_POST["photo_image_text"] = 0;
 }
 
 if ($err_code != "")

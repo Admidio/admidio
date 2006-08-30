@@ -35,9 +35,17 @@ require("../../system/login_valid.php");
 
 // Uebergabevariablen pruefen
 
-if(isset($_GET["user_id"]) && is_numeric($_GET["user_id"]) == false)
+if(isset($_GET["user_id"]))
 {
-    $g_message->show("invalid");
+	if(is_numeric($_GET["user_id"]) == false)
+	{
+    	$g_message->show("invalid");
+	}
+	$usr_id = $_GET["user_id"];
+}
+else
+{
+	$usr_id = 0;
 }
 
 // pruefen, ob Modus neues Mitglied erfassen
@@ -73,30 +81,20 @@ if(!editUser() && $_GET['user_id'] != $g_current_user->id)
     $g_message->show("norights");
 }
 
-// user_id und edit-Modus ermitteln
-if($a_new_user)
+if($a_new_user == false)
 {
-   if(strlen($_GET['user_id']) > 0)
-      $a_user_id = $_GET['user_id'];
-   else
-      $a_user_id = 0;
-}
-else
-{
-   $a_user_id = $_GET['user_id'];
-   
-   // jetzt noch schauen, ob User ueberhaupt Mitglied in der Gliedgemeinschaft ist
-   if(isMember($a_user_id) == false)
-   {
-        $g_message->show("norights");
-   }
+	// jetzt noch schauen, ob User ueberhaupt Mitglied in der Gliedgemeinschaft ist
+	if(isMember($usr_id) == false)
+	{
+		$g_message->show("norights");
+	}
 }
 
 // User auslesen
-if($a_user_id > 0)
+if($usr_id > 0)
 {
-   $user = new User($g_adm_con);
-    $user->GetUser($a_user_id);
+	$user = new User($g_adm_con);
+	$user->GetUser($usr_id);
 }
 
 echo "
@@ -116,14 +114,14 @@ echo "</head>";
 require("../../../adm_config/body_top.php");
     echo "
     <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-        <form action=\"profile_save.php?user_id=$a_user_id&amp;new_user=$a_new_user&amp;url=$url";
-        if($a_new_user && $a_user_id > 0) 
+        <form action=\"profile_save.php?user_id=$usr_id&amp;new_user=$a_new_user&amp;url=$url";
+        if($a_new_user && $usr_id > 0) 
         {
             echo "&amp;pw=$user->password";
         }
         echo "\" method=\"post\" name=\"ProfilAnzeigen\">
             <div class=\"formHead\">";
-                if($a_user_id == $g_current_user->id)
+                if($usr_id == $g_current_user->id)
                 {
                     echo strspace("Mein Profil", 2);
                 }
@@ -140,7 +138,7 @@ require("../../../adm_config/body_top.php");
                 <div>
                     <div style=\"text-align: right; width: 30%; float: left;\">Nachname:</div>
                     <div style=\"text-align: left; margin-left: 32%;\">";
-                        if($a_user_id == 0)
+                        if($usr_id == 0)
                         {
                             echo "<input type=\"text\" id=\"last_name\" name=\"last_name\" style=\"width: 200px;\" maxlength=\"30\" />";
                         }
@@ -158,7 +156,7 @@ require("../../../adm_config/body_top.php");
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 30%; float: left;\">Vorname:</div>
                     <div style=\"text-align: left; margin-left: 32%;\">";
-                        if($a_user_id == 0)
+                        if($usr_id == 0)
                         {
                             echo "<input type=\"text\" name=\"first_name\" style=\"width: 200px;\" maxlength=\"30\" />";
                         }
@@ -173,7 +171,7 @@ require("../../../adm_config/body_top.php");
                         }
                     echo "</div>
                 </div>";
-                if(!$a_user_id == 0)
+                if(!$usr_id == 0)
                 {
                     echo "<div style=\"margin-top: 6px;\">
                         <div style=\"text-align: right; width: 30%; float: left;\">Benutzername:</div>
@@ -188,12 +186,12 @@ require("../../../adm_config/body_top.php");
                     </div>";
 
                     // eigenes Passwort aendern, nur Webmaster duerfen Passwoerter von anderen aendern
-                    if(hasRole('Webmaster') || $g_current_user->id == $a_user_id )
+                    if(hasRole('Webmaster') || $g_current_user->id == $usr_id )
                     {
                         echo "<div style=\"margin-top: 6px;\">
                             <div style=\"text-align: right; width: 30%; float: left;\">Passwort:</div>
                             <div style=\"text-align: left; margin-left: 32%;\">
-                                <button name=\"password\" type=\"button\" value=\"Passwort &auml;ndern\" onclick=\"window.open('password.php?user_id=$a_user_id','Titel','width=350,height=260,left=310,top=200')\">
+                                <button name=\"password\" type=\"button\" value=\"Passwort &auml;ndern\" onclick=\"window.open('password.php?user_id=$usr_id','Titel','width=350,height=260,left=310,top=200')\">
                                 <img src=\"$g_root_path/adm_program/images/key.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Passwort &auml;ndern\">
                                 &nbsp;Passwort &auml;ndern</button>
                             </div>
@@ -330,7 +328,7 @@ require("../../../adm_config/body_top.php");
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 30%; float: left;\">E-Mail:</div>
                     <div style=\"text-align: left; margin-left: 32%;\">";
-                        if($a_user_id == 0)
+                        if($usr_id == 0)
                         {
                             echo "<input type=\"text\" name=\"email\" style=\"width: 300px;\" maxlength=\"50\" />";
                         }
@@ -373,12 +371,12 @@ require("../../../adm_config/body_top.php");
                     <div style=\"text-align: right; width: 30%; float: left;\">Geschlecht:</div>
                     <div style=\"text-align: left; margin-left: 32%;\">
                         <input type=\"radio\" id=\"female\" name=\"gender\" value=\"2\"";
-                            if($user->gender == 2)
+                            if($a_new_user == false && $user->gender == 2)
                                 echo " checked ";
                             echo "><label for=\"female\"><img src=\"$g_root_path/adm_program/images/female.png\" title=\"weiblich\" alt=\"weiblich\"></label>
                         &nbsp;
                         <input type=\"radio\" id=\"male\" name=\"gender\" value=\"1\"";
-                            if($user->gender == 1)
+                            if($a_new_user == false && $user->gender == 1)
                                 echo " checked ";
                             echo "><label for=\"male\"><img src=\"$g_root_path/adm_program/images/male.png\" title=\"m&auml;nnlich\" alt=\"m&auml;nnlich\"></label>
                     </div>
@@ -445,7 +443,7 @@ require("../../../adm_config/body_top.php");
                     }
                 }
 
-                // gruppierungsspezifische Felder einlesen
+                // organisationsspezifische Felder einlesen
                 if($a_new_user)
                 {
                     $sql = "SELECT *
@@ -495,7 +493,7 @@ require("../../../adm_config/body_top.php");
                             
                             if($row->usf_type == "CHECKBOX")
                             {
-                                if($row->usd_value == 1)
+                                if($a_new_user == false && $row->usd_value == 1)
                                 {
                                     echo " checked ";
                                 }
@@ -545,7 +543,7 @@ require("../../../adm_config/body_top.php");
                     &nbsp;Speichern</button>
                 </div>";
 
-                if($user->usr_id_change > 0)
+                if($a_new_user == false && $user->usr_id_change > 0)
                 {
                     // Angabe ueber die letzten Aenderungen
                     $sql    = "SELECT usr_first_name, usr_last_name

@@ -134,9 +134,9 @@ require("../../../adm_config/body_top.php");
 
         echo "<p>
             <span class=\"iconLink\">
-                <a href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?new_user=1\"><img 
+                <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?new_user=1\"><img 
                 class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Login\"></a>
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?new_user=1\">Benutzer anlegen</a>
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_new.php?new_user=1\">Benutzer anlegen</a>
             </span>
             &nbsp;&nbsp;&nbsp;&nbsp;";
 
@@ -334,7 +334,7 @@ require("../../../adm_config/body_top.php");
                                 }
 
                                 // nur Mitglieder der eigenen Organisation editieren
-                                echo "<a href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=$row->usr_id\"><img 
+                                echo "<a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$row->usr_id\"><img 
                                     src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Benutzerdaten bearbeiten\" title=\"Benutzerdaten bearbeiten\"></a>&nbsp;";
                             }
                             else

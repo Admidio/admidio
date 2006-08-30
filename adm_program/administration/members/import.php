@@ -39,22 +39,6 @@ if (ini_get('file_uploads') != '1')
     $g_message->show("no_fileuploads");
 }
 
-if($_GET['mode'] == 2)
-{
-    if(strlen($_FILES['userfile']['tmp_name']) == 0)
-    {
-        $g_message->show("feld", "Datei");
-    }
-
-    $_SESSION["file_lines"] = file($_FILES['userfile']['tmp_name']);
-    $_SESSION["value_separator"] = ",";
-
-    if(count($_SESSION["file_lines"]) == 0)
-    {
-        $g_message->show("file_not_exist");
-    }
-}
-
 //Beginn der Seite
 echo "
 <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
