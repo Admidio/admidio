@@ -35,18 +35,25 @@ require("../../system/email_class.php");
 
 // Uebergabevariablen pruefen
 
-if(isset($_GET["user_id"]) && is_numeric($_GET["user_id"]) == false)
+if(isset($_GET["user_id"]))
 {
-    $g_message->show("invalid");
+	if(is_numeric($_GET["user_id"]) == false)
+	{
+    	$g_message->show("invalid");
+	}
+	$usr_id  = $_GET['user_id'];
+}
+else
+{
+	$usr_id = 0;
 }
 
-$user_id  = $_GET['user_id'];
 $err_code = "";
 $err_text = "";
 
-if(!isset($_POST['login']))
+if(!isset($_POST['login_name']))
 {
-    $_POST['login'] = "";
+    $_POST['login_name'] = "";
 }
    
 // wenn URL uebergeben wurde zu dieser gehen, ansonsten zurueck
@@ -62,22 +69,22 @@ else
 /*------------------------------------------------------------*/
 // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
 /*------------------------------------------------------------*/
-if(!editUser() && $user_id != $g_current_user->id)
+if(!editUser() && $usr_id != $g_current_user->id)
 {
     $g_message->show("norights");
 }
 
 $user = new User($g_adm_con);
 
-if($user_id > 0)
+if($usr_id > 0)
 {
     // Userdaten aus Datenbank holen
-    $user->getUser($user_id);
+    $user->getUser($usr_id);
     
     if($user->valid == 1)
     {
         // keine Webanmeldung, dann schauen, ob User überhaupt Mitglied in der Gliedgemeinschaft ist
-        if(isMember($user_id) == false)
+        if(isMember($usr_id) == false)
         {
             $g_message->show("norolle");
         }
@@ -98,11 +105,14 @@ $user->fax        = strStripTags($_POST['fax']);
 $user->email      = strStripTags($_POST['email']);
 $user->homepage   = strStripTags($_POST['homepage']);
 $user->birthday   = strStripTags($_POST['birthday']);
-$user->gender     = $_POST['gender'];
-if($user->gender != 1 && $user->gender != 2)
+if(isset($_POST['gender']))
 {
-    // falls das Geschlecht nicht angegeben wurde, dann neutralen Wert eintragen
-    $user->gender = 0;
+	$user->gender = $_POST['gender'];
+}
+else
+{
+	// falls das Geschlecht nicht angegeben wurde, dann neutralen Wert eintragen
+	$user->gender = 0;
 }
 
 /*------------------------------------------------------------*/
@@ -133,7 +143,7 @@ if(strlen($user->last_name) > 0)
             {
                 $row = mysql_fetch_array($result);
 
-                if(strcmp($row[0], $user_id) != 0)
+                if(strcmp($row[0], $usr_id) != 0)
                 {
                     $err_code = "login_name";
                 }
@@ -149,7 +159,7 @@ if(strlen($user->last_name) > 0)
             }
         }
 
-        // Feldinhalt der gruppierungsspezifischen Felder pruefen
+        // Feldinhalt der organisationsspezifischen Felder pruefen
         $sql = "SELECT usf_name, usf_type
                   FROM ". TBL_USER_FIELDS. "
                  WHERE usf_org_shortname  = '$g_organization' ";
@@ -163,7 +173,8 @@ if(strlen($user->last_name) > 0)
         while($row = mysql_fetch_object($result_msg))
         {
             // ein neuer Wert vorhanden
-            if(strlen($_POST[urlencode($row->usf_name)]) > 0)
+            if(isset($_POST[urlencode($row->usf_name)]) 
+            && strlen($_POST[urlencode($row->usf_name)]) > 0)
             {
                 if($row->usf_type == "NUMERIC"
                 && !is_numeric($_POST[urlencode($row->usf_name)]))
@@ -201,7 +212,7 @@ if(strlen($user->birthday) > 0)
 // Benutzerdaten in Datenbank schreiben
 /*------------------------------------------------------------*/
 
-if($user_id > 0)
+if($usr_id > 0)
 {
     $ret_code = $user->update($g_current_user->id);
 }
@@ -215,60 +226,63 @@ if($ret_code != 0)
     $g_message->show("mysql", $ret_code);
 }
 
-/*------------------------------------------------------------*/
-// Messenger-Daten und gruppierungsspezifische Felder anlegen / updaten
-/*------------------------------------------------------------*/
-
-$sql = "SELECT usf_id, usf_name, usd_id, usd_value
-          FROM ". TBL_USER_FIELDS. " LEFT JOIN ". TBL_USER_DATA. "
-            ON usd_usf_id = usf_id
-           AND usd_usr_id         = {0}
-         WHERE (  usf_org_shortname IS NULL
-               OR usf_org_shortname  = '$g_organization' ) ";
-if(!isModerator())
+if($usr_id > 0)
 {
-    $sql = $sql. " AND usf_locked = 0 ";
-}
-$sql = prepareSQL($sql, array($user->id));
-$result_msg = mysql_query($sql, $g_adm_con);
-db_error($result_msg);
-
-while($row = mysql_fetch_object($result_msg))
-{
-    if(is_null($row->usd_value))
-    {
-        // noch kein Wert vorhanden -> neu einfuegen
-        if(strlen(trim($_POST[urlencode($row->usf_name)])) > 0)
-        {
-            $sql = "INSERT INTO ". TBL_USER_DATA. " (usd_usr_id, usd_usf_id, usd_value)
-                                             VALUES ({0}, $row->usf_id, '". $_POST[urlencode($row->usf_name)]. "') ";
-            $sql = prepareSQL($sql, array($user->id));
-            $result = mysql_query($sql, $g_adm_con);
-            db_error($result);
-        }
-    }
-    else
-    {
-        // auch ein neuer Wert vorhanden
-        if(strlen(trim($_POST[urlencode($row->usf_name)])) > 0)
-        {
-            if($_POST[urlencode($row->usf_name)] != $row->usd_value)
-            {
-                $sql = "UPDATE ". TBL_USER_DATA. " SET usd_value = {0}
-                         WHERE usd_id = $row->usd_id ";
-                $sql = prepareSQL($sql, array($_POST[urlencode($row->usf_name)]));
-                $result = mysql_query($sql, $g_adm_con);
-                db_error($result);
-            }
-        }
-        else
-        {
-            $sql = "DELETE FROM ". TBL_USER_DATA. "
-                     WHERE usd_id = $row->usd_id ";
-            $result = mysql_query($sql, $g_adm_con);
-            db_error($result);
-        }
-    }
+	/*------------------------------------------------------------*/
+	// Messenger-Daten und gruppierungsspezifische Felder anlegen / updaten
+	/*------------------------------------------------------------*/
+	
+	$sql = "SELECT usf_id, usf_name, usd_id, usd_value
+	          FROM ". TBL_USER_FIELDS. " LEFT JOIN ". TBL_USER_DATA. "
+	            ON usd_usf_id = usf_id
+	           AND usd_usr_id         = {0}
+	         WHERE (  usf_org_shortname IS NULL
+	               OR usf_org_shortname  = '$g_organization' ) ";
+	if(!isModerator())
+	{
+	    $sql = $sql. " AND usf_locked = 0 ";
+	}
+	$sql = prepareSQL($sql, array($user->id));
+	$result_msg = mysql_query($sql, $g_adm_con);
+	db_error($result_msg);
+	
+	while($row = mysql_fetch_object($result_msg))
+	{
+	    if(is_null($row->usd_value))
+	    {
+	        // noch kein Wert vorhanden -> neu einfuegen
+	        if(strlen(trim($_POST[urlencode($row->usf_name)])) > 0)
+	        {
+	            $sql = "INSERT INTO ". TBL_USER_DATA. " (usd_usr_id, usd_usf_id, usd_value)
+	                                             VALUES ({0}, $row->usf_id, '". $_POST[urlencode($row->usf_name)]. "') ";
+	            $sql = prepareSQL($sql, array($user->id));
+	            $result = mysql_query($sql, $g_adm_con);
+	            db_error($result);
+	        }
+	    }
+	    else
+	    {
+	        // auch ein neuer Wert vorhanden
+	        if(strlen(trim($_POST[urlencode($row->usf_name)])) > 0)
+	        {
+	            if($_POST[urlencode($row->usf_name)] != $row->usd_value)
+	            {
+	                $sql = "UPDATE ". TBL_USER_DATA. " SET usd_value = {0}
+	                         WHERE usd_id = $row->usd_id ";
+	                $sql = prepareSQL($sql, array($_POST[urlencode($row->usf_name)]));
+	                $result = mysql_query($sql, $g_adm_con);
+	                db_error($result);
+	            }
+	        }
+	        else
+	        {
+	            $sql = "DELETE FROM ". TBL_USER_DATA. "
+	                     WHERE usd_id = $row->usd_id ";
+	            $result = mysql_query($sql, $g_adm_con);
+	            db_error($result);
+	        }
+	    }
+	}
 }
 
 if($user->valid == 0)
@@ -334,7 +348,7 @@ if($user->valid == 0)
 // auf die richtige Seite weiterleiten
 /*------------------------------------------------------------*/
 
-if($user_id == 0)
+if($usr_id == 0)
 {
     // neuer User -> Rollen zuordnen
     $location = "Location: roles.php?user_id=$user->id&new_user=1&url=$url";
@@ -342,7 +356,7 @@ if($user_id == 0)
 else
 {
     // zur Profilseite zurueckkehren und die URL, von der die Profilseite aufgerufen wurde uebergeben
-    $g_message->setForwardUrl("$g_root_path/adm_program/modules/profile/profile.php?user_id=$user_id&url=$url", 2000);
+    $g_message->setForwardUrl("$g_root_path/adm_program/modules/profile/profile.php?user_id=$usr_id&url=$url", 2000);
     $g_message->show("save");
 }
 header($location);

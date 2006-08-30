@@ -39,6 +39,21 @@ if(!isModerator())
     $g_message->show("norights");
 }
 
+// Uebergabevariablen pruefen
+
+if(isset($_GET["rlc_id"]))
+{
+	if(is_numeric($_GET["rlc_id"]) == false)
+	{
+		$g_message->show("invalid");
+	}
+	$rlc_id = $_GET["rlc_id"];
+}
+else
+{
+	$rlc_id = 0;
+}
+
 // wenn URL uebergeben wurde zu dieser gehen, ansonsten zurueck
 if(array_key_exists('url', $_GET))
 {
@@ -55,10 +70,10 @@ $category_locked = 0;
 // Wenn eine Feld-ID uebergeben wurde, soll das Feld geaendert werden
 // -> Felder mit Daten des Feldes vorbelegen
 
-if ($_GET["rlc_id"] != 0)
+if($rlc_id > 0)
 {
     $sql    = "SELECT * FROM ". TBL_ROLE_CATEGORIES. " WHERE rlc_id = {0}";
-    $sql    = prepareSQL($sql, array($_GET['rlc_id']));
+    $sql    = prepareSQL($sql, array($rlc_id));
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
 
@@ -87,9 +102,9 @@ echo "</head>";
 
 require("../../../adm_config/body_top.php");
     echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-        <form action=\"categories_function.php?rlc_id=". $_GET['rlc_id']. "&amp;mode=1&amp;url=$url\" method=\"post\" id=\"edit_category\">
+        <form action=\"categories_function.php?rlc_id=$rlc_id&amp;mode=1&amp;url=$url\" method=\"post\" id=\"edit_category\">
             <div class=\"formHead\">";
-                if($_GET['rlc_id'] > 0)
+                if($rlc_id > 0)
                 {
                     echo strspace("Kategorie ändern");
                 }

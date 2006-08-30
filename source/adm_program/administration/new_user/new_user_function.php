@@ -139,13 +139,6 @@ elseif($_GET["mode"] == 3)
       <script language=\"JavaScript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
       <![endif]-->";
 
-      if($_GET['timer'] > 0)
-      {
-         echo "<script language=\"JavaScript1.2\" type=\"text/javascript\"><!--\n
-               window.setTimeout(\"window.location.href='". $_GET['url']. "'\", ". $_GET['timer']. ");\n
-               //--></script>";
-      }
-
       require("../../../adm_config/header.php");
    echo "</head>";
 
@@ -173,7 +166,7 @@ elseif($_GET["mode"] == 3)
                &nbsp;Zur&uuml;ck</button>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <button name=\"anlegen\" type=\"button\" value=\"anlegen\"
-               onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=". $_GET['new_user_id']. "&amp;new_user=1&amp;url=". urlencode("$g_root_path/adm_program/administration/new_user/new_user.php"). "'\">
+               onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_new.php?user_id=". $_GET['new_user_id']. "&amp;new_user=1&amp;url=". urlencode("$g_root_path/adm_program/administration/new_user/new_user.php"). "'\">
                <img src=\"$g_root_path/adm_program/images/user_add.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer anlegen\">
                &nbsp;Anlegen</button>
             &nbsp;&nbsp;&nbsp;&nbsp;

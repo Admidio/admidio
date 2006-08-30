@@ -41,9 +41,17 @@ if(!isModerator())
 
 // Uebergabevariablen pruefen
 
-if(isset($_GET["usf_id"]) && is_numeric($_GET["usf_id"]) == false)
+if(isset($_GET["usf_id"]))
 {
-    $g_message->show("invalid");
+	if(is_numeric($_GET["usf_id"]) == false)
+	{
+    	$g_message->show("invalid");
+	}
+	$usf_id = $_GET["usf_id"];
+}
+else
+{
+	$usf_id = 0;
 }
 
 // wenn URL uebergeben wurde zu dieser gehen, ansonsten zurueck
@@ -64,10 +72,10 @@ $field_locked      = 0;
 // Wenn eine Feld-ID uebergeben wurde, soll das Feld geaendert werden
 // -> Felder mit Daten des Feldes vorbelegen
 
-if ($_GET["usf_id"] != 0)
+if($usf_id > 0)
 {
     $sql    = "SELECT * FROM ". TBL_USER_FIELDS. " WHERE usf_id = {0}";
-    $sql    = prepareSQL($sql, array($_GET['usf_id']));
+    $sql    = prepareSQL($sql, array($usf_id));
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
 
@@ -99,9 +107,9 @@ echo "</head>";
 
 require("../../../adm_config/body_top.php");
     echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-        <form action=\"field_function.php?usf_id=". $_GET['usf_id']. "&amp;mode=1&amp;url=$url\" method=\"post\" id=\"edit_field\">
+        <form action=\"field_function.php?usf_id=$usf_id&amp;mode=1&amp;url=$url\" method=\"post\" id=\"edit_field\">
             <div class=\"formHead\" style=\"width: 400px\">";
-                if($_GET['usf_id'] > 0)
+                if($usf_id > 0)
                 {
                     echo strspace("Feld ändern", 2);
                 }

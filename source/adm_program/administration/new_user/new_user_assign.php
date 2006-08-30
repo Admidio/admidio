@@ -216,7 +216,7 @@ echo "
 
 <p>Falls der Benutzer noch nicht existiert:</p>
 <p><button name=\"neu\" type=\"button\" value=\"neu\"
-   onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=". $_GET['new_user_id']. "&amp;new_user=1&amp;url=". urlencode("$g_root_path/adm_program/administration/new_user/new_user.php"). "'\">
+   onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_new.php?user_id=". $_GET['new_user_id']. "&amp;new_user=1&amp;url=". urlencode("$g_root_path/adm_program/administration/new_user/new_user.php"). "'\">
 <img src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Neuer Benutzer\">
 &nbsp;Neuer Benutzer</button></p>
 

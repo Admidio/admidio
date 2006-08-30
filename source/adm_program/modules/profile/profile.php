@@ -613,9 +613,9 @@ require("../../../adm_config/body_top.php");
                     </span>
                     &nbsp;&nbsp;&nbsp;&nbsp;                    
                     <span class=\"iconLink\">
-                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=$a_user_id&amp;url=$url\"><img
+                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$a_user_id&amp;url=$url\"><img
                          class=\"iconLink\" src=\"$g_root_path/adm_program/images/edit.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Profildaten &auml;ndern\"></a>
-                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_edit.php?user_id=$a_user_id&amp;url=$url\">Profildaten &auml;ndern</a>
+                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$a_user_id&amp;url=$url\">Profildaten &auml;ndern</a>
                     </span>";
                 }                
             echo "</div>
