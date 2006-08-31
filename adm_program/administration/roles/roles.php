@@ -100,7 +100,7 @@ require("../../../adm_config/body_top.php");
                 src=\"$g_root_path/adm_program/images/$image\" style=\"vertical-align: middle;\" border=\"0\" alt=\"$description_lnk\"></a>
                 <a class=\"iconLink\" href=\"roles.php?inactive=$valid\">$description_lnk</a>
             </span>
-			&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;
             <span class=\"iconLink\">
                 <a class=\"iconLink\" href=\"categories.php\"><img 
                 src=\"$g_root_path/adm_program/images/application_double.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Kategorien pflegen\"></a>
@@ -216,9 +216,7 @@ require("../../../adm_config/body_top.php");
                             }
                             else
                             {
-                                $load_url = urlencode("$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$row->rol_id&amp;mode=4&amp;inactive=1");
-                                echo "
-                                <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_role&amp;err_text=$row->rol_name&amp;err_head=L&ouml;schen&amp;button=2&amp;url=$load_url\">
+                                echo "<a href=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$row->rol_id&amp;mode=6\">
                                 <img src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Rolle l&ouml;schen\" title=\"Rolle l&ouml;schen\"></a>";
                             }
                         }

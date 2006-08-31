@@ -60,7 +60,7 @@ echo "</head>";
 
 require("../../../adm_config/body_top.php");
     echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-		<h1>Kategorien</h1>
+        <h1>Kategorien</h1>
 
         <p>
             <span class=\"iconLink\">
@@ -68,7 +68,7 @@ require("../../../adm_config/body_top.php");
                 src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Kategorie anlegen\"></a>
                 <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/categories_new.php?url=$url\">Kategorie anlegen</a>
             </span>
-		</p>
+        </p>
 
         <table class=\"tableList\" style=\"width: 300px;\" cellpadding=\"2\" cellspacing=\"0\">
             <tr>
@@ -77,11 +77,11 @@ require("../../../adm_config/body_top.php");
                 <th class=\"tableHeader\">&nbsp;</th>
             </tr>";
             
-	        $sql = "SELECT * FROM ". TBL_ROLE_CATEGORIES. "
-	                 WHERE rlc_org_shortname LIKE '$g_organization'
-	                 ORDER BY rlc_name ASC ";
-	        $cat_result = mysql_query($sql, $g_adm_con);
-	        db_error($cat_result);
+            $sql = "SELECT * FROM ". TBL_ROLE_CATEGORIES. "
+                     WHERE rlc_org_shortname LIKE '$g_organization'
+                     ORDER BY rlc_name ASC ";
+            $cat_result = mysql_query($sql, $g_adm_con);
+            db_error($cat_result);
 
             while($cat_row = mysql_fetch_object($cat_result))
             {
@@ -111,8 +111,7 @@ require("../../../adm_config/body_top.php");
                         // nur Kategorien loeschen, die keine Rollen zugeordnet sind
                         if($row_num == 0)
                         {
-                            $load_url = urlencode("$g_root_path/adm_program/administration/roles/categories_function.php?rlc_id=$cat_row->rlc_id&mode=2&url=$url");
-                            echo "&nbsp;<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_category&err_text=$cat_row->rlc_name&err_head=Kategorie l&ouml;schen&button=2&url=$load_url\"><img
+                            echo "&nbsp;<a href=\"$g_root_path/adm_program/administration/roles/categories_function.php?rlc_id=$cat_row->rlc_id&amp;mode=3&amp;url=$url\"><img
                             src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>";
                         }
                         else
