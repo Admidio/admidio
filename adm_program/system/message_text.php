@@ -130,7 +130,7 @@ $message_text = array(
 
     "no_category_roles" =>
         "Es sind noch keine Rollen für diese Kategorie erstellt worden.<br /><br />
-        Rollen können <a href=\"$g_root_path/adm_program/administration/roles/roles.php\">hier</a>
+        Rollen können <a href=\"%VAR1%\">hier</a>
         erstellt und gepflegt werden.",
 
     "no_old_roles" =>
