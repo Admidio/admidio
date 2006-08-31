@@ -118,12 +118,14 @@ if($list_found == 0)
         if($active_role == 0)
         {
             $err_code = "no_old_roles";    
+            $err_text = "";
         }
         else
         {
             $err_code = "no_category_roles";    
+            $err_text = "$g_root_path/adm_program/administration/roles/roles.php";
         }
-        $g_message->show($err_code, "", "Hinweis");
+        $g_message->show($err_code, $err_text, "Hinweis");
     }
     else
     {
