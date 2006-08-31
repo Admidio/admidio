@@ -11,6 +11,7 @@
  * rlc_id: ID der Rollen-Kategorien
  * mode:   1 - Kategorie anlegen oder updaten
  *         2 - Kategorie loeschen
+ *         3 - Frage, ob Kategorie geloescht werden soll
  * url :   URL von der die aufrufende Seite aufgerufen wurde
  *         (muss uebergeben werden, damit der Zurueck-Button funktioniert)
  *
@@ -44,14 +45,24 @@ if(!isModerator())
 // Uebergabevariablen pruefen
 
 if(is_numeric($_GET["mode"]) == false
-|| $_GET["mode"] < 1 || $_GET["mode"] > 2)
+|| $_GET["mode"] < 1 || $_GET["mode"] > 3)
 {
     $g_message->show("invalid");
 }
 
-if(isset($_GET["rlc_id"]) && is_numeric($_GET["rlc_id"]) == false && $_GET["rlc_id"] != NULL)
+if(isset($_GET["rlc_id"]) && is_numeric($_GET["rlc_id"]) == false)
 {
     $g_message->show("invalid");
+}
+
+// wenn URL uebergeben wurde zu dieser gehen, ansonsten zurueck
+if(array_key_exists('url', $_GET) && strlen($_GET['url']) > 0)
+{
+    $url = urlencode($_GET['url']);
+}
+else
+{
+    $url = urlencode(getHttpReferer());
 }
 
 $err_code = "";
@@ -144,8 +155,21 @@ elseif($_GET['mode'] == 2)  // Feld loeschen
         $err_code = "delete";
     }
 }
+elseif($_GET["mode"] == 3)
+{
+    // Frage, ob Kategorie geloescht werden soll
+    $sql = "SELECT rlc_name FROM ". TBL_ROLE_CATEGORIES. "
+             WHERE rlc_id = {0}";
+    $sql    = prepareSQL($sql, array($_GET['rlc_id']));
+    $result = mysql_query($sql, $g_adm_con);
+    db_error($result);
+    $row = mysql_fetch_array($result);
+    
+    $g_message->setForwardYesNo("$g_root_path/adm_program/administration/roles/categories_function.php?rlc_id=". $_GET['rlc_id']. "&mode=2&url=$url");
+    $g_message->show("delete_category", utf8_encode($row[0]), "Löschen");
+}
          
-// zu den Organisationseinstellungen zurueck
-$g_message->setForwardUrl("$g_root_path/adm_program/administration/roles/categories.php?url=". $_GET['url'], 2000);
+// zur Kategorienuebersicht zurueck
+$g_message->setForwardUrl("$g_root_path/adm_program/administration/roles/categories.php?url=$url", 2000);
 $g_message->show($err_code);
 ?>

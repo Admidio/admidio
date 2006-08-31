@@ -14,6 +14,7 @@
  *         3 - Rolle zur inaktiven Rolle machen
  *         4 - Rolle loeschen
  *         5 - Rolle wieder aktiv setzen
+ *         6 - Frage, ob inaktive Rolle geloescht werden soll
  ******************************************************************************
  *
  * This program is free software; you can redistribute it and/or
@@ -44,14 +45,18 @@ if(!isModerator())
 // Uebergabevariablen pruefen
 
 if(is_numeric($_GET["mode"]) == false
-|| $_GET["mode"] < 1 || $_GET["mode"] > 5)
+|| $_GET["mode"] < 1 || $_GET["mode"] > 6)
 {
     $g_message->show("invalid");
 }
 
-if(isset($_GET["rol_id"]) && is_numeric($_GET["rol_id"]) == false && $_GET["rol_id"] != NULL)
+if(isset($_GET["rol_id"]) && is_numeric($_GET["rol_id"]) == false)
 {
     $g_message->show("invalid");
+}
+else
+{
+    $rol_id = $_GET['rol_id'];
 }
 
 // wenn URL uebergeben wurde zu dieser gehen, ansonsten zurueck
@@ -66,7 +71,6 @@ else
 
 $err_code = "";
 $err_text = "";
-$rol_id = $_GET['rol_id'];
 
 if($_GET["mode"] == 1)
 {
@@ -128,7 +132,7 @@ elseif($_GET["mode"] == 2)
 
     if(strlen(trim($_POST["name"])) > 0)
     {
-        if(!($_GET['rol_id'] > 0))
+        if($rol_id == 0)
         {
             // Schauen, ob die Rolle bereits existiert
             $sql    = "SELECT COUNT(*) FROM ". TBL_ROLES. "
@@ -344,13 +348,13 @@ elseif($_GET["mode"] == 2)
             // Kontrollieren ob bei nachtraeglicher Aenderung der maximalen Mitgliederzahl diese nicht bereits ueberschritten wurde
 
             // Zaehlen wieviele Leute die Rolle bereits haben, ohne Leiter
-            if($_GET['rol_id'] > 0)
+            if($rol_id > 0)
             {
                 $sql    = "SELECT COUNT(*) FROM ". TBL_MEMBERS. "
                             WHERE mem_rol_id= {0}
                               AND mem_leader = 0
                               AND mem_valid  = 1";
-                $sql    = prepareSQL($sql, array($_GET['rol_id']));
+                $sql    = prepareSQL($sql, array($rol_id));
                 $result = mysql_query($sql, $g_adm_con);
                 db_error($result);
                 $role_members = mysql_fetch_array($result);
@@ -372,7 +376,7 @@ elseif($_GET["mode"] == 2)
                 $_POST['beitrag'] = "0";
             }
 
-            if($_GET['rol_id'] > 0)
+            if($rol_id > 0)
             {
                 $act_date = date("Y.m.d G:i:s", time());
                 $sql = "UPDATE ". TBL_ROLES. "  SET rol_name    = {0}
@@ -419,7 +423,7 @@ elseif($_GET["mode"] == 2)
                                                        {5}, {6}, 1) ";
             }
             $sql    = prepareSQL($sql, array(trim($_POST['name']), trim($_POST['beschreibung']), $_POST['category'], $_POST['wochentag'],
-            trim($_POST['ort']), $_POST['max_mitglieder'], $_POST['beitrag'], $_GET['rol_id']));
+            trim($_POST['ort']), $_POST['max_mitglieder'], $_POST['beitrag'], $rol_id));
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
         }
@@ -444,7 +448,7 @@ elseif($_GET["mode"] == 3)
 
     $sql = "SELECT rol_name FROM ". TBL_ROLES. "
              WHERE rol_id = {0}";
-    $sql    = prepareSQL($sql, array($_GET['rol_id']));
+    $sql    = prepareSQL($sql, array($rol_id));
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
 
@@ -461,7 +465,7 @@ elseif($_GET["mode"] == 3)
                                           , mem_end   = SYSDATE()
                 WHERE mem_rol_id = {0}
                   AND mem_valid  = 1 ";
-    $sql    = prepareSQL($sql, array($_GET['rol_id']));
+    $sql    = prepareSQL($sql, array($rol_id));
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
 
@@ -478,13 +482,13 @@ elseif($_GET["mode"] == 4)
     // Rolle aus der DB loeschens
     $sql    = "DELETE FROM ". TBL_MEMBERS. " 
                 WHERE mem_rol_id = {0} ";
-    $sql    = prepareSQL($sql, array($_GET['rol_id']));
+    $sql    = prepareSQL($sql, array($rol_id));
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
 
     $sql    = "DELETE FROM ". TBL_ROLES. "
                 WHERE rol_id = {0}";
-    $sql    = prepareSQL($sql, array($_GET['rol_id']));
+    $sql    = prepareSQL($sql, array($rol_id));
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
    
@@ -492,23 +496,36 @@ elseif($_GET["mode"] == 4)
 }
 elseif($_GET["mode"] == 5)
 {
-    // Rolle aus der DB loeschens
+    // Rolle wieder aktiv setzen
     $sql    = "UPDATE ". TBL_MEMBERS. " SET mem_valid = 1
                                           , mem_end   = NULL
                 WHERE mem_rol_id = {0} ";
-    $sql    = prepareSQL($sql, array($_GET['rol_id']));
+    $sql    = prepareSQL($sql, array($rol_id));
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
 
     $sql    = "UPDATE ". TBL_ROLES. " SET rol_valid = 1
                 WHERE rol_id = {0}";
-    $sql    = prepareSQL($sql, array($_GET['rol_id']));
+    $sql    = prepareSQL($sql, array($rol_id));
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
    
     $err_code = "role_active";
 }
-         
+elseif($_GET["mode"] == 6)
+{
+    // Fragen, ob die inaktive Rolle geloescht werden soll
+    $sql = "SELECT rol_name FROM ". TBL_ROLES. "
+             WHERE rol_id = {0}";
+    $sql    = prepareSQL($sql, array($rol_id));
+    $result = mysql_query($sql, $g_adm_con);
+    db_error($result);
+    $row = mysql_fetch_array($result);
+    
+    $g_message->setForwardYesNo("$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$rol_id&amp;mode=4&amp;inactive=1");
+    $g_message->show("delete_role", utf8_encode($row[0]), "Löschen");
+}
+        
 $g_message->setForwardUrl("$g_root_path/adm_program/administration/roles/roles.php", 2000);
 $g_message->show($err_code);
 ?>
