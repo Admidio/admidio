@@ -39,7 +39,7 @@ if(isset($_SESSION['photo_event_request']))
 }
 
 //pruefen ob adm_my_files/photos existiert
-if(!file_exists("$g_root_path/adm_my_files/photos"))
+if(!file_exists("../../../adm_my_files/photos"))
 {
     $g_message->show("no_photo_folder");
 }
