@@ -64,30 +64,37 @@ else
     $url = urlencode(getHttpReferer());
 }
 
-$field_type        = "";
-$field_name        = "";
-$field_description = "";
-$field_locked      = 0;
-
-// Wenn eine Feld-ID uebergeben wurde, soll das Feld geaendert werden
-// -> Felder mit Daten des Feldes vorbelegen
-
-if($usf_id > 0)
+if(isset($_SESSION['fields_request']))
 {
-    $sql    = "SELECT * FROM ". TBL_USER_FIELDS. " WHERE usf_id = {0}";
-    $sql    = prepareSQL($sql, array($usf_id));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
-
-    if (mysql_num_rows($result) > 0)
-    {
-        $row_usf = mysql_fetch_object($result);
-
-        $field_type        = $row_usf->usf_type;
-        $field_name        = $row_usf->usf_name;
-        $field_description = $row_usf->usf_description;
-        $field_locked      = $row_usf->usf_locked;
-    }
+   $form_values = $_SESSION['fields_request'];
+   unset($_SESSION['fields_request']);
+}
+else
+{ 
+	$form_values['name']        = " ";
+	$form_values['description'] = " ";
+	$form_values['type']        = " ";
+	$form_values['locked']      = 0;
+	
+	// Wenn eine Feld-ID uebergeben wurde, soll das Feld geaendert werden
+	// -> Felder mit Daten des Feldes vorbelegen	
+	if($usf_id > 0)
+	{
+	    $sql    = "SELECT * FROM ". TBL_USER_FIELDS. " WHERE usf_id = {0}";
+	    $sql    = prepareSQL($sql, array($usf_id));
+	    $result = mysql_query($sql, $g_adm_con);
+	    db_error($result);
+	
+	    if (mysql_num_rows($result) > 0)
+	    {
+	        $row_usf = mysql_fetch_object($result);
+	
+	        $form_values['name']        = $row_usf->usf_name;
+	        $form_values['description'] = $row_usf->usf_description;
+	        $form_values['type']        = $row_usf->usf_type;
+	        $form_values['locked']      = $row_usf->usf_locked;
+	    }
+	}
 }
 
 echo "
@@ -107,7 +114,7 @@ echo "</head>";
 
 require("../../../adm_config/body_top.php");
     echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-        <form action=\"field_function.php?usf_id=$usf_id&amp;mode=1&amp;url=$url\" method=\"post\" id=\"edit_field\">
+        <form action=\"fields_function.php?usf_id=$usf_id&amp;mode=1&amp;url=$url\" method=\"post\" id=\"edit_field\">
             <div class=\"formHead\" style=\"width: 400px\">";
                 if($usf_id > 0)
                 {
@@ -122,45 +129,45 @@ require("../../../adm_config/body_top.php");
                 <div>
                     <div style=\"text-align: right; width: 28%; float: left;\">Name:</div>
                     <div style=\"text-align: left; margin-left: 29%;\">
-                        <input type=\"text\" id=\"name\" name=\"name\" size=\"20\" maxlength=\"13\" value=\"". htmlspecialchars($field_name, ENT_QUOTES). "\">
+                        <input type=\"text\" id=\"name\" name=\"name\" size=\"20\" maxlength=\"13\" value=\"". htmlspecialchars($form_values['name'], ENT_QUOTES). "\">
                     </div>
                 </div>
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 28%; float: left;\">Beschreibung:</div>
                     <div style=\"text-align: left; margin-left: 29%;\">
-                        <input type=\"text\" name=\"description\" size=\"38\" maxlength=\"255\" value=\"". htmlspecialchars($field_description, ENT_QUOTES). "\">
+                        <input type=\"text\" name=\"description\" size=\"38\" maxlength=\"255\" value=\"". htmlspecialchars($form_values['description'], ENT_QUOTES). "\">
                     </div>
                 </div>
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 28%; float: left;\">Datentyp:</div>
                     <div style=\"text-align: left; margin-left: 29%;\">
-                        <select size=\"1\" name=\"typ\">
-                            <option value=\"\""; 
-                                if(strlen($field_type) == 0) 
+                        <select size=\"1\" name=\"type\">
+                            <option value=\" \""; 
+                                if(strlen($form_values['type']) == 0) 
                                 {
                                     echo " selected=\"selected\"";
                                 }
                                 echo ">&nbsp;</option>\n
                             <option value=\"TEXT\"";     
-                                if($field_type == "TEXT") 
+                                if($form_values['type'] == "TEXT") 
                                 {
                                     echo " selected=\"selected\""; 
                                 }
                                 echo ">Text (30 Zeichen)</option>\n
                             <option value=\"TEXT_BIG\""; 
-                                if($field_type == "TEXT_BIG") 
+                                if($form_values['type'] == "TEXT_BIG") 
                                 {
                                     echo " selected=\"selected\""; 
                                 }
                                 echo ">Text (255 Zeichen)</option>\n
                             <option value=\"NUMERIC\"";  
-                                if($field_type == "NUMERIC") 
+                                if($form_values['type'] == "NUMERIC") 
                                 {
                                     echo " selected=\"selected\""; 
                                 }
                                 echo ">Zahl</option>\n
                             <option value=\"CHECKBOX\""; 
-                                if($field_type == "CHECKBOX") 
+                                if($form_values['type'] == "CHECKBOX") 
                                 {
                                     echo " selected=\"selected\""; 
                                 }
@@ -174,7 +181,7 @@ require("../../../adm_config/body_top.php");
                     </div>
                     <div style=\"text-align: left; margin-left: 29%;\">
                         <input type=\"checkbox\" id=\"locked\" name=\"locked\" ";
-                        if($field_locked == 1)
+                        if(isset($form_values['locked']) && $form_values['locked'] == 1)
                         {
                             echo " checked ";
                         }
