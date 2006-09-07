@@ -64,25 +64,32 @@ else
     $url = urlencode(getHttpReferer());
 }
 
-$category_name   = "";
-$category_locked = 0;
-
-// Wenn eine Feld-ID uebergeben wurde, soll das Feld geaendert werden
-// -> Felder mit Daten des Feldes vorbelegen
-
-if($rlc_id > 0)
+if(isset($_SESSION['categories_request']))
 {
-    $sql    = "SELECT * FROM ". TBL_ROLE_CATEGORIES. " WHERE rlc_id = {0}";
-    $sql    = prepareSQL($sql, array($rlc_id));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+   $form_values = $_SESSION['categories_request'];
+   unset($_SESSION['categories_request']);
+}
+else
+{ 
+	$form_values['name']   = " ";
+	$form_values['locked'] = 0;
 
-    if (mysql_num_rows($result) > 0)
-    {
-        $row_rlc = mysql_fetch_object($result);
-        $category_name   = $row_rlc->rlc_name;
-        $category_locked = $row_rlc->rlc_locked;
-    }
+	// Wenn eine Feld-ID uebergeben wurde, soll das Feld geaendert werden
+	// -> Felder mit Daten des Feldes vorbelegen
+	if($rlc_id > 0)
+	{
+	    $sql    = "SELECT * FROM ". TBL_ROLE_CATEGORIES. " WHERE rlc_id = {0}";
+	    $sql    = prepareSQL($sql, array($rlc_id));
+	    $result = mysql_query($sql, $g_adm_con);
+	    db_error($result);
+	
+	    if (mysql_num_rows($result) > 0)
+	    {
+	        $row_rlc = mysql_fetch_object($result);
+	        $form_values['name']   = $row_rlc->rlc_name;
+	        $form_values['locked'] = $row_rlc->rlc_locked;
+	    }
+	}
 }
 
 echo "
@@ -117,7 +124,7 @@ require("../../../adm_config/body_top.php");
                 <div>
                     <div style=\"text-align: right; width: 23%; float: left;\">Name:</div>
                     <div style=\"text-align: left; margin-left: 24%;\">
-                        <input type=\"text\" id=\"name\" name=\"name\" size=\"30\" maxlength=\"100\" value=\"". htmlspecialchars($category_name, ENT_QUOTES). "\">
+                        <input type=\"text\" id=\"name\" name=\"name\" size=\"30\" maxlength=\"100\" value=\"". htmlspecialchars($form_values['name'], ENT_QUOTES). "\">
                     </div>
                 </div>
                 <div style=\"margin-top: 6px;\">
@@ -126,7 +133,7 @@ require("../../../adm_config/body_top.php");
                     </div>
                     <div style=\"text-align: left; margin-left: 24%;\">
                         <input type=\"checkbox\" id=\"locked\" name=\"locked\" ";
-                            if($category_locked == 1)
+                            if(isset($form_values['locked']) && $form_values['locked'] == 1)
                             {
                                 echo " checked ";
                             }

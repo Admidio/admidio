@@ -72,6 +72,7 @@ if($_GET['mode'] == 1)
 {
     // Feld anlegen oder updaten
 
+	$_SESSION['categories_request'] = $_REQUEST;
     $category_name = strStripTags($_POST['name']);
 
     if(strlen($category_name) > 0)
@@ -118,6 +119,7 @@ if($_GET['mode'] == 1)
         $sql    = prepareSQL($sql, array(trim($category_name), $_GET['rlc_id']));
         $result = mysql_query($sql, $g_adm_con);
         db_error($result);
+        unset($_SESSION['categories_request']);
     }
     else
     {

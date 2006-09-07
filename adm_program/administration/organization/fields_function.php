@@ -39,7 +39,7 @@ require("../../system/login_valid.php");
 // nur Moderatoren duerfen Felder erfassen & verwalten
 if(!isModerator())
 {
-   $g_message->show("norights");
+    $g_message->show("norights");
 }
 
 // Uebergabevariablen pruefen
@@ -57,94 +57,103 @@ if(isset($_GET["usf_id"]) && is_numeric($_GET["usf_id"]) == false)
 
 $err_code = "";
 $err_text = "";
-$_SESSION['fields_request'] = $_REQUEST;
 
 if($_GET['mode'] == 1)
 {
    // Feld anlegen oder updaten
 
-   if(strlen(trim($_POST['name'])) > 0
-   && strlen(trim($_POST['type'])) > 0)
-   {
-      if(!($_GET['usf_id'] > 0))
-      {
-         // Schauen, ob das Feld bereits existiert
-         $sql    = "SELECT COUNT(*) FROM ". TBL_USER_FIELDS. "
-                     WHERE usf_org_shortname LIKE '$g_organization'
-                       AND usf_name         LIKE {0}";
-         $sql    = prepareSQL($sql, array($_POST['name']));
-         $result = mysql_query($sql, $g_adm_con);
-         db_error($result);
-         $row = mysql_fetch_array($result);
-      
-         if($row[0] > 0)
-         {
-            $g_message->show("field_exist");
-         }      
-      }
+    $_SESSION['fields_request'] = $_REQUEST;
+    
+    if(strlen(trim($_POST['name'])) > 0
+    && strlen(trim($_POST['type'])) > 0)
+    {
+        if(!($_GET['usf_id'] > 0))
+        {
+            // Schauen, ob das Feld bereits existiert
+            $sql    = "SELECT COUNT(*) FROM ". TBL_USER_FIELDS. "
+                        WHERE usf_org_shortname LIKE '$g_organization'
+                          AND usf_name         LIKE {0}";
+            $sql    = prepareSQL($sql, array($_POST['name']));
+            $result = mysql_query($sql, $g_adm_con);
+            db_error($result);
+            $row = mysql_fetch_array($result);
 
-      if(array_key_exists("locked", $_POST))
-         $locked = 1;
-      else
-         $locked = 0;
+            if($row[0] > 0)
+            {
+                $g_message->show("field_exist");
+            }      
+        }
 
-      if($_GET['usf_id'] > 0)
-      {
-         $sql = "UPDATE ". TBL_USER_FIELDS. "
-                    SET usf_name        = {0}
-                      , usf_description = {1}
-                      , usf_type        = {2}
-                      , usf_locked      = $locked
-                  WHERE usf_id = {3}";
-      }
-      else
-      {
-         // Feld in Datenbank hinzufuegen
-         $sql    = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_shortname, usf_name, usf_description,
-                                                usf_type, usf_locked)
-                    VALUES ('$g_organization', {0}, {1}, {2}, $locked) ";
-      }
-      $sql    = prepareSQL($sql, array(trim($_POST['name']), trim($_POST['description']),
-                                       trim($_POST['type']), $_GET['usf_id']));
-      $result = mysql_query($sql, $g_adm_con);
-      db_error($result);
-      unset($_SESSION['fields_request']);
-   }
-   else
-   {
-      // es sind nicht alle Felder gefuellt
-      if(strlen(trim($_POST['name'])) == 0)
-         $err_text = "Name";
-      else
-         $err_text = "Datentyp";
-      $err_code = "feld";
-   }
-   
-   if(strlen($err_code) > 0)
-   {
-      $g_message->show($err_code, $err_text);
-   }
+        if(array_key_exists("locked", $_POST))
+        {
+            $locked = 1;
+        }
+        else
+        {
+            $locked = 0;
+        }
 
-   $err_code = "save";
+        if($_GET['usf_id'] > 0)
+        {
+            $sql = "UPDATE ". TBL_USER_FIELDS. "
+                       SET usf_name        = {0}
+                         , usf_description = {1}
+                         , usf_type        = {2}
+                         , usf_locked      = $locked
+                     WHERE usf_id = {3}";
+        }
+        else
+        {
+            // Feld in Datenbank hinzufuegen
+            $sql    = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_shortname, usf_name, usf_description,
+                                                          usf_type, usf_locked)
+                            VALUES ('$g_organization', {0}, {1}, {2}, $locked) ";
+        }
+        $sql    = prepareSQL($sql, array(trim($_POST['name']), trim($_POST['description']),
+                                         trim($_POST['type']), $_GET['usf_id']));
+        $result = mysql_query($sql, $g_adm_con);
+        db_error($result);
+        unset($_SESSION['fields_request']);
+    }
+    else
+    {
+        // es sind nicht alle Felder gefuellt
+        if(strlen(trim($_POST['name'])) == 0)
+        {
+            $err_text = "Name";
+        }
+        else
+        {
+            $err_text = "Datentyp";
+        }
+        $err_code = "feld";
+    }
+
+    if(strlen($err_code) > 0)
+    {
+        $g_message->show($err_code, $err_text);
+    }
+
+    $err_code = "save";
 }
 elseif($_GET['mode'] == 2)
 {
-   // Feld loeschen
+    // Feld loeschen
 
-   // erst die Userdaten zum Feld loeschen
-   $sql    = "DELETE FROM ". TBL_USER_DATA. "
-               WHERE usd_usf_id = {0}";
-   $sql    = prepareSQL($sql, array($_GET['usf_id']));
-   $result = mysql_query($sql, $g_adm_con);
-   db_error($result);
+    // erst die Userdaten zum Feld loeschen
+    $sql    = "DELETE FROM ". TBL_USER_DATA. "
+                WHERE usd_usf_id = {0}";
+    $sql    = prepareSQL($sql, array($_GET['usf_id']));
+    $result = mysql_query($sql, $g_adm_con);
+    db_error($result);
 
-   $sql    = "DELETE FROM ". TBL_USER_FIELDS. "
-               WHERE usf_id = {0}";
-   $sql    = prepareSQL($sql, array($_GET['usf_id']));
-   $result = mysql_query($sql, $g_adm_con);
-   db_error($result);
+    $sql    = "DELETE FROM ". TBL_USER_FIELDS. "
+                WHERE usf_id = {0}";
+    $sql    = prepareSQL($sql, array($_GET['usf_id']));
+    $result = mysql_query($sql, $g_adm_con);
+    db_error($result);
 
-   $err_code = "delete";
+    $err_code = "delete";
 }
 elseif($_GET["mode"] == 3)
 {
