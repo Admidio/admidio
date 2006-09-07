@@ -11,6 +11,7 @@
  * usf_id: ID des Feldes
  * mode:   1 - Feld anlegen oder updaten
  *         2 - Feld loeschen
+ *         3 - Frage, ob Feld geloescht werden soll
  * url :   URL von der die aufrufende Seite aufgerufen wurde
  *         (muss uebergeben werden, damit der Zurueck-Button funktioniert)
  *
@@ -44,7 +45,7 @@ if(!isModerator())
 // Uebergabevariablen pruefen
 
 if(is_numeric($_GET["mode"]) == false
-|| $_GET["mode"] < 1 || $_GET["mode"] > 2)
+|| $_GET["mode"] < 1 || $_GET["mode"] > 3)
 {
     $g_message->show("invalid");
 }
@@ -56,13 +57,14 @@ if(isset($_GET["usf_id"]) && is_numeric($_GET["usf_id"]) == false)
 
 $err_code = "";
 $err_text = "";
+$_SESSION['fields_request'] = $_REQUEST;
 
 if($_GET['mode'] == 1)
 {
    // Feld anlegen oder updaten
 
    if(strlen(trim($_POST['name'])) > 0
-   && strlen(trim($_POST['typ'])) > 0)
+   && strlen(trim($_POST['type'])) > 0)
    {
       if(!($_GET['usf_id'] > 0))
       {
@@ -103,9 +105,10 @@ if($_GET['mode'] == 1)
                     VALUES ('$g_organization', {0}, {1}, {2}, $locked) ";
       }
       $sql    = prepareSQL($sql, array(trim($_POST['name']), trim($_POST['description']),
-                                       trim($_POST['typ']), $_GET['usf_id']));
+                                       trim($_POST['type']), $_GET['usf_id']));
       $result = mysql_query($sql, $g_adm_con);
       db_error($result);
+      unset($_SESSION['fields_request']);
    }
    else
    {
@@ -143,8 +146,21 @@ elseif($_GET['mode'] == 2)
 
    $err_code = "delete";
 }
+elseif($_GET["mode"] == 3)
+{
+    // Frage, ob Kategorie geloescht werden soll
+    $sql = "SELECT usf_name FROM ". TBL_USER_FIELDS. "
+             WHERE usf_id = {0}";
+    $sql    = prepareSQL($sql, array($_GET['usf_id']));
+    $result = mysql_query($sql, $g_adm_con);
+    db_error($result);
+    $row = mysql_fetch_array($result);
+    
+    $g_message->setForwardYesNo("$g_root_path/adm_program/administration/organization/fields_function.php?usf_id=". $_GET['usf_id']. "&mode=2&url=". $_GET['url']);
+    $g_message->show("delete_field", utf8_encode($row[0]), "Löschen");
+}
          
 // zu den Organisationseinstellungen zurueck
-$g_message->setForwardUrl("$g_root_path/adm_program/administration/organization/organization.php?url=". $_GET['url'], 2000);
+$g_message->setForwardUrl("$g_root_path/adm_program/administration/organization/fields.php?url=". $_GET['url'], 2000);
 $g_message->show($err_code);
 ?>

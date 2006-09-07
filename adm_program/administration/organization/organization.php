@@ -64,11 +64,19 @@ echo "</head>";
 
 require("../../../adm_config/body_top.php");
     echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-        <form action=\"organization_function.php?org_id=$g_current_organization->id&amp;url=$url\" method=\"post\" name=\"Organisationseinstellungen\">
-            <div class=\"formHead\">Organisationseinstellungen</div>
-            
+		<h1>Organisationseinstellungen</h1>
+		<p>
+            <span class=\"iconLink\">
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/organization/fields.php\"><img
+                 class=\"iconLink\" src=\"$g_root_path/adm_program/images/application_form.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Organisationsspezifische Profilfelder pflegen\"></a>
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/organization/fields.php\">Profilfelder pflegen</a>
+            </span>
+		</p>
+        <form action=\"organization_function.php?org_id=$g_current_organization->id&amp;url=$url\" method=\"post\" name=\"orga_settings\">
             <div class=\"formBody\">
-                <div>
+				<div>
+				</div>
+                <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 48%; float: left;\">Name (Abk.):</div>
                     <div style=\"text-align: left; margin-left: 50%;\">
                         <input type=\"text\" name=\"shortname\" class=\"readonly\" readonly size=\"10\" maxlength=\"10\" value=\"$g_current_organization->shortname\">
@@ -315,100 +323,9 @@ require("../../../adm_config/body_top.php");
                         </div>
                     </div>
 
-                </div>";
-
-                /*------------------------------------------------------------*/
-                // organisationsspezifische Felder anzeigen
-                /*------------------------------------------------------------*/
-
-                $sql = "SELECT * FROM ". TBL_USER_FIELDS. "
-                         WHERE usf_org_shortname LIKE '$g_organization'
-                         ORDER BY usf_name ASC ";
-                $result = mysql_query($sql, $g_adm_con);
-                db_error($result);
-
-                if(mysql_num_rows($result) > 0)
-                {
-                    echo "<div style=\"margin-top: 20px; margin-bottom: 7px;\">Organisationsspezifische Profilfelder:
-                        <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=profil_felder','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
-                    </div>
-                    <table class=\"tableList\" style=\"width: 95%;\" cellpadding=\"2\" cellspacing=\"0\">
-                        <tr>
-                            <th class=\"tableHeader\" style=\"text-align: left;\">Feld</th>
-                            <th class=\"tableHeader\" style=\"text-align: left;\">Beschreibung</th>
-                            <th class=\"tableHeader\" style=\"text-align: left;\">Datentyp</th>
-                            <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Feld nur f&uuml;r Moderatoren sichtbar\" title=\"Feld nur f&uuml;r Moderatoren sichtbar\"></th>
-                            <th class=\"tableHeader\">&nbsp;</th>
-                        </tr>";
-
-                        while($row = mysql_fetch_object($result))
-                        {
-                            echo "
-                            <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
-                                <td style=\"text-align: left;\"><a href=\"$g_root_path/adm_program/administration/organization/field.php?usf_id=$row->usf_id\">$row->usf_name</a></td>
-                                <td style=\"text-align: left;\">$row->usf_description</td>
-                                <td style=\"text-align: left;\">";
-                                    if($row->usf_type == "TEXT")
-                                    {
-                                        echo "Text (30)";
-                                    }
-                                    elseif($row->usf_type == "TEXT_BIG")
-                                    {
-                                        echo "Text (255)";
-                                    }
-                                    elseif($row->usf_type == "NUMERIC")
-                                    {
-                                        echo "Zahl";
-                                    }
-                                    elseif($row->usf_type == "CHECKBOX")
-                                    {
-                                        echo "Ja / Nein";
-                                    }
-                                echo "</td>
-                                <td style=\"text-align: center;\">";
-                                    if($row->usf_locked == 1)
-                                    {
-                                        echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Feld nur f&uuml;r Moderatoren sichtbar\" title=\"Feld nur f&uuml;r Moderatoren sichtbar\">";
-                                    }
-                                    else
-                                    {
-                                        echo "&nbsp;";
-                                    }
-                                echo "</td>
-                                <td style=\"text-align: right; width: 45px;\">
-                                    <a href=\"$g_root_path/adm_program/administration/organization/field.php?usf_id=$row->usf_id&amp;url=$url\">
-                                    <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>&nbsp;";
-                                    $load_url = urlencode("$g_root_path/adm_program/administration/organization/field_function.php?usf_id=$row->usf_id&mode=2&url=$url");
-                                    echo "<a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_field&err_text=$row->usf_name&err_head=Profilfeld l&ouml;schen&button=2&url=$load_url\"><img
-                                    src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>
-                                </td>
-                            </tr>";
-                        }
-                    echo "</table>";
-                }
-                else
-                {
-                    echo "
-                    Es wurden noch keine organisationsspezifischen Profilfelder angelegt !
-                    <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=profil_felder','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
-                    <br />";
-                }
-
-                echo "
-                <button id=\"new_field\" type=\"button\" value=\"new_field\" style=\"margin-top: 3px; width: 180px;\"
-                    onClick=\"self.location.href='$g_root_path/adm_program/administration/organization/field.php?url=$url'\">
-                    <img src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Feld hinzuf&uuml;gen\">
-                    &nbsp;Feld hinzuf&uuml;gen</button>
-
-                <hr width=\"85%\" />
+                </div>
 
                 <div style=\"margin-top: 6px;\">
-                    <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='". urldecode($url). "'\">
-                        <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
-                        &nbsp;Zur&uuml;ck</button>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <button name=\"speichern\" type=\"submit\" value=\"speichern\">
                         <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
                         &nbsp;Speichern</button>
