@@ -105,10 +105,7 @@ if(!editDownload())
 //testen ob Schreibrechte fuer adm_my_files bestehen
 if (decoct(fileperms("../../../adm_my_files/download"))!=40777)
 {
-    $g_message->addVariableContent("adm_my_files/download", 1);
-    $g_message->addVariableContent($g_preferences['email_administrator'], 2);
-    $g_message->setForwardUrl("$g_root_path/adm_program/modules/download/download.php");
-    $g_message->show("write_access");
+    $g_message->show("invalid_folder");
 }
 
 $folder = strStripTags(urldecode($_GET['folder']));
@@ -116,8 +113,6 @@ $file   = strStripTags(urldecode($_GET['file']));
 $default_folder = strStripTags(urldecode($_GET['default_folder']));
 
 $url        = "";
-$err_code   = "";
-$err_text   = "";
 $act_folder = "../../../adm_my_files/download";
 
 // uebergebene Ordner auf Gueltigkeit pruefen
@@ -126,9 +121,7 @@ if(strlen($default_folder) > 0)
 {
     if(strpos($default_folder, "..") !== false)
     {
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_folder";
-        header($location);
-        exit();
+        $g_message->show("invalid_folder");
     }
     $act_folder = "$act_folder/$default_folder";
 }
@@ -136,9 +129,7 @@ if(strlen($folder) > 0)
 {
     if(strpos($folder, "..") !== false)
     {
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_folder";
-        header($location);
-        exit();
+        $g_message->show("invalid_folder");
     }
     $act_folder = "$act_folder/$folder";
 }
@@ -150,13 +141,13 @@ if($_GET["mode"] == 1)
 {
     if (empty($_POST))
     {
-        $g_message->show("empty_upload_post", ini_get(post_max_size));
+        $g_message->show("empty_upload_post",ini_get(post_max_size));
     }
     
     // Dateien hochladen
     if(strpos($_POST['new_name'], "..") !== false)
     {
-        $err_code = "invalid_file";
+        $g_message->show("invalid_file");
     }
     else
     {
@@ -164,13 +155,13 @@ if($_GET["mode"] == 1)
         //Dateigroesse ueberpruefen Servereinstellungen
         if ($_FILES['userfile']['error']==1)
         {
-            $g_message->show("file_2big_server", $g_preferences['max_file_upload_size']);
+                    $g_message->show("file_2big_server",ini_get(post_max_size));
         }
         
         //Dateigroesse ueberpruefen Administratoreinstellungen
         if ($_FILES['userfile']['size']>($g_preferences['max_file_upload_size'])*1000)
         {
-            $g_message->show("file_2big", ini_get(upload_max_filesize));
+            $g_message->show("file_2big_server",ini_get(post_max_size));
         }
         
         // Datei-Extension ermitteln
@@ -196,16 +187,14 @@ if($_GET["mode"] == 1)
         {
             $file_name = "$file_name.$file_ext";
         }
-        
+		
         $ret = isValidFileName($file_name, true);
         if($ret == 0)
         {
             // Datei hochladen
             if(move_uploaded_file($_FILES['userfile']['tmp_name'], "$act_folder/$file_name"))
             {
-                $err_code = "upload_file";
-                $err_text = $file_name;
-                $url = urlencode("$g_root_path/adm_program/modules/download/download.php?folder=$folder&default_folder=$default_folder");
+                $g_message->show("upload_file",$file_name);
             }
             else
             {
@@ -214,19 +203,17 @@ if($_GET["mode"] == 1)
         }
         else
         {
-            if($ret == -1)
-            {
-                $err_code = "feld";
-                $err_text = urlencode("Datei ausw&auml;hlen");
-            }
+        	if($ret == -1)
+        	{
+        		$g_message->show("feld", "Datei auswählen");
+        	}
             elseif($ret == -2)
             {
-                $err_code = "invalid_file_name";
-                $err_text = $file_name;
+                $g_message->show("invalid_file_name",$file_name);
             }
             elseif($ret == -3)
             {
-                $err_code = "invalid_file_extension";            
+                $g_message->show("invalid_file_extension");            
             }
         }
     }
@@ -239,18 +226,14 @@ elseif($_GET["mode"] == 2)
     {
         if( removeDir ("$act_folder/$file"))
         {
-            $err_code = "delete_folder";
-            $err_text = $file;
-            $url= "$g_root_path/adm_program/modules/download/download.php?default_folder=$default_folder&folder=$folder";
+        		$g_message->show("delete_folder",$file);
         }
     }
     else
     {
         if(unlink("$act_folder/$file"))
         {
-            $err_code = "delete_file";
-            $err_text = $file;
-            $url= "$g_root_path/adm_program/modules/download/download.php?default_folder=$default_folder&folder=$folder";
+            $g_message->show("delete_file",$file);
         }
     }
     $url = urlencode("$g_root_path/adm_program/modules/download/download.php?folder=$folder&default_folder=$default_folder");
@@ -261,13 +244,12 @@ elseif($_GET["mode"] == 3)
    $new_folder = $_POST['new_folder'];
 
    if(strpos($new_folder, "..") !== false)
-      $err_code = "invalid_folder";
+      $g_message->show("invalid_folder");
    else
    {
       if(strlen($new_folder) == 0)
       {
-         $err_code = "feld";
-         $err_text = "Name";
+         $g_message->show("feld", "Name");
       }
       else
       {
@@ -282,9 +264,7 @@ elseif($_GET["mode"] == 3)
 
          if(in_array($new_folder, $ordnerarray))
          {
-            $err_code = "folder_exists";
-            $err_text = $new_folder;
-            $url = urlencode("$g_root_path/adm_program/modules/download/folder_new.php?folder=&default_folder=");
+            $g_message->show(folder_exists, $new_folder);
          }
          else
          {
@@ -292,8 +272,7 @@ elseif($_GET["mode"] == 3)
             mkdir("$act_folder/$new_folder",0777);
             chmod("$act_folder/$new_folder", 0777);
 
-            $err_code = "create_folder";
-            $err_text = $new_folder;
+            $g_message->show("create_folder", $new_folder);
             $url = urlencode("$g_root_path/adm_program/modules/download/download.php?folder=$folder&default_folder=$default_folder");
          }
       }
@@ -306,8 +285,7 @@ elseif($_GET["mode"] == 4)
 
    if(strlen($new_name) == 0)
    {
-      $err_code = "feld";
-      $err_text = "Name";
+      $g_message->show("feld", "Name");
    }
    else
    {
@@ -325,17 +303,14 @@ elseif($_GET["mode"] == 4)
          //Gibt es den Ordner schon?
          if(in_array($new_name, $ordnerarray))
          {
-            $err_code = "folder_exists";
-            $err_text = $new_folder;
+            $g_message->show("folder_exists");
          }
          else
          {
             //Umbenennen der Datei
             if(rename("$act_folder/$file","$act_folder/$new_name"))
             {
-               $err_code = "rename_folder";
-               $err_text = $file;
-               $url = urlencode("$g_root_path/adm_program/modules/download/download.php?folder=$folder&default_folder=$default_folder");
+               $g_message->show("rename_folder",$file);
             }
          }
       }
@@ -354,8 +329,7 @@ elseif($_GET["mode"] == 4)
          //Gibt es die Datei schon?
          if(in_array($new_name, $ordnerarray))
          {
-            $err_code = "file_exists";
-            $err_text = $new_name;
+            $g_message->show("file_exists",$file);
          }
          else
          {
@@ -365,27 +339,21 @@ elseif($_GET["mode"] == 4)
             //Umbenennen der Datei
             if(rename("$act_folder/$file","$act_folder/$new_name"))
             {
-               $err_code = "rename_file";
-               $err_text = $file;
-               $url = urlencode("$g_root_path/adm_program/modules/download/download.php?folder=$folder&default_folder=$default_folder");
-            }
+            	$g_message->show("rename_file",$file);
+				}
             }
             else
             {
                if($ret == -2)
                {
-                  $err_code = "invalid_file_name";
-                  $err_text = $new_name;
+                  $g_message->show("invalid_file_name",$new_name);
                }
                elseif($ret == -3)
-                  $err_code = "invalid_file_extension";
+                  $g_message->show("invalid_file_extension");
             }
          }
       }
    }
 }
 
-$location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=$err_code&err_text=$err_text&url=$url";
-header($location);
-exit();
 ?>
