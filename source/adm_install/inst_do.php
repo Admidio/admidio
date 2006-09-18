@@ -181,6 +181,7 @@ if(strlen($g_tbl_praefix) == 0)
 
 // Defines fuer alle Datenbanktabellen
 define("TBL_ANNOUNCEMENTS",     $g_tbl_praefix. "_announcements");
+define("TBL_CATEGORIES",        $g_tbl_praefix. "_categories");
 define("TBL_DATES",             $g_tbl_praefix. "_dates");
 define("TBL_FOLDERS",           $g_tbl_praefix. "_folders");
 define("TBL_FOLDER_ROLES",      $g_tbl_praefix. "_folder_roles");
@@ -191,10 +192,10 @@ define("TBL_MEMBERS",           $g_tbl_praefix. "_members");
 define("TBL_ORGANIZATIONS",     $g_tbl_praefix. "_organizations");
 define("TBL_PHOTOS",            $g_tbl_praefix. "_photos");
 define("TBL_PREFERENCES",       $g_tbl_praefix. "_preferences");
-define("TBL_ROLE_CATEGORIES",   $g_tbl_praefix. "_role_categories");
 define("TBL_ROLE_DEPENDENCIES", $g_tbl_praefix. "_role_dependencies");
 define("TBL_ROLES",             $g_tbl_praefix. "_roles");
 define("TBL_SESSIONS",          $g_tbl_praefix. "_sessions");
+define("TBL_TEXTS",             $g_tbl_praefix. "_texts");
 define("TBL_USERS",             $g_tbl_praefix. "_users");
 define("TBL_USER_DATA",         $g_tbl_praefix. "_user_data");
 define("TBL_USER_FIELDS",       $g_tbl_praefix. "_user_fields");
@@ -334,11 +335,7 @@ if($_GET['mode'] == 3)
         for($i = $_POST['version']; $i <= 4; $i++)
         {
             $error = 0;
-            if($i == 1)
-            {
-                $filename = "db_scripts/upd_1_1_db.sql";
-            }
-            elseif($i == 3)
+            if($i == 3)
             {
                 $filename = "db_scripts/upd_1_3_db.sql";
             }
@@ -379,15 +376,7 @@ if($_GET['mode'] == 3)
                 }
             }
 
-            if($i == 1)
-            {
-                include("db_scripts/upd_1_1_conv.php");
-            }
-            elseif($i == 2)
-            {
-                include("db_scripts/upd_1_2_conv.php");
-            }
-            elseif($i == 3)
+            if($i == 3)
             {
                 include("db_scripts/upd_1_3_conv.php");
             }
@@ -501,34 +490,37 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
     db_error($result);
     
     
-    // Rollen-Kategorie eintragen
-    $sql = "INSERT INTO ". TBL_ROLE_CATEGORIES. " (rlc_org_shortname, rlc_name, rlc_locked)
-                                           VALUES ({0}, 'Allgemein', 1)";
-    $sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
+    // Default-Kategorie fuer Rollen und Links eintragen
+    $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden)
+                                           VALUES ($org_id, 'ROL', 'Allgemein', 1)";
     $result = mysql_query($sql, $connection);
+    if(!$result) showError(mysql_error());
     $category_common = mysql_insert_id();
+    
+    $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden)
+                                           VALUES ($org_id, 'ROL', 'Gruppen', 1)";
+    $result = mysql_query($sql, $connection);
+    if(!$result) showError(mysql_error());
+    
+    $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden)
+                                           VALUES ($org_id, 'ROL', 'Kurse', 1)";
+    $result = mysql_query($sql, $connection);
+    if(!$result) showError(mysql_error());
+    
+    $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden)
+                                           VALUES ($org_id, 'ROL', 'Mannschaften', 1)";
+    $result = mysql_query($sql, $connection);
+    if(!$result) showError(mysql_error());
 
-    if(!$result) showError(mysql_error());
-    $sql = "INSERT INTO ". TBL_ROLE_CATEGORIES. " (rlc_org_shortname, rlc_name)
-                                           VALUES ({0}, 'Gruppen')";
-    $sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
-    $result = mysql_query($sql, $connection);
-    if(!$result) showError(mysql_error());
-    $sql = "INSERT INTO ". TBL_ROLE_CATEGORIES. " (rlc_org_shortname, rlc_name)
-                                           VALUES ({0}, 'Kurse')";
-    $sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
-    $result = mysql_query($sql, $connection);
-    if(!$result) showError(mysql_error());
-    $sql = "INSERT INTO ". TBL_ROLE_CATEGORIES. " (rlc_org_shortname, rlc_name)
-                                           VALUES ({0}, 'Mannschaften')";
-    $sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
+    $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden)
+                                           VALUES ($org_id, 'LNK', 'Allgemein', 0)";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
 
     // nun die Default-Rollen anlegen
 
     // Webmaster
-    $sql = "INSERT INTO ". TBL_ROLES. " (rol_org_shortname, rol_rlc_id, rol_name, rol_description, rol_valid,
+    $sql = "INSERT INTO ". TBL_ROLES. " (rol_org_shortname, rol_cat_id, rol_name, rol_description, rol_valid,
                                          rol_moderation, rol_announcements, rol_dates, rol_download, 
                                          rol_guestbook, rol_guestbook_comments, rol_photo, rol_weblinks,
                                          rol_edit_user, rol_mail_logout, rol_mail_login)
@@ -539,7 +531,7 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
     if(!$result) showError(mysql_error());
 
     // Mitglied
-    $sql = "INSERT INTO ". TBL_ROLES. " (rol_org_shortname, rol_rlc_id, rol_name, rol_description, rol_valid,
+    $sql = "INSERT INTO ". TBL_ROLES. " (rol_org_shortname, rol_cat_id, rol_name, rol_description, rol_valid,
                                          rol_moderation, rol_announcements, rol_dates, rol_download,
                                          rol_guestbook, rol_guestbook_comments, rol_photo, rol_weblinks,
                                          rol_edit_user, rol_mail_logout, rol_mail_login)
@@ -550,7 +542,7 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
     if(!$result) showError(mysql_error());
 
     // Vorstand
-    $sql = "INSERT INTO ". TBL_ROLES. " (rol_org_shortname, rol_rlc_id, rol_name, rol_description, rol_valid,
+    $sql = "INSERT INTO ". TBL_ROLES. " (rol_org_shortname, rol_cat_id, rol_name, rol_description, rol_valid,
                                          rol_moderation, rol_announcements, rol_dates, rol_download, 
                                          rol_guestbook, rol_guestbook_comments, rol_photo, rol_weblinks,
                                          rol_edit_user, rol_mail_logout, rol_mail_login)
