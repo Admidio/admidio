@@ -48,6 +48,8 @@ else
     setcookie("adm_session", "", 0, "/", ".". $g_domain);
 }
 
+unset($_SESSION['g_current_organizsation']);
+
 if ($session_found > 0)
 {
     // Session loeschen

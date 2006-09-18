@@ -381,7 +381,7 @@ elseif($_GET["mode"] == 2)
                 $act_date = date("Y.m.d G:i:s", time());
                 $sql = "UPDATE ". TBL_ROLES. "  SET rol_name    = {0}
                                                   , rol_description   = {1}
-                                                  , rol_rlc_id        = {2}
+                                                  , rol_cat_id        = {2}
                                                   , rol_moderation    = $moderation
                                                   , rol_announcements = $announcements
                                                   , rol_dates         = $termine
@@ -409,7 +409,7 @@ elseif($_GET["mode"] == 2)
             else
             {
                 // Rolle in Datenbank hinzufuegen
-                $sql    = "INSERT INTO ". TBL_ROLES. " (rol_org_shortname, rol_name, rol_description, rol_rlc_id,
+                $sql    = "INSERT INTO ". TBL_ROLES. " (rol_org_shortname, rol_name, rol_description, rol_cat_id,
                                                        rol_moderation, rol_announcements, rol_dates, rol_photo, rol_download,
                                                        rol_edit_user, rol_guestbook, rol_guestbook_comments, rol_mail_logout, 
                                                        rol_mail_login, rol_weblinks,  rol_locked, rol_start_date, rol_start_time,

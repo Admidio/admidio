@@ -48,11 +48,11 @@ else
 }
 
 // Alle Rollen auflisten, die der Webmaster sehen darf
-$sql    = "SELECT * FROM ". TBL_ROLES. ", ". TBL_ROLE_CATEGORIES. "
+$sql    = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
             WHERE rol_org_shortname = '$g_organization' 
               AND rol_valid         = $valid
-              AND rol_rlc_id        = rlc_id
-            ORDER BY rlc_name, rol_name ";
+              AND rol_cat_id        = cat_id
+            ORDER BY cat_name, rol_name ";
 $result = mysql_query($sql, $g_adm_con);
 db_error($result);
 
@@ -102,9 +102,9 @@ require("../../../adm_config/body_top.php");
             </span>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <span class=\"iconLink\">
-                <a class=\"iconLink\" href=\"categories.php\"><img 
+                <a class=\"iconLink\" href=\"categories.php?type=ROL\"><img 
                 src=\"$g_root_path/adm_program/images/application_double.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Kategorien pflegen\"></a>
-                <a class=\"iconLink\" href=\"categories.php\">Kategorien pflegen</a>
+                <a class=\"iconLink\" href=\"categories.php?type=ROL\">Kategorien pflegen</a>
             </span>
         </p>
 
@@ -122,7 +122,7 @@ require("../../../adm_config/body_top.php");
                 echo "
                 <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
                     <td style=\"text-align: left;\">&nbsp;<a href=\"$g_root_path/adm_program/administration/roles/roles_new.php?rol_id=$row->rol_id\">$row->rol_name</a></td>
-                    <td style=\"text-align: left;\">&nbsp;$row->rlc_name</td>
+                    <td style=\"text-align: left;\">&nbsp;$row->cat_name</td>
                     <td style=\"text-align: left;\">";
                         if($row->rol_moderation == 1)
                         {

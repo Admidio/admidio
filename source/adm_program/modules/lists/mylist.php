@@ -168,20 +168,20 @@ require("../../../adm_config/body_top.php");
                     // Webmaster und Moderatoren duerfen Listen zu allen Rollen sehen
                     if(isModerator())
                     {
-                        $sql     = "SELECT * FROM ". TBL_ROLES. ", ". TBL_ROLE_CATEGORIES. "
+                        $sql     = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                                      WHERE rol_org_shortname = '$g_organization'
                                        AND rol_valid         = $active_role
-                                       AND rol_rlc_id        = rlc_id
-                                     ORDER BY rlc_name, rol_name";
+                                       AND rol_cat_id        = cat_id
+                                     ORDER BY cat_name, rol_name";
                     }
                     else
                     {
-                        $sql     = "SELECT * FROM ". TBL_ROLES. ", ". TBL_ROLE_CATEGORIES. "
+                        $sql     = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                                      WHERE rol_org_shortname = '$g_organization'
                                        AND rol_locked        = 0
                                        AND rol_valid         = $active_role
-                                       AND rol_rlc_id        = rlc_id
-                                     ORDER BY rlc_name, rol_name";
+                                       AND rol_cat_id        = cat_id
+                                     ORDER BY cat_name, rol_name";
                     }
                     $result_lst = mysql_query($sql, $g_adm_con);
                     db_error($result_lst);
@@ -189,14 +189,14 @@ require("../../../adm_config/body_top.php");
 
                     while($row = mysql_fetch_object($result_lst))
                     {
-                        if($act_category != $row->rlc_name)
+                        if($act_category != $row->cat_name)
                         {
                             if(strlen($act_category) > 0)
                             {
                                 echo "</optgroup>";
                             }
-                            echo "<optgroup label=\"$row->rlc_name\">";
-                            $act_category = $row->rlc_name;
+                            echo "<optgroup label=\"$row->cat_name\">";
+                            $act_category = $row->cat_name;
                         }
                         echo "<option value=\"$row->rol_id\" ";
                         if($rol_id == $row->rol_id)

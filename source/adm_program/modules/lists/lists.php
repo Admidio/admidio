@@ -85,10 +85,10 @@ else
 
 // SQL-Statement zusammensetzen
 
-$sql = "SELECT * FROM ". TBL_ROLES. ", ". TBL_ROLE_CATEGORIES. "
+$sql = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
          WHERE rol_org_shortname = '$g_organization' 
            AND rol_valid  = $active_role 
-           AND rol_rlc_id = rlc_id ";
+           AND rol_cat_id = cat_id ";
 if(!isModerator()) 
 {
     // wenn nicht Moderator, dann keine versteckten Rollen anzeigen
@@ -96,13 +96,14 @@ if(!isModerator())
 }
 if($g_session_valid == false)
 {
-    $sql .= " AND rlc_locked = 0 ";
+    $sql .= " AND cat_hidden = 0 ";
 }
 if(strlen($category) > 0 && $category != "Alle")
 {
     // wenn eine Kategorie uebergeben wurde, dann nur Rollen dieser anzeigen
-    $sql .= " AND rlc_org_shortname = '$g_organization' 
-              AND rlc_name          = '$category' ";
+    $sql .= " AND cat_org_id = $g_current_organization->id
+              AND cat_type   = 'ROL'
+              AND cat_name   = '$category' ";
 }
 $sql .= "ORDER BY rol_name ";
 
@@ -200,13 +201,14 @@ require("../../../adm_config/body_top.php");
         if($show_ctg_sel == 1)
         {
             // Combobox mit allen Kategorien anzeigen
-            $sql = "SELECT * FROM ". TBL_ROLE_CATEGORIES. "
-                     WHERE rlc_org_shortname = '$g_organization' ";
+            $sql = "SELECT * FROM ". TBL_CATEGORIES. "
+                     WHERE cat_org_id = $g_current_organization->id 
+                       AND cat_type   = 'ROL' ";
             if($g_session_valid == false)
             {
-                $sql .= " AND rlc_locked = 0 ";
+                $sql .= " AND cat_hidden = 0 ";
             }
-            $sql .= " ORDER BY rlc_name ASC ";
+            $sql .= " ORDER BY cat_name ASC ";
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
 
@@ -223,12 +225,12 @@ require("../../../adm_config/body_top.php");
 
                     while($row = mysql_fetch_object($result))
                     {
-                        echo '<option value="'. urlencode($row->rlc_name). '"';
-                        if($category == $row->rlc_name)
+                        echo '<option value="'. urlencode($row->cat_name). '"';
+                        if($category == $row->cat_name)
                         {
                             echo " selected ";
                         }
-                        echo ">$row->rlc_name</option>";
+                        echo ">$row->cat_name</option>";
                     }
                 echo '</select></p>';
             }

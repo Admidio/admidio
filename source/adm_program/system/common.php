@@ -46,6 +46,7 @@ if(strlen($g_tbl_praefix) == 0)
 
 // Defines fuer alle Datenbanktabellen
 define("TBL_ANNOUNCEMENTS",     $g_tbl_praefix. "_announcements");
+define("TBL_CATEGORIES",        $g_tbl_praefix. "_categories");
 define("TBL_DATES",             $g_tbl_praefix. "_dates");
 define("TBL_FOLDERS",           $g_tbl_praefix. "_folders");
 define("TBL_FOLDER_ROLES",      $g_tbl_praefix. "_folder_roles");
@@ -60,6 +61,7 @@ define("TBL_ROLE_CATEGORIES",   $g_tbl_praefix. "_role_categories");
 define("TBL_ROLE_DEPENDENCIES", $g_tbl_praefix. "_role_dependencies");
 define("TBL_ROLES",             $g_tbl_praefix. "_roles");
 define("TBL_SESSIONS",          $g_tbl_praefix. "_sessions");
+define("TBL_TEXTS",             $g_tbl_praefix. "_texts");
 define("TBL_USERS",             $g_tbl_praefix. "_users");
 define("TBL_USER_DATA",         $g_tbl_praefix. "_user_data");
 define("TBL_USER_FIELDS",       $g_tbl_praefix. "_user_fields");
@@ -83,35 +85,35 @@ $g_message       = new Message();
 if(isset($_SESSION['g_current_organizsation']) 
 && isset($_SESSION['g_preferences']))
 {
-	$g_current_organization = $_SESSION['g_current_organizsation'];
-	$g_current_organization->db_connection = $g_adm_con;
-	$g_preferences  = $_SESSION['g_preferences'];
+    $g_current_organization = $_SESSION['g_current_organizsation'];
+    $g_current_organization->db_connection = $g_adm_con;
+    $g_preferences  = $_SESSION['g_preferences'];
 }
 else
 {
-	$g_current_organization = new Organization($g_adm_con);
-	$g_current_organization->getOrganization($g_organization);
-	
-	// Einstellungen der Organisation auslesen
-	$sql    = "SELECT * FROM ". TBL_PREFERENCES. "
-	            WHERE prf_org_id = $g_current_organization->id ";
-	$result = mysql_query($sql, $g_adm_con);
-	if($result == false)
-	{
-	    // Fehler direkt ausgeben, da hier sonst Endlosschleifen entstehen
-	    echo "<div style=\"color: #CC0000;\">Error: ". mysql_error(). "</div>";
-	    exit();
-	}
-	
-	$g_preferences = array();
-	while($prf_row = mysql_fetch_object($result))
-	{
-	    $g_preferences[$prf_row->prf_name] = $prf_row->prf_value;
-	}
+    $g_current_organization = new Organization($g_adm_con);
+    $g_current_organization->getOrganization($g_organization);
+    
+    // Einstellungen der Organisation auslesen
+    $sql    = "SELECT * FROM ". TBL_PREFERENCES. "
+                WHERE prf_org_id = $g_current_organization->id ";
+    $result = mysql_query($sql, $g_adm_con);
+    if($result == false)
+    {
+        // Fehler direkt ausgeben, da hier sonst Endlosschleifen entstehen
+        echo "<div style=\"color: #CC0000;\">Error: ". mysql_error(). "</div>";
+        exit();
+    }
+    
+    $g_preferences = array();
+    while($prf_row = mysql_fetch_object($result))
+    {
+        $g_preferences[$prf_row->prf_name] = $prf_row->prf_value;
+    }
 
-	// Daten in Session-Variablen sichern
-	$_SESSION['g_current_organizsation'] = $g_current_organization;
-	$_SESSION['g_preferences']  = $g_preferences;
+    // Daten in Session-Variablen sichern
+    $_SESSION['g_current_organizsation'] = $g_current_organization;
+    $_SESSION['g_preferences']  = $g_preferences;
 }
 
 // includes MIT Datenbankverbindung

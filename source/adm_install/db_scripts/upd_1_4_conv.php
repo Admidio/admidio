@@ -24,6 +24,21 @@
  *
  *****************************************************************************/
 
+define("TBL_ROLE_CATEGORIES",   $g_tbl_praefix. "_role_categories");
+
+// Categorien-Tabelle kopieren
+$sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_id, cat_org_id, cat_type, cat_name, cat_hidden)
+                        SELECT rlc_id, org_id, 'ROL', rlc_name, rlc_locked
+                          FROM ". TBL_ROLE_CATEGORIES. "
+                          LEFT JOIN ". TBL_ORGANIZATIONS. "
+                            ON rlc_org_shortname = org_shortname ";
+$result = mysql_query($sql, $connection);
+if(!$result) showError(mysql_error());
+
+$sql = "drop table ". TBL_ROLE_CATEGORIES;
+$result = mysql_query($sql, $connection);
+if(!$result) showError(mysql_error());
+
 // Orga-Felder in adm_preferences umwandeln
 $sql = "SELECT * FROM ". TBL_ORGANIZATIONS;
 $result_orga = mysql_query($sql, $connection);
@@ -65,6 +80,32 @@ while($row_orga = mysql_fetch_object($result_orga))
             VALUES ($row_orga->org_id, 'photo_preview_scale', '100')";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
+
+    // Alle Links bekommen erst einmal die neue Kategorie "Allgemein"
+    
+    $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden)
+                                      VALUES ($row_orga->org_id, 'LNK', 'Allgemein', 0) ";
+    $result = mysql_query($sql, $connection);
+    if(!$result) showError(mysql_error());
+    
+    $cat_id = mysql_insert_id($connection);
+    
+    $sql = "UPDATE ". TBL_LINKS. " SET lnk_cat_id = $cat_id 
+             WHERE lnk_org_id = $row_orga->org_id ";
+    $result = mysql_query($sql, $connection);
+    if(!$result) showError(mysql_error());
 }
+
+// Referenz zw. Rollen und Kategorie wiederherstellen
+$sql = "alter table ". TBL_ROLES. " add constraint ". $g_tbl_praefix. "_FK_ROL_CAT foreign key (rol_cat_id)
+        references ". TBL_CATEGORIES. " (cat_id) on delete restrict on update restrict ";
+$result = mysql_query($sql, $connection);
+if(!$result) showError(mysql_error());
+
+// Referenz zw. Rollen und Kategorie wiederherstellen
+$sql = "alter table ". TBL_LINKS. " add constraint ". $g_tbl_praefix. "_FK_LNK_CAT foreign key (lnk_cat_id)
+        references ". TBL_CATEGORIES. " (cat_id) on delete restrict on update restrict ";
+$result = mysql_query($sql, $connection);
+if(!$result) showError(mysql_error());
 
 ?>
