@@ -109,6 +109,8 @@ if ($user_found >= 1)
         {
             setcookie("adm_session", "$user_session" , 0, "/", ".". $g_domain);
         }
+        
+        unset($_SESSION['g_current_organizsation']);
 
         // Last-Login speichern
 
@@ -132,14 +134,14 @@ if ($user_found >= 1)
         // die Startseite verweisen
         if(isset($_SESSION['login_forward_url']) == false)
         {
-        	$_SESSION['login_forward_url'] = "home";
+            $_SESSION['login_forward_url'] = "home";
         }
         
         // bevor zur entsprechenden Seite weitergeleitet wird, muss noch geprueft werden,
         // ob der Browser Cookies setzen darf -> sonst kein Login moeglich
-	    $location = "Location: $g_root_path/adm_program/system/cookie_check.php";
-	    header($location);
-	    exit();
+        $location = "Location: $g_root_path/adm_program/system/cookie_check.php";
+        header($location);
+        exit();
     }
     else
     {

@@ -10,25 +10,21 @@ drop table if exists %PRAEFIX%_announcements;
 
 drop table if exists %PRAEFIX%_dates;
 
-drop table if exists %PRAEFIX%_folders;
-
 drop table if exists %PRAEFIX%_folder_roles;
 
-drop table if exists %PRAEFIX%_guestbook;
+drop table if exists %PRAEFIX%_folders;
 
 drop table if exists %PRAEFIX%_guestbook_comments;
+
+drop table if exists %PRAEFIX%_guestbook;
 
 drop table if exists %PRAEFIX%_links;
 
 drop table if exists %PRAEFIX%_members;
 
-drop table if exists %PRAEFIX%_organizations;
-
 drop table if exists %PRAEFIX%_photos;
 
 drop table if exists %PRAEFIX%_preferences;
-
-drop table if exists %PRAEFIX%_role_categories;
 
 drop table if exists %PRAEFIX%_role_dependencies;
 
@@ -41,6 +37,12 @@ drop table if exists %PRAEFIX%_user_data;
 drop table if exists %PRAEFIX%_user_fields;
 
 drop table if exists %PRAEFIX%_users;
+
+drop table if exists %PRAEFIX%_texts;
+
+drop table if exists %PRAEFIX%_categories;
+
+drop table if exists %PRAEFIX%_organizations;
 
 /*==============================================================*/
 /* Table: adm_announcements                                     */
@@ -202,8 +204,13 @@ create table %PRAEFIX%_guestbook_comments
    gbc_id                         int(11) unsigned               not null AUTO_INCREMENT,
    gbc_gbo_id                     int(11) unsigned               not null,
    gbc_usr_id                     int(11) unsigned               not null,
+   gbc_name                       varchar(60)                    not null,
    gbc_text                       text                           not null,
+   gbc_email                      varchar(50),
    gbc_timestamp                  datetime                       not null,
+   gbc_ip_address                 varchar(15)                    not null,
+   gbc_last_change                datetime,
+   gbc_usr_id_change              int(11) unsigned,
    primary key (gbc_id)
 )
 type = InnoDB;
@@ -225,6 +232,7 @@ create table %PRAEFIX%_links
 (
    lnk_id                         int(11) unsigned               not null AUTO_INCREMENT,
    lnk_org_id                     tinyint(4)                     not null,
+   lnk_cat_id 							 int(11) unsigned               not null,
    lnk_name                       varchar(255)                   not null,
    lnk_description                text,
    lnk_url                        varchar(255)                   not null,
@@ -357,23 +365,24 @@ type = InnoDB;
 alter table %PRAEFIX%_preferences add index PRF_ORG_FK (prf_org_id);
 
 /*==============================================================*/
-/* Table: adm_role_categories                                   */
+/* Table: adm_categories                                        */
 /*==============================================================*/
-create table %PRAEFIX%_role_categories
+create table %PRAEFIX%_categories
 (
-   rlc_id                         int (11) unsigned              not null AUTO_INCREMENT,
-   rlc_org_shortname              varchar(10)                    not null,
-   rlc_name                       varchar(30)                    not null,
-   rlc_locked                     tinyint(1) unsigned            not null default 0,
-   primary key (rlc_id)
+   cat_id                         int (11) unsigned              not null AUTO_INCREMENT,
+   cat_org_id                     tinyint(4)                     not null,
+   cat_type                       varchar(10)                    not null,
+   cat_name                       varchar(30)                    not null,
+   cat_hidden                     tinyint(1) unsigned            not null default 0,
+   primary key (cat_id)
 )
 type = InnoDB
 auto_increment = 1;
 
 /*==============================================================*/
-/* Index: "RLC_ORG_FK"                                            */
+/* Index: "CAT_ORG_FK"                                            */
 /*==============================================================*/
-alter table %PRAEFIX%_role_categories add index RLC_ORG_FK (rlc_org_shortname);
+alter table %PRAEFIX%_categories add index CAT_ORG_FK (cat_org_id);
 
 /*==============================================================*/
 /* Table: adm_role_dependencies                                 */
@@ -411,7 +420,7 @@ create table %PRAEFIX%_roles
 (
    rol_id                         int(11) unsigned               not null AUTO_INCREMENT,
    rol_org_shortname              varchar(10)                    not null,
-   rol_rlc_id                     int(11) unsigned               not null,
+   rol_cat_id                     int(11) unsigned               not null,
    rol_name                       varchar(30)                    not null,
    rol_description                varchar(255),
    rol_moderation                 tinyint(1) unsigned            not null default 0,
@@ -448,9 +457,9 @@ auto_increment = 1;
 alter table %PRAEFIX%_roles add index ROL_ORG_FK (rol_org_shortname);
 
 /*==============================================================*/
-/* Index: "ROL_RLC_FK"                                            */
+/* Index: "ROL_CAT_FK"                                            */
 /*==============================================================*/
-alter table %PRAEFIX%_roles add index ROL_RLC_FK (rol_rlc_id);
+alter table %PRAEFIX%_roles add index ROL_CAT_FK (rol_cat_id);
 
 /*==============================================================*/
 /* Index: "ROL_USR_FK"                                            */
@@ -484,6 +493,25 @@ alter table %PRAEFIX%_sessions add index SES_USR_FK (ses_usr_id);
 /* Index: "SES_ORG_FK"                                            */
 /*==============================================================*/
 alter table %PRAEFIX%_sessions add index SES_ORG_FK (ses_org_shortname);
+
+/*==============================================================*/
+/* Table: adm_texts                                             */
+/*==============================================================*/
+create table adm_texts
+(
+   txt_id                         int(11) unsigned               not null,
+   txt_org_id                     tinyint(4)                     not null,
+   txt_name                       varchar(30)                    not null,
+   txt_text                       text,
+   primary key (txt_id)
+)
+type = InnoDB
+auto_increment = 1;
+
+/*==============================================================*/
+/* Index: "TXT_ORG_FK"                                            */
+/*==============================================================*/
+alter table %PRAEFIX%_texts add index TXT_ORG_FK (txt_org_id);
 
 /*==============================================================*/
 /* Table: adm_user_data                                         */
@@ -626,12 +654,18 @@ alter table %PRAEFIX%_guestbook_comments add constraint %PRAEFIX%_FK_GBC_GBO for
 
 alter table %PRAEFIX%_guestbook_comments add constraint %PRAEFIX%_FK_GBC_USR foreign key (gbc_usr_id)
       references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
+      
+alter table %PRAEFIX%_guestbook_comments add constraint %PRAEFIX%_FK_GBC_USR_CHANGE foreign key (gbc_usr_id_change)
+      references %PRAEFIX%_users (usr_id) on delete set null on update restrict;      
 
 alter table %PRAEFIX%_links add constraint %PRAEFIX%_FK_LNK_ORG foreign key (lnk_org_id)
       references %PRAEFIX%_organizations (org_id) on delete restrict on update restrict;
 
 alter table %PRAEFIX%_links add constraint %PRAEFIX%_FK_LNK_USR foreign key (lnk_usr_id)
       references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
+      
+alter table %PRAEFIX%_links add constraint %PRAEFIX%_FK_LNK_CAT foreign key (lnk_cat_id)
+      references %PRAEFIX%_categories (cat_id) on delete restrict on update restrict;      
 
 alter table %PRAEFIX%_members add constraint %PRAEFIX%_FK_MEM_ROL foreign key (mem_rol_id)
       references %PRAEFIX%_roles (rol_id) on delete restrict on update restrict;
@@ -657,8 +691,8 @@ alter table %PRAEFIX%_photos add constraint %PRAEFIX%_FK_PHO_USR_CHANGE foreign 
 alter table %PRAEFIX%_preferences add constraint %PRAEFIX%_FK_PRF_ORG foreign key (prf_org_id)
       references %PRAEFIX%_organizations (org_id) on delete restrict on update restrict;
 
-alter table %PRAEFIX%_role_categories add constraint %PRAEFIX%_FK_RLC_ORG foreign key (rlc_org_shortname)
-      references %PRAEFIX%_organizations (org_shortname) on delete restrict on update restrict;
+alter table %PRAEFIX%_categories add constraint %PRAEFIX%_FK_CAT_ORG foreign key (cat_org_id)
+      references %PRAEFIX%_organizations (org_id) on delete restrict on update restrict;
 
 alter table %PRAEFIX%_role_dependencies add constraint %PRAEFIX%_FK_RLD_ROL_CHILD foreign key (rld_rol_id_child)
       references %PRAEFIX%_roles (rol_id) on delete restrict on update restrict;
@@ -672,8 +706,8 @@ alter table %PRAEFIX%_role_dependencies add constraint %PRAEFIX%_FK_RLD_USR fore
 alter table %PRAEFIX%_roles add constraint %PRAEFIX%_FK_ROL_ORG foreign key (rol_org_shortname)
       references %PRAEFIX%_organizations (org_shortname) on delete restrict on update restrict;
 
-alter table %PRAEFIX%_roles add constraint %PRAEFIX%_FK_ROL_RLC foreign key (rol_rlc_id)
-      references %PRAEFIX%_role_categories (rlc_id) on delete restrict on update restrict;
+alter table %PRAEFIX%_roles add constraint %PRAEFIX%_FK_ROL_CAT foreign key (rol_cat_id)
+      references %PRAEFIX%_categories (cat_id) on delete restrict on update restrict;
 
 alter table %PRAEFIX%_roles add constraint %PRAEFIX%_FK_ROL_USR foreign key (rol_usr_id_change)
       references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
@@ -683,6 +717,9 @@ alter table %PRAEFIX%_sessions add constraint %PRAEFIX%_FK_SES_ORG foreign key (
 
 alter table %PRAEFIX%_sessions add constraint %PRAEFIX%_FK_SES_USR foreign key (ses_usr_id)
       references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
+      
+alter table %PRAEFIX%_texts add constraint %PRAEFIX%_FK_TXT_ORG foreign key (txt_org_id)
+      references %PRAEFIX%_organizations (org_id) on delete restrict on update restrict;      
 
 alter table %PRAEFIX%_user_data add constraint %PRAEFIX%_FK_USD_USF foreign key (usd_usf_id)
       references %PRAEFIX%_user_fields (usf_id) on delete restrict on update restrict;

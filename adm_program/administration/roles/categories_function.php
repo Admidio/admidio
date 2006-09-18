@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Verschiedene Funktionen fuer Rollen-Kategorien
+ * Verschiedene Funktionen fuer Kategorien
  *
  * Copyright    : (c) 2004 - 2006 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -8,7 +8,10 @@
  *
  * Uebergaben:
  *
- * rlc_id: ID der Rollen-Kategorien
+ * cat_id: ID der Rollen-Kategorien
+ * type :  Typ der Kategorie, die angelegt werden sollen
+ *         ROL = Rollenkategorien
+ *         LNK = Linkkategorien
  * mode:   1 - Kategorie anlegen oder updaten
  *         2 - Kategorie loeschen
  *         3 - Frage, ob Kategorie geloescht werden soll
@@ -50,9 +53,24 @@ if(is_numeric($_GET["mode"]) == false
     $g_message->show("invalid");
 }
 
-if(isset($_GET["rlc_id"]) && is_numeric($_GET["rlc_id"]) == false)
+if(isset($_GET["cat_id"]) && is_numeric($_GET["cat_id"]) == false)
 {
     $g_message->show("invalid");
+}
+
+if($_GET["cat_id"] == 0)
+{
+    if(isset($_GET["type"]))
+    {
+        if($_GET["type"] != "ROL" && $_GET["type"] != "LNK")
+        {
+            $g_message->show("invalid");
+        }
+    }
+    else
+    {
+        $g_message->show("invalid");
+    }  
 }
 
 // wenn URL uebergeben wurde zu dieser gehen, ansonsten zurueck
@@ -72,17 +90,17 @@ if($_GET['mode'] == 1)
 {
     // Feld anlegen oder updaten
 
-	$_SESSION['categories_request'] = $_REQUEST;
+    $_SESSION['categories_request'] = $_REQUEST;
     $category_name = strStripTags($_POST['name']);
 
     if(strlen($category_name) > 0)
     {
-        if(!($_GET['rlc_id'] > 0))
+        if(!($_GET['cat_id'] > 0))
         {
             // Schauen, ob die Kategorie bereits existiert
-            $sql    = "SELECT COUNT(*) FROM ". TBL_ROLE_CATEGORIES. "
-                        WHERE rlc_org_shortname LIKE '$g_organization'
-                          AND rlc_name          LIKE {0}";
+            $sql    = "SELECT COUNT(*) FROM ". TBL_CATEGORIES. "
+                        WHERE cat_org_id = $g_current_organization->id
+                          AND cat_name   LIKE {0}";
             $sql    = prepareSQL($sql, array($category_name));
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
@@ -94,29 +112,29 @@ if($_GET['mode'] == 1)
             }      
         }
 
-        if(array_key_exists("locked", $_POST))
+        if(array_key_exists("hidden", $_POST))
         {
-            $locked = 1;
+            $hidden = 1;
         }
         else
         {
-            $locked = 0;
+            $hidden = 0;
         }
 
-        if($_GET['rlc_id'] > 0)
+        if($_GET['cat_id'] > 0)
         {
-            $sql = "UPDATE ". TBL_ROLE_CATEGORIES. "
-                       SET rlc_name   = {0}
-                         , rlc_locked = $locked
-                     WHERE rlc_id     = {1}";
+            $sql = "UPDATE ". TBL_CATEGORIES. "
+                       SET cat_name   = {0}
+                         , cat_hidden = $hidden
+                     WHERE cat_id     = {1}";
         }
         else
         {
             // Feld in Datenbank hinzufuegen
-            $sql    = "INSERT INTO ". TBL_ROLE_CATEGORIES. " (rlc_org_shortname, rlc_name, rlc_locked)
-                                                      VALUES ('$g_organization', {0}, $locked) ";
+            $sql    = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden)
+                                                 VALUES ($g_current_organization->id, {2}, {0}, $hidden) ";
         }
-        $sql    = prepareSQL($sql, array(trim($category_name), $_GET['rlc_id']));
+        $sql    = prepareSQL($sql, array(trim($category_name), $_GET['cat_id'], $_GET['type']));
         $result = mysql_query($sql, $g_adm_con);
         db_error($result);
         unset($_SESSION['categories_request']);
@@ -139,8 +157,8 @@ elseif($_GET['mode'] == 2)  // Feld loeschen
 {
     // schauen, ob Rollen dieser Kategorie zugeordnet sind
     $sql    = "SELECT * FROM ". TBL_ROLES. "
-                WHERE rol_rlc_id = {0} ";
-    $sql    = prepareSQL($sql, array($_GET['rlc_id']));
+                WHERE rol_cat_id = {0} ";
+    $sql    = prepareSQL($sql, array($_GET['cat_id']));
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);              
     $row_num = mysql_num_rows($result);
@@ -148,9 +166,9 @@ elseif($_GET['mode'] == 2)  // Feld loeschen
     if($row_num == 0)
     {
         // Feld loeschen
-        $sql    = "DELETE FROM ". TBL_ROLE_CATEGORIES. "
-                    WHERE rlc_id = {0}";
-        $sql    = prepareSQL($sql, array($_GET['rlc_id']));
+        $sql    = "DELETE FROM ". TBL_CATEGORIES. "
+                    WHERE cat_id = {0}";
+        $sql    = prepareSQL($sql, array($_GET['cat_id']));
         $result = mysql_query($sql, $g_adm_con);
         db_error($result);
 
@@ -160,18 +178,18 @@ elseif($_GET['mode'] == 2)  // Feld loeschen
 elseif($_GET["mode"] == 3)
 {
     // Frage, ob Kategorie geloescht werden soll
-    $sql = "SELECT rlc_name FROM ". TBL_ROLE_CATEGORIES. "
-             WHERE rlc_id = {0}";
-    $sql    = prepareSQL($sql, array($_GET['rlc_id']));
+    $sql = "SELECT cat_name FROM ". TBL_CATEGORIES. "
+             WHERE cat_id = {0}";
+    $sql    = prepareSQL($sql, array($_GET['cat_id']));
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
     $row = mysql_fetch_array($result);
     
-    $g_message->setForwardYesNo("$g_root_path/adm_program/administration/roles/categories_function.php?rlc_id=". $_GET['rlc_id']. "&mode=2&url=$url");
+    $g_message->setForwardYesNo("$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=". $_GET['cat_id']. "&mode=2&url=$url");
     $g_message->show("delete_category", utf8_encode($row[0]), "Löschen");
 }
          
 // zur Kategorienuebersicht zurueck
-$g_message->setForwardUrl("$g_root_path/adm_program/administration/roles/categories.php?url=$url", 2000);
+$g_message->setForwardUrl("$g_root_path/adm_program/administration/roles/categories.php?type=ROL&url=$url", 2000);
 $g_message->show($err_code);
 ?>

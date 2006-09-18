@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Rollen-Kategorien anlegen und bearbeiten
+ * Kategorien anlegen und bearbeiten
  *
  * Copyright    : (c) 2004 - 2006 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -8,7 +8,10 @@
  *
  * Uebergaben:
  *
- * rlc_id: ID der Rollen-Kategorien, die bearbeitet werden soll
+ * cat_id: ID der Rollen-Kategorien, die bearbeitet werden soll
+ * type :  Typ der Kategorie, die angelegt werden sollen
+ *         ROL = Rollenkategorien
+ *         LNK = Linkkategorien
  * url :   URL von der die aufrufende Seite aufgerufen wurde
  *         (muss uebergeben werden, damit der Zurueck-Button funktioniert)
  *
@@ -41,17 +44,30 @@ if(!isModerator())
 
 // Uebergabevariablen pruefen
 
-if(isset($_GET["rlc_id"]))
+if(isset($_GET["cat_id"]))
 {
-	if(is_numeric($_GET["rlc_id"]) == false)
-	{
-		$g_message->show("invalid");
-	}
-	$rlc_id = $_GET["rlc_id"];
+    if(is_numeric($_GET["cat_id"]) == false)
+    {
+        $g_message->show("invalid");
+    }
+    $cat_id = $_GET["cat_id"];
 }
 else
 {
-	$rlc_id = 0;
+    // neue Kategorie anlegen
+    $cat_id = 0;
+    
+    if(isset($_GET["type"]))
+    {
+        if($_GET["type"] != "ROL" && $_GET["type"] != "LNK")
+        {
+            $g_message->show("invalid");
+        }
+    }
+    else
+    {
+        $g_message->show("invalid");
+    }    
 }
 
 // wenn URL uebergeben wurde zu dieser gehen, ansonsten zurueck
@@ -71,25 +87,25 @@ if(isset($_SESSION['categories_request']))
 }
 else
 { 
-	$form_values['name']   = " ";
-	$form_values['locked'] = 0;
+    $form_values['name']   = " ";
+    $form_values['hidden'] = 0;
 
-	// Wenn eine Feld-ID uebergeben wurde, soll das Feld geaendert werden
-	// -> Felder mit Daten des Feldes vorbelegen
-	if($rlc_id > 0)
-	{
-	    $sql    = "SELECT * FROM ". TBL_ROLE_CATEGORIES. " WHERE rlc_id = {0}";
-	    $sql    = prepareSQL($sql, array($rlc_id));
-	    $result = mysql_query($sql, $g_adm_con);
-	    db_error($result);
-	
-	    if (mysql_num_rows($result) > 0)
-	    {
-	        $row_rlc = mysql_fetch_object($result);
-	        $form_values['name']   = $row_rlc->rlc_name;
-	        $form_values['locked'] = $row_rlc->rlc_locked;
-	    }
-	}
+    // Wenn eine Feld-ID uebergeben wurde, soll das Feld geaendert werden
+    // -> Felder mit Daten des Feldes vorbelegen
+    if($cat_id > 0)
+    {
+        $sql    = "SELECT * FROM ". TBL_CATEGORIES. " WHERE cat_id = {0}";
+        $sql    = prepareSQL($sql, array($cat_id));
+        $result = mysql_query($sql, $g_adm_con);
+        db_error($result);
+    
+        if (mysql_num_rows($result) > 0)
+        {
+            $row_cat = mysql_fetch_object($result);
+            $form_values['name']   = $row_cat->cat_name;
+            $form_values['hidden'] = $row_cat->cat_hidden;
+        }
+    }
 }
 
 echo "
@@ -109,9 +125,9 @@ echo "</head>";
 
 require("../../../adm_config/body_top.php");
     echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-        <form action=\"categories_function.php?rlc_id=$rlc_id&amp;mode=1&amp;url=$url\" method=\"post\" id=\"edit_category\">
+        <form action=\"categories_function.php?cat_id=$cat_id&amp;type=". $_GET["type"]. "&amp;mode=1&amp;url=$url\" method=\"post\" id=\"edit_category\">
             <div class=\"formHead\">";
-                if($rlc_id > 0)
+                if($cat_id > 0)
                 {
                     echo strspace("Kategorie ändern");
                 }
@@ -129,16 +145,16 @@ require("../../../adm_config/body_top.php");
                 </div>
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 23%; float: left;\">
-                        <label for=\"locked\"><img src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\"></label>
+                        <label for=\"hidden\"><img src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\"></label>
                     </div>
                     <div style=\"text-align: left; margin-left: 24%;\">
-                        <input type=\"checkbox\" id=\"locked\" name=\"locked\" ";
-                            if(isset($form_values['locked']) && $form_values['locked'] == 1)
+                        <input type=\"checkbox\" id=\"hidden\" name=\"hidden\" ";
+                            if(isset($form_values['hidden']) && $form_values['hidden'] == 1)
                             {
                                 echo " checked ";
                             }
                             echo " value=\"1\" />
-                        <label for=\"locked\">Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar&nbsp;</label>
+                        <label for=\"hidden\">Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar&nbsp;</label>
                     </div>
                 </div>
 

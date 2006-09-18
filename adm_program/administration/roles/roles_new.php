@@ -40,20 +40,20 @@ if(!isModerator())
 
 if(isset($_GET["rol_id"]))
 {
-	if(is_numeric($_GET["rol_id"]) == false)
-	{
-    	$g_message->show("invalid");
-	}
-	$rol_id = $_GET["rol_id"];
+    if(is_numeric($_GET["rol_id"]) == false)
+    {
+        $g_message->show("invalid");
+    }
+    $rol_id = $_GET["rol_id"];
 }
 else
 {
-	$rol_id = 0;
+    $rol_id = 0;
 }
 
 $rolle          = "";
 $beschreibung   = "";
-$rlc_id         = 0;
+$cat_id         = 0;
 $r_moderation   = 0;
 $r_announcements= 0;
 $r_dates        = 0;
@@ -100,7 +100,7 @@ if ($rol_id > 0)
 
         $rolle           = $row_ar->rol_name;
         $beschreibung    = $row_ar->rol_description;
-        $act_rlc_id      = $row_ar->rol_rlc_id;
+        $act_cat_id      = $row_ar->rol_cat_id;
         $r_moderation    = $row_ar->rol_moderation;
         $r_announcements = $row_ar->rol_announcements;
         $r_dates         = $row_ar->rol_dates;
@@ -181,19 +181,20 @@ require("../../../adm_config/body_top.php");
                 <div style=\"text-align: right; width: 28%; float: left;\">Kategorie:</div>
                 <div style=\"text-align: left; margin-left: 30%;\">
                     <select size=\"1\" name=\"category\">";
-                        $sql = "SELECT * FROM ". TBL_ROLE_CATEGORIES. "
-                                    WHERE rlc_org_shortname LIKE '$g_organization' 
-                                   ORDER BY rlc_name ASC ";
+                        $sql = "SELECT * FROM ". TBL_CATEGORIES. "
+                                 WHERE cat_org_id LIKE $g_current_organisation->id
+                                   AND cat_type      = 'ROL'
+                                 ORDER BY cat_name ASC ";
                         $result = mysql_query($sql, $g_adm_con);
                         db_error($result);
                         
                         while($row = mysql_fetch_object($result))
                         {
-                            echo "<option value=\"$row->rlc_id\"";
-                                if($act_rlc_id == $row->rlc_id
-                                || ($act_rlc_id == 0 && $row->rlc_name == 'Allgemein'))
+                            echo "<option value=\"$row->cat_id\"";
+                                if($act_cat_id == $row->cat_id
+                                || ($act_cat_id == 0 && $row->cat_name == 'Allgemein'))
                                     echo " selected ";
-                            echo ">$row->rlc_name</option>";
+                            echo ">$row->cat_name</option>";
                         }
                     echo "</select>
                 </div>
