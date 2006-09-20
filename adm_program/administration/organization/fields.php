@@ -43,6 +43,8 @@ else
     $url = urlencode(getHttpReferer());
 }
 
+unset($_SESSION['fields_request']);
+
 echo "
 <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
@@ -70,77 +72,77 @@ require("../../../adm_config/body_top.php");
             </span>
         </p>";
 
-		$sql = "SELECT * FROM ". TBL_USER_FIELDS. "
-		         WHERE usf_org_shortname LIKE '$g_organization'
-		         ORDER BY usf_name ASC ";
-		$result = mysql_query($sql, $g_adm_con);
-		db_error($result);
-		
-	    echo "
-	    <table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\">
-	        <tr>
-	            <th class=\"tableHeader\" style=\"text-align: left;\">Feld <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-	        		onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=profil_felder','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\"></th>
-	            <th class=\"tableHeader\" style=\"text-align: left;\">Beschreibung</th>
-	            <th class=\"tableHeader\" style=\"text-align: left;\">Datentyp</th>
-	            <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Feld nur f&uuml;r Moderatoren sichtbar\" title=\"Feld nur f&uuml;r Moderatoren sichtbar\"></th>
-	            <th class=\"tableHeader\">&nbsp;</th>
-	        </tr>";
-		
-			if(mysql_num_rows($result) > 0)
-			{
-		        while($row = mysql_fetch_object($result))
-		        {
-		            echo "
-		            <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
-		                <td style=\"text-align: left;\"><a href=\"$g_root_path/adm_program/administration/organization/field.php?usf_id=$row->usf_id\">$row->usf_name</a></td>
-		                <td style=\"text-align: left;\">$row->usf_description</td>
-		                <td style=\"text-align: left;\">";
-		                    if($row->usf_type == "TEXT")
-		                    {
-		                        echo "Text (30)";
-		                    }
-		                    elseif($row->usf_type == "TEXT_BIG")
-		                    {
-		                        echo "Text (255)";
-		                    }
-		                    elseif($row->usf_type == "NUMERIC")
-		                    {
-		                        echo "Zahl";
-		                    }
-		                    elseif($row->usf_type == "CHECKBOX")
-		                    {
-		                        echo "Ja / Nein";
-		                    }
-		                echo "</td>
-		                <td style=\"text-align: center;\">";
-		                    if($row->usf_locked == 1)
-		                    {
-		                        echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Feld nur f&uuml;r Moderatoren sichtbar\" title=\"Feld nur f&uuml;r Moderatoren sichtbar\">";
-		                    }
-		                    else
-		                    {
-		                        echo "&nbsp;";
-		                    }
-		                echo "</td>
-		                <td style=\"text-align: right; width: 45px;\">
-		                    <a href=\"$g_root_path/adm_program/administration/organization/fields_new.php?usf_id=$row->usf_id&amp;url=$url\">
-		                    <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>&nbsp;";
-		                    echo "<a href=\"$g_root_path/adm_program/administration/organization/fields_function.php?mode=3&amp;usf_id=$row->usf_id&amp;url=$url\"><img
-		                    src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>
-		                </td>
-		            </tr>";
-		        }
-			}
-			else
-			{
-			    echo "<tr>
-					<td colspan=\"5\" style=\"text-align: center;\">
-					    <p>Es wurden noch keine organisationsspezifischen Profilfelder angelegt !</p>
-			    	</td>
-				</tr>";
-			}
-	    echo "</table>";
+        $sql = "SELECT * FROM ". TBL_USER_FIELDS. "
+                 WHERE usf_org_shortname LIKE '$g_organization'
+                 ORDER BY usf_name ASC ";
+        $result = mysql_query($sql, $g_adm_con);
+        db_error($result);
+        
+        echo "
+        <table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\">
+            <tr>
+                <th class=\"tableHeader\" style=\"text-align: left;\">Feld <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=profil_felder','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\"></th>
+                <th class=\"tableHeader\" style=\"text-align: left;\">Beschreibung</th>
+                <th class=\"tableHeader\" style=\"text-align: left;\">Datentyp</th>
+                <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Feld nur f&uuml;r Moderatoren sichtbar\" title=\"Feld nur f&uuml;r Moderatoren sichtbar\"></th>
+                <th class=\"tableHeader\">&nbsp;</th>
+            </tr>";
+        
+            if(mysql_num_rows($result) > 0)
+            {
+                while($row = mysql_fetch_object($result))
+                {
+                    echo "
+                    <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
+                        <td style=\"text-align: left;\"><a href=\"$g_root_path/adm_program/administration/organization/field.php?usf_id=$row->usf_id\">$row->usf_name</a></td>
+                        <td style=\"text-align: left;\">$row->usf_description</td>
+                        <td style=\"text-align: left;\">";
+                            if($row->usf_type == "TEXT")
+                            {
+                                echo "Text (30)";
+                            }
+                            elseif($row->usf_type == "TEXT_BIG")
+                            {
+                                echo "Text (255)";
+                            }
+                            elseif($row->usf_type == "NUMERIC")
+                            {
+                                echo "Zahl";
+                            }
+                            elseif($row->usf_type == "CHECKBOX")
+                            {
+                                echo "Ja / Nein";
+                            }
+                        echo "</td>
+                        <td style=\"text-align: center;\">";
+                            if($row->usf_locked == 1)
+                            {
+                                echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Feld nur f&uuml;r Moderatoren sichtbar\" title=\"Feld nur f&uuml;r Moderatoren sichtbar\">";
+                            }
+                            else
+                            {
+                                echo "&nbsp;";
+                            }
+                        echo "</td>
+                        <td style=\"text-align: right; width: 45px;\">
+                            <a href=\"$g_root_path/adm_program/administration/organization/fields_new.php?usf_id=$row->usf_id&amp;url=$url\">
+                            <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>&nbsp;";
+                            echo "<a href=\"$g_root_path/adm_program/administration/organization/fields_function.php?mode=3&amp;usf_id=$row->usf_id&amp;url=$url\"><img
+                            src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>
+                        </td>
+                    </tr>";
+                }
+            }
+            else
+            {
+                echo "<tr>
+                    <td colspan=\"5\" style=\"text-align: center;\">
+                        <p>Es wurden noch keine organisationsspezifischen Profilfelder angelegt !</p>
+                    </td>
+                </tr>";
+            }
+        echo "</table>";
 
         echo "<p>
             <span class=\"iconLink\">
