@@ -42,9 +42,9 @@ if(!isModerator())
 
 // Uebergabevariablen pruefen
 
-if(isset($_GET["type"]))
+if(isset($_GET['type']))
 {
-    if($_GET["type"] != "ROL" && $_GET["type"] != "LNK")
+    if($_GET['type'] != "ROL" && $_GET['type'] != "LNK")
     {
         $g_message->show("invalid");
     }
@@ -63,6 +63,8 @@ else
 {
     $url = urlencode(getHttpReferer());
 }
+
+unset($_SESSION['categories_request']);
 
 echo "
 <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
@@ -115,7 +117,7 @@ require("../../../adm_config/body_top.php");
 
                 echo "
                 <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
-                    <td style=\"text-align: left;\"><a href=\"$g_root_path/adm_program/administration/roles/categories_new.php?cat_id=$cat_row->cat_id\">$cat_row->cat_name</a></td>
+                    <td style=\"text-align: left;\"><a href=\"$g_root_path/adm_program/administration/roles/categories_new.php?cat_id=$cat_row->cat_id&amp;type=". $_GET['type']. "\">$cat_row->cat_name</a></td>
                     <td style=\"text-align: center;\">";
                         if($cat_row->cat_hidden == 1)
                         {
@@ -127,7 +129,7 @@ require("../../../adm_config/body_top.php");
                         }
                     echo "</td>
                     <td style=\"text-align: right; width: 45px;\">
-                        <a href=\"$g_root_path/adm_program/administration/roles/categories_new.php?cat_id=$cat_row->cat_id&amp;url=$url\">
+                        <a href=\"$g_root_path/adm_program/administration/roles/categories_new.php?cat_id=$cat_row->cat_id&amp;type=". $_GET['type']. "&amp;url=$url\">
                         <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>";
                         // nur Kategorien loeschen, die keine Rollen zugeordnet sind
                         if($row_num == 0)
