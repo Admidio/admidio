@@ -69,6 +69,7 @@ else
     $url = urlencode(getHttpReferer());
 }
 
+$_SESSION['roles_request'] = $_REQUEST;
 $err_code = "";
 $err_text = "";
 
@@ -130,7 +131,7 @@ elseif($_GET["mode"] == 2)
 {
     // Rolle anlegen oder updaten
 
-    if(strlen(trim($_POST["name"])) > 0)
+    if(strlen(trim($_POST['name'])) > 0)
     {
         if($rol_id == 0)
         {
@@ -152,18 +153,21 @@ elseif($_GET["mode"] == 2)
         }
 
         // Zeitraum von/bis auf Gueltigkeit pruefen
+        
+        $d_datum_von = null;
+        $d_datum_bis = null;
 
-        if(strlen($_POST['datum_von']) > 0)
+        if(strlen($_POST['start_date']) > 0)
         {
-            if(dtCheckDate($_POST['datum_von']))
+            if(dtCheckDate($_POST['start_date']))
             {
-                $d_datum_von = dtFormatDate($_POST['datum_von'], "Y-m-d");
+                $d_datum_von = dtFormatDate($_POST['start_date'], "Y-m-d");
 
-                if(strlen($_POST['datum_bis']) > 0)
+                if(strlen($_POST['end_date']) > 0)
                 {
-                    if(dtCheckDate($_POST['datum_bis']))
+                    if(dtCheckDate($_POST['end_date']))
                     {
-                        $d_datum_bis = dtFormatDate($_POST['datum_bis'], "Y-m-d");
+                        $d_datum_bis = dtFormatDate($_POST['end_date'], "Y-m-d");
                     }
                     else
                     {
@@ -186,24 +190,27 @@ elseif($_GET["mode"] == 2)
 
         // Uhrzeit von/bis auf Gueltigkeit pruefen
 
+        $t_uhrzeit_von = null;
+        $t_uhrzeit_bis = null;
+
         if(strlen($err_code) == 0)
         {
-            if(strlen($_POST['uhrzeit_von']) > 0)
+            if(strlen($_POST['start_time']) > 0)
             {
-                if(dtCheckTime($_POST['uhrzeit_von']))
+                if(dtCheckTime($_POST['start_time']))
                 {
-                    $t_uhrzeit_von = dtFormatTime($_POST['uhrzeit_von'], "H:i:s");
+                    $t_uhrzeit_von = dtFormatTime($_POST['start_time'], "H:i:s");
                 }
                 else
                 {
                     $err_code = "uhrzeit";
                 }
 
-                if(strlen($_POST['uhrzeit_bis']) > 0)
+                if(strlen($_POST['end_time']) > 0)
                 {
-                    if(dtCheckTime($_POST['uhrzeit_bis']))
+                    if(dtCheckTime($_POST['end_time']))
                     {
-                        $t_uhrzeit_bis = dtFormatTime($_POST['uhrzeit_bis'], "H:i:s");
+                        $t_uhrzeit_bis = dtFormatTime($_POST['end_time'], "H:i:s");
                     }
                     else
                     {
@@ -220,7 +227,7 @@ elseif($_GET["mode"] == 2)
 
         if(strlen($err_code) == 0)
         {
-            if(strcmp($_POST["name"], "Webmaster") == 0)
+            if(strcmp($_POST['name'], "Webmaster") == 0)
             {
                 $moderation = 1;
             }
@@ -254,7 +261,7 @@ elseif($_GET["mode"] == 2)
                 $termine = 0;
             }
 
-            if(array_key_exists("photo", $_POST))
+            if(array_key_exists("photos", $_POST))
             {
                 $foto = 1;
             }
@@ -263,7 +270,7 @@ elseif($_GET["mode"] == 2)
                 $foto = 0;
             }
 
-            if(array_key_exists("download", $_POST))
+            if(array_key_exists("downloads", $_POST))
             {
                 $download = 1;
             }
@@ -290,7 +297,7 @@ elseif($_GET["mode"] == 2)
                 $guestbook_comments = 0;
             }
 
-            if(array_key_exists("user", $_POST))
+            if(array_key_exists("users", $_POST))
             {
                 $user = 1;
             }
@@ -317,7 +324,7 @@ elseif($_GET["mode"] == 2)
                 $mail_login = 0;
             }
 
-            if(array_key_exists("weblinks", $_POST))
+            if(array_key_exists("links", $_POST))
             {
                 $weblinks = 1;
             }
@@ -335,15 +342,16 @@ elseif($_GET["mode"] == 2)
                 $locked = 0;
             }
 
-            if(!array_key_exists("max_mitglieder", $_POST)
-            || strlen($_POST['max_mitglieder']) == 0)
+            if(!array_key_exists("max_members", $_POST)
+            || strlen($_POST['max_members']) == 0)
             {
-                $_POST['max_mitglieder'] = "NULL";
+                $_POST['max_members'] = "NULL";
             }
-            elseif($_POST['max_mitglieder'] == 0)
+            /* Fasse: erkenne im Moment den Sinn nicht mehr :-(
+            elseif($_POST['max_members'] == 0)
             {
-                $_POST['max_mitglieder'] = "0";
-            }
+                $_POST['max_members'] = "0";
+            }*/
 
             // Kontrollieren ob bei nachtraeglicher Aenderung der maximalen Mitgliederzahl diese nicht bereits ueberschritten wurde
 
@@ -358,23 +366,23 @@ elseif($_GET["mode"] == 2)
                 $result = mysql_query($sql, $g_adm_con);
                 db_error($result);
                 $role_members = mysql_fetch_array($result);
-                //echo $role_members[0]."<br>".$_POST['max_mitglieder']; exit();
 
-                if($_POST['max_mitglieder']!= 0 && ($role_members[0] > $_POST['max_mitglieder']))
+                if($_POST['max_members']!= 0 && ($role_members[0] > $_POST['max_members']))
                 {
                     $g_message->show("max_members_roles_change");
                 }
             }
 
-            if(!array_key_exists("beitrag", $_POST)
-            || strlen($_POST['beitrag']) == 0)
+            if(!array_key_exists("cost", $_POST)
+            || strlen($_POST['cost']) == 0)
             {
-                $_POST['beitrag'] = "NULL";
+                $_POST['cost'] = "NULL";
             }
-            elseif($_POST['beitrag'] == 0)
+            /* Fasse: erkenne im Moment den Sinn nicht mehr :-(
+            elseif($_POST['cost'] == 0)
             {
-                $_POST['beitrag'] = "0";
-            }
+                $_POST['cost'] = "0";
+            }*/
 
             if($rol_id > 0)
             {
@@ -422,10 +430,12 @@ elseif($_GET["mode"] == 2)
                                                        '$d_datum_bis','$t_uhrzeit_bis', {3}, {4},
                                                        {5}, {6}, 1) ";
             }
-            $sql    = prepareSQL($sql, array(trim($_POST['name']), trim($_POST['beschreibung']), $_POST['category'], $_POST['wochentag'],
-            trim($_POST['ort']), $_POST['max_mitglieder'], $_POST['beitrag'], $rol_id));
+            $sql    = prepareSQL($sql, array(trim($_POST['name']), trim($_POST['description']), $_POST['category'], $_POST['weekday'],
+            trim($_POST['location']), $_POST['max_members'], $_POST['cost'], $rol_id));
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
+            
+            unset($_SESSION['roles_request']);
         }
     }
     else
