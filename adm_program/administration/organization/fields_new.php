@@ -43,15 +43,15 @@ if(!isModerator())
 
 if(isset($_GET["usf_id"]))
 {
-	if(is_numeric($_GET["usf_id"]) == false)
-	{
-    	$g_message->show("invalid");
-	}
-	$usf_id = $_GET["usf_id"];
+    if(is_numeric($_GET["usf_id"]) == false)
+    {
+        $g_message->show("invalid");
+    }
+    $usf_id = $_GET["usf_id"];
 }
 else
 {
-	$usf_id = 0;
+    $usf_id = 0;
 }
 
 // wenn URL uebergeben wurde zu dieser gehen, ansonsten zurueck
@@ -71,30 +71,30 @@ if(isset($_SESSION['fields_request']))
 }
 else
 { 
-	$form_values['name']        = " ";
-	$form_values['description'] = " ";
-	$form_values['type']        = " ";
-	$form_values['locked']      = 0;
-	
-	// Wenn eine Feld-ID uebergeben wurde, soll das Feld geaendert werden
-	// -> Felder mit Daten des Feldes vorbelegen	
-	if($usf_id > 0)
-	{
-	    $sql    = "SELECT * FROM ". TBL_USER_FIELDS. " WHERE usf_id = {0}";
-	    $sql    = prepareSQL($sql, array($usf_id));
-	    $result = mysql_query($sql, $g_adm_con);
-	    db_error($result);
-	
-	    if (mysql_num_rows($result) > 0)
-	    {
-	        $row_usf = mysql_fetch_object($result);
-	
-	        $form_values['name']        = $row_usf->usf_name;
-	        $form_values['description'] = $row_usf->usf_description;
-	        $form_values['type']        = $row_usf->usf_type;
-	        $form_values['locked']      = $row_usf->usf_locked;
-	    }
-	}
+    $form_values['name']        = "";
+    $form_values['description'] = "";
+    $form_values['type']        = "";
+    $form_values['locked']      = 0;
+    
+    // Wenn eine Feld-ID uebergeben wurde, soll das Feld geaendert werden
+    // -> Felder mit Daten des Feldes vorbelegen    
+    if($usf_id > 0)
+    {
+        $sql    = "SELECT * FROM ". TBL_USER_FIELDS. " WHERE usf_id = {0}";
+        $sql    = prepareSQL($sql, array($usf_id));
+        $result = mysql_query($sql, $g_adm_con);
+        db_error($result);
+    
+        if (mysql_num_rows($result) > 0)
+        {
+            $row_usf = mysql_fetch_object($result);
+    
+            $form_values['name']        = $row_usf->usf_name;
+            $form_values['description'] = $row_usf->usf_description;
+            $form_values['type']        = $row_usf->usf_type;
+            $form_values['locked']      = $row_usf->usf_locked;
+        }
+    }
 }
 
 echo "
