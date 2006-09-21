@@ -193,13 +193,24 @@ function mysqltime($dateFormat, $time)
    return $destStr;
 }
 
-// wandelt ein DateTime-Feld einer MySql-Datenbank in einen Timestamp um
+// wandelt ein DateTime- oder Date-Feld einer MySql-Datenbank in einen Timestamp um
 
 function mysqlmaketimestamp($dateTime)
 {
-   $dateArray = split("[- :]", $dateTime);
-   
-   return mktime($dateArray[3], $dateArray[4], $dateArray[5], $dateArray[1], $dateArray[2], $dateArray[0]);
+    if(strlen($dateTime) > 10)
+    {
+        // Datetime
+        list($year, $month, $day, $hour, $minute, $second) = split("[- :]", $dateTime);
+    }
+    else
+    {
+        // Date
+        list($year, $month, $day) = split("[- :]", $dateTime);
+        $hour   = 0;
+        $minute = 0;
+        $second = 0;
+    }
+    return mktime($hour, $minute, $second, $day, $month, $year);
 }
 
 // prueft ein Datum auf Gueltigkeit
@@ -207,13 +218,17 @@ function mysqlmaketimestamp($dateTime)
 
 function dtCheckDate($date)
 {
-   $formatDate = dtFormatDate($date);
-   $arrDate    = explode(".", $formatDate);
-   
+    $formatDate = dtFormatDate($date);
+    $arrDate    = explode(".", $formatDate);
+
     if(count($arrDate) == 3)
-    return checkdate($arrDate[1],$arrDate[0],$arrDate[2]);
-   else
-    return false;
+    {
+        return checkdate($arrDate[1],$arrDate[0],$arrDate[2]);
+    }
+    else
+    {
+        return false;
+    }
 }
 
 // formatiert ein Datum
