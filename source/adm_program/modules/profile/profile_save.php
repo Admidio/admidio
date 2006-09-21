@@ -37,17 +37,18 @@ require("../../system/email_class.php");
 
 if(isset($_GET["user_id"]))
 {
-	if(is_numeric($_GET["user_id"]) == false)
-	{
-    	$g_message->show("invalid");
-	}
-	$usr_id  = $_GET['user_id'];
+    if(is_numeric($_GET["user_id"]) == false)
+    {
+        $g_message->show("invalid");
+    }
+    $usr_id  = $_GET['user_id'];
 }
 else
 {
-	$usr_id = 0;
+    $usr_id = 0;
 }
 
+$_SESSION['profile_request'] = $_REQUEST;
 $err_code = "";
 $err_text = "";
 
@@ -107,12 +108,12 @@ $user->homepage   = strStripTags($_POST['homepage']);
 $user->birthday   = strStripTags($_POST['birthday']);
 if(isset($_POST['gender']))
 {
-	$user->gender = $_POST['gender'];
+    $user->gender = $_POST['gender'];
 }
 else
 {
-	// falls das Geschlecht nicht angegeben wurde, dann neutralen Wert eintragen
-	$user->gender = 0;
+    // falls das Geschlecht nicht angegeben wurde, dann neutralen Wert eintragen
+    $user->gender = 0;
 }
 
 /*------------------------------------------------------------*/
@@ -228,94 +229,70 @@ if($ret_code != 0)
 
 if($usr_id > 0)
 {
-	/*------------------------------------------------------------*/
-	// Messenger-Daten und gruppierungsspezifische Felder anlegen / updaten
-	/*------------------------------------------------------------*/
-	
-	$sql = "SELECT usf_id, usf_name, usd_id, usd_value
-	          FROM ". TBL_USER_FIELDS. " LEFT JOIN ". TBL_USER_DATA. "
-	            ON usd_usf_id = usf_id
-	           AND usd_usr_id         = {0}
-	         WHERE (  usf_org_shortname IS NULL
-	               OR usf_org_shortname  = '$g_organization' ) ";
-	if(!isModerator())
-	{
-	    $sql = $sql. " AND usf_locked = 0 ";
-	}
-	$sql = prepareSQL($sql, array($user->id));
-	$result_msg = mysql_query($sql, $g_adm_con);
-	db_error($result_msg);
-	
-	while($row = mysql_fetch_object($result_msg))
-	{
-	    if(is_null($row->usd_value))
-	    {
-	        // noch kein Wert vorhanden -> neu einfuegen
-	        if(strlen(trim($_POST[urlencode($row->usf_name)])) > 0)
-	        {
-	            $sql = "INSERT INTO ". TBL_USER_DATA. " (usd_usr_id, usd_usf_id, usd_value)
-	                                             VALUES ({0}, $row->usf_id, '". $_POST[urlencode($row->usf_name)]. "') ";
-	            $sql = prepareSQL($sql, array($user->id));
-	            $result = mysql_query($sql, $g_adm_con);
-	            db_error($result);
-	        }
-	    }
-	    else
-	    {
-	        // auch ein neuer Wert vorhanden
-	        if(strlen(trim($_POST[urlencode($row->usf_name)])) > 0)
-	        {
-	            if($_POST[urlencode($row->usf_name)] != $row->usd_value)
-	            {
-	                $sql = "UPDATE ". TBL_USER_DATA. " SET usd_value = {0}
-	                         WHERE usd_id = $row->usd_id ";
-	                $sql = prepareSQL($sql, array($_POST[urlencode($row->usf_name)]));
-	                $result = mysql_query($sql, $g_adm_con);
-	                db_error($result);
-	            }
-	        }
-	        else
-	        {
-	            $sql = "DELETE FROM ". TBL_USER_DATA. "
-	                     WHERE usd_id = $row->usd_id ";
-	            $result = mysql_query($sql, $g_adm_con);
-	            db_error($result);
-	        }
-	    }
-	}
+    /*------------------------------------------------------------*/
+    // Messenger-Daten und gruppierungsspezifische Felder anlegen / updaten
+    /*------------------------------------------------------------*/
+    
+    $sql = "SELECT usf_id, usf_name, usd_id, usd_value
+              FROM ". TBL_USER_FIELDS. " LEFT JOIN ". TBL_USER_DATA. "
+                ON usd_usf_id = usf_id
+               AND usd_usr_id         = {0}
+             WHERE (  usf_org_shortname IS NULL
+                   OR usf_org_shortname  = '$g_organization' ) ";
+    if(!isModerator())
+    {
+        $sql = $sql. " AND usf_locked = 0 ";
+    }
+    $sql = prepareSQL($sql, array($user->id));
+    $result_msg = mysql_query($sql, $g_adm_con);
+    db_error($result_msg);
+    
+    while($row = mysql_fetch_object($result_msg))
+    {
+        if(is_null($row->usd_value))
+        {
+            // noch kein Wert vorhanden -> neu einfuegen
+            if(isset($_POST[urlencode($row->usf_name)]) && strlen(trim($_POST[urlencode($row->usf_name)])) > 0)
+            {
+                $sql = "INSERT INTO ". TBL_USER_DATA. " (usd_usr_id, usd_usf_id, usd_value)
+                                                 VALUES ({0}, $row->usf_id, '". $_POST[urlencode($row->usf_name)]. "') ";
+                $sql = prepareSQL($sql, array($user->id));
+                $result = mysql_query($sql, $g_adm_con);
+                db_error($result);
+            }
+        }
+        else
+        {
+            // auch ein neuer Wert vorhanden
+            if(isset($_POST[urlencode($row->usf_name)]) && strlen(trim($_POST[urlencode($row->usf_name)])) > 0)
+            {
+                if($_POST[urlencode($row->usf_name)] != $row->usd_value)
+                {
+                    $sql = "UPDATE ". TBL_USER_DATA. " SET usd_value = {0}
+                             WHERE usd_id = $row->usd_id ";
+                    $sql = prepareSQL($sql, array($_POST[urlencode($row->usf_name)]));
+                    $result = mysql_query($sql, $g_adm_con);
+                    db_error($result);
+                }
+            }
+            else
+            {
+                $sql = "DELETE FROM ". TBL_USER_DATA. "
+                         WHERE usd_id = $row->usd_id ";
+                $result = mysql_query($sql, $g_adm_con);
+                db_error($result);
+            }
+        }
+    }
 }
+
+unset($_SESSION['profile_request']);
 
 if($user->valid == 0)
 {
     /*------------------------------------------------------------*/
     // neuer Benutzer wurde ueber Webanmeldung angelegt
     /*------------------------------------------------------------*/
-    if($g_forum == 1)
-    {
-        mysql_select_db($g_forum_db, $g_forum_con);
-
-        // jetzt noch den neuen User ins Forum eintragen
-        $sql    = "SELECT MAX(user_id) as anzahl 
-                     FROM ". $g_forum_praefix. "_users";
-        $result = mysql_query($sql, $g_forum_con);
-        db_error($result);
-        $row    = mysql_fetch_array($result);
-        $new_user_id = $row[0] + 1;
-
-        $sql    = "INSERT INTO ". $g_forum_praefix. "_users
-                               (user_id, username, user_password, user_regdate, user_timezone,
-                                user_style, user_lang, user_viewemail, user_attachsig, user_allowhtml,
-                                user_dateformat, user_email, user_notify, user_notify_pm, user_popup_pm,
-                                user_avatar)
-                        VALUES ($user->id, '$user->login_name', '$user->password', ". time(). ", 1.00,
-                                2, 'german', 0, 1, 0,
-                                'd.m.Y, H:i', '$user->email', 0, 1, 1,
-                                '') ";
-        $result = mysql_query($sql, $g_forum_con);
-        db_error($result);
-
-        mysql_select_db($g_adm_db, $g_adm_con);
-    }
 
     // User auf aktiv setzen
     $user->valid = 1;

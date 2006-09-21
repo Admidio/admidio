@@ -37,15 +37,15 @@ require("../../system/login_valid.php");
 
 if(isset($_GET["user_id"]))
 {
-	if(is_numeric($_GET["user_id"]) == false)
-	{
-    	$g_message->show("invalid");
-	}
-	$usr_id = $_GET["user_id"];
+    if(is_numeric($_GET["user_id"]) == false)
+    {
+        $g_message->show("invalid");
+    }
+    $usr_id = $_GET["user_id"];
 }
 else
 {
-	$usr_id = 0;
+    $usr_id = 0;
 }
 
 // pruefen, ob Modus neues Mitglied erfassen
@@ -83,18 +83,42 @@ if(!editUser() && $_GET['user_id'] != $g_current_user->id)
 
 if($a_new_user == false)
 {
-	// jetzt noch schauen, ob User ueberhaupt Mitglied in der Gliedgemeinschaft ist
-	if(isMember($usr_id) == false)
-	{
-		$g_message->show("norights");
-	}
+    // jetzt noch schauen, ob User ueberhaupt Mitglied in der Gliedgemeinschaft ist
+    if(isMember($usr_id) == false)
+    {
+        $g_message->show("norights");
+    }
 }
 
-// User auslesen
-if($usr_id > 0)
+$b_history = false;     // History-Funktion bereits aktiviert ja/nein
+$user = new User($g_adm_con);
+
+if(isset($_SESSION['profile_request']))
 {
-	$user = new User($g_adm_con);
-	$user->GetUser($usr_id);
+    $form_values = $_SESSION['profile_request'];
+    $user->last_name  = $form_values['last_name'];
+    $user->first_name = $form_values['first_name'];
+    $user->login_name = $form_values['login_name'];
+    $user->address    = $form_values['address'];
+    $user->zip_code   = $form_values['zip_code'];
+    $user->city       = $form_values['city'];
+    $user->country    = $form_values['country'];
+    $user->phone      = $form_values['phone'];
+    $user->mobile     = $form_values['mobile'];
+    $user->fax        = $form_values['fax'];
+    $user->email      = $form_values['email'];
+    $user->homepage   = $form_values['homepage'];
+    $user->birthday   = $form_values['birthday'];
+    $user->gender     = $form_values['gender'];
+    unset($_SESSION['profile_request']);
+    $b_history = true;
+}
+elseif($usr_id > 0)
+{ 
+    // User auslesen
+    $user->GetUser($usr_id);
+    // um die Zurueck-Funktion zu vereinfachen, deutsche Zeitangaben nutzen
+    $user->birthday = mysqldate('d.m.y', $user->birthday);
 }
 
 echo "
@@ -137,39 +161,25 @@ require("../../../adm_config/body_top.php");
             <div class=\"formBody\">
                 <div>
                     <div style=\"text-align: right; width: 30%; float: left;\">Nachname:</div>
-                    <div style=\"text-align: left; margin-left: 32%;\">";
-                        if($usr_id == 0)
+                    <div style=\"text-align: left; margin-left: 32%;\">
+                        <input type=\"text\" id=\"last_name\" name=\"last_name\" style=\"width: 200px;\" maxlength=\"30\" value=\"$user->last_name\" ";
+                        if(!hasRole('Webmaster'))
                         {
-                            echo "<input type=\"text\" id=\"last_name\" name=\"last_name\" style=\"width: 200px;\" maxlength=\"30\" />";
+                            echo " class=\"readonly\" readonly ";
                         }
-                        else
-                        {
-                            echo "<input type=\"text\" id=\"last_name\" name=\"last_name\" style=\"width: 200px;\" maxlength=\"30\" value=\"$user->last_name\" ";
-                            if(!hasRole('Webmaster'))
-                            {
-                                echo " class=\"readonly\" readonly ";
-                            }
-                            echo " />";
-                        }
-                    echo "</div>
+                        echo " />
+                    </div>
                 </div>
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 30%; float: left;\">Vorname:</div>
-                    <div style=\"text-align: left; margin-left: 32%;\">";
-                        if($usr_id == 0)
+                    <div style=\"text-align: left; margin-left: 32%;\">
+                        <input type=\"text\" name=\"first_name\" style=\"width: 200px;\" maxlength=\"30\" value=\"$user->first_name\" ";
+                        if(!hasRole('Webmaster'))
                         {
-                            echo "<input type=\"text\" name=\"first_name\" style=\"width: 200px;\" maxlength=\"30\" />";
+                            echo " class=\"readonly\" readonly ";
                         }
-                        else
-                        {
-                            echo "<input type=\"text\" name=\"first_name\" style=\"width: 200px;\" maxlength=\"30\" value=\"$user->first_name\" ";
-                            if(!hasRole('Webmaster'))
-                            {
-                                echo " class=\"readonly\" readonly ";
-                            }
-                            echo " />";
-                        }
-                    echo "</div>
+                        echo " />
+                    </div>
                 </div>";
                 if(!$usr_id == 0)
                 {
@@ -203,42 +213,21 @@ require("../../../adm_config/body_top.php");
 
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 30%; float: left;\">Adresse:</div>
-                    <div style=\"text-align: left; margin-left: 32%;\">";
-                        if($a_new_user)
-                        {
-                            echo "<input type=\"text\" id=\"address\" name=\"address\" style=\"width: 300px;\" maxlength=\"50\" />";
-                        }
-                        else
-                        {
-                            echo "<input type=\"text\" id=\"address\" name=\"address\" style=\"width: 300px;\" maxlength=\"50\" value=\"$user->address\" />";
-                        }
-                    echo "</div>
+                    <div style=\"text-align: left; margin-left: 32%;\">
+                        <input type=\"text\" id=\"address\" name=\"address\" style=\"width: 300px;\" maxlength=\"50\" value=\"$user->address\" />
+                    </div>
                 </div>
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 30%; float: left;\">Postleitzahl:</div>
-                    <div style=\"text-align: left; margin-left: 32%;\">";
-                        if($a_new_user)
-                        {
-                            echo "<input type=\"text\" name=\"zip_code\" style=\"width: 80px;\" maxlength=\"10\" />";
-                        }
-                        else
-                        {
-                            echo "<input type=\"text\" name=\"zip_code\" style=\"width: 80px;\" maxlength=\"10\" value=\"$user->zip_code\" />";
-                        }
-                    echo "</div>
+                    <div style=\"text-align: left; margin-left: 32%;\">
+                        <input type=\"text\" name=\"zip_code\" style=\"width: 80px;\" maxlength=\"10\" value=\"$user->zip_code\" />
+                    </div>
                 </div>
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 30%; float: left;\">Ort:</div>
-                    <div style=\"text-align: left; margin-left: 32%;\">";
-                        if($a_new_user)
-                        {
-                            echo "<input type=\"text\" name=\"city\" style=\"width: 200px;\" maxlength=\"30\" />";
-                        }
-                        else
-                        {
-                            echo "<input type=\"text\" name=\"city\" style=\"width: 200px;\" maxlength=\"30\" value=\"$user->city\" />";
-                        }
-                    echo "</div>
+                    <div style=\"text-align: left; margin-left: 32%;\">
+                        <input type=\"text\" name=\"city\" style=\"width: 200px;\" maxlength=\"30\" value=\"$user->city\" />
+                    </div>
                 </div>
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 30%; float: left;\">Land:</div>
@@ -285,87 +274,45 @@ require("../../../adm_config/body_top.php");
 
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 30%; float: left;\">Telefon:</div>
-                    <div style=\"text-align: left; margin-left: 32%;\">";
-                        if($a_new_user)
-                        {
-                            echo "<input type=\"text\" name=\"phone\" style=\"width: 130px;\" maxlength=\"20\" />";
-                        }
-                        else
-                        {
-                            echo "<input type=\"text\" name=\"phone\" style=\"width: 130px;\" maxlength=\"20\" value=\"$user->phone\" />";
-                        }
-                        echo "&nbsp;<span style=\"font-family: Courier;\">(Vorwahl-Tel.Nr.)</span>
+                    <div style=\"text-align: left; margin-left: 32%;\">
+                        <input type=\"text\" name=\"phone\" style=\"width: 130px;\" maxlength=\"20\" value=\"$user->phone\" />
+                        &nbsp;<span style=\"font-family: Courier;\">(Vorwahl-Tel.Nr.)</span>
                     </div>
                 </div>
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 30%; float: left;\">Handy:</div>
-                    <div style=\"text-align: left; margin-left: 32%;\">";
-                        if($a_new_user)
-                        {
-                            echo "<input type=\"text\" name=\"mobile\" style=\"width: 130px;\" maxlength=\"20\" />";
-                        }
-                        else
-                        {
-                            echo "<input type=\"text\" name=\"mobile\" style=\"width: 130px;\" maxlength=\"20\" value=\"$user->mobile\" />";
-                        }
-                        echo "&nbsp;<span style=\"font-family: Courier;\">(Vorwahl-Handynr.)</span>
+                    <div style=\"text-align: left; margin-left: 32%;\">
+                        <input type=\"text\" name=\"mobile\" style=\"width: 130px;\" maxlength=\"20\" value=\"$user->mobile\" />
+                        &nbsp;<span style=\"font-family: Courier;\">(Vorwahl-Handynr.)</span>
                      </div>
                 </div>
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 30%; float: left;\">Fax:</div>
-                    <div style=\"text-align: left; margin-left: 32%;\">";
-                        if($a_new_user)
-                        {
-                            echo "<input type=\"text\" name=\"fax\" style=\"width: 130px;\" maxlength=\"20\" />";
-                        }
-                        else
-                        {
-                            echo "<input type=\"text\" name=\"fax\" style=\"width: 130px;\" maxlength=\"20\" value=\"$user->fax\" />";
-                        }
-                        echo "&nbsp;<span style=\"font-family: Courier;\">(Vorwahl-Faxnr.)</span>
+                    <div style=\"text-align: left; margin-left: 32%;\">
+                        <input type=\"text\" name=\"fax\" style=\"width: 130px;\" maxlength=\"20\" value=\"$user->fax\" />
+                        &nbsp;<span style=\"font-family: Courier;\">(Vorwahl-Faxnr.)</span>
                     </div>
                 </div>
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 30%; float: left;\">E-Mail:</div>
-                    <div style=\"text-align: left; margin-left: 32%;\">";
-                        if($usr_id == 0)
-                        {
-                            echo "<input type=\"text\" name=\"email\" style=\"width: 300px;\" maxlength=\"50\" />";
-                        }
-                        else
-                        {
-                            echo "<input type=\"text\" name=\"email\" style=\"width: 300px;\" maxlength=\"50\" value=\"$user->email\" />";
-                        }
-                    echo "</div>
+                    <div style=\"text-align: left; margin-left: 32%;\">
+                        <input type=\"text\" name=\"email\" style=\"width: 300px;\" maxlength=\"50\" value=\"$user->email\" />
+                    </div>
                 </div>
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 30%; float: left;\">Homepage:</div>
-                    <div style=\"text-align: left; margin-left: 32%;\">";
-                        if($a_new_user)
-                        {
-                            echo "<input type=\"text\" name=\"homepage\" style=\"width: 300px;\" maxlength=\"50\" />";
-                        }
-                        else
-                        {
-                            echo "<input type=\"text\" name=\"homepage\" style=\"width: 300px;\" maxlength=\"50\" value=\"$user->homepage\" />";
-                        }
-                    echo "</div>
+                    <div style=\"text-align: left; margin-left: 32%;\">
+                        <input type=\"text\" name=\"homepage\" style=\"width: 300px;\" maxlength=\"50\" value=\"$user->homepage\" />
+                    </div>
                 </div>
 
                 <hr width=\"80%\" />
 
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 30%; float: left;\">Geburtstag:</div>
-                    <div style=\"text-align: left; margin-left: 32%;\">";
-                        if($a_new_user)
-                        {
-                            echo "<input type=\"text\" name=\"birthday\" style=\"width: 80px;\" maxlength=\"10\" />";
-                        }
-                        else
-                        {
-                            echo "<input type=\"text\" name=\"birthday\" style=\"width: 80px;\" maxlength=\"10\" value=\"". mysqldatetime('d.m.y', $user->birthday). "\" />";
-                        }
-                    echo "</div>
+                    <div style=\"text-align: left; margin-left: 32%;\">
+                        <input type=\"text\" name=\"birthday\" style=\"width: 80px;\" maxlength=\"10\" value=\"$user->birthday\" />
+                    </div>
                 </div>
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 30%; float: left;\">Geschlecht:</div>
@@ -430,15 +377,16 @@ require("../../../adm_config/body_top.php");
                                 echo "\" style=\"vertical-align: middle;\" />
                             </div>
                             <div style=\"text-align: left; margin-left: 32%;\">";
-                                if($a_new_user)
+                                if($b_history == true)
                                 {
-                                    echo "<input type=\"text\" name=\"". urlencode($row->usf_name). "\" style=\"width: 200px;\" maxlength=\"50\" />";
+                                    $messenger_id = $form_values[urlencode($row->usf_name)];
                                 }
                                 else
                                 {
-                                    echo "<input type=\"text\" name=\"". urlencode($row->usf_name). "\" style=\"width: 200px;\" maxlength=\"50\" value=\"$row->usd_value\" />";
+                                    $messenger_id = $row->usd_value;
                                 }
-                            echo "</div>
+                                echo "<input type=\"text\" name=\"". urlencode($row->usf_name). "\" style=\"width: 200px;\" maxlength=\"50\" value=\"$messenger_id\" />
+                            </div>
                         </div>";
                     }
                 }
@@ -493,7 +441,13 @@ require("../../../adm_config/body_top.php");
                             
                             if($row->usf_type == "CHECKBOX")
                             {
-                                if($a_new_user == false && $row->usd_value == 1)
+                                if($b_history == true && isset($form_values[urlencode($row->usf_name)]) 
+                                && $form_values[urlencode($row->usf_name)] == 1)
+                                {
+                                    // Zurueck-Navigation und Haeckchen war bereits gesetzt
+                                    echo " checked ";
+                                }
+                                elseif($a_new_user == false && $row->usd_value == 1)
                                 {
                                     echo " checked ";
                                 }
@@ -514,7 +468,11 @@ require("../../../adm_config/body_top.php");
                                     echo " style=\"width: 300px;\" maxlength=\"255\" ";
                                 }
                                 
-                                if(strlen($row->usd_value) > 0)
+                                if($b_history == true)
+                                {
+                                    echo " value=\"". $form_values[urlencode($row->usf_name)]. "\" ";
+                                }
+                                elseif(strlen($row->usd_value) > 0)
                                 {
                                     echo " value=\"$row->usd_value\" ";
                                 }

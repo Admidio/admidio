@@ -87,6 +87,8 @@ if($a_user_id > 0)
     $user->GetUser($a_user_id);
 }
 
+unset($_SESSION['profile_request']);
+
 echo "
 <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
