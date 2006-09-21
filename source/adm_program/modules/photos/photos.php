@@ -86,14 +86,33 @@ if(isset($_GET["locked"]) && is_numeric($_GET["locked"]) == false)
 //ID einer bestimmten Veranstaltung
 $pho_id=$_GET["pho_id"];
 
-//Aufruf der ggf. uebergebenen Veranstaltung
-$sql="  SELECT *
-        FROM ". TBL_PHOTOS. "
-        WHERE pho_id ={0}";
-$sql    = prepareSQL($sql, array($pho_id));
-$result_event = mysql_query($sql, $g_adm_con);
-db_error($result_event);
-$adm_photo = mysql_fetch_array($result_event);
+//erfassen der Veranstaltung falls noch nicht in Session gespeichert
+if(!isset($_SESSION['photo_event']) || $_SESSION['photo_event']['pho_id']!= $pho_id)
+{
+    $sql="  SELECT *
+            FROM ". TBL_PHOTOS. "
+            WHERE pho_id ={0}";
+    $sql    = prepareSQL($sql, array($pho_id));
+    $result_event = mysql_query($sql, $g_adm_con);
+    db_error($result_event);
+    $adm_photo = mysql_fetch_array($result_event);
+
+    //Variablen in Session schreiben
+    $_SESSION['photo_event']['pho_id']= $adm_photo['pho_id'];
+    $_SESSION['photo_event']['pho_org_schortname']= $adm_photo['pho_org_schortname'];
+    $_SESSION['photo_event']['pho_quantity']= $adm_photo['pho_quantity'];
+    $_SESSION['photo_event']['pho_name']= $adm_photo['pho_name'];
+    $_SESSION['photo_event']['pho_begin']= $adm_photo['pho_begin'];
+    $_SESSION['photo_event']['pho_end']= $adm_photo['pho_end'];
+    $_SESSION['photo_event']['pho_photographers']= $adm_photo['pho_photographers'];
+    $_SESSION['photo_event']['pho_usr_id']= $adm_photo['pho_usr_id'];
+    $_SESSION['photo_event']['pho_timestamp']= $adm_photo['pho_timestamp'];
+    $_SESSION['photo_event']['pho_locked']= $adm_photo['pho_locked'];
+    $_SESSION['photo_event']['pho_pho_id_parent']= $adm_photo['pho_pho_id_parent'];
+    $_SESSION['photo_event']['pho_last_change']= $adm_photo['pho_last_change'];
+    $_SESSION['photo_event']['pho_usr_id_change']= $adm_photo['pho_usr_id_change'];
+
+}
 
 
 //erfassen ob Unterveranstaltungen existieren
@@ -102,26 +121,26 @@ $sql="  SELECT *
         WHERE pho_pho_id_parent ={0}";
 $sql    = prepareSQL($sql, array($pho_id));
 $result_children = mysql_query($sql, $g_adm_con);
-db_error($result_event);
+db_error($result_children);
 $children = mysql_num_rows($result_children);
 
 //Erfassen des Anlegers der uebergebenen Veranstaltung
-if($pho_id!=NULL && $adm_photo["pho_usr_id"]!=NULL)
+if($pho_id!=NULL && $_SESSION['photo_event']['pho_usr_id']!=NULL)
 {
     $sql="  SELECT *
             FROM ". TBL_USERS. "
-            WHERE usr_id =".$adm_photo["pho_usr_id"];
+            WHERE usr_id =".$_SESSION['photo_event']['pho_usr_id'];
     $result_u1 = mysql_query($sql, $g_adm_con);
     db_error($result_u1);
     $user1 = mysql_fetch_object($result_u1);
 }
 
 //Erfassen des Veraenderers der uebergebenen Veranstaltung
-if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL)
+if($pho_id!=NULL && $_SESSION['photo_event']['pho_usr_id_change']!=NULL)
 {
     $sql="  SELECT *
             FROM ". TBL_USERS. "
-            WHERE usr_id =".$adm_photo["pho_usr_id_change"];
+            WHERE usr_id =".$_SESSION['photo_event']['pho_usr_id_change'];
     $result_u2 = mysql_query($sql, $g_adm_con);
     db_error($result_u2);
     $user2 = mysql_fetch_object($result_u2);
@@ -132,13 +151,13 @@ if($pho_id!=NULL && $adm_photo["pho_usr_id_change"]!=NULL)
 if($_GET["locked"]=="1" || $_GET["locked"]=="0")
 {
     //bei Seitenaufruf ohne Moderationsrechte
-    if(!$g_session_valid || $g_session_valid && !editPhoto($adm_photo["pho_org_shortname"]))
+    if(!$g_session_valid || $g_session_valid && !editPhoto($_SESSION['photo_event']['pho_org_shortname']))
     {
         $g_message->show("photoverwaltungsrecht");
     }
 
     //bei Seitenaufruf mit Moderationsrechten
-    if($g_session_valid && editPhoto($adm_photo["pho_org_shortname"]))
+    if($g_session_valid && editPhoto($_SESSION['photo_event']['pho_org_shortname']))
     {
         $locked=$_GET["locked"];
         $sql="  UPDATE ". TBL_PHOTOS. " SET  pho_locked = $locked
@@ -148,7 +167,7 @@ if($_GET["locked"]=="1" || $_GET["locked"]=="0")
         db_error($result_approved);
 
         //Zurueck zur Elternveranstaltung
-        $pho_id=$adm_photo_parent["pho_id"];
+        $pho_id=$_SESSION['photo_event']['pho_pho_id_parent'];
         $sql="   SELECT *
                  FROM ". TBL_PHOTOS. "
                  WHERE pho_id ={0}";
@@ -156,6 +175,22 @@ if($_GET["locked"]=="1" || $_GET["locked"]=="0")
         $result_event = mysql_query($sql, $g_adm_con);
         db_error($result_event);
         $adm_photo = mysql_fetch_array($result_event);
+
+        //Variablen in Session schreiben
+        $_SESSION['photo_event']['pho_id']= $adm_photo['pho_id'];
+        $_SESSION['photo_event']['pho_org_schortname']= $adm_photo['pho_org_schortname'];
+        $_SESSION['photo_event']['pho_quantity']= $adm_photo['pho_quantity'];
+        $_SESSION['photo_event']['pho_name']= $adm_photo['pho_name'];
+        $_SESSION['photo_event']['pho_begin']= $adm_photo['pho_begin'];
+        $_SESSION['photo_event']['pho_end']= $adm_photo['pho_end'];
+        $_SESSION['photo_event']['pho_photographers']= $adm_photo['pho_photographers'];
+        $_SESSION['photo_event']['pho_usr_id']= $adm_photo['pho_usr_id'];
+        $_SESSION['photo_event']['pho_timestamp']= $adm_photo['pho_timestamp'];
+        $_SESSION['photo_event']['pho_locked']= $adm_photo['pho_locked'];
+        $_SESSION['photo_event']['pho_pho_id_parent']= $adm_photo['pho_pho_id_parent'];
+        $_SESSION['photo_event']['pho_last_change']= $adm_photo['pho_last_change'];
+        $_SESSION['photo_event']['pho_usr_id_change']= $adm_photo['pho_usr_id_change'];
+
     }
 }
 
@@ -191,13 +226,13 @@ echo "
         }
         else
         {
-            echo $adm_photo["pho_name"];
+            echo $_SESSION['photo_event']['pho_name'];
         }
         echo "</h1>";
 
         //solange nach Unterveranstaltungen suchen bis es keine mehr gibt
         $navilink = "";
-        $pho_parent_id = $adm_photo["pho_pho_id_parent"];
+        $pho_parent_id = $_SESSION['photo_event']['pho_pho_id_parent'];
         while ($pho_parent_id > 0)
         {
             //Erfassen der Eltern Veranstaltung
@@ -209,7 +244,7 @@ echo "
             $adm_photo_parent = mysql_fetch_array($result);
 
             //Link zusammensetzen
-            $navilink = "&nbsp;&gt;&nbsp;<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$adm_photo["pho_pho_id_parent"]."\">".$adm_photo_parent["pho_name"]."</a>".$navilink;
+            $navilink = "&nbsp;&gt;&nbsp;<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$_SESSION['photo_event']['pho_pho_id_parent']."\">".$adm_photo_parent["pho_name"]."</a>".$navilink;
 
             //Elternveranst
             $pho_parent_id=$adm_photo_parent["pho_pho_id_parent"];
@@ -240,9 +275,9 @@ echo "
                 {
                     echo "&nbsp;&nbsp;&nbsp;&nbsp;
                     <span class=\"iconLink\">
-                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=".$adm_photo["pho_id"]."\"><img
+                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=".$_SESSION['photo_event']['pho_id']."\"><img
                         class=\"iconLink\" src=\"$g_root_path/adm_program/images/photo.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Bilder hochladen\"></a>
-                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=".$adm_photo["pho_id"]."\">Bilder hochladen</a>
+                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=".$_SESSION['photo_event']['pho_id']."\">Bilder hochladen</a>
                     </span>";
                 }
             echo "</p>";
@@ -252,12 +287,12 @@ echo "
         echo "<div class=\"formBody\">";
             /*************************THUMBNAILS**********************************/
             //Nur wenn uebergeben Veranstaltung Bilder enthaelt
-            if($adm_photo["pho_quantity"] > 0)
+            if($_SESSION['photo_event']['pho_quantity'] > 0)
             {
                 //Aanzahl der Bilder
-                $bilder = $adm_photo["pho_quantity"];
+                $bilder = $_SESSION['photo_event']['pho_quantity'];
                 //Ordnerpfad
-                $ordner = "../../../adm_my_files/photos/".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"];
+                $ordner = "../../../adm_my_files/photos/".$_SESSION['photo_event']['pho_begin']."_".$_SESSION['photo_event']['pho_id'];
 
                 //Thumbnails pro Seite
                 $thumbs_per_side = $g_preferences['photo_thumbs_row']*$g_preferences['photo_thumbs_column'];
@@ -282,10 +317,10 @@ echo "
 
                 //Datum der Veranstaltung
                 echo"
-                Datum: ".mysqldate("d.m.y", $adm_photo["pho_begin"]);
-                if($adm_photo["pho_end"] != $adm_photo["pho_begin"])
+                Datum: ".mysqldate("d.m.y", $_SESSION['photo_event']['pho_begin']);
+                if($_SESSION['photo_event']['pho_end'] != $_SESSION['photo_event']['pho_begin'])
                 {
-                    echo " bis ".mysqldate("d.m.y", $adm_photo["pho_end"]);
+                    echo " bis ".mysqldate("d.m.y", $_SESSION['photo_event']['pho_end']);
                 }
 
                 //Seitennavigation
@@ -342,7 +377,7 @@ echo "
                                     <br>";
 
                                     //Buttons fuer moderatoren
-                                    if ($g_session_valid && editPhoto($adm_photo["pho_org_shortname"]))
+                                    if ($g_session_valid && editPhoto($_SESSION['photo_event']['pho_org_shortname']))
                                     {
                                         echo"
                                         <img src=\"$g_root_path/adm_program/images/arrow_turn_left.png\" style=\"cursor: pointer; vertical-align: middle;\" width=\"16\" height=\"16\" border=\"0\" alt=\"nach links drehen\" title=\"nach links drehen\"
@@ -364,16 +399,16 @@ echo "
                 //Anleger und Veraendererinfos
                 echo"
                 <div style=\"margin: 8px 4px 4px 4px; font-size: 8pt; text-align: center;\">";
-                    if($adm_photo["pho_usr_id"]!=NULL)
+                    if($_SESSION['photo_event']['pho_usr_id']!=NULL)
                     {
                         echo"Angelegt von ". strSpecialChars2Html($user1->usr_first_name). " ". strSpecialChars2Html($user1->usr_last_name)
-                        ." am ". mysqldatetime("d.m.y h:i", $adm_photo["pho_timestamp"]);
+                        ." am ". mysqldatetime("d.m.y h:i", $_SESSION['photo_event']['pho_timestamp']);
                     }
-                    if($adm_photo["pho_usr_id_change"]!=NULL && strtotime($adm_photo["pho_last_change"])>(strtotime($adm_photo["pho_timestamp"])+ 3600))
+                    if($_SESSION['photo_event']['pho_usr_id_change']!=NULL && strtotime($_SESSION['photo_event']['pho_last_change'])>(strtotime($_SESSION['photo_event']['pho_timestamp'])+ 3600))
                     {
                         echo"<br>
                         Letztes Update durch ". strSpecialChars2Html($user2->usr_first_name). " ". strSpecialChars2Html($user2->usr_last_name)
-                        ." am ". mysqldatetime("d.m.y h:i", $adm_photo["pho_last_change"]);
+                        ." am ". mysqldatetime("d.m.y h:i", $_SESSION['photo_event']['pho_last_change']);
                     }
                 echo "</div>";
 
@@ -612,7 +647,7 @@ echo "
 
             /****************************Leere Veranstaltung****************/
             //Falls die Veranstaltung weder Bilder noch Unterordner enthaelt
-                if(($adm_photo["pho_quantity"]=="0" || !isset($adm_photo["pho_quantity"])) && mysql_num_rows($result_list)==0)
+                if(($_SESSION['photo_event']['pho_quantity']=="0" || !isset($_SESSION['photo_event']['pho_quantity'])) && mysql_num_rows($result_list)==0)
                 {
                     echo"<tr style=\"text-align: center;\"><td td colspan=\"$colums\">Diese Veranstaltung enth&auml;lt leider noch keine Bilder.</td></tr>";
                 }
@@ -627,13 +662,13 @@ echo "
 
         /************************Buttons********************************/
         //Uebersicht
-        if($adm_photo["pho_id"]!=NULL)
+        if($_SESSION['photo_event']['pho_id']!=NULL)
         {
             echo "<p>
                 <span class=\"iconLink\">
-                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=". $adm_photo["pho_pho_id_parent"]. "\"><img
+                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=". $_SESSION['photo_event']['pho_pho_id_parent']. "\"><img
                     class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Zur&uuml;ck\"></a>
-                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=". $adm_photo["pho_pho_id_parent"]. "\">Zur&uuml;ck</a>
+                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=". $_SESSION['photo_event']['pho_pho_id_parent']. "\">Zur&uuml;ck</a>
                 </span>
             </p>";
         }
