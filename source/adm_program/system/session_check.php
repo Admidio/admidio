@@ -54,21 +54,10 @@ if(strlen($g_session_id) > 0)
         $valid    = false;
         $time_gap = time() - mysqlmaketimestamp($row->ses_timestamp);
 
-        if($row->ses_longer_session == 1)
+        // wenn länger als 30 min. nichts gemacht, dann ausloggen
+        if ($time_gap < 1800) 
         {
-            // User will erst nach 10 Stunden ausgeloggt werden
-            if ($time_gap < 28800) 
-            {
-                $valid = true;
-            }
-        }
-        else
-        {
-            // wenn länger als 30 min. nichts gemacht, dann ausloggen
-            if ($time_gap < 1800) 
-            {
-                $valid = true;
-            }
+            $valid = true;
         }
 
         if($valid)

@@ -81,21 +81,10 @@ if ($user_found >= 1)
         $user_session   = md5(uniqid(rand()));      
         $login_datetime = date("Y.m.d H:i:s", time());
 
-        // darf der User laenger eingeloggt sein
-
-        if(array_key_exists("long_login", $_POST))
-        {
-            $long_login = 1;
-        }
-        else
-        {
-            $long_login = 0;
-        }
-
         // Session-ID speichern
 
-        $sql = "INSERT INTO ". TBL_SESSIONS. " (ses_usr_id, ses_org_shortname, ses_session, ses_timestamp, ses_ip_address, ses_longer_session)
-                VALUES ('$user_row->usr_id', '$g_organization', '$user_session', '$login_datetime', '". $_SERVER['REMOTE_ADDR']. "', $long_login) ";
+        $sql = "INSERT INTO ". TBL_SESSIONS. " (ses_usr_id, ses_org_shortname, ses_session, ses_timestamp, ses_ip_address)
+                VALUES ('$user_row->usr_id', '$g_organization', '$user_session', '$login_datetime', '". $_SERVER['REMOTE_ADDR']. "') ";
         $result = mysql_query($sql, $g_adm_con);
         db_error($result);
 
