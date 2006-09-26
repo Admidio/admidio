@@ -88,3 +88,7 @@ ALTER TABLE %PRAEFIX%_guestbook_comments
       
 alter table %PRAEFIX%_guestbook_comments add constraint %PRAEFIX%_FK_GBC_USR_CHANGE foreign key (gbc_usr_id_change)
       references %PRAEFIX%_users (usr_id) on delete set null on update restrict;      
+
+-- Sessiontabelle bearbeiten
+ALTER TABLE %PRAEFIX%_sessions DROP COLUMN ses_longer_session;
+ALTER TABLE %PRAEFIX%_sessions ADD COLUMN ses_blob blob AFTER ses_ip_address;

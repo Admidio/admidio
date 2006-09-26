@@ -478,6 +478,7 @@ create table %PRAEFIX%_sessions
    ses_timestamp                  datetime                       not null,
    ses_ip_address                 varchar(15),
    ses_longer_session             tinyint(1) unsigned            not null default 0,
+   ses_blob                       blob,
    primary key (ses_id),
    key ak_session (ses_session)
 )

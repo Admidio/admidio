@@ -166,14 +166,6 @@ echo "
                       der Rolle zu zuordnen oder vorhandene Mitglieder zu entfernen.";
                 break;
 
-            case "login":
-                echo "Normalerweise wirst du aus Sicherheitsgr&uuml;nden nach 30 Minuten, in denen du
-                      nichts auf der Homepage gemacht hast, automatisch abgemeldet.<br /><br />
-                      Sollte es allerdings &ouml;fters vorkommen, dass du l&auml;ngere Zeit nicht am Computer
-                      bist, du dich aber trotzdem nicht jedesmal neu einloggen willst, so kannst
-                      du diesen Zeitraum auf maximal 8 Stunden erh&ouml;hen.";
-                break;
-
             case "mail_admin":
                 echo "Die E-Mail-Adresse des Administrators wird als Absenderadresse f&uuml;r Systemnachrichten
                       benutzt. (z.B. bei der Registierungsbest&auml;tigung)<br><br>
