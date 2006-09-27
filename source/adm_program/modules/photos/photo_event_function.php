@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2006 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Jochen Erkens
- * 
+ *
  * Uebergaben:
  * pho_id: id der Veranstaltung die bearbeitet werden soll
  * aufgabe: - makenew (neue eingaben speichern)
@@ -40,7 +40,7 @@ if(isset($_GET["pho_id"]) && is_numeric($_GET["pho_id"]) == false && $_GET["pho_
     $g_message->show("invalid");
 }
 
-if(isset($_GET["aufgabe"]) && $_GET["aufgabe"] != "makenew" && $_GET["aufgabe"] != "do_delete" 
+if(isset($_GET["aufgabe"]) && $_GET["aufgabe"] != "makenew" && $_GET["aufgabe"] != "do_delete"
     && $_GET["aufgabe"] != "makechange" && $_GET["aufgabe"] != "delete_request")
 {
     $g_message->show("invalid");
@@ -50,7 +50,11 @@ $_SESSION['photo_event_request'] = $_REQUEST;
 
 //Uebernahme Variablen
 $pho_id  = $_GET['pho_id'];
-$aufgabe = $_GET['aufgabe'];
+
+if(isset($_GET['aufgabe']))
+{
+    $aufgabe = $_GET['aufgabe'];
+}
 
 //Aktueller Timestamp
 $act_datetime= date("Y.m.d G:i:s", time());
@@ -78,13 +82,13 @@ if(!$g_session_valid || $g_session_valid && (!editPhoto($adm_photo["pho_org_shor
 }
 
 //bei Seitenaufruf mit Moderationsrechten
-if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
+if($g_session_valid && editPhoto($adm_photo['pho_org_shortname']))
 {
     //Speicherort
     $ordner = "../../../adm_my_files/photos/".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"];
 
     /********************Aenderungen oder Neueintraege kontrollieren***********************************/
-    if($_POST["submit"])
+    if(isset($_POST["submit"]) && $_POST["submit"])
     {
     //Gesendete Variablen Uebernehmen und kontollieren
         //Veranstaltung
@@ -93,10 +97,14 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
         {
             $g_message->show("veranstaltung");
         }
-        
+
         //Parent-Ordner
-        $parent_id = $_POST["parent"];
-        
+        if(isset($_POST["parent"]))
+        {
+            $parent_id = $_POST["parent"];
+        }
+        else $parent_id = NULL;
+
         //Beginn
         $beginn =  $_POST["beginn"];
         if($beginn=="" || !dtCheckDate($beginn))
@@ -106,7 +114,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
         if(dtCheckDate($beginn)){
             $beginn = dtFormatDate($beginn, "Y-m-d");
         }
-       
+
         //Ende
         $ende =  $_POST["ende"];
         if($ende==""){
@@ -121,15 +129,15 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
             if(dtCheckDate($ende))
             {
                 $ende = dtFormatDate($ende, "Y-m-d");
-            }   
+            }
         }
-        
+
         //Anfang muss vor oder gleich Ende sein
         if($ende<$beginn)
         {
             $g_message->show("startvorend");
         }
-        
+
         //Photographen
         $photographen =  $_POST["photographen"];
         if($photographen=="")
@@ -138,12 +146,15 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
         }
 
         //Freigabe
-        $locked=$_POST["locked"];
-        if($locked==NULL)
+        if (isset ($_POST["locked"]))
+        {
+            $locked=$_POST["locked"];
+        }
+        else
         {
             $locked=0;
         }
-        
+
         /********************neuen Datensatz anlegen***********************************/
         if ($aufgabe=="makenew")
         {
@@ -194,7 +205,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
                 $g_message->addVariableContent("adm_my_files/photos", 1);
                 $g_message->addVariableContent($g_preferences['email_administrator'], 2);
                 $g_message->setForwardUrl("$g_root_path/adm_program/modules/photos/photos.php");
-                $g_message->show("write_access");                
+                $g_message->show("write_access");
             }
             //wenn Rechte OK, Ordner erstellen
             else
@@ -225,7 +236,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
         }
         if($parent_id=="0"){
                 $sql=$sql."pho_pho_id_parent = NULL,";
-        }        
+        }
         $sql=$sql."     pho_begin ='$beginn',
                         pho_end ='$ende',
                         pho_photographers ='$photographen',
@@ -261,7 +272,11 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
             db_error($result);
             $neudaten_parent = mysql_fetch_array($result);
         }
-        
+        else
+        {
+            $pho_parent_id=NULL;
+        }
+
         //Erfassen des Anlegers der Ubergebenen Veranstaltung
         if($neudaten["pho_usr_id"]!=NULL)
         {
@@ -302,7 +317,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
     echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">";
 
     /*******************************Bericht*********************************************/
-    if($_POST["submit"])
+    if(isset($_POST["submit"]) && $_POST["submit"])
     {
         echo"<div style=\"width: 430px\" align=\"center\" class=\"formHead\">Bericht</div>";
         echo"
@@ -341,18 +356,18 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
         </div><br><br>";
     }//submit
 
- 
+
 /***********************Veranstaltung Loeschen*******************************************/
 
     //Nachfrage ob geloescht werden soll
-    if($_GET["job"]=="delete_request")
+    if(isset($_GET["job"]) && $_GET["job"]=="delete_request")
     {
         $g_message->setForwardYesNo("$g_root_path/adm_program/modules/photos/photo_event_function.php?job=do_delete&pho_id=$pho_id");
         $g_message->show("delete_veranst", utf8_encode($adm_photo["pho_name"]));
     }
-    
-    
-    if($_GET["job"]=="do_delete")
+
+
+    if(isset($_GET["job"]) && $_GET["job"]=="do_delete")
     {
         //Erfasse der zu loeschenden Veranstaltung bzw. Unterveranstaltungen
         //Erfassen der Veranstaltung bei Aenderungsaufruf und schreiben in array
@@ -369,7 +384,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
                     WHERE (pho_pho_id_parent ='$delete_id')";
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
-            
+
             while($adm_photo_delete_collect  = mysql_fetch_array($result))
             {
                 $delete_ids["$counter"]=$adm_photo_delete_collect["pho_id"];
@@ -384,7 +399,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
         //Bericht
         echo"<div style=\"width: 500px\" align=\"center\" class=\"formHead\">Bericht</div>";
         echo"<div style=\"width: 500px\" align=\"center\" class=\"formBody\">";
-        
+
         //Alle veranstaltungen aufrufen und sie selbst und ihre Bilder loeschen
         for($x=0; $x<$counter; $x++)
         {
@@ -395,10 +410,10 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
             $adm_photo_delete = mysql_fetch_array($result);
-            
+
             //Ordnerpfad zusammensetzen
             $ordner = "../../../adm_my_files/photos/".$adm_photo_delete["pho_begin"]."_".$adm_photo_delete["pho_id"];
-            
+
             //wenn Ordner existiert
             if(file_exists($ordner))
             {
@@ -416,7 +431,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
                         }
                 }
             }
-            
+
             //Loeschen der Daten aus der Datenbank
             $sql =" DELETE
                     FROM ". TBL_PHOTOS. "
@@ -427,7 +442,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
             {
                 echo"Der Datensatz zu &bdquo;".$adm_photo_delete["pho_name"]."&rdquo; wurde aus der Datenbank gel&ouml;scht.";
             }
-            
+
             //Loeschen der Ordners
             if(file_exists($ordner))
                 {
@@ -446,10 +461,10 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
     </button>
     </div>";
     }//Ende Veranstaltung loeschen
-    
+
     /***********************************Ende********************************************/
         echo"</div>";
-            
+
         require("../../../adm_config/body_bottom.php");
         echo "</body>
     </html>";
