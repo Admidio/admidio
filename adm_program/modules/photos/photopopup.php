@@ -146,7 +146,7 @@ echo "
                 //Hochformat Bilder
                 if ($bildgroesse[0]<=$bildgroesse[1])
                 {
-                    $side=y;
+                    $side="y";
                     if ($bildgroesse[1]>$g_preferences['photo_show_height']){
                         $scal=$g_preferences['photo_show_height'];
                     }
@@ -159,7 +159,7 @@ echo "
                 //Querformat Bilder
                 if ($bildgroesse[0]>$bildgroesse[1])
                 {
-                    $side=x;
+                    $side="x";
                     if ($bildgroesse[0]>$g_preferences['photo_show_width'])
                     {
                         $scal=$g_preferences['photo_show_width'];

@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2006 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Jochen Erkens
- * 
+ *
  * Uebergaben:
  * pho_id: id der Veranstaltung die bearbeitet werden soll
  * aufgabe: - new (neues Formular)
@@ -53,28 +53,29 @@ else
 {
     $form_values['veranstaltung']   = "";
     $form_values['parent']          = "";
-    $form_values['beginn']          = "";   
+    $form_values['beginn']          = "";
     $form_values['ende']            = "";
     $form_values['photographen']    = "";
-    $form_values['locked']          = 0; 
-   
+    $form_values['locked']          = 0;
+
+
+    //Erfassen der Veranstaltung bei Aenderungsaufruf
+    $sql="  SELECT *
+            FROM ". TBL_PHOTOS. "
+            WHERE (pho_id ='$pho_id')";
+    $result = mysql_query($sql, $g_adm_con);
+    db_error($result);
+    $adm_photo = mysql_fetch_array($result);
+
     if ($_GET['aufgabe'] == "change")
     {
-        //Erfassen der Veranstaltung bei Aenderungsaufruf
-        $sql="  SELECT *
-                FROM ". TBL_PHOTOS. "
-                WHERE (pho_id ='$pho_id')";
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
-        $adm_photo = mysql_fetch_array($result);
-   
-            $form_values['veranstaltung']   = $adm_photo["pho_name"];
-            $form_values['parent']          = $adm_photo["pho_pho_id_parent"];
-            $form_values['beginn']          = mysqldate("d.m.y", $adm_photo["pho_begin"]);   
-            $form_values['ende']            = mysqldate("d.m.y", $adm_photo["pho_end"]);
-            $form_values['photographen']    = $adm_photo["pho_photographers"];
-            $form_values['locked']          = $adm_photo["pho_locked"]; 
-    
+        $form_values['veranstaltung']   = $adm_photo["pho_name"];
+        $form_values['parent']          = $adm_photo["pho_pho_id_parent"];
+        $form_values['beginn']          = mysqldate("d.m.y", $adm_photo["pho_begin"]);
+        $form_values['ende']            = mysqldate("d.m.y", $adm_photo["pho_end"]);
+        $form_values['photographen']    = $adm_photo["pho_photographers"];
+        $form_values['locked']          = $adm_photo["pho_locked"];
+
     }
 }
 
@@ -90,13 +91,13 @@ $result_list = mysql_query($sql, $g_adm_con);
 db_error($result_list);
 
 //bei Seitenaufruf ohne Moderationsrechte
-if(!$g_session_valid || $g_session_valid && (!editPhoto($adm_photo["pho_org_shortname"]) && $aufgabe="change") || !editPhoto())
+if(!$g_session_valid || $g_session_valid  && $aufgabe="change"&& (!editPhoto($adm_photo["pho_org_shortname"])) || !editPhoto())
 {
     $g_message->show("photoverwaltunsrecht");
 }
 
 //bei Seitenaufruf mit Moderationsrechten
-if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
+if($g_session_valid && editPhoto($adm_photo['pho_org_shortname']))
 {
     //Speicherort
     $ordner = "../../../adm_my_files/photos/".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"];
@@ -134,7 +135,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
                 echo "Veranstaltung bearbeiten";
         }
     echo"</div>";
-        
+
     //Body
     echo"
     <div class=\"formBody\" align=\"center\">
@@ -146,7 +147,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
             if($_GET["aufgabe"]=="change"){
                 echo "&aufgabe=makechange\">";
             }
-        
+
             //Veranstaltung
             echo"
             <div>
@@ -183,7 +184,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
                             echo"<option value=\"".$adm_photo_child["pho_id"]."\" selected=\"selected\">".$vorschub."&#151;".$adm_photo_child["pho_name"]
                             ."&nbsp(".mysqldate("y", $adm_photo_child["pho_begin"]).")</option>";
                         }
-  
+
                         //Versnstaltung selbst darf nicht ausgewaehlt werden
                         if($adm_photo_child["pho_id"]!=$adm_photo["pho_pho_id_parent"] && $adm_photo_child["pho_id"]==$pho_id && $_GET["aufgabe"]=="change" || $option==false )
                         {
@@ -197,7 +198,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
                     }//if
                 }//while
             }//function
-        
+
             echo"
             <div style=\"margin-top: 6px;\">
                <div style=\"text-align: right; width: 170px; float: left;\">in Ordner:</div>
@@ -252,7 +253,7 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
             echo"
             <div style=\"margin-top: 6px;\">
                 <div style=\"text-align: right; width: 170px; float: left;\">Ende:</div>
-                <div style=\"text-align: left; margin-left: 180px;\">   
+                <div style=\"text-align: left; margin-left: 180px;\">
                     <input type=\"text\" name=\"ende\" size=\"10\" tabindex=\"4\" maxlength=\"10\" value=\"".$form_values['ende']."\">
                 </div>
             </div>";
@@ -302,17 +303,17 @@ if($g_session_valid && editPhoto($adm_photo["$g_organization"]))
             </div>
         </form>
     </div>
-        
+
     <script type=\"text/javascript\">
         <!--
             document.getElementById('veranstaltung').focus();
         -->
     </script>";
 
-  
+
     /***********************************Ende********************************************/
         echo"</div>";
-            
+
         require("../../../adm_config/body_bottom.php");
         echo "</body>
     </html>";

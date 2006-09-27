@@ -13,7 +13,7 @@
  * ziel: wo soll es gspeichert werden
  * aufgabe: anzeigen oder speichern
  * nr: Nummer des hochgeladenen bildes
- * side: Seite des Bildes die scaliert werden soll 
+ * side: Seite des Bildes die scaliert werden soll
  ******************************************************************************
  *
  * This program is free software; you can redistribute it and/or
@@ -32,41 +32,74 @@
  *
  *****************************************************************************/
 require("../../system/common.php");
-header("Content-Type: image/jpeg");
+//header("Content-Type: image/jpeg");
 
 // Uebergabevariablen pruefen
 
-if(isset($_GET["aufgabe"]) && $_GET["aufgabe"] != "anzeigen" && $_GET["aufgabe"] != "speichern")
+//Aufgabe
+if(isset($_GET['aufgabe']))
+{
+    $aufgabe = $_GET['aufgabe'];
+}
+else
 {
     $g_message->show("invalid");
 }
 
-if(isset($_GET["nr"]) && is_numeric($_GET["nr"]) == false)
+if($aufgabe != "anzeigen" && $aufgabe != "speichern")
 {
     $g_message->show("invalid");
 }
 
-if(isset($_GET["scal"]) && is_numeric($_GET["scal"]) == false)
+//Bildnr
+$nr=NULL;
+if(isset($_GET['nr']))
+{
+    $nr   = $_GET['nr'];
+}
+if(!is_numeric($nr) && $nr!=NULL)
 {
     $g_message->show("invalid");
 }
 
-if(strlen($_GET["side"]) > 0 && $_GET["side"] != "y" && $_GET["side"] != "x")
+//Scale
+$scal=NULL;
+if(isset($_GET['scal']))
+{
+    $scal = $_GET['scal'];
+}
+if(!is_numeric($scal))
 {
     $g_message->show("invalid");
 }
 
-//Uebernahme welches Bild umgerechnet werden soll
-$aufgabe = $_GET['aufgabe'];
-$bild = strStripTags($_GET['bild']);
-$scal = $_GET['scal'];
-$ziel = strStripTags($_GET['ziel']);
-$nr   = $_GET['nr'];
-$side = $_GET["side"];
+//Seite
+$side=NULL;
+if(isset($_GET['side']))
+{
+    $side = $_GET['side'];
+}
+if($side != "y" && $side != "x" && $side!=NULL)
+{
+    $g_message->show("invalid");
+}
 
+//Bild
+$bild;
+if(isset($_GET['bild']))
+{
+    $bild = strStripTags($_GET['bild']);
+}
 if(strlen($bild) == 0)
 {
     $bild = "../../../adm_my_files/photos/temp$nr.jpg";
+}
+
+//Ziel
+$ziel=NULL;
+if(isset($_GET['ziel']))
+{
+    $ziel = strStripTags($_GET['ziel']);
 }
 
 //Ermittlung der Original Bildgroesse
@@ -124,7 +157,7 @@ if($aufgabe=="anzeigen")
         $text="&#169;&#32;".$g_current_organization->homepage;
         imagettftext($neubild, $font_s, 0, $font_x, $font_y, $font_c, $font_ttf, $text);
     }
-    
+
     //Rueckgabe des Neuen Bildes
     imagejpeg($neubild,"",90);
 };
@@ -134,7 +167,6 @@ if($aufgabe=="speichern")
 {
     require("../../system/login_valid.php");
     imagejpeg($neubild, "$ziel.jpg", 90);
-    imagejpeg($neubild,"",90);
     chmod("$ziel.jpg",0777);
 };//if Aufgabe
 

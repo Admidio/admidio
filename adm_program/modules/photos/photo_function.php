@@ -53,7 +53,10 @@ if($_GET["job"] == "delete" && !isset($_GET["bild"]))
     $g_message->show("invalid");
 }
 
-$pho_id = $_GET["pho_id"];
+if(isset($_GET["pho_id"]))
+{
+    $pho_id = $_GET["pho_id"];
+}
 
 //Rechtsdrehung eines Bildes
 //pho_id: Veranstaltungsid
@@ -62,7 +65,7 @@ function right_rotate ($pho_id, $bild)
 {
     global $g_adm_con;
     header("Content-Type: image/jpeg");
-    
+
     //Aufruf der ggf. Uebergebenen Veranstaltung
     $sql = "    SELECT *
                 FROM ". TBL_PHOTOS. "
@@ -70,19 +73,19 @@ function right_rotate ($pho_id, $bild)
     $result_event = mysql_query($sql, $g_adm_con);
     db_error($result_event);
     $adm_photo = mysql_fetch_array($result_event);
-    
+
     //Ordnerpfad zusammensetzen
     $ordner = "../../../adm_my_files/photos/".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"];
 
     //Ermittlung der Original Bildgroessee
     $bildgroesse = getimagesize("$ordner/$bild.jpg");
-    
+
     // Erzeugung neues Bild
     $neubild = imagecreatetruecolor($bildgroesse[1], $bildgroesse[0]);
-    
+
     //Aufrufen des Originalbildes
     $bilddaten = imagecreatefromjpeg("$ordner/$bild.jpg");
-    
+
     //kopieren der Daten in neues Bild
     for($y=0; $y<$bildgroesse[1]; $y++)
     {
@@ -91,7 +94,7 @@ function right_rotate ($pho_id, $bild)
             imagecopy($neubild, $bilddaten, $bildgroesse[1]-$y-1, $x, $x, $y, 1,1 );
         }
     }
-   
+
     //ursprungsdatei loeschen
     if(file_exists("$ordner/$bild.jpg"))
     {
@@ -102,7 +105,7 @@ function right_rotate ($pho_id, $bild)
     //speichern
     imagejpeg($neubild, "$ordner/$bild.jpg", 90);
     chmod("$ordner/$bild.jpg",0777);
-    
+
     //Loeschen des Bildes aus Arbeitsspeicher
     imagedestroy($neubild);
     imagedestroy($bilddaten);
@@ -115,7 +118,7 @@ function left_rotate ($pho_id, $bild)
 {
     global $g_adm_con;
     header("Content-Type: image/jpeg");
-    
+
     //Aufruf der ggf. Uebergebenen Veranstaltung
     $sql = "    SELECT *
                 FROM ". TBL_PHOTOS. "
@@ -123,19 +126,19 @@ function left_rotate ($pho_id, $bild)
     $result_event = mysql_query($sql, $g_adm_con);
     db_error($result_event);
     $adm_photo = mysql_fetch_array($result_event);
-    
+
     //Ordnerpfad zusammensetzen
     $ordner = "../../../adm_my_files/photos/".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"];
 
     //Ermittlung der Original Bildgroessee
     $bildgroesse = getimagesize("$ordner/$bild.jpg");
-    
+
     // Erzeugung neues Bild
     $neubild = imagecreatetruecolor($bildgroesse[1], $bildgroesse[0]);
-    
+
     //Aufrufen des Originalbildes
     $bilddaten = imagecreatefromjpeg("$ordner/$bild.jpg");
-    
+
     //kopieren der Daten in neues Bild
     for($y=0; $y<$bildgroesse[1]; $y++)
     {
@@ -144,7 +147,7 @@ function left_rotate ($pho_id, $bild)
             imagecopy($neubild, $bilddaten, $y, $bildgroesse[0]-$x-1, $x, $y, 1,1 );
         }
    }
-   
+
     //ursprungsdatei loeschen
     if(file_exists("$ordner/$bild.jpg"))
     {
@@ -155,7 +158,7 @@ function left_rotate ($pho_id, $bild)
     //speichern
     imagejpeg($neubild, "$ordner/$bild.jpg", 90);
     chmod("$ordner/$bild.jpg",0777);
-    
+
     //Loeschen des Bildes aus Arbeitsspeicher
     imagedestroy($neubild);
     imagedestroy($bilddaten);
@@ -189,7 +192,7 @@ function delete ($pho_id, $bild)
         chmod("$ordner/$bild.jpg", 0777);
         unlink("$ordner/$bild.jpg");
     }
-   
+
     //Umbennenen der Restbilder
     $neuenr=1;
     for($x=1; $x<=$adm_photo["pho_quantity"]; $x++)
@@ -203,7 +206,7 @@ function delete ($pho_id, $bild)
             $neuenr++;
         }//if
    }//for
-   
+
    //&Auml;ndern der Datenbankeintaege
     $sql="  UPDATE ". TBL_PHOTOS. "
             SET pho_quantity = '$neuebilderzahl',
@@ -222,7 +225,7 @@ if($_GET["job"]=="rotate")
     {
         $g_message->show("photoverwaltungsrecht");
     }
-    
+
     //Aufruf der entsprechenden Funktion
     if($_GET["direction"]=="right"){
         right_rotate($pho_id, $_GET["bild"]);
@@ -230,7 +233,7 @@ if($_GET["job"]=="rotate")
     if($_GET["direction"]=="left"){
         left_rotate($pho_id, $_GET["bild"]);
     }
-    
+
     // zur Ausgangsseite zurueck
     $seite=$_GET["seite"];
     $location = "Location: $g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id&seite=$seite";
@@ -246,21 +249,33 @@ if($_GET["job"]=="delete_request")
 }
 
 //Nutzung der Loeschfunktion
-if($_GET["job"]=="do_delete")
+if(isset($_GET["job"]) && $_GET["job"]=="do_delete")
 {
+    //erfassen der Veranstaltung
+    $sql = "    SELECT *
+                FROM ". TBL_PHOTOS. "
+                WHERE (pho_id ='$pho_id')";
+    $result = mysql_query($sql, $g_adm_con);
+    db_error($result);
+    $adm_photo = mysql_fetch_array($result);
+
     //bei Seitenaufruf ohne Moderationsrechte
     if(!$g_session_valid || $g_session_valid && !editPhoto($adm_photo["pho_org_shortname"]))
     {
         $g_message->show("photoverwaltungsrecht");
     }
-    
+
     //Aufruf der entsprechenden Funktion
     delete($pho_id, $_GET["bild"]);
-    
+
     // zur Ausgangsseite zurueck
-    $seite=$_GET["seite"];
-    
-    $g_message->setForwardUrl("$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id&seite=$seite", 2000);
+    if(isset($_GET["seite"]))
+    {
+        $seite=$_GET["seite"];
+    }
+    else $seite=1;
+
+    $g_message->setForwardUrl("$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id&seite=$seite&reload=true", 2000);
     $g_message->show("photo_deleted");
 }
 ?>

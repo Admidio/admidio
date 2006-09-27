@@ -7,7 +7,7 @@
  * Module-Owner : Jochen Erkens
  *
  * Uebergaben:
- * 
+ *
  * pho_id: id der Veranstaltung zu der die Bilder hinzugefuegt werden sollen
  ******************************************************************************
  *
@@ -26,7 +26,7 @@
  * Foundation, Inc., 79 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
- 
+
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
@@ -44,7 +44,8 @@ if(!$g_session_valid || $g_session_valid & !editPhoto())
 }
 
 //Kontrolle ob Server Dateiuploads zulaesst
-if(ini_get(file_uploads)==0)
+$ini = ini_get('file_uploads');
+if($ini!=1)
 {
     $g_message->show("no_file_upload_server");
 }
@@ -64,7 +65,7 @@ if($g_session_valid & editPhoto())
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
     $adm_photo = mysql_fetch_array($result);
-    
+
     //Ordnerpfad
     $ordner = "../../../adm_my_files/photos/".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"];
 
@@ -80,7 +81,7 @@ if($g_session_valid & editPhoto())
         $adm_photo_parent = mysql_fetch_array($result);
     }
 
- 
+
     //Beginn HTML
    echo "
    <!-- (c) 2004 - 2005 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
@@ -133,7 +134,7 @@ if($g_session_valid & editPhoto())
                             &nbsp;Bilder hochladen
                         </button>
                     </div>
-               </div> 
+               </div>
             </form>";
 
             //Seitenende

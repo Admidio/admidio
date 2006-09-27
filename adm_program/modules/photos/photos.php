@@ -44,8 +44,14 @@ if(!file_exists("../../../adm_my_files/photos"))
     $g_message->show("no_photo_folder");
 }
 
-// Uebergabevariablen pruefen
-if(isset($_GET["pho_id"]) && is_numeric($_GET["pho_id"]) == false && $_GET["pho_id"]!=NULL)
+//ID Pruefen
+if(isset($_GET["pho_id"]))
+{
+    $pho_id=$_GET["pho_id"];
+}
+else $pho_id=NULL;
+
+if(!is_numeric($pho_id) && $pho_id!=NULL)
 {
     $g_message->show("invalid");
 }
@@ -77,17 +83,30 @@ else
     $thumb_seite = 1;
 }
 
-if(isset($_GET["locked"]) && is_numeric($_GET["locked"]) == false)
+
+if(isset($_GET["locked"]))
+{
+    $locked = $_GET["locked"];
+}
+else
+{
+    $locked=NULL;
+}
+
+if(!is_numeric($locked) && $locked!=NULL)
 {
     $g_message->show("invalid");
 }
 
-//Uebername der uebergebenen Variablen
-//ID einer bestimmten Veranstaltung
-$pho_id=$_GET["pho_id"];
+$reload = false;
+if(isset($_GET['reload']))
+{
+    $reload=$_GET['reload'];
+}
+
 
 //erfassen der Veranstaltung falls noch nicht in Session gespeichert
-if(!isset($_SESSION['photo_event']) || $_SESSION['photo_event']['pho_id']!= $pho_id)
+if(!isset($_SESSION['photo_event']) || $_SESSION['photo_event']['pho_id']!= $pho_id || $reload)
 {
     $sql="  SELECT *
             FROM ". TBL_PHOTOS. "
@@ -99,7 +118,7 @@ if(!isset($_SESSION['photo_event']) || $_SESSION['photo_event']['pho_id']!= $pho
 
     //Variablen in Session schreiben
     $_SESSION['photo_event']['pho_id']= $adm_photo['pho_id'];
-    $_SESSION['photo_event']['pho_org_schortname']= $adm_photo['pho_org_schortname'];
+    $_SESSION['photo_event']['pho_org_shortname']= $adm_photo['pho_org_shortname'];
     $_SESSION['photo_event']['pho_quantity']= $adm_photo['pho_quantity'];
     $_SESSION['photo_event']['pho_name']= $adm_photo['pho_name'];
     $_SESSION['photo_event']['pho_begin']= $adm_photo['pho_begin'];
@@ -148,7 +167,7 @@ if($pho_id!=NULL && $_SESSION['photo_event']['pho_usr_id_change']!=NULL)
 
 /*********************LOCKED************************************/
 //Falls gefordert und Foto-edit-rechte, aendern der Freigabe
-if($_GET["locked"]=="1" || $_GET["locked"]=="0")
+if($locked=="1" || $locked=="0")
 {
     //bei Seitenaufruf ohne Moderationsrechte
     if(!$g_session_valid || $g_session_valid && !editPhoto($_SESSION['photo_event']['pho_org_shortname']))
@@ -159,7 +178,6 @@ if($_GET["locked"]=="1" || $_GET["locked"]=="0")
     //bei Seitenaufruf mit Moderationsrechten
     if($g_session_valid && editPhoto($_SESSION['photo_event']['pho_org_shortname']))
     {
-        $locked=$_GET["locked"];
         $sql="  UPDATE ". TBL_PHOTOS. " SET  pho_locked = $locked
                  WHERE pho_id = {0}";
         $sql    = prepareSQL($sql, array($pho_id));
@@ -305,7 +323,7 @@ echo "
                 $popup_width  = $g_preferences['photo_show_width']+70;
 
                 //Ausrechnen der Seitenzahl
-                if (settype($bilder,integer) || settype($thumb_seiten,integer))
+                if (settype($bilder, "int") || settype($thumb_seiten, "int"))
                 {
                     $thumb_seiten = round($bilder / $thumbs_per_side);
                 }
@@ -431,7 +449,7 @@ echo "
             {
                 $sql=$sql." AND pho_pho_id_parent = {0} ";
             }
-            if (!editPhoto($adm_photo_list["pho_org_shortname"]))
+            if (!editPhoto($g_organization))
             {
                 $sql=$sql." AND pho_locked = 0 ";
             }
@@ -559,7 +577,7 @@ echo "
                             {
                                 echo"
                                 <a target=\"_self\" href=\"photos.php?pho_id=".$adm_photo_list["pho_id"]."\">
-                                    <img src=\"resize.php?bild=$bsp_pic_path&amp;scal=".$g_preferences['photo_preview_scale']."&amp;aufgabe=anzeigen&amp;side=y\" border=\"0\" alt=\"$previewpic\"
+                                    <img src=\"resize.php?bild=$bsp_pic_path&amp;scal=".$g_preferences['photo_preview_scale']."&amp;aufgabe=anzeigen&amp;side=y\" border=\"0\" alt=\"Zufallsbild\"
                                     style=\"vertical-align: middle; align: right;\"></a></div>";
                             }
                             echo"
@@ -649,7 +667,7 @@ echo "
             //Falls die Veranstaltung weder Bilder noch Unterordner enthaelt
                 if(($_SESSION['photo_event']['pho_quantity']=="0" || !isset($_SESSION['photo_event']['pho_quantity'])) && mysql_num_rows($result_list)==0)
                 {
-                    echo"<tr style=\"text-align: center;\"><td td colspan=\"$colums\">Diese Veranstaltung enth&auml;lt leider noch keine Bilder.</td></tr>";
+                    echo"<tr style=\"text-align: center;\"><td>Diese Veranstaltung enth&auml;lt leider noch keine Bilder.</td></tr>";
                 }
 
             if(mysql_num_rows($result_list) > 2)
