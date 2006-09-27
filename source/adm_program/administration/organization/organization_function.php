@@ -38,6 +38,8 @@ if(!hasRole("Webmaster"))
     $g_message->show("norights");
 }
 
+$_SESSION['organization_request'] = $_REQUEST;
+
 // Uebergabevariablen pruefen
 
 if(isset($_GET["org_id"]) && is_numeric($_GET["org_id"]) == false)
@@ -45,23 +47,14 @@ if(isset($_GET["org_id"]) && is_numeric($_GET["org_id"]) == false)
     $g_message->show("invalid");
 }
 
-$err_code   = "";
-
-$g_current_organization->longname  = strStripTags($_POST["longname"]);
-$g_current_organization->homepage  = strStripTags($_POST["homepage"]);
-if(isset($_POST["parent"]))
-{
-	$g_current_organization->org_id_parent = $_POST["parent"];
-}
-else
-{
-	$g_current_organization->org_id_parent = null;
-}
+$err_code = "";
+$err_text = "";
 
 // *******************************************************************************
 // Pruefen, ob alle notwendigen Felder gefuellt sind
 // *******************************************************************************
-if(strlen($g_current_organization->longname) == 0)
+$_POST["longname"] = strStripTags($_POST["longname"]);
+if(strlen($_POST["longname"]) == 0)
 {
     $err_code = "feld";
     $err_text = "Name (lang)";
@@ -81,6 +74,27 @@ if(strlen($err_code) == 0)
             $err_code = "email_invalid";
         }
     }
+    if($_POST['logout_minutes'] <= 0)
+    {
+        $err_code = "feld";
+        $err_text = "Automatischer Logout";
+    }
+}
+
+if ($err_code != "")
+{
+    $g_message->show($err_code, $err_text);
+}
+
+$g_current_organization->longname  = strStripTags($_POST["longname"]);
+$g_current_organization->homepage  = strStripTags($_POST["homepage"]);
+if(isset($_POST["parent"]))
+{
+    $g_current_organization->org_id_parent = $_POST["parent"];
+}
+else
+{
+    $g_current_organization->org_id_parent = null;
 }
 
 if(isset($_POST["send_email_extern"]) == false)
@@ -113,11 +127,6 @@ if(isset($_POST["photo_image_text"]) == false)
     $_POST["photo_image_text"] = 0;
 }
 
-if ($err_code != "")
-{
-    $g_message->show($err_code, $err_text);
-}
-
 // *******************************************************************************
 // Organisation updaten
 // *******************************************************************************
@@ -131,10 +140,13 @@ if($ret_code != 0)
 
 writeOrgaPreferences('email_administrator', $_POST['email_administrator']);
 writeOrgaPreferences('default_country',     $_POST['default_country']);
-writeOrgaPreferences('send_email_extern',   $_POST['send_email_extern']);
 writeOrgaPreferences('enable_bbcode',       $_POST['enable_bbcode']);
 writeOrgaPreferences('enable_rss',          $_POST['enable_rss']);
+writeOrgaPreferences('logout_minutes',      $_POST['logout_minutes']);
+//Einstellungen Mailmodul
+writeOrgaPreferences('send_email_extern',   $_POST['send_email_extern']);
 writeOrgaPreferences('max_email_attachment_size', $_POST['max_email_attachment_size']);
+//Einstellungen Downloadmodul
 writeOrgaPreferences('max_file_upload_size', $_POST['max_file_upload_size']);
 //Einstellungen Photomodul
 writeOrgaPreferences('photo_thumbs_column', $_POST['photo_thumbs_column']);
@@ -146,6 +158,7 @@ writeOrgaPreferences('photo_show_height', $_POST['photo_show_height']);
 writeOrgaPreferences('photo_image_text', $_POST['photo_image_text']);
 writeOrgaPreferences('photo_preview_scale', $_POST['photo_preview_scale']);
 
+unset($_SESSION['organization_request']);
 unset($_SESSION['g_current_organizsation']);
 unset($_SESSION['g_preferences']);
 
