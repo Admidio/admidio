@@ -53,9 +53,8 @@ if(strlen($g_session_id) > 0)
     {    
         $valid    = false;
         $time_gap = time() - mysqlmaketimestamp($row->ses_timestamp);
-
-        // wenn länger als 30 min. nichts gemacht, dann ausloggen
-        if ($time_gap < 1800) 
+        // wenn länger nichts gemacht wurde, als in Orga-Prefs eingestellt ist, dann ausloggen
+        if ($time_gap < $g_preferences['logout_minutes'] * 60) 
         {
             $valid = true;
         }

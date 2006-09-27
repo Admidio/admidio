@@ -210,7 +210,7 @@ function mysqlmaketimestamp($dateTime)
         $minute = 0;
         $second = 0;
     }
-    return mktime($hour, $minute, $second, $day, $month, $year);
+    return mktime($hour, $minute, $second, $month, $day, $year);
 }
 
 // prueft ein Datum auf Gueltigkeit

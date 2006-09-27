@@ -47,6 +47,11 @@ if(!$result_orga) showError(mysql_error());
 while($row_orga = mysql_fetch_object($result_orga))
 {
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+            VALUES ($row_orga->org_id, 'logout_minutes', '30')";
+    $result = mysql_query($sql, $connection);
+    if(!$result) showError(mysql_error());
+    
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
             VALUES ($row_orga->org_id, 'photo_thumbs_column', '5')";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());

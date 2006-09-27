@@ -61,7 +61,7 @@ if ($user_found >= 1)
     if($user_row->usr_number_invalid >= 3)
     {
         // wenn innerhalb 15 min. 3 falsche Logins stattfanden -> Konto 15 min. sperren
-        if(mktime() - mysqlmaketimestamp($user_row->usr_date_invalid) < 900)
+        if(time() - mysqlmaketimestamp($user_row->usr_date_invalid) < 900)
         {
             $g_message->show("login_failed");
         }
