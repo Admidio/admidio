@@ -51,7 +51,7 @@ if(!editDate() && $_GET["mode"] != 4)
 
 // Uebergabevariablen pruefen
 
-if(isset($_GET["dat_id"]) && is_numeric($_GET["dat_id"]) == false && $_GET["dat_id"]!=NULL)
+if(isset($_GET["dat_id"]) && is_numeric($_GET["dat_id"]) == false)
 {
     $g_message->show("invalid");
 }
