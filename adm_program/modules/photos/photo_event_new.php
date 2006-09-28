@@ -60,9 +60,10 @@ else
 
 
     //Erfassen der Veranstaltung bei Aenderungsaufruf
-    $sql="  SELECT *
-            FROM ". TBL_PHOTOS. "
-            WHERE (pho_id ='$pho_id')";
+    $sql = "SELECT *
+              FROM ". TBL_PHOTOS. "
+             WHERE pho_id = {0} ";
+    $sql = prepareSQL($sql, array($_GET['pho_id']));
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
     $adm_photo = mysql_fetch_array($result);
@@ -131,7 +132,8 @@ if($g_session_valid && editPhoto($adm_photo['pho_org_shortname']))
         {
             echo "Neue Veranstaltung anlegen";
         }
-        if($_GET["aufgabe"]=="change"){
+        if($_GET["aufgabe"]=="change")
+        {
                 echo "Veranstaltung bearbeiten";
         }
     echo"</div>";
@@ -139,12 +141,13 @@ if($g_session_valid && editPhoto($adm_photo['pho_org_shortname']))
     //Body
     echo"
     <div class=\"formBody\" align=\"center\">
-        <form method=\"POST\" action=\"photo_event_function.php?pho_id=$pho_id";
+        <form method=\"POST\" action=\"photo_event_function.php?pho_id=". $_GET["pho_id"];
             if($_GET["aufgabe"]=="new")
             {
                 echo "&aufgabe=makenew\">";
             }
-            if($_GET["aufgabe"]=="change"){
+            if($_GET["aufgabe"]=="change")
+            {
                 echo "&aufgabe=makechange\">";
             }
 
@@ -276,7 +279,8 @@ if($g_session_valid && editPhoto($adm_photo['pho_org_shortname']))
                     {
                         echo "<input type=\"checkbox\" name=\"locked\" id=\"locked\" tabindex=\"6\" checked value=\"1\">";
                     }
-                    if($form_values['locked']==0){
+                    if($form_values['locked']==0)
+                    {
                         echo "<input type=\"checkbox\" name=\"locked\" id=\"locked\" tabindex=\"6\" value=\"1\">";
                     }
                  echo"</div>
