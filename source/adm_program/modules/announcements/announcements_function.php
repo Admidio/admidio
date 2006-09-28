@@ -46,7 +46,7 @@ if(!editAnnouncements())
 
 // Uebergabevariablen pruefen
 
-if(isset($_GET["ann_id"]) && is_numeric($_GET["ann_id"]) == false && $_GET["ann_id"]!=NULL)
+if(isset($_GET["ann_id"]) && is_numeric($_GET["ann_id"]) == false)
 {
     $g_message->show("invalid");
 }
