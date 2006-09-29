@@ -10,7 +10,6 @@
  *
  * user_id: zeigt das Profil der uebergebenen user_id an
  *          (wird keine user_id uebergeben, dann Profil des eingeloggten Users anzeigen)
- * url:     URL auf die danach weitergeleitet wird
  *
  ******************************************************************************
  *
@@ -40,17 +39,7 @@ if(isset($_GET["user_id"]) && is_numeric($_GET["user_id"]) == false)
     $g_message->show("invalid");
 }
 
-// wenn URL uebergeben wurde zu dieser gehen, ansonsten zurueck
-if(array_key_exists('url', $_GET))
-{
-    $url = urlencode($_GET['url']);
-}
-else
-{
-    $url = urlencode(getHttpReferer());
-}
-
-if(!array_key_exists('user_id', $_GET)
+if(isset($_GET['user_id']) == false
 || $_GET['user_id'] == $g_current_user->id)
 {
     // wenn nichts uebergeben wurde, dann eigene Daten anzeigen
@@ -88,6 +77,12 @@ if($a_user_id > 0)
 }
 
 unset($_SESSION['profile_request']);
+// Seiten fuer Zuruecknavigation merken
+if($a_user_id != $g_current_user->id && isset($_GET['user_id']) == false)
+{
+    $_SESSION['navigation']->clear();
+}
+$_SESSION['navigation']->addUrl($g_current_url);
 
 echo "
 <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
@@ -369,9 +364,9 @@ require("../../../adm_config/body_top.php");
                     {
                         echo "<div style=\"margin-top: 10px;\">
                             <span class=\"iconLink\">
-                                <a class=\"iconLink\" href=\"roles.php?user_id=$a_user_id&amp;url=". urlencode("$g_root_path/adm_program/modules/profile/profile.php?user_id=$a_user_id&url=$url"). "\"><img
+                                <a class=\"iconLink\" href=\"roles.php?user_id=$a_user_id\"><img
                                  class=\"iconLink\" src=\"$g_root_path/adm_program/images/wand.png\" style=\"vertical-align: middle;\" border=\"0\" title=\"Rollen &auml;ndern\" alt=\"Rollen &auml;ndern\"></a>
-                                <a class=\"iconLink\" href=\"roles.php?user_id=$a_user_id&amp;url=". urlencode("$g_root_path/adm_program/modules/profile/profile.php?user_id=$a_user_id&url=$url"). "\">Rollen &auml;ndern</a>
+                                <a class=\"iconLink\" href=\"roles.php?user_id=$a_user_id\">Rollen &auml;ndern</a>
                             </span>
                         </div>";
                     }
@@ -599,25 +594,31 @@ require("../../../adm_config/body_top.php");
 
             <div style=\"clear: left;\"><br /></div>
 
-            <div>
-                <span class=\"iconLink\">
-                    <a class=\"iconLink\" href=\"javascript:self.location.href='". urldecode($url). "'\"><img
-                     class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Zur&uuml;ck\"></a>
-                    <a class=\"iconLink\" href=\"javascript:self.location.href='". urldecode($url). "'\">Zur&uuml;ck</a>
-                </span>";
+            <div>";
+                if($a_user_id != $g_current_user->id && isset($_GET['user_id']) == true)
+                {
+                    echo "<span class=\"iconLink\">
+                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\"><img
+                         class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Zur&uuml;ck\"></a>
+                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+                    </span>";
+                }
                 if($edit_user)
                 {
-                    echo "&nbsp;&nbsp;&nbsp;&nbsp;
-                    <span class=\"iconLink\">
-                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$a_user_id&amp;url=$url\"><img
+                    if($a_user_id != $g_current_user->id && isset($_GET['user_id']) == true)
+                    {
+                        echo "&nbsp;&nbsp;&nbsp;&nbsp;";
+                    }
+                    echo "<span class=\"iconLink\">
+                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$a_user_id\"><img
                          class=\"iconLink\" src=\"$g_root_path/adm_program/images/photo.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Profildaten &auml;ndern\"></a>
-                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$a_user_id&amp;url=$url\">Profilfoto &auml;ndern</a>
+                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$a_user_id\">Profilfoto &auml;ndern</a>
                     </span>
                     &nbsp;&nbsp;&nbsp;&nbsp;                    
                     <span class=\"iconLink\">
-                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$a_user_id&amp;url=$url\"><img
+                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$a_user_id\"><img
                          class=\"iconLink\" src=\"$g_root_path/adm_program/images/edit.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Profildaten &auml;ndern\"></a>
-                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$a_user_id&amp;url=$url\">Profildaten &auml;ndern</a>
+                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$a_user_id\">Profildaten &auml;ndern</a>
                     </span>";
                 }                
             echo "</div>

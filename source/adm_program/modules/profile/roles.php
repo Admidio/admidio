@@ -11,7 +11,6 @@
  * user_id     - Funktionen der uebergebenen user_id aendern
  * popup   : 0 - (Default) Fenster wird normal mit Homepagerahmen angezeigt
  *           1 - Fenster wurde im Popupmodus aufgerufen
- * url:        - URL auf die danach weitergeleitet wird
  *
  ******************************************************************************
  *
@@ -71,18 +70,9 @@ else
     $_GET["new_user"] = 0;
 }
 
-// wenn URL uebergeben wurde zu dieser gehen, ansonsten zurueck
-if(array_key_exists('url', $_GET))
-{
-    $url = urlencode($_GET['url']);
-}
-else
-{
-    $url = "";
-}
-
 $user     = new User($g_adm_con);
 $user->GetUser($_GET['user_id']);
+$_SESSION['navigation']->addUrl($g_current_url);
 
 echo "
 <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
@@ -140,7 +130,7 @@ else
 echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
     <h1>Rollen f&uuml;r $user->first_name $user->last_name zuordnen</h1>
 
-    <form action=\"roles_save.php?user_id=". $_GET['user_id']. "&amp;popup=". $_GET['popup']. "&amp;new_user=". $_GET['new_user']. "&amp;url=$url\" method=\"post\" name=\"Funktionen\">
+    <form action=\"roles_save.php?user_id=". $_GET['user_id']. "&amp;popup=". $_GET['popup']. "&amp;new_user=". $_GET['new_user']. "\" method=\"post\" name=\"Funktionen\">
         <table class=\"tableList\" cellpadding=\"3\" cellspacing=\"0\" ";
             if($_GET['popup'] == 1)
             {
@@ -248,7 +238,7 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
         <div style=\"margin: 8px;\">";
             if($_GET['popup'] == 0)
             {
-                echo "<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
+                echo "<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
                     <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
                       &nbsp;Zur&uuml;ck</button>";
             }

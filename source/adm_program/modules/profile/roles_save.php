@@ -9,7 +9,6 @@
  * Uebergaben:
  *
  * user_id: Funktionen der uebergebenen ID aendern
- * url:     URL auf die danach weitergeleitet wird
  *
  ******************************************************************************
  *
@@ -226,6 +225,8 @@ while($row = mysql_fetch_object($result_rolle))
    $i++;
 }
 
+$_SESSION['navigation']->deleteLastUrl();
+
 foreach($parentRoles as $actRole)
 {
     $sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin,mem_end, mem_valid, mem_leader)
@@ -280,6 +281,6 @@ if($_GET['popup'] == 1)
 else
 {
     // zur Ausgangsseite zurueck
-    $g_message->setForwardUrl($_GET['url'], 2000);
+    $g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
     $g_message->show("save");
 }
