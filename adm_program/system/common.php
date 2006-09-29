@@ -34,6 +34,7 @@ require_once($g_server_path. "/adm_program/system/date.php");
 require_once($g_server_path. "/adm_program/system/string.php");
 require_once($g_server_path. "/adm_program/system/message_class.php");
 require_once($g_server_path. "/adm_program/system/message_text.php");
+require_once($g_server_path. "/adm_program/system/navigation_class.php");
 require_once($g_server_path. "/adm_program/system/user_class.php");
 require_once($g_server_path. "/adm_program/system/organization_class.php");
 
@@ -57,7 +58,6 @@ define("TBL_MEMBERS",           $g_tbl_praefix. "_members");
 define("TBL_ORGANIZATIONS",     $g_tbl_praefix. "_organizations");
 define("TBL_PHOTOS",            $g_tbl_praefix. "_photos");
 define("TBL_PREFERENCES",       $g_tbl_praefix. "_preferences");
-define("TBL_ROLE_CATEGORIES",   $g_tbl_praefix. "_role_categories");
 define("TBL_ROLE_DEPENDENCIES", $g_tbl_praefix. "_role_dependencies");
 define("TBL_ROLES",             $g_tbl_praefix. "_roles");
 define("TBL_SESSIONS",          $g_tbl_praefix. "_sessions");
@@ -114,6 +114,13 @@ else
     // Daten in Session-Variablen sichern
     $_SESSION['g_current_organizsation'] = $g_current_organization;
     $_SESSION['g_preferences']  = $g_preferences;
+}
+
+// Objekt fuer die Zuruecknavigation in den Modulen
+// hier werden die Urls in einem Stack gespeichert
+if(isset($_SESSION['navigation']) == false)
+{
+    $_SESSION['navigation'] = new Navigation();
 }
 
 // includes MIT Datenbankverbindung

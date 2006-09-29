@@ -56,6 +56,9 @@ if(isset($_GET['letter']) && strlen($_GET["letter"]) > 2)
 $restrict = "";
 $listname = "";
 $i = 0;
+// Navigation faengt hier im Modul an
+$_SESSION['navigation']->clear();
+$_SESSION['navigation']->addUrl($g_current_url);
 
 if(array_key_exists("letter", $_GET))
 {

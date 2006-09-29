@@ -9,7 +9,6 @@
  * Uebergaben:
  *
  * user_id : ID des Benutzers, der bearbeitet werden soll
- * url :     URL auf die danach weitergeleitet wird
  *
  ******************************************************************************
  *
@@ -57,16 +56,6 @@ if(!isset($_POST['login_name']))
     $_POST['login_name'] = "";
 }
    
-// wenn URL uebergeben wurde zu dieser gehen, ansonsten zurueck
-if(array_key_exists('url', $_GET))
-{
-    $url = urlencode($_GET['url']);
-}
-else
-{
-    $url = "";
-}   
-
 /*------------------------------------------------------------*/
 // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
 /*------------------------------------------------------------*/
@@ -287,6 +276,7 @@ if($usr_id > 0)
 }
 
 unset($_SESSION['profile_request']);
+$_SESSION['navigation']->deleteLastUrl();
 
 if($user->valid == 0)
 {
@@ -316,7 +306,7 @@ if($user->valid == 0)
     }
 
     // neuer User -> Rollen zuordnen
-    $location = "Location: roles.php?user_id=$user->id&new_user=1&url=$url";
+    $location = "Location: roles.php?user_id=$user->id&new_user=1";
     header($location);
     exit();
 }
@@ -328,12 +318,12 @@ if($user->valid == 0)
 if($usr_id == 0)
 {
     // neuer User -> Rollen zuordnen
-    $location = "Location: roles.php?user_id=$user->id&new_user=1&url=$url";
+    $location = "Location: roles.php?user_id=$user->id&new_user=1";
 }
 else
 {
-    // zur Profilseite zurueckkehren und die URL, von der die Profilseite aufgerufen wurde uebergeben
-    $g_message->setForwardUrl("$g_root_path/adm_program/modules/profile/profile.php?user_id=$usr_id&url=$url", 2000);
+    // zur Profilseite zurueckkehren
+    $g_message->setForwardUrl("$g_root_path/adm_program/modules/profile/profile.php?user_id=$usr_id", 2000);
     $g_message->show("save");
 }
 header($location);

@@ -83,6 +83,10 @@ else
     }
 }   
 
+// Navigation faengt hier im Modul an
+$_SESSION['navigation']->clear();
+$_SESSION['navigation']->addUrl($g_current_url);
+
 // SQL-Statement zusammensetzen
 
 $sql = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "

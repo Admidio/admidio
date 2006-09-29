@@ -84,6 +84,13 @@ else
     }
 }  
 
+if($rol_id == 0)
+{
+    // Navigation faengt hier im Modul an
+    $_SESSION['navigation']->clear();
+}
+$_SESSION['navigation']->addUrl($g_current_url);
+
 $b_history = false;     // History-Funktion bereits aktiviert ja/nein
 $default_fields = 6;    // Anzahl der Felder, die beim Aufruf angezeigt werden
 
@@ -248,12 +255,15 @@ require("../../../adm_config/body_top.php");
                     </tr>
                 </table>
 
-                <p>
-                    <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
-                        <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
-                        Zur&uuml;ck</button>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <button name=\"anzeigen\" type=\"submit\" value=\"anzeigen\">
+                <p>";
+                    if($rol_id > 0)
+                    {
+                        echo "<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
+                            <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
+                            Zur&uuml;ck</button>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                    }
+                    echo "<button name=\"anzeigen\" type=\"submit\" value=\"anzeigen\">
                         <img src=\"$g_root_path/adm_program/images/application_view_columns.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Liste anzeigen\">
                         &nbsp;Liste anzeigen</button>            
                 </p>

@@ -11,7 +11,6 @@
  * type   : Listenselect (mylist, address, telephone, former)
  * mode   : Ausgabeart   (html, print, csv-ms, csv-ms-2k, csv-oo)
  * rol_id : Rolle, fuer die die Funktion dargestellt werden soll
- * url    : URL auf die danach weitergeleitet wird
  *
  ******************************************************************************
  *
@@ -37,22 +36,6 @@ require("../../system/login_valid.php");
 $mode   = strStripTags($_GET["mode"]);
 $type   = strStripTags($_GET["type"]);
 $rol_id = strStripTags($_GET["rol_id"]);
-
-// wenn URL uebergeben wurde zu dieser gehen, ansonsten zurueck
-if(array_key_exists('url', $_GET))
-{
-    $url = urlencode($_GET['url']);
-}
-else
-{
-    $url = urlencode(getHttpReferer());
-    if(strlen($url) == 0)
-    {
-        // Fehler im IE, dort wird Referrer nicht uebergeben, wenn Seite 
-        // ueber Javascript mittels window.location.href aufgerufen wurde
-        $url = "$g_root_path/adm_program/modules/lists/lists.php";  
-    }
-}
 
 if($mode != "csv-ms"
 && $mode != "csv-ms-2k"
@@ -263,6 +246,9 @@ if($leiter == 0)
     }
 }
 
+// Url fuer die Zuruecknavigation merken
+$_SESSION['navigation']->addUrl($g_current_url);
+
 if($mode != "csv")
 {
     // Html-Kopf wird geschrieben
@@ -438,15 +424,15 @@ for($j = 0; $j < $max_count; $j++)
             }
             else
             {
-            	if($i > 0)	// usr_id wird nicht angezeigt
-            	{
-                	$col_name = $arr_col_name[$arr_fields[$i]];
+                if($i > 0)  // usr_id wird nicht angezeigt
+                {
+                    $col_name = $arr_col_name[$arr_fields[$i]];
                 
-	                if($arr_fields[$i] == "usr_gender")
-	                {
-	                    // Icon des Geschlechts zentriert darstellen
-	                    $align = "center";
-	                }
+                    if($arr_fields[$i] == "usr_gender")
+                    {
+                        // Icon des Geschlechts zentriert darstellen
+                        $align = "center";
+                    }
                 }
             }
             
@@ -496,10 +482,9 @@ for($j = 0; $j < $max_count; $j++)
         {
             if($mode == "html")
             {
-                $load_url = urlencode("$g_root_path/adm_program/modules/lists/lists_show.php?mode=$mode&type=$type&rol_id=$rol_id&url=$url");
                 echo "<tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" 
                 onMouseOut=\"this.className='listMouseOut'\" style=\"cursor: pointer\" 
-                onClick=\"window.location.href='$g_root_path/adm_program/modules/profile/profile.php?user_id=$row[0]&url=$load_url'\">\n";
+                onClick=\"window.location.href='$g_root_path/adm_program/modules/profile/profile.php?user_id=$row[0]'\">\n";
             }
             else if($mode == "print")
             {
@@ -761,9 +746,9 @@ else
     {
         echo "<p>
             <span class=\"iconLink\">
-                <a class=\"iconLink\" href=\"javascript:self.location.href='". urldecode($url). "'\"><img
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\"><img
                 class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Zur&uuml;ck\"></a>
-                <a class=\"iconLink\" href=\"javascript:self.location.href='". urldecode($url). "'\">Zur&uuml;ck</a>
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
             </span>
         </p>
         </div>";        

@@ -10,7 +10,6 @@
  *
  * user_id : zeigt das Profil der uebergebenen user_id an
  * new_user - 1 : Dialog um neue Benutzer hinzuzufuegen.
- * url :     URL auf die danach weitergeleitet wird
  *
  ******************************************************************************
  *
@@ -65,16 +64,6 @@ else
     $a_new_user = false;
 }
 
-// wenn URL uebergeben wurde zu dieser gehen, ansonsten zurueck
-if(array_key_exists('url', $_GET))
-{
-    $url = urlencode($_GET['url']);
-}
-else
-{
-    $url = urlencode(getHttpReferer());
-}
-
 // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
 if(!editUser() && $_GET['user_id'] != $g_current_user->id)
 {
@@ -91,7 +80,8 @@ if($a_new_user == false)
 }
 
 $b_history = false;     // History-Funktion bereits aktiviert ja/nein
-$user = new User($g_adm_con);
+$user      = new User($g_adm_con);
+$_SESSION['navigation']->addUrl($g_current_url);
 
 if(isset($_SESSION['profile_request']))
 {
@@ -138,7 +128,7 @@ echo "</head>";
 require("../../../adm_config/body_top.php");
     echo "
     <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-        <form action=\"profile_save.php?user_id=$usr_id&amp;new_user=$a_new_user&amp;url=$url";
+        <form action=\"profile_save.php?user_id=$usr_id&amp;new_user=$a_new_user";
         if($a_new_user && $usr_id > 0) 
         {
             echo "&amp;pw=$user->password";
@@ -492,7 +482,7 @@ require("../../../adm_config/body_top.php");
                 echo "<hr width=\"80%\" />
 
                 <div style=\"margin-top: 6px;\">
-                    <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
+                    <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
                     <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
                     &nbsp;Zur&uuml;ck</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
