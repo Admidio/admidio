@@ -11,7 +11,7 @@
  * mode: actual  - (Default) Alle aktuellen und zukuenftige Termine anzeigen
  *       old     - Alle bereits erledigten
  * start         - Angabe, ab welchem Datensatz Termine angezeigt werden sollen
- * id               - Nur einen einzigen Termin anzeigen lassen.
+ * id            - Nur einen einzigen Termin anzeigen lassen.
  *
  ******************************************************************************
  *
@@ -80,6 +80,9 @@ if($g_preferences['enable_bbcode'] == 1)
 
 unset($_SESSION['dates_request']);
 $act_date = date("Y.m.d 00:00:00", time());
+// Navigation faengt hier im Modul an
+$_SESSION['navigation']->clear();
+$_SESSION['navigation']->addUrl($g_current_url);
 
 echo "
 <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n

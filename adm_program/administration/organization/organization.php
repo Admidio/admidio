@@ -6,10 +6,6 @@
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  *
- * Uebergaben:
- *
- * url:     URL auf die danach weitergeleitet wird
- *
  ******************************************************************************
  *
  * This program is free software; you can redistribute it and/or
@@ -35,16 +31,6 @@ require("../../system/login_valid.php");
 if(!hasRole("Webmaster"))
 {
     $g_message->show("norights");
-}
-
-// wenn URL uebergeben wurde zu dieser gehen, ansonsten zurueck
-if(array_key_exists('url', $_GET))
-{
-    $url = $_GET['url'];
-}
-else
-{
-    $url = urlencode(getHttpReferer());
 }
 
 if(isset($_SESSION['organization_request']))
@@ -108,7 +94,7 @@ require("../../../adm_config/body_top.php");
                 <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/organization/fields.php\">Profilfelder pflegen</a>
             </span>
         </p>
-        <form action=\"organization_function.php?org_id=$g_current_organization->id&amp;url=$url\" method=\"post\" name=\"orga_settings\">
+        <form action=\"organization_function.php?org_id=$g_current_organization->id\" method=\"post\" name=\"orga_settings\">
             <div class=\"formBody\">
                 <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 95%;\">
                     <div class=\"groupBoxHeadline\">Allgemeine Einstellungen</div>

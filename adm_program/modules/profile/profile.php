@@ -598,9 +598,9 @@ require("../../../adm_config/body_top.php");
                 if($a_user_id != $g_current_user->id && isset($_GET['user_id']) == true)
                 {
                     echo "<span class=\"iconLink\">
-                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\"><img
+                        <a class=\"iconLink\" href=\"". $_SESSION['navigation']->getPreviousUrl(). "\"><img
                          class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Zur&uuml;ck\"></a>
-                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+                        <a class=\"iconLink\" href=\"". $_SESSION['navigation']->getPreviousUrl(). "\">Zur&uuml;ck</a>
                     </span>";
                 }
                 if($edit_user)

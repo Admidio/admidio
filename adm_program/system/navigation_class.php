@@ -19,8 +19,6 @@
  *
  * Will man nun an einer Stelle zuruecksurfen, so muss die Funktion
  * $_SESSION['navigation']->getPreviousUrl() aufgerufen werden
- * (Innerhalb des Html-Codes kann die Seite back.php aufgerufen werden. Diese
- * ruft dann wiederum diese Funktion auf)
  *
  * Mit $_SESSION['navigation']->deleteLastUrl() kann man die letzte eingetragene
  * Url aus dem Stack loeschen

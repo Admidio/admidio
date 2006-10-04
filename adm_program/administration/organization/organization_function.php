@@ -9,7 +9,6 @@
  * Uebergaben:
  *
  * org_id: ID der Organisation, die bearbeitet werden soll
- * url:    URL auf die danach weitergeleitet wird
  *
  ******************************************************************************
  *
@@ -163,6 +162,6 @@ unset($_SESSION['g_current_organizsation']);
 unset($_SESSION['g_preferences']);
 
 // zur Ausgangsseite zurueck
-$g_message->setForwardUrl("$g_root_path/adm_program/administration/organization/organization.php?url=". $_GET['url'], 2000);
+$g_message->setForwardUrl("$g_root_path/adm_program/administration/organization/organization.php", 2000);
 $g_message->show("save");
 ?>

@@ -238,7 +238,7 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
         <div style=\"margin: 8px;\">";
             if($_GET['popup'] == 0)
             {
-                echo "<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
+                echo "<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='". $_SESSION['navigation']->getPreviousUrl(). "'\">
                     <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
                       &nbsp;Zur&uuml;ck</button>";
             }
