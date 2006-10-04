@@ -63,16 +63,6 @@ if(isset($_GET["user_id"]) && is_numeric($_GET["user_id"]) == false)
     $g_message->show("invalid");
 }
 
-// wenn URL uebergeben wurde zu dieser gehen, ansonsten zurueck
-if(array_key_exists('url', $_GET) && strlen($_GET['url']) > 0)
-{
-    $url = urlencode($_GET['url']);
-}
-else
-{
-    $url = urlencode(getHttpReferer());
-}
-
 if(isset($_GET['members']) && is_numeric($_GET['members']))
 {
     $members = $_GET['members'];
@@ -126,12 +116,12 @@ if($_GET["mode"] == 1)
                     &nbsp;Zur&uuml;ck</button>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <button name=\"delete\" type=\"button\" value=\"delete\"
-                    onclick=\"self.location.href='$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET['user_id']. "&mode=3&url=$url'\">
+                    onclick=\"self.location.href='$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET['user_id']. "&mode=3'\">
                     <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer l&ouml;schen\">
                     &nbsp;L&ouml;schen</button>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <button name=\"former\" type=\"button\" value=\"former\"
-                    onclick=\"self.location.href='$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET['user_id']. "&mode=2&url=$url'\">
+                    onclick=\"self.location.href='$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET['user_id']. "&mode=2'\">
                     <img src=\"$g_root_path/adm_program/images/user.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Ehemaliger\">
                     &nbsp;Ehemaliger</button>
             </div>
@@ -172,44 +162,6 @@ elseif($_GET["mode"] == 2)
         db_error($result);
     }
 
-    if($g_forum)
-    {
-        mysql_select_db($g_forum_db, $g_forum_con);
-
-        // Loginname auslesen
-        $sql = "SELECT usr_login_name FROM ". TBL_USERS. " WHERE usr_id = {0}";
-        $sql = prepareSQL($sql, array($_GET['user_id']));
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
-
-        $row = mysql_fetch_array($result);
-        $login = $row[0];
-
-        // User in Foren-Tabelle suchen
-        $sql    = "SELECT user_id FROM ". $g_forum_praefix. "_users WHERE username LIKE '$login'";
-        $result = mysql_query($sql, $g_forum_con);
-        db_error($result);
-
-        $row = mysql_fetch_array($result);
-        $forum_user_id = $row[0];
-
-        // nur l&ouml;schen, wenn auch ein User existiert
-        if(strlen($forum_user_id) > 0)
-        {
-            // erst einmal alle bisherigen Gruppen des Users loeschen
-            $sql    = "DELETE FROM ". $g_forum_praefix. "_user_group WHERE user_id = $forum_user_id";
-            $result = mysql_query($sql, $g_forum_con);
-            db_error($result);
-
-            // jetzt User loeschen
-            $sql    = "DELETE FROM ". $g_forum_praefix. "_users WHERE user_id = $forum_user_id";
-            $result = mysql_query($sql, $g_forum_con);
-            db_error($result);
-        }
-
-        mysql_select_db($g_adm_db, $g_adm_con);
-    }
-
     $err_code = "delete_member_ok";
     $err_text = utf8_encode($g_current_organization->longname);
 }
@@ -225,43 +177,6 @@ elseif($_GET["mode"] == 3)
     $user = new User($g_adm_con);
     $user->GetUser($_GET['user_id']);
     $user->delete();
-
-    if($g_forum)
-    {
-        $sql = "SELECT usr_login_name FROM ". TBL_USERS. " WHERE usr_id = {0}";
-        $sql = prepareSQL($sql, array($_GET['user_id']));
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
-
-        $row = mysql_fetch_array($result);
-        $login = $row[0];
-        
-        mysql_select_db($g_forum_db, $g_forum_con);
-
-        // User in Foren-Tabelle suchen
-        $sql    = "SELECT user_id FROM ". $g_forum_praefix. "_users WHERE username LIKE '$login'";
-        $result = mysql_query($sql, $g_forum_con);
-        db_error($result);
-
-        $row = mysql_fetch_array($result);
-        $forum_user_id = $row[0];
-
-        // nur l&ouml;schen, wenn auch ein User existiert
-        if(strlen($forum_user_id) > 0)
-        {
-            // erst einmal alle bisherigen Gruppen des Users loeschen
-            $sql    = "DELETE FROM ". $g_forum_praefix. "_user_group WHERE user_id = $forum_user_id";
-            $result = mysql_query($sql, $g_forum_con);
-            db_error($result);
-
-            // jetzt User loeschen
-            $sql    = "DELETE FROM ". $g_forum_praefix. "_users WHERE user_id = $forum_user_id";
-            $result = mysql_query($sql, $g_forum_con);
-            db_error($result);
-        }
-
-        mysql_select_db($g_adm_db, $g_adm_con);
-    }
 
     $err_code = "delete";
 }
@@ -317,8 +232,7 @@ elseif($_GET["mode"] == 5)
     // Fragen, ob Zugangsdaten verschickt werden sollen
     $user = new User($g_adm_con);
     $user->GetUser($_GET['user_id']);
-    $load_url = urlencode("$g_root_path/adm_program/administration/members/members.php?members=". $_GET['members']. "&letter=". $_GET['letter']);
-    $g_message->setForwardYesNo("$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET["user_id"]. "&mode=4&url=$load_url");
+    $g_message->setForwardYesNo("$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET["user_id"]. "&mode=4");
     $g_message->show("send_new_login", utf8_encode("$user->first_name $user->last_name"));
 }
 elseif($_GET["mode"] == 6)
@@ -326,13 +240,12 @@ elseif($_GET["mode"] == 6)
     // Frage, ob Mitglied geloescht werden soll
     $user = new User($g_adm_con);
     $user->GetUser($_GET['user_id']);
-    $load_url = urlencode("$g_root_path/adm_program/administration/members/members.php?members=". $_GET['members']. "&letter=". $_GET['letter']);
-    $g_message->setForwardYesNo("$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET["user_id"]. "&mode=2&url=$load_url");
+    $g_message->setForwardYesNo("$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET["user_id"]. "&mode=2");
     $g_message->addVariableContent(utf8_encode("$user->first_name $user->last_name"));
     $g_message->addVariableContent(utf8_encode($g_current_organization->longname));
     $g_message->show("delete_member", "", "Entfernen");
 }
 
-$g_message->setForwardUrl(urldecode($url), 2000);
+$g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
 $g_message->show($err_code, $err_text);
 ?>

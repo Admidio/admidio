@@ -35,22 +35,22 @@ require("../../system/login_valid.php");
 
 if(!editAnnouncements())
 {
-	$g_message->show("norights");
+    $g_message->show("norights");
 }
 
 // Uebergabevariablen pruefen
 
 if(isset($_GET["ann_id"]))
 {
-	if(is_numeric($_GET["ann_id"]) == false)
-	{
-		$g_message->show("invalid");
-	}
-	$ann_id = $_GET["ann_id"];
+    if(is_numeric($_GET["ann_id"]) == false)
+    {
+        $g_message->show("invalid");
+    }
+    $ann_id = $_GET["ann_id"];
 }
 else
 {
-	$ann_id = 0;
+    $ann_id = 0;
 }
 
 if(array_key_exists("headline", $_GET))
@@ -62,43 +62,45 @@ else
     $_GET["headline"] = "Ank&uuml;ndigungen";
 }
 
+$_SESSION['navigation']->addUrl($g_current_url);
+
 if(isset($_SESSION['announcements_request']))
 {
-	$form_values = $_SESSION['announcements_request'];
-	unset($_SESSION['announcements_request']);
+    $form_values = $_SESSION['announcements_request'];
+    unset($_SESSION['announcements_request']);
 }
 else
 {
-	$form_values['headline']    = "";
-	$form_values['description'] = "";
-	$form_values['global']      = 0;	
-	
-	// Wenn eine Ankuendigungs-ID uebergeben wurde, soll die Ankuendigung geaendert werden
-	// -> Felder mit Daten der Ankuendigung vorbelegen
+    $form_values['headline']    = "";
+    $form_values['description'] = "";
+    $form_values['global']      = 0;    
+    
+    // Wenn eine Ankuendigungs-ID uebergeben wurde, soll die Ankuendigung geaendert werden
+    // -> Felder mit Daten der Ankuendigung vorbelegen
 
-	if ($ann_id > 0)
-	{
-	    $sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. " 
-	                WHERE ann_id = {0}
-	                  AND (  ann_org_shortname = '$g_organization'
-	                      OR ann_global = 1) ";
-	    $sql    = prepareSQL($sql, array($_GET['ann_id']));
-	    $result = mysql_query($sql, $g_adm_con);
-	    db_error($result);
-	
-	    if (mysql_num_rows($result) > 0)
-	    {
-	        $row_ba = mysql_fetch_object($result);
-	
-	        $form_values['headline']    = $row_ba->ann_headline;
-	        $form_values['description'] = $row_ba->ann_description;
-	        $form_values['global']      = $row_ba->ann_global;
-	    }
-	    else
-	    {
-	        $g_message->show("norights");
-	    }
-	}
+    if ($ann_id > 0)
+    {
+        $sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. " 
+                    WHERE ann_id = {0}
+                      AND (  ann_org_shortname = '$g_organization'
+                          OR ann_global = 1) ";
+        $sql    = prepareSQL($sql, array($_GET['ann_id']));
+        $result = mysql_query($sql, $g_adm_con);
+        db_error($result);
+    
+        if (mysql_num_rows($result) > 0)
+        {
+            $row_ba = mysql_fetch_object($result);
+    
+            $form_values['headline']    = $row_ba->ann_headline;
+            $form_values['description'] = $row_ba->ann_description;
+            $form_values['global']      = $row_ba->ann_global;
+        }
+        else
+        {
+            $g_message->show("norights");
+        }
+    }
 }
 
 echo "
@@ -191,7 +193,7 @@ require("../../../adm_config/body_top.php");
                 echo "<hr width=\"85%\" />
 
                 <div style=\"margin-top: 6px;\">
-                    <button name=\"zurueck\" type=\"button\" tabindex=\"4\" value=\"zurueck\" onclick=\"history.back()\" tabindex=\"5\">
+                    <button name=\"zurueck\" type=\"button\" tabindex=\"4\" value=\"zurueck\" onclick=\"self.location.href='". $_SESSION['navigation']->getPreviousUrl(). "'\" tabindex=\"5\">
                         <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" 
                         width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
                         &nbsp;Zur&uuml;ck</button>

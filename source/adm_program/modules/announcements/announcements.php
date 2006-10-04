@@ -76,6 +76,9 @@ if($g_preferences['enable_bbcode'] == 1)
 }
 
 unset($_SESSION['announcements_request']);
+// Navigation faengt hier im Modul an
+$_SESSION['navigation']->clear();
+$_SESSION['navigation']->addUrl($g_current_url);
 
 echo "
 <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n

@@ -14,7 +14,6 @@
  *         3 - Termin aendern
  *         4 - Termin im iCal-Format exportieren
  *         5 - Frage, ob Termin geloescht werden soll
- * url:    kann beim Loeschen mit uebergeben werden
  *
  ******************************************************************************
  *
@@ -172,9 +171,9 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
                 db_error($result);
                 
                 unset($_SESSION['dates_request']);
+                $_SESSION['navigation']->deleteLastUrl();
 
-                $location = "Location: $g_root_path/adm_program/modules/dates/dates.php";
-                header($location);
+                header("Location: ". $_SESSION['navigation']->getUrl());
                 exit();
             }
             else
@@ -212,12 +211,7 @@ elseif($_GET["mode"] == 2)
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
 
-    if(!isset($_GET["url"]))
-    {
-        $_GET["url"] = "$g_root_path/$g_main_page";
-    }
-
-    $g_message->setForwardUrl($_GET["url"]);
+    $g_message->setForwardUrl($_SESSION['navigation']->getUrl());
     $g_message->show("delete");
 }
 elseif($_GET["mode"] == 4)
@@ -234,7 +228,7 @@ elseif($_GET["mode"] == 4)
 }
 elseif($_GET["mode"] == 5)
 {
-    $g_message->setForwardYesNo("$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=". $_GET["dat_id"]. "&amp;mode=2&amp;url=$g_root_path/adm_program/modules/dates/dates.php");
+    $g_message->setForwardYesNo("$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=". $_GET["dat_id"]. "&amp;mode=2");
     $g_message->show("delete_date", utf8_encode($row_dat->dat_headline), "Löschen");
 }
 

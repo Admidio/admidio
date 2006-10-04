@@ -40,16 +40,18 @@ if(!editDate())
 
 if(isset($_GET["dat_id"]))
 {
-	if(is_numeric($_GET["dat_id"]) == false)
-	{
-    	$g_message->show("invalid");
-	}
-	$dat_id = $_GET["dat_id"];
+    if(is_numeric($_GET["dat_id"]) == false)
+    {
+        $g_message->show("invalid");
+    }
+    $dat_id = $_GET["dat_id"];
 }
 else
 {
-	$dat_id = 0;		
+    $dat_id = 0;        
 }
+
+$_SESSION['navigation']->addUrl($g_current_url);
 
 if(isset($_SESSION['dates_request']))
 {
@@ -226,7 +228,7 @@ require("../../../adm_config/body_top.php");
                 <hr width=\"85%\" />
 
                 <div style=\"margin-top: 6px;\">
-                    <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
+                    <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='". $_SESSION['navigation']->getPreviousUrl(). "'\">
                         <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" 
                         width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
                         &nbsp;Zur&uuml;ck</button>
