@@ -193,7 +193,7 @@ require("../../../adm_config/body_top.php");
                 echo "<hr width=\"85%\" />
 
                 <div style=\"margin-top: 6px;\">
-                    <button name=\"zurueck\" type=\"button\" tabindex=\"4\" value=\"zurueck\" onclick=\"self.location.href='". $_SESSION['navigation']->getPreviousUrl(). "'\" tabindex=\"5\">
+                    <button name=\"zurueck\" type=\"button\" tabindex=\"4\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\" tabindex=\"5\">
                         <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" 
                         width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
                         &nbsp;Zur&uuml;ck</button>
