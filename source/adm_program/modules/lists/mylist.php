@@ -258,7 +258,7 @@ require("../../../adm_config/body_top.php");
                 <p>";
                     if($rol_id > 0)
                     {
-                        echo "<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='". $_SESSION['navigation']->getPreviousUrl(). "'\">
+                        echo "<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
                             <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
                             Zur&uuml;ck</button>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
