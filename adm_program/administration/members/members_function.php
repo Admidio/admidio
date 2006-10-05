@@ -14,10 +14,7 @@
  *       4 - User E-Mail mit neuen Zugangsdaten schicken
  *       5 - Frage, ob Zugangsdaten geschickt werden soll
  *       6 - Frage, ob Mitglied geloescht werden soll
- * user_id - Id des Benutzers, der bearbeitet werden soll
- * members - 1 : (Default) Nur Mitglieder der Gliedgemeinschaft anzeigen
- *           0 : Mitglieder, Ehemalige, Mitglieder anderer Gliedgemeinschaften
- * letter: alle User deren Nachnamen mit dem Buchstaben beginnt, werden angezeigt 
+ * user_id - Id des Benutzers, der bearbeitet werden soll 
  *
  ******************************************************************************
  *
@@ -59,20 +56,6 @@ if(is_numeric($_GET["mode"]) == false
 }
 
 if(isset($_GET["user_id"]) && is_numeric($_GET["user_id"]) == false)
-{
-    $g_message->show("invalid");
-}
-
-if(isset($_GET['members']) && is_numeric($_GET['members']))
-{
-    $members = $_GET['members'];
-}
-else
-{
-    $members = 1;
-}
-
-if(isset($_GET['letter']) && strlen($_GET["letter"]) > 2)
 {
     $g_message->show("invalid");
 }

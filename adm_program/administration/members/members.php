@@ -363,7 +363,7 @@ require("../../../adm_config/body_top.php");
                                 // Mitglieder nicht loeschen, wenn sie noch in anderen Organisationen aktiv sind
                                 if($is_member == true)
                                 {
-                                    echo "<a href=\"$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->usr_id&mode=6&members=$members&letter=$letter\"><img 
+                                    echo "<a href=\"$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->usr_id&mode=6\"><img 
                                         src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Benutzer entfernen\" title=\"Benutzer entfernen\"></a>";
                                 }
                             }
