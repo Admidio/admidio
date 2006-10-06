@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * User auf der Homepage und im Forum ausloggen
+ * User aus Admidio ausloggen
  * Cookies loeschen
  *
  * Copyright    : (c) 2004 - 2006 The Admidio Team

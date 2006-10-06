@@ -327,7 +327,7 @@ require("../../../adm_config/body_top.php");
                                 {
                                     // Link um E-Mail mit neuem Passwort zu zuschicken
                                     // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
-                                    echo "<a href=\"$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->usr_id&mode=5&members=$members&letter=$letter\"><img 
+                                    echo "<a href=\"$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->usr_id&mode=5\"><img 
                                         src=\"$g_root_path/adm_program/images/key.png\" border=\"0\" alt=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\" 
                                         title=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\"></a>&nbsp;";
                                 }

@@ -83,21 +83,6 @@ if($_GET["mode"] == 1)
     $new_user->delete();
     $user->update($g_current_user->id);
 
-    if($g_forum == 1)
-    {
-        mysql_select_db($g_forum_db, $g_forum_con);
-
-        // jetzt den User im Forum updaten
-        $sql    = "UPDATE ". $g_forum_praefix. "_users SET username      = '$user->login_name'
-                                                                         , user_password = '$user->password'
-                                                                         , user_email    = '$user->email'
-                        WHERE username = '$old_login' ";
-        $result = mysql_query($sql, $g_forum_con);
-        db_error($result);
-
-        mysql_select_db($g_adm_db, $g_adm_con);
-    }
-
     // nur ausfuehren, wenn E-Mails auch unterstuetzt werden
     if($g_preferences['send_email_extern'] != 1)
     {
