@@ -162,6 +162,6 @@ unset($_SESSION['g_current_organizsation']);
 unset($_SESSION['g_preferences']);
 
 // zur Ausgangsseite zurueck
-$g_message->setForwardUrl("$g_root_path/adm_program/administration/organization/organization.php", 2000);
+$g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
 $g_message->show("save");
 ?>

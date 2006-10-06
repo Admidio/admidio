@@ -47,6 +47,10 @@ else
     $valid = 1; 
 }
 
+// Navigation faengt hier im Modul an
+$_SESSION['navigation']->clear();
+$_SESSION['navigation']->addUrl($g_current_url);
+
 // Alle Rollen auflisten, die der Webmaster sehen darf
 $sql    = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
             WHERE rol_org_shortname = '$g_organization' 

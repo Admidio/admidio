@@ -54,16 +54,7 @@ else
     $g_message->show("invalid");
 }
 
-// wenn URL uebergeben wurde zu dieser gehen, ansonsten zurueck
-if(array_key_exists('url', $_GET))
-{
-    $url = $_GET['url'];
-}
-else
-{
-    $url = urlencode(getHttpReferer());
-}
-
+$_SESSION['navigation']->addUrl($g_current_url);
 unset($_SESSION['categories_request']);
 
 echo "
@@ -87,9 +78,9 @@ require("../../../adm_config/body_top.php");
 
         <p>
             <span class=\"iconLink\">
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/categories_new.php?type=". $_GET['type']. "&amp;url=$url\"><img 
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/categories_new.php?type=". $_GET['type']. "\"><img 
                 src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Kategorie anlegen\"></a>
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/categories_new.php?type=". $_GET['type']. "&amp;url=$url\">Kategorie anlegen</a>
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/categories_new.php?type=". $_GET['type']. "\">Kategorie anlegen</a>
             </span>
         </p>
 
@@ -129,12 +120,12 @@ require("../../../adm_config/body_top.php");
                         }
                     echo "</td>
                     <td style=\"text-align: right; width: 45px;\">
-                        <a href=\"$g_root_path/adm_program/administration/roles/categories_new.php?cat_id=$cat_row->cat_id&amp;type=". $_GET['type']. "&amp;url=$url\">
+                        <a href=\"$g_root_path/adm_program/administration/roles/categories_new.php?cat_id=$cat_row->cat_id&amp;type=". $_GET['type']. "\">
                         <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>";
                         // nur Kategorien loeschen, die keine Rollen zugeordnet sind
                         if($row_num == 0)
                         {
-                            echo "&nbsp;<a href=\"$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=$cat_row->cat_id&amp;mode=3&amp;url=$url\"><img
+                            echo "&nbsp;<a href=\"$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=$cat_row->cat_id&amp;mode=3\"><img
                             src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>";
                         }
                         else
@@ -148,9 +139,9 @@ require("../../../adm_config/body_top.php");
 
         <p>
             <span class=\"iconLink\">
-                <a class=\"iconLink\" href=\"javascript:self.location.href='". urldecode($url). "'\"><img
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\"><img
                 class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Zur&uuml;ck\"></a>
-                <a class=\"iconLink\" href=\"javascript:self.location.href='". urldecode($url). "'\">Zur&uuml;ck</a>
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
             </span>
         </p>
     </div>";

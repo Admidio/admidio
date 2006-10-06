@@ -59,16 +59,6 @@ else
     $rol_id = $_GET['rol_id'];
 }
 
-// wenn URL uebergeben wurde zu dieser gehen, ansonsten zurueck
-if(array_key_exists('url', $_GET) && strlen($_GET['url']) > 0)
-{
-    $url = urlencode($_GET['url']);
-}
-else
-{
-    $url = urlencode(getHttpReferer());
-}
-
 $_SESSION['roles_request'] = $_REQUEST;
 $err_code = "";
 $err_text = "";
@@ -112,12 +102,12 @@ if($_GET["mode"] == 1)
                     &nbsp;Zur&uuml;ck</button>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <button name=\"delete\" type=\"button\" value=\"delete\"
-                    onclick=\"self.location.href='$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=". $_GET['rol_id']. "&mode=4&url=$url'\">
+                    onclick=\"self.location.href='$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=". $_GET['rol_id']. "&mode=4'\">
                     <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Rolle l&ouml;schen\">
                     &nbsp;L&ouml;schen</button>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <button name=\"inactive\" type=\"button\" value=\"inactive\"
-                    onclick=\"self.location.href='$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=". $_GET['rol_id']. "&mode=3&url=$url'\">
+                    onclick=\"self.location.href='$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=". $_GET['rol_id']. "&mode=3'\">
                     <img src=\"$g_root_path/adm_program/images/wand_gray.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Inaktive Rolle\">
                     &nbsp;Inaktive Rolle</button>
             </div>
@@ -435,6 +425,7 @@ elseif($_GET["mode"] == 2)
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
             
+            $_SESSION['navigation']->deleteLastUrl();
             unset($_SESSION['roles_request']);
         }
     }
@@ -520,7 +511,16 @@ elseif($_GET["mode"] == 5)
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
    
+   	// Name der Rolle auslesen
+    $sql = "SELECT rol_name FROM ". TBL_ROLES. "
+             WHERE rol_id = {0}";
+    $sql    = prepareSQL($sql, array($rol_id));
+    $result = mysql_query($sql, $g_adm_con);
+    db_error($result);
+    $row = mysql_fetch_array($result);	   
+   
     $err_code = "role_active";
+    $g_message->addVariableContent(utf8_encode($row[0]));
 }
 elseif($_GET["mode"] == 6)
 {
@@ -536,6 +536,6 @@ elseif($_GET["mode"] == 6)
     $g_message->show("delete_role", utf8_encode($row[0]), "Löschen");
 }
         
-$g_message->setForwardUrl("$g_root_path/adm_program/administration/roles/roles.php", 2000);
+$g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
 $g_message->show($err_code);
 ?>

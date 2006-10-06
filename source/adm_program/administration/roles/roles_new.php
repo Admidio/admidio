@@ -51,6 +51,7 @@ else
     $rol_id = 0;
 }
 
+$_SESSION['navigation']->addUrl($g_current_url);
 
 if(isset($_SESSION['roles_request']))
 {
@@ -445,7 +446,7 @@ require("../../../adm_config/body_top.php");
                 </div>
 
                 <div style=\"margin-top: 15px;\">
-                    <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
+                    <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
                         <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
                         &nbsp;Zur&uuml;ck</button>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;            
