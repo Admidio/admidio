@@ -1,4 +1,4 @@
-<?
+<?php
 /******************************************************************************
  * Script mit HTML-Code fuer ein Feld der Eigenen-Liste-Konfiguration
  *
@@ -32,11 +32,11 @@ $b_ajax = false;
 
 if(isset($_GET['field_number']))
 {
-	// Script wurde ueber Ajax aufgerufen
-	include("../../system/common.php");	
+    // Script wurde ueber Ajax aufgerufen
+    include("../../system/common.php"); 
 
-	$i = $_GET['field_number'];
-	$b_ajax = true;
+    $i = $_GET['field_number'];
+    $b_ajax = true;
 }
 
 if(isset($result_user_fields) == false)
@@ -49,7 +49,7 @@ if(isset($result_user_fields) == false)
                  ORDER BY usf_org_shortname DESC, usf_name ASC";
 
     $result_user_fields = mysql_query($sql, $g_adm_con);
-    db_error($result_user_fields);	
+    db_error($result_user_fields);  
 }
 
 // Array um den Namen der Tabellen sinnvolle Texte zuzuweisen
@@ -74,40 +74,40 @@ echo "<div style=\"text-align: center; width: 18%; float: left; margin-top: 5px;
     <div style=\"text-align: center; width: 37%; float: left; margin-top: 5px;\">
         <select size=\"1\" name=\"column$i\">
             <option value=\"\" ";
-            	if($b_ajax == true || $b_history == false)
-            	{
-            		echo " selected ";
-            	}
-				echo "></option>
+                if($b_ajax == true || $b_history == false)
+                {
+                    echo " selected ";
+                }
+                echo "></option>
             <optgroup label=\"Stammdaten\">";
-            	$value = reset($arr_col_name);
-				$key   = key($arr_col_name);
-            	for($j = 0; $j < count($arr_col_name); $j++)
-            	{
-	                echo "<option value=\"$key\" ";
+                $value = reset($arr_col_name);
+                $key   = key($arr_col_name);
+                for($j = 0; $j < count($arr_col_name); $j++)
+                {
+                    echo "<option value=\"$key\" ";
                     if($b_ajax == false && $b_history == true)
                     {
-	                    // wenn Zurueck gewaehlt wurde, dann Felder mit den alten
-	                    // Werten vorbelegen
-	                    if($form_values["column$i"] == $key)
-	                    {
-							echo " selected ";                        	
-	                    }
+                        // wenn Zurueck gewaehlt wurde, dann Felder mit den alten
+                        // Werten vorbelegen
+                        if($form_values["column$i"] == $key)
+                        {
+                            echo " selected ";                          
+                        }
                     }
                     else
                     {
-                    	// Nachname und Vorname sollen in den ersten beiden
-                    	// Spalten vorgeschlagen werden
-	                    if(($key == "usr_last_name" && $i == 1 )
-	                    || ($key == "usr_first_name" && $i == 2 )) 
-	                    {
-	                        echo " selected ";
-	                    }
+                        // Nachname und Vorname sollen in den ersten beiden
+                        // Spalten vorgeschlagen werden
+                        if(($key == "usr_last_name" && $i == 1 )
+                        || ($key == "usr_first_name" && $i == 2 )) 
+                        {
+                            echo " selected ";
+                        }
                     }
                     echo ">$value</option>";
-	            	$value = next($arr_col_name);
-					$key   = key($arr_col_name);
-            	}
+                    $value = next($arr_col_name);
+                    $key   = key($arr_col_name);
+                }
 
                 //ggf zusaetzliche Felder auslesen und bereitstellen
                 $field_header = false;
@@ -138,7 +138,7 @@ echo "<div style=\"text-align: center; width: 18%; float: left; margin-top: 5px;
                         if($b_ajax == false && $b_history == true
                         && $form_values["column$i"] == $uf_row->usf_id)
                         {
-							echo " selected ";                        	
+                            echo " selected ";                          
                         }
                         echo ">$uf_row->usf_name</option>";
                     }
@@ -150,37 +150,37 @@ echo "<div style=\"text-align: center; width: 18%; float: left; margin-top: 5px;
     <div style=\"text-align: center; width: 18%; float: left; margin-top: 5px;\">
         <select size=\"1\" name=\"sort$i\">
             <option value=\"\" ";
-            	if($b_ajax == true || isset($form_values["sort$i"]) == false)
-            	{
-            		echo " selected ";
-            	}
-				echo ">&nbsp;</option>
+                if($b_ajax == true || isset($form_values["sort$i"]) == false)
+                {
+                    echo " selected ";
+                }
+                echo ">&nbsp;</option>
             <option value=\"ASC\" ";
-            	if($b_ajax == false && $b_history == true
-            	&& $form_values["sort$i"] == "ASC")
-            	{
-            		echo " selected ";
-            	}
-            	echo ">A bis Z</option>
+                if($b_ajax == false && $b_history == true
+                && $form_values["sort$i"] == "ASC")
+                {
+                    echo " selected ";
+                }
+                echo ">A bis Z</option>
             <option value=\"DESC\" ";
-            	if($b_ajax == false && $b_history == true
-            	&& $form_values["sort$i"] == "DESC")
-            	{
-            		echo " selected ";
-            	}
-            	echo ">Z bis A</option>
+                if($b_ajax == false && $b_history == true
+                && $form_values["sort$i"] == "DESC")
+                {
+                    echo " selected ";
+                }
+                echo ">Z bis A</option>
         </select>
     </div>";
-	if($b_ajax == false && $b_history == true)
-	{
-		$condition = $form_values["condition$i"];
-	}
-	else
-	{
-		$condition = "";
-	}
+    if($b_ajax == false && $b_history == true)
+    {
+        $condition = $form_values["condition$i"];
+    }
+    else
+    {
+        $condition = "";
+    }
     echo "<div style=\"text-align: center; width: 27%; float: left; margin-top: 5px;\">
         <input type=\"text\" name=\"condition$i\" size=\"15\" maxlength=\"30\" value=\"$condition\">
     </div>
-	<span id=\"next_field_". ($i + 1). "\" style=\"clear: left;\"></span>";
+    <span id=\"next_field_". ($i + 1). "\" style=\"clear: left;\"></span>";
 ?>
