@@ -9,8 +9,6 @@
  * Uebergaben:
  *
  * usf_id: ID des Feldes, das bearbeitet werden soll
- * url :   URL von der die aufrufende Seite aufgerufen wurde
- *         (muss uebergeben werden, damit der Zurueck-Button funktioniert)
  *
  ******************************************************************************
  *
@@ -54,15 +52,7 @@ else
     $usf_id = 0;
 }
 
-// wenn URL uebergeben wurde zu dieser gehen, ansonsten zurueck
-if(array_key_exists('url', $_GET))
-{
-    $url = $_GET['url'];
-}
-else
-{
-    $url = urlencode(getHttpReferer());
-}
+$_SESSION['navigation']->addUrl($g_current_url);
 
 if(isset($_SESSION['fields_request']))
 {
@@ -114,7 +104,7 @@ echo "</head>";
 
 require("../../../adm_config/body_top.php");
     echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-        <form action=\"fields_function.php?usf_id=$usf_id&amp;mode=1&amp;url=$url\" method=\"post\" id=\"edit_field\">
+        <form action=\"fields_function.php?usf_id=$usf_id&amp;mode=1\" method=\"post\" id=\"edit_field\">
             <div class=\"formHead\" style=\"width: 400px\">";
                 if($usf_id > 0)
                 {
@@ -195,7 +185,7 @@ require("../../../adm_config/body_top.php");
                 <hr width=\"85%\" />
 
                 <div style=\"margin-top: 6px;\">
-                    <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
+                    <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
                     <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
                     &nbsp;Zur&uuml;ck</button>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

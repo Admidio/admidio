@@ -12,8 +12,6 @@
  * type :  Typ der Kategorie, die angelegt werden sollen
  *         ROL = Rollenkategorien
  *         LNK = Linkkategorien
- * url :   URL von der die aufrufende Seite aufgerufen wurde
- *         (muss uebergeben werden, damit der Zurueck-Button funktioniert)
  *
  ******************************************************************************
  *
@@ -70,15 +68,7 @@ else
     }    
 }
 
-// wenn URL uebergeben wurde zu dieser gehen, ansonsten zurueck
-if(array_key_exists('url', $_GET))
-{
-    $url = $_GET['url'];
-}
-else
-{
-    $url = urlencode(getHttpReferer());
-}
+$_SESSION['navigation']->addUrl($g_current_url);
 
 if(isset($_SESSION['categories_request']))
 {
@@ -125,7 +115,7 @@ echo "</head>";
 
 require("../../../adm_config/body_top.php");
     echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-        <form action=\"categories_function.php?cat_id=$cat_id&amp;type=". $_GET["type"]. "&amp;mode=1&amp;url=$url\" method=\"post\" id=\"edit_category\">
+        <form action=\"categories_function.php?cat_id=$cat_id&amp;type=". $_GET["type"]. "&amp;mode=1\" method=\"post\" id=\"edit_category\">
             <div class=\"formHead\">";
                 if($cat_id > 0)
                 {
@@ -161,7 +151,7 @@ require("../../../adm_config/body_top.php");
                 <hr width=\"85%\" />
 
                 <div style=\"margin-top: 6px;\">
-                    <button id=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
+                    <button id=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
                     <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
                     &nbsp;Zur&uuml;ck</button>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

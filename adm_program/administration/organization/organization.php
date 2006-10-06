@@ -33,6 +33,10 @@ if(!hasRole("Webmaster"))
     $g_message->show("norights");
 }
 
+// Navigation faengt hier im Modul an
+$_SESSION['navigation']->clear();
+$_SESSION['navigation']->addUrl($g_current_url);
+
 if(isset($_SESSION['organization_request']))
 {
    $form_values = $_SESSION['organization_request'];

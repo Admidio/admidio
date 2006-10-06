@@ -15,8 +15,6 @@
  * mode:   1 - Kategorie anlegen oder updaten
  *         2 - Kategorie loeschen
  *         3 - Frage, ob Kategorie geloescht werden soll
- * url :   URL von der die aufrufende Seite aufgerufen wurde
- *         (muss uebergeben werden, damit der Zurueck-Button funktioniert)
  *
  ******************************************************************************
  *
@@ -73,16 +71,6 @@ if($_GET["cat_id"] == 0)
     }  
 }
 
-// wenn URL uebergeben wurde zu dieser gehen, ansonsten zurueck
-if(array_key_exists('url', $_GET) && strlen($_GET['url']) > 0)
-{
-    $url = urlencode($_GET['url']);
-}
-else
-{
-    $url = urlencode(getHttpReferer());
-}
-
 $err_code = "";
 $err_text = "";
 
@@ -137,6 +125,8 @@ if($_GET['mode'] == 1)
         $sql    = prepareSQL($sql, array(trim($category_name), $_GET['cat_id'], $_GET['type']));
         $result = mysql_query($sql, $g_adm_con);
         db_error($result);
+       
+       	$_SESSION['navigation']->deleteLastUrl();
         unset($_SESSION['categories_request']);
     }
     else
@@ -185,11 +175,11 @@ elseif($_GET["mode"] == 3)
     db_error($result);
     $row = mysql_fetch_array($result);
     
-    $g_message->setForwardYesNo("$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=". $_GET['cat_id']. "&mode=2&url=$url");
+    $g_message->setForwardYesNo("$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=". $_GET['cat_id']. "&mode=2");
     $g_message->show("delete_category", utf8_encode($row[0]), "Löschen");
 }
          
 // zur Kategorienuebersicht zurueck
-$g_message->setForwardUrl("$g_root_path/adm_program/administration/roles/categories.php?type=ROL&url=$url", 2000);
+$g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
 $g_message->show($err_code);
 ?>

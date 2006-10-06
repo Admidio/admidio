@@ -12,8 +12,6 @@
  * mode:   1 - Feld anlegen oder updaten
  *         2 - Feld loeschen
  *         3 - Frage, ob Feld geloescht werden soll
- * url :   URL von der die aufrufende Seite aufgerufen wurde
- *         (muss uebergeben werden, damit der Zurueck-Button funktioniert)
  *
  ******************************************************************************
  *
@@ -113,6 +111,8 @@ if($_GET['mode'] == 1)
                                          trim($_POST['type']), $_GET['usf_id']));
         $result = mysql_query($sql, $g_adm_con);
         db_error($result);
+        
+        $_SESSION['navigation']->deleteLastUrl();
         unset($_SESSION['fields_request']);
     }
     else
@@ -165,11 +165,11 @@ elseif($_GET["mode"] == 3)
     db_error($result);
     $row = mysql_fetch_array($result);
     
-    $g_message->setForwardYesNo("$g_root_path/adm_program/administration/organization/fields_function.php?usf_id=". $_GET['usf_id']. "&mode=2&url=". $_GET['url']);
+    $g_message->setForwardYesNo("$g_root_path/adm_program/administration/organization/fields_function.php?usf_id=". $_GET['usf_id']. "&mode=2");
     $g_message->show("delete_field", utf8_encode($row[0]), "Löschen");
 }
          
 // zu den Organisationseinstellungen zurueck
-$g_message->setForwardUrl("$g_root_path/adm_program/administration/organization/fields.php?url=". $_GET['url'], 2000);
+$g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
 $g_message->show($err_code);
 ?>

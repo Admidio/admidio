@@ -33,16 +33,7 @@ if(!isModerator())
     $g_message->show("norights");
 }
 
-// wenn URL uebergeben wurde zu dieser gehen, ansonsten zurueck
-if(array_key_exists('url', $_GET))
-{
-    $url = $_GET['url'];
-}
-else
-{
-    $url = urlencode(getHttpReferer());
-}
-
+$_SESSION['navigation']->addUrl($g_current_url);
 unset($_SESSION['fields_request']);
 
 echo "
@@ -66,9 +57,9 @@ require("../../../adm_config/body_top.php");
 
         <p>
             <span class=\"iconLink\">
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/organization/fields_new.php?url=$url\"><img 
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/organization/fields_new.php\"><img 
                 src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Profilfeld anlegen\"></a>
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/organization/fields_new.php?url=$url\">Profilfeld anlegen</a>
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/organization/fields_new.php\">Profilfeld anlegen</a>
             </span>
         </p>";
 
@@ -126,9 +117,9 @@ require("../../../adm_config/body_top.php");
                             }
                         echo "</td>
                         <td style=\"text-align: right; width: 45px;\">
-                            <a href=\"$g_root_path/adm_program/administration/organization/fields_new.php?usf_id=$row->usf_id&amp;url=$url\">
+                            <a href=\"$g_root_path/adm_program/administration/organization/fields_new.php?usf_id=$row->usf_id\">
                             <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>&nbsp;";
-                            echo "<a href=\"$g_root_path/adm_program/administration/organization/fields_function.php?mode=3&amp;usf_id=$row->usf_id&amp;url=$url\"><img
+                            echo "<a href=\"$g_root_path/adm_program/administration/organization/fields_function.php?mode=3&amp;usf_id=$row->usf_id\"><img
                             src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>
                         </td>
                     </tr>";
@@ -146,9 +137,9 @@ require("../../../adm_config/body_top.php");
 
         echo "<p>
             <span class=\"iconLink\">
-                <a class=\"iconLink\" href=\"javascript:self.location.href='". urldecode($url). "'\"><img
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\"><img
                 class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Zur&uuml;ck\"></a>
-                <a class=\"iconLink\" href=\"javascript:self.location.href='". urldecode($url). "'\">Zur&uuml;ck</a>
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
             </span>
         </p>
     </div>";
