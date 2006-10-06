@@ -1,4 +1,4 @@
-<?
+<?php
 /******************************************************************************
  * Dieses Script setzt das SQL-Statement fuer die myList zusammen und
  * uebergibt es an das allgemeine Listen-Script
