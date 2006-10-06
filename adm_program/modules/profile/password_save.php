@@ -66,19 +66,6 @@ if( ($_POST["old_password"] != "" || hasRole('Webmaster') )
       {
          $user->password = md5($_POST["new_password"]);
          $user->update($g_current_user->id);
-
-         if($g_forum == 1)
-         {
-            mysql_select_db($g_forum_db, $g_forum_con);
-
-            // jetzt noch das Passwort im Forum aendern
-            $sql    = "UPDATE ". $g_forum_praefix. "_users SET user_password = '$password_crypt'
-                        WHERE username = '". $row_login[0]. "' ";
-            $result = mysql_query($sql, $g_forum_con);
-            db_error($result);
-
-            mysql_select_db($g_adm_db, $g_adm_con);
-         }
       }
       else
       {
