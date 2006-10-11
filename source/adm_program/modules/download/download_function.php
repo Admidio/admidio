@@ -40,12 +40,11 @@ require("../../system/common.php");
 require("../../system/login_valid.php");
 
 // Uebergabevariablen pruefen
-
-if(is_numeric($_GET["mode"]) == false
-|| $_GET["mode"] < 1 || $_GET["mode"] > 4)
-{
-    $g_message->show("invalid");
-}
+	if(is_numeric($_GET["mode"]) == false
+	|| $_GET["mode"] < 1 || $_GET["mode"] > 4)
+	{
+    	$g_message->show("invalid");
+	}
 
 //Pruefrotine ob Ordner/Datei
 function file_or_folder ($act_dir,$file) 
@@ -108,9 +107,9 @@ if (decoct(fileperms("../../../adm_my_files/download"))!=40777)
     $g_message->show("invalid_folder");
 }
 
-$folder = strStripTags(urldecode($_GET['folder']));
-$file   = strStripTags(urldecode($_GET['file']));
-$default_folder = strStripTags(urldecode($_GET['default_folder']));
+	$folder = strStripTags(urldecode($_GET['folder']));
+	$file   = strStripTags(urldecode($_GET['file']));
+	$default_folder = strStripTags(urldecode($_GET['default_folder']));
 
 $url        = "";
 $act_folder = "../../../adm_my_files/download";
