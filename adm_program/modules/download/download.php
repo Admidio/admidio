@@ -1,4 +1,4 @@
-<?php
+﻿﻿<?php
 /******************************************************************************
  * Downloads auflisten
  *
@@ -44,8 +44,9 @@ if(isset($_GET["sort"]) && $_GET["sort"] != "asc" && $_GET["sort"] != "desc")
     $g_message->show("invalid");
 }
 
-$default_folder = strStripTags(urldecode($_GET['default_folder']));
-$folder     = strStripTags(urldecode($_GET['folder']));
+	$default_folder = strStripTags(urldecode($_GET['default_folder']));
+	$folder     = strStripTags(urldecode($_GET['folder']));
+	
 $act_folder = "../../../adm_my_files/download";
 
 // uebergebene Ordner auf Gueltigkeit pruefen
@@ -54,9 +55,7 @@ if(strlen($default_folder) > 0)
 {
     if(strpos($default_folder, "..") !== false)
     {
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_folder";
-        header($location);
-        exit();
+        $g_message->show("invalid_folder");
     }
     $act_folder = "$act_folder/$default_folder";
 }
@@ -65,11 +64,50 @@ if(strlen($folder) > 0)
 {
     if(strpos($folder, "..") !== false)
     {
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_folder";
-        header($location);
-        exit();
+        $g_message->show("invalid_folder");
     }
     $act_folder = "$act_folder/$folder";
+}
+
+//Erstellen des Links vom Menü
+$path = explode("/",$folder);
+$next_folder = "";
+If ($default_folder <> "")
+{
+	$link = "<a href=\"$g_root_path/adm_program/modules/download/download.php?folder=".urlencode($next_folder)."&amp;default_folder=". urlencode($default_folder). "\">$default_folder</a>";
+}
+else
+{
+	$link = "<a href=\"$g_root_path/adm_program/modules/download/download.php?folder=".urlencode($next_folder)."&amp;default_folder=". urlencode($default_folder). "\">Download</a>";	
+}
+$i=0;
+While ($i <> count($path)-1)
+{
+	If ($i==0) 
+	{
+		$next_folder = $path[0];
+	}
+	else
+	{
+		$next_folder = $next_folder."/".$path[$i];
+	};
+	$link = $link."/<a href=\"$g_root_path/adm_program/modules/download/download.php?folder=".urlencode($next_folder). "&amp;default_folder=". urlencode($default_folder). "\">$path[$i]</a>";	
+	$i++;
+}
+If ($folder <> "") 
+{
+	$link = $link."/$path[$i]";
+}
+else
+{
+	If ($default_folder == "")
+	{
+		$link = "Download";
+	}
+	else
+	{
+		$link = "$default_folder";
+	};
 }
 
 $info= strStripTags($_GET['info']);
@@ -77,9 +115,7 @@ $info= strStripTags($_GET['info']);
 //Auslesen des Ordners und schreiben in array
 if(!is_dir($act_folder))
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=folder_not_exist";
-    header($location);
-    exit();
+    $g_message->show("folder_not_exist");
 }
 
 // Ordnerinhalt sortieren
@@ -114,6 +150,7 @@ echo "
 echo "</head>";
 
 require("../../../adm_config/body_top.php");
+
     echo"<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
     <h1>Downloadbereich</h1>
     <p>";
@@ -155,20 +192,7 @@ require("../../../adm_config/body_top.php");
             <tr>
                <th class=\"tableHeader\" width=\"25\" style=\"text-align: center;\"><img src=\"$g_root_path/adm_program/images/folder.png\" border=\"0\" alt=\"Ordner\"></th>
                <th class=\"tableHeader\" style=\"text-align: left;\">";
-                  if(strlen($folder) == 0)
-                  {
-                     if(strlen($default_folder) == 0)
-                        echo "Download";
-                     else
-                        echo $default_folder;
-                  }
-                  else
-                  {
-                    if(strlen($default_folder) == 0)
-                        echo "Download/".$folder;
-                     else
-                        echo $default_folder."/".$folder;
-                  }
+               echo"$link";
                echo "</th>
                <th class=\"tableHeader\" style=\"text-align: center;\">Erstellungsdatum</th>
                <th class=\"tableHeader\" style=\"text-align: right;\">Gr&ouml;&szlig;e&nbsp;</th>";
