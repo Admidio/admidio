@@ -44,8 +44,14 @@ if(isset($_GET["sort"]) && $_GET["sort"] != "asc" && $_GET["sort"] != "desc")
     $g_message->show("invalid");
 }
 
+If (isset($_GET['default_folder']))	
 	$default_folder = strStripTags(urldecode($_GET['default_folder']));
-	$folder     = strStripTags(urldecode($_GET['folder']));
+else
+	$default_folder = "";
+if (isset($_GET['folder']))
+	$folder = strStripTags(urldecode($_GET['folder']));
+else
+	$folder = "";
 	
 $act_folder = "../../../adm_my_files/download";
 
@@ -109,8 +115,15 @@ else
 		$link = "$default_folder";
 	};
 }
+if (isset($_GET['info']))
+	$info= strStripTags($_GET['info']);
+else
+	$info="";
 
-$info= strStripTags($_GET['info']);
+if (isset($_GET['sort']))
+	$sort= strStripTags($_GET['sort']);
+else
+	$sort= "";
 
 //Auslesen des Ordners und schreiben in array
 if(!is_dir($act_folder))
