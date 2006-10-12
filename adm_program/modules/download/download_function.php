@@ -107,9 +107,20 @@ if (decoct(fileperms("../../../adm_my_files/download"))!=40777)
     $g_message->show("invalid_folder");
 }
 
+if (isset($_GET['folder']))
 	$folder = strStripTags(urldecode($_GET['folder']));
-	$file   = strStripTags(urldecode($_GET['file']));
-	$default_folder = strStripTags(urldecode($_GET['default_folder']));
+else
+	$folder = ""; 
+
+if (isset($_GET['file']))
+	$file = strStripTags(urldecode($_GET['file']));
+else
+	$file = "";
+
+if (isset($_GET['default_folder']))
+	$folder = strStripTags(urldecode($_GET['default_folder']));
+else
+	$default_folder = "";
 
 $url        = "";
 $act_folder = "../../../adm_my_files/download";
