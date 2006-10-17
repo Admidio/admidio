@@ -44,6 +44,7 @@ if(isset($_GET["aufgabe"]) && $_GET["aufgabe"] != "new" && $_GET["aufgabe"] != "
     $g_message->show("invalid");
 }
 
+
 if(isset($_SESSION['photo_event_request']))
 {
     $form_values = $_SESSION['photo_event_request'];
@@ -92,36 +93,38 @@ $result_list = mysql_query($sql, $g_adm_con);
 db_error($result_list);
 
 //bei Seitenaufruf ohne Moderationsrechte
-if(!$g_session_valid || $g_session_valid  && $aufgabe="change"&& (!editPhoto($adm_photo["pho_org_shortname"])) || !editPhoto())
+if(!$g_session_valid || $g_session_valid  && ($aufgabe=="change" && !editPhoto($adm_photo["pho_org_shortname"])) || !editPhoto())
 {
     $g_message->show("photoverwaltunsrecht");
 }
 
 //bei Seitenaufruf mit Moderationsrechten
-if($g_session_valid && editPhoto($adm_photo['pho_org_shortname']))
+if($g_session_valid && $aufgabe=="change" && editPhoto($adm_photo['pho_org_shortname']))
 {
     //Speicherort
     $ordner = "../../../adm_my_files/photos/".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"];
 
-    /******************************HTML-Teil******************************************/
-    echo"
-    <!-- (c) 2004 - 2005 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
-    <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
-    <html>
-        <head>
-            <title>$g_current_organization->longname - Veranstaltungsverwaltung</title>
-            <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
+}
 
-            <!--[if lt IE 7]>
-                <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
-            <![endif]-->";
+/******************************HTML-Teil******************************************/
+echo"
+<!-- (c) 2004 - 2005 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
+<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
+<html>
+    <head>
+        <title>$g_current_organization->longname - Veranstaltungsverwaltung</title>
+        <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
 
-            require("../../../adm_config/header.php");
-        echo "
-        </head>";
+        <!--[if lt IE 7]>
+            <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
+        <![endif]-->";
 
-    require("../../../adm_config/body_top.php");
-    echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">";
+        require("../../../adm_config/header.php");
+    echo "
+    </head>";
+
+require("../../../adm_config/body_top.php");
+echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">";
 
 
     /****************************Formular***********************************************/
@@ -321,5 +324,5 @@ if($g_session_valid && editPhoto($adm_photo['pho_org_shortname']))
         require("../../../adm_config/body_bottom.php");
         echo "</body>
     </html>";
-};//Moderation
+//Moderation
 ?>
