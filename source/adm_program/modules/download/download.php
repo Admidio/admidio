@@ -1,4 +1,4 @@
-﻿﻿<?php
+<?php
 /******************************************************************************
  * Downloads auflisten
  *
@@ -44,15 +44,15 @@ if(isset($_GET["sort"]) && $_GET["sort"] != "asc" && $_GET["sort"] != "desc")
     $g_message->show("invalid");
 }
 
-If (isset($_GET['default_folder']))	
-	$default_folder = strStripTags(urldecode($_GET['default_folder']));
+If (isset($_GET['default_folder'])) 
+    $default_folder = strStripTags(urldecode($_GET['default_folder']));
 else
-	$default_folder = "";
+    $default_folder = "";
 if (isset($_GET['folder']))
-	$folder = strStripTags(urldecode($_GET['folder']));
+    $folder = strStripTags(urldecode($_GET['folder']));
 else
-	$folder = "";
-	
+    $folder = "";
+    
 $act_folder = "../../../adm_my_files/download";
 
 // uebergebene Ordner auf Gueltigkeit pruefen
@@ -80,50 +80,50 @@ $path = explode("/",$folder);
 $next_folder = "";
 If ($default_folder <> "")
 {
-	$link = "<a href=\"$g_root_path/adm_program/modules/download/download.php?folder=".urlencode($next_folder)."&amp;default_folder=". urlencode($default_folder). "\">$default_folder</a>";
+    $link = "<a href=\"$g_root_path/adm_program/modules/download/download.php?folder=".urlencode($next_folder)."&amp;default_folder=". urlencode($default_folder). "\">$default_folder</a>";
 }
 else
 {
-	$link = "<a href=\"$g_root_path/adm_program/modules/download/download.php?folder=".urlencode($next_folder)."&amp;default_folder=". urlencode($default_folder). "\">Download</a>";	
+    $link = "<a href=\"$g_root_path/adm_program/modules/download/download.php?folder=".urlencode($next_folder)."&amp;default_folder=". urlencode($default_folder). "\">Download</a>";   
 }
 $i=0;
 While ($i <> count($path)-1)
 {
-	If ($i==0) 
-	{
-		$next_folder = $path[0];
-	}
-	else
-	{
-		$next_folder = $next_folder."/".$path[$i];
-	};
-	$link = $link."/<a href=\"$g_root_path/adm_program/modules/download/download.php?folder=".urlencode($next_folder). "&amp;default_folder=". urlencode($default_folder). "\">$path[$i]</a>";	
-	$i++;
+    If ($i==0) 
+    {
+        $next_folder = $path[0];
+    }
+    else
+    {
+        $next_folder = $next_folder."/".$path[$i];
+    };
+    $link = $link."/<a href=\"$g_root_path/adm_program/modules/download/download.php?folder=".urlencode($next_folder). "&amp;default_folder=". urlencode($default_folder). "\">$path[$i]</a>";  
+    $i++;
 }
 If ($folder <> "") 
 {
-	$link = $link."/$path[$i]";
+    $link = $link."/$path[$i]";
 }
 else
 {
-	If ($default_folder == "")
-	{
-		$link = "Download";
-	}
-	else
-	{
-		$link = "$default_folder";
-	};
+    If ($default_folder == "")
+    {
+        $link = "Download";
+    }
+    else
+    {
+        $link = "$default_folder";
+    };
 }
 if (isset($_GET['info']))
-	$info= strStripTags($_GET['info']);
+    $info= strStripTags($_GET['info']);
 else
-	$info="";
+    $info="";
 
 if (isset($_GET['sort']))
-	$sort= strStripTags($_GET['sort']);
+    $sort= strStripTags($_GET['sort']);
 else
-	$sort= "";
+    $sort= "";
 
 //Auslesen des Ordners und schreiben in array
 if(!is_dir($act_folder))
