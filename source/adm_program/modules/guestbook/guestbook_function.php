@@ -14,6 +14,8 @@
  *           3 - Gaestebucheintrag editieren
  *           4 - Kommentar zu einem Eintrag anlegen
  *           5 - Kommentar eines Gaestebucheintrages loeschen
+ *           6 - Nachfrage ob Gaestebucheintrag geloescht werden soll
+ *           7 - Nachfrage ob Gaestebuchkommentar geloescht werden soll
  * url:      kann beim Loeschen mit uebergeben werden
  * headline: Ueberschrift, die ueber den Gaestebuch steht
  *           (Default) Gaestebuch
@@ -73,14 +75,14 @@ else
 
 
 // Erst einmal pruefen ob die noetigen Berechtigungen vorhanden sind
-if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mode'] == 5)
+if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mode'] == 5 || $_GET['mode'] == 6 || $_GET['mode'] == 7 )
 {
     // Der User muss fuer diese modes eingeloggt sein
     require("../../system/login_valid.php");
 
-    if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 5)
+    if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 5 || $_GET['mode'] == 6 || $_GET['mode'] == 7)
     {
-        // Fuer die modes 2,3 und 5 werden editGuestbook-Rechte benoetigt
+        // Fuer die modes 2,3,5,6 und 7 werden editGuestbook-Rechte benoetigt
         if(!editGuestbook())
         {
             $g_message->show("norights");
@@ -98,13 +100,13 @@ if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mod
 
 
     // Abschliessend wird jetzt noch geprueft ob die uebergebene ID ueberhaupt zur Orga gehoert
-    if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4)
+    if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mode'] == 6 )
     {
         $sql    = "SELECT * FROM ". TBL_GUESTBOOK. " WHERE gbo_id = {0} and gbo_org_id = $g_current_organization->id";
         $sql    = prepareSQL($sql, array($_GET['id']));
     }
 
-    if ($_GET['mode'] == 5)
+    if ($_GET['mode'] == 5 || $_GET['mode'] == 7 )
     {
         $sql    = "SELECT * FROM ". TBL_GUESTBOOK_COMMENTS. ", ". TBL_GUESTBOOK. " WHERE gbc_id = {0} and gbo_org_id = $g_current_organization->id";
         $sql    = prepareSQL($sql, array($_GET['id']));
@@ -118,6 +120,7 @@ if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mod
         $g_message->show("invalid");
     }
 
+    $gbObject = mysql_fetch_object($result);
 
 }
 
@@ -311,8 +314,6 @@ elseif($_GET["mode"] == 4)
         $err_text = "Text";
         $err_code = "feld";
     }
-
-
 }
 
 elseif ($_GET["mode"] == 5)
@@ -330,6 +331,20 @@ elseif ($_GET["mode"] == 5)
 
     $g_message->setForwardUrl($_GET["url"]);
     $g_message->show("delete");
+}
+
+elseif ($_GET["mode"] == 6)
+{
+    //Nachfrage ob Gaestebucheintrag geloescht werden soll
+    $g_message->setForwardYesNo("$g_root_path/adm_program/modules/guestbook/guestbook_function.php?id=$_GET[id]&mode=2&url=$g_root_path/adm_program/modules/guestbook/guestbook.php");
+    $g_message->show("delete_gbook_entry", utf8_encode($gbObject->gbo_name));
+}
+
+elseif ($_GET["mode"] == 7)
+{
+    //Nachfrage ob Gaestebucheintrag geloescht werden soll
+    $g_message->setForwardYesNo("$g_root_path/adm_program/modules/guestbook/guestbook_function.php?id=$_GET[id]&mode=5&url=$g_root_path/adm_program/modules/guestbook/guestbook.php?id=$gbObject->gbc_gbo_id");
+    $g_message->show("delete_gbook_comment", utf8_encode($gbObject->gbc_name));
 }
 
 else
