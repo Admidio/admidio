@@ -59,21 +59,21 @@ require("../../adm_config/body_top.php");
                         <input type=\"password\" name=\"passwort\" size=\"14\" maxlength=\"20\" />
                     </div>
                 </div>
-                <div style=\"margin-top: 15px;\">
+                <div style=\"margin-top: 15px; margin-bottom: 15px;\">
                     <button name=\"login\" type=\"submit\" value=\"login\">
                     <img src=\"$g_root_path/adm_program/images/key.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Login\">
                     &nbsp;Login</button>
+                </div>";
+                if($g_preferences['registration_mode'] > 0)
+                {
+                    echo "<div style=\"font-size: 8pt; margin-top: 5px;\">
+                        <a href=\"registration.php\">Ich m&ouml;chte mich registrieren!</a>
+                    </div>";
+                }
+                echo "<div style=\"font-size: 8pt; margin-top: 5px;\">
+                    <a href=\"$g_root_path/adm_program/modules/mail/mail.php?rolle=Webmaster&subject=Loginprobleme\">Ich habe mein Passwort vergessen!</a>
                 </div>
-            </div>
-
-            <div class=\"formHead\" style=\"width: 260px\">". strspace("Registrieren"). "</div>
-            <div class=\"formBody\" style=\"width: 260px\">
-                <div style=\"margin-bottom: 7px;\">Du bist noch nicht registriert ?</div>
-                <button name=\"Registrieren\" type=\"button\" value=\"Registrieren\"
-                onclick=\"self.location.href='registration.php'\">
-                <img src=\"$g_root_path/adm_program/images/register.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Registrieren\">
-                &nbsp;Registrieren</button>
-                <div style=\"font-size: 8pt; margin-top: 10px;\">
+                <div style=\"font-size: 8pt; margin-top: 20px;\">
                     Powered by <a href=\"http://www.admidio.org\" target=\"_blank\">Admidio ". getVersion(). "</a>
                 </div>
             </div>

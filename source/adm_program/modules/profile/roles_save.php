@@ -92,35 +92,44 @@ $parentRoles = array();
 //Ergebnisse durchlaufen und Kontrollieren ob Maximale Teilnehmerzahl ueberschritten wuerde
 while($row = mysql_fetch_object($result_rolle))
 {
-    //Aufruf von allen die die Rolle bereits haben und keine Leiter sind
-    $sql    =   "SELECT mem_usr_id, mem_valid, mem_leader
-                 FROM ". TBL_MEMBERS. "
-                 WHERE mem_rol_id = $row->rol_id
-                 AND mem_leader = 0
-                 AND mem_valid  = 1";
-    $sql    = prepareSQL($sql, array($_GET['user_id']));
-    $result_valid_members = mysql_query($sql, $g_adm_con);
-    db_error($result_valid_members);
-    $valid_members = mysql_num_rows($result_valid_members);
-    
-    //alle die die Rolle haben in Array schreiben
-    $valid_members_array = array();
-    for($x=0; $row2 = mysql_fetch_object($result_valid_members); $x++)
+    if($row->rol_max_members > 0)
     {
-        $valid_members_array[$x]="$row2->mem_usr_id";
-    }
-    
-    //Bedingungen fuer Abbruch und Abbruch
-    if ($valid_members>=$row->rol_max_members 
-        &&  $row->rol_max_members!=NULL
-        &&  !in_array($_GET['user_id'], $valid_members_array)
-        &&  $_POST["leader-$i"]==false 
-        &&  $_POST["role-$i"]==true)
-    {
-        $g_message->show("max_members_profile", utf8_encode($row->rol_name));
+        // erst einmal schauen, ob der Benutzer dieser Rolle bereits zugeordnet ist
+        $sql    =   "SELECT COUNT(*)
+                       FROM ". TBL_MEMBERS. "
+                      WHERE mem_rol_id = $row->rol_id
+                        AND mem_usr_id = {0}
+                        AND mem_leader = 0
+                        AND mem_valid  = 1";
+        $sql    = prepareSQL($sql, array($_GET['user_id']));
+        $result = mysql_query($sql, $g_adm_con);
+        db_error($result);
+        
+        $row_usr = mysql_fetch_array($result);
+
+        if($row_usr[0] == 0)
+        {
+            // Benutzer ist der Rolle noch nicht zugeordnet, dann schauen, ob die Anzahl ueberschritten wird
+            $sql    =   "SELECT COUNT(*)
+                           FROM ". TBL_MEMBERS. "
+                          WHERE mem_rol_id = $row->rol_id
+                            AND mem_leader = 0
+                            AND mem_valid  = 1";
+            $result = mysql_query($sql, $g_adm_con);
+            db_error($result);
+            
+            $row_members = mysql_fetch_array($result);
+
+            //Bedingungen fuer Abbruch und Abbruch
+            if($row_memners[0] >= $row->rol_max_members 
+            && $_POST["leader-$i"] == false 
+            && $_POST["role-$i"]   == true)
+            {
+                $g_message->show("max_members_profile", utf8_encode($row->rol_name));
+            }
+        }
     }
     $i++;
-
 }
 
 //Dateizeiger auf erstes Element zurueck setzen

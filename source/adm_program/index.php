@@ -92,13 +92,16 @@ require("../adm_config/body_top.php");
                     <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/login.php\"><img
                     src=\"$g_root_path/adm_program/images/key.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Login\"></a>
                     <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/login.php\">Login</a>
-                </span>
-                &nbsp;&nbsp;&nbsp;
-                <span class=\"iconLink\">
-                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/registration.php\"><img
-                    src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Registrieren\"></a>
-                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/registration.php\">Registrieren</a>
                 </span>";
+                if($g_preferences['registration_mode'] > 0)
+                {
+                    echo "&nbsp;&nbsp;&nbsp;
+                    <span class=\"iconLink\">
+                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/registration.php\"><img
+                        src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Registrieren\"></a>
+                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/registration.php\">Registrieren</a>
+                    </span>";
+                }
             }
         echo "</div>";
 
@@ -227,7 +230,7 @@ require("../adm_config/body_top.php");
                 echo strspace("Administration", 1);
             echo "</div>
             <div class=\"formBody\">";
-                if(isModerator())
+                if(hasRole("Webmaster") && $g_preferences['registration_mode'] > 0)
                 {
                     echo "
                     <div style=\"text-align: left; width: 40; float: left;\">

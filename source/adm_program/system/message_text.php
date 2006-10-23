@@ -113,6 +113,9 @@ $message_text = array(
 
     "logout" =>
         "Du wurdest erfolgreich abgemeldet.",
+        
+    "module_disabled" =>
+        "Dieses Modul wurde nicht freigegeben.",
 
     "mysql" =>
         "Folgender Fehler trat beim Zugriff auf die Datenbank auf:<br /><br />

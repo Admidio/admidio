@@ -26,105 +26,16 @@
 
 require("common.php");
 
-if(isset($_SESSION['registration_request']))
+// pruefen, ob Modul aufgerufen werden darf
+if($g_preferences['registration_mode'] == 0)
 {
-   $form_values = $_SESSION['registration_request'];
-   unset($_SESSION['registration_request']);
+    $g_message->show("module_disabled");
 }
 else
 {
-	$form_values['last_name']  = "";
-	$form_values['first_name'] = "";
-	$form_values['email']      = "";
-	$form_values['login_name'] = "";
+    // bei Registrierung wird ueber das Profil weiter bearbeitet
+    header("Location: $g_root_path/adm_program/modules/profile/profile_new.php?new_user=2");
+    exit();
 }
 
-echo "
-<!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
-<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
-<html>
-<head>
-    <title>$g_current_organization->longname - Registrierung</title>
-    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
-
-    <!--[if lt IE 7]>
-    <script language=\"JavaScript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
-    <![endif]-->";
-
-    require("../../adm_config/header.php");
-echo "</head>";
-
-require("../../adm_config/body_top.php");
-    echo "
-    <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\"><br>
-        <form action=\"registration_save.php\" method=\"post\" name=\"Anmeldung\">
-            <div class=\"formHead\" style=\"width: 360px\">". strspace("Registrieren"). "</div>
-            <div class=\"formBody\" style=\"width: 360px\">
-                <div>
-                    <div style=\"text-align: right; width: 130; float: left;\">Nachname:</div>
-                    <div style=\"text-align: left; margin-left: 140px;\">
-                        <input type=\"text\" id=\"last_name\" name=\"last_name\" size=\"20\" maxlength=\"30\" value=\"". $form_values['last_name']. "\">
-                    </div>
-                </div>
-                <div style=\"margin-top: 8px;\">
-                    <div style=\"text-align: right; width: 130; float: left;\">Vorname:</div>
-                    <div style=\"text-align: left; margin-left: 140px;\">
-                        <input type=\"text\" name=\"first_name\" size=\"20\" maxlength=\"30\" value=\"". $form_values['first_name']. "\">
-                    </div>
-                </div>
-                <div style=\"margin-top: 8px;\">
-                    <div style=\"text-align: right; width: 130; float: left;\">E-Mail:</div>
-                    <div style=\"text-align: left; margin-left: 140px;\">
-                        <input type=\"text\" name=\"email\" size=\"24\" maxlength=\"50\" value=\"". $form_values['email']. "\">&nbsp;
-                        <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                        onClick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=email','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\">
-                    </div>
-                </div>
-
-                <hr width=\"80%\" />
-
-                <div style=\"margin-top: 8px;\">
-                    <div style=\"text-align: right; width: 130; float: left;\">Benutzername:</div>
-                    <div style=\"text-align: left; margin-left: 140px;\">
-                        <input type=\"text\" name=\"login_name\" size=\"20\" maxlength=\"20\" value=\"". $form_values['login_name']. "\">&nbsp;
-                        <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=nickname','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\">
-                    </div>
-                </div>
-                <div style=\"margin-top: 8px;\">
-                    <div style=\"text-align: right; width: 130; float: left;\">Passwort:</div>
-                    <div style=\"text-align: left; margin-left: 140px;\">
-                        <input type=\"password\" name=\"password\" size=\"10\" maxlength=\"20\" />&nbsp;
-                        <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=password','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\">
-                    </div>
-                </div>
-                <div style=\"margin-top: 8px;\">
-                    <div style=\"text-align: right; width: 130; float: left;\">Passwort (Wdh):</div>
-                    <div style=\"text-align: left; margin-left: 140px;\">
-                        <input type=\"password\" name=\"password2\" size=\"10\" maxlength=\"20\" />
-                    </div>
-                </div>
-
-                <hr width=\"80%\" />
-
-                <div style=\"margin-top: 8px;\">
-                    <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
-                        <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
-                        &nbsp;Zur&uuml;ck</button>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <button name=\"abschicken\" type=\"submit\" value=\"abschicken\">
-                        <img src=\"$g_root_path/adm_program/images/mail.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Abschicken\">
-                        &nbsp;Abschicken</button>
-                </div>
-            </div>
-        </form>
-    </div>
-    <script type=\"text/javascript\"><!--
-        document.getElementById('last_name').focus();
-    --></script>";
-
-    require("../../adm_config/body_bottom.php");
-echo "</body>
-</html>";
 ?>

@@ -52,6 +52,7 @@ else
    $form_values['parent']               = $g_current_organization->org_id_parent;
    $form_values['enable_bbcode']        = $g_preferences['enable_bbcode'];
    $form_values['enable_rss']           = $g_preferences['enable_rss'];
+   $form_values['registration_mode']    = $g_preferences['registration_mode'];
    $form_values['logout_minutes']       = $g_preferences['logout_minutes'];
    $form_values['send_email_extern']    = $g_preferences['send_email_extern'];
    $form_values['max_email_attachment_size'] = $g_preferences['max_email_attachment_size'];
@@ -241,6 +242,36 @@ require("../../../adm_config/body_top.php");
                         bereitstellen, die dann &uuml;ber den Browser einem Feedreader zugeordnet
                         werden k&ouml;nnen.                 
                     </div>                    
+                    <div style=\"margin-top: 15px;\">
+                        <div style=\"text-align: left; width: 55%; float: left;\">Registrierung:</div>
+                        <div style=\"text-align: left; margin-left: 45%;\">
+                            <select size=\"1\" name=\"registration_mode\">
+                                <option value=\"0\" ";
+                                if($form_values['registration_mode'] == 0)
+                                {
+                                    echo " selected ";
+                                }
+                                echo ">Deaktiviert</option>
+                                <option value=\"1\" ";
+                                if($form_values['registration_mode'] == 1)
+                                {
+                                    echo " selected ";
+                                }
+                                echo ">Schnelle Registrierung</option>
+                                <option value=\"2\" ";
+                                if($form_values['registration_mode'] == 2)
+                                {
+                                    echo " selected ";
+                                }
+                                echo ">Erweiterte Registrierung</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class=\"smallText\">
+                        Hier kann die Art der Registrierung festgelegt bzw. ganz abgeschaltet werden. Mit der schnellen
+                        Registrierung kann der Benutzer nur die Logindaten und seinen Namen eingeben, bei der erweiterten
+                        Registrierung stehen ihm alle Felder des Profils zur Verf&uuml;gung.
+                    </div>
                     <div style=\"margin-top: 15px;\">
                         <div style=\"text-align: left; width: 55%; float: left;\">Automatischer Logout nach:</div>
                         <div style=\"text-align: left; margin-left: 45%;\">
