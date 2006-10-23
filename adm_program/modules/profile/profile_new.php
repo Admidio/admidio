@@ -8,8 +8,10 @@
  *
  * Uebergaben:
  *
- * user_id : zeigt das Profil der uebergebenen user_id an
- * new_user - 1 : Dialog um neue Benutzer hinzuzufuegen.
+ * user_id :  ID des Benutzers, dessen Profil bearbeitet werden soll
+ * new_user : 0 - (Default) vorhandenen User bearbeiten
+ *            1 - Dialog um neue Benutzer hinzuzufuegen.
+ *            2 - Dialog um Registrierung entgegenzunehmen
  *
  ******************************************************************************
  *
@@ -30,7 +32,11 @@
  *****************************************************************************/
 
 require("../../system/common.php");
-require("../../system/login_valid.php");
+// Registrierung muss ausgeloggt moeglich sein
+if($_GET['new_user'] != 2)
+{
+    require("../../system/login_valid.php");
+}
 
 // Uebergabevariablen pruefen
 
@@ -47,36 +53,40 @@ else
     $usr_id = 0;
 }
 
-// pruefen, ob Modus neues Mitglied erfassen
+// pruefen, ob Modus neues Mitglied oder Registrierung erfassen
 if(array_key_exists("new_user", $_GET))
 {
     if(is_numeric($_GET['new_user']))
     {
-        $a_new_user = $_GET['new_user'];
+        $new_user = $_GET['new_user'];
     }
     else
     {
-        $a_new_user = false;
+        $new_user = 0;
     }
 }
 else
 {
-    $a_new_user = false;
+    $new_user = 0;
 }
 
-// prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
-if(!editUser() && $_GET['user_id'] != $g_current_user->id)
+
+if($new_user != 2)
 {
-    $g_message->show("norights");
+    // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
+    if(editUser() == false && $_GET['user_id'] != $g_current_user->id)
+    {
+        $g_message->show("norights");
+    }
 }
 
-if($a_new_user == false)
+if($new_user == 0)
 {
     // jetzt noch schauen, ob User ueberhaupt Mitglied in der Gliedgemeinschaft ist
     if(isMember($usr_id) == false)
     {
         $g_message->show("norights");
-    }
+    }    
 }
 
 $b_history = false;     // History-Funktion bereits aktiviert ja/nein
@@ -89,17 +99,21 @@ if(isset($_SESSION['profile_request']))
     $user->last_name  = $form_values['last_name'];
     $user->first_name = $form_values['first_name'];
     $user->login_name = $form_values['login_name'];
-    $user->address    = $form_values['address'];
-    $user->zip_code   = $form_values['zip_code'];
-    $user->city       = $form_values['city'];
-    $user->country    = $form_values['country'];
-    $user->phone      = $form_values['phone'];
-    $user->mobile     = $form_values['mobile'];
-    $user->fax        = $form_values['fax'];
     $user->email      = $form_values['email'];
-    $user->homepage   = $form_values['homepage'];
-    $user->birthday   = $form_values['birthday'];
-    $user->gender     = $form_values['gender'];
+    // immer fuellen, ausser bei der schnellen Registrierung
+    if($new_user != 2 || $g_preferences['registration_mode'] != 1)
+    {
+        $user->address    = $form_values['address'];
+        $user->zip_code   = $form_values['zip_code'];
+        $user->city       = $form_values['city'];
+        $user->country    = $form_values['country'];
+        $user->phone      = $form_values['phone'];
+        $user->mobile     = $form_values['mobile'];
+        $user->fax        = $form_values['fax'];
+        $user->homepage   = $form_values['homepage'];
+        $user->birthday   = $form_values['birthday'];
+        $user->gender     = $form_values['gender'];
+    }
     unset($_SESSION['profile_request']);
     $b_history = true;
 }
@@ -128,20 +142,19 @@ echo "</head>";
 require("../../../adm_config/body_top.php");
     echo "
     <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-        <form action=\"profile_save.php?user_id=$usr_id&amp;new_user=$a_new_user";
-        if($a_new_user && $usr_id > 0) 
-        {
-            echo "&amp;pw=$user->password";
-        }
-        echo "\" method=\"post\" name=\"ProfilAnzeigen\">
+        <form action=\"profile_save.php?user_id=$usr_id&amp;new_user=$new_user\" method=\"post\" name=\"ProfilAnzeigen\">
             <div class=\"formHead\">";
-                if($usr_id == $g_current_user->id)
-                {
-                    echo strspace("Mein Profil", 2);
-                }
-                else if($a_new_user)
+                if($new_user == 1)
                 {
                     echo strspace("Neuer Benutzer", 2);
+                }
+                elseif($new_user == 2)
+                {
+                    echo strspace("Registrieren", 2);
+                }
+                elseif($usr_id == $g_current_user->id)
+                {
+                    echo strspace("Mein Profil", 2);
                 }
                 else
                 {
@@ -153,175 +166,330 @@ require("../../../adm_config/body_top.php");
                     <div style=\"text-align: right; width: 30%; float: left;\">Nachname:</div>
                     <div style=\"text-align: left; margin-left: 32%;\">
                         <input type=\"text\" id=\"last_name\" name=\"last_name\" style=\"width: 200px;\" maxlength=\"30\" value=\"$user->last_name\" ";
-                        if(!hasRole('Webmaster'))
+                        if(hasRole('Webmaster') == false && $new_user == 0)
                         {
                             echo " class=\"readonly\" readonly ";
                         }
-                        echo " />
-                    </div>
+                        echo " />";
+                        if($new_user > 0)
+                        {
+                            echo "&nbsp;*";
+                        }
+                    echo "</div>
                 </div>
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 30%; float: left;\">Vorname:</div>
                     <div style=\"text-align: left; margin-left: 32%;\">
                         <input type=\"text\" name=\"first_name\" style=\"width: 200px;\" maxlength=\"30\" value=\"$user->first_name\" ";
-                        if(!hasRole('Webmaster'))
+                        if(hasRole('Webmaster') == false && $new_user == 0)
                         {
                             echo " class=\"readonly\" readonly ";
                         }
-                        echo " />
-                    </div>
+                        echo " />";
+                        if($new_user > 0)
+                        {
+                            echo "&nbsp;*";
+                        }
+                    echo "</div>
                 </div>";
-                if(!$usr_id == 0)
+                if($usr_id > 0 || $new_user == 2)
                 {
+                    // bei der schnellen Registrierung hier schon das E-Mailfeld anzeigen, 
+                    // da der untere Block nicht angezeigt wird
+                    if($new_user == 2 && $g_preferences['registration_mode'] == 1)
+                    {
+                        echo "
+                        <div style=\"margin-top: 6px;\">
+                            <div style=\"text-align: right; width: 30%; float: left;\">E-Mail:</div>
+                            <div style=\"text-align: left; margin-left: 32%;\">
+                                <input type=\"text\" name=\"email\" style=\"width: 300px;\" maxlength=\"50\" value=\"$user->email\" />&nbsp;*&nbsp;
+                                <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                                onClick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=email','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\">
+                            </div>
+                        </div>
+                        <hr width=\"85%\">";
+                    }
                     echo "<div style=\"margin-top: 6px;\">
                         <div style=\"text-align: right; width: 30%; float: left;\">Benutzername:</div>
                         <div style=\"text-align: left; margin-left: 32%;\">
                             <input type=\"text\" name=\"login_name\" style=\"width: 130px;\" maxlength=\"20\" value=\"$user->login_name\" ";
-                            if(!hasRole('Webmaster'))
+                            if(hasRole('Webmaster') == false && $new_user == 0)
                             {
                                 echo " class=\"readonly\" readonly ";
                             }
-                            echo " />
-                        </div>
+                            echo " />";
+                        if($new_user > 0)
+                        {
+                            echo "&nbsp;*&nbsp;
+                            <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=nickname','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\">";
+                        }
+                    echo "</div>
                     </div>";
 
-                    // eigenes Passwort aendern, nur Webmaster duerfen Passwoerter von anderen aendern
-                    if(hasRole('Webmaster') || $g_current_user->id == $usr_id )
+                    if($new_user == 2)
                     {
                         echo "<div style=\"margin-top: 6px;\">
                             <div style=\"text-align: right; width: 30%; float: left;\">Passwort:</div>
                             <div style=\"text-align: left; margin-left: 32%;\">
-                                <button name=\"password\" type=\"button\" value=\"Passwort &auml;ndern\" onclick=\"window.open('password.php?user_id=$usr_id','Titel','width=350,height=260,left=310,top=200')\">
-                                <img src=\"$g_root_path/adm_program/images/key.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Passwort &auml;ndern\">
-                                &nbsp;Passwort &auml;ndern</button>
+                                <input type=\"password\" name=\"password\" size=\"10\" maxlength=\"20\" />&nbsp;*&nbsp;
+                                <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=password','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\">
+                            </div>
+                        </div>
+                        <div style=\"margin-top: 6px;\">
+                            <div style=\"text-align: right; width: 30%; float: left;\">Passwort (Wdh):</div>
+                            <div style=\"text-align: left; margin-left: 32%;\">
+                                <input type=\"password\" name=\"password2\" size=\"10\" maxlength=\"20\" />&nbsp;*
                             </div>
                         </div>";
                     }
+                    else
+                    {
+                        // eigenes Passwort aendern, nur Webmaster duerfen Passwoerter von anderen aendern
+                        if(hasRole('Webmaster') || $g_current_user->id == $usr_id )
+                        {
+                            echo "<div style=\"margin-top: 6px;\">
+                                <div style=\"text-align: right; width: 30%; float: left;\">Passwort:</div>
+                                <div style=\"text-align: left; margin-left: 32%;\">
+                                    <button name=\"password\" type=\"button\" value=\"Passwort &auml;ndern\" onclick=\"window.open('password.php?user_id=$usr_id','Titel','width=350,height=260,left=310,top=200')\">
+                                    <img src=\"$g_root_path/adm_program/images/key.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Passwort &auml;ndern\">
+                                    &nbsp;Passwort &auml;ndern</button>
+                                </div>
+                            </div>";
+                        }
+                    }
                 }
 
-                echo "<hr width=\"80%\" />
-
-                <div style=\"margin-top: 6px;\">
-                    <div style=\"text-align: right; width: 30%; float: left;\">Adresse:</div>
-                    <div style=\"text-align: left; margin-left: 32%;\">
-                        <input type=\"text\" id=\"address\" name=\"address\" style=\"width: 300px;\" maxlength=\"50\" value=\"$user->address\" />
-                    </div>
-                </div>
-                <div style=\"margin-top: 6px;\">
-                    <div style=\"text-align: right; width: 30%; float: left;\">Postleitzahl:</div>
-                    <div style=\"text-align: left; margin-left: 32%;\">
-                        <input type=\"text\" name=\"zip_code\" style=\"width: 80px;\" maxlength=\"10\" value=\"$user->zip_code\" />
-                    </div>
-                </div>
-                <div style=\"margin-top: 6px;\">
-                    <div style=\"text-align: right; width: 30%; float: left;\">Ort:</div>
-                    <div style=\"text-align: left; margin-left: 32%;\">
-                        <input type=\"text\" name=\"city\" style=\"width: 200px;\" maxlength=\"30\" value=\"$user->city\" />
-                    </div>
-                </div>
-                <div style=\"margin-top: 6px;\">
-                    <div style=\"text-align: right; width: 30%; float: left;\">Land:</div>
-                    <div style=\"text-align: left; margin-left: 32%;\">";
-                        //Laenderliste oeffnen
-                        $landlist = fopen("../../system/staaten.txt", "r");
-                        echo "
-                        <select size=\"1\" name=\"country\" />
-                            <option value=\"\"";
-                                if(strlen($g_preferences['default_country']) == 0
-                                && strlen($user->country) == 0)
-                                {
-                                    echo " selected ";
-                                }
-                            echo "></option>";
-                            if(strlen($g_preferences['default_country']) > 0)
-                            {
-                                echo "<option value=\"". $g_preferences['default_country']. "\">". $g_preferences['default_country']. "</option>
-                                <option value=\"\">--------------------------------</option>\n";
-                            }
-                            
-                            $land = utf8_decode(trim(fgets($landlist)));
-                            while (!feof($landlist))
-                            {
-                                echo"<option value=\"$land\"";
-                                     if($a_new_user && $land == $g_preferences['default_country'])
-                                     {
-                                        echo " selected ";
-                                     }
-                                     if(!$a_new_user && $land == $user->country)
-                                     {
-                                        echo " selected ";
-                                     }
-                                echo">$land</option>\n";
-                                $land = utf8_decode(trim(fgets($landlist)));
-                            }    
-                        
-                        echo"
-                        </select>";
-                    echo "</div>
-                </div>
-
-                <hr width=\"80%\" />
-
-                <div style=\"margin-top: 6px;\">
-                    <div style=\"text-align: right; width: 30%; float: left;\">Telefon:</div>
-                    <div style=\"text-align: left; margin-left: 32%;\">
-                        <input type=\"text\" name=\"phone\" style=\"width: 130px;\" maxlength=\"20\" value=\"$user->phone\" />
-                        &nbsp;<span style=\"font-family: Courier;\">(Vorwahl-Tel.Nr.)</span>
-                    </div>
-                </div>
-                <div style=\"margin-top: 6px;\">
-                    <div style=\"text-align: right; width: 30%; float: left;\">Handy:</div>
-                    <div style=\"text-align: left; margin-left: 32%;\">
-                        <input type=\"text\" name=\"mobile\" style=\"width: 130px;\" maxlength=\"20\" value=\"$user->mobile\" />
-                        &nbsp;<span style=\"font-family: Courier;\">(Vorwahl-Handynr.)</span>
-                     </div>
-                </div>
-                <div style=\"margin-top: 6px;\">
-                    <div style=\"text-align: right; width: 30%; float: left;\">Fax:</div>
-                    <div style=\"text-align: left; margin-left: 32%;\">
-                        <input type=\"text\" name=\"fax\" style=\"width: 130px;\" maxlength=\"20\" value=\"$user->fax\" />
-                        &nbsp;<span style=\"font-family: Courier;\">(Vorwahl-Faxnr.)</span>
-                    </div>
-                </div>
-                <div style=\"margin-top: 6px;\">
-                    <div style=\"text-align: right; width: 30%; float: left;\">E-Mail:</div>
-                    <div style=\"text-align: left; margin-left: 32%;\">
-                        <input type=\"text\" name=\"email\" style=\"width: 300px;\" maxlength=\"50\" value=\"$user->email\" />
-                    </div>
-                </div>
-                <div style=\"margin-top: 6px;\">
-                    <div style=\"text-align: right; width: 30%; float: left;\">Homepage:</div>
-                    <div style=\"text-align: left; margin-left: 32%;\">
-                        <input type=\"text\" name=\"homepage\" style=\"width: 300px;\" maxlength=\"50\" value=\"$user->homepage\" />
-                    </div>
-                </div>
-
-                <hr width=\"80%\" />
-
-                <div style=\"margin-top: 6px;\">
-                    <div style=\"text-align: right; width: 30%; float: left;\">Geburtstag:</div>
-                    <div style=\"text-align: left; margin-left: 32%;\">
-                        <input type=\"text\" name=\"birthday\" style=\"width: 80px;\" maxlength=\"10\" value=\"$user->birthday\" />
-                    </div>
-                </div>
-                <div style=\"margin-top: 6px;\">
-                    <div style=\"text-align: right; width: 30%; float: left;\">Geschlecht:</div>
-                    <div style=\"text-align: left; margin-left: 32%;\">
-                        <input type=\"radio\" id=\"female\" name=\"gender\" value=\"2\"";
-                            if($a_new_user == false && $user->gender == 2)
-                                echo " checked ";
-                            echo "><label for=\"female\"><img src=\"$g_root_path/adm_program/images/female.png\" title=\"weiblich\" alt=\"weiblich\"></label>
-                        &nbsp;
-                        <input type=\"radio\" id=\"male\" name=\"gender\" value=\"1\"";
-                            if($a_new_user == false && $user->gender == 1)
-                                echo " checked ";
-                            echo "><label for=\"male\"><img src=\"$g_root_path/adm_program/images/male.png\" title=\"m&auml;nnlich\" alt=\"m&auml;nnlich\"></label>
-                    </div>
-                </div>";
-
-                if(!$a_new_user)
+                // immer anzeigen, ausser bei der schnellen Registrierung
+                if($new_user != 2 || $g_preferences['registration_mode'] != 1)
                 {
-                    echo "<hr width=\"80%\" />";
+                    echo "<hr width=\"85%\">
+
+                    <div style=\"margin-top: 6px;\">
+                        <div style=\"text-align: right; width: 30%; float: left;\">Adresse:</div>
+                        <div style=\"text-align: left; margin-left: 32%;\">
+                            <input type=\"text\" id=\"address\" name=\"address\" style=\"width: 300px;\" maxlength=\"50\" value=\"$user->address\" />
+                        </div>
+                    </div>
+                    <div style=\"margin-top: 6px;\">
+                        <div style=\"text-align: right; width: 30%; float: left;\">Postleitzahl:</div>
+                        <div style=\"text-align: left; margin-left: 32%;\">
+                            <input type=\"text\" name=\"zip_code\" style=\"width: 80px;\" maxlength=\"10\" value=\"$user->zip_code\" />
+                        </div>
+                    </div>
+                    <div style=\"margin-top: 6px;\">
+                        <div style=\"text-align: right; width: 30%; float: left;\">Ort:</div>
+                        <div style=\"text-align: left; margin-left: 32%;\">
+                            <input type=\"text\" name=\"city\" style=\"width: 200px;\" maxlength=\"30\" value=\"$user->city\" />
+                        </div>
+                    </div>
+                    <div style=\"margin-top: 6px;\">
+                        <div style=\"text-align: right; width: 30%; float: left;\">Land:</div>
+                        <div style=\"text-align: left; margin-left: 32%;\">";
+                            //Laenderliste oeffnen
+                            $landlist = fopen("../../system/staaten.txt", "r");
+                            echo "
+                            <select size=\"1\" name=\"country\" />
+                                <option value=\"\"";
+                                    if(strlen($g_preferences['default_country']) == 0
+                                    && strlen($user->country) == 0)
+                                    {
+                                        echo " selected ";
+                                    }
+                                echo "></option>";
+                                if(strlen($g_preferences['default_country']) > 0)
+                                {
+                                    echo "<option value=\"". $g_preferences['default_country']. "\">". $g_preferences['default_country']. "</option>
+                                    <option value=\"\">--------------------------------</option>\n";
+                                }
+
+                                $land = utf8_decode(trim(fgets($landlist)));
+                                while (!feof($landlist))
+                                {
+                                    echo"<option value=\"$land\"";
+                                         if($new_user > 0 && $land == $g_preferences['default_country'])
+                                         {
+                                            echo " selected ";
+                                         }
+                                         if(!$new_user > 0 && $land == $user->country)
+                                         {
+                                            echo " selected ";
+                                         }
+                                    echo">$land</option>\n";
+                                    $land = utf8_decode(trim(fgets($landlist)));
+                                }    
+
+                            echo"
+                            </select>";
+                        echo "</div>
+                    </div>
+
+                    <hr width=\"85%\">
+
+                    <div style=\"margin-top: 6px;\">
+                        <div style=\"text-align: right; width: 30%; float: left;\">Telefon:</div>
+                        <div style=\"text-align: left; margin-left: 32%;\">
+                            <input type=\"text\" name=\"phone\" style=\"width: 130px;\" maxlength=\"20\" value=\"$user->phone\" />
+                            &nbsp;<span style=\"font-family: Courier;\">(Vorwahl-Tel.Nr.)</span>
+                        </div>
+                    </div>
+                    <div style=\"margin-top: 6px;\">
+                        <div style=\"text-align: right; width: 30%; float: left;\">Handy:</div>
+                        <div style=\"text-align: left; margin-left: 32%;\">
+                            <input type=\"text\" name=\"mobile\" style=\"width: 130px;\" maxlength=\"20\" value=\"$user->mobile\" />
+                            &nbsp;<span style=\"font-family: Courier;\">(Vorwahl-Handynr.)</span>
+                         </div>
+                    </div>
+                    <div style=\"margin-top: 6px;\">
+                        <div style=\"text-align: right; width: 30%; float: left;\">Fax:</div>
+                        <div style=\"text-align: left; margin-left: 32%;\">
+                            <input type=\"text\" name=\"fax\" style=\"width: 130px;\" maxlength=\"20\" value=\"$user->fax\" />
+                            &nbsp;<span style=\"font-family: Courier;\">(Vorwahl-Faxnr.)</span>
+                        </div>
+                    </div>
+                    <div style=\"margin-top: 6px;\">
+                        <div style=\"text-align: right; width: 30%; float: left;\">E-Mail:</div>
+                        <div style=\"text-align: left; margin-left: 32%;\">
+                            <input type=\"text\" name=\"email\" style=\"width: 300px;\" maxlength=\"50\" value=\"$user->email\" />";
+                            if($new_user == 2)
+                            {
+                                // bei erweiterter Registrierung ist dies ein Pflichtfeld
+                                echo "&nbsp;*&nbsp;
+                                <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                                onClick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=email','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\">";
+                            }
+                        echo "</div>
+                    </div>
+                    <div style=\"margin-top: 6px;\">
+                        <div style=\"text-align: right; width: 30%; float: left;\">Homepage:</div>
+                        <div style=\"text-align: left; margin-left: 32%;\">
+                            <input type=\"text\" name=\"homepage\" style=\"width: 300px;\" maxlength=\"50\" value=\"$user->homepage\" />
+                        </div>
+                    </div>
+
+                    <hr width=\"85%\">
+
+                    <div style=\"margin-top: 6px;\">
+                        <div style=\"text-align: right; width: 30%; float: left;\">Geburtstag:</div>
+                        <div style=\"text-align: left; margin-left: 32%;\">
+                            <input type=\"text\" name=\"birthday\" style=\"width: 80px;\" maxlength=\"10\" value=\"$user->birthday\" />
+                        </div>
+                    </div>
+                    <div style=\"margin-top: 6px;\">
+                        <div style=\"text-align: right; width: 30%; float: left;\">Geschlecht:</div>
+                        <div style=\"text-align: left; margin-left: 32%;\">
+                            <input type=\"radio\" id=\"female\" name=\"gender\" value=\"2\"";
+                                if($new_user == 0 && $user->gender == 2)
+                                    echo " checked ";
+                                echo "><label for=\"female\"><img src=\"$g_root_path/adm_program/images/female.png\" title=\"weiblich\" alt=\"weiblich\"></label>
+                            &nbsp;
+                            <input type=\"radio\" id=\"male\" name=\"gender\" value=\"1\"";
+                                if($new_user == 0 && $user->gender == 1)
+                                    echo " checked ";
+                                echo "><label for=\"male\"><img src=\"$g_root_path/adm_program/images/male.png\" title=\"m&auml;nnlich\" alt=\"m&auml;nnlich\"></label>
+                        </div>
+                    </div>";
+
+                    // organisationsspezifische Felder einlesen
+                    if($new_user > 0)
+                    {
+                        $sql = "SELECT *
+                                  FROM ". TBL_USER_FIELDS. "
+                                 WHERE usf_org_shortname = '$g_organization'
+                                 ORDER BY usf_name ASC ";
+                    }
+                    else
+                    {
+                        $sql = "SELECT *
+                                  FROM ". TBL_USER_FIELDS. " LEFT JOIN ". TBL_USER_DATA. "
+                                    ON usd_usf_id = usf_id
+                                   AND usd_usr_id = $user->id
+                                 WHERE usf_org_shortname = '$g_organization' ";
+                        if(!isModerator())
+                        {
+                            $sql = $sql. " AND usf_locked = 0 ";
+                        }
+                        $sql = $sql. " ORDER BY usf_name ASC ";
+                    }
+                    $result_field = mysql_query($sql, $g_adm_con);
+                    db_error($result_field);
+
+                    if(mysql_num_rows($result_field) > 0)
+                    {
+                        echo "<hr width=\"85%\">";
+                    }
+
+                    while($row = mysql_fetch_object($result_field))
+                    {
+                        echo "<div style=\"margin-top: 6px;\">
+                            <div style=\"text-align: right; width: 30%; float: left;\">
+                                $row->usf_name:
+                            </div>
+                            <div style=\"text-align: left; margin-left: 32%;\">";                        
+                                // in Abhaengigkeit des Feldtypes wird das Eingabefeld erstellt
+                                echo "<input type=\"";
+                                if($row->usf_type == "CHECKBOX")
+                                {
+                                    echo "checkbox";
+                                }
+                                else
+                                {
+                                    echo "text";
+                                }
+                                echo "\" id=\"". urlencode($row->usf_name). "\" name=\"". urlencode($row->usf_name). "\" ";
+
+                                if($row->usf_type == "CHECKBOX")
+                                {
+                                    if($b_history == true && isset($form_values[urlencode($row->usf_name)]) 
+                                    && $form_values[urlencode($row->usf_name)] == 1)
+                                    {
+                                        // Zurueck-Navigation und Haeckchen war bereits gesetzt
+                                        echo " checked ";
+                                    }
+                                    elseif($new_user == 0 && $row->usd_value == 1)
+                                    {
+                                        echo " checked ";
+                                    }
+                                    echo " value=\"1\" ";
+                                }
+                                else
+                                {
+                                    if($row->usf_type == "NUMERIC")
+                                    {
+                                        echo " style=\"width: 80px;\" maxlength=\"15\" ";
+                                    }
+                                    elseif($row->usf_type == "TEXT")
+                                    {
+                                        echo " style=\"width: 200px;\" maxlength=\"30\" ";
+                                    }
+                                    elseif($row->usf_type == "TEXT_BIG")
+                                    {
+                                        echo " style=\"width: 300px;\" maxlength=\"255\" ";
+                                    }
+
+                                    if($b_history == true)
+                                    {
+                                        echo " value=\"". $form_values[urlencode($row->usf_name)]. "\" ";
+                                    }
+                                    elseif(strlen($row->usd_value) > 0)
+                                    {
+                                        echo " value=\"$row->usd_value\" ";
+                                    }
+                                }
+                                echo ">";
+                                // Fragezeichen mit Feldbeschreibung anzeigen, wenn diese hinterlegt ist
+                                if(strlen($row->usf_description) > 0)
+                                {
+                                    echo "&nbsp;<img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" 
+                                    vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=user_field_description&err_text=". urlencode($row->usf_name). "','Message','width=400,height=400,left=310,top=200,scrollbars=yes')\">";
+                                }
+                            echo "</div>
+                        </div>";
+                    }
+
+                    echo "<hr width=\"85%\">";
 
                     // alle zugeordneten Messengerdaten einlesen
                     $sql = "SELECT usf_name, usd_value
@@ -379,107 +547,22 @@ require("../../../adm_config/body_top.php");
                             </div>
                         </div>";
                     }
-                }
+                } // end ohne schnelle Registrierung
 
-                // organisationsspezifische Felder einlesen
-                if($a_new_user)
+                // Bild und Text fuer den Speichern-Button
+                if($new_user == 2)
                 {
-                    $sql = "SELECT *
-                              FROM ". TBL_USER_FIELDS. "
-                             WHERE usf_org_shortname = '$g_organization'
-                             ORDER BY usf_name ASC ";
+                    // Registrierung
+                    $btn_image = "mail.png";
+                    $btn_text  = "Abschicken";
                 }
                 else
                 {
-                    $sql = "SELECT *
-                              FROM ". TBL_USER_FIELDS. " LEFT JOIN ". TBL_USER_DATA. "
-                                ON usd_usf_id = usf_id
-                               AND usd_usr_id = $user->id
-                             WHERE usf_org_shortname = '$g_organization' ";
-                    if(!isModerator())
-                    {
-                        $sql = $sql. " AND usf_locked = 0 ";
-                    }
-                    $sql = $sql. " ORDER BY usf_name ASC ";
-                }
-                $result_field = mysql_query($sql, $g_adm_con);
-                db_error($result_field);
-
-                if(mysql_num_rows($result_field) > 0)
-                {
-                    echo "<hr width=\"80%\" />";
+                    $btn_image = "disk.png";
+                    $btn_text  = "Speichern";
                 }
 
-                while($row = mysql_fetch_object($result_field))
-                {
-                    echo "<div style=\"margin-top: 6px;\">
-                        <div style=\"text-align: right; width: 30%; float: left;\">
-                            $row->usf_name:
-                        </div>
-                        <div style=\"text-align: left; margin-left: 32%;\">";                        
-                            // in Abhaengigkeit des Feldtypes wird das Eingabefeld erstellt
-                            echo "<input type=\"";
-                            if($row->usf_type == "CHECKBOX")
-                            {
-                                echo "checkbox";
-                            }
-                            else
-                            {
-                                echo "text";
-                            }
-                            echo "\" id=\"". urlencode($row->usf_name). "\" name=\"". urlencode($row->usf_name). "\" ";
-                            
-                            if($row->usf_type == "CHECKBOX")
-                            {
-                                if($b_history == true && isset($form_values[urlencode($row->usf_name)]) 
-                                && $form_values[urlencode($row->usf_name)] == 1)
-                                {
-                                    // Zurueck-Navigation und Haeckchen war bereits gesetzt
-                                    echo " checked ";
-                                }
-                                elseif($a_new_user == false && $row->usd_value == 1)
-                                {
-                                    echo " checked ";
-                                }
-                                echo " value=\"1\" ";
-                            }
-                            else
-                            {
-                                if($row->usf_type == "NUMERIC")
-                                {
-                                    echo " style=\"width: 80px;\" maxlength=\"15\" ";
-                                }
-                                elseif($row->usf_type == "TEXT")
-                                {
-                                    echo " style=\"width: 200px;\" maxlength=\"30\" ";
-                                }
-                                elseif($row->usf_type == "TEXT_BIG")
-                                {
-                                    echo " style=\"width: 300px;\" maxlength=\"255\" ";
-                                }
-                                
-                                if($b_history == true)
-                                {
-                                    echo " value=\"". $form_values[urlencode($row->usf_name)]. "\" ";
-                                }
-                                elseif(strlen($row->usd_value) > 0)
-                                {
-                                    echo " value=\"$row->usd_value\" ";
-                                }
-                            }
-                            echo ">";
-                            // Fragezeichen mit Feldbeschreibung anzeigen, wenn diese hinterlegt ist
-                            if(strlen($row->usf_description) > 0)
-                            {
-                                echo "&nbsp;<img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" 
-                                vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=user_field_description&err_text=". urlencode($row->usf_name). "','Message','width=400,height=400,left=310,top=200,scrollbars=yes')\">";
-                            }
-                        echo "</div>
-                    </div>";
-                }
-
-                echo "<hr width=\"80%\" />
+                echo "<hr width=\"85%\">
 
                 <div style=\"margin-top: 6px;\">
                     <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
@@ -487,11 +570,11 @@ require("../../../adm_config/body_top.php");
                     &nbsp;Zur&uuml;ck</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
                     <button name=\"speichern\" type=\"submit\" value=\"speichern\">
-                    <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
-                    &nbsp;Speichern</button>
+                    <img src=\"$g_root_path/adm_program/images/$btn_image\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"$btn_text\">
+                    &nbsp;$btn_text</button>
                 </div>";
 
-                if($a_new_user == false && $user->usr_id_change > 0)
+                if($new_user == 0 && $user->usr_id_change > 0)
                 {
                     // Angabe ueber die letzten Aenderungen
                     $sql    = "SELECT usr_first_name, usr_last_name
@@ -510,7 +593,7 @@ require("../../../adm_config/body_top.php");
         </form>
     </div>
     <script type=\"text/javascript\"><!--\n";
-        if(hasRole('Webmaster') || $a_new_user)
+        if(hasRole('Webmaster') || $new_user > 0)
         {
             echo "document.getElementById('last_name').focus();";
         }

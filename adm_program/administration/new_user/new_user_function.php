@@ -40,6 +40,12 @@ if(!hasRole("Webmaster"))
    $g_message->show("norights");
 }
 
+// pruefen, ob Modul aufgerufen werden darf
+if($g_preferences['registration_mode'] == 0)
+{
+    $g_message->show("module_disabled");
+}
+
 // Uebergabevariablen pruefen
 
 if(isset($_GET["user_id"]) && is_numeric($_GET["user_id"]) == false)

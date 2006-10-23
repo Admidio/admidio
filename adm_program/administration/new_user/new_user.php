@@ -33,6 +33,12 @@ if(!hasRole("Webmaster"))
    $g_message->show("norights");
 }
 
+// pruefen, ob Modul aufgerufen werden darf
+if($g_preferences['registration_mode'] == 0)
+{
+    $g_message->show("module_disabled");
+}
+
 // Neue Mitglieder der Gruppierung selektieren
 $sql    = "SELECT * FROM ". TBL_USERS. " 
             WHERE usr_valid = 0

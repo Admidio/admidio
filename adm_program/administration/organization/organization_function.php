@@ -141,20 +141,21 @@ writeOrgaPreferences('email_administrator', $_POST['email_administrator']);
 writeOrgaPreferences('default_country',     $_POST['default_country']);
 writeOrgaPreferences('enable_bbcode',       $_POST['enable_bbcode']);
 writeOrgaPreferences('enable_rss',          $_POST['enable_rss']);
+writeOrgaPreferences('registration_mode',   $_POST['registration_mode']);
 writeOrgaPreferences('logout_minutes',      $_POST['logout_minutes']);
 //Einstellungen Mailmodul
 writeOrgaPreferences('send_email_extern',   $_POST['send_email_extern']);
 writeOrgaPreferences('max_email_attachment_size', $_POST['max_email_attachment_size']);
 //Einstellungen Downloadmodul
-writeOrgaPreferences('max_file_upload_size', $_POST['max_file_upload_size']);
+writeOrgaPreferences('max_file_upload_size',$_POST['max_file_upload_size']);
 //Einstellungen Photomodul
 writeOrgaPreferences('photo_thumbs_column', $_POST['photo_thumbs_column']);
-writeOrgaPreferences('photo_thumbs_row', $_POST['photo_thumbs_row']);
-writeOrgaPreferences('photo_thumbs_scale', $_POST['photo_thumbs_scale']);
-writeOrgaPreferences('photo_save_scale', $_POST['photo_save_scale']);
-writeOrgaPreferences('photo_show_width', $_POST['photo_show_width']);
-writeOrgaPreferences('photo_show_height', $_POST['photo_show_height']);
-writeOrgaPreferences('photo_image_text', $_POST['photo_image_text']);
+writeOrgaPreferences('photo_thumbs_row',    $_POST['photo_thumbs_row']);
+writeOrgaPreferences('photo_thumbs_scale',  $_POST['photo_thumbs_scale']);
+writeOrgaPreferences('photo_save_scale',    $_POST['photo_save_scale']);
+writeOrgaPreferences('photo_show_width',    $_POST['photo_show_width']);
+writeOrgaPreferences('photo_show_height',   $_POST['photo_show_height']);
+writeOrgaPreferences('photo_image_text',    $_POST['photo_image_text']);
 writeOrgaPreferences('photo_preview_scale', $_POST['photo_preview_scale']);
 
 unset($_SESSION['organization_request']);

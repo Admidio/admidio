@@ -8,7 +8,10 @@
  *
  * Uebergaben:
  *
- * user_id : ID des Benutzers, der bearbeitet werden soll
+ * user_id :  ID des Benutzers, dessen Profil bearbeitet werden soll
+ * new_user : 0 - (Default) vorhandenen User bearbeiten
+ *            1 - Dialog um neue Benutzer hinzuzufuegen.
+ *            2 - Dialog um Registrierung entgegenzunehmen
  *
  ******************************************************************************
  *
@@ -29,8 +32,12 @@
  *****************************************************************************/
 
 require("../../system/common.php");
-require("../../system/login_valid.php");
 require("../../system/email_class.php");
+// Registrierung muss ausgeloggt moeglich sein
+if($_GET['new_user'] != 2)
+{
+    require("../../system/login_valid.php");
+}
 
 // Uebergabevariablen pruefen
 
@@ -47,9 +54,24 @@ else
     $usr_id = 0;
 }
 
+// pruefen, ob Modus neues Mitglied oder Registrierung erfassen
+if(array_key_exists("new_user", $_GET))
+{
+    if(is_numeric($_GET['new_user']))
+    {
+        $new_user = $_GET['new_user'];
+    }
+    else
+    {
+        $new_user = 0;
+    }
+}
+else
+{
+    $new_user = 0;
+}
+
 $_SESSION['profile_request'] = $_REQUEST;
-$err_code = "";
-$err_text = "";
 
 if(!isset($_POST['login_name']))
 {
@@ -85,24 +107,37 @@ if($usr_id > 0)
 $user->last_name  = strStripTags($_POST['last_name']);
 $user->first_name = strStripTags($_POST['first_name']);
 $user->login_name = strStripTags($_POST['login_name']);
-$user->address    = strStripTags($_POST['address']);
-$user->zip_code   = strStripTags($_POST['zip_code']);
-$user->city       = strStripTags($_POST['city']);
-$user->country    = strStripTags($_POST['country']);
-$user->phone      = strStripTags($_POST['phone']);
-$user->mobile     = strStripTags($_POST['mobile']);
-$user->fax        = strStripTags($_POST['fax']);
 $user->email      = strStripTags($_POST['email']);
-$user->homepage   = strStripTags($_POST['homepage']);
-$user->birthday   = strStripTags($_POST['birthday']);
-if(isset($_POST['gender']))
+
+// immer speichern, ausser bei der schnellen Registrierung
+if($new_user != 2 || $g_preferences['registration_mode'] != 1)
 {
-    $user->gender = $_POST['gender'];
+    $user->address    = strStripTags($_POST['address']);
+    $user->zip_code   = strStripTags($_POST['zip_code']);
+    $user->city       = strStripTags($_POST['city']);
+    $user->country    = strStripTags($_POST['country']);
+    $user->phone      = strStripTags($_POST['phone']);
+    $user->mobile     = strStripTags($_POST['mobile']);
+    $user->fax        = strStripTags($_POST['fax']);
+    $user->homepage   = strStripTags($_POST['homepage']);
+    $user->birthday   = strStripTags($_POST['birthday']);
+    if(isset($_POST['gender']))
+    {
+        $user->gender = $_POST['gender'];
+    }
+    else
+    {
+        // falls das Geschlecht nicht angegeben wurde, dann neutralen Wert eintragen
+        $user->gender = 0;
+    }
 }
-else
+
+// falls Registrierung, dann die entsprechenden Felder noch besetzen
+if($new_user == 2)
 {
-    // falls das Geschlecht nicht angegeben wurde, dann neutralen Wert eintragen
-    $user->gender = 0;
+    $user->valid = 0;
+    $user->reg_org_shortname = $g_current_organization->shortname;
+    $user->password = md5($_POST['password']);
 }
 
 /*------------------------------------------------------------*/
@@ -112,11 +147,11 @@ if(strlen($user->last_name) > 0)
 {
     if(strlen($user->first_name) > 0)
     {
-        if(strlen($user->email) != 0)
+        if(strlen($user->email) > 0 || $new_user == 2)
         {
             if(!isValidEmailAddress($user->email))
             {
-                $err_code = "email_invalid";
+                $g_message->show("email_invalid");
             }
         }
 
@@ -135,7 +170,7 @@ if(strlen($user->last_name) > 0)
 
                 if(strcmp($row[0], $usr_id) != 0)
                 {
-                    $err_code = "login_name";
+                    $g_message->show("login_name");
                 }
             }
         }
@@ -144,11 +179,30 @@ if(strlen($user->last_name) > 0)
         {
             if(!dtCheckDate($user->birthday))
             {
-                $err_code = "datum";
-                $err_text = "Geburtstag";
+                $g_message->show("datum", "Geburtstag");
             }
         }
+        
+        // bei Registrierung muss Loginname und Pw geprueft werden
+        if($new_user == 2)
+        {
+            if(strlen($user->login_name) == 0)
+            {
+                $g_message->show("feld", "Benutzername");
+            }
+            
+            // beide Passwortfelder muessen identisch sein
+            if ($_POST['password'] != $_POST['password2'])
+            {
+                $g_message->show("passwort");
+            }
 
+            if(strlen($_POST['password']) == 0)
+            {
+                $g_message->show("feld", "Passwort");
+            }
+        }
+        
         // Feldinhalt der organisationsspezifischen Felder pruefen
         $sql = "SELECT usf_name, usf_type
                   FROM ". TBL_USER_FIELDS. "
@@ -169,27 +223,19 @@ if(strlen($user->last_name) > 0)
                 if($row->usf_type == "NUMERIC"
                 && !is_numeric($_POST[urlencode($row->usf_name)]))
                 {
-                    $err_code = "field_numeric";
-                    $err_text = $row->usf_name;
+                    $g_message->show("field_numeric", $row->usf_name);
                 }
             }
-        }
+        }    
     }
     else
     {
-        $err_code = "feld";
-        $err_text = "Vorname";
+        $g_message->show("feld", "Vorname");
     }
 }
 else
 {
-    $err_code = "feld";
-    $err_text = "Name";
-}
-
-if(strlen($err_code) > 0)
-{
-    $g_message->show($err_code, $err_text);
+    $g_message->show("feld", "Name");
 }
 
 // Geburtstag fuer die DB formatieren
@@ -216,7 +262,8 @@ if($ret_code != 0)
     $g_message->show("mysql", $ret_code);
 }
 
-if($usr_id > 0)
+// immer speichern, ausser bei der schnellen Registrierung
+if($new_user != 2 || $g_preferences['registration_mode'] != 1)
 {
     /*------------------------------------------------------------*/
     // Messenger-Daten und gruppierungsspezifische Felder anlegen / updaten
@@ -278,7 +325,7 @@ if($usr_id > 0)
 unset($_SESSION['profile_request']);
 $_SESSION['navigation']->deleteLastUrl();
 
-if($user->valid == 0)
+if($user->valid == 0 && $usr_id > 0)
 {
     /*------------------------------------------------------------*/
     // neuer Benutzer wurde ueber Webanmeldung angelegt
@@ -309,6 +356,57 @@ if($user->valid == 0)
     $location = "Location: roles.php?user_id=$user->id&new_user=1";
     header($location);
     exit();
+}
+elseif($new_user == 2)
+{
+    /*------------------------------------------------------------*/
+    // Registrierung eines neuen Benutzers
+    // -> E-Mail an alle Webmaster schreiben
+    /*------------------------------------------------------------*/  
+    $err_code = "save";
+    $err_text = "";
+    
+    // nur ausfuehren, wenn E-Mails auch unterstuetzt werden
+    if($g_preferences['send_email_extern'] != 1)
+    {    
+        $sql    = "SELECT usr_first_name, usr_last_name, usr_email
+                     FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
+                    WHERE rol_org_shortname = '$g_organization'
+                      AND rol_name          = 'Webmaster'
+                      AND mem_rol_id        = rol_id
+                      AND mem_valid         = 1
+                      AND mem_usr_id        = usr_id
+                      AND usr_valid         = 1
+                      AND LENGTH(usr_email) > 0 ";
+        $result = mysql_query($sql, $g_adm_con);
+        db_error($result);
+
+        while($row = mysql_fetch_object($result))
+        {
+            // Mail an die Webmaster schicken, dass sich ein neuer User angemeldet hat
+            $email = new Email();
+            $email->setSender($g_preferences['email_administrator']);
+            $email->addRecipient($row->usr_email, "$row->first_name $row->last_name");
+            $email->setSubject(utf8_decode("Neue Registrierung"));
+            $email->setText(utf8_decode("Es hat sich ein neuer User auf "). $g_current_organization->homepage. 
+                utf8_decode(" registriert.\n\nNachname: "). $user->last_name. utf8_decode("\nVorname:  "). 
+                $user->first_name. utf8_decode("\nE-Mail:   "). $user->email. 
+                utf8_decode("\n\n\nDiese Nachricht wurde automatisch erzeugt."));
+            if($email->sendEmail() == true)
+            {
+                $err_code = "anmeldung";
+            }      
+            else
+            {
+                $err_code = "mail_not_send";    
+                $err_text = $row->usr_email;
+            }
+        }
+    }
+    
+    // nach Registrierung auf die Startseite verweisen
+    $g_message->setForwardUrl("home");
+    $g_message->show($err_code, $err_text);
 }
 
 /*------------------------------------------------------------*/
