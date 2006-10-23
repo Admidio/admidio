@@ -218,9 +218,8 @@ require("../../../adm_config/body_top.php");
                                     onclick=\"self.location.href='guestbook_new.php?id=$row->gbo_id&amp;headline=". $_GET['headline']. "'\">";
 
                                     echo "
-                                    <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer; vertical-align: middle;\" width=\"16\" height=\"16\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" ";
-                                    $load_url = urlencode("$g_root_path/adm_program/modules/guestbook/guestbook_function.php?id=$row->gbo_id&amp;mode=2&amp;url=$g_root_path/adm_program/modules/guestbook/guestbook.php");
-                                    echo " onclick=\"self.location.href='$g_root_path/adm_program/system/err_msg.php?err_code=delete_gbook_entry&amp;err_text=". urlencode($row->gbo_name). "&amp;err_head=L&ouml;schen&amp;button=2&amp;url=$load_url'\">";
+                                    <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer; vertical-align: middle;\" width=\"16\" height=\"16\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"
+                                     onclick=\"self.location.href='guestbook_function.php?id=$row->gbo_id&amp;mode=6'\">";
 
                             }
 
@@ -325,9 +324,8 @@ require("../../../adm_config/body_top.php");
                                         if (editGuestbook())
                                         {
                                                 echo "
-                                                <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer;\" width=\"16\" height=\"16\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" ";
-                                                $load_url = urlencode("$g_root_path/adm_program/modules/guestbook/guestbook_function.php?id=$row->gbc_id&amp;mode=5&amp;url=$g_root_path/adm_program/modules/guestbook/guestbook.php?id=". $_GET['id']);
-                                                echo " onclick=\"self.location.href='$g_root_path/adm_program/system/err_msg.php?err_code=delete_gbook_comment&amp;err_text=". urlencode(strSpecialChars2Html($commentWriter->first_name). " ". strSpecialChars2Html($commentWriter->last_name)). "&amp;err_head=L&ouml;schen&amp;button=2&amp;url=$load_url'\">";
+                                                <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer;\" width=\"16\" height=\"16\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"
+                                                 onclick=\"self.location.href='guestbook_function.php?id=$row->gbc_id&amp;mode=7'\">";
 
                                         }
 
