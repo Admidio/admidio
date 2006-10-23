@@ -232,7 +232,7 @@ create table %PRAEFIX%_links
 (
    lnk_id                         int(11) unsigned               not null AUTO_INCREMENT,
    lnk_org_id                     tinyint(4)                     not null,
-   lnk_cat_id 							 int(11) unsigned               not null,
+   lnk_cat_id                              int(11) unsigned               not null,
    lnk_name                       varchar(255)                   not null,
    lnk_description                text,
    lnk_url                        varchar(255)                   not null,
@@ -429,7 +429,7 @@ create table %PRAEFIX%_roles
    rol_download                   tinyint(1) unsigned            not null default 0,
    rol_edit_user                  tinyint(1) unsigned            not null default 0,
    rol_guestbook                  tinyint(1) unsigned            not null default 0,
-   rol_guestbook_comments         tinyint(1) unsigned            not null default 0,   
+   rol_guestbook_comments         tinyint(1) unsigned            not null default 0,
    rol_mail_logout                tinyint(1) unsigned            not null default 0,
    rol_mail_login                 tinyint(1) unsigned            not null default 0,
    rol_photo                      tinyint(1) unsigned            not null default 0,
@@ -498,7 +498,7 @@ alter table %PRAEFIX%_sessions add index SES_ORG_FK (ses_org_shortname);
 /*==============================================================*/
 /* Table: adm_texts                                             */
 /*==============================================================*/
-create table adm_texts
+create table %PRAEFIX%_texts
 (
    txt_id                         int(11) unsigned               not null,
    txt_org_id                     tinyint(4)                     not null,
@@ -655,18 +655,18 @@ alter table %PRAEFIX%_guestbook_comments add constraint %PRAEFIX%_FK_GBC_GBO for
 
 alter table %PRAEFIX%_guestbook_comments add constraint %PRAEFIX%_FK_GBC_USR foreign key (gbc_usr_id)
       references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
-      
+
 alter table %PRAEFIX%_guestbook_comments add constraint %PRAEFIX%_FK_GBC_USR_CHANGE foreign key (gbc_usr_id_change)
-      references %PRAEFIX%_users (usr_id) on delete set null on update restrict;      
+      references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
 
 alter table %PRAEFIX%_links add constraint %PRAEFIX%_FK_LNK_ORG foreign key (lnk_org_id)
       references %PRAEFIX%_organizations (org_id) on delete restrict on update restrict;
 
 alter table %PRAEFIX%_links add constraint %PRAEFIX%_FK_LNK_USR foreign key (lnk_usr_id)
       references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
-      
+
 alter table %PRAEFIX%_links add constraint %PRAEFIX%_FK_LNK_CAT foreign key (lnk_cat_id)
-      references %PRAEFIX%_categories (cat_id) on delete restrict on update restrict;      
+      references %PRAEFIX%_categories (cat_id) on delete restrict on update restrict;
 
 alter table %PRAEFIX%_members add constraint %PRAEFIX%_FK_MEM_ROL foreign key (mem_rol_id)
       references %PRAEFIX%_roles (rol_id) on delete restrict on update restrict;
@@ -718,9 +718,9 @@ alter table %PRAEFIX%_sessions add constraint %PRAEFIX%_FK_SES_ORG foreign key (
 
 alter table %PRAEFIX%_sessions add constraint %PRAEFIX%_FK_SES_USR foreign key (ses_usr_id)
       references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
-      
+
 alter table %PRAEFIX%_texts add constraint %PRAEFIX%_FK_TXT_ORG foreign key (txt_org_id)
-      references %PRAEFIX%_organizations (org_id) on delete restrict on update restrict;      
+      references %PRAEFIX%_organizations (org_id) on delete restrict on update restrict;
 
 alter table %PRAEFIX%_user_data add constraint %PRAEFIX%_FK_USD_USF foreign key (usd_usf_id)
       references %PRAEFIX%_user_fields (usf_id) on delete restrict on update restrict;

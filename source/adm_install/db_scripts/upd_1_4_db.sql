@@ -60,9 +60,9 @@ alter table %PRAEFIX%_links add index LNK_CAT_FK (lnk_cat_id);
 
 alter table %PRAEFIX%_categories add constraint %PRAEFIX%_FK_CAT_ORG foreign key (cat_org_id)
       references %PRAEFIX%_organizations (org_id) on delete restrict on update restrict;
-      
+
 -- Texttabelle
-create table adm_texts
+create table %PRAEFIX%_texts
 (
    txt_id                         int(11) unsigned               not null,
    txt_org_id                     tinyint(4)                     not null,
@@ -73,11 +73,11 @@ create table adm_texts
 type = InnoDB
 auto_increment = 1;
 
-alter table %PRAEFIX%_texts add index TXT_ORG_FK (txt_org_id);    
+alter table %PRAEFIX%_texts add index TXT_ORG_FK (txt_org_id);
 
 alter table %PRAEFIX%_texts add constraint %PRAEFIX%_FK_TXT_ORG foreign key (txt_org_id)
       references %PRAEFIX%_organizations (org_id) on delete restrict on update restrict;
-      
+
 -- Guestbook-Comments erweitern
 ALTER TABLE %PRAEFIX%_guestbook_comments
  ADD COLUMN gbc_name VARCHAR(50) NOT NULL DEFAULT '' AFTER `gbc_usr_id`,
@@ -85,9 +85,9 @@ ALTER TABLE %PRAEFIX%_guestbook_comments
  ADD COLUMN gbc_ip_address VARCHAR(15) NOT NULL DEFAULT '0' AFTER `gbc_email`,
  ADD COLUMN gbc_last_change DATETIME AFTER `gbc_ip_address`,
  ADD COLUMN gbc_usr_id_change INTEGER(11) UNSIGNED AFTER `gbc_last_change`;
-      
+
 alter table %PRAEFIX%_guestbook_comments add constraint %PRAEFIX%_FK_GBC_USR_CHANGE foreign key (gbc_usr_id_change)
-      references %PRAEFIX%_users (usr_id) on delete set null on update restrict;      
+      references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
 
 -- Sessiontabelle bearbeiten
 ALTER TABLE %PRAEFIX%_sessions DROP COLUMN ses_longer_session;
