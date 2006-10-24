@@ -27,6 +27,7 @@
 require("../adm_program/system/function.php");
 require("../adm_program/system/string.php");
 require("../adm_program/system/date.php");
+session_start();
 
 // setzt die Ausfuehrungszeit des Scripts auf 2 Min., da hier teilweise sehr viel gemacht wird
 // allerdings darf hier keine Fehlermeldung wg. dem safe_mode kommen
@@ -73,6 +74,8 @@ function showError($err_msg, $err_head = "Fehler", $mode = 1)
                     echo 'self.location.href=\'../adm_program/index.php\'">
                     <img src="../adm_program/images/application_view_list.png" style="vertical-align: middle; padding-bottom: 1px;" width="16" height="16" border="0" alt="Zurueck">
                     &nbsp;Admidio &Uuml;bersicht';
+                    // da neue Einstellungen erstellt wurden, diese komplett neu einlesen
+                    unset($_SESSION['g_preferences']);
                 }
                 echo '</button></p>
             </div>
@@ -85,7 +88,6 @@ function showError($err_msg, $err_head = "Fehler", $mode = 1)
 if($_GET['mode'] == 1)
 {
     // Installation 1.Seite
-    session_start();
 
     // Tabellenpraefix pruefen
     $g_tbl_praefix = $_POST['praefix'];
@@ -121,7 +123,6 @@ if($_GET['mode'] == 1)
 elseif($_GET['mode'] == 2)
 {
     // Installation 2.Seite
-    session_start();
 
     // MySQL-Zugangsdaten in config.php schreiben
     // Datei auslesen
