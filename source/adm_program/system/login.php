@@ -70,8 +70,17 @@ require("../../adm_config/body_top.php");
                         <a href=\"registration.php\">Ich m&ouml;chte mich registrieren!</a>
                     </div>";
                 }
+                // E-Mail intern oder extern verschicken
+                if($g_preferences['send_email_extern'] == 1)
+                {
+                    $mail_link = "mailto:". $g_preferences['email_administrator']. "?subject=Loginprobleme";
+                }
+                else
+                {
+                    $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?rolle=Webmaster&subject=Loginprobleme";
+                }
                 echo "<div style=\"font-size: 8pt; margin-top: 5px;\">
-                    <a href=\"$g_root_path/adm_program/modules/mail/mail.php?rolle=Webmaster&subject=Loginprobleme\">Ich habe mein Passwort vergessen!</a>
+                    <a href=\"$mail_link\">Ich habe mein Passwort vergessen!</a>
                 </div>
                 <div style=\"font-size: 8pt; margin-top: 20px;\">
                     Powered by <a href=\"http://www.admidio.org\" target=\"_blank\">Admidio ". getVersion(). "</a>
