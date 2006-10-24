@@ -12,6 +12,7 @@
  * mode:     1 - Neuen Link anlegen
  *           2 - Link loeschen
  *           3 - Link editieren
+ *           4 - Nachfrage ob Link geloescht werden soll
  * url:      kann beim Loeschen mit uebergeben werden
  * headline: Ueberschrift, die ueber den Links steht
  *           (Default) Links
@@ -78,6 +79,8 @@ if ($_GET["lnk_id"] > 0)
         //Wenn keine Daten zu der ID gefunden worden bzw. die ID einer anderen Orga gehört ist Schluss mit lustig...
         $g_message->show("invalid");
     }
+
+    $linkObject = mysql_fetch_object($result);
 }
 
 if (array_key_exists("headline", $_GET))
@@ -95,7 +98,7 @@ $_SESSION['links_request'] = $_REQUEST;
 $err_code = "";
 $err_text = "";
 
-if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
+if ($_GET["mode"] == 1 || ($_GET["mode"] == 3 && $_GET["lnk_id"] > 0) )
 {
     $linkName = strStripTags($_POST['linkname']);
     $description  = strStripTags($_POST['description']);
@@ -160,7 +163,7 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
     }
 }
 
-elseif ($_GET["mode"] == 2)
+elseif ($_GET["mode"] == 2 && $_GET["lnk_id"] > 0)
 {
     // Loeschen von Weblinks...
     $sql = "DELETE FROM ". TBL_LINKS. " WHERE lnk_id = {0}";
@@ -175,6 +178,13 @@ elseif ($_GET["mode"] == 2)
 
     $g_message->setForwardUrl($_GET["url"]);
     $g_message->show("delete");
+}
+
+elseif ($_GET["mode"] == 4 && $_GET["lnk_id"] > 0)
+{
+    //Nachfrage ob Weblinkeintrag geloescht werden soll
+    $g_message->setForwardYesNo("$g_root_path/adm_program/modules/links/links_function.php?lnk_id=$_GET[lnk_id]&mode=2&url=$g_root_path/adm_program/modules/links/links.php");
+    $g_message->show("delete_link", utf8_encode($linkObject->lnk_name));
 }
 
 else

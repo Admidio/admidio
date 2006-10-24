@@ -211,10 +211,8 @@ require("../../../adm_config/body_top.php");
                                     echo "<img src=\"$g_root_path/adm_program/images/edit.png\" style=\"cursor: pointer; vertical-align: middle;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"
                                         onclick=\"self.location.href='links_new.php?lnk_id=$row->lnk_id&amp;headline=". $_GET['headline']. "'\">
 
-                                        <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer; vertical-align: middle;\" width=\"16\" height=\"16\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" ";
-                                        $load_url = urlencode("$g_root_path/adm_program/modules/links/links_function.php?lnk_id=$row->lnk_id&amp;mode=2&amp;url=$g_root_path/adm_program/modules/links/links.php");
-                                        echo " onclick=\"self.location.href='$g_root_path/adm_program/system/err_msg.php?err_code=delete_link&amp;err_text=". urlencode($row->lnk_name). "&amp;err_head=L&ouml;schen&amp;button=2&amp;url=$load_url'\">
-                                        &nbsp;";
+                                        <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer; vertical-align: middle;\" width=\"16\" height=\"16\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"
+                                         onclick=\"self.location.href='links_function.php?lnk_id=$row->lnk_id&amp;mode=4'\">";
                                 }
                                 $user_create = new User($g_adm_con);
                                 $user_create->getUser($row->lnk_usr_id);
