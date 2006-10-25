@@ -31,7 +31,7 @@
    <p>Nun erscheint folgende Seite auf der Sie ausw&auml;hlen k&ouml;nnen, ob Sie Admidio installieren, updaten oder eine
    neue Gruppierung hinzuf&uuml;gen wollen. Klicken Sie auf <b>Admidio Datenbank updaten</b>, falls diese
    Option noch nicht ausgew&auml;hlt wurde und dann auf den Button <b>Weiter</b>.</p>
-   <p><img src="help/images/installation.png" alt="Admidio Installationsseite" /></p>
+   <p><img src="help/images/screenshots/installation.png" alt="Admidio Installationsseite" /></p>
    </li>
 
    <li>Auf der n&auml;chsten Maske m&uuml;ssen Sie Ihre Zugangsdaten zur Datenbank und die momentan installierte Admidio-Version

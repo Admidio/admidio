@@ -2,22 +2,28 @@
 <?php include("help_menu.php"); ?>
 
 <td style="background-color: #ffffff; padding-left: 15px;">
-    <script type="text/javascript"><!--
-    google_ad_client = "pub-9192132534802138";
-    google_ad_width = 468;
-    google_ad_height = 60;
-    google_ad_format = "468x60_as";
-    google_ad_type = "text";
-    google_ad_channel ="3257135751";
-    google_color_border = "FFFFFF";
-    google_color_bg = "FFFFFF";
-    google_color_link = "E0791F";
-    google_color_url = "E0791F";
-    google_color_text = "000000";
-    //--></script>
-    <script type="text/javascript"
-      src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-    </script>
+    <?php 
+    if($_SERVER['HTTP_HOST'] != 'localhost')
+    {
+        echo '
+        <script type="text/javascript"><!--
+            google_ad_client = "pub-9192132534802138";
+            google_ad_width = 468;
+            google_ad_height = 60;
+            google_ad_format = "468x60_as";
+            google_ad_type = "text";
+            google_ad_channel ="3257135751";
+            google_color_border = "FFFFFF";
+            google_color_bg = "FFFFFF";
+            google_color_link = "E0791F";
+            google_color_url = "E0791F";
+            google_color_text = "000000";
+        //--></script>
+        <script type="text/javascript"
+            src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+        </script>';
+    }
+    ?>
     
     <h2>Die Hilfe zu Admidio</h2>
     <h3>Installation &amp; Update</h3>

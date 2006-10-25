@@ -9,8 +9,8 @@
     Haus aus eine Reihe Module (Ank&uuml;ndigungen, Termine, Listen, Profile ...) mit.
     Diese k&ouml;nnen Sie alle auf der &Uuml;bersichtsseite sehen.</p>
 
-    <a style="target-new: tab;" href="help/images/uebersicht.png"><img
-    style="border: 0px;" src="help/images/uebersicht_thumb.png" alt="&Uuml;bersicht der Module"
+    <a style="target-new: tab;" href="help/images/screenshots/uebersicht.png"><img
+    style="border: 0px;" src="help/images/screenshots/uebersicht_thumb.png" alt="&Uuml;bersicht der Module"
     title="&Uuml;bersicht der Module" /></a>
 
     <p>Dazu kommen noch verschiedene Administrationsdialoge.</p>
@@ -61,6 +61,14 @@
           <p>Link :<br />
              <span class="code">http://www.ihre-domain.de/admidio-ordner/
                 adm_program/system/logout.php</span>
+          </p>
+      </li>
+      <li>
+          <p><b>Registrierung</b></p>
+          <p>Neue Benutzer k&ouml;nnen sich &uuml;ber dieses Formular registrieren.</p>
+          <p>Link :<br />
+             <span class="code">http://www.ihre-domain.de/admidio-ordner/
+                adm_program/system/registration.php</span>
           </p>
       </li>
       <li>
@@ -292,11 +300,11 @@
    <br />
 
    <div style="text-align: left; float: left;">
-      <a href="index.php?help/installation.php"><img src="help/images/back.png" style="vertical-align: bottom; border: 0px;" alt="Datenbank installieren und Basisdaten anlegen" title="Datenbank installieren und Basisdaten anlegen" /></a>
+      <a href="index.php?help/installation.php"><img src="help/images/icons/back.png" style="vertical-align: bottom; border: 0px;" alt="Datenbank installieren und Basisdaten anlegen" title="Datenbank installieren und Basisdaten anlegen" /></a>
    </div>
    <div style="text-align: right;">
       <b>N&auml;chster Artikel:</b>&nbsp;
       <a href="index.php?help/layout.php">Admidio dem eigenen Layout anpassen</a>&nbsp;
-      <a href="index.php?help/layout.php"><img src="help/images/forward.png" style="vertical-align: bottom; border: 0px;" alt="Admidio dem eigenen Layout anpassen" title="Admidio dem eigenen Layout anpassen" /></a>
+      <a href="index.php?help/layout.php"><img src="help/images/icons/forward.png" style="vertical-align: bottom; border: 0px;" alt="Admidio dem eigenen Layout anpassen" title="Admidio dem eigenen Layout anpassen" /></a>
    </div>
 </td>

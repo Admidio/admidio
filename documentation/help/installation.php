@@ -19,28 +19,28 @@
    <p>Nun erscheint folgende Seite auf der Sie ausw&auml;hlen k&ouml;nnen, ob Sie Admidio installieren, updaten oder eine
    neue Gruppierung hinzuf&uuml;gen wollen. Klicken Sie auf <b>Admidio installieren und einrichten</b>, falls diese
    Option noch nicht ausgew&auml;hlt wurde und dann auf den Button <b>Weiter</b>.</p>
-   <p><img src="help/images/installation.png" alt="Admidio Installationsseite" /></p>
+   <p><img src="help/images/screenshots/installation.png" alt="Admidio Installationsseite" /></p>
    </li>
 
    <li>
    <p>In dem darauffolgenden Formular geben Sie bitte im ersten Abschnitt die Zugangsdaten zu Ihrer
    MySQL-Datenbank ein. Diese sollten Sie von Ihrem Webspace-Anbieter zugeschickt bekommen haben.</p>
 
-   <p><img src="help/images/inst_form_database.png" alt="Zugangsdaten zur Datenbank" /></p>
+   <p><img src="help/images/screenshots/inst_form_database.png" alt="Zugangsdaten zur Datenbank" /></p>
    </li>
 
    <li>
    <p>Sie k&ouml;nnen den Tabellennamen von Admidio ein beliebiges Pr&auml;fix verpassen. Vorgegeben wird
    <b>adm</b>. Somit w&uuml;rden die Tabellen nach dem Schema <i>adm_tabellenname</i> benannt.</p>
 
-   <p><img src="help/images/inst_form_options.png" alt="Optionen" /></p>
+   <p><img src="help/images/screenshots/inst_form_options.png" alt="Optionen" /></p>
    </li>
 
    <li>
    <p>Nun m&uuml;ssen Sie noch ein K&uuml;rzel und eine l&auml;ngere Bezeichnung f&uuml;r Ihren Verein,
    Gruppe oder Organisation eingeben. Das K&uuml;rzel k&ouml;nnen Sie sp&auml;ter nicht mehr &auml;ndern!</p>
 
-   <p><img src="help/images/inst_form_organization.png" alt="Gruppierung" /></p>
+   <p><img src="help/images/screenshots/inst_form_organization.png" alt="Gruppierung" /></p>
    </li>
 
    <li>
@@ -48,7 +48,7 @@
    Installation ein Benutzer mit den Rechten eines Webmasters angelegt. Geben Sie die dazu notwendigen
    Daten in das Formular ein.</p>
 
-   <p><img src="help/images/inst_form_webmaster.png" alt="Benutzer anlegen" /></p>
+   <p><img src="help/images/screenshots/inst_form_webmaster.png" alt="Benutzer anlegen" /></p>
    </li>
 
    <li><p>Nachdem Sie das Formular vollst&auml;ndig ausgef&uuml;llt haben, klicken Sie auf
@@ -58,7 +58,7 @@
    Kopieren Sie die Datei in das Verzeichnis <b>adm_config</b> auf Ihrem Webspace. Danach k&ouml;nnen
    Sie auf <b>Weiter</b> klicken.</p></li>
 
-   <p><img src="help/images/inst_form_config_file.png" alt="Konfigurationsdatei" /></p>
+   <p><img src="help/images/screenshots/inst_form_config_file.png" alt="Konfigurationsdatei" /></p>
    </li>
 
    <li><p>Sie haben nun Admidio erfolgreich auf Ihrem Webspace installiert.<br>L&ouml;schen Sie bitte nach
@@ -75,6 +75,6 @@
    <div style="text-align: right;">
       <b>N&auml;chster Artikel:</b>&nbsp;
       <a href="index.php?help/module_einbauen.php">Aufruf der Module einbauen</a>&nbsp;
-      <a href="index.php?help/module_einbauen.php"><img src="help/images/forward.png" style="vertical-align: bottom; border: 0px;" alt="Aufruf der Module einbauen" title="Aufruf der Module einbauen" /></a>
+      <a href="index.php?help/module_einbauen.php"><img src="help/images/icons/forward.png" style="vertical-align: bottom; border: 0px;" alt="Aufruf der Module einbauen" title="Aufruf der Module einbauen" /></a>
    </div>
 </td>
