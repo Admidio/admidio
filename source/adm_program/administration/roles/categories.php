@@ -93,7 +93,9 @@ require("../../../adm_config/body_top.php");
             
             $sql = "SELECT * FROM ". TBL_CATEGORIES. "
                      WHERE cat_org_id = $g_current_organization->id
+                       AND cat_type   = {0}
                      ORDER BY cat_name ASC ";
+            $sql = prepareSQL($sql, array($_GET['type']));
             $cat_result = mysql_query($sql, $g_adm_con);
             db_error($cat_result);
 
