@@ -222,7 +222,7 @@ require("../../../adm_config/body_top.php");
                 </div>";
 
                 // Nicht eingeloggte User bekommen jetzt noch das Captcha praesentiert...
-                if (!$g_session_valid)
+                if (!$g_session_valid && $g_preferences['enable_guestbook_captcha'] == 1)
                 {
                     echo "
 

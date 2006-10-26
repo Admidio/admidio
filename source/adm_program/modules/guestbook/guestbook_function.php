@@ -137,7 +137,7 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
 
     // Falls der User nicht eingeloggt ist, aber ein Captcha geschaltet ist,
     // muss natuerlich der Code ueberprueft werden
-    if ($_GET["mode"] == 1 && !$g_session_valid)
+    if ($_GET["mode"] == 1 && !$g_session_valid && $g_preferences['enable_guestbook_captcha'] == 1)
     {
         if ( !isset($_SESSION['captchacode']) || strtoupper($_SESSION['captchacode']) != strtoupper($_POST['captcha']) )
         {
