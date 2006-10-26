@@ -131,6 +131,11 @@ if(isset($_POST["photo_image_text"]) == false)
     $_POST["photo_image_text"] = 0;
 }
 
+if(isset($_POST["enable_guestbook_captcha"]) == false)
+{
+    $_POST["enable_guestbook_captcha"] = 0;
+}
+
 // *******************************************************************************
 // Organisation updaten
 // *******************************************************************************
@@ -163,6 +168,8 @@ writeOrgaPreferences('photo_show_width',    $_POST['photo_show_width']);
 writeOrgaPreferences('photo_show_height',   $_POST['photo_show_height']);
 writeOrgaPreferences('photo_image_text',    $_POST['photo_image_text']);
 writeOrgaPreferences('photo_preview_scale', $_POST['photo_preview_scale']);
+//Einstellungen Gaestebuchmodul
+writeOrgaPreferences('enable_guestbook_captcha', $_POST['enable_guestbook_captcha']);
 
 unset($_SESSION['organization_request']);
 unset($_SESSION['g_current_organizsation']);

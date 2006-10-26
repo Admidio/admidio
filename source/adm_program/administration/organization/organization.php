@@ -66,6 +66,7 @@ else
    $form_values['photo_show_width']          = $g_preferences['photo_show_width'];
    $form_values['photo_show_height']         = $g_preferences['photo_show_height'];
    $form_values['photo_image_text']          = $g_preferences['photo_image_text'];
+   $form_values['enable_guestbook_captcha']  = $g_preferences['enable_guestbook_captcha'];
 }
 
 echo "
@@ -325,7 +326,7 @@ require("../../../adm_config/body_top.php");
                     </div>
                     <div class=\"smallText\">
                         F&uuml;r nicht eingeloggte Benutzer wird im Mailformular bei aktiviertem Captcha ein Alphanumerischer
-                        Code eingeblendet. Diesen muss der Benutzer vor dem Mailversand eingeben. Dies soll sicherstellen,
+                        Code eingeblendet. Diesen muss der Benutzer vor dem Mailversand korrekt eingeben. Dies soll sicherstellen,
                         dass das Formular nicht von Spammern missbraucht werden kann.
                     </div>
 
@@ -467,8 +468,35 @@ require("../../../adm_config/body_top.php");
                         erfolgt nur bei Bildern mit einer Skalierung &uuml;ber 200 Pixel der l&auml;ngeren Seite, also in der Regl nicht bei Thumbnails.
                     </div>
 
-                </div>
+                </div>";
 
+                /**************************************************************************************/
+                //Einstellungen Gaestebuchmodul
+                /**************************************************************************************/
+
+                echo"
+                <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 95%;\">
+                    <div class=\"groupBoxHeadline\">Einstellungen G&auml;stebuchmodul&nbsp;&nbsp; </div>
+
+                    <div style=\"margin-top: 6px;\">
+                        <div style=\"text-align: left; width: 55%; float: left;\">Captcha aktivieren:</div>
+                        <div style=\"text-align: left; margin-left: 45%;\">
+                            <input type=\"checkbox\" id=\"enable_guestbook_captcha\" name=\"enable_guestbook_captcha\" ";
+                            if(isset($form_values['enable_guestbook_captcha']) && $form_values['enable_guestbook_captcha'] == 1)
+                            {
+                                echo " checked ";
+                            }
+                            echo " value=\"1\" />
+                        </div>
+                    </div>
+                    <div class=\"smallText\">
+                        F&uuml;r nicht eingeloggte Benutzer wird im G&auml;stebuchformular bei aktiviertem Captcha ein Alphanumerischer
+                        Code eingeblendet. Diesen muss der Benutzer vor dem Absenden des Formularinhalts korrekt eingeben.
+                        Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann.
+                    </div>
+                </div>";
+
+                echo "
                 <div style=\"margin-top: 6px;\">
                     <button name=\"speichern\" type=\"submit\" value=\"speichern\">
                         <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
