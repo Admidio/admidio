@@ -151,8 +151,8 @@ require("../../../adm_config/body_top.php");
       echo "</div>
       <div class=\"formBody\">
          <div>
-            <div style=\"text-align: right; width: 15%; float: left;\">an:</div>
-            <div style=\"text-align: left; margin-left: 17%;\">";
+            <div style=\"text-align: right; width: 25%; float: left;\">an:</div>
+            <div style=\"text-align: left; margin-left: 27%;\">";
                if (array_key_exists("usr_id", $_GET))
                {
                    // usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
@@ -224,8 +224,8 @@ require("../../../adm_config/body_top.php");
          <hr width=\"90%\" />
 
          <div style=\"margin-top: 8px;\">
-            <div style=\"text-align: right; width: 15%; float: left;\">Name:</div>
-            <div style=\"text-align: left; margin-left: 17%;\">";
+            <div style=\"text-align: right; width: 25%; float: left;\">Name:</div>
+            <div style=\"text-align: left; margin-left: 27%;\">";
                if ($g_current_user->id != 0)
                {
                    echo "<input class=\"readonly\" readonly type=\"text\" name=\"name\" style=\"width: 200px;\" maxlength=\"50\" value=\"$g_current_user->first_name $g_current_user->last_name\">";
@@ -237,8 +237,8 @@ require("../../../adm_config/body_top.php");
             echo "</div>
          </div>
          <div style=\"margin-top: 8px;\">
-            <div style=\"text-align: right; width: 15%; float: left;\">E-Mail:</div>
-            <div style=\"text-align: left; margin-left: 17%;\">";
+            <div style=\"text-align: right; width: 25%; float: left;\">E-Mail:</div>
+            <div style=\"text-align: left; margin-left: 27%;\">";
                if ($g_current_user->id != 0)
                {
                    echo "<input class=\"readonly\" readonly type=\"text\" name=\"mailfrom\" style=\"width: 350px;\" maxlength=\"50\" value=\"$g_current_user->email\">";
@@ -253,8 +253,8 @@ require("../../../adm_config/body_top.php");
          <hr width=\"90%\" />
 
          <div style=\"margin-top: 8px;\">
-            <div style=\"text-align: right; width: 15%; float: left;\">Betreff:</div>
-            <div style=\"text-align: left; margin-left: 17%;\">";
+            <div style=\"text-align: right; width: 25%; float: left;\">Betreff:</div>
+            <div style=\"text-align: left; margin-left: 27%;\">";
                if ($_GET["subject"] == "")
                {
                    echo "<input type=\"text\" id=\"subject\" name=\"subject\" style=\"width: 350px;\" maxlength=\"50\">";
@@ -266,8 +266,8 @@ require("../../../adm_config/body_top.php");
             echo "</div>
          </div>
          <div style=\"margin-top: 8px;\">
-            <div style=\"text-align: right; width: 15%; float: left;\">Nachricht:</div>
-            <div style=\"text-align: left; margin-left: 17%;\">
+            <div style=\"text-align: right; width: 25%; float: left;\">Nachricht:</div>
+            <div style=\"text-align: left; margin-left: 27%;\">
                <textarea name=\"body\" style=\"width: 350px;\" rows=\"10\" cols=\"45\">". $_GET["body"]. "</textarea>
             </div>
          </div>";
@@ -279,8 +279,8 @@ require("../../../adm_config/body_top.php");
          {
              echo "
              <div style=\"margin-top: 8px;\">
-                 <div style=\"text-align: right; width: 15%; float: left;\">Anhang:</div>
-                 <div style=\"text-align: left; margin-left: 17%;\">
+                 <div style=\"text-align: right; width: 25%; float: left;\">Anhang:</div>
+                 <div style=\"text-align: left; margin-left: 27%;\">
                      <input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"" . ($g_preferences['max_email_attachment_size'] * 1024) . "\">
                      <input name=\"userfile\" size=\"40\" type=\"file\">
                  </div>
@@ -289,7 +289,7 @@ require("../../../adm_config/body_top.php");
 
          echo "
          <div style=\"margin-top: 8px;\">
-            <div style=\"text-align: left; margin-left: 17%;\">
+            <div style=\"text-align: left; margin-left: 27%;\">
                <input type=\"checkbox\" id=\"kopie\" name=\"kopie\" value=\"1\" ";
                if ($_GET["kopie"] == 1)
                {
@@ -297,8 +297,31 @@ require("../../../adm_config/body_top.php");
                }
                echo "> <label for=\"kopie\">Kopie der E-Mail an mich senden</label>
             </div>
-         </div>
+         </div>";
 
+         // Nicht eingeloggte User bekommen jetzt noch das Captcha praesentiert,
+         // falls es in den Orgaeinstellungen aktiviert wurde...
+         if (!$g_session_valid && $g_preferences['enable_mail_captcha'] == 1)
+         {
+             echo "
+
+             <div style=\"margin-top: 6px;\">
+                 <div style=\"text-align: left; margin-left: 27%;\">
+                     <img src=\"$g_root_path/adm_program/system/captcha_class.php\" border=\"0\" alt=\"Captcha\" />
+                 </div>
+             </div>
+
+             <div style=\"margin-top: 6px;\">
+                    <div style=\"text-align: right; width: 25%; float: left;\">Best&auml;tigungscode:*</div>
+                    <div style=\"text-align: left; margin-left: 27%;\">
+                        <input type=\"text\" id=\"captcha\" name=\"captcha\" style=\"width: 200px;\" maxlength=\"8\" value=\"\">
+                        <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                             onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=captcha_help','Message','width=400,height=320,left=310,top=200,scrollbars=yes')\">
+                    </div>
+             </div>";
+         }
+
+         echo "
          <hr width=\"90%\" />
 
          <div style=\"margin-top: 8px;\">

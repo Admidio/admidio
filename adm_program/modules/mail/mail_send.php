@@ -68,6 +68,19 @@ if ($g_preferences['send_email_extern'] == 1)
     $g_message->show("mail_extern");
 }
 
+// Falls der User nicht eingeloggt ist, aber ein Captcha geschaltet ist,
+// muss natuerlich der Code ueberprueft werden
+if (!$g_session_valid && $g_preferences['enable_mail_captcha'] == 1)
+{
+    if ( !isset($_SESSION['captchacode']) || strtoupper($_SESSION['captchacode']) != strtoupper($_POST['captcha']) )
+    {
+        $g_message->show("captcha_code");
+    }
+}
+
+
+
+
 $_POST['mailfrom'] = trim($_POST['mailfrom']);
 $_POST['name']     = trim($_POST['name']);
 $_POST['subject']  = trim($_POST['subject']);
@@ -249,6 +262,12 @@ if ($email->sendEmail())
         $err_text = $_POST['mailto'];
     }
     $err_code="mail_send";
+
+    // Der CaptchaCode wird bei erfolgreichem Mailversand aus der Session geloescht
+    if (isset($_SESSION['captchacode']))
+    {
+        unset($_SESSION['captchacode']);
+    }
 }
 else
 {
