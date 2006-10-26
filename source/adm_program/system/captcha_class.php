@@ -20,13 +20,25 @@
  *
  * if ( strtoupper($_SESSION['captchacode']) != strtoupper($_POST['captcha']) )
  * {
- * 		echo "Das Captcha wurde nicht richtig geloest...";
+ *         echo "Das Captcha wurde nicht richtig geloest...";
  * }
  * else
  * {
- *		echo "Das Captcha wurde richtig geloest!";
+ *        echo "Das Captcha wurde richtig geloest!";
  * }
  *
+ * Wenn die auszuloesende Aktion erfolgreich ausgefuehrt wurde, sollte der
+ * CaptchaCode aus der Session geloescht werden, damit man nicht anschliessend
+ * erneut das Script aufrufen kann ohne vorher ein neues Captcha geloest zu
+ * haben.
+ *
+ * Zum Beispiel so:
+ *
+ * // Der CaptchaCode wird bei erfolgreicher Aktion aus der Session geloescht
+ * if (isset($_SESSION['captchacode']))
+ * {
+ *    unset($_SESSION['captchacode']);
+ * }
  *
  *
  ******************************************************************************
@@ -123,7 +135,7 @@ class Captcha
         // erst vertikal...
         for($i=0; $i < $this->width; $i += intval($this->backgroundWritingSize / 2))
         {
-            $color	= imagecolorallocate($image, $this->backgroundColourR - 40, $this->backgroundColourG - 40, $this->backgroundColourB - 40);
+            $color    = imagecolorallocate($image, $this->backgroundColourR - 40, $this->backgroundColourG - 40, $this->backgroundColourB - 40);
             imageline($image, $i, 0, $i, $this->height, $color);
         }
 
@@ -145,8 +157,8 @@ class Captcha
         {
                 $xPosition = intval($xStartPosition + $i * ($this->width / ($this->charCount +1)));
 
-                $text	= substr($this->captchaCode, $i, 1);
-                $color	=  imagecolorallocate($image, $this->backgroundColourR - 125, $this->backgroundColourG - 55, $this->backgroundColourB - 90);
+                $text    = substr($this->captchaCode, $i, 1);
+                $color    =  imagecolorallocate($image, $this->backgroundColourR - 125, $this->backgroundColourG - 55, $this->backgroundColourB - 90);
                 ImageTTFText($image, $this->codeSize, 0, $xPosition, 35, $color, $this->font, $text);
         }
 
