@@ -44,27 +44,28 @@ if(isset($_SESSION['organization_request']))
 }
 else
 {
-   $form_values['shortname']            = $g_current_organization->shortname;
-   $form_values['longname']             = $g_current_organization->longname;
-   $form_values['homepage']             = $g_current_organization->homepage;
-   $form_values['email_administrator']  = $g_preferences['email_administrator'];
-   $form_values['default_country']      = $g_preferences['default_country'];
-   $form_values['parent']               = $g_current_organization->org_id_parent;
-   $form_values['enable_bbcode']        = $g_preferences['enable_bbcode'];
-   $form_values['enable_rss']           = $g_preferences['enable_rss'];
-   $form_values['registration_mode']    = $g_preferences['registration_mode'];
-   $form_values['logout_minutes']       = $g_preferences['logout_minutes'];
-   $form_values['send_email_extern']    = $g_preferences['send_email_extern'];
+   $form_values['shortname']                 = $g_current_organization->shortname;
+   $form_values['longname']                  = $g_current_organization->longname;
+   $form_values['homepage']                  = $g_current_organization->homepage;
+   $form_values['email_administrator']       = $g_preferences['email_administrator'];
+   $form_values['default_country']           = $g_preferences['default_country'];
+   $form_values['parent']                    = $g_current_organization->org_id_parent;
+   $form_values['enable_bbcode']             = $g_preferences['enable_bbcode'];
+   $form_values['enable_rss']                = $g_preferences['enable_rss'];
+   $form_values['registration_mode']         = $g_preferences['registration_mode'];
+   $form_values['logout_minutes']            = $g_preferences['logout_minutes'];
+   $form_values['send_email_extern']         = $g_preferences['send_email_extern'];
    $form_values['max_email_attachment_size'] = $g_preferences['max_email_attachment_size'];
-   $form_values['max_file_upload_size'] = $g_preferences['max_file_upload_size'];
-   $form_values['photo_thumbs_row']     = $g_preferences['photo_thumbs_row'];
-   $form_values['photo_thumbs_column']  = $g_preferences['photo_thumbs_column'];
-   $form_values['photo_thumbs_scale']   = $g_preferences['photo_thumbs_scale'];
-   $form_values['photo_save_scale']     = $g_preferences['photo_save_scale'];
-   $form_values['photo_preview_scale']  = $g_preferences['photo_preview_scale'];
-   $form_values['photo_show_width']     = $g_preferences['photo_show_width'];
-   $form_values['photo_show_height']    = $g_preferences['photo_show_height'];
-   $form_values['photo_image_text']     = $g_preferences['photo_image_text'];
+   $form_values['enable_mail_captcha']       = $g_preferences['enable_mail_captcha'];
+   $form_values['max_file_upload_size']      = $g_preferences['max_file_upload_size'];
+   $form_values['photo_thumbs_row']          = $g_preferences['photo_thumbs_row'];
+   $form_values['photo_thumbs_column']       = $g_preferences['photo_thumbs_column'];
+   $form_values['photo_thumbs_scale']        = $g_preferences['photo_thumbs_scale'];
+   $form_values['photo_save_scale']          = $g_preferences['photo_save_scale'];
+   $form_values['photo_preview_scale']       = $g_preferences['photo_preview_scale'];
+   $form_values['photo_show_width']          = $g_preferences['photo_show_width'];
+   $form_values['photo_show_height']         = $g_preferences['photo_show_height'];
+   $form_values['photo_image_text']          = $g_preferences['photo_image_text'];
 }
 
 echo "
@@ -74,7 +75,7 @@ echo "
 <head>
     <title>$g_current_organization->longname - bearbeiten</title>
     <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
-    
+
     <style type=\"text/css\">
         .smallText {
             font-size: 7pt;
@@ -128,7 +129,7 @@ require("../../../adm_config/body_top.php");
                         </div>
                     </div>
                     <div class=\"smallText\">
-                        Hier sollte die E-Mail-Adresse eines Administrators stehen. Diese wird als Absenderadresse 
+                        Hier sollte die E-Mail-Adresse eines Administrators stehen. Diese wird als Absenderadresse
                         f&uuml;r Systemnachrichten benutzt. (z.B. bei der Registierungsbest&auml;tigung)
                     </div>
                     <div style=\"margin-top: 15px;\">
@@ -146,7 +147,7 @@ require("../../../adm_config/body_top.php");
                                 echo ">- Bitte w&auml;hlen -</option>";
                                 $land = utf8_decode(trim(fgets($landlist)));
                                 while (!feof($landlist))
-                                {    
+                                {
                                     echo"<option value=\"$land\"";
                                     if($land == $form_values['default_country'])
                                     {
@@ -154,7 +155,7 @@ require("../../../adm_config/body_top.php");
                                     }
                                     echo">$land</option>";
                                     $land = utf8_decode(trim(fgets($landlist)));
-                                }    
+                                }
                             echo"</select>
                         </div>
                     </div>
@@ -221,10 +222,10 @@ require("../../../adm_config/body_top.php");
                         </div>
                     </div>
                     <div class=\"smallText\">
-                        Die Benutzer k&ouml;nnen in Textboxen (z.B. Terminbeschreibungen, G&auml;stebucheintr&auml;gen) BB-Code nutzen um den 
-                        Text besser zu formatieren.                    
+                        Die Benutzer k&ouml;nnen in Textboxen (z.B. Terminbeschreibungen, G&auml;stebucheintr&auml;gen) BB-Code nutzen um den
+                        Text besser zu formatieren.
                     </div>
-                    
+
                     <div style=\"margin-top: 15px;\">
                         <div style=\"text-align: left; width: 55%; float: left;\">RSS-Feeds aktivieren:</div>
                         <div style=\"text-align: left; margin-left: 45%;\">
@@ -240,8 +241,8 @@ require("../../../adm_config/body_top.php");
                         Admidio kann RSS-Feeds f&uuml;r verschiedene Module (Ank&uuml;ndigungen,
                         Termine, G&auml;stebuch und Weblinks) auf den jeweiligen &Uuml;bersichtsseiten
                         bereitstellen, die dann &uuml;ber den Browser einem Feedreader zugeordnet
-                        werden k&ouml;nnen.                 
-                    </div>                    
+                        werden k&ouml;nnen.
+                    </div>
                     <div style=\"margin-top: 15px;\">
                         <div style=\"text-align: left; width: 55%; float: left;\">Registrierung:</div>
                         <div style=\"text-align: left; margin-left: 45%;\">
@@ -279,7 +280,7 @@ require("../../../adm_config/body_top.php");
                         </div>
                     </div>
                     <div class=\"smallText\">
-                        Dieser Wert gibt an, nach wieviel Minuten ein inaktiver Benutzer automatisch ausgeloggt wird. 
+                        Dieser Wert gibt an, nach wieviel Minuten ein inaktiver Benutzer automatisch ausgeloggt wird.
                         Inaktiv ist ein Benutzer solange er keine Seite des Admidio-Systems aufruft.
                     </div>
                 </div>";
@@ -287,10 +288,11 @@ require("../../../adm_config/body_top.php");
                 /**************************************************************************************/
                 //Einstellungen Mailmodul
                 /**************************************************************************************/
-                
+
                 echo"
                 <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 95%;\">
                     <div class=\"groupBoxHeadline\">Einstellungen Mailmodul&nbsp;&nbsp; </div>
+
                     <div style=\"margin-top: 6px;\">
                         <div style=\"text-align: left; width: 55%; float: left;\">Externes Mailprogramm:</div>
                         <div style=\"text-align: left; margin-left: 45%;\">
@@ -307,8 +309,26 @@ require("../../../adm_config/body_top.php");
                         ist. Sollte dein Webserver keinen E-Mailversand unterst&uuml;tzen, kannst du diese Option
                         aktivieren. Dadurch wird versucht, das lokale E-Mail-Programm des Benutzers zu starten,
                         sobald dieser auf einen E-Mail-Link klickt.
-                        Allerdings funktioniert dann die automatische Benachrichtigung bei Neuanmeldungen nicht mehr.                    
+                        Allerdings funktioniert dann die automatische Benachrichtigung bei Neuanmeldungen nicht mehr.
                     </div>
+
+                    <div style=\"margin-top: 15px;\">
+                        <div style=\"text-align: left; width: 55%; float: left;\">Captcha aktivieren:</div>
+                        <div style=\"text-align: left; margin-left: 45%;\">
+                            <input type=\"checkbox\" id=\"enable_mail_captcha\" name=\"enable_mail_captcha\" ";
+                            if(isset($form_values['enable_mail_captcha']) && $form_values['enable_mail_captcha'] == 1)
+                            {
+                                echo " checked ";
+                            }
+                            echo " value=\"1\" />
+                        </div>
+                    </div>
+                    <div class=\"smallText\">
+                        F&uuml;r nicht eingeloggte Benutzer wird im Mailformular bei aktiviertem Captcha ein Alphanumerischer
+                        Code eingeblendet. Diesen muss der Benutzer vor dem Mailversand eingeben. Dies soll sicherstellen,
+                        dass das Formular nicht von Spammern missbraucht werden kann.
+                    </div>
+
                     <div style=\"margin-top: 15px;\">
                         <div style=\"text-align: left; width: 55%; float: left;\">Maximale Dateigr&ouml;&szlig;e f&uuml;r Anh&auml;nge:</div>
                         <div style=\"text-align: left; margin-left: 45%;\">
@@ -316,7 +336,7 @@ require("../../../adm_config/body_top.php");
                         </div>
                     </div>
                     <div class=\"smallText\">
-                        Benutzer k&ouml;nnen nur Dateien anh&auml;ngen, bei denen die Dateigr&ouml;&szlig;e kleiner als der hier 
+                        Benutzer k&ouml;nnen nur Dateien anh&auml;ngen, bei denen die Dateigr&ouml;&szlig;e kleiner als der hier
                         angegebene Wert ist. Steht hier 0, so sind keine Anh&auml;nge im Mailmodul m&ouml;glich.
                     </div>
                 </div>";
@@ -324,8 +344,8 @@ require("../../../adm_config/body_top.php");
                 /**************************************************************************************/
                 //Einstellungen Downloadmodul
                 /**************************************************************************************/
-                
-                echo"                
+
+                echo"
                 <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 95%;\">
                     <div class=\"groupBoxHeadline\">Einstellungen Downloadmodul&nbsp;&nbsp; </div>
                     <div style=\"margin-top: 6px;\">
@@ -335,7 +355,7 @@ require("../../../adm_config/body_top.php");
                         </div>
                     </div>
                     <div class=\"smallText\">
-                        Benutzer k&ouml;nnen nur Dateien hochladen, bei denen die Dateigr&ouml;&szlig;e kleiner als der hier 
+                        Benutzer k&ouml;nnen nur Dateien hochladen, bei denen die Dateigr&ouml;&szlig;e kleiner als der hier
                         angegebene Wert ist. Steht hier 0, so ist der Upload deaktiviert.
                     </div>
                 </div>";
@@ -343,15 +363,15 @@ require("../../../adm_config/body_top.php");
                 /**************************************************************************************/
                 //Einstellungen Photomodul
                 /**************************************************************************************/
-                
+
                 echo"
                 <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 95%;\">
                     <div class=\"groupBoxHeadline\">Einstellungen Fotomodul&nbsp;&nbsp; </div>
-                    
+
                     <div style=\"margin-top: 6px;\">
                         <div style=\"text-align: left; width: 55%; float: left;\">Thumbnailzeilen:</div>
                         <div style=\"text-align: left; margin-left: 45%;\">
-                            <input type=\"text\" name=\"photo_thumbs_row\" size=\"2\" maxlength=\"2\" value=\"". $form_values['photo_thumbs_row']. "\"> 
+                            <input type=\"text\" name=\"photo_thumbs_row\" size=\"2\" maxlength=\"2\" value=\"". $form_values['photo_thumbs_row']. "\">
                          </div>
                     </div>
                     <div class=\"smallText\">
@@ -369,7 +389,7 @@ require("../../../adm_config/body_top.php");
                         Vorsicht: zuviele Thumbnails nebeneinander passen nicht ins Layout. Ggf. die Thumbnailskalierung
                         herunter setzen.
                     </div>
-                    
+
                     <div style=\"margin-top: 15px;\">
                         <div style=\"text-align: left; width: 55%; float: left;\">Skalierung Thumbnails:</div>
                         <div style=\"text-align: left; margin-left: 45%;\">
@@ -381,7 +401,7 @@ require("../../../adm_config/body_top.php");
                         skaliert werden soll. Vorsicht: Werden die Thumbnails zu breit, passen weniger nebeneinander.
                         Ggf. weniger Thumbnailspalten einstellen.
                     </div>
-                                   
+
                     <div style=\"margin-top: 15px;\">
                         <div style=\"text-align: left; width: 55%; float: left;\">Skalierung beim Hochladen:</div>
                         <div style=\"text-align: left; margin-left: 45%;\">
@@ -393,7 +413,7 @@ require("../../../adm_config/body_top.php");
                         ist der Parameter f&uuml;r die l&auml;ngere Seite des Bildes, egal ob das Bild im Hoch-
                         oder Querformat &uuml;bergeben wurde. Die andere Seite wird im Verh&auml;ltnis berechnet.
                     </div>
-                    
+
                     <div style=\"margin-top: 15px;\">
                         <div style=\"text-align: left; width: 55%; float: left;\">H&ouml;he der Vorschaubilder:</div>
                         <div style=\"text-align: left; margin-left: 45%;\">
@@ -403,7 +423,7 @@ require("../../../adm_config/body_top.php");
                     <div class=\"smallText\">
                         Hier wird die H&ouml;he des jeweiligen Vorschaubildes in der Veranstaltungs&uuml;bersicht festgelegt.
                     </div>
-                    
+
                     <div style=\"margin-top: 15px;\">
                         <div style=\"text-align: left; width: 55%; float: left;\">Max. Bildanzeigebreite:</div>
                         <div style=\"text-align: left; margin-left: 45%;\">

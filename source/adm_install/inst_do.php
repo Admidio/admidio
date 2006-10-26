@@ -420,11 +420,6 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
 
     // Einstellungen anlegen
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-                                       VALUES ($org_id, 'max_email_attachment_size', '1024') ";
-    $result = mysql_query($sql, $connection);
-    db_error($result);
-
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
                                        VALUES ($org_id, 'max_file_upload_size', '3072') ";
     $result = mysql_query($sql, $connection);
     db_error($result);
@@ -451,74 +446,85 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
     db_error($result);
 
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+                                       VALUES ($org_id, 'email_administrator', 'webmaster@". $_SERVER['HTTP_HOST']. "') ";
+    $result = mysql_query($sql, $connection);
+    db_error($result);
+
+    //Mailmoduleinstellungen
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
                                        VALUES ($org_id, 'send_email_extern', '0') ";
     $result = mysql_query($sql, $connection);
     db_error($result);
 
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-                                       VALUES ($org_id, 'email_administrator', 'webmaster@". $_SERVER['HTTP_HOST']. "') ";
+                                       VALUES ($org_id, 'max_email_attachment_size', '1024') ";
     $result = mysql_query($sql, $connection);
     db_error($result);
-    
-     //Fotomoduleinstellungen
+
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+                                       VALUES ($org_id, 'enable_mail_captcha', '1') ";
+    $result = mysql_query($sql, $connection);
+    db_error($result);
+
+    //Fotomoduleinstellungen
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
                                        VALUES ($org_id, 'photo_save_scale', '640')";
     $result = mysql_query($sql, $connection);
     db_error($result);
-    
+
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
             VALUES ($org_id, 'photo_thumbs_column', '5')";
     $result = mysql_query($sql, $connection);
     db_error($result);
-    
+
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
             VALUES ($org_id, 'photo_thumbs_row', '5')";
     $result = mysql_query($sql, $connection);
     db_error($result);
-    
+
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
             VALUES ($org_id, 'photo_thumbs_scale', '100')";
     $result = mysql_query($sql, $connection);
     db_error($result);
-    
+
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
             VALUES ($org_id, 'photo_show_width', '500')";
     $result = mysql_query($sql, $connection);
     db_error($result);
-    
+
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
             VALUES ($org_id, 'photo_show_height', '380')";
     $result = mysql_query($sql, $connection);
     db_error($result);
-    
+
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
             VALUES ($org_id, 'photo_image_text', '1')";
     $result = mysql_query($sql, $connection);
-    db_error($result);    
-        
+    db_error($result);
+
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
             VALUES ($org_id, 'photo_preview_scale', '100')";
     $result = mysql_query($sql, $connection);
     db_error($result);
-    
-    
+
+
     // Default-Kategorie fuer Rollen und Links eintragen
     $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden)
                                            VALUES ($org_id, 'ROL', 'Allgemein', 1)";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
     $category_common = mysql_insert_id();
-    
+
     $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden)
                                            VALUES ($org_id, 'ROL', 'Gruppen', 1)";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
-    
+
     $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden)
                                            VALUES ($org_id, 'ROL', 'Kurse', 1)";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
-    
+
     $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden)
                                            VALUES ($org_id, 'ROL', 'Mannschaften', 1)";
     $result = mysql_query($sql, $connection);
@@ -533,7 +539,7 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
 
     // Webmaster
     $sql = "INSERT INTO ". TBL_ROLES. " (rol_org_shortname, rol_cat_id, rol_name, rol_description, rol_valid,
-                                         rol_moderation, rol_announcements, rol_dates, rol_download, 
+                                         rol_moderation, rol_announcements, rol_dates, rol_download,
                                          rol_guestbook, rol_guestbook_comments, rol_photo, rol_weblinks,
                                          rol_edit_user, rol_mail_logout, rol_mail_login)
                                  VALUES ({0}, $category_common, 'Webmaster', 'Gruppe der Administratoren des Systems', 1,
@@ -555,7 +561,7 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
 
     // Vorstand
     $sql = "INSERT INTO ". TBL_ROLES. " (rol_org_shortname, rol_cat_id, rol_name, rol_description, rol_valid,
-                                         rol_moderation, rol_announcements, rol_dates, rol_download, 
+                                         rol_moderation, rol_announcements, rol_dates, rol_download,
                                          rol_guestbook, rol_guestbook_comments, rol_photo, rol_weblinks,
                                          rol_edit_user, rol_mail_logout, rol_mail_login)
                                  VALUES ({0}, $category_common, 'Vorstand', 'Vorstand des Vereins', 1,

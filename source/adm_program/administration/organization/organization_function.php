@@ -101,6 +101,11 @@ if(isset($_POST["send_email_extern"]) == false)
     $_POST["send_email_extern"] = 0;
 }
 
+if(isset($_POST["enable_mail_captcha"]) == false)
+{
+    $_POST["enable_mail_captcha"] = 0;
+}
+
 if(isset($_POST["enable_bbcode"]) == false)
 {
     $_POST["enable_bbcode"] = 0;
@@ -144,8 +149,9 @@ writeOrgaPreferences('enable_rss',          $_POST['enable_rss']);
 writeOrgaPreferences('registration_mode',   $_POST['registration_mode']);
 writeOrgaPreferences('logout_minutes',      $_POST['logout_minutes']);
 //Einstellungen Mailmodul
-writeOrgaPreferences('send_email_extern',   $_POST['send_email_extern']);
+writeOrgaPreferences('send_email_extern',         $_POST['send_email_extern']);
 writeOrgaPreferences('max_email_attachment_size', $_POST['max_email_attachment_size']);
+writeOrgaPreferences('enable_mail_captcha',       $_POST['enable_mail_captcha']);
 //Einstellungen Downloadmodul
 writeOrgaPreferences('max_file_upload_size',$_POST['max_file_upload_size']);
 //Einstellungen Photomodul

@@ -55,52 +55,57 @@ while($row_orga = mysql_fetch_object($result_orga))
             VALUES ($row_orga->org_id, 'logout_minutes', '30')";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
-    
+
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
             VALUES ($row_orga->org_id, 'photo_thumbs_column', '5')";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
-    
+
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
             VALUES ($row_orga->org_id, 'photo_thumbs_row', '5')";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
-    
+
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
             VALUES ($row_orga->org_id, 'photo_thumbs_scale', '100')";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
-    
+
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
             VALUES ($row_orga->org_id, 'photo_show_width', '500')";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
-    
+
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
             VALUES ($row_orga->org_id, 'photo_show_height', '380')";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
-    
+
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
             VALUES ($row_orga->org_id, 'photo_image_text', '1')";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
-        
+
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
             VALUES ($row_orga->org_id, 'photo_preview_scale', '100')";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
 
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+            VALUES ($row_orga->org_id, 'enable_mail_captcha', '1')";
+    $result = mysql_query($sql, $connection);
+    if(!$result) showError(mysql_error());
+
     // Alle Links bekommen erst einmal die neue Kategorie "Allgemein"
-    
+
     $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden)
                                       VALUES ($row_orga->org_id, 'LNK', 'Allgemein', 0) ";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
-    
+
     $cat_id = mysql_insert_id($connection);
-    
-    $sql = "UPDATE ". TBL_LINKS. " SET lnk_cat_id = $cat_id 
+
+    $sql = "UPDATE ". TBL_LINKS. " SET lnk_cat_id = $cat_id
              WHERE lnk_org_id = $row_orga->org_id ";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
