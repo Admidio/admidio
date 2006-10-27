@@ -575,10 +575,15 @@ echo "
                             <td style=\"width: 35%\"><div align=\"center\">";
                             if(file_exists($ordner))
                             {
-                                echo"
-                                <a target=\"_self\" href=\"photos.php?pho_id=".$adm_photo_list["pho_id"]."\">
+                                //beispielbild nur anzeigen wenn x-seite unter 3+ y-seite ist
+                                $bildgroesse = getimagesize($bsp_pic_path);
+                                if($bildgroesse[0]<$bildgroesse[1]*3)
+                                {
+                                    echo"
+                                    <a target=\"_self\" href=\"photos.php?pho_id=".$adm_photo_list["pho_id"]."\">
                                     <img src=\"resize.php?bild=$bsp_pic_path&amp;scal=".$g_preferences['photo_preview_scale']."&amp;aufgabe=anzeigen&amp;side=y\" border=\"0\" alt=\"Zufallsbild\"
                                     style=\"vertical-align: middle; align: right;\"></a></div>";
+                                }
                             }
                             echo"
                             </td>
