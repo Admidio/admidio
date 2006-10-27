@@ -136,6 +136,11 @@ if(isset($_POST["enable_guestbook_captcha"]) == false)
     $_POST["enable_guestbook_captcha"] = 0;
 }
 
+if(strlen($_POST["flooding_protection_time"]) == 0)
+{
+    $_POST["flooding_protection_time"] = 0;
+}
+
 // *******************************************************************************
 // Organisation updaten
 // *******************************************************************************
@@ -170,6 +175,7 @@ writeOrgaPreferences('photo_image_text',    $_POST['photo_image_text']);
 writeOrgaPreferences('photo_preview_scale', $_POST['photo_preview_scale']);
 //Einstellungen Gaestebuchmodul
 writeOrgaPreferences('enable_guestbook_captcha', $_POST['enable_guestbook_captcha']);
+writeOrgaPreferences('flooding_protection_time', $_POST['flooding_protection_time']);
 
 unset($_SESSION['organization_request']);
 unset($_SESSION['g_current_organizsation']);

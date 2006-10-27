@@ -67,6 +67,7 @@ else
    $form_values['photo_show_height']         = $g_preferences['photo_show_height'];
    $form_values['photo_image_text']          = $g_preferences['photo_image_text'];
    $form_values['enable_guestbook_captcha']  = $g_preferences['enable_guestbook_captcha'];
+   $form_values['flooding_protection_time']  = $g_preferences['flooding_protection_time'];
 }
 
 echo "
@@ -494,6 +495,21 @@ require("../../../adm_config/body_top.php");
                         Code eingeblendet. Diesen muss der Benutzer vor dem Absenden des Formularinhalts korrekt eingeben.
                         Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann.
                     </div>
+
+                    <div style=\"margin-top: 15px;\">
+                        <div style=\"text-align: left; width: 55%; float: left;\">Flooding Protection Intervall:</div>
+                        <div style=\"text-align: left; margin-left: 45%;\">
+                            <input type=\"text\" name=\"flooding_protection_time\" size=\"4\" maxlength=\"4\" value=\"". $form_values['flooding_protection_time']. "\"> Sekunden
+                        </div>
+                    </div>
+                    <div class=\"smallText\">
+                        F&uuml;r nicht eingeloggte Benutzer wird bei Eintr&auml;gen im G&auml;stebuch &uuml;berpr&uuml;ft,
+                        ob sie innerhalb des eingestellten Intervalls bereits einen Eintrag get&auml;tigt haben.
+                        Damit soll verhindert werden, dass Benutzer in zu kurzen Zeitabst&auml;nden hintereinander
+                        ungew&uuml;nschte Eintr&auml;ge erzeugen. Ist das Intervall auf 0 gesetzt wird diese &Uuml;berpr&uuml;fung
+                        nicht durchgef&uuml;hrt.
+                    </div>
+
                 </div>";
 
                 echo "
