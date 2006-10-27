@@ -46,6 +46,7 @@ if(isset($_GET["aufgabe"]) && $_GET["aufgabe"] != "makenew" && $_GET["aufgabe"] 
     $g_message->show("invalid");
 }
 
+//Gepostete Variablen in Session speichern
 $_SESSION['photo_event_request'] = $_REQUEST;
 
 //Uebernahme Variablen
@@ -91,6 +92,19 @@ if($g_session_valid && editPhoto($adm_photo['pho_org_shortname']))
     if(isset($_POST["submit"]) && $_POST["submit"])
     {
     //Gesendete Variablen Uebernehmen und kontollieren
+
+        //Freigabe(muss zuerst gemacht werden da diese nicht gesetzt sein koennte)
+        if (isset ($_POST["locked"]))
+        {
+            $locked=$_POST["locked"];
+        }
+        else
+        {
+            $locked=0;
+        }
+        //damit locked bei Rueckschritt in Session gesetzt ist
+        $_SESSION['photo_event_request']['locked']=$locked;
+
         //Veranstaltung
         $veranstaltung = $_POST["veranstaltung"];
         if($veranstaltung=="")
@@ -145,15 +159,6 @@ if($g_session_valid && editPhoto($adm_photo['pho_org_shortname']))
             $photographen="leider unbekannt";
         }
 
-        //Freigabe
-        if (isset ($_POST["locked"]))
-        {
-            $locked=$_POST["locked"];
-        }
-        else
-        {
-            $locked=0;
-        }
 
         /********************neuen Datensatz anlegen***********************************/
         if ($aufgabe=="makenew")

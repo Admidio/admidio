@@ -33,18 +33,25 @@ require("../../system/common.php");
 require("../../system/login_valid.php");
 
 // Uebergabevariablen pruefen
-
+//Veranstaltungsuebergabe Numerisch und != Null?
 if(isset($_GET["pho_id"]) && is_numeric($_GET["pho_id"]) == false && $_GET["pho_id"]!=NULL)
 {
     $g_message->show("invalid");
 }
 
+// Aufgabe gesetzt, welche Aufgabe
 if(isset($_GET["aufgabe"]) && $_GET["aufgabe"] != "new" && $_GET["aufgabe"] != "change")
 {
     $g_message->show("invalid");
 }
 
+//Variablen initialisieren
+$form_values = array();
+$pho_id = $_GET["pho_id"];
 
+
+
+//Wenn die eventsession besteht in form_values einlesen
 if(isset($_SESSION['photo_event_request']))
 {
     $form_values = $_SESSION['photo_event_request'];
@@ -52,14 +59,19 @@ if(isset($_SESSION['photo_event_request']))
 }
 else
 {
+
     $form_values['veranstaltung']   = "";
     $form_values['parent']          = "";
     $form_values['beginn']          = "";
     $form_values['ende']            = "";
     $form_values['photographen']    = "";
     $form_values['locked']          = 0;
+}
 
 
+//sonst, veranstaltung aufrufen und inhalte in form values uebertragen
+if ($_GET['aufgabe'] == "change")
+{
     //Erfassen der Veranstaltung bei Aenderungsaufruf
     $sql = "SELECT *
               FROM ". TBL_PHOTOS. "
@@ -69,17 +81,15 @@ else
     db_error($result);
     $adm_photo = mysql_fetch_array($result);
 
-    if ($_GET['aufgabe'] == "change")
-    {
-        $form_values['veranstaltung']   = $adm_photo["pho_name"];
-        $form_values['parent']          = $adm_photo["pho_pho_id_parent"];
-        $form_values['beginn']          = mysqldate("d.m.y", $adm_photo["pho_begin"]);
-        $form_values['ende']            = mysqldate("d.m.y", $adm_photo["pho_end"]);
-        $form_values['photographen']    = $adm_photo["pho_photographers"];
-        $form_values['locked']          = $adm_photo["pho_locked"];
-
-    }
+    //inhalten in form_values uebertragen
+    $form_values['veranstaltung']       = $adm_photo["pho_name"];
+    $form_values['parent']              = $adm_photo["pho_pho_id_parent"];
+    $form_values['beginn']              = mysqldate("d.m.y", $adm_photo["pho_begin"]);
+    $form_values['ende']                = mysqldate("d.m.y", $adm_photo["pho_end"]);
+    $form_values['photographen']        = $adm_photo["pho_photographers"];
+    $form_values['locked']              = $adm_photo["pho_locked"];
 }
+
 
 //Aktueller Timestamp
 $act_datetime= date("Y.m.d G:i:s", time());
@@ -93,16 +103,16 @@ $result_list = mysql_query($sql, $g_adm_con);
 db_error($result_list);
 
 //bei Seitenaufruf ohne Moderationsrechte
-if(!$g_session_valid || $g_session_valid  && ($aufgabe=="change" && !editPhoto($adm_photo["pho_org_shortname"])) || !editPhoto())
+if(!$g_session_valid || $g_session_valid  && ($aufgabe=="change" && !editPhoto($g_organization)) || !editPhoto())
 {
     $g_message->show("photoverwaltunsrecht");
 }
 
 //bei Seitenaufruf mit Moderationsrechten
-if($g_session_valid && $aufgabe=="change" && editPhoto($adm_photo['pho_org_shortname']))
+if($g_session_valid && $aufgabe=="change" && editPhoto($g_organization))
 {
     //Speicherort
-    $ordner = "../../../adm_my_files/photos/".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"];
+    $ordner = "../../../adm_my_files/photos/".$form_values['beginn']."_".$pho_id;
 
 }
 
@@ -131,10 +141,12 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">";
     //Kopfzeile
     echo"
     <div class=\"formHead\">";
+        //bei neuer Veranstaltung
         if($_GET["aufgabe"]=="new")
         {
             echo "Neue Veranstaltung anlegen";
         }
+        //bei bestehender Veranstaltung
         if($_GET["aufgabe"]=="change")
         {
                 echo "Veranstaltung bearbeiten";
@@ -164,10 +176,11 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">";
             </div>";
 
             //Parent
-            //Suchen nach Kindern Funktion mit selbstaufruf
+            //Suchen nach Kindern, Funktion mit selbstaufruf
             function subfolder($parent_id, $vorschub, $pho_id, $adm_photo, $option)
             {
                 global $g_adm_con;
+                global $form_values;
                 $vorschub=$vorschub."&nbsp;&nbsp;&nbsp;&nbsp;";
 
                 //Erfassen der auszugebenden Veranstaltung
@@ -278,14 +291,13 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">";
             <div style=\"margin-top: 6px;\">
                 <div style=\"text-align: right; width: 170px; float: left;\">Sperren:</div>
                 <div style=\"text-align: left; margin-left: 180px;\">";
+                    echo "<input type=\"checkbox\" name=\"locked\" id=\"locked\" tabindex=\"6\" value=\"1\"";
+
                     if($form_values['locked']==1)
                     {
-                        echo "<input type=\"checkbox\" name=\"locked\" id=\"locked\" tabindex=\"6\" checked value=\"1\">";
+                        echo "checked = \"checked\" ";
                     }
-                    if($form_values['locked']==0)
-                    {
-                        echo "<input type=\"checkbox\" name=\"locked\" id=\"locked\" tabindex=\"6\" value=\"1\">";
-                    }
+
                  echo"</div>
             </div>";
 

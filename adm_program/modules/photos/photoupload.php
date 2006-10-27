@@ -80,6 +80,7 @@ if($g_session_valid & editPhoto())
         db_error($result);
         $adm_photo_parent = mysql_fetch_array($result);
     }
+    else $adm_photo_parent = NULL;
 
 
     //Beginn HTML
