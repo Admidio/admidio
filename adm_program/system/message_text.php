@@ -113,7 +113,7 @@ $message_text = array(
 
     "logout" =>
         "Du wurdest erfolgreich abgemeldet.",
-        
+
     "module_disabled" =>
         "Dieses Modul wurde nicht freigegeben.",
 
@@ -226,7 +226,7 @@ $message_text = array(
 
     "flooding_protection" =>
         "Dein letzter Eintrag im Gästebuch <br />
-            liegt weniger als 3 Minuten zurück.",
+         liegt weniger als %VAR1% Sekunden zurück.",
     //Ende Fehlermeldungen Gaestebuchmodul
 
         //Fehlermeldungen Profilfoto
