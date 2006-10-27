@@ -117,7 +117,7 @@ else
 
 }
 
-if (!$g_session_valid)
+if (!$g_session_valid && $g_preferences['flooding_protection_time'] != 0)
 {
     // Falls er nicht eingeloggt ist, wird vor dem Ausfuellen des Formulars noch geprueft ob der
     // User innerhalb einer festgelegten Zeitspanne unter seiner IP-Adresse schon einmal
@@ -125,7 +125,7 @@ if (!$g_session_valid)
     $ipAddress = $_SERVER['REMOTE_ADDR'];
 
     $sql = "SELECT count(*) FROM ". TBL_GUESTBOOK. "
-            where unix_timestamp(gbo_timestamp) > unix_timestamp()-180
+            where unix_timestamp(gbo_timestamp) > unix_timestamp()-". $g_preferences['flooding_protection_time']. "
               and gbo_org_id = $g_current_organization->id
               and gbo_ip_address = '$ipAddress' ";
     $result = mysql_query($sql, $g_adm_con);
@@ -134,7 +134,7 @@ if (!$g_session_valid)
     if($row[0] > 0)
     {
           //Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
-          $g_message->show("flooding_protection");
+          $g_message->show("flooding_protection", $g_preferences['flooding_protection_time']);
     }
 }
 
