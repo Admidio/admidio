@@ -9,7 +9,7 @@
  * Uebergaben:
  *
  * usr_id  - E-Mail an den entsprechenden Benutzer schreiben
- * rolle   - E-Mail an alle Mitglieder der Rolle schreiben
+ * rol_id  - E-Mail an alle Mitglieder der Rolle schreiben
  *
  ******************************************************************************
  *
@@ -39,13 +39,11 @@ if (isset($_GET["usr_id"]) && is_numeric($_GET["usr_id"]) == false)
     $g_message->show("invalid");
 }
 
-if (isset($_GET["rolle"]))
+if (strlen($_POST["rol_id"]) > 0 && is_numeric($_POST["rol_id"]) == false)
 {
-    $_GET["rolle"] = strStripTags($_GET["rolle"]);
+    $g_message->show("invalid");
 }
 
-$err_code = "";
-$err_text = "";
 
 // Pruefungen, ob die Seite regulaer aufgerufen wurde
 
@@ -58,6 +56,12 @@ if (array_key_exists("usr_id", $_GET) && !$g_session_valid)
 // Falls Attachmentgroesse die max_post_size aus der php.ini uebertrifft, ist $_POST komplett leer.
 // Deswegen muss dies ueberprueft werden...
 if (empty($_POST))
+{
+    $g_message->show("invalid");
+}
+
+//Es muss auf jeden Fall eine rol_id oder eine usr_id uebergeben werden...
+if (!isset($_POST["rol_id"]) && !isset($_GET["usr_id"]))
 {
     $g_message->show("invalid");
 }
@@ -79,6 +83,8 @@ if (!$g_session_valid && $g_preferences['enable_mail_captcha'] == 1)
 }
 
 
+$err_code = "";
+$err_text = "";
 
 
 $_POST['mailfrom'] = trim($_POST['mailfrom']);
@@ -139,10 +145,10 @@ else
     $err_text = "Name";
 }
 
-if (array_key_exists("rolle", $_POST) && strlen($err_code) == 0)
+if (array_key_exists("rol_id", $_POST) && strlen($err_code) == 0)
 {
 
-    if (strlen($_POST['rolle']) == 0)
+    if (strlen($_POST['rol_id']) == 0)
     {
         $err_code = "mail_rolle";
     }
@@ -152,15 +158,15 @@ if (array_key_exists("rolle", $_POST) && strlen($err_code) == 0)
         {
             $sql    = "SELECT rol_mail_login FROM ". TBL_ROLES. "
                        WHERE rol_org_shortname    = '$g_organization'
-                       AND UPPER(rol_name) = UPPER({0}) ";
+                       AND rol_id = {0} ";
         }
         else
         {
             $sql    = "SELECT rol_mail_logout FROM ". TBL_ROLES. "
                        WHERE rol_org_shortname    = '$g_organization'
-                       AND UPPER(rol_name) = UPPER({0}) ";
+                       AND rol_id = {0} ";
         }
-        $sql    = prepareSQL($sql, array($_POST['rolle']));
+        $sql    = prepareSQL($sql, array($_POST['rol_id']));
         $result = mysql_query($sql, $g_adm_con);
         db_error($result);
         $row = mysql_fetch_array($result);
@@ -198,13 +204,13 @@ else
     $sql    = "SELECT usr_first_name, usr_last_name, usr_email, rol_name
                 FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                WHERE rol_org_shortname = '$g_organization'
-                 AND rol_name          = {0}
+                 AND rol_id            = {0}
                  AND mem_rol_id        = rol_id
                  AND mem_valid         = 1
                  AND mem_usr_id        = usr_id
                  AND usr_valid         = 1
                  AND LENGTH(usr_email) > 0 ";
-    $sql    = prepareSQL($sql, array($_POST['rolle']));
+    $sql    = prepareSQL($sql, array($_POST['rol_id']));
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
 
@@ -213,6 +219,14 @@ else
         $email->addBlindCopy($row->usr_email, "$row->usr_first_name $row->usr_last_name");
         $rolle = $row->rol_name;
     }
+
+    //Falls in der Rolle kein User mit gueltiger Mailadresse oder die Rolle gar nicht in der Orga
+    // existiert, muss zumindest eine brauchbare Fehlermeldung präsentiert werden...
+    if (is_null($rolle))
+    {
+        $g_message->show("role_empty");
+    }
+
 }
 
 // Falls eine Kopie benoetigt wird, das entsprechende Flag im Mailobjekt setzen
@@ -253,9 +267,9 @@ $email->setText($mail_body);
 //Nun kann die Mail endgueltig versendet werden...
 if ($email->sendEmail())
 {
-    if (strlen($_POST['rolle']) > 0)
+    if (strlen($_POST['rol_id']) > 0)
     {
-        $err_text = "die Rolle ". $_POST['rolle'];
+        $err_text = "die Rolle $rolle";
     }
     else
     {
@@ -271,9 +285,9 @@ if ($email->sendEmail())
 }
 else
 {
-    if (strlen($_POST['rolle']) > 0)
+    if (strlen($_POST['rol_id']) > 0)
     {
-        $err_text = "die Rolle ". $_POST['rolle'];
+        $err_text = "die Rolle $rolle";
     }
     else
     {

@@ -10,6 +10,8 @@
  *
  * usr_id  - E-Mail an den entsprechenden Benutzer schreiben
  * rolle   - E-Mail an alle Mitglieder der Rolle schreiben
+ * cat     - In Kombination mit dem Rollennamen muss auch der Kategoriename uebergeben werden
+ * rol_id  - Statt einem Rollennamen/Kategorienamen kann auch eine RollenId uebergeben werden
  * subject - Betreff der E-Mail
  * body    - Inhalt der E-Mail
  * kopie   - 1 (Default) Checkbox "Kopie an mich senden" ist gesetzt
@@ -174,7 +176,7 @@ require("../../../adm_config/body_top.php");
                else
                {
                    // keine Uebergabe, dann alle Rollen entsprechend Login/Logout auflisten
-                   echo "<select size=\"1\" id=\"role\" name=\"rolle\">";
+                   echo "<select size=\"1\" id=\"rol_id\" name=\"rol_id\">";
                    echo "<option value=\"\" selected=\"selected\">- Bitte w&auml;hlen -</option>";
 
                    if ($g_session_valid)
@@ -182,39 +184,54 @@ require("../../../adm_config/body_top.php");
                        // im eingeloggten Zustand duerfen nur Moderatoren an gelocked Rollen schreiben
                        if (isModerator())
                        {
-                           $sql    = "SELECT rol_name FROM ". TBL_ROLES. "
+                           $sql    = "SELECT rol_name, rol_id, cat_name FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                                       WHERE rol_org_shortname = '$g_organization'
                                       AND rol_mail_login = 1
                                       AND rol_valid      = 1
-                                      ORDER BY rol_name ";
+                                      AND rol_cat_id     = cat_id
+                                      ORDER BY cat_name, rol_name ";
                        }
                        else
                        {
-                           $sql    = "SELECT rol_name FROM ". TBL_ROLES. "
+                           $sql    = "SELECT rol_name, rol_id, cat_name FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                                       WHERE rol_org_shortname = '$g_organization'
                                       AND rol_mail_login = 1
                                       AND rol_locked     = 0
                                       AND rol_valid      = 1
-                                      ORDER BY rol_name ";
+                                      AND rol_cat_id     = cat_id
+                                      ORDER BY cat_name, rol_name ";
                        }
                    }
                    else
                    {
-                       $sql    = "SELECT rol_name FROM ". TBL_ROLES. "
+                       $sql    = "SELECT rol_name, rol_id, cat_name FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                                   WHERE rol_org_shortname  = '$g_organization'
                                   AND rol_mail_logout = 1
                                   AND rol_valid       = 1
-                                  ORDER BY rol_name ";
+                                  AND rol_cat_id      = cat_id
+                                  ORDER BY cat_name, rol_name ";
                    }
                    $result = mysql_query($sql, $g_adm_con);
                    db_error($result);
+                   $act_category = "";
 
-                   while ($row = mysql_fetch_array($result))
+                   while ($row = mysql_fetch_object($result))
                    {
-                       echo "<option value=\"$row[0]\">$row[0]</option>";
+                       if($act_category != $row->cat_name)
+                        {
+                            if(strlen($act_category) > 0)
+                            {
+                                echo "</optgroup>";
+                            }
+                            echo "<optgroup label=\"$row->cat_name\">";
+                            $act_category = $row->cat_name;
+                        }
+                        echo "<option value=\"$row->rol_id\" ";
+                        echo ">$row->rol_name</option>";
                    }
 
-                   echo "</select>&nbsp;
+                   echo "</optgroup>
+                   </select>&nbsp;
                    <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" alt=\"Hilfe\" title=\"Hilfe\"
                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_mail','Message','width=400,height=400,left=310,top=200')\">";
                }
