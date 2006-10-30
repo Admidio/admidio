@@ -382,6 +382,10 @@ $message_text = array(
     "profile_mail" =>
         "In Ihrem <a href=\"%VAR1%\">Profil</a>
         ist keine gültige Emailadresse hinterlegt!",
+
+    "role_empty" =>
+        "Die von Ihnen ausgewählte Rolle enthält keine Mitglieder
+         mit gültigen Mailadressen, an die eine Mail versendet werden kann!",
     //Ende Fehlermeldungen Mailmodul
 
 
