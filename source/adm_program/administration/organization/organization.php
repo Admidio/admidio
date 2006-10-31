@@ -53,6 +53,8 @@ else
    $form_values['enable_bbcode']             = $g_preferences['enable_bbcode'];
    $form_values['enable_rss']                = $g_preferences['enable_rss'];
    $form_values['registration_mode']         = $g_preferences['registration_mode'];
+   $form_values['enable_registration_captcha']    = $g_preferences['enable_registration_captcha'];
+   $form_values['enable_registration_admin_mail'] = $g_preferences['enable_registration_admin_mail'];
    $form_values['logout_minutes']            = $g_preferences['logout_minutes'];
    $form_values['send_email_extern']         = $g_preferences['send_email_extern'];
    $form_values['max_email_attachment_size'] = $g_preferences['max_email_attachment_size'];
@@ -245,6 +247,26 @@ require("../../../adm_config/body_top.php");
                         bereitstellen, die dann &uuml;ber den Browser einem Feedreader zugeordnet
                         werden k&ouml;nnen.
                     </div>
+
+                    <div style=\"margin-top: 15px;\">
+                        <div style=\"text-align: left; width: 55%; float: left;\">Automatischer Logout nach:</div>
+                        <div style=\"text-align: left; margin-left: 45%;\">
+                            <input type=\"text\" name=\"logout_minutes\" size=\"4\" maxlength=\"4\" value=\"". $form_values['logout_minutes']. "\"> Minuten
+                        </div>
+                    </div>
+                    <div class=\"smallText\">
+                        Dieser Wert gibt an, nach wieviel Minuten ein inaktiver Benutzer automatisch ausgeloggt wird.
+                        Inaktiv ist ein Benutzer solange er keine Seite des Admidio-Systems aufruft.
+                    </div>
+                </div>";
+
+                /**************************************************************************************/
+                //Einstellungen Registrierung
+                /**************************************************************************************/
+
+                echo"
+                <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 95%;\">
+                    <div class=\"groupBoxHeadline\">Einstellungen Registrierung&nbsp;&nbsp; </div>
                     <div style=\"margin-top: 15px;\">
                         <div style=\"text-align: left; width: 55%; float: left;\">Registrierung:</div>
                         <div style=\"text-align: left; margin-left: 45%;\">
@@ -275,15 +297,37 @@ require("../../../adm_config/body_top.php");
                         Registrierung kann der Benutzer nur die Logindaten und seinen Namen eingeben, bei der erweiterten
                         Registrierung stehen ihm alle Felder des Profils zur Verf&uuml;gung.
                     </div>
+
                     <div style=\"margin-top: 15px;\">
-                        <div style=\"text-align: left; width: 55%; float: left;\">Automatischer Logout nach:</div>
+                        <div style=\"text-align: left; width: 55%; float: left;\">Captcha aktivieren:</div>
                         <div style=\"text-align: left; margin-left: 45%;\">
-                            <input type=\"text\" name=\"logout_minutes\" size=\"4\" maxlength=\"4\" value=\"". $form_values['logout_minutes']. "\"> Minuten
+                            <input type=\"checkbox\" id=\"enable_mail_captcha\" name=\"enable_registration_captcha\" ";
+                            if(isset($form_values['enable_registration_captcha']) && $form_values['enable_registration_captcha'] == 1)
+                            {
+                                echo " checked ";
+                            }
+                            echo " value=\"1\" />
                         </div>
                     </div>
                     <div class=\"smallText\">
-                        Dieser Wert gibt an, nach wieviel Minuten ein inaktiver Benutzer automatisch ausgeloggt wird.
-                        Inaktiv ist ein Benutzer solange er keine Seite des Admidio-Systems aufruft.
+                        Bei der Registrierung wird f&uuml;r alle Benutzer bei aktiviertem Captcha ein alphanumerischer
+                        Code eingeblendet. Diesen muss der Benutzer vor der Registrierung korrekt eingeben. Dies soll sicherstellen,
+                        dass das Formular nicht von Spammern missbraucht werden kann.
+                    </div>
+
+                    <div style=\"margin-top: 15px;\">
+                        <div style=\"text-align: left; width: 55%; float: left;\">E-Mail-Benachrichtigung:</div>
+                        <div style=\"text-align: left; margin-left: 45%;\">
+                            <input type=\"checkbox\" id=\"enable_registration_admin_mail\" name=\"enable_registration_admin_mail\" ";
+                            if(isset($form_values['enable_registration_admin_mail']) && $form_values['enable_registration_admin_mail'] == 1)
+                            {
+                                echo " checked ";
+                            }
+                            echo " value=\"1\" />
+                        </div>
+                    </div>
+                    <div class=\"smallText\">
+                        Alle Webmaster erhalten eine E-Mail, sobald sich ein neuer User im System registriert hat.
                     </div>
                 </div>";
 
@@ -326,7 +370,7 @@ require("../../../adm_config/body_top.php");
                         </div>
                     </div>
                     <div class=\"smallText\">
-                        F&uuml;r nicht eingeloggte Benutzer wird im Mailformular bei aktiviertem Captcha ein Alphanumerischer
+                        F&uuml;r nicht eingeloggte Benutzer wird im Mailformular bei aktiviertem Captcha ein alphanumerischer
                         Code eingeblendet. Diesen muss der Benutzer vor dem Mailversand korrekt eingeben. Dies soll sicherstellen,
                         dass das Formular nicht von Spammern missbraucht werden kann.
                     </div>
@@ -491,7 +535,7 @@ require("../../../adm_config/body_top.php");
                         </div>
                     </div>
                     <div class=\"smallText\">
-                        F&uuml;r nicht eingeloggte Benutzer wird im G&auml;stebuchformular bei aktiviertem Captcha ein Alphanumerischer
+                        F&uuml;r nicht eingeloggte Benutzer wird im G&auml;stebuchformular bei aktiviertem Captcha ein alphanumerischer
                         Code eingeblendet. Diesen muss der Benutzer vor dem Absenden des Formularinhalts korrekt eingeben.
                         Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann.
                     </div>
