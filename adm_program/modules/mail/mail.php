@@ -52,30 +52,109 @@ if ($g_session_valid && !isValidEmailAddress($g_current_user->email))
     $g_message->show("profile_mail", "$g_root_path/adm_program/modules/profile/profile.php");
 }
 
-if (isset($_GET["usr_id"]) && is_numeric($_GET["usr_id"]) == false)
+
+// Falls eine Usr_id uebergeben wurde, muss geprueft werden ob der User ueberhaupt
+// auf diese zugreifen darf oder ob die UsrId ueberhaupt eine gueltige Mailadresse hat...
+if (isset($_GET["usr_id"]))
 {
-    $g_message->show("invalid");
+    if (!$g_session_valid)
+    {
+        //in ausgeloggtem Zustand duerfen nie direkt usr_ids uebergeben werden...
+        $g_message->show("invalid");
+    }
+
+    if (is_numeric($_GET["usr_id"]) == false)
+    {
+        $g_message->show("invalid");
+    }
+
+    if (!editUser())
+    {
+        $sql    = "SELECT DISTINCT usr_id, usr_email
+                     FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. "
+                    WHERE mem_usr_id = usr_id
+                      AND mem_rol_id = rol_id
+                      AND rol_org_shortname = '$g_current_organization->shortname'
+                      AND usr_id  = {0} ";
+    }
+    else
+    {
+        $sql    = "SELECT usr_id, usr_email
+                     FROM ". TBL_USERS. "
+                    WHERE usr_id  = {0} ";
+    }
+    $sql    = prepareSQL($sql, array($_GET['usr_id']));
+    $result = mysql_query($sql, $g_adm_con);
+    db_error($result);
+    $row = mysql_fetch_object($result);
+
+    if (mysql_num_rows($result) != 1)
+    {
+        $g_message->show("usrid_not_found");
+    }
+
+    if (!isValidEmailAddress($row->usr_email))
+    {
+        $g_message->show("usrmail_not_found");
+    }
 }
 
-if (array_key_exists("usr_id", $_GET) && !$g_session_valid)
-{
-    //in ausgeloggtem Zustand duerfen nie direkt usr_ids uebergeben werden...
-    $g_message->show("invalid");
-}
 
-if (array_key_exists("rolle", $_GET))
+if (isset($_GET["rol_id"]))
 {
-    $_GET["rolle"] = strStripTags($_GET["rolle"]);
+    if (is_numeric($_GET["rol_id"]) == false)
+    {
+        $g_message->show("invalid");
+    }
 
     if ($g_session_valid)
     {
         $sql    = "SELECT rol_mail_login FROM ". TBL_ROLES. "
                    WHERE rol_org_shortname    = '$g_organization'
-                   AND UPPER(rol_name) = UPPER({0}) ";
+                   AND rol_id = {0} ";
     }
     else
     {
         $sql    = "SELECT rol_mail_logout FROM ". TBL_ROLES. "
+                   WHERE rol_org_shortname    = '$g_organization'
+                   AND rol_id = {0} ";
+    }
+    $sql    = prepareSQL($sql, array($_GET['rol_id']));
+    $result = mysql_query($sql, $g_adm_con);
+    db_error($result);
+    $row = mysql_fetch_array($result);
+
+    if ($row[0] != 1)
+    {
+        $g_message->show("invalid");
+    }
+}
+
+
+//Falls ein Rollenname uebergeben wurde muss auch der Kategoriename uebergeben werden und umgekehrt...
+if ( (isset($_GET["rolle"]) && !isset($_GET["cat"])) || (!isset($_GET["rolle"]) && isset($_GET["cat"])) )
+{
+    $g_message->show("invalid");
+}
+
+
+
+if (isset($_GET["rolle"]) && isset($_GET["cat"]))
+{
+    $_GET["rolle"] = strStripTags($_GET["rolle"]);
+    $_GET["cat"]   = strStripTags($_GET["cat"]);
+
+    if ($g_session_valid)
+    {
+        $sql    = "SELECT rol_mail_login
+                    FROM ". TBL_ROLES. "
+                   WHERE rol_org_shortname    = '$g_organization'
+                   AND UPPER(rol_name) = UPPER({0}) ";
+    }
+    else
+    {
+        $sql    = "SELECT rol_mail_logout
+                    FROM ". TBL_ROLES. "
                    WHERE rol_org_shortname    = '$g_organization'
                    AND UPPER(rol_name) = UPPER({0}) ";
     }
@@ -88,6 +167,9 @@ if (array_key_exists("rolle", $_GET))
     {
         $g_message->show("invalid");
     }
+
+
+
 }
 
 if (array_key_exists("subject", $_GET))

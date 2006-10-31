@@ -386,6 +386,12 @@ $message_text = array(
     "role_empty" =>
         "Die von Ihnen ausgewählte Rolle enthält keine Mitglieder
          mit gültigen Mailadressen, an die eine Mail versendet werden kann!",
+
+    "usrid_not_found" =>
+        "Die Userdaten der übergebenen ID konnten nicht gefunden werden!",
+
+    "usrmail_not_found" =>
+        "Der User hat keine gültige Mailadresse in seinem Profil hinterlegt!",
     //Ende Fehlermeldungen Mailmodul
 
 

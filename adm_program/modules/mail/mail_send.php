@@ -47,21 +47,50 @@ if (strlen($_POST["rol_id"]) > 0 && is_numeric($_POST["rol_id"]) == false)
 
 // Pruefungen, ob die Seite regulaer aufgerufen wurde
 
-//in ausgeloggtem Zustand duerfen nie direkt usr_ids uebergeben werden...
+// in ausgeloggtem Zustand duerfen nie direkt usr_ids uebergeben werden...
 if (array_key_exists("usr_id", $_GET) && !$g_session_valid)
 {
     $g_message->show("invalid");
 }
 
+// Falls eine Usr_id uebergeben wurde, muss geprueft werden ob der User ueberhaupt
+// auf diese zugreifen darf oder ob die UsrId ueberhaupt eine gueltige Mailadresse hat...
+if (array_key_exists("usr_id", $_GET))
+{
+    if (!editUser())
+    {
+        $sql    = "SELECT DISTINCT usr_id, usr_email
+                     FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. "
+                    WHERE mem_usr_id = usr_id
+                      AND mem_rol_id = rol_id
+                      AND rol_org_shortname = '$g_current_organization->shortname'
+                      AND usr_id  = {0} ";
+    }
+    else
+    {
+        $sql    = "SELECT usr_id, usr_email
+                     FROM ". TBL_USERS. "
+                    WHERE usr_id  = {0} ";
+    }
+    $sql    = prepareSQL($sql, array($_GET['usr_id']));
+    $result = mysql_query($sql, $g_adm_con);
+    db_error($result);
+    $row = mysql_fetch_object($result);
+
+    if (mysql_num_rows($result) != 1)
+    {
+        $g_message->show("usrid_not_found");
+    }
+
+    if (!isValidEmailAddress($row->usr_email))
+    {
+        $g_message->show("usrmail_not_found");
+    }
+}
+
 // Falls Attachmentgroesse die max_post_size aus der php.ini uebertrifft, ist $_POST komplett leer.
 // Deswegen muss dies ueberprueft werden...
 if (empty($_POST))
-{
-    $g_message->show("invalid");
-}
-
-//Es muss auf jeden Fall eine rol_id oder eine usr_id uebergeben werden...
-if (!isset($_POST["rol_id"]) && !isset($_GET["usr_id"]))
 {
     $g_message->show("invalid");
 }
