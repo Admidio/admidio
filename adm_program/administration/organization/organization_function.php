@@ -101,6 +101,16 @@ if(isset($_POST["send_email_extern"]) == false)
     $_POST["send_email_extern"] = 0;
 }
 
+if(isset($_POST["enable_registration_captcha"]) == false)
+{
+    $_POST["enable_registration_captcha"] = 0;
+}
+
+if(isset($_POST["enable_registration_admin_mail"]) == false)
+{
+    $_POST["enable_registration_admin_mail"] = 0;
+}
+
 if(isset($_POST["enable_mail_captcha"]) == false)
 {
     $_POST["enable_mail_captcha"] = 0;
@@ -156,8 +166,11 @@ writeOrgaPreferences('email_administrator', $_POST['email_administrator']);
 writeOrgaPreferences('default_country',     $_POST['default_country']);
 writeOrgaPreferences('enable_bbcode',       $_POST['enable_bbcode']);
 writeOrgaPreferences('enable_rss',          $_POST['enable_rss']);
-writeOrgaPreferences('registration_mode',   $_POST['registration_mode']);
 writeOrgaPreferences('logout_minutes',      $_POST['logout_minutes']);
+//Einstellungen Registrierung
+writeOrgaPreferences('registration_mode',   $_POST['registration_mode']);
+writeOrgaPreferences('enable_registration_captcha',    $_POST['enable_registration_captcha']);
+writeOrgaPreferences('enable_registration_admin_mail', $_POST['enable_registration_admin_mail']);
 //Einstellungen Mailmodul
 writeOrgaPreferences('send_email_extern',         $_POST['send_email_extern']);
 writeOrgaPreferences('max_email_attachment_size', $_POST['max_email_attachment_size']);
