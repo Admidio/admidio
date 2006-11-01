@@ -145,98 +145,92 @@ if($new_user == 2)
 /*------------------------------------------------------------*/
 if(strlen($user->last_name) > 0)
 {
-    if(strlen($user->first_name) > 0)
-    {
-        if(strlen($user->email) > 0 || $new_user == 2)
-        {
-            if(!isValidEmailAddress($user->email))
-            {
-                $g_message->show("email_invalid");
-            }
-        }
-
-        if(strlen($user->login_name) > 0)
-        {
-            // pruefen, ob der Benutzername bereits vergeben ist
-            $sql = "SELECT usr_id FROM ". TBL_USERS. "
-                     WHERE usr_login_name = {0} ";
-            $sql    = prepareSQL($sql, array($user->login_name));
-            $result = mysql_query($sql, $g_adm_con);
-            db_error($result);
-
-            if(mysql_num_rows($result) > 0)
-            {
-                $row = mysql_fetch_array($result);
-
-                if(strcmp($row[0], $usr_id) != 0)
-                {
-                    $g_message->show("login_name");
-                }
-            }
-        }
-
-        if(strlen($user->birthday) > 0)
-        {
-            if(!dtCheckDate($user->birthday))
-            {
-                $g_message->show("datum", "Geburtstag");
-            }
-        }
-        
-        // bei Registrierung muss Loginname und Pw geprueft werden
-        if($new_user == 2)
-        {
-            if(strlen($user->login_name) == 0)
-            {
-                $g_message->show("feld", "Benutzername");
-            }
-            
-            // beide Passwortfelder muessen identisch sein
-            if ($_POST['password'] != $_POST['password2'])
-            {
-                $g_message->show("passwort");
-            }
-
-            if(strlen($_POST['password']) == 0)
-            {
-                $g_message->show("feld", "Passwort");
-            }
-        }
-        
-        // Feldinhalt der organisationsspezifischen Felder pruefen
-        $sql = "SELECT usf_name, usf_type
-                  FROM ". TBL_USER_FIELDS. "
-                 WHERE usf_org_shortname  = '$g_organization' ";
-        if(!isModerator())
-        {
-            $sql = $sql. " AND usf_locked = 0 ";
-        }
-        $result_msg = mysql_query($sql, $g_adm_con);
-        db_error($result_msg);
-
-        while($row = mysql_fetch_object($result_msg))
-        {
-            // ein neuer Wert vorhanden
-            if(isset($_POST[urlencode($row->usf_name)]) 
-            && strlen($_POST[urlencode($row->usf_name)]) > 0)
-            {
-                if($row->usf_type == "NUMERIC"
-                && !is_numeric($_POST[urlencode($row->usf_name)]))
-                {
-                    $g_message->show("field_numeric", $row->usf_name);
-                }
-            }
-        }    
-    }
-    else
-    {
-        $g_message->show("feld", "Vorname");
-    }
-}
-else
-{
     $g_message->show("feld", "Name");
 }
+if(strlen($user->first_name) > 0)
+{
+    $g_message->show("feld", "Vorname");
+}
+// E-Mail-Adresse auf Gueltigkeit pruefen, Pflichtfeld bei Registrierung
+if(strlen($user->email) > 0 || $new_user == 2)
+{
+    if(!isValidEmailAddress($user->email))
+    {
+        $g_message->show("email_invalid");
+    }
+}
+if(strlen($user->login_name) > 0)
+{
+    // pruefen, ob der Benutzername bereits vergeben ist
+    $sql = "SELECT usr_id FROM ". TBL_USERS. "
+             WHERE usr_login_name = {0} ";
+    $sql    = prepareSQL($sql, array($user->login_name));
+    $result = mysql_query($sql, $g_adm_con);
+    db_error($result);
+
+    if(mysql_num_rows($result) > 0)
+    {
+        $row = mysql_fetch_array($result);
+
+        if(strcmp($row[0], $usr_id) != 0)
+        {
+            $g_message->show("login_name");
+        }
+    }
+}
+if(strlen($user->birthday) > 0)
+{
+    if(!dtCheckDate($user->birthday))
+    {
+        $g_message->show("datum", "Geburtstag");
+    }
+}
+        
+// bei Registrierung muss Loginname und Pw geprueft werden
+if($new_user == 2)
+{
+    if(strlen($user->login_name) == 0)
+    {
+        $g_message->show("feld", "Benutzername");
+    }
+    
+    // beide Passwortfelder muessen identisch sein
+    if ($_POST['password'] != $_POST['password2'])
+    {
+        $g_message->show("passwort");
+    }
+
+    if(strlen($_POST['password']) == 0)
+    {
+        $g_message->show("feld", "Passwort");
+    }
+}
+        
+// Feldinhalt der organisationsspezifischen Felder pruefen
+$sql = "SELECT usf_name, usf_type
+          FROM ". TBL_USER_FIELDS. "
+         WHERE usf_org_shortname  = '$g_organization' ";
+if(!isModerator())
+{
+    $sql = $sql. " AND usf_locked = 0 ";
+}
+$result_msg = mysql_query($sql, $g_adm_con);
+db_error($result_msg);
+
+while($row = mysql_fetch_object($result_msg))
+{
+    // ein neuer Wert vorhanden
+    if(isset($_POST[urlencode($row->usf_name)]) 
+    && strlen($_POST[urlencode($row->usf_name)]) > 0)
+    {
+        if($row->usf_type == "NUMERIC"
+        && !is_numeric($_POST[urlencode($row->usf_name)]))
+        {
+            $g_message->show("field_numeric", $row->usf_name);
+        }
+    }
+}    
+
 
 // Falls der User sich registrieren wollte, aber ein Captcha geschaltet ist,
 // muss natuerlich der Code ueberprueft werden
@@ -248,15 +242,15 @@ if ($new_user == 2 && $g_preferences['enable_registration_captcha'] == 1)
     }
 }
 
+/*------------------------------------------------------------*/
+// Benutzerdaten in Datenbank schreiben
+/*------------------------------------------------------------*/
+
 // Geburtstag fuer die DB formatieren
 if(strlen($user->birthday) > 0)
 {
     $user->birthday = dtFormatDate($user->birthday, "Y-m-d");
 }
-
-/*------------------------------------------------------------*/
-// Benutzerdaten in Datenbank schreiben
-/*------------------------------------------------------------*/
 
 if($usr_id > 0)
 {
