@@ -143,11 +143,11 @@ if($new_user == 2)
 /*------------------------------------------------------------*/
 // Felder prüfen
 /*------------------------------------------------------------*/
-if(strlen($user->last_name) > 0)
+if(strlen($user->last_name) == 0)
 {
     $g_message->show("feld", "Name");
 }
-if(strlen($user->first_name) > 0)
+if(strlen($user->first_name) == 0)
 {
     $g_message->show("feld", "Vorname");
 }
