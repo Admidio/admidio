@@ -225,8 +225,8 @@ class User
     // damit die Aenderung protokolliert werden kann (Ausnahme bei Registrierung)
     function insert($login_user_id)
     {
-        if($this->id == 0  && is_numeric($login_user_id)
-        && ($login_user_id > 0 || $this->valid == 0)) 
+        if($this->id == 0  && is_numeric($login_user_id)	// neuer angelegter User
+        && ($login_user_id > 0 || $this->valid == 0)) 		// neuer registrierter User
         {
             $act_date = date("Y-m-d H:i:s", time());
 
@@ -234,11 +234,21 @@ class User
                                   usr_city, usr_country, usr_phone, usr_mobile, usr_fax, usr_birthday, 
                                   usr_gender, usr_email, usr_homepage, usr_last_login, usr_actual_login, 
                                   usr_number_login, usr_date_invalid, usr_number_invalid, usr_last_change, 
-                                  usr_usr_id_change, usr_valid, usr_reg_org_shortname, usr_login_name, usr_password )
+                                  usr_valid, usr_usr_id_change, usr_reg_org_shortname, usr_login_name, usr_password )
                          VALUES ('$this->last_name', '$this->first_name', '$this->address', '$this->zip_code',
                                  '$this->city', '$this->country', '$this->phone', '$this->mobile', '$this->fax', '$this->birthday', 
                                  '$this->gender', '$this->email', '$this->homepage', NULL, NULL, 
-                                 0,  NULL, 0, '$act_date', $login_user_id, $this->valid ";
+                                 0,  NULL, 0, '$act_date', $this->valid ";
+			// bei einer Registrierung ist die Login-User-Id nicht gefüllt                                 
+            if($this->valid == 0 && $login_user_id == 0)
+            {
+                $sql = $sql. ", NULL ";
+            }
+            else
+            {
+                $sql = $sql. ", $login_user_id ";
+            }
+            // Shortname ist nur bei einer Registrierung gefuellt
             if(strlen($this->reg_org_shortname) == 0)
             {
                 $sql = $sql. ", NULL ";
@@ -255,6 +265,7 @@ class User
             {
                 $sql = $sql. ", '$this->login_name', '$this->password' ) ";
             }
+
             $result = mysql_query($sql, $this->db_connection);
             db_error($result);
 
