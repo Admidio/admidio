@@ -238,6 +238,16 @@ else
     $g_message->show("feld", "Name");
 }
 
+// Falls der User sich registrieren wollte, aber ein Captcha geschaltet ist,
+// muss natuerlich der Code ueberprueft werden
+if ($new_user == 2 && $g_preferences['enable_registration_captcha'] == 1)
+{
+    if ( !isset($_SESSION['captchacode']) || strtoupper($_SESSION['captchacode']) != strtoupper($_POST['captcha']) )
+    {
+        $g_message->show("captcha_code");
+    }
+}
+
 // Geburtstag fuer die DB formatieren
 if(strlen($user->birthday) > 0)
 {
@@ -366,8 +376,8 @@ elseif($new_user == 2)
     $err_code = "save";
     $err_text = "";
     
-    // nur ausfuehren, wenn E-Mails auch unterstuetzt werden
-    if($g_preferences['send_email_extern'] != 1)
+    // nur ausfuehren, wenn E-Mails auch unterstuetzt werden und die Webmasterbenachrichtung aktiviert ist
+    if($g_preferences['send_email_extern'] == 0 && $g_preferences['enable_registration_admin_mail'] == 1)
     {    
         $sql    = "SELECT usr_first_name, usr_last_name, usr_email
                      FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
@@ -386,7 +396,7 @@ elseif($new_user == 2)
             // Mail an die Webmaster schicken, dass sich ein neuer User angemeldet hat
             $email = new Email();
             $email->setSender($g_preferences['email_administrator']);
-            $email->addRecipient($row->usr_email, "$row->first_name $row->last_name");
+            $email->addRecipient($row->usr_email, "$row->usr_first_name $row->usr_last_name");
             $email->setSubject(utf8_decode("Neue Registrierung"));
             $email->setText(utf8_decode("Es hat sich ein neuer User auf "). $g_current_organization->homepage. 
                 utf8_decode(" registriert.\n\nNachname: "). $user->last_name. utf8_decode("\nVorname:  "). 
