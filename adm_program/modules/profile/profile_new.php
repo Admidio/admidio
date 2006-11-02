@@ -232,7 +232,7 @@ require("../../../adm_config/body_top.php");
                         echo "<div style=\"margin-top: 6px;\">
                             <div style=\"text-align: right; width: 30%; float: left;\">Passwort:</div>
                             <div style=\"text-align: left; margin-left: 32%;\">
-                                <input type=\"password\" name=\"password\" size=\"10\" maxlength=\"20\" />&nbsp;*&nbsp;
+                                <input type=\"password\" name=\"password\" style=\"width: 130px;\" maxlength=\"20\" />&nbsp;*&nbsp;
                                 <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                                 onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=password','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\">
                             </div>
@@ -240,7 +240,7 @@ require("../../../adm_config/body_top.php");
                         <div style=\"margin-top: 6px;\">
                             <div style=\"text-align: right; width: 30%; float: left;\">Passwort (Wdh):</div>
                             <div style=\"text-align: left; margin-left: 32%;\">
-                                <input type=\"password\" name=\"password2\" size=\"10\" maxlength=\"20\" />&nbsp;*
+                                <input type=\"password\" name=\"password2\" style=\"width: 130px;\" maxlength=\"20\" />&nbsp;*
                             </div>
                         </div>";
                     }
@@ -549,27 +549,27 @@ require("../../../adm_config/body_top.php");
                     }
                 } // end ohne schnelle Registrierung
 
-		         // User, die sich registrieren wollen, bekommen jetzt noch das Captcha praesentiert,
-		         // falls es in den Orgaeinstellungen aktiviert wurde...
-		         if ($new_user == 2 && $g_preferences['enable_registration_captcha'] == 1)
-		         {
-		             echo "
-		
-		             <div style=\"margin-top: 6px;\">
-		                 <div style=\"text-align: left; margin-left: 32%;\">
-		                     <img src=\"$g_root_path/adm_program/system/captcha_class.php\" border=\"0\" alt=\"Captcha\" />
-		                 </div>
-		             </div>
-		
-		             <div style=\"margin-top: 6px;\">
-		                    <div style=\"text-align: right; width: 30%; float: left;\">Best&auml;tigungscode:</div>
-		                    <div style=\"text-align: left; margin-left: 32%;\">
-		                        <input type=\"text\" id=\"captcha\" name=\"captcha\" style=\"width: 200px;\" maxlength=\"8\" value=\"\">&nbsp;*&nbsp;
-		                        <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-		                             onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=captcha_help','Message','width=400,height=320,left=310,top=200,scrollbars=yes')\">
-		                    </div>
-		             </div>";
-		         }
+                 // User, die sich registrieren wollen, bekommen jetzt noch das Captcha praesentiert,
+                 // falls es in den Orgaeinstellungen aktiviert wurde...
+                 if ($new_user == 2 && $g_preferences['enable_registration_captcha'] == 1)
+                 {
+                     echo "
+        
+                     <div style=\"margin-top: 6px;\">
+                         <div style=\"text-align: left; margin-left: 32%;\">
+                             <img src=\"$g_root_path/adm_program/system/captcha_class.php\" border=\"0\" alt=\"Captcha\" />
+                         </div>
+                     </div>
+        
+                     <div style=\"margin-top: 6px;\">
+                            <div style=\"text-align: right; width: 30%; float: left;\">Best&auml;tigungscode:</div>
+                            <div style=\"text-align: left; margin-left: 32%;\">
+                                <input type=\"text\" id=\"captcha\" name=\"captcha\" style=\"width: 200px;\" maxlength=\"8\" value=\"\">&nbsp;*&nbsp;
+                                <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                                     onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=captcha_help','Message','width=400,height=320,left=310,top=200,scrollbars=yes')\">
+                            </div>
+                     </div>";
+                 }
          
                 // Bild und Text fuer den Speichern-Button
                 if($new_user == 2)
