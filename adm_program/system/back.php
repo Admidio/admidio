@@ -45,6 +45,10 @@
 
 include("common.php");
 
-header("Location: ". $_SESSION['navigation']->getPreviousUrl());
+// die letzte Url aus dem Stack loeschen, da dies die aktuelle Seite ist
+$_SESSION['navigation']->deleteLastUrl();
+
+// Jetzt die "neue" letzte Url aufrufen
+header("Location: ". $_SESSION['navigation']->getUrl());
  
 ?>

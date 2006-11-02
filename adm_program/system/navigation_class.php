@@ -18,7 +18,7 @@
  * $_SESSION['navigation']->addUrl($g_current_url) aufgerufen werde
  *
  * Will man nun an einer Stelle zuruecksurfen, so muss die Funktion
- * $_SESSION['navigation']->getPreviousUrl() aufgerufen werden
+ * $_SESSION['navigation']->getUrl() aufgerufen werden
  *
  * Mit $_SESSION['navigation']->deleteLastUrl() kann man die letzte eingetragene
  * Url aus dem Stack loeschen
@@ -80,12 +80,9 @@ class Navigation
     }
     
     // gibt die vorletzte Url aus dem Stack zurueck
-    // die letzte Url ist die aktuelle Seite, diese wird dann geloescht
     function getPreviousUrl()
     {
-        $this->count--;
-        unset($this->url_arr[$this->count]);
-        return $this->url_arr[$this->count-1];
+        return $this->url_arr[$this->count-2];
     }
 
     // gibt die letzte Url aus dem Stack zurueck
