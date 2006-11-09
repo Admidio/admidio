@@ -87,16 +87,18 @@ if ($user_found >= 1)
                 VALUES ('$user_row->usr_id', '$g_organization', '$user_session', '$login_datetime', '". $_SERVER['REMOTE_ADDR']. "') ";
         $result = mysql_query($sql, $g_adm_con);
         db_error($result);
-
+        
         // Cookies fuer die Anmeldung setzen
-        if($_SERVER['HTTP_HOST'] == 'localhost')
+        if(strpos($_SERVER['HTTP_HOST'], "localhost") !== false
+        || strpos($_SERVER['HTTP_HOST'], "127.0.0.1") !== false)
         {
-            // beim localhost darf keine Domaine uebergeben werden
-            setcookie("adm_session", "$user_session", 0, "/");
+        	// kein Localhost -> Domaine beim Cookie setzen
+        	setcookie("adm_session", "$user_session" , 0, "/", ".". $g_domain);
         }
         else
         {
-            setcookie("adm_session", "$user_session" , 0, "/", ".". $g_domain);
+        	// beim localhost darf keine Domaine uebergeben werden
+        	setcookie("adm_session", "$user_session", 0, "/");
         }
         
         unset($_SESSION['g_current_organizsation']);
