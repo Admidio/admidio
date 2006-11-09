@@ -38,14 +38,16 @@ $session_found = mysql_num_rows($result);
 
 // Inhalt der Cookies loeschen
 
-if($_SERVER['HTTP_HOST'] == 'localhost')
+if(strpos($_SERVER['HTTP_HOST'], "localhost") !== false
+|| strpos($_SERVER['HTTP_HOST'], "127.0.0.1") !== false)
 {
-    // beim localhost darf keine Domaine uebergeben werden
-    setcookie("adm_session", "", 0, "/");
+	// kein Localhost -> Domaine beim Cookie setzen
+    setcookie("adm_session", "", 0, "/", ".". $g_domain);
 }
 else
 {
-    setcookie("adm_session", "", 0, "/", ".". $g_domain);
+    // beim localhost darf keine Domaine uebergeben werden
+    setcookie("adm_session", "", 0, "/");
 }
 
 unset($_SESSION['g_current_organizsation']);
