@@ -125,7 +125,17 @@ db_error($result);
 
 $role_row = mysql_fetch_object($result);
 
-// das geweilige Sql-Statement zusammenbauen
+// Kategorie auslesen
+$sql = "SELECT *
+          FROM ". TBL_CATEGORIES. "
+         WHERE cat_id     = {0} ";
+$sql    = prepareSQL($sql, array($role_row->rol_cat_id));
+$result = mysql_query($sql, $g_adm_con);
+db_error($result);
+
+$cat_row = mysql_fetch_object($result);
+
+// das jeweilige Sql-Statement zusammenbauen
 // !!!! Das erste Feld muss immer usr_id sein !!!!
 // !!!! wenn Gruppen angezeigt werden, muss mem_leader = 0 gesetzt sein !!!!
 
@@ -173,7 +183,7 @@ switch($type)
                       AND usr_valid  = 1
                     ORDER BY mem_end DESC, usr_last_name, usr_first_name ";
       break;
-      
+
     default:
         // Dem aufgerufenen Skript wurde die notwendige Variable nicht richtig uebergeben !
         $g_message->show("invalid");
@@ -307,22 +317,22 @@ if($mode != "csv")
         if($role_row->rol_mail_login == 1)
         {
             echo "<span class=\"iconLink\">
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/mail/mail.php?rolle=$role_row->rol_name\"><img 
-                class=\"iconLink\" src=\"$g_root_path/adm_program/images/mail.png\" style=\"vertical-align: middle; cursor: pointer;\" 
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/mail/mail.php?rolle=$role_row->rol_name\"><img
+                class=\"iconLink\" src=\"$g_root_path/adm_program/images/mail.png\" style=\"vertical-align: middle; cursor: pointer;\"
                 border=\"0\" alt=\"E-Mail an Mitglieder\"></a>
                 <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/mail/mail.php?rolle=$role_row->rol_name\">E-Mail an Mitglieder</a>
             </span>
             &nbsp;&nbsp;&nbsp;";
         }
-        
+
         echo "<span class=\"iconLink\">
             <a class=\"iconLink\" href=\"#\" onclick=\"window.open('lists_show.php?type=$type&amp;mode=print&amp;rol_id=$rol_id', '_blank')\"><img
             class=\"iconLink\" src=\"$g_root_path/adm_program/images/print.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Druckvorschau\"></a>
             <a class=\"iconLink\" href=\"#\" onclick=\"window.open('lists_show.php?type=$type&amp;mode=print&amp;rol_id=$rol_id', '_blank')\">Druckvorschau</a>
         </span>
-        
+
         &nbsp;&nbsp;
-        
+
         <img class=\"iconLink\" src=\"$g_root_path/adm_program/images/database_out.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Exportieren\">
         <select size=\"1\" name=\"list$i\" onchange=\"exportList(this)\">
             <option value=\"\" selected=\"selected\">Exportieren nach ...</option>
@@ -367,23 +377,23 @@ for($j = 0; $j < $max_count; $j++)
     {
         if($mode == "csv")
         {
-            if($j == 0 && $leiter == 1) 
+            if($j == 0 && $leiter == 1)
             {
                 $str_csv = $str_csv. "Leiter\n\n";
             }
-            if($j == 1) 
+            if($j == 1)
             {
                 $str_csv = $str_csv. "\n\nTeilnehmer\n\n";
             }
         }
         else
         {
-            if($j == 0 && $leiter == 1) 
+            if($j == 0 && $leiter == 1)
             {
                 echo "<h2>Leiter</h2>";
             }
             // erste Tabelle abschliessen
-            if($j == 1) 
+            if($j == 1)
             {
                 echo "</table><br /><h2>Teilnehmer</h2>";
             }
@@ -397,7 +407,7 @@ for($j = 0; $j < $max_count; $j++)
         for($i = 0; $i < count($arr_fields); $i++)
         {
             $align = "left";
-            
+
             // den Namen des Feldes ermitteln
             if(strpos($arr_fields[$i], ".") > 0)
             {
@@ -408,11 +418,11 @@ for($j = 0; $j < $max_count; $j++)
                          WHERE usf_id = $usf_id ";
                 $result_user_fields = mysql_query($sql, $g_adm_con);
                 db_error($result_user_fields);
-                
+
                 $row = mysql_fetch_object($result_user_fields);
                 $col_name = $row->usf_name;
                 $arr_usf_types[$usf_id] = $row->usf_type;
-                
+
                 if($arr_usf_types[$usf_id] == "CHECKBOX")
                 {
                     $align = "center";
@@ -420,14 +430,14 @@ for($j = 0; $j < $max_count; $j++)
                 elseif($arr_usf_types[$usf_id] == "NUMERIC")
                 {
                     $align = "right";
-                }                
+                }
             }
             else
             {
                 if($i > 0)  // usr_id wird nicht angezeigt
                 {
                     $col_name = $arr_col_name[$arr_fields[$i]];
-                
+
                     if($arr_fields[$i] == "usr_gender")
                     {
                         // Icon des Geschlechts zentriert darstellen
@@ -435,14 +445,14 @@ for($j = 0; $j < $max_count; $j++)
                     }
                 }
             }
-            
+
             if($mode == "csv")
             {
-                if($i > 0) 
+                if($i > 0)
                 {
                     $str_csv = $str_csv. $separator;
                 }
-                
+
                 if($i == 0)
                 {
                     $str_csv = $str_csv. $value_quotes. "Nr.". $value_quotes;
@@ -482,8 +492,8 @@ for($j = 0; $j < $max_count; $j++)
         {
             if($mode == "html")
             {
-                echo "<tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" 
-                onMouseOut=\"this.className='listMouseOut'\" style=\"cursor: pointer\" 
+                echo "<tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\"
+                onMouseOut=\"this.className='listMouseOut'\" style=\"cursor: pointer\"
                 onClick=\"window.location.href='$g_root_path/adm_program/modules/profile/profile.php?user_id=$row[0]'\">\n";
             }
             else if($mode == "print")
@@ -507,7 +517,7 @@ for($j = 0; $j < $max_count; $j++)
                     $b_user_field = false;
                     $usf_id = 0;
                 }
-            
+
                 if($mode != "csv")
                 {
                     $align = "left";
@@ -547,7 +557,7 @@ for($j = 0; $j < $max_count; $j++)
                 else
                 {
                     $content = "";
-                    
+
                     // Felder nachformatieren
                     switch($arr_fields[$i])
                     {
@@ -590,7 +600,7 @@ for($j = 0; $j < $max_count; $j++)
                         case "usr_homepage":
                             // Homepage als Link darstellen
                             if(strlen($row[$i]) > 0)
-                            {                                
+                            {
                                 $row[$i] = stripslashes($row[$i]);
                                 if(substr_count(strtolower($row[$i]), "http://") == 0)
                                 {
@@ -618,7 +628,7 @@ for($j = 0; $j < $max_count; $j++)
                                 }
                                 else
                                 {
-                                    $content = "<img src=\"$g_root_path/adm_program/images/male.png\" 
+                                    $content = "<img src=\"$g_root_path/adm_program/images/male.png\"
                                                 style=\"vertical-align: middle;\" alt=\"m&auml;nnlich\">";
                                 }
                             }
@@ -630,7 +640,7 @@ for($j = 0; $j < $max_count; $j++)
                                 }
                                 else
                                 {
-                                    $content = "<img src=\"$g_root_path/adm_program/images/female.png\" 
+                                    $content = "<img src=\"$g_root_path/adm_program/images/female.png\"
                                                 style=\"vertical-align: middle;\" alt=\"weiblich\">";
                                 }
                             }
@@ -649,7 +659,7 @@ for($j = 0; $j < $max_count; $j++)
                             {
                                 $content = "<img src=\"../profile/profile_photo_show.php?usr_id=$row[0]\"
                                             style=\"vertical-align: middle;\" alt=\"Benutzerfoto\">";
-                            }     
+                            }
                             if ($mode == "csv" && $row[$i] != NULL)
                             {
                                 $content = "Profilfoto Online";
@@ -671,7 +681,7 @@ for($j = 0; $j < $max_count; $j++)
                                         }
                                         else
                                         {
-                                            echo "<img src=\"$g_root_path/adm_program/images/checkbox_checked.gif\" 
+                                            echo "<img src=\"$g_root_path/adm_program/images/checkbox_checked.gif\"
                                                 style=\"vertical-align: middle;\" alt=\"on\">";
                                         }
                                     }
@@ -683,7 +693,7 @@ for($j = 0; $j < $max_count; $j++)
                                         }
                                         else
                                         {
-                                            echo "<img src=\"$g_root_path/adm_program/images/checkbox.gif\" 
+                                            echo "<img src=\"$g_root_path/adm_program/images/checkbox.gif\"
                                                 style=\"vertical-align: middle;\" alt=\"off\">";
                                         }
                                     }
@@ -702,13 +712,13 @@ for($j = 0; $j < $max_count; $j++)
 
                     if($mode == "csv")
                     {
-                        if($i > 0) 
+                        if($i > 0)
                         {
                             $str_csv = $str_csv. $separator;
                         }
                         $str_csv = $str_csv. $value_quotes. "$content". $value_quotes;
                     }
-                    
+
                     else
                     {
                         echo $content. "</td>\n";
@@ -742,6 +752,73 @@ else
 {
     echo "</table>";
 
+
+    //INFOBOX zur Gruppe
+    echo"<br /><br /><h3>Infobox: ".$role_row->rol_name."</h3>";
+    echo "
+    <table class=\"$class_table\" style=\"width: 400px;\" cellpadding=\"2\" cellspacing=\"0\">";
+        //Kategorie
+        echo"
+        <tr>
+            <td>Kategorie:</td>
+            <td>".$cat_row->cat_name."</td>
+        </tr>";
+
+        //Beschreibung
+        if(strlen($role_row->rol_description) > 0)
+        {
+            echo"<tr>
+                <td>Beschreibung:</td>
+                <td>".$role_row->rol_description."</td>
+            </tr>";
+        }
+
+        //Zeitraum
+        if(strlen(mysqldate("d.m.y", $role_row->rol_start_date)) > 0)
+        {
+            echo"<tr>
+                <td>Zeitraum:</td>
+                <td>". mysqldate("d.m.y", $role_row->rol_start_date). " bis ". mysqldate("d.m.y", $role_row->rol_end_date). "</td>
+            </tr>";
+        }
+
+        //Termin
+        if($role_row->rol_weekday > 0 || (  strcmp(mysqltime("h:i", $role_row->rol_start_time), "00:00") != 0)
+            && $role_row->rol_start_time != NULL )
+        {
+            echo"<tr>
+                <td>Termin: </td>
+                <td>". $arrDay[$role_row->rol_weekday-1];
+                    if(strcmp(mysqltime("h:i", $role_row->rol_start_time), "00:00") != 0)
+                    {
+                        echo " von ". mysqltime("h:i", $role_row->rol_start_time). " bis ". mysqltime("h:i", $role_row->rol_end_time);
+                    }
+
+                echo"</td>
+            </tr>";
+        }
+
+        //Treffpunkt
+        if(strlen($role_row->rol_location) > 0)
+        {
+            echo"<tr>
+                <td>Treffpunkt:</td>
+                <td>".$role_row->rol_location."</td>
+            </tr>";
+        }
+
+        //Beitrag
+        if(strlen($role_row->rol_cost) > 0)
+        {
+            echo"<tr>
+                <td>Beitrag:</td>
+                <td>$role_row->rol_cost &euro;</td>
+            </tr>";
+        }
+
+    echo"</table>";
+    // Ende Infobox
+
     if($mode != "print")
     {
         echo "<p>
@@ -751,14 +828,14 @@ else
                 <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
             </span>
         </p>
-        </div>";        
+        </div>";
         require("../../../adm_config/body_bottom.php");
     }
     else
     {
         echo "</div>";
     }
-        
+
     echo "</body>
     </html>";
 }
