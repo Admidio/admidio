@@ -63,16 +63,26 @@ function prepareSQL($queryString, $paramArr)
 {
     foreach (array_keys($paramArr) as $paramName)
     {
+        // wenn Variable ein Leerstring ist, dann Null in DB schreiben
+        if(strlen($paramArr[$paramName]) == 0)
+        {
+            $paramArr[$paramName] = 'NULL';
+        }
+    
+        // Variablentyp pruefen und danach Formatieren
         if (is_int($paramArr[$paramName]))
         {
+            // Integer
             $paramArr[$paramName] = (int)$paramArr[$paramName];
         }
         elseif (is_numeric($paramArr[$paramName]))
         {
+            // Zahl
             $paramArr[$paramName] = (float)$paramArr[$paramName];
         }
         elseif (($paramArr[$paramName] != 'NULL') and ($paramArr[$paramName] != 'NOT NULL'))
         {
+            // String, aber nicht NULL
             $paramArr[$paramName] = mysql_escape_string(stripslashes($paramArr[$paramName]));
             $paramArr[$paramName] = '\''.$paramArr[$paramName].'\'';
         }
@@ -90,33 +100,33 @@ function getHttpReferer()
 
     $exception = 0;
 
-	if(isset($_SERVER['HTTP_REFERER']))
-	{
-	    if($exception == 0)
-	        $exception = substr_count($_SERVER['HTTP_REFERER'], "menue.htm");
-	    if($exception == 0)
-	        $exception = substr_count($_SERVER['HTTP_REFERER'], "status.php");
-	    if($exception == 0)
-	        $exception = substr_count($_SERVER['HTTP_REFERER'], "err_msg.php");
-	    if($exception == 0)
-	        $exception = substr_count($_SERVER['HTTP_REFERER'], "index.htm");
-	    if($exception == 0)
-	        $exception = substr_count($_SERVER['HTTP_REFERER'], "login.php");
-	    if($exception == 0)
-	    {
-	        $tmp_url = $g_root_path. "/";
-	        if(strcmp($_SERVER['HTTP_REFERER'], $tmp_url) == 0)
-	        {
-	            $exception = 1;
-	        }
-	    }
-	
-	    if($exception == 0)
-	    {
-	        return $_SERVER['HTTP_REFERER'];
-	    }
-	}
-	return $g_root_path. "/". $g_main_page;
+    if(isset($_SERVER['HTTP_REFERER']))
+    {
+        if($exception == 0)
+            $exception = substr_count($_SERVER['HTTP_REFERER'], "menue.htm");
+        if($exception == 0)
+            $exception = substr_count($_SERVER['HTTP_REFERER'], "status.php");
+        if($exception == 0)
+            $exception = substr_count($_SERVER['HTTP_REFERER'], "err_msg.php");
+        if($exception == 0)
+            $exception = substr_count($_SERVER['HTTP_REFERER'], "index.htm");
+        if($exception == 0)
+            $exception = substr_count($_SERVER['HTTP_REFERER'], "login.php");
+        if($exception == 0)
+        {
+            $tmp_url = $g_root_path. "/";
+            if(strcmp($_SERVER['HTTP_REFERER'], $tmp_url) == 0)
+            {
+                $exception = 1;
+            }
+        }
+    
+        if($exception == 0)
+        {
+            return $_SERVER['HTTP_REFERER'];
+        }
+    }
+    return $g_root_path. "/". $g_main_page;
 }
 
 // Funktion prueft, ob ein User die uebergebene Rolle besitzt
