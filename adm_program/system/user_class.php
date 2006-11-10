@@ -174,45 +174,36 @@ class User
         {
             $act_date = date("Y-m-d H:i:s", time());
 
-            $sql = "UPDATE ". TBL_USERS. " SET usr_last_name  = '$this->last_name'
-                                          , usr_first_name = '$this->first_name'
-                                                        , usr_address    = '$this->address'
-                                                        , usr_zip_code   = '$this->zip_code'
-                                                        , usr_city       = '$this->city'
-                                                        , usr_country    = '$this->country'
-                                                        , usr_phone      = '$this->phone'
-                                                        , usr_mobile     = '$this->mobile'
-                                          , usr_fax        = '$this->fax'
-                                                        , usr_birthday   = '$this->birthday'
-                                                        , usr_gender     = '$this->gender'
-                                                        , usr_email      = '$this->email'
-                                                        , usr_homepage   = '$this->homepage'
-                                                        , usr_last_login = '$this->last_login'
-                                                        , usr_actual_login   = '$this->actual_login'
-                                                        , usr_number_login   = $this->number_login
-                                                        , usr_date_invalid   = '$this->date_invalid'
-                                                        , usr_number_invalid = $this->number_invalid
-                                                        , usr_last_change    = '$act_date'
-                                                        , usr_usr_id_change  = $login_user_id 
-                                                        , usr_valid          = $this->valid ";
-            if(strlen($this->reg_org_shortname) == 0)
-            {
-                $sql = $sql. ", usr_reg_org_shortname = NULL ";
-            }
-            else
-            {
-                $sql = $sql. ", usr_reg_org_shortname = '$this->reg_org_shortname' ";
-            }
-            if(strlen($this->login_name) == 0)
-            {
-                $sql = $sql. ", usr_login_name = NULL, usr_password = NULL ";
-            }
-            else
-            {
-                $sql = $sql. ", usr_login_name = '$this->login_name', usr_password = '$this->password' ";
-            }
-            $sql = $sql. " WHERE usr_id = $this->id ";
-
+            $sql = "UPDATE ". TBL_USERS. " SET usr_last_name  = {0}
+                                             , usr_first_name = {1}
+                                             , usr_address    = {2}
+                                             , usr_zip_code   = {3}
+                                             , usr_city       = {4}
+                                             , usr_country    = {5}
+                                             , usr_phone      = {6}
+                                             , usr_mobile     = {7}
+                                             , usr_fax        = {8}
+                                             , usr_birthday   = {9}
+                                             , usr_gender     = {10}
+                                             , usr_email      = {11}
+                                             , usr_homepage   = {12}
+                                             , usr_last_login = {13}
+                                             , usr_actual_login   = {14}
+                                             , usr_number_login   = {15}
+                                             , usr_date_invalid   = {16}
+                                             , usr_number_invalid = {17}
+                                             , usr_last_change    = '$act_date'
+                                             , usr_usr_id_change  = $login_user_id 
+                                             , usr_valid          = {18}
+                                             , usr_reg_org_shortname = {19}
+                                             , usr_login_name     = {20}
+                                             , usr_password       = {21}
+                     WHERE usr_id = $this->id ";
+            $sql = prepareSQL($sql, array($this->last_name, $this->first_name, $this->address, $this->zip_code,
+                        $this->city, $this->country, $this->phone, $this->mobile, $this->fax, $this->birthday,
+                        $this->gender, $this->email, $this->homepage, $this->last_login, $this->actual_login,
+                        $this->number_login, $this->date_invalid, $this->number_invalid, $this->valid,
+                        $this->reg_org_shortname, $this->login_name, $this->password));
             $result = mysql_query($sql, $this->db_connection);
             db_error($result);
             return 0;
@@ -225,8 +216,8 @@ class User
     // damit die Aenderung protokolliert werden kann (Ausnahme bei Registrierung)
     function insert($login_user_id)
     {
-        if($this->id == 0  && is_numeric($login_user_id)	// neuer angelegter User
-        && ($login_user_id > 0 || $this->valid == 0)) 		// neuer registrierter User
+        if($this->id == 0  && is_numeric($login_user_id)    // neuer angelegter User
+        && ($login_user_id > 0 || $this->valid == 0))       // neuer registrierter User
         {
             $act_date = date("Y-m-d H:i:s", time());
 
@@ -234,38 +225,23 @@ class User
                                   usr_city, usr_country, usr_phone, usr_mobile, usr_fax, usr_birthday, 
                                   usr_gender, usr_email, usr_homepage, usr_last_login, usr_actual_login, 
                                   usr_number_login, usr_date_invalid, usr_number_invalid, usr_last_change, 
-                                  usr_valid, usr_usr_id_change, usr_reg_org_shortname, usr_login_name, usr_password )
-                         VALUES ('$this->last_name', '$this->first_name', '$this->address', '$this->zip_code',
-                                 '$this->city', '$this->country', '$this->phone', '$this->mobile', '$this->fax', '$this->birthday', 
-                                 '$this->gender', '$this->email', '$this->homepage', NULL, NULL, 
-                                 0,  NULL, 0, '$act_date', $this->valid ";
-			// bei einer Registrierung ist die Login-User-Id nicht gefüllt                                 
+                                  usr_valid, usr_reg_org_shortname, usr_login_name, usr_password, usr_usr_id_change )
+                         VALUES ({0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, NULL, NULL, 
+                                 0,  NULL, 0, '$act_date', {13}, {14}, {15}, {16}";
+            // bei einer Registrierung ist die Login-User-Id nicht gefüllt                                 
             if($this->valid == 0 && $login_user_id == 0)
             {
-                $sql = $sql. ", NULL ";
+                $sql = $sql. ", NULL )";
             }
             else
             {
-                $sql = $sql. ", $login_user_id ";
-            }
-            // Shortname ist nur bei einer Registrierung gefuellt
-            if(strlen($this->reg_org_shortname) == 0)
-            {
-                $sql = $sql. ", NULL ";
-            }
-            else
-            {
-                $sql = $sql. ", '$this->reg_org_shortname' ";
-            }
-            if(strlen($this->login_name) == 0)
-            {
-                $sql = $sql. ", NULL, NULL ) ";
-            }
-            else
-            {
-                $sql = $sql. ", '$this->login_name', '$this->password' ) ";
+                $sql = $sql. ", $login_user_id )";
             }
 
+            $sql = prepareSQL($sql, array($this->last_name, $this->first_name, $this->address, $this->zip_code,
+                        $this->city, $this->country, $this->phone, $this->mobile, $this->fax, $this->birthday,
+                        $this->gender, $this->email, $this->homepage, $this->valid,
+                        $this->reg_org_shortname, $this->login_name, $this->password));
             $result = mysql_query($sql, $this->db_connection);
             db_error($result);
 
