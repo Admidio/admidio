@@ -33,7 +33,7 @@
 
 require("../../system/common.php");
 // Registrierung muss ausgeloggt moeglich sein
-if($_GET['new_user'] != 2)
+if(isset($_GET['new_user']) && $_GET['new_user'] != 2)
 {
     require("../../system/login_valid.php");
 }
