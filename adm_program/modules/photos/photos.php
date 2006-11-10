@@ -222,8 +222,15 @@ echo "
 <html>
     <head>
         <title>$g_current_organization->longname - Fotogalerien</title>
-        <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
+        <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">";
 
+        if($g_preferences['enable_rss'] == 1)
+        {
+            echo "<link type=\"application/rss+xml\" rel=\"alternate\" title=\"$g_current_organization->longname - Fotos\"
+            href=\"$g_root_path/adm_program/modules/photos/rss_photos.php\">";
+        };
+
+        echo"
         <!--[if lt IE 7]>
             <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
         <![endif]-->";
