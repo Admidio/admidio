@@ -59,29 +59,29 @@ class Organization
         $this->clear();
     }
 
-    // User mit der uebergebenen ID aus der Datenbank auslesen
+    // Organisation mit der uebergebenen ID aus der Datenbank auslesen
     function getOrganization($shortname)
     {
-    	if(strlen($shortname) > 0)
-    	{
-    		$shortname = strStripTags($shortname);
-	        $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. " WHERE org_shortname = {0}";
-	        $sql = prepareSQL($sql, array($shortname));
-	        $result = mysql_query($sql, $this->db_connection);
-	        db_error($result);
-	
-	        if($row = mysql_fetch_object($result))
-	        {
-	            $this->id          = $row->org_id;
-	            $this->longname    = $row->org_longname;
-	            $this->shortname   = $row->org_shortname;
-	            $this->org_id_parent = $row->org_org_id_parent;
-	            $this->homepage    = $row->org_homepage;
-	        }
-	        else
-	        {
-	            $this->clear();
-	        }
+        if(strlen($shortname) > 0)
+        {
+            $shortname = strStripTags($shortname);
+            $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. " WHERE org_shortname = {0}";
+            $sql = prepareSQL($sql, array($shortname));
+            $result = mysql_query($sql, $this->db_connection);
+            db_error($result);
+    
+            if($row = mysql_fetch_object($result))
+            {
+                $this->id          = $row->org_id;
+                $this->longname    = $row->org_longname;
+                $this->shortname   = $row->org_shortname;
+                $this->org_id_parent = $row->org_org_id_parent;
+                $this->homepage    = $row->org_homepage;
+            }
+            else
+            {
+                $this->clear();
+            }
         }
         else
         {
@@ -94,32 +94,26 @@ class Organization
     // alle Klassenvariablen wieder zuruecksetzen
    function clear()
    {
-        $this->id          = 0;
-        $this->longname    = "";
-        $this->shortname   = "";
-        $this->org_id_parent = 0;
-        $this->homepage    = "";
+        $this->id            = 0;
+        $this->longname      = "";
+        $this->shortname     = "";
+        $this->org_id_parent = NULL;
+        $this->homepage      = "";
     }
 
 
-    // aktuelle Userdaten in der Datenbank updaten
+    // aktuelle Organisationsdaten in der Datenbank updaten
     function update()
     {
         if($this->id > 0)
         {
             $sql = "UPDATE ". TBL_ORGANIZATIONS. "
-                             SET org_longname    = '$this->longname'
-                               , org_shortname   = '$this->shortname'
-                               , org_homepage    = '$this->homepage' ";
-            if($this->org_id_parent == 0)
-            {
-                $sql = $sql. ", org_org_id_parent = NULL ";
-            }
-            else
-            {
-                $sql = $sql. ", org_org_id_parent = $this->org_id_parent ";
-            }
-            $sql = $sql. " WHERE org_id = $this->id ";
+                             SET org_longname      = {0}
+                               , org_shortname     = {1}
+                               , org_org_id_parent = {2}
+                               , org_homepage      = {3}
+                     WHERE org_id = $this->id ";
+            $sql = prepareSQL($sql, array($this->longname, $this->shortname, $this->org_id_parent, $this->homepage));
             $result = mysql_query($sql, $this->db_connection);
             db_error($result);
             return 0;
@@ -127,13 +121,14 @@ class Organization
         return -1;
     }
 
-    // aktuelle Userdaten neu in der Datenbank schreiben
+    // Organisationsdaten in der Datenbank schreiben
     function insert()
     {
         if($this->id == 0)
         {
             $sql = "INSERT INTO ". TBL_ORGANIZATIONS. " (org_longname, org_shortname, org_org_id_parent, org_homepage)
-                         VALUES ('$this->longname', '$this->shortname', $this->org_id_parent, '$this->homepage' ) ";
+                         VALUES ({0}, {1}, {2}, {3} ) ";
+            $sql = prepareSQL($sql, array($this->longname, $this->shortname, $this->org_id_parent, $this->homepage));
             $result = mysql_query($sql, $this->db_connection);
             db_error($result);
 
