@@ -92,13 +92,13 @@ if ($user_found >= 1)
         if(strpos($_SERVER['HTTP_HOST'], "localhost") !== false
         || strpos($_SERVER['HTTP_HOST'], "127.0.0.1") !== false)
         {
-        	// kein Localhost -> Domaine beim Cookie setzen
-        	setcookie("adm_session", "$user_session" , 0, "/", ".". $g_domain);
+            // beim localhost darf keine Domaine uebergeben werden
+            setcookie("adm_session", "$user_session", 0, "/");
         }
         else
         {
-        	// beim localhost darf keine Domaine uebergeben werden
-        	setcookie("adm_session", "$user_session", 0, "/");
+            // kein Localhost -> Domaine beim Cookie setzen
+            setcookie("adm_session", "$user_session" , 0, "/", ".". $g_domain);
         }
         
         unset($_SESSION['g_current_organizsation']);
