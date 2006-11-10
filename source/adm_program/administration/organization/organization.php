@@ -243,7 +243,7 @@ require("../../../adm_config/body_top.php");
                     </div>
                     <div class=\"smallText\">
                         Admidio kann RSS-Feeds f&uuml;r verschiedene Module (Ank&uuml;ndigungen,
-                        Termine, G&auml;stebuch und Weblinks) auf den jeweiligen &Uuml;bersichtsseiten
+                        Termine, G&auml;stebuch, Fotogalerien und Weblinks) auf den jeweiligen &Uuml;bersichtsseiten
                         bereitstellen, die dann &uuml;ber den Browser einem Feedreader zugeordnet
                         werden k&ouml;nnen.
                     </div>
