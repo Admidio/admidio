@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * RSS - Feed fuer Ankuendigungen
+ * RSS - Feed fuer Photos
  *
  * Copyright    : (c) 2004 - 2006 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -41,19 +41,14 @@ if ($g_preferences['enable_rss'] != 1)
     $g_message->show("rss_disabled");
 }
 
-// damit das SQL-Statement nachher nicht auf die Nase faellt, muss $organizations gefuellt sein
-if (strlen($organizations) == 0)
-{
-    $organizations = "'$g_current_organization->shortname'";
-}
 
-
-// die neuesten 10 Annkuedigungen aus der DB fischen...
+// die neuesten 10 Photoveranstaltungen aus der DB fischen...
 $sql = "SELECT * FROM ". TBL_PHOTOS. "
-        WHERE ( pho_org_shortname = '$g_current_organization->shortname')
+        WHERE ( pho_org_shortname = {0}
+        AND pho_locked = 0)
         ORDER BY pho_timestamp DESC
         LIMIT 10";
-
+$sql    = prepareSQL($sql, array($g_current_organization->shortname));
 $result = mysql_query($sql, $g_adm_con);
 db_error($result);
 
@@ -64,8 +59,9 @@ function bildersumme($pho_id_parent){
     global $bildersumme;
     $sql = "    SELECT *
                 FROM ". TBL_PHOTOS. "
-                WHERE pho_pho_id_parent = $pho_id_parent
+                WHERE pho_pho_id_parent = {0}
                 AND pho_locked = 0";
+    $sql    = prepareSQL($sql, array($pho_id_parent));
     $result_child= mysql_query($sql, $g_adm_con);
     db_error($result_child, 1);
     while($adm_photo_child=mysql_fetch_array($result_child))
@@ -83,23 +79,35 @@ $rss = new RSSfeed("http://$g_current_organization->homepage", "$g_current_organ
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
 while ($row = mysql_fetch_object($result))
 {
-    // Den Autor des Termins ermitteln
-    $sql     = "SELECT * FROM ". TBL_USERS. " WHERE usr_id = $row->pho_usr_id";
+    // Den Anleger ermitteln
+    $sql     = "SELECT usr_first_name, usr_last_name FROM ". TBL_USERS. " WHERE usr_id = {0}";
+    $sql    = prepareSQL($sql, array($row->pho_usr_id));
     $result2 = mysql_query($sql, $g_adm_con);
     db_error($result2);
-    $user = mysql_fetch_object($result2);
+    $create_user = mysql_fetch_object($result2);
 
-
+    // Den Veraenderer ermitteln falls ungleich NULL
+    if($row->pho_usr_id_change!= NULL)
+    {
+        $sql     = "SELECT usr_first_name, usr_last_name FROM ". TBL_USERS. " WHERE usr_id = {0}";
+        $sql    = prepareSQL($sql, array($row->pho_usr_id_change));
+        $result3 = mysql_query($sql, $g_adm_con);
+        db_error($result3);
+        $update_user = mysql_fetch_object($result3);
+    }
     // Die Attribute fuer das Item zusammenstellen
+
     //Titel
     $parents = "";
     $pho_parent_id = $row->pho_pho_id_parent;
+    //Titel muss mit Ordnerstruktur zusammengesetzt werden
     while ($pho_parent_id != NULL)
     {
         //Erfassen der Eltern Veranstaltung
         $sql=" SELECT *
                  FROM ". TBL_PHOTOS. "
-                WHERE pho_id ='$pho_parent_id'";
+                WHERE pho_id ={0}";
+        $sql    = prepareSQL($sql, array($pho_parent_id));
         $result_parents = mysql_query($sql, $g_adm_con);
         db_error($result_parents);
         $adm_photo_parent = mysql_fetch_array($result_parents);
@@ -115,43 +123,53 @@ while ($row = mysql_fetch_object($result))
     //Link
     $link  = "$g_root_path/adm_program/modules/photos/photos.php?pho_id=". $row->pho_id;
 
-    //Inhalt
-    $description = "Fotogalerien".$parents."&nbsp;&gt;&nbsp;<b>". strSpecialChars2Html($row->pho_name). "</b>";
-
+    //Bildersumme
     $bildersumme=$row->pho_quantity;
     bildersumme($row->pho_id);
 
+    //Inhalt zusammensetzen
+    $description = "Fotogalerien".$parents."&nbsp;&gt;&nbsp;<b>". strSpecialChars2Html($row->pho_name). "</b>";
     $description = $description. "<br /><br /> Bilder: ".$bildersumme;
     $description = $description. "<br /> Datum: ".mysqldate("d.m.y", $row->pho_begin);
+    //Enddatum nur wenn anders als startdatum
     if($row->pho_end != $row->pho_begin)
     {
         $description = $description. " bis ".mysqldate("d.m.y", $row->pho_end);
     }
     $description = $description. "<br />Fotos von: ".$row->pho_photographers;
 
-    //die ersten fuenf Bilder
+    //die letzten fuenf Bilder sollen als Beispiel genutzt werden
     if($row->pho_quantity >0)
     {
         $description = $description. "<br /><br />Beispielbilder:<br />";
-        for($bild=1; $bild<=5 && $bild<=$row->pho_quantity; $bild++)
+        for($bild=$row->pho_quantity; $bild>=$row->pho_quantity-4 && $bild>0; $bild--)
         {
-            $bildpfad = "../../../adm_my_files/photos/".$row->pho_begin."_".$row->pho_id.$ordner."/".$bild.".jpg";
-            $description = $description. "
-                <img src=\"$g_root_path/adm_program/modules/photos/resize.php?bild=".$bildpfad."&amp;scal=100&amp;aufgabe=anzeigen\" border=\"0\" alt=\"bild\">&nbsp;";
+            $bildpfad = "../../../adm_my_files/photos/".$row->pho_begin."_".$row->pho_id."/".$bild.".jpg";
+            //Zu Sicherheit noch überwachen ob das Bild existiert, wenn ja raus damit
+            if (file_exists($bildpfad))
+            {
+                $description = $description. "
+                 <img src=\"$g_root_path/adm_program/modules/photos/resize.php?bild=".$bildpfad."&amp;scal=100&amp;aufgabe=anzeigen\" border=\"0\" alt=\"bild\">&nbsp;";
+            }
         }
     }
 
+    //Link zur Momepage
     $description = $description. "<br /><br /><a href=\"$link\">Link auf $g_current_organization->homepage</a>";
-    $description = $description. "<br /><br /><i>Angelegt von ". strSpecialChars2Html($user->usr_first_name). " ". strSpecialChars2Html($user->usr_last_name);
+
+    //Angaben zum Anleger
+    $description = $description. "<br /><br /><i>Angelegt von ". strSpecialChars2Html($create_user->usr_first_name). " ". strSpecialChars2Html($create_user->usr_last_name);
     $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->pho_timestamp). "</i>";
 
-    $pubDate = date('r',strtotime($row->pho_timestamp));
+    //Angaben zum Updater
+    $description = $description. "<br /><i>Letztes Update durch ". strSpecialChars2Html($update_user->usr_first_name). " ". strSpecialChars2Html($update_user->usr_last_name);
+    $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->pho_last_change). "</i>";
 
+    $pubDate = date('r',strtotime($row->pho_timestamp));
 
     // Item hinzufuegen
     $rss->addItem($title, $description, $pubDate, $link);
 }
-
 
 // jetzt nur noch den Feed generieren lassen
 $rss->buildFeed();
