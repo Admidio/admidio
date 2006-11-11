@@ -37,6 +37,9 @@ $mode   = strStripTags($_GET["mode"]);
 $type   = strStripTags($_GET["type"]);
 $rol_id = strStripTags($_GET["rol_id"]);
 
+//SESSION array für bilder initialisieren
+$_SESSION['profilphoto'] = array();
+
 if($mode != "csv-ms"
 && $mode != "csv-ms-2k"
 && $mode != "csv-oo"
@@ -657,7 +660,8 @@ for($j = 0; $j < $max_count; $j++)
                             // Benutzerfoto anzeigen
                             if(($mode == "html" || $mode == "print") && $row[$i] != NULL)
                             {
-                                $content = "<img src=\"../profile/profile_photo_show.php?usr_id=$row[0]\"
+                                $_SESSION['profilphoto'][$row[0]]=$row[$i];
+                                $content = "<img src=\"photo_show.php?usr_id=".$row[0]."\"
                                             style=\"vertical-align: middle;\" alt=\"Benutzerfoto\">";
                             }
                             if ($mode == "csv" && $row[$i] != NULL)
