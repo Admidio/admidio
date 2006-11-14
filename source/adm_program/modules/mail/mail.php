@@ -109,13 +109,13 @@ if (isset($_GET["rol_id"]))
 
     if ($g_session_valid)
     {
-        $sql    = "SELECT rol_mail_login FROM ". TBL_ROLES. "
+        $sql    = "SELECT rol_mail_login, rol_name FROM ". TBL_ROLES. "
                    WHERE rol_org_shortname    = '$g_organization'
                    AND rol_id = {0} ";
     }
     else
     {
-        $sql    = "SELECT rol_mail_logout FROM ". TBL_ROLES. "
+        $sql    = "SELECT rol_mail_logout, rol_name FROM ". TBL_ROLES. "
                    WHERE rol_org_shortname    = '$g_organization'
                    AND rol_id = {0} ";
     }
@@ -250,10 +250,16 @@ require("../../../adm_config/body_top.php");
                }
                elseif (array_key_exists("rolle", $_GET))
                {
-                   // Rolle wurde uebergeben, dann E-Mails nur an diese Rolle schreiben
+                   // RollenID wurde uebergeben, dann E-Mails nur an diese Rolle schreiben
                    echo "<input class=\"readonly\" readonly type=\"text\" name=\"rolle\" size=\"28\" maxlength=\"30\" value=\"". $_GET['rolle']. "\">
                       &nbsp;<img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" alt=\"Hilfe\" title=\"Hilfe\"
                       onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_mail','Message','width=400,height=400,left=310,top=200,scrollbars=yes')\">";
+               }
+               elseif (array_key_exists("rol_id", $_GET))
+               {
+                   // RollenID wurde uebergeben, dann E-Mails nur an diese Rolle schreiben
+                   echo "
+                    <select size=\"1\" id=\"rol_id\" name=\"rol_id\"><option value=\"". $_GET['rol_id']. "\" selected=\"selected\">". $row[1]. "</option></select>&nbsp;";
                }
                else
                {
@@ -439,9 +445,9 @@ require("../../../adm_config/body_top.php");
 
     // Focus auf das erste Eingabefeld setzen
     if(!array_key_exists("usr_id", $_GET)
-    && !array_key_exists("rolle", $_GET))
+    && !array_key_exists("rol_id", $_GET))
     {
-        $focus_field = "role";
+        $focus_field = "rol_id";
     }
     else if($g_current_user->id == 0)
     {
