@@ -42,17 +42,27 @@ if (ini_get('file_uploads') != '1')
 }
 
 // Uebergabevariablen pruefen
-
+// usr_id
 if(isset($_GET["usr_id"]) && is_numeric($_GET["usr_id"]) == false)
 {
     $g_message->show("invalid");
 }
 
-if(isset($_GET["job"]) && $_GET["job"] != "save" && $_GET["job"]!="delete"
-&& $_GET["job"] != "dont_save" && $_GET["job"] != "upload" && $_GET["job"] != "msg_delete")
+//Aufgabe
+if(isset($_GET["job"]))
+{
+    $job=$_GET["job"];
+}
+else
+{
+    $job = NULL;
+}
+
+if($job != "save" && $job!="delete" && $job != "dont_save" && $job != "upload" && $job != "msg_delete" && $job != NULL)
 {
     $g_message->show("invalid");
 }
+
 
 if(!array_key_exists('usr_id', $_GET))
 {
@@ -67,7 +77,7 @@ else
     if(editUser())
     {
         // jetzt noch schauen, ob User ueberhaupt Mitglied in der Gliedgemeinschaft ist
-        if(isMember($_GET['usr_id']))      
+        if(isMember($_GET['usr_id']))
         {
             $edit_user = true;
         }
@@ -101,7 +111,7 @@ if($user_id > 0)
 $bild="../../../adm_my_files/photos/".$user_id.".jpg";
 
     /*****************************Bild speichern*************************************/
-    if($_GET["job"]=="save")
+    if($job=="save")
     {
 
         //Bilddaten in Datenbank schreiben
@@ -124,7 +134,7 @@ $bild="../../../adm_my_files/photos/".$user_id.".jpg";
         $g_message->show("profile_photo_update");
     }
         /*****************************Bild nicht speichern*************************************/
-    if($_GET["job"]=="dont_save")
+    if($job=="dont_save")
     {
         //Zwischenspeicher leeren
         if(file_exists("$bild"))
@@ -136,39 +146,39 @@ $bild="../../../adm_my_files/photos/".$user_id.".jpg";
         $g_message->setForwardUrl("$g_root_path/adm_program/modules/profile/profile.php?user_id=$user_id", 2000);
         $g_message->show("profile_photo_update_cancel");
     }
-    
+
     /*********************** Nachfrage Bild loeschen *************************************/
-    if($_GET["job"]=="msg_delete")
+    if($job=="msg_delete")
     {
         $g_message->setForwardYesNo("$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$user_id&job=delete");
         $g_message->show("delete_photo", "", "Löschen");
-    }    
-    
+    }
+
     /***************************** Bild loeschen *************************************/
-    if($_GET["job"]=="delete")
+    if($job=="delete")
     {
         $sql="  UPDATE ". TBL_USERS. "
                 SET usr_photo = NULL
                 WHERE usr_id = $user_id ";
         $result = mysql_query($sql, $g_adm_con);
         db_error($result);
-        
+
         // zur Ausgangsseite zurueck
         $g_message->setForwardUrl("$g_root_path/adm_program/modules/profile/profile.php?user_id=$user_id", 2000);
         $g_message->show("profile_photo_deleted");
     }
-    
+
     /*********************** Kontrollmechanismen *********************************/
     //kontrollmechanismen
-    if($_POST["upload"])
+    if( isset($_POST["upload"]))
     {
-        
+
         //Dateigroesse
         if ($_FILES["bilddatei"]["error"]==1)
         {
             $g_message->show("profile_photo_2big", ini_get(upload_max_filesize));
         }
-        
+
         //Kontrolle ob Bilder ausgewaehlt wurden
         if(!file_exists($_FILES["bilddatei"]["tmp_name"]))
         {
@@ -206,7 +216,7 @@ require("../../../adm_config/body_top.php");
 
 
    /*****************************Bild hochladen*************************************/
-    if($_GET["job"]==NULL)
+    if($job==NULL)
     {
         echo "
         <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
@@ -236,9 +246,9 @@ require("../../../adm_config/body_top.php");
                 if(mysql_result($result_photo,0,"usr_photo")!=NULL)
                 {
                     echo"<img src=\"profile_photo_show.php?usr_id=$user_id\"\"><br>
-                    <a href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=msg_delete&usr_id=$user_id\"><img 
+                    <a href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=msg_delete&usr_id=$user_id\"><img
                         src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Foto l&ouml;schen\" title=\"Foto l&ouml;schen\"></a>";
-                
+
                 }
                 //wenn nicht Schattenkopf
                 else
@@ -270,7 +280,7 @@ require("../../../adm_config/body_top.php");
     }
 
     /*****************************Bild zwischenspeichern bestaetigen***********************************/
-    if($_GET["job"]=="upload")
+    if($job=="upload")
     {
         echo "
         <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
@@ -339,7 +349,7 @@ require("../../../adm_config/body_top.php");
                         <tr style=\"text-align: center;\">
                             <td>Aktuelles Bild:<br>";
                                 //Falls vorhanden Bild ausgeben
-                                if(@MYSQL_RESULT($result_photo,0,"usr_photo")!=NULL)
+                                if(mysql_result($result_photo,0,"usr_photo")!=NULL)
                                 {
                                     echo"<img src=\"profile_photo_show.php?usr_id=$user_id\"\">";
                                 }
