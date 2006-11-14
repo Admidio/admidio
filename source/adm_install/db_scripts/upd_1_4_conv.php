@@ -39,6 +39,11 @@ $sql = "drop table ". TBL_ROLE_CATEGORIES;
 $result = mysql_query($sql, $connection);
 if(!$result) showError(mysql_error());
 
+// Alle bisherigen Rollen bekommen das Recht ihr eigenes Profil zu aendern
+$sql = "UPDATE ". TBL_ROLES. " SET rol_profile = 1 ";
+$result = mysql_query($sql, $connection);
+if(!$result) showError(mysql_error());
+
 // Orga-Felder in adm_preferences umwandeln
 $sql = "SELECT * FROM ". TBL_ORGANIZATIONS;
 $result_orga = mysql_query($sql, $connection);

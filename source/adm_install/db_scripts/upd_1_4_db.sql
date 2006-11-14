@@ -54,6 +54,7 @@ alter table %PRAEFIX%_categories add index CAT_ORG_FK (cat_org_id);
 ALTER TABLE %PRAEFIX%_roles DROP index ROL_RLC_FK;
 ALTER TABLE %PRAEFIX%_roles CHANGE COLUMN `rol_rlc_id` `rol_cat_id` INTEGER(11) UNSIGNED NOT NULL DEFAULT 0;
 alter table %PRAEFIX%_roles add index ROL_CAT_FK (rol_cat_id);
+ALTER TABLE %PRAEFIX%_roles ADD COLUMN `rol_profile` tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER `rol_photo`;
 
 ALTER TABLE %PRAEFIX%_links ADD COLUMN `lnk_cat_id` INTEGER(11) UNSIGNED NOT NULL DEFAULT 0 AFTER `lnk_org_id`;
 alter table %PRAEFIX%_links add index LNK_CAT_FK (lnk_cat_id);
