@@ -433,6 +433,7 @@ create table %PRAEFIX%_roles
    rol_mail_logout                tinyint(1) unsigned            not null default 0,
    rol_mail_login                 tinyint(1) unsigned            not null default 0,
    rol_photo                      tinyint(1) unsigned            not null default 0,
+   rol_profile                    tinyint(1) unsigned            not null default 0,
    rol_weblinks                   tinyint(1) unsigned            not null default 0,
    rol_locked                     tinyint(1) unsigned            not null default 0,
    rol_start_date                 date,
