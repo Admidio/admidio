@@ -39,6 +39,10 @@ if($g_preferences['registration_mode'] == 0)
     $g_message->show("module_disabled");
 }
 
+// Navigation faengt hier im Modul an
+$_SESSION['navigation']->clear();
+$_SESSION['navigation']->addUrl($g_current_url);
+
 // Neue Mitglieder der Gruppierung selektieren
 $sql    = "SELECT * FROM ". TBL_USERS. " 
             WHERE usr_valid = 0
@@ -75,8 +79,7 @@ require("../../../adm_config/body_top.php");
 
    <table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\">
       <tr>
-         <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;Nachname</th>
-         <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;Vorname</th>
+         <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;Name</th>
          <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;Benutzername</th>
          <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;E-Mail</th>
          <th class=\"tableHeader\" style=\"text-align: center;\">&nbsp;Funktionen</th>
@@ -85,14 +88,13 @@ require("../../../adm_config/body_top.php");
       while($row = mysql_fetch_object($result))
       {
          echo "<tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
-                  <td style=\"text-align: left;\">&nbsp;$row->usr_last_name</td>
-                  <td style=\"text-align: left;\">&nbsp;$row->usr_first_name</td>
+                  <td style=\"text-align: left;\">&nbsp;<a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->usr_id\">$row->usr_last_name, $row->usr_first_name</a></td>
                   <td style=\"text-align: left;\">&nbsp;$row->usr_login_name</td>
                   <td style=\"text-align: left;\">&nbsp;<a href=\"mailto:$row->usr_email\">$row->usr_email</a></td>
                   <td style=\"text-align: center;\">
                      <a href=\"new_user_function.php?mode=3&amp;new_user_id=$row->usr_id\">
                         <img src=\"$g_root_path/adm_program/images/properties.png\" border=\"0\" alt=\"Anmeldung zuordnen\" title=\"Anmeldung zuordnen\"></a>&nbsp;&nbsp;
-                     <a href=\"$g_root_path/adm_program/system/err_msg.php?err_code=delete_new_user&amp;err_text=$row->usr_first_name $row->usr_last_name&amp;err_head=L&ouml;schen&amp;button=2&amp;url=". urlencode("$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$row->usr_id&amp;mode=4"). "\">
+                     <a href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$row->usr_id&amp;mode=5\">
                         <img src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Anmeldung l&ouml;schen\" title=\"Anmeldung l&ouml;schen\"></a>
                   </td>
                </tr>";
