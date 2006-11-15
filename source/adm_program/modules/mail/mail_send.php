@@ -127,6 +127,13 @@ $email = new Email();
 //Nun der Mail die Absenderangaben,den Betreff und das Attachment hinzufuegen...
 if (strlen($_POST['name']) > 0)
 {
+    //Absenderangaben checken falls der User eingeloggt ist, damit ein paar schlaue User nicht einfach die Felder aendern koennen...
+    if ( $g_session_valid && ($_POST['mailfrom'] != $g_current_user->email || $_POST['name'] != "$g_current_user->first_name $g_current_user->last_name") )
+    {
+        $g_message->show("invalid");
+    }
+
+
     //Absenderangaben setzen
     if ($email->setSender($_POST['mailfrom'],$_POST['name']))
     {
@@ -136,6 +143,12 @@ if (strlen($_POST['name']) > 0)
             //Pruefen ob moeglicher Weise ein Attachment vorliegt
             if (isset($_FILES['userfile']))
             {
+                //noch mal schnell pruefen ob der User wirklich eingelogt ist...
+                if (!$g_session_valid)
+                {
+                    $g_message->show("invalid");
+                }
+
                 //Pruefen ob ein Fehler beim Upload vorliegt
                 if (($_FILES['userfile']['error'] != 0) &&  ($_FILES['userfile']['error'] != 4))
                 {
@@ -229,6 +242,8 @@ if (array_key_exists("usr_id", $_GET))
 }
 else
 {
+    $rolle = null;
+
     //Rolle wurde uebergeben, dann an alle Mitglieder aus der DB fischen
     $sql    = "SELECT usr_first_name, usr_last_name, usr_email, rol_name
                 FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
@@ -259,7 +274,7 @@ else
 }
 
 // Falls eine Kopie benoetigt wird, das entsprechende Flag im Mailobjekt setzen
-if ($_POST[kopie])
+if ($_POST['kopie'])
 {
     $email->setCopyToSenderFlag();
 
@@ -271,7 +286,7 @@ if ($_POST[kopie])
 }
 
 //Den Text fuer die Mail aufbereiten
-$mail_body = $mail_body. $_POST['name']. " hat ";
+$mail_body = $_POST['name']. " hat ";
 if (strlen($rolle) > 0)
 {
     $mail_body = $mail_body. "an die Rolle \"$rolle\"";

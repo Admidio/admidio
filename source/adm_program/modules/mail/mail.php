@@ -53,10 +53,17 @@ if ($g_session_valid && !isValidEmailAddress($g_current_user->email))
 }
 
 
-// Falls eine Usr_id uebergeben wurde, muss geprueft werden ob der User ueberhaupt
-// auf diese zugreifen darf oder ob die UsrId ueberhaupt eine gueltige Mailadresse hat...
+//Falls ein Rollenname uebergeben wurde muss auch der Kategoriename uebergeben werden und umgekehrt...
+if ( (isset($_GET["rolle"]) && !isset($_GET["cat"])) || (!isset($_GET["rolle"]) && isset($_GET["cat"])) )
+{
+    $g_message->show("invalid");
+}
+
+
 if (isset($_GET["usr_id"]))
 {
+    // Falls eine Usr_id uebergeben wurde, muss geprueft werden ob der User ueberhaupt
+    // auf diese zugreifen darf oder ob die UsrId ueberhaupt eine gueltige Mailadresse hat...
     if (!$g_session_valid)
     {
         //in ausgeloggtem Zustand duerfen nie direkt usr_ids uebergeben werden...
@@ -97,11 +104,13 @@ if (isset($_GET["usr_id"]))
     {
         $g_message->show("usrmail_not_found");
     }
+
+    $userEmail = $row->usr_email;
 }
-
-
-if (isset($_GET["rol_id"]))
+elseif (isset($_GET["rol_id"]))
 {
+    // Falls eine rol_id uebergeben wurde, muss geprueft werden ob der User ueberhaupt
+    // auf diese zugreifen darf
     if (is_numeric($_GET["rol_id"]) == false)
     {
         $g_message->show("invalid");
@@ -128,37 +137,36 @@ if (isset($_GET["rol_id"]))
     {
         $g_message->show("invalid");
     }
+
+    $rollenName = $row[1];
+    $rollenID   = $_GET['rol_id'];
 }
-
-
-//Falls ein Rollenname uebergeben wurde muss auch der Kategoriename uebergeben werden und umgekehrt...
-if ( (isset($_GET["rolle"]) && !isset($_GET["cat"])) || (!isset($_GET["rolle"]) && isset($_GET["cat"])) )
+elseif (isset($_GET["rolle"]) && isset($_GET["cat"]))
 {
-    $g_message->show("invalid");
-}
-
-
-
-if (isset($_GET["rolle"]) && isset($_GET["cat"]))
-{
+    // Falls eine rolle und eine category uebergeben wurde, muss geprueft werden ob der User ueberhaupt
+    // auf diese zugreifen darf
     $_GET["rolle"] = strStripTags($_GET["rolle"]);
     $_GET["cat"]   = strStripTags($_GET["cat"]);
 
     if ($g_session_valid)
     {
-        $sql    = "SELECT rol_mail_login
-                    FROM ". TBL_ROLES. "
+        $sql    = "SELECT rol_mail_login, rol_id
+                    FROM ". TBL_ROLES. " ,". TBL_CATEGORIES. "
                    WHERE rol_org_shortname    = '$g_organization'
-                   AND UPPER(rol_name) = UPPER({0}) ";
+                   AND UPPER(rol_name) = UPPER({0})
+                   AND rol_cat_id      = cat_id
+                   AND UPPER(cat_name) = UPPER({1})";
     }
     else
     {
-        $sql    = "SELECT rol_mail_logout
-                    FROM ". TBL_ROLES. "
+        $sql    = "SELECT rol_mail_logout, rol_id
+                    FROM ". TBL_ROLES. " ,". TBL_CATEGORIES. "
                    WHERE rol_org_shortname    = '$g_organization'
-                   AND UPPER(rol_name) = UPPER({0}) ";
+                   AND UPPER(rol_name) = UPPER({0})
+                   AND rol_cat_id      = cat_id
+                   AND UPPER(cat_name) = UPPER({1})";
     }
-    $sql    = prepareSQL($sql, array($_GET['rolle']));
+    $sql    = prepareSQL($sql, array($_GET['rolle'],$_GET['cat']));
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
     $row = mysql_fetch_array($result);
@@ -168,8 +176,8 @@ if (isset($_GET["rolle"]) && isset($_GET["cat"]))
         $g_message->show("invalid");
     }
 
-
-
+    $rollenName = $_GET['rolle'];
+    $rollenID   = $row[1];
 }
 
 if (array_key_exists("subject", $_GET))
@@ -240,26 +248,13 @@ require("../../../adm_config/body_top.php");
                if (array_key_exists("usr_id", $_GET))
                {
                    // usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
-                   $sql    = "SELECT usr_email FROM ". TBL_USERS. " WHERE usr_id = '{0}' ";
-                   $sql    = prepareSQL($sql, array($_GET['usr_id']));
-                   $result = mysql_query($sql, $g_adm_con);
-                   db_error($result);
-
-                   $row = mysql_fetch_array($result);
-                   echo "<input class=\"readonly\" readonly type=\"text\" name=\"mailto\" style=\"width: 350px;\" maxlength=\"50\" value=\"". $row[0]. "\">";
+                   echo "<input class=\"readonly\" readonly type=\"text\" name=\"mailto\" style=\"width: 350px;\" maxlength=\"50\" value=\"$userEmail\">";
                }
-               elseif (array_key_exists("rolle", $_GET))
+               elseif ( array_key_exists("rol_id", $_GET) || (array_key_exists("rolle", $_GET) && array_key_exists("cat", $_GET)) )
                {
-                   // RollenID wurde uebergeben, dann E-Mails nur an diese Rolle schreiben
-                   echo "<input class=\"readonly\" readonly type=\"text\" name=\"rolle\" size=\"28\" maxlength=\"30\" value=\"". $_GET['rolle']. "\">
-                      &nbsp;<img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" alt=\"Hilfe\" title=\"Hilfe\"
-                      onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_mail','Message','width=400,height=400,left=310,top=200,scrollbars=yes')\">";
-               }
-               elseif (array_key_exists("rol_id", $_GET))
-               {
-                   // RollenID wurde uebergeben, dann E-Mails nur an diese Rolle schreiben
+                   // Rolle wurde uebergeben, dann E-Mails nur an diese Rolle schreiben
                    echo "
-                    <select size=\"1\" id=\"rol_id\" name=\"rol_id\"><option value=\"". $_GET['rol_id']. "\" selected=\"selected\">". $row[1]. "</option></select>&nbsp;";
+                    <select size=\"1\" id=\"rol_id\" name=\"rol_id\"><option value=\"$rollenID\" selected=\"selected\">$rollenName</option></select>&nbsp;";
                }
                else
                {
@@ -269,35 +264,39 @@ require("../../../adm_config/body_top.php");
 
                    if ($g_session_valid)
                    {
-                       // im eingeloggten Zustand duerfen nur Moderatoren an gelocked Rollen schreiben
                        if (isModerator())
                        {
-                           $sql    = "SELECT rol_name, rol_id, cat_name FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                                      WHERE rol_org_shortname = '$g_organization'
-                                      AND rol_mail_login = 1
-                                      AND rol_valid      = 1
-                                      AND rol_cat_id     = cat_id
-                                      ORDER BY cat_name, rol_name ";
+                            // im eingeloggten Zustand duerfen nur Moderatoren an gelocked Rollen schreiben
+                               $sql    = "SELECT rol_name, rol_id, cat_name FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                                       WHERE rol_org_shortname = '$g_organization'
+                                       AND rol_mail_login = 1
+                                       AND rol_valid      = 1
+                                       AND rol_cat_id     = cat_id
+                                       ORDER BY cat_name, rol_name ";
                        }
                        else
                        {
-                           $sql    = "SELECT rol_name, rol_id, cat_name FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                                      WHERE rol_org_shortname = '$g_organization'
-                                      AND rol_mail_login = 1
-                                      AND rol_locked     = 0
-                                      AND rol_valid      = 1
-                                      AND rol_cat_id     = cat_id
-                                      ORDER BY cat_name, rol_name ";
+                            // alle nicht gelocked Rollen auflisten,
+                            // an die im eingeloggten Zustand Mails versendet werden duerfen
+                               $sql    = "SELECT rol_name, rol_id, cat_name FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                                       WHERE rol_org_shortname = '$g_organization'
+                                       AND rol_mail_login = 1
+                                       AND rol_locked     = 0
+                                       AND rol_valid      = 1
+                                       AND rol_cat_id     = cat_id
+                                       ORDER BY cat_name, rol_name ";
                        }
                    }
                    else
                    {
-                       $sql    = "SELECT rol_name, rol_id, cat_name FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                                  WHERE rol_org_shortname  = '$g_organization'
-                                  AND rol_mail_logout = 1
-                                  AND rol_valid       = 1
-                                  AND rol_cat_id      = cat_id
-                                  ORDER BY cat_name, rol_name ";
+                        // alle Rollen auflisten,
+                        // an die im nicht eingeloggten Zustand Mails versendet werden duerfen
+                           $sql    = "SELECT rol_name, rol_id, cat_name FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                                   WHERE rol_org_shortname  = '$g_organization'
+                                   AND rol_mail_logout = 1
+                                   AND rol_valid       = 1
+                                   AND rol_cat_id      = cat_id
+                                   ORDER BY cat_name, rol_name ";
                    }
                    $result = mysql_query($sql, $g_adm_con);
                    db_error($result);
@@ -444,8 +443,9 @@ require("../../../adm_config/body_top.php");
    </div>";
 
     // Focus auf das erste Eingabefeld setzen
-    if(!array_key_exists("usr_id", $_GET)
-    && !array_key_exists("rol_id", $_GET))
+    if (!array_key_exists("usr_id", $_GET)
+     && !array_key_exists("rol_id", $_GET)
+     && !array_key_exists("rolle",  $_GET))
     {
         $focus_field = "rol_id";
     }
