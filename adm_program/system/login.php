@@ -77,7 +77,7 @@ require("../../adm_config/body_top.php");
                 }
                 else
                 {
-                    $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?rolle=Webmaster&subject=Loginprobleme";
+                    $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?rolle=Webmaster&cat=Allgemein&subject=Loginprobleme";
                 }
                 echo "<div style=\"font-size: 8pt; margin-top: 5px;\">
                     <a href=\"$mail_link\">Ich habe mein Passwort vergessen!</a>

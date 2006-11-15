@@ -106,7 +106,7 @@ function getErrorText($error_code, $error_text, $g_current_organization)
         case "field_exist":
             $error_str = " Es existiert bereits ein Feld in dieser Organisation mit dem Namen.";
             break;
-            
+
         case "feld":
             $error_str = "Das Feld <b>$error_text</b> ist nicht gef&uuml;llt.";
             break;
@@ -249,7 +249,7 @@ function getErrorText($error_code, $error_text, $g_current_organization)
         case "max_members_profile":
             $error_str = "Speichern nicht m&ouml;glich, bei der Rolle &bdquo;".$error_text."&rdquo; w&uuml;rde die maximale Mitgliederzahl &uuml;berschritten.";
             break;
-            
+
         case "max_members_roles_change":
             $error_str = "Speichern nicht m&ouml;glich, die Rolle hat bereits mehr Mitglieder als die von Dir eingegeben Begrenzung.";
             break;
@@ -261,7 +261,7 @@ function getErrorText($error_code, $error_text, $g_current_organization)
             }
             else
             {
-                $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?rolle=Webmaster";
+                $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?rolle=Webmaster&cat=Allgemein";
             }
             $error_str = "Der Ordner <b>$error_text</b> konnte nicht angelegt werden. Du musst dich an
             den <a href=\"$mail_link\">Webmaster</a>
