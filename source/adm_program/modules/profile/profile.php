@@ -360,7 +360,8 @@ require("../../../adm_config/body_top.php");
                     </div>";
 
                     // Moderatoren & Gruppenleiter duerfen neue Rollen zuordnen
-                    if(isModerator() || isGroupLeader() || editUser())
+                    if((isModerator() || isGroupLeader() || editUser())
+                    && $user->reg_org_shortname != $g_organization)
                     {
                         echo "<div style=\"margin-top: 10px;\">
                             <span class=\"iconLink\">

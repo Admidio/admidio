@@ -12,6 +12,7 @@
  * new_user : 0 - (Default) vorhandenen User bearbeiten
  *            1 - Dialog um neue Benutzer hinzuzufuegen.
  *            2 - Dialog um Registrierung entgegenzunehmen
+ *            3 - Registrierung zuordnen/akzeptieren
  *
  ******************************************************************************
  *
@@ -70,7 +71,6 @@ else
     $new_user = 0;
 }
 
-
 if($new_user != 2)
 {
     // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
@@ -80,17 +80,24 @@ if($new_user != 2)
     }
 }
 
+// User auslesen
+$user      = new User($g_adm_con);
+$user->GetUser($usr_id);
+
 if($new_user == 0)
 {
     // jetzt noch schauen, ob User ueberhaupt Mitglied in der Gliedgemeinschaft ist
     if(isMember($usr_id) == false)
     {
-        $g_message->show("norights");
+        // falls doch eine Registrierung vorliegt, dann darf Profil angezeigt werden
+        if($user->valid != 0 || $user->reg_org_shortname != $g_organization)
+        {
+            $g_message->show("norights");
+        }
     }    
 }
 
 $b_history = false;     // History-Funktion bereits aktiviert ja/nein
-$user      = new User($g_adm_con);
 $_SESSION['navigation']->addUrl($g_current_url);
 
 if(isset($_SESSION['profile_request']))
@@ -119,8 +126,6 @@ if(isset($_SESSION['profile_request']))
 }
 elseif($usr_id > 0)
 { 
-    // User auslesen
-    $user->GetUser($usr_id);
     // um die Zurueck-Funktion zu vereinfachen, deutsche Zeitangaben nutzen
     $user->birthday = mysqldate('d.m.y', $user->birthday);
 }

@@ -9,6 +9,7 @@
  * mode: 1 - User-Account einem Benutzer zuordnen
  *       3 - Abfrage, wie der Datensatz zugeordnet werden soll
  *       4 - User-Account loeschen
+ *       5 - Frage, ob User-Account geloescht werden soll
  * new_user_id: Id des Logins, das verarbeitet werden soll
  * user_id:     Id des Benutzers, dem das neue Login zugeordnet werden soll
  *
@@ -59,7 +60,7 @@ if(isset($_GET["new_user_id"]) && is_numeric($_GET["new_user_id"]) == false)
 }
 
 if(is_numeric($_GET["mode"]) == false
-|| $_GET["mode"] < 1 || $_GET["mode"] > 4)
+|| $_GET["mode"] < 1 || $_GET["mode"] > 5)
 {
     $g_message->show("invalid");
 }
@@ -157,7 +158,7 @@ elseif($_GET["mode"] == 3)
                &nbsp;Zur&uuml;ck</button>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <button name=\"anlegen\" type=\"button\" value=\"anlegen\"
-               onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_new.php?user_id=". $_GET['new_user_id']. "&amp;new_user=1&amp;url=". urlencode("$g_root_path/adm_program/administration/new_user/new_user.php"). "'\">
+               onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_new.php?user_id=". $_GET['new_user_id']. "&amp;new_user=3&amp;url=". urlencode("$g_root_path/adm_program/administration/new_user/new_user.php"). "'\">
                <img src=\"$g_root_path/adm_program/images/user_add.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer anlegen\">
                &nbsp;Anlegen</button>
             &nbsp;&nbsp;&nbsp;&nbsp;
@@ -183,6 +184,14 @@ elseif($_GET["mode"] == 4)
    $location = "Location: $g_root_path/adm_program/administration/new_user/new_user.php";
    header($location);
    exit();
+}
+elseif($_GET["mode"] == 5)
+{
+    // Fragen, ob der User-Account geloescht werden soll
+    $user = new User($g_adm_con);
+    $user->GetUser($_GET['new_user_id']);
+    $g_message->setForwardYesNo("$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=". $_GET['new_user_id']. "&amp;mode=4");
+    $g_message->show("delete_new_user", utf8_encode("$user->first_name $user->last_name"), "Löschen");
 }
 
 ?>

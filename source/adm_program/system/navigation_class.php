@@ -82,7 +82,16 @@ class Navigation
     // gibt die vorletzte Url aus dem Stack zurueck
     function getPreviousUrl()
     {
-        return $this->url_arr[$this->count-2];
+        if($this->count > 1)
+        {
+            $url_count = $this->count - 2;
+        }
+        else
+        {
+            // es gibt nur eine Url, dann diese nehmen
+            $url_count = 0;
+        }
+        return $this->url_arr[$url_count];
     }
 
     // gibt die letzte Url aus dem Stack zurueck

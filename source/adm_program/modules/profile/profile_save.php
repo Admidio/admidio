@@ -10,8 +10,9 @@
  *
  * user_id :  ID des Benutzers, dessen Profil bearbeitet werden soll
  * new_user : 0 - (Default) vorhandenen User bearbeiten
- *            1 - Dialog um neue Benutzer hinzuzufuegen.
- *            2 - Dialog um Registrierung entgegenzunehmen
+ *            1 - Neuen Benutzer hinzufuegen.
+ *            2 - Registrierung entgegennehmen
+ *            3 - Registrierung zuordnen/akzeptieren
  *
  ******************************************************************************
  *
@@ -329,10 +330,12 @@ if($new_user != 2 || $g_preferences['registration_mode'] != 1)
 unset($_SESSION['profile_request']);
 $_SESSION['navigation']->deleteLastUrl();
 
-if($user->valid == 0 && $usr_id > 0)
+// hier auf Modus pruefen, damit kein Konflikt mit Editieren der Webanmeldung entsteht
+//if($user->valid == 0 && $usr_id > 0)
+if($new_user == 3)
 {
     /*------------------------------------------------------------*/
-    // neuer Benutzer wurde ueber Webanmeldung angelegt
+    // neuer Benutzer wurde ueber Webanmeldung angelegt und soll nun zugeordnet werden
     /*------------------------------------------------------------*/
 
     // User auf aktiv setzen
@@ -421,6 +424,12 @@ if($usr_id == 0)
 {
     // neuer User -> Rollen zuordnen
     $location = "Location: roles.php?user_id=$user->id&new_user=1";
+}
+elseif($new_user == 0 && $user->valid == 0)
+{
+    // neue Registrierung bearbeitet
+    $g_message->setForwardUrl($_SESSION['navigation']->getPreviousUrl(), 2000);
+    $g_message->show("save");    
 }
 else
 {
