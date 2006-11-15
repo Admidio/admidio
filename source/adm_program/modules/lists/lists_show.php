@@ -320,10 +320,10 @@ if($mode != "csv")
         if($role_row->rol_mail_login == 1)
         {
             echo "<span class=\"iconLink\">
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/mail/mail.php?rolle=$role_row->rol_name\"><img
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/mail/mail.php?rol_id=$role_row->rol_id\"><img
                 class=\"iconLink\" src=\"$g_root_path/adm_program/images/mail.png\" style=\"vertical-align: middle; cursor: pointer;\"
                 border=\"0\" alt=\"E-Mail an Mitglieder\"></a>
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/mail/mail.php?rolle=$role_row->rol_name\">E-Mail an Mitglieder</a>
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/mail/mail.php?rol_id=$role_row->rol_id\">E-Mail an Mitglieder</a>
             </span>
             &nbsp;&nbsp;&nbsp;";
         }
