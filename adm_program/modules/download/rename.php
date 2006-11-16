@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /******************************************************************************
  * Verwaltung der Downloads
  *
@@ -53,9 +53,7 @@ if(strlen($default_folder) > 0)
 {
     if(strpos($default_folder, "..") !== false)
     {
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_folder";
-        header($location);
-        exit();
+        $g_message->show("invalid_folder");
     }
     $act_folder = "$act_folder/$default_folder";
 }
@@ -64,9 +62,7 @@ if(strlen($folder) > 0)
 {
     if(strpos($folder, "..") !== false)
     {
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_folder";
-        header($location);
-        exit();
+        $g_message->show("invalid_folder");
     }
     $act_folder = "$act_folder/$folder";
 }
@@ -74,9 +70,7 @@ if(strlen($folder) > 0)
 if(strpos($file, "..") !== false
 || strlen($file) == 0)
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_file";
-    header($location);
-    exit();
+    $g_message->show("invalid_folder");
 }
 
 //Beginn der Seite

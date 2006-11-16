@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /******************************************************************************
  * Verwaltung der Downloads
  *
@@ -38,7 +38,7 @@ require("../../system/login_valid.php");
 // erst pruefen, ob der User auch die entsprechenden Rechte hat
 if(!editDownload())
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=no_file_upload_server";
+    $g_message->show("no_file_upload_server");
     header($location);
     exit();
 }
@@ -46,9 +46,7 @@ if(!editDownload())
 //pruefen ob in den aktuellen Servereinstellungen ueberhaupt file_uploads auf ON gesetzt ist...
 if (ini_get('file_uploads') != '1')
 {
-    $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=no_fileuploads";
-    header($location);
-    exit();
+    $g_message->show("no_fileuploads");
 }
 
 
@@ -61,9 +59,7 @@ if(strlen($default_folder) > 0)
 {
     if(strpos($default_folder, "..") !== false)
     {
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_folder";
-        header($location);
-        exit();
+        $g_message->show("invalid_folder");
     }
 }
 
@@ -71,9 +67,7 @@ if(strlen($folder) > 0)
 {
     if(strpos($folder, "..") !== false)
     {
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_folder";
-        header($location);
-        exit();
+        $g_message->show("invalid_folder");
     }
 }
 

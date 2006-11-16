@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /******************************************************************************
  * Verwaltung der Downloads
  *
@@ -50,9 +50,7 @@ if(strlen($default_folder) > 0)
 {
     if(strpos($default_folder, "..") !== false)
     {
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_folder";
-        header($location);
-        exit();
+        $g_message->show("invalid_folder");
     }
 }
 
@@ -60,9 +58,7 @@ if(strlen($folder) > 0)
 {
     if(strpos($folder, "..") !== false)
     {
-        $location = "Location: $g_root_path/adm_program/system/err_msg.php?err_code=invalid_folder";
-        header($location);
-        exit();
+        $g_message->show("invalid_folder");
     }
 }
 
@@ -110,6 +106,7 @@ require("../../../adm_config/body_top.php");
                     <div style=\"text-align: right; width: 33%; float: left;\">Name:</div>
                     <div style=\"text-align: left; margin-left: 35%;\">
                         <input type=\"text\" id=\"new_folder\" name=\"new_folder\" style=\"width: 200px;\" maxlength=\"255\">
+                    		<input type=\"hidden\" id=\"folder\" value=\"$folder\" style=\"width: 200px;\" maxlength=\"255\">
                     </div>
                 </div>
 

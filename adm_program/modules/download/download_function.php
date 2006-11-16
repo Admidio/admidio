@@ -41,7 +41,7 @@ require("../../system/login_valid.php");
 
 // Uebergabevariablen pruefen
 	if(is_numeric($_GET["mode"]) == false
-	|| $_GET["mode"] < 1 || $_GET["mode"] > 4)
+	|| $_GET["mode"] < 1 || $_GET["mode"] > 5)
 	{
     	$g_message->show("invalid");
 	}
@@ -107,18 +107,19 @@ if (decoct(fileperms("../../../adm_my_files/download"))!=40777)
     $g_message->show("invalid_folder");
 }
 
+
 if (isset($_GET['folder']))
 	$folder = strStripTags(urldecode($_GET['folder']));
 else
 	$folder = ""; 
-
+	
 if (isset($_GET['file']))
 	$file = strStripTags(urldecode($_GET['file']));
 else
 	$file = "";
-
+	
 if (isset($_GET['default_folder']))
-	$folder = strStripTags(urldecode($_GET['default_folder']));
+	$default_folder = strStripTags(urldecode($_GET['default_folder']));
 else
 	$default_folder = "";
 
@@ -133,7 +134,7 @@ if(strlen($default_folder) > 0)
     {
         $g_message->show("invalid_folder");
     }
-    $act_folder = "$act_folder/$default_folder";
+    $act_folder = "$default_folder/$act_folder";
 }
 if(strlen($folder) > 0)
 {
@@ -204,6 +205,7 @@ if($_GET["mode"] == 1)
             // Datei hochladen
             if(move_uploaded_file($_FILES['userfile']['tmp_name'], "$act_folder/$file_name"))
             {
+                $g_message->setForwardUrl($navigation->getUrl());
                 $g_message->show("upload_file",$file_name);
             }
             else
@@ -236,6 +238,7 @@ elseif($_GET["mode"] == 2)
     {
         if( removeDir ("$act_folder/$file"))
         {
+        		$g_message->setForwardUrl($navigation->getUrl());
         		$g_message->show("delete_folder",$file);
         }
     }
@@ -243,6 +246,7 @@ elseif($_GET["mode"] == 2)
     {
         if(unlink("$act_folder/$file"))
         {
+            $g_message->setForwardUrl($navigation->getUrl());
             $g_message->show("delete_file",$file);
         }
     }
@@ -274,14 +278,15 @@ elseif($_GET["mode"] == 3)
 
          if(in_array($new_folder, $ordnerarray))
          {
-            $g_message->show(folder_exists, $new_folder);
+            $g_message->show("folder_exists", $new_folder);
+            //echo "test"; //new_ Einsetzten!
          }
          else
          {
             // Ordner erstellen
             mkdir("$act_folder/$new_folder",0777);
             chmod("$act_folder/$new_folder", 0777);
-
+				$g_message->setForwardUrl($navigation->getUrl());
             $g_message->show("create_folder", $new_folder);
             $url = urlencode("$g_root_path/adm_program/modules/download/download.php?folder=$folder&default_folder=$default_folder");
          }
@@ -320,6 +325,7 @@ elseif($_GET["mode"] == 4)
             //Umbenennen der Datei
             if(rename("$act_folder/$file","$act_folder/$new_name"))
             {
+            	$g_message->setForwardUrl($navigation->getUrl());
                $g_message->show("rename_folder",$file);
             }
          }
@@ -349,6 +355,7 @@ elseif($_GET["mode"] == 4)
             //Umbenennen der Datei
             if(rename("$act_folder/$file","$act_folder/$new_name"))
             {
+            	$g_message->setForwardUrl($navigation->getUrl());
             	$g_message->show("rename_file",$file);
 				}
             }
@@ -365,5 +372,9 @@ elseif($_GET["mode"] == 4)
       }
    }
 }
-
+elseif($_GET["mode"] == 5)
+{
+	$g_message->setForwardYesNo("$g_root_path/adm_program/modules/download/download_function.php?mode=2&amp;folder=$folder&amp;file=$file&amp;default_folder=$default_folder");
+	$g_message->show("delete_file_folder",$file);
+}
 ?>
