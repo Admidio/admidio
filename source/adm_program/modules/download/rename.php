@@ -46,6 +46,7 @@ $default_folder = strStripTags(urldecode($_GET['default_folder']));
 $folder     = strStripTags(urldecode($_GET['folder']));
 $file       = strStripTags($_GET['file']);
 $act_folder = "../../../adm_my_files/download";
+$datei = "";
 
 // uebergebene Ordner auf Gueltigkeit pruefen
 // und Ordnerpfad zusammensetzen
