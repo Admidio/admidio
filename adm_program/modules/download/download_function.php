@@ -12,6 +12,7 @@
  *           2 - Datei / Ordner loeschen
  *           3 - Ordner erstellen
  *           4 - Datei / Ordner umbenennen
+ *				 5 - Datei /Ordner loeschen abfrage
  * folder :  relativer Pfad zu der Datei / Ordners
  * default_folder : gibt den Ordner in adm_my_files/download an, ab dem die
  *                  Verzeichnisstruktur angezeigt wird. Wurde ein Default-Ordner
@@ -200,6 +201,9 @@ if($_GET["mode"] == 1)
         }
 		
         $ret = isValidFileName($file_name, true);
+        if (file_exists("$act_folder/$file_name")){
+           $g_message->show("file_exists","$file_name");
+        }
         if($ret == 0)
         {
             // Datei hochladen
@@ -278,8 +282,8 @@ elseif($_GET["mode"] == 3)
 
          if(in_array($new_folder, $ordnerarray))
          {
-            $g_message->show("folder_exists", $new_folder);
-            //echo "test"; //new_ Einsetzten!
+            $g_message->addVariableContent($new_folder, 1);
+            $g_message->show("folder_exists");
          }
          else
          {
@@ -318,7 +322,7 @@ elseif($_GET["mode"] == 4)
          //Gibt es den Ordner schon?
          if(in_array($new_name, $ordnerarray))
          {
-            $g_message->show("folder_exists");
+            $g_message->show("folder_exists","$new_name");
          }
          else
          {
