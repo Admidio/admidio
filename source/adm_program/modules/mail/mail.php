@@ -203,6 +203,13 @@ if (!array_key_exists("kopie", $_GET) || !is_numeric($_GET["kopie"]))
     $_GET["kopie"] = "1";
 }
 
+// Seiten fuer Zuruecknavigation merken
+if(isset($_GET["usr_id"]) == false)
+{
+    $_SESSION['navigation']->clear();
+}
+$_SESSION['navigation']->addUrl($g_current_url);
+
 echo "
 <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
@@ -229,7 +236,7 @@ require("../../../adm_config/body_top.php");
       {
           echo "usr_id=". $_GET['usr_id']. "&";
       }
-      echo "url=". urlencode(getHttpReferer()). "\" method=\"post\" name=\"Mail\" enctype=\"multipart/form-data\">
+      echo "\" method=\"post\" name=\"Mail\" enctype=\"multipart/form-data\">
 
       <div class=\"formHead\">";
       if ($_GET["subject"] == "")
@@ -428,12 +435,15 @@ require("../../../adm_config/body_top.php");
          echo "
          <hr width=\"90%\" />
 
-         <div style=\"margin-top: 8px;\">
-            <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
-               <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
-               &nbsp;Zur&uuml;ck</button>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button name=\"abschicken\" type=\"submit\" value=\"abschicken\">
+         <div style=\"margin-top: 8px;\">";
+         	if(isset($_GET["usr_id"]))
+         	{
+	            echo "<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
+	               <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
+	               &nbsp;Zur&uuml;ck</button>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+         	}
+            echo "<button name=\"abschicken\" type=\"submit\" value=\"abschicken\">
                <img src=\"$g_root_path/adm_program/images/mail.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Abschicken\">
                &nbsp;Abschicken</button>
          </div>

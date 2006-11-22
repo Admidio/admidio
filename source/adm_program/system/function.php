@@ -90,45 +90,6 @@ function prepareSQL($queryString, $paramArr)
     return preg_replace('/\{(.*?)\}/ei','$paramArr[\'$1\']', $queryString);
 }
 
-// HTTP_REFERER wird gesetzt. Bei Ausnahmen geht es zurueck zur Startseite
-// Falls eine URL uebergeben wird, so wird diese geprueft und ggf. zurueckgegeben
-
-function getHttpReferer()
-{
-    global $g_root_path;
-    global $g_main_page;
-
-    $exception = 0;
-
-    if(isset($_SERVER['HTTP_REFERER']))
-    {
-        if($exception == 0)
-            $exception = substr_count($_SERVER['HTTP_REFERER'], "menue.htm");
-        if($exception == 0)
-            $exception = substr_count($_SERVER['HTTP_REFERER'], "status.php");
-        if($exception == 0)
-            $exception = substr_count($_SERVER['HTTP_REFERER'], "err_msg.php");
-        if($exception == 0)
-            $exception = substr_count($_SERVER['HTTP_REFERER'], "index.htm");
-        if($exception == 0)
-            $exception = substr_count($_SERVER['HTTP_REFERER'], "login.php");
-        if($exception == 0)
-        {
-            $tmp_url = $g_root_path. "/";
-            if(strcmp($_SERVER['HTTP_REFERER'], $tmp_url) == 0)
-            {
-                $exception = 1;
-            }
-        }
-    
-        if($exception == 0)
-        {
-            return $_SERVER['HTTP_REFERER'];
-        }
-    }
-    return $g_root_path. "/". $g_main_page;
-}
-
 // Funktion prueft, ob ein User die uebergebene Rolle besitzt
 // Inhalt der Variable "$function" muss gleich dem DB-Feld "rolle.funktion" sein
 
