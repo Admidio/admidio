@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /******************************************************************************
  * Downloads auflisten
  *
@@ -172,7 +172,7 @@ require("../../../adm_config/body_top.php");
     echo"<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
     <h1>Downloadbereich</h1>
     <p>";
-	echo "<h2>$link</h2>";
+    echo "<h2>$link</h2>";
     //Button zurück zur Downloadübersicht & Eins zurück
     if(strlen($folder) > 0)
     {
@@ -204,12 +204,12 @@ require("../../../adm_config/body_top.php");
 
     // Ausgabe von Verwaltungsinfos
     echo "$info";
-	 $index_folder = count($path)-1;
-	 if ($index_folder == 0)
-	 	$show_folder = "Download";
-	 else
-	 	$show_folder = "$path[$index_folder]";
-	 	
+     $index_folder = count($path)-1;
+     if ($index_folder == 0)
+        $show_folder = "Download";
+     else
+        $show_folder = "$path[$index_folder]";
+        
     //Anlegen der Tabelle
     echo" <table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\">
             <tr>
