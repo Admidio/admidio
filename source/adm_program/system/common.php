@@ -37,6 +37,8 @@ require_once($g_server_path. "/adm_program/system/message_text.php");
 require_once($g_server_path. "/adm_program/system/navigation_class.php");
 require_once($g_server_path. "/adm_program/system/user_class.php");
 require_once($g_server_path. "/adm_program/system/organization_class.php");
+require_once($g_server_path. "/adm_program/system/role_dependency_class.php");
+
 
 
  // Standard-Praefix ist adm auch wegen Kompatibilitaet zu alten Versionen
