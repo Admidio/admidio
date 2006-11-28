@@ -81,7 +81,7 @@ if($_GET["mode"] == 1)
     echo "</head>";
 
     require("../../../adm_config/body_top.php");
-        echo "<div align=\"center\"><br /><br /><br />
+		echo "<div align=\"center\"><br /><br /><br />
             <div class=\"formHead\" style=\"width: 400px\">". strspace("Rolle l&ouml;schen"). "</div>
 
             <div class=\"formBody\" style=\"width: 400px\">
@@ -424,6 +424,48 @@ elseif($_GET["mode"] == 2)
             trim($_POST['location']), $_POST['max_members'], $_POST['cost'], $rol_id));
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
+			
+			
+			//Rollenabhaengigkeiten setzten
+			
+			if(array_key_exists("ChildRoles", $_POST))
+            {
+				
+				$sentChildRoles = $_POST['ChildRoles'];
+				// holt eine Liste der ausgewählten Rolen
+		        $DBChildRoles = RoleDependency::getChildRoles($g_adm_con,$rol_id);
+				
+				$roleDep = new RoleDependency($g_adm_con);
+				
+				//entferne alle Rollen die nicht mehr ausgewählt sind
+				foreach ($DBChildRoles as $DBChildRole)
+				{
+					if(in_array($DBChildRole,$sentChildRoles))
+						continue;
+					else
+					{
+						$roleDep->get($DBChildRole,$rol_id);
+						$roleDep->delete();
+					}
+				}
+				//fuege alle neuen Rolen hinzu
+				foreach ($sentChildRoles as $sentChildRole)
+				{
+					if(in_array($sentChildRole,$DBChildRoles))
+						continue;
+					else
+					{
+						$roleDep->clear();
+						$roleDep->setChild($sentChildRole);
+						$roleDep->setParent($rol_id);
+						$roleDep->insert($g_current_user->id);
+					}
+				}				
+				        
+            }
+            
+			
+			
             
             $_SESSION['navigation']->deleteLastUrl();
             unset($_SESSION['roles_request']);
