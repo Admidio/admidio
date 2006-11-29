@@ -125,7 +125,7 @@ class Captcha
     {
 
         // ein leeres Bild definieren
-        $image = imagecreatetruecolor($this->width, $this->height);
+        $image = imagecreate($this->width, $this->height);
 
         // Hintergrundfarbe setzen...
         $background =  imagecolorallocate($image, $this->backgroundColourR, $this->backgroundColourG, $this->backgroundColourB);
