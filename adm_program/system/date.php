@@ -239,11 +239,11 @@ function dtCheckDate($date)
 
 function dtFormatDate($date, $format = "")
 {
-   $day   = "";
-   $month = "";
-   $year  = "";
-   
-   // String auf gueltige Zeichen pruefen
+    $day   = "";
+    $month = "";
+    $year  = "";
+
+    // String auf gueltige Zeichen pruefen
     $anz = strspn($date, "0123456789. ");
     if($anz == strlen($date))
     {
@@ -282,9 +282,37 @@ function dtFormatDate($date, $format = "")
                 $year = $arrDate[2];
 
             if(strlen($format) > 0)
-                return date($format, mktime(0, 0, 0, $month, $day, $year));
+            {
+                // Datum wird jetzt formatiert zurueckgegeben, bisher ist aber nur Y m d als Format moeglich
+                $return_date = "";
+                for($i = 0; $i < strlen($format); $i++)
+                {
+                    switch($format[$i])
+                    {
+                        case 'Y':
+                            $return_date = $return_date. sprintf("%04d", $year);
+                            break;
+
+                        case 'm':
+                            $return_date = $return_date. sprintf("%02d", $month);
+                            break;
+
+                        case 'd':
+                            $return_date = $return_date. sprintf("%02d", $day);
+                            break;
+
+                        default:
+                            $return_date = $return_date. $format[$i];
+                            break;
+                    }
+                }
+                
+                return $return_date;
+            }
             else
+            {
                 return "$day.$month.$year";
+            }
         }
         else
             return "";
@@ -365,12 +393,41 @@ function dtFormatTime($time, $format = "")
             $second = "00";
             
         if(strlen($format) > 0)
-            return date($format, mktime($hour, $minute, $second));
+        {
+            // Zeit wird jetzt formatiert zurueckgegeben, bisher ist aber nur H i s als Format moeglich
+            $return_time = "";
+            for($i = 0; $i < strlen($format); $i++)
+            {
+                switch($format[$i])
+                {
+                    case 'H':
+                        $return_time = $return_time. sprintf("%02d", $hour);
+                        break;
+
+                    case 'i':
+                        $return_time = $return_time. sprintf("%02d", $minute);
+                        break;
+
+                    case 's':
+                        $return_time = $return_time. sprintf("%02d", $second);
+                        break;
+
+                    default:
+                        $return_time = $return_time. $format[$i];
+                        break;
+                }
+            }
+            return $return_time;
+        }
         else
+        {
             return "$hour:$minute:$second";
+        }
     }
     else
+    {
         return "";
+    }
 }
 
 ?>
