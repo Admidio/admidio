@@ -242,24 +242,34 @@ require("../../../adm_config/body_top.php");
                         if(strlen($user->birthday) > 0 && strcmp($user->birthday, "0000-00-00") != 0)
                         {
                             echo mysqldatetime('d.m.y', $user->birthday);
+                            
                             // Alter berechnen
-                            $act_date = getDate(time());
-                            $geb_date = getDate(mysqlmaketimestamp($user->birthday));
+                            // Hier muss man aufpassen, da viele PHP-Funkionen nicht mit einem Datum vor 1970 umgehen koennen !!!
+                            $act_date  = getDate(time());
+                            $geb_day   = mysqldatetime("d", $user->birthday);
+                            $geb_month = mysqldatetime("m", $user->birthday);
+                            $geb_year  = mysqldatetime("y", $user->birthday);
                             $birthday = false;
 
-                            if($act_date['mon'] >= $geb_date['mon'])
+                            if($act_date['mon'] >= $geb_month)
                             {
-                                if($act_date['mon'] == $geb_date['mon'])
+                                if($act_date['mon'] == $geb_month)
                                 {
-                                    if($act_date['mday'] >= $geb_date['mday'])
+                                    if($act_date['mday'] >= $geb_day)
+                                    {
                                         $birthday = true;
+                                    }
                                 }
                                 else
+                                {
                                     $birthday = true;
+                                }
                             }
-                            $age = $act_date['year'] - $geb_date['year'];
+                            $age = $act_date['year'] - $geb_year;
                             if($birthday == false)
+                            {
                                 $age--;
+                            }
                             echo "&nbsp;&nbsp;&nbsp;($age Jahre)";
                         }
                         else
