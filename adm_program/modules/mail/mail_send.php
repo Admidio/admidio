@@ -53,6 +53,10 @@ if (array_key_exists("usr_id", $_GET) && !$g_session_valid)
     $g_message->show("invalid");
 }
 
+// aktuelle Seite im NaviObjekt speichern. Dann kann in der Vorgaengerseite geprueft werden, ob das
+// Formular mit den in der Session gespeicherten Werten ausgefuellt werden soll...
+$_SESSION['navigation']->addUrl($g_current_url);
+
 // Falls eine Usr_id uebergeben wurde, muss geprueft werden ob der User ueberhaupt
 // auf diese zugreifen darf oder ob die UsrId ueberhaupt eine gueltige Mailadresse hat...
 if (array_key_exists("usr_id", $_GET))
@@ -326,6 +330,9 @@ if ($email->sendEmail())
     {
         unset($_SESSION['captchacode']);
     }
+
+    // Bei erfolgreichem Versenden wird aus dem NaviObjekt die am Anfang hinzugefuegte URL wieder geloescht...
+    $_SESSION['navigation']->deleteLastUrl();
 }
 else
 {
