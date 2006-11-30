@@ -204,7 +204,7 @@ if (!array_key_exists("kopie", $_GET) || !is_numeric($_GET["kopie"]))
 }
 
 // Seiten fuer Zuruecknavigation merken
-if(isset($_GET["usr_id"]) == false)
+if(isset($_GET["usr_id"]) == false && isset($_GET["rol_id"]) == false)
 {
     $_SESSION['navigation']->clear();
 }
@@ -436,13 +436,13 @@ require("../../../adm_config/body_top.php");
          <hr width=\"90%\" />
 
          <div style=\"margin-top: 8px;\">";
-         	if(isset($_GET["usr_id"]))
-         	{
-	            echo "<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
-	               <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
-	               &nbsp;Zur&uuml;ck</button>
-				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-         	}
+             if(isset($_GET["usr_id"]))
+             {
+                echo "<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
+                   <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
+                   &nbsp;Zur&uuml;ck</button>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+             }
             echo "<button name=\"abschicken\" type=\"submit\" value=\"abschicken\">
                <img src=\"$g_root_path/adm_program/images/mail.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Abschicken\">
                &nbsp;Abschicken</button>
