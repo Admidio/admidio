@@ -203,6 +203,18 @@ if (!array_key_exists("kopie", $_GET) || !is_numeric($_GET["kopie"]))
     $_GET["kopie"] = "1";
 }
 
+// Wenn die letzte URL in der Zuruecknavigation die des Scriptes mail_send.php ist,
+// dann soll das Formular gefuellt werden mit den Werten aus der Session
+if (strpos($_SESSION['navigation']->getUrl(),'mail_send.php') > 0)
+{
+    // Das Formular wurde also schon einmal ausgefüllt,
+    // da der User hier wieder gelandet ist nach der Mailversand-Seite
+    echo "blabla";
+    $_SESSION['navigation']->deleteLastUrl();
+}
+
+
+
 // Seiten fuer Zuruecknavigation merken
 if(isset($_GET["usr_id"]) == false && isset($_GET["rol_id"]) == false)
 {
