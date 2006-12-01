@@ -10,9 +10,9 @@
  * verwaltet werden. Ein Objekt dieser Klasse wird in common.php angelegt
  * und als Session-Variable $_SESSION['navigation'] weiter verwendet.
  *
- * Beim Aufruf der Basisseite eines Moduls muss die Funktion 
+ * Beim Aufruf der Basisseite eines Moduls muss die Funktion
  * $_SESSION['navigation']->clear() aufgerufen werden, um alle vorherigen Eintraege
- * zu loeschen. 
+ * zu loeschen.
  *
  * Nun muss auf allen Seiten innerhalb des Moduls die Funktion
  * $_SESSION['navigation']->addUrl($g_current_url) aufgerufen werde
@@ -45,7 +45,7 @@ class Navigation
 {
     var $url_arr = array();
     var $count;
-    
+
     function Navigation()
     {
         $this->count = 0;
@@ -67,7 +67,7 @@ class Navigation
         $this->count--;
         unset($this->url_arr[$this->count]);
     }
-    
+
     // fuegt eine Seite zum Navigationsstack hinzu
     function addUrl($url)
     {
@@ -78,7 +78,7 @@ class Navigation
             $this->count++;
         }
     }
-    
+
     // gibt die vorletzte Url aus dem Stack zurueck
     function getPreviousUrl()
     {
@@ -97,6 +97,10 @@ class Navigation
     // gibt die letzte Url aus dem Stack zurueck
     function getUrl()
     {
+        if($this->count == 0)
+        {
+            return null;
+        }
         return $this->url_arr[$this->count-1];
     }
 }
