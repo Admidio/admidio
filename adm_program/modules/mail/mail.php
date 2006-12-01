@@ -205,12 +205,22 @@ if (!array_key_exists("kopie", $_GET) || !is_numeric($_GET["kopie"]))
 
 // Wenn die letzte URL in der Zuruecknavigation die des Scriptes mail_send.php ist,
 // dann soll das Formular gefuellt werden mit den Werten aus der Session
-if (strpos($_SESSION['navigation']->getUrl(),'mail_send.php') > 0)
+if (strpos($_SESSION['navigation']->getUrl(),'mail_send.php') > 0 && isset($_SESSION['mail_request']))
 {
     // Das Formular wurde also schon einmal ausgefüllt,
     // da der User hier wieder gelandet ist nach der Mailversand-Seite
-    echo "blabla";
+    $form_values = $_SESSION['mail_request'];
+    unset($_SESSION['mail_request']);
+
     $_SESSION['navigation']->deleteLastUrl();
+}
+else
+{
+    $form_values['name']         = "";
+    $form_values['mailfrom']     = "";
+    $form_values['subject']      = "";
+    $form_values['body']         = "";
+    $form_values['rol_id']       = "";
 }
 
 
@@ -279,7 +289,10 @@ require("../../../adm_config/body_top.php");
                {
                    // keine Uebergabe, dann alle Rollen entsprechend Login/Logout auflisten
                    echo "<select size=\"1\" id=\"rol_id\" name=\"rol_id\">";
-                   echo "<option value=\"\" selected=\"selected\">- Bitte w&auml;hlen -</option>";
+                   if ($form_values['rol_id'] == "")
+                   {
+                       echo "<option value=\"\" selected=\"selected\">- Bitte w&auml;hlen -</option>";
+                   }
 
                    if ($g_session_valid)
                    {
@@ -333,6 +346,10 @@ require("../../../adm_config/body_top.php");
                             $act_category = $row->cat_name;
                         }
                         echo "<option value=\"$row->rol_id\" ";
+                        if ($row->rol_id == $form_values['rol_id'])
+                        {
+                            echo "selected=\"selected\"";
+                        }
                         echo ">$row->rol_name</option>";
                    }
 
@@ -355,7 +372,7 @@ require("../../../adm_config/body_top.php");
                }
                else
                {
-                   echo "<input type=\"text\" id=\"name\" name=\"name\" style=\"width: 200px;\" maxlength=\"50\" value=\"\">";
+                   echo "<input type=\"text\" id=\"name\" name=\"name\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['name']. "\">";
                }
             echo "</div>
          </div>
@@ -368,7 +385,7 @@ require("../../../adm_config/body_top.php");
                }
                else
                {
-                   echo "<input type=\"text\" name=\"mailfrom\" style=\"width: 350px;\" maxlength=\"50\" value=\"\">";
+                   echo "<input type=\"text\" name=\"mailfrom\" style=\"width: 350px;\" maxlength=\"50\" value=\"". $form_values['mailfrom']. "\">";
                }
             echo "</div>
          </div>
@@ -378,21 +395,28 @@ require("../../../adm_config/body_top.php");
          <div style=\"margin-top: 8px;\">
             <div style=\"text-align: right; width: 25%; float: left;\">Betreff:</div>
             <div style=\"text-align: left; margin-left: 27%;\">";
-               if ($_GET["subject"] == "")
+               if ($_GET['subject'] == "")
                {
-                   echo "<input type=\"text\" id=\"subject\" name=\"subject\" style=\"width: 350px;\" maxlength=\"50\">";
+                   echo "<input type=\"text\" id=\"subject\" name=\"subject\" style=\"width: 350px;\" maxlength=\"50\" value=\"". $form_values['subject']. "\">";
                }
                else
                {
-                   echo "<input class=\"readonly\" readonly type=\"text\" name=\"subject\" style=\"width: 350px;\" maxlength=\"50\" value=\"". $_GET["subject"]. "\">";
+                   echo "<input class=\"readonly\" readonly type=\"text\" name=\"subject\" style=\"width: 350px;\" maxlength=\"50\" value=\"". $_GET['subject']. "\">";
                }
             echo "</div>
          </div>
          <div style=\"margin-top: 8px;\">
             <div style=\"text-align: right; width: 25%; float: left;\">Nachricht:</div>
-            <div style=\"text-align: left; margin-left: 27%;\">
-               <textarea name=\"body\" style=\"width: 350px;\" rows=\"10\" cols=\"45\">". $_GET["body"]. "</textarea>
-            </div>
+            <div style=\"text-align: left; margin-left: 27%;\">";
+               if ($form_values['body'] != "")
+               {
+                   echo "<textarea name=\"body\" style=\"width: 350px;\" rows=\"10\" cols=\"45\">". $form_values['body']. "</textarea>";
+               }
+               else
+               {
+                   echo "<textarea name=\"body\" style=\"width: 350px;\" rows=\"10\" cols=\"45\">". $_GET['body']. "</textarea>";
+               }
+            echo "</div>
          </div>";
 
 
@@ -414,7 +438,7 @@ require("../../../adm_config/body_top.php");
          <div style=\"margin-top: 8px;\">
             <div style=\"text-align: left; margin-left: 27%;\">
                <input type=\"checkbox\" id=\"kopie\" name=\"kopie\" value=\"1\" ";
-               if ($_GET["kopie"] == 1)
+               if ($_GET['kopie'] == 1)
                {
                    echo " checked=\"checked\" ";
                }
@@ -448,7 +472,7 @@ require("../../../adm_config/body_top.php");
          <hr width=\"90%\" />
 
          <div style=\"margin-top: 8px;\">";
-             if(isset($_GET["usr_id"]) || isset($_GET["rol_id"]))
+             if(isset($_GET['usr_id']) || isset($_GET['rol_id']))
              {
                 echo "<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
                    <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
