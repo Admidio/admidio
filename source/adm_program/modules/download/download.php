@@ -145,11 +145,13 @@ while (false !== ($filename = readdir($dh)))
 $ordnerarray = array_slice ($ordnerarray,2);
 if ($sort == "desc")
 {
-    sort($ordnerarray);
+    // Absteigend
+    rsort($ordnerarray);
 }
 else
 {
-    rsort($ordnerarray);
+    // Aufsteigend
+    sort($ordnerarray);
 };
 
 echo "
