@@ -57,6 +57,9 @@ if (array_key_exists("usr_id", $_GET) && !$g_session_valid)
 // Formular mit den in der Session gespeicherten Werten ausgefuellt werden soll...
 $_SESSION['navigation']->addUrl($g_current_url);
 
+// Der Inhalt des Formulars wird nun in der Session gespeichert...
+$_SESSION['mail_request'] = $_REQUEST;
+
 // Falls eine Usr_id uebergeben wurde, muss geprueft werden ob der User ueberhaupt
 // auf diese zugreifen darf oder ob die UsrId ueberhaupt eine gueltige Mailadresse hat...
 if (array_key_exists("usr_id", $_GET))
@@ -333,6 +336,9 @@ if ($email->sendEmail())
 
     // Bei erfolgreichem Versenden wird aus dem NaviObjekt die am Anfang hinzugefuegte URL wieder geloescht...
     $_SESSION['navigation']->deleteLastUrl();
+
+    // Der Inhalt des Formulars wird bei erfolgreichem insert/update aus der Session geloescht
+    unset($_SESSION['mail_request']);
 }
 else
 {
