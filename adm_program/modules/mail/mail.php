@@ -358,7 +358,7 @@ require("../../../adm_config/body_top.php");
                    <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" alt=\"Hilfe\" title=\"Hilfe\"
                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_mail','Message','width=400,height=400,left=310,top=200')\">";
                }
-            echo "</div>
+            echo "&nbsp;<acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym></div>
          </div>
 
          <hr width=\"90%\" />
@@ -374,7 +374,7 @@ require("../../../adm_config/body_top.php");
                {
                    echo "<input type=\"text\" id=\"name\" name=\"name\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['name']. "\">";
                }
-            echo "</div>
+            echo "&nbsp;<acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym></div>
          </div>
          <div style=\"margin-top: 8px;\">
             <div style=\"text-align: right; width: 25%; float: left;\">E-Mail:</div>
@@ -387,7 +387,7 @@ require("../../../adm_config/body_top.php");
                {
                    echo "<input type=\"text\" name=\"mailfrom\" style=\"width: 350px;\" maxlength=\"50\" value=\"". $form_values['mailfrom']. "\">";
                }
-            echo "</div>
+            echo "&nbsp;<acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym></div>
          </div>
 
          <hr width=\"90%\" />
@@ -403,7 +403,7 @@ require("../../../adm_config/body_top.php");
                {
                    echo "<input class=\"readonly\" readonly type=\"text\" name=\"subject\" style=\"width: 350px;\" maxlength=\"50\" value=\"". $_GET['subject']. "\">";
                }
-            echo "</div>
+            echo "&nbsp;<acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym></div>
          </div>
          <div style=\"margin-top: 8px;\">
             <div style=\"text-align: right; width: 25%; float: left;\">Nachricht:</div>
@@ -424,12 +424,13 @@ require("../../../adm_config/body_top.php");
          // Nur eingeloggte User duerfen Attachments mit max 3MB anhaengen...
          if (($g_session_valid) && ($g_preferences['max_email_attachment_size'] > 0) && (ini_get('file_uploads') == '1'))
          {
+             // das Feld userfile wird in der Breite mit size und width gesetzt, da FF nur size benutzt und IE size zu breit macht :(      
              echo "
              <div style=\"margin-top: 8px;\">
                  <div style=\"text-align: right; width: 25%; float: left;\">Anhang:</div>
                  <div style=\"text-align: left; margin-left: 27%;\">
                      <input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"" . ($g_preferences['max_email_attachment_size'] * 1024) . "\">
-                     <input name=\"userfile\" size=\"40\" type=\"file\">
+                     <input name=\"userfile\" size=\"35\" style=\"width: 350px;\" type=\"file\">
                  </div>
              </div>";
          }
@@ -459,9 +460,9 @@ require("../../../adm_config/body_top.php");
              </div>
 
              <div style=\"margin-top: 6px;\">
-                    <div style=\"text-align: right; width: 25%; float: left;\">Best&auml;tigungscode:*</div>
+                    <div style=\"text-align: right; width: 25%; float: left;\">Best&auml;tigungscode:</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <input type=\"text\" id=\"captcha\" name=\"captcha\" style=\"width: 200px;\" maxlength=\"8\" value=\"\">
+                        <input type=\"text\" id=\"captcha\" name=\"captcha\" style=\"width: 200px;\" maxlength=\"8\" value=\"\">&nbsp;<acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym>&nbsp;
                         <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                              onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=captcha_help','Message','width=400,height=320,left=310,top=200,scrollbars=yes')\">
                     </div>
