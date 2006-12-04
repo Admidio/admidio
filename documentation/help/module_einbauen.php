@@ -153,6 +153,12 @@
                    <td class="parameter">Name der Rolle, an deren Mitglieder eine E-Mail geschickt wird.</td>
                 </tr>
                 <tr>
+                   <td class="parameter"><b>cat</b></td>
+                   <td class="parameter"><i>Kategorie</i></td>
+                   <td class="parameter">Name der Kategorie, in der sich die Rolle befindet. Die Kategorie muss 
+                        mit &uuml;bergeben werden, wenn der Parameter <b>rolle</b> benutzt wird.</td>
+                </tr>
+                <tr>
                    <td class="parameter"><b>subject</b></td>
                    <td class="parameter"><i>Betreff</i></td>
                    <td class="parameter">Betreff der E-Mail kann hiermit vorbelegt werden.</td>
