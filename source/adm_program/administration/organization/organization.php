@@ -44,32 +44,39 @@ if(isset($_SESSION['organization_request']))
 }
 else
 {
-   $form_values['shortname']                 = $g_current_organization->shortname;
-   $form_values['longname']                  = $g_current_organization->longname;
-   $form_values['homepage']                  = $g_current_organization->homepage;
-   $form_values['email_administrator']       = $g_preferences['email_administrator'];
-   $form_values['default_country']           = $g_preferences['default_country'];
-   $form_values['parent']                    = $g_current_organization->org_id_parent;
-   $form_values['enable_bbcode']             = $g_preferences['enable_bbcode'];
-   $form_values['enable_rss']                = $g_preferences['enable_rss'];
-   $form_values['registration_mode']         = $g_preferences['registration_mode'];
+   $form_values['shortname']                      = $g_current_organization->shortname;
+   $form_values['longname']                       = $g_current_organization->longname;
+   $form_values['homepage']                  	  = $g_current_organization->homepage;
+   $form_values['email_administrator']            = $g_preferences['email_administrator'];
+   $form_values['default_country']                = $g_preferences['default_country'];
+   $form_values['parent']                         = $g_current_organization->org_id_parent;
+   $form_values['enable_bbcode']                  = $g_preferences['enable_bbcode'];
+   $form_values['enable_rss']                     = $g_preferences['enable_rss'];
+   $form_values['registration_mode']              = $g_preferences['registration_mode'];
    $form_values['enable_registration_captcha']    = $g_preferences['enable_registration_captcha'];
    $form_values['enable_registration_admin_mail'] = $g_preferences['enable_registration_admin_mail'];
-   $form_values['logout_minutes']            = $g_preferences['logout_minutes'];
-   $form_values['send_email_extern']         = $g_preferences['send_email_extern'];
-   $form_values['max_email_attachment_size'] = $g_preferences['max_email_attachment_size'];
-   $form_values['enable_mail_captcha']       = $g_preferences['enable_mail_captcha'];
-   $form_values['max_file_upload_size']      = $g_preferences['max_file_upload_size'];
-   $form_values['photo_thumbs_row']          = $g_preferences['photo_thumbs_row'];
-   $form_values['photo_thumbs_column']       = $g_preferences['photo_thumbs_column'];
-   $form_values['photo_thumbs_scale']        = $g_preferences['photo_thumbs_scale'];
-   $form_values['photo_save_scale']          = $g_preferences['photo_save_scale'];
-   $form_values['photo_preview_scale']       = $g_preferences['photo_preview_scale'];
-   $form_values['photo_show_width']          = $g_preferences['photo_show_width'];
-   $form_values['photo_show_height']         = $g_preferences['photo_show_height'];
-   $form_values['photo_image_text']          = $g_preferences['photo_image_text'];
-   $form_values['enable_guestbook_captcha']  = $g_preferences['enable_guestbook_captcha'];
-   $form_values['flooding_protection_time']  = $g_preferences['flooding_protection_time'];
+   $form_values['logout_minutes']                 = $g_preferences['logout_minutes'];
+   $form_values['send_email_extern']         	  = $g_preferences['send_email_extern'];
+   $form_values['max_email_attachment_size'] 	  = $g_preferences['max_email_attachment_size'];
+   $form_values['enable_mail_captcha']       	  = $g_preferences['enable_mail_captcha'];
+   $form_values['enable_download_module']      	  = $g_preferences['enable_download_module'];
+   $form_values['max_file_upload_size']      	  = $g_preferences['max_file_upload_size'];
+   $form_values['enable_photo_module']        	  = $g_preferences['enable_photo_module'];
+   $form_values['photo_thumbs_row']          	  = $g_preferences['photo_thumbs_row'];
+   $form_values['photo_thumbs_column']       	  = $g_preferences['photo_thumbs_column'];
+   $form_values['photo_thumbs_scale']        	  = $g_preferences['photo_thumbs_scale'];
+   $form_values['photo_save_scale']          	  = $g_preferences['photo_save_scale'];
+   $form_values['photo_preview_scale']       	  = $g_preferences['photo_preview_scale'];
+   $form_values['photo_show_width']          	  = $g_preferences['photo_show_width'];
+   $form_values['photo_show_height']         	  = $g_preferences['photo_show_height'];
+   $form_values['photo_image_text']          	  = $g_preferences['photo_image_text'];
+   $form_values['enable_guestbook_module']  	  = $g_preferences['enable_guestbook_module'];
+   $form_values['enable_guestbook_captcha']  	  = $g_preferences['enable_guestbook_captcha'];
+   $form_values['flooding_protection_time']  	  = $g_preferences['flooding_protection_time'];
+   $form_values['enable_dates_module']		  	  = $g_preferences['enable_dates_module'];
+   $form_values['enable_weblinks_module']	  	  = $g_preferences['enable_weblinks_module'];
+   $form_values['enable_announcements_module'] 	  = $g_preferences['enable_announcements_module'];
+   $form_values['enable_lists_module']		  	  = $g_preferences['enable_lists_module'];
 }
 
 echo "
@@ -352,8 +359,8 @@ require("../../../adm_config/body_top.php");
                     </div>
                     <div class=\"smallText\">
                         E-Mails werden in der Regel &uuml;ber den Webserver verschickt auf dem Admidio eingerichtet
-                        ist. Sollte dein Webserver keinen E-Mailversand unterst&uuml;tzen, kannst du diese Option
-                        aktivieren. Dadurch wird versucht, das lokale E-Mail-Programm des Benutzers zu starten,
+                        ist. Sollte dein Webserver keinen E-Mailversand unterst&uuml;tzen, kannst Du durch diese Option das
+                        Mailmodul deaktivieren. Dadurch wird versucht, das lokale E-Mail-Programm des Benutzers zu starten,
                         sobald dieser auf einen E-Mail-Link klickt.
                         Allerdings funktioniert dann die automatische Benachrichtigung bei Neuanmeldungen nicht mehr.
                     </div>
@@ -394,7 +401,24 @@ require("../../../adm_config/body_top.php");
                 echo"
                 <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 95%;\">
                     <div class=\"groupBoxHeadline\">Einstellungen Downloadmodul&nbsp;&nbsp; </div>
+
                     <div style=\"margin-top: 6px;\">
+                        <div style=\"text-align: left; width: 55%; float: left;\">Downloadmodul aktivieren:</div>
+                        <div style=\"text-align: left; margin-left: 45%;\">
+                            <input type=\"checkbox\" id=\"enable_download_module\" name=\"enable_download_module\" ";
+                            if(isset($form_values['enable_download_module']) && $form_values['enable_download_module'] == 1)
+                            {
+                                echo " checked ";
+                            }
+                            echo " value=\"1\" />
+                        </div>
+                    </div>
+                    <div class=\"smallText\">
+                        Das Downloadmodul kann &uuml;ber diese Einstellung komplett deaktiviet werden. Es ist dann nicht mehr
+                        aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt.
+                    </div>
+
+                    <div style=\"margin-top: 15px;\">
                         <div style=\"text-align: left; width: 55%; float: left;\">Maximale Dateigr&ouml;&szlig;e:</div>
                         <div style=\"text-align: left; margin-left: 45%;\">
                             <input type=\"text\" name=\"max_file_upload_size\" size=\"4\" maxlength=\"6\" value=\"". $form_values['max_file_upload_size']. "\"> KB
@@ -415,6 +439,22 @@ require("../../../adm_config/body_top.php");
                     <div class=\"groupBoxHeadline\">Einstellungen Fotomodul&nbsp;&nbsp; </div>
 
                     <div style=\"margin-top: 6px;\">
+                        <div style=\"text-align: left; width: 55%; float: left;\">Fotomodul aktivieren:</div>
+                        <div style=\"text-align: left; margin-left: 45%;\">
+                            <input type=\"checkbox\" id=\"enable_photo_module\" name=\"enable_photo_module\" ";
+                            if(isset($form_values['enable_photo_module']) && $form_values['enable_photo_module'] == 1)
+                            {
+                                echo " checked ";
+                            }
+                            echo " value=\"1\" />
+                        </div>
+                    </div>
+                    <div class=\"smallText\">
+                        Das Fotomodul kann &uuml;ber diese Einstellung komplett deaktiviet werden. Es ist dann nicht mehr
+                        aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt.
+                    </div>
+
+                    <div style=\"margin-top: 15px;\">
                         <div style=\"text-align: left; width: 55%; float: left;\">Thumbnailzeilen:</div>
                         <div style=\"text-align: left; margin-left: 45%;\">
                             <input type=\"text\" name=\"photo_thumbs_row\" size=\"2\" maxlength=\"2\" value=\"". $form_values['photo_thumbs_row']. "\">
@@ -524,6 +564,22 @@ require("../../../adm_config/body_top.php");
                     <div class=\"groupBoxHeadline\">Einstellungen G&auml;stebuchmodul&nbsp;&nbsp; </div>
 
                     <div style=\"margin-top: 6px;\">
+                        <div style=\"text-align: left; width: 55%; float: left;\">G&auml;stebuch aktivieren:</div>
+                        <div style=\"text-align: left; margin-left: 45%;\">
+                            <input type=\"checkbox\" id=\"enable_guestbook_module\" name=\"enable_guestbook_module\" ";
+                            if(isset($form_values['enable_guestbook_module']) && $form_values['enable_guestbook_module'] == 1)
+                            {
+                                echo " checked ";
+                            }
+                            echo " value=\"1\" />
+                        </div>
+                    </div>
+                    <div class=\"smallText\">
+                        Das G&auml;stebuch kann &uuml;ber diese Einstellung komplett deaktiviet werden. Es ist dann nicht mehr
+                        aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt.
+                    </div>
+
+                    <div style=\"margin-top: 15px;\">
                         <div style=\"text-align: left; width: 55%; float: left;\">Captcha aktivieren:</div>
                         <div style=\"text-align: left; margin-left: 45%;\">
                             <input type=\"checkbox\" id=\"enable_guestbook_captcha\" name=\"enable_guestbook_captcha\" ";
@@ -556,8 +612,112 @@ require("../../../adm_config/body_top.php");
 
                 </div>";
 
+                /**************************************************************************************/
+                //Einstellungen Ankuendigungsmodul
+                /**************************************************************************************/
+
+                echo"
+                <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 95%;\">
+                    <div class=\"groupBoxHeadline\">Einstellungen Ank&uuml;ndigungsmodul&nbsp;&nbsp; </div>
+
+                    <div style=\"margin-top: 6px;\">
+                        <div style=\"text-align: left; width: 55%; float: left;\">Ank&uuml;ndigungsmodul aktivieren:</div>
+                        <div style=\"text-align: left; margin-left: 45%;\">
+                            <input type=\"checkbox\" id=\"enable_announcements_module\" name=\"enable_announcements_module\" ";
+                            if(isset($form_values['enable_announcements_module']) && $form_values['enable_announcements_module'] == 1)
+                            {
+                                echo " checked ";
+                            }
+                            echo " value=\"1\" />
+                        </div>
+                    </div>
+                    <div class=\"smallText\">
+                        Das Ank&uuml;ndigungsmodul kann &uuml;ber diese Einstellung komplett deaktiviet werden. Es ist dann nicht mehr
+                        aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt.
+                    </div>
+
+                </div>";
+
+                /**************************************************************************************/
+                //Einstellungen Terminmodul
+                /**************************************************************************************/
+
+                echo"
+                <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 95%;\">
+                    <div class=\"groupBoxHeadline\">Einstellungen Terminmodul&nbsp;&nbsp; </div>
+
+                    <div style=\"margin-top: 6px;\">
+                        <div style=\"text-align: left; width: 55%; float: left;\">Terminmodul aktivieren:</div>
+                        <div style=\"text-align: left; margin-left: 45%;\">
+                            <input type=\"checkbox\" id=\"enable_dates_module\" name=\"enable_dates_module\" ";
+                            if(isset($form_values['enable_dates_module']) && $form_values['enable_dates_module'] == 1)
+                            {
+                                echo " checked ";
+                            }
+                            echo " value=\"1\" />
+                        </div>
+                    </div>
+                    <div class=\"smallText\">
+                        Das Terminmodul kann &uuml;ber diese Einstellung komplett deaktiviet werden. Es ist dann nicht mehr
+                        aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt.
+                    </div>
+
+                </div>";
+
+                /**************************************************************************************/
+                //Einstellungen Listenmodul
+                /**************************************************************************************/
+
+                echo"
+                <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 95%;\">
+                    <div class=\"groupBoxHeadline\">Einstellungen Listenmodul&nbsp;&nbsp; </div>
+
+                    <div style=\"margin-top: 6px;\">
+                        <div style=\"text-align: left; width: 55%; float: left;\">Listenmodul aktivieren:</div>
+                        <div style=\"text-align: left; margin-left: 45%;\">
+                            <input type=\"checkbox\" id=\"enable_lists_module\" name=\"enable_lists_module\" ";
+                            if(isset($form_values['enable_lists_module']) && $form_values['enable_lists_module'] == 1)
+                            {
+                                echo " checked ";
+                            }
+                            echo " value=\"1\" />
+                        </div>
+                    </div>
+                    <div class=\"smallText\">
+                        Das Listenmodul kann &uuml;ber diese Einstellung komplett deaktiviet werden. Es ist dann nicht mehr
+                        aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt.
+                    </div>
+
+                </div>";
+
+                /**************************************************************************************/
+                //Einstellungen Weblinksmodul
+                /**************************************************************************************/
+
+                echo"
+                <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 95%;\">
+                    <div class=\"groupBoxHeadline\">Einstellungen Weblinksmodul&nbsp;&nbsp; </div>
+
+                    <div style=\"margin-top: 6px;\">
+                        <div style=\"text-align: left; width: 55%; float: left;\">Weblinksmodul aktivieren:</div>
+                        <div style=\"text-align: left; margin-left: 45%;\">
+                            <input type=\"checkbox\" id=\"enable_weblinks_module\" name=\"enable_weblinks_module\" ";
+                            if(isset($form_values['enable_weblinks_module']) && $form_values['enable_weblinks_module'] == 1)
+                            {
+                                echo " checked ";
+                            }
+                            echo " value=\"1\" />
+                        </div>
+                    </div>
+                    <div class=\"smallText\">
+                        Das Weblinksmodul kann &uuml;ber diese Einstellung komplett deaktiviet werden. Es ist dann nicht mehr
+                        aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt.
+                    </div>
+
+                </div>";
+
                 echo "
-                <div style=\"margin-top: 6px;\">
+                <div style=\"margin-top: 15px;\">
                     <button name=\"speichern\" type=\"submit\" value=\"speichern\">
                         <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
                         &nbsp;Speichern</button>
