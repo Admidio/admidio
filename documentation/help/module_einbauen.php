@@ -38,7 +38,7 @@
     folgt dann der Wert. Wollen Sie mehr als einen Parameter anh&auml;ngen, so m&uuml;ssen sie
     die Parameter durch ein <b>&</b> voneinander trennen.</p>
 
-    <p class="code">Beispiel:<br />http://www.test.de/.../mail.php<b><span style="color: #990000">?</span>rolle<span style="color: #990000">=</span><span style="color: #aaaaaa">Webmaster</span><span style="color: #990000">&</span>cat<span style="color: #990000">=</span><span style="color: #aaaaaa">Allgemein</span><span style="color: #990000">&</span>subject<span style="color: #990000">=</span><span style="color: #aaaaaa">Test</span></b></p>
+    <p class="code">Beispiel:<br />http://www.test.de/.../mail.php<b><span style="color: #990000">?</span>rolle<span style="color: #990000">=</span><span style="color: #aaaaaa">Webmaster</span><span style="color: #990000">&</span>cat<span style="color: #990000">=</span><span style="color: #aaaaaa">Allgemein</span></b></p>
 
     <p>Bitte beachten Sie, dass in der kompletten URL kein Leerzeichen und Sonderzeichen
     vorkommen darf. Dies gilt auch f&uuml;r die Parameter. Falls Sie dennoch einen Wert mit
