@@ -3,7 +3,8 @@
 
 <td style="background-color: #ffffff; padding-left: 15px;">
     <?php 
-    if($_SERVER['HTTP_HOST'] != 'localhost')
+    if(strpos($_SERVER['HTTP_HOST'], "localhost") !== false
+    || strpos($_SERVER['HTTP_HOST'], "127.0.0.1") !== false)
     {
         echo '
         <script type="text/javascript"><!--
