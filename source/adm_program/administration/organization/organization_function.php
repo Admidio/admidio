@@ -131,7 +131,7 @@ if(isset($_POST["enable_rss"]) == false)
     $_POST["enable_rss"] = 0;
 }
 
-if(strlen($_POST["enable_download_module"]) == false)
+if(isset($_POST["enable_download_module"]) == false)
 {
     $_POST["enable_download_module"] = 0;
 }
