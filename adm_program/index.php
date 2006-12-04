@@ -111,81 +111,107 @@ require("../adm_config/body_top.php");
         <div class=\"formHead\">";
             echo strspace("Module", 1);
         echo "</div>
-        <div class=\"formBody\">
-            <div style=\"text-align: left; width: 40; float: left;\">
-                <a href=\"$g_root_path/adm_program/modules/announcements/announcements.php\">
-                <img style=\"position: relative; top: 2px;\" src=\"$g_root_path/adm_program/images/note_big.png\" border=\"0\" alt=\"Ank&uuml;ndigungen\" />
-                </a>
-            </div>
-            <div style=\"text-align: left; margin-left: 45px;\">
-                <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/announcements/announcements.php\">Ank&uuml;ndigungen</a></span><br />
-                <span class=\"textDescription\">Hier k&ouml;nnen Ank&uuml;ndigungen (News / Aktuelles) angeschaut, erstellt und bearbeitet werden.</span>
-            </div>
+        <div class=\"formBody\">";
 
-            <div style=\"margin-top: 7px;\"></div>
+            if($g_preferences['enable_announcements_module'] == 1)
+            {
+                echo "
+                <div style=\"text-align: left; width: 40; float: left;\">
+                    <a href=\"$g_root_path/adm_program/modules/announcements/announcements.php\">
+                    <img style=\"position: relative; top: 2px;\" src=\"$g_root_path/adm_program/images/note_big.png\" border=\"0\" alt=\"Ank&uuml;ndigungen\" />
+                    </a>
+                </div>
+                <div style=\"text-align: left; margin-left: 45px;\">
+                    <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/announcements/announcements.php\">Ank&uuml;ndigungen</a></span><br />
+                    <span class=\"textDescription\">Hier k&ouml;nnen Ank&uuml;ndigungen (News / Aktuelles) angeschaut, erstellt und bearbeitet werden.</span>
+                </div>
 
-            <div style=\"text-align: left; width: 40; float: left;\">
-                <a href=\"$g_root_path/adm_program/modules/download/download.php\">
-                <img style=\"position: relative; top: 2px;\" src=\"$g_root_path/adm_program/images/download_big.png\" border=\"0\" alt=\"Download\" />
-                </a>
-            </div>
-            <div style=\"text-align: left; margin-left: 45px;\">
-                <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/download/download.php\">Download</a></span><br />
-                <span class=\"textDescription\">Benutzer k&ouml;nnen Dateien aus bestimmten Verzeichnissen herunterladen.</span>
-            </div>
+                <div style=\"margin-top: 7px;\"></div>";
+            }
 
-            <div style=\"margin-top: 7px;\"></div>
+            if($g_preferences['enable_download_module'] == 1)
+            {
+                echo "
+                <div style=\"text-align: left; width: 40; float: left;\">
+                    <a href=\"$g_root_path/adm_program/modules/download/download.php\">
+                    <img style=\"position: relative; top: 2px;\" src=\"$g_root_path/adm_program/images/download_big.png\" border=\"0\" alt=\"Download\" />
+                    </a>
+                </div>
+                <div style=\"text-align: left; margin-left: 45px;\">
+                    <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/download/download.php\">Download</a></span><br />
+                    <span class=\"textDescription\">Benutzer k&ouml;nnen Dateien aus bestimmten Verzeichnissen herunterladen.</span>
+                </div>
 
-            <div style=\"text-align: left; width: 40; float: left;\">
-                <a href=\"$g_root_path/adm_program/modules/mail/mail.php\">
-                <img style=\"position: relative; top: 5px;\" src=\"$g_root_path/adm_program/images/mail_open_big.png\" border=\"0\" alt=\"E-Mail\" />
-                </a>
-            </div>
-            <div style=\"text-align: left; margin-left: 45px;\">
-                <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/mail/mail.php\">E-Mail</a></span><br />
-                <span class=\"textDescription\">E-Mails an Rollen (Gruppen / Kurse / Abteilungen) schreiben.</span>
-            </div>
+                <div style=\"margin-top: 7px;\"></div>";
+            }
 
-            <div style=\"margin-top: 7px;\"></div>
+            if($g_preferences['send_email_extern'] == 0)
+            {
+                echo "
+                <div style=\"text-align: left; width: 40; float: left;\">
+                    <a href=\"$g_root_path/adm_program/modules/mail/mail.php\">
+                    <img style=\"position: relative; top: 5px;\" src=\"$g_root_path/adm_program/images/mail_open_big.png\" border=\"0\" alt=\"E-Mail\" />
+                    </a>
+                </div>
+                <div style=\"text-align: left; margin-left: 45px;\">
+                    <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/mail/mail.php\">E-Mail</a></span><br />
+                    <span class=\"textDescription\">E-Mails an Rollen (Gruppen / Kurse / Abteilungen) schreiben.</span>
+                </div>
 
-            <div style=\"text-align: left; width: 40; float: left;\">
-                <a href=\"$g_root_path/adm_program/modules/photos/photos.php\">
-                <img style=\"position: relative; top: 2px;\" src=\"$g_root_path/adm_program/images/photo_big.png\" border=\"0\" alt=\"Fotos\" />
-                </a>
-            </div>
-            <div style=\"text-align: left; margin-left: 45px;\">
-                <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/photos/photos.php\">Fotos</a></span><br />
-                <span class=\"textDescription\">Eine Fotoverwaltung bei der berechtigte Benutzer online Fotos hochladen k&ouml;nnen.</span>
-            </div>
+                <div style=\"margin-top: 7px;\"></div>";
+            }
 
-            <div style=\"margin-top: 7px;\"></div>
+            if($g_preferences['enable_photo_module'] == 1)
+            {
+                echo "
+                <div style=\"text-align: left; width: 40; float: left;\">
+                    <a href=\"$g_root_path/adm_program/modules/photos/photos.php\">
+                    <img style=\"position: relative; top: 2px;\" src=\"$g_root_path/adm_program/images/photo_big.png\" border=\"0\" alt=\"Fotos\" />
+                    </a>
+                </div>
+                <div style=\"text-align: left; margin-left: 45px;\">
+                    <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/photos/photos.php\">Fotos</a></span><br />
+                    <span class=\"textDescription\">Eine Fotoverwaltung bei der berechtigte Benutzer online Fotos hochladen k&ouml;nnen.</span>
+                </div>
 
-            <div style=\"text-align: left; width: 40; float: left;\">
-                <a href=\"$g_root_path/adm_program/modules/guestbook/guestbook.php\">
-                <img style=\"position: relative; top: 2px;\" src=\"$g_root_path/adm_program/images/guestbook_big.png\" border=\"0\" alt=\"G&auml;stebuch\" />
-                </a>
-            </div>
-            <div style=\"text-align: left; margin-left: 45px;\">
-                <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/guestbook/guestbook.php\">G&auml;stebuch</a></span><br />
-                <span class=\"textDescription\">Hier k&ouml;nnen Besucher ihre Gr&uuml;&szlig;e und Anmerkungen eintragen.</span>
-            </div>
+                <div style=\"margin-top: 7px;\"></div>";
+            }
 
-            <div style=\"margin-top: 7px;\"></div>
+            if($g_preferences['enable_guestbook_module'] == 1)
+            {
+                echo "
+                <div style=\"text-align: left; width: 40; float: left;\">
+                    <a href=\"$g_root_path/adm_program/modules/guestbook/guestbook.php\">
+                    <img style=\"position: relative; top: 2px;\" src=\"$g_root_path/adm_program/images/guestbook_big.png\" border=\"0\" alt=\"G&auml;stebuch\" />
+                    </a>
+                </div>
+                <div style=\"text-align: left; margin-left: 45px;\">
+                    <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/guestbook/guestbook.php\">G&auml;stebuch</a></span><br />
+                    <span class=\"textDescription\">Hier k&ouml;nnen Besucher ihre Gr&uuml;&szlig;e und Anmerkungen eintragen.</span>
+                </div>
 
-            <div style=\"text-align: left; width: 40; float: left;\">
-                <a href=\"$g_root_path/adm_program/modules/lists/lists.php\">
-                <img style=\"position: relative; top: 5px;\" src=\"$g_root_path/adm_program/images/list_big.png\" border=\"0\" alt=\"Listen\" />
-                </a>
-            </div>
-            <div style=\"text-align: left; margin-left: 45px;\">
-                <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/lists/lists.php\">Listen</a></span>&nbsp;&nbsp;
-                <span class=\"textHeadSmall\">&#91; <a href=\"$g_root_path/adm_program/modules/lists/mylist.php\">Eigene Liste</a>&nbsp;&nbsp;|&nbsp;
-                <a href=\"$g_root_path/adm_program/modules/lists/lists.php?active_role=0\">Inaktive Rollen</a> &#93;</span><br />
-                <span class=\"textDescription\">Verschiedene Benutzerlisten der Rollen (Gruppen / Kurse / Abteilungen) anzeigen.</span>
-            </div>
+                <div style=\"margin-top: 7px;\"></div>";
+            }
 
-            <div style=\"margin-top: 7px;\"></div>
+            if($g_preferences['enable_lists_module'] == 1)
+            {
+                echo "
+                <div style=\"text-align: left; width: 40; float: left;\">
+                    <a href=\"$g_root_path/adm_program/modules/lists/lists.php\">
+                    <img style=\"position: relative; top: 5px;\" src=\"$g_root_path/adm_program/images/list_big.png\" border=\"0\" alt=\"Listen\" />
+                    </a>
+                </div>
+                <div style=\"text-align: left; margin-left: 45px;\">
+                    <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/lists/lists.php\">Listen</a></span>&nbsp;&nbsp;
+                    <span class=\"textHeadSmall\">&#91; <a href=\"$g_root_path/adm_program/modules/lists/mylist.php\">Eigene Liste</a>&nbsp;&nbsp;|&nbsp;
+                    <a href=\"$g_root_path/adm_program/modules/lists/lists.php?active_role=0\">Inaktive Rollen</a> &#93;</span><br />
+                    <span class=\"textDescription\">Verschiedene Benutzerlisten der Rollen (Gruppen / Kurse / Abteilungen) anzeigen.</span>
+                </div>
 
+                <div style=\"margin-top: 7px;\"></div>";
+            }
+
+            echo "
             <div style=\"text-align: left; width: 40; float: left;\">
                 <a href=\"$g_root_path/adm_program/modules/profile/profile.php\">
                 <img style=\"position: relative; top: 5px;\" src=\"$g_root_path/adm_program/images/person_big.png\" border=\"0\" alt=\"Profil\" />
@@ -196,36 +222,46 @@ require("../adm_config/body_top.php");
                 <span class=\"textDescription\">Das eigene Profil anschauen und bearbeiten.</span>
             </div>
 
-            <div style=\"margin-top: 7px;\"></div>
+            <div style=\"margin-top: 7px;\"></div>";
 
-            <div style=\"text-align: left; width: 40; float: left;\">
-                <a href=\"$g_root_path/adm_program/modules/dates/dates.php\">
-                <img style=\"position: relative; top: 5px;\" src=\"$g_root_path/adm_program/images/history_big.png\" border=\"0\" alt=\"Termine\" />
-                </a>
-            </div>
-            <div style=\"text-align: left; margin-left: 45px;\">
-                <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/dates/dates.php\">Termine</a></span>&nbsp;&nbsp;
-                <span class=\"textHeadSmall\">&#91; <a href=\"$g_root_path/adm_program/modules/dates/dates.php?mode=old\">Vergangene Termine</a> &#93;</span><br />
-                <span class=\"textDescription\">Hier k&ouml;nnen Termine angeschaut, erstellt und bearbeitet werden.</span>
-            </div>
+            if($g_preferences['enable_dates_module'] == 1)
+            {
+                echo "
+                <div style=\"text-align: left; width: 40; float: left;\">
+                    <a href=\"$g_root_path/adm_program/modules/dates/dates.php\">
+                    <img style=\"position: relative; top: 5px;\" src=\"$g_root_path/adm_program/images/history_big.png\" border=\"0\" alt=\"Termine\" />
+                    </a>
+                </div>
+                <div style=\"text-align: left; margin-left: 45px;\">
+                    <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/dates/dates.php\">Termine</a></span>&nbsp;&nbsp;
+                    <span class=\"textHeadSmall\">&#91; <a href=\"$g_root_path/adm_program/modules/dates/dates.php?mode=old\">Vergangene Termine</a> &#93;</span><br />
+                    <span class=\"textDescription\">Hier k&ouml;nnen Termine angeschaut, erstellt und bearbeitet werden.</span>
+                </div>
 
-            <div style=\"margin-top: 7px;\"></div>
+                <div style=\"margin-top: 7px;\"></div>";
+            }
 
-            <div style=\"text-align: left; width: 40; float: left;\">
-                <a href=\"$g_root_path/adm_program/modules/links/links.php\">
-                <img style=\"position: relative; top: 5px;\" src=\"$g_root_path/adm_program/images/globe_big.png\" border=\"0\" alt=\"Weblinks\" />
-                </a>
-            </div>
-            <div style=\"text-align: left; margin-left: 45px;\">
-                <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/links/links.php\">Weblinks</a></span><br />
-                <span class=\"textDescription\">Hier k&ouml;nnen Links zu interessanten Webseiten abgelegt werden.</span>
-            </div>
+            if($g_preferences['enable_weblinks_module'] == 1)
+            {
+                echo "
+                <div style=\"text-align: left; width: 40; float: left;\">
+                    <a href=\"$g_root_path/adm_program/modules/links/links.php\">
+                    <img style=\"position: relative; top: 5px;\" src=\"$g_root_path/adm_program/images/globe_big.png\" border=\"0\" alt=\"Weblinks\" />
+                    </a>
+                </div>
+                <div style=\"text-align: left; margin-left: 45px;\">
+                    <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/links/links.php\">Weblinks</a></span><br />
+                    <span class=\"textDescription\">Hier k&ouml;nnen Links zu interessanten Webseiten abgelegt werden.</span>
+                </div>";
+            }
+
+        echo "
         </div>";
 
         if(isModerator() || editUser())
         {
             echo "<br /><br />
-            
+
             <div class=\"formHead\">";
                 echo strspace("Administration", 1);
             echo "</div>
