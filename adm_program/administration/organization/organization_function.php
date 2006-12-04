@@ -101,6 +101,16 @@ if(isset($_POST["send_email_extern"]) == false)
     $_POST["send_email_extern"] = 0;
 }
 
+if(strlen($_POST["max_email_attachment_size"]) == 0)
+{
+    $_POST["max_email_attachment_size"] = 0;
+}
+
+if(isset($_POST["enable_mail_captcha"]) == false)
+{
+    $_POST["enable_mail_captcha"] = 0;
+}
+
 if(isset($_POST["enable_registration_captcha"]) == false)
 {
     $_POST["enable_registration_captcha"] = 0;
@@ -109,11 +119,6 @@ if(isset($_POST["enable_registration_captcha"]) == false)
 if(isset($_POST["enable_registration_admin_mail"]) == false)
 {
     $_POST["enable_registration_admin_mail"] = 0;
-}
-
-if(isset($_POST["enable_mail_captcha"]) == false)
-{
-    $_POST["enable_mail_captcha"] = 0;
 }
 
 if(isset($_POST["enable_bbcode"]) == false)
@@ -126,9 +131,9 @@ if(isset($_POST["enable_rss"]) == false)
     $_POST["enable_rss"] = 0;
 }
 
-if(strlen($_POST["max_email_attachment_size"]) == 0)
+if(strlen($_POST["enable_download_module"]) == false)
 {
-    $_POST["max_email_attachment_size"] = 0;
+    $_POST["enable_download_module"] = 0;
 }
 
 if(strlen($_POST["max_file_upload_size"]) == 0)
@@ -136,9 +141,19 @@ if(strlen($_POST["max_file_upload_size"]) == 0)
     $_POST["max_file_upload_size"] = 0;
 }
 
+if(isset($_POST["enable_photo_module"]) == false)
+{
+    $_POST["enable_photo_module"] = 0;
+}
+
 if(isset($_POST["photo_image_text"]) == false)
 {
     $_POST["photo_image_text"] = 0;
+}
+
+if(isset($_POST["enable_guestbook_module"]) == false)
+{
+    $_POST["enable_guestbook_module"] = 0;
 }
 
 if(isset($_POST["enable_guestbook_captcha"]) == false)
@@ -151,6 +166,25 @@ if(strlen($_POST["flooding_protection_time"]) == 0)
     $_POST["flooding_protection_time"] = 0;
 }
 
+if(isset($_POST["enable_weblinks_module"]) == false)
+{
+    $_POST["enable_weblinks_module"] = 0;
+}
+
+if(isset($_POST["enable_dates_module"]) == false)
+{
+    $_POST["enable_dates_module"] = 0;
+}
+
+if(isset($_POST["enable_lists_module"]) == false)
+{
+    $_POST["enable_lists_module"] = 0;
+}
+
+if(isset($_POST["enable_announcements_module"]) == false)
+{
+    $_POST["enable_announcements_module"] = 0;
+}
 // *******************************************************************************
 // Organisation updaten
 // *******************************************************************************
@@ -168,7 +202,7 @@ writeOrgaPreferences('enable_bbcode',       $_POST['enable_bbcode']);
 writeOrgaPreferences('enable_rss',          $_POST['enable_rss']);
 writeOrgaPreferences('logout_minutes',      $_POST['logout_minutes']);
 //Einstellungen Registrierung
-writeOrgaPreferences('registration_mode',   $_POST['registration_mode']);
+writeOrgaPreferences('registration_mode',              $_POST['registration_mode']);
 writeOrgaPreferences('enable_registration_captcha',    $_POST['enable_registration_captcha']);
 writeOrgaPreferences('enable_registration_admin_mail', $_POST['enable_registration_admin_mail']);
 //Einstellungen Mailmodul
@@ -176,8 +210,10 @@ writeOrgaPreferences('send_email_extern',         $_POST['send_email_extern']);
 writeOrgaPreferences('max_email_attachment_size', $_POST['max_email_attachment_size']);
 writeOrgaPreferences('enable_mail_captcha',       $_POST['enable_mail_captcha']);
 //Einstellungen Downloadmodul
-writeOrgaPreferences('max_file_upload_size',$_POST['max_file_upload_size']);
+writeOrgaPreferences('enable_download_module', $_POST['enable_download_module']);
+writeOrgaPreferences('max_file_upload_size',   $_POST['max_file_upload_size']);
 //Einstellungen Photomodul
+writeOrgaPreferences('enable_photo_module', $_POST['enable_photo_module']);
 writeOrgaPreferences('photo_thumbs_column', $_POST['photo_thumbs_column']);
 writeOrgaPreferences('photo_thumbs_row',    $_POST['photo_thumbs_row']);
 writeOrgaPreferences('photo_thumbs_scale',  $_POST['photo_thumbs_scale']);
@@ -187,8 +223,17 @@ writeOrgaPreferences('photo_show_height',   $_POST['photo_show_height']);
 writeOrgaPreferences('photo_image_text',    $_POST['photo_image_text']);
 writeOrgaPreferences('photo_preview_scale', $_POST['photo_preview_scale']);
 //Einstellungen Gaestebuchmodul
+writeOrgaPreferences('enable_guestbook_module',  $_POST['enable_guestbook_module']);
 writeOrgaPreferences('enable_guestbook_captcha', $_POST['enable_guestbook_captcha']);
 writeOrgaPreferences('flooding_protection_time', $_POST['flooding_protection_time']);
+//Einstellungen Listenmodul
+writeOrgaPreferences('enable_lists_module',          $_POST['enable_lists_module']);
+//Einstellungen Ankuendigungsmodul
+writeOrgaPreferences('enable_announcements_module',  $_POST['enable_announcements_module']);
+//Einstellungen Terminmodul
+writeOrgaPreferences('enable_dates_module',          $_POST['enable_dates_module']);
+//Einstellungen Weblinkmodul
+writeOrgaPreferences('enable_weblinks_module',       $_POST['enable_weblinks_module']);
 
 unset($_SESSION['organization_request']);
 unset($_SESSION['g_current_organizsation']);
