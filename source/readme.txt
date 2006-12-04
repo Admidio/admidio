@@ -84,8 +84,8 @@ http://forum.admidio.org
 
  5. Lizenz
 -------------------------------------------------------------------------
-Die Admidio Mitgliederverwaltung steht unter der GNU General Public License. 
-Bevor Sie Admidio beutzen, sollten Sie unbedingt die gpl-de.html durchlesen.
+Die Admidio Mitgliederverwaltung steht unter der GNU General Public License 2. 
+Bevor Sie Admidio benutzen, sollten Sie unbedingt die gpl-de.html durchlesen.
 Mit der Installation und Benutzung der Admidio Mitgliederverwaltung 
 akteptieren Sie die Bedingungen der GNU General Public License.
 
