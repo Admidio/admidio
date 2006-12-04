@@ -29,16 +29,16 @@
     <p>Die folgenden Links zu den Modulen sind hier aus Platzgr&uuml;nden zweizeilig dargestellt.
     Sie m&uuml;ssen diese dann nat&uuml;rlich zusammengeschrieben verlinken.</p>
 
-    <p>Alle Paramter, die hier angegeben werden, sind optional. Jedes Modul kann ohne die
+    <p>Alle Parameter, die hier angegeben werden, sind optional. Jedes Modul kann ohne die
     jeweiligen Paramter aufgerufen werden. Sie sollten diese nur &uuml;bergeben, falls sie
     die gew&uuml;nschte &Auml;nderung ben&ouml;tigen.</p>
 
-    <p>Parameter werden direkt an den URL angehangen. Sie m&uuml;ssen einfach ein <b>?</b>
-    hinter die URL setzen und k&ouml;nnen dann den Parameter schreiben. Nach einem <b>=</b>
+    <p>Die Parameter werden direkt an die URL angehangen. Sie m&uuml;ssen einfach ein <b>?</b>
+    hinter die URL setzen und k&ouml;nnen dann den Parameternamen schreiben. Nach einem <b>=</b>
     folgt dann der Wert. Wollen Sie mehr als einen Parameter anh&auml;ngen, so m&uuml;ssen sie
     die Parameter durch ein <b>&</b> voneinander trennen.</p>
 
-    <p class="code">Beispiel:<br />http://www.test.de/.../mail.php?rolle=Webmaster&cat=Allgemein&subject=Test</p>
+    <p class="code">Beispiel:<br />http://www.test.de/.../mail.php<b><span style="color: #990000">?</span>rolle<span style="color: #990000">=</span><span style="color: #aaaaaa">Webmaster</span><span style="color: #990000">&</span>cat<span style="color: #990000">=</span><span style="color: #aaaaaa">Allgemein</span><span style="color: #990000">&</span>subject<span style="color: #990000">=</span><span style="color: #aaaaaa">Test</span></b></p>
 
     <p>Bitte beachten Sie, dass in der kompletten URL kein Leerzeichen und Sonderzeichen
     vorkommen darf. Dies gilt auch f&uuml;r die Parameter. Falls Sie dennoch einen Wert mit

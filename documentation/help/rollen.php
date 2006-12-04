@@ -102,6 +102,6 @@
    <br />
 
    <div style="text-align: left;">
-      <a href="index.php?help/layout.php"><img src="help/images/icons/back.png" style="vertical-align: bottom; border: 0px;" alt="Admidio dem eigenen Layout anpassen" title="Admidio dem eigenen Layout anpassen" /></a>
+      <a href="index.php?help/plugins.php"><img src="help/images/icons/back.png" style="vertical-align: bottom; border: 0px;" alt="Plugins einbauen" title="Plugins einbauen" /></a>
    </div>
 </td>

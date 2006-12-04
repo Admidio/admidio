@@ -33,7 +33,8 @@
     <h3 style="margin-top: 30px;">Admidio in die eigene Homepage integrieren</h3>
     <p><a href="index.php?help/module_einbauen.php">3. Aufruf der Module einbauen</a></p>
     <p><a href="index.php?help/layout.php">4. Admidio dem eigenen Layout anpassen</a></p>
+    <p><a href="index.php?help/plugins.php">5. Plugins einbauen</a></p>
 
     <h3 style="margin-top: 30px;">Admidio konfigurieren</h3>
-    <p><a href="index.php?help/rollen.php">5. Rollen anlegen und pflegen</a></p>
+    <p><a href="index.php?help/rollen.php">6. Rollen anlegen und pflegen</a></p>
 </td>

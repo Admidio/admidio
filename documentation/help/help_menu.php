@@ -10,5 +10,6 @@
    <p><a class="menu" href="index.php?help/update.php">2. Updaten</a></p>
    <p><a class="menu" href="index.php?help/module_einbauen.php">3. Module einbauen</a></p>
    <p><a class="menu" href="index.php?help/layout.php">4. Layout anpassen</a></p>
-   <p><a class="menu" href="index.php?help/rollen.php">5. Rollen</a></p>
+   <p><a class="menu" href="index.php?help/plugins.php">5. Plugins einbauen</a></p>
+   <p><a class="menu" href="index.php?help/rollen.php">6. Rollen</a></p>
 </td>

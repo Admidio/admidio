@@ -69,7 +69,7 @@
    </div>
    <div style="text-align: right;">
       <b>N&auml;chster Artikel:</b>&nbsp;
-      <a href="index.php?help/rollen.php">Rollen anlegen und pflegen</a>&nbsp;
-      <a href="index.php?help/rollen.php"><img src="help/images/icons/forward.png" style="vertical-align: bottom; border: 0px;" alt="Rollen anlegen und pflegen" title="Rollen anlegen und pflegen" /></a>
+      <a href="index.php?help/plugins.php">Plugins einbauen</a>&nbsp;
+      <a href="index.php?help/plugins.php"><img src="help/images/icons/forward.png" style="vertical-align: bottom; border: 0px;" alt="Plugins einbauen" title="Plugins einbauen" /></a>
    </div>
 </td>
