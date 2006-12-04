@@ -420,12 +420,6 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
 
     // Einstellungen anlegen
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-                                       VALUES ($org_id, 'max_file_upload_size', '3072') ";
-    $result = mysql_query($sql, $connection);
-    db_error($result);
-
-
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
                                        VALUES ($org_id, 'enable_rss', '1') ";
     $result = mysql_query($sql, $connection);
     db_error($result);
@@ -460,7 +454,7 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
                                        VALUES ($org_id, 'enable_registration_admin_mail', '1') ";
     $result = mysql_query($sql, $connection);
     db_error($result);
-    
+
     //Mailmoduleinstellungen
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
                                        VALUES ($org_id, 'send_email_extern', '0') ";
@@ -478,6 +472,11 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
     db_error($result);
 
     //Fotomoduleinstellungen
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+                                       VALUES ($org_id, 'enable_photo_module', '1')";
+    $result = mysql_query($sql, $connection);
+    db_error($result);
+
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
                                        VALUES ($org_id, 'photo_save_scale', '640')";
     $result = mysql_query($sql, $connection);
@@ -520,12 +519,52 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
 
     //Gaestebuchmoduleinstellungen
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+                                       VALUES ($org_id, 'enable_guestbook_module', '1')";
+    $result = mysql_query($sql, $connection);
+    db_error($result);
+
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
                                        VALUES ($org_id, 'enable_guestbook_captcha', '1')";
     $result = mysql_query($sql, $connection);
     db_error($result);
 
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
                                        VALUES ($org_id, 'flooding_protection_time', '180')";
+    $result = mysql_query($sql, $connection);
+    db_error($result);
+
+    //Weblinkseinstellungen
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+                                       VALUES ($org_id, 'enable_weblinks_module', '1')";
+    $result = mysql_query($sql, $connection);
+    db_error($result);
+
+    //Downloadmoduleinstellungen
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+                                       VALUES ($org_id, 'enable_download_module', '1') ";
+    $result = mysql_query($sql, $connection);
+    db_error($result);
+
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+                                       VALUES ($org_id, 'max_file_upload_size', '3072') ";
+    $result = mysql_query($sql, $connection);
+    db_error($result);
+
+    //Ankuendigungsmoduleinstellungen
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+                                       VALUES ($org_id, 'enable_announcements_module', '1') ";
+    $result = mysql_query($sql, $connection);
+    db_error($result);
+
+    //Terminmoduleinstellungen
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+                                       VALUES ($org_id, 'enable_dates_module', '1') ";
+    $result = mysql_query($sql, $connection);
+    db_error($result);
+
+    //Listenmoduleinstellungen
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+                                       VALUES ($org_id, 'enable_lists_module', '1') ";
     $result = mysql_query($sql, $connection);
     db_error($result);
 
