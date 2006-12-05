@@ -4,17 +4,18 @@
 <td style="background-color: #ffffff; padding-left: 15px;">
     <h2>Der Unterschied zwischen Plugins und Modulen:</h2>
 
-    <p>Plugins sind kleine Php-Scripte f&uuml;r bestimmte Aufgaben (z.B. n&auml;chsten 2 Termine anzeigen, aktuelle Geburtstage anzeigen ...).
-    Sie m&uuml;ssen im Gegensatz zu Modulen aber nicht unbedingt als eigene Seite aufgerufen werden, sondern k&ouml;nnen in jede beliebige
-    Html- oder Php-Seite eingebunden werden. Sie k&ouml;nnen die Plugins auch in der body_top.php oder body_bottom.php von Admidio 
+    <p>Plugins sind kleine Php-Scripte f&uuml;r bestimmte Aufgaben (z.B. n&auml;chsten 2 Termine anzeigen, 
+    aktuelle Geburtstage anzeigen ...). Sie m&uuml;ssen im Gegensatz zu Modulen aber nicht unbedingt als 
+    eigene Seite aufgerufen werden, sondern k&ouml;nnen in jede beliebige Html- oder Php-Seite eingebunden 
+    werden. Sie k&ouml;nnen die Plugins auch in der body_top.php oder body_bottom.php von Admidio 
     einbauen, so dass bestimmte Informationen auf allen Admidio-Seiten angezeigt werden.</p>
     
     <h2>Wie baue ich Plugins ein ?</h2>
     
-    <p>Laden Sie das Plugin von unserer Homepage herunter und entpacken Sie die Zip-Datei. Kopieren Sie das
-    Verzeichnis mit den Dateien in den Ordner <b>adm_plugins</b> in Ihrem Admidio-Ordner. Falls der Ordner adm_plugins
-    noch nicht existiert, m&uuml;ssen Sie ihn zuerst noch erstellen. Dieser sollte sich auf derselben Ebene wie <i>adm_my_files</i> 
-    befinden.</p>
+    <p><a href="../index.php?download/plugins/plugins.php">Laden Sie das Plugin von unserer Homepage herunter</a> und entpacken 
+    Sie die Zip-Datei. Kopieren Sie das Verzeichnis mit den Dateien in den Ordner <b>adm_plugins</b> in Ihrem 
+    Admidio-Ordner. Falls der Ordner adm_plugins noch nicht existiert, m&uuml;ssen Sie ihn zuerst noch erstellen. 
+    Dieser sollte sich auf derselben Ebene wie <i>adm_my_files</i> befinden.</p>
     
     <p>Plugins sind meistens in Php geschrieben und sollen ihren Inhalt in eine bestehende Html- oder 
     Php-Seite einbinden.</p>

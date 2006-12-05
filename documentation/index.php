@@ -60,9 +60,11 @@ else
                   <img style="border: 0px;" src="help/images/admidio_logo_75.png" alt="Admidio - Die Online-Mitgliederverwaltung für Vereine, Gruppen und Organisationen" />
                </a>
             </div>
-            <div style="margin-left: 200px; padding-top: 10px; padding-bottom: 15px;">
+            <div style="margin-left: 200px; padding-top: 10px; padding-bottom: 0px;">
                <span style="font-size: 20pt; font-weight: bold;">Die Online- & Offlinehilfe</span><br />
-               <span style="font-size: 12pt; font-weight: bold;">für Admidio</span>
+               <span style="font-size: 12pt; font-weight: bold;">für Admidio</span><br />
+               <a class="menu" href="index.php?help/help.php">Hilfe</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+               <a class="menu" href="index.php?download/download.php">Download</a>
             </div>
          </td>
          <td style="background-image:url(help/images/gr_r.png); background-repeat:repeat-y;"></td>
