@@ -94,7 +94,7 @@ if($new_user == 0)
         {
             $g_message->show("norights");
         }
-    }    
+    }
 }
 
 $b_history = false;     // History-Funktion bereits aktiviert ja/nein
@@ -125,7 +125,7 @@ if(isset($_SESSION['profile_request']))
     $b_history = true;
 }
 elseif($usr_id > 0)
-{ 
+{
     // um die Zurueck-Funktion zu vereinfachen, deutsche Zeitangaben nutzen
     $user->birthday = mysqldate('d.m.y', $user->birthday);
 }
@@ -199,7 +199,7 @@ require("../../../adm_config/body_top.php");
                 </div>";
                 if($usr_id > 0 || $new_user == 2)
                 {
-                    // bei der schnellen Registrierung hier schon das E-Mailfeld anzeigen, 
+                    // bei der schnellen Registrierung hier schon das E-Mailfeld anzeigen,
                     // da der untere Block nicht angezeigt wird
                     if($new_user == 2 && $g_preferences['registration_mode'] == 1)
                     {
@@ -207,7 +207,7 @@ require("../../../adm_config/body_top.php");
                         <div style=\"margin-top: 6px;\">
                             <div style=\"text-align: right; width: 30%; float: left;\">E-Mail:</div>
                             <div style=\"text-align: left; margin-left: 32%;\">
-                                <input type=\"text\" name=\"email\" style=\"width: 300px;\" maxlength=\"50\" value=\"$user->email\" />&nbsp;*&nbsp;
+                                <input type=\"text\" name=\"email\" style=\"width: 300px;\" maxlength=\"50\" value=\"$user->email\" />&nbsp;<acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym>&nbsp;
                                 <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                                 onClick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=email','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\">
                             </div>
@@ -325,7 +325,7 @@ require("../../../adm_config/body_top.php");
                                          }
                                     echo">$land</option>\n";
                                     $land = utf8_decode(trim(fgets($landlist)));
-                                }    
+                                }
 
                             echo"
                             </select>";
@@ -433,7 +433,7 @@ require("../../../adm_config/body_top.php");
                             <div style=\"text-align: right; width: 30%; float: left;\">
                                 $row->usf_name:
                             </div>
-                            <div style=\"text-align: left; margin-left: 32%;\">";                        
+                            <div style=\"text-align: left; margin-left: 32%;\">";
                                 // in Abhaengigkeit des Feldtypes wird das Eingabefeld erstellt
                                 echo "<input type=\"";
                                 if($row->usf_type == "CHECKBOX")
@@ -448,7 +448,7 @@ require("../../../adm_config/body_top.php");
 
                                 if($row->usf_type == "CHECKBOX")
                                 {
-                                    if($b_history == true && isset($form_values[urlencode($row->usf_name)]) 
+                                    if($b_history == true && isset($form_values[urlencode($row->usf_name)])
                                     && $form_values[urlencode($row->usf_name)] == 1)
                                     {
                                         // Zurueck-Navigation und Haeckchen war bereits gesetzt
@@ -488,7 +488,7 @@ require("../../../adm_config/body_top.php");
                                 // Fragezeichen mit Feldbeschreibung anzeigen, wenn diese hinterlegt ist
                                 if(strlen($row->usf_description) > 0)
                                 {
-                                    echo "&nbsp;<img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" 
+                                    echo "&nbsp;<img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\"
                                     vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                                     onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=user_field_description&err_text=". urlencode($row->usf_name). "','Message','width=400,height=400,left=310,top=200,scrollbars=yes')\">";
                                 }
@@ -561,23 +561,23 @@ require("../../../adm_config/body_top.php");
                  if ($new_user == 2 && $g_preferences['enable_registration_captcha'] == 1)
                  {
                      echo "
-        
+
                      <div style=\"margin-top: 6px;\">
                          <div style=\"text-align: left; margin-left: 32%;\">
                              <img src=\"$g_root_path/adm_program/system/captcha_class.php\" border=\"0\" alt=\"Captcha\" />
                          </div>
                      </div>
-        
+
                      <div style=\"margin-top: 6px;\">
                             <div style=\"text-align: right; width: 30%; float: left;\">Best&auml;tigungscode:</div>
                             <div style=\"text-align: left; margin-left: 32%;\">
-                                <input type=\"text\" id=\"captcha\" name=\"captcha\" style=\"width: 200px;\" maxlength=\"8\" value=\"\">&nbsp;*&nbsp;
+                                <input type=\"text\" id=\"captcha\" name=\"captcha\" style=\"width: 200px;\" maxlength=\"8\" value=\"\">&nbsp;<acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym>&nbsp;
                                 <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                                      onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=captcha_help','Message','width=400,height=320,left=310,top=200,scrollbars=yes')\">
                             </div>
                      </div>";
                  }
-         
+
                 // Bild und Text fuer den Speichern-Button
                 if($new_user == 2)
                 {
@@ -634,7 +634,7 @@ require("../../../adm_config/body_top.php");
         {
             echo "document.getElementById('address').focus();";
         }
-    echo "\n--></script>";    
+    echo "\n--></script>";
 
     require("../../../adm_config/body_bottom.php");
 echo "</body>
