@@ -72,6 +72,13 @@ else
     $new_user = 0;
 }
 
+// Registrierung deaktiviert, also auch diesen Modus sperren
+if(($new_user == 2 || $new_user == 3)
+&& $g_preferences['registration_mode'] == 0)
+{
+    $g_message->show("module_disabled");
+}
+
 $_SESSION['profile_request'] = $_REQUEST;
 
 if(!isset($_POST['login_name']))
