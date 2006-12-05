@@ -98,7 +98,12 @@ else
 
 if(isset($_POST["enable_mail_module"]) == false)
 {
-    $_POST["send_email_extern"] = 0;
+    $_POST["enable_mail_module"] = 0;
+}
+
+if(isset($_POST["enable_system_mails"]) == false)
+{
+    $_POST["enable_system_mails"] = 0;
 }
 
 if(strlen($_POST["max_email_attachment_size"]) == 0)
@@ -197,6 +202,7 @@ if($ret_code != 0)
 // Einstellungen speichern
 
 writeOrgaPreferences('email_administrator', $_POST['email_administrator']);
+writeOrgaPreferences('enable_system_mails', $_POST['enable_system_mails']);
 writeOrgaPreferences('default_country',     $_POST['default_country']);
 writeOrgaPreferences('enable_bbcode',       $_POST['enable_bbcode']);
 writeOrgaPreferences('enable_rss',          $_POST['enable_rss']);
