@@ -30,7 +30,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
- 
+
 require("../../system/common.php");
 require("../../system/login_valid.php");
 require("../../system/email_class.php");
@@ -91,7 +91,7 @@ if($_GET["mode"] == 1)
     $user->update($g_current_user->id);
 
     // nur ausfuehren, wenn E-Mails auch unterstuetzt werden
-    if($g_preferences['send_email_extern'] != 1)
+    if($g_preferences['enable_system_mails'] == 1)
     {
         // Mail an den User schicken, um die Anmeldung zu bestaetigen
         $email = new Email();
@@ -101,7 +101,7 @@ if($_GET["mode"] == 1)
         $email->setText(utf8_decode("Hallo "). $user->first_name. utf8_decode(",\n\ndeine Anmeldung auf ").
             $g_current_organization->homepage. utf8_decode("wurde bestätigt.\n\nNun kannst du dich mit deinem Benutzernamen : ").
             $user->login_name. utf8_decode("\nund dem Passwort auf der Homepage einloggen.\n\n".
-            "Sollten noch Fragen bestehen, schreib eine E-Mail an "). $g_preferences['email_administrator']. 
+            "Sollten noch Fragen bestehen, schreib eine E-Mail an "). $g_preferences['email_administrator'].
             utf8_decode(" .\n\nViele Grüße\nDie Webmaster"));
         if($email->sendEmail() == true)
         {
@@ -109,7 +109,7 @@ if($_GET["mode"] == 1)
         }
         else
         {
-            $err_code = "mail_not_send";    
+            $err_code = "mail_not_send";
             $err_text = $user->email;
         }
     }

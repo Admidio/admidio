@@ -323,7 +323,7 @@ require("../../../adm_config/body_top.php");
                                 if(hasRole("Webmaster")
                                 && strlen($row->usr_login_name) > 0
                                 && strlen($row->usr_email) > 0
-                                && $g_preferences['send_email_extern'] != 1)
+                                && $g_preferences['enable_system_mails'] == 1)
                                 {
                                     // Link um E-Mail mit neuem Passwort zu zuschicken
                                     // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
