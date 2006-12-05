@@ -31,6 +31,14 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
+// pruefen ob das Modul ueberhaupt aktiviert ist
+if ($g_preferences['enable_dates_module'] != 1)
+{
+    // das Modul ist deaktiviert
+    $g_message->show("module_disabled");
+}
+
+
 if(!editDate())
 {
     $g_message->show("norights");
@@ -48,7 +56,7 @@ if(isset($_GET["dat_id"]))
 }
 else
 {
-    $dat_id = 0;        
+    $dat_id = 0;
 }
 
 $_SESSION['navigation']->addUrl($g_current_url);
@@ -69,24 +77,24 @@ else
     $form_values['time_to']       = "";
     $form_values['meeting_point'] = "";
     $form_values['description']   = "";
-    
+
     // Wenn eine Termin-ID uebergeben wurde, soll der Termin geaendert werden
     // -> Felder mit Daten des Termins vorbelegen
-    
+
     if ($dat_id > 0)
     {
-        $sql    = "SELECT * FROM ". TBL_DATES. " 
+        $sql    = "SELECT * FROM ". TBL_DATES. "
                     WHERE dat_id = {0}
                       AND (  dat_org_shortname = '$g_organization'
                           OR dat_global = 1) ";
         $sql    = prepareSQL($sql, array($dat_id));
         $result = mysql_query($sql, $g_adm_con);
         db_error($result);
-    
+
         if (mysql_num_rows($result) > 0)
         {
             $row_bt = mysql_fetch_object($result);
-    
+
             $form_values['global']    = $row_bt->dat_global;
             $form_values['headline']  = $row_bt->dat_headline;
             $form_values['date_from'] = mysqldatetime("d.m.y", $row_bt->dat_begin);
@@ -97,11 +105,11 @@ else
                 $form_values['date_to'] = mysqldatetime("d.m.y", $row_bt->dat_end);
                 $form_values['time_to'] = mysqldatetime("h:i", $row_bt->dat_end);
             }
-            if ($form_values['time_from'] == "00:00") 
+            if ($form_values['time_from'] == "00:00")
             {
                 $form_values['time_from'] = "";
             }
-            if ($form_values['time_to'] == "00:00")   
+            if ($form_values['time_to'] == "00:00")
             {
                 $form_values['time_to'] = "";
             }
@@ -232,12 +240,12 @@ require("../../../adm_config/body_top.php");
 
                 <div style=\"margin-top: 6px;\">
                     <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
-                        <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" 
+                        <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\"
                         width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
                         &nbsp;Zur&uuml;ck</button>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <button name=\"speichern\" type=\"submit\" value=\"speichern\">
-                        <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" 
+                        <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\"
                         width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
                         &nbsp;Speichern</button>
                 </div>

@@ -41,6 +41,13 @@ if ($g_preferences['enable_rss'] != 1)
     $g_message->show("rss_disabled");
 }
 
+// pruefen ob das Modul ueberhaupt aktiviert ist
+if ($g_preferences['enable_dates_module'] != 1)
+{
+    // das Modul ist deaktiviert
+    $g_message->show("module_disabled");
+}
+
 // Nachschauen ob BB-Code aktiviert ist...
 if ($g_preferences['enable_bbcode'] == 1)
 {
