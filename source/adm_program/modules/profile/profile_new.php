@@ -71,7 +71,16 @@ else
     $new_user = 0;
 }
 
-if($new_user != 2)
+// pruefen, ob Modul aufgerufen werden darf
+if($new_user == 2)
+{
+    // Registrierung deaktiviert, also auch diesen Modus sperren
+    if($g_preferences['registration_mode'] == 0)
+    {
+        $g_message->show("module_disabled");
+    }
+}
+else
 {
     // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
     if(editUser() == false && $_GET['user_id'] != $g_current_user->id)
