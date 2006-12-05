@@ -154,39 +154,39 @@ echo "
     <!--[if lt IE 7]>
     <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
     <![endif]-->";
-	
-	echo "
-	<script type=\"text/javascript\">
+    
+    echo "
+    <script type=\"text/javascript\">
 
-		
-		function hinzufuegen() 
-		{
-			NeuerEintrag = new Option(document.TerminAnlegen.AllRoles.options[document.TerminAnlegen.AllRoles.selectedIndex].text, document.TerminAnlegen.AllRoles.options[document.TerminAnlegen.AllRoles.selectedIndex].value, false, true);
-			document.TerminAnlegen.AllRoles.options[document.TerminAnlegen.AllRoles.selectedIndex] = null;
-			document.TerminAnlegen.elements['ChildRoles[]'].options[document.TerminAnlegen.elements['ChildRoles[]'].length] = NeuerEintrag;
+        
+        function hinzufuegen() 
+        {
+            NeuerEintrag = new Option(document.TerminAnlegen.AllRoles.options[document.TerminAnlegen.AllRoles.selectedIndex].text, document.TerminAnlegen.AllRoles.options[document.TerminAnlegen.AllRoles.selectedIndex].value, false, true);
+            document.TerminAnlegen.AllRoles.options[document.TerminAnlegen.AllRoles.selectedIndex] = null;
+            document.TerminAnlegen.elements['ChildRoles[]'].options[document.TerminAnlegen.elements['ChildRoles[]'].length] = NeuerEintrag;
         }
-		
-		function entfernen() 
-		{
-			NeuerEintrag = new Option(document.TerminAnlegen.elements['ChildRoles[]'].options[document.TerminAnlegen.elements['ChildRoles[]'].selectedIndex].text, document.TerminAnlegen.elements['ChildRoles[]'].options[document.TerminAnlegen.elements['ChildRoles[]'].selectedIndex].value, false, true);
-			document.TerminAnlegen.elements['ChildRoles[]'].options[document.TerminAnlegen.elements['ChildRoles[]'].selectedIndex] = null;
-			document.TerminAnlegen.AllRoles.options[document.TerminAnlegen.AllRoles.length] = NeuerEintrag;
+        
+        function entfernen() 
+        {
+            NeuerEintrag = new Option(document.TerminAnlegen.elements['ChildRoles[]'].options[document.TerminAnlegen.elements['ChildRoles[]'].selectedIndex].text, document.TerminAnlegen.elements['ChildRoles[]'].options[document.TerminAnlegen.elements['ChildRoles[]'].selectedIndex].value, false, true);
+            document.TerminAnlegen.elements['ChildRoles[]'].options[document.TerminAnlegen.elements['ChildRoles[]'].selectedIndex] = null;
+            document.TerminAnlegen.AllRoles.options[document.TerminAnlegen.AllRoles.length] = NeuerEintrag;
         }
-		
-		function absenden()
-		{
-			for (var i = 0; i < document.TerminAnlegen.elements['ChildRoles[]'].options.length; i++)
-			{
-				document.TerminAnlegen.elements['ChildRoles[]'].options[i].selected = true;
-			}
-				
-			document.TerminAnlegen.submit();
-		}
-	
-	
-		
-		
-	</script>";
+        
+        function absenden()
+        {
+            for (var i = 0; i < document.TerminAnlegen.elements['ChildRoles[]'].options.length; i++)
+            {
+                document.TerminAnlegen.elements['ChildRoles[]'].options[i].selected = true;
+            }
+                
+            document.TerminAnlegen.submit();
+        }
+    
+    
+        
+        
+    </script>";
 
     require("../../../adm_config/header.php");
 echo "</head>";
@@ -215,6 +215,7 @@ require("../../../adm_config/body_top.php");
                             echo " class=\"readonly\" readonly ";
                         }
                         echo " style=\"width: 330px;\" maxlength=\"50\" value=\"". htmlspecialchars($form_values['name'], ENT_QUOTES). "\">
+                        <acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym>
                     </div>
                 </div>
                 <div style=\"margin-top: 6px;\">
@@ -414,66 +415,66 @@ require("../../../adm_config/body_top.php");
                         </div>
                     </div>                
                 </div>
-				
-							<div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 90%;\">
+                
+                            <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 90%;\">
                 <div class=\"groupBoxHeadline\">Abh&auml;ngigkeiten</div>
-		
-				<div style=\"margin-top: 6px;\">Ein Mitglied der nachfolgenden Rollen soll auch automatisch Mitglied in dieser Rolle sein!
-		            <div style=\"text-align: left; margin-left: 30%;\">";
-		                						
-		                        // holt eine Liste der ausgewählten Rolen
-		                        $childRoles = RoleDependency::getChildRoles($g_adm_con,$rol_id);
-		                        
-		                        // Alle Rollen auflisten, die der Webmaster sehen darf
-		                        $sql    = "SELECT * FROM ". TBL_ROLES. "
-		                            WHERE rol_org_shortname = '$g_organization'
-		                              AND rol_valid         = 1
-		                            ORDER BY rol_id";
-		                        $allRoles = mysql_query($sql, $g_adm_con);
-		                        db_error($allRoles);
-								
-								if($childRoles == -1)
-									$noChildRoles = true;									
-								else
-									$noChildRoles = false;
-									
-								$childRoleObjects = array();
-								
-								echo "unabhaengig &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; abhaengig <br>";
-								echo "<select name=\"AllRoles\" size=\"8\">";
-								while($row = mysql_fetch_object($allRoles))
-								{
-									if(in_array($row->rol_id,$childRoles)  )
-										$childRoleObjects[] = $row;
-									elseif ($row->rol_id == $rol_id)
-										continue;
-									else
-									echo "<option value=\"$row->rol_id\">$row->rol_name</option>";
-								}
-								echo "</select>";
-								echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-								echo "<select name=\"ChildRoles[]\" size=\"8\" multiple>";
-								foreach ($childRoleObjects as $childRoleObject)
-									echo "<option value=\"$childRoleObject->rol_id\">$childRoleObject->rol_name</option>";
-								echo "</select>";
-								echo "<br>";
-								echo "<span class=\"iconLink\">
-									<a class=\"iconLink\" href=\"javascript:hinzufuegen()\"><img
-									class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Feld hinzuf&uuml;gen\"></a>
-									<a class=\"iconLink\" href=\"javascript:hinzufuegen()\">Rolle hinzuf&uuml;gen</a>
-									<a class=\"iconLink\" href=\"javascript:entfernen()\"><img
-									class=\"iconLink\" src=\"$g_root_path/adm_program/images/delete.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Feld hinzuf&uuml;gen\"></a>
-									<a class=\"iconLink\" href=\"javascript:entfernen()\">Rolle entfernen</a>
-									</span><br>";
-								 								
-								
-		                        
-		                        
-		          echo "</div>
-		            </div>
-		        </div>
-				
-				
+        
+                <div style=\"margin-top: 6px;\">Ein Mitglied der nachfolgenden Rollen soll auch automatisch Mitglied in dieser Rolle sein!
+                    <div style=\"text-align: left; margin-left: 30%;\">";
+                                                
+                                // holt eine Liste der ausgewählten Rolen
+                                $childRoles = RoleDependency::getChildRoles($g_adm_con,$rol_id);
+                                
+                                // Alle Rollen auflisten, die der Webmaster sehen darf
+                                $sql    = "SELECT * FROM ". TBL_ROLES. "
+                                    WHERE rol_org_shortname = '$g_organization'
+                                      AND rol_valid         = 1
+                                    ORDER BY rol_id";
+                                $allRoles = mysql_query($sql, $g_adm_con);
+                                db_error($allRoles);
+                                
+                                if($childRoles == -1)
+                                    $noChildRoles = true;                                   
+                                else
+                                    $noChildRoles = false;
+                                    
+                                $childRoleObjects = array();
+                                
+                                echo "unabhaengig &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; abhaengig <br>";
+                                echo "<select name=\"AllRoles\" size=\"8\">";
+                                while($row = mysql_fetch_object($allRoles))
+                                {
+                                    if(in_array($row->rol_id,$childRoles)  )
+                                        $childRoleObjects[] = $row;
+                                    elseif ($row->rol_id == $rol_id)
+                                        continue;
+                                    else
+                                    echo "<option value=\"$row->rol_id\">$row->rol_name</option>";
+                                }
+                                echo "</select>";
+                                echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                                echo "<select name=\"ChildRoles[]\" size=\"8\" multiple>";
+                                foreach ($childRoleObjects as $childRoleObject)
+                                    echo "<option value=\"$childRoleObject->rol_id\">$childRoleObject->rol_name</option>";
+                                echo "</select>";
+                                echo "<br>";
+                                echo "<span class=\"iconLink\">
+                                    <a class=\"iconLink\" href=\"javascript:hinzufuegen()\"><img
+                                    class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Feld hinzuf&uuml;gen\"></a>
+                                    <a class=\"iconLink\" href=\"javascript:hinzufuegen()\">Rolle hinzuf&uuml;gen</a>
+                                    <a class=\"iconLink\" href=\"javascript:entfernen()\"><img
+                                    class=\"iconLink\" src=\"$g_root_path/adm_program/images/delete.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Feld hinzuf&uuml;gen\"></a>
+                                    <a class=\"iconLink\" href=\"javascript:entfernen()\">Rolle entfernen</a>
+                                    </span><br>";
+                                                                
+                                
+                                
+                                
+                  echo "</div>
+                    </div>
+                </div>
+                
+                
                 <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 90%;\">
                     <div class=\"groupBoxHeadline\">Eigenschaften&nbsp;&nbsp;(optional)</div>
 

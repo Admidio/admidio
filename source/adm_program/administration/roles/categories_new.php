@@ -131,6 +131,7 @@ require("../../../adm_config/body_top.php");
                     <div style=\"text-align: right; width: 23%; float: left;\">Name:</div>
                     <div style=\"text-align: left; margin-left: 24%;\">
                         <input type=\"text\" id=\"name\" name=\"name\" size=\"30\" maxlength=\"100\" value=\"". htmlspecialchars($form_values['name'], ENT_QUOTES). "\">
+                        <acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym>
                     </div>
                 </div>
                 <div style=\"margin-top: 6px;\">

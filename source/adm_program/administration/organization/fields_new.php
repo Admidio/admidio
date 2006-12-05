@@ -120,6 +120,7 @@ require("../../../adm_config/body_top.php");
                     <div style=\"text-align: right; width: 28%; float: left;\">Name:</div>
                     <div style=\"text-align: left; margin-left: 29%;\">
                         <input type=\"text\" id=\"name\" name=\"name\" size=\"20\" maxlength=\"13\" value=\"". htmlspecialchars($form_values['name'], ENT_QUOTES). "\">
+                        <acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym>
                     </div>
                 </div>
                 <div style=\"margin-top: 6px;\">
@@ -137,7 +138,7 @@ require("../../../adm_config/body_top.php");
                                 {
                                     echo " selected=\"selected\"";
                                 }
-                                echo ">&nbsp;</option>\n
+                                echo ">- Bitte w&auml;hlen -</option>\n
                             <option value=\"TEXT\"";     
                                 if($form_values['type'] == "TEXT") 
                                 {
@@ -163,6 +164,7 @@ require("../../../adm_config/body_top.php");
                                 }
                                 echo ">Ja / Nein</option>\n
                         </select>
+                        <acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym>
                     </div>
                 </div>
                 <div style=\"margin-top: 6px;\">
