@@ -205,7 +205,7 @@ require("../../../adm_config/body_top.php");
                                     {
                                         $route_url .= ",%20$own_user->country";
                                     }
-                                    
+
                                     $route_url .= "&daddr=". urlencode($user->address);
                                     if(strlen($user->zip_code)  > 0)
                                     {
@@ -242,7 +242,7 @@ require("../../../adm_config/body_top.php");
                         if(strlen($user->birthday) > 0 && strcmp($user->birthday, "0000-00-00") != 0)
                         {
                             echo mysqldatetime('d.m.y', $user->birthday);
-                            
+
                             // Alter berechnen
                             // Hier muss man aufpassen, da viele PHP-Funkionen nicht mit einem Datum vor 1970 umgehen koennen !!!
                             $act_date  = getDate(time());
@@ -284,7 +284,7 @@ require("../../../adm_config/body_top.php");
                     <div style=\"margin-top: 10px; margin-left: 30%; text-align: left\">";
                         if(strlen($user->email) > 0)
                         {
-                            if($g_preferences['send_email_extern'] == 1)
+                            if($g_preferences['enable_mail_module'] != 1)
                                 $mail_link = "mailto:$user->email";
                             else
                                 $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?usr_id=$user->id";
@@ -337,18 +337,18 @@ require("../../../adm_config/body_top.php");
                 // *******************************************************************************
                 // Bild-Block
                 // *******************************************************************************
-                
+
                 //Nachsehen ob fuer den User ein Photo gespeichert wurde
                 $sql =" SELECT usr_photo
                         FROM ".TBL_USERS."
                         WHERE usr_id = '$a_user_id'";
                 $result_photo = mysql_query($sql, $g_adm_con);
                 db_error($result_photo);
-                
+
                 echo"
                 <div style=\"margin-top: 4px; text-align: center;\">
                     <div class=\"groupBox\">";
-                    
+
                         //Falls vorhanden Bild ausgeben
                         if(mysql_result($result_photo,0,"usr_photo")!=NULL)
                         {
@@ -446,7 +446,7 @@ require("../../../adm_config/body_top.php");
                                     // Sonderzeichen aus der ICQ-Nummer entfernen (damit kommt www.icq.com nicht zurecht)
                                     preg_match_all("/\d+/", $row->usd_value, $matches);
                                     $icq_number = implode("", reset($matches));
-                                    
+
                                     // ICQ Onlinestatus anzeigen
                                     echo "<a href=\"http://www.icq.com/whitepages/cmd.php?uin=$icq_number&amp;action=add\"  class=\"wpaction\">
                                     <img border=\"0\" src=\"http://status.icq.com/online.gif?icq=$icq_number&img=5\"
@@ -625,13 +625,13 @@ require("../../../adm_config/body_top.php");
                          class=\"iconLink\" src=\"$g_root_path/adm_program/images/photo.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Profildaten &auml;ndern\"></a>
                         <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$a_user_id\">Profilfoto &auml;ndern</a>
                     </span>
-                    &nbsp;&nbsp;&nbsp;&nbsp;                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;
                     <span class=\"iconLink\">
                         <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$a_user_id\"><img
                          class=\"iconLink\" src=\"$g_root_path/adm_program/images/edit.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Profildaten &auml;ndern\"></a>
                         <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$a_user_id\">Profildaten &auml;ndern</a>
                     </span>";
-                }                
+                }
             echo "</div>
         </div>
     </div>";

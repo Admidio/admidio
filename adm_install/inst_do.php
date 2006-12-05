@@ -435,6 +435,11 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
     db_error($result);
 
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+                                       VALUES ($org_id, 'enable_system_mails', '1') ";
+    $result = mysql_query($sql, $connection);
+    db_error($result);
+
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
                                        VALUES ($org_id, 'email_administrator', 'webmaster@". $_SERVER['HTTP_HOST']. "') ";
     $result = mysql_query($sql, $connection);
     db_error($result);
@@ -457,7 +462,7 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
 
     //Mailmoduleinstellungen
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-                                       VALUES ($org_id, 'send_email_extern', '0') ";
+                                       VALUES ($org_id, 'enable_mail_module', '1') ";
     $result = mysql_query($sql, $connection);
     db_error($result);
 

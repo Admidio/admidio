@@ -96,7 +96,7 @@ else
     $g_current_organization->org_id_parent = null;
 }
 
-if(isset($_POST["send_email_extern"]) == false)
+if(isset($_POST["enable_mail_module"]) == false)
 {
     $_POST["send_email_extern"] = 0;
 }
@@ -206,7 +206,7 @@ writeOrgaPreferences('registration_mode',              $_POST['registration_mode
 writeOrgaPreferences('enable_registration_captcha',    $_POST['enable_registration_captcha']);
 writeOrgaPreferences('enable_registration_admin_mail', $_POST['enable_registration_admin_mail']);
 //Einstellungen Mailmodul
-writeOrgaPreferences('send_email_extern',         $_POST['send_email_extern']);
+writeOrgaPreferences('enable_mail_module',        $_POST['enable_mail_module']);
 writeOrgaPreferences('max_email_attachment_size', $_POST['max_email_attachment_size']);
 writeOrgaPreferences('enable_mail_captcha',       $_POST['enable_mail_captcha']);
 //Einstellungen Downloadmodul

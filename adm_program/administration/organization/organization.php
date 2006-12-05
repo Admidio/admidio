@@ -56,7 +56,7 @@ else
    $form_values['enable_registration_captcha']    = $g_preferences['enable_registration_captcha'];
    $form_values['enable_registration_admin_mail'] = $g_preferences['enable_registration_admin_mail'];
    $form_values['logout_minutes']                 = $g_preferences['logout_minutes'];
-   $form_values['send_email_extern']         	  = $g_preferences['send_email_extern'];
+   $form_values['enable_mail_module']         	  = $g_preferences['enable_mail_module'];
    $form_values['max_email_attachment_size'] 	  = $g_preferences['max_email_attachment_size'];
    $form_values['enable_mail_captcha']       	  = $g_preferences['enable_mail_captcha'];
    $form_values['enable_download_module']      	  = $g_preferences['enable_download_module'];
@@ -308,7 +308,7 @@ require("../../../adm_config/body_top.php");
                     <div style=\"margin-top: 15px;\">
                         <div style=\"text-align: left; width: 55%; float: left;\">Captcha aktivieren:</div>
                         <div style=\"text-align: left; margin-left: 45%;\">
-                            <input type=\"checkbox\" id=\"enable_mail_captcha\" name=\"enable_registration_captcha\" ";
+                            <input type=\"checkbox\" id=\"enable_registration_captcha\" name=\"enable_registration_captcha\" ";
                             if(isset($form_values['enable_registration_captcha']) && $form_values['enable_registration_captcha'] == 1)
                             {
                                 echo " checked ";
@@ -347,10 +347,10 @@ require("../../../adm_config/body_top.php");
                     <div class=\"groupBoxHeadline\">Einstellungen Mailmodul&nbsp;&nbsp; </div>
 
                     <div style=\"margin-top: 6px;\">
-                        <div style=\"text-align: left; width: 55%; float: left;\">Externes Mailprogramm:</div>
+                        <div style=\"text-align: left; width: 55%; float: left;\">Mailmodul aktivieren:</div>
                         <div style=\"text-align: left; margin-left: 45%;\">
-                            <input type=\"checkbox\" id=\"send_email_extern\" name=\"send_email_extern\" ";
-                            if(isset($form_values['send_email_extern']) && $form_values['send_email_extern'] == 1)
+                            <input type=\"checkbox\" id=\"enable_mail_module\" name=\"enable_mail_module\" ";
+                            if(isset($form_values['enable_mail_module']) && $form_values['enable_mail_module'] == 1)
                             {
                                 echo " checked ";
                             }
@@ -358,11 +358,8 @@ require("../../../adm_config/body_top.php");
                         </div>
                     </div>
                     <div class=\"smallText\">
-                        E-Mails werden in der Regel &uuml;ber den Webserver verschickt auf dem Admidio eingerichtet
-                        ist. Sollte dein Webserver keinen E-Mailversand unterst&uuml;tzen, kannst Du durch diese Option das
-                        Mailmodul deaktivieren. Dadurch wird versucht, das lokale E-Mail-Programm des Benutzers zu starten,
-                        sobald dieser auf einen E-Mail-Link klickt.
-                        Allerdings funktioniert dann die automatische Benachrichtigung bei Neuanmeldungen nicht mehr.
+                        Das Mailmodul kann &uuml;ber diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
+                        aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt.
                     </div>
 
                     <div style=\"margin-top: 15px;\">
@@ -414,7 +411,7 @@ require("../../../adm_config/body_top.php");
                         </div>
                     </div>
                     <div class=\"smallText\">
-                        Das Downloadmodul kann &uuml;ber diese Einstellung komplett deaktiviet werden. Es ist dann nicht mehr
+                        Das Downloadmodul kann &uuml;ber diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
                         aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt.
                     </div>
 
@@ -450,7 +447,7 @@ require("../../../adm_config/body_top.php");
                         </div>
                     </div>
                     <div class=\"smallText\">
-                        Das Fotomodul kann &uuml;ber diese Einstellung komplett deaktiviet werden. Es ist dann nicht mehr
+                        Das Fotomodul kann &uuml;ber diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
                         aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt.
                     </div>
 
@@ -575,7 +572,7 @@ require("../../../adm_config/body_top.php");
                         </div>
                     </div>
                     <div class=\"smallText\">
-                        Das G&auml;stebuch kann &uuml;ber diese Einstellung komplett deaktiviet werden. Es ist dann nicht mehr
+                        Das G&auml;stebuch kann &uuml;ber diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
                         aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt.
                     </div>
 
@@ -632,7 +629,7 @@ require("../../../adm_config/body_top.php");
                         </div>
                     </div>
                     <div class=\"smallText\">
-                        Das Ank&uuml;ndigungsmodul kann &uuml;ber diese Einstellung komplett deaktiviet werden. Es ist dann nicht mehr
+                        Das Ank&uuml;ndigungsmodul kann &uuml;ber diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
                         aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt.
                     </div>
 
@@ -658,7 +655,7 @@ require("../../../adm_config/body_top.php");
                         </div>
                     </div>
                     <div class=\"smallText\">
-                        Das Terminmodul kann &uuml;ber diese Einstellung komplett deaktiviet werden. Es ist dann nicht mehr
+                        Das Terminmodul kann &uuml;ber diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
                         aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt.
                     </div>
 
@@ -684,7 +681,7 @@ require("../../../adm_config/body_top.php");
                         </div>
                     </div>
                     <div class=\"smallText\">
-                        Das Listenmodul kann &uuml;ber diese Einstellung komplett deaktiviet werden. Es ist dann nicht mehr
+                        Das Listenmodul kann &uuml;ber diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
                         aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt.
                     </div>
 
@@ -710,7 +707,7 @@ require("../../../adm_config/body_top.php");
                         </div>
                     </div>
                     <div class=\"smallText\">
-                        Das Weblinksmodul kann &uuml;ber diese Einstellung komplett deaktiviet werden. Es ist dann nicht mehr
+                        Das Weblinksmodul kann &uuml;ber diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
                         aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt.
                     </div>
 
