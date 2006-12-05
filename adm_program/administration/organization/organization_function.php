@@ -52,8 +52,8 @@ $err_text = "";
 // *******************************************************************************
 // Pruefen, ob alle notwendigen Felder gefuellt sind
 // *******************************************************************************
-$_POST["longname"] = strStripTags($_POST["longname"]);
-if(strlen($_POST["longname"]) == 0)
+
+if(isset($_POST["longname"]) == false || strlen($_POST["longname"]) == 0)
 {
     $err_code = "feld";
     $err_text = "Name (lang)";
@@ -84,6 +84,8 @@ if ($err_code != "")
 {
     $g_message->show($err_code, $err_text);
 }
+
+echo "blubb"; exit();
 
 $g_current_organization->longname  = strStripTags($_POST["longname"]);
 $g_current_organization->homepage  = strStripTags($_POST["homepage"]);
