@@ -37,7 +37,14 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
-// erst prüfen, ob der User auch die entsprechenden Rechte hat
+// pruefen ob das Modul ueberhaupt aktiviert ist
+if ($g_preferences['enable_announcements_module'] != 1)
+{
+    // das Modul ist deaktiviert
+    $g_message->show("module_disabled");
+}
+
+// pruefen, ob der User auch die entsprechenden Rechte hat
 if(!editAnnouncements())
 {
     $g_message->show("norights");
@@ -59,7 +66,7 @@ if(is_numeric($_GET["mode"]) == false
 if($_GET["mode"] == 2 || $_GET["mode"] == 3 || $_GET["mode"] == 4)
 {
     // pruefen, ob man die Ankuendigung bearbeiten darf
-    $sql = "SELECT * FROM ". TBL_ANNOUNCEMENTS. " 
+    $sql = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
              WHERE ann_id = {0}
                AND (  ann_org_shortname = '$g_organization'
                    OR ann_global = 1 ) ";
@@ -132,7 +139,7 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
         }
         unset($_SESSION['announcements_request']);
         $_SESSION['navigation']->deleteLastUrl();
-        
+
         header("Location: ". $_SESSION['navigation']->getUrl());
         exit();
     }
@@ -155,7 +162,7 @@ elseif($_GET["mode"] == 2)
     $sql    = prepareSQL($sql, array($_GET["ann_id"]));
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
-	
+
     $g_message->setForwardUrl($_SESSION['navigation']->getUrl());
     $g_message->show("delete");
 }
