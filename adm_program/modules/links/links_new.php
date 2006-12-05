@@ -69,8 +69,8 @@ if (isset($_SESSION['links_request']))
 }
 else
 {
-    $form_values['linkname']	= "";
-    $form_values['description']	= "";
+    $form_values['linkname']    = "";
+    $form_values['description'] = "";
     $form_values['linkurl']     = "";
 
     // Wenn eine Link-ID uebergeben wurde, soll der Link geaendert werden
@@ -87,7 +87,7 @@ else
             $row_ba = mysql_fetch_object($result);
 
             $form_values['linkname']    = $row_ba->lnk_name;
-            $form_values['description']	= $row_ba->lnk_description;
+            $form_values['description'] = $row_ba->lnk_description;
             $form_values['linkurl']     = $row_ba->lnk_url;
         }
         elseif (mysql_num_rows($result) == 0)
@@ -143,6 +143,7 @@ require("../../../adm_config/body_top.php");
                     <div style=\"text-align: right; width: 25%; float: left;\">Linkname:</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
                         <input type=\"text\" id=\"linkname\" name=\"linkname\" tabindex=\"1\" style=\"width: 350px;\" maxlength=\"250\" value=\"". htmlspecialchars($form_values['linkname'], ENT_QUOTES). "\">
+                        <acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym>
                     </div>
                 </div>
 
@@ -150,6 +151,7 @@ require("../../../adm_config/body_top.php");
                     <div style=\"text-align: right; width: 25%; float: left;\">Linkadresse:</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
                         <input type=\"text\" id=\"linkurl\" name=\"linkurl\" tabindex=\"2\" style=\"width: 350px;\" maxlength=\"250\" value=\"". htmlspecialchars($form_values['linkurl'], ENT_QUOTES). "\">
+                        <acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym>
                     </div>
                 </div>
 
@@ -163,6 +165,7 @@ require("../../../adm_config/body_top.php");
                     echo "</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
                         <textarea  name=\"description\" tabindex=\"3\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". htmlspecialchars($form_values['description'], ENT_QUOTES). "</textarea>
+                        <acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym>
                     </div>
                 </div>";
 

@@ -103,13 +103,13 @@ $result_list = mysql_query($sql, $g_adm_con);
 db_error($result_list);
 
 //bei Seitenaufruf ohne Moderationsrechte
-if(!$g_session_valid || $g_session_valid  && ($aufgabe=="change" && !editPhoto($g_organization)) || !editPhoto())
+if(!$g_session_valid || $g_session_valid  && ($_GET["aufgabe"]=="change" && !editPhoto($g_organization)) || !editPhoto())
 {
     $g_message->show("photoverwaltunsrecht");
 }
 
 //bei Seitenaufruf mit Moderationsrechten
-if($g_session_valid && $aufgabe=="change" && editPhoto($g_organization))
+if($g_session_valid && $_GET["aufgabe"]=="change" && editPhoto($g_organization))
 {
     //Speicherort
     $ordner = "../../../adm_my_files/photos/".$form_values['beginn']."_".$pho_id;
@@ -172,6 +172,7 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">";
                 <div style=\"text-align: right; width: 170px; float: left;\">Veranstaltung:</div>
                 <div style=\"text-align: left; margin-left: 180px;\">
                     <input type=\"text\" id=\"veranstaltung\" name=\"veranstaltung\" style=\"width: 300px;\" maxlength=\"50\" tabindex=\"1\" value=\"".$form_values['veranstaltung']."\">
+                    <acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym>
                 </div>
             </div>";
 
@@ -265,6 +266,7 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">";
                 <div style=\"text-align: right; width: 170px; float: left;\">Beginn:</div>
                 <div style=\"text-align: left; margin-left: 180px;\">
                     <input type=\"text\" name=\"beginn\" size=\"10\" tabindex=\"3\" maxlength=\"10\" value=\"".$form_values['beginn']."\">
+                    <acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym>
                 </div>
             </div>";
 
