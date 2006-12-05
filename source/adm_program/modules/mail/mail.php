@@ -38,7 +38,7 @@
 require("../../system/common.php");
 
 // Pruefungen, ob die Seite regulaer aufgerufen wurde
-if ($g_preferences['send_email_extern'] == 1)
+if ($g_preferences['enable_mail_module'] != 1)
 {
     // es duerfen oder koennen keine Mails ueber den Server verschickt werden
     $g_message->show("mail_extern");
@@ -424,7 +424,7 @@ require("../../../adm_config/body_top.php");
          // Nur eingeloggte User duerfen Attachments mit max 3MB anhaengen...
          if (($g_session_valid) && ($g_preferences['max_email_attachment_size'] > 0) && (ini_get('file_uploads') == '1'))
          {
-             // das Feld userfile wird in der Breite mit size und width gesetzt, da FF nur size benutzt und IE size zu breit macht :(      
+             // das Feld userfile wird in der Breite mit size und width gesetzt, da FF nur size benutzt und IE size zu breit macht :(
              echo "
              <div style=\"margin-top: 8px;\">
                  <div style=\"text-align: right; width: 25%; float: left;\">Anhang:</div>

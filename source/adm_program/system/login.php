@@ -71,7 +71,7 @@ require("../../adm_config/body_top.php");
                     </div>";
                 }
                 // E-Mail intern oder extern verschicken
-                if($g_preferences['send_email_extern'] == 1)
+                if($g_preferences['enable_mail_module'] != 1)
                 {
                     $mail_link = "mailto:". $g_preferences['email_administrator']. "?subject=Loginprobleme";
                 }

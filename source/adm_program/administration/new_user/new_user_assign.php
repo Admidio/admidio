@@ -28,7 +28,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
- 
+
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
@@ -201,7 +201,7 @@ echo "
                <td style=\"text-align: left;\">&nbsp;<a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->usr_id\">$row->usr_last_name,&nbsp;$row->usr_first_name</a></td>
                <td style=\"text-align: left;\">&nbsp;$row->usr_login_name</td>
                <td style=\"text-align: left;\">&nbsp;";
-               if($g_preferences['send_email_extern'] == 1)
+               if($g_preferences['enable_mail_module'] != 1)
                   echo "<a href=\"mailto:$row->usr_email\">";
                else
                   echo "<a href=\"$g_root_path/adm_program/modules/mail/mail.php?usr_id=$row->usr_id\">";

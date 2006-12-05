@@ -32,6 +32,13 @@
 require("../../system/common.php");
 require("../../system/email_class.php");
 
+if ($g_preferences['enable_mail_module'] != 1)
+{
+    // es duerfen oder koennen keine Mails ueber den Server verschickt werden
+    $g_message->show("mail_extern");
+}
+
+
 // Uebergabevariablen pruefen
 
 if (isset($_GET["usr_id"]) && is_numeric($_GET["usr_id"]) == false)
@@ -100,12 +107,6 @@ if (array_key_exists("usr_id", $_GET))
 if (empty($_POST))
 {
     $g_message->show("invalid");
-}
-
-if ($g_preferences['send_email_extern'] == 1)
-{
-    // es duerfen oder koennen keine Mails ueber den Server verschickt werden
-    $g_message->show("mail_extern");
 }
 
 // Falls der User nicht eingeloggt ist, aber ein Captcha geschaltet ist,

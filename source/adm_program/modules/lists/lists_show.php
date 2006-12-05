@@ -317,7 +317,7 @@ if($mode != "csv")
     if($mode != "print")
     {
         echo "<p>";
-        if($role_row->rol_mail_login == 1)
+        if($role_row->rol_mail_login == 1 && $g_preferences['enable_mail_module'] == 1)
         {
             echo "<span class=\"iconLink\">
                 <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/mail/mail.php?rol_id=$role_row->rol_id\"><img
@@ -570,7 +570,7 @@ for($j = 0; $j < $max_count; $j++)
                             {
                                 if($mode == "html")
                                 {
-                                    if($g_preferences['send_email_extern'] == 1)
+                                    if($g_preferences['enable_mail_module'] != 1)
                                     {
                                         $content = "<a href=\"mailto:". $row[$i]. "\">". $row[$i]. "</a>";
                                     }

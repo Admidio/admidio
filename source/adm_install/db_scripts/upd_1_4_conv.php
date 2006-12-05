@@ -156,6 +156,37 @@ while($row_orga = mysql_fetch_object($result_orga))
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
 
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+            VALUES ($row_orga->org_id, 'enable_system_mails', '1')";
+    $result = mysql_query($sql, $connection);
+    if(!$result) showError(mysql_error());
+
+    // Jetzt noch die alte OrgaEinstellung send_mail_extern in enable_mail_module umwandeln
+    $sql = "SELECT prf_value FROM ". TBL_PREFERENCES. "
+            WHERE prf_name = 'send_email_extern' AND prf_org_id = $row_orga->org_id";
+    $result_mail_ext = mysql_query($sql, $connection);
+    if(!$result_mail_ext) showError(mysql_error());
+    $mail_ext = mysql_fetch_object($result_mail_ext);
+
+    if ($mail_ext->prf_value == 0)
+    {
+        $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+                VALUES ($row_orga->org_id, 'enable_mail_module', '1')";
+        $result = mysql_query($sql, $connection);
+        if(!$result) showError(mysql_error());
+    }
+    else
+    {
+        $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+                VALUES ($row_orga->org_id, 'enable_mail_module', '0')";
+        $result = mysql_query($sql, $connection);
+        if(!$result) showError(mysql_error());
+    }
+
+    $sql = "DELETE FROM ". TBL_PREFERENCES. "
+            WHERE prf_name = 'send_email_extern' AND prf_org_id = $row_orga->org_id";
+    $result = mysql_query($sql, $connection);
+    if(!$result) showError(mysql_error());
 
     // Alle Links bekommen erst einmal die neue Kategorie "Allgemein"
 

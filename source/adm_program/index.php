@@ -145,7 +145,7 @@ require("../adm_config/body_top.php");
                 <div style=\"margin-top: 7px;\"></div>";
             }
 
-            if($g_preferences['send_email_extern'] == 0)
+            if($g_preferences['enable_mail_module'] == 1)
             {
                 echo "
                 <div style=\"text-align: left; width: 40; float: left;\">
