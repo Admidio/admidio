@@ -14,7 +14,7 @@
  *       4 - User E-Mail mit neuen Zugangsdaten schicken
  *       5 - Frage, ob Zugangsdaten geschickt werden soll
  *       6 - Frage, ob Mitglied geloescht werden soll
- * user_id - Id des Benutzers, der bearbeitet werden soll 
+ * user_id - Id des Benutzers, der bearbeitet werden soll
  *
  ******************************************************************************
  *
@@ -33,7 +33,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
- 
+
 require("../../system/common.php");
 require("../../system/login_valid.php");
 require("../../system/email_class.php");
@@ -167,7 +167,7 @@ elseif($_GET["mode"] == 4)
 {
     // nur Webmaster duerfen User neue Zugangsdaten zuschicken
     // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
-    if(!hasRole("Webmaster") || $g_preferences['send_email_extern'] == 1)
+    if(!hasRole("Webmaster") || $g_preferences['enable_system_mails'] != 1)
     {
         $g_message->show("norights");
     }
@@ -175,7 +175,7 @@ elseif($_GET["mode"] == 4)
     $user = new User($g_adm_con);
     $user->GetUser($_GET['user_id']);
 
-    if($g_preferences['send_email_extern'] != 1)
+    if($g_preferences['enable_system_mails'] == 1)
     {
         // neues Passwort generieren
         $password = substr(md5(time()), 0, 8);
@@ -186,7 +186,7 @@ elseif($_GET["mode"] == 4)
                     WHERE usr_id = $user->id ";
         $result = mysql_query($sql, $g_adm_con);
         db_error($result);
-        
+
         // Mail an den User mit den Loginaten schicken
         $email = new Email();
         $email->setSender($g_preferences['email_administrator']);
@@ -205,7 +205,7 @@ elseif($_GET["mode"] == 4)
         }
         else
         {
-            $err_code = "mail_not_send";    
+            $err_code = "mail_not_send";
             $err_text = $user->email;
         }
     }

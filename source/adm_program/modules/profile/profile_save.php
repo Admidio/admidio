@@ -85,7 +85,7 @@ if(!isset($_POST['login_name']))
 {
     $_POST['login_name'] = "";
 }
-   
+
 /*------------------------------------------------------------*/
 // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
 /*------------------------------------------------------------*/
@@ -100,7 +100,7 @@ if($usr_id > 0)
 {
     // Userdaten aus Datenbank holen
     $user->getUser($usr_id);
-    
+
     if($user->valid == 1)
     {
         // keine Webanmeldung, dann schauen, ob User überhaupt Mitglied in der Gliedgemeinschaft ist
@@ -193,7 +193,7 @@ if(strlen($user->birthday) > 0)
         $g_message->show("datum", "Geburtstag");
     }
 }
-        
+
 // bei Registrierung muss Loginname und Pw geprueft werden
 if($new_user == 2)
 {
@@ -201,7 +201,7 @@ if($new_user == 2)
     {
         $g_message->show("feld", "Benutzername");
     }
-    
+
     // beide Passwortfelder muessen identisch sein
     if ($_POST['password'] != $_POST['password2'])
     {
@@ -213,7 +213,7 @@ if($new_user == 2)
         $g_message->show("feld", "Passwort");
     }
 }
-        
+
 // Feldinhalt der organisationsspezifischen Felder pruefen
 $sql = "SELECT usf_name, usf_type
           FROM ". TBL_USER_FIELDS. "
@@ -228,7 +228,7 @@ db_error($result_msg);
 while($row = mysql_fetch_object($result_msg))
 {
     // ein neuer Wert vorhanden
-    if(isset($_POST[urlencode($row->usf_name)]) 
+    if(isset($_POST[urlencode($row->usf_name)])
     && strlen($_POST[urlencode($row->usf_name)]) > 0)
     {
         if($row->usf_type == "NUMERIC"
@@ -237,7 +237,7 @@ while($row = mysql_fetch_object($result_msg))
             $g_message->show("field_numeric", $row->usf_name);
         }
     }
-}    
+}
 
 
 // Falls der User sich registrieren wollte, aber ein Captcha geschaltet ist,
@@ -280,7 +280,7 @@ if($new_user != 2 || $g_preferences['registration_mode'] != 1)
     /*------------------------------------------------------------*/
     // Messenger-Daten und gruppierungsspezifische Felder anlegen / updaten
     /*------------------------------------------------------------*/
-    
+
     $sql = "SELECT usf_id, usf_name, usd_id, usd_value
               FROM ". TBL_USER_FIELDS. " LEFT JOIN ". TBL_USER_DATA. "
                 ON usd_usf_id = usf_id
@@ -294,7 +294,7 @@ if($new_user != 2 || $g_preferences['registration_mode'] != 1)
     $sql = prepareSQL($sql, array($user->id));
     $result_msg = mysql_query($sql, $g_adm_con);
     db_error($result_msg);
-    
+
     while($row = mysql_fetch_object($result_msg))
     {
         if(is_null($row->usd_value))
@@ -351,14 +351,14 @@ if($new_user == 3)
     $user->update($g_current_user->id);
 
     // nur ausfuehren, wenn E-Mails auch unterstuetzt werden
-    if($g_preferences['send_email_extern'] != 1)
+    if($g_preferences['enable_system_mails'] == 1)
     {
         // Mail an den User schicken, um die Anmeldung zu bestaetigen
         $email = new Email();
         $email->setSender($g_preferences['email_administrator']);
         $email->addRecipient($user->email, "$user->first_name $user->last_name");
         $email->setSubject("Anmeldung auf $g_current_organization->homepage");
-        $email->setText(utf8_decode("Hallo "). $user->first_name. utf8_decode(",\n\ndeine Anmeldung auf "). 
+        $email->setText(utf8_decode("Hallo "). $user->first_name. utf8_decode(",\n\ndeine Anmeldung auf ").
             $g_current_organization->homepage. utf8_decode("wurde bestätigt.\n\nNun kannst du dich mit deinem Benutzernamen : ").
             $user->login_name. utf8_decode("\nund dem Passwort auf der Homepage einloggen.\n\n".
             "Sollten noch Fragen bestehen, schreib eine E-Mail an "). $g_preferences['email_administrator'].
@@ -376,13 +376,13 @@ elseif($new_user == 2)
     /*------------------------------------------------------------*/
     // Registrierung eines neuen Benutzers
     // -> E-Mail an alle Webmaster schreiben
-    /*------------------------------------------------------------*/  
+    /*------------------------------------------------------------*/
     $err_code = "save";
     $err_text = "";
-    
+
     // nur ausfuehren, wenn E-Mails auch unterstuetzt werden und die Webmasterbenachrichtung aktiviert ist
-    if($g_preferences['send_email_extern'] == 0 && $g_preferences['enable_registration_admin_mail'] == 1)
-    {    
+    if($g_preferences['enable_system_mails'] == 1 && $g_preferences['enable_registration_admin_mail'] == 1)
+    {
         $sql    = "SELECT usr_first_name, usr_last_name, usr_email
                      FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                     WHERE rol_org_shortname = '$g_organization'
@@ -402,22 +402,22 @@ elseif($new_user == 2)
             $email->setSender($g_preferences['email_administrator']);
             $email->addRecipient($row->usr_email, "$row->usr_first_name $row->usr_last_name");
             $email->setSubject(utf8_decode("Neue Registrierung"));
-            $email->setText(utf8_decode("Es hat sich ein neuer User auf "). $g_current_organization->homepage. 
-                utf8_decode(" registriert.\n\nNachname: "). $user->last_name. utf8_decode("\nVorname:  "). 
-                $user->first_name. utf8_decode("\nE-Mail:   "). $user->email. 
+            $email->setText(utf8_decode("Es hat sich ein neuer User auf "). $g_current_organization->homepage.
+                utf8_decode(" registriert.\n\nNachname: "). $user->last_name. utf8_decode("\nVorname:  ").
+                $user->first_name. utf8_decode("\nE-Mail:   "). $user->email.
                 utf8_decode("\n\n\nDiese Nachricht wurde automatisch erzeugt."));
             if($email->sendEmail() == true)
             {
                 $err_code = "anmeldung";
-            }      
+            }
             else
             {
-                $err_code = "mail_not_send";    
+                $err_code = "mail_not_send";
                 $err_text = $row->usr_email;
             }
         }
     }
-    
+
     // nach Registrierung auf die Startseite verweisen
     $g_message->setForwardUrl("home");
     $g_message->show($err_code, $err_text);
@@ -436,7 +436,7 @@ elseif($new_user == 0 && $user->valid == 0)
 {
     // neue Registrierung bearbeitet
     $g_message->setForwardUrl($_SESSION['navigation']->getPreviousUrl(), 2000);
-    $g_message->show("save");    
+    $g_message->show("save");
 }
 else
 {
