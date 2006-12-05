@@ -33,6 +33,13 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
+// pruefen ob das Modul ueberhaupt aktiviert ist
+if ($g_preferences['enable_announcements_module'] != 1)
+{
+    // das Modul ist deaktiviert
+    $g_message->show("module_disabled");
+}
+
 if(!editAnnouncements())
 {
     $g_message->show("norights");
@@ -73,25 +80,25 @@ else
 {
     $form_values['headline']    = "";
     $form_values['description'] = "";
-    $form_values['global']      = 0;    
-    
+    $form_values['global']      = 0;
+
     // Wenn eine Ankuendigungs-ID uebergeben wurde, soll die Ankuendigung geaendert werden
     // -> Felder mit Daten der Ankuendigung vorbelegen
 
     if ($ann_id > 0)
     {
-        $sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. " 
+        $sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
                     WHERE ann_id = {0}
                       AND (  ann_org_shortname = '$g_organization'
                           OR ann_global = 1) ";
         $sql    = prepareSQL($sql, array($_GET['ann_id']));
         $result = mysql_query($sql, $g_adm_con);
         db_error($result);
-    
+
         if (mysql_num_rows($result) > 0)
         {
             $row_ba = mysql_fetch_object($result);
-    
+
             $form_values['headline']    = $row_ba->ann_headline;
             $form_values['description'] = $row_ba->ann_description;
             $form_values['global']      = $row_ba->ann_global;
@@ -196,12 +203,12 @@ require("../../../adm_config/body_top.php");
 
                 <div style=\"margin-top: 6px;\">
                     <button name=\"zurueck\" type=\"button\" tabindex=\"4\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\" tabindex=\"5\">
-                        <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" 
+                        <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\"
                         width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
                         &nbsp;Zur&uuml;ck</button>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <button name=\"speichern\" type=\"submit\" tabindex=\"5\" value=\"speichern\" tabindex=\"4\">
-                        <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" 
+                        <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\"
                         width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
                         &nbsp;Speichern</button>
                 </div>

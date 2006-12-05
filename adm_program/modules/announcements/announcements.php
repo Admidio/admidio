@@ -34,6 +34,13 @@
 require("../../system/common.php");
 require("../../system/bbcode.php");
 
+// pruefen ob das Modul ueberhaupt aktiviert ist
+if ($g_preferences['enable_announcements_module'] != 1)
+{
+    // das Modul ist deaktiviert
+    $g_message->show("module_disabled");
+}
+
 // Uebergabevariablen pruefen
 
 if(array_key_exists("start", $_GET))
@@ -223,7 +230,7 @@ require("../../../adm_config/body_top.php");
                                 if($row->ann_org_shortname == $g_organization)
                                 {
                                     echo "
-                                    <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer;\" width=\"16\" height=\"16\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" 
+                                    <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer;\" width=\"16\" height=\"16\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"
                                         onclick=\"self.location.href='$g_root_path/adm_program/modules/announcements/announcements_function.php?mode=4&ann_id=$row->ann_id'\">";
                                 }
                             echo "&nbsp;</div>";
