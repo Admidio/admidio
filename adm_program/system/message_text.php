@@ -372,10 +372,6 @@ $message_text = array(
         "Die Seite wurde ungültig aufgerufen oder Dein Dateinanhang konnte nicht hochgeladen werden.<br />
         Vermutlich ist das Attachment zu groß!",
 
-    "mail_extern" =>
-        "Es können keine E-Mails über diese Homepage verschickt werden.<br /><br />
-        Benutze bitte dein E-Mail-Programm zum Versenden der E-Mail.",
-
     "mail_rolle" =>
         "Bitte wähle eine Rolle als Adressat der Mail aus!",
 

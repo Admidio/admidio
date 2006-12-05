@@ -41,7 +41,7 @@ require("../../system/common.php");
 if ($g_preferences['enable_mail_module'] != 1)
 {
     // es duerfen oder koennen keine Mails ueber den Server verschickt werden
-    $g_message->show("mail_extern");
+    $g_message->show("module_disabled");
 }
 
 
