@@ -10,7 +10,7 @@
  *
  * Konfigurationsvariablen:
  *
- * plg_announcements_count : Anzahl der Termine, die angezeigt werden sollen (Default = 2)
+ * plg_announcements_count : Anzahl der Ankuendigungen, die angezeigt werden sollen (Default = 2)
  * plg_max_char_per_word :   Maximale Anzahl von Zeichen in einem Wort, 
  *                           bevor ein Zeilenumbruch kommt (Default = deaktiviert) 
  * plg_headline :    Wahlweise kann hier ein anderer Titel fuer die Ankuendigungen angegeben werden
