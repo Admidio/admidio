@@ -36,6 +36,13 @@
 require("../../system/common.php");
 require_once("../../system/date_class.php");
 
+// pruefen ob das Modul ueberhaupt aktiviert ist
+if ($g_preferences['enable_dates_module'] != 1)
+{
+    // das Modul ist deaktiviert
+    $g_message->show("module_disabled");
+}
+
 if($_GET["mode"] != 4)
 {
     // Alle Funktionen, ausser Exportieren, duerfen nur eingeloggte User
@@ -169,7 +176,7 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
                 $sql    = prepareSQL($sql, array($headline, $place, $content, $_GET['dat_id']));
                 $result = mysql_query($sql, $g_adm_con);
                 db_error($result);
-                
+
                 unset($_SESSION['dates_request']);
                 $_SESSION['navigation']->deleteLastUrl();
 
