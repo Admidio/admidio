@@ -48,6 +48,7 @@ else
    $form_values['longname']                       = $g_current_organization->longname;
    $form_values['homepage']                  	  = $g_current_organization->homepage;
    $form_values['email_administrator']            = $g_preferences['email_administrator'];
+   $form_values['enable_system_mails']            = $g_preferences['enable_system_mails'];
    $form_values['default_country']                = $g_preferences['default_country'];
    $form_values['parent']                         = $g_current_organization->org_id_parent;
    $form_values['enable_bbcode']                  = $g_preferences['enable_bbcode'];
@@ -143,6 +144,26 @@ require("../../../adm_config/body_top.php");
                         Hier sollte die E-Mail-Adresse eines Administrators stehen. Diese wird als Absenderadresse
                         f&uuml;r Systemnachrichten benutzt. (z.B. bei der Registierungsbest&auml;tigung)
                     </div>
+
+                    <div style=\"margin-top: 15px;\">
+                        <div style=\"text-align: left; width: 55%; float: left;\">Systemmails aktivieren:</div>
+                        <div style=\"text-align: left; margin-left: 45%;\">
+                            <input type=\"checkbox\" id=\"enable_system_mails\" name=\"enable_system_mails\" ";
+                            if(isset($form_values['enable_system_mails']) && $form_values['enable_system_mails'] == 1)
+                            {
+                                echo " checked ";
+                            }
+                            echo " value=\"1\" />
+                        </div>
+                    </div>
+                    <div class=\"smallText\">
+                        Hier k&ouml;nnen die Systemmails von Admidio deaktiviert werden. Systemmails sind Benachrichtigungen,
+                        wenn sich zum Beispiel ein neuer User angemeldet hat. Aber auch Registrierungsbest&auml;tigungen
+                        werden als Systemmail verschickt. Dieses Feature sollte also am besten nicht deaktiviert werden.
+                        Es sei denn der Server unterst&uuml;tzt gar keinen Mailversand.
+                        Das Mailmodul ist durch die Deaktivierung nicht betroffen.
+                    </div>
+
                     <div style=\"margin-top: 15px;\">
                         <div style=\"text-align: left; width: 55%; float: left;\">Standard-Land:</div>
                         <div style=\"text-align: left; margin-left: 45%;\">";
@@ -359,7 +380,8 @@ require("../../../adm_config/body_top.php");
                     </div>
                     <div class=\"smallText\">
                         Das Mailmodul kann &uuml;ber diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
-                        aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt.
+                        aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt. Falls der Server keinen
+                        Mailversand unterst&uuml;tzt, sollte das Modul deaktiviert werden.
                     </div>
 
                     <div style=\"margin-top: 15px;\">
