@@ -39,7 +39,7 @@ if ($g_preferences['enable_photo_module'] != 1)
     $g_message->show("module_disabled");
 }
 
-
+//nachsehen ob daten über die Veranstaltung vorhanden sind
 if(isset($_SESSION['photo_event_request']))
 {
     $form_values = $_SESSION['photo_event_request'];
@@ -59,10 +59,20 @@ if(isset($_GET["pho_id"]))
 }
 else $pho_id=NULL;
 
+//KOntrolle ob ID nummerisch ist
 if(!is_numeric($pho_id) && $pho_id!=NULL)
 {
     $g_message->show("invalid");
 }
+
+//Wurde keine Veranstaltung übergeben kann das Navigationsstack zurückgesetzt werden
+if ($pho_id == NULL)
+{
+    $_SESSION['navigation']->clear();
+}
+
+//URL auf Navigationstack ablegen
+$_SESSION['navigation']->addUrl($g_current_url);
 
 //aktuelle event_element
 if(array_key_exists("start", $_GET))
@@ -704,9 +714,9 @@ echo "
         {
             echo "<p>
                 <span class=\"iconLink\">
-                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=". $_SESSION['photo_event']['pho_pho_id_parent']. "\"><img
+                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\"><img
                     class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Zur&uuml;ck\"></a>
-                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=". $_SESSION['photo_event']['pho_pho_id_parent']. "\">Zur&uuml;ck</a>
+                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
                 </span>
             </p>";
         }
