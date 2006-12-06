@@ -85,7 +85,6 @@ if ($err_code != "")
     $g_message->show($err_code, $err_text);
 }
 
-echo "blubb"; exit();
 
 $g_current_organization->longname  = strStripTags($_POST["longname"]);
 $g_current_organization->homepage  = strStripTags($_POST["homepage"]);
