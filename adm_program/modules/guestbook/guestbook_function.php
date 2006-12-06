@@ -40,6 +40,14 @@
 
 require("../../system/common.php");
 
+// pruefen ob das Modul ueberhaupt aktiviert ist
+if ($g_preferences['enable_guestbook_module'] != 1)
+{
+    // das Modul ist deaktiviert
+    $g_message->show("module_disabled");
+}
+
+
 // Uebergabevariablen pruefen
 
 if (array_key_exists("id", $_GET))
