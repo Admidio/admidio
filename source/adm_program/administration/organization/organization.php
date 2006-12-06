@@ -77,7 +77,6 @@ else
    $form_values['enable_dates_module']		  	  = $g_preferences['enable_dates_module'];
    $form_values['enable_weblinks_module']	  	  = $g_preferences['enable_weblinks_module'];
    $form_values['enable_announcements_module'] 	  = $g_preferences['enable_announcements_module'];
-   $form_values['enable_lists_module']		  	  = $g_preferences['enable_lists_module'];
 }
 
 echo "
@@ -658,33 +657,6 @@ require("../../../adm_config/body_top.php");
                         Damit soll verhindert werden, dass Benutzer in zu kurzen Zeitabst&auml;nden hintereinander
                         ungew&uuml;nschte Eintr&auml;ge erzeugen. Ist das Intervall auf 0 gesetzt wird diese &Uuml;berpr&uuml;fung
                         nicht durchgef&uuml;hrt.
-                    </div>
-
-                </div>";
-
-
-                /**************************************************************************************/
-                //Einstellungen Listenmodul
-                /**************************************************************************************/
-
-                echo"
-                <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 95%;\">
-                    <div class=\"groupBoxHeadline\">Einstellungen Listenmodul&nbsp;&nbsp; </div>
-
-                    <div style=\"margin-top: 6px;\">
-                        <div style=\"text-align: left; width: 55%; float: left;\">Listenmodul aktivieren:</div>
-                        <div style=\"text-align: left; margin-left: 45%;\">
-                            <input type=\"checkbox\" id=\"enable_lists_module\" name=\"enable_lists_module\" ";
-                            if(isset($form_values['enable_lists_module']) && $form_values['enable_lists_module'] == 1)
-                            {
-                                echo " checked ";
-                            }
-                            echo " value=\"1\" />
-                        </div>
-                    </div>
-                    <div class=\"smallText\">
-                        Das Listenmodul kann &uuml;ber diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
-                        aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt.
                     </div>
 
                 </div>";
