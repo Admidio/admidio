@@ -38,6 +38,9 @@ if ($g_preferences['enable_photo_module'] != 1)
     $g_message->show("module_disabled");
 }
 
+//URL auf Navigationstack ablegen
+$_SESSION['navigation']->addUrl($g_current_url);
+
 // Uebergabevariablen pruefen
 
 if(isset($_GET["pho_id"]) && is_numeric($_GET["pho_id"]) == false)
@@ -243,7 +246,7 @@ if($_GET["job"]=="rotate")
 
     // zur Ausgangsseite zurueck
     $seite=$_GET["seite"];
-    $location = "Location: $g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id&seite=$seite";
+    $location = "Location: $g_root_path/adm_program/system/back.php";
     header($location);
     exit();
 }
