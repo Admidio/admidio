@@ -32,6 +32,14 @@
 
 require("../../system/common.php");
 
+// pruefen ob das Modul ueberhaupt aktiviert ist
+if ($g_preferences['enable_photo_module'] != 1)
+{
+    // das Modul ist deaktiviert
+    $g_message->show("module_disabled");
+}
+
+
 if(isset($_SESSION['photo_event_request']))
 {
     $form_values = $_SESSION['photo_event_request'];
