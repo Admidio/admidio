@@ -288,6 +288,7 @@ require("../../../adm_config/body_top.php");
                     </div>
                 </div>";
 
+
                 /**************************************************************************************/
                 //Einstellungen Registrierung
                 /**************************************************************************************/
@@ -359,6 +360,71 @@ require("../../../adm_config/body_top.php");
                     </div>
                 </div>";
 
+
+                /**************************************************************************************/
+                //Einstellungen Ankuendigungsmodul
+                /**************************************************************************************/
+
+                echo"
+                <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 95%;\">
+                    <div class=\"groupBoxHeadline\">Einstellungen Ank&uuml;ndigungsmodul&nbsp;&nbsp; </div>
+
+                    <div style=\"margin-top: 6px;\">
+                        <div style=\"text-align: left; width: 55%; float: left;\">Ank&uuml;ndigungsmodul aktivieren:</div>
+                        <div style=\"text-align: left; margin-left: 45%;\">
+                            <input type=\"checkbox\" id=\"enable_announcements_module\" name=\"enable_announcements_module\" ";
+                            if(isset($form_values['enable_announcements_module']) && $form_values['enable_announcements_module'] == 1)
+                            {
+                                echo " checked ";
+                            }
+                            echo " value=\"1\" />
+                        </div>
+                    </div>
+                    <div class=\"smallText\">
+                        Das Ank&uuml;ndigungsmodul kann &uuml;ber diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
+                        aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt.
+                    </div>
+
+                </div>";
+
+
+                /**************************************************************************************/
+                //Einstellungen Downloadmodul
+                /**************************************************************************************/
+
+                echo"
+                <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 95%;\">
+                    <div class=\"groupBoxHeadline\">Einstellungen Downloadmodul&nbsp;&nbsp; </div>
+
+                    <div style=\"margin-top: 6px;\">
+                        <div style=\"text-align: left; width: 55%; float: left;\">Downloadmodul aktivieren:</div>
+                        <div style=\"text-align: left; margin-left: 45%;\">
+                            <input type=\"checkbox\" id=\"enable_download_module\" name=\"enable_download_module\" ";
+                            if(isset($form_values['enable_download_module']) && $form_values['enable_download_module'] == 1)
+                            {
+                                echo " checked ";
+                            }
+                            echo " value=\"1\" />
+                        </div>
+                    </div>
+                    <div class=\"smallText\">
+                        Das Downloadmodul kann &uuml;ber diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
+                        aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt.
+                    </div>
+
+                    <div style=\"margin-top: 15px;\">
+                        <div style=\"text-align: left; width: 55%; float: left;\">Maximale Dateigr&ouml;&szlig;e:</div>
+                        <div style=\"text-align: left; margin-left: 45%;\">
+                            <input type=\"text\" name=\"max_file_upload_size\" size=\"4\" maxlength=\"6\" value=\"". $form_values['max_file_upload_size']. "\"> KB
+                        </div>
+                    </div>
+                    <div class=\"smallText\">
+                        Benutzer k&ouml;nnen nur Dateien hochladen, bei denen die Dateigr&ouml;&szlig;e kleiner als der hier
+                        angegebene Wert ist. Steht hier 0, so ist der Upload deaktiviert.
+                    </div>
+                </div>";
+
+
                 /**************************************************************************************/
                 //Einstellungen Mailmodul
                 /**************************************************************************************/
@@ -413,41 +479,6 @@ require("../../../adm_config/body_top.php");
                     </div>
                 </div>";
 
-                /**************************************************************************************/
-                //Einstellungen Downloadmodul
-                /**************************************************************************************/
-
-                echo"
-                <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 95%;\">
-                    <div class=\"groupBoxHeadline\">Einstellungen Downloadmodul&nbsp;&nbsp; </div>
-
-                    <div style=\"margin-top: 6px;\">
-                        <div style=\"text-align: left; width: 55%; float: left;\">Downloadmodul aktivieren:</div>
-                        <div style=\"text-align: left; margin-left: 45%;\">
-                            <input type=\"checkbox\" id=\"enable_download_module\" name=\"enable_download_module\" ";
-                            if(isset($form_values['enable_download_module']) && $form_values['enable_download_module'] == 1)
-                            {
-                                echo " checked ";
-                            }
-                            echo " value=\"1\" />
-                        </div>
-                    </div>
-                    <div class=\"smallText\">
-                        Das Downloadmodul kann &uuml;ber diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
-                        aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt.
-                    </div>
-
-                    <div style=\"margin-top: 15px;\">
-                        <div style=\"text-align: left; width: 55%; float: left;\">Maximale Dateigr&ouml;&szlig;e:</div>
-                        <div style=\"text-align: left; margin-left: 45%;\">
-                            <input type=\"text\" name=\"max_file_upload_size\" size=\"4\" maxlength=\"6\" value=\"". $form_values['max_file_upload_size']. "\"> KB
-                        </div>
-                    </div>
-                    <div class=\"smallText\">
-                        Benutzer k&ouml;nnen nur Dateien hochladen, bei denen die Dateigr&ouml;&szlig;e kleiner als der hier
-                        angegebene Wert ist. Steht hier 0, so ist der Upload deaktiviert.
-                    </div>
-                </div>";
 
                 /**************************************************************************************/
                 //Einstellungen Photomodul
@@ -631,19 +662,20 @@ require("../../../adm_config/body_top.php");
 
                 </div>";
 
+
                 /**************************************************************************************/
-                //Einstellungen Ankuendigungsmodul
+                //Einstellungen Listenmodul
                 /**************************************************************************************/
 
                 echo"
                 <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 95%;\">
-                    <div class=\"groupBoxHeadline\">Einstellungen Ank&uuml;ndigungsmodul&nbsp;&nbsp; </div>
+                    <div class=\"groupBoxHeadline\">Einstellungen Listenmodul&nbsp;&nbsp; </div>
 
                     <div style=\"margin-top: 6px;\">
-                        <div style=\"text-align: left; width: 55%; float: left;\">Ank&uuml;ndigungsmodul aktivieren:</div>
+                        <div style=\"text-align: left; width: 55%; float: left;\">Listenmodul aktivieren:</div>
                         <div style=\"text-align: left; margin-left: 45%;\">
-                            <input type=\"checkbox\" id=\"enable_announcements_module\" name=\"enable_announcements_module\" ";
-                            if(isset($form_values['enable_announcements_module']) && $form_values['enable_announcements_module'] == 1)
+                            <input type=\"checkbox\" id=\"enable_lists_module\" name=\"enable_lists_module\" ";
+                            if(isset($form_values['enable_lists_module']) && $form_values['enable_lists_module'] == 1)
                             {
                                 echo " checked ";
                             }
@@ -651,11 +683,12 @@ require("../../../adm_config/body_top.php");
                         </div>
                     </div>
                     <div class=\"smallText\">
-                        Das Ank&uuml;ndigungsmodul kann &uuml;ber diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
+                        Das Listenmodul kann &uuml;ber diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
                         aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt.
                     </div>
 
                 </div>";
+
 
                 /**************************************************************************************/
                 //Einstellungen Terminmodul
@@ -683,31 +716,6 @@ require("../../../adm_config/body_top.php");
 
                 </div>";
 
-                /**************************************************************************************/
-                //Einstellungen Listenmodul
-                /**************************************************************************************/
-
-                echo"
-                <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 95%;\">
-                    <div class=\"groupBoxHeadline\">Einstellungen Listenmodul&nbsp;&nbsp; </div>
-
-                    <div style=\"margin-top: 6px;\">
-                        <div style=\"text-align: left; width: 55%; float: left;\">Listenmodul aktivieren:</div>
-                        <div style=\"text-align: left; margin-left: 45%;\">
-                            <input type=\"checkbox\" id=\"enable_lists_module\" name=\"enable_lists_module\" ";
-                            if(isset($form_values['enable_lists_module']) && $form_values['enable_lists_module'] == 1)
-                            {
-                                echo " checked ";
-                            }
-                            echo " value=\"1\" />
-                        </div>
-                    </div>
-                    <div class=\"smallText\">
-                        Das Listenmodul kann &uuml;ber diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
-                        aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt.
-                    </div>
-
-                </div>";
 
                 /**************************************************************************************/
                 //Einstellungen Weblinksmodul
