@@ -182,11 +182,6 @@ if(isset($_POST["enable_dates_module"]) == false)
     $_POST["enable_dates_module"] = 0;
 }
 
-if(isset($_POST["enable_lists_module"]) == false)
-{
-    $_POST["enable_lists_module"] = 0;
-}
-
 if(isset($_POST["enable_announcements_module"]) == false)
 {
     $_POST["enable_announcements_module"] = 0;
@@ -233,8 +228,6 @@ writeOrgaPreferences('photo_preview_scale', $_POST['photo_preview_scale']);
 writeOrgaPreferences('enable_guestbook_module',  $_POST['enable_guestbook_module']);
 writeOrgaPreferences('enable_guestbook_captcha', $_POST['enable_guestbook_captcha']);
 writeOrgaPreferences('flooding_protection_time', $_POST['flooding_protection_time']);
-//Einstellungen Listenmodul
-writeOrgaPreferences('enable_lists_module',          $_POST['enable_lists_module']);
 //Einstellungen Ankuendigungsmodul
 writeOrgaPreferences('enable_announcements_module',  $_POST['enable_announcements_module']);
 //Einstellungen Terminmodul

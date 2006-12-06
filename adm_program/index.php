@@ -193,23 +193,21 @@ require("../adm_config/body_top.php");
                 <div style=\"margin-top: 7px;\"></div>";
             }
 
-            if($g_preferences['enable_lists_module'] == 1)
-            {
-                echo "
-                <div style=\"text-align: left; width: 40; float: left;\">
-                    <a href=\"$g_root_path/adm_program/modules/lists/lists.php\">
-                    <img style=\"position: relative; top: 5px;\" src=\"$g_root_path/adm_program/images/list_big.png\" border=\"0\" alt=\"Listen\" />
-                    </a>
-                </div>
-                <div style=\"text-align: left; margin-left: 45px;\">
-                    <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/lists/lists.php\">Listen</a></span>&nbsp;&nbsp;
-                    <span class=\"textHeadSmall\">&#91; <a href=\"$g_root_path/adm_program/modules/lists/mylist.php\">Eigene Liste</a>&nbsp;&nbsp;|&nbsp;
-                    <a href=\"$g_root_path/adm_program/modules/lists/lists.php?active_role=0\">Inaktive Rollen</a> &#93;</span><br />
-                    <span class=\"textDescription\">Verschiedene Benutzerlisten der Rollen (Gruppen / Kurse / Abteilungen) anzeigen.</span>
-                </div>
+            echo "
+            <div style=\"text-align: left; width: 40; float: left;\">
+                <a href=\"$g_root_path/adm_program/modules/lists/lists.php\">
+                <img style=\"position: relative; top: 5px;\" src=\"$g_root_path/adm_program/images/list_big.png\" border=\"0\" alt=\"Listen\" />
+                </a>
+            </div>
+            <div style=\"text-align: left; margin-left: 45px;\">
+                <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/lists/lists.php\">Listen</a></span>&nbsp;&nbsp;
+                <span class=\"textHeadSmall\">&#91; <a href=\"$g_root_path/adm_program/modules/lists/mylist.php\">Eigene Liste</a>&nbsp;&nbsp;|&nbsp;
+                <a href=\"$g_root_path/adm_program/modules/lists/lists.php?active_role=0\">Inaktive Rollen</a> &#93;</span><br />
+                <span class=\"textDescription\">Verschiedene Benutzerlisten der Rollen (Gruppen / Kurse / Abteilungen) anzeigen.</span>
+            </div>
 
-                <div style=\"margin-top: 7px;\"></div>";
-            }
+            <div style=\"margin-top: 7px;\"></div>";
+
 
             echo "
             <div style=\"text-align: left; width: 40; float: left;\">
