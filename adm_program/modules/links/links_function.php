@@ -38,6 +38,13 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
+// pruefen ob das Modul ueberhaupt aktiviert ist
+if ($g_preferences['enable_weblinks_module'] != 1)
+{
+    // das Modul ist deaktiviert
+    $g_message->show("module_disabled");
+}
+
 // erst pruefen, ob der User auch die entsprechenden Rechte hat
 if (!editWeblinks())
 {
