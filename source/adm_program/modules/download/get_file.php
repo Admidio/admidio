@@ -34,6 +34,13 @@
 
 require("../../system/common.php");
 
+// pruefen ob das Modul ueberhaupt aktiviert ist
+if ($g_preferences['enable_download_module'] != 1)
+{
+    // das Modul ist deaktiviert
+    $g_message->show("module_disabled");
+}
+
 $folder = strStripTags(urldecode($_GET['folder']));
 $file   = strStripTags(urldecode($_GET['file']));
 $default_folder = strStripTags(urldecode($_GET['default_folder']));

@@ -37,6 +37,13 @@
 
 require("../../system/common.php");
 
+// pruefen ob das Modul ueberhaupt aktiviert ist
+if ($g_preferences['enable_download_module'] != 1)
+{
+    // das Modul ist deaktiviert
+    $g_message->show("module_disabled");
+}
+
 //Verwaltung der Session
 $_SESSION['navigation']->clear();
 $_SESSION['navigation']->addUrl($g_current_url);
@@ -49,7 +56,7 @@ if(isset($_GET["sort"]) && $_GET["sort"] != "asc" && $_GET["sort"] != "desc")
     $g_message->show("invalid");
 }
 
-If (isset($_GET['default_folder'])) 
+If (isset($_GET['default_folder']))
     $default_folder = strStripTags(urldecode($_GET['default_folder']));
 else
     $default_folder = "";
@@ -57,7 +64,7 @@ if (isset($_GET['folder']))
     $folder = strStripTags(urldecode($_GET['folder']));
 else
     $folder = "";
-    
+
 $act_folder = "../../../adm_my_files/download";
 
 // uebergebene Ordner auf Gueltigkeit pruefen
@@ -89,12 +96,12 @@ If ($default_folder <> "")
 }
 else
 {
-    $link = "<a href=\"$g_root_path/adm_program/modules/download/download.php?folder=".urlencode($next_folder)."&amp;default_folder=". urlencode($default_folder). "\">Download</a>";   
+    $link = "<a href=\"$g_root_path/adm_program/modules/download/download.php?folder=".urlencode($next_folder)."&amp;default_folder=". urlencode($default_folder). "\">Download</a>";
 }
 $i=0;
 While ($i <> count($path)-1)
 {
-    If ($i==0) 
+    If ($i==0)
     {
         $next_folder = $path[0];
     }
@@ -102,10 +109,10 @@ While ($i <> count($path)-1)
     {
         $next_folder = $next_folder."/".$path[$i];
     };
-    $link = $link."/<a href=\"$g_root_path/adm_program/modules/download/download.php?folder=".urlencode($next_folder). "&amp;default_folder=". urlencode($default_folder). "\">$path[$i]</a>";  
+    $link = $link."/<a href=\"$g_root_path/adm_program/modules/download/download.php?folder=".urlencode($next_folder). "&amp;default_folder=". urlencode($default_folder). "\">$path[$i]</a>";
     $i++;
 }
-If ($folder <> "") 
+If ($folder <> "")
 {
     $link = $link."/$path[$i]";
 }
@@ -211,7 +218,7 @@ require("../../../adm_config/body_top.php");
         $show_folder = "Download";
      else
         $show_folder = "$path[$index_folder]";
-        
+
     //Anlegen der Tabelle
     echo" <table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\">
             <tr>

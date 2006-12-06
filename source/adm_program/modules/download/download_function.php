@@ -40,15 +40,23 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
+// pruefen ob das Modul ueberhaupt aktiviert ist
+if ($g_preferences['enable_download_module'] != 1)
+{
+    // das Modul ist deaktiviert
+    $g_message->show("module_disabled");
+}
+
+
 // Uebergabevariablen pruefen
-	if(is_numeric($_GET["mode"]) == false
-	|| $_GET["mode"] < 1 || $_GET["mode"] > 5)
-	{
-    	$g_message->show("invalid");
-	}
+    if(is_numeric($_GET["mode"]) == false
+    || $_GET["mode"] < 1 || $_GET["mode"] > 5)
+    {
+        $g_message->show("invalid");
+    }
 
 //Pruefrotine ob Ordner/Datei
-function file_or_folder ($act_dir,$file) 
+function file_or_folder ($act_dir,$file)
 {
     if(strlen($file) > 0)
     {
@@ -71,18 +79,18 @@ function file_or_folder ($act_dir,$file)
 };
 
 // rekursive Funktion um ganze Ordner mit Unterordnern zu loeschen
-function removeDir ($dir) 
+function removeDir ($dir)
 {
     $fHandle = opendir($dir);
-    if($fHandle > 0) 
+    if($fHandle > 0)
     {
-        while (false !== ($fName = readdir($fHandle))) 
-        {     
+        while (false !== ($fName = readdir($fHandle)))
+        {
             if($fName != "." && $fName != "..")
             {
                 if(is_dir("$dir/$fName"))
                 {
-                    removeDir("$dir/$fName");               
+                    removeDir("$dir/$fName");
                 }
                 else
                 {
@@ -90,7 +98,7 @@ function removeDir ($dir)
                 }
             }
         }
-        return rmdir($dir);      
+        return rmdir($dir);
     };
     return false;
 };
@@ -110,19 +118,19 @@ if (decoct(fileperms("../../../adm_my_files/download"))!=40777)
 
 
 if (isset($_GET['folder']))
-	$folder = strStripTags(urldecode($_GET['folder']));
+    $folder = strStripTags(urldecode($_GET['folder']));
 else
-	$folder = ""; 
-	
+    $folder = "";
+
 if (isset($_GET['file']))
-	$file = strStripTags(urldecode($_GET['file']));
+    $file = strStripTags(urldecode($_GET['file']));
 else
-	$file = "";
-	
+    $file = "";
+
 if (isset($_GET['default_folder']))
-	$default_folder = strStripTags(urldecode($_GET['default_folder']));
+    $default_folder = strStripTags(urldecode($_GET['default_folder']));
 else
-	$default_folder = "";
+    $default_folder = "";
 
 $url        = "";
 $act_folder = "../../../adm_my_files/download";
@@ -155,7 +163,7 @@ if($_GET["mode"] == 1)
     {
         $g_message->show("empty_upload_post",ini_get(post_max_size));
     }
-    
+
     // Dateien hochladen
     if(strpos($_POST['new_name'], "..") !== false)
     {
@@ -169,13 +177,13 @@ if($_GET["mode"] == 1)
         {
                     $g_message->show("file_2big_server",ini_get(post_max_size));
         }
-        
+
         //Dateigroesse ueberpruefen Administratoreinstellungen
         if ($_FILES['userfile']['size']>($g_preferences['max_file_upload_size'])*1000)
         {
             $g_message->show("file_2big_server",ini_get(post_max_size));
         }
-        
+
         // Datei-Extension ermitteln
         if(strpos($local_file, ".") !== false)
         {
@@ -199,7 +207,7 @@ if($_GET["mode"] == 1)
         {
             $file_name = "$file_name.$file_ext";
         }
-		
+
         $ret = isValidFileName($file_name, true);
         if (file_exists("$act_folder/$file_name")){
            $g_message->show("file_exists","$file_name");
@@ -219,17 +227,17 @@ if($_GET["mode"] == 1)
         }
         else
         {
-        	if($ret == -1)
-        	{
-        		$g_message->show("feld", "Datei auswählen");
-        	}
+            if($ret == -1)
+            {
+                $g_message->show("feld", "Datei auswï¿½hlen");
+            }
             elseif($ret == -2)
             {
                 $g_message->show("invalid_file_name",$file_name);
             }
             elseif($ret == -3)
             {
-                $g_message->show("invalid_file_extension");            
+                $g_message->show("invalid_file_extension");
             }
         }
     }
@@ -237,13 +245,13 @@ if($_GET["mode"] == 1)
 elseif($_GET["mode"] == 2)
 {
    // Loeschen der Datei/Ordner
-   
+
     if($is_folder)
     {
         if( removeDir ("$act_folder/$file"))
         {
-        		$g_message->setForwardUrl($navigation->getUrl());
-        		$g_message->show("delete_folder",$file);
+                $g_message->setForwardUrl($navigation->getUrl());
+                $g_message->show("delete_folder",$file);
         }
     }
     else
@@ -290,7 +298,7 @@ elseif($_GET["mode"] == 3)
             // Ordner erstellen
             mkdir("$act_folder/$new_folder",0777);
             chmod("$act_folder/$new_folder", 0777);
-				$g_message->setForwardUrl($navigation->getUrl());
+                $g_message->setForwardUrl($navigation->getUrl());
             $g_message->show("create_folder", $new_folder);
             $url = urlencode("$g_root_path/adm_program/modules/download/download.php?folder=$folder&default_folder=$default_folder");
          }
@@ -329,7 +337,7 @@ elseif($_GET["mode"] == 4)
             //Umbenennen der Datei
             if(rename("$act_folder/$file","$act_folder/$new_name"))
             {
-            	$g_message->setForwardUrl($navigation->getUrl());
+                $g_message->setForwardUrl($navigation->getUrl());
                $g_message->show("rename_folder",$file);
             }
          }
@@ -359,9 +367,9 @@ elseif($_GET["mode"] == 4)
             //Umbenennen der Datei
             if(rename("$act_folder/$file","$act_folder/$new_name"))
             {
-            	$g_message->setForwardUrl($navigation->getUrl());
-            	$g_message->show("rename_file",$file);
-				}
+                $g_message->setForwardUrl($navigation->getUrl());
+                $g_message->show("rename_file",$file);
+                }
             }
             else
             {
@@ -378,7 +386,7 @@ elseif($_GET["mode"] == 4)
 }
 elseif($_GET["mode"] == 5)
 {
-	$g_message->setForwardYesNo("$g_root_path/adm_program/modules/download/download_function.php?mode=2&amp;folder=$folder&amp;file=$file&amp;default_folder=$default_folder");
-	$g_message->show("delete_file_folder",$file);
+    $g_message->setForwardYesNo("$g_root_path/adm_program/modules/download/download_function.php?mode=2&amp;folder=$folder&amp;file=$file&amp;default_folder=$default_folder");
+    $g_message->show("delete_file_folder",$file);
 }
 ?>
