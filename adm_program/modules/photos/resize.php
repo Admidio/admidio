@@ -1,5 +1,5 @@
 <?php
-   /******************************************************************************
+ /******************************************************************************
  * Photoresizer
  *
  * Copyright    : (c) 2004 - 2006 The Admidio Team
@@ -32,6 +32,15 @@
  *
  *****************************************************************************/
 require("../../system/common.php");
+
+// pruefen ob das Modul ueberhaupt aktiviert ist
+if ($g_preferences['enable_photo_module'] != 1)
+{
+    // das Modul ist deaktiviert
+    $g_message->show("module_disabled");
+}
+
+
 //header("Content-Type: image/jpeg");
 
 // Uebergabevariablen pruefen

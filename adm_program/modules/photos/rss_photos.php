@@ -41,6 +41,12 @@ if ($g_preferences['enable_rss'] != 1)
     $g_message->show("rss_disabled");
 }
 
+// pruefen ob das Modul ueberhaupt aktiviert ist
+if ($g_preferences['enable_photo_module'] != 1)
+{
+    // das Modul ist deaktiviert
+    $g_message->show("module_disabled");
+}
 
 // die neuesten 10 Photoveranstaltungen aus der DB fischen...
 $sql = "SELECT * FROM ". TBL_PHOTOS. "
