@@ -510,7 +510,7 @@ require("../../../adm_config/body_top.php");
                          </div>
                     </div>
                     <div class=\"smallText\">
-                        Der hier angegebene Wert bestimmt wieviele Zeilen an Thumbnails auf einer Seite angezeigt werden.
+                        Der hier angegebene Wert bestimmt wieviele Zeilen an Thumbnails auf einer Seite angezeigt werden. (Standardwert: 5)
                     </div>
 
                     <div style=\"margin-top: 15px;\">
@@ -522,7 +522,7 @@ require("../../../adm_config/body_top.php");
                     <div class=\"smallText\">
                         Der hier angegebene Wert bestimmt wieviele Zeilen an Thumbnails auf einer Seite angezeigt werden.
                         Vorsicht: zuviele Thumbnails nebeneinander passen nicht ins Layout. Ggf. die Thumbnailskalierung
-                        herunter setzen.
+                        herunter setzen. (Standardwert: 5)
                     </div>
 
                     <div style=\"margin-top: 15px;\">
@@ -534,7 +534,7 @@ require("../../../adm_config/body_top.php");
                     <div class=\"smallText\">
                         Hier kann festgelegt werden auf welchen Wert die l&auml;ngere Bildseite in der Thumbnailanzeige
                         skaliert werden soll. Vorsicht: Werden die Thumbnails zu breit, passen weniger nebeneinander.
-                        Ggf. weniger Thumbnailspalten einstellen.
+                        Ggf. weniger Thumbnailspalten einstellen. (Standardwert: 100)
                     </div>
 
                     <div style=\"margin-top: 15px;\">
@@ -546,7 +546,7 @@ require("../../../adm_config/body_top.php");
                     <div class=\"smallText\">
                         Beim hochladen werden alle Bilder neu skaliert. Der hier eingegeben Pixelwert
                         ist der Parameter f&uuml;r die l&auml;ngere Seite des Bildes, egal ob das Bild im Hoch-
-                        oder Querformat &uuml;bergeben wurde. Die andere Seite wird im Verh&auml;ltnis berechnet.
+                        oder Querformat &uuml;bergeben wurde. Die andere Seite wird im Verh&auml;ltnis berechnet.(Standardwert: 640)
                     </div>
 
                     <div style=\"margin-top: 15px;\">
@@ -556,7 +556,7 @@ require("../../../adm_config/body_top.php");
                          </div>
                     </div>
                     <div class=\"smallText\">
-                        Hier wird die H&ouml;he des jeweiligen Vorschaubildes in der Veranstaltungs&uuml;bersicht festgelegt.
+                        Hier wird die H&ouml;he des jeweiligen Vorschaubildes in der Veranstaltungs&uuml;bersicht festgelegt. (Standardwert: 100)
                     </div>
 
                     <div style=\"margin-top: 15px;\">
@@ -569,7 +569,7 @@ require("../../../adm_config/body_top.php");
                         Die hier angegeben Werte bestimmen die maximale Breite und H&ouml;he die ein Bild im Anzeigefenster
                         haben darf. Das Fenster wird automatisch entsprechend gr&ouml;&szlig;er. Besonders bei der H&ouml;he
                         ist Vorsicht angebracht, da &uuml;ber und unter dem Bild noch genug Platz f&uuml;r Layout und Browser
-                        sein muss.
+                        sein muss. (Standardwert: 500)
                     </div>
 
                     <div style=\"margin-top: 15px;\">
@@ -582,7 +582,7 @@ require("../../../adm_config/body_top.php");
                         Die hier angegeben Werte bestimmen die maximale Breite und H&ouml;he die ein Bild im Anzeigefenster
                         haben darf. Das Fenster wird automatisch entsprechend gr&ouml;&szlig;er. Besonders bei der H&ouml;he
                         ist Vorsicht angebracht, da &uuml;ber und unter dem Bild noch genug Platz f&uuml;r Layout und Browser
-                        sein muss.
+                        sein muss. (Standardwert: 380)
                     </div>
 
                     <div style=\"margin-top: 15px;\">
