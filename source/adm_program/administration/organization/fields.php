@@ -86,7 +86,7 @@ require("../../../adm_config/body_top.php");
                 {
                     echo "
                     <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
-                        <td style=\"text-align: left;\"><a href=\"$g_root_path/adm_program/administration/organization/field.php?usf_id=$row->usf_id\">$row->usf_name</a></td>
+                        <td style=\"text-align: left;\"><a href=\"$g_root_path/adm_program/administration/organization/fields_new.php?usf_id=$row->usf_id\">$row->usf_name</a></td>
                         <td style=\"text-align: left;\">$row->usf_description</td>
                         <td style=\"text-align: left;\">";
                             if($row->usf_type == "TEXT")
