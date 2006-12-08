@@ -300,11 +300,11 @@ if($new_user != 2 || $g_preferences['registration_mode'] != 1)
         if(is_null($row->usd_value))
         {
             // noch kein Wert vorhanden -> neu einfuegen
-            if(isset($_POST[urlencode($row->usf_name)]) && strlen(trim($_POST[urlencode($row->usf_name)])) > 0)
+            if(isset($_POST[$row->usf_id]) && strlen(trim($_POST[$row->usf_id])) > 0)
             {
                 $sql = "INSERT INTO ". TBL_USER_DATA. " (usd_usr_id, usd_usf_id, usd_value)
-                                                 VALUES ({0}, $row->usf_id, '". $_POST[urlencode($row->usf_name)]. "') ";
-                $sql = prepareSQL($sql, array($user->id));
+                                                 VALUES ({0}, $row->usf_id, {1}) ";
+                $sql = prepareSQL($sql, array($user->id, $_POST[$row->usf_id]));
                 $result = mysql_query($sql, $g_adm_con);
                 db_error($result);
             }
@@ -312,13 +312,13 @@ if($new_user != 2 || $g_preferences['registration_mode'] != 1)
         else
         {
             // auch ein neuer Wert vorhanden
-            if(isset($_POST[urlencode($row->usf_name)]) && strlen(trim($_POST[urlencode($row->usf_name)])) > 0)
+            if(isset($_POST[$row->usf_id]) && strlen(trim($_POST[$row->usf_id])) > 0)
             {
-                if($_POST[urlencode($row->usf_name)] != $row->usd_value)
+                if($_POST[$row->usf_id] != $row->usd_value)
                 {
                     $sql = "UPDATE ". TBL_USER_DATA. " SET usd_value = {0}
                              WHERE usd_id = $row->usd_id ";
-                    $sql = prepareSQL($sql, array($_POST[urlencode($row->usf_name)]));
+                    $sql = prepareSQL($sql, array($_POST[$row->usf_id]));
                     $result = mysql_query($sql, $g_adm_con);
                     db_error($result);
                 }
