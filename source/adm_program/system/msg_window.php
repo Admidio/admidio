@@ -131,6 +131,11 @@ echo "
                             <td>Sucht alle Benutzer, deren Telefonnummer 241 enth&auml;lt und
                                mit 54 endet</td>
                          </tr>
+                         <tr>
+                            <td valign=\"top\">Ja/Nein Feld</td>
+                            <td width=\"110\" valign=\"top\"><b>Ja</b></td>
+                            <td>Sucht alle Benutzer bei denen ein H&auml;ckchen gesetzt wurde</td>
+                         </tr>
                       </table>";
                 break;
 
