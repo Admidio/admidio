@@ -453,7 +453,7 @@ require("../../../adm_config/body_top.php");
                                 {
                                     echo "text";
                                 }
-                                echo "\" id=\"". urlencode($row->usf_name). "\" name=\"". urlencode($row->usf_name). "\" ";
+                                echo "\" id=\"$row->usf_id\" name=\"$row->usf_id\" ";
 
                                 if($row->usf_type == "CHECKBOX")
                                 {
@@ -508,7 +508,7 @@ require("../../../adm_config/body_top.php");
                     echo "<hr width=\"85%\">";
 
                     // alle zugeordneten Messengerdaten einlesen
-                    $sql = "SELECT usf_name, usd_value
+                    $sql = "SELECT usf_id, usf_name, usd_value
                               FROM ". TBL_USER_FIELDS. " LEFT JOIN ". TBL_USER_DATA. "
                                 ON usd_usf_id = usf_id
                                AND usd_usr_id = $user->id
@@ -559,7 +559,7 @@ require("../../../adm_config/body_top.php");
                                 {
                                     $messenger_id = $row->usd_value;
                                 }
-                                echo "<input type=\"text\" name=\"". urlencode($row->usf_name). "\" style=\"width: 200px;\" maxlength=\"50\" value=\"$messenger_id\" />
+                                echo "<input type=\"text\" name=\"$row->usf_id\" style=\"width: 200px;\" maxlength=\"50\" value=\"$messenger_id\" />
                             </div>
                         </div>";
                     }
