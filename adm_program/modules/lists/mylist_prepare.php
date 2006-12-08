@@ -27,7 +27,7 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
-require("../../system/search_parser_class.php");
+require("search_parser_class.php");
 
 $_SESSION['mylist_request'] = $_REQUEST;
 
@@ -96,7 +96,8 @@ for($i = 0; $i < count($_POST); $i++)
             {
                 $act_field = $value;
             }
-            
+
+            $act_field_name = $value;   // im Gegensatz zu $act_field steht hier IMMER der Feldname drin
             $sql_select = $sql_select. $act_field;
         }
         elseif(substr_count($key, "sort") > 0)
@@ -112,7 +113,35 @@ for($i = 0; $i < count($_POST); $i++)
             if(strpos($act_field, ".") > 0)
             {
                 // ein benutzerdefiniertes Feld
-                $type = "string";
+                
+                // Datentyp ermitteln
+                $sql = "SELECT usf_type FROM ". TBL_USER_FIELDS. "
+                         WHERE usf_org_shortname = '$g_organization' 
+                           AND usf_id            = '$act_field_name' ";
+                $result = mysql_query($sql, $g_adm_con);
+                db_error($result);
+                
+                $row = mysql_fetch_object($result);
+                
+                if($row->usf_type == "CHECKBOX")
+                {
+                    $type = "int";
+                    $value = strtoupper($value);
+                    
+                    // Ja bzw. Nein werden durch 1 bzw. 0 ersetzt, damit Vergleich in DB gemacht werden kann
+                    if($value == "JA" || $value == "1" || $value == "TRUE")
+                    {
+                        $value = "1";
+                    }
+                    elseif($value == "NEIN" || $value == "0" || $value == "FALSE")
+                    {
+                        $value = "0";
+                    }
+                }
+                else
+                {
+                    $type = "string";
+                }
             }
             else
             {
@@ -121,7 +150,6 @@ for($i = 0; $i < count($_POST); $i++)
                 db_error($result);
                 $type   = mysql_field_type($result, 0);
             }
-
             $parser    = new CParser;
             $sql_where = $sql_where. $parser->makeSqlStatement($value, $act_field, $type);
         }
