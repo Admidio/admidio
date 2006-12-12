@@ -358,7 +358,7 @@ require("../../../adm_config/body_top.php");
                    <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" alt=\"Hilfe\" title=\"Hilfe\"
                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_mail','Message','width=400,height=400,left=310,top=200')\">";
                }
-            echo "&nbsp;<acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym></div>
+            echo "&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span></div>
          </div>
 
          <hr width=\"90%\" />
@@ -374,7 +374,7 @@ require("../../../adm_config/body_top.php");
                {
                    echo "<input type=\"text\" id=\"name\" name=\"name\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['name']. "\">";
                }
-            echo "&nbsp;<acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym></div>
+            echo "&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span></div>
          </div>
          <div style=\"margin-top: 8px;\">
             <div style=\"text-align: right; width: 25%; float: left;\">E-Mail:</div>
@@ -387,7 +387,7 @@ require("../../../adm_config/body_top.php");
                {
                    echo "<input type=\"text\" name=\"mailfrom\" style=\"width: 350px;\" maxlength=\"50\" value=\"". $form_values['mailfrom']. "\">";
                }
-            echo "&nbsp;<acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym></div>
+            echo "&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span></div>
          </div>
 
          <hr width=\"90%\" />
@@ -403,7 +403,7 @@ require("../../../adm_config/body_top.php");
                {
                    echo "<input class=\"readonly\" readonly type=\"text\" name=\"subject\" style=\"width: 350px;\" maxlength=\"50\" value=\"". $_GET['subject']. "\">";
                }
-            echo "&nbsp;<acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym></div>
+            echo "&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span></div>
          </div>
          <div style=\"margin-top: 8px;\">
             <div style=\"text-align: right; width: 25%; float: left;\">Nachricht:</div>
@@ -462,7 +462,7 @@ require("../../../adm_config/body_top.php");
              <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 25%; float: left;\">Best&auml;tigungscode:</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <input type=\"text\" id=\"captcha\" name=\"captcha\" style=\"width: 200px;\" maxlength=\"8\" value=\"\">&nbsp;<acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym>&nbsp;
+                        <input type=\"text\" id=\"captcha\" name=\"captcha\" style=\"width: 200px;\" maxlength=\"8\" value=\"\">&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>&nbsp;
                         <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                              onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=captcha_help','Message','width=400,height=320,left=310,top=200,scrollbars=yes')\">
                     </div>

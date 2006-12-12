@@ -151,7 +151,7 @@ require("../../../adm_config/body_top.php");
                     <div style=\"text-align: right; width: 25%; float: left;\">Linkname:</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
                         <input type=\"text\" id=\"linkname\" name=\"linkname\" tabindex=\"1\" style=\"width: 350px;\" maxlength=\"250\" value=\"". htmlspecialchars($form_values['linkname'], ENT_QUOTES). "\">
-                        <acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym>
+                        <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
                     </div>
                 </div>
 
@@ -159,7 +159,7 @@ require("../../../adm_config/body_top.php");
                     <div style=\"text-align: right; width: 25%; float: left;\">Linkadresse:</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
                         <input type=\"text\" id=\"linkurl\" name=\"linkurl\" tabindex=\"2\" style=\"width: 350px;\" maxlength=\"250\" value=\"". htmlspecialchars($form_values['linkurl'], ENT_QUOTES). "\">
-                        <acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym>
+                        <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
                     </div>
                 </div>
 
@@ -173,7 +173,7 @@ require("../../../adm_config/body_top.php");
                     echo "</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
                         <textarea  name=\"description\" tabindex=\"3\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". htmlspecialchars($form_values['description'], ENT_QUOTES). "</textarea>
-                        <acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym>
+                        <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
                     </div>
                 </div>";
 

@@ -187,7 +187,7 @@ require("../../../adm_config/body_top.php");
                         echo " />";
                         if($new_user > 0 || hasRole('Webmaster') == true)
                         {
-                            echo "&nbsp;<acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym>";
+                            echo "&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>";
                         }
                     echo "</div>
                 </div>
@@ -202,7 +202,7 @@ require("../../../adm_config/body_top.php");
                         echo " />";
                         if($new_user > 0 || hasRole('Webmaster') == true)
                         {
-                            echo "&nbsp;<acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym>";
+                            echo "&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>";
                         }
                     echo "</div>
                 </div>";
@@ -216,7 +216,7 @@ require("../../../adm_config/body_top.php");
                         <div style=\"margin-top: 6px;\">
                             <div style=\"text-align: right; width: 30%; float: left;\">E-Mail:</div>
                             <div style=\"text-align: left; margin-left: 32%;\">
-                                <input type=\"text\" name=\"email\" style=\"width: 300px;\" maxlength=\"50\" value=\"$user->email\" />&nbsp;<acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym>&nbsp;
+                                <input type=\"text\" name=\"email\" style=\"width: 300px;\" maxlength=\"50\" value=\"$user->email\" />&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>&nbsp;
                                 <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                                 onClick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=email','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\">
                             </div>
@@ -234,7 +234,7 @@ require("../../../adm_config/body_top.php");
                             echo " />";
                         if($new_user > 0)
                         {
-                            echo "&nbsp;<acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym>&nbsp;
+                            echo "&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>&nbsp;
                             <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                             onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=nickname','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\">";
                         }
@@ -247,7 +247,7 @@ require("../../../adm_config/body_top.php");
                             <div style=\"text-align: right; width: 30%; float: left;\">Passwort:</div>
                             <div style=\"text-align: left; margin-left: 32%;\">
                                 <input type=\"password\" name=\"password\" style=\"width: 130px;\" maxlength=\"20\" />
-                                <acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym>&nbsp;
+                                <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>&nbsp;
                                 <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                                 onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=password','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\">
                             </div>
@@ -256,7 +256,7 @@ require("../../../adm_config/body_top.php");
                             <div style=\"text-align: right; width: 30%; float: left;\">Passwort (Wdh):</div>
                             <div style=\"text-align: left; margin-left: 32%;\">
                                 <input type=\"password\" name=\"password2\" style=\"width: 130px;\" maxlength=\"20\" />
-                                <acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym>
+                                <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
                             </div>
                         </div>";
                     }
@@ -371,7 +371,7 @@ require("../../../adm_config/body_top.php");
                             if($new_user == 2)
                             {
                                 // bei erweiterter Registrierung ist dies ein Pflichtfeld
-                                echo "&nbsp;<acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym>&nbsp;
+                                echo "&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>&nbsp;
                                 <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                                 onClick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=email','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\">";
                             }
@@ -580,7 +580,7 @@ require("../../../adm_config/body_top.php");
                      <div style=\"margin-top: 6px;\">
                             <div style=\"text-align: right; width: 30%; float: left;\">Best&auml;tigungscode:</div>
                             <div style=\"text-align: left; margin-left: 32%;\">
-                                <input type=\"text\" id=\"captcha\" name=\"captcha\" style=\"width: 200px;\" maxlength=\"8\" value=\"\">&nbsp;<acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym>&nbsp;
+                                <input type=\"text\" id=\"captcha\" name=\"captcha\" style=\"width: 200px;\" maxlength=\"8\" value=\"\">&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>&nbsp;
                                 <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                                      onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=captcha_help','Message','width=400,height=320,left=310,top=200,scrollbars=yes')\">
                             </div>

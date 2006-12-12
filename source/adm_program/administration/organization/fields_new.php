@@ -120,7 +120,7 @@ require("../../../adm_config/body_top.php");
                     <div style=\"text-align: right; width: 28%; float: left;\">Name:</div>
                     <div style=\"text-align: left; margin-left: 29%;\">
                         <input type=\"text\" id=\"name\" name=\"name\" size=\"20\" maxlength=\"13\" value=\"". htmlspecialchars($form_values['name'], ENT_QUOTES). "\">
-                        <acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym>
+                        <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
                     </div>
                 </div>
                 <div style=\"margin-top: 6px;\">
@@ -164,7 +164,7 @@ require("../../../adm_config/body_top.php");
                                 }
                                 echo ">Ja / Nein</option>\n
                         </select>
-                        <acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym>
+                        <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
                     </div>
                 </div>
                 <div style=\"margin-top: 6px;\">

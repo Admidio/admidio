@@ -179,7 +179,7 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">";
                 <div style=\"text-align: right; width: 170px; float: left;\">Veranstaltung:</div>
                 <div style=\"text-align: left; margin-left: 180px;\">
                     <input type=\"text\" id=\"veranstaltung\" name=\"veranstaltung\" style=\"width: 300px;\" maxlength=\"50\" tabindex=\"1\" value=\"".$form_values['veranstaltung']."\">
-                    <acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym>
+                    <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
                 </div>
             </div>";
 
@@ -273,7 +273,7 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">";
                 <div style=\"text-align: right; width: 170px; float: left;\">Beginn:</div>
                 <div style=\"text-align: left; margin-left: 180px;\">
                     <input type=\"text\" name=\"beginn\" size=\"10\" tabindex=\"3\" maxlength=\"10\" value=\"".$form_values['beginn']."\">
-                    <acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym>
+                    <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
                 </div>
             </div>";
 

@@ -115,7 +115,7 @@ require("../../../adm_config/body_top.php");
                     <div style=\"text-align: left; margin-left: 35%;\">
                         <input type=\"text\" id=\"new_folder\" name=\"new_folder\" style=\"width: 200px;\" maxlength=\"255\">
                         <input type=\"hidden\" id=\"folder\" value=\"$folder\" style=\"width: 200px;\" maxlength=\"255\">
-                        <acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym>
+                        <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
                     </div>
                 </div>
 

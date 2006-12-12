@@ -155,7 +155,7 @@ require("../../../adm_config/body_top.php");
                     <div style=\"text-align: right; width: 25%; float: left;\">&Uuml;berschrift:</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
                         <input type=\"text\" name=\"headline\" style=\"width: 350px;\" tabindex=\"1\" maxlength=\"100\" value=\"". htmlspecialchars($form_values['headline'], ENT_QUOTES). "\">
-                        <acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym>
+                        <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
                     </div>
                 </div>
 
@@ -169,7 +169,7 @@ require("../../../adm_config/body_top.php");
                     echo "</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
                         <textarea  name=\"description\" style=\"width: 350px;\" tabindex=\"2\" rows=\"10\" cols=\"40\">". htmlspecialchars($form_values['description'], ENT_QUOTES). "</textarea>
-                        <acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym>
+                        <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
                     </div>
                 </div>";
 

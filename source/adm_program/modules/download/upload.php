@@ -123,7 +123,7 @@ require("../../../adm_config/body_top.php");
                     <div style=\"text-align: right; width: 30%; float: left;\">Datei ausw&auml;hlen:</div>
                     <div style=\"text-align: left; margin-left: 32%;\">
                         <input id=\"userfile\" name=\"userfile\" size=\"30\" type=\"file\">
-                        <acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym>
+                        <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
                     </div>
                 </div>
                 <div style=\"margin-top: 10px;\">
