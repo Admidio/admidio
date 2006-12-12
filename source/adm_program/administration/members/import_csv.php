@@ -36,17 +36,16 @@ if(!editUser())
     $g_message->show("norights");
 }
 
-$user = new User($g_adm_con);
+// Felder prüfen
 
-// rol_id von der zuweisenden Rolle auslesen
-$sql = "SELECT rol_id FROM ". TBL_ROLES. "
-         WHERE rol_org_shortname = '$g_organization'
-           AND rol_name          = {0} 
-           AND rol_valid         = 1 ";
-$sql = prepareSQL($sql, array($_SESSION['role']));
-$result = mysql_query($sql, $g_adm_con);
-db_error($result);
-$rol_row = mysql_fetch_array($result);
+if($_POST["usr_last_name"] == 0)
+{
+    $g_message->show("feld", "Nachname");
+}
+if($_POST["usr_first_name"] == 0)
+{
+    $g_message->show("feld", "Vorname");
+}
 
 if(array_key_exists("first_row", $_POST))
 {
@@ -57,8 +56,25 @@ else
     $first_row_title = false;
 }
 
+// die organisationsspezifischen Felder in ein Array schreiben, 
+// damit man spaeter schneller darauf zugreifen kann
+$sql = "SELECT *
+          FROM ". TBL_USER_FIELDS. "
+         WHERE (  usf_org_shortname = '$g_organization'
+               OR (   usf_org_shortname IS NULL
+                  AND usf_type      = 'MESSENGER' ))
+         ORDER BY usf_org_shortname DESC, usf_name ASC ";
+$result_field = mysql_query($sql, $g_adm_con);
+db_error($result_field);
+
+while($row = mysql_fetch_object($result_field))
+{
+    $arr_user_fields[$row->usf_id] = $row->usf_id;
+}
+
 // jede Zeile aus der Datei einzeln durchgehen und den Benutzer in der DB anlegen
 $line = reset($_SESSION["file_lines"]);
+$user = new User($g_adm_con);
 $start_row    = 0;
 $count_import = 0;
 
@@ -166,10 +182,33 @@ for($i = $start_row; $i < count($_SESSION["file_lines"]); $i++)
         // Usersatz anlegen
         $user->insert($g_current_user->id);
         $count_import++;
+        
+        $usf_id = reset($arr_user_fields);    
+
+        for($j = 1; $j <= count($arr_user_fields); $j++)
+        {        
+            // wenn dem Orga-Feld eine Spalte aus der Datei zugeordnet wurde
+            if($_POST[$usf_id] > 0)
+            {
+                $arr_index = $_POST[$usf_id]-1;
+                $value = $arr_columns["$arr_index"];
+                $value = trim(str_replace("\"", "", $value));
+                
+                if(strlen($value) > 0)
+                {
+                    // Inhalt des Orga-Feldes schreiben
+                    $sql = "INSERT INTO ". TBL_USER_DATA. " (usd_usr_id, usd_usf_id, usd_value)
+                                                     VALUES ($user->id, $usf_id, '$value') ";
+                    $result = mysql_query($sql, $g_adm_con);
+                    db_error($result);
+                }
+            }
+            $usf_id = next($arr_user_fields);
+        }
 
         // Rolle dem User zuordnen
         $sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin, mem_valid)
-                                       VALUES ($rol_row[0], $user->id, NOW(), 1) ";
+                                       VALUES (". $_SESSION['rol_id']. ", $user->id, NOW(), 1) ";
         $result = mysql_query($sql, $g_adm_con);
         db_error($result);        
     }

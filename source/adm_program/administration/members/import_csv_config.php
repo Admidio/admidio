@@ -113,6 +113,7 @@ require("../../../adm_config/body_top.php");
                         <th class=\"tableHeader\">Dateispalte</th>
                     </tr>";
 
+                    // Array mit allen User-Feldern, die importiert werden koennen
                     $arr_col_name = array('usr_last_name'  => 'Nachname',
                                           'usr_first_name' => 'Vorname',
                                           'usr_address'    => 'Adresse',
@@ -127,7 +128,22 @@ require("../../../adm_config/body_top.php");
                                           'usr_birthday'   => 'Geburtstag',
                                           'usr_gender'     => 'Geschlecht',
                     );
+                    
+                    // Organisationsspezifische Felder noch in das Array aufnehmen
+                    $sql = "SELECT *
+                              FROM ". TBL_USER_FIELDS. "
+                             WHERE (  usf_org_shortname = '$g_organization'
+                                   OR (   usf_org_shortname IS NULL
+                                      AND usf_type      = 'MESSENGER' ))
+                             ORDER BY usf_org_shortname DESC, usf_name ASC ";
+                    $result_field = mysql_query($sql, $g_adm_con);
+                    db_error($result_field);
 
+                    while($row = mysql_fetch_object($result_field))
+                    {
+                        $arr_col_name[$row->usf_id] = $row->usf_name;
+                    }
+                                 
                     $line = reset($_SESSION["file_lines"]);
                     $arr_columns = explode($_SESSION["value_separator"], $line);
 
@@ -151,8 +167,17 @@ require("../../../adm_config/body_top.php");
                                         $column = next($arr_columns);
                                     }
                                     reset($arr_columns);
-                                echo "</select>
-                            </td>
+                                echo "</select>";
+                                // Nachname und Vorname als Pflichtfelder kennzeichnen
+                                if(key($arr_col_name) == "usr_last_name" || key($arr_col_name) == "usr_first_name")
+                                {
+                                    echo "&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>";
+                                }
+                                else
+                                {
+                                    echo "&nbsp;&nbsp;&nbsp;";
+                                }
+                            echo "</td>
                         </tr>";
                         $db_column = next($arr_col_name);
                     }
