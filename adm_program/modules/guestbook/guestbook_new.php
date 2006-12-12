@@ -198,7 +198,7 @@ require("../../../adm_config/body_top.php");
                     else
                     {
                         echo "<input type=\"text\" id=\"name\" name=\"name\" tabindex=\"1\" style=\"width: 350px;\" maxlength=\"60\" value=\"". htmlspecialchars($form_values['name'], ENT_QUOTES). "\">
-                        <acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym>";
+                        <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>";
                     }
                     echo "</div>
                 </div>
@@ -226,7 +226,7 @@ require("../../../adm_config/body_top.php");
                     }
                     echo "</div>
                     <div style=\"text-align: left; vertical-align: top; margin-left: 27%;\">
-                        <textarea  name=\"text\" tabindex=\"4\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". htmlspecialchars($form_values['text'], ENT_QUOTES). "</textarea>&nbsp;<acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym>
+                        <textarea  name=\"text\" tabindex=\"4\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". htmlspecialchars($form_values['text'], ENT_QUOTES). "</textarea>&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
                     </div>
                 </div>";
 
@@ -246,7 +246,7 @@ require("../../../adm_config/body_top.php");
                            <div style=\"text-align: right; width: 25%; float: left;\">Best&auml;tigungscode:</div>
                            <div style=\"text-align: left; margin-left: 27%;\">
                                <input type=\"text\" id=\"captcha\" name=\"captcha\" tabindex=\"5\" style=\"width: 200px;\" maxlength=\"8\" value=\"\">
-                               <acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym>
+                               <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
                                <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                                     onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=captcha_help','Message','width=400,height=320,left=310,top=200,scrollbars=yes')\">
                            </div>

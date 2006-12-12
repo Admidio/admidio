@@ -215,7 +215,7 @@ require("../../../adm_config/body_top.php");
                             echo " class=\"readonly\" readonly ";
                         }
                         echo " style=\"width: 330px;\" maxlength=\"50\" value=\"". htmlspecialchars($form_values['name'], ENT_QUOTES). "\">
-                        <acronym title=\"Pflichtfeld\" style=\"color: #990000;\">*</acronym>
+                        <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
                     </div>
                 </div>
                 <div style=\"margin-top: 6px;\">
