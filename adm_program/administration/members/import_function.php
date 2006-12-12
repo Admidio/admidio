@@ -47,7 +47,7 @@ else if($_FILES['userfile']['error'] == 1)
     $err_code = "file_2big_server";
     $err_text = $g_preferences['max_file_upload_size'];
 }
-else if(strlen($_POST['role']) == 0)
+else if($_POST['rol_id'] == 0)
 {
     $err_code = "feld";
     $err_text = "Rolle";
@@ -58,7 +58,7 @@ if(strlen($err_code) > 0)
     $g_message->show($err_code, $err_text);
 }
 
-$_SESSION["role"]             = $_POST["role"];
+$_SESSION["rol_id"]           = $_POST["rol_id"];
 $_SESSION["user_import_mode"] = $_POST["user_import_mode"];
 $_SESSION["file_lines"]       = file($_FILES['userfile']['tmp_name']);
 
