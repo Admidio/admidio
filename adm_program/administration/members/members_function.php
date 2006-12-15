@@ -60,6 +60,30 @@ if(isset($_GET["user_id"]) && is_numeric($_GET["user_id"]) == false)
     $g_message->show("invalid");
 }
 
+// nun erst einmal allgemein pruefen, ob der User zur aktuellen Orga gehoert
+if(isMember($_GET["user_id"]) == true)
+{
+    $this_orga = true;
+}
+else
+{
+    $this_orga = false;
+}
+
+// pruefen, ob der User noch in anderen Organisationen aktiv ist
+$sql    = "SELECT rol_id
+             FROM ". TBL_ROLES. ", ". TBL_MEMBERS. "
+            WHERE rol_org_shortname <> '$g_organization'
+              AND rol_valid          = 1
+              AND mem_rol_id         = rol_id
+              AND mem_valid          = 1
+              AND mem_usr_id         = {0} ";
+$sql    = prepareSQL($sql, array($_GET['user_id']));              
+$result = mysql_query($sql, $g_adm_con);
+db_error($result);
+$other_orga = mysql_num_rows($result);
+
+
 if($_GET["mode"] == 1)
 {
     echo "
@@ -116,11 +140,17 @@ if($_GET["mode"] == 1)
 }
 elseif($_GET["mode"] == 2)
 {
-    // User NUR aus der Gliedgemeinschaft entfernen
+    // User NUR aus der aktuellen Organisation entfernen
 
     // Es duerfen keine Webmaster entfernt werden
     if(hasRole("Webmaster", $g_current_user->id) == false
     && hasRole("Webmaster", $_GET['user_id']) == true)
+    {
+        $g_message->show("norights");
+    }
+
+    // User muss zur aktuellen Orga dazugehoeren
+    if($this_orga == false)
     {
         $g_message->show("norights");
     }
@@ -145,17 +175,19 @@ elseif($_GET["mode"] == 2)
         db_error($result);
     }
 
-    $err_code = "delete_member_ok";
+    $err_code = "remove_member_ok";
     $err_text = utf8_encode($g_current_organization->longname);
 }
 elseif($_GET["mode"] == 3)
 {
     // nur Webmaster duerfen User physikalisch loeschen
-    if(!hasRole("Webmaster"))
+    // User darf in keiner anderen Orga aktiv sein
+    if(hasRole("Webmaster") == false 
+    || $other_orga > 0)
     {
         $g_message->show("norights");
     }
-
+    
     // User aus der Datenbank loeschen
     $user = new User($g_adm_con);
     $user->GetUser($_GET['user_id']);
@@ -167,7 +199,10 @@ elseif($_GET["mode"] == 4)
 {
     // nur Webmaster duerfen User neue Zugangsdaten zuschicken
     // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
-    if(!hasRole("Webmaster") || $g_preferences['enable_system_mails'] != 1)
+    // nur an Mitglieder der eigenen Organisation schicken
+    if(hasRole("Webmaster" == false) 
+    || $g_preferences['enable_system_mails'] != 1
+    || $this_orga == false)
     {
         $g_message->show("norights");
     }
@@ -220,13 +255,32 @@ elseif($_GET["mode"] == 5)
 }
 elseif($_GET["mode"] == 6)
 {
-    // Frage, ob Mitglied geloescht werden soll
-    $user = new User($g_adm_con);
-    $user->GetUser($_GET['user_id']);
-    $g_message->setForwardYesNo("$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET["user_id"]. "&mode=2");
-    $g_message->addVariableContent(utf8_encode("$user->first_name $user->last_name"));
-    $g_message->addVariableContent(utf8_encode($g_current_organization->longname));
-    $g_message->show("delete_member", "", "Entfernen");
+    if($this_orga == true && $other_orga == 0)
+    {
+        // User ist NUR Mitglied der aktuellen Orga -> dann fragen, ob Ehemaliger oder ganz loeschen
+        header("Location: $g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET["user_id"]. "&mode=1");
+        exit();
+    }
+    elseif($this_orga == true && $other_orga > 0)
+    {
+        // User ist AUCH noch in anderen Orgas Mitglied -> User kann nur aus dieser Orga entfernt werden
+        $user = new User($g_adm_con);
+        $user->GetUser($_GET['user_id']);
+        $g_message->setForwardYesNo("$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET["user_id"]. "&mode=2");
+        $g_message->addVariableContent(utf8_encode("$user->first_name $user->last_name"));
+        $g_message->addVariableContent(utf8_encode($g_current_organization->longname));
+        $g_message->show("remove_member", "", "Entfernen");
+    }
+    elseif($this_orga == false && $other_orga == 0)
+    {
+        // User ist in keiner Orga mehr Mitglied -> kann komplett geloescht werden
+        $user = new User($g_adm_con);
+        $user->GetUser($_GET['user_id']);
+        $g_message->setForwardYesNo("$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET["user_id"]. "&mode=3");
+        $g_message->addVariableContent(utf8_encode("$user->first_name $user->last_name"));
+        $g_message->addVariableContent(utf8_encode($g_current_organization->longname));
+        $g_message->show("delete_user", "", "Löschen");
+    }
 }
 
 $g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);

@@ -30,6 +30,17 @@ require("../../system/login_valid.php");
 $err_code = "";
 $err_text = "";
 
+// Uebergabevariablen pruefen
+if(isset($_GET["rol_id"]) == false || is_numeric($_GET["rol_id"]) == false)
+{
+    $g_message->show("invalid");
+}
+
+if(isset($_GET["user_import_mode"]) == false || is_numeric($_GET["user_import_mode"]) == false)
+{
+    $g_message->show("invalid");
+}
+
 // nur berechtigte User duerfen User importieren
 if(!editUser())
 {
