@@ -358,20 +358,12 @@ require("../../../adm_config/body_top.php");
                             db_error($result);
                             $row_count_2 = mysql_fetch_array($result);
 
-                            if($row_count_2[0] > 0)
+                            // wenn der User nicht mehr Mitglied der aktuellen Orga, aber noch Mitglied einer anderen Orga ist,
+                            // dann darf er nicht aus der DB geloescht werden
+                            if($row_count_2[0] == 0 || $is_member == true)
                             {
-                                // Mitglieder nicht loeschen, wenn sie noch in anderen Organisationen aktiv sind
-                                if($is_member == true)
-                                {
-                                    echo "<a href=\"$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->usr_id&mode=6\"><img
-                                        src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Benutzer entfernen\" title=\"Benutzer entfernen\"></a>";
-                                }
-                            }
-                            else
-                            {
-                                // Mitglied kann aus der Datenbank geloescht oder zu einem Ehemaligen gemacht werden
-                                echo "<a href=\"members_function.php?user_id=$row->usr_id&amp;mode=1\"><img
-                                    src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Benutzer l&ouml;schen\" title=\"Benutzer l&ouml;schen\"></a>";
+                                echo "<a href=\"$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->usr_id&mode=6\"><img
+                                    src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Benutzer entfernen\" title=\"Benutzer entfernen\"></a>";
                             }
                         echo "</td>
                     </tr>";

@@ -60,19 +60,12 @@ $message_text = array(
 
     "delete_user" =>
         "<p>Willst du <b>%VAR1%</b> wirklich löschen ?</p>
-        <p>Der Benutzer wird physikalisch in der Datenbank gelöscht. Falls
-        du nur die Mitgliedschaft beenden willst, musst du im Profil
-        einfach die entsprechenden Rollen entfernen !</p>",
+        <p>Der Benutzer wird damit physikalisch in der Datenbank gelöscht und ein Zugriff auf
+        seine Daten nicht mehr möglich.</p>",
 
     "delete_new_user" =>
         "<p>Willst du die Web-Registrierung von
         <b>%VAR1%</b> wirklich löschen ?</p>",
-
-    "delete_member" =>
-        "Wollen Sie die Mitgliedschaft des Benutzers %VAR1% bei %VAR2% beenden ?",
-
-    "delete_member_ok" =>
-        "Die Mitgliedschaft des Benutzers bei %VAR1% wurde erfolgreich beendet !",
 
     "email_invalid" =>
         "Die E-Mail-Adresse ist nicht gültig.",
@@ -164,6 +157,12 @@ $message_text = array(
         "Du hast ein falsches Passwort eingegeben und
         konntest deshalb nicht angemeldet werden.<br /><br />
         Überprüf bitte dein Passwort und gib dieses dann erneut ein.",
+
+    "remove_member" =>
+        "Wollen Sie die Mitgliedschaft des Benutzers %VAR1% bei %VAR2% beenden ?",
+
+    "remove_member_ok" =>
+        "Die Mitgliedschaft des Benutzers bei %VAR1% wurde erfolgreich beendet !",
 
     "role_active" =>
         "Die Rolle <b>%VAR1%</b> wurde wieder auf <b>aktiv</b> gesetzt.",
