@@ -56,7 +56,7 @@ if (ini_get('file_uploads') != '1')
     $g_message->show("no_fileuploads");
 }
 
-
+$_SESSION['navigation']->addUrl($g_current_url);
 $default_folder = strStripTags(urldecode($_GET['default_folder']));
 $folder     = strStripTags(urldecode($_GET['folder']));
 

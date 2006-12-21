@@ -7,7 +7,7 @@
  * Module-Owner : Martin Günzler
  *
  * Uebergaben:
- *
+ *    
  * folder : akuteller Ordner (relativer Pfad in Abhaengigkeit adm_my_files/download
  *          und default_folder
  * default_folder : gibt den Ordner in adm_my_files/download an, ab dem die
@@ -45,7 +45,10 @@ if ($g_preferences['enable_download_module'] != 1)
 }
 
 //Verwaltung der Session
-$_SESSION['navigation']->clear();
+if(isset($_GET["usr_id"]) == false && isset($_GET["rol_id"]) == false)
+{
+    //$_SESSION['navigation']->clear();
+}
 $_SESSION['navigation']->addUrl($g_current_url);
 
 
