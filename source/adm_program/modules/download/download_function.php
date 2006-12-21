@@ -217,7 +217,7 @@ if($_GET["mode"] == 1)
             // Datei hochladen
             if(move_uploaded_file($_FILES['userfile']['tmp_name'], "$act_folder/$file_name"))
             {
-                $g_message->setForwardUrl($navigation->getUrl());
+                $g_message->setForwardUrl("$g_root_path/adm_program/system/back.php");
                 $g_message->show("upload_file",$file_name);
             }
             else
@@ -250,7 +250,7 @@ elseif($_GET["mode"] == 2)
     {
         if( removeDir ("$act_folder/$file"))
         {
-                $g_message->setForwardUrl($navigation->getUrl());
+                $g_message->setForwardUrl("$g_root_path/adm_program/system/back.php");
                 $g_message->show("delete_folder",$file);
         }
     }
@@ -258,7 +258,7 @@ elseif($_GET["mode"] == 2)
     {
         if(unlink("$act_folder/$file"))
         {
-            $g_message->setForwardUrl($navigation->getUrl());
+            $g_message->setForwardUrl("$g_root_path/adm_program/system/back.php");
             $g_message->show("delete_file",$file);
         }
     }
@@ -298,7 +298,7 @@ elseif($_GET["mode"] == 3)
             // Ordner erstellen
             mkdir("$act_folder/$new_folder",0777);
             chmod("$act_folder/$new_folder", 0777);
-                $g_message->setForwardUrl($navigation->getUrl());
+            $g_message->setForwardUrl("$g_root_path/adm_program/system/back.php");
             $g_message->show("create_folder", $new_folder);
             $url = urlencode("$g_root_path/adm_program/modules/download/download.php?folder=$folder&default_folder=$default_folder");
          }
@@ -337,7 +337,7 @@ elseif($_GET["mode"] == 4)
             //Umbenennen der Datei
             if(rename("$act_folder/$file","$act_folder/$new_name"))
             {
-                $g_message->setForwardUrl($navigation->getUrl());
+                $g_message->setForwardUrl("$g_root_path/adm_program/system/back.php");
                $g_message->show("rename_folder",$file);
             }
          }
@@ -367,7 +367,7 @@ elseif($_GET["mode"] == 4)
             //Umbenennen der Datei
             if(rename("$act_folder/$file","$act_folder/$new_name"))
             {
-                $g_message->setForwardUrl($navigation->getUrl());
+                $g_message->setForwardUrl("$g_root_path/adm_program/system/back.php");
                 $g_message->show("rename_file",$file);
                 }
             }
@@ -385,7 +385,8 @@ elseif($_GET["mode"] == 4)
    }
 }
 elseif($_GET["mode"] == 5)
-{
+{	
+	$_SESSION['navigation']->addUrl($g_current_url);
     $g_message->setForwardYesNo("$g_root_path/adm_program/modules/download/download_function.php?mode=2&amp;folder=$folder&amp;file=$file&amp;default_folder=$default_folder");
     $g_message->show("delete_file_folder",$file);
 }

@@ -49,6 +49,7 @@ if(!editDownload())
     $g_message->show("norights");
 }
 
+$_SESSION['navigation']->addUrl($g_current_url);
 $default_folder = strStripTags(urldecode($_GET['default_folder']));
 $folder = strStripTags(urldecode($_GET['folder']));
 
