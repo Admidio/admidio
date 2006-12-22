@@ -330,11 +330,12 @@ $message_text = array(
         "Der Ordner <b>%VAR1%</b> wurde angelegt.",
 
     "folder_exists" =>
-        "Der Ordner <b>%VAR1%</b> existiert bereits.<br />
-        Gib bitte einen anderen Namen ein.",
+        "Der Ordner <b>%VAR1%</b> existiert bereits!<br><br>
+        Wähle bitte einen anderen Namen für den neuen Ordner aus.",
 
     "file_exists" =>
-        "Die Datei <b>%VAR1%</b> existiert bereits.",
+        "Die Datei <b>%VAR1%</b> existiert bereits!<br><br>
+        Wähle bitte einen anderen Dateinamen aus.",
 
     "rename_folder" =>
         "Der Ordner <b>%VAR1%</b> wurde umbenannt.",
@@ -351,7 +352,7 @@ $message_text = array(
         Dateigröße von %VAR1%B.",
 
     "empty_upload_post" =>
-        "Die Seite wurde ungültig aufgerufen oder die Datei konnte nicht hochgeladen werden.<br />
+        "Die Seite wurde ungültig aufgerufen oder die Datei konnte nicht hochgeladen werden.<br>
         Vermutlich wurde die vom Server vorgegebene, maximale Uploadgröße, von %VAR1%B übersteigen!",
     //Ende Fehlermeldungen Downloadmodul
 
