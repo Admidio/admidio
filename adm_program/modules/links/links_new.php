@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2006 The Admidio Team
  * Homepage     : http://www.admidio.org
- * Module-Owner : Elmar Meuthen
+ * Module-Owner : Daniel Dieckelmann
  *
  * Uebergaben:
  *
@@ -69,6 +69,7 @@ else
     $_GET["headline"] = "Links";
 }
 
+$_SESSION['navigation']->addUrl($g_current_url);
 
 if (isset($_SESSION['links_request']))
 {
@@ -97,6 +98,7 @@ else
             $form_values['linkname']    = $row_ba->lnk_name;
             $form_values['description'] = $row_ba->lnk_description;
             $form_values['linkurl']     = $row_ba->lnk_url;
+            $form_values['category']     = $row_ba->lnk_cat_id;
         }
         elseif (mysql_num_rows($result) == 0)
         {
@@ -160,6 +162,29 @@ require("../../../adm_config/body_top.php");
                     <div style=\"text-align: left; margin-left: 27%;\">
                         <input type=\"text\" id=\"linkurl\" name=\"linkurl\" tabindex=\"2\" style=\"width: 350px;\" maxlength=\"250\" value=\"". htmlspecialchars($form_values['linkurl'], ENT_QUOTES). "\">
                         <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
+                    </div>
+                </div>
+                
+                <div style=\"margin-top: 6px;\">
+                    <div style=\"text-align: right; width: 25%; float: left;\">Kategorie:</div>
+                    <div style=\"text-align: left; margin-left: 27%;\">
+                        <select size=\"1\" name=\"category\">";
+                            $sql = "SELECT * FROM ". TBL_CATEGORIES. "
+                                     WHERE cat_org_id = $g_current_organization->id
+                                       AND cat_type   = 'LNK'
+                                     ORDER BY cat_name ASC ";
+                            $result = mysql_query($sql, $g_adm_con);
+                            db_error($result);
+
+                            while($row = mysql_fetch_object($result))
+                            {
+                                echo "<option value=\"$row->cat_id\"";
+                                    if($form_values['category'] == $row->cat_id
+                                    || ($form_values['category'] == 0 && $row->cat_name == 'Allgemein'))
+                                        echo " selected ";
+                                echo ">$row->cat_name</option>";
+                            }
+                        echo "</select>
                     </div>
                 </div>
 

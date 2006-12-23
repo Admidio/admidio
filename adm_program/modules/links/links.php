@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2006 The Admidio Team
  * Homepage     : http://www.admidio.org
- * Module-Owner : Elmar Meuthen
+ * Module-Owner : Daniel Dieckelmann
  *
  * start     - Angabe, ab welchem Datensatz Links angezeigt werden sollen
  * headline  - Ueberschrift, die ueber den Links steht
@@ -82,6 +82,10 @@ if ($g_preferences['enable_bbcode'] == 1)
     $bbcode = new ubbParser();
 }
 
+// Navigation initialisieren - Modul fängt hier an.
+$_SESSION['navigation']->clear();
+$_SESSION['navigation']->addUrl($g_current_url);
+
 unset($_SESSION['links_request']);
 
 echo "
@@ -114,23 +118,41 @@ require("../../../adm_config/body_top.php");
         // falls eine id fuer einen bestimmten Link uebergeben worden ist...
         if ($_GET['id'] > 0)
         {
-            $sql    = "SELECT * FROM ". TBL_LINKS. "
-                       WHERE lnk_id = {0} and lnk_org_id = '$g_current_organization->id'";
+            $sql1    = "SELECT * FROM ". TBL_LINKS. "
+                       JOIN ". TBL_CATEGORIES ."
+                       ON lnk_cat_id = cat_id
+                       WHERE lnk_id = {0}
+                       AND lnk_org_id = '$g_current_organization->id'
+                       AND cat_org_id = '$g_current_organization->id'";
 
-            $sql    = prepareSQL($sql, array($_GET['id']));
+            $sql1    = prepareSQL($sql1, array($_GET['id']));
         }
         //...ansonsten alle fuer die Gruppierung passenden Links aus der DB holen.
         else
         {
-            $sql    = "SELECT * FROM ". TBL_LINKS. "
-                       WHERE lnk_org_id = '$g_current_organization->id'
-                       ORDER BY lnk_timestamp DESC
+            // Links bereits nach den Namen ihrer Kategorie sortiert.
+            $sql1    = "SELECT * FROM ". TBL_LINKS. " AS L
+                       JOIN ". TBL_CATEGORIES ." AS C
+                       ON L.lnk_cat_id = C.cat_id
+                       WHERE L.lnk_org_id = '$g_current_organization->id'
+                       AND C.cat_org_id = '$g_current_organization->id'
+                       AND C.cat_type = 'LNK'
+                       ORDER BY C.cat_name, lnk_timestamp DESC
                        LIMIT {0}, 10 ";
 
-            $sql    = prepareSQL($sql, array($_GET['start']));
+            $sql1    = prepareSQL($sql1, array($_GET['start']));
+            
+            // Kategorien auslesen - Erstmal mit zwei Statements gelöst.
+            $sql2    = "SELECT * FROM ". TBL_CATEGORIES. "
+                        WHERE cat_org_id = '$g_current_organization->id'
+                        AND cat_type = 'LNK'
+                        ORDER BY cat_name ASC ";
+                        
+            $categories_result = mysql_query($sql2, $g_adm_con);
+            db_error($categories_result);
         }
 
-        $links_result = mysql_query($sql, $g_adm_con);
+        $links_result = mysql_query($sql1, $g_adm_con);
         db_error($links_result);
 
         // Gucken wieviele Linkdatensaetze insgesamt fuer die Gruppierung vorliegen...
@@ -155,6 +177,12 @@ require("../../../adm_config/body_top.php");
                         class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Neu anlegen\"></a>
                         <a class=\"iconLink\" href=\"links_new.php?headline=". $_GET["headline"]. "\">Neu anlegen</a>
                     </span>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <span class=\"iconLink\">
+                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/categories.php?type=LNK\"><img
+                        src=\"$g_root_path/adm_program/images/application_double.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Kategorien pflegen\"></a>
+                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/categories.php?type=LNK\">Kategorien pflegen</a>
+                    </span>
                 </p>";
             }
 
@@ -177,13 +205,52 @@ require("../../../adm_config/body_top.php");
         }
         else
         {
+            // Wenn nur ein Link angezeigt werden soll, categories_result setzen
+            if ($_GET['id'] > 0)
+            {
+                $categories_result = $links_result;
+            }
 
-            // Links auflisten
-            echo "<div class=\"formHead\">Weblinks</div>
-            <div class=\"formBody\" style=\"overflow: hidden;\">";
+            // Zählervariable für Anzahl von mysql_fetch_object
+            $j = 0;
+            
+            // Überhaupt etwas geschrieben?
+            $did_write_something = false;
+            
+            // Links in Kategorien auflisten
+            while ($row_cat = mysql_fetch_object($categories_result))
+            {
+            $dont_write = false;
 
+            // Wenn Kategorie nicht versteckt ist, und auch der User eingeloggt ist: Dann anzeigen
+            if (($row_cat->cat_hidden == 1) && ($g_session_valid == false))
+            {
+                $dont_write = true; // Nichts anzeigen
+            }
+            if (!$dont_write)
+            {
+                $did_write_something = true;
+                echo "<div class=\"formHead\">$row_cat->cat_name</div>
+                <div class=\"formBody\" style=\"overflow: hidden;\">";
+            }
                 $i = 0;
-                while ($row = mysql_fetch_object($links_result))
+                $previous_cat_id = $row_cat->cat_id;
+                //echo $previous_cat_id;
+
+                if ((($j > 0) && ($j < $numLinks)) || ($_GET['id'] > 0))
+                {
+                    // Zeiger um eine Position zurücksetzen
+                    mysql_data_seek($links_result, $j);
+                }
+                
+                // Solange die vorherige Kategorie-ID sich nicht verändert...
+                // Sonst in die neue Kategorie springen
+                while (($row = mysql_fetch_object($links_result)) && ($row->lnk_cat_id == $previous_cat_id))
+                {
+
+                $previous_cat_id = $row->lnk_cat_id;
+
+                if (!$dont_write)
                 {
                     if($i > 0)
                     {
@@ -236,10 +303,22 @@ require("../../../adm_config/body_top.php");
                                 }
                             echo "</div>";
                         }
-                    echo "</div>";
-                    $i++;
+                        echo "</div>";
+                 }  // Ende Wenn !dont_write
+                 $i++;
+                 $j++;
                  }  // Ende While-Schleife
-             echo "</div>";
+             if (!$dont_write)
+             {
+                echo "</div><br />";
+             }
+             } // Ende Kategorien-While-Schleife
+
+             // Es wurde noch gar nichts geschrieben
+             if (!$did_write_something)
+             {
+                echo "<p>Es sind keine Eintr&auml;ge vorhanden.</p>";
+             }
         }
 
         if(mysql_num_rows($links_result) > 2)
