@@ -93,6 +93,8 @@ echo "
             font-weight: normal;
         }
     </style>
+    
+    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/toggleDiv.js\"></script>
 
     <!--[if lt IE 7]>
     <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
@@ -111,9 +113,30 @@ require("../../../adm_config/body_top.php");
                 <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/organization/fields.php\">Profilfelder pflegen</a>
             </span>
         </p>
+        
+        <div class=\"formBody\" style=\"font-size: 12px; padding: 6px 0px; width: 566px;\">
+            <a href=\"#\" onClick=\"toggleDiv('general');\">Allgemein</a>
+
+             &#124; <a href=\"#\" onClick=\"toggleDiv('register');\">Registrierung</a>
+
+             &#124; <a href=\"#\" onClick=\"toggleDiv('announcement-module');\">Ankündigungen</a>
+
+             &#124; <a href=\"#\" onClick=\"toggleDiv('download-module');\">Downloads</a>
+
+             &#124; <a href=\"#\" onClick=\"toggleDiv('mail-module');\">Mails</a>
+
+             &#124; <a href=\"#\" onClick=\"toggleDiv('photo-module');\">Fotos</a>
+
+             &#124; <a href=\"#\" onClick=\"toggleDiv('guestbook-module');\">Gästebuch</a>
+
+             &#124; <a href=\"#\" onClick=\"toggleDiv('dates-module');\">Termine</a>
+
+             &#124; <a href=\"#\" onClick=\"toggleDiv('links-module');\">Links</a>
+        </div><br />
+        
         <form action=\"organization_function.php?org_id=$g_current_organization->id\" method=\"post\" name=\"orga_settings\">
             <div class=\"formBody\">
-                <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 95%;\">
+                <div class=\"groupBox\" id=\"general\" style=\"visibility: hidden; display: none; margin-top: 15px; text-align: left; width: 95%;\">
                     <div class=\"groupBoxHeadline\">Allgemeine Einstellungen</div>
                     <div style=\"margin-top: 6px;\">
                         <div style=\"text-align: left; width: 55%; float: left;\">Name (Abk.):</div>
@@ -293,7 +316,7 @@ require("../../../adm_config/body_top.php");
                 /**************************************************************************************/
 
                 echo"
-                <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 95%;\">
+                <div class=\"groupBox\" id=\"register\" style=\"visibility: hidden; display: none; margin-top: 15px; text-align: left; width: 95%;\">
                     <div class=\"groupBoxHeadline\">Einstellungen Registrierung&nbsp;&nbsp; </div>
                     <div style=\"margin-top: 15px;\">
                         <div style=\"text-align: left; width: 55%; float: left;\">Registrierung:</div>
@@ -365,7 +388,7 @@ require("../../../adm_config/body_top.php");
                 /**************************************************************************************/
 
                 echo"
-                <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 95%;\">
+                <div class=\"groupBox\" id=\"announcement-module\" style=\"visibility: hidden; display: none; margin-top: 15px; text-align: left; width: 95%;\">
                     <div class=\"groupBoxHeadline\">Einstellungen Ank&uuml;ndigungsmodul&nbsp;&nbsp; </div>
 
                     <div style=\"margin-top: 6px;\">
@@ -392,7 +415,7 @@ require("../../../adm_config/body_top.php");
                 /**************************************************************************************/
 
                 echo"
-                <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 95%;\">
+                <div class=\"groupBox\"	id=\"download-module\" style=\"visibility: hidden; display: none; margin-top: 15px; text-align: left; width: 95%;\">
                     <div class=\"groupBoxHeadline\">Einstellungen Downloadmodul&nbsp;&nbsp; </div>
 
                     <div style=\"margin-top: 6px;\">
@@ -429,7 +452,7 @@ require("../../../adm_config/body_top.php");
                 /**************************************************************************************/
 
                 echo"
-                <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 95%;\">
+                <div class=\"groupBox\" id=\"mail-module\" style=\"visibility: hidden; display: none; margin-top: 15px; text-align: left; width: 95%;\">
                     <div class=\"groupBoxHeadline\">Einstellungen Mailmodul&nbsp;&nbsp; </div>
 
                     <div style=\"margin-top: 6px;\">
@@ -484,7 +507,7 @@ require("../../../adm_config/body_top.php");
                 /**************************************************************************************/
 
                 echo"
-                <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 95%;\">
+                <div class=\"groupBox\" id=\"photo-module\" style=\"visibility: hidden; display: none; margin-top: 15px; text-align: left; width: 95%;\">
                     <div class=\"groupBoxHeadline\">Einstellungen Fotomodul&nbsp;&nbsp; </div>
 
                     <div style=\"margin-top: 6px;\">
@@ -609,7 +632,7 @@ require("../../../adm_config/body_top.php");
                 /**************************************************************************************/
 
                 echo"
-                <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 95%;\">
+                <div class=\"groupBox\" id=\"guestbook-module\" style=\"visibility: hidden; display: none; margin-top: 15px; text-align: left; width: 95%;\">
                     <div class=\"groupBoxHeadline\">Einstellungen G&auml;stebuchmodul&nbsp;&nbsp; </div>
 
                     <div style=\"margin-top: 6px;\">
@@ -667,7 +690,7 @@ require("../../../adm_config/body_top.php");
                 /**************************************************************************************/
 
                 echo"
-                <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 95%;\">
+                <div class=\"groupBox\" id=\"dates-module\" style=\"visibility: hidden; display: none; margin-top: 15px; text-align: left; width: 95%;\">
                     <div class=\"groupBoxHeadline\">Einstellungen Terminmodul&nbsp;&nbsp; </div>
 
                     <div style=\"margin-top: 6px;\">
@@ -694,7 +717,7 @@ require("../../../adm_config/body_top.php");
                 /**************************************************************************************/
 
                 echo"
-                <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 95%;\">
+                <div class=\"groupBox\" id=\"links-module\" style=\"visibility: hidden; display: none; margin-top: 15px; text-align: left; width: 95%;\">
                     <div class=\"groupBoxHeadline\">Einstellungen Weblinksmodul&nbsp;&nbsp; </div>
 
                     <div style=\"margin-top: 6px;\">
@@ -713,20 +736,24 @@ require("../../../adm_config/body_top.php");
                         aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt.
                     </div>
 
-                </div>";
-
-                echo "
-                <div style=\"margin-top: 15px;\">
-                    <button name=\"speichern\" type=\"submit\" value=\"speichern\">
-                        <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
-                        &nbsp;Speichern</button>
                 </div>
+
+             <br />
+            </div>";
+            
+            echo "
+            <br />
+            <div class=\"formBody\">
+                <button name=\"speichern\" type=\"submit\" value=\"speichern\">
+                    <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
+                    &nbsp;Speichern</button>
             </div>
         </form>
     </div>
 
     <script type=\"text/javascript\"><!--
-        document.getElementById('longname').focus();
+        toggleDiv('general');
+                document.getElementById('longname').focus();
     --></script>";
 
     require("../../../adm_config/body_bottom.php");
