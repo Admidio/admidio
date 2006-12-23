@@ -70,6 +70,11 @@ else
 
 $act_folder = "../../../adm_my_files/download";
 
+//Session zur�ck setzten
+$_SESSION['new_folder'] = '';
+$_SESSION['new_name'] = '';
+//$_SESSION['userfile'] = "";
+
 // uebergebene Ordner auf Gueltigkeit pruefen
 // und Ordnerpfad zusammensetzen
 if(strlen($default_folder) > 0)
@@ -90,7 +95,7 @@ if(strlen($folder) > 0)
     $act_folder = "$act_folder/$folder";
 }
 
-//Erstellen des Links vom Menü
+//Erstellen des Links vom Men�
 $path = explode("/",$folder);
 $next_folder = "";
 If ($default_folder <> "")
@@ -110,26 +115,28 @@ While ($i <> count($path)-1)
     }
     else
     {
-        $next_folder = $next_folder."/".$path[$i];
+        $next_folder = $next_folder." > ".$path[$i];
     };
-    $link = $link."/<a href=\"$g_root_path/adm_program/modules/download/download.php?folder=".urlencode($next_folder). "&amp;default_folder=". urlencode($default_folder). "\">$path[$i]</a>";
+    $link = $link." > <a href=\"$g_root_path/adm_program/modules/download/download.php?folder=".urlencode($next_folder). "&amp;default_folder=". urlencode($default_folder). "\">$path[$i]</a>";
     $i++;
 }
 If ($folder <> "")
 {
-    $link = $link."/$path[$i]";
+    $link = "<h2>$path[$i]</h2><p><img src=\"$g_root_path/adm_program/images/application_view_list.png\"> $link</p>";
 }
 else
 {
     If ($default_folder == "")
     {
-        $link = "Download";
+        $link = "<h2>Download</h2>";
     }
     else
     {
-        $link = "$default_folder";
+        $link = "<h2>$default_folder</h2>";
     };
 }
+
+
 if (isset($_GET['info']))
     $info= strStripTags($_GET['info']);
 else
@@ -184,17 +191,7 @@ require("../../../adm_config/body_top.php");
     echo"<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
     <h1>Downloadbereich</h1>
     <p>";
-    echo "<h2>$link</h2>";
-    //Button zurück zur Downloadübersicht & Eins zurück
-    if(strlen($folder) > 0)
-    {
-        $pfad = strrev(substr(strchr(strrev($folder),"/"),1));
-        echo "<span class=\"iconLink\">
-            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/download.php?folder=". urlencode($pfad). "&amp;default_folder=". urlencode($default_folder). "\"><img
-            class=\"iconLink\" src=\"$g_root_path/adm_program/images/folder.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Ordner schlie&szlig;en\"></a>
-            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/download.php?folder=". urlencode($pfad). "&amp;default_folder=". urlencode($default_folder). "\">Ordner schlie&szlig;en</a>
-        </span>";
-    };
+    echo "$link";
 
     //Button Upload und Neuer Ordner
     if ($g_session_valid && editDownload())
