@@ -78,6 +78,13 @@ if(strlen($folder) > 0)
     }
 }
 
+if ($_SESSION['new_name'] == '')
+   	$_SESSION['new_name'] = '';
+$new_name = $_SESSION['new_name'];
+if ($_SESSION['userfile'] == '')
+   	$_SESSION['userfile'] = '';
+$userfile = $_SESSION['userfile'];
+
 //Beginn der Seite
 echo "
 <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
@@ -122,14 +129,14 @@ require("../../../adm_config/body_top.php");
                 <div style=\"margin-top: 15px;\">
                     <div style=\"text-align: right; width: 30%; float: left;\">Datei ausw&auml;hlen:</div>
                     <div style=\"text-align: left; margin-left: 32%;\">
-                        <input id=\"userfile\" name=\"userfile\" size=\"30\" type=\"file\">
+                        <input id=\"userfile\" name=\"userfile\" size=\"30\" type=\"file\" value=\"$userfile\">
                         <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
                     </div>
                 </div>
                 <div style=\"margin-top: 10px;\">
                     <div style=\"text-align: right; width: 30%; float: left;\">Neuer Dateiname:</div>
                     <div style=\"text-align: left; margin-left: 32%;\">
-                        <input type=\"text\" name=\"new_name\" size=\"25\" tabindex=\"1\">
+                        <input type=\"text\" id=\"new_name\" name=\"new_name\" size=\"25\" tabindex=\"1\" value=\"$new_name\">
                         &nbsp;(optional)&nbsp;<img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                         onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=dateiname','Message','width=400,height=350,left=310,top=200,scrollbars=yes')\">
                     </div>
