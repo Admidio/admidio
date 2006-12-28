@@ -44,7 +44,7 @@ if(isset($_GET['inactive'])
 }
 else
 {
-    $valid = 1; 
+    $valid = 1;
 }
 
 // Navigation faengt hier im Modul an
@@ -53,7 +53,7 @@ $_SESSION['navigation']->addUrl($g_current_url);
 
 // Alle Rollen auflisten, die der Webmaster sehen darf
 $sql    = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-            WHERE rol_org_shortname = '$g_organization' 
+            WHERE rol_org_shortname = '$g_organization'
               AND rol_valid         = $valid
               AND rol_cat_id        = cat_id
             ORDER BY cat_name, rol_name ";
@@ -84,7 +84,7 @@ require("../../../adm_config/body_top.php");
 
         <p>
             <span class=\"iconLink\">
-                <a class=\"iconLink\" href=\"roles_new.php\"><img 
+                <a class=\"iconLink\" href=\"roles_new.php\"><img
                 src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Rolle anlegen\"></a>
                 <a class=\"iconLink\" href=\"roles_new.php\">Rolle anlegen</a>
             </span>
@@ -102,13 +102,13 @@ require("../../../adm_config/body_top.php");
                 $image       = "wand.png";
             }
             echo "<span class=\"iconLink\">
-                <a class=\"iconLink\" href=\"roles.php?inactive=$valid\"><img 
+                <a class=\"iconLink\" href=\"roles.php?inactive=$valid\"><img
                 src=\"$g_root_path/adm_program/images/$image\" style=\"vertical-align: middle;\" border=\"0\" alt=\"$description_lnk\"></a>
                 <a class=\"iconLink\" href=\"roles.php?inactive=$valid\">$description_lnk</a>
             </span>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <span class=\"iconLink\">
-                <a class=\"iconLink\" href=\"categories.php?type=ROL\"><img 
+                <a class=\"iconLink\" href=\"categories.php?type=ROL\"><img
                 src=\"$g_root_path/adm_program/images/application_double.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Kategorien pflegen\"></a>
                 <a class=\"iconLink\" href=\"categories.php?type=ROL\">Kategorien pflegen</a>
             </span>
@@ -132,80 +132,85 @@ require("../../../adm_config/body_top.php");
                     <td style=\"text-align: left;\">";
                         if($row->rol_moderation == 1)
                         {
-                            echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/wand.png\" 
+                            echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/wand.png\"
                             alt=\"Moderation (Benutzer &amp; Rollen verwalten uvm.)\" title=\"Moderation (Benutzer &amp; Rollen verwalten uvm.)\">";
                         }
                         if($row->rol_edit_user == 1)
                         {
-                            echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/user.png\" 
+                            echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/user.png\"
                             alt=\"Daten aller Benutzer bearbeiten\" title=\"Daten aller Benutzer bearbeiten\">";
                         }
                         if($row->rol_announcements == 1)
                         {
-                            echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/note.png\" 
+                            echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/note.png\"
                             alt=\"Ank&uuml;ndigungen anlegen und bearbeiten\" title=\"Ank&uuml;ndigungen anlegen und bearbeiten\">";
                         }
                         if($row->rol_dates == 1)
                         {
-                            echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/date.png\" 
+                            echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/date.png\"
                             alt=\"Termine anlegen und bearbeiten\" title=\"Termine anlegen und bearbeiten\">";
                         }
                         if($row->rol_photo == 1)
                         {
-                            echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/photo.png\" 
+                            echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/photo.png\"
                             alt=\"Fotos hochladen und bearbeiten\" title=\"Fotos hochladen und bearbeiten\">";
                         }
                         if($row->rol_download == 1)
                         {
-                            echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/folder_down.png\" 
+                            echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/folder_down.png\"
                             alt=\"Downloads hochladen und bearbeiten\" title=\"Downloads hochladen und bearbeiten\">";
                         }
                         if($row->rol_guestbook == 1)
                         {
-                            echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/comment.png\" 
+                            echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/comment.png\"
                             alt=\"G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen\" title=\"G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen\">";
                         }
                         if($row->rol_guestbook_comments == 1)
                         {
-                            echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/comments.png\" 
+                            echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/comments.png\"
                             alt=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\" title=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\">";
                         }
                         if($row->rol_mail_logout == 1)
                         {
-                            echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/mail.png\" 
+                            echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/mail.png\"
                             alt=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\" title=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\">";
                         }
                         if($row->rol_mail_login == 1)
                         {
-                            echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/mail_key.png\" 
+                            echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/mail_key.png\"
                             alt=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\" title=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\">";
                         }
                         if($row->rol_weblinks == 1)
                         {
-                            echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/globe.png\" 
+                            echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/globe.png\"
                             alt=\"Weblinks anlegen und bearbeiten\" title=\"Weblinks anlegen und bearbeiten\">";
+                        }
+                        if($row->rol_profile == 1)
+                        {
+                            echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/user.png\"
+                            alt=\"Eigenes Profil bearbeiten\" title=\"Eigenes Profil bearbeiten\">";
                         }
                     echo "</td>
                     <td style=\"text-align: center;\">";
                         if($row->rol_locked == 1)
                         {
-                            echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/lock.png\" 
+                            echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/lock.png\"
                             alt=\"Rolle nur f&uuml;r Moderatoren sichtbar\" title=\"Rolle nur f&uuml;r Moderatoren sichtbar\">";
                         }
                     echo "</td>
                     <td style=\"text-align: center;\">
-                        <a href=\"$g_root_path/adm_program/modules/lists/lists_show.php?type=address&amp;mode=html&amp;rol_id=$row->rol_id\"><img 
+                        <a href=\"$g_root_path/adm_program/modules/lists/lists_show.php?type=address&amp;mode=html&amp;rol_id=$row->rol_id\"><img
                         src=\"$g_root_path/adm_program/images/application_view_columns.png\" border=\"0\" alt=\"Mitglieder anzeigen\" title=\"Mitglieder anzeigen\"></a>&nbsp;";
-                        
+
                         if($valid == true)
                         {
-                            echo "<a href=\"#\"><img src=\"$g_root_path/adm_program/images/add.png\" border=\"0\" alt=\"Mitglieder zuordnen\" title=\"Mitglieder zuordnen\" 
+                            echo "<a href=\"#\"><img src=\"$g_root_path/adm_program/images/add.png\" border=\"0\" alt=\"Mitglieder zuordnen\" title=\"Mitglieder zuordnen\"
                                 onclick=\"window.open('$g_root_path/adm_program/modules/lists/members.php?rol_id=$row->rol_id&amp;popup=1','Titel','width=570,height=550,left=310,top=100,scrollbars=yes,resizable=yes')\">
                             </a>";
                         }
                         else
                         {
-                            echo "<a href=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$row->rol_id&amp;mode=5\"><img 
+                            echo "<a href=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$row->rol_id&amp;mode=5\"><img
                                 src=\"$g_root_path/adm_program/images/wand.png\" border=\"0\" alt=\"Rolle aktivieren\" title=\"Rolle aktivieren\"></a>";
                         }
 

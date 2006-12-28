@@ -26,7 +26,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
- 
+
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
@@ -59,7 +59,7 @@ if(isset($_SESSION['roles_request']))
    unset($_SESSION['roles_request']);
 }
 else
-{ 
+{
     $form_values['name']          = "";
     $form_values['description']   = "";
     $form_values['category']      = "";
@@ -72,6 +72,7 @@ else
     $form_values['downloads']     = 0;
     $form_values['guestbook']     = 0;
     $form_values['guestbook_comments'] = 0;
+    $form_values['profile'] 	  = 1;
     $form_values['mail_logout']   = 0;
     $form_values['mail_login']    = 0;
     $form_values['links']         = 0;
@@ -118,7 +119,9 @@ else
             $form_values['photos']        = $row_ar->rol_photo;
             $form_values['downloads']     = $row_ar->rol_download;
             $form_values['guestbook']     = $row_ar->rol_guestbook;
-            $form_values['guestbook_comments'] = $row_ar->rol_guestbook_comments; 
+            $form_values['guestbook_comments'] = $row_ar->rol_guestbook_comments;
+            $form_values['guestbook_comments'] = $row_ar->rol_guestbook_comments;
+            $form_values['profile'] 	  = $row_ar->rol_profile;
             $form_values['mail_logout']   = $row_ar->rol_mail_logout;
             $form_values['mail_login']    = $row_ar->rol_mail_login;
             $form_values['links']         = $row_ar->rol_weblinks;
@@ -131,11 +134,11 @@ else
             $form_values['location']      = $row_ar->rol_location;
             $form_values['cost']          = $row_ar->rol_cost;
 
-            if ($form_values['start_time'] == "00:00") 
+            if ($form_values['start_time'] == "00:00")
             {
                 $form_values['start_time'] = "";
             }
-            if ($form_values['end_time'] == "00:00") 
+            if ($form_values['end_time'] == "00:00")
             {
                 $form_values['end_time'] = "";
             }
@@ -154,38 +157,38 @@ echo "
     <!--[if lt IE 7]>
     <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
     <![endif]-->";
-    
+
     echo "
     <script type=\"text/javascript\">
 
-        
-        function hinzufuegen() 
+
+        function hinzufuegen()
         {
             NeuerEintrag = new Option(document.TerminAnlegen.AllRoles.options[document.TerminAnlegen.AllRoles.selectedIndex].text, document.TerminAnlegen.AllRoles.options[document.TerminAnlegen.AllRoles.selectedIndex].value, false, true);
             document.TerminAnlegen.AllRoles.options[document.TerminAnlegen.AllRoles.selectedIndex] = null;
             document.TerminAnlegen.elements['ChildRoles[]'].options[document.TerminAnlegen.elements['ChildRoles[]'].length] = NeuerEintrag;
         }
-        
-        function entfernen() 
+
+        function entfernen()
         {
             NeuerEintrag = new Option(document.TerminAnlegen.elements['ChildRoles[]'].options[document.TerminAnlegen.elements['ChildRoles[]'].selectedIndex].text, document.TerminAnlegen.elements['ChildRoles[]'].options[document.TerminAnlegen.elements['ChildRoles[]'].selectedIndex].value, false, true);
             document.TerminAnlegen.elements['ChildRoles[]'].options[document.TerminAnlegen.elements['ChildRoles[]'].selectedIndex] = null;
             document.TerminAnlegen.AllRoles.options[document.TerminAnlegen.AllRoles.length] = NeuerEintrag;
         }
-        
+
         function absenden()
         {
             for (var i = 0; i < document.TerminAnlegen.elements['ChildRoles[]'].options.length; i++)
             {
                 document.TerminAnlegen.elements['ChildRoles[]'].options[i].selected = true;
             }
-                
+
             document.TerminAnlegen.submit();
         }
-    
-    
-        
-        
+
+
+
+
     </script>";
 
     require("../../../adm_config/header.php");
@@ -413,18 +416,30 @@ require("../../../adm_config/body_top.php");
                         <div style=\"text-align: left; margin-left: 12%;\">
                             <label for=\"links\">Weblinks anlegen und bearbeiten&nbsp;</label>
                         </div>
-                    </div>                
+                    </div>
+                    <div style=\"margin-top: 6px;\">
+                        <div style=\"text-align: right; width: 10%; float: left;\">
+                            <input type=\"checkbox\" id=\"profile\" name=\"profile\" ";
+                            if($form_values['profile'] == 1)
+                                echo " checked ";
+                            echo " value=\"1\" />&nbsp;
+                            <label for=\"profile\"><img src=\"$g_root_path/adm_program/images/user.png\" alt=\"Eigenes Profil bearbeiten\"></label>
+                        </div>
+                        <div style=\"text-align: left; margin-left: 12%;\">
+                            <label for=\"profile\">Eigenes Profil bearbeiten&nbsp;</label>
+                        </div>
+                    </div>
                 </div>
-                
+
                             <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 90%;\">
                 <div class=\"groupBoxHeadline\">Abh&auml;ngigkeiten</div>
-        
+
                 <div style=\"margin-top: 6px;\">Ein Mitglied der nachfolgenden Rollen soll auch automatisch Mitglied in dieser Rolle sein!
                     <div style=\"text-align: left; margin-left: 30%;\">";
-                                                
+
                                 // holt eine Liste der ausgewählten Rolen
                                 $childRoles = RoleDependency::getChildRoles($g_adm_con,$rol_id);
-                                
+
                                 // Alle Rollen auflisten, die der Webmaster sehen darf
                                 $sql    = "SELECT * FROM ". TBL_ROLES. "
                                     WHERE rol_org_shortname = '$g_organization'
@@ -432,14 +447,14 @@ require("../../../adm_config/body_top.php");
                                     ORDER BY rol_id";
                                 $allRoles = mysql_query($sql, $g_adm_con);
                                 db_error($allRoles);
-                                
+
                                 if($childRoles == -1)
-                                    $noChildRoles = true;                                   
+                                    $noChildRoles = true;
                                 else
                                     $noChildRoles = false;
-                                    
+
                                 $childRoleObjects = array();
-                                
+
                                 echo "unabhaengig &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; abhaengig <br>";
                                 echo "<select name=\"AllRoles\" size=\"8\">";
                                 while($row = mysql_fetch_object($allRoles))
@@ -466,25 +481,25 @@ require("../../../adm_config/body_top.php");
                                     class=\"iconLink\" src=\"$g_root_path/adm_program/images/delete.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Feld hinzuf&uuml;gen\"></a>
                                     <a class=\"iconLink\" href=\"javascript:entfernen()\">Rolle entfernen</a>
                                     </span><br>";
-                                                                
-                                
-                                
-                                
+
+
+
+
                   echo "</div>
                     </div>
                 </div>
-                
-                
+
+
                 <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 90%;\">
                     <div class=\"groupBoxHeadline\">Eigenschaften&nbsp;&nbsp;(optional)</div>
 
                     <div style=\"margin-top: 6px;\">
                         <div style=\"text-align: right; width: 33%; float: left;\">max. Teilnehmer:</div>
                         <div style=\"text-align: left; margin-left: 35%;\">
-                            <input type=\"text\" name=\"max_members\" size=\"3\" maxlength=\"3\" value=\""; 
+                            <input type=\"text\" name=\"max_members\" size=\"3\" maxlength=\"3\" value=\"";
                             if($form_values['max_members'] > 0)
                             {
-                                echo $form_values['max_members']; 
+                                echo $form_values['max_members'];
                             }
                             echo "\">&nbsp;(ohne Leiter)</div>
                     </div>
@@ -508,18 +523,18 @@ require("../../../adm_config/body_top.php");
                         <div style=\"text-align: right; width: 33%; float: left;\">Wochentag:</div>
                         <div style=\"text-align: left; margin-left: 35%;\">
                             <select size=\"1\" name=\"weekday\">
-                            <option value=\"0\""; 
-                            if($form_values['weekday'] == 0) 
+                            <option value=\"0\"";
+                            if($form_values['weekday'] == 0)
                             {
-                                echo " selected=\"selected\""; 
+                                echo " selected=\"selected\"";
                             }
                             echo ">&nbsp;</option>\n";
                             for($i = 1; $i < 8; $i++)
                             {
-                                echo "<option value=\"$i\""; 
-                                if($form_values['weekday'] == $i) 
+                                echo "<option value=\"$i\"";
+                                if($form_values['weekday'] == $i)
                                 {
-                                    echo " selected=\"selected\""; 
+                                    echo " selected=\"selected\"";
                                 }
                                 echo ">". $arrDay[$i-1]. "</option>\n";
                             }
@@ -542,7 +557,7 @@ require("../../../adm_config/body_top.php");
                     <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
                         <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
                         &nbsp;Zur&uuml;ck</button>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;            
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <button name=\"speichern\" type=\"button\" value=\"speichern\" onclick=\"absenden()\">
                         <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
                         &nbsp;Speichern</button>
@@ -569,7 +584,7 @@ require("../../../adm_config/body_top.php");
     </div>
     <script type=\"text/javascript\"><!--\n
         document.getElementById('name').focus();
-    \n--></script>";    
+    \n--></script>";
 
     require("../../../adm_config/body_bottom.php");
 echo "</body>
