@@ -68,7 +68,14 @@ if(!array_key_exists('usr_id', $_GET))
 {
     // wenn nichts uebergeben wurde, dann eigene Daten anzeigen
     $user_id = $g_current_user->id;
-    $edit_user = true;
+    if(editProfile())
+    {
+    	$edit_user = true;
+    }
+    else
+    {
+    	$edit_user = false;
+    }
 }
 else
 {
@@ -94,7 +101,9 @@ else
 
 
 // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
-if(!editUser() && $user_id != $g_current_user->id)
+if((!editUser() && $user_id != $g_current_user->id)
+	&&
+	(!editProfile() && $user_id == $g_current_user->id))
 {
     $g_message->show("norights");
 }

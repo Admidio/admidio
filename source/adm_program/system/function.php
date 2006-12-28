@@ -68,7 +68,7 @@ function prepareSQL($queryString, $paramArr)
         {
             $paramArr[$paramName] = 'NULL';
         }
-    
+
         // Variablentyp pruefen und danach Formatieren
         if (is_int($paramArr[$paramName]))
         {
@@ -289,9 +289,9 @@ function editAnnouncements()
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
 
-    $edit_user = mysql_num_rows($result);
+    $edit_announcements = mysql_num_rows($result);
 
-    if($edit_user > 0)
+    if($edit_announcements > 0)
     {
         return true;
     }
@@ -320,9 +320,9 @@ function editDate()
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
 
-    $edit_user = mysql_num_rows($result);
+    $edit_date = mysql_num_rows($result);
 
-    if($edit_user > 0)
+    if($edit_date > 0)
     {
         return true;
     }
@@ -357,9 +357,9 @@ function editPhoto($organization = "")
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
 
-    $edit_user = mysql_num_rows($result);
+    $edit_photo = mysql_num_rows($result);
 
-    if($edit_user > 0)
+    if($edit_photo > 0)
     {
         return true;
     }
@@ -388,9 +388,9 @@ function editDownload()
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
 
-    $edit_user = mysql_num_rows($result);
+    $edit_download = mysql_num_rows($result);
 
-    if($edit_user > 0)
+    if($edit_download > 0)
     {
         return true;
     }
@@ -419,9 +419,39 @@ function editWeblinks()
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
 
-    $edit_user = mysql_num_rows($result);
+    $edit_weblinks = mysql_num_rows($result);
 
-    if ( $edit_user > 0 )
+    if ( $edit_weblinks > 0 )
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+// Funktion prueft, ob der angemeldete User sein eigenes Profil bearbeiten darf
+function editProfile()
+{
+    global $g_current_user;
+    global $g_adm_con;
+    global $g_organization;
+
+    $sql    = "SELECT *
+                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
+                WHERE mem_usr_id        = $g_current_user->id
+                  AND mem_rol_id        = rol_id
+                  AND mem_valid         = 1
+                  AND rol_org_shortname = '$g_organization'
+                  AND rol_profile       = 1
+                  AND rol_valid         = 1 ";
+    $result = mysql_query($sql, $g_adm_con);
+    db_error($result);
+
+    $edit_profile = mysql_num_rows($result);
+
+    if ( $edit_profile > 0 )
     {
         return true;
     }
@@ -609,8 +639,8 @@ function writeOrgaPreferences($name, $value)
                AND prf_org_id = $g_current_organization->id ";
     $sql = prepareSQL($sql, array($name));
     $result = mysql_query($sql, $g_adm_con);
-    db_error($result);    
-    
+    db_error($result);
+
     if(mysql_num_rows($result) > 0)
     {
         $sql = "UPDATE ". TBL_PREFERENCES. " SET prf_value = {0}
@@ -618,7 +648,7 @@ function writeOrgaPreferences($name, $value)
                    AND prf_org_id = $g_current_organization->id ";
         $sql = prepareSQL($sql, array($value, $name));
         $result = mysql_query($sql, $g_adm_con);
-        db_error($result);    
+        db_error($result);
     }
     else
     {
@@ -626,7 +656,7 @@ function writeOrgaPreferences($name, $value)
                                            VALUES ($g_current_organization->id, {0}, {1}) ";
         $sql = prepareSQL($sql, array($name, $value));
         $result = mysql_query($sql, $g_adm_con);
-        db_error($result);    
+        db_error($result);
     }
 }
 

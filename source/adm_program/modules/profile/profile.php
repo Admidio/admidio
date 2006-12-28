@@ -44,7 +44,11 @@ if(isset($_GET['user_id']) == false
 {
     // wenn nichts uebergeben wurde, dann eigene Daten anzeigen
     $a_user_id = $g_current_user->id;
-    $edit_user = true;
+    // wenn der User sein eigenes Profil bearbeiten darf
+    if(editProfile())
+    {
+    	$edit_user = true;
+    }
 }
 else
 {

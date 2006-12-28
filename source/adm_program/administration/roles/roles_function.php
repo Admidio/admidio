@@ -32,7 +32,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
- 
+
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
@@ -139,11 +139,11 @@ elseif($_GET["mode"] == 2)
             if($row[0] > 0)
             {
                 $g_message->show("role_exist");
-            }      
+            }
         }
 
         // Zeitraum von/bis auf Gueltigkeit pruefen
-        
+
         $d_datum_von = null;
         $d_datum_bis = null;
 
@@ -323,6 +323,15 @@ elseif($_GET["mode"] == 2)
                 $weblinks = 0;
             }
 
+            if(array_key_exists("profile", $_POST))
+            {
+                $profile = 1;
+            }
+            else
+            {
+                $profile = 0;
+            }
+
             if(array_key_exists("locked", $_POST))
             {
                 $locked = 1;
@@ -391,6 +400,7 @@ elseif($_GET["mode"] == 2)
                                                   , rol_mail_logout   = $mail_logout
                                                   , rol_mail_login    = $mail_login
                                                   , rol_weblinks      = $weblinks
+                                                  , rol_profile       = $profile
                                                   , rol_locked        = $locked
                                                   , rol_start_date    = '$d_datum_von'
                                                   , rol_start_time    = '$t_uhrzeit_von'
@@ -409,14 +419,14 @@ elseif($_GET["mode"] == 2)
                 // Rolle in Datenbank hinzufuegen
                 $sql    = "INSERT INTO ". TBL_ROLES. " (rol_org_shortname, rol_name, rol_description, rol_cat_id,
                                                        rol_moderation, rol_announcements, rol_dates, rol_photo, rol_download,
-                                                       rol_edit_user, rol_guestbook, rol_guestbook_comments, rol_mail_logout, 
-                                                       rol_mail_login, rol_weblinks,  rol_locked, rol_start_date, rol_start_time,
+                                                       rol_edit_user, rol_guestbook, rol_guestbook_comments, rol_mail_logout,
+                                                       rol_mail_login, rol_weblinks, rol_profile,  rol_locked, rol_start_date, rol_start_time,
                                                        rol_end_date, rol_end_time, rol_weekday, rol_location,
                                                        rol_max_members, rol_cost, rol_valid)
                                                 VALUES ('$g_organization', {0}, {1}, {2},
                                                        $moderation, $announcements, $termine, $foto, $download,
-                                                       $user, $guestbook, $guestbook_comments, $mail_logout, 
-                                                       $mail_login, $weblinks, $locked, '$d_datum_von', '$t_uhrzeit_von',
+                                                       $user, $guestbook, $guestbook_comments, $mail_logout,
+                                                       $mail_login, $weblinks, $profile, $locked, '$d_datum_von', '$t_uhrzeit_von',
                                                        '$d_datum_bis','$t_uhrzeit_bis', {3}, {4},
                                                        {5}, {6}, 1) ";
             }
@@ -424,19 +434,19 @@ elseif($_GET["mode"] == 2)
             trim($_POST['location']), $_POST['max_members'], $_POST['cost'], $rol_id));
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
-			
-			
+
+
 			//Rollenabhaengigkeiten setzten
-			
+
 			if(array_key_exists("ChildRoles", $_POST))
             {
-				
+
 				$sentChildRoles = $_POST['ChildRoles'];
 				// holt eine Liste der ausgewählten Rolen
 		        $DBChildRoles = RoleDependency::getChildRoles($g_adm_con,$rol_id);
-				
+
 				$roleDep = new RoleDependency($g_adm_con);
-				
+
 				//entferne alle Rollen die nicht mehr ausgewählt sind
 				foreach ($DBChildRoles as $DBChildRole)
 				{
@@ -460,13 +470,13 @@ elseif($_GET["mode"] == 2)
 						$roleDep->setParent($rol_id);
 						$roleDep->insert($g_current_user->id);
 					}
-				}				
-				        
+				}
+
             }
-            
-			
-			
-            
+
+
+
+
             $_SESSION['navigation']->deleteLastUrl();
             unset($_SESSION['roles_request']);
         }
@@ -487,7 +497,7 @@ elseif($_GET["mode"] == 2)
 }
 elseif($_GET["mode"] == 3)
 {
-    // Rolle zur inaktiven Rolle machen 
+    // Rolle zur inaktiven Rolle machen
 
     $sql = "SELECT rol_name FROM ". TBL_ROLES. "
              WHERE rol_id = {0}";
@@ -523,7 +533,7 @@ elseif($_GET["mode"] == 3)
 elseif($_GET["mode"] == 4)
 {
     // Rolle aus der DB loeschens
-    $sql    = "DELETE FROM ". TBL_MEMBERS. " 
+    $sql    = "DELETE FROM ". TBL_MEMBERS. "
                 WHERE mem_rol_id = {0} ";
     $sql    = prepareSQL($sql, array($rol_id));
     $result = mysql_query($sql, $g_adm_con);
@@ -534,7 +544,7 @@ elseif($_GET["mode"] == 4)
     $sql    = prepareSQL($sql, array($rol_id));
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
-   
+
     $err_code = "delete";
 }
 elseif($_GET["mode"] == 5)
@@ -552,15 +562,15 @@ elseif($_GET["mode"] == 5)
     $sql    = prepareSQL($sql, array($rol_id));
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
-   
+
    	// Name der Rolle auslesen
     $sql = "SELECT rol_name FROM ". TBL_ROLES. "
              WHERE rol_id = {0}";
     $sql    = prepareSQL($sql, array($rol_id));
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
-    $row = mysql_fetch_array($result);	   
-   
+    $row = mysql_fetch_array($result);
+
     $err_code = "role_active";
     $g_message->addVariableContent(utf8_encode($row[0]));
 }
@@ -573,11 +583,11 @@ elseif($_GET["mode"] == 6)
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
     $row = mysql_fetch_array($result);
-    
+
     $g_message->setForwardYesNo("$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$rol_id&amp;mode=4&amp;inactive=1");
     $g_message->show("delete_role", utf8_encode($row[0]), "Löschen");
 }
-        
+
 $g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
 $g_message->show($err_code);
 ?>
