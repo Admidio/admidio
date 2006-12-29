@@ -27,10 +27,10 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
- 
+
 require("../../system/common.php");
 require("../../system/login_valid.php");
-require("../../system/role_dependency_class.php");
+
 
 // nur Webmaster & Moderatoren duerfen Rollen zuweisen
 if(!isModerator() && !isGroupLeader() && !editUser())
@@ -57,7 +57,7 @@ if(isModerator())
 elseif(isGroupLeader())
 {
     // Alle Rollen auflisten, bei denen das Mitglied Leiter ist
-    $sql    = "SELECT rol_id, rol_name, rol_max_members 
+    $sql    = "SELECT rol_id, rol_name, rol_max_members
                  FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
                 WHERE mem_usr_id  = $g_current_user->id
                   AND mem_valid  = 1
@@ -87,7 +87,7 @@ $i     = 0;
 $value = reset($_POST);
 $key   = key($_POST);
 $parentRoles = array();
-        
+
 
 //Ergebnisse durchlaufen und Kontrollieren ob Maximale Teilnehmerzahl ueberschritten wuerde
 while($row = mysql_fetch_object($result_rolle))
@@ -104,7 +104,7 @@ while($row = mysql_fetch_object($result_rolle))
         $sql    = prepareSQL($sql, array($_GET['user_id']));
         $result = mysql_query($sql, $g_adm_con);
         db_error($result);
-        
+
         $row_usr = mysql_fetch_array($result);
 
         if($row_usr[0] == 0)
@@ -117,12 +117,12 @@ while($row = mysql_fetch_object($result_rolle))
                             AND mem_valid  = 1";
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
-            
+
             $row_members = mysql_fetch_array($result);
 
             //Bedingungen fuer Abbruch und Abbruch
-            if($row_memners[0] >= $row->rol_max_members 
-            && $_POST["leader-$i"] == false 
+            if($row_memners[0] >= $row->rol_max_members
+            && $_POST["leader-$i"] == false
             && $_POST["role-$i"]   == true)
             {
                 $g_message->show("max_members_profile", utf8_encode($row->rol_name));
@@ -139,7 +139,7 @@ if(mysql_num_rows($result_rolle)>0)
 }
 $i     = 0;
 
-//Ergebnisse durchlaufen und Datenbankupdate durchfuehren      
+//Ergebnisse durchlaufen und Datenbankupdate durchfuehren
 while($row = mysql_fetch_object($result_rolle))
 {
     // der Webmaster-Rolle duerfen nur Webmaster neue Mitglieder zuweisen
@@ -209,26 +209,26 @@ while($row = mysql_fetch_object($result_rolle))
             }
         }
 
-        
+
         //Update aufueren
         $sql    = prepareSQL($sql, array($_GET['user_id']));
         $result = mysql_query($sql, $g_adm_con);
         db_error($result);
-        
+
         //find the parent roles
         if($function == 1 && $user_found < 1)
         {
             //$roleDepSrc = new RoleDependency($g_adm_con);
             $tmpRoles = RoleDependency::getParentRoles($g_adm_con,$row->rol_id);
-            
+
             foreach($tmpRoles as $tmpRole)
             {
                 if(!in_array($tmpRole,$parentRoles))
                 $parentRoles[] = $tmpRole;
-            }       
-            
+            }
+
         }
-        
+
     }
 
    $i++;
@@ -244,7 +244,7 @@ foreach($parentRoles as $actRole)
 
 
     $sql    = prepareSQL($sql, array($_GET['user_id']));
-    $result = mysql_query($sql, $g_adm_con);                
+    $result = mysql_query($sql, $g_adm_con);
     db_error($result);
 }
 
