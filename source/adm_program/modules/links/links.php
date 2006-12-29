@@ -88,6 +88,8 @@ $_SESSION['navigation']->addUrl($g_current_url);
 
 unset($_SESSION['links_request']);
 
+$linksPerPage = 10;
+
 echo "
 <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
@@ -141,15 +143,6 @@ require("../../../adm_config/body_top.php");
                        LIMIT {0}, 10 ";
 
             $sql1    = prepareSQL($sql1, array($_GET['start']));
-            
-            // Kategorien auslesen - Erstmal mit zwei Statements gelöst.
-            $sql2    = "SELECT * FROM ". TBL_CATEGORIES. "
-                        WHERE cat_org_id = '$g_current_organization->id'
-                        AND cat_type = 'LNK'
-                        ORDER BY cat_name ASC ";
-                        
-            $categories_result = mysql_query($sql2, $g_adm_con);
-            db_error($categories_result);
         }
 
         $links_result = mysql_query($sql1, $g_adm_con);
@@ -205,50 +198,48 @@ require("../../../adm_config/body_top.php");
         }
         else
         {
-            // Wenn nur ein Link angezeigt werden soll, categories_result setzen
-            if ($_GET['id'] > 0)
-            {
-                $categories_result = $links_result;
-            }
 
             // Zählervariable für Anzahl von mysql_fetch_object
             $j = 0;
-            
-            // Überhaupt etwas geschrieben?
+            // Zählervariable für Anzahl der Links in einer Kategorie
+            $i = 0;
+            // Überhaupt etwas geschrieben? -> Wichtig, wenn es nur versteckte Kategorien gibt.
             $did_write_something = false;
-            
-            // Links in Kategorien auflisten
-            while ($row_cat = mysql_fetch_object($categories_result))
-            {
+            // Vorherige Kategorie-ID.
+            $previous_cat_id = -1;
+            // Kommt jetzt eine neue Kategorie?
+            $new_category = true;
+            // Schreibe diese Kategorie nicht! Sie ist versteckt und der Usert nicht eingeloggt
             $dont_write = false;
-
-            // Wenn Kategorie nicht versteckt ist, und auch der User eingeloggt ist: Dann anzeigen
-            if (($row_cat->cat_hidden == 1) && ($g_session_valid == false))
-            {
-                $dont_write = true; // Nichts anzeigen
-            }
-            if (!$dont_write)
-            {
-                $did_write_something = true;
-                echo "<div class=\"formHead\">$row_cat->cat_name</div>
-                <div class=\"formBody\" style=\"overflow: hidden;\">";
-            }
-                $i = 0;
-                $previous_cat_id = $row_cat->cat_id;
-                //echo $previous_cat_id;
-
-                if ((($j > 0) && ($j < $numLinks)) || ($_GET['id'] > 0))
-                {
-                    // Zeiger um eine Position zurücksetzen
-                    mysql_data_seek($links_result, $j);
-                }
                 
                 // Solange die vorherige Kategorie-ID sich nicht verändert...
                 // Sonst in die neue Kategorie springen
-                while (($row = mysql_fetch_object($links_result)) && ($row->lnk_cat_id == $previous_cat_id))
+                while (($row = mysql_fetch_object($links_result)) && ($j<$linksPerPage))
                 {
 
-                $previous_cat_id = $row->lnk_cat_id;
+                if ($row->lnk_cat_id != $previous_cat_id)
+                {
+                    if (($row->cat_hidden == 1) && ($g_session_valid == false))
+                    {
+                        // Nichts anzeigen, weil Kategorie versteckt ist und User nicht eingeloggt
+                        $dont_write = true;
+                    } else {
+                        $dont_write = false;
+                    }
+                    
+                    if (!$dont_write)
+                    {
+                        $i = 0;
+                        $new_category = true;
+                        $did_write_something = true;
+                        if ($j>0)
+                        {
+                            echo "</div><br />";
+                        }
+                        echo "<div class=\"formHead\">$row->cat_name</div>
+                        <div class=\"formBody\" style=\"overflow: hidden;\">";
+                    }
+                }
 
                 if (!$dont_write)
                 {
@@ -276,6 +267,7 @@ require("../../../adm_config/body_top.php");
                                 echo nl2br(strSpecialChars2Html($row->lnk_description));
                             }
                         echo "</div>";
+                        
                         if(editWeblinks())
                         {
                             echo "
@@ -303,25 +295,30 @@ require("../../../adm_config/body_top.php");
                                 }
                             echo "</div>";
                         }
-                        echo "</div>";
+                    echo "</div><br />";
                  }  // Ende Wenn !dont_write
+
                  $i++;
                  $j++;
-                 }  // Ende While-Schleife
-             if (!$dont_write)
-             {
-                echo "</div><br />";
-             }
-             } // Ende Kategorien-While-Schleife
 
-             // Es wurde noch gar nichts geschrieben
+                 // Jetzt wird die jtzige die vorherige Kategorie
+                 $previous_cat_id = $row->lnk_cat_id;
+
+                 $new_category = false;
+
+                 }  // Ende While-Schleife
+
+             // Es wurde noch gar nichts geschrieben ODER ein einzelner Link ist versteckt
              if (!$did_write_something)
              {
-                echo "<p>Es sind keine Eintr&auml;ge vorhanden.</p>";
+                echo "<!-- Versteckte Kategorie -->
+                      <p>Es sind keine Eintr&auml;ge vorhanden.</p>";
              }
-        }
+             
+             echo "</div>";
+        } // Ende Wenn mehr als 0 Datensätze
 
-        if(mysql_num_rows($links_result) > 2)
+        if (mysql_num_rows($links_result) > 2)
         {
             // Navigation mit Vor- und Zurueck-Buttons
             // erst anzeigen, wenn mehr als 2 Eintraege (letzte Navigationsseite) vorhanden sind
