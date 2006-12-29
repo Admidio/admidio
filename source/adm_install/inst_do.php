@@ -601,9 +601,9 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
     $sql = "INSERT INTO ". TBL_ROLES. " (rol_org_shortname, rol_cat_id, rol_name, rol_description, rol_valid,
                                          rol_moderation, rol_announcements, rol_dates, rol_download,
                                          rol_guestbook, rol_guestbook_comments, rol_photo, rol_weblinks,
-                                         rol_edit_user, rol_mail_logout, rol_mail_login)
+                                         rol_edit_user, rol_mail_logout, rol_mail_login, rol_edit_profile)
                                  VALUES ({0}, $category_common, 'Webmaster', 'Gruppe der Administratoren des Systems', 1,
-                                         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1) ";
+                                         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1) ";
     $sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
@@ -612,9 +612,9 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
     $sql = "INSERT INTO ". TBL_ROLES. " (rol_org_shortname, rol_cat_id, rol_name, rol_description, rol_valid,
                                          rol_moderation, rol_announcements, rol_dates, rol_download,
                                          rol_guestbook, rol_guestbook_comments, rol_photo, rol_weblinks,
-                                         rol_edit_user, rol_mail_logout, rol_mail_login)
+                                         rol_edit_user, rol_mail_logout, rol_mail_login, rol_edit_profile)
                                  VALUES ({0}, $category_common, 'Mitglied', 'Alle Mitglieder der Organisation', 1,
-                                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1) ";
+                                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1) ";
     $sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
@@ -623,9 +623,9 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
     $sql = "INSERT INTO ". TBL_ROLES. " (rol_org_shortname, rol_cat_id, rol_name, rol_description, rol_valid,
                                          rol_moderation, rol_announcements, rol_dates, rol_download,
                                          rol_guestbook, rol_guestbook_comments, rol_photo, rol_weblinks,
-                                         rol_edit_user, rol_mail_logout, rol_mail_login)
+                                         rol_edit_user, rol_mail_logout, rol_mail_login, rol_edit_profile)
                                  VALUES ({0}, $category_common, 'Vorstand', 'Vorstand des Vereins', 1,
-                                         0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1) ";
+                                         0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1) ";
     $sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
