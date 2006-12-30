@@ -168,7 +168,7 @@ require("../../../adm_config/body_top.php");
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 25%; float: left;\">Kategorie:</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <select size=\"1\" name=\"category\">";
+                        <select size=\"1\" name=\"category\" tabindex=\"3\">";
                             $sql = "SELECT * FROM ". TBL_CATEGORIES. "
                                      WHERE cat_org_id = $g_current_organization->id
                                        AND cat_type   = 'LNK'
@@ -193,11 +193,11 @@ require("../../../adm_config/body_top.php");
                         if($g_preferences['enable_bbcode'] == 1)
                         {
                           echo "<br><br>
-                          <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\" tabindex=\"6\">Text formatieren</a>";
+                          <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\" tabindex=\"7\">Text formatieren</a>";
                         }
                     echo "</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <textarea  name=\"description\" tabindex=\"3\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". htmlspecialchars($form_values['description'], ENT_QUOTES). "</textarea>
+                        <textarea  name=\"description\" tabindex=\"4\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". htmlspecialchars($form_values['description'], ENT_QUOTES). "</textarea>
                         <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
                     </div>
                 </div>";
@@ -206,12 +206,12 @@ require("../../../adm_config/body_top.php");
                 echo "<hr width=\"85%\" />
 
                 <div style=\"margin-top: 6px;\">
-                    <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\" tabindex=\"5\">
+                    <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\" tabindex=\"6\">
                         <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\"
                         width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
                         &nbsp;Zur&uuml;ck</button>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <button name=\"speichern\" type=\"submit\" value=\"speichern\" tabindex=\"4\">
+                    <button name=\"speichern\" type=\"submit\" value=\"speichern\" tabindex=\"5\">
                         <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\"
                         width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
                         &nbsp;Speichern</button>
