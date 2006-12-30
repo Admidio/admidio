@@ -295,7 +295,7 @@ require("../../../adm_config/body_top.php");
                                 }
                             echo "</div>";
                         }
-                    echo "</div><br />";
+                    echo "</div>";
                  }  // Ende Wenn !dont_write
 
                  $i++;
