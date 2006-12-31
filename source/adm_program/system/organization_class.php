@@ -1,4 +1,4 @@
-﻿<?php
+<?php 
 /******************************************************************************
  * Klasse fuer Datenbanktabelle adm_organizations
  *

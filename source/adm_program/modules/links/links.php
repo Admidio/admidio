@@ -1,4 +1,4 @@
-﻿<?php
+<?php 
 /******************************************************************************
  * Links auflisten
  *
@@ -82,7 +82,7 @@ if ($g_preferences['enable_bbcode'] == 1)
     $bbcode = new ubbParser();
 }
 
-// Navigation initialisieren - Modul fängt hier an.
+// Navigation initialisieren - Modul f�ngt hier an.
 $_SESSION['navigation']->clear();
 $_SESSION['navigation']->addUrl($g_current_url);
 
@@ -199,11 +199,11 @@ require("../../../adm_config/body_top.php");
         else
         {
 
-            // Zählervariable für Anzahl von mysql_fetch_object
+            // Z�hlervariable f�r Anzahl von mysql_fetch_object
             $j = 0;
-            // Zählervariable für Anzahl der Links in einer Kategorie
+            // Z�hlervariable f�r Anzahl der Links in einer Kategorie
             $i = 0;
-            // Überhaupt etwas geschrieben? -> Wichtig, wenn es nur versteckte Kategorien gibt.
+            // �berhaupt etwas geschrieben? -> Wichtig, wenn es nur versteckte Kategorien gibt.
             $did_write_something = false;
             // Vorherige Kategorie-ID.
             $previous_cat_id = -1;
@@ -212,7 +212,7 @@ require("../../../adm_config/body_top.php");
             // Schreibe diese Kategorie nicht! Sie ist versteckt und der Usert nicht eingeloggt
             $dont_write = false;
                 
-                // Solange die vorherige Kategorie-ID sich nicht verändert...
+                // Solange die vorherige Kategorie-ID sich nicht ver�ndert...
                 // Sonst in die neue Kategorie springen
                 while (($row = mysql_fetch_object($links_result)) && ($j<$linksPerPage))
                 {
@@ -316,7 +316,7 @@ require("../../../adm_config/body_top.php");
              }
              
              echo "</div>";
-        } // Ende Wenn mehr als 0 Datensätze
+        } // Ende Wenn mehr als 0 Datens�tze
 
         if (mysql_num_rows($links_result) > 2)
         {
