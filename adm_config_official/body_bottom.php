@@ -3,6 +3,16 @@
      einer Admidio-Modul-Seite erscheinen soll.
 -->
 
+<?
+// Link zur Moduluebersicht
+if(strpos($_SERVER['REQUEST_URI'], "index.php") === false)
+{
+    echo "<div style=\"text-align: center;\">
+        <a href=\"$g_root_path/adm_program/index.php\">Zur&uuml;ck zur &Uuml;bersicht</a>
+    </div>";
+}
+?>
+
 <div style="text-align: center; margin: 15px;">
     <a href="http://www.admidio.org" target="_blank"><img 
         src="<?php echo $g_root_path ?>/adm_program/images/admidio_logo_20.png" style="vertical-align: middle; border-width: 0px;" 
