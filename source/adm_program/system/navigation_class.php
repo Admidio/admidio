@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /******************************************************************************
  * Klasse fuer Zuruecknavigation in den einzelnen Modulen
  *
