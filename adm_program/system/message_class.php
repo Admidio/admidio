@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /******************************************************************************
  * Klasse fuer die Ausgabe von Hinweistexten oder Fehlermeldungen
  *
@@ -213,7 +213,7 @@ class Message
                             /*
                             // Ich habe hier eine Anpassung vorgenommen, so dass der Weiter-Button auch wenn
                             // es einen Timer gibt angezeigt wird.
-                            // Bei Bugs bitte rückgängig machen, indem man diesen Teil hier auskommentiert und
+                            // Bei Bugs bitte r�ckg�ngig machen, indem man diesen Teil hier auskommentiert und
                             //oben alles zwischen den Kommentaren loescht!
                             // DD
                             //
