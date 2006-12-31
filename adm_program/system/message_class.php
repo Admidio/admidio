@@ -189,6 +189,19 @@ class Message
             <div class="formBody" style="width: 350px">
                 <p>'. $this->content. '</p>
                 <p>';
+                
+                    // Eingefuegt von DD
+                    if(strlen($this->forward_url) > 0)
+                    {
+                        if($this->yes_no_buttons == false)
+                        {
+                            echo '<button id="weiter" type="button" value="weiter" onclick="window.location.href=\''. $this->forward_url. '\'">
+                            <img src="'. $g_root_path. '/adm_program/images/forward.png" style="vertical-align: middle;" align="top" vspace="1" width="16" height="16" border="0" alt="Weiter">
+                            &nbsp;Weiter</button>';
+                        }
+                    }
+                    // ENDE Eingefuegt von DD
+                    
                     if($this->timer > 0)
                     {
                         echo "&nbsp;";
@@ -197,6 +210,13 @@ class Message
                     {
                         if(strlen($this->forward_url) > 0)
                         {
+                            /*
+                            // Ich habe hier eine Anpassung vorgenommen, so dass der Weiter-Button auch wenn
+                            // es einen Timer gibt angezeigt wird.
+                            // Bei Bugs bitte rückgängig machen, indem man diesen Teil hier auskommentiert und
+                            //oben alles zwischen den Kommentaren loescht!
+                            // DD
+                            //
                             if($this->yes_no_buttons == false)
                             {
                                 echo '<button id="weiter" type="button" value="weiter" onclick="window.location.href=\''. $this->forward_url. '\'">
@@ -204,6 +224,9 @@ class Message
                                 &nbsp;Weiter</button>';
                             }
                             else
+                            {
+                            */
+                            if($this->yes_no_buttons == true)
                             {
                                 echo '<button id="ja" type="button" value="ja"
                                 onclick="self.location.href=\''. $this->forward_url. '\'">
