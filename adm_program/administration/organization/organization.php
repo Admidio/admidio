@@ -1,4 +1,4 @@
-<?php
+ï»¿<?php
 /******************************************************************************
  * Organisationseinstellungen
  *
@@ -119,7 +119,7 @@ require("../../../adm_config/body_top.php");
 
              &#124; <a href=\"#\" onClick=\"toggleDiv('register');\">Registrierung</a>
 
-             &#124; <a href=\"#\" onClick=\"toggleDiv('announcement-module');\">Ankündigungen</a>
+             &#124; <a href=\"#\" onClick=\"toggleDiv('announcement-module');\">AnkÃ¼ndigungen</a>
 
              &#124; <a href=\"#\" onClick=\"toggleDiv('download-module');\">Downloads</a>
 
@@ -127,7 +127,7 @@ require("../../../adm_config/body_top.php");
 
              &#124; <a href=\"#\" onClick=\"toggleDiv('photo-module');\">Fotos</a>
 
-             &#124; <a href=\"#\" onClick=\"toggleDiv('guestbook-module');\">Gästebuch</a>
+             &#124; <a href=\"#\" onClick=\"toggleDiv('guestbook-module');\">GÃ¤stebuch</a>
 
              &#124; <a href=\"#\" onClick=\"toggleDiv('dates-module');\">Termine</a>
 
