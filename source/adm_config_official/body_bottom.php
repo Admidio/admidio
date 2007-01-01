@@ -7,8 +7,8 @@
 // Link zur Moduluebersicht
 if(strpos($_SERVER['REQUEST_URI'], "index.php") === false)
 {
-    echo "<div style=\"text-align: center;\">
-        <a href=\"$g_root_path/adm_program/index.php\">Zur&uuml;ck zur &Uuml;bersicht</a>
+    echo "<div style=\"text-align: center; margin-top: 5px;\">
+        <a href=\"$g_root_path/adm_program/index.php\">Zur&uuml;ck zur Modul&uuml;bersicht</a>
     </div>";
 }
 ?>
