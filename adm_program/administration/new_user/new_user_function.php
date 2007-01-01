@@ -6,10 +6,12 @@
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  *
- * mode: 1 - User-Account einem Benutzer zuordnen
- *       3 - Abfrage, wie der Datensatz zugeordnet werden soll
+ * mode: 1 - Registrierung einem Benutzer zuordnen, der bereits Mitglied der Orga ist
+ *       2 - Registrierung einem Benutzer zuordnen, der noch KEIN Mitglied der Orga ist
+ *       3 - Benachrichtigung an den User, dass er nun fuer die aktuelle Orga freigeschaltet wurde
  *       4 - User-Account loeschen
  *       5 - Frage, ob User-Account geloescht werden soll
+ *       6 - Registrierung muss nicht zugeordnet werden, einfach Logindaten verschicken
  * new_user_id: Id des Logins, das verarbeitet werden soll
  * user_id:     Id des Benutzers, dem das neue Login zugeordnet werden soll
  *
@@ -60,7 +62,7 @@ if(isset($_GET["new_user_id"]) && is_numeric($_GET["new_user_id"]) == false)
 }
 
 if(is_numeric($_GET["mode"]) == false
-|| $_GET["mode"] < 1 || $_GET["mode"] > 5)
+|| $_GET["mode"] < 1 || $_GET["mode"] > 6)
 {
     $g_message->show("invalid");
 }
@@ -68,32 +70,51 @@ if(is_numeric($_GET["mode"]) == false
 $err_code = "";
 $err_text = "";
 
-if($_GET["mode"] == 1)
+if(isset($_GET['new_user_id']))
 {
-    // User-Account einem Mitglied zuordnen
-
     $new_user = new User($g_adm_con);
-    $new_user->getUser($_GET['new_user_id']);
+    $new_user->getUser($_GET['new_user_id']);	
+}
 
+if(isset($_GET['user_id']))
+{
     $user = new User($g_adm_con);
-    $user->getUser($_GET['user_id']);
+    $user->getUser($_GET['user_id']);   
+}
 
-    $old_login = $user->login_name;
+if($_GET["mode"] == 1 || $_GET["mode"] == 2)
+{
+    // User-Account einem existierenden Mitglied zuordnen
 
-    // Daten kopieren
-    $user->email      = $new_user->email;
-    $user->login_name = $new_user->login_name;
-    $user->password   = $new_user->password;
+    // Daten kopieren, aber nur, wenn noch keine Logindaten existieren
+    if(strlen($user->login_name) == 0 && strlen($user->password) == 0)
+    {
+        $user->email      = $new_user->email;
+        $user->login_name = $new_user->login_name;
+        $user->password   = $new_user->password;
+    }
 
     // zuerst den neuen Usersatz loeschen, dann den alten Updaten,
     // damit kein Duplicate-Key wegen dem Loginnamen entsteht
     $new_user->delete();
     $user->update($g_current_user->id);
+}
 
+if($_GET["mode"] == 2)
+{
+    // User existiert bereits, ist aber bisher noch kein Mitglied der aktuellen Orga, 
+    // deshalb erst einmal Rollen zuordnen und dann spaeter eine Mail schicken
+    $_SESSION['navigation']->addUrl("$g_root_path/adm_program/administration/new_user/new_user_function.php?mode=3&user_id=". $_GET['user_id']. "&new_user_id=". $_GET['new_user_id']);
+    header("Location: $g_root_path/adm_program/modules/profile/roles.php?user_id=". $_GET['user_id']);
+    exit(); 
+}
+
+if($_GET["mode"] == 1 || $_GET["mode"] == 3)
+{
     // nur ausfuehren, wenn E-Mails auch unterstuetzt werden
     if($g_preferences['enable_system_mails'] == 1)
     {
-        // Mail an den User schicken, um die Anmeldung zu bestaetigen
+        // Mail an den User schicken, um die Anmeldung bwz. die Zuordnung zur neuen Orga zu bestaetigen
         $email = new Email();
         $email->setSender($g_preferences['email_administrator']);
         $email->addRecipient($user->email, "$user->first_name $user->last_name");
@@ -117,64 +138,9 @@ if($_GET["mode"] == 1)
     $g_message->setForwardUrl("$g_root_path/adm_program/administration/new_user/new_user.php");
     $g_message->show($err_code, $err_text);
 }
-elseif($_GET["mode"] == 3)
-{
-   echo "
-   <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
-   <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
-   <html>
-   <head>
-      <title>$g_current_organization->longname - Messagebox</title>
-      <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
-
-      <!--[if lt IE 7]>
-      <script language=\"JavaScript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
-      <![endif]-->";
-
-      require("../../../adm_config/header.php");
-   echo "</head>";
-
-   require("../../../adm_config/body_top.php");
-      echo "<div align=\"center\"><br /><br /><br />
-
-      <div class=\"formHead\" style=\"width: 400px\">". strspace("Anmeldung zuordnen"). "</div>
-
-      <div class=\"formBody\" style=\"width: 400px\">
-         <p style=\"text-align: left;\">
-            <img src=\"$g_root_path/adm_program/images/properties.png\" style=\"vertical-align: bottom;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer anlegen\">
-            Existiert der Benutzer bereits in der Datenbank oder bist du dir nicht sicher,
-            wähle erst einmal <b>zuordnen</b> aus. Dort werden dir alle vorhandenen Benutzer
-            angezeigt und du kannst die Anmeldung einem vorhandenen Benutzer zuordnen oder einen neuen
-            Benutzer anlegen.
-         </p>
-         <p style=\"text-align: left;\">
-            <img src=\"$g_root_path/adm_program/images/user_add.png\" style=\"vertical-align: bottom;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer anlegen\">
-            Existiert dieser Benutzer noch nicht, kannst du aus der vorhandenen
-            Anmeldung einen neuen Benutzer <b>anlegen</b>.
-         </p>
-            <button name=\"back\" type=\"button\" value=\"back\"
-               onclick=\"history.back()\">
-               <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer anlegen\">
-               &nbsp;Zur&uuml;ck</button>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <button name=\"anlegen\" type=\"button\" value=\"anlegen\"
-               onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_new.php?user_id=". $_GET['new_user_id']. "&amp;new_user=3&amp;url=". urlencode("$g_root_path/adm_program/administration/new_user/new_user.php"). "'\">
-               <img src=\"$g_root_path/adm_program/images/user_add.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer anlegen\">
-               &nbsp;Anlegen</button>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <button name=\"zuordnen\" type=\"button\" value=\"zuordnen\"
-               onclick=\"self.location.href='$g_root_path/adm_program/administration/new_user/new_user_assign.php?new_user_id=". $_GET['new_user_id']. "&amp;all=0'\">
-               <img src=\"$g_root_path/adm_program/images/properties.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer anlegen\">
-               &nbsp;Zuordnen</button>
-      </div>
-      </div>";
-
-      require("../../../adm_config/body_bottom.php");
-   echo "</body></html>";
-}
 elseif($_GET["mode"] == 4)
 {
-   // User-Account loeschen
+   // Registrierung loeschen
 
    $sql    = "DELETE FROM ". TBL_USERS. " WHERE usr_id = {0}";
    $sql    = prepareSQL($sql, array($_GET['new_user_id']));
@@ -187,11 +153,21 @@ elseif($_GET["mode"] == 4)
 }
 elseif($_GET["mode"] == 5)
 {
-    // Fragen, ob der User-Account geloescht werden soll
-    $user = new User($g_adm_con);
-    $user->GetUser($_GET['new_user_id']);
+    // Fragen, ob die Registrierung geloescht werden soll
     $g_message->setForwardYesNo("$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=". $_GET['new_user_id']. "&amp;mode=4");
-    $g_message->show("delete_new_user", utf8_encode("$user->first_name $user->last_name"), "Löschen");
+    $g_message->show("delete_new_user", utf8_encode("$new_user->first_name $new_user->last_name"), "Löschen");
+}
+elseif($_GET["mode"] == 6)
+{
+	// Der User existiert schon und besitzt auch ein Login
+    
+    // Registrierung loeschen
+	$new_user->delete();
+    
+    // Zugangsdaten neu verschicken
+    $_SESSION['navigation']->addUrl("$g_root_path/adm_program/administration/new_user/new_user.php");
+    header("Location: $g_root_path/adm_program/administration/members/members_function.php?mode=4&user_id=". $_GET['user_id']);
+    exit(); 
 }
 
 ?>
