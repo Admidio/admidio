@@ -42,7 +42,7 @@ if(strlen($_POST["column1"]) == 0)
     $err_text = "Feld 1";
 }
 
-if(strlen($_POST["role"]) == 0)
+if(strlen($_POST["rol_id"]) == 0 || is_numeric($_POST["rol_id"]) == false)
 {
     $err_text = "Rolle";
 }
@@ -53,7 +53,7 @@ if(strlen($err_text) != 0)
 }
 
 // als erstes wird die Rolle uebergeben
-$rol_id = $_POST["role"];
+$rol_id = $_POST["rol_id"];
 
 // Ehemalige
 if(!array_key_exists("former", $_POST))

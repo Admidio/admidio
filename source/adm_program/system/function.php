@@ -629,6 +629,66 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
     return $page_string;
 }
 
+// Diese Funktion erzeugt eine Combobox mit allen Rollen, die der Benutzer sehen darf
+// Die Rollen werden dabei nach Kategorie gruppiert
+//
+// Uebergaben:
+// field_id   : Id und Name der Select-Box
+
+function generateRoleSelectBox($field_id = "")
+{
+	global $g_organization;
+    global $g_adm_con;
+    
+	if(strlen($field_id) == 0)
+    {
+    	$field_id = "rol_id";
+    }
+	$box_string = "
+        <select size=\"1\" id=\"$field_id\" name=\"$field_id\">
+            <option value=\"0\" selected=\"selected\">- Bitte w&auml;hlen -</option>";
+            // Rollen selektieren
+
+            // Webmaster und Moderatoren duerfen Listen zu allen Rollen sehen
+            if(isModerator())
+            {
+                $sql     = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                             WHERE rol_org_shortname = '$g_organization'
+                               AND rol_valid         = 1
+                               AND rol_cat_id        = cat_id
+                             ORDER BY cat_name, rol_name";
+            }
+            else
+            {
+                $sql     = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                             WHERE rol_org_shortname = '$g_organization'
+                               AND rol_locked        = 0
+                               AND rol_valid         = 1
+                               AND rol_cat_id        = cat_id
+                             ORDER BY cat_name, rol_name";
+            }
+            $result_lst = mysql_query($sql, $g_adm_con);
+            db_error($result_lst);
+            $act_category = "";
+
+            while($row = mysql_fetch_object($result_lst))
+            {
+                if($act_category != $row->cat_name)
+                {
+                    if(strlen($act_category) > 0)
+                    {
+                        $box_string .= "</optgroup>";
+                    }
+                    $box_string .= "<optgroup label=\"$row->cat_name\">";
+                    $act_category = $row->cat_name;
+                }
+                $box_string .= "<option value=\"$row->rol_id\">$row->rol_name</option>";
+            }
+            $box_string .= "</optgroup>
+        </select>";
+    return $box_string;
+}
+
 function writeOrgaPreferences($name, $value)
 {
     global $g_adm_con;

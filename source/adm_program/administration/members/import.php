@@ -83,48 +83,11 @@ require("../../../adm_config/body_top.php");
                 </div>
                 <div style=\"margin-top: 15px;\">
                     <div style=\"text-align: right; width: 30%; float: left;\">Rolle zuordnen:</div>
-                    <div style=\"text-align: left; margin-left: 32%;\">
-                        <select size=\"1\" id=\"rol_id\" name=\"rol_id\">
-                            <option value=\"0\" selected=\"selected\">- Bitte w&auml;hlen -</option>";
-                            // Rollen selektieren
-
-                            // Webmaster und Moderatoren duerfen Listen zu allen Rollen sehen
-                            if(isModerator())
-                            {
-                                $sql     = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                                             WHERE rol_org_shortname = '$g_organization'
-                                               AND rol_valid         = 1
-                                               AND rol_cat_id        = cat_id
-                                             ORDER BY cat_name, rol_name";
-                            }
-                            else
-                            {
-                                $sql     = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                                             WHERE rol_org_shortname = '$g_organization'
-                                               AND rol_locked        = 0
-                                               AND rol_valid         = 1
-                                               AND rol_cat_id        = cat_id
-                                             ORDER BY cat_name, rol_name";
-                            }
-                            $result_lst = mysql_query($sql, $g_adm_con);
-                            db_error($result_lst);
-                            $act_category = "";
-
-                            while($row = mysql_fetch_object($result_lst))
-                            {
-                                if($act_category != $row->cat_name)
-                                {
-                                    if(strlen($act_category) > 0)
-                                    {
-                                        echo "</optgroup>";
-                                    }
-                                    echo "<optgroup label=\"$row->cat_name\">";
-                                    $act_category = $row->cat_name;
-                                }
-                                echo "<option value=\"$row->rol_id\">$row->rol_name</option>";
-                            }
-                            echo "</optgroup>
-                        </select>&nbsp;
+                    <div style=\"text-align: left; margin-left: 32%;\">";
+                        // Combobox mit allen Rollen ausgeben
+                        echo generateRoleSelectBox();
+                        
+                        echo "&nbsp;
                         <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                         onClick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=role_assign','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\">
                     </div>

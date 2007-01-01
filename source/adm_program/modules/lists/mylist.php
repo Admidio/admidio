@@ -167,54 +167,12 @@ require("../../../adm_config/body_top.php");
             echo "</div>
             <div class=\"formBody\">
                 <b>1.</b> W&auml;hle eine Rolle aus von der du eine Mitgliederliste erstellen willst:
-                <p><b>Rolle :</b>&nbsp;&nbsp;
-                <select size=\"1\" id=\"role\" name=\"role\">
-                    <option value=\"\" selected=\"selected\">- Bitte w&auml;hlen -</option>";
-                    // Rollen selektieren
-
-                    // Webmaster und Moderatoren duerfen Listen zu allen Rollen sehen
-                    if(isModerator())
-                    {
-                        $sql     = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                                     WHERE rol_org_shortname = '$g_organization'
-                                       AND rol_valid         = $active_role
-                                       AND rol_cat_id        = cat_id
-                                     ORDER BY cat_name, rol_name";
-                    }
-                    else
-                    {
-                        $sql     = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                                     WHERE rol_org_shortname = '$g_organization'
-                                       AND rol_locked        = 0
-                                       AND rol_valid         = $active_role
-                                       AND rol_cat_id        = cat_id
-                                     ORDER BY cat_name, rol_name";
-                    }
-                    $result_lst = mysql_query($sql, $g_adm_con);
-                    db_error($result_lst);
-                    $act_category = "";
-
-                    while($row = mysql_fetch_object($result_lst))
-                    {
-                        if($act_category != $row->cat_name)
-                        {
-                            if(strlen($act_category) > 0)
-                            {
-                                echo "</optgroup>";
-                            }
-                            echo "<optgroup label=\"$row->cat_name\">";
-                            $act_category = $row->cat_name;
-                        }
-                        echo "<option value=\"$row->rol_id\" ";
-                        if($rol_id == $row->rol_id)
-                        {
-                            echo " selected ";
-                        }
-                        echo ">$row->rol_name</option>";
-                    }
-                    echo "</optgroup>
-                </select>
-                &nbsp;&nbsp;&nbsp;
+                <p><b>Rolle :</b>&nbsp;&nbsp;";
+                
+                // Combobox mit allen Rollen ausgeben
+                echo generateRoleSelectBox();
+                
+                echo "&nbsp;&nbsp;&nbsp;
                 <input type=\"checkbox\" id=\"former\" name=\"former\" value=\"1\" ";
                     if(!$active_member) 
                     {
