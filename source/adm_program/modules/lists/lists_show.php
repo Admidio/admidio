@@ -570,13 +570,13 @@ for($j = 0; $j < $max_count; $j++)
                             {
                                 if($mode == "html")
                                 {
-                                    if($g_preferences['enable_mail_module'] != 1)
+                                    if($g_preferences['enable_mail_module'] == 1)
                                     {
-                                        $content = "<a href=\"mailto:". $row[$i]. "\">". $row[$i]. "</a>";
+                                        $content = "<a href=\"$g_root_path/adm_program/modules/mail/mail.php?usr_id=". $row[0]. "\">". $row[$i]. "</a>";
                                     }
                                     else
                                     {
-                                        $content = "<a href=\"../mail/mail.php?usr_id=". $row[0]. "\">". $row[$i]. "</a>";
+                                        $content = "<a href=\"mailto:". $row[$i]. "\">". $row[$i]. "</a>";
                                     }
                                 }
                                 else
