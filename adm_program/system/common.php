@@ -79,23 +79,29 @@ session_start();
 $g_session_id    = "";
 $g_session_valid = false;
 $g_current_url   = "http://". $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI'];
-$g_current_user  = new User($g_adm_con);
 $g_message       = new Message();
 
-// globale Klassen mit Datenbankbezug werden in Sessionvariablen gespeichert, 
+// globale Klassen mit Datenbankbezug werden in Sessionvariablen gespeichert,
 // damit die Daten nicht bei jedem Script aus der Datenbank ausgelesen werden muessen
-if(isset($_SESSION['g_current_organizsation']) 
+if(isset($_SESSION['g_current_organizsation'])
 && isset($_SESSION['g_preferences']))
 {
     $g_current_organization = $_SESSION['g_current_organizsation'];
     $g_current_organization->db_connection = $g_adm_con;
     $g_preferences  = $_SESSION['g_preferences'];
+    if(isset($_SESSION['g_current_user']))
+    {
+    	$g_current_user =& $_SESSION['g_current_user'];
+    	$g_current_user->reconnect($g_adm_con);
+    }
 }
 else
 {
     $g_current_organization = new Organization($g_adm_con);
     $g_current_organization->getOrganization($g_organization);
-    
+    $g_current_user  = new User($g_adm_con);
+
+
     // Einstellungen der Organisation auslesen
     $sql    = "SELECT * FROM ". TBL_PREFERENCES. "
                 WHERE prf_org_id = $g_current_organization->id ";
@@ -106,7 +112,7 @@ else
         echo "<div style=\"color: #CC0000;\">Error: ". mysql_error(). "</div>";
         exit();
     }
-    
+
     $g_preferences = array();
     while($prf_row = mysql_fetch_object($result))
     {
@@ -116,6 +122,7 @@ else
     // Daten in Session-Variablen sichern
     $_SESSION['g_current_organizsation'] = $g_current_organization;
     $_SESSION['g_preferences']  = $g_preferences;
+
 }
 
 // Objekt fuer die Zuruecknavigation in den Modulen
