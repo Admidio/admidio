@@ -435,8 +435,8 @@ elseif($_GET["mode"] == 2)
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
 
-			//Reset des Rechtecache in der Userclasse für den aendernen User
-			//$g_current_user->clearRights();
+			//Reset des Rechtecache in der UserKlasse für den aendernen User
+			$g_current_user->clearRights();
 
 			//Rollenabhaengigkeiten setzten
 			if(array_key_exists("ChildRoles", $_POST))
