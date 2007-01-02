@@ -274,6 +274,13 @@ if($ret_code != 0)
     $g_message->show("mysql", $ret_code);
 }
 
+// wenn Daten des eingeloggten Users geaendert werden, dann Session-Variablen aktualisieren
+if($user->id == $g_current_user->id)
+{
+    $g_current_user = $user;
+    $_SESSION['g_current_user'] = $g_current_user;
+}
+
 // immer speichern, ausser bei der schnellen Registrierung
 if($new_user != 2 || $g_preferences['registration_mode'] != 1)
 {
