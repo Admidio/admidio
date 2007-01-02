@@ -31,12 +31,12 @@ $err_code = "";
 $err_text = "";
 
 // Uebergabevariablen pruefen
-if(isset($_GET["rol_id"]) == false || is_numeric($_GET["rol_id"]) == false)
+if(isset($_POST["rol_id"]) == false || is_numeric($_POST["rol_id"]) == false)
 {
     $g_message->show("invalid");
 }
 
-if(isset($_GET["user_import_mode"]) == false || is_numeric($_GET["user_import_mode"]) == false)
+if(isset($_POST["user_import_mode"]) == false || is_numeric($_POST["user_import_mode"]) == false)
 {
     $g_message->show("invalid");
 }
