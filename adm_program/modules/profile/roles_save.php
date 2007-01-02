@@ -89,7 +89,7 @@ $key   = key($_POST);
 $parentRoles = array();
 
 
-//Ergebnisse durchlaufen und Kontrollieren ob Maximale Teilnehmerzahl ueberschritten wuerde
+// Ergebnisse durchlaufen und kontrollieren ob maximale Teilnehmerzahl ueberschritten wuerde
 while($row = mysql_fetch_object($result_rolle))
 {
     if($row->rol_max_members > 0)
@@ -139,7 +139,7 @@ if(mysql_num_rows($result_rolle)>0)
 }
 $i     = 0;
 
-//Ergebnisse durchlaufen und Datenbankupdate durchfuehren
+// Ergebnisse durchlaufen und Datenbankupdate durchfuehren
 while($row = mysql_fetch_object($result_rolle))
 {
     // der Webmaster-Rolle duerfen nur Webmaster neue Mitglieder zuweisen
@@ -210,12 +210,12 @@ while($row = mysql_fetch_object($result_rolle))
         }
 
 
-        //Update aufueren
+        // Update aufueren
         $sql    = prepareSQL($sql, array($_GET['user_id']));
         $result = mysql_query($sql, $g_adm_con);
         db_error($result);
 
-        //find the parent roles
+        // find the parent roles
         if($function == 1 && $user_found < 1)
         {
             //$roleDepSrc = new RoleDependency($g_adm_con);
@@ -235,6 +235,14 @@ while($row = mysql_fetch_object($result_rolle))
 }
 
 $_SESSION['navigation']->deleteLastUrl();
+
+// falls Rollen dem eingeloggten User neu zugewiesen wurden, 
+// dann muessen die Rechte in den Session-Variablen neu eingelesen werden
+if($g_current_user->id != $_GET['user_id'])
+{
+    $g_current_user->clearRights();
+    $_SESSION['g_current_user'] = $g_current_user;
+}
 
 foreach($parentRoles as $actRole)
 {
