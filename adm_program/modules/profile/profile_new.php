@@ -83,9 +83,7 @@ if($new_user == 2)
 else
 {
     // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
-    if((editUser() == false && $_GET['user_id'] != $g_current_user->id)
-    	&&
-       (editProfile() == false && $_GET['user_id'] == $g_current_user->id))
+    if($g_current_user->editUser($_GET['user_id']) == false)
     {
         $g_message->show("norights");
     }

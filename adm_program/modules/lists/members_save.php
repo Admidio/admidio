@@ -46,7 +46,7 @@ if(isset($_GET["role_id"]) && is_numeric($_GET["role_id"]) == false)
 }
 else
 {
-    $role_id = $_GET["role_id"];    
+    $role_id = $_GET["role_id"];
 }
 
 //Erfassen der uebergeben Rolle
@@ -60,7 +60,7 @@ $role = mysql_fetch_object($result_role);
 // nur Moderatoren duerfen Rollen zuweisen
 // nur Webmaster duerfen die Rolle Webmaster zuweisen
 // beide muessen mitglied der richtigen Gliedgemeinschaft sein
-if((!isModerator() && !isGroupLeader($role_id) && !editUser()) || (!hasRole("Webmaster") && $role->rol_name=="Webmaster") || $role->rol_org_shortname!=$g_organization)
+if((!isModerator() && !isGroupLeader($role_id) && !$g_current_user->editUser()) || (!hasRole("Webmaster") && $role->rol_name=="Webmaster") || $role->rol_org_shortname!=$g_organization)
 {
    $g_message->show("norights");
 }
@@ -73,7 +73,7 @@ $sql =" SELECT *
 $sql    = prepareSQL($sql, array($role_id));
 $result_mem_role = mysql_query($sql, $g_adm_con);
 db_error($result_mem_role);
-   
+
 //Schreiben der Datensaetze in Array sortiert nach zugewiesenen Benutzern (id)
 $mitglieder_array= array(array());
 for($x=0; $mem_role= mysql_fetch_array($result_mem_role); $x++)
@@ -93,10 +93,10 @@ db_error($result_user);
 
 //Kontrolle ob nicht am ende die Mitgliederzahl ueberstigen wird
 if($role->rol_max_members!=NULL)
-{   
+{
     $counter=0;
     while($user= mysql_fetch_array($result_user))
-    {    
+    {
         if ($_POST["member_".$user["usr_id"]]==true && $_POST["leader_".$user["usr_id"]]==false)
         {
             $counter++;
@@ -105,8 +105,8 @@ if($role->rol_max_members!=NULL)
     if($counter>$role->rol_max_members)
     {
         $g_message->show("max_members");
-    }  
-    
+    }
+
     //Dateizeiger zurueck zum Anfang
     mysql_data_seek($result_user,0);
 }
@@ -118,60 +118,60 @@ while($user= mysql_fetch_array($result_user))
     if(array_key_exists($user["usr_id"], $mitglieder_array))
     {
         //Kontolle ob Zuweisung geaendert wurde wen ja entsprechenden SQL-Befehl zusammensetzen
-        
+
         //Falls abgewaehlt wurde (automatisch auch als Leiter abmelden)
         if($mitglieder_array[$user["usr_id"]][5]==1 && $_POST["member_".$user["usr_id"]]==false)
         {
             $mem_id = $mitglieder_array[$user["usr_id"]][0];
-            $sql =" UPDATE ". TBL_MEMBERS. " 
-                    SET mem_valid  = 0, 
-                        mem_end   = NOW(), 
+            $sql =" UPDATE ". TBL_MEMBERS. "
+                    SET mem_valid  = 0,
+                        mem_end   = NOW(),
                         mem_leader = 0
-                    WHERE mem_id = {0}";                             
+                    WHERE mem_id = {0}";
             $sql    = prepareSQL($sql, array($mem_id));
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
         }
-           
+
         //Falls wieder angemeldet wurde
         if($mitglieder_array[$user["usr_id"]][5]==0 && $_POST["member_".$user["usr_id"]]==true)
         {
             $mem_id = $mitglieder_array[$user["usr_id"]][0];
-            $sql =" UPDATE ". TBL_MEMBERS. " 
-                    SET mem_valid  = 1, 
+            $sql =" UPDATE ". TBL_MEMBERS. "
+                    SET mem_valid  = 1,
                         mem_end   = '0000-00-00'";
-            
+
             //Falls jemand auch Leiter werden soll
             if($_POST["leader_".$user["usr_id"]]==true)
             {
                 $sql .=", mem_leader = 1 ";
             }
-            
+
             $sql .= "WHERE mem_id = {0}";
             $sql    = prepareSQL($sql, array($mem_id));
             $result = mysql_query($sql, $g_adm_con);
-            db_error($result);          
+            db_error($result);
         }
-            
+
         //Falls nur Leiterfunktion hinzugefuegt/entfernt werden soll under der user Mitglied ist/bleibt
         if($mitglieder_array[$user["usr_id"]][5]==1 && $_POST["member_".$user["usr_id"]]==true)
         {
             $mem_id = $mitglieder_array[$user["usr_id"]][0];
-            
+
             //Falls Leiter hinzugefuegt werden soll
                 if($_POST["leader_".$user["usr_id"]]==true && $mitglieder_array[$user["usr_id"]][6]==0)
                 {
-                    $sql =" UPDATE ". TBL_MEMBERS. " SET mem_leader  = 1 
+                    $sql =" UPDATE ". TBL_MEMBERS. " SET mem_leader  = 1
                             WHERE mem_id = {0}";
                     $sql    = prepareSQL($sql, array($mem_id));
                     $result = mysql_query($sql, $g_adm_con);
                     db_error($result);
                 }
-                
+
                 //Falls Leiter entfernt werden soll
                 if($_POST["leader_".$user["usr_id"]]==false && $mitglieder_array[$user["usr_id"]][6]==1)
                 {
-                    $sql =" UPDATE ". TBL_MEMBERS. " SET mem_leader  = 0 
+                    $sql =" UPDATE ". TBL_MEMBERS. " SET mem_leader  = 0
                             WHERE mem_id = {0}";
                     $sql    = prepareSQL($sql, array($mem_id));
                     $result = mysql_query($sql, $g_adm_con);
@@ -179,14 +179,14 @@ while($user= mysql_fetch_array($result_user))
                 }
         }
     }
-        
+
     //Falls noch nie angemeldet gewesen aber jetzt werden soll
     else if(!array_key_exists($user["usr_id"], $mitglieder_array) && $_POST["member_".$user["usr_id"]]==true)
     {
         $usr_id = $user["usr_id"];
         $sql="  INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin, mem_valid, mem_leader)
                 VALUES ({0}, {1}, NOW(), 1";
-        
+
         //Falls jemand direkt Leiter werden soll
         if($_POST["leader_".$user["usr_id"]]==true)
         {
@@ -209,7 +209,7 @@ while($user= mysql_fetch_array($result_user))
       <title>Funktionen zuordnen</title>
       <meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\" />
       <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\" />
-      
+
       <!--[if lt IE 7]>
       <script language=\"JavaScript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
       <![endif]-->

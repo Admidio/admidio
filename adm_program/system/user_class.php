@@ -6,7 +6,7 @@
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  *
- * Diese Klasse dient dazu einen Userobjekt zu erstellen. 
+ * Diese Klasse dient dazu einen Userobjekt zu erstellen.
  * Ein User kann ueber diese Klasse in der Datenbank verwaltet werden
  *
  * Das Objekt wird erzeugt durch Aufruf des Konstruktors und der Uebergabe der
@@ -18,7 +18,7 @@
  *
  * Folgende Funktionen stehen nun zur Verfuegung:
  *
- * update($login_user_id) - User wird mit den geaenderten Daten in die Datenbank 
+ * update($login_user_id) - User wird mit den geaenderten Daten in die Datenbank
  *                          zurueckgeschrieben
  * insert($login_user_id) - Ein neuer User wird in die Datenbank geschrieben
  * delete()               - Der gewaehlte User wird aus der Datenbank geloescht
@@ -72,11 +72,20 @@ class User
     var $valid;
     var $reg_org_shortname;
 
+    //User Rechte
+    var $editProfile;
+    var $editUser;
+
     // Konstruktor
     function User($connection)
     {
         $this->db_connection = $connection;
         $this->clear();
+    }
+
+    function reconnect($connection)
+    {
+    	$this->db_connection = $connection;
     }
 
     // User mit der uebergebenen ID aus der Datenbank auslesen
@@ -87,7 +96,7 @@ class User
             $sql = "SELECT * FROM ". TBL_USERS. " WHERE usr_id = $user_id";
             $result = mysql_query($sql, $this->db_connection);
             db_error($result);
-    
+
             if($row = mysql_fetch_object($result))
             {
                 // Variablen fuellen
@@ -163,6 +172,17 @@ class User
         $this->usr_id_change  = 0;
         $this->valid          = 1;
         $this->reg_org_shortname = "";
+
+        // User Rechte vorbelegen
+        $this->editProfile = -1;
+        $this->editUser = -1;
+    }
+
+    // alle Rechtevariablen wieder zuruecksetzen
+    function clearRights()
+    {
+        $this->editProfile = -1;
+        $this->editUser = -1;
     }
 
     // aktuelle Userdaten in der Datenbank updaten
@@ -193,7 +213,7 @@ class User
                                              , usr_date_invalid   = {16}
                                              , usr_number_invalid = {17}
                                              , usr_last_change    = '$act_date'
-                                             , usr_usr_id_change  = $login_user_id 
+                                             , usr_usr_id_change  = $login_user_id
                                              , usr_valid          = {18}
                                              , usr_reg_org_shortname = {19}
                                              , usr_login_name     = {20}
@@ -222,13 +242,13 @@ class User
             $act_date = date("Y-m-d H:i:s", time());
 
             $sql = "INSERT INTO ". TBL_USERS. " (usr_last_name, usr_first_name, usr_address, usr_zip_code,
-                                  usr_city, usr_country, usr_phone, usr_mobile, usr_fax, usr_birthday, 
-                                  usr_gender, usr_email, usr_homepage, usr_last_login, usr_actual_login, 
-                                  usr_number_login, usr_date_invalid, usr_number_invalid, usr_last_change, 
+                                  usr_city, usr_country, usr_phone, usr_mobile, usr_fax, usr_birthday,
+                                  usr_gender, usr_email, usr_homepage, usr_last_login, usr_actual_login,
+                                  usr_number_login, usr_date_invalid, usr_number_invalid, usr_last_change,
                                   usr_valid, usr_reg_org_shortname, usr_login_name, usr_password, usr_usr_id_change )
-                         VALUES ({0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, NULL, NULL, 
+                         VALUES ({0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, NULL, NULL,
                                  0,  NULL, 0, '$act_date', {13}, {14}, {15}, {16}";
-            // bei einer Registrierung ist die Login-User-Id nicht gefüllt                                 
+            // bei einer Registrierung ist die Login-User-Id nicht gefüllt
             if($this->valid == 0 && $login_user_id == 0)
             {
                 $sql = $sql. ", NULL )";
@@ -251,7 +271,7 @@ class User
         return -1;
     }
 
-    // aktuellen Benutzer loeschen   
+    // aktuellen Benutzer loeschen
     function delete()
     {
         $sql    = "UPDATE ". TBL_ANNOUNCEMENTS. " SET ann_usr_id = NULL
@@ -329,53 +349,53 @@ class User
         $sql    = "DELETE FROM ". TBL_USER_DATA. " WHERE usd_usr_id = $this->id";
         $result = mysql_query($sql, $this->db_connection);
         db_error($result);
-    
-        $sql    = "DELETE FROM ". TBL_USERS. " 
+
+        $sql    = "DELETE FROM ". TBL_USERS. "
                     WHERE usr_id = $this->id ";
         $result = mysql_query($sql, $this->db_connection);
         db_error($result);
 
         $this->clear();
     }
-   
-    // gibt die Userdaten als VCard zurueck   
-    function getVCard() 
+
+    // gibt die Userdaten als VCard zurueck
+    function getVCard()
     {
         $vcard  = (string) "BEGIN:VCARD\r\n";
         $vcard .= (string) "VERSION:2.1\r\n";
         $vcard .= (string) "N:" . $this->last_name. ";". $this->first_name . ";;;\r\n";
         $vcard .= (string) "FN:". $this->first_name . " ". $this->last_name . "\r\n";
-        if (strlen(trim($this->login_name)) > 0) 
+        if (strlen(trim($this->login_name)) > 0)
         {
             $vcard .= (string) "NICKNAME:" . $this->login_name . "\r\n";
         }
-        if (strlen(trim($this->phone)) > 0) 
+        if (strlen(trim($this->phone)) > 0)
         {
             $vcard .= (string) "TEL;HOME;VOICE:" . $this->phone . "\r\n";
         }
-        if (strlen(trim($this->mobile)) > 0) 
+        if (strlen(trim($this->mobile)) > 0)
         {
             $vcard .= (string) "TEL;CELL;VOICE:" . $this->mobile . "\r\n";
         }
-        if (strlen(trim($this->fax)) > 0) 
+        if (strlen(trim($this->fax)) > 0)
         {
             $vcard .= (string) "TEL;HOME;FAX:" . $this->fax . "\r\n";
         }
         $vcard .= (string) "ADR;HOME:;;" . $this->address . ";" . $this->city . ";;" . $this->zip_code . ";" . $this->country . "\r\n";
-        if (strlen(trim($this->homepage)) > 0) 
+        if (strlen(trim($this->homepage)) > 0)
         {
             $vcard .= (string) "URL;HOME:" . $this->homepage . "\r\n";
         }
-        if (strlen(trim($this->birthday)) > 0) 
+        if (strlen(trim($this->birthday)) > 0)
         {
             $vcard .= (string) "BDAY:" . mysqldatetime("ymd", $this->birthday) . "\r\n";
         }
-        if (strlen(trim($this->email)) > 0) 
+        if (strlen(trim($this->email)) > 0)
         {
             $vcard .= (string) "EMAIL;PREF;INTERNET:" . $this->email . "\r\n";
         }
         // Geschlecht ist nicht in vCard 2.1 enthalten, wird hier fuer das Windows-Adressbuch uebergeben
-        if ($this->gender > 0) 
+        if ($this->gender > 0)
         {
             if($this->gender == 1)
             {
@@ -387,13 +407,118 @@ class User
             }
             $vcard .= (string) "X-WAB-GENDER:" . $wab_gender . "\r\n";
         }
-        if (strlen(trim($this->last_change)) > 0) 
+        if (strlen(trim($this->last_change)) > 0)
         {
             $vcard .= (string) "REV:" . mysqldatetime("ymdThis", $this->last_change) . "\r\n";
         }
-        
+
         $vcard .= (string) "END:VCARD\r\n";
         return $vcard;
     }
+
+    // Funktion prueft, ob der angemeldete User das entsprechende Profil bearbeiten darf
+	function editProfile($profileID = NULL)
+	{
+	    global $g_adm_con;
+	    global $g_organization;
+
+	    if($profileID == NULL)
+	    {
+	    	$profileID = $this->id;
+	    }
+
+
+	    //soll das eigene Profil bearbeitet werden?
+	    if($profileID == $this->id)
+	    {
+	    	// Prüfen ob die Datenbank schon abgefragt wurde, wenn nicht dann Recht auslesen
+	    	if($this->editProfile == -1)
+	    	{
+	    		$sql    =  "SELECT *
+		                 	FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
+		                	WHERE mem_usr_id        = $this->id
+		                  	AND mem_rol_id        = rol_id
+		                  	AND mem_valid         = 1
+		                  	AND rol_org_shortname = '$g_organization'
+		                  	AND rol_profile       = 1
+		                  	AND rol_valid         = 1 ";
+			    $result = mysql_query($sql, $g_adm_con);
+			    db_error($result);
+
+			    $found_rows = mysql_num_rows($result);
+
+			    if($found_rows >= 1)
+			    {
+			    	$this->editProfile = 1;
+			    }
+			    else
+			    {
+			    	$this->editProfile = 0;
+			    }
+	    	}
+
+	    	if($this->editProfile == 1)
+	    	{
+	    		return true;
+	    	}
+	    	else
+	    	{
+	    		return false;
+	    	}
+
+
+	    }
+	    else
+	    {
+	    	return $this->editUser();
+	    }
+
+
+	}
+
+	// Funktion prueft, ob der angemeldete User fremde Benutzerdaten bearbeiten darf
+
+	function editUser()
+	{
+	    global $g_adm_con;
+	    global $g_organization;
+
+		// prüfen ob die Userrechte schon aus der Datenbank geholt wurden
+		if($this->editUser == -1)
+		{
+			$sql    = "SELECT *
+		                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
+		                WHERE mem_usr_id        = $this->id
+		                  AND mem_valid         = 1
+		                  AND mem_rol_id        = rol_id
+		                  AND rol_org_shortname = '$g_organization'
+		                  AND rol_edit_user     = 1
+		                  AND rol_valid         = 1 ";
+		    $result = mysql_query($sql, $g_adm_con);
+		    db_error($result);
+
+		    $found_rows = mysql_num_rows($result);
+
+		    if($found_rows >= 1)
+		    {
+		    	$this->editUser = 1;
+		    }
+		    else
+		    {
+		    	$this->editUser = 0;
+		    }
+		}
+
+	    if($this->editUser == 1)
+	    {
+	        return true;
+	    }
+	    else
+	    {
+	        return false;
+	    }
+	}
+
+
 }
 ?>

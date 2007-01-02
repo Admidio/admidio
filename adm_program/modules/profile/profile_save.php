@@ -89,9 +89,7 @@ if(!isset($_POST['login_name']))
 /*------------------------------------------------------------*/
 // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
 /*------------------------------------------------------------*/
-if((!editUser() && $user_id != $g_current_user->id)
-	&&
-	(!editProfile() && $user_id == $g_current_user->id))
+if(!$g_current_user->editUser($user_id))
 {
     $g_message->show("norights");
 }

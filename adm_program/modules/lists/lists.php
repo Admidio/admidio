@@ -10,7 +10,7 @@
  *
  * category - Kategorie der Rollen, die angezeigt werden sollen
  *            Wird keine Kategorie uebergeben, werden alle Rollen angezeigt
- * category-selection: yes - (Default) Anzeige der Combobox mit den verschiedenen 
+ * category-selection: yes - (Default) Anzeige der Combobox mit den verschiedenen
  *                           Rollen-Kategorien
  *                     no  - Combobox nicht anzeigen
  * active_role : 1 - (Default) aktive Rollen auflisten
@@ -81,7 +81,7 @@ else
     {
         $active_role = $_GET['active_role'];
     }
-}   
+}
 
 // Navigation faengt hier im Modul an
 $_SESSION['navigation']->clear();
@@ -90,10 +90,10 @@ $_SESSION['navigation']->addUrl($g_current_url);
 // SQL-Statement zusammensetzen
 
 $sql = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-         WHERE rol_org_shortname = '$g_organization' 
-           AND rol_valid  = $active_role 
+         WHERE rol_org_shortname = '$g_organization'
+           AND rol_valid  = $active_role
            AND rol_cat_id = cat_id ";
-if(!isModerator()) 
+if(!isModerator())
 {
     // wenn nicht Moderator, dann keine versteckten Rollen anzeigen
     $sql .= " AND rol_locked = 0 ";
@@ -122,12 +122,12 @@ if($list_found == 0)
         // wenn User eingeloggt, dann Meldung, dass keine Rollen in der Kategorie existieren
         if($active_role == 0)
         {
-            $err_code = "no_old_roles";    
+            $err_code = "no_old_roles";
             $err_text = "";
         }
         else
         {
-            $err_code = "no_category_roles";    
+            $err_code = "no_category_roles";
             $err_text = "$g_root_path/adm_program/administration/roles/roles.php";
         }
         $g_message->show($err_code, $err_text, "Hinweis");
@@ -155,7 +155,7 @@ echo "
         function showCategory()
         {
             var category = document.getElementById('category').value;
-            self.location.href = 'lists.php?category=' + category + '&category-selection=". $_GET['category-selection']. "&active_role=$active_role';   
+            self.location.href = 'lists.php?category=' + category + '&category-selection=". $_GET['category-selection']. "&active_role=$active_role';
         }
 
         function showList(element, rol_id)
@@ -206,7 +206,7 @@ require("../../../adm_config/body_top.php");
         {
             // Combobox mit allen Kategorien anzeigen
             $sql = "SELECT * FROM ". TBL_CATEGORIES. "
-                     WHERE cat_org_id = $g_current_organization->id 
+                     WHERE cat_org_id = $g_current_organization->id
                        AND cat_type   = 'ROL' ";
             if($g_session_valid == false)
             {
@@ -217,10 +217,10 @@ require("../../../adm_config/body_top.php");
             db_error($result);
 
             if(mysql_num_rows($result) > 0)
-            {   
+            {
                 echo '<p>Kategorie w&auml;hlen:&nbsp;&nbsp;
                 <select size="1" id="category" onchange="showCategory()">
-                    <option value="Alle" '; 
+                    <option value="Alle" ';
                     if(strlen($category) == 0)
                     {
                         echo " selected ";
@@ -266,7 +266,7 @@ require("../../../adm_config/body_top.php");
                 db_error($result);
                 $row    = mysql_fetch_array($result);
                 $num_member = $row[0];
-                
+
                  // Anzahl Mitglieder ermitteln die Leiter sind
                 $sql = "SELECT COUNT(*)
                           FROM ". TBL_MEMBERS. "
@@ -318,7 +318,7 @@ require("../../../adm_config/body_top.php");
                             echo "<b>$row_lst->rol_name</b>";
                         }
 
-                        if(isModerator() || isGroupLeader($row_lst->rol_id) || editUser())
+                        if(isModerator() || isGroupLeader($row_lst->rol_id) || $g_current_user->editUser())
                         {
                             if($row_lst->rol_name != "Webmaster"
                             || ($row_lst->rol_name == "Webmaster" && hasRole("Webmaster")))
@@ -326,17 +326,17 @@ require("../../../adm_config/body_top.php");
                                 if(isModerator())
                                 {
                                     // nur Moderatoren duerfen Rollen editieren
-                                    echo "&nbsp;<a href=\"$g_root_path/adm_program/administration/roles/roles_new.php?rol_id=$row_lst->rol_id\"><img 
-                                        src=\"$g_root_path/adm_program/images/edit.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" 
-                                        width=\"16\" height=\"16\" border=\"0\" alt=\"Einstellungen\" title=\"Einstellungen\"></a>";    
+                                    echo "&nbsp;<a href=\"$g_root_path/adm_program/administration/roles/roles_new.php?rol_id=$row_lst->rol_id\"><img
+                                        src=\"$g_root_path/adm_program/images/edit.png\" style=\"vertical-align: middle; padding-bottom: 1px;\"
+                                        width=\"16\" height=\"16\" border=\"0\" alt=\"Einstellungen\" title=\"Einstellungen\"></a>";
                                 }
 
                                 // Gruppenleiter und Moderatoren duerfen Mitglieder zuordnen oder entfernen (nicht bei Ehemaligen Rollen)
                                 if($row_lst->rol_valid==1)
                                 {
-                                    echo "&nbsp;<img src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle; padding-bottom: 1px; cursor: pointer;\" 
-                                        width=\"16\" height=\"16\" border=\"0\" alt=\"Mitglieder zuordnen\" title=\"Mitglieder zuordnen\" 
-                                        onclick=\"window.open('$g_root_path/adm_program/modules/lists/members.php?rol_id=$row_lst->rol_id&amp;popup=1','Titel','width=570,height=550,left=310,top=100,scrollbars=yes,resizable=yes')\">";    
+                                    echo "&nbsp;<img src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle; padding-bottom: 1px; cursor: pointer;\"
+                                        width=\"16\" height=\"16\" border=\"0\" alt=\"Mitglieder zuordnen\" title=\"Mitglieder zuordnen\"
+                                        onclick=\"window.open('$g_root_path/adm_program/modules/lists/members.php?rol_id=$row_lst->rol_id&amp;popup=1','Titel','width=570,height=550,left=310,top=100,scrollbars=yes,resizable=yes')\">";
                                 }
                             }
                         }
@@ -350,7 +350,7 @@ require("../../../adm_config/body_top.php");
                                 <option value=\"\" selected=\"selected\">Liste anzeigen ...</option>
                                 <option value=\"address\">Adressliste</option>
                                 <option value=\"telefon\">Telefonliste</option>";
-                                if($active_role && $num_former > 0) 
+                                if($active_role && $num_former > 0)
                                 {
                                     echo "<option value=\"former\">Ehemaligenliste</option>";
                                 }

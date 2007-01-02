@@ -33,7 +33,7 @@ require("../../system/login_valid.php");
 
 
 // nur Webmaster & Moderatoren duerfen Rollen zuweisen
-if(!isModerator() && !isGroupLeader() && !editUser())
+if(!isModerator() && !isGroupLeader() && !$g_current_user->editUser())
 {
     $g_message->show("norights");
 }
@@ -68,7 +68,7 @@ elseif(isGroupLeader())
                   AND rol_locked     = 0
                 ORDER BY rol_name";
 }
-elseif(editUser())
+elseif($g_current_user->editUser())
 {
     // Alle Rollen auflisten, die keinen Moderatorenstatus haben
     $sql    = "SELECT rol_id, rol_name, rol_max_members

@@ -68,42 +68,16 @@ if(!array_key_exists('usr_id', $_GET))
 {
     // wenn nichts uebergeben wurde, dann eigene Daten anzeigen
     $user_id = $g_current_user->id;
-    if(editProfile())
-    {
-    	$edit_user = true;
-    }
-    else
-    {
-    	$edit_user = false;
-    }
 }
 else
 {
     // Daten eines anderen Users anzeigen und pruefen, ob editiert werden darf
     $user_id = $_GET['usr_id'];
-    if(editUser())
-    {
-        // jetzt noch schauen, ob User ueberhaupt Mitglied in der Gliedgemeinschaft ist
-        if(isMember($_GET['usr_id']))
-        {
-            $edit_user = true;
-        }
-        else
-        {
-            $edit_user = false;
-        }
-    }
-    else
-    {
-        $edit_user = false;
-    }
 }
 
 
 // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
-if((!editUser() && $user_id != $g_current_user->id)
-	&&
-	(!editProfile() && $user_id == $g_current_user->id))
+if(!editProfile($user_id))
 {
     $g_message->show("norights");
 }

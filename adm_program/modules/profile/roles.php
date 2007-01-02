@@ -29,12 +29,12 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
- 
+
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
 // nur Webmaster & Moderatoren duerfen Rollen zuweisen
-if(!isModerator() && !isGroupLeader() && !editUser())
+if(!isModerator() && !isGroupLeader() && !$g_current_user->editUser())
 {
     $g_message->show("norights");
 }
@@ -126,7 +126,7 @@ else
 {
     echo "<body>";
 }
-   
+
 echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
     <h1>Rollen f&uuml;r $user->first_name $user->last_name zuordnen</h1>
 
@@ -141,7 +141,7 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
                 <th class=\"tableHeader\" style=\"text-align: left;\">Rolle</th>
                 <th class=\"tableHeader\" style=\"text-align: left;\">Beschreibung</th>
                 <th class=\"tableHeader\" style=\"text-align: center; width: 80px;\">Leiter
-                    <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: middle; padding-bottom: 1px;\" 
+                    <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: middle; padding-bottom: 1px;\"
                     width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                     onClick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=leader','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
                 </th>
@@ -176,7 +176,7 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
                               AND br.rol_locked  = 0
                             ORDER BY br.rol_name";
             }
-            elseif(editUser())
+            elseif($g_current_user->editUser())
             {
                 // Alle Rollen auflisten, die keinen Moderatorenstatus haben
                 $sql    = "SELECT rol_name, rol_description, mem_usr_id, mem_leader
@@ -234,7 +234,7 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
                 $i++;
             }
         echo "</table>
-        
+
         <div style=\"margin: 8px;\">";
             if($_GET['popup'] == 0)
             {
@@ -248,14 +248,14 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
                     <img src=\"$g_root_path/adm_program/images/door_in.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Schlie&szlig;en\">
                     &nbsp;Schlie&szlig;en</button>";
             }
-                
+
             echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <button name=\"speichern\" type=\"submit\" value=\"speichern\">
                 <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
                 &nbsp;Speichern</button>
         </div>
     </form>
-   
+
     </div>";
 
     if($_GET['popup'] == 0)

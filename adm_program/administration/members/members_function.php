@@ -42,7 +42,7 @@ $err_code = "";
 $err_text = "";
 
 // nur berechtigte User duerfen Funktionen aufrufen
-if(!editUser())
+if(!$g_current_user->editUser())
 {
     $g_message->show("norights");
 }
@@ -78,7 +78,7 @@ $sql    = "SELECT rol_id
               AND mem_rol_id         = rol_id
               AND mem_valid          = 1
               AND mem_usr_id         = {0} ";
-$sql    = prepareSQL($sql, array($_GET['user_id']));              
+$sql    = prepareSQL($sql, array($_GET['user_id']));
 $result = mysql_query($sql, $g_adm_con);
 db_error($result);
 $other_orga = mysql_num_rows($result);
@@ -182,12 +182,12 @@ elseif($_GET["mode"] == 3)
 {
     // nur Webmaster duerfen User physikalisch loeschen
     // User darf in keiner anderen Orga aktiv sein
-    if(hasRole("Webmaster") == false 
+    if(hasRole("Webmaster") == false
     || $other_orga > 0)
     {
         $g_message->show("norights");
     }
-    
+
     // User aus der Datenbank loeschen
     $user = new User($g_adm_con);
     $user->GetUser($_GET['user_id']);
@@ -200,7 +200,7 @@ elseif($_GET["mode"] == 4)
     // nur Webmaster duerfen User neue Zugangsdaten zuschicken
     // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
     // nur an Mitglieder der eigenen Organisation schicken
-    if(hasRole("Webmaster" == false) 
+    if(hasRole("Webmaster" == false)
     || $g_preferences['enable_system_mails'] != 1
     || $this_orga == false)
     {

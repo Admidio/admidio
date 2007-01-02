@@ -256,7 +256,7 @@ require("../adm_config/body_top.php");
         echo "
         </div>";
 
-        if(isModerator() || editUser())
+        if(isModerator() || $g_current_user->editUser())
         {
             echo "<br /><br />
 
