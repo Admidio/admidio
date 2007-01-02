@@ -81,6 +81,7 @@ else
     $form_values['linkname']    = "";
     $form_values['description'] = "";
     $form_values['linkurl']     = "";
+    $form_values['category']    = 0;
 
     // Wenn eine Link-ID uebergeben wurde, soll der Link geaendert werden
     // -> Felder mit Daten des Links vorbelegen
@@ -98,7 +99,7 @@ else
             $form_values['linkname']    = $row_ba->lnk_name;
             $form_values['description'] = $row_ba->lnk_description;
             $form_values['linkurl']     = $row_ba->lnk_url;
-            $form_values['category']     = $row_ba->lnk_cat_id;
+            $form_values['category']    = $row_ba->lnk_cat_id;
         }
         elseif (mysql_num_rows($result) == 0)
         {
