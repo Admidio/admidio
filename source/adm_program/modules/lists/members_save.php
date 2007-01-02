@@ -220,34 +220,7 @@ while($user= mysql_fetch_array($result_user))
     }
 }
 
+//Zurueck zur Herkunftsseite
+$g_message->setForwardUrl("$g_root_path/adm_program/system/back.php", 2000);
+$g_message->show("members_changed");
 
-   echo "
-   <?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?". ">
-   <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 TRANSITIONAL//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
-   <html xmlns=\"http://www.w3.org/1999/xhtml\">
-   <head>
-      <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->
-      <title>Funktionen zuordnen</title>
-      <meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\" />
-      <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\" />
-
-      <!--[if lt IE 7]>
-      <script language=\"JavaScript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
-      <![endif]-->
-   </head>
-
-   <body>
-      <div align=\"center\"><br />
-         <div class=\"groupBox\" align=\"left\" style=\"padding: 10px\">
-            <p>Die &Auml;nderungen wurden erfolgreich gespeichert.</p>
-            <p>Bitte denk daran, die Listenauswahl im Browser neu zu laden,
-            damit die ge&auml;nderten Daten angezeigt werden.</p>
-         </div>
-         <div style=\"padding-top: 10px;\" align=\"center\">
-            <button name=\"schliessen\" type=\"button\" value=\"schliessen\" onclick=\"window.close()\">
-            <img src=\"$g_root_path/adm_program/images/door_in.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\">
-            &nbsp;Schlie&szlig;en</button>
-         </div>
-      </div>
-   </body>
-   </html>";

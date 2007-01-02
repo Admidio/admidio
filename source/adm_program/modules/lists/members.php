@@ -52,16 +52,10 @@ if(isset($_GET["restrict"]) && $_GET["restrict"] != "m" && $_GET["restrict"] != 
     $g_message->show("invalid");
 }
 
-if(isset($_GET["popup"]))
+//URL auf Navigationstack ablegen
+if(!isset($_GET["restrict"]))
 {
-    if(is_numeric($_GET["popup"]) == false)
-    {
-        $g_message->show("invalid");
-    }
-}
-else
-{
-    $_GET["popup"] = 0;
+    $_SESSION['navigation']->addUrl($g_current_url);
 }
 
 //Erfassen der uebergeben Rolle
@@ -211,27 +205,16 @@ echo "
     <!--[if lt IE 7]>
         <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
     <![endif]-->";
-
-    if($_GET['popup'] == 0)
-    {
         require("../../../adm_config/header.php");
-    }
 echo "</head>";
 
-if($_GET['popup'] == 0)
-{
     require("../../../adm_config/body_top.php");
-}
-else
-{
-    echo "<body>";
-}
 
 //Beginn Formular
 echo"
 <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
     <a name=\"Anfang\"></a>
-    <form action=\"members_save.php?role_id=".$role_id. "&amp;popup=". $_GET['popup']."\" method=\"post\" name=\"Mitglieder\">
+    <form action=\"members_save.php?role_id=".$role_id. "\" method=\"post\" name=\"Mitglieder\">
        <h2>Mitglieder zu $role->rol_name zuordnen</h2>";
 
         if($count_valid_users != $user_anzahl || $restrict == "u")
