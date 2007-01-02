@@ -60,13 +60,22 @@ if(isset($_GET["sort"]) && $_GET["sort"] != "asc" && $_GET["sort"] != "desc")
 }
 
 If (isset($_GET['default_folder']))
+{
     $default_folder = strStripTags(urldecode($_GET['default_folder']));
+}
 else
+{
     $default_folder = "";
+}
+
 if (isset($_GET['folder']))
+{
     $folder = strStripTags(urldecode($_GET['folder']));
+}
 else
+{
     $folder = "";
+}
 
 $act_folder = "../../../adm_my_files/download";
 
@@ -98,14 +107,22 @@ if(strlen($folder) > 0)
 //Erstellen des Links vom Menü
 $path = explode("/",$folder);
 $next_folder = "";
-If ($default_folder <> "")
+if (strlen($default_folder) > 0)
 {
-    $link = "<a href=\"$g_root_path/adm_program/modules/download/download.php?folder=".urlencode($next_folder)."&amp;default_folder=". urlencode($default_folder). "\">$default_folder</a>";
+    $text = "$default_folder";
 }
 else
 {
-    $link = "<a href=\"$g_root_path/adm_program/modules/download/download.php?folder=".urlencode($next_folder)."&amp;default_folder=". urlencode($default_folder). "\">Download</a>";
+    $text = "Downloads";
 }
+
+if (strlen($default_folder) > 0 || strlen($folder) > 0)
+{
+    $link = "<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/download.php?folder=".urlencode($next_folder)."&amp;default_folder=". urlencode($default_folder). "\"><img 
+                class=\"iconLink\" src=\"$g_root_path/adm_program/images/application_view_list.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Downloads\"></a>
+             <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/download.php?folder=".urlencode($next_folder)."&amp;default_folder=". urlencode($default_folder). "\">$text</a>";
+}
+
 $i=0;
 While ($i <> count($path)-1)
 {
@@ -117,13 +134,15 @@ While ($i <> count($path)-1)
     {
         $next_folder = $next_folder." > ".$path[$i];
     };
-    $link = $link." > <a href=\"$g_root_path/adm_program/modules/download/download.php?folder=".urlencode($next_folder). "&amp;default_folder=". urlencode($default_folder). "\">$path[$i]</a>";
+    $link = $link." &gt; <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/download.php?folder=".urlencode($next_folder). "&amp;default_folder=". urlencode($default_folder). "\">$path[$i]</a>";
     $i++;
 }
-If ($folder <> "")
+
+if(strlen($folder) > 0)
 {
-    $link = "<h2>$path[$i]</h2><p><img src=\"$g_root_path/adm_program/images/application_view_list.png\"> $link</p>";
+    $link = "<p><span class=\"iconLink\">$link &gt; $path[$i]</span></p>";
 }
+/* erst einmal draussen gelassen, da es nicht unbedingt benoetigt wird
 else
 {
     If ($default_folder == "")
@@ -134,7 +153,7 @@ else
     {
         $link = "<h2>$default_folder</h2>";
     };
-}
+}*/
 
 
 if (isset($_GET['info']))
@@ -189,46 +208,45 @@ echo "</head>";
 require("../../../adm_config/body_top.php");
 
     echo"<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-    <h1>Downloadbereich</h1>
-    <p>";
-    echo "$link";
+    <h1>Downloadbereich</h1>";
+    
+    if(strlen($folder) > 0)
+    {
+        echo "$link";
+    }
 
     //Button Upload und Neuer Ordner
     if ($g_session_valid && editDownload())
     {
-        echo "&nbsp;&nbsp;&nbsp;&nbsp;
-        <span class=\"iconLink\">
-            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/folder_new.php?folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\"><img
-            class=\"iconLink\" src=\"$g_root_path/adm_program/images/folder_create.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Ordner erstellen\"></a>
-            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/folder_new.php?folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\">Ordner anlegen</a>
-        </span>
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        <span class=\"iconLink\">
-            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/upload.php?folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\"><img
-            class=\"iconLink\" src=\"$g_root_path/adm_program/images/page_white_get.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Hochladen\"></a>
-            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/upload.php?folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\">Datei hochladen</a>
-        </span>";
+        echo "<p>
+            <span class=\"iconLink\">
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/folder_new.php?folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\"><img
+                class=\"iconLink\" src=\"$g_root_path/adm_program/images/folder_create.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Ordner erstellen\"></a>
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/folder_new.php?folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\">Ordner anlegen</a>
+            </span>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <span class=\"iconLink\">
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/upload.php?folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\"><img
+                class=\"iconLink\" src=\"$g_root_path/adm_program/images/page_white_get.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Hochladen\"></a>
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/upload.php?folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\">Datei hochladen</a>
+            </span>
+        </p>";
     };
-    echo "</p>";
 
     // Ausgabe von Verwaltungsinfos
     echo "$info";
-     $index_folder = count($path)-1;
-     if ($index_folder == 0)
-        $show_folder = "Download";
-     else
-        $show_folder = "$path[$index_folder]";
 
     //Anlegen der Tabelle
     echo" <table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\">
             <tr>
                <th class=\"tableHeader\" width=\"25\" style=\"text-align: center;\"><img src=\"$g_root_path/adm_program/images/folder.png\" border=\"0\" alt=\"Ordner\"></th>
-               <th class=\"tableHeader\" style=\"text-align: left;\">$show_folder";
-               echo "</th>
+               <th class=\"tableHeader\" style=\"text-align: left;\">Name</th>
                <th class=\"tableHeader\" style=\"text-align: center;\">Erstellungsdatum</th>
                <th class=\"tableHeader\" style=\"text-align: right;\">Gr&ouml;&szlig;e&nbsp;</th>";
                if ($g_session_valid && editDownload())
-                  echo "<th class=\"tableHeader\" align=\"center\">Editieren</th>";
+               {
+                   echo "<th class=\"tableHeader\" align=\"center\">Editieren</th>";
+               }
             echo "</tr>";
 
 
@@ -306,7 +324,8 @@ require("../../../adm_config/body_top.php");
                $dateiendung = "page_white_powerpoint";
             elseif($dateiendung=="txt"
             ||     $dateiendung=="php"
-            ||     $dateiendung=="sql")
+            ||     $dateiendung=="sql"
+            ||     $dateiendung=="log")
                $dateiendung = "page_white_text";
             elseif($dateiendung=="pdf")
                $dateiendung = "page_white_acrobat";
@@ -315,6 +334,8 @@ require("../../../adm_config/body_top.php");
             ||     $dateiendung=="rar"
             ||     $dateiendung=="tar")
                $dateiendung = "page_white_compressed";
+            elseif($dateiendung=="swf")
+               $dateiendung = "page_white_flash";
             else
                $dateiendung = "page_white_question";
 
