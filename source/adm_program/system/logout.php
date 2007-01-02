@@ -51,6 +51,7 @@ else
 }
 
 unset($_SESSION['g_current_organizsation']);
+unset($_SESSION['g_current_user']);
 
 if ($session_found > 0)
 {

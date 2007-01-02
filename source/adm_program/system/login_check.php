@@ -71,14 +71,14 @@ if ($user_found >= 1)
     {
         // alte Sessions des Users loeschen
 
-        $sql    = "DELETE FROM ". TBL_SESSIONS. " 
-                    WHERE ses_usr_id        LIKE '$user_row->usr_id' 
+        $sql    = "DELETE FROM ". TBL_SESSIONS. "
+                    WHERE ses_usr_id        LIKE '$user_row->usr_id'
                       AND ses_org_shortname LIKE '$g_organization'  ";
         $result = mysql_query($sql, $g_adm_con);
         db_error($result);
 
         // Session-ID erzeugen
-        $user_session   = md5(uniqid(rand()));      
+        $user_session   = md5(uniqid(rand()));
         $login_datetime = date("Y.m.d H:i:s", time());
 
         // Session-ID speichern
@@ -87,7 +87,7 @@ if ($user_found >= 1)
                 VALUES ('$user_row->usr_id', '$g_organization', '$user_session', '$login_datetime', '". $_SERVER['REMOTE_ADDR']. "') ";
         $result = mysql_query($sql, $g_adm_con);
         db_error($result);
-        
+
         // Cookies fuer die Anmeldung setzen
         if(strpos($_SERVER['HTTP_HOST'], "localhost") !== false
         || strpos($_SERVER['HTTP_HOST'], "127.0.0.1") !== false)
@@ -100,7 +100,12 @@ if ($user_found >= 1)
             // kein Localhost -> Domaine beim Cookie setzen
             setcookie("adm_session", "$user_session" , 0, "/", ".". $g_domain);
         }
-        
+
+        //User Daten in Session speichern
+        $g_current_user = new User($g_adm_con);
+        $g_current_user->getUser($user_row->usr_id);
+        $_SESSION['g_current_user'] = $g_current_user;
+
         unset($_SESSION['g_current_organizsation']);
 
         // Last-Login speichern
@@ -121,13 +126,13 @@ if ($user_found >= 1)
         $result = mysql_query($sql, $g_adm_con);
         db_error($result);
 
-        // falls noch keine Forward-Url gesetzt wurde, dann nach dem Login auf 
+        // falls noch keine Forward-Url gesetzt wurde, dann nach dem Login auf
         // die Startseite verweisen
         if(isset($_SESSION['login_forward_url']) == false)
         {
             $_SESSION['login_forward_url'] = "home";
         }
-        
+
         // bevor zur entsprechenden Seite weitergeleitet wird, muss noch geprueft werden,
         // ob der Browser Cookies setzen darf -> sonst kein Login moeglich
         $location = "Location: $g_root_path/adm_program/system/cookie_check.php";

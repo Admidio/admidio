@@ -33,7 +33,7 @@ else
 {
     $g_session_id = "";
 }
-   
+
 $g_session_valid = false;
 
 if(strlen($g_session_id) > 0)
@@ -50,11 +50,11 @@ if(strlen($g_session_id) > 0)
     $row           = mysql_fetch_object($result);
 
     if ($session_found == 1)
-    {    
+    {
         $valid    = false;
         $time_gap = time() - mysqlmaketimestamp($row->ses_timestamp);
         // wenn länger nichts gemacht wurde, als in Orga-Prefs eingestellt ist, dann ausloggen
-        if ($time_gap < $g_preferences['logout_minutes'] * 60) 
+        if ($time_gap < $g_preferences['logout_minutes'] * 60)
         {
             $valid = true;
         }
@@ -62,13 +62,12 @@ if(strlen($g_session_id) > 0)
         if($valid)
         {
             $g_session_valid = true;
-            $g_current_user->getUser($row->ses_usr_id);
 
             // Datetime der Session muss aktualisiert werden
 
             $act_datetime   = date("Y-m-d H:i:s", time());
 
-            $sql    = "UPDATE ". TBL_SESSIONS. " SET ses_timestamp = '$act_datetime' 
+            $sql    = "UPDATE ". TBL_SESSIONS. " SET ses_timestamp = '$act_datetime'
                         WHERE ses_session LIKE {0}";
             $sql    = prepareSQL($sql, array($g_session_id));
             $result = mysql_query($sql, $g_adm_con);
