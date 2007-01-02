@@ -336,7 +336,7 @@ require("../../../adm_config/body_top.php");
                                 {
                                     echo "&nbsp;<img src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle; padding-bottom: 1px; cursor: pointer;\"
                                         width=\"16\" height=\"16\" border=\"0\" alt=\"Mitglieder zuordnen\" title=\"Mitglieder zuordnen\"
-                                        onclick=\"window.open('$g_root_path/adm_program/modules/lists/members.php?rol_id=$row_lst->rol_id&amp;popup=1','Titel','width=570,height=550,left=310,top=100,scrollbars=yes,resizable=yes')\">";
+                                        onclick=\"self.location.href='$g_root_path/adm_program/modules/lists/members.php?rol_id=$row_lst->rol_id'\">";
                                 }
                             }
                         }
