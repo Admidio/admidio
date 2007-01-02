@@ -85,7 +85,12 @@ if((!isModerator() && !isGroupLeader($role_id) && !$g_current_user->editUser()) 
 $column=6;
 
 //uebername ob nur Mitglieder oder alle User der Datenbank angezeigt werden sollen
-$restrict=$_GET["restrict"];
+if(isset($_GET["restrict"]))
+{
+    $restrict=$_GET["restrict"];
+}
+else $restrict="m";
+
 if(strlen($restrict) == 0 || !isModerator() || !$g_current_user->editUser())
 {
     $restrict="m";
@@ -226,7 +231,7 @@ else
 echo"
 <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
     <a name=\"Anfang\"></a>
-    <form action=\"members_save.php?role_id=".$role_id. "&amp;popup=". $_GET['popup']. "&amp;url=$url\" method=\"post\" name=\"Mitglieder\">
+    <form action=\"members_save.php?role_id=".$role_id. "&amp;popup=". $_GET['popup']."\" method=\"post\" name=\"Mitglieder\">
        <h2>Mitglieder zu $role->rol_name zuordnen</h2>";
 
         if($count_valid_users != $user_anzahl || $restrict == "u")
@@ -324,8 +329,8 @@ echo"
                 //Ausgabe aller Personen mit entsprechendem Anfangsbuchstaben
                 $user_text= $user['usr_first_name']."&nbsp;".$user['usr_last_name']."&nbsp;&nbsp;&nbsp;"
                             .$user['usr_address']."&nbsp;&nbsp;&nbsp;"
-                            .$user['usr_plz']."&nbsp;".$user['usr_ort']."&nbsp;&nbsp;&nbsp;"
-                            .$user['usr_tel1'];
+                            .$user['usr_zip_code']."&nbsp;".$user['usr_city']."&nbsp;&nbsp;&nbsp;"
+                            .$user['usr_phone'];
                 echo"
                 <tr>
                     <td style=\"text-align: center;\">
