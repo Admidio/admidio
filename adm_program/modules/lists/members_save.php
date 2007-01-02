@@ -94,6 +94,7 @@ db_error($result_user);
 //Kontrolle ob nicht am ende die Mitgliederzahl ueberstigen wird
 if($role->rol_max_members!=NULL)
 {
+    //Zaehler fuer die Mitgliederzahl
     $counter=0;
     while($user= mysql_fetch_array($result_user))
     {
@@ -111,11 +112,31 @@ if($role->rol_max_members!=NULL)
     mysql_data_seek($result_user,0);
 }
 
+//Kontrolle der member und leader Felder
+while($user= mysql_fetch_array($result_user))
+{
+    //Kontrolle für membervariablen
+    if(!isset($_POST["member_".$user["usr_id"]]))
+    {
+        $_POST["member_".$user["usr_id"]]=false;
+    }
+
+    //Kontrolle für leadervariablen
+    if(!isset($_POST["leader_".$user["usr_id"]]))
+    {
+        $_POST["leader_".$user["usr_id"]]=false;
+    }
+}
+//Dateizeiger zurueck zum Anfang
+mysql_data_seek($result_user,0);
+
+
+
 //Datensaetze durchgehen und sehen ob faer den Benutzer eine aenderung vorliegt
 while($user= mysql_fetch_array($result_user))
 {
     //Falls User Mitglied der Rolle ist oder schonmal war
-    if(array_key_exists($user["usr_id"], $mitglieder_array))
+    if(isset($_POST["member_".$user["usr_id"]]) && array_key_exists($user["usr_id"], $mitglieder_array))
     {
         //Kontolle ob Zuweisung geaendert wurde wen ja entsprechenden SQL-Befehl zusammensetzen
 
