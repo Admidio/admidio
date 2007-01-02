@@ -222,7 +222,7 @@ require("../../../adm_config/body_top.php");
                     if ($g_preferences['enable_bbcode'] == 1)
                     {
                       echo "<br><br>
-                      <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\" tabindex=\"6\">Text formatieren</a>";
+                      <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\" tabindex=\"4\">Text formatieren</a>";
                     }
                     echo "</div>
                     <div style=\"text-align: left; vertical-align: top; margin-left: 27%;\">
@@ -259,12 +259,12 @@ require("../../../adm_config/body_top.php");
                 <hr width=\"85%\" />
 
                 <div style=\"margin-top: 6px;\">
-                    <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\" tabindex=\"5\">
+                    <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\" tabindex=\"6\">
                         <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\"
                         width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
                         &nbsp;Zur&uuml;ck</button>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <button name=\"speichern\" type=\"submit\" value=\"speichern\" tabindex=\"4\">
+                    <button name=\"speichern\" type=\"submit\" value=\"speichern\" tabindex=\"7\">
                         <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\"
                         width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
                         &nbsp;Speichern</button>
