@@ -208,6 +208,10 @@ $message_text = array(
         wenden, damit dieser <acronym title=\"über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen.\">
         Schreibrechte</acronym> für den Ordner setzen kann.",
 
+    //Fahlermeldungen Mitgliederzuordnung
+    "members_changed" =>
+        "Die &Auml;nderungen wurden erfolgreich gespeichert.",
+
     //Fehlermeldungen Linkmodul
     "delete_link" =>
         "Willst Du den Link<br />
