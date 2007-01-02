@@ -42,7 +42,7 @@ if(isset($_GET["user_import_mode"]) == false || is_numeric($_GET["user_import_mo
 }
 
 // nur berechtigte User duerfen User importieren
-if(!editUser())
+if(!$g_current_user->editUser())
 {
     $g_message->show("norights");
 }

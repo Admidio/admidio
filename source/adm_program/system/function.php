@@ -239,36 +239,6 @@ function isGroupLeader($rol_id = 0)
     }
 }
 
-// Funktion prueft, ob der angemeldete User Benutzerdaten bearbeiten darf
-
-function editUser()
-{
-    global $g_current_user;
-    global $g_adm_con;
-    global $g_organization;
-
-    $sql    = "SELECT *
-                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-                WHERE mem_usr_id        = $g_current_user->id
-                  AND mem_valid         = 1
-                  AND mem_rol_id        = rol_id
-                  AND rol_org_shortname = '$g_organization'
-                  AND rol_edit_user     = 1
-                  AND rol_valid         = 1 ";
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
-
-    $edit_user = mysql_num_rows($result);
-
-    if($edit_user > 0)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
 
 // Funktion prueft, ob der angemeldete User Ankuendigungen anlegen darf
 
@@ -431,35 +401,7 @@ function editWeblinks()
     }
 }
 
-// Funktion prueft, ob der angemeldete User sein eigenes Profil bearbeiten darf
-function editProfile()
-{
-    global $g_current_user;
-    global $g_adm_con;
-    global $g_organization;
 
-    $sql    = "SELECT *
-                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-                WHERE mem_usr_id        = $g_current_user->id
-                  AND mem_rol_id        = rol_id
-                  AND mem_valid         = 1
-                  AND rol_org_shortname = '$g_organization'
-                  AND rol_profile       = 1
-                  AND rol_valid         = 1 ";
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
-
-    $edit_profile = mysql_num_rows($result);
-
-    if ( $edit_profile > 0 )
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
 
 
 // Funktion prueft, ob der angemeldete User Gaestebucheintraege loeschen und editieren darf

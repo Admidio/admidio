@@ -14,7 +14,7 @@
  *              u - alle in der Datenbank gespeicherten user
  * popup   :    0 - (Default) Fenster wird normal mit Homepagerahmen angezeigt
  *              1 - Fenster wurde im Popupmodus aufgerufen
- * 
+ *
  ******************************************************************************
  *
  * This program is free software; you can redistribute it and/or
@@ -44,7 +44,7 @@ if(isset($_GET["rol_id"]) && is_numeric($_GET["rol_id"]) == false)
 }
 else
 {
-    $role_id = $_GET["rol_id"]; 
+    $role_id = $_GET["rol_id"];
 }
 
 if(isset($_GET["restrict"]) && $_GET["restrict"] != "m" && $_GET["restrict"] != "u")
@@ -65,7 +65,7 @@ else
 }
 
 //Erfassen der uebergeben Rolle
-$sql="  SELECT * 
+$sql="  SELECT *
         FROM ". TBL_ROLES. "
         WHERE rol_id = {0}";
 $sql    = prepareSQL($sql, array($role_id));
@@ -76,7 +76,7 @@ $role = mysql_fetch_object($result_role);
 // nur Moderatoren duerfen Rollen zuweisen
 // nur Webmaster duerfen die Rolle Webmaster zuweisen
 // beide muessen mitglied der richtigen Gliedgemeinschaft sein
-if((!isModerator() && !isGroupLeader($role_id) && !editUser()) || (!hasRole("Webmaster") && $role->rol_name=="Webmaster") || $role->rol_org_shortname!=$g_organization)
+if((!isModerator() && !isGroupLeader($role_id) && !$g_current_user->editUser()) || (!hasRole("Webmaster") && $role->rol_name=="Webmaster") || $role->rol_org_shortname!=$g_organization)
 {
     $g_message->show("norights");
 }
@@ -86,7 +86,7 @@ $column=6;
 
 //uebername ob nur Mitglieder oder alle User der Datenbank angezeigt werden sollen
 $restrict=$_GET["restrict"];
-if(strlen($restrict) == 0 || !isModerator() || !editUser())
+if(strlen($restrict) == 0 || !isModerator() || !$g_current_user->editUser())
 {
     $restrict="m";
 }
@@ -140,7 +140,7 @@ $sql="  SELECT mem_usr_id, mem_rol_id, mem_valid, mem_leader
 $sql    = prepareSQL($sql, array($role_id));
 $result_role_member = mysql_query($sql, $g_adm_con);
 db_error($result_role_member);
-            
+
 //Schreiben der User-IDs die die Rolle bereits haben oder hatten in Array
 //Schreiben der Leiter der Rolle in weiters arry
 $role_member = array();
@@ -158,7 +158,7 @@ for($y=0; $member = mysql_fetch_array($result_role_member); $y++)
 }
 
 // User zaehlen, die mind. einer Rolle zugeordnet sind
-$sql    = "SELECT COUNT(*) 
+$sql    = "SELECT COUNT(*)
              FROM ". TBL_USERS. "
             WHERE usr_valid = 1 ";
 $result = mysql_query($sql, $g_adm_con);
@@ -197,7 +197,7 @@ echo "
                 var name   = element.name;
                 var pos_number = name.search('_') + 1;
                 var number = name.substr(pos_number, name.length - pos_number);
-                var role_name = 'leader_' + number; 
+                var role_name = 'leader_' + number;
                 document.getElementById(role_name).checked = false;
             }
         }
@@ -206,7 +206,7 @@ echo "
     <!--[if lt IE 7]>
         <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
     <![endif]-->";
-    
+
     if($_GET['popup'] == 0)
     {
         require("../../../adm_config/header.php");
@@ -228,12 +228,12 @@ echo"
     <a name=\"Anfang\"></a>
     <form action=\"members_save.php?role_id=".$role_id. "&amp;popup=". $_GET['popup']. "&amp;url=$url\" method=\"post\" name=\"Mitglieder\">
        <h2>Mitglieder zu $role->rol_name zuordnen</h2>";
-        
+
         if($count_valid_users != $user_anzahl || $restrict == "u")
-        {   
+        {
             //Button Alle bzw. nur Mitglieder anzeigen
-            echo "<p>";            
-            if($restrict=="m" && (isModerator() || editUser()))
+            echo "<p>";
+            if($restrict=="m" && (isModerator() || $g_current_user->editUser()))
             {
                 echo "<span class=\"iconLink\">
                     <a class=\"iconLink\" href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=u\"><img
@@ -241,7 +241,7 @@ echo"
                     <a class=\"iconLink\" href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=u\">Alle Benutzer anzeigen</a>
                 </span>";
             }
-            else if($restrict=="u" && (isModerator() || editUser()))
+            else if($restrict=="u" && (isModerator() || $g_current_user->editUser()))
             {
                 echo "<span class=\"iconLink\">
                     <a class=\"iconLink\" href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=m\"><img
@@ -251,7 +251,7 @@ echo"
             }
             echo "</p>";
         }
-        
+
         //Anfang Tabelle
         echo"
         <table class=\"tableList\" cellpadding=\"3\" cellspacing=\"0\" style=\"width: 95%;\">
@@ -264,7 +264,7 @@ echo"
                 <th class=\"tableHeader\" style=\"text-align: center;\">Leiter</th>
             </tr>";
             $letter_merker = "";
- 
+
             //Ausgabe der Tabellenzeilen, ggf. einfuegen von Ankern
             while($user = mysql_fetch_array($result_user))
             {
@@ -272,15 +272,15 @@ echo"
                 if(strlen($letter_merker) > 0 && $letter < 65)
                 {
                     // die ersten Ascii-Zeichen alle unter # anzeigen
-                    $letter_merker = $letter;                   
+                    $letter_merker = $letter;
                 }
- 
+
                 //grosse Anfangsbuchstaben werden erst ab 50 Personen angezeigt
                 if( $user_anzahl > 50
                 && ($letter_merker != $letter || strlen($letter_merker) == 0))
-                {                                       
-                    echo "<tr><td style=\"text-align: center;\" colspan=\"$column\">";                      
-                    
+                {
+                    echo "<tr><td style=\"text-align: center;\" colspan=\"$column\">";
+
                     //Zahlen werden unter # zusammengefasst
                     if($letter < 65)
                     {
@@ -290,19 +290,19 @@ echo"
                     else if($letter>=65)
                     {
                         //Aktueller Anfangsbuchstabe plus Anker
-                        $letter_string = chr($letter);                      
+                        $letter_string = chr($letter);
                         echo"<a name=\"$letter_string\"></a><h2>$letter_string</h2>";
                     }
-                    
-                    //Buchstaben Links zu Ankern wenn mehr als 100 Namen angezeigt werden sollen                
+
+                    //Buchstaben Links zu Ankern wenn mehr als 100 Namen angezeigt werden sollen
                     if($user_anzahl>100 && (($letter < 65 && $first_linkline!=true) || $letter>=65))
-                    {               
+                    {
                         $first_linkline=true;
                         echo"<a href=\"#Anfang\">Anfang</a>&nbsp;";
                         for($menu_letter=65; $menu_letter<=90; $menu_letter++)
                         {
                             //Falls Aktueller Anfangsbuchstabe, Nur Buchstabe ausgeben
-                            $menu_letter_string = chr($menu_letter);                        
+                            $menu_letter_string = chr($menu_letter);
                             if($letter==$menu_letter || !in_array($menu_letter, $first_letter_array))
                             {
                                 echo"$menu_letter_string&nbsp;";
@@ -313,14 +313,14 @@ echo"
                                 echo"<a href=\"#$menu_letter_string\">$menu_letter_string</a>&nbsp;";
                             }
                         }//for
-                    
+
                         echo"<a href=\"#Ende\">Ende</a>";
                     }// if User_anzahl>100
-                    
-                    echo"</td></tr>";                                
+
+                    echo"</td></tr>";
                     $letter_merker = $letter;
                 }
-                
+
                 //Ausgabe aller Personen mit entsprechendem Anfangsbuchstaben
                 $user_text= $user['usr_first_name']."&nbsp;".$user['usr_last_name']."&nbsp;&nbsp;&nbsp;"
                             .$user['usr_address']."&nbsp;&nbsp;&nbsp;"
@@ -333,7 +333,7 @@ echo"
                     </td>
                     <td style=\"text-align: left;\">". $user['usr_last_name']."</td>
                     <td style=\"text-align: left;\">". $user['usr_first_name']."</td>
-                    
+
                     <td style=\"text-align: center;\">";
                         //Geburtstag nur ausgeben wenn bekannt
                         if($user['usr_birthday']!='0000-00-00')
@@ -353,7 +353,7 @@ echo"
                             echo"<input type=\"checkbox\" onclick=\"unmarkLeader(this)\" id=\"member_$user[0]\" name=\"member_$user[0]\" value=\"1\">";
                         }
                     echo"</td>
-                        
+
                     <td style=\"text-align: center;\">";
                         //Haekchen setzen ob jemand Leiter ist oder nicht
                         if(in_array($user['usr_id'], $group_leaders))
@@ -368,7 +368,7 @@ echo"
                 </tr>";
             }//Ende for-Schleife
         echo"</table>";
-      
+
       //Buttons schliessen oder Speichern
         echo"<a name=\"Ende\"></a>
         <div style=\"margin: 8px;\">

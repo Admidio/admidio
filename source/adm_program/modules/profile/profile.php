@@ -44,33 +44,12 @@ if(isset($_GET['user_id']) == false
 {
     // wenn nichts uebergeben wurde, dann eigene Daten anzeigen
     $a_user_id = $g_current_user->id;
-    // wenn der User sein eigenes Profil bearbeiten darf
-    if(editProfile())
-    {
-    	$edit_user = true;
-    }
 }
 else
 {
     // Daten eines anderen Users anzeigen und pruefen, ob editiert werden darf
     $a_user_id = $_GET['user_id'];
-    if(editUser())
-    {
-        // jetzt noch schauen, ob User ueberhaupt Mitglied in der Gliedgemeinschaft ist
 
-        if(isMember($a_user_id) == true)
-        {
-            $edit_user = true;
-        }
-        else
-        {
-            $edit_user = false;
-        }
-    }
-    else
-    {
-        $edit_user = false;
-    }
 }
 
 // User auslesen
@@ -374,7 +353,7 @@ require("../../../adm_config/body_top.php");
                     </div>";
 
                     // Moderatoren & Gruppenleiter duerfen neue Rollen zuordnen
-                    if((isModerator() || isGroupLeader() || editUser())
+                    if((isModerator() || isGroupLeader() || $g_current_user->editUser())
                     && $user->reg_org_shortname != $g_organization)
                     {
                         echo "<div style=\"margin-top: 10px;\">
@@ -618,12 +597,10 @@ require("../../../adm_config/body_top.php");
                         <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
                     </span>";
                 }
-                if($edit_user)
+                // Wenn der User nicht das Recht hat das Profil zu aendern,
+                // werden die Links nicht angezeigt
+                if($g_current_user->editProfile($a_user_id) == true)
                 {
-                    if($a_user_id != $g_current_user->id && isset($_GET['user_id']) == true)
-                    {
-                        echo "&nbsp;&nbsp;&nbsp;&nbsp;";
-                    }
                     echo "<span class=\"iconLink\">
                         <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$a_user_id\"><img
                          class=\"iconLink\" src=\"$g_root_path/adm_program/images/photo.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Profildaten &auml;ndern\"></a>
@@ -635,6 +612,10 @@ require("../../../adm_config/body_top.php");
                          class=\"iconLink\" src=\"$g_root_path/adm_program/images/edit.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Profildaten &auml;ndern\"></a>
                         <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$a_user_id\">Profildaten &auml;ndern</a>
                     </span>";
+                }
+                else
+            	{
+                    echo "&nbsp;&nbsp;&nbsp;&nbsp;";
                 }
             echo "</div>
         </div>

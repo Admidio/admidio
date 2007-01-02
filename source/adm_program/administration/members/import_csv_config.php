@@ -31,7 +31,7 @@ $err_code = "";
 $err_text = "";
 
 // nur berechtigte User duerfen User importieren
-if(!editUser())
+if(!$g_current_user->editUser())
 {
     $g_message->show("norights");
 }
@@ -98,7 +98,7 @@ require("../../../adm_config/body_top.php");
                     <p>Ordne den Datenbankfeldern, wenn m&ouml;glich eine Spalte aus der Datei zu.</p>
                     <p>Auf der linken Seite stehen alle m&ouml;glichen Datenbankfelder und auf der
                     rechten Seite sind jeweils alle Spalten aus der ausgew&auml;hlten Datei
-                    aufgelistet. Falls nicht alle Datenbankfelder in der Datei vorhanden sind, k&ouml;nnen 
+                    aufgelistet. Falls nicht alle Datenbankfelder in der Datei vorhanden sind, k&ouml;nnen
                     diese Felder einfach leer gelassen werden.</p>
                 </div>
 
@@ -128,7 +128,7 @@ require("../../../adm_config/body_top.php");
                                           'usr_birthday'   => 'Geburtstag',
                                           'usr_gender'     => 'Geschlecht',
                     );
-                    
+
                     // Organisationsspezifische Felder noch in das Array aufnehmen
                     $sql = "SELECT *
                               FROM ". TBL_USER_FIELDS. "
@@ -143,7 +143,7 @@ require("../../../adm_config/body_top.php");
                     {
                         $arr_col_name[$row->usf_id] = $row->usf_name;
                     }
-                                 
+
                     $line = reset($_SESSION["file_lines"]);
                     $arr_columns = explode($_SESSION["value_separator"], $line);
 
@@ -196,7 +196,7 @@ require("../../../adm_config/body_top.php");
     </div>
     <script type=\"text/javascript\"><!--
         document.getElementById('first_row').focus();
-    --></script>";  
+    --></script>";
     require("../../../adm_config/body_bottom.php");
 echo "</body>
 </html>";

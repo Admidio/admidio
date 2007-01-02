@@ -23,7 +23,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
- 
+
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
@@ -31,7 +31,7 @@ $err_code = "";
 $err_text = "";
 
 // nur berechtigte User duerfen User importieren
-if(!editUser())
+if(!$g_current_user->editUser())
 {
     $g_message->show("norights");
 }
@@ -56,7 +56,7 @@ else
     $first_row_title = false;
 }
 
-// die organisationsspezifischen Felder in ein Array schreiben, 
+// die organisationsspezifischen Felder in ein Array schreiben,
 // damit man spaeter schneller darauf zugreifen kann
 $sql = "SELECT *
           FROM ". TBL_USER_FIELDS. "
@@ -89,13 +89,13 @@ for($i = $start_row; $i < count($_SESSION["file_lines"]); $i++)
 {
     $user->clear();
     $arr_columns = explode($_SESSION["value_separator"], $line);
-    $value = reset($arr_columns);    
+    $value = reset($arr_columns);
 
     for($j = 1; $j <= count($arr_columns); $j++)
     {
         // Hochkomma und Spaces entfernen
         $value = trim(str_replace("\"", "", $value));
-        
+
         if($j == $_POST["usr_last_name"])
         {
             $user->last_name = $value;
@@ -152,10 +152,10 @@ for($i = $start_row; $i < count($_SESSION["file_lines"]); $i++)
         {
             $user->gender = $value;
         }
-        
+
         $value = next($arr_columns);
     }
-    
+
     // schauen, ob schon User mit dem Namen existieren
     $sql = "SELECT usr_id FROM ". TBL_USERS. "
              WHERE usr_last_name  = '$user->last_name'
@@ -164,36 +164,36 @@ for($i = $start_row; $i < count($_SESSION["file_lines"]); $i++)
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
     $dup_users = mysql_num_rows($result);
-    
+
     if($dup_users > 0 && $_SESSION["user_import_mode"] == 3)
     {
         // alle vorhandene User mit dem Namen loeschen
         while($row = mysql_fetch_object($result))
-        {            
+        {
             $duplicate_user = new User($g_adm_con);
             $duplicate_user->GetUser($row->usr_id);
             $duplicate_user->delete();
         }
     }
-        
+
     if( $dup_users == 0
     || ($dup_users  > 0 && $_SESSION["user_import_mode"] > 1) )
     {
         // Usersatz anlegen
         $user->insert($g_current_user->id);
         $count_import++;
-        
-        $usf_id = reset($arr_user_fields);    
+
+        $usf_id = reset($arr_user_fields);
 
         for($j = 1; $j <= count($arr_user_fields); $j++)
-        {        
+        {
             // wenn dem Orga-Feld eine Spalte aus der Datei zugeordnet wurde
             if($_POST[$usf_id] > 0)
             {
                 $arr_index = $_POST[$usf_id]-1;
                 $value = $arr_columns["$arr_index"];
                 $value = trim(str_replace("\"", "", $value));
-                
+
                 if(strlen($value) > 0)
                 {
                     // Inhalt des Orga-Feldes schreiben
@@ -210,9 +210,9 @@ for($i = $start_row; $i < count($_SESSION["file_lines"]); $i++)
         $sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin, mem_valid)
                                        VALUES (". $_SESSION['rol_id']. ", $user->id, NOW(), 1) ";
         $result = mysql_query($sql, $g_adm_con);
-        db_error($result);        
+        db_error($result);
     }
-    
+
     $line = next($_SESSION["file_lines"]);
 }
 
