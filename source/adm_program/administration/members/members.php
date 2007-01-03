@@ -124,6 +124,71 @@ echo "
     <title>$g_current_organization->longname - Benutzerverwaltung</title>
     <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
 
+    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/ajax.js\"></script>
+
+    <script type=\"text/javascript\">
+        var resObject     = createXMLHttpRequest();
+        var oldValue;
+
+        function updateList()
+        {
+            if (!resObject)
+            {
+                return;
+            }
+
+            var query = document.getElementById('queryForm').value;
+
+            //Unnoetige Requests sollen natuerlich vermieden werden
+            if (query == oldValue)
+            {
+                return;
+            }
+
+            //aktuellen Wert merken
+            oldValue = query;
+
+            //onLoad Handler setzen
+            resObject.onload=updateList_callback;
+
+            //asynchronen GET-Request vorbereiten
+            query=encodeURIComponent(query);
+
+            resObject.open('GET', 'query_suggestions.php?query=' + query, false);
+
+            //Request absetzen
+            resObject.send(null);
+        }
+
+        function updateList_callback()
+        {
+            if(resObject.responseXML)
+            {
+                //Ziel-Element festlegen
+                target = document.getElementById('suggestions');
+
+                //Vorschlagsliste
+                var list = resObject.responseXML.getElementsByTagName('suggest');
+
+                if (list[0])
+                {
+                    var tmp = document.importNode(list[0].firstChild,true);
+                    target.replaceChild(tmp,target.firstChild);
+                }
+                else
+                {
+                    //Vorschlaege loeschen
+                    target.innerHTML='&nbsp;';
+                }
+            }
+            else
+            {
+                //Irgendwas ist maechtig schief gelaufen
+                alert(resObject.responseText);
+            }
+        }
+    </script>
+
     <!--[if lt IE 7]>
     <script language=\"JavaScript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
     <![endif]-->";
