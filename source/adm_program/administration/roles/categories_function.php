@@ -56,6 +56,11 @@ if(isset($_GET["cat_id"]) && is_numeric($_GET["cat_id"]) == false)
     $g_message->show("invalid");
 }
 
+if(isset($_GET["cat_id"]) == false)
+{
+    $_GET["cat_id"] = 0;
+}
+
 if($_GET["cat_id"] == 0)
 {
     if(isset($_GET["type"]))
@@ -83,13 +88,14 @@ if($_GET['mode'] == 1)
 
     if(strlen($category_name) > 0)
     {
-        if(!($_GET['cat_id'] > 0))
+        if($_GET['cat_id'] == 0)
         {
             // Schauen, ob die Kategorie bereits existiert
             $sql    = "SELECT COUNT(*) FROM ". TBL_CATEGORIES. "
                         WHERE cat_org_id = $g_current_organization->id
-                          AND cat_name   LIKE {0}";
-            $sql    = prepareSQL($sql, array($category_name));
+                          AND cat_type   = {0}
+                          AND cat_name   LIKE {1} ";
+            $sql    = prepareSQL($sql, array($_GET['type'], $category_name));
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
             $row = mysql_fetch_array($result);
@@ -126,7 +132,7 @@ if($_GET['mode'] == 1)
         $result = mysql_query($sql, $g_adm_con);
         db_error($result);
        
-       	$_SESSION['navigation']->deleteLastUrl();
+        $_SESSION['navigation']->deleteLastUrl();
         unset($_SESSION['categories_request']);
     }
     else
