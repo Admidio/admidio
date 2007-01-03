@@ -73,13 +73,13 @@ $err_text = "";
 if(isset($_GET['new_user_id']))
 {
     $new_user = new User($g_adm_con);
-    $new_user->getUser($_GET['new_user_id']);	
+    $new_user->getUser($_GET['new_user_id']);
 }
 
 if(isset($_GET['user_id']))
 {
     $user = new User($g_adm_con);
-    $user->getUser($_GET['user_id']);   
+    $user->getUser($_GET['user_id']);
 }
 
 if($_GET["mode"] == 1 || $_GET["mode"] == 2)
@@ -102,11 +102,11 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 2)
 
 if($_GET["mode"] == 2)
 {
-    // User existiert bereits, ist aber bisher noch kein Mitglied der aktuellen Orga, 
+    // User existiert bereits, ist aber bisher noch kein Mitglied der aktuellen Orga,
     // deshalb erst einmal Rollen zuordnen und dann spaeter eine Mail schicken
     $_SESSION['navigation']->addUrl("$g_root_path/adm_program/administration/new_user/new_user_function.php?mode=3&user_id=". $_GET['user_id']. "&new_user_id=". $_GET['new_user_id']);
     header("Location: $g_root_path/adm_program/modules/profile/roles.php?user_id=". $_GET['user_id']);
-    exit(); 
+    exit();
 }
 
 if($_GET["mode"] == 1 || $_GET["mode"] == 3)
@@ -120,7 +120,7 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
         $email->addRecipient($user->email, "$user->first_name $user->last_name");
         $email->setSubject("Anmeldung auf $g_current_organization->homepage");
         $email->setText(utf8_decode("Hallo "). $user->first_name. utf8_decode(",\n\ndeine Anmeldung auf ").
-            $g_current_organization->homepage. utf8_decode("wurde bestätigt.\n\nNun kannst du dich mit deinem Benutzernamen : ").
+            $g_current_organization->homepage."&nbsp". utf8_decode("wurde bestätigt.\n\nNun kannst du dich mit deinem Benutzernamen : ").
             $user->login_name. utf8_decode("\nund dem Passwort auf der Homepage einloggen.\n\n".
             "Sollten noch Fragen bestehen, schreib eine E-Mail an "). $g_preferences['email_administrator'].
             utf8_decode(" .\n\nViele Grüße\nDie Webmaster"));
@@ -160,14 +160,14 @@ elseif($_GET["mode"] == 5)
 elseif($_GET["mode"] == 6)
 {
 	// Der User existiert schon und besitzt auch ein Login
-    
+
     // Registrierung loeschen
 	$new_user->delete();
-    
+
     // Zugangsdaten neu verschicken
     $_SESSION['navigation']->addUrl("$g_root_path/adm_program/administration/new_user/new_user.php");
     header("Location: $g_root_path/adm_program/administration/members/members_function.php?mode=4&user_id=". $_GET['user_id']);
-    exit(); 
+    exit();
 }
 
 ?>
