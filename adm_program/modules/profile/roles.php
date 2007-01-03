@@ -74,6 +74,17 @@ $user     = new User($g_adm_con);
 $user->GetUser($_GET['user_id']);
 $_SESSION['navigation']->addUrl($g_current_url);
 
+//Testen ob Feste Rolle gesetzt ist
+if(isset($_SESSION['set_rol_id']))
+{
+    $set_rol_id = $_SESSION['set_rol_id'];
+    unset($_SESSION['set_rol_id']);
+}
+else
+{
+    $set_rol_id = NULL;
+}
+
 echo "
 <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
@@ -207,7 +218,7 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
 
                          // wenn der User aus der Mitgliederzuordnung heraus neu angelegt wurde
                          // entsprechende Rolle sofort hinzufuegen
-                         if($row->rol_id == $_SESSION['set_rol_id'])
+                         if($row->rol_id == $set_rol_id)
                          {
                             echo " checked ";
                          }
@@ -271,4 +282,5 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
     }
 echo "</body>
 </html>";
+//festgelgte Rolle loeschen
 ?>
