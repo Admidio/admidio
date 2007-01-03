@@ -150,7 +150,7 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
             if(isModerator())
             {
                 // Alle Rollen der Gruppierung auflisten
-                $sql    = "SELECT rol_name, rol_description, mem_usr_id, mem_leader
+                $sql    = "SELECT rol_name, rol_description, mem_usr_id, mem_leader, rol_id
                              FROM ". TBL_ROLES. " LEFT JOIN ". TBL_MEMBERS. "
                                ON rol_id     = mem_rol_id
                               AND mem_usr_id = {0}
@@ -162,7 +162,7 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
             elseif(isGroupLeader())
             {
                 // Alle Rollen auflisten, bei denen das Mitglied Leiter ist
-                $sql    = "SELECT br.rol_name, br.rol_description, mgl.mem_usr_id, mgl.mem_leader
+                $sql    = "SELECT br.rol_name, br.rol_description, br.rol_id, mgl.mem_usr_id, mgl.mem_leader
                              FROM ". TBL_MEMBERS. " bm, ". TBL_ROLES. " br LEFT JOIN ". TBL_MEMBERS. " mgl
                                ON br.rol_id      = mgl.mem_rol_id
                               AND mgl.mem_usr_id = {0}
@@ -179,7 +179,7 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
             elseif($g_current_user->editUser())
             {
                 // Alle Rollen auflisten, die keinen Moderatorenstatus haben
-                $sql    = "SELECT rol_name, rol_description, mem_usr_id, mem_leader
+                $sql    = "SELECT rol_name, rol_description, rol_id, mem_usr_id, mem_leader
                              FROM ". TBL_ROLES. " LEFT JOIN ". TBL_MEMBERS. "
                                ON rol_id     = mem_rol_id
                               AND mem_usr_id = {0}
@@ -201,6 +201,13 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
                    <td style=\"text-align: center; vertical-align: top;\">
                       <input type=\"checkbox\" id=\"role-$i\" name=\"role-$i\" ";
                          if($row->mem_usr_id > 0)
+                         {
+                            echo " checked ";
+                         }
+
+                         // wenn der User aus der Mitgliederzuordnung heraus neu angelegt wurde
+                         // entsprechende Rolle sofort hinzufuegen
+                         if($row->rol_id == $_SESSION['set_rol_id'])
                          {
                             echo " checked ";
                          }

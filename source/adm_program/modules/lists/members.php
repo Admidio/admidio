@@ -231,10 +231,21 @@ echo"
             }
             else if($restrict=="u" && (isModerator() || $g_current_user->editUser()))
             {
+                //Nur Mitglieder anzeigen
                 echo "<span class=\"iconLink\">
                     <a class=\"iconLink\" href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=m\"><img
                     class=\"iconLink\" src=\"$g_root_path/adm_program/images/user.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Nur Mitglieder anzeigen\"></a>
                     <a class=\"iconLink\" href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=m\">Nur Mitglieder anzeigen</a>
+                </span>";
+
+                //aktuelle Rolle in SessionID sichern
+                $_SESSION['set_rol_id'] = $role_id;
+                //Neuen Benutzer Anlegen
+                echo"&nbsp;&nbsp;&nbsp;&nbsp;
+                <span class=\"iconLink\">
+                    <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?new_user=1\"><img
+                    class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Login\"></a>
+                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_new.php?new_user=1\">Benutzer anlegen</a>
                 </span>";
             }
             echo "</p>";
