@@ -168,7 +168,7 @@ echo "
                 target = document.getElementById('suggestions');
 
                 //Vorschlagsliste
-                var list = resObject.responseXML.getElementsByTagName('suggest');
+                var list = resObject.responseXML.getElementsByTagName('suggestions');
 
                 if (list[0])
                 {
@@ -252,6 +252,23 @@ require("../../../adm_config/body_top.php");
             echo " mit Nachnamen ". str_replace("%", "*", $letter);
         }
         echo " werden angezeigt</p>";
+
+        //Hier gibt es jetzt noch die Suchbox...
+        echo "
+        <fieldset style=\"width:250px;\">
+            <legend><b>Suche:</b></legend>
+            <form action=\"\" method=\"get\">
+
+                <!-- onkeyup aktualisiert die Liste - on keypress waere zu frueh -->
+                <input type=\"text\" value=\"\" name=\"queryForm\" id=\"queryForm\" autocomplete=\"off\" onkeyup=\"updateList();\" />
+                <input type=\"submit\" value=\"Senden\" />
+
+            </form>
+
+            <!-- das ziel-DIV für die gefundenen Vorschläge -->
+            <div id=\"suggestions\" style=\"overflow:auto; height:100px; margin:5px; \">&nbsp;</div>
+
+   </fieldset>";
 
         echo "<p>";
 
