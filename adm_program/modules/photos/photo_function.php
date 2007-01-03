@@ -58,7 +58,13 @@ if(isset($_GET["direction"]) && $_GET["direction"] != "left" && $_GET["direction
     $g_message->show("invalid");
 }
 
-if($_GET["job"] == "delete" && !isset($_GET["bild"]))
+if(($_GET["job"] == "do_delete" || $_GET["job"] == "delete_request" || $_GET["job"] == "rotate")
+&& (isset($_GET["bild"]) == false || is_numeric($_GET["bild"]) == false) )
+{
+    $g_message->show("invalid");
+}
+
+if(isset($_GET["thumb_seite"]) && is_numeric($_GET["thumb_seite"]) == false)
 {
     $g_message->show("invalid");
 }
@@ -254,7 +260,7 @@ if($_GET["job"]=="rotate")
 //Nachfrage ob geloescht werden soll
 if($_GET["job"]=="delete_request")
 {
-   $g_message->setForwardYesNo("$g_root_path/adm_program/modules/photos/photo_function.php?pho_id=$pho_id&bild=$bild&thumb_seite=$thumb_seite&job=do_delete");
+   $g_message->setForwardYesNo("$g_root_path/adm_program/modules/photos/photo_function.php?pho_id=$pho_id&bild=". $_GET["bild"]. "&thumb_seite=". $_GET["thumb_seite"]. "&job=do_delete");
    $g_message->show("delete_photo");
 }
 
