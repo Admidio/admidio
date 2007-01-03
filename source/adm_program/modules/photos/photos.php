@@ -124,32 +124,31 @@ if(isset($_GET['reload']))
 
 
 //erfassen der Veranstaltung falls noch nicht in Session gespeichert
-if(!isset($_SESSION['photo_event']) || $_SESSION['photo_event']['pho_id']!= $pho_id || $reload)
-{
-    $sql="  SELECT *
-            FROM ". TBL_PHOTOS. "
-            WHERE pho_id ={0}";
-    $sql    = prepareSQL($sql, array($pho_id));
-    $result_event = mysql_query($sql, $g_adm_con);
-    db_error($result_event);
-    $adm_photo = mysql_fetch_array($result_event);
 
-    //Variablen in Session schreiben
-    $_SESSION['photo_event']['pho_id']= $adm_photo['pho_id'];
-    $_SESSION['photo_event']['pho_org_shortname']= $adm_photo['pho_org_shortname'];
-    $_SESSION['photo_event']['pho_quantity']= $adm_photo['pho_quantity'];
-    $_SESSION['photo_event']['pho_name']= $adm_photo['pho_name'];
-    $_SESSION['photo_event']['pho_begin']= $adm_photo['pho_begin'];
-    $_SESSION['photo_event']['pho_end']= $adm_photo['pho_end'];
-    $_SESSION['photo_event']['pho_photographers']= $adm_photo['pho_photographers'];
-    $_SESSION['photo_event']['pho_usr_id']= $adm_photo['pho_usr_id'];
-    $_SESSION['photo_event']['pho_timestamp']= $adm_photo['pho_timestamp'];
-    $_SESSION['photo_event']['pho_locked']= $adm_photo['pho_locked'];
-    $_SESSION['photo_event']['pho_pho_id_parent']= $adm_photo['pho_pho_id_parent'];
-    $_SESSION['photo_event']['pho_last_change']= $adm_photo['pho_last_change'];
-    $_SESSION['photo_event']['pho_usr_id_change']= $adm_photo['pho_usr_id_change'];
+$sql="  SELECT *
+        FROM ". TBL_PHOTOS. "
+        WHERE pho_id ={0}";
+$sql    = prepareSQL($sql, array($pho_id));
+$result_event = mysql_query($sql, $g_adm_con);
+db_error($result_event);
+$adm_photo = mysql_fetch_array($result_event);
 
-}
+//Variablen in Session schreiben
+$_SESSION['photo_event']['pho_id']= $adm_photo['pho_id'];
+$_SESSION['photo_event']['pho_org_shortname']= $adm_photo['pho_org_shortname'];
+$_SESSION['photo_event']['pho_quantity']= $adm_photo['pho_quantity'];
+$_SESSION['photo_event']['pho_name']= $adm_photo['pho_name'];
+$_SESSION['photo_event']['pho_begin']= $adm_photo['pho_begin'];
+$_SESSION['photo_event']['pho_end']= $adm_photo['pho_end'];
+$_SESSION['photo_event']['pho_photographers']= $adm_photo['pho_photographers'];
+$_SESSION['photo_event']['pho_usr_id']= $adm_photo['pho_usr_id'];
+$_SESSION['photo_event']['pho_timestamp']= $adm_photo['pho_timestamp'];
+$_SESSION['photo_event']['pho_locked']= $adm_photo['pho_locked'];
+$_SESSION['photo_event']['pho_pho_id_parent']= $adm_photo['pho_pho_id_parent'];
+$_SESSION['photo_event']['pho_last_change']= $adm_photo['pho_last_change'];
+$_SESSION['photo_event']['pho_usr_id_change']= $adm_photo['pho_usr_id_change'];
+
+
 
 
 //erfassen ob Unterveranstaltungen existieren

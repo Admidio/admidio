@@ -9,8 +9,12 @@
  * Uebergaben:
  *
  * pho_id: id der Veranstaltung
- * job: loeschen oder drehen
+ * job: - do_delete
+ *      - rotate
+ *      - delete_request
  * direction: drehrichtung links oder rechts
+ * bild: Nr. des Bildes welches verarbeitet werden soll
+ * thumb_seite: von welcher Thumnailseite aus wurde die Funktion aufgerufen
  ******************************************************************************
  *
  * This program is free software; you can redistribute it and/or
@@ -64,10 +68,6 @@ if(($_GET["job"] == "do_delete" || $_GET["job"] == "delete_request" || $_GET["jo
     $g_message->show("invalid");
 }
 
-if(isset($_GET["thumb_seite"]) && is_numeric($_GET["thumb_seite"]) == false)
-{
-    $g_message->show("invalid");
-}
 
 if(isset($_GET["pho_id"]))
 {
@@ -258,7 +258,7 @@ if($_GET["job"]=="rotate")
 //Nachfrage ob geloescht werden soll
 if($_GET["job"]=="delete_request")
 {
-   $g_message->setForwardYesNo("$g_root_path/adm_program/modules/photos/photo_function.php?pho_id=$pho_id&bild=". $_GET["bild"]. "&thumb_seite=". $_GET["thumb_seite"]. "&job=do_delete");
+   $g_message->setForwardYesNo("$g_root_path/adm_program/modules/photos/photo_function.php?pho_id=$pho_id&bild=". $_GET["bild"]."&job=do_delete");
    $g_message->show("delete_photo");
 }
 
@@ -282,14 +282,9 @@ if(isset($_GET["job"]) && $_GET["job"]=="do_delete")
     //Aufruf der entsprechenden Funktion
     delete($pho_id, $_GET["bild"]);
 
-    // zur Ausgangsseite zurueck
-    if(isset($_GET["seite"]))
-    {
-        $seite=$_GET["seite"];
-    }
-    else $seite=1;
 
-    $g_message->setForwardUrl("$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id&seite=$seite&reload=true", 2000);
+    $_SESSION['navigation']->deleteLastUrl();
+    $g_message->setForwardUrl("$g_root_path/adm_program/system/back.php", 2000);
     $g_message->show("photo_deleted");
 }
 ?>

@@ -11,6 +11,7 @@
  * aufgabe: - makenew (neue eingaben speichern)
  *          - makechange (Aenderungen ausfuehren)
  *          - delete (Loeschen einer Veranstaltung)
+ *          - delete_request
  *
  ******************************************************************************
  *
