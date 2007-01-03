@@ -165,25 +165,25 @@ echo "
         function hinzufuegen()
         {
             NeuerEintrag = new Option(document.TerminAnlegen.AllRoles.options[document.TerminAnlegen.AllRoles.selectedIndex].text, document.TerminAnlegen.AllRoles.options[document.TerminAnlegen.AllRoles.selectedIndex].value, false, true);
-            document.RolleAnlegen.AllRoles.options[document.RolleAnlegen.AllRoles.selectedIndex] = null;
-            document.RolleAnlegen.elements['ChildRoles[]'].options[document.RolleAnlegen.elements['ChildRoles[]'].length] = NeuerEintrag;
+            document.TerminAnlegen.AllRoles.options[document.TerminAnlegen.AllRoles.selectedIndex] = null;
+            document.TerminAnlegen.elements['ChildRoles[]'].options[document.TerminAnlegen.elements['ChildRoles[]'].length] = NeuerEintrag;
         }
 
         function entfernen()
         {
-            NeuerEintrag = new Option(document.RolleAnlegen.elements['ChildRoles[]'].options[document.RolleAnlegen.elements['ChildRoles[]'].selectedIndex].text, document.RolleAnlegen.elements['ChildRoles[]'].options[document.RolleAnlegen.elements['ChildRoles[]'].selectedIndex].value, false, true);
-            document.RolleAnlegen.elements['ChildRoles[]'].options[document.RolleAnlegen.elements['ChildRoles[]'].selectedIndex] = null;
-            document.RolleAnlegen.AllRoles.options[document.RolleAnlegen.AllRoles.length] = NeuerEintrag;
+            NeuerEintrag = new Option(document.TerminAnlegen.elements['ChildRoles[]'].options[document.TerminAnlegen.elements['ChildRoles[]'].selectedIndex].text, document.TerminAnlegen.elements['ChildRoles[]'].options[document.TerminAnlegen.elements['ChildRoles[]'].selectedIndex].value, false, true);
+            document.TerminAnlegen.elements['ChildRoles[]'].options[document.TerminAnlegen.elements['ChildRoles[]'].selectedIndex] = null;
+            document.TerminAnlegen.AllRoles.options[document.TerminAnlegen.AllRoles.length] = NeuerEintrag;
         }
 
         function absenden()
         {
-            for (var i = 0; i < document.RolleAnlegen.elements['ChildRoles[]'].options.length; i++)
+            for (var i = 0; i < document.TerminAnlegen.elements['ChildRoles[]'].options.length; i++)
             {
-                document.RolleAnlegen.elements['ChildRoles[]'].options[i].selected = true;
+                document.TerminAnlegen.elements['ChildRoles[]'].options[i].selected = true;
             }
 
-            document.RolleAnlegen.submit();
+            document.TerminAnlegen.submit();
         }
 
 
@@ -196,7 +196,7 @@ echo "</head>";
 
 require("../../../adm_config/body_top.php");
     echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-        <form action=\"roles_function.php?rol_id=$rol_id&amp;mode=2\" method=\"post\" name=\"RolleAnlegen\">
+        <form action=\"roles_function.php?rol_id=$rol_id&amp;mode=2\" method=\"post\" name=\"TerminAnlegen\">
             <div class=\"formHead\">";
                 if($rol_id > 0)
                 {
