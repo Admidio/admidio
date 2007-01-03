@@ -218,7 +218,7 @@ require("../../../adm_config/body_top.php");
                         echo "<div style=\"text-align: right;\">". mysqldatetime("d.m.y h:i", $row->gbo_timestamp). "&nbsp;";
 
                             // aendern & loeschen duerfen nur User mit den gesetzten Rechten
-                            if (editGuestbook())
+                            if ($g_current_user->editGuestbookRight())
                             {
                                     echo "
                                     <img src=\"$g_root_path/adm_program/images/edit.png\" style=\"cursor: pointer; vertical-align: middle;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"
@@ -328,7 +328,7 @@ require("../../../adm_config/body_top.php");
                                         <div style=\"text-align: right;\">". mysqldatetime("d.m.y h:i", $row->gbc_timestamp). "&nbsp;";
 
                                         // loeschen von Kommentaren duerfen nur User mit den gesetzten Rechten
-                                        if (editGuestbook())
+                                        if ($g_current_user->editGuestbookRight())
                                         {
                                                 echo "
                                                 <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer;\" width=\"16\" height=\"16\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"
