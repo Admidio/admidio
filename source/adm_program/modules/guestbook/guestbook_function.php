@@ -100,7 +100,7 @@ if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mod
     if ($_GET['mode'] == 4)
     {
         // Fuer den mode 4 werden commentGuestbook-Rechte benoetigt
-        if(!commentGuestbook())
+        if(!$g_current_user->commentGuestbookRight())
         {
             $g_message->show("norights");
         }

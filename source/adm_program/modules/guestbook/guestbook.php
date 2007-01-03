@@ -283,7 +283,7 @@ require("../../../adm_config/body_top.php");
                             </div>";
                         }
 
-                        if ($_GET['id'] == 0 && mysql_num_rows($comment_result) == 0 && commentGuestbook())
+                        if ($_GET['id'] == 0 && mysql_num_rows($comment_result) == 0 && $g_current_user->commentGuestbookRight())
                         {
                             // Falls keine Kommentare vorhanden sind, aber das Recht zur Kommentierung, wird der Link zur Kommentarseite angezeigt...
                             $load_url = "$g_root_path/adm_program/modules/guestbook/guestbook.php?id=$row->gbo_id";
@@ -372,7 +372,7 @@ require("../../../adm_config/body_top.php");
 
         // Ab hier kommt nun das Formular um neue Kommentare hinzuzufuegen...
         // ...natuerlich nur wenn das Recht gesetzt ist, eine ID uebergeben wurde und der Eintrag wirklich vorhanden ist...
-        if (commentGuestbook() && mysql_num_rows($guestbook_result) > 0 && $_GET['id'] > 0)
+        if ($g_current_user->commentGuestbookRight() && mysql_num_rows($guestbook_result) > 0 && $_GET['id'] > 0)
         {
             echo "
             <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
