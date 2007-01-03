@@ -312,7 +312,7 @@ if($mode != "csv")
 
     echo "
     <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-    <h1>$role_row->rol_name</h1>";
+    <h1>".$role_row->rol_name."&nbsp;&#40;".$cat_row->cat_name."&#41;</h1>";
 
     if($mode != "print")
     {
@@ -758,9 +758,15 @@ else
 
 
     //INFOBOX zur Gruppe
-    echo"<br /><br /><h3>Infobox: ".$role_row->rol_name."</h3>";
     echo "
+    <br /><br />
     <table class=\"$class_table\" style=\"width: 400px;\" cellpadding=\"2\" cellspacing=\"0\">";
+        //Kopf
+        echo"
+        <tr>
+            <th class=\"$class_header\" colspan=\"2\">Infobox: ".$role_row->rol_name."</th>
+        </tr>
+        ";
         //Kategorie
         echo"
         <tr>
