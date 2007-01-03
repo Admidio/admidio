@@ -249,9 +249,7 @@ if($_GET["job"]=="rotate")
     if($_GET["direction"]=="left"){
         left_rotate($pho_id, $_GET["bild"]);
     }
-
     // zur Ausgangsseite zurueck
-    $seite=$_GET["seite"];
     $location = "Location: $g_root_path/adm_program/system/back.php";
     header($location);
     exit();
