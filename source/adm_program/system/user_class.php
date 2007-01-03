@@ -547,6 +547,35 @@ class User
             return false;
         }
     }
+    
+    // Funktion prueft, ob der angemeldete User Gaestebucheintraege loeschen und editieren darf
+    function editGuestbookRight()
+    {
+        global $g_adm_con;
+        global $g_organization;
+
+        $sql    = "SELECT *
+                     FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
+                    WHERE mem_usr_id        = $this->id
+                      AND mem_rol_id        = rol_id
+                      AND mem_valid         = 1
+                      AND rol_org_shortname = '$g_organization'
+                      AND rol_guestbook     = 1
+                      AND rol_valid         = 1 ";
+        $result = mysql_query($sql, $g_adm_con);
+        db_error($result);
+
+        $edit_user = mysql_num_rows($result);
+
+        if ( $edit_user > 0 )
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
 
 }

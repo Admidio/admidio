@@ -69,7 +69,7 @@ if ($_GET["id"] != 0)
 {
     require("../../system/login_valid.php");
 
-    if (!editGuestbook())
+    if (!$g_current_user->editGuestbookRight())
     {
         $g_message->show("norights");
     }

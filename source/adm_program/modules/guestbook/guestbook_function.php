@@ -91,7 +91,7 @@ if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mod
     if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 5 || $_GET['mode'] == 6 || $_GET['mode'] == 7)
     {
         // Fuer die modes 2,3,5,6 und 7 werden editGuestbook-Rechte benoetigt
-        if(!editGuestbook())
+        if(!$g_current_user->editGuestbookRight())
         {
             $g_message->show("norights");
         }
