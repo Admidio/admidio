@@ -237,7 +237,7 @@ function delete ($pho_id, $bild)
 if($_GET["job"]=="rotate")
 {
     //bei Seitenaufruf ohne Moderationsrechte
-    if(!$g_session_valid || $g_session_valid && !editPhoto($adm_photo["pho_org_shortname"]))
+    if(!$g_session_valid || $g_session_valid && !editPhoto())
     {
         $g_message->show("photoverwaltungsrecht");
     }
