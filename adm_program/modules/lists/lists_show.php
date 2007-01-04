@@ -259,8 +259,11 @@ if($leiter == 0)
     }
 }
 
-// Url fuer die Zuruecknavigation merken
-$_SESSION['navigation']->addUrl($g_current_url);
+if($mode == "html")
+{
+    // Url fuer die Zuruecknavigation merken, aber nur in der Html-Ansicht
+    $_SESSION['navigation']->addUrl($g_current_url);
+}
 
 if($mode != "csv")
 {
