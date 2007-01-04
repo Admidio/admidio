@@ -34,7 +34,7 @@ $options= array(
             'Winter','Sonne', 'Fahrrad',
             'Kind','Familie', 'Spass', 'Urlaub',
             'Spielzeug','Computer','Internet',
-            'PHP','JavaScript','Mozilla','XML'
+            'PHP','JavaScript','Mozilla','XML', 'blablablablablablabla'
            );
 
 
@@ -42,7 +42,7 @@ $xml='<?xml version="1.0" encoding="iso-8859-1" ?>';
 
 if (!$_GET['query'])
 {
-    // keine Daten - kein Query
+    // Wenn keine Daten uebergeben werden gibt es auch nur ein leeres XML-Dokument
     $xml .= '<empty />';
 }
 else
@@ -54,11 +54,11 @@ else
         $q=strtolower($_GET['query']);
         if (strpos(strtolower($opt),$q)===0)
         {
-            $match[]="<li>$opt</li>";
+            $match[]="<li><a href=\"#\" onclick=\"someFunction()\">$opt</a></li>";
         }
     }
     sort($match);
-    $xml .= "<suggestions xmlns='http://www.w3.org/1999/xhtml'><ul>\n".join("\n",$match)."</ul></suggestions>";
+    $xml .= "<suggestions xmlns='http://www.w3.org/1999/xhtml'><ul class=\"autoSuggestions\">\n".implode("\n",$match)."</ul></suggestions>";
 }
 
 header('Content-Type: text/xml');
