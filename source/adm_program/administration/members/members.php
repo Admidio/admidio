@@ -148,43 +148,41 @@ echo "
             //aktuellen Wert merken
             oldValue = query;
 
-            //onLoad Handler setzen
-            resObject.onload=updateList_callback;
-
             //asynchronen GET-Request vorbereiten
             query=encodeURIComponent(query);
 
             resObject.open('GET', 'query_suggestions.php?query=' + query, false);
 
+            resObject.onreadystatechange =  updateList_callback;
+
             //Request absetzen
             resObject.send(null);
+
         }
 
         function updateList_callback()
         {
-            if(resObject.responseXML)
+            if (resObject.readyState == 4)
             {
-                //Ziel-Element festlegen
-                target = document.getElementById('suggestions');
-
-                //Vorschlagsliste
-                var list = resObject.responseXML.getElementsByTagName('suggestions');
-
-                if (list[0])
+                if(resObject.responseXML)
                 {
-                    var tmp = document.importNode(list[0].firstChild,true);
-                    target.replaceChild(tmp,target.firstChild);
+                    //Ziel-Element festlegen
+                    target = document.getElementById('suggestions');
+
+                    //Vorschlagsliste
+                    var list = resObject.responseXML.getElementsByTagName('suggestions');
+
+                    if (list[0])
+                    {
+                        var tmp = document.importNode(list[0].firstChild,true);
+                        target.replaceChild(tmp,target.firstChild);
+                    }
+                    else
+                    {
+                        //Vorschlaege loeschen
+                        target.innerHTML='&nbsp;';
+                    }
                 }
-                else
-                {
-                    //Vorschlaege loeschen
-                    target.innerHTML='&nbsp;';
-                }
-            }
-            else
-            {
-                //Irgendwas ist maechtig schief gelaufen
-                alert(resObject.responseText);
             }
         }
     </script>
@@ -255,20 +253,21 @@ require("../../../adm_config/body_top.php");
 
         //Hier gibt es jetzt noch die Suchbox...
         echo "
-        <fieldset style=\"width:250px;\">
-            <legend><b>Suche:</b></legend>
+        <div style=\"width: 250px;\">
             <form action=\"\" method=\"get\">
 
                 <!-- onkeyup aktualisiert die Liste - on keypress waere zu frueh -->
                 <input type=\"text\" value=\"\" name=\"queryForm\" id=\"queryForm\" autocomplete=\"off\" onkeyup=\"updateList();\" />
-                <input type=\"submit\" value=\"Senden\" />
+                <input type=\"submit\" value=\"Suchen\" />
+
 
             </form>
 
-            <!-- das ziel-DIV für die gefundenen Vorschläge -->
-            <div id=\"suggestions\" style=\"overflow:auto; height:100px; margin:5px; \">&nbsp;</div>
+            <!-- das ziel-DIV fuer die gefundenen Vorschlaege -->
+            <div id=\"suggestions\">&nbsp;</div>
 
-   </fieldset>";
+        </div>
+        ";
 
         echo "<p>";
 
