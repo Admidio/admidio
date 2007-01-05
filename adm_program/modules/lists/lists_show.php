@@ -317,6 +317,12 @@ if($mode != "csv")
     <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
     <h1>".$role_row->rol_name."&nbsp;&#40;".$cat_row->cat_name."&#41;</h1>";
 
+    //Beschreibung der Rolle einblenden
+    if(strlen($role_row->rol_description) > 0)
+    {
+        echo$role_row->rol_description."<br />";
+    }
+
     if($mode != "print")
     {
         echo "<p>";
@@ -761,76 +767,95 @@ else
 
 
     //INFOBOX zur Gruppe
-    echo "
-    <br /><br />
-    <table class=\"$class_table\" style=\"width: 400px;\" cellpadding=\"2\" cellspacing=\"0\">";
-        //Kopf
-        echo"
-        <tr>
-            <th class=\"$class_header\" colspan=\"2\">Infobox: ".$role_row->rol_name."</th>
-        </tr>
-        ";
-        //Kategorie
-        echo"
-        <tr>
-            <td>Kategorie:</td>
-            <td>".$cat_row->cat_name."</td>
-        </tr>";
-
-        //Beschreibung
-        if(strlen($role_row->rol_description) > 0)
-        {
-            echo"<tr>
-                <td>Beschreibung:</td>
-                <td>".$role_row->rol_description."</td>
+    //nur anzeigen wenn zusatzfelder gefüllt sind
+    if( strlen(mysqldate("d.m.y", $role_row->rol_start_date)>0
+        || $role_row->rol_weekday > 0
+        || ((strcmp(mysqltime("h:i", $role_row->rol_start_time), "00:00") != 0)&& $role_row->rol_start_time != NULL))
+        || strlen($role_row->rol_location) > 0
+        || strlen($role_row->rol_cost)
+        || strlen($role_row->rol_max_members) > 0)
+    {
+        echo "
+        <br /><br />
+        <table class=\"$class_table\" style=\"width: 400px;\" cellpadding=\"2\" cellspacing=\"0\">";
+            //Kopf
+            echo"
+            <tr>
+                <th class=\"$class_header\" colspan=\"2\">Infobox: ".$role_row->rol_name."</th>
+            </tr>
+            ";
+            //Kategorie
+            echo"
+            <tr>
+                <td>Kategorie:</td>
+                <td>".$cat_row->cat_name."</td>
             </tr>";
-        }
 
-        //Zeitraum
-        if(strlen(mysqldate("d.m.y", $role_row->rol_start_date)) > 0)
-        {
-            echo"<tr>
-                <td>Zeitraum:</td>
-                <td>". mysqldate("d.m.y", $role_row->rol_start_date). " bis ". mysqldate("d.m.y", $role_row->rol_end_date). "</td>
-            </tr>";
-        }
+            //Beschreibung
+            if(strlen($role_row->rol_description) > 0)
+            {
+                echo"<tr>
+                    <td>Beschreibung:</td>
+                    <td>".$role_row->rol_description."</td>
+                </tr>";
+            }
 
-        //Termin
-        if($role_row->rol_weekday > 0 || (  strcmp(mysqltime("h:i", $role_row->rol_start_time), "00:00") != 0)
-            && $role_row->rol_start_time != NULL )
-        {
-            echo"<tr>
-                <td>Termin: </td>
-                <td>". $arrDay[$role_row->rol_weekday-1];
-                    if(strcmp(mysqltime("h:i", $role_row->rol_start_time), "00:00") != 0)
-                    {
-                        echo " von ". mysqltime("h:i", $role_row->rol_start_time). " bis ". mysqltime("h:i", $role_row->rol_end_time);
-                    }
+            //Zeitraum
+            if(strlen(mysqldate("d.m.y", $role_row->rol_start_date)) > 0)
+            {
+                echo"<tr>
+                    <td>Zeitraum:</td>
+                    <td>". mysqldate("d.m.y", $role_row->rol_start_date). " bis ". mysqldate("d.m.y", $role_row->rol_end_date). "</td>
+                </tr>";
+            }
 
-                echo"</td>
-            </tr>";
-        }
+            //Termin
+            if($role_row->rol_weekday > 0 || (  strcmp(mysqltime("h:i", $role_row->rol_start_time), "00:00") != 0)
+                && $role_row->rol_start_time != NULL )
+            {
+                echo"<tr>
+                    <td>Termin: </td>
+                    <td>". $arrDay[$role_row->rol_weekday-1];
+                        if(strcmp(mysqltime("h:i", $role_row->rol_start_time), "00:00") != 0)
+                        {
+                            echo " von ". mysqltime("h:i", $role_row->rol_start_time). " bis ". mysqltime("h:i", $role_row->rol_end_time);
+                        }
 
-        //Treffpunkt
-        if(strlen($role_row->rol_location) > 0)
-        {
-            echo"<tr>
-                <td>Treffpunkt:</td>
-                <td>".$role_row->rol_location."</td>
-            </tr>";
-        }
+                    echo"</td>
+                </tr>";
+            }
 
-        //Beitrag
-        if(strlen($role_row->rol_cost) > 0)
-        {
-            echo"<tr>
-                <td>Beitrag:</td>
-                <td>$role_row->rol_cost &euro;</td>
-            </tr>";
-        }
+            //Treffpunkt
+            if(strlen($role_row->rol_location) > 0)
+            {
+                echo"<tr>
+                    <td>Treffpunkt:</td>
+                    <td>".$role_row->rol_location."</td>
+                </tr>";
+            }
 
-    echo"</table>";
+            //Beitrag
+            if(strlen($role_row->rol_cost) > 0)
+            {
+                echo"<tr>
+                    <td>Beitrag:</td>
+                    <td>$role_row->rol_cost &euro;</td>
+                </tr>";
+            }
+
+            //maximale Teilnehmerzahl
+            if(strlen($role_row->rol_max_members) > 0)
+            {
+                echo"<tr>
+                    <td>Max. Teilnehmer:</td>
+                    <td>$role_row->rol_max_members</td>
+                </tr>";
+            }
+
+        echo"</table>";
+    }
     // Ende Infobox
+
 
     if($mode != "print")
     {
