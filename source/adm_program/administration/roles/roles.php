@@ -137,7 +137,7 @@ require("../../../adm_config/body_top.php");
                         }
                         if($row->rol_edit_user == 1)
                         {
-                            echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/user.png\"
+                            echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/users.png\"
                             alt=\"Daten aller Benutzer bearbeiten\" title=\"Daten aller Benutzer bearbeiten\">";
                         }
                         if($row->rol_announcements == 1)

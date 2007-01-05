@@ -168,35 +168,29 @@ echo "
 
     echo "
     <script type=\"text/javascript\">
-
-
         function hinzufuegen()
         {
-            NeuerEintrag = new Option(document.TerminAnlegen.AllRoles.options[document.TerminAnlegen.AllRoles.selectedIndex].text, document.TerminAnlegen.AllRoles.options[document.TerminAnlegen.AllRoles.selectedIndex].value, false, true);
-            document.TerminAnlegen.AllRoles.options[document.TerminAnlegen.AllRoles.selectedIndex] = null;
-            document.TerminAnlegen.elements['ChildRoles[]'].options[document.TerminAnlegen.elements['ChildRoles[]'].length] = NeuerEintrag;
+            NeuerEintrag = new Option(document.formRole.AllRoles.options[document.formRole.AllRoles.selectedIndex].text, document.formRole.AllRoles.options[document.formRole.AllRoles.selectedIndex].value, false, true);
+            document.formRole.AllRoles.options[document.formRole.AllRoles.selectedIndex] = null;
+            document.formRole.elements['ChildRoles[]'].options[document.formRole.elements['ChildRoles[]'].length] = NeuerEintrag;
         }
 
         function entfernen()
         {
-            NeuerEintrag = new Option(document.TerminAnlegen.elements['ChildRoles[]'].options[document.TerminAnlegen.elements['ChildRoles[]'].selectedIndex].text, document.TerminAnlegen.elements['ChildRoles[]'].options[document.TerminAnlegen.elements['ChildRoles[]'].selectedIndex].value, false, true);
-            document.TerminAnlegen.elements['ChildRoles[]'].options[document.TerminAnlegen.elements['ChildRoles[]'].selectedIndex] = null;
-            document.TerminAnlegen.AllRoles.options[document.TerminAnlegen.AllRoles.length] = NeuerEintrag;
+            NeuerEintrag = new Option(document.formRole.elements['ChildRoles[]'].options[document.formRole.elements['ChildRoles[]'].selectedIndex].text, document.formRole.elements['ChildRoles[]'].options[document.formRole.elements['ChildRoles[]'].selectedIndex].value, false, true);
+            document.formRole.elements['ChildRoles[]'].options[document.formRole.elements['ChildRoles[]'].selectedIndex] = null;
+            document.formRole.AllRoles.options[document.formRole.AllRoles.length] = NeuerEintrag;
         }
 
         function absenden()
         {
-            for (var i = 0; i < document.TerminAnlegen.elements['ChildRoles[]'].options.length; i++)
+            for (var i = 0; i < document.formRole.elements['ChildRoles[]'].options.length; i++)
             {
-                document.TerminAnlegen.elements['ChildRoles[]'].options[i].selected = true;
+                document.formRole.elements['ChildRoles[]'].options[i].selected = true;
             }
 
-            document.TerminAnlegen.submit();
+            document.formRole.submit();
         }
-
-
-
-
     </script>";
 
     require("../../../adm_config/header.php");
@@ -204,7 +198,7 @@ echo "</head>";
 
 require("../../../adm_config/body_top.php");
     echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-        <form action=\"roles_function.php?rol_id=$rol_id&amp;mode=2\" method=\"post\" name=\"TerminAnlegen\">
+        <form action=\"roles_function.php?rol_id=$rol_id&amp;mode=2\" method=\"post\" name=\"formRole\">
             <div class=\"formHead\">";
                 if($rol_id > 0)
                 {
@@ -305,7 +299,7 @@ require("../../../adm_config/body_top.php");
                                 echo " checked ";
                             }
                             echo " value=\"1\" />&nbsp;
-                            <label for=\"users\"><img src=\"$g_root_path/adm_program/images/user.png\" alt=\"Daten aller Benutzer bearbeiten\"></label>
+                            <label for=\"users\"><img src=\"$g_root_path/adm_program/images/users.png\" alt=\"Daten aller Benutzer bearbeiten\"></label>
                         </div>
                         <div style=\"text-align: left; margin-left: 12%;\">
                             <label for=\"users\">Daten aller Benutzer bearbeiten&nbsp;</label>
@@ -439,32 +433,33 @@ require("../../../adm_config/body_top.php");
                     </div>
                 </div>
 
-                            <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 90%;\">
-                <div class=\"groupBoxHeadline\">Abh&auml;ngigkeiten</div>
+                <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 90%;\">
+                    <div class=\"groupBoxHeadline\">Abh&auml;ngigkeiten</div>
 
-                <div style=\"margin-top: 6px;\">Ein Mitglied der nachfolgenden Rollen soll auch automatisch Mitglied in dieser Rolle sein!
-                    <div style=\"text-align: left; margin-left: 30%;\">";
+                    <div style=\"margin-top: 6px;\">
+                        <p>Ein Mitglied der nachfolgenden Rollen soll auch automatisch Mitglied in dieser Rolle sein!</p>
+                        <div style=\"text-align: left; float: left; margin-left: 5%; margin-right: 10%;\">";
 
-                                // holt eine Liste der ausgewählten Rolen
-                                $childRoles = RoleDependency::getChildRoles($g_adm_con,$rol_id);
+                            // holt eine Liste der ausgewählten Rolen
+                            $childRoles = RoleDependency::getChildRoles($g_adm_con,$rol_id);
 
-                                // Alle Rollen auflisten, die der Webmaster sehen darf
-                                $sql    = "SELECT * FROM ". TBL_ROLES. "
-                                    WHERE rol_org_shortname = '$g_organization'
-                                      AND rol_valid         = 1
-                                    ORDER BY rol_id";
-                                $allRoles = mysql_query($sql, $g_adm_con);
-                                db_error($allRoles);
+                            // Alle Rollen auflisten, die der Webmaster sehen darf
+                            $sql    = "SELECT * FROM ". TBL_ROLES. "
+                                WHERE rol_org_shortname = '$g_organization'
+                                  AND rol_valid         = 1
+                                ORDER BY rol_id";
+                            $allRoles = mysql_query($sql, $g_adm_con);
+                            db_error($allRoles);
 
-                                if($childRoles == -1)
-                                    $noChildRoles = true;
-                                else
-                                    $noChildRoles = false;
+                            if($childRoles == -1)
+                                $noChildRoles = true;
+                            else
+                                $noChildRoles = false;
 
-                                $childRoleObjects = array();
+                            $childRoleObjects = array();
 
-                                echo "unabhaengig &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; abhaengig <br>";
-                                echo "<select name=\"AllRoles\" size=\"8\">";
+                            echo "unabh&auml;ngig<br>
+                            <select name=\"AllRoles\" size=\"8\" style=\"width: 200px;\">";
                                 while($row = mysql_fetch_object($allRoles))
                                 {
                                     if(in_array($row->rol_id,$childRoles)  )
@@ -474,26 +469,29 @@ require("../../../adm_config/body_top.php");
                                     else
                                     echo "<option value=\"$row->rol_id\">$row->rol_name</option>";
                                 }
-                                echo "</select>";
-                                echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-                                echo "<select name=\"ChildRoles[]\" size=\"8\" multiple>";
+                            echo "</select>
+                            <br>
+                            <span class=\"iconLink\">
+                                <a class=\"iconLink\" href=\"javascript:hinzufuegen()\"><img
+                                class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Feld hinzuf&uuml;gen\"></a>
+                                <a class=\"iconLink\" href=\"javascript:hinzufuegen()\">Rolle hinzuf&uuml;gen</a>
+                            </span>
+                        </div>
+                        <div>
+                            abh&auml;ngig<br>
+                            <select name=\"ChildRoles[]\" size=\"8\" multiple style=\"width: 200px;\">";
                                 foreach ($childRoleObjects as $childRoleObject)
+                                {
                                     echo "<option value=\"$childRoleObject->rol_id\">$childRoleObject->rol_name</option>";
-                                echo "</select>";
-                                echo "<br>";
-                                echo "<span class=\"iconLink\">
-                                    <a class=\"iconLink\" href=\"javascript:hinzufuegen()\"><img
-                                    class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Feld hinzuf&uuml;gen\"></a>
-                                    <a class=\"iconLink\" href=\"javascript:hinzufuegen()\">Rolle hinzuf&uuml;gen</a>
-                                    <a class=\"iconLink\" href=\"javascript:entfernen()\"><img
-                                    class=\"iconLink\" src=\"$g_root_path/adm_program/images/delete.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Feld hinzuf&uuml;gen\"></a>
-                                    <a class=\"iconLink\" href=\"javascript:entfernen()\">Rolle entfernen</a>
-                                    </span><br>";
-
-
-
-
-                  echo "</div>
+                                }
+                            echo "</select>
+                            <br>
+                            <span class=\"iconLink\">
+                                <a class=\"iconLink\" href=\"javascript:entfernen()\"><img
+                                class=\"iconLink\" src=\"$g_root_path/adm_program/images/delete.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Feld hinzuf&uuml;gen\"></a>
+                                <a class=\"iconLink\" href=\"javascript:entfernen()\">Rolle entfernen</a>
+                            </span>
+                        </div>
                     </div>
                 </div>
 
