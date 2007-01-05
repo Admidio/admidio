@@ -164,25 +164,19 @@ echo "
         {
             if (resObject.readyState == 4)
             {
-                if(resObject.responseXML)
-                {
                     //Ziel-Element festlegen
                     target = document.getElementById('suggestions');
 
-                    //Vorschlagsliste
-                    var list = resObject.responseXML.getElementsByTagName('suggestions');
-
-                    if (list[0])
+                    if (resObject.responseText)
                     {
-                        var tmp = document.importNode(list[0].firstChild,true);
-                        target.replaceChild(tmp,target.firstChild);
+                        //Vorschlaege in die Seite einbetten
+                        target.innerHTML = resObject.responseText;
                     }
                     else
                     {
                         //Vorschlaege loeschen
                         target.innerHTML='&nbsp;';
                     }
-                }
             }
         }
     </script>
