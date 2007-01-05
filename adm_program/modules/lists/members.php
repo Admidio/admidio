@@ -52,7 +52,8 @@ if(isset($_GET["restrict"]) && $_GET["restrict"] != "m" && $_GET["restrict"] != 
     $g_message->show("invalid");
 }
 
-//URL auf Navigationstack ablegen
+
+//URL auf Navigationstack ablegen, wenn werder selbstaufruf der Seite, noch interner Ankeraufruf
 if(!isset($_GET["restrict"]))
 {
     $_SESSION['navigation']->addUrl($g_current_url);
@@ -371,9 +372,9 @@ echo"
       //Buttons schliessen oder Speichern
         echo"<a name=\"Ende\"></a>
         <div style=\"margin: 8px;\">
-            <button name=\"schliessen\" type=\"button\" value=\"schliessen\" onclick=\"window.close()\">
-                <img src=\"$g_root_path/adm_program/images/door_in.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Schlie&szlig;en\">&nbsp;Schlie&szlig;en
-            </button>
+            <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
+                    <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
+                    &nbsp;Zur&uuml;ck</button>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
             <button name=\"speichern\" type=\"submit\" value=\"speichern\">
                 <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">&nbsp;Speichern
