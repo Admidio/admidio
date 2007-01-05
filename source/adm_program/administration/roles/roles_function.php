@@ -44,7 +44,8 @@ if(!isModerator())
 
 // Uebergabevariablen pruefen
 
-if(is_numeric($_GET["mode"]) == false
+if(isset($_GET["mode"]) == false
+|| is_numeric($_GET["mode"]) == false
 || $_GET["mode"] < 1 || $_GET["mode"] > 6)
 {
     $g_message->show("invalid");
@@ -57,6 +58,19 @@ if(isset($_GET["rol_id"]) && is_numeric($_GET["rol_id"]) == false)
 else
 {
     $rol_id = $_GET['rol_id'];
+}
+
+// Pruefung, ob die Rolle zur aktuellen Organisation gehoert
+$sql    = "SELECT * FROM ". TBL_ROLES. " 
+            WHERE rol_id            = {0}
+              AND rol_org_shortname = '$g_organization' ";
+$sql    = prepareSQL($sql, array($_GET["rol_id"]));
+$result = mysql_query($sql, $g_adm_con);
+db_error($result);
+
+if (mysql_num_rows($result) == 0)
+{
+    $g_message->show("invalid");
 }
 
 $_SESSION['roles_request'] = $_REQUEST;
@@ -81,7 +95,7 @@ if($_GET["mode"] == 1)
     echo "</head>";
 
     require("../../../adm_config/body_top.php");
-		echo "<div align=\"center\"><br /><br /><br />
+        echo "<div align=\"center\"><br /><br /><br />
             <div class=\"formHead\" style=\"width: 400px\">". strspace("Rolle l&ouml;schen"). "</div>
 
             <div class=\"formBody\" style=\"width: 400px\">
@@ -128,10 +142,9 @@ elseif($_GET["mode"] == 2)
             // Schauen, ob die Rolle bereits existiert
             $sql    = "SELECT COUNT(*) FROM ". TBL_ROLES. "
                         WHERE rol_org_shortname LIKE '$g_organization'
-                          AND rol_name          LIKE {0} ";
-                          // erst einmal rausgenommen, noch sind keine doppelten Namen moeglich
-                          //AND rol_rlc_id        =    {1} ";
-            $sql    = prepareSQL($sql, array($_POST['name']/*, $_POST['category']*/));
+                          AND rol_name          LIKE {0}
+                          AND rol_rlc_id        =    {1} ";
+            $sql    = prepareSQL($sql, array($_POST['name'], $_POST['category']));
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
             $row = mysql_fetch_array($result);
@@ -412,7 +425,7 @@ elseif($_GET["mode"] == 2)
                                                   , rol_cost          = {6}
                                                   , rol_last_change   = '$act_date'
                                                   , rol_usr_id_change = $g_current_user->id
-                        WHERE rol_id = {7}";
+                        WHERE rol_id = {7} ";
             }
             else
             {
@@ -435,43 +448,43 @@ elseif($_GET["mode"] == 2)
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
 
-			//Reset des Rechtecache in der UserKlasse für den aendernen User
-			$g_current_user->clearRights();
+            //Reset des Rechtecache in der UserKlasse für den aendernen User
+            $g_current_user->clearRights();
 
-			//Rollenabhaengigkeiten setzten
-			if(array_key_exists("ChildRoles", $_POST))
+            //Rollenabhaengigkeiten setzten
+            if(array_key_exists("ChildRoles", $_POST))
             {
 
-				$sentChildRoles = $_POST['ChildRoles'];
-				// holt eine Liste der ausgewählten Rolen
-		        $DBChildRoles = RoleDependency::getChildRoles($g_adm_con,$rol_id);
+                $sentChildRoles = $_POST['ChildRoles'];
+                // holt eine Liste der ausgewählten Rolen
+                $DBChildRoles = RoleDependency::getChildRoles($g_adm_con,$rol_id);
 
-				$roleDep = new RoleDependency($g_adm_con);
+                $roleDep = new RoleDependency($g_adm_con);
 
-				//entferne alle Rollen die nicht mehr ausgewählt sind
-				foreach ($DBChildRoles as $DBChildRole)
-				{
-					if(in_array($DBChildRole,$sentChildRoles))
-						continue;
-					else
-					{
-						$roleDep->get($DBChildRole,$rol_id);
-						$roleDep->delete();
-					}
-				}
-				//fuege alle neuen Rolen hinzu
-				foreach ($sentChildRoles as $sentChildRole)
-				{
-					if(in_array($sentChildRole,$DBChildRoles))
-						continue;
-					else
-					{
-						$roleDep->clear();
-						$roleDep->setChild($sentChildRole);
-						$roleDep->setParent($rol_id);
-						$roleDep->insert($g_current_user->id);
-					}
-				}
+                //entferne alle Rollen die nicht mehr ausgewählt sind
+                foreach ($DBChildRoles as $DBChildRole)
+                {
+                    if(in_array($DBChildRole,$sentChildRoles))
+                        continue;
+                    else
+                    {
+                        $roleDep->get($DBChildRole,$rol_id);
+                        $roleDep->delete();
+                    }
+                }
+                //fuege alle neuen Rolen hinzu
+                foreach ($sentChildRoles as $sentChildRole)
+                {
+                    if(in_array($sentChildRole,$DBChildRoles))
+                        continue;
+                    else
+                    {
+                        $roleDep->clear();
+                        $roleDep->setChild($sentChildRole);
+                        $roleDep->setParent($rol_id);
+                        $roleDep->insert($g_current_user->id);
+                    }
+                }
 
             }
 
@@ -564,7 +577,7 @@ elseif($_GET["mode"] == 5)
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
 
-   	// Name der Rolle auslesen
+    // Name der Rolle auslesen
     $sql = "SELECT rol_name FROM ". TBL_ROLES. "
              WHERE rol_id = {0}";
     $sql    = prepareSQL($sql, array($rol_id));
