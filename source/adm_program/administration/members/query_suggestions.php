@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Script mit HTML-Code fuer ein Feld der Eigenen-Liste-Konfiguration
+ * Script mit HTML-Code fuer eine Liste mit Suchvorschlaegen
  *
  * Copyright    : (c) 2004 - 2006 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -37,13 +37,10 @@ $options= array(
             'PHP','JavaScript','Mozilla','XML', 'blablablablablablabla'
            );
 
-
-$xml='<?xml version="1.0" encoding="iso-8859-1" ?>';
-
-if (!$_GET['query'])
+if (!isset($_GET['query']) || !$_GET['query'])
 {
-    // Wenn keine Daten uebergeben werden gibt es auch nur ein leeres XML-Dokument
-    $xml .= '<empty />';
+    // Wenn keine Daten uebergeben werden gibt es auch nur ein leeres Dokument
+    $output = null;
 }
 else
 {
@@ -58,10 +55,10 @@ else
         }
     }
     sort($match);
-    $xml .= "<suggestions xmlns='http://www.w3.org/1999/xhtml'><ul class=\"autoSuggestions\">\n".implode("\n",$match)."</ul></suggestions>";
+    $output = "<ul class=\"autoSuggestions\">\n".implode("\n",$match)."</ul>";
 }
 
-header('Content-Type: text/xml');
-echo $xml;
+header('Content-Type: text/html');
+echo $output;
 
 ?>
