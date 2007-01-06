@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Script mit HTML-Code fuer eine Liste mit Suchvorschlaegen
+ * Script mit HTML-Code fuer ein Feld der Eigenen-Liste-Konfiguration
  *
  * Copyright    : (c) 2004 - 2006 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -34,13 +34,16 @@ $options= array(
             'Winter','Sonne', 'Fahrrad',
             'Kind','Familie', 'Spass', 'Urlaub',
             'Spielzeug','Computer','Internet',
-            'PHP','JavaScript','Mozilla','XML', 'blablablablablablabla'
+            'PHP','JavaScript','Mozilla','XML'
            );
+
+
+$xml='<?xml version="1.0" encoding="iso-8859-1" ?>';
 
 if (!isset($_GET['query']) || !$_GET['query'])
 {
-    // Wenn keine Daten uebergeben werden gibt es auch nur ein leeres Dokument
-    $output = null;
+    // kein Query - keine Daten...
+    $xml .= '<results></results>';
 }
 else
 {
@@ -51,14 +54,14 @@ else
         $q=strtolower($_GET['query']);
         if (strpos(strtolower($opt),$q)===0)
         {
-            $match[]="<li><a href=\"#\" onclick=\"someFunction()\">$opt</a></li>";
+            $match[]="<rs>$opt</rs>";
         }
     }
     sort($match);
-    $output = "<ul class=\"autoSuggestions\">\n".implode("\n",$match)."</ul>";
+    $xml .= "<results>\n".join("\n",$match)."</results>";
 }
 
-header('Content-Type: text/html');
-echo $output;
+header('Content-Type: text/xml');
+echo $xml;
 
 ?>

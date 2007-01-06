@@ -123,63 +123,11 @@ echo "
 <head>
     <title>$g_current_organization->longname - Benutzerverwaltung</title>
     <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
+    <link rel=\"stylesheet\" type=\"text/css\" href=\"autosuggest.css\">
 
-    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/ajax.js\"></script>
-
-    <script type=\"text/javascript\">
-        var resObject     = createXMLHttpRequest();
-        var oldValue;
-
-        function updateList()
-        {
-            if (!resObject)
-            {
-                return;
-            }
-
-            var query = document.getElementById('queryForm').value;
-
-            //Unnoetige Requests sollen natuerlich vermieden werden
-            if (query == oldValue)
-            {
-                return;
-            }
-
-            //aktuellen Wert merken
-            oldValue = query;
-
-            //asynchronen GET-Request vorbereiten
-            query=encodeURIComponent(query);
-
-            resObject.open('GET', 'query_suggestions.php?query=' + query, false);
-
-            resObject.onreadystatechange =  updateList_callback;
-
-            //Request absetzen
-            resObject.send(null);
-
-        }
-
-        function updateList_callback()
-        {
-            if (resObject.readyState == 4)
-            {
-                    //Ziel-Element festlegen
-                    target = document.getElementById('suggestions');
-
-                    if (resObject.responseText)
-                    {
-                        //Vorschlaege in die Seite einbetten
-                        target.innerHTML = resObject.responseText;
-                    }
-                    else
-                    {
-                        //Vorschlaege loeschen
-                        target.innerHTML='&nbsp;';
-                    }
-            }
-        }
-    </script>
+    <script type=\"text/javascript\" src=\"bsn.Ajax.js\"></script>
+    <script type=\"text/javascript\" src=\"bsn.DOM.js\"></script>
+    <script type=\"text/javascript\" src=\"bsn.AutoSuggest.js\"></script>
 
     <!--[if lt IE 7]>
     <script language=\"JavaScript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
@@ -248,19 +196,21 @@ require("../../../adm_config/body_top.php");
         //Hier gibt es jetzt noch die Suchbox...
         echo "
         <div style=\"width: 250px;\">
-            <form action=\"\" method=\"get\">
-
-                <!-- onkeyup aktualisiert die Liste - on keypress waere zu frueh -->
-                <input type=\"text\" value=\"\" name=\"queryForm\" id=\"queryForm\" autocomplete=\"off\" onkeyup=\"updateList();\" />
+            <form action=\"members.php?members=$members=\" method=\"post\">
+                <input type=\"text\" value=\"\" name=\"queryForm\" id=\"queryForm\" autocomplete=\"off\"  />
                 <input type=\"submit\" value=\"Suchen\" />
-
-
             </form>
-
-            <!-- das ziel-DIV fuer die gefundenen Vorschlaege -->
-            <div id=\"suggestions\">&nbsp;</div>
-
         </div>
+
+        <script type=\"text/javascript\">
+            var options = {
+                        script:\"query_suggestions.php?\",
+                        varname:\"query\",
+                        minchars:1,
+                        timeout:10000
+            };
+            var as = new AutoSuggest('queryForm', options);
+        </script>
         ";
 
         echo "<p>";
