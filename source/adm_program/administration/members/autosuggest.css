@@ -1,0 +1,27 @@
+/* Layout fuer die Autosuggestions bei Suchfeldern */
+ul.autosuggest {
+    position:   absolute;
+    list-style: none;
+    margin:     0;
+    padding:    0;
+    text-align: left;
+    overflow-y: auto;
+}
+
+ul.autosuggest li a:link,
+ul.autosuggest li a:visited {
+    display:          block;
+    padding:          2px;
+    text-decoration:  none;
+    background-color: #eaeaea;
+}
+
+ul.autosuggest li a:hover,
+ul.autosuggest li a:active {
+    background-color: #cccccc;
+}
+
+ul.autosuggest li.highlight a:link,
+ul.autosuggest li.highlight a:visited {
+    background-color: #cccccc;
+}
