@@ -426,12 +426,11 @@ class User
 	    {
 	    	$profileID = $this->id;
 	    }
-
-
-	    //soll das eigene Profil bearbeitet werden?
+        
+        //soll das eigene Profil bearbeitet werden?
 	    if($profileID == $this->id)
 	    {
-	    	// Prüfen ob die Datenbank schon abgefragt wurde, wenn nicht dann Recht auslesen
+	    	// Pruefen ob die Datenbank schon abgefragt wurde, wenn nicht dann Recht auslesen
 	    	if($this->editProfile == -1)
 	    	{
 	    		$sql    =  "SELECT *
@@ -463,7 +462,7 @@ class User
 	    	}
 	    	else
 	    	{
-	    		return false;
+	    		return $this->editUser();
 	    	}
 
 
