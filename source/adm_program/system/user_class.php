@@ -75,6 +75,8 @@ class User
     //User Rechte
     var $editProfile;
     var $editUser;
+    var $commentGuestbookRight;
+    var $editGuestbookRight;
 
     // Konstruktor
     function User($connection)
@@ -176,6 +178,8 @@ class User
         // User Rechte vorbelegen
         $this->editProfile = -1;
         $this->editUser = -1;
+        $this->editGuestbookRight = -1;
+        $this->commentGuestbookRight = -1;
     }
 
     // alle Rechtevariablen wieder zuruecksetzen
@@ -183,6 +187,8 @@ class User
     {
         $this->editProfile = -1;
         $this->editUser = -1;
+        $this->editGuestbookRight = -1;
+        $this->commentGuestbookRight = -1;
     }
 
     // aktuelle Userdaten in der Datenbank updaten
@@ -521,23 +527,35 @@ class User
     // Funktion prueft, ob der angemeldete User Gaestebucheintraege kommentieren darf
     function commentGuestbookRight()
     {
-        global $g_adm_con;
-        global $g_organization;
+         if($this->commentGuestbookRight == -1)
+         {
+            global $g_adm_con;
+            global $g_organization;
 
-        $sql    = "SELECT *
-                     FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-                    WHERE mem_usr_id             = $this->id
-                      AND mem_rol_id             = rol_id
-                      AND mem_valid              = 1
-                      AND rol_org_shortname      = '$g_organization'
-                      AND rol_guestbook_comments = 1
-                      AND rol_valid              = 1 ";
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
+            $sql    = "SELECT *
+                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
+                        WHERE mem_usr_id             = $this->id
+                          AND mem_rol_id             = rol_id
+                          AND mem_valid              = 1
+                          AND rol_org_shortname      = '$g_organization'
+                          AND rol_guestbook_comments = 1
+                          AND rol_valid              = 1 ";
+            $result = mysql_query($sql, $g_adm_con);
+            db_error($result);
 
-        $edit_user = mysql_num_rows($result);
+            $edit_user = mysql_num_rows($result);
 
-        if ( $edit_user > 0 )
+            if ( $edit_user > 0 )
+            {
+                $this->commentGuestbookRight = 1;
+            }
+            else
+            {
+                $this->commentGuestbookRight = 0;
+            }
+        }
+        
+        if($this->commentGuestbookRight == 1)
         {
             return true;
         }
@@ -550,23 +568,36 @@ class User
     // Funktion prueft, ob der angemeldete User Gaestebucheintraege loeschen und editieren darf
     function editGuestbookRight()
     {
-        global $g_adm_con;
-        global $g_organization;
+            
+        if($this->editGuestbookRight == -1)
+        {
+            global $g_adm_con;
+            global $g_organization;
 
-        $sql    = "SELECT *
-                     FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-                    WHERE mem_usr_id        = $this->id
-                      AND mem_rol_id        = rol_id
-                      AND mem_valid         = 1
-                      AND rol_org_shortname = '$g_organization'
-                      AND rol_guestbook     = 1
-                      AND rol_valid         = 1 ";
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
+            $sql    = "SELECT *
+                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
+                        WHERE mem_usr_id        = $this->id
+                          AND mem_rol_id        = rol_id
+                          AND mem_valid         = 1
+                          AND rol_org_shortname = '$g_organization'
+                          AND rol_guestbook     = 1
+                          AND rol_valid         = 1 ";
+            $result = mysql_query($sql, $g_adm_con);
+            db_error($result);
 
-        $edit_user = mysql_num_rows($result);
+            $edit_user = mysql_num_rows($result);
 
-        if ( $edit_user > 0 )
+            if ( $edit_user > 0 )
+            {
+                $this->editGuestbookRight = 1;
+            }
+            else
+            {
+                $this->editGuestbookRight = 0;
+            }
+        }
+        
+        if ( $this->editGuestbookRight == 1)
         {
             return true;
         }
@@ -574,6 +605,7 @@ class User
         {
             return false;
         }
+        
     }
 
 
