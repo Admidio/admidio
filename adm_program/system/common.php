@@ -120,7 +120,7 @@ else
 // Daten des angemeldeten Users auch in Session speichern
 if(isset($_SESSION['g_current_user']))
 {
-    $g_current_user = $_SESSION['g_current_user'];
+    $g_current_user =& $_SESSION['g_current_user'];
     $g_current_user->db_connection = $g_adm_con;
 }
 else
