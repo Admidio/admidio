@@ -88,6 +88,7 @@ $_SESSION['navigation']->addUrl($g_current_url);
 
 unset($_SESSION['links_request']);
 
+// Hier eingerichtet, damit es später noch in den Orga-Einstellungen verwendet werden kann
 $linksPerPage = 10;
 
 echo "
@@ -150,8 +151,24 @@ require("../../../adm_config/body_top.php");
 
         // Gucken wieviele Linkdatensaetze insgesamt fuer die Gruppierung vorliegen...
         // Das wird naemlich noch fuer die Seitenanzeige benoetigt...
-        $sql    = "SELECT COUNT(*) FROM ". TBL_LINKS. "
-                   WHERE lnk_org_id = '$g_current_organization->id'";
+        if ($g_session_valid == false)
+        {
+            // Wenn User nicht eingeloggt ist, Kategorien, die hidden sind, aussortieren
+            $sql    = "SELECT COUNT(*) FROM ". TBL_LINKS. " AS L
+                      JOIN ". TBL_CATEGORIES ." AS C
+                      ON L.lnk_cat_id = C.cat_id
+                      WHERE L.lnk_org_id = '$g_current_organization->id'
+                      AND C.cat_org_id = '$g_current_organization->id'
+                      AND C.cat_type = 'LNK' 
+                      AND C.cat_hidden = '0'";    
+        } 
+        else
+        {   
+            // Alle Kategorien anzeigen
+            $sql    = "SELECT COUNT(*) FROM ". TBL_LINKS. "
+                      WHERE lnk_org_id = '$g_current_organization->id'";
+        }
+        
         $result = mysql_query($sql, $g_adm_con);
         db_error($result);
         $row = mysql_fetch_array($result);
@@ -199,9 +216,9 @@ require("../../../adm_config/body_top.php");
         else
         {
 
-            // Z�hlervariable f�r Anzahl von mysql_fetch_object
+            // Zählervariable für Anzahl von mysql_fetch_object
             $j = 0;
-            // Z�hlervariable f�r Anzahl der Links in einer Kategorie
+            // Zählervariable für Anzahl der Links in einer Kategorie
             $i = 0;
             // �berhaupt etwas geschrieben? -> Wichtig, wenn es nur versteckte Kategorien gibt.
             $did_write_something = false;
@@ -209,7 +226,7 @@ require("../../../adm_config/body_top.php");
             $previous_cat_id = -1;
             // Kommt jetzt eine neue Kategorie?
             $new_category = true;
-            // Schreibe diese Kategorie nicht! Sie ist versteckt und der Usert nicht eingeloggt
+            // Schreibe diese Kategorie nicht! Sie ist versteckt und der User nicht eingeloggt
             $dont_write = false;
                 
                 // Solange die vorherige Kategorie-ID sich nicht ver�ndert...
@@ -316,7 +333,7 @@ require("../../../adm_config/body_top.php");
              }
              
              echo "</div>";
-        } // Ende Wenn mehr als 0 Datens�tze
+        } // Ende Wenn mehr als 0 Datensätze
 
         if (mysql_num_rows($links_result) > 2)
         {
