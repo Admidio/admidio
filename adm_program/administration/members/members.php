@@ -34,12 +34,12 @@ require("../../system/common.php");
 require("../../system/login_valid.php");
 
 // nur berechtigte User duerfen die Mitgliederverwaltung aufrufen
-if(!$g_current_user->editUser())
+if (!$g_current_user->editUser())
 {
     $g_message->show("norights");
 }
 
-if(isset($_GET['members']) && is_numeric($_GET['members']))
+if (isset($_GET['members']) && is_numeric($_GET['members']))
 {
     $members = $_GET['members'];
 }
@@ -48,7 +48,20 @@ else
     $members = 1;
 }
 
-if(isset($_GET['letter']) && strlen($_GET["letter"]) > 2)
+if (isset($_POST['queryForm']) && strlen($_POST['queryForm']) > 0)
+{
+    $queryForm = strStripTags($_POST['queryForm']);
+}
+else
+{
+    $queryForm = null;
+}
+
+// Die zum Caching in der Session zwischengespeicherten Namen werden beim
+// neu laden der Seite immer abgeraeumt...
+unset ($_SESSION['QuerySuggestions']);
+
+if (isset($_GET['letter']) && strlen($_GET["letter"]) > 2)
 {
     $g_message->show("invalid");
 }
@@ -76,32 +89,69 @@ else
     $letter = "%";
 }
 
-// alle Mitglieder zur Auswahl selektieren
-// unbestaetigte User werden dabei nicht angezeigt
-if($members == true)
+
+if ($queryForm)
 {
-    $sql    = "SELECT DISTINCT usr_id, usr_last_name, usr_first_name, usr_email, usr_homepage,
-                      usr_login_name, usr_last_change
-                 FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. "
-                WHERE usr_last_name LIKE {0}
-                  AND usr_valid = 1
-                  AND mem_usr_id = usr_id
-                  AND mem_rol_id = rol_id
-                  AND mem_valid  = 1
-                  AND rol_org_shortname = '$g_current_organization->shortname'
-                  AND rol_valid  = 1
-                ORDER BY usr_last_name, usr_first_name ";
+    //Es wurde eine Suchanfrage uebermittelt
+
+    if ($members)
+    {
+        //Es werden nur OrganisationsMitglieder durchsucht
+        $sql    = "SELECT DISTINCT usr_id, usr_last_name, usr_first_name, usr_email, usr_homepage,
+                          usr_login_name, usr_last_change
+                     FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. "
+                    WHERE (    CONCAT_WS(' ', usr_last_name, usr_first_name) LIKE {0}
+                            OR CONCAT_WS(' ', usr_first_name, usr_last_name) LIKE {0})
+                      AND usr_valid = 1
+                      AND mem_usr_id = usr_id
+                      AND mem_rol_id = rol_id
+                      AND mem_valid  = 1
+                      AND rol_org_shortname = '$g_current_organization->shortname'
+                      AND rol_valid  = 1
+                    ORDER BY usr_last_name, usr_first_name ";
+    }
+    else
+    {
+        //Es wird in allen Mitgliedern gesucht
+        $sql    = "SELECT usr_id, usr_last_name, usr_first_name, usr_email, usr_homepage,
+                          usr_login_name, usr_last_change
+                     FROM ". TBL_USERS. "
+                    WHERE (    CONCAT_WS(' ', usr_last_name, usr_first_name) LIKE {0}
+                            OR CONCAT_WS(' ', usr_first_name, usr_last_name) LIKE {0})
+                      AND usr_valid = 1
+                    ORDER BY usr_last_name, usr_first_name ";
+    }
+    $sql    = prepareSQL($sql, array(str_replace(',', '', $queryForm). '%'));
 }
 else
 {
-    $sql    = "SELECT usr_id, usr_last_name, usr_first_name, usr_email, usr_homepage,
-                      usr_login_name, usr_last_change
-                 FROM ". TBL_USERS. "
-                WHERE usr_last_name LIKE {0}
-                  AND usr_valid = 1
-                ORDER BY usr_last_name, usr_first_name ";
+    // alle Mitglieder zur Auswahl selektieren
+    // unbestaetigte User werden dabei nicht angezeigt
+    if($members == true)
+    {
+        $sql    = "SELECT DISTINCT usr_id, usr_last_name, usr_first_name, usr_email, usr_homepage,
+                          usr_login_name, usr_last_change
+                     FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. "
+                    WHERE usr_last_name LIKE {0}
+                      AND usr_valid = 1
+                      AND mem_usr_id = usr_id
+                      AND mem_rol_id = rol_id
+                      AND mem_valid  = 1
+                      AND rol_org_shortname = '$g_current_organization->shortname'
+                      AND rol_valid  = 1
+                    ORDER BY usr_last_name, usr_first_name ";
+    }
+    else
+    {
+        $sql    = "SELECT usr_id, usr_last_name, usr_first_name, usr_email, usr_homepage,
+                          usr_login_name, usr_last_change
+                     FROM ". TBL_USERS. "
+                    WHERE usr_last_name LIKE {0}
+                      AND usr_valid = 1
+                    ORDER BY usr_last_name, usr_first_name ";
+    }
+    $sql    = prepareSQL($sql, array($letter));
 }
-$sql    = prepareSQL($sql, array($letter));
 $result_mgl = mysql_query($sql, $g_adm_con);
 db_error($result_mgl);
 
@@ -196,18 +246,18 @@ require("../../../adm_config/body_top.php");
         //Hier gibt es jetzt noch die Suchbox...
         echo "
         <div style=\"width: 250px;\">
-            <form action=\"members.php?members=$members=\" method=\"post\">
-                <input type=\"text\" value=\"\" name=\"queryForm\" id=\"queryForm\" autocomplete=\"off\"  />
+            <form action=\"members.php?members=$members\" method=\"post\">
+                <input type=\"text\" value=\"$queryForm\" name=\"queryForm\" id=\"queryForm\" autocomplete=\"off\"  />
                 <input type=\"submit\" value=\"Suchen\" />
             </form>
         </div>
 
         <script type=\"text/javascript\">
             var options = {
-                        script:\"query_suggestions.php?\",
+                        script:\"query_suggestions.php?members=$members&\",
                         varname:\"query\",
                         minchars:1,
-                        timeout:10000
+                        timeout:5000
             };
             var as = new AutoSuggest('queryForm', options);
         </script>
