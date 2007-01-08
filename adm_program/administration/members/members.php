@@ -125,9 +125,9 @@ echo "
     <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
     <link rel=\"stylesheet\" type=\"text/css\" href=\"autosuggest.css\">
 
-    <script type=\"text/javascript\" src=\"bsn.Ajax.js\"></script>
-    <script type=\"text/javascript\" src=\"bsn.DOM.js\"></script>
-    <script type=\"text/javascript\" src=\"bsn.AutoSuggest.js\"></script>
+    <script type=\"text/javascript\" src=\"../../libs/bsn.autosuggest/bsn.Ajax.js\"></script>
+    <script type=\"text/javascript\" src=\"../../libs/bsn.autosuggest/bsn.DOM.js\"></script>
+    <script type=\"text/javascript\" src=\"../../libs/bsn.autosuggest/bsn.AutoSuggest.js\"></script>
 
     <!--[if lt IE 7]>
     <script language=\"JavaScript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
