@@ -267,7 +267,7 @@ require("../../../adm_config/body_top.php");
 
             // Leiste mit allen Buchstaben des Alphabets anzeigen
 
-            if($letter == "%")
+            if ($letter == "%" && !$queryForm)
             {
                 echo "<b>Alle</b>&nbsp;&nbsp;&nbsp;";
             }
