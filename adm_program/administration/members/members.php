@@ -245,9 +245,9 @@ require("../../../adm_config/body_top.php");
 
         //Hier gibt es jetzt noch die Suchbox...
         echo "
-        <div style=\"width: 250px;\">
+        <div style=\"width: 300px;\">
             <form action=\"members.php?members=$members\" method=\"post\">
-                <input type=\"text\" value=\"$queryForm\" name=\"queryForm\" id=\"queryForm\" autocomplete=\"off\"  />
+                <input type=\"text\" value=\"$queryForm\" name=\"queryForm\" id=\"queryForm\" autocomplete=\"off\" style=\"width: 200px;\"  />
                 <input type=\"submit\" value=\"Suchen\" />
             </form>
         </div>
