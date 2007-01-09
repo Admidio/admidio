@@ -12,7 +12,7 @@
  *           2 - Datei / Ordner loeschen
  *           3 - Ordner erstellen
  *           4 - Datei / Ordner umbenennen
- *				 5 - Datei /Ordner loeschen abfrage
+ *               5 - Datei /Ordner loeschen abfrage
  * folder :  relativer Pfad zu der Datei / Ordners
  * default_folder : gibt den Ordner in adm_my_files/download an, ab dem die
  *                  Verzeichnisstruktur angezeigt wird. Wurde ein Default-Ordner
@@ -123,9 +123,18 @@ else
     $folder = "";
 
 if (isset($_GET['file']))
+{
     $file = strStripTags(urldecode($_GET['file']));
+    
+    if(strpbrk($_GET['file'], "\\/") != false)
+    {
+        $g_message->show("invalid");
+    }
+}
 else
+{
     $file = "";
+}
 
 if (isset($_GET['default_folder']))
     $default_folder = strStripTags(urldecode($_GET['default_folder']));
@@ -139,7 +148,8 @@ $act_folder = "../../../adm_my_files/download";
 // und Ordnerpfad zusammensetzen
 if(strlen($default_folder) > 0)
 {
-    if(strpos($default_folder, "..") !== false)
+   if(strpos($default_folder, "..") !== false
+   || strpos($default_folder, ":/") !== false)
     {
         $g_message->show("invalid_folder");
     }
@@ -147,7 +157,8 @@ if(strlen($default_folder) > 0)
 }
 if(strlen($folder) > 0)
 {
-    if(strpos($folder, "..") !== false)
+   if(strpos($folder, "..") !== false
+   || strpos($folder, ":/") !== false)
     {
         $g_message->show("invalid_folder");
     }
@@ -229,7 +240,7 @@ if($_GET["mode"] == 1)
         {
             if($ret == -1)
             {
-                $g_message->show("feld", "Datei ausw�hlen");
+                $g_message->show("feld", "Datei ausw?hlen");
             }
             elseif($ret == -2)
             {
@@ -385,8 +396,8 @@ elseif($_GET["mode"] == 4)
    }
 }
 elseif($_GET["mode"] == 5)
-{	
-	$_SESSION['navigation']->addUrl($g_current_url);
+{   
+    $_SESSION['navigation']->addUrl($g_current_url);
     $g_message->setForwardYesNo("$g_root_path/adm_program/modules/download/download_function.php?mode=2&amp;folder=$folder&amp;file=$file&amp;default_folder=$default_folder");
     $g_message->show("delete_file_folder",$file);
 }
