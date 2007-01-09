@@ -135,24 +135,31 @@ _bsn.AutoSuggest.prototype.doAjaxRequest = function ()
 _bsn.AutoSuggest.prototype.setSuggestions = function (req)
 {
 
-    var xml = req.responseXML;
-
-    // traverse xml
-    //
-    this.aSuggestions = [];
-    var results = xml.getElementsByTagName('results')[0].childNodes;
-
-    for (var i=0;i<results.length;i++)
+    try
     {
-        if (results[i].hasChildNodes())
-            this.aSuggestions.push( results[i].childNodes[0].nodeValue );
+        var xml = req.responseXML;
+
+        // traverse xml
+        //
+        this.aSuggestions = [];
+        var results = xml.getElementsByTagName('results')[0].childNodes;
+
+        for (var i=0;i<results.length;i++)
+        {
+            if (results[i].hasChildNodes())
+                this.aSuggestions.push( results[i].childNodes[0].nodeValue );
+        }
+
+
+        this.idAs = "as_"+this.fld.id;
+
+
+        this.createList(this.aSuggestions);
     }
-
-
-    this.idAs = "as_"+this.fld.id;
-
-
-    this.createList(this.aSuggestions);
+    catch(Error)
+    {
+         return;
+    }
 
 }
 
