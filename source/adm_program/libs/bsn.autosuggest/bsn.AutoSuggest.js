@@ -5,7 +5,7 @@
  *    requires:    bsn.DOM.js
  *                 bsn.Ajax.js
  *
- *	modified by Elmar Meuthen from "The Admidio Team - http://www.admidio.org" in January 2007
+ *    modified by Elmar Meuthen from "The Admidio Team - http://www.admidio.org" in January 2007
  *
  */
 
@@ -85,27 +85,14 @@ _bsn.AutoSuggest.prototype.getSuggestions = function (val)
         for (var i=0;i<this.aSuggestions.length;i++)
         {
             var modifiedVal = val.replace(/,/,"");
-            var valArray	 = modifiedVal.split(" ");
             var suggestArray = this.aSuggestions[i].split(", ");
-            if (valArray.length == 1)
+
+            if (suggestArray[0].concat(" ").concat(suggestArray[1]).substr(0,modifiedVal.length).toLowerCase() == modifiedVal.toLowerCase()
+            ||  suggestArray[1].concat(" ").concat(suggestArray[0]).substr(0,modifiedVal.length).toLowerCase() == modifiedVal.toLowerCase())
             {
-                if (suggestArray[0].substr(0,modifiedVal.length).toLowerCase() == modifiedVal.toLowerCase()
-                ||  suggestArray[1].substr(0,modifiedVal.length).toLowerCase() == modifiedVal.toLowerCase())
-                {
-                    arr.push( this.aSuggestions[i] );
-                }
+                arr.push( this.aSuggestions[i] );
             }
-            else
-            {
-                if (this.aSuggestions[i].replace(/,/,"").substr(0,modifiedVal.length).toLowerCase() == valArray[0].toLowerCase().concat(" ").concat(valArray[1].toLowerCase())
-                ||  this.aSuggestions[i].replace(/,/,"").substr(0,modifiedVal.length).toLowerCase() == valArray[1].toLowerCase().concat(" ").concat(valArray[0].toLowerCase()))
-                {
-                    arr.push( this.aSuggestions[i] );
-                }
-            }
-            //if (this.aSuggestions[i].substr(0,val.length).toLowerCase() == val.toLowerCase())
-            //if (this.aSuggestions[i].substr(0,val.length).toLowerCase() == val.toLowerCase())
-            //    arr.push( this.aSuggestions[i] );
+
         }
 
         this.nInputChars = val.length;
