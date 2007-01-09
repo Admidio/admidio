@@ -88,7 +88,8 @@ $_SESSION['new_name'] = '';
 // und Ordnerpfad zusammensetzen
 if(strlen($default_folder) > 0)
 {
-    if(strpos($default_folder, "..") !== false)
+   if(strpos($default_folder, "..") !== false
+   || strpos($default_folder, ":/") !== false)
     {
         $g_message->show("invalid_folder");
     }
@@ -97,7 +98,8 @@ if(strlen($default_folder) > 0)
 
 if(strlen($folder) > 0)
 {
-    if(strpos($folder, "..") !== false)
+   if(strpos($folder, "..") !== false
+   || strpos($folder, ":/") !== false)
     {
         $g_message->show("invalid_folder");
     }

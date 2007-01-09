@@ -56,13 +56,14 @@ $act_folder = "../../../adm_my_files/download";
 $datei = "";
 
 if ($_SESSION['new_name'] == '')
-	$_SESSION['new_name'] = '';
+    $_SESSION['new_name'] = '';
 $new_name = $_SESSION['new_name'];
 // uebergebene Ordner auf Gueltigkeit pruefen
 // und Ordnerpfad zusammensetzen
 if(strlen($default_folder) > 0)
 {
-    if(strpos($default_folder, "..") !== false)
+   if(strpos($default_folder, "..") !== false
+   || strpos($default_folder, ":/") !== false)
     {
         $g_message->show("invalid_folder");
     }
@@ -71,7 +72,8 @@ if(strlen($default_folder) > 0)
 
 if(strlen($folder) > 0)
 {
-    if(strpos($folder, "..") !== false)
+   if(strpos($folder, "..") !== false
+   || strpos($folder, ":/") !== false)
     {
         $g_message->show("invalid_folder");
     }
@@ -104,8 +106,8 @@ require("../../../adm_config/body_top.php");
     echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">";
         $datei = explode(".","$file");
         // Session umschreiben
-		if (count($datei) == '1')
-			$datei[1] = '';
+        if (count($datei) == '1')
+            $datei[1] = '';
         echo "<p>&nbsp;</p>
         <form method=\"POST\" action=\"download_function.php?mode=4&amp;folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "&amp;file=". urlencode($file). "\">
             <div class=\"formHead\" style=\"width: 400px\">Datei/Ordner umbenennen</div>

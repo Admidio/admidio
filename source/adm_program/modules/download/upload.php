@@ -64,7 +64,8 @@ $folder     = strStripTags(urldecode($_GET['folder']));
 // und Ordnerpfad zusammensetzen
 if(strlen($default_folder) > 0)
 {
-    if(strpos($default_folder, "..") !== false)
+   if(strpos($default_folder, "..") !== false
+   || strpos($default_folder, ":/") !== false)
     {
         $g_message->show("invalid_folder");
     }
@@ -72,17 +73,18 @@ if(strlen($default_folder) > 0)
 
 if(strlen($folder) > 0)
 {
-    if(strpos($folder, "..") !== false)
+   if(strpos($folder, "..") !== false
+   || strpos($folder, ":/") !== false)
     {
         $g_message->show("invalid_folder");
     }
 }
 
 if ($_SESSION['new_name'] == '')
-   	$_SESSION['new_name'] = '';
+    $_SESSION['new_name'] = '';
 $new_name = $_SESSION['new_name'];
 if ($_SESSION['userfile'] == '')
-   	$_SESSION['userfile'] = '';
+    $_SESSION['userfile'] = '';
 $userfile = $_SESSION['userfile'];
 
 //Beginn der Seite

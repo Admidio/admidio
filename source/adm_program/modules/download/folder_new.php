@@ -57,7 +57,9 @@ $folder = strStripTags(urldecode($_GET['folder']));
 // und Ordnerpfad zusammensetzen
 if(strlen($default_folder) > 0)
 {
-    if(strpos($default_folder, "..") !== false)
+   if(strpos($default_folder, "..") !== false
+   || strpos($default_folder, ":/") !== false)
+
     {
         $g_message->show("invalid_folder");
     }
@@ -65,7 +67,8 @@ if(strlen($default_folder) > 0)
 
 if(strlen($folder) > 0)
 {
-    if(strpos($folder, "..") !== false)
+   if(strpos($folder, "..") !== false
+   || strpos($folder, ":/") !== false)
     {
         $g_message->show("invalid_folder");
     }
@@ -110,7 +113,7 @@ require("../../../adm_config/body_top.php");
                         echo ucfirst($folder);
                     }
                     if ($_SESSION['new_folder'] == '')
-                    	$_SESSION['new_folder'] = "";
+                        $_SESSION['new_folder'] = "";
                     $new_folder = $_SESSION['new_folder'];
                     echo "</b> erstellen
                 </div>
