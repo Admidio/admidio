@@ -67,6 +67,11 @@ if( ($_POST["old_password"] != "" || hasRole('Webmaster') )
             $user->password = md5($_POST["new_password"]);
             $user->update($g_current_user->id);
 
+            if($g_forum == 1)
+            {
+                forum_update_user($user->login_name, 1, $user->password, $user->email, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
+            }
+
             // wenn das PW des eingeloggten Users geaendert wird, dann Session-Variablen aktualisieren
             if($user->id == $g_current_user->id)
             {

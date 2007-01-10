@@ -54,4 +54,20 @@
    // Ohne http:// oder www. und auch keine Subdomains angeben !!!
    // Beispiel: "admidio.org"
    $g_domain   = "%DOMAIN%";
+   
+   
+   // Forumspezifisch
+   // phpBB-Forum integriert
+   // 1 = ja
+   // 0 = nein
+   $g_forum = 0;
+
+   // Praefix der Tabellen des phpBB-Forums
+   $g_forum_praefix = "";
+
+   // Zugangsdaten zur Datenbank des Forums
+   $g_forum_srv = "";
+   $g_forum_usr = "";
+   $g_forum_pw  = "";
+   $g_forum_db  = "";   
 ?>
