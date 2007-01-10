@@ -111,7 +111,7 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
                 // wenn Datum-bis nicht gefüllt ist, dann mit Datum-von nehmen
                 if(strlen($_POST['date_to'])   == 0)
                 {
-                    $_POST['date_to']   = $_POST['date_from'];
+                    $_POST['date_to'] = $_POST['date_from'];
                 }
                 if(strlen($_POST['time_to']) == 0)
                 {
@@ -159,21 +159,21 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
                     $sql = "INSERT INTO ". TBL_DATES. " (dat_global, dat_org_shortname, dat_usr_id, dat_timestamp, dat_headline,
                                                          dat_begin, dat_end, dat_location, dat_description)
                                                  VALUES ($global, '$g_organization', '$g_current_user->id', '$act_date', {0},
-                                                         '$dt_datum_von', '$dt_datum_bis', {1}, {2})";
+                                                         {1}, {2}, {3}, {4})";
                 }
                 else
                 {
-                    $sql = "UPDATE ". TBL_DATES. " SET dat_global         = $global
-                                                     , dat_headline   = {0}
-                                                     , dat_begin            = '$dt_datum_von'
-                                                     , dat_end            = '$dt_datum_bis'
-                                                     , dat_location            = {1}
-                                                     , dat_description   = {2}
-                                                     , dat_last_change    = '$act_date'
+                    $sql = "UPDATE ". TBL_DATES. " SET dat_global        = $global
+                                                     , dat_headline      = {0}
+                                                     , dat_begin         = {1}
+                                                     , dat_end           = {2}
+                                                     , dat_location      = {3}
+                                                     , dat_description   = {4}
+                                                     , dat_last_change   = '$act_date'
                                                      , dat_usr_id_change = $g_current_user->id
                              WHERE dat_id = {3}";
                 }
-                $sql    = prepareSQL($sql, array($headline, $place, $content, $_GET['dat_id']));
+                $sql    = prepareSQL($sql, array($headline, $dt_datum_von, $dt_datum_bis, $place, $content, $_GET['dat_id']));
                 $result = mysql_query($sql, $g_adm_con);
                 db_error($result);
 
