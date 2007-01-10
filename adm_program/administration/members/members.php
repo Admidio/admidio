@@ -175,6 +175,13 @@ echo "
     <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
     <link rel=\"stylesheet\" type=\"text/css\" href=\"autosuggest.css\">
 
+    <style type=\"text/css\">
+        /* Safari braucht im Body position: relative damit das SuggestFeld unter und nicht auf der Suchbox liegt*/
+        body {
+            position: relative;
+        }
+    </style>
+
     <script type=\"text/javascript\" src=\"../../libs/bsn.autosuggest/bsn.Ajax.js\"></script>
     <script type=\"text/javascript\" src=\"../../libs/bsn.autosuggest/bsn.DOM.js\"></script>
     <script type=\"text/javascript\" src=\"../../libs/bsn.autosuggest/bsn.AutoSuggest.js\"></script>
