@@ -89,7 +89,7 @@ if(!isset($_POST['login_name']))
 /*------------------------------------------------------------*/
 // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
 /*------------------------------------------------------------*/
-if($new_user == 0 && $g_current_user->editUser($usr_id) == false)
+if($new_user == 0 && $g_current_user->editProfile($usr_id) == false)
 {
     $g_message->show("norights");
 }
@@ -466,7 +466,7 @@ elseif($new_user == 2)
     // Registrierung eines neuen Benutzers
     // -> E-Mail an alle Webmaster schreiben
     /*------------------------------------------------------------*/
-    $err_code = "save";
+    $err_code = "anmeldung";
     $err_text = "";
 
     // nur ausfuehren, wenn E-Mails auch unterstuetzt werden und die Webmasterbenachrichtung aktiviert ist
@@ -495,11 +495,7 @@ elseif($new_user == 2)
                 utf8_decode(" registriert.\n\nNachname: "). $user->last_name. utf8_decode("\nVorname:  ").
                 $user->first_name. utf8_decode("\nE-Mail:   "). $user->email.
                 utf8_decode("\n\n\nDiese Nachricht wurde automatisch erzeugt."));
-            if($email->sendEmail() == true)
-            {
-                $err_code = "anmeldung";
-            }
-            else
+            if($email->sendEmail() == false)
             {
                 $err_code = "mail_not_send";
                 $err_text = $row->usr_email;
