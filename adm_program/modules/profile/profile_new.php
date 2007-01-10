@@ -459,8 +459,8 @@ require("../../../adm_config/body_top.php");
 
                                 if($row->usf_type == "CHECKBOX")
                                 {
-                                    if($b_history == true && isset($form_values[urlencode($row->usf_name)])
-                                    && $form_values[urlencode($row->usf_name)] == 1)
+                                    if($b_history == true && isset($form_values[$row->usf_id])
+                                    && $form_values[$row->usf_id] == 1)
                                     {
                                         // Zurueck-Navigation und Haeckchen war bereits gesetzt
                                         echo " checked ";
@@ -488,7 +488,7 @@ require("../../../adm_config/body_top.php");
 
                                     if($b_history == true)
                                     {
-                                        echo " value=\"". $form_values[urlencode($row->usf_name)]. "\" ";
+                                        echo " value=\"". $form_values[$row->usf_id]. "\" ";
                                     }
                                     elseif(strlen($row->usd_value) > 0)
                                     {
@@ -555,7 +555,7 @@ require("../../../adm_config/body_top.php");
                             <div style=\"text-align: left; margin-left: 32%;\">";
                                 if($b_history == true)
                                 {
-                                    $messenger_id = $form_values[urlencode($row->usf_name)];
+                                    $messenger_id = $form_values[$row->usf_id];
                                 }
                                 else
                                 {
