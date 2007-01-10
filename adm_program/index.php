@@ -253,6 +253,30 @@ require("../adm_config/body_top.php");
                 </div>";
             }
 
+            // Wenn das Forum aktiv ist, dieses auch in der Übersicht anzeigen.
+            if($g_forum == 1)
+            {
+                echo "<div style=\"margin-top: 7px;\"></div>";
+
+                if($g_forum_session_valid)
+                {
+                    $forumstext = "Sie sind als <b>".$g_forum_user."</b> im Forum <b>".$g_forum_sitename."</b> angemeldet ".$g_forum_neuePM_Text;
+                }
+                else
+                {
+                    $forumstext = "Der virtuelle Treffpunkt zum Austausch von Gedanken und Erfahrungen.";
+                }
+                echo "
+                <div style=\"text-align: left; width: 40; float: left;\">
+                    <a href=\"http://$g_domain/$g_forum_path/index.php\">
+                    <img style=\"position: relative; top: 5px;\" src=\"$g_root_path/adm_program/images/forum_big.png\" border=\"0\" alt=\"Forum\" />
+                    </a>
+                </div>
+                <div style=\"text-align: left; margin-left: 45px;\">
+                    <span class=\"textHead\"><a href=\"http://$g_domain/$g_forum_path/index.php\">Forum</a></span><br />
+                    <span class=\"textDescription\">$forumstext</span>
+                </div>";
+            }
         echo "
         </div>";
 

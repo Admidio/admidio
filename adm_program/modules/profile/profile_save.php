@@ -89,7 +89,7 @@ if(!isset($_POST['login_name']))
 /*------------------------------------------------------------*/
 // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
 /*------------------------------------------------------------*/
-if($new_user == 0 && $g_current_user->editUser($user_id) == false)
+if($new_user == 0 && $g_current_user->editUser($usr_id) == false)
 {
     $g_message->show("norights");
 }
@@ -185,6 +185,64 @@ if(strlen($user->login_name) > 0)
             $g_message->show("login_name");
         }
     }
+    
+    // pruefen, ob der Benutzername bereits im Forum vergeben ist, 
+    // Benutzernamenswechesel und diese Dinge
+    if($g_forum == 1 && $usr_id > 0)
+    {
+        // pruefen, ob der Benutzername bereits im Forum vergeben ist
+        // Wenn die usr_id 0 ist, ist es eine Neuanmeldung, also nur den login_namen prüfen
+        if($usr_id == 0)
+        {
+            if(forum_check_user($user->login_name, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix))
+            {
+                $g_message->show("login_name_forum");
+            }
+        }
+        else
+        // Wenn die usr_id > 0, dann ist es eine Änderung eines bestehenden Users, 
+        // also nachschauen, ob der neu gewählte login_name im Forum existiert.
+        {
+            // Erst mal den alten Usernamen holen
+            $sql = "SELECT usr_login_name FROM ". TBL_USERS. "
+                     WHERE usr_id =  $usr_id";
+            $result = mysql_query($sql, $g_adm_con);
+            db_error($result);
+            
+            if(mysql_num_rows($result) > 0)
+            {
+                $row = mysql_fetch_array($result);
+                
+                // Wenn der alte Benutzername leer ist, ist es eine Neuanmeldung im Forum
+                if(!$row[0])
+                {
+                    // Neuanmeldung im Forum
+                    $forum_new = TRUE;
+                    
+                    // Schauen, ob der neue Benutzername schon im Forum vorhanden ist
+                    if(forum_check_user($user->login_name, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix))
+                    {
+                        $g_message->show("login_name_forum");
+                    }
+                }
+                else
+                {
+                    // Bestehender User im Forum
+                    $forum_new = FALSE;
+                    $forum_old_username = $row[0];
+                    
+                    // Schauen, ob der neue Benutzername schon im Forum vorhanden ist
+                    if(forum_check_user($user->login_name, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix))
+                    {
+                        if($forum_old_username != $user->login_name)
+                        {
+                            $g_message->show("login_name_forum");
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 if(strlen($user->birthday) > 0)
 {
@@ -262,10 +320,28 @@ if(strlen($user->birthday) > 0)
 
 if($usr_id > 0)
 {
-    $ret_code = $user->update($g_current_user->id);
+    // Vorher schauen ob es den Username im Forum schon gibt.
+    if($g_forum)
+    {
+        if($forum_new)
+        {
+            // Eine Neuanmeldung im Forum
+            forum_insert_user($user->login_name, 1, $user->password, $user->email, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
+        }
+        else
+        {
+            // Ein Update eines bestehenden Forumusers
+            forum_update_username($user->login_name, $forum_old_username, 1, $user->password, $user->email, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
+        }
+    }
+    $ret_code = $user->update($g_current_user->id);        
 }
 else
 {
+    if($g_forum && $user->login_name)
+    {
+        forum_insert_user($user->login_name, 1, $user->password, $user->email, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
+    }
     $ret_code = $user->insert($g_current_user->id);
 }
 
@@ -357,6 +433,12 @@ if($new_user == 3)
     $user->reg_org_shortname = "";
     $user->update($g_current_user->id);
 
+    // Den User nun im Forum auch als Aktiv updaten
+    if($g_forum)
+    {
+        forum_update_user($user->login_name, 1, $user->password, $user->email, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
+    }
+
     // nur ausfuehren, wenn E-Mails auch unterstuetzt werden
     if($g_preferences['enable_system_mails'] == 1)
     {
@@ -437,7 +519,8 @@ elseif($new_user == 2)
 if($usr_id == 0)
 {
     // neuer User -> Rollen zuordnen
-    $location = "Location: roles.php?user_id=$user->id&new_user=1";
+    header("Location: roles.php?user_id=$user->id&new_user=1");
+    exit();
 }
 elseif($new_user == 0 && $user->valid == 0)
 {
@@ -451,6 +534,4 @@ else
     $g_message->setForwardUrl("$g_root_path/adm_program/modules/profile/profile.php?user_id=$usr_id", 2000);
     $g_message->show("save");
 }
-header($location);
-exit();
 ?>

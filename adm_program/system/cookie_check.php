@@ -6,6 +6,11 @@
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  *
+ * Uebergaben:
+ *
+ * message_code : Name der Nachricht aus message_text.php, 
+ *                die nach Login angezeigt werden soll
+ *
  ******************************************************************************
  *
  * This program is free software; you can redistribute it and/or
@@ -28,14 +33,36 @@ require("common.php");
 
 if(isset($_COOKIE['adm_session']) == false)
 {
-	unset($_SESSION['login_forward_url']);
-	$g_message->setForwardUrl("home");
-	$g_message->show("no_cookie", $g_current_organization->homepage);
+    unset($_SESSION['login_forward_url']);
+    $g_message->setForwardUrl("home");
+    $g_message->show("no_cookie", $g_current_organization->homepage);
 }
 else
 {
-	$g_message->setForwardUrl($_SESSION['login_forward_url'], 2000);
-	unset($_SESSION['login_forward_url']);
-	$g_message->show("login");	
+    // Uebergabevariable pruefen     
+    if(isset($_GET['message_code']) == false)
+    {
+        $g_message->show("invalid");
+    }
+    
+    $message_code = strStripTags($_GET['message_code']);
+    $show_time = 2000;
+    
+    if($g_forum)
+    {
+        // Je nach Forumsaktion, Meldung ausgeben und weiter zur ForwardUrl - Seite
+        $g_message->addVariableContent($g_current_user->login_name);
+        $g_message->addVariableContent($g_forum_sitename);
+        
+        if($message_code != "loginforum")
+        {
+            // Wenn es eine andere Meldung, als eine Standard-Meldung ist, dem User mehr Zeit zum lesen lassen
+            $show_time = 0;
+        }
+    }
+
+    $g_message->setForwardUrl($_SESSION['login_forward_url'], $show_time);
+    unset($_SESSION['login_forward_url']);  
+    $g_message->show($message_code);
 }
 ?>

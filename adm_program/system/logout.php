@@ -63,7 +63,31 @@ if ($session_found > 0)
     db_error($result);
 }
 
+// Wenn die Session des Forums aktiv ist, diese ebenfalls löschen.
+if($g_forum && $g_forum_session_valid)
+{
+    mysql_select_db($g_forum_db, $g_forum_con);
+
+    // User-Session im Forum löschen
+    $sql    = "DELETE FROM ". $g_forum_praefix. "_sessions WHERE session_user_id = $g_forum_userid ";
+    $result = mysql_query($sql, $g_forum_con);
+    db_error($result);
+
+    mysql_select_db($g_adm_db, $g_adm_con);
+
+
+    // Cookie fuer die Anmeldung im Forum löschen
+    setcookie($g_forum_cookie_name."_sid", "", $current_time - 31536000, $g_forum_cookie_path, $g_forum_cookie_domain, $g_forum_cookie_secure);
+
+
+    $message_code = "logoutforum";    
+}
+else
+{
+    $message_code = "logout";
+}
+
 // Hinweis auf erfolgreiches Ausloggen und weiter zur Startseite
 $g_message->setForwardUrl("home", 2000);
-$g_message->show("logout");
+$g_message->show($message_code);
 ?>
