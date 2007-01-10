@@ -665,7 +665,7 @@ echo "
 
                                     echo"
                                     <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer; vertical-align: middle;\" width=\"16\" height=\"16\" border=\"0\"
-                                         alt=\"Veranstaltung L&oumlschen\" title=\"Veranstaltung L&oumlschen\"
+                                         alt=\"Veranstaltung L&ouml;schen\" title=\"Veranstaltung L&ouml;schen\"
                                          onclick=\"self.location.href='photo_event_function.php?job=delete_request&pho_id=$this_pho_id'\">";
 
                                     if($adm_photo_list["pho_locked"]==1 && file_exists($ordner))
