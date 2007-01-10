@@ -75,7 +75,7 @@ if (isset($_GET["usr_id"]))
         $g_message->show("invalid");
     }
 
-    if (!editUser())
+    if (!$g_current_user->editUser())
     {
         $sql    = "SELECT DISTINCT usr_id, usr_email
                      FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. "

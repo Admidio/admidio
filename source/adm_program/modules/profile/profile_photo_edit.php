@@ -77,7 +77,7 @@ else
 
 
 // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
-if(!editProfile($user_id))
+if($g_current_user->editProfile($user_id) == false)
 {
     $g_message->show("norights");
 }
