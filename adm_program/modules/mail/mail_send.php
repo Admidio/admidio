@@ -71,7 +71,7 @@ $_SESSION['mail_request'] = $_REQUEST;
 // auf diese zugreifen darf oder ob die UsrId ueberhaupt eine gueltige Mailadresse hat...
 if (array_key_exists("usr_id", $_GET))
 {
-    if (!editUser())
+    if (!$g_current_user->editUser())
     {
         $sql    = "SELECT DISTINCT usr_id, usr_email
                      FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. "
