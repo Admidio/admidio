@@ -1,9 +1,4 @@
 /* Layout fuer die Autosuggestions bei Suchfeldern */
-/* Safari braucht im Body position: relative */
-body {
-    position: relative;
-}
-
 ul.autosuggest {
     position:   absolute;
     list-style: none;
