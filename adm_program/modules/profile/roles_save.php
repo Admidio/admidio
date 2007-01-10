@@ -121,7 +121,7 @@ while($row = mysql_fetch_object($result_rolle))
             $row_members = mysql_fetch_array($result);
 
             //Bedingungen fuer Abbruch und Abbruch
-            if($row_memners[0] >= $row->rol_max_members
+            if($row_members[0] >= $row->rol_max_members
             && $_POST["leader-$i"] == false
             && $_POST["role-$i"]   == true)
             {
