@@ -174,20 +174,17 @@ elseif($_GET["mode"] == 2)
                     }
                     else
                     {
-                        $err_code = "datum";
-                        $err_text = "Zeitraum bis";
+                        $g_message->show("datum", "Zeitraum bis");
                     }
                 }
                 else
                 {
-                    $err_code = "feld";
-                    $err_text = "Zeitraum bis";
+                    $g_message->show("feld", "Zeitraum bis");
                 }
             }
             else
             {
-                $err_code = "datum";
-                $err_text = "Zeitraum von";
+                $g_message->show("datum", "Zeitraum von");
             }
         }
 
@@ -206,7 +203,7 @@ elseif($_GET["mode"] == 2)
                 }
                 else
                 {
-                    $err_code = "uhrzeit";
+                    $g_message->show("uhrzeit");
                 }
 
                 if(strlen($_POST['end_time']) > 0)
@@ -217,13 +214,12 @@ elseif($_GET["mode"] == 2)
                     }
                     else
                     {
-                        $err_code = "uhrzeit";
+                        $g_message->show("uhrzeit");
                     }
                 }
                 else
                 {
-                    $err_code = "feld";
-                    $err_text = "Uhrzeit bis";
+                    $g_message->show("feld", "Uhrzeit bis");
                 }
             }
         }
@@ -415,17 +411,17 @@ elseif($_GET["mode"] == 2)
                                                   , rol_weblinks      = $weblinks
                                                   , rol_profile       = $profile
                                                   , rol_locked        = $locked
-                                                  , rol_start_date    = '$d_datum_von'
-                                                  , rol_start_time    = '$t_uhrzeit_von'
-                                                  , rol_end_date      = '$d_datum_bis'
-                                                  , rol_end_time      = '$t_uhrzeit_bis'
-                                                  , rol_weekday       = {3}
-                                                  , rol_location      = {4}
-                                                  , rol_max_members   = {5}
-                                                  , rol_cost          = {6}
+                                                  , rol_start_date    = {3}
+                                                  , rol_start_time    = {4}
+                                                  , rol_end_date      = {5}
+                                                  , rol_end_time      = {6}
+                                                  , rol_weekday       = {7}
+                                                  , rol_location      = {8}
+                                                  , rol_max_members   = {9}
+                                                  , rol_cost          = {10}
                                                   , rol_last_change   = '$act_date'
                                                   , rol_usr_id_change = $g_current_user->id
-                        WHERE rol_id = {7} ";
+                        WHERE rol_id = {11} ";
             }
             else
             {
@@ -439,12 +435,13 @@ elseif($_GET["mode"] == 2)
                                                 VALUES ('$g_organization', {0}, {1}, {2},
                                                        $moderation, $announcements, $termine, $foto, $download,
                                                        $user, $guestbook, $guestbook_comments, $mail_logout,
-                                                       $mail_login, $weblinks, $profile, $locked, '$d_datum_von', '$t_uhrzeit_von',
-                                                       '$d_datum_bis','$t_uhrzeit_bis', {3}, {4},
-                                                       {5}, {6}, 1) ";
+                                                       $mail_login, $weblinks, $profile, $locked, {3}, {4},
+                                                       {5},{6}, {7}, {8},
+                                                       {9}, {10}, 1) ";
             }
-            $sql    = prepareSQL($sql, array(trim($_POST['name']), trim($_POST['description']), $_POST['category'], $_POST['weekday'],
-            trim($_POST['location']), $_POST['max_members'], $_POST['cost'], $rol_id));
+            $sql    = prepareSQL($sql, array(trim($_POST['name']), trim($_POST['description']), $_POST['category'], 
+                            $d_datum_von, $t_uhrzeit_von, $d_datum_bis, $t_uhrzeit_bis,  $_POST['weekday'],
+                            trim($_POST['location']), $_POST['max_members'], $_POST['cost'], $rol_id));
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
 
@@ -488,9 +485,6 @@ elseif($_GET["mode"] == 2)
 
             }
 
-
-
-
             $_SESSION['navigation']->deleteLastUrl();
             unset($_SESSION['roles_request']);
         }
@@ -498,13 +492,7 @@ elseif($_GET["mode"] == 2)
     else
     {
         // es sind nicht alle Felder gefuellt
-        $err_text = "Rolle";
-        $err_code = "feld";
-    }
-
-    if(strlen($err_code) > 0)
-    {
-        $g_message->show($err_code, $err_text);
+        $g_message->show("feld", "Rolle");
     }
 
     $err_code = "save";
