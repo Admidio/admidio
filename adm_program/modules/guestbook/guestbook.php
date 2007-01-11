@@ -301,66 +301,7 @@ require("../../../adm_config/body_top.php");
                         // werden unter dem Eintrag die dazugehoerigen Kommentare (falls welche da sind) angezeigt.
                         if (mysql_num_rows($guestbook_result) > 0 && $_GET['id'] > 0)
                         {
-
-                            echo "
-                            <br />";
-
-                            //Kommentarnummer auf 1 setzen
-                            $commentNumber = 1;
-
-                            // Die Kommetare liegen bereits im MysqlResultset $comment_result vor
-                            // also nur noch auflisten...
-                            while ($row = mysql_fetch_object($comment_result))
-                            {
-                                // Die Userdaten des Kommentarschreibers aus der DB holen
-                                $commentWriter = new User($g_adm_con);
-                                $commentWriter->getUser($row->gbc_usr_id);
-
-                                echo "
-                                <div class=\"groupBox\" style=\"overflow: hidden; margin-left: 20px; margin-right: 20px;\">
-                                    <div class=\"groupBoxHeadline\">
-                                        <div style=\"text-align: left; float: left;\">
-                                            <img src=\"$g_root_path/adm_program/images/comments.png\" style=\"vertical-align: top;\" alt=\"Kommentar ". $commentNumber. "\">&nbsp;".
-                                            "Kommentar ". $commentNumber. " von ". strSpecialChars2Html($commentWriter->first_name). " ". strSpecialChars2Html($commentWriter->last_name). "</div>";
-
-
-                                        echo "
-                                        <div style=\"text-align: right;\">". mysqldatetime("d.m.y h:i", $row->gbc_timestamp). "&nbsp;";
-
-                                        // loeschen von Kommentaren duerfen nur User mit den gesetzten Rechten
-                                        if ($g_current_user->editGuestbookRight())
-                                        {
-                                                echo "
-                                                <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer;\" width=\"16\" height=\"16\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"
-                                                 onclick=\"self.location.href='guestbook_function.php?id=$row->gbc_id&amp;mode=7'\">";
-
-                                        }
-
-                                        echo "&nbsp;</div>";
-                                    echo "
-                                    </div>
-
-                                    <div style=\"margin: 8px 4px 4px 4px; text-align: left;\">";
-                                        // wenn BBCode aktiviert ist, den Text noch parsen, ansonsten direkt ausgeben
-                                        if ($g_preferences['enable_bbcode'] == 1)
-                                        {
-                                            echo strSpecialChars2Html($bbcode->parse($row->gbc_text));
-                                        }
-                                        else
-                                        {
-                                            echo nl2br(strSpecialChars2Html($row->gbc_text));
-                                        }
-                                    echo "</div>
-
-                                </div>
-
-                                <br />";
-
-                                // Kommentarnummer um 1 erhoehen
-                                $commentNumber = $commentNumber + 1;
-
-                            } // Ende While-Schleife fuer das Auflisten der Kommentare...
-
+                            include("get_comments.php");
                         }
 
                 echo "</div>
@@ -393,7 +334,7 @@ require("../../../adm_config/body_top.php");
 
                         <div style=\"margin-top: 6px;\">
                             <div style=\"text-align: right; width: 25%; float: left;\">Kommentar:";
-                                if($g_preferences['enable_bbcode'] == 1)
+                                if ($g_preferences['enable_bbcode'] == 1)
                                 {
                                   echo "<br><br>
                                   <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\" tabindex=\"6\">Text formatieren</a>";
@@ -424,7 +365,7 @@ require("../../../adm_config/body_top.php");
             </div>";
         }
 
-        if(mysql_num_rows($guestbook_result) > 2)
+        if (mysql_num_rows($guestbook_result) > 2)
         {
             // Navigation mit Vor- und Zurueck-Buttons
             // erst anzeigen, wenn mehr als 2 Eintraege (letzte Navigationsseite) vorhanden sind

@@ -8,7 +8,7 @@
  *
  * Uebergaben:
  *
- * id: Hiermit wird die ID des Gaestebucheintrages uebergeben
+ * cid: Hiermit wird die ID des Gaestebucheintrages uebergeben
  *
  ******************************************************************************
  *
@@ -28,25 +28,30 @@
  *
  *****************************************************************************/
 
-require("../../system/common.php");
-require("../../system/bbcode.php");
 
-if (isset($_GET['id']) && is_numeric($_GET['id']))
+
+if (isset($_GET['cid']) && is_numeric($_GET['cid']))
 {
-    $id = $_GET['id'];
+    // Script wurde ueber Ajax aufgerufen
+    $cid = $_GET['cid'];
+
+    require("../../system/common.php");
+    require("../../system/bbcode.php");
+
+    if ($g_preferences['enable_bbcode'] == 1)
+    {
+        // Klasse fuer BBCode
+        $bbcode = new ubbParser();
+    }
 }
 else
 {
-    $id = 0;
+    $cid = 0;
 }
 
-if ($g_preferences['enable_bbcode'] == 1)
-{
-    // Klasse fuer BBCode
-    $bbcode = new ubbParser();
-}
 
-if ($id > 0)
+
+if ($cid > 0)
 {
     $sql    = "SELECT * FROM ". TBL_GUESTBOOK_COMMENTS. ", ". TBL_GUESTBOOK. "
                                    WHERE gbo_id     = {0}
@@ -54,11 +59,16 @@ if ($id > 0)
                                      AND gbo_org_id = '$g_current_organization->id'
                                    ORDER by gbc_timestamp asc";
 
-    $sql    = prepareSQL($sql, array($id));
+    $sql    = prepareSQL($sql, array($cid));
 
     $comment_result = mysql_query($sql, $g_adm_con);
     db_error($comment_result);
+}
 
+if (isset($comment_result))
+{
+    echo "
+    <br />";
 
     //Kommentarnummer auf 1 setzen
     $commentNumber = 1;
@@ -113,11 +123,7 @@ if ($id > 0)
         // Kommentarnummer um 1 erhoehen
         $commentNumber = $commentNumber + 1;
 
-    } // Ende While-Schleife fuer das Auflisten der Kommentare...
-
-
-
+    }
 }
-
 
 ?>
