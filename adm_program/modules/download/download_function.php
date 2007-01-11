@@ -105,7 +105,7 @@ function removeDir ($dir)
 
 
 // erst pruefen, ob der User auch die entsprechenden Rechte hat
-if(!editDownload())
+if(!$g_current_user->editDownloadRight())
 {
     $g_message->show("norights");
 }

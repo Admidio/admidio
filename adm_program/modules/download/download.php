@@ -218,7 +218,7 @@ require("../../../adm_config/body_top.php");
     }
 
     //Button Upload und Neuer Ordner
-    if ($g_session_valid && editDownload())
+    if ($g_session_valid && $g_current_user->editDownloadRight())
     {
         echo "<p>
             <span class=\"iconLink\">
@@ -245,7 +245,7 @@ require("../../../adm_config/body_top.php");
                <th class=\"tableHeader\" style=\"text-align: left;\">Name</th>
                <th class=\"tableHeader\" style=\"text-align: center;\">Erstellungsdatum</th>
                <th class=\"tableHeader\" style=\"text-align: right;\">Gr&ouml;&szlig;e&nbsp;</th>";
-               if ($g_session_valid && editDownload())
+               if ($g_session_valid && $g_current_user->editDownloadRight())
                {
                    echo "<th class=\"tableHeader\" align=\"center\">Editieren</th>";
                }
@@ -259,7 +259,7 @@ require("../../../adm_config/body_top.php");
                <td colspan=\"2\">Dieser Ordner ist leer</td>
                <td></td>
                <td></td>";
-               if ($g_session_valid && editDownload()) echo "<td></td>";
+               if ($g_session_valid && $g_current_user->editDownloadRight()) echo "<td></td>";
       echo "</tr>";
     }
 
@@ -281,7 +281,7 @@ require("../../../adm_config/body_top.php");
                   <td style=\"text-align: left;\"><a href=\"$g_root_path/adm_program/modules/download/download.php?folder=". urlencode($next_folder). "&amp;default_folder=". urlencode($default_folder). "\">$ordnerarray[$i]</a></td>
                   <td>&nbsp;</td>
                   <td>&nbsp;</td>";
-            if ($g_session_valid && editDownload())
+            if ($g_session_valid && $g_current_user->editDownloadRight())
             {
                echo "
                <td style=\"text-align: center;\">&nbsp;
@@ -349,7 +349,7 @@ require("../../../adm_config/body_top.php");
                      <td style=\"text-align: right;\">$dateigroesse kB&nbsp;</td>";
 
             //Moderation
-            if ($g_session_valid && editDownload())
+            if ($g_session_valid && $g_current_user->editDownloadRight())
             {
                echo "
                <td align=\"center\">&nbsp;
