@@ -166,29 +166,74 @@ if($g_session_valid & editPhoto())
                                 $bildnr++;
                                 echo "<br>Bild $bildnr:<br>";
 
-                                //Groessnanpassung Bild und Bericht
-                                if(move_uploaded_file($_FILES["bilddatei"]["tmp_name"][$x], "../../../adm_my_files/photos/temp$y.jpg"))
+                                //Bild in Tempordner verschieben, groeße aendern und speichern
+                                if(move_uploaded_file($_FILES["bilddatei"]["tmp_name"][$x], "../../../adm_my_files/photos/temp".$y.".jpg"))
                                 {
-                                    echo"<img src=\"resize.php?scal=".$g_preferences['photo_save_scale']."&ziel=$ordner/$bildnr&aufgabe=speichern&nr=$y\">";
-                                    echo"<img src=\"resize.php?scal=".$g_preferences['photo_save_scale']."&aufgabe=anzeigen&bild=$ordner/$bildnr.jpg\"><br><br>";
+                                    $temp_bild="../../../adm_my_files/photos/temp".$y.".jpg";
+
+                                    //Ermittlung der Original Bildgroesse
+                                    $bildgroesse = getimagesize($temp_bild);
+
+                                    //Errechnung seitenverhaeltniss
+                                    $seitenverhaeltnis = $bildgroesse[0]/$bildgroesse[1];
+
+                                    //laengere seite soll scallirt werden
+                                    //Errechnug neuen Bildgroesse Querformat
+                                    if($bildgroesse[0]>=$bildgroesse[1])
+                                    {
+                                        $neubildsize = array ($g_preferences['photo_save_scale'], round($g_preferences['photo_save_scale']/$seitenverhaeltnis));
+                                    }
+                                    //Errechnug neuen Bildgroesse Hochformat
+                                    if($bildgroesse[0]<$bildgroesse[1]){
+                                        $neubildsize = array (round($g_preferences['photo_save_scale']*$seitenverhaeltnis), $g_preferences['photo_save_scale']);
+                                    }
+
+                                    // Erzeugung neues Bild
+                                    $neubild = imagecreatetruecolor($neubildsize[0], $neubildsize[1]);
+
+                                    //Aufrufen des Originalbildes
+                                    $bilddaten = imagecreatefromjpeg($temp_bild);
+
+                                    //kopieren der Daten in neues Bild
+                                    imagecopyresampled($neubild, $bilddaten, 0, 0, 0, 0, $neubildsize[0], $neubildsize[1], $bildgroesse[0], $bildgroesse[1]);
+
+                                    //Bild in Zielordner abspeichern
+                                    imagejpeg($neubild, $ordner."/".$bildnr.".jpg", 90);
+                                    chmod($ordner."/".$bildnr.".jpg",0777);
+
+                                    //Loeschen des Bildes aus Arbeitsspeicher
+                                    if(file_exists("../../../adm_my_files/photos/temp".$y.".jpg"))
+                                    {
+                                        unlink("../../../adm_my_files/photos/temp".$y.".jpg");
+                                    }
+                                    imagedestroy($neubild);
+                                }//Ende Bild speichern
+
+
+                                //Kontrolle
+                                if(file_exists($ordner."/".$bildnr.".jpg"))
+                                {
+                                    echo"<img src=\"photo_show.php?scal=".$g_preferences['photo_save_scale']."&aufgabe=anzeigen&bild=$ordner/$bildnr.jpg\"><br><br>";
+                                    //Aendern der Datenbankeintaege
+                                    $sql=" UPDATE ". TBL_PHOTOS. "
+                                           SET   pho_quantity = '$bildnr',
+                                                 pho_last_change ='$act_datetime',
+                                                 pho_usr_id_change = $g_current_user->id
+                                           WHERE pho_id = {0}";
+                                    $sql    = prepareSQL($sql, array($pho_id));
+                                    $result = mysql_query($sql, $g_adm_con);
+                                    db_error($result);
                                 }
                                 else
                                 {
+                                    $bildnr--;
                                     echo"Das Bild konnte nicht verarbeitet werden.";
                                 }
                                 unset($y);
                             }//if($bilddatei!= "")
                         }//for
 
-                    //Aendern der Datenbankeintaege
-                    $sql=" UPDATE ". TBL_PHOTOS. "
-                           SET   pho_quantity = '$bildnr',
-                                 pho_last_change ='$act_datetime',
-                                 pho_usr_id_change = $g_current_user->id
-                           WHERE pho_id = {0}";
-                    $sql    = prepareSQL($sql, array($pho_id));
-                    $result = mysql_query($sql, $g_adm_con);
-                    db_error($result);
+
 
                     //Buttons
                     echo"

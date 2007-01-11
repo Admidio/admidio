@@ -180,7 +180,7 @@ echo "
                 //Ausgabe Bild
                 echo"
                 <div style=\"align: center\">
-                    <img src=\"resize.php?bild=$ordner/$bild.jpg&amp;scal=$scal&amp;aufgabe=anzeigen&amp;side=$side\"  border=\"0\" alt=\"$ordner $bild\">
+                    <img src=\"photo_show.php?bild=$ordner/$bild.jpg&amp;scal=$scal&amp;side=$side\"  border=\"0\" alt=\"$ordner $bild\">
                 </div>";
 
                 //Fenster schliessen Button
