@@ -119,7 +119,7 @@ require("../../../adm_config/body_top.php");
             <div class=\"formHead\">";
                 if($cat_id > 0)
                 {
-                    echo strspace("Kategorie ändern");
+                    echo strspace("Kategorie &auml;ndern");
                 }
                 else
                 {
