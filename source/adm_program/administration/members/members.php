@@ -307,36 +307,39 @@ require("../../../adm_config/body_top.php");
                 echo "<a href=\"members.php?members=$members&letter=%\">Alle</a>&nbsp;&nbsp;&nbsp;";
             }
 
+            // Alle Anfangsbuchstaben der Nachnamen ermitteln, die bisher in der DB gespeichert sind
+            if($members == 1)
+            {
+                $sql    = "SELECT DISTINCT UPPER(SUBSTRING(usr_last_name, 1, 1)) 
+                             FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
+                            WHERE rol_org_shortname = '$g_organization'
+                              AND rol_valid  = 1
+                              AND mem_rol_id = rol_id
+                              AND mem_usr_id = usr_id
+                              AND mem_valid  = 1
+                              AND usr_valid  = 1 
+                            ORDER BY usr_last_name ";
+            }
+            else
+            {
+                $sql    = "SELECT DISTINCT UPPER(SUBSTRING(usr_last_name, 1, 1))  
+                             FROM ". TBL_USERS. "
+                            WHERE usr_valid  = 1 
+                            ORDER BY usr_last_name ";
+            }
+            $result = mysql_query($sql, $g_adm_con);
+            db_error($result);
+            
+            $letter_row = mysql_fetch_array($result);
             $letter_menu = "A";
+            
             for($i = 0; $i < 26;$i++)
             {
-                // Anzahl Mitglieder zum entsprechenden Buchstaben ermitteln
-                if($members == 1)
-                {
-                    $sql    = "SELECT COUNT(usr_id) FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
-                                WHERE rol_org_shortname = '$g_organization'
-                                  AND rol_valid  = 1
-                                  AND mem_rol_id = rol_id
-                                  AND mem_usr_id = usr_id
-                                  AND mem_valid  = 1
-                                  AND usr_last_name LIKE '$letter_menu%'
-                                  AND usr_valid  = 1 ";
-                }
-                else
-                {
-                    $sql    = "SELECT COUNT(usr_id) FROM ". TBL_USERS. "
-                                WHERE usr_last_name LIKE '$letter_menu%'
-                                  AND usr_valid  = 1 ";
-                }
-                $result = mysql_query($sql, $g_adm_con);
-                db_error($result);
-                $row = mysql_fetch_array($result);
-
                 if($letter_menu == substr($letter, 0, 1))
                 {
                     echo "<b>$letter_menu</b>";
                 }
-                elseif($row[0] > 0)
+                elseif($letter_menu == $letter_row[0])
                 {
                     echo "<a href=\"members.php?members=$members&letter=$letter_menu\">$letter_menu</a>";
                 }
@@ -346,7 +349,12 @@ require("../../../adm_config/body_top.php");
                 }
 
                 echo "&nbsp;&nbsp;";
+                
                 // naechsten Buchstaben anwaehlen
+                if($letter_menu == $letter_row[0])
+                {
+                    $letter_row = mysql_fetch_array($result);
+                }
                 $letter_menu = strNextLetter($letter_menu);
             }
         echo "</p>";
