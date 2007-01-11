@@ -699,6 +699,7 @@ echo "
                     echo"<tr style=\"text-align: center;\"><td>Diese Veranstaltung enth&auml;lt leider noch keine Bilder.</td></tr>";
                 }
 
+            //Tabellenende
             echo "</table>";
             if(mysql_num_rows($result_list) > 2)
             {
