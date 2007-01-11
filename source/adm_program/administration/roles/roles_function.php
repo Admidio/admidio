@@ -60,17 +60,20 @@ else
     $rol_id = $_GET['rol_id'];
 }
 
-// Pruefung, ob die Rolle zur aktuellen Organisation gehoert
-$sql    = "SELECT * FROM ". TBL_ROLES. " 
-            WHERE rol_id            = {0}
-              AND rol_org_shortname = '$g_organization' ";
-$sql    = prepareSQL($sql, array($_GET["rol_id"]));
-$result = mysql_query($sql, $g_adm_con);
-db_error($result);
-
-if (mysql_num_rows($result) == 0)
+if($rol_id > 0)
 {
-    $g_message->show("invalid");
+    // Pruefung, ob die Rolle zur aktuellen Organisation gehoert
+    $sql    = "SELECT * FROM ". TBL_ROLES. " 
+                WHERE rol_id            = {0}
+                  AND rol_org_shortname = '$g_organization' ";
+    $sql    = prepareSQL($sql, array($rol_id));
+    $result = mysql_query($sql, $g_adm_con);
+    db_error($result);
+    
+    if (mysql_num_rows($result) == 0)
+    {
+        $g_message->show("invalid");
+    }
 }
 
 $_SESSION['roles_request'] = $_REQUEST;
@@ -143,7 +146,7 @@ elseif($_GET["mode"] == 2)
             $sql    = "SELECT COUNT(*) FROM ". TBL_ROLES. "
                         WHERE rol_org_shortname LIKE '$g_organization'
                           AND rol_name          LIKE {0}
-                          AND rol_rlc_id        =    {1} ";
+                          AND rol_cat_id        =    {1} ";
             $sql    = prepareSQL($sql, array($_POST['name'], $_POST['category']));
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
@@ -526,7 +529,7 @@ elseif($_GET["mode"] == 3)
 
     $sql    = "UPDATE ". TBL_ROLES. " SET rol_valid = 0
                 WHERE rol_id = {0}";
-    $sql    = prepareSQL($sql, array($_GET['rol_id']));
+    $sql    = prepareSQL($sql, array($rol_id));
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
 
