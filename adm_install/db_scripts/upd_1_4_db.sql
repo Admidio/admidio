@@ -25,8 +25,13 @@ ALTER TABLE %PRAEFIX%_roles ADD COLUMN `rol_profile` tinyint(1) unsigned NOT NUL
 ALTER TABLE %PRAEFIX%_links ADD COLUMN `lnk_cat_id` INTEGER(11) UNSIGNED NOT NULL DEFAULT 0 AFTER `lnk_org_id`;
 alter table %PRAEFIX%_links add index LNK_CAT_FK (lnk_cat_id);
 
+alter table %PRAEFIX%_links add index LNK_USR_CHANGE_FK (lnk_usr_id_change);
+
 alter table %PRAEFIX%_categories add constraint %PRAEFIX%_FK_CAT_ORG foreign key (cat_org_id)
       references %PRAEFIX%_organizations (org_id) on delete restrict on update restrict;
+      
+alter table %PRAEFIX%_links add constraint %PRAEFIX%_FK_LNK_USR_CHANGE foreign key (lnk_usr_id_change)
+      references %PRAEFIX%_users (usr_id) on delete set null on update restrict;      
 
 -- Texttabelle
 create table %PRAEFIX%_texts

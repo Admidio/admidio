@@ -210,6 +210,16 @@ alter table %PRAEFIX%_links add index LNK_ORG_FK (lnk_org_id);
 alter table %PRAEFIX%_links add index LNK_USR_FK (lnk_usr_id);
 
 /*==============================================================*/
+/* Index: "LNK_CAT_FK"                                            */
+/*==============================================================*/
+alter table %PRAEFIX%_links add index LNK_CAT_FK (lnk_cat_id);
+
+/*==============================================================*/
+/* Index: "LNK_USR_CHANGE_FK"                                            */
+/*==============================================================*/
+alter table %PRAEFIX%_links add index LNK_USR_CHANGE_FK (lnk_usr_id_change);
+
+/*==============================================================*/
 /* Table: adm_members                                           */
 /*==============================================================*/
 create table %PRAEFIX%_members
@@ -610,6 +620,9 @@ alter table %PRAEFIX%_links add constraint %PRAEFIX%_FK_LNK_USR foreign key (lnk
 
 alter table %PRAEFIX%_links add constraint %PRAEFIX%_FK_LNK_CAT foreign key (lnk_cat_id)
       references %PRAEFIX%_categories (cat_id) on delete restrict on update restrict;
+
+alter table %PRAEFIX%_links add constraint %PRAEFIX%_FK_LNK_USR_CHANGE foreign key (lnk_usr_id_change)
+      references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
 
 alter table %PRAEFIX%_members add constraint %PRAEFIX%_FK_MEM_ROL foreign key (mem_rol_id)
       references %PRAEFIX%_roles (rol_id) on delete restrict on update restrict;
