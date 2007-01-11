@@ -176,13 +176,18 @@ alter table %PRAEFIX%_guestbook_comments add index GBC_GBO_FK (gbc_gbo_id);
 alter table %PRAEFIX%_guestbook_comments add index GBC_USR_FK (gbc_usr_id);
 
 /*==============================================================*/
+/* Index: "GBC_USR_CHANGE_FK"                                            */
+/*==============================================================*/
+alter table %PRAEFIX%_guestbook_comments add index GBC_USR_CHANGE_FK (gbc_usr_id_change);
+
+/*==============================================================*/
 /* Table: adm_links                                             */
 /*==============================================================*/
 create table %PRAEFIX%_links
 (
    lnk_id                         int(11) unsigned               not null AUTO_INCREMENT,
    lnk_org_id                     tinyint(4)                     not null,
-   lnk_cat_id                              int(11) unsigned               not null,
+   lnk_cat_id                     int(11) unsigned               not null,
    lnk_name                       varchar(255)                   not null,
    lnk_description                text,
    lnk_url                        varchar(255)                   not null,
