@@ -1,0 +1,123 @@
+<?php
+/******************************************************************************
+ * Script mit HTML-Code fuer die Kommentare eines Gaestebucheintrages
+ *
+ * Copyright    : (c) 2004 - 2006 The Admidio Team
+ * Homepage     : http://www.admidio.org
+ * Module-Owner : Elmar Meuthen
+ *
+ * Uebergaben:
+ *
+ * id: Hiermit wird die ID des Gaestebucheintrages uebergeben
+ *
+ ******************************************************************************
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *
+ *****************************************************************************/
+
+require("../../system/common.php");
+require("../../system/bbcode.php");
+
+if (isset($_GET['id']) && is_numeric($_GET['id']))
+{
+    $id = $_GET['id'];
+}
+else
+{
+    $id = 0;
+}
+
+if ($g_preferences['enable_bbcode'] == 1)
+{
+    // Klasse fuer BBCode
+    $bbcode = new ubbParser();
+}
+
+if ($id > 0)
+{
+    $sql    = "SELECT * FROM ". TBL_GUESTBOOK_COMMENTS. ", ". TBL_GUESTBOOK. "
+                                   WHERE gbo_id     = {0}
+                                     AND gbc_gbo_id = gbo_id
+                                     AND gbo_org_id = '$g_current_organization->id'
+                                   ORDER by gbc_timestamp asc";
+
+    $sql    = prepareSQL($sql, array($id));
+
+    $comment_result = mysql_query($sql, $g_adm_con);
+    db_error($comment_result);
+
+
+    //Kommentarnummer auf 1 setzen
+    $commentNumber = 1;
+
+    // Jetzt nur noch die Kommentare auflisten
+    while ($row = mysql_fetch_object($comment_result))
+    {
+        // Die Userdaten des Kommentarschreibers aus der DB holen
+        $commentWriter = new User($g_adm_con);
+        $commentWriter->getUser($row->gbc_usr_id);
+
+        echo "
+        <div class=\"groupBox\" style=\"overflow: hidden; margin-left: 20px; margin-right: 20px;\">
+            <div class=\"groupBoxHeadline\">
+                <div style=\"text-align: left; float: left;\">
+                    <img src=\"$g_root_path/adm_program/images/comments.png\" style=\"vertical-align: top;\" alt=\"Kommentar ". $commentNumber. "\">&nbsp;".
+                    "Kommentar ". $commentNumber. " von ". strSpecialChars2Html($commentWriter->first_name). " ". strSpecialChars2Html($commentWriter->last_name). "</div>";
+
+
+                echo "
+                <div style=\"text-align: right;\">". mysqldatetime("d.m.y h:i", $row->gbc_timestamp). "&nbsp;";
+
+                // loeschen von Kommentaren duerfen nur User mit den gesetzten Rechten
+                if ($g_current_user->editGuestbookRight())
+                {
+                        echo "
+                        <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer;\" width=\"16\" height=\"16\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"
+                         onclick=\"self.location.href='guestbook_function.php?id=$row->gbc_id&amp;mode=7'\">";
+
+                }
+
+                echo "&nbsp;</div>";
+            echo "
+            </div>
+
+            <div style=\"margin: 8px 4px 4px 4px; text-align: left;\">";
+                // wenn BBCode aktiviert ist, den Text noch parsen, ansonsten direkt ausgeben
+                if ($g_preferences['enable_bbcode'] == 1)
+                {
+                    echo strSpecialChars2Html($bbcode->parse($row->gbc_text));
+                }
+                else
+                {
+                    echo nl2br(strSpecialChars2Html($row->gbc_text));
+                }
+            echo "</div>
+
+        </div>
+
+        <br />";
+
+        // Kommentarnummer um 1 erhoehen
+        $commentNumber = $commentNumber + 1;
+
+    } // Ende While-Schleife fuer das Auflisten der Kommentare...
+
+
+
+}
+
+
+?>
