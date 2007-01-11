@@ -216,11 +216,11 @@ if($g_session_valid & editPhoto())
                                     echo"<img src=\"photo_show.php?scal=".$g_preferences['photo_save_scale']."&aufgabe=anzeigen&bild=$ordner/$bildnr.jpg\"><br><br>";
                                     //Aendern der Datenbankeintaege
                                     $sql=" UPDATE ". TBL_PHOTOS. "
-                                           SET   pho_quantity = '$bildnr',
-                                                 pho_last_change ='$act_datetime',
-                                                 pho_usr_id_change = $g_current_user->id
-                                           WHERE pho_id = {0}";
-                                    $sql    = prepareSQL($sql, array($pho_id));
+                                           SET   pho_quantity = {0},
+                                                 pho_last_change ={1},
+                                                 pho_usr_id_change = {2}
+                                           WHERE pho_id = {3}";
+                                    $sql    = prepareSQL($sql, array($bildnr, $act_datetime, $g_current_user->id,$pho_id));
                                     $result = mysql_query($sql, $g_adm_con);
                                     db_error($result);
                                 }
