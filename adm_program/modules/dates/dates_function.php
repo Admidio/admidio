@@ -171,7 +171,7 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
                                                      , dat_description   = {4}
                                                      , dat_last_change   = '$act_date'
                                                      , dat_usr_id_change = $g_current_user->id
-                             WHERE dat_id = {3}";
+                             WHERE dat_id = {5}";
                 }
                 $sql    = prepareSQL($sql, array($headline, $dt_datum_von, $dt_datum_bis, $place, $content, $_GET['dat_id']));
                 $result = mysql_query($sql, $g_adm_con);
