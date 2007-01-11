@@ -53,6 +53,7 @@ ALTER TABLE %PRAEFIX%_guestbook_comments
  ADD COLUMN gbc_last_change DATETIME AFTER `gbc_ip_address`,
  ADD COLUMN gbc_usr_id_change INTEGER(11) UNSIGNED AFTER `gbc_last_change`;
 
+alter table %PRAEFIX%_guestbook_comments add index GBC_USR_CHANGE_FK (gbc_usr_id_change);
 alter table %PRAEFIX%_guestbook_comments add constraint %PRAEFIX%_FK_GBC_USR_CHANGE foreign key (gbc_usr_id_change)
       references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
 
