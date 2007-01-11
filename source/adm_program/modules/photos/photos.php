@@ -690,7 +690,7 @@ echo "
                         </tr>";
                     }//Ende Ordner existiert
                 };//for
-            echo "</table>";
+
 
             /****************************Leere Veranstaltung****************/
             //Falls die Veranstaltung weder Bilder noch Unterordner enthaelt
@@ -699,6 +699,7 @@ echo "
                     echo"<tr style=\"text-align: center;\"><td>Diese Veranstaltung enth&auml;lt leider noch keine Bilder.</td></tr>";
                 }
 
+            echo "</table>";
             if(mysql_num_rows($result_list) > 2)
             {
                 // Navigation mit Vor- und Zurueck-Buttons
