@@ -42,7 +42,7 @@ if ($g_preferences['enable_weblinks_module'] != 1)
 
 
 // Ist ueberhaupt das Recht vorhanden?
-if (!editWeblinks())
+if (!$g_current_user->editWeblinksRight())
 {
     $g_message->show("norights");
 }

@@ -77,6 +77,7 @@ class User
     var $editUser;
     var $commentGuestbookRight;
     var $editGuestbookRight;
+    var $editWeblinksRight;
 
     // Konstruktor
     function User($connection)
@@ -180,6 +181,7 @@ class User
         $this->editUser = -1;
         $this->editGuestbookRight = -1;
         $this->commentGuestbookRight = -1;
+        $this->editWeblinksRight = -1;
     }
 
     // alle Rechtevariablen wieder zuruecksetzen
@@ -605,6 +607,50 @@ class User
         {
             return false;
         }
+        
+    }
+    
+    // Funktion prueft, ob der angemeldete User Weblinks anlegen und editieren darf
+    function editWeblinksRight()
+    {
+        
+        if(-1 == this->editWeblinksRight)
+        {
+            global $g_adm_con;
+            global $g_organization;
+
+            $sql    = "SELECT *
+                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
+                        WHERE mem_usr_id        = $this->id
+                          AND mem_rol_id        = rol_id
+                          AND mem_valid         = 1
+                          AND rol_org_shortname = '$g_organization'
+                          AND rol_weblinks      = 1
+                          AND rol_valid         = 1 ";
+            $result = mysql_query($sql, $g_adm_con);
+            db_error($result);
+
+            $edit_weblinks = mysql_num_rows($result);
+
+            if ( $edit_weblinks > 0 )
+            {
+                this->editWeblinksRight = 1;
+            }
+            else
+            {
+                this->editWeblinksRight = 0;
+            }
+        }
+        
+        if (1 == $this->editWeblinksRight)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+        
         
     }
 

@@ -176,10 +176,10 @@ require("../../../adm_config/body_top.php");
 
         // Icon-Links und Navigation anzeigen
 
-        if ($_GET['id'] == 0 && (editWeblinks() || $g_preferences['enable_rss'] == true))
+        if ($_GET['id'] == 0 && ($g_current_user->editWeblinksRight() || $g_preferences['enable_rss'] == true))
         {
             // Neuen Link anlegen
-            if (editWeblinks())
+            if ($g_current_user->editWeblinksRight())
             {
                 echo "<p>
                     <span class=\"iconLink\">
@@ -285,12 +285,12 @@ require("../../../adm_config/body_top.php");
                             }
                         echo "</div>";
                         
-                        if(editWeblinks())
+                        if($g_current_user->editWeblinksRight())
                         {
                             echo "
                             <div style=\"margin-top: 10px; font-size: 8pt; text-align: left;\">";
                                 // aendern & loeschen duerfen nur User mit den gesetzten Rechten
-                                if (editWeblinks())
+                                if ($g_current_user->editWeblinksRight())
                                 {
                                     echo "<img src=\"$g_root_path/adm_program/images/edit.png\" style=\"cursor: pointer; vertical-align: middle;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"
                                         onclick=\"self.location.href='links_new.php?lnk_id=$row->lnk_id&amp;headline=". $_GET['headline']. "'\">
