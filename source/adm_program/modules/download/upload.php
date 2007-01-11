@@ -43,7 +43,7 @@ if ($g_preferences['enable_download_module'] != 1)
 }
 
 // erst pruefen, ob der User auch die entsprechenden Rechte hat
-if(!editDownload())
+if(!$g_current_user->editDownloadRight())
 {
     $g_message->show("no_file_upload_server");
     header($location);

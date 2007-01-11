@@ -78,6 +78,7 @@ class User
     var $commentGuestbookRight;
     var $editGuestbookRight;
     var $editWeblinksRight;
+    var $editDownloadRight;
 
     // Konstruktor
     function User($connection)
@@ -182,6 +183,7 @@ class User
         $this->editGuestbookRight = -1;
         $this->commentGuestbookRight = -1;
         $this->editWeblinksRight = -1;
+        $this->editDownloadRight = -1;
     }
 
     // alle Rechtevariablen wieder zuruecksetzen
@@ -427,7 +429,6 @@ class User
     // Funktion prueft, ob der angemeldete User das entsprechende Profil bearbeiten darf
 	function editProfile($profileID = NULL)
 	{
-	    global $g_adm_con;
 	    global $g_organization;
 
 	    if($profileID == NULL)
@@ -449,7 +450,7 @@ class User
 		                  	AND rol_org_shortname = '$g_organization'
 		                  	AND rol_profile       = 1
 		                  	AND rol_valid         = 1 ";
-			    $result = mysql_query($sql, $g_adm_con);
+			    $result = mysql_query($sql, $this->db_connection);
 			    db_error($result);
 
 			    $found_rows = mysql_num_rows($result);
@@ -487,7 +488,6 @@ class User
 
 	function editUser()
 	{
-	    global $g_adm_con;
 	    global $g_organization;
 
 		// prüfen ob die Userrechte schon aus der Datenbank geholt wurden
@@ -501,7 +501,7 @@ class User
 		                  AND rol_org_shortname = '$g_organization'
 		                  AND rol_edit_user     = 1
 		                  AND rol_valid         = 1 ";
-		    $result = mysql_query($sql, $g_adm_con);
+		    $result = mysql_query($sql, $this->db_connection);
 		    db_error($result);
 
 		    $found_rows = mysql_num_rows($result);
@@ -531,7 +531,6 @@ class User
     {
          if($this->commentGuestbookRight == -1)
          {
-            global $g_adm_con;
             global $g_organization;
 
             $sql    = "SELECT *
@@ -542,7 +541,7 @@ class User
                           AND rol_org_shortname      = '$g_organization'
                           AND rol_guestbook_comments = 1
                           AND rol_valid              = 1 ";
-            $result = mysql_query($sql, $g_adm_con);
+            $result = mysql_query($sql, $this->db_connection);
             db_error($result);
 
             $edit_user = mysql_num_rows($result);
@@ -573,7 +572,6 @@ class User
             
         if($this->editGuestbookRight == -1)
         {
-            global $g_adm_con;
             global $g_organization;
 
             $sql    = "SELECT *
@@ -584,7 +582,7 @@ class User
                           AND rol_org_shortname = '$g_organization'
                           AND rol_guestbook     = 1
                           AND rol_valid         = 1 ";
-            $result = mysql_query($sql, $g_adm_con);
+            $result = mysql_query($sql, $this->db_connection);
             db_error($result);
 
             $edit_user = mysql_num_rows($result);
@@ -614,9 +612,8 @@ class User
     function editWeblinksRight()
     {
         
-        if(-1 == this->editWeblinksRight)
+        if(-1 == $this->editWeblinksRight)
         {
-            global $g_adm_con;
             global $g_organization;
 
             $sql    = "SELECT *
@@ -627,18 +624,18 @@ class User
                           AND rol_org_shortname = '$g_organization'
                           AND rol_weblinks      = 1
                           AND rol_valid         = 1 ";
-            $result = mysql_query($sql, $g_adm_con);
+            $result = mysql_query($sql, $this->db_connection);
             db_error($result);
 
             $edit_weblinks = mysql_num_rows($result);
 
             if ( $edit_weblinks > 0 )
             {
-                this->editWeblinksRight = 1;
+                $this->editWeblinksRight = 1;
             }
             else
             {
-                this->editWeblinksRight = 0;
+                $this->editWeblinksRight = 0;
             }
         }
         
@@ -654,6 +651,47 @@ class User
         
     }
 
+    // Funktion prueft, ob der angemeldete User Downloads hochladen und verwalten darf
+
+    function editDownloadRight()
+    {
+        if(-1 == $this->editDownloadRight)
+        {        
+            global $g_organization;
+
+            $sql    = "SELECT *
+                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
+                        WHERE mem_usr_id        = $this->id
+                          AND mem_rol_id        = rol_id
+                          AND mem_valid         = 1
+                          AND rol_org_shortname = '$g_organization'
+                          AND rol_download      = 1
+                          AND rol_valid         = 1 ";
+            $result = mysql_query($sql, $this->db_connection);
+            db_error($result);
+
+            $edit_download = mysql_num_rows($result);
+
+            if($edit_download > 0)
+            {
+                $this->editDownloadRight = 1;
+            }
+            else
+            {
+                $this->editDownloadRight = 0;
+            }
+        }
+        
+        if (1 == $this->editDownloadRight)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+        
+    }
 
 }
 ?>
