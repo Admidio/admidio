@@ -415,7 +415,7 @@ echo "
                                 echo"
                                 <td style=\"text-align: center;\">
                                     <img onclick=\"window.open('photopopup.php?bild=$bild&pho_id=$pho_id','msg', 'height=".$popup_height.", width=".$popup_width.",left=162,top=5')\" style=\"vertical-align: middle; cursor: pointer;\"
-                                    src=\"resize.php?bild=$ordner/$bild.jpg&amp;scal=".$g_preferences['photo_thumbs_scale']."&amp;aufgabe=anzeigen\" border=\"0\" alt=\"$bild\">
+                                    src=\"photo_show.php?bild=$ordner/$bild.jpg&amp;scal=".$g_preferences['photo_thumbs_scale']."&amp;aufgabe=anzeigen\" border=\"0\" alt=\"$bild\">
                                     <br>";
 
                                     //Buttons fuer moderatoren
@@ -605,7 +605,7 @@ echo "
                                 {
                                     echo"
                                     <a target=\"_self\" href=\"photos.php?pho_id=".$adm_photo_list["pho_id"]."\">
-                                    <img src=\"resize.php?bild=$bsp_pic_path&amp;scal=".$g_preferences['photo_preview_scale']."&amp;aufgabe=anzeigen&amp;side=y\" border=\"0\" alt=\"Zufallsbild\"
+                                    <img src=\"photo_show.php?bild=$bsp_pic_path&amp;scal=".$g_preferences['photo_preview_scale']."&amp;aufgabe=anzeigen&amp;side=y\" border=\"0\" alt=\"Zufallsbild\"
                                     style=\"vertical-align: middle; align: right;\"></a></div>";
                                 }
                             }
