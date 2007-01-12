@@ -243,6 +243,7 @@ require("../../../adm_config/body_top.php");
             while ($row = mysql_fetch_object($guestbook_result))
             {
                 echo "
+                <a name=\"$row->gbo_id\"></a>
                 <div class=\"boxBody\" style=\"overflow: hidden;\">
                     <div class=\"boxHead\">
                         <div style=\"text-align: left; float: left;\">
@@ -331,19 +332,19 @@ require("../../../adm_config/body_top.php");
                             // Dieses div wird erst gemeinsam mit den Kommentaren ueber Javascript eingeblendet
                             echo "
                             <div id=\"commentsVisible_$row->gbo_id\" style=\"visibility: hidden; display: none; margin: 8px 4px 4px; font-size: 10pt; text-align: left;\">
-                                <a href=\"#\" onClick=\"toggleComments($row->gbo_id);\">
+                                <a href=\"#$row->gbo_id\" onClick=\"toggleComments($row->gbo_id);\">
                                 <img src=\"$g_root_path/adm_program/images/comments.png\" style=\"vertical-align: middle;\" alt=\"Kommentare ausblenden\"
                                 title=\"Kommentare ausblenden\" border=\"0\"></a>
-                                <a href=\"#\" onClick=\"toggleComments($row->gbo_id);\">Kommentare ausblenden</a>
+                                <a href=\"#$row->gbo_id\" onClick=\"toggleComments($row->gbo_id);\">Kommentare ausblenden</a>
                             </div>";
 
                             // Dieses div wird ausgeblendet wenn die Kommetare angezeigt werden
                             echo "
                             <div id=\"commentsInvisible_$row->gbo_id\" style=\"visibility: visible; display: block; margin: 8px 4px 4px; font-size: 10pt; text-align: left;\">
-                                <a href=\"#\" onClick=\"toggleComments($row->gbo_id);\">
+                                <a href=\"#$row->gbo_id\" onClick=\"toggleComments($row->gbo_id);\">
                                 <img src=\"$g_root_path/adm_program/images/comments.png\" style=\"vertical-align: middle;\" alt=\"Kommentare anzeigen\"
                                 title=\"Kommentare anzeigen\" border=\"0\"></a>
-                                <a href=\"#\" onClick=\"toggleComments($row->gbo_id);\">". mysql_num_rows($comment_result). " Kommentar(e) zu diesem Eintrag</a>
+                                <a href=\"#$row->gbo_id\" onClick=\"toggleComments($row->gbo_id);\">". mysql_num_rows($comment_result). " Kommentar(e) zu diesem Eintrag</a>
                                 <div id=\"comments_$row->gbo_id\" style=\"text-align: left;\"></div>
                             </div>";
 
