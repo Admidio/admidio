@@ -80,12 +80,15 @@ if(strlen($folder) > 0)
     }
 }
 
-if ($_SESSION['new_name'] == '')
-    $_SESSION['new_name'] = '';
-$new_name = $_SESSION['new_name'];
-if ($_SESSION['userfile'] == '')
-    $_SESSION['userfile'] = '';
-$userfile = $_SESSION['userfile'];
+if(isset($_SESSION['download_request']))
+{
+   $form_values = $_SESSION['download_request'];
+   unset($_SESSION['download_request']);
+}
+else
+{
+   $form_values['new_name'] = null;
+}
 
 //Beginn der Seite
 echo "
@@ -131,14 +134,14 @@ require("../../../adm_config/body_top.php");
                 <div style=\"margin-top: 15px;\">
                     <div style=\"text-align: right; width: 30%; float: left;\">Datei ausw&auml;hlen:</div>
                     <div style=\"text-align: left; margin-left: 32%;\">
-                        <input id=\"userfile\" name=\"userfile\" size=\"30\" type=\"file\" value=\"$userfile\">
+                        <input id=\"userfile\" name=\"userfile\" size=\"30\" type=\"file\">
                         <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
                     </div>
                 </div>
                 <div style=\"margin-top: 10px;\">
                     <div style=\"text-align: right; width: 30%; float: left;\">Neuer Dateiname:</div>
                     <div style=\"text-align: left; margin-left: 32%;\">
-                        <input type=\"text\" id=\"new_name\" name=\"new_name\" size=\"25\" tabindex=\"1\" value=\"$new_name\">
+                        <input type=\"text\" id=\"new_name\" name=\"new_name\" size=\"25\" tabindex=\"1\" value=\"". $form_values['new_name']. "\">
                         &nbsp;(optional)&nbsp;<img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                         onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=dateiname','Message','width=400,height=350,left=310,top=200,scrollbars=yes')\">
                     </div>
