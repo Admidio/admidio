@@ -14,9 +14,8 @@
  *                  Verzeichnisstruktur angezeigt wird. Wurde ein Default-Ordner
  *                  gesetzt, kann der Anwender nur noch in Unterordner und nicht
  *                  in hoehere Ordner des Default-Ordners navigieren
- * info   : Ausgabe von Verwaltungsinformationen
- * sort  : Gibt die Art der Sortierung an. Default ist aufsteigend. Bei der Ãœbergabe
- *             von "desc" wird absteigend sortiert.
+ * sort   : Gibt die Art der Sortierung an. Default ist aufsteigend. Bei der Uebergabe
+ *          von "desc" wird absteigend sortiert.
  ******************************************************************************
  *
  * This program is free software; you can redistribute it and/or
@@ -44,81 +43,77 @@ if ($g_preferences['enable_download_module'] != 1)
     $g_message->show("module_disabled");
 }
 
-//Verwaltung der Session
-if(isset($_GET["usr_id"]) == false && isset($_GET["rol_id"]) == false)
-{
-    //$_SESSION['navigation']->clear();
-}
-$_SESSION['navigation']->addUrl($g_current_url);
-unset($_SESSION['download_request']);
-
+// lokale Variablen der Uebergabevariablen initialisieren
+$req_folder = null;
+$req_default_folder = null;
+$req_sort   = "asc";
 
 // Uebergabevariablen pruefen
 
-if(isset($_GET["sort"]) && $_GET["sort"] != "asc" && $_GET["sort"] != "desc")
+if(isset($_GET['folder']))
 {
-    $g_message->show("invalid");
+    if(strpos($_GET['folder'], "..") !== false
+    || strpos($_GET['folder'], ":/") !== false)
+    {
+        $g_message->show("invalid_folder");
+    }
+    $req_folder = strStripTags(urldecode($_GET['folder']));
 }
 
-If (isset($_GET['default_folder']))
+if (isset($_GET['default_folder']))
 {
-    $default_folder = strStripTags(urldecode($_GET['default_folder']));
-}
-else
-{
-    $default_folder = "";
+    if(strpos($_GET['default_folder'], "..") !== false
+    || strpos($_GET['default_folder'], ":/") !== false)
+    {
+        $g_message->show("invalid_folder");
+    }
+    $req_default_folder = strStripTags(urldecode($_GET['default_folder']));
 }
 
-if (isset($_GET['folder']))
+if(isset($_GET["sort"]))  
 {
-    $folder = strStripTags(urldecode($_GET['folder']));
+    if(strtolower($_GET["sort"]) != "asc" && strtolower($_GET["sort"]) != "desc")
+    {
+        $g_message->show("invalid");
+    }
+    $req_sort = strtolower($_GET["sort"]);
 }
-else
-{
-    $folder = "";
-}
+
+//Verwaltung der Session
+$_SESSION['navigation']->clear();
+$_SESSION['navigation']->addUrl($g_current_url);
+unset($_SESSION['download_request']);
 
 $act_folder = "../../../adm_my_files/download";
 
-// uebergebene Ordner auf Gueltigkeit pruefen
-// und Ordnerpfad zusammensetzen
-if(strlen($default_folder) > 0)
+// Ordnerpfad zusammensetzen
+if(strlen($req_default_folder) > 0)
 {
-   if(strpos($default_folder, "..") !== false
-   || strpos($default_folder, ":/") !== false)
-    {
-        $g_message->show("invalid_folder");
-    }
-    $act_folder = "$act_folder/$default_folder";
+    $act_folder = "$act_folder/$req_default_folder";
 }
 
-if(strlen($folder) > 0)
+if(strlen($req_folder) > 0)
 {
-   if(strpos($folder, "..") !== false
-   || strpos($folder, ":/") !== false)
-    {
-        $g_message->show("invalid_folder");
-    }
-    $act_folder = "$act_folder/$folder";
+    $act_folder = "$act_folder/$req_folder";
 }
 
 //Erstellen des Links vom Menü
-$path = explode("/",$folder);
+$path = explode("/",$req_folder);
 $next_folder = "";
-if (strlen($default_folder) > 0)
+if (strlen($req_default_folder) > 0)
 {
-    $text = "$default_folder";
+    $text = $req_default_folder;
 }
 else
 {
     $text = "Downloads";
 }
 
-if (strlen($default_folder) > 0 || strlen($folder) > 0)
+if (strlen($req_default_folder) > 0 || strlen($req_folder) > 0)
 {
-    $link = "<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/download.php?folder=".urlencode($next_folder)."&amp;default_folder=". urlencode($default_folder). "\"><img 
+    $link = "<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/download.php?default_folder=". urlencode($req_default_folder). "\"><img 
                 class=\"iconLink\" src=\"$g_root_path/adm_program/images/application_view_list.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Downloads\"></a>
-             <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/download.php?folder=".urlencode($next_folder)."&amp;default_folder=". urlencode($default_folder). "\">$text</a>";
+             <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/download.php?default_folder=". urlencode($req_default_folder). "\">$text</a>";
 }
 
 $i=0;
@@ -130,39 +125,16 @@ While ($i <> count($path)-1)
     }
     else
     {
-        $next_folder = $next_folder." > ".$path[$i];
+        $next_folder = $next_folder."/".$path[$i];
     };
-    $link = $link." &gt; <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/download.php?folder=".urlencode($next_folder). "&amp;default_folder=". urlencode($default_folder). "\">$path[$i]</a>";
+    $link = $link." &gt; <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/download.php?folder=".urlencode($next_folder). "&amp;default_folder=". urlencode($req_default_folder). "\">$path[$i]</a>";
     $i++;
 }
 
-if(strlen($folder) > 0)
+if(strlen($req_folder) > 0)
 {
     $link = "<p><span class=\"iconLink\">$link &gt; $path[$i]</span></p>";
 }
-/* erst einmal draussen gelassen, da es nicht unbedingt benoetigt wird
-else
-{
-    If ($default_folder == "")
-    {
-        $link = "<h2>Download</h2>";
-    }
-    else
-    {
-        $link = "<h2>$default_folder</h2>";
-    };
-}*/
-
-
-if (isset($_GET['info']))
-    $info= strStripTags($_GET['info']);
-else
-    $info="";
-
-if (isset($_GET['sort']))
-    $sort= strStripTags($_GET['sort']);
-else
-    $sort= "";
 
 //Auslesen des Ordners und schreiben in array
 if(!is_dir($act_folder))
@@ -177,7 +149,7 @@ while (false !== ($filename = readdir($dh)))
     $ordnerarray[] = $filename;
 }
 $ordnerarray = array_slice ($ordnerarray,2);
-if ($sort == "desc")
+if ($req_sort == "desc")
 {
     // Absteigend
     rsort($ordnerarray);
@@ -208,7 +180,7 @@ require("../../../adm_config/body_top.php");
     echo"<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
     <h1>Downloadbereich</h1>";
     
-    if(strlen($folder) > 0)
+    if(strlen($req_folder) > 0)
     {
         echo "$link";
     }
@@ -218,21 +190,18 @@ require("../../../adm_config/body_top.php");
     {
         echo "<p>
             <span class=\"iconLink\">
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/folder_new.php?folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\"><img
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/folder_new.php?folder=". urlencode($req_folder). "&amp;default_folder=". urlencode($req_default_folder). "\"><img
                 class=\"iconLink\" src=\"$g_root_path/adm_program/images/folder_create.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Ordner erstellen\"></a>
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/folder_new.php?folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\">Ordner anlegen</a>
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/folder_new.php?folder=". urlencode($req_folder). "&amp;default_folder=". urlencode($req_default_folder). "\">Ordner anlegen</a>
             </span>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <span class=\"iconLink\">
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/upload.php?folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\"><img
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/upload.php?folder=". urlencode($req_folder). "&amp;default_folder=". urlencode($req_default_folder). "\"><img
                 class=\"iconLink\" src=\"$g_root_path/adm_program/images/page_white_get.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Hochladen\"></a>
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/upload.php?folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\">Datei hochladen</a>
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/upload.php?folder=". urlencode($req_folder). "&amp;default_folder=". urlencode($req_default_folder). "\">Datei hochladen</a>
             </span>
         </p>";
     };
-
-    // Ausgabe von Verwaltungsinfos
-    echo "$info";
 
     //Anlegen der Tabelle
     echo" <table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\">
@@ -265,35 +234,37 @@ require("../../../adm_config/body_top.php");
     {
          if(filetype("$act_folder/$ordnerarray[$i]")=="dir")
          {
-            if(strlen($folder) > 0)
-               $next_folder = "$folder/$ordnerarray[$i]";
+            if(strlen($req_folder) > 0)
+               $next_folder = "$req_folder/$ordnerarray[$i]";
             else
                $next_folder = $ordnerarray[$i];
 
             echo "
                <tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\">
-                  <td style=\"text-align: center;\"><a href=\"$g_root_path/adm_program/modules/download/download.php?folder=". urlencode($next_folder). "&amp;default_folder=". urlencode($default_folder). "\">
+                  <td style=\"text-align: center;\"><a href=\"$g_root_path/adm_program/modules/download/download.php?folder=". urlencode($next_folder). "&amp;default_folder=". urlencode($req_default_folder). "\">
                      <img src=\"$g_root_path/adm_program/images/folder.png\" border=\"0\" alt=\"Ordner\" title=\"Ordner\"></a></td>
-                  <td style=\"text-align: left;\"><a href=\"$g_root_path/adm_program/modules/download/download.php?folder=". urlencode($next_folder). "&amp;default_folder=". urlencode($default_folder). "\">$ordnerarray[$i]</a></td>
+                  <td style=\"text-align: left;\"><a href=\"$g_root_path/adm_program/modules/download/download.php?folder=". urlencode($next_folder). "&amp;default_folder=". urlencode($req_default_folder). "\">$ordnerarray[$i]</a></td>
                   <td>&nbsp;</td>
                   <td>&nbsp;</td>";
             if ($g_session_valid && $g_current_user->editDownloadRight())
             {
                echo "
                <td style=\"text-align: center;\">&nbsp;
-                  <a href=\"$g_root_path/adm_program/modules/download/rename.php?folder=". urlencode($folder). "&amp;file=". urlencode($ordnerarray[$i]). "&amp;default_folder=". urlencode($default_folder). "\"><img 
-                    src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Umbenennen\"></a>&nbsp;&nbsp;&nbsp;";
-                  //$load_url = urlencode("$g_root_path/adm_program/modules/download/download_function.php?mode=2&amp;folder=$folder&amp;file=$ordnerarray[$i]&amp;default_folder=$default_folder");
-                  echo "<a href=\"$g_root_path/adm_program/modules/download/download_function.php?mode=5&amp;file=$ordnerarray[$i]&amp;folder=$folder&amp;default_folder=$default_folder\"><img 
+                  <a href=\"$g_root_path/adm_program/modules/download/rename.php?folder=". urlencode($req_folder). "&amp;file=". urlencode($ordnerarray[$i]). "&amp;default_folder=". urlencode($req_default_folder). "\"><img 
+                    src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Umbenennen\"></a>&nbsp;&nbsp;&nbsp;
+                  <a href=\"$g_root_path/adm_program/modules/download/download_function.php?mode=5&amp;file=". urlencode($ordnerarray[$i]). "&amp;folder=". urlencode($req_folder). "&amp;default_folder=". urlencode($req_default_folder). "\"><img 
                     src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>
                </td>";
             }
             echo "</tr>";
          };
     };
+    
     //durchlaufen des Ordnerarrays und Dateilinkausgabe in Tabellenzeilen
-    for($i=0; $i<count($ordnerarray); $i++){
-           if(filetype("$act_folder/$ordnerarray[$i]")=="file"){
+    for($i=0; $i<count($ordnerarray); $i++)
+    {
+        if(filetype("$act_folder/$ordnerarray[$i]")=="file")
+        {
             //ermittlung der Dateigroesse
             $dateigroesse = round(filesize("$act_folder/$ordnerarray[$i]")/1024);
             // Ermittlung des Datums
@@ -339,8 +310,8 @@ require("../../../adm_config/body_top.php");
 
             //Link und Dateiinfo Ausgabe
             echo "<tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\">
-                     <td style=\"text-align: center;\"><a href=\"get_file.php?folder=". urlencode($folder). "&amp;file=". urlencode($ordnerarray[$i]). "&amp;default_folder=". urlencode($default_folder). "\"><img src=\"$g_root_path/adm_program/images/$dateiendung.png\" border=\"0\" alt=\"Datei\" title=\"Datei\"></a></td>
-                     <td style=\"text-align: left;\"><a href=\"get_file.php?folder=". urlencode($folder). "&amp;file=". urlencode($ordnerarray[$i]). "&amp;default_folder=". urlencode($default_folder). "\">$ordnerarray[$i]</a></td>
+                     <td style=\"text-align: center;\"><a href=\"get_file.php?folder=". urlencode($req_folder). "&amp;file=". urlencode($ordnerarray[$i]). "&amp;default_folder=". urlencode($req_default_folder). "\"><img src=\"$g_root_path/adm_program/images/$dateiendung.png\" border=\"0\" alt=\"Datei\" title=\"Datei\"></a></td>
+                     <td style=\"text-align: left;\"><a href=\"get_file.php?folder=". urlencode($req_folder). "&amp;file=". urlencode($ordnerarray[$i]). "&amp;default_folder=". urlencode($req_default_folder). "\">$ordnerarray[$i]</a></td>
                      <td style=\"text-align: center;\">$dateidatum</td>
                      <td style=\"text-align: right;\">$dateigroesse kB&nbsp;</td>";
 
@@ -349,10 +320,9 @@ require("../../../adm_config/body_top.php");
             {
                echo "
                <td align=\"center\">&nbsp;
-                  <a href=\"$g_root_path/adm_program/modules/download/rename.php?folder=". urlencode($folder). "&amp;file=". urlencode($ordnerarray[$i]). "&amp;default_folder=". urlencode($default_folder). "\">
-                     <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Umbenennen\"></a>&nbsp;&nbsp;&nbsp;";
-                  $load_url = urlencode("$g_root_path/adm_program/modules/download/download_function.php?mode=2&amp;folder=$folder&amp;file=$ordnerarray[$i]&amp;default_folder=$default_folder");
-                  echo "<a href=\"$g_root_path/adm_program/modules/download/download_function.php?mode=5&amp;file=$ordnerarray[$i]&amp;folder=$folder&amp;default_folder=$default_folder\">
+                  <a href=\"$g_root_path/adm_program/modules/download/rename.php?folder=". urlencode($req_folder). "&amp;file=". urlencode($ordnerarray[$i]). "&amp;default_folder=". urlencode($req_default_folder). "\">
+                     <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Umbenennen\"></a>&nbsp;&nbsp;&nbsp;
+                  <a href=\"$g_root_path/adm_program/modules/download/download_function.php?mode=5&amp;file=". urlencode($ordnerarray[$i]). "&amp;folder=". urlencode($req_folder). "&amp;default_folder=". urlencode($req_default_folder). "\">
                      <img src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>
                </td>";
             }
