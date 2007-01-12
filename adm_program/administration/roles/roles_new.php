@@ -299,7 +299,7 @@ require("../../../adm_config/body_top.php");
                                 echo " checked ";
                             }
                             echo " value=\"1\" />&nbsp;
-                            <label for=\"users\"><img src=\"$g_root_path/adm_program/images/users.png\" alt=\"Daten aller Benutzer bearbeiten\"></label>
+                            <label for=\"users\"><img src=\"$g_root_path/adm_program/images/group.png\" alt=\"Daten aller Benutzer bearbeiten\"></label>
                         </div>
                         <div style=\"text-align: left; margin-left: 12%;\">
                             <label for=\"users\">Daten aller Benutzer bearbeiten&nbsp;</label>
