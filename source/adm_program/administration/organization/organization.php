@@ -93,7 +93,7 @@ echo "
             font-weight: normal;
         }
     </style>
-    
+
     <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/toggleDiv.js\"></script>
 
     <!--[if lt IE 7]>
@@ -113,13 +113,13 @@ require("../../../adm_config/body_top.php");
                 <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/organization/fields.php\">Profilfelder pflegen</a>
             </span>
         </p>
-        
+
         <div class=\"formBody\" style=\"font-size: 12px; padding: 6px 0px; width: 566px;\">
             <a href=\"#\" onClick=\"toggleDiv('general');\">Allgemein</a>
 
              &#124; <a href=\"#\" onClick=\"toggleDiv('register');\">Registrierung</a>
 
-             &#124; <a href=\"#\" onClick=\"toggleDiv('announcement-module');\">Ankündigungen</a>
+             &#124; <a href=\"#\" onClick=\"toggleDiv('announcement-module');\">Ank&uuml;ndigungen</a>
 
              &#124; <a href=\"#\" onClick=\"toggleDiv('download-module');\">Downloads</a>
 
@@ -127,13 +127,13 @@ require("../../../adm_config/body_top.php");
 
              &#124; <a href=\"#\" onClick=\"toggleDiv('photo-module');\">Fotos</a>
 
-             &#124; <a href=\"#\" onClick=\"toggleDiv('guestbook-module');\">Gästebuch</a>
+             &#124; <a href=\"#\" onClick=\"toggleDiv('guestbook-module');\">G&auml;stebuch</a>
 
              &#124; <a href=\"#\" onClick=\"toggleDiv('dates-module');\">Termine</a>
 
              &#124; <a href=\"#\" onClick=\"toggleDiv('links-module');\">Links</a>
         </div><br />
-        
+
         <form action=\"organization_function.php?org_id=$g_current_organization->id\" method=\"post\" name=\"orga_settings\">
             <div class=\"formBody\">
                 <div class=\"groupBox\" id=\"general\" style=\"visibility: hidden; display: none; margin-top: 15px; text-align: left; width: 95%;\">
@@ -740,7 +740,7 @@ require("../../../adm_config/body_top.php");
 
              <br />
             </div>";
-            
+
             echo "
             <br />
             <div class=\"formBody\">
