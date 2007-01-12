@@ -99,6 +99,31 @@ echo "
     }
 
     echo "
+
+    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/ajax.js\"></script>
+
+    <script type=\"text/javascript\">
+        var resObject     = createXMLHttpRequest();
+        var gbookId		  = 0;
+
+        function getComments(commentId)
+        {
+            gbookId = commentId;
+            resObject.open('get', 'get_comments.php?cid=' + gbookId, false);
+            resObject.onreadystatechange = handleResponse;
+            resObject.send(null);
+        }
+
+        function handleResponse()
+        {
+            if(resObject.readyState == 4)
+            {
+                var objectId = 'commentSection_' + gbookId;
+                document.getElementById(objectId).innerHTML = resObject.responseText;
+            }
+        }
+    </script>
+
     <!--[if lt IE 7]>
     <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
     <![endif]-->";
@@ -272,14 +297,14 @@ require("../../../adm_config/body_top.php");
 
                         if ($_GET['id'] == 0 && mysql_num_rows($comment_result) > 0)
                         {
-                            // Falls Kommentare vorhanden sind, wird der Link zur Kommentarseite angezeigt...
+                            // Falls Kommentare vorhanden sind, wird ein Link eingeblendet mit dem die Kommentare nachgeladen werden
                             $load_url = "$g_root_path/adm_program/modules/guestbook/guestbook.php?id=$row->gbo_id&start=". $_GET["start"]. "&headline=". $_GET["headline"];
                             echo "
-                            <div style=\"margin: 8px 4px 4px 4px; font-size: 10pt; text-align: left;\">
+                            <div id=\"commentSection_$row->gbo_id\" style=\"text-align: left;\">
                                 <a href=\"$load_url\">
                                 <img src=\"$g_root_path/adm_program/images/comments.png\" style=\"vertical-align: middle;\" alt=\"Kommentare anzeigen\"
                                 title=\"Kommentare anzeigen\" border=\"0\"></a>
-                                <a href=\"$load_url\">". mysql_num_rows($comment_result). " Kommentar(e) zu diesem Eintrag</a>
+                                <a href=\"#\" onClick=\"getComments($row->gbo_id);\">". mysql_num_rows($comment_result). " Kommentar(e) zu diesem Eintrag</a>
                             </div>";
                         }
 
