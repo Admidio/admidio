@@ -10,8 +10,9 @@
  *
  * members - 1 : (Default) Nur Mitglieder der Gliedgemeinschaft anzeigen
  *           0 : Mitglieder, Ehemalige, Mitglieder anderer Gliedgemeinschaften
- * letter: alle User deren Nachnamen mit dem Buchstaben beginnt, werden angezeigt
- * start:  Angabe, ab welchem Datensatz Mitglieder angezeigt werden sollen
+ * letter      : alle User deren Nachnamen mit dem Buchstaben beginnt, werden angezeigt
+ * start       : Angabe, ab welchem Datensatz Mitglieder angezeigt werden sollen
+ * search      : Inhalt des Suchfeldes, damit dieser beim Blaettern weiter genutzt werden kann
  *
  ******************************************************************************
  *
@@ -40,79 +41,76 @@ if (!$g_current_user->editUser())
     $g_message->show("norights");
 }
 
+// lokale Variablen initialisieren
+$restrict = "";
+$listname = "";
+$i = 0;
+$members_per_page = 20; // Anzahl der Mitglieder, die auf einer Seite angezeigt werden
+
+// lokale Variablen der Uebergabevariablen initialisieren
+$req_members   = 1;
+$req_letter    = "%";
+$req_start     = 0;
+$req_search    = null;
+$req_queryForm = null;
+
 // Uebergabevariablen pruefen
 
 if (isset($_GET['members']) && is_numeric($_GET['members']))
 {
-    $members = $_GET['members'];
-}
-else
-{
-    $members = 1;
+    $req_members = $_GET['members'];
 }
 
-if (isset($_GET['letter']) && strlen($_GET["letter"]) > 2)
+if (isset($_GET['letter']))
 {
-    $g_message->show("invalid");
+    
+    if(strlen($_GET['letter']) > 2)
+    {
+        $g_message->show("invalid");
+    }
+    if(strpos($_GET['letter'], "%") === false)
+    {
+        $req_letter = strStripTags($_GET['letter'], true);
+        $req_letter = $_GET['letter']. "%";
+    }
+    else
+    {
+        $req_letter = $_GET['letter'];
+    }
 }
 
-if(array_key_exists("start", $_GET))
+if(isset($_GET['start']))
 {
     if(is_numeric($_GET["start"]) == false)
     {
         $g_message->show("invalid");
     }
-}
-else
-{
-    $_GET["start"] = 0;
+    $req_start = $_GET['start'];
 }
 
-
-if (isset($_POST['queryForm']) && strlen($_POST['queryForm']) > 0)
+if(isset($_GET['search']))
 {
-    $queryForm = strStripTags($_POST['queryForm']);
+    $req_search = strStripTags($_GET['search']);
 }
-else
+
+if (isset($_GET['queryForm']) && strlen($_GET['queryForm']) > 0)
 {
-    $queryForm = null;
+    $req_queryForm = strStripTags($_GET['queryForm']);
 }
 
 // Die zum Caching in der Session zwischengespeicherten Namen werden beim
 // neu laden der Seite immer abgeraeumt...
 unset ($_SESSION['QuerySuggestions']);
 
-$restrict = "";
-$listname = "";
-$i = 0;
-$members_per_page = 20; // Anzahl der Mitglieder, die auf einer Seite angezeigt werden
-
 // Navigation faengt hier im Modul an
 $_SESSION['navigation']->clear();
 $_SESSION['navigation']->addUrl($g_current_url);
 
-if(array_key_exists("letter", $_GET))
-{
-    if($_GET["letter"] != "%")
-    {
-        $letter = $_GET["letter"]. "%";
-    }
-    else
-    {
-        $letter = "%";
-    }
-}
-else
-{
-    $letter = "%";
-}
-
-
-if ($queryForm)
+if ($req_queryForm)
 {
     //Es wurde eine Suchanfrage uebermittelt
 
-    if ($members)
+    if ($req_members)
     {
         //Es werden nur OrganisationsMitglieder durchsucht
         $sql    = "SELECT DISTINCT usr_id, usr_last_name, usr_first_name, usr_email, usr_homepage,
@@ -139,13 +137,13 @@ if ($queryForm)
                       AND usr_valid = 1
                     ORDER BY usr_last_name, usr_first_name ";
     }
-    $sql    = prepareSQL($sql, array(str_replace(',', '', $queryForm). '%'));
+    $sql    = prepareSQL($sql, array(str_replace(',', '', $req_queryForm). '%'));
 }
 else
 {
     // alle Mitglieder zur Auswahl selektieren
     // unbestaetigte User werden dabei nicht angezeigt
-    if($members == true)
+    if($req_members)
     {
         $sql    = "SELECT DISTINCT usr_id, usr_last_name, usr_first_name, usr_email, usr_homepage,
                           usr_login_name, usr_last_change
@@ -168,14 +166,14 @@ else
                       AND usr_valid = 1
                     ORDER BY usr_last_name, usr_first_name ";
     }
-    $sql    = prepareSQL($sql, array($letter));
+    $sql    = prepareSQL($sql, array($req_letter));
 }
 $result_mgl = mysql_query($sql, $g_adm_con);
 db_error($result_mgl);
 
 $num_members = mysql_num_rows($result_mgl);
 
-if($num_members < $_GET['start'])
+if($num_members < $req_start)
 {
     $g_message->show("invalid");
 }
@@ -224,42 +222,42 @@ require("../../../adm_config/body_top.php");
         echo "<p>
             <span class=\"iconLink\">
                 <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?new_user=1\"><img
-                class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Login\"></a>
+                class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Benutzer anlegen\"></a>
                 <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_new.php?new_user=1\">Benutzer anlegen</a>
             </span>
             &nbsp;&nbsp;&nbsp;&nbsp;";
 
-            if($count_mem_rol != mysql_num_rows($result_mgl) || $members == false)
+            if($count_mem_rol != mysql_num_rows($result_mgl) || $req_members == false)
             {
                 // Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
-                if($members == 1)
+                if($req_members == 1)
                 {
-                    echo "<span class=\"iconLink\">
-                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members.php?members=0&letter=". str_replace("%", "", $letter). "\"><img
-                        class=\"iconLink\" src=\"$g_root_path/adm_program/images/group.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Benutzer anzeigen\"></a>
-                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members.php?members=0&letter=". str_replace("%", "", $letter). "\">Alle Benutzer anzeigen</a>
-                    </span>
-                    &nbsp;&nbsp;&nbsp;&nbsp;";
+                    $link_text = "Alle Benutzer anzeigen";
+                    $link_icon = "group.png";
+                    $link_members = 0;
                 }
                 else
                 {
-                    echo "<span class=\"iconLink\">
-                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members.php?members=1&letter=". str_replace("%", "", $letter). "\"><img
-                         class=\"iconLink\" src=\"$g_root_path/adm_program/images/user.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Benutzer anzeigen\"></a>
-                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members.php?members=1&letter=". str_replace("%", "", $letter). "\">Nur Mitglieder anzeigen</a>
-                    </span>
-                    &nbsp;&nbsp;&nbsp;&nbsp;";
+                    $link_text = "Nur Mitglieder anzeigen";
+                    $link_icon = "user.png";
+                    $link_members = 1;
                 }
+                echo "<span class=\"iconLink\">
+                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members.php?members=$link_members&letter=". str_replace("%", "", $req_letter). "\"><img
+                     class=\"iconLink\" src=\"$g_root_path/adm_program/images/$link_icon\" style=\"vertical-align: middle;\" border=\"0\" alt=\"$link_text\"></a>
+                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members.php?members=$link_members&letter=". str_replace("%", "", $req_letter). "\">$link_text</a>
+                </span>
+                &nbsp;&nbsp;&nbsp;&nbsp;";
             }
             echo "
             <span class=\"iconLink\">
                 <a href=\"import.php\"><img
-                class=\"iconLink\" src=\"$g_root_path/adm_program/images/database_in.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Login\"></a>
+                class=\"iconLink\" src=\"$g_root_path/adm_program/images/database_in.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Benutzer importieren\"></a>
                 <a class=\"iconLink\" href=\"import.php\">Benutzer importieren</a>
             </span>
         </p>";
 
-        if($members == 1)
+        if($req_members)
         {
             echo "<p>Alle Mitglieder ";
         }
@@ -268,24 +266,24 @@ require("../../../adm_config/body_top.php");
             echo "<p>Alle Benutzer (Mitglieder, Ehemalige) ";
         }
 
-        if($letter != "%")
+        if($req_letter != "%")
         {
-            echo " mit Nachnamen ". str_replace("%", "*", $letter);
+            echo " mit Nachnamen ". str_replace("%", "*", $req_letter);
         }
         echo " werden angezeigt</p>";
 
         //Hier gibt es jetzt noch die Suchbox...
         echo "
         <div style=\"width: 300px;\">
-            <form action=\"members.php?members=$members\" method=\"post\">
-                <input type=\"text\" value=\"$queryForm\" name=\"queryForm\" id=\"queryForm\" autocomplete=\"off\" style=\"width: 200px;\"  />
+            <form action=\"members.php?members=$req_members\" method=\"get\">
+                <input type=\"text\" value=\"$req_queryForm\" name=\"queryForm\" id=\"queryForm\" autocomplete=\"off\" style=\"width: 200px;\"  />
                 <input type=\"submit\" value=\"Suchen\" />
             </form>
         </div>
 
         <script type=\"text/javascript\">
             var options = {
-                        script:\"query_suggestions.php?members=$members&\",
+                        script:\"query_suggestions.php?members=$req_members&\",
                         varname:\"query\",
                         minchars:1,
                         timeout:5000
@@ -298,17 +296,17 @@ require("../../../adm_config/body_top.php");
 
             // Leiste mit allen Buchstaben des Alphabets anzeigen
 
-            if ($letter == "%" && !$queryForm)
+            if ($req_letter == "%" && !$req_queryForm)
             {
                 echo "<b>Alle</b>&nbsp;&nbsp;&nbsp;";
             }
             else
             {
-                echo "<a href=\"members.php?members=$members&letter=%\">Alle</a>&nbsp;&nbsp;&nbsp;";
+                echo "<a href=\"members.php?members=$req_members&letter=%\">Alle</a>&nbsp;&nbsp;&nbsp;";
             }
 
             // Alle Anfangsbuchstaben der Nachnamen ermitteln, die bisher in der DB gespeichert sind
-            if($members == 1)
+            if($req_members == 1)
             {
                 $sql    = "SELECT DISTINCT UPPER(SUBSTRING(usr_last_name, 1, 1)) 
                              FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
@@ -335,13 +333,13 @@ require("../../../adm_config/body_top.php");
             
             for($i = 0; $i < 26;$i++)
             {
-                if($letter_menu == substr($letter, 0, 1))
+                if($letter_menu == substr($req_letter, 0, 1))
                 {
                     echo "<b>$letter_menu</b>";
                 }
                 elseif($letter_menu == $letter_row[0])
                 {
-                    echo "<a href=\"members.php?members=$members&letter=$letter_menu\">$letter_menu</a>";
+                    echo "<a href=\"members.php?members=$req_members&letter=$letter_menu\">$letter_menu</a>";
                 }
                 else
                 {
@@ -375,16 +373,16 @@ require("../../../adm_config/body_top.php");
                 $i = 0;
                 
                 // jetzt erst einmal zu dem ersten relevanten Datensatz springen
-                if(!mysql_data_seek($result_mgl, $_GET['start']))
+                if(!mysql_data_seek($result_mgl, $req_start))
                 {
                     $g_message->show("invalid");
                 }
 
-                for($i = 0; $i < $members_per_page && $i + $_GET['start'] < $num_members; $i++)
+                for($i = 0; $i < $members_per_page && $i + $req_start < $num_members; $i++)
                 {
                     if($row = mysql_fetch_object($result_mgl))
                     {
-                        if($members == true)
+                        if($req_members)
                         {
                             $is_member = true;
                         }
@@ -395,9 +393,9 @@ require("../../../adm_config/body_top.php");
 
                         echo "
                         <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
-                            <td align=\"right\">". ($_GET['start'] + $i + 1). "&nbsp;</td>
+                            <td align=\"right\">". ($req_start + $i + 1). "&nbsp;</td>
                             <td align=\"center\">";
-                                if($is_member == true)
+                                if($is_member)
                                 {
                                     echo "<a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->usr_id\"><img
                                         src=\"$g_root_path/adm_program/images/user.png\" alt=\"Mitglied bei $g_current_organization->longname\"
@@ -439,7 +437,7 @@ require("../../../adm_config/body_top.php");
                             <td align=\"left\">&nbsp;$row->usr_login_name</td>
                             <td align=\"center\">&nbsp;". mysqldatetime("d.m.y h:i" , $row->usr_last_change). "</td>
                             <td align=\"center\">";
-                                if($is_member == true)
+                                if($is_member)
                                 {
                                     if(hasRole("Webmaster")
                                     && strlen($row->usr_login_name) > 0
@@ -493,8 +491,8 @@ require("../../../adm_config/body_top.php");
             echo "</table>";
             
             // Navigation mit Vor- und Zurueck-Buttons
-            $base_url = "$g_root_path/adm_program/administration/members/members.php?letter=$letter&members=$members";
-            echo generatePagination($base_url, $num_members, $members_per_page, $_GET["start"], TRUE);
+            $base_url = "$g_root_path/adm_program/administration/members/members.php?letter=$req_letter&members=$req_members&queryForm=$req_queryForm";
+            echo generatePagination($base_url, $num_members, $members_per_page, $req_start, TRUE);
 
         }
         else
