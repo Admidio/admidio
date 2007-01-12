@@ -601,6 +601,10 @@ require("../../../adm_config/body_top.php");
                 // werden die Links nicht angezeigt
                 if($g_current_user->editProfile($a_user_id) == true)
                 {
+                    if($a_user_id != $g_current_user->id && isset($_GET['user_id']) == true)
+                    {
+                        echo "&nbsp;&nbsp;&nbsp;&nbsp;";
+                    }
                     echo "<span class=\"iconLink\">
                         <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$a_user_id\"><img
                          class=\"iconLink\" src=\"$g_root_path/adm_program/images/photo.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Profildaten &auml;ndern\"></a>
@@ -614,7 +618,7 @@ require("../../../adm_config/body_top.php");
                     </span>";
                 }
                 else
-            	{
+                {
                     echo "&nbsp;&nbsp;&nbsp;&nbsp;";
                 }
             echo "</div>
