@@ -116,13 +116,6 @@ if(!is_numeric($locked) && $locked!=NULL)
     $g_message->show("invalid");
 }
 
-$reload = false;
-if(isset($_GET['reload']))
-{
-    $reload=$_GET['reload'];
-}
-
-
 //erfassen der Veranstaltung falls noch nicht in Session gespeichert
 
 $sql="  SELECT *

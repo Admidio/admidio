@@ -179,11 +179,9 @@ if($g_session_valid && editPhoto($adm_photo['pho_org_shortname']))
             db_error($result);
             //erfragen der id
             $pho_id=mysql_insert_id($g_adm_con);
-        }
 
-        //Verzeichnis erstellen
-        if ($aufgabe=="makenew")
-        {
+            //Verzeichnis erstellen
+        
             $ordnerneu = "$beginn"."_"."$pho_id";
             //Wenn keine Schreibrechte Loeschen der Daten aus der Datenbank
             if (decoct(fileperms("../../../adm_my_files/photos"))!=40777)
@@ -204,6 +202,9 @@ if($g_session_valid && editPhoto($adm_photo['pho_org_shortname']))
             {
                 $ordnererstellt = mkdir("../../../adm_my_files/photos/$ordnerneu",0777);
                 chmod("../../../adm_my_files/photos/$ordnerneu", 0777);
+                
+                // Anlegen der Veranstaltung war erfolgreich -> event_new aus der Historie entfernen
+                $_SESSION['navigation']->deleteLastUrl();
             }
         }//if
 
@@ -238,6 +239,9 @@ if($g_session_valid && editPhoto($adm_photo['pho_org_shortname']))
             //alten ordner loeschen
             chmod("$ordner", 0777);
             rmdir("$ordner");
+            
+            // Aendern der Veranstaltung war erfolgreich -> event_new aus der Historie entfernen
+            $_SESSION['navigation']->deleteLastUrl();
         }//if
 
         /********************Aenderung der Datenbankeinträge***********************************/

@@ -56,7 +56,7 @@ if(isset($_GET["aufgabe"]) && $_GET["aufgabe"] != "new" && $_GET["aufgabe"] != "
 $form_values = array();
 $pho_id = $_GET["pho_id"];
 
-
+$_SESSION['navigation']->addUrl($g_current_url);
 
 //Wenn die eventsession besteht in form_values einlesen
 if(isset($_SESSION['photo_event_request']))
