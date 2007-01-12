@@ -93,9 +93,10 @@ if(isset($_GET['search']))
     $req_search = strStripTags($_GET['search']);
 }
 
-if (isset($_GET['queryForm']) && strlen($_GET['queryForm']) > 0)
+// members aus dem $_REQUEST Array holen, da es sowohl durch GET als auch durch POST uebergeben werden kann
+if (isset($_REQUEST['queryForm']) && strlen($_REQUEST['queryForm']) > 0)
 {
-    $req_queryForm = strStripTags($_GET['queryForm']);
+    $req_queryForm = strStripTags($_REQUEST['queryForm']);
 }
 
 // Die zum Caching in der Session zwischengespeicherten Namen werden beim
@@ -243,9 +244,9 @@ require("../../../adm_config/body_top.php");
                     $link_members = 1;
                 }
                 echo "<span class=\"iconLink\">
-                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members.php?members=$link_members&letter=". str_replace("%", "", $req_letter). "\"><img
+                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members.php?members=$link_members&letter=". str_replace("%", "", $req_letter). "&queryForm=$req_queryForm\"><img
                      class=\"iconLink\" src=\"$g_root_path/adm_program/images/$link_icon\" style=\"vertical-align: middle;\" border=\"0\" alt=\"$link_text\"></a>
-                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members.php?members=$link_members&letter=". str_replace("%", "", $req_letter). "\">$link_text</a>
+                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members.php?members=$link_members&letter=". str_replace("%", "", $req_letter). "&queryForm=$req_queryForm\">$link_text</a>
                 </span>
                 &nbsp;&nbsp;&nbsp;&nbsp;";
             }
@@ -275,7 +276,7 @@ require("../../../adm_config/body_top.php");
         //Hier gibt es jetzt noch die Suchbox...
         echo "
         <div style=\"width: 300px;\">
-            <form action=\"members.php?members=$req_members\" method=\"get\">
+            <form action=\"members.php?members=$req_members\" method=\"post\">
                 <input type=\"text\" value=\"$req_queryForm\" name=\"queryForm\" id=\"queryForm\" autocomplete=\"off\" style=\"width: 200px;\"  />
                 <input type=\"submit\" value=\"Suchen\" />
             </form>
