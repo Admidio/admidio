@@ -104,7 +104,7 @@ echo "
 
     <script type=\"text/javascript\">
         var resObject     = createXMLHttpRequest();
-        var gbookId		  = 0;
+        var gbookId          = 0;
 
         function getComments(commentId)
         {
@@ -116,12 +116,42 @@ echo "
 
         function handleResponse()
         {
-            if(resObject.readyState == 4)
+            if (resObject.readyState == 4)
             {
                 var objectId = 'commentSection_' + gbookId;
                 document.getElementById(objectId).innerHTML = resObject.responseText;
+                toggleComments(gbookId);
             }
         }
+
+        function toggleComments(commentId)
+        {
+            if (document.getElementById('commentSection_' + commentId).innerHTML.length == 0)
+            {
+                getComments(commentId);
+            }
+            else
+            {
+                toggleDiv('commentsInvisible_' + commentId);
+                toggleDiv('commentsVisible_' + commentId);
+                toggleDiv('commentSection_' + commentId);
+            }
+        }
+
+        function toggleDiv(objectId)
+        {
+            if (document.getElementById(objectId).style.visibility == 'visible')
+            {
+                document.getElementById(objectId).style.visibility = 'hidden';
+                document.getElementById(objectId).style.display    = 'none';
+            }
+            else
+            {
+                document.getElementById(objectId).style.visibility = 'visible';
+                document.getElementById(objectId).style.display    = 'block';
+            }
+        }
+
     </script>
 
     <!--[if lt IE 7]>
@@ -295,18 +325,33 @@ require("../../../adm_config/body_top.php");
                         db_error($comment_result);
 
 
+                        // Falls Kommentare vorhanden sind...
                         if ($_GET['id'] == 0 && mysql_num_rows($comment_result) > 0)
                         {
-                            // Falls Kommentare vorhanden sind, wird ein Link eingeblendet mit dem die Kommentare nachgeladen werden
-                            $load_url = "$g_root_path/adm_program/modules/guestbook/guestbook.php?id=$row->gbo_id&start=". $_GET["start"]. "&headline=". $_GET["headline"];
+                            // Dieses div wird erst gemeinsam mit den Kommentaren ueber Javascript eingeblendet
                             echo "
-                            <div id=\"commentSection_$row->gbo_id\" style=\"text-align: left;\">
-                                <a href=\"$load_url\">
+                            <div id=\"commentsVisible_$row->gbo_id\" style=\"visibility: hidden; display: none; margin: 8px 4px 4px; font-size: 10pt; text-align: left;\">
+                                <a href=\"#\" onClick=\"toggleComments($row->gbo_id);\">
+                                <img src=\"$g_root_path/adm_program/images/comments.png\" style=\"vertical-align: middle;\" alt=\"Kommentare ausblenden\"
+                                title=\"Kommentare ausblenden\" border=\"0\"></a>
+                                <a href=\"#\" onClick=\"toggleComments($row->gbo_id);\">Kommentare ausblenden</a>
+                            </div>";
+
+                            // Dieses div wird ausgeblendet wenn die Kommetare angezeigt werden
+                            echo "
+                            <div id=\"commentsInvisible_$row->gbo_id\" style=\"visibility: visible; display: block; margin: 8px 4px 4px; font-size: 10pt; text-align: left;\">
+                                <a href=\"#\" onClick=\"toggleComments($row->gbo_id);\">
                                 <img src=\"$g_root_path/adm_program/images/comments.png\" style=\"vertical-align: middle;\" alt=\"Kommentare anzeigen\"
                                 title=\"Kommentare anzeigen\" border=\"0\"></a>
-                                <a href=\"#\" onClick=\"getComments($row->gbo_id);\">". mysql_num_rows($comment_result). " Kommentar(e) zu diesem Eintrag</a>
+                                <a href=\"#\" onClick=\"toggleComments($row->gbo_id);\">". mysql_num_rows($comment_result). " Kommentar(e) zu diesem Eintrag</a>
+                                <div id=\"comments_$row->gbo_id\" style=\"text-align: left;\"></div>
                             </div>";
+
+                            // Hier ist das div, in die die Kommentare reingesetzt werden
+                            echo "
+                            <div id=\"commentSection_$row->gbo_id\" style=\"visibility: hidden; display: none;\"></div>";
                         }
+
 
                         if ($_GET['id'] == 0 && mysql_num_rows($comment_result) == 0 && $g_current_user->commentGuestbookRight())
                         {
