@@ -81,12 +81,21 @@ function strSpecialChars2Html($srcString)
 
 // entfernt Html-, PHP-Codes und Spaces am Anfang und Ende des Strings
 
-function strStripTags($srcString)
+function strStripTags($srcString, $checkChar = 0)
 {
     // Spaces vorne und hinten entfernen
     $srcString = trim($srcString);
     // HTML und PHP Tags entfernen
     $srcString = strip_tags($srcString);
+    
+    if($checkChar)
+    {
+        $anz = strspn($srcString, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_+ ");
+        if($anz != strlen($srcString))
+        {
+            $srcString = "";
+        }
+    }
 
     return $srcString;
 }
