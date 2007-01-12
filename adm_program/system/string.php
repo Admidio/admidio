@@ -90,7 +90,7 @@ function strStripTags($srcString, $checkChar = 0)
     
     if($checkChar)
     {
-        $anz = strspn($srcString, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_+ ");
+        $anz = strspn($srcString, "abcdefghijklmnopqrstuvwxyzäöüßABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜ0123456789.-_+ ");
         if($anz != strlen($srcString))
         {
             $srcString = "";
@@ -209,27 +209,36 @@ function isValidFileName($file_name, $check_ext = false)
     // If the email address was not empty
     if(strlen(trim($file_name)) > 0)
     {
-        // nur gueltige Zeichen zulassen
-        $anz = strspn($file_name, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_+ ");
+        // nur ungueltige Zeichen pruefen (gueltige Pruefung hat zu Problemen bei Sonderzeichen gefuehrt
+        $anz = strspn($file_name, "/\\!\"§$%&<>|");
 
-        if($anz == strlen($file_name))
+        if($anz == 0)
         {
-            if($check_ext)
+            if(strlen($file_name) == strlen(strip_tags($file_name))
+            && strpos($file_name, "..") === false
+            && strpos($file_name, ":/") === false)
             {
-                // auf gueltige Endungen pruefen
-                $arr_invalid_ext = array("php", "php3", "php4", "php5", "html", "htm", "htaccess", "htpasswd", "pl");
-                $file_ext  = substr($file_name, strrpos($file_name, ".")+1);
+                if($check_ext)
+                {
+                    // auf gueltige Endungen pruefen
+                    $arr_invalid_ext = array("php", "php3", "php4", "php5", "html", "htm", "htaccess", "htpasswd", "pl");
+                    $file_ext  = substr($file_name, strrpos($file_name, ".")+1);
 
-                if(in_array($file_ext, $arr_invalid_ext))
-                {
-                    return -3;
+                    if(in_array($file_ext, $arr_invalid_ext))
+                    {
+                        return -3;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
                 }
-                else
-                {
-                    return 0;
-                }
+                return 0;
             }
-            return 0;
+            else
+            {
+                return -2;
+            }
         }
         else
         {

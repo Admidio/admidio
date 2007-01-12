@@ -74,6 +74,16 @@ if(strlen($folder) > 0)
     }
 }
 
+if(isset($_SESSION['download_request']))
+{
+   $form_values = $_SESSION['download_request'];
+   unset($_SESSION['download_request']);
+}
+else
+{
+   $form_values['new_folder'] = null;
+}
+
 //Beginn der Seite
 echo "
 <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
@@ -112,15 +122,12 @@ require("../../../adm_config/body_top.php");
                     {
                         echo ucfirst($folder);
                     }
-                    if ($_SESSION['new_folder'] == '')
-                        $_SESSION['new_folder'] = "";
-                    $new_folder = $_SESSION['new_folder'];
                     echo "</b> erstellen
                 </div>
                 <div style=\"margin-top: 15px;\">
                     <div style=\"text-align: right; width: 33%; float: left;\">Name:</div>
                     <div style=\"text-align: left; margin-left: 35%;\">
-                        <input type=\"text\" id=\"new_folder\" value=\"$new_folder\" name=\"new_folder\" style=\"width: 200px;\" maxlength=\"255\">
+                        <input type=\"text\" id=\"new_folder\" name=\"new_folder\" value=\"". $form_values['new_folder']. "\" style=\"width: 200px;\" maxlength=\"255\">
                         <input type=\"hidden\" id=\"folder\" value=\"$folder\" style=\"width: 200px;\" maxlength=\"255\">
                         <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
                     </div>

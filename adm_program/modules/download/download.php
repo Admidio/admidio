@@ -50,6 +50,7 @@ if(isset($_GET["usr_id"]) == false && isset($_GET["rol_id"]) == false)
     //$_SESSION['navigation']->clear();
 }
 $_SESSION['navigation']->addUrl($g_current_url);
+unset($_SESSION['download_request']);
 
 
 // Uebergabevariablen pruefen
@@ -78,11 +79,6 @@ else
 }
 
 $act_folder = "../../../adm_my_files/download";
-
-//Session zur�ck setzten
-$_SESSION['new_folder'] = '';
-$_SESSION['new_name'] = '';
-//$_SESSION['userfile'] = "";
 
 // uebergebene Ordner auf Gueltigkeit pruefen
 // und Ordnerpfad zusammensetzen
@@ -285,11 +281,11 @@ require("../../../adm_config/body_top.php");
             {
                echo "
                <td style=\"text-align: center;\">&nbsp;
-                  <a href=\"$g_root_path/adm_program/modules/download/rename.php?folder=". urlencode($folder). "&amp;file=". urlencode($ordnerarray[$i]). "&amp;default_folder=". urlencode($default_folder). "\">
-                     <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Umbenennen\"></a>&nbsp;&nbsp;&nbsp;";
+                  <a href=\"$g_root_path/adm_program/modules/download/rename.php?folder=". urlencode($folder). "&amp;file=". urlencode($ordnerarray[$i]). "&amp;default_folder=". urlencode($default_folder). "\"><img 
+                    src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Umbenennen\"></a>&nbsp;&nbsp;&nbsp;";
                   //$load_url = urlencode("$g_root_path/adm_program/modules/download/download_function.php?mode=2&amp;folder=$folder&amp;file=$ordnerarray[$i]&amp;default_folder=$default_folder");
-                  echo "<a href=\"$g_root_path/adm_program/modules/download/download_function.php?mode=5&amp;file=$ordnerarray[$i]&amp;folder=$folder&amp;default_folder=$default_folder\">
-                    <img src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>
+                  echo "<a href=\"$g_root_path/adm_program/modules/download/download_function.php?mode=5&amp;file=$ordnerarray[$i]&amp;folder=$folder&amp;default_folder=$default_folder\"><img 
+                    src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>
                </td>";
             }
             echo "</tr>";
@@ -298,7 +294,7 @@ require("../../../adm_config/body_top.php");
     //durchlaufen des Ordnerarrays und Dateilinkausgabe in Tabellenzeilen
     for($i=0; $i<count($ordnerarray); $i++){
            if(filetype("$act_folder/$ordnerarray[$i]")=="file"){
-            //ermittlung der Dateigröße
+            //ermittlung der Dateigroesse
             $dateigroesse = round(filesize("$act_folder/$ordnerarray[$i]")/1024);
             // Ermittlung des Datums
             $dateidatum   = date ("d.m.Y", filemtime("$act_folder/$ordnerarray[$i]"));

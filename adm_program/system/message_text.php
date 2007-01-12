@@ -208,7 +208,7 @@ $message_text = array(
         wenden, damit dieser <acronym title=\"über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen.\">
         Schreibrechte</acronym> für den Ordner setzen kann.",
 
-	  //Meldungen Anmeldung im Forum
+      //Meldungen Anmeldung im Forum
     "loginforum" =>
         "Du hast dich erfolgreich auf Admidio und <br />im Forum <b>%VAR2%</b> 
         als User <b>%VAR1%</b> angemeldet.",
@@ -233,7 +233,7 @@ $message_text = array(
         "Der gew&auml;hlte Benutzername existiert im Forum schon.<br /><br />
         W&auml;hle bitte einen neuen Namen.",
 
-	  //Ende Meldungen Anmeldung im Forum
+      //Ende Meldungen Anmeldung im Forum
 
     //Fahlermeldungen Mitgliederzuordnung
     "members_changed" =>
@@ -354,6 +354,9 @@ $message_text = array(
     "delete_folder" =>
         "Der Ordner <b>%VAR1%</b> wurde gelöscht.",
 
+    "delete_error" =>
+        "Beim Löschen ist ein unbekannter Fehler aufgetreten.",
+
     "upload_file" =>
         "Die Datei <b>%VAR1%</b> wurde hochgeladen.",
 
@@ -385,6 +388,9 @@ $message_text = array(
     "empty_upload_post" =>
         "Die Seite wurde ungültig aufgerufen oder die Datei konnte nicht hochgeladen werden.<br>
         Vermutlich wurde die vom Server vorgegebene, maximale Uploadgröße, von %VAR1%B übersteigen!",
+
+    "file_upload_error" =>
+        "Beim Hochladen der Datei <b>%VAR1%</b> ist ein unbekannter Fehler aufgetreten.",
     //Ende Fehlermeldungen Downloadmodul
 
 

@@ -55,9 +55,6 @@ $file       = strStripTags($_GET['file']);
 $act_folder = "../../../adm_my_files/download";
 $datei = "";
 
-if ($_SESSION['new_name'] == '')
-    $_SESSION['new_name'] = '';
-$new_name = $_SESSION['new_name'];
 // uebergebene Ordner auf Gueltigkeit pruefen
 // und Ordnerpfad zusammensetzen
 if(strlen($default_folder) > 0)
@@ -86,6 +83,27 @@ if(strpos($file, "..") !== false
     $g_message->show("invalid_folder");
 }
 
+if(isset($_SESSION['download_request']))
+{
+   $form_values = $_SESSION['download_request'];
+   unset($_SESSION['download_request']);
+}
+else
+{
+   $form_values['new_name'] = null;
+}
+
+// Endung der Datei ermitteln
+$file_array = explode(".","$file");
+if(count($file_array) == 1)
+{
+    $file_extension = null;
+}
+else
+{
+    $file_extension = ".". $file_array[1];
+}
+
 //Beginn der Seite
 echo "
 <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
@@ -103,28 +121,20 @@ echo "</head>";
 
 require("../../../adm_config/body_top.php");
     //Beginn des Inhaltes
-    echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">";
-        $datei = explode(".","$file");
-        // Session umschreiben
-        if (count($datei) == '1')
-            $datei[1] = '';
-        echo "<p>&nbsp;</p>
+    echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
+        <p>&nbsp;</p>
         <form method=\"POST\" action=\"download_function.php?mode=4&amp;folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "&amp;file=". urlencode($file). "\">
             <div class=\"formHead\" style=\"width: 400px\">Datei/Ordner umbenennen</div>
             <div class=\"formBody\" style=\"width: 400px\">
                 <div>
                     <div style=\"text-align: right; width: 35%; float: left;\">Bisheriger Name:</div>
-                    <div style=\"text-align: left; margin-left: 37%;\">$datei[0]</div>
+                    <div style=\"text-align: left; margin-left: 37%;\">$file_array[0]</div>
                 </div>
                 <div style=\"margin-top: 10px;\">
                     <div style=\"text-align: right; width: 35%; float: left;\">Neuer Name:</div>
                     <div style=\"text-align: left; margin-left: 37%;\">
-                        <input type=\"text\" id=\"new_name\" name=\"new_name\" value=\"$new_name\" size=\"25\" tabindex=\"1\">";
-                        if(strlen($datei[1]) > 0)
-                        {
-                            echo ".$datei[1]";
-                        }
-                        echo "&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
+                        <input type=\"text\" id=\"new_name\" name=\"new_name\" value=\"". $form_values['new_name']. "\" size=\"25\" tabindex=\"1\">$file_extension
+                        &nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
                         &nbsp;<img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                         onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=dateiname','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\">
                     </div>
