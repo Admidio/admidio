@@ -67,8 +67,10 @@ if ($cid > 0)
 
 if (isset($comment_result))
 {
-    echo "
-    <br />";
+
+    echo"
+    <div id=\"comments_$cid\" style=\"visibility: visible; display: block; text-align: left;\">
+        <br />";
 
     //Kommentarnummer auf 1 setzen
     $commentNumber = 1;
@@ -124,6 +126,8 @@ if (isset($comment_result))
         $commentNumber = $commentNumber + 1;
 
     }
+    echo"
+    </div>";
 }
 
 ?>
