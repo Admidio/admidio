@@ -438,16 +438,16 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
     {
         if ( $on_page > 1 )
         {
-            $page_string = '<a class="iconLink" href="' . $base_url . "&amp;start=" . ( ( $on_page - 2 ) * $per_page ) . '">
-                            <img class="iconLink" src="'. $g_root_path. '/adm_program/images/back.png" style="vertical-align: middle;" border="0" alt="Vorherige"></a>
+            $page_string = '<a class="iconLink" href="' . $base_url . "&amp;start=" . ( ( $on_page - 2 ) * $per_page ) . '"><img 
+                                class="iconLink" src="'. $g_root_path. '/adm_program/images/back.png" style="vertical-align: middle;" border="0" alt="Vorherige"></a>
                             <a class="iconLink" href="' . $base_url . "&amp;start=" . ( ( $on_page - 2 ) * $per_page ) . '">Vorherige</a>&nbsp;&nbsp;' . $page_string;
         }
 
         if ( $on_page < $total_pages )
         {
             $page_string .= '&nbsp;&nbsp;<a class="iconLink" href="' . $base_url . "&amp;start=" . ( $on_page * $per_page ) . '">N&auml;chste</a>
-                            <a class="iconLink" href="' . $base_url . "&amp;start=" . ( $on_page * $per_page ) . '">
-                            <img class="iconLink" src="'. $g_root_path. '/adm_program/images/forward.png" style="vertical-align: middle;" border="0" alt="N&auml;chste"></a>';
+                            <a class="iconLink" href="' . $base_url . "&amp;start=" . ( $on_page * $per_page ) . '"><img 
+                                class="iconLink" src="'. $g_root_path. '/adm_program/images/forward.png" style="vertical-align: middle;" border="0" alt="N&auml;chste"></a>';
         }
 
     }
@@ -465,14 +465,14 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
 
 function generateRoleSelectBox($field_id = "")
 {
-	global $g_organization;
+    global $g_organization;
     global $g_adm_con;
     
-	if(strlen($field_id) == 0)
+    if(strlen($field_id) == 0)
     {
-    	$field_id = "rol_id";
+        $field_id = "rol_id";
     }
-	$box_string = "
+    $box_string = "
         <select size=\"1\" id=\"$field_id\" name=\"$field_id\">
             <option value=\"0\" selected=\"selected\">- Bitte w&auml;hlen -</option>";
             // Rollen selektieren
