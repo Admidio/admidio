@@ -78,9 +78,12 @@ if (isset($comment_result))
     // Jetzt nur noch die Kommentare auflisten
     while ($row = mysql_fetch_object($comment_result))
     {
+        $cid = $row->gbc_gbo_id;
+
         // Die Userdaten des Kommentarschreibers aus der DB holen
         $commentWriter = new User($g_adm_con);
         $commentWriter->getUser($row->gbc_usr_id);
+
 
         echo "
         <div class=\"groupBox\" style=\"overflow: hidden; margin-left: 20px; margin-right: 20px;\">
@@ -126,6 +129,20 @@ if (isset($comment_result))
         $commentNumber = $commentNumber + 1;
 
     }
+
+    if ($g_current_user->commentGuestbookRight())
+    {
+        // Bei Kommentierungsrechten, wird der Link zur Kommentarseite angezeigt...
+        $load_url = "$g_root_path/adm_program/modules/guestbook/guestbook_comment_new.php?id=$cid";
+        echo "
+        <div style=\"margin: 8px 4px 4px 4px; font-size: 8pt; text-align: left;\">
+            <a href=\"$load_url\">
+            <img src=\"$g_root_path/adm_program/images/comments.png\" style=\"vertical-align: middle;\" alt=\"Kommentieren\"
+            title=\"Kommentieren\" border=\"0\"></a>
+            <a href=\"$load_url\">Einen Kommentar zu diesem Beitrag schreiben.</a>
+        </div>";
+    }
+
     echo"
     </div>";
 }
