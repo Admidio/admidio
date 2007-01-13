@@ -167,6 +167,11 @@ if(isset($_POST["enable_guestbook_captcha"]) == false)
     $_POST["enable_guestbook_captcha"] = 0;
 }
 
+if(isset($_POST["enable_gbook_comments4all"]) == false)
+{
+    $_POST["enable_gbook_comments4all"] = 0;
+}
+
 if(strlen($_POST["flooding_protection_time"]) == 0)
 {
     $_POST["flooding_protection_time"] = 0;
@@ -227,6 +232,7 @@ writeOrgaPreferences('photo_preview_scale', $_POST['photo_preview_scale']);
 //Einstellungen Gaestebuchmodul
 writeOrgaPreferences('enable_guestbook_module',  $_POST['enable_guestbook_module']);
 writeOrgaPreferences('enable_guestbook_captcha', $_POST['enable_guestbook_captcha']);
+writeOrgaPreferences('enable_gbook_comments4all', $_POST['enable_gbook_comments4all']);
 writeOrgaPreferences('flooding_protection_time', $_POST['flooding_protection_time']);
 //Einstellungen Ankuendigungsmodul
 writeOrgaPreferences('enable_announcements_module',  $_POST['enable_announcements_module']);

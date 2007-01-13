@@ -347,7 +347,7 @@ require("../../../adm_config/body_top.php");
                                 <div id=\"comments_$row->gbo_id\" style=\"text-align: left;\"></div>
                             </div>";
 
-                            // Hier ist das div, in die die Kommentare reingesetzt werden
+                            // Hier ist das div, in das die Kommentare reingesetzt werden
                             echo "
                             <div id=\"commentSection_$row->gbo_id\" style=\"visibility: hidden; display: none;\"></div>";
                         }
