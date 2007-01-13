@@ -243,7 +243,6 @@ require("../../../adm_config/body_top.php");
             while ($row = mysql_fetch_object($guestbook_result))
             {
                 echo "
-                <a name=\"$row->gbo_id\"></a>
                 <div class=\"boxBody\" style=\"overflow: hidden;\">
                     <div class=\"boxHead\">
                         <div style=\"text-align: left; float: left;\">
@@ -332,19 +331,19 @@ require("../../../adm_config/body_top.php");
                             // Dieses div wird erst gemeinsam mit den Kommentaren ueber Javascript eingeblendet
                             echo "
                             <div id=\"commentsVisible_$row->gbo_id\" style=\"visibility: hidden; display: none; margin: 8px 4px 4px; font-size: 10pt; text-align: left;\">
-                                <a href=\"#$row->gbo_id\" onClick=\"toggleComments($row->gbo_id);\">
+                                <a href=\"javascript:toggleComments($row->gbo_id);\">
                                 <img src=\"$g_root_path/adm_program/images/comments.png\" style=\"vertical-align: middle;\" alt=\"Kommentare ausblenden\"
                                 title=\"Kommentare ausblenden\" border=\"0\"></a>
-                                <a href=\"#$row->gbo_id\" onClick=\"toggleComments($row->gbo_id);\">Kommentare ausblenden</a>
+                                <a href=\"javascript:toggleComments($row->gbo_id);\">Kommentare ausblenden</a>
                             </div>";
 
                             // Dieses div wird ausgeblendet wenn die Kommetare angezeigt werden
                             echo "
                             <div id=\"commentsInvisible_$row->gbo_id\" style=\"visibility: visible; display: block; margin: 8px 4px 4px; font-size: 10pt; text-align: left;\">
-                                <a href=\"#$row->gbo_id\" onClick=\"toggleComments($row->gbo_id);\">
+                                <a href=\"javascript:toggleComments($row->gbo_id);\">
                                 <img src=\"$g_root_path/adm_program/images/comments.png\" style=\"vertical-align: middle;\" alt=\"Kommentare anzeigen\"
                                 title=\"Kommentare anzeigen\" border=\"0\"></a>
-                                <a href=\"#$row->gbo_id\" onClick=\"toggleComments($row->gbo_id);\">". mysql_num_rows($comment_result). " Kommentar(e) zu diesem Eintrag</a>
+                                <a href=\"javascript:toggleComments($row->gbo_id);\">". mysql_num_rows($comment_result). " Kommentar(e) zu diesem Eintrag</a>
                                 <div id=\"comments_$row->gbo_id\" style=\"text-align: left;\"></div>
                             </div>";
 
@@ -357,7 +356,7 @@ require("../../../adm_config/body_top.php");
                         if ($_GET['id'] == 0 && mysql_num_rows($comment_result) == 0 && $g_current_user->commentGuestbookRight())
                         {
                             // Falls keine Kommentare vorhanden sind, aber das Recht zur Kommentierung, wird der Link zur Kommentarseite angezeigt...
-                            $load_url = "$g_root_path/adm_program/modules/guestbook/guestbook.php?id=$row->gbo_id";
+                            $load_url = "$g_root_path/adm_program/modules/guestbook/guestbook_comment_new.php?id=$row->gbo_id";
                             echo "
                             <div style=\"margin: 8px 4px 4px 4px; font-size: 8pt; text-align: left;\">
                                 <a href=\"$load_url\">
@@ -381,60 +380,6 @@ require("../../../adm_config/body_top.php");
             }  // Ende While-Schleife
         }
 
-
-        // Ab hier kommt nun das Formular um neue Kommentare hinzuzufuegen...
-        // ...natuerlich nur wenn das Recht gesetzt ist, eine ID uebergeben wurde und der Eintrag wirklich vorhanden ist...
-        if ($g_current_user->commentGuestbookRight() && mysql_num_rows($guestbook_result) > 0 && $_GET['id'] > 0)
-        {
-            echo "
-            <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-                <form action=\"guestbook_function.php?id=". $_GET['id']. "&amp;headline=". $_GET['headline']. "&amp;mode=4\" method=\"post\" name=\"KommentarEintragen\">
-
-                    <div class=\"formHead\">";
-                        $formHeadline = " Kommentar anlegen";
-
-                        echo strspace($formHeadline, 2);
-                    echo "</div>
-                    <div class=\"formBody\">
-                        <div>
-                            <div style=\"text-align: right; width: 25%; float: left;\">Name:</div>
-                            <div style=\"text-align: left; margin-left: 27%;\">
-                                <input class=\"readonly\" readonly type=\"text\" id=\"name\" name=\"name\" tabindex=\"1\" style=\"width: 350px;\" maxlength=\"60\" value=\"". htmlspecialchars($g_current_user->first_name. " ". $g_current_user->last_name, ENT_QUOTES). "\">
-                            </div>
-                        </div>
-
-                        <div style=\"margin-top: 6px;\">
-                            <div style=\"text-align: right; width: 25%; float: left;\">Kommentar:";
-                                if ($g_preferences['enable_bbcode'] == 1)
-                                {
-                                  echo "<br><br>
-                                  <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\" tabindex=\"6\">Text formatieren</a>";
-                                }
-                            echo "</div>
-                            <div style=\"text-align: left; margin-left: 27%;\">
-                                <textarea  name=\"text\" tabindex=\"3\" style=\"width: 350px;\" rows=\"10\" cols=\"40\"></textarea>
-                            </div>
-                        </div>";
-
-
-                        echo "<hr width=\"85%\" />
-
-                        <div style=\"margin-top: 6px;\">
-                            <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\" tabindex=\"5\">
-                                <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\"
-                                width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
-                                &nbsp;Zur&uuml;ck</button>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <button name=\"speichern\" type=\"submit\" value=\"speichern\" tabindex=\"4\">
-                                <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\"
-                                width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
-                                &nbsp;Speichern</button>
-                        </div>";
-
-                    echo "</div>
-                </form>
-            </div>";
-        }
 
         if (mysql_num_rows($guestbook_result) > 2)
         {

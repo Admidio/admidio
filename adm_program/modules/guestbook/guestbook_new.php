@@ -226,7 +226,7 @@ require("../../../adm_config/body_top.php");
                     }
                     echo "</div>
                     <div style=\"text-align: left; vertical-align: top; margin-left: 27%;\">
-                        <textarea  name=\"text\" tabindex=\"4\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". htmlspecialchars($form_values['text'], ENT_QUOTES). "</textarea>&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
+                        <textarea  id=\"text\" name=\"text\" tabindex=\"4\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". htmlspecialchars($form_values['text'], ENT_QUOTES). "</textarea>&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
                     </div>
                 </div>";
 
@@ -271,9 +271,20 @@ require("../../../adm_config/body_top.php");
                 </div>
             </div>
         </form>
-    </div>
+    </div>";
+
+    if ($g_current_user->id == 0)
+    {
+        $focusField = "name";
+    }
+    else
+    {
+        $focusField = "text";
+    }
+
+    echo"
     <script type=\"text/javascript\"><!--
-        document.getElementById('headline').focus();
+        document.getElementById('$focusField').focus();
     --></script>";
 
    require("../../../adm_config/body_bottom.php");
