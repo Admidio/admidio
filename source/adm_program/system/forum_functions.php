@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Funktionen und Routinen für das Forum
+ * Funktionen und Routinen fuer das Forum
  *
  * Copyright    : (c) 2004 - 2006 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -24,9 +24,9 @@
  *
  *****************************************************************************/
 
-// Globale Variablen für das Forum
-$g_forum_session_id    = "";			// Die Session für das Forum
-$g_forum_session_valid = FALSE;		// Session gültig
+// Globale Variablen fuer das Forum
+$g_forum_session_id    = "";			// Die Session fuer das Forum
+$g_forum_session_valid = FALSE;		// Session gueltig
 $g_forum_user  = "";							// Username im Forum
 $g_forum_userid = "";							// UserID im Forum
 $g_forum_neuePM = "";							// Nachrichten im Forum
@@ -40,7 +40,7 @@ $g_forum_cookie_secure ="";				// Cookie Secure des Forums
 
 
 // Forumspezifische Konfigurationsvariablen lesen und zuweisen
-// Forums DB wählen
+// Forums DB waehlen
 mysql_select_db($g_forum_db, $g_forum_con);
 
 $sql    = "SELECT config_value FROM ". $g_forum_praefix. "_config WHERE config_name = 'sitename' ";
@@ -85,7 +85,7 @@ db_error($result);
 $row = mysql_fetch_array($result);
 $g_forum_path = str_replace('/', '', $row[0]);
 
-// Admidio DB wählen
+// Admidio DB waehlen
 mysql_select_db($g_adm_db, $g_adm_con);
 
 
@@ -107,7 +107,7 @@ if ($g_forum_session_valid)
 {
     $g_forum_user = $g_current_user->login_name;
     
-    // Forums DB wählen
+    // Forums DB waehlen
     mysql_select_db($g_forum_db, $g_forum_con);
     
     $sql    = "SELECT user_id, username, user_new_privmsg FROM ". $g_forum_praefix. "_users WHERE username LIKE {0} ";
@@ -135,15 +135,15 @@ if ($g_forum_session_valid)
        $g_forum_neuePM_Text = "und haben <b>".$g_forum_neuePM."</b> neue Nachrichten.";
     }
     
-    // Admidio DB wählen
+    // Admidio DB waehlen
     mysql_select_db($g_adm_db, $g_adm_con);
 }
 
 
-// Gültige Session im Forum updaten. Sofern die Admidio Session gültig ist, ist auch die Forum Session gültig
+// Gueltige Session im Forum updaten. Sofern die Admidio Session gï¿½ltig ist, ist auch die Forum Session gï¿½ltig
 if($g_session_valid)
 {
-    // Forums DB wählen
+    // Forums DB wï¿½hlen
     mysql_select_db($g_forum_db, $g_forum_con);
     
     // Erst mal schauen, ob sich die Session noch im Session Table des Forums befindet
@@ -164,7 +164,7 @@ if($g_session_valid)
     else
     {
         // Session existiert nicht, also neu anlegen (Autologin im Forum)
-        // Daten für das Cookie und den Session Eintrag im Forum aufbereiten
+        // Daten fï¿½r das Cookie und den Session Eintrag im Forum aufbereiten
 	      $ip_sep = explode('.', getenv('REMOTE_ADDR'));
 	      $user_ip = sprintf('%02x%02x%02x%02x', $ip_sep[0], $ip_sep[1], $ip_sep[2], $ip_sep[3]);
 	      $current_time = time();
@@ -177,17 +177,17 @@ if($g_session_valid)
         db_error($result);
     }    
     
-    // Admidio DB wählen
+    // Admidio DB wï¿½hlen
     mysql_select_db($g_adm_db, $g_adm_con);
 }
 elseif (isset($_COOKIE[$g_forum_cookie_name."_sid"]))
 {
-    // Die Admidio Session ist ungültig oder abgelaufen, also die Session des Forums ebenfalls löschen.
+    // Die Admidio Session ist ungï¿½ltig oder abgelaufen, also die Session des Forums ebenfalls lï¿½schen.
     
     // Session ID aus dem Cookie lesen
     $g_forum_session_id = $_COOKIE[$g_forum_cookie_name."_sid"];
        
-    // Forums DB wählen
+    // Forums DB wï¿½hlen
     mysql_select_db($g_forum_db, $g_forum_con);
  
     // User-ID aus der Session lesen
@@ -199,13 +199,13 @@ elseif (isset($_COOKIE[$g_forum_cookie_name."_sid"]))
         
     if(mysql_num_rows($result)!=0)
     {
-        // User-Session im Forum löschen
+        // User-Session im Forum lï¿½schen
         $sql    = "DELETE FROM ". $g_forum_praefix. "_sessions WHERE session_user_id = $row[0] ";
         $result = mysql_query($sql, $g_forum_con);
         db_error($result);
     }
  
-    // Admidio DB wählen
+    // Admidio DB wï¿½hlen
     mysql_select_db($g_adm_db, $g_adm_con);
 }
 
@@ -221,11 +221,11 @@ elseif (isset($_COOKIE[$g_forum_cookie_name."_sid"]))
  ******************************************************************************/
 
 
-// Funktion überprüft ob der Admin Account im Forum ungleich des Admidio Accounts ist.
-// Falls ja wird der Admidio Account (Username & Password) ins Forum übernommen.
+// Funktion ï¿½berprï¿½ft ob der Admin Account im Forum ungleich des Admidio Accounts ist.
+// Falls ja wird der Admidio Account (Username & Password) ins Forum ï¿½bernommen.
 function forum_check_admin($username, $password_crypt, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix)
 {
-    // Forum Datenbank auswählen
+    // Forum Datenbank auswï¿½hlen
     mysql_select_db($g_forum_db, $g_forum_con);
     
     // Administrator nun in Foren-Tabelle suchen und dort das Password, Username & UserID auslesen
@@ -237,7 +237,7 @@ function forum_check_admin($username, $password_crypt, $g_forum_db, $g_forum_con
     
     if($username == $row[0] AND $password_crypt == $row[1])
     {
-        // Admidio DB wählen
+        // Admidio DB waehlen
         mysql_select_db($g_adm_db, $g_adm_con);
         
         return FALSE;
@@ -251,7 +251,7 @@ function forum_check_admin($username, $password_crypt, $g_forum_db, $g_forum_con
         $result = mysql_query($sql, $g_forum_con);
         db_error($result);
         
-        // Admidio DB wählen
+        // Admidio DB waehlen
         mysql_select_db($g_adm_db, $g_adm_con);
         
         return TRUE;
@@ -259,18 +259,18 @@ function forum_check_admin($username, $password_crypt, $g_forum_db, $g_forum_con
 }
 
 
-// Funktion überprüft ob das Password im Forum ungleich des Admidio Passwords ist.
-// Falls ja wird das Admidio Password ins Forum übernommen.
+// Funktion ueberprueft ob das Password im Forum ungleich des Admidio Passwords ist.
+// Falls ja wird das Admidio Password ins Forum uebernommen.
 function forum_check_password($password_admidio, $password_forum, $forum_userid, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix)
 {
-    // Passwörter vergleichen
+    // Passwoerter vergleichen
     if ($password_admidio == $password_forum)
     {
         return TRUE;
     }
     else
     {
-        // Forum Datenbank auswählen
+        // Forum Datenbank auswaehlen
         mysql_select_db($g_forum_db, $g_forum_con);
         
         // Password in Foren-Tabelle auf das Password in Admidio setzen
@@ -281,17 +281,17 @@ function forum_check_password($password_admidio, $password_forum, $forum_userid,
         $result = mysql_query($sql, $g_forum_con);
         db_error($result);
         
-        // Admidio DB wählen
+        // Admidio DB waehlen
         mysql_select_db($g_adm_db, $g_adm_con);
         
         return FALSE;
     }
 }
 
-// Funktion überprüft, ob der User schon im Forum existiert
+// Funktion ueberprueft, ob der User schon im Forum existiert
 function forum_check_user($forum_username, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix)
 {
-    // Forum Datenbank auswählen
+    // Forum Datenbank auswaehlen
     mysql_select_db($g_forum_db, $g_forum_con);
     
     // User im Forum suchen
@@ -300,10 +300,10 @@ function forum_check_user($forum_username, $g_forum_db, $g_forum_con, $g_adm_db,
     $result = mysql_query($sql, $g_forum_con);
     db_error($result);      
     
-    // Admidio DB wählen
+    // Admidio DB waehlen
     mysql_select_db($g_adm_db, $g_adm_con);
     
-    // Wenn ein Ergebis grösser 0 vorliegt, existiert der User bereits.
+    // Wenn ein Ergebis groesser 0 vorliegt, existiert der User bereits.
     if(mysql_num_rows($result) !=0)
     {
         return TRUE;
@@ -317,8 +317,8 @@ function forum_check_user($forum_username, $g_forum_db, $g_forum_con, $g_adm_db,
 // Funktion updated einen bestehenden User im Forum
 function forum_update_user($forum_username, $forum_useraktiv, $forum_password, $forum_email, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix)
 {
-    // Erst mal schauen ob der User alle Kriterien erfüllt um im Forum aktiv zu sein
-    // Voraussetzung ist ein gültiger Benutzername, eine Email und ein Password
+    // Erst mal schauen ob der User alle Kriterien erfaellt um im Forum aktiv zu sein
+    // Voraussetzung ist ein gaeltiger Benutzername, eine Email und ein Password
     if($forum_username AND $forum_password AND $forum_email)
     {
         $forum_useraktiv = 1;
@@ -328,7 +328,7 @@ function forum_update_user($forum_username, $forum_useraktiv, $forum_password, $
         $forum_useraktiv = 0;
     }
     
-    // Forum Datenbank auswählen
+    // Forum Datenbank auswaehlen
     mysql_select_db($g_forum_db, $g_forum_con);
     
     // User im Forum updaten
@@ -338,7 +338,7 @@ function forum_update_user($forum_username, $forum_useraktiv, $forum_password, $
     $result = mysql_query($sql, $g_forum_con);
     db_error($result);
     
-    // Admidio DB wählen
+    // Admidio DB waehlen
     mysql_select_db($g_adm_db, $g_adm_con);
 }
 
@@ -346,7 +346,7 @@ function forum_update_user($forum_username, $forum_useraktiv, $forum_password, $
 // Funktion legt einen neuen Benutzer im Forum an
 function forum_insert_user($forum_username, $forum_useraktiv, $forum_password, $forum_email, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix)
 {
-    // Forum Datenbank auswählen
+    // Forum Datenbank auswaehlen
     mysql_select_db($g_forum_db, $g_forum_con);
     
     // jetzt noch den neuen User ins Forum eintragen, ggf. Fehlermeldung als Standard ausgeben.
@@ -369,7 +369,7 @@ function forum_insert_user($forum_username, $forum_useraktiv, $forum_password, $
     $result = mysql_query($sql, $g_forum_con);
     db_error($result);
     
-    // Admidio DB wählen
+    // Admidio DB waehlen
     mysql_select_db($g_adm_db, $g_adm_con);
 }
 
@@ -377,9 +377,9 @@ function forum_insert_user($forum_username, $forum_useraktiv, $forum_password, $
 // Funktion updated einen bestehenden User im Forum
 function forum_update_username($forum_new_username, $forum_old_username, $forum_useraktiv, $forum_password, $forum_email, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix)
 {
-    // Erst mal schauen ob der User alle Kriterien erfüllt um im Forum aktiv zu sein
-    // Voraussetzung ist ein gültiger Benutzername, eine Email und ein Password
-    if($forum_username != '' AND $forum_password != '' AND $forum_email != '')
+    // Erst mal schauen ob der User alle Kriterien erfuellt um im Forum aktiv zu sein
+    // Voraussetzung ist ein gueltiger Benutzername, eine Email und ein Password
+    if(strlen($forum_new_username) > 0 AND strlen($forum_password) > 0 AND strlen($forum_email) > 0)
     {
         $forum_useraktiv = 1;
     }
@@ -388,7 +388,7 @@ function forum_update_username($forum_new_username, $forum_old_username, $forum_
         $forum_useraktiv = 0;
     }
     
-    // Forum Datenbank auswählen
+    // Forum Datenbank auswaehlen
     mysql_select_db($g_forum_db, $g_forum_con);
     
     // User im Forum updaten
@@ -398,7 +398,7 @@ function forum_update_username($forum_new_username, $forum_old_username, $forum_
     $result = mysql_query($sql, $g_forum_con);
     db_error($result);
     
-    // Admidio DB wählen
+    // Admidio DB waehlen
     mysql_select_db($g_adm_db, $g_adm_con);
 }
 ?>
