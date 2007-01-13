@@ -109,7 +109,7 @@ echo "
         function getComments(commentId)
         {
             gbookId = commentId;
-            resObject.open('get', 'get_comments.php?cid=' + gbookId, false);
+            resObject.open('get', 'get_comments.php?cid=' + gbookId, true);
             resObject.onreadystatechange = handleResponse;
             resObject.send(null);
         }
@@ -331,19 +331,19 @@ require("../../../adm_config/body_top.php");
                             // Dieses div wird erst gemeinsam mit den Kommentaren ueber Javascript eingeblendet
                             echo "
                             <div id=\"commentsVisible_$row->gbo_id\" style=\"visibility: hidden; display: none; margin: 8px 4px 4px; font-size: 10pt; text-align: left;\">
-                                <a href=\"javascript:toggleComments($row->gbo_id);\">
+                                <a href=\"javascript:toggleComments($row->gbo_id)\">
                                 <img src=\"$g_root_path/adm_program/images/comments.png\" style=\"vertical-align: middle;\" alt=\"Kommentare ausblenden\"
                                 title=\"Kommentare ausblenden\" border=\"0\"></a>
-                                <a href=\"javascript:toggleComments($row->gbo_id);\">Kommentare ausblenden</a>
+                                <a href=\"javascript:toggleComments($row->gbo_id)\">Kommentare ausblenden</a>
                             </div>";
 
                             // Dieses div wird ausgeblendet wenn die Kommetare angezeigt werden
                             echo "
                             <div id=\"commentsInvisible_$row->gbo_id\" style=\"visibility: visible; display: block; margin: 8px 4px 4px; font-size: 10pt; text-align: left;\">
-                                <a href=\"javascript:toggleComments($row->gbo_id);\">
+                                <a href=\"javascript:toggleComments($row->gbo_id)\">
                                 <img src=\"$g_root_path/adm_program/images/comments.png\" style=\"vertical-align: middle;\" alt=\"Kommentare anzeigen\"
                                 title=\"Kommentare anzeigen\" border=\"0\"></a>
-                                <a href=\"javascript:toggleComments($row->gbo_id);\">". mysql_num_rows($comment_result). " Kommentar(e) zu diesem Eintrag</a>
+                                <a href=\"javascript:toggleComments($row->gbo_id)\">". mysql_num_rows($comment_result). " Kommentar(e) zu diesem Eintrag</a>
                                 <div id=\"comments_$row->gbo_id\" style=\"text-align: left;\"></div>
                             </div>";
 
