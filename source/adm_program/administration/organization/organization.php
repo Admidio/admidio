@@ -46,7 +46,7 @@ else
 {
    $form_values['shortname']                      = $g_current_organization->shortname;
    $form_values['longname']                       = $g_current_organization->longname;
-   $form_values['homepage']                  	  = $g_current_organization->homepage;
+   $form_values['homepage']                        = $g_current_organization->homepage;
    $form_values['email_administrator']            = $g_preferences['email_administrator'];
    $form_values['enable_system_mails']            = $g_preferences['enable_system_mails'];
    $form_values['default_country']                = $g_preferences['default_country'];
@@ -57,26 +57,27 @@ else
    $form_values['enable_registration_captcha']    = $g_preferences['enable_registration_captcha'];
    $form_values['enable_registration_admin_mail'] = $g_preferences['enable_registration_admin_mail'];
    $form_values['logout_minutes']                 = $g_preferences['logout_minutes'];
-   $form_values['enable_mail_module']         	  = $g_preferences['enable_mail_module'];
-   $form_values['max_email_attachment_size'] 	  = $g_preferences['max_email_attachment_size'];
-   $form_values['enable_mail_captcha']       	  = $g_preferences['enable_mail_captcha'];
-   $form_values['enable_download_module']      	  = $g_preferences['enable_download_module'];
-   $form_values['max_file_upload_size']      	  = $g_preferences['max_file_upload_size'];
-   $form_values['enable_photo_module']        	  = $g_preferences['enable_photo_module'];
-   $form_values['photo_thumbs_row']          	  = $g_preferences['photo_thumbs_row'];
-   $form_values['photo_thumbs_column']       	  = $g_preferences['photo_thumbs_column'];
-   $form_values['photo_thumbs_scale']        	  = $g_preferences['photo_thumbs_scale'];
-   $form_values['photo_save_scale']          	  = $g_preferences['photo_save_scale'];
-   $form_values['photo_preview_scale']       	  = $g_preferences['photo_preview_scale'];
-   $form_values['photo_show_width']          	  = $g_preferences['photo_show_width'];
-   $form_values['photo_show_height']         	  = $g_preferences['photo_show_height'];
-   $form_values['photo_image_text']          	  = $g_preferences['photo_image_text'];
-   $form_values['enable_guestbook_module']  	  = $g_preferences['enable_guestbook_module'];
-   $form_values['enable_guestbook_captcha']  	  = $g_preferences['enable_guestbook_captcha'];
-   $form_values['flooding_protection_time']  	  = $g_preferences['flooding_protection_time'];
-   $form_values['enable_dates_module']		  	  = $g_preferences['enable_dates_module'];
-   $form_values['enable_weblinks_module']	  	  = $g_preferences['enable_weblinks_module'];
-   $form_values['enable_announcements_module'] 	  = $g_preferences['enable_announcements_module'];
+   $form_values['enable_mail_module']               = $g_preferences['enable_mail_module'];
+   $form_values['max_email_attachment_size']       = $g_preferences['max_email_attachment_size'];
+   $form_values['enable_mail_captcha']             = $g_preferences['enable_mail_captcha'];
+   $form_values['enable_download_module']            = $g_preferences['enable_download_module'];
+   $form_values['max_file_upload_size']            = $g_preferences['max_file_upload_size'];
+   $form_values['enable_photo_module']              = $g_preferences['enable_photo_module'];
+   $form_values['photo_thumbs_row']                = $g_preferences['photo_thumbs_row'];
+   $form_values['photo_thumbs_column']             = $g_preferences['photo_thumbs_column'];
+   $form_values['photo_thumbs_scale']              = $g_preferences['photo_thumbs_scale'];
+   $form_values['photo_save_scale']                = $g_preferences['photo_save_scale'];
+   $form_values['photo_preview_scale']             = $g_preferences['photo_preview_scale'];
+   $form_values['photo_show_width']                = $g_preferences['photo_show_width'];
+   $form_values['photo_show_height']               = $g_preferences['photo_show_height'];
+   $form_values['photo_image_text']                = $g_preferences['photo_image_text'];
+   $form_values['enable_guestbook_module']        = $g_preferences['enable_guestbook_module'];
+   $form_values['enable_guestbook_captcha']        = $g_preferences['enable_guestbook_captcha'];
+   $form_values['flooding_protection_time']        = $g_preferences['flooding_protection_time'];
+   $form_values['enable_gbook_comments4all']        = $g_preferences['enable_gbook_comments4all'];
+   $form_values['enable_dates_module']                = $g_preferences['enable_dates_module'];
+   $form_values['enable_weblinks_module']            = $g_preferences['enable_weblinks_module'];
+   $form_values['enable_announcements_module']       = $g_preferences['enable_announcements_module'];
 }
 
 echo "
@@ -415,7 +416,7 @@ require("../../../adm_config/body_top.php");
                 /**************************************************************************************/
 
                 echo"
-                <div class=\"groupBox\"	id=\"download-module\" style=\"visibility: hidden; display: none; margin-top: 15px; text-align: left; width: 95%;\">
+                <div class=\"groupBox\"    id=\"download-module\" style=\"visibility: hidden; display: none; margin-top: 15px; text-align: left; width: 95%;\">
                     <div class=\"groupBoxHeadline\">Einstellungen Downloadmodul&nbsp;&nbsp; </div>
 
                     <div style=\"margin-top: 6px;\">
@@ -666,6 +667,22 @@ require("../../../adm_config/body_top.php");
                         F&uuml;r nicht eingeloggte Benutzer wird im G&auml;stebuchformular bei aktiviertem Captcha ein alphanumerischer
                         Code eingeblendet. Diesen muss der Benutzer vor dem Absenden des Formularinhalts korrekt eingeben.
                         Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann.
+                    </div>
+
+                    <div style=\"margin-top: 15px;\">
+                        <div style=\"text-align: left; width: 55%; float: left;\">Anonyme Kommentare erlauben:</div>
+                        <div style=\"text-align: left; margin-left: 45%;\">
+                            <input type=\"checkbox\" id=\"enable_gbook_comments4all\" name=\"enable_gbook_comments4all\" ";
+                            if(isset($form_values['enable_gbook_comments4all']) && $form_values['enable_gbook_comments4all'] == 1)
+                            {
+                                echo " checked ";
+                            }
+                            echo " value=\"1\" />
+                        </div>
+                    </div>
+                    <div class=\"smallText\">
+                        Nicht eingeloggte Benutzer k&ouml;nnen, nach Aktivierung dieser Option, Eintr&auml;ge im G&auml;stebuch kommentieren. Die Rechtevergabe
+                        f&uuml;r dieses Feature &uuml;ber die Rollenverwaltung wird dann ignoriert.
                     </div>
 
                     <div style=\"margin-top: 15px;\">

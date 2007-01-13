@@ -122,6 +122,11 @@ while($row_orga = mysql_fetch_object($result_orga))
     if(!$result) showError(mysql_error());
 
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+            VALUES ($row_orga->org_id, 'enable_gbook_comments4all', '0')";
+    $result = mysql_query($sql, $connection);
+    if(!$result) showError(mysql_error());
+
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
             VALUES ($row_orga->org_id, 'enable_photo_module', '1')";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
