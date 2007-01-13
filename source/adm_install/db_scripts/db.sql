@@ -153,7 +153,7 @@ create table %PRAEFIX%_guestbook_comments
 (
    gbc_id                         int(11) unsigned               not null AUTO_INCREMENT,
    gbc_gbo_id                     int(11) unsigned               not null,
-   gbc_usr_id                     int(11) unsigned               not null,
+   gbc_usr_id                     int(11) unsigned,
    gbc_name                       varchar(60)                    not null,
    gbc_text                       text                           not null,
    gbc_email                      varchar(50),
