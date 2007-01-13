@@ -31,7 +31,6 @@
  *****************************************************************************/
 
 require("../../system/common.php");
-require("../../system/login_valid.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_guestbook_module'] != 1)
@@ -40,9 +39,15 @@ if ($g_preferences['enable_guestbook_module'] != 1)
     $g_message->show("module_disabled");
 }
 
+if ($g_preferences['enable_gbook_comments4all'] == 0)
+{
+    // Falls anonymes kommentieren nicht erlaubt ist, muss der User eingeloggt sein
+    require("../../system/login_valid.php");
+}
+
 
 // hat der user das Recht zu kommentieren?
-if (!$g_current_user->commentGuestbookRight())
+if (!$g_current_user->commentGuestbookRight() && $g_preferences['enable_gbook_comments4all'] == 0)
 {
     $g_message->show("norights");
 }
@@ -69,6 +74,47 @@ if (array_key_exists("headline", $_GET))
 else
 {
     $_GET["headline"] = "G&auml;stebuch";
+}
+
+
+if (isset($_SESSION['guestbook_comment_request']))
+{
+    $form_values = $_SESSION['guestbook_comment_request'];
+    unset($_SESSION['guestbook_comment_request']);
+}
+else
+{
+    $form_values['name']  = "";
+    $form_values['email'] = "";
+    $form_values['text']  = "";
+    // Wenn der User eingeloggt ist koennen zumindest
+    // Name und Emailadresse vorbelegt werden...
+    if ($g_session_valid)
+    {
+        $form_values['name']     = $g_current_user->first_name. " ". $g_current_user->last_name;
+        $form_values['email']    = $g_current_user->email;
+    }
+}
+
+
+if (!$g_session_valid && $g_preferences['flooding_protection_time'] != 0)
+{
+    // Falls er nicht eingeloggt ist, wird vor dem Ausfuellen des Formulars noch geprueft ob der
+    // User innerhalb einer festgelegten Zeitspanne unter seiner IP-Adresse schon einmal
+    // einen GB-Eintrag erzeugt hat...
+    $ipAddress = $_SERVER['REMOTE_ADDR'];
+
+    $sql = "SELECT count(*) FROM ". TBL_GUESTBOOK_COMMENTS. "
+            where unix_timestamp(gbc_timestamp) > unix_timestamp()-". $g_preferences['flooding_protection_time']. "
+              and gbc_ip_address = '$ipAddress' ";
+    $result = mysql_query($sql, $g_adm_con);
+    db_error($result);
+    $row = mysql_fetch_array($result);
+    if($row[0] > 0)
+    {
+          //Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
+          $g_message->show("flooding_protection", $g_preferences['flooding_protection_time']);
+    }
 }
 
 
@@ -100,8 +146,24 @@ require("../../../adm_config/body_top.php");
             <div class=\"formBody\">
                 <div>
                     <div style=\"text-align: right; width: 25%; float: left;\">Name:</div>
+                    <div style=\"text-align: left; margin-left: 27%;\">";
+                    if ($g_current_user->id != 0)
+                    {
+                        // Eingeloggte User sollen ihren Namen nicht aendern duerfen
+                        echo "<input class=\"readonly\" readonly type=\"text\" id=\"name\" name=\"name\" tabindex=\"1\" style=\"width: 350px;\" maxlength=\"60\" value=\"". htmlspecialchars($form_values['name'], ENT_QUOTES). "\">";
+                    }
+                    else
+                    {
+                        echo "<input type=\"text\" id=\"name\" name=\"name\" tabindex=\"1\" style=\"width: 350px;\" maxlength=\"60\" value=\"". htmlspecialchars($form_values['name'], ENT_QUOTES). "\">
+                        <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>";
+                    }
+                    echo "</div>
+                </div>
+
+                <div style=\"margin-top: 6px;\">
+                    <div style=\"text-align: right; width: 25%; float: left;\">Emailadresse:</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <input class=\"readonly\" readonly type=\"text\" id=\"name\" name=\"name\" tabindex=\"1\" style=\"width: 350px;\" maxlength=\"60\" value=\"". htmlspecialchars($g_current_user->first_name. " ". $g_current_user->last_name, ENT_QUOTES). "\">
+                        <input type=\"text\" id=\"email\" name=\"email\" tabindex=\"2\" style=\"width: 350px;\" maxlength=\"50\" value=\"". htmlspecialchars($form_values['email'], ENT_QUOTES). "\">
                     </div>
                 </div>
 
@@ -114,9 +176,32 @@ require("../../../adm_config/body_top.php");
                         }
                     echo "</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <textarea  id=\"text\" name=\"text\" tabindex=\"2\" style=\"width: 350px;\" rows=\"10\" cols=\"40\"></textarea>
+                        <textarea  id=\"text\" name=\"text\" tabindex=\"3\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". htmlspecialchars($form_values['text'], ENT_QUOTES). "</textarea>&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
                     </div>
                 </div>";
+
+                // Nicht eingeloggte User bekommen jetzt noch das Captcha praesentiert,
+                // falls es in den Orgaeinstellungen aktiviert wurde...
+                if (!$g_session_valid && $g_preferences['enable_guestbook_captcha'] == 1)
+                {
+                    echo "
+
+                    <div style=\"margin-top: 6px;\">
+                        <div style=\"text-align: left; margin-left: 27%;\">
+                            <img src=\"$g_root_path/adm_program/system/captcha_class.php\" border=\"0\" alt=\"Captcha\" />
+                        </div>
+                    </div>
+
+                    <div style=\"margin-top: 6px;\">
+                           <div style=\"text-align: right; width: 25%; float: left;\">Best&auml;tigungscode:</div>
+                           <div style=\"text-align: left; margin-left: 27%;\">
+                               <input type=\"text\" id=\"captcha\" name=\"captcha\" tabindex=\"4\" style=\"width: 200px;\" maxlength=\"8\" value=\"\">
+                               <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
+                               <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=captcha_help','Message','width=400,height=320,left=310,top=200,scrollbars=yes')\">
+                           </div>
+                    </div>";
+                }
 
 
                 echo "<hr width=\"85%\" />
