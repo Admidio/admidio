@@ -83,6 +83,7 @@ if ($g_preferences['enable_bbcode'] == 1)
 }
 
 unset($_SESSION['guestbook_entry_request']);
+unset($_SESSION['guestbook_comment_request']);
 
 echo "
 <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
@@ -353,14 +354,14 @@ require("../../../adm_config/body_top.php");
                         }
 
 
-                        if ($_GET['id'] == 0 && mysql_num_rows($comment_result) == 0 && $g_current_user->commentGuestbookRight())
+                        if ($_GET['id'] == 0 && mysql_num_rows($comment_result) == 0 && ($g_current_user->commentGuestbookRight() || $g_preferences['enable_gbook_comments4all'] == 1) )
                         {
                             // Falls keine Kommentare vorhanden sind, aber das Recht zur Kommentierung, wird der Link zur Kommentarseite angezeigt...
                             $load_url = "$g_root_path/adm_program/modules/guestbook/guestbook_comment_new.php?id=$row->gbo_id";
                             echo "
                             <div style=\"margin: 8px 4px 4px 4px; font-size: 8pt; text-align: left;\">
                                 <a href=\"$load_url\">
-                                <img src=\"$g_root_path/adm_program/images/comments.png\" style=\"vertical-align: middle;\" alt=\"Kommentieren\"
+                                <img src=\"$g_root_path/adm_program/images/new_comment.png\" style=\"vertical-align: middle;\" alt=\"Kommentieren\"
                                 title=\"Kommentieren\" border=\"0\"></a>
                                 <a href=\"$load_url\">Einen Kommentar zu diesem Beitrag schreiben.</a>
                             </div>";

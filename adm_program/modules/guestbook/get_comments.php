@@ -80,17 +80,24 @@ if (isset($comment_result))
     {
         $cid = $row->gbc_gbo_id;
 
-        // Die Userdaten des Kommentarschreibers aus der DB holen
-        $commentWriter = new User($g_adm_con);
-        $commentWriter->getUser($row->gbc_usr_id);
-
-
         echo "
         <div class=\"groupBox\" style=\"overflow: hidden; margin-left: 20px; margin-right: 20px;\">
             <div class=\"groupBoxHeadline\">
                 <div style=\"text-align: left; float: left;\">
                     <img src=\"$g_root_path/adm_program/images/comments.png\" style=\"vertical-align: top;\" alt=\"Kommentar ". $commentNumber. "\">&nbsp;".
-                    "Kommentar ". $commentNumber. " von ". strSpecialChars2Html($commentWriter->first_name). " ". strSpecialChars2Html($commentWriter->last_name). "</div>";
+                    "Kommentar ". $commentNumber. " von ". strSpecialChars2Html($row->gbc_name);
+
+                // Falls eine Mailadresse des Users angegeben wurde, soll ein Maillink angezeigt werden...
+                if (isValidEmailAddress($row->gbc_email))
+                {
+                    echo "
+                    <a href=\"mailto:$row->gbc_email\">
+                    <img src=\"$g_root_path/adm_program/images/mail.png\" style=\"vertical-align: middle;\" alt=\"Mail an $row->gbc_email\"
+                    title=\"Mail an $row->gbc_email\" border=\"0\"></a>";
+                }
+
+                echo "
+                </div>";
 
 
                 echo "
@@ -130,14 +137,14 @@ if (isset($comment_result))
 
     }
 
-    if ($g_current_user->commentGuestbookRight())
+    if ($g_current_user->commentGuestbookRight() || $g_preferences['enable_gbook_comments4all'] == 1)
     {
         // Bei Kommentierungsrechten, wird der Link zur Kommentarseite angezeigt...
         $load_url = "$g_root_path/adm_program/modules/guestbook/guestbook_comment_new.php?id=$cid";
         echo "
         <div style=\"margin: 8px 4px 4px 4px; font-size: 8pt; text-align: left;\">
             <a href=\"$load_url\">
-            <img src=\"$g_root_path/adm_program/images/comments.png\" style=\"vertical-align: middle;\" alt=\"Kommentieren\"
+            <img src=\"$g_root_path/adm_program/images/new_comment.png\" style=\"vertical-align: middle;\" alt=\"Kommentieren\"
             title=\"Kommentieren\" border=\"0\"></a>
             <a href=\"$load_url\">Einen Kommentar zu diesem Beitrag schreiben.</a>
         </div>";

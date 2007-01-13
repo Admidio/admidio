@@ -85,8 +85,29 @@ else
 // Erst einmal pruefen ob die noetigen Berechtigungen vorhanden sind
 if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mode'] == 5 || $_GET['mode'] == 6 || $_GET['mode'] == 7 )
 {
-    // Der User muss fuer diese modes eingeloggt sein
-    require("../../system/login_valid.php");
+
+    if ($_GET['mode'] == 4)
+    {
+        // Wenn nicht jeder kommentieren darf, muss man eingeloggt zu sein
+        if ($g_preferences['enable_gbook_comments4all'] == 0)
+        {
+            require("../../system/login_valid.php");
+
+            // Ausserdem werden dann commentGuestbook-Rechte benoetigt
+            if (!$g_current_user->commentGuestbookRight())
+            {
+                $g_message->show("norights");
+            }
+        }
+
+    }
+    else
+    {
+        // Der User muss fuer die anderen Modes auf jeden Fall eingeloggt sein
+        require("../../system/login_valid.php");
+    }
+
+
 
     if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 5 || $_GET['mode'] == 6 || $_GET['mode'] == 7)
     {
@@ -97,14 +118,7 @@ if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mod
         }
     }
 
-    if ($_GET['mode'] == 4)
-    {
-        // Fuer den mode 4 werden commentGuestbook-Rechte benoetigt
-        if(!$g_current_user->commentGuestbookRight())
-        {
-            $g_message->show("norights");
-        }
-    }
+
 
 
     // Abschliessend wird jetzt noch geprueft ob die uebergebene ID ueberhaupt zur Orga gehoert
@@ -303,17 +317,88 @@ elseif($_GET["mode"] == 2)
 
 elseif($_GET["mode"] == 4)
 {
-    //Daten fuer die DB vorbereiten
-    $text      = strStripTags($_POST['text']);
-    $actDate   = date("Y.m.d G:i:s", time());
+    // Der Inhalt des Formulars wird nun in der Session gespeichert...
+    $_SESSION['guestbook_comment_request'] = $_REQUEST;
 
-    if (strlen($text)  > 0)
+
+    // Falls der User nicht eingeloggt ist, aber ein Captcha geschaltet ist,
+    // muss natuerlich der Code ueberprueft werden
+    if ($_GET["mode"] == 4 && !$g_session_valid && $g_preferences['enable_guestbook_captcha'] == 1)
     {
-        $sql = "INSERT INTO ". TBL_GUESTBOOK_COMMENTS. " (gbc_gbo_id, gbc_usr_id, gbc_text, gbc_timestamp)
-                                                 VALUES ({0}, $g_current_user->id, {1}, '$actDate')";
-        $sql    = prepareSQL($sql, array($_GET['id'], $text));
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
+        if ( !isset($_SESSION['captchacode']) || strtoupper($_SESSION['captchacode']) != strtoupper($_POST['captcha']) )
+        {
+            $g_message->show("captcha_code");
+        }
+    }
+
+
+    //Daten fuer die DB vorbereiten
+    $name      = strStripTags($_POST['name']);
+    $text      = strStripTags($_POST['text']);
+
+    $email     = strStripTags($_POST['email']);
+    if (!isValidEmailAddress($email))
+    {
+        // falls die Email ein ungueltiges Format aufweist wird sie einfach auf null gesetzt
+        $email = null;
+    }
+
+
+    $actDate   = date("Y.m.d G:i:s", time());
+    $ipAddress = $_SERVER['REMOTE_ADDR'];
+
+    if (strlen($name) > 0 && strlen($text)  > 0)
+    {
+
+        if ($g_session_valid)
+        {
+            // Falls der User eingeloggt ist wird die aktuelle UserId und der korrekte Name mitabgespeichert...
+            $realName = $g_current_user->first_name. " ". $g_current_user->last_name;
+
+            $sql = "INSERT INTO ". TBL_GUESTBOOK_COMMENTS. " (gbc_gbo_id, gbc_usr_id, gbc_name, gbc_text, gbc_email, gbc_timestamp, gbc_ip_address)
+                                                     VALUES ({0}, $g_current_user->id, '$realName', {1}, {2}, '$actDate', '$ipAddress')";
+            $sql    = prepareSQL($sql, array($_GET['id'], $text, $email));
+            $result = mysql_query($sql, $g_adm_con);
+            db_error($result);
+        }
+        else
+        {
+            if ($g_preferences['flooding_protection_time'] != 0)
+            {
+                // Falls er nicht eingeloggt ist, wird vor dem Abspeichern noch geprueft ob der
+                // User innerhalb einer festgelegten Zeitspanne unter seiner IP-Adresse schon einmal
+                // einen GB-Eintrag/Kommentar erzeugt hat...
+                $sql = "SELECT count(*) FROM ". TBL_GUESTBOOK_COMMENTS. "
+                        where unix_timestamp(gbc_timestamp) > unix_timestamp()-". $g_preferences['flooding_protection_time']. "
+                          and gbc_ip_address = '$ipAddress' ";
+                $result = mysql_query($sql, $g_adm_con);
+                db_error($result);
+                $row = mysql_fetch_array($result);
+                if($row[0] > 0)
+                {
+                    //Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
+                    $g_message->show("flooding_protection", $g_preferences['flooding_protection_time']);
+                }
+            }
+
+            // Falls er nicht eingeloggt ist, gibt es das sql-Statement natürlich ohne die UserID
+            $sql = "INSERT INTO ". TBL_GUESTBOOK_COMMENTS. " (gbc_gbo_id, gbc_name, gbc_text, gbc_email, gbc_timestamp, gbc_ip_address)
+                                                     VALUES ({0}, {1}, {2}, {3}, '$actDate', '$ipAddress')";
+            $sql    = prepareSQL($sql, array($_GET['id'], $name, $text, $email));
+
+            $result = mysql_query($sql, $g_adm_con);
+            db_error($result);
+
+        }
+
+        // Der Inhalt des Formulars wird bei erfolgreichem insert/update aus der Session geloescht
+        unset($_SESSION['guestbook_comment_request']);
+
+        // Der CaptchaCode wird bei erfolgreichem insert/update aus der Session geloescht
+        if (isset($_SESSION['captchacode']))
+        {
+            unset($_SESSION['captchacode']);
+        }
 
         $location = "Location: $g_root_path/adm_program/modules/guestbook/guestbook.php?id=". $_GET['id']. "&headline=". $_GET['headline'];
         header($location);
@@ -322,7 +407,14 @@ elseif($_GET["mode"] == 4)
     }
     else
     {
-        $err_text = "Text";
+        if(strlen($name) > 0)
+        {
+            $err_text = "Text";
+        }
+        else
+        {
+            $err_text = "Name";
+        }
         $err_code = "feld";
     }
 }
