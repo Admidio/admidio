@@ -203,8 +203,8 @@ echo "
         }
 
     // Dieses Array enthaelt alle IDs, die in den Orga-Einstellungen auftauchen
-    ids = new Array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-                    'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
+    ids = new Array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+                    'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' );
 
 
     // Die eigentliche Funktion: Schaltet die Einstellungsdialoge durch
@@ -273,7 +273,7 @@ echo"
 
 
         //Buchstaben Navigation
-        for($menu_letter=65; $menu_letter<=90; $menu_letter++)
+        for($menu_letter=35; $menu_letter<=90; $menu_letter++)
         {
             //Falls Aktueller Anfangsbuchstabe, Nur Buchstabe ausgeben
             $menu_letter_string = chr($menu_letter);
@@ -286,9 +286,13 @@ echo"
             {
                 echo"<a href=\"#\" onClick=\"toggleDiv('$menu_letter_string');\">$menu_letter_string</a>&nbsp;";
             }
+            if($menu_letter == 35)
+            {
+                $menu_letter = 64;
+            }
         }//for
 
-        $letter_merker=64;
+       $letter_merker=35;
 
        $user = mysql_fetch_array($result_user);
        //Zeilen ausgeben
@@ -296,18 +300,25 @@ echo"
         {
             //Aktueller Buchstabe
             $letter = ord(strtoupper($user['usr_last_name']));
-            $letter_string = chr($letter);
+
 
             if($letter != $letter_merker)
             {
+                if($letter_merker==35)
+                {
+                    $letter_merker=65;
+                }
+                else
+                {
+                  $letter_merker++;
+                }
+                $letter_string = chr($letter_merker);
+
                 //Container mit allen ergebnissen zum Buchstaben
                 echo"
                 <div id=\"$letter_string\" name=\"$letter\" style=\"visibility: hidden; display: none; margin-top: 15px;\">";
 
                 echo "<h1>$letter_string</h1>";
-
-                //Lettermerker neu belegen
-                $letter_merker = $letter;
 
                 //Tabelle ausgeben
                 echo"
@@ -374,7 +385,7 @@ echo"
             if(ord(strtoupper($user['usr_last_name'])) != $letter_merker || mysql_num_rows($result_user)-1==$x)
             {
                 echo"</table>";
-                //echo"</div>";
+                echo"</div>";
             }
         }//End For
 
