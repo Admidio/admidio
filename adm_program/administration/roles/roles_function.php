@@ -461,27 +461,30 @@ elseif($_GET["mode"] == 2)
 
                 // holt eine Liste der ausgewählten Rolen
                 $DBChildRoles = RoleDependency::getChildRoles($g_adm_con,$rol_id);
-
+				
 				//entferne alle Rollen die nicht mehr ausgewählt sind
-                foreach ($DBChildRoles as $DBChildRole)
-                {
-                    if(in_array($DBChildRole,$sentChildRoles))
-                        continue;
-                    else
-                    {
+				if($DBChildRoles != -1)
+				{
+	                foreach ($DBChildRoles as $DBChildRole)
+	                {
+	                    if(in_array($DBChildRole,$sentChildRoles))
+	                        continue;
+	                    else
+	                    {
 
-						$roleDep->get($DBChildRole,$rol_id);
-                        $roleDep->delete();
-                    }
-                }
+							$roleDep->get($DBChildRole,$rol_id);
+	                        $roleDep->delete();
+	                    }
+	                }
+				}
                 //fuege alle neuen Rollen hinzu
                 foreach ($sentChildRoles as $sentChildRole)
                 {
-                    if(in_array($sentChildRole,$DBChildRoles))
+					if((-1 == $DBChildRoles) || in_array($sentChildRole,$DBChildRoles))
                         continue;
                     else
                     {
-                        $roleDep->clear();
+						$roleDep->clear();
                         $roleDep->setChild($sentChildRole);
                         $roleDep->setParent($rol_id);
                         $roleDep->insert($g_current_user->id);

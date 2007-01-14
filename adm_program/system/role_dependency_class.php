@@ -258,7 +258,7 @@ class RoleDependency
 	            }
 	            //Das letzte Komma wieder wegschneiden
 	            $sql = substr($sql,0,-1);
-				echo "$sql";
+				
 	            $result2 = mysql_query($sql, $this->db_connection);
 		    	db_error($result2);
 	        }
