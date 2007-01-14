@@ -63,13 +63,13 @@ else
 if($rol_id > 0)
 {
     // Pruefung, ob die Rolle zur aktuellen Organisation gehoert
-    $sql    = "SELECT * FROM ". TBL_ROLES. " 
+    $sql    = "SELECT * FROM ". TBL_ROLES. "
                 WHERE rol_id            = {0}
                   AND rol_org_shortname = '$g_organization' ";
     $sql    = prepareSQL($sql, array($rol_id));
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
-    
+
     if (mysql_num_rows($result) == 0)
     {
         $g_message->show("invalid");
@@ -442,7 +442,7 @@ elseif($_GET["mode"] == 2)
                                                        {5},{6}, {7}, {8},
                                                        {9}, {10}, 1) ";
             }
-            $sql    = prepareSQL($sql, array(trim($_POST['name']), trim($_POST['description']), $_POST['category'], 
+            $sql    = prepareSQL($sql, array(trim($_POST['name']), trim($_POST['description']), $_POST['category'],
                             $d_datum_von, $t_uhrzeit_von, $d_datum_bis, $t_uhrzeit_bis,  $_POST['weekday'],
                             trim($_POST['location']), $_POST['max_members'], $_POST['cost'], $rol_id));
             $result = mysql_query($sql, $g_adm_con);
@@ -456,23 +456,25 @@ elseif($_GET["mode"] == 2)
             {
 
                 $sentChildRoles = $_POST['ChildRoles'];
-                // holt eine Liste der ausgewählten Rolen
-                $DBChildRoles = RoleDependency::getChildRoles($g_adm_con,$rol_id);
 
                 $roleDep = new RoleDependency($g_adm_con);
 
-                //entferne alle Rollen die nicht mehr ausgewählt sind
+                // holt eine Liste der ausgewählten Rolen
+                $DBChildRoles = RoleDependency::getChildRoles($g_adm_con,$rol_id);
+
+				//entferne alle Rollen die nicht mehr ausgewählt sind
                 foreach ($DBChildRoles as $DBChildRole)
                 {
                     if(in_array($DBChildRole,$sentChildRoles))
                         continue;
                     else
                     {
-                        $roleDep->get($DBChildRole,$rol_id);
+
+						$roleDep->get($DBChildRole,$rol_id);
                         $roleDep->delete();
                     }
                 }
-                //fuege alle neuen Rolen hinzu
+                //fuege alle neuen Rollen hinzu
                 foreach ($sentChildRoles as $sentChildRole)
                 {
                     if(in_array($sentChildRole,$DBChildRoles))
@@ -483,9 +485,18 @@ elseif($_GET["mode"] == 2)
                         $roleDep->setChild($sentChildRole);
                         $roleDep->setParent($rol_id);
                         $roleDep->insert($g_current_user->id);
+
+                        //füge alle Mitglieder der ChildRole der ParentRole zu
+                        $roleDep->updateMembership();
+
                     }
+
                 }
 
+            }
+            else
+            {
+            	RoleDependency::removeChildRoles($g_adm_con,$rol_id);
             }
 
             $_SESSION['navigation']->deleteLastUrl();
