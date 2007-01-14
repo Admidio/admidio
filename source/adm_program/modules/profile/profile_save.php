@@ -188,7 +188,7 @@ if(strlen($user->login_name) > 0)
     
     // pruefen, ob der Benutzername bereits im Forum vergeben ist, 
     // Benutzernamenswechesel und diese Dinge
-    if($g_forum == 1 && $usr_id > 0)
+    if($g_forum)
     {
         // pruefen, ob der Benutzername bereits im Forum vergeben ist
         // Wenn die usr_id 0 ist, ist es eine Neuanmeldung, also nur den login_namen prüfen
@@ -531,3 +531,4 @@ else
     $g_message->show("save");
 }
 ?>
+
