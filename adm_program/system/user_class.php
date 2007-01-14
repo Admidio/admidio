@@ -178,12 +178,8 @@ class User
         $this->reg_org_shortname = "";
 
         // User Rechte vorbelegen
-        $this->editProfile = -1;
-        $this->editUser = -1;
-        $this->editGuestbookRight = -1;
-        $this->commentGuestbookRight = -1;
-        $this->editWeblinksRight = -1;
-        $this->editDownloadRight = -1;
+        $this->clearRights();
+
     }
 
     // alle Rechtevariablen wieder zuruecksetzen
@@ -193,6 +189,8 @@ class User
         $this->editUser = -1;
         $this->editGuestbookRight = -1;
         $this->commentGuestbookRight = -1;
+        $this->editWeblinksRight = -1;
+        $this->editDownloadRight = -1;
     }
 
     // aktuelle Userdaten in der Datenbank updaten
@@ -435,7 +433,7 @@ class User
 	    {
 	    	$profileID = $this->id;
 	    }
-        
+
         //soll das eigene Profil bearbeitet werden?
 	    if($profileID == $this->id)
 	    {
@@ -525,7 +523,7 @@ class User
 	        return false;
 	    }
 	}
-    
+
     // Funktion prueft, ob der angemeldete User Gaestebucheintraege kommentieren darf
     function commentGuestbookRight()
     {
@@ -555,7 +553,7 @@ class User
                 $this->commentGuestbookRight = 0;
             }
         }
-        
+
         if($this->commentGuestbookRight == 1)
         {
             return true;
@@ -565,11 +563,11 @@ class User
             return false;
         }
     }
-    
+
     // Funktion prueft, ob der angemeldete User Gaestebucheintraege loeschen und editieren darf
     function editGuestbookRight()
     {
-            
+
         if($this->editGuestbookRight == -1)
         {
             global $g_organization;
@@ -596,7 +594,7 @@ class User
                 $this->editGuestbookRight = 0;
             }
         }
-        
+
         if ( $this->editGuestbookRight == 1)
         {
             return true;
@@ -605,13 +603,13 @@ class User
         {
             return false;
         }
-        
+
     }
-    
+
     // Funktion prueft, ob der angemeldete User Weblinks anlegen und editieren darf
     function editWeblinksRight()
     {
-        
+
         if(-1 == $this->editWeblinksRight)
         {
             global $g_organization;
@@ -638,7 +636,7 @@ class User
                 $this->editWeblinksRight = 0;
             }
         }
-        
+
         if (1 == $this->editWeblinksRight)
         {
             return true;
@@ -647,8 +645,8 @@ class User
         {
             return false;
         }
-        
-        
+
+
     }
 
     // Funktion prueft, ob der angemeldete User Downloads hochladen und verwalten darf
@@ -656,7 +654,7 @@ class User
     function editDownloadRight()
     {
         if(-1 == $this->editDownloadRight)
-        {        
+        {
             global $g_organization;
 
             $sql    = "SELECT *
@@ -681,7 +679,7 @@ class User
                 $this->editDownloadRight = 0;
             }
         }
-        
+
         if (1 == $this->editDownloadRight)
         {
             return true;
@@ -690,7 +688,7 @@ class User
         {
             return false;
         }
-        
+
     }
 
 }
