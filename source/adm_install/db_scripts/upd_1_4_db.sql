@@ -67,3 +67,6 @@ alter table %PRAEFIX%_guestbook_comments add constraint %PRAEFIX%_FK_GBC_USR_CHA
 -- Sessiontabelle bearbeiten
 ALTER TABLE %PRAEFIX%_sessions DROP COLUMN ses_longer_session;
 ALTER TABLE %PRAEFIX%_sessions ADD COLUMN ses_blob blob AFTER ses_ip_address;
+
+-- Memberstabelle pflegen
+UPDATE %PRAEFIX%_members SET mem_end = NULL WHERE mem_end = '0000-00-00';

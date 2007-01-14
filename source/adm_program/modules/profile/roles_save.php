@@ -183,7 +183,7 @@ while($row = mysql_fetch_object($result_rolle))
             if($function == 1)
             {
                 $sql = "UPDATE ". TBL_MEMBERS. " SET mem_valid  = 1
-                                                   , mem_end   = '0000-00-00'
+                                                   , mem_end    = NULL
                                                    , mem_leader = $leiter
                             WHERE mem_rol_id = $row->rol_id
                               AND mem_usr_id = {0}";
@@ -192,7 +192,7 @@ while($row = mysql_fetch_object($result_rolle))
             else
             {
                 $sql = "UPDATE ". TBL_MEMBERS. " SET mem_valid  = 0
-                                                   , mem_end   = NOW()
+                                                   , mem_end    = NOW()
                                                    , mem_leader = $leiter
                             WHERE mem_rol_id = $row->rol_id
                               AND mem_usr_id = {0}";
@@ -204,7 +204,7 @@ while($row = mysql_fetch_object($result_rolle))
             if($function == 1)
             {
                 $sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin,mem_end, mem_valid, mem_leader)
-                          VALUES ($row->rol_id, {0}, NOW(),0000-00-00, 1, $leiter) ";
+                          VALUES ($row->rol_id, {0}, NOW(),NULL, 1, $leiter) ";
                 $count_assigned++;
             }
         }
@@ -247,10 +247,7 @@ if($g_current_user->id != $_GET['user_id'])
 foreach($parentRoles as $actRole)
 {
     $sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin,mem_end, mem_valid, mem_leader)
-              VALUES ($actRole, {0}, NOW(), 0000-00-00, 1, $leiter)
-                     ON DUPLICATE KEY UPDATE mem_end = 0000-00-00";
-
-
+              VALUES ($actRole, {0}, NOW(), NULL, 1, $leiter) ";
     $sql    = prepareSQL($sql, array($_GET['user_id']));
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
@@ -262,42 +259,6 @@ if($_GET['new_user'] == 1 && $count_assigned == 0)
     $g_message->show("norolle");
 }
 
-if($_GET['popup'] == 1)
-{
-    echo "
-    <?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?". ">
-    <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 TRANSITIONAL//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
-    <html xmlns=\"http://www.w3.org/1999/xhtml\">
-    <head>
-        <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->
-        <title>Funktionen zuordnen</title>
-        <meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\" />
-        <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\" />
-
-        <!--[if lt IE 7]>
-        <script language=\"JavaScript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
-        <![endif]-->
-    </head>
-
-    <body>
-        <div align=\"center\"><br />
-            <div class=\"groupBox\" align=\"left\" style=\"padding: 10px\">
-                <p>Die &Auml;nderungen wurden erfolgreich gespeichert.</p>
-                <p>Bitte denk daran, das Profil im Browser neu zu laden,
-                damit die ge&auml;nderten Rollen angezeigt werden.</p>
-            </div>
-            <div style=\"padding-top: 10px;\" align=\"center\">
-                <button name=\"schliessen\" type=\"button\" value=\"schliessen\" onclick=\"window.close()\">
-                <img src=\"$g_root_path/adm_program/images/door_ing.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\">
-                &nbsp;Schlie&szlig;en</button>
-            </div>
-        </div>
-    </body>
-    </html>";
-}
-else
-{
-    // zur Ausgangsseite zurueck
-    $g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
-    $g_message->show("save");
-}
+// zur Ausgangsseite zurueck
+$g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
+$g_message->show("save");
