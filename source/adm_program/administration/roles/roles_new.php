@@ -434,10 +434,11 @@ require("../../../adm_config/body_top.php");
                 </div>
 
                 <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 90%;\">
-                    <div class=\"groupBoxHeadline\">Abh&auml;ngigkeiten</div>
+                    <div class=\"groupBoxHeadline\">Abh&auml;ngigkeiten&nbsp;&nbsp;(optional)</div>
 
                     <div style=\"margin-top: 6px;\">
                         <p>Ein Mitglied der nachfolgenden Rollen soll auch automatisch Mitglied in dieser Rolle sein!</p>
+						<p>Beim Setzten dieser Abh&auml;ngigkeit werden auch bereits existierende Mitglieder der abh&auml;ngigen Rolle Mitglied in der aktuellen Rolle. Beim Entfernen einer Abh&auml;ngigkeit werden Mitgliedschaften nicht aufgehoben!<p>
                         <div style=\"text-align: left; float: left; margin-left: 5%; margin-right: 10%;\">";
 
                             // holt eine Liste der ausgewählten Rolen
