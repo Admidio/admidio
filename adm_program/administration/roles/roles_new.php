@@ -142,15 +142,6 @@ else
         $form_values['weekday']       = $row_ar->rol_weekday;
         $form_values['location']      = $row_ar->rol_location;
         $form_values['cost']          = $row_ar->rol_cost;
-
-        if ($form_values['start_time'] == "00:00")
-        {
-            $form_values['start_time'] = "";
-        }
-        if ($form_values['end_time'] == "00:00")
-        {
-            $form_values['end_time'] = "";
-        }
     }
 }
 
@@ -283,10 +274,10 @@ require("../../../adm_config/body_top.php");
                                 echo " disabled ";
                             }
                             echo " value=\"1\" />&nbsp;
-                            <label for=\"moderation\"><img src=\"$g_root_path/adm_program/images/wand.png\" alt=\"Moderation (Benutzer &amp; Rollen verwalten uvm.)\"></label>
+                            <label for=\"moderation\"><img src=\"$g_root_path/adm_program/images/wand.png\" alt=\"Moderation (Rollen verwalten und zuordnen uvm.)\"></label>
                         </div>
                         <div style=\"text-align: left; margin-left: 12%;\">
-                            <label for=\"moderation\">Moderation (Benutzer &amp; Rollen verwalten uvm.)&nbsp;</label>
+                            <label for=\"moderation\">Moderation (Rollen verwalten und zuordnen uvm.)&nbsp;</label>
                             <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                             onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_moderation','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\">
                         </div>
@@ -299,12 +290,24 @@ require("../../../adm_config/body_top.php");
                                 echo " checked ";
                             }
                             echo " value=\"1\" />&nbsp;
-                            <label for=\"users\"><img src=\"$g_root_path/adm_program/images/group.png\" alt=\"Daten aller Benutzer bearbeiten\"></label>
+                            <label for=\"users\"><img src=\"$g_root_path/adm_program/images/group.png\" alt=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\"></label>
                         </div>
                         <div style=\"text-align: left; margin-left: 12%;\">
-                            <label for=\"users\">Daten aller Benutzer bearbeiten&nbsp;</label>
+                            <label for=\"users\">Profildaten und Rollenzuordnungen aller Benutzer bearbeiten&nbsp;</label>
                             <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                             onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_benutzer','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\">
+                        </div>
+                    </div>
+                    <div style=\"margin-top: 6px;\">
+                        <div style=\"text-align: right; width: 10%; float: left;\">
+                            <input type=\"checkbox\" id=\"profile\" name=\"profile\" ";
+                            if(isset($form_values['profile']) && $form_values['profile'] == 1)
+                                echo " checked ";
+                            echo " value=\"1\" />&nbsp;
+                            <label for=\"profile\"><img src=\"$g_root_path/adm_program/images/user.png\" alt=\"Eigenes Profil bearbeiten\"></label>
+                        </div>
+                        <div style=\"text-align: left; margin-left: 12%;\">
+                            <label for=\"profile\">Eigenes Profil bearbeiten&nbsp;</label>
                         </div>
                     </div>
                     <div style=\"margin-top: 6px;\">
@@ -419,18 +422,6 @@ require("../../../adm_config/body_top.php");
                             <label for=\"links\">Weblinks anlegen und bearbeiten&nbsp;</label>
                         </div>
                     </div>
-                    <div style=\"margin-top: 6px;\">
-                        <div style=\"text-align: right; width: 10%; float: left;\">
-                            <input type=\"checkbox\" id=\"profile\" name=\"profile\" ";
-                            if(isset($form_values['profile']) && $form_values['profile'] == 1)
-                                echo " checked ";
-                            echo " value=\"1\" />&nbsp;
-                            <label for=\"profile\"><img src=\"$g_root_path/adm_program/images/user.png\" alt=\"Eigenes Profil bearbeiten\"></label>
-                        </div>
-                        <div style=\"text-align: left; margin-left: 12%;\">
-                            <label for=\"profile\">Eigenes Profil bearbeiten&nbsp;</label>
-                        </div>
-                    </div>
                 </div>
 
                 <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 90%;\">
@@ -438,7 +429,7 @@ require("../../../adm_config/body_top.php");
 
                     <div style=\"margin-top: 6px;\">
                         <p>Ein Mitglied der nachfolgenden Rollen soll auch automatisch Mitglied in dieser Rolle sein!</p>
-						<p>Beim Setzten dieser Abh&auml;ngigkeit werden auch bereits existierende Mitglieder der abh&auml;ngigen Rolle Mitglied in der aktuellen Rolle. Beim Entfernen einer Abh&auml;ngigkeit werden Mitgliedschaften nicht aufgehoben!<p>
+                        <p>Beim Setzten dieser Abh&auml;ngigkeit werden auch bereits existierende Mitglieder der abh&auml;ngigen Rolle Mitglied in der aktuellen Rolle. Beim Entfernen einer Abh&auml;ngigkeit werden Mitgliedschaften nicht aufgehoben!<p>
                         <div style=\"text-align: left; float: left; margin-left: 5%; margin-right: 10%;\">";
 
                             // holt eine Liste der ausgewählten Rolen
