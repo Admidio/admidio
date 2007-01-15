@@ -45,7 +45,7 @@ if (isset($_GET["usr_id"]) && is_numeric($_GET["usr_id"]) == false)
     $g_message->show("invalid");
 }
 
-if (strlen($_POST["rol_id"]) > 0 && is_numeric($_POST["rol_id"]) == false)
+if (isset($_GET["rol_id"]) && is_numeric($_POST["rol_id"]) == false)
 {
     $g_message->show("invalid");
 }
@@ -234,6 +234,8 @@ if (strlen($err_code) > 0)
     $g_message->show($err_code, $err_text);
 }
 
+$rolle = null;
+
 //Nun die Empfaenger zusammensuchen und an das Mailobjekt uebergeben
 if (array_key_exists("usr_id", $_GET))
 {
@@ -249,8 +251,6 @@ if (array_key_exists("usr_id", $_GET))
 }
 else
 {
-    $rolle = null;
-
     //Rolle wurde uebergeben, dann an alle Mitglieder aus der DB fischen
     $sql    = "SELECT usr_first_name, usr_last_name, usr_email, rol_name
                 FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
@@ -281,7 +281,7 @@ else
 }
 
 // Falls eine Kopie benoetigt wird, das entsprechende Flag im Mailobjekt setzen
-if ($_POST['kopie'])
+if (isset($_POST['kopie']) && $_POST['kopie'] == true)
 {
     $email->setCopyToSenderFlag();
 
@@ -318,7 +318,7 @@ $email->setText($mail_body);
 //Nun kann die Mail endgueltig versendet werden...
 if ($email->sendEmail())
 {
-    if (strlen($_POST['rol_id']) > 0)
+    if (strlen($rolle) > 0)
     {
         $err_text = "die Rolle $rolle";
     }
