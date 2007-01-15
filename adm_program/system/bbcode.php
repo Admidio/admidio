@@ -221,6 +221,7 @@ class ubbParser
   function parse_edit($tree) {return $this->simple_parse($tree, '<span class="edit"><b>edit:</b>','</span>');}
   function parse_bold($tree) {return $this->simple_parse($tree, '<b>', '</b>');}
   function parse_quote($tree){return $this->simple_parse($tree, '<blockquote>', '</blockquote>');}
+  function parse_center($tree){return $this->simple_parse($tree, '<center>', '</center>');}
 
   /* more complex code generation methods */
   function parse_me($tree, $params = array())
