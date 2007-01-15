@@ -2,7 +2,7 @@
 /******************************************************************************
  * Klasse fuer Datenbanktabelle adm_users
  *
- * Copyright    : (c) 2004 - 2006 The Admidio Team
+ * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  *
@@ -29,8 +29,7 @@
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * version 2 as published by the Free Software Foundation
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -89,7 +88,7 @@ class User
 
     function reconnect($connection)
     {
-    	$this->db_connection = $connection;
+        $this->db_connection = $connection;
     }
 
     // User mit der uebergebenen ID aus der Datenbank auslesen
@@ -425,104 +424,104 @@ class User
     }
 
     // Funktion prueft, ob der angemeldete User das entsprechende Profil bearbeiten darf
-	function editProfile($profileID = NULL)
-	{
-	    global $g_organization;
+    function editProfile($profileID = NULL)
+    {
+        global $g_organization;
 
-	    if($profileID == NULL)
-	    {
-	    	$profileID = $this->id;
-	    }
+        if($profileID == NULL)
+        {
+            $profileID = $this->id;
+        }
 
         //soll das eigene Profil bearbeitet werden?
-	    if($profileID == $this->id)
-	    {
-	    	// Pruefen ob die Datenbank schon abgefragt wurde, wenn nicht dann Recht auslesen
-	    	if($this->editProfile == -1)
-	    	{
-	    		$sql    =  "SELECT *
-		                 	FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-		                	WHERE mem_usr_id        = $this->id
-		                  	AND mem_rol_id        = rol_id
-		                  	AND mem_valid         = 1
-		                  	AND rol_org_shortname = '$g_organization'
-		                  	AND rol_profile       = 1
-		                  	AND rol_valid         = 1 ";
-			    $result = mysql_query($sql, $this->db_connection);
-			    db_error($result);
+        if($profileID == $this->id)
+        {
+            // Pruefen ob die Datenbank schon abgefragt wurde, wenn nicht dann Recht auslesen
+            if($this->editProfile == -1)
+            {
+                $sql    =  "SELECT *
+                            FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
+                            WHERE mem_usr_id        = $this->id
+                            AND mem_rol_id        = rol_id
+                            AND mem_valid         = 1
+                            AND rol_org_shortname = '$g_organization'
+                            AND rol_profile       = 1
+                            AND rol_valid         = 1 ";
+                $result = mysql_query($sql, $this->db_connection);
+                db_error($result);
 
-			    $found_rows = mysql_num_rows($result);
+                $found_rows = mysql_num_rows($result);
 
-			    if($found_rows >= 1)
-			    {
-			    	$this->editProfile = 1;
-			    }
-			    else
-			    {
-			    	$this->editProfile = 0;
-			    }
-	    	}
+                if($found_rows >= 1)
+                {
+                    $this->editProfile = 1;
+                }
+                else
+                {
+                    $this->editProfile = 0;
+                }
+            }
 
-	    	if($this->editProfile == 1)
-	    	{
-	    		return true;
-	    	}
-	    	else
-	    	{
-	    		return $this->editUser();
-	    	}
-
-
-	    }
-	    else
-	    {
-	    	return $this->editUser();
-	    }
+            if($this->editProfile == 1)
+            {
+                return true;
+            }
+            else
+            {
+                return $this->editUser();
+            }
 
 
-	}
+        }
+        else
+        {
+            return $this->editUser();
+        }
 
-	// Funktion prueft, ob der angemeldete User fremde Benutzerdaten bearbeiten darf
 
-	function editUser()
-	{
-	    global $g_organization;
+    }
 
-		// prüfen ob die Userrechte schon aus der Datenbank geholt wurden
-		if($this->editUser == -1)
-		{
-			$sql    = "SELECT *
-		                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-		                WHERE mem_usr_id        = $this->id
-		                  AND mem_valid         = 1
-		                  AND mem_rol_id        = rol_id
-		                  AND rol_org_shortname = '$g_organization'
-		                  AND rol_edit_user     = 1
-		                  AND rol_valid         = 1 ";
-		    $result = mysql_query($sql, $this->db_connection);
-		    db_error($result);
+    // Funktion prueft, ob der angemeldete User fremde Benutzerdaten bearbeiten darf
 
-		    $found_rows = mysql_num_rows($result);
+    function editUser()
+    {
+        global $g_organization;
 
-		    if($found_rows >= 1)
-		    {
-		    	$this->editUser = 1;
-		    }
-		    else
-		    {
-		    	$this->editUser = 0;
-		    }
-		}
+        // prüfen ob die Userrechte schon aus der Datenbank geholt wurden
+        if($this->editUser == -1)
+        {
+            $sql    = "SELECT *
+                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
+                        WHERE mem_usr_id        = $this->id
+                          AND mem_valid         = 1
+                          AND mem_rol_id        = rol_id
+                          AND rol_org_shortname = '$g_organization'
+                          AND rol_edit_user     = 1
+                          AND rol_valid         = 1 ";
+            $result = mysql_query($sql, $this->db_connection);
+            db_error($result);
 
-	    if($this->editUser == 1)
-	    {
-	        return true;
-	    }
-	    else
-	    {
-	        return false;
-	    }
-	}
+            $found_rows = mysql_num_rows($result);
+
+            if($found_rows >= 1)
+            {
+                $this->editUser = 1;
+            }
+            else
+            {
+                $this->editUser = 0;
+            }
+        }
+
+        if($this->editUser == 1)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
     // Funktion prueft, ob der angemeldete User Gaestebucheintraege kommentieren darf
     function commentGuestbookRight()

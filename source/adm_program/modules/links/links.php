@@ -2,7 +2,7 @@
 /******************************************************************************
  * Links auflisten
  *
- * Copyright    : (c) 2004 - 2006 The Admidio Team
+ * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Daniel Dieckelmann
  *
@@ -16,8 +16,7 @@
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * version 2 as published by the Free Software Foundation
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -82,7 +81,7 @@ if ($g_preferences['enable_bbcode'] == 1)
     $bbcode = new ubbParser();
 }
 
-// Navigation initialisieren - Modul f�ngt hier an.
+// Navigation initialisieren - Modul f?ngt hier an.
 $_SESSION['navigation']->clear();
 $_SESSION['navigation']->addUrl($g_current_url);
 
@@ -92,7 +91,7 @@ unset($_SESSION['links_request']);
 $linksPerPage = 10;
 
 echo "
-<!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
+<!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org - Version: ". ADMIDIO_VERSION. " -->\n
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
 <html>
 <head>
@@ -220,7 +219,7 @@ require("../../../adm_config/body_top.php");
             $j = 0;
             // Zählervariable für Anzahl der Links in einer Kategorie
             $i = 0;
-            // �berhaupt etwas geschrieben? -> Wichtig, wenn es nur versteckte Kategorien gibt.
+            // ?berhaupt etwas geschrieben? -> Wichtig, wenn es nur versteckte Kategorien gibt.
             $did_write_something = false;
             // Vorherige Kategorie-ID.
             $previous_cat_id = -1;
@@ -229,7 +228,7 @@ require("../../../adm_config/body_top.php");
             // Schreibe diese Kategorie nicht! Sie ist versteckt und der User nicht eingeloggt
             $dont_write = false;
                 
-                // Solange die vorherige Kategorie-ID sich nicht ver�ndert...
+                // Solange die vorherige Kategorie-ID sich nicht ver?ndert...
                 // Sonst in die neue Kategorie springen
                 while (($row = mysql_fetch_object($links_result)) && ($j<$linksPerPage))
                 {

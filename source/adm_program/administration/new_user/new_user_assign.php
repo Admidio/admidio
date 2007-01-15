@@ -2,7 +2,7 @@
 /******************************************************************************
  * Zeigt eine Liste mit moeglichen Zuordnungen an
  *
- * Copyright    : (c) 2004 - 2006 The Admidio Team
+ * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  *
@@ -14,8 +14,7 @@
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * version 2 as published by the Free Software Foundation
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -54,24 +53,24 @@ $new_user->getUser($_GET['new_user_id']);
 
 // alle User aus der DB selektieren, die denselben Vor- und Nachnamen haben
 $sql = "SELECT * " .
-	   "  FROM ". TBL_USERS. 
-	   " WHERE UPPER(usr_last_name)  LIKE UPPER('$new_user->last_name')" .
-	   "   AND UPPER(usr_first_name) LIKE UPPER('$new_user->first_name') " .
-	   "   AND usr_valid      = 1 ";
+       "  FROM ". TBL_USERS. 
+       " WHERE UPPER(usr_last_name)  LIKE UPPER('$new_user->last_name')" .
+       "   AND UPPER(usr_first_name) LIKE UPPER('$new_user->first_name') " .
+       "   AND usr_valid      = 1 ";
 $result_usr   = mysql_query($sql, $g_adm_con);
 $member_found = mysql_num_rows($result_usr);
 
 if($member_found == 0)
 {
-	// kein User mit dem Namen gefunden, dann direkt neuen User erzeugen und dieses Script verlassen
-	header("Location: $g_root_path/adm_program/modules/profile/profile_new.php?user_id=". $_GET['new_user_id']. "&new_user=3");
-	exit();
+    // kein User mit dem Namen gefunden, dann direkt neuen User erzeugen und dieses Script verlassen
+    header("Location: $g_root_path/adm_program/modules/profile/profile_new.php?user_id=". $_GET['new_user_id']. "&new_user=3");
+    exit();
 }
 
 $_SESSION['navigation']->addUrl($g_current_url);
 
 echo "
-<!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
+<!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org - Version: ". ADMIDIO_VERSION. " -->\n
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
 <html>
 <head>
@@ -90,21 +89,21 @@ echo "
 <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
     <div class=\"formHead\" style=\"width: 400px;\">Anmeldung zuordnen</div>
     <div class=\"formBody\" style=\"width: 400px;\">
-    	Es wurde bereits ein Benutzer unter dem Namen <b>$new_user->first_name $new_user->last_name</b> 
+        Es wurde bereits ein Benutzer unter dem Namen <b>$new_user->first_name $new_user->last_name</b> 
         in der Datenbank gefunden.<br>
         <div class=\"groupBox\" style=\"margin-top: 10px; text-align: left;\">
             <div class=\"groupBoxHeadline\">Gefundene Benutzer</div>";
             $i = 0;
-        	while($row = mysql_fetch_object($result_usr))
+            while($row = mysql_fetch_object($result_usr))
             {
-            	if($i > 0)
+                if($i > 0)
                 {
-                	echo "<hr width=\"85%\">";
+                    echo "<hr width=\"85%\">";
                 }
-            	echo "<div style=\"margin-left: 20px;\">
+                echo "<div style=\"margin-left: 20px;\">
                     <i>$row->usr_last_name, $row->usr_first_name</i><br>
-                	$row->usr_address<br>
-                	$row->usr_zip_code $row->usr_city<br>";
+                    $row->usr_address<br>
+                    $row->usr_zip_code $row->usr_city<br>";
                     if($g_preferences['enable_mail_module'] == 1)
                     {
                         echo "<a href=\"$g_root_path/adm_program/modules/mail/mail.php?usr_id=$row->usr_id\">$row->usr_email</a><br>";
@@ -116,8 +115,8 @@ echo "
                     
                     if(isMember($row->usr_id) == false && strlen($row->usr_login_name) == 0)
                     {
-                    	// kein Mitlgied dieser Orga und auch keine Logindaten vorhanden
-                    	echo "<br>Dieser Benutzer ist noch kein Mitglied der Organisation $g_organization und 
+                        // kein Mitlgied dieser Orga und auch keine Logindaten vorhanden
+                        echo "<br>Dieser Benutzer ist noch kein Mitglied der Organisation $g_organization und 
                         besitzt auch keine Logindaten.<br><br>
                         <span class=\"iconLink\">
                             <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=". $_GET['new_user_id']. "&amp;user_id=$row->usr_id&amp;mode=2\"><img
@@ -137,9 +136,9 @@ echo "
                     }               
                     else
                     {
-                    	if(isMember($row->usr_id) == true)
+                        if(isMember($row->usr_id) == true)
                         {
-                        	// der Benutzer ist bereits Mitglied dieser Orga, also nur Logindaten neu zuschicken                    
+                            // der Benutzer ist bereits Mitglied dieser Orga, also nur Logindaten neu zuschicken                    
                             echo "<br>Dieser Benutzer besitzt schon ein g&uuml;ltiges Login. 
                                 M&ouml;chtest du ihm seinen Loginnamen mit Passwort als Erinnerung zuschicken ?<br>
                             <div style=\"margin-top: 5px;\">

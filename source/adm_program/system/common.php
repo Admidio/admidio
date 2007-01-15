@@ -3,7 +3,7 @@
  * Script beinhaltet allgemeine Daten / Variablen, die fuer alle anderen
  * Scripte notwendig sind
  *
- * Copyright    : (c) 2004 - 2006 The Admidio Team
+ * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  *
@@ -11,8 +11,7 @@
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * version 2 as published by the Free Software Foundation
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -26,6 +25,7 @@
  *****************************************************************************/
 
 define('SERVER_PATH', substr(__FILE__, 0, strpos(__FILE__, "adm_program")-1));
+define('ADMIDIO_VERSION', '1.4 Beta');  // die Versionsnummer bitte nicht aendern !!!
 
 // includes OHNE Datenbankverbindung
 require_once(SERVER_PATH. "/adm_config/config.php");

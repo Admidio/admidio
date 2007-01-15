@@ -2,7 +2,7 @@
 /******************************************************************************
  * Installationsdialog fuer die MySql-Datenbank
  *
- * Copyright    : (c) 2004 - 2006 The Admidio Team
+ * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  *
@@ -16,8 +16,7 @@
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * version 2 as published by the Free Software Foundation
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -64,7 +63,7 @@ else
 }
 
 echo "
-<!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org -->
+<!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org -->
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
 <html>
 <head>
@@ -85,7 +84,7 @@ echo "
 <div align=\"center\">
     <div class=\"formHead\" style=\"text-align: left;\">
         <img style=\"float:left; padding: 5px 0px 0px 0px;\" src=\"../adm_program/images/admidio_logo_50.png\" border=\"0\" alt=\"www.admidio.org\" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <div style=\"font-size: 16pt; font-weight: bold; text-align: right; padding: 5px 10px 10px 0px;\">Version ". getVersion(). "</div>
+        <div style=\"font-size: 16pt; font-weight: bold; text-align: right; padding: 5px 10px 10px 0px;\">Version ". ADMIDIO_VERSION. "</div>
         <div style=\"font-size: 11pt; padding: 0px 0px 5px 0px;\">Die Online-Mitgliederverwaltung f&uuml;r Vereine, Gruppen und Organisationen</div>
     </div>
 
@@ -300,7 +299,7 @@ echo "
         </div>
     </div>
     <div class=\"formHead\" style=\"font-size: 8pt; text-align: center; border-top-width: 0px;\">
-        &copy; 2004 - 2006&nbsp;&nbsp;<a href=\"http://www.admidio.org\" target=\"_blank\">The Admidio Team</a>
+        &copy; 2004 - 2007&nbsp;&nbsp;<a href=\"http://www.admidio.org\" target=\"_blank\">The Admidio Team</a>
     </div>
 </div>
 </body>

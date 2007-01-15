@@ -5,7 +5,7 @@
  *
  * Ist der User nicht eingeloggt, wird er automatisch auf die Loginseite weitergeleitet
  *
- * Copyright    : (c) 2004 - 2006 The Admidio Team
+ * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  *
@@ -13,8 +13,7 @@
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * version 2 as published by the Free Software Foundation
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -29,11 +28,11 @@
 
 if($g_session_valid == false)
 {
-	if(isset($_SESSION['login_forward_url']) == false)
-	{
-	    // aufgerufene URL merken, damit diese nach dem Einloggen sofort aufgerufen werden kann
-	    $_SESSION['login_forward_url'] = $g_current_url;
-	}
+    if(isset($_SESSION['login_forward_url']) == false)
+    {
+        // aufgerufene URL merken, damit diese nach dem Einloggen sofort aufgerufen werden kann
+        $_SESSION['login_forward_url'] = $g_current_url;
+    }
     
     // User nicht eingeloggt -> Loginseite aufrufen
     $location = "Location: $g_root_path/adm_program/system/login.php";

@@ -2,7 +2,7 @@
 /******************************************************************************
  * Funktionen und Routinen fuer das Forum
  *
- * Copyright    : (c) 2004 - 2006 The Admidio Team
+ * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Thomas Thoss
  *
@@ -10,8 +10,7 @@
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * version 2 as published by the Free Software Foundation
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -25,18 +24,18 @@
  *****************************************************************************/
 
 // Globale Variablen fuer das Forum
-$g_forum_session_id    = "";			// Die Session fuer das Forum
-$g_forum_session_valid = FALSE;		// Session gueltig
-$g_forum_user  = "";							// Username im Forum
-$g_forum_userid = "";							// UserID im Forum
-$g_forum_neuePM = "";							// Nachrichten im Forum
-$g_forum_sitename = "";						// Name des Forums
-$g_forum_server = "";							// Server des Forums
-$g_forum_path = "";								// Pfad zum Forum
-$g_forum_cookie_name = "";				// Name des Forum Cookies
-$g_forum_cookie_path = "";				// Pfad zum Forum Cookies
-$g_forum_cookie_domain = "";			// Domain des Forum Cookies
-$g_forum_cookie_secure ="";				// Cookie Secure des Forums
+$g_forum_session_id    = "";            // Die Session fuer das Forum
+$g_forum_session_valid = FALSE;     // Session gueltig
+$g_forum_user  = "";                            // Username im Forum
+$g_forum_userid = "";                           // UserID im Forum
+$g_forum_neuePM = "";                           // Nachrichten im Forum
+$g_forum_sitename = "";                     // Name des Forums
+$g_forum_server = "";                           // Server des Forums
+$g_forum_path = "";                             // Pfad zum Forum
+$g_forum_cookie_name = "";              // Name des Forum Cookies
+$g_forum_cookie_path = "";              // Pfad zum Forum Cookies
+$g_forum_cookie_domain = "";            // Domain des Forum Cookies
+$g_forum_cookie_secure ="";             // Cookie Secure des Forums
 
 
 // Forumspezifische Konfigurationsvariablen lesen und zuweisen
@@ -140,10 +139,10 @@ if ($g_forum_session_valid)
 }
 
 
-// Gueltige Session im Forum updaten. Sofern die Admidio Session g�ltig ist, ist auch die Forum Session g�ltig
+// Gueltige Session im Forum updaten. Sofern die Admidio Session g?ltig ist, ist auch die Forum Session g?ltig
 if($g_session_valid)
 {
-    // Forums DB w�hlen
+    // Forums DB w?hlen
     mysql_select_db($g_forum_db, $g_forum_con);
     
     // Erst mal schauen, ob sich die Session noch im Session Table des Forums befindet
@@ -164,30 +163,30 @@ if($g_session_valid)
     else
     {
         // Session existiert nicht, also neu anlegen (Autologin im Forum)
-        // Daten f�r das Cookie und den Session Eintrag im Forum aufbereiten
-	      $ip_sep = explode('.', getenv('REMOTE_ADDR'));
-	      $user_ip = sprintf('%02x%02x%02x%02x', $ip_sep[0], $ip_sep[1], $ip_sep[2], $ip_sep[3]);
-	      $current_time = time();
-	      
-	      // Session in die Forum DB schreiben
-	      $sql = "INSERT INTO " .$g_forum_praefix. "_sessions
-	             (session_id, session_user_id, session_start, session_time, session_ip, session_page, session_logged_in, session_admin)
-	             VALUES ('$g_session_id', $g_forum_userid, $current_time, $current_time, '$user_ip', 0, 1, 0)";
-	      $result = mysql_query($sql, $g_forum_con);
+        // Daten f?r das Cookie und den Session Eintrag im Forum aufbereiten
+          $ip_sep = explode('.', getenv('REMOTE_ADDR'));
+          $user_ip = sprintf('%02x%02x%02x%02x', $ip_sep[0], $ip_sep[1], $ip_sep[2], $ip_sep[3]);
+          $current_time = time();
+          
+          // Session in die Forum DB schreiben
+          $sql = "INSERT INTO " .$g_forum_praefix. "_sessions
+                 (session_id, session_user_id, session_start, session_time, session_ip, session_page, session_logged_in, session_admin)
+                 VALUES ('$g_session_id', $g_forum_userid, $current_time, $current_time, '$user_ip', 0, 1, 0)";
+          $result = mysql_query($sql, $g_forum_con);
         db_error($result);
     }    
     
-    // Admidio DB w�hlen
+    // Admidio DB w?hlen
     mysql_select_db($g_adm_db, $g_adm_con);
 }
 elseif (isset($_COOKIE[$g_forum_cookie_name."_sid"]))
 {
-    // Die Admidio Session ist ung�ltig oder abgelaufen, also die Session des Forums ebenfalls l�schen.
+    // Die Admidio Session ist ung?ltig oder abgelaufen, also die Session des Forums ebenfalls l?schen.
     
     // Session ID aus dem Cookie lesen
     $g_forum_session_id = $_COOKIE[$g_forum_cookie_name."_sid"];
        
-    // Forums DB w�hlen
+    // Forums DB w?hlen
     mysql_select_db($g_forum_db, $g_forum_con);
  
     // User-ID aus der Session lesen
@@ -199,13 +198,13 @@ elseif (isset($_COOKIE[$g_forum_cookie_name."_sid"]))
         
     if(mysql_num_rows($result)!=0)
     {
-        // User-Session im Forum l�schen
+        // User-Session im Forum l?schen
         $sql    = "DELETE FROM ". $g_forum_praefix. "_sessions WHERE session_user_id = $row[0] ";
         $result = mysql_query($sql, $g_forum_con);
         db_error($result);
     }
  
-    // Admidio DB w�hlen
+    // Admidio DB w?hlen
     mysql_select_db($g_adm_db, $g_adm_con);
 }
 
@@ -221,11 +220,11 @@ elseif (isset($_COOKIE[$g_forum_cookie_name."_sid"]))
  ******************************************************************************/
 
 
-// Funktion �berpr�ft ob der Admin Account im Forum ungleich des Admidio Accounts ist.
-// Falls ja wird der Admidio Account (Username & Password) ins Forum �bernommen.
+// Funktion ?berpr?ft ob der Admin Account im Forum ungleich des Admidio Accounts ist.
+// Falls ja wird der Admidio Account (Username & Password) ins Forum ?bernommen.
 function forum_check_admin($username, $password_crypt, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix)
 {
-    // Forum Datenbank ausw�hlen
+    // Forum Datenbank ausw?hlen
     mysql_select_db($g_forum_db, $g_forum_con);
     
     // Administrator nun in Foren-Tabelle suchen und dort das Password, Username & UserID auslesen
