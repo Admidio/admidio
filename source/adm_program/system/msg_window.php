@@ -80,6 +80,10 @@ echo "
                             <td valign=\"top\">Text <b>[small]</b>klein<b>[/small]</b> darstellen</td>
                          </tr>
                          <tr>
+                            <td valign=\"top\" style=\"text-align: center;\">Text zentriert darstellen</td>
+                            <td valign=\"top\"><b>[center]</b>Text zentriert darstellen<b>[/center]</b></td>
+                         </tr>
+                         <tr>
                             <td valign=\"top\">Einen <a href=\"http://$g_current_organization->homepage\">Link</a> setzen</td>
                             <td valign=\"top\">Einen <b>[url=</b>http://www.beispiel.de<b>]</b>Link<b>[/url]</b> setzen</td>
                          </tr>
