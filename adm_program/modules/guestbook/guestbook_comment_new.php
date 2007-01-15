@@ -8,7 +8,8 @@
  *
  * Uebergaben:
  *
- * id            - ID des Eintrages, der bearbeitet werden soll
+ * id            - ID des Eintrages, dem ein Kommentar hinzugefuegt werden soll
+ * cid			 - ID des Kommentars der editiert werden soll
  * headline      - Ueberschrift, die ueber den Einraegen steht
  *                 (Default) Gaestebuch
  *
@@ -39,17 +40,36 @@ if ($g_preferences['enable_guestbook_module'] != 1)
     $g_message->show("module_disabled");
 }
 
-if ($g_preferences['enable_gbook_comments4all'] == 0)
+// Es muss ein (nicht zwei) Parameter uebergeben werden: Entweder id oder cid...
+if (isset($_GET['id']) && isset($_GET['cid']))
 {
-    // Falls anonymes kommentieren nicht erlaubt ist, muss der User eingeloggt sein
-    require("../../system/login_valid.php");
+    $g_message->show("invalid");
 }
 
-
-// hat der user das Recht zu kommentieren?
-if (!$g_current_user->commentGuestbookRight() && $g_preferences['enable_gbook_comments4all'] == 0)
+//Erst einmal die Rechte abklopfen...
+if ($g_preferences['enable_gbook_comments4all'] == 0 && isset($_GET['id']))
 {
-    $g_message->show("norights");
+    // Falls anonymes kommentieren nicht erlaubt ist, muss der User eingeloggt sein zum kommentieren
+    require("../../system/login_valid.php");
+
+    if (!$g_current_user->commentGuestbookRight())
+    {
+        // der User hat kein Recht zu kommentieren
+        $g_message->show("norights");
+    }
+}
+
+if (isset($_GET['cid']))
+{
+    // Zum editieren von Kommentaren muss der User auch eingeloggt sein
+    require("../../system/login_valid.php");
+
+    if (!$g_current_user->editGuestbookRight())
+    {
+        // der User hat kein Recht Kommentare zu editieren
+        $g_message->show("norights");
+    }
+
 }
 
 
@@ -57,6 +77,13 @@ if (!$g_current_user->commentGuestbookRight() && $g_preferences['enable_gbook_co
 if (array_key_exists("id", $_GET))
 {
     if (is_numeric($_GET["id"]) == false)
+    {
+        $g_message->show("invalid");
+    }
+}
+elseif (array_key_exists("cid", $_GET))
+{
+    if (is_numeric($_GET["cid"]) == false)
     {
         $g_message->show("invalid");
     }
@@ -87,9 +114,38 @@ else
     $form_values['name']  = "";
     $form_values['email'] = "";
     $form_values['text']  = "";
-    // Wenn der User eingeloggt ist koennen zumindest
-    // Name und Emailadresse vorbelegt werden...
-    if ($g_session_valid)
+
+    // Wenn eine cid uebergeben wurde, soll der Eintrag geaendert werden
+    // -> Felder mit Daten des Kommentares vorbelegen
+
+    if (isset($_GET['cid']))
+    {
+        $sql    = "SELECT * FROM ". TBL_GUESTBOOK. ",".TBL_GUESTBOOK_COMMENTS.  "
+                    WHERE gbc_id = {0} and gbo_org_id = $g_current_organization->id
+                      AND gbo_id = gbc_gbo_id";
+        $sql    = prepareSQL($sql, array($_GET['cid']));
+        $result = mysql_query($sql, $g_adm_con);
+        db_error($result);
+
+        if (mysql_num_rows($result) > 0)
+        {
+            $row_ba = mysql_fetch_object($result);
+
+            $form_values['name']     = $row_ba->gbc_name;
+            $form_values['text']     = $row_ba->gbc_text;
+            $form_values['email']    = $row_ba->gbc_email;
+        }
+        elseif (mysql_num_rows($result) == 0)
+        {
+            //Wenn keine Daten zu der CID gefunden worden bzw. die CID einer anderen Orga gehört ist Schluss mit lustig...
+            $g_message->show("invalid");
+        }
+
+    }
+
+    // Wenn der User eingeloggt ist und keine cid uebergeben wurde
+    // koennen zumindest Name und Emailadresse vorbelegt werden...
+    if (!isset($_GET['cid']) && $g_session_valid)
     {
         $form_values['name']     = $g_current_user->first_name. " ". $g_current_user->last_name;
         $form_values['email']    = $g_current_user->email;
@@ -135,14 +191,24 @@ echo "</head>";
 
 require("../../../adm_config/body_top.php");
     echo "
-    <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
+    <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">";
 
-        <form action=\"guestbook_function.php?id=". $_GET['id']. "&amp;headline=". $_GET['headline']. "&amp;mode=4\" method=\"post\" name=\"KommentarEintragen\">
+        if (isset($_GET['id']))
+        {
+            echo "
+            <form action=\"guestbook_function.php?id=". $_GET['id']. "&amp;headline=". $_GET['headline']. "&amp;mode=4\" method=\"post\" name=\"Kommentar\">
             <div class=\"formHead\">";
                 $formHeadline = " Kommentar anlegen";
-
-                echo strspace($formHeadline, 2);
-            echo "</div>
+        }
+        else
+        {
+            echo "
+            <form action=\"guestbook_function.php?id=". $_GET['cid']. "&amp;headline=". $_GET['headline']. "&amp;mode=8\" method=\"post\" name=\"Kommentar\">
+            <div class=\"formHead\">";
+                $formHeadline = " Kommentar editieren";
+        }
+        echo strspace($formHeadline, 2);
+        echo "</div>
             <div class=\"formBody\">
                 <div>
                     <div style=\"text-align: right; width: 25%; float: left;\">Name:</div>
@@ -220,13 +286,20 @@ require("../../../adm_config/body_top.php");
 
             echo "</div>
         </form>
-
-
     </div>";
+
+    if ($g_current_user->id == 0)
+    {
+        $focusField = "name";
+    }
+    else
+    {
+        $focusField = "text";
+    }
 
     echo"
     <script type=\"text/javascript\"><!--
-        document.getElementById('text').focus();
+        document.getElementById('$focusField').focus();
     --></script>";
 
    require("../../../adm_config/body_bottom.php");

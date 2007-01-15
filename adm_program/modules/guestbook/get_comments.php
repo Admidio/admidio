@@ -103,9 +103,13 @@ if (isset($comment_result))
                 echo "
                 <div style=\"text-align: right;\">". mysqldatetime("d.m.y h:i", $row->gbc_timestamp). "&nbsp;";
 
-                // loeschen von Kommentaren duerfen nur User mit den gesetzten Rechten
+                // aendern und loeschen von Kommentaren duerfen nur User mit den gesetzten Rechten
                 if ($g_current_user->editGuestbookRight())
                 {
+                        echo "
+                        <img src=\"$g_root_path/adm_program/images/edit.png\" style=\"cursor: pointer;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"
+                         onclick=\"self.location.href='guestbook_comment_new.php?cid=$row->gbc_id'\">";
+
                         echo "
                         <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer;\" width=\"16\" height=\"16\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"
                          onclick=\"self.location.href='guestbook_function.php?id=$row->gbc_id&amp;mode=7'\">";
