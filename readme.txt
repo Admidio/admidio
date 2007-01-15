@@ -1,6 +1,6 @@
 -------------------------------------------------------------------------
                             Admidio 1.3 
-     	        Copyright (c) 2004 - 2006 The Admidio Team
+     	        Copyright (c) 2004 - 2007 The Admidio Team
            Admidio is a open source user management software
 -------------------------------------------------------------------------
 
@@ -109,6 +109,9 @@ Wir möchten uns an dieser Stelle bei Personen und Projekten bedanken, die
 an Admidio mitgearbeitet haben, oder deren Arbeit in Admidio eingeflossen 
 ist.
 
+Thomas Thoss
+   Überarbeitung und Erweiterung der phpBB-Schnittstelle
+
 Mark James
 	http://www.famfamfam.com
 	Icon Bibliothek famfamfam
@@ -122,6 +125,10 @@ Jon Papaioannou
 	http://bennu.sourceforge.net
 	iCal Bibliothek Bennu
 	
+Timothy Groves
+	http://www.brandspankingnew.net
+	BSN.AutoSuggest
+	
 Roönaän Webdevelopment
 	http://www.roonaan.nl
 	quickerUbb Klasse
@@ -131,6 +138,6 @@ phpBB bulletin board
 	Diverse Funktionen
 
 -------------------------------------------------------------------------
-       	      Copyright (c) 2004 - 2006 The Admidio Team
+       	      Copyright (c) 2004 - 2007 The Admidio Team
            Admidio is a open source user management software
 -------------------------------------------------------------------------
