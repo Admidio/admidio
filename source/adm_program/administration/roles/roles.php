@@ -140,6 +140,11 @@ require("../../../adm_config/body_top.php");
                             echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/group.png\"
                             alt=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\" title=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\">";
                         }
+                        if($row->rol_profile == 1)
+                        {
+                            echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/user.png\"
+                            alt=\"Eigenes Profil bearbeiten\" title=\"Eigenes Profil bearbeiten\">";
+                        }
                         if($row->rol_announcements == 1)
                         {
                             echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/note.png\"
@@ -184,11 +189,6 @@ require("../../../adm_config/body_top.php");
                         {
                             echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/globe.png\"
                             alt=\"Weblinks anlegen und bearbeiten\" title=\"Weblinks anlegen und bearbeiten\">";
-                        }
-                        if($row->rol_profile == 1)
-                        {
-                            echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/user.png\"
-                            alt=\"Eigenes Profil bearbeiten\" title=\"Eigenes Profil bearbeiten\">";
                         }
                     echo "</td>
                     <td style=\"text-align: center;\">";
