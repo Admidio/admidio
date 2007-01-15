@@ -130,8 +130,22 @@ if (isset($comment_result))
                 {
                     echo nl2br(strSpecialChars2Html($row->gbc_text));
                 }
-            echo "</div>
+            echo "</div>";
 
+            // Falls der Kommentar editiert worden ist, wird dies angezeigt
+            if($row->gbc_usr_id_change > 0)
+            {
+                // Userdaten des Editors holen...
+                $user_change = new User($g_adm_con);
+                $user_change->getUser($row->gbc_usr_id_change);
+
+                echo "
+                <div style=\"margin: 8px 4px 4px 4px; font-size: 8pt; text-align: left;\">Zuletzt bearbeitet von ".
+                strSpecialChars2Html($user_change->first_name). " ". strSpecialChars2Html($user_change->last_name).
+                " am ". mysqldatetime("d.m.y h:i", $row->gbc_last_change). "</div>";
+            }
+
+        echo"
         </div>
 
         <br />";
