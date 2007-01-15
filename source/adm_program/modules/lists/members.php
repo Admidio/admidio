@@ -125,9 +125,13 @@ if($restrict=="u")
 $first_letter_array = array();
 for($x=0; $user = mysql_fetch_array($result_user); $x++)
 {
-    if(!in_array(ord($user['usr_last_name']), $first_letter_array))
+    if(!in_array(ord($user['usr_last_name']), $first_letter_array) && ord($user['usr_last_name'])>65)
     {
         $first_letter_array[$x]= ord($user['usr_last_name']);
+    }
+    if(!in_array(ord($user['usr_last_name']), $first_letter_array) && ord($user['usr_last_name'])<65 && !in_array(35, $first_letter_array))
+    {
+        $first_letter_array[$x]= 35;
     }
 }
 mysql_data_seek ($result_user, 0);
@@ -203,22 +207,23 @@ echo "
 
     // Dieses Array enthaelt alle IDs, die in den Orga-Einstellungen auftauchen
     ids = new Array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-                    'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' );
+                    'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'zahl' );
 
 
     // Die eigentliche Funktion: Schaltet die Einstellungsdialoge durch
     function toggleDiv(element_id)
     {
+        //Alle divs auf unsichtbar setzen
         var i;
         for (i=0;i<ids.length;i++)
         {
-            // Erstmal alle DIVs aus unsichtbar setzen
             document.getElementById(ids[i]).style.visibility = 'hidden';
             document.getElementById(ids[i]).style.display    = 'none';
         }
-            // Angeforderten Bereich anzeigen
-            document.getElementById(element_id).style.visibility = 'visible';
-            document.getElementById(element_id).style.display    = 'block';
+
+        // Angeforderten Bereich anzeigen
+        document.getElementById(element_id).style.visibility = 'visible';
+        document.getElementById(element_id).style.display    = 'block';
     }
     --></script>
 
@@ -276,17 +281,24 @@ echo"
         {
             //Falls Aktueller Anfangsbuchstabe, Nur Buchstabe ausgeben
             $menu_letter_string = chr($menu_letter);
-            if(!in_array($menu_letter, $first_letter_array))
+            if(!in_array($menu_letter, $first_letter_array) && $menu_letter>64 && $menu_letter<91)
             {
                 echo"$menu_letter_string&nbsp;";
             }
             //Falls Nicht Link zu Anker
-            else
+            if(in_array($menu_letter, $first_letter_array) && $menu_letter>64 && $menu_letter<91)
             {
                 echo"<a href=\"#\" onClick=\"toggleDiv('$menu_letter_string');\">$menu_letter_string</a>&nbsp;";
             }
+
+            //Für Namen die mit Zahlen beginnen
             if($menu_letter == 35)
             {
+                if( in_array(35, $first_letter_array))
+                {
+                    echo"<a href=\"#\" onClick=\"toggleDiv('zahl');\">$menu_letter_string</a>&nbsp;";
+                }
+                else echo"&#35;&nbsp;";
                 $menu_letter = 64;
             }
         }//for
@@ -300,24 +312,29 @@ echo"
             //Aktueller Buchstabe
             $letter = ord(strtoupper($user['usr_last_name']));
 
-
             if($letter != $letter_merker)
             {
-                if($letter_merker==35)
+
+                //Container für Zahlen style=\"visibility: hidden; display: none; margin-top: 15px;\"
+                if($letter_merker<64)
                 {
-                    $letter_merker=65;
+                    echo"
+                    <div id=\"zahl\" name=\"zahl\" >";
+                    echo "<h1>&#35;</h1>";
+                    $letter_merker=64;
                 }
+
+                //Container für Buchstaben
                 else
                 {
-                  $letter_merker++;
+                    $letter_merker++;
+                    $letter_string = chr($letter_merker);
+
+                    //Container mit allen ergebnissen zum Buchstaben
+                    echo"<div id=\"$letter_string\" name=\"$letter\" >";
+
+                    echo "<h1>$letter_string</h1>";
                 }
-                $letter_string = chr($letter_merker);
-
-                //Container mit allen ergebnissen zum Buchstaben
-                echo"
-                <div id=\"$letter_string\" name=\"$letter\" style=\"visibility: hidden; display: none; margin-top: 15px;\">";
-
-                echo "<h1>$letter_string</h1>";
 
                 //Tabelle ausgeben
                 echo"
