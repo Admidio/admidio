@@ -133,12 +133,12 @@ require("../../../adm_config/body_top.php");
                         if($row->rol_moderation == 1)
                         {
                             echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/wand.png\"
-                            alt=\"Moderation (Benutzer &amp; Rollen verwalten uvm.)\" title=\"Moderation (Benutzer &amp; Rollen verwalten uvm.)\">";
+                            alt=\"Moderation (Rollen verwalten und zuordnen uvm.)\" title=\"Moderation (Rollen verwalten und zuordnen uvm.)\">";
                         }
                         if($row->rol_edit_user == 1)
                         {
                             echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/group.png\"
-                            alt=\"Daten aller Benutzer bearbeiten\" title=\"Daten aller Benutzer bearbeiten\">";
+                            alt=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\" title=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\">";
                         }
                         if($row->rol_announcements == 1)
                         {

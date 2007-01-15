@@ -70,3 +70,9 @@ ALTER TABLE %PRAEFIX%_sessions ADD COLUMN ses_blob blob AFTER ses_ip_address;
 
 -- Memberstabelle pflegen
 UPDATE %PRAEFIX%_members SET mem_end = NULL WHERE mem_end = '0000-00-00';
+
+-- Rollentabelle pflegen
+UPDATE %PRAEFIX%_roles SET rol_start_date = NULL WHERE rol_start_date = '0000-00-00';
+UPDATE %PRAEFIX%_roles SET rol_end_date = NULL WHERE rol_end_date = '0000-00-00';
+UPDATE %PRAEFIX%_roles SET rol_start_time = NULL WHERE rol_start_time = '00:00:00';
+UPDATE %PRAEFIX%_roles SET rol_end_time = NULL WHERE rol_end_time = '00:00:00';
