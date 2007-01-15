@@ -446,7 +446,13 @@ elseif($_GET["mode"] == 2)
                             trim($_POST['location']), $_POST['max_members'], $_POST['cost'], $rol_id));
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
-
+			
+			// holt die Role ID des letzten Insert Statements
+			if($rol_id < 1)
+			{
+				$rol_id = mysql_insert_id();
+			}
+			
             //Reset des Rechtecache in der UserKlasse für den aendernen User
             $g_current_user->clearRights();
 
