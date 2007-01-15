@@ -100,10 +100,10 @@ class Message
     // die Meldung wird ausgegeben
     function show($msg_key = "" , $msg_variable1 = "", $msg_headline = "")
     {
-    	// noetig, da dies bei den includes benoetigt wird
-    	global $g_session_valid;
-    	global $g_root_path;
-    	
+        // noetig, da dies bei den includes benoetigt wird
+        global $g_session_valid;
+        global $g_root_path;
+        
         // Uebergabevariablen auswerten
         if(strlen($msg_key) > 0)
         {
@@ -177,9 +177,9 @@ class Message
                            //--></script>';
                 }
         
-                require($GLOBALS['g_server_path']. "/adm_config/header.php");
+                require(SERVER_PATH. "/adm_config/header.php");
             echo '</head>';
-            require($GLOBALS['g_server_path']. "/adm_config/body_top.php");         
+            require(SERVER_PATH. "/adm_config/body_top.php");         
         }
         
         echo '
@@ -213,7 +213,7 @@ class Message
                             /*
                             // Ich habe hier eine Anpassung vorgenommen, so dass der Weiter-Button auch wenn
                             // es einen Timer gibt angezeigt wird.
-                            // Bei Bugs bitte r�ckg�ngig machen, indem man diesen Teil hier auskommentiert und
+                            // Bei Bugs bitte r?ckg?ngig machen, indem man diesen Teil hier auskommentiert und
                             //oben alles zwischen den Kommentaren loescht!
                             // DD
                             //
@@ -252,7 +252,7 @@ class Message
         
         if($this->inline == false)
         {
-            require($GLOBALS['g_server_path']. "/adm_config/body_bottom.php");
+            require(SERVER_PATH. "/adm_config/body_bottom.php");
             echo '</body></html>';
             exit();
         }

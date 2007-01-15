@@ -25,19 +25,19 @@
  *
  *****************************************************************************/
 
-$g_server_path = substr(__FILE__, 0, strpos(__FILE__, "adm_program")-1);
+define('SERVER_PATH', substr(__FILE__, 0, strpos(__FILE__, "adm_program")-1));
 
 // includes OHNE Datenbankverbindung
-require_once($g_server_path. "/adm_config/config.php");
-require_once($g_server_path. "/adm_program/system/function.php");
-require_once($g_server_path. "/adm_program/system/date.php");
-require_once($g_server_path. "/adm_program/system/string.php");
-require_once($g_server_path. "/adm_program/system/message_class.php");
-require_once($g_server_path. "/adm_program/system/message_text.php");
-require_once($g_server_path. "/adm_program/system/navigation_class.php");
-require_once($g_server_path. "/adm_program/system/user_class.php");
-require_once($g_server_path. "/adm_program/system/organization_class.php");
-require_once($g_server_path. "/adm_program/system/role_dependency_class.php");
+require_once(SERVER_PATH. "/adm_config/config.php");
+require_once(SERVER_PATH. "/adm_program/system/function.php");
+require_once(SERVER_PATH. "/adm_program/system/date.php");
+require_once(SERVER_PATH. "/adm_program/system/string.php");
+require_once(SERVER_PATH. "/adm_program/system/message_class.php");
+require_once(SERVER_PATH. "/adm_program/system/message_text.php");
+require_once(SERVER_PATH. "/adm_program/system/navigation_class.php");
+require_once(SERVER_PATH. "/adm_program/system/user_class.php");
+require_once(SERVER_PATH. "/adm_program/system/organization_class.php");
+require_once(SERVER_PATH. "/adm_program/system/role_dependency_class.php");
 
 
 
@@ -226,7 +226,7 @@ if(strlen($g_session_id) > 0)
 if($g_forum)
 {
     $g_forum_con = mysql_connect ($g_forum_srv, $g_forum_usr, $g_forum_pw);
-    include($g_server_path. "/adm_program/system/forum_functions.php");
+    include(SERVER_PATH. "/adm_program/system/forum_functions.php");
 }
 else
 {

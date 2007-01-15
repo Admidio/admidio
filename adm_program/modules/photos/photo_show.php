@@ -116,7 +116,7 @@ imagecopyresampled($neubild, $bilddaten, 0, 0, 0, 0, $neubildsize[0], $neubildsi
 if ($scal>200 && $g_preferences['photo_image_text'] == 1)
 {
     $font_c = imagecolorallocate($neubild,255,255,255);
-    $font_ttf=$g_server_path."/adm_program/system/mr_phone1.ttf";
+    $font_ttf=SERVER_PATH."/adm_program/system/mr_phone1.ttf";
     $font_s = $scal/40;
     $font_x = $font_s;
     $font_y = $neubildsize[1]-$font_s;
