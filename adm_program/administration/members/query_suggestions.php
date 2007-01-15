@@ -2,7 +2,7 @@
 /******************************************************************************
  * Script mit HTML-Code fuer ein Feld der Eigenen-Liste-Konfiguration
  *
- * Copyright    : (c) 2004 - 2006 The Admidio Team
+ * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
  *
@@ -13,8 +13,7 @@
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * version 2 as published by the Free Software Foundation
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -114,7 +113,7 @@ else
     foreach ($querySuggestions as $suggest)
     {
         $q=strtolower($query);
-        if (	strpos(strtolower($suggest['lastName']),$q)===0
+        if (    strpos(strtolower($suggest['lastName']),$q)===0
             or  strpos(strtolower($suggest['firstName']),$q)===0
             or  strpos(strtolower($suggest['firstName']). " ". strtolower($suggest['lastName']),str_replace(',', '', $q))===0
             or  strpos(strtolower($suggest['lastName']). " ". strtolower($suggest['firstName']),str_replace(',', '', $q))===0)

@@ -2,7 +2,7 @@
 /******************************************************************************
  * Email - Klasse
  *
- * Copyright    : (c) 2004 - 2006 The Admidio Team
+ * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
  *
@@ -20,7 +20,7 @@
  *
  * Nun wird der Absender gesetzt:
  * function setSender($address, $name='')
- * Uebergaben: $address	- Die Emailadresse
+ * Uebergaben: $address - Die Emailadresse
  *             $name    - Der Name des Absenders (optional)
  *
  * Nun koennen in beliebiger Reihenfolge und Anzahl Adressaten (To,Cc,Bcc)
@@ -63,8 +63,7 @@
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * version 2 as published by the Free Software Foundation
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -202,9 +201,9 @@ function setText($text)
 function addAttachment($tmp_filename, $orig_filename = '', $file_type='application/octet-stream')
 {
     $this->attachments[] = array(
-            'orig_filename'	=> $orig_filename,
-            'tmp_filename'	=> $tmp_filename,
-            'file_type'	=> $file_type);
+            'orig_filename' => $orig_filename,
+            'tmp_filename'  => $tmp_filename,
+            'file_type' => $file_type);
     $this->headerOptions['Content-Type'] = "multipart/mixed;\n\tboundary=\"". $this->mailBoundary. "\"";
 }
 
@@ -214,7 +213,7 @@ function setCopyToSenderFlag()
     $this->copyToSender = true;
 }
 
-// Funktion um das Flag zu setzen, dass in der Kopie alle Empf�nger der Mail aufgelistet werden
+// Funktion um das Flag zu setzen, dass in der Kopie alle Empf?nger der Mail aufgelistet werden
 function setListRecipientsFlag()
 {
     $this->listRecipients = true;
@@ -240,10 +239,10 @@ function prepareBody()
     // Fuer die Attachments alles vorbereiten...
     if (isset($this->attachments))
     {
-        $this->mail_body	= $this->mail_body. "This message is in MIME format.\n";
-        $this->mail_body	= $this->mail_body. "Since your mail reader does not understand this format,\n";
-        $this->mail_body	= $this->mail_body. "some or all of this message may not be legible.\n\n";
-        $this->mail_body	= $this->mail_body. "--". $this->mailBoundary. "\nContent-Type: ". $this->contentType. "\n\n";
+        $this->mail_body    = $this->mail_body. "This message is in MIME format.\n";
+        $this->mail_body    = $this->mail_body. "Since your mail reader does not understand this format,\n";
+        $this->mail_body    = $this->mail_body. "some or all of this message may not be legible.\n\n";
+        $this->mail_body    = $this->mail_body. "--". $this->mailBoundary. "\nContent-Type: ". $this->contentType. "\n\n";
     }
 
     // Eigentlichen Mail-Text hinzufuegen...

@@ -2,7 +2,7 @@
 /******************************************************************************
  * Password des Benutzers speichern
  *
- * Copyright    : (c) 2004 - 2006 The Admidio Team
+ * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  *
@@ -14,8 +14,7 @@
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * version 2 as published by the Free Software Foundation
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -98,7 +97,7 @@ echo "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?". ">
 <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 TRANSITIONAL//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
 <html xmlns=\"http://www.w3.org/1999/xhtml\">
 <head>
-    <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->
+    <!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org - Version: ". ADMIDIO_VERSION. " -->
     <title>Passwort &auml;ndern</title>
     <meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\" />
     <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\" />

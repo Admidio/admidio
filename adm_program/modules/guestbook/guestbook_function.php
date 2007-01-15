@@ -2,7 +2,7 @@
 /******************************************************************************
  * Verschiedene Funktionen fuer das Gaestebuch
  *
- * Copyright    : (c) 2004 - 2006 The Admidio Team
+ * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
  *
@@ -16,7 +16,7 @@
  *           5 - Kommentar eines Gaestebucheintrages loeschen
  *           6 - Nachfrage ob Gaestebucheintrag geloescht werden soll
  *           7 - Nachfrage ob Gaestebuchkommentar geloescht werden soll
- * 			 8 - Kommentar eines Gaestebucheintrages editieren
+ *           8 - Kommentar eines Gaestebucheintrages editieren
  * url:      kann beim Loeschen mit uebergeben werden
  * headline: Ueberschrift, die ueber den Gaestebuch steht
  *           (Default) Gaestebuch
@@ -25,8 +25,7 @@
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * version 2 as published by the Free Software Foundation
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of

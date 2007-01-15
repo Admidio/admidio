@@ -2,7 +2,7 @@
 /******************************************************************************
  * Allgemeine Funktionen
  *
- * Copyright    : (c) 2004 - 2006 The Admidio Team
+ * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  *
@@ -10,8 +10,7 @@
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * version 2 as published by the Free Software Foundation
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -43,13 +42,6 @@ function db_error($result)
         }
         exit();
     }
-}
-
-// die Versionsnummer bitte nicht aendern !!!
-
-function getVersion()
-{
-    return "1.4 Beta";
 }
 
 // die uebergebenen Variablen fuer den SQL-Code werden geprueft
@@ -338,18 +330,6 @@ function editPhoto($organization = "")
         return false;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 // diese Funktion gibt eine Seitennavigation in Anhaengigkeit der Anzahl Seiten zurueck
 // Beispiel:

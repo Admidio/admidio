@@ -2,7 +2,7 @@
 /******************************************************************************
  * Verschiedene Funktionen fuer Rollen
  *
- * Copyright    : (c) 2004 - 2006 The Admidio Team
+ * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  *
@@ -19,8 +19,7 @@
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * version 2 as published by the Free Software Foundation
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -83,7 +82,7 @@ $err_text = "";
 if($_GET["mode"] == 1)
 {
     echo "
-    <!-- (c) 2004 - 2006 The Admidio Team - http://www.admidio.org - Version: ". getVersion(). " -->\n
+    <!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org - Version: ". ADMIDIO_VERSION. " -->\n
     <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
     <html>
     <head>
@@ -461,30 +460,30 @@ elseif($_GET["mode"] == 2)
 
                 // holt eine Liste der ausgewählten Rolen
                 $DBChildRoles = RoleDependency::getChildRoles($g_adm_con,$rol_id);
-				
-				//entferne alle Rollen die nicht mehr ausgewählt sind
-				if($DBChildRoles != -1)
-				{
-	                foreach ($DBChildRoles as $DBChildRole)
-	                {
-	                    if(in_array($DBChildRole,$sentChildRoles))
-	                        continue;
-	                    else
-	                    {
+                
+                //entferne alle Rollen die nicht mehr ausgewählt sind
+                if($DBChildRoles != -1)
+                {
+                    foreach ($DBChildRoles as $DBChildRole)
+                    {
+                        if(in_array($DBChildRole,$sentChildRoles))
+                            continue;
+                        else
+                        {
 
-							$roleDep->get($DBChildRole,$rol_id);
-	                        $roleDep->delete();
-	                    }
-	                }
-				}
+                            $roleDep->get($DBChildRole,$rol_id);
+                            $roleDep->delete();
+                        }
+                    }
+                }
                 //fuege alle neuen Rollen hinzu
                 foreach ($sentChildRoles as $sentChildRole)
                 {
-					if((-1 == $DBChildRoles) || in_array($sentChildRole,$DBChildRoles))
+                    if((-1 == $DBChildRoles) || in_array($sentChildRole,$DBChildRoles))
                         continue;
                     else
                     {
-						$roleDep->clear();
+                        $roleDep->clear();
                         $roleDep->setChild($sentChildRole);
                         $roleDep->setParent($rol_id);
                         $roleDep->insert($g_current_user->id);
@@ -499,7 +498,7 @@ elseif($_GET["mode"] == 2)
             }
             else
             {
-            	RoleDependency::removeChildRoles($g_adm_con,$rol_id);
+                RoleDependency::removeChildRoles($g_adm_con,$rol_id);
             }
 
             $_SESSION['navigation']->deleteLastUrl();
