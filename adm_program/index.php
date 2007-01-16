@@ -327,8 +327,12 @@ require("../adm_config/body_top.php");
                     <div style=\"text-align: left; margin-left: 45px;\">
                         <span class=\"textHead\"><a href=\"$g_root_path/adm_program/administration/roles/roles.php\">Rollenverwaltung</a></span><br />
                         <span class=\"textDescription\">Rollen (Gruppen / Kurse / Abteilungen) k&ouml;nnen hier erstellt oder bearbeitet werden.</span>
-                    </div>
+                    </div>";
+                }
 
+                if(hasRole("Webmaster"))
+                {
+                    echo "
                     <div style=\"margin-top: 7px;\"></div>
 
                     <div style=\"text-align: left; width: 40; float: left;\">
