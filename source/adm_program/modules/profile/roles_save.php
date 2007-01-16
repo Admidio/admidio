@@ -246,7 +246,8 @@ if($g_current_user->id != $_GET['user_id'])
 foreach($parentRoles as $actRole)
 {
     $sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin,mem_end, mem_valid, mem_leader)
-              VALUES ($actRole, {0}, NOW(), NULL, 1, $leiter) ";
+                 VALUES ($actRole, {0}, NOW(), NULL, 1, $leiter) 
+                     ON DUPLICATE KEY UPDATE mem_end = NULL ";
     $sql    = prepareSQL($sql, array($_GET['user_id']));
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
