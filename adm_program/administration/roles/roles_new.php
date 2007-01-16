@@ -438,7 +438,7 @@ require("../../../adm_config/body_top.php");
                             $sql    = "SELECT * FROM ". TBL_ROLES. "
                                 WHERE rol_org_shortname = '$g_organization'
                                   AND rol_valid         = 1
-                                ORDER BY rol_id";
+                                ORDER BY rol_name ";
                             $allRoles = mysql_query($sql, $g_adm_con);
                             db_error($allRoles);
 
