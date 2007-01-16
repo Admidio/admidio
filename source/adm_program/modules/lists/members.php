@@ -144,7 +144,7 @@ for($x=0; $user = mysql_fetch_array($result_user); $x++)
     }
 
     //Umlaute
-    if(!in_array(ord($user['usr_last_name']), $first_letter_array) && ord($user['usr_last_name'])>191)
+    if(!in_array(191, $first_letter_array) && ord($user['usr_last_name'])>191)
     {
         $first_letter_array[$x]= 191;
     }
@@ -222,7 +222,7 @@ echo "
 
     // Dieses Array enthaelt alle IDs, die in den Orga-Einstellungen auftauchen
     ids = new Array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-                    'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'zahl');
+                    'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'zahl', 'uml');
 
 
     // Die eigentliche Funktion: Schaltet die Einstellungsdialoge durch
@@ -328,9 +328,9 @@ echo"
             {
                 if( in_array(191, $first_letter_array))
                 {
-                    echo"<a href=\"#\" onClick=\"toggleDiv('uml');\">Uml</a>&nbsp;";
+                    echo"<a href=\"#\" onClick=\"toggleDiv('uml');\">&Auml;&Ouml;&Uuml;</a>&nbsp;";
                 }
-                else echo"Umlaute";
+                else echo"&Auml;&Ouml;&Uuml;";
             }
         }//for
 
@@ -338,7 +338,7 @@ echo"
        $letter_merker=34;
        $user = mysql_fetch_array($result_user);
        //Zeilen ausgeben
-       for($x=1; $x<mysql_num_rows($result_user); $x++)
+       for($x=1; $x<=mysql_num_rows($result_user)+1; $x++)
         {
             //Aktueller Buchstabe
             $letter = ord(strtoupper($user['usr_last_name']));
@@ -349,10 +349,16 @@ echo"
                 $letter = 35;
             }
 
+            //Falls Umlaut
+            if($letter >=190)
+            {
+                $letter = 191;
+            }
+
             if($letter != $letter_merker)
             {
                 //Container fuer Zahlen oder Umlaute
-                if($letter_merker==34 || $letter_merker==191)
+                if($letter_merker==34)
                 {
                     //Leerer Container fuer Zahlen
                     if($letter_merker==34 && !in_array(35, $first_letter_array))
@@ -368,18 +374,6 @@ echo"
                         <div id=\"zahl\" name=\"zahl\" style=\"visibility: hidden; display: none; margin-top: 15px;\">";
                         echo "<h1>&#35;</h1>";
                         $letter_merker=35;
-                    }
-                    //Container fuer Umlaute
-                    if($letter_merker==191 && in_array(191, $first_letter_array))
-                    {
-                        echo"
-                        <div id=\"uml\" name=\"uml\" style=\"visibility: hidden; display: none; margin-top: 15px;\">";
-                        echo "<h1>Umlaute</h1>";
-                    }
-                    //Lerer Container für Umlaute falls keine vorhenden
-                    if(!in_array(191, $first_letter_array))
-                    {
-                        echo"<div id=\"uml\" name=\"uml\" style=\"visibility: hidden; display: none; margin-top: 15px;\"></div>";
                     }
                 }
                 //Container für Buchstaben
@@ -403,13 +397,24 @@ echo"
                         $letter_merker++;
                     }
 
-                    //Buchstabe zu Ascinr
-                    $letter_string = chr($letter_merker);
+                    //Container für Umlaute falls vorhenden
+                    if( $letter_merker==191 && in_array(191, $first_letter_array))
+                    {
+                        echo"
+                        <div id=\"uml\" name=\"uml\" style=\"visibility: hidden; display: none; margin-top: 15px;\">";
+                        echo "<h1>Umlaute</h1>";
+                    }
+                    // sonst normal
+                    else
+                    {
+                        //Buchstabe zu Ascinr
+                        $letter_string = chr($letter_merker);
 
-                    //Container mit allen ergebnissen zum Buchstaben
-                    echo"<div id=\"$letter_string\" name=\"$letter\" style=\"visibility: hidden; display: none; margin-top: 15px;\">";
+                        //Container mit allen ergebnissen zum Buchstaben
+                        echo"<div id=\"$letter_string\" name=\"$letter\" style=\"visibility: hidden; display: none; margin-top: 15px;\">";
 
-                    echo "<h1>$letter_string</h1>";
+                        echo "<h1>$letter_string</h1>";
+                    }
                 }
 
 
@@ -484,8 +489,13 @@ echo"
             {
                 $letter = 35;
             }
+             //Falls Umlaut
+            if($letter >=190)
+            {
+                $letter = 191;
+            }
 
-            if($letter != $letter_merker || mysql_num_rows($result_user)-1==$x)
+            if($letter != $letter_merker || mysql_num_rows($result_user)+1==$x)
             {
                 echo"</table>";
                 echo"</div>";
@@ -493,11 +503,15 @@ echo"
         }//End For
 
 
+        //Leerer Container für Umlaute falls keine vorhenden
+        if(!in_array(191, $first_letter_array))
+        {
+            echo"<div id=\"uml\" name=\"uml\" style=\"visibility: hidden; display: none; margin-top: 15px;\"></div>";
+        }
 
       //Buttons schliessen oder Speichern
-        echo"<a name=\"Ende\"></a>
-        <div style=\"margin: 8px;\">
-            <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
+        echo"<div style=\"margin: 8px;\">
+            <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
                     <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
                     &nbsp;Zur&uuml;ck</button>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
