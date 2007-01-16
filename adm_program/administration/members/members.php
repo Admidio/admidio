@@ -331,6 +331,14 @@ require("../../../adm_config/body_top.php");
             $letter_row = mysql_fetch_array($result);
             $letter_menu = "A";
             
+            // kleine Vorschleife die alle Sonderzeichen (Zahlen) vor dem A durchgeht 
+            // (diese werden nicht im Buchstabenmenue angezeigt)
+            while(ord($letter_row[0]) < ord("A"))
+            {
+                $letter_row = mysql_fetch_array($result);
+            }
+            
+            // Nun alle Buchstaben mit evtl. vorhandenen Links im Buchstabenmenue anzeigen
             for($i = 0; $i < 26;$i++)
             {
                 if($letter_menu == substr($req_letter, 0, 1))
