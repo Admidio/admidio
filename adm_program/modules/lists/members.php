@@ -125,13 +125,28 @@ if($restrict=="u")
 $first_letter_array = array();
 for($x=0; $user = mysql_fetch_array($result_user); $x++)
 {
-    if(!in_array(ord($user['usr_last_name']), $first_letter_array) && ord($user['usr_last_name'])>65)
+    //normal A bis Z
+    if(!in_array(ord($user['usr_last_name']), $first_letter_array) && ord($user['usr_last_name'])>64 && ord($user['usr_last_name'])<91)
     {
         $first_letter_array[$x]= ord($user['usr_last_name']);
     }
-    if(!in_array(ord($user['usr_last_name']), $first_letter_array) && ord($user['usr_last_name'])<65 && !in_array(35, $first_letter_array))
+
+    //kleinbuchstaben A bis Z
+    if(!in_array(ord($user['usr_last_name'])-32, $first_letter_array) && ord($user['usr_last_name'])>96 && ord($user['usr_last_name'])<123)
+    {
+        $first_letter_array[$x]= ord($user['usr_last_name'])-32;
+    }
+
+    //zahlen wete
+    if(!in_array(ord($user['usr_last_name']), $first_letter_array) && ord($user['usr_last_name'])<64 && !in_array(35, $first_letter_array))
     {
         $first_letter_array[$x]= 35;
+    }
+
+    //Umlaute
+    if(!in_array(ord($user['usr_last_name']), $first_letter_array) && ord($user['usr_last_name'])>191)
+    {
+        $first_letter_array[$x]= 191;
     }
 }
 mysql_data_seek ($result_user, 0);
@@ -207,7 +222,7 @@ echo "
 
     // Dieses Array enthaelt alle IDs, die in den Orga-Einstellungen auftauchen
     ids = new Array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-                    'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'zahl' );
+                    'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'zahl');
 
 
     // Die eigentliche Funktion: Schaltet die Einstellungsdialoge durch
@@ -277,7 +292,7 @@ echo"
 
 
         //Buchstaben Navigation
-        for($menu_letter=35; $menu_letter<=90; $menu_letter++)
+        for($menu_letter=35; $menu_letter<=191; $menu_letter++)
         {
             //Falls Aktueller Anfangsbuchstabe, Nur Buchstabe ausgeben
             $menu_letter_string = chr($menu_letter);
@@ -291,7 +306,13 @@ echo"
                 echo"<a href=\"#\" onClick=\"toggleDiv('$menu_letter_string');\">$menu_letter_string</a>&nbsp;";
             }
 
-            //Für Namen die mit Zahlen beginnen
+            //Sprung zu Umlaute
+            if($menu_letter==90)
+            {
+                $menu_letter=191;
+            }
+
+            //Fuer Namen die mit Zahlen beginnen
             if($menu_letter == 35)
             {
                 if( in_array(35, $first_letter_array))
@@ -301,10 +322,20 @@ echo"
                 else echo"&#35;&nbsp;";
                 $menu_letter = 64;
             }
+
+            //Fuer Umlaute
+            if($menu_letter == 191)
+            {
+                if( in_array(191, $first_letter_array))
+                {
+                    echo"<a href=\"#\" onClick=\"toggleDiv('uml');\">Uml</a>&nbsp;";
+                }
+                else echo"Umlaute";
+            }
         }//for
 
-       $letter_merker=35;
 
+       $letter_merker=34;
        $user = mysql_fetch_array($result_user);
        //Zeilen ausgeben
        for($x=1; $x<mysql_num_rows($result_user); $x++)
@@ -312,29 +343,76 @@ echo"
             //Aktueller Buchstabe
             $letter = ord(strtoupper($user['usr_last_name']));
 
+            //Falls Zahl
+            if($letter >=48 && $letter <=57)
+            {
+                $letter = 35;
+            }
+
             if($letter != $letter_merker)
             {
-
-                //Container für Zahlen style=\"visibility: hidden; display: none; margin-top: 15px;\"
-                if($letter_merker<64)
+                //Container fuer Zahlen oder Umlaute
+                if($letter_merker==34 || $letter_merker==191)
                 {
-                    echo"
-                    <div id=\"zahl\" name=\"zahl\" >";
-                    echo "<h1>&#35;</h1>";
-                    $letter_merker=64;
+                    //Leerer Container fuer Zahlen
+                    if($letter_merker==34 && !in_array(35, $first_letter_array))
+                    {
+                        echo"<div id=\"zahl\" name=\"zahl\" style=\"visibility: hidden; display: none; margin-top: 15px;\">";
+                        $letter_merker=64;
+                        mysql_data_seek ($result_user, 0);
+                    }
+                    //Container fuer Zahlen
+                    if($letter_merker==34 && in_array(35, $first_letter_array))
+                    {
+                        echo"
+                        <div id=\"zahl\" name=\"zahl\" style=\"visibility: hidden; display: none; margin-top: 15px;\">";
+                        echo "<h1>&#35;</h1>";
+                        $letter_merker=35;
+                    }
+                    //Container fuer Umlaute
+                    if($letter_merker==191 && in_array(191, $first_letter_array))
+                    {
+                        echo"
+                        <div id=\"uml\" name=\"uml\" style=\"visibility: hidden; display: none; margin-top: 15px;\">";
+                        echo "<h1>Umlaute</h1>";
+                    }
+                    //Lerer Container für Umlaute falls keine vorhenden
+                    if(!in_array(191, $first_letter_array))
+                    {
+                        echo"<div id=\"uml\" name=\"uml\" style=\"visibility: hidden; display: none; margin-top: 15px;\"></div>";
+                    }
                 }
-
                 //Container für Buchstaben
                 else
                 {
-                    $letter_merker++;
+                    //Sprung zu Umlauten oder Buchstaben
+                    if($letter_merker==90 || $letter_merker==35)
+                    {
+                        //Sprung zu Buchstaben
+                        if($letter_merker==35)
+                        {
+                            $letter_merker=64;
+                        }
+                        if($letter_merker==90)
+                        {
+                            $letter_merker=191;
+                        }
+                    }
+                    else
+                    {
+                        $letter_merker++;
+                    }
+
+                    //Buchstabe zu Ascinr
                     $letter_string = chr($letter_merker);
 
                     //Container mit allen ergebnissen zum Buchstaben
-                    echo"<div id=\"$letter_string\" name=\"$letter\" >";
+                    echo"<div id=\"$letter_string\" name=\"$letter\" style=\"visibility: hidden; display: none; margin-top: 15px;\">";
 
                     echo "<h1>$letter_string</h1>";
                 }
+
+
 
                 //Tabelle ausgeben
                 echo"
@@ -398,12 +476,22 @@ echo"
             //Naechsten Datensatz abrufen
             $user = mysql_fetch_array($result_user);
 
-            if(ord(strtoupper($user['usr_last_name'])) != $letter_merker || mysql_num_rows($result_user)-1==$x)
+            //Aktueller Buchstabe
+            $letter = ord(strtoupper($user['usr_last_name']));
+
+            //Falls Zahl
+            if($letter >=48 && $letter <=57)
+            {
+                $letter = 35;
+            }
+
+            if($letter != $letter_merker || mysql_num_rows($result_user)-1==$x)
             {
                 echo"</table>";
                 echo"</div>";
             }
         }//End For
+
 
 
       //Buttons schliessen oder Speichern
@@ -425,7 +513,5 @@ echo"
         toggleDiv('A');
     -->
     </script>";
-
     require("../../../adm_config/body_bottom.php");
-echo "</body>
-</html>";
+echo "</body></html>";
