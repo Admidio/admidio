@@ -126,7 +126,7 @@ if ($user_found >= 1)
         db_error($result);
 
         // Paralell im Forum einloggen, wenn g_forum gesetzt ist
-        if($g_forum == 1)
+        if($g_forum)
         {
             /* Überprüfen, ob User ID =1 (Administrator) angemeldet ist. 
             Falls ja, wird geprüft, ob im Forum der gleiche Username und Password für die UserID 2 
@@ -149,44 +149,52 @@ if ($user_found >= 1)
             $result = mysql_query($sql, $g_forum_con);
             db_error($result);
 
-            $row = mysql_fetch_array($result);
+			// Natürlich sollte hier der User auch im Forum existieren 
+			// um eine gültige Anmeldung im Forum zu machen
+			if(mysql_num_rows($result))
+			{
+	            $row = mysql_fetch_array($result);
+	
+	            // Daten für das Cookie und den Session Eintrag im Forum aufbereiten
+	            $ip_sep = explode('.', getenv('REMOTE_ADDR'));
+	            $user_ip = sprintf('%02x%02x%02x%02x', $ip_sep[0], $ip_sep[1], $ip_sep[2], $ip_sep[3]);
+	            $current_time = time();
+	
+	            // Session in die Forum DB schreiben
+	            $sql = "INSERT INTO " .$g_forum_praefix. "_sessions
+	                           (session_id, session_user_id, session_start, session_time, session_ip, session_page, session_logged_in, session_admin)
+	                    VALUES ('$user_session', $row[1], $current_time, $current_time, '$user_ip', 0, 1, 0)";
+	            $result = mysql_query($sql, $g_forum_con);
+	            db_error($result);
+	
+	            // Cookie fuer die Anmeldung im Forum setzen
+	            setcookie($g_forum_cookie_name."_sid", $user_session, time() + 60*60*24*30, $g_forum_cookie_path, $g_forum_cookie_domain, $g_forum_cookie_secure);
+	
+	            // Admidio DB wählen
+	            mysql_select_db($g_adm_db, $g_adm_con);
 
-
-            // Daten für das Cookie und den Session Eintrag im Forum aufbereiten
-            $ip_sep = explode('.', getenv('REMOTE_ADDR'));
-            $user_ip = sprintf('%02x%02x%02x%02x', $ip_sep[0], $ip_sep[1], $ip_sep[2], $ip_sep[3]);
-            $current_time = time();
-
-            // Session in die Forum DB schreiben
-            $sql = "INSERT INTO " .$g_forum_praefix. "_sessions
-                           (session_id, session_user_id, session_start, session_time, session_ip, session_page, session_logged_in, session_admin)
-                    VALUES ('$user_session', $row[1], $current_time, $current_time, '$user_ip', 0, 1, 0)";
-            $result = mysql_query($sql, $g_forum_con);
-            db_error($result);
-
-            // Cookie fuer die Anmeldung im Forum setzen
-            setcookie($g_forum_cookie_name."_sid", $user_session, time() + 60*60*24*30, $g_forum_cookie_path, $g_forum_cookie_domain, $g_forum_cookie_secure);
-
-            // Admidio DB wählen
-            mysql_select_db($g_adm_db, $g_adm_con);
-
-
-            // heaerLocation entsprechend der Aktionen setzen, Meldungen ausgeben und weiter zur URL.
-            if($forum_admin_reset)
-            {
-                // Administrator Account wurde zurück gesetzt, Meldung vorbereiten
-                $login_message = "loginforum_admin";
-            }
-            elseif(!(forum_check_password($password_crypt, $row[0], $row[1], $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix)))
-            {
-                // Password wurde zurück gesetzt, Meldung vorbereiten
-                $login_message = "loginforum_pass";
-            }
-            else
-            {
-                // Im Forum und in Admidio angemeldet, Meldung vorbereiten
-                $login_message = "loginforum";
-            }
+	            // heaerLocation entsprechend der Aktionen setzen, Meldungen ausgeben und weiter zur URL.
+	            if($forum_admin_reset)
+	            {
+	                // Administrator Account wurde zurück gesetzt, Meldung vorbereiten
+	                $login_message = "loginforum_admin";
+	            }
+	            elseif(!(forum_check_password($password_crypt, $row[0], $row[1], $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix)))
+	            {
+	                // Password wurde zurück gesetzt, Meldung vorbereiten
+	                $login_message = "loginforum_pass";
+	            }
+	            else
+	            {
+	                // Im Forum und in Admidio angemeldet, Meldung vorbereiten
+	                $login_message = "loginforum";
+	            }
+			}
+			else
+			{
+				// User gibt es im Forum nicht, also eine reine Admidio anmeldung.
+				$login_message = "login";
+			}
         }
         else
         {
