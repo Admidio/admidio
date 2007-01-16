@@ -93,8 +93,29 @@ echo "
             font-weight: normal;
         }
     </style>
+    
+    <script type=\"text/javascript\">
+        // Dieses Array enthaelt alle IDs, die in den Orga-Einstellungen auftauchen
+        ids = new Array('general', 'register', 'announcement-module', 'download-module', 'mail-module',
+                        'photo-module', 'guestbook-module', 'dates-module', 'links-module');
 
-    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/toggleDiv.js\"></script>
+
+        // Die eigentliche Funktion: Schaltet die Einstellungsdialoge durch
+        function toggleDiv(element_id)
+        {
+            var i;
+            for (i=0;i<ids.length;i++)
+            {
+                // Erstmal alle DIVs aus unsichtbar setzen
+                document.getElementById(ids[i]).style.visibility = 'hidden';
+                document.getElementById(ids[i]).style.display    = 'none';
+            }
+            // Angeforderten Bereich anzeigen
+            document.getElementById(element_id).style.visibility = 'visible';
+            document.getElementById(element_id).style.display    = 'block';
+            // window.blur();
+        }
+    </script>
 
     <!--[if lt IE 7]>
     <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
