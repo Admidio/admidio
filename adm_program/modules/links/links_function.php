@@ -108,7 +108,7 @@ if ($_GET["mode"] == 1 || ($_GET["mode"] == 3 && $_GET["lnk_id"] > 0) )
 {
     $linkName = strStripTags($_POST['linkname']);
     $description  = strStripTags($_POST['description']);
-    $linkUrl = trim($_POST['linkurl']);
+    $linkUrl = strStripTags(trim($_POST['linkurl']));
     $category = $_POST['category'];
 
     if (strlen($linkName) > 0 && strlen($description)  > 0 && strlen($linkUrl) > 0)
