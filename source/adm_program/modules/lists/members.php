@@ -291,222 +291,228 @@ echo"
         }
 
 
-        //Buchstaben Navigation
-        for($menu_letter=35; $menu_letter<=191; $menu_letter++)
+        //Buchstaben Navigation bei mehr als 50 personen
+        if(mysql_num_rows($result_user)>=50)
         {
-            //Falls Aktueller Anfangsbuchstabe, Nur Buchstabe ausgeben
-            $menu_letter_string = chr($menu_letter);
-            if(!in_array($menu_letter, $first_letter_array) && $menu_letter>64 && $menu_letter<91)
+            for($menu_letter=35; $menu_letter<=191; $menu_letter++)
             {
-                echo"$menu_letter_string&nbsp;";
-            }
-            //Falls Nicht Link zu Anker
-            if(in_array($menu_letter, $first_letter_array) && $menu_letter>64 && $menu_letter<91)
-            {
-                echo"<a href=\"#\" onClick=\"toggleDiv('$menu_letter_string');\">$menu_letter_string</a>&nbsp;";
-            }
-
-            //Sprung zu Umlaute
-            if($menu_letter==90)
-            {
-                $menu_letter=191;
-            }
-
-            //Fuer Namen die mit Zahlen beginnen
-            if($menu_letter == 35)
-            {
-                if( in_array(35, $first_letter_array))
+                //Falls Aktueller Anfangsbuchstabe, Nur Buchstabe ausgeben
+                $menu_letter_string = chr($menu_letter);
+                if(!in_array($menu_letter, $first_letter_array) && $menu_letter>64 && $menu_letter<91)
                 {
-                    echo"<a href=\"#\" onClick=\"toggleDiv('zahl');\">$menu_letter_string</a>&nbsp;";
+                    echo"$menu_letter_string&nbsp;";
                 }
-                else echo"&#35;&nbsp;";
-                $menu_letter = 64;
-            }
-
-            //Fuer Umlaute
-            if($menu_letter == 191)
-            {
-                if( in_array(191, $first_letter_array))
+                //Falls Nicht Link zu Anker
+                if(in_array($menu_letter, $first_letter_array) && $menu_letter>64 && $menu_letter<91)
                 {
-                    echo"<a href=\"#\" onClick=\"toggleDiv('uml');\">&Auml;&Ouml;&Uuml;</a>&nbsp;";
+                    echo"<a href=\"#\" onClick=\"toggleDiv('$menu_letter_string');\">$menu_letter_string</a>&nbsp;";
                 }
-                else echo"&Auml;&Ouml;&Uuml;";
-            }
-        }//for
 
-
-       $letter_merker=34;
-       $user = mysql_fetch_array($result_user);
-       //Zeilen ausgeben
-       for($x=1; $x<=mysql_num_rows($result_user)+1; $x++)
-        {
-            //Aktueller Buchstabe
-            $letter = ord(strtoupper($user['usr_last_name']));
-
-            //Falls Zahl
-            if($letter >=48 && $letter <=57)
-            {
-                $letter = 35;
-            }
-
-            //Falls Umlaut
-            if($letter >=190)
-            {
-                $letter = 191;
-            }
-
-            if($letter != $letter_merker)
-            {
-                //Container fuer Zahlen oder Umlaute
-                if($letter_merker==34)
+                //Sprung zu Umlaute
+                if($menu_letter==90)
                 {
-                    //Leerer Container fuer Zahlen
-                    if($letter_merker==34 && !in_array(35, $first_letter_array))
-                    {
-                        echo"<div id=\"zahl\" name=\"zahl\" style=\"visibility: hidden; display: none; margin-top: 15px;\">";
-                        $letter_merker=64;
-                        mysql_data_seek ($result_user, 0);
-                    }
-                    //Container fuer Zahlen
-                    if($letter_merker==34 && in_array(35, $first_letter_array))
-                    {
-                        echo"
-                        <div id=\"zahl\" name=\"zahl\" style=\"visibility: hidden; display: none; margin-top: 15px;\">";
-                        echo "<h1>&#35;</h1>";
-                        $letter_merker=35;
-                    }
+                    $menu_letter=191;
                 }
-                //Container für Buchstaben
-                else
+
+                //Fuer Namen die mit Zahlen beginnen
+                if($menu_letter == 35)
                 {
-                    //Sprung zu Umlauten oder Buchstaben
-                    if($letter_merker==90 || $letter_merker==35)
+                    if( in_array(35, $first_letter_array))
                     {
-                        //Sprung zu Buchstaben
-                        if($letter_merker==35)
-                        {
-                            $letter_merker=64;
-                        }
-                        if($letter_merker==90)
-                        {
-                            $letter_merker=191;
-                        }
+                        echo"<a href=\"#\" onClick=\"toggleDiv('zahl');\">$menu_letter_string</a>&nbsp;";
                     }
-                    else
+                    else echo"&#35;&nbsp;";
+                    $menu_letter = 64;
+                }
+
+                //Fuer Umlaute
+                if($menu_letter == 191)
+                {
+                    if( in_array(191, $first_letter_array))
+                    {
+                        echo"<a href=\"#\" onClick=\"toggleDiv('uml');\">&Auml;&Ouml;&Uuml;</a>&nbsp;";
+                    }
+                    else echo"&Auml;&Ouml;&Uuml;";
+                }
+            }//for
+
+           //Container anlegen und Ausgabe
+           $letter_merker=34;
+           $user = mysql_fetch_array($result_user);
+           //Zeilen ausgeben
+           for($x=1; $x<=mysql_num_rows($result_user); $x++)
+            {
+                //Aktueller Buchstabe
+                $letter = ord(strtoupper($user['usr_last_name']));
+
+                //Falls Zahl
+                if($letter >=48 && $letter <=57)
+                {
+                    $letter = 35;
+                }
+
+                //Falls Umlaut
+                if($letter >=190)
+                {
+                    $letter = 191;
+                }
+
+                //Falls Kleinbuchstabe
+                if($letter >=97 && $letter <=122)
+                {
+                    $letter = $letter-32;
+                }
+
+
+                //Nach erstem benoetigtem Container suchen, solange leere ausgeben
+                while($letter!=$letter_merker && !in_array($letter_merker+1, $first_letter_array) && $letter_merker<=197)
+                {
+                    $letter_merker++;
+                    //Buchstabe fuer ID
+                    $letter_string = chr($letter_merker);
+
+                    //Falls Zahl
+                    if($letter_merker == 35)
+                    {
+                        $letter_string = "zahl";
+                    }
+
+                    //Falls Umlaut
+                    if($letter_merker ==191)
+                    {
+                        $letter_string = "uml";
+                    }
+
+                    //leerer Container
+                    echo"<div id=\"$letter_string\" name=\"$letter_string\" style=\"visibility: hidden; display: none; margin-top: 15px;\"></div>";
+
+                }//Ende while
+
+                //Falls neuer Anfangsbuchstabe Container ausgeben
+                if($letter!=$letter_merker){
+
+                    //Falls normaler Buchstabe
+                    if($letter_merker >=65 || $letter_merker <=91)
                     {
                         $letter_merker++;
-                    }
-
-                    //Container für Umlaute falls vorhenden
-                    if( $letter_merker==191 && in_array(191, $first_letter_array))
-                    {
-                        echo"
-                        <div id=\"uml\" name=\"uml\" style=\"visibility: hidden; display: none; margin-top: 15px;\">";
-                        echo "<h1>Umlaute</h1>";
-                    }
-                    // sonst normal
-                    else
-                    {
-                        //Buchstabe zu Ascinr
+                        //Buchstabe fuer ID
                         $letter_string = chr($letter_merker);
-
-                        //Container mit allen ergebnissen zum Buchstaben
-                        echo"<div id=\"$letter_string\" name=\"$letter\" style=\"visibility: hidden; display: none; margin-top: 15px;\">";
-
-                        echo "<h1>$letter_string</h1>";
                     }
+
+                    //Falls Zahl
+                    if($letter_merker == 34)
+                    {
+                        $letter_merker = 35;
+                        $letter_string = "zahl";
+                    }
+
+                    //Falls Umlaut
+                    if($letter_merker ==191)
+                    {
+                        $letter_merker = 191;
+                        $letter_string = "uml";
+                    }
+
+                    //Container
+                    echo"<div id=\"$letter_string\" name=\"$letter_string\" style=\"visibility: hidden; display: none; margin-top: 15px;\">";
+
+                    //Ueberschrift
+                    echo "<h1>$letter_string</h1>";
+
+                    //Tabelle anlegen
+                    echo"
+                    <table class=\"tableList\" cellpadding=\"3\" cellspacing=\"0\" style=\"width: 95%;\">
+                        <tr>
+                            <th class=\"tableHeader\" style=\"text-align: center;\">Info</th>
+                            <th class=\"tableHeader\" style=\"text-align: center;\">Name</th>
+                            <th class=\"tableHeader\" style=\"text-align: center;\">Vorname</th>
+                            <th class=\"tableHeader\" style=\"text-align: center;\">Geburtsdatum</th>
+                            <th class=\"tableHeader\" style=\"text-align: center;\">Mitglied</th>
+                            <th class=\"tableHeader\" style=\"text-align: center;\">Leiter</th>
+                        </tr>";
                 }
 
 
-
-                //Tabelle ausgeben
+                //Datensatz ausgeben
+                $user_text= $user['usr_first_name']."&nbsp;".$user['usr_last_name']."&nbsp;&nbsp;&nbsp;"
+                            .$user['usr_address']."&nbsp;&nbsp;&nbsp;"
+                            .$user['usr_zip_code']."&nbsp;".$user['usr_city']."&nbsp;&nbsp;&nbsp;"
+                            .$user['usr_phone'];
                 echo"
-                <table class=\"tableList\" cellpadding=\"3\" cellspacing=\"0\" style=\"width: 95%;\">
-                    <tr>
-                        <th class=\"tableHeader\" style=\"text-align: center;\">Info</th>
-                        <th class=\"tableHeader\" style=\"text-align: center;\">Name</th>
-                        <th class=\"tableHeader\" style=\"text-align: center;\">Vorname</th>
-                        <th class=\"tableHeader\" style=\"text-align: center;\">Geburtsdatum</th>
-                        <th class=\"tableHeader\" style=\"text-align: center;\">Mitglied</th>
-                        <th class=\"tableHeader\" style=\"text-align: center;\">Leiter</th>
-                    </tr>";
-            }// Ende neuer Anfangsbuchstabe
+                <tr>
+                    <td style=\"text-align: center;\">
+                        <img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/note.png\" alt=\"Userinformationen\" title=\"$user_text\">
+                    </td>
+                    <td style=\"text-align: left;\">". $user['usr_last_name']."</td>
+                    <td style=\"text-align: left;\">". $user['usr_first_name']."</td>
 
-                    //Ausgabe aller Personen mit entsprechendem Anfangsbuchstaben
-                    $user_text= $user['usr_first_name']."&nbsp;".$user['usr_last_name']."&nbsp;&nbsp;&nbsp;"
-                                .$user['usr_address']."&nbsp;&nbsp;&nbsp;"
-                                .$user['usr_zip_code']."&nbsp;".$user['usr_city']."&nbsp;&nbsp;&nbsp;"
-                                .$user['usr_phone'];
-                    echo"
-                    <tr>
-                        <td style=\"text-align: center;\">
-                            <img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/note.png\" alt=\"Userinformationen\" title=\"$user_text\">
-                        </td>
-                        <td style=\"text-align: left;\">". $user['usr_last_name']."</td>
-                        <td style=\"text-align: left;\">". $user['usr_first_name']."</td>
+                    <td style=\"text-align: center;\">";
+                        //Geburtstag nur ausgeben wenn bekannt
+                        if($user['usr_birthday']!='0000-00-00')
+                        {
+                            echo mysqldate("d.m.y", $user['usr_birthday']);
+                        }
+                    echo"</td>
 
-                        <td style=\"text-align: center;\">";
-                            //Geburtstag nur ausgeben wenn bekannt
-                            if($user['usr_birthday']!='0000-00-00')
-                            {
-                                echo mysqldate("d.m.y", $user['usr_birthday']);
-                            }
-                        echo"</td>
+                    <td style=\"text-align: center;\">";
+                        //Haekchen setzen ob jemand Mitglied ist oder nicht
+                        if(in_array($user['usr_id'], $role_member))
+                        {
+                            echo"<input type=\"checkbox\" onclick=\"unmarkLeader(this)\" id=\"member_$user[0]\" name=\"member_$user[0]\" checked value=\"1\">";
+                        }
+                        else
+                        {
+                            echo"<input type=\"checkbox\" onclick=\"unmarkLeader(this)\" id=\"member_$user[0]\" name=\"member_$user[0]\" value=\"1\">";
+                        }
+                    echo"</td>
 
-                        <td style=\"text-align: center;\">";
-                            //Haekchen setzen ob jemand Mitglied ist oder nicht
-                            if(in_array($user['usr_id'], $role_member))
-                            {
-                                echo"<input type=\"checkbox\" onclick=\"unmarkLeader(this)\" id=\"member_$user[0]\" name=\"member_$user[0]\" checked value=\"1\">";
-                            }
-                            else
-                            {
-                                echo"<input type=\"checkbox\" onclick=\"unmarkLeader(this)\" id=\"member_$user[0]\" name=\"member_$user[0]\" value=\"1\">";
-                            }
-                        echo"</td>
+                    <td style=\"text-align: center;\">";
+                        //Haekchen setzen ob jemand Leiter ist oder nicht
+                        if(in_array($user['usr_id'], $group_leaders))
+                        {
+                            echo"<input type=\"checkbox\" onclick=\"markMember(this)\" id=\"leader_$user[0]\" name=\"leader_$user[0]\" checked value=\"1\">";
+                        }
+                        else
+                        {
+                            echo"<input type=\"checkbox\" onclick=\"markMember(this)\" id=\"leader_$user[0]\" name=\"leader_$user[0]\" value=\"1\">";
+                        }
+                    echo"</td>
+                </tr>";
 
-                        <td style=\"text-align: center;\">";
-                            //Haekchen setzen ob jemand Leiter ist oder nicht
-                            if(in_array($user['usr_id'], $group_leaders))
-                            {
-                                echo"<input type=\"checkbox\" onclick=\"markMember(this)\" id=\"leader_$user[0]\" name=\"leader_$user[0]\" checked value=\"1\">";
-                            }
-                            else
-                            {
-                                echo"<input type=\"checkbox\" onclick=\"markMember(this)\" id=\"leader_$user[0]\" name=\"leader_$user[0]\" value=\"1\">";
-                            }
-                        echo"</td>
-                    </tr>";
+                //Naechsten Datensatz abrufen
+                $user = mysql_fetch_array($result_user);
 
-            //Naechsten Datensatz abrufen
-            $user = mysql_fetch_array($result_user);
+                //neuer Buchstabe
+                $new_letter = ord(strtoupper($user['usr_last_name']));
 
-            //Aktueller Buchstabe
-            $letter = ord(strtoupper($user['usr_last_name']));
+                //Falls Zahl
+                if($new_letter >=48 && $new_letter <=57)
+                {
+                    $new_letter = 35;
+                }
 
-            //Falls Zahl
-            if($letter >=48 && $letter <=57)
-            {
-                $letter = 35;
-            }
-             //Falls Umlaut
-            if($letter >=190)
-            {
-                $letter = 191;
-            }
+                //Falls Umlaut
+                if($new_letter >=190)
+                {
+                    $new_letter = 191;
+                }
 
-            if($letter != $letter_merker || mysql_num_rows($result_user)+1==$x)
-            {
-                echo"</table>";
-                echo"</div>";
-            }
-        }//End For
+                //Falls Kleinbuchstabe
+                if($new_letter >=97 && $new_letter <=122)
+                {
+                    $new_letter = $new_letter-32;
+                }
+
+                if($new_letter != $letter_merker || mysql_num_rows($result_user)+1==$x)
+                {
+                    echo"</table>";
+                    echo"</div>";
+                }
+                //Ende Container
 
 
-        //Leerer Container für Umlaute falls keine vorhenden
-        if(!in_array(191, $first_letter_array))
-        {
-            echo"<div id=\"uml\" name=\"uml\" style=\"visibility: hidden; display: none; margin-top: 15px;\"></div>";
+
+            }//End For
         }
 
       //Buttons schliessen oder Speichern
@@ -521,7 +527,7 @@ echo"
         </div>
    </form></div>";//Ende Formular
 
-    echo"
+   echo"
     <script type=\"text/javascript\">
     <!--
         toggleDiv('A');
