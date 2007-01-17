@@ -368,20 +368,24 @@ require("../../../adm_config/body_top.php");
                         <div style=\"text-align: left; margin-left: 12%;\">
                             <label for=\"guestbook\">G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen&nbsp;</label>
                         </div>
-                    </div>
-                    <div style=\"margin-top: 6px;\">
-                        <div style=\"text-align: right; width: 10%; float: left;\">
-                            <input type=\"checkbox\" id=\"guestbook_comments\" name=\"guestbook_comments\" ";
-                            if(isset($form_values['guestbook_comments']) && $form_values['guestbook_comments'] == 1)
-                                echo " checked ";
-                            echo " value=\"1\" />&nbsp;
-                            <label for=\"guestbook_comments\"><img src=\"$g_root_path/adm_program/images/comments.png\" alt=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\"></label>
-                        </div>
-                        <div style=\"text-align: left; margin-left: 12%;\">
-                            <label for=\"guestbook_comments\">Kommentare zu G&auml;stebucheintr&auml;gen anlegen&nbsp;</label>
-                        </div>
-                    </div>
-                    <div style=\"margin-top: 6px;\">
+                    </div>";
+                    // falls anonyme Gaestebuchkommentare erfassen werden duerfen, braucht man das Recht pro Rolle nicht mehr zu vergeben
+                    if($g_preferences['enable_gbook_comments4all'] == false)
+                    {
+                        echo "<div style=\"margin-top: 6px;\">
+                            <div style=\"text-align: right; width: 10%; float: left;\">
+                                <input type=\"checkbox\" id=\"guestbook_comments\" name=\"guestbook_comments\" ";
+                                if(isset($form_values['guestbook_comments']) && $form_values['guestbook_comments'] == 1)
+                                    echo " checked ";
+                                echo " value=\"1\" />&nbsp;
+                                <label for=\"guestbook_comments\"><img src=\"$g_root_path/adm_program/images/comments.png\" alt=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\"></label>
+                            </div>
+                            <div style=\"text-align: left; margin-left: 12%;\">
+                                <label for=\"guestbook_comments\">Kommentare zu G&auml;stebucheintr&auml;gen anlegen&nbsp;</label>
+                            </div>
+                        </div>";
+                    }
+                    echo "<div style=\"margin-top: 6px;\">
                         <div style=\"text-align: right; width: 10%; float: left;\">
                             <input type=\"checkbox\" id=\"mail_logout\" name=\"mail_logout\" ";
                             if(isset($form_values['mail_logout']) && $form_values['mail_logout'] == 1)
