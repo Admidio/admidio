@@ -179,10 +179,15 @@ elseif($_GET["mode"] == 2)
 }
 elseif($_GET["mode"] == 3)
 {
-    // nur Webmaster duerfen User physikalisch loeschen
+    // Es duerfen keine Webmaster entfernt werden
+    if(hasRole("Webmaster", $g_current_user->id) == false
+    && hasRole("Webmaster", $_GET['user_id']) == true)
+    {
+        $g_message->show("norights");
+    }
+    
     // User darf in keiner anderen Orga aktiv sein
-    if(hasRole("Webmaster") == false
-    || $other_orga > 0)
+    if($other_orga > 0)
     {
         $g_message->show("norights");
     }
