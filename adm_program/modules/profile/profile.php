@@ -334,12 +334,12 @@ require("../../../adm_config/body_top.php");
                         //Falls vorhanden Bild ausgeben
                         if(mysql_result($result_photo,0,"usr_photo")!=NULL)
                         {
-                            echo"<img src=\"profile_photo_show.php?usr_id=$a_user_id\">";
+                            echo"<img src=\"profile_photo_show.php?usr_id=$a_user_id\" alt=\"Profilfoto\">";
                         }
                         //wenn nicht Schattenkopf
                         else
                         {
-                            echo"<img src=\"$g_root_path/adm_program/images/no_profile_pic.png\">";
+                            echo"<img src=\"$g_root_path/adm_program/images/no_profile_pic.png\" alt=\"Profilfoto\">";
                         }
                     echo"</div>";
                     echo"
@@ -431,7 +431,7 @@ require("../../../adm_config/body_top.php");
 
                                     // ICQ Onlinestatus anzeigen
                                     echo "<a href=\"http://www.icq.com/whitepages/cmd.php?uin=$icq_number&amp;action=add\"  class=\"wpaction\">
-                                    <img border=\"0\" src=\"http://status.icq.com/online.gif?icq=$icq_number&img=5\"
+                                    <img border=\"0\" src=\"http://status.icq.com/online.gif?icq=$icq_number&amp;img=5\"
                                     style=\"vertical-align: middle;\" alt=\"$row->usd_value zu $row->usf_description hinzuf&uuml;gen\" title=\"$row->usd_value zu $row->usf_description hinzuf&uuml;gen\" /></a>&nbsp;";
                                 }
                                 elseif($row->usf_name == 'Skype')
@@ -606,7 +606,7 @@ require("../../../adm_config/body_top.php");
                     }
                     echo "<span class=\"iconLink\">
                         <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$a_user_id\"><img
-                         class=\"iconLink\" src=\"$g_root_path/adm_program/images/photo.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Profildaten &auml;ndern\"></a>
+                         class=\"iconLink\" src=\"$g_root_path/adm_program/images/photo.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Profilfoto &auml;ndern\"></a>
                         <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$a_user_id\">Profilfoto &auml;ndern</a>
                     </span>
                     &nbsp;&nbsp;&nbsp;&nbsp;

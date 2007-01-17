@@ -6,7 +6,8 @@
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  *
- * err_code  - Code fuer die Information, die angezeigt werden soll
+ * err_code - Code fuer die Information, die angezeigt werden soll
+ * err_text - Text, der innerhalb einer Meldung angezeigt werden kann
  *
  ******************************************************************************
  *
@@ -27,6 +28,26 @@
 
 require("common.php");
 
+// lokale Variablen der Uebergabevariablen initialisieren
+$req_err_code = null;
+$req_err_text = null;
+
+// Uebergabevariablen pruefen
+
+if(isset($_GET['err_code']) && strlen($_GET['err_code']) > 0)
+{
+    $req_err_code = strStripTags($_GET['err_code']);
+}
+else
+{
+    $g_message->show("invalid");
+}
+
+if(isset($_GET['err_text']))
+{
+    $req_err_text = strStripTags($_GET['err_text']);
+}
+
 echo "
 <!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org - Version: ". ADMIDIO_VERSION. " -->\n
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
@@ -37,16 +58,14 @@ echo "
     <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
 
     <!--[if lt IE 7]>
-    <script language=\"JavaScript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
+    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
     <![endif]-->
-
-
 </head>
 
 <body onLoad=\"windowresize()\">
-    <script language=\"JavaScript\" src=\"$g_root_path/adm_program/system/window_resize.js\"></script>
+    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/window_resize.js\"></script>
     <div class=\"groupBox\" align=\"left\" style=\"padding: 10px\" id=\"Inhalt\">";
-        switch ($_GET['err_code'])
+        switch ($req_err_code)
         {
             case "bbcode":
                 echo "Die Beschreibung bei einigen Modulen (Ank&uuml;ndigungen, Terminen, G&auml;stebuch und Weblinks)
@@ -257,7 +276,7 @@ echo "
                 $sql = "SELECT usf_description FROM ". TBL_USER_FIELDS. "
                          WHERE usf_org_shortname = '$g_organization'
                            AND usf_name          = {0} ";
-                $sql = prepareSQL($sql, array($_GET['err_text']));
+                $sql = prepareSQL($sql, array($req_err_text));
                 $result_field = mysql_query($sql, $g_adm_con);
                 db_error($result_field);
 
