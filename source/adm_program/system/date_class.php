@@ -113,8 +113,8 @@ class Date
         $this->location       = "";
         $this->headline       = "";
         $this->usr_id         = 0;
-        $this->timestamp      = "";
-        $this->last_change    = "";
+        $this->timestamp      = NULL;
+        $this->last_change    = NULL;
         $this->usr_id_change  = 0;
     }
 
