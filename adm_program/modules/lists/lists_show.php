@@ -767,12 +767,12 @@ else
 
     //INFOBOX zur Gruppe
     //nur anzeigen wenn zusatzfelder gefüllt sind
-    if( strlen(mysqldate("d.m.y", $role_row->rol_start_date)>0
-        || $role_row->rol_weekday > 0
-        || ((strcmp(mysqltime("h:i", $role_row->rol_start_time), "00:00") != 0)&& $role_row->rol_start_time != NULL))
-        || strlen($role_row->rol_location) > 0
-        || strlen($role_row->rol_cost)
-        || strlen($role_row->rol_max_members) > 0)
+    if(strlen($role_row->rol_start_date) > 0
+    || $role_row->rol_weekday > 0
+    || strlen($role_row->rol_start_time) > 0
+    || strlen($role_row->rol_location) > 0
+    || strlen($role_row->rol_cost) > 0
+    || strlen($role_row->rol_max_members) > 0)
     {
         echo "
         <br /><br />
@@ -800,7 +800,7 @@ else
             }
 
             //Zeitraum
-            if(strlen(mysqldate("d.m.y", $role_row->rol_start_date)) > 0)
+            if(strlen($role_row->rol_start_date) > 0)
             {
                 echo"<tr>
                     <td>Zeitraum:</td>
@@ -809,13 +809,12 @@ else
             }
 
             //Termin
-            if($role_row->rol_weekday > 0 || (  strcmp(mysqltime("h:i", $role_row->rol_start_time), "00:00") != 0)
-                && $role_row->rol_start_time != NULL )
+            if($role_row->rol_weekday > 0 || strlen($role_row->rol_start_time) > 0)
             {
                 echo"<tr>
                     <td>Termin: </td>
                     <td>". $arrDay[$role_row->rol_weekday-1];
-                        if(strcmp(mysqltime("h:i", $role_row->rol_start_time), "00:00") != 0)
+                        if(strlen($role_row->rol_start_time) > 0)
                         {
                             echo " von ". mysqltime("h:i", $role_row->rol_start_time). " bis ". mysqltime("h:i", $role_row->rol_end_time);
                         }

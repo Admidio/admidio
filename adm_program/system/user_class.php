@@ -113,14 +113,7 @@ class User
                 $this->phone      = $row->usr_phone;
                 $this->mobile     = $row->usr_mobile;
                 $this->fax        = $row->usr_fax;
-                if($row->usr_birthday == "0000-00-00")
-                {
-                    $this->birthday = "";
-                }
-                else
-                {
-                    $this->birthday = $row->usr_birthday;
-                }
+                $this->birthday   = $row->usr_birthday;
                 $this->gender         = $row->usr_gender;
                 $this->email          = $row->usr_email;
                 $this->homepage       = $row->usr_homepage;
@@ -160,18 +153,18 @@ class User
         $this->phone          = "";
         $this->mobile         = "";
         $this->fax            = "";
-        $this->birthday       = "";
+        $this->birthday       = NULL;
         $this->gender         = "";
         $this->email          = "";
         $this->homepage       = "";
         $this->login_name     = NULL;
         $this->password       = NULL;
-        $this->last_login     = "";
-        $this->actual_login   = "";
+        $this->last_login     = NULL;
+        $this->actual_login   = NULL;
         $this->number_login   = 0;
-        $this->date_invalid   = "";
+        $this->date_invalid   = NULL;
         $this->number_invalid = 0;
-        $this->last_change    = "";
+        $this->last_change    = NULL;
         $this->usr_id_change  = 0;
         $this->valid          = 1;
         $this->reg_org_shortname = "";

@@ -221,7 +221,7 @@ require("../../../adm_config/body_top.php");
 
                     echo "<div style=\"float: left; margin-top: 10px; width: 30%; text-align: left\">Geburtstag:</div>
                     <div style=\"margin-top: 10px; margin-left: 30%; text-align: left\">";
-                        if(strlen($user->birthday) > 0 && strcmp($user->birthday, "0000-00-00") != 0)
+                        if(strlen($user->birthday) > 0)
                         {
                             echo mysqldatetime('d.m.y', $user->birthday);
 

@@ -66,13 +66,20 @@ alter table %PRAEFIX%_guestbook_comments add constraint %PRAEFIX%_FK_GBC_USR_CHA
 
 -- Sessiontabelle bearbeiten
 ALTER TABLE %PRAEFIX%_sessions DROP COLUMN ses_longer_session;
-ALTER TABLE %PRAEFIX%_sessions ADD COLUMN ses_blob blob AFTER ses_ip_address;
+ALTER TABLE %PRAEFIX%_sessions ADD  COLUMN ses_blob blob AFTER ses_ip_address;
 
 -- Memberstabelle pflegen
 UPDATE %PRAEFIX%_members SET mem_end = NULL WHERE mem_end = '0000-00-00';
 
 -- Rollentabelle pflegen
 UPDATE %PRAEFIX%_roles SET rol_start_date = NULL WHERE rol_start_date = '0000-00-00';
-UPDATE %PRAEFIX%_roles SET rol_end_date = NULL WHERE rol_end_date = '0000-00-00';
+UPDATE %PRAEFIX%_roles SET rol_end_date   = NULL WHERE rol_end_date   = '0000-00-00';
 UPDATE %PRAEFIX%_roles SET rol_start_time = NULL WHERE rol_start_time = '00:00:00';
-UPDATE %PRAEFIX%_roles SET rol_end_time = NULL WHERE rol_end_time = '00:00:00';
+UPDATE %PRAEFIX%_roles SET rol_end_time   = NULL WHERE rol_end_time   = '00:00:00';
+
+-- Usertabelle pflegen
+UPDATE %PRAEFIX%_users SET usr_birthday     = NULL WHERE usr_birthday     = '0000-00-00';
+UPDATE %PRAEFIX%_users SET usr_last_login   = NULL WHERE usr_last_login   = '0000-00-00 00:00:00';
+UPDATE %PRAEFIX%_users SET usr_actual_login = NULL WHERE usr_actual_login = '0000-00-00 00:00:00';
+UPDATE %PRAEFIX%_users SET usr_date_invalid = NULL WHERE usr_date_invalid = '0000-00-00 00:00:00';
+UPDATE %PRAEFIX%_users SET usr_last_change  = NULL WHERE usr_last_change  = '0000-00-00 00:00:00';
