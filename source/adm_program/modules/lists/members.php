@@ -222,7 +222,7 @@ echo "
 
     // Dieses Array enthaelt alle IDs, die in den Orga-Einstellungen auftauchen
     ids = new Array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-                    'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'zahl', 'uml');
+                    'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'uml', 'zahl');
 
 
     // Die eigentliche Funktion: Schaltet die Einstellungsdialoge durch
@@ -397,27 +397,28 @@ echo"
                         $letter_merker++;
                         //Buchstabe fuer ID
                         $letter_string = chr($letter_merker);
+                        $letter_text = $letter_string;
                     }
 
                     //Falls Zahl
-                    if($letter_merker == 34)
+                    if($letter_merker == 35)
                     {
-                        $letter_merker = 35;
                         $letter_string = "zahl";
+                        $letter_text = "&#35;";
                     }
 
                     //Falls Umlaut
                     if($letter_merker ==191)
                     {
-                        $letter_merker = 191;
                         $letter_string = "uml";
+                        $letter_text = "&Auml;&Ouml;&Uuml;";
                     }
 
                     //Container
-                    echo"<div id=\"$letter_string\" name=\"$letter_string\" style=\"visibility: hidden; display: none; margin-top: 15px;\">";
+                    echo"<div id=\"$letter_string\" name=\"$letter_string\"  style=\"visibility: hidden; display: none; margin-top: 15px;\">";
 
                     //Ueberschrift
-                    echo "<h1>$letter_string</h1>";
+                    echo "<h1>$letter_text</h1>";
 
                     //Tabelle anlegen
                     echo"
@@ -513,8 +514,82 @@ echo"
 
 
             }//End For
-        }
 
+            //ggf noch leerer Container Umlaute
+            if(!in_array(191, $first_letter_array))
+            {
+                echo"<div id=\"uml\" name=\"uml\" style=\"visibility: hidden; display: none; margin-top: 15px;\"></div>";
+            }
+        }//Ende if >50
+
+
+        //fuer weniger als 50 Benutzer
+        else
+        {
+            //Tabelle anlegen
+            echo"
+            <table class=\"tableList\" cellpadding=\"3\" cellspacing=\"0\" style=\"width: 95%;\">
+                <tr>
+                    <th class=\"tableHeader\" style=\"text-align: center;\">Info</th>
+                    <th class=\"tableHeader\" style=\"text-align: center;\">Name</th>
+                    <th class=\"tableHeader\" style=\"text-align: center;\">Vorname</th>
+                    <th class=\"tableHeader\" style=\"text-align: center;\">Geburtsdatum</th>
+                    <th class=\"tableHeader\" style=\"text-align: center;\">Mitglied</th>
+                    <th class=\"tableHeader\" style=\"text-align: center;\">Leiter</th>
+                </tr>";
+
+            while($user = mysql_fetch_array($result_user))
+            {
+                 //Datensatz ausgeben
+                $user_text= $user['usr_first_name']."&nbsp;".$user['usr_last_name']."&nbsp;&nbsp;&nbsp;"
+                            .$user['usr_address']."&nbsp;&nbsp;&nbsp;"
+                            .$user['usr_zip_code']."&nbsp;".$user['usr_city']."&nbsp;&nbsp;&nbsp;"
+                            .$user['usr_phone'];
+                echo"
+                <tr>
+                    <td style=\"text-align: center;\">
+                        <img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/note.png\" alt=\"Userinformationen\" title=\"$user_text\">
+                    </td>
+                    <td style=\"text-align: left;\">". $user['usr_last_name']."</td>
+                    <td style=\"text-align: left;\">". $user['usr_first_name']."</td>
+
+                    <td style=\"text-align: center;\">";
+                        //Geburtstag nur ausgeben wenn bekannt
+                        if($user['usr_birthday']!='0000-00-00')
+                        {
+                            echo mysqldate("d.m.y", $user['usr_birthday']);
+                        }
+                    echo"</td>
+
+                    <td style=\"text-align: center;\">";
+                        //Haekchen setzen ob jemand Mitglied ist oder nicht
+                        if(in_array($user['usr_id'], $role_member))
+                        {
+                            echo"<input type=\"checkbox\" onclick=\"unmarkLeader(this)\" id=\"member_$user[0]\" name=\"member_$user[0]\" checked value=\"1\">";
+                        }
+                        else
+                        {
+                            echo"<input type=\"checkbox\" onclick=\"unmarkLeader(this)\" id=\"member_$user[0]\" name=\"member_$user[0]\" value=\"1\">";
+                        }
+                    echo"</td>
+
+                    <td style=\"text-align: center;\">";
+                        //Haekchen setzen ob jemand Leiter ist oder nicht
+                        if(in_array($user['usr_id'], $group_leaders))
+                        {
+                            echo"<input type=\"checkbox\" onclick=\"markMember(this)\" id=\"leader_$user[0]\" name=\"leader_$user[0]\" checked value=\"1\">";
+                        }
+                        else
+                        {
+                            echo"<input type=\"checkbox\" onclick=\"markMember(this)\" id=\"leader_$user[0]\" name=\"leader_$user[0]\" value=\"1\">";
+                        }
+                    echo"</td>
+                </tr>";
+
+            }
+
+            echo"</table>";
+        }
       //Buttons schliessen oder Speichern
         echo"<div style=\"margin: 8px;\">
             <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
@@ -527,11 +602,16 @@ echo"
         </div>
    </form></div>";//Ende Formular
 
-   echo"
-    <script type=\"text/javascript\">
-    <!--
-        toggleDiv('A');
-    -->
-    </script>";
+    //nur bei mehr als 50
+    if(mysql_num_rows($result_user)>=50)
+    {
+         echo"
+        <script type=\"text/javascript\">
+        <!--
+            toggleDiv('A');
+        -->
+        </script>";
+    }
+
     require("../../../adm_config/body_bottom.php");
 echo "</body></html>";
