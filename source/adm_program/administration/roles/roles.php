@@ -169,7 +169,8 @@ require("../../../adm_config/body_top.php");
                             echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/comment.png\"
                             alt=\"G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen\" title=\"G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen\">";
                         }
-                        if($row->rol_guestbook_comments == 1)
+                        // falls anonyme Gaestebuchkommentare erfassen werden duerfen, braucht man das Recht pro Rolle nicht mehr zu vergeben
+                        if($row->rol_guestbook_comments == 1 && $g_preferences['enable_gbook_comments4all'] == false)
                         {
                             echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/comments.png\"
                             alt=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\" title=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\">";
