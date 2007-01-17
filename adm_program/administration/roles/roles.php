@@ -204,9 +204,8 @@ require("../../../adm_config/body_top.php");
 
                         if($valid == true)
                         {
-                            echo "<a href=\"#\"><img src=\"$g_root_path/adm_program/images/add.png\" border=\"0\" alt=\"Mitglieder zuordnen\" title=\"Mitglieder zuordnen\"
-                                onclick=\"window.open('$g_root_path/adm_program/modules/lists/members.php?rol_id=$row->rol_id&amp;popup=1','Titel','width=570,height=550,left=310,top=100,scrollbars=yes,resizable=yes')\">
-                            </a>";
+                            echo "<a href=\"$g_root_path/adm_program/modules/lists/members.php?rol_id=$row->rol_id\"><img 
+                                src=\"$g_root_path/adm_program/images/add.png\" border=\"0\" alt=\"Mitglieder zuordnen\" title=\"Mitglieder zuordnen\"></a>";
                         }
                         else
                         {

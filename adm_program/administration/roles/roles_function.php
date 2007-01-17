@@ -446,13 +446,13 @@ elseif($_GET["mode"] == 2)
                             trim($_POST['location']), $_POST['max_members'], $_POST['cost'], $rol_id));
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
-			
-			// holt die Role ID des letzten Insert Statements
-			if($rol_id < 1)
-			{
-				$rol_id = mysql_insert_id();
-			}
-			
+            
+            // holt die Role ID des letzten Insert Statements
+            if($rol_id < 1)
+            {
+                $rol_id = mysql_insert_id();
+            }
+            
             //Reset des Rechtecache in der UserKlasse für den aendernen User
             $g_current_user->clearRights();
 
@@ -553,6 +553,7 @@ elseif($_GET["mode"] == 3)
     db_error($result);
 
     $err_code = "role_inactive";
+    $g_message->addVariableContent(utf8_encode($row[0]));
 }
 elseif($_GET["mode"] == 4)
 {
