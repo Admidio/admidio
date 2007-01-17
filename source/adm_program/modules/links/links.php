@@ -139,7 +139,7 @@ require("../../../adm_config/body_top.php");
                        WHERE L.lnk_org_id = '$g_current_organization->id'
                        AND C.cat_org_id = '$g_current_organization->id'
                        AND C.cat_type = 'LNK'
-                       ORDER BY C.cat_name, lnk_timestamp DESC
+                       ORDER BY C.cat_name, L.lnk_name, lnk_timestamp DESC
                        LIMIT {0}, 10 ";
 
             $sql1    = prepareSQL($sql1, array($_GET['start']));
@@ -159,13 +159,15 @@ require("../../../adm_config/body_top.php");
                       WHERE L.lnk_org_id = '$g_current_organization->id'
                       AND C.cat_org_id = '$g_current_organization->id'
                       AND C.cat_type = 'LNK' 
-                      AND C.cat_hidden = '0'";    
+                      AND C.cat_hidden = '0'
+                      ORDER BY L.lnk_name DESC";    
         } 
         else
         {   
             // Alle Kategorien anzeigen
             $sql    = "SELECT COUNT(*) FROM ". TBL_LINKS. "
-                      WHERE lnk_org_id = '$g_current_organization->id'";
+                      WHERE lnk_org_id = '$g_current_organization->id'
+                      ORDER BY lnk_name DESC";
         }
         
         $result = mysql_query($sql, $g_adm_con);
