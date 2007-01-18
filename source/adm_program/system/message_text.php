@@ -332,8 +332,8 @@ $message_text = array(
         "Sie haben eine ungültigen Datei aufgerufen !",
 
     "invalid_file_name" =>
-        "Du kannst die Datei <b>%VAR1%</b> nicht hochladen,
-        da der Dateiname ungültige Zeichen enthält.",
+        "Der ausgwählte Dateiname enthält ungültige Zeichen !<br><br>
+        Wähle bitte einen anderen Namen für die Datei aus.",
 
     "invalid_file_extension" =>
         "Du kannst keine PHP, HTML oder Perl Dateien hochladen.",
