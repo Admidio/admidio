@@ -97,7 +97,7 @@ if(isset($_SESSION['mylist_request']))
 {
     $form_values = $_SESSION['mylist_request'];
     unset($_SESSION['mylist_request']);
-    $rol_id = $form_values['role'];
+    $rol_id = $form_values['rol_id'];
     if(isset($form_values['former']) && $form_values['former'] == 1)
     {
         $active_member = 0;
