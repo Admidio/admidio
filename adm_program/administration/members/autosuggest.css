@@ -6,7 +6,7 @@ ul.autosuggest {
     padding:    0;
     text-align: left;
     overflow-y: auto;
-    font-size:  10px;
+    font-size:  10pt;
 }
 
 ul.autosuggest li a:link,
