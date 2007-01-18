@@ -99,11 +99,28 @@ if($new_user == 0)
     // jetzt noch schauen, ob User ueberhaupt Mitglied in der Gliedgemeinschaft ist
     if(isMember($usr_id) == false)
     {
-        // falls doch eine Registrierung vorliegt, dann darf Profil angezeigt werden
-        if($user->valid != 0 || $user->reg_org_shortname != $g_organization)
+        // pruefen, ob der User noch in anderen Organisationen aktiv ist
+        $sql    = "SELECT *
+                     FROM ". TBL_ROLES. ", ". TBL_MEMBERS. "
+                    WHERE rol_org_shortname <> '$g_organization'
+                      AND rol_valid          = 1
+                      AND mem_rol_id         = rol_id
+                      AND mem_valid          = 1
+                      AND mem_usr_id         = $usr_id ";
+        $result      = mysql_query($sql, $g_adm_con);
+        db_error($result);
+        $b_other_orga = false;
+
+        if(mysql_num_rows($result) > 0)
         {
-            $g_message->show("norights");
+            // User, der woanders noch aktiv ist, darf in dieser Orga nicht bearbeitet werden
+            // falls doch eine Registrierung vorliegt, dann darf Profil angezeigt werden
+            if($user->valid != 0 || $user->reg_org_shortname != $g_organization)
+            {
+                $g_message->show("norights");
+            }
         }
+    
     }
 }
 
