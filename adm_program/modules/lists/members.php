@@ -195,7 +195,15 @@ echo "
     <meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\">
     <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
 
-    <script type=\"text/javascript\"><!--
+    <style type=\"text/css\">
+        .smallText {
+            font-size: 8pt;
+            font-weight: normal;
+			text-align: center;
+        }
+    </style>
+
+	<script type=\"text/javascript\"><!--
         function markMember(element)
         {
             if(element.checked == true)
@@ -605,7 +613,11 @@ echo"
     //nur bei mehr als 50
     if(mysql_num_rows($result_user)>=50)
     {
-         echo"
+       echo"
+ 			<div class=\"smallText\">
+                        Das Zwischenspeichern vor dem Buchstabenwechsel ist nicht n&ouml;tig&#33;&#33;&#33;
+             </div>";
+		echo"
         <script type=\"text/javascript\">
         <!--
             toggleDiv('A');
