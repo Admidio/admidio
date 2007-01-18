@@ -458,36 +458,8 @@ require("../../../adm_config/body_top.php");
                             <td align=\"left\">&nbsp;$row->usr_login_name</td>
                             <td align=\"center\">&nbsp;". mysqldatetime("d.m.y h:i" , $row->usr_last_change). "</td>
                             <td align=\"center\">";
-                                if($is_member)
-                                {
-                                    if(hasRole("Webmaster")
-                                    && strlen($row->usr_login_name) > 0
-                                    && strlen($row->usr_email) > 0
-                                    && $g_preferences['enable_system_mails'] == 1)
-                                    {
-                                        // Link um E-Mail mit neuem Passwort zu zuschicken
-                                        // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
-                                        echo "<a href=\"$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->usr_id&mode=5\"><img
-                                            src=\"$g_root_path/adm_program/images/key.png\" border=\"0\" alt=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\"
-                                            title=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\"></a>&nbsp;";
-                                    }
-                                    else
-                                    {
-                                        echo "<img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">&nbsp;";
-                                    }
-
-                                    // nur Mitglieder der eigenen Organisation editieren
-                                    echo "<a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$row->usr_id\"><img
-                                        src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Benutzerdaten bearbeiten\" title=\"Benutzerdaten bearbeiten\"></a>&nbsp;";
-                                }
-                                else
-                                {
-                                    echo "<img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">
-                                    <img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">&nbsp;";
-                                }
-
                                 // pruefen, ob der User noch in anderen Organisationen aktiv ist
-                                $sql    = "SELECT COUNT(*)
+                                $sql    = "SELECT *
                                              FROM ". TBL_ROLES. ", ". TBL_MEMBERS. "
                                             WHERE rol_org_shortname <> '$g_organization'
                                               AND rol_valid          = 1
@@ -496,14 +468,54 @@ require("../../../adm_config/body_top.php");
                                               AND mem_usr_id         = $row->usr_id ";
                                 $result      = mysql_query($sql, $g_adm_con);
                                 db_error($result);
-                                $row_count_2 = mysql_fetch_array($result);
+                                $b_other_orga = false;
+                                
+                                if(mysql_num_rows($result) > 0)
+                                {
+                                    $b_other_orga = true;
+                                }
+                                                                
+                                // Link um E-Mail mit neuem Passwort zu zuschicken
+                                // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
+                                if($is_member
+                                && hasRole("Webmaster")
+                                && strlen($row->usr_login_name) > 0
+                                && strlen($row->usr_email) > 0
+                                && $g_preferences['enable_system_mails'] == 1)
+                                {
+                                    echo "<a href=\"$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->usr_id&mode=5\"><img
+                                        src=\"$g_root_path/adm_program/images/key.png\" border=\"0\" alt=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\"
+                                        title=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\"></a>&nbsp;";
+                                }
+                                else
+                                {
+                                    echo "<img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">&nbsp;";
+                                }
+
+                                // Link um User zu editieren
+                                // es duerfen keine Nicht-Mitglieder editiert werden, die Mitglied in einer anderen Orga sind
+                                if($is_member || $b_other_orga == false)
+                                {
+                                    echo "<a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$row->usr_id\"><img
+                                        src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Benutzerdaten bearbeiten\" title=\"Benutzerdaten bearbeiten\"></a>&nbsp;";
+                                }
+                                else
+                                {
+                                    echo "<img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">";
+                                }
+
 
                                 // wenn der User nicht mehr Mitglied der aktuellen Orga, aber noch Mitglied einer anderen Orga ist,
                                 // dann darf er nicht aus der DB geloescht werden
-                                if($row_count_2[0] == 0 || $is_member == true)
+                                if(($b_other_orga == false || $is_member == true)
+                                && $row->usr_id != $g_current_user->id)
                                 {
                                     echo "<a href=\"$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->usr_id&mode=6\"><img
                                         src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Benutzer entfernen\" title=\"Benutzer entfernen\"></a>";
+                                }
+                                else
+                                {
+                                    echo "<img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">";
                                 }
                             echo "</td>
                         </tr>";

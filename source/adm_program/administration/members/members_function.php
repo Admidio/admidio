@@ -149,7 +149,9 @@ elseif($_GET["mode"] == 2)
     }
 
     // User muss zur aktuellen Orga dazugehoeren
-    if($this_orga == false)
+    // kein Suizid ermoeglichen
+    if($this_orga == false
+    || $g_current_user->id == $_GET['user_id'])
     {
         $g_message->show("norights");
     }
@@ -187,7 +189,9 @@ elseif($_GET["mode"] == 3)
     }
     
     // User darf in keiner anderen Orga aktiv sein
-    if($other_orga > 0)
+    // kein Suizid ermoeglichen
+    if($other_orga > 0
+    || $g_current_user->id == $_GET['user_id'])
     {
         $g_message->show("norights");
     }

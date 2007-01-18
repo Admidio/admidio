@@ -105,7 +105,23 @@ if($usr_id > 0)
         // keine Webanmeldung, dann schauen, ob User überhaupt Mitglied in der Gliedgemeinschaft ist
         if(isMember($usr_id) == false)
         {
-            $g_message->show("norolle");
+            // pruefen, ob der User noch in anderen Organisationen aktiv ist
+            $sql    = "SELECT *
+                         FROM ". TBL_ROLES. ", ". TBL_MEMBERS. "
+                        WHERE rol_org_shortname <> '$g_organization'
+                          AND rol_valid          = 1
+                          AND mem_rol_id         = rol_id
+                          AND mem_valid          = 1
+                          AND mem_usr_id         = $usr_id ";
+            $result      = mysql_query($sql, $g_adm_con);
+            db_error($result);
+            $b_other_orga = false;
+
+            if(mysql_num_rows($result) > 0)
+            {
+                // User, der woanders noch aktiv ist, darf in dieser Orga nicht bearbeitet werden
+                $g_message->show("norights");
+            }
         }
     }
 }
