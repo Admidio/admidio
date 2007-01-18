@@ -341,11 +341,24 @@ require("../../../adm_config/body_top.php");
             // Nun alle Buchstaben mit evtl. vorhandenen Links im Buchstabenmenue anzeigen
             for($i = 0; $i < 26;$i++)
             {
+                // pruefen, ob es Mitglieder zum Buchstaben gibt, unter Beruecksichtigung deutscher Sonderzeichen
+                if( $letter_menu == $letter_row[0]
+                || ($letter_menu == "A" && utf8_encode($letter_row[0]) == "Ä")
+                || ($letter_menu == "O" && utf8_encode($letter_row[0]) == "Ö")
+                || ($letter_menu == "U" && utf8_encode($letter_row[0]) == "Ü") )
+                {
+                    $letter_found = true;
+                }
+                else
+                {
+                    $letter_found = false;
+                }
+            
                 if($letter_menu == substr($req_letter, 0, 1))
                 {
                     echo "<b>$letter_menu</b>";
                 }
-                elseif($letter_menu == $letter_row[0])
+                elseif($letter_found == true)
                 {
                     echo "<a href=\"members.php?members=$req_members&letter=$letter_menu\">$letter_menu</a>";
                 }
@@ -357,7 +370,7 @@ require("../../../adm_config/body_top.php");
                 echo "&nbsp;&nbsp;";
                 
                 // naechsten Buchstaben anwaehlen
-                if($letter_menu == $letter_row[0])
+                if($letter_found == true)
                 {
                     $letter_row = mysql_fetch_array($result);
                 }
