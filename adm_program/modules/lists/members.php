@@ -615,7 +615,7 @@ echo"
     {
        echo"
  			<div class=\"smallText\">
-                        Das Zwischenspeichern vor dem Buchstabenwechsel ist nicht n&ouml;tig&#33;&#33;&#33;
+                        Das Zwischenspeichern vor dem Buchstabenwechsel ist nicht notwendig&#33;&#33;&#33;
              </div>";
 		echo"
         <script type=\"text/javascript\">
