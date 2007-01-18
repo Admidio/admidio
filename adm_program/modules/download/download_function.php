@@ -109,7 +109,7 @@ if (isset($_GET['file']))
     {
         if($ret_code == -2)
         {
-            $g_message->show("invalid_file_name",$new_name);
+            $g_message->show("invalid_file_name");
         }
         elseif($ret_code == -3)
         {
@@ -237,7 +237,7 @@ if($req_mode == 1)
         }
         elseif($ret_code == -2)
         {
-            $g_message->show("invalid_file_name",$file_name);
+            $g_message->show("invalid_file_name");
         }
         elseif($ret_code == -3)
         {
@@ -309,7 +309,7 @@ elseif($req_mode == 3)
             }
             elseif($ret == -2)
             {
-                $g_message->show("invalid_file_name",$file_name);
+                $g_message->show("invalid_file_name");
             }
             elseif($ret == -3)
             {
@@ -368,7 +368,7 @@ elseif($req_mode == 4)
             }
             elseif($ret_code == -2)
             {
-                $g_message->show("invalid_file_name", $_POST['new_name']);
+                $g_message->show("invalid_file_name");
             }
             elseif($ret_code == -3)
             {
@@ -448,7 +448,7 @@ elseif($req_mode == 4)
             {
                 if($ret_code  == -2)
                 {
-                    $g_message->show("invalid_file_name",$new_name);
+                    $g_message->show("invalid_file_name");
                 }
                 elseif($ret_code  == -3)
                 {
