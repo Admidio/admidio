@@ -30,29 +30,28 @@ require("search_parser_class.php");
 
 $_SESSION['mylist_request'] = $_REQUEST;
 
-$err_text    = "";
+$req_rol_id  = 0;
 $sql_select  = "";
 $sql_join    = "";
 $sql_where   = "";
 $sql_orderby = "";
 
-if(strlen($_POST["column1"]) == 0)
+// Uebergabevariablen pruefen
+
+if(isset($_POST["column1"]) == false || strlen($_POST["column1"]) == 0)
 {
-    $err_text = "Feld 1";
+    $g_message->show("feld", "Feld 1");
 }
 
-if(strlen($_POST["rol_id"]) == 0 || is_numeric($_POST["rol_id"]) == false)
+if(isset($_POST["rol_id"]) == false || $_POST["rol_id"] == 0 || is_numeric($_POST["rol_id"]) == false)
 {
-    $err_text = "Rolle";
+    $g_message->show("feld", "Rolle");
 }
-
-if(strlen($err_text) != 0)
+else
 {
-    $g_message->show("feld", $err_text);
+    // als erstes wird die Rolle uebergeben
+    $req_rol_id = $_POST["rol_id"];
 }
-
-// als erstes wird die Rolle uebergeben
-$rol_id = $_POST["rol_id"];
 
 // Ehemalige
 if(!array_key_exists("former", $_POST))
@@ -169,7 +168,7 @@ $main_sql = "SELECT usr_id, $sql_select
                FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                     $sql_join
               WHERE rol_org_shortname = '$g_organization'
-                AND rol_id     = $rol_id
+                AND rol_id     = $req_rol_id
                 AND rol_valid  = 1
                 AND mem_rol_id = rol_id
                 AND mem_valid  = $act_members
@@ -186,7 +185,7 @@ if(strlen($sql_orderby) > 0)
 $_SESSION['mylist_sql'] = $main_sql;
 
 // weiterleiten zur allgemeinen Listeseite
-$location = "Location: $g_root_path/adm_program/modules/lists/lists_show.php?type=mylist&mode=html&rol_id=$rol_id";
+$location = "Location: $g_root_path/adm_program/modules/lists/lists_show.php?type=mylist&mode=html&rol_id=$req_rol_id";
 header($location);
 exit();
 
