@@ -33,11 +33,13 @@
  *****************************************************************************/
 
 // Include von common 
-$g_plugin_path = substr(__FILE__, 0, strpos(__FILE__, "adm_plugins")-1);
-require_once($g_plugin_path. "/adm_program/system/common.php");
+define('ADM_PATH', substr(__FILE__, 0, strpos(__FILE__, "adm_plugins")-1));
+require_once(ADM_PATH. "/adm_program/system/common.php");
 
 // Konfigurationsvariablen pruefen
-if(isset($_GET['plg_dates_count']) == true)
+// dabei muss beachtet werden, dass diese evtl. per GET uebergeben oder 
+// innerhalb des aufrufenden Scripts einfach nur gesetzt werden
+if(isset($_GET['plg_dates_count']) && is_numeric($_GET['plg_dates_count']))
 {
     $plg_dates_count = $_GET['plg_dates_count'];
 }
@@ -46,7 +48,7 @@ if(isset($plg_dates_count) == false || is_numeric($plg_dates_count) == false)
     $plg_dates_count = 2;
 }
 
-if(isset($_GET['plg_max_char_per_word']) == true)
+if(isset($_GET['plg_max_char_per_word']) && is_numeric($_GET['plg_max_char_per_word']))
 {
     $plg_max_char_per_word = $_GET['plg_max_char_per_word'];
 }
@@ -55,9 +57,9 @@ if(isset($plg_max_char_per_word) == false || is_numeric($plg_max_char_per_word) 
     $plg_max_char_per_word = 0;
 }
 
-if(isset($_GET['plg_link_class']) == true)
+if(isset($_GET['plg_link_class']))
 {
-    $plg_link_class = $_GET['plg_link_class'];
+    $plg_link_class = strStripTags($_GET['plg_link_class']);
 }
 if(isset($plg_link_class) == true)
 {
@@ -79,9 +81,9 @@ if($g_current_organization->org_id_parent > 0)
     $sql = $sql. " OR org_id = $g_current_organization->org_id_parent ";
 }
 $result = mysql_query($sql, $g_adm_con);
-db_error($result, true);
+db_error($result);
 
-$organizations = "";
+$organizations = null;
 $i             = 0;
 
 while($row = mysql_fetch_object($result))
@@ -94,16 +96,28 @@ while($row = mysql_fetch_object($result))
     $i++;
 }
 
-$sql    = "SELECT * FROM ". TBL_DATES. "
-            WHERE (  dat_org_shortname = '$g_organization'
-                  OR (   dat_global   = 1
-                     AND dat_org_shortname IN ($organizations) ))
-              AND (  dat_begin >= '$act_date'
-                  OR dat_end   >= '$act_date' )
-            ORDER BY dat_begin ASC
-            LIMIT $plg_dates_count ";
+if(strlen($organizations) > 0)
+{
+    $sql    = "SELECT * FROM ". TBL_DATES. "
+                WHERE (  dat_org_shortname = '$g_organization'
+                      OR (   dat_global   = 1
+                         AND dat_org_shortname IN ($organizations) ))
+                  AND (  dat_begin >= '$act_date'
+                      OR dat_end   >= '$act_date' )
+                ORDER BY dat_begin ASC
+                LIMIT $plg_dates_count ";
+}
+else
+{
+    $sql    = "SELECT * FROM ". TBL_DATES. "
+                WHERE dat_org_shortname = '$g_organization'
+                  AND (  dat_begin >= '$act_date'
+                      OR dat_end   >= '$act_date' )
+                ORDER BY dat_begin ASC
+                LIMIT $plg_dates_count ";
+}
 $result = mysql_query($sql, $g_adm_con);
-db_error($result, true);
+db_error($result);
 
 while($row = mysql_fetch_object($result))
 {

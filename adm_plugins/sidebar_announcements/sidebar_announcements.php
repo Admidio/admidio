@@ -34,11 +34,13 @@
  *****************************************************************************/
 
 // Include von common 
-$g_plugin_path = substr(__FILE__, 0, strpos(__FILE__, "adm_plugins")-1);
-require_once($g_plugin_path. "/adm_program/system/common.php");
+define('ADM_PATH', substr(__FILE__, 0, strpos(__FILE__, "adm_plugins")-1));
+require_once(ADM_PATH. "/adm_program/system/common.php");
 
 // Konfigurationsvariablen pruefen
-if(isset($_GET['plg_announcements_count']) == true)
+// dabei muss beachtet werden, dass diese evtl. per GET uebergeben oder 
+// innerhalb des aufrufenden Scripts einfach nur gesetzt werden
+if(isset($_GET['plg_announcements_count']) && is_numeric($_GET['plg_announcements_count']))
 {
     $plg_announcements_count = $_GET['plg_announcements_count'];
 }
@@ -47,7 +49,7 @@ if(isset($plg_announcements_count) == false || is_numeric($plg_announcements_cou
     $plg_announcements_count = 2;
 }
 
-if(isset($_GET['plg_max_char_per_word']) == true)
+if(isset($_GET['plg_max_char_per_word']) && is_numeric($_GET['plg_max_char_per_word']))
 {
     $plg_max_char_per_word = $_GET['plg_max_char_per_word'];
 }
@@ -56,9 +58,9 @@ if(isset($plg_max_char_per_word) == false || is_numeric($plg_max_char_per_word) 
     $plg_max_char_per_word = 0;
 }
 
-if(isset($_GET['plg_link_class']) == true)
+if(isset($_GET['plg_link_class']))
 {
-    $plg_link_class = $_GET['plg_link_class'];
+    $plg_link_class = strStripTags($_GET['plg_link_class']);
 }
 if(isset($plg_link_class) == true)
 {
@@ -69,9 +71,9 @@ else
     $plg_link_class = " ";
 }
 
-if(isset($_GET['plg_headline']) == true)
+if(isset($_GET['plg_headline']))
 {
-    $plg_headline = $_GET['plg_headline'];
+    $plg_headline = strStripTags($_GET['plg_headline']);
 }
 if(isset($plg_headline) == true)
 {
@@ -93,9 +95,9 @@ if($g_current_organization->org_id_parent > 0)
     $sql = $sql. " OR org_id = $g_current_organization->org_id_parent ";
 }
 $result = mysql_query($sql, $g_adm_con);
-db_error($result, true);
+db_error($result);
 
-$organizations = "";
+$organizations = null;
 $i             = 0;
 
 while($row = mysql_fetch_object($result))
@@ -108,14 +110,24 @@ while($row = mysql_fetch_object($result))
     $i++;
 }
 
-$sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
-            WHERE (  ann_org_shortname = '$g_organization'
-                  OR (   ann_global   = 1
-                     AND ann_org_shortname IN ($organizations) ))
-            ORDER BY ann_timestamp DESC
-            LIMIT $plg_announcements_count ";
+if(strlen($organizations) > 0)
+{
+    $sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
+                WHERE (  ann_org_shortname = '$g_organization'
+                      OR (   ann_global   = 1
+                         AND ann_org_shortname IN ($organizations) ))
+                ORDER BY ann_timestamp DESC
+                LIMIT $plg_announcements_count ";
+}
+else
+{
+    $sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
+                WHERE ann_org_shortname = '$g_organization'
+                ORDER BY ann_timestamp DESC
+                LIMIT $plg_announcements_count ";
+}
 $result = mysql_query($sql, $g_adm_con);
-db_error($result, true);
+db_error($result);
 
 while($row = mysql_fetch_object($result))
 {
