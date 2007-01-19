@@ -35,40 +35,7 @@
 // Include von common 
 define('ADM_PATH', substr(__FILE__, 0, strpos(__FILE__, "adm_plugins")-1));
 require_once(ADM_PATH. "/adm_program/system/common.php");
-
-// Konfigurationsvariablen pruefen
-// dabei muss beachtet werden, dass diese evtl. per GET uebergeben oder 
-// innerhalb des aufrufenden Scripts einfach nur gesetzt werden
-if(isset($_GET['plg_dates_count']) && is_numeric($_GET['plg_dates_count']))
-{
-    $plg_dates_count = $_GET['plg_dates_count'];
-}
-if(isset($plg_dates_count) == false || is_numeric($plg_dates_count) == false)
-{
-    $plg_dates_count = 2;
-}
-
-if(isset($_GET['plg_max_char_per_word']) && is_numeric($_GET['plg_max_char_per_word']))
-{
-    $plg_max_char_per_word = $_GET['plg_max_char_per_word'];
-}
-if(isset($plg_max_char_per_word) == false || is_numeric($plg_max_char_per_word) == false)
-{
-    $plg_max_char_per_word = 0;
-}
-
-if(isset($_GET['plg_link_class']))
-{
-    $plg_link_class = strStripTags($_GET['plg_link_class']);
-}
-if(isset($plg_link_class) == true)
-{
-    $plg_link_class = strStripTags($plg_link_class);
-}
-else
-{
-    $plg_link_class = " ";
-}
+require_once(ADM_PATH. "/adm_plugins/sidebar_dates/config.php");
  
 $act_date = date("Y.m.d 00:00:00", time());
 mysql_select_db($g_adm_db, $g_adm_con );
@@ -105,7 +72,7 @@ if(strlen($organizations) > 0)
                   AND (  dat_begin >= '$act_date'
                       OR dat_end   >= '$act_date' )
                 ORDER BY dat_begin ASC
-                LIMIT $plg_dates_count ";
+                LIMIT ". PLG_DATES_COUNT;
 }
 else
 {
@@ -114,7 +81,7 @@ else
                   AND (  dat_begin >= '$act_date'
                       OR dat_end   >= '$act_date' )
                 ORDER BY dat_begin ASC
-                LIMIT $plg_dates_count ";
+                LIMIT ". PLG_DATES_COUNT;
 }
 $result = mysql_query($sql, $g_adm_con);
 db_error($result);
@@ -128,9 +95,9 @@ while($row = mysql_fetch_object($result))
         echo mysqldatetime("h:i", $row->dat_begin);
     }
 
-    echo "<br /><a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/modules/dates/dates.php?id=$row->dat_id\">";
+    echo "<br /><a class=\"". PLG_LINK_CLASS. "\" href=\"$g_root_path/adm_program/modules/dates/dates.php?id=$row->dat_id\">";
 
-    if($plg_max_char_per_word > 0)
+    if(PLG_MAX_CHAR_PER_WORD > 0)
     {
         $new_headline = "";
         unset($words);
@@ -140,10 +107,10 @@ while($row = mysql_fetch_object($result))
         
         for($i = 0; $i < count($words); $i++)
         {
-            if(strlen($words[$i]) > $plg_max_char_per_word)
+            if(strlen($words[$i]) > PLG_MAX_CHAR_PER_WORD)
             {
-                $new_headline = "$new_headline ". substr($row->dat_headline, 0, $plg_max_char_per_word). "-<br />". 
-                                substr($row->dat_headline, $plg_max_char_per_word);
+                $new_headline = "$new_headline ". substr($row->dat_headline, 0, PLG_MAX_CHAR_PER_WORD). "-<br />". 
+                                substr($row->dat_headline, PLG_MAX_CHAR_PER_WORD);
             }
             else
             {
@@ -158,5 +125,5 @@ while($row = mysql_fetch_object($result))
     }
 }
 
-echo "<a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/modules/dates/dates.php\">Alle Termine</a>";
+echo "<a class=\"". PLG_LINK_CLASS. "\" href=\"$g_root_path/adm_program/modules/dates/dates.php\">Alle Termine</a>";
 ?>
