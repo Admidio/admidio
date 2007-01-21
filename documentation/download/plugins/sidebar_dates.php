@@ -15,7 +15,7 @@
 
 
     <p>Bitte beachten Sie bei der <a href="index.php?help/plugins.php">Installation und Einrichtung des Plugins</a> 
-        unsere Hilfe. Dort wird Ihnen auch erkl&auml;rt, wie Sie die Parameter einbauen k&ouml;nnen.</p>
+        unsere Hilfe. Dort wird Ihnen erkl&auml;rt, wie Sie Plugins in Ihre Seite einbauen k&ouml;nnen.</p>
         
     <h2>Download</h2>    
     
@@ -47,27 +47,29 @@
     </div>    
     
     
-    <h2>Parameter</h2>
+    <h2>Konfiguration</h2>
 
+    <p>&Uuml;ber die beigef&uuml;gte Plugin-Datei <b>config.php</b> k&ouml;nnen Sie das Plugin anpassen. Folgende Einstellungen stehen Ihnen zur Verf&uuml;gung:</p>
+    
     <table class="parameter">
         <tr>
-            <th class="parameter">Parameter</th>
+            <th class="parameter">Einstellung</th>
             <th class="parameter">Wert</th>
             <th class="parameter">Beschreibung</th>
         </tr>
         <tr>
-            <td class="parameter"><b>plg_dates_count</b></td>
+            <td class="parameter"><b>PLG_DATES_COUNT</b></td>
             <td class="parameter"><i>Anzahl Termine</i></td>
             <td class="parameter">Anzahl der Termine, die angezeigt werden sollen (Default = 2)</td>
         </tr>
         <tr>
-            <td class="parameter"><b>plg_link_class</b></td>
+            <td class="parameter"><b>PLG_LINK_CLASS</b></td>
             <td class="parameter"><i>CSS-Klasse</i></td>
             <td class="parameter">Name der Klasse fuer Links, falls Links anders als &uuml;blich 
                 dargestellt werden sollen</td>
         </tr>
         <tr>
-            <td class="parameter"><b>plg_max_char_per_word</b></td>
+            <td class="parameter"><b>PLG_MAX_CHAR_PER_WORD</b></td>
             <td class="parameter"><i>Anzahl Zeichen</i></td>
             <td class="parameter">Maximale Anzahl von Zeichen in einem Wort, 
                 bevor ein Zeilenumbruch kommt (Default = deaktiviert)</td>

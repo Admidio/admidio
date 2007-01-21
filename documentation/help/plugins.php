@@ -21,7 +21,7 @@
     Php-Seite einbinden.</p>
     
     <p>Falls Sie das Plugin nun in eine reine Html-Seite einbinden wollen, sollten Sie die Dateierweiterung
-    der Seite zuerst von <i>html</i> in <i>php</i> umbenennen. Nun k&ouml;nnen wir das Modul mit Hilfe von Php
+    der Seite zuerst von <i>html</i> in <i>php</i> umbenennen. Nun k&ouml;nnen Sie das Modul mit Hilfe von Php
     in Ihre ehemals reine Html-Seite integrieren. F&uuml;gen Sie nun folgenden Abschnitt im Html-Code an der Stelle 
     ein, an der die Ausgabe des Plugins dargestellt werden soll und ersetzen Sie den Link zum Plugin durch Ihre
     individuellen Daten:</p>
@@ -31,17 +31,14 @@
     sidebar_dates/sidebar_dates.php</i>");<br>
     ?&gt;</p>
     
-    <p>Kann man das Plugin &uuml;ber Variablen konfigurieren, so sieht der 
-    <a href="http://tut.php-q.net/get.html#u2" target="_blank">Aufruf mit Variablen</a> in etwa so aus:</p>
-
-    <p class="code">&lt;?php<br>
-    include("<i>http://www.meine-domain.de/admidio/adm_plugins/
-    sidebar_dates/sidebar_dates.php<b>?plg_dates_count=3</b></i>");<br>
-    ?&gt;</p>
-
     <p>Innerhalb von Php-Code ist nat&uuml;rlich nur der Include-Aufruf n&ouml;tig.
     <p class="code">include("<i>http://www.meine-domain.de/admidio/adm_plugins/
-    sidebar_dates/sidebar_dates.php?plg_dates_count=3</i>");</p>
+    sidebar_dates/sidebar_dates.php</i>");</p>
+    
+    <p>Konfigurieren k&ouml;nnen Sie die meisten Plugins &uuml;ber eine <b>config.php</b> Datei, die sich im selben Ordner
+    wie das Plugin befindet. Hier stehen Ihnen einige Variablen mit Default-Werten zur Verf&uuml;gung. Diese k&ouml;nnen
+    Sie Ihren Bed&uuml;rfnissen anpassen. Bei einem Update des Plugins brauchen und sollen Sie diese Datei nicht 
+    &uuml;berschreiben.</p>
     
     <p>Ein Beispiel f&uuml;r eine Integration von mehreren Plugins in einer Seitenleiste sehen Sie auf diesem 
     Screenshot im hervorgehobenen Bereich:</p>
