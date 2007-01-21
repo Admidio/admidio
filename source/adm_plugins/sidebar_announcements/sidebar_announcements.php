@@ -8,14 +8,6 @@
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  *
- * Konfigurationsvariablen:
- *
- * plg_announcements_count : Anzahl der Ankuendigungen, die angezeigt werden sollen (Default = 2)
- * plg_max_char_per_word :   Maximale Anzahl von Zeichen in einem Wort, 
- *                           bevor ein Zeilenumbruch kommt (Default = deaktiviert) 
- * plg_headline :    Wahlweise kann hier ein anderer Titel fuer die Ankuendigungen angegeben werden
- * plg_link_class  : Name der Klasse fuer Links
- *
  ******************************************************************************
  *
  * This program is free software; you can redistribute it and/or
@@ -34,11 +26,31 @@
  *****************************************************************************/
 
 // Include von common 
-define('ADM_PATH', substr(__FILE__, 0, strpos(__FILE__, "adm_plugins")-1));
-require_once(ADM_PATH. "/adm_program/system/common.php");
-require_once(ADM_PATH. "/adm_plugins/sidebar_announcements/config.php");
+define('PLUGIN_PATH', substr(__FILE__, 0, strpos(__FILE__, "sidebar_announcements.php")-1));
+require_once(PLUGIN_PATH. "/../../adm_program/system/common.php");
+require_once(PLUGIN_PATH. "/config.php");
+
+// pruefen, ob alle Einstellungen in config.php gesetzt wurden
+// falls nicht, hier noch mal die Default-Werte setzen
+if(!defined('PLG_DATES_COUNT'))
+{
+    define('PLG_DATES_COUNT', 2);
+}
+if(!defined('PLG_LINK_CLASS'))
+{
+    define('PLG_LINK_CLASS', '');
+}
+if(!defined('PLG_MAX_CHAR_PER_WORD'))
+{
+    define('PLG_MAX_CHAR_PER_WORD', 0);
+}
+if(!defined('PLG_HEADLINE'))
+{
+    define('PLG_HEADLINE', 'Ankündigungen');
+}
 
 $act_date = date("Y.m.d 00:00:00", time());
+// DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
 mysql_select_db($g_adm_db, $g_adm_con );
 
 // alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist

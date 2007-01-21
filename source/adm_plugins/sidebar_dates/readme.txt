@@ -20,25 +20,28 @@ Admidio (http://www.admidio.org) und kann nicht ohne diese benutzt werden.
 
  2. Installation
 -------------------------------------------------------------------------
-Beachten Sie bitte für eine fehlerfreie Installation unsere Onlinehilfe !
+Beachten Sie bitte fÃ¼r eine fehlerfreie Installation unsere Onlinehilfe !
 http://www.admidio.de/index.php?help/plugins.php
 
-Dort wird Ihnen Schritt für Schritt die Installation und Einrichtung
-eines Plugins erklärt.
+Dort wird Ihnen Schritt fÃ¼r Schritt die Installation und Einrichtung
+eines Plugins erklÃ¤rt.
 
  3. Update
 -------------------------------------------------------------------------
-Ersetzen Sie die bereits vorhandenen Dateien des Plugins durch die neuen 
-Dateien.
+Ersetzen Sie die alle Dateien (bis auf die Datei config.php !!!) vorhandenen 
+Dateien des Plugins durch die neuen Dateien.
+
+Falls es mit der neuen Version neue Einstellungen gibt, die Sie gerne verÃ¤ndern
+mÃ¶chten, so mÃ¼ssen Sie diese noch in Ihre vorhandene config.php eintragen.
 
  4. Bugs
 -------------------------------------------------------------------------
 Haben Sie einen Fehler in unserer Software gefunden und ausgeschlossen, 
-dass dieser nur in Ihrer Installation auftritt, können Sie diesen Fehler
+dass dieser nur in Ihrer Installation auftritt, kÃ¶nnen Sie diesen Fehler
 direkt in unserer Bug-Verwaltung auf Sourceforge melden.
 http://sourceforge.net/projects/admidio
 
-Sie können den Fehler aber auch erst einmal in unserem Forum melden.
+Sie kÃ¶nnen den Fehler aber auch erst einmal in unserem Forum melden.
 http://forum.admidio.org
 
  5. Lizenz
@@ -50,7 +53,7 @@ sollten Sie unbedingt die gpl-de.html durchlesen.
  6. Copyright
 -------------------------------------------------------------------------
 Es ist nicht gestattet den Copyrighthinweis im Quellcode zu entfernen.
-Für weitere Informationen sollten Sie die gpl-de.html durchlesen.
+FÃ¼r weitere Informationen sollten Sie die gpl-de.html durchlesen.
 
 -------------------------------------------------------------------------
        	      Copyright (c) 2004 - 2007 The Admidio Team
