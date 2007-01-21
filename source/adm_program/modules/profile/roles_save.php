@@ -88,6 +88,7 @@ $key   = key($_POST);
 $parentRoles = array();
 
 
+
 // Ergebnisse durchlaufen und kontrollieren ob maximale Teilnehmerzahl ueberschritten wuerde
 while($row = mysql_fetch_object($result_rolle))
 {
@@ -214,13 +215,11 @@ while($row = mysql_fetch_object($result_rolle))
         $result = mysql_query($sql, $g_adm_con);
         db_error($result);
 
-        // find the parent roles
-        if($function == 1 && $user_found < 1)
+		// find the parent roles
+        if($function == 1)
         {
-            //$roleDepSrc = new RoleDependency($g_adm_con);
             $tmpRoles = RoleDependency::getParentRoles($g_adm_con,$row->rol_id);
-
-            foreach($tmpRoles as $tmpRole)
+			foreach($tmpRoles as $tmpRole)
             {
                 if(!in_array($tmpRole,$parentRoles))
                 $parentRoles[] = $tmpRole;
@@ -243,13 +242,24 @@ if($g_current_user->id != $_GET['user_id'])
     $_SESSION['g_current_user'] = $g_current_user;
 }
 
-foreach($parentRoles as $actRole)
+if(count($parentRoles) > 0 )
 {
-    $sql = "INSERT IGNORE INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin,mem_end, mem_valid, mem_leader)
-                 VALUES ($actRole, {0}, NOW(), NULL, 1, $leiter)";
-    $sql    = prepareSQL($sql, array($_GET['user_id']));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+	$sql = "REPLACE INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin,mem_end, mem_valid, mem_leader) VALUES ";
+
+	// alle einzufuegenden Rollen anhaengen
+	foreach($parentRoles as $actRole)
+	{
+	   
+	    $sql .= " ($actRole, {0}, NOW(), NULL, 1, $leiter),";
+	    
+	}
+
+	//Das letzte Komma wieder wegschneiden
+	$sql = substr($sql,0,-1);
+	
+	$sql    = prepareSQL($sql, array($_GET['user_id']));
+	$result = mysql_query($sql, $g_adm_con);
+	db_error($result);
 }
 
 if($_GET['new_user'] == 1 && $count_assigned == 0)
