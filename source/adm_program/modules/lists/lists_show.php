@@ -633,7 +633,7 @@ for($j = 0; $j < $max_count; $j++)
                             // Geschlecht anzeigen
                             if($row[$i] == 1)
                             {
-                                if($mode == "csv")
+                                if($mode == "csv" || $mode == "print")
                                 {
                                     $content = utf8_decode("männlich");
                                 }
@@ -645,7 +645,7 @@ for($j = 0; $j < $max_count; $j++)
                             }
                             elseif($row[$i] == 2)
                             {
-                                if($mode == "csv")
+                                if($mode == "csv" || $mode == "print")
                                 {
                                     $content = utf8_decode("weiblich");
                                 }
@@ -813,7 +813,11 @@ else
             {
                 echo"<tr>
                     <td>Termin: </td>
-                    <td>". $arrDay[$role_row->rol_weekday-1];
+                    <td>"; 
+                        if($role_row->rol_weekday > 0)
+                        {
+                            echo $arrDay[$role_row->rol_weekday-1];
+                        }
                         if(strlen($role_row->rol_start_time) > 0)
                         {
                             echo " von ". mysqltime("h:i", $role_row->rol_start_time). " bis ". mysqltime("h:i", $role_row->rol_end_time);
