@@ -42,28 +42,36 @@ if($g_preferences['registration_mode'] == 0)
     $g_message->show("module_disabled");
 }
 
-if(isset($_GET['new_user_id']) == false || is_numeric($_GET['new_user_id']) == false)
+// Uebergabevariablen pruefen und initialisieren
+$req_new_user_id = 0;
+
+if(isset($_GET['new_user_id']) && is_numeric($_GET['new_user_id']))
+{
+    $req_new_user_id = $_GET['new_user_id'];
+}
+else
 {
     $g_message->show("invalid");
 }
 
 // neuen User erst einmal als Objekt erzeugen
 $new_user = new User($g_adm_con);
-$new_user->getUser($_GET['new_user_id']);
+$new_user->getUser($req_new_user_id);
 
 // alle User aus der DB selektieren, die denselben Vor- und Nachnamen haben
 $sql = "SELECT * " .
        "  FROM ". TBL_USERS. 
-       " WHERE UPPER(usr_last_name)  LIKE UPPER('$new_user->last_name')" .
-       "   AND UPPER(usr_first_name) LIKE UPPER('$new_user->first_name') " .
+       " WHERE UPPER(usr_last_name)  LIKE UPPER({0})" .
+       "   AND UPPER(usr_first_name) LIKE UPPER({1}) " .
        "   AND usr_valid      = 1 ";
-$result_usr   = mysql_query($sql, $g_adm_con);
+$sql = prepareSql($sql, array($new_user->last_name, $new_user->first_name));
+$result_usr = mysql_query($sql, $g_adm_con);
 $member_found = mysql_num_rows($result_usr);
 
 if($member_found == 0)
 {
     // kein User mit dem Namen gefunden, dann direkt neuen User erzeugen und dieses Script verlassen
-    header("Location: $g_root_path/adm_program/modules/profile/profile_new.php?user_id=". $_GET['new_user_id']. "&new_user=3");
+    header("Location: $g_root_path/adm_program/modules/profile/profile_new.php?user_id=$req_new_user_id&new_user=3");
     exit();
 }
 
@@ -119,9 +127,9 @@ echo "
                         echo "<br>Dieser Benutzer ist noch kein Mitglied der Organisation $g_organization und 
                         besitzt auch keine Logindaten.<br><br>
                         <span class=\"iconLink\">
-                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=". $_GET['new_user_id']. "&amp;user_id=$row->usr_id&amp;mode=2\"><img
+                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=2\"><img
                              class=\"iconLink\" src=\"$g_root_path/adm_program/images/properties.png\" style=\"vertical-align: middle;\" border=\"0\" title=\"Rollen und Logindaten diesem Benutzer zuordnen\" alt=\"Rollen und Logindaten diesem Benutzer zuordnen\"></a>
-                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=". $_GET['new_user_id']. "&amp;user_id=$row->usr_id&amp;mode=2\">Mitgliedschaft und Logindaten diesem Benutzer zuordnen</a>
+                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=2\">Mitgliedschaft und Logindaten diesem Benutzer zuordnen</a>
                         </span>";
                     }               
                     elseif(isMember($row->usr_id) == false && strlen($row->usr_login_name) > 0)
@@ -129,9 +137,9 @@ echo "
                         // kein Mitlgied dieser Orga und Logindaten sind bereits vorhanden
                         echo "<br>Dieser Benutzer ist noch kein Mitglied der Organisation $g_organization, besitzt aber bereits Logindaten.<br><br>
                         <span class=\"iconLink\">
-                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=". $_GET['new_user_id']. "&amp;user_id=$row->usr_id&amp;mode=2\"><img
+                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=2\"><img
                              class=\"iconLink\" src=\"$g_root_path/adm_program/images/properties.png\" style=\"vertical-align: middle;\" border=\"0\" title=\"Mitgliedschaft zuweisen\" alt=\"Mitgliedschaft zuweisen\"></a>
-                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=". $_GET['new_user_id']. "&amp;user_id=$row->usr_id&amp;mode=2\">Mitgliedschaft zuweisen</a>
+                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=2\">Mitgliedschaft zuweisen</a>
                         </span>";
                     }               
                     else
@@ -143,9 +151,9 @@ echo "
                                 M&ouml;chtest du ihm seinen Loginnamen mit Passwort als Erinnerung zuschicken ?<br>
                             <div style=\"margin-top: 5px;\">
                                 <span class=\"iconLink\">
-                                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=". $_GET['new_user_id']. "&amp;user_id=$row->usr_id&amp;mode=6\"><img
+                                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=6\"><img
                                      class=\"iconLink\" src=\"$g_root_path/adm_program/images/key.png\" style=\"vertical-align: middle;\" border=\"0\" title=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\" alt=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\"></a>
-                                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=". $_GET['new_user_id']. "&amp;user_id=$row->usr_id&amp;mode=6\">Zugangsdaten zuschicken</a>
+                                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=6\">Zugangsdaten zuschicken</a>
                                 </span>
                             </div>";
                         }
@@ -161,9 +169,9 @@ echo "
                 kannst du auch einen neuen Benutzer anlegen.<br>
                 <div style=\"margin-top: 5px;\">
                     <span class=\"iconLink\">
-                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=". $_GET['new_user_id']. "&new_user=3\"><img
+                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$req_new_user_id&new_user=3\"><img
                          class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" title=\"Neuen Benutzer anlegen\" alt=\"Neuen Benutzer anlegen\"></a>
-                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=". $_GET['new_user_id']. "&new_user=3\">Benutzer anlegen</a>
+                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$req_new_user_id&new_user=3\">Benutzer anlegen</a>
                     </span>
                 </div>
             </div>
