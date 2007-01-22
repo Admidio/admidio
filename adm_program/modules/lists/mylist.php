@@ -35,19 +35,16 @@ require("../../system/common.php");
 require("../../system/login_valid.php");
 
 // Uebergabevariablen pruefen und ggf. vorbelegen
+$req_rol_id = 0;
 
-if(array_key_exists("rol_id", $_GET))
+if(isset($_GET['rol_id']))
 {
-    if(is_numeric($_GET["rol_id"]) == false)
+    if(is_numeric($_GET['rol_id']) == false)
     {
         $g_message->show("invalid");
     }   
-    $rol_id = $_GET["rol_id"];
-}
-else
-{
-    $rol_id = 0;
-}   
+    $req_rol_id = $_GET["rol_id"];
+}  
 
 if(!isset($_GET['active_role']))
 {
@@ -83,7 +80,7 @@ else
     }
 }  
 
-if($rol_id == 0)
+if($req_rol_id == 0)
 {
     // Navigation faengt hier im Modul an
     $_SESSION['navigation']->clear();
@@ -97,7 +94,7 @@ if(isset($_SESSION['mylist_request']))
 {
     $form_values = $_SESSION['mylist_request'];
     unset($_SESSION['mylist_request']);
-    $rol_id = $form_values['rol_id'];
+    $req_rol_id = $form_values['rol_id'];
     if(isset($form_values['former']) && $form_values['former'] == 1)
     {
         $active_member = 0;
@@ -169,7 +166,7 @@ require("../../../adm_config/body_top.php");
                 <p><b>Rolle :</b>&nbsp;&nbsp;";
                 
                 // Combobox mit allen Rollen ausgeben
-                echo generateRoleSelectBox();
+                echo generateRoleSelectBox($req_rol_id);
                 
                 echo "&nbsp;&nbsp;&nbsp;
                 <input type=\"checkbox\" id=\"former\" name=\"former\" value=\"1\" ";
@@ -213,7 +210,8 @@ require("../../../adm_config/body_top.php");
                 </table>
 
                 <p>";
-                    if($rol_id > 0)
+                    // Zurueck-Button nur anzeigen, wenn MyList nicht direkt aufgerufen wurde
+                    if($_SESSION['navigation']->count > 1)
                     {
                         echo "<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
                             <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">

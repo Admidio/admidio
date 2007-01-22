@@ -379,12 +379,16 @@ require("../../../adm_config/body_top.php");
                     echo "</div>";
                 }
                 if($row_lst->rol_weekday > 0
-                || strlen($role_row->rol_start_time) > 0 )
+                || strlen($row_lst->rol_start_time) > 0 )
                 {
                     echo "<div style=\"margin-top: 3px;\">
                         <div style=\"margin-left: 30px; width: 130px; text-align: left; float: left;\">Gruppenstunde:</div>
-                        <div style=\"text-align: left;\">". $arrDay[$row_lst->rol_weekday-1];
-                            if(strlen($role_row->rol_start_time) > 0)
+                        <div style=\"text-align: left;\">"; 
+                            if($row_lst->rol_weekday > 0)
+                            {
+                                echo $arrDay[$row_lst->rol_weekday-1];
+                            }
+                            if(strlen($row_lst->rol_start_time) > 0)
                             {
                                 echo " von ". mysqltime("h:i", $row_lst->rol_start_time). " bis ". mysqltime("h:i", $row_lst->rol_end_time);
                             }
