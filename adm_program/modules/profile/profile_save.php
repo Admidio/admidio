@@ -126,10 +126,18 @@ if($usr_id > 0)
     }
 }
 
+/*------------------------------------------------------------*/
 // Feldinhalte saeubern und der User-Klasse zuordnen
-$user->last_name  = strStripTags($_POST['last_name']);
-$user->first_name = strStripTags($_POST['first_name']);
-$user->login_name = strStripTags($_POST['login_name']);
+/*------------------------------------------------------------*/
+
+if(hasRole('Webmaster') || $new_user > 0)
+{
+    // Diese Daten duerfen nur vom Webmaster bzw. bei Neuanlage geaendert werden
+    $user->last_name  = strStripTags($_POST['last_name']);
+    $user->first_name = strStripTags($_POST['first_name']);
+    $user->login_name = strStripTags($_POST['login_name']);
+}
+
 $user->email      = strStripTags($_POST['email']);
 
 // immer speichern, ausser bei der schnellen Registrierung
