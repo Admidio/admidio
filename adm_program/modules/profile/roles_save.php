@@ -209,7 +209,6 @@ while($row = mysql_fetch_object($result_rolle))
             }
         }
 
-
         // Update aufueren
         $sql    = prepareSQL($sql, array($_GET['user_id']));
         $result = mysql_query($sql, $g_adm_con);
@@ -249,15 +248,13 @@ if(count($parentRoles) > 0 )
 	// alle einzufuegenden Rollen anhaengen
 	foreach($parentRoles as $actRole)
 	{
-	   
-	    $sql .= " ($actRole, {0}, NOW(), NULL, 1, $leiter),";
-	    
+	    $sql .= " ($actRole, {0}, NOW(), NULL, 1, 0),";
 	}
 
 	//Das letzte Komma wieder wegschneiden
 	$sql = substr($sql,0,-1);
 	
-	$sql    = prepareSQL($sql, array($_GET['user_id']));
+    $sql    = prepareSQL($sql, array($_GET['user_id']));
 	$result = mysql_query($sql, $g_adm_con);
 	db_error($result);
 }
