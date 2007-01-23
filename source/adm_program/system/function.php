@@ -443,7 +443,7 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
 // Uebergaben:
 // field_id   : Id und Name der Select-Box
 
-function generateRoleSelectBox($field_id = "")
+function generateRoleSelectBox($default_role = 0, $field_id = "")
 {
     global $g_organization;
     global $g_adm_con;
@@ -490,7 +490,13 @@ function generateRoleSelectBox($field_id = "")
                     $box_string .= "<optgroup label=\"$row->cat_name\">";
                     $act_category = $row->cat_name;
                 }
-                $box_string .= "<option value=\"$row->rol_id\">$row->rol_name</option>";
+                // wurde eine Rollen-Id uebergeben, dann Combobox mit dieser vorbelegen
+                $selected = "";
+                if($row->rol_id == $default_role)
+                {
+                    $selected = " selected ";
+                }
+                $box_string .= "<option $selected value=\"$row->rol_id\">$row->rol_name</option>";
             }
             $box_string .= "</optgroup>
         </select>";

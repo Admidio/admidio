@@ -38,55 +38,80 @@ $g_forum_cookie_domain = "";            // Domain des Forum Cookies
 $g_forum_cookie_secure ="";             // Cookie Secure des Forums
 
 
-// Forumspezifische Konfigurationsvariablen lesen und zuweisen
-// Forums DB waehlen
-mysql_select_db($g_forum_db, $g_forum_con);
+// Session Variablen fuer das Forum auslesen
+if(isset($_SESSION['g_forum_sitename'])   
+&& isset($_SESSION['g_forum_cookie_name'])
+&& isset($_SESSION['g_forum_cookie_path'])
+&& isset($_SESSION['g_forum_cookie_domain'])
+&& isset($_SESSION['g_forum_cookie_secure'])
+&& isset($_SESSION['g_forum_server'])
+&& isset($_SESSION['g_forum_path'])) 
+{
+    $g_forum_sitename = $_SESSION['g_forum_sitename'];
+    $g_forum_cookie_name = $_SESSION['g_forum_cookie_name'];
+    $g_forum_cookie_path = $_SESSION['g_forum_cookie_path'];
+    $g_forum_cookie_domain = $_SESSION['g_forum_cookie_domain'];
+    $g_forum_cookie_secure = $_SESSION['g_forum_cookie_secure'];
+    $g_forum_server = $_SESSION['g_forum_server'];
+    $g_forum_path = $_SESSION['g_forum_path'];
+}
+else
+{
+	// Forums DB waehlen
+	mysql_select_db($g_forum_db, $g_forum_con);
+	
+	$sql    = "SELECT config_value FROM ". $g_forum_praefix. "_config WHERE config_name = 'sitename' ";
+	$result = mysql_query($sql, $g_forum_con);
+	db_error($result);
+	$row = mysql_fetch_array($result);
+	$g_forum_sitename = $row[0];
+	$_SESSION['g_forum_sitename'] = $g_forum_sitename;
 
-$sql    = "SELECT config_value FROM ". $g_forum_praefix. "_config WHERE config_name = 'sitename' ";
-$result = mysql_query($sql, $g_forum_con);
-db_error($result);
-$row = mysql_fetch_array($result);
-$g_forum_sitename = $row[0];
-
-$sql    = "SELECT config_value FROM ". $g_forum_praefix. "_config WHERE config_name = 'cookie_name' ";
-$result = mysql_query($sql, $g_forum_con);
-db_error($result);
-$row = mysql_fetch_array($result);
-$g_forum_cookie_name = $row[0];
-
-$sql    = "SELECT config_value FROM ". $g_forum_praefix. "_config WHERE config_name = 'cookie_path' ";
-$result = mysql_query($sql, $g_forum_con);
-db_error($result);
-$row = mysql_fetch_array($result);
-$g_forum_cookie_path = $row[0];
-
-$sql    = "SELECT config_value FROM ". $g_forum_praefix. "_config WHERE config_name = 'cookie_domain' ";
-$result = mysql_query($sql, $g_forum_con);
-db_error($result);
-$row = mysql_fetch_array($result);
-$g_forum_cookie_domain = $row[0];
-
-$sql    = "SELECT config_value FROM ". $g_forum_praefix. "_config WHERE config_name = 'cookie_secure' ";
-$result = mysql_query($sql, $g_forum_con);
-db_error($result);
-$row = mysql_fetch_array($result);
-$g_forum_cookie_secure = $row[0];
-
-$sql    = "SELECT config_value FROM ". $g_forum_praefix. "_config WHERE config_name = 'server_name' ";
-$result = mysql_query($sql, $g_forum_con);
-db_error($result);
-$row = mysql_fetch_array($result);
-$g_forum_server = str_replace('/', '', $row[0]);
-
-$sql    = "SELECT config_value FROM ". $g_forum_praefix. "_config WHERE config_name = 'script_path' ";
-$result = mysql_query($sql, $g_forum_con);
-db_error($result);
-$row = mysql_fetch_array($result);
-$g_forum_path = str_replace('/', '', $row[0]);
-
-// Admidio DB waehlen
-mysql_select_db($g_adm_db, $g_adm_con);
-
+	$sql    = "SELECT config_value FROM ". $g_forum_praefix. "_config WHERE config_name = 'cookie_name' ";
+	$result = mysql_query($sql, $g_forum_con);
+	db_error($result);
+	$row = mysql_fetch_array($result);
+	$g_forum_cookie_name = $row[0];
+	$_SESSION['g_forum_cookie_name'] = $g_forum_cookie_name;
+	
+	$sql    = "SELECT config_value FROM ". $g_forum_praefix. "_config WHERE config_name = 'cookie_path' ";
+	$result = mysql_query($sql, $g_forum_con);
+	db_error($result);
+	$row = mysql_fetch_array($result);
+	$g_forum_cookie_path = $row[0];
+	$_SESSION['g_forum_cookie_path'] = $g_forum_cookie_path;
+	
+	$sql    = "SELECT config_value FROM ". $g_forum_praefix. "_config WHERE config_name = 'cookie_domain' ";
+	$result = mysql_query($sql, $g_forum_con);
+	db_error($result);
+	$row = mysql_fetch_array($result);
+	$g_forum_cookie_domain = $row[0];
+	$_SESSION['g_forum_cookie_domain'] = $g_forum_cookie_domain;
+	
+	$sql    = "SELECT config_value FROM ". $g_forum_praefix. "_config WHERE config_name = 'cookie_secure' ";
+	$result = mysql_query($sql, $g_forum_con);
+	db_error($result);
+	$row = mysql_fetch_array($result);
+	$g_forum_cookie_secure = $row[0];
+	$_SESSION['g_forum_cookie_secure'] = $g_forum_cookie_secure;
+	
+	$sql    = "SELECT config_value FROM ". $g_forum_praefix. "_config WHERE config_name = 'server_name' ";
+	$result = mysql_query($sql, $g_forum_con);
+	db_error($result);
+	$row = mysql_fetch_array($result);
+	$g_forum_server = str_replace('/', '', $row[0]);
+	$_SESSION['g_forum_server'] = $g_forum_server;
+	
+	$sql    = "SELECT config_value FROM ". $g_forum_praefix. "_config WHERE config_name = 'script_path' ";
+	$result = mysql_query($sql, $g_forum_con);
+	db_error($result);
+	$row = mysql_fetch_array($result);
+	$g_forum_path = str_replace('/', '', $row[0]);
+	$_SESSION['g_forum_path'] = $g_forum_path;
+	
+	// Admidio DB waehlen
+	mysql_select_db($g_adm_db, $g_adm_con);
+}
 
 // Cookie des Forums einlesen
 if(isset($_COOKIE[$g_forum_cookie_name."_sid"]) AND $g_session_valid)
@@ -413,3 +438,4 @@ function forum_update_username($forum_new_username, $forum_old_username, $forum_
     mysql_select_db($g_adm_db, $g_adm_con);
 }
 ?>
+
