@@ -181,7 +181,7 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
     }
 
 
-    $homepage  = strStripTags($_POST['homepage']);
+    $homepage  = strStripTags(trim($_POST['homepage']));
     if (strlen($homepage) != 0)
     {
         // Die Webadresse wird jetzt, falls sie nicht mit http:// oder https:// beginnt, entsprechend aufbereitet
