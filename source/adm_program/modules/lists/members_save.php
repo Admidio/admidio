@@ -134,6 +134,9 @@ mysql_data_seek($result_user,0);
 //Datensaetze durchgehen und sehen ob faer den Benutzer eine aenderung vorliegt
 while($user= mysql_fetch_array($result_user))
 {
+
+    $parentRoles = array();
+    
     //Falls User Mitglied der Rolle ist oder schonmal war
     if(isset($_POST["member_".$user["usr_id"]]) && array_key_exists($user["usr_id"], $mitglieder_array))
     {
@@ -171,6 +174,15 @@ while($user= mysql_fetch_array($result_user))
             $sql    = prepareSQL($sql, array($mem_id));
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
+            
+            // abhaengige Rollen finden
+            $tmpRoles = RoleDependency::getParentRoles($g_adm_con,$role_id);
+			foreach($tmpRoles as $tmpRole)
+            {
+                if(!in_array($tmpRole,$parentRoles))
+                $parentRoles[] = $tmpRole;
+            }
+            
         }
 
         //Falls nur Leiterfunktion hinzugefuegt/entfernt werden soll under der user Mitglied ist/bleibt
@@ -216,7 +228,34 @@ while($user= mysql_fetch_array($result_user))
         $sql    = prepareSQL($sql, array($role_id, $usr_id));
         $result = mysql_query($sql, $g_adm_con);
         db_error($result);
+        
+        // abhaengige Rollen finden
+        $tmpRoles = RoleDependency::getParentRoles($g_adm_con,$role_id);
+        foreach($tmpRoles as $tmpRole)
+        {
+            if(!in_array($tmpRole,$parentRoles))
+            $parentRoles[] = $tmpRole;
+        }
     }
+    
+    if(count($parentRoles) > 0 )
+    {
+    	$sql = "REPLACE INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin,mem_end, mem_valid, mem_leader) VALUES ";
+
+    	// alle einzufuegenden Rollen anhaengen
+    	foreach($parentRoles as $actRole)
+    	{
+    	    $sql .= " ($actRole, {0}, NOW(), NULL, 1, 0),";
+    	}
+
+    	//Das letzte Komma wieder wegschneiden
+    	$sql = substr($sql,0,-1);
+    	
+    	$sql    = prepareSQL($sql, array($user["usr_id"]));
+    	$result = mysql_query($sql, $g_adm_con);
+    	db_error($result);
+    }
+    
 }
 
 //Zurueck zur Herkunftsseite
