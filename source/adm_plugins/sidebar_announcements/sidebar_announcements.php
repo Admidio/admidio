@@ -119,7 +119,7 @@ while($row = mysql_fetch_object($result))
                 $new_headline = "$new_headline ". $words[$i];
             }
         }
-        echo "$new_headline</a><br />-----<br />";
+        echo "$new_headline</a><br />";
     }
     else
     {
