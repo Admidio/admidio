@@ -339,6 +339,8 @@ if ($email->sendEmail())
 
     // Der Inhalt des Formulars wird bei erfolgreichem insert/update aus der Session geloescht
     unset($_SESSION['mail_request']);
+
+    $g_message->show($err_code, $err_text, "Hinweis");
 }
 else
 {
@@ -351,8 +353,10 @@ else
         $err_text = $_POST['mailto'];
     }
     $err_code="mail_not_send";
+
+    $g_message->show($err_code, $err_text);
 }
 
 
-$g_message->show($err_code, $err_text);
+
 ?>
