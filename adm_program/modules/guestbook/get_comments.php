@@ -84,7 +84,7 @@ if (isset($comment_result))
             <div class=\"groupBoxHeadline\">
                 <div style=\"text-align: left; float: left;\">
                     <img src=\"$g_root_path/adm_program/images/comments.png\" style=\"vertical-align: top;\" alt=\"Kommentar ". $commentNumber. "\">&nbsp;".
-                    "von ". strSpecialChars2Html($row->gbc_name);
+                    "Kommentar von ". strSpecialChars2Html($row->gbc_name);
 
                 // Falls eine Mailadresse des Users angegeben wurde, soll ein Maillink angezeigt werden...
                 if (isValidEmailAddress($row->gbc_email))
