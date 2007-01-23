@@ -234,7 +234,7 @@ class ubbParser
      /* [url]href[/url] as well as [url=href]text[/url] is supported */
      $href = isset($params['url']) ? $params['url'] : $tree->toText();
      $href = $this->valid_url($href) ? $href : '';
-     return $this->simple_parse($tree, '<a href="'.htmlspecialchars($href).'">', '</a>');
+     return $this->simple_parse($tree, '<a href="'.htmlspecialchars($href).'" target="_blank">', '</a>');
   }
   // MFA mail in email umbenannt
   function parse_email($tree, $params = array())
