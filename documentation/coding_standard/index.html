@@ -28,6 +28,7 @@
         <li><h3><a href="#SVN">SVN Vorgaben</a></h3></li>
         <li><h3><a href="#Namen">Namenskonventionen</a></h3></li>
         <li><h3><a href="#Dateiformat">Dateiformate</a></h3></li>
+        <li><h3><a href="#PHPEinstellungen">PHP-Server-Einstellungen</a></h3></li>
     </ol>
 
     <hr/>
@@ -71,7 +72,7 @@
         </p>
 
         <p>
-            Wir haben uns f&uuml;r Einr&uuml;ckungen in H&ouml;he von vier Leerzeichen entschieden.
+            Wir haben uns f&uuml;r Einr&uuml;ckungen in H&ouml;he von <b>vier</b> Leerzeichen entschieden.
             Das hei&szlig;t, in der Entwicklungsumgebung muss eingestellt sein, dass ein Tab vier
             Leerzeichen entspricht. In Eclipse muss man, wenn man mit PHPeclipse arbeitet,
             dies sogar an zwei Stellen tun.
@@ -341,7 +342,7 @@ function addition($wert1, $wert2, $wert3 = '')
 
         <p>
             Wenn Dateien in SVN eingecheckt werden, muss auch eine Commit-Message verfasst werden.
-            Bei einem Bugfix geh&ouml;rt in die Messages auf jeden Fall die zugeh&ouml;rige Bugnummer und
+            Bei einem Bugfix geh&ouml;rt in die Messages auf jeden Fall die zugeh&ouml;rige Bugnummer
             und eine kurze Beschreibung der verrichteten T&auml;tigkeiten...
         </p>
 
@@ -397,8 +398,16 @@ function addition($wert1, $wert2, $wert3 = '')
             <li>Zeilenumbruch Windows (CRLF)</li>
         </ul>
 
+		  <p>
+		  		Bei UTF-8 ist noch zu beachten, dass der Editor das Byte-Order-Flag (BOM) <b>nicht</b> setzen darf.
+		  		Dieses Flag dient eigentlich zur genauen Identifizierung des verwendeten UTF Kodierung (UTF-8, UTF-16 oder UTF-32).
+		  		Verwendet man dieses aber in PHP, so wird es einfach am Scriptanfang im Browser ausgegeben und f&uuml;hrt dann
+		  		auch meistens zu einer Fehlermeldung im Script.
+		  </p>
+
         <p>
-            In Eclipse kann man dies entweder global konfigurieren, oder aber auf Projektbasis(Was in meinen Augen mehr Sinn macht.).
+            In Eclipse kann man den Zeichensatz und Zeilenumbruch entweder global konfigurieren,
+            oder aber auf Projektbasis (Was in meinen Augen mehr Sinn macht.).
             Hier ein Screenshot von den Projekteinstellungen:
         </p>
 
@@ -414,6 +423,33 @@ function addition($wert1, $wert2, $wert3 = '')
         <a href="#Inhalt">Zur&uuml;ck zum Inhaltsverzeichnis</a>
     </div>
 
+    <hr/>
+
+    <div>
+        <h2><a name="PHPEinstellungen">PHP-Server-Einstellungen</a></h2>
+
+        <p>
+            Um bestimmte Sicherheitsprobleme mit PHP von vorneherein aus dem Weg zu gehen, ist es sinnvoll
+            einige PHP-Servereinstellungen auf dem lokalen Webserver anzupassen. Hierzu m&uuml;ssen in der Datei
+            php.ini Einstellungen kontrolliert bzw. umgesetzt werden.
+        </p>
+
+        <p>
+        		<b>register_globals = off</b> muss gesetzt werden. Dadurch wird verhindert, dass Variablen, die an ein Script
+        		&uuml;bergeben wurden, ohne $_GET bzw. $_POST Array benutzt werden k&ouml;nnten und man ist als
+        		Programmierer gezwungen auf &Uuml;bergabevariabeln mit $_GET['blabla'] bzw. $_POST['blabla'] zu zugreifen.
+        		Genauere Erl&auml;uterungen gibt es <a href="http://de.php.net/manual/de/security.globals.php">hier auf www.php.net</a>.
+        </p>
+
+        <p>
+        	   <b>error_reporting = E_ALL</b> setzen bzw. den Zusatz <b>& ~E_NOTICE</b> entfernen. Dies f&uuml;hrt dazu, dass
+        	   nun auch Warnings ausgegeben werden, wenn z.B. eine Variable benutzt wird, die vorher noch nicht definiert war.
+        	   Somit f&uuml;hrt dies zu einem sauberen Programmierstil und kann auch auf m&ouml;gliche Sicherheitsprobleme
+        	   aufmerksam machen.
+        </p>
+
+        <a href="#Inhalt">Zur&uuml;ck zum Inhaltsverzeichnis</a>
+    </div>
 </body>
 
 </html>
