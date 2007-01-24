@@ -24,6 +24,11 @@
  *
  *****************************************************************************/
 
+if ('common.php' == basename($_SERVER['SCRIPT_FILENAME']))
+{
+    die('Diese Seite darf nicht direkt aufgerufen werden !');
+}
+
 define('SERVER_PATH', substr(__FILE__, 0, strpos(__FILE__, "adm_program")-1));
 define('ADMIDIO_VERSION', '1.4 Beta');  // die Versionsnummer bitte nicht aendern !!!
 
