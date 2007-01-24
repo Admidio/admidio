@@ -23,6 +23,11 @@
  *
  *****************************************************************************/
 
+if ('message_text.php' == basename($_SERVER['SCRIPT_FILENAME']))
+{
+    die('Diese Seite darf nicht direkt aufgerufen werden !');
+}
+
 $message_text = array(
     "anmeldung" =>
         "<p>Deine Daten wurden gespeichert.</p>

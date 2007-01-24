@@ -26,6 +26,11 @@
  *
  *****************************************************************************/
 
+if ('login_valid.php' == basename($_SERVER['SCRIPT_FILENAME']))
+{
+    die('Diese Seite darf nicht direkt aufgerufen werden !');
+}
+
 if($g_session_valid == false)
 {
     if(isset($_SESSION['login_forward_url']) == false)

@@ -1,5 +1,4 @@
 <?php
-error_reporting(E_ALL);
   /**********************************************
   * quickerUbb (c)2004 Roönaän
   *

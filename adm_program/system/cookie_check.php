@@ -28,6 +28,11 @@
  *
  *****************************************************************************/
 
+if ('cookie_check.php' == basename($_SERVER['SCRIPT_FILENAME']))
+{
+    die('Diese Seite darf nicht direkt aufgerufen werden !');
+}
+
 require("common.php");
 
 if(isset($_COOKIE['adm_session']) == false)
