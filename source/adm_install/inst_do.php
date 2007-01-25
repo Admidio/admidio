@@ -144,7 +144,6 @@ elseif($_GET['mode'] == 2)
     $file_content = str_replace("%PASSWORD%",  $_SESSION['password'], $file_content);
     $file_content = str_replace("%DATABASE%",  $_SESSION['database'], $file_content);
     $file_content = str_replace("%ROOT_PATH%", $root_path,            $file_content);
-    $file_content = str_replace("%DOMAIN%",    $_SERVER['HTTP_HOST'], $file_content);
     $file_content = str_replace("%ORGANIZATION%", $_SESSION['verein-name-kurz'], $file_content);
 
     // die erstellte Config-Datei an den User schicken

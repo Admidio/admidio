@@ -36,17 +36,16 @@ db_error($result);
 $session_found = mysql_num_rows($result);
 
 // Inhalt der Cookies loeschen
-
-if(strpos($_SERVER['HTTP_HOST'], "localhost") !== false
-|| strpos($_SERVER['HTTP_HOST'], "127.0.0.1") !== false)
+$domain = ereg_replace('^[^\.]*\.([^\.]*)\.(.*)$', '\1.\2',$_SERVER['HTTP_HOST']);
+if($domain == "localhost")
 {
     // beim localhost darf keine Domaine uebergeben werden
-    setcookie("adm_session", "", 0, "/");
+    setcookie("adm_session", "", time() - 1000, "/");
 }
 else
 {
     // kein Localhost -> Domaine beim Cookie setzen
-    setcookie("adm_session", "", 0, "/", ".". $g_domain);
+    setcookie("adm_session", "", time() - 1000, "/", ".$domain", 0);
 }
 
 unset($_SESSION['g_current_organizsation']);

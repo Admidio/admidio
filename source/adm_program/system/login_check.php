@@ -23,23 +23,20 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
- 
-if ('login_check.php' == basename($_SERVER['SCRIPT_FILENAME']))
-{
-    die('Diese Seite darf nicht direkt aufgerufen werden !');
-}
 
 require("common.php");
 
-$_POST['loginname'] = strStripTags($_POST['loginname']);
+// Variablen initialisieren
+$user_found  = 0;
 
-if(strlen($_POST['loginname']) == 0)
+// Uebergabevariablen filtern
+$req_login_name     = strStripTags($_POST['loginname']);
+$req_password_crypt = md5($_POST["passwort"]);
+
+if(strlen($req_login_name) == 0)
 {
     $g_message->show("feld", "Benutzername");
 }
-
-$user_found = 0;
-$password_crypt = md5($_POST["passwort"]);
 
 // Name und Passwort pruefen
 // Rolle muss mind. Mitglied sein
@@ -53,7 +50,7 @@ $sql    = "SELECT *
               AND mem_valid         = 1
               AND rol_org_shortname = '$g_organization'
               AND rol_valid         = 1 ";
-$sql    = prepareSQL($sql, array($_POST["loginname"]));
+$sql    = prepareSQL($sql, array($req_login_name));
 $result = mysql_query($sql, $g_adm_con);
 db_error($result);
 
@@ -71,7 +68,7 @@ if ($user_found >= 1)
         }
     }
 
-    if($user_row->usr_password == $password_crypt)
+    if($user_row->usr_password == $req_password_crypt)
     {
         // alte Sessions des Users loeschen
 
@@ -93,8 +90,8 @@ if ($user_found >= 1)
         db_error($result);
 
         // Cookies fuer die Anmeldung setzen
-        if(strpos($_SERVER['HTTP_HOST'], "localhost") !== false
-        || strpos($_SERVER['HTTP_HOST'], "127.0.0.1") !== false)
+        $domain = ereg_replace('^[^\.]*\.([^\.]*)\.(.*)$', '\1.\2',$_SERVER['HTTP_HOST']);
+        if($domain == "localhost")
         {
             // beim localhost darf keine Domaine uebergeben werden
             setcookie("adm_session", "$user_session", 0, "/");
@@ -102,7 +99,7 @@ if ($user_found >= 1)
         else
         {
             // kein Localhost -> Domaine beim Cookie setzen
-            setcookie("adm_session", "$user_session" , 0, "/", ".". $g_domain);
+            setcookie("adm_session", "$user_session" , 0, "/", ".$domain", 0);
         }
 
         //User Daten in Session speichern
@@ -141,7 +138,7 @@ if ($user_found >= 1)
             */
             if($user_row->usr_id == 1)
             {
-                $forum_admin_reset = forum_check_admin($_POST['loginname'], $password_crypt, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
+                $forum_admin_reset = forum_check_admin($req_login_name, $req_password_crypt, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
             }
 
 
@@ -150,7 +147,7 @@ if ($user_found >= 1)
 
             // User nun in Foren-Tabelle suchen und dort das Password & UserID auslesen
             $sql    = "SELECT  user_password, user_id FROM ". $g_forum_praefix. "_users WHERE username LIKE {0} ";
-            $sql    = prepareSQL($sql, array($_POST['loginname']));
+            $sql    = prepareSQL($sql, array($req_login_name));
             $result = mysql_query($sql, $g_forum_con);
             db_error($result);
 
@@ -184,7 +181,7 @@ if ($user_found >= 1)
                     // Administrator Account wurde zurück gesetzt, Meldung vorbereiten
                     $login_message = "loginforum_admin";
                 }
-                elseif(!(forum_check_password($password_crypt, $row[0], $row[1], $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix)))
+                elseif(!(forum_check_password($req_password_crypt, $row[0], $row[1], $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix)))
                 {
                     // Password wurde zurück gesetzt, Meldung vorbereiten
                     $login_message = "loginforum_pass";
