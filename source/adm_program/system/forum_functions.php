@@ -57,6 +57,7 @@ if(isset($_SESSION['g_forum_sitename'])
 }
 else
 {
+}
 	// Forums DB waehlen
 	mysql_select_db($g_forum_db, $g_forum_con);
 	
@@ -111,7 +112,7 @@ else
 	
 	// Admidio DB waehlen
 	mysql_select_db($g_adm_db, $g_adm_con);
-}
+
 
 // Cookie des Forums einlesen
 if(isset($_COOKIE[$g_forum_cookie_name."_sid"]) AND $g_session_valid)
@@ -132,50 +133,43 @@ else
 }
 
 
-// Username, UserID und NeueNachrichten aus der Forums DB lesen, sofern es den User gibt.
-if(forum_check_user($g_current_user->login_name, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix))
-{
-    $g_forum_user = $g_current_user->login_name;
-    
-    // Forums DB waehlen
-    mysql_select_db($g_forum_db, $g_forum_con);
-    
-    $sql    = "SELECT user_id, username, user_new_privmsg FROM ". $g_forum_praefix. "_users WHERE username LIKE {0} ";
-    $sql    = prepareSQL($sql, array($g_forum_user));
-    $result = mysql_query($sql, $g_forum_con);
-    db_error($result);
-    
-    $row = mysql_fetch_array($result);
-    
-    $g_forum_userid = $row[0];
-    $g_forum_user  = $row[1];
-    $g_forum_neuePM = $row[2];
-    
-    // Wenn neue Nachrichten vorliegen, einen ansprechenden Text generieren
-    if ($g_forum_neuePM == 0)
-    {
-        $g_forum_neuePM_Text = "und haben <b>keine</b> neue Nachrichten.";
-    }
-    elseif ($g_forum_neuePM == 1)
-    {
-        $g_forum_neuePM_Text = "und haben <b>1</b> neue Nachricht.";
-    }
-    else
-    {
-        $g_forum_neuePM_Text = "und haben <b>".$g_forum_neuePM."</b> neue Nachrichten.";
-    }
-
-   	// Admidio DB waehlen
-  	mysql_select_db($g_adm_db, $g_adm_con);
-}
-
-// Gueltige Session im Forum updaten. Sofern die Admidio Session gueltig ist, ist auch die Forum Session gueltig
+// Gueltige Session im Forum updaten und Userdaten holen. Sofern die Admidio 
+// Session gueltig ist, ist auch die Forum Session gueltig
 if($g_session_valid)
 {
     if(forum_check_user($g_current_user->login_name, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix))
 	{
-		// Forums DB waehlen
-    	mysql_select_db($g_forum_db, $g_forum_con);
+    	// Username, UserID und NeueNachrichten aus der Forums DB lesen.
+	    $g_forum_user = $g_current_user->login_name;
+	    
+	    // Forums DB waehlen
+	    mysql_select_db($g_forum_db, $g_forum_con);
+	    
+	    $sql    = "SELECT user_id, username, user_new_privmsg FROM ". $g_forum_praefix. "_users WHERE username LIKE {0} ";
+	    $sql    = prepareSQL($sql, array($g_forum_user));
+	    $result = mysql_query($sql, $g_forum_con);
+	    db_error($result);
+	    
+	    $row = mysql_fetch_array($result);
+	    
+	    $g_forum_userid = $row[0];
+	    $g_forum_user  = $row[1];
+	    $g_forum_neuePM = $row[2];
+	    
+	    // Wenn neue Nachrichten vorliegen, einen ansprechenden Text generieren
+	    if ($g_forum_neuePM == 0)
+	    {
+	        $g_forum_neuePM_Text = "und haben <b>keine</b> neue Nachrichten.";
+	    }
+	    elseif ($g_forum_neuePM == 1)
+	    {
+	        $g_forum_neuePM_Text = "und haben <b>1</b> neue Nachricht.";
+	    }
+	    else
+	    {
+	        $g_forum_neuePM_Text = "und haben <b>".$g_forum_neuePM."</b> neue Nachrichten.";
+	    }
+	
 
     	// Erst mal schauen, ob sich die Session noch im Session Table des Forums befindet
     	$sql    = "SELECT session_id FROM ". $g_forum_praefix. "_sessions
@@ -214,7 +208,10 @@ if($g_session_valid)
     	// Den User gibt es im Forum und eine neue Session wurde angelegt, also ist das Forum Valid.
     	$g_forum_session_valid = TRUE;
     	$g_forum_session_id = $g_session_id;
-    }
+    	
+        // Cookie fuer die Anmeldung im Forum setzen
+        setcookie($g_forum_cookie_name."_sid", $g_session_id, time() + 60*60*24*30, $g_forum_cookie_path, $g_forum_cookie_domain, $g_forum_cookie_secure);
+	}
 }
 elseif (isset($_COOKIE[$g_forum_cookie_name."_sid"]))
 {
@@ -243,6 +240,9 @@ elseif (isset($_COOKIE[$g_forum_cookie_name."_sid"]))
  
     // Admidio DB waehlen
     mysql_select_db($g_adm_db, $g_adm_con);
+    
+    // Cookie fuer die Anmeldung im Forum löschen
+    setcookie($g_forum_cookie_name."_sid", "", $current_time - 31536000, $g_forum_cookie_path, $g_forum_cookie_domain, $g_forum_cookie_secure);
 }
 
 
@@ -355,7 +355,7 @@ function forum_update_user($forum_username, $forum_useraktiv, $forum_password, $
 {
     // Erst mal schauen ob der User alle Kriterien erfaellt um im Forum aktiv zu sein
     // Voraussetzung ist ein gueltiger Benutzername, eine Email und ein Password
-    if(strlen($forum_new_username) > 0 AND strlen($forum_password) > 0 AND strlen($forum_email) > 0)
+    if(strlen($forum_username) > 0 AND strlen($forum_password) > 0 AND strlen($forum_email) > 0)
     {
         $forum_useraktiv = 1;
     }
