@@ -59,11 +59,11 @@ $new_user = new User($g_adm_con);
 $new_user->getUser($req_new_user_id);
 
 // alle User aus der DB selektieren, die denselben Vor- und Nachnamen haben
-$sql = "SELECT * " .
-       "  FROM ". TBL_USERS. 
-       " WHERE UPPER(usr_last_name)  LIKE UPPER({0})" .
-       "   AND UPPER(usr_first_name) LIKE UPPER({1}) " .
-       "   AND usr_valid      = 1 ";
+$sql = "SELECT * 
+          FROM ". TBL_USERS. "
+         WHERE SUBSTRING(SOUNDEX(usr_last_name), 1, 4)  LIKE SUBSTRING(SOUNDEX({0}), 1, 4)
+           AND SUBSTRING(SOUNDEX(usr_first_name), 1, 4) LIKE SUBSTRING(SOUNDEX({1}), 1, 4)
+           AND usr_valid      = 1 ";
 $sql = prepareSql($sql, array($new_user->last_name, $new_user->first_name));
 $result_usr = mysql_query($sql, $g_adm_con);
 $member_found = mysql_num_rows($result_usr);
@@ -97,7 +97,7 @@ echo "
 <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
     <div class=\"formHead\" style=\"width: 400px;\">Anmeldung zuordnen</div>
     <div class=\"formBody\" style=\"width: 400px;\">
-        Es wurde bereits ein Benutzer unter dem Namen <b>$new_user->first_name $new_user->last_name</b> 
+        Es wurde bereits ein Benutzer mit &auml;hnlichem Namen wie <b>$new_user->first_name $new_user->last_name</b> 
         in der Datenbank gefunden.<br>
         <div class=\"groupBox\" style=\"margin-top: 10px; text-align: left;\">
             <div class=\"groupBoxHeadline\">Gefundene Benutzer</div>";
@@ -121,42 +121,66 @@ echo "
                         echo "<a href=\"mailto:$row->usr_email\">$row->usr_email</a><br>";
                     }
                     
-                    if(isMember($row->usr_id) == false && strlen($row->usr_login_name) == 0)
+                    if(isMember($row->usr_id))
                     {
-                        // kein Mitlgied dieser Orga und auch keine Logindaten vorhanden
-                        echo "<br>Dieser Benutzer ist noch kein Mitglied der Organisation $g_organization und 
-                        besitzt auch keine Logindaten.<br><br>
-                        <span class=\"iconLink\">
-                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=2\"><img
-                             class=\"iconLink\" src=\"$g_root_path/adm_program/images/properties.png\" style=\"vertical-align: middle;\" border=\"0\" title=\"Rollen und Logindaten diesem Benutzer zuordnen\" alt=\"Rollen und Logindaten diesem Benutzer zuordnen\"></a>
-                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=2\">Mitgliedschaft und Logindaten diesem Benutzer zuordnen</a>
-                        </span>";
-                    }               
-                    elseif(isMember($row->usr_id) == false && strlen($row->usr_login_name) > 0)
-                    {
-                        // kein Mitlgied dieser Orga und Logindaten sind bereits vorhanden
-                        echo "<br>Dieser Benutzer ist noch kein Mitglied der Organisation $g_organization, besitzt aber bereits Logindaten.<br><br>
-                        <span class=\"iconLink\">
-                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=2\"><img
-                             class=\"iconLink\" src=\"$g_root_path/adm_program/images/properties.png\" style=\"vertical-align: middle;\" border=\"0\" title=\"Mitgliedschaft zuweisen\" alt=\"Mitgliedschaft zuweisen\"></a>
-                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=2\">Mitgliedschaft zuweisen</a>
-                        </span>";
-                    }               
-                    else
-                    {
-                        if(isMember($row->usr_id) == true)
+                        // gefundene User ist bereits Mitglied dieser Organisation
+                        if(strlen($row->usr_login_name) > 0)
                         {
-                            // der Benutzer ist bereits Mitglied dieser Orga, also nur Logindaten neu zuschicken                    
-                            echo "<br>Dieser Benutzer besitzt schon ein g&uuml;ltiges Login. 
-                                M&ouml;chtest du ihm seinen Loginnamen mit Passwort als Erinnerung zuschicken ?<br>
+                            // Logindaten sind bereits vorhanden -> Logindaten neu zuschicken                    
+                            echo "<br>Dieser Benutzer besitzt schon ein g&uuml;ltiges Login.";
+                            if($g_preferences['enable_system_mails'] == 1)
+                            {
+                                echo "<br>M&ouml;chtest du ihm seinen Loginnamen mit Passwort als Erinnerung zuschicken ?<br>
+                                <div style=\"margin-top: 5px;\">
+                                    <span class=\"iconLink\">
+                                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=6\"><img
+                                         class=\"iconLink\" src=\"$g_root_path/adm_program/images/key.png\" style=\"vertical-align: middle;\" border=\"0\" title=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\" alt=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\"></a>
+                                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=6\">Zugangsdaten zuschicken</a>
+                                    </span>
+                                </div>";
+                            }
+                        }
+                        else
+                        {
+                            // Logindaten sind NICHT vorhanden -> diese nun zuordnen
+                            echo "<br>Dieser Benutzer besitzt noch kein Login.<br>
+                                M&ouml;chtest du ihm die Daten dieser Registrierung zuordnen ?<br>
                             <div style=\"margin-top: 5px;\">
                                 <span class=\"iconLink\">
-                                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=6\"><img
-                                     class=\"iconLink\" src=\"$g_root_path/adm_program/images/key.png\" style=\"vertical-align: middle;\" border=\"0\" title=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\" alt=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\"></a>
-                                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=6\">Zugangsdaten zuschicken</a>
+                                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=1\"><img
+                                     class=\"iconLink\" src=\"$g_root_path/adm_program/images/properties.png\" style=\"vertical-align: middle;\" border=\"0\" title=\"Zugangsdaten zuordnen\" alt=\"Zugangsdaten zuordnen\"></a>
+                                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=1\">Zugangsdaten zuordnen</a>
                                 </span>
                             </div>";
                         }
+                    }
+                    else
+                    {
+                        // gefundene User ist noch KEIN Mitglied dieser Organisation
+                        $link = "$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=2";
+                        
+                        if(strlen($row->usr_login_name) > 0)
+                        {
+                            // Logindaten sind bereits vorhanden
+                            echo "<br>Dieser Benutzer ist noch kein Mitglied der Organisation $g_organization, 
+                            besitzt aber bereits Logindaten.<br><br>
+                            <span class=\"iconLink\">
+                                <a class=\"iconLink\" href=\"$link\"><img class=\"iconLink\" 
+                                 src=\"$g_root_path/adm_program/images/properties.png\" style=\"vertical-align: middle;\" border=\"0\" title=\"Mitgliedschaft zuweisen\" alt=\"Mitgliedschaft zuweisen\"></a>
+                                <a class=\"iconLink\" href=\"$link\">Mitgliedschaft zuweisen</a>
+                            </span>";
+                        }               
+                        else
+                        {
+                            // KEINE Logindaten vorhanden
+                            echo "<br>Dieser Benutzer ist noch kein Mitglied der Organisation $g_organization und 
+                            besitzt auch keine Logindaten.<br><br>
+                            <span class=\"iconLink\">
+                                <a class=\"iconLink\" href=\"$link\"><img class=\"iconLink\"
+                                 src=\"$g_root_path/adm_program/images/properties.png\" style=\"vertical-align: middle;\" border=\"0\" title=\"Rollen und Logindaten diesem Benutzer zuordnen\" alt=\"Rollen und Logindaten diesem Benutzer zuordnen\"></a>
+                                <a class=\"iconLink\" href=\"$link\">Mitgliedschaft und Logindaten diesem Benutzer zuordnen</a>
+                            </span>";
+                        }               
                     }
                 echo "</div>";
                 $i++;
