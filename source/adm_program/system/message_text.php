@@ -28,6 +28,13 @@ $message_text = array(
         "<p>Deine Daten wurden gespeichert.</p>
         <p>Du kannst dich noch nicht einloggen.<br />
         Sobald deine Anmeldung vom Administrator bestätigt wurde, erhälst du eine E-Mail.</p>",
+      
+    "assign_login" =>
+        "Die Logindaten wurden erfolgreich zugeordnet.",
+
+    "assign_login_mail" =>
+        "Die Logindaten wurden erfolgreich zugeordnet und der
+        Benutzer ist darüber per E-Mail benachrichtigt worden.",
 
     "category_exist" =>
         " Es existiert bereits eine Kategorie in dieser Organisation mit dem Namen.",
@@ -178,14 +185,6 @@ $message_text = array(
     "uhrzeit" =>
         "Es wurde keine sinnvolle Uhrzeit eingegeben.<br /><br />
         Die Uhrzeit muss zwischen 00:00 und 23:59 liegen !",
-
-    "zuordnen" =>
-        "Wollen Sie die aktuelle Webanmeldung wirklich<br />
-        <b>%VAR1%</b> zuordnen ?",
-
-    "send_login_mail" =>
-        "Die Logindaten wurden erfolgreich zugeordnet und der
-        Benutzer wurde darüber benachrichtigt.",
 
     "send_new_login" =>
         "Möchtest du <b>%VAR1%</b> eine E-Mail mit dem Benutzernamen

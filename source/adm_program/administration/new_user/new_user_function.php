@@ -48,16 +48,29 @@ if($g_preferences['registration_mode'] == 0)
     $g_message->show("module_disabled");
 }
 
+// lokale Variablen der Uebergabevariablen initialisieren
+$req_user_id     = 0;
+$req_new_user_id = 0;
+$req_mode        = 0;
+
 // Uebergabevariablen pruefen
 
-if(isset($_GET["user_id"]) && is_numeric($_GET["user_id"]) == false)
+if(isset($_GET["user_id"]))
 {
-    $g_message->show("invalid");
+    if(is_numeric($_GET["user_id"]) == false)
+    {
+        $g_message->show("invalid");
+    }
+    $req_user_id = $_GET["user_id"];
 }
 
-if(isset($_GET["new_user_id"]) && is_numeric($_GET["new_user_id"]) == false)
+if(isset($_GET["new_user_id"]))
 {
-    $g_message->show("invalid");
+    if(is_numeric($_GET["new_user_id"]) == false)
+    {
+        $g_message->show("invalid");
+    }
+    $req_new_user_id = $_GET["new_user_id"];
 }
 
 if(is_numeric($_GET["mode"]) == false
@@ -65,23 +78,27 @@ if(is_numeric($_GET["mode"]) == false
 {
     $g_message->show("invalid");
 }
+else
+{
+    $req_mode = $_GET["mode"];
+}
 
 $err_code = "";
 $err_text = "";
 
-if(isset($_GET['new_user_id']))
+if($req_new_user_id > 0)
 {
     $new_user = new User($g_adm_con);
-    $new_user->getUser($_GET['new_user_id']);
+    $new_user->getUser($req_new_user_id);
 }
 
-if(isset($_GET['user_id']))
+if($req_user_id > 0)
 {
     $user = new User($g_adm_con);
-    $user->getUser($_GET['user_id']);
+    $user->getUser($req_user_id);
 }
 
-if($_GET["mode"] == 1 || $_GET["mode"] == 2)
+if($req_mode == 1 || $req_mode == 2)
 {
     // User-Account einem existierenden Mitglied zuordnen
 
@@ -99,16 +116,16 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 2)
     $user->update($g_current_user->id);
 }
 
-if($_GET["mode"] == 2)
+if($req_mode == 2)
 {
     // User existiert bereits, ist aber bisher noch kein Mitglied der aktuellen Orga,
     // deshalb erst einmal Rollen zuordnen und dann spaeter eine Mail schicken
-    $_SESSION['navigation']->addUrl("$g_root_path/adm_program/administration/new_user/new_user_function.php?mode=3&user_id=". $_GET['user_id']. "&new_user_id=". $_GET['new_user_id']);
-    header("Location: $g_root_path/adm_program/modules/profile/roles.php?user_id=". $_GET['user_id']);
+    $_SESSION['navigation']->addUrl("$g_root_path/adm_program/administration/new_user/new_user_function.php?mode=3&user_id=$req_user_id&new_user_id=$req_new_user_id");
+    header("Location: $g_root_path/adm_program/modules/profile/roles.php?user_id=$req_user_id");
     exit();
 }
 
-if($_GET["mode"] == 1 || $_GET["mode"] == 3)
+if($req_mode == 1 || $req_mode == 3)
 {
     // nur ausfuehren, wenn E-Mails auch unterstuetzt werden
     if($g_preferences['enable_system_mails'] == 1)
@@ -125,7 +142,7 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
             utf8_decode(" .\n\nViele Grüße\nDie Webmaster"));
         if($email->sendEmail() == true)
         {
-            $err_code = "send_login_mail";
+            $err_code = "assign_login_mail";
         }
         else
         {
@@ -133,16 +150,20 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
             $err_text = $user->email;
         }
     }
+    else
+    {
+        $err_code = "assign_login";
+    }
 
     $g_message->setForwardUrl("$g_root_path/adm_program/administration/new_user/new_user.php");
     $g_message->show($err_code, $err_text);
 }
-elseif($_GET["mode"] == 4)
+elseif($req_mode == 4)
 {
    // Registrierung loeschen
 
    $sql    = "DELETE FROM ". TBL_USERS. " WHERE usr_id = {0}";
-   $sql    = prepareSQL($sql, array($_GET['new_user_id']));
+   $sql    = prepareSQL($sql, array($req_new_user_id));
    $result = mysql_query($sql, $g_adm_con);
    db_error($result);
 
@@ -150,13 +171,13 @@ elseif($_GET["mode"] == 4)
    header($location);
    exit();
 }
-elseif($_GET["mode"] == 5)
+elseif($req_mode == 5)
 {
     // Fragen, ob die Registrierung geloescht werden soll
-    $g_message->setForwardYesNo("$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=". $_GET['new_user_id']. "&amp;mode=4");
+    $g_message->setForwardYesNo("$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;mode=4");
     $g_message->show("delete_new_user", utf8_encode("$new_user->first_name $new_user->last_name"), "Löschen");
 }
-elseif($_GET["mode"] == 6)
+elseif($req_mode == 6)
 {
     // Der User existiert schon und besitzt auch ein Login
 
@@ -165,7 +186,7 @@ elseif($_GET["mode"] == 6)
 
     // Zugangsdaten neu verschicken
     $_SESSION['navigation']->addUrl("$g_root_path/adm_program/administration/new_user/new_user.php");
-    header("Location: $g_root_path/adm_program/administration/members/members_function.php?mode=4&user_id=". $_GET['user_id']);
+    header("Location: $g_root_path/adm_program/administration/members/members_function.php?mode=4&user_id=$req_user_id");
     exit();
 }
 
