@@ -229,7 +229,7 @@ elseif($_GET["mode"] == 4)
     header('Content-Type: text/calendar');
     header('Content-Disposition: attachment; filename="'. $date->begin. '.ics"');
 
-    echo $date->getIcal($g_domain);
+    echo $date->getIcal($_SERVER['HTTP_HOST']);
     exit();
 }
 elseif($_GET["mode"] == 5)
