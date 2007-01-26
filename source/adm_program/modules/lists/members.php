@@ -410,7 +410,6 @@ echo"
                     {
                         $letter_merker++;
 						$letter_string = "zahl";
-						$letter_text = "&#35;";
                     }
                     
                     //Sonst
@@ -419,10 +418,9 @@ echo"
 						$letter_merker++;
 	                    //Buchstabe fuer ID
 	                    $letter_string = chr($letter_merker);
-	                    $letter_text = $letter_string;
                     }
                     //leerer Container
-                    echo"<div id=\"$letter_string\" name=\"$letter_string\" style=\"visibility: hidden; display: none; margin-top: 15px;\"><h1>".$letter_text."</h1></div>";
+                    echo"<div id=\"$letter_string\" name=\"$letter_string\" style=\"visibility: hidden; display: none;\"><h1></h1></div>";
 
                 }//Ende while
 
@@ -447,7 +445,7 @@ echo"
                     }
 
                     //Container
-                    echo"<div id=\"$letter_string\" name=\"$letter_string\" style=\"visibility: hidden; display: none; margin-top: 15px;\">";
+                    echo"<div id=\"$letter_string\" name=\"$letter_string\" style=\"margin-top: 15px;\">";
 
                     //Ueberschrift
                     echo "<h1>$letter_text</h1>";
@@ -648,12 +646,6 @@ echo"
  			<div class=\"smallText\">
                         Das Zwischenspeichern vor dem Buchstabenwechsel ist nicht notwendig&#33;&#33;&#33;
              </div>";
-		echo"
-        <script type=\"text/javascript\">
-        <!--
-            toggleDiv('A');
-        -->
-        </script>";
     }
 
     require("../../../adm_config/body_bottom.php");
