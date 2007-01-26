@@ -61,8 +61,10 @@ $new_user->getUser($req_new_user_id);
 // alle User aus der DB selektieren, die denselben Vor- und Nachnamen haben
 $sql = "SELECT * 
           FROM ". TBL_USERS. "
-         WHERE SUBSTRING(SOUNDEX(usr_last_name), 1, 4)  LIKE SUBSTRING(SOUNDEX({0}), 1, 4)
-           AND SUBSTRING(SOUNDEX(usr_first_name), 1, 4) LIKE SUBSTRING(SOUNDEX({1}), 1, 4)
+         WHERE (  (   SUBSTRING(SOUNDEX(usr_last_name), 1, 4)  LIKE SUBSTRING(SOUNDEX({0}), 1, 4)
+                  AND SUBSTRING(SOUNDEX(usr_first_name), 1, 4) LIKE SUBSTRING(SOUNDEX({1}), 1, 4) )
+               OR (   SUBSTRING(SOUNDEX(usr_last_name), 1, 4)  LIKE SUBSTRING(SOUNDEX({1}), 1, 4)
+                  AND SUBSTRING(SOUNDEX(usr_first_name), 1, 4) LIKE SUBSTRING(SOUNDEX({0}), 1, 4) ) )
            AND usr_valid      = 1 ";
 $sql = prepareSql($sql, array($new_user->last_name, $new_user->first_name));
 $result_usr = mysql_query($sql, $g_adm_con);
@@ -101,6 +103,8 @@ echo "
         in der Datenbank gefunden.<br>
         <div class=\"groupBox\" style=\"margin-top: 10px; text-align: left;\">
             <div class=\"groupBoxHeadline\">Gefundene Benutzer</div>";
+            
+            // Alle gefundenen Benutzer mit Adresse ausgeben und einem Link zur weiteren moeglichen Verarbeitung
             $i = 0;
             while($row = mysql_fetch_object($result_usr))
             {
@@ -109,16 +113,25 @@ echo "
                     echo "<hr width=\"85%\">";
                 }
                 echo "<div style=\"margin-left: 20px;\">
-                    <i>$row->usr_last_name, $row->usr_first_name</i><br>
-                    $row->usr_address<br>
-                    $row->usr_zip_code $row->usr_city<br>";
-                    if($g_preferences['enable_mail_module'] == 1)
+                    <i>$row->usr_first_name $row->usr_last_name</i><br>";
+                    if(strlen($row->usr_address) > 0)
                     {
-                        echo "<a href=\"$g_root_path/adm_program/modules/mail/mail.php?usr_id=$row->usr_id\">$row->usr_email</a><br>";
+                        echo "$row->usr_address<br>";
                     }
-                    else
+                    if(strlen($row->usr_zip_code) > 0 || strlen($row->usr_city) > 0)
                     {
-                        echo "<a href=\"mailto:$row->usr_email\">$row->usr_email</a><br>";
+                        echo "$row->usr_zip_code $row->usr_city<br>";
+                    }
+                    if(strlen($row->usr_email) > 0)
+                    {
+                        if($g_preferences['enable_mail_module'] == 1)
+                        {
+                            echo "<a href=\"$g_root_path/adm_program/modules/mail/mail.php?usr_id=$row->usr_id\">$row->usr_email</a><br>";
+                        }
+                        else
+                        {
+                            echo "<a href=\"mailto:$row->usr_email\">$row->usr_email</a><br>";
+                        }
                     }
                     
                     if(isMember($row->usr_id))
