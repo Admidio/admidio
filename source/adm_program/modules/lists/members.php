@@ -452,14 +452,14 @@ echo"
 
                     //Tabelle anlegen
                     echo"
-                    <table class=\"tableList\" cellpadding=\"3\" cellspacing=\"0\" style=\"width: 95%;\">
+                    <table class=\"tableList\" cellpadding=\"3\" cellspacing=\"0\">
                         <tr>
-                            <th class=\"tableHeader\" style=\"text-align: center;\">Info</th>
-                            <th class=\"tableHeader\" style=\"text-align: center;\">Name</th>
-                            <th class=\"tableHeader\" style=\"text-align: center;\">Vorname</th>
-                            <th class=\"tableHeader\" style=\"text-align: center;\">Geburtsdatum</th>
-                            <th class=\"tableHeader\" style=\"text-align: center;\">Mitglied</th>
-                            <th class=\"tableHeader\" style=\"text-align: center;\">Leiter</th>
+                            <th class=\"tableHeader\" style=\"text-align: left;\">Info</th>
+                            <th class=\"tableHeader\" style=\"text-align: left;\">Name</th>
+                            <th class=\"tableHeader\" style=\"text-align: left;\">Vorname</th>
+                            <th class=\"tableHeader\" style=\"text-align: left;\">Geburtsdatum</th>
+                            <th class=\"tableHeader\" style=\"text-align: left;\">Mitglied</th>
+                            <th class=\"tableHeader\" style=\"text-align: left;\">Leiter</th>
                         </tr>";
                 }
 
@@ -470,7 +470,7 @@ echo"
                             .$user['usr_zip_code']."&nbsp;".$user['usr_city']."&nbsp;&nbsp;&nbsp;"
                             .$user['usr_phone'];
                 echo"
-                <tr>
+                <tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\">
                     <td style=\"text-align: center;\">
                         <img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/note.png\" alt=\"Userinformationen\" title=\"$user_text\">
                     </td>
@@ -565,14 +565,14 @@ echo"
         {
             //Tabelle anlegen
             echo"
-            <table class=\"tableList\" cellpadding=\"3\" cellspacing=\"0\" style=\"width: 95%;\">
+            <table class=\"tableList\" cellpadding=\"3\" cellspacing=\"0\" >
                 <tr>
-                    <th class=\"tableHeader\" style=\"text-align: center;\">Info</th>
-                    <th class=\"tableHeader\" style=\"text-align: center;\">Name</th>
-                    <th class=\"tableHeader\" style=\"text-align: center;\">Vorname</th>
-                    <th class=\"tableHeader\" style=\"text-align: center;\">Geburtsdatum</th>
-                    <th class=\"tableHeader\" style=\"text-align: center;\">Mitglied</th>
-                    <th class=\"tableHeader\" style=\"text-align: center;\">Leiter</th>
+                    <th class=\"tableHeader\" style=\"text-align: left;\">Info</th>
+                    <th class=\"tableHeader\" style=\"text-align: left;\">Name</th>
+                    <th class=\"tableHeader\" style=\"text-align: left;\">Vorname</th>
+                    <th class=\"tableHeader\" style=\"text-align: left;\">Geburtsdatum</th>
+                    <th class=\"tableHeader\" style=\"text-align: left;\">Mitglied</th>
+                    <th class=\"tableHeader\" style=\"text-align: left;\">Leiter</th>
                 </tr>";
 
             while($user = mysql_fetch_array($result_user))
@@ -583,7 +583,7 @@ echo"
                             .$user['usr_zip_code']."&nbsp;".$user['usr_city']."&nbsp;&nbsp;&nbsp;"
                             .$user['usr_phone'];
                 echo"
-                <tr>
+                <tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\">
                     <td style=\"text-align: center;\">
                         <img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/note.png\" alt=\"Userinformationen\" title=\"$user_text\">
                     </td>
