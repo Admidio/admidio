@@ -98,6 +98,7 @@ function Email()
     //Hier werden noch mal alle Empfaenger der Mail reingeschrieben,
     //fuer den Fall das eine Kopie der Mail angefordert wird...
     $this->addresses = '';
+
 }
 
 // Funktion um den ContentType auf UTF-8 umzusetzen
@@ -172,14 +173,7 @@ function addBlindCopy($address, $name='')
 {
     if (isValidEmailAddress($address))
     {
-        if (!isset($this->headerOptions['Bcc']))
-        {
-            $this->headerOptions['Bcc'] = $name. " <". $address. ">";
-        }
-        else
-        {
-        $this->headerOptions['Bcc'] = $this->headerOptions['Bcc']. ", ". $name. " <". $address. ">";
-        }
+        $this->bccArray[] = $name. " <". $address. ">";
         $this->addresses = $this->addresses. $name. " <". $address. ">\n";
         return true;
     }
@@ -213,7 +207,7 @@ function setCopyToSenderFlag()
     $this->copyToSender = true;
 }
 
-// Funktion um das Flag zu setzen, dass in der Kopie alle Empf?nger der Mail aufgelistet werden
+// Funktion um das Flag zu setzen, dass in der Kopie alle Empfaenger der Mail aufgelistet werden
 function setListRecipientsFlag()
 {
     $this->listRecipients = true;
@@ -288,7 +282,7 @@ function sendEmail()
     }
 
     // Wenn keine Empfaenger gesetzt wurden, ist hier auch Ende...
-    if (!isset($this->headerOptions['To']) and !isset($this->headerOptions['Cc']) and !isset($this->headerOptions['Bcc']))
+    if (!isset($this->headerOptions['To']) and !isset($this->headerOptions['Cc']) and !isset($this->bccArray))
     {
         return false;
     }
@@ -309,17 +303,64 @@ function sendEmail()
         unset($this->headerOptions['Subject']);
     }
 
-    // Hier wird der Header fuer die Mail aufbereitet...
-    $this->prepareHeader();
+    //Hier werden jetzt die BCC-Empfaenger im Header verewigt und die Mail dann abgeschickt.
+    //Da dies haeppchenweise geschehen soll, wird mit einer Schleife gearbeitet
+    $bccCounter = 0;
 
-    // Hier wird der Body fuer die Mail aufbereitet...
-    $this->prepareBody();
-
-    // Mail wird jetzt versendet...
-    if (!mail($recipient, $subject, $this->mail_body, $this->mail_properties))
+    if (isset($this->bccArray))
     {
-         return false;
+        foreach ($this->bccArray as $key => $value)
+        {
+            if (!isset($this->headerOptions['Bcc']))
+            {
+                $this->headerOptions['Bcc'] = $value;
+            }
+            else
+            {
+            $this->headerOptions['Bcc'] = $this->headerOptions['Bcc']. ", ". $value;
+            }
+
+            $bccCounter++;
+
+            //immer wenn die Anzahl der BCCs 50 erreicht hat oder aber das letzte Element des Arrays erreicht ist, wird die Mail versand.
+            if ($bccCounter == 50 || count($this->bccArray) == $key+1)
+            {
+                // Hier wird der Header fuer die Mail aufbereitet...
+                $this->prepareHeader();
+
+                // Hier wird der Body fuer die Mail aufbereitet...
+                $this->prepareBody();
+
+                // Mail wird jetzt versendet...
+                if (!mail($recipient, $subject, $this->mail_body, $this->mail_properties))
+                {
+                     return false;
+                }
+
+                unset($this->headerOptions['Bcc']);
+                $bccCounter = 0;
+            }
+
+
+        }
     }
+    else
+    {
+        //...und hier noch das ganze wenn es keine BCCs gibt!
+
+        // Hier wird der Header fuer die Mail aufbereitet...
+        $this->prepareHeader();
+
+        // Hier wird der Body fuer die Mail aufbereitet...
+        $this->prepareBody();
+
+        // Mail wird jetzt versendet...
+        if (!mail($recipient, $subject, $this->mail_body, $this->mail_properties))
+        {
+             return false;
+        }
+    }
+
 
     // Eventuell noch eine Kopie an den Absender verschicken:
     if ($this->copyToSender)
