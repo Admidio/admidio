@@ -131,31 +131,31 @@ for($x=0; $user = mysql_fetch_array($result_user); $x++)
     //falls Kleinbuchstaben
     if($this_letter>=97 && $this_letter<=122)
     {
-		$this_letter = $this_letter-32;
+        $this_letter = $this_letter-32;
     }
     
-	//falls zahlen
+    //falls zahlen
     if($this_letter>=48 && $this_letter<=57)
     {
-		$this_letter = 35;
+        $this_letter = 35;
     }
 
     //Umlaute zu A
-	if($this_letter>=192 && $this_letter<=198)
+    if($this_letter>=192 && $this_letter<=198)
     {
-		$this_letter = 65;
+        $this_letter = 65;
     }
     
-	//Umlaute zu O
-	if($this_letter>=210 && $this_letter<=214)
+    //Umlaute zu O
+    if($this_letter>=210 && $this_letter<=214)
     {
-		$this_letter = 79;
+        $this_letter = 79;
     }
     
-	//Umlaute zu U
-	if($this_letter>=217 && $this_letter<=220)
+    //Umlaute zu U
+    if($this_letter>=217 && $this_letter<=220)
     {
-		$this_letter = 85;
+        $this_letter = 85;
     }
     
     $first_letter_array[$x]= $this_letter;
@@ -201,7 +201,7 @@ $count_valid_users = $row[0];
 
 //Beginn HTML
 echo "
-<!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org - Version: ". ADMIDIO_VERSION. " -->\n
+<!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org -->\n
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
 <html>
 <head>
@@ -213,11 +213,11 @@ echo "
         .smallText {
             font-size: 8pt;
             font-weight: normal;
-			text-align: center;
+            text-align: center;
         }
     </style>
 
-	<script type=\"text/javascript\"><!--
+    <script type=\"text/javascript\"><!--
         function markMember(element)
         {
             if(element.checked == true)
@@ -263,7 +263,7 @@ echo "
         document.getElementById(element_id).style.display    = 'block';
     }
 
-	// Alle Divs anzeigen
+    // Alle Divs anzeigen
     function showAll()
     {
         //Alle divs auf unsichtbar setzen
@@ -271,7 +271,7 @@ echo "
         for (i=0;i<ids.length;i++)
         {
             document.getElementById(ids[i]).style.visibility = 'visible';
-        	document.getElementById(ids[i]).style.display    = 'block';
+            document.getElementById(ids[i]).style.display    = 'block';
         }     
     }
     --></script>
@@ -362,37 +362,37 @@ echo"
            $user = mysql_fetch_array($result_user);
             
             //Anfangsbuchstabe erfassen
-		    $this_letter = ord($user['usr_last_name']);
-		    
-		    //falls Kleinbuchstaben
-		    if($this_letter>=97 && $this_letter<=122)
-		    {
-				$this_letter = $this_letter-32;
-		    }
-		    
-			//falls zahlen
-		    if($this_letter>=48 && $this_letter<=57)
-		    {
-				$this_letter = 35;
-		    }
-		
-		    //Umlaute zu A
-			if($this_letter>=192 && $this_letter<=198)
-		    {
-				$this_letter = 65;
-		    }
-		    
-			//Umlaute zu O
-			if($this_letter>=210 && $this_letter<=214)
-		    {
-				$this_letter = 79;
-		    }
-		    
-			//Umlaute zu U
-			if($this_letter>=217 && $this_letter<=220)
-		    {
-				$this_letter = 85;
-		    }
+            $this_letter = ord($user['usr_last_name']);
+            
+            //falls Kleinbuchstaben
+            if($this_letter>=97 && $this_letter<=122)
+            {
+                $this_letter = $this_letter-32;
+            }
+            
+            //falls zahlen
+            if($this_letter>=48 && $this_letter<=57)
+            {
+                $this_letter = 35;
+            }
+        
+            //Umlaute zu A
+            if($this_letter>=192 && $this_letter<=198)
+            {
+                $this_letter = 65;
+            }
+            
+            //Umlaute zu O
+            if($this_letter>=210 && $this_letter<=214)
+            {
+                $this_letter = 79;
+            }
+            
+            //Umlaute zu U
+            if($this_letter>=217 && $this_letter<=220)
+            {
+                $this_letter = 85;
+            }
            
            //Zeilen ausgeben
            for($x=1; $x<=mysql_num_rows($result_user); $x++)
@@ -409,15 +409,15 @@ echo"
                     if($letter_merker == 35)
                     {
                         $letter_merker++;
-						$letter_string = "zahl";
+                        $letter_string = "zahl";
                     }
                     
                     //Sonst
                     else
                     {
-						$letter_merker++;
-	                    //Buchstabe fuer ID
-	                    $letter_string = chr($letter_merker);
+                        $letter_merker++;
+                        //Buchstabe fuer ID
+                        $letter_string = chr($letter_merker);
                     }
                     //leerer Container
                     echo"<div id=\"$letter_string\" name=\"$letter_string\" style=\"visibility: hidden; display: none;\"><h1></h1></div>";
@@ -514,37 +514,37 @@ echo"
                 $user = mysql_fetch_array($result_user);
 
                 //Anfangsbuchstabe erfassen
-			    $this_letter = ord($user['usr_last_name']);
-			    
-			    //falls Kleinbuchstaben
-			    if($this_letter>=97 && $this_letter<=122)
-			    {
-					$this_letter = $this_letter-32;
-			    }
-			    
-				//falls zahlen
-			    if($this_letter>=48 && $this_letter<=57)
-			    {
-					$this_letter = 35;
-			    }
-			
-			    //Umlaute zu A
-				if($this_letter>=192 && $this_letter<=198)
-			    {
-					$this_letter = 65;
-			    }
-			    
-				//Umlaute zu O
-				if($this_letter>=210 && $this_letter<=214)
-			    {
-					$this_letter = 79;
-			    }
-			    
-				//Umlaute zu U
-				if($this_letter>=217 && $this_letter<=220)
-			    {
-					$this_letter = 85;
-			    }
+                $this_letter = ord($user['usr_last_name']);
+                
+                //falls Kleinbuchstaben
+                if($this_letter>=97 && $this_letter<=122)
+                {
+                    $this_letter = $this_letter-32;
+                }
+                
+                //falls zahlen
+                if($this_letter>=48 && $this_letter<=57)
+                {
+                    $this_letter = 35;
+                }
+            
+                //Umlaute zu A
+                if($this_letter>=192 && $this_letter<=198)
+                {
+                    $this_letter = 65;
+                }
+                
+                //Umlaute zu O
+                if($this_letter>=210 && $this_letter<=214)
+                {
+                    $this_letter = 79;
+                }
+                
+                //Umlaute zu U
+                if($this_letter>=217 && $this_letter<=220)
+                {
+                    $this_letter = 85;
+                }
 
                 if($this_letter != $letter_merker || mysql_num_rows($result_user)+1==$x)
                 {
@@ -643,7 +643,7 @@ echo"
     if(mysql_num_rows($result_user)>=50)
     {
        echo"
- 			<div class=\"smallText\">
+            <div class=\"smallText\">
                         Das Zwischenspeichern vor dem Buchstabenwechsel ist nicht notwendig&#33;&#33;&#33;
              </div>";
     }

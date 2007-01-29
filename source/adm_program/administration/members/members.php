@@ -189,7 +189,7 @@ $row = mysql_fetch_array($result);
 $count_mem_rol = $row[0];
 
 echo "
-<!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org - Version: ". ADMIDIO_VERSION. " -->\n
+<!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org -->\n
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
 <html>
 <head>

@@ -47,7 +47,7 @@ echo "
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
 <html>
 <head>
-    <!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org - Version: ". ADMIDIO_VERSION. " -->\n
+    <!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org -->\n
     <title>Passwort &auml;ndern</title>
     <meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\">
     <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
