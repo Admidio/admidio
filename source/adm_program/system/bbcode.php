@@ -230,10 +230,20 @@ class ubbParser
   }
   function parse_url($tree, $params = array())
   {
+     global $g_root_path;
      /* [url]href[/url] as well as [url=href]text[/url] is supported */
      $href = isset($params['url']) ? $params['url'] : $tree->toText();
      $href = $this->valid_url($href) ? $href : '';
-     return $this->simple_parse($tree, '<a href="'.htmlspecialchars($href).'" target="_blank">', '</a>');
+     // MFA bei einem Verweis auf Admidioseiten, diesen im selben Fenster oeffnen
+     if(strpos($href, $g_root_path) === 0)
+     {
+        $target = "_self";
+     }
+     else
+     {
+        $target = "_blank";
+     }
+     return $this->simple_parse($tree, '<a href="'.htmlspecialchars($href).'" target="'. $target. '">', '</a>');
   }
   // MFA mail in email umbenannt
   function parse_email($tree, $params = array())
