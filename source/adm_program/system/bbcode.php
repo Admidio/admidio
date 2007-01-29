@@ -235,7 +235,7 @@ class ubbParser
      $href = isset($params['url']) ? $params['url'] : $tree->toText();
      $href = $this->valid_url($href) ? $href : '';
      // MFA bei einem Verweis auf Admidioseiten, diesen im selben Fenster oeffnen
-     if(strpos($href, $g_root_path) === 0)
+     if(strpos(strtolower($href), strtolower($g_root_path)) === 0)
      {
         $target = "_self";
      }
