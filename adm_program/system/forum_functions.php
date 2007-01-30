@@ -25,7 +25,7 @@
 
 // Globale Variablen fuer das Forum
 $g_forum_session_id    = "";            // Die Session fuer das Forum
-$g_forum_session_valid = FALSE;     	// Session gueltig
+$g_forum_session_valid = FALSE;         // Session gueltig
 $g_forum_user  = "";                    // Username im Forum
 $g_forum_userid = "";                   // UserID im Forum
 $g_forum_neuePM = "";                   // Nachrichten im Forum
@@ -57,60 +57,60 @@ if(isset($_SESSION['s_forum_sitename'])
 }
 else
 {
-	// Forums DB waehlen
-	mysql_select_db($g_forum_db, $g_forum_con);
-	
-	$sql    = "SELECT config_value FROM ". $g_forum_praefix. "_config WHERE config_name = 'sitename' ";
-	$result = mysql_query($sql, $g_forum_con);
-	db_error($result);
-	$row = mysql_fetch_array($result);
-	$g_forum_sitename = $row[0];
-	$_SESSION['s_forum_sitename'] = $g_forum_sitename;
+    // Forums DB waehlen
+    mysql_select_db($g_forum_db, $g_forum_con);
+    
+    $sql    = "SELECT config_value FROM ". $g_forum_praefix. "_config WHERE config_name = 'sitename' ";
+    $result = mysql_query($sql, $g_forum_con);
+    db_error($result);
+    $row = mysql_fetch_array($result);
+    $g_forum_sitename = $row[0];
+    $_SESSION['s_forum_sitename'] = $g_forum_sitename;
 
-	$sql    = "SELECT config_value FROM ". $g_forum_praefix. "_config WHERE config_name = 'cookie_name' ";
-	$result = mysql_query($sql, $g_forum_con);
-	db_error($result);
-	$row = mysql_fetch_array($result);
-	$g_forum_cookie_name = $row[0];
-	$_SESSION['s_forum_cookie_name'] = $g_forum_cookie_name;
-	
-	$sql    = "SELECT config_value FROM ". $g_forum_praefix. "_config WHERE config_name = 'cookie_path' ";
-	$result = mysql_query($sql, $g_forum_con);
-	db_error($result);
-	$row = mysql_fetch_array($result);
-	$g_forum_cookie_path = $row[0];
-	$_SESSION['s_forum_cookie_path'] = $g_forum_cookie_path;
-	
-	$sql    = "SELECT config_value FROM ". $g_forum_praefix. "_config WHERE config_name = 'cookie_domain' ";
-	$result = mysql_query($sql, $g_forum_con);
-	db_error($result);
-	$row = mysql_fetch_array($result);
-	$g_forum_cookie_domain = $row[0];
-	$_SESSION['s_forum_cookie_domain'] = $g_forum_cookie_domain;
-	
-	$sql    = "SELECT config_value FROM ". $g_forum_praefix. "_config WHERE config_name = 'cookie_secure' ";
-	$result = mysql_query($sql, $g_forum_con);
-	db_error($result);
-	$row = mysql_fetch_array($result);
-	$g_forum_cookie_secure = $row[0];
-	$_SESSION['s_forum_cookie_secure'] = $g_forum_cookie_secure;
-	
-	$sql    = "SELECT config_value FROM ". $g_forum_praefix. "_config WHERE config_name = 'server_name' ";
-	$result = mysql_query($sql, $g_forum_con);
-	db_error($result);
-	$row = mysql_fetch_array($result);
-	$g_forum_server = str_replace('/', '', $row[0]);
-	$_SESSION['s_forum_server'] = $g_forum_server;
-	
-	$sql    = "SELECT config_value FROM ". $g_forum_praefix. "_config WHERE config_name = 'script_path' ";
-	$result = mysql_query($sql, $g_forum_con);
-	db_error($result);
-	$row = mysql_fetch_array($result);
-	$g_forum_path = str_replace('/', '', $row[0]);
-	$_SESSION['s_forum_path'] = $g_forum_path;
-	
-	// Admidio DB waehlen
-	mysql_select_db($g_adm_db, $g_adm_con);
+    $sql    = "SELECT config_value FROM ". $g_forum_praefix. "_config WHERE config_name = 'cookie_name' ";
+    $result = mysql_query($sql, $g_forum_con);
+    db_error($result);
+    $row = mysql_fetch_array($result);
+    $g_forum_cookie_name = $row[0];
+    $_SESSION['s_forum_cookie_name'] = $g_forum_cookie_name;
+    
+    $sql    = "SELECT config_value FROM ". $g_forum_praefix. "_config WHERE config_name = 'cookie_path' ";
+    $result = mysql_query($sql, $g_forum_con);
+    db_error($result);
+    $row = mysql_fetch_array($result);
+    $g_forum_cookie_path = $row[0];
+    $_SESSION['s_forum_cookie_path'] = $g_forum_cookie_path;
+    
+    $sql    = "SELECT config_value FROM ". $g_forum_praefix. "_config WHERE config_name = 'cookie_domain' ";
+    $result = mysql_query($sql, $g_forum_con);
+    db_error($result);
+    $row = mysql_fetch_array($result);
+    $g_forum_cookie_domain = $row[0];
+    $_SESSION['s_forum_cookie_domain'] = $g_forum_cookie_domain;
+    
+    $sql    = "SELECT config_value FROM ". $g_forum_praefix. "_config WHERE config_name = 'cookie_secure' ";
+    $result = mysql_query($sql, $g_forum_con);
+    db_error($result);
+    $row = mysql_fetch_array($result);
+    $g_forum_cookie_secure = $row[0];
+    $_SESSION['s_forum_cookie_secure'] = $g_forum_cookie_secure;
+    
+    $sql    = "SELECT config_value FROM ". $g_forum_praefix. "_config WHERE config_name = 'server_name' ";
+    $result = mysql_query($sql, $g_forum_con);
+    db_error($result);
+    $row = mysql_fetch_array($result);
+    $g_forum_server = str_replace('/', '', $row[0]);
+    $_SESSION['s_forum_server'] = $g_forum_server;
+    
+    $sql    = "SELECT config_value FROM ". $g_forum_praefix. "_config WHERE config_name = 'script_path' ";
+    $result = mysql_query($sql, $g_forum_con);
+    db_error($result);
+    $row = mysql_fetch_array($result);
+    $g_forum_path = str_replace('/', '', $row[0]);
+    $_SESSION['s_forum_path'] = $g_forum_path;
+    
+    // Admidio DB waehlen
+    mysql_select_db($g_adm_db, $g_adm_con);
 }
 
 // Cookie des Forums einlesen
@@ -119,7 +119,7 @@ if(isset($_COOKIE[$g_forum_cookie_name."_sid"]) AND $g_session_valid)
     $g_forum_session_id = $_COOKIE[$g_forum_cookie_name."_sid"];
     if($g_forum_session_id == $g_session_id)
     {
-	    $g_forum_session_valid = TRUE;
+        $g_forum_session_valid = TRUE;
     }
     else
     {
@@ -137,80 +137,80 @@ else
 if($g_session_valid)
 {
     if(forum_check_user($g_current_user->login_name, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix))
-	{
-    	// Username, UserID und NeueNachrichten aus der Forums DB lesen.
-	    $g_forum_user = $g_current_user->login_name;
-	    
-	    // Forums DB waehlen
-	    mysql_select_db($g_forum_db, $g_forum_con);
-	    
-	    $sql    = "SELECT user_id, username, user_new_privmsg FROM ". $g_forum_praefix. "_users WHERE username LIKE {0} ";
-	    $sql    = prepareSQL($sql, array($g_forum_user));
-	    $result = mysql_query($sql, $g_forum_con);
-	    db_error($result);
-	    
-	    $row = mysql_fetch_array($result);
-	    
-	    $g_forum_userid = $row[0];
-	    $g_forum_user  = $row[1];
-	    $g_forum_neuePM = $row[2];
-	    
-	    // Wenn neue Nachrichten vorliegen, einen ansprechenden Text generieren
-	    if ($g_forum_neuePM == 0)
-	    {
-	        $g_forum_neuePM_Text = "und haben <b>keine</b> neue Nachrichten.";
-	    }
-	    elseif ($g_forum_neuePM == 1)
-	    {
-	        $g_forum_neuePM_Text = "und haben <b>1</b> neue Nachricht.";
-	    }
-	    else
-	    {
-	        $g_forum_neuePM_Text = "und haben <b>".$g_forum_neuePM."</b> neue Nachrichten.";
-	    }
-	
+    {
+        // Username, UserID und NeueNachrichten aus der Forums DB lesen.
+        $g_forum_user = $g_current_user->login_name;
+        
+        // Forums DB waehlen
+        mysql_select_db($g_forum_db, $g_forum_con);
+        
+        $sql    = "SELECT user_id, username, user_new_privmsg FROM ". $g_forum_praefix. "_users WHERE username LIKE {0} ";
+        $sql    = prepareSQL($sql, array($g_forum_user));
+        $result = mysql_query($sql, $g_forum_con);
+        db_error($result);
+        
+        $row = mysql_fetch_array($result);
+        
+        $g_forum_userid = $row[0];
+        $g_forum_user  = $row[1];
+        $g_forum_neuePM = $row[2];
+        
+        // Wenn neue Nachrichten vorliegen, einen ansprechenden Text generieren
+        if ($g_forum_neuePM == 0)
+        {
+            $g_forum_neuePM_Text = "und haben <b>keine</b> neue Nachrichten.";
+        }
+        elseif ($g_forum_neuePM == 1)
+        {
+            $g_forum_neuePM_Text = "und haben <b>1</b> neue Nachricht.";
+        }
+        else
+        {
+            $g_forum_neuePM_Text = "und haben <b>".$g_forum_neuePM."</b> neue Nachrichten.";
+        }
+    
 
-    	// Erst mal schauen, ob sich die Session noch im Session Table des Forums befindet
-    	$sql    = "SELECT session_id FROM ". $g_forum_praefix. "_sessions
-    	           WHERE session_id = '".$g_session_id."' ";
-    	$result = mysql_query($sql, $g_forum_con);
-    	
-    	if(mysql_num_rows($result))
-    	{
-    	    // Session existiert, also updaten
-    	    $sql    = "UPDATE ". $g_forum_praefix. "_sessions 
-    	              SET session_time = ". time() .",  session_user_id = ". $g_forum_userid .",  session_logged_in = 1
-    	              WHERE session_id = {0}";
-    	    $sql    = prepareSQL($sql, array($g_session_id));
-    	    $result = mysql_query($sql, $g_forum_con);
-    	    db_error($result);
-    	}
-    	else
-    	{
-    	    // Session existiert nicht, also neu anlegen (Autologin im Forum)
-    	    // Daten fuer das Cookie und den Session Eintrag im Forum aufbereiten
-    	    $ip_sep = explode('.', getenv('REMOTE_ADDR'));
-    	    $user_ip = sprintf('%02x%02x%02x%02x', $ip_sep[0], $ip_sep[1], $ip_sep[2], $ip_sep[3]);
-    	    $current_time = time();
-    	    
-    	    // Session in die Forum DB schreiben
-    	    $sql = "INSERT INTO " .$g_forum_praefix. "_sessions
-    	           (session_id, session_user_id, session_start, session_time, session_ip, session_page, session_logged_in, session_admin)
-    	           VALUES ('$g_session_id', $g_forum_userid, $current_time, $current_time, '$user_ip', 0, 1, 0)";
-    	    $result = mysql_query($sql, $g_forum_con);
-    	    db_error($result);
-    	}    
-    	
-    	// Admidio DB waehlen
-    	mysql_select_db($g_adm_db, $g_adm_con);
-    	
-    	// Den User gibt es im Forum und eine neue Session wurde angelegt, also ist das Forum Valid.
-    	$g_forum_session_valid = TRUE;
-    	$g_forum_session_id = $g_session_id;
-    	
+        // Erst mal schauen, ob sich die Session noch im Session Table des Forums befindet
+        $sql    = "SELECT session_id FROM ". $g_forum_praefix. "_sessions
+                   WHERE session_id = '".$g_session_id."' ";
+        $result = mysql_query($sql, $g_forum_con);
+        
+        if(mysql_num_rows($result))
+        {
+            // Session existiert, also updaten
+            $sql    = "UPDATE ". $g_forum_praefix. "_sessions 
+                      SET session_time = ". time() .",  session_user_id = ". $g_forum_userid .",  session_logged_in = 1
+                      WHERE session_id = {0}";
+            $sql    = prepareSQL($sql, array($g_session_id));
+            $result = mysql_query($sql, $g_forum_con);
+            db_error($result);
+        }
+        else
+        {
+            // Session existiert nicht, also neu anlegen (Autologin im Forum)
+            // Daten fuer das Cookie und den Session Eintrag im Forum aufbereiten
+            $ip_sep = explode('.', getenv('REMOTE_ADDR'));
+            $user_ip = sprintf('%02x%02x%02x%02x', $ip_sep[0], $ip_sep[1], $ip_sep[2], $ip_sep[3]);
+            $current_time = time();
+            
+            // Session in die Forum DB schreiben
+            $sql = "INSERT INTO " .$g_forum_praefix. "_sessions
+                   (session_id, session_user_id, session_start, session_time, session_ip, session_page, session_logged_in, session_admin)
+                   VALUES ('$g_session_id', $g_forum_userid, $current_time, $current_time, '$user_ip', 0, 1, 0)";
+            $result = mysql_query($sql, $g_forum_con);
+            db_error($result);
+        }    
+        
+        // Admidio DB waehlen
+        mysql_select_db($g_adm_db, $g_adm_con);
+        
+        // Den User gibt es im Forum und eine neue Session wurde angelegt, also ist das Forum Valid.
+        $g_forum_session_valid = TRUE;
+        $g_forum_session_id = $g_session_id;
+        
         // Cookie fuer die Anmeldung im Forum setzen
         setcookie($g_forum_cookie_name."_sid", $g_session_id, time() + 60*60*24*30, $g_forum_cookie_path, $g_forum_cookie_domain, $g_forum_cookie_secure);
-	}
+    }
 }
 elseif (isset($_COOKIE[$g_forum_cookie_name."_sid"]))
 {
@@ -241,7 +241,7 @@ elseif (isset($_COOKIE[$g_forum_cookie_name."_sid"]))
     mysql_select_db($g_adm_db, $g_adm_con);
     
     // Cookie fuer die Anmeldung im Forum löschen
-    setcookie($g_forum_cookie_name."_sid", "", $current_time - 31536000, $g_forum_cookie_path, $g_forum_cookie_domain, $g_forum_cookie_secure);
+    setcookie($g_forum_cookie_name."_sid", "", time() - 31536000, $g_forum_cookie_path, $g_forum_cookie_domain, $g_forum_cookie_secure);
 }
 
 
