@@ -130,6 +130,7 @@ if ($user_found >= 1)
         // Paralell im Forum einloggen, wenn g_forum gesetzt ist
         if($g_forum)
         {
+            $forum_admin_reset = false;
             /* Überprüfen, ob User ID =1 (Administrator) angemeldet ist. 
             Falls ja, wird geprüft, ob im Forum der gleiche Username und Password für die UserID 2 
             (Standard ID für den Administrator im Forum) besteht.

@@ -75,7 +75,7 @@ if($g_forum && $g_forum_session_valid)
 
 
     // Cookie fuer die Anmeldung im Forum löschen
-    setcookie($g_forum_cookie_name."_sid", "", $current_time - 31536000, $g_forum_cookie_path, $g_forum_cookie_domain, $g_forum_cookie_secure);
+    setcookie($g_forum_cookie_name."_sid", "", time() - 31536000, $g_forum_cookie_path, $g_forum_cookie_domain, $g_forum_cookie_secure);
 
 
     $message_code = "logoutforum";    
