@@ -56,8 +56,6 @@ if(strlen($g_tbl_praefix) == 0)
 define("TBL_ANNOUNCEMENTS",     $g_tbl_praefix. "_announcements");
 define("TBL_CATEGORIES",        $g_tbl_praefix. "_categories");
 define("TBL_DATES",             $g_tbl_praefix. "_dates");
-define("TBL_FOLDERS",           $g_tbl_praefix. "_folders");
-define("TBL_FOLDER_ROLES",      $g_tbl_praefix. "_folder_roles");
 define("TBL_GUESTBOOK",         $g_tbl_praefix. "_guestbook");
 define("TBL_GUESTBOOK_COMMENTS",$g_tbl_praefix. "_guestbook_comments");
 define("TBL_LINKS",             $g_tbl_praefix. "_links");

@@ -6,6 +6,8 @@
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  *
+ * Uebergaben:
+ *
  * mode : 0 (Default) Erster Dialog
  *        1 Admidio installieren - Config-Datei
  *        2 Datenbank installieren
@@ -28,7 +30,6 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
-require("../adm_program/system/function.php");
 
 // pruefen, ob es eine Erstinstallation ist
 if(file_exists("../adm_config/config.php"))
@@ -40,27 +41,29 @@ else
    $first_install = true;
 }
 
-if(!isset($_GET['mode'])
-&& !isset($_POST['mode']))
+// Uebergabevariablen pruefen
+$req_mode = 0;
+
+if(isset($_REQUEST['mode']) && is_numeric($_REQUEST['mode']))   // mode kann per GET oder POST uebergeben werden
 {
-   $mode = 0;
+   $req_mode = $_REQUEST['mode'];
 }
-else
+
+// Versionsnummer aus common.php auslesen
+// muss hier etwas komplizierter sein, da common.php nicht eingebunden werden kann
+$file_handle = fopen("../adm_program/system/common.php", "r");
+$admidio_version = null;
+
+while (!feof($file_handle) && strlen($admidio_version) == 0) 
 {
-    if(isset($_POST['mode']))
+    $buffer = fgets($file_handle, 4096);
+    if(strpos($buffer, "ADMIDIO_VERSION") !== false)
     {
-        $mode = $_POST['mode'];
-    }
-    else
-    {
-        $mode = $_GET['mode'];
-    }
-    
-    if(is_numeric($mode) == false)
-    {
-        $mode = 0;
+        $str_arr = explode("'", $buffer);
+        $admidio_version = $str_arr[3];
     }
 }
+fclose ($file_handle); 
 
 echo "
 <!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org -->
@@ -70,7 +73,7 @@ echo "
     <title>Admidio - Installation</title>
 
     <meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-15\">
-    <meta name=\"author\"   content=\"Markus Fassbender\">
+    <meta name=\"author\"   content=\"Admidio Team\">
     <meta name=\"robots\"   content=\"index,follow\">
     <meta name=\"language\" content=\"de\">
 
@@ -84,34 +87,34 @@ echo "
 <div align=\"center\">
     <div class=\"formHead\" style=\"text-align: left;\">
         <img style=\"float:left; padding: 5px 0px 0px 0px;\" src=\"../adm_program/images/admidio_logo_50.png\" border=\"0\" alt=\"www.admidio.org\" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <div style=\"font-size: 16pt; font-weight: bold; text-align: right; padding: 5px 10px 10px 0px;\">Version ". ADMIDIO_VERSION. "</div>
+        <div style=\"font-size: 16pt; font-weight: bold; text-align: right; padding: 5px 10px 10px 0px;\">Version $admidio_version</div>
         <div style=\"font-size: 11pt; padding: 0px 0px 5px 0px;\">Die Online-Mitgliederverwaltung f&uuml;r Vereine, Gruppen und Organisationen</div>
     </div>
 
     <div class=\"formBody\">
         <div align=\"center\">";
-            if($mode == 0)
+            if($req_mode == 0)
             {
                 echo "<h1>Installation &amp; Einrichtung</h1>";
             }
-            elseif($mode == 1)
+            elseif($req_mode == 1)
             {
                 echo "<h1>Datenbank installieren</h1>";
             }
-            elseif($mode == 2)
+            elseif($req_mode == 2)
             {
                 echo "<h1>Konfigurationsdatei erstellen</h1>";
             }
-            elseif($mode == 3)
+            elseif($req_mode == 3)
             {
                 echo "<h1>Datenbank updaten</h1>";
             }
-            elseif($mode == 4)
+            elseif($req_mode == 4)
             {
                 echo "<h1>Neue Organisation hinzuf&uuml;gen</h1>";
             }
 
-            if($mode == 0)
+            if($req_mode == 0)
             {
                 echo "
                 <form name=\"installation\" action=\"index.php\" method=\"post\">
@@ -140,7 +143,7 @@ echo "
                 echo "<br>
                 </div>";
             }
-            elseif($mode == 2)
+            elseif($req_mode == 2)
             {
                 echo "<br>
                 <form name=\"installation\" action=\"inst_do.php?mode=5\" method=\"post\">
@@ -162,7 +165,7 @@ echo "
             }
             else
             {
-                echo "<form name=\"installation\" action=\"inst_do.php?mode=$mode\" method=\"post\">";
+                echo "<form name=\"installation\" action=\"inst_do.php?mode=$req_mode\" method=\"post\">";
                 // Verbindungsdaten zur Datenbank
                 echo "
                 <table class=\"groupBox\" width=\"350\" cellpadding=\"5\">
@@ -190,7 +193,7 @@ echo "
                 <br />";
 
                 // Optionen fuer die Installation
-                if($mode == 1)
+                if($req_mode == 1)
                 {
                     echo "
                     <table class=\"groupBox\" width=\"350\" cellpadding=\"5\">
@@ -209,7 +212,7 @@ echo "
                 }
 
                 // Updaten von Version
-                if($mode == 3)
+                if($req_mode == 3)
                 {
                     echo "<br />
                     <table class=\"groupBox\" width=\"350\" cellpadding=\"5\">
@@ -231,7 +234,7 @@ echo "
                 }
 
                 // Organisation anlegen
-                if($mode != 3)
+                if($req_mode != 3)
                 {
                     echo "
                     <table class=\"groupBox\" width=\"350\" cellpadding=\"5\">
@@ -240,19 +243,19 @@ echo "
                         </tr>
                         <tr>
                             <td width=\"120px\">Name (Abk.):</td>
-                            <td><input type=\"text\" name=\"verein-name-kurz\" size=\"10\" maxlength=\"10\" /></td>
+                            <td><input type=\"text\" name=\"orga_name_short\" size=\"10\" maxlength=\"10\" /></td>
                         </tr>
                         <tr>
                             <td width=\"120px\">Name (lang):</td>
-                            <td><input type=\"text\" name=\"verein-name-lang\" size=\"25\" maxlength=\"60\" /></td>
+                            <td><input type=\"text\" name=\"orga_name_long\" size=\"25\" maxlength=\"60\" /></td>
                         </tr>
                     </table>
                     <br />";
                 }
 
                 // Webmaster anlegen
-                if($mode == 1
-                || $mode == 4)
+                if($req_mode == 1
+                || $req_mode == 4)
                 {
                     echo "
                     <table class=\"groupBox\" width=\"350\" cellpadding=\"5\">
@@ -261,23 +264,23 @@ echo "
                         </tr>
                         <tr>
                             <td width=\"120px\">Nachname:</td>
-                            <td><input type=\"text\" name=\"user-surname\" size=\"25\" maxlength=\"50\" /></td>
+                            <td><input type=\"text\" name=\"user_last_name\" size=\"25\" maxlength=\"50\" /></td>
                         </tr>
                         <tr>
                             <td width=\"120px\">Vorname:</td>
-                            <td><input type=\"text\" name=\"user-firstname\" size=\"25\" maxlength=\"50\" /></td>
+                            <td><input type=\"text\" name=\"user_first_name\" size=\"25\" maxlength=\"50\" /></td>
                         </tr>
                         <tr>
                             <td width=\"120px\">E-Mail:</td>
-                            <td><input type=\"text\" name=\"user-email\" size=\"25\" maxlength=\"50\" /></td>
+                            <td><input type=\"text\" name=\"user_email\" size=\"25\" maxlength=\"50\" /></td>
                         </tr>
                         <tr>
                             <td width=\"120px\">Benutzername:</td>
-                            <td><input type=\"text\" name=\"user-login\" size=\"25\" maxlength=\"50\" /></td>
+                            <td><input type=\"text\" name=\"user_login\" size=\"25\" maxlength=\"50\" /></td>
                         </tr>
                         <tr>
                             <td width=\"120px\">Passwort:</td>
-                            <td><input type=\"password\" name=\"user-passwort\" size=\"25\" maxlength=\"50\" /></td>
+                            <td><input type=\"password\" name=\"user_password\" size=\"25\" maxlength=\"50\" /></td>
                         </tr>
                     </table>
                     <br />";
@@ -285,7 +288,7 @@ echo "
             }
             echo "
             <div style=\"margin-top: 15px; margin-bottom: 5px;\">";
-                if($mode > 0)
+                if($req_mode > 0)
                 {
                     echo "<button name=\"back\" type=\"button\" value=\"back\" onclick=\"history.back()\">
                         <img src=\"../adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zurueck\">
