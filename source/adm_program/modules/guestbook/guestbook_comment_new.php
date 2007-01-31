@@ -253,7 +253,7 @@ require("../../../adm_config/body_top.php");
 
                     <div style=\"margin-top: 6px;\">
                         <div style=\"text-align: left; margin-left: 27%;\">
-                            <img src=\"$g_root_path/adm_program/system/captcha_class.php\" border=\"0\" alt=\"Captcha\" />
+                            <img src=\"$g_root_path/adm_program/system/captcha_class.php?id=". time(). "\" border=\"0\" alt=\"Captcha\" />
                         </div>
                     </div>
 

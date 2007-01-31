@@ -32,6 +32,11 @@ if(!hasRole("Webmaster"))
     $g_message->show("norights");
 }
 
+if(file_exists("../../../adm_install"))
+{
+    $g_message->show("installFolderExists");
+}
+
 // Navigation faengt hier im Modul an
 $_SESSION['navigation']->clear();
 $_SESSION['navigation']->addUrl($g_current_url);
@@ -93,7 +98,7 @@ echo "
             font-weight: normal;
         }
     </style>
-    
+
     <script type=\"text/javascript\">
         // Dieses Array enthaelt alle IDs, die in den Orga-Einstellungen auftauchen
         ids = new Array('general', 'register', 'announcement-module', 'download-module', 'mail-module',

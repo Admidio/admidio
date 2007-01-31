@@ -424,7 +424,7 @@ if($req_mode == 1 || $req_mode == 4)
     /************************************************************************/
     // neue Organisation anlegen oder hinzufuegen
     /************************************************************************/
-    
+
     $req_orga_name_short = strStripTags($_POST['orga_name_short']);
     $req_orga_name_long  = strStripTags($_POST['orga_name_long']);
 
@@ -667,7 +667,7 @@ if($req_mode == 1 || $req_mode == 4)
     $sql = prepareSQL($sql, array($req_orga_name_short));
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
-    
+
     // User Webmaster anlegen
     $pw_md5 = md5($req_user_password);
     $sql = "INSERT INTO ". TBL_USERS. " (usr_last_name, usr_first_name, usr_email, usr_login_name, usr_password, usr_valid)
@@ -698,6 +698,7 @@ if($req_mode == 1)
 }
 else
 {
-    showError("Die Einrichtung der Datenbank konnte erfolgreich abgeschlossen werden.", "Fertig", 2);
+    showError("Die Einrichtung der Datenbank konnte erfolgreich abgeschlossen werden.<br> <br>
+               Nun muss von Dir noch das Installationsverzeichnis <b>adm_install</b> gel&ouml;scht werden.", "Fertig", 2);
 }
 ?>
