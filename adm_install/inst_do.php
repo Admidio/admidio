@@ -6,6 +6,14 @@
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  *
+ * Uebergaben:
+ *
+ * mode : 0 (Default) Erster Dialog
+ *        1 Admidio installieren - Config-Datei
+ *        2 Datenbank installieren
+ *        3 Datenbank updaten
+ *        4 Neue Organisation anlegen
+ *
  ******************************************************************************
  *
  * This program is free software; you can redistribute it and/or
@@ -27,6 +35,24 @@ require("../adm_program/system/function.php");
 require("../adm_program/system/string.php");
 require("../adm_program/system/date.php");
 session_start();
+
+// lokale Variablen der Uebergabevarialben initialieren
+
+// Uebergabevariablen pruefen
+$req_mode    = 0;
+$req_version = 0;
+$req_orga_name_short = null;
+$req_orga_name_long  = null;
+$req_user_last_name  = null;
+$req_user_first_name = null;
+$req_user_email      = null;
+$req_user_login      = null;
+$req_user_password   = null;
+
+if(isset($_GET['mode']) && is_numeric($_GET['mode']))
+{
+   $req_mode = $_GET['mode'];
+}
 
 // setzt die Ausfuehrungszeit des Scripts auf 2 Min., da hier teilweise sehr viel gemacht wird
 // allerdings darf hier keine Fehlermeldung wg. dem safe_mode kommen
@@ -84,12 +110,12 @@ function showError($err_msg, $err_head = "Fehler", $mode = 1)
     exit();
 }
 
-if($_GET['mode'] == 1)
+if($req_mode == 1)
 {
     // Installation 1.Seite
 
     // Tabellenpraefix pruefen
-    $g_tbl_praefix = $_POST['praefix'];
+    $g_tbl_praefix = strStripTags($_POST['praefix']);
     if(strlen($g_tbl_praefix) == 0)
     {
         $g_tbl_praefix = "adm";
@@ -113,13 +139,9 @@ if($_GET['mode'] == 1)
 
     // Session-Variablen merken
     $_SESSION['praefix']  = $g_tbl_praefix;
-    $_SESSION['server']   = $_POST['server'];
-    $_SESSION['user']     = $_POST['user'];
-    $_SESSION['password'] = $_POST['password'];
-    $_SESSION['database'] = $_POST['database'];
-    $_SESSION['verein-name-kurz'] = $_POST['verein-name-kurz'];
+    $_SESSION['orga_name_short'] = strStripTags($_POST['orga_name_short']);
 }
-elseif($_GET['mode'] == 2)
+elseif($req_mode == 2)
 {
     // Installation 2.Seite
 
@@ -144,7 +166,7 @@ elseif($_GET['mode'] == 2)
     $file_content = str_replace("%PASSWORD%",  $_SESSION['password'], $file_content);
     $file_content = str_replace("%DATABASE%",  $_SESSION['database'], $file_content);
     $file_content = str_replace("%ROOT_PATH%", $root_path,            $file_content);
-    $file_content = str_replace("%ORGANIZATION%", $_SESSION['verein-name-kurz'], $file_content);
+    $file_content = str_replace("%ORGANIZATION%", $_SESSION['orga_name_short'], $file_content);
 
     // die erstellte Config-Datei an den User schicken
     $filename = "config.php";
@@ -155,7 +177,7 @@ elseif($_GET['mode'] == 2)
     echo $file_content;
     exit();
 }
-elseif($_GET['mode'] == 5)
+elseif($req_mode == 5)
 {
     if(file_exists("../adm_config/config.php"))
     {
@@ -172,6 +194,12 @@ else
     require("../adm_config/config.php");
 }
 
+// Zugangsdaten der DB in Sessionvariablen gefiltert speichern
+$_SESSION['server']   = strStripTags($_POST['server']);
+$_SESSION['user']     = strStripTags($_POST['user']);
+$_SESSION['password'] = strStripTags($_POST['password']);
+$_SESSION['database'] = strStripTags($_POST['database']);
+
 // Standard-Praefix ist adm auch wegen Kompatibilitaet zu alten Versionen
 if(strlen($g_tbl_praefix) == 0)
 {
@@ -182,8 +210,6 @@ if(strlen($g_tbl_praefix) == 0)
 define("TBL_ANNOUNCEMENTS",     $g_tbl_praefix. "_announcements");
 define("TBL_CATEGORIES",        $g_tbl_praefix. "_categories");
 define("TBL_DATES",             $g_tbl_praefix. "_dates");
-define("TBL_FOLDERS",           $g_tbl_praefix. "_folders");
-define("TBL_FOLDER_ROLES",      $g_tbl_praefix. "_folder_roles");
 define("TBL_GUESTBOOK",         $g_tbl_praefix. "_guestbook");
 define("TBL_GUESTBOOK_COMMENTS",$g_tbl_praefix. "_guestbook_comments");
 define("TBL_LINKS",             $g_tbl_praefix. "_links");
@@ -203,47 +229,49 @@ define("TBL_USER_FIELDS",       $g_tbl_praefix. "_user_fields");
 // Eingabefelder pruefen
 /*------------------------------------------------------------*/
 
-if(strlen($_POST['server'])    == 0
-|| strlen($_POST['user'])     == 0
+if(strlen($_SESSION['server'])   == 0
+|| strlen($_SESSION['user'])     == 0
 // bei localhost muss es kein Passwort geben
-//|| strlen($_POST['password'])  == 0
-|| strlen($_POST['database']) == 0 )
+//|| strlen($_SESSION['password']) == 0
+|| strlen($_SESSION['database']) == 0 )
 {
     showError("Es sind nicht alle Zugangsdaten zur MySql-Datenbank eingegeben worden !");
 }
 
-if($_GET['mode'] == 3)
+if($req_mode == 3)
 {
-    if($_POST['version'] == 0)
+    if($_POST['version'] == 0 || is_numeric($_POST['version']) == false)
     {
         showError("Bei einem Update m&uuml;ssen Sie Ihre bisherige Version angeben !");
     }
+    $req_version = $_POST['version'];
 }
 
 // bei Installation oder hinzufuegen einer Organisation
-if($_GET['mode'] == 1 || $_GET['mode'] == 4)
+if($req_mode == 1 || $req_mode == 4)
 {
-    $_POST['user-surname']   = strStripTags($_POST['user-surname']);
-    $_POST['user-firstname'] = strStripTags($_POST['user-firstname']);
-    $_POST['user-email']     = strStripTags($_POST['user-email']);
-    $_POST['user-login']     = strStripTags($_POST['user-login']);
+    $req_user_last_name  = strStripTags($_POST['user_last_name']);
+    $req_user_first_name = strStripTags($_POST['user_first_name']);
+    $req_user_email      = strStripTags($_POST['user_email']);
+    $req_user_login      = strStripTags($_POST['user_login']);
+    $req_user_password   = strStripTags($_POST['user_password']);
 
-    if(strlen($_POST['user-surname'])   == 0
-    || strlen($_POST['user-firstname']) == 0
-    || strlen($_POST['user-email']) == 0
-    || strlen($_POST['user-login'])     == 0
-    || strlen($_POST['user-passwort'])  == 0 )
+    if(strlen($req_user_last_name)  == 0
+    || strlen($req_user_first_name) == 0
+    || strlen($req_user_email)      == 0
+    || strlen($req_user_login)      == 0
+    || strlen($req_user_password)   == 0 )
     {
         showError("Es sind nicht alle Benutzerdaten eingegeben worden !");
     }
 
-    if(isValidEmailAddress($_POST['user-email']) == false)
+    if(isValidEmailAddress($req_user_email) == false)
     {
         showError("Die E-Mail-Adresse ist nicht g&uuml;ltig.");
     }
 
-    if(  strlen($_POST['verein-name-lang']) == 0
-    || strlen($_POST['verein-name-kurz']) == 0 )
+    if(strlen($_POST['orga_name_long'])  == 0
+    || strlen($_POST['orga_name_short']) == 0 )
     {
         showError("Sie m&uuml;ssen einen Namen f&uuml;r die Organisation / den Verein eingeben !");
     }
@@ -254,16 +282,16 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
 /*------------------------------------------------------------*/
 
 // Verbindung zu Datenbank herstellen
-$connection = mysql_connect ($_POST['server'], $_POST['user'], $_POST['password'])
+$connection = mysql_connect ($_SESSION['server'], $_SESSION['user'], $_SESSION['password'])
               or showError("Es konnte keine Verbindung zur Datenbank hergestellt werden.<br /><br />
                             Pr&uuml;fen Sie noch einmal Ihre MySql-Zugangsdaten !");
 
-if(!mysql_select_db($_POST['database'], $connection ))
+if(!mysql_select_db($_SESSION['database'], $connection ))
 {
-    showError("Die angegebene Datenbank <b>". $_POST['database']. "</b> konnte nicht gefunden werden !");
+    showError("Die angegebene Datenbank <b>". $_SESSION['database']. "</b> konnte nicht gefunden werden !");
 }
 
-if($_GET['mode'] == 1)
+if($req_mode == 1)
 {
     $error    = 0;
     $filename = "db_scripts/db.sql";
@@ -326,12 +354,12 @@ if($_GET['mode'] == 1)
     if(!$result) showError(mysql_error());
 }
 
-if($_GET['mode'] == 3)
+if($req_mode == 3)
 {
     // Updatescripte fuer die Datenbank verarbeiten
-    if($_POST['version'] > 0)
+    if($req_version > 0)
     {
-        for($i = $_POST['version']; $i <= 4; $i++)
+        for($i = $req_version; $i <= 4; $i++)
         {
             $error = 0;
             if($i == 3)
@@ -391,12 +419,17 @@ if($_GET['mode'] == 3)
     }
 }
 
-if($_GET['mode'] == 1 || $_GET['mode'] == 4)
+if($req_mode == 1 || $req_mode == 4)
 {
-    // neue Organisation anlegen
+    /************************************************************************/
+    // neue Organisation anlegen oder hinzufuegen
+    /************************************************************************/
+    
+    $req_orga_name_short = strStripTags($_POST['orga_name_short']);
+    $req_orga_name_long  = strStripTags($_POST['orga_name_long']);
 
     $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. " WHERE org_shortname = {0} ";
-    $sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
+    $sql = prepareSQL($sql, array($req_orga_name_short));
     $result = mysql_query($sql, $connection);
     if(!$result)
     {
@@ -405,13 +438,13 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
 
     if(mysql_num_rows($result) > 0)
     {
-        showError("Eine Organisation mit dem angegebenen kurzen Namen <b>". $_POST['verein-name-kurz']. "</b> existiert bereits.<br /><br />
+        showError("Eine Organisation mit dem angegebenen kurzen Namen <b>$req_orga_name_short</b> existiert bereits.<br /><br />
                    W&auml;hlen Sie bitte einen anderen kurzen Namen !");
     }
 
     $sql = "INSERT INTO ". TBL_ORGANIZATIONS. " (org_shortname, org_longname, org_homepage)
                                          VALUES ({0}, {1}, '". $_SERVER['HTTP_HOST']. "') ";
-    $sql = prepareSQL($sql, array($_POST['verein-name-kurz'], $_POST['verein-name-lang']));
+    $sql = prepareSQL($sql, array($req_orga_name_short, $req_orga_name_long));
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
     $org_id = mysql_insert_id($connection);
@@ -607,7 +640,7 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
                                          rol_edit_user, rol_mail_logout, rol_mail_login, rol_profile)
                                  VALUES ({0}, $category_common, 'Webmaster', 'Gruppe der Administratoren des Systems', 1,
                                          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1) ";
-    $sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
+    $sql = prepareSQL($sql, array($req_orga_name_short));
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
 
@@ -618,7 +651,7 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
                                          rol_edit_user, rol_mail_logout, rol_mail_login, rol_profile)
                                  VALUES ({0}, $category_common, 'Mitglied', 'Alle Mitglieder der Organisation', 1,
                                          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1) ";
-    $sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
+    $sql = prepareSQL($sql, array($req_orga_name_short));
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
 
@@ -629,20 +662,16 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
                                          rol_edit_user, rol_mail_logout, rol_mail_login, rol_profile)
                                  VALUES ({0}, $category_common, 'Vorstand', 'Vorstand des Vereins', 1,
                                          0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1) ";
-    $sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
+    $sql = prepareSQL($sql, array($req_orga_name_short));
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
-}
-
-// bei Installation oder hinzufuegen einer Organisation
-if($_GET['mode'] == 1 || $_GET['mode'] == 4)
-{
+    
     // User Webmaster anlegen
 
-    $pw_md5 = md5($_POST['user-passwort']);
+    $pw_md5 = md5($req_user_password);
     $sql = "INSERT INTO ". TBL_USERS. " (usr_last_name, usr_first_name, usr_email, usr_login_name, usr_password, usr_valid)
                                  VALUES ({0}, {1}, {2}, {3}, '$pw_md5', 1) ";
-    $sql = prepareSQL($sql, array($_POST['user-surname'], $_POST['user-firstname'], $_POST['user-email'], $_POST['user-login']));
+    $sql = prepareSQL($sql, array($req_user_last_name, $req_user_first_name, $req_user_email, $req_user_login));
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
 
@@ -652,7 +681,7 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
     $sql = "SELECT rol_id FROM ". TBL_ROLES. "
              WHERE rol_org_shortname = {0}
                AND rol_name          = 'Webmaster' ";
-    $sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
+    $sql = prepareSQL($sql, array($req_orga_name_short));
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
     $row = mysql_fetch_array($result);
@@ -666,7 +695,7 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
     $sql = "SELECT rol_id FROM ". TBL_ROLES. "
              WHERE rol_org_shortname = {0}
                AND rol_name          = 'Mitglied' ";
-    $sql = prepareSQL($sql, array($_POST['verein-name-kurz']));
+    $sql = prepareSQL($sql, array($req_orga_name_short));
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
     $row = mysql_fetch_array($result);
@@ -677,7 +706,7 @@ if($_GET['mode'] == 1 || $_GET['mode'] == 4)
     if(!$result) showError(mysql_error());
 }
 
-if($_GET['mode'] == 1)
+if($req_mode == 1)
 {
     $location = "Location: index.php?mode=2";
     header($location);
