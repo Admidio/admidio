@@ -26,28 +26,26 @@
  *****************************************************************************/
 
 // Include von common 
-define('PLUGIN_PATH', substr(__FILE__, 0, strpos(__FILE__, "sidebar_announcements.php")-1));
-require_once(PLUGIN_PATH. "/../../adm_program/system/common.php");
-require_once(PLUGIN_PATH. "/config.php");
+if(!defined('PLUGIN_PATH'))
+{
+    define('PLUGIN_PATH', substr(__FILE__, 0, strpos(__FILE__, "sidebar_announcements")-1));
+}
+require_once(PLUGIN_PATH. "/../adm_program/system/common.php");
+require_once(PLUGIN_PATH. "/sidebar_announcements/config.php");
 
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
 // falls nicht, hier noch mal die Default-Werte setzen
-if(!defined('PLG_DATES_COUNT'))
+if(is_numeric($plg_announcements_count) == false)
 {
-    define('PLG_DATES_COUNT', 2);
+    $plg_announcements_count = 2;
 }
-if(!defined('PLG_LINK_CLASS'))
+if(is_numeric($plg_max_char_per_word) == false)
 {
-    define('PLG_LINK_CLASS', '');
+    $plg_max_char_per_word = 0;
 }
-if(!defined('PLG_MAX_CHAR_PER_WORD'))
-{
-    define('PLG_MAX_CHAR_PER_WORD', 0);
-}
-if(!defined('PLG_HEADLINE'))
-{
-    define('PLG_HEADLINE', 'Ankündigungen');
-}
+
+$plg_link_class = strip_tags($plg_link_class);
+$plg_headline = strip_tags($plg_headline);
 
 $act_date = date("Y.m.d 00:00:00", time());
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
@@ -83,23 +81,23 @@ if(strlen($organizations) > 0)
                       OR (   ann_global   = 1
                          AND ann_org_shortname IN ($organizations) ))
                 ORDER BY ann_timestamp DESC
-                LIMIT ". PLG_ANNOUNCEMENTS_COUNT;
+                LIMIT $plg_announcements_count";
 }
 else
 {
     $sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
                 WHERE ann_org_shortname = '$g_organization'
                 ORDER BY ann_timestamp DESC
-                LIMIT ". PLG_ANNOUNCEMENTS_COUNT;
+                LIMIT $plg_announcements_count";
 }
 $result = mysql_query($sql, $g_adm_con);
 db_error($result);
 
 while($row = mysql_fetch_object($result))
 {
-    echo "<a class=\"". PLG_LINK_CLASS. "\" href=\"$g_root_path/adm_program/modules/announcements/announcements.php?id=$row->ann_id&amp;headline=". utf8_decode(PLG_HEADLINE). "\">";
+    echo "<a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/modules/announcements/announcements.php?id=$row->ann_id&amp;headline=". utf8_decode($plg_headline). "\">";
     
-    if(PLG_MAX_CHAR_PER_WORD > 0)
+    if($plg_max_char_per_word > 0)
     {
         $new_headline = "";
         unset($words);
@@ -109,10 +107,10 @@ while($row = mysql_fetch_object($result))
         
         for($i = 0; $i < count($words); $i++)
         {
-            if(strlen($words[$i]) > PLG_MAX_CHAR_PER_WORD)
+            if(strlen($words[$i]) > $plg_max_char_per_word)
             {
-                $new_headline = "$new_headline ". substr($words[$i], 0, PLG_MAX_CHAR_PER_WORD). "-<br />". 
-                                substr($words[$i], PLG_MAX_CHAR_PER_WORD);
+                $new_headline = "$new_headline ". substr($words[$i], 0, $plg_max_char_per_word). "-<br />". 
+                                substr($words[$i], $plg_max_char_per_word);
             }
             else
             {
@@ -129,5 +127,5 @@ while($row = mysql_fetch_object($result))
     echo "(&nbsp;". mysqldatetime("d.m.y", $row->ann_timestamp). "&nbsp;)<br />-----<br />";
 }
 
-echo "<a class=\"". PLG_LINK_CLASS. "\" href=\"$g_root_path/adm_program/modules/announcements/announcements.php?headline=". utf8_decode(PLG_HEADLINE). "\">mehr</a>";
+echo "<a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/modules/announcements/announcements.php?headline=". utf8_decode($plg_headline). "\">mehr</a>";
 ?>
