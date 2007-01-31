@@ -643,6 +643,7 @@ if($req_mode == 1 || $req_mode == 4)
     $sql = prepareSQL($sql, array($req_orga_name_short));
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
+    $rol_id_webmaster = mysql_insert_id();
 
     // Mitglied
     $sql = "INSERT INTO ". TBL_ROLES. " (rol_org_shortname, rol_cat_id, rol_name, rol_description, rol_valid,
@@ -654,6 +655,7 @@ if($req_mode == 1 || $req_mode == 4)
     $sql = prepareSQL($sql, array($req_orga_name_short));
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
+    $rol_id_member = mysql_insert_id();
 
     // Vorstand
     $sql = "INSERT INTO ". TBL_ROLES. " (rol_org_shortname, rol_cat_id, rol_name, rol_description, rol_valid,
@@ -667,41 +669,23 @@ if($req_mode == 1 || $req_mode == 4)
     if(!$result) showError(mysql_error());
     
     // User Webmaster anlegen
-
     $pw_md5 = md5($req_user_password);
     $sql = "INSERT INTO ". TBL_USERS. " (usr_last_name, usr_first_name, usr_email, usr_login_name, usr_password, usr_valid)
                                  VALUES ({0}, {1}, {2}, {3}, '$pw_md5', 1) ";
     $sql = prepareSQL($sql, array($req_user_last_name, $req_user_first_name, $req_user_email, $req_user_login));
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
-
     $user_id = mysql_insert_id();
 
-    // Mitgliedschaft "Webmaster" anlegen
-    $sql = "SELECT rol_id FROM ". TBL_ROLES. "
-             WHERE rol_org_shortname = {0}
-               AND rol_name          = 'Webmaster' ";
-    $sql = prepareSQL($sql, array($req_orga_name_short));
-    $result = mysql_query($sql, $connection);
-    if(!$result) showError(mysql_error());
-    $row = mysql_fetch_array($result);
-
+    // Mitgliedschaft bei Rolle "Webmaster" anlegen
     $sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin, mem_valid)
-                                   VALUES ($row[0], $user_id, NOW(), 1) ";
+                                   VALUES ($rol_id_webmaster, $user_id, NOW(), 1) ";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
 
     // Mitgliedschaft "Mitglied" anlegen
-    $sql = "SELECT rol_id FROM ". TBL_ROLES. "
-             WHERE rol_org_shortname = {0}
-               AND rol_name          = 'Mitglied' ";
-    $sql = prepareSQL($sql, array($req_orga_name_short));
-    $result = mysql_query($sql, $connection);
-    if(!$result) showError(mysql_error());
-    $row = mysql_fetch_array($result);
-
     $sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin, mem_valid)
-                                   VALUES ($row[0], $user_id, NOW(), 1) ";
+                                   VALUES ($rol_id_member, $user_id, NOW(), 1) ";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
 }
