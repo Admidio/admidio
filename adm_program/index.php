@@ -33,6 +33,18 @@ if(!file_exists("../adm_config/config.php"))
 
 include("system/common.php");
 
+$webmasterRole = FALSE;
+if (hasRole("Webmaster"))
+{
+    $webmasterRole = TRUE;
+
+    if(file_exists("../adm_install"))
+    {
+        $g_message->show("installFolderExists");
+    }
+}
+
+
 echo "
 <!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org -->\n
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
@@ -287,7 +299,7 @@ require("../adm_config/body_top.php");
                 echo strspace("Administration", 1);
             echo "</div>
             <div class=\"formBody\">";
-                if(hasRole("Webmaster") && $g_preferences['registration_mode'] > 0)
+                if($webmasterRole && $g_preferences['registration_mode'] > 0)
                 {
                     echo "
                     <div style=\"text-align: left; width: 40; float: left;\">

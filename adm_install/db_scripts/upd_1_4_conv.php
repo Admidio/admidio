@@ -43,7 +43,7 @@ $sql = "UPDATE ". TBL_ROLES. " SET rol_profile = 1 ";
 $result = mysql_query($sql, $connection);
 if(!$result) showError(mysql_error());
 
-// Orga-Felder in adm_preferences umwandeln
+// neue Orgafelder anlegen
 $sql = "SELECT * FROM ". TBL_ORGANIZATIONS;
 $result_orga = mysql_query($sql, $connection);
 if(!$result_orga) showError(mysql_error());
@@ -116,7 +116,7 @@ while($row_orga = mysql_fetch_object($result_orga))
     if(!$result) showError(mysql_error());
 
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-            VALUES ($row_orga->org_id, 'flooding_protection_time', '180')";
+            VALUES ($row_orga->org_id, 'flooding_protection_time', '60')";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
 
@@ -213,5 +213,23 @@ $sql = "alter table ". TBL_LINKS. " add constraint ". $g_tbl_praefix. "_FK_LNK_C
         references ". TBL_CATEGORIES. " (cat_id) on delete restrict on update restrict ";
 $result = mysql_query($sql, $connection);
 if(!$result) showError(mysql_error());
+
+//In der CommentsTabelle des Gaestebuchs werden nun die usrIDs in Namen uebersetzt
+$sql = "SELECT * FROM ". TBL_GUESTBOOK_COMMENTS;
+$result_comments = mysql_query($sql, $connection);
+if(!$result_comments) showError(mysql_error());
+
+while($row_comment = mysql_fetch_object($result_comments))
+{
+    $sql = "SELECT usr_last_name, usr_first_name FROM ". TBL_USERS. " WHERE usr_id =  $row_comment->gbc_usr_id";
+    $result = mysql_query($sql, $connection);
+    if(!$result) showError(mysql_error());
+    $row = mysql_fetch_object($result);
+
+    $sql = "UPDATE ". TBL_GUESTBOOK_COMMENTS. " SET gbc_name =  '$row->usr_first_name $row->usr_last_name' WHERE gbc_id = $row_comment->gbc_id";
+    $result = mysql_query($sql, $connection);
+    if(!$result) showError(mysql_error());
+}
+
 
 ?>

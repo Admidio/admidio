@@ -28,7 +28,7 @@ $message_text = array(
         "<p>Deine Daten wurden gespeichert.</p>
         <p>Du kannst dich noch nicht einloggen.<br />
         Sobald deine Anmeldung vom Administrator bestätigt wurde, erhälst du eine E-Mail.</p>",
-      
+
     "assign_login" =>
         "Die Logindaten wurden erfolgreich zugeordnet.",
 
@@ -91,6 +91,10 @@ $message_text = array(
 
     "import" =>
         "%VAR1% Datensätze wurden erfolgreich importiert !",
+
+    "installFolderExists" =>
+        "Das Installationsverzeichnis <b>adm_install</b> existiert noch auf dem Server.
+         Aus Sicherheitsgründen muss dies gelöscht werden!",
 
     "invalid" =>
         "Ungültiger Seitenaufruf !",
@@ -206,27 +210,28 @@ $message_text = array(
         wenden, damit dieser <acronym title=\"über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen.\">
         Schreibrechte</acronym> für den Ordner setzen kann.",
 
+
       //Meldungen Anmeldung im Forum
     "loginforum" =>
-        "Du hast dich erfolgreich auf Admidio und <br />im Forum <b>%VAR2%</b> 
+        "Du hast dich erfolgreich auf Admidio und <br />im Forum <b>%VAR2%</b>
         als User <b>%VAR1%</b> angemeldet.",
-    
+
     "loginforum_pass" =>
         "Dein Password im Forum %VAR2% wurde auf das Admidio Password zurückgesetz.<br>
         Verwende beim nächsten Login im Forum dein Admidio Password.<br><br>
-        Du wurdest erfolgreich auf Admidio und <br />im Forum <b>%VAR2%</b> 
+        Du wurdest erfolgreich auf Admidio und <br />im Forum <b>%VAR2%</b>
         als User <b>%VAR1%</b> angemeldet.",
 
     "loginforum_admin" =>
-        "Dein Administrator Account vom Forum %VAR2% wurde auf den 
+        "Dein Administrator Account vom Forum %VAR2% wurde auf den
         Admidio Account zurückgesetz.<br>
         Verwende beim nächsten Login im Forum dein Admidio Username und Password.<br><br>
-        Du wurdest erfolgreich auf Admidio und <br />im Forum <b>%VAR2%</b> 
+        Du wurdest erfolgreich auf Admidio und <br />im Forum <b>%VAR2%</b>
         als User <b>%VAR1%</b> angemeldet.",
 
     "logoutforum" =>
         "Du wurdest erfolgreich auf Admidio und <br />im Forum abgemeldet.",
-        
+
     "login_name_forum" =>
         "Der gew&auml;hlte Benutzername existiert im Forum schon.<br /><br />
         W&auml;hle bitte einen neuen Namen.",
