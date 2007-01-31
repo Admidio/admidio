@@ -10,17 +10,17 @@
  *****************************************************************************/
 
 // Anzahl der Termine, die angezeigt werden sollen (Default = 2)
-define('PLG_ANNOUNCEMENTS_COUNT', 2);
+$plg_announcements_count = 2;
 
 // Name einer CSS-Klasse fuer Links
 // Nur noetig, falls die Links ein anderes Aussehen bekommen sollen
-define('PLG_LINK_CLASS', '');
+$plg_link_class = '';
 
 // Maximale Anzahl von Zeichen in einem Wort, 
 // bevor ein Zeilenumbruch kommt (Default = 0 (deaktiviert)) 
-define('PLG_MAX_CHAR_PER_WORD', 0);
+$plg_max_char_per_word = 0;
 
 // Wahlweise kann hier ein anderer Titel fuer die Ankuendigungen angegeben werden
-define('PLG_HEADLINE', 'Ankündigungen');
+$plg_headline = 'Ankündigungen';
 
 ?>
