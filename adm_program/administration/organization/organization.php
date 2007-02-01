@@ -32,6 +32,7 @@ if(!hasRole("Webmaster"))
     $g_message->show("norights");
 }
 
+// der Installationsordner darf aus Sicherheitsgruenden nicht existieren
 if(file_exists("../../../adm_install"))
 {
     $g_message->show("installFolderExists");
@@ -165,6 +166,13 @@ require("../../../adm_config/body_top.php");
                 <div class=\"groupBox\" id=\"general\" style=\"visibility: hidden; display: none; margin-top: 15px; text-align: left; width: 95%;\">
                     <div class=\"groupBoxHeadline\">Allgemeine Einstellungen</div>
                     <div style=\"margin-top: 6px;\">
+                        <div style=\"text-align: left; width: 55%; float: left;\">Admidio-Version:</div>
+                        <div style=\"text-align: left; margin-left: 45%;\">
+                            <input type=\"text\" name=\"version\" class=\"readonly\" readonly size=\"10\" maxlength=\"10\" value=\"". ADMIDIO_VERSION. "\">&nbsp;
+                            <a href=\"http://www.admidio.org/index.php?download.php\" target=\"_blank\">Update suchen</a>
+                        </div>
+                    </div>
+                    <div style=\"margin-top: 15px;\">
                         <div style=\"text-align: left; width: 55%; float: left;\">Name (Abk.):</div>
                         <div style=\"text-align: left; margin-left: 45%;\">
                             <input type=\"text\" name=\"shortname\" class=\"readonly\" readonly size=\"10\" maxlength=\"10\" value=\"". $form_values['shortname']. "\">
@@ -192,7 +200,7 @@ require("../../../adm_config/body_top.php");
                         Hier sollte die E-Mail-Adresse eines Administrators stehen. Diese wird als Absenderadresse
                         f&uuml;r Systemnachrichten benutzt. (z.B. bei der Registierungsbest&auml;tigung)
                     </div>
-
+                    
                     <div style=\"margin-top: 15px;\">
                         <div style=\"text-align: left; width: 55%; float: left;\">Systemmails aktivieren:</div>
                         <div style=\"text-align: left; margin-left: 45%;\">

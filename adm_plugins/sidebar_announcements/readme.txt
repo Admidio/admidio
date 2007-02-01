@@ -28,8 +28,8 @@ eines Plugins erklärt.
 
  3. Update
 -------------------------------------------------------------------------
-Ersetzen Sie die alle Dateien (bis auf die Datei config.php !!!) vorhandenen 
-Dateien des Plugins durch die neuen Dateien.
+Ersetzen Sie die alle Dateien (bis auf die Datei config.php !!!) 
+des Plugins durch die neuen Dateien.
 
 Falls es mit der neuen Version neue Einstellungen gibt, die Sie gerne verändern
 möchten, so müssen Sie diese noch in Ihre vorhandene config.php eintragen.

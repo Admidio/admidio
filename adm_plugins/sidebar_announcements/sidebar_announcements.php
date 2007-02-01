@@ -1,6 +1,11 @@
 <?php
 /******************************************************************************
- * Plugin das die letzten X Ankuendigungen auflistet
+ * Sidebar Announcements
+ *
+ * Version 1.0
+ *
+ * Plugin das die letzten X Ankuendigungen in einer schlanken Oberflaeche auflistet
+ * und so ideal in einer Seitenleiste eingesetzt werden kann
  *
  * Compatible to Admidio-Versions 1.2 - 1.4
  *

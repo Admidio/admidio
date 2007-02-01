@@ -82,7 +82,7 @@ require("../../adm_config/body_top.php");
                     <a href=\"$mail_link\">Ich habe mein Passwort vergessen!</a>
                 </div>
                 <div style=\"font-size: 8pt; margin-top: 20px;\">
-                    Powered by <a href=\"http://www.admidio.org\" target=\"_blank\">Admidio ". ADMIDIO_VERSION. "</a>
+                    Powered by <a href=\"http://www.admidio.org\" target=\"_blank\">Admidio</a>
                 </div>
             </div>
         </form>
