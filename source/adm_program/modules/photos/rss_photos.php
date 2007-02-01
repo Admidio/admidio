@@ -118,7 +118,7 @@ while ($row = mysql_fetch_object($result))
         $adm_photo_parent = mysql_fetch_array($result_parents);
 
         //Link zusammensetzen
-        $parents = "&nbsp;&gt;&nbsp;".$adm_photo_parent["pho_name"].$parents;
+        $parents = " > ".$adm_photo_parent["pho_name"].$parents;
 
         //Elternveranst
         $pho_parent_id=$adm_photo_parent["pho_pho_id_parent"];
