@@ -199,8 +199,57 @@ require("../../../adm_config/body_top.php");
                     <div class=\"smallText\">
                         Hier sollte die E-Mail-Adresse eines Administrators stehen. Diese wird als Absenderadresse
                         f&uuml;r Systemnachrichten benutzt. (z.B. bei der Registierungsbest&auml;tigung)
-                    </div>
-                    
+                    </div>";
+
+                    // Pruefung ob dieser Orga bereits andere Orgas untergeordnet sind
+                    $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. " WHERE org_org_id_parent = $g_current_organization->id";
+                    $result = mysql_query($sql, $g_adm_con);
+                    db_error($result);
+
+                    //Falls andere Orgas untergeordnet sind, darf diese Orga keiner anderen Orga untergeordnet werden
+                    if(mysql_num_rows($result)==0)
+                    {
+                        $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. "
+                                 WHERE org_id <> $g_current_organization->id
+                                   AND org_org_id_parent is NULL
+                                 ORDER BY org_longname ASC, org_shortname ASC ";
+                        $result = mysql_query($sql, $g_adm_con);
+                        db_error($result);
+
+                        if(mysql_num_rows($result) > 0)
+                        {
+                            // Auswahlfeld fuer die uebergeordnete Organisation
+                            echo "
+                            <div style=\"margin-top: 15px;\">
+                                <div style=\"text-align: left; width: 55%; float: left;\">&Uuml;bergeordnete Organisation:</div>
+                                <div style=\"text-align: left; margin-left: 45%;\">
+                                    <select size=\"1\" name=\"parent\">
+                                        <option value=\"0\" ";
+                                        if(strlen($form_values['parent']) == 0)
+                                        {
+                                            echo " selected ";
+                                        }
+                                        echo ">keine</option>";
+
+                                        while($row = mysql_fetch_object($result))
+                                        {
+                                            echo "<option value=\"$row->org_id\"";
+                                                if($form_values['parent'] == $row->org_id)
+                                                {
+                                                    echo " selected ";
+                                                }
+                                                echo ">$row->org_shortname</option>";
+                                        }
+                                    echo "</select>
+                                </div>
+                            </div>
+                            <div class=\"smallText\">
+                                Hier kannst du die &uuml;bergeordnete Organisation festlegen. Diese haben dann die Berechtigung Termine f&uuml;r die untergeordneten Organisationen anzulegen.
+                            </div>";
+                        }
+                    }
+
+                    echo "
                     <div style=\"margin-top: 15px;\">
                         <div style=\"text-align: left; width: 55%; float: left;\">Systemmails aktivieren:</div>
                         <div style=\"text-align: left; margin-left: 45%;\">
@@ -250,54 +299,8 @@ require("../../../adm_config/body_top.php");
                     <div class=\"smallText\">
                         Das ausgew&auml;hlte Land wird beim Anlegen eines neuen Benutzers automatisch vorgeschlagen und
                         erleichtert die Eingabe.
-                    </div>";
-
-                    // Pruefung ob dieser Orga bereits andere Orgas untergeordnet sind
-                    $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. " WHERE org_org_id_parent = $g_current_organization->id";
-                    $result = mysql_query($sql, $g_adm_con);
-                    db_error($result);
-
-                    //Falls andere Orgas untergeordnet sind, darf diese Orga keiner anderen Orga untergeordnet werden
-                    if(mysql_num_rows($result)==0)
-                    {
-                        $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. "
-                                 WHERE org_id <> $g_current_organization->id
-                                   AND org_org_id_parent is NULL
-                                 ORDER BY org_longname ASC, org_shortname ASC ";
-                        $result = mysql_query($sql, $g_adm_con);
-                        db_error($result);
-
-                        if(mysql_num_rows($result) > 0)
-                        {
-                            // Auswahlfeld fuer die uebergeordnete Organisation
-                            echo "
-                            <div style=\"margin-top: 15px;\">
-                                <div style=\"text-align: right; width: 48%; float: left;\">&Uuml;bergeordnete Organisation:</div>
-                                <div style=\"text-align: left; margin-left: 50%;\">
-                                    <select size=\"1\" name=\"parent\">
-                                        <option value=\"0\" ";
-                                        if(strlen($form_values['parent']) == 0)
-                                        {
-                                            echo " selected ";
-                                        }
-                                        echo ">keine</option>";
-
-                                        while($row = mysql_fetch_object($result))
-                                        {
-                                            echo "<option value=\"$row->org_id\"";
-                                                if($form_values['parent'] == $row->org_id)
-                                                {
-                                                    echo " selected ";
-                                                }
-                                                echo ">$row->org_shortname</option>";
-                                        }
-                                    echo "</select>
-                                </div>
-                            </div>";
-                        }
-                    }
-
-                    echo "
+                    </div>
+                    
                     <div style=\"margin-top: 15px;\">
                         <div style=\"text-align: left; width: 55%; float: left;\">BBCode zulassen:</div>
                         <div style=\"text-align: left; margin-left: 45%;\">
