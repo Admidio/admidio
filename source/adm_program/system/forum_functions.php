@@ -230,10 +230,10 @@ elseif (isset($_COOKIE[$g_forum_cookie_name."_sid"]))
     // Admidio DB waehlen
     mysql_select_db($g_adm_db, $g_adm_con);
     
-    // Cookie fuer die Anmeldung im Forum löschen
+    // Cookie fuer die Anmeldung im Forum lÃ¶schen
     setcookie($g_forum_cookie_name."_sid", "", time() - 31536000, $g_forum_cookie_path, $g_forum_cookie_domain, $g_forum_cookie_secure);
     
-   	// Session Varibale löschen
+   	// Session Varibale lÃ¶schen
 	unset($_SESSION['s_user_valid']);
 }
 
@@ -353,7 +353,7 @@ function forum_update_user($forum_username, $forum_useraktiv, $forum_password, $
     }
     else
     {
-        $forum_useraktiv = 0;
+        $forum_useraktiv = 1;
     }
     
     // Forum Datenbank auswaehlen
@@ -413,7 +413,7 @@ function forum_update_username($forum_new_username, $forum_old_username, $forum_
     }
     else
     {
-        $forum_useraktiv = 0;
+        $forum_useraktiv = 1;
     }
     
     // Forum Datenbank auswaehlen
