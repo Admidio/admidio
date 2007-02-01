@@ -133,7 +133,7 @@ while ($row = mysql_fetch_object($result))
     bildersumme($row->pho_id);
 
     //Inhalt zusammensetzen
-    $description = "Fotogalerien".$parents."&nbsp;&gt;&nbsp;<b>". strSpecialChars2Html($row->pho_name). "</b>";
+    $description = "Fotogalerien".$parents." > ". strSpecialChars2Html($row->pho_name);
     $description = $description. "<br /><br /> Bilder: ".$bildersumme;
     $description = $description. "<br /> Datum: ".mysqldate("d.m.y", $row->pho_begin);
     //Enddatum nur wenn anders als startdatum
@@ -154,7 +154,7 @@ while ($row = mysql_fetch_object($result))
             if (file_exists($bildpfad))
             {
                 $description = $description. "
-                 <img src=\"$g_root_path/adm_program/modules/photos/resize.php?bild=".$bildpfad."&amp;scal=100&amp;aufgabe=anzeigen\" border=\"0\" alt=\"bild\">&nbsp;";
+                 <img src=\"$g_root_path/adm_program/modules/photos/photo_show.php?bild=".$bildpfad."&amp;scal=100\" border=\"0\" alt=\"bild\">&nbsp;";
             }
         }
     }
