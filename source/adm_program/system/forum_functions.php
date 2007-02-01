@@ -25,7 +25,6 @@
 
 // Globale Variablen fuer das Forum
 $g_forum_session_id    = "";            // Die Session fuer das Forum
-$g_forum_session_valid = FALSE;         // Session gueltig
 $g_forum_user  = "";                    // Username im Forum
 $g_forum_userid = "";                   // UserID im Forum
 $g_forum_neuePM = "";                   // Nachrichten im Forum
@@ -117,18 +116,6 @@ else
 if(isset($_COOKIE[$g_forum_cookie_name."_sid"]) AND $g_session_valid)
 {
     $g_forum_session_id = $_COOKIE[$g_forum_cookie_name."_sid"];
-    if($g_forum_session_id == $g_session_id)
-    {
-        $g_forum_session_valid = TRUE;
-    }
-    else
-    {
-        $g_forum_session_valid = FALSE;
-    }
-}
-else
-{
-    $g_forum_session_valid = FALSE;
 }
 
 
@@ -136,7 +123,11 @@ else
 // Session gueltig ist, ist auch die Forum Session gueltig
 if($g_session_valid)
 {
-    if(forum_check_user($g_current_user->login_name, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix))
+    if(!isset($_SESSION['s_user_valid']))
+    {
+    	$_SESSION['s_user_valid'] = forum_check_user($g_current_user->login_name, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
+    }
+    if($_SESSION['s_user_valid'])
     {
         // Username, UserID und NeueNachrichten aus der Forums DB lesen.
         $g_forum_user = $g_current_user->login_name;
@@ -204,8 +195,7 @@ if($g_session_valid)
         // Admidio DB waehlen
         mysql_select_db($g_adm_db, $g_adm_con);
         
-        // Den User gibt es im Forum und eine neue Session wurde angelegt, also ist das Forum Valid.
-        $g_forum_session_valid = TRUE;
+        // Den User gibt es im Forum und eine neue Session wurde angelegt, session_id gleichsetzten.
         $g_forum_session_id = $g_session_id;
         
         // Cookie fuer die Anmeldung im Forum setzen
@@ -242,6 +232,9 @@ elseif (isset($_COOKIE[$g_forum_cookie_name."_sid"]))
     
     // Cookie fuer die Anmeldung im Forum löschen
     setcookie($g_forum_cookie_name."_sid", "", time() - 31536000, $g_forum_cookie_path, $g_forum_cookie_domain, $g_forum_cookie_secure);
+    
+   	// Session Varibale löschen
+	unset($_SESSION['s_user_valid']);
 }
 
 
