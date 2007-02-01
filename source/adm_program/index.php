@@ -33,6 +33,17 @@ if(!file_exists("../adm_config/config.php"))
 
 include("system/common.php");
 
+$webmasterRole = false;
+if(hasRole("Webmaster"))
+{
+    // der Installationsordner darf aus Sicherheitsgruenden nicht existieren
+    if(file_exists("../adm_install"))
+    {
+        $g_message->show("installFolderExists");
+    }
+    $webmasterRole = true;
+}
+
 echo "
 <!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org -->\n
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
@@ -252,7 +263,7 @@ require("../adm_config/body_top.php");
                 </div>";
             }
 
-            // Wenn das Forum aktiv ist, dieses auch in der Ãbersicht anzeigen.
+            // Wenn das Forum aktiv ist, dieses auch in der Ã?bersicht anzeigen.
             if($g_forum)
             {
                 echo "<div style=\"margin-top: 7px;\"></div>";
@@ -287,7 +298,7 @@ require("../adm_config/body_top.php");
                 echo strspace("Administration", 1);
             echo "</div>
             <div class=\"formBody\">";
-                if(hasRole("Webmaster") && $g_preferences['registration_mode'] > 0)
+                if($webmasterRole && $g_preferences['registration_mode'] > 0)
                 {
                     echo "
                     <div style=\"text-align: left; width: 40; float: left;\">
@@ -330,7 +341,7 @@ require("../adm_config/body_top.php");
                     </div>";
                 }
 
-                if(hasRole("Webmaster"))
+                if($webmasterRole)
                 {
                     echo "
                     <div style=\"margin-top: 7px;\"></div>

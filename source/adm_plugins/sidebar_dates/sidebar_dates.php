@@ -1,6 +1,11 @@
 <?php
 /******************************************************************************
- * Plugin das die letzten X Termine auflistet
+ * Sidebar Dates
+ *
+ * Version 1.0
+ *
+ * Plugin das die letzten X Termine in einer schlanken Oberflaeche auflistet
+ * und so ideal in einer Seitenleiste eingesetzt werden kann
  *
  * Compatible to Admidio-Versions 1.2 - 1.4
  *
