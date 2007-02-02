@@ -205,12 +205,12 @@ require("../../../adm_config/body_top.php");
                         if($valid == true)
                         {
                             echo "<a href=\"$g_root_path/adm_program/modules/lists/members.php?rol_id=$row->rol_id\"><img 
-                                src=\"$g_root_path/adm_program/images/add.png\" border=\"0\" alt=\"Mitglieder zuordnen\" title=\"Mitglieder zuordnen\"></a>";
+                                src=\"$g_root_path/adm_program/images/add.png\" border=\"0\" alt=\"Mitglieder zuordnen\" title=\"Mitglieder zuordnen\"></a>&nbsp;";
                         }
                         else
                         {
                             echo "<a href=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$row->rol_id&amp;mode=5\"><img
-                                src=\"$g_root_path/adm_program/images/wand.png\" border=\"0\" alt=\"Rolle aktivieren\" title=\"Rolle aktivieren\"></a>";
+                                src=\"$g_root_path/adm_program/images/wand.png\" border=\"0\" alt=\"Rolle aktivieren\" title=\"Rolle aktivieren\"></a>&nbsp;";
                         }
 
                         if($row->rol_name == "Webmaster")
@@ -221,13 +221,13 @@ require("../../../adm_config/body_top.php");
                         {
                             if($valid == true)
                             {
-                                echo "<a href=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$row->rol_id&amp;mode=1\">
-                                <img src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Rolle l&ouml;schen\" title=\"Rolle l&ouml;schen\"></a>";
+                                echo "<a href=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$row->rol_id&amp;mode=1\"><img 
+                                    src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Rolle l&ouml;schen\" title=\"Rolle l&ouml;schen\"></a>";
                             }
                             else
                             {
-                                echo "<a href=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$row->rol_id&amp;mode=6\">
-                                <img src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Rolle l&ouml;schen\" title=\"Rolle l&ouml;schen\"></a>";
+                                echo "<a href=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$row->rol_id&amp;mode=6\"><img 
+                                    src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Rolle l&ouml;schen\" title=\"Rolle l&ouml;schen\"></a>";
                             }
                         }
                     echo "</td>
