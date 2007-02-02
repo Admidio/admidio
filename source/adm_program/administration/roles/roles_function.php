@@ -607,10 +607,10 @@ elseif($_GET["mode"] == 6)
     $sql    = prepareSQL($sql, array($rol_id));
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
-    $row = mysql_fetch_array($result);
+    $row = mysql_fetch_object($result);
 
-    $g_message->setForwardYesNo("$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$rol_id&amp;mode=4&amp;inactive=1");
-    $g_message->show("delete_role", utf8_encode($row[0]), "Löschen");
+    $g_message->setForwardYesNo("$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$rol_id&amp;mode=4");
+    $g_message->show("delete_role", utf8_encode($row->rol_name), "Löschen");
 }
 
 $g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
