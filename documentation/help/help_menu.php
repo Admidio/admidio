@@ -12,4 +12,5 @@
    <p><a class="menu" href="index.php?help/layout.php">4. Layout anpassen</a></p>
    <p><a class="menu" href="index.php?help/plugins.php">5. Plugins einbauen</a></p>
    <p><a class="menu" href="index.php?help/rollen.php">6. Rollen</a></p>
+   <p><a class="menu" href="index.php?help/forum.php">7. Forum einbauen</a></p>
 </td>

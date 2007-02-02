@@ -104,4 +104,9 @@
    <div style="text-align: left;">
       <a href="index.php?help/plugins.php"><img src="help/images/icons/back.png" style="vertical-align: bottom; border: 0px;" alt="Plugins einbauen" title="Plugins einbauen" /></a>
    </div>
+   <div style="text-align: right;">
+      <b>N&auml;chster Artikel:</b>&nbsp;
+      <a href="index.php?help/forum.php">Forum einbauen</a>&nbsp;
+      <a href="index.php?help/forum.php"><img src="help/images/icons/forward.png" style="vertical-align: bottom; border: 0px;" alt="Forum einbauen" title="Forum einbauen" /></a>
+   </div>
 </td>
