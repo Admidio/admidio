@@ -89,18 +89,9 @@ if ($user_found >= 1)
         $result = mysql_query($sql, $g_adm_con);
         db_error($result);
 
-        // Cookies fuer die Anmeldung setzen
-        $domain = ereg_replace('^[^\.]*\.([^\.]*)\.(.*)$', '\1.\2',$_SERVER['HTTP_HOST']);
-        if($domain == "localhost")
-        {
-            // beim localhost darf keine Domaine uebergeben werden
-            setcookie("adm_session", "$user_session", 0, "/");
-        }
-        else
-        {
-            // kein Localhost -> Domaine beim Cookie setzen
-            setcookie("adm_session", "$user_session" , 0, "/", ".$domain", 0);
-        }
+        // Cookies fuer die Anmeldung setzen und evtl. Ports entfernen
+        $domain = substr($_SERVER['HTTP_HOST'], 0, strpos($_SERVER['HTTP_HOST'], ':'));
+        setcookie("adm_session", "$user_session" , 0, "/", $domain, 0);
 
         //User Daten in Session speichern
         $g_current_user = new User($g_adm_con);

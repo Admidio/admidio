@@ -265,11 +265,11 @@ class User
             {
                 $sql = $sql. ", $login_user_id )";
             }
-
-            $sql = prepareSQL($sql, array($this->last_name, $this->first_name, $this->address, $this->zip_code,
+            
+            $sql = prepareSQL($sql, array($this->last_name, $this->first_name, $this->address, 
                         $this->city, $this->country, $this->phone, $this->mobile, $this->fax, $this->birthday,
                         $this->gender, $this->email, $this->homepage, $this->valid,
-                        $this->reg_org_shortname, $this->login_name, $this->password));
+                        $this->reg_org_shortname, $this->login_name, $this->password));                        
             $result = mysql_query($sql, $this->db_connection);
             db_error($result);
 
