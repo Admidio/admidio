@@ -59,7 +59,11 @@ else
             $show_time = 0;
         }
     }
-
+    // pruefen ob eine Weiterleitungsseite gesetzt wurde, anonsten auf die Startseite verweisen
+    if(strlen($_SESSION['login_forward_url']) == 0)
+    {
+    	$_SESSION['login_forward_url'] = "home";
+    }
     $g_message->setForwardUrl($_SESSION['login_forward_url'], $show_time);
     unset($_SESSION['login_forward_url']);  
     $g_message->show($message_code);
