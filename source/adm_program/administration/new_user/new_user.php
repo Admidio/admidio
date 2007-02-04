@@ -47,9 +47,9 @@ $sql    = "SELECT * FROM ". TBL_USERS. "
             WHERE usr_valid = 0
               AND usr_reg_org_shortname = '$g_organization' 
             ORDER BY usr_last_name, usr_first_name ";
-$result = mysql_query($sql, $g_adm_con);
-db_error($result);
-$member_found = mysql_num_rows($result);
+$usr_result = mysql_query($sql, $g_adm_con);
+db_error($usr_result);
+$member_found = mysql_num_rows($usr_result);
 
 if ($member_found == 0)
 {
@@ -84,7 +84,7 @@ require("../../../adm_config/body_top.php");
             <th class=\"tableHeader\" style=\"text-align: center;\">&nbsp;Funktionen</th>
         </tr>";
 
-        while($row = mysql_fetch_object($result))
+        while($row = mysql_fetch_object($usr_result))
         {
             echo "
             <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
