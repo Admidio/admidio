@@ -87,7 +87,7 @@ $_SESSION['navigation']->addUrl($g_current_url);
 
 unset($_SESSION['links_request']);
 
-// Hier eingerichtet, damit es später noch in den Orga-Einstellungen verwendet werden kann
+// Hier eingerichtet, damit es sp√§ter noch in den Orga-Einstellungen verwendet werden kann
 $linksPerPage = 10;
 
 echo "
@@ -121,11 +121,11 @@ require("../../../adm_config/body_top.php");
         if ($_GET['id'] > 0)
         {
             $sql1    = "SELECT * FROM ". TBL_LINKS. "
-                       JOIN ". TBL_CATEGORIES ."
+                       LEFT JOIN ". TBL_CATEGORIES ."
                        ON lnk_cat_id = cat_id
+                       AND cat_org_id = $g_current_organization->id
                        WHERE lnk_id = {0}
-                       AND lnk_org_id = '$g_current_organization->id'
-                       AND cat_org_id = '$g_current_organization->id'";
+                       AND lnk_org_id = $g_current_organization->id ";
 
             $sql1    = prepareSQL($sql1, array($_GET['id']));
         }
@@ -133,13 +133,13 @@ require("../../../adm_config/body_top.php");
         else
         {
             // Links bereits nach den Namen ihrer Kategorie sortiert.
-            $sql1    = "SELECT * FROM ". TBL_LINKS. " AS L
-                       JOIN ". TBL_CATEGORIES ." AS C
-                       ON L.lnk_cat_id = C.cat_id
-                       WHERE L.lnk_org_id = '$g_current_organization->id'
-                       AND C.cat_org_id = '$g_current_organization->id'
-                       AND C.cat_type = 'LNK'
-                       ORDER BY C.cat_name, L.lnk_name, lnk_timestamp DESC
+            $sql1    = "SELECT * FROM ". TBL_LINKS. "
+                       LEFT JOIN ". TBL_CATEGORIES ."
+                       ON lnk_cat_id = cat_id
+                       AND cat_org_id = $g_current_organization->id
+                       AND cat_type = 'LNK'
+                       WHERE lnk_org_id = $g_current_organization->id
+                       ORDER BY cat_name, lnk_name, lnk_timestamp DESC
                        LIMIT {0}, 10 ";
 
             $sql1    = prepareSQL($sql1, array($_GET['start']));
@@ -153,20 +153,20 @@ require("../../../adm_config/body_top.php");
         if ($g_session_valid == false)
         {
             // Wenn User nicht eingeloggt ist, Kategorien, die hidden sind, aussortieren
-            $sql    = "SELECT COUNT(*) FROM ". TBL_LINKS. " AS L
-                      JOIN ". TBL_CATEGORIES ." AS C
-                      ON L.lnk_cat_id = C.cat_id
-                      WHERE L.lnk_org_id = '$g_current_organization->id'
-                      AND C.cat_org_id = '$g_current_organization->id'
-                      AND C.cat_type = 'LNK' 
-                      AND C.cat_hidden = '0'
+            $sql    = "SELECT COUNT(*) FROM ". TBL_LINKS. "
+                      LEFT JOIN ". TBL_CATEGORIES ."
+                      ON lnk_cat_id = cat_id
+                      AND cat_org_id = $g_current_organization->id
+                      AND cat_type = 'LNK' 
+                      AND cat_hidden = 0
+                      WHERE lnk_org_id = $g_current_organization->id
                       ORDER BY L.lnk_name DESC";    
         } 
         else
         {   
             // Alle Kategorien anzeigen
             $sql    = "SELECT COUNT(*) FROM ". TBL_LINKS. "
-                      WHERE lnk_org_id = '$g_current_organization->id'
+                      WHERE lnk_org_id = $g_current_organization->id
                       ORDER BY lnk_name DESC";
         }
         
@@ -217,9 +217,9 @@ require("../../../adm_config/body_top.php");
         else
         {
 
-            // Zählervariable für Anzahl von mysql_fetch_object
+            // Z√§hlervariable f√ºr Anzahl von mysql_fetch_object
             $j = 0;
-            // Zählervariable für Anzahl der Links in einer Kategorie
+            // Z√§hlervariable f√ºr Anzahl der Links in einer Kategorie
             $i = 0;
             // ?berhaupt etwas geschrieben? -> Wichtig, wenn es nur versteckte Kategorien gibt.
             $did_write_something = false;
@@ -334,7 +334,7 @@ require("../../../adm_config/body_top.php");
              }
              
              echo "</div>";
-        } // Ende Wenn mehr als 0 Datensätze
+        } // Ende Wenn mehr als 0 Datens√§tze
 
         if (mysql_num_rows($links_result) > 2)
         {
