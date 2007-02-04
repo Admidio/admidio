@@ -56,7 +56,7 @@ $sql    = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
               AND rol_valid         = $valid
               AND rol_cat_id        = cat_id
             ORDER BY cat_name, rol_name ";
-$result = mysql_query($sql, $g_adm_con);
+$usr_result = mysql_query($sql, $g_adm_con);
 db_error($result);
 
 unset($_SESSION['roles_request']);
@@ -122,7 +122,7 @@ require("../../../adm_config/body_top.php");
                 <th class=\"tableHeader\">Funktionen</th>
             </tr>";
 
-            while($row = mysql_fetch_object($result))
+            while($row = mysql_fetch_object($usr_result))
             {
                 echo "
                 <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
