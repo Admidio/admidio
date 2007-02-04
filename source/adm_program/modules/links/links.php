@@ -160,7 +160,7 @@ require("../../../adm_config/body_top.php");
                       AND cat_type = 'LNK' 
                       AND cat_hidden = 0
                       WHERE lnk_org_id = $g_current_organization->id
-                      ORDER BY L.lnk_name DESC";    
+                      ORDER BY lnk_name DESC";    
         } 
         else
         {   
