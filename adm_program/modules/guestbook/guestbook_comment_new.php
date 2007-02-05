@@ -241,7 +241,7 @@ require("../../../adm_config/body_top.php");
                         }
                     echo "</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <textarea  id=\"text\" name=\"text\" tabindex=\"3\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". htmlspecialchars($form_values['text'], ENT_QUOTES). "</textarea>&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
+                        <textarea  id=\"entry\" name=\"entry\" tabindex=\"3\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". htmlspecialchars($form_values['text'], ENT_QUOTES). "</textarea>&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
                     </div>
                 </div>";
 
