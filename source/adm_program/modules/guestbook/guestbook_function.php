@@ -171,7 +171,7 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
     // Daten fuer die DB werden nun aufbereitet...
 
     $name      = strStripTags($_POST['name']);
-    $text      = strStripTags($_POST['text']);
+    $text      = strStripTags($_POST['entry']);
 
     $email     = strStripTags($_POST['email']);
     if (!isValidEmailAddress($email))
@@ -334,7 +334,7 @@ elseif($_GET["mode"] == 4 || $_GET["mode"] == 8)
 
     //Daten fuer die DB vorbereiten
     $name      = strStripTags($_POST['name']);
-    $text      = strStripTags($_POST['text']);
+    $text      = strStripTags($_POST['entry']);
 
     $email     = strStripTags($_POST['email']);
     if (!isValidEmailAddress($email))
