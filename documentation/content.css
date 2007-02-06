@@ -77,6 +77,12 @@ h2 {
 	vertical-align: top;
 }
 
+.notice {
+	border: 		2px dashed darkgray;
+	background-color: #eeeeee;
+	padding: 5px;
+}
+
 th.parameter {
 	color:			gray;
 	padding:		5px;

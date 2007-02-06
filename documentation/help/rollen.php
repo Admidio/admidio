@@ -63,10 +63,13 @@
          <p><img style="vertical-align: bottom;" src="help/images/icons/wand.png" alt="Moderation" />&nbsp;
          Benutzer dieser Rolle bekommen erweiterte Rechte. Sie k&ouml;nnen Rollen erstellen,
          verwalten und anderen Benutzern Rollen zuordnen.</p>
-         <p><img style="vertical-align: bottom;" src="help/images/icons/user.png" alt="Benutzer bearbeiten" />&nbsp;
+         <p><img style="vertical-align: bottom;" src="help/images/icons/group.png" alt="Benutzer bearbeiten" />&nbsp;
          Rollen, die diese Option aktiviert haben, haben die Berechtigung
          Benutzerdaten (au&szlig;er Passw&ouml;rter) und Rollenzugeh&ouml;rigkeiten
-         anderer Mitglieder zu bearbeiten.</p>
+         anderer Mitglieder zu bearbeiten. Au&szlig;erdem hat er Zugriff auf die Benutzerverwaltung und kann dort
+         auch Mitglieder anlegen und l&ouml;schen.</p>
+         <p><img style="vertical-align: bottom;" src="help/images/icons/user.png" alt="Profil bearbeiten" />&nbsp;
+         Der angemeldete Benutzer dieser Rolle hat die Berechtigung sein eigenes Profil zu bearbeiten.</p>
          <p><img style="vertical-align: bottom;" src="help/images/icons/note.png" alt="Ank&uuml;ndigungen" />&nbsp;
          Benutzer k&ouml;nnen Ank&uuml;ndigungen anlegen (keine Termine) und diese
          sp&auml;ter auch bearbeiten oder l&ouml;schen.</p>
@@ -89,6 +92,12 @@
          Benutzer bekommen die Berechtigung Weblinks zu erfassen, zu bearbeiten und zu l&ouml;schen.</p>
       </li>
       <li>
+         <p>&Uuml;ber die <b>Abh&auml;ngigkeiten</b> k&ouml;nnen Sie bestimmen, dass Mitglieder anderer Rollen auch automatisch
+         Mitglied dieser Rollen werden sollen. Werden hier Abh&auml;nigkeiten gesetzt, so werden sofort alle bisherigen Mitglieder
+         der abh&auml;ngigen Rolle Mitglied der aktuellen Rolle und sp&auml;ter dann auch jedes neue Mitglied der abh&auml;ngigen 
+         Rolle.</p>
+      </li>
+      <li>
          <p>Die <b>Einstellungen</b> sind optional und sollten nur bei Bedarf gef&uuml;llt werden. Hier k&ouml;nnen Termine
          f&uuml;r regelm&auml;&szlig;ige Treffen, Preise f&uuml;r Kurse oder die maximale Anzahl an Teilnehmern definiert werden.</p>
       </li>
@@ -99,14 +108,14 @@
       </li>
    </ul>
 
-   <br />
+   <br /><br /> 
 
-   <div style="text-align: left;">
+   <div style="text-align: left; float: left;">
       <a href="index.php?help/plugins.php"><img src="help/images/icons/back.png" style="vertical-align: bottom; border: 0px;" alt="Plugins einbauen" title="Plugins einbauen" /></a>
    </div>
    <div style="text-align: right;">
       <b>N&auml;chster Artikel:</b>&nbsp;
-      <a href="index.php?help/forum.php">Forum einbauen</a>&nbsp;
-      <a href="index.php?help/forum.php"><img src="help/images/icons/forward.png" style="vertical-align: bottom; border: 0px;" alt="Forum einbauen" title="Forum einbauen" /></a>
+      <a href="index.php?help/forum.php">Schnittstelle zum phpBB-Forum</a>&nbsp;
+      <a href="index.php?help/forum.php"><img src="help/images/icons/forward.png" style="vertical-align: bottom; border: 0px;" alt="Schnittstelle zum phpBB-Forum einrichten" title="Schnittstelle zum phpBB-Forum einrichten" /></a>
    </div>
 </td>

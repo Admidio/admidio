@@ -22,23 +22,40 @@
     
     <p>Falls Sie das Plugin nun in eine reine Html-Seite einbinden wollen, sollten Sie die Dateierweiterung
     der Seite zuerst von <i>html</i> in <i>php</i> umbenennen. Nun k&ouml;nnen Sie das Modul mit Hilfe von Php
-    in Ihre ehemals reine Html-Seite integrieren. F&uuml;gen Sie nun folgenden Abschnitt im Html-Code an der Stelle 
-    ein, an der die Ausgabe des Plugins dargestellt werden soll und ersetzen Sie den Link zum Plugin durch Ihre
-    individuellen Daten:</p>
+    in Ihre ehemals reine Html-Seite integrieren. F&uuml;gen Sie nun das Plugin mit einer der folgenden Methoden
+    in Ihren Html-Code an der Stelle ein, an der die Ausgabe des Plugins dargestellt werden soll:</p>
+    
+    <p><b>1.</b> Benutzen Sie das Plugin innerhalb von Admidio-Seiten, so reicht ein einfacher Aufruf von:
     
     <p class="code">&lt;?php<br>
-    include("<i>http://www.meine-domain.de/admidio/adm_plugins/
-    sidebar_dates/sidebar_dates.php</i>");<br>
+    include("<i>SERVER_PATH. "/adm_plugins/sidebar_dates/sidebar_dates.php</i>");<br>
     ?&gt;</p>
     
-    <p>Innerhalb von Php-Code ist nat&uuml;rlich nur der Include-Aufruf n&ouml;tig.
-    <p class="code">include("<i>http://www.meine-domain.de/admidio/adm_plugins/
-    sidebar_dates/sidebar_dates.php</i>");</p>
+    <p><b>2.</b> Wird das Plugin auf Seiten benutzt, die nichts mit Admidio zu tun haben, so muss vorher noch die <i>common.php</i>
+    &uuml;ber relative Pfadangaben eingebunden werden:</p>
+    
+    <p class="code">include_once("<i>Relativer-Pfad-zu-Admidio-Ordner
+    /adm_program/system/common.php</i>");<br>
+    include("<i>SERVER_PATH. "/adm_plugins/sidebar_dates/sidebar_dates.php</i>");</p>
+    
+    <p><b>3.</b> Haben die vorherigen Varianten nicht zum Erfolg gef&uuml;hrt kann man die Plugins auch direkt 
+    &uuml;ber eine URL einbinden. Allerdings wird bei dieser Variante die common.php f&uuml;r jedes Plugin wiederholt
+    abgearbeitet, was der Performance des Webservers nicht gerade dienlich ist.</p>
+    
+    <p class="code">&lt;?php<br>
+        include("<i>http://www.meine-domain.de/Pfad-zu-Admidio
+        /adm_plugins/sidebar_dates/sidebar_dates.php</i>");<br>
+    ?&gt;</p>
+    
+    <h2>Wo kann ich Plugins konfigurieren ?</h2>
     
     <p>Konfigurieren k&ouml;nnen Sie die meisten Plugins &uuml;ber eine <b>config.php</b> Datei, die sich im selben Ordner
     wie das Plugin befindet. Hier stehen Ihnen einige Variablen mit Default-Werten zur Verf&uuml;gung. Diese k&ouml;nnen
-    Sie Ihren Bed&uuml;rfnissen anpassen. Bei einem Update des Plugins brauchen und sollen Sie diese Datei nicht 
-    &uuml;berschreiben.</p>
+    Sie Ihren Bed&uuml;rfnissen anpassen.</p>
+    
+    <p>Bei einem Update des Plugins brauchen und sollen Sie diese Datei nicht 
+    &uuml;berschreiben. Sind durch das Update neue Einstellungen hinzugekommen, so m&uuml;ssen Sie die neuen Variablen aus
+    der heruntergeladenen config.php in Ihre bisherige config.php des Plugins kopieren und den gew&uuml;nschten Wert einsetzen.</p>
     
     <p>Ein Beispiel f&uuml;r eine Integration von mehreren Plugins in einer Seitenleiste sehen Sie auf diesem 
     Screenshot im hervorgehobenen Bereich:</p>

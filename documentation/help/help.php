@@ -38,4 +38,5 @@
 
     <h3 style="margin-top: 30px;">Admidio konfigurieren</h3>
     <p><a href="index.php?help/rollen.php">6. Rollen anlegen und pflegen</a></p>
+    <p><a href="index.php?help/forum.php">7. Schnittstelle zum phpBB-Forum einrichten</a></p>
 </td>

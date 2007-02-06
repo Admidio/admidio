@@ -40,7 +40,7 @@
 
     <p class="code">Beispiel:<br />http://www.test.de/.../mail.php<b><span style="color: #990000">?</span>rolle<span style="color: #990000">=</span><span style="color: #aaaaaa">Webmaster</span><span style="color: #990000">&</span>cat<span style="color: #990000">=</span><span style="color: #aaaaaa">Allgemein</span></b></p>
 
-    <p>Bitte beachten Sie, dass in der kompletten URL kein Leerzeichen und Sonderzeichen
+    <p class="notice"><b>Hinweis:</b><br> Bitte beachten Sie, dass in der kompletten URL kein Leerzeichen und Sonderzeichen
     vorkommen darf. Dies gilt auch f&uuml;r die Parameter. Falls Sie dennoch einen Wert mit
     Leerzeichen &uuml;bergeben wollen, k&ouml;nnen Sie anstatt dem Leerzeichen einfach <b>%20</b>
     schreiben.</p>
