@@ -85,13 +85,13 @@ class CParser
         {
             $this->m_dest = " AND ( UPPER($field_name) LIKE '";
         }
-        elseif($field_type != "checkbox")
+        elseif($field_type == "checkbox")
         {
             // !!! Sonderfall !!!
             // bei einer Checkbox kann es nur 1 oder 0 geben und keine komplizierten Verknuepfungen
             if($str_src == 1)
             {
-                 $this->m_dest = " AND $field_name = '1' ";
+                $this->m_dest = " AND $field_name = '1' ";
             }
             else
             {
