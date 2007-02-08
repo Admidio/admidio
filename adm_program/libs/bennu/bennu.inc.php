@@ -2,10 +2,10 @@
 
 if(!defined('_BENNU_VERSION')) {
     define('_BENNU_VERSION', '0.1');
-    include('iCalendar_rfc2445.php');
-    include('iCalendar_components.php');
-    include('iCalendar_properties.php');
-    include('iCalendar_parameters.php');
+    include('icalendar_rfc2445.php');
+    include('icalendar_components.php');
+    include('icalendar_properties.php');
+    include('icalendar_parameters.php');
 }
 
 ?>
