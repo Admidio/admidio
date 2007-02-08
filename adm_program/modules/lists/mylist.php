@@ -179,7 +179,7 @@ require("../../../adm_config/body_top.php");
 
                 <p><b>2.</b> Bestimme die Felder, die in der Liste angezeigt werden sollen:</p>
 
-                <table class=\"tableList\" style=\"width: 90%;\" cellpadding=\"0\" cellspacing=\"0\">
+                <table class=\"tableList\" style=\"width: 95%;\" cellpadding=\"0\" cellspacing=\"0\">
                     <tr>
                         <th class=\"tableHeader\" style=\"width: 18%;\">Nr.</th>
                         <th class=\"tableHeader\" style=\"width: 37%;\">Feld</th>
