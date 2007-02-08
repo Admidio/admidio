@@ -123,7 +123,7 @@ for($i = 0; $i < count($_POST); $i++)
                 
                 if($row->usf_type == "CHECKBOX")
                 {
-                    $type = "int";
+                    $type = "checkbox";
                     $value = strtoupper($value);
                     
                     // Ja bzw. Nein werden durch 1 bzw. 0 ersetzt, damit Vergleich in DB gemacht werden kann
@@ -135,6 +135,10 @@ for($i = 0; $i < count($_POST); $i++)
                     {
                         $value = "0";
                     }
+                }
+                elseif($row->usf_type == "NUMERIC")
+                {
+                    $type = "int";
                 }
                 else
                 {
@@ -183,7 +187,7 @@ if(strlen($sql_orderby) > 0)
 
 // SQL-Statement in Session-Variable schreiben
 $_SESSION['mylist_sql'] = $main_sql;
-
+//echo $main_sql; exit();
 // weiterleiten zur allgemeinen Listeseite
 $location = "Location: $g_root_path/adm_program/modules/lists/lists_show.php?type=mylist&mode=html&rol_id=$req_rol_id";
 header($location);
