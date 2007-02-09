@@ -27,24 +27,24 @@
     
     <p><b>1.</b> Benutzen Sie das Plugin innerhalb von Admidio-Seiten, so reicht ein einfacher Aufruf von:
     
-    <p class="code">&lt;?php<br>
-    include("<i>SERVER_PATH. "/adm_plugins/sidebar_dates/sidebar_dates.php</i>");<br>
+    <p class="code">&lt;?php<br />
+    include("<i>SERVER_PATH. "/adm_plugins/sidebar_dates/sidebar_dates.php</i>");<br />
     ?&gt;</p>
     
     <p><b>2.</b> Wird das Plugin auf Seiten benutzt, die nichts mit Admidio zu tun haben, so muss vorher noch die <i>common.php</i>
     &uuml;ber relative Pfadangaben eingebunden werden:</p>
     
     <p class="code">include_once("<i>Relativer-Pfad-zu-Admidio-Ordner
-    /adm_program/system/common.php</i>");<br>
+    /adm_program/system/common.php</i>");<br />
     include("<i>SERVER_PATH. "/adm_plugins/sidebar_dates/sidebar_dates.php</i>");</p>
     
     <p><b>3.</b> Haben die vorherigen Varianten nicht zum Erfolg gef&uuml;hrt kann man die Plugins auch direkt 
     &uuml;ber eine URL einbinden. Allerdings wird bei dieser Variante die common.php f&uuml;r jedes Plugin wiederholt
     abgearbeitet, was der Performance des Webservers nicht gerade dienlich ist.</p>
     
-    <p class="code">&lt;?php<br>
+    <p class="code">&lt;?php<br />
         include("<i>http://www.meine-domain.de/Pfad-zu-Admidio
-        /adm_plugins/sidebar_dates/sidebar_dates.php</i>");<br>
+        /adm_plugins/sidebar_dates/sidebar_dates.php</i>");<br />
     ?&gt;</p>
     
     <h2>Wo kann ich Plugins konfigurieren ?</h2>

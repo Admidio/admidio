@@ -61,7 +61,7 @@ else
                </a>
             </div>
             <div style="margin-left: 200px; padding-top: 10px; padding-bottom: 0px;">
-               <span style="font-size: 20pt; font-weight: bold;">Die Online- & Offlinehilfe</span><br />
+               <span style="font-size: 20pt; font-weight: bold;">Die Online- &amp; Offlinehilfe</span><br />
                <span style="font-size: 12pt; font-weight: bold;">für Admidio</span><br />
                <a class="menu" href="index.php?help/help.php">Hilfe</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                <a class="menu" href="index.php?download/download.php">Download</a>
@@ -76,9 +76,7 @@ else
       </tr>
    </table>
 
-    <br>
-
-   <table style="width: 750px; border: 0px; text-align: center; margin: auto;" cellpadding="0" cellspacing="0">
+   <table style="width: 750px; border: 0px; text-align: center; margin: auto; margin-top: 20px;" cellpadding="0" cellspacing="0">
       <tr>
          <td style="width: 20px;"><img src="help/images/bl_tl.png" style="display: block;" alt="tl" /></td>
          <td style="background-image:url(help/images/bl_t.png); background-repeat:repeat-x;"></td>

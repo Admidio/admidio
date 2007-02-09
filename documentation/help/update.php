@@ -11,11 +11,11 @@
    <p>( Die Ordner <i>adm_config</i> und <i>adm_my_files</i> d&uuml;rfen Sie auf keinen Fall l&ouml;schen, da hier Ihre Einstellungen,
    Fotos und Downloads gespeichert werden! )</p></li>
 
-   <li><p><i>Wichtig !<br />Falls Sie ein Bugfix-Update einspielen (diese &auml;ndern nur die 3. Stelle der Versionsnummer z.B. 1.2.0 nach 1.2.1)
+   <li><p class="notice"><b>Hinweis:</b><br />Falls Sie ein Bugfix-Update einspielen (diese &auml;ndern nur die 3. Stelle der Versionsnummer z.B. 1.2.0 nach 1.2.1)
    brauchen Sie nur das Verzeichnis <b>adm_program</b> auf Ihrem Webserver zu ersetzen und haben damit das Update erfolgreich
-   durchgef&uuml;hrt.</p>
-   <p>Bei gr&ouml;&szlig;eren Versionswechseln z.B. von 1.1 auf 1.2 m&uuml;ssen Sie noch die nachfolgenden
-   Punkte durchgehen:</i></p></li>
+   durchgef&uuml;hrt.<br /><br />
+   Bei gr&ouml;&szlig;eren Versionswechseln z.B. von 1.3 auf 1.4 m&uuml;ssen Sie noch die nachfolgenden
+   Punkte durchgehen:</p></li>
 
    <li><p>Kopieren Sie <b>nur</b> die Verzeichnisse <b>adm_install</b> und <b>adm_program</b> mit Ihrem
    FTP-Programm auf den Webserver Ihrer Homepage.</p></li>
@@ -34,7 +34,7 @@
    <p><img src="help/images/screenshots/installation.png" alt="Admidio Installationsseite" /></p>
    </li>
 
-   <li>Auf der n&auml;chsten Maske m&uuml;ssen Sie Ihre Zugangsdaten zur Datenbank und die momentan installierte Admidio-Version
+   <li><p>Auf der n&auml;chsten Maske m&uuml;ssen Sie Ihre Zugangsdaten zur Datenbank und die momentan installierte Admidio-Version
    angeben. Nachdem Sie auf <b>Weiter</b> geklickt haben, warten Sie solange bis die Meldung erscheint, dass die
    Datenbank erfolgreich installiert wurde. </p>
    <p>Falls Sie wiederholt auf Weiter klicken oder die Seite schlie&szlig;en, kann das

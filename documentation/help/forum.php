@@ -10,12 +10,12 @@
     <p>Nach erfolgreicher Installation des Forums und der Anpassung in Admidio 
     erhalten sie auf der Übersichtsseite den zusätzlichen Modulpunkt Forum:</p>
     
-    <p><img border="0" src="help/images/screenshots/forum_uebersicht_logoff.png" width="414" height="80" alt="forum_uebersicht_logoff.png"></p>
+    <p><img src="help/images/screenshots/forum_uebersicht_logoff.png" alt="forum_uebersicht_logoff.png" /></p>
     
     <p>In Admidio angemeldete User erhalten eine abweichende Ansicht dieses 
     Modulpunktes:</p>
     
-    <p><img border="0" src="help/images/screenshots/forum_uebersicht_logon.png" width="505" height="66" alt="forum_uebersicht_logon.png"></p>
+    <p><img src="help/images/screenshots/forum_uebersicht_logon.png" alt="forum_uebersicht_logon.png" /></p>
     
     <p>Jeder User, der sich über eine Webanmeldung bei Admdio anmeldet, oder der 
     unter der Benutzerverwaltung von Admidio mit einem gültigen Benutzernamen 
@@ -42,12 +42,12 @@
     Admidio hinterlegten Daten gleichgezogen. Der Webmaster erhält einen 
     entsprechenden Hinweis.</p>
     
-    <p class="notice"><b>Hinweis:</b><br> Das Forum befindet sich im Parallelbetrieb zu Admidio. 
+    <p class="notice"><b>Hinweis:</b><br /> Das Forum befindet sich im Parallelbetrieb zu Admidio. 
     Mit der Standardinstallation und Anpassung kann sich jederzeit ein Benutzer 
     auf dem Forum anmelden, ohne sich dabei in Admidio zu registrieren. Das 
     bedeutet, Admidiouser können im Forum mit dort registrierten Usern und 
     Besuchern schreiben. Ein Forum User ist nicht immer ein Admidio User, jedoch 
-    ist jeder Admidio User (mit gültigem Benutzernamen) ein User im Forum.<br>
+    ist jeder Admidio User (mit gültigem Benutzernamen) ein User im Forum.<br />
     Das Forum lässt sich auch&nbsp; -so es gewünscht ist - im Stand Allone 
     Betrieb mit Admidio anpassen. Dazu sind Anpassungen einiger php Datei des 
     Forums notwenig. Es ist dann keinerlei Registrierung im Forum mehr möglich. 
@@ -61,7 +61,7 @@
     <a href="http://www.phpbb.com">phpbb.com</a> die Installationsdateien 
     herunter und installieren sie das Board nach den Installationsanleitungen 
     von phpBB auf ihrem Webserver.&nbsp; Support für die Installation des phpBB 
-    Forums erhalten sie bei phpBB direkt. <br>
+    Forums erhalten sie bei phpBB direkt. <br />
     Wir empfehlen Ihnen einen Installationsordner direkt auf ihrem Webspace 
     unter root/forum. Sollte ihre Domaine z.B. www.beispiel.de sein, wäre der 
     entsprechende Ordner www.beispiel.de/forum</p>
@@ -73,11 +73,11 @@
     Konfiguration. Suchen sie dort den Punkt &quot;Namenswechsel erlauben&quot; und 
     Schalten sie es auf <b>Nein</b>! Speichern sie die Einstellungen.</p>
     <p>
-    <img border="0" src="help/images/screenshots/forum_einstellungen.png" width="288" height="46" alt="forum_einstellungen.png"><br>
+    <img src="help/images/screenshots/forum_einstellungen.png" alt="forum_einstellungen.png" /><br />
     </p>
-    <p class="notice"><b>Hinweis:</b><br> In Admidio werden die Forumuser 
+    <p class="notice"><b>Hinweis:</b><br /> In Admidio werden die Forumuser 
     anhand ihres Benutzernamens im Forum identifiziert und zugeordnet. Es ist 
-    sehr wichtig, dass sie diesen Punkt deaktivieren.</b><br>
+    sehr wichtig, dass sie diesen Punkt deaktivieren.<br />
     Ein Wechsel des Benutzernamens in Admidio wird im Forum dann vollkommen 
     automatisch nachgezogen und gleichgesetzt. </p>
     
@@ -87,26 +87,26 @@
     herunter und öffnen Sie diese mit einem Editor. Am Ende finden sie die 
     Zeilen:</p>
 
-    <p class="code">// Forumspezifisch<br>
-    // Forum integriert<br>
-    // 1 = ja<br>
-    // 0 = nein<br>
-    $g_forum = 0;<br>
-    <br>
-    // Praefix der Tabellen des phpBB-Forums<br>
-    $g_forum_praefix = &quot;&quot;;<br>
-    <br>
-    $g_forum_srv = &quot;&quot;;<br>
-    $g_forum_usr = &quot;&quot;;<br>
-    $g_forum_pw = &quot;&quot;;<br>
-    $g_forum_db = &quot;&quot;;<br></p>
+    <p class="code">// Forumspezifisch<br />
+    // Forum integriert<br />
+    // 1 = ja<br />
+    // 0 = nein<br />
+    $g_forum = 0;<br />
+    <br />
+    // Praefix der Tabellen des phpBB-Forums<br />
+    $g_forum_praefix = &quot;&quot;;<br />
+    <br />
+    $g_forum_srv = &quot;&quot;;<br />
+    $g_forum_usr = &quot;&quot;;<br />
+    $g_forum_pw = &quot;&quot;;<br />
+    $g_forum_db = &quot;&quot;;<br /></p>
     
     
     <p>Setzen sie den Wert für $g_forum auf 1. </p>
     
     
     <p>Bei $g_forum_praefix verwenden sie den Praefix (ohne Unterstrich &quot;_&quot;), den 
-    sie ebenfalls bei der Installation des Forums angegeben haben. <br>
+    sie ebenfalls bei der Installation des Forums angegeben haben. <br />
     Der Standardwert ist bei einer Neuinstallation des Forums ist hier &quot;phpbb&quot;. </p>
     
     
@@ -132,28 +132,28 @@
     würde ihr config.php wie folgt aussehen:</p>
     
     
-    <p class="code">// Forumspezifisch<br>
-    // Forum integriert<br>
-    // 1 = ja<br>
-    // 0 = nein<br>
-    $g_forum = 1;<br>
-    <br>
-    // Praefix der Tabellen des phpBB-Forums<br>
-    $g_forum_praefix = &quot;phpbb&quot;;<br>
-    <br>
-    $g_forum_srv = &quot;db.beispieldb.de&quot;;<br>
-    $g_forum_usr = &quot;beispieluser&quot;;<br>
-    $g_forum_pw = &quot;beispielpassword&quot;;<br>
-    $g_forum_db = &quot;beispiel_forums_datenbank&quot;;<br></p>
+    <p class="code">// Forumspezifisch<br />
+    // Forum integriert<br />
+    // 1 = ja<br />
+    // 0 = nein<br />
+    $g_forum = 1;<br />
+    <br />
+    // Praefix der Tabellen des phpBB-Forums<br />
+    $g_forum_praefix = &quot;phpbb&quot;;<br />
+    <br />
+    $g_forum_srv = &quot;db.beispieldb.de&quot;;<br />
+    $g_forum_usr = &quot;beispieluser&quot;;<br />
+    $g_forum_pw = &quot;beispielpassword&quot;;<br />
+    $g_forum_db = &quot;beispiel_forums_datenbank&quot;;<br /></p>
     
     <p>Speichern sie ihre config.php und laden sie diese auf ihren Webspace ins 
     Verzeichnis adm_config.</p>
     
     
-    <p class="notice"><b>Hinweis:</b><br> Die Datei config.php ist im UTF8 Datenformat. 
+    <p class="notice"><b>Hinweis:</b><br /> Die Datei config.php ist im UTF8 Datenformat. 
     Viele Editoren setzen an den Anfang der Datei ein Byte-Order-Mark, welches 
     der Webserver als Zeichen interpretiert. Sie erhalten dann beim Aufruf der 
-    Seite eine Fehlermeldung: <b>headers already sent (output started at...</b><br>
+    Seite eine Fehlermeldung: <b>headers already sent (output started at...</b><br />
     Sollte dies bei ihnen der Fall sein, laden sie die Datei config.php mit dem 
     Standard Windows Editor Notepad. Dieser Notepad Editor kann sehr wohl UTF8 
     Dateien lesen, speichert diese jedoch ohne Byte-Order-Mark. Speichern sie 
@@ -168,26 +168,26 @@
     sich im Forum mit Gästen und anderen Forumsbenutzern unterhalten. </p>
     <p>Möchten sie das Forum exklusiv für Admidio Benutzer betreiben, sind 
     Anpassungen der Forum Sourcen notwenig.</p>
-    <p>Zu bearbeitende Dateien:<br></p>
-    <p class="code">includes/usercp_register.php<br>
-    language/lang_german/lang_main.php<br>
+    <p>Zu bearbeitende Dateien:<br /></p>
+    <p class="code">includes/usercp_register.php<br />
+    language/lang_german/lang_main.php<br />
     templates/subSilver/agreement.tpl</p>
-    <p><b>Öffnen sie die Datei includes/usercp_register.php und suchen sie</b><br></p>
+    <p><b>Öffnen sie die Datei includes/usercp_register.php und suchen sie</b><br /></p>
     <p class="code">if ( $mode == 'register' &amp;&amp; !isset($HTTP_POST_VARS['agreed']) &amp;&amp; 
 !isset($HTTP_GET_VARS['agreed']) )</p>
     <p>Ersetzten sie diese Zeile mit</p>
     <p class="code">if ( $mode == 'register' &amp;&amp; 
     !isset($HTTP_POST_VARS['agreed']))</p>
-    <p>suchen sie<br></p>
+    <p>suchen sie<br /></p>
     <p class="code">show_coppa();</p>
     <p>Ersetzten sie diese Zeile mit</p>
-    <p class="code">//show_coppa();<br>
-    echo &quot;&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&lt;b&gt;&lt;center&gt;<br>
-    Die Registrierung ist auf diesem Board abgeschaltet!&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;<br>
-    Melden sie sich bitte über die Admidio Seite an.&lt;/b&gt;&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;<br>
+    <p class="code">//show_coppa();<br />
+    echo &quot;&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&lt;b&gt;&lt;center&gt;<br />
+    Die Registrierung ist auf diesem Board abgeschaltet!&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;<br />
+    Melden sie sich bitte über die Admidio Seite an.&lt;/b&gt;&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;<br />
     &lt;a href=&quot;.getenv('HTTP_REFERER').&quot;&gt;Zurück zur vorherigen Seite&lt;/a&gt;&lt;br /&gt;&lt;br 
-    /&gt;<br>
-    &lt;a href=http://&quot;.getenv('SERVER_NAME').&quot;&gt;Zurück zur Hauptseite&lt;/a&gt;<br>
+    /&gt;<br />
+    &lt;a href=http://&quot;.getenv('SERVER_NAME').&quot;&gt;Zurück zur Hauptseite&lt;/a&gt;<br />
     &lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&quot;;</p>
     <p><b>Öffnen sie die Datei 
     language/lang_german/lang_main.php, sofern vorhanden in allen anderen 
@@ -200,7 +200,7 @@
 
     <p><b>Öffnen sie die Datei 
     templates/subSilver/agreement.tpl und sofern vorhanden in allen weiteren 
-    Templates, suchen sie</b><br></p>
+    Templates, suchen sie</b><br /></p>
     <p class="code">&lt;td&gt;&lt;span class=&quot;genmed&quot;&gt;&lt;br /&gt;{AGREEMENT}&lt;br /&gt;&lt;br /&gt;&lt;br 
     /&gt;&lt;div align=&quot;center&quot;&gt;&lt;a href=&quot;{U_AGREE_OVER13}&quot; 
     class=&quot;genmed&quot;&gt;{AGREE_OVER_13}&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;&lt;a href=&quot;{U_INDEX}&quot; 
@@ -218,7 +218,7 @@
     <p>Speicher sie die Dateien und laden Sie sie in die entsprechenden 
     Verzeichnisse hoch.</p>
     
-    <p class="notice"><b>Hinweis:</b><br> Die Änderungen der Sourcen beseitigen gleichzeitig den 
+    <p class="notice"><b>Hinweis:</b><br /> Die Änderungen der Sourcen beseitigen gleichzeitig den 
     Fehler der automatischen BOT Registrierungen im Forum.</p>
 
     <p>&nbsp;</p>

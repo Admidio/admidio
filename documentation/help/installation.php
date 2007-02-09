@@ -56,18 +56,18 @@
 
    <li><p>Auf der n&auml;chsten Seite k&ouml;nnen Sie die Konfigurationsdatei <b>config.php</b> herunterladen.
    Kopieren Sie die Datei in das Verzeichnis <b>adm_config</b> auf Ihrem Webspace. Danach k&ouml;nnen
-   Sie auf <b>Weiter</b> klicken.</p></li>
+   Sie auf <b>Weiter</b> klicken.</p>
 
    <p><img src="help/images/screenshots/inst_form_config_file.png" alt="Konfigurationsdatei" /></p>
    </li>
 
-   <li><p>Sie haben nun Admidio erfolgreich auf Ihrem Webspace installiert.<br>L&ouml;schen Sie bitte nach
+   <li><p>Sie haben nun Admidio erfolgreich auf Ihrem Webspace installiert.<br />L&ouml;schen Sie bitte nach
    der Installation das Verzeichnis <b>adm_install</b> auf Ihrem Webspace um einem Mi&szlig;brauch dieser
    Scripte vorzubeugen!</p></li>
 
    <li><p>Um das Foto- oder das Downloadmodul nutzen zu k&ouml;nnen, m&uuml;ssen Sie den Ordnern <b>download</b>
    und <b>photos</b> im Ordner <i>adm_my_files</i> &uuml;ber Ihr FTP-Programm die Dateirechte 777 geben,
-   damit die Scripte dort Dateien ablegen k&ouml;nnen.</li>
+   damit die Scripte dort Dateien ablegen k&ouml;nnen.</p></li>
    </ul>
 
    <br />

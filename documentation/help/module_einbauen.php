@@ -36,11 +36,11 @@
     <p>Die Parameter werden direkt an die URL angehangen. Sie m&uuml;ssen einfach ein <b>?</b>
     hinter die URL setzen und k&ouml;nnen dann den Parameternamen schreiben. Nach einem <b>=</b>
     folgt dann der Wert. Wollen Sie mehr als einen Parameter anh&auml;ngen, so m&uuml;ssen sie
-    die Parameter durch ein <b>&</b> voneinander trennen.</p>
+    die Parameter durch ein <b>&amp;</b> voneinander trennen.</p>
 
-    <p class="code">Beispiel:<br />http://www.test.de/.../mail.php<b><span style="color: #990000">?</span>rolle<span style="color: #990000">=</span><span style="color: #aaaaaa">Webmaster</span><span style="color: #990000">&</span>cat<span style="color: #990000">=</span><span style="color: #aaaaaa">Allgemein</span></b></p>
+    <p class="code">Beispiel:<br />http://www.test.de/.../mail.php<b><span style="color: #990000">?</span>rolle<span style="color: #990000">=</span><span style="color: #aaaaaa">Webmaster</span><span style="color: #990000">&amp;</span>cat<span style="color: #990000">=</span><span style="color: #aaaaaa">Allgemein</span></b></p>
 
-    <p class="notice"><b>Hinweis:</b><br> Bitte beachten Sie, dass in der kompletten URL kein Leerzeichen und Sonderzeichen
+    <p class="notice"><b>Hinweis:</b><br /> Bitte beachten Sie, dass in der kompletten URL kein Leerzeichen und Sonderzeichen
     vorkommen darf. Dies gilt auch f&uuml;r die Parameter. Falls Sie dennoch einen Wert mit
     Leerzeichen &uuml;bergeben wollen, k&ouml;nnen Sie anstatt dem Leerzeichen einfach <b>%20</b>
     schreiben.</p>
@@ -79,20 +79,19 @@
              <span class="code">http://www.ihre-domain.de/admidio-ordner/
                 adm_program/modules/announcements/annnouncements.php</span>
           </p>
-          <p>
-             <table class="parameter">
-                <tr>
-                   <th class="parameter">Parameter</th>
-                   <th class="parameter">Wert</th>
-                   <th class="parameter">Beschreibung</th>
-                </tr>
-                <tr>
-                   <td class="parameter"><b>headline</b></td>
-                   <td class="parameter"><i>Bezeichnung</i></td>
-                   <td class="parameter">Frei w&auml;hlbare Bezeichnung f&uuml;r das Modul anstelle von Ank&uuml;ndigungen</td>
-                </tr>
-             </table>
-          </p>
+
+         <table class="parameter">
+            <tr>
+               <th class="parameter">Parameter</th>
+               <th class="parameter">Wert</th>
+               <th class="parameter">Beschreibung</th>
+            </tr>
+            <tr>
+               <td class="parameter"><b>headline</b></td>
+               <td class="parameter"><i>Bezeichnung</i></td>
+               <td class="parameter">Frei w&auml;hlbare Bezeichnung f&uuml;r das Modul anstelle von Ank&uuml;ndigungen</td>
+            </tr>
+         </table>
       </li>
         <li>
             <p><b>Downloads</b></p>
@@ -101,8 +100,7 @@
                 <span class="code">http://www.ihre-domain.de/admidio-ordner/
                     adm_program/modules/downloads/downloads.php</span>
             </p>
-            <p>
-                <table class="parameter">
+            <table class="parameter">
                 <tr>
                     <th class="parameter">Parameter</th>
                     <th class="parameter">Wert</th>
@@ -127,10 +125,9 @@
                     <td class="parameter"><i>asc</i> (default)<br /><i>desc</i></td>
                     <td class="parameter">Angabe zur Sortierung der Dateien und Ordner.<br />
                         Es wird normalerweise aufsteigend (A-Z) sortiert. &Uuml;bergibt man sort=desc
-                        so wird absteigend (Z-A) sortiert.</i></td>
+                        so wird absteigend (Z-A) sortiert.</td>
                 </tr>
-                </table>
-            </p>
+            </table>
         </li>
       <li>
           <p><b>E-Mail</b></p>
@@ -140,41 +137,39 @@
              <span class="code">http://www.ihre-domain.de/admidio-ordner/
                 adm_program/modules/mail/mail.php</span>
           </p>
-          <p>
-            <table class="parameter">
-                <tr>
-                   <th class="parameter">Parameter</th>
-                   <th class="parameter">Wert</th>
-                   <th class="parameter">Beschreibung</th>
-                </tr>
-                <tr>
-                   <td class="parameter"><b>rolle</b></td>
-                   <td class="parameter"><i>Rollenname</i></td>
-                   <td class="parameter">Name der Rolle, an deren Mitglieder eine E-Mail geschickt wird.</td>
-                </tr>
-                <tr>
-                   <td class="parameter"><b>cat</b></td>
-                   <td class="parameter"><i>Kategorie</i></td>
-                   <td class="parameter">Name der Kategorie, in der sich die Rolle befindet. Die Kategorie muss 
-                        mit &uuml;bergeben werden, wenn der Parameter <b>rolle</b> benutzt wird.</td>
-                </tr>
-                <tr>
-                   <td class="parameter"><b>subject</b></td>
-                   <td class="parameter"><i>Betreff</i></td>
-                   <td class="parameter">Betreff der E-Mail kann hiermit vorbelegt werden.</td>
-                </tr>
-                <tr>
-                   <td class="parameter"><b>body</b></td>
-                   <td class="parameter"><i>Text</i></td>
-                   <td class="parameter">Inhalt der E-Mail kann hier vorbelegt werden.</td>
-                </tr>
-                <tr>
-                   <td class="parameter"><b>kopie</b></td>
-                   <td class="parameter"><i>1</i> (Default)<br /><i>0</i></td>
-                   <td class="parameter">Flag, ob eine Kopie an den Absender verschickt werden soll.</td>
-                </tr>
-            </table>
-         </p>
+          <table class="parameter">
+            <tr>
+               <th class="parameter">Parameter</th>
+               <th class="parameter">Wert</th>
+               <th class="parameter">Beschreibung</th>
+            </tr>
+            <tr>
+               <td class="parameter"><b>rolle</b></td>
+               <td class="parameter"><i>Rollenname</i></td>
+               <td class="parameter">Name der Rolle, an deren Mitglieder eine E-Mail geschickt wird.</td>
+            </tr>
+            <tr>
+               <td class="parameter"><b>cat</b></td>
+               <td class="parameter"><i>Kategorie</i></td>
+               <td class="parameter">Name der Kategorie, in der sich die Rolle befindet. Die Kategorie muss 
+                    mit &uuml;bergeben werden, wenn der Parameter <b>rolle</b> benutzt wird.</td>
+            </tr>
+            <tr>
+               <td class="parameter"><b>subject</b></td>
+               <td class="parameter"><i>Betreff</i></td>
+               <td class="parameter">Betreff der E-Mail kann hiermit vorbelegt werden.</td>
+            </tr>
+            <tr>
+               <td class="parameter"><b>body</b></td>
+               <td class="parameter"><i>Text</i></td>
+               <td class="parameter">Inhalt der E-Mail kann hier vorbelegt werden.</td>
+            </tr>
+            <tr>
+               <td class="parameter"><b>kopie</b></td>
+               <td class="parameter"><i>1</i> (Default)<br /><i>0</i></td>
+               <td class="parameter">Flag, ob eine Kopie an den Absender verschickt werden soll.</td>
+            </tr>
+          </table>
       </li>
       <li>
          <p><b>Fotos</b></p>
@@ -201,33 +196,31 @@
              <span class="code">http://www.ihre-domain.de/admidio-ordner/
                 adm_program/modules/lists/lists.php</span>
          </p>
-         <p>
-            <table class="parameter">
-                <tr>
-                   <th class="parameter">Parameter</th>
-                   <th class="parameter">Wert</th>
-                   <th class="parameter">Beschreibung</th>
-                </tr>
-                <tr>
-                   <td class="parameter"><b>category</b></td>
-                   <td class="parameter"><i>Kategoriename</i></td>
-                   <td class="parameter">Name der Kategorie deren Rollen direkt
-                      angezeigt werden sollen</td>
-                </tr>
-                <tr>
-                   <td class="parameter"><b>category-selection</b></td>
-                   <td class="parameter"><i>yes</i> (Default)<br /><i>No</i></td>
-                   <td class="parameter">Flag, ob die Kombobox mit der Kategorieauswahl
-                      angezeigt werden soll</td>
-                </tr>
-                <tr>
-                   <td class="parameter"><b>active_role</b></td>
-                   <td class="parameter"><i>1</i> (Default)<br /><i>0</i></td>
-                   <td class="parameter">Bei 1 werden alle aktiven Rollen in der
-                      Kategorie anzeigt und bei 0 nur die inaktiven Rollen</td>
-                </tr>
-             </table>
-         </p>
+        <table class="parameter">
+            <tr>
+               <th class="parameter">Parameter</th>
+               <th class="parameter">Wert</th>
+               <th class="parameter">Beschreibung</th>
+            </tr>
+            <tr>
+               <td class="parameter"><b>category</b></td>
+               <td class="parameter"><i>Kategoriename</i></td>
+               <td class="parameter">Name der Kategorie deren Rollen direkt
+                  angezeigt werden sollen</td>
+            </tr>
+            <tr>
+               <td class="parameter"><b>category-selection</b></td>
+               <td class="parameter"><i>yes</i> (Default)<br /><i>No</i></td>
+               <td class="parameter">Flag, ob die Kombobox mit der Kategorieauswahl
+                  angezeigt werden soll</td>
+            </tr>
+            <tr>
+               <td class="parameter"><b>active_role</b></td>
+               <td class="parameter"><i>1</i> (Default)<br /><i>0</i></td>
+               <td class="parameter">Bei 1 werden alle aktiven Rollen in der
+                  Kategorie anzeigt und bei 0 nur die inaktiven Rollen</td>
+            </tr>
+         </table>
       </li>
       <li>
          <p><b>Eigene Listen</b></p>
@@ -237,27 +230,25 @@
              <span class="code">http://www.ihre-domain.de/admidio-ordner/
                 adm_program/modules/lists/mylist.php</span>
          </p>
-         <p>
-            <table class="parameter">
-                <tr>
-                   <th class="parameter">Parameter</th>
-                   <th class="parameter">Wert</th>
-                   <th class="parameter">Beschreibung</th>
-                </tr>
-                <tr>
-                   <td class="parameter"><b>active_role</b></td>
-                   <td class="parameter"><i>1</i> (Default)<br /><i>0</i></td>
-                   <td class="parameter">Bei 1 werden alle aktiven Rollen der
-                      Organisation anzeigt und bei 0 nur die inaktiven Rollen</td>
-                </tr>
-                <tr>
-                   <td class="parameter"><b>active_member</b></td>
-                   <td class="parameter"><i>1</i> (Default)<br /><i>0</i></td>
-                   <td class="parameter">Bei 1 werden alle aktiven Mitglieder der
-                      Rolle anzeigt und bei 0 nur die inaktiven Mitglieder</td>
-                </tr>
-             </table>
-         </p>
+        <table class="parameter">
+            <tr>
+               <th class="parameter">Parameter</th>
+               <th class="parameter">Wert</th>
+               <th class="parameter">Beschreibung</th>
+            </tr>
+            <tr>
+               <td class="parameter"><b>active_role</b></td>
+               <td class="parameter"><i>1</i> (Default)<br /><i>0</i></td>
+               <td class="parameter">Bei 1 werden alle aktiven Rollen der
+                  Organisation anzeigt und bei 0 nur die inaktiven Rollen</td>
+            </tr>
+            <tr>
+               <td class="parameter"><b>active_member</b></td>
+               <td class="parameter"><i>1</i> (Default)<br /><i>0</i></td>
+               <td class="parameter">Bei 1 werden alle aktiven Mitglieder der
+                  Rolle anzeigt und bei 0 nur die inaktiven Mitglieder</td>
+            </tr>
+         </table>
       </li>
       <li>
          <p><b>Profil</b></p>
@@ -276,21 +267,19 @@
              <span class="code">http://www.ihre-domain.de/admidio-ordner/
                 adm_program/modules/dates/dates.php</span>
           </p>
-          <p>
-             <table class="parameter">
-                <tr>
-                   <th class="parameter">Parameter</th>
-                   <th class="parameter">Wert</th>
-                   <th class="parameter">Beschreibung</th>
-                </tr>
-                <tr>
-                   <td class="parameter"><b>mode</b></td>
-                   <td class="parameter"><i>actual</i> (Default)<br /><i>old</i></td>
-                   <td class="parameter">Im Standardfall werden alle kommenden Termine angezeigt.
-                      Ist der Wert <i>old</i> werden nur die bereits vergangenen Termine angezeigt.</td>
-                </tr>
-             </table>
-          </p>
+         <table class="parameter">
+            <tr>
+               <th class="parameter">Parameter</th>
+               <th class="parameter">Wert</th>
+               <th class="parameter">Beschreibung</th>
+            </tr>
+            <tr>
+               <td class="parameter"><b>mode</b></td>
+               <td class="parameter"><i>actual</i> (Default)<br /><i>old</i></td>
+               <td class="parameter">Im Standardfall werden alle kommenden Termine angezeigt.
+                  Ist der Wert <i>old</i> werden nur die bereits vergangenen Termine angezeigt.</td>
+            </tr>
+         </table>
       </li>
       <li>
          <p><b>Weblinks</b></p>
