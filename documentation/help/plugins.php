@@ -12,7 +12,7 @@
     
     <h2>Wie baue ich Plugins ein ?</h2>
     
-    <p><a href="../index.php?download/plugins/plugins.php">Laden Sie das Plugin von unserer Homepage herunter</a> und entpacken 
+    <p><a href="http://forum.admidio.org/viewforum.php?f=9">Laden Sie das Plugin von unserer Homepage herunter</a> und entpacken 
     Sie die Zip-Datei. Kopieren Sie das Verzeichnis mit den Dateien in den Ordner <b>adm_plugins</b> in Ihrem 
     Admidio-Ordner. Falls der Ordner adm_plugins noch nicht existiert, m&uuml;ssen Sie ihn zuerst noch erstellen. 
     Dieser sollte sich auf derselben Ebene wie <i>adm_my_files</i> befinden.</p>
