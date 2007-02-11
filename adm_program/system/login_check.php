@@ -1,4 +1,4 @@
-ï»¿<?php
+<?php
 /******************************************************************************
  * Meldet den User bei Admidio an, wenn sich dieser einloggen darf
  * Cookies setzen
@@ -124,11 +124,11 @@ if ($user_found >= 1)
             $forum_admin_reset = false;
             $forum_export_account = false;
             
-            /* ÃœberprÃ¼fen, ob User ID =1 (Administrator) angemeldet ist. 
-            Falls ja, wird geprÃ¼ft, ob im Forum der gleiche Username und Password fÃ¼r die UserID 2 
-            (Standard ID fÃ¼r den Administrator im Forum) besteht.
+            /* Überprüfen, ob User ID =1 (Administrator) angemeldet ist. 
+            Falls ja, wird geprüft, ob im Forum der gleiche Username und Password für die UserID 2 
+            (Standard ID für den Administrator im Forum) besteht.
             Dieser wird im nein Fall (neue Installation des Boards) auf den Username und das Password des 
-            Admidio UserID Accounts 1 (Standard fÃ¼r Administartor) geÃ¤ndert und eine Meldung ausgegegen.
+            Admidio UserID Accounts 1 (Standard für Administartor) geändert und eine Meldung ausgegegen.
             */
             if($user_row->usr_id == 1)
             {
@@ -136,7 +136,7 @@ if ($user_found >= 1)
             }
 
 
-			// PrÃ¼fen, ob es den User im Forum gibt, im Nein Fall diesem User ein Forum Account anlegen
+			// Prüfen, ob es den User im Forum gibt, im Nein Fall diesem User ein Forum Account anlegen
             if(!forum_check_user($req_login_name, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix))
             {
             	$forum_export_account = TRUE;
@@ -145,7 +145,7 @@ if ($user_found >= 1)
             	forum_insert_user($g_current_user->login_name, 1, $g_current_user->password, $g_current_user->email, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
             }
             
-            // Datenbank auswÃ¤hlen
+            // Datenbank auswählen
             mysql_select_db($g_forum_db, $g_forum_con);
 
             // User nun in Foren-Tabelle suchen und dort das Password & UserID auslesen
@@ -154,13 +154,13 @@ if ($user_found >= 1)
             $result = mysql_query($sql, $g_forum_con);
             db_error($result);
 
-            // NatÃ¼rlich sollte hier der User auch im Forum existieren 
-            // um eine gÃ¼ltige Anmeldung im Forum zu machen
+            // Natürlich sollte hier der User auch im Forum existieren 
+            // um eine gültige Anmeldung im Forum zu machen
             if(mysql_num_rows($result))
             {
                 $row = mysql_fetch_array($result);
     
-                // Daten fÃ¼r das Cookie und den Session Eintrag im Forum aufbereiten
+                // Daten für das Cookie und den Session Eintrag im Forum aufbereiten
                 $ip_sep = explode('.', getenv('REMOTE_ADDR'));
                 $user_ip = sprintf('%02x%02x%02x%02x', $ip_sep[0], $ip_sep[1], $ip_sep[2], $ip_sep[3]);
                 $current_time = time();
@@ -175,13 +175,13 @@ if ($user_found >= 1)
                 // Cookie fuer die Anmeldung im Forum setzen
                 setcookie($g_forum_cookie_name."_sid", $user_session, time() + 60*60*24*30, $g_forum_cookie_path, $g_forum_cookie_domain, $g_forum_cookie_secure);
     
-                // Admidio DB wÃ¤hlen
+                // Admidio DB wählen
                 mysql_select_db($g_adm_db, $g_adm_con);
 
                 // heaerLocation entsprechend der Aktionen setzen, Meldungen ausgeben und weiter zur URL.
                 if($forum_admin_reset)
                 {
-                    // Administrator Account wurde zurÃ¼ck gesetzt, Meldung vorbereiten
+                    // Administrator Account wurde zurück gesetzt, Meldung vorbereiten
                     $login_message = "loginforum_admin";
                 }
                 elseif($forum_export_account)
@@ -191,7 +191,7 @@ if ($user_found >= 1)
                 }
                 elseif(!(forum_check_password($req_password_crypt, $row[0], $row[1], $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix)))
                 {
-                    // Password wurde zurÃ¼ck gesetzt, Meldung vorbereiten
+                    // Password wurde zurück gesetzt, Meldung vorbereiten
                     $login_message = "loginforum_pass";
                 }
                 else
@@ -226,7 +226,7 @@ if ($user_found >= 1)
     }
     else
     {
-        // ungÃ¼ltige Logins werden mitgeloggt
+        // ungültige Logins werden mitgeloggt
         $sql    = "UPDATE ". TBL_USERS. " SET usr_date_invalid = NOW()
                                             , usr_number_invalid   = usr_number_invalid + 1
                     WHERE usr_id = $user_row->usr_id ";
