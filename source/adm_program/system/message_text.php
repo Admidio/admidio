@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /******************************************************************************
  * Texte fuer Hinweistexten oder Fehlermeldungen
  *
@@ -225,6 +225,12 @@ $message_text = array(
     "loginforum_admin" =>
         "Dein Administrator Account vom Forum %VAR2% wurde auf den
         Admidio Account zurückgesetz.<br>
+        Verwende beim nächsten Login im Forum dein Admidio Username und Password.<br><br>
+        Du wurdest erfolgreich auf Admidio und <br />im Forum <b>%VAR2%</b>
+        als User <b>%VAR1%</b> angemeldet.",
+
+    "loginforum_new" =>
+        "Dein Admidio Account wurde in das Forum %VAR2% exportiert und angelegt.<br>
         Verwende beim nächsten Login im Forum dein Admidio Username und Password.<br><br>
         Du wurdest erfolgreich auf Admidio und <br />im Forum <b>%VAR2%</b>
         als User <b>%VAR1%</b> angemeldet.",
