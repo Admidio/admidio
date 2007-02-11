@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /******************************************************************************
  * User aus Admidio ausloggen
  * Cookies loeschen
@@ -53,7 +53,7 @@ if ($session_found > 0)
 }
 
 // Wenn die Session des Forums aktiv ist, diese ebenfalls löschen.
-if($g_forum)
+if(isset($_SESSION['s_user_valid']) AND $_SESSION['s_user_valid'] == TRUE)
 {
     mysql_select_db($g_forum_db, $g_forum_con);
 
