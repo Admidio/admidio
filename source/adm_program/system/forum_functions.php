@@ -221,20 +221,24 @@ elseif (isset($_COOKIE[$g_forum_cookie_name."_sid"]))
         
     if(mysql_num_rows($result)!=0)
     {
-        // User-Session im Forum loeschen
-        $sql    = "DELETE FROM ". $g_forum_praefix. "_sessions WHERE session_user_id = $row[0] ";
-        $result = mysql_query($sql, $g_forum_con);
-        db_error($result);
+        // Ab phpBB 2.0.21 wird die SID geprueft. Gaeste können dann nicht mehr posten, wenn die SID geloescht wird.
+        // An dieser Stelle wird ueberprueft, ob es sich um einen Gast (-1) handelt, in dem Fall bleibt die SID bestehen.
+        if(!$row['session_user_id'] == -1)
+        {
+        	// User-Session im Forum loeschen
+        	$sql    = "DELETE FROM ". $g_forum_praefix. "_sessions WHERE session_user_id = $row[0] ";
+        	$result = mysql_query($sql, $g_forum_con);
+        	db_error($result);
+        	
+    		// Cookie fuer die Anmeldung im Forum loeschen
+    		setcookie($g_forum_cookie_name."_sid", "", time() - 31536000, $g_forum_cookie_path, $g_forum_cookie_domain, $g_forum_cookie_secure);
+    
+   			// Session Varibale loeschen
+			unset($_SESSION['s_user_valid']);
+        }
     }
- 
     // Admidio DB waehlen
-    mysql_select_db($g_adm_db, $g_adm_con);
-    
-    // Cookie fuer die Anmeldung im Forum lÃ¶schen
-    setcookie($g_forum_cookie_name."_sid", "", time() - 31536000, $g_forum_cookie_path, $g_forum_cookie_domain, $g_forum_cookie_secure);
-    
-   	// Session Varibale lÃ¶schen
-	unset($_SESSION['s_user_valid']);
+	mysql_select_db($g_adm_db, $g_adm_con);
 }
 
 
