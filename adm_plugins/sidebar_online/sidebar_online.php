@@ -32,7 +32,7 @@
 // Include von common 
 if(!defined('PLUGIN_PATH'))
 {
-    define('PLUGIN_PATH', substr(__FILE__, 0, strpos(__FILE__, "sidebar_dates")-1));
+    define('PLUGIN_PATH', substr(__FILE__, 0, strpos(__FILE__, "sidebar_online")-1));
 }
 require_once(PLUGIN_PATH. "/../adm_program/system/common.php");
 require_once(PLUGIN_PATH. "/sidebar_online/config.php");
@@ -57,18 +57,18 @@ $sql = "SELECT ses_usr_id FROM ". TBL_SESSIONS. " WHERE ses_timestamp BETWEEN '"
 $result = mysql_query($sql, $g_adm_con);
 db_error($result);
 
-echo "<small>Seit ".$onlinezeit." Minuten online:<br>";
+echo "Seit ".$onlinezeit." Minuten online:<br>";
 
 while($row = mysql_fetch_object($result))
 {
     // User_login_name finden und ausgeben
-	$sql = "SELECT usr_login_name FROM ". TBL_USERS. " WHERE usr_id LIKE '".$row->ses_usr_id."'";
+    $sql = "SELECT usr_login_name FROM ". TBL_USERS. " WHERE usr_id LIKE '".$row->ses_usr_id."'";
 
-	$on_result = mysql_query($sql, $g_adm_con);
-	db_error($on_result);
-	
-	$useronline = mysql_fetch_array($on_result);
-	echo "<b><a href=\"/adm_program/modules/profile/profile.php?user_id=$row->ses_usr_id\">".$useronline['usr_login_name']."</a></b> / ";
+    $on_result = mysql_query($sql, $g_adm_con);
+    db_error($on_result);
+    
+    $useronline = mysql_fetch_array($on_result);
+    echo "<b><a href=\"/adm_program/modules/profile/profile.php?user_id=$row->ses_usr_id\">".$useronline['usr_login_name']."</a></b><br>";
 }
-echo "</small>";
+
 ?>
