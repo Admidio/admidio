@@ -24,7 +24,7 @@
  *****************************************************************************/
 
 // Globale Variablen fuer das Forum
-$g_forum_session_id    = "";            // Die Session fuer das Forum
+$g_forum_session_id  = "";            	// Die Session fuer das Forum
 $g_forum_user  = "";                    // Username im Forum
 $g_forum_userid = "";                   // UserID im Forum
 $g_forum_neuePM = "";                   // Nachrichten im Forum
@@ -221,10 +221,10 @@ elseif (isset($_COOKIE[$g_forum_cookie_name."_sid"]))
         
     if(mysql_num_rows($result)!=0)
     {
-        // Ab phpBB 2.0.21 wird die SID geprueft. Gaeste kÃ¶nnen dann nicht mehr posten, wenn die SID geloescht wird.
+        // Ab phpBB 2.0.21 wird die SID geprueft. Gaeste koennen dann nicht mehr posten, wenn die SID geloescht wird.
         // An dieser Stelle wird ueberprueft, ob es sich um einen Gast (-1) handelt, in dem Fall bleibt die SID bestehen.
-        if(!$row['session_user_id'] == -1)
-        {
+        //if(!$row['session_user_id'] == -1)
+        //{
         	// User-Session im Forum loeschen
         	$sql    = "DELETE FROM ". $g_forum_praefix. "_sessions WHERE session_user_id = $row[0] ";
         	$result = mysql_query($sql, $g_forum_con);
@@ -235,7 +235,7 @@ elseif (isset($_COOKIE[$g_forum_cookie_name."_sid"]))
     
    			// Session Varibale loeschen
 			unset($_SESSION['s_user_valid']);
-        }
+        //}
     }
     // Admidio DB waehlen
 	mysql_select_db($g_adm_db, $g_adm_con);
@@ -250,6 +250,7 @@ elseif (isset($_COOKIE[$g_forum_cookie_name."_sid"]))
  * forum_check_user
  * forum_update_user
  * forum_insert_user
+ * forum_delete_user
  ******************************************************************************/
 
 
@@ -401,6 +402,29 @@ function forum_insert_user($forum_username, $forum_useraktiv, $forum_password, $
     $result = mysql_query($sql, $g_forum_con);
     db_error($result);
     
+    // Jetzt noch eine neue private Groupe anlegen
+    $sql    = "SELECT MAX(group_id) as anzahl 
+                 FROM ". $g_forum_praefix. "_groups";
+    $result = mysql_query($sql, $g_forum_con);
+    db_error($result);
+    $row    = mysql_fetch_array($result);
+    $new_group_id = $row[0] + 1;
+    
+    $sql    = "INSERT INTO ". $g_forum_praefix. "_groups
+              (group_id, group_type, group_name, group_description, group_moderator, group_single_user)
+              VALUES 
+              ($new_group_id, 1, '', 'Personal User', 0, 1) ";
+    $result = mysql_query($sql, $g_forum_con);
+    db_error($result);
+    
+    // und den neuen User dieser Gruppe zuordenen
+    $sql    = "INSERT INTO ". $g_forum_praefix. "_user_group
+              (group_id, user_id, user_pending)
+              VALUES 
+              ($new_group_id, $new_user_id, 0) ";
+    $result = mysql_query($sql, $g_forum_con);
+    db_error($result);
+    
     // Admidio DB waehlen
     mysql_select_db($g_adm_db, $g_adm_con);
 }
@@ -429,6 +453,132 @@ function forum_update_username($forum_new_username, $forum_old_username, $forum_
                WHERE username = '". $forum_old_username. "' ";
     $result = mysql_query($sql, $g_forum_con);
     db_error($result);
+    
+    // Admidio DB waehlen
+    mysql_select_db($g_adm_db, $g_adm_con);
+}
+
+
+// Funktion löscht einen bestehenden User im Forum
+function forum_delete_user($forum_username, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix)
+{
+    // Forum Datenbank auswaehlen
+    mysql_select_db($g_forum_db, $g_forum_con);
+    
+    // User_ID des Users holen
+    $sql    = "SELECT user_id FROM ". $g_forum_praefix. "_users WHERE username LIKE {0} ";
+    $sql    = prepareSQL($sql, array($forum_username));
+    $result = mysql_query($sql, $g_forum_con);
+    db_error($result);
+    
+    $row = mysql_fetch_array($result);
+    $forum_userid = $row[0];
+    
+    // Gruppen ID des Users holen
+    $sql    = "SELECT g.group_id 
+				FROM ". $g_forum_praefix. "_user_group ug, ". $g_forum_praefix. "_groups g  
+				WHERE ug.user_id = ". $forum_userid ."
+					AND g.group_id = ug.group_id 
+					AND g.group_single_user = 1";
+    $result = mysql_query($sql, $g_forum_con);
+    db_error($result); 
+    
+    $row = mysql_fetch_array($result);
+    $forum_group = $row[0];
+    
+	// Alle Post des Users mit Gast Username versehen
+	$sql = "UPDATE ". $g_forum_praefix. "_posts
+			SET poster_id = -1, post_username = '" . $forum_username . "' 
+			WHERE poster_id = $forum_userid";
+    $result = mysql_query($sql, $g_forum_con);
+    db_error($result); 
+
+	// Alle Topics des User auf geloescht setzten
+	$sql = "UPDATE ". $g_forum_praefix. "_topics
+				SET topic_poster = -1 
+				WHERE topic_poster = $forum_userid";
+    $result = mysql_query($sql, $g_forum_con);
+    db_error($result);
+    
+    // Alle Votes des Users auf geloescht setzten
+	$sql = "UPDATE ". $g_forum_praefix. "_vote_voters
+			SET vote_user_id = -1
+			WHERE vote_user_id = $forum_userid";
+    $result = mysql_query($sql, $g_forum_con);
+    db_error($result);
+    
+	// GroupID der der Group holen, in denen der User Mod Rechte hat
+	$sql = "SELECT group_id
+			FROM ". $g_forum_praefix. "_groups
+			WHERE group_moderator = $forum_userid";
+    $result = mysql_query($sql, $g_forum_con);
+    db_error($result);
+    
+    $group_moderator[] = 0;
+
+	while ( $row_group = mysql_fetch_array($result) )
+	{
+		$group_moderator[] = $row_group['group_id'];
+	}
+	
+	if ( count($group_moderator) )
+	{
+		$update_moderator_id = implode(', ', $group_moderator);
+		
+		$sql = "UPDATE ". $g_forum_praefix. "_groups
+			SET group_moderator = 2
+			WHERE group_moderator IN ($update_moderator_id)";
+		    $result = mysql_query($sql, $g_forum_con);
+    		db_error($result);
+	}
+
+    // User im Forum loeschen
+    $sql = "DELETE FROM ". $g_forum_praefix. "_users 
+    		WHERE user_id = $forum_userid ";
+    $result = mysql_query($sql, $g_forum_con);
+    db_error($result);
+
+    // User aus den Gruppen loeschen
+    $sql = "DELETE FROM ". $g_forum_praefix. "_user_group 
+    		WHERE user_id = $forum_userid ";
+    $result = mysql_query($sql, $g_forum_con);
+    db_error($result);
+
+    // Single User Group loeschen
+    $sql = "DELETE FROM ". $g_forum_praefix. "_groups
+			WHERE group_id =  $forum_group ";
+    $result = mysql_query($sql, $g_forum_con);
+    db_error($result);    
+    
+    // User aus der Auth Tabelle loeschen
+	$sql = "DELETE FROM ". $g_forum_praefix. "_auth_access
+			WHERE group_id = $forum_group ";
+    $result = mysql_query($sql, $g_forum_con);
+    db_error($result);    
+
+	// User aus den zu beobachteten Topics Tabelle loeschen
+	$sql = "DELETE FROM ". $g_forum_praefix. "_topics_watch
+			WHERE user_id = $forum_userid ";
+    $result = mysql_query($sql, $g_forum_con);
+    db_error($result);    
+	
+	// User aus der Banlist Tabelle loeschen
+	$sql = "DELETE FROM ". $g_forum_praefix. "_banlist
+			WHERE ban_userid = $forum_userid ";
+    $result = mysql_query($sql, $g_forum_con);
+    db_error($result);    
+
+	// Session des Users loeschen
+	$sql = "DELETE FROM ". $g_forum_praefix. "_sessions
+			WHERE session_user_id = $forum_userid ";
+    $result = mysql_query($sql, $g_forum_con);
+    db_error($result);    
+	
+	// Session_Keys des User loeschen
+	$sql = "DELETE FROM ". $g_forum_praefix. "_sessions_keys
+			WHERE user_id = $forum_userid ";
+    $result = mysql_query($sql, $g_forum_con);
+    db_error($result);    
     
     // Admidio DB waehlen
     mysql_select_db($g_adm_db, $g_adm_con);
