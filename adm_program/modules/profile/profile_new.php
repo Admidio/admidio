@@ -430,8 +430,7 @@ require("../../../adm_config/body_top.php");
                     {
                         $sql = "SELECT *
                                   FROM ". TBL_USER_FIELDS. "
-                                 WHERE usf_org_shortname = '$g_organization'
-                                 ORDER BY usf_name ASC ";
+                                 WHERE usf_org_shortname = '$g_organization' ";
                     }
                     else
                     {
@@ -440,12 +439,14 @@ require("../../../adm_config/body_top.php");
                                     ON usd_usf_id = usf_id
                                    AND usd_usr_id = $user->id
                                  WHERE usf_org_shortname = '$g_organization' ";
-                        if(!isModerator())
-                        {
-                            $sql = $sql. " AND usf_locked = 0 ";
-                        }
-                        $sql = $sql. " ORDER BY usf_name ASC ";
                     }
+                    // wenn nicht Moderator, dann nur die freigegebenen Felder anzeigen
+                    if(!isModerator())
+                    {
+                        $sql = $sql. " AND usf_locked = 0 ";
+                    }
+                    $sql = $sql. " ORDER BY usf_name ASC ";
+                    
                     $result_field = mysql_query($sql, $g_adm_con);
                     db_error($result_field);
 
@@ -506,7 +507,7 @@ require("../../../adm_config/body_top.php");
                                     {
                                         echo " value=\"". $form_values[$row->usf_id]. "\" ";
                                     }
-                                    elseif(strlen($row->usd_value) > 0)
+                                    elseif($new_user == 0 && strlen($row->usd_value) > 0)
                                     {
                                         echo " value=\"$row->usd_value\" ";
                                     }
