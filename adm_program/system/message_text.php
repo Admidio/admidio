@@ -27,54 +27,54 @@ $message_text = array(
     "anmeldung" =>
         "<p>Deine Daten wurden gespeichert.</p>
         <p>Du kannst dich noch nicht einloggen.<br />
-        Sobald deine Anmeldung vom Administrator bestätigt wurde, erhälst du eine E-Mail.</p>",
+        Sobald deine Anmeldung vom Administrator bestÃ¤tigt wurde, erhÃ¤lst du eine E-Mail.</p>",
 
     "assign_login" =>
         "Die Logindaten wurden erfolgreich zugeordnet.",
 
     "assign_login_mail" =>
         "Die Logindaten wurden erfolgreich zugeordnet und der
-        Benutzer ist darüber per E-Mail benachrichtigt worden.",
+        Benutzer ist darÃ¼ber per E-Mail benachrichtigt worden.",
 
     "category_exist" =>
         " Es existiert bereits eine Kategorie in dieser Organisation mit dem Namen.",
 
     "datum" =>
-        "Es wurde kein gültiges Datum in das Feld <b>%VAR1%</b> eingegeben.",
+        "Es wurde kein gÃ¼ltiges Datum in das Feld <b>%VAR1%</b> eingegeben.",
 
     "delete" =>
-        "Die Daten wurden gelöscht !",
+        "Die Daten wurden gelÃ¶scht !",
 
     "delete_announcement" =>
-        "Willst du die Ankündigung<br />
-        <b>%VAR1%</b><br />wirklich löschen ?",
+        "Willst du die AnkÃ¼ndigung<br />
+        <b>%VAR1%</b><br />wirklich lÃ¶schen ?",
 
     "delete_category" =>
-        "<p>Willst du die Kategorie <b>%VAR1%</b> wirklich löschen ?</p>",
+        "<p>Willst du die Kategorie <b>%VAR1%</b> wirklich lÃ¶schen ?</p>",
 
     "delete_date" =>
         "Willst du den Termin<br />
-        <b>%VAR1%</b><br />wirklich löschen ?",
+        <b>%VAR1%</b><br />wirklich lÃ¶schen ?",
 
     "delete_role" =>
-        "Willst du die Rolle <b>%VAR1%</b> wirklich löschen ?<br><br>
-        Es werden damit auch alle Mitgliedschaften entgütig entfernt.",
+        "Willst du die Rolle <b>%VAR1%</b> wirklich lÃ¶schen ?<br><br>
+        Es werden damit auch alle Mitgliedschaften entgÃ¼tig entfernt.",
 
     "delete_field" =>
-        "<p>Willst du das Feld <b>%VAR1%</b> wirklich löschen ?</p>
-        <p>Es werden alle Daten, die Benutzer in diesem Feld gespeichert haben, gelöscht.</p>",
+        "<p>Willst du das Feld <b>%VAR1%</b> wirklich lÃ¶schen ?</p>
+        <p>Es werden alle Daten, die Benutzer in diesem Feld gespeichert haben, gelÃ¶scht.</p>",
 
     "delete_user" =>
-        "<p>Willst du <b>%VAR1%</b> wirklich löschen ?</p>
-        <p>Der Benutzer wird damit physikalisch in der Datenbank gelöscht und ein Zugriff auf
-        seine Daten nicht mehr möglich.</p>",
+        "<p>Willst du <b>%VAR1%</b> wirklich lÃ¶schen ?</p>
+        <p>Der Benutzer wird damit physikalisch in der Datenbank gelÃ¶scht und ein Zugriff auf
+        seine Daten nicht mehr mÃ¶glich.</p>",
 
     "delete_new_user" =>
         "<p>Willst du die Web-Registrierung von
-        <b>%VAR1%</b> wirklich löschen ?</p>",
+        <b>%VAR1%</b> wirklich lÃ¶schen ?</p>",
 
     "email_invalid" =>
-        "Die E-Mail-Adresse ist nicht gültig.",
+        "Die E-Mail-Adresse ist nicht gÃ¼ltig.",
 
     "field_numeric" =>
         "Das Feld <b>%VAR1%</b> darf nur Zahlen enthalten.<br>
@@ -84,29 +84,29 @@ $message_text = array(
         " Es existiert bereits ein Feld in dieser Organisation mit dem Namen.",
 
     "feld" =>
-        "Das Feld <b>%VAR1%</b> ist nicht gefüllt.",
+        "Das Feld <b>%VAR1%</b> ist nicht gefÃ¼llt.",
 
     "felder" =>
-        "Es sind nicht alle Felder aufgefüllt worden.",
+        "Es sind nicht alle Felder aufgefÃ¼llt worden.",
 
     "import" =>
-        "%VAR1% Datensätze wurden erfolgreich importiert !",
+        "%VAR1% DatensÃ¤tze wurden erfolgreich importiert !",
 
     "installFolderExists" =>
         "Das Installationsverzeichnis <b>adm_install</b> existiert noch auf dem Server.
-         Aus Sicherheitsgründen muss dies gelöscht werden!",
+         Aus SicherheitsgrÃ¼nden muss dies gelÃ¶scht werden!",
 
     "invalid" =>
-        "Ungültiger Seitenaufruf !",
+        "UngÃ¼ltiger Seitenaufruf !",
 
     "login_failed" =>
         "Du hast dich innerhalb kurzer Zeit mehrmals mit einem
-        falschen Passwort versucht einzuloggen.<br />Aus Sicherheitsgründen
-        ist dein Zugang für <b>15 Minuten</b> gesperrt.",
+        falschen Passwort versucht einzuloggen.<br />Aus SicherheitsgrÃ¼nden
+        ist dein Zugang fÃ¼r <b>15 Minuten</b> gesperrt.",
 
     "login_name" =>
-        "Der gewählte Benutzername existiert schon.<br /><br />
-        Wähle bitte einen neuen Namen.",
+        "Der gewÃ¤hlte Benutzername existiert schon.<br /><br />
+        WÃ¤hle bitte einen neuen Namen.",
 
     "login_unknown" =>
         "Der angegebene Benutzername existiert nicht.",
@@ -128,45 +128,45 @@ $message_text = array(
         "Bist du sicher, dass der Benutzer noch nicht in der Datenbank existiert ?",
 
     "noaccept" =>
-        "Deine Anmeldung wurde noch nicht vom Administrator bestätigt.<br /><br />
-        Einloggen ist nicht möglich",
+        "Deine Anmeldung wurde noch nicht vom Administrator bestÃ¤tigt.<br /><br />
+        Einloggen ist nicht mÃ¶glich",
 
     "nodata" =>
         "Es sind keine Daten vorhanden !",
 
     "no_category_roles" =>
-        "Es sind noch keine Rollen für diese Kategorie erstellt worden.<br /><br />
-        Rollen können <a href=\"%VAR1%\">hier</a>
+        "Es sind noch keine Rollen fÃ¼r diese Kategorie erstellt worden.<br /><br />
+        Rollen kÃ¶nnen <a href=\"%VAR1%\">hier</a>
         erstellt und gepflegt werden.",
 
     "no_old_roles" =>
         "Es sind noch keine Rollen aus dem System entfernt worden.<br /><br />
-        Erst wenn du in der Rollenverwaltung Rollen löschst, erscheinen diese automatisch bei
+        Erst wenn du in der Rollenverwaltung Rollen lÃ¶schst, erscheinen diese automatisch bei
         den \"Entfernten Rollen\".",
 
     "norights" =>
-        "Du hast keine Rechte diese Aktion auszuführen",
+        "Du hast keine Rechte diese Aktion auszufÃ¼hren",
 
     "nomembers" =>
         "Es sind keine Anmeldungen vorhanden.",
 
     "norolle" =>
-        "Die Daten können nicht gespeichert werden.<br />
+        "Die Daten kÃ¶nnen nicht gespeichert werden.<br />
         Dem Benutzer sind keine Rollen zugeordnet.",
 
     "no_cookie" =>
-        "Der Login kann nicht durchgeführt werden, da dein Browser
+        "Der Login kann nicht durchgefÃ¼hrt werden, da dein Browser
         das Setzen von Cookies verbietet !<br><br>
         Damit du dich erfolgreich anmelden kannst, musst du in deinem Browser
         einstellen, dass dieser Cookies von %VAR1% akzeptiert.",
 
     "passwort" =>
-        "Das Passwort stimmt nicht mit der Wiederholung überein.",
+        "Das Passwort stimmt nicht mit der Wiederholung Ã¼berein.",
 
     "password_unknown" =>
         "Du hast ein falsches Passwort eingegeben und
         konntest deshalb nicht angemeldet werden.<br /><br />
-        Überprüf bitte dein Passwort und gib dieses dann erneut ein.",
+        ÃœberprÃ¼f bitte dein Passwort und gib dieses dann erneut ein.",
 
     "remove_member" =>
         "Wollen Sie die Mitgliedschaft des Benutzers %VAR1% bei %VAR2% beenden ?",
@@ -191,24 +191,24 @@ $message_text = array(
         Die Uhrzeit muss zwischen 00:00 und 23:59 liegen !",
 
     "send_new_login" =>
-        "Möchtest du <b>%VAR1%</b> eine E-Mail mit dem Benutzernamen
+        "MÃ¶chtest du <b>%VAR1%</b> eine E-Mail mit dem Benutzernamen
         und einem neuen Passwort zumailen ?",
 
     "max_members" =>
-        "Speichern nicht möglich, die maximale Mitgliederzahl würde überschritten.",
+        "Speichern nicht mÃ¶glich, die maximale Mitgliederzahl wÃ¼rde Ã¼berschritten.",
 
     "max_members_profile" =>
-        "Speichern nicht möglich, bei der Rolle &bdquo;%VAR1%&rdquo;
-        würde die maximale Mitgliederzahl überschritten.",
+        "Speichern nicht mÃ¶glich, bei der Rolle &bdquo;%VAR1%&rdquo;
+        wÃ¼rde die maximale Mitgliederzahl Ã¼berschritten.",
 
     "max_members_roles_change" =>
-        "Speichern nicht möglich, die Rolle hat bereits mehr Mitglieder als die von Dir eingegeben Begrenzung.",
+        "Speichern nicht mÃ¶glich, die Rolle hat bereits mehr Mitglieder als die von Dir eingegeben Begrenzung.",
 
     "write_access" =>
         "Der Ordner <b>%VAR1%</b> konnte nicht angelegt werden. Du musst dich an
         den <a href=\"mailto:%VAR2%\">Webmaster</a>
-        wenden, damit dieser <acronym title=\"über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen.\">
-        Schreibrechte</acronym> für den Ordner setzen kann.",
+        wenden, damit dieser <acronym title=\"Ã¼ber FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen.\">
+        Schreibrechte</acronym> fÃ¼r den Ordner setzen kann.",
 
 
       //Meldungen Anmeldung im Forum
@@ -217,21 +217,21 @@ $message_text = array(
         als User <b>%VAR1%</b> angemeldet.",
 
     "loginforum_pass" =>
-        "Dein Password im Forum %VAR2% wurde auf das Admidio Password zurückgesetz.<br>
-        Verwende beim nächsten Login im Forum dein Admidio Password.<br><br>
+        "Dein Password im Forum %VAR2% wurde auf das Admidio Password zurÃ¼ckgesetz.<br>
+        Verwende beim nÃ¤chsten Login im Forum dein Admidio Password.<br><br>
         Du wurdest erfolgreich auf Admidio und <br />im Forum <b>%VAR2%</b>
         als User <b>%VAR1%</b> angemeldet.",
 
     "loginforum_admin" =>
         "Dein Administrator Account vom Forum %VAR2% wurde auf den
-        Admidio Account zurückgesetz.<br>
-        Verwende beim nächsten Login im Forum dein Admidio Username und Password.<br><br>
+        Admidio Account zurÃ¼ckgesetz.<br>
+        Verwende beim nÃ¤chsten Login im Forum dein Admidio Username und Password.<br><br>
         Du wurdest erfolgreich auf Admidio und <br />im Forum <b>%VAR2%</b>
         als User <b>%VAR1%</b> angemeldet.",
 
     "loginforum_new" =>
         "Dein Admidio Account wurde in das Forum %VAR2% exportiert und angelegt.<br>
-        Verwende beim nächsten Login im Forum dein Admidio Username und Password.<br><br>
+        Verwende beim nÃ¤chsten Login im Forum dein Admidio Username und Password.<br><br>
         Du wurdest erfolgreich auf Admidio und <br />im Forum <b>%VAR2%</b>
         als User <b>%VAR1%</b> angemeldet.",
 
@@ -251,21 +251,21 @@ $message_text = array(
     //Fehlermeldungen Linkmodul
     "delete_link" =>
         "Willst Du den Link<br />
-        <b>%VAR1%</b><br />wirklich löschen ?",
+        <b>%VAR1%</b><br />wirklich lÃ¶schen ?",
 
 
     //Fehlermeldungen Gaestebuchmodul
     "delete_gbook_entry" =>
-        "Willst Du den Gästebucheintrag von<br />
-        <b>%VAR1%</b><br />wirklich löschen ?",
+        "Willst Du den GÃ¤stebucheintrag von<br />
+        <b>%VAR1%</b><br />wirklich lÃ¶schen ?",
 
     "delete_gbook_comment" =>
         "Willst Du den Kommentar von<br />
-        <b>%VAR1%</b><br />wirklich löschen ?",
+        <b>%VAR1%</b><br />wirklich lÃ¶schen ?",
 
     "flooding_protection" =>
-        "Dein letzter Eintrag im Gästebuch <br />
-         liegt weniger als %VAR1% Sekunden zurück.",
+        "Dein letzter Eintrag im GÃ¤stebuch <br />
+         liegt weniger als %VAR1% Sekunden zurÃ¼ck.",
     //Ende Fehlermeldungen Gaestebuchmodul
 
         //Fehlermeldungen Profilfoto
@@ -276,14 +276,14 @@ $message_text = array(
         "Der Vorgang wurde abgebrochen.",
 
     "profile_photo_nopic" =>
-        "Es wurde keine Bilddatei ausgewählt.",
+        "Es wurde keine Bilddatei ausgewÃ¤hlt.",
 
     "profile_photo_deleted" =>
           "Das Profilfoto wurde gel&ouml;scht.",
 
     "profile_photo_2big" =>
-        "Das hochgeladene Foto übersteigt die vom Server zugelassene
-        Dateigröße von %VAR1%B.",
+        "Das hochgeladene Foto Ã¼bersteigt die vom Server zugelassene
+        DateigrÃ¶ÃŸe von %VAR1%B.",
 
 
     //Fehlermeldungen Fotomodul
@@ -291,80 +291,80 @@ $message_text = array(
         "Der Ordner adm_my_files/photos wurde nicht gefunden.",
 
     "photodateiphotoup" =>
-        "Du hast keine Bilddatei ausgewählt, die hinzugefügt
+        "Du hast keine Bilddatei ausgewÃ¤hlt, die hinzugefÃ¼gt
         werden sollen.<br />",
 
     "photoverwaltunsrecht" =>
-        "Nur eingeloggte Benutzer mit Fotoverwaltungsrecht dürfen Fotos verwalten.<br />",
+        "Nur eingeloggte Benutzer mit Fotoverwaltungsrecht dÃ¼rfen Fotos verwalten.<br />",
 
     "dateiendungphotoup" =>
-        "Die ausgewählte Datei ist nicht im JPG-Format gespeichert.<br />",
+        "Die ausgewÃ¤hlte Datei ist nicht im JPG-Format gespeichert.<br />",
 
     "startdatum" =>
-        "Es muss ein gültiges  Startdatum für die Veranstalltung eingegeben werden.<br />",
+        "Es muss ein gÃ¼ltiges  Startdatum fÃ¼r die Veranstalltung eingegeben werden.<br />",
 
     "enddatum" =>
-        "Das eingegebene Enddatum ist ungültig.<br />",
+        "Das eingegebene Enddatum ist ungÃ¼ltig.<br />",
 
     "startvorend" =>
         "Das eingegebene Enddatum liegt vor dem Anfangsdatum.<br />",
 
     "veranstaltung" =>
-        "Es muss ein Name für die Veranstaltung eingegeben weden.<br />",
+        "Es muss ein Name fÃ¼r die Veranstaltung eingegeben weden.<br />",
 
     "delete_veranst" =>
         "Willst du die Veranstaltung:<br />
-        <b>%VAR1%</b><br />wirklich löschen ?<br>
+        <b>%VAR1%</b><br />wirklich lÃ¶schen ?<br>
         Alle enthaltenen Unterveranstaltungen und Bilder gehen verloren.",
 
     "delete_photo" =>
-        "Soll das ausgewählte Foto wirklich gelöscht werden?",
+        "Soll das ausgewÃ¤hlte Foto wirklich gelÃ¶scht werden?",
 
     "photo_deleted" =>
-        "Das Foto wurde erfolgreich gelöscht.",
+        "Das Foto wurde erfolgreich gelÃ¶scht.",
 
     "photo_2big" =>
-        "Mindestens eins der hochgeladenen Fotos übersteigt die vom Server zugelassene
-        Dateigröße von %VAR1%B.",
+        "Mindestens eins der hochgeladenen Fotos Ã¼bersteigt die vom Server zugelassene
+        DateigrÃ¶ÃŸe von %VAR1%B.",
 
     "empty_photo_post" =>
-        "Die Seite wurde ungültig aufgerufen oder die Datei(en) konnte nicht hochgeladen werden.<br />
-        Vermutlich wurde die vom Server vorgegebene, maximale Uploadgröße,
-        von %VAR1%B übersteigen!",
+        "Die Seite wurde ungÃ¼ltig aufgerufen oder die Datei(en) konnte nicht hochgeladen werden.<br />
+        Vermutlich wurde die vom Server vorgegebene, maximale UploadgrÃ¶ÃŸe,
+        von %VAR1%B Ã¼bersteigen!",
     //Ende Fehlermeldungen Fotomodul
 
 
     //Fehlermeldungen Downloadmodul
     "invalid_folder" =>
-        "Sie haben einen ungültigen Ordner aufgerufen !",
+        "Sie haben einen ungÃ¼ltigen Ordner aufgerufen !",
 
     "invalid_folder" =>
-        "Sie haben eine ungültigen Datei aufgerufen !",
+        "Sie haben eine ungÃ¼ltigen Datei aufgerufen !",
 
     "invalid_file_name" =>
-        "Der ausgwählte Dateiname enthält ungültige Zeichen !<br><br>
-        Wähle bitte einen anderen Namen für die Datei aus.",
+        "Der ausgwÃ¤hlte Dateiname enthÃ¤lt ungÃ¼ltige Zeichen !<br><br>
+        WÃ¤hle bitte einen anderen Namen fÃ¼r die Datei aus.",
 
     "invalid_file_extension" =>
         "Du kannst keine PHP, HTML oder Perl Dateien hochladen.",
 
     "file_not_exist" =>
-        "Die ausgewählte Datei existiert nicht.",
+        "Die ausgewÃ¤hlte Datei existiert nicht.",
 
     "folder_not_exist" =>
         "Der aufgerufene Ordner existiert nicht.",
 
     "delete_file_folder" =>
-        "Willst du die Datei / den Ordner <b>%VAR1%</b> wirklich löschen ?",
+        "Willst du die Datei / den Ordner <b>%VAR1%</b> wirklich lÃ¶schen ?",
 
     "delete_file" =>
-        "Die Datei <b>%VAR1%</b> wurde gelöscht.",
+        "Die Datei <b>%VAR1%</b> wurde gelÃ¶scht.",
 
     "delete_folder" =>
-        "Der Ordner <b>%VAR1%</b> wurde gelöscht.",
+        "Der Ordner <b>%VAR1%</b> wurde gelÃ¶scht.",
 
     "delete_error" =>
-        "Beim Löschen ist ein unbekannter Fehler aufgetreten.",
+        "Beim LÃ¶schen ist ein unbekannter Fehler aufgetreten.",
 
     "upload_file" =>
         "Die Datei <b>%VAR1%</b> wurde hochgeladen.",
@@ -374,11 +374,11 @@ $message_text = array(
 
     "folder_exists" =>
         "Der Ordner <b>%VAR1%</b> existiert bereits!<br><br>
-        Wähle bitte einen anderen Namen für den neuen Ordner aus.",
+        WÃ¤hle bitte einen anderen Namen fÃ¼r den neuen Ordner aus.",
 
     "file_exists" =>
         "Die Datei <b>%VAR1%</b> existiert bereits!<br><br>
-        Wähle bitte einen anderen Dateinamen aus.",
+        WÃ¤hle bitte einen anderen Dateinamen aus.",
 
     "rename_folder" =>
         "Der Ordner <b>%VAR1%</b> wurde umbenannt.",
@@ -387,16 +387,16 @@ $message_text = array(
         "Die Datei <b>%VAR1%</b> wurde umbenannt.",
 
     "file_2big" =>
-        "Die hochgeladene Datei übersteigt die zulässige
-        Dateigröße von %VAR1%KB.",
+        "Die hochgeladene Datei Ã¼bersteigt die zulÃ¤ssige
+        DateigrÃ¶ÃŸe von %VAR1%KB.",
 
     "file_2big_server" =>
-        "Die hochgeladene Datei übersteigt die vom Server zugelassene
-        Dateigröße von %VAR1%B.",
+        "Die hochgeladene Datei Ã¼bersteigt die vom Server zugelassene
+        DateigrÃ¶ÃŸe von %VAR1%B.",
 
     "empty_upload_post" =>
-        "Die Seite wurde ungültig aufgerufen oder die Datei konnte nicht hochgeladen werden.<br>
-        Vermutlich wurde die vom Server vorgegebene, maximale Uploadgröße, von %VAR1%B übersteigen!",
+        "Die Seite wurde ungÃ¼ltig aufgerufen oder die Datei konnte nicht hochgeladen werden.<br>
+        Vermutlich wurde die vom Server vorgegebene, maximale UploadgrÃ¶ÃŸe, von %VAR1%B Ã¼bersteigen!",
 
     "file_upload_error" =>
         "Beim Hochladen der Datei <b>%VAR1%</b> ist ein unbekannter Fehler aufgetreten.",
@@ -412,28 +412,28 @@ $message_text = array(
 
     "attachment" =>
         "Dein Dateinanhang konnte nicht hochgeladen werden.<br />
-        Vermutlich ist das Attachment zu groß!",
+        Vermutlich ist das Attachment zu groÃŸ!",
 
     "attachment_or_invalid" =>
-        "Die Seite wurde ungültig aufgerufen oder Dein Dateinanhang konnte nicht hochgeladen werden.<br />
-        Vermutlich ist das Attachment zu groß!",
+        "Die Seite wurde ungÃ¼ltig aufgerufen oder Dein Dateinanhang konnte nicht hochgeladen werden.<br />
+        Vermutlich ist das Attachment zu groÃŸ!",
 
     "mail_rolle" =>
-        "Bitte wähle eine Rolle als Adressat der Mail aus!",
+        "Bitte wÃ¤hle eine Rolle als Adressat der Mail aus!",
 
     "profile_mail" =>
         "In Ihrem <a href=\"%VAR1%\">Profil</a>
-        ist keine gültige Emailadresse hinterlegt!",
+        ist keine gÃ¼ltige Emailadresse hinterlegt!",
 
     "role_empty" =>
-        "Die von Ihnen ausgewählte Rolle enthält keine Mitglieder
-         mit gültigen Mailadressen, an die eine Mail versendet werden kann!",
+        "Die von Ihnen ausgewÃ¤hlte Rolle enthÃ¤lt keine Mitglieder
+         mit gÃ¼ltigen Mailadressen, an die eine Mail versendet werden kann!",
 
     "usrid_not_found" =>
-        "Die Userdaten der übergebenen ID konnten nicht gefunden werden!",
+        "Die Userdaten der Ã¼bergebenen ID konnten nicht gefunden werden!",
 
     "usrmail_not_found" =>
-        "Der User hat keine gültige Mailadresse in seinem Profil hinterlegt!",
+        "Der User hat keine gÃ¼ltige Mailadresse in seinem Profil hinterlegt!",
     //Ende Fehlermeldungen Mailmodul
 
 
@@ -444,7 +444,7 @@ $message_text = array(
 
     //Fehlermeldungen Capcha-Klasse
     "captcha_code" =>
-        "Der Bestätigungscode wurde falsch eingegeben.",
+        "Der BestÃ¤tigungscode wurde falsch eingegeben.",
     //Ende Fehlermeldungen Capcha-Klasse
 
 
