@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------
-                            Admidio 1.3 
+                               Admidio 
      	        Copyright (c) 2004 - 2007 The Admidio Team
            Admidio is a open source user management software
 -------------------------------------------------------------------------
