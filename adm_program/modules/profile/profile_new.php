@@ -426,14 +426,16 @@ require("../../../adm_config/body_top.php");
                     </div>";
 
                     // organisationsspezifische Felder einlesen
-                    if($new_user > 0)
+                    if($new_user == 1 || $new_user == 2)
                     {
+                        // Neuer User anlegen bzw. Registrierung anlegen
                         $sql = "SELECT *
                                   FROM ". TBL_USER_FIELDS. "
                                  WHERE usf_org_shortname = '$g_organization' ";
                     }
                     else
                     {
+                        // vorhandender User editieren bzw. Registrierung akzeptieren
                         $sql = "SELECT *
                                   FROM ". TBL_USER_FIELDS. " LEFT JOIN ". TBL_USER_DATA. "
                                     ON usd_usf_id = usf_id
@@ -507,7 +509,7 @@ require("../../../adm_config/body_top.php");
                                     {
                                         echo " value=\"". $form_values[$row->usf_id]. "\" ";
                                     }
-                                    elseif($new_user == 0 && strlen($row->usd_value) > 0)
+                                    elseif(isset($row->usd_value) && strlen($row->usd_value) > 0)
                                     {
                                         echo " value=\"$row->usd_value\" ";
                                     }
