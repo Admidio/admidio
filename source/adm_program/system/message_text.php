@@ -211,7 +211,7 @@ $message_text = array(
         Schreibrechte</acronym> für den Ordner setzen kann.",
 
 
-      //Meldungen Anmeldung im Forum
+    //Meldungen Anmeldung im Forum
     "loginforum" =>
         "Du hast dich erfolgreich auf Admidio und <br />im Forum <b>%VAR2%</b>
         als User <b>%VAR1%</b> angemeldet.",
@@ -242,9 +242,12 @@ $message_text = array(
         "Der gew&auml;hlte Benutzername existiert im Forum schon.<br /><br />
         W&auml;hle bitte einen neuen Namen.",
 
-      //Ende Meldungen Anmeldung im Forum
+    "delete_forum_user" =>
+        "Der gew&auml;hlte Benutzername wurde im Forum und in Admidio gel&ouml;scht.",
 
-    //Fahlermeldungen Mitgliederzuordnung
+    //Ende Meldungen Anmeldung im Forum
+
+    //Fehlermeldungen Mitgliederzuordnung
     "members_changed" =>
         "Die &Auml;nderungen wurden erfolgreich gespeichert.",
 
