@@ -28,7 +28,7 @@
     <p><b>1.</b> Benutzen Sie das Plugin innerhalb von Admidio-Seiten, so reicht ein einfacher Aufruf von:
     
     <p class="code">&lt;?php<br />
-    include("<i>SERVER_PATH. "/adm_plugins/sidebar_dates/sidebar_dates.php</i>");<br />
+    include(<i>SERVER_PATH. "/adm_plugins/sidebar_dates/sidebar_dates.php</i>");<br />
     ?&gt;</p>
     
     <p><b>2.</b> Wird das Plugin auf Seiten benutzt, die nichts mit Admidio zu tun haben, so muss vorher noch die <i>common.php</i>
@@ -36,7 +36,7 @@
     
     <p class="code">include_once("<i>Relativer-Pfad-zu-Admidio-Ordner
     /adm_program/system/common.php</i>");<br />
-    include("<i>SERVER_PATH. "/adm_plugins/sidebar_dates/sidebar_dates.php</i>");</p>
+    include(<i>SERVER_PATH. "/adm_plugins/sidebar_dates/sidebar_dates.php</i>");</p>
     
     <p><b>3.</b> Haben die vorherigen Varianten nicht zum Erfolg gef&uuml;hrt kann man die Plugins auch direkt 
     &uuml;ber eine URL einbinden. Allerdings wird bei dieser Variante die common.php f&uuml;r jedes Plugin wiederholt
