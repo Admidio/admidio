@@ -24,7 +24,7 @@
  *****************************************************************************/
 
 // Globale Variablen fuer das Forum
-$g_forum_session_id  = "";            	// Die Session fuer das Forum
+$g_forum_session_id  = session_id();   	// Die Session fuer das Forum ist immer die Session_ID
 $g_forum_user  = "";                    // Username im Forum
 $g_forum_userid = "";                   // UserID im Forum
 $g_forum_neuePM = "";                   // Nachrichten im Forum
@@ -112,12 +112,6 @@ else
     mysql_select_db($g_adm_db, $g_adm_con);
 }
 
-// Cookie des Forums einlesen
-if(isset($_COOKIE[$g_forum_cookie_name."_sid"]) AND $g_session_valid)
-{
-    $g_forum_session_id = $_COOKIE[$g_forum_cookie_name."_sid"];
-}
-
 
 // Gueltige Session im Forum updaten und Userdaten holen. Sofern die Admidio 
 // Session gueltig ist, ist auch die Forum Session gueltig
@@ -159,86 +153,25 @@ if($g_session_valid)
         {
             $g_forum_neuePM_Text = "und haben <b>".$g_forum_neuePM."</b> neue Nachrichten.";
         }
-    
-
-        // Erst mal schauen, ob sich die Session noch im Session Table des Forums befindet
-        $sql    = "SELECT session_id FROM ". $g_forum_praefix. "_sessions
-                   WHERE session_id = '".$g_session_id."' ";
-        $result = mysql_query($sql, $g_forum_con);
-        
-        if(mysql_num_rows($result))
-        {
-            // Session existiert, also updaten
-            $sql    = "UPDATE ". $g_forum_praefix. "_sessions 
-                      SET session_time = ". time() .",  session_user_id = ". $g_forum_userid .",  session_logged_in = 1
-                      WHERE session_id = {0}";
-            $sql    = prepareSQL($sql, array($g_session_id));
-            $result = mysql_query($sql, $g_forum_con);
-            db_error($result);
-        }
-        else
-        {
-            // Session existiert nicht, also neu anlegen (Autologin im Forum)
-            // Daten fuer das Cookie und den Session Eintrag im Forum aufbereiten
-            $ip_sep = explode('.', getenv('REMOTE_ADDR'));
-            $user_ip = sprintf('%02x%02x%02x%02x', $ip_sep[0], $ip_sep[1], $ip_sep[2], $ip_sep[3]);
-            $current_time = time();
-            
-            // Session in die Forum DB schreiben
-            $sql = "INSERT INTO " .$g_forum_praefix. "_sessions
-                   (session_id, session_user_id, session_start, session_time, session_ip, session_page, session_logged_in, session_admin)
-                   VALUES ('$g_session_id', $g_forum_userid, $current_time, $current_time, '$user_ip', 0, 1, 0)";
-            $result = mysql_query($sql, $g_forum_con);
-            db_error($result);
-        }    
         
         // Admidio DB waehlen
-        mysql_select_db($g_adm_db, $g_adm_con);
-        
-        // Den User gibt es im Forum und eine neue Session wurde angelegt, session_id gleichsetzten.
-        $g_forum_session_id = $g_session_id;
-        
-        // Cookie fuer die Anmeldung im Forum setzen
-        setcookie($g_forum_cookie_name."_sid", $g_session_id, time() + 60*60*24*30, $g_forum_cookie_path, $g_forum_cookie_domain, $g_forum_cookie_secure);
+	    mysql_select_db($g_adm_db, $g_adm_con);
+    
+		forum_session("update", $g_forum_userid, $g_forum_cookie_name, $g_forum_cookie_path, $g_forum_cookie_domain, $g_forum_cookie_secure, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
+    }
+    else
+    {
+    	// Gastlogin (Anonymous = -1) im Forum anlegen
+    	forum_session("insert", -1, $g_forum_cookie_name, $g_forum_cookie_path, $g_forum_cookie_domain, $g_forum_cookie_secure, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
     }
 }
-elseif (isset($_COOKIE[$g_forum_cookie_name."_sid"]))
+else
 {
-    // Die Admidio Session ist ungueltig oder abgelaufen, also die Session des Forums ebenfalls loeschen.
+   	// Session Varibale löschen
+    unset($_SESSION['s_user_valid']);
     
-    // Session ID aus dem Cookie lesen
-    $g_forum_session_id = $_COOKIE[$g_forum_cookie_name."_sid"];
-       
-    // Forums DB waehlen
-    mysql_select_db($g_forum_db, $g_forum_con);
- 
-    // User-ID aus der Session lesen
-    $sql    = "SELECT  session_user_id FROM ". $g_forum_praefix. "_sessions WHERE session_id = '$g_forum_session_id' ";
-    $result = mysql_query($sql, $g_forum_con);
-    db_error($result);
-    
-    $row = mysql_fetch_array($result);
-        
-    if(mysql_num_rows($result)!=0)
-    {
-        // Ab phpBB 2.0.21 wird die SID geprueft. Gaeste koennen dann nicht mehr posten, wenn die SID geloescht wird.
-        // An dieser Stelle wird ueberprueft, ob es sich um einen Gast (-1) handelt, in dem Fall bleibt die SID bestehen.
-        //if(!$row['session_user_id'] == -1)
-        //{
-        	// User-Session im Forum loeschen
-        	$sql    = "DELETE FROM ". $g_forum_praefix. "_sessions WHERE session_user_id = $row[0] ";
-        	$result = mysql_query($sql, $g_forum_con);
-        	db_error($result);
-        	
-    		// Cookie fuer die Anmeldung im Forum loeschen
-    		setcookie($g_forum_cookie_name."_sid", "", time() - 31536000, $g_forum_cookie_path, $g_forum_cookie_domain, $g_forum_cookie_secure);
-    
-   			// Session Varibale loeschen
-			unset($_SESSION['s_user_valid']);
-        //}
-    }
-    // Admidio DB waehlen
-	mysql_select_db($g_adm_db, $g_adm_con);
+    // Die Admidio Session ist ungueltig oder abgelaufen, also die Session des Forums auf Gast umstellen.
+    forum_session("insert", -1, $g_forum_cookie_name, $g_forum_cookie_path, $g_forum_cookie_domain, $g_forum_cookie_secure, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
 }
 
 
@@ -251,7 +184,9 @@ elseif (isset($_COOKIE[$g_forum_cookie_name."_sid"]))
  * forum_update_user
  * forum_insert_user
  * forum_delete_user
- ******************************************************************************/
+ * forum_imsert_session
+ * forum_session
+ *******************************************************************************/
 
 
 // Funktion ueberprueft ob der Admin Account im Forum ungleich des Admidio Accounts ist.
@@ -402,7 +337,7 @@ function forum_insert_user($forum_username, $forum_useraktiv, $forum_password, $
     $result = mysql_query($sql, $g_forum_con);
     db_error($result);
     
-    // Jetzt noch eine neue private Groupe anlegen
+    // Jetzt noch eine neue private Group anlegen
     $sql    = "SELECT MAX(group_id) as anzahl 
                  FROM ". $g_forum_praefix. "_groups";
     $result = mysql_query($sql, $g_forum_con);
@@ -459,7 +394,7 @@ function forum_update_username($forum_new_username, $forum_old_username, $forum_
 }
 
 
-// Funktion löscht einen bestehenden User im Forum
+// Funktion loescht einen bestehenden User im Forum
 function forum_delete_user($forum_username, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix)
 {
     // Forum Datenbank auswaehlen
@@ -583,4 +518,72 @@ function forum_delete_user($forum_username, $g_forum_db, $g_forum_con, $g_adm_db
     // Admidio DB waehlen
     mysql_select_db($g_adm_db, $g_adm_con);
 }
+
+
+// Funktion kuemmert sich um die Sessions und das Cookie des Forums
+function forum_session($aktion, $g_forum_userid, $g_forum_cookie_name, $g_forum_cookie_path, $g_forum_cookie_domain, $g_forum_cookie_secure, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix)
+{
+    // Daten fuer das Cookie und den Session Eintrag im Forum aufbereiten
+    $ip_sep = explode('.', getenv('REMOTE_ADDR'));
+    $user_ip = sprintf('%02x%02x%02x%02x', $ip_sep[0], $ip_sep[1], $ip_sep[2], $ip_sep[3]);
+    $current_time = time();
+    $g_forum_session_id = session_id();
+    
+    if($g_forum_userid == -1)
+    {
+    	$session_logged_in = 0;
+    }
+    else
+    {
+    	$session_logged_in = 1;
+    }
+    
+    // Forum Datenbank auswaehlen
+    mysql_select_db($g_forum_db, $g_forum_con);
+    
+    // Bereinigung der Forum Sessions, wenn diese aelter als 5 Stunden sind
+    $sql    = "DELETE FROM ". $g_forum_praefix. "_sessions WHERE session_start + 18000 < session_time ";
+   	$result = mysql_query($sql, $g_forum_con);
+   	db_error($result);
+    
+    if($g_forum_userid > 0)
+    {
+    	// Alte User-Session des Users im Forum loeschen
+ 		$sql    = "DELETE FROM ". $g_forum_praefix. "_sessions WHERE session_user_id = $g_forum_userid AND session_id NOT LIKE '".$g_forum_session_id."' ";
+  		$result = mysql_query($sql, $g_forum_con);
+   		db_error($result);
+   	}
+
+   	// Erst mal schauen, ob sich die Session noch im Session Table des Forums befindet
+   	$sql    = "SELECT session_id FROM ". $g_forum_praefix. "_sessions
+   	           WHERE session_id = '".$g_forum_session_id."' ";
+   	$result = mysql_query($sql, $g_forum_con);
+   	
+   	if(mysql_num_rows($result))
+   	{
+		// Session existiert, also updaten
+   	    $sql    = "UPDATE ". $g_forum_praefix. "_sessions 
+   	              SET session_time = ". time() .",  session_user_id = ". $g_forum_userid .",  session_logged_in = $session_logged_in
+   	              WHERE session_id = {0}";
+   	    $sql    = prepareSQL($sql, array($g_forum_session_id));
+   	    $result = mysql_query($sql, $g_forum_con);
+   	    db_error($result);
+	}
+	else
+	{
+	    // Session in die Forum DB schreiben
+   	    $sql    = "INSERT INTO " .$g_forum_praefix. "_sessions
+   	              (session_id, session_user_id, session_start, session_time, session_ip, session_page, session_logged_in, session_admin)
+   	              VALUES ('$g_forum_session_id', $g_forum_userid, $current_time, $current_time, '$user_ip', 0, $session_logged_in, 0)";
+   	    $result = mysql_query($sql, $g_forum_con);
+   	    db_error($result);
+	}
+	
+    // Cookie fuer die Anmeldung im Forum setzen
+    setcookie($g_forum_cookie_name."_sid", $g_forum_session_id, time() + 60*60*24*30, $g_forum_cookie_path, $g_forum_cookie_domain, $g_forum_cookie_secure);
+    
+    // Admidio DB waehlen
+    mysql_select_db($g_adm_db, $g_adm_con);
+}
+
 ?>

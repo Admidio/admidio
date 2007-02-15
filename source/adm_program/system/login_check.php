@@ -79,7 +79,8 @@ if ($user_found >= 1)
         db_error($result);
 
         // Session-ID erzeugen
-        $user_session   = md5(uniqid(rand()));
+        //$user_session   = md5(uniqid(rand()));
+        $user_session   = session_id();
         $login_datetime = date("Y.m.d H:i:s", time());
 
         // Session-ID speichern
@@ -91,7 +92,7 @@ if ($user_found >= 1)
 
         // Cookies fuer die Anmeldung setzen und evtl. Ports entfernen
         $domain = substr($_SERVER['HTTP_HOST'], 0, strpos($_SERVER['HTTP_HOST'], ':'));
-        setcookie("adm_session", "$user_session" , 0, "/", $domain, 0);
+        setcookie("adm_session", "$user_session" , time() + 60*60*24*30, "/", $domain, 0);
 
         //User Daten in Session speichern
         $g_current_user = new User($g_adm_con);
@@ -145,7 +146,7 @@ if ($user_found >= 1)
             	forum_insert_user($g_current_user->login_name, 1, $g_current_user->password, $g_current_user->email, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
             }
             
-            // Datenbank auswählen
+            // Forums Datenbank auswaehlen
             mysql_select_db($g_forum_db, $g_forum_con);
 
             // User nun in Foren-Tabelle suchen und dort das Password & UserID auslesen
@@ -153,30 +154,17 @@ if ($user_found >= 1)
             $sql    = prepareSQL($sql, array($req_login_name));
             $result = mysql_query($sql, $g_forum_con);
             db_error($result);
+            
+            // Admidio DB waehlen
+		    mysql_select_db($g_adm_db, $g_adm_con);
 
             // Natürlich sollte hier der User auch im Forum existieren 
-            // um eine gültige Anmeldung im Forum zu machen
+            // um eine gueltige Anmeldung im Forum zu machen
             if(mysql_num_rows($result))
             {
                 $row = mysql_fetch_array($result);
     
-                // Daten für das Cookie und den Session Eintrag im Forum aufbereiten
-                $ip_sep = explode('.', getenv('REMOTE_ADDR'));
-                $user_ip = sprintf('%02x%02x%02x%02x', $ip_sep[0], $ip_sep[1], $ip_sep[2], $ip_sep[3]);
-                $current_time = time();
-    
-                // Session in die Forum DB schreiben
-                $sql = "INSERT INTO " .$g_forum_praefix. "_sessions
-                               (session_id, session_user_id, session_start, session_time, session_ip, session_page, session_logged_in, session_admin)
-                        VALUES ('$user_session', $row[1], $current_time, $current_time, '$user_ip', 0, 1, 0)";
-                $result = mysql_query($sql, $g_forum_con);
-                db_error($result);
-    
-                // Cookie fuer die Anmeldung im Forum setzen
-                setcookie($g_forum_cookie_name."_sid", $user_session, time() + 60*60*24*30, $g_forum_cookie_path, $g_forum_cookie_domain, $g_forum_cookie_secure);
-    
-                // Admidio DB wählen
-                mysql_select_db($g_adm_db, $g_adm_con);
+                forum_session("insert", $row[1], $g_forum_cookie_name, $g_forum_cookie_path, $g_forum_cookie_domain, $g_forum_cookie_secure, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
 
                 // heaerLocation entsprechend der Aktionen setzen, Meldungen ausgeben und weiter zur URL.
                 if($forum_admin_reset)
