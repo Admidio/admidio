@@ -167,7 +167,7 @@ if($g_session_valid)
 }
 else
 {
-   	// Session Varibale löschen
+   	// Session Varibale loeschen
     unset($_SESSION['s_user_valid']);
     
     // Die Admidio Session ist ungueltig oder abgelaufen, also die Session des Forums auf Gast umstellen.

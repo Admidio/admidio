@@ -52,12 +52,12 @@ if ($session_found > 0)
     db_error($result);
 }
 
-// Wenn die Session des Forums aktiv ist, diese ebenfalls löschen.
+// Wenn die Session des Forums aktiv ist, diese ebenfalls loeschen.
 if(isset($_SESSION['s_user_valid']) AND $_SESSION['s_user_valid'] == TRUE)
 {
     forum_session("update", -1, $g_forum_cookie_name, $g_forum_cookie_path, $g_forum_cookie_domain, $g_forum_cookie_secure, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
 
-	// Session Varibale löschen
+	// Session Varibale loeschen
 	unset($_SESSION['s_user_valid']);
 
     $message_code = "logoutforum";    

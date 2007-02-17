@@ -227,7 +227,7 @@ if(strlen($g_session_id) > 0)
 }
 
 // Verbindung zur Forum-Datenbank herstellen und die Funktionen, sowie Routinen des Forums laden.
-if($g_forum)
+if($g_forum) 
 {
     $g_forum_con = mysql_connect ($g_forum_srv, $g_forum_usr, $g_forum_pw);
     include(SERVER_PATH. "/adm_program/system/forum_functions.php");

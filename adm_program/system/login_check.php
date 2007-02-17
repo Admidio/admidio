@@ -125,11 +125,11 @@ if ($user_found >= 1)
             $forum_admin_reset = false;
             $forum_export_account = false;
             
-            /* Überprüfen, ob User ID =1 (Administrator) angemeldet ist. 
-            Falls ja, wird geprüft, ob im Forum der gleiche Username und Password für die UserID 2 
-            (Standard ID für den Administrator im Forum) besteht.
+            /* Ueberpruefen, ob User ID =1 (Administrator) angemeldet ist. 
+            Falls ja, wird geprueft, ob im Forum der gleiche Username und Password fuer die UserID 2 
+            (Standard ID fuer den Administrator im Forum) besteht.
             Dieser wird im nein Fall (neue Installation des Boards) auf den Username und das Password des 
-            Admidio UserID Accounts 1 (Standard für Administartor) geändert und eine Meldung ausgegegen.
+            Admidio UserID Accounts 1 (Standard fuer Administartor) geaendert und eine Meldung ausgegegen.
             */
             if($user_row->usr_id == 1)
             {
@@ -137,7 +137,7 @@ if ($user_found >= 1)
             }
 
 
-			// Prüfen, ob es den User im Forum gibt, im Nein Fall diesem User ein Forum Account anlegen
+			// Pruefen, ob es den User im Forum gibt, im Nein Fall diesem User ein Forum Account anlegen
             if(!forum_check_user($req_login_name, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix))
             {
             	$forum_export_account = TRUE;
@@ -158,7 +158,7 @@ if ($user_found >= 1)
             // Admidio DB waehlen
 		    mysql_select_db($g_adm_db, $g_adm_con);
 
-            // Natürlich sollte hier der User auch im Forum existieren 
+            // Natï¿½rlich sollte hier der User auch im Forum existieren 
             // um eine gueltige Anmeldung im Forum zu machen
             if(mysql_num_rows($result))
             {
@@ -169,7 +169,7 @@ if ($user_found >= 1)
                 // heaerLocation entsprechend der Aktionen setzen, Meldungen ausgeben und weiter zur URL.
                 if($forum_admin_reset)
                 {
-                    // Administrator Account wurde zurück gesetzt, Meldung vorbereiten
+                    // Administrator Account wurde zurï¿½ck gesetzt, Meldung vorbereiten
                     $login_message = "loginforum_admin";
                 }
                 elseif($forum_export_account)
@@ -179,7 +179,7 @@ if ($user_found >= 1)
                 }
                 elseif(!(forum_check_password($req_password_crypt, $row[0], $row[1], $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix)))
                 {
-                    // Password wurde zurück gesetzt, Meldung vorbereiten
+                    // Password wurde zurï¿½ck gesetzt, Meldung vorbereiten
                     $login_message = "loginforum_pass";
                 }
                 else
@@ -214,7 +214,7 @@ if ($user_found >= 1)
     }
     else
     {
-        // ungültige Logins werden mitgeloggt
+        // ungï¿½ltige Logins werden mitgeloggt
         $sql    = "UPDATE ". TBL_USERS. " SET usr_date_invalid = NOW()
                                             , usr_number_invalid   = usr_number_invalid + 1
                     WHERE usr_id = $user_row->usr_id ";
