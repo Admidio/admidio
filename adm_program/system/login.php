@@ -25,6 +25,13 @@
 
 require("common.php");
 
+$sql    = "SELECT rol_id
+             FROM ". TBL_ROLES. "
+            WHERE rol_name  = 'Webmaster' ";
+$result = mysql_query($sql, $g_adm_con);
+db_error($result);
+$webmaster_row = mysql_fetch_object($result);
+
 echo "
 <!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org -->\n
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
@@ -76,7 +83,7 @@ require("../../adm_config/body_top.php");
                 }
                 else
                 {
-                    $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?rolle=Webmaster&cat=Allgemein&subject=Loginprobleme";
+                    $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?rol_id=$webmaster_row->rol_id&subject=Loginprobleme";
                 }
                 echo "<div style=\"font-size: 8pt; margin-top: 5px;\">
                     <a href=\"$mail_link\">Ich habe mein Passwort vergessen!</a>
