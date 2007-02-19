@@ -48,7 +48,7 @@ $members_per_page = 20; // Anzahl der Mitglieder, die auf einer Seite angezeigt 
 
 // lokale Variablen der Uebergabevariablen initialisieren
 $req_members   = 1;
-$req_letter    = "%";
+$req_letter    = "";
 $req_start     = 0;
 $req_search    = null;
 $req_queryForm = null;
@@ -63,19 +63,11 @@ if (isset($_GET['members']) && is_numeric($_GET['members']))
 if (isset($_GET['letter']))
 {
     
-    if(strlen($_GET['letter']) > 2)
+    if(strlen($_GET['letter']) > 1)
     {
         $g_message->show("invalid");
     }
-    if(strpos($_GET['letter'], "%") === false)
-    {
-        $req_letter = strStripTags($_GET['letter'], true);
-        $req_letter = $_GET['letter']. "%";
-    }
-    else
-    {
-        $req_letter = $_GET['letter'];
-    }
+    $req_letter = $_GET['letter'];
 }
 
 if(isset($_GET['start']))
@@ -148,7 +140,7 @@ else
         $sql    = "SELECT DISTINCT usr_id, usr_last_name, usr_first_name, usr_email, usr_homepage,
                           usr_login_name, usr_last_change
                      FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. "
-                    WHERE usr_last_name LIKE {0}
+                    WHERE usr_last_name LIKE '$req_letter%'
                       AND usr_valid = 1
                       AND mem_usr_id = usr_id
                       AND mem_rol_id = rol_id
@@ -162,11 +154,10 @@ else
         $sql    = "SELECT usr_id, usr_last_name, usr_first_name, usr_email, usr_homepage,
                           usr_login_name, usr_last_change
                      FROM ". TBL_USERS. "
-                    WHERE usr_last_name LIKE {0}
+                    WHERE usr_last_name LIKE '$req_letter%'
                       AND usr_valid = 1
                     ORDER BY usr_last_name, usr_first_name ";
     }
-    $sql    = prepareSQL($sql, array($req_letter));
 }
 $result_mgl = mysql_query($sql, $g_adm_con);
 db_error($result_mgl);
@@ -243,9 +234,9 @@ require("../../../adm_config/body_top.php");
                     $link_members = 1;
                 }
                 echo "<span class=\"iconLink\">
-                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members.php?members=$link_members&letter=". str_replace("%", "", $req_letter). "&queryForm=$req_queryForm\"><img
+                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members.php?members=$link_members&letter=$req_letter&queryForm=$req_queryForm\"><img
                      class=\"iconLink\" src=\"$g_root_path/adm_program/images/$link_icon\" style=\"vertical-align: middle;\" border=\"0\" alt=\"$link_text\"></a>
-                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members.php?members=$link_members&letter=". str_replace("%", "", $req_letter). "&queryForm=$req_queryForm\">$link_text</a>
+                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members.php?members=$link_members&letter=$req_letter&queryForm=$req_queryForm\">$link_text</a>
                 </span>
                 &nbsp;&nbsp;&nbsp;&nbsp;";
             }
@@ -266,9 +257,9 @@ require("../../../adm_config/body_top.php");
             echo "<p>Alle Benutzer (Mitglieder, Ehemalige) ";
         }
 
-        if($req_letter != "%")
+        if(strlen($req_letter) > 0)
         {
-            echo " mit Nachnamen ". str_replace("%", "*", $req_letter);
+            echo " mit Nachnamen $req_letter*";
         }
         echo " werden angezeigt</p>";
 
@@ -296,13 +287,13 @@ require("../../../adm_config/body_top.php");
 
             // Leiste mit allen Buchstaben des Alphabets anzeigen
 
-            if ($req_letter == "%" && !$req_queryForm)
+            if (strlen($req_letter) == 0 && !$req_queryForm)
             {
                 echo "<b>Alle</b>&nbsp;&nbsp;&nbsp;";
             }
             else
             {
-                echo "<a href=\"members.php?members=$req_members&letter=%\">Alle</a>&nbsp;&nbsp;&nbsp;";
+                echo "<a href=\"members.php?members=$req_members\">Alle</a>&nbsp;&nbsp;&nbsp;";
             }
 
             // Alle Anfangsbuchstaben der Nachnamen ermitteln, die bisher in der DB gespeichert sind
