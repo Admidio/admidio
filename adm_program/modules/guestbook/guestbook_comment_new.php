@@ -112,7 +112,7 @@ else
 {
     $form_values['name']  = "";
     $form_values['email'] = "";
-    $form_values['text']  = "";
+    $form_values['entry']  = "";
 
     // Wenn eine cid uebergeben wurde, soll der Eintrag geaendert werden
     // -> Felder mit Daten des Kommentares vorbelegen
@@ -131,7 +131,7 @@ else
             $row_ba = mysql_fetch_object($result);
 
             $form_values['name']     = $row_ba->gbc_name;
-            $form_values['text']     = $row_ba->gbc_text;
+            $form_values['entry']     = $row_ba->gbc_text;
             $form_values['email']    = $row_ba->gbc_email;
         }
         elseif (mysql_num_rows($result) == 0)
@@ -241,7 +241,7 @@ require("../../../adm_config/body_top.php");
                         }
                     echo "</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <textarea  id=\"entry\" name=\"entry\" tabindex=\"3\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". htmlspecialchars($form_values['text'], ENT_QUOTES). "</textarea>&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
+                        <textarea  id=\"entry\" name=\"entry\" tabindex=\"3\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". htmlspecialchars($form_values['entry'], ENT_QUOTES). "</textarea>&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
                     </div>
                 </div>";
 
