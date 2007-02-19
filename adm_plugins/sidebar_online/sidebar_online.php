@@ -39,9 +39,27 @@ require_once(PLUGIN_PATH. "/sidebar_online/config.php");
  
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
 // falls nicht, hier noch mal die Default-Werte setzen
-if(is_numeric($onlinezeit) == false)
+if(isset($onlinezeit) == false || is_numeric($onlinezeit) == false)
 {
     $onlinezeit = 10;
+}
+
+if(isset($plg_link_class))
+{
+    $plg_link_class = strip_tags($plg_link_class);
+}
+else
+{
+    $plg_link_class = "";
+}
+
+if(isset($plg_link_target))
+{
+    $plg_link_target = strip_tags($plg_link_target);
+}
+else
+{
+    $plg_link_target = "_self";
 }
 
 // Aktuelle Zeit setzten
@@ -57,18 +75,24 @@ $sql = "SELECT ses_usr_id FROM ". TBL_SESSIONS. " WHERE ses_timestamp BETWEEN '"
 $result = mysql_query($sql, $g_adm_con);
 db_error($result);
 
-echo "Seit ".$onlinezeit." Minuten online:<br>";
-
-while($row = mysql_fetch_object($result))
+if(mysql_num_rows($result) > 0)
 {
-    // User_login_name finden und ausgeben
-    $sql = "SELECT usr_login_name FROM ". TBL_USERS. " WHERE usr_id LIKE '".$row->ses_usr_id."'";
-
-    $on_result = mysql_query($sql, $g_adm_con);
-    db_error($on_result);
-    
-    $useronline = mysql_fetch_array($on_result);
-    echo "<b><a href=\"/adm_program/modules/profile/profile.php?user_id=$row->ses_usr_id\">".$useronline['usr_login_name']."</a></b><br>";
+	echo "Seit ".$onlinezeit." Minuten online:<br>";
+	
+	while($row = mysql_fetch_object($result))
+	{
+	    // User_login_name finden und ausgeben
+	    $sql = "SELECT usr_login_name FROM ". TBL_USERS. " WHERE usr_id LIKE '".$row->ses_usr_id."'";
+	
+	    $on_result = mysql_query($sql, $g_adm_con);
+	    db_error($on_result);
+	    
+	    $useronline = mysql_fetch_array($on_result);
+	    echo "<b><a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->ses_usr_id\" target=\"$plg_link_target\">".$useronline['usr_login_name']."</a></b><br>";
+	}
 }
-
+else
+{
+    echo "Momentan ist kein Benutzer online";
+}
 ?>

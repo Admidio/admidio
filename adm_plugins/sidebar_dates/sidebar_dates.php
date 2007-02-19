@@ -40,16 +40,32 @@ require_once(PLUGIN_PATH. "/sidebar_dates/config.php");
  
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
 // falls nicht, hier noch mal die Default-Werte setzen
-if(is_numeric($plg_dates_count) == false)
+if(isset($plg_dates_count) == false || is_numeric($plg_dates_count) == false)
 {
     $plg_dates_count = 2;
 }
-if(is_numeric($plg_max_char_per_word) == false)
+if(isset($plg_max_char_per_word) == false || is_numeric($plg_max_char_per_word) == false)
 {
     $plg_max_char_per_word = 0;
 }
 
-$plg_link_class = strip_tags($plg_link_class);
+if(isset($plg_link_class))
+{
+    $plg_link_class = strip_tags($plg_link_class);
+}
+else
+{
+    $plg_link_class = "";
+}
+
+if(isset($plg_link_target))
+{
+    $plg_link_target = strip_tags($plg_link_target);
+}
+else
+{
+    $plg_link_target = "_self";
+}
 
 $act_date = date("Y.m.d 00:00:00", time());
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
@@ -101,44 +117,51 @@ else
 $result = mysql_query($sql, $g_adm_con);
 db_error($result);
 
-while($row = mysql_fetch_object($result))
+if(mysql_num_rows($result) > 0)
 {
-    echo mysqldatetime("d.m.y", $row->dat_begin). "&nbsp;&nbsp;";
-
-    if (mysqldatetime("h:i", $row->dat_begin) != "00:00")
-    {
-        echo mysqldatetime("h:i", $row->dat_begin);
-    }
-
-    echo "<br /><a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/modules/dates/dates.php?id=$row->dat_id\">";
-
-    if($plg_max_char_per_word > 0)
-    {
-        $new_headline = "";
-        unset($words);
-        
-        // Woerter unterbrechen, wenn sie zu lang sind
-        $words = explode(" ", $row->dat_headline);
-        
-        for($i = 0; $i < count($words); $i++)
-        {
-            if(strlen($words[$i]) > $plg_max_char_per_word)
-            {
-                $new_headline = "$new_headline ". substr($row->dat_headline, 0, $plg_max_char_per_word). "-<br />". 
-                                substr($row->dat_headline, $plg_max_char_per_word);
-            }
-            else
-            {
-                $new_headline = "$new_headline ". $words[$i];
-            }
-        }
-        echo "$new_headline</a><br />-----<br />";
-    }
-    else
-    {
-        echo "$row->dat_headline</a><br />-----<br />";
-    }
+	while($row = mysql_fetch_object($result))
+	{
+	    echo mysqldatetime("d.m.y", $row->dat_begin). "&nbsp;&nbsp;";
+	
+	    if (mysqldatetime("h:i", $row->dat_begin) != "00:00")
+	    {
+	        echo mysqldatetime("h:i", $row->dat_begin);
+	    }
+	
+	    echo "<br /><a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/modules/dates/dates.php?id=$row->dat_id\" target=\"$plg_link_target\">";
+	
+	    if($plg_max_char_per_word > 0)
+	    {
+	        $new_headline = "";
+	        unset($words);
+	        
+	        // Woerter unterbrechen, wenn sie zu lang sind
+	        $words = explode(" ", $row->dat_headline);
+	        
+	        for($i = 0; $i < count($words); $i++)
+	        {
+	            if(strlen($words[$i]) > $plg_max_char_per_word)
+	            {
+	                $new_headline = "$new_headline ". substr($row->dat_headline, 0, $plg_max_char_per_word). "-<br />". 
+	                                substr($row->dat_headline, $plg_max_char_per_word);
+	            }
+	            else
+	            {
+	                $new_headline = "$new_headline ". $words[$i];
+	            }
+	        }
+	        echo "$new_headline</a><br />-----<br />";
+	    }
+	    else
+	    {
+	        echo "$row->dat_headline</a><br />-----<br />";
+	    }
+	}
+	
+	echo "<a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/modules/dates/dates.php\" target=\"$plg_link_target\">Alle Termine</a>";
 }
-
-echo "<a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/modules/dates/dates.php\">Alle Termine</a>";
+else
+{
+    echo "Es sind keine Termine vorhanden.";
+}
 ?>
