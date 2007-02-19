@@ -27,7 +27,8 @@ require("common.php");
 
 $sql    = "SELECT rol_id
              FROM ". TBL_ROLES. "
-            WHERE rol_name  = 'Webmaster' ";
+            WHERE rol_org_shortname = '$g_current_organization->shortname'
+			  AND rol_name          = 'Webmaster' ";
 $result = mysql_query($sql, $g_adm_con);
 db_error($result);
 $webmaster_row = mysql_fetch_object($result);
