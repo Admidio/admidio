@@ -32,11 +32,16 @@
     ?&gt;</p>
     
     <p><b>2.</b> Wird das Plugin auf Seiten benutzt, die nichts mit Admidio zu tun haben, so muss vorher noch die <i>common.php</i>
-    &uuml;ber den Serverpfad eingebunden werden:</p>
+    <b>ganz am Anfang</b> Ihrer Php-Datei &uuml;ber den Serverpfad eingebunden werden:</p>
     
     <p class="code">&lt;?php<br />
     include_once($_SERVER['DOCUMENT_ROOT']. "/<i>Pfad-zu-Admidio-Ordner</i>
     /adm_program/system/common.php");<br />
+    ?&gt;</p>
+    
+    <p>Danach folgt, wie bei Punkt 1, der Einbau der Plugins an den von Ihnen gewünschten Stellen:</p>
+    
+    <p class="code">&lt;?php<br />
     include($_SERVER['DOCUMENT_ROOT']. "/<i>Pfad-zu-Admidio-Ordner</i>
     /adm_plugins/sidebar_dates/sidebar_dates.php");<br />
     ?&gt;</p>
