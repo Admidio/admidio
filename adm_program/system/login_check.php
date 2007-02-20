@@ -92,7 +92,7 @@ if ($user_found >= 1)
 
         // Cookies fuer die Anmeldung setzen und evtl. Ports entfernen
         $domain = substr($_SERVER['HTTP_HOST'], 0, strpos($_SERVER['HTTP_HOST'], ':'));
-        setcookie("adm_session", "$user_session" , time() + 60*60*24*30, "/", $domain, 0);
+        setcookie("adm_session", "$user_session" , 0, "/", $domain, 0);
 
         //User Daten in Session speichern
         $g_current_user = new User($g_adm_con);
@@ -137,13 +137,13 @@ if ($user_found >= 1)
             }
 
 
-			// Pruefen, ob es den User im Forum gibt, im Nein Fall diesem User ein Forum Account anlegen
+            // Pruefen, ob es den User im Forum gibt, im Nein Fall diesem User ein Forum Account anlegen
             if(!forum_check_user($req_login_name, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix))
             {
-            	$forum_export_account = TRUE;
-            	
-            	// Export der Admido Daten ins Forum und einen Forum Account erstellen
-            	forum_insert_user($g_current_user->login_name, 1, $g_current_user->password, $g_current_user->email, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
+                $forum_export_account = TRUE;
+                
+                // Export der Admido Daten ins Forum und einen Forum Account erstellen
+                forum_insert_user($g_current_user->login_name, 1, $g_current_user->password, $g_current_user->email, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
             }
             
             // Forums Datenbank auswaehlen
@@ -156,9 +156,9 @@ if ($user_found >= 1)
             db_error($result);
             
             // Admidio DB waehlen
-		    mysql_select_db($g_adm_db, $g_adm_con);
+            mysql_select_db($g_adm_db, $g_adm_con);
 
-            // Nat�rlich sollte hier der User auch im Forum existieren 
+            // Nat?rlich sollte hier der User auch im Forum existieren 
             // um eine gueltige Anmeldung im Forum zu machen
             if(mysql_num_rows($result))
             {
@@ -169,17 +169,17 @@ if ($user_found >= 1)
                 // heaerLocation entsprechend der Aktionen setzen, Meldungen ausgeben und weiter zur URL.
                 if($forum_admin_reset)
                 {
-                    // Administrator Account wurde zur�ck gesetzt, Meldung vorbereiten
+                    // Administrator Account wurde zur?ck gesetzt, Meldung vorbereiten
                     $login_message = "loginforum_admin";
                 }
                 elseif($forum_export_account)
                 {
-                	// Admidio Account wurde zum Forum exportiert und ein Account erstellt, Meldung anzeigen
-                	$login_message = "loginforum_new";
+                    // Admidio Account wurde zum Forum exportiert und ein Account erstellt, Meldung anzeigen
+                    $login_message = "loginforum_new";
                 }
                 elseif(!(forum_check_password($req_password_crypt, $row[0], $row[1], $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix)))
                 {
-                    // Password wurde zur�ck gesetzt, Meldung vorbereiten
+                    // Password wurde zur?ck gesetzt, Meldung vorbereiten
                     $login_message = "loginforum_pass";
                 }
                 else
@@ -214,7 +214,7 @@ if ($user_found >= 1)
     }
     else
     {
-        // ung�ltige Logins werden mitgeloggt
+        // ung?ltige Logins werden mitgeloggt
         $sql    = "UPDATE ". TBL_USERS. " SET usr_date_invalid = NOW()
                                             , usr_number_invalid   = usr_number_invalid + 1
                     WHERE usr_id = $user_row->usr_id ";
