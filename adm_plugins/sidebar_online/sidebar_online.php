@@ -1,12 +1,12 @@
 <?php
 /******************************************************************************
- * Sidebar Wer ist Online
+ * Sidebar Online
  *
- * Version 1.0
+ * Version 1.0.2
  *
- * Plugin das die aktiven Besucher der Homepage anzeigt
+ * Plugin zeigt die aktiven registrierten Besucher der Homepage
  *
- * Compatible to Admidio-Versions 1.4
+ * Kompatible ab Admidio-Versions 1.4.1
  *
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -77,19 +77,19 @@ db_error($result);
 
 if(mysql_num_rows($result) > 0)
 {
-	echo "Seit ".$onlinezeit." Minuten online:<br>";
-	
-	while($row = mysql_fetch_object($result))
-	{
-	    // User_login_name finden und ausgeben
-	    $sql = "SELECT usr_login_name FROM ". TBL_USERS. " WHERE usr_id LIKE '".$row->ses_usr_id."'";
-	
-	    $on_result = mysql_query($sql, $g_adm_con);
-	    db_error($on_result);
-	    
-	    $useronline = mysql_fetch_array($on_result);
-	    echo "<b><a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->ses_usr_id\" target=\"$plg_link_target\">".$useronline['usr_login_name']."</a></b><br>";
-	}
+    echo "Seit ".$onlinezeit." Minuten online:<br>";
+    
+    while($row = mysql_fetch_object($result))
+    {
+        // User_login_name finden und ausgeben
+        $sql = "SELECT usr_login_name FROM ". TBL_USERS. " WHERE usr_id LIKE '".$row->ses_usr_id."'";
+    
+        $on_result = mysql_query($sql, $g_adm_con);
+        db_error($on_result);
+        
+        $useronline = mysql_fetch_array($on_result);
+        echo "<b><a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->ses_usr_id\" target=\"$plg_link_target\">".$useronline['usr_login_name']."</a></b><br>";
+    }
 }
 else
 {

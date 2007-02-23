@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------
-                           Sidebar Dates 
+                             Sidebar Login 
      	        Copyright (c) 2004 - 2007 The Admidio Team
            Admidio is a open source user management software
 -------------------------------------------------------------------------
@@ -14,7 +14,7 @@
 
  1. Einleitung
 -------------------------------------------------------------------------
-Sidebar Dates ist ein Plugin zu der Online-Mitgliederverwaltung
+Sidebar Login ist ein Plugin zu der Online-Mitgliederverwaltung
 Admidio (http://www.admidio.org) und kann nicht ohne diese benutzt werden.
 
 

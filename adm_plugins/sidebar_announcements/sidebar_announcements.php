@@ -2,12 +2,12 @@
 /******************************************************************************
  * Sidebar Announcements
  *
- * Version 1.0
+ * Version 1.0.2
  *
  * Plugin das die letzten X Ankuendigungen in einer schlanken Oberflaeche auflistet
  * und so ideal in einer Seitenleiste eingesetzt werden kann
  *
- * Compatible to Admidio-Versions 1.2 - 1.4
+ * Kompatible ab Admidio-Versions 1.4.1
  *
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -124,41 +124,41 @@ db_error($result);
 
 if(mysql_num_rows($result) > 0)
 {
-	while($row = mysql_fetch_object($result))
-	{
-	    echo "<a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/modules/announcements/announcements.php?id=$row->ann_id&amp;headline=". utf8_decode($plg_headline). "\" target=\"$plg_link_target\">";
-	    
-	    if($plg_max_char_per_word > 0)
-	    {
-	        $new_headline = "";
-	        unset($words);
-	    
-	        // Woerter unterbrechen, wenn sie zu lang sind
-	        $words = explode(" ", $row->ann_headline);
-	        
-	        for($i = 0; $i < count($words); $i++)
-	        {
-	            if(strlen($words[$i]) > $plg_max_char_per_word)
-	            {
-	                $new_headline = "$new_headline ". substr($words[$i], 0, $plg_max_char_per_word). "-<br />". 
-	                                substr($words[$i], $plg_max_char_per_word);
-	            }
-	            else
-	            {
-	                $new_headline = "$new_headline ". $words[$i];
-	            }
-	        }
-	        echo "$new_headline</a><br />";
-	    }
-	    else
-	    {
-	        echo "$row->ann_headline</a><br />";
-	    }
-	     
-	    echo "(&nbsp;". mysqldatetime("d.m.y", $row->ann_timestamp). "&nbsp;)<br />-----<br />";
-	}
-	
-	echo "<a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/modules/announcements/announcements.php?headline=". utf8_decode($plg_headline). "\" target=\"$plg_link_target\">Alle $plg_headline</a>";
+    while($row = mysql_fetch_object($result))
+    {
+        echo "<a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/modules/announcements/announcements.php?id=$row->ann_id&amp;headline=". utf8_decode($plg_headline). "\" target=\"$plg_link_target\">";
+        
+        if($plg_max_char_per_word > 0)
+        {
+            $new_headline = "";
+            unset($words);
+        
+            // Woerter unterbrechen, wenn sie zu lang sind
+            $words = explode(" ", $row->ann_headline);
+            
+            for($i = 0; $i < count($words); $i++)
+            {
+                if(strlen($words[$i]) > $plg_max_char_per_word)
+                {
+                    $new_headline = "$new_headline ". substr($words[$i], 0, $plg_max_char_per_word). "-<br />". 
+                                    substr($words[$i], $plg_max_char_per_word);
+                }
+                else
+                {
+                    $new_headline = "$new_headline ". $words[$i];
+                }
+            }
+            echo "$new_headline</a><br />";
+        }
+        else
+        {
+            echo "$row->ann_headline</a><br />";
+        }
+         
+        echo "(&nbsp;". mysqldatetime("d.m.y", $row->ann_timestamp). "&nbsp;)<br />-----<br />";
+    }
+    
+    echo "<a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/modules/announcements/announcements.php?headline=". utf8_decode($plg_headline). "\" target=\"$plg_link_target\">Alle $plg_headline</a>";
 }
 else
 {
