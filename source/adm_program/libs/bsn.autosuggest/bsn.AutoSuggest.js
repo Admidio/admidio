@@ -207,7 +207,6 @@ _bsn.AutoSuggest.prototype.createList = function(arr)
     var RETURN = 13;
 
 
-
     this.fld.onkeydown = function(ev)
     {
         var key = (window.event) ? window.event.keyCode : ev.keyCode;
@@ -215,6 +214,7 @@ _bsn.AutoSuggest.prototype.createList = function(arr)
         switch(key)
         {
             case TAB:
+            case RETURN:
             pointer.setHighlightedValue();
             break;
 
@@ -223,10 +223,6 @@ _bsn.AutoSuggest.prototype.createList = function(arr)
             break;
 
             case KEYUP:
-            pointer.changeHighlight(key);
-            return false;
-            break;
-
             case KEYDN:
             pointer.changeHighlight(key);
             return false;
