@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------
-                       Sidebar Announcements 1.0 
+                         Sidebar Announcements
      	        Copyright (c) 2004 - 2007 The Admidio Team
            Admidio is a open source user management software
 -------------------------------------------------------------------------
