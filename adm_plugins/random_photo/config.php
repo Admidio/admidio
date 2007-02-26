@@ -17,9 +17,6 @@ $plg_link_target = '_self';
 // bevor ein Zeilenumbruch kommt (Default = 0 (deaktiviert)) 
 $plg_max_char_per_word = 0;
 
-// Wahlweise kann hier ein anderer Titel fuer die Ankuendigungen angegeben werden
-$plg_headline = 'Fotos';
-
 //Maximale Photobreite
 //Angabe in px, (Default = 150)
 $plg_photos_max_width = 150;
@@ -37,5 +34,5 @@ $plg_photos_events = 0;
 $plg_photos_picnr = 0;
 
 //Soll der Link zur Veranstaltung unter dem Bild angezeigt werden?
-$plg_photos_show_link = false;
+$plg_photos_show_link = true;
 ?>

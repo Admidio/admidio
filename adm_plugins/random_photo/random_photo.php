@@ -63,43 +63,24 @@ else
 {
     $plg_headline = "Fotos";
 }
-if(isset($plg_photos_max_width))
-{
-    $plg_photos_max_width = strip_tags($plg_photos_max_width);
-}
-else
+
+if(!isset($plg_photos_max_width) || !is_numeric($plg_photos_max_width))
 {
     $plg_photos_max_width = 150;
 }
-if(isset($plg_photos_max_height))
-{
-    $plg_photos_max_height = strip_tags($plg_photos_max_height);
-}
-else
+if(!isset($plg_photos_max_height) || !is_numeric($plg_photos_max_heigth))
 {
     $plg_photos_max_height = 200;
 }
-if(isset($plg_photos_events))
-{
-    $plg_photos_events = strip_tags($plg_photos_events);
-}
-else
+if(!isset($plg_photos_events) || !is_numeric($plg_photos_events))
 {
     $plg_photos_events = 0;
 }
-if(isset($plg_photos_picnr))
-{
-    $plg_photos_picnr = strip_tags($plg_photos_picnr);
-}
-else
+if(!isset($plg_photos_picnr) || !is_numeric($plg_photos_picnr))
 {
     $plg_photos_picnr = 0;
 }
-if(isset($plg_photos_show_link))
-{
-    $plg_photos_show_link = strip_tags($plg_photos_show_link);
-}
-else
+if(!isset($plg_photos_show_link) || !is_numeric($plg_photos_show_link))
 {
     $plg_photos_show_link = true;
 }
@@ -168,13 +149,13 @@ $pho_id = $event['pho_id'];
 //Entscheidung ueber scallierung
 if($bildgroesse[0]/$plg_photos_max_width > $bildgroesse[1]/$plg_photos_max_height)
 {
-   echo "<img onclick=\"window.open('../../adm_program/modules/photos/photopopup.php?bild=$picnr&pho_id=$pho_id','msg', 'height=".$popup_height.", width=".$popup_width.",left=162,top=5')\" style=\"vertical-align: middle; cursor: pointer;\"
-			src=\"../../adm_program/modules/photos/photo_show.php?bild=".$picpath."&amp;scal=".$plg_photos_max_width."&amp;side=x\"  border=\"0\" alt=\"Zufallsbild\">";
+   echo "<img onclick=\"window.open('$g_root_path/adm_program/modules/photos/photopopup.php?bild=$picnr&pho_id=$pho_id','msg', 'height=".$popup_height.", width=".$popup_width.",left=162,top=5')\" style=\"vertical-align: middle; cursor: pointer;\"
+			src=\"$g_root_path/adm_program/modules/photos/photo_show.php?bild=".$picpath."&amp;scal=".$plg_photos_max_width."&amp;side=x\"  border=\"0\" alt=\"Zufallsbild\">";
 }
 else
 {
    echo "<img onclick=\"window.open('../../adm_program/modules/photos/photopopup.php?bild=$picnr&pho_id=$pho_id','msg', 'height=".$popup_height.", width=".$popup_width.",left=162,top=5')\" style=\"vertical-align: middle; cursor: pointer;\"
-			src=\"../../adm_program/modules/photos/photo_show.php?bild=".$picpath."&amp;scal=".$plg_photos_max_height."&amp;side=y\"  border=\"0\" alt=\"Zufallsbild\">";
+			src=\"$g_root_path/adm_program/modules/photos/photo_show.php?bild=".$picpath."&amp;scal=".$plg_photos_max_height."&amp;side=y\"  border=\"0\" alt=\"Zufallsbild\">";
 }
 
 
