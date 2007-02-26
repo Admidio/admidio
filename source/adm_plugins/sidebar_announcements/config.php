@@ -26,7 +26,7 @@ $plg_photos_max_width = 150;
 
 //Maximale Photohoehe
 //Angabe in px, (Default = 200)
-$plg_photos_max_height = 150;
+$plg_photos_max_height = 200;
 
 //Zahl der Veranstaltungen aus denen das Foto kommen darf, gezählt wird ab der aktuellsten
 //Default = 0 (Keine Einschraenkung)
