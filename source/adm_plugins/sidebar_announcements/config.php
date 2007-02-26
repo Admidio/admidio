@@ -9,13 +9,6 @@
  *
  *****************************************************************************/
 
-// Anzahl der Termine, die angezeigt werden sollen (Default = 2)
-$plg_announcements_count = 2;
-
-// Name einer CSS-Klasse fuer Links
-// Nur noetig, falls die Links ein anderes Aussehen bekommen sollen
-$plg_link_class = '';
-
 // Angabe des Ziels (target) in dem die Inhalte der Links geöffnet werden sollen
 // Hier koennen die ueblichen targets (_self, _top ...) oder Framenamen angegeben werden
 $plg_link_target = '_self';
@@ -25,6 +18,24 @@ $plg_link_target = '_self';
 $plg_max_char_per_word = 0;
 
 // Wahlweise kann hier ein anderer Titel fuer die Ankuendigungen angegeben werden
-$plg_headline = 'Ank&uuml;ndigungen';
+$plg_headline = 'Fotos';
 
+//Maximale Photobreite
+//Angabe in px, (Default = 150)
+$plg_photos_max_width = 150;
+
+//Maximale Photohoehe
+//Angabe in px, (Default = 200)
+$plg_photos_max_height = 150;
+
+//Zahl der Veranstaltungen aus denen das Foto kommen darf, gezählt wird ab der aktuellsten
+//Default = 10
+$plg_photos_events = 10;
+
+//Bildauswahl
+// =1 (erstes Bild) etc. =0 (Zufall,(Default)) 
+$plg_photos_picnr = 0;
+
+//Soll der Link zur Veranstaltung unter dem Bild angezeigt werden?
+$plg_photos_show_link = false;
 ?>
