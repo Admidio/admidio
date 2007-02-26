@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------
-                         Sidebar Announcements
+                         Random Photo
      	        Copyright (c) 2004 - 2007 The Admidio Team
            Admidio is a open source user management software
 -------------------------------------------------------------------------
