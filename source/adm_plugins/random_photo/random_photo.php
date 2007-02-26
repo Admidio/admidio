@@ -137,7 +137,7 @@ else
 }
 
 //Bilpfad zusammensetzen
-$picpath = "../../adm_my_files/photos/".$event['pho_begin']."_".$event['pho_id']."/".$picnr.".jpg";
+$picpath = PLUGIN_PATH. "/../adm_my_files/photos/".$event['pho_begin']."_".$event['pho_id']."/".$picnr.".jpg";
 
 //Ermittlung der Original Bildgroesse
 $bildgroesse = getimagesize($picpath);
@@ -161,9 +161,6 @@ for($i = 0; $i < count($words); $i++)
         $link_text = "$link_text ". $words[$i];
     }
 }
-
-//Bildpfad anpassen
-$picpath = "../".$picpath;
 
 //Ausgabe
 $pho_id = $event['pho_id'];
