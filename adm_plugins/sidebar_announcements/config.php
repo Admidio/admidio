@@ -29,8 +29,8 @@ $plg_photos_max_width = 150;
 $plg_photos_max_height = 150;
 
 //Zahl der Veranstaltungen aus denen das Foto kommen darf, gezählt wird ab der aktuellsten
-//Default = 10
-$plg_photos_events = 10;
+//Default = 0 (Keine Einschraenkung)
+$plg_photos_events = 0;
 
 //Bildauswahl
 // =1 (erstes Bild) etc. =0 (Zufall,(Default)) 
