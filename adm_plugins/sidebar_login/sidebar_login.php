@@ -73,7 +73,7 @@ if(isset($plg_rank) == false)
     $plg_rank = array();
 }
 
-$sql    = "SELECT rol_id
+$sql    = "SELECT rol_id, rol_mail_logout
              FROM ". TBL_ROLES. "
             WHERE rol_org_shortname = '$g_current_organization->shortname'
               AND rol_name          = 'Webmaster' ";
@@ -149,7 +149,8 @@ else
                 if($plg_show_email_link)
                 {
                     // E-Mail intern oder extern verschicken
-                    if($g_preferences['enable_mail_module'] != 1)
+                    if($g_preferences['enable_mail_module'] != 1 
+                    || $webmaster_row->rol_mail_logout != 1 )
                     {
                         $mail_link = "mailto:". $g_preferences['email_administrator']. "?subject=Loginprobleme";
                     }

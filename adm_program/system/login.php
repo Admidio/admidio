@@ -25,10 +25,10 @@
 
 require("common.php");
 
-$sql    = "SELECT rol_id
+$sql    = "SELECT rol_id, rol_mail_logout
              FROM ". TBL_ROLES. "
             WHERE rol_org_shortname = '$g_current_organization->shortname'
-			  AND rol_name          = 'Webmaster' ";
+              AND rol_name          = 'Webmaster' ";
 $result = mysql_query($sql, $g_adm_con);
 db_error($result);
 $webmaster_row = mysql_fetch_object($result);
@@ -78,7 +78,8 @@ require("../../adm_config/body_top.php");
                     </div>";
                 }
                 // E-Mail intern oder extern verschicken
-                if($g_preferences['enable_mail_module'] != 1)
+                if($g_preferences['enable_mail_module'] != 1 
+                || $webmaster_row->rol_mail_logout != 1 )
                 {
                     $mail_link = "mailto:". $g_preferences['email_administrator']. "?subject=Loginprobleme";
                 }
