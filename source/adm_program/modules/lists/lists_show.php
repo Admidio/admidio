@@ -319,7 +319,7 @@ if($mode != "csv")
     //Beschreibung der Rolle einblenden
     if(strlen($role_row->rol_description) > 0)
     {
-        echo$role_row->rol_description."<br />";
+        echo "<p>$role_row->rol_description</p>";
     }
 
     if($mode != "print")
