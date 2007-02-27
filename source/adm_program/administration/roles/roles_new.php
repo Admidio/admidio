@@ -308,124 +308,145 @@ require("../../../adm_config/body_top.php");
                         <div style=\"text-align: left; margin-left: 12%;\">
                             <label for=\"profile\">Eigenes Profil bearbeiten&nbsp;</label>
                         </div>
-                    </div>
-                    <div style=\"margin-top: 6px;\">
-                        <div style=\"text-align: right; width: 10%; float: left;\">
-                            <input type=\"checkbox\" id=\"announcements\" name=\"announcements\" ";
-                            if(isset($form_values['announcements']) && $form_values['announcements'] == 1)
-                                echo " checked ";
-                            echo " value=\"1\" />&nbsp;
-                            <label for=\"announcements\"><img src=\"$g_root_path/adm_program/images/note.png\" alt=\"Ank&uuml;ndigungen anlegen und bearbeiten\"></label>
-                        </div>
-                        <div style=\"text-align: left; margin-left: 12%;\">
-                            <label for=\"announcements\">Ank&uuml;ndigungen anlegen und bearbeiten&nbsp;</label>
-                        </div>
-                    </div>
-                    <div style=\"margin-top: 6px;\">
-                        <div style=\"text-align: right; width: 10%; float: left;\">
-                            <input type=\"checkbox\" id=\"dates\" name=\"dates\" ";
-                            if(isset($form_values['dates']) && $form_values['dates'] == 1)
-                                echo " checked ";
-                            echo " value=\"1\" />&nbsp;
-                            <label for=\"dates\"><img src=\"$g_root_path/adm_program/images/date.png\" alt=\"Termine anlegen und bearbeiten\"></label>
-                        </div>
-                        <div style=\"text-align: left; margin-left: 12%;\">
-                            <label for=\"dates\">Termine anlegen und bearbeiten&nbsp;</label>
-                        </div>
-                    </div>
-                    <div style=\"margin-top: 6px;\">
-                        <div style=\"text-align: right; width: 10%; float: left;\">
-                            <input type=\"checkbox\" id=\"photos\" name=\"photos\" ";
-                            if(isset($form_values['photos']) && $form_values['photos'] == 1)
-                                echo " checked ";
-                            echo " value=\"1\" />&nbsp;
-                            <label for=\"photos\"><img src=\"$g_root_path/adm_program/images/photo.png\" alt=\"Fotos hochladen und bearbeiten\"></label>
-                        </div>
-                        <div style=\"text-align: left; margin-left: 12%;\">
-                            <label for=\"photos\">Fotos hochladen und bearbeiten&nbsp;</label>
-                        </div>
-                    </div>
-                    <div style=\"margin-top: 6px;\">
-                        <div style=\"text-align: right; width: 10%; float: left;\">
-                            <input type=\"checkbox\" id=\"downloads\" name=\"downloads\" ";
-                            if(isset($form_values['downloads']) && $form_values['downloads'] == 1)
-                                echo " checked ";
-                            echo " value=\"1\" />&nbsp;
-                            <label for=\"downloads\"><img src=\"$g_root_path/adm_program/images/folder_down.png\" alt=\"Downloads hochladen und bearbeiten\"></label>
-                        </div>
-                        <div style=\"text-align: left; margin-left: 12%;\">
-                            <label for=\"downloads\">Downloads hochladen und bearbeiten&nbsp;</label>
-                        </div>
-                    </div>
-                    <div style=\"margin-top: 6px;\">
-                        <div style=\"text-align: right; width: 10%; float: left;\">
-                            <input type=\"checkbox\" id=\"guestbook\" name=\"guestbook\" ";
-                            if(isset($form_values['guestbook']) && $form_values['guestbook'] == 1)
-                                echo " checked ";
-                            echo " value=\"1\" />&nbsp;
-                            <label for=\"guestbook\"><img src=\"$g_root_path/adm_program/images/comment.png\" alt=\"G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen\"></label>
-                        </div>
-                        <div style=\"text-align: left; margin-left: 12%;\">
-                            <label for=\"guestbook\">G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen&nbsp;</label>
-                        </div>
                     </div>";
-                    // falls anonyme Gaestebuchkommentare erfassen werden duerfen, braucht man das Recht pro Rolle nicht mehr zu vergeben
-                    if($g_preferences['enable_gbook_comments4all'] == false)
+                    if($g_preferences['enable_announcements_module'])
                     {
                         echo "<div style=\"margin-top: 6px;\">
                             <div style=\"text-align: right; width: 10%; float: left;\">
-                                <input type=\"checkbox\" id=\"guestbook_comments\" name=\"guestbook_comments\" ";
-                                if(isset($form_values['guestbook_comments']) && $form_values['guestbook_comments'] == 1)
+                                <input type=\"checkbox\" id=\"announcements\" name=\"announcements\" ";
+                                if(isset($form_values['announcements']) && $form_values['announcements'] == 1)
                                     echo " checked ";
                                 echo " value=\"1\" />&nbsp;
-                                <label for=\"guestbook_comments\"><img src=\"$g_root_path/adm_program/images/comments.png\" alt=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\"></label>
+                                <label for=\"announcements\"><img src=\"$g_root_path/adm_program/images/note.png\" alt=\"Ank&uuml;ndigungen anlegen und bearbeiten\"></label>
                             </div>
                             <div style=\"text-align: left; margin-left: 12%;\">
-                                <label for=\"guestbook_comments\">Kommentare zu G&auml;stebucheintr&auml;gen anlegen&nbsp;</label>
+                                <label for=\"announcements\">Ank&uuml;ndigungen anlegen und bearbeiten&nbsp;</label>
                             </div>
                         </div>";
                     }
-                    echo "<div style=\"margin-top: 6px;\">
-                        <div style=\"text-align: right; width: 10%; float: left;\">
-                            <input type=\"checkbox\" id=\"mail_logout\" name=\"mail_logout\" ";
-                            if(isset($form_values['mail_logout']) && $form_values['mail_logout'] == 1)
-                                echo " checked ";
-                            echo " value=\"1\" />&nbsp;
-                            <label for=\"mail_logout\"><img src=\"$g_root_path/adm_program/images/mail.png\" alt=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\"></label>
+                    if($g_preferences['enable_dates_module'])
+                    {
+                        echo "<div style=\"margin-top: 6px;\">
+                            <div style=\"text-align: right; width: 10%; float: left;\">
+                                <input type=\"checkbox\" id=\"dates\" name=\"dates\" ";
+                                if(isset($form_values['dates']) && $form_values['dates'] == 1)
+                                    echo " checked ";
+                                echo " value=\"1\" />&nbsp;
+                                <label for=\"dates\"><img src=\"$g_root_path/adm_program/images/date.png\" alt=\"Termine anlegen und bearbeiten\"></label>
+                            </div>
+                            <div style=\"text-align: left; margin-left: 12%;\">
+                                <label for=\"dates\">Termine anlegen und bearbeiten&nbsp;</label>
+                            </div>
+                        </div>";
+                    }
+                    if($g_preferences['enable_photo_module'])
+                    {
+                        echo "<div style=\"margin-top: 6px;\">
+                            <div style=\"text-align: right; width: 10%; float: left;\">
+                                <input type=\"checkbox\" id=\"photos\" name=\"photos\" ";
+                                if(isset($form_values['photos']) && $form_values['photos'] == 1)
+                                    echo " checked ";
+                                echo " value=\"1\" />&nbsp;
+                                <label for=\"photos\"><img src=\"$g_root_path/adm_program/images/photo.png\" alt=\"Fotos hochladen und bearbeiten\"></label>
+                            </div>
+                            <div style=\"text-align: left; margin-left: 12%;\">
+                                <label for=\"photos\">Fotos hochladen und bearbeiten&nbsp;</label>
+                            </div>
+                        </div>";
+                    }
+                    if($g_preferences['enable_download_module'])
+                    {
+                        echo "<div style=\"margin-top: 6px;\">
+                            <div style=\"text-align: right; width: 10%; float: left;\">
+                                <input type=\"checkbox\" id=\"downloads\" name=\"downloads\" ";
+                                if(isset($form_values['downloads']) && $form_values['downloads'] == 1)
+                                    echo " checked ";
+                                echo " value=\"1\" />&nbsp;
+                                <label for=\"downloads\"><img src=\"$g_root_path/adm_program/images/folder_down.png\" alt=\"Downloads hochladen und bearbeiten\"></label>
+                            </div>
+                            <div style=\"text-align: left; margin-left: 12%;\">
+                                <label for=\"downloads\">Downloads hochladen und bearbeiten&nbsp;</label>
+                            </div>
+                        </div>";
+                    }
+                    if($g_preferences['enable_guestbook_module'])
+                    {
+                        echo "<div style=\"margin-top: 6px;\">
+                            <div style=\"text-align: right; width: 10%; float: left;\">
+                                <input type=\"checkbox\" id=\"guestbook\" name=\"guestbook\" ";
+                                if(isset($form_values['guestbook']) && $form_values['guestbook'] == 1)
+                                    echo " checked ";
+                                echo " value=\"1\" />&nbsp;
+                                <label for=\"guestbook\"><img src=\"$g_root_path/adm_program/images/comment.png\" alt=\"G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen\"></label>
+                            </div>
+                            <div style=\"text-align: left; margin-left: 12%;\">
+                                <label for=\"guestbook\">G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen&nbsp;</label>
+                            </div>
+                        </div>";
+                        // falls anonyme Gaestebuchkommentare erfassen werden duerfen, braucht man das Recht pro Rolle nicht mehr zu vergeben
+                        if($g_preferences['enable_gbook_comments4all'] == false)
+                        {
+                            echo "<div style=\"margin-top: 6px;\">
+                                <div style=\"text-align: right; width: 10%; float: left;\">
+                                    <input type=\"checkbox\" id=\"guestbook_comments\" name=\"guestbook_comments\" ";
+                                    if(isset($form_values['guestbook_comments']) && $form_values['guestbook_comments'] == 1)
+                                        echo " checked ";
+                                    echo " value=\"1\" />&nbsp;
+                                    <label for=\"guestbook_comments\"><img src=\"$g_root_path/adm_program/images/comments.png\" alt=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\"></label>
+                                </div>
+                                <div style=\"text-align: left; margin-left: 12%;\">
+                                    <label for=\"guestbook_comments\">Kommentare zu G&auml;stebucheintr&auml;gen anlegen&nbsp;</label>
+                                </div>
+                            </div>";
+                        }
+                    }
+                    if($g_preferences['enable_mail_module'])
+                    {
+                        echo "<div style=\"margin-top: 6px;\">
+                            <div style=\"text-align: right; width: 10%; float: left;\">
+                                <input type=\"checkbox\" id=\"mail_logout\" name=\"mail_logout\" ";
+                                if(isset($form_values['mail_logout']) && $form_values['mail_logout'] == 1)
+                                    echo " checked ";
+                                echo " value=\"1\" />&nbsp;
+                                <label for=\"mail_logout\"><img src=\"$g_root_path/adm_program/images/mail.png\" alt=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\"></label>
+                            </div>
+                            <div style=\"text-align: left; margin-left: 12%;\">
+                                <label for=\"mail_logout\">Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben&nbsp;</label>
+                                <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_logout','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\">
+                            </div>
                         </div>
-                        <div style=\"text-align: left; margin-left: 12%;\">
-                            <label for=\"mail_logout\">Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben&nbsp;</label>
-                            <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_logout','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\">
-                        </div>
-                    </div>
-                    <div style=\"margin-top: 6px;\">
-                        <div style=\"text-align: right; width: 10%; float: left;\">
-                            <input type=\"checkbox\" id=\"mail_login\" name=\"mail_login\" ";
-                            if(isset($form_values['mail_login']) && $form_values['mail_login'] == 1)
-                                echo " checked ";
-                            echo " value=\"1\" />&nbsp;
-                            <label for=\"mail_login\"><img src=\"$g_root_path/adm_program/images/mail_key.png\" alt=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\"></label>
-                        </div>
-                        <div style=\"text-align: left; margin-left: 12%;\">
-                            <label for=\"mail_login\">Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben&nbsp;</label>
-                            <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_login','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\">
-                        </div>
-                    </div>
-                    <div style=\"margin-top: 6px;\">
-                        <div style=\"text-align: right; width: 10%; float: left;\">
-                            <input type=\"checkbox\" id=\"links\" name=\"links\" ";
-                            if(isset($form_values['links']) && $form_values['links'] == 1)
-                                echo " checked ";
-                            echo " value=\"1\" />&nbsp;
-                            <label for=\"links\"><img src=\"$g_root_path/adm_program/images/globe.png\" alt=\"Weblinks anlegen und bearbeiten\"></label>
-                        </div>
-                        <div style=\"text-align: left; margin-left: 12%;\">
-                            <label for=\"links\">Weblinks anlegen und bearbeiten&nbsp;</label>
-                        </div>
-                    </div>
-                </div>
+                        <div style=\"margin-top: 6px;\">
+                            <div style=\"text-align: right; width: 10%; float: left;\">
+                                <input type=\"checkbox\" id=\"mail_login\" name=\"mail_login\" ";
+                                if(isset($form_values['mail_login']) && $form_values['mail_login'] == 1)
+                                    echo " checked ";
+                                echo " value=\"1\" />&nbsp;
+                                <label for=\"mail_login\"><img src=\"$g_root_path/adm_program/images/mail_key.png\" alt=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\"></label>
+                            </div>
+                            <div style=\"text-align: left; margin-left: 12%;\">
+                                <label for=\"mail_login\">Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben&nbsp;</label>
+                                <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_login','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\">
+                            </div>
+                        </div>";
+                    }
+                    if($g_preferences['enable_weblinks_module'])
+                    {
+                        echo "<div style=\"margin-top: 6px;\">
+                            <div style=\"text-align: right; width: 10%; float: left;\">
+                                <input type=\"checkbox\" id=\"links\" name=\"links\" ";
+                                if(isset($form_values['links']) && $form_values['links'] == 1)
+                                    echo " checked ";
+                                echo " value=\"1\" />&nbsp;
+                                <label for=\"links\"><img src=\"$g_root_path/adm_program/images/globe.png\" alt=\"Weblinks anlegen und bearbeiten\"></label>
+                            </div>
+                            <div style=\"text-align: left; margin-left: 12%;\">
+                                <label for=\"links\">Weblinks anlegen und bearbeiten&nbsp;</label>
+                            </div>
+                        </div>";
+                    }
+                echo "</div>
 
                 <div class=\"groupBox\" style=\"margin-top: 15px; text-align: left; width: 90%;\">
                     <div class=\"groupBoxHeadline\">Abh&auml;ngigkeiten&nbsp;&nbsp;(optional)</div>
