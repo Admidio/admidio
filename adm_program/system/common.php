@@ -98,6 +98,12 @@ else
 {
     $g_current_organization = new Organization($g_adm_con);
     $g_current_organization->getOrganization($g_organization);
+    if($g_current_organization->id == 0)
+    {
+        // Organizsation wurde nicht gefunden
+        echo "<div style=\"color: #CC0000;\">Error: ". $message_text['missing_orga']. "</div>";
+        exit();
+    }
     
     // Einstellungen der Organisation auslesen
     $sql    = "SELECT * FROM ". TBL_PREFERENCES. "
