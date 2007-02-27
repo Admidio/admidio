@@ -90,13 +90,13 @@ if(!isset($plg_photos_show_link) || !is_numeric($plg_photos_show_link))
 $sql="      SELECT *
             FROM ". TBL_PHOTOS. "
             WHERE pho_org_shortname ='$g_organization' 
-			AND pho_locked = 0
-			ORDER BY pho_begin DESC";
+            AND pho_locked = 0
+            ORDER BY pho_begin DESC";
 
 //Limit setzen falls gefordert
 if($plg_photos_events != 0)
 {
-	$sql = $sql."LIMIT 0, $plg_photos_events";
+    $sql = $sql."LIMIT 0, $plg_photos_events";
 }
 
 $result = mysql_query($sql, $g_adm_con);
@@ -127,20 +127,27 @@ $bildgroesse = getimagesize($picpath);
 $popup_height = $g_preferences['photo_show_height']+210;
 $popup_width  = $g_preferences['photo_show_width']+70;
 
-//Linktext umbrechen wenn noetig
-$words = explode(" ", $event['pho_name']);
-
-for($i = 0; $i < count($words); $i++)
+if($plg_photos_show_link && $plg_max_char_per_word > 0)
 {
-    if(strlen($words[$i]) > $plg_max_char_per_word)
+    //Linktext umbrechen wenn noetig
+    $words = explode(" ", $event['pho_name']);
+    
+    for($i = 0; $i < count($words); $i++)
     {
-        $link_text = "$link_text ". substr($words[$i], 0, $plg_max_char_per_word). "<br />". 
-                        substr($words[$i], $plg_max_char_per_word);
+        if(strlen($words[$i]) > $plg_max_char_per_word)
+        {
+            $link_text = "$link_text ". substr($words[$i], 0, $plg_max_char_per_word). "<br />". 
+                            substr($words[$i], $plg_max_char_per_word);
+        }
+        else
+        {
+            $link_text = "$link_text ". $words[$i];
+        }
     }
-    else
-    {
-        $link_text = "$link_text ". $words[$i];
-    }
+}
+else
+{
+    $link_text = $event['pho_name'];
 }
 
 //Ausgabe
@@ -150,12 +157,12 @@ $pho_id = $event['pho_id'];
 if($bildgroesse[0]/$plg_photos_max_width > $bildgroesse[1]/$plg_photos_max_height)
 {
    echo "<img onclick=\"window.open('$g_root_path/adm_program/modules/photos/photopopup.php?bild=$picnr&pho_id=$pho_id','msg', 'height=".$popup_height.", width=".$popup_width.",left=162,top=5')\" style=\"vertical-align: middle; cursor: pointer;\"
-			src=\"$g_root_path/adm_program/modules/photos/photo_show.php?bild=".$picpath."&amp;scal=".$plg_photos_max_width."&amp;side=x\"  border=\"0\" alt=\"Zufallsbild\">";
+            src=\"$g_root_path/adm_program/modules/photos/photo_show.php?bild=".$picpath."&amp;scal=".$plg_photos_max_width."&amp;side=x\"  border=\"0\" alt=\"Zufallsbild\">";
 }
 else
 {
    echo "<img onclick=\"window.open('../../adm_program/modules/photos/photopopup.php?bild=$picnr&pho_id=$pho_id','msg', 'height=".$popup_height.", width=".$popup_width.",left=162,top=5')\" style=\"vertical-align: middle; cursor: pointer;\"
-			src=\"$g_root_path/adm_program/modules/photos/photo_show.php?bild=".$picpath."&amp;scal=".$plg_photos_max_height."&amp;side=y\"  border=\"0\" alt=\"Zufallsbild\">";
+            src=\"$g_root_path/adm_program/modules/photos/photo_show.php?bild=".$picpath."&amp;scal=".$plg_photos_max_height."&amp;side=y\"  border=\"0\" alt=\"Zufallsbild\">";
 }
 
 
