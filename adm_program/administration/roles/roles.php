@@ -39,11 +39,11 @@ if(!isModerator())
 if(isset($_GET['inactive'])
 && $_GET['inactive'] == 1)
 {
-    $valid = 0;
+    $req_valid = 0;
 }
 else
 {
-    $valid = 1;
+    $req_valid = 1;
 }
 
 // Navigation faengt hier im Modul an
@@ -53,7 +53,7 @@ $_SESSION['navigation']->addUrl($g_current_url);
 // Alle Rollen auflisten, die der Webmaster sehen darf
 $sql    = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
             WHERE rol_org_shortname = '$g_organization'
-              AND rol_valid         = $valid
+              AND rol_valid         = $req_valid
               AND rol_cat_id        = cat_id
             ORDER BY cat_name, rol_name ";
 $usr_result = mysql_query($sql, $g_adm_con);
@@ -88,7 +88,7 @@ require("../../../adm_config/body_top.php");
                 <a class=\"iconLink\" href=\"roles_new.php\">Rolle anlegen</a>
             </span>
             &nbsp;&nbsp;&nbsp;&nbsp;";
-            if($valid == true)
+            if($req_valid == true)
             {
                 $description_lnk = "Inaktive Rollen";
                 $description_lst = "Aktive Rollen";
@@ -101,9 +101,9 @@ require("../../../adm_config/body_top.php");
                 $image       = "wand.png";
             }
             echo "<span class=\"iconLink\">
-                <a class=\"iconLink\" href=\"roles.php?inactive=$valid\"><img
+                <a class=\"iconLink\" href=\"roles.php?inactive=$req_valid\"><img
                 src=\"$g_root_path/adm_program/images/$image\" style=\"vertical-align: middle;\" border=\"0\" alt=\"$description_lnk\"></a>
-                <a class=\"iconLink\" href=\"roles.php?inactive=$valid\">$description_lnk</a>
+                <a class=\"iconLink\" href=\"roles.php?inactive=$req_valid\">$description_lnk</a>
             </span>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <span class=\"iconLink\">
@@ -144,48 +144,48 @@ require("../../../adm_config/body_top.php");
                             echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/user.png\"
                             alt=\"Eigenes Profil bearbeiten\" title=\"Eigenes Profil bearbeiten\">";
                         }
-                        if($row->rol_announcements == 1)
+                        if($row->rol_announcements == 1 && $g_preferences['enable_announcements_module'] == 1)
                         {
                             echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/note.png\"
                             alt=\"Ank&uuml;ndigungen anlegen und bearbeiten\" title=\"Ank&uuml;ndigungen anlegen und bearbeiten\">";
                         }
-                        if($row->rol_dates == 1)
+                        if($row->rol_dates == 1 && $g_preferences['enable_dates_module'] == 1)
                         {
                             echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/date.png\"
                             alt=\"Termine anlegen und bearbeiten\" title=\"Termine anlegen und bearbeiten\">";
                         }
-                        if($row->rol_photo == 1)
+                        if($row->rol_photo == 1 && $g_preferences['enable_photo_module'] == 1)
                         {
                             echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/photo.png\"
                             alt=\"Fotos hochladen und bearbeiten\" title=\"Fotos hochladen und bearbeiten\">";
                         }
-                        if($row->rol_download == 1)
+                        if($row->rol_download == 1 && $g_preferences['enable_download_module'] == 1)
                         {
                             echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/folder_down.png\"
                             alt=\"Downloads hochladen und bearbeiten\" title=\"Downloads hochladen und bearbeiten\">";
                         }
-                        if($row->rol_guestbook == 1)
+                        if($row->rol_guestbook == 1 && $g_preferences['enable_guestbook_module'] == 1)
                         {
                             echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/comment.png\"
                             alt=\"G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen\" title=\"G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen\">";
                         }
                         // falls anonyme Gaestebuchkommentare erfassen werden duerfen, braucht man das Recht pro Rolle nicht mehr zu vergeben
-                        if($row->rol_guestbook_comments == 1 && $g_preferences['enable_gbook_comments4all'] == false)
+                        if($row->rol_guestbook_comments == 1  && $g_preferences['enable_guestbook_module'] == 1 && $g_preferences['enable_gbook_comments4all'] == false)
                         {
                             echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/comments.png\"
                             alt=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\" title=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\">";
                         }
-                        if($row->rol_mail_logout == 1)
+                        if($row->rol_mail_logout == 1 && $g_preferences['enable_mail_module'] == 1)
                         {
                             echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/mail.png\"
                             alt=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\" title=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\">";
                         }
-                        if($row->rol_mail_login == 1)
+                        if($row->rol_mail_login == 1 && $g_preferences['enable_mail_module'] == 1)
                         {
                             echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/mail_key.png\"
                             alt=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\" title=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\">";
                         }
-                        if($row->rol_weblinks == 1)
+                        if($row->rol_weblinks == 1 && $g_preferences['enable_weblinks_module'] == 1)
                         {
                             echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/globe.png\"
                             alt=\"Weblinks anlegen und bearbeiten\" title=\"Weblinks anlegen und bearbeiten\">";
@@ -202,7 +202,7 @@ require("../../../adm_config/body_top.php");
                         <a href=\"$g_root_path/adm_program/modules/lists/lists_show.php?type=address&amp;mode=html&amp;rol_id=$row->rol_id\"><img
                         src=\"$g_root_path/adm_program/images/application_view_columns.png\" border=\"0\" alt=\"Mitglieder anzeigen\" title=\"Mitglieder anzeigen\"></a>&nbsp;";
 
-                        if($valid == true)
+                        if($req_valid == true)
                         {
                             echo "<a href=\"$g_root_path/adm_program/modules/lists/members.php?rol_id=$row->rol_id\"><img 
                                 src=\"$g_root_path/adm_program/images/add.png\" border=\"0\" alt=\"Mitglieder zuordnen\" title=\"Mitglieder zuordnen\"></a>&nbsp;";
@@ -219,7 +219,7 @@ require("../../../adm_config/body_top.php");
                         }
                         else
                         {
-                            if($valid == true)
+                            if($req_valid == true)
                             {
                                 echo "<a href=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$row->rol_id&amp;mode=1\"><img 
                                     src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Rolle l&ouml;schen\" title=\"Rolle l&ouml;schen\"></a>";
