@@ -203,6 +203,9 @@ $message_text = array(
 
     "max_members_roles_change" =>
         "Speichern nicht möglich, die Rolle hat bereits mehr Mitglieder als die von Dir eingegeben Begrenzung.",
+        
+    "missing_orga" =>
+        "Die Organisation aus der config.php konnte in der Datenbank nicht gefunden werden.",
 
     "write_access" =>
         "Der Ordner <b>%VAR1%</b> konnte nicht angelegt werden. Du musst dich an
