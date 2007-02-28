@@ -540,7 +540,7 @@ function forum_session($aktion, $g_forum_userid, $g_forum_cookie_name, $g_forum_
     mysql_select_db($g_forum_db, $g_forum_con);
     
     // Bereinigungsarbeiten werden nur durchgefuehrt, wenn sich der Admin anmeldet
-    if($g_forum_userid = 2)
+    if($g_forum_userid == 2)
     {   
         // Bereinigung der Forum Sessions, wenn diese aelter als 5 Stunden sind
         $sql    = "DELETE FROM ". $g_forum_praefix. "_sessions WHERE session_start + 18000 < $current_time ";
