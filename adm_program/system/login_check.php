@@ -78,21 +78,14 @@ if ($user_found >= 1)
         $result = mysql_query($sql, $g_adm_con);
         db_error($result);
 
-        // Session-ID erzeugen
-        //$user_session   = md5(uniqid(rand()));
-        $user_session   = session_id();
         $login_datetime = date("Y.m.d H:i:s", time());
 
         // Session-ID speichern
 
         $sql = "INSERT INTO ". TBL_SESSIONS. " (ses_usr_id, ses_org_shortname, ses_session, ses_timestamp, ses_ip_address)
-                VALUES ('$user_row->usr_id', '$g_organization', '$user_session', '$login_datetime', '". $_SERVER['REMOTE_ADDR']. "') ";
+                VALUES ('$user_row->usr_id', '$g_organization', '$g_session_id', '$login_datetime', '". $_SERVER['REMOTE_ADDR']. "') ";
         $result = mysql_query($sql, $g_adm_con);
         db_error($result);
-
-        // Cookies fuer die Anmeldung setzen und evtl. Ports entfernen
-        $domain = substr($_SERVER['HTTP_HOST'], 0, strpos($_SERVER['HTTP_HOST'], ':'));
-        setcookie("adm_session", "$user_session" , 0, "/", $domain, 0);
 
         //User Daten in Session speichern
         $g_current_user = new User($g_adm_con);

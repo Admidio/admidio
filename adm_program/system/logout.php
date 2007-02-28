@@ -35,14 +35,10 @@ db_error($result);
 
 $session_found = mysql_num_rows($result);
 
-// Inhalt der Cookies loeschen
-$domain = substr($_SERVER['HTTP_HOST'], 0, strpos($_SERVER['HTTP_HOST'], ':'));
-setcookie("adm_session", "" , time() - 1000, "/", $domain, 0);
-
 unset($_SESSION['g_current_organizsation']);
 unset($_SESSION['g_current_user']);
 
-if ($session_found > 0)
+if($session_found > 0)
 {
     // Session loeschen
 
@@ -57,8 +53,8 @@ if(isset($_SESSION['s_user_valid']) AND $_SESSION['s_user_valid'] == TRUE)
 {
     forum_session("update", -1, $g_forum_cookie_name, $g_forum_cookie_path, $g_forum_cookie_domain, $g_forum_cookie_secure, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
 
-	// Session Varibale loeschen
-	unset($_SESSION['s_user_valid']);
+    // Session Varibale loeschen
+    unset($_SESSION['s_user_valid']);
 
     $message_code = "logoutforum";    
 }
