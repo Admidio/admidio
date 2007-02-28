@@ -76,7 +76,7 @@ $g_adm_con = mysql_connect ($g_adm_srv, $g_adm_usr, $g_adm_pw);
 mysql_select_db($g_adm_db, $g_adm_con );
 
 // PHP-Session starten
-session_name('adm_session_name');
+session_name('admidio_session_id');
 session_start();
 
 // Globale Variablen
@@ -101,8 +101,7 @@ else
     if($g_current_organization->id == 0)
     {
         // Organizsation wurde nicht gefunden
-        echo "<div style=\"color: #CC0000;\">Error: ". $message_text['missing_orga']. "</div>";
-        exit();
+        die("<div style=\"color: #CC0000;\">Error: ". $message_text['missing_orga']. "</div>");
     }
     
     // Einstellungen der Organisation auslesen
@@ -112,8 +111,7 @@ else
     if($result == false)
     {
         // Fehler direkt ausgeben, da hier sonst Endlosschleifen entstehen
-        echo "<div style=\"color: #CC0000;\">Error: ". mysql_error(). "</div>";
-        exit();
+        die("<div style=\"color: #CC0000;\">Error: ". mysql_error(). "</div>");
     }
     
     $g_preferences = array();
@@ -149,16 +147,6 @@ if(isset($_SESSION['navigation']) == false)
 /*********************************************************************************
 Aktuelle Session auf Gueltigkeit pruefen
 /********************************************************************************/
-
-// Cookies einlesen
-if(isset($_COOKIE['adm_session']))
-{
-    $g_session_id = $_COOKIE['adm_session'];
-}
-else
-{
-    $g_session_id = "";
-}
 
 if(strlen($g_session_id) > 0)
 {

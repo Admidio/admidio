@@ -24,7 +24,6 @@
  *****************************************************************************/
 
 // Globale Variablen fuer das Forum
-$g_forum_session_id  = session_id();   	// Die Session fuer das Forum ist immer die Session_ID
 $g_forum_user  = "";                    // Username im Forum
 $g_forum_userid = "";                   // UserID im Forum
 $g_forum_neuePM = "";                   // Nachrichten im Forum
@@ -119,7 +118,7 @@ if($g_session_valid)
 {
     if(!isset($_SESSION['s_user_valid']))
     {
-    	$_SESSION['s_user_valid'] = forum_check_user($g_current_user->login_name, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
+        $_SESSION['s_user_valid'] = forum_check_user($g_current_user->login_name, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
     }
     if($_SESSION['s_user_valid'])
     {
@@ -155,19 +154,19 @@ if($g_session_valid)
         }
         
         // Admidio DB waehlen
-	    mysql_select_db($g_adm_db, $g_adm_con);
+        mysql_select_db($g_adm_db, $g_adm_con);
     
-		forum_session("update", $g_forum_userid, $g_forum_cookie_name, $g_forum_cookie_path, $g_forum_cookie_domain, $g_forum_cookie_secure, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
+        forum_session("update", $g_forum_userid, $g_forum_cookie_name, $g_forum_cookie_path, $g_forum_cookie_domain, $g_forum_cookie_secure, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
     }
     else
     {
-    	// Gastlogin (Anonymous = -1) im Forum anlegen
-    	forum_session("insert", -1, $g_forum_cookie_name, $g_forum_cookie_path, $g_forum_cookie_domain, $g_forum_cookie_secure, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
+        // Gastlogin (Anonymous = -1) im Forum anlegen
+        forum_session("insert", -1, $g_forum_cookie_name, $g_forum_cookie_path, $g_forum_cookie_domain, $g_forum_cookie_secure, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
     }
 }
 else
 {
-   	// Session Varibale löschen
+    // Session Varibale löschen
     unset($_SESSION['s_user_valid']);
     
     // Die Admidio Session ist ungueltig oder abgelaufen, also die Session des Forums auf Gast umstellen.
@@ -410,107 +409,107 @@ function forum_delete_user($forum_username, $g_forum_db, $g_forum_con, $g_adm_db
     
     // Gruppen ID des Users holen
     $sql    = "SELECT g.group_id 
-				FROM ". $g_forum_praefix. "_user_group ug, ". $g_forum_praefix. "_groups g  
-				WHERE ug.user_id = ". $forum_userid ."
-					AND g.group_id = ug.group_id 
-					AND g.group_single_user = 1";
+                FROM ". $g_forum_praefix. "_user_group ug, ". $g_forum_praefix. "_groups g  
+                WHERE ug.user_id = ". $forum_userid ."
+                    AND g.group_id = ug.group_id 
+                    AND g.group_single_user = 1";
     $result = mysql_query($sql, $g_forum_con);
     db_error($result); 
     
     $row = mysql_fetch_array($result);
     $forum_group = $row[0];
     
-	// Alle Post des Users mit Gast Username versehen
-	$sql = "UPDATE ". $g_forum_praefix. "_posts
-			SET poster_id = -1, post_username = '" . $forum_username . "' 
-			WHERE poster_id = $forum_userid";
+    // Alle Post des Users mit Gast Username versehen
+    $sql = "UPDATE ". $g_forum_praefix. "_posts
+            SET poster_id = -1, post_username = '" . $forum_username . "' 
+            WHERE poster_id = $forum_userid";
     $result = mysql_query($sql, $g_forum_con);
     db_error($result); 
 
-	// Alle Topics des User auf geloescht setzten
-	$sql = "UPDATE ". $g_forum_praefix. "_topics
-				SET topic_poster = -1 
-				WHERE topic_poster = $forum_userid";
+    // Alle Topics des User auf geloescht setzten
+    $sql = "UPDATE ". $g_forum_praefix. "_topics
+                SET topic_poster = -1 
+                WHERE topic_poster = $forum_userid";
     $result = mysql_query($sql, $g_forum_con);
     db_error($result);
     
     // Alle Votes des Users auf geloescht setzten
-	$sql = "UPDATE ". $g_forum_praefix. "_vote_voters
-			SET vote_user_id = -1
-			WHERE vote_user_id = $forum_userid";
+    $sql = "UPDATE ". $g_forum_praefix. "_vote_voters
+            SET vote_user_id = -1
+            WHERE vote_user_id = $forum_userid";
     $result = mysql_query($sql, $g_forum_con);
     db_error($result);
     
-	// GroupID der der Group holen, in denen der User Mod Rechte hat
-	$sql = "SELECT group_id
-			FROM ". $g_forum_praefix. "_groups
-			WHERE group_moderator = $forum_userid";
+    // GroupID der der Group holen, in denen der User Mod Rechte hat
+    $sql = "SELECT group_id
+            FROM ". $g_forum_praefix. "_groups
+            WHERE group_moderator = $forum_userid";
     $result = mysql_query($sql, $g_forum_con);
     db_error($result);
     
     $group_moderator[] = 0;
 
-	while ( $row_group = mysql_fetch_array($result) )
-	{
-		$group_moderator[] = $row_group['group_id'];
-	}
-	
-	if ( count($group_moderator) )
-	{
-		$update_moderator_id = implode(', ', $group_moderator);
-		
-		$sql = "UPDATE ". $g_forum_praefix. "_groups
-			SET group_moderator = 2
-			WHERE group_moderator IN ($update_moderator_id)";
-		    $result = mysql_query($sql, $g_forum_con);
-    		db_error($result);
-	}
+    while ( $row_group = mysql_fetch_array($result) )
+    {
+        $group_moderator[] = $row_group['group_id'];
+    }
+    
+    if ( count($group_moderator) )
+    {
+        $update_moderator_id = implode(', ', $group_moderator);
+        
+        $sql = "UPDATE ". $g_forum_praefix. "_groups
+            SET group_moderator = 2
+            WHERE group_moderator IN ($update_moderator_id)";
+            $result = mysql_query($sql, $g_forum_con);
+            db_error($result);
+    }
 
     // User im Forum loeschen
     $sql = "DELETE FROM ". $g_forum_praefix. "_users 
-    		WHERE user_id = $forum_userid ";
+            WHERE user_id = $forum_userid ";
     $result = mysql_query($sql, $g_forum_con);
     db_error($result);
 
     // User aus den Gruppen loeschen
     $sql = "DELETE FROM ". $g_forum_praefix. "_user_group 
-    		WHERE user_id = $forum_userid ";
+            WHERE user_id = $forum_userid ";
     $result = mysql_query($sql, $g_forum_con);
     db_error($result);
 
     // Single User Group loeschen
     $sql = "DELETE FROM ". $g_forum_praefix. "_groups
-			WHERE group_id =  $forum_group ";
+            WHERE group_id =  $forum_group ";
     $result = mysql_query($sql, $g_forum_con);
     db_error($result);    
     
     // User aus der Auth Tabelle loeschen
-	$sql = "DELETE FROM ". $g_forum_praefix. "_auth_access
-			WHERE group_id = $forum_group ";
+    $sql = "DELETE FROM ". $g_forum_praefix. "_auth_access
+            WHERE group_id = $forum_group ";
     $result = mysql_query($sql, $g_forum_con);
     db_error($result);    
 
-	// User aus den zu beobachteten Topics Tabelle loeschen
-	$sql = "DELETE FROM ". $g_forum_praefix. "_topics_watch
-			WHERE user_id = $forum_userid ";
+    // User aus den zu beobachteten Topics Tabelle loeschen
+    $sql = "DELETE FROM ". $g_forum_praefix. "_topics_watch
+            WHERE user_id = $forum_userid ";
     $result = mysql_query($sql, $g_forum_con);
     db_error($result);    
-	
-	// User aus der Banlist Tabelle loeschen
-	$sql = "DELETE FROM ". $g_forum_praefix. "_banlist
-			WHERE ban_userid = $forum_userid ";
+    
+    // User aus der Banlist Tabelle loeschen
+    $sql = "DELETE FROM ". $g_forum_praefix. "_banlist
+            WHERE ban_userid = $forum_userid ";
     $result = mysql_query($sql, $g_forum_con);
     db_error($result);    
 
-	// Session des Users loeschen
-	$sql = "DELETE FROM ". $g_forum_praefix. "_sessions
-			WHERE session_user_id = $forum_userid ";
+    // Session des Users loeschen
+    $sql = "DELETE FROM ". $g_forum_praefix. "_sessions
+            WHERE session_user_id = $forum_userid ";
     $result = mysql_query($sql, $g_forum_con);
     db_error($result);    
-	
-	// Session_Keys des User loeschen
-	$sql = "DELETE FROM ". $g_forum_praefix. "_sessions_keys
-			WHERE user_id = $forum_userid ";
+    
+    // Session_Keys des User loeschen
+    $sql = "DELETE FROM ". $g_forum_praefix. "_sessions_keys
+            WHERE user_id = $forum_userid ";
     $result = mysql_query($sql, $g_forum_con);
     db_error($result);    
     
@@ -530,85 +529,85 @@ function forum_session($aktion, $g_forum_userid, $g_forum_cookie_name, $g_forum_
     
     if($g_forum_userid == -1)
     {
-    	$session_logged_in = 0;
+        $session_logged_in = 0;
     }
     else
     {
-    	$session_logged_in = 1;
+        $session_logged_in = 1;
     }
     
     // Forum Datenbank auswaehlen
     mysql_select_db($g_forum_db, $g_forum_con);
     
     // Bereinigungsarbeiten werden nur durchgefuehrt, wenn sich der Admin anmeldet
-	if($g_forum_userid = 2)
-	{   
-    	// Bereinigung der Forum Sessions, wenn diese aelter als 5 Stunden sind
-    	$sql    = "DELETE FROM ". $g_forum_praefix. "_sessions WHERE session_start + 18000 < $current_time ";
-   		$result = mysql_query($sql, $g_forum_con);
-   		db_error($result);
-   	}
+    if($g_forum_userid = 2)
+    {   
+        // Bereinigung der Forum Sessions, wenn diese aelter als 5 Stunden sind
+        $sql    = "DELETE FROM ". $g_forum_praefix. "_sessions WHERE session_start + 18000 < $current_time ";
+        $result = mysql_query($sql, $g_forum_con);
+        db_error($result);
+    }
     
     if($g_forum_userid > 0)
     {
-    	// Alte User-Session des Users im Forum loeschen
- 		$sql    = "DELETE FROM ". $g_forum_praefix. "_sessions WHERE session_user_id = $g_forum_userid AND session_id NOT LIKE '".$g_forum_session_id."' ";
-  		$result = mysql_query($sql, $g_forum_con);
-   		db_error($result);
-   	}
+        // Alte User-Session des Users im Forum loeschen
+        $sql    = "DELETE FROM ". $g_forum_praefix. "_sessions WHERE session_user_id = $g_forum_userid AND session_id NOT LIKE '".$g_forum_session_id."' ";
+        $result = mysql_query($sql, $g_forum_con);
+        db_error($result);
+    }
 
-   	// Erst mal schauen, ob sich die Session noch im Session Table des Forums befindet
-   	$sql    = "SELECT session_id, session_start, session_time FROM ". $g_forum_praefix. "_sessions
-   	           WHERE session_id = '".$g_forum_session_id."' ";
-   	$result = mysql_query($sql, $g_forum_con);
-   	
-   	if(mysql_num_rows($result))
-   	{
-		// Session existiert, also updaten
-		
-		// Sessionstart alle 5 Minuten aktualisieren
-		$row = mysql_fetch_array($result);
-		if($row[1] + 300 < $row[2])
-		{
-			$sql    = "UPDATE ". $g_forum_praefix. "_sessions 
-   	         	      SET session_time = ". $current_time .", session_start = ". $current_time .", session_user_id = ". $g_forum_userid .",  session_logged_in = $session_logged_in
-   	            	  WHERE session_id = {0}";
-		}
-		else
-		{
-   	    	$sql    = "UPDATE ". $g_forum_praefix. "_sessions 
-   	        	      SET session_time = ". $current_time .", session_user_id = ". $g_forum_userid .",  session_logged_in = $session_logged_in
-   	            	  WHERE session_id = {0}";
-   	    }
-   	    $sql    = prepareSQL($sql, array($g_forum_session_id));
-   	    $result = mysql_query($sql, $g_forum_con);
-   	    db_error($result);
-	}
-	else
-	{
-	    // Session in die Forum DB schreiben
-   	    $sql    = "INSERT INTO " .$g_forum_praefix. "_sessions
-   	              (session_id, session_user_id, session_start, session_time, session_ip, session_page, session_logged_in, session_admin)
-   	              VALUES ('$g_forum_session_id', $g_forum_userid, $current_time, $current_time, '$user_ip', 0, $session_logged_in, 0)";
-   	    $result = mysql_query($sql, $g_forum_con);
-   	    db_error($result);
-	}
-	
+    // Erst mal schauen, ob sich die Session noch im Session Table des Forums befindet
+    $sql    = "SELECT session_id, session_start, session_time FROM ". $g_forum_praefix. "_sessions
+               WHERE session_id = '".$g_forum_session_id."' ";
+    $result = mysql_query($sql, $g_forum_con);
+    
+    if(mysql_num_rows($result))
+    {
+        // Session existiert, also updaten
+        
+        // Sessionstart alle 5 Minuten aktualisieren
+        $row = mysql_fetch_array($result);
+        if($row[1] + 300 < $row[2])
+        {
+            $sql    = "UPDATE ". $g_forum_praefix. "_sessions 
+                      SET session_time = ". $current_time .", session_start = ". $current_time .", session_user_id = ". $g_forum_userid .",  session_logged_in = $session_logged_in
+                      WHERE session_id = {0}";
+        }
+        else
+        {
+            $sql    = "UPDATE ". $g_forum_praefix. "_sessions 
+                      SET session_time = ". $current_time .", session_user_id = ". $g_forum_userid .",  session_logged_in = $session_logged_in
+                      WHERE session_id = {0}";
+        }
+        $sql    = prepareSQL($sql, array($g_forum_session_id));
+        $result = mysql_query($sql, $g_forum_con);
+        db_error($result);
+    }
+    else
+    {
+        // Session in die Forum DB schreiben
+        $sql    = "INSERT INTO " .$g_forum_praefix. "_sessions
+                  (session_id, session_user_id, session_start, session_time, session_ip, session_page, session_logged_in, session_admin)
+                  VALUES ('$g_forum_session_id', $g_forum_userid, $current_time, $current_time, '$user_ip', 0, $session_logged_in, 0)";
+        $result = mysql_query($sql, $g_forum_con);
+        db_error($result);
+    }
+    
     // Cookie des Forums einlesen
-	if(isset($_COOKIE[$g_forum_cookie_name."_sid"]))
-	{
-	    $g_cookie_session_id = $_COOKIE[$g_forum_cookie_name."_sid"];
-	    if($g_cookie_session_id != $g_forum_session_id)
-	    {
-		    // Cookie fuer die Anmeldung im Forum setzen
-		    setcookie($g_forum_cookie_name."_sid", $g_forum_session_id, time() + 60*60*24*30, $g_forum_cookie_path, $g_forum_cookie_domain, $g_forum_cookie_secure);
-	    }
-	}
-	else
-	{
-	    // Cookie fuer die Anmeldung im Forum setzen
-	    setcookie($g_forum_cookie_name."_sid", $g_forum_session_id, time() + 60*60*24*30, $g_forum_cookie_path, $g_forum_cookie_domain, $g_forum_cookie_secure);
-	}
+    if(isset($_COOKIE[$g_forum_cookie_name."_sid"]))
+    {
+        $g_cookie_session_id = $_COOKIE[$g_forum_cookie_name."_sid"];
+        if($g_cookie_session_id != $g_forum_session_id)
+        {
+            // Cookie fuer die Anmeldung im Forum setzen
+            setcookie($g_forum_cookie_name."_sid", $g_forum_session_id, time() + 60*60*24*30, $g_forum_cookie_path, $g_forum_cookie_domain, $g_forum_cookie_secure);
+        }
+    }
+    else
+    {
+        // Cookie fuer die Anmeldung im Forum setzen
+        setcookie($g_forum_cookie_name."_sid", $g_forum_session_id, time() + 60*60*24*30, $g_forum_cookie_path, $g_forum_cookie_domain, $g_forum_cookie_secure);
+    }
     
     // Admidio DB waehlen
     mysql_select_db($g_adm_db, $g_adm_con);
