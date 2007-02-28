@@ -96,7 +96,7 @@ if(strlen($req_folder) > 0)
     $act_folder = "$act_folder/$req_folder";
 }
 
-//Erstellen des Links vom Menü
+//Erstellen des Links vom Menï¿½
 $path = explode("/",$req_folder);
 $next_folder = "";
 if (strlen($req_default_folder) > 0)
@@ -145,9 +145,12 @@ if(!is_dir($act_folder))
 $dh  = opendir($act_folder);
 while (false !== ($filename = readdir($dh)))
 {
-    $ordnerarray[] = $filename;
+    if($filename != "." && $filename != "..")
+    {
+        $ordnerarray[] = $filename;
+    }
 }
-$ordnerarray = array_slice ($ordnerarray,2);
+
 if ($req_sort == "desc")
 {
     // Absteigend
