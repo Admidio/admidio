@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------
-                         Random Photo
+                            Random Photo
      	        Copyright (c) 2004 - 2007 The Admidio Team
            Admidio is a open source user management software
 -------------------------------------------------------------------------
@@ -32,7 +32,7 @@ Ersetzen Sie die alle Dateien (bis auf die Datei config.php !!!)
 des Plugins durch die neuen Dateien.
 
 Falls es mit der neuen Version neue Einstellungen gibt, die Sie gerne ver√§ndern
-moe∂chten, so mueºssen Sie diese noch in Ihre vorhandene config.php eintragen.
+m√∂chten, so mue¬ºssen Sie diese noch in Ihre vorhandene config.php eintragen.
 
  4. Bugs
 -------------------------------------------------------------------------
