@@ -21,6 +21,13 @@ $plg_show_names_extern = 1;
 // 0 = (Default) Es wird nur der Name ohne Link mit E-Mail-Adresse angezeigt
 $plg_show_email_extern = 0;
 
+// Wie soll der Name des Geburtstagskindes angezeigt werden ?
+// 1 = (Default) Vorname Nachname  (Hans Mustermann)
+// 2 = Nachname, Vorname (Mustermann, Hans)
+// 3 = Vorname (Hans)
+// 4 = Loginname (Hansi)
+$plg_show_names = 1;
+
 // Name einer CSS-Klasse fuer Links
 // Nur noetig, falls die Links ein anderes Aussehen bekommen sollen
 $plg_link_class = '';
