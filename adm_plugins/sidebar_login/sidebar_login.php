@@ -2,7 +2,7 @@
 /******************************************************************************
  * Sidebar Login
  *
- * Version 1.0
+ * Version 1.0.1
  *
  * Plugin zeigt Loginfelder zum Anmelden an und im eingeloggten Zustand ein 
  * paar Daten zum eingeloggten User
@@ -48,6 +48,11 @@ if(isset($plg_show_register_link) == false || is_numeric($plg_show_register_link
 if(isset($plg_show_email_link) == false || is_numeric($plg_show_email_link) == false)
 {
     $plg_show_email_link = 1;
+}
+
+if(isset($plg_show_logout_link) == false || is_numeric($plg_show_logout_link) == false)
+{
+    $plg_show_logout_link = 1;
 }
 
 if(isset($plg_link_class))
@@ -117,6 +122,14 @@ if($g_session_valid == 1)
         }
     }
     echo "</div>";
+    
+    // Link zum Ausloggen
+    if($plg_show_logout_link)
+    {
+        echo "<div style=\"padding-top: 5px;\">
+            <a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/system/logout.php\" target=\"$plg_link_target\">Logout</a>       
+        </div>";
+    }
 }
 else
 {
@@ -134,12 +147,13 @@ else
             <input type=\"submit\" value=\"Login\">        
         </div>";
         
+        // Links zum Registrieren und melden eines Problems anzeigen, falls gewuenscht
         if($plg_show_register_link || $plg_show_email_link)
         {
             echo "<div style=\"padding-top: 5px;\">";
                 if($plg_show_register_link && $g_preferences['registration_mode'])
                 {
-                    echo "&nbsp;<a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/system/registration.php\" 
+                    echo "<a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/system/registration.php\" 
                         target=\"$plg_link_target\">Registrieren</a>";
                 }
                 if($plg_show_register_link && $plg_show_email_link)
@@ -158,10 +172,10 @@ else
                     {
                         $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?rol_id=$webmaster_row->rol_id&subject=Loginprobleme";
                     }
-                    echo "&nbsp;<a class=\"$plg_link_class\" href=\"$mail_link\" target=\"$plg_link_target\">Loginprobleme</a>";
+                    echo "<a class=\"$plg_link_class\" href=\"$mail_link\" target=\"$plg_link_target\">Loginprobleme</a>";
                 }
             echo "</div>";
-        }
+        }    
     echo "</form>";
 }
 
