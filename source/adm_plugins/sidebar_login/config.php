@@ -20,6 +20,11 @@ $plg_show_register_link = 1;
 // 0 = Link wird nicht angezeigt
 $plg_show_email_link = 1;
 
+// Zeigt nach dem Einloggen einen Link zum Ausloggen an
+// 1 = (Default) Link wird angezeigt
+// 0 = Link wird nicht angezeigt
+$plg_show_logout_link = 1;
+
 // Name einer CSS-Klasse fuer Links
 // Nur noetig, falls die Links ein anderes Aussehen bekommen sollen
 $plg_link_class = '';
