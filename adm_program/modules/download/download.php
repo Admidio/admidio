@@ -96,7 +96,7 @@ if(strlen($req_folder) > 0)
     $act_folder = "$act_folder/$req_folder";
 }
 
-//Erstellen des Links vom Men�
+//Erstellen des Links vom Menue
 $path = explode("/",$req_folder);
 $next_folder = "";
 if (strlen($req_default_folder) > 0)
@@ -135,13 +135,14 @@ if(strlen($req_folder) > 0)
     $link = "<p><span class=\"iconLink\">$link &gt; $path[$i]</span></p>";
 }
 
-//Auslesen des Ordners und schreiben in array
+// pruefen, ob Ordner ueberhaupt existiert
 if(!is_dir($act_folder))
 {
     $g_message->show("folder_not_exist");
 }
 
-// Ordnerinhalt sortieren
+// Ordnerinhalt in Array schreiben
+$ordnerarray = array();
 $dh  = opendir($act_folder);
 while (false !== ($filename = readdir($dh)))
 {
@@ -151,16 +152,20 @@ while (false !== ($filename = readdir($dh)))
     }
 }
 
-if ($req_sort == "desc")
+// Ordner und Dateien sortieren
+if(count($ordnerarray) > 0)
 {
-    // Absteigend
-    rsort($ordnerarray);
+    if ($req_sort == "desc")
+    {
+        // Absteigend
+        rsort($ordnerarray);
+    }
+    else
+    {
+        // Aufsteigend
+        sort($ordnerarray);
+    };
 }
-else
-{
-    // Aufsteigend
-    sort($ordnerarray);
-};
 
 echo "
 <!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org -->\n
