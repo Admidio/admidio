@@ -2,7 +2,7 @@
 /******************************************************************************
  * Sidebar Birthday
  *
- * Version 1.0
+ * Version 1.1
  *
  * Plugin listet alle Benutzer auf, die an dem aktuellen Tag Geburtstag haben
  *
@@ -44,6 +44,16 @@ if(isset($plg_show_names_extern) == false || is_numeric($plg_show_names_extern) 
     $plg_show_names_extern = 1;
 }
 
+if(isset($plg_show_email_extern) == false || is_numeric($plg_show_email_extern) == false)
+{
+    $plg_show_email_extern = 0;
+}
+
+if(isset($plg_show_names) == false || is_numeric($plg_show_names) == false)
+{
+    $plg_show_names = 1;
+}
+
 if(isset($plg_link_class))
 {
     $plg_link_class = strip_tags($plg_link_class);
@@ -63,7 +73,7 @@ else
 }
 
 
-$sql    = "SELECT DISTINCT usr_id, usr_last_name, usr_first_name, usr_birthday, usr_email
+$sql    = "SELECT DISTINCT usr_id, usr_last_name, usr_first_name, usr_login_name, usr_birthday, usr_email
              FROM ". TBL_USERS. " 
              JOIN ". TBL_MEMBERS. "
                ON mem_usr_id = usr_id
@@ -114,25 +124,43 @@ if($anz_geb > 0)
             {
                 $age--;
             }
-
+            
+            // Anzeigeart des Namens beruecksichtigen
+            if($plg_show_names == 2)        // Nachname, Vorname
+            {
+                $show_name = "$row->usr_last_name, $row->usr_first_name";
+            }
+            elseif($plg_show_names == 3)    // Vorname
+            {
+                $show_name = $row->usr_first_name;
+            }
+            elseif($plg_show_names == 4)    // Loginname
+            {
+                $show_name = $row->usr_login_name;
+            }
+            else                            // Vorname Nachname
+            {
+                $show_name = "$row->usr_first_name $row->usr_last_name";
+            }
+            
             // Namen mit Alter und Mail-Link anzeigen
             if(strlen($row->usr_email) > 0
             && ($g_session_valid || $plg_show_email_extern))
             {
                 if($g_session_valid)
                 {
-                    echo "<a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/modules/mail/mail.php?usr_id=$row->usr_id\" 
-                         target=\"$plg_link_target\">$row->usr_first_name $row->usr_last_name</a>";
+                    echo "<a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->usr_id\" 
+                         target=\"$plg_link_target\">$show_name</a>";
                 }
                 else
                 {
                     echo "<a class=\"$plg_link_class\" href=\"mailto:$row->usr_email\" 
-                        target=\"$plg_link_target\">$row->usr_first_name $row->usr_last_name</a>";
+                        target=\"$plg_link_target\">$show_name</a>";
                 }
             }
             else
             {
-                echo "$row->usr_first_name $row->usr_last_name";
+                echo $show_name;
             }
             echo " wird heute $age Jahre alt.<br />-----<br />";
         }
