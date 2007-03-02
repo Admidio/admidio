@@ -72,6 +72,8 @@ $filename = "$act_folder/$file";
 // Passenden Datentyp erzeugen.
 header("Content-Type: application/octet-stream");
 header("Content-Disposition: attachment; filename=\"$file\"");
+// noetig fuer IE6, da sonst pdf und doc nicht direkt geoeffnet werden kann
+header('Cache-Control: private'); 
 
 // Datei ausgeben.
 readfile($filename);
