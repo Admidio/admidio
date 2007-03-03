@@ -114,7 +114,7 @@ if($g_session_valid == 1)
             $count_rank = key($plg_rank);
             if($count_rank < $g_current_user->number_login)
             {
-                $rank = strip_tags($value);
+                $rank = utf8_decode(strip_tags($value));
             }
             $value = next($plg_rank);
         }
