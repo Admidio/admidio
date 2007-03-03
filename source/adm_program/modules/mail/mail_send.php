@@ -336,10 +336,21 @@ if ($email->sendEmail())
 
     // Bei erfolgreichem Versenden wird aus dem NaviObjekt die am Anfang hinzugefuegte URL wieder geloescht...
     $_SESSION['navigation']->deleteLastUrl();
+    // dann auch noch die mail.php entfernen
+    $_SESSION['navigation']->deleteLastUrl();
 
     // Der Inhalt des Formulars wird bei erfolgreichem insert/update aus der Session geloescht
     unset($_SESSION['mail_request']);
 
+    // Meldung ueber erfolgreichen Versand und danach weiterleiten
+    if($_SESSION['navigation']->count > 0)
+    {
+        $g_message->setForwardUrl($_SESSION['navigation']->getUrl());
+    }
+    else
+    {
+        $g_message->setForwardUrl("home");
+    }
     $g_message->show($err_code, $err_text, "Hinweis");
 }
 else
