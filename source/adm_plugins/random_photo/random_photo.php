@@ -85,6 +85,9 @@ if(!isset($plg_photos_show_link) || !is_numeric($plg_photos_show_link))
     $plg_photos_show_link = true;
 }
 
+// DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
+mysql_select_db($g_adm_db, $g_adm_con );
+
 //Versnstaltungen Aufrufen
 //Bedingungen: Vreigegeben,Anzahllimit, Bilder enthalten 
 $sql="      SELECT *

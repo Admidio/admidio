@@ -78,6 +78,9 @@ if(isset($plg_rank) == false)
     $plg_rank = array();
 }
 
+// DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
+mysql_select_db($g_adm_db, $g_adm_con );
+
 $sql    = "SELECT rol_id, rol_mail_logout
              FROM ". TBL_ROLES. "
             WHERE rol_org_shortname = '$g_current_organization->shortname'
