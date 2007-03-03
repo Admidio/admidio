@@ -62,6 +62,9 @@ else
     $plg_link_target = "_self";
 }
 
+// DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
+mysql_select_db($g_adm_db, $g_adm_con );
+
 // Aktuelle Zeit setzten
 $act_date = date("Y.m.d H:i:s", time());
 // Referenzzeit setzen
