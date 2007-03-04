@@ -159,6 +159,19 @@ if ($user_found >= 1)
     
                 forum_session("insert", $row[1], $g_forum_cookie_name, $g_forum_cookie_path, $g_forum_cookie_domain, $g_forum_cookie_secure, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
 
+                // Forum Datenbank auswaehlen
+    			mysql_select_db($g_forum_db, $g_forum_con);
+    
+                // Last_Visit fuer die letzten neuen Beitraege aktualisieren
+                $sql    = "UPDATE ". $g_forum_praefix. "_users 
+                	      SET user_lastvisit = ". time() . "
+                    	  WHERE user_id = $row[1]";
+                $result = mysql_query($sql, $g_forum_con);
+        		db_error($result);
+        		
+	            // Admidio DB waehlen
+            	mysql_select_db($g_adm_db, $g_adm_con);
+
                 // heaerLocation entsprechend der Aktionen setzen, Meldungen ausgeben und weiter zur URL.
                 if($forum_admin_reset)
                 {
