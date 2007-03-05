@@ -44,7 +44,11 @@ require_once(SERVER_PATH. "/adm_program/system/user_class.php");
 require_once(SERVER_PATH. "/adm_program/system/organization_class.php");
 require_once(SERVER_PATH. "/adm_program/system/role_dependency_class.php");
 
-
+// falls Debug-Kennzeichen nicht in config.php gesetzt wurde, dann hier auf false setzen
+if(!defined('DEBUG'))
+{
+    define('DEBUG', '0');
+}
 
  // Standard-Praefix ist adm auch wegen Kompatibilitaet zu alten Versionen
 if(strlen($g_tbl_praefix) == 0)
