@@ -139,19 +139,7 @@ if ($user_found >= 1)
                 forum_insert_user($g_current_user->login_name, 1, $g_current_user->password, $g_current_user->email, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
             }
             
-            // Forums Datenbank auswaehlen
-            mysql_select_db($g_forum_db, $g_forum_con);
-
-            // User nun in Foren-Tabelle suchen und dort das Password & UserID auslesen
-            $sql    = "SELECT  user_password, user_id FROM ". $g_forum_praefix. "_users WHERE username LIKE {0} ";
-            $sql    = prepareSQL($sql, array($req_login_name));
-            $result = mysql_query($sql, $g_forum_con);
-            db_error($result);
-            
-            // Admidio DB waehlen
-            mysql_select_db($g_adm_db, $g_adm_con);
-
-            // Nat?rlich sollte hier der User auch im Forum existieren 
+            // Natuerlich sollte hier der User auch im Forum existieren 
             // um eine gueltige Anmeldung im Forum zu machen
             if(mysql_num_rows($result))
             {
@@ -175,7 +163,7 @@ if ($user_found >= 1)
                 // heaerLocation entsprechend der Aktionen setzen, Meldungen ausgeben und weiter zur URL.
                 if($forum_admin_reset)
                 {
-                    // Administrator Account wurde zur?ck gesetzt, Meldung vorbereiten
+                    // Administrator Account wurde zurueck gesetzt, Meldung vorbereiten
                     $login_message = "loginforum_admin";
                 }
                 elseif($forum_export_account)
