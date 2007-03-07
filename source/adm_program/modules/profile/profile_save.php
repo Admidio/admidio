@@ -363,7 +363,7 @@ else
 {
     if($g_forum && $user->login_name)
     {
-        forum_insert_user($user->login_name, 1, $user->password, $user->email, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
+        forum_insert_user($user->login_name, 0, $user->password, $user->email, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
     }
     $ret_code = $user->insert($g_current_user->id);
 }
