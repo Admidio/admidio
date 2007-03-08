@@ -448,161 +448,22 @@ if($req_mode == 1 || $req_mode == 4)
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
     $org_id = mysql_insert_id($connection);
-
-    // Einstellungen anlegen
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-                                       VALUES ($org_id, 'enable_rss', '1') ";
-    $result = mysql_query($sql, $connection);
-    db_error($result);
-
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-                                       VALUES ($org_id, 'enable_bbcode', '1') ";
-    $result = mysql_query($sql, $connection);
-    db_error($result);
-
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-                                       VALUES ($org_id, 'logout_minutes', '20') ";
-    $result = mysql_query($sql, $connection);
-    db_error($result);
-
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-                                       VALUES ($org_id, 'enable_system_mails', '1') ";
-    $result = mysql_query($sql, $connection);
-    db_error($result);
-
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-                                       VALUES ($org_id, 'email_administrator', 'webmaster@". $_SERVER['HTTP_HOST']. "') ";
-    $result = mysql_query($sql, $connection);
-    db_error($result);
-
-    //Registrierungseinstellungen
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-                                       VALUES ($org_id, 'registration_mode', '1') ";
-    $result = mysql_query($sql, $connection);
-    db_error($result);
-
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-                                       VALUES ($org_id, 'enable_registration_captcha', '1') ";
-    $result = mysql_query($sql, $connection);
-    db_error($result);
-
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-                                       VALUES ($org_id, 'enable_registration_admin_mail', '1') ";
-    $result = mysql_query($sql, $connection);
-    db_error($result);
-
-    //Mailmoduleinstellungen
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-                                       VALUES ($org_id, 'enable_mail_module', '1') ";
-    $result = mysql_query($sql, $connection);
-    db_error($result);
-
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-                                       VALUES ($org_id, 'max_email_attachment_size', '1024') ";
-    $result = mysql_query($sql, $connection);
-    db_error($result);
-
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-                                       VALUES ($org_id, 'enable_mail_captcha', '1') ";
-    $result = mysql_query($sql, $connection);
-    db_error($result);
-
-    //Fotomoduleinstellungen
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-                                       VALUES ($org_id, 'enable_photo_module', '1')";
-    $result = mysql_query($sql, $connection);
-    db_error($result);
-
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-                                       VALUES ($org_id, 'photo_save_scale', '640')";
-    $result = mysql_query($sql, $connection);
-    db_error($result);
-
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-            VALUES ($org_id, 'photo_thumbs_column', '5')";
-    $result = mysql_query($sql, $connection);
-    db_error($result);
-
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-            VALUES ($org_id, 'photo_thumbs_row', '5')";
-    $result = mysql_query($sql, $connection);
-    db_error($result);
-
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-            VALUES ($org_id, 'photo_thumbs_scale', '100')";
-    $result = mysql_query($sql, $connection);
-    db_error($result);
-
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-            VALUES ($org_id, 'photo_show_width', '500')";
-    $result = mysql_query($sql, $connection);
-    db_error($result);
-
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-            VALUES ($org_id, 'photo_show_height', '380')";
-    $result = mysql_query($sql, $connection);
-    db_error($result);
-
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-            VALUES ($org_id, 'photo_image_text', '1')";
-    $result = mysql_query($sql, $connection);
-    db_error($result);
-
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-            VALUES ($org_id, 'photo_preview_scale', '100')";
-    $result = mysql_query($sql, $connection);
-    db_error($result);
-
-    //Gaestebuchmoduleinstellungen
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-                                       VALUES ($org_id, 'enable_guestbook_module', '1')";
-    $result = mysql_query($sql, $connection);
-    db_error($result);
-
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-                                       VALUES ($org_id, 'enable_guestbook_captcha', '1')";
-    $result = mysql_query($sql, $connection);
-    db_error($result);
-
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-                                       VALUES ($org_id, 'flooding_protection_time', '180')";
-    $result = mysql_query($sql, $connection);
-    db_error($result);
-
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-                                       VALUES ($org_id, 'enable_gbook_comments4all', '0')";
-    $result = mysql_query($sql, $connection);
-    db_error($result);
-
-    //Weblinkseinstellungen
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-                                       VALUES ($org_id, 'enable_weblinks_module', '1')";
-    $result = mysql_query($sql, $connection);
-    db_error($result);
-
-    //Downloadmoduleinstellungen
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-                                       VALUES ($org_id, 'enable_download_module', '1') ";
-    $result = mysql_query($sql, $connection);
-    db_error($result);
-
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-                                       VALUES ($org_id, 'max_file_upload_size', '3072') ";
-    $result = mysql_query($sql, $connection);
-    db_error($result);
-
-    //Ankuendigungsmoduleinstellungen
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-                                       VALUES ($org_id, 'enable_announcements_module', '1') ";
-    $result = mysql_query($sql, $connection);
-    db_error($result);
-
-    //Terminmoduleinstellungen
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-                                       VALUES ($org_id, 'enable_dates_module', '1') ";
-    $result = mysql_query($sql, $connection);
-    db_error($result);
-
+    
+    // alle Einstellungen aus preferences.php in die Tabelle adm_preferences schreiben
+    include("db_scripts/preferences.php");
+    
+    $value = reset($orga_preferences);
+    while($value !== false)
+    {
+        $key   = key($orga_preferences);
+        
+        $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+                                           VALUES ($org_id,    '$key',   '$value') ";
+        $result = mysql_query($sql, $connection);
+        db_error($result);
+        
+        $value = next($orga_preferences);
+    }
 
     // Default-Kategorie fuer Rollen und Links eintragen
     $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden)
@@ -692,8 +553,7 @@ if($req_mode == 1 || $req_mode == 4)
 
 if($req_mode == 1)
 {
-    $location = "Location: index.php?mode=2";
-    header($location);
+    header("Location: index.php?mode=2");
     exit();
 }
 else
