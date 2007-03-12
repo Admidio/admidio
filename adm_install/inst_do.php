@@ -359,14 +359,14 @@ if($req_mode == 3)
     // Updatescripte fuer die Datenbank verarbeiten
     if($req_version > 0)
     {
-        for($i = $req_version; $i <= 4; $i++)
+        for($update_count = $req_version; $update_count <= 5; $update_count++)
         {
             $error = 0;
-            if($i == 3)
+            if($update_count == 3)
             {
                 $filename = "db_scripts/upd_1_3_db.sql";
             }
-            elseif($i == 4)
+            elseif($update_count == 4)
             {
                 $filename = "db_scripts/upd_1_4_db.sql";
             }
@@ -403,13 +403,17 @@ if($req_mode == 3)
                 }
             }
 
-            if($i == 3)
+            if($update_count == 3)
             {
                 include("db_scripts/upd_1_3_conv.php");
             }
-            elseif($i == 4)
+            elseif($update_count == 4)
             {
                 include("db_scripts/upd_1_4_conv.php");
+            }
+            elseif($update_count == 5)
+            {
+                include("db_scripts/upd_1_5_conv.php");
             }
         }
     }

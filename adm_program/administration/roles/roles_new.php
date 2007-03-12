@@ -406,7 +406,13 @@ require("../../../adm_config/body_top.php");
                             <div style=\"text-align: right; width: 10%; float: left;\">
                                 <input type=\"checkbox\" id=\"mail_logout\" name=\"mail_logout\" ";
                                 if(isset($form_values['mail_logout']) && $form_values['mail_logout'] == 1)
+                                {
                                     echo " checked ";
+                                }
+                                if(strcmp($form_values['name'], "Webmaster") == 0)
+                                {
+                                    echo " disabled ";
+                                }                                
                                 echo " value=\"1\" />&nbsp;
                                 <label for=\"mail_logout\"><img src=\"$g_root_path/adm_program/images/mail.png\" alt=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\"></label>
                             </div>
@@ -420,7 +426,13 @@ require("../../../adm_config/body_top.php");
                             <div style=\"text-align: right; width: 10%; float: left;\">
                                 <input type=\"checkbox\" id=\"mail_login\" name=\"mail_login\" ";
                                 if(isset($form_values['mail_login']) && $form_values['mail_login'] == 1)
+                                {
                                     echo " checked ";
+                                }
+                                if(strcmp($form_values['name'], "Webmaster") == 0)
+                                {
+                                    echo " disabled ";
+                                }                                
                                 echo " value=\"1\" />&nbsp;
                                 <label for=\"mail_login\"><img src=\"$g_root_path/adm_program/images/mail_key.png\" alt=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\"></label>
                             </div>
