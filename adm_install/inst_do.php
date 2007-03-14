@@ -293,7 +293,6 @@ if(!mysql_select_db($_SESSION['database'], $connection ))
 
 if($req_mode == 1)
 {
-    $error    = 0;
     $filename = "db_scripts/db.sql";
     $file     = fopen($filename, "r")
                 or showError("Die Datei <b>db.sql</b> konnte nicht im Verzeichnis <b>adm_install/db_scripts</b> gefunden werden.");
@@ -310,14 +309,9 @@ if($req_mode == 1)
             $result = mysql_query($sql, $connection);
             if(!$result)
             {
-                showError(mysql_error());
-                $error++;
+                die(showError(mysql_error()));
             }
         }
-    }
-    if($error > 0)
-    {
-        exit();
     }
 
     // Default-Daten anlegen
@@ -361,7 +355,6 @@ if($req_mode == 3)
     {
         for($update_count = $req_version; $update_count <= 5; $update_count++)
         {
-            $error = 0;
             if($update_count == 3)
             {
                 $filename = "db_scripts/upd_1_3_db.sql";
@@ -392,14 +385,9 @@ if($req_mode == 3)
                         $result = mysql_query($sql, $connection);
                         if(!$result)
                         {
-                            showError(mysql_error());
-                            $error++;
+                            die(showError(mysql_error()));
                         }
                     }
-                }
-                if($error > 0)
-                {
-                    exit();
                 }
             }
 
@@ -456,43 +444,38 @@ if($req_mode == 1 || $req_mode == 4)
     // alle Einstellungen aus preferences.php in die Tabelle adm_preferences schreiben
     include("db_scripts/preferences.php");
     
-    $value = reset($orga_preferences);
-    while($value !== false)
+    foreach($orga_preferences as $key => $value)
     {
-        $key   = key($orga_preferences);
-        
         $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
                                            VALUES ($org_id,    '$key',   '$value') ";
         $result = mysql_query($sql, $connection);
         db_error($result);
-        
-        $value = next($orga_preferences);
     }
-
+    
     // Default-Kategorie fuer Rollen und Links eintragen
     $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden)
-                                           VALUES ($org_id, 'ROL', 'Allgemein', 1)";
+                                      VALUES ($org_id, 'ROL', 'Allgemein', 1)";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
     $category_common = mysql_insert_id();
 
     $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden)
-                                           VALUES ($org_id, 'ROL', 'Gruppen', 1)";
+                                      VALUES ($org_id, 'ROL', 'Gruppen', 1)";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
 
     $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden)
-                                           VALUES ($org_id, 'ROL', 'Kurse', 1)";
+                                      VALUES ($org_id, 'ROL', 'Kurse', 1)";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
 
     $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden)
-                                           VALUES ($org_id, 'ROL', 'Mannschaften', 1)";
+                                      VALUES ($org_id, 'ROL', 'Mannschaften', 1)";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
 
     $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden)
-                                           VALUES ($org_id, 'LNK', 'Allgemein', 0)";
+                                      VALUES ($org_id, 'LNK', 'Allgemein', 0)";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
 
@@ -562,7 +545,7 @@ if($req_mode == 1)
 }
 else
 {
-    showError("Die Einrichtung der Datenbank konnte erfolgreich abgeschlossen werden.<br> <br>
-               Nun muss von Dir noch das Installationsverzeichnis <b>adm_install</b> gel&ouml;scht werden.", "Fertig", 2);
+    showError("Die Einrichtung der Datenbank konnte erfolgreich abgeschlossen werden.<br><br>
+               Nun muss noch das Installationsverzeichnis <b>adm_install</b> gel&ouml;scht werden.", "Fertig", 2);
 }
 ?>
