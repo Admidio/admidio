@@ -24,6 +24,8 @@
  * delete()               - Der gewaehlte User wird aus der Datenbank geloescht
  * clear()                - Die Klassenvariablen werden neu initialisiert
  * getVCard()             - Es wird eine vCard des Users als String zurueckgegeben
+ * isWebmaster()          - gibt true/false zurueck, falls der User Mitglied der 
+ *                          Rolle "Webmaster" ist
  *
  ******************************************************************************
  *
@@ -45,6 +47,7 @@
 class User
 {
     var $db_connection;
+    var $webmaster;
     var $id;
     var $last_name;
     var $first_name;
@@ -80,10 +83,17 @@ class User
     var $editDownloadRight;
 
     // Konstruktor
-    function User($connection)
+    function User($connection, $user_id = 0)
     {
         $this->db_connection = $connection;
-        $this->clear();
+        if($user_id > 0)
+        {
+            $this->getUser($user_id);
+        }
+        else
+        {
+            $this->clear();
+        }
     }
 
     function reconnect($connection)
@@ -94,6 +104,8 @@ class User
     // User mit der uebergebenen ID aus der Datenbank auslesen
     function getUser($user_id)
     {
+        $this->clear();
+        
         if($user_id > 0 && is_numeric($user_id))
         {
             $sql = "SELECT * FROM ". TBL_USERS. " WHERE usr_id = $user_id";
@@ -129,14 +141,6 @@ class User
                 $this->valid          = $row->usr_valid;
                 $this->reg_org_shortname = $row->usr_reg_org_shortname;
             }
-            else
-            {
-                $this->clear();
-            }
-        }
-        else
-        {
-            $this->clear();
         }
     }
 
@@ -168,10 +172,11 @@ class User
         $this->usr_id_change  = 0;
         $this->valid          = 1;
         $this->reg_org_shortname = "";
+        
+        $this->webmaster = -1;
 
         // User Rechte vorbelegen
         $this->clearRights();
-
     }
 
     // alle Rechtevariablen wieder zuruecksetzen
@@ -691,5 +696,34 @@ class User
 
     }
 
+    function isWebmaster()
+    {
+        global $g_organization;
+        
+        if($this->webmaster == -1)
+        {
+            // Status wurde noch nicht ausgelesen
+            $sql    = "SELECT rol_id
+                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
+                        WHERE mem_usr_id        = $this->id
+                          AND mem_valid         = 1
+                          AND mem_rol_id        = rol_id
+                          AND rol_org_shortname = '$g_organization'
+                          AND rol_name          = 'Webmaster'
+                          AND rol_valid         = 1 ";
+            $result = mysql_query($sql, $this->db_connection);
+            db_error($result);
+            
+            if(mysql_num_rows($result) > 0)
+            {
+                $this->webmaster = true;
+            }
+            else
+            {
+                $this->webmaster = false;
+            }
+        }
+        return $this->webmaster;
+    }
 }
 ?>

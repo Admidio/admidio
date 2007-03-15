@@ -20,7 +20,7 @@
  *
  * delete()               - Der gewaehlte User wird aus der Datenbank geloescht
  * clear()                - Die Klassenvariablen werden neu initialisiert
- * getIcal()              - Es wird eine vCard des Users als String zurueckgegeben
+ * getIcal()              - gibt einen Termin im iCal-Format zurueck
  *
  ******************************************************************************
  *
@@ -128,27 +128,6 @@ class Date
         db_error($result);
 
         $this->clear();
-    }
-    
-    function prepareIcalText($text)
-    {
-    
-    //$retval = $text;
-        
-        //$text = ereg_replace("(\r\n|\n|\r)","\\n",$text);
-        
-        // substitute special characters
-        $text = strtr($text, array("\n" => '\\n', '\\' => '\\\\', ',' => '\\,', ';' => '\\;'));
-        
-        //fold text
-        while(strlen($text) > 75) 
-        {
-            $retval .= substr($text, 0, 74) . '\n' . ' ';
-            $text  = substr($retval, 74);
-        }
-        $retval .= $text;
-        
-        return $retval;
     }
    
     // gibt einen Termin im iCal-Format zurueck

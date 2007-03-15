@@ -143,7 +143,7 @@ $i     = 0;
 while($row = mysql_fetch_object($result_rolle))
 {
     // der Webmaster-Rolle duerfen nur Webmaster neue Mitglieder zuweisen
-    if($row->rol_name != 'Webmaster' || hasRole('Webmaster'))
+    if($row->rol_name != 'Webmaster' || $g_current_user->isWebmaster())
     {
         if($key == "role-$i")
         {
@@ -214,11 +214,11 @@ while($row = mysql_fetch_object($result_rolle))
         $result = mysql_query($sql, $g_adm_con);
         db_error($result);
 
-		// find the parent roles
+        // find the parent roles
         if($function == 1)
         {
             $tmpRoles = RoleDependency::getParentRoles($g_adm_con,$row->rol_id);
-			foreach($tmpRoles as $tmpRole)
+            foreach($tmpRoles as $tmpRole)
             {
                 if(!in_array($tmpRole,$parentRoles))
                 $parentRoles[] = $tmpRole;
@@ -243,20 +243,20 @@ if($g_current_user->id != $_GET['user_id'])
 
 if(count($parentRoles) > 0 )
 {
-	$sql = "REPLACE INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin,mem_end, mem_valid, mem_leader) VALUES ";
+    $sql = "REPLACE INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin,mem_end, mem_valid, mem_leader) VALUES ";
 
-	// alle einzufuegenden Rollen anhaengen
-	foreach($parentRoles as $actRole)
-	{
-	    $sql .= " ($actRole, {0}, NOW(), NULL, 1, 0),";
-	}
+    // alle einzufuegenden Rollen anhaengen
+    foreach($parentRoles as $actRole)
+    {
+        $sql .= " ($actRole, {0}, NOW(), NULL, 1, 0),";
+    }
 
-	//Das letzte Komma wieder wegschneiden
-	$sql = substr($sql,0,-1);
-	
+    //Das letzte Komma wieder wegschneiden
+    $sql = substr($sql,0,-1);
+    
     $sql    = prepareSQL($sql, array($_GET['user_id']));
-	$result = mysql_query($sql, $g_adm_con);
-	db_error($result);
+    $result = mysql_query($sql, $g_adm_con);
+    db_error($result);
 }
 
 if($_GET['new_user'] == 1 && $count_assigned == 0)

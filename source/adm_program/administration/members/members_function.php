@@ -140,10 +140,11 @@ if($_GET["mode"] == 1)
 elseif($_GET["mode"] == 2)
 {
     // User NUR aus der aktuellen Organisation entfernen
+    $user = new User($g_adm_con, $_GET['user_id']);
 
     // Es duerfen keine Webmaster entfernt werden
-    if(hasRole("Webmaster", $g_current_user->id) == false
-    && hasRole("Webmaster", $_GET['user_id']) == true)
+    if($g_current_user->isWebmaster() == false
+    && $user->isWebmaster()           == true)
     {
         $g_message->show("norights");
     }
@@ -181,9 +182,12 @@ elseif($_GET["mode"] == 2)
 }
 elseif($_GET["mode"] == 3)
 {
+    // User aus der Datenbank loeschen
+    $user = new User($g_adm_con, $_GET['user_id']);
+    
     // Es duerfen keine Webmaster entfernt werden
-    if(hasRole("Webmaster", $g_current_user->id) == false
-    && hasRole("Webmaster", $_GET['user_id']) == true)
+    if($g_current_user->isWebmaster() == false
+    && $user->isWebmaster()           == true)
     {
         $g_message->show("norights");
     }
@@ -196,23 +200,21 @@ elseif($_GET["mode"] == 3)
         $g_message->show("norights");
     }
 
-    // User aus der Datenbank loeschen
-    $user = new User($g_adm_con);
-    $user->GetUser($_GET['user_id']);
     // Den Username für die Löschung im Forum zwischenspeichern
     $forum_user = $user->login_name;
+    
     // User aus der Admidio Datenbank loeschen
     $user->delete();
 
-	// Paralell im Forum loeschen, wenn g_forum gesetzt ist
+    // Paralell im Forum loeschen, wenn g_forum gesetzt ist
     if($g_forum)
     {
-    	forum_delete_user($forum_user, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
-    	$err_code = "delete_forum_user";
+        forum_delete_user($forum_user, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
+        $err_code = "delete_forum_user";
     }
     else
     {
-    	$err_code = "delete";
+        $err_code = "delete";
     }
 }
 elseif($_GET["mode"] == 4)
@@ -220,7 +222,7 @@ elseif($_GET["mode"] == 4)
     // nur Webmaster duerfen User neue Zugangsdaten zuschicken
     // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
     // nur an Mitglieder der eigenen Organisation schicken
-    if(hasRole("Webmaster" == false)
+    if($g_current_user->isWebmaster() == false
     || $g_preferences['enable_system_mails'] != 1
     || $this_orga == false)
     {

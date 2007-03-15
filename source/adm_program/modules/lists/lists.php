@@ -320,7 +320,7 @@ require("../../../adm_config/body_top.php");
                         if(isModerator() || isGroupLeader($row_lst->rol_id) || $g_current_user->editUser())
                         {
                             if($row_lst->rol_name != "Webmaster"
-                            || ($row_lst->rol_name == "Webmaster" && hasRole("Webmaster")))
+                            || ($row_lst->rol_name == "Webmaster" && $g_current_user->isWebmaster()))
                             {
                                 if(isModerator())
                                 {
