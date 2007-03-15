@@ -18,8 +18,13 @@
  *
  * Folgende Funktionen stehen nun zur Verfuegung:
  *
- * delete()               - Der gewaehlte User wird aus der Datenbank geloescht
  * clear()                - Die Klassenvariablen werden neu initialisiert
+ * setValue($field_name, $field_value) - setzt einen Wert fuer ein bestimmtes Feld
+ * getValue($field_name)  - gibt den Wert eines Feldes zurueck
+ * update($login_user_id) - Termin wird mit den geaenderten Daten in die Datenbank
+ *                          zurueckgeschrieben
+ * insert($login_user_id) - Ein neuer Termin wird in die Datenbank geschrieben
+ * delete()               - Der gewaehlte User wird aus der Datenbank geloescht
  * getIcal()              - gibt einen Termin im iCal-Format zurueck
  *
  ******************************************************************************
@@ -41,59 +46,18 @@
 
 include(SERVER_PATH. "/adm_program/libs/bennu/bennu.inc.php");
 
-
 class Date
 {
     var $db_connection;
-    var $id;
-    var $org_shortname;
-    var $global;
-    var $begin;
-    var $end;
-    var $description;
-    var $location;
-    var $headline;
-    var $usr_id;
-    var $timestamp;
-    var $last_change;
-    var $usr_id_change;
-    
+    var $db_fields = array();    
     
     // Konstruktor
-    function Date($connection)
+    function Date($connection, $date_id = 0)
     {
         $this->db_connection = $connection;
-        $this->clear();
-    }
-
-    // User mit der uebergebenen ID aus der Datenbank auslesen
-    function getDate($dat_id)
-    {
-        if($dat_id > 0 && is_numeric($dat_id))
+        if($date_id > 0)
         {
-            $sql    = "SELECT * FROM ". TBL_DATES. " WHERE dat_id = $dat_id";
-            $result = mysql_query($sql, $this->db_connection);
-            db_error($result);
-    
-            if($row = mysql_fetch_object($result))
-            {
-                $this->id             = $row->dat_id;
-                $this->org_shortname  = $row->dat_org_shortname;
-                $this->global         = $row->dat_global;
-                $this->begin          = $row->dat_begin;
-                $this->end            = $row->dat_end;
-                $this->description    = $row->dat_description;
-                $this->location       = $row->dat_location;
-                $this->headline       = $row->dat_headline;
-                $this->usr_id         = $row->dat_usr_id;
-                $this->timestamp      = $row->dat_timestamp;
-                $this->last_change    = $row->dat_last_change;
-                $this->usr_id_change  = $row->dat_usr_id_change;            
-            }
-            else
-            {
-                $this->clear();
-            }
+            $this->getRole($date_id);
         }
         else
         {
@@ -101,29 +65,224 @@ class Date
         }
     }
 
+    // Termin mit der uebergebenen ID aus der Datenbank auslesen
+    function getDate($date_id)
+    {
+        $this->clear();
+        
+        if($date_id > 0 && is_numeric($date_id))
+        {
+            $sql    = "SELECT * FROM ". TBL_DATES. " WHERE dat_id = $date_id";
+            $result = mysql_query($sql, $this->db_connection);
+            db_error($result);
+    
+            if($row = mysql_fetch_array($result, MYSQL_ASSOC))
+            {
+                // Daten in das Klassenarray schieben
+                foreach($row as $key => $value)
+                {
+                    $this->db_fields[$key] = $value;
+                }
+            }
+        }
+    }
+
     // alle Klassenvariablen wieder zuruecksetzen
     function clear()
     {
-        $this->id             = 0;
-        $this->org_shortname  = "";
-        $this->global         = 0;
-        $this->begin          = "";
-        $this->end            = "";
-        $this->description    = "";
-        $this->location       = "";
-        $this->headline       = "";
-        $this->usr_id         = 0;
-        $this->timestamp      = NULL;
-        $this->last_change    = NULL;
-        $this->usr_id_change  = 0;
+        if(count($this->db_fields) > 0)
+        {
+            foreach($this->db_fields as $key => $value)
+            {
+                $this->db_fields[$key] = null;
+            }
+        }
+        else
+        {
+            // alle Spalten der Tabelle adm_roles ins Array einlesen 
+            // und auf null setzen
+            $sql = "SHOW COLUMNS FROM ". TBL_DATES;
+            $result = mysql_query($sql, $this->db_connection);
+            db_error($result);
+            
+            while ($row = mysql_fetch_array($result))
+            {
+                $this->db_fields[$row['Field']] = null;
+            }
+        }
     }
 
+    // Funktion setzt den Wert eines Feldes neu, 
+    // dabei koennen noch noetige Plausibilitaetspruefungen gemacht werden
+    function setValue($field_name, $field_value)
+    {
+        $field_name  = strStripTags($field_name);
+        $field_value = strStripTags($field_value);
+        
+        if(strlen($field_value) == 0)
+        {
+            $field_value = null;
+        }
+        
+        // Plausibilitaetspruefungen
+        switch($field_name)
+        {
+            case "dat_id":
+            case "dat_usr_id":
+            case "dat_usr_id_change":
+                if(is_numeric($field_value) == false)
+                {
+                    $field_value = null;
+                }
+                break;
+            
+            case "dat_global":
+                if($field_value != 1)
+                {
+                    $field_value = 0;
+                }
+                break;
+        }
+                
+        $this->db_fields[$field_name] = $field_value;
+    }
 
+    // Funktion gibt den Wert eines Feldes zurueck
+    // hier koennen auch noch bestimmte Formatierungen angewandt werden
+    function getValue($field_name)
+    {
+        return $this->db_fields[$field_name];
+    }
+    
+    // aktuelle Rollendaten in der Datenbank updaten
+    // Es muss die ID des eingeloggten Users uebergeben werden,
+    // damit die Aenderung protokolliert werden kann
+    function update($login_user_id)
+    {
+        if(count($this->db_fields)    > 0
+        && $this->db_fields['dat_id'] > 0 
+        && $login_user_id             > 0 
+        && is_numeric($this->db_fields['dat_id'])
+        && is_numeric($login_user_id))
+        {
+            $act_date = date("Y-m-d H:i:s", time());
+
+            // SQL-Update-Statement zusammenbasteln
+            $item_connection = "";
+            $sql_field_list  = "";
+
+            // Schleife ueber alle DB-Felder und diese dem Update hinzufuegen                
+            foreach($this->db_fields as $key => $value)
+            {
+                // rol_id soll nicht im Update erscheinen
+                if($key != "dat_id") 
+                {
+                    // jetzt noch Spezialfaelle abhandeln
+                    switch($key)
+                    {
+                        case "dat_last_change":
+                            $sql_field_list = $sql_field_list. " $item_connection $key = '$act_date' ";
+                            break;
+
+                        case "dat_usr_id_change":
+                            $sql_field_list = $sql_field_list. " $item_connection $key = $login_user_id ";
+                            break;
+
+                        default:
+                            $sql_field_list = $sql_field_list. " $item_connection $key = \{$key} ";
+                            break;
+                    }
+
+                    if(strlen($item_connection) == 0)
+                    {
+                        $item_connection = ",";
+                    }
+                }
+            }
+            $sql = "UPDATE ". TBL_DATES. " SET $sql_field_list WHERE dat_id = {dat_id} ";
+            $sql = prepareSQL($sql, $this->db_fields);
+            $result = mysql_query($sql, $this->db_connection);
+            db_error($result);
+            return 0;
+        }
+        return -1;
+    }
+
+    // aktuelle Rollendaten neu in der Datenbank schreiben
+    // Es muss die ID des eingeloggten Users uebergeben werden,
+    // damit die Aenderung protokolliert werden kann
+    function insert($login_user_id)
+    {
+        global $g_organization;
+        
+        if($login_user_id > 0 
+        && is_numeric($login_user_id)
+        && (  isset($this->db_fields['dat_id']) == false
+           || $this->db_fields['dat_id']        == 0 ))
+        {
+            $act_date = date("Y-m-d H:i:s", time());
+
+            // SQL-Update-Statement zusammenbasteln
+            $item_connection = "";
+            $sql_field_list  = "";
+            $sql_value_list  = "";
+
+            // Schleife ueber alle DB-Felder und diese dem Insert hinzufuegen 
+            foreach($this->db_fields as $key => $value)
+            {
+                // rol_id soll nicht im Insert erscheinen
+                if($key != "dat_id" && strlen($value) > 0) 
+                {
+                    $sql_field_list = $sql_field_list. " $item_connection $key ";
+                    if(is_numeric($value))
+                    {
+                        $sql_value_list = $sql_value_list. " $item_connection $value ";
+                    }
+                    else
+                    {
+                        $sql_value_list = $sql_value_list. " $item_connection '$value' ";
+                    }
+
+                    if(strlen($item_connection) == 0)
+                    {
+                        $item_connection = ",";
+                    }
+                }
+            }
+            
+            // Felder hinzufuegen, die zwingend erforderlich sind
+            if(isset($this->db_fields['dat_org_shortname']) == false)
+            {
+                $sql_field_list = $sql_field_list. ", dat_org_shortname ";
+                $sql_value_list = $sql_value_list. ", '$g_organization' ";
+            }
+            if(isset($this->db_fields['dat_timestamp']) == false)
+            {
+                $sql_field_list = $sql_field_list. ", dat_timestamp ";
+                $sql_value_list = $sql_value_list. ", '$act_date' ";
+            }
+            if(isset($this->db_fields['dat_usr_id']) == false)
+            {
+                $sql_field_list = $sql_field_list. ", dat_usr_id ";
+                $sql_value_list = $sql_value_list. ", $login_user_id ";
+            }
+            
+            $sql = "INSERT INTO ". TBL_DATES. " ($sql_field_list) VALUES ($sql_value_list) ";
+            $sql = prepareSQL($sql, $this->db_fields);
+            $result = mysql_query($sql, $this->db_connection);
+            db_error($result);
+            
+            $this->db_fields['dat_id'] = mysql_insert_id($this->db_connection);
+            return 0;
+        }
+        return -1;
+    }    
+    
     // aktuellen Benutzer loeschen   
     function delete()
     {
         $sql    = "DELETE FROM ". TBL_DATES. " 
-                    WHERE dat_id = $this->id ";
+                    WHERE dat_id = ". $this->db_fields['dat_id'];
         $result = mysql_query($sql, $this->db_connection);
         db_error($result);
 
@@ -133,25 +292,25 @@ class Date
     // gibt einen Termin im iCal-Format zurueck
     function getIcal($domain)
     {
-        $a = new iCalendar;
-        $ev = new iCalendar_event;
-        $a->add_property('METHOD','PUBLISH');
+        $cal = new iCalendar;
+        $event = new iCalendar_event;
+        $cal->add_property('METHOD','PUBLISH');
         $prodid = "-//www.admidio.org//Admidio" . ADMIDIO_VERSION . "//DE";
-        $a->add_property('PRODID',$prodid);
-        $uid = mysqldatetime("ymdThis", $this->timestamp) . "+" . $this->usr_id . "@" . $domain;
-        $ev->add_property('uid', $uid);
+        $cal->add_property('PRODID',$prodid);
+        $uid = mysqldatetime("ymdThis", $this->db_fields['timestamp']) . "+" . $this->db_fields['usr_id'] . "@" . $domain;
+        $event->add_property('uid', $uid);
     
-        $ev->add_property('summary',     utf8_encode($this->headline));
-        $ev->add_property('description', utf8_encode($this->description));
+        $event->add_property('summary',     utf8_encode($this->db_fields['headline']));
+        $event->add_property('description', utf8_encode($this->db_fields['description']));
 
-        $ev->add_property('dtstart', mysqldatetime("ymdThis", $this->begin));
-        $ev->add_property('dtend',   mysqldatetime("ymdThis", $this->end));
-        $ev->add_property('dtstamp', mysqldatetime("ymdThisZ", $this->timestamp));
+        $event->add_property('dtstart', mysqldatetime("ymdThis", $this->db_fields['begin']));
+        $event->add_property('dtend',   mysqldatetime("ymdThis", $this->db_fields['end']));
+        $event->add_property('dtstamp', mysqldatetime("ymdThisZ", $this->db_fields['timestamp']));
 
-        $ev->add_property('location', utf8_encode($this->location));
+        $event->add_property('location', utf8_encode($this->db_fields['location']));
 
-        $a->add_component($ev);
-        return $a->serialize();    
+        $cal->add_component($event);
+        return $cal->serialize();    
     }    
 }
 ?>

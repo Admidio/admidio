@@ -62,7 +62,7 @@ if($req_rol_id > 0)
     // Pruefung, ob die Rolle zur aktuellen Organisation gehoert
     if($role->getValue("rol_org_shortname") != $g_organization)
     {
-        $g_message->show("invalid");
+        $g_message->show("norights");
     }
     
     // Rolle Webmaster darf nur vom Webmaster selber erstellt oder gepflegt werden

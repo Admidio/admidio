@@ -29,6 +29,7 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
+require("../../system/date_class.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_dates_module'] != 1)
@@ -37,88 +38,71 @@ if ($g_preferences['enable_dates_module'] != 1)
     $g_message->show("module_disabled");
 }
 
-
 if(!editDate())
 {
     $g_message->show("norights");
 }
 
+// lokale Variablen der Uebergabevariablen initialisieren
+$req_dat_id = 0;
+
 // Uebergabevariablen pruefen
 
-if(isset($_GET["dat_id"]))
+if(isset($_GET['dat_id']))
 {
-    if(is_numeric($_GET["dat_id"]) == false)
+    if(is_numeric($_GET['dat_id']) == false)
     {
         $g_message->show("invalid");
     }
-    $dat_id = $_GET["dat_id"];
-}
-else
-{
-    $dat_id = 0;
+    $req_dat_id = $_GET['dat_id'];
 }
 
 $_SESSION['navigation']->addUrl($g_current_url);
 
+// Rollenobjekt anlegen
+$date = new Date($g_adm_con);
+
+if($req_dat_id > 0)
+{
+    $date->getDate($req_dat_id);
+    
+    // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
+    if($date->getValue("dat_org_shortname") != $g_organization
+    && $date->getValue("dat_global") == 0 )
+    {
+        $g_message->show("norights");
+    }
+}
+
 if(isset($_SESSION['dates_request']))
 {
-    // alte Werte nach Fehlermeldung wiederherstellen
-    $form_values = $_SESSION['dates_request'];
+    // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
+    // nun die vorher eingegebenen Inhalte auslesen
+    foreach($_SESSION['dates_request'] as $key => $value)
+    {
+        if(strpos($key, "dat_") == 0)
+        {
+            $date->setValue($key, $value);
+        }        
+    }
+    $date_from = $_SESSION['dates_request']['date_from'];
+    $time_from = $_SESSION['dates_request']['time_from'];
+    $date_to   = $_SESSION['dates_request']['date_to'];
+    $time_to   = $_SESSION['dates_request']['time_to'];
     unset($_SESSION['dates_request']);
 }
 else
 {
-    $form_values['headline']      = "";
-    $form_values['global']        = 0;
-    $form_values['date_from']     = "";
-    $form_values['time_from']     = "";
-    $form_values['date_to']       = "";
-    $form_values['time_to']       = "";
-    $form_values['meeting_point'] = "";
-    $form_values['description']   = "";
-
-    // Wenn eine Termin-ID uebergeben wurde, soll der Termin geaendert werden
-    // -> Felder mit Daten des Termins vorbelegen
-
-    if ($dat_id > 0)
+    // Zeitangaben von/bis aus Datetime-Feld aufsplitten
+    $date_from = mysqldatetime("d.m.y", $date->getValue("dat_begin"));
+    $time_from = mysqldatetime("h:i",   $date->getValue("dat_begin"));
+    $date_to   = null;
+    $time_to   = null;
+    if($date->getValue("dat_begin") != $date->getValue("dat_end"))
     {
-        $sql    = "SELECT * FROM ". TBL_DATES. "
-                    WHERE dat_id = {0}
-                      AND (  dat_org_shortname = '$g_organization'
-                          OR dat_global = 1) ";
-        $sql    = prepareSQL($sql, array($dat_id));
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
-
-        if (mysql_num_rows($result) > 0)
-        {
-            $row_bt = mysql_fetch_object($result);
-
-            $form_values['global']    = $row_bt->dat_global;
-            $form_values['headline']  = $row_bt->dat_headline;
-            $form_values['date_from'] = mysqldatetime("d.m.y", $row_bt->dat_begin);
-            $form_values['time_from'] = mysqldatetime("h:i", $row_bt->dat_begin);
-            if($row_bt->dat_begin != $row_bt->dat_end)
-            {
-                // Datum-Bis nur anzeigen, wenn es sich von Datum-Von unterscheidet
-                $form_values['date_to'] = mysqldatetime("d.m.y", $row_bt->dat_end);
-                $form_values['time_to'] = mysqldatetime("h:i", $row_bt->dat_end);
-            }
-            if ($form_values['time_from'] == "00:00")
-            {
-                $form_values['time_from'] = "";
-            }
-            if ($form_values['time_to'] == "00:00")
-            {
-                $form_values['time_to'] = "";
-            }
-            $form_values['meeting_point'] = $row_bt->dat_location;
-            $form_values['description']   = $row_bt->dat_description;
-        }
-        else
-        {
-            $g_message->show("norights");
-        }
+        // Datum-Bis nur anzeigen, wenn es sich von Datum-Von unterscheidet
+        $date_to = mysqldatetime("d.m.y", $date->getValue("dat_end"));
+        $time_to = mysqldatetime("h:i",   $date->getValue("dat_end"));
     }
 }
 
@@ -140,8 +124,8 @@ echo "</head>";
 require("../../../adm_config/body_top.php");
     echo "
     <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-        <form name=\"form\" action=\"dates_function.php?dat_id=$dat_id&amp;mode=";
-            if($dat_id > 0)
+        <form name=\"form\" action=\"dates_function.php?dat_id=$req_dat_id&amp;mode=";
+            if($req_dat_id > 0)
             {
                 echo "3";
             }
@@ -152,7 +136,7 @@ require("../../../adm_config/body_top.php");
             echo "\" method=\"post\" name=\"TerminAnlegen\">
 
             <div class=\"formHead\">";
-                if($dat_id > 0)
+                if($req_dat_id > 0)
                 {
                     echo strspace("Termin &auml;ndern", 2);
                 }
@@ -165,31 +149,30 @@ require("../../../adm_config/body_top.php");
                 <div>
                     <div style=\"text-align: right; width: 25%; float: left;\">&Uuml;berschrift:</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <input type=\"text\" name=\"headline\" style=\"width: 350px;\" maxlength=\"100\" value=\"". htmlspecialchars($form_values['headline'], ENT_QUOTES). "\">
+                        <input type=\"text\" name=\"dat_headline\" style=\"width: 350px;\" maxlength=\"100\" value=\"". htmlspecialchars($date->getValue("dat_headline"), ENT_QUOTES). "\">
                         <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
                     </div>
                 </div>";
 
                 // bei mehr als einer Organisation, Checkbox anzeigen, ob Termin bei anderen angezeigt werden soll
-                $sql = "SELECT COUNT(1) FROM ". TBL_ORGANIZATIONS. "
+                $sql = "SELECT org_id FROM ". TBL_ORGANIZATIONS. "
                          WHERE org_org_id_parent IS NOT NULL ";
                 $result = mysql_query($sql, $g_adm_con);
                 db_error($result);
-                $row = mysql_fetch_array($result);
 
-                if($row[0] > 0)
+                if(mysql_num_rows($result) > 0)
                 {
                     echo "
                     <div style=\"margin-top: 6px;\">
                         <div style=\"text-align: right; width: 25%; float: left;\">&nbsp;</div>
                         <div style=\"text-align: left; margin-left: 27%;\">
-                            <input type=\"checkbox\" id=\"global\" name=\"global\" ";
-                            if(isset($form_values['global']) && $form_values['global'] == 1)
+                            <input type=\"checkbox\" id=\"dat_global\" name=\"dat_global\" ";
+                            if($date->getValue("dat_global") == 1)
                             {
                                 echo " checked=\"checked\" ";
                             }
                             echo " value=\"1\" />
-                            <label for=\"global\">Termin ist f&uuml;r mehrere Organisationen sichtbar</label>&nbsp;
+                            <label for=\"dat_global\">Termin ist f&uuml;r mehrere Organisationen sichtbar</label>&nbsp;
                             <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" alt=\"Hilfe\" title=\"Hilfe\"
                             onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=termin_global','Message','width=400,height=350,left=310,top=200,scrollbars=yes')\">
                         </div>
@@ -201,24 +184,24 @@ require("../../../adm_config/body_top.php");
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 25%; float: left;\">Datum Beginn:</div>
                     <div style=\"text-align: left; width: 75%; position: relative; left: 2%;\">
-                        <input type=\"text\" name=\"date_from\" size=\"10\" maxlength=\"10\" value=\"". $form_values['date_from']. "\">
+                        <input type=\"text\" name=\"date_from\" size=\"10\" maxlength=\"10\" value=\"$date_from\">
                         <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Uhrzeit Beginn:&nbsp;
-                        <input type=\"text\" name=\"time_from\" size=\"5\" maxlength=\"5\" value=\"". $form_values['time_from']. "\">
+                        <input type=\"text\" name=\"time_from\" size=\"5\" maxlength=\"5\" value=\"$time_from\">
                     </div>
                 </div>
                 <div style=\"margin-top: 6px;\">
                 <div style=\"text-align: right; width: 25%; float: left;\">Datum Ende:</div>
                     <div style=\"text-align: left; width: 75%; position: relative; left: 2%;\">
-                        <input type=\"text\" name=\"date_to\" size=\"10\" maxlength=\"10\" value=\"". $form_values['date_to']. "\">
+                        <input type=\"text\" name=\"date_to\" size=\"10\" maxlength=\"10\" value=\"$date_to\">
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Uhrzeit Ende:&nbsp;
-                        <input type=\"text\" name=\"time_to\" size=\"5\" maxlength=\"5\" value=\"". $form_values['time_to']. "\">
+                        <input type=\"text\" name=\"time_to\" size=\"5\" maxlength=\"5\" value=\"$time_to\">
                     </div>
                 </div>
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: right; width: 25%; float: left;\">Treffpunkt:</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <input type=\"text\" name=\"meeting_point\" style=\"width: 350px;\" maxlength=\"50\" value=\"". htmlspecialchars($form_values['meeting_point'], ENT_QUOTES). "\">
+                        <input type=\"text\" name=\"dat_location\" style=\"width: 350px;\" maxlength=\"50\" value=\"". htmlspecialchars($date->getValue("dat_location"), ENT_QUOTES). "\">
                     </div>
                 </div>
                 <div style=\"margin-top: 6px;\">
@@ -230,7 +213,7 @@ require("../../../adm_config/body_top.php");
                         }
                     echo "</div>
                     <div style=\"text-align: left; margin-left: 27%;\">
-                        <textarea  name=\"description\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". htmlspecialchars($form_values['description'], ENT_QUOTES). "</textarea>
+                        <textarea  name=\"dat_description\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". htmlspecialchars($date->getValue("dat_description"), ENT_QUOTES). "</textarea>
                         <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
                     </div>
                 </div>
