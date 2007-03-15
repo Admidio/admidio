@@ -9,8 +9,8 @@
  * Uebergaben:
  *
  * user_id     - Funktionen der uebergebenen user_id aendern
- * popup   : 0 - (Default) Fenster wird normal mit Homepagerahmen angezeigt
- *           1 - Fenster wurde im Popupmodus aufgerufen
+ * new_user: 0 - (Default) Daten eines vorhandenen Users werden bearbeitet
+ *           1 - Der User ist gerade angelegt worden -> Rollen muessen zugeordnet werden
  *
  ******************************************************************************
  *
@@ -38,39 +38,32 @@ if(!isModerator() && !isGroupLeader() && !$g_current_user->editUser())
     $g_message->show("norights");
 }
 
+// lokale Variablen der Uebergabevariablen initialisieren
+$req_usr_id   = 0;
+$req_new_user = 0;
+
 // Uebergabevariablen pruefen
 
-if(isset($_GET["user_id"]) && is_numeric($_GET["user_id"]) == false)
+if(isset($_GET["user_id"]))
 {
-    $g_message->show("invalid");
-}
-
-if(array_key_exists("popup", $_GET))
-{
-    if(is_numeric($_GET["popup"]) == false)
+    if(is_numeric($_GET["user_id"]) == false)
     {
         $g_message->show("invalid");
     }
-}
-else
-{
-    $_GET["popup"] = 0;
+    $req_usr_id = $_GET["user_id"];
 }
 
-if(array_key_exists("new_user", $_GET))
+if(isset($_GET["new_user"]))
 {
     if(is_numeric($_GET["new_user"]) == false)
     {
         $g_message->show("invalid");
     }
-}
-else
-{
-    $_GET["new_user"] = 0;
+    $req_new_usr = $_GET["new_user"];
 }
 
 $user     = new User($g_adm_con);
-$user->GetUser($_GET['user_id']);
+$user->GetUser($req_usr_id);
 $_SESSION['navigation']->addUrl($g_current_url);
 
 //Testen ob Feste Rolle gesetzt ist
@@ -122,31 +115,16 @@ echo "
     <!--[if lt IE 7]>
     <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
     <![endif]-->";
-    if($_GET['popup'] == 0)
-    {
-        require("../../../adm_config/header.php");
-    }
+    require("../../../adm_config/header.php");
 echo "</head>";
 
-if($_GET['popup'] == 0)
-{
-    require("../../../adm_config/body_top.php");
-}
-else
-{
-    echo "<body>";
-}
-
-echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
+require("../../../adm_config/body_top.php");
+    echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
     <h1>Rollen f&uuml;r $user->first_name $user->last_name zuordnen</h1>
 
-    <form action=\"roles_save.php?user_id=". $_GET['user_id']. "&amp;popup=". $_GET['popup']. "&amp;new_user=". $_GET['new_user']. "\" method=\"post\" name=\"Funktionen\">
-        <table class=\"tableList\" cellpadding=\"3\" cellspacing=\"0\" ";
-            if($_GET['popup'] == 1)
-            {
-                echo "style=\"width: 95%;\">";
-            }
-            echo "<tr>
+    <form action=\"roles_save.php?user_id=$req_usr_id&amp;new_user=$req_new_user\" method=\"post\" name=\"Funktionen\">
+        <table class=\"tableList\" cellpadding=\"3\" cellspacing=\"0\">
+            <tr>
                 <th class=\"tableHeader\">&nbsp;</th>
                 <th class=\"tableHeader\" style=\"text-align: left;\">Rolle</th>
                 <th class=\"tableHeader\" style=\"text-align: left;\">Beschreibung</th>
@@ -200,7 +178,7 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
                               AND rol_locked     = 0
                             ORDER BY rol_name";
             }
-            $sql    = prepareSQL($sql, array($_GET['user_id']));
+            $sql    = prepareSQL($sql, array($req_usr_id));
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
             $i = 0;
@@ -253,20 +231,12 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
         echo "</table>
 
         <div style=\"margin: 8px;\">";
-            if($_GET['popup'] == 0)
-            {
-                echo "<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
-                    <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
-                      &nbsp;Zur&uuml;ck</button>";
-            }
-            else
-            {
-                echo "<button name=\"schliessen\" type=\"button\" value=\"schliessen\" onclick=\"window.close()\">
-                    <img src=\"$g_root_path/adm_program/images/door_in.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Schlie&szlig;en\">
-                    &nbsp;Schlie&szlig;en</button>";
-            }
-
-            echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            echo "<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
+                <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
+                  &nbsp;Zur&uuml;ck</button>
+                  
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            
             <button name=\"speichern\" type=\"submit\" value=\"speichern\">
                 <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
                 &nbsp;Speichern</button>
@@ -274,12 +244,7 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
     </form>
 
     </div>";
-
-    if($_GET['popup'] == 0)
-    {
-      require("../../../adm_config/body_bottom.php");
-    }
+    require("../../../adm_config/body_bottom.php");
 echo "</body>
 </html>";
-//festgelgte Rolle loeschen
 ?>

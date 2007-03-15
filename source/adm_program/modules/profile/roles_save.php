@@ -37,11 +37,28 @@ if(!isModerator() && !isGroupLeader() && !$g_current_user->editUser())
     $g_message->show("norights");
 }
 
+// lokale Variablen der Uebergabevariablen initialisieren
+$req_usr_id   = 0;
+$req_new_user = 0;
+
 // Uebergabevariablen pruefen
 
-if(isset($_GET["user_id"]) && is_numeric($_GET["user_id"]) == false)
+if(isset($_GET["user_id"]))
 {
-    $g_message->show("invalid");
+    if(is_numeric($_GET["user_id"]) == false)
+    {
+        $g_message->show("invalid");
+    }
+    $req_usr_id = $_GET["user_id"];
+}
+
+if(isset($_GET["new_user"]))
+{
+    if(is_numeric($_GET["new_user"]) == false)
+    {
+        $g_message->show("invalid");
+    }
+    $req_new_usr = $_GET["new_user"];
 }
 
 if(isModerator())
@@ -101,7 +118,7 @@ while($row = mysql_fetch_object($result_rolle))
                         AND mem_usr_id = {0}
                         AND mem_leader = 0
                         AND mem_valid  = 1";
-        $sql    = prepareSQL($sql, array($_GET['user_id']));
+        $sql    = prepareSQL($sql, array($req_usr_id));
         $result = mysql_query($sql, $g_adm_con);
         db_error($result);
 
@@ -171,7 +188,7 @@ while($row = mysql_fetch_object($result_rolle))
                     WHERE mem_rol_id = $row->rol_id
                       AND mem_usr_id = {0}
                       AND mem_rol_id = rol_id ";
-        $sql    = prepareSQL($sql, array($_GET['user_id']));
+        $sql    = prepareSQL($sql, array($req_usr_id));
         $result = mysql_query($sql, $g_adm_con);
         db_error($result);
 
@@ -210,7 +227,7 @@ while($row = mysql_fetch_object($result_rolle))
         }
 
         // Update aufueren
-        $sql    = prepareSQL($sql, array($_GET['user_id']));
+        $sql    = prepareSQL($sql, array($req_usr_id));
         $result = mysql_query($sql, $g_adm_con);
         db_error($result);
 
@@ -235,7 +252,7 @@ $_SESSION['navigation']->deleteLastUrl();
 
 // falls Rollen dem eingeloggten User neu zugewiesen wurden, 
 // dann muessen die Rechte in den Session-Variablen neu eingelesen werden
-if($g_current_user->id != $_GET['user_id'])
+if($g_current_user->id != $req_usr_id)
 {
     $g_current_user->clearRights();
     $_SESSION['g_current_user'] = $g_current_user;
@@ -251,15 +268,15 @@ if(count($parentRoles) > 0 )
         $sql .= " ($actRole, {0}, NOW(), NULL, 1, 0),";
     }
 
-    //Das letzte Komma wieder wegschneiden
+    // Das letzte Komma wieder wegschneiden
     $sql = substr($sql,0,-1);
     
-    $sql    = prepareSQL($sql, array($_GET['user_id']));
+    $sql    = prepareSQL($sql, array($req_usr_id));
     $result = mysql_query($sql, $g_adm_con);
     db_error($result);
 }
 
-if($_GET['new_user'] == 1 && $count_assigned == 0)
+if($req_new_user == 1 && $count_assigned == 0)
 {
     // Neuem User wurden keine Rollen zugewiesen
     $g_message->show("norolle");
