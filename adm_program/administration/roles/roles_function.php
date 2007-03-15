@@ -73,7 +73,7 @@ if($req_rol_id > 0)
     // Pruefung, ob die Rolle zur aktuellen Organisation gehoert
     if($role->getValue("rol_org_shortname") != $g_organization)
     {
-        $g_message->show("invalid");
+        $g_message->show("norights");
     }
 }
 
@@ -300,7 +300,7 @@ elseif($_GET["mode"] == 2)
     // POST Variablen in das Role-Objekt schreiben
     foreach($_POST as $key => $value)
     {
-        if(strpos($key, "rol_") == 0)
+        if(strpos($key, "rol_") === 0)
         {
             $role->setValue($key, $value);
         }

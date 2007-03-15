@@ -18,13 +18,13 @@
  *
  * Folgende Funktionen stehen weiter zur Verfuegung:
  *
+ * clear()                - Die Klassenvariablen werden neu initialisiert
  * setValue($field_name, $field_value) - setzt einen Wert fuer ein bestimmtes Feld
  * getValue($field_name)  - gibt den Wert eines Feldes zurueck
  * update($login_user_id) - Rolle wird mit den geaenderten Daten in die Datenbank
  *                          zurueckgeschrieben
  * insert($login_user_id) - Eine neue Rolle wird in die Datenbank geschrieben
  * delete()               - Die gewaehlte Rolle wird aus der Datenbank geloescht
- * clear()                - Die Klassenvariablen werden neu initialisiert
  * setInactive()          - setzt die Rolle auf inaktiv
  * setActive()            - setzt die Rolle wieder auf aktiv
  * countVacancies($count_leaders = false) - gibt die freien Plaetze der Rolle zurueck
@@ -93,7 +93,7 @@ class Role
     {
         if(count($this->db_fields) > 0)
         {
-            foreach($this->db_fields as $key)
+            foreach($this->db_fields as $key => $value)
             {
                 $this->db_fields[$key] = null;
             }
@@ -122,7 +122,7 @@ class Role
         
         if(strlen($field_value) == 0)
         {
-            $field_value = NULL;
+            $field_value = null;
         }
         
         // Plausibilitaetspruefungen
@@ -132,9 +132,10 @@ class Role
             case "rol_cat_id":
             case "rol_weekday":
             case "rol_max_members":
+            case "rol_usr_id_change":
                 if(is_numeric($field_value) == false)
                 {
-                    $field_value = NULL;
+                    $field_value = null;
                 }
                 break;
             
@@ -151,6 +152,7 @@ class Role
             case "rol_profile":
             case "rol_weblinks":
             case "rol_locked":
+            case "rol_valid":
                 if($field_value != 1)
                 {
                     $field_value = 0;
@@ -182,8 +184,8 @@ class Role
             $act_date = date("Y-m-d H:i:s", time());
 
             // SQL-Update-Statement zusammenbasteln
-            $sql = "UPDATE ". TBL_ROLES;
-            $item_connection = "SET";
+            $item_connection = "";
+            $sql_field_list  = "";
 
             // Schleife ueber alle DB-Felder und diese dem Update hinzufuegen                
             foreach($this->db_fields as $key => $value)
@@ -195,26 +197,26 @@ class Role
                     switch($key)
                     {
                         case "rol_last_change":
-                            $sql = $sql. " $item_connection $key = '$act_date' ";
+                            $sql_field_list = $sql_field_list. " $item_connection $key = '$act_date' ";
                             break;
 
                         case "rol_usr_id_change":
-                            $sql = $sql. " $item_connection $key = $login_user_id ";
+                            $sql_field_list = $sql_field_list. " $item_connection $key = $login_user_id ";
                             break;
 
                         default:
-                            $sql = $sql. " $item_connection $key = \{$key} ";
+                            $sql_field_list = $sql_field_list. " $item_connection $key = \{$key} ";
                             break;
                     }
 
-                    if($item_connection == "SET")
+                    if(strlen($item_connection) == 0)
                     {
                         $item_connection = ",";
                     }
                 }
             }
 
-            $sql = $sql. " WHERE rol_id = {rol_id} ";
+            $sql = "UPDATE ". TBL_ROLES. " SET $sql_field_list WHERE rol_id = {rol_id} ";
             $sql = prepareSQL($sql, $this->db_fields);
             $result = mysql_query($sql, $this->db_connection);
             db_error($result);
