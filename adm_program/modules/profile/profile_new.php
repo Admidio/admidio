@@ -198,12 +198,12 @@ require("../../../adm_config/body_top.php");
                     <div style=\"text-align: right; width: 30%; float: left;\">Nachname:</div>
                     <div style=\"text-align: left; margin-left: 32%;\">
                         <input type=\"text\" id=\"last_name\" name=\"last_name\" style=\"width: 200px;\" maxlength=\"30\" value=\"$user->last_name\" ";
-                        if(hasRole('Webmaster') == false && $new_user == 0)
+                        if($g_current_user->isWebmaster() == false && $new_user == 0)
                         {
                             echo " class=\"readonly\" readonly ";
                         }
                         echo " />";
-                        if($new_user > 0 || hasRole('Webmaster') == true)
+                        if($new_user > 0 || $g_current_user->isWebmaster() == true)
                         {
                             echo "&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>";
                         }
@@ -213,12 +213,12 @@ require("../../../adm_config/body_top.php");
                     <div style=\"text-align: right; width: 30%; float: left;\">Vorname:</div>
                     <div style=\"text-align: left; margin-left: 32%;\">
                         <input type=\"text\" name=\"first_name\" style=\"width: 200px;\" maxlength=\"30\" value=\"$user->first_name\" ";
-                        if(hasRole('Webmaster') == false && $new_user == 0)
+                        if($g_current_user->isWebmaster() == false && $new_user == 0)
                         {
                             echo " class=\"readonly\" readonly ";
                         }
                         echo " />";
-                        if($new_user > 0 || hasRole('Webmaster') == true)
+                        if($new_user > 0 || $g_current_user->isWebmaster() == true)
                         {
                             echo "&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>";
                         }
@@ -245,7 +245,7 @@ require("../../../adm_config/body_top.php");
                         <div style=\"text-align: right; width: 30%; float: left;\">Benutzername:</div>
                         <div style=\"text-align: left; margin-left: 32%;\">
                             <input type=\"text\" name=\"login_name\" style=\"width: 130px;\" maxlength=\"20\" value=\"$user->login_name\" ";
-                            if(hasRole('Webmaster') == false && $new_user == 0)
+                            if($g_current_user->isWebmaster() == false && $new_user == 0)
                             {
                                 echo " class=\"readonly\" readonly ";
                             }
@@ -281,7 +281,7 @@ require("../../../adm_config/body_top.php");
                     else
                     {
                         // eigenes Passwort aendern, nur Webmaster duerfen Passwoerter von anderen aendern
-                        if(hasRole('Webmaster') || $g_current_user->id == $usr_id )
+                        if($g_current_user->isWebmaster() || $g_current_user->id == $usr_id )
                         {
                             echo "<div style=\"margin-top: 6px;\">
                                 <div style=\"text-align: right; width: 30%; float: left;\">Passwort:</div>
@@ -656,7 +656,7 @@ require("../../../adm_config/body_top.php");
         </form>
     </div>
     <script type=\"text/javascript\"><!--\n";
-        if(hasRole('Webmaster') || $new_user > 0)
+        if($g_current_user->isWebmaster() || $new_user > 0)
         {
             echo "document.getElementById('last_name').focus();";
         }

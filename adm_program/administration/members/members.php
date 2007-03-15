@@ -469,7 +469,7 @@ require("../../../adm_config/body_top.php");
                                 // Link um E-Mail mit neuem Passwort zu zuschicken
                                 // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
                                 if($is_member
-                                && hasRole("Webmaster")
+                                && $g_current_user->isWebmaster()
                                 && strlen($row->usr_login_name) > 0
                                 && strlen($row->usr_email) > 0
                                 && $g_preferences['enable_system_mails'] == 1)

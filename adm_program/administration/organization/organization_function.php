@@ -31,7 +31,7 @@ require("../../system/common.php");
 require("../../system/login_valid.php");
 
 // nur Webmaster duerfen Organisationen bearbeiten
-if(!hasRole("Webmaster"))
+if($g_current_user->isWebmaster() == false)
 {
     $g_message->show("norights");
 }

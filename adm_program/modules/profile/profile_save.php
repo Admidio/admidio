@@ -130,7 +130,7 @@ if($usr_id > 0)
 // Feldinhalte saeubern und der User-Klasse zuordnen
 /*------------------------------------------------------------*/
 
-if(hasRole('Webmaster') || $new_user > 0)
+if($g_current_user->isWebmaster() || $new_user > 0)
 {
     // Diese Daten duerfen nur vom Webmaster bzw. bei Neuanlage geaendert werden
     $user->last_name  = strStripTags($_POST['last_name']);

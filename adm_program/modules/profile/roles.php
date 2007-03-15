@@ -223,7 +223,7 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
                          }
 
                          // die Funktion Webmaster darf nur von einem Webmaster vergeben werden
-                         if($row->rol_name == 'Webmaster' && !hasRole('Webmaster'))
+                         if($row->rol_name == 'Webmaster' && !$g_current_user->isWebmaster())
                          {
                             echo " disabled ";
                          }
@@ -240,7 +240,7 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
                             }
 
                             // die Funktion Webmaster darf nur von einem Webmaster vergeben werden
-                            if($row->rol_name == 'Webmaster' && !hasRole('Webmaster'))
+                            if($row->rol_name == 'Webmaster' && !$g_current_user->isWebmaster())
                             {
                                 echo " disabled ";
                             }

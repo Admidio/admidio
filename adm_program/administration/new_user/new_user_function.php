@@ -37,7 +37,7 @@ require("../../system/login_valid.php");
 require("../../system/email_class.php");
 
 // nur Webmaster duerfen User bestaetigen, ansonsten Seite verlassen
-if(!hasRole("Webmaster"))
+if($g_current_user->isWebmaster() == false)
 {
    $g_message->show("norights");
 }
@@ -160,25 +160,25 @@ if($req_mode == 1 || $req_mode == 3)
 }
 elseif($req_mode == 4)
 {
-	// Registrierung loeschen
-   	
-   	// Den Username für die Loeschung im Forum zwischenspeichern
+    // Registrierung loeschen
+    
+    // Den Username für die Loeschung im Forum zwischenspeichern
     $forum_user = $new_user->login_name;
     
-	// Paralell im Forum loeschen, wenn g_forum gesetzt ist
+    // Paralell im Forum loeschen, wenn g_forum gesetzt ist
     if($g_forum)
     {
-    	forum_delete_user($forum_user, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
+        forum_delete_user($forum_user, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
     }
 
-	$sql    = "DELETE FROM ". TBL_USERS. " WHERE usr_id = {0}";
-	$sql    = prepareSQL($sql, array($req_new_user_id));
-	$result = mysql_query($sql, $g_adm_con);
-	db_error($result);
+    $sql    = "DELETE FROM ". TBL_USERS. " WHERE usr_id = {0}";
+    $sql    = prepareSQL($sql, array($req_new_user_id));
+    $result = mysql_query($sql, $g_adm_con);
+    db_error($result);
 
-	$location = "Location: $g_root_path/adm_program/administration/new_user/new_user.php";
-	header($location);
-	exit();
+    $location = "Location: $g_root_path/adm_program/administration/new_user/new_user.php";
+    header($location);
+    exit();
 }
 elseif($req_mode == 5)
 {
@@ -190,16 +190,16 @@ elseif($req_mode == 6)
 {
     // Der User existiert schon und besitzt auch ein Login
     
-	// Den Username für die Loeschung im Forum zwischenspeichern
+    // Den Username für die Loeschung im Forum zwischenspeichern
     $forum_user = $new_user->login_name;
 
     // Registrierung loeschen
     $new_user->delete();
     
-	// Paralell im Forum loeschen, wenn g_forum gesetzt ist
+    // Paralell im Forum loeschen, wenn g_forum gesetzt ist
     if($g_forum)
     {
-    	forum_delete_user($forum_user, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
+        forum_delete_user($forum_user, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
     }
 
     // Zugangsdaten neu verschicken

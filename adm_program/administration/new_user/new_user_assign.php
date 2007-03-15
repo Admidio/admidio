@@ -31,7 +31,7 @@ require("../../system/common.php");
 require("../../system/login_valid.php");
 
 // nur Webmaster duerfen User zuordnen, ansonsten Seite verlassen
-if(!hasRole("Webmaster"))
+if($g_current_user->isWebmaster() == false)
 {
    $g_message->show("norights");
 }

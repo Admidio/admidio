@@ -33,7 +33,7 @@ require("../../system/login_valid.php");
 $user_id = $_GET['user_id'];
 
 // nur Webmaster duerfen fremde Passwoerter aendern
-if(!hasRole("Webmaster") && $g_current_user->id != $user_id)
+if(!$g_current_user->isWebmaster() && $g_current_user->id != $user_id)
 {
     $g_message->show("norights");
 }
@@ -51,7 +51,7 @@ $count_user = 0;
 $user = new User($g_adm_con);
 $user->getUser($user_id);
 
-if( ($_POST["old_password"] != "" || hasRole('Webmaster') )
+if( ($_POST["old_password"] != "" || $g_current_user->isWebmaster() )
 && $_POST["new_password"] != ""
 && $_POST["new_password2"] != "")
 {
@@ -61,7 +61,7 @@ if( ($_POST["old_password"] != "" || hasRole('Webmaster') )
         $old_password_crypt = md5($_POST["old_password"]);
 
         // Webmaster duerfen Passwort so aendern
-        if($user->password == $old_password_crypt || hasRole('Webmaster'))
+        if($user->password == $old_password_crypt || $g_current_user->isWebmaster())
         {
             $user->password = md5($_POST["new_password"]);
             $user->update($g_current_user->id);

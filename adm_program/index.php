@@ -34,7 +34,7 @@ if(!file_exists("../adm_config/config.php"))
 include("system/common.php");
 
 $webmasterRole = false;
-if(hasRole("Webmaster"))
+if($g_current_user->isWebmaster())
 {
     // der Installationsordner darf aus Sicherheitsgruenden nicht existieren
     if(!DEBUG && file_exists("../adm_install"))

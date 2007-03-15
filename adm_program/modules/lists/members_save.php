@@ -59,7 +59,12 @@ $role = mysql_fetch_object($result_role);
 // nur Moderatoren duerfen Rollen zuweisen
 // nur Webmaster duerfen die Rolle Webmaster zuweisen
 // beide muessen mitglied der richtigen Gliedgemeinschaft sein
-if((!isModerator() && !isGroupLeader($role_id) && !$g_current_user->editUser()) || (!hasRole("Webmaster") && $role->rol_name=="Webmaster") || $role->rol_org_shortname!=$g_organization)
+if(  (!isModerator() 
+   && !isGroupLeader($role_id) 
+   && !$g_current_user->editUser()) 
+|| (  !$g_current_user->isWebmaster()
+   && $role->rol_name=="Webmaster") 
+|| $role->rol_org_shortname!=$g_organization)
 {
    $g_message->show("norights");
 }
@@ -177,7 +182,7 @@ while($user= mysql_fetch_array($result_user))
             
             // abhaengige Rollen finden
             $tmpRoles = RoleDependency::getParentRoles($g_adm_con,$role_id);
-			foreach($tmpRoles as $tmpRole)
+            foreach($tmpRoles as $tmpRole)
             {
                 if(!in_array($tmpRole,$parentRoles))
                 $parentRoles[] = $tmpRole;
@@ -240,20 +245,20 @@ while($user= mysql_fetch_array($result_user))
     
     if(count($parentRoles) > 0 )
     {
-    	$sql = "REPLACE INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin,mem_end, mem_valid, mem_leader) VALUES ";
+        $sql = "REPLACE INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin,mem_end, mem_valid, mem_leader) VALUES ";
 
-    	// alle einzufuegenden Rollen anhaengen
-    	foreach($parentRoles as $actRole)
-    	{
-    	    $sql .= " ($actRole, {0}, NOW(), NULL, 1, 0),";
-    	}
+        // alle einzufuegenden Rollen anhaengen
+        foreach($parentRoles as $actRole)
+        {
+            $sql .= " ($actRole, {0}, NOW(), NULL, 1, 0),";
+        }
 
-    	//Das letzte Komma wieder wegschneiden
-    	$sql = substr($sql,0,-1);
-    	
-    	$sql    = prepareSQL($sql, array($user["usr_id"]));
-    	$result = mysql_query($sql, $g_adm_con);
-    	db_error($result);
+        //Das letzte Komma wieder wegschneiden
+        $sql = substr($sql,0,-1);
+        
+        $sql    = prepareSQL($sql, array($user["usr_id"]));
+        $result = mysql_query($sql, $g_adm_con);
+        db_error($result);
     }
     
 }
