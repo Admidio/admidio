@@ -34,12 +34,16 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
+require("../../system/role_class.php");
 
 // nur Moderatoren duerfen Rollen erfassen & verwalten
 if(!isModerator())
 {
     $g_message->show("norights");
 }
+
+// lokale Variablen der Uebergabevariablen initialisieren
+$req_rol_id = 0;
 
 // Uebergabevariablen pruefen
 
@@ -50,34 +54,31 @@ if(isset($_GET["mode"]) == false
     $g_message->show("invalid");
 }
 
-if(isset($_GET["rol_id"]) && is_numeric($_GET["rol_id"]) == false)
+if(isset($_GET["rol_id"]))
 {
-    $g_message->show("invalid");
-}
-else
-{
-    $rol_id = $_GET['rol_id'];
+    if(is_numeric($_GET["rol_id"]) == false)
+    {
+        $g_message->show("invalid");
+    }
+    $req_rol_id = $_GET["rol_id"];
 }
 
-if($rol_id > 0)
+// Rollenobjekt anlegen
+$role = new Role($g_adm_con);
+
+if($req_rol_id > 0)
 {
+    $role->getRole($req_rol_id);
+    
     // Pruefung, ob die Rolle zur aktuellen Organisation gehoert
-    $sql    = "SELECT * FROM ". TBL_ROLES. "
-                WHERE rol_id            = {0}
-                  AND rol_org_shortname = '$g_organization' ";
-    $sql    = prepareSQL($sql, array($rol_id));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
-
-    if (mysql_num_rows($result) == 0)
+    if($role->getValue("rol_org_shortname") != $g_organization)
     {
         $g_message->show("invalid");
     }
 }
 
 $_SESSION['roles_request'] = $_REQUEST;
-$err_code = "";
-$err_text = "";
+$msg_code = "";
 
 if($_GET["mode"] == 1)
 {
@@ -137,482 +138,299 @@ elseif($_GET["mode"] == 2)
 {
     // Rolle anlegen oder updaten
 
-    if(strlen(trim($_POST['name'])) > 0)
+    if(strlen(trim($_POST['rol_name'])) == 0)
     {
-        if($rol_id == 0)
-        {
-            // Schauen, ob die Rolle bereits existiert
-            $sql    = "SELECT COUNT(*) FROM ". TBL_ROLES. "
-                        WHERE rol_org_shortname LIKE '$g_organization'
-                          AND rol_name          LIKE {0}
-                          AND rol_cat_id        =    {1} ";
-            $sql    = prepareSQL($sql, array($_POST['name'], $_POST['category']));
-            $result = mysql_query($sql, $g_adm_con);
-            db_error($result);
-            $row = mysql_fetch_array($result);
+        // es sind nicht alle Felder gefuellt
+        $g_message->show("feld", "Name");
+    }
+        
+    if($req_rol_id == 0)
+    {
+        // Schauen, ob die Rolle bereits existiert
+        $sql    = "SELECT COUNT(*) FROM ". TBL_ROLES. "
+                    WHERE rol_org_shortname LIKE '$g_organization'
+                      AND rol_name          LIKE {0}
+                      AND rol_cat_id        =    {1} ";
+        $sql    = prepareSQL($sql, array($_POST['rol_name'], $_POST['rol_cat_id']));
+        $result = mysql_query($sql, $g_adm_con);
+        db_error($result);
+        $row = mysql_fetch_array($result);
 
-            if($row[0] > 0)
-            {
-                $g_message->show("role_exist");
-            }
+        if($row[0] > 0)
+        {
+            $g_message->show("role_exist");
         }
+    }
+        
+    // bei der Rolle "Webmaster" muessen bestimmte Flags gesetzt sein
+    if(strcmp($_POST['rol_name'], "Webmaster") == 0)
+    {
+        $_POST['rol_moderation']  = 1;
+        $_POST['rol_mail_logout'] = 1;
+        $_POST['rol_mail_login']  = 1;
+    }
+    
+    if(isset($_POST['rol_moderation']) == false)
+    {
+        $_POST['rol_moderation'] = 0;
+    }
+    if(isset($_POST['rol_announcements']) == false)
+    {
+        $_POST['rol_announcements'] = 0;
+    }
+    if(isset($_POST['rol_dates']) == false)
+    {
+        $_POST['rol_dates'] = 0;
+    }
+    if(isset($_POST['rol_photo']) == false)
+    {
+        $_POST['rol_photo'] = 0;
+    }
+    if(isset($_POST['rol_download']) == false)
+    {
+        $_POST['rol_download'] = 0;
+    }
+    if(isset($_POST['rol_guestbook']) == false)
+    {
+        $_POST['rol_guestbook'] = 0;
+    }
+    if(isset($_POST['rol_guestbook_comments']) == false)
+    {
+        $_POST['rol_guestbook_comments'] = 0;
+    }
+    if(isset($_POST['rol_edit_user']) == false)
+    {
+        $_POST['rol_edit_user'] = 0;
+    }
+    if(isset($_POST['rol_mail_logout']) == false)
+    {
+        $_POST['rol_mail_logout'] = 0;
+    }
+    if(isset($_POST['rol_mail_login']) == false)
+    {
+        $_POST['rol_mail_login'] = 0;
+    }
+    if(isset($_POST['rol_weblinks']) == false)
+    {
+        $_POST['rol_weblinks'] = 0;
+    }
+    if(isset($_POST['rol_profile']) == false)
+    {
+        $_POST['rol_profile'] = 0;
+    }
+    if(isset($_POST['rol_locked']) == false)
+    {
+        $_POST['rol_locked'] = 0;
+    }
+    
+    // Zeitraum von/bis auf Gueltigkeit pruefen
 
-        // Zeitraum von/bis auf Gueltigkeit pruefen
-
-        $d_datum_von = null;
-        $d_datum_bis = null;
-
-        if(strlen($_POST['start_date']) > 0)
+    if(strlen($_POST['rol_start_date']) > 0)
+    {
+        if(dtCheckDate($_POST['rol_start_date']))
         {
-            if(dtCheckDate($_POST['start_date']))
-            {
-                $d_datum_von = dtFormatDate($_POST['start_date'], "Y-m-d");
+            $_POST['rol_start_date'] = dtFormatDate($_POST['rol_start_date'], "Y-m-d");
 
-                if(strlen($_POST['end_date']) > 0)
+            if(strlen($_POST['rol_end_date']) > 0)
+            {
+                if(dtCheckDate($_POST['rol_end_date']))
                 {
-                    if(dtCheckDate($_POST['end_date']))
-                    {
-                        $d_datum_bis = dtFormatDate($_POST['end_date'], "Y-m-d");
-                    }
-                    else
-                    {
-                        $g_message->show("datum", "Zeitraum bis");
-                    }
+                    $_POST['rol_end_date'] = dtFormatDate($_POST['rol_end_date'], "Y-m-d");
                 }
                 else
                 {
-                    $g_message->show("feld", "Zeitraum bis");
+                    $g_message->show("datum", "Zeitraum bis");
                 }
             }
             else
             {
-                $g_message->show("datum", "Zeitraum von");
+                $g_message->show("feld", "Zeitraum bis");
             }
         }
-
-        // Uhrzeit von/bis auf Gueltigkeit pruefen
-
-        $t_uhrzeit_von = null;
-        $t_uhrzeit_bis = null;
-
-        if(strlen($err_code) == 0)
+        else
         {
-            if(strlen($_POST['start_time']) > 0)
-            {
-                if(dtCheckTime($_POST['start_time']))
-                {
-                    $t_uhrzeit_von = dtFormatTime($_POST['start_time'], "H:i:s");
-                }
-                else
-                {
-                    $g_message->show("uhrzeit");
-                }
-
-                if(strlen($_POST['end_time']) > 0)
-                {
-                    if(dtCheckTime($_POST['end_time']))
-                    {
-                        $t_uhrzeit_bis = dtFormatTime($_POST['end_time'], "H:i:s");
-                    }
-                    else
-                    {
-                        $g_message->show("uhrzeit");
-                    }
-                }
-                else
-                {
-                    $g_message->show("feld", "Uhrzeit bis");
-                }
-            }
+            $g_message->show("datum", "Zeitraum von");
         }
+    }
 
-        if(strlen($err_code) == 0)
+    // Uhrzeit von/bis auf Gueltigkeit pruefen
+
+    if(strlen($_POST['rol_start_time']) > 0)
+    {
+        if(dtCheckTime($_POST['rol_start_time']))
         {
-            if(strcmp($_POST['name'], "Webmaster") == 0)
-            {
-                $moderation = 1;
-            }
-            else
-            {
-                if(array_key_exists("moderation", $_POST))
-                {
-                    $moderation = 1;
-                }
-                else
-                {
-                    $moderation = 0;
-                }
-            }
-
-            if(array_key_exists("announcements", $_POST))
-            {
-                $announcements = 1;
-            }
-            else
-            {
-                $announcements = 0;
-            }
-
-            if(array_key_exists("dates", $_POST))
-            {
-                $termine = 1;
-            }
-            else
-            {
-                $termine = 0;
-            }
-
-            if(array_key_exists("photos", $_POST))
-            {
-                $foto = 1;
-            }
-            else
-            {
-                $foto = 0;
-            }
-
-            if(array_key_exists("downloads", $_POST))
-            {
-                $download = 1;
-            }
-            else
-            {
-                $download = 0;
-            }
-
-            if(array_key_exists("guestbook", $_POST))
-            {
-                $guestbook = 1;
-            }
-            else
-            {
-                $guestbook = 0;
-            }
-
-            if(array_key_exists("guestbook_comments", $_POST))
-            {
-                $guestbook_comments = 1;
-            }
-            else
-            {
-                $guestbook_comments = 0;
-            }
-
-            if(array_key_exists("users", $_POST))
-            {
-                $user = 1;
-            }
-            else
-            {
-                $user = 0;
-            }
-
-            if(array_key_exists("mail_logout", $_POST))
-            {
-                $mail_logout = 1;
-            }
-            else
-            {
-                $mail_logout = 0;
-            }
-
-            if(array_key_exists("mail_login", $_POST))
-            {
-                $mail_login = 1;
-            }
-            else
-            {
-                $mail_login = 0;
-            }
-
-            if(array_key_exists("links", $_POST))
-            {
-                $weblinks = 1;
-            }
-            else
-            {
-                $weblinks = 0;
-            }
-
-            if(array_key_exists("profile", $_POST))
-            {
-                $profile = 1;
-            }
-            else
-            {
-                $profile = 0;
-            }
-
-            if(array_key_exists("locked", $_POST))
-            {
-                $locked = 1;
-            }
-            else
-            {
-                $locked = 0;
-            }
-
-            if(!array_key_exists("max_members", $_POST)
-            || strlen($_POST['max_members']) == 0)
-            {
-                $_POST['max_members'] = "NULL";
-            }
-            /* Fasse: erkenne im Moment den Sinn nicht mehr :-(
-            elseif($_POST['max_members'] == 0)
-            {
-                $_POST['max_members'] = "0";
-            }*/
-
-            // Kontrollieren ob bei nachtraeglicher Aenderung der maximalen Mitgliederzahl diese nicht bereits ueberschritten wurde
-
-            // Zaehlen wieviele Leute die Rolle bereits haben, ohne Leiter
-            if($rol_id > 0)
-            {
-                $sql    = "SELECT COUNT(*) FROM ". TBL_MEMBERS. "
-                            WHERE mem_rol_id= {0}
-                              AND mem_leader = 0
-                              AND mem_valid  = 1";
-                $sql    = prepareSQL($sql, array($rol_id));
-                $result = mysql_query($sql, $g_adm_con);
-                db_error($result);
-                $role_members = mysql_fetch_array($result);
-
-                if($_POST['max_members']!= 0 && ($role_members[0] > $_POST['max_members']))
-                {
-                    $g_message->show("max_members_roles_change");
-                }
-            }
-
-            if(!array_key_exists("cost", $_POST)
-            || strlen($_POST['cost']) == 0)
-            {
-                $_POST['cost'] = "NULL";
-            }
-            /* Fasse: erkenne im Moment den Sinn nicht mehr :-(
-            elseif($_POST['cost'] == 0)
-            {
-                $_POST['cost'] = "0";
-            }*/
-
-            if($rol_id > 0)
-            {
-                $act_date = date("Y.m.d G:i:s", time());
-                $sql = "UPDATE ". TBL_ROLES. "  SET rol_name    = {0}
-                                                  , rol_description   = {1}
-                                                  , rol_cat_id        = {2}
-                                                  , rol_moderation    = $moderation
-                                                  , rol_announcements = $announcements
-                                                  , rol_dates         = $termine
-                                                  , rol_photo         = $foto
-                                                  , rol_download      = $download
-                                                  , rol_edit_user     = $user
-                                                  , rol_guestbook     = $guestbook
-                                                  , rol_guestbook_comments = $guestbook_comments
-                                                  , rol_mail_logout   = $mail_logout
-                                                  , rol_mail_login    = $mail_login
-                                                  , rol_weblinks      = $weblinks
-                                                  , rol_profile       = $profile
-                                                  , rol_locked        = $locked
-                                                  , rol_start_date    = {3}
-                                                  , rol_start_time    = {4}
-                                                  , rol_end_date      = {5}
-                                                  , rol_end_time      = {6}
-                                                  , rol_weekday       = {7}
-                                                  , rol_location      = {8}
-                                                  , rol_max_members   = {9}
-                                                  , rol_cost          = {10}
-                                                  , rol_last_change   = '$act_date'
-                                                  , rol_usr_id_change = $g_current_user->id
-                        WHERE rol_id = {11} ";
-            }
-            else
-            {
-                // Rolle in Datenbank hinzufuegen
-                $sql    = "INSERT INTO ". TBL_ROLES. " (rol_org_shortname, rol_name, rol_description, rol_cat_id,
-                                                       rol_moderation, rol_announcements, rol_dates, rol_photo, rol_download,
-                                                       rol_edit_user, rol_guestbook, rol_guestbook_comments, rol_mail_logout,
-                                                       rol_mail_login, rol_weblinks, rol_profile,  rol_locked, rol_start_date, rol_start_time,
-                                                       rol_end_date, rol_end_time, rol_weekday, rol_location,
-                                                       rol_max_members, rol_cost, rol_valid)
-                                                VALUES ('$g_organization', {0}, {1}, {2},
-                                                       $moderation, $announcements, $termine, $foto, $download,
-                                                       $user, $guestbook, $guestbook_comments, $mail_logout,
-                                                       $mail_login, $weblinks, $profile, $locked, {3}, {4},
-                                                       {5},{6}, {7}, {8},
-                                                       {9}, {10}, 1) ";
-            }
-            $sql    = prepareSQL($sql, array(trim($_POST['name']), trim($_POST['description']), $_POST['category'],
-                            $d_datum_von, $t_uhrzeit_von, $d_datum_bis, $t_uhrzeit_bis,  $_POST['weekday'],
-                            trim($_POST['location']), $_POST['max_members'], $_POST['cost'], $rol_id));
-            $result = mysql_query($sql, $g_adm_con);
-            db_error($result);
-            
-            // holt die Role ID des letzten Insert Statements
-            if($rol_id < 1)
-            {
-                $rol_id = mysql_insert_id();
-            }
-            
-            //Reset des Rechtecache in der UserKlasse für den aendernen User
-            $g_current_user->clearRights();
-
-            //Rollenabhaengigkeiten setzten
-            if(array_key_exists("ChildRoles", $_POST))
-            {
-
-                $sentChildRoles = $_POST['ChildRoles'];
-
-                $roleDep = new RoleDependency($g_adm_con);
-
-                // holt eine Liste der ausgewählten Rolen
-                $DBChildRoles = RoleDependency::getChildRoles($g_adm_con,$rol_id);
-                
-                //entferne alle Rollen die nicht mehr ausgewählt sind
-                if($DBChildRoles != -1)
-                {
-                    foreach ($DBChildRoles as $DBChildRole)
-                    {
-                        if(in_array($DBChildRole,$sentChildRoles))
-                            continue;
-                        else
-                        {
-
-                            $roleDep->get($DBChildRole,$rol_id);
-                            $roleDep->delete();
-                        }
-                    }
-                }
-                //fuege alle neuen Rollen hinzu
-                foreach ($sentChildRoles as $sentChildRole)
-                {
-                    if((-1 == $DBChildRoles) || in_array($sentChildRole,$DBChildRoles))
-                        continue;
-                    else
-                    {
-                        $roleDep->clear();
-                        $roleDep->setChild($sentChildRole);
-                        $roleDep->setParent($rol_id);
-                        $roleDep->insert($g_current_user->id);
-
-                        //füge alle Mitglieder der ChildRole der ParentRole zu
-                        $roleDep->updateMembership();
-
-                    }
-
-                }
-
-            }
-            else
-            {
-                RoleDependency::removeChildRoles($g_adm_con,$rol_id);
-            }
-
-            $_SESSION['navigation']->deleteLastUrl();
-            unset($_SESSION['roles_request']);
+            $_POST['rol_start_time'] = dtFormatTime($_POST['rol_start_time'], "H:i:s");
         }
+        else
+        {
+            $g_message->show("uhrzeit");
+        }
+
+        if(strlen($_POST['rol_end_time']) > 0)
+        {
+            if(dtCheckTime($_POST['rol_end_time']))
+            {
+                $_POST['rol_end_time'] = dtFormatTime($_POST['rol_end_time'], "H:i:s");
+            }
+            else
+            {
+                $g_message->show("uhrzeit");
+            }
+        }
+        else
+        {
+            $g_message->show("feld", "Uhrzeit bis");
+        }
+    }
+
+    // Kontrollieren ob bei nachtraeglicher Senkung der maximalen Mitgliederzahl diese nicht bereits ueberschritten wurde
+
+    if($req_rol_id > 0
+    && $_POST['rol_max_members'] < $role->getValue('rol_max_members'))
+    {
+        // Zaehlen wieviele Leute die Rolle bereits haben, ohne Leiter
+        $num_free_places = $role->countVacancies();
+
+        if($num_free_places == 0)
+        {
+            $g_message->show("max_members_roles_change");
+        }
+    }
+    
+    // POST Variablen in das Role-Objekt schreiben
+    foreach($_POST as $key => $value)
+    {
+        if(strpos($key, "rol_") == 0)
+        {
+            $role->setValue($key, $value);
+        }
+    }
+
+    // Daten in Datenbank schreiben
+    if($req_rol_id > 0)
+    {
+        $return_code = $role->update($g_current_user->id);
     }
     else
     {
-        // es sind nicht alle Felder gefuellt
-        $g_message->show("feld", "Rolle");
+        $return_code = $role->insert($g_current_user->id);
     }
 
-    $err_code = "save";
-}
-elseif($_GET["mode"] == 3)
-{
-    // Rolle zur inaktiven Rolle machen
-
-    $sql = "SELECT rol_name FROM ". TBL_ROLES. "
-             WHERE rol_id = {0}";
-    $sql    = prepareSQL($sql, array($rol_id));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
-
-    $row = mysql_fetch_array($result);
-
-    if($row[0] == "Webmaster")
+    if($return_code < 0)
     {
         $g_message->show("norights");
     }
 
-    // Rolle ungueltig machen
+    // holt die Role ID des letzten Insert Statements
+    if($req_rol_id == 0)
+    {
+        $req_rol_id = $role->getValue("rol_id");
+    }
 
-    $sql    = "UPDATE ". TBL_MEMBERS. " SET mem_valid = 0
-                                          , mem_end   = SYSDATE()
-                WHERE mem_rol_id = {0}
-                  AND mem_valid  = 1 ";
-    $sql    = prepareSQL($sql, array($rol_id));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    //Reset des Rechtecache in der UserKlasse für den aendernen User
+    $g_current_user->clearRights();
 
-    $sql    = "UPDATE ". TBL_ROLES. " SET rol_valid = 0
-                WHERE rol_id = {0}";
-    $sql    = prepareSQL($sql, array($rol_id));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    //Rollenabhaengigkeiten setzten
+    if(array_key_exists("ChildRoles", $_POST))
+    {
 
-    $err_code = "role_inactive";
-    $g_message->addVariableContent(utf8_encode($row[0]));
+        $sentChildRoles = $_POST['ChildRoles'];
+
+        $roleDep = new RoleDependency($g_adm_con);
+
+        // holt eine Liste der ausgewählten Rolen
+        $DBChildRoles = RoleDependency::getChildRoles($g_adm_con,$req_rol_id);
+
+        //entferne alle Rollen die nicht mehr ausgewählt sind
+        if($DBChildRoles != -1)
+        {
+            foreach ($DBChildRoles as $DBChildRole)
+            {
+                if(in_array($DBChildRole,$sentChildRoles))
+                    continue;
+                else
+                {
+
+                    $roleDep->get($DBChildRole,$req_rol_id);
+                    $roleDep->delete();
+                }
+            }
+        }
+        //fuege alle neuen Rollen hinzu
+        foreach ($sentChildRoles as $sentChildRole)
+        {
+            if((-1 == $DBChildRoles) || in_array($sentChildRole,$DBChildRoles))
+                continue;
+            else
+            {
+                $roleDep->clear();
+                $roleDep->setChild($sentChildRole);
+                $roleDep->setParent($req_rol_id);
+                $roleDep->insert($g_current_user->id);
+
+                //füge alle Mitglieder der ChildRole der ParentRole zu
+                $roleDep->updateMembership();
+
+            }
+
+        }
+
+    }
+    else
+    {
+        RoleDependency::removeChildRoles($g_adm_con,$req_rol_id);
+    }
+
+    $_SESSION['navigation']->deleteLastUrl();
+    unset($_SESSION['roles_request']);
+
+    $msg_code = "save";
+}
+elseif($_GET["mode"] == 3)
+{
+    // Rolle zur inaktiven Rolle machen
+    $return_code = $role->setInactive();
+    
+    if($return_code < 0)
+    {
+        $g_message->show("norights");
+    }
+
+    $msg_code = "role_inactive";
+    $g_message->addVariableContent(utf8_encode($role->getValue("rol_name")));
 }
 elseif($_GET["mode"] == 4)
 {
     // Rolle aus der DB loeschens
-    $sql    = "DELETE FROM ". TBL_MEMBERS. "
-                WHERE mem_rol_id = {0} ";
-    $sql    = prepareSQL($sql, array($rol_id));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    $return_code = $role->delete();
+    
+    if($return_code < 0)
+    {
+        $g_message->show("norights");
+    }
 
-    $sql    = "DELETE FROM ". TBL_ROLES. "
-                WHERE rol_id = {0}";
-    $sql    = prepareSQL($sql, array($rol_id));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
-
-    $err_code = "delete";
+    $msg_code = "delete";
 }
 elseif($_GET["mode"] == 5)
 {
     // Rolle wieder aktiv setzen
-    $sql    = "UPDATE ". TBL_MEMBERS. " SET mem_valid = 1
-                                          , mem_end   = NULL
-                WHERE mem_rol_id = {0} ";
-    $sql    = prepareSQL($sql, array($rol_id));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    $return_code = $role->setActive();
 
-    $sql    = "UPDATE ". TBL_ROLES. " SET rol_valid = 1
-                WHERE rol_id = {0}";
-    $sql    = prepareSQL($sql, array($rol_id));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    if($return_code < 0)
+    {
+        $g_message->show("norights");
+    }
 
-    // Name der Rolle auslesen
-    $sql = "SELECT rol_name FROM ". TBL_ROLES. "
-             WHERE rol_id = {0}";
-    $sql    = prepareSQL($sql, array($rol_id));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
-    $row = mysql_fetch_array($result);
-
-    $err_code = "role_active";
-    $g_message->addVariableContent(utf8_encode($row[0]));
+    $msg_code = "role_active";
+    $g_message->addVariableContent(utf8_encode($role->getValue("rol_name")));
 }
 elseif($_GET["mode"] == 6)
 {
     // Fragen, ob die inaktive Rolle geloescht werden soll
-    $sql = "SELECT rol_name FROM ". TBL_ROLES. "
-             WHERE rol_id = {0}";
-    $sql    = prepareSQL($sql, array($rol_id));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
-    $row = mysql_fetch_object($result);
-
-    $g_message->setForwardYesNo("$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$rol_id&amp;mode=4");
-    $g_message->show("delete_role", utf8_encode($row->rol_name), "Löschen");
+    $g_message->setForwardYesNo("$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$req_rol_id&amp;mode=4");
+    $g_message->show("delete_role", utf8_encode($role->getValue("rol_name")), "Löschen");
 }
 
 $g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
-$g_message->show($err_code);
+$g_message->show($msg_code);
 ?>
