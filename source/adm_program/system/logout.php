@@ -49,25 +49,9 @@ if($session_found > 0)
 }
 
 // Wenn die Session des Forums aktiv ist, diese ebenfalls loeschen.
-if(isset($_SESSION['s_user_valid']) AND $_SESSION['s_user_valid'] == TRUE)
+if($g_forum->session_valid)
 {
-    forum_session("update", -1, $g_forum_cookie_name, $g_forum_cookie_path, $g_forum_cookie_domain, $g_forum_cookie_secure, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
-
-    // Forum Datenbank auswaehlen
-    mysql_select_db($g_forum_db, $g_forum_con);
-    
-    // Last_Visit fuer das Forum aktualisieren
-    $sql    = "UPDATE ". $g_forum_praefix. "_users 
-       	      SET user_lastvisit = ". time() . "
-           	  WHERE user_id = $g_forum_userid";
-    $result = mysql_query($sql, $g_forum_con);
-    db_error($result);
-    		
-	// Admidio DB waehlen
-    mysql_select_db($g_adm_db, $g_adm_con);
-
-    // Session Varibale loeschen
-    unset($_SESSION['s_user_valid']);
+    $g_forum->forum_user_logoff();
 
     $message_code = "logoutforum";    
 }

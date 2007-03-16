@@ -213,17 +213,19 @@ if(strlen($user->login_name) > 0)
     // Benutzernamenswechesel und diese Dinge
     if($g_forum)
     {
+        //$g_forum->forum_user_register($user->login_name);
+        
         // pruefen, ob der Benutzername bereits im Forum vergeben ist
         // Wenn die usr_id 0 ist, ist es eine Neuanmeldung, also nur den login_namen prüfen
         if($usr_id == 0)
         {
-            if(forum_check_user($user->login_name, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix))
+            if($g_forum->forum_check_user($user->login_name))
             {
                 $g_message->show("login_name_forum");
             }
         }
         else
-        // Wenn die usr_id > 0, dann ist es eine Änderung eines bestehenden Users, 
+        // Wenn die usr_id > 0, dann ist es eine Aenderung eines bestehenden Users, 
         // also nachschauen, ob der neu gewählte login_name im Forum existiert.
         {
             // Erst mal den alten Usernamen holen
@@ -243,7 +245,7 @@ if(strlen($user->login_name) > 0)
                     $forum_new = TRUE;
                     
                     // Schauen, ob der neue Benutzername schon im Forum vorhanden ist
-                    if(forum_check_user($user->login_name, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix))
+                    if($g_forum->forum_check_user($user->login_name))
                     {
                         $g_message->show("login_name_forum");
                     }
@@ -255,7 +257,7 @@ if(strlen($user->login_name) > 0)
                     $forum_old_username = $row[0];
                     
                     // Schauen, ob der neue Benutzername schon im Forum vorhanden ist
-                    if(forum_check_user($user->login_name, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix))
+                    if($g_forum->forum_check_user($user->login_name))
                     {
                         if($forum_old_username != $user->login_name)
                         {
@@ -349,12 +351,12 @@ if($usr_id > 0)
         if($forum_new)
         {
             // Eine Neuanmeldung im Forum
-            forum_insert_user($user->login_name, 1, $user->password, $user->email, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
+            $g_forum->forum_insert_user($user->login_name, 1, $user->password, $user->email);
         }
         else
         {
             // Ein Update eines bestehenden Forumusers
-            forum_update_username($user->login_name, $forum_old_username, 1, $user->password, $user->email, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
+            $g_forum->forum_update_username($user->login_name, $forum_old_username, 1, $user->password, $user->email);
         }
     }
     $ret_code = $user->update($g_current_user->id);        
@@ -363,7 +365,7 @@ else
 {
     if($g_forum && $user->login_name)
     {
-        forum_insert_user($user->login_name, 0, $user->password, $user->email, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
+        $g_forum->forum_insert_user($user->login_name, 0, $user->password, $user->email);
     }
     $ret_code = $user->insert($g_current_user->id);
 }
@@ -456,10 +458,10 @@ if($new_user == 3)
     $user->reg_org_shortname = "";
     $user->update($g_current_user->id);
 
-    // Den User nun im Forum auch als Aktiv updaten
+    // Den User nun im Forum auch als Aktiv updaten, wenn g_forum gesetzt ist
     if($g_forum)
     {
-        forum_update_user($user->login_name, 1, $user->password, $user->email, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
+        $g_forum->forum_update_user($user->login_name, 1, $user->password, $user->email);
     }
 
     // nur ausfuehren, wenn E-Mails auch unterstuetzt werden

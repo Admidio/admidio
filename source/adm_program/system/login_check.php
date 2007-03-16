@@ -115,72 +115,10 @@ if ($user_found >= 1)
         // Paralell im Forum einloggen, wenn g_forum gesetzt ist
         if($g_forum)
         {
-            $forum_admin_reset = false;
-            $forum_export_account = false;
-            
-            /* Ueberpruefen, ob User ID =1 (Administrator) angemeldet ist. 
-            Falls ja, wird geprueft, ob im Forum der gleiche Username und Password fuer die UserID 2 
-            (Standard ID fuer den Administrator im Forum) besteht.
-            Dieser wird im nein Fall (neue Installation des Boards) auf den Username und das Password des 
-            Admidio UserID Accounts 1 (Standard fuer Administartor) geaendert und eine Meldung ausgegegen.
-            */
-            if($user_row->usr_id == 1)
-            {
-                $forum_admin_reset = forum_check_admin($req_login_name, $req_password_crypt, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
-            }
+			$g_forum->forum_user_login($user_row->usr_id, $req_login_name, $req_password_crypt, $g_current_user->login_name, $g_current_user->password, $g_current_user->email);
 
-
-            // Pruefen, ob es den User im Forum gibt, im Nein Fall diesem User ein Forum Account anlegen
-            if(!forum_check_user($req_login_name, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix))
-            {
-                $forum_export_account = TRUE;
-                
-                // Export der Admido Daten ins Forum und einen Forum Account erstellen
-                forum_insert_user($g_current_user->login_name, 1, $g_current_user->password, $g_current_user->email, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
-            }
-            
-            // Forums Datenbank auswaehlen
-            mysql_select_db($g_forum_db, $g_forum_con);
-
-            // User nun in Foren-Tabelle suchen und dort das Password & UserID auslesen
-            $sql    = "SELECT  user_password, user_id FROM ". $g_forum_praefix. "_users WHERE username LIKE {0} ";
-            $sql    = prepareSQL($sql, array($req_login_name));
-            $result = mysql_query($sql, $g_forum_con);
-            db_error($result);
-            
-            // Admidio DB waehlen
-            mysql_select_db($g_adm_db, $g_adm_con);
-            
-            // Natuerlich sollte hier der User auch im Forum existieren 
-            // um eine gueltige Anmeldung im Forum zu machen
-            if(mysql_num_rows($result))
-            {
-                $row = mysql_fetch_array($result);
-    
-                forum_session("insert", $row[1], $g_forum_cookie_name, $g_forum_cookie_path, $g_forum_cookie_domain, $g_forum_cookie_secure, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
-
-                // heaerLocation entsprechend der Aktionen setzen, Meldungen ausgeben und weiter zur URL.
-                if($forum_admin_reset)
-                {
-                    // Administrator Account wurde zurueck gesetzt, Meldung vorbereiten
-                    $login_message = "loginforum_admin";
-                }
-                elseif($forum_export_account)
-                {
-                    // Admidio Account wurde zum Forum exportiert und ein Account erstellt, Meldung anzeigen
-                    $login_message = "loginforum_new";
-                }
-                elseif(!(forum_check_password($req_password_crypt, $row[0], $row[1], $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix)))
-                {
-                    // Password wurde zurueck gesetzt, Meldung vorbereiten
-                    $login_message = "loginforum_pass";
-                }
-                else
-                {
-                    // Im Forum und in Admidio angemeldet, Meldung vorbereiten
-                    $login_message = "loginforum";
-                }
-            }
+            $login_message = $g_forum->message;
+        }
             else
             {
                 // User gibt es im Forum nicht, also eine reine Admidio anmeldung.

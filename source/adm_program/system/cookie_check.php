@@ -51,7 +51,7 @@ else
     {
         // Je nach Forumsaktion, Meldung ausgeben und weiter zur ForwardUrl - Seite
         $g_message->addVariableContent($g_current_user->login_name);
-        $g_message->addVariableContent($g_forum_sitename);
+        $g_message->addVariableContent($g_forum->forum_sitename);
         
         if($message_code != "loginforum")
         {

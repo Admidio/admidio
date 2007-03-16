@@ -162,13 +162,10 @@ elseif($req_mode == 4)
 {
     // Registrierung loeschen
     
-    // Den Username für die Loeschung im Forum zwischenspeichern
-    $forum_user = $new_user->login_name;
-    
-    // Paralell im Forum loeschen, wenn g_forum gesetzt ist
+	// Paralell im Forum loeschen, wenn g_forum gesetzt ist
     if($g_forum)
     {
-        forum_delete_user($forum_user, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
+    	$g_forum->forum_delete_user($new_user->login_name);
     }
 
     $sql    = "DELETE FROM ". TBL_USERS. " WHERE usr_id = {0}";
