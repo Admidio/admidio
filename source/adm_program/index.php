@@ -59,14 +59,6 @@ echo "
         font-weight:   bold;
     }
 
-    .textHeadSmall {
-        font-size:     9pt;
-        font-weight:   bold;
-    }
-
-    .textDescription {
-        font-size:     8pt;
-    }
     -->
     </style>
 
@@ -133,7 +125,7 @@ require("../adm_config/body_top.php");
                 </div>
                 <div style=\"text-align: left; margin-left: 45px;\">
                     <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/announcements/announcements.php\">Ank&uuml;ndigungen</a></span><br />
-                    <span class=\"textDescription\">Hier k&ouml;nnen Ank&uuml;ndigungen (News / Aktuelles) angeschaut, erstellt und bearbeitet werden.</span>
+                    <span class=\"smallFontSize\">Hier k&ouml;nnen Ank&uuml;ndigungen (News / Aktuelles) angeschaut, erstellt und bearbeitet werden.</span>
                 </div>
 
                 <div style=\"margin-top: 7px;\"></div>";
@@ -149,7 +141,7 @@ require("../adm_config/body_top.php");
                 </div>
                 <div style=\"text-align: left; margin-left: 45px;\">
                     <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/download/download.php\">Download</a></span><br />
-                    <span class=\"textDescription\">Benutzer k&ouml;nnen Dateien aus bestimmten Verzeichnissen herunterladen.</span>
+                    <span class=\"smallFontSize\">Benutzer k&ouml;nnen Dateien aus bestimmten Verzeichnissen herunterladen.</span>
                 </div>
 
                 <div style=\"margin-top: 7px;\"></div>";
@@ -165,7 +157,7 @@ require("../adm_config/body_top.php");
                 </div>
                 <div style=\"text-align: left; margin-left: 45px;\">
                     <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/mail/mail.php\">E-Mail</a></span><br />
-                    <span class=\"textDescription\">E-Mails an Rollen (Gruppen / Kurse / Abteilungen) schreiben.</span>
+                    <span class=\"smallFontSize\">E-Mails an Rollen (Gruppen / Kurse / Abteilungen) schreiben.</span>
                 </div>
 
                 <div style=\"margin-top: 7px;\"></div>";
@@ -181,7 +173,7 @@ require("../adm_config/body_top.php");
                 </div>
                 <div style=\"text-align: left; margin-left: 45px;\">
                     <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/photos/photos.php\">Fotos</a></span><br />
-                    <span class=\"textDescription\">Eine Fotoverwaltung bei der berechtigte Benutzer online Fotos hochladen k&ouml;nnen.</span>
+                    <span class=\"smallFontSize\">Eine Fotoverwaltung bei der berechtigte Benutzer online Fotos hochladen k&ouml;nnen.</span>
                 </div>
 
                 <div style=\"margin-top: 7px;\"></div>";
@@ -197,7 +189,7 @@ require("../adm_config/body_top.php");
                 </div>
                 <div style=\"text-align: left; margin-left: 45px;\">
                     <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/guestbook/guestbook.php\">G&auml;stebuch</a></span><br />
-                    <span class=\"textDescription\">Hier k&ouml;nnen Besucher ihre Gr&uuml;&szlig;e und Anmerkungen eintragen.</span>
+                    <span class=\"smallFontSize\">Hier k&ouml;nnen Besucher ihre Gr&uuml;&szlig;e und Anmerkungen eintragen.</span>
                 </div>
 
                 <div style=\"margin-top: 7px;\"></div>";
@@ -211,9 +203,9 @@ require("../adm_config/body_top.php");
             </div>
             <div style=\"text-align: left; margin-left: 45px;\">
                 <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/lists/lists.php\">Listen</a></span>&nbsp;&nbsp;
-                <span class=\"textHeadSmall\">&#91; <a href=\"$g_root_path/adm_program/modules/lists/mylist.php\">Eigene Liste</a>&nbsp;&nbsp;|&nbsp;
-                <a href=\"$g_root_path/adm_program/modules/lists/lists.php?active_role=0\">Inaktive Rollen</a> &#93;</span><br />
-                <span class=\"textDescription\">Verschiedene Benutzerlisten der Rollen (Gruppen / Kurse / Abteilungen) anzeigen.</span>
+                &#91; <a href=\"$g_root_path/adm_program/modules/lists/mylist.php\">Eigene Liste</a>&nbsp;|
+                <a href=\"$g_root_path/adm_program/modules/lists/lists.php?active_role=0\">Inaktive Rollen</a> &#93;<br />
+                <span class=\"smallFontSize\">Verschiedene Benutzerlisten der Rollen (Gruppen / Kurse / Abteilungen) anzeigen.</span>
             </div>
 
             <div style=\"margin-top: 7px;\"></div>";
@@ -227,7 +219,7 @@ require("../adm_config/body_top.php");
             </div>
             <div style=\"text-align: left; margin-left: 45px;\">
                 <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/profile/profile.php\">Profil</a></span><br />
-                <span class=\"textDescription\">Das eigene Profil anschauen und bearbeiten.</span>
+                <span class=\"smallFontSize\">Das eigene Profil anschauen und bearbeiten.</span>
             </div>
 
             <div style=\"margin-top: 7px;\"></div>";
@@ -242,8 +234,8 @@ require("../adm_config/body_top.php");
                 </div>
                 <div style=\"text-align: left; margin-left: 45px;\">
                     <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/dates/dates.php\">Termine</a></span>&nbsp;&nbsp;
-                    <span class=\"textHeadSmall\">&#91; <a href=\"$g_root_path/adm_program/modules/dates/dates.php?mode=old\">Vergangene Termine</a> &#93;</span><br />
-                    <span class=\"textDescription\">Hier k&ouml;nnen Termine angeschaut, erstellt und bearbeitet werden.</span>
+                    &#91; <a href=\"$g_root_path/adm_program/modules/dates/dates.php?mode=old\">Vergangene Termine</a> &#93;<br />
+                    <span class=\"smallFontSize\">Hier k&ouml;nnen Termine angeschaut, erstellt und bearbeitet werden.</span>
                 </div>
 
                 <div style=\"margin-top: 7px;\"></div>";
@@ -259,7 +251,7 @@ require("../adm_config/body_top.php");
                 </div>
                 <div style=\"text-align: left; margin-left: 45px;\">
                     <span class=\"textHead\"><a href=\"$g_root_path/adm_program/modules/links/links.php\">Weblinks</a></span><br />
-                    <span class=\"textDescription\">Hier k&ouml;nnen Links zu interessanten Webseiten abgelegt werden.</span>
+                    <span class=\"smallFontSize\">Hier k&ouml;nnen Links zu interessanten Webseiten abgelegt werden.</span>
                 </div>";
             }
 
@@ -284,7 +276,7 @@ require("../adm_config/body_top.php");
                 </div>
                 <div style=\"text-align: left; margin-left: 45px;\">
                     <span class=\"textHead\"><a href=\"http://". $_SERVER['HTTP_HOST']. "/$g_forum_path/index.php\">Forum</a></span><br />
-                    <span class=\"textDescription\">$forumstext</span>
+                    <span class=\"smallFontSize\">$forumstext</span>
                 </div>";
             }
         echo "
@@ -308,7 +300,7 @@ require("../adm_config/body_top.php");
                     </div>
                     <div style=\"text-align: left; margin-left: 45px;\">
                         <span class=\"textHead\"><a href=\"$g_root_path/adm_program/administration/new_user/new_user.php\">Neue Web-Anmeldungen verwalten</a></span><br />
-                        <span class=\"textDescription\">Besucher, die sich auf der Homepage registriert haben, k&ouml;nnen hier freigeschaltet oder abgelehnt werden.</span>
+                        <span class=\"smallFontSize\">Besucher, die sich auf der Homepage registriert haben, k&ouml;nnen hier freigeschaltet oder abgelehnt werden.</span>
                     </div>
 
                     <div style=\"margin-top: 7px;\"></div>";
@@ -322,7 +314,7 @@ require("../adm_config/body_top.php");
                 </div>
                 <div style=\"text-align: left; margin-left: 45px;\">
                     <span class=\"textHead\"><a href=\"$g_root_path/adm_program/administration/members/members.php\">Benutzerverwaltung</a></span><br />
-                    <span class=\"textDescription\">Mitglieder (Benutzer) k&ouml;nnen entfernt und neue Mitglieder (Benutzer) k&ouml;nnen in der Datenbank anlegt werden.</span>
+                    <span class=\"smallFontSize\">Mitglieder (Benutzer) k&ouml;nnen entfernt und neue Mitglieder (Benutzer) k&ouml;nnen in der Datenbank anlegt werden.</span>
                 </div>";
 
                 if(isModerator())
@@ -337,7 +329,7 @@ require("../adm_config/body_top.php");
                     </div>
                     <div style=\"text-align: left; margin-left: 45px;\">
                         <span class=\"textHead\"><a href=\"$g_root_path/adm_program/administration/roles/roles.php\">Rollenverwaltung</a></span><br />
-                        <span class=\"textDescription\">Rollen (Gruppen / Kurse / Abteilungen) k&ouml;nnen hier erstellt oder bearbeitet werden.</span>
+                        <span class=\"smallFontSize\">Rollen (Gruppen / Kurse / Abteilungen) k&ouml;nnen hier erstellt oder bearbeitet werden.</span>
                     </div>";
                 }
 
@@ -353,7 +345,7 @@ require("../adm_config/body_top.php");
                     </div>
                     <div style=\"text-align: left; margin-left: 45px;\">
                         <span class=\"textHead\"><a href=\"$g_root_path/adm_program/administration/organization/organization.php\">Organisationseinstellungen</a></span><br />
-                        <span class=\"textDescription\">Einstellungen f&uuml;r die Organisation, spezifische Profilfelder und Rollenkategorien k&ouml;nnen hier bearbeitet werden.</span>
+                        <span class=\"smallFontSize\">Einstellungen f&uuml;r die Organisation, spezifische Profilfelder und Rollenkategorien k&ouml;nnen hier bearbeitet werden.</span>
                     </div>";
                 }
             echo "</div>";

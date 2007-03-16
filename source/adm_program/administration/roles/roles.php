@@ -69,6 +69,30 @@ echo "
     <title>$g_current_organization->longname - Rollenverwaltung</title>
     <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
 
+    <script type=\"text/javascript\">
+        function showHideCategory(category_name)
+        {
+            var block_element = 'cat_' + category_name;
+            var link_element  = 'lnk_' + category_name;
+            var image_element = 'img_' + category_name;
+            
+            if(document.getElementById(block_element).style.visibility == 'hidden')
+            {
+                document.getElementById(block_element).style.visibility = 'visible';
+                document.getElementById(block_element).style.display    = '';
+                document.getElementById(link_element).innerHTML         = 'ausblenden';
+                document.images[image_element].src = '$g_root_path/adm_program/images/bullet_toggle_minus.png';
+            }
+            else
+            {
+                document.getElementById(block_element).style.visibility = 'hidden';
+                document.getElementById(block_element).style.display    = 'none';
+                document.getElementById(link_element).innerHTML         = 'einblenden';
+                document.images[image_element].src = '$g_root_path/adm_program/images/bullet_toggle_plus.png';
+            }
+        }
+    </script>
+    
     <!--[if lt IE 7]>
     <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
     <![endif]-->";
@@ -114,20 +138,42 @@ require("../../../adm_config/body_top.php");
         </p>
 
         <table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\">
-            <tr>
-                <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;$description_lst</th>
-                <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;Kategorie</th>
-                <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;Berechtigungen</th>
-                <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Rolle nur f&uuml;r Moderatoren sichtbar\" title=\"Rolle nur f&uuml;r Moderatoren sichtbar\"></th>
-                <th class=\"tableHeader\">Funktionen</th>
-            </tr>";
+            <thead>
+                <tr>
+                    <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;$description_lst</th>
+                    <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;Berechtigungen</th>
+                    <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Rolle nur f&uuml;r Moderatoren sichtbar\" title=\"Rolle nur f&uuml;r Moderatoren sichtbar\"></th>
+                    <th class=\"tableHeader\">Funktionen</th>
+                </tr>
+            </thead>";
+            $category = "";
 
             while($row = mysql_fetch_object($usr_result))
             {
+                if($category != $row->cat_name)
+                {
+                    if(strlen($category) > 0)
+                    {
+                        echo "</tbody>";
+                    }
+                    echo "<tbody>
+                        <tr>
+                            <td class=\"tableSubHeader\" colspan=\"4\">
+                                <div class=\"tableSubHeaderFont\" style=\"float: left;\"><a
+                                    href=\"javascript:showHideCategory('$row->cat_name')\"><img name=\"img_$row->cat_name\" src=\"$g_root_path/adm_program/images/bullet_toggle_minus.png\" 
+                                    style=\"vertical-align: middle;\" border=\"0\" alt=\"ausblenden\"></a>$row->cat_name</div>
+                                <div class=\"smallFontSize\" style=\"text-align: right;\"><a id=\"lnk_$row->cat_name\"
+                                    href=\"javascript:showHideCategory('$row->cat_name')\">ausblenden</a>&nbsp;</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody id=\"cat_$row->cat_name\">";
+                
+                    $category = $row->cat_name;
+                }            
                 echo "
                 <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
                     <td style=\"text-align: left;\">&nbsp;<a href=\"$g_root_path/adm_program/administration/roles/roles_new.php?rol_id=$row->rol_id\">$row->rol_name</a></td>
-                    <td style=\"text-align: left;\">&nbsp;$row->cat_name</td>
                     <td style=\"text-align: left;\">";
                         if($row->rol_moderation == 1)
                         {

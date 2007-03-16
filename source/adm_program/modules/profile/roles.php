@@ -110,6 +110,28 @@ echo "
                 document.getElementById(role_name).checked = false;
             }
         }
+        
+        function showHideCategory(category_name)
+        {
+            var block_element = 'cat_' + category_name;
+            var link_element  = 'lnk_' + category_name;
+            var image_element = 'img_' + category_name;
+            
+            if(document.getElementById(block_element).style.visibility == 'hidden')
+            {
+                document.getElementById(block_element).style.visibility = 'visible';
+                document.getElementById(block_element).style.display    = '';
+                document.getElementById(link_element).innerHTML         = 'ausblenden';
+                document.images[image_element].src = '$g_root_path/adm_program/images/bullet_toggle_minus.png';
+            }
+            else
+            {
+                document.getElementById(block_element).style.visibility = 'hidden';
+                document.getElementById(block_element).style.display    = 'none';
+                document.getElementById(link_element).innerHTML         = 'einblenden';
+                document.images[image_element].src = '$g_root_path/adm_program/images/bullet_toggle_plus.png';
+            }
+        }
     </script>
 
     <!--[if lt IE 7]>
@@ -124,34 +146,39 @@ require("../../../adm_config/body_top.php");
 
     <form action=\"roles_save.php?user_id=$req_usr_id&amp;new_user=$req_new_user\" method=\"post\" name=\"Funktionen\">
         <table class=\"tableList\" cellpadding=\"3\" cellspacing=\"0\">
-            <tr>
-                <th class=\"tableHeader\">&nbsp;</th>
-                <th class=\"tableHeader\" style=\"text-align: left;\">Rolle</th>
-                <th class=\"tableHeader\" style=\"text-align: left;\">Beschreibung</th>
-                <th class=\"tableHeader\" style=\"text-align: center; width: 80px;\">Leiter
-                    <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: middle; padding-bottom: 1px;\"
-                    width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                    onClick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=leader','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
-                </th>
-            </tr>";
+            <thead>
+                <tr>
+                    <th class=\"tableHeader\">&nbsp;</th>
+                    <th class=\"tableHeader\" style=\"text-align: left;\">Rolle</th>
+                    <th class=\"tableHeader\" style=\"text-align: left;\">Beschreibung</th>
+                    <th class=\"tableHeader\" style=\"text-align: center; width: 80px;\">Leiter
+                        <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: middle; padding-bottom: 1px;\"
+                        width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                        onClick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=leader','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
+                    </th>
+                </tr>
+            </thead>";
 
             if(isModerator())
             {
                 // Alle Rollen der Gruppierung auflisten
-                $sql    = "SELECT rol_name, rol_description, mem_usr_id, mem_leader, rol_id
-                             FROM ". TBL_ROLES. " LEFT JOIN ". TBL_MEMBERS. "
+                $sql    = "SELECT cat_name, rol_name, rol_description, mem_usr_id, mem_leader, rol_id
+                             FROM ". TBL_CATEGORIES. ", ". TBL_ROLES. " 
+                             LEFT JOIN ". TBL_MEMBERS. "
                                ON rol_id     = mem_rol_id
                               AND mem_usr_id = {0}
                               AND mem_valid  = 1
                             WHERE rol_org_shortname = '$g_organization'
                               AND rol_valid  = 1
-                            ORDER BY rol_name";
+                              AND rol_cat_id = cat_id
+                            ORDER BY cat_name, rol_name";
             }
             elseif(isGroupLeader())
             {
                 // Alle Rollen auflisten, bei denen das Mitglied Leiter ist
-                $sql    = "SELECT br.rol_name, br.rol_description, br.rol_id, mgl.mem_usr_id, mgl.mem_leader
-                             FROM ". TBL_MEMBERS. " bm, ". TBL_ROLES. " br LEFT JOIN ". TBL_MEMBERS. " mgl
+                $sql    = "SELECT cat_name, br.rol_name, br.rol_description, br.rol_id, mgl.mem_usr_id, mgl.mem_leader
+                             FROM ". TBL_MEMBERS. " bm, ". TBL_CATEGORIES. ", ". TBL_ROLES. " br 
+                             LEFT JOIN ". TBL_MEMBERS. " mgl
                                ON br.rol_id      = mgl.mem_rol_id
                               AND mgl.mem_usr_id = {0}
                               AND mgl.mem_valid  = 1
@@ -162,13 +189,15 @@ require("../../../adm_config/body_top.php");
                               AND br.rol_org_shortname = '$g_organization'
                               AND br.rol_valid   = 1
                               AND br.rol_locked  = 0
-                            ORDER BY br.rol_name";
+                              AND br.rol_cat_id = cat_id
+                            ORDER BY cat_name, br.rol_name";
             }
             elseif($g_current_user->editUser())
             {
                 // Alle Rollen auflisten, die keinen Moderatorenstatus haben
-                $sql    = "SELECT rol_name, rol_description, rol_id, mem_usr_id, mem_leader
-                             FROM ". TBL_ROLES. " LEFT JOIN ". TBL_MEMBERS. "
+                $sql    = "SELECT cat_name, rol_name, rol_description, rol_id, mem_usr_id, mem_leader
+                             FROM ". TBL_CATEGORIES. ", ". TBL_ROLES. " 
+                             LEFT JOIN ". TBL_MEMBERS. "
                                ON rol_id     = mem_rol_id
                               AND mem_usr_id = {0}
                               AND mem_valid  = 1
@@ -176,16 +205,40 @@ require("../../../adm_config/body_top.php");
                               AND rol_valid      = 1
                               AND rol_moderation = 0
                               AND rol_locked     = 0
-                            ORDER BY rol_name";
+                              AND rol_cat_id = cat_id
+                            ORDER BY cat_name, rol_name";
             }
             $sql    = prepareSQL($sql, array($req_usr_id));
             $result = mysql_query($sql, $g_adm_con);
             db_error($result);
             $i = 0;
+            $category = "";
 
             while($row = mysql_fetch_object($result))
             {
-                echo "<tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
+                if($category != $row->cat_name)
+                {
+                    if(strlen($category) > 0)
+                    {
+                        echo "</tbody>";
+                    }
+                    echo "<tbody>
+                        <tr>
+                            <td class=\"tableSubHeader\" colspan=\"4\">
+                                <div class=\"tableSubHeaderFont\" style=\"float: left;\"><a 
+                                    href=\"javascript:showHideCategory('$row->cat_name')\"><img name=\"img_$row->cat_name\" src=\"$g_root_path/adm_program/images/bullet_toggle_minus.png\" 
+                                    style=\"vertical-align: middle;\" border=\"0\" alt=\"ausblenden\"></a>$row->cat_name</div>
+                                <div class=\"smallFontSize\" style=\"text-align: right;\"><a id=\"lnk_$row->cat_name\"
+                                    href=\"javascript:showHideCategory('$row->cat_name')\">ausblenden</a>&nbsp;</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody id=\"cat_$row->cat_name\">";
+                
+                    $category = $row->cat_name;
+                }
+                echo "
+                <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
                    <td style=\"text-align: center; vertical-align: top;\">
                       <input type=\"checkbox\" id=\"role-$i\" name=\"role-$i\" ";
                          if($row->mem_usr_id > 0)
