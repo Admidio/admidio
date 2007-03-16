@@ -25,24 +25,30 @@
 
 /* Allgemeine Anpassungen */
 
+.defaultFontSize, body {
+    font-size:        10pt;
+}
+
+.bigFontSize {
+    font-size:        12pt;
+}
+
+.smallFontSize {
+    font-size:        8pt;
+}
+
 body {
     color:            #555555;
     font-family:      arial, sans-serif;
-    font-size:        10pt;
     background-color: #ffffff;
 }
 
 h1 {
-     color:                #85C226;
+     color:				 #85C226;
 }
 
 hr {
     border:           1px solid #6CA7A8;
-}
-
-button {
-    color:            #000000;
-    font-size:        10pt;
 }
 
 .readonly {
@@ -98,7 +104,7 @@ a:hover {
     width:            550px;         /* Maximale Breite von Formularen */
     color:            #333333;
     background-color: #85C226;
-    font-size:        13pt;
+    font-size:        12pt;
     font-weight:      bold;
     border-width:     1px 1px 0px 1px;
     border-color:     #555555;
@@ -110,7 +116,6 @@ a:hover {
 .formBody {
     width:            550px;         /* Maximale Breite von Formularen */
     color:            #555555;
-    font-size:        11pt;
     background-color: #eaeaea;
     border-width:     1px;
     border-color:     #555555;
@@ -137,7 +142,6 @@ a:hover {
 .boxBody {
     color:            #555555;
     width:            550px;
-    font-size:        11pt;
     background-color: #eaeaea;
     border-width:     1px;
     border-color:     #555555;
@@ -155,7 +159,6 @@ a:hover {
 .tableList {
     width:            550px;         /* Optimale Breite von Listen */
     background-color: #eaeaea;
-    font-size:        10pt;
     border-width:     1px;
     border-color:     #555555;
     border-style:     solid;
@@ -166,8 +169,19 @@ a:hover {
 .tableHeader {
     color:            #555555;
     background-color: #85C226;
-    font-size:        10pt;
     padding:          3px;
+}
+
+.tableSubHeader {
+    background-color: #c5c5c5;
+}
+
+.tableSubHeaderFont {
+    color:            #888888;
+    font-size:        13pt;	 
+    font-weight:      bold;
+    font-style:       italic;
+    letter-spacing:	 0.2em;
 }
 
 .listMouseOut {

@@ -129,7 +129,7 @@ require("../../../adm_config/body_top.php");
                 <div>
                     <div style=\"text-align: right; width: 23%; float: left;\">Name:</div>
                     <div style=\"text-align: left; margin-left: 24%;\">
-                        <input type=\"text\" id=\"name\" name=\"name\" size=\"30\" maxlength=\"100\" value=\"". htmlspecialchars($form_values['name'], ENT_QUOTES). "\">
+                        <input type=\"text\" id=\"name\" name=\"name\" size=\"30\" maxlength=\"30\" value=\"". htmlspecialchars($form_values['name'], ENT_QUOTES). "\">
                         <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
                     </div>
                 </div>
