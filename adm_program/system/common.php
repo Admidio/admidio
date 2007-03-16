@@ -43,6 +43,7 @@ require_once(SERVER_PATH. "/adm_program/system/navigation_class.php");
 require_once(SERVER_PATH. "/adm_program/system/user_class.php");
 require_once(SERVER_PATH. "/adm_program/system/organization_class.php");
 require_once(SERVER_PATH. "/adm_program/system/role_dependency_class.php");
+require_once(SERVER_PATH. "/adm_program/system/forum_class_phpbb.php");
 
 // falls Debug-Kennzeichen nicht in config.php gesetzt wurde, dann hier auf false setzen
 if(!defined('DEBUG'))

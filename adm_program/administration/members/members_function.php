@@ -200,21 +200,22 @@ elseif($_GET["mode"] == 3)
         $g_message->show("norights");
     }
 
-    // Den Username für die Löschung im Forum zwischenspeichern
-    $forum_user = $user->login_name;
-    
-    // User aus der Admidio Datenbank loeschen
-    $user->delete();
-
-    // Paralell im Forum loeschen, wenn g_forum gesetzt ist
+	// Paralell im Forum loeschen, wenn g_forum gesetzt ist
     if($g_forum)
     {
-        forum_delete_user($forum_user, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
-        $err_code = "delete_forum_user";
+    	$g_forum->forum_delete_user($user->login_name);
+    	
+   	    // User aus der Admidio Datenbank loeschen
+    	$user->delete();
+    		
+    	$err_code = "delete_forum_user";
     }
     else
     {
-        $err_code = "delete";
+    	// User aus der Admidio Datenbank loeschen
+    	$user->delete();
+    
+    	$err_code = "delete";
     }
 }
 elseif($_GET["mode"] == 4)

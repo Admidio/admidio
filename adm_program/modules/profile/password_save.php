@@ -66,9 +66,10 @@ if( ($_POST["old_password"] != "" || $g_current_user->isWebmaster() )
             $user->password = md5($_POST["new_password"]);
             $user->update($g_current_user->id);
 
-            if($g_forum == 1)
+            // Paralell im Forum aendern, wenn g_forum gesetzt ist
+            if($g_forum)
             {
-                forum_update_user($user->login_name, 1, $user->password, $user->email, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
+                $g_forum->forum_update_user($user->login_name, 1, $user->password, $user->email);
             }
 
             // wenn das PW des eingeloggten Users geaendert wird, dann Session-Variablen aktualisieren

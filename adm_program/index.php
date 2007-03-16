@@ -268,7 +268,7 @@ require("../adm_config/body_top.php");
             {
                 echo "<div style=\"margin-top: 7px;\"></div>";
 
-                if(isset($_SESSION['s_user_valid']) AND $_SESSION['s_user_valid'] == TRUE)
+                if($g_forum->session_valid)
                 {
                     $forumstext = "Sie sind als <b>".$g_forum_user."</b> im Forum <b>".$g_forum_sitename."</b> angemeldet ".$g_forum_neuePM_Text;
                 }

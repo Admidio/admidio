@@ -100,11 +100,11 @@ class Message
     function show($msg_key = "" , $msg_variable1 = "", $msg_headline = "")
     {
         // noetig, da dies bei den includes benoetigt wird
+        global $g_forum;
         global $g_session_valid, $g_root_path;
         global $g_adm_db, $g_adm_srv, $g_adm_con;
         global $g_organization, $g_current_organization, $g_current_user;
-        // benötigt für das Forum
-        global $g_forum_user, $g_forum_neuePM_Text; 
+
         // Und natürlich diese hier um den Forward richtig zu setzen
         global $g_current_url;
         
