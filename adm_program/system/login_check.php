@@ -119,14 +119,9 @@ if ($user_found >= 1)
 
             $login_message = $g_forum->message;
         }
-            else
-            {
-                // User gibt es im Forum nicht, also eine reine Admidio anmeldung.
-                $login_message = "login";
-            }
-        }
         else
         {
+            // User gibt es im Forum nicht, also eine reine Admidio anmeldung.
             $login_message = "login";
         }
 
