@@ -51,7 +51,7 @@ if($session_found > 0)
 // Wenn die Session des Forums aktiv ist, diese ebenfalls loeschen.
 if($g_forum->session_valid)
 {
-    $g_forum->forum_user_logoff();
+	$g_forum->UserLogoff();
 
     $message_code = "logoutforum";    
 }

@@ -163,9 +163,9 @@ elseif($req_mode == 4)
     // Registrierung loeschen
     
 	// Paralell im Forum loeschen, wenn g_forum gesetzt ist
-    if($g_forum)
+    if($g_forum_integriert)
     {
-    	$g_forum->forum_delete_user($new_user->login_name);
+    	$g_forum->UserDelete($new_user->login_name);
     }
 
     $sql    = "DELETE FROM ". TBL_USERS. " WHERE usr_id = {0}";
@@ -193,10 +193,10 @@ elseif($req_mode == 6)
     // Registrierung loeschen
     $new_user->delete();
     
-    // Paralell im Forum loeschen, wenn g_forum gesetzt ist
-    if($g_forum)
+	// Paralell im Forum loeschen, wenn g_forum gesetzt ist
+    if($g_forum_integriert)
     {
-        forum_delete_user($forum_user, $g_forum_db, $g_forum_con, $g_adm_db, $g_adm_con, $g_forum_praefix);
+    	UserDelete($new_user->login_name);
     }
 
     // Zugangsdaten neu verschicken

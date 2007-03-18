@@ -201,22 +201,19 @@ elseif($_GET["mode"] == 3)
     }
 
 	// Paralell im Forum loeschen, wenn g_forum gesetzt ist
-    if($g_forum)
+    if($g_forum_integriert)
     {
-    	$g_forum->forum_delete_user($user->login_name);
+    	$g_forum->UserDelete($user->login_name);
     	
-   	    // User aus der Admidio Datenbank loeschen
-    	$user->delete();
-    		
     	$err_code = "delete_forum_user";
     }
     else
     {
-    	// User aus der Admidio Datenbank loeschen
-    	$user->delete();
-    
     	$err_code = "delete";
     }
+    
+    // User aus der Admidio Datenbank loeschen
+    $user->delete();
 }
 elseif($_GET["mode"] == 4)
 {
