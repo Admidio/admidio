@@ -51,10 +51,23 @@ $g_organization = "%ORGANIZATION%";
 
 
 // Forumspezifisch
-// phpBB-Forum integriert
+// Forum integriert
 // 1 = ja
 // 0 = nein
-$g_forum = 0;
+$g_forum_integriert = 0;
+
+// Genutztes Forum 
+// "phpbb2" 	- PHP Bulletin Board 2.x
+// "phpbb3" 	- PHP Bulletin Board 3.x *NOCH NICHT GENUTZT*
+// "smf1" 		- Simple Minds Forum 1.x *NOCH NICHT GENUTZT*
+$g_forum_version = "phpbb2";
+
+// Vorhandene Admidio Accounts automatisch beim anmelden des Users ins 
+// Forum exportieren und einen Forum Account erstellen
+// 1 = ja (Standard)
+// 0 = nein
+$g_forum_export = 1;
+
 
 // Praefix der Tabellen des phpBB-Forums
 $g_forum_praefix = "";

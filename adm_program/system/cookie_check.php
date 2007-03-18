@@ -47,11 +47,11 @@ else
     $message_code = strStripTags($_GET['message_code']);
     $show_time = 2000;
     
-    if($g_forum)
+    if($g_forum_integriert)
     {
         // Je nach Forumsaktion, Meldung ausgeben und weiter zur ForwardUrl - Seite
         $g_message->addVariableContent($g_current_user->login_name);
-        $g_message->addVariableContent($g_forum->forum_sitename);
+        $g_message->addVariableContent($g_forum->sitename);
         
         if($message_code != "loginforum")
         {
