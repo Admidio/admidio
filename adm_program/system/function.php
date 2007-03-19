@@ -503,10 +503,13 @@ function generateRoleSelectBox($default_role = 0, $field_id = "")
     return $box_string;
 }
 
+// Funktion um Systemeinstellungen in die DB und das globale Array zu schreiben
+
 function writeOrgaPreferences($name, $value)
 {
     global $g_adm_con;
     global $g_current_organization;
+    global $g_preferences;
 
     $sql = "SELECT * FROM ". TBL_PREFERENCES. "
              WHERE prf_name   = {0}
@@ -532,6 +535,9 @@ function writeOrgaPreferences($name, $value)
         $result = mysql_query($sql, $g_adm_con);
         db_error($result);
     }
+    
+    // den Wert noch im globalen Array setzen
+    $g_preferences[$name] = $value;
 }
 
 ?>

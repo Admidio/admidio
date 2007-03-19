@@ -44,45 +44,21 @@ $_SESSION['navigation']->addUrl($g_current_url);
 
 if(isset($_SESSION['organization_request']))
 {
-   $form_values = $_SESSION['organization_request'];
-   unset($_SESSION['organization_request']);
+    $form_values = $_SESSION['organization_request'];
+    unset($_SESSION['organization_request']);
 }
 else
 {
-   $form_values['shortname']                      = $g_current_organization->shortname;
-   $form_values['longname']                       = $g_current_organization->longname;
-   $form_values['homepage']                        = $g_current_organization->homepage;
-   $form_values['email_administrator']            = $g_preferences['email_administrator'];
-   $form_values['enable_system_mails']            = $g_preferences['enable_system_mails'];
-   $form_values['default_country']                = $g_preferences['default_country'];
-   $form_values['parent']                         = $g_current_organization->org_id_parent;
-   $form_values['enable_bbcode']                  = $g_preferences['enable_bbcode'];
-   $form_values['enable_rss']                     = $g_preferences['enable_rss'];
-   $form_values['registration_mode']              = $g_preferences['registration_mode'];
-   $form_values['enable_registration_captcha']    = $g_preferences['enable_registration_captcha'];
-   $form_values['enable_registration_admin_mail'] = $g_preferences['enable_registration_admin_mail'];
-   $form_values['logout_minutes']                 = $g_preferences['logout_minutes'];
-   $form_values['enable_mail_module']               = $g_preferences['enable_mail_module'];
-   $form_values['max_email_attachment_size']       = $g_preferences['max_email_attachment_size'];
-   $form_values['enable_mail_captcha']             = $g_preferences['enable_mail_captcha'];
-   $form_values['enable_download_module']            = $g_preferences['enable_download_module'];
-   $form_values['max_file_upload_size']            = $g_preferences['max_file_upload_size'];
-   $form_values['enable_photo_module']              = $g_preferences['enable_photo_module'];
-   $form_values['photo_thumbs_row']                = $g_preferences['photo_thumbs_row'];
-   $form_values['photo_thumbs_column']             = $g_preferences['photo_thumbs_column'];
-   $form_values['photo_thumbs_scale']              = $g_preferences['photo_thumbs_scale'];
-   $form_values['photo_save_scale']                = $g_preferences['photo_save_scale'];
-   $form_values['photo_preview_scale']             = $g_preferences['photo_preview_scale'];
-   $form_values['photo_show_width']                = $g_preferences['photo_show_width'];
-   $form_values['photo_show_height']               = $g_preferences['photo_show_height'];
-   $form_values['photo_image_text']                = $g_preferences['photo_image_text'];
-   $form_values['enable_guestbook_module']        = $g_preferences['enable_guestbook_module'];
-   $form_values['enable_guestbook_captcha']        = $g_preferences['enable_guestbook_captcha'];
-   $form_values['flooding_protection_time']        = $g_preferences['flooding_protection_time'];
-   $form_values['enable_gbook_comments4all']        = $g_preferences['enable_gbook_comments4all'];
-   $form_values['enable_dates_module']                = $g_preferences['enable_dates_module'];
-   $form_values['enable_weblinks_module']            = $g_preferences['enable_weblinks_module'];
-   $form_values['enable_announcements_module']       = $g_preferences['enable_announcements_module'];
+    $form_values['shortname']                      = $g_current_organization->shortname;
+    $form_values['longname']                       = $g_current_organization->longname;
+    $form_values['homepage']                       = $g_current_organization->homepage;
+    $form_values['parent']                         = $g_current_organization->org_id_parent;
+
+    // alle Systemeinstellungen in das form-Array schreiben
+    foreach($g_preferences as $key => $value)
+    {
+        $form_values[$key] = $value;
+    }
 }
 
 echo "
@@ -161,7 +137,7 @@ require("../../../adm_config/body_top.php");
              &#124; <a href=\"#\" onClick=\"toggleDiv('links-module');\">Links</a>
         </div><br />
 
-        <form action=\"organization_function.php?org_id=$g_current_organization->id\" method=\"post\" name=\"orga_settings\">
+        <form action=\"organization_function.php\" method=\"post\" name=\"orga_settings\">
             <div class=\"formBody\">
                 <div class=\"groupBox\" id=\"general\" style=\"visibility: hidden; display: none; margin-top: 15px; text-align: left; width: 95%;\">
                     <div class=\"groupBoxHeadline\">Allgemeine Einstellungen</div>
@@ -797,7 +773,7 @@ require("../../../adm_config/body_top.php");
             echo "
             <br />
             <div class=\"formBody\">
-                <button name=\"speichern\" type=\"submit\" value=\"speichern\">
+                <button name=\"save\" type=\"submit\" value=\"speichern\">
                     <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
                     &nbsp;Speichern</button>
             </div>

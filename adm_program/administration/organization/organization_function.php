@@ -6,10 +6,6 @@
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  *
- * Uebergaben:
- *
- * org_id: ID der Organisation, die bearbeitet werden soll
- *
  ******************************************************************************
  *
  * This program is free software; you can redistribute it and/or
@@ -38,52 +34,35 @@ if($g_current_user->isWebmaster() == false)
 
 $_SESSION['organization_request'] = $_REQUEST;
 
-// Uebergabevariablen pruefen
-
-if(isset($_GET["org_id"]) && is_numeric($_GET["org_id"]) == false)
-{
-    $g_message->show("invalid");
-}
-
-$err_code = "";
-$err_text = "";
-
 // *******************************************************************************
 // Pruefen, ob alle notwendigen Felder gefuellt sind
 // *******************************************************************************
 
-if(isset($_POST["longname"]) == false || strlen($_POST["longname"]) == 0)
+if(strlen($_POST["longname"]) == 0)
 {
-    $err_code = "feld";
-    $err_text = "Name (lang)";
+    $g_message->show("feld", "Name (lang)");
 }
 
-if(strlen($err_code) == 0)
+if(strlen($_POST['email_administrator']) == 0)
 {
-    if(strlen($_POST['email_administrator']) == 0)
+    $g_message->show("feld", "E-Mail Adresse des Administrator");
+}
+else
+{
+    if(!isValidEmailAddress($_POST['email_administrator']))
     {
-        $err_code = "feld";
-        $err_text = "E-Mail Adresse des Administrator";
-    }
-    else
-    {
-        if(!isValidEmailAddress($_POST['email_administrator']))
-        {
-            $err_code = "email_invalid";
-        }
-    }
-    if($_POST['logout_minutes'] <= 0)
-    {
-        $err_code = "feld";
-        $err_text = "Automatischer Logout";
+        $g_message->show("email_invalid");
     }
 }
 
-if ($err_code != "")
+if(is_numeric($_POST['logout_minutes']) == false || $_POST['logout_minutes'] <= 0)
 {
-    $g_message->show($err_code, $err_text);
+    $g_message->show("feld", "Automatischer Logout");
 }
 
+// *******************************************************************************
+// Daten speichern
+// *******************************************************************************
 
 $g_current_organization->longname  = strStripTags($_POST["longname"]);
 $g_current_organization->homepage  = strStripTags($_POST["homepage"]);
@@ -201,48 +180,20 @@ if($ret_code != 0)
 
 // Einstellungen speichern
 
-writeOrgaPreferences('email_administrator', $_POST['email_administrator']);
-writeOrgaPreferences('enable_system_mails', $_POST['enable_system_mails']);
-writeOrgaPreferences('default_country',     $_POST['default_country']);
-writeOrgaPreferences('enable_bbcode',       $_POST['enable_bbcode']);
-writeOrgaPreferences('enable_rss',          $_POST['enable_rss']);
-writeOrgaPreferences('logout_minutes',      $_POST['logout_minutes']);
-//Einstellungen Registrierung
-writeOrgaPreferences('registration_mode',              $_POST['registration_mode']);
-writeOrgaPreferences('enable_registration_captcha',    $_POST['enable_registration_captcha']);
-writeOrgaPreferences('enable_registration_admin_mail', $_POST['enable_registration_admin_mail']);
-//Einstellungen Mailmodul
-writeOrgaPreferences('enable_mail_module',        $_POST['enable_mail_module']);
-writeOrgaPreferences('max_email_attachment_size', $_POST['max_email_attachment_size']);
-writeOrgaPreferences('enable_mail_captcha',       $_POST['enable_mail_captcha']);
-//Einstellungen Downloadmodul
-writeOrgaPreferences('enable_download_module', $_POST['enable_download_module']);
-writeOrgaPreferences('max_file_upload_size',   $_POST['max_file_upload_size']);
-//Einstellungen Photomodul
-writeOrgaPreferences('enable_photo_module', $_POST['enable_photo_module']);
-writeOrgaPreferences('photo_thumbs_column', $_POST['photo_thumbs_column']);
-writeOrgaPreferences('photo_thumbs_row',    $_POST['photo_thumbs_row']);
-writeOrgaPreferences('photo_thumbs_scale',  $_POST['photo_thumbs_scale']);
-writeOrgaPreferences('photo_save_scale',    $_POST['photo_save_scale']);
-writeOrgaPreferences('photo_show_width',    $_POST['photo_show_width']);
-writeOrgaPreferences('photo_show_height',   $_POST['photo_show_height']);
-writeOrgaPreferences('photo_image_text',    $_POST['photo_image_text']);
-writeOrgaPreferences('photo_preview_scale', $_POST['photo_preview_scale']);
-//Einstellungen Gaestebuchmodul
-writeOrgaPreferences('enable_guestbook_module',  $_POST['enable_guestbook_module']);
-writeOrgaPreferences('enable_guestbook_captcha', $_POST['enable_guestbook_captcha']);
-writeOrgaPreferences('enable_gbook_comments4all', $_POST['enable_gbook_comments4all']);
-writeOrgaPreferences('flooding_protection_time', $_POST['flooding_protection_time']);
-//Einstellungen Ankuendigungsmodul
-writeOrgaPreferences('enable_announcements_module',  $_POST['enable_announcements_module']);
-//Einstellungen Terminmodul
-writeOrgaPreferences('enable_dates_module',          $_POST['enable_dates_module']);
-//Einstellungen Weblinkmodul
-writeOrgaPreferences('enable_weblinks_module',       $_POST['enable_weblinks_module']);
+foreach($_POST as $key => $value)
+{
+    // Elmente, die nicht in adm_preferences gespeichert werden hier aussortieren
+    if($key != "version"
+    && $key != "shortname"
+    && $key != "longname"
+    && $key != "homepage"
+    && $key != "save")
+    {
+        writeOrgaPreferences($key, $value);
+    }
+}
 
 unset($_SESSION['organization_request']);
-unset($_SESSION['g_current_organizsation']);
-unset($_SESSION['g_preferences']);
 
 // zur Ausgangsseite zurueck
 $g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
