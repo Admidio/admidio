@@ -115,7 +115,7 @@ if ($user_found >= 1)
         // Paralell im Forum einloggen, wenn g_forum gesetzt ist
         if($g_forum_integriert)
         {
-			$g_forum->UserLogin($user_row->usr_id, $req_login_name, $req_password_crypt, $g_current_user->login_name, $g_current_user->password, $g_current_user->email);
+			$g_forum->userLogin($user_row->usr_id, $req_login_name, $req_password_crypt, $g_current_user->login_name, $g_current_user->password, $g_current_user->email);
 
             $login_message = $g_forum->message;
         }

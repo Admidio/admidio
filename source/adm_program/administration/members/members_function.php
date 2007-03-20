@@ -203,7 +203,7 @@ elseif($_GET["mode"] == 3)
 	// Paralell im Forum loeschen, wenn g_forum gesetzt ist
     if($g_forum_integriert)
     {
-    	$g_forum->UserDelete($user->login_name);
+    	$g_forum->userDelete($user->login_name);
     	
     	$err_code = "delete_forum_user";
     }

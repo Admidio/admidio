@@ -69,7 +69,7 @@ if( ($_POST["old_password"] != "" || $g_current_user->isWebmaster() )
             // Paralell im Forum aendern, wenn g_forum gesetzt ist
             if($g_forum_integriert)
             {
-                $g_forum->UserUpdate($user->login_name, 1, $user->password, $user->email);
+                $g_forum->userUpdate($user->login_name, 1, $user->password, $user->email);
             }
 
             // wenn das PW des eingeloggten Users geaendert wird, dann Session-Variablen aktualisieren

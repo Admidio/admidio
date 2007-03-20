@@ -16,72 +16,72 @@
  *
  * Folgende Funktionen stehen nun zur Verfuegung:
  *
- * UserClear()			  - Userdaten und Session_Valid loeschen
+ * userClear()			  - Userdaten und Session_Valid loeschen
  *
- * Preferences()    	  - Die Preferences des Forums werden in die Allgemeine 
+ * preferences()    	  - Die Preferences des Forums werden in die Allgemeine 
  *							Forums Umgebungsdaten eingelesen.
  *
- * UserCheck($username)	  -	Es wird geürüft, ob es den User (Username) schon im Forum gibt.
+ * userCheck($username)	  -	Es wird geürüft, ob es den User (Username) schon im Forum gibt.
  *							$username = Der login_name des Users
  *							RETURNCODE = TRUE  - Den User gibt es
  *							RETURNCODE = FALSE - Den User gibt es nicht
  *
- * UserRegister($username)
+ * userRegister($username)
  *
  *
- * UserLogin($usr_id, $login_name, $password_crypt, $g_forum_user, $g_forum_password, $g_forum_email)
+ * userLogin($usr_id, $login_name, $password_crypt, $forum_user, $forum_password, $forum_email)
  *						  - Meldet den User (Username) im Forum an.
  *							$usr_id 			= Der aktuelle Admidio user_id des Users
  *							$login_name			= Der aktuelle Admidio Login reg_login_name des Users
  *							$password_crypt		= Der aktuelle Admidio Login reg_password Crypt des Users
- *							$g_forum_user		= Der aktuelle Admidio login_name des Users
- *							$g_forum_password	= Das aktuelle Admidio password des Users
- *							$g_forum_email		= Der aktuelle Admidio email des Users
+ *							$forum_user		= Der aktuelle Admidio login_name des Users
+ *							$forum_password	= Das aktuelle Admidio password des Users
+ *							$forum_email		= Der aktuelle Admidio email des Users
  *							RETURNCODE 	= TRUE  - User angemeldet
  *							RETURNCODE 	= FALSE - User nicht angemeldet
  *
- * UserLogoff()	  		  - Meldet den aktuellen User im Forum ab.
+ * userLogoff()	  			  - Meldet den aktuellen User im Forum ab.
  *							RETURNCODE = TRUE  - User abgemeldet
  *							RETURNCODE = FALSE - User nicht abgemeldet
  *
- * User($username)		  - Funktion holt die Userdaten
+ * user($username)			  - Funktion holt die Userdaten
  *							$username = Der aktuelle login_name des Users
  *
- * UserPM($username)	  -	Funktion prueft auf neue Private Messages (PM)
+ * userPM($username)			  - Funktion prueft auf neue Private Messages (PM)
  *
- * CheckAdmin($username, $password_crypt)
+ * checkAdmin($username, $password_crypt)
  *						  - Funktion ueberprueft ob der Admin Account im Forum ungleich des 
  *							Admidio Accounts ist. Falls ja wird der Admidio Account 
  *							(Username & Password) ins Forum uebernommen.
  *							$username 		= Login_name des Webmasters
  *							$password_crypt = Crypt Password des Webmasters
  *
- * CheckPassword($password_admidio, $password_forum, $forum_userid)
+ * checkPassword($password_admidio, $password_forum, $forum_userid)
  *						  - Funktion ueberprueft ob das Password im Forum ungleich des Admidio Passwords ist.
  *							Falls ja wird das Admidio Password ins Forum uebernommen.
  *							$password_admidio 	= Crypt Admidio Password
  *							$password_forum 	= Crypt Forum Password 
  *							$forum_userid		= UserID im Forum
  *
- * UserInsert($username, $forum_useraktiv, $forum_password, $forum_email)
+ * userInsert($username, $forum_useraktiv, $forum_password, $forum_email)
  *
- * UserDelete($username)  -	Loescht einen User im Forum
+ * userDelete($username)		  - Loescht einen User im Forum
  *							$username  = Der login_name des Users, der geloescht werden soll
  *							RETURNCODE = TRUE  - User geloescht
  *							RETURNCODE = FALSE - User nicht geloescht
  *
- * UserUpdate($username, $forum_useraktiv, $forum_password, $forum_email)
+ * userUpdate($username, $forum_useraktiv, $forum_password, $forum_email)
  *
- * UsernameUpdate($forum_new_username, $forum_old_username, $forum_useraktiv, $forum_password, $forum_email)
+ * usernameUpdate($forum_new_username, $forum_old_username, $forum_useraktiv, $forum_password, $forum_email)
  *
- * Session($aktion, $id)  - Kuemmert sich um die Sessions und das Cookie des Forums
- *  						$aktion = "logoff" 	Die Session wird abgemeldet
+ * session($aktion, $id)			  - Kuemmert sich um die Sessions und das Cookie des Forums
+ *  							$aktion = "logoff" 	Die Session wird abgemeldet
  *							$aktion = "update" 	Die Session wird aktualisiert
  * 							$aktion = "insert" 	Die Session wird angemeldet
  *
- * SessionBereinigen()	  - Ungenutzter Code Muell (bitte da lassen)
+ * sessionBereinigen()			-  Ungenutzter Code Muell (bitte da lassen)
  *
- * Nix() 				  -	Eine Funktion, die nichts, rein garnichts macht.
+ * Nix() 				  - Eine Funktion, die nichts, rein garnichts macht.
  *
  ******************************************************************************
  *
@@ -143,7 +143,7 @@ class Forum
 
 
 	// Userdaten und Session_Valid loeschen
-	function UserClear()
+	function userClear()
 	{
 		// Session-Valid und Userdaten loeschen
 		$this->session_valid 	= FALSE;
@@ -152,13 +152,11 @@ class Forum
 		$this->password 		= "";
 		$this->neuePM	 		= 0;
 		$this->neuePM_Text 		= "";
-
-		$_SESSION['g_forum']	= $g_forum;
 	}
 
 
 	// Die Preferences des Forums werden in die Allgemeine Forums Umgebungsdaten eingelesen.
-	function Preferences()
+	function preferences()
 	{
 		// Forums DB waehlen
 		mysql_select_db($this->forum_db, $this->forum_db_connection);
@@ -207,14 +205,11 @@ class Forum
 
 		// Admidio DB waehlen
 		mysql_select_db($this->adm_db, $this->adm_con);
-
-		// Daten in Session-Variablen sichern
-		$_SESSION['g_forum']	= $g_forum;
 	}
 
 
 	// Funktion ueberprueft, ob der User schon im Forum existiert
-	function UserCheck($forum_username)
+	function userCheck($forum_username)
 	{
 		// Forums DB waehlen
 		mysql_select_db($this->forum_db, $this->forum_db_connection);
@@ -241,14 +236,14 @@ class Forum
 
 
 	// Funktion registriert den aktuellen User im Forum an
-	function UserRegister($g_forum_user)
+	function userRegister($forum_user)
 	{
 
 	}
 
 
 	// Funktion meldet den aktuellen User im Forum an
-	function UserLogin($usr_id, $login_name, $password_crypt, $g_forum_user, $g_forum_password, $g_forum_email)
+	function userLogin($usr_id, $login_name, $password_crypt, $forum_user, $forum_password, $forum_email)
 	{
 		/* Ueberpruefen, ob User ID =1 (Administrator) angemeldet ist. 
 		Falls ja, wird geprueft, ob im Forum der gleiche Username und Password fuer die UserID 2 
@@ -258,19 +253,19 @@ class Forum
 		*/
 		if($usr_id == 1)
 		{
-			if($this->CheckAdmin($login_name, $password_crypt))
+			if($this->checkAdmin($login_name, $password_crypt))
 			{
 				$this->message = "loginforum_admin";
 			}
 		}
 
 		// Pruefen, ob es den User im Forum gibt, im Nein Fall diesem User ein Forum Account anlegen
-		if(!$this->UserCheck($login_name))
+		if(!$this->userCheck($login_name))
 		{
 			if($this->export)
 			{
 				// Export der Admido Daten ins Forum und einen Forum Account erstellen
-				$this->UserInsert($g_forum_user, 1, $g_forum_password, $g_forum_email);
+				$this->userInsert($forum_user, 1, $forum_password, $forum_email);
 
 				$this->message = "loginforum_new";
 				$this->session_valid = TRUE;		
@@ -289,17 +284,17 @@ class Forum
 		if($this->session_valid)
 		{
 			// Userdaten holen
-			$this->User($login_name);
+			$this->user($login_name);
 
 			// Password Admidio und Forum pruefen, ggf. zuruecksetzen
-			if(!($this->CheckPassword($password_crypt, $this->password, $this->userid)))
+			if(!($this->checkPassword($password_crypt, $this->password, $this->userid)))
 			{
 				// Password wurde zurueck gesetzt, Meldung vorbereiten
 				$this->message = "loginforum_pass";
 			}
 
 			// Session anlegen
-			$this->Session("insert", $this->userid);
+			$this->session("insert", $this->userid);
 
 			if($this->message == "")
 			{
@@ -311,10 +306,10 @@ class Forum
 
 
 	// Funktion meldet den aktuellen User im Forum ab
-	function UserLogoff()
+	function userLogoff()
 	{
 		// Session wird auf logoff gesetzt
-		$this->Session("logoff", $this->userid);
+		$this->session("logoff", $this->userid);
 
 		// Forums DB waehlen
 		mysql_select_db($this->forum_db, $this->forum_db_connection);
@@ -330,18 +325,18 @@ class Forum
 		mysql_select_db($this->adm_db, $this->adm_con);
 
 		// Session-Valid und Userdaten loeschen
-		$this->UserClear();
+		$this->userClear();
 	}
 
 
 	// Funktion holt die Userdaten
-	function User($g_forum_user)
+	function user($forum_user)
 	{
 		// Forums DB waehlen
 		mysql_select_db($this->forum_db, $this->forum_db_connection);
 
 		$sql    = "SELECT user_id, username, user_password FROM ". $this->praefix. "_users WHERE username LIKE {0} ";
-		$sql    = prepareSQL($sql, array($g_forum_user));
+		$sql    = prepareSQL($sql, array($forum_user));
 		$result = mysql_query($sql, $this->forum_db_connection);
 		db_error($result);
 
@@ -353,20 +348,17 @@ class Forum
 
 		// Admidio DB waehlen
 		mysql_select_db($this->adm_db, $this->adm_con);
-
-		// Daten in Session-Variablen sichern
-		$_SESSION['g_forum'] = $g_forum;
 	}
 
 
 	// Funktion prueft auf neue PM
-	function UserPM($g_forum_user)
+	function userPM($forum_user)
 	{
 		// Forums DB waehlen
 		mysql_select_db($this->forum_db, $this->forum_db_connection);
 
 		$sql    = "SELECT user_new_privmsg FROM ". $this->praefix. "_users WHERE username LIKE {0} ";
-		$sql    = prepareSQL($sql, array($g_forum_user));
+		$sql    = prepareSQL($sql, array($forum_user));
 		$result = mysql_query($sql, $this->forum_db_connection);
 		db_error($result);
 
@@ -389,13 +381,13 @@ class Forum
 		}
 
 		// Admidio DB waehlen
-	mysql_select_db($this->adm_db, $this->adm_con);
+		mysql_select_db($this->adm_db, $this->adm_con);
 	}
 
 
 	// Funktion ueberprueft ob der Admin Account im Forum ungleich des Admidio Accounts ist.
 	// Falls ja wird der Admidio Account (Username & Password) ins Forum uebernommen.
-	function CheckAdmin($username, $password_crypt)
+	function checkAdmin($username, $password_crypt)
 	{
 		// Forums DB waehlen
 		mysql_select_db($this->forum_db, $this->forum_db_connection);
@@ -433,7 +425,7 @@ class Forum
 
 	// Funktion ueberprueft ob das Password im Forum ungleich des Admidio Passwords ist.
 	// Falls ja wird das Admidio Password ins Forum uebernommen.
-	function CheckPassword($password_admidio, $password_forum, $forum_userid)
+	function checkPassword($password_admidio, $password_forum, $forum_userid)
 	{
 		// Passwoerter vergleichen
 		if ($password_admidio == $password_forum)
@@ -462,7 +454,7 @@ class Forum
 
 
 	// Funktion legt einen neuen Benutzer im Forum an
-	function UserInsert($forum_username, $forum_useraktiv, $forum_password, $forum_email)
+	function userInsert($forum_username, $forum_useraktiv, $forum_password, $forum_email)
 	{
 		// Forums DB waehlen
 		mysql_select_db($this->forum_db, $this->forum_db_connection);
@@ -513,7 +505,7 @@ class Forum
 
 
 	// Funktion loescht einen bestehenden User im Forum
-	function UserDelete($forum_username)
+	function userDelete($forum_username)
 	{
 		if(strlen($forum_username) > 0)
 		{
@@ -648,7 +640,7 @@ class Forum
 
 
 	// Funktion updated einen bestehenden User im Forum
-	function UserUpdate($forum_username, $forum_useraktiv, $forum_password, $forum_email)
+	function userUpdate($forum_username, $forum_useraktiv, $forum_password, $forum_email)
 	{
 		// Erst mal schauen ob der User alle Kriterien erfaellt um im Forum aktiv zu sein
 		// Voraussetzung ist ein gueltiger Benutzername, eine Email und ein Password
@@ -677,7 +669,7 @@ class Forum
 
 
 	// Funktion updated einen bestehenden User im Forum
-	function UsernameUpdate($forum_new_username, $forum_old_username, $forum_useraktiv, $forum_password, $forum_email)
+	function usernameUpdate($forum_new_username, $forum_old_username, $forum_useraktiv, $forum_password, $forum_email)
 	{
 		// Erst mal schauen ob der User alle Kriterien erfuellt um im Forum aktiv zu sein
 		// Voraussetzung ist ein gueltiger Benutzername, eine Email und ein Password
@@ -706,7 +698,7 @@ class Forum
 
 
 	// Funktion kuemmert sich um die Sessions und das Cookie des Forums
-	function Session($aktion, $g_forum_userid)
+	function session($aktion, $forum_userid)
 	{
 		// Daten fuer das Cookie und den Session Eintrag im Forum aufbereiten
 		$ip_sep = explode('.', getenv('REMOTE_ADDR'));
@@ -718,12 +710,12 @@ class Forum
 
 		// Nachschauen, ob dieser User mehrere SessionIDs hat, diese dann bis auf die aktuelle loeschen
 		$sql    = "SELECT session_id FROM ". $this->praefix. "_sessions
-		           WHERE session_user_id = $g_forum_userid";
+		           WHERE session_user_id = $forum_userid";
 		$result = mysql_query($sql, $this->forum_db_connection);
 
 		if(mysql_num_rows($result) > 1)
 		{
-			$sql    = "DELETE FROM ". $this->praefix. "_sessions WHERE session_user_id = $g_forum_userid AND session_id NOT LIKE '".$this->session_id."' ";
+			$sql    = "DELETE FROM ". $this->praefix. "_sessions WHERE session_user_id = $forum_userid AND session_id NOT LIKE '".$this->session_id."' ";
 			$result = mysql_query($sql, $this->forum_db_connection);
 			db_error($result);
 		}
@@ -738,7 +730,7 @@ class Forum
 			if($aktion == "logoff")
 			{
 				$sql    = "UPDATE ". $this->praefix. "_sessions 
-				           SET session_time = ". $current_time .", session_ip = '". $user_ip ."', session_user_id = ". $g_forum_userid .",  session_logged_in = 0
+				           SET session_time = ". $current_time .", session_ip = '". $user_ip ."', session_user_id = ". $forum_userid .",  session_logged_in = 0
 				           WHERE session_id = {0}";
 				$sql    = prepareSQL($sql, array($this->session_id));
 				$result = mysql_query($sql, $this->forum_db_connection);
@@ -758,7 +750,7 @@ class Forum
 			if($aktion == "insert")
 			{
 				$sql    = "UPDATE ". $this->praefix. "_sessions 
-				           SET session_time = ". $current_time .", session_start = ". $current_time .", session_ip = '". $user_ip ."', session_user_id = ". $g_forum_userid .",  session_logged_in = 1
+				           SET session_time = ". $current_time .", session_start = ". $current_time .", session_ip = '". $user_ip ."', session_user_id = ". $forum_userid .",  session_logged_in = 1
 				           WHERE session_id = {0}";
 				$sql    = prepareSQL($sql, array($this->session_id));
 				$result = mysql_query($sql, $this->forum_db_connection);
@@ -770,7 +762,7 @@ class Forum
 			// Session auf jeden Fall in die Forum DB schreiben, damit der User angemeldet ist
 			$sql    = "INSERT INTO " .$this->praefix. "_sessions
 			          (session_id, session_user_id, session_start, session_time, session_ip, session_page, session_logged_in, session_admin)
-			          VALUES ('$this->session_id', $g_forum_userid, $current_time, $current_time, '$user_ip', 0, 1, 0)";
+			          VALUES ('$this->session_id', $forum_userid, $current_time, $current_time, '$user_ip', 0, 1, 0)";
 			$result = mysql_query($sql, $this->forum_db_connection);
 			db_error($result);
 		}	
@@ -797,10 +789,10 @@ class Forum
 
 
 	// CODEMUELL fuer spaeter
-	function SessionBereinigen()
+	function sessionBereinigen()
 	{
 		// Bereinigungsarbeiten werden nur durchgefuehrt, wenn sich der Admin anmeldet
-		if($g_forum_userid == 2)
+		if($forum_userid == 2)
 		{
 			// Bereinigung der Forum Sessions, wenn diese aelter als 60 Tage sind
 			$sql    = "DELETE FROM ". $this->praefix. "_sessions WHERE session_start + 518400 < $current_time ";
@@ -808,21 +800,13 @@ class Forum
 			db_error($result);
 		}
 
-		if($g_forum_userid > 0)
+		if($forum_userid > 0)
 		{
 			// Alte User-Session des Users im Forum loeschen
-			$sql    = "DELETE FROM ". $this->praefix. "_sessions WHERE session_user_id = $g_forum_userid AND session_id NOT LIKE '".$g_forum_session_id."' ";
+			$sql    = "DELETE FROM ". $this->praefix. "_sessions WHERE session_user_id = $forum_userid AND session_id NOT LIKE '".$g_forum_session_id."' ";
 			$result = mysql_query($sql, $this->forum_db_connection);
 			db_error($result);
 		}
-	}
-
-
-	// Eine Funktion, die nichts, rein garnichts macht. 
-	// Wenn der Returncode gleich TRUE, wurde auch in der Tat das nichts machen bestaetigt
-	function Nix()
-	{
-		return TRUE;
 	}
 }
 ?>
