@@ -165,7 +165,7 @@ elseif($req_mode == 4)
 	// Paralell im Forum loeschen, wenn g_forum gesetzt ist
     if($g_forum_integriert)
     {
-    	$g_forum->UserDelete($new_user->login_name);
+    	$g_forum->userDelete($new_user->login_name);
     }
 
     $sql    = "DELETE FROM ". TBL_USERS. " WHERE usr_id = {0}";
@@ -196,7 +196,7 @@ elseif($req_mode == 6)
 	// Paralell im Forum loeschen, wenn g_forum gesetzt ist
     if($g_forum_integriert)
     {
-    	UserDelete($new_user->login_name);
+    	$g_forum->userDelete($new_user->login_name);
     }
 
     // Zugangsdaten neu verschicken

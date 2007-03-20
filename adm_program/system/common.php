@@ -248,7 +248,7 @@ if($g_forum_integriert)
         $g_forum->forum_db              = $g_forum_db;
         $g_forum->adm_con               = $g_adm_con;
         $g_forum->adm_db                = $g_adm_db;
-        $g_forum->Preferences();
+        $g_forum->preferences();
         $_SESSION['g_forum']            = $g_forum;
     }
     
@@ -259,17 +259,17 @@ if($g_forum_integriert)
         // Wenn die Forum Session bereits valid ist, wird diese Abfrage uebersprungen
         if($g_forum->session_valid != TRUE)
         { 
-            $g_forum->session_valid = $g_forum->UserCheck($g_current_user->login_name);
+            $g_forum->session_valid = $g_forum->userCheck($g_current_user->login_name);
         }
     
         // Wenn die Forumssession gueltig ist, Userdaten holen und gueltige Session im Forum updaten. 
         if($g_forum->session_valid)
         {
             // Fuer diesen User neue PMs pruefen
-            $g_forum->UserPM($g_current_user->login_name);
+            $g_forum->userPM($g_current_user->login_name);
             
             // Sofern die Admidio Session gueltig ist, ist auch die Forum Session gueltig
-            $g_forum->Session("update", $g_forum->userid);
+            $g_forum->session("update", $g_forum->userid);
         }
     }
     else
@@ -278,7 +278,7 @@ if($g_forum_integriert)
         if($g_forum->session_valid)
         {
             // Admidio Session ist abgelaufen, ungueltig oder ein logoff, also im Forum logoff
-            $g_forum->Session("logoff", $g_forum->userid);
+            $g_forum->session("logoff", $g_forum->userid);
         }
         $g_forum->session_valid = FALSE;
     }
