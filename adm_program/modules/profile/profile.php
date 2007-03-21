@@ -332,7 +332,7 @@ require("../../../adm_config/body_top.php");
                         //Falls vorhanden Bild ausgeben
                         if(mysql_result($result_photo,0,"usr_photo")!=NULL)
                         {
-                            echo"<img src=\"profile_photo_show.php?usr_id=$a_user_id\" alt=\"Profilfoto\">";
+                            echo"<img src=\"profile_photo_show.php?usr_id=$a_user_id&amp;id=". time(). "\" alt=\"Profilfoto\">";
                         }
                         //wenn nicht Schattenkopf
                         else
