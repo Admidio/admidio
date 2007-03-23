@@ -268,12 +268,12 @@ require("../adm_config/body_top.php");
                 }
                 echo "
                 <div style=\"text-align: left; width: 40; float: left;\">
-                    <a href=\"http://". $_SERVER['HTTP_HOST']. "/$g_forum_path/index.php\">
+                    <a href=\"http://". $_SERVER['HTTP_HOST']. "/$g_forum->path/index.php\">
                     <img style=\"position: relative; top: 5px;\" src=\"$g_root_path/adm_program/images/forum_big.png\" border=\"0\" alt=\"Forum\" />
                     </a>
                 </div>
                 <div style=\"text-align: left; margin-left: 45px;\">
-                    <span class=\"textHead\"><a href=\"http://". $_SERVER['HTTP_HOST']. "/$g_forum_path/index.php\">Forum</a></span><br />
+                    <span class=\"textHead\"><a href=\"http://". $_SERVER['HTTP_HOST']. "/$g_forum->path/index.php\">Forum</a></span><br />
                     <span class=\"smallFontSize\">$forumstext</span>
                 </div>";
             }
