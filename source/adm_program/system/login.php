@@ -73,7 +73,7 @@ require("../../adm_config/body_top.php");
                 </div>";
                 if($g_preferences['registration_mode'] > 0)
                 {
-                    echo "<div style=\"font-size: 8pt; margin-top: 5px;\">
+                    echo "<div class=\"smallFontSize\" style=\"margin-top: 5px;\">
                         <a href=\"registration.php\">Ich m&ouml;chte mich registrieren!</a>
                     </div>";
                 }
@@ -87,10 +87,10 @@ require("../../adm_config/body_top.php");
                 {
                     $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?rol_id=$webmaster_row->rol_id&subject=Loginprobleme";
                 }
-                echo "<div style=\"font-size: 8pt; margin-top: 5px;\">
+                echo "<div class=\"smallFontSize\" style=\"margin-top: 5px;\">
                     <a href=\"$mail_link\">Ich habe mein Passwort vergessen!</a>
                 </div>
-                <div style=\"font-size: 8pt; margin-top: 20px;\">
+                <div class=\"smallFontSize\" style=\"margin-top: 20px;\">
                     Powered by <a href=\"http://www.admidio.org\" target=\"_blank\">Admidio</a>
                 </div>
             </div>

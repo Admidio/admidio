@@ -432,7 +432,7 @@ echo "
 
                 //Anleger und Veraendererinfos
                 echo"
-                <div style=\"margin: 8px 4px 4px 4px; font-size: 8pt; text-align: center;\">";
+                <div class=\"smallFontSize\" style=\"margin: 8px 4px 4px 4px;\">";
                     if($_SESSION['photo_event']['pho_usr_id']!=NULL)
                     {
                         echo"Angelegt von ". strSpecialChars2Html($user1->usr_first_name). " ". strSpecialChars2Html($user1->usr_last_name)
@@ -588,96 +588,95 @@ echo "
                         //Ausgabe
                         echo"
                         <tr>
-                            <td style=\"width: 35%\"><div align=\"center\">";
-                            if(file_exists($ordner))
-                            {
-                                //beispielbild nur anzeigen wenn x-seite unter 3+ y-seite ist
-                                $bildgroesse = getimagesize($bsp_pic_path);
-                                if($bildgroesse[0]<$bildgroesse[1]*3)
+                            <td style=\"width: 35%\">";
+                                if(file_exists($ordner))
                                 {
-                                    echo"
-                                    <a target=\"_self\" href=\"photos.php?pho_id=".$adm_photo_list["pho_id"]."\">
-                                    <img src=\"photo_show.php?bild=$bsp_pic_path&amp;scal=".$g_preferences['photo_preview_scale']."&amp;aufgabe=anzeigen&amp;side=y\" border=\"0\" alt=\"Zufallsbild\"
-                                    style=\"vertical-align: middle; align: right;\"></a></div>";
+                                    //beispielbild nur anzeigen wenn x-seite unter 3+ y-seite ist
+                                    $bildgroesse = getimagesize($bsp_pic_path);
+                                    if($bildgroesse[0]<$bildgroesse[1]*3)
+                                    {
+                                        echo"<div align=\"center\">
+                                            <a target=\"_self\" href=\"photos.php?pho_id=".$adm_photo_list["pho_id"]."\">
+                                            <img src=\"photo_show.php?bild=$bsp_pic_path&amp;scal=".$g_preferences['photo_preview_scale']."&amp;aufgabe=anzeigen&amp;side=y\" border=\"0\" alt=\"Zufallsbild\"
+                                            style=\"vertical-align: middle; align: right;\"></a>
+                                        </div>";
+                                    }
                                 }
-                            }
-                            echo"
-                            </td>
+                            echo"</td>
                             <td>";
-
-                            //Warnung fuer Leute mit Fotorechten: Ordner existiert nicht
-                            if(!file_exists($ordner) && ($g_session_valid && editPhoto($adm_photo_list["pho_org_shortname"])))
-                            {
-                                echo"<img src=\"$g_root_path/adm_program/images/warning16.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Warnhinweis\" title=\"Warnhinweis\"
-                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=folder_not_found','Message','width=400, height=400, left=310,top=200,scrollbars=no')\">&nbsp;";
-                            }
-
-                            //Hinweis fur Leute mit Photorechten: Veranstaltung ist gesperrt
-                            if($adm_photo_list["pho_locked"]==1 && file_exists($ordner))
-                            {
-                                echo"<img src=\"$g_root_path/adm_program/images/lock.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Veranstaltung ist gesperrt\" title=\"Veranstaltung ist gesperrt\"
-                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=not_approved','Message','width=400, height=300, left=310,top=200,scrollbars=no')\">&nbsp;";
-                            }
-
-                            //Veranstaltungs angaben
-                            if(file_exists($ordner))
-                            {
-                                echo"<a target=\"_self\" href=\"photos.php?pho_id=".$adm_photo_list["pho_id"]."\">".$adm_photo_list["pho_name"]."</a><br>";
-                            }
-                            else
-                            {
-                                echo $adm_photo_list["pho_name"];
-                            }
-
-                            echo"
-                            <div style=\"margin: 8px 4px 4px 4px; font-size: 8pt; text-align: left;\">
-                                Bilder: ".$bildersumme." <br>
-                                Datum: ".mysqldate("d.m.y", $adm_photo_list["pho_begin"]);
-                                if($adm_photo_list["pho_end"] != $adm_photo_list["pho_begin"])
+                                //Warnung fuer Leute mit Fotorechten: Ordner existiert nicht
+                                if(!file_exists($ordner) && ($g_session_valid && editPhoto($adm_photo_list["pho_org_shortname"])))
                                 {
-                                    echo " bis ".mysqldate("d.m.y", $adm_photo_list["pho_end"]);
+                                    echo"<img src=\"$g_root_path/adm_program/images/warning16.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Warnhinweis\" title=\"Warnhinweis\"
+                                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=folder_not_found','Message','width=400, height=400, left=310,top=200,scrollbars=no')\">&nbsp;";
                                 }
-                                echo "<br>Fotos von: ".$adm_photo_list["pho_photographers"]."<br>";
 
-                                //bei Moderationrecheten
-                                if ($g_session_valid && editPhoto($adm_photo_list["pho_org_shortname"]))
+                                //Hinweis fur Leute mit Photorechten: Veranstaltung ist gesperrt
+                                if($adm_photo_list["pho_locked"]==1 && file_exists($ordner))
                                 {
-                                    $this_pho_id = $adm_photo_list["pho_id"];
-                                    if(file_exists($ordner))
-                                    {
-                                        echo"
-                                        <img src=\"$g_root_path/adm_program/images/photo.png\" style=\"cursor: pointer; vertical-align: middle;\"
-                                            width=\"16\" height=\"16\" border=\"0\" alt=\"Bilder hochladen\" title=\"Bilder hochladen\"
-                                            onclick=\"self.location.href='photoupload.php?pho_id=$this_pho_id'\">&nbsp;
-
-                                        <img src=\"$g_root_path/adm_program/images/edit.png\"style=\"cursor: pointer; vertical-align: middle;\"
-                                            width=\"16\" height=\"16\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"
-                                            onclick=\"self.location.href='photo_event_new.php?pho_id=$this_pho_id&aufgabe=change'\">&nbsp;";
-                                    }
-
-                                    echo"
-                                    <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer; vertical-align: middle;\" width=\"16\" height=\"16\" border=\"0\"
-                                         alt=\"Veranstaltung L&ouml;schen\" title=\"Veranstaltung L&ouml;schen\"
-                                         onclick=\"self.location.href='photo_event_function.php?job=delete_request&pho_id=$this_pho_id'\">";
-
-                                    if($adm_photo_list["pho_locked"]==1 && file_exists($ordner))
-                                    {
-                                        echo"
-                                        <img src=\"$g_root_path/adm_program/images/key.png\"  alt=\"Freigeben\" title=\"Freigeben\"
-                                            style=\"cursor: pointer; vertical-align: middle;\" width=\"16\" height=\"16\" border=\"0\"
-                                            onclick=\"self.location.href='photos.php?pho_id=$this_pho_id&locked=0'\">";
-                                    }
-
-                                    if($adm_photo_list["pho_locked"]==0 && file_exists($ordner))
-                                    {
-                                        echo"
-                                        <img src=\"$g_root_path/adm_program/images/key.png\" alt=\"Sperren\" title=\"Sperren\"
-                                            style=\"cursor: pointer; vertical-align: middle;\" width=\"16\" height=\"16\" border=\"0\"
-                                            onclick=\"self.location.href='photos.php?pho_id=$this_pho_id&locked=1'\">";
-                                    }
+                                    echo"<img src=\"$g_root_path/adm_program/images/lock.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Veranstaltung ist gesperrt\" title=\"Veranstaltung ist gesperrt\"
+                                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=not_approved','Message','width=400, height=300, left=310,top=200,scrollbars=no')\">&nbsp;";
                                 }
-                            echo"
-                            </div>
+
+                                //Veranstaltungs angaben
+                                if(file_exists($ordner))
+                                {
+                                    echo"<a target=\"_self\" href=\"photos.php?pho_id=".$adm_photo_list["pho_id"]."\">".$adm_photo_list["pho_name"]."</a><br>";
+                                }
+                                else
+                                {
+                                    echo $adm_photo_list["pho_name"];
+                                }
+
+                                echo"
+                                <div class=\"smallFontSize\" style=\"margin: 8px 4px 4px 4px;\">
+                                    Bilder: ".$bildersumme." <br>
+                                    Datum: ".mysqldate("d.m.y", $adm_photo_list["pho_begin"]);
+                                    if($adm_photo_list["pho_end"] != $adm_photo_list["pho_begin"])
+                                    {
+                                        echo " bis ".mysqldate("d.m.y", $adm_photo_list["pho_end"]);
+                                    }
+                                    echo "<br>Fotos von: ".$adm_photo_list["pho_photographers"]."<br>";
+
+                                    //bei Moderationrecheten
+                                    if ($g_session_valid && editPhoto($adm_photo_list["pho_org_shortname"]))
+                                    {
+                                        $this_pho_id = $adm_photo_list["pho_id"];
+                                        if(file_exists($ordner))
+                                        {
+                                            echo"
+                                            <img src=\"$g_root_path/adm_program/images/photo.png\" style=\"cursor: pointer; vertical-align: middle;\"
+                                                width=\"16\" height=\"16\" border=\"0\" alt=\"Bilder hochladen\" title=\"Bilder hochladen\"
+                                                onclick=\"self.location.href='photoupload.php?pho_id=$this_pho_id'\">&nbsp;
+
+                                            <img src=\"$g_root_path/adm_program/images/edit.png\"style=\"cursor: pointer; vertical-align: middle;\"
+                                                width=\"16\" height=\"16\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"
+                                                onclick=\"self.location.href='photo_event_new.php?pho_id=$this_pho_id&aufgabe=change'\">&nbsp;";
+                                        }
+
+                                        echo"
+                                        <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer; vertical-align: middle;\" width=\"16\" height=\"16\" border=\"0\"
+                                             alt=\"Veranstaltung L&ouml;schen\" title=\"Veranstaltung L&ouml;schen\"
+                                             onclick=\"self.location.href='photo_event_function.php?job=delete_request&pho_id=$this_pho_id'\">";
+
+                                        if($adm_photo_list["pho_locked"]==1 && file_exists($ordner))
+                                        {
+                                            echo"
+                                            <img src=\"$g_root_path/adm_program/images/key.png\"  alt=\"Freigeben\" title=\"Freigeben\"
+                                                style=\"cursor: pointer; vertical-align: middle;\" width=\"16\" height=\"16\" border=\"0\"
+                                                onclick=\"self.location.href='photos.php?pho_id=$this_pho_id&locked=0'\">";
+                                        }
+
+                                        if($adm_photo_list["pho_locked"]==0 && file_exists($ordner))
+                                        {
+                                            echo"
+                                            <img src=\"$g_root_path/adm_program/images/key.png\" alt=\"Sperren\" title=\"Sperren\"
+                                                style=\"cursor: pointer; vertical-align: middle;\" width=\"16\" height=\"16\" border=\"0\"
+                                                onclick=\"self.location.href='photos.php?pho_id=$this_pho_id&locked=1'\">";
+                                        }
+                                    }
+                                echo"
+                                </div>
                             </td>
                         </tr>";
                     }//Ende Ordner existiert

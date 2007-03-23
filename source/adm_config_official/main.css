@@ -133,6 +133,7 @@ a:hover {
 
 .boxHead {
     color:            #333333;
+    text-align:       left;
     background-color: #85C226;
     width:            100%;
     min-height:       20px;
@@ -144,6 +145,7 @@ a:hover {
 .boxBody {
     color:            #555555;
     width:            550px;
+    text-align:       left;
     background-color: #eaeaea;
     border-width:     1px;
     border-color:     #555555;

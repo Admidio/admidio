@@ -214,14 +214,6 @@ echo "
     <meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\">
     <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
 
-    <style type=\"text/css\">
-        .smallText {
-            font-size: 8pt;
-            font-weight: normal;
-            text-align: center;
-        }
-    </style>
-
     <script type=\"text/javascript\"><!--
         function markMember(element)
         {
@@ -642,16 +634,19 @@ echo"
                 <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">&nbsp;Speichern
             </button>
         </div>
-   </form></div>";//Ende Formular
-
+    </form>";
+    
     //nur bei mehr als 50
     if(mysql_num_rows($result_user)>=50)
     {
-       echo"
-            <div class=\"smallText\">
-                        Das Zwischenspeichern vor dem Buchstabenwechsel ist nicht notwendig&#33;&#33;&#33;
-             </div>";
+        echo"
+        <div class=\"smallFontSize\">
+            Das Zwischenspeichern vor dem Buchstabenwechsel ist nicht notwendig&#33;&#33;&#33;
+        </div>";
     }
+   
+    echo "</div>";
+
 
     require("../../../adm_config/body_bottom.php");
 echo "</body></html>";

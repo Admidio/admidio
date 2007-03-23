@@ -119,7 +119,7 @@ if (isset($comment_result))
             echo "
             </div>
 
-            <div style=\"margin: 8px 4px 4px 4px; text-align: left;\">";
+            <div style=\"margin: 8px 4px 4px 4px;\">";
                 // wenn BBCode aktiviert ist, den Text noch parsen, ansonsten direkt ausgeben
                 if ($g_preferences['enable_bbcode'] == 1)
                 {
@@ -139,7 +139,7 @@ if (isset($comment_result))
                 $user_change->getUser($row->gbc_usr_id_change);
 
                 echo "
-                <div style=\"margin: 8px 4px 4px 4px; font-size: 8pt; text-align: left;\">Zuletzt bearbeitet von ".
+                <div class=\"smallFontSize\" style=\"margin: 8px 4px 4px 4px;\">Zuletzt bearbeitet von ".
                 strSpecialChars2Html($user_change->first_name). " ". strSpecialChars2Html($user_change->last_name).
                 " am ". mysqldatetime("d.m.y h:i", $row->gbc_last_change). "</div>";
             }
@@ -159,7 +159,7 @@ if (isset($comment_result))
         // Bei Kommentierungsrechten, wird der Link zur Kommentarseite angezeigt...
         $load_url = "$g_root_path/adm_program/modules/guestbook/guestbook_comment_new.php?id=$cid";
         echo "
-        <div style=\"margin: 8px 4px 4px 4px; font-size: 8pt; text-align: left;\">
+        <div class=\"smallFontSize\" style=\"margin: 8px 4px 4px 4px;\">
             <a href=\"$load_url\">
             <img src=\"$g_root_path/adm_program/images/new_comment.png\" style=\"vertical-align: middle;\" alt=\"Kommentieren\"
             title=\"Kommentieren\" border=\"0\"></a>

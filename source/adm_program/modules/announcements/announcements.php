@@ -212,7 +212,7 @@ require("../../../adm_config/body_top.php");
                 echo "
                 <div class=\"boxBody\" style=\"overflow: hidden;\">
                     <div class=\"boxHead\">
-                        <div style=\"text-align: left; float: left;\">
+                        <div style=\"width: 75%; float: left;\">
                             <img src=\"$g_root_path/adm_program/images/note.png\" style=\"vertical-align: top;\" alt=\"". strSpecialChars2Html($row->ann_headline). "\">&nbsp;".
                             strSpecialChars2Html($row->ann_headline). "
                         </div>";
@@ -240,7 +240,7 @@ require("../../../adm_config/body_top.php");
                         }
                     echo "</div>
 
-                    <div style=\"margin: 8px 4px 4px 4px; text-align: left;\">";
+                    <div style=\"margin: 8px 4px 4px 4px;\">";
                         // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
                         if($g_preferences['enable_bbcode'] == 1)
                         {
@@ -251,7 +251,7 @@ require("../../../adm_config/body_top.php");
                             echo nl2br(strSpecialChars2Html($row->ann_description));
                         }
                     echo "</div>
-                    <div style=\"margin: 8px 4px 4px 4px; font-size: 8pt; text-align: left;\">";
+                    <div class=\"smallFontSize\" style=\"margin: 8px 4px 4px 4px;\">";
                         $user_create = new User($g_adm_con);
                         $user_create->getUser($row->ann_usr_id);
                         echo "Angelegt von ". strSpecialChars2Html($user_create->first_name). " ". strSpecialChars2Html($user_create->last_name).

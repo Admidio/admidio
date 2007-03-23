@@ -289,7 +289,7 @@ require("../../../adm_config/body_top.php");
                             echo "&nbsp;</div>";
                         echo "</div>
 
-                        <div style=\"margin: 8px 4px 4px 4px; text-align: left;\">";
+                        <div style=\"margin: 8px 4px 4px 4px;\">";
                             // wenn BBCode aktiviert ist, den Text noch parsen, ansonsten direkt ausgeben
                             if ($g_preferences['enable_bbcode'] == 1)
                             {
@@ -310,7 +310,7 @@ require("../../../adm_config/body_top.php");
                             $user_change->getUser($row->gbo_usr_id_change);
 
                             echo "
-                            <div style=\"margin: 8px 4px 4px 4px; font-size: 8pt; text-align: left;\">Zuletzt bearbeitet von ".
+                            <div class=\"smallFontSize\" style=\"margin: 8px 4px 4px 4px;\">Zuletzt bearbeitet von ".
                             strSpecialChars2Html($user_change->first_name). " ". strSpecialChars2Html($user_change->last_name).
                             " am ". mysqldatetime("d.m.y h:i", $row->gbo_last_change). "</div>";
                         }
@@ -330,7 +330,7 @@ require("../../../adm_config/body_top.php");
                         {
                             // Dieses div wird erst gemeinsam mit den Kommentaren ueber Javascript eingeblendet
                             echo "
-                            <div id=\"commentsVisible_$row->gbo_id\" style=\"visibility: hidden; display: none; margin: 8px 4px 4px; font-size: 10pt; text-align: left;\">
+                            <div id=\"commentsVisible_$row->gbo_id\" style=\"visibility: hidden; display: none; margin: 8px 4px 4px;\">
                                 <a href=\"javascript:toggleComments($row->gbo_id)\">
                                 <img src=\"$g_root_path/adm_program/images/comments.png\" style=\"vertical-align: middle;\" alt=\"Kommentare ausblenden\"
                                 title=\"Kommentare ausblenden\" border=\"0\"></a>
@@ -339,7 +339,7 @@ require("../../../adm_config/body_top.php");
 
                             // Dieses div wird ausgeblendet wenn die Kommetare angezeigt werden
                             echo "
-                            <div id=\"commentsInvisible_$row->gbo_id\" style=\"visibility: visible; display: block; margin: 8px 4px 4px; font-size: 10pt; text-align: left;\">
+                            <div id=\"commentsInvisible_$row->gbo_id\" style=\"visibility: visible; display: block; margin: 8px 4px 4px;\">
                                 <a href=\"javascript:toggleComments($row->gbo_id)\">
                                 <img src=\"$g_root_path/adm_program/images/comments.png\" style=\"vertical-align: middle;\" alt=\"Kommentare anzeigen\"
                                 title=\"Kommentare anzeigen\" border=\"0\"></a>
@@ -358,7 +358,7 @@ require("../../../adm_config/body_top.php");
                             // Falls keine Kommentare vorhanden sind, aber das Recht zur Kommentierung, wird der Link zur Kommentarseite angezeigt...
                             $load_url = "$g_root_path/adm_program/modules/guestbook/guestbook_comment_new.php?id=$row->gbo_id";
                             echo "
-                            <div style=\"margin: 8px 4px 4px 4px; font-size: 8pt; text-align: left;\">
+                            <div class=\"smallFontSize\" style=\"margin: 8px 4px 4px 4px;\">
                                 <a href=\"$load_url\">
                                 <img src=\"$g_root_path/adm_program/images/new_comment.png\" style=\"vertical-align: middle;\" alt=\"Kommentieren\"
                                 title=\"Kommentieren\" border=\"0\"></a>

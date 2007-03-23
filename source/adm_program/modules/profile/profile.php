@@ -114,7 +114,7 @@ require("../../../adm_config/body_top.php");
                         }
                     echo "</div>
 
-                    <div style=\"float: left; width: 30%; text-align: left\">Adresse:";
+                    <div style=\"float: left; width: 30%;\">Adresse:";
                         if(strlen($user->zip_code) > 0 || strlen($user->city) > 0)
                             echo "<br />&nbsp;";
                         if(strlen($user->country) > 0)
@@ -122,10 +122,10 @@ require("../../../adm_config/body_top.php");
                         if(strlen($user->address) > 0
                         && (  strlen($user->zip_code)  > 0
                         || strlen($user->city)  > 0 ))
-                            echo "<br /><span style=\"font-size: 8pt;\">&nbsp;</span>";
+                            echo "<br /><span class=\"smallFontSize\">&nbsp;</span>";
                     echo "</div>
 
-                    <div style=\"margin-left: 30%; text-align: left\">";
+                    <div style=\"margin-left: 30%;\">";
                         if(strlen($user->address) == 0 && strlen($user->zip_code) == 0 && strlen($user->city) == 0)
                             echo "<i>keine Daten vorhanden</i>";
                         if(strlen($user->address) > 0)
@@ -161,7 +161,7 @@ require("../../../adm_config/body_top.php");
                             }
 
                             echo "<br />
-                            <span style=\"font-size: 8pt;\">( <a href=\"$map_url\" target=\"_blank\">Stadtplan</a>";
+                            <span class=\"smallFontSize\">( <a href=\"$map_url\" target=\"_blank\">Stadtplan</a>";
 
                             if($g_current_user->id != $a_user_id)
                             {
@@ -274,7 +274,7 @@ require("../../../adm_config/body_top.php");
                             <a href=\"$mail_link\" style=\" overflow: visible; display: inline;\">";
                             if(strlen($user->email) > 25)
                             {
-                                echo "<span style=\"font-size: 8pt;\">$user->email</span>";
+                                echo "<span class=\"smallFontSize\">$user->email</span>";
                             }
                             else
                             {
@@ -298,7 +298,7 @@ require("../../../adm_config/body_top.php");
                             <a href=\"http://$user->homepage\" target=\"_blank\">";
                             if(strlen($user->homepage) > 25)
                             {
-                                echo "<span style=\"font-size: 8pt;\">$user->homepage</span>";
+                                echo "<span class=\"smallFontSize\">$user->homepage</span>";
                             }
                             else
                             {
@@ -462,7 +462,7 @@ require("../../../adm_config/body_top.php");
                                 };
                                 if(strlen($row->usd_value) > 25)
                                 {
-                                    echo "<span style=\"font-size: 8pt;\">$row->usd_value</span>";
+                                    echo "<span class=\"smallFontSize\">$row->usd_value</span>";
                                 }
                                 else
                                 {

@@ -289,7 +289,7 @@ require("../../../adm_config/body_top.php");
                         if($g_current_user->editWeblinksRight())
                         {
                             echo "
-                            <div style=\"margin-top: 10px; font-size: 8pt; text-align: left;\">";
+                            <div class=\"smallFontSize\" style=\"margin-top: 10px; text-align: left;\">";
                                 // aendern & loeschen duerfen nur User mit den gesetzten Rechten
                                 if ($g_current_user->editWeblinksRight())
                                 {
