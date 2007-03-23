@@ -135,11 +135,11 @@ require("../../../adm_config/body_top.php");
             <div class=\"formHead\">";
                 if($req_rol_id > 0)
                 {
-                    echo strspace("Rolle &auml;ndern", 2);
+                    echo "Rolle &auml;ndern";
                 }
                 else
                 {
-                    echo strspace("Rolle anlegen", 2);
+                    echo "Rolle anlegen";
                 }
             echo "</div>
             <div class=\"formBody\">

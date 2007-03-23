@@ -102,7 +102,7 @@ if($_GET["mode"] == 1)
 
     require("../../../adm_config/body_top.php");
         echo "<div align=\"center\"><br /><br /><br />
-            <div class=\"formHead\" style=\"width: 400px\">". strspace("Mitglied l&ouml;schen"). "</div>
+            <div class=\"formHead\" style=\"width: 400px\">Mitglied l&ouml;schen</div>
 
             <div class=\"formBody\" style=\"width: 400px\">
                 <p align=\"left\">
@@ -200,16 +200,16 @@ elseif($_GET["mode"] == 3)
         $g_message->show("norights");
     }
 
-	// Paralell im Forum loeschen, wenn g_forum gesetzt ist
+    // Paralell im Forum loeschen, wenn g_forum gesetzt ist
     if($g_forum_integriert)
     {
-    	$g_forum->userDelete($user->login_name);
-    	
-    	$err_code = "delete_forum_user";
+        $g_forum->userDelete($user->login_name);
+        
+        $err_code = "delete_forum_user";
     }
     else
     {
-    	$err_code = "delete";
+        $err_code = "delete";
     }
     
     // User aus der Admidio Datenbank loeschen

@@ -118,11 +118,11 @@ require("../../../adm_config/body_top.php");
         <h1>";
             if(strcmp($_GET['mode'], "old") == 0)
             {
-                echo strspace("Alte Termine");
+                echo "Alte Termine";
             }
             else
             {
-                echo strspace("Termine");
+                echo "Termine";
             }
         echo "</h1>";
 

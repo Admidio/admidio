@@ -87,11 +87,11 @@ require("../../../adm_config/body_top.php");
         <div class=\"formHead\">";
             if($a_user_id == $g_current_user->id)
             {
-                echo strspace("Mein Profil", 2);
+                echo "Mein Profil";
             }
             else
             {
-                echo strspace("Profil von ". $user->first_name. " ". $user->last_name, 1);
+                echo "Profil von ". $user->first_name. " ". $user->last_name;
             }
         echo "</div>
 

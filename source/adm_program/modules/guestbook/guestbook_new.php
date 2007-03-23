@@ -177,13 +177,12 @@ require("../../../adm_config/body_top.php");
             <div class=\"formHead\">";
                 if ($_GET['id'] > 0)
                 {
-                    $formHeadline = "G&auml;stebucheintrag &auml;ndern";
+                    echo "G&auml;stebucheintrag &auml;ndern";
                 }
                 else
                 {
-                    $formHeadline = "G&auml;stebucheintrag anlegen";
+                    echo "G&auml;stebucheintrag anlegen";
                 }
-                echo strspace($formHeadline, 2);
             echo "</div>
             <div class=\"formBody\">
                 <div>

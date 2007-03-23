@@ -110,7 +110,7 @@ echo "</head>";
 
 require("../../../adm_config/body_top.php");
     echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-        <h1>". strspace($_GET["headline"]). "</h1>";
+        <h1>". $_GET["headline"]. "</h1>";
 
         // alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
         $arr_ref_orgas = $g_current_organization->getReferenceOrganizations();

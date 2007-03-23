@@ -91,7 +91,7 @@ require("../../../adm_config/body_top.php");
     //Beginn des Inhaltes
     echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
         <form action=\"import_csv.php\" method=\"post\">
-            <div class=\"formHead\">". strspace("Felder zuordnen"). "</div>
+            <div class=\"formHead\">Felder zuordnen</div>
             <div class=\"formBody\">
                 <div style=\"text-align: center; width: 100%;\">
                     <p>Ordne den Datenbankfeldern, wenn m&ouml;glich eine Spalte aus der Datei zu.</p>

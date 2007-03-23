@@ -107,11 +107,11 @@ require("../../../adm_config/body_top.php");
             <div class=\"formHead\" style=\"width: 400px\">";
                 if($usf_id > 0)
                 {
-                    echo strspace("Feld ändern", 2);
+                    echo "Feld ändern";
                 }
                 else
                 {
-                    echo strspace("Feld anlegen", 2);
+                    echo "Feld anlegen";
                 }
             echo "</div>
             <div class=\"formBody\" style=\"width: 400px\">

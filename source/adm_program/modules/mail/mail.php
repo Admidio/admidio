@@ -262,11 +262,11 @@ require("../../../adm_config/body_top.php");
       <div class=\"formHead\">";
       if ($_GET["subject"] == "")
       {
-          echo strspace("E-Mail verschicken");
+          echo "E-Mail verschicken";
       }
       else
       {
-          echo strspace($_GET["subject"]);
+          echo $_GET["subject"];
       }
       echo "</div>
       <div class=\"formBody\">
