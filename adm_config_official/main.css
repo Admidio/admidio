@@ -45,6 +45,7 @@ body {
 
 h1 {
      color:				 #85C226;
+     letter-spacing:	 0.3em;
 }
 
 hr {
@@ -106,6 +107,7 @@ a:hover {
     background-color: #85C226;
     font-size:        12pt;
     font-weight:      bold;
+    letter-spacing:	 0.2em;
     border-width:     1px 1px 0px 1px;
     border-color:     #555555;
     border-style:     solid;
