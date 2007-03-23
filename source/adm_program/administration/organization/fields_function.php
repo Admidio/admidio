@@ -72,7 +72,7 @@ if($_GET['mode'] == 1)
                           AND usf_name         LIKE {0}";
             $sql    = prepareSQL($sql, array($_POST['name']));
             $result = mysql_query($sql, $g_adm_con);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
             $row = mysql_fetch_array($result);
 
             if($row[0] > 0)
@@ -109,7 +109,7 @@ if($_GET['mode'] == 1)
         $sql    = prepareSQL($sql, array(trim($_POST['name']), trim($_POST['description']),
                                          trim($_POST['type']), $_GET['usf_id']));
         $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
         
         $_SESSION['navigation']->deleteLastUrl();
         unset($_SESSION['fields_request']);
@@ -144,13 +144,13 @@ elseif($_GET['mode'] == 2)
                 WHERE usd_usf_id = {0}";
     $sql    = prepareSQL($sql, array($_GET['usf_id']));
     $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    db_error($result,__FILE__,__LINE__);
 
     $sql    = "DELETE FROM ". TBL_USER_FIELDS. "
                 WHERE usf_id = {0}";
     $sql    = prepareSQL($sql, array($_GET['usf_id']));
     $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    db_error($result,__FILE__,__LINE__);
 
     $err_code = "delete";
 }
@@ -161,7 +161,7 @@ elseif($_GET["mode"] == 3)
              WHERE usf_id = {0}";
     $sql    = prepareSQL($sql, array($_GET['usf_id']));
     $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    db_error($result,__FILE__,__LINE__);
     $row = mysql_fetch_array($result);
     
     $g_message->setForwardYesNo("$g_root_path/adm_program/administration/organization/fields_function.php?usf_id=". $_GET['usf_id']. "&mode=2");

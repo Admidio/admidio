@@ -210,7 +210,7 @@ require("../../../adm_config/body_top.php");
             }
             $sql    = prepareSQL($sql, array($req_usr_id));
             $result = mysql_query($sql, $g_adm_con);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
             $i = 0;
             $category = "";
 

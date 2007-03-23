@@ -59,7 +59,7 @@ class RoleDependency
                    " WHERE rld_rol_id_child = $childRoleId
                        AND rld_rol_id_parent = $parentRoleId";
             $result = mysql_query($sql, $this->db_connection);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
 
             if($row = mysql_fetch_object($result))
             {
@@ -115,7 +115,7 @@ class RoleDependency
                       "AND rld_rol_id_child  = '$this->role_id_child_orig'";
 
             $result = mysql_query($sql, $this->db_connection);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
             $persisted = true;
             return 0;
         }
@@ -136,7 +136,7 @@ class RoleDependency
                                                          , $login_user_id
                                                          , '$act_date') ";
             $result = mysql_query($sql, $this->db_connection);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
             $persisted = true;
             return 0;
         }
@@ -159,7 +159,7 @@ class RoleDependency
                    " WHERE rld_rol_id_child = $this->role_id_child_orig " .
                      "AND rld_rol_id_parent = $this->role_id_parent_orig";
         $result = mysql_query($sql, $this->db_connection);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
 
         $this->clear();
     }
@@ -173,7 +173,7 @@ class RoleDependency
             $sql = "SELECT rld_rol_id_parent FROM ". TBL_ROLE_DEPENDENCIES.
                    " WHERE rld_rol_id_child = $childId ";
             $result = mysql_query($sql, $dbConnection);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
 
             $num_rows = mysql_num_rows($result);
             if ($num_rows)
@@ -198,7 +198,7 @@ class RoleDependency
             $sql = "SELECT rld_rol_id_child FROM ". TBL_ROLE_DEPENDENCIES.
                    " WHERE rld_rol_id_parent = $parentId ";
             $result = mysql_query($sql, $dbConnection);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
 
             $num_rows = mysql_num_rows($result);
             if ($num_rows)
@@ -243,7 +243,7 @@ class RoleDependency
             $sql = "SELECT mem_usr_id FROM ". TBL_MEMBERS.
                        " WHERE mem_rol_id = $this->role_id_child ;";
             $result = mysql_query($sql, $this->db_connection);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
 
 
             $num_rows = mysql_num_rows($result);
@@ -259,7 +259,7 @@ class RoleDependency
                 $sql = substr($sql,0,-1);
                 
                 $result2 = mysql_query($sql, $this->db_connection);
-                db_error($result2);
+                db_error($result2,__FILE__,__LINE__);
             }
             return 0;
         }
@@ -275,7 +275,7 @@ class RoleDependency
             $sql = "DELETE FROM ". TBL_ROLE_DEPENDENCIES.
                    " WHERE rld_rol_id_parent = $parentId ";
             $result = mysql_query($sql, $dbConnection);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
 
             return  0;
         }

@@ -124,7 +124,7 @@ else
                       AND gbo_id = gbc_gbo_id";
         $sql    = prepareSQL($sql, array($_GET['cid']));
         $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
 
         if (mysql_num_rows($result) > 0)
         {
@@ -163,7 +163,7 @@ if (!$g_session_valid && $g_preferences['flooding_protection_time'] != 0)
             where unix_timestamp(gbc_timestamp) > unix_timestamp()-". $g_preferences['flooding_protection_time']. "
               and gbc_ip_address = '$ipAddress' ";
     $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    db_error($result,__FILE__,__LINE__);
     $row = mysql_fetch_array($result);
     if($row[0] > 0)
     {

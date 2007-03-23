@@ -278,7 +278,7 @@ echo "
                            AND usf_name          = {0} ";
                 $sql = prepareSQL($sql, array($req_err_text));
                 $result_field = mysql_query($sql, $g_adm_con);
-                db_error($result_field);
+                db_error($result_field,__FILE__,__LINE__);
 
                 $row = mysql_fetch_object($result_field);
                 echo $row->usf_description;

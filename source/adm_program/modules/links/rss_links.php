@@ -61,7 +61,7 @@ $sql = "SELECT * FROM ". TBL_LINKS. "
         ORDER BY lnk_timestamp DESC";
 
 $result = mysql_query($sql, $g_adm_con);
-db_error($result);
+db_error($result,__FILE__,__LINE__);
 
 
 // ab hier wird der RSS-Feed zusammengestellt
@@ -76,7 +76,7 @@ while ($row = mysql_fetch_object($result))
     // Den Autor des Links ermitteln
     $sql     = "SELECT * FROM ". TBL_USERS. " WHERE usr_id = $row->lnk_usr_id";
     $result2 = mysql_query($sql, $g_adm_con);
-    db_error($result2);
+    db_error($result2,__FILE__,__LINE__);
     $user = mysql_fetch_object($result2);
 
 

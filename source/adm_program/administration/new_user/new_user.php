@@ -48,7 +48,7 @@ $sql    = "SELECT * FROM ". TBL_USERS. "
               AND usr_reg_org_shortname = '$g_organization' 
             ORDER BY usr_last_name, usr_first_name ";
 $usr_result = mysql_query($sql, $g_adm_con);
-db_error($usr_result);
+db_error($usr_result,__FILE__,__LINE__);
 $member_found = mysql_num_rows($usr_result);
 
 if ($member_found == 0)

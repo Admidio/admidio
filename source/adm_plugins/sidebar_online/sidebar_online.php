@@ -76,7 +76,7 @@ mysql_select_db($g_adm_db, $g_adm_con );
 // User IDs alles Sessons finden, die in genannter aktueller und referenz Zeit sind
 $sql = "SELECT ses_usr_id FROM ". TBL_SESSIONS. " WHERE ses_timestamp BETWEEN '".$ref_date."' AND '".$act_date."'";
 $result = mysql_query($sql, $g_adm_con);
-db_error($result);
+db_error($result,__FILE__,__LINE__);
 
 if(mysql_num_rows($result) > 0)
 {
@@ -88,7 +88,7 @@ if(mysql_num_rows($result) > 0)
         $sql = "SELECT usr_login_name FROM ". TBL_USERS. " WHERE usr_id LIKE '".$row->ses_usr_id."'";
     
         $on_result = mysql_query($sql, $g_adm_con);
-        db_error($on_result);
+        db_error($on_result,__FILE__,__LINE__);
         
         $useronline = mysql_fetch_array($on_result);
         echo "<b><a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->ses_usr_id\" target=\"$plg_link_target\">".$useronline['usr_login_name']."</a></b><br>";

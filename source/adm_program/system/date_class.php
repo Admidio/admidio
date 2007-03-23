@@ -74,7 +74,7 @@ class Date
         {
             $sql    = "SELECT * FROM ". TBL_DATES. " WHERE dat_id = $date_id";
             $result = mysql_query($sql, $this->db_connection);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
     
             if($row = mysql_fetch_array($result, MYSQL_ASSOC))
             {
@@ -103,7 +103,7 @@ class Date
             // und auf null setzen
             $sql = "SHOW COLUMNS FROM ". TBL_DATES;
             $result = mysql_query($sql, $this->db_connection);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
             
             while ($row = mysql_fetch_array($result))
             {
@@ -202,7 +202,7 @@ class Date
             $sql = "UPDATE ". TBL_DATES. " SET $sql_field_list WHERE dat_id = {dat_id} ";
             $sql = prepareSQL($sql, $this->db_fields);
             $result = mysql_query($sql, $this->db_connection);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
             return 0;
         }
         return -1;
@@ -270,7 +270,7 @@ class Date
             $sql = "INSERT INTO ". TBL_DATES. " ($sql_field_list) VALUES ($sql_value_list) ";
             $sql = prepareSQL($sql, $this->db_fields);
             $result = mysql_query($sql, $this->db_connection);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
             
             $this->db_fields['dat_id'] = mysql_insert_id($this->db_connection);
             return 0;
@@ -284,7 +284,7 @@ class Date
         $sql    = "DELETE FROM ". TBL_DATES. " 
                     WHERE dat_id = ". $this->db_fields['dat_id'];
         $result = mysql_query($sql, $this->db_connection);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
 
         $this->clear();
     }

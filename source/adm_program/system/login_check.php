@@ -52,7 +52,7 @@ $sql    = "SELECT *
               AND rol_valid         = 1 ";
 $sql    = prepareSQL($sql, array($req_login_name));
 $result = mysql_query($sql, $g_adm_con);
-db_error($result);
+db_error($result,__FILE__,__LINE__);
 
 $user_found = mysql_num_rows($result);
 $user_row   = mysql_fetch_object($result);
@@ -76,7 +76,7 @@ if ($user_found >= 1)
                     WHERE ses_usr_id        LIKE '$user_row->usr_id'
                       AND ses_org_shortname LIKE '$g_organization'  ";
         $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
 
         $login_datetime = date("Y.m.d H:i:s", time());
 
@@ -85,7 +85,7 @@ if ($user_found >= 1)
         $sql = "INSERT INTO ". TBL_SESSIONS. " (ses_usr_id, ses_org_shortname, ses_session, ses_timestamp, ses_ip_address)
                 VALUES ('$user_row->usr_id', '$g_organization', '$g_session_id', '$login_datetime', '". $_SERVER['REMOTE_ADDR']. "') ";
         $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
 
         //User Daten in Session speichern
         $g_current_user = new User($g_adm_con);
@@ -99,7 +99,7 @@ if ($user_found >= 1)
         $sql = "UPDATE ". TBL_USERS. " SET usr_last_login = usr_actual_login
                  WHERE usr_id = $user_row->usr_id";
         $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
 
         // Logins zaehlen und aktuelles Login-Datum speichern
 
@@ -110,12 +110,12 @@ if ($user_found >= 1)
                                          , usr_number_invalid = 0
                  WHERE usr_id = $user_row->usr_id";
         $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
 
         // Paralell im Forum einloggen, wenn g_forum gesetzt ist
         if($g_forum_integriert)
         {
-			$g_forum->userLogin($user_row->usr_id, $req_login_name, $req_password_crypt, $g_current_user->login_name, $g_current_user->password, $g_current_user->email);
+            $g_forum->userLogin($user_row->usr_id, $req_login_name, $req_password_crypt, $g_current_user->login_name, $g_current_user->password, $g_current_user->email);
 
             $login_message = $g_forum->message;
         }
@@ -145,7 +145,7 @@ if ($user_found >= 1)
                                             , usr_number_invalid   = usr_number_invalid + 1
                     WHERE usr_id = $user_row->usr_id ";
         $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
 
         $g_message->show("password_unknown");
     }

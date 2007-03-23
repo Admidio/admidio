@@ -146,7 +146,7 @@ require("../../../adm_config/body_top.php");
         }
 
         $links_result = mysql_query($sql1, $g_adm_con);
-        db_error($links_result);
+        db_error($links_result,__FILE__,__LINE__);
 
         // Gucken wieviele Linkdatensaetze insgesamt fuer die Gruppierung vorliegen...
         // Das wird naemlich noch fuer die Seitenanzeige benoetigt...
@@ -171,7 +171,7 @@ require("../../../adm_config/body_top.php");
         }
         
         $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
         $row = mysql_fetch_array($result);
         $numLinks = $row[0];
 

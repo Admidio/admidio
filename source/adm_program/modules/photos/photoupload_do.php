@@ -66,7 +66,7 @@ if($g_session_valid & editPhoto())
                 WHERE pho_id = {0}";
     $sql    = prepareSQL($sql, array($pho_id));
     $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    db_error($result,__FILE__,__LINE__);
     $adm_photo = mysql_fetch_array($result);
 
     //Ordnerpfad
@@ -80,7 +80,7 @@ if($g_session_valid & editPhoto())
                 FROM ". TBL_PHOTOS. "
                 WHERE pho_id ='$pho_parent_id'";
         $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
         $adm_photo_parent = mysql_fetch_array($result);
     }
 
@@ -223,7 +223,7 @@ if($g_session_valid & editPhoto())
                                            WHERE pho_id = {3}";
                                     $sql    = prepareSQL($sql, array($bildnr, $act_datetime, $g_current_user->id,$pho_id));
                                     $result = mysql_query($sql, $g_adm_con);
-                                    db_error($result);
+                                    db_error($result,__FILE__,__LINE__);
                                 }
                                 else
                                 {

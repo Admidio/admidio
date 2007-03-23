@@ -122,7 +122,7 @@ $sql="  SELECT *
         WHERE pho_id ={0}";
 $sql    = prepareSQL($sql, array($pho_id));
 $result_event = mysql_query($sql, $g_adm_con);
-db_error($result_event);
+db_error($result_event,__FILE__,__LINE__);
 $adm_photo = mysql_fetch_array($result_event);
 
 //Variablen in Session schreiben
@@ -149,7 +149,7 @@ $sql="  SELECT *
         WHERE pho_pho_id_parent ={0}";
 $sql    = prepareSQL($sql, array($pho_id));
 $result_children = mysql_query($sql, $g_adm_con);
-db_error($result_children);
+db_error($result_children,__FILE__,__LINE__);
 $children = mysql_num_rows($result_children);
 
 //Erfassen des Anlegers der uebergebenen Veranstaltung
@@ -159,7 +159,7 @@ if($pho_id!=NULL && $_SESSION['photo_event']['pho_usr_id']!=NULL)
             FROM ". TBL_USERS. "
             WHERE usr_id =".$_SESSION['photo_event']['pho_usr_id'];
     $result_u1 = mysql_query($sql, $g_adm_con);
-    db_error($result_u1);
+    db_error($result_u1,__FILE__,__LINE__);
     $user1 = mysql_fetch_object($result_u1);
 }
 
@@ -170,7 +170,7 @@ if($pho_id!=NULL && $_SESSION['photo_event']['pho_usr_id_change']!=NULL)
             FROM ". TBL_USERS. "
             WHERE usr_id =".$_SESSION['photo_event']['pho_usr_id_change'];
     $result_u2 = mysql_query($sql, $g_adm_con);
-    db_error($result_u2);
+    db_error($result_u2,__FILE__,__LINE__);
     $user2 = mysql_fetch_object($result_u2);
 }
 
@@ -191,7 +191,7 @@ if($locked=="1" || $locked=="0")
                  WHERE pho_id = {0}";
         $sql    = prepareSQL($sql, array($pho_id));
         $result_approved = mysql_query($sql, $g_adm_con);
-        db_error($result_approved);
+        db_error($result_approved,__FILE__,__LINE__);
 
         //Zurueck zur Elternveranstaltung
         $pho_id=$_SESSION['photo_event']['pho_pho_id_parent'];
@@ -200,7 +200,7 @@ if($locked=="1" || $locked=="0")
                  WHERE pho_id ={0}";
         $sql    = prepareSQL($sql, array($pho_id));
         $result_event = mysql_query($sql, $g_adm_con);
-        db_error($result_event);
+        db_error($result_event,__FILE__,__LINE__);
         $adm_photo = mysql_fetch_array($result_event);
 
         //Variablen in Session schreiben
@@ -274,7 +274,7 @@ echo "
                      FROM ". TBL_PHOTOS. "
                     WHERE pho_id ='$pho_parent_id'";
             $result = mysql_query($sql, $g_adm_con);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
             $adm_photo_parent = mysql_fetch_array($result);
 
             //Link zusammensetzen
@@ -474,7 +474,7 @@ echo "
 
             $sql    = prepareSQL($sql, array($pho_id));
             $result_list = mysql_query($sql, $g_adm_con);
-            db_error($result_list);
+            db_error($result_list,__FILE__,__LINE__);
 
             //Gesamtzahl der auszugebenden Veranstaltungen
             $events=mysql_num_rows($result_list);
@@ -509,7 +509,7 @@ echo "
                             WHERE pho_pho_id_parent = $pho_id_parent
                             AND pho_locked = 0";
                 $result_child= mysql_query($sql, $g_adm_con);
-                db_error($result_child, 1);
+                db_error($result_child,__FILE__,__LINE__);
                 while($adm_photo_child=mysql_fetch_array($result_child))
                 {
                     $bildersumme=$bildersumme+$adm_photo_child["pho_quantity"];
@@ -529,7 +529,7 @@ echo "
                             WHERE pho_pho_id_parent = $pho_id_parent
                             AND pho_locked = 0";
                 $result_child= mysql_query($sql, $g_adm_con);
-                db_error($result_child, 1);
+                db_error($result_child,__FILE__,__LINE__);
                 while($adm_photo_child=mysql_fetch_array($result_child))
                 {
                     if($adm_photo_child["pho_quantity"]!=0)

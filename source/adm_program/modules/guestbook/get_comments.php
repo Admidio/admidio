@@ -61,7 +61,7 @@ if ($cid > 0)
     $sql    = prepareSQL($sql, array($cid));
 
     $comment_result = mysql_query($sql, $g_adm_con);
-    db_error($comment_result);
+    db_error($comment_result,__FILE__,__LINE__);
 }
 
 if (isset($comment_result))

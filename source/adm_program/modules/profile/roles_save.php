@@ -96,7 +96,7 @@ elseif($g_current_user->editUser())
                 ORDER BY rol_name";
 }
 $result_rolle = mysql_query($sql, $g_adm_con);
-db_error($result_rolle);
+db_error($result_rolle,__FILE__,__LINE__);
 
 $count_assigned = 0;
 $i     = 0;
@@ -120,7 +120,7 @@ while($row = mysql_fetch_object($result_rolle))
                         AND mem_valid  = 1";
         $sql    = prepareSQL($sql, array($req_usr_id));
         $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
 
         $row_usr = mysql_fetch_array($result);
 
@@ -133,7 +133,7 @@ while($row = mysql_fetch_object($result_rolle))
                             AND mem_leader = 0
                             AND mem_valid  = 1";
             $result = mysql_query($sql, $g_adm_con);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
 
             $row_members = mysql_fetch_array($result);
 
@@ -190,7 +190,7 @@ while($row = mysql_fetch_object($result_rolle))
                       AND mem_rol_id = rol_id ";
         $sql    = prepareSQL($sql, array($req_usr_id));
         $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
 
         $user_found = mysql_num_rows($result);
 
@@ -229,7 +229,7 @@ while($row = mysql_fetch_object($result_rolle))
         // Update aufueren
         $sql    = prepareSQL($sql, array($req_usr_id));
         $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
 
         // find the parent roles
         if($function == 1)
@@ -273,7 +273,7 @@ if(count($parentRoles) > 0 )
     
     $sql    = prepareSQL($sql, array($req_usr_id));
     $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    db_error($result,__FILE__,__LINE__);
 }
 
 if($req_new_user == 1 && $count_assigned == 0)

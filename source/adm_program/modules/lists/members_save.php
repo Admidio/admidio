@@ -53,7 +53,7 @@ $sql="SELECT * FROM ". TBL_ROLES. "
       WHERE rol_id = {0}";
 $sql    = prepareSQL($sql, array($role_id));
 $result_role = mysql_query($sql, $g_adm_con);
-db_error($result);
+db_error($result,__FILE__,__LINE__);
 $role = mysql_fetch_object($result_role);
 
 // nur Moderatoren duerfen Rollen zuweisen
@@ -76,7 +76,7 @@ $sql =" SELECT *
         WHERE mem_rol_id = {0}";
 $sql    = prepareSQL($sql, array($role_id));
 $result_mem_role = mysql_query($sql, $g_adm_con);
-db_error($result_mem_role);
+db_error($result_mem_role,__FILE__,__LINE__);
 
 //Schreiben der Datensaetze in Array sortiert nach zugewiesenen Benutzern (id)
 $mitglieder_array= array(array());
@@ -93,7 +93,7 @@ $sql =" SELECT *
         FROM ". TBL_USERS. "
         WHERE usr_valid = 1 ";
 $result_user = mysql_query($sql, $g_adm_con);
-db_error($result_user);
+db_error($result_user,__FILE__,__LINE__);
 
 //Kontrolle ob nicht am ende die Mitgliederzahl ueberstigen wird
 if($role->rol_max_members!=NULL)
@@ -158,7 +158,7 @@ while($user= mysql_fetch_array($result_user))
                     WHERE mem_id = {0}";
             $sql    = prepareSQL($sql, array($mem_id));
             $result = mysql_query($sql, $g_adm_con);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
         }
 
         //Falls wieder angemeldet wurde
@@ -178,7 +178,7 @@ while($user= mysql_fetch_array($result_user))
             $sql .= "WHERE mem_id = {0}";
             $sql    = prepareSQL($sql, array($mem_id));
             $result = mysql_query($sql, $g_adm_con);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
             
             // abhaengige Rollen finden
             $tmpRoles = RoleDependency::getParentRoles($g_adm_con,$role_id);
@@ -202,7 +202,7 @@ while($user= mysql_fetch_array($result_user))
                             WHERE mem_id = {0}";
                     $sql    = prepareSQL($sql, array($mem_id));
                     $result = mysql_query($sql, $g_adm_con);
-                    db_error($result);
+                    db_error($result,__FILE__,__LINE__);
                 }
 
                 //Falls Leiter entfernt werden soll
@@ -212,7 +212,7 @@ while($user= mysql_fetch_array($result_user))
                             WHERE mem_id = {0}";
                     $sql    = prepareSQL($sql, array($mem_id));
                     $result = mysql_query($sql, $g_adm_con);
-                db_error($result);
+                db_error($result,__FILE__,__LINE__);
                 }
         }
     }
@@ -232,7 +232,7 @@ while($user= mysql_fetch_array($result_user))
         else $sql .=", 0) ";
         $sql    = prepareSQL($sql, array($role_id, $usr_id));
         $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
         
         // abhaengige Rollen finden
         $tmpRoles = RoleDependency::getParentRoles($g_adm_con,$role_id);
@@ -258,7 +258,7 @@ while($user= mysql_fetch_array($result_user))
         
         $sql    = prepareSQL($sql, array($user["usr_id"]));
         $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
     }
     
 }

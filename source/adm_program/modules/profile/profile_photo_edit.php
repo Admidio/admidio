@@ -85,7 +85,7 @@ if($job=="save")
               FROM ". TBL_SESSIONS. "
              WHERE ses_usr_id = $req_usr_id ";
     $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    db_error($result,__FILE__,__LINE__);
     
     $session_photo = mysql_fetch_object($result);
 
@@ -94,14 +94,14 @@ if($job=="save")
                SET usr_photo = '". addslashes($session_photo->ses_blob). "'
              WHERE usr_id    = $req_usr_id ";
     $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    db_error($result,__FILE__,__LINE__);
     
     // Bild in der Session loeschen
     $sql =" UPDATE ". TBL_SESSIONS. "
                SET ses_blob   = NULL 
              WHERE ses_usr_id = $req_usr_id ";
     $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    db_error($result,__FILE__,__LINE__);
 
     // zur Ausgangsseite zurueck
     $g_message->setForwardUrl("$g_root_path/adm_program/modules/profile/profile.php?user_id=$req_usr_id", 2000);
@@ -127,7 +127,7 @@ elseif($job=="delete")
              SET usr_photo = NULL
            WHERE usr_id = $req_usr_id ";
     $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    db_error($result,__FILE__,__LINE__);
 
     // zur Ausgangsseite zurueck
     $g_message->setForwardUrl("$g_root_path/adm_program/modules/profile/profile.php?user_id=$req_usr_id", 2000);
@@ -202,7 +202,7 @@ require("../../../adm_config/body_top.php");
                         FROM ".TBL_USERS."
                         WHERE usr_id = $req_usr_id ";
                 $result_photo = mysql_query($sql, $g_adm_con);
-                db_error($result_photo);
+                db_error($result_photo,__FILE__,__LINE__);
 
                 //Falls vorhanden Bild ausgeben
                 if(mysql_result($result_photo,0,"usr_photo")!=NULL)
@@ -306,14 +306,14 @@ require("../../../adm_config/body_top.php");
                            SET ses_blob   = '$user_photo'
                          WHERE ses_usr_id = $req_usr_id ";
                 $result = mysql_query($sql, $g_adm_con);
-                db_error($result);                    
+                db_error($result,__FILE__,__LINE__);                    
 
                 //Nachsehen ob fuer den User ein Photo gespeichert war
                 $sql =" SELECT usr_photo
                         FROM ".TBL_USERS."
                         WHERE usr_id = $req_usr_id ";
                 $result_photo = mysql_query($sql, $g_adm_con);
-                db_error($result_photo);
+                db_error($result_photo,__FILE__,__LINE__);
 
                 //neues und altes Bild anzeigen
                 echo"

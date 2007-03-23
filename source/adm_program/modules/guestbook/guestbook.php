@@ -185,14 +185,14 @@ require("../../../adm_config/body_top.php");
         }
 
         $guestbook_result = mysql_query($sql, $g_adm_con);
-        db_error($guestbook_result);
+        db_error($guestbook_result,__FILE__,__LINE__);
 
         // Gucken wieviele Gaestebucheintraege insgesamt vorliegen...
         // Das ist wichtig für die Seitengenerierung...
         $sql    = "SELECT COUNT(*) FROM ". TBL_GUESTBOOK. "
                    WHERE gbo_org_id = '$g_current_organization->id'";
         $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
         $row = mysql_fetch_array($result);
         $num_guestbook = $row[0];
 
@@ -322,7 +322,7 @@ require("../../../adm_config/body_top.php");
                                    ORDER by gbc_timestamp asc";
 
                         $comment_result = mysql_query($sql, $g_adm_con);
-                        db_error($comment_result);
+                        db_error($comment_result,__FILE__,__LINE__);
 
 
                         // Falls Kommentare vorhanden sind...

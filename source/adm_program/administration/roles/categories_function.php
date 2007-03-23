@@ -96,7 +96,7 @@ if($_GET['mode'] == 1)
                           AND cat_name   LIKE {1} ";
             $sql    = prepareSQL($sql, array($_GET['type'], $category_name));
             $result = mysql_query($sql, $g_adm_con);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
             $row = mysql_fetch_array($result);
 
             if($row[0] > 0)
@@ -129,7 +129,7 @@ if($_GET['mode'] == 1)
         }
         $sql    = prepareSQL($sql, array(trim($category_name), $_GET['cat_id'], $_GET['type']));
         $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
        
         $_SESSION['navigation']->deleteLastUrl();
         unset($_SESSION['categories_request']);
@@ -155,7 +155,7 @@ elseif($_GET['mode'] == 2)  // Feld loeschen
                 WHERE rol_cat_id = {0} ";
     $sql    = prepareSQL($sql, array($_GET['cat_id']));
     $result = mysql_query($sql, $g_adm_con);
-    db_error($result);              
+    db_error($result,__FILE__,__LINE__);              
     $row_num = mysql_num_rows($result);
 
     if($row_num == 0)
@@ -165,7 +165,7 @@ elseif($_GET['mode'] == 2)  // Feld loeschen
                     WHERE cat_id = {0}";
         $sql    = prepareSQL($sql, array($_GET['cat_id']));
         $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
 
         $err_code = "delete";
     }
@@ -177,7 +177,7 @@ elseif($_GET["mode"] == 3)
              WHERE cat_id = {0}";
     $sql    = prepareSQL($sql, array($_GET['cat_id']));
     $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    db_error($result,__FILE__,__LINE__);
     $row = mysql_fetch_array($result);
     
     $g_message->setForwardYesNo("$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=". $_GET['cat_id']. "&mode=2");

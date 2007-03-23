@@ -123,7 +123,7 @@ $sql = "SELECT *
          WHERE rol_id     = {0} ";
 $sql    = prepareSQL($sql, array($rol_id));
 $result = mysql_query($sql, $g_adm_con);
-db_error($result);
+db_error($result,__FILE__,__LINE__);
 
 $role_row = mysql_fetch_object($result);
 
@@ -133,7 +133,7 @@ $sql = "SELECT *
          WHERE cat_id     = {0} ";
 $sql    = prepareSQL($sql, array($role_row->rol_cat_id));
 $result = mysql_query($sql, $g_adm_con);
-db_error($result);
+db_error($result,__FILE__,__LINE__);
 
 $cat_row = mysql_fetch_object($result);
 
@@ -210,7 +210,7 @@ $sql = "SELECT mem_leader
               AND mem_leader = 1 ";
 $sql    = prepareSQL($sql, array($rol_id));
 $result = mysql_query($sql, $g_adm_con);
-db_error($result);
+db_error($result,__FILE__,__LINE__);
 
 if(mysql_num_rows($result) > 0)
 {
@@ -249,7 +249,7 @@ if($leiter == 0)
     // keine Leiter vorhanden -> SQL-Statement ausfuehren
     $main_sql = prepareSQL($main_sql, array($rol_id));
     $result_lst = mysql_query($main_sql, $g_adm_con);
-    db_error($result_lst);
+    db_error($result_lst,__FILE__,__LINE__);
 
     if(mysql_num_rows($result_lst) == 0)
     {
@@ -381,7 +381,7 @@ for($j = 0; $j < $max_count; $j++)
             $main_sql = prepareSQL($main_sql, array($rol_id));
             $result_lst = mysql_query($main_sql, $g_adm_con);
         }
-        db_error($result_lst, true);
+        db_error($result_lst,__FILE__,__LINE__);
     }
 
     if(mysql_num_rows($result_lst) > 0)
@@ -428,7 +428,7 @@ for($j = 0; $j < $max_count; $j++)
                 $sql = "SELECT usf_name, usf_type FROM ". TBL_USER_FIELDS. "
                          WHERE usf_id = $usf_id ";
                 $result_user_fields = mysql_query($sql, $g_adm_con);
-                db_error($result_user_fields);
+                db_error($result_user_fields,__FILE__,__LINE__);
 
                 $row = mysql_fetch_object($result_user_fields);
                 $col_name = $row->usf_name;

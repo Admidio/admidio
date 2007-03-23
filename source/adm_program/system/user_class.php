@@ -110,7 +110,7 @@ class User
         {
             $sql = "SELECT * FROM ". TBL_USERS. " WHERE usr_id = $user_id";
             $result = mysql_query($sql, $this->db_connection);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
 
             if($row = mysql_fetch_object($result))
             {
@@ -234,7 +234,7 @@ class User
                         $this->number_login, $this->date_invalid, $this->number_invalid, $this->valid,
                         $this->reg_org_shortname, $this->login_name, $this->password));
             $result = mysql_query($sql, $this->db_connection);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
             return 0;
         }
         return -1;
@@ -276,7 +276,7 @@ class User
                         $this->gender, $this->email, $this->homepage, $this->valid,
                         $this->reg_org_shortname, $this->login_name, $this->password));                        
             $result = mysql_query($sql, $this->db_connection);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
 
             $this->id = mysql_insert_id($this->db_connection);
             return 0;
@@ -290,83 +290,83 @@ class User
         $sql    = "UPDATE ". TBL_ANNOUNCEMENTS. " SET ann_usr_id = NULL
                     WHERE ann_usr_id = $this->id";
         $result = mysql_query($sql, $this->db_connection);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
 
         $sql    = "UPDATE ". TBL_ANNOUNCEMENTS. " SET ann_usr_id_change = NULL
                     WHERE ann_usr_id_change = $this->id";
         $result = mysql_query($sql, $this->db_connection);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
 
         $sql    = "UPDATE ". TBL_DATES. " SET dat_usr_id = NULL
                     WHERE dat_usr_id = $this->id";
         $result = mysql_query($sql, $this->db_connection);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
 
         $sql    = "UPDATE ". TBL_DATES. " SET dat_usr_id_change = NULL
                     WHERE dat_usr_id_change = $this->id";
         $result = mysql_query($sql, $this->db_connection);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
 
         $sql    = "UPDATE ". TBL_GUESTBOOK. " SET gbo_usr_id = NULL
                     WHERE gbo_usr_id = $this->id";
         $result = mysql_query($sql, $this->db_connection);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
 
         $sql    = "UPDATE ". TBL_GUESTBOOK. " SET gbo_usr_id_change = NULL
                     WHERE gbo_usr_id_change = $this->id";
         $result = mysql_query($sql, $this->db_connection);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
 
         $sql    = "UPDATE ". TBL_LINKS. " SET lnk_usr_id = NULL
                     WHERE lnk_usr_id = $this->id";
         $result = mysql_query($sql, $this->db_connection);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
 
         $sql    = "UPDATE ". TBL_PHOTOS. " SET pho_usr_id = NULL
                     WHERE pho_usr_id = $this->id";
         $result = mysql_query($sql, $this->db_connection);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
 
         $sql    = "UPDATE ". TBL_PHOTOS. " SET pho_usr_id_change = NULL
                     WHERE pho_usr_id_change = $this->id";
         $result = mysql_query($sql, $this->db_connection);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
 
         $sql    = "UPDATE ". TBL_ROLES. " SET rol_usr_id_change = NULL
                     WHERE rol_usr_id_change = $this->id";
         $result = mysql_query($sql, $this->db_connection);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
 
         $sql    = "UPDATE ". TBL_ROLE_DEPENDENCIES. " SET rld_usr_id = NULL
                     WHERE rld_usr_id = $this->id";
         $result = mysql_query($sql, $this->db_connection);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
 
         $sql    = "UPDATE ". TBL_USERS. " SET usr_usr_id_change = NULL
                     WHERE usr_usr_id_change = $this->id";
         $result = mysql_query($sql, $this->db_connection);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
 
         $sql    = "DELETE FROM ". TBL_GUESTBOOK_COMMENTS. " WHERE gbc_usr_id = $this->id";
         $result = mysql_query($sql, $this->db_connection);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
 
         $sql    = "DELETE FROM ". TBL_MEMBERS. " WHERE mem_usr_id = $this->id";
         $result = mysql_query($sql, $this->db_connection);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
 
         $sql    = "DELETE FROM ". TBL_SESSIONS. " WHERE ses_usr_id = $this->id";
         $result = mysql_query($sql, $this->db_connection);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
 
         $sql    = "DELETE FROM ". TBL_USER_DATA. " WHERE usd_usr_id = $this->id";
         $result = mysql_query($sql, $this->db_connection);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
 
         $sql    = "DELETE FROM ". TBL_USERS. "
                     WHERE usr_id = $this->id ";
         $result = mysql_query($sql, $this->db_connection);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
 
         $this->clear();
     }
@@ -454,7 +454,7 @@ class User
                             AND rol_profile       = 1
                             AND rol_valid         = 1 ";
                 $result = mysql_query($sql, $this->db_connection);
-                db_error($result);
+                db_error($result,__FILE__,__LINE__);
 
                 $found_rows = mysql_num_rows($result);
 
@@ -505,7 +505,7 @@ class User
                           AND rol_edit_user     = 1
                           AND rol_valid         = 1 ";
             $result = mysql_query($sql, $this->db_connection);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
 
             $found_rows = mysql_num_rows($result);
 
@@ -545,7 +545,7 @@ class User
                           AND rol_guestbook_comments = 1
                           AND rol_valid              = 1 ";
             $result = mysql_query($sql, $this->db_connection);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
 
             $edit_user = mysql_num_rows($result);
 
@@ -586,7 +586,7 @@ class User
                           AND rol_guestbook     = 1
                           AND rol_valid         = 1 ";
             $result = mysql_query($sql, $this->db_connection);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
 
             $edit_user = mysql_num_rows($result);
 
@@ -628,7 +628,7 @@ class User
                           AND rol_weblinks      = 1
                           AND rol_valid         = 1 ";
             $result = mysql_query($sql, $this->db_connection);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
 
             $edit_weblinks = mysql_num_rows($result);
 
@@ -671,7 +671,7 @@ class User
                           AND rol_download      = 1
                           AND rol_valid         = 1 ";
             $result = mysql_query($sql, $this->db_connection);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
 
             $edit_download = mysql_num_rows($result);
 
@@ -712,7 +712,7 @@ class User
                           AND rol_name          = 'Webmaster'
                           AND rol_valid         = 1 ";
             $result = mysql_query($sql, $this->db_connection);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
             
             if(mysql_num_rows($result) > 0)
             {

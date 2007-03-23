@@ -72,7 +72,7 @@ $sql="  SELECT *
         FROM ". TBL_PHOTOS. "
         WHERE (pho_id ='$pho_id')";
 $result = mysql_query($sql, $g_adm_con);
-db_error($result);
+db_error($result,__FILE__,__LINE__);
 $adm_photo = mysql_fetch_array($result);
 
 //erfassen der Veranstaltungsliste
@@ -81,7 +81,7 @@ $sql="  SELECT *
         WHERE pho_org_shortname ='$g_organization'
         ORDER BY pho_begin DESC ";
 $result_list = mysql_query($sql, $g_adm_con);
-db_error($result_list);
+db_error($result_list,__FILE__,__LINE__);
 
 //bei Seitenaufruf ohne Moderationsrechte
 if(!$g_session_valid || $g_session_valid && (!editPhoto($adm_photo["pho_org_shortname"]) && $aufgabe="change") || !editPhoto())
@@ -175,7 +175,7 @@ if($g_session_valid && editPhoto($adm_photo['pho_org_shortname']))
                     VALUES(0, 'neu', '0000-00-00', '0000-00-00', 'leider unbekannt', '$act_datetime', '$act_datetime', '$g_organization',
                             '$g_current_user->id', '$locked')";
             $result = mysql_query($sql, $g_adm_con);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
             //erfragen der id
             $pho_id=mysql_insert_id($g_adm_con);
 
@@ -189,7 +189,7 @@ if($g_session_valid && editPhoto($adm_photo['pho_org_shortname']))
                         FROM ". TBL_PHOTOS. "
                         WHERE (pho_id ='$pho_id')";
                 $result = mysql_query($sql, $g_adm_con);
-                db_error($result);
+                db_error($result,__FILE__,__LINE__);
 
                 $g_message->addVariableContent("adm_my_files/photos", 1);
                 $g_message->addVariableContent($g_preferences['email_administrator'], 2);
@@ -263,7 +263,7 @@ if($g_session_valid && editPhoto($adm_photo['pho_org_shortname']))
 
         //SQL Befehl ausfuehren
         $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
 
         /********************Daten aus Datenbank neu laden***********************************/
 
@@ -272,7 +272,7 @@ if($g_session_valid && editPhoto($adm_photo['pho_org_shortname']))
                 FROM ". TBL_PHOTOS. "
                 WHERE pho_id ='$pho_id'";
         $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
         $neudaten = mysql_fetch_array($result);
 
         //Speicherort
@@ -285,7 +285,7 @@ if($g_session_valid && editPhoto($adm_photo['pho_org_shortname']))
                     FROM ". TBL_PHOTOS. "
                     WHERE pho_id ='$pho_parent_id'";
             $result = mysql_query($sql, $g_adm_con);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
             $neudaten_parent = mysql_fetch_array($result);
         }
         else
@@ -298,7 +298,7 @@ if($g_session_valid && editPhoto($adm_photo['pho_org_shortname']))
         {
             $sql  = "SELECT * FROM ". TBL_USERS. " WHERE usr_id =".$neudaten["pho_usr_id"];
             $result_u1 = mysql_query($sql, $g_adm_con);
-            db_error($result_u1);
+            db_error($result_u1,__FILE__,__LINE__);
             $user1 = mysql_fetch_object($result_u1);
         }
 
@@ -307,7 +307,7 @@ if($g_session_valid && editPhoto($adm_photo['pho_org_shortname']))
         {
             $sql  = "SELECT * FROM ". TBL_USERS. " WHERE usr_id =".$neudaten["pho_usr_id_change"];
             $result_u2 = mysql_query($sql, $g_adm_con);
-            db_error($result_u2);
+            db_error($result_u2,__FILE__,__LINE__);
             $user2 = mysql_fetch_object($result_u2);
         }
     }// if submit
@@ -399,7 +399,7 @@ if($g_session_valid && editPhoto($adm_photo['pho_org_shortname']))
                     FROM ". TBL_PHOTOS. "
                     WHERE (pho_pho_id_parent ='$delete_id')";
             $result = mysql_query($sql, $g_adm_con);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
 
             while($adm_photo_delete_collect  = mysql_fetch_array($result))
             {
@@ -424,7 +424,7 @@ if($g_session_valid && editPhoto($adm_photo['pho_org_shortname']))
                     FROM ". TBL_PHOTOS. "
                     WHERE (pho_id ='$pho_id_delete')";
             $result = mysql_query($sql, $g_adm_con);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
             $adm_photo_delete = mysql_fetch_array($result);
 
             //Ordnerpfad zusammensetzen
@@ -453,7 +453,7 @@ if($g_session_valid && editPhoto($adm_photo['pho_org_shortname']))
                     FROM ". TBL_PHOTOS. "
                     WHERE (pho_id ='".$adm_photo_delete["pho_id"]."')";
             $result_delet = mysql_query($sql, $g_adm_con);
-            db_error($result_delet);
+            db_error($result_delet,__FILE__,__LINE__);
             if($result_delet)
             {
                 echo"Der Datensatz zu &bdquo;".$adm_photo_delete["pho_name"]."&rdquo; wurde aus der Datenbank gel&ouml;scht.";

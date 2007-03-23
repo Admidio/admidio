@@ -157,7 +157,7 @@ require("../../../adm_config/body_top.php");
         }
 
         $announcements_result = mysql_query($sql, $g_adm_con);
-        db_error($announcements_result);
+        db_error($announcements_result,__FILE__,__LINE__);
 
         // Gucken wieviele Datensaetze die Abfrage ermittelt kann...
         $sql    = "SELECT COUNT(*) FROM ". TBL_ANNOUNCEMENTS. "
@@ -166,7 +166,7 @@ require("../../../adm_config/body_top.php");
                              AND ann_org_shortname IN ($organizations) ))
                     ORDER BY ann_timestamp ASC ";
         $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
         $row = mysql_fetch_array($result);
         $num_announcements = $row[0];
 

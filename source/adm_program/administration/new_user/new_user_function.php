@@ -162,16 +162,16 @@ elseif($req_mode == 4)
 {
     // Registrierung loeschen
     
-	// Paralell im Forum loeschen, wenn g_forum gesetzt ist
+    // Paralell im Forum loeschen, wenn g_forum gesetzt ist
     if($g_forum_integriert)
     {
-    	$g_forum->userDelete($new_user->login_name);
+        $g_forum->userDelete($new_user->login_name);
     }
 
     $sql    = "DELETE FROM ". TBL_USERS. " WHERE usr_id = {0}";
     $sql    = prepareSQL($sql, array($req_new_user_id));
     $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    db_error($result,__FILE__,__LINE__);
 
     $location = "Location: $g_root_path/adm_program/administration/new_user/new_user.php";
     header($location);
@@ -193,10 +193,10 @@ elseif($req_mode == 6)
     // Registrierung loeschen
     $new_user->delete();
     
-	// Paralell im Forum loeschen, wenn g_forum gesetzt ist
+    // Paralell im Forum loeschen, wenn g_forum gesetzt ist
     if($g_forum_integriert)
     {
-    	$g_forum->userDelete($new_user->login_name);
+        $g_forum->userDelete($new_user->login_name);
     }
 
     // Zugangsdaten neu verschicken

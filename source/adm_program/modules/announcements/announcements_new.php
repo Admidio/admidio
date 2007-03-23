@@ -92,7 +92,7 @@ else
                           OR ann_global = 1) ";
         $sql    = prepareSQL($sql, array($_GET['ann_id']));
         $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
 
         if (mysql_num_rows($result) > 0)
         {
@@ -175,7 +175,7 @@ require("../../../adm_config/body_top.php");
                 $sql = "SELECT COUNT(1) FROM ". TBL_ORGANIZATIONS. "
                          WHERE org_org_id_parent IS NOT NULL ";
                 $result = mysql_query($sql, $g_adm_con);
-                db_error($result);
+                db_error($result,__FILE__,__LINE__);
                 $row = mysql_fetch_array($result);
 
                 if($row[0] > 0)

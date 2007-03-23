@@ -89,7 +89,7 @@ else
         $sql    = "SELECT * FROM ". TBL_LINKS. " WHERE lnk_id = {0} and lnk_org_id = $g_current_organization->id";
         $sql    = prepareSQL($sql, array($_GET['lnk_id']));
         $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
 
         if (mysql_num_rows($result) > 0)
         {
@@ -173,7 +173,7 @@ require("../../../adm_config/body_top.php");
                                        AND cat_type   = 'LNK'
                                      ORDER BY cat_name ASC ";
                             $result = mysql_query($sql, $g_adm_con);
-                            db_error($result);
+                            db_error($result,__FILE__,__LINE__);
 
                             while($row = mysql_fetch_object($result))
                             {

@@ -57,7 +57,7 @@ $sql    = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
               AND rol_cat_id        = cat_id
             ORDER BY cat_name, rol_name ";
 $usr_result = mysql_query($sql, $g_adm_con);
-db_error($result);
+db_error($result,__FILE__,__LINE__);
 
 unset($_SESSION['roles_request']);
 
