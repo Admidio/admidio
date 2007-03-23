@@ -186,11 +186,11 @@ require("../../../adm_config/body_top.php");
             <div class=\"formHead\">";
                 if($req_usr_id == $g_current_user->id)
                 {
-                    echo strspace("Mein Profilfoto &auml;ndern", 2);
+                    echo "Mein Profilfoto &auml;ndern";
                 }
                 else
                 {
-                    echo strspace("Profilfoto von ". $user->first_name. " ". $user->last_name. " &auml;ndern", 1);
+                    echo "Profilfoto von ". $user->first_name. " ". $user->last_name. " &auml;ndern";
                 }
             echo "</div>
 
@@ -249,11 +249,11 @@ require("../../../adm_config/body_top.php");
             <div class=\"formHead\">";
                 if($req_usr_id == $g_current_user->id)
                 {
-                    echo strspace("Mein Profilfoto", 2);
+                    echo "Mein Profilfoto";
                 }
                 else
                 {
-                   echo strspace("Profilfoto von ". $user->first_name. " ". $user->last_name, 1);
+                    echo "Profilfoto von ". $user->first_name. " ". $user->last_name;
                 }
             echo "</div>
 

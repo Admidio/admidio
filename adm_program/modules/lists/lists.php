@@ -193,11 +193,11 @@ require("../../../adm_config/body_top.php");
         <h1>';
             if($active_role)
             {
-                echo strspace("Aktive Rollen");
+                echo "Aktive Rollen";
             }
             else
             {
-                echo strspace("Inaktive Rollen");
+                echo "Inaktive Rollen";
             }
         echo '</h1>';
 
@@ -242,11 +242,11 @@ require("../../../adm_config/body_top.php");
         echo "<div class=\"formHead\">";
             if(strlen($category) > 0)
             {
-                echo strspace($category);
+                echo $category;
             }
             else
             {
-                echo strspace("Alle");
+                echo "Alle";
             }
         echo "</div>
 

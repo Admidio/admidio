@@ -110,9 +110,7 @@ require("../adm_config/body_top.php");
         echo "<br />";
 
         echo "
-        <div class=\"formHead\">";
-            echo strspace("Module", 1);
-        echo "</div>
+        <div class=\"formHead\">Module</div>
         <div class=\"formBody\">";
 
             if($g_preferences['enable_announcements_module'] == 1)
@@ -286,9 +284,7 @@ require("../adm_config/body_top.php");
         {
             echo "<br /><br />
 
-            <div class=\"formHead\">";
-                echo strspace("Administration", 1);
-            echo "</div>
+            <div class=\"formHead\">Administration</div>
             <div class=\"formBody\">";
                 if($webmasterRole && $g_preferences['registration_mode'] > 0)
                 {

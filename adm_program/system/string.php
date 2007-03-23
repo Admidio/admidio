@@ -23,45 +23,6 @@
  *
  *****************************************************************************/
 
-// nach jedem Buchstaben in dem uebergebenen String wird ein Space gesetzt
-// geeignet, um den Text optisch ansprechender zu gestalten
-//
-// Bsp: "Teststring"  ->  "T e s t s t r i n g"
-
-function strspace($srcString, $count = 1)
-{
-    $html_special = false;
-    $dest_string  = "";
-    for($i = 0; $i < strlen($srcString); $i++)
-    {
-        $dest_string = $dest_string. substr($srcString, $i, 1);
-        if($html_special == true)
-        {
-            if(substr($srcString, $i, 1) == ";")
-            {
-                $html_special = false;
-            }
-        }
-
-        if($html_special == false)
-        {
-            if(substr($srcString, $i, 1) == "&")
-            {
-                $html_special = true;
-            }
-            else
-            {
-                for($j = 0; $j < $count; $j++)
-                {
-                    $dest_string = $dest_string. "&nbsp;";
-                }
-            }
-        }
-    }
-    return $dest_string;
-}
-
-
 // alle Sonderzeichen werden in Html-Standard übersetzt
 // Diese Funktion unterscheidet sich von htmlentities(), da HTML-Tags
 // hierdurch immer noch funktionieren
@@ -97,37 +58,6 @@ function strStripTags($srcString, $checkChar = 0)
     }
 
     return $srcString;
-}
-
-
-// sind die Nachkommastellen 0, dann werden sie unterdrückt
-//
-// Bsp:   153.00 -> 153   153.50 -> 153.5   153.54 -> 153.54
-
-function numWithoutZero($number)
-{
-    $pos = strpos($number, ".");
-
-    if($pos === false)
-    {
-        return $number;
-    }
-    else
-    {
-        $divideNum = explode(".", $number);
-
-        if(substr($divideNum[1], 1, 1) == 0)
-        {
-            if(substr($divideNum[1], 0, 1) == 0)
-            {
-                return $divideNum[0];
-            }
-
-            return $divideNum[0]. ".". substr($divideNum[1], 0, 1);
-        }
-
-        return $number;
-    }
 }
 
 // ermittelt den vorherigen oder nächsten Buchstaben im Alphabet

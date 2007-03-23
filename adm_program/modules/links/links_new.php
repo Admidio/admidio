@@ -140,13 +140,12 @@ require("../../../adm_config/body_top.php");
             <div class=\"formHead\">";
                 if($_GET["lnk_id"] > 0)
                 {
-                    $formHeadline = $_GET["headline"]. " &auml;ndern";
+                    echo $_GET["headline"]. " &auml;ndern";
                 }
                 else
                 {
-                    $formHeadline = $_GET["headline"]. " anlegen";
+                    echo $_GET["headline"]. " anlegen";
                 }
-                echo strspace($formHeadline, 2);
             echo "</div>
             <div class=\"formBody\">
                 <div>

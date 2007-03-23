@@ -118,11 +118,11 @@ require("../../../adm_config/body_top.php");
             <div class=\"formHead\">";
                 if($cat_id > 0)
                 {
-                    echo strspace("Kategorie &auml;ndern");
+                    echo "Kategorie &auml;ndern";
                 }
                 else
                 {
-                    echo strspace("Kategorie anlegen");
+                    echo "Kategorie anlegen";
                 }
             echo "</div>
             <div class=\"formBody\">

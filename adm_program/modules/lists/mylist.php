@@ -158,9 +158,7 @@ echo "</head>";
 require("../../../adm_config/body_top.php");
     echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
         <form action=\"mylist_prepare.php\" method=\"post\" name=\"properties\">
-            <div class=\"formHead\">";
-                echo strspace("Eigene Liste", 1);
-            echo "</div>
+            <div class=\"formHead\">Eigene Liste</div>
             <div class=\"formBody\">
                 <b>1.</b> W&auml;hle eine Rolle aus von der du eine Mitgliederliste erstellen willst:
                 <p><b>Rolle :</b>&nbsp;&nbsp;";

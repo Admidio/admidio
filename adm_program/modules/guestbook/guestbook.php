@@ -163,7 +163,7 @@ echo "</head>";
 
 require("../../../adm_config/body_top.php");
     echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-        <h1>". strspace($_GET["headline"]). "</h1>";
+        <h1>". $_GET["headline"]. "</h1>";
 
         // falls eine id fuer einen bestimmten Gaestebucheintrag uebergeben worden ist...
         if ($_GET['id'] > 0)

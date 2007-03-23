@@ -178,19 +178,19 @@ require("../../../adm_config/body_top.php");
             <div class=\"formHead\">";
                 if($new_user == 1)
                 {
-                    echo strspace("Neuer Benutzer", 2);
+                    echo "Neuer Benutzer";
                 }
                 elseif($new_user == 2)
                 {
-                    echo strspace("Registrieren", 2);
+                    echo "Registrieren";
                 }
                 elseif($usr_id == $g_current_user->id)
                 {
-                    echo strspace("Mein Profil", 2);
+                    echo "Mein Profil";
                 }
                 else
                 {
-                    echo strspace("Profil von ". $user->first_name. " ". $user->last_name, 1);
+                    echo "Profil von ". $user->first_name. " ". $user->last_name;
                 }
             echo "</div>
             <div class=\"formBody\">

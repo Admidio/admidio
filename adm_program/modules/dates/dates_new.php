@@ -138,11 +138,11 @@ require("../../../adm_config/body_top.php");
             <div class=\"formHead\">";
                 if($req_dat_id > 0)
                 {
-                    echo strspace("Termin &auml;ndern", 2);
+                    echo "Termin &auml;ndern";
                 }
                 else
                 {
-                    echo strspace("Termin anlegen", 2);
+                    echo "Termin anlegen";
                 }
             echo "</div>
             <div class=\"formBody\">

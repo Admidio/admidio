@@ -99,7 +99,7 @@ if($_GET["mode"] == 1)
 
     require("../../../adm_config/body_top.php");
         echo "<div align=\"center\"><br /><br /><br />
-            <div class=\"formHead\" style=\"width: 400px\">". strspace("Rolle l&ouml;schen"). "</div>
+            <div class=\"formHead\" style=\"width: 400px\">Rolle l&ouml;schen</div>
 
             <div class=\"formBody\" style=\"width: 400px\">
                 <p align=\"left\">

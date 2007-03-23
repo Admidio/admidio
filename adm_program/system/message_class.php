@@ -188,7 +188,7 @@ class Message
         
         echo '
         <div style="margin-top: 10px; margin-bottom: 10px;" align="center"><br /><br />
-            <div class="formHead" style="width: 350px">'. strspace($this->headline). '</div>
+            <div class="formHead" style="width: 350px">'. $this->headline. '</div>
         
             <div class="formBody" style="width: 350px">
                 <p>'. $this->content. '</p>

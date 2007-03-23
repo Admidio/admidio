@@ -52,7 +52,7 @@ require("../../adm_config/body_top.php");
     echo "<div align=\"center\">
         <br /><br /><br />
         <form action=\"login_check.php\" name=\"Login\" method=\"post\">
-            <div class=\"formHead\" style=\"width: 260px\">". strspace("Login"). "</div>
+            <div class=\"formHead\" style=\"width: 260px\">Login</div>
             <div class=\"formBody\" style=\"width: 260px\">
                 <div style=\"margin-top: 7px;\">
                     <div style=\"text-align: right; width: 110px; float: left;\">Benutzername:</div>

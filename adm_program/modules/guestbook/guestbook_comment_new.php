@@ -196,18 +196,15 @@ require("../../../adm_config/body_top.php");
         {
             echo "
             <form action=\"guestbook_function.php?id=". $_GET['id']. "&amp;headline=". $_GET['headline']. "&amp;mode=4\" method=\"post\" name=\"Kommentar\">
-            <div class=\"formHead\">";
-                $formHeadline = " Kommentar anlegen";
+            <div class=\"formHead\">Kommentar anlegen</div>";
         }
         else
         {
             echo "
             <form action=\"guestbook_function.php?id=". $_GET['cid']. "&amp;headline=". $_GET['headline']. "&amp;mode=8\" method=\"post\" name=\"Kommentar\">
-            <div class=\"formHead\">";
-                $formHeadline = " Kommentar editieren";
+            <div class=\"formHead\">Kommentar editieren</div>";
         }
-        echo strspace($formHeadline, 2);
-        echo "</div>
+        echo "
             <div class=\"formBody\">
                 <div>
                     <div style=\"text-align: right; width: 25%; float: left;\">Name:</div>
