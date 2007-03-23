@@ -64,7 +64,7 @@ $sql = "SELECT *
                   AND usf_type      = 'MESSENGER' ))
          ORDER BY usf_org_shortname DESC, usf_name ASC ";
 $result_field = mysql_query($sql, $g_adm_con);
-db_error($result_field);
+db_error($result_field,__FILE__,__LINE__);
 
 while($row = mysql_fetch_object($result_field))
 {
@@ -161,7 +161,7 @@ for($i = $start_row; $i < count($_SESSION["file_lines"]); $i++)
                AND usr_first_name = '$user->first_name'
                AND usr_valid      = 1 ";
     $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    db_error($result,__FILE__,__LINE__);
     $dup_users = mysql_num_rows($result);
 
     if($dup_users > 0 && $_SESSION["user_import_mode"] == 3)
@@ -199,7 +199,7 @@ for($i = $start_row; $i < count($_SESSION["file_lines"]); $i++)
                     $sql = "INSERT INTO ". TBL_USER_DATA. " (usd_usr_id, usd_usf_id, usd_value)
                                                      VALUES ($user->id, $usf_id, '$value') ";
                     $result = mysql_query($sql, $g_adm_con);
-                    db_error($result);
+                    db_error($result,__FILE__,__LINE__);
                 }
             }
             $usf_id = next($arr_user_fields);
@@ -209,7 +209,7 @@ for($i = $start_row; $i < count($_SESSION["file_lines"]); $i++)
         $sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin, mem_valid)
                                        VALUES (". $_SESSION['rol_id']. ", $user->id, NOW(), 1) ";
         $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
     }
 
     $line = next($_SESSION["file_lines"]);

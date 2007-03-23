@@ -84,7 +84,7 @@ if ($_GET['aufgabe'] == "change")
              WHERE pho_id = {0} ";
     $sql = prepareSQL($sql, array($_GET['pho_id']));
     $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    db_error($result,__FILE__,__LINE__);
     $adm_photo = mysql_fetch_array($result);
 
     //inhalten in form_values uebertragen
@@ -106,7 +106,7 @@ $sql="  SELECT *
         WHERE pho_org_shortname ='$g_organization'
         ORDER BY pho_begin DESC ";
 $result_list = mysql_query($sql, $g_adm_con);
-db_error($result_list);
+db_error($result_list,__FILE__,__LINE__);
 
 //bei Seitenaufruf ohne Moderationsrechte
 if(!$g_session_valid || $g_session_valid  && ($_GET["aufgabe"]=="change" && !editPhoto($g_organization)) || !editPhoto())
@@ -195,7 +195,7 @@ echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">";
                         FROM ". TBL_PHOTOS. "
                         WHERE (pho_pho_id_parent ='$parent_id')";
                 $result_child = mysql_query($sql, $g_adm_con);
-                db_error($result_child, 1);
+                db_error($result_child,__FILE__,__LINE__);
 
                 while($adm_photo_child=mysql_fetch_array($result_child)){
                     if($adm_photo_child["pho_id"]!=NULL)

@@ -79,7 +79,7 @@ if($g_current_organization->org_id_parent > 0)
     $sql = $sql. " OR org_id = $g_current_organization->org_id_parent ";
 }
 $result = mysql_query($sql, $g_adm_con);
-db_error($result);
+db_error($result,__FILE__,__LINE__);
 
 $organizations = null;
 $i             = 0;
@@ -115,7 +115,7 @@ else
                 LIMIT $plg_dates_count";
 }
 $result = mysql_query($sql, $g_adm_con);
-db_error($result);
+db_error($result,__FILE__,__LINE__);
 
 if(mysql_num_rows($result) > 0)
 {

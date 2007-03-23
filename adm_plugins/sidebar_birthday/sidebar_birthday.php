@@ -87,7 +87,7 @@ $sql    = "SELECT DISTINCT usr_id, usr_last_name, usr_first_name, usr_login_name
               AND usr_valid = 1
             ORDER BY usr_last_name, usr_first_name ";
 $result = mysql_query($sql, $g_adm_con);
-db_error($result, true);
+db_error($result,__FILE__,__LINE__);
 
 $anz_geb = mysql_num_rows($result);
 

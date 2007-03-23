@@ -153,7 +153,7 @@ elseif($_GET["mode"] == 2)
                       AND rol_cat_id        =    {1} ";
         $sql    = prepareSQL($sql, array($_POST['rol_name'], $_POST['rol_cat_id']));
         $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
         $row = mysql_fetch_array($result);
 
         if($row[0] > 0)

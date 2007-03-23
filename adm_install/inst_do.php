@@ -449,7 +449,7 @@ if($req_mode == 1 || $req_mode == 4)
         $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
                                            VALUES ($org_id,    '$key',   '$value') ";
         $result = mysql_query($sql, $connection);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
     }
     
     // Default-Kategorie fuer Rollen und Links eintragen

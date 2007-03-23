@@ -67,7 +67,7 @@ class Organization
             $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. " WHERE org_shortname = {0}";
             $sql = prepareSQL($sql, array($shortname));
             $result = mysql_query($sql, $this->db_connection);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
     
             if($row = mysql_fetch_object($result))
             {
@@ -114,7 +114,7 @@ class Organization
                      WHERE org_id = $this->id ";
             $sql = prepareSQL($sql, array($this->longname, $this->shortname, $this->org_id_parent, $this->homepage));
             $result = mysql_query($sql, $this->db_connection);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
             return 0;
         }
         return -1;
@@ -129,7 +129,7 @@ class Organization
                          VALUES ({0}, {1}, {2}, {3} ) ";
             $sql = prepareSQL($sql, array($this->longname, $this->shortname, $this->org_id_parent, $this->homepage));
             $result = mysql_query($sql, $this->db_connection);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
 
             $this->id = mysql_insert_id($this->db_connection);
             return 0;
@@ -163,7 +163,7 @@ class Organization
             $sql .= " org_id = $this->org_id_parent ";
         }
         $result = mysql_query($sql, $this->db_connection);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
         
         while($row = mysql_fetch_object($result))
         {

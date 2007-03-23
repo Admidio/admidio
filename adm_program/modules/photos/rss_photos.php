@@ -55,7 +55,7 @@ $sql = "SELECT * FROM ". TBL_PHOTOS. "
         LIMIT 10";
 $sql    = prepareSQL($sql, array($g_current_organization->shortname));
 $result = mysql_query($sql, $g_adm_con);
-db_error($result);
+db_error($result,__FILE__,__LINE__);
 
 //Funktion mit selbstaufruf zum erfassen der Bilder in Unterveranstaltungen
 function bildersumme($pho_id_parent){
@@ -68,7 +68,7 @@ function bildersumme($pho_id_parent){
                 AND pho_locked = 0";
     $sql    = prepareSQL($sql, array($pho_id_parent));
     $result_child= mysql_query($sql, $g_adm_con);
-    db_error($result_child, 1);
+    db_error($result_child,__FILE__,__LINE__);
     while($adm_photo_child=mysql_fetch_array($result_child))
     {
         $bildersumme=$bildersumme+$adm_photo_child["pho_quantity"];
@@ -88,7 +88,7 @@ while ($row = mysql_fetch_object($result))
     $sql     = "SELECT usr_first_name, usr_last_name FROM ". TBL_USERS. " WHERE usr_id = {0}";
     $sql    = prepareSQL($sql, array($row->pho_usr_id));
     $result2 = mysql_query($sql, $g_adm_con);
-    db_error($result2);
+    db_error($result2,__FILE__,__LINE__);
     $create_user = mysql_fetch_object($result2);
 
     // Den Veraenderer ermitteln falls ungleich NULL
@@ -97,7 +97,7 @@ while ($row = mysql_fetch_object($result))
         $sql     = "SELECT usr_first_name, usr_last_name FROM ". TBL_USERS. " WHERE usr_id = {0}";
         $sql    = prepareSQL($sql, array($row->pho_usr_id_change));
         $result3 = mysql_query($sql, $g_adm_con);
-        db_error($result3);
+        db_error($result3,__FILE__,__LINE__);
         $update_user = mysql_fetch_object($result3);
     }
     // Die Attribute fuer das Item zusammenstellen
@@ -114,7 +114,7 @@ while ($row = mysql_fetch_object($result))
                 WHERE pho_id ={0}";
         $sql    = prepareSQL($sql, array($pho_parent_id));
         $result_parents = mysql_query($sql, $g_adm_con);
-        db_error($result_parents);
+        db_error($result_parents,__FILE__,__LINE__);
         $adm_photo_parent = mysql_fetch_array($result_parents);
 
         //Link zusammensetzen

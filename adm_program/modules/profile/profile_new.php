@@ -108,7 +108,7 @@ if($new_user == 0)
                       AND mem_valid          = 1
                       AND mem_usr_id         = $usr_id ";
         $result      = mysql_query($sql, $g_adm_con);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
         $b_other_orga = false;
 
         if(mysql_num_rows($result) > 0)
@@ -450,7 +450,7 @@ require("../../../adm_config/body_top.php");
                     $sql = $sql. " ORDER BY usf_name ASC ";
                     
                     $result_field = mysql_query($sql, $g_adm_con);
-                    db_error($result_field);
+                    db_error($result_field,__FILE__,__LINE__);
 
                     if(mysql_num_rows($result_field) > 0)
                     {
@@ -537,7 +537,7 @@ require("../../../adm_config/body_top.php");
                                AND usf_type   = 'MESSENGER'
                              ORDER BY usf_name ASC ";
                     $result_msg = mysql_query($sql, $g_adm_con);
-                    db_error($result_msg);
+                    db_error($result_msg,__FILE__,__LINE__);
 
                     while($row = mysql_fetch_object($result_msg))
                     {
@@ -644,7 +644,7 @@ require("../../../adm_config/body_top.php");
                                  FROM ". TBL_USERS. "
                                 WHERE usr_id = $user->usr_id_change ";
                     $result = mysql_query($sql, $g_adm_con);
-                    db_error($result);
+                    db_error($result,__FILE__,__LINE__);
                     $row = mysql_fetch_array($result);
 
                     echo "<div style=\"margin-top: 6px;\"><span style=\"font-size: 10pt\">

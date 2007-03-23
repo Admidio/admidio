@@ -117,7 +117,7 @@ for($i = 0; $i < count($_POST); $i++)
                          WHERE usf_org_shortname = '$g_organization' 
                            AND usf_id            = '$act_field_name' ";
                 $result = mysql_query($sql, $g_adm_con);
-                db_error($result);
+                db_error($result,__FILE__,__LINE__);
                 
                 $row = mysql_fetch_object($result);
                 
@@ -149,7 +149,7 @@ for($i = 0; $i < count($_POST); $i++)
             {
                 $sql = "SELECT $act_field FROM ". TBL_USERS. " LIMIT 1, 1 ";
                 $result = mysql_query($sql, $g_adm_con);
-                db_error($result);
+                db_error($result,__FILE__,__LINE__);
                 $type   = mysql_field_type($result, 0);
             }
             $parser    = new CParser;

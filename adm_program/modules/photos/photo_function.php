@@ -86,7 +86,7 @@ function right_rotate ($pho_id, $bild)
                 FROM ". TBL_PHOTOS. "
                 WHERE (pho_id ='$pho_id')";
     $result_event = mysql_query($sql, $g_adm_con);
-    db_error($result_event);
+    db_error($result_event,__FILE__,__LINE__);
     $adm_photo = mysql_fetch_array($result_event);
 
     //Ordnerpfad zusammensetzen
@@ -139,7 +139,7 @@ function left_rotate ($pho_id, $bild)
                 FROM ". TBL_PHOTOS. "
                 WHERE (pho_id ='$pho_id')";
     $result_event = mysql_query($sql, $g_adm_con);
-    db_error($result_event);
+    db_error($result_event,__FILE__,__LINE__);
     $adm_photo = mysql_fetch_array($result_event);
 
     //Ordnerpfad zusammensetzen
@@ -192,7 +192,7 @@ function delete ($pho_id, $bild)
                 FROM ". TBL_PHOTOS. "
                 WHERE (pho_id ='$pho_id')";
     $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    db_error($result,__FILE__,__LINE__);
     $adm_photo = mysql_fetch_array($result);
 
     //Speicherort
@@ -229,7 +229,7 @@ function delete ($pho_id, $bild)
                 pho_usr_id_change = $g_current_user->id
             WHERE pho_id = '$pho_id'";
     $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    db_error($result,__FILE__,__LINE__);
 };
 
 //Nutzung der rotatefunktion
@@ -269,7 +269,7 @@ if(isset($_GET["job"]) && $_GET["job"]=="do_delete")
                 FROM ". TBL_PHOTOS. "
                 WHERE (pho_id ='$pho_id')";
     $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    db_error($result,__FILE__,__LINE__);
     $adm_photo = mysql_fetch_array($result);
 
     //bei Seitenaufruf ohne Moderationsrechte

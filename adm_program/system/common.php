@@ -161,7 +161,7 @@ if(strlen($g_session_id) > 0)
     $sql    = prepareSQL($sql, array($g_session_id));
     $result = mysql_query($sql, $g_adm_con);
 
-    db_error($result);
+    db_error($result,__FILE__,__LINE__);
 
     $session_found = mysql_num_rows($result);
     $row           = mysql_fetch_object($result);
@@ -194,7 +194,7 @@ if(strlen($g_session_id) > 0)
                         WHERE ses_session LIKE {0}";
             $sql    = prepareSQL($sql, array($g_session_id));
             $result = mysql_query($sql, $g_adm_con);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
         }
         else
         {
@@ -206,7 +206,7 @@ if(strlen($g_session_id) > 0)
             $sql    = prepareSQL($sql, array($g_session_id));
             $result = mysql_query($sql, $g_adm_con);
 
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
         }
     }
     else
@@ -220,7 +220,7 @@ if(strlen($g_session_id) > 0)
             $sql    = prepareSQL($sql, array($g_session_id));
             $result = mysql_query($sql, $g_adm_con);
 
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
         }
     }
 }

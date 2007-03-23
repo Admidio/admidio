@@ -79,7 +79,7 @@ $sql    = "SELECT rol_id
               AND mem_usr_id         = {0} ";
 $sql    = prepareSQL($sql, array($_GET['user_id']));
 $result = mysql_query($sql, $g_adm_con);
-db_error($result);
+db_error($result,__FILE__,__LINE__);
 $other_orga = mysql_num_rows($result);
 
 
@@ -166,7 +166,7 @@ elseif($_GET["mode"] == 2)
                AND mem_usr_id        = {0}";
     $sql        = prepareSQL($sql, array($_GET['user_id']));
     $result_mgl = mysql_query($sql, $g_adm_con);
-    db_error($result_mgl);
+    db_error($result_mgl,__FILE__,__LINE__);
 
     while($row = mysql_fetch_object($result_mgl))
     {
@@ -174,7 +174,7 @@ elseif($_GET["mode"] == 2)
         $sql    = "UPDATE ". TBL_MEMBERS. " SET mem_valid = 0
                     WHERE mem_id = $row->mem_id ";
         $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
     }
 
     $err_code = "remove_member_ok";
@@ -240,7 +240,7 @@ elseif($_GET["mode"] == 4)
         $sql    = "UPDATE ". TBL_USERS. " SET usr_password = '$password_md5'
                     WHERE usr_id = $user->id ";
         $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
 
         // Mail an den User mit den Loginaten schicken
         $email = new Email();

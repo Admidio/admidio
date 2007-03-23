@@ -191,7 +191,7 @@ require("../../../adm_config/body_top.php");
 
 
         $dates_result = mysql_query($sql, $g_adm_con);
-        db_error($dates_result);
+        db_error($dates_result,__FILE__,__LINE__);
 
         // Gucken wieviele Datensaetze die Abfrage ermittelt kann...
         if(strcmp($_GET['mode'], "old") == 0)
@@ -215,7 +215,7 @@ require("../../../adm_config/body_top.php");
                         ORDER BY dat_begin ASC ";
         }
         $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
         $row = mysql_fetch_array($result);
         $num_dates = $row[0];
 

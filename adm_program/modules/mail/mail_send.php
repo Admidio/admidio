@@ -87,7 +87,7 @@ if (array_key_exists("usr_id", $_GET))
     }
     $sql    = prepareSQL($sql, array($_GET['usr_id']));
     $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    db_error($result,__FILE__,__LINE__);
     $row = mysql_fetch_object($result);
 
     if (mysql_num_rows($result) != 1)
@@ -217,7 +217,7 @@ if (array_key_exists("rol_id", $_POST) && strlen($err_code) == 0)
         }
         $sql    = prepareSQL($sql, array($_POST['rol_id']));
         $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
         $row = mysql_fetch_array($result);
 
         if ($row[0] != 1)
@@ -243,7 +243,7 @@ if (array_key_exists("usr_id", $_GET))
     $sql    = "SELECT usr_first_name, usr_last_name, usr_email FROM ". TBL_USERS. " WHERE usr_id = {0} ";
     $sql    = prepareSQL($sql, array($_GET['usr_id']));
     $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    db_error($result,__FILE__,__LINE__);
     $row = mysql_fetch_row($result);
 
     //den gefundenen User dem Mailobjekt hinzufuegen...
@@ -263,7 +263,7 @@ else
                  AND LENGTH(usr_email) > 0 ";
     $sql    = prepareSQL($sql, array($_POST['rol_id']));
     $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    db_error($result,__FILE__,__LINE__);
 
     while ($row = mysql_fetch_object($result))
     {

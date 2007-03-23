@@ -71,7 +71,7 @@ if($_GET["mode"] == 2 || $_GET["mode"] == 3 || $_GET["mode"] == 4)
                    OR ann_global = 1 ) ";
     $sql = prepareSQL($sql, array($_GET['ann_id']));
     $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    db_error($result,__FILE__,__LINE__);
 
     if(!$row_ann = mysql_fetch_object($result))
     {
@@ -122,7 +122,7 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
                                                          {0}, {1})";
             $sql    = prepareSQL($sql, array($headline, $content));
             $result = mysql_query($sql, $g_adm_con);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
         }
         else
         {
@@ -134,7 +134,7 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
                      WHERE ann_id = {2}";
             $sql    = prepareSQL($sql, array($headline, $content, $_GET['ann_id']));
             $result = mysql_query($sql, $g_adm_con);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
         }
         unset($_SESSION['announcements_request']);
         $_SESSION['navigation']->deleteLastUrl();
@@ -160,7 +160,7 @@ elseif($_GET["mode"] == 2)
     $sql = "DELETE FROM ". TBL_ANNOUNCEMENTS. " WHERE ann_id = {0}";
     $sql    = prepareSQL($sql, array($_GET["ann_id"]));
     $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    db_error($result,__FILE__,__LINE__);
 
     $g_message->setForwardUrl($_SESSION['navigation']->getUrl());
     $g_message->show("delete");

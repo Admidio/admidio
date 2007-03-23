@@ -323,7 +323,7 @@ require("../../../adm_config/body_top.php");
                         FROM ".TBL_USERS."
                         WHERE usr_id = '$a_user_id'";
                 $result_photo = mysql_query($sql, $g_adm_con);
-                db_error($result_photo);
+                db_error($result_photo,__FILE__,__LINE__);
 
                 echo"
                 <div style=\"margin-top: 4px; text-align: center;\">
@@ -381,7 +381,7 @@ require("../../../adm_config/body_top.php");
                            AND usf_type         = 'MESSENGER'
                          ORDER BY usf_name ASC ";
                 $result_msg = mysql_query($sql, $g_adm_con);
-                db_error($result_msg, true);
+                db_error($result_msg,__FILE__,__LINE__);
                 $count_msg = mysql_num_rows($result_msg);
 
                 // alle gruppierungsspezifischen Felder auslesen
@@ -396,7 +396,7 @@ require("../../../adm_config/body_top.php");
                 }
                 $sql = $sql. " ORDER BY usf_name ASC ";
                 $result_field = mysql_query($sql, $g_adm_con);
-                db_error($result_field, true);
+                db_error($result_field,__FILE__,__LINE__);
                 $count_field = mysql_num_rows($result_field);
 
                 // wenn Daten vorhanden, dann diese anzeigen
@@ -545,14 +545,14 @@ require("../../../adm_config/body_top.php");
                                ORDER BY rol_org_shortname, rol_name";
                 }
                 $result_role = mysql_query($sql, $g_adm_con);
-                db_error($result_role, true);
+                db_error($result_role,__FILE__,__LINE__);
                 $count_role = mysql_num_rows($result_role);
 
                 if($count_role > 0)
                 {
                     $sql = "SELECT org_shortname FROM ". TBL_ORGANIZATIONS. "";
                     $result = mysql_query($sql, $g_adm_con);
-                    db_error($result);
+                    db_error($result,__FILE__,__LINE__);
 
                     $count_grp = mysql_num_rows($result);
                     $i = 0;

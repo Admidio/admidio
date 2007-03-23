@@ -66,7 +66,7 @@ require("../../../adm_config/body_top.php");
                  WHERE usf_org_shortname LIKE '$g_organization'
                  ORDER BY usf_name ASC ";
         $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
         
         echo "
         <table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\">

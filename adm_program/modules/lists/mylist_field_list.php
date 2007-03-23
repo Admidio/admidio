@@ -48,7 +48,7 @@ if(isset($result_user_fields) == false)
                  ORDER BY usf_org_shortname DESC, usf_name ASC";
 
     $result_user_fields = mysql_query($sql, $g_adm_con);
-    db_error($result_user_fields);  
+    db_error($result_user_fields,__FILE__,__LINE__);  
 }
 
 // Array um den Namen der Tabellen sinnvolle Texte zuzuweisen

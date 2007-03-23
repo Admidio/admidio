@@ -96,7 +96,7 @@ require("../../../adm_config/body_top.php");
                      ORDER BY cat_name ASC ";
             $sql = prepareSQL($sql, array($_GET['type']));
             $cat_result = mysql_query($sql, $g_adm_con);
-            db_error($cat_result);
+            db_error($cat_result,__FILE__,__LINE__);
 
             while($cat_row = mysql_fetch_object($cat_result))
             {
@@ -104,7 +104,7 @@ require("../../../adm_config/body_top.php");
                 $sql = "SELECT * FROM ". TBL_ROLES. "
                          WHERE rol_cat_id = $cat_row->cat_id ";
                 $result = mysql_query($sql, $g_adm_con);
-                db_error($result);
+                db_error($result,__FILE__,__LINE__);
                 $row_num = mysql_num_rows($result);
 
                 echo "

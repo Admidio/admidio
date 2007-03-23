@@ -171,7 +171,7 @@ require("../../../adm_config/body_top.php");
                                        AND cat_type   = 'ROL'
                                      ORDER BY cat_name ASC ";
                             $result = mysql_query($sql, $g_adm_con);
-                            db_error($result);
+                            db_error($result,__FILE__,__LINE__);
 
                             while($row = mysql_fetch_object($result))
                             {
@@ -423,7 +423,7 @@ require("../../../adm_config/body_top.php");
                                   AND rol_valid         = 1
                                 ORDER BY rol_name ";
                             $allRoles = mysql_query($sql, $g_adm_con);
-                            db_error($allRoles);
+                            db_error($allRoles,__FILE__,__LINE__);
 
                             if($childRoles == -1)
                                 $noChildRoles = true;

@@ -136,7 +136,7 @@ require("../../../adm_config/body_top.php");
                                       AND usf_type      = 'MESSENGER' ))
                              ORDER BY usf_org_shortname DESC, usf_name ASC ";
                     $result_field = mysql_query($sql, $g_adm_con);
-                    db_error($result_field);
+                    db_error($result_field,__FILE__,__LINE__);
 
                     while($row = mysql_fetch_object($result_field))
                     {

@@ -64,7 +64,7 @@ $sql="  SELECT *
         WHERE rol_id = {0}";
 $sql    = prepareSQL($sql, array($role_id));
 $result_role = mysql_query($sql, $g_adm_con);
-db_error($result);
+db_error($result,__FILE__,__LINE__);
 $role = mysql_fetch_object($result_role);
 
 // nur Moderatoren duerfen Rollen zuweisen
@@ -108,7 +108,7 @@ if($restrict=="m")
             AND usr_valid  = 1
             ORDER BY usr_last_name, usr_first_name ASC ";
     $result_user = mysql_query($sql, $g_adm_con);
-    db_error($result_user);
+    db_error($result_user,__FILE__,__LINE__);
     //Zaehlen wieviele Leute in der Datenbank stehen
     $user_anzahl = mysql_num_rows($result_user);
 }
@@ -121,7 +121,7 @@ if($restrict=="u")
             WHERE usr_valid = 1
             ORDER BY usr_last_name, usr_first_name ASC ";
     $result_user = mysql_query($sql, $g_adm_con);
-    db_error($result_user);
+    db_error($result_user,__FILE__,__LINE__);
     //Zaehlen wieviele Leute in der Datenbank stehen
     $user_anzahl = mysql_num_rows($result_user);
 }
@@ -176,7 +176,7 @@ $sql="  SELECT mem_usr_id, mem_rol_id, mem_valid, mem_leader
         WHERE mem_rol_id = {0}";
 $sql    = prepareSQL($sql, array($role_id));
 $result_role_member = mysql_query($sql, $g_adm_con);
-db_error($result_role_member);
+db_error($result_role_member,__FILE__,__LINE__);
 
 //Schreiben der User-IDs die die Rolle bereits haben oder hatten in Array
 //Schreiben der Leiter der Rolle in weiters arry
@@ -199,7 +199,7 @@ $sql    = "SELECT COUNT(*)
              FROM ". TBL_USERS. "
             WHERE usr_valid = 1 ";
 $result = mysql_query($sql, $g_adm_con);
-db_error($result);
+db_error($result,__FILE__,__LINE__);
 
 $row = mysql_fetch_array($result);
 $count_valid_users = $row[0];

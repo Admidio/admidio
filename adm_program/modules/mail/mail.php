@@ -91,7 +91,7 @@ if (isset($_GET["usr_id"]))
     }
     $sql    = prepareSQL($sql, array($_GET['usr_id']));
     $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    db_error($result,__FILE__,__LINE__);
     $row = mysql_fetch_object($result);
 
     if (mysql_num_rows($result) != 1)
@@ -129,7 +129,7 @@ elseif (isset($_GET["rol_id"]))
     }
     $sql    = prepareSQL($sql, array($_GET['rol_id']));
     $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    db_error($result,__FILE__,__LINE__);
     $row = mysql_fetch_array($result);
 
     if ($row[0] != 1)
@@ -167,7 +167,7 @@ elseif (isset($_GET["rolle"]) && isset($_GET["cat"]))
     }
     $sql    = prepareSQL($sql, array($_GET['rolle'],$_GET['cat']));
     $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    db_error($result,__FILE__,__LINE__);
     $row = mysql_fetch_array($result);
 
     if ($row[0] != 1)
@@ -330,7 +330,7 @@ require("../../../adm_config/body_top.php");
                                    ORDER BY cat_name, rol_name ";
                    }
                    $result = mysql_query($sql, $g_adm_con);
-                   db_error($result);
+                   db_error($result,__FILE__,__LINE__);
                    $act_category = "";
 
                    while ($row = mysql_fetch_object($result))

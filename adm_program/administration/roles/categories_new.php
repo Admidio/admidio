@@ -86,7 +86,7 @@ else
         $sql    = "SELECT * FROM ". TBL_CATEGORIES. " WHERE cat_id = {0}";
         $sql    = prepareSQL($sql, array($cat_id));
         $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
     
         if (mysql_num_rows($result) > 0)
         {

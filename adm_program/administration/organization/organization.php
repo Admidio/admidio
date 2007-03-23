@@ -180,7 +180,7 @@ require("../../../adm_config/body_top.php");
                     // Pruefung ob dieser Orga bereits andere Orgas untergeordnet sind
                     $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. " WHERE org_org_id_parent = $g_current_organization->id";
                     $result = mysql_query($sql, $g_adm_con);
-                    db_error($result);
+                    db_error($result,__FILE__,__LINE__);
 
                     //Falls andere Orgas untergeordnet sind, darf diese Orga keiner anderen Orga untergeordnet werden
                     if(mysql_num_rows($result)==0)
@@ -190,7 +190,7 @@ require("../../../adm_config/body_top.php");
                                    AND org_org_id_parent is NULL
                                  ORDER BY org_longname ASC, org_shortname ASC ";
                         $result = mysql_query($sql, $g_adm_con);
-                        db_error($result);
+                        db_error($result,__FILE__,__LINE__);
 
                         if(mysql_num_rows($result) > 0)
                         {

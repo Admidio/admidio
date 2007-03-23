@@ -135,7 +135,7 @@ if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mod
     }
 
     $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    db_error($result,__FILE__,__LINE__);
 
     if (mysql_num_rows($result) == 0)
     {
@@ -214,7 +214,7 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
 
                 $sql    = prepareSQL($sql, array($text, $email, $homepage));
                 $result = mysql_query($sql, $g_adm_con);
-                db_error($result);
+                db_error($result,__FILE__,__LINE__);
 
             }
             else
@@ -229,7 +229,7 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
                               and gbo_org_id = $g_current_organization->id
                               and gbo_ip_address = '$ipAddress' ";
                     $result = mysql_query($sql, $g_adm_con);
-                    db_error($result);
+                    db_error($result,__FILE__,__LINE__);
                     $row = mysql_fetch_array($result);
                     if($row[0] > 0)
                     {
@@ -246,7 +246,7 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
 
                 $sql    = prepareSQL($sql, array($name, $text, $email, $homepage));
                 $result = mysql_query($sql, $g_adm_con);
-                db_error($result);
+                db_error($result,__FILE__,__LINE__);
             }
 
         }
@@ -261,7 +261,7 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
                      WHERE gbo_id = {4}";
             $sql    = prepareSQL($sql, array($name, $text, $email, $homepage, $_GET['id']));
             $result = mysql_query($sql, $g_adm_con);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
         }
 
         // Der Inhalt des Formulars wird bei erfolgreichem insert/update aus der Session geloescht
@@ -298,13 +298,13 @@ elseif($_GET["mode"] == 2)
     $sql = "DELETE FROM ". TBL_GUESTBOOK_COMMENTS. " WHERE gbc_gbo_id = {0}";
     $sql    = prepareSQL($sql, array($_GET['id']));
     $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    db_error($result,__FILE__,__LINE__);
 
     //dann den Eintrag selber loeschen...
     $sql = "DELETE FROM ". TBL_GUESTBOOK. " WHERE gbo_id = {0}";
     $sql    = prepareSQL($sql, array($_GET['id']));
     $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    db_error($result,__FILE__,__LINE__);
 
     if (!isset($_GET["url"]))
     {
@@ -361,7 +361,7 @@ elseif($_GET["mode"] == 4 || $_GET["mode"] == 8)
                                                          VALUES ({0}, $g_current_user->id, '$realName', {1}, {2}, '$actDate', '$ipAddress')";
                 $sql    = prepareSQL($sql, array($_GET['id'], $text, $email));
                 $result = mysql_query($sql, $g_adm_con);
-                db_error($result);
+                db_error($result,__FILE__,__LINE__);
             }
             else
             {
@@ -374,7 +374,7 @@ elseif($_GET["mode"] == 4 || $_GET["mode"] == 8)
                             where unix_timestamp(gbc_timestamp) > unix_timestamp()-". $g_preferences['flooding_protection_time']. "
                               and gbc_ip_address = '$ipAddress' ";
                     $result = mysql_query($sql, $g_adm_con);
-                    db_error($result);
+                    db_error($result,__FILE__,__LINE__);
                     $row = mysql_fetch_array($result);
                     if($row[0] > 0)
                     {
@@ -389,7 +389,7 @@ elseif($_GET["mode"] == 4 || $_GET["mode"] == 8)
                 $sql    = prepareSQL($sql, array($_GET['id'], $name, $text, $email));
 
                 $result = mysql_query($sql, $g_adm_con);
-                db_error($result);
+                db_error($result,__FILE__,__LINE__);
 
             }
         }
@@ -404,7 +404,7 @@ elseif($_GET["mode"] == 4 || $_GET["mode"] == 8)
                      WHERE gbc_id = {3}";
             $sql    = prepareSQL($sql, array($name, $text, $email, $_GET['id']));
             $result = mysql_query($sql, $g_adm_con);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
         }
 
         // Der Inhalt des Formulars wird bei erfolgreichem insert/update aus der Session geloescht
@@ -441,7 +441,7 @@ elseif ($_GET["mode"] == 5)
     $sql = "DELETE FROM ". TBL_GUESTBOOK_COMMENTS. " WHERE gbc_id = {0}";
     $sql    = prepareSQL($sql, array($_GET['id']));
     $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    db_error($result,__FILE__,__LINE__);
 
     if (!isset($_GET["url"]))
     {

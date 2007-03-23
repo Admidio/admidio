@@ -111,7 +111,7 @@ if(strlen($category) > 0 && $category != "Alle")
 $sql .= "ORDER BY rol_name ";
 
 $result_lst = mysql_query($sql, $g_adm_con);
-db_error($result_lst);
+db_error($result_lst,__FILE__,__LINE__);
 $list_found = mysql_num_rows($result_lst);
 
 if($list_found == 0)
@@ -213,7 +213,7 @@ require("../../../adm_config/body_top.php");
             }
             $sql .= " ORDER BY cat_name ASC ";
             $result = mysql_query($sql, $g_adm_con);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
 
             if(mysql_num_rows($result) > 0)
             {
@@ -262,7 +262,7 @@ require("../../../adm_config/body_top.php");
                            AND mem_valid  = $active_role
                            AND mem_leader = 0";
                 $result = mysql_query($sql, $g_adm_con);
-                db_error($result);
+                db_error($result,__FILE__,__LINE__);
                 $row    = mysql_fetch_array($result);
                 $num_member = $row[0];
 
@@ -273,7 +273,7 @@ require("../../../adm_config/body_top.php");
                            AND mem_valid  = $active_role
                            AND mem_leader = 1";
                 $result = mysql_query($sql, $g_adm_con);
-                db_error($result);
+                db_error($result,__FILE__,__LINE__);
                 $row    = mysql_fetch_array($result);
                 $num_leader = $row[0];
 
@@ -285,7 +285,7 @@ require("../../../adm_config/body_top.php");
                              WHERE mem_rol_id = $row_lst->rol_id
                                AND mem_valid  = 0 ";
                     $result = mysql_query($sql, $g_adm_con);
-                    db_error($result);
+                    db_error($result,__FILE__,__LINE__);
                     $row    = mysql_fetch_array($result);
                     $num_former = $row[0];
                 }

@@ -62,7 +62,7 @@ $sql = "SELECT * FROM ". TBL_GUESTBOOK. "
         LIMIT 10 ";
 
 $result = mysql_query($sql, $g_adm_con);
-db_error($result);
+db_error($result,__FILE__,__LINE__);
 
 
 // ab hier wird der RSS-Feed zusammengestellt

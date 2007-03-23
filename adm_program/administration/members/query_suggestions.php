@@ -94,7 +94,7 @@ else
                         ORDER BY usr_last_name, usr_first_name ";
         }
         $result_mgl = mysql_query($sql, $g_adm_con);
-        db_error($result_mgl);
+        db_error($result_mgl,__FILE__,__LINE__);
 
         // Jetzt das komplette resultSet in ein Array schreiben...
         while($row = mysql_fetch_object($result_mgl))

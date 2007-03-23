@@ -75,7 +75,7 @@ class Role
         {
             $sql = "SELECT * FROM ". TBL_ROLES. " WHERE rol_id = $role_id";
             $result = mysql_query($sql, $this->db_connection);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
 
             if($row = mysql_fetch_array($result, MYSQL_ASSOC))
             {
@@ -104,7 +104,7 @@ class Role
             // und auf null setzen
             $sql = "SHOW COLUMNS FROM ". TBL_ROLES;
             $result = mysql_query($sql, $this->db_connection);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
             
             while ($row = mysql_fetch_array($result))
             {
@@ -219,7 +219,7 @@ class Role
             $sql = "UPDATE ". TBL_ROLES. " SET $sql_field_list WHERE rol_id = {rol_id} ";
             $sql = prepareSQL($sql, $this->db_fields);
             $result = mysql_query($sql, $this->db_connection);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
             return 0;
         }
         return -1;
@@ -287,7 +287,7 @@ class Role
             $sql = "INSERT INTO ". TBL_ROLES. " ($sql_field_list) VALUES ($sql_value_list) ";
             $sql = prepareSQL($sql, $this->db_fields);
             $result = mysql_query($sql, $this->db_connection);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
             
             $this->db_fields['rol_id'] = mysql_insert_id($this->db_connection);
             return 0;
@@ -305,17 +305,17 @@ class Role
                         WHERE rld_rol_id_parent = ". $this->db_fields['rol_id']. "
                            OR rld_rol_id_child  = ". $this->db_fields['rol_id'];
             $result = mysql_query($sql, $this->db_connection);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
 
             $sql    = "DELETE FROM ". TBL_MEMBERS. " 
                         WHERE mem_rol_id = ". $this->db_fields['rol_id'];
             $result = mysql_query($sql, $this->db_connection);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
 
             $sql    = "DELETE FROM ". TBL_ROLES. " 
                         WHERE rol_id = ". $this->db_fields['rol_id'];
             $result = mysql_query($sql, $this->db_connection);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
 
             $this->clear();
             return 0;
@@ -334,12 +334,12 @@ class Role
                         WHERE mem_rol_id = ". $this->db_fields['rol_id']. "
                           AND mem_valid  = 1 ";
             $result = mysql_query($sql, $this->db_connection);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
 
             $sql    = "UPDATE ". TBL_ROLES. " SET rol_valid = 0
                         WHERE rol_id = ". $this->db_fields['rol_id'];
             $result = mysql_query($sql, $this->db_connection);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
             
             return 0;
         }
@@ -356,12 +356,12 @@ class Role
                                                   , mem_end   = NULL
                         WHERE mem_rol_id = ". $this->db_fields['rol_id'];
             $result = mysql_query($sql, $this->db_connection);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
 
             $sql    = "UPDATE ". TBL_ROLES. " SET rol_valid = 1
                         WHERE rol_id = ". $this->db_fields['rol_id'];
             $result = mysql_query($sql, $this->db_connection);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
             
             return 0;
         }
@@ -383,7 +383,7 @@ class Role
             }
             $sql    = prepareSQL($sql, array($req_rol_id));
             $result = mysql_query($sql, $g_adm_con);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
             
             $num_members = mysql_num_rows($result);            
             return $this->db_fields['rol_max_members'] - $num_members;

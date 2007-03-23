@@ -31,7 +31,7 @@ require("common.php");
 $sql    = "SELECT * FROM ". TBL_SESSIONS. " WHERE ses_session = {0} ";
 $sql    = prepareSQL($sql, array($g_session_id));
 $result = mysql_query($sql, $g_adm_con);
-db_error($result);
+db_error($result,__FILE__,__LINE__);
 
 $session_found = mysql_num_rows($result);
 
@@ -45,7 +45,7 @@ if($session_found > 0)
     $sql    = "DELETE FROM ". TBL_SESSIONS. " WHERE ses_session = {0}";
     $sql    = prepareSQL($sql, array($g_session_id));
     $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    db_error($result,__FILE__,__LINE__);
 }
 
 // Wenn die Session des Forums aktiv ist, diese ebenfalls loeschen.

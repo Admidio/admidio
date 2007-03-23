@@ -25,20 +25,35 @@
 
 // Funktion fuer das Error-Handling der Datenbank
 
-function db_error($result)
+function db_error($result, $file = "", $line = "")
 {
     global $g_root_path;
     global $g_message;
 
     if($result == false)
     {
+        $error_string = "";
+        if(strlen($file) > 0)
+        {
+            // nur den Dateinamen ohne Pfad anzeigen
+            $file = substr($file, strrpos($file, "\\"));
+            $file = substr($file, strrpos($file, "/"));
+            $file = substr($file, 1);
+            $error_string = $error_string. "<i>File:</i> <b>$file</b><br>";
+        }
+        if(strlen($line) > 0)
+        {
+            $error_string = $error_string. "<i>Line:</i> <b>$line</b><br>";
+        }
+        $error_string = $error_string. "<i>Errorcode:</i> <b>". mysql_errno(). "</b><br>". mysql_error();
+        
         if(headers_sent() == false)
         {
-            $g_message->show("mysql", "Errorcode: ". mysql_errno(). "<br>". mysql_error());
+            $g_message->show("mysql", $error_string);
         }
         else
         {
-            echo "<div style=\"color: #CC0000;\">Error: ". mysql_errno(). " ". mysql_error(). "</div>";
+            echo "<div style=\"color: #CC0000;\">$error_string</div>";
         }
         exit();
     }
@@ -106,7 +121,7 @@ function hasRole($function, $user_id = 0)
                   AND rol_valid         = 1 ";
     $sql    = prepareSQL($sql, array($user_id, $function));
     $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    db_error($result,__FILE__,__LINE__);
 
     $user_found = mysql_num_rows($result);
 
@@ -143,7 +158,7 @@ function isModerator($user_id = 0)
                   AND rol_valid         = 1 ";
     $sql    = prepareSQL($sql, array($user_id));
     $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    db_error($result,__FILE__,__LINE__);
 
     $edit_user = mysql_num_rows($result);
 
@@ -179,7 +194,7 @@ function isMember($user_id, $organization = "")
                   AND rol_valid         = 1 ";
     $sql    = prepareSQL($sql, array($user_id, $organization));
     $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    db_error($result,__FILE__,__LINE__);
 
     $row = mysql_fetch_row($result);
     $row_count = $row[0];
@@ -217,7 +232,7 @@ function isGroupLeader($rol_id = 0)
     }
     $sql    = prepareSQL($sql, array($rol_id));
     $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    db_error($result,__FILE__,__LINE__);
 
     $edit_user = mysql_num_rows($result);
 
@@ -249,7 +264,7 @@ function editAnnouncements()
                   AND rol_announcements = 1
                   AND rol_valid         = 1 ";
     $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    db_error($result,__FILE__,__LINE__);
 
     $edit_announcements = mysql_num_rows($result);
 
@@ -280,7 +295,7 @@ function editDate()
                   AND rol_dates         = 1
                   AND rol_valid         = 1 ";
     $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    db_error($result,__FILE__,__LINE__);
 
     $edit_date = mysql_num_rows($result);
 
@@ -317,7 +332,7 @@ function editPhoto($organization = "")
                   AND rol_valid         = 1 ";
     $sql    = prepareSQL($sql, array($organization));
     $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    db_error($result,__FILE__,__LINE__);
 
     $edit_photo = mysql_num_rows($result);
 
@@ -476,7 +491,7 @@ function generateRoleSelectBox($default_role = 0, $field_id = "")
                              ORDER BY cat_name, rol_name";
             }
             $result_lst = mysql_query($sql, $g_adm_con);
-            db_error($result_lst);
+            db_error($result_lst,__FILE__,__LINE__);
             $act_category = "";
 
             while($row = mysql_fetch_object($result_lst))
@@ -516,7 +531,7 @@ function writeOrgaPreferences($name, $value)
                AND prf_org_id = $g_current_organization->id ";
     $sql = prepareSQL($sql, array($name));
     $result = mysql_query($sql, $g_adm_con);
-    db_error($result);
+    db_error($result,__FILE__,__LINE__);
 
     if(mysql_num_rows($result) > 0)
     {
@@ -525,7 +540,7 @@ function writeOrgaPreferences($name, $value)
                    AND prf_org_id = $g_current_organization->id ";
         $sql = prepareSQL($sql, array($value, $name));
         $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
     }
     else
     {
@@ -533,7 +548,7 @@ function writeOrgaPreferences($name, $value)
                                            VALUES ($g_current_organization->id, {0}, {1}) ";
         $sql = prepareSQL($sql, array($name, $value));
         $result = mysql_query($sql, $g_adm_con);
-        db_error($result);
+        db_error($result,__FILE__,__LINE__);
     }
     
     // den Wert noch im globalen Array setzen

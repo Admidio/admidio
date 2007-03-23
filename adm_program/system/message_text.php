@@ -124,8 +124,7 @@ $message_text = array(
         "Die Organisation aus der config.php konnte in der Datenbank nicht gefunden werden.",
 
     "mysql" =>
-        "Folgender Fehler trat beim Zugriff auf die Datenbank auf:<br /><br />
-        <b>%VAR1%</b>",
+        "Folgender Fehler trat beim Zugriff auf die Datenbank auf:<br /><br />%VAR1%",
 
     "new_user" =>
         "Bist du sicher, dass der Benutzer noch nicht in der Datenbank existiert?",

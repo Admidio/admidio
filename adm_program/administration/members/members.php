@@ -160,7 +160,7 @@ else
     }
 }
 $result_mgl = mysql_query($sql, $g_adm_con);
-db_error($result_mgl);
+db_error($result_mgl,__FILE__,__LINE__);
 
 $num_members = mysql_num_rows($result_mgl);
 
@@ -174,7 +174,7 @@ $sql    = "SELECT COUNT(*)
              FROM ". TBL_USERS. "
             WHERE usr_valid = 1 ";
 $result = mysql_query($sql, $g_adm_con);
-db_error($result);
+db_error($result,__FILE__,__LINE__);
 
 $row = mysql_fetch_array($result);
 $count_mem_rol = $row[0];
@@ -317,7 +317,7 @@ require("../../../adm_config/body_top.php");
                             ORDER BY usr_last_name ";
             }
             $result = mysql_query($sql, $g_adm_con);
-            db_error($result);
+            db_error($result,__FILE__,__LINE__);
             
             $letter_row = mysql_fetch_array($result);
             $letter_menu = "A";
@@ -458,7 +458,7 @@ require("../../../adm_config/body_top.php");
                                               AND mem_valid          = 1
                                               AND mem_usr_id         = $row->usr_id ";
                                 $result      = mysql_query($sql, $g_adm_con);
-                                db_error($result);
+                                db_error($result,__FILE__,__LINE__);
                                 $b_other_orga = false;
                                 
                                 if(mysql_num_rows($result) > 0)
