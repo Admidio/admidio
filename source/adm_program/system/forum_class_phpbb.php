@@ -195,13 +195,14 @@ class Forum
         $result = mysql_query($sql, $this->forum_db_connection);
         db_error($result,__FILE__,__LINE__);
         $row = mysql_fetch_array($result);
-        $this->server = str_replace('/', '', $row[0]);
+        $this->server = str_replace('http://', '', $row[0]);
+		$this->server = str_replace('HTTP://', '', $row[0]);
 
         $sql    = "SELECT config_value FROM ". $this->praefix. "_config WHERE config_name = 'script_path' ";
         $result = mysql_query($sql, $this->forum_db_connection);
         db_error($result,__FILE__,__LINE__);
         $row = mysql_fetch_array($result);
-        $this->path = str_replace('/', '', $row[0]);
+        $this->path = str_replace('//', '', '/'.$row[0].'/');
 
         // Admidio DB waehlen
         mysql_select_db($this->adm_db, $this->adm_con);
