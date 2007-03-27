@@ -202,7 +202,15 @@ class Forum
         $result = mysql_query($sql, $this->forum_db_connection);
         db_error($result,__FILE__,__LINE__);
         $row = mysql_fetch_array($result);
-        $this->path = str_replace('//', '', '/'.$row[0].'/');
+        $this->path = $row[0];
+        if(strpos($this->path, "/", 0) == 0)
+        {
+        	$this->path = str_replace('//', '', '/'.$this->path);
+        }
+        if(strpos($this->path, "/", strlen($this->path)-1) == TRUE)
+        {
+        	$this->path = str_replace('//', '', $this->path.'/');
+        }
 
         // Admidio DB waehlen
         mysql_select_db($this->adm_db, $this->adm_con);
