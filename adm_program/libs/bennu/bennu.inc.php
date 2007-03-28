@@ -2,10 +2,10 @@
 
 if(!defined('_BENNU_VERSION')) {
     define('_BENNU_VERSION', '0.1');
-    include('icalendar_rfc2445.php');
-    include('icalendar_components.php');
-    include('icalendar_properties.php');
-    include('icalendar_parameters.php');
+    include(SERVER_PATH. '/adm_program/libs/bennu/icalendar_rfc2445.php');
+    include(SERVER_PATH. '/adm_program/libs/bennu/icalendar_components.php');
+    include(SERVER_PATH. '/adm_program/libs/bennu/icalendar_properties.php');
+    include(SERVER_PATH. '/adm_program/libs/bennu/icalendar_parameters.php');
 }
 
 ?>
