@@ -307,17 +307,17 @@ class Date
         $cal->add_property('METHOD','PUBLISH');
         $prodid = "-//www.admidio.org//Admidio" . ADMIDIO_VERSION . "//DE";
         $cal->add_property('PRODID',$prodid);
-        $uid = mysqldatetime("ymdThis", $this->db_fields['timestamp']) . "+" . $this->db_fields['usr_id'] . "@" . $domain;
+        $uid = mysqldatetime("ymdThis", $this->db_fields['dat_timestamp']) . "+" . $this->db_fields['dat_usr_id'] . "@" . $domain;
         $event->add_property('uid', $uid);
     
-        $event->add_property('summary',     utf8_encode($this->db_fields['headline']));
-        $event->add_property('description', utf8_encode($this->db_fields['description']));
+        $event->add_property('summary',     utf8_encode($this->db_fields['dat_headline']));
+        $event->add_property('description', utf8_encode($this->db_fields['dat_description']));
 
-        $event->add_property('dtstart', mysqldatetime("ymdThis", $this->db_fields['begin']));
-        $event->add_property('dtend',   mysqldatetime("ymdThis", $this->db_fields['end']));
-        $event->add_property('dtstamp', mysqldatetime("ymdThisZ", $this->db_fields['timestamp']));
+        $event->add_property('dtstart', mysqldatetime("ymdThis", $this->db_fields['dat_begin']));
+        $event->add_property('dtend',   mysqldatetime("ymdThis", $this->db_fields['dat_end']));
+        $event->add_property('dtstamp', mysqldatetime("ymdThisZ", $this->db_fields['dat_timestamp']));
 
-        $event->add_property('location', utf8_encode($this->db_fields['location']));
+        $event->add_property('location', utf8_encode($this->db_fields['dat_location']));
 
         $cal->add_component($event);
         return $cal->serialize();    
