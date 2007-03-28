@@ -50,15 +50,6 @@ else
 $_SESSION['navigation']->clear();
 $_SESSION['navigation']->addUrl($g_current_url);
 
-// Alle Rollen auflisten, die der Webmaster sehen darf
-$sql    = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-            WHERE rol_org_shortname = '$g_organization'
-              AND rol_valid         = $req_valid
-              AND rol_cat_id        = cat_id
-            ORDER BY cat_name, rol_name ";
-$usr_result = mysql_query($sql, $g_adm_con);
-db_error($result,__FILE__,__LINE__);
-
 unset($_SESSION['roles_request']);
 
 echo "
@@ -147,6 +138,15 @@ require("../../../adm_config/body_top.php");
                 </tr>
             </thead>";
             $category = "";
+            
+            // alle Rollen gruppiert nach Kategorie auflisten
+            $sql    = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                        WHERE rol_org_shortname = '$g_organization'
+                          AND rol_valid         = $req_valid
+                          AND rol_cat_id        = cat_id
+                        ORDER BY cat_name, rol_name ";
+            $usr_result = mysql_query($sql, $g_adm_con);
+            db_error($result,__FILE__,__LINE__);
 
             while($row = mysql_fetch_object($usr_result))
             {
@@ -173,7 +173,7 @@ require("../../../adm_config/body_top.php");
                 }            
                 echo "
                 <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
-                    <td style=\"text-align: left;\">&nbsp;<a href=\"$g_root_path/adm_program/administration/roles/roles_new.php?rol_id=$row->rol_id\">$row->rol_name</a></td>
+                    <td style=\"text-align: left;\">&nbsp;<a href=\"$g_root_path/adm_program/administration/roles/roles_new.php?rol_id=$row->rol_id\" title=\"$row->rol_description\">$row->rol_name</a></td>
                     <td style=\"text-align: left;\">";
                         if($row->rol_moderation == 1)
                         {
