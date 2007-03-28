@@ -146,7 +146,14 @@ if(isset($_SESSION['profile_request']))
         $user->fax        = $form_values['fax'];
         $user->homepage   = $form_values['homepage'];
         $user->birthday   = $form_values['birthday'];
-        $user->gender     = $form_values['gender'];
+        if(isset($form_values['gender']))
+        {
+            $user->gender = $form_values['gender'];
+        }
+        else
+        {
+            $user->gender = 0;
+        }
     }
     unset($_SESSION['profile_request']);
     $b_history = true;
