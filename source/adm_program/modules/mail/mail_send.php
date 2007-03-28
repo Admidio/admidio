@@ -351,7 +351,7 @@ if ($email->sendEmail())
     {
         $g_message->setForwardUrl("home");
     }
-    $g_message->show($err_code, $err_text, "Hinweis");
+    $g_message->show($err_code, utf8_encode($err_text), "Hinweis");
 }
 else
 {
@@ -365,7 +365,7 @@ else
     }
     $err_code="mail_not_send";
 
-    $g_message->show($err_code, $err_text);
+    $g_message->show($err_code, utf8_encode($err_text));
 }
 
 
