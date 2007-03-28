@@ -19,6 +19,7 @@
  * Folgende Funktionen stehen nun zur Verfuegung:
  *
  * clear()                - Die Klassenvariablen werden neu initialisiert
+ * setArray($field_arra)  - uebernimmt alle Werte aus einem Array in das Field-Array 
  * setValue($field_name, $field_value) - setzt einen Wert fuer ein bestimmtes Feld
  * getValue($field_name)  - gibt den Wert eines Feldes zurueck
  * update($login_user_id) - Termin wird mit den geaenderten Daten in die Datenbank
@@ -112,6 +113,15 @@ class Date
         }
     }
 
+    // Funktion uebernimmt alle Werte eines Arrays in das Field-Array
+    function setArray($field_array)
+    {
+        foreach($field_array as $field => $value)
+        {
+            $this->db_fields[$field] = $value;
+        }
+    }
+    
     // Funktion setzt den Wert eines Feldes neu, 
     // dabei koennen noch noetige Plausibilitaetspruefungen gemacht werden
     function setValue($field_name, $field_value)
