@@ -545,6 +545,10 @@ if($req_mode == 1)
 }
 else
 {
+    // globale Orga-Objekte entfernen, damit sie neu eingelesen werden
+    unset($_SESSION['g_current_organizsation']);
+    unset($_SESSION['g_preferences']);
+    
     showError("Die Einrichtung der Datenbank konnte erfolgreich abgeschlossen werden.<br><br>
                Nun muss noch das Installationsverzeichnis <b>adm_install</b> gel&ouml;scht werden.", "Fertig", 2);
 }
