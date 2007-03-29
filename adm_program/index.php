@@ -72,14 +72,9 @@ echo "</head>";
 require("../adm_config/body_top.php");
     echo "
     <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-        <table border=\"0\">
-            <tr>
-                <td align=\"right\"><img src=\"../adm_program/images/admidio_logo_50.png\" border=\"0\" alt=\"Admidio\" /></td>
-                <td align=\"left\"><span style=\"font-size: 22pt; font-weight: bold;\">&nbsp;-&nbsp;&Uuml;bersicht</span></td>
-            </tr>
-        </table>
+        <h1>$g_current_organization->longname</h1>
 
-        <div style=\"padding-top: 15px; padding-bottom: 5px;\">";
+        <p>";
             if($g_session_valid == 1)
             {
                 echo "<span class=\"iconLink\">
@@ -105,11 +100,8 @@ require("../adm_config/body_top.php");
                     </span>";
                 }
             }
-        echo "</div>";
+        echo "</p>
 
-        echo "<br />";
-
-        echo "
         <div class=\"formHead\">Module</div>
         <div class=\"formBody\">";
 
