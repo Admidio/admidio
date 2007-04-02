@@ -125,7 +125,7 @@ require("../../../adm_config/body_top.php");
                             echo "<br /><span class=\"smallFontSize\">&nbsp;</span>";
                     echo "</div>
 
-                    <div style=\"margin-left: 30%;\">";
+                    <div>";
                         if(strlen($user->address) == 0 && strlen($user->zip_code) == 0 && strlen($user->city) == 0)
                             echo "<i>keine Daten vorhanden</i>";
                         if(strlen($user->address) > 0)
@@ -207,18 +207,18 @@ require("../../../adm_config/body_top.php");
                     echo "</div>
 
                     <div style=\"float: left; margin-top: 10px; width: 30%; text-align: left\">Telefon:</div>
-                    <div style=\"margin-top: 10px; margin-left: 30%; text-align: left\">$user->phone&nbsp;</div>";
+                    <div style=\"margin-top: 10px; text-align: left\">$user->phone&nbsp;</div>";
 
                     echo "<div style=\"float: left; width: 30%; text-align: left\">Handy:</div>
-                    <div style=\"margin-left: 30%; text-align: left\">$user->mobile&nbsp;</div>";
+                    <div style=\"text-align: left\">$user->mobile&nbsp;</div>";
 
                     echo "<div style=\"float: left; width: 30%; text-align: left\">Fax:</div>
-                    <div style=\"margin-left: 30%; text-align: left\">$user->fax&nbsp;</div>";
+                    <div style=\"text-align: left\">$user->fax&nbsp;</div>";
 
                     // Block Geburtstag, Geschlecht und Benutzer
 
                     echo "<div style=\"float: left; margin-top: 10px; width: 30%; text-align: left\">Geburtstag:</div>
-                    <div style=\"margin-top: 10px; margin-left: 30%; text-align: left\">";
+                    <div style=\"margin-top: 10px; text-align: left\">";
                         if(strlen($user->birthday) > 0)
                         {
                             echo mysqldatetime('d.m.y', $user->birthday);
@@ -256,12 +256,12 @@ require("../../../adm_config/body_top.php");
                             echo "&nbsp;";
                     echo "</div>
                     <div style=\"float: left; width: 30%; text-align: left\">Benutzer:</div>
-                    <div style=\"margin-left: 30%; text-align: left\">$user->login_name&nbsp;</div>";
+                    <div style=\"text-align: left\">$user->login_name&nbsp;</div>";
 
                     // Block E-Mail und Homepage
 
                     echo "<div style=\"float: left; margin-top: 10px; width: 30%; text-align: left\">E-Mail:</div>
-                    <div style=\"margin-top: 10px; margin-left: 30%; text-align: left\">";
+                    <div style=\"margin-top: 10px; text-align: left\">";
                         if(strlen($user->email) > 0)
                         {
                             if($g_preferences['enable_mail_module'] != 1)
@@ -286,7 +286,7 @@ require("../../../adm_config/body_top.php");
                             echo "&nbsp;";
                     echo "</div>
                     <div style=\"float: left; width: 30%; text-align: left\">Homepage:</div>
-                    <div style=\"margin-left: 30%; text-align: left\">";
+                    <div style=\"text-align: left\">";
                         if(strlen($user->homepage) > 0)
                         {
                             $user->homepage = stripslashes($user->homepage);
@@ -419,7 +419,7 @@ require("../../../adm_config/body_top.php");
                                 else
                                     echo "&nbsp;";
                                 echo "</div>
-                                <div style=\"margin-left: 30%; text-align: left\">";
+                                <div style=\"text-align: left\">";
 
                                 if($row->usf_name == 'ICQ')
                                 {
@@ -482,7 +482,7 @@ require("../../../adm_config/body_top.php");
                             {
                                 echo "<div style=\"float: left; width: 30%; text-align: left\">
                                     $row_field->usf_name:</div>
-                                <div style=\"margin-left: 30%; text-align: left\">";
+                                <div style=\"text-align: left\">";
 
                                 // Feldinhalt ausgeben
                                 if($row_field->usf_type == 'CHECKBOX')
