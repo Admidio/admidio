@@ -202,7 +202,7 @@ require("../../../adm_config/body_top.php");
             echo "</div>
             <div class=\"formBody\">
                 <div>
-                    <div style=\"text-align: right; width: 30%; float: left;\">Nachname:</div>
+                    <div style=\"text-align: right; width: 30%; float: left;\">Nachname:&nbsp;</div>
                     <div style=\"text-align: left; margin-left: 32%;\">
                         <input type=\"text\" id=\"last_name\" name=\"last_name\" style=\"width: 200px;\" maxlength=\"30\" value=\"$user->last_name\" ";
                         if($g_current_user->isWebmaster() == false && $new_user == 0)
@@ -217,7 +217,7 @@ require("../../../adm_config/body_top.php");
                     echo "</div>
                 </div>
                 <div style=\"margin-top: 6px;\">
-                    <div style=\"text-align: right; width: 30%; float: left;\">Vorname:</div>
+                    <div style=\"text-align: right; width: 30%; float: left;\">Vorname:&nbsp;</div>
                     <div style=\"text-align: left; margin-left: 32%;\">
                         <input type=\"text\" name=\"first_name\" style=\"width: 200px;\" maxlength=\"30\" value=\"$user->first_name\" ";
                         if($g_current_user->isWebmaster() == false && $new_user == 0)
@@ -239,7 +239,7 @@ require("../../../adm_config/body_top.php");
                     {
                         echo "
                         <div style=\"margin-top: 6px;\">
-                            <div style=\"text-align: right; width: 30%; float: left;\">E-Mail:</div>
+                            <div style=\"text-align: right; width: 30%; float: left;\">E-Mail:&nbsp;</div>
                             <div style=\"text-align: left; margin-left: 32%;\">
                                 <input type=\"text\" name=\"email\" style=\"width: 300px;\" maxlength=\"50\" value=\"$user->email\" />&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>&nbsp;
                                 <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
@@ -249,7 +249,7 @@ require("../../../adm_config/body_top.php");
                         <hr width=\"85%\">";
                     }
                     echo "<div style=\"margin-top: 6px;\">
-                        <div style=\"text-align: right; width: 30%; float: left;\">Benutzername:</div>
+                        <div style=\"text-align: right; width: 30%; float: left;\">Benutzername:&nbsp;</div>
                         <div style=\"text-align: left; margin-left: 32%;\">
                             <input type=\"text\" name=\"login_name\" style=\"width: 130px;\" maxlength=\"20\" value=\"$user->login_name\" ";
                             if($g_current_user->isWebmaster() == false && $new_user == 0)
@@ -269,7 +269,7 @@ require("../../../adm_config/body_top.php");
                     if($new_user == 2)
                     {
                         echo "<div style=\"margin-top: 6px;\">
-                            <div style=\"text-align: right; width: 30%; float: left;\">Passwort:</div>
+                            <div style=\"text-align: right; width: 30%; float: left;\">Passwort:&nbsp;</div>
                             <div style=\"text-align: left; margin-left: 32%;\">
                                 <input type=\"password\" name=\"password\" style=\"width: 130px;\" maxlength=\"20\" />
                                 <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>&nbsp;
@@ -278,7 +278,7 @@ require("../../../adm_config/body_top.php");
                             </div>
                         </div>
                         <div style=\"margin-top: 6px;\">
-                            <div style=\"text-align: right; width: 30%; float: left;\">Passwort (Wdh):</div>
+                            <div style=\"text-align: right; width: 30%; float: left;\">Passwort (Wdh):&nbsp;</div>
                             <div style=\"text-align: left; margin-left: 32%;\">
                                 <input type=\"password\" name=\"password2\" style=\"width: 130px;\" maxlength=\"20\" />
                                 <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
@@ -291,7 +291,7 @@ require("../../../adm_config/body_top.php");
                         if($g_current_user->isWebmaster() || $g_current_user->id == $usr_id )
                         {
                             echo "<div style=\"margin-top: 6px;\">
-                                <div style=\"text-align: right; width: 30%; float: left;\">Passwort:</div>
+                                <div style=\"text-align: right; width: 30%; float: left;\">Passwort:&nbsp;</div>
                                 <div style=\"text-align: left; margin-left: 32%;\">
                                     <button name=\"password\" type=\"button\" value=\"Passwort &auml;ndern\" onclick=\"window.open('password.php?user_id=$usr_id','Titel','width=350,height=260,left=310,top=200')\">
                                     <img src=\"$g_root_path/adm_program/images/key.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Passwort &auml;ndern\">
@@ -308,25 +308,25 @@ require("../../../adm_config/body_top.php");
                     echo "<hr width=\"85%\">
 
                     <div style=\"margin-top: 6px;\">
-                        <div style=\"text-align: right; width: 30%; float: left;\">Adresse:</div>
+                        <div style=\"text-align: right; width: 30%; float: left;\">Adresse:&nbsp;</div>
                         <div style=\"text-align: left; margin-left: 32%;\">
                             <input type=\"text\" id=\"address\" name=\"address\" style=\"width: 300px;\" maxlength=\"50\" value=\"$user->address\" />
                         </div>
                     </div>
                     <div style=\"margin-top: 6px;\">
-                        <div style=\"text-align: right; width: 30%; float: left;\">Postleitzahl:</div>
+                        <div style=\"text-align: right; width: 30%; float: left;\">Postleitzahl:&nbsp;</div>
                         <div style=\"text-align: left; margin-left: 32%;\">
                             <input type=\"text\" name=\"zip_code\" style=\"width: 80px;\" maxlength=\"10\" value=\"$user->zip_code\" />
                         </div>
                     </div>
                     <div style=\"margin-top: 6px;\">
-                        <div style=\"text-align: right; width: 30%; float: left;\">Ort:</div>
+                        <div style=\"text-align: right; width: 30%; float: left;\">Ort:&nbsp;</div>
                         <div style=\"text-align: left; margin-left: 32%;\">
                             <input type=\"text\" name=\"city\" style=\"width: 200px;\" maxlength=\"30\" value=\"$user->city\" />
                         </div>
                     </div>
                     <div style=\"margin-top: 6px;\">
-                        <div style=\"text-align: right; width: 30%; float: left;\">Land:</div>
+                        <div style=\"text-align: right; width: 30%; float: left;\">Land:&nbsp;</div>
                         <div style=\"text-align: left; margin-left: 32%;\">";
                             //Laenderliste oeffnen
                             $landlist = fopen("../../system/staaten.txt", "r");
@@ -369,28 +369,28 @@ require("../../../adm_config/body_top.php");
                     <hr width=\"85%\">
 
                     <div style=\"margin-top: 6px;\">
-                        <div style=\"text-align: right; width: 30%; float: left;\">Telefon:</div>
+                        <div style=\"text-align: right; width: 30%; float: left;\">Telefon:&nbsp;</div>
                         <div style=\"text-align: left; margin-left: 32%;\">
                             <input type=\"text\" name=\"phone\" style=\"width: 130px;\" maxlength=\"20\" value=\"$user->phone\" />
                             &nbsp;<span style=\"font-family: Courier;\">(Vorwahl-Tel.Nr.)</span>
                         </div>
                     </div>
                     <div style=\"margin-top: 6px;\">
-                        <div style=\"text-align: right; width: 30%; float: left;\">Handy:</div>
+                        <div style=\"text-align: right; width: 30%; float: left;\">Handy:&nbsp;</div>
                         <div style=\"text-align: left; margin-left: 32%;\">
                             <input type=\"text\" name=\"mobile\" style=\"width: 130px;\" maxlength=\"20\" value=\"$user->mobile\" />
                             &nbsp;<span style=\"font-family: Courier;\">(Vorwahl-Handynr.)</span>
                          </div>
                     </div>
                     <div style=\"margin-top: 6px;\">
-                        <div style=\"text-align: right; width: 30%; float: left;\">Fax:</div>
+                        <div style=\"text-align: right; width: 30%; float: left;\">Fax:&nbsp;</div>
                         <div style=\"text-align: left; margin-left: 32%;\">
                             <input type=\"text\" name=\"fax\" style=\"width: 130px;\" maxlength=\"20\" value=\"$user->fax\" />
                             &nbsp;<span style=\"font-family: Courier;\">(Vorwahl-Faxnr.)</span>
                         </div>
                     </div>
                     <div style=\"margin-top: 6px;\">
-                        <div style=\"text-align: right; width: 30%; float: left;\">E-Mail:</div>
+                        <div style=\"text-align: right; width: 30%; float: left;\">E-Mail:&nbsp;</div>
                         <div style=\"text-align: left; margin-left: 32%;\">
                             <input type=\"text\" name=\"email\" style=\"width: 300px;\" maxlength=\"50\" value=\"$user->email\" />";
                             if($new_user == 2)
@@ -403,7 +403,7 @@ require("../../../adm_config/body_top.php");
                         echo "</div>
                     </div>
                     <div style=\"margin-top: 6px;\">
-                        <div style=\"text-align: right; width: 30%; float: left;\">Homepage:</div>
+                        <div style=\"text-align: right; width: 30%; float: left;\">Homepage:&nbsp;</div>
                         <div style=\"text-align: left; margin-left: 32%;\">
                             <input type=\"text\" name=\"homepage\" style=\"width: 300px;\" maxlength=\"50\" value=\"$user->homepage\" />
                         </div>
@@ -412,13 +412,13 @@ require("../../../adm_config/body_top.php");
                     <hr width=\"85%\">
 
                     <div style=\"margin-top: 6px;\">
-                        <div style=\"text-align: right; width: 30%; float: left;\">Geburtstag:</div>
+                        <div style=\"text-align: right; width: 30%; float: left;\">Geburtstag:&nbsp;</div>
                         <div style=\"text-align: left; margin-left: 32%;\">
                             <input type=\"text\" name=\"birthday\" style=\"width: 80px;\" maxlength=\"10\" value=\"$user->birthday\" />
                         </div>
                     </div>
                     <div style=\"margin-top: 6px;\">
-                        <div style=\"text-align: right; width: 30%; float: left;\">Geschlecht:</div>
+                        <div style=\"text-align: right; width: 30%; float: left;\">Geschlecht:&nbsp;</div>
                         <div style=\"text-align: left; margin-left: 32%;\">
                             <input type=\"radio\" id=\"female\" name=\"gender\" value=\"2\"";
                                 if($new_user == 0 && $user->gender == 2)
@@ -468,7 +468,7 @@ require("../../../adm_config/body_top.php");
                     {
                         echo "<div style=\"margin-top: 6px;\">
                             <div style=\"text-align: right; width: 30%; float: left;\">
-                                $row->usf_name:
+                                $row->usf_name:&nbsp;
                             </div>
                             <div style=\"text-align: left; margin-left: 32%;\">";
                                 // in Abhaengigkeit des Feldtypes wird das Eingabefeld erstellt
@@ -576,7 +576,7 @@ require("../../../adm_config/body_top.php");
                                 {
                                     echo "yahoo.png";
                                 }
-                                echo "\" style=\"vertical-align: middle;\" />
+                                echo "\" style=\"vertical-align: middle;\" />&nbsp;
                             </div>
                             <div style=\"text-align: left; margin-left: 32%;\">";
                                 if($b_history == true)
@@ -606,7 +606,7 @@ require("../../../adm_config/body_top.php");
                      </div>
 
                      <div style=\"margin-top: 6px;\">
-                            <div style=\"text-align: right; width: 30%; float: left;\">Best&auml;tigungscode:</div>
+                            <div style=\"text-align: right; width: 30%; float: left;\">Best&auml;tigungscode:&nbsp;</div>
                             <div style=\"text-align: left; margin-left: 32%;\">
                                 <input type=\"text\" id=\"captcha\" name=\"captcha\" style=\"width: 200px;\" maxlength=\"8\" value=\"\">&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>&nbsp;
                                 <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
