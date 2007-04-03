@@ -83,14 +83,20 @@ $g_adm_con = mysql_connect ($g_adm_srv, $g_adm_usr, $g_adm_pw);
 mysql_select_db($g_adm_db, $g_adm_con );
 
 // PHP-Session starten
-session_name('admidio_session_id');
+session_name('admidio_php_session_id');
 session_start();
 
 // Globale Variablen
-$g_session_id    = session_id();
+$g_session_id    = "";
 $g_session_valid = false;
 $g_current_url   = "http://". $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI'];
 $g_message       = new Message();
+
+// Cookies einlesen
+if(isset($_COOKIE['admidio_session_id']))
+{
+    $g_session_id = $_COOKIE['admidio_session_id'];
+}
 
 // globale Klassen mit Datenbankbezug werden in Sessionvariablen gespeichert, 
 // damit die Daten nicht bei jedem Script aus der Datenbank ausgelesen werden muessen

@@ -35,6 +35,10 @@ db_error($result,__FILE__,__LINE__);
 
 $session_found = mysql_num_rows($result);
 
+// Inhalt der Cookies loeschen
+$domain = substr($_SERVER['HTTP_HOST'], 0, strpos($_SERVER['HTTP_HOST'], ':'));
+setcookie("admidio_session_id", "" , time() - 1000, "/", $domain, 0);
+
 unset($_SESSION['g_current_organizsation']);
 unset($_SESSION['g_current_user']);
 
