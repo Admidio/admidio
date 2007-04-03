@@ -29,6 +29,7 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
+require("../../system/role_dependency_class.php");
 
 
 // nur Webmaster & Moderatoren duerfen Rollen zuweisen

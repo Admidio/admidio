@@ -29,6 +29,7 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 require("../../system/role_class.php");
+require("../../system/role_dependency_class.php");
 
 // nur Moderatoren duerfen Rollen anlegen und verwalten
 if(!isModerator())

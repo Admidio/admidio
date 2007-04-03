@@ -31,6 +31,7 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
+require("../../system/role_dependency_class.php");
 
 // Uebergabevariablen pruefen
 
