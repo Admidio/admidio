@@ -12,6 +12,11 @@
 // Zeit in der die User noch als Aktiv gelten (Default = 10)
 $onlinezeit = 10;
 
+// Anzeige der Benutzernamen untereinander bzw. nebeneinander
+// 0 = (Default) Benutzernamen untereinander auflisten (1 Name pro Zeile)
+// 1 = Benutzernamen nebeneinander auflisten
+$plg_show_users_side_by_side = 0;
+
 // Name einer CSS-Klasse fuer Links
 // Nur noetig, falls die Links ein anderes Aussehen bekommen sollen
 $plg_link_class = '';

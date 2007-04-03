@@ -44,6 +44,11 @@ if(isset($onlinezeit) == false || is_numeric($onlinezeit) == false)
     $onlinezeit = 10;
 }
 
+if(isset($plg_show_users_side_by_side) == false || is_numeric($plg_show_users_side_by_side) == false)
+{
+    $plg_show_users_side_by_side = 0;
+}
+
 if(isset($plg_link_class))
 {
     $plg_link_class = strip_tags($plg_link_class);
@@ -91,7 +96,17 @@ if(mysql_num_rows($result) > 0)
         db_error($on_result,__FILE__,__LINE__);
         
         $useronline = mysql_fetch_array($on_result);
-        echo "<b><a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->ses_usr_id\" target=\"$plg_link_target\">".$useronline['usr_login_name']."</a></b><br>";
+        echo "<b><a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->ses_usr_id\" target=\"$plg_link_target\">".$useronline['usr_login_name']."</a></b>";
+        
+        // User neben-/untereinander anzeigen
+        if($plg_show_users_side_by_side)
+        {
+            echo ", ";
+        }
+        else
+        {
+            echo "<br>";
+        }
     }
 }
 else
