@@ -173,7 +173,7 @@ class Captcha
 
 
 // Hier wird nun die Klasse initialisiert und das Bildchen ausgegeben...
-session_name('admidio_session_id');
+session_name('admidio_php_session_id');
 session_start();
 $captcha = new Captcha();
 $captcha->getCaptcha();

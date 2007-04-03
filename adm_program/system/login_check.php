@@ -78,6 +78,7 @@ if ($user_found >= 1)
         $result = mysql_query($sql, $g_adm_con);
         db_error($result,__FILE__,__LINE__);
 
+        $g_session_id   = session_id();
         $login_datetime = date("Y.m.d H:i:s", time());
 
         // Session-ID speichern
@@ -86,6 +87,10 @@ if ($user_found >= 1)
                 VALUES ('$user_row->usr_id', '$g_organization', '$g_session_id', '$login_datetime', '". $_SERVER['REMOTE_ADDR']. "') ";
         $result = mysql_query($sql, $g_adm_con);
         db_error($result,__FILE__,__LINE__);
+
+        // Cookies fuer die Anmeldung setzen und evtl. Ports entfernen
+        $domain = substr($_SERVER['HTTP_HOST'], 0, strpos($_SERVER['HTTP_HOST'], ':'));
+        setcookie("admidio_session_id", "$g_session_id" , 0, "/", $domain, 0);
 
         //User Daten in Session speichern
         $g_current_user = new User($g_adm_con);
