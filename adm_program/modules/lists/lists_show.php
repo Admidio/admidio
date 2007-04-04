@@ -31,47 +31,57 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
+require("../../system/role_class.php");
 
-$mode   = strStripTags($_GET["mode"]);
-$type   = strStripTags($_GET["type"]);
-$rol_id = strStripTags($_GET["rol_id"]);
+// lokale Variablen der Uebergabevariablen initialisieren
+$req_rol_id = 0;
+$arr_mode   = array("csv-ms", "csv-ms-2k", "csv-oo", "html", "print");
+$arr_type   = array("mylist", "address", "telephone", "former");
+
+// Uebergabevariablen pruefen
+
+$req_mode   = strStripTags($_GET["mode"]);
+$req_type   = strStripTags($_GET["type"]);
+
+if(in_array($req_mode, $arr_mode) == false)
+{
+    $g_message->show("invalid");
+}
+
+if(in_array($req_type, $arr_type) == false)
+{
+    $g_message->show("invalid");
+}
+
+if(isset($_GET["rol_id"]))
+{
+    if(is_numeric($_GET["rol_id"]) == false)
+    {
+        $g_message->show("invalid");
+    }
+    $req_rol_id = $_GET["rol_id"];
+}
 
 //SESSION array für bilder initialisieren
 $_SESSION['profilphoto'] = array();
 
-if($mode != "csv-ms"
-&& $mode != "csv-ms-2k"
-&& $mode != "csv-oo"
-&& $mode != "html"
-&& $mode != "print")
-{
-    // Dem aufgerufenen Skript wurde die notwendige Variable nicht richtig uebergeben !
-    $g_message->show("invalid");
-}
-
-if($rol_id <= 0 || is_numeric($rol_id) == false)
-{
-    // Dem aufgerufenen Skript wurde die notwendige Variable nicht richtig uebergeben !
-    $g_message->show("invalid");
-}
-
-if($mode == "csv-ms")
+if($req_mode == "csv-ms")
 {
     $separator    = ";"; // Microsoft XP und neuer braucht ein Semicolon
     $value_quotes = "\"";
-    $mode         = "csv";
+    $req_mode         = "csv";
 }
-else if($mode == "csv-ms-2k")
+else if($req_mode == "csv-ms-2k")
 {
     $separator    = ","; // Microsoft 2000 und aelter braucht ein Komma
     $value_quotes = "\"";
-    $mode         = "csv";
+    $req_mode         = "csv";
 }
-else if($mode == "csv-oo")
+else if($req_mode == "csv-oo")
 {
     $separator    = ",";    // fuer CSV-Dateien
     $value_quotes = "\"";   // Werte muessen mit Anfuehrungszeichen eingeschlossen sein
-    $mode         = "csv";
+    $req_mode         = "csv";
 }
 else
 {
@@ -100,13 +110,13 @@ $arr_col_name = array('usr_last_name'  => 'Nachname',
                       'mem_leader'     => 'Leiter'
                       );
 
-if($mode == "html")
+if($req_mode == "html")
 {
     $class_table  = "tableList";
     $class_header = "tableHeader";
     $class_row    = "";
 }
-else if($mode == "print")
+else if($req_mode == "print")
 {
     $class_table  = "tableListPrint";
     $class_header = "tableHeaderPrint";
@@ -117,21 +127,14 @@ $main_sql  = "";   // enthaelt das Haupt-Sql-Statement fuer die Liste
 $str_csv   = "";   // enthaelt die komplette CSV-Datei als String
 $leiter    = 0;    // Gruppe besitzt Leiter
 
-// Rollenname auslesen
-$sql = "SELECT *
-          FROM ". TBL_ROLES. "
-         WHERE rol_id     = {0} ";
-$sql    = prepareSQL($sql, array($rol_id));
-$result = mysql_query($sql, $g_adm_con);
-db_error($result,__FILE__,__LINE__);
-
-$role_row = mysql_fetch_object($result);
+// Rollenobjekt erzeugen
+$role = new Role($g_adm_con, $req_rol_id);
 
 // Kategorie auslesen
 $sql = "SELECT *
           FROM ". TBL_CATEGORIES. "
          WHERE cat_id     = {0} ";
-$sql    = prepareSQL($sql, array($role_row->rol_cat_id));
+$sql    = prepareSQL($sql, array($role->getValue("rol_cat_id")));
 $result = mysql_query($sql, $g_adm_con);
 db_error($result,__FILE__,__LINE__);
 
@@ -141,7 +144,7 @@ $cat_row = mysql_fetch_object($result);
 // !!!! Das erste Feld muss immer usr_id sein !!!!
 // !!!! wenn Gruppen angezeigt werden, muss mem_leader = 0 gesetzt sein !!!!
 
-switch($type)
+switch($req_type)
 {
     case "mylist":
         $main_sql = $_SESSION['mylist_sql'];
@@ -153,7 +156,7 @@ switch($type)
                     WHERE rol_org_shortname = '$g_organization'
                       AND rol_id     = {0}
                       AND rol_id     = mem_rol_id
-                      AND mem_valid  = $role_row->rol_valid
+                      AND mem_valid  = ". $role->getValue("rol_valid"). "
                       AND mem_leader = 0
                       AND mem_usr_id = usr_id
                       AND usr_valid  = 1
@@ -166,7 +169,7 @@ switch($type)
                     WHERE rol_org_shortname = '$g_organization'
                       AND rol_id     = {0}
                       AND rol_id     = mem_rol_id
-                      AND mem_valid  = $role_row->rol_valid
+                      AND mem_valid  = ". $role->getValue("rol_valid"). "
                       AND mem_leader = 0
                       AND mem_usr_id = usr_id
                       AND usr_valid  = 1
@@ -185,10 +188,6 @@ switch($type)
                       AND usr_valid  = 1
                     ORDER BY mem_end DESC, usr_last_name, usr_first_name ";
       break;
-
-    default:
-        // Dem aufgerufenen Skript wurde die notwendige Variable nicht richtig uebergeben !
-        $g_message->show("invalid");
 }
 
 // pruefen, ob die Rolle Leiter hat, wenn nicht, dann Standardliste anzeigen
@@ -208,7 +207,7 @@ $sql = "SELECT mem_leader
               AND mem_rol_id = rol_id
               AND mem_valid  = $former
               AND mem_leader = 1 ";
-$sql    = prepareSQL($sql, array($rol_id));
+$sql    = prepareSQL($sql, array($req_rol_id));
 $result = mysql_query($sql, $g_adm_con);
 db_error($result,__FILE__,__LINE__);
 
@@ -247,7 +246,7 @@ for($i = 0; $i < count($arr_fields); $i++)
 if($leiter == 0)
 {
     // keine Leiter vorhanden -> SQL-Statement ausfuehren
-    $main_sql = prepareSQL($main_sql, array($rol_id));
+    $main_sql = prepareSQL($main_sql, array($req_rol_id));
     $result_lst = mysql_query($main_sql, $g_adm_con);
     db_error($result_lst,__FILE__,__LINE__);
 
@@ -258,13 +257,13 @@ if($leiter == 0)
     }
 }
 
-if($mode == "html")
+if($req_mode == "html")
 {
     // Url fuer die Zuruecknavigation merken, aber nur in der Html-Ansicht
     $_SESSION['navigation']->addUrl($g_current_url);
 }
 
-if($mode != "csv")
+if($req_mode != "csv")
 {
     // Html-Kopf wird geschrieben
     echo "
@@ -272,7 +271,7 @@ if($mode != "csv")
     <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
     <html>
     <head>
-        <title>$g_current_organization->longname - Liste - $role_row->rol_name</title>
+        <title>$g_current_organization->longname - Liste - ". $role->getValue("rol_name"). "</title>
         <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
 
         <!--[if lt IE 7]>
@@ -286,12 +285,12 @@ if($mode != "csv")
 
                 if(sel_list.length > 1)
                 {
-                    self.location.href = 'lists_show.php?type=$type&rol_id=$rol_id&mode=' + sel_list;
+                    self.location.href = 'lists_show.php?type=$req_type&rol_id=$req_rol_id&mode=' + sel_list;
                 }
             }
         //--></script>";
 
-        if($mode == "print")
+        if($req_mode == "print")
         {
             echo "<style type=\"text/css\">
                 @page { size:landscape; }
@@ -303,7 +302,7 @@ if($mode != "csv")
         }
     echo "</head>";
 
-    if($mode == "print")
+    if($req_mode == "print")
     {
         echo "<body class=\"bodyPrint\">";
     }
@@ -314,32 +313,32 @@ if($mode != "csv")
 
     echo "
     <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-    <h1>".$role_row->rol_name."&nbsp;&#40;".$cat_row->cat_name."&#41;</h1>";
+    <h1>". $role->getValue("rol_name"). "&nbsp;&#40;".$cat_row->cat_name."&#41;</h1>";
 
     //Beschreibung der Rolle einblenden
-    if(strlen($role_row->rol_description) > 0)
+    if(strlen($role->getValue("rol_description")) > 0)
     {
-        echo "<p>$role_row->rol_description</p>";
+        echo "<p>". $role->getValue("rol_description"). "</p>";
     }
 
-    if($mode != "print")
+    if($req_mode != "print")
     {
         echo "<p>";
-        if($role_row->rol_mail_login == 1 && $g_preferences['enable_mail_module'] == 1)
+        if($role->getValue("rol_mail_login") == 1 && $g_preferences['enable_mail_module'] == 1)
         {
             echo "<span class=\"iconLink\">
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/mail/mail.php?rol_id=$role_row->rol_id\"><img
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/mail/mail.php?rol_id=$req_rol_id\"><img
                 class=\"iconLink\" src=\"$g_root_path/adm_program/images/mail.png\" style=\"vertical-align: middle; cursor: pointer;\"
                 border=\"0\" alt=\"E-Mail an Mitglieder\"></a>
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/mail/mail.php?rol_id=$role_row->rol_id\">E-Mail an Mitglieder</a>
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/mail/mail.php?rol_id=$req_rol_id\">E-Mail an Mitglieder</a>
             </span>
             &nbsp;&nbsp;&nbsp;";
         }
 
         echo "<span class=\"iconLink\">
-            <a class=\"iconLink\" href=\"#\" onclick=\"window.open('lists_show.php?type=$type&amp;mode=print&amp;rol_id=$rol_id', '_blank')\"><img
+            <a class=\"iconLink\" href=\"#\" onclick=\"window.open('lists_show.php?type=$req_type&amp;mode=print&amp;rol_id=$req_rol_id', '_blank')\"><img
             class=\"iconLink\" src=\"$g_root_path/adm_program/images/print.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Druckvorschau\"></a>
-            <a class=\"iconLink\" href=\"#\" onclick=\"window.open('lists_show.php?type=$type&amp;mode=print&amp;rol_id=$rol_id', '_blank')\">Druckvorschau</a>
+            <a class=\"iconLink\" href=\"#\" onclick=\"window.open('lists_show.php?type=$req_type&amp;mode=print&amp;rol_id=$req_rol_id', '_blank')\">Druckvorschau</a>
         </span>
 
         &nbsp;&nbsp;
@@ -373,12 +372,12 @@ for($j = 0; $j < $max_count; $j++)
         // wenn Leiter vorhanden, dann muessen SQL-Statements hier getrennt aufgerufen werden
         if($j == 0)   // Leiter
         {
-            $leiter_sql = prepareSQL($leiter_sql, array($rol_id));
+            $leiter_sql = prepareSQL($leiter_sql, array($req_rol_id));
             $result_lst = mysql_query($leiter_sql, $g_adm_con);
         }
         else
         {
-            $main_sql = prepareSQL($main_sql, array($rol_id));
+            $main_sql = prepareSQL($main_sql, array($req_rol_id));
             $result_lst = mysql_query($main_sql, $g_adm_con);
         }
         db_error($result_lst,__FILE__,__LINE__);
@@ -386,7 +385,7 @@ for($j = 0; $j < $max_count; $j++)
 
     if(mysql_num_rows($result_lst) > 0)
     {
-        if($mode == "csv")
+        if($req_mode == "csv")
         {
             if($j == 0 && $leiter == 1)
             {
@@ -406,12 +405,12 @@ for($j = 0; $j < $max_count; $j++)
             // erste Tabelle abschliessen
             if($j == 1)
             {
-                echo "</table><br /><h2>Teilnehmer</h2>";
+                echo "</tbody></table><br /><h2>Teilnehmer</h2>";
             }
 
             // Tabellenkopf schreiben
             echo "<table class=\"$class_table\" style=\"width: 95%;\" cellpadding=\"2\" cellspacing=\"0\">
-            <tr>";
+            <thead><tr>";
         }
 
         // Spalten-Ueberschriften
@@ -457,7 +456,7 @@ for($j = 0; $j < $max_count; $j++)
                 }
             }
 
-            if($mode == "csv")
+            if($req_mode == "csv")
             {
                 if($i > 0)
                 {
@@ -488,26 +487,26 @@ for($j = 0; $j < $max_count; $j++)
             }
         }  // End-For
 
-        if($mode == "csv")
+        if($req_mode == "csv")
         {
             $str_csv = $str_csv. "\n";
         }
         else
         {
-            echo "</tr>\n";
+            echo "</tr></thead><tbody>\n";
         }
 
         $irow       = 1;
 
         while($row = mysql_fetch_array($result_lst))
         {
-            if($mode == "html")
+            if($req_mode == "html")
             {
                 echo "<tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\"
                 onMouseOut=\"this.className='listMouseOut'\" style=\"cursor: pointer\"
                 onClick=\"window.location.href='$g_root_path/adm_program/modules/profile/profile.php?user_id=$row[0]'\">\n";
             }
-            else if($mode == "print")
+            else if($req_mode == "print")
             {
                 echo "<tr>\n";
             }
@@ -529,7 +528,7 @@ for($j = 0; $j < $max_count; $j++)
                     $usf_id = 0;
                 }
 
-                if($mode != "csv")
+                if($req_mode != "csv")
                 {
                     $align = "left";
                     if($b_user_field == true)
@@ -556,7 +555,7 @@ for($j = 0; $j < $max_count; $j++)
                 if($i == 0)
                 {
                     // erste Spalte zeigt lfd. Nummer an
-                    if($mode == "csv")
+                    if($req_mode == "csv")
                     {
                         $str_csv = $str_csv. $value_quotes. "$irow". $value_quotes;
                     }
@@ -576,7 +575,7 @@ for($j = 0; $j < $max_count; $j++)
                             // E-Mail als Link darstellen
                             if(strlen($row[$i]) > 0)
                             {
-                                if($mode == "html")
+                                if($req_mode == "html")
                                 {
                                     if($g_preferences['enable_mail_module'] == 1)
                                     {
@@ -618,7 +617,7 @@ for($j = 0; $j < $max_count; $j++)
                                     $row[$i] = "http://". $row[$i];
                                 }
 
-                                if($mode == "html")
+                                if($req_mode == "html")
                                 {
                                     $content = "<a href=\"". $row[$i]. "\" target=\"_top\">". substr($row[$i], 7). "</a>";
                                 }
@@ -633,7 +632,7 @@ for($j = 0; $j < $max_count; $j++)
                             // Geschlecht anzeigen
                             if($row[$i] == 1)
                             {
-                                if($mode == "csv" || $mode == "print")
+                                if($req_mode == "csv" || $req_mode == "print")
                                 {
                                     $content = utf8_decode("männlich");
                                 }
@@ -645,7 +644,7 @@ for($j = 0; $j < $max_count; $j++)
                             }
                             elseif($row[$i] == 2)
                             {
-                                if($mode == "csv" || $mode == "print")
+                                if($req_mode == "csv" || $req_mode == "print")
                                 {
                                     $content = utf8_decode("weiblich");
                                 }
@@ -657,7 +656,7 @@ for($j = 0; $j < $max_count; $j++)
                             }
                             else
                             {
-                                if($mode != "csv")
+                                if($req_mode != "csv")
                                 {
                                     $content = "&nbsp;";
                                 }
@@ -666,13 +665,13 @@ for($j = 0; $j < $max_count; $j++)
 
                         case "usr_photo":
                             // Benutzerfoto anzeigen
-                            if(($mode == "html" || $mode == "print") && $row[$i] != NULL)
+                            if(($req_mode == "html" || $req_mode == "print") && $row[$i] != NULL)
                             {
                                 $_SESSION['profilphoto'][$row[0]]=$row[$i];
                                 $content = "<img src=\"photo_show.php?usr_id=".$row[0]."\"
                                             style=\"vertical-align: middle;\" alt=\"Benutzerfoto\">";
                             }
-                            if ($mode == "csv" && $row[$i] != NULL)
+                            if ($req_mode == "csv" && $row[$i] != NULL)
                             {
                                 $content = "Profilfoto Online";
                             }
@@ -687,7 +686,7 @@ for($j = 0; $j < $max_count; $j++)
                                     // Checkboxen werden durch ein Bildchen dargestellt
                                     if($row[$i] == 1)
                                     {
-                                        if($mode == "csv")
+                                        if($req_mode == "csv")
                                         {
                                             $content = "ja";
                                         }
@@ -699,7 +698,7 @@ for($j = 0; $j < $max_count; $j++)
                                     }
                                     else
                                     {
-                                        if($mode == "csv")
+                                        if($req_mode == "csv")
                                         {
                                             $content = "nein";
                                         }
@@ -722,7 +721,7 @@ for($j = 0; $j < $max_count; $j++)
                             break;
                     }
 
-                    if($mode == "csv")
+                    if($req_mode == "csv")
                     {
                         if($i > 0)
                         {
@@ -738,7 +737,7 @@ for($j = 0; $j < $max_count; $j++)
                 }
             }
 
-            if($mode == "csv")
+            if($req_mode == "csv")
             {
                 $str_csv = $str_csv. "\n";
             }
@@ -752,27 +751,27 @@ for($j = 0; $j < $max_count; $j++)
     }  // End-If (Rows > 0)
 }  // End-For (Leiter, Teilnehmer)
 
-if($mode == "csv")
+if($req_mode == "csv")
 {
     // nun die erstellte CSV-Datei an den User schicken
-    $filename = $g_organization. "-". str_replace(" ", "_", str_replace(".", "", $role_row->rol_name)). ".csv";
+    $filename = $g_organization. "-". str_replace(" ", "_", str_replace(".", "", $role->getValue("rol_name"))). ".csv";
     header("Content-Type: text/comma-separated-values; charset=ISO-8859-1");
     header("Content-Disposition: attachment; filename=\"$filename\"");
     echo $str_csv;
 }
 else
 {
-    echo "</table>";
+    echo "</tbody></table>";
 
 
     //INFOBOX zur Gruppe
     //nur anzeigen wenn zusatzfelder gefüllt sind
-    if(strlen($role_row->rol_start_date) > 0
-    || $role_row->rol_weekday > 0
-    || strlen($role_row->rol_start_time) > 0
-    || strlen($role_row->rol_location) > 0
-    || strlen($role_row->rol_cost) > 0
-    || strlen($role_row->rol_max_members) > 0)
+    if(strlen($role->getValue("rol_start_date")) > 0
+    || $role->getValue("rol_weekday") > 0
+    || strlen($role->getValue("rol_start_time")) > 0
+    || strlen($role->getValue("rol_location")) > 0
+    || strlen($role->getValue("rol_cost")) > 0
+    || strlen($role->getValue("rol_max_members")) > 0)
     {
         echo "
         <br /><br />
@@ -780,7 +779,7 @@ else
             //Kopf
             echo"
             <tr>
-                <th class=\"$class_header\" colspan=\"2\">Infobox: ".$role_row->rol_name."</th>
+                <th class=\"$class_header\" colspan=\"2\">Infobox: ". $role->getValue("rol_name"). "</th>
             </tr>
             ";
             //Kategorie
@@ -791,36 +790,36 @@ else
             </tr>";
 
             //Beschreibung
-            if(strlen($role_row->rol_description) > 0)
+            if(strlen($role->getValue("rol_description")) > 0)
             {
                 echo"<tr>
                     <td>Beschreibung:</td>
-                    <td>".$role_row->rol_description."</td>
+                    <td>".$role->getValue("rol_description")."</td>
                 </tr>";
             }
 
             //Zeitraum
-            if(strlen($role_row->rol_start_date) > 0)
+            if(strlen($role->getValue("rol_start_date")) > 0)
             {
                 echo"<tr>
                     <td>Zeitraum:</td>
-                    <td>". mysqldate("d.m.y", $role_row->rol_start_date). " bis ". mysqldate("d.m.y", $role_row->rol_end_date). "</td>
+                    <td>". mysqldate("d.m.y", $role->getValue("rol_start_date")). " bis ". mysqldate("d.m.y", $role->getValue("rol_end_date")). "</td>
                 </tr>";
             }
 
             //Termin
-            if($role_row->rol_weekday > 0 || strlen($role_row->rol_start_time) > 0)
+            if($role->getValue("rol_weekday") > 0 || strlen($role->getValue("rol_start_time")) > 0)
             {
                 echo"<tr>
                     <td>Termin: </td>
                     <td>"; 
-                        if($role_row->rol_weekday > 0)
+                        if($role->getValue("rol_weekday") > 0)
                         {
-                            echo $arrDay[$role_row->rol_weekday-1];
+                            echo $arrDay[$role->getValue("rol_weekday")-1];
                         }
-                        if(strlen($role_row->rol_start_time) > 0)
+                        if(strlen($role->getValue("rol_start_time")) > 0)
                         {
-                            echo " von ". mysqltime("h:i", $role_row->rol_start_time). " bis ". mysqltime("h:i", $role_row->rol_end_time);
+                            echo " von ". mysqltime("h:i", $role->getValue("rol_start_time")). " bis ". mysqltime("h:i", $role->getValue("rol_end_time"));
                         }
 
                     echo"</td>
@@ -828,29 +827,29 @@ else
             }
 
             //Treffpunkt
-            if(strlen($role_row->rol_location) > 0)
+            if(strlen($role->getValue("rol_location")) > 0)
             {
                 echo"<tr>
                     <td>Treffpunkt:</td>
-                    <td>".$role_row->rol_location."</td>
+                    <td>".$role->getValue("rol_location")."</td>
                 </tr>";
             }
 
             //Beitrag
-            if(strlen($role_row->rol_cost) > 0)
+            if(strlen($role->getValue("rol_cost")) > 0)
             {
                 echo"<tr>
                     <td>Beitrag:</td>
-                    <td>$role_row->rol_cost &euro;</td>
+                    <td>". $role->getValue("rol_cost"). " &euro;</td>
                 </tr>";
             }
 
             //maximale Teilnehmerzahl
-            if(strlen($role_row->rol_max_members) > 0)
+            if(strlen($role->getValue("rol_max_members")) > 0)
             {
                 echo"<tr>
                     <td>Max. Teilnehmer:</td>
-                    <td>$role_row->rol_max_members</td>
+                    <td>". $role->getValue("rol_max_members"). "</td>
                 </tr>";
             }
 
@@ -859,7 +858,7 @@ else
     // Ende Infobox
 
 
-    if($mode != "print")
+    if($req_mode != "print")
     {
         echo "<p>
             <span class=\"iconLink\">
