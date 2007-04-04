@@ -100,10 +100,10 @@ if(isset($_COOKIE['admidio_session_id']))
 
 // globale Klassen mit Datenbankbezug werden in Sessionvariablen gespeichert, 
 // damit die Daten nicht bei jedem Script aus der Datenbank ausgelesen werden muessen
-if(isset($_SESSION['g_current_organizsation']) 
+if(isset($_SESSION['g_current_organization']) 
 && isset($_SESSION['g_preferences']))
 {
-    $g_current_organization =& $_SESSION['g_current_organizsation'];
+    $g_current_organization =& $_SESSION['g_current_organization'];
     $g_current_organization->db_connection = $g_adm_con;
     $g_preferences  =& $_SESSION['g_preferences'];
 }
@@ -113,7 +113,7 @@ else
     $g_current_organization->getOrganization($g_organization);
     if($g_current_organization->id == 0)
     {
-        // Organizsation wurde nicht gefunden
+        // Organisation wurde nicht gefunden
         die("<div style=\"color: #CC0000;\">Error: ". $message_text['missing_orga']. "</div>");
     }
     
@@ -132,10 +132,10 @@ else
     {
         $g_preferences[$prf_row->prf_name] = $prf_row->prf_value;
     }
-
+    
     // Daten in Session-Variablen sichern
-    $_SESSION['g_current_organizsation'] = $g_current_organization;
-    $_SESSION['g_preferences']  = $g_preferences;
+    $_SESSION['g_current_organization'] =& $g_current_organization;
+    $_SESSION['g_preferences']          =& $g_preferences;
 }
 
 // Daten des angemeldeten Users auch in Session speichern
@@ -147,7 +147,7 @@ if(isset($_SESSION['g_current_user']))
 else
 {
     $g_current_user  = new User($g_adm_con);
-    $_SESSION['g_current_user'] = $g_current_user;
+    $_SESSION['g_current_user'] =& $g_current_user;
 }
 
 // Objekt fuer die Zuruecknavigation in den Modulen

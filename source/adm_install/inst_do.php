@@ -34,6 +34,8 @@
 require("../adm_program/system/function.php");
 require("../adm_program/system/string.php");
 require("../adm_program/system/date.php");
+
+session_name('admidio_php_session_id');
 session_start();
 
 // lokale Variablen der Uebergabevarialben initialieren
@@ -99,8 +101,6 @@ function showError($err_msg, $err_head = "Fehler", $mode = 1)
                     echo 'self.location.href=\'../adm_program/index.php\'">
                     <img src="../adm_program/images/application_view_list.png" style="vertical-align: middle; padding-bottom: 1px;" width="16" height="16" border="0" alt="Zurueck">
                     &nbsp;Admidio &Uuml;bersicht';
-                    // da neue Einstellungen erstellt wurden, diese komplett neu einlesen
-                    unset($_SESSION['g_preferences']);
                 }
                 echo '</button></p>
             </div>
@@ -546,7 +546,7 @@ if($req_mode == 1)
 else
 {
     // globale Orga-Objekte entfernen, damit sie neu eingelesen werden
-    unset($_SESSION['g_current_organizsation']);
+    unset($_SESSION['g_current_organisation']);
     unset($_SESSION['g_preferences']);
     
     showError("Die Einrichtung der Datenbank konnte erfolgreich abgeschlossen werden.<br><br>
