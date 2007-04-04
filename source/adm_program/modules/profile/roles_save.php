@@ -8,7 +8,9 @@
  *
  * Uebergaben:
  *
- * user_id: Funktionen der uebergebenen ID aendern
+ * user_id     - Funktionen der uebergebenen ID aendern
+ * new_user: 0 - (Default) Daten eines vorhandenen Users werden bearbeitet
+ *           1 - Der User ist gerade angelegt worden -> Rollen muessen zugeordnet werden
  *
  ******************************************************************************
  *
@@ -100,12 +102,7 @@ $result_rolle = mysql_query($sql, $g_adm_con);
 db_error($result_rolle,__FILE__,__LINE__);
 
 $count_assigned = 0;
-$i     = 0;
-$value = reset($_POST);
-$key   = key($_POST);
 $parentRoles = array();
-
-
 
 // Ergebnisse durchlaufen und kontrollieren ob maximale Teilnehmerzahl ueberschritten wuerde
 while($row = mysql_fetch_object($result_rolle))
@@ -140,14 +137,13 @@ while($row = mysql_fetch_object($result_rolle))
 
             //Bedingungen fuer Abbruch und Abbruch
             if($row_members[0] >= $row->rol_max_members
-            && $_POST["leader-$i"] == false
-            && $_POST["role-$i"]   == true)
+            && $_POST["leader-$row->rol_id"] == false
+            && $_POST["role-$row->rol_id"]   == true)
             {
                 $g_message->show("max_members_profile", utf8_encode($row->rol_name));
             }
         }
     }
-    $i++;
 }
 
 //Dateizeiger auf erstes Element zurueck setzen
@@ -155,7 +151,6 @@ if(mysql_num_rows($result_rolle)>0)
 {
     mysql_data_seek($result_rolle, 0);
 }
-$i     = 0;
 
 // Ergebnisse durchlaufen und Datenbankupdate durchfuehren
 while($row = mysql_fetch_object($result_rolle))
@@ -163,22 +158,18 @@ while($row = mysql_fetch_object($result_rolle))
     // der Webmaster-Rolle duerfen nur Webmaster neue Mitglieder zuweisen
     if($row->rol_name != 'Webmaster' || $g_current_user->isWebmaster())
     {
-        if($key == "role-$i")
+        if(isset($_POST["role-$row->rol_id"]) && $_POST["role-$row->rol_id"] == 1)
         {
             $function = 1;
-            $value    = next($_POST);
-            $key      = key($_POST);
         }
         else
         {
             $function = 0;
         }
 
-        if($key == "leader-$i")
+        if(isset($_POST["leader-$row->rol_id"]) && $_POST["leader-$row->rol_id"] == 1)
         {
             $leiter   = 1;
-            $value    = next($_POST);
-            $key      = key($_POST);
         }
         else
         {
@@ -245,8 +236,6 @@ while($row = mysql_fetch_object($result_rolle))
         }
 
     }
-
-   $i++;
 }
 
 $_SESSION['navigation']->deleteLastUrl();

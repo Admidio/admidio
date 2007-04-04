@@ -211,7 +211,6 @@ require("../../../adm_config/body_top.php");
             $sql    = prepareSQL($sql, array($req_usr_id));
             $result = mysql_query($sql, $g_adm_con);
             db_error($result,__FILE__,__LINE__);
-            $i = 0;
             $category = "";
 
             while($row = mysql_fetch_object($result))
@@ -240,7 +239,7 @@ require("../../../adm_config/body_top.php");
                 echo "
                 <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
                    <td style=\"text-align: center; vertical-align: top;\">
-                      <input type=\"checkbox\" id=\"role-$i\" name=\"role-$i\" ";
+                      <input type=\"checkbox\" id=\"role-$row->rol_id\" name=\"role-$row->rol_id\" ";
                          if($row->mem_usr_id > 0)
                          {
                             echo " checked ";
@@ -261,10 +260,10 @@ require("../../../adm_config/body_top.php");
 
                          echo " onclick=\"unmarkLeader(this)\" value=\"1\" />
                    </td>
-                   <td style=\"text-align: left; vertical-align: top;\"><label for=\"role-$i\">$row->rol_name</label></td>
+                   <td style=\"text-align: left; vertical-align: top;\"><label for=\"role-$row->rol_id\">$row->rol_name</label></td>
                    <td style=\"text-align: left; vertical-align: top;\">$row->rol_description</td>
                    <td style=\"text-align: center; vertical-align: top;\">
-                            <input type=\"checkbox\" id=\"leader-$i\" name=\"leader-$i\" ";
+                            <input type=\"checkbox\" id=\"leader-$row->rol_id\" name=\"leader-$row->rol_id\" ";
                             if($row->mem_leader > 0)
                             {
                                 echo " checked ";
@@ -279,7 +278,6 @@ require("../../../adm_config/body_top.php");
                             echo " onclick=\"markMember(this)\" value=\"1\" />
                    </td>
                 </tr>";
-                $i++;
             }
         echo "</table>
 
