@@ -178,6 +178,7 @@ a:hover {
 
 .tableSubHeader {
     background-color: #c5c5c5;
+    padding:          1px;
 }
 
 .tableSubHeaderFont {
@@ -194,7 +195,7 @@ a:hover {
 }
 
 .listMouseOver {
-    background-color: #cccccc;
+    background-color: #d5d5d5;
     color:            #555555;
 }
 
@@ -225,6 +226,19 @@ a:hover {
     font-family:      arial, sans-serif;
     font-size:        10pt;
     background-color: #cccccc;
+}
+
+.tableSubHeaderPrint {
+    background-color: #eeeeee;
+    padding:          0px;
+}
+
+.tableSubHeaderFontPrint {
+    color:            #888888;
+    font-size:        12pt;	 
+    font-weight:      bold;
+    font-style:       italic;
+    letter-spacing:	 0.2em;
 }
 
 .tableRowPrint {
