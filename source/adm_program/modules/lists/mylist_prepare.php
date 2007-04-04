@@ -168,7 +168,7 @@ for($i = 0; $i < count($_POST); $i++)
     $key   = key($_POST);
 }
 
-$main_sql = "SELECT usr_id, $sql_select
+$main_sql = "SELECT mem_leader, usr_id, $sql_select
                FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                     $sql_join
               WHERE rol_org_shortname = '$g_organization'
@@ -176,13 +176,12 @@ $main_sql = "SELECT usr_id, $sql_select
                 AND rol_valid  = 1
                 AND mem_rol_id = rol_id
                 AND mem_valid  = $act_members
-                AND mem_leader = 0
                 AND mem_usr_id = usr_id
                 AND usr_valid  = 1
                     $sql_where ";
 if(strlen($sql_orderby) > 0)
 {
-    $main_sql = $main_sql. " ORDER BY $sql_orderby ";
+    $main_sql = $main_sql. " ORDER BY mem_leader DESC, $sql_orderby ";
 }
 
 // SQL-Statement in Session-Variable schreiben
