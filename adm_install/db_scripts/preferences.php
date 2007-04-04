@@ -39,12 +39,14 @@ $orga_preferences = array(
     'registration_mode' => '1',
     'enable_registration_captcha'    => '1',
     'enable_registration_admin_mail' => '1',
-    
-    // Mailmodul
-    'enable_mail_module'  => '1',
-    'max_email_attachment_size' => '1024',
-    'enable_mail_captcha' => '1',
-    
+
+    // Ankuendigungen
+    'enable_announcements_module' => '1',
+
+    // Downloads
+    'enable_download_module' => '1',
+    'max_file_upload_size'   => '3072',
+        
     // Fotomodul
     'enable_photo_module' => '1',
     'photo_save_scale'    => '640',
@@ -62,17 +64,18 @@ $orga_preferences = array(
     'flooding_protection_time'  => '60',
     'enable_gbook_comments4all' => '0',
     
-    // Weblinks
-    'enable_weblinks_module' => '1',
+    // Listen
+    'lists_members_per_page' => '20',
     
-    // Downloads
-    'enable_download_module' => '1',
-    'max_file_upload_size'   => '3072',
-    
-    // Ankuendigungen
-    'enable_announcements_module' => '1',
-    
+    // Mailmodul
+    'enable_mail_module'  => '1',
+    'max_email_attachment_size' => '1024',
+    'enable_mail_captcha' => '1',
+        
     // Termine
     'enable_dates_module' => '1'
+    
+    // Weblinks
+    'enable_weblinks_module' => '1',
  )
 ?>
