@@ -106,7 +106,7 @@ if ($req_queryForm)
     {
         //Es werden nur OrganisationsMitglieder durchsucht
         $sql    = "SELECT DISTINCT usr_id, usr_last_name, usr_first_name, usr_email, usr_homepage,
-                          usr_login_name, usr_last_change
+                          usr_login_name, usr_last_change, 1 member
                      FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. "
                     WHERE (    CONCAT_WS(' ', usr_last_name, usr_first_name) LIKE {0}
                             OR CONCAT_WS(' ', usr_first_name, usr_last_name) LIKE {0})
@@ -120,13 +120,21 @@ if ($req_queryForm)
     }
     else
     {
-        //Es wird in allen Mitgliedern gesucht
+        // alle DB-User auslesen und Anzahl der zugeordneten Orga-Rollen ermitteln
         $sql    = "SELECT usr_id, usr_last_name, usr_first_name, usr_email, usr_homepage,
-                          usr_login_name, usr_last_change
+                          usr_login_name, usr_last_change, count(rol_id) member
                      FROM ". TBL_USERS. "
+                     LEFT JOIN ". TBL_MEMBERS. "
+                       ON mem_usr_id = usr_id
+                      AND mem_valid  = 1
+                     LEFT JOIN ". TBL_ROLES. "
+                       ON mem_rol_id = rol_id
+                      AND rol_org_shortname = 'BDKJ'
+                      AND rol_valid = 1
                     WHERE (    CONCAT_WS(' ', usr_last_name, usr_first_name) LIKE {0}
                             OR CONCAT_WS(' ', usr_first_name, usr_last_name) LIKE {0})
                       AND usr_valid = 1
+                    GROUP BY usr_id
                     ORDER BY usr_last_name, usr_first_name ";
     }
     $sql    = prepareSQL($sql, array(str_replace(',', '', $req_queryForm). '%'));
@@ -138,7 +146,7 @@ else
     if($req_members)
     {
         $sql    = "SELECT DISTINCT usr_id, usr_last_name, usr_first_name, usr_email, usr_homepage,
-                          usr_login_name, usr_last_change
+                          usr_login_name, usr_last_change, 1 member
                      FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. "
                     WHERE usr_last_name LIKE '$req_letter%'
                       AND usr_valid = 1
@@ -151,11 +159,20 @@ else
     }
     else
     {
+        // alle DB-User auslesen und Anzahl der zugeordneten Orga-Rollen ermitteln
         $sql    = "SELECT usr_id, usr_last_name, usr_first_name, usr_email, usr_homepage,
-                          usr_login_name, usr_last_change
+                          usr_login_name, usr_last_change, count(rol_id) member
                      FROM ". TBL_USERS. "
+                     LEFT JOIN ". TBL_MEMBERS. "
+                       ON mem_usr_id = usr_id
+                      AND mem_valid  = 1
+                     LEFT JOIN ". TBL_ROLES. "
+                       ON mem_rol_id = rol_id
+                      AND rol_org_shortname = 'BDKJ'
+                      AND rol_valid = 1
                     WHERE usr_last_name LIKE '$req_letter%'
                       AND usr_valid = 1
+                    GROUP BY usr_id
                     ORDER BY usr_last_name, usr_first_name ";
     }
 }
@@ -394,20 +411,11 @@ require("../../../adm_config/body_top.php");
                 {
                     if($row = mysql_fetch_object($result_mgl))
                     {
-                        if($req_members)
-                        {
-                            $is_member = true;
-                        }
-                        else
-                        {
-                            $is_member = isMember($row->usr_id);
-                        }
-
                         echo "
                         <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
                             <td align=\"right\">". ($req_start + $i + 1). "&nbsp;</td>
                             <td align=\"center\">";
-                                if($is_member)
+                                if($row->member > 0)
                                 {
                                     echo "<a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->usr_id\"><img
                                         src=\"$g_root_path/adm_program/images/user.png\" alt=\"Mitglied bei $g_current_organization->longname\"
@@ -468,7 +476,7 @@ require("../../../adm_config/body_top.php");
                                                                 
                                 // Link um E-Mail mit neuem Passwort zu zuschicken
                                 // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
-                                if($is_member
+                                if($row->member > 0
                                 && $g_current_user->isWebmaster()
                                 && strlen($row->usr_login_name) > 0
                                 && strlen($row->usr_email) > 0
@@ -485,7 +493,7 @@ require("../../../adm_config/body_top.php");
 
                                 // Link um User zu editieren
                                 // es duerfen keine Nicht-Mitglieder editiert werden, die Mitglied in einer anderen Orga sind
-                                if($is_member || $b_other_orga == false)
+                                if($row->member > 0 || $b_other_orga == false)
                                 {
                                     echo "<a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$row->usr_id\"><img
                                         src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Benutzerdaten bearbeiten\" title=\"Benutzerdaten bearbeiten\"></a>&nbsp;";
@@ -498,7 +506,7 @@ require("../../../adm_config/body_top.php");
 
                                 // wenn der User nicht mehr Mitglied der aktuellen Orga, aber noch Mitglied einer anderen Orga ist,
                                 // dann darf er nicht aus der DB geloescht werden
-                                if(($b_other_orga == false || $is_member == true)
+                                if(($b_other_orga == false || $row->member > 0)
                                 && $row->usr_id != $g_current_user->id)
                                 {
                                     echo "<a href=\"$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->usr_id&mode=6\"><img
