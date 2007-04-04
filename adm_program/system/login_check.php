@@ -97,7 +97,7 @@ if ($user_found >= 1)
         $g_current_user->getUser($user_row->usr_id);
         $_SESSION['g_current_user'] = $g_current_user;
 
-        unset($_SESSION['g_current_organizsation']);
+        unset($_SESSION['g_current_organisation']);
 
         // Last-Login speichern
 

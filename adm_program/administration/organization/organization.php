@@ -78,8 +78,8 @@ echo "
 
     <script type=\"text/javascript\">
         // Dieses Array enthaelt alle IDs, die in den Orga-Einstellungen auftauchen
-        ids = new Array('general', 'register', 'announcement-module', 'download-module', 'mail-module',
-                        'photo-module', 'guestbook-module', 'dates-module', 'links-module');
+        ids = new Array('general', 'register', 'announcement-module', 'download-module', 'photo-module', 
+                        'guestbook-module', 'list-module', 'mail-module','dates-module', 'links-module');
 
 
         // Die eigentliche Funktion: Schaltet die Einstellungsdialoge durch
@@ -125,12 +125,14 @@ require("../../../adm_config/body_top.php");
              &#124; <a href=\"#\" onClick=\"toggleDiv('announcement-module');\">Ank&uuml;ndigungen</a>
 
              &#124; <a href=\"#\" onClick=\"toggleDiv('download-module');\">Downloads</a>
-
-             &#124; <a href=\"#\" onClick=\"toggleDiv('mail-module');\">Mails</a>
-
+             
              &#124; <a href=\"#\" onClick=\"toggleDiv('photo-module');\">Fotos</a>
 
              &#124; <a href=\"#\" onClick=\"toggleDiv('guestbook-module');\">G&auml;stebuch</a>
+             
+             &#124; <a href=\"#\" onClick=\"toggleDiv('list-module');\">Listen</a>
+
+             &#124; <a href=\"#\" onClick=\"toggleDiv('mail-module');\">Mails</a>
 
              &#124; <a href=\"#\" onClick=\"toggleDiv('dates-module');\">Termine</a>
 
@@ -461,61 +463,6 @@ require("../../../adm_config/body_top.php");
 
 
                 /**************************************************************************************/
-                //Einstellungen Mailmodul
-                /**************************************************************************************/
-
-                echo"
-                <div class=\"groupBox\" id=\"mail-module\" style=\"visibility: hidden; display: none; margin-top: 15px; text-align: left; width: 95%;\">
-                    <div class=\"groupBoxHeadline\">Einstellungen Mailmodul&nbsp;&nbsp; </div>
-
-                    <div style=\"margin-top: 6px;\">
-                        <div style=\"text-align: left; width: 55%; float: left;\">Mailmodul aktivieren:</div>
-                        <div style=\"text-align: left;\">
-                            <input type=\"checkbox\" id=\"enable_mail_module\" name=\"enable_mail_module\" ";
-                            if(isset($form_values['enable_mail_module']) && $form_values['enable_mail_module'] == 1)
-                            {
-                                echo " checked ";
-                            }
-                            echo " value=\"1\" />
-                        </div>
-                    </div>
-                    <div class=\"smallText\">
-                        Das Mailmodul kann &uuml;ber diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
-                        aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt. Falls der Server keinen
-                        Mailversand unterst&uuml;tzt, sollte das Modul deaktiviert werden.
-                    </div>
-
-                    <div style=\"margin-top: 15px;\">
-                        <div style=\"text-align: left; width: 55%; float: left;\">Captcha aktivieren:</div>
-                        <div style=\"text-align: left;\">
-                            <input type=\"checkbox\" id=\"enable_mail_captcha\" name=\"enable_mail_captcha\" ";
-                            if(isset($form_values['enable_mail_captcha']) && $form_values['enable_mail_captcha'] == 1)
-                            {
-                                echo " checked ";
-                            }
-                            echo " value=\"1\" />
-                        </div>
-                    </div>
-                    <div class=\"smallText\">
-                        F&uuml;r nicht eingeloggte Benutzer wird im Mailformular bei aktiviertem Captcha ein alphanumerischer
-                        Code eingeblendet. Diesen muss der Benutzer vor dem Mailversand korrekt eingeben. Dies soll sicherstellen,
-                        dass das Formular nicht von Spammern missbraucht werden kann.
-                    </div>
-
-                    <div style=\"margin-top: 15px;\">
-                        <div style=\"text-align: left; width: 55%; float: left;\">Maximale Dateigr&ouml;&szlig;e f&uuml;r Anh&auml;nge:</div>
-                        <div style=\"text-align: left;\">
-                            <input type=\"text\" name=\"max_email_attachment_size\" size=\"4\" maxlength=\"6\" value=\"". $form_values['max_email_attachment_size']. "\"> KB
-                        </div>
-                    </div>
-                    <div class=\"smallText\">
-                        Benutzer k&ouml;nnen nur Dateien anh&auml;ngen, bei denen die Dateigr&ouml;&szlig;e kleiner als der hier
-                        angegebene Wert ist. Steht hier 0, so sind keine Anh&auml;nge im Mailmodul m&ouml;glich.
-                    </div>
-                </div>";
-
-
-                /**************************************************************************************/
                 //Einstellungen Photomodul
                 /**************************************************************************************/
 
@@ -711,6 +658,85 @@ require("../../../adm_config/body_top.php");
                         nicht durchgef&uuml;hrt.
                     </div>
 
+                </div>";
+
+
+                /**************************************************************************************/
+                //Einstellungen Listenmodul
+                /**************************************************************************************/
+
+                echo"
+                <div class=\"groupBox\" id=\"list-module\" style=\"visibility: hidden; display: none; margin-top: 15px; text-align: left; width: 95%;\">
+                    <div class=\"groupBoxHeadline\">Einstellungen Listen&nbsp;&nbsp; </div>
+
+                    <div style=\"margin-top: 6px;\">
+                     <div style=\"text-align: left; width: 55%; float: left;\">Anzahl Teilnehmer pro Seite:</div>
+                        <div style=\"text-align: left;\">
+                            <input type=\"text\" name=\"lists_members_per_page\" size=\"4\" maxlength=\"4\" value=\"". $form_values['lists_members_per_page']. "\">
+                        </div>
+                    </div>
+                    <div class=\"smallText\">
+                        F&uuml;r nicht eingeloggte Benutzer wird bei Eintr&auml;gen im G&auml;stebuch &uuml;berpr&uuml;ft,
+                        ob sie innerhalb des eingestellten Intervalls bereits einen Eintrag get&auml;tigt haben.
+                        Damit soll verhindert werden, dass Benutzer in zu kurzen Zeitabst&auml;nden hintereinander
+                        ungew&uuml;nschte Eintr&auml;ge erzeugen. Ist das Intervall auf 0 gesetzt wird diese &Uuml;berpr&uuml;fung
+                        nicht durchgef&uuml;hrt.
+                    </div>
+                </div>";
+                
+
+                /**************************************************************************************/
+                //Einstellungen Mailmodul
+                /**************************************************************************************/
+
+                echo"
+                <div class=\"groupBox\" id=\"mail-module\" style=\"visibility: hidden; display: none; margin-top: 15px; text-align: left; width: 95%;\">
+                    <div class=\"groupBoxHeadline\">Einstellungen Mailmodul&nbsp;&nbsp; </div>
+
+                    <div style=\"margin-top: 6px;\">
+                        <div style=\"text-align: left; width: 55%; float: left;\">Mailmodul aktivieren:</div>
+                        <div style=\"text-align: left;\">
+                            <input type=\"checkbox\" id=\"enable_mail_module\" name=\"enable_mail_module\" ";
+                            if(isset($form_values['enable_mail_module']) && $form_values['enable_mail_module'] == 1)
+                            {
+                                echo " checked ";
+                            }
+                            echo " value=\"1\" />
+                        </div>
+                    </div>
+                    <div class=\"smallText\">
+                        Das Mailmodul kann &uuml;ber diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
+                        aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt. Falls der Server keinen
+                        Mailversand unterst&uuml;tzt, sollte das Modul deaktiviert werden.
+                    </div>
+
+                    <div style=\"margin-top: 15px;\">
+                        <div style=\"text-align: left; width: 55%; float: left;\">Captcha aktivieren:</div>
+                        <div style=\"text-align: left;\">
+                            <input type=\"checkbox\" id=\"enable_mail_captcha\" name=\"enable_mail_captcha\" ";
+                            if(isset($form_values['enable_mail_captcha']) && $form_values['enable_mail_captcha'] == 1)
+                            {
+                                echo " checked ";
+                            }
+                            echo " value=\"1\" />
+                        </div>
+                    </div>
+                    <div class=\"smallText\">
+                        F&uuml;r nicht eingeloggte Benutzer wird im Mailformular bei aktiviertem Captcha ein alphanumerischer
+                        Code eingeblendet. Diesen muss der Benutzer vor dem Mailversand korrekt eingeben. Dies soll sicherstellen,
+                        dass das Formular nicht von Spammern missbraucht werden kann.
+                    </div>
+
+                    <div style=\"margin-top: 15px;\">
+                        <div style=\"text-align: left; width: 55%; float: left;\">Maximale Dateigr&ouml;&szlig;e f&uuml;r Anh&auml;nge:</div>
+                        <div style=\"text-align: left;\">
+                            <input type=\"text\" name=\"max_email_attachment_size\" size=\"4\" maxlength=\"6\" value=\"". $form_values['max_email_attachment_size']. "\"> KB
+                        </div>
+                    </div>
+                    <div class=\"smallText\">
+                        Benutzer k&ouml;nnen nur Dateien anh&auml;ngen, bei denen die Dateigr&ouml;&szlig;e kleiner als der hier
+                        angegebene Wert ist. Steht hier 0, so sind keine Anh&auml;nge im Mailmodul m&ouml;glich.
+                    </div>
                 </div>";
 
 

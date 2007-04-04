@@ -39,8 +39,9 @@ $session_found = mysql_num_rows($result);
 $domain = substr($_SERVER['HTTP_HOST'], 0, strpos($_SERVER['HTTP_HOST'], ':'));
 setcookie("admidio_session_id", "" , time() - 1000, "/", $domain, 0);
 
-unset($_SESSION['g_current_organizsation']);
+unset($_SESSION['g_current_organisation']);
 unset($_SESSION['g_current_user']);
+unset($_SESSION['g_preferences']);
 
 if($session_found > 0)
 {
