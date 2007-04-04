@@ -676,11 +676,9 @@ require("../../../adm_config/body_top.php");
                         </div>
                     </div>
                     <div class=\"smallText\">
-                        F&uuml;r nicht eingeloggte Benutzer wird bei Eintr&auml;gen im G&auml;stebuch &uuml;berpr&uuml;ft,
-                        ob sie innerhalb des eingestellten Intervalls bereits einen Eintrag get&auml;tigt haben.
-                        Damit soll verhindert werden, dass Benutzer in zu kurzen Zeitabst&auml;nden hintereinander
-                        ungew&uuml;nschte Eintr&auml;ge erzeugen. Ist das Intervall auf 0 gesetzt wird diese &Uuml;berpr&uuml;fung
-                        nicht durchgef&uuml;hrt.
+                        Anzahl der Teilnehmer die auf einer Seite aufgelistet werden. Gibt es mehr Teilnehmer zu einer Rolle, 
+                        so kann man in der Liste bl&auml;ttern. Die Druckvorschau und der Export sind von diesem Wert nicht
+                        betroffen. Bei dem Wert 0 werden alle Teilnehmer aufgelistet und die Bl&auml;ttern-Funktion deaktiviert.
                     </div>
                 </div>";
                 
