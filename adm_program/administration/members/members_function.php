@@ -172,6 +172,7 @@ elseif($_GET["mode"] == 2)
     {
         // alle Rollen der aktuellen Gliedgemeinschaft auf ungueltig setzen
         $sql    = "UPDATE ". TBL_MEMBERS. " SET mem_valid = 0
+                                              , mem_end   = NOW()
                     WHERE mem_id = $row->mem_id ";
         $result = mysql_query($sql, $g_adm_con);
         db_error($result,__FILE__,__LINE__);
