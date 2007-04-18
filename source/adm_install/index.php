@@ -65,6 +65,7 @@ while (!feof($file_handle) && strlen($admidio_version) == 0)
 }
 fclose ($file_handle); 
 
+// Html des Modules ausgeben
 echo "
 <!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org -->
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
@@ -74,10 +75,9 @@ echo "
 
     <meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-15\">
     <meta name=\"author\"   content=\"Admidio Team\">
-    <meta name=\"robots\"   content=\"index,follow\">
-    <meta name=\"language\" content=\"de\">
+    <meta name=\"robots\"   content=\"noindex\">
 
-    <link rel=\"stylesheet\" type=\"text/css\" href=\"../adm_config/main.css\">
+    <link rel=\"stylesheet\" type=\"text/css\" href=\"../adm_program/layout/system.css\">
 
     <!--[if lt IE 7]>
     <script type=\"text/javascript\" src=\"../adm_program/system/correct_png.js\"></script>
@@ -85,7 +85,7 @@ echo "
 </head>
 <body>
 <div align=\"center\">
-    <div class=\"formHead\" style=\"text-align: left;\">
+    <div class=\"formHead\" style=\"text-align: left; letter-spacing: 0em;\">
         <img style=\"float:left; padding: 5px 0px 0px 0px;\" src=\"../adm_program/images/admidio_logo_50.png\" border=\"0\" alt=\"www.admidio.org\" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <div style=\"font-size: 16pt; font-weight: bold; text-align: right; padding: 5px 10px 10px 0px;\">Version $admidio_version</div>
         <div style=\"font-size: 11pt; padding: 0px 0px 5px 0px;\">Die Online-Mitgliederverwaltung f&uuml;r Vereine, Gruppen und Organisationen</div>
@@ -95,24 +95,25 @@ echo "
         <div align=\"center\">";
             if($req_mode == 0)
             {
-                echo "<h1>Installation &amp; Einrichtung</h1>";
+                $title = "Installation &amp; Einrichtung";
             }
             elseif($req_mode == 1)
             {
-                echo "<h1>Datenbank installieren</h1>";
+                $title = "Datenbank installieren";
             }
             elseif($req_mode == 2)
             {
-                echo "<h1>Konfigurationsdatei erstellen</h1>";
+                $title = "Konfigurationsdatei erstellen";
             }
             elseif($req_mode == 3)
             {
-                echo "<h1>Datenbank updaten</h1>";
+                $title = "Datenbank updaten";
             }
             elseif($req_mode == 4)
             {
-                echo "<h1>Neue Organisation hinzuf&uuml;gen</h1>";
+                $title = "Neue Organisation hinzuf&uuml;gen";
             }
+            echo "<h1 class=\"moduleHeadline\" style=\"letter-spacing: 0.2em;\">$title</h1>";
 
             if($req_mode == 0)
             {

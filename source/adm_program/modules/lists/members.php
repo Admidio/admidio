@@ -204,16 +204,9 @@ db_error($result,__FILE__,__LINE__);
 $row = mysql_fetch_array($result);
 $count_valid_users = $row[0];
 
-//Beginn HTML
-echo "
-<!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org -->\n
-<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
-<html>
-<head>
-    <title>Mitglieder zuordnen</title>
-    <meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\">
-    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
-
+// Html-Kopf ausgeben
+$g_layout['title']  = "Mitglieder zuordnen";
+$g_layout['header'] = "
     <script type=\"text/javascript\"><!--
         function markMember(element)
         {
@@ -271,382 +264,372 @@ echo "
             document.getElementById(ids[i]).style.display    = 'block';
         }     
     }
-    --></script>
+    --></script>";
 
-    <!--[if lt IE 7]>
-        <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
-    <![endif]-->";
-        require("../../../adm_config/header.php");
-echo "</head>";
+require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+echo "
+<form action=\"members_save.php?role_id=".$role_id. "\" method=\"post\" name=\"Mitglieder\">
+   <h2>Mitglieder zu $role->rol_name zuordnen</h2>";
 
-    require("../../../adm_config/body_top.php");
-
-//Beginn Formular
-echo"
-<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-    <form action=\"members_save.php?role_id=".$role_id. "\" method=\"post\" name=\"Mitglieder\">
-       <h2>Mitglieder zu $role->rol_name zuordnen</h2>";
-
-        if($count_valid_users != $user_anzahl || $restrict == "u")
+    if($count_valid_users != $user_anzahl || $restrict == "u")
+    {
+        //Button Alle bzw. nur Mitglieder anzeigen
+        echo "<p>";
+        if($restrict=="m" && (isModerator() || $g_current_user->editUser()))
         {
-            //Button Alle bzw. nur Mitglieder anzeigen
-            echo "<p>";
-            if($restrict=="m" && (isModerator() || $g_current_user->editUser()))
-            {
-                echo "<span class=\"iconLink\">
-                    <a class=\"iconLink\" href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=u\"><img
-                    class=\"iconLink\" src=\"$g_root_path/adm_program/images/group.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Alle Benutzer anzeigen\"></a>
-                    <a class=\"iconLink\" href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=u\">Alle Benutzer anzeigen</a>
-                </span>";
-            }
-            else if($restrict=="u" && (isModerator() || $g_current_user->editUser()))
-            {
-                //Nur Mitglieder anzeigen
-                echo "<span class=\"iconLink\">
-                    <a class=\"iconLink\" href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=m\"><img
-                    class=\"iconLink\" src=\"$g_root_path/adm_program/images/user.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Nur Mitglieder anzeigen\"></a>
-                    <a class=\"iconLink\" href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=m\">Nur Mitglieder anzeigen</a>
-                </span>";
+            echo "<span class=\"iconLink\">
+                <a class=\"iconLink\" href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=u\"><img
+                class=\"iconLink\" src=\"$g_root_path/adm_program/images/group.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Alle Benutzer anzeigen\"></a>
+                <a class=\"iconLink\" href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=u\">Alle Benutzer anzeigen</a>
+            </span>";
+        }
+        else if($restrict=="u" && (isModerator() || $g_current_user->editUser()))
+        {
+            //Nur Mitglieder anzeigen
+            echo "<span class=\"iconLink\">
+                <a class=\"iconLink\" href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=m\"><img
+                class=\"iconLink\" src=\"$g_root_path/adm_program/images/user.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Nur Mitglieder anzeigen\"></a>
+                <a class=\"iconLink\" href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=m\">Nur Mitglieder anzeigen</a>
+            </span>";
 
-                //aktuelle Rolle in SessionID sichern
-                $_SESSION['set_rol_id'] = $role_id;
-                //Neuen Benutzer Anlegen
-                echo"&nbsp;&nbsp;&nbsp;&nbsp;
-                <span class=\"iconLink\">
-                    <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?new_user=1\"><img
-                    class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Login\"></a>
-                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_new.php?new_user=1\">Benutzer anlegen</a>
-                </span>";
+            //aktuelle Rolle in SessionID sichern
+            $_SESSION['set_rol_id'] = $role_id;
+            //Neuen Benutzer Anlegen
+            echo"&nbsp;&nbsp;&nbsp;&nbsp;
+            <span class=\"iconLink\">
+                <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?new_user=1\"><img
+                class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Login\"></a>
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_new.php?new_user=1\">Benutzer anlegen</a>
+            </span>";
+        }
+        echo "</p>";
+    }
+
+
+    //Buchstaben Navigation bei mehr als 50 personen
+    if(mysql_num_rows($result_user)>=50)
+    {
+        //Alle
+        echo"<a href=\"#\" onClick=\"showAll();\">Alle</a>&nbsp;";
+
+        for($menu_letter=35; $menu_letter<=90; $menu_letter++)
+        {
+            //Falls Aktueller Anfangsbuchstabe, Nur Buchstabe ausgeben
+            $menu_letter_string = chr($menu_letter);
+            if(!in_array($menu_letter, $first_letter_array) && $menu_letter>=65 && $menu_letter<=90)
+            {
+                echo"$menu_letter_string&nbsp;";
             }
-            echo "</p>";
+            //Falls Nicht Link zu Anker
+            if(in_array($menu_letter, $first_letter_array) && $menu_letter>=65 && $menu_letter<=90)
+            {
+                echo"<a href=\"#\" onClick=\"toggleDiv('$menu_letter_string');\">$menu_letter_string</a>&nbsp;";
+            }
+
+            //Fuer Namen die mit Zahlen beginnen
+            if($menu_letter == 35)
+            {
+                if( in_array(35, $first_letter_array))
+                {
+                    echo"<a href=\"#\" onClick=\"toggleDiv('zahl');\">$menu_letter_string</a>&nbsp;";
+                }
+                else echo"&#35;&nbsp;";
+                $menu_letter = 64;
+            }
+        }//for
+
+       //Container anlegen und Ausgabe
+       $letter_merker=34;
+       $user = mysql_fetch_array($result_user);
+
+        //Anfangsbuchstabe erfassen
+        $this_letter = ord($user['usr_last_name']);
+
+        //falls Kleinbuchstaben
+        if($this_letter>=97 && $this_letter<=122)
+        {
+            $this_letter = $this_letter-32;
         }
 
-
-        //Buchstaben Navigation bei mehr als 50 personen
-        if(mysql_num_rows($result_user)>=50)
+        //falls zahlen
+        if($this_letter>=48 && $this_letter<=57)
         {
-            //Alle
-            echo"<a href=\"#\" onClick=\"showAll();\">Alle</a>&nbsp;";
-            
-            for($menu_letter=35; $menu_letter<=90; $menu_letter++)
+            $this_letter = 35;
+        }
+
+        //Umlaute zu A
+        if($this_letter>=192 && $this_letter<=198)
+        {
+            $this_letter = 65;
+        }
+
+        //Umlaute zu O
+        if($this_letter>=210 && $this_letter<=214)
+        {
+            $this_letter = 79;
+        }
+
+        //Umlaute zu U
+        if($this_letter>=217 && $this_letter<=220)
+        {
+            $this_letter = 85;
+        }
+
+       //Zeilen ausgeben
+       for($x=1; $x<=mysql_num_rows($result_user); $x++)
+        {
+            //Sprung zu Buchstaben
+            if($this_letter!=$letter_merker && $letter_merker==35)
             {
-                //Falls Aktueller Anfangsbuchstabe, Nur Buchstabe ausgeben
-                $menu_letter_string = chr($menu_letter);
-                if(!in_array($menu_letter, $first_letter_array) && $menu_letter>=65 && $menu_letter<=90)
+                $letter_merker=64;
+            }
+            //Nach erstem benoetigtem Container suchen, solange leere ausgeben
+            while($this_letter!=$letter_merker && !in_array($letter_merker+1, $first_letter_array) && $letter_merker<91)
+            {
+                //Falls Zahl
+                if($letter_merker == 35)
                 {
-                    echo"$menu_letter_string&nbsp;";
-                }
-                //Falls Nicht Link zu Anker
-                if(in_array($menu_letter, $first_letter_array) && $menu_letter>=65 && $menu_letter<=90)
-                {
-                    echo"<a href=\"#\" onClick=\"toggleDiv('$menu_letter_string');\">$menu_letter_string</a>&nbsp;";
+                    $letter_merker++;
+                    $letter_string = "zahl";
                 }
 
-                //Fuer Namen die mit Zahlen beginnen
-                if($menu_letter == 35)
+                //Sonst
+                else
                 {
-                    if( in_array(35, $first_letter_array))
+                    $letter_merker++;
+                    //Buchstabe fuer ID
+                    $letter_string = chr($letter_merker);
+                }
+                //leerer Container
+                echo"<div id=\"$letter_string\" name=\"$letter_string\" style=\"visibility: hidden; display: none;\"><h1 class=\"moduleHeadline\"></h1></div>";
+
+            }//Ende while
+
+            //Falls neuer Anfangsbuchstabe Container ausgeben
+            if($this_letter!=$letter_merker && $letter_merker)
+            {
+                //Falls normaler Buchstabe
+                if($letter_merker >=64 && $letter_merker <=90)
+                {
+                    $letter_merker++;
+                    //Buchstabe fuer ID
+                    $letter_string = chr($letter_merker);
+                    $letter_text = $letter_string;
+                }
+
+                //Falls Zahl
+                if($letter_merker == 34)
+                {
+                    $letter_merker++;
+                    $letter_string = "zahl";
+                    $letter_text = "&#35;";
+                }
+
+                //Container
+                echo"<div id=\"$letter_string\" name=\"$letter_string\" style=\"margin-top: 15px;\">";
+
+                //Ueberschrift
+                echo "<h1 class=\"moduleHeadline\">$letter_text</h1>";
+
+                //Tabelle anlegen
+                echo"
+                <table class=\"tableList\" cellpadding=\"3\" cellspacing=\"0\">
+                    <tr>
+                        <th class=\"tableHeader\" style=\"text-align: left;\">Info</th>
+                        <th class=\"tableHeader\" style=\"text-align: left;\">Name</th>
+                        <th class=\"tableHeader\" style=\"text-align: left;\">Vorname</th>
+                        <th class=\"tableHeader\" style=\"text-align: left;\">Geburtsdatum</th>
+                        <th class=\"tableHeader\" style=\"text-align: left;\">Mitglied</th>
+                        <th class=\"tableHeader\" style=\"text-align: left;\">Leiter</th>
+                    </tr>";
+            }
+
+
+            //Datensatz ausgeben
+            $user_text= $user['usr_first_name']."&nbsp;".$user['usr_last_name']."&nbsp;&nbsp;&nbsp;"
+                        .$user['usr_address']."&nbsp;&nbsp;&nbsp;"
+                        .$user['usr_zip_code']."&nbsp;".$user['usr_city']."&nbsp;&nbsp;&nbsp;"
+                        .$user['usr_phone'];
+            echo"
+            <tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\">
+                <td style=\"text-align: center;\">
+                    <img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/note.png\" alt=\"Userinformationen\" title=\"$user_text\">
+                </td>
+                <td style=\"text-align: left;\">". $user['usr_last_name']."</td>
+                <td style=\"text-align: left;\">". $user['usr_first_name']."</td>
+
+                <td style=\"text-align: center;\">";
+                    //Geburtstag nur ausgeben wenn bekannt
+                    if($user['usr_birthday']!='0000-00-00')
                     {
-                        echo"<a href=\"#\" onClick=\"toggleDiv('zahl');\">$menu_letter_string</a>&nbsp;";
+                        echo mysqldate("d.m.y", $user['usr_birthday']);
                     }
-                    else echo"&#35;&nbsp;";
-                    $menu_letter = 64;
-                }
-            }//for
+                echo"</td>
 
-           //Container anlegen und Ausgabe
-           $letter_merker=34;
-           $user = mysql_fetch_array($result_user);
-            
+                <td style=\"text-align: center;\">";
+                    //Haekchen setzen ob jemand Mitglied ist oder nicht
+                    if(in_array($user['usr_id'], $role_member))
+                    {
+                        echo"<input type=\"checkbox\" onclick=\"unmarkLeader(this)\" id=\"member_$user[0]\" name=\"member_$user[0]\" checked value=\"1\">";
+                    }
+                    else
+                    {
+                        echo"<input type=\"checkbox\" onclick=\"unmarkLeader(this)\" id=\"member_$user[0]\" name=\"member_$user[0]\" value=\"1\">";
+                    }
+                echo"</td>
+
+                <td style=\"text-align: center;\">";
+                    //Haekchen setzen ob jemand Leiter ist oder nicht
+                    if(in_array($user['usr_id'], $group_leaders))
+                    {
+                        echo"<input type=\"checkbox\" onclick=\"markMember(this)\" id=\"leader_$user[0]\" name=\"leader_$user[0]\" checked value=\"1\">";
+                    }
+                    else
+                    {
+                        echo"<input type=\"checkbox\" onclick=\"markMember(this)\" id=\"leader_$user[0]\" name=\"leader_$user[0]\" value=\"1\">";
+                    }
+                echo"</td>
+            </tr>";
+
+            //Naechsten Datensatz abrufen
+            $user = mysql_fetch_array($result_user);
+
             //Anfangsbuchstabe erfassen
             $this_letter = ord($user['usr_last_name']);
-            
+
             //falls Kleinbuchstaben
             if($this_letter>=97 && $this_letter<=122)
             {
                 $this_letter = $this_letter-32;
             }
-            
+
             //falls zahlen
             if($this_letter>=48 && $this_letter<=57)
             {
                 $this_letter = 35;
             }
-        
+
             //Umlaute zu A
             if($this_letter>=192 && $this_letter<=198)
             {
                 $this_letter = 65;
             }
-            
+
             //Umlaute zu O
             if($this_letter>=210 && $this_letter<=214)
             {
                 $this_letter = 79;
             }
-            
+
             //Umlaute zu U
             if($this_letter>=217 && $this_letter<=220)
             {
                 $this_letter = 85;
             }
-           
-           //Zeilen ausgeben
-           for($x=1; $x<=mysql_num_rows($result_user); $x++)
+
+            if($this_letter != $letter_merker || mysql_num_rows($result_user)+1==$x)
             {
-                //Sprung zu Buchstaben
-                if($this_letter!=$letter_merker && $letter_merker==35)
-                {
-                    $letter_merker=64;
-                }
-                //Nach erstem benoetigtem Container suchen, solange leere ausgeben
-                while($this_letter!=$letter_merker && !in_array($letter_merker+1, $first_letter_array) && $letter_merker<91)
-                {
-                    //Falls Zahl
-                    if($letter_merker == 35)
+                echo"</table>";
+                echo"</div>";
+            }
+            //Ende Container
+
+
+
+        }//End For
+
+    }//Ende if >50
+
+
+    //fuer weniger als 50 Benutzer
+    else
+    {
+        //Tabelle anlegen
+        echo"
+        <table class=\"tableList\" cellpadding=\"3\" cellspacing=\"0\" >
+            <tr>
+                <th class=\"tableHeader\" style=\"text-align: left;\">Info</th>
+                <th class=\"tableHeader\" style=\"text-align: left;\">Name</th>
+                <th class=\"tableHeader\" style=\"text-align: left;\">Vorname</th>
+                <th class=\"tableHeader\" style=\"text-align: left;\">Geburtsdatum</th>
+                <th class=\"tableHeader\" style=\"text-align: left;\">Mitglied</th>
+                <th class=\"tableHeader\" style=\"text-align: left;\">Leiter</th>
+            </tr>";
+
+        while($user = mysql_fetch_array($result_user))
+        {
+             //Datensatz ausgeben
+            $user_text= $user['usr_first_name']."&nbsp;".$user['usr_last_name']."&nbsp;&nbsp;&nbsp;"
+                        .$user['usr_address']."&nbsp;&nbsp;&nbsp;"
+                        .$user['usr_zip_code']."&nbsp;".$user['usr_city']."&nbsp;&nbsp;&nbsp;"
+                        .$user['usr_phone'];
+            echo"
+            <tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\">
+                <td style=\"text-align: center;\">
+                    <img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/note.png\" alt=\"Userinformationen\" title=\"$user_text\">
+                </td>
+                <td style=\"text-align: left;\">". $user['usr_last_name']."</td>
+                <td style=\"text-align: left;\">". $user['usr_first_name']."</td>
+
+                <td style=\"text-align: center;\">";
+                    //Geburtstag nur ausgeben wenn bekannt
+                    if($user['usr_birthday']!='0000-00-00')
                     {
-                        $letter_merker++;
-                        $letter_string = "zahl";
+                        echo mysqldate("d.m.y", $user['usr_birthday']);
                     }
-                    
-                    //Sonst
+                echo"</td>
+
+                <td style=\"text-align: center;\">";
+                    //Haekchen setzen ob jemand Mitglied ist oder nicht
+                    if(in_array($user['usr_id'], $role_member))
+                    {
+                        echo"<input type=\"checkbox\" onclick=\"unmarkLeader(this)\" id=\"member_$user[0]\" name=\"member_$user[0]\" checked value=\"1\">";
+                    }
                     else
                     {
-                        $letter_merker++;
-                        //Buchstabe fuer ID
-                        $letter_string = chr($letter_merker);
+                        echo"<input type=\"checkbox\" onclick=\"unmarkLeader(this)\" id=\"member_$user[0]\" name=\"member_$user[0]\" value=\"1\">";
                     }
-                    //leerer Container
-                    echo"<div id=\"$letter_string\" name=\"$letter_string\" style=\"visibility: hidden; display: none;\"><h1></h1></div>";
+                echo"</td>
 
-                }//Ende while
-
-                //Falls neuer Anfangsbuchstabe Container ausgeben
-                if($this_letter!=$letter_merker && $letter_merker)
-                {
-                    //Falls normaler Buchstabe
-                    if($letter_merker >=64 && $letter_merker <=90)
+                <td style=\"text-align: center;\">";
+                    //Haekchen setzen ob jemand Leiter ist oder nicht
+                    if(in_array($user['usr_id'], $group_leaders))
                     {
-                        $letter_merker++;
-                        //Buchstabe fuer ID
-                        $letter_string = chr($letter_merker);
-                        $letter_text = $letter_string;
+                        echo"<input type=\"checkbox\" onclick=\"markMember(this)\" id=\"leader_$user[0]\" name=\"leader_$user[0]\" checked value=\"1\">";
                     }
-
-                    //Falls Zahl
-                    if($letter_merker == 34)
+                    else
                     {
-                        $letter_merker++;
-                        $letter_string = "zahl";
-                        $letter_text = "&#35;";
+                        echo"<input type=\"checkbox\" onclick=\"markMember(this)\" id=\"leader_$user[0]\" name=\"leader_$user[0]\" value=\"1\">";
                     }
+                echo"</td>
+            </tr>";
 
-                    //Container
-                    echo"<div id=\"$letter_string\" name=\"$letter_string\" style=\"margin-top: 15px;\">";
-
-                    //Ueberschrift
-                    echo "<h1>$letter_text</h1>";
-
-                    //Tabelle anlegen
-                    echo"
-                    <table class=\"tableList\" cellpadding=\"3\" cellspacing=\"0\">
-                        <tr>
-                            <th class=\"tableHeader\" style=\"text-align: left;\">Info</th>
-                            <th class=\"tableHeader\" style=\"text-align: left;\">Name</th>
-                            <th class=\"tableHeader\" style=\"text-align: left;\">Vorname</th>
-                            <th class=\"tableHeader\" style=\"text-align: left;\">Geburtsdatum</th>
-                            <th class=\"tableHeader\" style=\"text-align: left;\">Mitglied</th>
-                            <th class=\"tableHeader\" style=\"text-align: left;\">Leiter</th>
-                        </tr>";
-                }
-
-
-                //Datensatz ausgeben
-                $user_text= $user['usr_first_name']."&nbsp;".$user['usr_last_name']."&nbsp;&nbsp;&nbsp;"
-                            .$user['usr_address']."&nbsp;&nbsp;&nbsp;"
-                            .$user['usr_zip_code']."&nbsp;".$user['usr_city']."&nbsp;&nbsp;&nbsp;"
-                            .$user['usr_phone'];
-                echo"
-                <tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\">
-                    <td style=\"text-align: center;\">
-                        <img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/note.png\" alt=\"Userinformationen\" title=\"$user_text\">
-                    </td>
-                    <td style=\"text-align: left;\">". $user['usr_last_name']."</td>
-                    <td style=\"text-align: left;\">". $user['usr_first_name']."</td>
-
-                    <td style=\"text-align: center;\">";
-                        //Geburtstag nur ausgeben wenn bekannt
-                        if($user['usr_birthday']!='0000-00-00')
-                        {
-                            echo mysqldate("d.m.y", $user['usr_birthday']);
-                        }
-                    echo"</td>
-
-                    <td style=\"text-align: center;\">";
-                        //Haekchen setzen ob jemand Mitglied ist oder nicht
-                        if(in_array($user['usr_id'], $role_member))
-                        {
-                            echo"<input type=\"checkbox\" onclick=\"unmarkLeader(this)\" id=\"member_$user[0]\" name=\"member_$user[0]\" checked value=\"1\">";
-                        }
-                        else
-                        {
-                            echo"<input type=\"checkbox\" onclick=\"unmarkLeader(this)\" id=\"member_$user[0]\" name=\"member_$user[0]\" value=\"1\">";
-                        }
-                    echo"</td>
-
-                    <td style=\"text-align: center;\">";
-                        //Haekchen setzen ob jemand Leiter ist oder nicht
-                        if(in_array($user['usr_id'], $group_leaders))
-                        {
-                            echo"<input type=\"checkbox\" onclick=\"markMember(this)\" id=\"leader_$user[0]\" name=\"leader_$user[0]\" checked value=\"1\">";
-                        }
-                        else
-                        {
-                            echo"<input type=\"checkbox\" onclick=\"markMember(this)\" id=\"leader_$user[0]\" name=\"leader_$user[0]\" value=\"1\">";
-                        }
-                    echo"</td>
-                </tr>";
-
-                //Naechsten Datensatz abrufen
-                $user = mysql_fetch_array($result_user);
-
-                //Anfangsbuchstabe erfassen
-                $this_letter = ord($user['usr_last_name']);
-                
-                //falls Kleinbuchstaben
-                if($this_letter>=97 && $this_letter<=122)
-                {
-                    $this_letter = $this_letter-32;
-                }
-                
-                //falls zahlen
-                if($this_letter>=48 && $this_letter<=57)
-                {
-                    $this_letter = 35;
-                }
-            
-                //Umlaute zu A
-                if($this_letter>=192 && $this_letter<=198)
-                {
-                    $this_letter = 65;
-                }
-                
-                //Umlaute zu O
-                if($this_letter>=210 && $this_letter<=214)
-                {
-                    $this_letter = 79;
-                }
-                
-                //Umlaute zu U
-                if($this_letter>=217 && $this_letter<=220)
-                {
-                    $this_letter = 85;
-                }
-
-                if($this_letter != $letter_merker || mysql_num_rows($result_user)+1==$x)
-                {
-                    echo"</table>";
-                    echo"</div>";
-                }
-                //Ende Container
-
-
-
-            }//End For
-
-        }//Ende if >50
-
-
-        //fuer weniger als 50 Benutzer
-        else
-        {
-            //Tabelle anlegen
-            echo"
-            <table class=\"tableList\" cellpadding=\"3\" cellspacing=\"0\" >
-                <tr>
-                    <th class=\"tableHeader\" style=\"text-align: left;\">Info</th>
-                    <th class=\"tableHeader\" style=\"text-align: left;\">Name</th>
-                    <th class=\"tableHeader\" style=\"text-align: left;\">Vorname</th>
-                    <th class=\"tableHeader\" style=\"text-align: left;\">Geburtsdatum</th>
-                    <th class=\"tableHeader\" style=\"text-align: left;\">Mitglied</th>
-                    <th class=\"tableHeader\" style=\"text-align: left;\">Leiter</th>
-                </tr>";
-
-            while($user = mysql_fetch_array($result_user))
-            {
-                 //Datensatz ausgeben
-                $user_text= $user['usr_first_name']."&nbsp;".$user['usr_last_name']."&nbsp;&nbsp;&nbsp;"
-                            .$user['usr_address']."&nbsp;&nbsp;&nbsp;"
-                            .$user['usr_zip_code']."&nbsp;".$user['usr_city']."&nbsp;&nbsp;&nbsp;"
-                            .$user['usr_phone'];
-                echo"
-                <tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\">
-                    <td style=\"text-align: center;\">
-                        <img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/note.png\" alt=\"Userinformationen\" title=\"$user_text\">
-                    </td>
-                    <td style=\"text-align: left;\">". $user['usr_last_name']."</td>
-                    <td style=\"text-align: left;\">". $user['usr_first_name']."</td>
-
-                    <td style=\"text-align: center;\">";
-                        //Geburtstag nur ausgeben wenn bekannt
-                        if($user['usr_birthday']!='0000-00-00')
-                        {
-                            echo mysqldate("d.m.y", $user['usr_birthday']);
-                        }
-                    echo"</td>
-
-                    <td style=\"text-align: center;\">";
-                        //Haekchen setzen ob jemand Mitglied ist oder nicht
-                        if(in_array($user['usr_id'], $role_member))
-                        {
-                            echo"<input type=\"checkbox\" onclick=\"unmarkLeader(this)\" id=\"member_$user[0]\" name=\"member_$user[0]\" checked value=\"1\">";
-                        }
-                        else
-                        {
-                            echo"<input type=\"checkbox\" onclick=\"unmarkLeader(this)\" id=\"member_$user[0]\" name=\"member_$user[0]\" value=\"1\">";
-                        }
-                    echo"</td>
-
-                    <td style=\"text-align: center;\">";
-                        //Haekchen setzen ob jemand Leiter ist oder nicht
-                        if(in_array($user['usr_id'], $group_leaders))
-                        {
-                            echo"<input type=\"checkbox\" onclick=\"markMember(this)\" id=\"leader_$user[0]\" name=\"leader_$user[0]\" checked value=\"1\">";
-                        }
-                        else
-                        {
-                            echo"<input type=\"checkbox\" onclick=\"markMember(this)\" id=\"leader_$user[0]\" name=\"leader_$user[0]\" value=\"1\">";
-                        }
-                    echo"</td>
-                </tr>";
-
-            }
-
-            echo"</table>";
         }
-      //Buttons schliessen oder Speichern
-        echo"<div style=\"margin: 8px;\">
-            <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
-                    <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
-                    &nbsp;Zur&uuml;ck</button>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
-            <button name=\"speichern\" type=\"submit\" value=\"speichern\">
-                <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">&nbsp;Speichern
-            </button>
-        </div>
-    </form>";
-    
-    //nur bei mehr als 50
-    if(mysql_num_rows($result_user)>=50)
-    {
-        echo"
-        <div class=\"smallFontSize\">
-            Das Zwischenspeichern vor dem Buchstabenwechsel ist nicht notwendig&#33;&#33;&#33;
-        </div>";
+
+        echo"</table>";
     }
+    
+    //Buttons schliessen oder Speichern
+    echo"<div style=\"margin: 8px;\">
+        <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
+                <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
+                &nbsp;Zur&uuml;ck</button>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
+        <button name=\"speichern\" type=\"submit\" value=\"speichern\">
+            <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">&nbsp;Speichern
+        </button>
+    </div>
+</form>";
+
+//nur bei mehr als 50
+if(mysql_num_rows($result_user)>=50)
+{
+    echo"
+    <div class=\"smallFontSize\">
+        Das Zwischenspeichern vor dem Buchstabenwechsel ist nicht notwendig&#33;&#33;&#33;
+    </div>";
+}
    
-    echo "</div>";
+require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
 
-
-    require("../../../adm_config/body_bottom.php");
-echo "</body></html>";
+?>

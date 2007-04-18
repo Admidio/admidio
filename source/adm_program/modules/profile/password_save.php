@@ -30,26 +30,32 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
-$user_id = $_GET['user_id'];
-
 // nur Webmaster duerfen fremde Passwoerter aendern
-if(!$g_current_user->isWebmaster() && $g_current_user->id != $user_id)
+if($g_current_user->isWebmaster() == false 
+&& $g_current_user->id            != $_GET['user_id'])
 {
     $g_message->show("norights");
 }
 
+// lokale Variablen der Uebergabevariablen initialisieren
+$req_user_id = 0;
+
 // Uebergabevariablen pruefen
 
-if(isset($_GET["user_id"]) && is_numeric($_GET["user_id"]) == false)
+if(isset($_GET['user_id']))
 {
-    $g_message->show("invalid");
+    if(is_numeric($_GET['user_id']) == false)
+    {
+        $g_message->show("invalid");
+    }
+    $req_user_id = $_GET['user_id'];
 }
 
 $err_code   = "";
 $count_user = 0;
 
 $user = new User($g_adm_con);
-$user->getUser($user_id);
+$user->getUser($req_user_id);
 
 if( ($_POST["old_password"] != "" || $g_current_user->isWebmaster() )
 && $_POST["new_password"] != ""
@@ -94,57 +100,46 @@ else
     $err_code = "felder";
 }
 
-echo "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?". ">
-<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 TRANSITIONAL//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
-<html xmlns=\"http://www.w3.org/1999/xhtml\">
-<head>
-    <!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org -->
-    <title>Passwort &auml;ndern</title>
-    <meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\" />
-    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\" />
+// Html-Kopf ausgeben
+$g_layout['title'] = "Passwort &auml;ndern";
+require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
-    <!--[if lt IE 7]>
-    <script language=\"JavaScript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
-    <![endif]-->
-</head>
+echo "<br />
+<div class=\"groupBox\" align=\"left\" style=\"padding: 10px\">";
+    switch ($err_code)
+    {
+        case "felder":
+            echo "Es sind nicht alle Felder aufgef&uuml;llt worden.";
+            break;
 
-<body>
-    <div align=\"center\"><br />
-        <div class=\"groupBox\" align=\"left\" style=\"padding: 10px\">";
-            switch ($err_code)
-            {
-                case "felder":
-                    echo "Es sind nicht alle Felder aufgef&uuml;llt worden.";
-                    break;
+        case "passwort":
+            echo "Das Passwort stimmt nicht mit der Wiederholung &uuml;berein.";
+            break;
 
-                case "passwort":
-                    echo "Das Passwort stimmt nicht mit der Wiederholung &uuml;berein.";
-                    break;
+        case "altes_passwort":
+            echo "Das alte Passwort ist falsch.";
+            break;
 
-                case "altes_passwort":
-                    echo "Das alte Passwort ist falsch.";
-                    break;
+        default:
+            echo "Das Passwort wurde erfolgreich ge&auml;ndert.";
+            break;
+    }
+echo "</div>
+<div style=\"padding-top: 10px;\" align=\"center\">";
+    if($err_code == "")
+    {
+        echo "<button name=\"schliessen\" type=\"button\" value=\"schliessen\" onclick=\"window.close()\">
+        <img src=\"$g_root_path/adm_program/images/door_in.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\">
+        &nbsp;Schlie&szlig;en</button>";
+    }
+    else
+    {
+        echo "<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
+        <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\">
+        &nbsp;Zur&uuml;ck</button>";
+    }
+echo "</div>";
+        
+require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
 
-                default:
-                    echo "Das Passwort wurde erfolgreich ge&auml;ndert.";
-                    break;
-            }
-        echo "</div>
-        <div style=\"padding-top: 10px;\" align=\"center\">";
-            if($err_code == "")
-            {
-                echo "<button name=\"schliessen\" type=\"button\" value=\"schliessen\" onclick=\"window.close()\">
-                <img src=\"$g_root_path/adm_program/images/door_in.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\">
-                &nbsp;Schlie&szlig;en</button>";
-            }
-            else
-            {
-                echo "<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
-                <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\">
-                &nbsp;Zur&uuml;ck</button>";
-            }
-        echo "</div>
-    </div>
-</body>
-</html>";
 ?>

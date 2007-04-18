@@ -312,26 +312,10 @@ if($g_session_valid && editPhoto($adm_photo['pho_org_shortname']))
         }
     }// if submit
 
-    /******************************HTML-Teil******************************************/
-    echo"
-    <!-- (c) 2004 - 2005 The Admidio Team - http://www.admidio.org -->\n
-    <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
-    <html>
-        <head>
-            <title>$g_current_organization->longname - Veranstaltungsverwaltung</title>
-            <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
-
-            <!--[if lt IE 7]>
-                <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
-            <![endif]-->";
-
-            require("../../../adm_config/header.php");
-        echo "
-        </head>";
-
-    require("../../../adm_config/body_top.php");
-    echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">";
-
+    /******************************HTML-Kopf******************************************/
+    $g_layout['title'] = "Veranstaltungsverwaltung";
+    require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+    
     /*******************************Bericht*********************************************/
     if(isset($_POST["submit"]) && $_POST["submit"])
     {
@@ -365,7 +349,7 @@ if($g_session_valid && editPhoto($adm_photo['pho_org_shortname']))
                 </td></tr>
                 <tr><td align=\"right\" width=\"50%\">Aktuelle Bilderzahl:</td><td align=\"left\">".$neudaten["pho_quantity"]."</td></tr>
             </table>
-            <hr width=\"85%\" />
+            <hr class=\"formLine\" width=\"85%\" />
             <button name=\"weiter\" type=\"button\" value=\"weiter\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id'\">Weiter&nbsp;
                 <img src=\"$g_root_path/adm_program/images/forward.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Weiter\">
             </button>
@@ -471,18 +455,13 @@ if($g_session_valid && editPhoto($adm_photo['pho_org_shortname']))
 
     //Zurueckbutton
     echo"
-    <hr width=\"85%\" />
+    <hr class=\"formLine\" width=\"85%\" />
     <button name=\"weiter\" type=\"button\" value=\"weiter\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php'\">Weiter&nbsp;
         <img src=\"$g_root_path/adm_program/images/forward.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Weiter\">
     </button>
     </div>";
     }//Ende Veranstaltung loeschen
 
-    /***********************************Ende********************************************/
-        echo"</div>";
-
-        require("../../../adm_config/body_bottom.php");
-        echo "</body>
-    </html>";
+    require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
 };//Moderation
 ?>

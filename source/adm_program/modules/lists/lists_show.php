@@ -80,19 +80,19 @@ if($req_mode == "csv-ms")
 {
     $separator    = ";"; // Microsoft XP und neuer braucht ein Semicolon
     $value_quotes = "\"";
-    $req_mode         = "csv";
+    $req_mode     = "csv";
 }
 else if($req_mode == "csv-ms-2k")
 {
     $separator    = ","; // Microsoft 2000 und aelter braucht ein Komma
     $value_quotes = "\"";
-    $req_mode         = "csv";
+    $req_mode     = "csv";
 }
 else if($req_mode == "csv-oo")
 {
     $separator    = ",";    // fuer CSV-Dateien
     $value_quotes = "\"";   // Werte muessen mit Anfuehrungszeichen eingeschlossen sein
-    $req_mode         = "csv";
+    $req_mode     = "csv";
 }
 else
 {
@@ -257,54 +257,46 @@ if($req_mode == "html" && $req_start == 0)
 if($req_mode != "csv")
 {
     // Html-Kopf wird geschrieben
-    echo "
-    <!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org -->\n
-    <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
-    <html>
-    <head>
-        <title>$g_current_organization->longname - Liste - ". $role->getValue("rol_name"). "</title>
-        <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
-
-        <!--[if lt IE 7]>
-        <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
-        <![endif]-->
-
-        <script language=\"JavaScript\" type=\"text/javascript\"><!--\n
-            function exportList(element)
-            {
-                var sel_list = element.value;
-
-                if(sel_list.length > 1)
-                {
-                    self.location.href = 'lists_show.php?type=$req_type&rol_id=$req_rol_id&mode=' + sel_list;
-                }
-            }
-        //--></script>";
-
-        if($req_mode == "print")
-        {
-            echo "<style type=\"text/css\">
-                @page { size:landscape; }
-            </style>";
-        }
-        else
-        {
-            require("../../../adm_config/header.php");
-        }
-    echo "</head>";
-
     if($req_mode == "print")
     {
-        echo "<body class=\"bodyPrint\">";
+        echo "
+        <!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org -->\n
+        <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
+        <html>
+        <head>
+            <title>$g_current_organization->longname - Liste - ". $role->getValue("rol_name"). "</title>
+            <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_program/layout/print.css\">
+
+            <!--[if lt IE 7]>
+            <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
+            <![endif]-->
+
+            <style type=\"text/css\">
+                @page { size:landscape; }
+            </style>
+        </head>
+        <body class=\"bodyPrint\">
+            <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">";
     }
     else
     {
-        require("../../../adm_config/body_top.php");
-    }
+        $g_layout['title']  = "Liste - ". $role->getValue("rol_name");
+        $g_layout['header'] = "
+            <script language=\"JavaScript\" type=\"text/javascript\"><!--\n
+                function exportList(element)
+                {
+                    var sel_list = element.value;
 
-    echo "
-    <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-    <h1>". $role->getValue("rol_name"). "&nbsp;&#40;".$cat_row->cat_name."&#41;</h1>";
+                    if(sel_list.length > 1)
+                    {
+                        self.location.href = 'lists_show.php?type=$req_type&rol_id=$req_rol_id&mode=' + sel_list;
+                    }
+                }
+            //--></script>";
+        require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+    }
+    
+    echo "<h1 class=\"moduleHeadline\">". $role->getValue("rol_name"). "&nbsp;&#40;".$cat_row->cat_name."&#41;</h1>";
 
     //Beschreibung der Rolle einblenden
     if(strlen($role->getValue("rol_description")) > 0)
@@ -312,7 +304,7 @@ if($req_mode != "csv")
         echo "<p>". $role->getValue("rol_description"). "</p>";
     }
 
-    if($req_mode != "print")
+    if($req_mode == "html")
     {
         if($req_type == "mylist")
         {
@@ -838,18 +830,16 @@ else
             }
 
         echo"</table>";
-    }
-    // Ende Infobox
-
-    echo "</div>";
+    } // Ende Infobox
     
-    if($req_mode != "print")
-    {    
-        require("../../../adm_config/body_bottom.php");
+    if($req_mode == "print")
+    {
+        echo "</div></body></html>";
     }
-
-    echo "</body>
-    </html>";
+    else
+    {    
+        require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+    }
 }
 
 ?>

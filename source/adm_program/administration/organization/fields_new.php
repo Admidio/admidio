@@ -86,122 +86,109 @@ else
     }
 }
 
+// zusaetzliche Daten fuer den Html-Kopf setzen
+if($usf_id > 0)
+{
+    $g_layout['title']  = "Profilfeld &auml;ndern";
+}
+else
+{
+    $g_layout['title']  = "Profilfeld anlegen";
+}
+
+// Html-Kopf ausgeben
+require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+
 echo "
-<!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org -->\n
-<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
-<html>
-<head>
-    <title>$g_current_organization->longname - Rolle</title>
-    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
-
-    <!--[if lt IE 7]>
-    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
-    <![endif]-->";
-
-    require("../../../adm_config/header.php");
-echo "</head>";
-
-require("../../../adm_config/body_top.php");
-    echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-        <form action=\"fields_function.php?usf_id=$usf_id&amp;mode=1\" method=\"post\" id=\"edit_field\">
-            <div class=\"formHead\" style=\"width: 400px\">";
-                if($usf_id > 0)
-                {
-                    echo "Feld ändern";
-                }
-                else
-                {
-                    echo "Feld anlegen";
-                }
-            echo "</div>
-            <div class=\"formBody\" style=\"width: 400px\">
-                <div>
-                    <div style=\"text-align: right; width: 28%; float: left;\">Name:</div>
-                    <div style=\"text-align: left; margin-left: 29%;\">
-                        <input type=\"text\" id=\"name\" name=\"name\" size=\"20\" maxlength=\"13\" value=\"". htmlspecialchars($form_values['name'], ENT_QUOTES). "\">
-                        <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
-                    </div>
-                </div>
-                <div style=\"margin-top: 6px;\">
-                    <div style=\"text-align: right; width: 28%; float: left;\">Beschreibung:</div>
-                    <div style=\"text-align: left; margin-left: 29%;\">
-                        <input type=\"text\" name=\"description\" size=\"38\" maxlength=\"255\" value=\"". htmlspecialchars($form_values['description'], ENT_QUOTES). "\">
-                    </div>
-                </div>
-                <div style=\"margin-top: 6px;\">
-                    <div style=\"text-align: right; width: 28%; float: left;\">Datentyp:</div>
-                    <div style=\"text-align: left; margin-left: 29%;\">
-                        <select size=\"1\" name=\"type\">
-                            <option value=\" \""; 
-                                if(strlen($form_values['type']) == 0) 
-                                {
-                                    echo " selected=\"selected\"";
-                                }
-                                echo ">- Bitte w&auml;hlen -</option>\n
-                            <option value=\"TEXT\"";     
-                                if($form_values['type'] == "TEXT") 
-                                {
-                                    echo " selected=\"selected\""; 
-                                }
-                                echo ">Text (30 Zeichen)</option>\n
-                            <option value=\"TEXT_BIG\""; 
-                                if($form_values['type'] == "TEXT_BIG") 
-                                {
-                                    echo " selected=\"selected\""; 
-                                }
-                                echo ">Text (255 Zeichen)</option>\n
-                            <option value=\"NUMERIC\"";  
-                                if($form_values['type'] == "NUMERIC") 
-                                {
-                                    echo " selected=\"selected\""; 
-                                }
-                                echo ">Zahl</option>\n
-                            <option value=\"CHECKBOX\""; 
-                                if($form_values['type'] == "CHECKBOX") 
-                                {
-                                    echo " selected=\"selected\""; 
-                                }
-                                echo ">Ja / Nein</option>\n
-                        </select>
-                        <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
-                    </div>
-                </div>
-                <div style=\"margin-top: 6px;\">
-                    <div style=\"text-align: right; width: 28%; float: left;\">
-                        <img src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Feld nur f&uuml;r Moderatoren sichtbar\">
-                    </div>
-                    <div style=\"text-align: left; margin-left: 29%;\">
-                        <input type=\"checkbox\" id=\"locked\" name=\"locked\" ";
-                        if(isset($form_values['locked']) && $form_values['locked'] == 1)
+<form action=\"fields_function.php?usf_id=$usf_id&amp;mode=1\" method=\"post\" id=\"edit_field\">
+    <div class=\"formHead\" style=\"width: 400px\">$g_layout['title']</div>
+    <div class=\"formBody\" style=\"width: 400px\">
+        <div>
+            <div style=\"text-align: right; width: 28%; float: left;\">Name:</div>
+            <div style=\"text-align: left; margin-left: 29%;\">
+                <input type=\"text\" id=\"name\" name=\"name\" size=\"20\" maxlength=\"13\" value=\"". htmlspecialchars($form_values['name'], ENT_QUOTES). "\">
+                <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
+            </div>
+        </div>
+        <div style=\"margin-top: 6px;\">
+            <div style=\"text-align: right; width: 28%; float: left;\">Beschreibung:</div>
+            <div style=\"text-align: left; margin-left: 29%;\">
+                <input type=\"text\" name=\"description\" size=\"38\" maxlength=\"255\" value=\"". htmlspecialchars($form_values['description'], ENT_QUOTES). "\">
+            </div>
+        </div>
+        <div style=\"margin-top: 6px;\">
+            <div style=\"text-align: right; width: 28%; float: left;\">Datentyp:</div>
+            <div style=\"text-align: left; margin-left: 29%;\">
+                <select size=\"1\" name=\"type\">
+                    <option value=\" \""; 
+                        if(strlen($form_values['type']) == 0) 
                         {
-                            echo " checked ";
+                            echo " selected=\"selected\"";
                         }
-                        echo " value=\"1\" />
-                        <label for=\"locked\">Feld nur f&uuml;r Moderatoren sichtbar&nbsp;</label>
-                        <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: middle;\" vspace=\"1\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=field_locked','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
-                    </div>
-                </div>
+                        echo ">- Bitte w&auml;hlen -</option>\n
+                    <option value=\"TEXT\"";     
+                        if($form_values['type'] == "TEXT") 
+                        {
+                            echo " selected=\"selected\""; 
+                        }
+                        echo ">Text (30 Zeichen)</option>\n
+                    <option value=\"TEXT_BIG\""; 
+                        if($form_values['type'] == "TEXT_BIG") 
+                        {
+                            echo " selected=\"selected\""; 
+                        }
+                        echo ">Text (255 Zeichen)</option>\n
+                    <option value=\"NUMERIC\"";  
+                        if($form_values['type'] == "NUMERIC") 
+                        {
+                            echo " selected=\"selected\""; 
+                        }
+                        echo ">Zahl</option>\n
+                    <option value=\"CHECKBOX\""; 
+                        if($form_values['type'] == "CHECKBOX") 
+                        {
+                            echo " selected=\"selected\""; 
+                        }
+                        echo ">Ja / Nein</option>\n
+                </select>
+                <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
+            </div>
+        </div>
+        <div style=\"margin-top: 6px;\">
+            <div style=\"text-align: right; width: 28%; float: left;\">
+                <img src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Feld nur f&uuml;r Moderatoren sichtbar\">
+            </div>
+            <div style=\"text-align: left; margin-left: 29%;\">
+                <input type=\"checkbox\" id=\"locked\" name=\"locked\" ";
+                if(isset($form_values['locked']) && $form_values['locked'] == 1)
+                {
+                    echo " checked ";
+                }
+                echo " value=\"1\" />
+                <label for=\"locked\">Feld nur f&uuml;r Moderatoren sichtbar&nbsp;</label>
+                <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: middle;\" vspace=\"1\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=field_locked','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
+            </div>
+        </div>
 
-                <hr width=\"85%\" />
+        <hr class=\"formLine\" width=\"85%\" />
 
-                <div style=\"margin-top: 6px;\">
-                    <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
-                    <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
-                    &nbsp;Zur&uuml;ck</button>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <button name=\"speichern\" type=\"submit\" value=\"speichern\">
-                    <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
-                    &nbsp;Speichern</button>
-                </div>";
-            echo "</div>
-        </form>
-    </div>
-    <script type=\"text/javascript\"><!--
-        document.getElementById('name').focus();
-    --></script>";
+        <div style=\"margin-top: 6px;\">
+            <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
+            <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
+            &nbsp;Zur&uuml;ck</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button name=\"speichern\" type=\"submit\" value=\"speichern\">
+            <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
+            &nbsp;Speichern</button>
+        </div>";
+    echo "</div>
+</form>
 
-    require("../../../adm_config/body_bottom.php");
-echo "</body>
-</html>";
+<script type=\"text/javascript\"><!--
+    document.getElementById('name').focus();
+--></script>";
+
+require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+
 ?>

@@ -89,81 +89,67 @@ else
    $form_values['new_name'] = null;
 }
 
-//Beginn der Seite
-echo "
-<!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org -->\n
-<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
-<html>
-<head>
-    <title>$g_current_organization->longname - Dateien hochladen</title>
-    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
+// Html-Kopf ausgeben
+$g_layout['title'] = "Umbenennen";
+require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
-    <!--[if lt IE 7]>
-    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
-    <![endif]-->";
-
-    require("../../../adm_config/header.php");
-echo "</head>";
-
-require("../../../adm_config/body_top.php");
-    //Beginn des Inhaltes
-    echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-        <p>&nbsp;</p>
-        <form action=\"download_function.php?mode=1&amp;folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\" method=\"post\" enctype=\"multipart/form-data\">
-            <div class=\"formHead\">Datei hochladen</div>
-            <div class=\"formBody\">
-                <div style=\"text-align: center; width: 100%;\">Datei in den Ordner <b>";
-                    if(strlen($folder) == 0)
-                    {
-                        if(strlen($default_folder) == 0)
-                        {
-                            echo "Download";
-                        }
-                        else
-                        {
-                            echo ucfirst($default_folder);
-                        }
-                    }
-                    else
-                    {
-                        echo ucfirst($folder);
-                    }
-                    echo "</b> hochladen
-                </div>
-                <div style=\"margin-top: 15px;\">
-                    <div style=\"text-align: right; width: 30%; float: left;\">Datei ausw&auml;hlen:</div>
-                    <div style=\"text-align: left; margin-left: 32%;\">
-                        <input id=\"userfile\" name=\"userfile\" size=\"30\" type=\"file\">
-                        <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
-                    </div>
-                </div>
-                <div style=\"margin-top: 10px;\">
-                    <div style=\"text-align: right; width: 30%; float: left;\">Neuer Dateiname:</div>
-                    <div style=\"text-align: left; margin-left: 32%;\">
-                        <input type=\"text\" id=\"new_name\" name=\"new_name\" size=\"25\" tabindex=\"1\" value=\"". $form_values['new_name']. "\">
-                        &nbsp;(optional)&nbsp;<img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=dateiname','Message','width=400,height=350,left=310,top=200,scrollbars=yes')\">
-                    </div>
-                </div>
-
-                <hr style=\"margin-top: 10px; margin-bottom: 10px;\" width=\"85%\" />
-
-                <div style=\"margin-top: 6px;\">
-                    <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
-                    <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
-                    &nbsp;Zur&uuml;ck</button>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <button name=\"hochladen\" type=\"submit\" value=\"hochladen\" tabindex=\"2\">
-                    <img src=\"$g_root_path/adm_program/images/page_white_get.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hochladen\">
-                    &nbsp;Hochladen</button>
-                </div>
+// Html des Modules ausgeben
+echo "<br>
+<form action=\"download_function.php?mode=1&amp;folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\" method=\"post\" enctype=\"multipart/form-data\">
+    <div class=\"formHead\">Datei hochladen</div>
+    <div class=\"formBody\">
+        <div style=\"text-align: center; width: 100%;\">Datei in den Ordner <b>";
+            if(strlen($folder) == 0)
+            {
+                if(strlen($default_folder) == 0)
+                {
+                    echo "Download";
+                }
+                else
+                {
+                    echo ucfirst($default_folder);
+                }
+            }
+            else
+            {
+                echo ucfirst($folder);
+            }
+            echo "</b> hochladen
+        </div>
+        <div style=\"margin-top: 15px;\">
+            <div style=\"text-align: right; width: 30%; float: left;\">Datei ausw&auml;hlen:</div>
+            <div style=\"text-align: left; margin-left: 32%;\">
+                <input id=\"userfile\" name=\"userfile\" size=\"30\" type=\"file\">
+                <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
             </div>
-        </form>
+        </div>
+        <div style=\"margin-top: 10px;\">
+            <div style=\"text-align: right; width: 30%; float: left;\">Neuer Dateiname:</div>
+            <div style=\"text-align: left; margin-left: 32%;\">
+                <input type=\"text\" id=\"new_name\" name=\"new_name\" size=\"25\" tabindex=\"1\" value=\"". $form_values['new_name']. "\">
+                &nbsp;(optional)&nbsp;<img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=dateiname','Message','width=400,height=350,left=310,top=200,scrollbars=yes')\">
+            </div>
+        </div>
+
+        <hr class=\"formLine\" style=\"margin-top: 10px; margin-bottom: 10px;\" width=\"85%\" />
+
+        <div style=\"margin-top: 6px;\">
+            <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
+            <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
+            &nbsp;Zur&uuml;ck</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button name=\"hochladen\" type=\"submit\" value=\"hochladen\" tabindex=\"2\">
+            <img src=\"$g_root_path/adm_program/images/page_white_get.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hochladen\">
+            &nbsp;Hochladen</button>
+        </div>
     </div>
-    <script type=\"text/javascript\"><!--
-        document.getElementById('userfile').focus();
-    --></script>";
-    require("../../../adm_config/body_bottom.php");
-echo "</body>
-</html>";
+</form>
+
+<script type=\"text/javascript\"><!--
+    document.getElementById('userfile').focus();
+--></script>";
+    
+require(SERVER_PATH. "/adm_program/layout/overall_footer.php"); 
+
 ?>

@@ -196,343 +196,332 @@ db_error($result,__FILE__,__LINE__);
 $row = mysql_fetch_array($result);
 $count_mem_rol = $row[0];
 
-echo "
-<!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org -->\n
-<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
-<html>
-<head>
-    <title>$g_current_organization->longname - Benutzerverwaltung</title>
-    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
-    <link rel=\"stylesheet\" type=\"text/css\" href=\"autosuggest.css\">
-
-    <style type=\"text/css\">
+// Html-Kopf ausgeben
+$g_layout['title']  = "Benutzerverwaltung";
+$g_layout['header'] = '
+    <link rel="stylesheet" type="text/css" href="autosuggest.css">
+    <script type="text/javascript" src="../../libs/bsn.autosuggest/bsn.Ajax.js"></script>
+    <script type="text/javascript" src="../../libs/bsn.autosuggest/bsn.DOM.js"></script>
+    <script type="text/javascript" src="../../libs/bsn.autosuggest/bsn.AutoSuggest.js"></script>
+    
+    <style type="text/css">
         /* Safari braucht im Body position: relative damit das SuggestFeld unter und nicht auf der Suchbox liegt*/
         body {
             position: relative;
         }
-    </style>
+    </style>';
 
-    <script type=\"text/javascript\" src=\"../../libs/bsn.autosuggest/bsn.Ajax.js\"></script>
-    <script type=\"text/javascript\" src=\"../../libs/bsn.autosuggest/bsn.DOM.js\"></script>
-    <script type=\"text/javascript\" src=\"../../libs/bsn.autosuggest/bsn.AutoSuggest.js\"></script>
+require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
-    <!--[if lt IE 7]>
-    <script language=\"JavaScript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
-    <![endif]-->";
+// Html des Modules ausgeben
+echo "
+<h1 class=\"moduleHeadline\">Benutzerverwaltung</h1>";
 
-    require("../../../adm_config/header.php");
-echo "</head>";
+echo "<p>
+    <span class=\"iconLink\">
+        <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?new_user=1\"><img
+        class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Benutzer anlegen\"></a>
+        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_new.php?new_user=1\">Benutzer anlegen</a>
+    </span>
+    &nbsp;&nbsp;&nbsp;&nbsp;";
 
-require("../../../adm_config/body_top.php");
-    echo "<div align=\"center\">
-        <h1>Benutzerverwaltung</h1>";
-
-        echo "<p>
-            <span class=\"iconLink\">
-                <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?new_user=1\"><img
-                class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Benutzer anlegen\"></a>
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_new.php?new_user=1\">Benutzer anlegen</a>
-            </span>
-            &nbsp;&nbsp;&nbsp;&nbsp;";
-
-            if($count_mem_rol != mysql_num_rows($result_mgl) || $req_members == false)
-            {
-                // Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
-                if($req_members == 1)
-                {
-                    $link_text = "Alle Benutzer anzeigen";
-                    $link_icon = "group.png";
-                    $link_members = 0;
-                }
-                else
-                {
-                    $link_text = "Nur Mitglieder anzeigen";
-                    $link_icon = "user.png";
-                    $link_members = 1;
-                }
-                echo "<span class=\"iconLink\">
-                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members.php?members=$link_members&letter=$req_letter&queryForm=$req_queryForm\"><img
-                     class=\"iconLink\" src=\"$g_root_path/adm_program/images/$link_icon\" style=\"vertical-align: middle;\" border=\"0\" alt=\"$link_text\"></a>
-                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members.php?members=$link_members&letter=$req_letter&queryForm=$req_queryForm\">$link_text</a>
-                </span>
-                &nbsp;&nbsp;&nbsp;&nbsp;";
-            }
-            echo "
-            <span class=\"iconLink\">
-                <a href=\"import.php\"><img
-                class=\"iconLink\" src=\"$g_root_path/adm_program/images/database_in.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Benutzer importieren\"></a>
-                <a class=\"iconLink\" href=\"import.php\">Benutzer importieren</a>
-            </span>
-        </p>";
-
-        if($req_members)
+    if($count_mem_rol != mysql_num_rows($result_mgl) || $req_members == false)
+    {
+        // Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
+        if($req_members == 1)
         {
-            echo "<p>Alle Mitglieder ";
+            $link_text = "Alle Benutzer anzeigen";
+            $link_icon = "group.png";
+            $link_members = 0;
         }
         else
         {
-            echo "<p>Alle Benutzer (Mitglieder, Ehemalige) ";
+            $link_text = "Nur Mitglieder anzeigen";
+            $link_icon = "user.png";
+            $link_members = 1;
         }
+        echo "<span class=\"iconLink\">
+            <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members.php?members=$link_members&letter=$req_letter&queryForm=$req_queryForm\"><img
+             class=\"iconLink\" src=\"$g_root_path/adm_program/images/$link_icon\" style=\"vertical-align: middle;\" border=\"0\" alt=\"$link_text\"></a>
+            <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members.php?members=$link_members&letter=$req_letter&queryForm=$req_queryForm\">$link_text</a>
+        </span>
+        &nbsp;&nbsp;&nbsp;&nbsp;";
+    }
+    echo "
+    <span class=\"iconLink\">
+        <a href=\"import.php\"><img
+        class=\"iconLink\" src=\"$g_root_path/adm_program/images/database_in.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Benutzer importieren\"></a>
+        <a class=\"iconLink\" href=\"import.php\">Benutzer importieren</a>
+    </span>
+</p>";
 
-        if(strlen($req_letter) > 0)
+if($req_members)
+{
+    echo "<p>Alle Mitglieder ";
+}
+else
+{
+    echo "<p>Alle Benutzer (Mitglieder, Ehemalige) ";
+}
+
+if(strlen($req_letter) > 0)
+{
+    echo " mit Nachnamen $req_letter*";
+}
+echo " werden angezeigt</p>";
+
+//Hier gibt es jetzt noch die Suchbox...
+echo "
+<div style=\"width: 300px;\">
+    <form action=\"members.php?members=$req_members\" method=\"post\">
+        <input type=\"text\" value=\"$req_queryForm\" name=\"queryForm\" id=\"queryForm\" autocomplete=\"off\" style=\"width: 200px;\"  />
+        <input type=\"submit\" value=\"Suchen\" />
+    </form>
+</div>
+
+<script type=\"text/javascript\">
+    var options = {
+                script:\"query_suggestions.php?members=$req_members&\",
+                varname:\"query\",
+                minchars:1,
+                timeout:5000
+    };
+    var as = new AutoSuggest('queryForm', options);
+</script>
+";
+
+echo "<p>";
+
+    // Leiste mit allen Buchstaben des Alphabets anzeigen
+
+    if (strlen($req_letter) == 0 && !$req_queryForm)
+    {
+        echo "<b>Alle</b>&nbsp;&nbsp;&nbsp;";
+    }
+    else
+    {
+        echo "<a href=\"members.php?members=$req_members\">Alle</a>&nbsp;&nbsp;&nbsp;";
+    }
+
+    // Alle Anfangsbuchstaben der Nachnamen ermitteln, die bisher in der DB gespeichert sind
+    if($req_members == 1)
+    {
+        $sql    = "SELECT DISTINCT UPPER(SUBSTRING(usr_last_name, 1, 1)) 
+                     FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
+                    WHERE rol_org_shortname = '$g_organization'
+                      AND rol_valid  = 1
+                      AND mem_rol_id = rol_id
+                      AND mem_usr_id = usr_id
+                      AND mem_valid  = 1
+                      AND usr_valid  = 1 
+                    ORDER BY usr_last_name ";
+    }
+    else
+    {
+        $sql    = "SELECT DISTINCT UPPER(SUBSTRING(usr_last_name, 1, 1))  
+                     FROM ". TBL_USERS. "
+                    WHERE usr_valid  = 1 
+                    ORDER BY usr_last_name ";
+    }
+    $result = mysql_query($sql, $g_adm_con);
+    db_error($result,__FILE__,__LINE__);
+
+    $letter_row = mysql_fetch_array($result);
+    $letter_menu = "A";
+
+    // kleine Vorschleife die alle Sonderzeichen (Zahlen) vor dem A durchgeht 
+    // (diese werden nicht im Buchstabenmenue angezeigt)
+    while(ord($letter_row[0]) < ord("A"))
+    {
+        $letter_row = mysql_fetch_array($result);
+    }
+
+    // Nun alle Buchstaben mit evtl. vorhandenen Links im Buchstabenmenue anzeigen
+    for($i = 0; $i < 26;$i++)
+    {
+        // pruefen, ob es Mitglieder zum Buchstaben gibt, unter Beruecksichtigung deutscher Sonderzeichen
+        if( $letter_menu == $letter_row[0]
+        || ($letter_menu == "A" && utf8_encode($letter_row[0]) == "Ä")
+        || ($letter_menu == "O" && utf8_encode($letter_row[0]) == "Ö")
+        || ($letter_menu == "U" && utf8_encode($letter_row[0]) == "Ü") )
         {
-            echo " mit Nachnamen $req_letter*";
+            $letter_found = true;
         }
-        echo " werden angezeigt</p>";
+        else
+        {
+            $letter_found = false;
+        }
 
-        //Hier gibt es jetzt noch die Suchbox...
-        echo "
-        <div style=\"width: 300px;\">
-            <form action=\"members.php?members=$req_members\" method=\"post\">
-                <input type=\"text\" value=\"$req_queryForm\" name=\"queryForm\" id=\"queryForm\" autocomplete=\"off\" style=\"width: 200px;\"  />
-                <input type=\"submit\" value=\"Suchen\" />
-            </form>
-        </div>
+        if($letter_menu == substr($req_letter, 0, 1))
+        {
+            echo "<b>$letter_menu</b>";
+        }
+        elseif($letter_found == true)
+        {
+            echo "<a href=\"members.php?members=$req_members&letter=$letter_menu\">$letter_menu</a>";
+        }
+        else
+        {
+            echo $letter_menu;
+        }
 
-        <script type=\"text/javascript\">
-            var options = {
-                        script:\"query_suggestions.php?members=$req_members&\",
-                        varname:\"query\",
-                        minchars:1,
-                        timeout:5000
-            };
-            var as = new AutoSuggest('queryForm', options);
-        </script>
-        ";
+        echo "&nbsp;&nbsp;";
 
-        echo "<p>";
-
-            // Leiste mit allen Buchstaben des Alphabets anzeigen
-
-            if (strlen($req_letter) == 0 && !$req_queryForm)
-            {
-                echo "<b>Alle</b>&nbsp;&nbsp;&nbsp;";
-            }
-            else
-            {
-                echo "<a href=\"members.php?members=$req_members\">Alle</a>&nbsp;&nbsp;&nbsp;";
-            }
-
-            // Alle Anfangsbuchstaben der Nachnamen ermitteln, die bisher in der DB gespeichert sind
-            if($req_members == 1)
-            {
-                $sql    = "SELECT DISTINCT UPPER(SUBSTRING(usr_last_name, 1, 1)) 
-                             FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
-                            WHERE rol_org_shortname = '$g_organization'
-                              AND rol_valid  = 1
-                              AND mem_rol_id = rol_id
-                              AND mem_usr_id = usr_id
-                              AND mem_valid  = 1
-                              AND usr_valid  = 1 
-                            ORDER BY usr_last_name ";
-            }
-            else
-            {
-                $sql    = "SELECT DISTINCT UPPER(SUBSTRING(usr_last_name, 1, 1))  
-                             FROM ". TBL_USERS. "
-                            WHERE usr_valid  = 1 
-                            ORDER BY usr_last_name ";
-            }
-            $result = mysql_query($sql, $g_adm_con);
-            db_error($result,__FILE__,__LINE__);
-            
+        // naechsten Buchstaben anwaehlen
+        if($letter_found == true)
+        {
             $letter_row = mysql_fetch_array($result);
-            $letter_menu = "A";
-            
-            // kleine Vorschleife die alle Sonderzeichen (Zahlen) vor dem A durchgeht 
-            // (diese werden nicht im Buchstabenmenue angezeigt)
-            while(ord($letter_row[0]) < ord("A"))
-            {
-                $letter_row = mysql_fetch_array($result);
-            }
-            
-            // Nun alle Buchstaben mit evtl. vorhandenen Links im Buchstabenmenue anzeigen
-            for($i = 0; $i < 26;$i++)
-            {
-                // pruefen, ob es Mitglieder zum Buchstaben gibt, unter Beruecksichtigung deutscher Sonderzeichen
-                if( $letter_menu == $letter_row[0]
-                || ($letter_menu == "A" && utf8_encode($letter_row[0]) == "Ä")
-                || ($letter_menu == "O" && utf8_encode($letter_row[0]) == "Ö")
-                || ($letter_menu == "U" && utf8_encode($letter_row[0]) == "Ü") )
-                {
-                    $letter_found = true;
-                }
-                else
-                {
-                    $letter_found = false;
-                }
-            
-                if($letter_menu == substr($req_letter, 0, 1))
-                {
-                    echo "<b>$letter_menu</b>";
-                }
-                elseif($letter_found == true)
-                {
-                    echo "<a href=\"members.php?members=$req_members&letter=$letter_menu\">$letter_menu</a>";
-                }
-                else
-                {
-                    echo $letter_menu;
-                }
+        }
+        $letter_menu = strNextLetter($letter_menu);
+    }
+echo "</p>";
 
-                echo "&nbsp;&nbsp;";
-                
-                // naechsten Buchstaben anwaehlen
-                if($letter_found == true)
-                {
-                    $letter_row = mysql_fetch_array($result);
-                }
-                $letter_menu = strNextLetter($letter_menu);
-            }
-        echo "</p>";
+if($num_members > 0)
+{
+    echo "<table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\">
+        <tr>
+            <th class=\"tableHeader\" align=\"right\">Nr.</th>
+            <th class=\"tableHeader\" align=\"center\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/user.png\" alt=\"Mitglied bei $g_current_organization->longname\" title=\"Mitglied bei $g_current_organization->longname\" border=\"0\"></th>
+            <th class=\"tableHeader\" align=\"left\">&nbsp;Name</th>
+            <th class=\"tableHeader\" align=\"center\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/mail.png\" alt=\"E-Mail\" title=\"E-Mail\"></th>
+            <th class=\"tableHeader\" align=\"center\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/globe.png\" alt=\"Homepage\" title=\"Homepage\"></th>
+            <th class=\"tableHeader\" align=\"left\">&nbsp;Benutzer</th>
+            <th class=\"tableHeader\" align=\"center\">&nbsp;Aktualisiert am</th>
+            <th class=\"tableHeader\" align=\"center\">Bearbeiten</th>
+        </tr>";
+        $i = 0;
 
-        if($num_members > 0)
+        // jetzt erst einmal zu dem ersten relevanten Datensatz springen
+        if(!mysql_data_seek($result_mgl, $req_start))
         {
-            echo "<table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\">
-                <tr>
-                    <th class=\"tableHeader\" align=\"right\">Nr.</th>
-                    <th class=\"tableHeader\" align=\"center\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/user.png\" alt=\"Mitglied bei $g_current_organization->longname\" title=\"Mitglied bei $g_current_organization->longname\" border=\"0\"></th>
-                    <th class=\"tableHeader\" align=\"left\">&nbsp;Name</th>
-                    <th class=\"tableHeader\" align=\"center\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/mail.png\" alt=\"E-Mail\" title=\"E-Mail\"></th>
-                    <th class=\"tableHeader\" align=\"center\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/globe.png\" alt=\"Homepage\" title=\"Homepage\"></th>
-                    <th class=\"tableHeader\" align=\"left\">&nbsp;Benutzer</th>
-                    <th class=\"tableHeader\" align=\"center\">&nbsp;Aktualisiert am</th>
-                    <th class=\"tableHeader\" align=\"center\">Bearbeiten</th>
+            $g_message->show("invalid");
+        }
+
+        for($i = 0; $i < $members_per_page && $i + $req_start < $num_members; $i++)
+        {
+            if($row = mysql_fetch_object($result_mgl))
+            {
+                echo "
+                <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
+                    <td align=\"right\">". ($req_start + $i + 1). "&nbsp;</td>
+                    <td align=\"center\">";
+                        if($row->member > 0)
+                        {
+                            echo "<a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->usr_id\"><img
+                                src=\"$g_root_path/adm_program/images/user.png\" alt=\"Mitglied bei $g_current_organization->longname\"
+                                title=\"Mitglied bei $g_current_organization->longname\" border=\"0\"></a>";
+                        }
+                        else
+                        {
+                            echo "&nbsp;";
+                        }
+                    echo "</td>
+                    <td align=\"left\">&nbsp;<a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->usr_id\">$row->usr_last_name,&nbsp;$row->usr_first_name</a></td>
+                    <td align=\"center\">";
+                        if(strlen($row->usr_email) > 0)
+                        {
+                            if($g_preferences['enable_mail_module'] != 1)
+                            {
+                                $mail_link = "mailto:$row->usr_email";
+                            }
+                            else
+                            {
+                                $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?usr_id=$row->usr_id";
+                            }
+                            echo "<a href=\"$mail_link\"><img src=\"$g_root_path/adm_program/images/mail.png\"
+                                alt=\"E-Mail an $row->usr_email schreiben\" title=\"E-Mail an $row->usr_email schreiben\" border=\"0\"></a>";
+                        }
+                    echo "</td>
+                    <td align=\"center\">";
+                        if(strlen($row->usr_homepage) > 0)
+                        {
+                            $row->usr_homepage = stripslashes($row->usr_homepage);
+                            if(substr_count(strtolower($row->usr_homepage), "http://") == 0)
+                            {
+                                $row->usr_homepage = "http://". $row->usr_homepage;
+                            }
+                            echo "<a href=\"$row->usr_homepage\" target=\"_blank\"><img
+                                src=\"$g_root_path/adm_program/images/globe.png\" alt=\"Homepage\" title=\"Homepage\" border=\"0\"></a>";
+                        }
+                    echo "</td>
+                    <td align=\"left\">&nbsp;$row->usr_login_name</td>
+                    <td align=\"center\">&nbsp;". mysqldatetime("d.m.y h:i" , $row->usr_last_change). "</td>
+                    <td align=\"center\">";
+                        // pruefen, ob der User noch in anderen Organisationen aktiv ist
+                        $sql    = "SELECT *
+                                     FROM ". TBL_ROLES. ", ". TBL_MEMBERS. "
+                                    WHERE rol_org_shortname <> '$g_organization'
+                                      AND rol_valid          = 1
+                                      AND mem_rol_id         = rol_id
+                                      AND mem_valid          = 1
+                                      AND mem_usr_id         = $row->usr_id ";
+                        $result      = mysql_query($sql, $g_adm_con);
+                        db_error($result,__FILE__,__LINE__);
+                        $b_other_orga = false;
+
+                        if(mysql_num_rows($result) > 0)
+                        {
+                            $b_other_orga = true;
+                        }
+
+                        // Link um E-Mail mit neuem Passwort zu zuschicken
+                        // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
+                        if($row->member > 0
+                        && $g_current_user->isWebmaster()
+                        && strlen($row->usr_login_name) > 0
+                        && strlen($row->usr_email) > 0
+                        && $g_preferences['enable_system_mails'] == 1)
+                        {
+                            echo "<a href=\"$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->usr_id&mode=5\"><img
+                                src=\"$g_root_path/adm_program/images/key.png\" border=\"0\" alt=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\"
+                                title=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\"></a>&nbsp;";
+                        }
+                        else
+                        {
+                            echo "<img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">&nbsp;";
+                        }
+
+                        // Link um User zu editieren
+                        // es duerfen keine Nicht-Mitglieder editiert werden, die Mitglied in einer anderen Orga sind
+                        if($row->member > 0 || $b_other_orga == false)
+                        {
+                            echo "<a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$row->usr_id\"><img
+                                src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Benutzerdaten bearbeiten\" title=\"Benutzerdaten bearbeiten\"></a>&nbsp;";
+                        }
+                        else
+                        {
+                            echo "<img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">";
+                        }
+
+
+                        // wenn der User nicht mehr Mitglied der aktuellen Orga, aber noch Mitglied einer anderen Orga ist,
+                        // dann darf er nicht aus der DB geloescht werden
+                        if(($b_other_orga == false || $row->member > 0)
+                        && $row->usr_id != $g_current_user->id)
+                        {
+                            echo "<a href=\"$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->usr_id&mode=6\"><img
+                                src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Benutzer entfernen\" title=\"Benutzer entfernen\"></a>";
+                        }
+                        else
+                        {
+                            echo "<img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">";
+                        }
+                    echo "</td>
                 </tr>";
-                $i = 0;
-                
-                // jetzt erst einmal zu dem ersten relevanten Datensatz springen
-                if(!mysql_data_seek($result_mgl, $req_start))
-                {
-                    $g_message->show("invalid");
-                }
-
-                for($i = 0; $i < $members_per_page && $i + $req_start < $num_members; $i++)
-                {
-                    if($row = mysql_fetch_object($result_mgl))
-                    {
-                        echo "
-                        <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
-                            <td align=\"right\">". ($req_start + $i + 1). "&nbsp;</td>
-                            <td align=\"center\">";
-                                if($row->member > 0)
-                                {
-                                    echo "<a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->usr_id\"><img
-                                        src=\"$g_root_path/adm_program/images/user.png\" alt=\"Mitglied bei $g_current_organization->longname\"
-                                        title=\"Mitglied bei $g_current_organization->longname\" border=\"0\"></a>";
-                                }
-                                else
-                                {
-                                    echo "&nbsp;";
-                                }
-                            echo "</td>
-                            <td align=\"left\">&nbsp;<a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->usr_id\">$row->usr_last_name,&nbsp;$row->usr_first_name</a></td>
-                            <td align=\"center\">";
-                                if(strlen($row->usr_email) > 0)
-                                {
-                                    if($g_preferences['enable_mail_module'] != 1)
-                                    {
-                                        $mail_link = "mailto:$row->usr_email";
-                                    }
-                                    else
-                                    {
-                                        $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?usr_id=$row->usr_id";
-                                    }
-                                    echo "<a href=\"$mail_link\"><img src=\"$g_root_path/adm_program/images/mail.png\"
-                                        alt=\"E-Mail an $row->usr_email schreiben\" title=\"E-Mail an $row->usr_email schreiben\" border=\"0\"></a>";
-                                }
-                            echo "</td>
-                            <td align=\"center\">";
-                                if(strlen($row->usr_homepage) > 0)
-                                {
-                                    $row->usr_homepage = stripslashes($row->usr_homepage);
-                                    if(substr_count(strtolower($row->usr_homepage), "http://") == 0)
-                                    {
-                                        $row->usr_homepage = "http://". $row->usr_homepage;
-                                    }
-                                    echo "<a href=\"$row->usr_homepage\" target=\"_blank\"><img
-                                        src=\"$g_root_path/adm_program/images/globe.png\" alt=\"Homepage\" title=\"Homepage\" border=\"0\"></a>";
-                                }
-                            echo "</td>
-                            <td align=\"left\">&nbsp;$row->usr_login_name</td>
-                            <td align=\"center\">&nbsp;". mysqldatetime("d.m.y h:i" , $row->usr_last_change). "</td>
-                            <td align=\"center\">";
-                                // pruefen, ob der User noch in anderen Organisationen aktiv ist
-                                $sql    = "SELECT *
-                                             FROM ". TBL_ROLES. ", ". TBL_MEMBERS. "
-                                            WHERE rol_org_shortname <> '$g_organization'
-                                              AND rol_valid          = 1
-                                              AND mem_rol_id         = rol_id
-                                              AND mem_valid          = 1
-                                              AND mem_usr_id         = $row->usr_id ";
-                                $result      = mysql_query($sql, $g_adm_con);
-                                db_error($result,__FILE__,__LINE__);
-                                $b_other_orga = false;
-                                
-                                if(mysql_num_rows($result) > 0)
-                                {
-                                    $b_other_orga = true;
-                                }
-                                                                
-                                // Link um E-Mail mit neuem Passwort zu zuschicken
-                                // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
-                                if($row->member > 0
-                                && $g_current_user->isWebmaster()
-                                && strlen($row->usr_login_name) > 0
-                                && strlen($row->usr_email) > 0
-                                && $g_preferences['enable_system_mails'] == 1)
-                                {
-                                    echo "<a href=\"$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->usr_id&mode=5\"><img
-                                        src=\"$g_root_path/adm_program/images/key.png\" border=\"0\" alt=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\"
-                                        title=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\"></a>&nbsp;";
-                                }
-                                else
-                                {
-                                    echo "<img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">&nbsp;";
-                                }
-
-                                // Link um User zu editieren
-                                // es duerfen keine Nicht-Mitglieder editiert werden, die Mitglied in einer anderen Orga sind
-                                if($row->member > 0 || $b_other_orga == false)
-                                {
-                                    echo "<a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$row->usr_id\"><img
-                                        src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Benutzerdaten bearbeiten\" title=\"Benutzerdaten bearbeiten\"></a>&nbsp;";
-                                }
-                                else
-                                {
-                                    echo "<img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">";
-                                }
-
-
-                                // wenn der User nicht mehr Mitglied der aktuellen Orga, aber noch Mitglied einer anderen Orga ist,
-                                // dann darf er nicht aus der DB geloescht werden
-                                if(($b_other_orga == false || $row->member > 0)
-                                && $row->usr_id != $g_current_user->id)
-                                {
-                                    echo "<a href=\"$g_root_path/adm_program/administration/members/members_function.php?user_id=$row->usr_id&mode=6\"><img
-                                        src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Benutzer entfernen\" title=\"Benutzer entfernen\"></a>";
-                                }
-                                else
-                                {
-                                    echo "<img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">";
-                                }
-                            echo "</td>
-                        </tr>";
-                    }
-                }
-            echo "</table>";
-            
-            // Navigation mit Vor- und Zurueck-Buttons
-            $base_url = "$g_root_path/adm_program/administration/members/members.php?letter=$req_letter&members=$req_members&queryForm=$req_queryForm";
-            echo generatePagination($base_url, $num_members, $members_per_page, $req_start, TRUE);
-
+            }
         }
-        else
-        {
-            echo "<p>Es wurde keine Daten gefunden !</p><br />";
-        }
-    echo "</div>";
-    require("../../../adm_config/body_bottom.php");
-echo "</body>
-</html>";
+    echo "</table>";
+
+    // Navigation mit Vor- und Zurueck-Buttons
+    $base_url = "$g_root_path/adm_program/administration/members/members.php?letter=$req_letter&members=$req_members&queryForm=$req_queryForm";
+    echo generatePagination($base_url, $num_members, $members_per_page, $req_start, TRUE);
+
+}
+else
+{
+    echo "<p>Es wurde keine Daten gefunden !</p><br />";
+}
+        
+require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+
 ?>

@@ -60,101 +60,84 @@ if($ini!=1)
 $_SESSION['navigation']->addUrl($g_current_url);
 
 //bei Seitenaufruf mit Moderationsrechten
-if($g_session_valid & editPhoto())
+if(!editPhoto())
 {
-    //Uebernahme Variablen
-    $pho_id= $_GET['pho_id'];
+    $g_message->show("norights");
+}
 
-    //erfassen der Veranstaltung
-    $sql = "    SELECT *
-                FROM ". TBL_PHOTOS. "
-                WHERE pho_id ={0}";
-    $sql    = prepareSQL($sql, array($pho_id));
+//Uebernahme Variablen
+$pho_id= $_GET['pho_id'];
+
+//erfassen der Veranstaltung
+$sql = "    SELECT *
+            FROM ". TBL_PHOTOS. "
+            WHERE pho_id ={0}";
+$sql    = prepareSQL($sql, array($pho_id));
+$result = mysql_query($sql, $g_adm_con);
+db_error($result,__FILE__,__LINE__);
+$adm_photo = mysql_fetch_array($result);
+
+//Ordnerpfad
+$ordner = "../../../adm_my_files/photos/".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"];
+
+//Erfassen der Eltern Veranstaltung
+if($adm_photo["pho_pho_id_parent"]!=NULL)
+{
+    $pho_parent_id=$adm_photo["pho_pho_id_parent"];
+    $sql="  SELECT *
+            FROM ". TBL_PHOTOS. "
+            WHERE pho_id ='$pho_parent_id'";
     $result = mysql_query($sql, $g_adm_con);
     db_error($result,__FILE__,__LINE__);
-    $adm_photo = mysql_fetch_array($result);
-
-    //Ordnerpfad
-    $ordner = "../../../adm_my_files/photos/".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"];
-
-    //Erfassen der Eltern Veranstaltung
-    if($adm_photo["pho_pho_id_parent"]!=NULL)
-    {
-        $pho_parent_id=$adm_photo["pho_pho_id_parent"];
-        $sql="  SELECT *
-                FROM ". TBL_PHOTOS. "
-                WHERE pho_id ='$pho_parent_id'";
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result,__FILE__,__LINE__);
-        $adm_photo_parent = mysql_fetch_array($result);
-    }
-    else $adm_photo_parent = NULL;
+    $adm_photo_parent = mysql_fetch_array($result);
+}
+else $adm_photo_parent = NULL;
 
 
-    //Beginn HTML
-   echo "
-   <!-- (c) 2004 - 2005 The Admidio Team - http://www.admidio.org -->\n
-   <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
-   <html>
-        <head>
-            <title>$g_current_organization->longname - Fotos hochladen</title>
-            <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
+// Html-Kopf ausgeben
+$g_layout['title'] = "Fotos hochladen";
+require(SERVER_PATH. "/adm_program/layout/overall_header.php");    
 
-            <!--[if lt IE 7]>
-                <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
-            <![endif]-->";
+/**************************Formular********************************************************/
+echo"
+<form name=\"photoup\" method=\"post\" action=\"photoupload_do.php?pho_id=$pho_id\" enctype=\"multipart/form-data\">
+    <div style=\"width: 410px\" align=\"center\" class=\"formHead\">Bilder hochladen</div>
+    <div style=\"width: 410px\" align=\"center\" class=\"formBody\">
+        Bilder zu dieser Veranstaltung hinzuf&uuml;gen:<br>"
+        .$adm_photo["pho_name"]."<br>"
+        ."(Beginn: ". mysqldate("d.m.y", $adm_photo["pho_begin"]).")"
+        ."<hr class=\"formLine\" width=\"85%\" />
+        <p>Bild 1:<input type=\"file\" id=\"bilddatei1\" name=\"bilddatei[]\" value=\"durchsuchen\"></p>
+        <p>Bild 2:<input type=\"file\" name=\"bilddatei[]\" value=\"durchsuchen\"></p>
+        <p>Bild 3:<input type=\"file\" name=\"bilddatei[]\" value=\"durchsuchen\"></p>
+        <p>Bild 4:<input type=\"file\" name=\"bilddatei[]\" value=\"durchsuchen\"></p>
+        <p>Bild 5:<input type=\"file\" name=\"bilddatei[]\" value=\"durchsuchen\"></p>
 
-            require("../../../adm_config/header.php");
-        echo "
-        </head>";
+        <hr class=\"formLine\" width=\"85%\" />
+        Hilfe: <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_up_help','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\">
+        <hr class=\"formLine\" width=\"85%\" />
 
-        require("../../../adm_config/body_top.php");
-            echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">";
+        <div style=\"margin-top: 6px;\">
+            <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
+                <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
+                &nbsp;Zur&uuml;ck
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button name=\"upload\" type=\"submit\" value=\"speichern\">
+                <img src=\"$g_root_path/adm_program/images/page_white_get.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
+                &nbsp;Bilder hochladen
+            </button>
+        </div>
+   </div>
+</form>";
 
+//Seitenende
+echo"
+<script type=\"text/javascript\"><!--
+        document.getElementById('bilddatei1').focus();
+--></script>";
 
-            /**************************Formular********************************************************/
-            echo"
-            <form name=\"photoup\" method=\"post\" action=\"photoupload_do.php?pho_id=$pho_id\" enctype=\"multipart/form-data\">
-                <div style=\"width: 410px\" align=\"center\" class=\"formHead\">Bilder hochladen</div>
-                <div style=\"width: 410px\" align=\"center\" class=\"formBody\">
-                    Bilder zu dieser Veranstaltung hinzuf&uuml;gen:<br>"
-                    .$adm_photo["pho_name"]."<br>"
-                    ."(Beginn: ". mysqldate("d.m.y", $adm_photo["pho_begin"]).")"
-                    ."<hr width=\"85%\" />
-                    <p>Bild 1:<input type=\"file\" id=\"bilddatei1\" name=\"bilddatei[]\" value=\"durchsuchen\"></p>
-                    <p>Bild 2:<input type=\"file\" name=\"bilddatei[]\" value=\"durchsuchen\"></p>
-                    <p>Bild 3:<input type=\"file\" name=\"bilddatei[]\" value=\"durchsuchen\"></p>
-                    <p>Bild 4:<input type=\"file\" name=\"bilddatei[]\" value=\"durchsuchen\"></p>
-                    <p>Bild 5:<input type=\"file\" name=\"bilddatei[]\" value=\"durchsuchen\"></p>
+require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
 
-                    <hr width=\"85%\" />
-                    Hilfe: <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_up_help','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\">
-                    <hr width=\"85%\" />
-
-                    <div style=\"margin-top: 6px;\">
-                        <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
-                            <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
-                            &nbsp;Zur&uuml;ck
-                        </button>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <button name=\"upload\" type=\"submit\" value=\"speichern\">
-                            <img src=\"$g_root_path/adm_program/images/page_white_get.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
-                            &nbsp;Bilder hochladen
-                        </button>
-                    </div>
-               </div>
-            </form>";
-
-            //Seitenende
-            echo"
-            </div>
-            <script type=\"text/javascript\"><!--
-                    document.getElementById('bilddatei1').focus();
-            --></script>";
-
-            require("../../../adm_config/body_bottom.php");
-        echo"</body>
-    </html>";
-}//if Moderator
 ?>

@@ -1,9 +1,16 @@
+<?php
 /******************************************************************************
- * Fenstergroeße an Inhalt anpassen
+ * Html-Kopf der in allen Admidio-Dateien integriert wird
  *
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
- * Module-Owner : Jochen Erkens
+ * Module-Owner : Markus Fassbender
+ *
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!! W I C H T I G !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ * Diese Datei bitte NICHT anpassen, da diese bei jedem Update ueberschrieben
+ * werden sollte. Individuelle Anpassungen koennen in der header.php bzw. der 
+ * body_top.php im Ordner adm_config gemacht werden.
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  *
  ******************************************************************************
  *
@@ -22,19 +29,13 @@
  *
  *****************************************************************************/
  
+    echo "</div>";
+ 
+    if($g_layout['includes'])
+    {
+       require(SERVER_PATH. "/adm_config/body_bottom.php");
+    }
+ echo "</body>
+ </html>";
 
-function windowresize()
-{
-	if(document.all)
-	{
-		breite = self.document.body.scrollWidth;
-		hoehe  = self.document.body.scrollHeight+80;
-	}
-	
-	else
-	{
-		breite = self.document.body.offsetWidth;
-		hoehe  = self.document.body.offsetHeight+80;
-	}
-	window.resizeTo(breite,hoehe);
-}
+ ?>

@@ -108,123 +108,109 @@ else
     }
 }
 
+// Html-Kopf ausgeben
+$g_layout['title'] = $_GET["headline"];
+require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+
+// Html des Modules ausgeben
 echo "
-<!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org -->\n
-<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
-<html>
-<head>
-    <title>$g_current_organization->longname - ". $_GET["headline"]. "</title>
-    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
+<form action=\"links_function.php?lnk_id=". $_GET["lnk_id"]. "&amp;headline=". $_GET['headline']. "&amp;mode=";
+    if($_GET["lnk_id"] > 0)
+    {
+        echo "3";
+    }
+    else
+    {
+        echo "1";
+    }
+    echo "\" method=\"post\" name=\"LinkAnlegen\">
 
-    <!--[if lt IE 7]>
-    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
-    <![endif]-->";
+    <div class=\"formHead\">";
+        if($_GET["lnk_id"] > 0)
+        {
+            echo $_GET["headline"]. " &auml;ndern";
+        }
+        else
+        {
+            echo $_GET["headline"]. " anlegen";
+        }
+    echo "</div>
+    <div class=\"formBody\">
+        <div>
+            <div style=\"text-align: right; width: 25%; float: left;\">Linkname:</div>
+            <div style=\"text-align: left; margin-left: 27%;\">
+                <input type=\"text\" id=\"linkname\" name=\"linkname\" tabindex=\"1\" style=\"width: 350px;\" maxlength=\"250\" value=\"". htmlspecialchars($form_values['linkname'], ENT_QUOTES). "\">
+                <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
+            </div>
+        </div>
 
-    require("../../../adm_config/header.php");
-echo "</head>";
+        <div style=\"margin-top: 6px;\">
+            <div style=\"text-align: right; width: 25%; float: left;\">Linkadresse:</div>
+            <div style=\"text-align: left; margin-left: 27%;\">
+                <input type=\"text\" id=\"linkurl\" name=\"linkurl\" tabindex=\"2\" style=\"width: 350px;\" maxlength=\"250\" value=\"". htmlspecialchars($form_values['linkurl'], ENT_QUOTES). "\">
+                <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
+            </div>
+        </div>
 
-require("../../../adm_config/body_top.php");
-    echo "
-    <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-        <form action=\"links_function.php?lnk_id=". $_GET["lnk_id"]. "&amp;headline=". $_GET['headline']. "&amp;mode=";
-            if($_GET["lnk_id"] > 0)
-            {
-                echo "3";
-            }
-            else
-            {
-                echo "1";
-            }
-            echo "\" method=\"post\" name=\"LinkAnlegen\">
+        <div style=\"margin-top: 6px;\">
+            <div style=\"text-align: right; width: 25%; float: left;\">Kategorie:</div>
+            <div style=\"text-align: left; margin-left: 27%;\">
+                <select size=\"1\" name=\"category\" tabindex=\"3\">";
+                    $sql = "SELECT * FROM ". TBL_CATEGORIES. "
+                             WHERE cat_org_id = $g_current_organization->id
+                               AND cat_type   = 'LNK'
+                             ORDER BY cat_name ASC ";
+                    $result = mysql_query($sql, $g_adm_con);
+                    db_error($result,__FILE__,__LINE__);
 
-            <div class=\"formHead\">";
-                if($_GET["lnk_id"] > 0)
+                    while($row = mysql_fetch_object($result))
+                    {
+                        echo "<option value=\"$row->cat_id\"";
+                            if($form_values['category'] == $row->cat_id
+                            || ($form_values['category'] == 0 && $row->cat_name == 'Allgemein'))
+                                echo " selected ";
+                        echo ">$row->cat_name</option>";
+                    }
+                echo "</select>
+            </div>
+        </div>
+
+        <div style=\"margin-top: 6px;\">
+            <div style=\"text-align: right; width: 25%; float: left;\">Beschreibung:";
+                if($g_preferences['enable_bbcode'] == 1)
                 {
-                    echo $_GET["headline"]. " &auml;ndern";
-                }
-                else
-                {
-                    echo $_GET["headline"]. " anlegen";
+                  echo "<br><br>
+                  <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\" tabindex=\"7\">Text formatieren</a>";
                 }
             echo "</div>
-            <div class=\"formBody\">
-                <div>
-                    <div style=\"text-align: right; width: 25%; float: left;\">Linkname:</div>
-                    <div style=\"text-align: left; margin-left: 27%;\">
-                        <input type=\"text\" id=\"linkname\" name=\"linkname\" tabindex=\"1\" style=\"width: 350px;\" maxlength=\"250\" value=\"". htmlspecialchars($form_values['linkname'], ENT_QUOTES). "\">
-                        <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
-                    </div>
-                </div>
-
-                <div style=\"margin-top: 6px;\">
-                    <div style=\"text-align: right; width: 25%; float: left;\">Linkadresse:</div>
-                    <div style=\"text-align: left; margin-left: 27%;\">
-                        <input type=\"text\" id=\"linkurl\" name=\"linkurl\" tabindex=\"2\" style=\"width: 350px;\" maxlength=\"250\" value=\"". htmlspecialchars($form_values['linkurl'], ENT_QUOTES). "\">
-                        <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
-                    </div>
-                </div>
-                
-                <div style=\"margin-top: 6px;\">
-                    <div style=\"text-align: right; width: 25%; float: left;\">Kategorie:</div>
-                    <div style=\"text-align: left; margin-left: 27%;\">
-                        <select size=\"1\" name=\"category\" tabindex=\"3\">";
-                            $sql = "SELECT * FROM ". TBL_CATEGORIES. "
-                                     WHERE cat_org_id = $g_current_organization->id
-                                       AND cat_type   = 'LNK'
-                                     ORDER BY cat_name ASC ";
-                            $result = mysql_query($sql, $g_adm_con);
-                            db_error($result,__FILE__,__LINE__);
-
-                            while($row = mysql_fetch_object($result))
-                            {
-                                echo "<option value=\"$row->cat_id\"";
-                                    if($form_values['category'] == $row->cat_id
-                                    || ($form_values['category'] == 0 && $row->cat_name == 'Allgemein'))
-                                        echo " selected ";
-                                echo ">$row->cat_name</option>";
-                            }
-                        echo "</select>
-                    </div>
-                </div>
-
-                <div style=\"margin-top: 6px;\">
-                    <div style=\"text-align: right; width: 25%; float: left;\">Beschreibung:";
-                        if($g_preferences['enable_bbcode'] == 1)
-                        {
-                          echo "<br><br>
-                          <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\" tabindex=\"7\">Text formatieren</a>";
-                        }
-                    echo "</div>
-                    <div style=\"text-align: left; margin-left: 27%;\">
-                        <textarea  name=\"description\" tabindex=\"4\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". htmlspecialchars($form_values['description'], ENT_QUOTES). "</textarea>
-                        <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
-                    </div>
-                </div>";
+            <div style=\"text-align: left; margin-left: 27%;\">
+                <textarea  name=\"description\" tabindex=\"4\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". htmlspecialchars($form_values['description'], ENT_QUOTES). "</textarea>
+                <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
+            </div>
+        </div>";
 
 
-                echo "<hr width=\"85%\" />
+        echo "<hr class=\"formLine\" width=\"85%\" />
 
-                <div style=\"margin-top: 6px;\">
-                    <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\" tabindex=\"6\">
-                        <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\"
-                        width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
-                        &nbsp;Zur&uuml;ck</button>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <button name=\"speichern\" type=\"submit\" value=\"speichern\" tabindex=\"5\">
-                        <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\"
-                        width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
-                        &nbsp;Speichern</button>
-                </div>";
+        <div style=\"margin-top: 6px;\">
+            <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\" tabindex=\"6\">
+                <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\"
+                width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
+                &nbsp;Zur&uuml;ck</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button name=\"speichern\" type=\"submit\" value=\"speichern\" tabindex=\"5\">
+                <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\"
+                width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
+                &nbsp;Speichern</button>
+        </div>";
 
-            echo "</div>
-        </form>
-    </div>
+    echo "</div>
+</form>
 
-    <script type=\"text/javascript\"><!--
-        document.getElementById('linkname').focus();
-    --></script>";
+<script type=\"text/javascript\"><!--
+    document.getElementById('linkname').focus();
+--></script>";
 
-   require("../../../adm_config/body_bottom.php");
-echo "</body>
-</html>";
+require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+
 ?>

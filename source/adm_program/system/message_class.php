@@ -100,12 +100,10 @@ class Message
     function show($msg_key = "" , $msg_variable1 = "", $msg_headline = "")
     {
         // noetig, da dies bei den includes benoetigt wird
-        global $g_forum;
-        global $g_session_valid, $g_root_path;
+        global $g_forum, $g_layout;
+        global $g_session_valid, $g_root_path, $g_preferences;
         global $g_adm_db, $g_adm_srv, $g_adm_con;
         global $g_organization, $g_current_organization, $g_current_user;
-
-        // Und natürlich diese hier um den Forward richtig zu setzen
         global $g_current_url;
         
         // Uebergabevariablen auswerten
@@ -162,75 +160,61 @@ class Message
         
         if($this->inline == false)
         {
-            echo '
-            <!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org - Version: '. ADMIDIO_VERSION. ' -->
-            <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-            <html>
-            <head>
-                <title>'. $GLOBALS['g_current_organization']->longname. ' - Messagebox</title>
-                <link rel="stylesheet" type="text/css" href="'. $g_root_path. '/adm_config/main.css">
-        
-                <!--[if lt IE 7]>
-                <script language="JavaScript" src="'. $g_root_path. '/adm_program/system/correct_png.js"></script>
-                <![endif]-->';
-        
-                if ($this->timer > 0)
-                {
-                    echo '<script language="JavaScript1.2" type="text/javascript"><!--
-                           window.setTimeout("window.location.href=\''. $this->forward_url. '\'", '. $this->timer. ');
-                           //--></script>';
-                }
-        
-                require(SERVER_PATH. "/adm_config/header.php");
-            echo '</head>';
-            require(SERVER_PATH. "/adm_config/body_top.php");         
+            // Html-Kopf ausgeben
+            $g_layout['title']  = "Hinweis";
+            if ($this->timer > 0)
+            {
+                $g_layout['header'] = '<script language="JavaScript1.2" type="text/javascript"><!--
+                    window.setTimeout("window.location.href=\''. $this->forward_url. '\'", '. $this->timer. ');
+                    //--></script>';
+            }
+    
+            require(SERVER_PATH. "/adm_program/layout/overall_header.php");       
         }
         
         echo '
-        <div style="margin-top: 10px; margin-bottom: 10px;" align="center"><br /><br />
-            <div class="formHead" style="width: 350px">'. $this->headline. '</div>
-        
-            <div class="formBody" style="width: 350px">
-                <p>'. $this->content. '</p>
-                <p>';
-                    if(strlen($this->forward_url) > 0)
+        <br /><br />
+        <div class="formHead" style="width: 350px">'. $this->headline. '</div>
+
+        <div class="formBody" style="width: 350px">
+            <p>'. $this->content. '</p>
+            <p>';
+                if(strlen($this->forward_url) > 0)
+                {
+                    if($this->yes_no_buttons == true)
                     {
-                        if($this->yes_no_buttons == true)
-                        {
-                            echo '
-                            <button id="ja" type="button" value="ja" onclick="self.location.href=\''. $this->forward_url. '\'">
-                                <img src="'. $g_root_path. '/adm_program/images/ok.png" style="vertical-align: middle;" align="top" vspace="1" width="16" height="16" border="0" alt="Ja">
-                                &nbsp;&nbsp;Ja&nbsp;&nbsp;&nbsp;
-                            </button>
-                            &nbsp;&nbsp;&nbsp;&nbsp;
-                            <button id="nein" type="button" value="nein" onclick="history.back()">
-                                <img src="'. $g_root_path. '/adm_program/images/error.png" style="vertical-align: middle;" align="top" vspace="1" width="16" height="16" border="0" alt="Nein">
-                                &nbsp;Nein
-                            </button>';
-                        }
-                        else
-                        {
-                            // Wenn weitergeleitet wird, dann auch immer einen Weiter-Button anzeigen
-                            echo '<button id="weiter" type="button" value="weiter" onclick="window.location.href=\''. $this->forward_url. '\'">
-                            <img src="'. $g_root_path. '/adm_program/images/forward.png" style="vertical-align: middle;" align="top" vspace="1" width="16" height="16" border="0" alt="Weiter">
-                            &nbsp;Weiter</button>';
-                        }
+                        echo '
+                        <button id="ja" type="button" value="ja" onclick="self.location.href=\''. $this->forward_url. '\'">
+                            <img src="'. $g_root_path. '/adm_program/images/ok.png" style="vertical-align: middle;" align="top" vspace="1" width="16" height="16" border="0" alt="Ja">
+                            &nbsp;&nbsp;Ja&nbsp;&nbsp;&nbsp;
+                        </button>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <button id="nein" type="button" value="nein" onclick="history.back()">
+                            <img src="'. $g_root_path. '/adm_program/images/error.png" style="vertical-align: middle;" align="top" vspace="1" width="16" height="16" border="0" alt="Nein">
+                            &nbsp;Nein
+                        </button>';
                     }
                     else
                     {
-                        // Wenn nicht weitergeleitet wird, dann immer einen Zurueck-Button anzeigen
-                        echo '<button id="zurueck" type="button" value="zurueck" onclick="history.back()">
-                        <img src="'. $g_root_path. '/adm_program/images/back.png" style="vertical-align: middle;" align="top" vspace="1" width="16" height="16" border="0" alt="Zurueck">
-                        &nbsp;Zur&uuml;ck</button>';
+                        // Wenn weitergeleitet wird, dann auch immer einen Weiter-Button anzeigen
+                        echo '<button id="weiter" type="button" value="weiter" onclick="window.location.href=\''. $this->forward_url. '\'">
+                        <img src="'. $g_root_path. '/adm_program/images/forward.png" style="vertical-align: middle;" align="top" vspace="1" width="16" height="16" border="0" alt="Weiter">
+                        &nbsp;Weiter</button>';
                     }
-                echo '</p>
-            </div>
+                }
+                else
+                {
+                    // Wenn nicht weitergeleitet wird, dann immer einen Zurueck-Button anzeigen
+                    echo '<button id="zurueck" type="button" value="zurueck" onclick="history.back()">
+                    <img src="'. $g_root_path. '/adm_program/images/back.png" style="vertical-align: middle;" align="top" vspace="1" width="16" height="16" border="0" alt="Zurueck">
+                    &nbsp;Zur&uuml;ck</button>';
+                }
+            echo '</p>
         </div>';
         
         if($this->inline == false)
         {
-            require(SERVER_PATH. "/adm_config/body_bottom.php");
-            echo '</body></html>';
+            require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
             exit();
         }
     }

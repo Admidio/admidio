@@ -83,74 +83,60 @@ else
    $form_values['new_folder'] = null;
 }
 
-//Beginn der Seite
-echo "
-<!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org -->\n
-<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
-<html>
-<head>
-    <title>$g_current_organization->longname - Ordner erstellen</title>
-    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
+// Html-Kopf ausgeben
+$g_layout['title'] = "Ordner erstellen";
+require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
-    <!--[if lt IE 7]>
-    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
-    <![endif]-->";
-
-    require("../../../adm_config/header.php");
-echo "</head>";
-
-require("../../../adm_config/body_top.php");
-    //Beginn des Inhaltes
-    echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\"><br />
-        <form method=\"post\" action=\"download_function.php?mode=3&amp;folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\">
-            <div class=\"formHead\" style=\"width: 400px\">Ordner erstellen</div>
-            <div class=\"formBody\" style=\"width: 400px\">
-                <div style=\"text-align: center; width: 100%;\">Neuer Ordner in <b>";
-                    if(strlen($folder) == 0)
-                    {
-                        if(strlen($default_folder) == 0)
-                        {
-                            echo "Download";
-                        }
-                        else
-                        {
-                            echo ucfirst($default_folder);
-                        }
-                    }
-                    else
-                    {
-                        echo ucfirst($folder);
-                    }
-                    echo "</b> erstellen
-                </div>
-                <div style=\"margin-top: 15px;\">
-                    <div style=\"text-align: right; width: 33%; float: left;\">Name:</div>
-                    <div style=\"text-align: left; margin-left: 35%;\">
-                        <input type=\"text\" id=\"new_folder\" name=\"new_folder\" value=\"". $form_values['new_folder']. "\" style=\"width: 200px;\" maxlength=\"255\">
-                        <input type=\"hidden\" id=\"folder\" value=\"$folder\" style=\"width: 200px;\" maxlength=\"255\">
-                        <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
-                    </div>
-                </div>
-
-                <hr style=\"margin-top: 10px; margin-bottom: 10px;\" width=\"85%\" />
-
-                <div style=\"margin-top: 6px;\">
-                    <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
-                    <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
-                    &nbsp;Zur&uuml;ck</button>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <button name=\"erstellen\" type=\"submit\" value=\"erstellen\">
-                    <img src=\"$g_root_path/adm_program/images/folder_create.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Ordner erstellen\">
-                    &nbsp;Ordner erstellen</button>
-                </div>
+// Html des Modules ausgeben
+echo "<br>
+<form method=\"post\" action=\"download_function.php?mode=3&amp;folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\">
+    <div class=\"formHead\" style=\"width: 400px\">Ordner erstellen</div>
+    <div class=\"formBody\" style=\"width: 400px\">
+        <div style=\"text-align: center; width: 100%;\">Neuer Ordner in <b>";
+            if(strlen($folder) == 0)
+            {
+                if(strlen($default_folder) == 0)
+                {
+                    echo "Download";
+                }
+                else
+                {
+                    echo ucfirst($default_folder);
+                }
+            }
+            else
+            {
+                echo ucfirst($folder);
+            }
+            echo "</b> erstellen
+        </div>
+        <div style=\"margin-top: 15px;\">
+            <div style=\"text-align: right; width: 33%; float: left;\">Name:</div>
+            <div style=\"text-align: left; margin-left: 35%;\">
+                <input type=\"text\" id=\"new_folder\" name=\"new_folder\" value=\"". $form_values['new_folder']. "\" style=\"width: 200px;\" maxlength=\"255\">
+                <input type=\"hidden\" id=\"folder\" value=\"$folder\" style=\"width: 200px;\" maxlength=\"255\">
+                <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
             </div>
-        </form>
+        </div>
+
+        <hr class=\"formLine\" style=\"margin-top: 10px; margin-bottom: 10px;\" width=\"85%\" />
+
+        <div style=\"margin-top: 6px;\">
+            <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
+            <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
+            &nbsp;Zur&uuml;ck</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button name=\"erstellen\" type=\"submit\" value=\"erstellen\">
+            <img src=\"$g_root_path/adm_program/images/folder_create.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Ordner erstellen\">
+            &nbsp;Ordner erstellen</button>
+        </div>
     </div>
-    <script type=\"text/javascript\"><!--
-        document.getElementById('new_folder').focus();
-    --></script>";
-    //Ende des Seiten Inhalts
-    require("../../../adm_config/body_bottom.php");
-echo "</body>
-</html>";
+</form>
+
+<script type=\"text/javascript\"><!--
+    document.getElementById('new_folder').focus();
+--></script>";
+    
+require(SERVER_PATH. "/adm_program/layout/overall_footer.php"); 
+
 ?>

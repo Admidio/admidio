@@ -8,9 +8,9 @@
  *
  * Uebergaben:
  *
- * ann_id        - ID der Ankuendigung, die bearbeitet werden soll
- * headline      - Ueberschrift, die ueber den Ankuendigungen steht
- *                 (Default) Ankuendigungen
+ * ann_id    - ID der Ankuendigung, die bearbeitet werden soll
+ * headline  - Ueberschrift, die ueber den Ankuendigungen steht
+ *             (Default) Ankuendigungen
  *
  ******************************************************************************
  *
@@ -44,28 +44,24 @@ if(!editAnnouncements())
     $g_message->show("norights");
 }
 
+// lokale Variablen der Uebergabevariablen initialisieren
+$req_ann_id   = 0;
+$req_headline = "Ank&uuml;ndigungen";
+
 // Uebergabevariablen pruefen
 
-if(isset($_GET["ann_id"]))
+if(isset($_GET['ann_id']))
 {
-    if(is_numeric($_GET["ann_id"]) == false)
+    if(is_numeric($_GET['ann_id']) == false)
     {
         $g_message->show("invalid");
     }
-    $ann_id = $_GET["ann_id"];
-}
-else
-{
-    $ann_id = 0;
+    $req_ann_id = $_GET['ann_id'];
 }
 
-if(array_key_exists("headline", $_GET))
+if(isset($_GET['headline']))
 {
-    $_GET["headline"] = strStripTags($_GET["headline"]);
-}
-else
-{
-    $_GET["headline"] = "Ank&uuml;ndigungen";
+    $req_headline = strStripTags($_GET["headline"]);
 }
 
 $_SESSION['navigation']->addUrl($g_current_url);
@@ -84,7 +80,7 @@ else
     // Wenn eine Ankuendigungs-ID uebergeben wurde, soll die Ankuendigung geaendert werden
     // -> Felder mit Daten der Ankuendigung vorbelegen
 
-    if ($ann_id > 0)
+    if ($req_ann_id > 0)
     {
         $sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
                     WHERE ann_id = {0}
@@ -109,115 +105,103 @@ else
     }
 }
 
+// Html-Kopf ausgeben
+$g_layout['title'] = $req_headline;
+
+require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+
+// Html des Modules ausgeben
 echo "
-<!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org -->\n
-<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
-<html>
-<head>
-    <title>$g_current_organization->longname - ". $_GET["headline"]. "</title>
-    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
+<form name=\"form\" action=\"announcements_function.php?ann_id=$req_ann_id&amp;headline=". $_GET['headline']. "&amp;mode=";
+    if($req_ann_id > 0)
+    {
+        echo "3";
+    }
+    else
+    {
+        echo "1";
+    }
+    echo "\" method=\"post\" name=\"AnkuendigungAnlegen\">
 
-    <!--[if lt IE 7]>
-    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
-    <![endif]-->";
-
-    require("../../../adm_config/header.php");
-echo "</head>";
-
-require("../../../adm_config/body_top.php");
-    echo "
-    <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-        <form name=\"form\" action=\"announcements_function.php?ann_id=$ann_id&amp;headline=". $_GET['headline']. "&amp;mode=";
-            if($ann_id > 0)
-            {
-                echo "3";
-            }
-            else
-            {
-                echo "1";
-            }
-            echo "\" method=\"post\" name=\"AnkuendigungAnlegen\">
-
-            <div class=\"formHead\">";
-                if($ann_id > 0)
-                {
-                    echo $_GET["headline"]. " &auml;ndern";
-                }
-                else
-                {
-                    echo $_GET["headline"]. " anlegen";
-                }
-            echo "</div>
-            <div class=\"formBody\">
-                <div>
-                    <div style=\"text-align: right; width: 25%; float: left;\">&Uuml;berschrift:</div>
-                    <div style=\"text-align: left; margin-left: 27%;\">
-                        <input type=\"text\" name=\"headline\" style=\"width: 350px;\" tabindex=\"1\" maxlength=\"100\" value=\"". htmlspecialchars($form_values['headline'], ENT_QUOTES). "\">
-                        <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
-                    </div>
-                </div>
-
-                <div style=\"margin-top: 6px;\">
-                <div style=\"text-align: right; width: 25%; float: left;\">Beschreibung:";
-                    if($g_preferences['enable_bbcode'] == 1)
-                    {
-                      echo "<br><br>
-                      <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=500,left=310,top=200,scrollbars=yes')\" tabindex=\"6\">Text formatieren</a>";
-                    }
-                    echo "</div>
-                    <div style=\"text-align: left; margin-left: 27%;\">
-                        <textarea  name=\"description\" style=\"width: 350px;\" tabindex=\"2\" rows=\"10\" cols=\"40\">". htmlspecialchars($form_values['description'], ENT_QUOTES). "</textarea>
-                        <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
-                    </div>
-                </div>";
-
-                // bei mehr als einer Organisation, Checkbox anzeigen, ob Ankuendigung bei anderen angezeigt werden soll
-                $sql = "SELECT COUNT(1) FROM ". TBL_ORGANIZATIONS. "
-                         WHERE org_org_id_parent IS NOT NULL ";
-                $result = mysql_query($sql, $g_adm_con);
-                db_error($result,__FILE__,__LINE__);
-                $row = mysql_fetch_array($result);
-
-                if($row[0] > 0)
-                {
-                    echo "
-                    <div style=\"margin-top: 6px;\">
-                        <div style=\"text-align: right; width: 25%; float: left;\">&nbsp;</div>
-                        <div style=\"text-align: left; margin-left: 27%;\">
-                            <input type=\"checkbox\" id=\"global\" name=\"global\" tabindex=\"3\" ";
-                            if(isset($form_values['global']) && $form_values['global'] == 1)
-                            {
-                                echo " checked=\"checked\" ";
-                            }
-                            echo " value=\"1\" />
-                            <label for=\"global\">". $_GET["headline"]. " f&uuml;r mehrere Organisationen sichtbar</label>&nbsp;
-                            <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=termin_global','Message','width=400,height=350,left=310,top=200,scrollbars=yes')\">
-                        </div>
-                    </div>";
-                }
-
-                echo "<hr width=\"85%\" />
-
-                <div style=\"margin-top: 6px;\">
-                    <button name=\"zurueck\" type=\"button\" tabindex=\"4\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\" tabindex=\"5\">
-                        <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\"
-                        width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
-                        &nbsp;Zur&uuml;ck</button>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <button name=\"speichern\" type=\"submit\" tabindex=\"5\" value=\"speichern\" tabindex=\"4\">
-                        <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\"
-                        width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
-                        &nbsp;Speichern</button>
-                </div>
+    <div class=\"formHead\">";
+        if($req_ann_id > 0)
+        {
+            echo "$req_headline &auml;ndern";
+        }
+        else
+        {
+            echo "$req_headline anlegen";
+        }
+    echo "</div>
+    <div class=\"formBody\">
+        <div>
+            <div style=\"text-align: right; width: 25%; float: left;\">&Uuml;berschrift:</div>
+            <div style=\"text-align: left; margin-left: 27%;\">
+                <input type=\"text\" name=\"headline\" style=\"width: 350px;\" tabindex=\"1\" maxlength=\"100\" value=\"". htmlspecialchars($form_values['headline'], ENT_QUOTES). "\">
+                <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
             </div>
-        </form>
-    </div>
-    <script type=\"text/javascript\"><!--
-        document.form.headline.focus();
-    --></script>";
+        </div>
 
-   require("../../../adm_config/body_bottom.php");
-echo "</body>
-</html>";
+        <div style=\"margin-top: 6px;\">
+        <div style=\"text-align: right; width: 25%; float: left;\">Beschreibung:";
+            if($g_preferences['enable_bbcode'] == 1)
+            {
+              echo "<br><br>
+              <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=500,left=310,top=200,scrollbars=yes')\" tabindex=\"6\">Text formatieren</a>";
+            }
+            echo "</div>
+            <div style=\"text-align: left; margin-left: 27%;\">
+                <textarea  name=\"description\" style=\"width: 350px;\" tabindex=\"2\" rows=\"10\" cols=\"40\">". htmlspecialchars($form_values['description'], ENT_QUOTES). "</textarea>
+                <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
+            </div>
+        </div>";
+
+        // bei mehr als einer Organisation, Checkbox anzeigen, ob Ankuendigung bei anderen angezeigt werden soll
+        $sql = "SELECT COUNT(1) FROM ". TBL_ORGANIZATIONS. "
+                 WHERE org_org_id_parent IS NOT NULL ";
+        $result = mysql_query($sql, $g_adm_con);
+        db_error($result,__FILE__,__LINE__);
+        $row = mysql_fetch_array($result);
+
+        if($row[0] > 0)
+        {
+            echo "
+            <div style=\"margin-top: 6px;\">
+                <div style=\"text-align: right; width: 25%; float: left;\">&nbsp;</div>
+                <div style=\"text-align: left; margin-left: 27%;\">
+                    <input type=\"checkbox\" id=\"global\" name=\"global\" tabindex=\"3\" ";
+                    if(isset($form_values['global']) && $form_values['global'] == 1)
+                    {
+                        echo " checked=\"checked\" ";
+                    }
+                    echo " value=\"1\" />
+                    <label for=\"global\">$req_headline f&uuml;r mehrere Organisationen sichtbar</label>&nbsp;
+                    <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=termin_global','Message','width=400,height=350,left=310,top=200,scrollbars=yes')\">
+                </div>
+            </div>";
+        }
+
+        echo "<hr class=\"formLine\" width=\"85%\" />
+
+        <div style=\"margin-top: 6px;\">
+            <button name=\"zurueck\" type=\"button\" tabindex=\"4\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\" tabindex=\"5\">
+                <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\"
+                width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
+                &nbsp;Zur&uuml;ck</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button name=\"speichern\" type=\"submit\" tabindex=\"5\" value=\"speichern\" tabindex=\"4\">
+                <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\"
+                width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
+                &nbsp;Speichern</button>
+        </div>
+    </div>
+</form>
+        
+<script type=\"text/javascript\"><!--
+    document.form.headline.focus();
+--></script>";
+
+require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+
 ?>

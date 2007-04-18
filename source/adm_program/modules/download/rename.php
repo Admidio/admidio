@@ -103,60 +103,47 @@ else
     $file_extension = ".". $file_array[1];
 }
 
-//Beginn der Seite
-echo "
-<!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org -->\n
-<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
-<html>
-<head>
-    <title>$g_current_organization->longname - Umbenennen</title>
-    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
+// Html-Kopf ausgeben
+$g_layout['title'] = "Umbenennen";
+require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
-    <!--[if lt IE 7]>
-    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
-    <![endif]-->";
-    require("../../../adm_config/header.php");
-echo "</head>";
-
-require("../../../adm_config/body_top.php");
-    //Beginn des Inhaltes
-    echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-        <p>&nbsp;</p>
-        <form method=\"POST\" action=\"download_function.php?mode=4&amp;folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "&amp;file=". urlencode($file). "\">
-            <div class=\"formHead\" style=\"width: 400px\">Datei/Ordner umbenennen</div>
-            <div class=\"formBody\" style=\"width: 400px\">
-                <div>
-                    <div style=\"text-align: right; width: 35%; float: left;\">Bisheriger Name:</div>
-                    <div style=\"text-align: left; margin-left: 37%;\">$file_array[0]</div>
-                </div>
-                <div style=\"margin-top: 10px;\">
-                    <div style=\"text-align: right; width: 35%; float: left;\">Neuer Name:</div>
-                    <div style=\"text-align: left; margin-left: 37%;\">
-                        <input type=\"text\" id=\"new_name\" name=\"new_name\" value=\"". $form_values['new_name']. "\" size=\"25\" tabindex=\"1\">$file_extension
-                        &nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
-                        &nbsp;<img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=dateiname','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\">
-                    </div>
-                </div>
-
-                <hr style=\"margin-top: 10px; margin-bottom: 10px;\" width=\"85%\" />
-
-                <div style=\"margin-top: 6px;\">
-                    <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
-                    <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
-                    &nbsp;Zur&uuml;ck</button>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <button name=\"umbenennen\" type=\"submit\" value=\"umbenennen\" tabindex=\"2\">
-                    <img src=\"$g_root_path/adm_program/images/edit.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hochladen\">
-                    &nbsp;Umbenennen</button>
-                </div>
+// Html des Modules ausgeben
+echo "<br>
+<form method=\"POST\" action=\"download_function.php?mode=4&amp;folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "&amp;file=". urlencode($file). "\">
+    <div class=\"formHead\" style=\"width: 400px\">Datei/Ordner umbenennen</div>
+    <div class=\"formBody\" style=\"width: 400px\">
+        <div>
+            <div style=\"text-align: right; width: 35%; float: left;\">Bisheriger Name:</div>
+            <div style=\"text-align: left; margin-left: 37%;\">$file_array[0]</div>
+        </div>
+        <div style=\"margin-top: 10px;\">
+            <div style=\"text-align: right; width: 35%; float: left;\">Neuer Name:</div>
+            <div style=\"text-align: left; margin-left: 37%;\">
+                <input type=\"text\" id=\"new_name\" name=\"new_name\" value=\"". $form_values['new_name']. "\" size=\"25\" tabindex=\"1\">$file_extension
+                &nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
+                &nbsp;<img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=dateiname','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\">
             </div>
-        </form>
+        </div>
+
+        <hr class=\"formLine\" style=\"margin-top: 10px; margin-bottom: 10px;\" width=\"85%\" />
+
+        <div style=\"margin-top: 6px;\">
+            <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
+            <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
+            &nbsp;Zur&uuml;ck</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button name=\"umbenennen\" type=\"submit\" value=\"umbenennen\" tabindex=\"2\">
+            <img src=\"$g_root_path/adm_program/images/edit.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hochladen\">
+            &nbsp;Umbenennen</button>
+        </div>
     </div>
-    <script type=\"text/javascript\"><!--
-        document.getElementById('new_name').focus();
-    --></script>";
-    require("../../../adm_config/body_bottom.php");
-echo "</body>
-</html>";
+</form>
+
+<script type=\"text/javascript\"><!--
+    document.getElementById('new_name').focus();
+--></script>";
+    
+require(SERVER_PATH. "/adm_program/layout/overall_footer.php"); 
+
 ?>

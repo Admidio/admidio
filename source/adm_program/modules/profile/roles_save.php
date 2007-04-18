@@ -137,8 +137,8 @@ while($row = mysql_fetch_object($result_rolle))
 
             //Bedingungen fuer Abbruch und Abbruch
             if($row_members[0] >= $row->rol_max_members
-            && $_POST["leader-$row->rol_id"] == false
-            && $_POST["role-$row->rol_id"]   == true)
+            && isset($_POST["leader-$row->rol_id"]) && $_POST["leader-$row->rol_id"] == false
+            && isset($_POST["role-$row->rol_id"])   && $_POST["role-$row->rol_id"]   == true)
             {
                 $g_message->show("max_members_profile", utf8_encode($row->rol_name));
             }
