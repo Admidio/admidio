@@ -8,7 +8,9 @@
  *
  * Uebergaben:
  *
- * dat_id: ID des Termins, der bearbeitet werden soll
+ * dat_id   - ID des Termins, der bearbeitet werden soll
+ * headline - Ueberschrift, die ueber den Terminen steht
+ *            (Default) Termine
  *
  ******************************************************************************
  *
@@ -44,7 +46,8 @@ if(!editDate())
 }
 
 // lokale Variablen der Uebergabevariablen initialisieren
-$req_dat_id = 0;
+$req_dat_id   = 0;
+$req_headline = "Termine";
 
 // Uebergabevariablen pruefen
 
@@ -55,6 +58,11 @@ if(isset($_GET['dat_id']))
         $g_message->show("invalid");
     }
     $req_dat_id = $_GET['dat_id'];
+}
+
+if(isset($_GET['headline']))
+{
+    $req_headline = strStripTags($_GET["headline"]);
 }
 
 $_SESSION['navigation']->addUrl($g_current_url);
@@ -106,139 +114,127 @@ else
     }
 }
 
+// Html-Kopf ausgeben
+$g_layout['title'] = $_GET["headline"];
+
+require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+
+// Html des Modules ausgeben
 echo "
-<!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org -->\n
-<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
-<html>
-<head>
-    <title>$g_current_organization->longname - Termin</title>
-    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
+<form name=\"form\" action=\"dates_function.php?dat_id=$req_dat_id&amp;mode=";
+    if($req_dat_id > 0)
+    {
+        echo "3";
+    }
+    else
+    {
+        echo "1";
+    }
+    echo "\" method=\"post\" name=\"TerminAnlegen\">
 
-    <!--[if lt IE 7]>
-    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
-    <![endif]-->";
+    <div class=\"formHead\">";
+        if($req_dat_id > 0)
+        {
+            echo "$req_headline &auml;ndern";
+        }
+        else
+        {
+            echo "$req_headline anlegen";
+        }
+    echo "</div>
+    <div class=\"formBody\">
+        <div>
+            <div style=\"text-align: right; width: 25%; float: left;\">&Uuml;berschrift:</div>
+            <div style=\"text-align: left; margin-left: 27%;\">
+                <input type=\"text\" name=\"dat_headline\" style=\"width: 350px;\" maxlength=\"100\" value=\"". htmlspecialchars($date->getValue("dat_headline"), ENT_QUOTES). "\">
+                <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
+            </div>
+        </div>";
 
-    require("../../../adm_config/header.php");
-echo "</head>";
+        // bei mehr als einer Organisation, Checkbox anzeigen, ob Termin bei anderen angezeigt werden soll
+        $sql = "SELECT org_id FROM ". TBL_ORGANIZATIONS. "
+                 WHERE org_org_id_parent IS NOT NULL ";
+        $result = mysql_query($sql, $g_adm_con);
+        db_error($result,__FILE__,__LINE__);
 
-require("../../../adm_config/body_top.php");
-    echo "
-    <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-        <form name=\"form\" action=\"dates_function.php?dat_id=$req_dat_id&amp;mode=";
-            if($req_dat_id > 0)
-            {
-                echo "3";
-            }
-            else
-            {
-                echo "1";
-            }
-            echo "\" method=\"post\" name=\"TerminAnlegen\">
+        if(mysql_num_rows($result) > 0)
+        {
+            echo "
+            <div style=\"margin-top: 6px;\">
+                <div style=\"text-align: right; width: 25%; float: left;\">&nbsp;</div>
+                <div style=\"text-align: left; margin-left: 27%;\">
+                    <input type=\"checkbox\" id=\"dat_global\" name=\"dat_global\" ";
+                    if($date->getValue("dat_global") == 1)
+                    {
+                        echo " checked=\"checked\" ";
+                    }
+                    echo " value=\"1\" />
+                    <label for=\"dat_global\">$req_headline ist f&uuml;r mehrere Organisationen sichtbar</label>&nbsp;
+                    <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" alt=\"Hilfe\" title=\"Hilfe\"
+                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=termin_global','Message','width=400,height=350,left=310,top=200,scrollbars=yes')\">
+                </div>
+            </div>";
+        }
 
-            <div class=\"formHead\">";
-                if($req_dat_id > 0)
+        echo "<hr class=\"formLine\" width=\"85%\" />
+
+        <div style=\"margin-top: 6px;\">
+            <div style=\"text-align: right; width: 25%; float: left;\">Datum Beginn:</div>
+            <div style=\"text-align: left; width: 75%; position: relative; left: 2%;\">
+                <input type=\"text\" name=\"date_from\" size=\"10\" maxlength=\"10\" value=\"$date_from\">
+                <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Uhrzeit Beginn:&nbsp;
+                <input type=\"text\" name=\"time_from\" size=\"5\" maxlength=\"5\" value=\"$time_from\">
+            </div>
+        </div>
+        <div style=\"margin-top: 6px;\">
+        <div style=\"text-align: right; width: 25%; float: left;\">Datum Ende:</div>
+            <div style=\"text-align: left; width: 75%; position: relative; left: 2%;\">
+                <input type=\"text\" name=\"date_to\" size=\"10\" maxlength=\"10\" value=\"$date_to\">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Uhrzeit Ende:&nbsp;
+                <input type=\"text\" name=\"time_to\" size=\"5\" maxlength=\"5\" value=\"$time_to\">
+            </div>
+        </div>
+        <div style=\"margin-top: 6px;\">
+            <div style=\"text-align: right; width: 25%; float: left;\">Treffpunkt:</div>
+            <div style=\"text-align: left; margin-left: 27%;\">
+                <input type=\"text\" name=\"dat_location\" style=\"width: 350px;\" maxlength=\"50\" value=\"". htmlspecialchars($date->getValue("dat_location"), ENT_QUOTES). "\">
+            </div>
+        </div>
+        <div style=\"margin-top: 6px;\">
+            <div style=\"text-align: right; width: 25%; float: left;\">Beschreibung:";
+                if($g_preferences['enable_bbcode'] == 1)
                 {
-                    echo "Termin &auml;ndern";
-                }
-                else
-                {
-                    echo "Termin anlegen";
+                    echo "<br><br>
+                    <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\" tabindex=\"6\">Text formatieren</a>";
                 }
             echo "</div>
-            <div class=\"formBody\">
-                <div>
-                    <div style=\"text-align: right; width: 25%; float: left;\">&Uuml;berschrift:</div>
-                    <div style=\"text-align: left; margin-left: 27%;\">
-                        <input type=\"text\" name=\"dat_headline\" style=\"width: 350px;\" maxlength=\"100\" value=\"". htmlspecialchars($date->getValue("dat_headline"), ENT_QUOTES). "\">
-                        <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
-                    </div>
-                </div>";
-
-                // bei mehr als einer Organisation, Checkbox anzeigen, ob Termin bei anderen angezeigt werden soll
-                $sql = "SELECT org_id FROM ". TBL_ORGANIZATIONS. "
-                         WHERE org_org_id_parent IS NOT NULL ";
-                $result = mysql_query($sql, $g_adm_con);
-                db_error($result,__FILE__,__LINE__);
-
-                if(mysql_num_rows($result) > 0)
-                {
-                    echo "
-                    <div style=\"margin-top: 6px;\">
-                        <div style=\"text-align: right; width: 25%; float: left;\">&nbsp;</div>
-                        <div style=\"text-align: left; margin-left: 27%;\">
-                            <input type=\"checkbox\" id=\"dat_global\" name=\"dat_global\" ";
-                            if($date->getValue("dat_global") == 1)
-                            {
-                                echo " checked=\"checked\" ";
-                            }
-                            echo " value=\"1\" />
-                            <label for=\"dat_global\">Termin ist f&uuml;r mehrere Organisationen sichtbar</label>&nbsp;
-                            <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" alt=\"Hilfe\" title=\"Hilfe\"
-                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=termin_global','Message','width=400,height=350,left=310,top=200,scrollbars=yes')\">
-                        </div>
-                    </div>";
-                }
-
-                echo "<hr width=\"85%\" />
-
-                <div style=\"margin-top: 6px;\">
-                    <div style=\"text-align: right; width: 25%; float: left;\">Datum Beginn:</div>
-                    <div style=\"text-align: left; width: 75%; position: relative; left: 2%;\">
-                        <input type=\"text\" name=\"date_from\" size=\"10\" maxlength=\"10\" value=\"$date_from\">
-                        <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Uhrzeit Beginn:&nbsp;
-                        <input type=\"text\" name=\"time_from\" size=\"5\" maxlength=\"5\" value=\"$time_from\">
-                    </div>
-                </div>
-                <div style=\"margin-top: 6px;\">
-                <div style=\"text-align: right; width: 25%; float: left;\">Datum Ende:</div>
-                    <div style=\"text-align: left; width: 75%; position: relative; left: 2%;\">
-                        <input type=\"text\" name=\"date_to\" size=\"10\" maxlength=\"10\" value=\"$date_to\">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Uhrzeit Ende:&nbsp;
-                        <input type=\"text\" name=\"time_to\" size=\"5\" maxlength=\"5\" value=\"$time_to\">
-                    </div>
-                </div>
-                <div style=\"margin-top: 6px;\">
-                    <div style=\"text-align: right; width: 25%; float: left;\">Treffpunkt:</div>
-                    <div style=\"text-align: left; margin-left: 27%;\">
-                        <input type=\"text\" name=\"dat_location\" style=\"width: 350px;\" maxlength=\"50\" value=\"". htmlspecialchars($date->getValue("dat_location"), ENT_QUOTES). "\">
-                    </div>
-                </div>
-                <div style=\"margin-top: 6px;\">
-                    <div style=\"text-align: right; width: 25%; float: left;\">Beschreibung:";
-                        if($g_preferences['enable_bbcode'] == 1)
-                        {
-                            echo "<br><br>
-                            <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\" tabindex=\"6\">Text formatieren</a>";
-                        }
-                    echo "</div>
-                    <div style=\"text-align: left; margin-left: 27%;\">
-                        <textarea  name=\"dat_description\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". htmlspecialchars($date->getValue("dat_description"), ENT_QUOTES). "</textarea>
-                        <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
-                    </div>
-                </div>
-
-                <hr width=\"85%\" />
-
-                <div style=\"margin-top: 6px;\">
-                    <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
-                        <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\"
-                        width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
-                        &nbsp;Zur&uuml;ck</button>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <button name=\"speichern\" type=\"submit\" value=\"speichern\">
-                        <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\"
-                        width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
-                        &nbsp;Speichern</button>
-                </div>
+            <div style=\"text-align: left; margin-left: 27%;\">
+                <textarea  name=\"dat_description\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". htmlspecialchars($date->getValue("dat_description"), ENT_QUOTES). "</textarea>
+                <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
             </div>
-        </form>
-    </div>
-    <script type=\"text/javascript\"><!--
-        document.form.headline.focus();
-    --></script>";
+        </div>
 
-   require("../../../adm_config/body_bottom.php");
-echo "</body>
-</html>";
+        <hr class=\"formLine\" width=\"85%\" />
+
+        <div style=\"margin-top: 6px;\">
+            <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
+                <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\"
+                width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
+                &nbsp;Zur&uuml;ck</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button name=\"speichern\" type=\"submit\" value=\"speichern\">
+                <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\"
+                width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
+                &nbsp;Speichern</button>
+        </div>
+    </div>
+</form>
+
+<script type=\"text/javascript\"><!--
+    document.form.headline.focus();
+--></script>";
+
+require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+
 ?>

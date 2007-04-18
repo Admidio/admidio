@@ -57,62 +57,49 @@ if ($member_found == 0)
     $g_message->show("nomembers", "", "Anmeldungen");
 }
 
+// Html-Kopf ausgeben
+$g_layout['title'] = "Neue Anmeldungen";
+require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+
+// Html des Modules ausgeben
 echo "
-<!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org -->\n
-<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
-<html>
-<head>
-    <title>$g_current_organization->longname - Neue Anmeldungen</title>
-    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
-    
-    <!--[if lt IE 7]>
-    <script language=\"JavaScript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
-    <![endif]-->";
-    
-    require("../../../adm_config/header.php");
-echo "</head>";
+<h1 class=\"moduleHeadline\">Neue Anmeldungen</h1>
 
-require("../../../adm_config/body_top.php");
-    echo "<div align=\"center\">
-    <h1>Neue Anmeldungen</h1>
+<table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\">
+    <tr>
+        <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;Name</th>
+        <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;Benutzername</th>
+        <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;E-Mail</th>
+        <th class=\"tableHeader\" style=\"text-align: center;\">&nbsp;Funktionen</th>
+    </tr>";
 
-    <table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\">
-        <tr>
-            <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;Name</th>
-            <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;Benutzername</th>
-            <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;E-Mail</th>
-            <th class=\"tableHeader\" style=\"text-align: center;\">&nbsp;Funktionen</th>
+    while($row = mysql_fetch_object($usr_result))
+    {
+        echo "
+        <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
+            <td style=\"text-align: left;\">&nbsp;<a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->usr_id\">$row->usr_last_name, $row->usr_first_name</a></td>
+            <td style=\"text-align: left;\">&nbsp;$row->usr_login_name</td>
+            <td style=\"text-align: left;\">&nbsp;";
+                if($g_preferences['enable_mail_module'] == 1)
+                {
+                    echo "<a href=\"$g_root_path/adm_program/modules/mail/mail.php?usr_id=$row->usr_id\">$row->usr_email</a>";
+                }
+                else
+                {
+                    echo "<a href=\"mailto:$row->usr_email\">$row->usr_email</a>";
+                }
+            echo "</td>
+            <td style=\"text-align: center;\">
+                <a href=\"new_user_assign.php?new_user_id=$row->usr_id\">
+                   <img src=\"$g_root_path/adm_program/images/properties.png\" border=\"0\" alt=\"Anmeldung zuordnen\" title=\"Anmeldung zuordnen\"></a>&nbsp;&nbsp;
+                <a href=\"new_user_function.php?new_user_id=$row->usr_id&amp;mode=5\">
+                   <img src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Anmeldung l&ouml;schen\" title=\"Anmeldung l&ouml;schen\"></a>
+            </td>
         </tr>";
+    }
 
-        while($row = mysql_fetch_object($usr_result))
-        {
-            echo "
-            <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
-                <td style=\"text-align: left;\">&nbsp;<a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->usr_id\">$row->usr_last_name, $row->usr_first_name</a></td>
-                <td style=\"text-align: left;\">&nbsp;$row->usr_login_name</td>
-                <td style=\"text-align: left;\">&nbsp;";
-                    if($g_preferences['enable_mail_module'] == 1)
-                    {
-                        echo "<a href=\"$g_root_path/adm_program/modules/mail/mail.php?usr_id=$row->usr_id\">$row->usr_email</a>";
-                    }
-                    else
-                    {
-                        echo "<a href=\"mailto:$row->usr_email\">$row->usr_email</a>";
-                    }
-                echo "</td>
-                <td style=\"text-align: center;\">
-                    <a href=\"new_user_assign.php?new_user_id=$row->usr_id\">
-                       <img src=\"$g_root_path/adm_program/images/properties.png\" border=\"0\" alt=\"Anmeldung zuordnen\" title=\"Anmeldung zuordnen\"></a>&nbsp;&nbsp;
-                    <a href=\"new_user_function.php?new_user_id=$row->usr_id&amp;mode=5\">
-                       <img src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Anmeldung l&ouml;schen\" title=\"Anmeldung l&ouml;schen\"></a>
-                </td>
-            </tr>";
-        }
+echo "</table>";
 
-    echo "</table>
-    </div>";
+require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
 
-    require("../../../adm_config/body_bottom.php");
-echo "</body>
-</html>";
 ?>

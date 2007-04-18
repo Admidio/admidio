@@ -34,9 +34,11 @@ $orga_preferences = array(
     'logout_minutes' => '20',
     'enable_system_mails' => '1',
     'email_administrator' => 'webmaster@'. $_SERVER['HTTP_HOST'],
+    'user_css'       => 'user.css',
+    'system_align'   => 'center',
     
     // Registrierung
-    'registration_mode' => '1',
+    'registration_mode'              => '1',
     'enable_registration_captcha'    => '1',
     'enable_registration_admin_mail' => '1',
 
@@ -68,9 +70,9 @@ $orga_preferences = array(
     'lists_members_per_page' => '20',
     
     // Mailmodul
-    'enable_mail_module'  => '1',
+    'enable_mail_module'        => '1',
     'max_email_attachment_size' => '1024',
-    'enable_mail_captcha' => '1',
+    'enable_mail_captcha'       => '1',
         
     // Termine
     'enable_dates_module' => '1'

@@ -93,107 +93,93 @@ $next=$bild+1;
 //Ordnerpfad zusammensetzen
 $ordner = "../../../adm_my_files/photos/".$_SESSION['photo_event']['pho_begin']."_".$_SESSION['photo_event']['pho_id'];
 
-//Anfang HTML
+$body_height = $g_preferences['photo_show_height'] + 130;
+$body_with   = $g_preferences['photo_show_width']  + 20;
+
+// Html-Kopf ausgeben
+$g_layout['title']    = "Fotogalerien";
+$g_layout['includes'] = false;
+require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+
+//Ausgabe der Eine Tabelle Kopfzelle mit &Uuml;berschrift, Photographen und Datum
+//untere Zelle mit Buttons Bild und Fenster Schlie&szlig;en Button
 echo "
-<!-- (c) 2004 - 2005 The Admidio Team - http://www.admidio.org -->\n
-<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
-<html>
-    <head>
-        <title>$g_current_organization->longname - Fotogalerien</title>
-        <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">";
-        echo"
-        <!--[if lt IE 7]>
-            <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
-        <![endif]-->";
-    echo "
-    </head>";
+<div class=\"formHead\" style=\"width:".$body_with."px\">".$_SESSION['photo_event']['pho_name']."</div>
+<div class=\"formBody\" style=\"width:".$body_with."px; height: ".$body_height."px;\">";
+    echo"Datum: ".mysqldate("d.m.y", $_SESSION['photo_event']['pho_begin']);
+    if($_SESSION['photo_event']['pho_end'] != $_SESSION['photo_event']['pho_begin'])
+    {
+        echo " bis ".mysqldate("d.m.y", $_SESSION['photo_event']['pho_end']);
+    }
+    echo "<br>Fotos von: ".$_SESSION['photo_event']['pho_photographers']."<br><br>";
 
-    //Ausgabe der Eine Tabelle Kopfzelle mit &Uuml;berschrift, Photographen und Datum
-    //untere Zelle mit Buttons Bild und Fenster Schlie&szlig;en Button
-    $body_height = $g_preferences['photo_show_height']+ 130;
-    $body_with = $g_preferences['photo_show_width']+20;
+    //Vor und zurueck buttons
+    if($last>0)
+    {
+        echo"<span class=\"iconLink\">
+            <a class=\"iconLink\" href=\"photopopup.php?bild=$last&pho_id=$pho_id\">
+                <img class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Vorheriges Bild\">
+            </a>
+            <a class=\"iconLink\" href=\"photopopup.php?bild=$last&pho_id=$pho_id\">Vorheriges Bild</a>
+        </span>
+        &nbsp;&nbsp;&nbsp;&nbsp;";
+    }
+    if($next<=$bilder)
+    {
+        echo"<span class=\"iconLink\">
+            <a class=\"iconLink\" href=\"photopopup.php?bild=$next&pho_id=$pho_id\">N&auml;chstes Bild</a>
+            <a class=\"iconLink\" href=\"photopopup.php?bild=$next&pho_id=$pho_id\">
+                <img class=\"iconLink\" src=\"$g_root_path/adm_program/images/forward.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"N&auml;chstes Bild\">
+            </a>
+        </span>";
+    }
+    echo"<br><br>";
 
-    echo "
-    <body>
-        <div style=\"margin-top: 5px; margin-bottom: 5px;\" align=\"center\">
-            <div class=\"formHead\" style=\"width:".$body_with."px\">".$_SESSION['photo_event']['pho_name']."</div>
-            <div class=\"formBody\" style=\"width:".$body_with."px; height: ".$body_height."px;\">";
-                echo"Datum: ".mysqldate("d.m.y", $_SESSION['photo_event']['pho_begin']);
-                if($_SESSION['photo_event']['pho_end'] != $_SESSION['photo_event']['pho_begin'])
-                {
-                    echo " bis ".mysqldate("d.m.y", $_SESSION['photo_event']['pho_end']);
-                }
-                echo "<br>Fotos von: ".$_SESSION['photo_event']['pho_photographers']."<br><br>";
+    //Ermittlung der Original Bildgroesse
+    $bildgroesse = getimagesize("$ordner/$bild.jpg");
+    //Entscheidung ueber scallierung
+    //Hochformat Bilder
+    if ($bildgroesse[0]<=$bildgroesse[1])
+    {
+        $side="y";
+        if ($bildgroesse[1]>$g_preferences['photo_show_height']){
+            $scal=$g_preferences['photo_show_height'];
+        }
+        else
+        {
+            $scal=$bildgroesse[1];
+        }
+    }
 
-                //Vor und zurueck buttons
-                if($last>0)
-                {
-                    echo"<span class=\"iconLink\">
-                        <a class=\"iconLink\" href=\"photopopup.php?bild=$last&pho_id=$pho_id\">
-                            <img class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Vorheriges Bild\">
-                        </a>
-                        <a class=\"iconLink\" href=\"photopopup.php?bild=$last&pho_id=$pho_id\">Vorheriges Bild</a>
-                    </span>
-                    &nbsp;&nbsp;&nbsp;&nbsp;";
-                }
-                if($next<=$bilder)
-                {
-                    echo"<span class=\"iconLink\">
-                        <a class=\"iconLink\" href=\"photopopup.php?bild=$next&pho_id=$pho_id\">N&auml;chstes Bild</a>
-                        <a class=\"iconLink\" href=\"photopopup.php?bild=$next&pho_id=$pho_id\">
-                            <img class=\"iconLink\" src=\"$g_root_path/adm_program/images/forward.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"N&auml;chstes Bild\">
-                        </a>
-                    </span>";
-                }
-                echo"<br><br>";
+    //Querformat Bilder
+    if ($bildgroesse[0]>$bildgroesse[1])
+    {
+        $side="x";
+        if ($bildgroesse[0]>$g_preferences['photo_show_width'])
+        {
+            $scal=$g_preferences['photo_show_width'];
+        }
+        else{
+            $scal=$bildgroesse[0];
+        }
+    }
 
-                //Ermittlung der Original Bildgroesse
-                $bildgroesse = getimagesize("$ordner/$bild.jpg");
-                //Entscheidung ueber scallierung
-                //Hochformat Bilder
-                if ($bildgroesse[0]<=$bildgroesse[1])
-                {
-                    $side="y";
-                    if ($bildgroesse[1]>$g_preferences['photo_show_height']){
-                        $scal=$g_preferences['photo_show_height'];
-                    }
-                    else
-                    {
-                        $scal=$bildgroesse[1];
-                    }
-                }
+    //Ausgabe Bild
+    echo"
+    <div style=\"align: center\">
+        <img src=\"photo_show.php?bild=$ordner/$bild.jpg&amp;scal=$scal&amp;side=$side\"  border=\"0\" alt=\"$ordner $bild\">
+    </div>";
 
-                //Querformat Bilder
-                if ($bildgroesse[0]>$bildgroesse[1])
-                {
-                    $side="x";
-                    if ($bildgroesse[0]>$g_preferences['photo_show_width'])
-                    {
-                        $scal=$g_preferences['photo_show_width'];
-                    }
-                    else{
-                        $scal=$bildgroesse[0];
-                    }
-                }
+    //Fenster schliessen Button
+    echo"<p>
+        <span class=\"iconLink\">
+            <a href=\"javascript:parent.window.close()\"><img
+            class=\"iconLink\" src=\"$g_root_path/adm_program/images/door_in.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Login\"></a>
+            <a class=\"iconLink\" href=\"javascript:parent.window.close()\">Fenster schlie&szlig;en</a>
+        </span>
+    </p>
+</div>";
+        
+require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
 
-                //Ausgabe Bild
-                echo"
-                <div style=\"align: center\">
-                    <img src=\"photo_show.php?bild=$ordner/$bild.jpg&amp;scal=$scal&amp;side=$side\"  border=\"0\" alt=\"$ordner $bild\">
-                </div>";
-
-                //Fenster schliessen Button
-                echo"<p>
-                    <span class=\"iconLink\">
-                        <a href=\"javascript:parent.window.close()\"><img
-                        class=\"iconLink\" src=\"$g_root_path/adm_program/images/door_in.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Login\"></a>
-                        <a class=\"iconLink\" href=\"javascript:parent.window.close()\">Fenster schlie&szlig;en</a>
-                    </span>
-                </p>
-            </div>
-        </div>";
-    //Seitenende
-    echo "
-    </body>
-</html>";
 ?>

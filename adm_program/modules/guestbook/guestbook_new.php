@@ -145,147 +145,133 @@ if (!$g_session_valid && $g_preferences['flooding_protection_time'] != 0)
     }
 }
 
+// Html-Kopf ausgeben
+$g_layout['title'] = $_GET["headline"];
+require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+
+// Html des Modules ausgeben
 echo "
-<!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org -->\n
-<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
-<html>
-<head>
-    <title>$g_current_organization->longname - ". $_GET["headline"]. "</title>
-    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
-
-    <!--[if lt IE 7]>
-    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
-    <![endif]-->";
-
-    require("../../../adm_config/header.php");
-echo "</head>";
-
-require("../../../adm_config/body_top.php");
-    echo "
-    <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-        <form action=\"guestbook_function.php?id=". $_GET["id"]. "&amp;headline=". $_GET['headline']. "&amp;mode=";
-            if ($_GET['id'] > 0)
-            {
-                echo "3";
-            }
-            else
-            {
-                echo "1";
-            }
-            echo "\" method=\"post\" name=\"Gaestebucheintrag\">
-
-            <div class=\"formHead\">";
-                if ($_GET['id'] > 0)
-                {
-                    echo "G&auml;stebucheintrag &auml;ndern";
-                }
-                else
-                {
-                    echo "G&auml;stebucheintrag anlegen";
-                }
-            echo "</div>
-            <div class=\"formBody\">
-                <div>
-                    <div style=\"text-align: right; width: 25%; float: left;\">Name:</div>
-                    <div style=\"text-align: left; margin-left: 27%;\">";
-                    if ($g_current_user->id != 0)
-                    {
-                        // Eingeloggte User sollen ihren Namen nicht aendern duerfen
-                        echo "<input class=\"readonly\" readonly type=\"text\" id=\"name\" name=\"name\" tabindex=\"1\" style=\"width: 350px;\" maxlength=\"60\" value=\"". htmlspecialchars($form_values['name'], ENT_QUOTES). "\">";
-                    }
-                    else
-                    {
-                        echo "<input type=\"text\" id=\"name\" name=\"name\" tabindex=\"1\" style=\"width: 350px;\" maxlength=\"60\" value=\"". htmlspecialchars($form_values['name'], ENT_QUOTES). "\">
-                        <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>";
-                    }
-                    echo "</div>
-                </div>
-
-                <div style=\"margin-top: 6px;\">
-                    <div style=\"text-align: right; width: 25%; float: left;\">Emailadresse:</div>
-                    <div style=\"text-align: left; margin-left: 27%;\">
-                        <input type=\"text\" id=\"email\" name=\"email\" tabindex=\"2\" style=\"width: 350px;\" maxlength=\"50\" value=\"". htmlspecialchars($form_values['email'], ENT_QUOTES). "\">
-                    </div>
-                </div>
-
-                <div style=\"margin-top: 6px;\">
-                    <div style=\"text-align: right; width: 25%; float: left;\">Homepage:</div>
-                    <div style=\"text-align: left; margin-left: 27%;\">
-                        <input type=\"text\" id=\"homepage\" name=\"homepage\" tabindex=\"3\" style=\"width: 350px;\" maxlength=\"50\" value=\"". htmlspecialchars($form_values['homepage'], ENT_QUOTES). "\">
-                    </div>
-                </div>
-
-                <div style=\"margin-top: 6px;\">
-                <div style=\"text-align: right; width: 25%; float: left;\">Text:";
-                    if ($g_preferences['enable_bbcode'] == 1)
-                    {
-                      echo "<br><br>
-                      <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\" tabindex=\"4\">Text formatieren</a>";
-                    }
-                    echo "</div>
-                    <div style=\"text-align: left; vertical-align: top; margin-left: 27%;\">
-                        <textarea id=\"entry\" name=\"entry\" tabindex=\"4\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". htmlspecialchars($form_values['entry'], ENT_QUOTES). "</textarea>&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
-                    </div>
-                </div>";
-
-                // Nicht eingeloggte User bekommen jetzt noch das Captcha praesentiert,
-                // falls es in den Orgaeinstellungen aktiviert wurde...
-                if (!$g_session_valid && $g_preferences['enable_guestbook_captcha'] == 1)
-                {
-                    echo "
-
-                    <div style=\"margin-top: 6px;\">
-                        <div style=\"text-align: left; margin-left: 27%;\">
-                            <img src=\"$g_root_path/adm_program/system/captcha_class.php?id=". time(). "\" border=\"0\" alt=\"Captcha\" />
-                        </div>
-                    </div>
-
-                    <div style=\"margin-top: 6px;\">
-                           <div style=\"text-align: right; width: 25%; float: left;\">Best&auml;tigungscode:</div>
-                           <div style=\"text-align: left; margin-left: 27%;\">
-                               <input type=\"text\" id=\"captcha\" name=\"captcha\" tabindex=\"5\" style=\"width: 200px;\" maxlength=\"8\" value=\"\">
-                               <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
-                               <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=captcha_help','Message','width=400,height=320,left=310,top=200,scrollbars=yes')\">
-                           </div>
-                    </div>";
-                }
-
-
-                echo "
-
-                <hr width=\"85%\" />
-
-                <div style=\"margin-top: 6px;\">
-                    <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\" tabindex=\"6\">
-                        <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\"
-                        width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
-                        &nbsp;Zur&uuml;ck</button>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <button name=\"speichern\" type=\"submit\" value=\"speichern\" tabindex=\"7\">
-                        <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\"
-                        width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
-                        &nbsp;Speichern</button>
-                </div>
-            </div>
-        </form>
-    </div>";
-
-    if ($g_current_user->id == 0)
+<form action=\"guestbook_function.php?id=". $_GET["id"]. "&amp;headline=". $_GET['headline']. "&amp;mode=";
+    if ($_GET['id'] > 0)
     {
-        $focusField = "name";
+        echo "3";
     }
     else
     {
-        $focusField = "text";
+        echo "1";
     }
+    echo "\" method=\"post\" name=\"Gaestebucheintrag\">
 
-    echo"
-    <script type=\"text/javascript\"><!--
-        document.getElementById('$focusField').focus();
-    --></script>";
+    <div class=\"formHead\">";
+        if ($_GET['id'] > 0)
+        {
+            echo "G&auml;stebucheintrag &auml;ndern";
+        }
+        else
+        {
+            echo "G&auml;stebucheintrag anlegen";
+        }
+    echo "</div>
+    <div class=\"formBody\">
+        <div>
+            <div style=\"text-align: right; width: 25%; float: left;\">Name:</div>
+            <div style=\"text-align: left; margin-left: 27%;\">";
+            if ($g_current_user->id != 0)
+            {
+                // Eingeloggte User sollen ihren Namen nicht aendern duerfen
+                echo "<input class=\"readonly\" readonly type=\"text\" id=\"name\" name=\"name\" tabindex=\"1\" style=\"width: 350px;\" maxlength=\"60\" value=\"". htmlspecialchars($form_values['name'], ENT_QUOTES). "\">";
+            }
+            else
+            {
+                echo "<input type=\"text\" id=\"name\" name=\"name\" tabindex=\"1\" style=\"width: 350px;\" maxlength=\"60\" value=\"". htmlspecialchars($form_values['name'], ENT_QUOTES). "\">
+                <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>";
+            }
+            echo "</div>
+        </div>
 
-   require("../../../adm_config/body_bottom.php");
-echo "</body>
-</html>";
+        <div style=\"margin-top: 6px;\">
+            <div style=\"text-align: right; width: 25%; float: left;\">Emailadresse:</div>
+            <div style=\"text-align: left; margin-left: 27%;\">
+                <input type=\"text\" id=\"email\" name=\"email\" tabindex=\"2\" style=\"width: 350px;\" maxlength=\"50\" value=\"". htmlspecialchars($form_values['email'], ENT_QUOTES). "\">
+            </div>
+        </div>
+
+        <div style=\"margin-top: 6px;\">
+            <div style=\"text-align: right; width: 25%; float: left;\">Homepage:</div>
+            <div style=\"text-align: left; margin-left: 27%;\">
+                <input type=\"text\" id=\"homepage\" name=\"homepage\" tabindex=\"3\" style=\"width: 350px;\" maxlength=\"50\" value=\"". htmlspecialchars($form_values['homepage'], ENT_QUOTES). "\">
+            </div>
+        </div>
+
+        <div style=\"margin-top: 6px;\">
+        <div style=\"text-align: right; width: 25%; float: left;\">Text:";
+            if ($g_preferences['enable_bbcode'] == 1)
+            {
+              echo "<br><br>
+              <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\" tabindex=\"4\">Text formatieren</a>";
+            }
+            echo "</div>
+            <div style=\"text-align: left; vertical-align: top; margin-left: 27%;\">
+                <textarea id=\"entry\" name=\"entry\" tabindex=\"4\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". htmlspecialchars($form_values['entry'], ENT_QUOTES). "</textarea>&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
+            </div>
+        </div>";
+
+        // Nicht eingeloggte User bekommen jetzt noch das Captcha praesentiert,
+        // falls es in den Orgaeinstellungen aktiviert wurde...
+        if (!$g_session_valid && $g_preferences['enable_guestbook_captcha'] == 1)
+        {
+            echo "
+
+            <div style=\"margin-top: 6px;\">
+                <div style=\"text-align: left; margin-left: 27%;\">
+                    <img src=\"$g_root_path/adm_program/system/captcha_class.php?id=". time(). "\" border=\"0\" alt=\"Captcha\" />
+                </div>
+            </div>
+
+            <div style=\"margin-top: 6px;\">
+                   <div style=\"text-align: right; width: 25%; float: left;\">Best&auml;tigungscode:</div>
+                   <div style=\"text-align: left; margin-left: 27%;\">
+                       <input type=\"text\" id=\"captcha\" name=\"captcha\" tabindex=\"5\" style=\"width: 200px;\" maxlength=\"8\" value=\"\">
+                       <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
+                       <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=captcha_help','Message','width=400,height=320,left=310,top=200,scrollbars=yes')\">
+                   </div>
+            </div>";
+        }
+
+
+        echo "
+
+        <hr class=\"formLine\" width=\"85%\" />
+
+        <div style=\"margin-top: 6px;\">
+            <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\" tabindex=\"6\">
+                <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\"
+                width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
+                &nbsp;Zur&uuml;ck</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button name=\"speichern\" type=\"submit\" value=\"speichern\" tabindex=\"7\">
+                <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\"
+                width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
+                &nbsp;Speichern</button>
+        </div>
+    </div>
+</form>";
+
+if ($g_current_user->id == 0)
+{
+    $focusField = "name";
+}
+else
+{
+    $focusField = "text";
+}
+
+echo"
+<script type=\"text/javascript\"><!--
+    document.getElementById('$focusField').focus();
+--></script>";
+
+require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+
 ?>

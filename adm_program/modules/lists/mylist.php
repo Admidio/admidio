@@ -117,13 +117,9 @@ if(isset($_SESSION['mylist_request']))
     $b_history = true;
 }
 
-echo "
-<!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org -->\n
-<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
-<html>
-<head>
-    <title>$g_current_organization->longname - Eigene Liste - Einstellungen</title>
-    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
+// Html-Kopf ausgeben
+$g_layout['title']  = "Eigene Liste - Einstellungen";
+$g_layout['header'] = "
     <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/ajax.js\"></script>
     
     <script type=\"text/javascript\">
@@ -146,85 +142,77 @@ echo "
                 document.getElementById(objectId).innerHTML += resObject.responseText;
             }
         }
-    </script>
+    </script>";
 
-    <!--[if lt IE 7]>
-    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
-    <![endif]-->";
+require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
-    require("../../../adm_config/header.php");
-echo "</head>";
+echo "
+<form action=\"mylist_prepare.php\" method=\"post\" name=\"properties\">
+    <div class=\"formHead\">Eigene Liste</div>
+    <div class=\"formBody\">
+        <b>1.</b> W&auml;hle eine Rolle aus von der du eine Mitgliederliste erstellen willst:
+        <p><b>Rolle :</b>&nbsp;&nbsp;";
 
-require("../../../adm_config/body_top.php");
-    echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-        <form action=\"mylist_prepare.php\" method=\"post\" name=\"properties\">
-            <div class=\"formHead\">Eigene Liste</div>
-            <div class=\"formBody\">
-                <b>1.</b> W&auml;hle eine Rolle aus von der du eine Mitgliederliste erstellen willst:
-                <p><b>Rolle :</b>&nbsp;&nbsp;";
-                
-                // Combobox mit allen Rollen ausgeben
-                echo generateRoleSelectBox($req_rol_id);
-                
-                echo "&nbsp;&nbsp;&nbsp;
-                <input type=\"checkbox\" id=\"former\" name=\"former\" value=\"1\" ";
-                    if(!$active_member) 
+        // Combobox mit allen Rollen ausgeben
+        echo generateRoleSelectBox($req_rol_id);
+
+        echo "&nbsp;&nbsp;&nbsp;
+        <input type=\"checkbox\" id=\"former\" name=\"former\" value=\"1\" ";
+            if(!$active_member) 
+            {
+                echo " checked ";
+            }
+            echo " />
+        <label for=\"former\">nur Ehemalige</label></p>
+
+        <p><b>2.</b> Bestimme die Felder, die in der Liste angezeigt werden sollen:</p>
+
+        <table class=\"tableList\" style=\"width: 95%;\" cellpadding=\"0\" cellspacing=\"0\">
+            <tr>
+                <th class=\"tableHeader\" style=\"width: 18%;\">Nr.</th>
+                <th class=\"tableHeader\" style=\"width: 37%;\">Feld</th>
+                <th class=\"tableHeader\" style=\"width: 18%;\">Sortierung</th>
+                <th class=\"tableHeader\" style=\"width: 27%;\">Bedingung
+                    <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                    onClick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=condition','Message','width=450,height=600,left=310,top=200,scrollbars=yes')\">
+                </th>
+            </tr>
+            <tr>
+                <td colspan=\"4\">";
+                    // Zeilen mit den einzelnen Feldern anzeigen
+                    for($i = 1; $i <= $default_fields; $i++)
                     {
-                        echo " checked ";
+                        include("mylist_field_list.php");
                     }
-                    echo " />
-                <label for=\"former\">nur Ehemalige</label></p>
+                echo "</td>
+            </tr>
+            <tr>
+                <td colspan=\"4\" style=\"padding: 4px;\">&nbsp;
+                    <span class=\"iconLink\">
+                        <a class=\"iconLink\" href=\"javascript:addField()\"><img
+                        class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Feld hinzuf&uuml;gen\"></a>
+                        <a class=\"iconLink\" href=\"javascript:addField()\">Feld hinzuf&uuml;gen</a>
+                    </span>
+                </td>
+            </tr>
+        </table>
 
-                <p><b>2.</b> Bestimme die Felder, die in der Liste angezeigt werden sollen:</p>
-
-                <table class=\"tableList\" style=\"width: 95%;\" cellpadding=\"0\" cellspacing=\"0\">
-                    <tr>
-                        <th class=\"tableHeader\" style=\"width: 18%;\">Nr.</th>
-                        <th class=\"tableHeader\" style=\"width: 37%;\">Feld</th>
-                        <th class=\"tableHeader\" style=\"width: 18%;\">Sortierung</th>
-                        <th class=\"tableHeader\" style=\"width: 27%;\">Bedingung
-                            <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                            onClick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=condition','Message','width=450,height=600,left=310,top=200,scrollbars=yes')\">
-                        </th>
-                    </tr>
-                    <tr>
-                        <td colspan=\"4\">";
-                            // Zeilen mit den einzelnen Feldern anzeigen
-                            for($i = 1; $i <= $default_fields; $i++)
-                            {
-                                include("mylist_field_list.php");
-                            }
-                        echo "</td>
-                    </tr>
-                    <tr>
-                        <td colspan=\"4\" style=\"padding: 4px;\">&nbsp;
-                            <span class=\"iconLink\">
-                                <a class=\"iconLink\" href=\"javascript:addField()\"><img
-                                class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Feld hinzuf&uuml;gen\"></a>
-                                <a class=\"iconLink\" href=\"javascript:addField()\">Feld hinzuf&uuml;gen</a>
-                            </span>
-                        </td>
-                    </tr>
-                </table>
-
-                <p>";
-                    // Zurueck-Button nur anzeigen, wenn MyList nicht direkt aufgerufen wurde
-                    if($_SESSION['navigation']->count > 1)
-                    {
-                        echo "<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
-                            <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
-                            Zur&uuml;ck</button>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-                    }
-                    echo "<button name=\"anzeigen\" type=\"submit\" value=\"anzeigen\">
-                        <img src=\"$g_root_path/adm_program/images/application_view_columns.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Liste anzeigen\">
-                        &nbsp;Liste anzeigen</button>            
-                </p>
-            </div>
-        </form>
-    </div>";
+        <p>";
+            // Zurueck-Button nur anzeigen, wenn MyList nicht direkt aufgerufen wurde
+            if($_SESSION['navigation']->count > 1)
+            {
+                echo "<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
+                    <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
+                    Zur&uuml;ck</button>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+            }
+            echo "<button name=\"anzeigen\" type=\"submit\" value=\"anzeigen\">
+                <img src=\"$g_root_path/adm_program/images/application_view_columns.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Liste anzeigen\">
+                &nbsp;Liste anzeigen</button>            
+        </p>
+    </div>
+</form>";
     
-    require("../../../adm_config/body_bottom.php");
-echo "</body>
-</html>";
+require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+
 ?>

@@ -13,8 +13,6 @@
  *           2 - Ankuendigung loeschen
  *           3 - Ankuendigung aendern
  *           4 - Frage, ob Ankuendigung geloescht werden soll
- * headline: Ueberschrift, die ueber den Ankuendigungen steht
- *           (Default) Ankuendigungen
  *
  ******************************************************************************
  *
@@ -77,15 +75,6 @@ if($_GET["mode"] == 2 || $_GET["mode"] == 3 || $_GET["mode"] == 4)
     {
         $g_message->show("norights");
     }
-}
-
-if(array_key_exists("headline", $_GET))
-{
-    $_GET["headline"] = strStripTags($_GET["headline"]);
-}
-else
-{
-    $_GET["headline"] = "Ank&uuml;ndigungen";
 }
 
 $_SESSION['announcements_request'] = $_REQUEST;

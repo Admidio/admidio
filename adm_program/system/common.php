@@ -89,6 +89,7 @@ session_start();
 // Globale Variablen
 $g_session_id    = "";
 $g_session_valid = false;
+$g_layout        = array();
 $g_current_url   = "http://". $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI'];
 $g_message       = new Message();
 

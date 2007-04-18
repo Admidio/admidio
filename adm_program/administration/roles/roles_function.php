@@ -83,56 +83,43 @@ $msg_code = "";
 
 if($_GET["mode"] == 1)
 {
-    echo "
-    <!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org -->\n
-    <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
-    <html>
-    <head>
-        <title>$g_current_organization->longname - Messagebox</title>
-        <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
+    // Html-Kopf ausgeben
+    $g_layout['title'] = "Messagebox";
+    require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
-        <!--[if lt IE 7]>
-        <script language=\"JavaScript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
-        <![endif]-->";
+    // Html des Modules ausgeben
+    echo "<br /><br /><br />
+    <div class=\"formHead\" style=\"width: 400px\">Rolle l&ouml;schen</div>
 
-        require("../../../adm_config/header.php");
-    echo "</head>";
+    <div class=\"formBody\" style=\"width: 400px\">
+        <p align=\"left\">
+            <img src=\"$g_root_path/adm_program/images/wand_gray.png\" style=\"vertical-align: bottom;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Inaktive Rolle\">
+            Du kannst die Rolle zu einer <b>inaktiven Rolle</b> machen. Dies hat den Vorteil, dass die Daten
+            (Mitgliederzuordnung) erhalten bleiben und du sp&auml;ter immer wieder sehen kannst, welche Personen dieser Rolle
+            zugeordnet waren. Allerdings erscheint die Rolle nicht mehr in den &uuml;blichen &Uuml;bersichten.
+        </p>
+        <p align=\"left\">
+            <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"vertical-align: bottom;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Rolle l&ouml;schen\">
+            Wenn du <b>L&ouml;schen</b> ausw&auml;hlst, wird die Rolle und alle Mitgliedszuordnungen entg&uuml;ltig aus der Datenbank
+            entfernt und es ist sp&auml;ter nicht mehr m&ouml;glich Daten dieser Rolle einzusehen.
+        </p>
+        <button name=\"back\" type=\"button\" value=\"back\"
+            onclick=\"history.back()\">
+            <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
+            &nbsp;Zur&uuml;ck</button>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <button name=\"delete\" type=\"button\" value=\"delete\"
+            onclick=\"self.location.href='$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=". $_GET['rol_id']. "&mode=4'\">
+            <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Rolle l&ouml;schen\">
+            &nbsp;L&ouml;schen</button>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <button name=\"inactive\" type=\"button\" value=\"inactive\"
+            onclick=\"self.location.href='$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=". $_GET['rol_id']. "&mode=3'\">
+            <img src=\"$g_root_path/adm_program/images/wand_gray.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Inaktive Rolle\">
+            &nbsp;Inaktive Rolle</button>
+    </div>";
 
-    require("../../../adm_config/body_top.php");
-        echo "<div align=\"center\"><br /><br /><br />
-            <div class=\"formHead\" style=\"width: 400px\">Rolle l&ouml;schen</div>
-
-            <div class=\"formBody\" style=\"width: 400px\">
-                <p align=\"left\">
-                    <img src=\"$g_root_path/adm_program/images/wand_gray.png\" style=\"vertical-align: bottom;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Inaktive Rolle\">
-                    Du kannst die Rolle zu einer <b>inaktiven Rolle</b> machen. Dies hat den Vorteil, dass die Daten
-                    (Mitgliederzuordnung) erhalten bleiben und du sp&auml;ter immer wieder sehen kannst, welche Personen dieser Rolle
-                    zugeordnet waren. Allerdings erscheint die Rolle nicht mehr in den &uuml;blichen &Uuml;bersichten.
-                </p>
-                <p align=\"left\">
-                    <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"vertical-align: bottom;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Rolle l&ouml;schen\">
-                    Wenn du <b>L&ouml;schen</b> ausw&auml;hlst, wird die Rolle und alle Mitgliedszuordnungen entg&uuml;ltig aus der Datenbank
-                    entfernt und es ist sp&auml;ter nicht mehr m&ouml;glich Daten dieser Rolle einzusehen.
-                </p>
-                <button name=\"back\" type=\"button\" value=\"back\"
-                    onclick=\"history.back()\">
-                    <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
-                    &nbsp;Zur&uuml;ck</button>
-                &nbsp;&nbsp;&nbsp;&nbsp;
-                <button name=\"delete\" type=\"button\" value=\"delete\"
-                    onclick=\"self.location.href='$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=". $_GET['rol_id']. "&mode=4'\">
-                    <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Rolle l&ouml;schen\">
-                    &nbsp;L&ouml;schen</button>
-                &nbsp;&nbsp;&nbsp;&nbsp;
-                <button name=\"inactive\" type=\"button\" value=\"inactive\"
-                    onclick=\"self.location.href='$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=". $_GET['rol_id']. "&mode=3'\">
-                    <img src=\"$g_root_path/adm_program/images/wand_gray.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Inaktive Rolle\">
-                    &nbsp;Inaktive Rolle</button>
-            </div>
-        </div>";
-
-        require("../../../adm_config/body_bottom.php");
-    echo "</body></html>";
+    require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
     exit();
 }
 elseif($_GET["mode"] == 2)

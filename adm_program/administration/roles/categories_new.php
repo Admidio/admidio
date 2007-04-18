@@ -97,76 +97,64 @@ else
     }
 }
 
+// Html-Kopf ausgeben
+$g_layout['title'] = "Kategorie";
+require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+
+// Html des Modules ausgeben
 echo "
-<!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org -->\n
-<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
-<html>
-<head>
-    <title>$g_current_organization->longname - Kategorie</title>
-    <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_config/main.css\">
+<form action=\"categories_function.php?cat_id=$cat_id&amp;type=". $_GET["type"]. "&amp;mode=1\" method=\"post\" id=\"edit_category\">
+    <div class=\"formHead\">";
+        if($cat_id > 0)
+        {
+            echo "Kategorie &auml;ndern";
+        }
+        else
+        {
+            echo "Kategorie anlegen";
+        }
+    echo "</div>
+    <div class=\"formBody\">
+        <div>
+            <div style=\"text-align: right; width: 23%; float: left;\">Name:</div>
+            <div style=\"text-align: left; margin-left: 24%;\">
+                <input type=\"text\" id=\"name\" name=\"name\" size=\"30\" maxlength=\"30\" value=\"". htmlspecialchars($form_values['name'], ENT_QUOTES). "\">
+                <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
+            </div>
+        </div>
+        <div style=\"margin-top: 6px;\">
+            <div style=\"text-align: right; width: 23%; float: left;\">
+                <label for=\"hidden\"><img src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\"></label>
+            </div>
+            <div style=\"text-align: left; margin-left: 24%;\">
+                <input type=\"checkbox\" id=\"hidden\" name=\"hidden\" ";
+                    if(isset($form_values['hidden']) && $form_values['hidden'] == 1)
+                    {
+                        echo " checked ";
+                    }
+                    echo " value=\"1\" />
+                <label for=\"hidden\">Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar&nbsp;</label>
+            </div>
+        </div>
 
-    <!--[if lt IE 7]>
-    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
-    <![endif]-->";
+        <hr class=\"formLine\" width=\"85%\" />
 
-    require("../../../adm_config/header.php");
-echo "</head>";
+        <div style=\"margin-top: 6px;\">
+            <button id=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
+            <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
+            &nbsp;Zur&uuml;ck</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button id=\"speichern\" type=\"submit\" value=\"speichern\">
+            <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
+            &nbsp;Speichern</button>
+        </div>";
+    echo "</div>
+</form>
 
-require("../../../adm_config/body_top.php");
-    echo "<div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">
-        <form action=\"categories_function.php?cat_id=$cat_id&amp;type=". $_GET["type"]. "&amp;mode=1\" method=\"post\" id=\"edit_category\">
-            <div class=\"formHead\">";
-                if($cat_id > 0)
-                {
-                    echo "Kategorie &auml;ndern";
-                }
-                else
-                {
-                    echo "Kategorie anlegen";
-                }
-            echo "</div>
-            <div class=\"formBody\">
-                <div>
-                    <div style=\"text-align: right; width: 23%; float: left;\">Name:</div>
-                    <div style=\"text-align: left; margin-left: 24%;\">
-                        <input type=\"text\" id=\"name\" name=\"name\" size=\"30\" maxlength=\"30\" value=\"". htmlspecialchars($form_values['name'], ENT_QUOTES). "\">
-                        <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
-                    </div>
-                </div>
-                <div style=\"margin-top: 6px;\">
-                    <div style=\"text-align: right; width: 23%; float: left;\">
-                        <label for=\"hidden\"><img src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\"></label>
-                    </div>
-                    <div style=\"text-align: left; margin-left: 24%;\">
-                        <input type=\"checkbox\" id=\"hidden\" name=\"hidden\" ";
-                            if(isset($form_values['hidden']) && $form_values['hidden'] == 1)
-                            {
-                                echo " checked ";
-                            }
-                            echo " value=\"1\" />
-                        <label for=\"hidden\">Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar&nbsp;</label>
-                    </div>
-                </div>
+<script type=\"text/javascript\"><!--
+    document.getElementById('name').focus();
+--></script>";
 
-                <hr width=\"85%\" />
+require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
 
-                <div style=\"margin-top: 6px;\">
-                    <button id=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
-                    <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
-                    &nbsp;Zur&uuml;ck</button>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <button id=\"speichern\" type=\"submit\" value=\"speichern\">
-                    <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
-                    &nbsp;Speichern</button>
-                </div>";
-            echo "</div>
-        </form>
-    </div>
-    <script type=\"text/javascript\"><!--
-        document.getElementById('name').focus();
-    --></script>";
-
-    require("../../../adm_config/body_bottom.php");
-echo "</body>
-</html>";
 ?>

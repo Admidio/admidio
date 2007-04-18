@@ -76,14 +76,13 @@ function showError($err_msg, $err_head = "Fehler", $mode = 1)
         <title>Admidio - Installation</title>
 
         <meta http-equiv="content-type" content="text/html; charset=ISO-8859-15">
-        <meta name="author"   content="Markus Fassbender">
-        <meta name="robots"   content="index,follow">
-        <meta name="language" content="de">
+        <meta name="author"   content="Admidio Team">
+        <meta name="robots"   content="noindex">
 
-        <link rel="stylesheet" type="text/css" href="../adm_config/main.css">
+        <link rel="stylesheet" type="text/css" href="../adm_program/layout/system.css">
     </head>
     <body>
-        <div style="margin-top: 10px; margin-bottom: 10px;" align="center"><br />
+        <div style="margin-top: 10px; margin-bottom: 10px;" align="center"><br>
             <div class="formHead" style="width: 300px;">'. $err_head. '</div>
             <div class="formBody" style="width: 300px;">
                 <p>'. $err_msg. '</p>
