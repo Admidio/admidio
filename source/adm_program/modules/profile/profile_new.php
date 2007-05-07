@@ -506,6 +506,11 @@ echo "
                             }
                             elseif(isset($row->usd_value) && strlen($row->usd_value) > 0)
                             {
+                                if($row->usf_type == "DATE")
+                                {
+                                    // Datum muss noch formatiert werden
+                                    $row->usd_value = mysqldate('d.m.y', $row->usd_value);
+                                }
                                 echo " value=\"$row->usd_value\" ";
                             }
                         }
