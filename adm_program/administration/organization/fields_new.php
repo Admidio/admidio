@@ -101,12 +101,12 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 echo "
 <form action=\"fields_function.php?usf_id=$usf_id&amp;mode=1\" method=\"post\" id=\"edit_field\">
-    <div class=\"formHead\" style=\"width: 400px\">$g_layout['title']</div>
+    <div class=\"formHead\" style=\"width: 400px\">". $g_layout['title']. "</div>
     <div class=\"formBody\" style=\"width: 400px\">
         <div>
             <div style=\"text-align: right; width: 28%; float: left;\">Name:</div>
             <div style=\"text-align: left; margin-left: 29%;\">
-                <input type=\"text\" id=\"name\" name=\"name\" size=\"20\" maxlength=\"13\" value=\"". htmlspecialchars($form_values['name'], ENT_QUOTES). "\">
+                <input type=\"text\" id=\"name\" name=\"name\" size=\"20\" maxlength=\"15\" value=\"". htmlspecialchars($form_values['name'], ENT_QUOTES). "\">
                 <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
             </div>
         </div>
@@ -126,12 +126,24 @@ echo "
                             echo " selected=\"selected\"";
                         }
                         echo ">- Bitte w&auml;hlen -</option>\n
+                    <option value=\"DATE\""; 
+                        if($form_values['type'] == "DATE") 
+                        {
+                            echo " selected=\"selected\""; 
+                        }
+                        echo ">Datum</option>\n
+                    <option value=\"CHECKBOX\""; 
+                        if($form_values['type'] == "CHECKBOX") 
+                        {
+                            echo " selected=\"selected\""; 
+                        }
+                        echo ">Ja / Nein</option>\n
                     <option value=\"TEXT\"";     
                         if($form_values['type'] == "TEXT") 
                         {
                             echo " selected=\"selected\""; 
                         }
-                        echo ">Text (30 Zeichen)</option>\n
+                        echo ">Text (50 Zeichen)</option>\n
                     <option value=\"TEXT_BIG\""; 
                         if($form_values['type'] == "TEXT_BIG") 
                         {
@@ -144,12 +156,6 @@ echo "
                             echo " selected=\"selected\""; 
                         }
                         echo ">Zahl</option>\n
-                    <option value=\"CHECKBOX\""; 
-                        if($form_values['type'] == "CHECKBOX") 
-                        {
-                            echo " selected=\"selected\""; 
-                        }
-                        echo ">Ja / Nein</option>\n
                 </select>
                 <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
             </div>

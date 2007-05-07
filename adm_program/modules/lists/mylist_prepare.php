@@ -140,6 +140,10 @@ for($i = 0; $i < count($_POST); $i++)
                 {
                     $type = "int";
                 }
+                elseif($row->usf_type == "DATE")
+                {
+                    $type = "date";
+                }
                 else
                 {
                     $type = "string";

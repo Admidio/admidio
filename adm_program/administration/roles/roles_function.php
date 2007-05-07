@@ -227,7 +227,7 @@ elseif($_GET["mode"] == 2)
                 }
                 else
                 {
-                    $g_message->show("datum", "Zeitraum bis");
+                    $g_message->show("date_invalid", "Zeitraum bis");
                 }
             }
             else
@@ -237,7 +237,7 @@ elseif($_GET["mode"] == 2)
         }
         else
         {
-            $g_message->show("datum", "Zeitraum von");
+            $g_message->show("date_invalid", "Zeitraum von");
         }
     }
 

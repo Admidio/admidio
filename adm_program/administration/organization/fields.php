@@ -94,6 +94,10 @@ echo "
                     {
                         echo "Ja / Nein";
                     }
+                    elseif($row->usf_type == "DATE")
+                    {
+                        echo "Datum";
+                    }
                 echo "</td>
                 <td style=\"text-align: center;\">";
                     if($row->usf_locked == 1)

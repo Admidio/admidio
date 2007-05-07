@@ -39,8 +39,9 @@ $message_text = array(
     "category_exist" =>
         "Es existiert bereits eine Kategorie in dieser Organisation mit diesem Namen.",
 
-    "datum" =>
-        "Es wurde kein gültiges Datum in das Feld <b>%VAR1%</b> eingegeben.",
+    "date_invalid" =>
+        "<p>Es wurde kein gültiges Datum in das Feld <b>%VAR1%</b> eingegeben.</p>
+        <p>Das Format des Datums sollte <i>dd.mm.yyyy</i> sein.</p>",
 
     "delete" =>
         "Die Daten wurden gelöscht!",
