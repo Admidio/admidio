@@ -271,9 +271,9 @@ if(strlen($user->login_name) > 0)
 }
 if(strlen($user->birthday) > 0)
 {
-    if(!dtCheckDate($user->birthday))
+    if(dtCheckDate($user->birthday) == false)
     {
-        $g_message->show("datum", "Geburtstag");
+        $g_message->show("date_invalid", "Geburtstag");
     }
 }
 
@@ -298,7 +298,7 @@ if($new_user == 2)
 }
 
 // Feldinhalt der organisationsspezifischen Felder pruefen
-$sql = "SELECT usf_name, usf_type
+$sql = "SELECT usf_id, usf_name, usf_type
           FROM ". TBL_USER_FIELDS. "
          WHERE usf_org_shortname  = '$g_organization' ";
 if(!isModerator())
@@ -311,13 +311,18 @@ db_error($result_msg,__FILE__,__LINE__);
 while($row = mysql_fetch_object($result_msg))
 {
     // ein neuer Wert vorhanden
-    if(isset($_POST[urlencode($row->usf_name)])
-    && strlen($_POST[urlencode($row->usf_name)]) > 0)
+    if(isset($_POST["usf-$row->usf_id"])
+    && strlen($_POST["usf-$row->usf_id"]) > 0)
     {
         if($row->usf_type == "NUMERIC"
-        && !is_numeric($_POST[urlencode($row->usf_name)]))
+        && is_numeric($_POST["usf-$row->usf_id"]) == false)
         {
             $g_message->show("field_numeric", $row->usf_name);
+        }
+        if($row->usf_type == "DATE"
+        && dtCheckDate($_POST["usf-$row->usf_id"]) == false)
+        {
+            $g_message->show("date_invalid", $row->usf_name);
         }
     }
 }
@@ -405,14 +410,21 @@ if($new_user != 2 || $g_preferences['registration_mode'] != 1)
 
     while($row = mysql_fetch_object($result_msg))
     {
+        // Feldinhalt von Html & PHP-Code bereinigen
+        $field_value = "";
+        if(isset($_POST["usf-$row->usf_id"]))
+        {
+            $field_value = strStripTags($_POST["usf-$row->usf_id"]);
+        }
+        
         if(is_null($row->usd_value))
         {
             // noch kein Wert vorhanden -> neu einfuegen
-            if(isset($_POST[$row->usf_id]) && strlen(trim($_POST[$row->usf_id])) > 0)
+            if(strlen($field_value) > 0)
             {
                 $sql = "INSERT INTO ". TBL_USER_DATA. " (usd_usr_id, usd_usf_id, usd_value)
                                                  VALUES ({0}, $row->usf_id, {1}) ";
-                $sql = prepareSQL($sql, array($user->id, $_POST[$row->usf_id]));
+                $sql = prepareSQL($sql, array($user->id, $field_value));
                 $result = mysql_query($sql, $g_adm_con);
                 db_error($result,__FILE__,__LINE__);
             }
@@ -420,13 +432,13 @@ if($new_user != 2 || $g_preferences['registration_mode'] != 1)
         else
         {
             // auch ein neuer Wert vorhanden
-            if(isset($_POST[$row->usf_id]) && strlen(trim($_POST[$row->usf_id])) > 0)
+            if(strlen($field_value) > 0)
             {
-                if($_POST[$row->usf_id] != $row->usd_value)
+                if($field_value != $row->usd_value)
                 {
                     $sql = "UPDATE ". TBL_USER_DATA. " SET usd_value = {0}
                              WHERE usd_id = $row->usd_id ";
-                    $sql = prepareSQL($sql, array($_POST[$row->usf_id]));
+                    $sql = prepareSQL($sql, array($field_value));
                     $result = mysql_query($sql, $g_adm_con);
                     db_error($result,__FILE__,__LINE__);
                 }
