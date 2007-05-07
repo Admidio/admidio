@@ -319,7 +319,7 @@ echo "
                     //Laenderliste oeffnen
                     $landlist = fopen("../../system/staaten.txt", "r");
                     echo "
-                    <select size=\"1\" name=\"country\" />
+                    <select size=\"1\" name=\"country\">
                         <option value=\"\"";
                             if(strlen($g_preferences['default_country']) == 0
                             && strlen($user->country) == 0)
@@ -469,7 +469,7 @@ echo "
                         {
                             echo "text";
                         }
-                        echo "\" id=\"$row->usf_id\" name=\"$row->usf_id\" ";
+                        echo "\" id=\"usf-$row->usf_id\" name=\"usf-$row->usf_id\" ";
 
                         if($row->usf_type == "CHECKBOX")
                         {
@@ -487,13 +487,13 @@ echo "
                         }
                         else
                         {
-                            if($row->usf_type == "NUMERIC")
+                            if($row->usf_type == "NUMERIC" || $row->usf_type == "DATE")
                             {
                                 echo " style=\"width: 80px;\" maxlength=\"15\" ";
                             }
                             elseif($row->usf_type == "TEXT")
                             {
-                                echo " style=\"width: 200px;\" maxlength=\"30\" ";
+                                echo " style=\"width: 200px;\" maxlength=\"50\" ";
                             }
                             elseif($row->usf_type == "TEXT_BIG")
                             {
@@ -502,7 +502,7 @@ echo "
 
                             if($b_history == true)
                             {
-                                echo " value=\"". $form_values[$row->usf_id]. "\" ";
+                                echo " value=\"". $form_values["usf-$row->usf_id"]. "\" ";
                             }
                             elseif(isset($row->usd_value) && strlen($row->usd_value) > 0)
                             {
@@ -515,7 +515,7 @@ echo "
                         {
                             echo "&nbsp;<img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\"
                             vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=user_field_description&err_text=". urlencode($row->usf_name). "','Message','width=400,height=400,left=310,top=200,scrollbars=yes')\">";
+                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=user_field_description&amp;err_text=". urlencode($row->usf_name). "','Message','width=400,height=400,left=310,top=200,scrollbars=yes')\">";
                         }
                     echo "</div>
                 </div>";
@@ -564,18 +564,18 @@ echo "
                         {
                             echo "yahoo.png";
                         }
-                        echo "\" style=\"vertical-align: middle;\" />&nbsp;
+                        echo "\" style=\"vertical-align: middle;\" alt=\"$row->usf_name\">&nbsp;
                     </div>
                     <div style=\"text-align: left; margin-left: 32%;\">";
                         if($b_history == true)
                         {
-                            $messenger_id = $form_values[$row->usf_id];
+                            $messenger_id = $form_values["usf-$row->usf_id"];
                         }
                         else
                         {
                             $messenger_id = $row->usd_value;
                         }
-                        echo "<input type=\"text\" name=\"$row->usf_id\" style=\"width: 200px;\" maxlength=\"50\" value=\"$messenger_id\" />
+                        echo "<input type=\"text\" id=\"usf-$row->usf_id\" name=\"usf-$row->usf_id\" style=\"width: 200px;\" maxlength=\"50\" value=\"$messenger_id\">
                     </div>
                 </div>";
             }

@@ -123,7 +123,7 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
     }
     else
     {
-        $g_message->show("datum", "Datum Beginn");
+        $g_message->show("date_invalid", "Datum Beginn");
     }
 
     // wenn Datum-bis nicht gefüllt ist, dann mit Datum-von nehmen
@@ -151,13 +151,13 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
     }
     else
     {
-        $g_message->show("datum", "Datum Ende");
+        $g_message->show("date_invalid", "Datum Ende");
     }
 
     // Enddatum muss groesser oder gleich dem Startdatum sein
     if(strcmp($_POST['date_from'],$_POST['date_to']) > 0)
     {
-        $g_message->show("datum", "Datum Ende oder Uhrzeit Ende");
+        $g_message->show("date_invalid", "Datum Ende oder Uhrzeit Ende");
     }
 
     if(isset($_POST['dat_global']) == false)
