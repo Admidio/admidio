@@ -319,10 +319,13 @@ while($row = mysql_fetch_object($result_msg))
         {
             $g_message->show("field_numeric", $row->usf_name);
         }
-        if($row->usf_type == "DATE"
-        && dtCheckDate($_POST["usf-$row->usf_id"]) == false)
+        if($row->usf_type == "DATE")
         {
-            $g_message->show("date_invalid", $row->usf_name);
+            if(dtCheckDate($_POST["usf-$row->usf_id"]) == false)
+            {
+                $g_message->show("date_invalid", $row->usf_name);
+            }
+            $_POST["usf-$row->usf_id"] = dtFormatDate($_POST["usf-$row->usf_id"], "Y-m-d");
         }
     }
 }

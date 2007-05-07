@@ -462,33 +462,34 @@ echo "</div>
                 if($count_field > 0)
                 {
                     // gruppierungsspezifische Felder anzeigen
-                    $i = 1;
 
                     while($row_field = mysql_fetch_object($result_field))
                     {
                         echo "<div style=\"float: left; width: 30%; text-align: left\">
                             $row_field->usf_name:</div>
                         <div style=\"text-align: left\">";
-
-                        // Feldinhalt ausgeben
-                        if($row_field->usf_type == 'CHECKBOX')
-                        {
-                            if($row_field->usd_value == 1)
+                            // Feldinhalt ausgeben
+                            if($row_field->usf_type == 'CHECKBOX')
                             {
-                                echo "&nbsp;<img src=\"$g_root_path/adm_program/images/checkbox_checked.gif\" style=\"vertical-align: middle;\">";
+                                if($row_field->usd_value == 1)
+                                {
+                                    echo "&nbsp;<img src=\"$g_root_path/adm_program/images/checkbox_checked.gif\" style=\"vertical-align: middle;\">";
+                                }
+                                else
+                                {
+                                    echo "&nbsp;<img src=\"$g_root_path/adm_program/images/checkbox.gif\" style=\"vertical-align: middle;\">";
+                                }
                             }
                             else
                             {
-                                echo "&nbsp;<img src=\"$g_root_path/adm_program/images/checkbox.gif\" style=\"vertical-align: middle;\">";
+                                if($row_field->usf_type == "DATE")
+                                {
+                                    // Datum muss noch formatiert werden
+                                    $row_field->usd_value = mysqldate('d.m.y', $row_field->usd_value);
+                                }                        
+                                echo "$row_field->usd_value&nbsp;";
                             }
-                        }
-                        else
-                        {
-                            echo "$row_field->usd_value&nbsp;";
-                        }
-
                         echo "</div>";
-                        $i++;
                     }
 
                 }
