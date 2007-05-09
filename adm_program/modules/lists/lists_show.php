@@ -657,37 +657,44 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                     if($b_user_field == true)
                     {                                
                         // benutzerdefiniertes Feld
-                        if($arr_usf_types[$usf_id] == "CHECKBOX")
+                        switch($arr_usf_types[$usf_id])
                         {
-                            // Checkboxen werden durch ein Bildchen dargestellt
-                            if($row[$i] == 1)
-                            {
-                                if($req_mode == "csv")
+                            case "CHECKBOX":
+                                // Checkboxen werden durch ein Bildchen dargestellt
+                                if($row[$i] == 1)
                                 {
-                                    $content = "ja";
+                                    if($req_mode == "csv")
+                                    {
+                                        $content = "ja";
+                                    }
+                                    else
+                                    {
+                                        echo "<img src=\"$g_root_path/adm_program/images/checkbox_checked.gif\"
+                                            style=\"vertical-align: middle;\" alt=\"on\">";
+                                    }
                                 }
                                 else
                                 {
-                                    echo "<img src=\"$g_root_path/adm_program/images/checkbox_checked.gif\"
-                                        style=\"vertical-align: middle;\" alt=\"on\">";
+                                    if($req_mode == "csv")
+                                    {
+                                        $content = "nein";
+                                    }
+                                    else
+                                    {
+                                        echo "<img src=\"$g_root_path/adm_program/images/checkbox.gif\"
+                                            style=\"vertical-align: middle;\" alt=\"off\">";
+                                    }
                                 }
-                            }
-                            else
-                            {
-                                if($req_mode == "csv")
-                                {
-                                    $content = "nein";
-                                }
-                                else
-                                {
-                                    echo "<img src=\"$g_root_path/adm_program/images/checkbox.gif\"
-                                        style=\"vertical-align: middle;\" alt=\"off\">";
-                                }
-                            }
-                        }
-                        else
-                        {
-                            $content = $row[$i];
+                                break;
+                               
+                            case "DATE":
+                                // Datum muss noch formatiert werden
+                                $content = mysqldate('d.m.y', $row[$i]);
+                                break;
+                                
+                            default:
+                                $content = $row[$i];
+                                break;                            
                         }
                     }
                     else
