@@ -41,7 +41,7 @@ require_once(PLUGIN_PATH. "/random_photo/config.php");
 
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
 // falls nicht, hier noch mal die Default-Werte setzen
-if(isset($plg_max_char_per_word) == false || is_numeric($plg_max_char_per_word) == false)
+if(!isset($plg_max_char_per_word) || !is_numeric($plg_max_char_per_word))
 {
     $plg_max_char_per_word = 0;
 }
@@ -80,7 +80,7 @@ if(!isset($plg_photos_picnr) || !is_numeric($plg_photos_picnr))
 {
     $plg_photos_picnr = 0;
 }
-if(!isset($plg_photos_show_link) || !is_numeric($plg_photos_show_link))
+if(!isset($plg_photos_show_link))
 {
     $plg_photos_show_link = true;
 }
@@ -94,6 +94,7 @@ $sql="      SELECT *
             FROM ". TBL_PHOTOS. "
             WHERE pho_org_shortname ='$g_organization' 
             AND pho_locked = 0
+            AND pho_quantity>0
             ORDER BY pho_begin DESC";
 
 //Limit setzen falls gefordert
@@ -104,24 +105,26 @@ if($plg_photos_events != 0)
 
 $result = mysql_query($sql, $g_adm_con);
 
-//Zeiger per Zufall auf eine Veranstaltung setzen
-mysql_data_seek($result, mt_rand(0, mysql_num_rows($result)-1));
-
-//Ausgewähltendatendatz holen
-$event =  mysql_fetch_array($result);
-
-//Falls gewuensch Bild per Zufall auswaehlen
-if($plg_photos_picnr ==0)
-{
-    $picnr = mt_rand(1, $event['pho_quantity']);
-}
-else
-{
-    $picnr = $plg_photos_picnr;
-}
-
-//Bilpfad zusammensetzen
-$picpath = PLUGIN_PATH. "/../adm_my_files/photos/".$event['pho_begin']."_".$event['pho_id']."/".$picnr.".jpg";
+do{
+	//Zeiger per Zufall auf eine Veranstaltung setzen
+	mysql_data_seek($result, mt_rand(0, mysql_num_rows($result)-1));
+	
+	//Ausgewähltendatendatz holen
+	$event =  mysql_fetch_array($result);
+	
+	//Falls gewuensch Bild per Zufall auswaehlen
+	if($plg_photos_picnr ==0)
+	{
+	    $picnr = mt_rand(1, $event['pho_quantity']);
+	}
+	else
+	{
+	    $picnr = $plg_photos_picnr;
+	}
+	
+	//Bilpfad zusammensetzen
+	$picpath = PLUGIN_PATH. "/../adm_my_files/photos/".$event['pho_begin']."_".$event['pho_id']."/".$picnr.".jpg";
+}while(!file_exists($picpath));
 
 //Ermittlung der Original Bildgroesse
 $bildgroesse = getimagesize($picpath);
