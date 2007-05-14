@@ -73,6 +73,55 @@ if(isset($_GET["pho_id"]))
     $pho_id = $_GET["pho_id"];
 }
 
+//Funktion zum Speichern von Bildern
+//Kind (upload, thumb)
+
+function image_save($orig_path, $scale, $destination_path)
+{
+    
+    //Ermittlung der Original Bildgroesse
+    $bildgroesse = getimagesize($orig_path);
+
+    //Errechnung seitenverhaeltniss
+    $seitenverhaeltnis = $bildgroesse[0]/$bildgroesse[1];
+
+    //laengere seite soll skalliert werden
+    //Errechnug neuen Bildgroesse Querformat
+    if($bildgroesse[0]>=$bildgroesse[1])
+    {
+        $neubildsize = array ($scale, round($scale/$seitenverhaeltnis));
+    }
+    //Errechnug neuen Bildgroesse Hochformat
+    if($bildgroesse[0]<$bildgroesse[1]){
+        $neubildsize = array (round($scale*$seitenverhaeltnis), $scale);
+    }
+
+
+    // Erzeugung neues Bild
+    $neubild = imagecreatetruecolor($neubildsize[0], $neubildsize[1]);
+
+    //Aufrufen des Originalbildes
+    $bilddaten = imagecreatefromjpeg($orig_path);
+
+    //kopieren der Daten in neues Bild
+    imagecopyresampled($neubild, $bilddaten, 0, 0, 0, 0, $neubildsize[0], $neubildsize[1], $bildgroesse[0], $bildgroesse[1]);
+    
+    //falls Bild existiert: Loeschen
+    if(file_exists($destination_path)){
+        unlink($destination_path);
+    }
+    
+    //Bild in Zielordner abspeichern
+    imagejpeg($neubild, $destination_path, 90);
+    chmod($destination_path,0777);
+
+    imagedestroy($neubild);
+    
+}
+
+
+
+
 //Rechtsdrehung eines Bildes
 //pho_id: Veranstaltungsid
 //bild: nr des Bildes das gedreht werden soll

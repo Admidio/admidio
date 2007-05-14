@@ -30,6 +30,7 @@
  *****************************************************************************/
 
 require("../../system/common.php");
+require_once("photo_function.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_photo_module'] != 1)
@@ -304,12 +305,18 @@ echo "<div class=\"formBody\">";
     /*************************THUMBNAILS**********************************/
     //Nur wenn uebergeben Veranstaltung Bilder enthaelt
     if($_SESSION['photo_event']['pho_quantity'] > 0)
-    {
+    {        
         //Aanzahl der Bilder
         $bilder = $_SESSION['photo_event']['pho_quantity'];
         //Ordnerpfad
         $ordner = "../../../adm_my_files/photos/".$_SESSION['photo_event']['pho_begin']."_".$_SESSION['photo_event']['pho_id'];
 
+        //Nachsehen ob Thumnailordner existiert und wenn nicht SafeMode ggf. anlegen
+        if(!file_exists($ordner."/thumbnails"))
+        {
+            mkdir($ordner."/thumbnails", 0777);
+        }
+        
         //Thumbnails pro Seite
         $thumbs_per_side = $g_preferences['photo_thumbs_row']*$g_preferences['photo_thumbs_column'];
 
@@ -386,10 +393,33 @@ echo "<div class=\"formBody\">";
                     $bild = ($thumb_seite*$thumbs_per_side)-$thumbs_per_side+($zeile*$g_preferences['photo_thumbs_column'])-$g_preferences['photo_thumbs_row']+$spalte+$difference;//Errechnug welches Bild ausgegeben wird
                     if ($bild <= $bilder)
                     {
+                        
+                        //Wenn Thumbnail existiert laengere Seite ermitteln
+                        $thumb_length=1;
+                        if(file_exists($ordner."/thumbnails/".$bild.".jpg"))
+                        {
+                            //Ermittlung der Original Bildgroesse
+                            $bildgroesse = getimagesize($ordner."/thumbnails/".$bild.".jpg");
+                            
+                            $thumb_length = $bildgroesse[1];
+                            if($bildgroesse[0]>$bildgroesse[1])
+                            {
+                                $thumb_length = $bildgroesse[0];
+                            }
+                        }
+                        
+                        //Nachsehen ob Bild als Thumbnail in entsprechender Groesse hinterlegt ist
+                        //Wenn nicht und nicht SafeMode anlegen
+                        if(!file_exists($ordner."/thumbnails/".$bild.".jpg") || $thumb_length !=$g_preferences['photo_thumbs_scale'])
+                        {
+                            image_save($ordner."/".$bild.".jpg", $g_preferences['photo_thumbs_scale'], $ordner."/thumbnails/".$bild.".jpg");
+                        }
+                      
+                        
                         echo"
                         <td style=\"text-align: center;\">
-                            <img onclick=\"window.open('photopopup.php?bild=$bild&pho_id=$pho_id','msg', 'height=".$popup_height.", width=".$popup_width.",left=162,top=5')\" style=\"vertical-align: middle; cursor: pointer;\"
-                            src=\"photo_show.php?bild=$ordner/$bild.jpg&amp;scal=".$g_preferences['photo_thumbs_scale']."&amp;aufgabe=anzeigen\" border=\"0\" alt=\"$bild\">
+                            <img onclick=\"window.open('photopopup.php?bild=$bild&pho_id=$pho_id','msg', 'height=".$popup_height.", width=".$popup_width.",left=162,top=5')\" 
+							style=\"vertical-align: middle; cursor: pointer;\" src=\"".$ordner."/thumbnails/".$bild.".jpg\" border=\"0\" alt=\"$bild\">
                             <br>";
 
                             //Buttons fuer moderatoren
