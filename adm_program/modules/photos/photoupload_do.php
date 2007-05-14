@@ -27,6 +27,7 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
+require("photo_function.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_photo_module'] != 1)
@@ -156,43 +157,15 @@ if($_POST["upload"])
                     if(move_uploaded_file($_FILES["bilddatei"]["tmp_name"][$x], "../../../adm_my_files/photos/temp".$y.".jpg"))
                     {
                         $temp_bild="../../../adm_my_files/photos/temp".$y.".jpg";
-
-                        //Ermittlung der Original Bildgroesse
-                        $bildgroesse = getimagesize($temp_bild);
-
-                        //Errechnung seitenverhaeltniss
-                        $seitenverhaeltnis = $bildgroesse[0]/$bildgroesse[1];
-
-                        //laengere seite soll scallirt werden
-                        //Errechnug neuen Bildgroesse Querformat
-                        if($bildgroesse[0]>=$bildgroesse[1])
-                        {
-                            $neubildsize = array ($g_preferences['photo_save_scale'], round($g_preferences['photo_save_scale']/$seitenverhaeltnis));
-                        }
-                        //Errechnug neuen Bildgroesse Hochformat
-                        if($bildgroesse[0]<$bildgroesse[1]){
-                            $neubildsize = array (round($g_preferences['photo_save_scale']*$seitenverhaeltnis), $g_preferences['photo_save_scale']);
-                        }
-
-                        // Erzeugung neues Bild
-                        $neubild = imagecreatetruecolor($neubildsize[0], $neubildsize[1]);
-
-                        //Aufrufen des Originalbildes
-                        $bilddaten = imagecreatefromjpeg($temp_bild);
-
-                        //kopieren der Daten in neues Bild
-                        imagecopyresampled($neubild, $bilddaten, 0, 0, 0, 0, $neubildsize[0], $neubildsize[1], $bildgroesse[0], $bildgroesse[1]);
-
-                        //Bild in Zielordner abspeichern
-                        imagejpeg($neubild, $ordner."/".$bildnr.".jpg", 90);
-                        chmod($ordner."/".$bildnr.".jpg",0777);
+                        
+                        //Bild skalliert speichern
+                        image_save($temp_bild, $g_preferences['photo_save_scale'], $ordner."/".$bildnr.".jpg");
 
                         //Loeschen des Bildes aus Arbeitsspeicher
                         if(file_exists("../../../adm_my_files/photos/temp".$y.".jpg"))
                         {
                             unlink("../../../adm_my_files/photos/temp".$y.".jpg");
                         }
-                        imagedestroy($neubild);
                     }//Ende Bild speichern
 
 
