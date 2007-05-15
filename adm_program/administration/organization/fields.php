@@ -26,8 +26,8 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
-// nur Moderatoren duerfen Kategorien erfassen & verwalten
-if(!isModerator())
+// nur Webmaster duerfen organisationsspezifischen Profilfelder verwalten
+if(!$g_current_user->isWebmaster())
 {
     $g_message->show("norights");
 }
@@ -53,7 +53,8 @@ echo "
 </p>";
 
 $sql = "SELECT * FROM ". TBL_USER_FIELDS. "
-         WHERE usf_org_shortname LIKE '$g_organization'
+         WHERE usf_org_id = $g_current_organization->id
+            OR usf_org_id IS NULL
          ORDER BY usf_name ASC ";
 $result = mysql_query($sql, $g_adm_con);
 db_error($result,__FILE__,__LINE__);
@@ -78,7 +79,19 @@ echo "
                 <td style=\"text-align: left;\"><a href=\"$g_root_path/adm_program/administration/organization/fields_new.php?usf_id=$row->usf_id\">$row->usf_name</a></td>
                 <td style=\"text-align: left;\">$row->usf_description</td>
                 <td style=\"text-align: left;\">";
-                    if($row->usf_type == "TEXT")
+                    if($row->usf_type == "DATE")
+                    {
+                        echo "Datum";
+                    }
+                    elseif($row->usf_type == "EMAIL")
+                    {
+                        echo "E-Mail";
+                    }
+                    elseif($row->usf_type == "CHECKBOX")
+                    {
+                        echo "Ja / Nein";
+                    }
+                    elseif($row->usf_type == "TEXT")
                     {
                         echo "Text (30)";
                     }
@@ -86,21 +99,17 @@ echo "
                     {
                         echo "Text (255)";
                     }
+                    elseif($row->usf_type == "URL")
+                    {
+                        echo "URL";
+                    }
                     elseif($row->usf_type == "NUMERIC")
                     {
                         echo "Zahl";
                     }
-                    elseif($row->usf_type == "CHECKBOX")
-                    {
-                        echo "Ja / Nein";
-                    }
-                    elseif($row->usf_type == "DATE")
-                    {
-                        echo "Datum";
-                    }
                 echo "</td>
                 <td style=\"text-align: center;\">";
-                    if($row->usf_locked == 1)
+                    if($row->usf_hidden == 1)
                     {
                         echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Feld nur f&uuml;r Moderatoren sichtbar\" title=\"Feld nur f&uuml;r Moderatoren sichtbar\">";
                     }

@@ -75,9 +75,9 @@ $orga_preferences = array(
     'enable_mail_captcha'       => '1',
         
     // Termine
-    'enable_dates_module' => '1'
+    'enable_dates_module' => '1',
     
     // Weblinks
-    'enable_weblinks_module' => '1',
+    'enable_weblinks_module' => '1'
  )
 ?>

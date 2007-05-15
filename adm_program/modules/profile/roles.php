@@ -33,7 +33,7 @@ require("../../system/common.php");
 require("../../system/login_valid.php");
 
 // nur Webmaster & Moderatoren duerfen Rollen zuweisen
-if(!isModerator() && !isGroupLeader() && !$g_current_user->editUser())
+if(!$g_current_user->assignRoles() && !isGroupLeader() && !$g_current_user->editUser())
 {
     $g_message->show("norights");
 }
@@ -149,7 +149,7 @@ echo "
             </tr>
         </thead>";
 
-        if(isModerator())
+        if($g_current_user->assignRoles())
         {
             // Alle Rollen der Gruppierung auflisten
             $sql    = "SELECT cat_name, rol_name, rol_description, mem_usr_id, mem_leader, rol_id
@@ -192,9 +192,9 @@ echo "
                           AND mem_usr_id = {0}
                           AND mem_valid  = 1
                         WHERE rol_org_shortname = '$g_organization'
-                          AND rol_valid      = 1
-                          AND rol_moderation = 0
-                          AND rol_locked     = 0
+                          AND rol_valid        = 1
+                          AND rol_assign_roles = 0
+                          AND rol_locked       = 0
                           AND rol_cat_id = cat_id
                         ORDER BY cat_name, rol_name";
         }

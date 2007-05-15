@@ -70,7 +70,7 @@ $role = mysql_fetch_object($result_role);
 // nur Moderatoren duerfen Rollen zuweisen
 // nur Webmaster duerfen die Rolle Webmaster zuweisen
 // beide muessen mitglied der richtigen Gliedgemeinschaft sein
-if(  (!isModerator() 
+if(  (!$g_current_user->assignRoles()
    && !isGroupLeader($role_id) 
    && !$g_current_user->editUser()) 
 || (  !$g_current_user->isWebmaster() 
@@ -90,7 +90,7 @@ if(isset($_GET["restrict"]))
 }
 else $restrict="m";
 
-if(strlen($restrict) == 0 || !isModerator() || !$g_current_user->editUser())
+if(strlen($restrict) == 0 || !$g_current_user->assignRoles() || !$g_current_user->editUser())
 {
     $restrict="m";
 }
@@ -275,7 +275,7 @@ echo "
     {
         //Button Alle bzw. nur Mitglieder anzeigen
         echo "<p>";
-        if($restrict=="m" && (isModerator() || $g_current_user->editUser()))
+        if($restrict=="m" && ($g_current_user->assignRoles() || $g_current_user->editUser()))
         {
             echo "<span class=\"iconLink\">
                 <a class=\"iconLink\" href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=u\"><img
@@ -283,7 +283,7 @@ echo "
                 <a class=\"iconLink\" href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=u\">Alle Benutzer anzeigen</a>
             </span>";
         }
-        else if($restrict=="u" && (isModerator() || $g_current_user->editUser()))
+        else if($restrict=="u" && ($g_current_user->assignRoles() || $g_current_user->editUser()))
         {
             //Nur Mitglieder anzeigen
             echo "<span class=\"iconLink\">

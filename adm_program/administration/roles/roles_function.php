@@ -38,7 +38,7 @@ require("../../system/role_class.php");
 require("../../system/role_dependency_class.php");
 
 // nur Moderatoren duerfen Rollen erfassen & verwalten
-if(!isModerator())
+if(!$g_current_user->assignRoles())
 {
     $g_message->show("norights");
 }
@@ -153,14 +153,14 @@ elseif($_GET["mode"] == 2)
     // bei der Rolle "Webmaster" muessen bestimmte Flags gesetzt sein
     if(strcmp($_POST['rol_name'], "Webmaster") == 0)
     {
-        $_POST['rol_moderation']  = 1;
-        $_POST['rol_mail_logout'] = 1;
-        $_POST['rol_mail_login']  = 1;
+        $_POST['rol_assign_roles'] = 1;
+        $_POST['rol_mail_logout']  = 1;
+        $_POST['rol_mail_login']   = 1;
     }
     
-    if(isset($_POST['rol_moderation']) == false)
+    if(isset($_POST['rol_assign_roles']) == false)
     {
-        $_POST['rol_moderation'] = 0;
+        $_POST['rol_assign_roles'] = 0;
     }
     if(isset($_POST['rol_announcements']) == false)
     {

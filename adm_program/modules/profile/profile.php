@@ -336,7 +336,7 @@ echo "</div>
             </div>";
 
             // Moderatoren & Gruppenleiter duerfen neue Rollen zuordnen
-            if((isModerator() || isGroupLeader() || $g_current_user->editUser())
+            if(($g_current_user->assignRoles() || isGroupLeader() || $g_current_user->editUser())
             && $user->reg_org_shortname != $g_organization)
             {
                 echo "<div style=\"margin-top: 10px;\">
@@ -360,11 +360,12 @@ echo "</div>
 
         // alle zugeordneten Messengerdaten einlesen
         $sql = "SELECT usf_name, usf_description, usd_value
-                  FROM ". TBL_USER_DATA. ", ". TBL_USER_FIELDS. "
-                 WHERE usd_usr_id        = $user->id
-                   AND usd_usf_id       = usf_id
-                   AND usf_org_shortname IS NULL
-                   AND usf_type         = 'MESSENGER'
+                  FROM ". TBL_USER_DATA. ", ". TBL_USER_FIELDS. ", ". TBL_CATEGORIES. "
+                 WHERE usd_usr_id  = $user->id
+                   AND usd_usf_id  = usf_id
+                   AND usf_org_id IS NULL
+                   AND usf_cat_id  = cat_id
+                   AND cat_name    = 'Messenger'
                  ORDER BY usf_name ASC ";
         $result_msg = mysql_query($sql, $g_adm_con);
         db_error($result_msg,__FILE__,__LINE__);
@@ -374,11 +375,11 @@ echo "</div>
         $sql = "SELECT *
                   FROM ". TBL_USER_FIELDS. " LEFT JOIN ". TBL_USER_DATA. "
                     ON usd_usf_id = usf_id
-                   AND usd_usr_id        = $user->id
-                 WHERE usf_org_shortname = '$g_organization' ";
-        if(!isModerator())
+                   AND usd_usr_id = $user->id
+                 WHERE usf_org_id = $g_current_organization->id ";
+        if(!$g_current_user->assignRoles())
         {
-            $sql = $sql. " AND usf_locked = 0 ";
+            $sql = $sql. " AND usf_hidden = 0 ";
         }
         $sql = $sql. " ORDER BY usf_name ASC ";
         $result_field = mysql_query($sql, $g_adm_con);
@@ -468,26 +469,82 @@ echo "</div>
                         echo "<div style=\"float: left; width: 30%; text-align: left\">
                             $row_field->usf_name:</div>
                         <div style=\"text-align: left\">";
-                            // Feldinhalt ausgeben
-                            if($row_field->usf_type == 'CHECKBOX')
+                            if(strlen($row_field->usd_value) > 0 || $row_field->usf_type == "CHECKBOX")
                             {
-                                if($row_field->usd_value == 1)
+                                // Feldinhalt ausgeben
+                                switch($row_field->usf_type)
                                 {
-                                    echo "&nbsp;<img src=\"$g_root_path/adm_program/images/checkbox_checked.gif\" style=\"vertical-align: middle;\">";
-                                }
-                                else
-                                {
-                                    echo "&nbsp;<img src=\"$g_root_path/adm_program/images/checkbox.gif\" style=\"vertical-align: middle;\">";
+                                    case "CHECKBOX":
+                                        if($row_field->usd_value == 1)
+                                        {
+                                            echo "<img src=\"$g_root_path/adm_program/images/checkbox_checked.gif\" style=\"vertical-align: middle;\">&nbsp;";
+                                        }
+                                        else
+                                        {
+                                            echo "<img src=\"$g_root_path/adm_program/images/checkbox.gif\" style=\"vertical-align: middle;\">&nbsp;";
+                                        }
+                                        break;
+
+                                    case "DATE":
+                                        // Datum muss noch formatiert werden
+                                        $row_field->usd_value = mysqldate('d.m.y', $row_field->usd_value);
+                                        echo "$row_field->usd_value&nbsp;";
+                                        break;
+
+                                    case "EMAIL":
+                                        // E-Mail als Link darstellen
+                                        if($g_preferences['enable_mail_module'] == 1 && $row_field->usf_name == "E-Mail")
+                                        {
+                                            $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?usr_id=$user->id";
+                                        }
+                                        else
+                                        {
+                                            $mail_link = "mailto:$row_field->usd_value";
+                                        }
+                                        echo "<a href=\"$mail_link\">
+                                        <img src=\"$g_root_path/adm_program/images/mail.png\" style=\"vertical-align: middle;\" alt=\"E-Mail an $row_field->usd_value schreiben\"
+                                        title=\"E-Mail an $row_field->usd_value schreiben\" border=\"0\"></a>
+                                        <a href=\"$mail_link\" style=\" overflow: visible; display: inline;\">";
+                                        if(strlen($row_field->usd_value) > 25)
+                                        {
+                                            echo "<span class=\"smallFontSize\">$row_field->usd_value</span>";
+                                        }
+                                        else
+                                        {
+                                            echo "$row_field->usd_value";
+                                        }
+                                        echo "</a>";
+                                        break;
+
+                                    case "URL":
+                                        // URL als Link darstellen
+                                        $row_field->usd_value = stripslashes($row_field->usd_value);
+                                        $row_field->usd_value = str_replace ("http://", "", $row_field->usd_value);
+                                        echo "
+                                        <a href=\"http://$row_field->usd_value\" target=\"_blank\">
+                                        <img src=\"$g_root_path/adm_program/images/globe.png\" style=\"vertical-align: middle;\" alt=\"Gehe zu $row_field->usd_value\"
+                                        title=\"Gehe zu $row_field->usd_value\" border=\"0\"></a>
+                                        <a href=\"http://$row_field->usd_value\" target=\"_blank\">";
+                                        if(strlen($row_field->usd_value) > 25)
+                                        {
+                                            echo "<span class=\"smallFontSize\">$row_field->usd_value</span>";
+                                        }
+                                        else
+                                        {
+                                            echo "$row_field->usd_value";
+                                        }
+                                        echo "</a>";
+                                        break;
+
+                                    default:
+                                        echo "$row_field->usd_value&nbsp;";
+                                        break;
                                 }
                             }
                             else
                             {
-                                if($row_field->usf_type == "DATE")
-                                {
-                                    // Datum muss noch formatiert werden
-                                    $row_field->usd_value = mysqldate('d.m.y', $row_field->usd_value);
-                                }                        
-                                echo "$row_field->usd_value&nbsp;";
+                                // Leerzeichen, damit Block gefuellt ist und Anzeige nicht verrutscht
+                                echo "&nbsp;";
                             }
                         echo "</div>";
                     }
@@ -505,7 +562,7 @@ echo "</div>
         // *******************************************************************************
 
         // Alle Rollen auflisten, die dem Mitglied zugeordnet sind
-        if(isModerator())
+        if($g_current_user->assignRoles())
         {
            // auch gesperrte Rollen, aber nur von dieser Gruppierung anzeigen
            $sql    = "SELECT rol_name, rol_org_shortname, mem_leader

@@ -33,20 +33,27 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
-// nur Moderatoren duerfen Kategorien erfassen & verwalten
-if(!isModerator())
-{
-    $g_message->show("norights");
-}
+// lokale Variablen der Uebergabevariablen initialisieren
+$req_type = "";
 
 // Uebergabevariablen pruefen
 
+// Modus und Rechte pruefen
 if(isset($_GET['type']))
 {
     if($_GET['type'] != "ROL" && $_GET['type'] != "LNK")
     {
         $g_message->show("invalid");
     }
+    if($_GET['type'] == "ROL" && $g_current_user->assignRoles() == false)
+    {
+        $g_message->show("norights");
+    }
+    if($_GET['type'] == "LNK" && $g_current_user->editWeblinksRight() == false)
+    {
+        $g_message->show("norights");
+    }
+    $req_type = $_GET['type'];
 }
 else
 {
@@ -66,9 +73,9 @@ echo "
 
 <p>
     <span class=\"iconLink\">
-        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/categories_new.php?type=". $_GET['type']. "\"><img 
+        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/categories_new.php?type=$req_type\"><img 
         src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Kategorie anlegen\"></a>
-        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/categories_new.php?type=". $_GET['type']. "\">Kategorie anlegen</a>
+        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/categories_new.php?type=$req_type\">Kategorie anlegen</a>
     </span>
 </p>
 
@@ -83,7 +90,7 @@ echo "
              WHERE cat_org_id = $g_current_organization->id
                AND cat_type   = {0}
              ORDER BY cat_name ASC ";
-    $sql = prepareSQL($sql, array($_GET['type']));
+    $sql = prepareSQL($sql, array($req_type));
     $cat_result = mysql_query($sql, $g_adm_con);
     db_error($cat_result,__FILE__,__LINE__);
 
@@ -98,7 +105,7 @@ echo "
 
         echo "
         <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
-            <td style=\"text-align: left;\"><a href=\"$g_root_path/adm_program/administration/roles/categories_new.php?cat_id=$cat_row->cat_id&amp;type=". $_GET['type']. "\">$cat_row->cat_name</a></td>
+            <td style=\"text-align: left;\"><a href=\"$g_root_path/adm_program/administration/roles/categories_new.php?cat_id=$cat_row->cat_id&amp;type=$req_type\">$cat_row->cat_name</a></td>
             <td style=\"text-align: center;\">";
                 if($cat_row->cat_hidden == 1)
                 {
@@ -110,12 +117,12 @@ echo "
                 }
             echo "</td>
             <td style=\"text-align: right; width: 45px;\">
-                <a href=\"$g_root_path/adm_program/administration/roles/categories_new.php?cat_id=$cat_row->cat_id&amp;type=". $_GET['type']. "\">
+                <a href=\"$g_root_path/adm_program/administration/roles/categories_new.php?cat_id=$cat_row->cat_id&amp;type=$req_type\">
                 <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>";
                 // nur Kategorien loeschen, die keine Rollen zugeordnet sind
                 if($row_num == 0)
                 {
-                    echo "&nbsp;<a href=\"$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=$cat_row->cat_id&amp;mode=3\"><img
+                    echo "&nbsp;<a href=\"$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=$cat_row->cat_id&amp;mode=3&amp;type=$req_type\"><img
                     src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>";
                 }
                 else

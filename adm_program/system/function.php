@@ -135,43 +135,6 @@ function hasRole($function, $user_id = 0)
     }
 }
 
-// Funktion prueft, ob der angemeldete User Moderatorenrechte hat
-
-function isModerator($user_id = 0)
-{
-    global $g_current_user;
-    global $g_adm_con;
-    global $g_organization;
-
-    if($user_id == 0)
-    {
-        $user_id = $g_current_user->id;
-    }
-
-    $sql    = "SELECT *
-                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-                WHERE mem_usr_id        = {0}
-                  AND mem_valid         = 1
-                  AND mem_rol_id        = rol_id
-                  AND rol_org_shortname = '$g_organization'
-                  AND rol_moderation    = 1
-                  AND rol_valid         = 1 ";
-    $sql    = prepareSQL($sql, array($user_id));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
-
-    $edit_user = mysql_num_rows($result);
-
-    if($edit_user > 0)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
 // Funktion prueft, ob der uebergebene User Mitglied in einer Rolle der Gruppierung ist
 
 function isMember($user_id, $organization = "")
@@ -460,8 +423,7 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
 
 function generateRoleSelectBox($default_role = 0, $field_id = "")
 {
-    global $g_organization;
-    global $g_adm_con;
+    global $g_organization, $g_current_user, $g_adm_con;
     
     if(strlen($field_id) == 0)
     {
@@ -473,7 +435,7 @@ function generateRoleSelectBox($default_role = 0, $field_id = "")
             // Rollen selektieren
 
             // Webmaster und Moderatoren duerfen Listen zu allen Rollen sehen
-            if(isModerator())
+            if($g_current_user->assignRoles())
             {
                 $sql     = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                              WHERE rol_org_shortname = '$g_organization'

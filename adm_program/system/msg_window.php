@@ -230,9 +230,9 @@ echo "
                   dann automatisch an alle Mitglieder weitergeleitet wird.";
             break;
 
-        case "rolle_moderation":
-            echo "Benutzer dieser Rolle bekommen erweiterte Rechte. Sie haben Zugriff auf die Rollenverwaltung
-                  und k&ouml;nnen neue Rollen erstellen, verwalten und anderen Benutzern Rollen zuordnen.";
+        case "rolle_zuordnen":
+            echo "Benutzer dieser Rolle haben Zugriff auf die Rollenverwaltung und k&ouml;nnen neue 
+                  Rollen erstellen, verwalten und anderen Benutzern Rollen zuordnen.";
             break;
 
         case "rolle_mail":
@@ -267,8 +267,8 @@ echo "
 
         case "user_field_description":
             $sql = "SELECT usf_description FROM ". TBL_USER_FIELDS. "
-                     WHERE usf_org_shortname = '$g_organization'
-                       AND usf_name          = {0} ";
+                     WHERE usf_org_id = $g_current_organization->id
+                       AND usf_name   = {0} ";
             $sql = prepareSQL($sql, array($req_err_text));
             $result_field = mysql_query($sql, $g_adm_con);
             db_error($result_field,__FILE__,__LINE__);

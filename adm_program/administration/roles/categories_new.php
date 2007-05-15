@@ -33,38 +33,41 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
-// nur Moderatoren duerfen Kategorien erfassen & verwalten
-if(!isModerator())
-{
-    $g_message->show("norights");
-}
+// lokale Variablen der Uebergabevariablen initialisieren
+$req_type   = "";
+$req_cat_id = 0;
 
 // Uebergabevariablen pruefen
 
-if(isset($_GET["cat_id"]))
+// Modus und Rechte pruefen
+if(isset($_GET['type']))
 {
-    if(is_numeric($_GET["cat_id"]) == false)
+    if($_GET['type'] != "ROL" && $_GET['type'] != "LNK")
     {
         $g_message->show("invalid");
     }
-    $cat_id = $_GET["cat_id"];
+    if($_GET['type'] == "ROL" && $g_current_user->assignRoles() == false)
+    {
+        $g_message->show("norights");
+    }
+    if($_GET['type'] == "LNK" && $g_current_user->editWeblinksRight() == false)
+    {
+        $g_message->show("norights");
+    }
+    $req_type = $_GET['type'];
 }
 else
 {
-    // neue Kategorie anlegen
-    $cat_id = 0;
-    
-    if(isset($_GET["type"]))
-    {
-        if($_GET["type"] != "ROL" && $_GET["type"] != "LNK")
-        {
-            $g_message->show("invalid");
-        }
-    }
-    else
+    $g_message->show("invalid");
+}
+
+if(isset($_GET['cat_id']))
+{
+    if(is_numeric($_GET['cat_id']) == false)
     {
         $g_message->show("invalid");
-    }    
+    }
+    $req_cat_id = $_GET['cat_id'];
 }
 
 $_SESSION['navigation']->addUrl($g_current_url);
@@ -81,10 +84,10 @@ else
 
     // Wenn eine Feld-ID uebergeben wurde, soll das Feld geaendert werden
     // -> Felder mit Daten des Feldes vorbelegen
-    if($cat_id > 0)
+    if($req_cat_id > 0)
     {
         $sql    = "SELECT * FROM ". TBL_CATEGORIES. " WHERE cat_id = {0}";
-        $sql    = prepareSQL($sql, array($cat_id));
+        $sql    = prepareSQL($sql, array($req_cat_id));
         $result = mysql_query($sql, $g_adm_con);
         db_error($result,__FILE__,__LINE__);
     
@@ -103,9 +106,9 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 // Html des Modules ausgeben
 echo "
-<form action=\"categories_function.php?cat_id=$cat_id&amp;type=". $_GET["type"]. "&amp;mode=1\" method=\"post\" id=\"edit_category\">
+<form action=\"categories_function.php?cat_id=$req_cat_id&amp;type=". $_GET["type"]. "&amp;mode=1&amp;type=$req_type\" method=\"post\" id=\"edit_category\">
     <div class=\"formHead\">";
-        if($cat_id > 0)
+        if($req_cat_id > 0)
         {
             echo "Kategorie &auml;ndern";
         }

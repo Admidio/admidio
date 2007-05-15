@@ -426,7 +426,7 @@ echo "
                 // Neuer User anlegen bzw. Registrierung anlegen
                 $sql = "SELECT *
                           FROM ". TBL_USER_FIELDS. "
-                         WHERE usf_org_shortname = '$g_organization' ";
+                         WHERE usf_org_id = $g_current_organization->id ";
             }
             else
             {
@@ -435,12 +435,12 @@ echo "
                           FROM ". TBL_USER_FIELDS. " LEFT JOIN ". TBL_USER_DATA. "
                             ON usd_usf_id = usf_id
                            AND usd_usr_id = $user->id
-                         WHERE usf_org_shortname = '$g_organization' ";
+                         WHERE usf_org_id = $g_current_organization->id ";
             }
             // wenn nicht Moderator, dann nur die freigegebenen Felder anzeigen
-            if(!isModerator())
+            if(!$g_current_user->assignRoles())
             {
-                $sql = $sql. " AND usf_locked = 0 ";
+                $sql = $sql. " AND usf_hidden = 0 ";
             }
             $sql = $sql. " ORDER BY usf_name ASC ";
 
@@ -495,7 +495,7 @@ echo "
                             {
                                 echo " style=\"width: 200px;\" maxlength=\"50\" ";
                             }
-                            elseif($row->usf_type == "TEXT_BIG")
+                            elseif($row->usf_type == "EMAIL" || $row->usf_type == "TEXT_BIG" || $row->usf_type == "URL")
                             {
                                 echo " style=\"width: 300px;\" maxlength=\"255\" ";
                             }
@@ -530,11 +530,13 @@ echo "
 
             // alle zugeordneten Messengerdaten einlesen
             $sql = "SELECT usf_id, usf_name, usd_value
-                      FROM ". TBL_USER_FIELDS. " LEFT JOIN ". TBL_USER_DATA. "
-                        ON usd_usf_id = usf_id
-                       AND usd_usr_id = $user->id
-                     WHERE usf_org_shortname IS NULL
-                       AND usf_type   = 'MESSENGER'
+                      FROM ". TBL_CATEGORIES. ", ". TBL_USER_FIELDS. "
+                      LEFT JOIN ". TBL_USER_DATA. "
+                        ON usd_usf_id  = usf_id
+                       AND usd_usr_id  = $user->id
+                     WHERE usf_org_id IS NULL
+                       AND usf_cat_id  = cat_id
+                       AND cat_name    = 'Messenger'
                      ORDER BY usf_name ASC ";
             $result_msg = mysql_query($sql, $g_adm_con);
             db_error($result_msg,__FILE__,__LINE__);

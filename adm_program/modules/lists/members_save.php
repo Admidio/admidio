@@ -60,7 +60,7 @@ $role = mysql_fetch_object($result_role);
 // nur Moderatoren duerfen Rollen zuweisen
 // nur Webmaster duerfen die Rolle Webmaster zuweisen
 // beide muessen mitglied der richtigen Gliedgemeinschaft sein
-if(  (!isModerator() 
+if(  (!$g_current_user->assignRoles()
    && !isGroupLeader($role_id) 
    && !$g_current_user->editUser()) 
 || (  !$g_current_user->isWebmaster()

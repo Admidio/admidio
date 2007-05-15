@@ -286,7 +286,7 @@ echo "
 
                if ($g_session_valid)
                {
-                   if (isModerator())
+                   if ($g_current_user->assignRoles())
                    {
                         // im eingeloggten Zustand duerfen nur Moderatoren an gelocked Rollen schreiben
                            $sql    = "SELECT rol_name, rol_id, cat_name FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "

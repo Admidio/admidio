@@ -141,6 +141,8 @@ else if($req_mode == "print")
 $main_sql  = "";   // enthaelt das Haupt-Sql-Statement fuer die Liste
 $str_csv   = "";   // enthaelt die komplette CSV-Datei als String
 $leiter    = 0;    // Gruppe besitzt Leiter
+$arr_usf_types = array();    // speichert zu jeder usf_id den usf_type
+$arr_usf_names = array();    // speichert zu jeder usf_id den usf_name
 
 // Rollenobjekt erzeugen
 $role = new Role($g_adm_con, $req_rol_id);
@@ -382,6 +384,7 @@ for($i = $start_column; $i < count($arr_fields); $i++)
         $row = mysql_fetch_object($result_user_fields);
         $col_name = $row->usf_name;
         $arr_usf_types[$usf_id] = $row->usf_type;
+        $arr_usf_names[$usf_id] = $row->usf_name;
 
         if($arr_usf_types[$usf_id] == "CHECKBOX")
         {
@@ -595,7 +598,7 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
 
                         if($req_mode == "html")
                         {
-                            $content = "<a href=\"". $row[$i]. "\" target=\"_top\">". substr($row[$i], 7). "</a>";
+                            $content = "<a href=\"". $row[$i]. "\" target=\"_blank\">". substr($row[$i], 7). "</a>";
                         }
                         else
                         {
@@ -690,6 +693,49 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                             case "DATE":
                                 // Datum muss noch formatiert werden
                                 $content = mysqldate('d.m.y', $row[$i]);
+                                break;
+
+                            case "EMAIL":
+                                // E-Mail als Link darstellen
+                                if(strlen($row[$i]) > 0)
+                                {
+                                    if($req_mode == "html")
+                                    {
+                                        if($g_preferences['enable_mail_module'] == 1 && $arr_usf_names[$usf_id] == "E-Mail")
+                                        {
+                                            $content = "<a href=\"$g_root_path/adm_program/modules/mail/mail.php?usr_id=". $row['usr_id']. "\">". $row[$i]. "</a>";
+                                        }
+                                        else
+                                        {
+                                            $content = "<a href=\"mailto:". $row[$i]. "\">". $row[$i]. "</a>";
+                                        }
+                                    }
+                                    else
+                                    {
+                                        $content = $row[$i];
+                                    }
+                                }
+                                break;
+
+                            case "URL":
+                                // Homepage als Link darstellen
+                                if(strlen($row[$i]) > 0)
+                                {
+                                    $row[$i] = stripslashes($row[$i]);
+                                    if(substr_count(strtolower($row[$i]), "http://") == 0)
+                                    {
+                                        $row[$i] = "http://". $row[$i];
+                                    }
+
+                                    if($req_mode == "html")
+                                    {
+                                        $content = "<a href=\"". $row[$i]. "\" target=\"_blank\">". substr($row[$i], 7). "</a>";
+                                    }
+                                    else
+                                    {
+                                        $content = substr($row[$i], 7);
+                                    }
+                                }
                                 break;
                                 
                             default:

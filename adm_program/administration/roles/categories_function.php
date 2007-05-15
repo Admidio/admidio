@@ -36,13 +36,33 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
-// nur Moderatoren duerfen Kategorien erfassen & verwalten
-if(!isModerator())
-{
-    $g_message->show("norights");
-}
+// lokale Variablen der Uebergabevariablen initialisieren
+$req_type   = "";
+$req_cat_id = 0;
 
 // Uebergabevariablen pruefen
+
+// Modus und Rechte pruefen
+if(isset($_GET['type']))
+{
+    if($_GET['type'] != "ROL" && $_GET['type'] != "LNK")
+    {
+        $g_message->show("invalid");
+    }
+    if($_GET['type'] == "ROL" && $g_current_user->assignRoles() == false)
+    {
+        $g_message->show("norights");
+    }
+    if($_GET['type'] == "LNK" && $g_current_user->editWeblinksRight() == false)
+    {
+        $g_message->show("norights");
+    }
+    $req_type = $_GET['type'];
+}
+else
+{
+    $g_message->show("invalid");
+}
 
 if(is_numeric($_GET["mode"]) == false
 || $_GET["mode"] < 1 || $_GET["mode"] > 3)
@@ -50,29 +70,13 @@ if(is_numeric($_GET["mode"]) == false
     $g_message->show("invalid");
 }
 
-if(isset($_GET["cat_id"]) && is_numeric($_GET["cat_id"]) == false)
+if(isset($_GET['cat_id']))
 {
-    $g_message->show("invalid");
-}
-
-if(isset($_GET["cat_id"]) == false)
-{
-    $_GET["cat_id"] = 0;
-}
-
-if($_GET["cat_id"] == 0)
-{
-    if(isset($_GET["type"]))
-    {
-        if($_GET["type"] != "ROL" && $_GET["type"] != "LNK")
-        {
-            $g_message->show("invalid");
-        }
-    }
-    else
+    if(is_numeric($_GET['cat_id']) == false)
     {
         $g_message->show("invalid");
-    }  
+    }
+    $req_cat_id = $_GET['cat_id'];
 }
 
 $err_code = "";
@@ -87,14 +91,14 @@ if($_GET['mode'] == 1)
 
     if(strlen($category_name) > 0)
     {
-        if($_GET['cat_id'] == 0)
+        if($req_cat_id == 0)
         {
             // Schauen, ob die Kategorie bereits existiert
             $sql    = "SELECT COUNT(*) FROM ". TBL_CATEGORIES. "
                         WHERE cat_org_id = $g_current_organization->id
                           AND cat_type   = {0}
                           AND cat_name   LIKE {1} ";
-            $sql    = prepareSQL($sql, array($_GET['type'], $category_name));
+            $sql    = prepareSQL($sql, array($req_type, $category_name));
             $result = mysql_query($sql, $g_adm_con);
             db_error($result,__FILE__,__LINE__);
             $row = mysql_fetch_array($result);
@@ -114,7 +118,7 @@ if($_GET['mode'] == 1)
             $hidden = 0;
         }
 
-        if($_GET['cat_id'] > 0)
+        if($req_cat_id > 0)
         {
             $sql = "UPDATE ". TBL_CATEGORIES. "
                        SET cat_name   = {0}
@@ -127,7 +131,7 @@ if($_GET['mode'] == 1)
             $sql    = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden)
                                                  VALUES ($g_current_organization->id, {2}, {0}, $hidden) ";
         }
-        $sql    = prepareSQL($sql, array(trim($category_name), $_GET['cat_id'], $_GET['type']));
+        $sql    = prepareSQL($sql, array(trim($category_name), $req_cat_id, $req_type));
         $result = mysql_query($sql, $g_adm_con);
         db_error($result,__FILE__,__LINE__);
        
@@ -153,7 +157,7 @@ elseif($_GET['mode'] == 2)  // Feld loeschen
     // schauen, ob Rollen dieser Kategorie zugeordnet sind
     $sql    = "SELECT * FROM ". TBL_ROLES. "
                 WHERE rol_cat_id = {0} ";
-    $sql    = prepareSQL($sql, array($_GET['cat_id']));
+    $sql    = prepareSQL($sql, array($req_cat_id));
     $result = mysql_query($sql, $g_adm_con);
     db_error($result,__FILE__,__LINE__);              
     $row_num = mysql_num_rows($result);
@@ -163,7 +167,7 @@ elseif($_GET['mode'] == 2)  // Feld loeschen
         // Feld loeschen
         $sql    = "DELETE FROM ". TBL_CATEGORIES. "
                     WHERE cat_id = {0}";
-        $sql    = prepareSQL($sql, array($_GET['cat_id']));
+        $sql    = prepareSQL($sql, array($req_cat_id));
         $result = mysql_query($sql, $g_adm_con);
         db_error($result,__FILE__,__LINE__);
 
@@ -175,12 +179,12 @@ elseif($_GET["mode"] == 3)
     // Frage, ob Kategorie geloescht werden soll
     $sql = "SELECT cat_name FROM ". TBL_CATEGORIES. "
              WHERE cat_id = {0}";
-    $sql    = prepareSQL($sql, array($_GET['cat_id']));
+    $sql    = prepareSQL($sql, array($req_cat_id));
     $result = mysql_query($sql, $g_adm_con);
     db_error($result,__FILE__,__LINE__);
     $row = mysql_fetch_array($result);
     
-    $g_message->setForwardYesNo("$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=". $_GET['cat_id']. "&mode=2");
+    $g_message->setForwardYesNo("$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=$req_cat_id&mode=2&type=$req_type");
     $g_message->show("delete_category", utf8_encode($row[0]), "Löschen");
 }
          

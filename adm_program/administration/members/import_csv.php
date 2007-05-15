@@ -59,10 +59,9 @@ else
 // damit man spaeter schneller darauf zugreifen kann
 $sql = "SELECT *
           FROM ". TBL_USER_FIELDS. "
-         WHERE (  usf_org_shortname = '$g_organization'
-               OR (   usf_org_shortname IS NULL
-                  AND usf_type      = 'MESSENGER' ))
-         ORDER BY usf_org_shortname DESC, usf_name ASC ";
+         WHERE (  usf_org_id = $g_current_organization->id
+               OR usf_org_id IS NULL )
+         ORDER BY usf_org_id DESC, usf_name ASC ";
 $result_field = mysql_query($sql, $g_adm_con);
 db_error($result_field,__FILE__,__LINE__);
 

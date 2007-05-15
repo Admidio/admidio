@@ -16,6 +16,12 @@ drop table if exists %PRAEFIX%_guestbook_comments;
 
 drop table if exists %PRAEFIX%_guestbook;
 
+drop table if exists %PRAEFIX%_folders;
+
+drop table if exists %PRAEFIX%_files;
+
+drop table if exists %PRAEFIX%_folder_roles;
+
 drop table if exists %PRAEFIX%_dates;
 
 drop table if exists %PRAEFIX%_announcements;
@@ -112,7 +118,7 @@ alter table %PRAEFIX%_preferences add constraint %PRAEFIX%_FK_PRF_ORG foreign ke
 create table %PRAEFIX%_categories
 (
    cat_id                         int (11) unsigned              not null AUTO_INCREMENT,
-   cat_org_id                     tinyint(4)                     not null,
+   cat_org_id                     tinyint(4),
    cat_type                       varchar(10)                    not null,
    cat_name                       varchar(30)                    not null,
    cat_hidden                     tinyint(1) unsigned            not null default 0,
@@ -150,6 +156,7 @@ create table %PRAEFIX%_users
    usr_login_name                 varchar(20),
    usr_password                   varchar(35),
    usr_photo                      blob,
+   usr_text                       text,
    usr_last_login                 datetime,
    usr_actual_login               datetime,
    usr_number_login               smallint(5) unsigned           not null default 0,
@@ -181,34 +188,38 @@ alter table %PRAEFIX%_users add constraint %PRAEFIX%_FK_USR_ORG_REG foreign key 
 create table %PRAEFIX%_user_fields
 (
    usf_id                         int(11) unsigned               not null AUTO_INCREMENT,
-   usf_org_shortname              varchar(10),
+   usf_org_id                     tinyint(4),
+   usf_cat_id                     int(11) unsigned               not null,
    usf_type                       varchar(10)                    not null,
    usf_name                       varchar(100)                   not null,
    usf_description                varchar(255),
-   usf_locked                     tinyint(1) unsigned            not null default 0,
+   usf_system                     tinyint(1) unsigned            not null default 0,
+   usf_disabled                   tinyint(1) unsigned            not null default 0,
+   usf_hidden                     tinyint(1) unsigned            not null default 0,
    primary key (usf_id)
 )
 type = InnoDB
 auto_increment = 1;
 
 -- Index
-alter table %PRAEFIX%_user_fields add index USF_ORG_FK (usf_org_shortname);
+alter table %PRAEFIX%_user_fields add index USF_ORG_FK (usf_org_id);
+alter table %PRAEFIX%_user_fields add index USF_CAT_FK (usf_cat_id);
 
 -- Constraints
-alter table %PRAEFIX%_user_fields add constraint %PRAEFIX%_FK_USF_ORG foreign key (usf_org_shortname)
-      references %PRAEFIX%_organizations (org_shortname) on delete restrict on update restrict;
+alter table %PRAEFIX%_user_fields add constraint FK_USF_ORG foreign key (usf_org_id)
+      references %PRAEFIX%_organizations (org_id) on delete restrict on update restrict;
+alter table %PRAEFIX%_user_fields add constraint FK_USF_CAT foreign key (usf_cat_id)
+      references %PRAEFIX%_categories (cat_id) on delete restrict on update restrict;
 
 /*==============================================================*/
 /* Table: adm_user_data                                         */
 /*==============================================================*/
-create table %PRAEFIX%_user_data
+create table adm_user_data
 (
-   usd_id                         int(11) unsigned               not null AUTO_INCREMENT,
    usd_usr_id                     int(11) unsigned               not null,
    usd_usf_id                     int(11) unsigned               not null,
    usd_value                      varchar(255),
-   primary key (usd_id),
-   unique ak_usr_usf_id (usd_usr_id, usd_usf_id)
+   primary key (usd_usr_id, usd_usf_id)
 )
 type = InnoDB
 auto_increment = 1;
@@ -261,7 +272,8 @@ create table %PRAEFIX%_roles
    rol_cat_id                     int(11) unsigned               not null,
    rol_name                       varchar(30)                    not null,
    rol_description                varchar(255),
-   rol_moderation                 tinyint(1) unsigned            not null default 0,
+   rol_assign_roles               tinyint(1) unsigned            not null default 0,
+   rol_approve_users              tinyint(1) unsigned            not null default 0,
    rol_announcements              tinyint(1) unsigned            not null default 0,
    rol_dates                      tinyint(1) unsigned            not null default 0,
    rol_download                   tinyint(1) unsigned            not null default 0,
@@ -285,6 +297,7 @@ create table %PRAEFIX%_roles
    rol_last_change                datetime,
    rol_usr_id_change              int(7) unsigned,
    rol_valid                      tinyint(1) unsigned            not null default 1,
+   rol_system                     tinyint(1) unsigned            not null default 0,
    primary key (rol_id)
 )
 type = InnoDB
@@ -424,6 +437,86 @@ alter table %PRAEFIX%_dates add constraint %PRAEFIX%_FK_DAT_USR foreign key (dat
       references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
 alter table %PRAEFIX%_dates add constraint %PRAEFIX%_FK_DAT_USR_CHANGE foreign key (dat_usr_id_change)
       references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
+      
+/*==============================================================*/
+/* Table: adm_folders                                           */
+/*==============================================================*/
+create table %PRAEFIX%_folders
+(
+   fol_id                         int(11) unsigned               not null AUTO_INCREMENT,
+   fol_org_id                     tinyint(4)                     not null,
+   fol_fol_id_parent              int(11) unsigned,
+   fol_type                       varchar(10)                    not null,
+   fol_name                       varchar(255)                   not null,
+   fol_path                       text                           not null,
+   fol_locked                     tinyint (1) unsigned           not null default 0,
+   fol_timestamp                  datetime                       not null,
+   fol_usr_id                     int(11) unsigned,
+   primary key (fol_id)
+)
+type = InnoDB;      
+
+-- Index
+alter table %PRAEFIX%_folders add index FOL_ORG_FK (fol_org_id);
+alter table %PRAEFIX%_folders add index FOL_FOL_PARENT_FK (fol_fol_id_parent);
+alter table %PRAEFIX%_folders add index FOL_USR_FK (fol_usr_id);
+
+-- Constraints
+alter table %PRAEFIX%_folders add constraint FK_FOL_ORG foreign key (fol_org_id)
+      references %PRAEFIX%_organizations (org_id) on delete restrict on update restrict;
+alter table %PRAEFIX%_folders add constraint FK_FOL_FOL_PARENT foreign key (fol_fol_id_parent)
+      references %PRAEFIX%_folders (fol_id) on delete restrict on update restrict;
+alter table %PRAEFIX%_folders add constraint FK_FOL_USR foreign key (fol_usr_id)
+      references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
+
+/*==============================================================*/
+/* Table: adm_files                                             */
+/*==============================================================*/
+create table %PRAEFIX%_files
+(
+   fil_id                         int(11) unsigned               not null,
+   fil_fol_id                     int(11) unsigned               not null,
+   fil_name                       varchar(255)                   not null,
+   fil_locked                     tinyint(1) unsigned            not null default 0,
+   fil_counter                    int,
+   fil_timestamp                  datetime                       not null,
+   fil_usr_id                     int(11) unsigned,
+   primary key (fil_id)
+)
+type = InnoDB;
+
+-- Index
+alter table %PRAEFIX%_files add index FIL_FOL_FK (fil_fol_id);
+alter table %PRAEFIX%_files add index FIL_USR_FK (fil_usr_id);
+
+-- Constraints
+alter table %PRAEFIX%_files add constraint FK_FIL_FOL foreign key (fil_fol_id)
+      references %PRAEFIX%_folders (fol_id) on delete restrict on update restrict;
+alter table %PRAEFIX%_files add constraint FK_FIL_USR foreign key (fil_usr_id)
+      references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
+      
+/*==============================================================*/
+/* Table: adm_folder_roles                                      */
+/*==============================================================*/
+create table %PRAEFIX%_folder_roles
+(
+   flr_fol_id                     int(11) unsigned               not null,
+   flr_rol_id                     int(11) unsigned               not null,
+   primary key (flr_fol_id, flr_rol_id)
+)
+type = InnoDB;
+
+-- Index
+alter table %PRAEFIX%_folder_roles add index FLR_FOL_FK (flr_fol_id);
+alter table %PRAEFIX%_folder_roles add index FLR_ROL_FK (flr_rol_id);
+
+-- Constraints
+alter table %PRAEFIX%_folder_roles add constraint FK_FLR_FOL foreign key (flr_fol_id)
+      references %PRAEFIX%_folders (fol_id) on delete restrict on update restrict;
+
+alter table %PRAEFIX%_folder_roles add constraint FK_FLR_ROL foreign key (flr_rol_id)
+      references %PRAEFIX%_roles (rol_id) on delete restrict on update restrict;
+
       
 /*==============================================================*/
 /* Table: adm_guestbook                                         */
