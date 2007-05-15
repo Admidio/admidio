@@ -114,8 +114,8 @@ for($i = 0; $i < count($_POST); $i++)
                 
                 // Datentyp ermitteln
                 $sql = "SELECT usf_type FROM ". TBL_USER_FIELDS. "
-                         WHERE usf_org_shortname = '$g_organization' 
-                           AND usf_id            = '$act_field_name' ";
+                         WHERE usf_org_id = $g_current_organization->id
+                           AND usf_id     = '$act_field_name' ";
                 $result = mysql_query($sql, $g_adm_con);
                 db_error($result,__FILE__,__LINE__);
                 

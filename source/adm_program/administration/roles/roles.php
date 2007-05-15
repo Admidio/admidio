@@ -31,7 +31,7 @@
  require("../../system/login_valid.php");
 
 // nur Moderatoren duerfen Rollen erfassen & verwalten
-if(!isModerator())
+if(!$g_current_user->assignRoles())
 {
     $g_message->show("norights");
 }
@@ -164,10 +164,10 @@ echo "
         <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
             <td style=\"text-align: left;\">&nbsp;<a href=\"$g_root_path/adm_program/administration/roles/roles_new.php?rol_id=$row->rol_id\" title=\"$row->rol_description\">$row->rol_name</a></td>
             <td style=\"text-align: left;\">";
-                if($row->rol_moderation == 1)
+                if($row->rol_assign_roles == 1)
                 {
                     echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/wand.png\"
-                    alt=\"Moderation (Rollen verwalten und zuordnen uvm.)\" title=\"Moderation (Rollen verwalten und zuordnen uvm.)\">";
+                    alt=\"Rollen verwalten und zuordnen\" title=\"Rollen verwalten und zuordnen\">";
                 }
                 if($row->rol_edit_user == 1)
                 {

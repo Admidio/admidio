@@ -33,8 +33,8 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
-// nur Moderatoren duerfen Felder erfassen & verwalten
-if(!isModerator())
+// nur Webmaster duerfen organisationsspezifischen Profilfelder verwalten
+if(!$g_current_user->isWebmaster())
 {
     $g_message->show("norights");
 }
@@ -68,8 +68,8 @@ if($_GET['mode'] == 1)
         {
             // Schauen, ob das Feld bereits existiert
             $sql    = "SELECT COUNT(*) FROM ". TBL_USER_FIELDS. "
-                        WHERE usf_org_shortname LIKE '$g_organization'
-                          AND usf_name         LIKE {0}";
+                        WHERE usf_org_id =    $g_current_organization->id
+                          AND usf_name   LIKE {0}";
             $sql    = prepareSQL($sql, array($_POST['name']));
             $result = mysql_query($sql, $g_adm_con);
             db_error($result,__FILE__,__LINE__);
@@ -81,13 +81,13 @@ if($_GET['mode'] == 1)
             }      
         }
 
-        if(array_key_exists("locked", $_POST))
+        if(array_key_exists("hidden", $_POST))
         {
-            $locked = 1;
+            $hidden = 1;
         }
         else
         {
-            $locked = 0;
+            $hidden = 0;
         }
 
         if($_GET['usf_id'] > 0)
@@ -96,15 +96,15 @@ if($_GET['mode'] == 1)
                        SET usf_name        = {0}
                          , usf_description = {1}
                          , usf_type        = {2}
-                         , usf_locked      = $locked
+                         , usf_hidden      = $hidden
                      WHERE usf_id = {3}";
         }
         else
         {
             // Feld in Datenbank hinzufuegen
-            $sql    = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_shortname, usf_name, usf_description,
-                                                          usf_type, usf_locked)
-                            VALUES ('$g_organization', {0}, {1}, {2}, $locked) ";
+            $sql    = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_id, usf_name, usf_description,
+                                                          usf_type, usf_hidden)
+                            VALUES ($g_current_organization->id, {0}, {1}, {2}, $hidden) ";
         }
         $sql    = prepareSQL($sql, array(trim($_POST['name']), trim($_POST['description']),
                                          trim($_POST['type']), $_GET['usf_id']));

@@ -149,7 +149,8 @@ class Role
                 }
                 break;
             
-            case "rol_moderation":
+            case "rol_approve_users":
+            case "rol_assign_roles":
             case "rol_announcements":
             case "rol_dates":
             case "rol_download":
@@ -163,6 +164,7 @@ class Role
             case "rol_weblinks":
             case "rol_locked":
             case "rol_valid":
+            case "rol_system":
                 if($field_value != 1)
                 {
                     $field_value = 0;

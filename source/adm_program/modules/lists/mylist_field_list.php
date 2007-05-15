@@ -43,9 +43,9 @@ if(isset($result_user_fields) == false)
     //Liste der Zusatzfelder erstellen
     $sql    =  "SELECT * 
                   FROM ". TBL_USER_FIELDS. "
-                 WHERE usf_org_shortname IS NULL
-                    OR usf_org_shortname = '$g_organization'
-                 ORDER BY usf_org_shortname DESC, usf_name ASC";
+                 WHERE usf_org_id IS NULL
+                    OR usf_org_id = $g_current_organization->id
+                 ORDER BY usf_org_id DESC, usf_name ASC";
 
     $result_user_fields = mysql_query($sql, $g_adm_con);
     db_error($result_user_fields,__FILE__,__LINE__);  
@@ -114,14 +114,14 @@ echo "<div style=\"text-align: center; width: 18%; float: left; margin-top: 5px;
 
                 while($uf_row = mysql_fetch_object($result_user_fields))
                 {     
-                    if($uf_row->usf_org_shortname != NULL
+                    if($uf_row->usf_org_id != NULL
                     && $field_header == false)
                     {
                         echo "</optgroup>
                         <optgroup label=\"Zus&auml;tzliche Felder\">";
                         $field_header = true;
                     }
-                    if($uf_row->usf_org_shortname == NULL
+                    if($uf_row->usf_org_id == NULL
                     && $msg_header == false)
                     {
                         echo "</optgroup>
@@ -129,7 +129,7 @@ echo "<div style=\"text-align: center; width: 18%; float: left; margin-top: 5px;
                         $msg_header = true;
                     }
                     //Nur Moderatoren duerfen sich gelockte Felder anzeigen lassen 
-                    if($uf_row->usf_locked==0 || isModerator())
+                    if($uf_row->usf_hidden == 0 || $g_current_user->assignRoles())
                     {
                         echo"<option value=\"$uf_row->usf_id\"";
                         // wenn Zurueck gewaehlt wurde, dann Felder mit den alten

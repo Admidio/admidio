@@ -30,8 +30,8 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
-// nur Moderatoren duerfen Profilfelder erfassen & verwalten
-if(!isModerator())
+// nur Webmaster duerfen organisationsspezifischen Profilfelder verwalten
+if(!$g_current_user->isWebmaster())
 {
     $g_message->show("norights");
 }
@@ -81,7 +81,7 @@ else
             $form_values['name']        = $row_usf->usf_name;
             $form_values['description'] = $row_usf->usf_description;
             $form_values['type']        = $row_usf->usf_type;
-            $form_values['locked']      = $row_usf->usf_locked;
+            $form_values['hidden']      = $row_usf->usf_hidden;
         }
     }
 }
@@ -132,6 +132,12 @@ echo "
                             echo " selected=\"selected\""; 
                         }
                         echo ">Datum</option>\n
+                    <option value=\"EMAIL\""; 
+                        if($form_values['type'] == "EMAIL") 
+                        {
+                            echo " selected=\"selected\""; 
+                        }
+                        echo ">E-Mail</option>\n
                     <option value=\"CHECKBOX\""; 
                         if($form_values['type'] == "CHECKBOX") 
                         {
@@ -150,6 +156,12 @@ echo "
                             echo " selected=\"selected\""; 
                         }
                         echo ">Text (255 Zeichen)</option>\n
+                    <option value=\"URL\""; 
+                        if($form_values['type'] == "URL") 
+                        {
+                            echo " selected=\"selected\""; 
+                        }
+                        echo ">URL</option>\n
                     <option value=\"NUMERIC\"";  
                         if($form_values['type'] == "NUMERIC") 
                         {
@@ -165,13 +177,13 @@ echo "
                 <img src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Feld nur f&uuml;r Moderatoren sichtbar\">
             </div>
             <div style=\"text-align: left; margin-left: 29%;\">
-                <input type=\"checkbox\" id=\"locked\" name=\"locked\" ";
-                if(isset($form_values['locked']) && $form_values['locked'] == 1)
+                <input type=\"checkbox\" id=\"hidden\" name=\"hidden\" ";
+                if(isset($form_values['hidden']) && $form_values['hidden'] == 1)
                 {
                     echo " checked ";
                 }
                 echo " value=\"1\" />
-                <label for=\"locked\">Feld nur f&uuml;r Moderatoren sichtbar&nbsp;</label>
+                <label for=\"hidden\">Feld nur f&uuml;r Moderatoren sichtbar&nbsp;</label>
                 <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: middle;\" vspace=\"1\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                 onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=field_locked','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
             </div>

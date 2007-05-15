@@ -300,10 +300,10 @@ if($new_user == 2)
 // Feldinhalt der organisationsspezifischen Felder pruefen
 $sql = "SELECT usf_id, usf_name, usf_type
           FROM ". TBL_USER_FIELDS. "
-         WHERE usf_org_shortname  = '$g_organization' ";
-if(!isModerator())
+         WHERE usf_org_id  = $g_current_organization->id ";
+if(!$g_current_user->assignRoles())
 {
-    $sql = $sql. " AND usf_locked = 0 ";
+    $sql = $sql. " AND usf_hidden = 0 ";
 }
 $result_msg = mysql_query($sql, $g_adm_con);
 db_error($result_msg,__FILE__,__LINE__);
@@ -397,15 +397,16 @@ if($new_user != 2 || $g_preferences['registration_mode'] != 1)
     // Messenger-Daten und gruppierungsspezifische Felder anlegen / updaten
     /*------------------------------------------------------------*/
 
-    $sql = "SELECT usf_id, usf_name, usd_id, usd_value
-              FROM ". TBL_USER_FIELDS. " LEFT JOIN ". TBL_USER_DATA. "
+    $sql = "SELECT usf_id, usf_name, usd_usr_id, usd_value
+              FROM ". TBL_USER_FIELDS. " 
+              LEFT JOIN ". TBL_USER_DATA. "
                 ON usd_usf_id = usf_id
                AND usd_usr_id         = {0}
-             WHERE (  usf_org_shortname IS NULL
-                   OR usf_org_shortname  = '$g_organization' ) ";
-    if(!isModerator())
+             WHERE (  usf_org_id IS NULL
+                   OR usf_org_id  = $g_current_organization->id ) ";
+    if(!$g_current_user->assignRoles())
     {
-        $sql = $sql. " AND usf_locked = 0 ";
+        $sql = $sql. " AND usf_hidden = 0 ";
     }
     $sql = prepareSQL($sql, array($user->id));
     $result_msg = mysql_query($sql, $g_adm_con);
@@ -420,38 +421,44 @@ if($new_user != 2 || $g_preferences['registration_mode'] != 1)
             $field_value = strStripTags($_POST["usf-$row->usf_id"]);
         }
         
-        if(is_null($row->usd_value))
+        // nur Aenderungen speichern
+        if($field_value != $row->usd_value)
         {
-            // noch kein Wert vorhanden -> neu einfuegen
-            if(strlen($field_value) > 0)
+            if(is_null($row->usd_value))
             {
-                $sql = "INSERT INTO ". TBL_USER_DATA. " (usd_usr_id, usd_usf_id, usd_value)
-                                                 VALUES ({0}, $row->usf_id, {1}) ";
-                $sql = prepareSQL($sql, array($user->id, $field_value));
-                $result = mysql_query($sql, $g_adm_con);
-                db_error($result,__FILE__,__LINE__);
-            }
-        }
-        else
-        {
-            // auch ein neuer Wert vorhanden
-            if(strlen($field_value) > 0)
-            {
-                if($field_value != $row->usd_value)
+                // noch kein Wert vorhanden -> neu einfuegen
+                if(strlen($field_value) > 0)
                 {
-                    $sql = "UPDATE ". TBL_USER_DATA. " SET usd_value = {0}
-                             WHERE usd_id = $row->usd_id ";
-                    $sql = prepareSQL($sql, array($field_value));
+                    $sql = "INSERT INTO ". TBL_USER_DATA. " (usd_usr_id, usd_usf_id, usd_value)
+                                                     VALUES ({0}, $row->usf_id, {1}) ";
+                    $sql = prepareSQL($sql, array($user->id, $field_value));
                     $result = mysql_query($sql, $g_adm_con);
                     db_error($result,__FILE__,__LINE__);
                 }
             }
             else
             {
-                $sql = "DELETE FROM ". TBL_USER_DATA. "
-                         WHERE usd_id = $row->usd_id ";
-                $result = mysql_query($sql, $g_adm_con);
-                db_error($result,__FILE__,__LINE__);
+                // auch ein neuer Wert vorhanden
+                if(strlen($field_value) > 0)
+                {
+                    if($field_value != $row->usd_value)
+                    {
+                        $sql = "UPDATE ". TBL_USER_DATA. " SET usd_value = {0}
+                                 WHERE usd_usr_id = $row->usd_usr_id 
+                                   AND usd_usf_id = $row->usf_id ";
+                        $sql = prepareSQL($sql, array($field_value));
+                        $result = mysql_query($sql, $g_adm_con);
+                        db_error($result,__FILE__,__LINE__);
+                    }
+                }
+                else
+                {
+                    $sql = "DELETE FROM ". TBL_USER_DATA. "
+                             WHERE usd_usr_id = $row->usd_usr_id 
+                               AND usd_usf_id = $row->usf_id ";
+                    $result = mysql_query($sql, $g_adm_con);
+                    db_error($result,__FILE__,__LINE__);
+                }
             }
         }
     }

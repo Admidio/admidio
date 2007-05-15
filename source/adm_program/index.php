@@ -258,7 +258,7 @@ echo "</p>
 echo "
 </div>";
 
-if(isModerator() || $g_current_user->editUser())
+if($g_current_user->assignRoles() || $g_current_user->editUser())
 {
     echo "<br /><br />
 
@@ -291,7 +291,7 @@ if(isModerator() || $g_current_user->editUser())
             <span class=\"smallFontSize\">Mitglieder (Benutzer) k&ouml;nnen entfernt und neue Mitglieder (Benutzer) k&ouml;nnen in der Datenbank anlegt werden.</span>
         </div>";
 
-        if(isModerator())
+        if($g_current_user->assignRoles())
         {
             echo "
             <div style=\"margin-top: 7px;\"></div>

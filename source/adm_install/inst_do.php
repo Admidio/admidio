@@ -34,6 +34,7 @@
 require("../adm_program/system/function.php");
 require("../adm_program/system/string.php");
 require("../adm_program/system/date.php");
+require("../adm_program/system/user_class.php");
 
 session_name('admidio_php_session_id');
 session_start();
@@ -315,34 +316,44 @@ if($req_mode == 1)
 
     // Default-Daten anlegen
 
+    // Orga-Uebergreifende Kategorien anlegen
+    $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden)
+                                      VALUES (NULL, 'USR', 'Stammdaten', 0) ";
+    $result = mysql_query($sql, $connection);
+    if(!$result) showError(mysql_error());
+    $cat_id_stammdaten = mysql_insert_id();
+
+    $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden)
+                                      VALUES (NULL, 'USR', 'Messenger', 0) ";
+    $result = mysql_query($sql, $connection);
+    if(!$result) showError(mysql_error());
+    $cat_id_messenger = mysql_insert_id();
+
+    // Stammdatenfelder anlegen
+    $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_id, usf_cat_id, usf_type, usf_name, usf_system)
+                                       VALUES (NULL, $cat_id_stammdaten, 'TEXT', 'Adresse', 1) 
+                                            , (NULL, $cat_id_stammdaten, 'TEXT', 'PLZ', 1)
+                                            , (NULL, $cat_id_stammdaten, 'TEXT', 'Ort', 1)
+                                            , (NULL, $cat_id_stammdaten, 'TEXT', 'Land', 1)
+                                            , (NULL, $cat_id_stammdaten, 'TEXT', 'Telefon', 1)
+                                            , (NULL, $cat_id_stammdaten, 'TEXT', 'Handy', 1)
+                                            , (NULL, $cat_id_stammdaten, 'TEXT', 'Fax', 1)
+                                            , (NULL, $cat_id_stammdaten, 'DATE', 'Geburtstag', 1)
+                                            , (NULL, $cat_id_stammdaten, 'NUMERIC', 'Geschlecht', 1)
+                                            , (NULL, $cat_id_stammdaten, 'E-Mail',  'E-Mail', 1)
+                                            , (NULL, $cat_id_stammdaten, 'URL',     'Homepage', 1) ";
+    $result = mysql_query($sql, $connection);
+    if(!$result) showError(mysql_error());
+    $usf_id_homepage = mysql_insert_id();
+
     // Messenger anlegen
-    $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_shortname, usf_type, usf_name, usf_description)
-                                       VALUES (NULL, 'MESSENGER', 'AIM', 'AOL Instant Messenger') ";
-    $result = mysql_query($sql, $connection);
-    if(!$result) showError(mysql_error());
-
-    $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_shortname, usf_type, usf_name, usf_description)
-                                       VALUES (NULL, 'MESSENGER', 'ICQ', 'ICQ') ";
-    $result = mysql_query($sql, $connection);
-    if(!$result) showError(mysql_error());
-
-    $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_shortname, usf_type, usf_name, usf_description)
-                                       VALUES (NULL, 'MESSENGER', 'MSN', 'MSN Messenger') ";
-    $result = mysql_query($sql, $connection);
-    if(!$result) showError(mysql_error());
-
-    $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_shortname, usf_type, usf_name, usf_description)
-                                       VALUES (NULL, 'MESSENGER', 'Yahoo', 'Yahoo! Messenger') ";
-    $result = mysql_query($sql, $connection);
-    if(!$result) showError(mysql_error());
-
-    $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_shortname, usf_type, usf_name, usf_description)
-                                       VALUES (NULL, 'MESSENGER', 'Skype', 'Skype') ";
-    $result = mysql_query($sql, $connection);
-    if(!$result) showError(mysql_error());
-
-    $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_shortname, usf_type, usf_name, usf_description)
-                                       VALUES (NULL, 'MESSENGER', 'Google Talk', 'Google Talk') ";
+    $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_id, usf_cat_id, usf_type, usf_name, usf_description, usf_system)
+                                       VALUES (NULL, $cat_id_messenger, 'TEXT', 'AIM', 'AOL Instant Messenger', 1) 
+                                            , (NULL, $cat_id_messenger, 'TEXT', 'ICQ', 'ICQ', 1) 
+                                            , (NULL, $cat_id_messenger, 'TEXT', 'MSN', 'MSN Messenger', 1)
+                                            , (NULL, $cat_id_messenger, 'TEXT', 'Yahoo', 'Yahoo! Messenger', 1) 
+                                            , (NULL, $cat_id_messenger, 'TEXT', 'Skype', 'Skype', 1) 
+                                            , (NULL, $cat_id_messenger, 'TEXT', 'Google Talk', 'Google Talk', 1) ";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
 }
@@ -361,6 +372,10 @@ if($req_mode == 3)
             elseif($update_count == 4)
             {
                 $filename = "db_scripts/upd_1_4_db.sql";
+            }
+            elseif($update_count == 5)
+            {
+                $filename = "db_scripts/upd_1_5_db.sql";
             }
             else
             {
@@ -453,28 +468,17 @@ if($req_mode == 1 || $req_mode == 4)
     
     // Default-Kategorie fuer Rollen und Links eintragen
     $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden)
-                                      VALUES ($org_id, 'ROL', 'Allgemein', 1)";
+                                           VALUES ($org_id, 'ROL', 'Allgemein', 1)";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
     $category_common = mysql_insert_id();
-
+    
     $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden)
-                                      VALUES ($org_id, 'ROL', 'Gruppen', 1)";
-    $result = mysql_query($sql, $connection);
-    if(!$result) showError(mysql_error());
-
-    $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden)
-                                      VALUES ($org_id, 'ROL', 'Kurse', 1)";
-    $result = mysql_query($sql, $connection);
-    if(!$result) showError(mysql_error());
-
-    $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden)
-                                      VALUES ($org_id, 'ROL', 'Mannschaften', 1)";
-    $result = mysql_query($sql, $connection);
-    if(!$result) showError(mysql_error());
-
-    $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden)
-                                      VALUES ($org_id, 'LNK', 'Allgemein', 0)";
+                                      VALUES ($org_id, 'ROL', 'Gruppen', 1)
+                                           , ($org_id, 'ROL', 'Kurse', 1)
+                                           , ($org_id, 'ROL', 'Mannschaften', 1)
+                                           , ($org_id, 'LNK', 'Allgemein', 0)
+                                           , ($org_id, 'USR', '". utf8_decode('Zusätzliche Daten'). "', 0) ";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
 
@@ -482,11 +486,11 @@ if($req_mode == 1 || $req_mode == 4)
 
     // Webmaster
     $sql = "INSERT INTO ". TBL_ROLES. " (rol_org_shortname, rol_cat_id, rol_name, rol_description, rol_valid,
-                                         rol_moderation, rol_announcements, rol_dates, rol_download,
+                                         rol_assign_roles, rol_approve_users, rol_announcements, rol_dates, rol_download,
                                          rol_guestbook, rol_guestbook_comments, rol_photo, rol_weblinks,
                                          rol_edit_user, rol_mail_logout, rol_mail_login, rol_profile)
                                  VALUES ({0}, $category_common, 'Webmaster', 'Gruppe der Administratoren des Systems', 1,
-                                         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1) ";
+                                         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1) ";
     $sql = prepareSQL($sql, array($req_orga_name_short));
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
@@ -494,11 +498,11 @@ if($req_mode == 1 || $req_mode == 4)
 
     // Mitglied
     $sql = "INSERT INTO ". TBL_ROLES. " (rol_org_shortname, rol_cat_id, rol_name, rol_description, rol_valid,
-                                         rol_moderation, rol_announcements, rol_dates, rol_download,
+                                         rol_assign_roles, rol_approve_users, rol_announcements, rol_dates, rol_download,
                                          rol_guestbook, rol_guestbook_comments, rol_photo, rol_weblinks,
                                          rol_edit_user, rol_mail_logout, rol_mail_login, rol_profile)
                                  VALUES ({0}, $category_common, 'Mitglied', 'Alle Mitglieder der Organisation', 1,
-                                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1) ";
+                                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1) ";
     $sql = prepareSQL($sql, array($req_orga_name_short));
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
@@ -506,33 +510,29 @@ if($req_mode == 1 || $req_mode == 4)
 
     // Vorstand
     $sql = "INSERT INTO ". TBL_ROLES. " (rol_org_shortname, rol_cat_id, rol_name, rol_description, rol_valid,
-                                         rol_moderation, rol_announcements, rol_dates, rol_download,
+                                         rol_assign_roles, rol_approve_users, rol_announcements, rol_dates, rol_download,
                                          rol_guestbook, rol_guestbook_comments, rol_photo, rol_weblinks,
                                          rol_edit_user, rol_mail_logout, rol_mail_login, rol_profile)
                                  VALUES ({0}, $category_common, 'Vorstand', 'Vorstand des Vereins', 1,
-                                         0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1) ";
+                                         0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1) ";
     $sql = prepareSQL($sql, array($req_orga_name_short));
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
 
     // User Webmaster anlegen
     $pw_md5 = md5($req_user_password);
-    $sql = "INSERT INTO ". TBL_USERS. " (usr_last_name, usr_first_name, usr_email, usr_login_name, usr_password, usr_valid)
-                                 VALUES ({0}, {1}, {2}, {3}, '$pw_md5', 1) ";
-    $sql = prepareSQL($sql, array($req_user_last_name, $req_user_first_name, $req_user_email, $req_user_login));
-    $result = mysql_query($sql, $connection);
-    if(!$result) showError(mysql_error());
-    $user_id = mysql_insert_id();
-
+    $user = new User($connection);
+    $user->last_name  = $req_user_last_name;
+    $user->first_name = $req_user_first_name;
+    $user->email      = $req_user_email;
+    $user->login_name = $req_user_login;
+    $user->password   = $pw_md5;
+    $user->insert(0);
+    
     // Mitgliedschaft bei Rolle "Webmaster" anlegen
     $sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin, mem_valid)
-                                   VALUES ($rol_id_webmaster, $user_id, NOW(), 1) ";
-    $result = mysql_query($sql, $connection);
-    if(!$result) showError(mysql_error());
-
-    // Mitgliedschaft "Mitglied" anlegen
-    $sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin, mem_valid)
-                                   VALUES ($rol_id_member, $user_id, NOW(), 1) ";
+                                   VALUES ($rol_id_webmaster, $user->id, NOW(), 1) 
+                                        , ($rol_id_member, $user->id, NOW(), 1) ";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
 }

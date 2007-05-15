@@ -35,7 +35,7 @@ require("../../system/role_dependency_class.php");
 
 
 // nur Webmaster & Moderatoren duerfen Rollen zuweisen
-if(!isModerator() && !isGroupLeader() && !$g_current_user->editUser())
+if(!$g_current_user->assignRoles() && !isGroupLeader() && !$g_current_user->editUser())
 {
     $g_message->show("norights");
 }
@@ -64,7 +64,7 @@ if(isset($_GET["new_user"]))
     $req_new_usr = $_GET["new_user"];
 }
 
-if(isModerator())
+if($g_current_user->assignRoles())
 {
     // Alle Rollen der Gruppierung auflisten
     $sql    = "SELECT rol_id, rol_name, rol_max_members
@@ -94,8 +94,8 @@ elseif($g_current_user->editUser())
                  FROM ". TBL_ROLES. "
                 WHERE rol_org_shortname = '$g_organization'
                   AND rol_valid        = 1
-                  AND rol_moderation = 0
-                  AND rol_locked     = 0
+                  AND rol_assign_roles = 0
+                  AND rol_locked       = 0
                 ORDER BY rol_name";
 }
 $result_rolle = mysql_query($sql, $g_adm_con);

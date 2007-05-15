@@ -75,6 +75,7 @@ class User
     var $reg_org_shortname;
 
     //User Rechte
+    var $assignRolesRight;
     var $editProfile;
     var $editUser;
     var $commentGuestbookRight;
@@ -182,8 +183,9 @@ class User
     // alle Rechtevariablen wieder zuruecksetzen
     function clearRights()
     {
+        $this->assignRolesRight = -1;
         $this->editProfile = -1;
-        $this->editUser = -1;
+        $this->editUser    = -1;
         $this->editGuestbookRight = -1;
         $this->commentGuestbookRight = -1;
         $this->editWeblinksRight = -1;
@@ -246,7 +248,7 @@ class User
     function insert($login_user_id)
     {
         if($this->id == 0  && is_numeric($login_user_id)    // neuer angelegter User
-        && ($login_user_id > 0 || $this->valid == 0))       // neuer registrierter User
+        && ($login_user_id >= 0 || $this->valid == 0))       // neuer registrierter User
         {
             $act_date = date("Y-m-d H:i:s", time());
 
@@ -262,7 +264,7 @@ class User
                          VALUES ({0}, {1}, {2}, '$this->zip_code', {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, NULL, NULL,
                                  0,  NULL, 0, '$act_date', {12}, {13}, {14}, {15}";
             // bei einer Registrierung ist die Login-User-Id nicht gefüllt
-            if($this->valid == 0 && $login_user_id == 0)
+            if($login_user_id == 0)
             {
                 $sql = $sql. ", NULL )";
             }
@@ -429,6 +431,46 @@ class User
         return $vcard;
     }
 
+    // Funktion prueft, ob der angemeldete User Weblinks anlegen und editieren darf
+    function assignRoles()
+    {
+        if(-1 == $this->assignRolesRight)
+        {
+            global $g_organization;
+
+            $sql    = "SELECT *
+                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
+                        WHERE mem_usr_id        = $this->id
+                          AND mem_rol_id        = rol_id
+                          AND mem_valid         = 1
+                          AND rol_org_shortname = '$g_organization'
+                          AND rol_assign_roles  = 1
+                          AND rol_valid         = 1 ";
+            $result = mysql_query($sql, $this->db_connection);
+            db_error($result,__FILE__,__LINE__);
+
+            $assign_roles = mysql_num_rows($result);
+
+            if ( $assign_roles > 0 )
+            {
+                $this->assignRolesRight = 1;
+            }
+            else
+            {
+                $this->assignRolesRight = 0;
+            }
+        }
+
+        if (1 == $this->assignRolesRight)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     // Funktion prueft, ob der angemeldete User das entsprechende Profil bearbeiten darf
     function editProfile($profileID = NULL)
     {
@@ -477,14 +519,11 @@ class User
                 return $this->editUser();
             }
 
-
         }
         else
         {
             return $this->editUser();
         }
-
-
     }
 
     // Funktion prueft, ob der angemeldete User fremde Benutzerdaten bearbeiten darf
@@ -572,7 +611,6 @@ class User
     // Funktion prueft, ob der angemeldete User Gaestebucheintraege loeschen und editieren darf
     function editGuestbookRight()
     {
-
         if($this->editGuestbookRight == -1)
         {
             global $g_organization;
@@ -608,13 +646,11 @@ class User
         {
             return false;
         }
-
     }
 
     // Funktion prueft, ob der angemeldete User Weblinks anlegen und editieren darf
     function editWeblinksRight()
     {
-
         if(-1 == $this->editWeblinksRight)
         {
             global $g_organization;
@@ -650,8 +686,6 @@ class User
         {
             return false;
         }
-
-
     }
 
     // Funktion prueft, ob der angemeldete User Downloads hochladen und verwalten darf
@@ -693,7 +727,6 @@ class User
         {
             return false;
         }
-
     }
 
     function isWebmaster()

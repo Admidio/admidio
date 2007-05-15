@@ -32,7 +32,7 @@ require("../../system/role_class.php");
 require("../../system/role_dependency_class.php");
 
 // nur Moderatoren duerfen Rollen anlegen und verwalten
-if(!isModerator())
+if(!$g_current_user->assignRoles())
 {
     $g_message->show("norights");
 }
@@ -199,8 +199,8 @@ echo "
 
             <div style=\"margin-top: 6px;\">
                 <div style=\"text-align: right; width: 10%; float: left; padding-right: 7px;\">
-                    <input type=\"checkbox\" id=\"rol_moderation\" name=\"rol_moderation\" ";
-                    if($role->getValue("rol_moderation") == 1)
+                    <input type=\"checkbox\" id=\"rol_assign_roles\" name=\"rol_assign_roles\" ";
+                    if($role->getValue("rol_assign_roles") == 1)
                     {
                         echo " checked ";
                     }
@@ -209,12 +209,12 @@ echo "
                         echo " disabled ";
                     }
                     echo " value=\"1\" />&nbsp;
-                    <label for=\"rol_moderation\"><img src=\"$g_root_path/adm_program/images/wand.png\" alt=\"Moderation (Rollen verwalten und zuordnen uvm.)\"></label>
+                    <label for=\"rol_assign_roles\"><img src=\"$g_root_path/adm_program/images/wand.png\" alt=\"Rollen verwalten und zuordnen\"></label>
                 </div>
                 <div style=\"text-align: left;\">
-                    <label for=\"rol_moderation\">Moderation (Rollen verwalten und zuordnen uvm.)&nbsp;</label>
+                    <label for=\"rol_assign_roles\">Rollen verwalten und zuordnen&nbsp;</label>
                     <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_moderation','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\">
+                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_zuordnen','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\">
                 </div>
             </div>
             <div style=\"margin-top: 6px;\">

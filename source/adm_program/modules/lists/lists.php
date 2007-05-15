@@ -92,7 +92,7 @@ $sql = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
          WHERE rol_org_shortname = '$g_organization'
            AND rol_valid  = $active_role
            AND rol_cat_id = cat_id ";
-if(!isModerator())
+if(!$g_current_user->assignRoles())
 {
     // wenn nicht Moderator, dann keine versteckten Rollen anzeigen
     $sql .= " AND rol_locked = 0 ";
@@ -307,12 +307,12 @@ echo "</div>
                     echo "<b>$row_lst->rol_name</b>";
                 }
 
-                if(isModerator() || isGroupLeader($row_lst->rol_id) || $g_current_user->editUser())
+                if($g_current_user->assignRoles() || isGroupLeader($row_lst->rol_id) || $g_current_user->editUser())
                 {
                     if($row_lst->rol_name != "Webmaster"
                     || ($row_lst->rol_name == "Webmaster" && $g_current_user->isWebmaster()))
                     {
-                        if(isModerator())
+                        if($g_current_user->assignRoles())
                         {
                             // nur Moderatoren duerfen Rollen editieren
                             echo "&nbsp;<a href=\"$g_root_path/adm_program/administration/roles/roles_new.php?rol_id=$row_lst->rol_id\"><img
