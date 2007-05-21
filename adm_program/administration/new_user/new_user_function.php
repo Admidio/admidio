@@ -168,10 +168,8 @@ elseif($req_mode == 4)
         $g_forum->userDelete($new_user->login_name);
     }
 
-    $sql    = "DELETE FROM ". TBL_USERS. " WHERE usr_id = {0}";
-    $sql    = prepareSQL($sql, array($req_new_user_id));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
+    // nun aus Admidio-DB loeschen
+    $new_user->delete();
 
     $location = "Location: $g_root_path/adm_program/administration/new_user/new_user.php";
     header($location);
