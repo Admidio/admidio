@@ -462,11 +462,11 @@ alter table %PRAEFIX%_folders add index FOL_FOL_PARENT_FK (fol_fol_id_parent);
 alter table %PRAEFIX%_folders add index FOL_USR_FK (fol_usr_id);
 
 -- Constraints
-alter table %PRAEFIX%_folders add constraint FK_FOL_ORG foreign key (fol_org_id)
+alter table %PRAEFIX%_folders add constraint %PRAEFIX%_FK_FOL_ORG foreign key (fol_org_id)
       references %PRAEFIX%_organizations (org_id) on delete restrict on update restrict;
-alter table %PRAEFIX%_folders add constraint FK_FOL_FOL_PARENT foreign key (fol_fol_id_parent)
+alter table %PRAEFIX%_folders add constraint %PRAEFIX%_FK_FOL_FOL_PARENT foreign key (fol_fol_id_parent)
       references %PRAEFIX%_folders (fol_id) on delete restrict on update restrict;
-alter table %PRAEFIX%_folders add constraint FK_FOL_USR foreign key (fol_usr_id)
+alter table %PRAEFIX%_folders add constraint %PRAEFIX%_FK_FOL_USR foreign key (fol_usr_id)
       references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
 
 /*==============================================================*/
@@ -490,9 +490,9 @@ alter table %PRAEFIX%_files add index FIL_FOL_FK (fil_fol_id);
 alter table %PRAEFIX%_files add index FIL_USR_FK (fil_usr_id);
 
 -- Constraints
-alter table %PRAEFIX%_files add constraint FK_FIL_FOL foreign key (fil_fol_id)
+alter table %PRAEFIX%_files add constraint %PRAEFIX%_FK_FIL_FOL foreign key (fil_fol_id)
       references %PRAEFIX%_folders (fol_id) on delete restrict on update restrict;
-alter table %PRAEFIX%_files add constraint FK_FIL_USR foreign key (fil_usr_id)
+alter table %PRAEFIX%_files add constraint %PRAEFIX%_FK_FIL_USR foreign key (fil_usr_id)
       references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
       
 /*==============================================================*/
@@ -511,10 +511,10 @@ alter table %PRAEFIX%_folder_roles add index FLR_FOL_FK (flr_fol_id);
 alter table %PRAEFIX%_folder_roles add index FLR_ROL_FK (flr_rol_id);
 
 -- Constraints
-alter table %PRAEFIX%_folder_roles add constraint FK_FLR_FOL foreign key (flr_fol_id)
+alter table %PRAEFIX%_folder_roles add constraint %PRAEFIX%_FK_FLR_FOL foreign key (flr_fol_id)
       references %PRAEFIX%_folders (fol_id) on delete restrict on update restrict;
 
-alter table %PRAEFIX%_folder_roles add constraint FK_FLR_ROL foreign key (flr_rol_id)
+alter table %PRAEFIX%_folder_roles add constraint %PRAEFIX%_FK_FLR_ROL foreign key (flr_rol_id)
       references %PRAEFIX%_roles (rol_id) on delete restrict on update restrict;
 
       
