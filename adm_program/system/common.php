@@ -102,7 +102,8 @@ if(isset($_COOKIE['admidio_session_id']))
 // globale Klassen mit Datenbankbezug werden in Sessionvariablen gespeichert, 
 // damit die Daten nicht bei jedem Script aus der Datenbank ausgelesen werden muessen
 if(isset($_SESSION['g_current_organization']) 
-&& isset($_SESSION['g_preferences']))
+&& isset($_SESSION['g_preferences'])
+&& $g_organization == $_SESSION['g_current_organization']->shortname )
 {
     $g_current_organization =& $_SESSION['g_current_organization'];
     $g_current_organization->db_connection = $g_adm_con;
