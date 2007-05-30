@@ -195,11 +195,14 @@ class User
     // aktuelle Userdaten in der Datenbank updaten
     // Es muss die ID des eingeloggten Users uebergeben werden,
     // damit die Aenderung protokolliert werden kann
-    function update($login_user_id)
+    function update($login_user_id, $set_change_date = true)
     {
         if($this->id > 0 && $login_user_id > 0 && is_numeric($login_user_id))
         {
-            $act_date = date("Y-m-d H:i:s", time());
+            if($set_change_date)
+            {
+                $this->last_change = date("Y-m-d H:i:s", time());
+            }
             
             // PLZ darf nicht ueber prepareSQL geprueft werden, 
             // da sonst fuehrende Nullen entfernt wuerden
@@ -223,18 +226,18 @@ class User
                                              , usr_number_login   = {14}
                                              , usr_date_invalid   = {15}
                                              , usr_number_invalid = {16}
-                                             , usr_last_change    = '$act_date'
+                                             , usr_last_change    = {17}
                                              , usr_usr_id_change  = $login_user_id
-                                             , usr_valid          = {17}
-                                             , usr_reg_org_shortname = {18}
-                                             , usr_login_name     = {19}
-                                             , usr_password       = {20}
+                                             , usr_valid          = {18}
+                                             , usr_reg_org_shortname = {19}
+                                             , usr_login_name     = {20}
+                                             , usr_password       = {21}
                      WHERE usr_id = $this->id ";
             $sql = prepareSQL($sql, array($this->last_name, $this->first_name, $this->address,
                         $this->city, $this->country, $this->phone, $this->mobile, $this->fax, $this->birthday,
                         $this->gender, $this->email, $this->homepage, $this->last_login, $this->actual_login,
-                        $this->number_login, $this->date_invalid, $this->number_invalid, $this->valid,
-                        $this->reg_org_shortname, $this->login_name, $this->password));
+                        $this->number_login, $this->date_invalid, $this->number_invalid, $this->last_change,
+                        $this->valid, $this->reg_org_shortname, $this->login_name, $this->password));
             $result = mysql_query($sql, $this->db_connection);
             db_error($result,__FILE__,__LINE__);
             return 0;

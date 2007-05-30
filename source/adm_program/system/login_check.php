@@ -99,23 +99,14 @@ if ($user_found >= 1)
 
         unset($_SESSION['g_current_organisation']);
 
-        // Last-Login speichern
-
-        $sql = "UPDATE ". TBL_USERS. " SET usr_last_login = usr_actual_login
-                 WHERE usr_id = $user_row->usr_id";
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result,__FILE__,__LINE__);
-
-        // Logins zaehlen und aktuelles Login-Datum speichern
-
+        // Logins zaehlen und aktuelles Login-Datum aktualisieren
         $act_date = date("Y-m-d H:i:s", time());
-        $sql = "UPDATE ". TBL_USERS. " SET usr_number_login   = usr_number_login + 1
-                                         , usr_actual_login   = '$act_date'
-                                         , usr_date_invalid   = NULL
-                                         , usr_number_invalid = 0
-                 WHERE usr_id = $user_row->usr_id";
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result,__FILE__,__LINE__);
+        $g_current_user->last_login     = $g_current_user->actual_login;
+        $g_current_user->number_login   = $g_current_user->number_login + 1;
+        $g_current_user->actual_login   = $act_date;
+        $g_current_user->date_invalid   = NULL;
+        $g_current_user->number_invalid = 0;
+        $g_current_user->update($user_row->usr_id, false);
 
         // Paralell im Forum einloggen, wenn g_forum gesetzt ist
         if($g_forum_integriert)
