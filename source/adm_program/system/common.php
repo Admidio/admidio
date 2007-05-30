@@ -79,8 +79,15 @@ define("TBL_USER_DATA",         $g_tbl_praefix. "_user_data");
 define("TBL_USER_FIELDS",       $g_tbl_praefix. "_user_fields");
 
  // Verbindung zu Datenbank herstellen
-$g_adm_con = mysql_connect ($g_adm_srv, $g_adm_usr, $g_adm_pw);
-mysql_select_db($g_adm_db, $g_adm_con );
+$g_adm_con = @mysql_connect ($g_adm_srv, $g_adm_usr, $g_adm_pw);
+if($g_adm_con == false)
+{
+    die("Es konnte keine Verbindung zur Datenbank hergestellt werden.");
+}
+if(mysql_select_db($g_adm_db, $g_adm_con) == false)
+{
+    die("Die Datenbank $g_adm_db wurde nicht gefunden. ");
+}
 
 // PHP-Session starten
 session_name('admidio_php_session_id');
