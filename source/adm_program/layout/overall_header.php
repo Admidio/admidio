@@ -31,7 +31,7 @@
 
 if(isset($g_layout['title']))
 {
-    $g_layout['title'] = " - ". strStripTags($g_layout['title']);
+    $g_layout['title'] = strStripTags($g_layout['title']);
 }
 else
 {
@@ -62,7 +62,12 @@ echo "
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
 <html>
 <head>
-    <title>$g_current_organization->longname". $g_layout['title']. "</title>
+    <title>$g_current_organization->longname"; 
+    if(strlen($g_layout['title']) > 0)
+    {
+        echo " - ". $g_layout['title'];
+    }
+    echo "</title>
     
     <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_program/layout/system.css\">\n";
     

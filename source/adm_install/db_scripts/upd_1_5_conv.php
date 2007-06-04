@@ -32,81 +32,81 @@ $result = mysql_query($sql, $connection);
 if(!$result) showError(mysql_error());
 
 // Allgemeine Kategorien anlegen
-$sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden)
-                                  VALUES (NULL, 'USR', 'Stammdaten', 0)";
+$sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_system, cat_sequence)
+                                  VALUES (NULL, 'USF', 'Stammdaten', 0, 1, 1)";
 $result = mysql_query($sql, $connection);
 if(!$result) showError(mysql_error());
 $cat_id_stammdaten = mysql_insert_id();
 
-$sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden)
-                                  VALUES (NULL, 'USR', 'Messenger', 0)";
+$sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_system, cat_sequence)
+                                  VALUES (NULL, 'USF', 'Messenger', 0, 1, 2)";
 $result = mysql_query($sql, $connection);
 if(!$result) showError(mysql_error());
 $cat_id_messenger = mysql_insert_id();
 
 // neue Userfelder anlegen
-$sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_id, usf_cat_id, usf_type, usf_name, usf_system)
-                                   VALUES (NULL, $cat_id_stammdaten, 'TEXT', 'Adresse', 1) ";
+$sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_id, usf_cat_id, usf_type, usf_name, usf_system, usf_sequence)
+                                   VALUES (NULL, $cat_id_stammdaten, 'TEXT', 'Adresse', 1, 1) ";
 $result = mysql_query($sql, $connection);
 if(!$result) showError(mysql_error());
 $usf_id_address = mysql_insert_id();
 
-$sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_id, usf_cat_id, usf_type, usf_name, usf_system)
-                                   VALUES (NULL, $cat_id_stammdaten, 'TEXT', 'PLZ', 1) ";
+$sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_id, usf_cat_id, usf_type, usf_name, usf_system, usf_sequence)
+                                   VALUES (NULL, $cat_id_stammdaten, 'TEXT', 'PLZ', 1, 2) ";
 $result = mysql_query($sql, $connection);
 if(!$result) showError(mysql_error());
 $usf_id_zip_code = mysql_insert_id();
 
-$sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_id, usf_cat_id, usf_type, usf_name, usf_system)
-                                   VALUES (NULL, $cat_id_stammdaten, 'TEXT', 'Ort', 1) ";
+$sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_id, usf_cat_id, usf_type, usf_name, usf_system, usf_sequence)
+                                   VALUES (NULL, $cat_id_stammdaten, 'TEXT', 'Ort', 1, 3) ";
 $result = mysql_query($sql, $connection);
 if(!$result) showError(mysql_error());
 $usf_id_city = mysql_insert_id();
 
-$sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_id, usf_cat_id, usf_type, usf_name, usf_system)
-                                   VALUES (NULL, $cat_id_stammdaten, 'TEXT', 'Land', 1) ";
+$sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_id, usf_cat_id, usf_type, usf_name, usf_system, usf_sequence)
+                                   VALUES (NULL, $cat_id_stammdaten, 'TEXT', 'Land', 1, 4) ";
 $result = mysql_query($sql, $connection);
 if(!$result) showError(mysql_error());
 $usf_id_country = mysql_insert_id();
 
-$sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_id, usf_cat_id, usf_type, usf_name, usf_system)
-                                   VALUES (NULL, $cat_id_stammdaten, 'TEXT', 'Telefon', 1) ";
+$sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_id, usf_cat_id, usf_type, usf_name, usf_system, usf_sequence)
+                                   VALUES (NULL, $cat_id_stammdaten, 'TEXT', 'Telefon', 1, 5) ";
 $result = mysql_query($sql, $connection);
 if(!$result) showError(mysql_error());
 $usf_id_phone = mysql_insert_id();
 
-$sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_id, usf_cat_id, usf_type, usf_name, usf_system)
-                                   VALUES (NULL, $cat_id_stammdaten, 'TEXT', 'Handy', 1) ";
+$sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_id, usf_cat_id, usf_type, usf_name, usf_system, usf_sequence)
+                                   VALUES (NULL, $cat_id_stammdaten, 'TEXT', 'Handy', 1, 6) ";
 $result = mysql_query($sql, $connection);
 if(!$result) showError(mysql_error());
 $usf_id_mobile = mysql_insert_id();
 
-$sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_id, usf_cat_id, usf_type, usf_name, usf_system)
-                                   VALUES (NULL, $cat_id_stammdaten, 'TEXT', 'Fax', 1) ";
+$sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_id, usf_cat_id, usf_type, usf_name, usf_system, usf_sequence)
+                                   VALUES (NULL, $cat_id_stammdaten, 'TEXT', 'Fax', 1, 7) ";
 $result = mysql_query($sql, $connection);
 if(!$result) showError(mysql_error());
 $usf_id_fax = mysql_insert_id();
 
-$sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_id, usf_cat_id, usf_type, usf_name, usf_system)
-                                   VALUES (NULL, $cat_id_stammdaten, 'DATE', 'Geburtstag', 1) ";
+$sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_id, usf_cat_id, usf_type, usf_name, usf_system, usf_sequence)
+                                   VALUES (NULL, $cat_id_stammdaten, 'DATE', 'Geburtstag', 1, 8) ";
 $result = mysql_query($sql, $connection);
 if(!$result) showError(mysql_error());
 $usf_id_birthday = mysql_insert_id();
 
-$sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_id, usf_cat_id, usf_type, usf_name, usf_system)
-                                   VALUES (NULL, $cat_id_stammdaten, 'NUMERIC', 'Geschlecht', 1) ";
+$sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_id, usf_cat_id, usf_type, usf_name, usf_system, usf_sequence)
+                                   VALUES (NULL, $cat_id_stammdaten, 'NUMERIC', 'Geschlecht', 1, 9) ";
 $result = mysql_query($sql, $connection);
 if(!$result) showError(mysql_error());
 $usf_id_gender = mysql_insert_id();
 
-$sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_id, usf_cat_id, usf_type, usf_name, usf_system)
-                                   VALUES (NULL, $cat_id_stammdaten, 'E-Mail',  'E-Mail', 1) ";
+$sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_id, usf_cat_id, usf_type, usf_name, usf_system, usf_sequence)
+                                   VALUES (NULL, $cat_id_stammdaten, 'EMAIL',  'E-Mail', 1, 10) ";
 $result = mysql_query($sql, $connection);
 if(!$result) showError(mysql_error());
 $usf_id_email = mysql_insert_id();
 
-$sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_id, usf_cat_id, usf_type, usf_name, usf_system)
-                                   VALUES (NULL, $cat_id_stammdaten, 'URL',     'Homepage', 1) ";
+$sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_id, usf_cat_id, usf_type, usf_name, usf_system, usf_sequence)
+                                   VALUES (NULL, $cat_id_stammdaten, 'URL',     'Homepage', 1, 11) ";
 $result = mysql_query($sql, $connection);
 if(!$result) showError(mysql_error());
 $usf_id_homepage = mysql_insert_id();
@@ -142,8 +142,8 @@ if(!$result_orga) showError(mysql_error());
 while($row_orga = mysql_fetch_object($result_orga))
 {
     // Orga-spezifische Kategorie anlegen
-    $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden)
-                                      VALUES ($row_orga->org_id, 'USR', '". utf8_decode('Zusätzliche Daten'). "', 0)";
+    $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_sequence)
+                                      VALUES ($row_orga->org_id, 'USF', '". utf8_decode('Zusätzliche Daten'). "', 0, 3)";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
     $cat_id_data = mysql_insert_id();
@@ -187,5 +187,29 @@ if(!$result) showError(mysql_error());
 $sql = "ALTER TABLE ". TBL_USER_FIELDS. " CHANGE COLUMN `usf_cat_id` `usf_cat_id` int(11) unsigned not null ";
 $result = mysql_query($sql, $connection);
 if(!$result) showError(mysql_error());
+
+// Orga-Felder zur Sortierung durchnummerieren
+$sql = "SELECT * FROM ". TBL_USER_FIELDS. " 
+         WHERE usf_sequence = 0 
+         ORDER BY usf_org_id, usf_name ";
+$result_usf = mysql_query($sql, $connection);
+if(!$result_usf) showError(mysql_error());
+$org_id_merker = 0;
+$sequence      = 1;
+
+while($row_usf = mysql_fetch_object($result_usf))
+{
+    if($row_usf->usf_org_id != $org_id_merker)
+    {
+        $sequence = 1;
+        $org_id_merker = $row_usf->usf_org_id;
+    }
+    $sql = "UPDATE ". TBL_USER_FIELDS. " SET usf_sequence = $sequence 
+             WHERE usf_id = $row_usf->usf_id ";
+    $result = mysql_query($sql, $connection);
+    if(!$result) showError(mysql_error());
+    
+    $sequence++;
+}
 
 ?>

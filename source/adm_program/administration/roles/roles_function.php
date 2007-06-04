@@ -126,25 +126,29 @@ elseif($_GET["mode"] == 2)
 {
     // Rolle anlegen oder updaten
 
-    if(strlen(trim($_POST['rol_name'])) == 0)
+    if(strlen($_POST['rol_name']) == 0)
     {
         // es sind nicht alle Felder gefuellt
         $g_message->show("feld", "Name");
+    }
+    if($_POST['rol_cat_id'] == 0)
+    {
+        // es sind nicht alle Felder gefuellt
+        $g_message->show("feld", "Kategorie");
     }
         
     if($req_rol_id == 0)
     {
         // Schauen, ob die Rolle bereits existiert
-        $sql    = "SELECT COUNT(*) FROM ". TBL_ROLES. "
+        $sql    = "SELECT COUNT(*) as count FROM ". TBL_ROLES. "
                     WHERE rol_org_shortname LIKE '$g_organization'
-                      AND rol_name          LIKE {0}
-                      AND rol_cat_id        =    {1} ";
-        $sql    = prepareSQL($sql, array($_POST['rol_name'], $_POST['rol_cat_id']));
+                      AND rol_name          LIKE '". $_POST['rol_name']. "'
+                      AND rol_cat_id        =     ". $_POST['rol_cat_id'];
         $result = mysql_query($sql, $g_adm_con);
         db_error($result,__FILE__,__LINE__);
         $row = mysql_fetch_array($result);
 
-        if($row[0] > 0)
+        if($row['count'] > 0)
         {
             $g_message->show("role_exist");
         }

@@ -126,7 +126,7 @@ echo "
             <th class=\"tableHeader\">Funktionen</th>
         </tr>
     </thead>";
-    $category = "";
+    $cat_id = "";
 
     // alle Rollen gruppiert nach Kategorie auflisten
     $sql    = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
@@ -139,9 +139,9 @@ echo "
 
     while($row = mysql_fetch_object($usr_result))
     {
-        if($category != $row->cat_name)
+        if($cat_id != $row->cat_id)
         {
-            if(strlen($category) > 0)
+            if($cat_id > 0)
             {
                 echo "</tbody>";
             }
@@ -158,7 +158,7 @@ echo "
             </tbody>
             <tbody id=\"cat_$row->cat_name\">";
 
-            $category = $row->cat_name;
+            $cat_id = $row->cat_id;
         }            
         echo "
         <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">

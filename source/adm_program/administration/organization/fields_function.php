@@ -32,12 +32,16 @@
  
 require("../../system/common.php");
 require("../../system/login_valid.php");
+require("../../system/user_field_class.php");
 
 // nur Webmaster duerfen organisationsspezifischen Profilfelder verwalten
 if(!$g_current_user->isWebmaster())
 {
     $g_message->show("norights");
 }
+
+// lokale Variablen der Uebergabevariablen initialisieren
+$req_usf_id = 0;
 
 // Uebergabevariablen pruefen
 
@@ -47,13 +51,31 @@ if(is_numeric($_GET["mode"]) == false
     $g_message->show("invalid");
 }
 
-if(isset($_GET["usf_id"]) && is_numeric($_GET["usf_id"]) == false)
+if(isset($_GET['usf_id']))
 {
-    $g_message->show("invalid");
+    if(is_numeric($_GET['usf_id']) == false)
+    {
+        $g_message->show("invalid");
+    }
+    $req_usf_id = $_GET['usf_id'];
+}
+
+// UserField-objekt anlegen
+$user_field = new UserField($g_adm_con);
+
+if($req_usf_id > 0)
+{
+    $user_field->getUserField($req_usf_id);
+    
+    // Pruefung, ob das Feld zur aktuellen Organisation gehoert bzw. allen verfuegbar ist
+    if($user_field->getValue("usf_org_id") >  0
+    && $user_field->getValue("usf_org_id") != $g_current_organization->id)
+    {
+        $g_message->show("norights");
+    }
 }
 
 $err_code = "";
-$err_text = "";
 
 if($_GET['mode'] == 1)
 {
@@ -61,111 +83,105 @@ if($_GET['mode'] == 1)
 
     $_SESSION['fields_request'] = $_REQUEST;
     
-    if(strlen(trim($_POST['name'])) > 0
-    && strlen(trim($_POST['type'])) > 0)
+    // pruefen, ob Pflichtfelder gefuellt sind
+    // (bei Systemfeldern sind diese disabled und werden nicht per POST uebertragen
+    if(isset($_POST['usf_name']) && strlen($_POST['usf_name']) == 0)
     {
-        if(!($_GET['usf_id'] > 0))
-        {
-            // Schauen, ob das Feld bereits existiert
-            $sql    = "SELECT COUNT(*) FROM ". TBL_USER_FIELDS. "
-                        WHERE usf_org_id =    $g_current_organization->id
-                          AND usf_name   LIKE {0}";
-            $sql    = prepareSQL($sql, array($_POST['name']));
-            $result = mysql_query($sql, $g_adm_con);
-            db_error($result,__FILE__,__LINE__);
-            $row = mysql_fetch_array($result);
+        $g_message->show("feld", "Name");
+    }    
 
-            if($row[0] > 0)
-            {
-                $g_message->show("field_exist");
-            }      
-        }
+    if(isset($_POST['usf_name']) && strlen($_POST['usf_type']) == 0)
+    {
+        $g_message->show("Datentyp", "Name");
+    }    
 
-        if(array_key_exists("hidden", $_POST))
-        {
-            $hidden = 1;
-        }
-        else
-        {
-            $hidden = 0;
-        }
-
-        if($_GET['usf_id'] > 0)
-        {
-            $sql = "UPDATE ". TBL_USER_FIELDS. "
-                       SET usf_name        = {0}
-                         , usf_description = {1}
-                         , usf_type        = {2}
-                         , usf_hidden      = $hidden
-                     WHERE usf_id = {3}";
-        }
-        else
-        {
-            // Feld in Datenbank hinzufuegen
-            $sql    = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_id, usf_name, usf_description,
-                                                          usf_type, usf_hidden)
-                            VALUES ($g_current_organization->id, {0}, {1}, {2}, $hidden) ";
-        }
-        $sql    = prepareSQL($sql, array(trim($_POST['name']), trim($_POST['description']),
-                                         trim($_POST['type']), $_GET['usf_id']));
+    if(isset($_POST['usf_name']) && $_POST['usf_cat_id'] == 0)
+    {
+        $g_message->show("Kategorie", "Name");
+    }    
+    
+    if($req_usf_id == 0)
+    {
+        // Schauen, ob das Feld bereits existiert
+        $sql    = "SELECT COUNT(*) as count FROM ". TBL_USER_FIELDS. "
+                    WHERE (  usf_org_id = $g_current_organization->id
+                          OR usf_org_id IS NULL )
+                      AND usf_name LIKE '". $_POST['usf_name']. "'";
         $result = mysql_query($sql, $g_adm_con);
         db_error($result,__FILE__,__LINE__);
-        
-        $_SESSION['navigation']->deleteLastUrl();
-        unset($_SESSION['fields_request']);
+        $row = mysql_fetch_array($result);
+
+        if($row['count'] > 0)
+        {
+            $g_message->show("field_exist");
+        }      
+    }
+
+    // Eingabe verdrehen, da der Feldname anders als im Dialog ist
+    if(isset($_POST['usf_hidden']))
+    {
+        $_POST['usf_hidden'] = 0;
     }
     else
     {
-        // es sind nicht alle Felder gefuellt
-        if(strlen(trim($_POST['name'])) == 0)
-        {
-            $err_text = "Name";
-        }
-        else
-        {
-            $err_text = "Datentyp";
-        }
-        $err_code = "feld";
+        $_POST['usf_hidden'] = 1;
+    }
+    if(isset($_POST['usf_disabled']) == false)
+    {
+        $_POST['usf_disabled'] = 0;
     }
 
-    if(strlen($err_code) > 0)
+    // POST Variablen in das UserField-Objekt schreiben
+    foreach($_POST as $key => $value)
     {
-        $g_message->show($err_code, $err_text);
+        if(strpos($key, "usf_") === 0)
+        {
+            $user_field->setValue($key, $value);
+        }
     }
+    
+    // Daten in Datenbank schreiben
+    if($req_usf_id > 0)
+    {
+        $return_code = $user_field->update();
+    }
+    else
+    {
+        $return_code = $user_field->insert();
+    }
+
+    if($return_code < 0)
+    {
+        $g_message->show("norights");
+    }    
+
+    $_SESSION['navigation']->deleteLastUrl();
+    unset($_SESSION['fields_request']);
 
     $err_code = "save";
 }
-elseif($_GET['mode'] == 2)
+elseif($_GET['mode'] == 2 || $_GET["mode"] == 3)
 {
-    // Feld loeschen
-
-    // erst die Userdaten zum Feld loeschen
-    $sql    = "DELETE FROM ". TBL_USER_DATA. "
-                WHERE usd_usf_id = {0}";
-    $sql    = prepareSQL($sql, array($_GET['usf_id']));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
-
-    $sql    = "DELETE FROM ". TBL_USER_FIELDS. "
-                WHERE usf_id = {0}";
-    $sql    = prepareSQL($sql, array($_GET['usf_id']));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
-
-    $err_code = "delete";
-}
-elseif($_GET["mode"] == 3)
-{
-    // Frage, ob Kategorie geloescht werden soll
-    $sql = "SELECT usf_name FROM ". TBL_USER_FIELDS. "
-             WHERE usf_id = {0}";
-    $sql    = prepareSQL($sql, array($_GET['usf_id']));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
-    $row = mysql_fetch_array($result);
+    if($user_field->getValue("usf_system") == 1)
+    {
+        // Systemfelder duerfen nicht geloescht werden
+        $g_message->show("invalid");
+    }
     
-    $g_message->setForwardYesNo("$g_root_path/adm_program/administration/organization/fields_function.php?usf_id=". $_GET['usf_id']. "&mode=2");
-    $g_message->show("delete_field", utf8_encode($row[0]), "Löschen");
+    if($_GET['mode'] == 2)
+    {
+        // Feld loeschen
+        $user_field->delete();
+
+        $err_code = "delete";
+    }
+    elseif($_GET["mode"] == 3)
+    {
+        // Frage, ob Kategorie geloescht werden soll
+
+        $g_message->setForwardYesNo("$g_root_path/adm_program/administration/organization/fields_function.php?usf_id=". $_GET['usf_id']. "&mode=2");
+        $g_message->show("delete_field", utf8_encode($user_field->getValue("usf_name")), "Löschen");
+    }
 }
          
 // zu den Organisationseinstellungen zurueck

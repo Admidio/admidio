@@ -166,11 +166,24 @@ echo "
                   Ohne diese kann die Anmeldung nicht durchgef&uuml;hrt werden.";
             break;
 
-        case "field_locked":
-            echo "Felder, die diese Option aktiviert haben, sind <b>nur</b> f&uuml;r Moderatoren
-                  sichtbar und k&ouml;nnen auch nur von diesen gepflegt werden.<br /><br />
-                  Benutzer, denen keiner moderierenden Rolle zugewiesen wurden,
-                  k&ouml;nnen den Inhalt der Felder weder sehen noch bearbeiten.";
+        case "field":
+            echo "Es k&ouml;nnen beliebig viele zus&auml;tzliche Felder definiert werden. 
+                  Diese werden im Profil der einzelnen Benutzer angezeigt und k&ouml;nnen dort auch
+                  bearbeitet werden. Au&szlig;erdem stehen diese Felder bei den Eigenen Listen zur 
+                  Verf&uuml;gung.";
+            break;
+
+        case "field_hidden":
+            echo "Ein Feld ist normalerweise f&uuml;r alle Benutzer sichtbar. Wird diese Funktion
+                  nicht ausgew&auml;hlt, so k&ouml;nnen die Daten nur von Benutzern gesehen werden,
+                  die das Recht haben alle Benutzer zu editieren. Im eigenen Profil kann der Benutzer 
+                  diese Daten auch sehen.";
+            break;
+
+        case "field_disabled":
+            echo "Wird ein Feld gesperrt, so k&ouml;nnen Benutzer im eigenen Profil dieses Feld nicht
+                  bearbeiten. Es kann nur noch von Benutzern bearbeitet werden, die das Rollenrecht
+                  besitzen alle Benutzer zu editieren.";
             break;
 
         case "file_size":
@@ -196,12 +209,6 @@ echo "
             echo "Das Passwort wird verschl&uuml;sselt gespeichert.
                   Es ist sp&auml;ter nicht mehr m&ouml;glich dieses nachzuschauen.
                   Aus diesem Grund solltest du es dir gut merken.";
-            break;
-
-        case "profil_felder":
-            echo "Du kannst beliebig viele neue Felder definieren, die im Profil der einzelnen Benutzer
-                  angezeigt und von diesen bearbeitet werden k&ouml;nnen. Au&szlig;erdem stehen dir diese
-                  Felder bei den Eigenen Listen zur Verf&uuml;gung.";
             break;
 
         case "rolle_benutzer":

@@ -317,43 +317,44 @@ if($req_mode == 1)
     // Default-Daten anlegen
 
     // Orga-Uebergreifende Kategorien anlegen
-    $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden)
-                                      VALUES (NULL, 'USR', 'Stammdaten', 0) ";
+    $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_system, cat_sequence)
+                                      VALUES (NULL, 'USF', 'Stammdaten', 0, 1, 1) ";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
     $cat_id_stammdaten = mysql_insert_id();
 
-    $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden)
-                                      VALUES (NULL, 'USR', 'Messenger', 0) ";
+    $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_system, cat_sequence)
+                                      VALUES (NULL, 'USF', 'Messenger', 0, 1, 2) ";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
     $cat_id_messenger = mysql_insert_id();
 
     // Stammdatenfelder anlegen
-    $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_id, usf_cat_id, usf_type, usf_name, usf_system)
-                                       VALUES (NULL, $cat_id_stammdaten, 'TEXT', 'Adresse', 1) 
-                                            , (NULL, $cat_id_stammdaten, 'TEXT', 'PLZ', 1)
-                                            , (NULL, $cat_id_stammdaten, 'TEXT', 'Ort', 1)
-                                            , (NULL, $cat_id_stammdaten, 'TEXT', 'Land', 1)
-                                            , (NULL, $cat_id_stammdaten, 'TEXT', 'Telefon', 1)
-                                            , (NULL, $cat_id_stammdaten, 'TEXT', 'Handy', 1)
-                                            , (NULL, $cat_id_stammdaten, 'TEXT', 'Fax', 1)
-                                            , (NULL, $cat_id_stammdaten, 'DATE', 'Geburtstag', 1)
-                                            , (NULL, $cat_id_stammdaten, 'NUMERIC', 'Geschlecht', 1)
-                                            , (NULL, $cat_id_stammdaten, 'E-Mail',  'E-Mail', 1)
-                                            , (NULL, $cat_id_stammdaten, 'URL',     'Homepage', 1) ";
+    $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_id, usf_cat_id, usf_type, usf_name, usf_system, usf_sequence)
+                                       VALUES (NULL, $cat_id_stammdaten, 'TEXT', 'Adresse', 1, 1) 
+                                            , (NULL, $cat_id_stammdaten, 'TEXT', 'PLZ', 1, 2)
+                                            , (NULL, $cat_id_stammdaten, 'TEXT', 'Ort', 1, 3)
+                                            , (NULL, $cat_id_stammdaten, 'TEXT', 'Land', 1, 4)
+                                            , (NULL, $cat_id_stammdaten, 'TEXT', 'Telefon', 1, 5)
+                                            , (NULL, $cat_id_stammdaten, 'TEXT', 'Handy', 1, 6)
+                                            , (NULL, $cat_id_stammdaten, 'TEXT', 'Fax', 1, 7)
+                                            , (NULL, $cat_id_stammdaten, 'DATE', 'Geburtstag', 1, 8)
+                                            , (NULL, $cat_id_stammdaten, 'NUMERIC', 'Geschlecht', 1, 9)
+                                            , (NULL, $cat_id_stammdaten, 'EMAIL','E-Mail', 1, 10)
+                                            , (NULL, $cat_id_stammdaten, 'URL',  'Homepage', 1, 11) ";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
     $usf_id_homepage = mysql_insert_id();
 
     // Messenger anlegen
-    $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_id, usf_cat_id, usf_type, usf_name, usf_description, usf_system)
-                                       VALUES (NULL, $cat_id_messenger, 'TEXT', 'AIM', 'AOL Instant Messenger', 1) 
-                                            , (NULL, $cat_id_messenger, 'TEXT', 'ICQ', 'ICQ', 1) 
-                                            , (NULL, $cat_id_messenger, 'TEXT', 'MSN', 'MSN Messenger', 1)
-                                            , (NULL, $cat_id_messenger, 'TEXT', 'Yahoo', 'Yahoo! Messenger', 1) 
-                                            , (NULL, $cat_id_messenger, 'TEXT', 'Skype', 'Skype', 1) 
-                                            , (NULL, $cat_id_messenger, 'TEXT', 'Google Talk', 'Google Talk', 1) ";
+    $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_org_id, usf_cat_id, usf_type, usf_name, usf_description, usf_system, usf_sequence)
+                                       VALUES (NULL, $cat_id_messenger, 'TEXT', 'AIM', 'AOL Instant Messenger', 1, 1) 
+                                            , (NULL, $cat_id_messenger, 'TEXT', 'Google Talk', 'Google Talk', 1, 2)
+                                            , (NULL, $cat_id_messenger, 'TEXT', 'ICQ', 'ICQ', 1, 3) 
+                                            , (NULL, $cat_id_messenger, 'TEXT', 'MSN', 'MSN Messenger', 1, 4)
+                                            , (NULL, $cat_id_messenger, 'TEXT', 'Skype', 'Skype', 1, 5) 
+                                            , (NULL, $cat_id_messenger, 'TEXT', 'Yahoo', 'Yahoo! Messenger', 1, 6)  ";
+                                            
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
 }
@@ -467,8 +468,8 @@ if($req_mode == 1 || $req_mode == 4)
     }
     
     // Default-Kategorie fuer Rollen und Links eintragen
-    $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden)
-                                           VALUES ($org_id, 'ROL', 'Allgemein', 1)";
+    $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_sequence)
+                                           VALUES ($org_id, 'ROL', 'Allgemein', 1, 3)";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
     $category_common = mysql_insert_id();
@@ -478,7 +479,7 @@ if($req_mode == 1 || $req_mode == 4)
                                            , ($org_id, 'ROL', 'Kurse', 1)
                                            , ($org_id, 'ROL', 'Mannschaften', 1)
                                            , ($org_id, 'LNK', 'Allgemein', 0)
-                                           , ($org_id, 'USR', '". utf8_decode('Zusätzliche Daten'). "', 0) ";
+                                           , ($org_id, 'USF', '". utf8_decode('Zusätzliche Daten'). "', 0) ";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
 

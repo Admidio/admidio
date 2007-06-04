@@ -155,7 +155,14 @@ echo "
         <div style=\"margin-top: 6px;\">
             <div style=\"text-align: right; width: 28%; float: left;\">Kategorie:&nbsp;</div>
             <div style=\"text-align: left;\">
-                <select size=\"1\" name=\"rol_cat_id\">";
+                <select size=\"1\" name=\"rol_cat_id\">
+                    <option value=\" \""; 
+                        if($role->getValue("rol_cat_id") == 0) 
+                        {
+                            echo " selected=\"selected\"";
+                        }
+                        echo ">- Bitte w&auml;hlen -</option>";
+                        
                     $sql = "SELECT * FROM ". TBL_CATEGORIES. "
                              WHERE cat_org_id = $g_current_organization->id
                                AND cat_type   = 'ROL'
@@ -166,9 +173,7 @@ echo "
                     while($row = mysql_fetch_object($result))
                     {
                         echo "<option value=\"$row->cat_id\"";
-                            // Default-Eintrag setzen
-                            if($role->getValue("rol_cat_id") == $row->cat_id
-                            || ($role->getValue("rol_cat_id") == 0 && $row->cat_name == 'Allgemein'))
+                            if($role->getValue("rol_cat_id") == $row->cat_id)
                             {
                                 echo " selected ";
                             }
@@ -548,7 +553,7 @@ echo "
 </form>
 
 <script type=\"text/javascript\"><!--\n
-    document.getElementById('name').focus();
+    document.getElementById('rol_name').focus();
 \n--></script>";
 
 require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
