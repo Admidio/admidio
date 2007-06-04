@@ -122,6 +122,8 @@ create table %PRAEFIX%_categories
    cat_type                       varchar(10)                    not null,
    cat_name                       varchar(30)                    not null,
    cat_hidden                     tinyint(1) unsigned            not null default 0,
+   cat_system                     tinyint(1) unsigned            not null default 0,
+   cat_sequence						 smallint                       not null,
    primary key (cat_id)
 )
 type = InnoDB
@@ -196,6 +198,7 @@ create table %PRAEFIX%_user_fields
    usf_system                     tinyint(1) unsigned            not null default 0,
    usf_disabled                   tinyint(1) unsigned            not null default 0,
    usf_hidden                     tinyint(1) unsigned            not null default 0,
+   usf_sequence						 smallint                       not null,
    primary key (usf_id)
 )
 type = InnoDB

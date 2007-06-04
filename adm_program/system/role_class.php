@@ -140,6 +140,13 @@ class Role
         {
             case "rol_id":
             case "rol_cat_id":
+                if(is_numeric($field_value) == false
+                || $field_value == 0)
+                {
+                    $field_value = null;
+                }
+                break;
+
             case "rol_weekday":
             case "rol_max_members":
             case "rol_usr_id_change":
@@ -278,7 +285,7 @@ class Role
                     }
                 }
             }
-            
+
             // Felder hinzufuegen, die zwingend erforderlich sind
             if(isset($this->db_fields['rol_org_shortname']) == false)
             {
@@ -295,8 +302,8 @@ class Role
                 $sql_field_list = $sql_field_list. ", rol_usr_id_change ";
                 $sql_value_list = $sql_value_list. ", $login_user_id ";
             }
-            
-            $sql = "INSERT INTO ". TBL_ROLES. " ($sql_field_list) VALUES ($sql_value_list) ";
+   
+            $sql = "INSERT INTO ". TBL_ROLES. " ($sql_field_list) VALUES ($sql_value_list) ";            
             $sql = prepareSQL($sql, $this->db_fields);
             $result = mysql_query($sql, $this->db_connection);
             db_error($result,__FILE__,__LINE__);
