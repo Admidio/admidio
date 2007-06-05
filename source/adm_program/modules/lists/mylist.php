@@ -129,9 +129,10 @@ $g_layout['header'] = "
         function addField() 
         {
             actFieldCount++;
-            resObject.open('get', 'mylist_field_list.php?field_number=' + actFieldCount, true);
+            resObject.open('POST', 'mylist_field_list.php', true);
+            resObject.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             resObject.onreadystatechange = handleResponse;
-            resObject.send(null);
+            resObject.send('field_number=' + actFieldCount);
         }
 
         function handleResponse() 
