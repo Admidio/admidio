@@ -29,12 +29,12 @@
  
 $b_ajax = false;
 
-if(isset($_GET['field_number']))
+if(isset($_POST['field_number']))
 {
     // Script wurde ueber Ajax aufgerufen
     include("../../system/common.php"); 
 
-    $i = $_GET['field_number'];
+    $i = $_POST['field_number'];
     $b_ajax = true;
 }
 
@@ -112,16 +112,16 @@ echo "<div style=\"text-align: center; width: 18%; float: left; margin-top: 5px;
                 $field_header = false;
                 $msg_header   = false;
 
-                while($uf_row = mysql_fetch_object($result_user_fields))
+                while($uf_row = mysql_fetch_array($result_user_fields))
                 {     
-                    if($uf_row->usf_org_id != NULL
+                    if($uf_row['usf_org_id'] != NULL
                     && $field_header == false)
                     {
                         echo "</optgroup>
                         <optgroup label=\"Zus&auml;tzliche Felder\">";
                         $field_header = true;
                     }
-                    if($uf_row->usf_org_id == NULL
+                    if($uf_row['usf_org_id'] == NULL
                     && $msg_header == false)
                     {
                         echo "</optgroup>
@@ -129,17 +129,29 @@ echo "<div style=\"text-align: center; width: 18%; float: left; margin-top: 5px;
                         $msg_header = true;
                     }
                     //Nur Moderatoren duerfen sich gelockte Felder anzeigen lassen 
-                    if($uf_row->usf_hidden == 0 || $g_current_user->assignRoles())
+                    if($uf_row['usf_hidden'] == 0 || $g_current_user->assignRoles())
                     {
-                        echo"<option value=\"$uf_row->usf_id\"";
+                        echo"<option value=\"". $uf_row['usf_id']. "\"";
                         // wenn Zurueck gewaehlt wurde, dann Felder mit den alten
                         // Werten vorbelegen
                         if($b_ajax == false && $b_history == true
-                        && $form_values["column$i"] == $uf_row->usf_id)
+                        && $form_values["column$i"] == $uf_row['usf_id'])
                         {
                             echo " selected ";                          
                         }
-                        echo ">$uf_row->usf_name</option>";
+                        echo ">"; 
+                        
+                        // Ajax gibt alles in UTF8 zurueck
+                        if($b_ajax)
+                        {
+                            echo utf8_encode($uf_row['usf_name']);
+                        }
+                        else
+                        {
+                            echo $uf_row['usf_name'];
+                        }
+                            
+                        echo "</option>";
                     }
                 }    
                 mysql_data_seek($result_user_fields, 0);                                
