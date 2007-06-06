@@ -77,9 +77,9 @@ echo "
 
 <p>
     <span class=\"iconLink\">
-        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/organization/fields_new.php\"><img 
+        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/fields_new.php\"><img 
         src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Profilfeld anlegen\"></a>
-        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/organization/fields_new.php\">Profilfeld anlegen</a>
+        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/fields_new.php\">Profilfeld anlegen</a>
     </span>
     &nbsp;&nbsp;&nbsp;&nbsp;
     <span class=\"iconLink\">
@@ -145,7 +145,7 @@ echo "
             echo "
             <tr id=\"row_$row->usf_id\" class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
                 <td style=\"text-align: center\"><img class=\"dragable\" src=\"$g_root_path/adm_program/images/arrow_out.png\" style=\"cursor: move;\" border=\"0\" alt=\"Reihenfolge &auml;ndern\" title=\"Reihenfolge &auml;ndern\"></td>
-                <td style=\"text-align: left;\"><a href=\"$g_root_path/adm_program/administration/organization/fields_new.php?usf_id=$row->usf_id\">$row->usf_name</a></td>
+                <td style=\"text-align: left;\"><a href=\"$g_root_path/adm_program/administration/members/fields_new.php?usf_id=$row->usf_id\">$row->usf_name</a></td>
                 <td style=\"text-align: left;\">$row->usf_description</td>
                 <td style=\"text-align: center;\">";
                     if($row->usf_hidden == 1)
@@ -198,7 +198,7 @@ echo "
                     }
                 echo "</td>
                 <td style=\"text-align: center;\">
-                    <a href=\"$g_root_path/adm_program/administration/organization/fields_new.php?usf_id=$row->usf_id\">
+                    <a href=\"$g_root_path/adm_program/administration/members/fields_new.php?usf_id=$row->usf_id\">
                     <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>&nbsp;";
                     if($row->usf_system == 1)
                     {
@@ -206,7 +206,7 @@ echo "
                     }
                     else
                     {
-                        echo "<a href=\"$g_root_path/adm_program/administration/organization/fields_function.php?mode=3&amp;usf_id=$row->usf_id\"><img
+                        echo "<a href=\"$g_root_path/adm_program/administration/members/fields_function.php?mode=3&amp;usf_id=$row->usf_id\"><img
                         src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>";
                     }
                 echo "</td>
