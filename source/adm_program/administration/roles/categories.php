@@ -41,7 +41,7 @@ $req_type = "";
 // Modus und Rechte pruefen
 if(isset($_GET['type']))
 {
-    if($_GET['type'] != "ROL" && $_GET['type'] != "LNK")
+    if($_GET['type'] != "ROL" && $_GET['type'] != "LNK" && $_GET['type'] != "USF")
     {
         $g_message->show("invalid");
     }
@@ -50,6 +50,10 @@ if(isset($_GET['type']))
         $g_message->show("norights");
     }
     if($_GET['type'] == "LNK" && $g_current_user->editWeblinksRight() == false)
+    {
+        $g_message->show("norights");
+    }
+    if($_GET['type'] == "USF" && $g_current_user->editUser() == false)
     {
         $g_message->show("norights");
     }
@@ -87,22 +91,16 @@ echo "
     </tr>";
 
     $sql = "SELECT * FROM ". TBL_CATEGORIES. "
-             WHERE cat_org_id = $g_current_organization->id
+             WHERE (  cat_org_id  = $g_current_organization->id
+                   OR cat_org_id IS NULL )
                AND cat_type   = {0}
-             ORDER BY cat_name ASC ";
+             ORDER BY cat_sequence ASC ";
     $sql = prepareSQL($sql, array($req_type));
     $cat_result = mysql_query($sql, $g_adm_con);
     db_error($cat_result,__FILE__,__LINE__);
 
     while($cat_row = mysql_fetch_object($cat_result))
     {
-        // schauen, ob Rollen zu dieser Kategorie existieren
-        $sql = "SELECT * FROM ". TBL_ROLES. "
-                 WHERE rol_cat_id = $cat_row->cat_id ";
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result,__FILE__,__LINE__);
-        $row_num = mysql_num_rows($result);
-
         echo "
         <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
             <td style=\"text-align: left;\"><a href=\"$g_root_path/adm_program/administration/roles/categories_new.php?cat_id=$cat_row->cat_id&amp;type=$req_type\">$cat_row->cat_name</a></td>
@@ -118,16 +116,16 @@ echo "
             echo "</td>
             <td style=\"text-align: right; width: 45px;\">
                 <a href=\"$g_root_path/adm_program/administration/roles/categories_new.php?cat_id=$cat_row->cat_id&amp;type=$req_type\">
-                <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>";
-                // nur Kategorien loeschen, die keine Rollen zugeordnet sind
-                if($row_num == 0)
+                <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>&nbsp;";
+
+                if($cat_row->cat_system == 1)
                 {
-                    echo "&nbsp;<a href=\"$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=$cat_row->cat_id&amp;mode=3&amp;type=$req_type\"><img
-                    src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>";
+                    echo "<img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">";
                 }
                 else
                 {
-                    echo "&nbsp;<img src=\"$g_root_path/adm_program/images/dummy.gif\" width=\"16\" border=\"0\" alt=\"Dummy\">";
+                    echo "<a href=\"$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=$cat_row->cat_id&amp;mode=3&amp;type=$req_type\"><img
+                    src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>";
                 }
             echo "</td>
         </tr>";

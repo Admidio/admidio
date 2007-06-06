@@ -42,7 +42,7 @@ $req_cat_id = 0;
 // Modus und Rechte pruefen
 if(isset($_GET['type']))
 {
-    if($_GET['type'] != "ROL" && $_GET['type'] != "LNK")
+    if($_GET['type'] != "ROL" && $_GET['type'] != "LNK" && $_GET['type'] != "USF")
     {
         $g_message->show("invalid");
     }
@@ -51,6 +51,10 @@ if(isset($_GET['type']))
         $g_message->show("norights");
     }
     if($_GET['type'] == "LNK" && $g_current_user->editWeblinksRight() == false)
+    {
+        $g_message->show("norights");
+    }
+    if($_GET['type'] == "USF" && $g_current_user->editUser() == false)
     {
         $g_message->show("norights");
     }

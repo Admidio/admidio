@@ -164,6 +164,7 @@ a:hover {
 
 .tableList {
     width:            550px;         /* Optimale Breite von Listen */
+    font-size:        10pt;
     background-color: #eaeaea;
     border-width:     1px;
     border-color:     #555555;
@@ -174,6 +175,7 @@ a:hover {
 
 .tableHeader {
     color:            #555555;
+    font-size:        10pt;
     background-color: #85C226;
     padding:          3px;
 }
