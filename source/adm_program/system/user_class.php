@@ -202,6 +202,7 @@ class User
             if($set_change_date)
             {
                 $this->last_change = date("Y-m-d H:i:s", time());
+                $login_user_id     = $this->usr_id_change;
             }
             
             // PLZ darf nicht ueber prepareSQL geprueft werden, 
