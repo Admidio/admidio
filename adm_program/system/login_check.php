@@ -41,7 +41,7 @@ if(strlen($req_login_name) == 0)
 // Name und Passwort pruefen
 // Rolle muss mind. Mitglied sein
 
-$sql    = "SELECT *
+$sql    = "SELECT usr_id
              FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. "
             WHERE usr_login_name     LIKE {0}
               AND usr_valid         = 1
@@ -55,20 +55,26 @@ $result = mysql_query($sql, $g_adm_con);
 db_error($result,__FILE__,__LINE__);
 
 $user_found = mysql_num_rows($result);
-$user_row   = mysql_fetch_object($result);
+$user_row   = mysql_fetch_array($result);
 
 if ($user_found >= 1)
 {
-    if($user_row->usr_number_invalid >= 3)
+    $act_date = date("Y-m-d H:i:s", time());
+    
+    // Userobjekt anlegen
+    $g_current_user = new User($g_adm_con);
+    $g_current_user->getUser($user_row['usr_id']);
+    
+    if($g_current_user->number_invalid >= 3)
     {
         // wenn innerhalb 15 min. 3 falsche Logins stattfanden -> Konto 15 min. sperren
-        if(time() - mysqlmaketimestamp($user_row->usr_date_invalid) < 900)
+        if(time() - mysqlmaketimestamp($g_current_user->date_invalid) < 900)
         {
             $g_message->show("login_failed");
         }
     }
 
-    if($user_row->usr_password == $req_password_crypt)
+    if($g_current_user->password == $req_password_crypt)
     {
         // alte Sessions des Users loeschen
 
@@ -84,7 +90,7 @@ if ($user_found >= 1)
         // Session-ID speichern
 
         $sql = "INSERT INTO ". TBL_SESSIONS. " (ses_usr_id, ses_org_shortname, ses_session, ses_timestamp, ses_ip_address)
-                VALUES ('$user_row->usr_id', '$g_organization', '$g_session_id', '$login_datetime', '". $_SERVER['REMOTE_ADDR']. "') ";
+                VALUES ('$g_current_user->id', '$g_organization', '$g_session_id', '$login_datetime', '". $_SERVER['REMOTE_ADDR']. "') ";
         $result = mysql_query($sql, $g_adm_con);
         db_error($result,__FILE__,__LINE__);
 
@@ -93,25 +99,21 @@ if ($user_found >= 1)
         setcookie("admidio_session_id", "$g_session_id" , 0, "/", $domain, 0);
 
         //User Daten in Session speichern
-        $g_current_user = new User($g_adm_con);
-        $g_current_user->getUser($user_row->usr_id);
         $_SESSION['g_current_user'] = $g_current_user;
-
         unset($_SESSION['g_current_organisation']);
 
         // Logins zaehlen und aktuelles Login-Datum aktualisieren
-        $act_date = date("Y-m-d H:i:s", time());
         $g_current_user->last_login     = $g_current_user->actual_login;
         $g_current_user->number_login   = $g_current_user->number_login + 1;
         $g_current_user->actual_login   = $act_date;
         $g_current_user->date_invalid   = NULL;
         $g_current_user->number_invalid = 0;
-        $g_current_user->update($user_row->usr_id, false);
+        $g_current_user->update($user_row['usr_id'], false);
 
         // Paralell im Forum einloggen, wenn g_forum gesetzt ist
         if($g_forum_integriert)
         {
-            $g_forum->userLogin($user_row->usr_id, $req_login_name, $req_password_crypt, $g_current_user->login_name, $g_current_user->password, $g_current_user->email);
+            $g_forum->userLogin($g_current_user->id, $req_login_name, $req_password_crypt, $g_current_user->login_name, $g_current_user->password, $g_current_user->email);
 
             $login_message = $g_forum->message;
         }
@@ -136,14 +138,27 @@ if ($user_found >= 1)
     }
     else
     {
-        // ung?ltige Logins werden mitgeloggt
-        $sql    = "UPDATE ". TBL_USERS. " SET usr_date_invalid = NOW()
-                                            , usr_number_invalid   = usr_number_invalid + 1
-                    WHERE usr_id = $user_row->usr_id ";
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result,__FILE__,__LINE__);
+        // ungueltige Logins werden mitgeloggt
+        
+        if($g_current_user->number_invalid >= 3)
+        {
+            $g_current_user->number_invalid = 1;
+        }
+        else
+        {
+            $g_current_user->number_invalid = $g_current_user->number_invalid + 1;
+        }
+        $g_current_user->date_invalid   = $act_date;
+        $g_current_user->update($user_row['usr_id'], false);
 
-        $g_message->show("password_unknown");
+        if($g_current_user->number_invalid >= 3)
+        {
+            $g_message->show("login_failed");
+        }
+        else
+        {
+            $g_message->show("password_unknown");
+        }
     }
 }
 else
