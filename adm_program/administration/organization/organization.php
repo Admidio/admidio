@@ -99,13 +99,6 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 echo "
 <h1 class=\"moduleHeadline\">Organisationseinstellungen</h1>
-<p>
-    <span class=\"iconLink\">
-        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/organization/fields.php\"><img
-         class=\"iconLink\" src=\"$g_root_path/adm_program/images/application_form.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Organisationsspezifische Profilfelder pflegen\"></a>
-        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/organization/fields.php\">Profilfelder pflegen</a>
-    </span>
-</p>
 
 <div class=\"formBody\" style=\"text-align: center;\">
     <a href=\"#\" onClick=\"toggleDiv('general');\">Allgemein</a>

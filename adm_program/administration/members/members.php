@@ -215,45 +215,51 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 // Html des Modules ausgeben
 echo "
-<h1 class=\"moduleHeadline\">Benutzerverwaltung</h1>";
+<h1 class=\"moduleHeadline\">Benutzerverwaltung</h1>
 
-echo "<p>
+<p>
     <span class=\"iconLink\">
         <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?new_user=1\"><img
         class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Benutzer anlegen\"></a>
         <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_new.php?new_user=1\">Benutzer anlegen</a>
     </span>
-    &nbsp;&nbsp;&nbsp;&nbsp;";
-
-    if($count_mem_rol != mysql_num_rows($result_mgl) || $req_members == false)
-    {
-        // Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
-        if($req_members == 1)
-        {
-            $link_text = "Alle Benutzer anzeigen";
-            $link_icon = "group.png";
-            $link_members = 0;
-        }
-        else
-        {
-            $link_text = "Nur Mitglieder anzeigen";
-            $link_icon = "user.png";
-            $link_members = 1;
-        }
-        echo "<span class=\"iconLink\">
-            <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members.php?members=$link_members&letter=$req_letter&queryForm=$req_queryForm\"><img
-             class=\"iconLink\" src=\"$g_root_path/adm_program/images/$link_icon\" style=\"vertical-align: middle;\" border=\"0\" alt=\"$link_text\"></a>
-            <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members.php?members=$link_members&letter=$req_letter&queryForm=$req_queryForm\">$link_text</a>
-        </span>
-        &nbsp;&nbsp;&nbsp;&nbsp;";
-    }
-    echo "
+    &nbsp;&nbsp;&nbsp;&nbsp;
     <span class=\"iconLink\">
-        <a href=\"import.php\"><img
+        <a href=\"$g_root_path/adm_program/administration/members/import.php\"><img
         class=\"iconLink\" src=\"$g_root_path/adm_program/images/database_in.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Benutzer importieren\"></a>
-        <a class=\"iconLink\" href=\"import.php\">Benutzer importieren</a>
+        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/import.php\">Benutzer importieren</a>
+    </span>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <span class=\"iconLink\">
+        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/fields.php\"><img
+         class=\"iconLink\" src=\"$g_root_path/adm_program/images/application_form.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Organisationsspezifische Profilfelder pflegen\"></a>
+        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/fields.php\">Profilfelder pflegen</a>
     </span>
 </p>";
+
+if($count_mem_rol != mysql_num_rows($result_mgl) || $req_members == false)
+{
+    // Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
+    if($req_members == 1)
+    {
+        $link_text = "Alle Benutzer anzeigen";
+        $link_icon = "group.png";
+        $link_members = 0;
+    }
+    else
+    {
+        $link_text = "Nur Mitglieder anzeigen";
+        $link_icon = "user.png";
+        $link_members = 1;
+    }
+    echo "<p>
+    <span class=\"iconLink\">
+        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members.php?members=$link_members&letter=$req_letter&queryForm=$req_queryForm\"><img
+         class=\"iconLink\" src=\"$g_root_path/adm_program/images/$link_icon\" style=\"vertical-align: middle;\" border=\"0\" alt=\"$link_text\"></a>
+        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members.php?members=$link_members&letter=$req_letter&queryForm=$req_queryForm\">$link_text</a>
+    </span>
+    </p>";
+}
 
 if($req_members)
 {

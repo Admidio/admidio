@@ -51,7 +51,9 @@ $message_text = array(
         <b>%VAR1%</b><br />wirklich löschen?",
 
     "delete_category" =>
-        "<p>Willst du die Kategorie <b>%VAR1%</b> wirklich löschen?</p>",
+        "<p>Soll die Kategorie <b>%VAR1%</b> wirklich gelöscht werden ?</p>
+        <p>Es werden alle Daten, die dieser Kategorie zugeordnet sind 
+        (Felder, Rollen, Links), mit gelöscht.</p>",
 
     "delete_date" =>
         "Willst du den Termin<br />
