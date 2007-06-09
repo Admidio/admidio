@@ -36,17 +36,17 @@ if ($g_preferences['enable_photo_module'] != 1)
     $g_message->show("module_disabled");
 }
 
+// erst pruefen, ob der User Fotoberarbeitungsrechte hat
+if(!$g_current_user->editPhotoRight())
+{
+    $g_message->show("photoverwaltunsrecht");
+}
+
 // Uebergabevariablen pruefen
 
 if(isset($_GET["pho_id"]) && is_numeric($_GET["pho_id"]) == false)
 {
     $g_message->show("invalid");
-}
-
-//bei Seitenaufruf ohne Moderationsrechte
-if(!$g_session_valid || $g_session_valid & !editPhoto())
-{
-    $g_message->show("photoverwaltunsrecht");
 }
 
 //Kontrolle ob Server Dateiuploads zulaesst
@@ -59,12 +59,6 @@ if($ini!=1)
 //URL auf Navigationstack ablegen
 $_SESSION['navigation']->addUrl($g_current_url);
 
-//bei Seitenaufruf mit Moderationsrechten
-if(!editPhoto())
-{
-    $g_message->show("norights");
-}
-
 //Uebernahme Variablen
 $pho_id= $_GET['pho_id'];
 
@@ -76,6 +70,12 @@ $sql    = prepareSQL($sql, array($pho_id));
 $result = mysql_query($sql, $g_adm_con);
 db_error($result,__FILE__,__LINE__);
 $adm_photo = mysql_fetch_array($result);
+
+// pruefen, ob Veranstaltung zur aktuellen Organisation gehoert
+if($adm_photo['pho_org_shortname'] != $g_organization)
+{
+    $g_message->show("invalid");
+}
 
 //Ordnerpfad
 $ordner = "../../../adm_my_files/photos/".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"];

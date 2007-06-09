@@ -126,6 +126,12 @@ $result_event = mysql_query($sql, $g_adm_con);
 db_error($result_event,__FILE__,__LINE__);
 $adm_photo = mysql_fetch_array($result_event);
 
+// pruefen, ob Veranstaltung zur aktuellen Organisation gehoert
+if($adm_photo['pho_org_shortname'] != $g_organization)
+{
+    $g_message->show("invalid");
+}	
+	
 //Variablen in Session schreiben
 $_SESSION['photo_event']['pho_id']= $adm_photo['pho_id'];
 $_SESSION['photo_event']['pho_org_shortname']= $adm_photo['pho_org_shortname'];
@@ -139,10 +145,7 @@ $_SESSION['photo_event']['pho_timestamp']= $adm_photo['pho_timestamp'];
 $_SESSION['photo_event']['pho_locked']= $adm_photo['pho_locked'];
 $_SESSION['photo_event']['pho_pho_id_parent']= $adm_photo['pho_pho_id_parent'];
 $_SESSION['photo_event']['pho_last_change']= $adm_photo['pho_last_change'];
-$_SESSION['photo_event']['pho_usr_id_change']= $adm_photo['pho_usr_id_change'];
-
-
-
+$_SESSION['photo_event']['pho_usr_id_change']= $adm_photo['pho_usr_id_change'];	
 
 //erfassen ob Unterveranstaltungen existieren
 $sql="  SELECT *
@@ -179,47 +182,42 @@ if($pho_id!=NULL && $_SESSION['photo_event']['pho_usr_id_change']!=NULL)
 //Falls gefordert und Foto-edit-rechte, aendern der Freigabe
 if($locked=="1" || $locked=="0")
 {
-    //bei Seitenaufruf ohne Moderationsrechte
-    if(!$g_session_valid || $g_session_valid && !editPhoto($_SESSION['photo_event']['pho_org_shortname']))
-    {
-        $g_message->show("photoverwaltungsrecht");
-    }
+	// erst pruefen, ob der User Fotoberarbeitungsrechte hat
+	if(!$g_current_user->editPhotoRight())
+	{
+	    $g_message->show("photoverwaltunsrecht");
+	}	    
 
-    //bei Seitenaufruf mit Moderationsrechten
-    if($g_session_valid && editPhoto($_SESSION['photo_event']['pho_org_shortname']))
-    {
-        $sql="  UPDATE ". TBL_PHOTOS. " SET  pho_locked = $locked
-                 WHERE pho_id = {0}";
-        $sql    = prepareSQL($sql, array($pho_id));
-        $result_approved = mysql_query($sql, $g_adm_con);
-        db_error($result_approved,__FILE__,__LINE__);
+    $sql="  UPDATE ". TBL_PHOTOS. " SET  pho_locked = $locked
+             WHERE pho_id = {0}";
+    $sql    = prepareSQL($sql, array($pho_id));
+    $result_approved = mysql_query($sql, $g_adm_con);
+    db_error($result_approved,__FILE__,__LINE__);
 
-        //Zurueck zur Elternveranstaltung
-        $pho_id=$_SESSION['photo_event']['pho_pho_id_parent'];
-        $sql="   SELECT *
-                 FROM ". TBL_PHOTOS. "
-                 WHERE pho_id ={0}";
-        $sql    = prepareSQL($sql, array($pho_id));
-        $result_event = mysql_query($sql, $g_adm_con);
-        db_error($result_event,__FILE__,__LINE__);
-        $adm_photo = mysql_fetch_array($result_event);
+    //Zurueck zur Elternveranstaltung
+    $pho_id=$_SESSION['photo_event']['pho_pho_id_parent'];
+    $sql="   SELECT *
+             FROM ". TBL_PHOTOS. "
+             WHERE pho_id ={0}";
+    $sql    = prepareSQL($sql, array($pho_id));
+    $result_event = mysql_query($sql, $g_adm_con);
+    db_error($result_event,__FILE__,__LINE__);
+    $adm_photo = mysql_fetch_array($result_event);
 
-        //Variablen in Session schreiben
-        $_SESSION['photo_event']['pho_id']= $adm_photo['pho_id'];
-        $_SESSION['photo_event']['pho_org_schortname']= $adm_photo['pho_org_schortname'];
-        $_SESSION['photo_event']['pho_quantity']= $adm_photo['pho_quantity'];
-        $_SESSION['photo_event']['pho_name']= $adm_photo['pho_name'];
-        $_SESSION['photo_event']['pho_begin']= $adm_photo['pho_begin'];
-        $_SESSION['photo_event']['pho_end']= $adm_photo['pho_end'];
-        $_SESSION['photo_event']['pho_photographers']= $adm_photo['pho_photographers'];
-        $_SESSION['photo_event']['pho_usr_id']= $adm_photo['pho_usr_id'];
-        $_SESSION['photo_event']['pho_timestamp']= $adm_photo['pho_timestamp'];
-        $_SESSION['photo_event']['pho_locked']= $adm_photo['pho_locked'];
-        $_SESSION['photo_event']['pho_pho_id_parent']= $adm_photo['pho_pho_id_parent'];
-        $_SESSION['photo_event']['pho_last_change']= $adm_photo['pho_last_change'];
-        $_SESSION['photo_event']['pho_usr_id_change']= $adm_photo['pho_usr_id_change'];
-
-    }
+    //Variablen in Session schreiben
+    $_SESSION['photo_event']['pho_id']= $adm_photo['pho_id'];
+    $_SESSION['photo_event']['pho_org_schortname']= $adm_photo['pho_org_schortname'];
+    $_SESSION['photo_event']['pho_quantity']= $adm_photo['pho_quantity'];
+    $_SESSION['photo_event']['pho_name']= $adm_photo['pho_name'];
+    $_SESSION['photo_event']['pho_begin']= $adm_photo['pho_begin'];
+    $_SESSION['photo_event']['pho_end']= $adm_photo['pho_end'];
+    $_SESSION['photo_event']['pho_photographers']= $adm_photo['pho_photographers'];
+    $_SESSION['photo_event']['pho_usr_id']= $adm_photo['pho_usr_id'];
+    $_SESSION['photo_event']['pho_timestamp']= $adm_photo['pho_timestamp'];
+    $_SESSION['photo_event']['pho_locked']= $adm_photo['pho_locked'];
+    $_SESSION['photo_event']['pho_pho_id_parent']= $adm_photo['pho_pho_id_parent'];
+    $_SESSION['photo_event']['pho_last_change']= $adm_photo['pho_last_change'];
+    $_SESSION['photo_event']['pho_usr_id_change']= $adm_photo['pho_usr_id_change'];
 }
 
 
@@ -280,7 +278,7 @@ if($pho_id > 0)
 }
 
 //bei Seitenaufruf mit Moderationsrechten
-if($g_session_valid && editPhoto())
+if($g_current_user->editPhotoRight())
 {
     echo"<p>
         <span class=\"iconLink\">
@@ -423,7 +421,7 @@ echo "<div class=\"formBody\">";
                             <br>";
 
                             //Buttons fuer moderatoren
-                            if ($g_session_valid && editPhoto($_SESSION['photo_event']['pho_org_shortname']))
+                            if($g_current_user->editPhotoRight())
                             {
                                 echo"
                                 <img src=\"$g_root_path/adm_program/images/arrow_turn_left.png\" style=\"cursor: pointer; vertical-align: middle;\" width=\"16\" height=\"16\" border=\"0\" alt=\"nach links drehen\" title=\"nach links drehen\"
@@ -477,7 +475,7 @@ echo "<div class=\"formBody\">";
     {
         $sql=$sql." AND pho_pho_id_parent = {0} ";
     }
-    if (!editPhoto($g_organization))
+    if (!$g_current_user->editPhotoRight())
     {
         $sql=$sql." AND pho_locked = 0 ";
     }
@@ -498,7 +496,7 @@ echo "<div class=\"formBody\">";
         $adm_photo_list = mysql_fetch_array($result_list);
         //Hauptordner
         $ordner = "../../../adm_my_files/photos/".$adm_photo_list["pho_begin"]."_".$adm_photo_list["pho_id"];
-        if((!file_exists($ordner) || $adm_photo_list["pho_locked"]==1) && (!editPhoto($adm_photo_list["pho_org_shortname"])))
+        if((!file_exists($ordner) || $adm_photo_list["pho_locked"]==1) && (!$g_current_user->editPhotoRight()))
         {
             $ignored++;
             if($x>=$event_element+$ignored-$ignore)$ignore++;
@@ -565,7 +563,7 @@ echo "<div class=\"formBody\">";
             $ordner = "../../../adm_my_files/photos/".$adm_photo_list["pho_begin"]."_".$adm_photo_list["pho_id"];
 
             //wenn ja Zeile ausgeben
-            if(file_exists($ordner) && ($adm_photo_list["pho_locked"]==0) || ($g_session_valid && editPhoto($adm_photo_list["pho_org_shortname"])))
+            if(file_exists($ordner) && ($adm_photo_list["pho_locked"]==0) || $g_current_user->editPhotoRight())
             {
                 //Summe der Bilder erfassen und zufaelliges Beispeilbild auswaehlen
                 $bildersumme=$adm_photo_list["pho_quantity"];
@@ -617,7 +615,7 @@ echo "<div class=\"formBody\">";
                     echo"</td>
                     <td>";
                         //Warnung fuer Leute mit Fotorechten: Ordner existiert nicht
-                        if(!file_exists($ordner) && ($g_session_valid && editPhoto($adm_photo_list["pho_org_shortname"])))
+                        if(!file_exists($ordner) && $g_current_user->editPhotoRight())
                         {
                             echo"<img src=\"$g_root_path/adm_program/images/warning16.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Warnhinweis\" title=\"Warnhinweis\"
                             onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=folder_not_found','Message','width=400, height=400, left=310,top=200,scrollbars=no')\">&nbsp;";
@@ -651,7 +649,7 @@ echo "<div class=\"formBody\">";
                             echo "<br>Fotos von: ".$adm_photo_list["pho_photographers"]."<br>";
 
                             //bei Moderationrecheten
-                            if ($g_session_valid && editPhoto($adm_photo_list["pho_org_shortname"]))
+                            if ($g_current_user->editPhotoRight())
                             {
                                 $this_pho_id = $adm_photo_list["pho_id"];
                                 if(file_exists($ordner))

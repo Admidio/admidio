@@ -38,6 +38,12 @@ if ($g_preferences['enable_photo_module'] != 1)
     $g_message->show("module_disabled");
 }
 
+// erst pruefen, ob der User Fotoberarbeitungsrechte hat
+if(!$g_current_user->editPhotoRight())
+{
+    $g_message->show("photoverwaltunsrecht");
+}
+
 // Uebergabevariablen pruefen
 //Veranstaltungsuebergabe Numerisch und != Null?
 if(isset($_GET["pho_id"]) && is_numeric($_GET["pho_id"]) == false && $_GET["pho_id"]!=NULL)
@@ -87,6 +93,12 @@ if ($_GET['aufgabe'] == "change")
     db_error($result,__FILE__,__LINE__);
     $adm_photo = mysql_fetch_array($result);
 
+	// pruefen, ob Veranstaltung zur aktuellen Organisation gehoert
+	if($adm_photo['pho_org_shortname'] != $g_organization)
+	{
+	    $g_message->show("invalid");
+	}
+
     //inhalten in form_values uebertragen
     $form_values['veranstaltung']       = $adm_photo["pho_name"];
     $form_values['parent']              = $adm_photo["pho_pho_id_parent"];
@@ -108,19 +120,8 @@ $sql="  SELECT *
 $result_list = mysql_query($sql, $g_adm_con);
 db_error($result_list,__FILE__,__LINE__);
 
-//bei Seitenaufruf ohne Moderationsrechte
-if(!$g_session_valid || $g_session_valid  && ($_GET["aufgabe"]=="change" && !editPhoto($g_organization)) || !editPhoto())
-{
-    $g_message->show("photoverwaltunsrecht");
-}
-
-//bei Seitenaufruf mit Moderationsrechten
-if($g_session_valid && $_GET["aufgabe"]=="change" && editPhoto($g_organization))
-{
-    //Speicherort
-    $ordner = "../../../adm_my_files/photos/".$form_values['beginn']."_".$pho_id;
-
-}
+//Speicherort
+$ordner = "../../../adm_my_files/photos/".$form_values['beginn']."_".$pho_id;
 
 /******************************HTML-Kopf******************************************/
 
