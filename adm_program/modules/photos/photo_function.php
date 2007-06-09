@@ -41,6 +41,12 @@ if ($g_preferences['enable_photo_module'] != 1)
     $g_message->show("module_disabled");
 }
 
+// erst pruefen, ob der User Fotoberarbeitungsrechte hat
+if(!$g_current_user->editPhotoRight())
+{
+    $g_message->show("photoverwaltunsrecht");
+}
+
 //URL auf Navigationstack ablegen
 $_SESSION['navigation']->addUrl($g_current_url);
 
@@ -284,12 +290,6 @@ function delete ($pho_id, $bild)
 //Nutzung der rotatefunktion
 if($_GET["job"]=="rotate")
 {
-    //bei Seitenaufruf ohne Moderationsrechte
-    if(!$g_session_valid || $g_session_valid && !editPhoto())
-    {
-        $g_message->show("photoverwaltungsrecht");
-    }
-
     //Aufruf der entsprechenden Funktion
     if($_GET["direction"]=="right"){
         right_rotate($pho_id, $_GET["bild"]);
@@ -321,15 +321,8 @@ if(isset($_GET["job"]) && $_GET["job"]=="do_delete")
     db_error($result,__FILE__,__LINE__);
     $adm_photo = mysql_fetch_array($result);
 
-    //bei Seitenaufruf ohne Moderationsrechte
-    if(!$g_session_valid || $g_session_valid && !editPhoto($adm_photo["pho_org_shortname"]))
-    {
-        $g_message->show("photoverwaltungsrecht");
-    }
-
     //Aufruf der entsprechenden Funktion
     delete($pho_id, $_GET["bild"]);
-
 
     $_SESSION['navigation']->deleteLastUrl();
     $g_message->setForwardUrl("$g_root_path/adm_program/system/back.php", 2000);
