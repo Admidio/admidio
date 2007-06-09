@@ -8,12 +8,7 @@ ALTER TABLE %PRAEFIX%_roles ADD COLUMN `rol_system` tinyint(1) unsigned NOT NULL
 ALTER TABLE %PRAEFIX%_user_fields DROP FOREIGN KEY %PRAEFIX%_FK_USF_ORG;
 ALTER TABLE %PRAEFIX%_user_fields DROP index USF_ORG_FK;
 
-ALTER TABLE %PRAEFIX%_user_fields ADD COLUMN `usf_org_id` tinyint(4) AFTER `usf_id`;
-alter table %PRAEFIX%_user_fields add index USF_ORG_FK (usf_org_id);
-alter table %PRAEFIX%_user_fields add constraint %PRAEFIX%_FK_USF_ORG foreign key (usf_org_id)
-      references %PRAEFIX%_organizations (org_id) on delete restrict on update restrict;
-
-ALTER TABLE %PRAEFIX%_user_fields ADD COLUMN `usf_cat_id` int(11) unsigned AFTER `usf_org_id`;
+ALTER TABLE %PRAEFIX%_user_fields ADD COLUMN `usf_cat_id` int(11) unsigned AFTER `usf_id`;
 alter table %PRAEFIX%_user_fields add index USF_CAT_FK (usf_cat_id);
 alter table %PRAEFIX%_user_fields add constraint FK_USF_CAT foreign key (usf_cat_id)
       references %PRAEFIX%_categories (cat_id) on delete restrict on update restrict;
@@ -24,6 +19,11 @@ ALTER TABLE %PRAEFIX%_user_fields ADD COLUMN `usf_sequence` smallint NOT NULL AF
 
 -- User-Tabelle ergaenzen
 ALTER TABLE %PRAEFIX%_users ADD COLUMN `usr_text` text AFTER `usr_photo`;
+
+-- org_shortname aus Rollentabelle entfernen
+ALTER TABLE %PRAEFIX%_roles DROP FOREIGN KEY %PRAEFIX%_FK_ROL_ORG;
+ALTER TABLE %PRAEFIX%_roles DROP INDEX ROL_ORG_FK;
+ALTER TABLE %PRAEFIX%_roles DROP COLUMN rol_org_shortname;
 
 -- Kategorie-Tabelle anpassen
 ALTER TABLE %PRAEFIX%_categories CHANGE COLUMN `cat_org_id` `cat_org_id` tinyint(4);

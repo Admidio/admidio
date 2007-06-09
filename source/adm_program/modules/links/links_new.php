@@ -159,7 +159,7 @@ echo "
                     $sql = "SELECT * FROM ". TBL_CATEGORIES. "
                              WHERE cat_org_id = $g_current_organization->id
                                AND cat_type   = 'LNK'
-                             ORDER BY cat_name ASC ";
+                             ORDER BY cat_sequence ASC ";
                     $result = mysql_query($sql, $g_adm_con);
                     db_error($result,__FILE__,__LINE__);
 

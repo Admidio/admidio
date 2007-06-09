@@ -42,10 +42,11 @@ if(isset($result_user_fields) == false)
 {
     //Liste der Zusatzfelder erstellen
     $sql    =  "SELECT * 
-                  FROM ". TBL_USER_FIELDS. "
-                 WHERE usf_org_id IS NULL
-                    OR usf_org_id = $g_current_organization->id
-                 ORDER BY usf_org_id DESC, usf_name ASC";
+                  FROM ". TBL_USER_FIELDS. ", ". TBL_CATEGORIES. "
+                 WHERE usf_cat_id = cat_id
+				   AND (  cat_org_id IS NULL
+                       OR cat_org_id = $g_current_organization->id )
+                 ORDER BY cat_sequence ASC, usf_sequence ASC ";
 
     $result_user_fields = mysql_query($sql, $g_adm_con);
     db_error($result_user_fields,__FILE__,__LINE__);  
@@ -114,14 +115,14 @@ echo "<div style=\"text-align: center; width: 18%; float: left; margin-top: 5px;
 
                 while($uf_row = mysql_fetch_array($result_user_fields))
                 {     
-                    if($uf_row['usf_org_id'] != NULL
+                    if($uf_row['cat_org_id'] != NULL
                     && $field_header == false)
                     {
                         echo "</optgroup>
                         <optgroup label=\"Zus&auml;tzliche Felder\">";
                         $field_header = true;
                     }
-                    if($uf_row['usf_org_id'] == NULL
+                    if($uf_row['cat_org_id'] == NULL
                     && $msg_header == false)
                     {
                         echo "</optgroup>

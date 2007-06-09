@@ -7,7 +7,9 @@
  * Module-Owner : Markus Fassbender
  *
  * Diese Klasse dient dazu einen Rollenobjekt zu erstellen.
- * Eine Rolle kann ueber diese Klasse in der Datenbank verwaltet werden
+ * Eine Rolle kann ueber diese Klasse in der Datenbank verwaltet werden.
+ * Dazu werden die Informationen der Rolle sowie der zugehoerigen Kategorie
+ * ausgelesen. Geschrieben werden aber nur die Rollendaten
  *
  * Das Objekt wird erzeugt durch Aufruf des Konstruktors und der Uebergabe der
  * aktuellen Datenbankverbindung:
@@ -54,12 +56,12 @@ class Role
     var $db_fields = array();
 
     // Konstruktor
-    function Role($connection, $role_id = 0)
+    function Role($connection, $role = 0)
     {
         $this->db_connection = $connection;
-        if($role_id > 0)
+        if(strlen($role) > 0)
         {
-            $this->getRole($role_id);
+            $this->getRole($role);
         }
         else
         {
@@ -68,23 +70,35 @@ class Role
     }
 
     // Rolle mit der uebergebenen ID aus der Datenbank auslesen
-    function getRole($role_id)
+    function getRole($role)
     {
         $this->clear();
         
-        if($role_id > 0 && is_numeric($role_id))
+        if(is_numeric($role))
         {
-            $sql = "SELECT * FROM ". TBL_ROLES. " WHERE rol_id = $role_id";
-            $result = mysql_query($sql, $this->db_connection);
-            db_error($result,__FILE__,__LINE__);
+            $sql = "SELECT * 
+					  FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. " 
+				     WHERE rol_cat_id = cat_id
+					   AND rol_id     = $role";
+        }
+        else
+        {
+            $role = addslashes($role);
+            $sql = "SELECT * 
+					  FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. " 
+				     WHERE rol_cat_id = cat_id
+					   AND rol_name   LIKE '$role'";
+        }
+        
+        $result = mysql_query($sql, $this->db_connection);
+        db_error($result,__FILE__,__LINE__);
 
-            if($row = mysql_fetch_array($result, MYSQL_ASSOC))
+        if($row = mysql_fetch_array($result, MYSQL_ASSOC))
+        {
+            // Daten in das Klassenarray schieben
+            foreach($row as $key => $value)
             {
-                // Daten in das Klassenarray schieben
-                foreach($row as $key => $value)
-                {
-                    $this->db_fields[$key] = $value;
-                }
+                $this->db_fields[$key] = $value;
             }
         }
     }
@@ -209,8 +223,8 @@ class Role
             // Schleife ueber alle DB-Felder und diese dem Update hinzufuegen                
             foreach($this->db_fields as $key => $value)
             {
-                // rol_id soll nicht im Update erscheinen
-                if($key != "rol_id") 
+                // ID und andere Tabellenfelder sollen nicht im Insert erscheinen
+                if($key != "rol_id" && strpos($key, "rol_") === 0) 
                 {
                     // jetzt noch Spezialfaelle abhandeln
                     switch($key)
@@ -266,8 +280,8 @@ class Role
             // Schleife ueber alle DB-Felder und diese dem Insert hinzufuegen 
             foreach($this->db_fields as $key => $value)
             {
-                // rol_id soll nicht im Insert erscheinen
-                if($key != "rol_id" && strlen($value) > 0) 
+                // ID und andere Tabellenfelder sollen nicht im Insert erscheinen
+                if($key != "rol_id" && strlen($value) > 0 && strpos($key, "rol_") === 0) 
                 {
                     $sql_field_list = $sql_field_list. " $item_connection $key ";
                     if(is_numeric($value))
@@ -287,11 +301,6 @@ class Role
             }
 
             // Felder hinzufuegen, die zwingend erforderlich sind
-            if(isset($this->db_fields['rol_org_shortname']) == false)
-            {
-                $sql_field_list = $sql_field_list. ", rol_org_shortname ";
-                $sql_value_list = $sql_value_list. ", '$g_organization' ";
-            }
             if(isset($this->db_fields['rol_last_change']) == false)
             {
                 $sql_field_list = $sql_field_list. ", rol_last_change ";

@@ -82,6 +82,7 @@ class User
     var $editGuestbookRight;
     var $editWeblinksRight;
     var $editDownloadRight;
+    var $editPhotoRight;
 
     // Konstruktor
     function User($connection, $user_id = 0)
@@ -190,6 +191,7 @@ class User
         $this->commentGuestbookRight = -1;
         $this->editWeblinksRight = -1;
         $this->editDownloadRight = -1;
+        $this->editPhotoRight    = -1;
     }
 
     // aktuelle Userdaten in der Datenbank updaten
@@ -440,16 +442,17 @@ class User
     {
         if(-1 == $this->assignRolesRight)
         {
-            global $g_organization;
+            global $g_current_organization;
 
             $sql    = "SELECT *
-                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-                        WHERE mem_usr_id        = $this->id
-                          AND mem_rol_id        = rol_id
-                          AND mem_valid         = 1
-                          AND rol_org_shortname = '$g_organization'
-                          AND rol_assign_roles  = 1
-                          AND rol_valid         = 1 ";
+                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                        WHERE mem_usr_id       = $this->id
+                          AND mem_rol_id       = rol_id
+                          AND mem_valid        = 1
+                          AND rol_assign_roles = 1
+                          AND rol_valid        = 1 
+						  AND rol_cat_id       = cat_id
+						  AND cat_org_id       = $g_current_organization->id ";
             $result = mysql_query($sql, $this->db_connection);
             db_error($result,__FILE__,__LINE__);
 
@@ -478,8 +481,6 @@ class User
     // Funktion prueft, ob der angemeldete User das entsprechende Profil bearbeiten darf
     function editProfile($profileID = NULL)
     {
-        global $g_organization;
-
         if($profileID == NULL)
         {
             $profileID = $this->id;
@@ -491,14 +492,17 @@ class User
             // Pruefen ob die Datenbank schon abgefragt wurde, wenn nicht dann Recht auslesen
             if($this->editProfile == -1)
             {
+                global $g_current_organization;
+                
                 $sql    =  "SELECT *
-                            FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-                            WHERE mem_usr_id        = $this->id
-                            AND mem_rol_id        = rol_id
-                            AND mem_valid         = 1
-                            AND rol_org_shortname = '$g_organization'
-                            AND rol_profile       = 1
-                            AND rol_valid         = 1 ";
+                              FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                             WHERE mem_usr_id  = $this->id
+                               AND mem_rol_id  = rol_id
+                               AND mem_valid   = 1
+                               AND rol_profile = 1
+                               AND rol_valid   = 1 
+						       AND rol_cat_id  = cat_id
+						       AND cat_org_id  = $g_current_organization->id ";
                 $result = mysql_query($sql, $this->db_connection);
                 db_error($result,__FILE__,__LINE__);
 
@@ -534,19 +538,20 @@ class User
 
     function editUser()
     {
-        global $g_organization;
+        global $g_current_organization;
 
         // prüfen ob die Userrechte schon aus der Datenbank geholt wurden
         if($this->editUser == -1)
         {
             $sql    = "SELECT *
-                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-                        WHERE mem_usr_id        = $this->id
-                          AND mem_valid         = 1
-                          AND mem_rol_id        = rol_id
-                          AND rol_org_shortname = '$g_organization'
-                          AND rol_edit_user     = 1
-                          AND rol_valid         = 1 ";
+                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                        WHERE mem_usr_id    = $this->id
+                          AND mem_valid     = 1
+                          AND mem_rol_id    = rol_id
+                          AND rol_edit_user = 1
+                          AND rol_valid     = 1 
+						  AND rol_cat_id    = cat_id
+						  AND cat_org_id    = $g_current_organization->id ";
             $result = mysql_query($sql, $this->db_connection);
             db_error($result,__FILE__,__LINE__);
 
@@ -577,16 +582,17 @@ class User
     {
          if($this->commentGuestbookRight == -1)
          {
-            global $g_organization;
+            global $g_current_organization;
 
             $sql    = "SELECT *
-                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
+                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                         WHERE mem_usr_id             = $this->id
                           AND mem_rol_id             = rol_id
                           AND mem_valid              = 1
-                          AND rol_org_shortname      = '$g_organization'
                           AND rol_guestbook_comments = 1
-                          AND rol_valid              = 1 ";
+                          AND rol_valid              = 1 
+						  AND rol_cat_id             = cat_id
+						  AND cat_org_id             = $g_current_organization->id ";
             $result = mysql_query($sql, $this->db_connection);
             db_error($result,__FILE__,__LINE__);
 
@@ -617,16 +623,17 @@ class User
     {
         if($this->editGuestbookRight == -1)
         {
-            global $g_organization;
+            global $g_current_organization;
 
             $sql    = "SELECT *
-                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-                        WHERE mem_usr_id        = $this->id
-                          AND mem_rol_id        = rol_id
-                          AND mem_valid         = 1
-                          AND rol_org_shortname = '$g_organization'
-                          AND rol_guestbook     = 1
-                          AND rol_valid         = 1 ";
+                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                        WHERE mem_usr_id    = $this->id
+                          AND mem_rol_id    = rol_id
+                          AND mem_valid     = 1
+                          AND rol_guestbook = 1
+                          AND rol_valid     = 1 
+						  AND rol_cat_id    = cat_id
+						  AND cat_org_id    = $g_current_organization->id ";
             $result = mysql_query($sql, $this->db_connection);
             db_error($result,__FILE__,__LINE__);
 
@@ -657,16 +664,17 @@ class User
     {
         if(-1 == $this->editWeblinksRight)
         {
-            global $g_organization;
+            global $g_current_organization;
 
             $sql    = "SELECT *
-                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-                        WHERE mem_usr_id        = $this->id
-                          AND mem_rol_id        = rol_id
-                          AND mem_valid         = 1
-                          AND rol_org_shortname = '$g_organization'
-                          AND rol_weblinks      = 1
-                          AND rol_valid         = 1 ";
+                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                        WHERE mem_usr_id   = $this->id
+                          AND mem_rol_id   = rol_id
+                          AND mem_valid    = 1
+                          AND rol_weblinks = 1
+                          AND rol_valid    = 1 
+						  AND rol_cat_id   = cat_id
+						  AND cat_org_id   = $g_current_organization->id ";
             $result = mysql_query($sql, $this->db_connection);
             db_error($result,__FILE__,__LINE__);
 
@@ -698,16 +706,17 @@ class User
     {
         if(-1 == $this->editDownloadRight)
         {
-            global $g_organization;
+            global $g_current_organization;
 
             $sql    = "SELECT *
-                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-                        WHERE mem_usr_id        = $this->id
-                          AND mem_rol_id        = rol_id
-                          AND mem_valid         = 1
-                          AND rol_org_shortname = '$g_organization'
-                          AND rol_download      = 1
-                          AND rol_valid         = 1 ";
+                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                        WHERE mem_usr_id   = $this->id
+                          AND mem_rol_id   = rol_id
+                          AND mem_valid    = 1
+                          AND rol_download = 1
+                          AND rol_valid    = 1 
+						  AND rol_cat_id   = cat_id
+						  AND cat_org_id   = $g_current_organization->id ";
             $result = mysql_query($sql, $this->db_connection);
             db_error($result,__FILE__,__LINE__);
 
@@ -733,21 +742,64 @@ class User
         }
     }
 
+	// Funktion prueft, ob der angemeldete User Fotos hochladen und verwalten darf
+	
+	function editPhotoRight()
+	{
+        if(-1 == $this->editPhotoRight)
+        {	    
+            global $g_current_organization;
+            
+		    $sql    = "SELECT *
+		                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+		                WHERE mem_usr_id = $g_current_user->id
+		                  AND mem_rol_id = rol_id
+		                  AND mem_valid  = 1
+		                  AND rol_photo  = 1
+		                  AND rol_valid  = 1 
+						  AND rol_cat_id = cat_id
+						  AND cat_org_id = $g_current_organization->id ";
+		    $result = mysql_query($sql, $g_adm_con);
+		    db_error($result,__FILE__,__LINE__);
+		
+		    $edit_photo = mysql_num_rows($result);
+	
+            if($edit_photo > 0)
+            {
+                $this->editPhotoRight = 1;
+            }
+            else
+            {
+                $this->editPhotoRight = 0;
+            }
+        }
+
+        if (1 == $this->editPhotoRight)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+	}
+
     function isWebmaster()
     {
-        global $g_organization;
-        
         if($this->webmaster == -1)
         {
             // Status wurde noch nicht ausgelesen
+            global $g_current_organization;
+            
             $sql    = "SELECT rol_id
-                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-                        WHERE mem_usr_id        = $this->id
-                          AND mem_valid         = 1
-                          AND mem_rol_id        = rol_id
-                          AND rol_org_shortname = '$g_organization'
-                          AND rol_name          = 'Webmaster'
-                          AND rol_valid         = 1 ";
+                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                        WHERE mem_usr_id = $this->id
+                          AND mem_valid  = 1
+                          AND mem_rol_id = rol_id
+                          AND rol_name   = 'Webmaster'
+                          AND rol_valid  = 1 
+						  AND rol_cat_id = cat_id
+						  AND cat_org_id = $g_current_organization->id ";
             $result = mysql_query($sql, $this->db_connection);
             db_error($result,__FILE__,__LINE__);
             

@@ -82,9 +82,10 @@ if(isset($plg_rank) == false)
 mysql_select_db($g_adm_db, $g_adm_con );
 
 $sql    = "SELECT rol_id, rol_mail_logout
-             FROM ". TBL_ROLES. "
-            WHERE rol_org_shortname = '$g_current_organization->shortname'
-              AND rol_name          = 'Webmaster' ";
+             FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+            WHERE rol_name   = 'Webmaster' 
+			  AND rol_cat_id = cat_id
+			  AND cat_org_id = $g_current_organization->id ";
 $result = mysql_query($sql, $g_adm_con);
 db_error($result,__FILE__,__LINE__);
 $webmaster_row = mysql_fetch_object($result);

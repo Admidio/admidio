@@ -130,10 +130,10 @@ echo "
 
     // alle Rollen gruppiert nach Kategorie auflisten
     $sql    = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                WHERE rol_org_shortname = '$g_organization'
-                  AND rol_valid         = $req_valid
-                  AND rol_cat_id        = cat_id
-                ORDER BY cat_name, rol_name ";
+                WHERE rol_valid  = $req_valid
+                  AND rol_cat_id = cat_id
+				  AND cat_org_id = $g_current_organization->id
+                ORDER BY cat_sequence, rol_name ";
     $usr_result = mysql_query($sql, $g_adm_con);
     db_error($result,__FILE__,__LINE__);
 

@@ -68,34 +68,37 @@ if($g_current_user->assignRoles())
 {
     // Alle Rollen der Gruppierung auflisten
     $sql    = "SELECT rol_id, rol_name, rol_max_members
-                 FROM ". TBL_ROLES. "
-                WHERE rol_org_shortname = '$g_organization'
-                  AND rol_valid        = 1
+                 FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                WHERE rol_valid  = 1
+				  AND rol_cat_id = cat_id
+				  AND cat_org_id = $g_current_organization->id
                 ORDER BY rol_name";
 }
 elseif(isGroupLeader())
 {
     // Alle Rollen auflisten, bei denen das Mitglied Leiter ist
     $sql    = "SELECT rol_id, rol_name, rol_max_members
-                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-                WHERE mem_usr_id  = $g_current_user->id
+                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                WHERE mem_usr_id = $g_current_user->id
                   AND mem_valid  = 1
                   AND mem_leader = 1
                   AND rol_id     = mem_rol_id
-                  AND rol_org_shortname = '$g_organization'
-                  AND rol_valid        = 1
-                  AND rol_locked     = 0
+                  AND rol_valid  = 1
+                  AND rol_locked = 0
+				  AND rol_cat_id = cat_id
+				  AND cat_org_id = $g_current_organization->id
                 ORDER BY rol_name";
 }
 elseif($g_current_user->editUser())
 {
     // Alle Rollen auflisten, die keinen Moderatorenstatus haben
     $sql    = "SELECT rol_id, rol_name, rol_max_members
-                 FROM ". TBL_ROLES. "
-                WHERE rol_org_shortname = '$g_organization'
-                  AND rol_valid        = 1
+                 FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                WHERE rol_valid        = 1
                   AND rol_assign_roles = 0
                   AND rol_locked       = 0
+				  AND rol_cat_id       = cat_id
+				  AND cat_org_id       = $g_current_organization->id
                 ORDER BY rol_name";
 }
 $result_rolle = mysql_query($sql, $g_adm_con);

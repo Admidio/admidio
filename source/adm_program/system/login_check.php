@@ -42,14 +42,15 @@ if(strlen($req_login_name) == 0)
 // Rolle muss mind. Mitglied sein
 
 $sql    = "SELECT usr_id
-             FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. "
-            WHERE usr_login_name     LIKE {0}
-              AND usr_valid         = 1
-              AND mem_usr_id        = usr_id
-              AND mem_rol_id        = rol_id
-              AND mem_valid         = 1
-              AND rol_org_shortname = '$g_organization'
-              AND rol_valid         = 1 ";
+             FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+            WHERE usr_login_name LIKE {0}
+              AND usr_valid      = 1
+              AND mem_usr_id     = usr_id
+              AND mem_rol_id     = rol_id
+              AND mem_valid      = 1
+              AND rol_valid      = 1 
+			  AND rol_cat_id     = cat_id
+			  AND cat_org_id     = $g_current_organization->id ";
 $sql    = prepareSQL($sql, array($req_login_name));
 $result = mysql_query($sql, $g_adm_con);
 db_error($result,__FILE__,__LINE__);

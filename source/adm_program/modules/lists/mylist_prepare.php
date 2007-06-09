@@ -113,8 +113,11 @@ for($i = 0; $i < count($_POST); $i++)
                 // ein benutzerdefiniertes Feld
                 
                 // Datentyp ermitteln
-                $sql = "SELECT usf_type FROM ". TBL_USER_FIELDS. "
-                         WHERE usf_org_id = $g_current_organization->id
+                $sql = "SELECT usf_type 
+						  FROM ". TBL_USER_FIELDS. ", ". TBL_CATEGORIES. "
+                         WHERE usf_cat_id = cat_id
+						   AND (  cat_org_id = $g_current_organization->id
+                               OR cat_org_id IS NULL )
                            AND usf_id     = '$act_field_name' ";
                 $result = mysql_query($sql, $g_adm_con);
                 db_error($result,__FILE__,__LINE__);
@@ -173,11 +176,12 @@ for($i = 0; $i < count($_POST); $i++)
 }
 
 $main_sql = "SELECT mem_leader, usr_id, $sql_select
-               FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
+               FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                     $sql_join
-              WHERE rol_org_shortname = '$g_organization'
-                AND rol_id     = $req_rol_id
+              WHERE rol_id     = $req_rol_id
                 AND rol_valid  = 1
+		        AND rol_cat_id = cat_id
+				AND rol_org_id = $g_current_organization->id
                 AND mem_rol_id = rol_id
                 AND mem_valid  = $act_members
                 AND mem_usr_id = usr_id

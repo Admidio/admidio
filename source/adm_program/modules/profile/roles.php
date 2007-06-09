@@ -158,10 +158,10 @@ echo "
                            ON rol_id     = mem_rol_id
                           AND mem_usr_id = {0}
                           AND mem_valid  = 1
-                        WHERE rol_org_shortname = '$g_organization'
-                          AND rol_valid  = 1
+                        WHERE rol_valid  = 1
                           AND rol_cat_id = cat_id
-                        ORDER BY cat_name, rol_name";
+						  AND cat_org_id = $g_current_organization->id
+                        ORDER BY cat_sequence, rol_name";
         }
         elseif(isGroupLeader())
         {
@@ -176,11 +176,11 @@ echo "
                           AND bm.mem_valid   = 1
                           AND bm.mem_leader  = 1
                           AND br.rol_id      = bm.mem_rol_id
-                          AND br.rol_org_shortname = '$g_organization'
                           AND br.rol_valid   = 1
                           AND br.rol_locked  = 0
-                          AND br.rol_cat_id = cat_id
-                        ORDER BY cat_name, br.rol_name";
+                          AND br.rol_cat_id  = cat_id
+						  AND cat_org_id     = $g_current_organization->id
+                        ORDER BY cat_sequence, br.rol_name";
         }
         elseif($g_current_user->editUser())
         {
@@ -191,12 +191,12 @@ echo "
                            ON rol_id     = mem_rol_id
                           AND mem_usr_id = {0}
                           AND mem_valid  = 1
-                        WHERE rol_org_shortname = '$g_organization'
-                          AND rol_valid        = 1
+                        WHERE rol_valid        = 1
                           AND rol_assign_roles = 0
                           AND rol_locked       = 0
                           AND rol_cat_id = cat_id
-                        ORDER BY cat_name, rol_name";
+						  AND cat_org_id = $g_current_organization->id
+                        ORDER BY cat_sequence, rol_name";
         }
         $sql    = prepareSQL($sql, array($req_usr_id));
         $result = mysql_query($sql, $g_adm_con);

@@ -117,10 +117,11 @@ echo "
 
             // Organisationsspezifische Felder noch in das Array aufnehmen
             $sql = "SELECT *
-                      FROM ". TBL_USER_FIELDS. "
-                     WHERE (  usf_org_id = $g_current_organization->id
-                           OR usf_org_id IS NULL )
-                     ORDER BY usf_org_id DESC, usf_name ASC ";
+                      FROM ". TBL_USER_FIELDS. ", ". TBL_CATEGORIES. "
+                     WHERE usf_cat_id = cat_id
+					   AND (  cat_org_id = $g_current_organization->id
+                           OR cat_org_id IS NULL )
+                     ORDER BY cat_sequence ASC, usf_sequence ASC ";
             $result_field = mysql_query($sql, $g_adm_con);
             db_error($result_field,__FILE__,__LINE__);
 

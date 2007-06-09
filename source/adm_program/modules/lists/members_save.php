@@ -31,6 +31,7 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
+require("../../system/role_class.php");
 require("../../system/role_dependency_class.php");
 
 // Uebergabevariablen pruefen
@@ -49,13 +50,8 @@ else
     $role_id = $_GET["role_id"];
 }
 
-//Erfassen der uebergeben Rolle
-$sql="SELECT * FROM ". TBL_ROLES. "
-      WHERE rol_id = {0}";
-$sql    = prepareSQL($sql, array($role_id));
-$result_role = mysql_query($sql, $g_adm_con);
-db_error($result,__FILE__,__LINE__);
-$role = mysql_fetch_object($result_role);
+// Objekt der uebergeben Rollen-ID erstellen
+$role = new Role($g_adm_con, $role_id);
 
 // nur Moderatoren duerfen Rollen zuweisen
 // nur Webmaster duerfen die Rolle Webmaster zuweisen
@@ -64,8 +60,8 @@ if(  (!$g_current_user->assignRoles()
    && !isGroupLeader($role_id) 
    && !$g_current_user->editUser()) 
 || (  !$g_current_user->isWebmaster()
-   && $role->rol_name=="Webmaster") 
-|| $role->rol_org_shortname!=$g_organization)
+   && $role->getValue("rol_name") == "Webmaster") 
+|| $role->getValue("cat_org_id") != $g_current_organization->id)
 {
    $g_message->show("norights");
 }
@@ -97,7 +93,7 @@ $result_user = mysql_query($sql, $g_adm_con);
 db_error($result_user,__FILE__,__LINE__);
 
 //Kontrolle ob nicht am ende die Mitgliederzahl ueberstigen wird
-if($role->rol_max_members!=NULL)
+if($role->getValue("rol_max_members") != NULL)
 {
     //Zaehler fuer die Mitgliederzahl
     $counter=0;
@@ -108,7 +104,7 @@ if($role->rol_max_members!=NULL)
             $counter++;
         }
     }
-    if($counter>$role->rol_max_members)
+    if($counter>$role->getValue("rol_max_members"))
     {
         $g_message->show("max_members");
     }
@@ -154,7 +150,7 @@ while($user= mysql_fetch_array($result_user))
             $mem_id = $mitglieder_array[$user["usr_id"]][0];
             $sql =" UPDATE ". TBL_MEMBERS. "
                     SET mem_valid  = 0,
-                        mem_end   = NOW(),
+                        mem_end    = NOW(),
                         mem_leader = 0
                     WHERE mem_id = {0}";
             $sql    = prepareSQL($sql, array($mem_id));
@@ -167,7 +163,7 @@ while($user= mysql_fetch_array($result_user))
         {
             $mem_id = $mitglieder_array[$user["usr_id"]][0];
             $sql =" UPDATE ". TBL_MEMBERS. "
-                    SET mem_valid  = 1,
+                    SET mem_valid = 1,
                         mem_end   = '0000-00-00'";
 
             //Falls jemand auch Leiter werden soll

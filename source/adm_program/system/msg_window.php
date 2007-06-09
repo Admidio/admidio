@@ -273,8 +273,11 @@ echo "
             break;
 
         case "user_field_description":
-            $sql = "SELECT usf_description FROM ". TBL_USER_FIELDS. "
-                     WHERE usf_org_id = $g_current_organization->id
+            $sql = "SELECT usf_description 
+					  FROM ". TBL_USER_FIELDS. ", ". TBL_CATEGORIES. "
+                     WHERE usf_cat_id = cat_id
+					   AND (  cat_org_id = $g_current_organization->id
+            			   OR cat_org_id IS NULL )
                        AND usf_name   = {0} ";
             $sql = prepareSQL($sql, array($req_err_text));
             $result_field = mysql_query($sql, $g_adm_con);

@@ -61,8 +61,8 @@ if($req_usf_id > 0)
     $user_field->getUserField($req_usf_id);
     
     // Pruefung, ob das Feld zur aktuellen Organisation gehoert
-    if($user_field->getValue("usf_org_id") >  0
-    && $user_field->getValue("usf_org_id") != $g_current_organization->id)
+    if($user_field->getValue("cat_org_id") >  0
+    && $user_field->getValue("cat_org_id") != $g_current_organization->id)
     {
         $g_message->show("norights");
     }

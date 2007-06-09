@@ -101,12 +101,13 @@ if($new_user == 0)
     {
         // pruefen, ob der User noch in anderen Organisationen aktiv ist
         $sql    = "SELECT *
-                     FROM ". TBL_ROLES. ", ". TBL_MEMBERS. "
-                    WHERE rol_org_shortname <> '$g_organization'
-                      AND rol_valid          = 1
-                      AND mem_rol_id         = rol_id
-                      AND mem_valid          = 1
-                      AND mem_usr_id         = $usr_id ";
+                     FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. "
+                    WHERE rol_valid   = 1
+					  AND rol_cat_id  = cat_id
+					  AND cat_org_id <> $g_current_organization->id
+                      AND mem_rol_id  = rol_id
+                      AND mem_valid   = 1
+                      AND mem_usr_id  = $usr_id ";
         $result      = mysql_query($sql, $g_adm_con);
         db_error($result,__FILE__,__LINE__);
         $b_other_orga = false;
@@ -425,24 +426,28 @@ echo "
             {
                 // Neuer User anlegen bzw. Registrierung anlegen
                 $sql = "SELECT *
-                          FROM ". TBL_USER_FIELDS. "
-                         WHERE usf_org_id = $g_current_organization->id ";
+                          FROM ". TBL_USER_FIELDS. ", ". TBL_CATEGORIES. "
+                         WHERE usf_cat_id = cat_id
+						   AND cat_org_id = $g_current_organization->id ";
             }
             else
             {
                 // vorhandender User editieren bzw. Registrierung akzeptieren
                 $sql = "SELECT *
-                          FROM ". TBL_USER_FIELDS. " LEFT JOIN ". TBL_USER_DATA. "
+                          FROM ". TBL_USER_FIELDS. " 
+						  LEFT JOIN ". TBL_USER_DATA. "
                             ON usd_usf_id = usf_id
                            AND usd_usr_id = $user->id
-                         WHERE usf_org_id = $g_current_organization->id ";
+                          JOIN ". TBL_CATEGORIES. "
+                            ON usf_cat_id = cat_id
+                           AND cat_org_id = $g_current_organization->id ";
             }
             // wenn nicht Moderator, dann nur die freigegebenen Felder anzeigen
             if(!$g_current_user->assignRoles())
             {
                 $sql = $sql. " AND usf_hidden = 0 ";
             }
-            $sql = $sql. " ORDER BY usf_name ASC ";
+            $sql = $sql. " ORDER BY usf_sequence ASC ";
 
             $result_field = mysql_query($sql, $g_adm_con);
             db_error($result_field,__FILE__,__LINE__);
@@ -530,14 +535,14 @@ echo "
 
             // alle zugeordneten Messengerdaten einlesen
             $sql = "SELECT usf_id, usf_name, usd_value
-                      FROM ". TBL_CATEGORIES. ", ". TBL_USER_FIELDS. "
+                      FROM ". TBL_USER_FIELDS. "
                       LEFT JOIN ". TBL_USER_DATA. "
                         ON usd_usf_id  = usf_id
                        AND usd_usr_id  = $user->id
-                     WHERE usf_org_id IS NULL
-                       AND usf_cat_id  = cat_id
-                       AND cat_name    = 'Messenger'
-                     ORDER BY usf_name ASC ";
+                      JOIN ". TBL_CATEGORIES. "
+						ON usf_cat_id = cat_id
+					   AND cat_name   = 'Messenger'
+                     ORDER BY usf_sequence ASC ";
             $result_msg = mysql_query($sql, $g_adm_con);
             db_error($result_msg,__FILE__,__LINE__);
 
