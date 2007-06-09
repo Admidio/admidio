@@ -72,7 +72,7 @@ if($req_rol_id > 0)
     $role->getRole($req_rol_id);
     
     // Pruefung, ob die Rolle zur aktuellen Organisation gehoert
-    if($role->getValue("rol_org_shortname") != $g_organization)
+    if($role->getValue("cat_org_id") != $g_current_organization->id)
     {
         $g_message->show("norights");
     }
@@ -140,10 +140,12 @@ elseif($_GET["mode"] == 2)
     if($req_rol_id == 0)
     {
         // Schauen, ob die Rolle bereits existiert
-        $sql    = "SELECT COUNT(*) as count FROM ". TBL_ROLES. "
-                    WHERE rol_org_shortname LIKE '$g_organization'
-                      AND rol_name          LIKE '". $_POST['rol_name']. "'
-                      AND rol_cat_id        =     ". $_POST['rol_cat_id'];
+        $sql    = "SELECT COUNT(*) as count 
+					 FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                    WHERE rol_name   LIKE '". $_POST['rol_name']. "'
+                      AND rol_cat_id = ". $_POST['rol_cat_id']. "
+					  AND rol_cat_id = cat_id
+					  AND cat_org_id = $g_current_organization->id ";
         $result = mysql_query($sql, $g_adm_con);
         db_error($result,__FILE__,__LINE__);
         $row = mysql_fetch_array($result);

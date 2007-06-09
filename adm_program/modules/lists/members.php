@@ -34,6 +34,7 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
+require("../../system/role_class.php");
 
 // Uebergabevariablen pruefen
 
@@ -58,14 +59,8 @@ if(!isset($_GET["restrict"]))
     $_SESSION['navigation']->addUrl($g_current_url);
 }
 
-//Erfassen der uebergeben Rolle
-$sql="  SELECT *
-        FROM ". TBL_ROLES. "
-        WHERE rol_id = {0}";
-$sql    = prepareSQL($sql, array($role_id));
-$result_role = mysql_query($sql, $g_adm_con);
-db_error($result,__FILE__,__LINE__);
-$role = mysql_fetch_object($result_role);
+// Objekt der uebergeben Rollen-ID erstellen
+$role = new Role($g_adm_con, $role_id);
 
 // nur Moderatoren duerfen Rollen zuweisen
 // nur Webmaster duerfen die Rolle Webmaster zuweisen
@@ -74,8 +69,8 @@ if(  (!$g_current_user->assignRoles()
    && !isGroupLeader($role_id) 
    && !$g_current_user->editUser()) 
 || (  !$g_current_user->isWebmaster() 
-   && $role->rol_name=="Webmaster") 
-|| $role->rol_org_shortname!=$g_organization)
+   && $role->getValue("rol_name") == "Webmaster") 
+|| $role->getValue("cat_org_id") != $g_current_organization->id)
 {
     $g_message->show("norights");
 }
@@ -99,13 +94,14 @@ if(strlen($restrict) == 0 || !$g_current_user->assignRoles() || !$g_current_user
 if($restrict=="m")
 {
     $sql = "SELECT DISTINCT usr_id, usr_last_name, usr_first_name, usr_birthday, usr_city, usr_phone, usr_address, usr_zip_code
-            FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. "
+            FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
             WHERE usr_id   = mem_usr_id
-            AND rol_org_shortname = '$g_organization'
             AND mem_rol_id = rol_id
             AND mem_valid  = 1
             AND rol_valid  = 1
             AND usr_valid  = 1
+			AND rol_cat_id = cat_id
+			AND cat_org_id = $g_current_organization->id
             ORDER BY usr_last_name, usr_first_name ASC ";
     $result_user = mysql_query($sql, $g_adm_con);
     db_error($result_user,__FILE__,__LINE__);
@@ -269,7 +265,7 @@ $g_layout['header'] = "
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 echo "
 <form action=\"members_save.php?role_id=".$role_id. "\" method=\"post\" name=\"Mitglieder\">
-   <h2>Mitglieder zu $role->rol_name zuordnen</h2>";
+   <h2>Mitglieder zu ". $role->getValue("rol_name"). " zuordnen</h2>";
 
     if($count_valid_users != $user_anzahl || $restrict == "u")
     {

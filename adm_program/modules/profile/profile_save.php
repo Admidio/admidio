@@ -107,12 +107,13 @@ if($usr_id > 0)
         {
             // pruefen, ob der User noch in anderen Organisationen aktiv ist
             $sql    = "SELECT *
-                         FROM ". TBL_ROLES. ", ". TBL_MEMBERS. "
-                        WHERE rol_org_shortname <> '$g_organization'
-                          AND rol_valid          = 1
-                          AND mem_rol_id         = rol_id
-                          AND mem_valid          = 1
-                          AND mem_usr_id         = $usr_id ";
+                         FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. "
+                        WHERE rol_valid   = 1
+					  	  AND rol_cat_id  = cat_id
+					  	  AND cat_org_id <> $g_current_organization->id
+                          AND mem_rol_id  = rol_id
+                          AND mem_valid   = 1
+                          AND mem_usr_id  = $usr_id ";
             $result      = mysql_query($sql, $g_adm_con);
             db_error($result,__FILE__,__LINE__);
             $b_other_orga = false;
@@ -299,8 +300,9 @@ if($new_user == 2)
 
 // Feldinhalt der organisationsspezifischen Felder pruefen
 $sql = "SELECT usf_id, usf_name, usf_type
-          FROM ". TBL_USER_FIELDS. "
-         WHERE usf_org_id  = $g_current_organization->id ";
+          FROM ". TBL_USER_FIELDS. ", ". TBL_CATEGORIES. "
+         WHERE usf_cat_id = cat_id
+		   AND cat_org_id = $g_current_organization->id ";
 if(!$g_current_user->assignRoles())
 {
     $sql = $sql. " AND usf_hidden = 0 ";
@@ -402,8 +404,10 @@ if($new_user != 2 || $g_preferences['registration_mode'] != 1)
               LEFT JOIN ". TBL_USER_DATA. "
                 ON usd_usf_id = usf_id
                AND usd_usr_id         = {0}
-             WHERE (  usf_org_id IS NULL
-                   OR usf_org_id  = $g_current_organization->id ) ";
+			  JOIN ". TBL_CATEGORIES. "
+				ON usf_cat_id = cat_id
+               AND (  cat_org_id IS NULL
+                   OR cat_org_id  = $g_current_organization->id ) ";
     if(!$g_current_user->assignRoles())
     {
         $sql = $sql. " AND usf_hidden = 0 ";
@@ -520,9 +524,10 @@ elseif($new_user == 2)
     if($g_preferences['enable_system_mails'] == 1 && $g_preferences['enable_registration_admin_mail'] == 1)
     {
         $sql    = "SELECT usr_first_name, usr_last_name, usr_email
-                     FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
-                    WHERE rol_org_shortname = '$g_organization'
-                      AND rol_name          = 'Webmaster'
+                     FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
+                    WHERE rol_name          = 'Webmaster'
+					  AND rol_cat_id        = cat_id
+					  AND cat_org_id        = $g_current_organization->id
                       AND mem_rol_id        = rol_id
                       AND mem_valid         = 1
                       AND mem_usr_id        = usr_id

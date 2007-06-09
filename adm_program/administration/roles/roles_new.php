@@ -61,7 +61,7 @@ if($req_rol_id > 0)
     $role->getRole($req_rol_id);
     
     // Pruefung, ob die Rolle zur aktuellen Organisation gehoert
-    if($role->getValue("rol_org_shortname") != $g_organization)
+    if($role->getValue("cat_org_id") != $g_current_organization->id)
     {
         $g_message->show("norights");
     }
@@ -166,7 +166,7 @@ echo "
                     $sql = "SELECT * FROM ". TBL_CATEGORIES. "
                              WHERE cat_org_id = $g_current_organization->id
                                AND cat_type   = 'ROL'
-                             ORDER BY cat_name ASC ";
+                             ORDER BY cat_sequence ASC ";
                     $result = mysql_query($sql, $g_adm_con);
                     db_error($result,__FILE__,__LINE__);
 
@@ -412,11 +412,13 @@ echo "
                     // holt eine Liste der ausgewählten Rolen
                     $childRoles = RoleDependency::getChildRoles($g_adm_con,$req_rol_id);
 
-                    // Alle Rollen auflisten, die der Webmaster sehen darf
-                    $sql    = "SELECT * FROM ". TBL_ROLES. "
-                        WHERE rol_org_shortname = '$g_organization'
-                          AND rol_valid         = 1
-                        ORDER BY rol_name ";
+                    // Alle Rollen auflisten, die der Benutzer sehen darf
+                    $sql = "SELECT * 
+							  FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                        	 WHERE rol_valid  = 1
+							   AND rol_cat_id = cat_id
+							   AND cat_org_id = $g_current_organization->id
+                             ORDER BY rol_name ";
                     $allRoles = mysql_query($sql, $g_adm_con);
                     db_error($allRoles,__FILE__,__LINE__);
 

@@ -127,7 +127,7 @@ else
                AND cat_org_id = $g_current_organization->id
                AND cat_type = 'LNK'
                WHERE lnk_org_id = $g_current_organization->id
-               ORDER BY cat_name, lnk_name, lnk_timestamp DESC
+               ORDER BY cat_sequence, lnk_name, lnk_timestamp DESC
                LIMIT {0}, 10 ";
 
     $sql1    = prepareSQL($sql1, array($_GET['start']));

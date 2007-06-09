@@ -77,13 +77,14 @@ else
         if($members == true)
         {
             $sql    = "SELECT DISTINCT usr_last_name, usr_first_name
-                         FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. "
+                         FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                         WHERE usr_valid = 1
                           AND mem_usr_id = usr_id
                           AND mem_rol_id = rol_id
                           AND mem_valid  = 1
-                          AND rol_org_shortname = '$g_current_organization->shortname'
                           AND rol_valid  = 1
+                          AND rol_cat_id = cat_id
+                          AND cat_org_id = $g_current_organization->id
                         ORDER BY usr_last_name, usr_first_name ";
         }
         else

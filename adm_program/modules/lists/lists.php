@@ -89,9 +89,9 @@ $_SESSION['navigation']->addUrl($g_current_url);
 // SQL-Statement zusammensetzen
 
 $sql = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-         WHERE rol_org_shortname = '$g_organization'
-           AND rol_valid  = $active_role
-           AND rol_cat_id = cat_id ";
+         WHERE rol_valid  = $active_role
+           AND rol_cat_id = cat_id 
+		   AND cat_org_id = $g_current_organization->id";
 if(!$g_current_user->assignRoles())
 {
     // wenn nicht Moderator, dann keine versteckten Rollen anzeigen
@@ -104,8 +104,7 @@ if($g_session_valid == false)
 if(strlen($category) > 0 && $category != "Alle")
 {
     // wenn eine Kategorie uebergeben wurde, dann nur Rollen dieser anzeigen
-    $sql .= " AND cat_org_id = $g_current_organization->id
-              AND cat_type   = 'ROL'
+    $sql .= " AND cat_type   = 'ROL'
               AND cat_name   = '$category' ";
 }
 $sql .= "ORDER BY rol_name ";
@@ -201,7 +200,7 @@ if($show_ctg_sel == 1)
     {
         $sql .= " AND cat_hidden = 0 ";
     }
-    $sql .= " ORDER BY cat_name ASC ";
+    $sql .= " ORDER BY cat_sequence ASC ";
     $result = mysql_query($sql, $g_adm_con);
     db_error($result,__FILE__,__LINE__);
 

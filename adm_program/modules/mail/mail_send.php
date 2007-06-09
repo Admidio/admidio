@@ -73,10 +73,11 @@ if (array_key_exists("usr_id", $_GET))
     if (!$g_current_user->editUser())
     {
         $sql    = "SELECT DISTINCT usr_id, usr_email
-                     FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. "
+                     FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                     WHERE mem_usr_id = usr_id
                       AND mem_rol_id = rol_id
-                      AND rol_org_shortname = '$g_current_organization->shortname'
+					  AND rol_cat_id = cat_id
+					  AND cat_org_id = $g_current_organization->id
                       AND usr_id  = {0} ";
     }
     else
@@ -205,15 +206,19 @@ if (array_key_exists("rol_id", $_POST) && strlen($err_code) == 0)
     {
         if ($g_session_valid)
         {
-            $sql    = "SELECT rol_mail_login FROM ". TBL_ROLES. "
-                       WHERE rol_org_shortname    = '$g_organization'
-                       AND rol_id = {0} ";
+            $sql    = "SELECT rol_mail_login 
+						 FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                        WHERE rol_id = {0} 
+					      AND rol_cat_id = cat_id
+					      AND cat_org_id = $g_current_organization->id ";
         }
         else
         {
-            $sql    = "SELECT rol_mail_logout FROM ". TBL_ROLES. "
-                       WHERE rol_org_shortname    = '$g_organization'
-                       AND rol_id = {0} ";
+            $sql    = "SELECT rol_mail_logout 
+						 FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                        WHERE rol_id = {0} 
+					      AND rol_cat_id = cat_id
+					      AND cat_org_id = $g_current_organization->id ";
         }
         $sql    = prepareSQL($sql, array($_POST['rol_id']));
         $result = mysql_query($sql, $g_adm_con);
@@ -253,9 +258,10 @@ else
 {
     //Rolle wurde uebergeben, dann an alle Mitglieder aus der DB fischen
     $sql    = "SELECT usr_first_name, usr_last_name, usr_email, rol_name
-                FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
-               WHERE rol_org_shortname = '$g_organization'
-                 AND rol_id            = {0}
+                FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
+               WHERE rol_id            = {0}
+				 AND rol_cat_id        = cat_id
+				 AND cat_org_id        = $g_current_organization->id
                  AND mem_rol_id        = rol_id
                  AND mem_valid         = 1
                  AND mem_usr_id        = usr_id

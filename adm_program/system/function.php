@@ -102,24 +102,27 @@ function prepareSQL($queryString, $paramArr)
 
 function hasRole($function, $user_id = 0)
 {
-    global $g_current_user;
-    global $g_adm_con;
-    global $g_organization;
+    global $g_current_user, $g_current_organization, $g_adm_con;
 
     if($user_id == 0)
     {
         $user_id = $g_current_user->id;
     }
+    elseif(is_numeric($user_id) == false)
+    {
+        return -1;
+    }
+    $function = addslashes($function);
 
     $sql    = "SELECT *
-                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-                WHERE mem_usr_id        = {0}
-                  AND mem_valid         = 1
-                  AND mem_rol_id        = rol_id
-                  AND rol_org_shortname = '$g_organization'
-                  AND rol_name          = {1}
-                  AND rol_valid         = 1 ";
-    $sql    = prepareSQL($sql, array($user_id, $function));
+                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                WHERE mem_usr_id = $user_id
+                  AND mem_valid  = 1
+                  AND mem_rol_id = rol_id
+                  AND rol_name   = '$function'
+                  AND rol_valid  = 1 
+				  AND rol_cat_id = cat_id
+				  AND cat_org_id = $g_current_organization->id ";
     $result = mysql_query($sql, $g_adm_con);
     db_error($result,__FILE__,__LINE__);
 
@@ -137,25 +140,23 @@ function hasRole($function, $user_id = 0)
 
 // Funktion prueft, ob der uebergebene User Mitglied in einer Rolle der Gruppierung ist
 
-function isMember($user_id, $organization = "")
+function isMember($user_id)
 {
-    global $g_current_user;
-    global $g_adm_con;
-    global $g_organization;
-
-    if(strlen($organization) == 0)
+    global $g_current_user, $g_current_organization, $g_adm_con;
+    
+    if(is_numeric($user_id) == false)
     {
-        $organization = $g_organization;
+        return -1;
     }
 
     $sql    = "SELECT COUNT(*)
-                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-                WHERE mem_usr_id        = {0}
-                  AND mem_valid         = 1
-                  AND mem_rol_id        = rol_id
-                  AND rol_org_shortname = {1}
-                  AND rol_valid         = 1 ";
-    $sql    = prepareSQL($sql, array($user_id, $organization));
+                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                WHERE mem_usr_id = $user_id
+                  AND mem_valid  = 1
+                  AND mem_rol_id = rol_id
+                  AND rol_valid  = 1 
+				  AND rol_cat_id = cat_id
+				  AND cat_org_id = $g_current_organization->id ";
     $result = mysql_query($sql, $g_adm_con);
     db_error($result,__FILE__,__LINE__);
 
@@ -177,18 +178,17 @@ function isMember($user_id, $organization = "")
 
 function isGroupLeader($rol_id = 0)
 {
-    global $g_current_user;
-    global $g_adm_con;
-    global $g_organization;
+    global $g_current_user, $g_current_organization, $g_adm_con;
 
     $sql    = "SELECT *
-                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-                WHERE mem_usr_id        = $g_current_user->id
-                  AND mem_valid         = 1
-                  AND mem_leader        = 1
-                  AND mem_rol_id        = rol_id
-                  AND rol_org_shortname = '$g_organization'
-                  AND rol_valid         = 1 ";
+                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                WHERE mem_usr_id = $g_current_user->id
+                  AND mem_valid  = 1
+                  AND mem_leader = 1
+                  AND mem_rol_id = rol_id
+                  AND rol_valid  = 1 
+				  AND rol_cat_id = cat_id
+				  AND cat_org_id = $g_current_organization->id ";
     if ($rol_id != 0)
     {
         $sql .= "  AND mem_rol_id           = {0}";
@@ -214,18 +214,17 @@ function isGroupLeader($rol_id = 0)
 
 function editAnnouncements()
 {
-    global $g_current_user;
-    global $g_adm_con;
-    global $g_organization;
+    global $g_current_user, $g_current_organization, $g_adm_con;
 
     $sql    = "SELECT *
-                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
+                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                 WHERE mem_usr_id        = $g_current_user->id
                   AND mem_rol_id        = rol_id
                   AND mem_valid         = 1
-                  AND rol_org_shortname = '$g_organization'
                   AND rol_announcements = 1
-                  AND rol_valid         = 1 ";
+                  AND rol_valid         = 1 
+				  AND rol_cat_id        = cat_id
+				  AND cat_org_id        = $g_current_organization->id ";
     $result = mysql_query($sql, $g_adm_con);
     db_error($result,__FILE__,__LINE__);
 
@@ -245,61 +244,23 @@ function editAnnouncements()
 
 function editDate()
 {
-    global $g_current_user;
-    global $g_adm_con;
-    global $g_organization;
+    global $g_current_user, $g_current_organization, $g_adm_con;
 
     $sql    = "SELECT *
-                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-                WHERE mem_usr_id        = $g_current_user->id
-                  AND mem_rol_id        = rol_id
-                  AND mem_valid         = 1
-                  AND rol_org_shortname = '$g_organization'
-                  AND rol_dates         = 1
-                  AND rol_valid         = 1 ";
+                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                WHERE mem_usr_id = $g_current_user->id
+                  AND mem_rol_id = rol_id
+                  AND mem_valid  = 1
+                  AND rol_dates  = 1
+                  AND rol_valid  = 1 
+				  AND rol_cat_id = cat_id
+				  AND cat_org_id = $g_current_organization->id ";
     $result = mysql_query($sql, $g_adm_con);
     db_error($result,__FILE__,__LINE__);
 
     $edit_date = mysql_num_rows($result);
 
     if($edit_date > 0)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-// Funktion prueft, ob der angemeldete User Fotos hochladen und verwalten darf
-
-function editPhoto($organization = "")
-{
-    global $g_current_user;
-    global $g_adm_con;
-    global $g_organization;
-
-    if(strlen($organization) == 0)
-    {
-        $organization = $g_organization;
-    }
-
-    $sql    = "SELECT *
-                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-                WHERE mem_usr_id        = $g_current_user->id
-                  AND mem_rol_id        = rol_id
-                  AND mem_valid         = 1
-                  AND rol_org_shortname = {0}
-                  AND rol_photo         = 1
-                  AND rol_valid         = 1 ";
-    $sql    = prepareSQL($sql, array($organization));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
-
-    $edit_photo = mysql_num_rows($result);
-
-    if($edit_photo > 0)
     {
         return true;
     }
@@ -423,7 +384,7 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
 
 function generateRoleSelectBox($default_role = 0, $field_id = "")
 {
-    global $g_organization, $g_current_user, $g_adm_con;
+    global $g_current_user, $g_current_organization, $g_adm_con;
     
     if(strlen($field_id) == 0)
     {
@@ -438,19 +399,19 @@ function generateRoleSelectBox($default_role = 0, $field_id = "")
             if($g_current_user->assignRoles())
             {
                 $sql     = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                             WHERE rol_org_shortname = '$g_organization'
-                               AND rol_valid         = 1
-                               AND rol_cat_id        = cat_id
-                             ORDER BY cat_name, rol_name";
+                             WHERE rol_valid  = 1
+                               AND rol_cat_id = cat_id
+							   AND cat_org_id = $current_organization->id
+                             ORDER BY cat_sequence, rol_name";
             }
             else
             {
                 $sql     = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                             WHERE rol_org_shortname = '$g_organization'
-                               AND rol_locked        = 0
-                               AND rol_valid         = 1
-                               AND rol_cat_id        = cat_id
-                             ORDER BY cat_name, rol_name";
+                             WHERE rol_locked = 0
+                               AND rol_valid  = 1
+                               AND rol_cat_id = cat_id
+							   AND cat_org_id = $current_organization->id
+                             ORDER BY cat_sequence, rol_name";
             }
             $result_lst = mysql_query($sql, $g_adm_con);
             db_error($result_lst,__FILE__,__LINE__);
@@ -484,9 +445,7 @@ function generateRoleSelectBox($default_role = 0, $field_id = "")
 
 function writeOrgaPreferences($name, $value)
 {
-    global $g_adm_con;
-    global $g_current_organization;
-    global $g_preferences;
+    global $g_adm_con, $g_current_organization, $g_preferences;
 
     $sql = "SELECT * FROM ". TBL_PREFERENCES. "
              WHERE prf_name   = {0}

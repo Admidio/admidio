@@ -24,14 +24,10 @@
  *****************************************************************************/
 
 require("common.php");
+require("role_class.php");
 
-$sql    = "SELECT rol_id, rol_mail_logout
-             FROM ". TBL_ROLES. "
-            WHERE rol_org_shortname = '$g_current_organization->shortname'
-              AND rol_name          = 'Webmaster' ";
-$result = mysql_query($sql, $g_adm_con);
-db_error($result,__FILE__,__LINE__);
-$webmaster_row = mysql_fetch_object($result);
+// Rollenobjekt fuer 'Webmaster' anlegen
+$role_webmaster = new Role($g_adm_con, 'Webmaster');
 
 // Html-Kopf ausgeben
 $g_layout['title']  = "Login";
@@ -69,13 +65,13 @@ echo "
         }
         // E-Mail intern oder extern verschicken
         if($g_preferences['enable_mail_module'] != 1 
-        || $webmaster_row->rol_mail_logout != 1 )
+        || $role_webmaster->getValue("rol_mail_logout") != 1 )
         {
             $mail_link = "mailto:". $g_preferences['email_administrator']. "?subject=Loginprobleme";
         }
         else
         {
-            $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?rol_id=$webmaster_row->rol_id&subject=Loginprobleme";
+            $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?rol_id=". $role_webmaster->getValue("rol_id"). "&subject=Loginprobleme";
         }
         echo "<div class=\"smallFontSize\" style=\"margin-top: 5px;\">
             <a href=\"$mail_link\">Ich habe mein Passwort vergessen!</a>

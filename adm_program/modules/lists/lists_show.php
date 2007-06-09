@@ -171,9 +171,10 @@ switch($req_type)
 
     case "address":
         $main_sql = "SELECT mem_leader, usr_id, usr_last_name, usr_first_name, usr_birthday, usr_address, usr_zip_code, usr_city
-                     FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
-                    WHERE rol_org_shortname = '$g_organization'
-                      AND rol_id     = {0}
+                     FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
+                    WHERE rol_id     = {0}
+					  AND rol_cat_id = cat_id
+					  AND cat_org_id = $g_current_organization->id
                       AND rol_id     = mem_rol_id
                       AND mem_valid  = ". $role->getValue("rol_valid"). "
                       AND mem_usr_id = usr_id
@@ -183,9 +184,10 @@ switch($req_type)
 
     case "telephone":
         $main_sql = "SELECT mem_leader, usr_id, usr_last_name, usr_first_name, usr_phone, usr_mobile, usr_email, usr_fax
-                     FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
-                    WHERE rol_org_shortname = '$g_organization'
-                      AND rol_id     = {0}
+                     FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
+                    WHERE rol_id     = {0}
+					  AND rol_cat_id = cat_id
+					  AND cat_org_id = $g_current_organization->id
                       AND rol_id     = mem_rol_id
                       AND mem_valid  = ". $role->getValue("rol_valid"). "
                       AND mem_usr_id = usr_id
@@ -195,9 +197,10 @@ switch($req_type)
 
     case "former":
         $main_sql = "SELECT mem_leader, usr_id, usr_last_name, usr_first_name, usr_birthday, mem_begin, mem_end
-                     FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
-                    WHERE rol_org_shortname = '$g_organization'
-                      AND rol_id     = {0}
+                     FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
+                    WHERE rol_id     = {0}
+					  AND rol_cat_id = cat_id
+					  AND cat_org_id = $g_current_organization->id
                       AND rol_id     = mem_rol_id
                       AND mem_valid  = 0
                       AND mem_usr_id = usr_id

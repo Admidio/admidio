@@ -71,12 +71,13 @@ else
 
 // pruefen, ob der User noch in anderen Organisationen aktiv ist
 $sql    = "SELECT rol_id
-             FROM ". TBL_ROLES. ", ". TBL_MEMBERS. "
-            WHERE rol_org_shortname <> '$g_organization'
-              AND rol_valid          = 1
-              AND mem_rol_id         = rol_id
-              AND mem_valid          = 1
-              AND mem_usr_id         = {0} ";
+             FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_CATEGORIES. "
+            WHERE rol_valid   = 1
+			  AND rol_cat_id  = cat_id
+              AND cat_org_id <> $g_current_organization->id
+              AND mem_rol_id  = rol_id
+              AND mem_valid   = 1
+              AND mem_usr_id  = {0} ";
 $sql    = prepareSQL($sql, array($_GET['user_id']));
 $result = mysql_query($sql, $g_adm_con);
 db_error($result,__FILE__,__LINE__);
@@ -145,12 +146,13 @@ elseif($_GET["mode"] == 2)
     }
 
     $sql = "SELECT mem_id
-              FROM ". TBL_ROLES. ", ". TBL_MEMBERS. "
-             WHERE rol_org_shortname = '$g_organization'
-               AND rol_valid         = 1
-               AND mem_rol_id        = rol_id
-               AND mem_valid         = 1
-               AND mem_usr_id        = {0}";
+              FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. "
+             WHERE rol_valid  = 1
+		 	   AND rol_cat_id = cat_id
+               AND cat_org_id = $g_current_organization->id
+               AND mem_rol_id = rol_id
+               AND mem_valid  = 1
+               AND mem_usr_id = {0}";
     $sql        = prepareSQL($sql, array($_GET['user_id']));
     $result_mgl = mysql_query($sql, $g_adm_con);
     db_error($result_mgl,__FILE__,__LINE__);

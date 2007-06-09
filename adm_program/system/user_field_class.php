@@ -71,7 +71,10 @@ class UserField
         
         if($usf_id > 0 && is_numeric($usf_id))
         {
-            $sql = "SELECT * FROM ". TBL_USER_FIELDS. " WHERE usf_id = $usf_id";
+            $sql = "SELECT * 
+					  FROM ". TBL_USER_FIELDS. ", ". TBL_CATEGORIES. " 
+					 WHERE usf_cat_id = cat_id
+					   AND usf_id     = $usf_id";
             $result = mysql_query($sql, $this->db_connection);
             db_error($result,__FILE__,__LINE__);
 
@@ -139,7 +142,6 @@ class UserField
         {
             case "usf_id":
             case "usf_cat_id":
-            case "usf_org_id":
                 if(is_numeric($field_value) == false 
                 || $field_value == 0)
                 {
@@ -183,8 +185,8 @@ class UserField
             // Schleife ueber alle DB-Felder und diese dem Update hinzufuegen                
             foreach($this->db_fields as $key => $value)
             {
-                // rol_id soll nicht im Update erscheinen
-                if($key != "usf_id") 
+                // ID und andere Tabellenfelder sollen nicht im Insert erscheinen
+                if($key != "usf_id" && strpos($key, "usf_") === 0) 
                 {
                     if(strlen($value) == 0)
                     {
@@ -243,8 +245,8 @@ class UserField
             // Schleife ueber alle DB-Felder und diese dem Insert hinzufuegen 
             foreach($this->db_fields as $key => $value)
             {
-                // usf_id soll nicht im Insert erscheinen
-                if($key != "usf_id" && strlen($value) > 0) 
+                // ID und andere Tabellenfelder sollen nicht im Insert erscheinen
+                if($key != "usf_id" && strlen($value) > 0 && strpos($key, "usf_") === 0) 
                 {
                     $sql_field_list = $sql_field_list. " $item_connection $key ";
                     if(is_numeric($value))
@@ -263,14 +265,7 @@ class UserField
                     }
                 }
             }
-            
-            // Felder hinzufuegen, die zwingend erforderlich sind
-            if(isset($this->db_fields['usf_org_id']) == false)
-            {
-                $sql_field_list = $sql_field_list. ", usf_org_id ";
-                $sql_value_list = $sql_value_list. ", $g_current_organization->id ";
-            }
-            
+                        
             $sql = "INSERT INTO ". TBL_USER_FIELDS. " ($sql_field_list) VALUES ($sql_value_list) ";
             $result = mysql_query($sql, $this->db_connection);
             db_error($result,__FILE__,__LINE__);

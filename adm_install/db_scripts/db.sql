@@ -190,7 +190,6 @@ alter table %PRAEFIX%_users add constraint %PRAEFIX%_FK_USR_ORG_REG foreign key 
 create table %PRAEFIX%_user_fields
 (
    usf_id                         int(11) unsigned               not null AUTO_INCREMENT,
-   usf_org_id                     tinyint(4),
    usf_cat_id                     int(11) unsigned               not null,
    usf_type                       varchar(10)                    not null,
    usf_name                       varchar(100)                   not null,
@@ -205,12 +204,9 @@ type = InnoDB
 auto_increment = 1;
 
 -- Index
-alter table %PRAEFIX%_user_fields add index USF_ORG_FK (usf_org_id);
 alter table %PRAEFIX%_user_fields add index USF_CAT_FK (usf_cat_id);
 
 -- Constraints
-alter table %PRAEFIX%_user_fields add constraint FK_USF_ORG foreign key (usf_org_id)
-      references %PRAEFIX%_organizations (org_id) on delete restrict on update restrict;
 alter table %PRAEFIX%_user_fields add constraint FK_USF_CAT foreign key (usf_cat_id)
       references %PRAEFIX%_categories (cat_id) on delete restrict on update restrict;
 
@@ -271,7 +267,6 @@ alter table %PRAEFIX%_sessions add constraint %PRAEFIX%_FK_SES_USR foreign key (
 create table %PRAEFIX%_roles
 (
    rol_id                         int(11) unsigned               not null AUTO_INCREMENT,
-   rol_org_shortname              varchar(10)                    not null,
    rol_cat_id                     int(11) unsigned               not null,
    rol_name                       varchar(30)                    not null,
    rol_description                varchar(255),
@@ -307,13 +302,10 @@ type = InnoDB
 auto_increment = 1;
 
 -- Index
-alter table %PRAEFIX%_roles add index ROL_ORG_FK (rol_org_shortname);
 alter table %PRAEFIX%_roles add index ROL_CAT_FK (rol_cat_id);
 alter table %PRAEFIX%_roles add index ROL_USR_FK (rol_usr_id_change);
 
 -- Constraints
-alter table %PRAEFIX%_roles add constraint %PRAEFIX%_FK_ROL_ORG foreign key (rol_org_shortname)
-      references %PRAEFIX%_organizations (org_shortname) on delete restrict on update restrict;
 alter table %PRAEFIX%_roles add constraint %PRAEFIX%_FK_ROL_CAT foreign key (rol_cat_id)
       references %PRAEFIX%_categories (cat_id) on delete restrict on update restrict;
 alter table %PRAEFIX%_roles add constraint %PRAEFIX%_FK_ROL_USR foreign key (rol_usr_id_change)

@@ -363,25 +363,29 @@ echo "</div>
                   FROM ". TBL_USER_DATA. ", ". TBL_USER_FIELDS. ", ". TBL_CATEGORIES. "
                  WHERE usd_usr_id  = $user->id
                    AND usd_usf_id  = usf_id
-                   AND usf_org_id IS NULL
                    AND usf_cat_id  = cat_id
+				   AND cat_org_id IS NULL
                    AND cat_name    = 'Messenger'
-                 ORDER BY usf_name ASC ";
+                 ORDER BY usf_sequence ASC ";
         $result_msg = mysql_query($sql, $g_adm_con);
         db_error($result_msg,__FILE__,__LINE__);
         $count_msg = mysql_num_rows($result_msg);
 
         // alle gruppierungsspezifischen Felder auslesen
         $sql = "SELECT *
-                  FROM ". TBL_USER_FIELDS. " LEFT JOIN ". TBL_USER_DATA. "
+                  FROM ". TBL_USER_FIELDS. " 
+				  LEFT JOIN ". TBL_USER_DATA. "
                     ON usd_usf_id = usf_id
                    AND usd_usr_id = $user->id
-                 WHERE usf_org_id = $g_current_organization->id ";
+                  JOIN ". TBL_CATEGORIES. "
+				    ON usf_cat_id = cat_id
+				   AND cat_org_id = $g_current_organization->id
+        		   AND cat_system = 0 ";
         if(!$g_current_user->assignRoles())
         {
             $sql = $sql. " AND usf_hidden = 0 ";
         }
-        $sql = $sql. " ORDER BY usf_name ASC ";
+        $sql = $sql. " ORDER BY usf_sequence ASC ";
         $result_field = mysql_query($sql, $g_adm_con);
         db_error($result_field,__FILE__,__LINE__);
         $count_field = mysql_num_rows($result_field);
@@ -565,28 +569,32 @@ echo "</div>
         if($g_current_user->assignRoles())
         {
            // auch gesperrte Rollen, aber nur von dieser Gruppierung anzeigen
-           $sql    = "SELECT rol_name, rol_org_shortname, mem_leader
-                        FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
+           $sql    = "SELECT rol_name, org_shortname, mem_leader
+                        FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_ORGANIZATIONS. "
                        WHERE mem_rol_id = rol_id
-                         AND mem_valid = 1
+                         AND mem_valid  = 1
                          AND mem_usr_id = $a_user_id
-                         AND rol_valid = 1
-                         AND (  rol_org_shortname LIKE '$g_organization'
-                             OR (   rol_org_shortname NOT LIKE '$g_organization'
-                                AND rol_locked = 0 ))
-                       ORDER BY rol_org_shortname, rol_name ";
+                         AND rol_valid  = 1
+						 AND rol_cat_id = cat_id
+						 AND cat_org_id = org_id
+                         AND (  cat_org_id = $g_current_organization->id
+                             OR (   cat_org_id <> $g_current_organization->id
+                                AND rol_locked  = 0 ))
+                       ORDER BY org_shortname, rol_name ";
         }
         else
         {
            // kein Moderator, dann keine gesperrten Rollen anzeigen
-           $sql    = "SELECT rol_name, rol_org_shortname, mem_leader
-                        FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-                       WHERE mem_rol_id    = rol_id
-                         AND mem_valid    = 1
-                         AND mem_usr_id    = $a_user_id
-                         AND rol_valid    = 1
+           $sql    = "SELECT rol_name, org_shortname, mem_leader
+                        FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_ORGANIZATIONS. "
+                       WHERE mem_rol_id = rol_id
+                         AND mem_valid  = 1
+                         AND mem_usr_id = $a_user_id
+                         AND rol_valid  = 1
                          AND rol_locked = 0
-                       ORDER BY rol_org_shortname, rol_name";
+						 AND rol_cat_id = cat_id
+						 AND cat_org_id = org_id
+                       ORDER BY org_shortname, rol_name";
         }
         $result_role = mysql_query($sql, $g_adm_con);
         db_error($result_role,__FILE__,__LINE__);
@@ -594,7 +602,7 @@ echo "</div>
 
         if($count_role > 0)
         {
-            $sql = "SELECT org_shortname FROM ". TBL_ORGANIZATIONS. "";
+            $sql = "SELECT org_shortname FROM ". TBL_ORGANIZATIONS;
             $result = mysql_query($sql, $g_adm_con);
             db_error($result,__FILE__,__LINE__);
 
@@ -614,7 +622,7 @@ echo "</div>
 
                     if($count_grp > 1)
                     {
-                        echo "$row->rol_org_shortname - ";
+                        echo "$row->org_shortname - ";
                     }
                     echo $row->rol_name;
                     if($row->mem_leader == 1)

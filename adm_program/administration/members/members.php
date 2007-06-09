@@ -107,15 +107,16 @@ if ($req_queryForm)
         //Es werden nur OrganisationsMitglieder durchsucht
         $sql    = "SELECT DISTINCT usr_id, usr_last_name, usr_first_name, usr_email, usr_homepage,
                           usr_login_name, usr_last_change, 1 member
-                     FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. "
+                     FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                     WHERE (    CONCAT_WS(' ', usr_last_name, usr_first_name) LIKE {0}
                             OR CONCAT_WS(' ', usr_first_name, usr_last_name) LIKE {0})
                       AND usr_valid = 1
                       AND mem_usr_id = usr_id
                       AND mem_rol_id = rol_id
                       AND mem_valid  = 1
-                      AND rol_org_shortname = '$g_current_organization->shortname'
                       AND rol_valid  = 1
+					  AND rol_cat_id = cat_id
+                      AND cat_org_id = $g_current_organization->id
                     ORDER BY usr_last_name, usr_first_name ";
     }
     else
@@ -129,8 +130,10 @@ if ($req_queryForm)
                       AND mem_valid  = 1
                      LEFT JOIN ". TBL_ROLES. "
                        ON mem_rol_id = rol_id
-                      AND rol_org_shortname = 'BDKJ'
-                      AND rol_valid = 1
+                      AND rol_valid  = 1
+                    RIGHT JOIN ". TBL_CATEGORIES. "
+ 					   ON rol_cat_id = cat_id
+                      AND cat_org_id = $g_current_organization->id
                     WHERE (    CONCAT_WS(' ', usr_last_name, usr_first_name) LIKE {0}
                             OR CONCAT_WS(' ', usr_first_name, usr_last_name) LIKE {0})
                       AND usr_valid = 1
@@ -147,14 +150,15 @@ else
     {
         $sql    = "SELECT DISTINCT usr_id, usr_last_name, usr_first_name, usr_email, usr_homepage,
                           usr_login_name, usr_last_change, 1 member
-                     FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. "
+                     FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                     WHERE usr_last_name LIKE '$req_letter%'
                       AND usr_valid = 1
                       AND mem_usr_id = usr_id
                       AND mem_rol_id = rol_id
                       AND mem_valid  = 1
-                      AND rol_org_shortname = '$g_current_organization->shortname'
                       AND rol_valid  = 1
+					  AND rol_cat_id = cat_id
+                      AND cat_org_id = $g_current_organization->id
                     ORDER BY usr_last_name, usr_first_name ";
     }
     else
@@ -168,8 +172,10 @@ else
                       AND mem_valid  = 1
                      LEFT JOIN ". TBL_ROLES. "
                        ON mem_rol_id = rol_id
-                      AND rol_org_shortname = 'BDKJ'
-                      AND rol_valid = 1
+                      AND rol_valid  = 1
+                    RIGHT JOIN ". TBL_CATEGORIES. "
+ 					   ON rol_cat_id = cat_id
+                      AND cat_org_id = $g_current_organization->id
                     WHERE usr_last_name LIKE '$req_letter%'
                       AND usr_valid = 1
                     GROUP BY usr_id
@@ -313,9 +319,10 @@ echo "<p>";
     if($req_members == 1)
     {
         $sql    = "SELECT DISTINCT UPPER(SUBSTRING(usr_last_name, 1, 1)) 
-                     FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
-                    WHERE rol_org_shortname = '$g_organization'
-                      AND rol_valid  = 1
+                     FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
+                    WHERE rol_valid  = 1
+					  AND rol_cat_id = cat_id
+					  AND cat_org_id = $g_current_organization->id
                       AND mem_rol_id = rol_id
                       AND mem_usr_id = usr_id
                       AND mem_valid  = 1
@@ -455,12 +462,13 @@ if($num_members > 0)
                     <td align=\"center\">";
                         // pruefen, ob der User noch in anderen Organisationen aktiv ist
                         $sql    = "SELECT *
-                                     FROM ". TBL_ROLES. ", ". TBL_MEMBERS. "
-                                    WHERE rol_org_shortname <> '$g_organization'
-                                      AND rol_valid          = 1
-                                      AND mem_rol_id         = rol_id
-                                      AND mem_valid          = 1
-                                      AND mem_usr_id         = $row->usr_id ";
+                                     FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. "
+                                    WHERE rol_valid   = 1
+									  AND rol_cat_id  = cat_id
+                       				  AND cat_org_id <> $g_current_organization->id
+                                      AND mem_rol_id  = rol_id
+                                      AND mem_valid   = 1
+                                      AND mem_usr_id  = $row->usr_id ";
                         $result      = mysql_query($sql, $g_adm_con);
                         db_error($result,__FILE__,__LINE__);
                         $b_other_orga = false;
