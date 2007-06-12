@@ -63,7 +63,7 @@ $g_layout['header'] = "
                 var sequence = i + 1;
 
                 // Synchroner Request, da ansonsten Scriptaculous verrueckt spielt
-                resObject.open('GET', 'fields_function.php?usf_id=' + usf_id + '&mode=4&sequence=' + sequence, false);
+                resObject.open('GET', '$g_root_path/adm_program/administration/members/fields_function.php?usf_id=' + usf_id + '&mode=4&sequence=' + sequence, false);
                 resObject.send(null);
             }
         }
