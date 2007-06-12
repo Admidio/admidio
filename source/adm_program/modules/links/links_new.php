@@ -114,7 +114,7 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 // Html des Modules ausgeben
 echo "
-<form action=\"links_function.php?lnk_id=". $_GET["lnk_id"]. "&amp;headline=". $_GET['headline']. "&amp;mode=";
+<form action=\"$g_root_path/adm_program/modules/links/links_function.php?lnk_id=". $_GET["lnk_id"]. "&amp;headline=". $_GET['headline']. "&amp;mode=";
     if($_GET["lnk_id"] > 0)
     {
         echo "3";

@@ -83,7 +83,7 @@ $_SESSION['navigation']->clear();
 $_SESSION['navigation']->addUrl($g_current_url);
 unset($_SESSION['download_request']);
 
-$act_folder = "../../../adm_my_files/download";
+$act_folder = SERVER_PATH. "/adm_my_files/download";
 
 // Ordnerpfad zusammensetzen
 if(strlen($req_default_folder) > 0)
@@ -306,8 +306,8 @@ for($i=0; $i<count($ordnerarray); $i++)
 
         //Link und Dateiinfo Ausgabe
         echo "<tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\">
-                 <td style=\"text-align: center;\"><a href=\"get_file.php?folder=". urlencode($req_folder). "&amp;file=". urlencode($ordnerarray[$i]). "&amp;default_folder=". urlencode($req_default_folder). "\"><img src=\"$g_root_path/adm_program/images/$dateiendung.png\" border=\"0\" alt=\"Datei\" title=\"Datei\"></a></td>
-                 <td style=\"text-align: left;\"><a href=\"get_file.php?folder=". urlencode($req_folder). "&amp;file=". urlencode($ordnerarray[$i]). "&amp;default_folder=". urlencode($req_default_folder). "\">$ordnerarray[$i]</a></td>
+                 <td style=\"text-align: center;\"><a href=\"$g_root_path/adm_program/modules/download/get_file.php?folder=". urlencode($req_folder). "&amp;file=". urlencode($ordnerarray[$i]). "&amp;default_folder=". urlencode($req_default_folder). "\"><img src=\"$g_root_path/adm_program/images/$dateiendung.png\" border=\"0\" alt=\"Datei\" title=\"Datei\"></a></td>
+                 <td style=\"text-align: left;\"><a href=\"$g_root_path/adm_program/modules/download/get_file.php?folder=". urlencode($req_folder). "&amp;file=". urlencode($ordnerarray[$i]). "&amp;default_folder=". urlencode($req_default_folder). "\">$ordnerarray[$i]</a></td>
                  <td style=\"text-align: center;\">$dateidatum</td>
                  <td style=\"text-align: right;\">$dateigroesse kB&nbsp;</td>";
 

@@ -122,7 +122,7 @@ echo "
      &#124; <a href=\"#\" onClick=\"toggleDiv('links-module');\">Links</a>
 </div><br />
 
-<form action=\"organization_function.php\" method=\"post\" name=\"orga_settings\">
+<form action=\"$g_root_path/adm_program/administration/organization/organization_function.php\" method=\"post\" name=\"orga_settings\">
     <div class=\"formBody\">
         <div class=\"groupBox\" id=\"general\" style=\"visibility: hidden; display: none; margin-top: 15px; text-align: left; width: 95%;\">
             <div class=\"groupBoxHeadline\">Allgemeine Einstellungen</div>

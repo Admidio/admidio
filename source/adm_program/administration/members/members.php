@@ -115,7 +115,7 @@ if ($req_queryForm)
                       AND mem_rol_id = rol_id
                       AND mem_valid  = 1
                       AND rol_valid  = 1
-					  AND rol_cat_id = cat_id
+                      AND rol_cat_id = cat_id
                       AND cat_org_id = $g_current_organization->id
                     ORDER BY usr_last_name, usr_first_name ";
     }
@@ -132,7 +132,7 @@ if ($req_queryForm)
                        ON mem_rol_id = rol_id
                       AND rol_valid  = 1
                     RIGHT JOIN ". TBL_CATEGORIES. "
- 					   ON rol_cat_id = cat_id
+                       ON rol_cat_id = cat_id
                       AND cat_org_id = $g_current_organization->id
                     WHERE (    CONCAT_WS(' ', usr_last_name, usr_first_name) LIKE {0}
                             OR CONCAT_WS(' ', usr_first_name, usr_last_name) LIKE {0})
@@ -157,7 +157,7 @@ else
                       AND mem_rol_id = rol_id
                       AND mem_valid  = 1
                       AND rol_valid  = 1
-					  AND rol_cat_id = cat_id
+                      AND rol_cat_id = cat_id
                       AND cat_org_id = $g_current_organization->id
                     ORDER BY usr_last_name, usr_first_name ";
     }
@@ -174,7 +174,7 @@ else
                        ON mem_rol_id = rol_id
                       AND rol_valid  = 1
                     RIGHT JOIN ". TBL_CATEGORIES. "
- 					   ON rol_cat_id = cat_id
+                       ON rol_cat_id = cat_id
                       AND cat_org_id = $g_current_organization->id
                     WHERE usr_last_name LIKE '$req_letter%'
                       AND usr_valid = 1
@@ -285,7 +285,7 @@ echo " werden angezeigt</p>";
 //Hier gibt es jetzt noch die Suchbox...
 echo "
 <div style=\"width: 300px;\">
-    <form action=\"members.php?members=$req_members\" method=\"post\">
+    <form action=\"$g_root_path/adm_program/administration/members/members.php?members=$req_members\" method=\"post\">
         <input type=\"text\" value=\"$req_queryForm\" name=\"queryForm\" id=\"queryForm\" autocomplete=\"off\" style=\"width: 200px;\"  />
         <input type=\"submit\" value=\"Suchen\" />
     </form>
@@ -293,7 +293,7 @@ echo "
 
 <script type=\"text/javascript\">
     var options = {
-                script:\"query_suggestions.php?members=$req_members&\",
+                script:\"$g_root_path/adm_program/administration/members/query_suggestions.php?members=$req_members&\",
                 varname:\"query\",
                 minchars:1,
                 timeout:5000
@@ -312,7 +312,7 @@ echo "<p>";
     }
     else
     {
-        echo "<a href=\"members.php?members=$req_members\">Alle</a>&nbsp;&nbsp;&nbsp;";
+        echo "<a href=\"$g_root_path/adm_program/administration/members/members.php?members=$req_members\">Alle</a>&nbsp;&nbsp;&nbsp;";
     }
 
     // Alle Anfangsbuchstaben der Nachnamen ermitteln, die bisher in der DB gespeichert sind
@@ -321,8 +321,8 @@ echo "<p>";
         $sql    = "SELECT DISTINCT UPPER(SUBSTRING(usr_last_name, 1, 1)) 
                      FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                     WHERE rol_valid  = 1
-					  AND rol_cat_id = cat_id
-					  AND cat_org_id = $g_current_organization->id
+                      AND rol_cat_id = cat_id
+                      AND cat_org_id = $g_current_organization->id
                       AND mem_rol_id = rol_id
                       AND mem_usr_id = usr_id
                       AND mem_valid  = 1
@@ -371,7 +371,7 @@ echo "<p>";
         }
         elseif($letter_found == true)
         {
-            echo "<a href=\"members.php?members=$req_members&letter=$letter_menu\">$letter_menu</a>";
+            echo "<a href=\"$g_root_path/adm_program/administration/members/members.php?members=$req_members&letter=$letter_menu\">$letter_menu</a>";
         }
         else
         {
@@ -464,8 +464,8 @@ if($num_members > 0)
                         $sql    = "SELECT *
                                      FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. "
                                     WHERE rol_valid   = 1
-									  AND rol_cat_id  = cat_id
-                       				  AND cat_org_id <> $g_current_organization->id
+                                      AND rol_cat_id  = cat_id
+                                      AND cat_org_id <> $g_current_organization->id
                                       AND mem_rol_id  = rol_id
                                       AND mem_valid   = 1
                                       AND mem_usr_id  = $row->usr_id ";

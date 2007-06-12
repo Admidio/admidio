@@ -91,7 +91,9 @@ $last=$bild-1;
 $next=$bild+1;
 
 //Ordnerpfad zusammensetzen
-$ordner = "../../../adm_my_files/photos/".$_SESSION['photo_event']['pho_begin']."_".$_SESSION['photo_event']['pho_id'];
+$ordner_foto = "/adm_my_files/photos/".$_SESSION['photo_event']['pho_begin']."_".$_SESSION['photo_event']['pho_id'];
+$ordner      = SERVER_PATH. $ordner_foto;
+$ordner_url  = $g_root_path. $ordner_foto;
 
 $body_height = $g_preferences['photo_show_height'] + 130;
 $body_with   = $g_preferences['photo_show_width']  + 20;
@@ -117,18 +119,18 @@ echo "
     if($last>0)
     {
         echo"<span class=\"iconLink\">
-            <a class=\"iconLink\" href=\"photopopup.php?bild=$last&pho_id=$pho_id\">
+            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photopopup.php?bild=$last&pho_id=$pho_id\">
                 <img class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Vorheriges Bild\">
             </a>
-            <a class=\"iconLink\" href=\"photopopup.php?bild=$last&pho_id=$pho_id\">Vorheriges Bild</a>
+            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photopopup.php?bild=$last&pho_id=$pho_id\">Vorheriges Bild</a>
         </span>
         &nbsp;&nbsp;&nbsp;&nbsp;";
     }
     if($next<=$bilder)
     {
         echo"<span class=\"iconLink\">
-            <a class=\"iconLink\" href=\"photopopup.php?bild=$next&pho_id=$pho_id\">N&auml;chstes Bild</a>
-            <a class=\"iconLink\" href=\"photopopup.php?bild=$next&pho_id=$pho_id\">
+            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photopopup.php?bild=$next&pho_id=$pho_id\">N&auml;chstes Bild</a>
+            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photopopup.php?bild=$next&pho_id=$pho_id\">
                 <img class=\"iconLink\" src=\"$g_root_path/adm_program/images/forward.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"N&auml;chstes Bild\">
             </a>
         </span>";
@@ -167,7 +169,7 @@ echo "
     //Ausgabe Bild
     echo"
     <div style=\"align: center\">
-        <img src=\"photo_show.php?bild=$ordner/$bild.jpg&amp;scal=$scal&amp;side=$side\"  border=\"0\" alt=\"$ordner $bild\">
+        <img src=\"$g_root_path/adm_program/modules/photos/photo_show.php?bild=$ordner_url/$bild.jpg&amp;scal=$scal&amp;side=$side\"  border=\"0\" alt=\"$ordner_url $bild\">
     </div>";
 
     //Fenster schliessen Button

@@ -110,7 +110,7 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 // Html des Modules ausgeben
 echo "
-<form action=\"categories_function.php?cat_id=$req_cat_id&amp;type=". $_GET["type"]. "&amp;mode=1&amp;type=$req_type\" method=\"post\" id=\"edit_category\">
+<form action=\"$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=$req_cat_id&amp;type=". $_GET["type"]. "&amp;mode=1&amp;type=$req_type\" method=\"post\" id=\"edit_category\">
     <div class=\"formHead\">";
         if($req_cat_id > 0)
         {

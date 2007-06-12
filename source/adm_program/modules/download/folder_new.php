@@ -89,7 +89,7 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 // Html des Modules ausgeben
 echo "<br>
-<form method=\"post\" action=\"download_function.php?mode=3&amp;folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\">
+<form method=\"post\" action=\"$g_root_path/adm_program/modules/download/download_function.php?mode=3&amp;folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\">
     <div class=\"formHead\" style=\"width: 400px\">Ordner erstellen</div>
     <div class=\"formBody\" style=\"width: 400px\">
         <div style=\"text-align: center; width: 100%;\">Neuer Ordner in <b>";

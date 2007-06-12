@@ -318,7 +318,7 @@ echo "</div>
                 //Falls vorhanden Bild ausgeben
                 if(mysql_result($result_photo,0,"usr_photo")!=NULL)
                 {
-                    echo"<img src=\"profile_photo_show.php?usr_id=$a_user_id&amp;id=". time(). "\" alt=\"Profilfoto\">";
+                    echo"<img src=\"$g_root_path/adm_program/modules/profile/profile_photo_show.php?usr_id=$a_user_id&amp;id=". time(). "\" alt=\"Profilfoto\">";
                 }
                 //wenn nicht Schattenkopf
                 else
@@ -341,9 +341,9 @@ echo "</div>
             {
                 echo "<div style=\"margin-top: 10px;\">
                     <span class=\"iconLink\">
-                        <a class=\"iconLink\" href=\"roles.php?user_id=$a_user_id\"><img
+                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/roles.php?user_id=$a_user_id\"><img
                          class=\"iconLink\" src=\"$g_root_path/adm_program/images/wand.png\" style=\"vertical-align: middle;\" border=\"0\" title=\"Rollen &auml;ndern\" alt=\"Rollen &auml;ndern\"></a>
-                        <a class=\"iconLink\" href=\"roles.php?user_id=$a_user_id\">Rollen &auml;ndern</a>
+                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/roles.php?user_id=$a_user_id\">Rollen &auml;ndern</a>
                     </span>
                 </div>";
             }
@@ -364,7 +364,7 @@ echo "</div>
                  WHERE usd_usr_id  = $user->id
                    AND usd_usf_id  = usf_id
                    AND usf_cat_id  = cat_id
-				   AND cat_org_id IS NULL
+                   AND cat_org_id IS NULL
                    AND cat_name    = 'Messenger'
                  ORDER BY usf_sequence ASC ";
         $result_msg = mysql_query($sql, $g_adm_con);
@@ -374,13 +374,13 @@ echo "</div>
         // alle gruppierungsspezifischen Felder auslesen
         $sql = "SELECT *
                   FROM ". TBL_USER_FIELDS. " 
-				  LEFT JOIN ". TBL_USER_DATA. "
+                  LEFT JOIN ". TBL_USER_DATA. "
                     ON usd_usf_id = usf_id
                    AND usd_usr_id = $user->id
                   JOIN ". TBL_CATEGORIES. "
-				    ON usf_cat_id = cat_id
-				   AND cat_org_id = $g_current_organization->id
-        		   AND cat_system = 0 ";
+                    ON usf_cat_id = cat_id
+                   AND cat_org_id = $g_current_organization->id
+                   AND cat_system = 0 ";
         if(!$g_current_user->assignRoles())
         {
             $sql = $sql. " AND usf_hidden = 0 ";
@@ -575,8 +575,8 @@ echo "</div>
                          AND mem_valid  = 1
                          AND mem_usr_id = $a_user_id
                          AND rol_valid  = 1
-						 AND rol_cat_id = cat_id
-						 AND cat_org_id = org_id
+                         AND rol_cat_id = cat_id
+                         AND cat_org_id = org_id
                          AND (  cat_org_id = $g_current_organization->id
                              OR (   cat_org_id <> $g_current_organization->id
                                 AND rol_locked  = 0 ))
@@ -592,8 +592,8 @@ echo "</div>
                          AND mem_usr_id = $a_user_id
                          AND rol_valid  = 1
                          AND rol_locked = 0
-						 AND rol_cat_id = cat_id
-						 AND cat_org_id = org_id
+                         AND rol_cat_id = cat_id
+                         AND cat_org_id = org_id
                        ORDER BY org_shortname, rol_name";
         }
         $result_role = mysql_query($sql, $g_adm_con);

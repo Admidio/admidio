@@ -50,7 +50,7 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 // Html des Modules ausgeben
 echo "
-<form action=\"password_save.php?user_id=". $_GET['user_id']. "\" method=\"post\" name=\"Anmeldung\">
+<form action=\"$g_root_path/adm_program/modules/profile/password_save.php?user_id=". $_GET['user_id']. "\" method=\"post\" name=\"Anmeldung\">
     <div class=\"formHead\" style=\"width: 300px\">Passwort &auml;ndern</div>
     <div class=\"formBody\" style=\"width: 300px\">
         <div style=\"margin-top: 6px;\">

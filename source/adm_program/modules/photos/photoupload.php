@@ -100,7 +100,7 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 /**************************Formular********************************************************/
 echo"
-<form name=\"photoup\" method=\"post\" action=\"photoupload_do.php?pho_id=$pho_id\" enctype=\"multipart/form-data\">
+<form name=\"photoup\" method=\"post\" action=\"$g_root_path/adm_program/modules/photos/photoupload_do.php?pho_id=$pho_id\" enctype=\"multipart/form-data\">
     <div style=\"width: 410px\" align=\"center\" class=\"formHead\">Bilder hochladen</div>
     <div style=\"width: 410px\" align=\"center\" class=\"formBody\">
         Bilder zu dieser Veranstaltung hinzuf&uuml;gen:<br>"

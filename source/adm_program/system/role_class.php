@@ -72,22 +72,26 @@ class Role
     // Rolle mit der uebergebenen ID aus der Datenbank auslesen
     function getRole($role)
     {
+        global $g_current_organization;
+        
         $this->clear();
         
         if(is_numeric($role))
         {
             $sql = "SELECT * 
-					  FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. " 
-				     WHERE rol_cat_id = cat_id
-					   AND rol_id     = $role";
+                      FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. " 
+                     WHERE rol_cat_id = cat_id
+                       AND rol_id     = $role
+                       AND cat_org_id = $g_current_organization->id ";
         }
         else
         {
             $role = addslashes($role);
             $sql = "SELECT * 
-					  FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. " 
-				     WHERE rol_cat_id = cat_id
-					   AND rol_name   LIKE '$role'";
+                      FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. " 
+                     WHERE rol_cat_id = cat_id
+                       AND rol_name   LIKE '$role'
+                       AND cat_org_id = $g_current_organization->id ";
         }
         
         $result = mysql_query($sql, $this->db_connection);
@@ -263,8 +267,6 @@ class Role
     // damit die Aenderung protokolliert werden kann
     function insert($login_user_id)
     {
-        global $g_organization;
-        
         if($login_user_id > 0 
         && is_numeric($login_user_id)
         && (  isset($this->db_fields['rol_id']) == false

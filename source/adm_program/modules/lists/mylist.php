@@ -148,7 +148,7 @@ $g_layout['header'] = "
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 echo "
-<form action=\"mylist_prepare.php\" method=\"post\" name=\"properties\">
+<form action=\"$g_root_path/adm_program/modules/lists/mylist_prepare.php\" method=\"post\" name=\"properties\">
     <div class=\"formHead\">Eigene Liste</div>
     <div class=\"formBody\">
         <b>1.</b> W&auml;hle eine Rolle aus von der du eine Mitgliederliste erstellen willst:

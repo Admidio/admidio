@@ -206,7 +206,7 @@ if($job==NULL)
 
         //Bildupload
         echo"
-        <form name=\"photoup\" method=\"post\" action=\"profile_photo_edit.php?job=upload&usr_id=".$req_usr_id."\" enctype=\"multipart/form-data\">
+        <form name=\"photoup\" method=\"post\" action=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=upload&usr_id=".$req_usr_id."\" enctype=\"multipart/form-data\">
             Bitte hier ein neues Bild ausw&auml;hlen:
             <p><input type=\"file\" id=\"bilddatei\" name=\"bilddatei\" size=\"40\" value=\"durchsuchen\"></p>
             <hr class=\"formLine\" width=\"85%\" />

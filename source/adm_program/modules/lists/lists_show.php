@@ -173,8 +173,8 @@ switch($req_type)
         $main_sql = "SELECT mem_leader, usr_id, usr_last_name, usr_first_name, usr_birthday, usr_address, usr_zip_code, usr_city
                      FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                     WHERE rol_id     = {0}
-					  AND rol_cat_id = cat_id
-					  AND cat_org_id = $g_current_organization->id
+                      AND rol_cat_id = cat_id
+                      AND cat_org_id = $g_current_organization->id
                       AND rol_id     = mem_rol_id
                       AND mem_valid  = ". $role->getValue("rol_valid"). "
                       AND mem_usr_id = usr_id
@@ -186,8 +186,8 @@ switch($req_type)
         $main_sql = "SELECT mem_leader, usr_id, usr_last_name, usr_first_name, usr_phone, usr_mobile, usr_email, usr_fax
                      FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                     WHERE rol_id     = {0}
-					  AND rol_cat_id = cat_id
-					  AND cat_org_id = $g_current_organization->id
+                      AND rol_cat_id = cat_id
+                      AND cat_org_id = $g_current_organization->id
                       AND rol_id     = mem_rol_id
                       AND mem_valid  = ". $role->getValue("rol_valid"). "
                       AND mem_usr_id = usr_id
@@ -199,8 +199,8 @@ switch($req_type)
         $main_sql = "SELECT mem_leader, usr_id, usr_last_name, usr_first_name, usr_birthday, mem_begin, mem_end
                      FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                     WHERE rol_id     = {0}
-					  AND rol_cat_id = cat_id
-					  AND cat_org_id = $g_current_organization->id
+                      AND rol_cat_id = cat_id
+                      AND cat_org_id = $g_current_organization->id
                       AND rol_id     = mem_rol_id
                       AND mem_valid  = 0
                       AND mem_usr_id = usr_id
@@ -294,7 +294,7 @@ if($req_mode != "csv")
 
                     if(sel_list.length > 1)
                     {
-                        self.location.href = 'lists_show.php?type=$req_type&rol_id=$req_rol_id&mode=' + sel_list;
+                        self.location.href = '$g_root_path/adm_program/modules/lists/lists_show.php?type=$req_type&rol_id=$req_rol_id&mode=' + sel_list;
                     }
                 }
             //--></script>";
@@ -343,9 +343,9 @@ if($req_mode != "csv")
         }
 
         echo "<span class=\"iconLink\">
-            <a class=\"iconLink\" href=\"#\" onclick=\"window.open('lists_show.php?type=$req_type&amp;mode=print&amp;rol_id=$req_rol_id', '_blank')\"><img
+            <a class=\"iconLink\" href=\"#\" onclick=\"window.open('$g_root_path/adm_program/modules/lists/lists_show.php?type=$req_type&amp;mode=print&amp;rol_id=$req_rol_id', '_blank')\"><img
             class=\"iconLink\" src=\"$g_root_path/adm_program/images/print.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Druckvorschau\"></a>
-            <a class=\"iconLink\" href=\"#\" onclick=\"window.open('lists_show.php?type=$req_type&amp;mode=print&amp;rol_id=$req_rol_id', '_blank')\">Druckvorschau</a>
+            <a class=\"iconLink\" href=\"#\" onclick=\"window.open('$g_root_path/adm_program/modules/lists/lists_show.php?type=$req_type&amp;mode=print&amp;rol_id=$req_rol_id', '_blank')\">Druckvorschau</a>
         </span>
 
         &nbsp;&nbsp;

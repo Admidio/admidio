@@ -80,8 +80,8 @@ if (isset($_GET["usr_id"]))
                      FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                     WHERE mem_usr_id = usr_id
                       AND mem_rol_id = rol_id
-					  AND rol_cat_id = cat_id
-					  AND cat_org_id = $g_current_organization->id
+                      AND rol_cat_id = cat_id
+                      AND cat_org_id = $g_current_organization->id
                       AND usr_id     = {0} ";
     }
     else
@@ -119,18 +119,18 @@ elseif (isset($_GET["rol_id"]))
     if ($g_session_valid)
     {
         $sql    = "SELECT rol_mail_login, rol_name 
-					 FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                     FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                     WHERE rol_id = {0} 
-					  AND rol_cat_id = cat_id
-					  AND cat_org_id = $g_current_organization->id ";
+                      AND rol_cat_id = cat_id
+                      AND cat_org_id = $g_current_organization->id ";
     }
     else
     {
         $sql    = "SELECT rol_mail_logout, rol_name 
-					 FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                     FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                     WHERE rol_id = {0} 
-					  AND rol_cat_id = cat_id
-					  AND cat_org_id = $g_current_organization->id ";
+                      AND rol_cat_id = cat_id
+                      AND cat_org_id = $g_current_organization->id ";
     }
     $sql    = prepareSQL($sql, array($_GET['rol_id']));
     $result = mysql_query($sql, $g_adm_con);
@@ -142,7 +142,7 @@ elseif (isset($_GET["rol_id"]))
         $g_message->show("invalid");
     }
 
-    $rollenName = $row[1];
+    $rollenName = $row['rol_name'];
     $rollenID   = $_GET['rol_id'];
 }
 elseif (isset($_GET["rolle"]) && isset($_GET["cat"]))
@@ -158,7 +158,7 @@ elseif (isset($_GET["rolle"]) && isset($_GET["cat"]))
                     FROM ". TBL_ROLES. " ,". TBL_CATEGORIES. "
                    WHERE UPPER(rol_name) = UPPER({0})
                    AND rol_cat_id        = cat_id
-				   AND cat_org_id        = $g_current_organization->id
+                   AND cat_org_id        = $g_current_organization->id
                    AND UPPER(cat_name)   = UPPER({1})";
     }
     else
@@ -167,7 +167,7 @@ elseif (isset($_GET["rolle"]) && isset($_GET["cat"]))
                     FROM ". TBL_ROLES. " ,". TBL_CATEGORIES. "
                    WHERE UPPER(rol_name) = UPPER({0})
                    AND rol_cat_id        = cat_id
-				   AND cat_org_id        = $g_current_organization->id
+                   AND cat_org_id        = $g_current_organization->id
                    AND UPPER(cat_name)   = UPPER({1})";
     }
     $sql    = prepareSQL($sql, array($_GET['rolle'],$_GET['cat']));
@@ -246,7 +246,7 @@ if($g_preferences['enable_rss'] == 1)
 
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 echo "
-<form action=\"mail_send.php?";
+<form action=\"$g_root_path/adm_program/modules/mail/mail_send.php?";
   // usr_id wird mit GET uebergeben,
   // da keine E-Mail-Adresse von mail_send angenommen werden soll
   if (array_key_exists("usr_id", $_GET))
@@ -295,11 +295,11 @@ echo "
                    {
                         // im eingeloggten Zustand duerfen nur Moderatoren an gelocked Rollen schreiben
                            $sql    = "SELECT rol_name, rol_id, cat_name 
-								   FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                                   FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                                    WHERE rol_mail_login = 1
                                    AND rol_valid        = 1
                                    AND rol_cat_id       = cat_id
-								   AND cat_org_id       = $g_current_organization->id
+                                   AND cat_org_id       = $g_current_organization->id
                                    ORDER BY cat_sequence, rol_name ";
                    }
                    else
@@ -307,12 +307,12 @@ echo "
                         // alle nicht gelocked Rollen auflisten,
                         // an die im eingeloggten Zustand Mails versendet werden duerfen
                            $sql    = "SELECT rol_name, rol_id, cat_name 
-								   FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                                   FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                                    WHERE rol_mail_login = 1
                                    AND rol_locked       = 0
                                    AND rol_valid        = 1
                                    AND rol_cat_id       = cat_id
-								   AND cat_org_id       = $g_current_organization->id
+                                   AND cat_org_id       = $g_current_organization->id
                                    ORDER BY cat_sequence, rol_name ";
                    }
                }
@@ -321,11 +321,11 @@ echo "
                     // alle Rollen auflisten,
                     // an die im nicht eingeloggten Zustand Mails versendet werden duerfen
                        $sql    = "SELECT rol_name, rol_id, cat_name 
-							   FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                               FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                                WHERE rol_mail_logout = 1
                                AND rol_valid         = 1
                                AND rol_cat_id        = cat_id
-							   AND cat_org_id        = $g_current_organization->id
+                               AND cat_org_id        = $g_current_organization->id
                                ORDER BY cat_sequence, rol_name ";
                }
                $result = mysql_query($sql, $g_adm_con);
