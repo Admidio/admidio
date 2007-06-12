@@ -29,7 +29,7 @@
  *
  *****************************************************************************/
 
-require("../../system/common.php");
+require_once("../../system/common.php");
 require_once("photo_function.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
@@ -47,22 +47,19 @@ if(isset($_SESSION['photo_event_request']))
 }
 
 //pruefen ob adm_my_files/photos existiert
-if(!file_exists("../../../adm_my_files/photos"))
+if(!file_exists(SERVER_PATH. "/adm_my_files/photos"))
 {
     $g_message->show("no_photo_folder");
 }
 
 //ID Pruefen
-if(isset($_GET["pho_id"]))
+if(isset($_GET["pho_id"]) && is_numeric($_GET["pho_id"]))
 {
-    $pho_id=$_GET["pho_id"];
+    $pho_id = $_GET["pho_id"];
 }
-else $pho_id=NULL;
-
-//KOntrolle ob ID nummerisch ist
-if(!is_numeric($pho_id) && $pho_id!=NULL)
+else 
 {
-    $g_message->show("invalid");
+    $pho_id = NULL;
 }
 
 //Wurde keine Veranstaltung übergeben kann das Navigationsstack zurückgesetzt werden
@@ -101,7 +98,6 @@ else
     $thumb_seite = 1;
 }
 
-
 if(isset($_GET["locked"]))
 {
     $locked = $_GET["locked"];
@@ -120,18 +116,18 @@ if(!is_numeric($locked) && $locked!=NULL)
 
 $sql="  SELECT *
         FROM ". TBL_PHOTOS. "
-        WHERE pho_id ={0}";
+        WHERE pho_id = {0}";
 $sql    = prepareSQL($sql, array($pho_id));
 $result_event = mysql_query($sql, $g_adm_con);
 db_error($result_event,__FILE__,__LINE__);
 $adm_photo = mysql_fetch_array($result_event);
 
 // pruefen, ob Veranstaltung zur aktuellen Organisation gehoert
-if($adm_photo['pho_org_shortname'] != $g_organization)
+if($pho_id > 0 && $adm_photo['pho_org_shortname'] != $g_organization)
 {
     $g_message->show("invalid");
-}	
-	
+}   
+
 //Variablen in Session schreiben
 $_SESSION['photo_event']['pho_id']= $adm_photo['pho_id'];
 $_SESSION['photo_event']['pho_org_shortname']= $adm_photo['pho_org_shortname'];
@@ -145,48 +141,52 @@ $_SESSION['photo_event']['pho_timestamp']= $adm_photo['pho_timestamp'];
 $_SESSION['photo_event']['pho_locked']= $adm_photo['pho_locked'];
 $_SESSION['photo_event']['pho_pho_id_parent']= $adm_photo['pho_pho_id_parent'];
 $_SESSION['photo_event']['pho_last_change']= $adm_photo['pho_last_change'];
-$_SESSION['photo_event']['pho_usr_id_change']= $adm_photo['pho_usr_id_change'];	
+$_SESSION['photo_event']['pho_usr_id_change']= $adm_photo['pho_usr_id_change']; 
 
-//erfassen ob Unterveranstaltungen existieren
-$sql="  SELECT *
-        FROM ". TBL_PHOTOS. "
-        WHERE pho_pho_id_parent ={0}";
-$sql    = prepareSQL($sql, array($pho_id));
-$result_children = mysql_query($sql, $g_adm_con);
-db_error($result_children,__FILE__,__LINE__);
-$children = mysql_num_rows($result_children);
-
-//Erfassen des Anlegers der uebergebenen Veranstaltung
-if($pho_id!=NULL && $_SESSION['photo_event']['pho_usr_id']!=NULL)
+if($pho_id > 0)
 {
+    //erfassen ob Unterveranstaltungen existieren
     $sql="  SELECT *
-            FROM ". TBL_USERS. "
-            WHERE usr_id =".$_SESSION['photo_event']['pho_usr_id'];
-    $result_u1 = mysql_query($sql, $g_adm_con);
-    db_error($result_u1,__FILE__,__LINE__);
-    $user1 = mysql_fetch_object($result_u1);
+            FROM ". TBL_PHOTOS. "
+            WHERE pho_pho_id_parent ={0}";
+    $sql    = prepareSQL($sql, array($pho_id));
+    $result_children = mysql_query($sql, $g_adm_con);
+    db_error($result_children,__FILE__,__LINE__);
+    $children = mysql_num_rows($result_children);
+
+    //Erfassen des Anlegers der uebergebenen Veranstaltung
+    if($_SESSION['photo_event']['pho_usr_id'] != NULL)
+    {
+        $sql="  SELECT *
+                FROM ". TBL_USERS. "
+                WHERE usr_id =".$_SESSION['photo_event']['pho_usr_id'];
+        $result_u1 = mysql_query($sql, $g_adm_con);
+        db_error($result_u1,__FILE__,__LINE__);
+        $user1 = mysql_fetch_object($result_u1);
+    }
+
+    //Erfassen des Veraenderers der uebergebenen Veranstaltung
+    if($_SESSION['photo_event']['pho_usr_id_change'] != NULL)
+    {
+        $sql="  SELECT *
+                FROM ". TBL_USERS. "
+                WHERE usr_id =".$_SESSION['photo_event']['pho_usr_id_change'];
+        $result_u2 = mysql_query($sql, $g_adm_con);
+        db_error($result_u2,__FILE__,__LINE__);
+        $user2 = mysql_fetch_object($result_u2);
+    }
 }
 
-//Erfassen des Veraenderers der uebergebenen Veranstaltung
-if($pho_id!=NULL && $_SESSION['photo_event']['pho_usr_id_change']!=NULL)
-{
-    $sql="  SELECT *
-            FROM ". TBL_USERS. "
-            WHERE usr_id =".$_SESSION['photo_event']['pho_usr_id_change'];
-    $result_u2 = mysql_query($sql, $g_adm_con);
-    db_error($result_u2,__FILE__,__LINE__);
-    $user2 = mysql_fetch_object($result_u2);
-}
 
 /*********************LOCKED************************************/
 //Falls gefordert und Foto-edit-rechte, aendern der Freigabe
 if($locked=="1" || $locked=="0")
 {
-	// erst pruefen, ob der User Fotoberarbeitungsrechte hat
-	if(!$g_current_user->editPhotoRight())
-	{
-	    $g_message->show("photoverwaltunsrecht");
-	}	    
+    // erst pruefen, ob der User Fotoberarbeitungsrechte hat
+    if(!$g_current_user->editPhotoRight())
+    {
+        $g_message->show("photoverwaltunsrecht");
+    }       
 
     $sql="  UPDATE ". TBL_PHOTOS. " SET  pho_locked = $locked
              WHERE pho_id = {0}";
@@ -307,7 +307,9 @@ echo "<div class=\"formBody\">";
         //Aanzahl der Bilder
         $bilder = $_SESSION['photo_event']['pho_quantity'];
         //Ordnerpfad
-        $ordner = "../../../adm_my_files/photos/".$_SESSION['photo_event']['pho_begin']."_".$_SESSION['photo_event']['pho_id'];
+        $ordner_foto = "/adm_my_files/photos/".$_SESSION['photo_event']['pho_begin']."_".$_SESSION['photo_event']['pho_id'];
+        $ordner      = SERVER_PATH. $ordner_foto;
+        $ordner_url  = $g_root_path. $ordner_foto;
 
         //Nachsehen ob Thumnailordner existiert und wenn nicht SafeMode ggf. anlegen
         if(!file_exists($ordner."/thumbnails"))
@@ -412,12 +414,11 @@ echo "<div class=\"formBody\">";
                         {
                             image_save($ordner."/".$bild.".jpg", $g_preferences['photo_thumbs_scale'], $ordner."/thumbnails/".$bild.".jpg");
                         }
-                      
                         
-                        echo"
+                        echo "
                         <td style=\"text-align: center;\">
                             <img onclick=\"window.open('photopopup.php?bild=$bild&pho_id=$pho_id','msg', 'height=".$popup_height.", width=".$popup_width.",left=162,top=5')\" 
-							style=\"vertical-align: middle; cursor: pointer;\" src=\"".$ordner."/thumbnails/".$bild.".jpg\" border=\"0\" alt=\"$bild\">
+                            style=\"vertical-align: middle; cursor: pointer;\" src=\"".$ordner_url."/thumbnails/".$bild.".jpg\" border=\"0\" alt=\"$bild\">
                             <br>";
 
                             //Buttons fuer moderatoren

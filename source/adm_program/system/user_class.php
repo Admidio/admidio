@@ -451,8 +451,8 @@ class User
                           AND mem_valid        = 1
                           AND rol_assign_roles = 1
                           AND rol_valid        = 1 
-						  AND rol_cat_id       = cat_id
-						  AND cat_org_id       = $g_current_organization->id ";
+                          AND rol_cat_id       = cat_id
+                          AND cat_org_id       = $g_current_organization->id ";
             $result = mysql_query($sql, $this->db_connection);
             db_error($result,__FILE__,__LINE__);
 
@@ -501,8 +501,8 @@ class User
                                AND mem_valid   = 1
                                AND rol_profile = 1
                                AND rol_valid   = 1 
-						       AND rol_cat_id  = cat_id
-						       AND cat_org_id  = $g_current_organization->id ";
+                               AND rol_cat_id  = cat_id
+                               AND cat_org_id  = $g_current_organization->id ";
                 $result = mysql_query($sql, $this->db_connection);
                 db_error($result,__FILE__,__LINE__);
 
@@ -550,8 +550,8 @@ class User
                           AND mem_rol_id    = rol_id
                           AND rol_edit_user = 1
                           AND rol_valid     = 1 
-						  AND rol_cat_id    = cat_id
-						  AND cat_org_id    = $g_current_organization->id ";
+                          AND rol_cat_id    = cat_id
+                          AND cat_org_id    = $g_current_organization->id ";
             $result = mysql_query($sql, $this->db_connection);
             db_error($result,__FILE__,__LINE__);
 
@@ -591,8 +591,8 @@ class User
                           AND mem_valid              = 1
                           AND rol_guestbook_comments = 1
                           AND rol_valid              = 1 
-						  AND rol_cat_id             = cat_id
-						  AND cat_org_id             = $g_current_organization->id ";
+                          AND rol_cat_id             = cat_id
+                          AND cat_org_id             = $g_current_organization->id ";
             $result = mysql_query($sql, $this->db_connection);
             db_error($result,__FILE__,__LINE__);
 
@@ -632,8 +632,8 @@ class User
                           AND mem_valid     = 1
                           AND rol_guestbook = 1
                           AND rol_valid     = 1 
-						  AND rol_cat_id    = cat_id
-						  AND cat_org_id    = $g_current_organization->id ";
+                          AND rol_cat_id    = cat_id
+                          AND cat_org_id    = $g_current_organization->id ";
             $result = mysql_query($sql, $this->db_connection);
             db_error($result,__FILE__,__LINE__);
 
@@ -673,8 +673,8 @@ class User
                           AND mem_valid    = 1
                           AND rol_weblinks = 1
                           AND rol_valid    = 1 
-						  AND rol_cat_id   = cat_id
-						  AND cat_org_id   = $g_current_organization->id ";
+                          AND rol_cat_id   = cat_id
+                          AND cat_org_id   = $g_current_organization->id ";
             $result = mysql_query($sql, $this->db_connection);
             db_error($result,__FILE__,__LINE__);
 
@@ -715,8 +715,8 @@ class User
                           AND mem_valid    = 1
                           AND rol_download = 1
                           AND rol_valid    = 1 
-						  AND rol_cat_id   = cat_id
-						  AND cat_org_id   = $g_current_organization->id ";
+                          AND rol_cat_id   = cat_id
+                          AND cat_org_id   = $g_current_organization->id ";
             $result = mysql_query($sql, $this->db_connection);
             db_error($result,__FILE__,__LINE__);
 
@@ -742,28 +742,28 @@ class User
         }
     }
 
-	// Funktion prueft, ob der angemeldete User Fotos hochladen und verwalten darf
-	
-	function editPhotoRight()
-	{
+    // Funktion prueft, ob der angemeldete User Fotos hochladen und verwalten darf
+    
+    function editPhotoRight()
+    {
         if(-1 == $this->editPhotoRight)
-        {	    
+        {       
             global $g_current_organization;
             
-		    $sql    = "SELECT *
-		                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-		                WHERE mem_usr_id = $g_current_user->id
-		                  AND mem_rol_id = rol_id
-		                  AND mem_valid  = 1
-		                  AND rol_photo  = 1
-		                  AND rol_valid  = 1 
-						  AND rol_cat_id = cat_id
-						  AND cat_org_id = $g_current_organization->id ";
-		    $result = mysql_query($sql, $g_adm_con);
-		    db_error($result,__FILE__,__LINE__);
-		
-		    $edit_photo = mysql_num_rows($result);
-	
+            $sql    = "SELECT *
+                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                        WHERE mem_usr_id = $this->id
+                          AND mem_rol_id = rol_id
+                          AND mem_valid  = 1
+                          AND rol_photo  = 1
+                          AND rol_valid  = 1 
+                          AND rol_cat_id = cat_id
+                          AND cat_org_id = $g_current_organization->id ";
+            $result = mysql_query($sql, $this->db_connection);
+            db_error($result,__FILE__,__LINE__);
+        
+            $edit_photo = mysql_num_rows($result);
+    
             if($edit_photo > 0)
             {
                 $this->editPhotoRight = 1;
@@ -782,7 +782,7 @@ class User
         {
             return false;
         }
-	}
+    }
 
     function isWebmaster()
     {
@@ -798,8 +798,8 @@ class User
                           AND mem_rol_id = rol_id
                           AND rol_name   = 'Webmaster'
                           AND rol_valid  = 1 
-						  AND rol_cat_id = cat_id
-						  AND cat_org_id = $g_current_organization->id ";
+                          AND rol_cat_id = cat_id
+                          AND cat_org_id = $g_current_organization->id ";
             $result = mysql_query($sql, $this->db_connection);
             db_error($result,__FILE__,__LINE__);
             

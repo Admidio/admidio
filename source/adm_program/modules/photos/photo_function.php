@@ -31,8 +31,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
-require("../../system/common.php");
-require("../../system/login_valid.php");
+require_once("../../system/common.php");
+require_once("../../system/login_valid.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_photo_module'] != 1)
@@ -52,9 +52,14 @@ $_SESSION['navigation']->addUrl($g_current_url);
 
 // Uebergabevariablen pruefen
 
-if(isset($_GET["pho_id"]) && is_numeric($_GET["pho_id"]) == false)
+//ID Pruefen
+if(isset($_GET["pho_id"]) && is_numeric($_GET["pho_id"]))
 {
-    $g_message->show("invalid");
+    $pho_id = $_GET["pho_id"];
+}
+else 
+{
+    $pho_id = NULL;
 }
 
 if(isset($_GET["job"]) && $_GET["job"] != "rotate" && $_GET["job"] != "delete_request" && $_GET["job"] != "do_delete")
@@ -67,16 +72,9 @@ if(isset($_GET["direction"]) && $_GET["direction"] != "left" && $_GET["direction
     $g_message->show("invalid");
 }
 
-if(($_GET["job"] == "do_delete" || $_GET["job"] == "delete_request" || $_GET["job"] == "rotate")
-&& (isset($_GET["bild"]) == false || is_numeric($_GET["bild"]) == false) )
+if(isset($_GET["job"]) && (isset($_GET["bild"]) == false || is_numeric($_GET["bild"]) == false) )
 {
     $g_message->show("invalid");
-}
-
-
-if(isset($_GET["pho_id"]))
-{
-    $pho_id = $_GET["pho_id"];
 }
 
 //Funktion zum Speichern von Bildern
@@ -84,45 +82,46 @@ if(isset($_GET["pho_id"]))
 
 function image_save($orig_path, $scale, $destination_path)
 {
-    
-    //Ermittlung der Original Bildgroesse
-    $bildgroesse = getimagesize($orig_path);
-
-    //Errechnung seitenverhaeltniss
-    $seitenverhaeltnis = $bildgroesse[0]/$bildgroesse[1];
-
-    //laengere seite soll skalliert werden
-    //Errechnug neuen Bildgroesse Querformat
-    if($bildgroesse[0]>=$bildgroesse[1])
+    if(file_exists($orig_path))
     {
-        $neubildsize = array ($scale, round($scale/$seitenverhaeltnis));
-    }
-    //Errechnug neuen Bildgroesse Hochformat
-    if($bildgroesse[0]<$bildgroesse[1]){
-        $neubildsize = array (round($scale*$seitenverhaeltnis), $scale);
-    }
+        //Ermittlung der Original Bildgroesse
+        $bildgroesse = getimagesize($orig_path);
+
+        //Errechnung seitenverhaeltniss
+        $seitenverhaeltnis = $bildgroesse[0]/$bildgroesse[1];
+
+        //laengere seite soll skalliert werden
+        //Errechnug neuen Bildgroesse Querformat
+        if($bildgroesse[0]>=$bildgroesse[1])
+        {
+            $neubildsize = array ($scale, round($scale/$seitenverhaeltnis));
+        }
+        //Errechnug neuen Bildgroesse Hochformat
+        if($bildgroesse[0]<$bildgroesse[1]){
+            $neubildsize = array (round($scale*$seitenverhaeltnis), $scale);
+        }
 
 
-    // Erzeugung neues Bild
-    $neubild = imagecreatetruecolor($neubildsize[0], $neubildsize[1]);
+        // Erzeugung neues Bild
+        $neubild = imagecreatetruecolor($neubildsize[0], $neubildsize[1]);
 
-    //Aufrufen des Originalbildes
-    $bilddaten = imagecreatefromjpeg($orig_path);
+        //Aufrufen des Originalbildes
+        $bilddaten = imagecreatefromjpeg($orig_path);
 
-    //kopieren der Daten in neues Bild
-    imagecopyresampled($neubild, $bilddaten, 0, 0, 0, 0, $neubildsize[0], $neubildsize[1], $bildgroesse[0], $bildgroesse[1]);
-    
-    //falls Bild existiert: Loeschen
-    if(file_exists($destination_path)){
-        unlink($destination_path);
-    }
-    
-    //Bild in Zielordner abspeichern
-    imagejpeg($neubild, $destination_path, 90);
-    chmod($destination_path,0777);
+        //kopieren der Daten in neues Bild
+        imagecopyresampled($neubild, $bilddaten, 0, 0, 0, 0, $neubildsize[0], $neubildsize[1], $bildgroesse[0], $bildgroesse[1]);
 
-    imagedestroy($neubild);
-    
+        //falls Bild existiert: Loeschen
+        if(file_exists($destination_path)){
+            unlink($destination_path);
+        }
+
+        //Bild in Zielordner abspeichern
+        imagejpeg($neubild, $destination_path, 90);
+        chmod($destination_path,0777);
+
+        imagedestroy($neubild);
+    }    
 }
 
 
@@ -288,7 +287,7 @@ function delete ($pho_id, $bild)
 };
 
 //Nutzung der rotatefunktion
-if($_GET["job"]=="rotate")
+if(isset($_GET["job"]) && $_GET["job"]=="rotate")
 {
     //Aufruf der entsprechenden Funktion
     if($_GET["direction"]=="right"){
@@ -304,7 +303,7 @@ if($_GET["job"]=="rotate")
 }
 
 //Nachfrage ob geloescht werden soll
-if($_GET["job"]=="delete_request")
+if(isset($_GET["job"]) && $_GET["job"]=="delete_request")
 {
    $g_message->setForwardYesNo("$g_root_path/adm_program/modules/photos/photo_function.php?pho_id=$pho_id&bild=". $_GET["bild"]."&job=do_delete");
    $g_message->show("delete_photo");
