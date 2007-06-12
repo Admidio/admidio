@@ -102,7 +102,7 @@ $g_layout['header'] = $g_layout['header']. "
         function getComments(commentId)
         {
             gbookId = commentId;
-            resObject.open('get', 'get_comments.php?cid=' + gbookId, true);
+            resObject.open('get', '$g_root_path/adm_program/modules/guestbook/get_comments.php?cid=' + gbookId, true);
             resObject.onreadystatechange = handleResponse;
             resObject.send(null);
         }
