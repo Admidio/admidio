@@ -44,6 +44,9 @@ if($g_current_user->isWebmaster())
     $webmasterRole = true;
 }
 
+// Url-Stack loeschen
+$_SESSION['navigation']->clear();
+
 // Html-Kopf ausgeben
 $g_layout['title']  = "Admidio &Uuml;bersicht";
 $g_layout['header'] = "    

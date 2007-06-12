@@ -121,8 +121,8 @@ function hasRole($function, $user_id = 0)
                   AND mem_rol_id = rol_id
                   AND rol_name   = '$function'
                   AND rol_valid  = 1 
-				  AND rol_cat_id = cat_id
-				  AND cat_org_id = $g_current_organization->id ";
+                  AND rol_cat_id = cat_id
+                  AND cat_org_id = $g_current_organization->id ";
     $result = mysql_query($sql, $g_adm_con);
     db_error($result,__FILE__,__LINE__);
 
@@ -155,8 +155,8 @@ function isMember($user_id)
                   AND mem_valid  = 1
                   AND mem_rol_id = rol_id
                   AND rol_valid  = 1 
-				  AND rol_cat_id = cat_id
-				  AND cat_org_id = $g_current_organization->id ";
+                  AND rol_cat_id = cat_id
+                  AND cat_org_id = $g_current_organization->id ";
     $result = mysql_query($sql, $g_adm_con);
     db_error($result,__FILE__,__LINE__);
 
@@ -187,8 +187,8 @@ function isGroupLeader($rol_id = 0)
                   AND mem_leader = 1
                   AND mem_rol_id = rol_id
                   AND rol_valid  = 1 
-				  AND rol_cat_id = cat_id
-				  AND cat_org_id = $g_current_organization->id ";
+                  AND rol_cat_id = cat_id
+                  AND cat_org_id = $g_current_organization->id ";
     if ($rol_id != 0)
     {
         $sql .= "  AND mem_rol_id           = {0}";
@@ -223,8 +223,8 @@ function editAnnouncements()
                   AND mem_valid         = 1
                   AND rol_announcements = 1
                   AND rol_valid         = 1 
-				  AND rol_cat_id        = cat_id
-				  AND cat_org_id        = $g_current_organization->id ";
+                  AND rol_cat_id        = cat_id
+                  AND cat_org_id        = $g_current_organization->id ";
     $result = mysql_query($sql, $g_adm_con);
     db_error($result,__FILE__,__LINE__);
 
@@ -253,8 +253,8 @@ function editDate()
                   AND mem_valid  = 1
                   AND rol_dates  = 1
                   AND rol_valid  = 1 
-				  AND rol_cat_id = cat_id
-				  AND cat_org_id = $g_current_organization->id ";
+                  AND rol_cat_id = cat_id
+                  AND cat_org_id = $g_current_organization->id ";
     $result = mysql_query($sql, $g_adm_con);
     db_error($result,__FILE__,__LINE__);
 
@@ -401,7 +401,7 @@ function generateRoleSelectBox($default_role = 0, $field_id = "")
                 $sql     = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                              WHERE rol_valid  = 1
                                AND rol_cat_id = cat_id
-							   AND cat_org_id = $current_organization->id
+                               AND cat_org_id = $g_current_organization->id
                              ORDER BY cat_sequence, rol_name";
             }
             else
@@ -410,7 +410,7 @@ function generateRoleSelectBox($default_role = 0, $field_id = "")
                              WHERE rol_locked = 0
                                AND rol_valid  = 1
                                AND rol_cat_id = cat_id
-							   AND cat_org_id = $current_organization->id
+                               AND cat_org_id = $g_current_organization->id
                              ORDER BY cat_sequence, rol_name";
             }
             $result_lst = mysql_query($sql, $g_adm_con);
