@@ -44,6 +44,9 @@ else
         $g_message->show("invalid");
     }
     
+    // Loginseite aus Url-Stack entfernen
+    $_SESSION['navigation']->deleteLastUrl();
+    
     $message_code = strStripTags($_GET['message_code']);
     $show_time = 2000;
     
