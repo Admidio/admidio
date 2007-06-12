@@ -290,7 +290,7 @@ echo "</div>
                 // Link nur anzeigen, wenn Rolle auch Mitglieder hat
                 if($num_member > 0 || $num_leader > 0)
                 {
-                    echo "<a href=\"lists_show.php?type=";
+                    echo "<a href=\"$g_root_path/adm_program/modules/lists/lists_show.php?type=";
                     if($active_role)
                     {
                         echo "address";

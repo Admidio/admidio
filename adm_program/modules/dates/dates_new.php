@@ -121,7 +121,7 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 // Html des Modules ausgeben
 echo "
-<form name=\"form\" action=\"dates_function.php?dat_id=$req_dat_id&amp;mode=";
+<form name=\"form\" action=\"$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=$req_dat_id&amp;mode=";
     if($req_dat_id > 0)
     {
         echo "3";

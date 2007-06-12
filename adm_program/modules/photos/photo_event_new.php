@@ -93,11 +93,11 @@ if ($_GET['aufgabe'] == "change")
     db_error($result,__FILE__,__LINE__);
     $adm_photo = mysql_fetch_array($result);
 
-	// pruefen, ob Veranstaltung zur aktuellen Organisation gehoert
-	if($adm_photo['pho_org_shortname'] != $g_organization)
-	{
-	    $g_message->show("invalid");
-	}
+    // pruefen, ob Veranstaltung zur aktuellen Organisation gehoert
+    if($adm_photo['pho_org_shortname'] != $g_organization)
+    {
+        $g_message->show("invalid");
+    }
 
     //inhalten in form_values uebertragen
     $form_values['veranstaltung']       = $adm_photo["pho_name"];
@@ -147,7 +147,7 @@ echo"</div>";
 //Body
 echo"
 <div class=\"formBody\" align=\"center\">
-    <form method=\"POST\" action=\"photo_event_function.php?pho_id=". $_GET["pho_id"];
+    <form method=\"POST\" action=\"$g_root_path/adm_program/modules/photos/photo_event_function.php?pho_id=". $_GET["pho_id"];
         if($_GET["aufgabe"]=="new")
         {
             echo "&aufgabe=makenew\">";

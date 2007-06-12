@@ -134,7 +134,7 @@ echo "
 <h1 class=\"moduleHeadline\">Rollen zuordnen</h1>
 <h3>Profil von $user->first_name $user->last_name</h3>
 
-<form action=\"roles_save.php?user_id=$req_usr_id&amp;new_user=$req_new_user\" method=\"post\" name=\"Funktionen\">
+<form action=\"$g_root_path/adm_program/modules/profile/roles_save.php?user_id=$req_usr_id&amp;new_user=$req_new_user\" method=\"post\" name=\"Funktionen\">
     <table class=\"tableList\" cellpadding=\"3\" cellspacing=\"0\">
         <thead>
             <tr>
@@ -160,7 +160,7 @@ echo "
                           AND mem_valid  = 1
                         WHERE rol_valid  = 1
                           AND rol_cat_id = cat_id
-						  AND cat_org_id = $g_current_organization->id
+                          AND cat_org_id = $g_current_organization->id
                         ORDER BY cat_sequence, rol_name";
         }
         elseif(isGroupLeader())
@@ -179,7 +179,7 @@ echo "
                           AND br.rol_valid   = 1
                           AND br.rol_locked  = 0
                           AND br.rol_cat_id  = cat_id
-						  AND cat_org_id     = $g_current_organization->id
+                          AND cat_org_id     = $g_current_organization->id
                         ORDER BY cat_sequence, br.rol_name";
         }
         elseif($g_current_user->editUser())
@@ -195,7 +195,7 @@ echo "
                           AND rol_assign_roles = 0
                           AND rol_locked       = 0
                           AND rol_cat_id = cat_id
-						  AND cat_org_id = $g_current_organization->id
+                          AND cat_org_id = $g_current_organization->id
                         ORDER BY cat_sequence, rol_name";
         }
         $sql    = prepareSQL($sql, array($req_usr_id));

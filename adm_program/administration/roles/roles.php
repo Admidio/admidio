@@ -87,9 +87,9 @@ echo "
 
 <p>
     <span class=\"iconLink\">
-        <a class=\"iconLink\" href=\"roles_new.php\"><img
+        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/roles_new.php\"><img
         src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Rolle anlegen\"></a>
-        <a class=\"iconLink\" href=\"roles_new.php\">Rolle anlegen</a>
+        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/roles_new.php\">Rolle anlegen</a>
     </span>
     &nbsp;&nbsp;&nbsp;&nbsp;";
     if($req_valid == true)
@@ -105,15 +105,15 @@ echo "
         $image       = "wand.png";
     }
     echo "<span class=\"iconLink\">
-        <a class=\"iconLink\" href=\"roles.php?inactive=$req_valid\"><img
+        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/roles.php?inactive=$req_valid\"><img
         src=\"$g_root_path/adm_program/images/$image\" style=\"vertical-align: middle;\" border=\"0\" alt=\"$description_lnk\"></a>
-        <a class=\"iconLink\" href=\"roles.php?inactive=$req_valid\">$description_lnk</a>
+        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/roles.php?inactive=$req_valid\">$description_lnk</a>
     </span>
     &nbsp;&nbsp;&nbsp;&nbsp;
     <span class=\"iconLink\">
-        <a class=\"iconLink\" href=\"categories.php?type=ROL\"><img
+        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/categories.php?type=ROL\"><img
         src=\"$g_root_path/adm_program/images/application_double.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Kategorien pflegen\"></a>
-        <a class=\"iconLink\" href=\"categories.php?type=ROL\">Kategorien pflegen</a>
+        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/categories.php?type=ROL\">Kategorien pflegen</a>
     </span>
 </p>
 
@@ -132,7 +132,7 @@ echo "
     $sql    = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                 WHERE rol_valid  = $req_valid
                   AND rol_cat_id = cat_id
-				  AND cat_org_id = $g_current_organization->id
+                  AND cat_org_id = $g_current_organization->id
                 ORDER BY cat_sequence, rol_name ";
     $usr_result = mysql_query($sql, $g_adm_con);
     db_error($result,__FILE__,__LINE__);

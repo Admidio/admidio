@@ -100,8 +100,8 @@ if($restrict=="m")
             AND mem_valid  = 1
             AND rol_valid  = 1
             AND usr_valid  = 1
-			AND rol_cat_id = cat_id
-			AND cat_org_id = $g_current_organization->id
+            AND rol_cat_id = cat_id
+            AND cat_org_id = $g_current_organization->id
             ORDER BY usr_last_name, usr_first_name ASC ";
     $result_user = mysql_query($sql, $g_adm_con);
     db_error($result_user,__FILE__,__LINE__);
@@ -264,7 +264,7 @@ $g_layout['header'] = "
 
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 echo "
-<form action=\"members_save.php?role_id=".$role_id. "\" method=\"post\" name=\"Mitglieder\">
+<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?role_id=".$role_id. "\" method=\"post\" name=\"Mitglieder\">
    <h2>Mitglieder zu ". $role->getValue("rol_name"). " zuordnen</h2>";
 
     if($count_valid_users != $user_anzahl || $restrict == "u")

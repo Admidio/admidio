@@ -54,7 +54,7 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 // Html des Modules ausgeben
 echo "
 <p>&nbsp;</p>
-<form id=\"form_import\" action=\"import_function.php\" method=\"post\" enctype=\"multipart/form-data\">
+<form id=\"form_import\" action=\"$g_root_path/adm_program/administration/members/import_function.php\" method=\"post\" enctype=\"multipart/form-data\">
     <div class=\"formHead\">Benutzer aus Datei importieren</div>
     <div class=\"formBody\">
         <div style=\"margin-top: 15px;\">

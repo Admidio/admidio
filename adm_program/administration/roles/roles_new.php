@@ -121,7 +121,7 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 // Html des Modules ausgeben
 echo "
-<form action=\"roles_function.php?rol_id=$req_rol_id&amp;mode=2\" method=\"post\" name=\"formRole\">
+<form action=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$req_rol_id&amp;mode=2\" method=\"post\" name=\"formRole\">
     <div class=\"formHead\">";
         if($req_rol_id > 0)
         {
@@ -414,10 +414,10 @@ echo "
 
                     // Alle Rollen auflisten, die der Benutzer sehen darf
                     $sql = "SELECT * 
-							  FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                        	 WHERE rol_valid  = 1
-							   AND rol_cat_id = cat_id
-							   AND cat_org_id = $g_current_organization->id
+                              FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                             WHERE rol_valid  = 1
+                               AND rol_cat_id = cat_id
+                               AND cat_org_id = $g_current_organization->id
                              ORDER BY rol_name ";
                     $allRoles = mysql_query($sql, $g_adm_con);
                     db_error($allRoles,__FILE__,__LINE__);

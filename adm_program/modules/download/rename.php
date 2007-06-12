@@ -109,7 +109,7 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 // Html des Modules ausgeben
 echo "<br>
-<form method=\"POST\" action=\"download_function.php?mode=4&amp;folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "&amp;file=". urlencode($file). "\">
+<form method=\"POST\" action=\"$g_root_path/adm_program/modules/download/download_function.php?mode=4&amp;folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "&amp;file=". urlencode($file). "\">
     <div class=\"formHead\" style=\"width: 400px\">Datei/Ordner umbenennen</div>
     <div class=\"formBody\" style=\"width: 400px\">
         <div>

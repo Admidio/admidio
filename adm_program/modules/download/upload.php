@@ -95,7 +95,7 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 // Html des Modules ausgeben
 echo "<br>
-<form action=\"download_function.php?mode=1&amp;folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\" method=\"post\" enctype=\"multipart/form-data\">
+<form action=\"$g_root_path/adm_program/modules/download/download_function.php?mode=1&amp;folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "\" method=\"post\" enctype=\"multipart/form-data\">
     <div class=\"formHead\">Datei hochladen</div>
     <div class=\"formBody\">
         <div style=\"text-align: center; width: 100%;\">Datei in den Ordner <b>";

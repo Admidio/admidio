@@ -220,9 +220,9 @@ if($req_id == 0
     {
         echo "<p>
             <span class=\"iconLink\">
-                <a class=\"iconLink\" href=\"dates_new.php?headline$req_headline\"><img
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/dates/dates_new.php?headline$req_headline\"><img
                 class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Termin anlegen\"></a>
-                <a class=\"iconLink\" href=\"dates_new.php?headline=$req_headline\">Anlegen</a>
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/dates/dates_new.php?headline=$req_headline\">Anlegen</a>
             </span>
         </p>";
     }

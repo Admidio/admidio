@@ -191,9 +191,9 @@ if ($_GET['id'] == 0)
     // Neuen Gaestebucheintrag anlegen
     echo "<p>
         <span class=\"iconLink\">
-            <a class=\"iconLink\" href=\"guestbook_new.php?headline=". $_GET["headline"]. "\"><img
+            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/guestbook/guestbook_new.php?headline=". $_GET["headline"]. "\"><img
             class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Neuen Eintrag anlegen\"></a>
-            <a class=\"iconLink\" href=\"guestbook_new.php?headline=". $_GET["headline"]. "\">Neuen Eintrag anlegen</a>
+            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/guestbook/guestbook_new.php?headline=". $_GET["headline"]. "\">Neuen Eintrag anlegen</a>
         </span>
     </p>";
 
@@ -205,9 +205,9 @@ else
 {
     echo "<p>
         <span class=\"iconLink\">
-            <a class=\"iconLink\" href=\"guestbook.php?headline=". $_GET["headline"]. "&start=". $_GET["start"] ."\"><img
+            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/guestbook/guestbook.php?headline=". $_GET["headline"]. "&start=". $_GET["start"] ."\"><img
             class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Zur&uuml;ck zum G&auml;stebuch\"></a>
-            <a class=\"iconLink\" href=\"guestbook.php?headline=". $_GET["headline"]. "&start=". $_GET["start"] ."\"\">Zur&uuml;ck zum G&auml;stebuch</a>
+            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/guestbook/guestbook.php?headline=". $_GET["headline"]. "&start=". $_GET["start"] ."\"\">Zur&uuml;ck zum G&auml;stebuch</a>
         </span>
     </p>";
 }
@@ -265,11 +265,11 @@ else
                     {
                             echo "
                             <img src=\"$g_root_path/adm_program/images/edit.png\" style=\"cursor: pointer; vertical-align: middle;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"
-                            onclick=\"self.location.href='guestbook_new.php?id=$row->gbo_id&amp;headline=". $_GET['headline']. "'\">";
+                            onclick=\"self.location.href='$g_root_path/adm_program/modules/guestbook/guestbook_new.php?id=$row->gbo_id&amp;headline=". $_GET['headline']. "'\">";
 
                             echo "
                             <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer; vertical-align: middle;\" width=\"16\" height=\"16\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"
-                             onclick=\"self.location.href='guestbook_function.php?id=$row->gbo_id&amp;mode=6'\">";
+                             onclick=\"self.location.href='$g_root_path/adm_program/modules/guestbook/guestbook_function.php?id=$row->gbo_id&amp;mode=6'\">";
 
                     }
 

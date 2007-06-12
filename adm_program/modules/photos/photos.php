@@ -354,10 +354,10 @@ echo "<div class=\"formBody\">";
         if($vorseite>=1)
         {
             echo"
-            <a href=\"photos.php?thumb_seite=$vorseite&amp;pho_id=$pho_id\">
+            <a href=\"$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$vorseite&amp;pho_id=$pho_id\">
                 <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Vorherige\">
             </a>
-            <a href=\"photos.php?thumb_seite=$vorseite&amp;pho_id=$pho_id\">Vorherige</a>&nbsp;&nbsp;";
+            <a href=\"$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$vorseite&amp;pho_id=$pho_id\">Vorherige</a>&nbsp;&nbsp;";
         }
 
         //Seitenzahlen
@@ -368,7 +368,7 @@ echo "<div class=\"formBody\">";
                 echo $thumb_seite."&nbsp;";
             }
             if($s!=$thumb_seite){
-                echo"<a href='photos.php?thumb_seite=$s&pho_id=$pho_id'>$s</a>&nbsp;";
+                echo"<a href='$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$s&pho_id=$pho_id'>$s</a>&nbsp;";
             }
         }
 
@@ -376,8 +376,8 @@ echo "<div class=\"formBody\">";
         $nachseite=$thumb_seite+1;
         if($nachseite<=$thumb_seiten){
             echo"
-            <a href=\"photos.php?thumb_seite=$nachseite&amp;pho_id=$pho_id\">N&auml;chste</a>
-            <a href=\"photos.php?thumb_seite=$nachseite&amp;pho_id=$pho_id\">
+            <a href=\"$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$nachseite&amp;pho_id=$pho_id\">N&auml;chste</a>
+            <a href=\"$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$nachseite&amp;pho_id=$pho_id\">
                 <img src=\"$g_root_path/adm_program/images/forward.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"N&auml;chste\">
             </a>";
         }
@@ -417,7 +417,7 @@ echo "<div class=\"formBody\">";
                         
                         echo "
                         <td style=\"text-align: center;\">
-                            <img onclick=\"window.open('photopopup.php?bild=$bild&pho_id=$pho_id','msg', 'height=".$popup_height.", width=".$popup_width.",left=162,top=5')\" 
+                            <img onclick=\"window.open('$g_root_path/adm_program/modules/photos/photopopup.php?bild=$bild&pho_id=$pho_id','msg', 'height=".$popup_height.", width=".$popup_width.",left=162,top=5')\" 
                             style=\"vertical-align: middle; cursor: pointer;\" src=\"".$ordner_url."/thumbnails/".$bild.".jpg\" border=\"0\" alt=\"$bild\">
                             <br>";
 
@@ -426,11 +426,11 @@ echo "<div class=\"formBody\">";
                             {
                                 echo"
                                 <img src=\"$g_root_path/adm_program/images/arrow_turn_left.png\" style=\"cursor: pointer; vertical-align: middle;\" width=\"16\" height=\"16\" border=\"0\" alt=\"nach links drehen\" title=\"nach links drehen\"
-                                    onclick=\"self.location.href='photo_function.php?pho_id=$pho_id&bild=$bild&thumb_seite=$thumb_seite&job=rotate&direction=left'\">
+                                    onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photo_function.php?pho_id=$pho_id&bild=$bild&thumb_seite=$thumb_seite&job=rotate&direction=left'\">
                                 <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer; vertical-align: middle;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Foto l&ouml;schen\" title=\"Foto l&ouml;schen\"
-                                    onclick=\"self.location.href='photo_function.php?pho_id=$pho_id&bild=$bild&thumb_seite=$thumb_seite&job=delete_request'\">
+                                    onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photo_function.php?pho_id=$pho_id&bild=$bild&thumb_seite=$thumb_seite&job=delete_request'\">
                                 <img src=\"$g_root_path/adm_program/images/arrow_turn_right.png\" style=\"cursor: pointer; vertical-align: middle;\" width=\"16\" height=\"16\" border=\"0\" alt=\"nach rechts drehen\" title=\"nach rechts drehen\"
-                                    onclick=\"self.location.href='photo_function.php?pho_id=$pho_id&bild=$bild&thumb_seite=$thumb_seite&job=rotate&direction=right'\">";
+                                    onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photo_function.php?pho_id=$pho_id&bild=$bild&thumb_seite=$thumb_seite&job=rotate&direction=right'\">";
                             }
                         echo"
                         </td>";
@@ -496,7 +496,7 @@ echo "<div class=\"formBody\">";
     {
         $adm_photo_list = mysql_fetch_array($result_list);
         //Hauptordner
-        $ordner = "../../../adm_my_files/photos/".$adm_photo_list["pho_begin"]."_".$adm_photo_list["pho_id"];
+        $ordner = SERVER_PATH. "/adm_my_files/photos/".$adm_photo_list["pho_begin"]."_".$adm_photo_list["pho_id"];
         if((!file_exists($ordner) || $adm_photo_list["pho_locked"]==1) && (!$g_current_user->editPhotoRight()))
         {
             $ignored++;
@@ -561,7 +561,7 @@ echo "<div class=\"formBody\">";
         {
             $adm_photo_list = mysql_fetch_array($result_list);
             //Hauptordner
-            $ordner = "../../../adm_my_files/photos/".$adm_photo_list["pho_begin"]."_".$adm_photo_list["pho_id"];
+            $ordner = SERVER_PATH. "/adm_my_files/photos/".$adm_photo_list["pho_begin"]."_".$adm_photo_list["pho_id"];
 
             //wenn ja Zeile ausgeben
             if(file_exists($ordner) && ($adm_photo_list["pho_locked"]==0) || $g_current_user->editPhotoRight())
@@ -587,12 +587,12 @@ echo "<div class=\"formBody\">";
                 else beispielbild($adm_photo_list["pho_id"]);
 
                 //Pfad des Beispielbildes
-                $bsp_pic_path = "../../../adm_my_files/photos/".$bsp_pic_beginn."_".$bsp_pho_id."/".$bsp_pic_nr.".jpg";
+                $bsp_pic_path = SERVER_PATH. "/adm_my_files/photos/".$bsp_pic_beginn."_".$bsp_pho_id."/".$bsp_pic_nr.".jpg";
 
                 //Wenn kein Bild gefunden wurde
                 if($bsp_pho_id==0)
                 {
-                    $bsp_pic_path ="../../images/nopix.jpg";
+                    $bsp_pic_path = SERVER_PATH. "/adm_program/images/nopix.jpg";
                 }
 
 
@@ -607,8 +607,8 @@ echo "<div class=\"formBody\">";
                             if($bildgroesse[0]<$bildgroesse[1]*3)
                             {
                                 echo"<div align=\"center\">
-                                    <a target=\"_self\" href=\"photos.php?pho_id=".$adm_photo_list["pho_id"]."\">
-                                    <img src=\"photo_show.php?bild=$bsp_pic_path&amp;scal=".$g_preferences['photo_preview_scale']."&amp;aufgabe=anzeigen&amp;side=y\" border=\"0\" alt=\"Zufallsbild\"
+                                    <a target=\"_self\" href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$adm_photo_list["pho_id"]."\">
+                                    <img src=\"$g_root_path/adm_program/modules/photos/photo_show.php?bild=$bsp_pic_path&amp;scal=".$g_preferences['photo_preview_scale']."&amp;aufgabe=anzeigen&amp;side=y\" border=\"0\" alt=\"Zufallsbild\"
                                     style=\"vertical-align: middle; align: right;\"></a>
                                 </div>";
                             }
@@ -632,7 +632,7 @@ echo "<div class=\"formBody\">";
                         //Veranstaltungs angaben
                         if(file_exists($ordner))
                         {
-                            echo"<a target=\"_self\" href=\"photos.php?pho_id=".$adm_photo_list["pho_id"]."\">".$adm_photo_list["pho_name"]."</a><br>";
+                            echo"<a target=\"_self\" href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$adm_photo_list["pho_id"]."\">".$adm_photo_list["pho_name"]."</a><br>";
                         }
                         else
                         {
@@ -658,24 +658,24 @@ echo "<div class=\"formBody\">";
                                     echo"
                                     <img src=\"$g_root_path/adm_program/images/photo.png\" style=\"cursor: pointer; vertical-align: middle;\"
                                         width=\"16\" height=\"16\" border=\"0\" alt=\"Bilder hochladen\" title=\"Bilder hochladen\"
-                                        onclick=\"self.location.href='photoupload.php?pho_id=$this_pho_id'\">&nbsp;
+                                        onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$this_pho_id'\">&nbsp;
 
                                     <img src=\"$g_root_path/adm_program/images/edit.png\"style=\"cursor: pointer; vertical-align: middle;\"
                                         width=\"16\" height=\"16\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"
-                                        onclick=\"self.location.href='photo_event_new.php?pho_id=$this_pho_id&aufgabe=change'\">&nbsp;";
+                                        onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photo_event_new.php?pho_id=$this_pho_id&aufgabe=change'\">&nbsp;";
                                 }
 
                                 echo"
                                 <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer; vertical-align: middle;\" width=\"16\" height=\"16\" border=\"0\"
                                      alt=\"Veranstaltung L&ouml;schen\" title=\"Veranstaltung L&ouml;schen\"
-                                     onclick=\"self.location.href='photo_event_function.php?job=delete_request&pho_id=$this_pho_id'\">";
+                                     onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photo_event_function.php?job=delete_request&pho_id=$this_pho_id'\">";
 
                                 if($adm_photo_list["pho_locked"]==1 && file_exists($ordner))
                                 {
                                     echo"
                                     <img src=\"$g_root_path/adm_program/images/key.png\"  alt=\"Freigeben\" title=\"Freigeben\"
                                         style=\"cursor: pointer; vertical-align: middle;\" width=\"16\" height=\"16\" border=\"0\"
-                                        onclick=\"self.location.href='photos.php?pho_id=$this_pho_id&locked=0'\">";
+                                        onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=$this_pho_id&locked=0'\">";
                                 }
 
                                 if($adm_photo_list["pho_locked"]==0 && file_exists($ordner))
@@ -683,7 +683,7 @@ echo "<div class=\"formBody\">";
                                     echo"
                                     <img src=\"$g_root_path/adm_program/images/key.png\" alt=\"Sperren\" title=\"Sperren\"
                                         style=\"cursor: pointer; vertical-align: middle;\" width=\"16\" height=\"16\" border=\"0\"
-                                        onclick=\"self.location.href='photos.php?pho_id=$this_pho_id&locked=1'\">";
+                                        onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=$this_pho_id&locked=1'\">";
                                 }
                             }
                         echo"

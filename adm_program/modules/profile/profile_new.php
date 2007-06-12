@@ -103,8 +103,8 @@ if($new_user == 0)
         $sql    = "SELECT *
                      FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. "
                     WHERE rol_valid   = 1
-					  AND rol_cat_id  = cat_id
-					  AND cat_org_id <> $g_current_organization->id
+                      AND rol_cat_id  = cat_id
+                      AND cat_org_id <> $g_current_organization->id
                       AND mem_rol_id  = rol_id
                       AND mem_valid   = 1
                       AND mem_usr_id  = $usr_id ";
@@ -170,7 +170,7 @@ $g_layout['title'] = "Profil bearbeiten";
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 echo "
-<form action=\"profile_save.php?user_id=$usr_id&amp;new_user=$new_user\" method=\"post\" name=\"ProfilAnzeigen\">
+<form action=\"$g_root_path/adm_program/modules/profile/profile_save.php?user_id=$usr_id&amp;new_user=$new_user\" method=\"post\" name=\"ProfilAnzeigen\">
     <div class=\"formHead\">";
         if($new_user == 1)
         {
@@ -428,14 +428,14 @@ echo "
                 $sql = "SELECT *
                           FROM ". TBL_USER_FIELDS. ", ". TBL_CATEGORIES. "
                          WHERE usf_cat_id = cat_id
-						   AND cat_org_id = $g_current_organization->id ";
+                           AND cat_org_id = $g_current_organization->id ";
             }
             else
             {
                 // vorhandender User editieren bzw. Registrierung akzeptieren
                 $sql = "SELECT *
                           FROM ". TBL_USER_FIELDS. " 
-						  LEFT JOIN ". TBL_USER_DATA. "
+                          LEFT JOIN ". TBL_USER_DATA. "
                             ON usd_usf_id = usf_id
                            AND usd_usr_id = $user->id
                           JOIN ". TBL_CATEGORIES. "
@@ -540,8 +540,8 @@ echo "
                         ON usd_usf_id  = usf_id
                        AND usd_usr_id  = $user->id
                       JOIN ". TBL_CATEGORIES. "
-						ON usf_cat_id = cat_id
-					   AND cat_name   = 'Messenger'
+                        ON usf_cat_id = cat_id
+                       AND cat_name   = 'Messenger'
                      ORDER BY usf_sequence ASC ";
             $result_msg = mysql_query($sql, $g_adm_con);
             db_error($result_msg,__FILE__,__LINE__);

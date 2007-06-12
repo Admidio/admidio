@@ -180,13 +180,13 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 if (isset($_GET['id']))
 {
     echo "
-    <form action=\"guestbook_function.php?id=". $_GET['id']. "&amp;headline=". $_GET['headline']. "&amp;mode=4\" method=\"post\" name=\"Kommentar\">
+    <form action=\"$g_root_path/adm_program/modules/guestbook/guestbook_function.php?id=". $_GET['id']. "&amp;headline=". $_GET['headline']. "&amp;mode=4\" method=\"post\" name=\"Kommentar\">
     <div class=\"formHead\">Kommentar anlegen</div>";
 }
 else
 {
     echo "
-    <form action=\"guestbook_function.php?id=". $_GET['cid']. "&amp;headline=". $_GET['headline']. "&amp;mode=8\" method=\"post\" name=\"Kommentar\">
+    <form action=\"$g_root_path/adm_program/modules/guestbook/guestbook_function.php?id=". $_GET['cid']. "&amp;headline=". $_GET['headline']. "&amp;mode=8\" method=\"post\" name=\"Kommentar\">
     <div class=\"formHead\">Kommentar editieren</div>";
 }
     echo "

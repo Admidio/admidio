@@ -102,7 +102,7 @@ else
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 echo "
-<form action=\"fields_function.php?usf_id=$req_usf_id&amp;mode=1\" method=\"post\" id=\"edit_field\">
+<form action=\"$g_root_path/adm_program/administration/members/fields_function.php?usf_id=$req_usf_id&amp;mode=1\" method=\"post\" id=\"edit_field\">
     <div class=\"formHead\">". $g_layout['title']. "</div>
     <div class=\"formBody\">
         <div>
