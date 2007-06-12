@@ -131,19 +131,19 @@ if(!$result_usr) showError(mysql_error());
 while($row_usr = mysql_fetch_object($result_usr))
 {
     $sql = "INSERT INTO ". TBL_USER_DATA. " (usd_usr_id, usd_usf_id, usd_value)
-                                     VALUES ($row_usr->usr_id, $usf_id_last_name, '$row_usr->usr_last_name')
-										  , ($row_usr->usr_id, $usf_id_first_name, '$row_usr->usr_first_name')
-										  , ($row_usr->usr_id, $usf_id_address, '$row_usr->usr_address')
-                                          , ($row_usr->usr_id, $usf_id_zip_code, '$row_usr->usr_zip_code')
-                                          , ($row_usr->usr_id, $usf_id_city, '$row_usr->usr_city')
-                                          , ($row_usr->usr_id, $usf_id_country, '$row_usr->usr_country')
-                                          , ($row_usr->usr_id, $usf_id_phone, '$row_usr->usr_phone')
-                                          , ($row_usr->usr_id, $usf_id_mobile, '$row_usr->usr_mobile')
-                                          , ($row_usr->usr_id, $usf_id_fax, '$row_usr->usr_fax')
-                                          , ($row_usr->usr_id, $usf_id_birthday, '$row_usr->usr_birthday')
-                                          , ($row_usr->usr_id, $usf_id_gender, '$row_usr->usr_gender')
-                                          , ($row_usr->usr_id, $usf_id_email, '$row_usr->usr_email')
-                                          , ($row_usr->usr_id, $usf_id_homepage, '$row_usr->usr_homepage') ";
+                                     VALUES ($row_usr->usr_id, $usf_id_last_name, '". addslashes($row_usr->usr_last_name). "')
+                                          , ($row_usr->usr_id, $usf_id_first_name, '". addslashes($row_usr->usr_first_name). "')
+                                          , ($row_usr->usr_id, $usf_id_address, '". addslashes($row_usr->usr_address). "')
+                                          , ($row_usr->usr_id, $usf_id_zip_code, '". addslashes($row_usr->usr_zip_code). "')
+                                          , ($row_usr->usr_id, $usf_id_city, '". addslashes($row_usr->usr_city). "')
+                                          , ($row_usr->usr_id, $usf_id_country, '". addslashes($row_usr->usr_country). "')
+                                          , ($row_usr->usr_id, $usf_id_phone, '". addslashes($row_usr->usr_phone). "')
+                                          , ($row_usr->usr_id, $usf_id_mobile, '". addslashes($row_usr->usr_mobile). "')
+                                          , ($row_usr->usr_id, $usf_id_fax, '". addslashes($row_usr->usr_fax). "')
+                                          , ($row_usr->usr_id, $usf_id_birthday, '". addslashes($row_usr->usr_birthday). "')
+                                          , ($row_usr->usr_id, $usf_id_gender, '". addslashes($row_usr->usr_gender). "')
+                                          , ($row_usr->usr_id, $usf_id_email, '". addslashes($row_usr->usr_email). "')
+                                          , ($row_usr->usr_id, $usf_id_homepage, '". addslashes($row_usr->usr_homepage). "') ";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());    
 }

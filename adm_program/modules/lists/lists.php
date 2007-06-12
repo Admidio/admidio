@@ -91,7 +91,7 @@ $_SESSION['navigation']->addUrl($g_current_url);
 $sql = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
          WHERE rol_valid  = $active_role
            AND rol_cat_id = cat_id 
-		   AND cat_org_id = $g_current_organization->id";
+           AND cat_org_id = $g_current_organization->id ";
 if(!$g_current_user->assignRoles())
 {
     // wenn nicht Moderator, dann keine versteckten Rollen anzeigen
