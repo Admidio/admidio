@@ -155,7 +155,14 @@ echo "
         <div style=\"margin-top: 6px;\">
             <div style=\"text-align: right; width: 25%; float: left;\">Kategorie:</div>
             <div style=\"text-align: left; margin-left: 27%;\">
-                <select size=\"1\" name=\"category\" tabindex=\"3\">";
+                <select size=\"1\" name=\"category\" tabindex=\"3\">
+                    <option value=\" \""; 
+                        if($form_values['category'] == 0) 
+                        {
+                            echo " selected=\"selected\"";
+                        }
+                        echo ">- Bitte w&auml;hlen -</option>";
+                        
                     $sql = "SELECT * FROM ". TBL_CATEGORIES. "
                              WHERE cat_org_id = $g_current_organization->id
                                AND cat_type   = 'LNK'
@@ -166,9 +173,10 @@ echo "
                     while($row = mysql_fetch_object($result))
                     {
                         echo "<option value=\"$row->cat_id\"";
-                            if($form_values['category'] == $row->cat_id
-                            || ($form_values['category'] == 0 && $row->cat_name == 'Allgemein'))
+                            if($form_values['category'] == $row->cat_id)
+                            {
                                 echo " selected ";
+                            }
                         echo ">$row->cat_name</option>";
                     }
                 echo "</select>
