@@ -218,10 +218,10 @@ else
     // Schreibe diese Kategorie nicht! Sie ist versteckt und der User nicht eingeloggt
     $dont_write = false;
 
-        // Solange die vorherige Kategorie-ID sich nicht veraendert...
-        // Sonst in die neue Kategorie springen
-        while (($row = mysql_fetch_object($links_result)) && ($j<$linksPerPage))
-        {
+    // Solange die vorherige Kategorie-ID sich nicht veraendert...
+    // Sonst in die neue Kategorie springen
+    while (($row = mysql_fetch_object($links_result)) && ($j<$linksPerPage))
+    {
 
         if ($row->lnk_cat_id != $previous_cat_id)
         {
@@ -302,26 +302,25 @@ else
                     echo "</div>";
                 }
             echo "</div>";
+            $j++;
          }  // Ende Wenn !dont_write
 
          $i++;
-         $j++;
 
          // Jetzt wird die jtzige die vorherige Kategorie
          $previous_cat_id = $row->lnk_cat_id;
 
          $new_category = false;
+    }  // Ende While-Schleife
 
-         }  // Ende While-Schleife
-
-     // Es wurde noch gar nichts geschrieben ODER ein einzelner Link ist versteckt
-     if (!$did_write_something)
-     {
+    // Es wurde noch gar nichts geschrieben ODER ein einzelner Link ist versteckt
+    if (!$did_write_something)
+    {
         echo "<!-- Versteckte Kategorie -->
-              <p>Es sind keine Eintr&auml;ge vorhanden.</p>";
-     }
+        <p>Es sind keine Eintr&auml;ge vorhanden.</p>";
+    }
 
-     echo "</div>";
+    echo "</div>";
 } // Ende Wenn mehr als 0 Datensaetze
 
 if (mysql_num_rows($links_result) > 2)
