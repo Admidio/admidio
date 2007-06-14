@@ -335,7 +335,7 @@ if($req_mode != "csv")
         {
             echo "<span class=\"iconLink\">
                 <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/mail/mail.php?rol_id=$req_rol_id\"><img
-                class=\"iconLink\" src=\"$g_root_path/adm_program/images/mail.png\" style=\"vertical-align: middle; cursor: pointer;\"
+                class=\"iconLink\" src=\"$g_root_path/adm_program/images/email.png\" style=\"vertical-align: middle; cursor: pointer;\"
                 border=\"0\" alt=\"E-Mail an Mitglieder\"></a>
                 <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/mail/mail.php?rol_id=$req_rol_id\">E-Mail an Mitglieder</a>
             </span>

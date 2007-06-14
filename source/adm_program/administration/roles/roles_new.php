@@ -355,7 +355,7 @@ echo "
                             echo " disabled ";
                         }                                
                         echo " value=\"1\" />&nbsp;
-                        <label for=\"rol_mail_logout\"><img src=\"$g_root_path/adm_program/images/mail.png\" alt=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\"></label>
+                        <label for=\"rol_mail_logout\"><img src=\"$g_root_path/adm_program/images/email.png\" alt=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\"></label>
                     </div>
                     <div style=\"text-align: left;\">
                         <label for=\"rol_mail_logout\">Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben&nbsp;</label>
@@ -375,7 +375,7 @@ echo "
                             echo " disabled ";
                         }                                
                         echo " value=\"1\" />&nbsp;
-                        <label for=\"rol_mail_login\"><img src=\"$g_root_path/adm_program/images/mail_key.png\" alt=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\"></label>
+                        <label for=\"rol_mail_login\"><img src=\"$g_root_path/adm_program/images/email_key.png\" alt=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\"></label>
                     </div>
                     <div style=\"text-align: left;\">
                         <label for=\"rol_mail_login\">Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben&nbsp;</label>

@@ -619,7 +619,7 @@ echo "
         if($new_user == 2)
         {
             // Registrierung
-            $btn_image = "mail.png";
+            $btn_image = "email.png";
             $btn_text  = "Abschicken";
         }
         else

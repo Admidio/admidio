@@ -144,7 +144,7 @@ echo "
             }           
             echo "
             <tr id=\"row_$row->usf_id\" class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
-                <td style=\"text-align: center\"><img class=\"dragable\" src=\"$g_root_path/adm_program/images/arrow_out.png\" style=\"cursor: move;\" border=\"0\" alt=\"Reihenfolge &auml;ndern\" title=\"Reihenfolge &auml;ndern\"></td>
+                <td style=\"text-align: left; width: 18px;\"><img class=\"dragable\" src=\"$g_root_path/adm_program/images/arrow_out.png\" style=\"cursor: move;\" border=\"0\" alt=\"Reihenfolge &auml;ndern\" title=\"Reihenfolge &auml;ndern\"></td>
                 <td style=\"text-align: left;\"><a href=\"$g_root_path/adm_program/administration/members/fields_new.php?usf_id=$row->usf_id\">$row->usf_name</a></td>
                 <td style=\"text-align: left;\">$row->usf_description</td>
                 <td style=\"text-align: center;\">";

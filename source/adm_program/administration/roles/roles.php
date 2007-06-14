@@ -133,7 +133,7 @@ echo "
                 WHERE rol_valid  = $req_valid
                   AND rol_cat_id = cat_id
                   AND cat_org_id = $g_current_organization->id
-                ORDER BY cat_sequence, rol_name ";
+                ORDER BY cat_sequence ASC, rol_name ASC ";
     $usr_result = mysql_query($sql, $g_adm_con);
     db_error($result,__FILE__,__LINE__);
 
@@ -145,12 +145,18 @@ echo "
             {
                 echo "</tbody>";
             }
+            $image_hidden = "";
+            if($row->cat_hidden == 1)
+            {
+                $image_hidden = "<img src=\"$g_root_path/adm_program/images/user_key.png\" 
+                            style=\"vertical-align: middle;\" border=\"0\" alt=\"Nur sichtbar f&uuml;r eingeloggte Benutzer\" title=\"Nur sichtbar f&uuml;r eingeloggte Benutzer\">";
+            }
             echo "<tbody>
                 <tr>
                     <td class=\"tableSubHeader\" colspan=\"4\">
                         <div class=\"tableSubHeaderFont\" style=\"float: left;\"><a
                             href=\"javascript:showHideCategory('$row->cat_name')\"><img name=\"img_$row->cat_name\" src=\"$g_root_path/adm_program/images/bullet_toggle_minus.png\" 
-                            style=\"vertical-align: middle;\" border=\"0\" alt=\"ausblenden\"></a>$row->cat_name</div>
+                            style=\"vertical-align: middle;\" border=\"0\" alt=\"ausblenden\"></a>$row->cat_name $image_hidden</div>
                         <div class=\"smallFontSize\" style=\"text-align: right;\"><a id=\"lnk_$row->cat_name\"
                             href=\"javascript:showHideCategory('$row->cat_name')\">ausblenden</a>&nbsp;</div>
                     </td>
@@ -212,12 +218,12 @@ echo "
                 }
                 if($row->rol_mail_logout == 1 && $g_preferences['enable_mail_module'] == 1)
                 {
-                    echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/mail.png\"
+                    echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/email.png\"
                     alt=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\" title=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\">";
                 }
                 if($row->rol_mail_login == 1 && $g_preferences['enable_mail_module'] == 1)
                 {
-                    echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/mail_key.png\"
+                    echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/email_key.png\"
                     alt=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\" title=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\">";
                 }
                 if($row->rol_weblinks == 1 && $g_preferences['enable_weblinks_module'] == 1)

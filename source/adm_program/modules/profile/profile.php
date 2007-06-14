@@ -255,7 +255,7 @@ echo "</div>
                     else
                         $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?usr_id=$user->id";
                     echo "<a href=\"$mail_link\">
-                    <img src=\"$g_root_path/adm_program/images/mail.png\" style=\"vertical-align: middle;\" alt=\"E-Mail an $user->email schreiben\"
+                    <img src=\"$g_root_path/adm_program/images/email.png\" style=\"vertical-align: middle;\" alt=\"E-Mail an $user->email schreiben\"
                     title=\"E-Mail an $user->email schreiben\" border=\"0\"></a>
                     <a href=\"$mail_link\" style=\" overflow: visible; display: inline;\">";
                     if(strlen($user->email) > 25)
@@ -506,7 +506,7 @@ echo "</div>
                                             $mail_link = "mailto:$row_field->usd_value";
                                         }
                                         echo "<a href=\"$mail_link\">
-                                        <img src=\"$g_root_path/adm_program/images/mail.png\" style=\"vertical-align: middle;\" alt=\"E-Mail an $row_field->usd_value schreiben\"
+                                        <img src=\"$g_root_path/adm_program/images/email.png\" style=\"vertical-align: middle;\" alt=\"E-Mail an $row_field->usd_value schreiben\"
                                         title=\"E-Mail an $row_field->usd_value schreiben\" border=\"0\"></a>
                                         <a href=\"$mail_link\" style=\" overflow: visible; display: inline;\">";
                                         if(strlen($row_field->usd_value) > 25)

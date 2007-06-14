@@ -479,7 +479,7 @@ echo "
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
          }
         echo "<button name=\"abschicken\" type=\"submit\" value=\"abschicken\">
-           <img src=\"$g_root_path/adm_program/images/mail.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Abschicken\">
+           <img src=\"$g_root_path/adm_program/images/email.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Abschicken\">
            &nbsp;Abschicken</button>
      </div>
   </div>

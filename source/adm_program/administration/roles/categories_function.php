@@ -15,6 +15,8 @@
  * mode:   1 - Kategorie anlegen oder updaten
  *         2 - Kategorie loeschen
  *         3 - Frage, ob Kategorie geloescht werden soll
+ *         4 - Reihenfolge fuer die uebergebene usf_id anpassen
+ * sequence: neue Reihenfolge fuer die uebergebene usf_id
  *
  ******************************************************************************
  *
@@ -35,12 +37,21 @@
  
 require("../../system/common.php");
 require("../../system/login_valid.php");
+require("../../system/category_class.php");
 
 // lokale Variablen der Uebergabevariablen initialisieren
-$req_type   = "";
 $req_cat_id = 0;
 
 // Uebergabevariablen pruefen
+
+if(isset($_GET['cat_id']))
+{
+    if(is_numeric($_GET['cat_id']) == false)
+    {
+        $g_message->show("invalid");
+    }
+    $req_cat_id = $_GET['cat_id'];
+}
 
 // Modus und Rechte pruefen
 if(isset($_GET['type']))
@@ -61,7 +72,6 @@ if(isset($_GET['type']))
     {
         $g_message->show("norights");
     }
-    $req_type = $_GET['type'];
 }
 else
 {
@@ -69,106 +79,111 @@ else
 }
 
 if(is_numeric($_GET["mode"]) == false
-|| $_GET["mode"] < 1 || $_GET["mode"] > 3)
+|| $_GET["mode"] < 1 || $_GET["mode"] > 4)
 {
     $g_message->show("invalid");
 }
 
-if(isset($_GET['cat_id']))
+if(isset($_GET['sequence']))
 {
-    if(is_numeric($_GET['cat_id']) == false)
+    if(is_numeric($_GET['sequence']) == false)
     {
         $g_message->show("invalid");
     }
-    $req_cat_id = $_GET['cat_id'];
+}
+
+// UserField-objekt anlegen
+$category = new Category($g_adm_con);
+
+if($req_cat_id > 0)
+{
+    $category->getCategory($req_cat_id);
+    
+    // Pruefung, ob die Kategorie zur aktuellen Organisation gehoert bzw. allen verfuegbar ist
+    if($category->getValue("cat_org_id") >  0
+    && $category->getValue("cat_org_id") != $g_current_organization->id)
+    {
+        $g_message->show("norights");
+    }
+}
+else
+{
+    // es wird eine neue Kategorie angelegt
+    $category->setValue("cat_org_id", $g_current_organization->id);
+    $category->setValue("cat_type", $_GET['type']);
 }
 
 $err_code = "";
-$err_text = "";
 
 if($_GET['mode'] == 1)
 {
     // Feld anlegen oder updaten
 
     $_SESSION['categories_request'] = $_REQUEST;
-    $category_name = strStripTags($_POST['name']);
 
-    if(strlen($category_name) > 0)
+    if(strlen($_POST['cat_name']) == 0)
     {
-        if($req_cat_id == 0)
-        {
-            // Schauen, ob die Kategorie bereits existiert
-            $sql    = "SELECT COUNT(*) as count 
-                         FROM ". TBL_CATEGORIES. "
-                        WHERE (  cat_org_id  = $g_current_organization->id
-                              OR cat_org_id IS NULL )
-                          AND cat_type   = {0}
-                          AND cat_name   LIKE {1} ";
-            $sql    = prepareSQL($sql, array($req_type, $category_name));
-            $result = mysql_query($sql, $g_adm_con);
-            db_error($result,__FILE__,__LINE__);
-            $row = mysql_fetch_array($result);
-
-            if($row['count'] > 0)
-            {
-                $g_message->show("category_exist");
-            }      
-        }
-
-        if(array_key_exists("hidden", $_POST))
-        {
-            $hidden = 1;
-        }
-        else
-        {
-            $hidden = 0;
-        }
-
-        if($req_cat_id > 0)
-        {
-            $sql = "UPDATE ". TBL_CATEGORIES. "
-                       SET cat_name   = {0}
-                         , cat_hidden = $hidden
-                     WHERE cat_id     = {1}";
-        }
-        else
-        {
-            // Feld in Datenbank hinzufuegen
-            $sql    = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden)
-                                                 VALUES ($g_current_organization->id, {2}, {0}, $hidden) ";
-        }
-        $sql    = prepareSQL($sql, array(trim($category_name), $req_cat_id, $req_type));
+        $g_message->show("feld", "Name");
+    }
+    
+    if($req_cat_id == 0)
+    {
+        // Schauen, ob die Kategorie bereits existiert
+        $sql    = "SELECT COUNT(*) as count 
+                     FROM ". TBL_CATEGORIES. "
+                    WHERE (  cat_org_id  = $g_current_organization->id
+                          OR cat_org_id IS NULL )
+                      AND cat_type = '". $_GET['type']. "'
+                      AND cat_name LIKE '". $_POST['cat_name']. "'";
         $result = mysql_query($sql, $g_adm_con);
         db_error($result,__FILE__,__LINE__);
-       
-        $_SESSION['navigation']->deleteLastUrl();
-        unset($_SESSION['categories_request']);
+        $row = mysql_fetch_array($result);
+
+        if($row['count'] > 0)
+        {
+            $g_message->show("category_exist");
+        }      
+    }
+
+    if(isset($_POST['cat_hidden']) == false)
+    {
+        $_POST['cat_hidden'] = 0;
+    }
+    
+    // POST Variablen in das UserField-Objekt schreiben
+    foreach($_POST as $key => $value)
+    {
+        if(strpos($key, "cat_") === 0)
+        {
+            $category->setValue($key, $value);
+        }
+    }
+    
+    // Daten in Datenbank schreiben
+    if($_GET['cat_id'] > 0)
+    {
+        $return_code = $category->update();
     }
     else
     {
-        // es sind nicht alle Felder gefuellt
-        $err_text = "Name";
-        $err_code = "feld";
+        $return_code = $category->insert();
     }
 
-    if(strlen($err_code) > 0)
+    if($return_code < 0)
     {
-        $g_message->show($err_code, $err_text);
-    }
+        $g_message->show("norights");
+    } 
+
+    $_SESSION['navigation']->deleteLastUrl();
+    unset($_SESSION['categories_request']);
 
     $err_code = "save";
 }
 elseif($_GET['mode'] == 2 || $_GET["mode"] == 3)
 {
     // Kategorie loeschen
-
-    $sql = "SELECT cat_name, cat_system FROM ". TBL_CATEGORIES. "
-             WHERE cat_id = $req_cat_id ";
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
-    $row = mysql_fetch_array($result);
-
-    if($row['cat_system'] == 1)
+    
+    if($category->getValue("cat_system") == 1)
     {
         // Systemfelder duerfen nicht geloescht werden
         $g_message->show("invalid");
@@ -176,43 +191,29 @@ elseif($_GET['mode'] == 2 || $_GET["mode"] == 3)
     
     if($_GET['mode'] == 2)
     {
-        // erst einmal zugehoerige Daten loeschen
-        if($req_type == 'ROL')
-        {
-            $sql    = "DELETE FROM ". TBL_ROLES. "
-                        WHERE rol_cat_id = $req_cat_id ";
-            $result = mysql_query($sql, $g_adm_con);
-            db_error($result,__FILE__,__LINE__);
-        }
-        elseif($req_type == 'LNK')
-        {
-            $sql    = "DELETE FROM ". TBL_LINKS. "
-                        WHERE lnk_cat_id = $req_cat_id ";
-            $result = mysql_query($sql, $g_adm_con);
-            db_error($result,__FILE__,__LINE__);
-        }
-        elseif($req_type == 'USF')
-        {
-            $sql    = "DELETE FROM ". TBL_USER_FIELDS. "
-                        WHERE usf_cat_id = $req_cat_id ";
-            $result = mysql_query($sql, $g_adm_con);
-            db_error($result,__FILE__,__LINE__);
-        }
-
         // Feld loeschen
-        $sql    = "DELETE FROM ". TBL_CATEGORIES. "
-                    WHERE cat_id = $req_cat_id";
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result,__FILE__,__LINE__);
+        $category->delete();
 
         $err_code = "delete";
     }
-    else
+    elseif($_GET["mode"] == 3)
     {
         // Frage, ob Kategorie geloescht werden soll
-        $g_message->setForwardYesNo("$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=$req_cat_id&mode=2&type=$req_type");
-        $g_message->show("delete_category", utf8_encode($row['cat_name']), "Löschen");
+        $g_message->setForwardYesNo("$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=$req_cat_id&mode=2&type=". $_GET['type']);
+        $g_message->show("delete_category", utf8_encode($category->getValue("cat_name")), "Löschen");
+    }    
+}
+elseif($_GET['mode'] == 4)
+{
+    // Feldreihenfolge aktualisieren
+    $sequence_old = $category->getValue("cat_sequence");
+    
+    if($sequence_old != $_GET['sequence'])
+    {
+        $category->setValue("cat_sequence", $_GET['sequence']);
+        $category->update();
     }
+    exit();
 }
          
 // zur Kategorienuebersicht zurueck

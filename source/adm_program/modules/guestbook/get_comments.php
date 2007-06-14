@@ -91,7 +91,7 @@ if (isset($comment_result))
                 {
                     echo "
                     <a href=\"mailto:$row->gbc_email\">
-                    <img src=\"$g_root_path/adm_program/images/mail.png\" style=\"vertical-align: middle;\" alt=\"Mail an $row->gbc_email\"
+                    <img src=\"$g_root_path/adm_program/images/email.png\" style=\"vertical-align: middle;\" alt=\"Mail an $row->gbc_email\"
                     title=\"Mail an $row->gbc_email\" border=\"0\"></a>";
                 }
 
@@ -161,7 +161,7 @@ if (isset($comment_result))
         echo "
         <div class=\"smallFontSize\" style=\"margin: 8px 4px 4px 4px;\">
             <a href=\"$load_url\">
-            <img src=\"$g_root_path/adm_program/images/new_comment.png\" style=\"vertical-align: middle;\" alt=\"Kommentieren\"
+            <img src=\"$g_root_path/adm_program/images/comment_new.png\" style=\"vertical-align: middle;\" alt=\"Kommentieren\"
             title=\"Kommentieren\" border=\"0\"></a>
             <a href=\"$load_url\">Einen Kommentar zu diesem Beitrag schreiben.</a>
         </div>";
