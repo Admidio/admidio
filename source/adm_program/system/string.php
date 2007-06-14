@@ -60,6 +60,26 @@ function strStripTags($srcString, $checkChar = 0)
     return $srcString;
 }
 
+// fuegt Quotes einem mittels addslashes() gequoteten Array und String hinzu
+function strAddSlashesDeep($value)
+{
+    $value = is_array($value) ?
+                array_map('strAddSlashesDeep', $value) :
+                addslashes($value);
+
+    return $value;
+}
+
+// Entfernt Quotes aus einem mittels addslashes() gequoteten Array und String
+function strStripSlashesDeep($value)
+{
+    $value = is_array($value) ?
+                array_map('strStripSlashesDeep', $value) :
+                stripslashes($value);
+
+    return $value;
+}
+
 // ermittelt den vorherigen oder nächsten Buchstaben im Alphabet
 // mode = 0  -> naechster Buchstabe
 // mode = 1  -> vorheriger Buchstabe

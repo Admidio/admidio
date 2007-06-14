@@ -78,6 +78,21 @@ define("TBL_USERS",             $g_tbl_praefix. "_users");
 define("TBL_USER_DATA",         $g_tbl_praefix. "_user_data");
 define("TBL_USER_FIELDS",       $g_tbl_praefix. "_user_fields");
 
+// Variablen von HMTL & PHP-Code befreien
+$_REQUEST = array_map("strStripTags", $_REQUEST);
+$_GET     = array_map("strStripTags", $_GET);
+$_POST    = array_map("strStripTags", $_POST);
+$_COOKIE  = array_map("strStripTags", $_COOKIE);
+
+// Anfuehrungszeichen escapen, damit DB-Abfragen sicher sind
+if(get_magic_quotes_gpc() == false)
+{
+    strAddSlashesDeep($_REQUEST);
+    strAddSlashesDeep($_GET);
+    strAddSlashesDeep($_POST);
+    strAddSlashesDeep($_COOKIE);
+}
+
  // Verbindung zu Datenbank herstellen
 $g_adm_con = @mysql_connect ($g_adm_srv, $g_adm_usr, $g_adm_pw);
 if($g_adm_con == false)
