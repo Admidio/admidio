@@ -32,9 +32,9 @@
  
 require("../../system/common.php");
 require("../../system/login_valid.php");
+require("../../system/category_class.php");
 
 // lokale Variablen der Uebergabevariablen initialisieren
-$req_type   = "";
 $req_cat_id = 0;
 
 // Uebergabevariablen pruefen
@@ -58,7 +58,6 @@ if(isset($_GET['type']))
     {
         $g_message->show("norights");
     }
-    $req_type = $_GET['type'];
 }
 else
 {
@@ -76,32 +75,33 @@ if(isset($_GET['cat_id']))
 
 $_SESSION['navigation']->addUrl($g_current_url);
 
+// UserField-objekt anlegen
+$category = new Category($g_adm_con);
+
+if($req_cat_id > 0)
+{
+    $category->getCategory($req_cat_id);
+    
+    // Pruefung, ob die Kategorie zur aktuellen Organisation gehoert bzw. allen verfuegbar ist
+    if($category->getValue("cat_org_id") >  0
+    && $category->getValue("cat_org_id") != $g_current_organization->id)
+    {
+        $g_message->show("norights");
+    }
+}
+
 if(isset($_SESSION['categories_request']))
 {
-   $form_values = $_SESSION['categories_request'];
-   unset($_SESSION['categories_request']);
-}
-else
-{ 
-    $form_values['name']   = " ";
-    $form_values['hidden'] = 0;
-
-    // Wenn eine Feld-ID uebergeben wurde, soll das Feld geaendert werden
-    // -> Felder mit Daten des Feldes vorbelegen
-    if($req_cat_id > 0)
+    // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
+    // nun die vorher eingegebenen Inhalte auslesen
+    foreach($_SESSION['categories_request'] as $key => $value)
     {
-        $sql    = "SELECT * FROM ". TBL_CATEGORIES. " WHERE cat_id = {0}";
-        $sql    = prepareSQL($sql, array($req_cat_id));
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result,__FILE__,__LINE__);
-    
-        if (mysql_num_rows($result) > 0)
+        if(strpos($key, "cat_") == 0)
         {
-            $row_cat = mysql_fetch_object($result);
-            $form_values['name']   = $row_cat->cat_name;
-            $form_values['hidden'] = $row_cat->cat_hidden;
-        }
+            $category->setValue($key, $value);
+        }        
     }
+    unset($_SESSION['categories_request']);
 }
 
 // Html-Kopf ausgeben
@@ -110,7 +110,7 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 // Html des Modules ausgeben
 echo "
-<form action=\"$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=$req_cat_id&amp;type=". $_GET["type"]. "&amp;mode=1&amp;type=$req_type\" method=\"post\" id=\"edit_category\">
+<form action=\"$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=$req_cat_id&amp;type=". $_GET["type"]. "&amp;mode=1\" method=\"post\" id=\"edit_category\">
     <div class=\"formHead\">";
         if($req_cat_id > 0)
         {
@@ -125,22 +125,22 @@ echo "
         <div>
             <div style=\"text-align: right; width: 23%; float: left;\">Name:</div>
             <div style=\"text-align: left; margin-left: 24%;\">
-                <input type=\"text\" id=\"name\" name=\"name\" size=\"30\" maxlength=\"30\" value=\"". htmlspecialchars($form_values['name'], ENT_QUOTES). "\">
+                <input type=\"text\" id=\"cat_name\" name=\"cat_name\" size=\"30\" maxlength=\"30\" value=\"". htmlspecialchars($category->getValue("cat_name"), ENT_QUOTES). "\">
                 <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
             </div>
         </div>
         <div style=\"margin-top: 6px;\">
             <div style=\"text-align: right; width: 23%; float: left;\">
-                <label for=\"hidden\"><img src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\"></label>
+                <label for=\"hidden\"><img src=\"$g_root_path/adm_program/images/user_key.png\" alt=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\"></label>
             </div>
             <div style=\"text-align: left; margin-left: 24%;\">
-                <input type=\"checkbox\" id=\"hidden\" name=\"hidden\" ";
-                    if(isset($form_values['hidden']) && $form_values['hidden'] == 1)
+                <input type=\"checkbox\" id=\"cat_hidden\" name=\"cat_hidden\" ";
+                    if($category->getValue("cat_hidden") == 1)
                     {
                         echo " checked ";
                     }
                     echo " value=\"1\" />
-                <label for=\"hidden\">Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar&nbsp;</label>
+                <label for=\"cat_hidden\">Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar&nbsp;</label>
             </div>
         </div>
 

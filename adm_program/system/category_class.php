@@ -1,20 +1,19 @@
 <?php
 /******************************************************************************
- * Klasse fuer Datenbanktabelle adm_user_fields
+ * Klasse fuer Datenbanktabelle adm_categories
  *
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  *
- * Diese Klasse dient dazu einen Benutzerdefiniertes Feldobjekt zu erstellen.
- * Eine Benutzerdefiniertes Feldobjekt kann ueber diese Klasse in der Datenbank 
- * verwaltet werden
+ * Diese Klasse dient dazu einen Kategorieobjekt zu erstellen.
+ * Eine Kategorieobjekt kann ueber diese Klasse in der Datenbank verwaltet werden
  *
  * Das Objekt wird erzeugt durch Aufruf des Konstruktors und der Uebergabe der
  * aktuellen Datenbankverbindung:
- * $user_field = new UserField($g_adm_con);
+ * $category = new Category($g_adm_con);
  *
- * Mit der Funktion getUserField($user_id) kann das gewuenschte Feld ausgelesen
+ * Mit der Funktion getCategory($cat_id) kann das gewuenschte Feld ausgelesen
  * werden.
  *
  * Folgende Funktionen stehen weiter zur Verfuegung:
@@ -45,18 +44,18 @@
  *
  *****************************************************************************/
 
-class UserField
+class Category
 {
     var $db_connection;
     var $db_fields = array();
 
     // Konstruktor
-    function UserField($connection, $usf_id = 0)
+    function Category($connection, $cat_id = 0)
     {
         $this->db_connection = $connection;
-        if($usf_id > 0)
+        if($cat_id > 0)
         {
-            $this->getUserField($usf_id);
+            $this->getCategory($cat_id);
         }
         else
         {
@@ -65,16 +64,16 @@ class UserField
     }
 
     // Benutzerdefiniertes Feld mit der uebergebenen ID aus der Datenbank auslesen
-    function getUserField($usf_id)
+    function getCategory($cat_id)
     {
         $this->clear();
         
-        if($usf_id > 0 && is_numeric($usf_id))
+        if($cat_id > 0 && is_numeric($cat_id))
         {
             $sql = "SELECT * 
-                      FROM ". TBL_USER_FIELDS. ", ". TBL_CATEGORIES. " 
-                     WHERE usf_cat_id = cat_id
-                       AND usf_id     = $usf_id";
+                      FROM ". TBL_CATEGORIES. " 
+                     WHERE cat_id     = $cat_id";
+                     error_log($sql);
             $result = mysql_query($sql, $this->db_connection);
             db_error($result,__FILE__,__LINE__);
 
@@ -103,7 +102,7 @@ class UserField
         {
             // alle Spalten der Tabelle adm_roles ins Array einlesen 
             // und auf null setzen
-            $sql = "SHOW COLUMNS FROM ". TBL_USER_FIELDS;
+            $sql = "SHOW COLUMNS FROM ". TBL_CATEGORIES;
             $result = mysql_query($sql, $this->db_connection);
             db_error($result,__FILE__,__LINE__);
             
@@ -140,32 +139,17 @@ class UserField
         // Plausibilitaetspruefungen
         switch($field_name)
         {
-            case "usf_id":
-            case "usf_cat_id":
+            case "cat_id":
+            case "cat_org_id":
                 if(is_numeric($field_value) == false 
                 || $field_value == 0)
                 {
                     $field_value = null;
                 }
-                
-                if($field_name == "usf_cat_id"
-                && $this->db_fields[$field_name] != $field_value)
-                {
-                    // erst einmal die hoechste Reihenfolgennummer der Kategorie ermitteln
-                    $sql = "SELECT COUNT(*) as count FROM ". TBL_USER_FIELDS. "
-                             WHERE usf_cat_id = $field_value";
-                    $result = mysql_query($sql, $this->db_connection);
-                    db_error($result,__FILE__,__LINE__);
-
-                    $row = mysql_fetch_array($result);
-
-                    $this->db_fields['usf_sequence'] = $row['count'] + 1;
-                }
                 break;
             
-            case "usf_system":
-            case "usf_disabled":
-            case "usf_hidden":
+            case "cat_system":
+            case "cat_hidden":
                 if($field_value != 1)
                 {
                     $field_value = 0;
@@ -187,8 +171,8 @@ class UserField
     function update()
     {
         if(count($this->db_fields)    > 0
-        && $this->db_fields['usf_id'] > 0 
-        && is_numeric($this->db_fields['usf_id']))
+        && $this->db_fields['cat_id'] > 0 
+        && is_numeric($this->db_fields['cat_id']))
         {
             $act_date = date("Y-m-d H:i:s", time());
 
@@ -200,7 +184,7 @@ class UserField
             foreach($this->db_fields as $key => $value)
             {
                 // ID und andere Tabellenfelder sollen nicht im Insert erscheinen
-                if($key != "usf_id" && strpos($key, "usf_") === 0) 
+                if($key != "cat_id" && strpos($key, "cat_") === 0) 
                 {
                     if(strlen($value) == 0)
                     {
@@ -223,7 +207,7 @@ class UserField
                 }
             }
 
-            $sql = "UPDATE ". TBL_USER_FIELDS. " SET $sql_field_list WHERE usf_id = ". $this->db_fields['usf_id'];
+            $sql = "UPDATE ". TBL_CATEGORIES. " SET $sql_field_list WHERE cat_id = ". $this->db_fields['cat_id'];
             $result = mysql_query($sql, $this->db_connection);
             db_error($result,__FILE__,__LINE__);
             return 0;
@@ -236,10 +220,22 @@ class UserField
     {
         global $g_current_organization;
         
-        if(isset($this->db_fields['usf_id']) == false
-        || $this->db_fields['usf_id']        == 0 )
+        if(isset($this->db_fields['cat_id']) == false
+        || $this->db_fields['cat_id']        == 0 )
         {
             $act_date = date("Y-m-d H:i:s", time());
+
+            // erst einmal die hoechste Reihenfolgennummer der Kategorie ermitteln
+            $sql = "SELECT COUNT(*) as count FROM ". TBL_CATEGORIES. "
+                     WHERE (  cat_org_id  = $g_current_organization->id
+                           OR cat_org_id IS NULL )
+                       AND cat_type = '". $this->db_fields['cat_type']. "'";
+            $result = mysql_query($sql, $this->db_connection);
+            db_error($result,__FILE__,__LINE__);
+
+            $row = mysql_fetch_array($result);
+
+            $this->db_fields['cat_sequence'] = $row['count'] + 1;
             
             // SQL-Update-Statement zusammenbasteln
             $item_connection = "";
@@ -250,7 +246,7 @@ class UserField
             foreach($this->db_fields as $key => $value)
             {
                 // ID und andere Tabellenfelder sollen nicht im Insert erscheinen
-                if($key != "usf_id" && strlen($value) > 0 && strpos($key, "usf_") === 0) 
+                if($key != "cat_id" && strlen($value) > 0 && strpos($key, "cat_") === 0) 
                 {
                     $sql_field_list = $sql_field_list. " $item_connection $key ";
                     if(is_numeric($value))
@@ -270,11 +266,11 @@ class UserField
                 }
             }
                         
-            $sql = "INSERT INTO ". TBL_USER_FIELDS. " ($sql_field_list) VALUES ($sql_value_list) ";
+            $sql = "INSERT INTO ". TBL_CATEGORIES. " ($sql_field_list) VALUES ($sql_value_list) ";
             $result = mysql_query($sql, $this->db_connection);
             db_error($result,__FILE__,__LINE__);
             
-            $this->db_fields['usf_id'] = mysql_insert_id($this->db_connection);
+            $this->db_fields['cat_id'] = mysql_insert_id($this->db_connection);
             return 0;
         }
         return -1;
@@ -283,13 +279,32 @@ class UserField
     // aktuelles Feld loeschen
     function delete()
     {
-        $sql    = "DELETE FROM ". TBL_USER_DATA. "
-                    WHERE usd_usf_id = ". $this->db_fields['usf_id'];
-        $result = mysql_query($sql, $this->db_connection);
-        db_error($result,__FILE__,__LINE__);
+        // erst einmal zugehoerige Daten loeschen
+        if($this->db_fields['cat_type'] == 'ROL')
+        {
+            $sql    = "DELETE FROM ". TBL_ROLES. "
+                        WHERE rol_cat_id = ". $this->db_fields['cat_id'];
+            $result = mysql_query($sql, $this->db_connection);
+            db_error($result,__FILE__,__LINE__);
+        }
+        elseif($this->db_fields['cat_type'] == 'LNK')
+        {
+            $sql    = "DELETE FROM ". TBL_LINKS. "
+                        WHERE lnk_cat_id = ". $this->db_fields['cat_id'];
+            $result = mysql_query($sql, $this->db_connection);
+            db_error($result,__FILE__,__LINE__);
+        }
+        elseif($this->db_fields['cat_type'] == 'USF')
+        {
+            $sql    = "DELETE FROM ". TBL_USER_FIELDS. "
+                        WHERE usf_cat_id = ". $this->db_fields['cat_id'];
+            $result = mysql_query($sql, $this->db_connection);
+            db_error($result,__FILE__,__LINE__);
+        }
 
-        $sql    = "DELETE FROM ". TBL_USER_FIELDS. "
-                    WHERE usf_id = ". $this->db_fields['usf_id'];
+        // Feld loeschen
+        $sql    = "DELETE FROM ". TBL_CATEGORIES. "
+                    WHERE cat_id = ". $this->db_fields['cat_id'];
         $result = mysql_query($sql, $this->db_connection);
         db_error($result,__FILE__,__LINE__);
 

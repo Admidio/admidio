@@ -396,7 +396,7 @@ if($num_members > 0)
             <th class=\"tableHeader\" align=\"right\">Nr.</th>
             <th class=\"tableHeader\" align=\"center\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/user.png\" alt=\"Mitglied bei $g_current_organization->longname\" title=\"Mitglied bei $g_current_organization->longname\" border=\"0\"></th>
             <th class=\"tableHeader\" align=\"left\">&nbsp;Name</th>
-            <th class=\"tableHeader\" align=\"center\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/mail.png\" alt=\"E-Mail\" title=\"E-Mail\"></th>
+            <th class=\"tableHeader\" align=\"center\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/email.png\" alt=\"E-Mail\" title=\"E-Mail\"></th>
             <th class=\"tableHeader\" align=\"center\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/globe.png\" alt=\"Homepage\" title=\"Homepage\"></th>
             <th class=\"tableHeader\" align=\"left\">&nbsp;Benutzer</th>
             <th class=\"tableHeader\" align=\"center\">&nbsp;Aktualisiert am</th>
@@ -441,7 +441,7 @@ if($num_members > 0)
                             {
                                 $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?usr_id=$row->usr_id";
                             }
-                            echo "<a href=\"$mail_link\"><img src=\"$g_root_path/adm_program/images/mail.png\"
+                            echo "<a href=\"$mail_link\"><img src=\"$g_root_path/adm_program/images/email.png\"
                                 alt=\"E-Mail an $row->usr_email schreiben\" title=\"E-Mail an $row->usr_email schreiben\" border=\"0\"></a>";
                         }
                     echo "</td>
