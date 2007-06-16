@@ -288,6 +288,10 @@ if($g_forum_integriert)
     // Nur wenn die Admidio Session valid ist, wird auf die Forum Session valid sein
     if($g_session_valid)
     {
+        // Ab und an werden die Userid, Username und Password aus der Session gelöscht. 
+		// Dies behebt den Fehler.
+		$g_forum->user($g_current_user->login_name);
+		
         // Wenn die Forum Session bereits valid ist, wird diese Abfrage uebersprungen
         if($g_forum->session_valid != TRUE)
         { 
