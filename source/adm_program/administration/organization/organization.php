@@ -33,7 +33,7 @@ if($g_current_user->isWebmaster() == false)
 }
 
 // der Installationsordner darf aus Sicherheitsgruenden nicht existieren
-if(!DEBUG && file_exists("../../../adm_install"))
+if($g_debug == 0 && file_exists("../../../adm_install"))
 {
     $g_message->show("installFolderExists");
 }
