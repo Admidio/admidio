@@ -48,9 +48,9 @@ if($g_forum_integriert)
 }
 
 // falls Debug-Kennzeichen nicht in config.php gesetzt wurde, dann hier auf false setzen
-if(!defined('DEBUG'))
+if(isset($g_debug) == false || $g_debug != 1)
 {
-    define('DEBUG', '0');
+    $g_debug = 0;
 }
 
  // Standard-Praefix ist adm auch wegen Kompatibilitaet zu alten Versionen
