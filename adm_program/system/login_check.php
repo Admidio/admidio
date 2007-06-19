@@ -49,8 +49,8 @@ $sql    = "SELECT usr_id
               AND mem_rol_id     = rol_id
               AND mem_valid      = 1
               AND rol_valid      = 1 
-			  AND rol_cat_id     = cat_id
-			  AND cat_org_id     = $g_current_organization->id ";
+              AND rol_cat_id     = cat_id
+              AND cat_org_id     = $g_current_organization->id ";
 $sql    = prepareSQL($sql, array($req_login_name));
 $result = mysql_query($sql, $g_adm_con);
 db_error($result,__FILE__,__LINE__);
@@ -80,8 +80,8 @@ if ($user_found >= 1)
         // alte Sessions des Users loeschen
 
         $sql    = "DELETE FROM ". TBL_SESSIONS. "
-                    WHERE ses_usr_id        LIKE '$user_row->usr_id'
-                      AND ses_org_shortname LIKE '$g_organization'  ";
+                    WHERE ses_usr_id        = $g_current_user->id
+                      AND ses_org_shortname = '$g_organization' ";
         $result = mysql_query($sql, $g_adm_con);
         db_error($result,__FILE__,__LINE__);
 
