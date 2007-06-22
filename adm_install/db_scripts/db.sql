@@ -197,6 +197,7 @@ create table %PRAEFIX%_user_fields
    usf_system                     tinyint(1) unsigned            not null default 0,
    usf_disabled                   tinyint(1) unsigned            not null default 0,
    usf_hidden                     tinyint(1) unsigned            not null default 0,
+   usf_mandatory                  tinyint(1) unsigned            not null default 0,
    usf_sequence						 smallint                       not null,
    primary key (usf_id)
 )

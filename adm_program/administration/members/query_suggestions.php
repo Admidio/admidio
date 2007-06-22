@@ -76,8 +76,14 @@ else
         // erst mal die Benutzerliste aus der DB holen und in der Session speichern
         if($members == true)
         {
-            $sql    = "SELECT DISTINCT usr_last_name, usr_first_name
-                         FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+            $sql    = "SELECT DISTINCT last_name.usd_value as last_name, first_name.usd_value as first_name
+                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_USERS. "
+                         LEFT JOIN ". TBL_USER_DATA. " as last_name
+                           ON last_name.usd_usr_id = usr_id
+                          AND last_name.usd_usf_id = ". $g_current_user->getProperty("Nachname", "usf_id"). "
+                         LEFT JOIN ". TBL_USER_DATA. " as first_name
+                           ON first_name.usd_usr_id = usr_id
+                          AND first_name.usd_usf_id = ". $g_current_user->getProperty("Vorname", "usf_id"). "
                         WHERE usr_valid = 1
                           AND mem_usr_id = usr_id
                           AND mem_rol_id = rol_id
@@ -85,12 +91,18 @@ else
                           AND rol_valid  = 1
                           AND rol_cat_id = cat_id
                           AND cat_org_id = $g_current_organization->id
-                        ORDER BY usr_last_name, usr_first_name ";
+                        ORDER BY last_name, first_name ";
         }
         else
         {
-            $sql    = "SELECT usr_last_name, usr_first_name
+            $sql    = "SELECT last_name.usd_value as last_name, first_name.usd_value as first_name
                          FROM ". TBL_USERS. "
+                         LEFT JOIN ". TBL_USER_DATA. " as last_name
+                           ON last_name.usd_usr_id = usr_id
+                          AND last_name.usd_usf_id = ". $g_current_user->getProperty("Nachname", "usf_id"). "
+                         LEFT JOIN ". TBL_USER_DATA. " as first_name
+                           ON first_name.usd_usr_id = usr_id
+                          AND first_name.usd_usf_id = ". $g_current_user->getProperty("Vorname", "usf_id"). "
                         WHERE usr_valid = 1
                         ORDER BY usr_last_name, usr_first_name ";
         }
@@ -100,7 +112,7 @@ else
         // Jetzt das komplette resultSet in ein Array schreiben...
         while($row = mysql_fetch_object($result_mgl))
         {
-            $entry=array('lastName' => $row->usr_last_name, 'firstName' => $row->usr_first_name);
+            $entry=array('lastName' => $row->last_name, 'firstName' => $row->first_name);
             $querySuggestions[]=$entry;
         }
 

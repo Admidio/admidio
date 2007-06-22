@@ -14,8 +14,9 @@ alter table %PRAEFIX%_user_fields add constraint FK_USF_CAT foreign key (usf_cat
       references %PRAEFIX%_categories (cat_id) on delete restrict on update restrict;
 ALTER TABLE %PRAEFIX%_user_fields ADD COLUMN `usf_system` tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER `usf_description`;
 ALTER TABLE %PRAEFIX%_user_fields CHANGE COLUMN `usf_locked` `usf_hidden` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0;
-ALTER TABLE %PRAEFIX%_user_fields ADD COLUMN `usf_disabled` tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER `usf_hidden`;
-ALTER TABLE %PRAEFIX%_user_fields ADD COLUMN `usf_sequence` smallint NOT NULL AFTER `usf_hidden`;
+ALTER TABLE %PRAEFIX%_user_fields ADD COLUMN `usf_disabled` tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER `usf_system`;
+ALTER TABLE %PRAEFIX%_user_fields ADD COLUMN `usf_mandatory` tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER `usf_hidden`;
+ALTER TABLE %PRAEFIX%_user_fields ADD COLUMN `usf_sequence` smallint NOT NULL AFTER `usf_mandatory`;
 
 -- User-Tabelle ergaenzen
 ALTER TABLE %PRAEFIX%_users ADD COLUMN `usr_text` text AFTER `usr_photo`;

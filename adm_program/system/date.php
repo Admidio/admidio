@@ -429,4 +429,39 @@ function dtFormatTime($time, $format = "")
     }
 }
 
+// Funktion berechnet aus dem Datum das Alter einer Person
+// Das Datum muss im Format "YYYY-MM-DD" (DB-Format) uebergeben werden
+
+function dtGetAge($date)
+{
+    // Alter berechnen
+    // Hier muss man aufpassen, da viele PHP-Funkionen nicht mit einem Datum vor 1970 umgehen koennen !!!
+    $act_date  = getDate(time());
+    $geb_day   = mysqldatetime("d", $date);
+    $geb_month = mysqldatetime("m", $date);
+    $geb_year  = mysqldatetime("y", $date);
+    $birthday  = false;
+
+    if($act_date['mon'] >= $geb_month)
+    {
+        if($act_date['mon'] == $geb_month)
+        {
+            if($act_date['mday'] >= $geb_day)
+            {
+                $birthday = true;
+            }
+        }
+        else
+        {
+            $birthday = true;
+        }
+    }
+    $age = $act_date['year'] - $geb_year;
+    if($birthday == false)
+    {
+        $age--;
+    }
+    return $age;
+}
+
 ?>

@@ -69,20 +69,24 @@ else
     $this_orga = false;
 }
 
-// pruefen, ob der User noch in anderen Organisationen aktiv ist
-$sql    = "SELECT rol_id
-             FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_CATEGORIES. "
-            WHERE rol_valid   = 1
-			  AND rol_cat_id  = cat_id
-              AND cat_org_id <> $g_current_organization->id
-              AND mem_rol_id  = rol_id
-              AND mem_valid   = 1
-              AND mem_usr_id  = {0} ";
-$sql    = prepareSQL($sql, array($_GET['user_id']));
-$result = mysql_query($sql, $g_adm_con);
-db_error($result,__FILE__,__LINE__);
-$other_orga = mysql_num_rows($result);
+if($_GET["mode"] != 1)
+{
+    // pruefen, ob der User noch in anderen Organisationen aktiv ist
+    $sql    = "SELECT rol_id
+                 FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_CATEGORIES. "
+                WHERE rol_valid   = 1
+                  AND rol_cat_id  = cat_id
+                  AND cat_org_id <> $g_current_organization->id
+                  AND mem_rol_id  = rol_id
+                  AND mem_valid   = 1
+                  AND mem_usr_id  = ". $_GET['user_id'];
+    $result = mysql_query($sql, $g_adm_con);
+    db_error($result,__FILE__,__LINE__);
+    $other_orga = mysql_num_rows($result);
 
+    // User-Objekt anlegen
+    $user = new User($g_adm_con, $_GET['user_id']);
+}
 
 if($_GET["mode"] == 1)
 {
@@ -128,7 +132,6 @@ if($_GET["mode"] == 1)
 elseif($_GET["mode"] == 2)
 {
     // User NUR aus der aktuellen Organisation entfernen
-    $user = new User($g_adm_con, $_GET['user_id']);
 
     // Es duerfen keine Webmaster entfernt werden
     if($g_current_user->isWebmaster() == false
@@ -140,7 +143,7 @@ elseif($_GET["mode"] == 2)
     // User muss zur aktuellen Orga dazugehoeren
     // kein Suizid ermoeglichen
     if($this_orga == false
-    || $g_current_user->id == $_GET['user_id'])
+    || $g_current_user->getValue("usr_id") == $_GET['user_id'])
     {
         $g_message->show("norights");
     }
@@ -148,21 +151,20 @@ elseif($_GET["mode"] == 2)
     $sql = "SELECT mem_id
               FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. "
              WHERE rol_valid  = 1
-		 	   AND rol_cat_id = cat_id
+               AND rol_cat_id = cat_id
                AND cat_org_id = $g_current_organization->id
                AND mem_rol_id = rol_id
                AND mem_valid  = 1
-               AND mem_usr_id = {0}";
-    $sql        = prepareSQL($sql, array($_GET['user_id']));
+               AND mem_usr_id = ". $_GET['user_id'];
     $result_mgl = mysql_query($sql, $g_adm_con);
     db_error($result_mgl,__FILE__,__LINE__);
 
-    while($row = mysql_fetch_object($result_mgl))
+    while($row = mysql_fetch_array($result_mgl))
     {
         // alle Rollen der aktuellen Gliedgemeinschaft auf ungueltig setzen
         $sql    = "UPDATE ". TBL_MEMBERS. " SET mem_valid = 0
                                               , mem_end   = NOW()
-                    WHERE mem_id = $row->mem_id ";
+                    WHERE mem_id = ". $row['mem_id'];
         $result = mysql_query($sql, $g_adm_con);
         db_error($result,__FILE__,__LINE__);
     }
@@ -173,7 +175,6 @@ elseif($_GET["mode"] == 2)
 elseif($_GET["mode"] == 3)
 {
     // User aus der Datenbank loeschen
-    $user = new User($g_adm_con, $_GET['user_id']);
     
     // Es duerfen keine Webmaster entfernt werden
     if($g_current_user->isWebmaster() == false
@@ -185,7 +186,7 @@ elseif($_GET["mode"] == 3)
     // User darf in keiner anderen Orga aktiv sein
     // kein Suizid ermoeglichen
     if($other_orga > 0
-    || $g_current_user->id == $_GET['user_id'])
+    || $g_current_user->getValue("usr_id") == $_GET['user_id'])
     {
         $g_message->show("norights");
     }
@@ -193,7 +194,7 @@ elseif($_GET["mode"] == 3)
     // Paralell im Forum loeschen, wenn g_forum gesetzt ist
     if($g_forum_integriert)
     {
-        $g_forum->userDelete($user->login_name);
+        $g_forum->userDelete($user->getValue("usr_login_name"));
         
         $err_code = "delete_forum_user";
     }
@@ -217,9 +218,6 @@ elseif($_GET["mode"] == 4)
         $g_message->show("norights");
     }
 
-    $user = new User($g_adm_con);
-    $user->GetUser($_GET['user_id']);
-
     if($g_preferences['enable_system_mails'] == 1)
     {
         // neues Passwort generieren
@@ -228,40 +226,38 @@ elseif($_GET["mode"] == 4)
 
         // Passwort des Users updaten
         $sql    = "UPDATE ". TBL_USERS. " SET usr_password = '$password_md5'
-                    WHERE usr_id = $user->id ";
+                    WHERE usr_id = ". $user->getValue("usr_id");
         $result = mysql_query($sql, $g_adm_con);
         db_error($result,__FILE__,__LINE__);
 
         // Mail an den User mit den Loginaten schicken
         $email = new Email();
         $email->setSender($g_preferences['email_administrator']);
-        $email->addRecipient($user->email, "$user->first_name $user->last_name");
+        $email->addRecipient($user->getValue("E-Mail"), $user->getValue("Vorname"). " ". $user->getValue("Nachname"));
         $email->setSubject(utf8_decode("Logindaten für "). $g_current_organization->homepage);
-        $email->setText(utf8_decode("Hallo "). $user->first_name. utf8_decode(",\n\ndu erhälst deine Logindaten für ").
+        $email->setText(utf8_decode("Hallo "). $user->getValue("Vorname"). utf8_decode(",\n\ndu erhälst deine Logindaten für ").
             $g_current_organization->homepage. utf8_decode(".\n\nBenutzername: ").
-            $user->login_name. utf8_decode("\nPasswort: $password\n\n".
+            $user->getValue("usr_login_name"). utf8_decode("\nPasswort: $password\n\n".
             "Das Passwort wurde automatisch generiert.\n".
             "Du solltest es nach dem Login in deinem Profil ändern.\n\n" .
             "Viele Grüße\nDie Webmaster"));
         if($email->sendEmail() == true)
         {
             $err_code = "mail_send";
-            $err_text = $user->email;
+            $err_text = $user->getValue("E-Mail");
         }
         else
         {
             $err_code = "mail_not_send";
-            $err_text = $user->email;
+            $err_text = $user->getValue("E-Mail");
         }
     }
 }
 elseif($_GET["mode"] == 5)
 {
     // Fragen, ob Zugangsdaten verschickt werden sollen
-    $user = new User($g_adm_con);
-    $user->GetUser($_GET['user_id']);
     $g_message->setForwardYesNo("$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET["user_id"]. "&mode=4");
-    $g_message->show("send_new_login", utf8_encode("$user->first_name $user->last_name"));
+    $g_message->show("send_new_login", utf8_encode($user->getValue("Vorname"). " ". $user->getValue("Nachname")));
 }
 elseif($_GET["mode"] == 6)
 {
@@ -274,20 +270,16 @@ elseif($_GET["mode"] == 6)
     elseif($this_orga == true && $other_orga > 0)
     {
         // User ist AUCH noch in anderen Orgas Mitglied -> User kann nur aus dieser Orga entfernt werden
-        $user = new User($g_adm_con);
-        $user->GetUser($_GET['user_id']);
         $g_message->setForwardYesNo("$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET["user_id"]. "&mode=2");
-        $g_message->addVariableContent(utf8_encode("$user->first_name $user->last_name"));
+        $g_message->addVariableContent(utf8_encode($user->getValue("Vorname"). " ". $user->getValue("Nachname")));
         $g_message->addVariableContent(utf8_encode($g_current_organization->longname));
         $g_message->show("remove_member", "", "Entfernen");
     }
     elseif($this_orga == false && $other_orga == 0)
     {
         // User ist in keiner Orga mehr Mitglied -> kann komplett geloescht werden
-        $user = new User($g_adm_con);
-        $user->GetUser($_GET['user_id']);
         $g_message->setForwardYesNo("$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET["user_id"]. "&mode=3");
-        $g_message->addVariableContent(utf8_encode("$user->first_name $user->last_name"));
+        $g_message->addVariableContent(utf8_encode($user->getValue("Vorname"). " ". $user->getValue("Nachname")));
         $g_message->addVariableContent(utf8_encode($g_current_organization->longname));
         $g_message->show("delete_user", "", "Löschen");
     }

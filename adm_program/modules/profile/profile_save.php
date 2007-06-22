@@ -71,6 +71,11 @@ else
     $new_user = 0;
 }
 
+if($new_user == 1 || $new_user == 2)
+{
+    $usr_id = 0;
+}
+
 // Registrierung deaktiviert, also auch diesen Modus sperren
 if(($new_user == 2 || $new_user == 3)
 && $g_preferences['registration_mode'] == 0)
@@ -80,9 +85,9 @@ if(($new_user == 2 || $new_user == 3)
 
 $_SESSION['profile_request'] = $_REQUEST;
 
-if(!isset($_POST['login_name']))
+if(!isset($_POST['usr_login_name']))
 {
-    $_POST['login_name'] = "";
+    $_POST['usr_login_name'] = "";
 }
 
 /*------------------------------------------------------------*/
@@ -93,14 +98,11 @@ if($new_user == 0 && $g_current_user->editProfile($usr_id) == false)
     $g_message->show("norights");
 }
 
-$user = new User($g_adm_con);
+$user = new User($g_adm_con, $usr_id);
 
 if($usr_id > 0)
 {
-    // Userdaten aus Datenbank holen
-    $user->getUser($usr_id);
-
-    if($user->valid == 1)
+    if($user->getValue("usr_valid") == 1)
     {
         // keine Webanmeldung, dann schauen, ob User überhaupt Mitglied in der Gliedgemeinschaft ist
         if(isMember($usr_id) == false)
@@ -109,8 +111,8 @@ if($usr_id > 0)
             $sql    = "SELECT *
                          FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. "
                         WHERE rol_valid   = 1
-					  	  AND rol_cat_id  = cat_id
-					  	  AND cat_org_id <> $g_current_organization->id
+                          AND rol_cat_id  = cat_id
+                          AND cat_org_id <> $g_current_organization->id
                           AND mem_rol_id  = rol_id
                           AND mem_valid   = 1
                           AND mem_usr_id  = $usr_id ";
@@ -128,208 +130,153 @@ if($usr_id > 0)
 }
 
 /*------------------------------------------------------------*/
-// Feldinhalte saeubern und der User-Klasse zuordnen
+// Feldinhalte pruefen der User-Klasse zuordnen
 /*------------------------------------------------------------*/
-
-if($g_current_user->isWebmaster() || $new_user > 0)
-{
-    // Diese Daten duerfen nur vom Webmaster bzw. bei Neuanlage geaendert werden
-    $user->last_name  = strStripTags($_POST['last_name']);
-    $user->first_name = strStripTags($_POST['first_name']);
-    $user->login_name = strStripTags($_POST['login_name']);
-}
-
-$user->email      = strStripTags($_POST['email']);
-
-// immer speichern, ausser bei der schnellen Registrierung
-if($new_user != 2 || $g_preferences['registration_mode'] != 1)
-{
-    $user->address    = strStripTags($_POST['address']);
-    $user->zip_code   = strStripTags($_POST['zip_code']);
-    $user->city       = strStripTags($_POST['city']);
-    $user->country    = strStripTags($_POST['country']);
-    $user->phone      = strStripTags($_POST['phone']);
-    $user->mobile     = strStripTags($_POST['mobile']);
-    $user->fax        = strStripTags($_POST['fax']);
-    $user->homepage   = strStripTags($_POST['homepage']);
-    $user->birthday   = strStripTags($_POST['birthday']);
-    if(isset($_POST['gender']))
-    {
-        $user->gender = $_POST['gender'];
-    }
-    else
-    {
-        // falls das Geschlecht nicht angegeben wurde, dann neutralen Wert eintragen
-        $user->gender = 0;
-    }
-}
-
-// falls Registrierung, dann die entsprechenden Felder noch besetzen
-if($new_user == 2)
-{
-    $user->valid = 0;
-    $user->reg_org_shortname = $g_current_organization->shortname;
-    $user->password = md5($_POST['password']);
-}
-
-/*------------------------------------------------------------*/
-// Felder prüfen
-/*------------------------------------------------------------*/
-if(strlen($user->last_name) == 0)
-{
-    $g_message->show("feld", "Name");
-}
-if(strlen($user->first_name) == 0)
-{
-    $g_message->show("feld", "Vorname");
-}
-// E-Mail-Adresse auf Gueltigkeit pruefen, Pflichtfeld bei Registrierung
-if(strlen($user->email) > 0 || $new_user == 2)
-{
-    if(!isValidEmailAddress($user->email))
-    {
-        $g_message->show("email_invalid");
-    }
-}
-if(strlen($user->login_name) > 0)
-{
-    // pruefen, ob der Benutzername bereits vergeben ist
-    $sql = "SELECT usr_id FROM ". TBL_USERS. "
-             WHERE usr_login_name = {0} ";
-    $sql    = prepareSQL($sql, array($user->login_name));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
-
-    if(mysql_num_rows($result) > 0)
-    {
-        $row = mysql_fetch_array($result);
-
-        if(strcmp($row[0], $usr_id) != 0)
-        {
-            $g_message->show("login_name");
-        }
-    }
-    
-    // pruefen, ob der Benutzername bereits im Forum vergeben ist, 
-    // Benutzernamenswechesel und diese Dinge
-    if($g_forum_integriert)
-    {
-        //$g_forum->userRegister($user->login_name);
-        
-        // pruefen, ob der Benutzername bereits im Forum vergeben ist
-        // Wenn die usr_id 0 ist, ist es eine Neuanmeldung, also nur den login_namen prüfen
-        if($usr_id == 0)
-        {
-            if($g_forum->userCheck($user->login_name))
-            {
-                $g_message->show("login_name_forum");
-            }
-        }
-        else
-        // Wenn die usr_id > 0, dann ist es eine Aenderung eines bestehenden Users, 
-        // also nachschauen, ob der neu gewählte login_name im Forum existiert.
-        {
-            // Erst mal den alten Usernamen holen
-            $sql = "SELECT usr_login_name FROM ". TBL_USERS. "
-                     WHERE usr_id =  $usr_id";
-            $result = mysql_query($sql, $g_adm_con);
-            db_error($result,__FILE__,__LINE__);
-            
-            if(mysql_num_rows($result) > 0)
-            {
-                $row = mysql_fetch_array($result);
-                
-                // Wenn der alte Benutzername leer ist, ist es eine Neuanmeldung im Forum
-                if(!$row[0])
-                {
-                    // Neuanmeldung im Forum
-                    $forum_new = TRUE;
-                    
-                    // Schauen, ob der neue Benutzername schon im Forum vorhanden ist
-                    if($g_forum->userCheck($user->login_name))
-                    {
-                        $g_message->show("login_name_forum");
-                    }
-                }
-                else
-                {
-                    // Bestehender User im Forum
-                    $forum_new = FALSE;
-                    $forum_old_username = $row[0];
-                    
-                    // Schauen, ob der neue Benutzername schon im Forum vorhanden ist
-                    if($g_forum->userCheck($user->login_name))
-                    {
-                        if($forum_old_username != $user->login_name)
-                        {
-                            $g_message->show("login_name_forum");
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-if(strlen($user->birthday) > 0)
-{
-    if(dtCheckDate($user->birthday) == false)
-    {
-        $g_message->show("date_invalid", "Geburtstag");
-    }
-}
 
 // bei Registrierung muss Loginname und Pw geprueft werden
 if($new_user == 2)
 {
-    if(strlen($user->login_name) == 0)
+    if(strlen($_POST['usr_login_name']) == 0)
     {
         $g_message->show("feld", "Benutzername");
     }
 
     // beide Passwortfelder muessen identisch sein
-    if ($_POST['password'] != $_POST['password2'])
+    if ($_POST['usr_password'] != $_POST['password2'])
     {
         $g_message->show("passwort");
     }
 
-    if(strlen($_POST['password']) == 0)
+    if(strlen($_POST['usr_password']) == 0)
     {
         $g_message->show("feld", "Passwort");
     }
 }
 
-// Feldinhalt der organisationsspezifischen Felder pruefen
-$sql = "SELECT usf_id, usf_name, usf_type
-          FROM ". TBL_USER_FIELDS. ", ". TBL_CATEGORIES. "
-         WHERE usf_cat_id = cat_id
-		   AND cat_org_id = $g_current_organization->id ";
-if(!$g_current_user->assignRoles())
+// nun alle Profilfelder pruefen
+foreach($user->db_user_fields as $key => $value)
 {
-    $sql = $sql. " AND usf_hidden = 0 ";
-}
-$result_msg = mysql_query($sql, $g_adm_con);
-db_error($result_msg,__FILE__,__LINE__);
-
-while($row = mysql_fetch_object($result_msg))
-{
-    // ein neuer Wert vorhanden
-    if(isset($_POST["usf-$row->usf_id"])
-    && strlen($_POST["usf-$row->usf_id"]) > 0)
+    $post_id = "usf-". $value['usf_id'];    
+    
+    if(isset($_POST[$post_id]))
     {
-        if($row->usf_type == "NUMERIC"
-        && is_numeric($_POST["usf-$row->usf_id"]) == false)
+        // Pflichtfelder muessen gefuellt sein
+        if($value['usf_mandatory'] == 1 && strlen($_POST[$post_id]) == 0)
         {
-            $g_message->show("field_numeric", $row->usf_name);
+            $g_message->show("feld", $value['usf_name']);
         }
-        if($row->usf_type == "DATE")
+
+        // gesperrte Felder duerfen nur von berechtigten Benutzern geaendert werden 
+        // Ausnahme bei der Registrierung
+        if($value['usf_disabled'] == 1 && $g_current_user->editUser() == false && $new_user != 2)
         {
-            if(dtCheckDate($_POST["usf-$row->usf_id"]) == false)
+            $g_message->show("norights");
+        }
+        
+        if(strlen($_POST[$post_id]) > 0)
+        {
+            // Pruefungen fuer die entsprechenden Datentypen
+            if($value['usf_type'] == "CHECKBOX")
             {
-                $g_message->show("date_invalid", $row->usf_name);
+                // Checkbox darf nur 1 oder 0 haben
+                if($_POST[$post_id] != 0 && $_POST[$post_id] != 1)
+                {
+                    $g_message->show("invalid");
+                }
             }
-            $_POST["usf-$row->usf_id"] = dtFormatDate($_POST["usf-$row->usf_id"], "Y-m-d");
+            elseif($value['usf_type'] == "DATE")
+            {
+                // Datum muss gueltig sein und formatiert werden
+                if(dtCheckDate($_POST[$post_id]) == false)
+                {
+                    $g_message->show("date_invalid", $value['usf_name']);
+                }
+                $_POST[$post_id] = dtFormatDate($_POST[$post_id], "Y-m-d");
+            }
+            elseif($value['usf_type'] == "EMAIL")
+            {
+                // Pruefung auf gueltige E-Mail-Adresse
+                if(!isValidEmailAddress($_POST[$post_id]))
+                {
+                    $g_message->show("email_invalid");
+                }        
+            }
+            elseif($value['usf_type'] == "NUMERIC")
+            {
+                // Zahl muss numerisch sein
+                if(is_numeric($_POST[$post_id]) == false)
+                {
+                    $g_message->show("field_numeric", $value['usf_name']);
+                }
+            }
+        }
+
+        $user->setValue($value['usf_name'], $_POST[$post_id]);
+    }
+    else
+    {
+        // Checkboxen uebergeben bei 0 keinen Wert, deshalb diesen hier setzen
+        if($value['usf_type'] == "CHECKBOX")
+        {
+            $user->setValue($value['usf_name'], "0");
         }
     }
+}
+
+$login_name_changed = false;
+
+if($g_current_user->isWebmaster() || $new_user > 0)
+{
+    // Loginname darf nur vom Webmaster bzw. bei Neuanlage geaendert werden    
+    if(strlen($_POST['usr_login_name']) > 0
+    && $_POST['usr_login_name'] != $user->getValue("usr_login_name"))
+    {
+        // pruefen, ob der Benutzername bereits vergeben ist
+        $sql = "SELECT usr_id FROM ". TBL_USERS. "
+                 WHERE usr_login_name = ". $_POST['usr_login_name'];
+        $result = mysql_query($sql, $g_adm_con);
+        db_error($result,__FILE__,__LINE__);
+
+        if(mysql_num_rows($result) > 0)
+        {
+            $row = mysql_fetch_array($result);
+
+            if(strcmp($row['usr_id'], $usr_id) != 0)
+            {
+                $g_message->show("login_name");
+            }
+        }
+        
+        $login_name_changed = true;
+
+        // pruefen, ob der Benutzername bereits im Forum vergeben ist, 
+        // Benutzernamenswechesel und diese Dinge
+        if($g_forum_integriert)
+        {
+            // pruefen, ob der Benutzername bereits im Forum vergeben ist
+            if($g_forum->userCheck($user->login_name))
+            {
+                $g_message->show("login_name_forum");
+            }
+            
+            // bisherigen Loginnamen merken, damit dieser spaeter im Forum geaendert werden kann
+            $forum_old_username = "";
+            if(strlen($user->getValue("usr_login_name")) > 0)
+            {
+                $forum_old_username = $user->getValue("usr_login_name");
+            }
+        }
+
+        $user->setValue("usr_login_name", $_POST['usr_login_name']);
+    }    
+}
+
+// falls Registrierung, dann die entsprechenden Felder noch besetzen
+if($new_user == 2)
+{
+    $user->setValue("usr_valid", 0);
+    $user->setValue("usr_reg_org_shortname", $g_current_organization->shortname);
+    $user->setValue("usr_password", md5($_POST['usr_password']));
 }
 
 
@@ -347,132 +294,38 @@ if ($new_user == 2 && $g_preferences['enable_registration_captcha'] == 1)
 // Benutzerdaten in Datenbank schreiben
 /*------------------------------------------------------------*/
 
-// Geburtstag fuer die DB formatieren
-if(strlen($user->birthday) > 0)
-{
-    $user->birthday = dtFormatDate($user->birthday, "Y-m-d");
-}
-
-if($usr_id > 0)
-{
-    // Vorher schauen ob es den Username im Forum schon gibt.
-    if($g_forum_integriert)
-    {
-        if($forum_new)
-        {
-            // Eine Neuanmeldung im Forum
-            $g_forum->userInsert($user->login_name, 1, $user->password, $user->email);
-        }
-        else
-        {
-            // Ein Update eines bestehenden Forumusers
-            $g_forum->usernameUpdate($user->login_name, $forum_old_username, 1, $user->password, $user->email);
-        }
-    }
-    $ret_code = $user->update($g_current_user->id);        
-}
-else
-{
-    if($g_forum_integriert && $user->login_name)
-    {
-        $g_forum->userInsert($user->login_name, 0, $user->password, $user->email);
-    }
-    $ret_code = $user->insert($g_current_user->id);
-}
+$ret_code = $user->save($g_current_user->getValue("usr_id"));        
 
 if($ret_code != 0)
 {
     $g_message->show("mysql", $ret_code);
 }
 
-// wenn Daten des eingeloggten Users geaendert werden, dann Session-Variablen aktualisieren
-if($user->id == $g_current_user->id)
+// Nachdem der User erfolgreich aktualisiert den Usernamen im Forum aktualisieren
+if($g_forum_integriert && $login_name_changed)
 {
-    $g_current_user = $user;
-    $_SESSION['g_current_user'] = $g_current_user;
+    if(strlen($forum_old_username) > 0)
+    {
+        // Ein Update eines bestehenden Forumusers
+        $g_forum->usernameUpdate($user->getValue("usr_login_name"), $forum_old_username, 1, $user->getValue("usr_password"), $user->getValue("E-Mail"));
+    }
+    else
+    {
+        // Eine Neuanmeldung im Forum
+        $g_forum->userInsert($user->getValue("usr_login_name"), 1, $user->getValue("usr_password"), $user->getValue("E-Mail"));
+    }
 }
 
-// immer speichern, ausser bei der schnellen Registrierung
-if($new_user != 2 || $g_preferences['registration_mode'] != 1)
+// wenn Daten des eingeloggten Users geaendert werden, dann Session-Variablen aktualisieren
+if($user->id == $g_current_user->getValue("usr_id"))
 {
-    /*------------------------------------------------------------*/
-    // Messenger-Daten und gruppierungsspezifische Felder anlegen / updaten
-    /*------------------------------------------------------------*/
-
-    $sql = "SELECT usf_id, usf_name, usd_usr_id, usd_value
-              FROM ". TBL_USER_FIELDS. " 
-              LEFT JOIN ". TBL_USER_DATA. "
-                ON usd_usf_id = usf_id
-               AND usd_usr_id         = {0}
-			  JOIN ". TBL_CATEGORIES. "
-				ON usf_cat_id = cat_id
-               AND (  cat_org_id IS NULL
-                   OR cat_org_id  = $g_current_organization->id ) ";
-    if(!$g_current_user->assignRoles())
-    {
-        $sql = $sql. " AND usf_hidden = 0 ";
-    }
-    $sql = prepareSQL($sql, array($user->id));
-    $result_msg = mysql_query($sql, $g_adm_con);
-    db_error($result_msg,__FILE__,__LINE__);
-
-    while($row = mysql_fetch_object($result_msg))
-    {
-        // Feldinhalt von Html & PHP-Code bereinigen
-        $field_value = "";
-        if(isset($_POST["usf-$row->usf_id"]))
-        {
-            $field_value = strStripTags($_POST["usf-$row->usf_id"]);
-        }
-        
-        // nur Aenderungen speichern
-        if($field_value != $row->usd_value)
-        {
-            if(is_null($row->usd_value))
-            {
-                // noch kein Wert vorhanden -> neu einfuegen
-                if(strlen($field_value) > 0)
-                {
-                    $sql = "INSERT INTO ". TBL_USER_DATA. " (usd_usr_id, usd_usf_id, usd_value)
-                                                     VALUES ({0}, $row->usf_id, {1}) ";
-                    $sql = prepareSQL($sql, array($user->id, $field_value));
-                    $result = mysql_query($sql, $g_adm_con);
-                    db_error($result,__FILE__,__LINE__);
-                }
-            }
-            else
-            {
-                // auch ein neuer Wert vorhanden
-                if(strlen($field_value) > 0)
-                {
-                    if($field_value != $row->usd_value)
-                    {
-                        $sql = "UPDATE ". TBL_USER_DATA. " SET usd_value = {0}
-                                 WHERE usd_usr_id = $row->usd_usr_id 
-                                   AND usd_usf_id = $row->usf_id ";
-                        $sql = prepareSQL($sql, array($field_value));
-                        $result = mysql_query($sql, $g_adm_con);
-                        db_error($result,__FILE__,__LINE__);
-                    }
-                }
-                else
-                {
-                    $sql = "DELETE FROM ". TBL_USER_DATA. "
-                             WHERE usd_usr_id = $row->usd_usr_id 
-                               AND usd_usf_id = $row->usf_id ";
-                    $result = mysql_query($sql, $g_adm_con);
-                    db_error($result,__FILE__,__LINE__);
-                }
-            }
-        }
-    }
+    $g_current_user = $user;
 }
 
 unset($_SESSION['profile_request']);
 $_SESSION['navigation']->deleteLastUrl();
 
 // hier auf Modus pruefen, damit kein Konflikt mit Editieren der Webanmeldung entsteht
-//if($user->valid == 0 && $usr_id > 0)
 if($new_user == 3)
 {
     /*------------------------------------------------------------*/
@@ -480,14 +333,14 @@ if($new_user == 3)
     /*------------------------------------------------------------*/
 
     // User auf aktiv setzen
-    $user->valid = 1;
-    $user->reg_org_shortname = "";
-    $user->update($g_current_user->id);
+    $user->setValue("usr_valid", 1);
+    $user->setValue("usr_reg_org_shortname", "");
+    $user->save($g_current_user->getValue("usr_id"));
 
     // Den User nun im Forum auch als Aktiv updaten, wenn g_forum gesetzt ist
     if($g_forum_integriert)
     {
-        $g_forum->userUpdate($user->login_name, 1, $user->password, $user->email);
+        $g_forum->userUpdate($user->getValue("usr_login_name"), 1, $user->getValue("usr_password"), $user->getValue("E-Mail"));
     }
 
     // nur ausfuehren, wenn E-Mails auch unterstuetzt werden
@@ -496,11 +349,11 @@ if($new_user == 3)
         // Mail an den User schicken, um die Anmeldung zu bestaetigen
         $email = new Email();
         $email->setSender($g_preferences['email_administrator']);
-        $email->addRecipient($user->email, "$user->first_name $user->last_name");
+        $email->addRecipient($user->getValue("E-Mail"), $user->getValue("Vorname"). " ". $user->getValue("Nachname"));
         $email->setSubject("Anmeldung auf $g_current_organization->homepage");
-        $email->setText(utf8_decode("Hallo "). $user->first_name. utf8_decode(",\n\ndeine Anmeldung auf ").
+        $email->setText(utf8_decode("Hallo "). $user->getValue("Vorname"). utf8_decode(",\n\ndeine Anmeldung auf ").
             $g_current_organization->homepage. utf8_decode("wurde bestätigt.\n\nNun kannst du dich mit deinem Benutzernamen : ").
-            $user->login_name. utf8_decode("\nund dem Passwort auf der Homepage einloggen.\n\n".
+            $user->getValue("usr_login_name"). utf8_decode("\nund dem Passwort auf der Homepage einloggen.\n\n".
             "Sollten noch Fragen bestehen, schreib eine E-Mail an "). $g_preferences['email_administrator'].
             utf8_decode(" .\n\nViele Grüße\nDie Webmaster"));
         $email->sendEmail();
@@ -523,34 +376,43 @@ elseif($new_user == 2)
     // nur ausfuehren, wenn E-Mails auch unterstuetzt werden und die Webmasterbenachrichtung aktiviert ist
     if($g_preferences['enable_system_mails'] == 1 && $g_preferences['enable_registration_admin_mail'] == 1)
     {
-        $sql    = "SELECT usr_first_name, usr_last_name, usr_email
-                     FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
-                    WHERE rol_name          = 'Webmaster'
-					  AND rol_cat_id        = cat_id
-					  AND cat_org_id        = $g_current_organization->id
-                      AND mem_rol_id        = rol_id
-                      AND mem_valid         = 1
-                      AND mem_usr_id        = usr_id
-                      AND usr_valid         = 1
-                      AND LENGTH(usr_email) > 0 ";
+        $sql = "SELECT first_name.usd_value as first_name, last_name.usd_value as last_name, email.usd_value as email
+                  FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
+                  LEFT JOIN ". TBL_USER_DATA. " first_name
+                    ON first_name.usd_usr_id = usr_id
+                   AND first_name.usd_usf_id = ". getProperty("Vorname", "usf_id"). "
+                  LEFT JOIN ". TBL_USER_DATA. " last_name
+                    ON last_name.usd_usr_id = usr_id
+                   AND last_name.usd_usf_id = ". getProperty("Nachname", "usf_id"). "
+                 RIGHT JOIN ". TBL_USER_DATA. " email
+                    ON email.usd_usr_id = usr_id
+                   AND email.usd_usf_id = ". getProperty("E-Mail", "usf_id"). "
+                   AND LENGTH(email.usd_value) > 0
+                 WHERE rol_name          = 'Webmaster'
+                   AND rol_cat_id        = cat_id
+                   AND cat_org_id        = $g_current_organization->id
+                   AND mem_rol_id        = rol_id
+                   AND mem_valid         = 1
+                   AND mem_usr_id        = usr_id
+                   AND usr_valid         = 1 ";
         $result = mysql_query($sql, $g_adm_con);
         db_error($result,__FILE__,__LINE__);
 
-        while($row = mysql_fetch_object($result))
+        while($row = mysql_fetch_array($result))
         {
             // Mail an die Webmaster schicken, dass sich ein neuer User angemeldet hat
             $email = new Email();
             $email->setSender($g_preferences['email_administrator']);
-            $email->addRecipient($row->usr_email, "$row->usr_first_name $row->usr_last_name");
+            $email->addRecipient($row['email'], $row['first_name']. " ". $row['last_name']);
             $email->setSubject(utf8_decode("Neue Registrierung"));
             $email->setText(utf8_decode("Es hat sich ein neuer User auf "). $g_current_organization->homepage.
-                utf8_decode(" registriert.\n\nNachname: "). $user->last_name. utf8_decode("\nVorname:  ").
-                $user->first_name. utf8_decode("\nE-Mail:   "). $user->email.
+                utf8_decode(" registriert.\n\nNachname: "). $user->getValue("Nachname"). utf8_decode("\nVorname:  ").
+                $user->getValue("Vorname"). utf8_decode("\nE-Mail:   "). $user->getValue("E-Mail").
                 utf8_decode("\n\n\nDiese Nachricht wurde automatisch erzeugt."));
             if($email->sendEmail() == false)
             {
                 $err_code = "mail_not_send";
-                $err_text = $row->usr_email;
+                $err_text = $row['email'];
             }
         }
     }

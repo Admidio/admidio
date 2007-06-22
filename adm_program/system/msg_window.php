@@ -161,11 +161,6 @@ echo "
                   werden k&ouml;nnen.";
             break;
 
-        case "email":
-            echo "Es ist wichtig, dass du eine g&uuml;ltige E-Mail-Adresse angibst.<br />
-                  Ohne diese kann die Anmeldung nicht durchgef&uuml;hrt werden.";
-            break;
-
         case "field":
             echo "Es k&ouml;nnen beliebig viele zus&auml;tzliche Felder definiert werden. 
                   Diese werden im Profil der einzelnen Benutzer angezeigt und k&ouml;nnen dort auch
@@ -184,6 +179,12 @@ echo "
             echo "Wird ein Feld gesperrt, so k&ouml;nnen Benutzer im eigenen Profil dieses Feld nicht
                   bearbeiten. Es kann nur noch von Benutzern bearbeitet werden, die das Rollenrecht
                   besitzen alle Benutzer zu editieren.";
+            break;
+
+        case "field_mandatory":
+            echo "Felder, die als Pflichtfelder markiert sind, m&uuml;ssen immer gef&uuml;llt werden.
+                  Dies gilt f&uuml;r die Registrierung, aber auch bei der gew&ouml;hnlichen 
+                  Profildatenbearbeitung.";
             break;
 
         case "file_size":
@@ -274,10 +275,10 @@ echo "
 
         case "user_field_description":
             $sql = "SELECT usf_description 
-					  FROM ". TBL_USER_FIELDS. ", ". TBL_CATEGORIES. "
+                      FROM ". TBL_USER_FIELDS. ", ". TBL_CATEGORIES. "
                      WHERE usf_cat_id = cat_id
-					   AND (  cat_org_id = $g_current_organization->id
-            			   OR cat_org_id IS NULL )
+                       AND (  cat_org_id = $g_current_organization->id
+                           OR cat_org_id IS NULL )
                        AND usf_name   = {0} ";
             $sql = prepareSQL($sql, array($req_err_text));
             $result_field = mysql_query($sql, $g_adm_con);

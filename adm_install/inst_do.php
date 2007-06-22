@@ -319,32 +319,33 @@ if($req_mode == 1)
 
     // Orga-Uebergreifende Kategorien anlegen
     $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_system, cat_sequence)
-                                      VALUES (NULL, 'USF', 'Stammdaten', 0, 1, 1) ";
+                                      VALUES (NULL, 'USF', 'Stammdaten', 0, 1, 0) ";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
     $cat_id_stammdaten = mysql_insert_id();
 
     $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_system, cat_sequence)
-                                      VALUES (NULL, 'USF', 'Messenger', 0, 1, 2) ";
+                                      VALUES (NULL, 'USF', 'Messenger', 0, 1, 1) ";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
     $cat_id_messenger = mysql_insert_id();
 
     // Stammdatenfelder anlegen
-    $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_cat_id, usf_type, usf_name, usf_system, usf_sequence)
-                                       VALUES ($cat_id_stammdaten, 'TEXT', 'Nachname', 1, 1)
-											, ($cat_id_stammdaten, 'TEXT', 'Vorname', 1, 1)
-											, ($cat_id_stammdaten, 'TEXT', 'Adresse', 1, 1) 
-                                            , ($cat_id_stammdaten, 'TEXT', 'PLZ', 1, 2)
-                                            , ($cat_id_stammdaten, 'TEXT', 'Ort', 1, 3)
-                                            , ($cat_id_stammdaten, 'TEXT', 'Land', 1, 4)
-                                            , ($cat_id_stammdaten, 'TEXT', 'Telefon', 1, 5)
-                                            , ($cat_id_stammdaten, 'TEXT', 'Handy', 1, 6)
-                                            , ($cat_id_stammdaten, 'TEXT', 'Fax', 1, 7)
-                                            , ($cat_id_stammdaten, 'DATE', 'Geburtstag', 1, 8)
-                                            , ($cat_id_stammdaten, 'NUMERIC', 'Geschlecht', 1, 9)
-                                            , ($cat_id_stammdaten, 'EMAIL','E-Mail', 1, 10)
-                                            , ($cat_id_stammdaten, 'URL',  'Homepage', 1, 11) ";
+    $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_cat_id, usf_type, usf_name, usf_description, usf_system, usf_disabled, usf_sequence)
+                                       VALUES ($cat_id_stammdaten, 'TEXT', 'Nachname', NULL, 1, 1, 1)
+                                            , ($cat_id_stammdaten, 'TEXT', 'Vorname', NULL, 1, 1, 2)
+                                            , ($cat_id_stammdaten, 'TEXT', 'Adresse', NULL, 1, 0, 3) 
+                                            , ($cat_id_stammdaten, 'TEXT', 'PLZ', NULL, 1, 0, 4)
+                                            , ($cat_id_stammdaten, 'TEXT', 'Ort', NULL, 1, 0, 5)
+                                            , ($cat_id_stammdaten, 'TEXT', 'Land', NULL, 1, 0, 6)
+                                            , ($cat_id_stammdaten, 'TEXT', 'Telefon', NULL, 1, 0, 7)
+                                            , ($cat_id_stammdaten, 'TEXT', 'Handy', NULL, 1, 0, 8)
+                                            , ($cat_id_stammdaten, 'TEXT', 'Fax', NULL, 1, 0, 9)
+                                            , ($cat_id_stammdaten, 'DATE', 'Geburtstag', NULL, 1, 0, 10)
+                                            , ($cat_id_stammdaten, 'NUMERIC', 'Geschlecht', NULL, 1, 0, 11)
+                                            , ($cat_id_stammdaten, 'EMAIL','E-Mail', 'Es muss eine g&uuml;ltige E-Mail-Adresse angegeben werden.<br />' + 
+                                                                   'Ohne diese kann das Programm nicht genutzt werden.', 1, 0, 12)
+                                            , ($cat_id_stammdaten, 'URL',  'Homepage', NULL, 1, 0, 13) ";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
     $usf_id_homepage = mysql_insert_id();
@@ -472,17 +473,17 @@ if($req_mode == 1 || $req_mode == 4)
     
     // Default-Kategorie fuer Rollen und Links eintragen
     $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_sequence)
-                                           VALUES ($org_id, 'ROL', 'Allgemein', 1, 3)";
+                                           VALUES ($org_id, 'ROL', 'Allgemein', 0, 1)";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
     $category_common = mysql_insert_id();
     
-    $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden)
-                                      VALUES ($org_id, 'ROL', 'Gruppen', 1)
-                                           , ($org_id, 'ROL', 'Kurse', 1)
-                                           , ($org_id, 'ROL', 'Mannschaften', 1)
-                                           , ($org_id, 'LNK', 'Allgemein', 0)
-                                           , ($org_id, 'USF', '". utf8_decode('Zusätzliche Daten'). "', 0) ";
+    $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_sequence)
+                                      VALUES ($org_id, 'ROL', 'Gruppen', 0, 2)
+                                           , ($org_id, 'ROL', 'Kurse', 0, 3)
+                                           , ($org_id, 'ROL', 'Mannschaften', 0, 4)
+                                           , ($org_id, 'LNK', 'Allgemein', 0, 1)
+                                           , ($org_id, 'USF', '". utf8_decode('Zusätzliche Daten'). "', 0, 2) ";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
 

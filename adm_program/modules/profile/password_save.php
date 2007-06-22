@@ -31,8 +31,8 @@ require("../../system/common.php");
 require("../../system/login_valid.php");
 
 // nur Webmaster duerfen fremde Passwoerter aendern
-if($g_current_user->isWebmaster() == false 
-&& $g_current_user->id            != $_GET['user_id'])
+if($g_current_user->isWebmaster()      == false 
+&& $g_current_user->getValue("usr_id") != $_GET['user_id'])
 {
     $g_message->show("norights");
 }
@@ -54,8 +54,7 @@ if(isset($_GET['user_id']))
 $err_code   = "";
 $count_user = 0;
 
-$user = new User($g_adm_con);
-$user->getUser($req_user_id);
+$user = new User($g_adm_con, $req_user_id);
 
 if( ($_POST["old_password"] != "" || $g_current_user->isWebmaster() )
 && $_POST["new_password"] != ""
@@ -67,22 +66,21 @@ if( ($_POST["old_password"] != "" || $g_current_user->isWebmaster() )
         $old_password_crypt = md5($_POST["old_password"]);
 
         // Webmaster duerfen Passwort so aendern
-        if($user->password == $old_password_crypt || $g_current_user->isWebmaster())
+        if($user->getValue("usr_password") == $old_password_crypt || $g_current_user->isWebmaster())
         {
-            $user->password = md5($_POST["new_password"]);
-            $user->update($g_current_user->id);
+            $user->setValue("usr_password", md5($_POST["new_password"]));
+            $user->save($g_current_user->id);
 
             // Paralell im Forum aendern, wenn g_forum gesetzt ist
             if($g_forum_integriert)
             {
-                $g_forum->userUpdate($user->login_name, 1, $user->password, $user->email);
+                $g_forum->userUpdate($user->getValue("usr_login_name"), 1, $user->getValue("usr_password"), $user->getValue("E-Mail"));
             }
 
             // wenn das PW des eingeloggten Users geaendert wird, dann Session-Variablen aktualisieren
-            if($user->id == $g_current_user->id)
+            if($user->getValue("usr_id") == $g_current_user->getValue("usr_id"))
             {
-                $g_current_user->password = $user->password;
-                $_SESSION['g_current_user'] = $g_current_user;
+                $g_current_user->setValue("usr_password", $user->getValue("usr_password"));
             }
         }
         else

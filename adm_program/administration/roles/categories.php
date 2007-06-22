@@ -120,8 +120,8 @@ echo "
             <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/user_key.png\" alt=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\" title=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\"></th>
             <th class=\"tableHeader\">&nbsp;</th>
         </tr>
-    </thead>
-    <tbody id=\"cat_list\">";
+    </thead>";
+    
         $sql = "SELECT * FROM ". TBL_CATEGORIES. "
                  WHERE (  cat_org_id  = $g_current_organization->id
                        OR cat_org_id IS NULL )
@@ -130,15 +130,35 @@ echo "
         $sql = prepareSQL($sql, array($req_type));
         $cat_result = mysql_query($sql, $g_adm_con);
         db_error($cat_result,__FILE__,__LINE__);
+        $write_tbody = false;
 
-        while($cat_row = mysql_fetch_object($cat_result))
+        while($cat_row = mysql_fetch_array($cat_result))
         {
+            // da bei USF die Kategorie Stammdaten nicht verschoben werden darf, muss hier ein bischen herumgewurschtelt werden
+            if($cat_row['cat_name'] == "Stammdaten" && $_GET['type'] == "USF")
+            {
+                $drag_icon = "&nbsp;";
+                echo "<tbody id=\"cat_stammdaten\">";
+            }
+            else
+            {
+                if($write_tbody == false)
+                {
+                    $write_tbody = true;
+                    if($_GET['type'] == "USF")
+                    {
+                        echo "</tbody>";
+                    }
+                    echo "<tbody id=\"cat_list\">";
+                }
+                $drag_icon = "<img class=\"dragable\" src=\"$g_root_path/adm_program/images/arrow_out.png\" style=\"cursor: move;\" border=\"0\" alt=\"Reihenfolge &auml;ndern\" title=\"Reihenfolge &auml;ndern\">";
+            }
             echo "
-            <tr id=\"row_$cat_row->cat_id\" class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
-                <td style=\"text-align: left; width: 18px;\"><img class=\"dragable\" src=\"$g_root_path/adm_program/images/arrow_out.png\" style=\"cursor: move;\" border=\"0\" alt=\"Reihenfolge &auml;ndern\" title=\"Reihenfolge &auml;ndern\"></td>
-                <td style=\"text-align: left;\"><a href=\"$g_root_path/adm_program/administration/roles/categories_new.php?cat_id=$cat_row->cat_id&amp;type=$req_type\">$cat_row->cat_name</a></td>
+            <tr id=\"row_". $cat_row['cat_id']. "\" class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
+                <td style=\"text-align: left; width: 18px;\">$drag_icon</td>
+                <td style=\"text-align: left;\"><a href=\"$g_root_path/adm_program/administration/roles/categories_new.php?cat_id=". $cat_row['cat_id']. "&amp;type=$req_type\">". $cat_row['cat_name']. "</a></td>
                 <td style=\"text-align: center;\">";
-                    if($cat_row->cat_hidden == 1)
+                    if($cat_row['cat_hidden'] == 1)
                     {
                         echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/user_key.png\" alt=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\" title=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\">";
                     }
@@ -148,16 +168,16 @@ echo "
                     }
                 echo "</td>
                 <td style=\"text-align: right; width: 45px;\">
-                    <a href=\"$g_root_path/adm_program/administration/roles/categories_new.php?cat_id=$cat_row->cat_id&amp;type=$req_type\">
+                    <a href=\"$g_root_path/adm_program/administration/roles/categories_new.php?cat_id=". $cat_row['cat_id']. "&amp;type=$req_type\">
                     <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>&nbsp;";
 
-                    if($cat_row->cat_system == 1)
+                    if($cat_row['cat_system'] == 1)
                     {
                         echo "<img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">";
                     }
                     else
                     {
-                        echo "<a href=\"$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=$cat_row->cat_id&amp;mode=3&amp;type=$req_type\"><img
+                        echo "<a href=\"$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=". $cat_row['cat_id']. "&amp;mode=3&amp;type=$req_type\"><img
                         src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>";
                     }
                 echo "</td>
