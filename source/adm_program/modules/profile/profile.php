@@ -33,33 +33,165 @@ require("../../system/login_valid.php");
 
 // Uebergabevariablen pruefen
 
-if(isset($_GET["user_id"]) && is_numeric($_GET["user_id"]) == false)
+if(isset($_GET['user_id']))
 {
-    $g_message->show("invalid");
-}
-
-if(isset($_GET['user_id']) == false
-|| $_GET['user_id'] == $g_current_user->id)
-{
-    // wenn nichts uebergeben wurde, dann eigene Daten anzeigen
-    $a_user_id = $g_current_user->id;
+    if(is_numeric($_GET["user_id"]) == false)
+    {
+        $g_message->show("invalid");
+    }
+    // Daten des uebergebenen Users anzeigen
+    $a_user_id = $_GET['user_id'];
 }
 else
 {
-    // Daten eines anderen Users anzeigen und pruefen, ob editiert werden darf
-    $a_user_id = $_GET['user_id'];
+    // wenn nichts uebergeben wurde, dann eigene Daten anzeigen
+    $a_user_id = $g_current_user->getValue("usr_id");
+}
 
+// diese Funktion gibt den Html-Code fuer ein Feld mit Beschreibung wieder
+// dabei wird der Inhalt richtig formatiert
+function getFieldCode($field, $user_id)
+{
+    global $g_preferences, $g_root_path, $g_current_user;
+    $value = "";
+    
+    if($g_current_user->editProfile($user_id) == false && $field['usf_hidden'] == 1)
+    {
+        return "";
+    }
+    
+    switch($field['usf_type'])
+    {
+        case "CHECKBOX":
+            if($field['usd_value'] == 1)
+            {
+                $value = "<img src=\"$g_root_path/adm_program/images/checkbox_checked.gif\" alt=\"on\">";
+            }
+            else
+            {
+                $value = "<img src=\"$g_root_path/adm_program/images/checkbox.gif\" alt=\"off\">";
+            }
+            break;
+            
+        case "DATE":
+            if(strlen($field['usd_value']) > 0)
+            {
+                $value = mysqldate('d.m.y', $field['usd_value']);
+                if($field['usf_name'] == "Geburtstag")
+                {
+                    // Alter mit ausgeben
+                    $value = $value. '&nbsp;&nbsp;&nbsp;('. dtGetAge($field['usd_value']). ' Jahre)';
+                }
+            }
+            break;
+            
+        case "EMAIL":
+            // E-Mail als Link darstellen
+            if(strlen($field['usd_value']) > 0)
+            {
+                if($g_preferences['enable_mail_module'] != 1)
+                {
+                    $mail_link = "mailto:". $field['usd_value'];
+                }
+                else
+                {
+                    $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?usr_id=$user_id";
+                }
+                $value = '<a href="'. $mail_link. '" style="overflow: visible; display: inline;">'. $field['usd_value']. '</a>';
+            }
+            break;
+
+        case "URL":
+            // Homepage als Link darstellen
+            if(strlen($field['usd_value']) > 0)
+            {
+                if(substr_count(strtolower($field['usd_value']), "http://") == 0)
+                {
+                    $field['usd_value'] = "http://". $field['usd_value'];
+                }
+
+                $value = '<a href="'. $field['usd_value']. '" target="_blank">'. substr($field['usd_value'], 7). '</a>';
+            }
+            break;
+                                
+        case "TEXT":
+        case "TEXT_BIG":
+            $value = $field['usd_value'];
+            break;
+    }
+    
+    if($field['cat_name'] == "Stammdaten")
+    {
+        if(strlen($field['usd_value']) > 25)
+        {
+            $value = '<span class="smallFontSize">'. $value. '</span>';
+        }
+    }
+    elseif($field['cat_name'] == "Messenger")
+    {
+        // Icons der Messenger anzeigen
+        if($field['usf_name'] == 'ICQ')
+        {
+            // Sonderzeichen aus der ICQ-Nummer entfernen (damit kommt www.icq.com nicht zurecht)
+            preg_match_all("/\d+/", $field['usd_value'], $matches);
+            $icq_number = implode("", reset($matches));
+
+            // ICQ Onlinestatus anzeigen
+            $value = "<a href=\"http://www.icq.com/whitepages/cmd.php?uin=$icq_number&amp;action=add\"  class=\"wpaction\">
+            <img border=\"0\" src=\"http://status.icq.com/online.gif?icq=$icq_number&amp;img=5\"
+            style=\"vertical-align: middle;\" alt=\"". $field['usd_value']. " zu ". $field['usf_name']. " hinzuf&uuml;gen\" 
+            title=\"". $field['usd_value']. " zu ". $field['usf_name']. " hinzuf&uuml;gen\" /></a>&nbsp;$value";
+        }
+        elseif($field['usf_name'] == 'Skype')
+        {
+            // Skype Onlinestatus anzeigen
+            $value = "<script type=\"text/javascript\" src=\"http://download.skype.com/share/skypebuttons/js/skypeCheck.js\"></script>
+            <a href=\"skype:". $field['usd_value']. "?add\"><img src=\"http://mystatus.skype.com/smallicon/". $field['usd_value']. "\"
+            style=\"border: none; vertical-align: middle;\" width=\"16\" height=\"16\" 
+            title=\"". $field['usd_value']. " zu ". $field['usf_name']. " hinzuf&uuml;gen\" 
+            alt=\"". $field['usd_value']. " zu ". $field['usf_name']. " hinzuf&uuml;gen\" /></a>&nbsp;&nbsp;$value";
+        }
+        else
+        {
+            $image = "";
+            if($field['usf_name'] == 'AIM')
+            {
+                $image = "aim.png";
+            }
+            elseif($field['usf_name'] == 'Google Talk')
+            {
+                $image = "google.gif";
+            }
+            elseif($field['usf_name'] == 'MSN')
+            {
+                $image = "msn.png";
+            }
+            elseif($field['usf_name'] == 'Yahoo')
+            {
+                $image = "yahoo.png";
+            }
+            if(strlen($image) > 0)
+            {
+                $value = "<img src=\"$g_root_path/adm_program/images/$image\" style=\"vertical-align: middle;\" 
+                    alt=\"". $field['usf_name']. "\" title=\"". $field['usf_name']. "\" />&nbsp;&nbsp;$value";
+            }
+        };
+    }
+    
+    $html = '<div style="margin-top: 3px;">
+        <div style="float: left; width: 30%; text-align: left;">'. $field['usf_name']. ':</div>
+        <div style="text-align: left;">'. $value. '&nbsp;</div>
+        </div>';
+             
+    return $html;
 }
 
 // User auslesen
-if($a_user_id > 0)
-{
-    $user = new User($g_adm_con, $a_user_id);
-}
+$user = new User($g_adm_con, $a_user_id);
 
 unset($_SESSION['profile_request']);
 // Seiten fuer Zuruecknavigation merken
-if($a_user_id != $g_current_user->id && isset($_GET['user_id']) == false)
+if($a_user_id != $g_current_user->getValue("usr_id") && isset($_GET['user_id']) == false)
 {
     $_SESSION['navigation']->clear();
 }
@@ -71,495 +203,275 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 echo "
 <div class=\"formHead\">";
-    if($a_user_id == $g_current_user->id)
+    if($a_user_id == $g_current_user->getValue("usr_id"))
     {
         echo "Mein Profil";
     }
     else
     {
-        echo "Profil von ". $user->first_name. " ". $user->last_name;
+        echo "Profil von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname");
     }
 echo "</div>
 
-<div class=\"formBody\">";
-
-    // *******************************************************************************
-    // Userdaten-Block
-    // *******************************************************************************
-
-    echo "<div style=\"width: 66%; margin-right: 10px; float: left;\">
-        <div class=\"groupBox\" style=\"margin-top: 4px; text-align: left;\">
-            <div class=\"groupBoxHeadline\">$user->first_name $user->last_name&nbsp;&nbsp;";
-                if($user->gender == 1)
-                {
-                    echo "<img src=\"$g_root_path/adm_program/images/male.png\" title=\"m&auml;nnlich\" alt=\"m&auml;nnlich\">";
-                }
-                elseif($user->gender == 2)
-                {
-                    echo "<img src=\"$g_root_path/adm_program/images/female.png\" title=\"weiblich\" alt=\"weiblich\">";
-                }
-            echo "</div>
-
-            <div style=\"float: left; width: 30%;\">Adresse:";
-                if(strlen($user->zip_code) > 0 || strlen($user->city) > 0)
-                    echo "<br />&nbsp;";
-                if(strlen($user->country) > 0)
-                    echo "<br />&nbsp;";
-                if(strlen($user->address) > 0
-                && (  strlen($user->zip_code)  > 0
-                || strlen($user->city)  > 0 ))
-                    echo "<br /><span class=\"smallFontSize\">&nbsp;</span>";
-            echo "</div>
-
-            <div>";
-                if(strlen($user->address) == 0 && strlen($user->zip_code) == 0 && strlen($user->city) == 0)
-                    echo "<i>keine Daten vorhanden</i>";
-                if(strlen($user->address) > 0)
-                    echo $user->address;
-                if(strlen($user->zip_code) > 0 || strlen($user->city) > 0)
-                {
-                    echo "<br />";
-                    if(strlen($user->zip_code) > 0)
-                        echo $user->zip_code. " ";
-                    if(strlen($user->city) > 0)
-                        echo $user->city;
-                }
-                if(strlen($user->country) > 0)
-                    echo "<br />". $user->country;
-
-                if(strlen($user->address) > 0
-                && (  strlen($user->zip_code)  > 0
-                || strlen($user->city)  > 0 ))
-                {
-                    // Button mit Karte anzeigen
-                    $map_url = "http://maps.google.com/?q=". urlencode($user->address);
-                    if(strlen($user->zip_code)  > 0)
-                    {
-                        $map_url .= ",%20$user->zip_code";
-                    }
-                    if(strlen($user->city)  > 0)
-                    {
-                        $map_url .= ",%20$user->city";
-                    }
-                    if(strlen($user->country)  > 0)
-                    {
-                        $map_url .= ",%20$user->country";
-                    }
-
-                    echo "<br />
-                    <span class=\"smallFontSize\">( <a href=\"$map_url\" target=\"_blank\">Stadtplan</a>";
-
-                    if($g_current_user->id != $a_user_id)
-                    {
-                        $own_user = new User($g_adm_con, $g_current_user->id);
-
-                        if(strlen($own_user->address) > 0
-                        && (  strlen($own_user->zip_code)  > 0
-                        || strlen($own_user->city)  > 0 ))
-                        {
-                            // Link fuer die Routenplanung
-                            $route_url = "http://maps.google.com/?f=d&saddr=". urlencode($own_user->address);
-                            if(strlen($own_user->zip_code)  > 0)
-                            {
-                                $route_url .= ",%20$own_user->zip_code";
-                            }
-                            if(strlen($own_user->city)  > 0)
-                            {
-                                $route_url .= ",%20$own_user->city";
-                            }
-                            if(strlen($own_user->country)  > 0)
-                            {
-                                $route_url .= ",%20$own_user->country";
-                            }
-
-                            $route_url .= "&daddr=". urlencode($user->address);
-                            if(strlen($user->zip_code)  > 0)
-                            {
-                                $route_url .= ",%20$user->zip_code";
-                            }
-                            if(strlen($user->city)  > 0)
-                            {
-                                $route_url .= ",%20$user->city";
-                            }
-                            if(strlen($user->country)  > 0)
-                            {
-                                $route_url .= ",%20$user->country";
-                            }
-                            echo " - <a href=\"$route_url\" target=\"_blank\">Route berechnen</a>";
-                        }
-                    }
-                    echo " )</span>";
-                }
-            echo "</div>
-
-            <div style=\"float: left; margin-top: 10px; width: 30%; text-align: left\">Telefon:</div>
-            <div style=\"margin-top: 10px; text-align: left\">$user->phone&nbsp;</div>";
-
-            echo "<div style=\"float: left; width: 30%; text-align: left\">Handy:</div>
-            <div style=\"text-align: left\">$user->mobile&nbsp;</div>";
-
-            echo "<div style=\"float: left; width: 30%; text-align: left\">Fax:</div>
-            <div style=\"text-align: left\">$user->fax&nbsp;</div>";
-
-            // Block Geburtstag, Geschlecht und Benutzer
-
-            echo "<div style=\"float: left; margin-top: 10px; width: 30%; text-align: left\">Geburtstag:</div>
-            <div style=\"margin-top: 10px; text-align: left\">";
-                if(strlen($user->birthday) > 0)
-                {
-                    echo mysqldatetime('d.m.y', $user->birthday);
-
-                    // Alter berechnen
-                    // Hier muss man aufpassen, da viele PHP-Funkionen nicht mit einem Datum vor 1970 umgehen koennen !!!
-                    $act_date  = getDate(time());
-                    $geb_day   = mysqldatetime("d", $user->birthday);
-                    $geb_month = mysqldatetime("m", $user->birthday);
-                    $geb_year  = mysqldatetime("y", $user->birthday);
-                    $birthday = false;
-
-                    if($act_date['mon'] >= $geb_month)
-                    {
-                        if($act_date['mon'] == $geb_month)
-                        {
-                            if($act_date['mday'] >= $geb_day)
-                            {
-                                $birthday = true;
-                            }
-                        }
-                        else
-                        {
-                            $birthday = true;
-                        }
-                    }
-                    $age = $act_date['year'] - $geb_year;
-                    if($birthday == false)
-                    {
-                        $age--;
-                    }
-                    echo "&nbsp;&nbsp;&nbsp;($age Jahre)";
-                }
-                else
-                    echo "&nbsp;";
-            echo "</div>
-            <div style=\"float: left; width: 30%; text-align: left\">Benutzer:</div>
-            <div style=\"text-align: left\">$user->login_name&nbsp;</div>";
-
-            // Block E-Mail und Homepage
-
-            echo "<div style=\"float: left; margin-top: 10px; width: 30%; text-align: left\">E-Mail:</div>
-            <div style=\"margin-top: 10px; text-align: left\">";
-                if(strlen($user->email) > 0)
-                {
-                    if($g_preferences['enable_mail_module'] != 1)
-                        $mail_link = "mailto:$user->email";
-                    else
-                        $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?usr_id=$user->id";
-                    echo "<a href=\"$mail_link\">
-                    <img src=\"$g_root_path/adm_program/images/email.png\" style=\"vertical-align: middle;\" alt=\"E-Mail an $user->email schreiben\"
-                    title=\"E-Mail an $user->email schreiben\" border=\"0\"></a>
-                    <a href=\"$mail_link\" style=\" overflow: visible; display: inline;\">";
-                    if(strlen($user->email) > 25)
-                    {
-                        echo "<span class=\"smallFontSize\">$user->email</span>";
-                    }
-                    else
-                    {
-                        echo "$user->email";
-                    }
-                    echo "</a>";
-                }
-                else
-                    echo "&nbsp;";
-            echo "</div>
-            <div style=\"float: left; width: 30%; text-align: left\">Homepage:</div>
-            <div style=\"text-align: left\">";
-                if(strlen($user->homepage) > 0)
-                {
-                    $user->homepage = stripslashes($user->homepage);
-                    $user->homepage = str_replace ("http://", "", $user->homepage);
-                    echo "
-                    <a href=\"http://$user->homepage\" target=\"_blank\">
-                    <img src=\"$g_root_path/adm_program/images/globe.png\" style=\"vertical-align: middle;\" alt=\"Gehe zu $user->homepage\"
-                    title=\"Gehe zu $user->homepage\" border=\"0\"></a>
-                    <a href=\"http://$user->homepage\" target=\"_blank\">";
-                    if(strlen($user->homepage) > 25)
-                    {
-                        echo "<span class=\"smallFontSize\">$user->homepage</span>";
-                    }
-                    else
-                    {
-                        echo "$user->homepage";
-                    }
-                    echo "</a>";
-                }
-                else
-                    echo "&nbsp;";
-            echo "</div>
-        </div>
-    </div>";
-
-    echo "<div style=\"width: 32%; float: left\">";
-
+<div class=\"formBody\">
+    <div>";
         // *******************************************************************************
-        // Bild-Block
+        // Userdaten-Block
         // *******************************************************************************
 
-        //Nachsehen ob fuer den User ein Photo gespeichert wurde
-        $sql =" SELECT usr_photo
-                FROM ".TBL_USERS."
-                WHERE usr_id = '$a_user_id'";
-        $result_photo = mysql_query($sql, $g_adm_con);
-        db_error($result_photo,__FILE__,__LINE__);
-
-        echo"
-        <div style=\"margin-top: 4px; text-align: center;\">
-            <div class=\"groupBox\">";
-
-                //Falls vorhanden Bild ausgeben
-                if(mysql_result($result_photo,0,"usr_photo")!=NULL)
-                {
-                    echo"<img src=\"$g_root_path/adm_program/modules/profile/profile_photo_show.php?usr_id=$a_user_id&amp;id=". time(). "\" alt=\"Profilfoto\">";
-                }
-                //wenn nicht Schattenkopf
-                else
-                {
-                    echo"<img src=\"$g_root_path/adm_program/images/no_profile_pic.png\" alt=\"Profilfoto\">";
-                }
-            echo"</div>";
-            echo"
-            <div style=\"margin-top: 12px;\">
-                <span class=\"iconLink\">
-                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id=$user->id\"><img
-                     class=\"iconLink\" src=\"$g_root_path/adm_program/images/vcard.png\" style=\"vertical-align: middle;\" border=\"0\" title=\"Benutzer als vCard exportieren\" alt=\"Benutzer als vCard exportieren\"></a>
-                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id=$user->id\">vCard exportieren</a>
-                </span>
-            </div>";
-
-            // Moderatoren & Gruppenleiter duerfen neue Rollen zuordnen
-            if(($g_current_user->assignRoles() || isGroupLeader() || $g_current_user->editUser())
-            && $user->reg_org_shortname != $g_organization)
-            {
-                echo "<div style=\"margin-top: 10px;\">
-                    <span class=\"iconLink\">
-                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/roles.php?user_id=$a_user_id\"><img
-                         class=\"iconLink\" src=\"$g_root_path/adm_program/images/wand.png\" style=\"vertical-align: middle;\" border=\"0\" title=\"Rollen &auml;ndern\" alt=\"Rollen &auml;ndern\"></a>
-                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/roles.php?user_id=$a_user_id\">Rollen &auml;ndern</a>
-                    </span>
+        echo "<div style=\"width: 66%; margin-right: 10px; float: left;\">
+            <div class=\"groupBox\" style=\"margin-top: 4px; text-align: left;\">
+                <div class=\"groupBoxHeadline\">
+                    <div style=\"width: 60%; float: left;\">
+                        $user->first_name $user->last_name&nbsp;&nbsp;";
+                        if($user->gender == 1)
+                        {
+                            echo "<img src=\"$g_root_path/adm_program/images/male.png\" style=\"vertical-align: top;\" title=\"m&auml;nnlich\" alt=\"m&auml;nnlich\">";
+                        }
+                        elseif($user->gender == 2)
+                        {
+                            echo "<img src=\"$g_root_path/adm_program/images/female.png\" style=\"vertical-align: top;\" title=\"weiblich\" alt=\"weiblich\">";
+                        }
+                    echo "</div>
+                    <div style=\"text-align: right;\">&nbsp;";
+                        // Nur berechtigte User duerfen ein Profil editieren
+                        if($g_current_user->editProfile($a_user_id) == true)
+                        {
+                            echo "<a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$a_user_id\"><img
+                             src=\"$g_root_path/adm_program/images/edit.png\" style=\"vertical-align: top;\" border=\"0\" alt=\"Daten bearbeiten\"></a>
+                            <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$a_user_id\">Bearbeiten</a>";
+                        }
+                    echo "</div>
+                </div>
+                <div>
+                    <div style=\"float: left; margin-bottom: 5px; width: 30%; text-align: left\">Benutzername:</div>
+                    <div style=\"margin-bottom: 5px; margin-left: 30%; text-align: left\"><i>". $user->getValue("usr_login_name"). "&nbsp;</i></div>
                 </div>";
-            }
-        echo "</div>
+
+                // Schleife ueber alle Felder der Stammdaten
+
+                foreach($user->db_user_fields as $key => $value)
+                {
+                    // nur Felder der Stammdaten anzeigen
+                    if($value['cat_name'] == "Stammdaten")
+                    {
+                        switch($value['usf_name'])
+                        {
+                            case "Nachname":
+                            case "Vorname":
+                            case "PLZ":
+                            case "Ort":
+                            case "Land":
+                            case "Geschlecht":
+                                // diese Felder werden nicht einzeln dargestellt
+                                break;
+
+                            case "Adresse":
+                                if($value['usf_name'] == "Adresse")   // nur 1x bei Adresse schreiben
+                                {
+                                    echo "<div style=\"margin-top: 3px;\">
+                                    <div style=\"float: left; width: 30%; text-align: left;\">Adresse:";
+                                        if(strlen($user->getValue("PLZ")) > 0 || strlen($user->getValue("Ort")) > 0)
+                                            echo "<br />&nbsp;";
+                                        if(strlen($user->getValue("Land")) > 0)
+                                            echo "<br />&nbsp;";
+                                        if(strlen($user->getValue("Adresse")) > 0
+                                        && (  strlen($user->getValue("PLZ"))  > 0
+                                        || strlen($user->getValue("Ort"))  > 0 ))
+                                            echo "<br /><span class=\"smallFontSize\">&nbsp;</span>";
+                                    echo "</div>
+
+                                    <div style=\"text-align: left;\">";
+                                        if(strlen($user->getValue("Adresse")) == 0 && strlen($user->getValue("PLZ")) == 0 && strlen($user->getValue("Ort")) == 0)
+                                            echo "<i>keine Daten vorhanden</i>";
+                                        if(strlen($user->getValue("Adresse")) > 0)
+                                            echo $user->getValue("Adresse");
+                                        if(strlen($user->getValue("PLZ")) > 0 || strlen($user->getValue("Ort")) > 0)
+                                        {
+                                            echo "<br />";
+                                            if(strlen($user->getValue("PLZ")) > 0)
+                                                echo $user->getValue("PLZ"). " ";
+                                            if(strlen($user->getValue("Ort")) > 0)
+                                                echo $user->getValue("Ort");
+                                        }
+                                        if(strlen($user->getValue("Land")) > 0)
+                                            echo "<br />". $user->getValue("Land");
+
+                                        if(strlen($user->getValue("Adresse")) > 0
+                                        && (  strlen($user->getValue("PLZ"))  > 0
+                                        || strlen($user->getValue("Ort"))  > 0 ))
+                                        {
+                                            // Button mit Karte anzeigen
+                                            $map_url = "http://maps.google.com/?q=". urlencode($user->getValue("Adresse"));
+                                            if(strlen($user->getValue("PLZ"))  > 0)
+                                            {
+                                                $map_url .= ",%20". $user->getValue("PLZ");
+                                            }
+                                            if(strlen($user->getValue("Ort"))  > 0)
+                                            {
+                                                $map_url .= ",%20". $user->getValue("Ort");
+                                            }
+                                            if(strlen($user->getValue("Land"))  > 0)
+                                            {
+                                                $map_url .= ",%20". $user->getValue("Land");
+                                            }
+
+                                            echo "<br />
+                                            <span class=\"smallFontSize\">( <a href=\"$map_url\" target=\"_blank\">Stadtplan</a>";
+
+                                            if($g_current_user->getValue("usr_id") != $a_user_id)
+                                            {
+                                                if(strlen($g_current_user->getValue("Adresse")) > 0
+                                                && (  strlen($g_current_user->getValue("PLZ"))  > 0
+                                                || strlen($g_current_user->getValue("Ort"))  > 0 ))
+                                                {
+                                                    // Link fuer die Routenplanung
+                                                    $route_url = "http://maps.google.com/?f=d&saddr=". urlencode($g_current_user->getValue("Adresse"));
+                                                    if(strlen($g_current_user->getValue("PLZ"))  > 0)
+                                                    {
+                                                        $route_url .= ",%20". $g_current_user->getValue("PLZ");
+                                                    }
+                                                    if(strlen($g_current_user->getValue("Ort"))  > 0)
+                                                    {
+                                                        $route_url .= ",%20". $g_current_user->getValue("Ort");
+                                                    }
+                                                    if(strlen($g_current_user->getValue("Land"))  > 0)
+                                                    {
+                                                        $route_url .= ",%20". $g_current_user->getValue("Land");
+                                                    }
+
+                                                    $route_url .= "&daddr=". urlencode($user->address);
+                                                    if(strlen($user->getValue("PLZ"))  > 0)
+                                                    {
+                                                        $route_url .= ",%20". $user->getValue("PLZ");
+                                                    }
+                                                    if(strlen($user->getValue("Ort")) > 0)
+                                                    {
+                                                        $route_url .= ",%20". $user->getValue("Ort");
+                                                    }
+                                                    if(strlen($user->getValue("Land")) > 0)
+                                                    {
+                                                        $route_url .= ",%20". $user->getValue("Land");
+                                                    }
+                                                    echo " - <a href=\"$route_url\" target=\"_blank\">Route berechnen</a>";
+                                                }
+                                            }
+                                            echo " )</span>";
+                                        }
+                                    echo "</div>
+                                    </div>";
+                                }
+                                break;
+
+                            default:
+                                echo getFieldCode($value, $a_user_id);
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        // keine Stammdaten mehr also diese Schleife erst einmal abbrechen
+                        break;
+                    }
+                }
+            echo "</div>
+        </div>";
+
+        echo "<div style=\"width: 32%; float: left\">";
+
+            // *******************************************************************************
+            // Bild-Block
+            // *******************************************************************************
+
+            //Nachsehen ob fuer den User ein Photo gespeichert wurde
+            $sql =" SELECT usr_photo
+                    FROM ".TBL_USERS."
+                    WHERE usr_id = '$a_user_id'";
+            $result_photo = mysql_query($sql, $g_adm_con);
+            db_error($result_photo,__FILE__,__LINE__);
+
+            echo"
+            <div style=\"margin-top: 4px; text-align: center;\">
+                <div class=\"groupBox\">";
+
+                    //Falls vorhanden Bild ausgeben
+                    if(mysql_result($result_photo,0,"usr_photo")!=NULL)
+                    {
+                        echo"<img src=\"$g_root_path/adm_program/modules/profile/profile_photo_show.php?usr_id=$a_user_id&amp;id=". time(). "\" alt=\"Profilfoto\">";
+                    }
+                    //wenn nicht Schattenkopf
+                    else
+                    {
+                        echo"<img src=\"$g_root_path/adm_program/images/no_profile_pic.png\" alt=\"Profilfoto\">";
+                    }
+                echo"</div>";
+                
+                // Nur berechtigte User duerfen ein Profil editieren
+                if($g_current_user->editProfile($a_user_id) == true)
+                {
+                    echo "<div style=\"margin-top: 5px;\">
+                        <span class=\"iconLink\">
+                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$a_user_id\"><img
+                             class=\"iconLink\" src=\"$g_root_path/adm_program/images/photo.png\" style=\"vertical-align: top;\" border=\"0\" alt=\"Foto &auml;ndern\"></a>
+                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$a_user_id\">Foto &auml;ndern</a>
+                        </span>
+                    </div>";
+                }
+                echo"<div style=\"margin-top: 5px;\">
+                    <span class=\"iconLink\">
+                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id=$user->id\"><img
+                         class=\"iconLink\" src=\"$g_root_path/adm_program/images/vcard.png\" style=\"vertical-align: top;\" border=\"0\" title=\"Benutzer als vCard exportieren\" alt=\"Benutzer als vCard exportieren\"></a>
+                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id=$user->id\">vCard exportieren</a>
+                    </span>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div style=\"clear: left;\"><br /></div>
+    <div style=\"clear: left; font-size: 1pt;\">&nbsp;</div>";
 
-    <div style=\"width: 66%; margin-right: 10px; float: left;\">";
+    // *******************************************************************************
+    // Schleife ueber alle Kategorien und Felder ausser den Stammdaten
+    // *******************************************************************************
 
-        // *******************************************************************************
-        // zusaetzliche Daten-Block
-        // *******************************************************************************
-
-        // alle zugeordneten Messengerdaten einlesen
-        $sql = "SELECT usf_name, usf_description, usd_value
-                  FROM ". TBL_USER_DATA. ", ". TBL_USER_FIELDS. ", ". TBL_CATEGORIES. "
-                 WHERE usd_usr_id  = $user->id
-                   AND usd_usf_id  = usf_id
-                   AND usf_cat_id  = cat_id
-                   AND cat_org_id IS NULL
-                   AND cat_name    = 'Messenger'
-                 ORDER BY usf_sequence ASC ";
-        $result_msg = mysql_query($sql, $g_adm_con);
-        db_error($result_msg,__FILE__,__LINE__);
-        $count_msg = mysql_num_rows($result_msg);
-
-        // alle gruppierungsspezifischen Felder auslesen
-        $sql = "SELECT *
-                  FROM ". TBL_USER_FIELDS. " 
-                  LEFT JOIN ". TBL_USER_DATA. "
-                    ON usd_usf_id = usf_id
-                   AND usd_usr_id = $user->id
-                  JOIN ". TBL_CATEGORIES. "
-                    ON usf_cat_id = cat_id
-                   AND cat_org_id = $g_current_organization->id
-                   AND cat_system = 0 ";
-        if(!$g_current_user->assignRoles())
+    $category = "";
+    foreach($user->db_user_fields as $key => $value)
+    {
+        // Felder der Kategorie Stammdaten wurde schon angezeigt, nun alle anderen anzeigen
+        // versteckte Felder nur anzeigen, wenn man das Recht hat, dieses Profil zu editieren
+        if($value['cat_name'] != "Stammdaten"
+        && (  $g_current_user->editProfile($a_user_id) == true
+           || ($g_current_user->editProfile($a_user_id) == false && $value['usf_hidden'] == 0 )))
         {
-            $sql = $sql. " AND usf_hidden = 0 ";
-        }
-        $sql = $sql. " ORDER BY usf_sequence ASC ";
-        $result_field = mysql_query($sql, $g_adm_con);
-        db_error($result_field,__FILE__,__LINE__);
-        $count_field = mysql_num_rows($result_field);
-
-        // wenn Daten vorhanden, dann diese anzeigen
-        if($count_field > 0 || $count_msg > 0)
-        {
-            echo "<div class=\"groupBox\" style=\"margin-top: 4px; text-align: left;\">
-                <div class=\"groupBoxHeadline\">Zus&auml;tzliche Daten</div>";
-
-                if($count_msg > 0)
+            // Kategorienwechsel den Kategorienheader anzeigen
+            // Kategorie "Messenger" nur anzeigen, wenn auch Daten zugeordnet sind
+            if($category != $value['cat_name'] 
+            && (  $value['cat_name'] != "Messenger" 
+               || ($value['cat_name'] == "Messenger" && strlen($value['usd_value']) > 0 )))
+            {
+                if(strlen($category) > 0)
                 {
-                    // Messengerdaten anzeigen
-                    mysql_data_seek($result_msg, 0);
-                    $i = 1;
-
-                    while($row = mysql_fetch_object($result_msg))
-                    {
-                        echo "<div style=\"float: left; width: 30%; text-align: left\">";
-                        if($i == 1)
-                            echo "Messenger:";
-                        else
-                            echo "&nbsp;";
-                        echo "</div>
-                        <div style=\"text-align: left\">";
-
-                        if($row->usf_name == 'ICQ')
-                        {
-                            // Sonderzeichen aus der ICQ-Nummer entfernen (damit kommt www.icq.com nicht zurecht)
-                            preg_match_all("/\d+/", $row->usd_value, $matches);
-                            $icq_number = implode("", reset($matches));
-
-                            // ICQ Onlinestatus anzeigen
-                            echo "<a href=\"http://www.icq.com/whitepages/cmd.php?uin=$icq_number&amp;action=add\"  class=\"wpaction\">
-                            <img border=\"0\" src=\"http://status.icq.com/online.gif?icq=$icq_number&amp;img=5\"
-                            style=\"vertical-align: middle;\" alt=\"$row->usd_value zu $row->usf_description hinzuf&uuml;gen\" title=\"$row->usd_value zu $row->usf_description hinzuf&uuml;gen\" /></a>&nbsp;";
-                        }
-                        elseif($row->usf_name == 'Skype')
-                        {
-                            // Skype Onlinestatus anzeigen
-                            echo "<script type=\"text/javascript\" src=\"http://download.skype.com/share/skypebuttons/js/skypeCheck.js\"></script>
-                            <a href=\"skype:$row->usd_value?add\"><img src=\"http://mystatus.skype.com/smallicon/$row->usd_value\"
-                            style=\"border: none; vertical-align: middle;\" width=\"16\" height=\"16\" title=\"$row->usd_value zu $row->usf_description hinzuf&uuml;gen\" alt=\"$row->usd_value zu $row->usf_description hinzuf&uuml;gen\" /></a>&nbsp;&nbsp;";
-                        }
-                        else
-                        {
-                            echo "<img src=\"$g_root_path/adm_program/images/";
-                            if($row->usf_name == 'AIM')
-                            {
-                                echo "aim.png";
-                            }
-                            elseif($row->usf_name == 'Google Talk')
-                            {
-                                echo "google.gif";
-                            }
-                            elseif($row->usf_name == 'MSN')
-                            {
-                                echo "msn.png";
-                            }
-                            elseif($row->usf_name == 'Yahoo')
-                            {
-                                echo "yahoo.png";
-                            }
-                            echo "\" style=\"vertical-align: middle;\" alt=\"$row->usf_description\" title=\"$row->usf_description\" />&nbsp;&nbsp;";
-                        };
-                        if(strlen($row->usd_value) > 25)
-                        {
-                            echo "<span class=\"smallFontSize\">$row->usd_value</span>";
-                        }
-                        else
-                        {
-                            echo "$row->usd_value";
-                        }
-                        echo "</div>";
-                        $i++;
-                    }
+                    echo "</div>";
                 }
-
-                if($count_field > 0)
-                {
-                    // gruppierungsspezifische Felder anzeigen
-
-                    while($row_field = mysql_fetch_object($result_field))
-                    {
-                        echo "<div style=\"float: left; width: 30%; text-align: left\">
-                            $row_field->usf_name:</div>
-                        <div style=\"text-align: left\">";
-                            if(strlen($row_field->usd_value) > 0 || $row_field->usf_type == "CHECKBOX")
-                            {
-                                // Feldinhalt ausgeben
-                                switch($row_field->usf_type)
-                                {
-                                    case "CHECKBOX":
-                                        if($row_field->usd_value == 1)
-                                        {
-                                            echo "<img src=\"$g_root_path/adm_program/images/checkbox_checked.gif\" style=\"vertical-align: middle;\">&nbsp;";
-                                        }
-                                        else
-                                        {
-                                            echo "<img src=\"$g_root_path/adm_program/images/checkbox.gif\" style=\"vertical-align: middle;\">&nbsp;";
-                                        }
-                                        break;
-
-                                    case "DATE":
-                                        // Datum muss noch formatiert werden
-                                        $row_field->usd_value = mysqldate('d.m.y', $row_field->usd_value);
-                                        echo "$row_field->usd_value&nbsp;";
-                                        break;
-
-                                    case "EMAIL":
-                                        // E-Mail als Link darstellen
-                                        if($g_preferences['enable_mail_module'] == 1 && $row_field->usf_name == "E-Mail")
-                                        {
-                                            $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?usr_id=$user->id";
-                                        }
-                                        else
-                                        {
-                                            $mail_link = "mailto:$row_field->usd_value";
-                                        }
-                                        echo "<a href=\"$mail_link\">
-                                        <img src=\"$g_root_path/adm_program/images/email.png\" style=\"vertical-align: middle;\" alt=\"E-Mail an $row_field->usd_value schreiben\"
-                                        title=\"E-Mail an $row_field->usd_value schreiben\" border=\"0\"></a>
-                                        <a href=\"$mail_link\" style=\" overflow: visible; display: inline;\">";
-                                        if(strlen($row_field->usd_value) > 25)
-                                        {
-                                            echo "<span class=\"smallFontSize\">$row_field->usd_value</span>";
-                                        }
-                                        else
-                                        {
-                                            echo "$row_field->usd_value";
-                                        }
-                                        echo "</a>";
-                                        break;
-
-                                    case "URL":
-                                        // URL als Link darstellen
-                                        $row_field->usd_value = stripslashes($row_field->usd_value);
-                                        $row_field->usd_value = str_replace ("http://", "", $row_field->usd_value);
-                                        echo "
-                                        <a href=\"http://$row_field->usd_value\" target=\"_blank\">
-                                        <img src=\"$g_root_path/adm_program/images/globe.png\" style=\"vertical-align: middle;\" alt=\"Gehe zu $row_field->usd_value\"
-                                        title=\"Gehe zu $row_field->usd_value\" border=\"0\"></a>
-                                        <a href=\"http://$row_field->usd_value\" target=\"_blank\">";
-                                        if(strlen($row_field->usd_value) > 25)
-                                        {
-                                            echo "<span class=\"smallFontSize\">$row_field->usd_value</span>";
-                                        }
-                                        else
-                                        {
-                                            echo "$row_field->usd_value";
-                                        }
-                                        echo "</a>";
-                                        break;
-
-                                    default:
-                                        echo "$row_field->usd_value&nbsp;";
-                                        break;
-                                }
-                            }
-                            else
-                            {
-                                // Leerzeichen, damit Block gefuellt ist und Anzeige nicht verrutscht
-                                echo "&nbsp;";
-                            }
-                        echo "</div>";
-                    }
-
-                }
-            echo "</div>";
+                $category = $value['cat_name'];
+                
+                echo "<div class=\"groupBox\" style=\"margin-top: 10px; text-align: left;\">
+                    <div class=\"groupBoxHeadline\">". $value['cat_name']. "</div>";
+            }
+            
+            // Html des Feldes ausgeben
+            // bei Kategorie "Messenger" nur anzeigen, wenn auch Daten zugeordnet sind
+            if($value['cat_name'] != "Messenger" 
+            || ($value['cat_name'] == "Messenger" && strlen($value['usd_value']) > 0 ))
+            {
+                echo getFieldCode($value, $a_user_id);
+            }
         }
+    }
 
     echo "</div>
 
-    <div style=\"width: 32%; float: left;\">";
+   <div style=\"margin-top: 5px;\">";
 
         // *******************************************************************************
         // Rollen-Block
@@ -569,7 +481,7 @@ echo "</div>
         if($g_current_user->assignRoles())
         {
            // auch gesperrte Rollen, aber nur von dieser Gruppierung anzeigen
-           $sql    = "SELECT rol_name, org_shortname, mem_leader
+           $sql    = "SELECT *
                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_ORGANIZATIONS. "
                        WHERE mem_rol_id = rol_id
                          AND mem_valid  = 1
@@ -580,12 +492,12 @@ echo "</div>
                          AND (  cat_org_id = $g_current_organization->id
                              OR (   cat_org_id <> $g_current_organization->id
                                 AND rol_locked  = 0 ))
-                       ORDER BY org_shortname, rol_name ";
+                       ORDER BY org_shortname, cat_sequence, rol_name ";
         }
         else
         {
            // kein Moderator, dann keine gesperrten Rollen anzeigen
-           $sql    = "SELECT rol_name, org_shortname, mem_leader
+           $sql    = "SELECT *
                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_ORGANIZATIONS. "
                        WHERE mem_rol_id = rol_id
                          AND mem_valid  = 1
@@ -594,7 +506,7 @@ echo "</div>
                          AND rol_locked = 0
                          AND rol_cat_id = cat_id
                          AND cat_org_id = org_id
-                       ORDER BY org_shortname, rol_name";
+                       ORDER BY org_shortname, cat_sequence, rol_name";
         }
         $result_role = mysql_query($sql, $g_adm_con);
         db_error($result_role,__FILE__,__LINE__);
@@ -609,10 +521,25 @@ echo "</div>
             $count_grp = mysql_num_rows($result);
             $i = 0;
 
-            echo "<div class=\"groupBox\" style=\"margin-top: 4px; text-align: left; height: 100%;\">
-                <div class=\"groupBoxHeadline\">Rollen</div>";
+            echo "<div class=\"groupBox\" style=\"margin-top: 10px; text-align: left; height: 100%;\">
+                <div class=\"groupBoxHeadline\">
+                    <div style=\"width: 70%; float: left;\">
+                        Rollen und Berechtigungen&nbsp;";
+                    echo "</div>
+                    <div style=\"text-align: right;\">&nbsp;";
+                        // Moderatoren & Gruppenleiter duerfen neue Rollen zuordnen
+                        if(($g_current_user->assignRoles() || isGroupLeader() || $g_current_user->editUser())
+                        && $user->getValue("usr_reg_org_shortname") != $g_current_organization->shortname)
+                        {
+                            echo "<a href=\"$g_root_path/adm_program/modules/profile/roles.php?user_id=$a_user_id\"><img
+                            src=\"$g_root_path/adm_program/images/edit.png\" style=\"vertical-align: top;\" 
+                            border=\"0\" title=\"Rollen &auml;ndern\" alt=\"Rollen &auml;ndern\"></a>
+                            <a href=\"$g_root_path/adm_program/modules/profile/roles.php?user_id=$a_user_id\">Bearbeiten</a>";
+                        }
+                    echo "</div>
+                </div>";
 
-                while($row = mysql_fetch_object($result_role))
+                while($row = mysql_fetch_array($result_role))
                 {
                     // jede einzelne Rolle anzeigen
                     if($i > 0)
@@ -622,56 +549,86 @@ echo "</div>
 
                     if($count_grp > 1)
                     {
-                        echo "$row->org_shortname - ";
+                        echo $row['org_shortname']. " - ";
                     }
-                    echo $row->rol_name;
-                    if($row->mem_leader == 1)
+                    echo $row['cat_name']. " - ". $row['rol_name'];
+                    if($row['mem_leader'] == 1)
                     {
                         echo " - Leiter";
+                    }
+                    if($row['org_shortname'] == $g_current_organization->shortname)
+                    {
+                        // nun fuer alle Rollenrechte die Icons anzeigen
+                        echo "&nbsp;";
+                        if($row['rol_assign_roles'] == 1)
+                        {
+                            echo "&nbsp;<img style=\"cursor: help; vertical-align: top;\" src=\"$g_root_path/adm_program/images/wand.png\"
+                                 alt=\"Rollen verwalten und zuordnen\" title=\"Rollen verwalten und zuordnen\">";
+                        }
+                        if($row['rol_edit_user'] == 1)
+                        {
+                            echo "&nbsp;<img style=\"cursor: help; vertical-align: top;\" src=\"$g_root_path/adm_program/images/group.png\"
+                                 alt=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\" title=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\">";
+                        }
+                        if($row['rol_profile'] == 1)
+                        {
+                            echo "&nbsp;<img style=\"cursor: help; vertical-align: top;\" src=\"$g_root_path/adm_program/images/user.png\"
+                                 alt=\"Eigenes Profil bearbeiten\" title=\"Eigenes Profil bearbeiten\">";
+                        }
+                        if($row['rol_announcements'] == 1 && $g_preferences['enable_announcements_module'] == 1)
+                        {
+                            echo "&nbsp;<img style=\"cursor: help; vertical-align: top;\" src=\"$g_root_path/adm_program/images/note.png\"
+                                 alt=\"Ank&uuml;ndigungen anlegen und bearbeiten\" title=\"Ank&uuml;ndigungen anlegen und bearbeiten\">";
+                        }
+                        if($row['rol_dates'] == 1 && $g_preferences['enable_dates_module'] == 1)
+                        {
+                            echo "&nbsp;<img style=\"cursor: help; vertical-align: top;\" src=\"$g_root_path/adm_program/images/date.png\"
+                                 alt=\"Termine anlegen und bearbeiten\" title=\"Termine anlegen und bearbeiten\">";
+                        }
+                        if($row['rol_photo'] == 1 && $g_preferences['enable_photo_module'] == 1)
+                        {
+                            echo "&nbsp;<img style=\"cursor: help; vertical-align: top;\" src=\"$g_root_path/adm_program/images/photo.png\"
+                                 alt=\"Fotos hochladen und bearbeiten\" title=\"Fotos hochladen und bearbeiten\">";
+                        }
+                        if($row['rol_download'] == 1 && $g_preferences['enable_download_module'] == 1)
+                        {
+                            echo "&nbsp;<img style=\"cursor: help; vertical-align: top;\" src=\"$g_root_path/adm_program/images/folder_down.png\"
+                                 alt=\"Downloads hochladen und bearbeiten\" title=\"Downloads hochladen und bearbeiten\">";
+                        }
+                        if($row['rol_guestbook'] == 1 && $g_preferences['enable_guestbook_module'] == 1)
+                        {
+                            echo "&nbsp;<img style=\"cursor: help; vertical-align: top;\" src=\"$g_root_path/adm_program/images/comment.png\"
+                                 alt=\"G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen\" title=\"G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen\">";
+                        }
+                        if($row['rol_guestbook_comments'] == 1 && $g_preferences['enable_guestbook_module'] == 1)
+                        {
+                            echo "&nbsp;<img style=\"cursor: help; vertical-align: top;\" src=\"$g_root_path/adm_program/images/comments.png\"
+                                 alt=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\" title=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\">";
+                        }
+                        if($row['rol_weblinks'] == 1 && $g_preferences['enable_weblinks_module'] == 1)
+                        {
+                            echo "&nbsp;<img style=\"cursor: help; vertical-align: top;\" src=\"$g_root_path/adm_program/images/globe.png\"
+                                 alt=\"Weblinks anlegen und bearbeiten\" title=\"Weblinks anlegen und bearbeiten\">";
+                        }
                     }
                     $i++;
                 }
             echo "</div>";
         }
-    echo "</div>
+    echo "</div>";
 
-    <div style=\"clear: left;\"><br /></div>
-
-    <div>";
-        if($a_user_id != $g_current_user->id && isset($_GET['user_id']) == true)
-        {
-            echo "<span class=\"iconLink\">
+    if($a_user_id != $g_current_user->getValue("usr_id") && isset($_GET['user_id']) == true)
+    {
+        echo "<div style=\"clear: left; font-size: 1pt;\">&nbsp;</div>
+        <div style=\"margin-top: 5px;\">
+            <span class=\"iconLink\">
                 <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\"><img
                  class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Zur&uuml;ck\"></a>
                 <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
-            </span>";
-        }
-        // Wenn der User nicht das Recht hat das Profil zu aendern,
-        // werden die Links nicht angezeigt
-        if($g_current_user->editProfile($a_user_id) == true)
-        {
-            if($a_user_id != $g_current_user->id && isset($_GET['user_id']) == true)
-            {
-                echo "&nbsp;&nbsp;&nbsp;&nbsp;";
-            }
-            echo "<span class=\"iconLink\">
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$a_user_id\"><img
-                 class=\"iconLink\" src=\"$g_root_path/adm_program/images/photo.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Profilfoto &auml;ndern\"></a>
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$a_user_id\">Profilfoto &auml;ndern</a>
             </span>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <span class=\"iconLink\">
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$a_user_id\"><img
-                 class=\"iconLink\" src=\"$g_root_path/adm_program/images/edit.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Profildaten &auml;ndern\"></a>
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$a_user_id\">Profildaten &auml;ndern</a>
-            </span>";
-        }
-        else
-        {
-            echo "&nbsp;&nbsp;&nbsp;&nbsp;";
-        }
-    echo "</div>
-</div>";
+        </div>";
+    }
+echo "</div>";
 
 require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
 

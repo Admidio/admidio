@@ -393,7 +393,7 @@ echo "
             </div>
             <div class=\"smallText\">
                 Hier kann die Art der Registrierung festgelegt bzw. ganz abgeschaltet werden. Mit der schnellen
-                Registrierung kann der Benutzer nur die Logindaten und seinen Namen eingeben, bei der erweiterten
+                Registrierung kann der Benutzer nur die Pflichtfelder eingeben, bei der erweiterten
                 Registrierung stehen ihm alle Felder des Profils zur Verf&uuml;gung.
             </div>
 

@@ -166,6 +166,7 @@ class UserField
             case "usf_system":
             case "usf_disabled":
             case "usf_hidden":
+            case "usf_mandatory":
                 if($field_value != 1)
                 {
                     $field_value = 0;
@@ -190,8 +191,6 @@ class UserField
         && $this->db_fields['usf_id'] > 0 
         && is_numeric($this->db_fields['usf_id']))
         {
-            $act_date = date("Y-m-d H:i:s", time());
-
             // SQL-Update-Statement zusammenbasteln
             $item_connection = "";
             $sql_field_list  = "";
@@ -239,8 +238,6 @@ class UserField
         if(isset($this->db_fields['usf_id']) == false
         || $this->db_fields['usf_id']        == 0 )
         {
-            $act_date = date("Y-m-d H:i:s", time());
-            
             // SQL-Update-Statement zusammenbasteln
             $item_connection = "";
             $sql_field_list  = "";

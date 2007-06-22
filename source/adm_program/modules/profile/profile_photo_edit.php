@@ -41,7 +41,7 @@ if (ini_get('file_uploads') != '1')
 }
 
 // lokale Variablen der Uebergabevariablen initialisieren
-$req_usr_id = $g_current_user->id;
+$req_usr_id = $g_current_user->getValue("usr_id");
 $job        = NULL;
 
 // Uebergabevariablen pruefen
@@ -73,8 +73,7 @@ if($g_current_user->editProfile($req_usr_id) == false)
 }
 
 // User auslesen
-$user = new User($g_adm_con);
-$user->GetUser($req_usr_id);
+$user = new User($g_adm_con, $req_usr_id);
 
 if($job=="save")
 {
@@ -169,13 +168,13 @@ if($job==NULL)
 {
     echo "
     <div class=\"formHead\">";
-        if($req_usr_id == $g_current_user->id)
+        if($req_usr_id == $g_current_user->getValue("usr_id"))
         {
             echo "Mein Profilfoto &auml;ndern";
         }
         else
         {
-            echo "Profilfoto von ". $user->first_name. " ". $user->last_name. " &auml;ndern";
+            echo "Profilfoto von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname"). " &auml;ndern";
         }
     echo "</div>
 
@@ -229,13 +228,13 @@ if($job=="upload")
 {
     echo "
     <div class=\"formHead\">";
-        if($req_usr_id == $g_current_user->id)
+        if($req_usr_id == $g_current_user->getValue("usr_id"))
         {
             echo "Mein Profilfoto";
         }
         else
         {
-            echo "Profilfoto von ". $user->first_name. " ". $user->last_name;
+            echo "Profilfoto von ". $_user->getValue("Vorname"). " ". $user->getValue("Nachname");
         }
     echo "</div>
 

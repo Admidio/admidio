@@ -238,6 +238,22 @@ echo "
                 onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=field_disabled','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
             </div>
         </div>
+        <div style=\"margin-top: 6px;\">
+            <div style=\"text-align: right; width: 28%; float: left;\">
+                <img src=\"$g_root_path/adm_program/images/asterisk_yellow.png\" alt=\"Pflichtfeld, muss vom Benutzer gef&uuml;llt werden\">
+            </div>
+            <div style=\"text-align: left; margin-left: 29%;\">
+                <input type=\"checkbox\" id=\"usf_mandatory\" name=\"usf_mandatory\" ";
+                if($user_field->getValue("usf_mandatory") == 1)
+                {
+                    echo " checked ";
+                }
+                echo " value=\"1\" />
+                <label for=\"usf_mandatory\">Pflichtfeld, muss vom Benutzer gef&uuml;llt werden&nbsp;</label>
+                <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: middle;\" vspace=\"1\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=field_mandatory','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
+            </div>
+        </div>
 
         <hr class=\"formLine\" width=\"85%\" />
 

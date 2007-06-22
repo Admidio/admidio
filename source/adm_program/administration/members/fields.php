@@ -109,8 +109,9 @@ echo "
             <th class=\"tableHeader\" style=\"text-align: left;\">Beschreibung</th>
             <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/eye.png\" alt=\"Feld f&uuml;r alle Benutzer bzw. nur berechtigte Nutzer sichtbar\" title=\"Feld f&uuml;r alle Benutzer bzw. nur berechtigte Nutzer sichtbar\"></th>
             <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/textfield_key.png\" alt=\"Feld nur f&uuml;r berechtigte Benutzer (Rollenrecht bzw. eigenes Profil) editierbar\" title=\"Feld nur f&uuml;r berechtigte Benutzer (Rollenrecht bzw. eigenes Profil) editierbar\"></th>
+            <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/asterisk_yellow.png\" alt=\"Pflichtfeld, muss vom Benutzer gef&uuml;llt werden\" title=\"Pflichtfeld, muss vom Benutzer gef&uuml;llt werden\"></th>
             <th class=\"tableHeader\" style=\"text-align: left;\">Datentyp</th>
-            <th class=\"tableHeader\">&nbsp;</th>
+            <th class=\"tableHeader\" style=\"width: 40px;\">&nbsp;</th>
         </tr>
     </thead>";
     
@@ -128,7 +129,7 @@ echo "
                 }
                 echo "<tbody>
                     <tr>
-                        <td class=\"tableSubHeader\" colspan=\"7\">
+                        <td class=\"tableSubHeader\" colspan=\"8\">
                             <div class=\"tableSubHeaderFont\" style=\"float: left;\"><a
                                 href=\"javascript:showHideBlock('$row->cat_name', '$g_root_path')\"><img name=\"img_$row->cat_name\" src=\"$g_root_path/adm_program/images/bullet_toggle_minus.png\" 
                                 style=\"vertical-align: middle;\" border=\"0\" alt=\"ausblenden\"></a>$row->cat_name</div>
@@ -165,6 +166,16 @@ echo "
                     else
                     {
                         echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/textfield.png\" alt=\"Feld im eigenen Profil und f&uuml;r berechtigte Benutzer editierbar\" title=\"Feld im eigenen Profil und f&uuml;r berechtigte Benutzer editierbar\">";
+                    }
+                echo "</td>
+                <td style=\"text-align: center;\">";
+                    if($row->usf_mandatory == 1)
+                    {
+                        echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/asterisk_yellow.png\" alt=\"Pflichtfeld, muss vom Benutzer gef&uuml;llt werden\" title=\"Pflichtfeld, muss vom Benutzer gef&uuml;llt werden\">";
+                    }
+                    else
+                    {
+                        echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/asterisk_gray.png\" alt=\"Feld muss nicht zwingend vom Benutzer gef&uuml;llt werden\" title=\"Feld muss nicht zwingend vom Benutzer gef&uuml;llt werden\">";
                     }
                 echo "</td>
                 <td style=\"text-align: left;\">";
