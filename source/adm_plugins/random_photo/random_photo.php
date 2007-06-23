@@ -1,11 +1,11 @@
 <?php
 /******************************************************************************
- * Sidebar Announcements
+ * Random Photo
  *
- * Version 1.0.2
+ * Version 1.0.1
  *
- * Plugin das die letzten X Ankuendigungen in einer schlanken Oberflaeche auflistet
- * und so ideal in einer Seitenleiste eingesetzt werden kann
+ * Plugin zeigt ein zufaellig ausgewaehltes Foto aus dem Fotomodul an und 
+ * und verlinkt neben dem Bild die dazugehörige Veranstaltung
  *
  * Kompatible ab Admidio-Versions 1.4.1
  *
