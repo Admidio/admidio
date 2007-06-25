@@ -170,6 +170,7 @@ if($_GET['mode'] == 1)
 
     $_SESSION['navigation']->deleteLastUrl();
     unset($_SESSION['fields_request']);
+    unset($_SESSION['g_current_user']);
 
     $err_code = "save";
 }
@@ -185,6 +186,7 @@ elseif($_GET['mode'] == 2 || $_GET["mode"] == 3)
     {
         // Feld loeschen
         $user_field->delete();
+        unset($_SESSION['g_current_user']);
 
         $err_code = "delete";
     }

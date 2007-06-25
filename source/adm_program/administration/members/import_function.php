@@ -26,9 +26,6 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
-$err_code = "";
-$err_text = "";
-
 // Uebergabevariablen pruefen
 if(isset($_POST["rol_id"]) == false || is_numeric($_POST["rol_id"]) == false)
 {
@@ -48,24 +45,16 @@ if(!$g_current_user->editUser())
 
 if(strlen($_FILES['userfile']['tmp_name']) == 0)
 {
-    $err_code = "feld";
-    $err_text = "Datei";
+    $g_message->show("feld", "Datei");
 }
 else if($_FILES['userfile']['error'] == 1)
 {
     //Dateigroesse ueberpruefen Servereinstellungen
-    $err_code = "file_2big_server";
-    $err_text = $g_preferences['max_file_upload_size'];
+    $g_message->show("file_2big_server", $g_preferences['max_file_upload_size']);
 }
 else if($_POST['rol_id'] == 0)
 {
-    $err_code = "feld";
-    $err_text = "Rolle";
-}
-
-if(strlen($err_code) > 0)
-{
-    $g_message->show($err_code, $err_text);
+    $g_message->show("feld", "Rolle");
 }
 
 $_SESSION["rol_id"]           = $_POST["rol_id"];

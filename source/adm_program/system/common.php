@@ -63,6 +63,9 @@ if(strlen($g_tbl_praefix) == 0)
 define("TBL_ANNOUNCEMENTS",     $g_tbl_praefix. "_announcements");
 define("TBL_CATEGORIES",        $g_tbl_praefix. "_categories");
 define("TBL_DATES",             $g_tbl_praefix. "_dates");
+define("TBL_FILES",             $g_tbl_praefix. "_files");
+define("TBL_FOLDERS",           $g_tbl_praefix. "_folders");
+define("TBL_FOLDER_ROLES",      $g_tbl_praefix. "_folder_roles");
 define("TBL_GUESTBOOK",         $g_tbl_praefix. "_guestbook");
 define("TBL_GUESTBOOK_COMMENTS",$g_tbl_praefix. "_guestbook_comments");
 define("TBL_LINKS",             $g_tbl_praefix. "_links");
@@ -289,9 +292,9 @@ if($g_forum_integriert)
     if($g_session_valid)
     {
         // Ab und an werden die Userid, Username und Password aus der Session gelöscht. 
-		// Dies behebt den Fehler.
-		$g_forum->user($g_current_user->login_name);
-		
+        // Dies behebt den Fehler.
+        $g_forum->user($g_current_user->login_name);
+        
         // Wenn die Forum Session bereits valid ist, wird diese Abfrage uebersprungen
         if($g_forum->session_valid != TRUE)
         { 

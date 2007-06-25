@@ -274,7 +274,8 @@ echo "
             echo "</td>
         </tr>";
     }
-echo "</table>";
+echo "</tbody>
+</table>";
     
 require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
 

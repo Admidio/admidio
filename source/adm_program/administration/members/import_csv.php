@@ -26,24 +26,21 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
-$err_code = "";
-$err_text = "";
-
 // nur berechtigte User duerfen User importieren
 if(!$g_current_user->editUser())
 {
     $g_message->show("norights");
 }
 
-// Felder prüfen
+// Pflichtfelder prüfen
 
-if($_POST["usr_last_name"] == 0)
+foreach($g_current_user->db_user_fields as $key => $value)
 {
-    $g_message->show("feld", "Nachname");
-}
-if($_POST["usr_first_name"] == 0)
-{
-    $g_message->show("feld", "Vorname");
+    if($value['usf_mandatory'] == 1
+    && strlen($_POST['usf-'. $value['usf_id']]) == 0)
+    {
+        $g_message->show("feld", $value['usf_name']);
+    }
 }
 
 if(array_key_exists("first_row", $_POST))
@@ -55,27 +52,12 @@ else
     $first_row_title = false;
 }
 
-// die organisationsspezifischen Felder in ein Array schreiben,
-// damit man spaeter schneller darauf zugreifen kann
-$sql = "SELECT *
-          FROM ". TBL_USER_FIELDS. ", ". TBL_CATEGORIES. "
-         WHERE usf_cat_id = cat_id
-	       AND (  cat_org_id = $g_current_organization->id
-               OR cat_org_id IS NULL )
-         ORDER BY cat_sequence ASC, usf_sequence ASC ";
-$result_field = mysql_query($sql, $g_adm_con);
-db_error($result_field,__FILE__,__LINE__);
-
-while($row = mysql_fetch_object($result_field))
-{
-    $arr_user_fields[$row->usf_id] = $row->usf_id;
-}
-
 // jede Zeile aus der Datei einzeln durchgehen und den Benutzer in der DB anlegen
 $line = reset($_SESSION["file_lines"]);
 $user = new User($g_adm_con);
 $start_row    = 0;
 $count_import = 0;
+$imported_fields = array();
 
 if($first_row_title == true)
 {
@@ -88,90 +70,151 @@ for($i = $start_row; $i < count($_SESSION["file_lines"]); $i++)
 {
     $user->clear();
     $arr_columns = explode($_SESSION["value_separator"], $line);
-    $value = reset($arr_columns);
 
-    for($j = 1; $j <= count($arr_columns); $j++)
+    foreach($arr_columns as $col_key => $col_value)
     {
         // Hochkomma und Spaces entfernen
-        $value = trim(str_replace("\"", "", $value));
-
-        if($j == $_POST["usr_last_name"])
+        $col_value = trim(strip_tags(str_replace("\"", "", $col_value)));
+        
+        // nun alle Userfelder durchgehen und schauen, bei welchem
+        // die entsprechende Dateispalte ausgewaehlt wurde
+        // dieser dann den Wert zuordnen
+        foreach($user->db_user_fields as $key => $value)
         {
-            $user->last_name = $value;
-        }
-        else if($j == $_POST["usr_first_name"])
-        {
-            $user->first_name = $value;
-        }
-        else if($j == $_POST["usr_address"])
-        {
-            $user->address = $value;
-        }
-        else if($j == $_POST["usr_zip_code"])
-        {
-            $user->zip_code = $value;
-        }
-        else if($j == $_POST["usr_city"])
-        {
-            $user->city = $value;
-        }
-        else if($j == $_POST["usr_country"])
-        {
-            $user->country = $value;
-        }
-        else if($j == $_POST["usr_phone"])
-        {
-            $user->phone = $value;
-        }
-        else if($j == $_POST["usr_mobile"])
-        {
-            $user->mobile = $value;
-        }
-        else if($j == $_POST["usr_fax"])
-        {
-            $user->fax = $value;
-        }
-        else if($j == $_POST["usr_email"])
-        {
-            $user->email = $value;
-        }
-        else if($j == $_POST["usr_homepage"])
-        {
-            $user->homepage = $value;
-        }
-        else if($j == $_POST["usr_birthday"])
-        {
-            if(strlen($value) > 0
-            && dtCheckDate($value))
+            if($col_key > 0 && $col_key == $_POST['usf-'. $value['usf_id']])
             {
-                $user->birthday = dtFormatDate($value, "Y-m-d");
+                // importiertes Feld merken
+                if(!isset($imported_fields[$value['usf_id']]))
+                {
+                    $imported_fields[$value['usf_id']] = $value['usf_name'];
+                }
+                
+                if($value['usf_name'] == "Geschlecht")
+                {
+                    if(strtolower($col_value) == "m"
+                    || strtolower($col_value) == "männlich"
+                    || $col_value             == "1")
+                    {
+                        $user->setValue($value['usf_name'], "1");
+                    }
+                    if(strtolower($col_value) == "w"
+                    || strtolower($col_value) == "weiblich"
+                    || $col_value             == "2")
+                    {
+                        $user->setValue($value['usf_name'], "2");
+                    }
+                }
+                elseif($value['usf_type'] == "CHECKBOX")
+                {
+                    if(strtolower($col_value) == "j"
+                    || strtolower($col_value) == "ja"
+                    || strtolower($col_value) == "y"
+                    || strtolower($col_value) == "yes"
+                    || $col_value             == "1")
+                    {
+                        $user->setValue($value['usf_name'], "1");
+                    }
+                    if(strtolower($col_value) == "n"
+                    || strtolower($col_value) == "nein"
+                    || strtolower($col_value) == "no"
+                    || $col_value             == "0"
+                    || strlen($col_value)     == 0)
+                    {
+                        $user->setValue($value['usf_name'], "0");
+                    }
+                }
+                elseif($value['usf_type'] == "DATE")
+                {
+                    if(strlen($col_value) > 0
+                    && dtCheckDate($col_value))
+                    {
+                        $user->setValue($value['usf_name'], dtFormatDate($col_value, "Y-m-d"));
+                    }
+                }
+                elseif($value['usf_type'] == "EMAIL")
+                {
+                    if(isValidEmailAddress($col_value))
+                    {
+                        $user->setValue($value['usf_name'], substr($col_value, 0, 50));
+                    }
+                }
+                elseif($value['usf_type'] == "INTEGER")
+                {
+                    // Integer sollte kleiner als 2 Milliarden sein
+                    if($col_value > -2000000000 && $col_value < 2000000000)
+                    {
+                        $user->setValue($value['usf_name'], $col_value);
+                    }
+                }
+                elseif($value['usf_type'] == "TEXT_BIG")
+                {
+                    $user->setValue($value['usf_name'], substr($col_value, 0, 255));
+                }
+                elseif($value['usf_type'] == "URL")
+                {
+                    if(strlen($col_value) > 0)
+                    {
+                        if(substr_count(strtolower($col_value), "http://") == 0)
+                        {
+                            $col_value = "http://". $col_value;
+                        }                    
+                        $user->setValue($value['usf_name'], substr($col_value, 0, 50));
+                    }
+                }
+                else
+                {
+                    
+                    $user->setValue($value['usf_name'], substr($col_value, 0, 50));
+                }
             }
         }
-        else if($j == $_POST["usr_gender"])
-        {
-            $user->gender = $value;
-        }
-
-        $value = next($arr_columns);
     }
 
     // schauen, ob schon User mit dem Namen existieren
-    $sql = "SELECT usr_id FROM ". TBL_USERS. "
-             WHERE usr_last_name  = '$user->last_name'
-               AND usr_first_name = '$user->first_name'
-               AND usr_valid      = 1 ";
+    $sql = "SELECT usr_id 
+              FROM ". TBL_USERS. "
+             RIGHT JOIN ". TBL_USER_DATA. " last_name
+                ON last_name.usd_usr_id = usr_id
+               AND last_name.usd_usf_id = ".  $user->getProperty("Nachname", "usf_id"). "
+               AND last_name.usd_value  = '". $user->getValue("Nachname"). "'
+             RIGHT JOIN ". TBL_USER_DATA. " first_name
+                ON first_name.usd_usr_id = usr_id
+               AND first_name.usd_usf_id = ".  $user->getProperty("Vorname", "usf_id"). "
+               AND first_name.usd_value  = '". $user->getValue("Vorname"). "'
+             WHERE usr_valid      = 1 ";
+    error_log($sql);
     $result = mysql_query($sql, $g_adm_con);
     db_error($result,__FILE__,__LINE__);
     $dup_users = mysql_num_rows($result);
 
-    if($dup_users > 0 && $_SESSION["user_import_mode"] == 3)
+    if($dup_users > 0)
     {
-        // alle vorhandene User mit dem Namen loeschen
-        while($row = mysql_fetch_object($result))
+        $duplicate_user = new User($g_adm_con);
+        
+        if($_SESSION["user_import_mode"] == 3)
         {
-            $duplicate_user = new User($g_adm_con);
-            $duplicate_user->GetUser($row->usr_id);
-            $duplicate_user->delete();
+            // alle vorhandene User mit dem Namen loeschen            
+            while($row = mysql_fetch_array($result))
+            {
+                $duplicate_user->GetUser($row['usr_id']);
+                $duplicate_user->delete();
+            }
+        }
+        elseif($_SESSION["user_import_mode"] == 4 && $dup_users == 1)
+        {
+            // Daten des Nutzers werden angepasst
+            $row = mysql_fetch_array($result);
+            $duplicate_user->GetUser($row['usr_id']);
+            
+            foreach($imported_fields as $key => $field_name)
+            {
+                if($field_name != "Nachname" && $field_name != "Vorname"
+                && $duplicate_user->getValue($field_name) != $user->getValue($field_name))
+                {
+                    $duplicate_user->setValue($field_name, $user->getValue($field_name));
+                }
+            }
+            $user = $duplicate_user;
         }
     }
 
@@ -179,47 +222,50 @@ for($i = $start_row; $i < count($_SESSION["file_lines"]); $i++)
     || ($dup_users  > 0 && $_SESSION["user_import_mode"] > 1) )
     {
         // Usersatz anlegen
-        $user->insert($g_current_user->id);
+        $user->save($g_current_user->id);
         $count_import++;
-
-        $usf_id = reset($arr_user_fields);
-
-        for($j = 1; $j <= count($arr_user_fields); $j++)
+        $mem_exists = false;
+        
+        if($_SESSION["user_import_mode"] == 1 || $_SESSION["user_import_mode"] == 4)
         {
-            // wenn dem Orga-Feld eine Spalte aus der Datei zugeordnet wurde
-            if($_POST[$usf_id] > 0)
+            // Benutzer existierte schon, dann schauen, ob Mitgliedschaft nicht bereits existiert
+            $sql = "SELECT COUNT(*) as count FROM ". TBL_MEMBERS. "
+                     WHERE mem_rol_id = ". $_SESSION['rol_id']. "
+                       AND mem_usr_id = ". $user->getValue("usr_id");
+            $result = mysql_query($sql, $g_adm_con);
+            db_error($result,__FILE__,__LINE__);
+            $row = mysql_fetch_array($result);
+            
+            if($row['count'] > 0)
             {
-                $arr_index = $_POST[$usf_id]-1;
-                $value = $arr_columns["$arr_index"];
-                $value = trim(str_replace("\"", "", $value));
-
-                if(strlen($value) > 0)
-                {
-                    // Inhalt des Orga-Feldes schreiben
-                    $sql = "INSERT INTO ". TBL_USER_DATA. " (usd_usr_id, usd_usf_id, usd_value)
-                                                     VALUES ($user->id, $usf_id, '$value') ";
-                    $result = mysql_query($sql, $g_adm_con);
-                    db_error($result,__FILE__,__LINE__);
-                }
+                $sql = "UPDATE ". TBL_USERS. " SET mem_end   = NULL
+                                                 , mem_valid = 1 
+                         WHERE mem_usr_id = ". $user->getValue("usr_id");
+                $result = mysql_query($sql, $g_adm_con);
+                db_error($result,__FILE__,__LINE__);
+                $mem_exists = true;
             }
-            $usf_id = next($arr_user_fields);
         }
 
-        // Rolle dem User zuordnen
-        $sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin, mem_valid)
-                                       VALUES (". $_SESSION['rol_id']. ", $user->id, NOW(), 1) ";
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result,__FILE__,__LINE__);
+        if($mem_exists == false)
+        {
+            // Rolle dem User zuordnen
+            $sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin, mem_valid)
+                                           VALUES (". $_SESSION['rol_id']. ", ". $user->getValue("usr_id"). ", NOW(), 1) ";
+            error_log($sql);
+            $result = mysql_query($sql, $g_adm_con);
+            db_error($result,__FILE__,__LINE__);
+        }
     }
 
     $line = next($_SESSION["file_lines"]);
 }
 
 // Session-Variablen wieder initialisieren
-$_SESSION["role"]            = "";
+$_SESSION["role"]             = "";
 $_SESSION["user_import_mode"] = "";
-$_SESSION["file_lines"]      = "";
-$_SESSION["value_separator"] = "";
+$_SESSION["file_lines"]       = "";
+$_SESSION["value_separator"]  = "";
 
 $g_message->setForwardUrl("$g_root_path/adm_program/administration/members/members.php");
 $g_message->show("import", $count_import);
