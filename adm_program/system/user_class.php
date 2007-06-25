@@ -161,51 +161,61 @@ class User
                     $this->valid          = $row['usr_valid'];
                     $this->reg_org_shortname = $row->usr_reg_org_shortname;
                 }
-                
-                $field_usd_value = "usd_value";
-                $join_user_data  = "LEFT JOIN ". TBL_USER_DATA. "
-                                      ON usd_usf_id = usf_id
-                                     AND usd_usr_id = $user_id";
-                $this->db_fields_changed = false;
+            }
+            
+            // user_data-Array aufbauen
+            $this->fillUserFieldArray($user_id);
+        }
+    }
+    
+    function fillUserFieldArray($user_id = 0)
+    {
+        global $g_current_organization;
+        
+        if(is_numeric($user_id) && $user_id > 0)
+        {        
+            $field_usd_value = "usd_value";
+            $join_user_data  = "LEFT JOIN ". TBL_USER_DATA. "
+                                  ON usd_usf_id = usf_id
+                                 AND usd_usr_id = $user_id";
+        }
+        else
+        {
+            $field_usd_value = "NULL as usd_value";
+            $join_user_data  = "";
+        }
+        
+        // Daten aus adm_user_data auslesen
+        $sql = "SELECT usf_id, usf_cat_id, cat_name, usf_name, usf_type, usf_description, 
+                       usf_disabled, usf_hidden, usf_mandatory, usf_system, $field_usd_value
+                  FROM ". TBL_CATEGORIES. ", ". TBL_USER_FIELDS. "
+                       $join_user_data
+                 WHERE usf_cat_id = cat_id 
+                   AND (  cat_org_id IS NULL
+                       OR cat_org_id  = $g_current_organization->id )
+                 ORDER BY cat_sequence, usf_sequence";
+        error_log($sql);
+        $result_usf = mysql_query($sql, $this->db_connection);
+        db_error($result_usf,__FILE__,__LINE__);        
+
+        while($row_usf = mysql_fetch_array($result_usf))
+        {
+            // ein mehrdimensionales Array aufbauen, welche fuer jedes usf-Feld alle 
+            // Daten des Sql-Statements beinhaltet
+            for($i = 0; $i < mysql_num_fields($result_usf); $i++)
+            {
+                $this->db_user_fields[$row_usf['usf_name']][mysql_field_name($result_usf, $i)] = $row_usf[$i];
+            }
+            // Flag, ob der Inhalt geaendert wurde, um das Update effektiver zu gestalten
+            $this->db_user_fields[$row_usf['usf_name']]['changed'] = false;
+            // Flag, welches angibt, ob der Wert neu hinzugefuegt wurde
+            if(is_null($row_usf['usd_value']))
+            {
+                $this->db_user_fields[$row_usf['usf_name']]['new'] = true;
             }
             else
             {
-                $field_usd_value = "NULL as usd_value";
-                $join_user_data  = "";
-            }
-            
-            // Daten aus adm_user_data auslesen
-            $sql = "SELECT usf_id, usf_cat_id, cat_name, usf_name, usf_type, usf_description, 
-                           usf_disabled, usf_hidden, usf_mandatory, usf_system, $field_usd_value
-                      FROM ". TBL_CATEGORIES. ", ". TBL_USER_FIELDS. "
-                           $join_user_data
-                     WHERE usf_cat_id = cat_id 
-                       AND (  cat_org_id IS NULL
-                           OR cat_org_id  = $g_current_organization->id )
-                     ORDER BY cat_sequence, usf_sequence";
-            $result_usf = mysql_query($sql, $this->db_connection);
-            db_error($result_usf,__FILE__,__LINE__);
-            error_log($sql);
-            
-            while($row_usf = mysql_fetch_array($result_usf))
-            {
-                // ein mehrdimensionales Array aufbauen, welche fuer jedes usf-Feld alle 
-                // Daten des Sql-Statements beinhaltet
-                for($i = 0; $i < mysql_num_fields($result_usf); $i++)
-                {
-                    $this->db_user_fields[$row_usf['usf_name']][mysql_field_name($result_usf, $i)] = $row_usf[$i];
-                }
-                // Flag, ob der Inhalt geaendert wurde, um das Update effektiver zu gestalten
-                $this->db_user_fields[$row_usf['usf_name']]['changed'] = false;
-                // Flag, welches angibt, ob der Wert neu hinzugefuegt wurde
-                if(is_null($row_usf['usd_value']))
-                {
-                    $this->db_user_fields[$row_usf['usf_name']]['new'] = true;
-                }
-                else
-                {
-                    $this->db_user_fields[$row_usf['usf_name']]['new'] = false;
-                }
+                $this->db_user_fields[$row_usf['usf_name']]['new'] = false;
             }
         }
     }
@@ -213,6 +223,8 @@ class User
     // alle Klassenvariablen wieder zuruecksetzen
     function clear()
     {
+        $this->db_fields_changed = false;
+    
         $this->id             = 0;
         $this->last_name      = "";
         $this->first_name     = "";
@@ -251,13 +263,8 @@ class User
                 }
                 else
                 {
-                    $this->db_fields[$key] = null;
+                    $this->db_fields[$key] = NULL;
                 }
-            }
-
-            foreach($this->db_user_fields as $key => $value)
-            {
-                $this->db_user_fields[$key] = null;
             }
         }
         else
@@ -276,9 +283,25 @@ class User
                 }
                 else
                 {
-                    $this->db_fields[$row['Field']] = null;
+                    $this->db_fields[$row['Field']] = NULL;
                 }
             }
+        }
+        
+        // user_data-Array initialisieren
+        if(count($this->db_user_fields) > 0)
+        {
+            foreach($this->db_user_fields as $key => $value)
+            {
+                $this->db_user_fields[$key]['usd_value'] = NULL;
+                $this->db_user_fields[$key]['new']       = true;
+                $this->db_user_fields[$key]['changed']   = false;
+            }
+        }
+        else
+        {
+            // user_data-Array aufbauen
+            $this->fillUserFieldArray();
         }
         
         // User Rechte vorbelegen
@@ -309,7 +332,7 @@ class User
         
         if(strlen($field_value) == 0)
         {
-            $field_value = null;
+            $field_value = NULL;
         }
         
         // Plausibilitaetspruefungen
@@ -320,7 +343,7 @@ class User
                 if(is_numeric($field_value) == false 
                 || $field_value == 0)
                 {
-                    $field_value = null;
+                    $field_value = NULL;
                 }                
                 break;
 
@@ -328,7 +351,7 @@ class User
             case "usr_id_number_invalid":
                 if(is_numeric($field_value) == false)
                 {
-                    $field_value = null;
+                    $field_value = NULL;
                 }
                 break;
         }
@@ -621,6 +644,7 @@ class User
     {
         $sql    = "UPDATE ". TBL_ANNOUNCEMENTS. " SET ann_usr_id = NULL
                     WHERE ann_usr_id = ". $this->db_fields['usr_id'];
+        error_log($sql);
         $result = mysql_query($sql, $this->db_connection);
         db_error($result,__FILE__,__LINE__);
 

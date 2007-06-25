@@ -223,12 +223,12 @@ echo "</div>
             <div class=\"groupBox\" style=\"margin-top: 4px; text-align: left;\">
                 <div class=\"groupBoxHeadline\">
                     <div style=\"width: 60%; float: left;\">
-                        $user->first_name $user->last_name&nbsp;&nbsp;";
-                        if($user->gender == 1)
+                        ". $user->getValue("Vorname"). " ". $user->getValue("Nachname"). "&nbsp;&nbsp;";
+                        if($user->getValue("Geschlecht") == 1)
                         {
                             echo "<img src=\"$g_root_path/adm_program/images/male.png\" style=\"vertical-align: top;\" title=\"m&auml;nnlich\" alt=\"m&auml;nnlich\">";
                         }
-                        elseif($user->gender == 2)
+                        elseif($user->getValue("Geschlecht") == 2)
                         {
                             echo "<img src=\"$g_root_path/adm_program/images/female.png\" style=\"vertical-align: top;\" title=\"weiblich\" alt=\"weiblich\">";
                         }

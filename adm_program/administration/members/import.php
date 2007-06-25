@@ -40,14 +40,6 @@ if (ini_get('file_uploads') != '1')
 
 // Html-Kopf ausgeben
 $g_layout['title']  = "Benutzer importieren";
-$g_layout['header'] = '
-    <script type="text/javascript"><!--
-        function submitForm()
-        {
-            document.forms.form_import.action = "import_csv_config.php";
-            document.forms.form_import.submit();
-        }
-    --></script>';
     
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
@@ -85,6 +77,7 @@ echo "
                 <option value=\"1\" selected>behalten</option>
                 <option value=\"2\">duplizieren</option>
                 <option value=\"3\">ersetzen</option>
+                <option value=\"4\">erg&auml;nzen</option>
             </select>
         </div>
 

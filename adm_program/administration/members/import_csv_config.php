@@ -26,9 +26,6 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
-$err_code = "";
-$err_text = "";
-
 // nur berechtigte User duerfen User importieren
 if(!$g_current_user->editUser())
 {
@@ -73,6 +70,7 @@ else
 
 // Html-Kopf ausgeben
 $g_layout['title'] = "Benutzer importieren";
+$g_layout['header'] = "<script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/show_hide_block.js\"></script>";
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 // Html des Modules ausgeben
@@ -93,81 +91,67 @@ echo "
             <label for=\"first_row\">Erste Zeile beinhaltet die Spaltenbezeichnungen</label>
         </div>
 
-        <table class=\"tableList\" style=\"width: 80%;\" cellpadding=\"2\" cellspacing=\"0\">
-            <tr>
-                <th class=\"tableHeader\">Datenbankfeld</th>
-                <th class=\"tableHeader\">Dateispalte</th>
-            </tr>";
-
-            // Array mit allen User-Feldern, die importiert werden koennen
-            $arr_col_name = array('usr_last_name'  => 'Nachname',
-                                  'usr_first_name' => 'Vorname',
-                                  'usr_address'    => 'Adresse',
-                                  'usr_zip_code'   => 'PLZ',
-                                  'usr_city'       => 'Ort',
-                                  'usr_country'    => 'Land',
-                                  'usr_phone'      => 'Telefon',
-                                  'usr_mobile'     => 'Handy',
-                                  'usr_fax'        => 'Fax',
-                                  'usr_email'      => 'E-Mail',
-                                  'usr_homepage'   => 'Homepage',
-                                  'usr_birthday'   => 'Geburtstag',
-                                  'usr_gender'     => 'Geschlecht',
-            );
-
-            // Organisationsspezifische Felder noch in das Array aufnehmen
-            $sql = "SELECT *
-                      FROM ". TBL_USER_FIELDS. ", ". TBL_CATEGORIES. "
-                     WHERE usf_cat_id = cat_id
-                       AND (  cat_org_id = $g_current_organization->id
-                           OR cat_org_id IS NULL )
-                     ORDER BY cat_sequence ASC, usf_sequence ASC ";
-            $result_field = mysql_query($sql, $g_adm_con);
-            db_error($result_field,__FILE__,__LINE__);
-
-            while($row = mysql_fetch_object($result_field))
-            {
-                $arr_col_name[$row->usf_id] = $row->usf_name;
-            }
+        <table class=\"tableList\" style=\"width: 75%;\" cellpadding=\"2\" cellspacing=\"0\">
+            <thead>
+                <tr>
+                    <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;Datenbankfeld</th>
+                    <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;Dateispalte</th>
+                </tr>
+            </thead>";
 
             $line = reset($_SESSION["file_lines"]);
             $arr_columns = explode($_SESSION["value_separator"], $line);
+            $category_merker = "";
 
             // jedes Benutzerfeld aus der Datenbank auflisten
-            $db_column = reset($arr_col_name);
-            for($i = 0; $i < count($arr_col_name); $i++)
+            
+            foreach($g_current_user->db_user_fields as $key => $value)
             {
+                if($category_merker != $value['cat_name'])
+                {
+                    if(strlen($category_merker) > 0)
+                    {
+                        echo "</tbody>";
+                    }
+                    echo "<tbody>
+                        <tr>
+                            <td class=\"tableSubHeader\" colspan=\"4\">
+                                <div class=\"tableSubHeaderFont\" style=\"float: left;\"><a
+                                    href=\"javascript:showHideBlock('". $value['cat_name']. "', '$g_root_path')\"><img name=\"img_". $value['cat_name']. "\" 
+                                    src=\"$g_root_path/adm_program/images/bullet_toggle_minus.png\" 
+                                    style=\"vertical-align: middle;\" border=\"0\" alt=\"ausblenden\"></a>". $value['cat_name']. "</div>
+                                <div class=\"smallFontSize\" style=\"text-align: right;\"><a id=\"lnk_". $value['cat_name']. "\"
+                                    href=\"javascript:showHideBlock('". $value['cat_name']. "', '$g_root_path')\">ausblenden</a>&nbsp;</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody id=\"cat_". $value['cat_name']. "\">";
+
+                    $category_merker = $value['cat_name'];
+                }             
                 echo "<tr>
-                    <td style=\"text-align: center;\">$db_column</td>
-                    <td style=\"text-align: center;\">
-                        <select size=\"1\" id=\"". key($arr_col_name). "\" name=\"". key($arr_col_name). "\">
-                            <option value=\"0\" selected=\"selected\"></option>";
+                    <td style=\"text-align: left;\">&nbsp;". $value['usf_name']. ":</td>
+                    <td style=\"text-align: left;\">&nbsp;
+                        <select size=\"1\" id=\"usf-". $value['usf_id']. "\" name=\"usf-". $value['usf_id']. "\">
+                            <option value=\"\" selected=\"selected\"></option>";
 
                             // Alle Spalten aus der Datei in Combobox auflisten
-                            $column = reset($arr_columns);
-                            for($j = 1; $j <= count($arr_columns); $j++)
+                            foreach($arr_columns as $col_key => $col_value)
                             {
-                                $column = trim($column);
-                                $column = str_replace("\"", "", $column);
-                                echo "<option value=\"$j\">$column</option>";
-                                $column = next($arr_columns);
+                                $col_value = trim(strip_tags(str_replace("\"", "", $col_value)));
+                                echo "<option value=\"$col_key\">$col_value</option>";
                             }
-                            reset($arr_columns);
                         echo "</select>";
                         // Nachname und Vorname als Pflichtfelder kennzeichnen
-                        if(key($arr_col_name) == "usr_last_name" || key($arr_col_name) == "usr_first_name")
+                        if($value['usf_mandatory'] == 1)
                         {
                             echo "&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>";
                         }
-                        else
-                        {
-                            echo "&nbsp;&nbsp;&nbsp;";
-                        }
                     echo "</td>
                 </tr>";
-                $db_column = next($arr_col_name);
             }
-        echo "</table>
+        echo "</tbody>
+        </table>
 
         <div style=\"margin-top: 6px;\">
             <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
