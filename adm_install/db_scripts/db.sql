@@ -240,12 +240,13 @@ alter table %PRAEFIX%_user_data add constraint %PRAEFIX%_FK_USD_USR foreign key 
 create table %PRAEFIX%_sessions
 (
    ses_id                         int(11) unsigned               not null AUTO_INCREMENT,
-   ses_usr_id                     int(11) unsigned               not null,
+   ses_usr_id                     int(11) unsigned,
    ses_org_shortname              varchar(10)                    not null,
    ses_session                    varchar(35)                    not null,
    ses_timestamp                  datetime                       not null,
-   ses_ip_address                 varchar(15),
+   ses_ip_address                 varchar(15)                    not null,
    ses_blob                       blob,
+   ses_renew                      tinyint(1) unsigned            not null default 0,
    primary key (ses_id),
    key ak_session (ses_session)
 )
