@@ -166,11 +166,10 @@ function getFieldCode($field, $user, $new_user)
 {
     global $g_preferences, $g_root_path, $g_current_user;
     $value    = "";
-    $readonly = "";
     
     // Kennzeichen fuer readonly setzen
     $readonly = "";
-    if($field['usf_disabled'] == 1 && $user->editUser() == false && $new_user == 0)
+    if($field['usf_disabled'] == 1 && $g_current_user->editUser() == false && $new_user == 0)
     {
         $readonly = " class=\"readonly\" readonly ";
     }

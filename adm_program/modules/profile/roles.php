@@ -62,8 +62,7 @@ if(isset($_GET["new_user"]))
     $req_new_usr = $_GET["new_user"];
 }
 
-$user     = new User($g_adm_con);
-$user->GetUser($req_usr_id);
+$user     = new User($g_adm_con, $req_usr_id);
 $_SESSION['navigation']->addUrl($g_current_url);
 
 //Testen ob Feste Rolle gesetzt ist
@@ -132,7 +131,7 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 echo "
 <h1 class=\"moduleHeadline\">Rollen zuordnen</h1>
-<h3>Profil von $user->first_name $user->last_name</h3>
+<h3>Profil von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname"). "</h3>
 
 <form action=\"$g_root_path/adm_program/modules/profile/roles_save.php?user_id=$req_usr_id&amp;new_user=$req_new_user\" method=\"post\" name=\"Funktionen\">
     <table class=\"tableList\" cellpadding=\"3\" cellspacing=\"0\">
