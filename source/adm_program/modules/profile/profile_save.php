@@ -158,7 +158,8 @@ foreach($user->db_user_fields as $key => $value)
 {
     $post_id = "usf-". $value['usf_id'];    
     
-    if(isset($_POST[$post_id]))
+    if(isset($_POST[$post_id])
+    && $_POST[$post_id] != $user->getValue($value['usf_name']))
     {
         // Pflichtfelder muessen gefuellt sein
         if($value['usf_mandatory'] == 1 && strlen($_POST[$post_id]) == 0)
@@ -240,7 +241,7 @@ if($g_current_user->isWebmaster() || $new_user > 0)
     {
         // pruefen, ob der Benutzername bereits vergeben ist
         $sql = "SELECT usr_id FROM ". TBL_USERS. "
-                 WHERE usr_login_name = ". $_POST['usr_login_name'];
+                 WHERE usr_login_name = '". $_POST['usr_login_name']. "'";
         $result = mysql_query($sql, $g_adm_con);
         db_error($result,__FILE__,__LINE__);
 
@@ -436,7 +437,7 @@ elseif($new_user == 2)
 if($usr_id == 0)
 {
     // neuer User -> Rollen zuordnen
-    header("Location: roles.php?user_id=$user->id&new_user=1");
+    header("Location: roles.php?user_id=". $user->getValue("usr_id"). "&new_user=1");
     exit();
 }
 elseif($new_user == 0 && $user->valid == 0)

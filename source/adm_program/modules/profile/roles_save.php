@@ -70,8 +70,8 @@ if($g_current_user->assignRoles())
     $sql    = "SELECT rol_id, rol_name, rol_max_members
                  FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                 WHERE rol_valid  = 1
-				  AND rol_cat_id = cat_id
-				  AND cat_org_id = $g_current_organization->id
+                  AND rol_cat_id = cat_id
+                  AND cat_org_id = $g_current_organization->id
                 ORDER BY rol_name";
 }
 elseif(isGroupLeader())
@@ -85,8 +85,8 @@ elseif(isGroupLeader())
                   AND rol_id     = mem_rol_id
                   AND rol_valid  = 1
                   AND rol_locked = 0
-				  AND rol_cat_id = cat_id
-				  AND cat_org_id = $g_current_organization->id
+                  AND rol_cat_id = cat_id
+                  AND cat_org_id = $g_current_organization->id
                 ORDER BY rol_name";
 }
 elseif($g_current_user->editUser())
@@ -97,8 +97,8 @@ elseif($g_current_user->editUser())
                 WHERE rol_valid        = 1
                   AND rol_assign_roles = 0
                   AND rol_locked       = 0
-				  AND rol_cat_id       = cat_id
-				  AND cat_org_id       = $g_current_organization->id
+                  AND rol_cat_id       = cat_id
+                  AND cat_org_id       = $g_current_organization->id
                 ORDER BY rol_name";
 }
 $result_rolle = mysql_query($sql, $g_adm_con);
@@ -245,10 +245,9 @@ $_SESSION['navigation']->deleteLastUrl();
 
 // falls Rollen dem eingeloggten User neu zugewiesen wurden, 
 // dann muessen die Rechte in den Session-Variablen neu eingelesen werden
-if($g_current_user->id != $req_usr_id)
+if($g_current_user->getValue("usr_id") != $req_usr_id)
 {
     $g_current_user->clearRights();
-    $_SESSION['g_current_user'] = $g_current_user;
 }
 
 if(count($parentRoles) > 0 )
