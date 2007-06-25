@@ -21,6 +21,11 @@ ALTER TABLE %PRAEFIX%_user_fields ADD COLUMN `usf_sequence` smallint NOT NULL AF
 -- User-Tabelle ergaenzen
 ALTER TABLE %PRAEFIX%_users ADD COLUMN `usr_text` text AFTER `usr_photo`;
 
+-- Session-Tabelle ergaenzen
+ALTER TABLE %PRAEFIX%_sessions ADD COLUMN `ses_renew` tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER `ses_blob`;
+ALTER TABLE %PRAEFIX%_sessions MODIFY COLUMN `ses_usr_id` INTEGER UNSIGNED DEFAULT 0;
+ALTER TABLE %PRAEFIX%_sessions MODIFY COLUMN `ses_ip_address` VARCHAR(15) NOT NULL;
+
 -- org_shortname aus Rollentabelle entfernen
 ALTER TABLE %PRAEFIX%_roles DROP FOREIGN KEY %PRAEFIX%_FK_ROL_ORG;
 ALTER TABLE %PRAEFIX%_roles DROP INDEX ROL_ORG_FK;
