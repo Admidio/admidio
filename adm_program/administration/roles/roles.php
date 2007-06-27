@@ -54,30 +54,7 @@ unset($_SESSION['roles_request']);
 
 // Html-Kopf ausgeben
 $g_layout['title']  = "Rollenverwaltung";
-$g_layout['header'] = "
-    <script type=\"text/javascript\">
-        function showHideCategory(category_name)
-        {
-            var block_element = 'cat_' + category_name;
-            var link_element  = 'lnk_' + category_name;
-            var image_element = 'img_' + category_name;
-            
-            if(document.getElementById(block_element).style.visibility == 'hidden')
-            {
-                document.getElementById(block_element).style.visibility = 'visible';
-                document.getElementById(block_element).style.display    = '';
-                document.getElementById(link_element).innerHTML         = 'ausblenden';
-                document.images[image_element].src = '$g_root_path/adm_program/images/bullet_toggle_minus.png';
-            }
-            else
-            {
-                document.getElementById(block_element).style.visibility = 'hidden';
-                document.getElementById(block_element).style.display    = 'none';
-                document.getElementById(link_element).innerHTML         = 'einblenden';
-                document.images[image_element].src = '$g_root_path/adm_program/images/bullet_toggle_plus.png';
-            }
-        }
-    </script>";
+$g_layout['header'] = "<script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/show_hide_block.js\"></script>";
 
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
@@ -154,11 +131,9 @@ echo "
             echo "<tbody>
                 <tr>
                     <td class=\"tableSubHeader\" colspan=\"4\">
-                        <div class=\"tableSubHeaderFont\" style=\"float: left;\"><a
-                            href=\"javascript:showHideCategory('$row->cat_name')\"><img name=\"img_$row->cat_name\" src=\"$g_root_path/adm_program/images/bullet_toggle_minus.png\" 
-                            style=\"vertical-align: middle;\" border=\"0\" alt=\"ausblenden\"></a>$row->cat_name $image_hidden</div>
-                        <div class=\"smallFontSize\" style=\"text-align: right;\"><a id=\"lnk_$row->cat_name\"
-                            href=\"javascript:showHideCategory('$row->cat_name')\">ausblenden</a>&nbsp;</div>
+                        <a href=\"javascript:showHideBlock('$row->cat_name','$g_root_path')\"><img name=\"img_$row->cat_name\" 
+                            style=\"padding: 2px 5px 1px 3px;\" src=\"$g_root_path/adm_program/images/triangle_open.gif\" 
+                            style=\"vertical-align: middle;\" border=\"0\" alt=\"ausblenden\"></a>$row->cat_name $image_hidden
                     </td>
                 </tr>
             </tbody>

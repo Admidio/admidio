@@ -116,12 +116,9 @@ echo "
                     echo "<tbody>
                         <tr>
                             <td class=\"tableSubHeader\" colspan=\"4\">
-                                <div class=\"tableSubHeaderFont\" style=\"float: left;\"><a
-                                    href=\"javascript:showHideBlock('". $value['cat_name']. "', '$g_root_path')\"><img name=\"img_". $value['cat_name']. "\" 
-                                    src=\"$g_root_path/adm_program/images/bullet_toggle_minus.png\" 
-                                    style=\"vertical-align: middle;\" border=\"0\" alt=\"ausblenden\"></a>". $value['cat_name']. "</div>
-                                <div class=\"smallFontSize\" style=\"text-align: right;\"><a id=\"lnk_". $value['cat_name']. "\"
-                                    href=\"javascript:showHideBlock('". $value['cat_name']. "', '$g_root_path')\">ausblenden</a>&nbsp;</div>
+                                <a href=\"javascript:showHideBlock('". $value['cat_name']. "', '$g_root_path')\"><img name=\"img_". $value['cat_name']. "\" 
+                                    style=\"padding: 2px 5px 1px 3px;\" src=\"$g_root_path/adm_program/images/triangle_open.gif\" 
+                                    style=\"vertical-align: middle;\" border=\"0\" alt=\"ausblenden\"></a>". $value['cat_name']. "
                             </td>
                         </tr>
                     </tbody>

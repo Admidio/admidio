@@ -49,7 +49,7 @@ if($_GET["mode"] != 4)
 }
 
 // erst prüfen, ob der User auch die entsprechenden Rechte hat
-if(!editDate() && $_GET["mode"] != 4)
+if(!$g_current_user->editDates() && $_GET["mode"] != 4)
 {
     $g_message->show("norights");
 }

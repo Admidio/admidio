@@ -209,67 +209,6 @@ function isGroupLeader($rol_id = 0)
     }
 }
 
-
-// Funktion prueft, ob der angemeldete User Ankuendigungen anlegen darf
-
-function editAnnouncements()
-{
-    global $g_current_user, $g_current_organization, $g_adm_con;
-
-    $sql    = "SELECT *
-                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                WHERE mem_usr_id        = $g_current_user->id
-                  AND mem_rol_id        = rol_id
-                  AND mem_valid         = 1
-                  AND rol_announcements = 1
-                  AND rol_valid         = 1 
-                  AND rol_cat_id        = cat_id
-                  AND cat_org_id        = $g_current_organization->id ";
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
-
-    $edit_announcements = mysql_num_rows($result);
-
-    if($edit_announcements > 0)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-// Funktion prueft, ob der angemeldete User Termine anlegen darf
-
-function editDate()
-{
-    global $g_current_user, $g_current_organization, $g_adm_con;
-
-    $sql    = "SELECT *
-                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                WHERE mem_usr_id = $g_current_user->id
-                  AND mem_rol_id = rol_id
-                  AND mem_valid  = 1
-                  AND rol_dates  = 1
-                  AND rol_valid  = 1 
-                  AND rol_cat_id = cat_id
-                  AND cat_org_id = $g_current_organization->id ";
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
-
-    $edit_date = mysql_num_rows($result);
-
-    if($edit_date > 0)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
 // diese Funktion gibt eine Seitennavigation in Anhaengigkeit der Anzahl Seiten zurueck
 // Beispiel:
 //              Seite: < Vorherige 1  2  3 ... 9  10  11 Naechste >
