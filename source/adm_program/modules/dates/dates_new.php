@@ -40,7 +40,7 @@ if ($g_preferences['enable_dates_module'] != 1)
     $g_message->show("module_disabled");
 }
 
-if(!editDate())
+if(!$g_current_user->editDates())
 {
     $g_message->show("norights");
 }

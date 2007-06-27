@@ -155,10 +155,10 @@ $num_announcements = $row[0];
 // Icon-Links und Navigation anzeigen
 
 if($req_id == 0
-&& (editAnnouncements() || $g_preferences['enable_rss'] == true))
+&& ($g_current_user->editAnnouncements() || $g_preferences['enable_rss'] == true))
 {
     // Neue Ankuendigung anlegen
-    if(editAnnouncements())
+    if($g_current_user->editAnnouncements())
     {
         echo "<p>
             <span class=\"iconLink\">
@@ -200,7 +200,7 @@ else
                 </div>";
 
                 // aendern & loeschen duerfen nur User mit den gesetzten Rechten
-                if(editAnnouncements())
+                if($g_current_user->editAnnouncements())
                 {
                     echo "<div style=\"text-align: right;\">" .
                         mysqldatetime("d.m.y", $row->ann_timestamp). "&nbsp;

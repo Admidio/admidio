@@ -42,7 +42,7 @@ if ($g_preferences['enable_announcements_module'] != 1)
 }
 
 // pruefen, ob der User auch die entsprechenden Rechte hat
-if(!editAnnouncements())
+if(!$g_current_user->editAnnouncements())
 {
     $g_message->show("norights");
 }

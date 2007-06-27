@@ -39,7 +39,7 @@ if ($g_preferences['enable_announcements_module'] != 1)
     $g_message->show("module_disabled");
 }
 
-if(!editAnnouncements())
+if(!$g_current_user->editAnnouncements())
 {
     $g_message->show("norights");
 }

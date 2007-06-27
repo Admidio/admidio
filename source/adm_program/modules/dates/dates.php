@@ -213,10 +213,10 @@ $num_dates = $row[0];
 // Icon-Links und Navigation anzeigen
 
 if($req_id == 0
-&& (editDate() || $g_preferences['enable_rss'] == true))
+&& ($g_current_user->editDates() || $g_preferences['enable_rss'] == true))
 {
     // Neue Termine anlegen
-    if(editDate())
+    if($g_current_user->editDates())
     {
         echo "<p>
             <span class=\"iconLink\">
@@ -264,7 +264,7 @@ else
                         onclick=\"self.location.href='$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=$row->dat_id&mode=4'\">";
 
                     // aendern & loeschen darf man nur eigene Termine, ausser Moderatoren
-                    if (editDate())
+                    if ($g_current_user->editDates())
                     {
                         echo "&nbsp;<img src=\"$g_root_path/adm_program/images/edit.png\" style=\"cursor: pointer\"
                             width=\"16\" height=\"16\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"

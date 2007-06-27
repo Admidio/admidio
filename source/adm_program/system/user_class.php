@@ -77,31 +77,15 @@ class User
     var $reg_org_shortname;
     
     var $db_fields_changed;         // Merker ob an den db_fields Daten was geaendert wurde
-    var $db_fields = array();       // Array ueber alle Felder der User-Tabelle des entsprechenden Users
+    var $db_fields      = array();  // Array ueber alle Felder der User-Tabelle des entsprechenden Users
     var $db_user_fields = array();  // Array ueber alle Felder der User-Fields-Tabelle des entsprechenden Users
-
-    //User Rechte
-    var $assignRolesRight;
-    var $editProfile;
-    var $editUser;
-    var $commentGuestbookRight;
-    var $editGuestbookRight;
-    var $editWeblinksRight;
-    var $editDownloadRight;
-    var $editPhotoRight;
+    var $roles_rights   = array();  // Array ueber alle Rollenrechte mit dem entsprechenden Status des Users
 
     // Konstruktor
     function User($connection, $user_id = 0)
     {
         $this->db_connection = $connection;
-        //if($user_id > 0)
-        {
-            $this->getUser($user_id);
-        }
-        /*else
-        {
-            $this->clear();
-        }*/
+        $this->getUser($user_id);
     }
 
     function reconnect($connection)
@@ -311,14 +295,18 @@ class User
     // alle Rechtevariablen wieder zuruecksetzen
     function clearRights()
     {
-        $this->assignRolesRight   = -1;
-        $this->editProfile        = -1;
-        $this->editUser           = -1;
-        $this->editGuestbookRight = -1;
-        $this->commentGuestbookRight = -1;
-        $this->editWeblinksRight  = -1;
-        $this->editDownloadRight  = -1;
-        $this->editPhotoRight     = -1;
+        // die Array-Keys muessen genauso wie die DB-Spalten heissen
+        $this->roles_rights['rol_announcements'] = -1;
+        $this->roles_rights['rol_approve_users'] = -1;
+        $this->roles_rights['rol_assign_roles']  = -1;
+        $this->roles_rights['rol_dates']         = -1;
+        $this->roles_rights['rol_download']      = -1;
+        $this->roles_rights['rol_edit_user']     = -1;
+        $this->roles_rights['rol_guestbook']     = -1;
+        $this->roles_rights['rol_guestbook_comments'] = -1;
+        $this->roles_rights['rol_photo']         = -1;
+        $this->roles_rights['rol_profile']       = -1;
+        $this->roles_rights['rol_weblinks']      = -1;
     }
 
     // Funktion setzt den Wert eines Profilfeldes neu, 
@@ -794,39 +782,39 @@ class User
         $vcard .= (string) "END:VCARD\r\n";
         return $vcard;
     }
-
-    // Funktion prueft, ob der angemeldete User Weblinks anlegen und editieren darf
-    function assignRoles()
+    
+    // Funktion prueft, ob der User das uebergebene Rollenrecht besitzt
+    function checkRolesRight($right)
     {
-        if(-1 == $this->assignRolesRight && $this->db_fields['usr_id'] > 0)
+        if($this->roles_rights[$right] == -1 && $this->db_fields['usr_id'] > 0)
         {
             global $g_current_organization;
 
             $sql    = "SELECT *
                          FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                        WHERE mem_usr_id       = ". $this->db_fields['usr_id']. "
-                          AND mem_rol_id       = rol_id
-                          AND mem_valid        = 1
-                          AND rol_assign_roles = 1
-                          AND rol_valid        = 1 
-                          AND rol_cat_id       = cat_id
-                          AND cat_org_id       = $g_current_organization->id ";
+                        WHERE mem_usr_id = ". $this->db_fields['usr_id']. "
+                          AND mem_rol_id = rol_id
+                          AND mem_valid  = 1
+                          AND $right     = 1
+                          AND rol_valid  = 1 
+                          AND rol_cat_id = cat_id
+                          AND cat_org_id = $g_current_organization->id ";
             $result = mysql_query($sql, $this->db_connection);
             db_error($result,__FILE__,__LINE__);
 
-            $assign_roles = mysql_num_rows($result);
+            $num_rows = mysql_num_rows($result);
 
-            if ( $assign_roles > 0 )
+            if($num_rows > 0)
             {
-                $this->assignRolesRight = 1;
+                $this->roles_rights[$right] = 1;
             }
             else
             {
-                $this->assignRolesRight = 0;
+                $this->roles_rights[$right] = 0;
             }
         }
 
-        if (1 == $this->assignRolesRight)
+        if ($this->roles_rights[$right] == 1)
         {
             return true;
         }
@@ -834,8 +822,38 @@ class User
         {
             return false;
         }
+    }    
+
+    // Funktion prueft, ob der angemeldete User Ankuendigungen anlegen und bearbeiten darf
+    function editAnnouncements()
+    {
+        return $this->checkRolesRight('rol_announcements');
     }
 
+    // Funktion prueft, ob der angemeldete User Registrierungen bearbeiten und zuordnen darf
+    function approveUsers()
+    {
+        return $this->checkRolesRight('rol_approve_users');
+    }
+
+    // Funktion prueft, ob der angemeldete User Rollen zuordnen, anlegen und bearbeiten darf
+    function assignRoles()
+    {
+        return $this->checkRolesRight('rol_assign_roles');
+    }
+    
+    // Funktion prueft, ob der angemeldete User Termine anlegen und bearbeiten darf
+    function editDates()
+    {
+        return $this->checkRolesRight('rol_dates');
+    }
+    
+    // Funktion prueft, ob der angemeldete User Downloads hochladen und verwalten darf
+    function editDownloadRight()
+    {
+        return $this->checkRolesRight('rol_download');
+    }
+    
     // Funktion prueft, ob der angemeldete User das entsprechende Profil bearbeiten darf
     function editProfile($profileID = NULL)
     {
@@ -847,36 +865,9 @@ class User
         //soll das eigene Profil bearbeitet werden?
         if($profileID == $this->id && $this->db_fields['usr_id'] > 0)
         {
-            // Pruefen ob die Datenbank schon abgefragt wurde, wenn nicht dann Recht auslesen
-            if($this->editProfile == -1)
-            {
-                global $g_current_organization;
-                
-                $sql    =  "SELECT *
-                              FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                             WHERE mem_usr_id  = ". $this->db_fields['usr_id']. "
-                               AND mem_rol_id  = rol_id
-                               AND mem_valid   = 1
-                               AND rol_profile = 1
-                               AND rol_valid   = 1 
-                               AND rol_cat_id  = cat_id
-                               AND cat_org_id  = $g_current_organization->id ";
-                $result = mysql_query($sql, $this->db_connection);
-                db_error($result,__FILE__,__LINE__);
+            $edit_profile = $this->checkRolesRight('rol_profile');
 
-                $found_rows = mysql_num_rows($result);
-
-                if($found_rows >= 1)
-                {
-                    $this->editProfile = 1;
-                }
-                else
-                {
-                    $this->editProfile = 0;
-                }
-            }
-
-            if($this->editProfile == 1)
+            if($edit_profile == 1)
             {
                 return true;
             }
@@ -893,253 +884,33 @@ class User
     }
 
     // Funktion prueft, ob der angemeldete User fremde Benutzerdaten bearbeiten darf
-
     function editUser()
     {
-        global $g_current_organization;
-
-        // prüfen ob die Userrechte schon aus der Datenbank geholt wurden
-        if($this->editUser == -1 && $this->db_fields['usr_id'] > 0)
-        {
-            $sql    = "SELECT *
-                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                        WHERE mem_usr_id    = ". $this->db_fields['usr_id']. "
-                          AND mem_valid     = 1
-                          AND mem_rol_id    = rol_id
-                          AND rol_edit_user = 1
-                          AND rol_valid     = 1 
-                          AND rol_cat_id    = cat_id
-                          AND cat_org_id    = $g_current_organization->id ";
-            $result = mysql_query($sql, $this->db_connection);
-            db_error($result,__FILE__,__LINE__);
-
-            $found_rows = mysql_num_rows($result);
-
-            if($found_rows >= 1)
-            {
-                $this->editUser = 1;
-            }
-            else
-            {
-                $this->editUser = 0;
-            }
-        }
-
-        if($this->editUser == 1)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    // Funktion prueft, ob der angemeldete User Gaestebucheintraege kommentieren darf
-    function commentGuestbookRight()
-    {
-         if($this->commentGuestbookRight == -1 && $this->db_fields['usr_id'] > 0)
-         {
-            global $g_current_organization;
-
-            $sql    = "SELECT *
-                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                        WHERE mem_usr_id             = ". $this->db_fields['usr_id']. "
-                          AND mem_rol_id             = rol_id
-                          AND mem_valid              = 1
-                          AND rol_guestbook_comments = 1
-                          AND rol_valid              = 1 
-                          AND rol_cat_id             = cat_id
-                          AND cat_org_id             = $g_current_organization->id ";
-            $result = mysql_query($sql, $this->db_connection);
-            db_error($result,__FILE__,__LINE__);
-
-            $edit_user = mysql_num_rows($result);
-
-            if ( $edit_user > 0 )
-            {
-                $this->commentGuestbookRight = 1;
-            }
-            else
-            {
-                $this->commentGuestbookRight = 0;
-            }
-        }
-
-        if($this->commentGuestbookRight == 1)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return $this->checkRolesRight('rol_edit_user');
     }
 
     // Funktion prueft, ob der angemeldete User Gaestebucheintraege loeschen und editieren darf
     function editGuestbookRight()
     {
-        if($this->editGuestbookRight == -1 && $this->db_fields['usr_id'] > 0)
-        {
-            global $g_current_organization;
-
-            $sql    = "SELECT *
-                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                        WHERE mem_usr_id    = ". $this->db_fields['usr_id']. "
-                          AND mem_rol_id    = rol_id
-                          AND mem_valid     = 1
-                          AND rol_guestbook = 1
-                          AND rol_valid     = 1 
-                          AND rol_cat_id    = cat_id
-                          AND cat_org_id    = $g_current_organization->id ";
-            $result = mysql_query($sql, $this->db_connection);
-            db_error($result,__FILE__,__LINE__);
-
-            $edit_user = mysql_num_rows($result);
-
-            if ( $edit_user > 0 )
-            {
-                $this->editGuestbookRight = 1;
-            }
-            else
-            {
-                $this->editGuestbookRight = 0;
-            }
-        }
-
-        if ( $this->editGuestbookRight == 1)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return $this->checkRolesRight('rol_guestbook');
+    }
+    
+    // Funktion prueft, ob der angemeldete User Gaestebucheintraege kommentieren darf
+    function commentGuestbookRight()
+    {
+        return $this->checkRolesRight('rol_guestbook_comments');
+    }
+    
+    // Funktion prueft, ob der angemeldete User Fotos hochladen und verwalten darf    
+    function editPhotoRight()
+    {
+        return $this->checkRolesRight('rol_photo');
     }
 
     // Funktion prueft, ob der angemeldete User Weblinks anlegen und editieren darf
     function editWeblinksRight()
     {
-        if(-1 == $this->editWeblinksRight && $this->db_fields['usr_id'] > 0)
-        {
-            global $g_current_organization;
-
-            $sql    = "SELECT *
-                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                        WHERE mem_usr_id   = ". $this->db_fields['usr_id']. "
-                          AND mem_rol_id   = rol_id
-                          AND mem_valid    = 1
-                          AND rol_weblinks = 1
-                          AND rol_valid    = 1 
-                          AND rol_cat_id   = cat_id
-                          AND cat_org_id   = $g_current_organization->id ";
-            $result = mysql_query($sql, $this->db_connection);
-            db_error($result,__FILE__,__LINE__);
-
-            $edit_weblinks = mysql_num_rows($result);
-
-            if ( $edit_weblinks > 0 )
-            {
-                $this->editWeblinksRight = 1;
-            }
-            else
-            {
-                $this->editWeblinksRight = 0;
-            }
-        }
-
-        if (1 == $this->editWeblinksRight)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    // Funktion prueft, ob der angemeldete User Downloads hochladen und verwalten darf
-
-    function editDownloadRight()
-    {
-        if(-1 == $this->editDownloadRight && $this->db_fields['usr_id'] > 0)
-        {
-            global $g_current_organization;
-
-            $sql    = "SELECT *
-                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                        WHERE mem_usr_id   = ". $this->db_fields['usr_id']. "
-                          AND mem_rol_id   = rol_id
-                          AND mem_valid    = 1
-                          AND rol_download = 1
-                          AND rol_valid    = 1 
-                          AND rol_cat_id   = cat_id
-                          AND cat_org_id   = $g_current_organization->id ";
-            $result = mysql_query($sql, $this->db_connection);
-            db_error($result,__FILE__,__LINE__);
-
-            $edit_download = mysql_num_rows($result);
-
-            if($edit_download > 0)
-            {
-                $this->editDownloadRight = 1;
-            }
-            else
-            {
-                $this->editDownloadRight = 0;
-            }
-        }
-
-        if (1 == $this->editDownloadRight)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    // Funktion prueft, ob der angemeldete User Fotos hochladen und verwalten darf
-    
-    function editPhotoRight()
-    {
-        if(-1 == $this->editPhotoRight && $this->db_fields['usr_id'] > 0)
-        {       
-            global $g_current_organization;
-            
-            $sql    = "SELECT *
-                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                        WHERE mem_usr_id = ". $this->db_fields['usr_id']. "
-                          AND mem_rol_id = rol_id
-                          AND mem_valid  = 1
-                          AND rol_photo  = 1
-                          AND rol_valid  = 1 
-                          AND rol_cat_id = cat_id
-                          AND cat_org_id = $g_current_organization->id ";
-            $result = mysql_query($sql, $this->db_connection);
-            db_error($result,__FILE__,__LINE__);
-        
-            $edit_photo = mysql_num_rows($result);
-    
-            if($edit_photo > 0)
-            {
-                $this->editPhotoRight = 1;
-            }
-            else
-            {
-                $this->editPhotoRight = 0;
-            }
-        }
-
-        if (1 == $this->editPhotoRight)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return $this->checkRolesRight('rol_weblinks');
     }
 
     function isWebmaster()

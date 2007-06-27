@@ -186,9 +186,6 @@ a:hover {
 .tableSubHeader {
     background-color: #c5c5c5;
     padding:          1px;
-}
-
-.tableSubHeaderFont {
     color:            #888888;
     font-size:        13pt;	 
     font-weight:      bold;
