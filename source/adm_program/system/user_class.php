@@ -170,7 +170,7 @@ class User
         }
         
         // Daten aus adm_user_data auslesen
-        $sql = "SELECT usf_id, usf_cat_id, cat_name, usf_name, usf_type, usf_description, 
+        $sql = "SELECT usf_id, cat_id, cat_name, usf_name, usf_type, usf_description, 
                        usf_disabled, usf_hidden, usf_mandatory, usf_system, $field_usd_value
                   FROM ". TBL_CATEGORIES. ", ". TBL_USER_FIELDS. "
                        $join_user_data

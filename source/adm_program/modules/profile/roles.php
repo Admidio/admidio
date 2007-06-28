@@ -130,7 +130,7 @@ echo "
         if($g_current_user->assignRoles())
         {
             // Alle Rollen der Gruppierung auflisten
-            $sql    = "SELECT cat_name, rol_name, rol_description, mem_usr_id, mem_leader, rol_id
+            $sql    = "SELECT cat_id, cat_name, rol_name, rol_description, mem_usr_id, mem_leader, rol_id
                          FROM ". TBL_CATEGORIES. ", ". TBL_ROLES. " 
                          LEFT JOIN ". TBL_MEMBERS. "
                            ON rol_id     = mem_rol_id
@@ -144,7 +144,7 @@ echo "
         elseif(isGroupLeader())
         {
             // Alle Rollen auflisten, bei denen das Mitglied Leiter ist
-            $sql    = "SELECT cat_name, br.rol_name, br.rol_description, br.rol_id, mgl.mem_usr_id, mgl.mem_leader
+            $sql    = "SELECT cat_id, cat_name, br.rol_name, br.rol_description, br.rol_id, mgl.mem_usr_id, mgl.mem_leader
                          FROM ". TBL_MEMBERS. " bm, ". TBL_CATEGORIES. ", ". TBL_ROLES. " br 
                          LEFT JOIN ". TBL_MEMBERS. " mgl
                            ON br.rol_id      = mgl.mem_rol_id
@@ -163,7 +163,7 @@ echo "
         elseif($g_current_user->editUser())
         {
             // Alle Rollen auflisten, die keinen Moderatorenstatus haben
-            $sql    = "SELECT cat_name, rol_name, rol_description, rol_id, mem_usr_id, mem_leader
+            $sql    = "SELECT cat_id, cat_name, rol_name, rol_description, rol_id, mem_usr_id, mem_leader
                          FROM ". TBL_CATEGORIES. ", ". TBL_ROLES. " 
                          LEFT JOIN ". TBL_MEMBERS. "
                            ON rol_id     = mem_rol_id
@@ -192,13 +192,13 @@ echo "
                 echo "<tbody>
                     <tr>
                         <td class=\"tableSubHeader\" colspan=\"4\">
-                            <a href=\"javascript:showHideBlock('$row->cat_name','$g_root_path')\"><img name=\"img_$row->cat_name\" 
-                                style=\"padding: 2px 5px 1px 3px;\" src=\"$g_root_path/adm_program/images/triangle_open.gif\" 
-                                style=\"vertical-align: middle;\" border=\"0\" alt=\"ausblenden\"></a>$row->cat_name
+                            <a href=\"javascript:showHideBlock('$row->cat_id','$g_root_path')\"><img name=\"img_$row->cat_id\" 
+                                style=\"padding: 1px 5px 2px 3px; vertical-align: middle;\" src=\"$g_root_path/adm_program/images/triangle_open.gif\" 
+                                border=\"0\" alt=\"ausblenden\"></a>$row->cat_name
                         </td>
                     </tr>
                 </tbody>
-                <tbody id=\"cat_$row->cat_name\">";
+                <tbody id=\"cat_$row->cat_id\">";
 
                 $category = $row->cat_name;
             }

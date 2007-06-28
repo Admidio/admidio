@@ -101,20 +101,7 @@ else
 }
 
 // Array um den Namen der Tabellen sinnvolle Texte zuzuweisen
-$arr_col_name = array('usr_last_name'  => 'Nachname',
-                      'usr_first_name' => 'Vorname',
-                      'usr_address'    => 'Adresse',
-                      'usr_zip_code'   => 'PLZ',
-                      'usr_city'       => 'Ort',
-                      'usr_country'    => 'Land',
-                      'usr_phone'      => 'Telefon',
-                      'usr_mobile'     => 'Handy',
-                      'usr_fax'        => 'Fax',
-                      'usr_email'      => 'E-Mail',
-                      'usr_homepage'   => 'Homepage',
-                      'usr_birthday'   => 'Geburtstag',
-                      'usr_gender'     => 'Geschlecht',
-                      'usr_login_name' => 'Loginname',
+$arr_col_name = array('usr_login_name' => 'Benutzername',
                       'usr_photo'      => 'Foto',
                       'mem_begin'      => 'Beginn',
                       'mem_end'        => 'Ende',
@@ -147,16 +134,6 @@ $arr_usf_names = array();    // speichert zu jeder usf_id den usf_name
 // Rollenobjekt erzeugen
 $role = new Role($g_adm_con, $req_rol_id);
 
-// Kategorie auslesen
-$sql = "SELECT *
-          FROM ". TBL_CATEGORIES. "
-         WHERE cat_id     = {0} ";
-$sql    = prepareSQL($sql, array($role->getValue("rol_cat_id")));
-$result = mysql_query($sql, $g_adm_con);
-db_error($result,__FILE__,__LINE__);
-
-$cat_row = mysql_fetch_object($result);
-
 // Nummer der Spalte, ab der die Anzeigefelder anfangen (beginnend mit 0)
 $start_column = 2;
 
@@ -170,8 +147,35 @@ switch($req_type)
         break;
 
     case "address":
-        $main_sql = "SELECT mem_leader, usr_id, usr_last_name, usr_first_name, usr_birthday, usr_address, usr_zip_code, usr_city
+        $usf_last_name  = $g_current_user->getProperty("Nachname", "usf_id");
+        $usf_first_name = $g_current_user->getProperty("Vorname", "usf_id");
+        $usf_birthday   = $g_current_user->getProperty("Geburtstag", "usf_id");
+        $usf_address    = $g_current_user->getProperty("Adresse", "usf_id");
+        $usf_zip_code   = $g_current_user->getProperty("PLZ", "usf_id");
+        $usf_city       = $g_current_user->getProperty("Ort", "usf_id");
+        
+        $main_sql = "SELECT mem_leader, usr_id, f$usf_last_name.usd_value, f$usf_first_name.usd_value, 
+                            f$usf_birthday.usd_value, f$usf_address.usd_value, 
+                            f$usf_zip_code.usd_value, f$usf_city.usd_value
                      FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
+                     LEFT JOIN ". TBL_USER_DATA ." f$usf_last_name
+                       ON f$usf_last_name.usd_usr_id = usr_id
+                      AND f$usf_last_name.usd_usf_id = $usf_last_name
+                     LEFT JOIN ". TBL_USER_DATA ." f$usf_first_name
+                       ON f$usf_first_name.usd_usr_id = usr_id
+                      AND f$usf_first_name.usd_usf_id = $usf_first_name
+                     LEFT JOIN ". TBL_USER_DATA ." f$usf_birthday
+                       ON f$usf_birthday.usd_usr_id = usr_id
+                      AND f$usf_birthday.usd_usf_id = $usf_birthday
+                     LEFT JOIN ". TBL_USER_DATA ." f$usf_address
+                       ON f$usf_address.usd_usr_id = usr_id
+                      AND f$usf_address.usd_usf_id = $usf_address
+                     LEFT JOIN ". TBL_USER_DATA ." f$usf_zip_code
+                       ON f$usf_zip_code.usd_usr_id = usr_id
+                      AND f$usf_zip_code.usd_usf_id = $usf_zip_code
+                     LEFT JOIN ". TBL_USER_DATA ." f$usf_city
+                       ON f$usf_city.usd_usr_id = usr_id
+                      AND f$usf_city.usd_usf_id = $usf_city
                     WHERE rol_id     = {0}
                       AND rol_cat_id = cat_id
                       AND cat_org_id = $g_current_organization->id
@@ -179,12 +183,34 @@ switch($req_type)
                       AND mem_valid  = ". $role->getValue("rol_valid"). "
                       AND mem_usr_id = usr_id
                       AND usr_valid  = 1
-                    ORDER BY mem_leader DESC, usr_last_name ASC, usr_first_name ASC ";
-      break;
+                    ORDER BY mem_leader DESC, f$usf_last_name.usd_value ASC, f$usf_first_name.usd_value ASC ";
+        break;
 
     case "telephone":
-        $main_sql = "SELECT mem_leader, usr_id, usr_last_name, usr_first_name, usr_phone, usr_mobile, usr_email, usr_fax
+        $usf_last_name  = $g_current_user->getProperty("Nachname", "usf_id");
+        $usf_first_name = $g_current_user->getProperty("Vorname", "usf_id");
+        $usf_phone      = $g_current_user->getProperty("Telefon", "usf_id");
+        $usf_mobile     = $g_current_user->getProperty("Handy", "usf_id");
+        $usf_email      = $g_current_user->getProperty("E-Mail", "usf_id");
+        
+        $main_sql = "SELECT mem_leader, usr_id, f$usf_last_name.usd_value, f$usf_first_name.usd_value, 
+                            f$usf_phone.usd_value, f$usf_mobile.usd_value, f$usf_email.usd_value, usr_fax
                      FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
+                     LEFT JOIN ". TBL_USER_DATA ." f$usf_last_name
+                       ON f$usf_last_name.usd_usr_id = usr_id
+                      AND f$usf_last_name.usd_usf_id = $usf_last_name
+                     LEFT JOIN ". TBL_USER_DATA ." f$usf_first_name
+                       ON f$usf_first_name.usd_usr_id = usr_id
+                      AND f$usf_first_name.usd_usf_id = $usf_first_name
+                     LEFT JOIN ". TBL_USER_DATA ." f$usf_phone
+                       ON f$usf_phone.usd_usr_id = usr_id
+                      AND f$usf_phone.usd_usf_id = $usf_phone
+                     LEFT JOIN ". TBL_USER_DATA ." f$usf_mobile
+                       ON f$usf_mobile.usd_usr_id = usr_id
+                      AND f$usf_mobile.usd_usf_id = $usf_mobile
+                     LEFT JOIN ". TBL_USER_DATA ." f$usf_email
+                       ON f$usf_email.usd_usr_id = usr_id
+                      AND f$usf_email.usd_usf_id = $usf_email
                     WHERE rol_id     = {0}
                       AND rol_cat_id = cat_id
                       AND cat_org_id = $g_current_organization->id
@@ -192,12 +218,26 @@ switch($req_type)
                       AND mem_valid  = ". $role->getValue("rol_valid"). "
                       AND mem_usr_id = usr_id
                       AND usr_valid  = 1
-                    ORDER BY mem_leader DESC, usr_last_name ASC, usr_first_name ASC ";
-      break;
+                    ORDER BY mem_leader DESC, f$usf_last_name.usd_value ASC, f$usf_first_name.usd_value ASC ";
+        break;
 
     case "former":
-        $main_sql = "SELECT mem_leader, usr_id, usr_last_name, usr_first_name, usr_birthday, mem_begin, mem_end
+        $usf_last_name  = $g_current_user->getProperty("Nachname", "usf_id");
+        $usf_first_name = $g_current_user->getProperty("Vorname", "usf_id");
+        $usf_birthday   = $g_current_user->getProperty("Geburtstag", "usf_id");
+        
+        $main_sql = "SELECT mem_leader, usr_id, f$usf_last_name.usd_value, f$usf_first_name.usd_value, 
+                            f$usf_birthday.usd_value, mem_begin, mem_end
                      FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
+                     LEFT JOIN ". TBL_USER_DATA ." f$usf_last_name
+                       ON f$usf_last_name.usd_usr_id = usr_id
+                      AND f$usf_last_name.usd_usf_id = $usf_last_name
+                     LEFT JOIN ". TBL_USER_DATA ." f$usf_first_name
+                       ON f$usf_first_name.usd_usr_id = usr_id
+                      AND f$usf_first_name.usd_usf_id = $usf_first_name
+                     LEFT JOIN ". TBL_USER_DATA ." f$usf_birthday
+                       ON f$usf_birthday.usd_usr_id = usr_id
+                      AND f$usf_birthday.usd_usf_id = $usf_birthday
                     WHERE rol_id     = {0}
                       AND rol_cat_id = cat_id
                       AND cat_org_id = $g_current_organization->id
@@ -205,8 +245,8 @@ switch($req_type)
                       AND mem_valid  = 0
                       AND mem_usr_id = usr_id
                       AND usr_valid  = 1
-                    ORDER BY mem_leader DESC, mem_end DESC, usr_last_name ASC, usr_first_name ASC ";
-      break;
+                    ORDER BY mem_leader DESC, mem_end DESC, f$usf_last_name.usd_value ASC, f$usf_first_name.usd_value ASC ";
+        break;
 }
 
 // pruefen, ob die Rolle Leiter hat, wenn nicht, dann Standardliste anzeigen
@@ -301,7 +341,7 @@ if($req_mode != "csv")
         require(SERVER_PATH. "/adm_program/layout/overall_header.php");
     }
     
-    echo "<h1 class=\"moduleHeadline\">". $role->getValue("rol_name"). "&nbsp;&#40;".$cat_row->cat_name."&#41;</h1>";
+    echo "<h1 class=\"moduleHeadline\">". $role->getValue("rol_name"). "&nbsp;&#40;".$role->getValue("cat_name")."&#41;</h1>";
 
     //Beschreibung der Rolle einblenden
     if(strlen($role->getValue("rol_description")) > 0)
@@ -548,209 +588,157 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                 }
             }
 
-            $content = "";
+            $content  = "";
+            $usf_type = "";
 
-            // Felder nachformatieren
-            switch($arr_fields[$i])
+            // Feldtyp bei Spezialfeldern setzen
+            if($arr_fields[$i] == "mem_begin" || $arr_fields[$i] == "mem_end")
             {
-                case "usr_email":
-                    // E-Mail als Link darstellen
-                    if(strlen($row[$i]) > 0)
+                $usf_type = "DATE";
+            }
+            elseif($arr_fields[$i] == "usr_login_name")
+            {
+                $usf_type = "TEXT";
+            }
+            elseif($usf_id > 0)
+            {
+                $usf_type = $arr_usf_types[$usf_id];
+            }
+                        
+            // Ausgabe je nach Feldtyp aufbereiten
+            if($usf_id == $g_current_user->getProperty("Geschlecht", "usf_id"))
+            {
+                // Geschlecht anzeigen
+                if($row[$i] == 1)
+                {
+                    if($req_mode == "csv" || $req_mode == "print")
                     {
-                        if($req_mode == "html")
+                        $content = utf8_decode("männlich");
+                    }
+                    else
+                    {
+                        $content = "<img src=\"$g_root_path/adm_program/images/male.png\"
+                                    style=\"vertical-align: middle;\" alt=\"m&auml;nnlich\">";
+                    }
+                }
+                elseif($row[$i] == 2)
+                {
+                    if($req_mode == "csv" || $req_mode == "print")
+                    {
+                        $content = utf8_decode("weiblich");
+                    }
+                    else
+                    {
+                        $content = "<img src=\"$g_root_path/adm_program/images/female.png\"
+                                    style=\"vertical-align: middle;\" alt=\"weiblich\">";
+                    }
+                }
+                else
+                {
+                    if($req_mode != "csv")
+                    {
+                        $content = "&nbsp;";
+                    }
+                }
+            }
+            elseif($arr_fields[$i] == "usr_photo")
+            {
+                // Benutzerfoto anzeigen
+                if(($req_mode == "html" || $req_mode == "print") && $row[$i] != NULL)
+                {
+                    $_SESSION['profilphoto'][$row['usr_id']]=$row[$i];
+                    $content = "<img src=\"photo_show.php?usr_id=".$row['usr_id']."\"
+                                style=\"vertical-align: middle;\" alt=\"Benutzerfoto\">";
+                }
+                if ($req_mode == "csv" && $row[$i] != NULL)
+                {
+                    $content = "Profilfoto Online";
+                }
+            }
+            else
+            {
+                switch($usf_type)
+                {
+                    case "CHECKBOX":
+                        // Checkboxen werden durch ein Bildchen dargestellt
+                        if($row[$i] == 1)
                         {
-                            if($g_preferences['enable_mail_module'] == 1)
+                            if($req_mode == "csv")
                             {
-                                $content = "<a href=\"$g_root_path/adm_program/modules/mail/mail.php?usr_id=". $row['usr_id']. "\">". $row[$i]. "</a>";
+                                $content = "ja";
                             }
                             else
                             {
-                                $content = "<a href=\"mailto:". $row[$i]. "\">". $row[$i]. "</a>";
+                                echo "<img src=\"$g_root_path/adm_program/images/checkbox_checked.gif\"
+                                    style=\"vertical-align: middle;\" alt=\"on\">";
                             }
                         }
                         else
                         {
-                            $content = $row[$i];
+                            if($req_mode == "csv")
+                            {
+                                $content = "nein";
+                            }
+                            else
+                            {
+                                echo "<img src=\"$g_root_path/adm_program/images/checkbox.gif\"
+                                    style=\"vertical-align: middle;\" alt=\"off\">";
+                            }
                         }
-                    }
-                    break;
+                        break;
 
-                case "usr_birthday":
-                case "mem_begin":
-                case "mem_end":
-                    if(strlen($row[$i]) > 0)
-                    {
-                        // Datum 00.00.0000 unterdruecken
-                        $content = mysqldatetime("d.m.y", $row[$i]);
-                        if($content == "00.00.0000")
-                        {
-                            $content = "";
-                        }
-                    }
-                    break;
+                    case "DATE":
+                        // Datum muss noch formatiert werden
+                        $content = mysqldate('d.m.y', $row[$i]);
+                        break;
 
-                case "usr_homepage":
-                    // Homepage als Link darstellen
-                    if(strlen($row[$i]) > 0)
-                    {
-                        $row[$i] = stripslashes($row[$i]);
-                        if(substr_count(strtolower($row[$i]), "http://") == 0)
+                    case "EMAIL":
+                        // E-Mail als Link darstellen
+                        if(strlen($row[$i]) > 0)
                         {
-                            $row[$i] = "http://". $row[$i];
-                        }
-
-                        if($req_mode == "html")
-                        {
-                            $content = "<a href=\"". $row[$i]. "\" target=\"_blank\">". substr($row[$i], 7). "</a>";
-                        }
-                        else
-                        {
-                            $content = substr($row[$i], 7);
-                        }
-                    }
-                    break;
-
-                case "usr_gender":
-                    // Geschlecht anzeigen
-                    if($row[$i] == 1)
-                    {
-                        if($req_mode == "csv" || $req_mode == "print")
-                        {
-                            $content = utf8_decode("männlich");
-                        }
-                        else
-                        {
-                            $content = "<img src=\"$g_root_path/adm_program/images/male.png\"
-                                        style=\"vertical-align: middle;\" alt=\"m&auml;nnlich\">";
-                        }
-                    }
-                    elseif($row[$i] == 2)
-                    {
-                        if($req_mode == "csv" || $req_mode == "print")
-                        {
-                            $content = utf8_decode("weiblich");
-                        }
-                        else
-                        {
-                            $content = "<img src=\"$g_root_path/adm_program/images/female.png\"
-                                        style=\"vertical-align: middle;\" alt=\"weiblich\">";
-                        }
-                    }
-                    else
-                    {
-                        if($req_mode != "csv")
-                        {
-                            $content = "&nbsp;";
-                        }
-                    }
-                    break;
-
-                case "usr_photo":
-                    // Benutzerfoto anzeigen
-                    if(($req_mode == "html" || $req_mode == "print") && $row[$i] != NULL)
-                    {
-                        $_SESSION['profilphoto'][$row['usr_id']]=$row[$i];
-                        $content = "<img src=\"photo_show.php?usr_id=".$row['usr_id']."\"
-                                    style=\"vertical-align: middle;\" alt=\"Benutzerfoto\">";
-                    }
-                    if ($req_mode == "csv" && $row[$i] != NULL)
-                    {
-                        $content = "Profilfoto Online";
-                    }
-                    break;
-
-                default:
-                    if($b_user_field == true)
-                    {                                
-                        // benutzerdefiniertes Feld
-                        switch($arr_usf_types[$usf_id])
-                        {
-                            case "CHECKBOX":
-                                // Checkboxen werden durch ein Bildchen dargestellt
-                                if($row[$i] == 1)
+                            if($req_mode == "html")
+                            {
+                                if($g_preferences['enable_mail_module'] == 1 && $arr_usf_names[$usf_id] == "E-Mail")
                                 {
-                                    if($req_mode == "csv")
-                                    {
-                                        $content = "ja";
-                                    }
-                                    else
-                                    {
-                                        echo "<img src=\"$g_root_path/adm_program/images/checkbox_checked.gif\"
-                                            style=\"vertical-align: middle;\" alt=\"on\">";
-                                    }
+                                    $content = "<a href=\"$g_root_path/adm_program/modules/mail/mail.php?usr_id=". $row['usr_id']. "\">". $row[$i]. "</a>";
                                 }
                                 else
                                 {
-                                    if($req_mode == "csv")
-                                    {
-                                        $content = "nein";
-                                    }
-                                    else
-                                    {
-                                        echo "<img src=\"$g_root_path/adm_program/images/checkbox.gif\"
-                                            style=\"vertical-align: middle;\" alt=\"off\">";
-                                    }
+                                    $content = "<a href=\"mailto:". $row[$i]. "\">". $row[$i]. "</a>";
                                 }
-                                break;
-                               
-                            case "DATE":
-                                // Datum muss noch formatiert werden
-                                $content = mysqldate('d.m.y', $row[$i]);
-                                break;
-
-                            case "EMAIL":
-                                // E-Mail als Link darstellen
-                                if(strlen($row[$i]) > 0)
-                                {
-                                    if($req_mode == "html")
-                                    {
-                                        if($g_preferences['enable_mail_module'] == 1 && $arr_usf_names[$usf_id] == "E-Mail")
-                                        {
-                                            $content = "<a href=\"$g_root_path/adm_program/modules/mail/mail.php?usr_id=". $row['usr_id']. "\">". $row[$i]. "</a>";
-                                        }
-                                        else
-                                        {
-                                            $content = "<a href=\"mailto:". $row[$i]. "\">". $row[$i]. "</a>";
-                                        }
-                                    }
-                                    else
-                                    {
-                                        $content = $row[$i];
-                                    }
-                                }
-                                break;
-
-                            case "URL":
-                                // Homepage als Link darstellen
-                                if(strlen($row[$i]) > 0)
-                                {
-                                    $row[$i] = stripslashes($row[$i]);
-                                    if(substr_count(strtolower($row[$i]), "http://") == 0)
-                                    {
-                                        $row[$i] = "http://". $row[$i];
-                                    }
-
-                                    if($req_mode == "html")
-                                    {
-                                        $content = "<a href=\"". $row[$i]. "\" target=\"_blank\">". substr($row[$i], 7). "</a>";
-                                    }
-                                    else
-                                    {
-                                        $content = substr($row[$i], 7);
-                                    }
-                                }
-                                break;
-                                
-                            default:
+                            }
+                            else
+                            {
                                 $content = $row[$i];
-                                break;                            
+                            }
                         }
-                    }
-                    else
-                    {
+                        break;
+
+                    case "URL":
+                        // Homepage als Link darstellen
+                        if(strlen($row[$i]) > 0)
+                        {
+                            $row[$i] = stripslashes($row[$i]);
+                            if(substr_count(strtolower($row[$i]), "http://") == 0)
+                            {
+                                $row[$i] = "http://". $row[$i];
+                            }
+
+                            if($req_mode == "html")
+                            {
+                                $content = "<a href=\"". $row[$i]. "\" target=\"_blank\">". substr($row[$i], 7). "</a>";
+                            }
+                            else
+                            {
+                                $content = substr($row[$i], 7);
+                            }
+                        }
+                        break;
+
+                    default:
                         $content = $row[$i];
-                    }
-                    break;
+                        break;                            
+                }
             }
 
             if($req_mode == "csv")
@@ -818,7 +806,7 @@ else
             echo"
             <tr>
                 <td>Kategorie:</td>
-                <td>".$cat_row->cat_name."</td>
+                <td>".$role->getValue("cat_name")."</td>
             </tr>";
 
             //Beschreibung

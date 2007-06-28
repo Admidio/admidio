@@ -149,6 +149,11 @@ while($row_usr = mysql_fetch_object($result_usr))
     if(!$result) showError(mysql_error());    
 }
 
+// Daten bereinigen
+$sql = "DELETE FROM ". TBL_USER_DATA. " WHERE LENGTH(usd_value) = 0 ";
+$result = mysql_query($sql, $connection);
+if(!$result) showError(mysql_error());
+
 // neue Systemeinstellungen anlegen
 $sql = "SELECT * FROM ". TBL_ORGANIZATIONS;
 $result_orga = mysql_query($sql, $connection);
