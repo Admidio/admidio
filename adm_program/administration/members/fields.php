@@ -131,13 +131,14 @@ echo "
                     <tr>
                         <td class=\"tableSubHeader\" colspan=\"8\">
                             <a
-                                href=\"javascript:showHideBlock('$row->cat_name', '$g_root_path')\"><img name=\"img_$row->cat_name\" style=\"padding: 2px 5px 1px 3px;\" src=\"$g_root_path/adm_program/images/triangle_open.gif\" 
-                                style=\"vertical-align: middle;\" border=\"0\" alt=\"ausblenden\"></a>$row->cat_name
+                                href=\"javascript:showHideBlock('$row->cat_id', '$g_root_path')\"><img name=\"img_$row->cat_id\" 
+                                style=\"vertical-align: middle; padding: 1px 5px 2px 3px;\" src=\"$g_root_path/adm_program/images/triangle_open.gif\" 
+                                border=\"0\" alt=\"ausblenden\"></a>$row->cat_name
                         </td>
                     </tr>
                 </tbody>
-                <tbody id=\"cat_$row->cat_name\">";
-                $js_drag_drop = $js_drag_drop. " Sortable.create('cat_$row->cat_name',{tag:'tr',onUpdate:updateDB,ghosting:true,dropOnEmpty:true,containment:['cat_$row->cat_name'],hoverclass:'drag'}); ";
+                <tbody id=\"cat_$row->cat_id\">";
+                $js_drag_drop = $js_drag_drop. " Sortable.create('cat_$row->cat_id',{tag:'tr',onUpdate:updateDB,ghosting:true,dropOnEmpty:true,containment:['cat_$row->cat_name'],hoverclass:'drag'}); ";
 
                 $cat_id = $row->cat_id;
             }           

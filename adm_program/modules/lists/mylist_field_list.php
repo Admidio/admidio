@@ -38,38 +38,6 @@ if(isset($_POST['field_number']))
     $b_ajax = true;
 }
 
-if(isset($result_user_fields) == false)
-{
-    //Liste der Zusatzfelder erstellen
-    $sql    =  "SELECT * 
-                  FROM ". TBL_USER_FIELDS. ", ". TBL_CATEGORIES. "
-                 WHERE usf_cat_id = cat_id
-				   AND (  cat_org_id IS NULL
-                       OR cat_org_id = $g_current_organization->id )
-                 ORDER BY cat_sequence ASC, usf_sequence ASC ";
-
-    $result_user_fields = mysql_query($sql, $g_adm_con);
-    db_error($result_user_fields,__FILE__,__LINE__);  
-}
-
-// Array um den Namen der Tabellen sinnvolle Texte zuzuweisen
-$arr_col_name = array('usr_last_name'  => 'Nachname',
-                      'usr_first_name' => 'Vorname',
-                      'usr_address'    => 'Adresse',
-                      'usr_zip_code'   => 'PLZ',
-                      'usr_city'       => 'Ort',
-                      'usr_country'    => 'Land',
-                      'usr_phone'      => 'Telefon',
-                      'usr_mobile'     => 'Handy',
-                      'usr_fax'        => 'Fax',
-                      'usr_email'      => 'E-Mail',
-                      'usr_homepage'   => 'Homepage',
-                      'usr_birthday'   => 'Geburtstag',
-                      'usr_gender'     => 'Geschlecht',
-                      'usr_login_name' => 'Loginname',
-                      'usr_photo'      => 'Foto'
-                      );
-
 echo "<div style=\"text-align: center; width: 18%; float: left; margin-top: 5px;\">&nbsp;$i. Feld :&nbsp;</div>
     <div style=\"text-align: center; width: 37%; float: left; margin-top: 5px;\">
         <select size=\"1\" name=\"column$i\">
@@ -78,85 +46,111 @@ echo "<div style=\"text-align: center; width: 18%; float: left; margin-top: 5px;
                 {
                     echo " selected ";
                 }
-                echo "></option>
-            <optgroup label=\"Stammdaten\">";
-                $value = reset($arr_col_name);
-                $key   = key($arr_col_name);
-                for($j = 0; $j < count($arr_col_name); $j++)
+                echo "></option>";
+
+            //ggf zusaetzliche Felder auslesen und bereitstellen
+            $category     = "";
+            $b_stammdaten = false;
+
+            foreach($g_current_user->db_user_fields as $key => $value)
+            {     
+                if($category != $value['cat_id'])
                 {
-                    echo "<option value=\"$key\" ";
-                    if($b_ajax == false && $b_history == true)
+                    if(strlen($category) > 0)
                     {
-                        // wenn Zurueck gewaehlt wurde, dann Felder mit den alten
-                        // Werten vorbelegen
-                        if($form_values["column$i"] == $key)
+                        if($b_stammdaten)
                         {
-                            echo " selected ";                          
+                            // wenn Zurueck gewaehlt wurde, dann Felder mit den alten Werten vorbelegen
+                            $photo_selected = "";
+                            $login_selected   = "";
+                            if($b_ajax == false && $b_history == true)
+                            {
+                                if($form_values["column$i"] == "usr_photo")
+                                {
+                                    $photo_selected = " selected ";                          
+                                }
+                                elseif($form_values["column$i"] == "usr_login_name")
+                                {
+                                    $login_selected = " selected ";                          
+                                }
+                            }
+            
+                            // Zusatzfelder z.B. usr_photo, mem_begin hinzufuegen
+                            echo "<option value=\"usr_login_name\" $login_selected>Benutzername</option>
+                                  <option value=\"usr_photo\" $photo_selected>Foto</option>";
                         }
+
+                        echo "</optgroup>";
+                    }
+
+                    // Ajax gibt alles in UTF8 zurueck
+                    if($b_ajax)
+                    {
+                        $category_name = utf8_encode($value['cat_name']);
                     }
                     else
                     {
-                        // Nachname und Vorname sollen in den ersten beiden
-                        // Spalten vorgeschlagen werden
-                        if(($key == "usr_last_name" && $i == 1 )
-                        || ($key == "usr_first_name" && $i == 2 )) 
-                        {
-                            echo " selected ";
-                        }
+                        $category_name = $value['cat_name'];
+                    }                        
+
+                    echo "<optgroup label=\"$category_name\">";
+
+                    if($value['cat_name'] == "Stammdaten")
+                    {
+                        $b_stammdaten = true;
                     }
-                    echo ">$value</option>";
-                    $value = next($arr_col_name);
-                    $key   = key($arr_col_name);
+                    else
+                    {
+                        $b_stammdaten = false;
+                    }
+                    $category = $value['cat_id'];
                 }
 
-                //ggf zusaetzliche Felder auslesen und bereitstellen
-                $field_header = false;
-                $msg_header   = false;
+                //Nur Moderatoren duerfen sich gelockte Felder anzeigen lassen 
+                if($value['usf_hidden'] == 0 || $g_current_user->assignRoles())
+                {
+                    // Ajax gibt alles in UTF8 zurueck
+                    if($b_ajax)
+                    {
+                        $field_name = utf8_encode($value['usf_name']);
+                    }
+                    else
+                    {
+                        $field_name = $value['usf_name'];
+                    }
+                    // wenn Zurueck gewaehlt wurde, dann Felder mit den alten Werten vorbelegen
+                    $selected = "";
+                    if($b_ajax == false && $b_history == true
+                    && $form_values["column$i"] == $value['usf_id'])
+                    {
+                        $selected = " selected ";                          
+                    }
 
-                while($uf_row = mysql_fetch_array($result_user_fields))
-                {     
-                    if($uf_row['cat_org_id'] != NULL
-                    && $field_header == false)
-                    {
-                        echo "</optgroup>
-                        <optgroup label=\"Zus&auml;tzliche Felder\">";
-                        $field_header = true;
-                    }
-                    if($uf_row['cat_org_id'] == NULL
-                    && $msg_header == false)
-                    {
-                        echo "</optgroup>
-                        <optgroup label=\"Messenger\">";
-                        $msg_header = true;
-                    }
-                    //Nur Moderatoren duerfen sich gelockte Felder anzeigen lassen 
-                    if($uf_row['usf_hidden'] == 0 || $g_current_user->assignRoles())
-                    {
-                        echo"<option value=\"". $uf_row['usf_id']. "\"";
-                        // wenn Zurueck gewaehlt wurde, dann Felder mit den alten
-                        // Werten vorbelegen
-                        if($b_ajax == false && $b_history == true
-                        && $form_values["column$i"] == $uf_row['usf_id'])
-                        {
-                            echo " selected ";                          
-                        }
-                        echo ">"; 
-                        
-                        // Ajax gibt alles in UTF8 zurueck
-                        if($b_ajax)
-                        {
-                            echo utf8_encode($uf_row['usf_name']);
-                        }
-                        else
-                        {
-                            echo $uf_row['usf_name'];
-                        }
-                            
-                        echo "</option>";
-                    }
-                }    
-                mysql_data_seek($result_user_fields, 0);                                
+                    echo"<option value=\"". $value['usf_id']. "\" $selected >$field_name</option>";
+                }
+            } 
+            
+            // wenn Zurueck gewaehlt wurde, dann Felder mit den alten Werten vorbelegen
+            $begin_selected = "";
+            $end_selected   = "";
+            if($b_ajax == false && $b_history == true)
+            {
+                if($form_values["column$i"] == "mem_begin")
+                {
+                    $begin_selected = " selected ";                          
+                }
+                elseif($form_values["column$i"] == "mem_end")
+                {
+                    $end_selected = " selected ";                          
+                }
+            }
+            
+            // nun noch Gruppe mit Rollendaten anhaengen
             echo "</optgroup>
+            <optgroup label=\"Rollendaten\">
+                <option value=\"mem_begin\" $begin_selected>Mitgliedsbeginn</option>
+                <option value=\"mem_end\" $end_selected>Mitgliedsende</option>
+            </optgroup>
         </select>&nbsp;&nbsp;
     </div>
     <div style=\"text-align: center; width: 18%; float: left; margin-top: 5px;\">

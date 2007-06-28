@@ -77,9 +77,10 @@ for($i = 0; $i < count($_POST); $i++)
             {
                 $sql_select = $sql_select. ", ";
             }
+            
             if(is_numeric($value))
             {
-                // ein benutzerdefiniertes Feld
+                // dynamisches Profilfeld
                 $table_alias = "f". $value;
                 
                 // JOIN - Syntax erstellen
@@ -92,6 +93,7 @@ for($i = 0; $i < count($_POST); $i++)
             }
             else
             {
+                // Spezialfelder z.B. usr_photo, mem_begin ...
                 $act_field = $value;
             }
 
@@ -114,9 +116,9 @@ for($i = 0; $i < count($_POST); $i++)
                 
                 // Datentyp ermitteln
                 $sql = "SELECT usf_type 
-						  FROM ". TBL_USER_FIELDS. ", ". TBL_CATEGORIES. "
+                          FROM ". TBL_USER_FIELDS. ", ". TBL_CATEGORIES. "
                          WHERE usf_cat_id = cat_id
-						   AND (  cat_org_id = $g_current_organization->id
+                           AND (  cat_org_id = $g_current_organization->id
                                OR cat_org_id IS NULL )
                            AND usf_id     = '$act_field_name' ";
                 $result = mysql_query($sql, $g_adm_con);
@@ -152,13 +154,15 @@ for($i = 0; $i < count($_POST); $i++)
                     $type = "string";
                 }
             }
-            else
+            elseif($act_field == "mem_begin" || $act_field == "mem_begin")
             {
-                $sql = "SELECT $act_field FROM ". TBL_USERS. " LIMIT 1, 1 ";
-                $result = mysql_query($sql, $g_adm_con);
-                db_error($result,__FILE__,__LINE__);
-                $type   = mysql_field_type($result, 0);
+                $type = "date";
             }
+            elseif($act_field == "usr_login_name")
+            {
+                $type = "string";
+            }
+            
             $parser    = new CParser;
             $sql_where = $sql_where. $parser->makeSqlStatement($value, $act_field, $type);
         }
@@ -180,8 +184,8 @@ $main_sql = "SELECT mem_leader, usr_id, $sql_select
                     $sql_join
               WHERE rol_id     = $req_rol_id
                 AND rol_valid  = 1
-		        AND rol_cat_id = cat_id
-				AND rol_org_id = $g_current_organization->id
+                AND rol_cat_id = cat_id
+                AND cat_org_id = $g_current_organization->id
                 AND mem_rol_id = rol_id
                 AND mem_valid  = $act_members
                 AND mem_usr_id = usr_id
@@ -194,7 +198,7 @@ if(strlen($sql_orderby) > 0)
 
 // SQL-Statement in Session-Variable schreiben
 $_SESSION['mylist_sql'] = $main_sql;
-//echo $main_sql; exit();
+
 // weiterleiten zur allgemeinen Listeseite
 $location = "Location: $g_root_path/adm_program/modules/lists/lists_show.php?type=mylist&mode=html&rol_id=$req_rol_id";
 header($location);

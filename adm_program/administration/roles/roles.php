@@ -131,13 +131,13 @@ echo "
             echo "<tbody>
                 <tr>
                     <td class=\"tableSubHeader\" colspan=\"4\">
-                        <a href=\"javascript:showHideBlock('$row->cat_name','$g_root_path')\"><img name=\"img_$row->cat_name\" 
-                            style=\"padding: 2px 5px 1px 3px;\" src=\"$g_root_path/adm_program/images/triangle_open.gif\" 
-                            style=\"vertical-align: middle;\" border=\"0\" alt=\"ausblenden\"></a>$row->cat_name $image_hidden
+                        <a href=\"javascript:showHideBlock('$row->cat_id','$g_root_path')\"><img name=\"img_$row->cat_id\" 
+                            style=\"padding: 1px 5px 2px 3px; vertical-align: middle;\" src=\"$g_root_path/adm_program/images/triangle_open.gif\" 
+                            border=\"0\" alt=\"ausblenden\"></a>$row->cat_name $image_hidden
                     </td>
                 </tr>
             </tbody>
-            <tbody id=\"cat_$row->cat_name\">";
+            <tbody id=\"cat_$row->cat_id\">";
 
             $cat_id = $row->cat_id;
         }            

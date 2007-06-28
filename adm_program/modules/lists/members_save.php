@@ -70,8 +70,7 @@ if(  (!$g_current_user->assignRoles()
 //Abfrag aller Datensaetze die mit der Rolle zu tun haben
 $sql =" SELECT *
         FROM ". TBL_MEMBERS. "
-        WHERE mem_rol_id = {0}";
-$sql    = prepareSQL($sql, array($role_id));
+        WHERE mem_rol_id = $role_id";
 $result_mem_role = mysql_query($sql, $g_adm_con);
 db_error($result_mem_role,__FILE__,__LINE__);
 

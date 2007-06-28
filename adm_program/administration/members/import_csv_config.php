@@ -101,30 +101,30 @@ echo "
 
             $line = reset($_SESSION["file_lines"]);
             $arr_columns = explode($_SESSION["value_separator"], $line);
-            $category_merker = "";
+            $category = "";
 
             // jedes Benutzerfeld aus der Datenbank auflisten
             
             foreach($g_current_user->db_user_fields as $key => $value)
             {
-                if($category_merker != $value['cat_name'])
+                if($category != $value['cat_id'])
                 {
-                    if(strlen($category_merker) > 0)
+                    if(strlen($category) > 0)
                     {
                         echo "</tbody>";
                     }
                     echo "<tbody>
                         <tr>
                             <td class=\"tableSubHeader\" colspan=\"4\">
-                                <a href=\"javascript:showHideBlock('". $value['cat_name']. "', '$g_root_path')\"><img name=\"img_". $value['cat_name']. "\" 
-                                    style=\"padding: 2px 5px 1px 3px;\" src=\"$g_root_path/adm_program/images/triangle_open.gif\" 
-                                    style=\"vertical-align: middle;\" border=\"0\" alt=\"ausblenden\"></a>". $value['cat_name']. "
+                                <a href=\"javascript:showHideBlock('". $value['cat_id']. "', '$g_root_path')\"><img name=\"img_". $value['cat_id']. "\" 
+                                    style=\"padding: 1px 5px 2px 3px; vertical-align: middle;\" src=\"$g_root_path/adm_program/images/triangle_open.gif\" 
+                                    border=\"0\" alt=\"ausblenden\"></a>". $value['cat_name']. "
                             </td>
                         </tr>
                     </tbody>
-                    <tbody id=\"cat_". $value['cat_name']. "\">";
+                    <tbody id=\"cat_". $value['cat_id']. "\">";
 
-                    $category_merker = $value['cat_name'];
+                    $category = $value['cat_id'];
                 }             
                 echo "<tr>
                     <td style=\"text-align: left;\">&nbsp;". $value['usf_name']. ":</td>
