@@ -718,12 +718,6 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                         // Homepage als Link darstellen
                         if(strlen($row[$i]) > 0)
                         {
-                            $row[$i] = stripslashes($row[$i]);
-                            if(substr_count(strtolower($row[$i]), "http://") == 0)
-                            {
-                                $row[$i] = "http://". $row[$i];
-                            }
-
                             if($req_mode == "html")
                             {
                                 $content = "<a href=\"". $row[$i]. "\" target=\"_blank\">". substr($row[$i], 7). "</a>";

@@ -154,6 +154,12 @@ $sql = "DELETE FROM ". TBL_USER_DATA. " WHERE LENGTH(usd_value) = 0 ";
 $result = mysql_query($sql, $connection);
 if(!$result) showError(mysql_error());
 
+$sql = "UPDATE adm_user_data SET usd_value = CONCAT('http://', usd_value)
+         WHERE usd_usf_id = $usf_id_homepage
+           AND LOCATE('http', usd_value) = 0 ";
+$result = mysql_query($sql, $connection);
+if(!$result) showError(mysql_error());
+
 // neue Systemeinstellungen anlegen
 $sql = "SELECT * FROM ". TBL_ORGANIZATIONS;
 $result_orga = mysql_query($sql, $connection);

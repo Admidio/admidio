@@ -18,13 +18,19 @@
  *
  * Folgende Funktionen stehen nun zur Verfuegung:
  *
- * setValue($field_name, $field_value) - setzt einen Wert fuer ein bestimmtes Feld
-                          der adm_user oder der adm_user_fields Tabelle
- * getValue($field_name)- gibt den Wert eines Feldes zurueck
+ * getUser($user_id)    - ermittelt die Daten des uebergebenen Benutzers
+ * clear()              - Die Klassenvariablen werden neu initialisiert
+ * setValue($field_name, $field_value) 
+ *                      - setzt einen Wert fuer ein bestimmtes Feld
+ *                        der adm_user oder der adm_user_fields Tabelle
+ * getValue($field_name)- gibt den Wert eines Feldes aus adm_user oder der 
+ *                        adm_user_fields zurueck
+ * getProperty($field_name, $property) 
+ *                      - gibt den Inhalt einer Eigenschaft eines Feldes zurueck.
+ *                        Dies kann die usf_id, usf_type, cat_id, cat_name usw. sein
  * save($login_user_id) - User wird mit den geaenderten Daten in die Datenbank
  *                        zurueckgeschrieben bwz. angelegt
  * delete()             - Der gewaehlte User wird aus der Datenbank geloescht
- * clear()              - Die Klassenvariablen werden neu initialisiert
  * getVCard()           - Es wird eine vCard des Users als String zurueckgegeben
  * isWebmaster()        - gibt true/false zurueck, falls der User Mitglied der 
  *                        Rolle "Webmaster" ist
@@ -86,11 +92,6 @@ class User
     {
         $this->db_connection = $connection;
         $this->getUser($user_id);
-    }
-
-    function reconnect($connection)
-    {
-        $this->db_connection = $connection;
     }
 
     // User mit der uebergebenen ID aus der Datenbank auslesen
@@ -365,6 +366,16 @@ class User
                 else
                 {
                     $this->db_user_fields[$field_name]['new'] = false;
+                }
+                
+                // Homepage noch mit http vorbelegen
+                if($this->getProperty($field_name, "usf_type") == "URL")
+                {
+                    if(substr_count(strtolower($field_value), "http://")  == 0
+                    || substr_count(strtolower($field_value), "https://") == 0 )
+                    {
+                        $field_value = "http://". $field_value;
+                    }
                 }
                 $this->db_user_fields[$field_name]['usd_value'] = $field_value;
                 $this->db_user_fields[$field_name]['changed']   = true;

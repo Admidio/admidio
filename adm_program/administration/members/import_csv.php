@@ -150,17 +150,6 @@ for($i = $start_row; $i < count($_SESSION["file_lines"]); $i++)
                 {
                     $user->setValue($value['usf_name'], substr($col_value, 0, 255));
                 }
-                elseif($value['usf_type'] == "URL")
-                {
-                    if(strlen($col_value) > 0)
-                    {
-                        if(substr_count(strtolower($col_value), "http://") == 0)
-                        {
-                            $col_value = "http://". $col_value;
-                        }                    
-                        $user->setValue($value['usf_name'], substr($col_value, 0, 50));
-                    }
-                }
                 else
                 {
                     
