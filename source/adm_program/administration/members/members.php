@@ -508,12 +508,7 @@ if($num_members > 0)
                     <td align=\"center\">";
                         if(strlen($row['homepage']) > 0)
                         {
-                            $row['homepage'] = stripslashes($row['homepage']);
-                            if(substr_count(strtolower($row['homepage']), "http://") == 0)
-                            {
-                                $row['homepage'] = "http://". $row['homepage'];
-                            }
-                            echo "<a href=\"$row->usr_homepage\" target=\"_blank\"><img
+                            echo "<a href=\"". $row['homepage']. "\" target=\"_blank\"><img
                                 src=\"$g_root_path/adm_program/images/globe.png\" alt=\"Homepage\" title=\"Homepage\" border=\"0\"></a>";
                         }
                     echo "</td>

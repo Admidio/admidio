@@ -105,11 +105,6 @@ function getFieldCode($field, $user_id)
             // Homepage als Link darstellen
             if(strlen($field['usd_value']) > 0)
             {
-                if(substr_count(strtolower($field['usd_value']), "http://") == 0)
-                {
-                    $field['usd_value'] = "http://". $field['usd_value'];
-                }
-
                 $value = '<a href="'. $field['usd_value']. '" target="_blank">'. substr($field['usd_value'], 7). '</a>';
             }
             break;

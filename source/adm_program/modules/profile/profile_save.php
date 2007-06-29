@@ -210,13 +210,6 @@ foreach($user->db_user_fields as $key => $value)
                     $g_message->show("field_numeric", $value['usf_name']);
                 }
             }
-            elseif($value['usf_type'] == "URL")
-            {
-                if(substr_count(strtolower($_POST[$post_id]), "http://") == 0)
-                {
-                    $_POST[$post_id] = "http://". $_POST[$post_id];
-                }                    
-            }
         }
 
         $user->setValue($value['usf_name'], $_POST[$post_id]);
