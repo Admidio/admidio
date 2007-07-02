@@ -238,138 +238,140 @@ echo "</div>
                         }
                     echo "</div>
                 </div>
-                <div>
-                    <div style=\"float: left; margin-bottom: 5px; width: 30%; text-align: left\">Benutzername:</div>
-                    <div style=\"margin-bottom: 5px; margin-left: 30%; text-align: left\"><i>". $user->getValue("usr_login_name"). "&nbsp;</i></div>
-                </div>";
+                <div class=\"groupBoxBody\">
+                    <div>
+                        <div style=\"float: left; margin-bottom: 5px; width: 30%; text-align: left\">Benutzername:</div>
+                        <div style=\"margin-bottom: 5px; margin-left: 30%; text-align: left\"><i>". $user->getValue("usr_login_name"). "&nbsp;</i></div>
+                    </div>";
 
-                // Schleife ueber alle Felder der Stammdaten
+                    // Schleife ueber alle Felder der Stammdaten
 
-                foreach($user->db_user_fields as $key => $value)
-                {
-                    // nur Felder der Stammdaten anzeigen
-                    if($value['cat_name'] == "Stammdaten")
+                    foreach($user->db_user_fields as $key => $value)
                     {
-                        switch($value['usf_name'])
+                        // nur Felder der Stammdaten anzeigen
+                        if($value['cat_name'] == "Stammdaten")
                         {
-                            case "Nachname":
-                            case "Vorname":
-                            case "PLZ":
-                            case "Ort":
-                            case "Land":
-                            case "Geschlecht":
-                                // diese Felder werden nicht einzeln dargestellt
-                                break;
+                            switch($value['usf_name'])
+                            {
+                                case "Nachname":
+                                case "Vorname":
+                                case "PLZ":
+                                case "Ort":
+                                case "Land":
+                                case "Geschlecht":
+                                    // diese Felder werden nicht einzeln dargestellt
+                                    break;
 
-                            case "Adresse":
-                                if($value['usf_name'] == "Adresse")   // nur 1x bei Adresse schreiben
-                                {
-                                    echo "<div style=\"margin-top: 3px;\">
-                                    <div style=\"float: left; width: 30%; text-align: left;\">Adresse:";
-                                        if(strlen($user->getValue("PLZ")) > 0 || strlen($user->getValue("Ort")) > 0)
-                                            echo "<br />&nbsp;";
-                                        if(strlen($user->getValue("Land")) > 0)
-                                            echo "<br />&nbsp;";
-                                        if(strlen($user->getValue("Adresse")) > 0
-                                        && (  strlen($user->getValue("PLZ"))  > 0
-                                        || strlen($user->getValue("Ort"))  > 0 ))
-                                            echo "<br /><span class=\"smallFontSize\">&nbsp;</span>";
-                                    echo "</div>
+                                case "Adresse":
+                                    if($value['usf_name'] == "Adresse")   // nur 1x bei Adresse schreiben
+                                    {
+                                        echo "<div style=\"margin-top: 3px;\">
+                                        <div style=\"float: left; width: 30%; text-align: left;\">Adresse:";
+                                            if(strlen($user->getValue("PLZ")) > 0 || strlen($user->getValue("Ort")) > 0)
+                                                echo "<br />&nbsp;";
+                                            if(strlen($user->getValue("Land")) > 0)
+                                                echo "<br />&nbsp;";
+                                            if(strlen($user->getValue("Adresse")) > 0
+                                            && (  strlen($user->getValue("PLZ"))  > 0
+                                            || strlen($user->getValue("Ort"))  > 0 ))
+                                                echo "<br /><span class=\"smallFontSize\">&nbsp;</span>";
+                                        echo "</div>
 
-                                    <div style=\"text-align: left;\">";
-                                        if(strlen($user->getValue("Adresse")) == 0 && strlen($user->getValue("PLZ")) == 0 && strlen($user->getValue("Ort")) == 0)
-                                            echo "<i>keine Daten vorhanden</i>";
-                                        if(strlen($user->getValue("Adresse")) > 0)
-                                            echo $user->getValue("Adresse");
-                                        if(strlen($user->getValue("PLZ")) > 0 || strlen($user->getValue("Ort")) > 0)
-                                        {
-                                            echo "<br />";
-                                            if(strlen($user->getValue("PLZ")) > 0)
-                                                echo $user->getValue("PLZ"). " ";
-                                            if(strlen($user->getValue("Ort")) > 0)
-                                                echo $user->getValue("Ort");
-                                        }
-                                        if(strlen($user->getValue("Land")) > 0)
-                                            echo "<br />". $user->getValue("Land");
-
-                                        if(strlen($user->getValue("Adresse")) > 0
-                                        && (  strlen($user->getValue("PLZ"))  > 0
-                                        || strlen($user->getValue("Ort"))  > 0 ))
-                                        {
-                                            // Button mit Karte anzeigen
-                                            $map_url = "http://maps.google.com/?q=". urlencode($user->getValue("Adresse"));
-                                            if(strlen($user->getValue("PLZ"))  > 0)
+                                        <div style=\"text-align: left;\">";
+                                            if(strlen($user->getValue("Adresse")) == 0 && strlen($user->getValue("PLZ")) == 0 && strlen($user->getValue("Ort")) == 0)
+                                                echo "<i>keine Daten vorhanden</i>";
+                                            if(strlen($user->getValue("Adresse")) > 0)
+                                                echo $user->getValue("Adresse");
+                                            if(strlen($user->getValue("PLZ")) > 0 || strlen($user->getValue("Ort")) > 0)
                                             {
-                                                $map_url .= ",%20". $user->getValue("PLZ");
+                                                echo "<br />";
+                                                if(strlen($user->getValue("PLZ")) > 0)
+                                                    echo $user->getValue("PLZ"). " ";
+                                                if(strlen($user->getValue("Ort")) > 0)
+                                                    echo $user->getValue("Ort");
                                             }
-                                            if(strlen($user->getValue("Ort"))  > 0)
-                                            {
-                                                $map_url .= ",%20". $user->getValue("Ort");
-                                            }
-                                            if(strlen($user->getValue("Land"))  > 0)
-                                            {
-                                                $map_url .= ",%20". $user->getValue("Land");
-                                            }
+                                            if(strlen($user->getValue("Land")) > 0)
+                                                echo "<br />". $user->getValue("Land");
 
-                                            echo "<br />
-                                            <span class=\"smallFontSize\">( <a href=\"$map_url\" target=\"_blank\">Stadtplan</a>";
-
-                                            if($g_current_user->getValue("usr_id") != $a_user_id)
+                                            if(strlen($user->getValue("Adresse")) > 0
+                                            && (  strlen($user->getValue("PLZ"))  > 0
+                                            || strlen($user->getValue("Ort"))  > 0 ))
                                             {
-                                                if(strlen($g_current_user->getValue("Adresse")) > 0
-                                                && (  strlen($g_current_user->getValue("PLZ"))  > 0
-                                                || strlen($g_current_user->getValue("Ort"))  > 0 ))
+                                                // Button mit Karte anzeigen
+                                                $map_url = "http://maps.google.com/?q=". urlencode($user->getValue("Adresse"));
+                                                if(strlen($user->getValue("PLZ"))  > 0)
                                                 {
-                                                    // Link fuer die Routenplanung
-                                                    $route_url = "http://maps.google.com/?f=d&saddr=". urlencode($g_current_user->getValue("Adresse"));
-                                                    if(strlen($g_current_user->getValue("PLZ"))  > 0)
-                                                    {
-                                                        $route_url .= ",%20". $g_current_user->getValue("PLZ");
-                                                    }
-                                                    if(strlen($g_current_user->getValue("Ort"))  > 0)
-                                                    {
-                                                        $route_url .= ",%20". $g_current_user->getValue("Ort");
-                                                    }
-                                                    if(strlen($g_current_user->getValue("Land"))  > 0)
-                                                    {
-                                                        $route_url .= ",%20". $g_current_user->getValue("Land");
-                                                    }
-
-                                                    $route_url .= "&daddr=". urlencode($user->address);
-                                                    if(strlen($user->getValue("PLZ"))  > 0)
-                                                    {
-                                                        $route_url .= ",%20". $user->getValue("PLZ");
-                                                    }
-                                                    if(strlen($user->getValue("Ort")) > 0)
-                                                    {
-                                                        $route_url .= ",%20". $user->getValue("Ort");
-                                                    }
-                                                    if(strlen($user->getValue("Land")) > 0)
-                                                    {
-                                                        $route_url .= ",%20". $user->getValue("Land");
-                                                    }
-                                                    echo " - <a href=\"$route_url\" target=\"_blank\">Route berechnen</a>";
+                                                    $map_url .= ",%20". $user->getValue("PLZ");
                                                 }
-                                            }
-                                            echo " )</span>";
-                                        }
-                                    echo "</div>
-                                    </div>";
-                                }
-                                break;
+                                                if(strlen($user->getValue("Ort"))  > 0)
+                                                {
+                                                    $map_url .= ",%20". $user->getValue("Ort");
+                                                }
+                                                if(strlen($user->getValue("Land"))  > 0)
+                                                {
+                                                    $map_url .= ",%20". $user->getValue("Land");
+                                                }
 
-                            default:
-                                echo getFieldCode($value, $a_user_id);
-                                break;
+                                                echo "<br />
+                                                <span class=\"smallFontSize\">( <a href=\"$map_url\" target=\"_blank\">Stadtplan</a>";
+
+                                                if($g_current_user->getValue("usr_id") != $a_user_id)
+                                                {
+                                                    if(strlen($g_current_user->getValue("Adresse")) > 0
+                                                    && (  strlen($g_current_user->getValue("PLZ"))  > 0
+                                                    || strlen($g_current_user->getValue("Ort"))  > 0 ))
+                                                    {
+                                                        // Link fuer die Routenplanung
+                                                        $route_url = "http://maps.google.com/?f=d&saddr=". urlencode($g_current_user->getValue("Adresse"));
+                                                        if(strlen($g_current_user->getValue("PLZ"))  > 0)
+                                                        {
+                                                            $route_url .= ",%20". $g_current_user->getValue("PLZ");
+                                                        }
+                                                        if(strlen($g_current_user->getValue("Ort"))  > 0)
+                                                        {
+                                                            $route_url .= ",%20". $g_current_user->getValue("Ort");
+                                                        }
+                                                        if(strlen($g_current_user->getValue("Land"))  > 0)
+                                                        {
+                                                            $route_url .= ",%20". $g_current_user->getValue("Land");
+                                                        }
+
+                                                        $route_url .= "&daddr=". urlencode($user->address);
+                                                        if(strlen($user->getValue("PLZ"))  > 0)
+                                                        {
+                                                            $route_url .= ",%20". $user->getValue("PLZ");
+                                                        }
+                                                        if(strlen($user->getValue("Ort")) > 0)
+                                                        {
+                                                            $route_url .= ",%20". $user->getValue("Ort");
+                                                        }
+                                                        if(strlen($user->getValue("Land")) > 0)
+                                                        {
+                                                            $route_url .= ",%20". $user->getValue("Land");
+                                                        }
+                                                        echo " - <a href=\"$route_url\" target=\"_blank\">Route berechnen</a>";
+                                                    }
+                                                }
+                                                echo " )</span>";
+                                            }
+                                        echo "</div>
+                                        </div>";
+                                    }
+                                    break;
+
+                                default:
+                                    echo getFieldCode($value, $a_user_id);
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            // keine Stammdaten mehr also diese Schleife erst einmal abbrechen
+                            break;
                         }
                     }
-                    else
-                    {
-                        // keine Stammdaten mehr also diese Schleife erst einmal abbrechen
-                        break;
-                    }
-                }
-            echo "</div>
+                echo "</div>
+            </div>
         </div>";
 
         echo "<div style=\"width: 32%; float: left\">";
@@ -387,19 +389,20 @@ echo "</div>
 
             echo"
             <div style=\"margin-top: 4px; text-align: center;\">
-                <div class=\"groupBox\">";
-
-                    //Falls vorhanden Bild ausgeben
-                    if(mysql_result($result_photo,0,"usr_photo")!=NULL)
-                    {
-                        echo"<img src=\"$g_root_path/adm_program/modules/profile/profile_photo_show.php?usr_id=$a_user_id&amp;id=". time(). "\" alt=\"Profilfoto\">";
-                    }
-                    //wenn nicht Schattenkopf
-                    else
-                    {
-                        echo"<img src=\"$g_root_path/adm_program/images/no_profile_pic.png\" alt=\"Profilfoto\">";
-                    }
-                echo"</div>";
+                <div class=\"groupBox\">
+                    <div class=\"groupBoxBody\">";
+                        //Falls vorhanden Bild ausgeben
+                        if(mysql_result($result_photo,0,"usr_photo")!=NULL)
+                        {
+                            echo"<img src=\"$g_root_path/adm_program/modules/profile/profile_photo_show.php?usr_id=$a_user_id&amp;id=". time(). "\" alt=\"Profilfoto\">";
+                        }
+                        //wenn nicht Schattenkopf
+                        else
+                        {
+                            echo"<img src=\"$g_root_path/adm_program/images/no_profile_pic.png\" alt=\"Profilfoto\">";
+                        }
+                    echo"</div>
+                </div>";
                 
                 // Nur berechtigte User duerfen ein Profil editieren
                 if($g_current_user->editProfile($a_user_id) == true)
@@ -446,12 +449,14 @@ echo "</div>
             {
                 if(strlen($category) > 0)
                 {
-                    echo "</div>";
+                    // div-Container groupBoxBody und groupBox schliessen
+                    echo "</div></div>";
                 }
                 $category = $value['cat_name'];
                 
                 echo "<div class=\"groupBox\" style=\"margin-top: 10px; text-align: left;\">
-                    <div class=\"groupBoxHeadline\">". $value['cat_name']. "</div>";
+                    <div class=\"groupBoxHeadline\">". $value['cat_name']. "</div>
+                    <div class=\"groupBoxBody\">";
             }
             
             // Html des Feldes ausgeben
@@ -464,7 +469,8 @@ echo "</div>
         }
     }
 
-    echo "</div>
+    // div-Container groupBoxBody und groupBox schliessen
+    echo "</div></div>
 
    <div style=\"margin-top: 5px;\">";
 
@@ -532,83 +538,84 @@ echo "</div>
                             <a href=\"$g_root_path/adm_program/modules/profile/roles.php?user_id=$a_user_id\">Bearbeiten</a>";
                         }
                     echo "</div>
-                </div>";
+                </div>
+                <div class=\"groupBoxBody\">";
+                    while($row = mysql_fetch_array($result_role))
+                    {
+                        // jede einzelne Rolle anzeigen
+                        if($i > 0)
+                        {
+                            echo "<br />";
+                        }
 
-                while($row = mysql_fetch_array($result_role))
-                {
-                    // jede einzelne Rolle anzeigen
-                    if($i > 0)
-                    {
-                        echo "<br />";
+                        if($count_grp > 1)
+                        {
+                            echo $row['org_shortname']. " - ";
+                        }
+                        echo $row['cat_name']. " - ". $row['rol_name'];
+                        if($row['mem_leader'] == 1)
+                        {
+                            echo " - Leiter";
+                        }
+                        if($row['org_shortname'] == $g_current_organization->shortname)
+                        {
+                            // nun fuer alle Rollenrechte die Icons anzeigen
+                            echo "&nbsp;";
+                            if($row['rol_assign_roles'] == 1)
+                            {
+                                echo "&nbsp;<img style=\"cursor: help; vertical-align: top;\" src=\"$g_root_path/adm_program/images/wand.png\"
+                                     alt=\"Rollen verwalten und zuordnen\" title=\"Rollen verwalten und zuordnen\">";
+                            }
+                            if($row['rol_edit_user'] == 1)
+                            {
+                                echo "&nbsp;<img style=\"cursor: help; vertical-align: top;\" src=\"$g_root_path/adm_program/images/group.png\"
+                                     alt=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\" title=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\">";
+                            }
+                            if($row['rol_profile'] == 1)
+                            {
+                                echo "&nbsp;<img style=\"cursor: help; vertical-align: top;\" src=\"$g_root_path/adm_program/images/user.png\"
+                                     alt=\"Eigenes Profil bearbeiten\" title=\"Eigenes Profil bearbeiten\">";
+                            }
+                            if($row['rol_announcements'] == 1 && $g_preferences['enable_announcements_module'] == 1)
+                            {
+                                echo "&nbsp;<img style=\"cursor: help; vertical-align: top;\" src=\"$g_root_path/adm_program/images/note.png\"
+                                     alt=\"Ank&uuml;ndigungen anlegen und bearbeiten\" title=\"Ank&uuml;ndigungen anlegen und bearbeiten\">";
+                            }
+                            if($row['rol_dates'] == 1 && $g_preferences['enable_dates_module'] == 1)
+                            {
+                                echo "&nbsp;<img style=\"cursor: help; vertical-align: top;\" src=\"$g_root_path/adm_program/images/date.png\"
+                                     alt=\"Termine anlegen und bearbeiten\" title=\"Termine anlegen und bearbeiten\">";
+                            }
+                            if($row['rol_photo'] == 1 && $g_preferences['enable_photo_module'] == 1)
+                            {
+                                echo "&nbsp;<img style=\"cursor: help; vertical-align: top;\" src=\"$g_root_path/adm_program/images/photo.png\"
+                                     alt=\"Fotos hochladen und bearbeiten\" title=\"Fotos hochladen und bearbeiten\">";
+                            }
+                            if($row['rol_download'] == 1 && $g_preferences['enable_download_module'] == 1)
+                            {
+                                echo "&nbsp;<img style=\"cursor: help; vertical-align: top;\" src=\"$g_root_path/adm_program/images/folder_down.png\"
+                                     alt=\"Downloads hochladen und bearbeiten\" title=\"Downloads hochladen und bearbeiten\">";
+                            }
+                            if($row['rol_guestbook'] == 1 && $g_preferences['enable_guestbook_module'] == 1)
+                            {
+                                echo "&nbsp;<img style=\"cursor: help; vertical-align: top;\" src=\"$g_root_path/adm_program/images/comment.png\"
+                                     alt=\"G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen\" title=\"G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen\">";
+                            }
+                            if($row['rol_guestbook_comments'] == 1 && $g_preferences['enable_guestbook_module'] == 1)
+                            {
+                                echo "&nbsp;<img style=\"cursor: help; vertical-align: top;\" src=\"$g_root_path/adm_program/images/comments.png\"
+                                     alt=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\" title=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\">";
+                            }
+                            if($row['rol_weblinks'] == 1 && $g_preferences['enable_weblinks_module'] == 1)
+                            {
+                                echo "&nbsp;<img style=\"cursor: help; vertical-align: top;\" src=\"$g_root_path/adm_program/images/globe.png\"
+                                     alt=\"Weblinks anlegen und bearbeiten\" title=\"Weblinks anlegen und bearbeiten\">";
+                            }
+                        }
+                        $i++;
                     }
-
-                    if($count_grp > 1)
-                    {
-                        echo $row['org_shortname']. " - ";
-                    }
-                    echo $row['cat_name']. " - ". $row['rol_name'];
-                    if($row['mem_leader'] == 1)
-                    {
-                        echo " - Leiter";
-                    }
-                    if($row['org_shortname'] == $g_current_organization->shortname)
-                    {
-                        // nun fuer alle Rollenrechte die Icons anzeigen
-                        echo "&nbsp;";
-                        if($row['rol_assign_roles'] == 1)
-                        {
-                            echo "&nbsp;<img style=\"cursor: help; vertical-align: top;\" src=\"$g_root_path/adm_program/images/wand.png\"
-                                 alt=\"Rollen verwalten und zuordnen\" title=\"Rollen verwalten und zuordnen\">";
-                        }
-                        if($row['rol_edit_user'] == 1)
-                        {
-                            echo "&nbsp;<img style=\"cursor: help; vertical-align: top;\" src=\"$g_root_path/adm_program/images/group.png\"
-                                 alt=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\" title=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\">";
-                        }
-                        if($row['rol_profile'] == 1)
-                        {
-                            echo "&nbsp;<img style=\"cursor: help; vertical-align: top;\" src=\"$g_root_path/adm_program/images/user.png\"
-                                 alt=\"Eigenes Profil bearbeiten\" title=\"Eigenes Profil bearbeiten\">";
-                        }
-                        if($row['rol_announcements'] == 1 && $g_preferences['enable_announcements_module'] == 1)
-                        {
-                            echo "&nbsp;<img style=\"cursor: help; vertical-align: top;\" src=\"$g_root_path/adm_program/images/note.png\"
-                                 alt=\"Ank&uuml;ndigungen anlegen und bearbeiten\" title=\"Ank&uuml;ndigungen anlegen und bearbeiten\">";
-                        }
-                        if($row['rol_dates'] == 1 && $g_preferences['enable_dates_module'] == 1)
-                        {
-                            echo "&nbsp;<img style=\"cursor: help; vertical-align: top;\" src=\"$g_root_path/adm_program/images/date.png\"
-                                 alt=\"Termine anlegen und bearbeiten\" title=\"Termine anlegen und bearbeiten\">";
-                        }
-                        if($row['rol_photo'] == 1 && $g_preferences['enable_photo_module'] == 1)
-                        {
-                            echo "&nbsp;<img style=\"cursor: help; vertical-align: top;\" src=\"$g_root_path/adm_program/images/photo.png\"
-                                 alt=\"Fotos hochladen und bearbeiten\" title=\"Fotos hochladen und bearbeiten\">";
-                        }
-                        if($row['rol_download'] == 1 && $g_preferences['enable_download_module'] == 1)
-                        {
-                            echo "&nbsp;<img style=\"cursor: help; vertical-align: top;\" src=\"$g_root_path/adm_program/images/folder_down.png\"
-                                 alt=\"Downloads hochladen und bearbeiten\" title=\"Downloads hochladen und bearbeiten\">";
-                        }
-                        if($row['rol_guestbook'] == 1 && $g_preferences['enable_guestbook_module'] == 1)
-                        {
-                            echo "&nbsp;<img style=\"cursor: help; vertical-align: top;\" src=\"$g_root_path/adm_program/images/comment.png\"
-                                 alt=\"G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen\" title=\"G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen\">";
-                        }
-                        if($row['rol_guestbook_comments'] == 1 && $g_preferences['enable_guestbook_module'] == 1)
-                        {
-                            echo "&nbsp;<img style=\"cursor: help; vertical-align: top;\" src=\"$g_root_path/adm_program/images/comments.png\"
-                                 alt=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\" title=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\">";
-                        }
-                        if($row['rol_weblinks'] == 1 && $g_preferences['enable_weblinks_module'] == 1)
-                        {
-                            echo "&nbsp;<img style=\"cursor: help; vertical-align: top;\" src=\"$g_root_path/adm_program/images/globe.png\"
-                                 alt=\"Weblinks anlegen und bearbeiten\" title=\"Weblinks anlegen und bearbeiten\">";
-                        }
-                    }
-                    $i++;
-                }
-            echo "</div>";
+                echo "</div>
+            </div>";
         }
     echo "</div>";
 

@@ -107,7 +107,7 @@ if(strlen($category) > 0 && $category != "Alle")
     $sql .= " AND cat_type   = 'ROL'
               AND cat_name   = '$category' ";
 }
-$sql .= "ORDER BY rol_name ";
+$sql .= "ORDER BY cat_sequence, rol_name ";
 
 $result_lst = mysql_query($sql, $g_adm_con);
 db_error($result_lst,__FILE__,__LINE__);

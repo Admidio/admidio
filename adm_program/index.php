@@ -33,7 +33,6 @@ if(!file_exists("../adm_config/config.php"))
 
 include("system/common.php");
 
-$webmasterRole = false;
 if($g_current_user->isWebmaster())
 {
     // der Installationsordner darf aus Sicherheitsgruenden nicht existieren
@@ -41,7 +40,6 @@ if($g_current_user->isWebmaster())
     {
         $g_message->show("installFolderExists");
     }
-    $webmasterRole = true;
 }
 
 // Url-Stack loeschen
@@ -261,13 +259,13 @@ echo "</p>
 echo "
 </div>";
 
-if($g_current_user->assignRoles() || $g_current_user->editUser())
+if($g_current_user->isWebmaster() || $g_current_user->assignRoles() || $g_current_user->approveUsers() || $g_current_user->editUser())
 {
     echo "<br /><br />
 
     <div class=\"formHead\">Administration</div>
     <div class=\"formBody\">";
-        if($webmasterRole && $g_preferences['registration_mode'] > 0)
+        if($g_current_user->approveUsers() && $g_preferences['registration_mode'] > 0)
         {
             echo "
             <div style=\"text-align: left; width: 40; float: left;\">
@@ -283,16 +281,19 @@ if($g_current_user->assignRoles() || $g_current_user->editUser())
             <div style=\"margin-top: 7px;\"></div>";
         }
 
-        echo "
-        <div style=\"text-align: left; width: 40; float: left;\">
-            <a href=\"$g_root_path/adm_program/administration/members/members.php\">
-            <img style=\"position: relative; top: 5px;\" src=\"$g_root_path/adm_program/images/person_admin_big.png\" border=\"0\" alt=\"Benutzerverwaltung\" />
-            </a>
-        </div>
-        <div style=\"text-align: left; margin-left: 45px;\">
-            <span class=\"textHead\"><a href=\"$g_root_path/adm_program/administration/members/members.php\">Benutzerverwaltung</a></span><br />
-            <span class=\"smallFontSize\">Mitglieder (Benutzer) k&ouml;nnen entfernt und neue Mitglieder (Benutzer) k&ouml;nnen in der Datenbank anlegt werden.</span>
-        </div>";
+        if($g_current_user->editUser())
+        {
+            echo "
+            <div style=\"text-align: left; width: 40; float: left;\">
+                <a href=\"$g_root_path/adm_program/administration/members/members.php\">
+                <img style=\"position: relative; top: 5px;\" src=\"$g_root_path/adm_program/images/person_admin_big.png\" border=\"0\" alt=\"Benutzerverwaltung\" />
+                </a>
+            </div>
+            <div style=\"text-align: left; margin-left: 45px;\">
+                <span class=\"textHead\"><a href=\"$g_root_path/adm_program/administration/members/members.php\">Benutzerverwaltung</a></span><br />
+                <span class=\"smallFontSize\">Mitglieder (Benutzer) k&ouml;nnen entfernt und neue Mitglieder (Benutzer) k&ouml;nnen in der Datenbank anlegt werden.</span>
+            </div>";
+        }
 
         if($g_current_user->assignRoles())
         {
@@ -310,7 +311,7 @@ if($g_current_user->assignRoles() || $g_current_user->editUser())
             </div>";
         }
 
-        if($webmasterRole)
+        if($g_current_user->isWebmaster())
         {
             echo "
             <div style=\"margin-top: 7px;\"></div>

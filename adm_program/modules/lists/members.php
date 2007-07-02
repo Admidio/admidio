@@ -121,7 +121,8 @@ if($restrict=="m")
             AND usr_valid  = 1
             AND rol_cat_id = cat_id
             AND cat_org_id = $g_current_organization->id
-            ORDER BY usr_last_name, usr_first_name ASC ";
+            ORDER BY last_name, first_name ";
+    error_log($sql);
     $result_user = mysql_query($sql, $g_adm_con);
     db_error($result_user,__FILE__,__LINE__);
     //Zaehlen wieviele Leute in der Datenbank stehen
@@ -156,7 +157,8 @@ if($restrict=="u")
               ON zip_code.usd_usr_id = usr_id
              AND zip_code.usd_usf_id = ". $g_current_user->getProperty("PLZ", "usf_id"). "
             WHERE usr_valid = 1
-            ORDER BY usr_last_name, usr_first_name ASC ";
+            ORDER BY last_name, first_name ";
+    error_log($sql);
     $result_user = mysql_query($sql, $g_adm_con);
     db_error($result_user,__FILE__,__LINE__);
     //Zaehlen wieviele Leute in der Datenbank stehen
@@ -504,16 +506,17 @@ echo "
                 }
 
                 // Ueberschrift fuer neuen Buchstaben
+                $block_id = "letter_$letter_string";
                 echo "<tbody id=\"head_$letter_string\">
                     <tr>
                         <td class=\"tableSubHeader\" colspan=\"6\">
-                            <a href=\"javascript:showHideBlock('$letter_string','$g_root_path')\"><img name=\"img_$letter_string\" 
+                            <a href=\"javascript:showHideBlock('$block_id','$g_root_path')\"><img name=\"img_$block_id\" 
                                 style=\"padding: 1px 5px 2px 3px; vertical-align: middle;\" src=\"$g_root_path/adm_program/images/triangle_open.gif\" 
                                 border=\"0\" alt=\"ausblenden\"></a>$letter_string
                         </td>
                     </tr>
                 </tbody>
-                <tbody id=\"cat_$letter_string\">";
+                <tbody id=\"$block_id\">";
             }
 
 

@@ -53,7 +53,9 @@
 class Role
 {
     var $db_connection;
-    var $db_fields = array();
+    
+    var $db_fields_changed;         // Merker ob an den db_fields Daten was geaendert wurde
+    var $db_fields = array();       // Array ueber alle Felder der Rollen-Tabelle der entsprechenden Rolle
 
     // Konstruktor
     function Role($connection, $role = 0)
@@ -110,6 +112,8 @@ class Role
     // alle Klassenvariablen wieder zuruecksetzen
     function clear()
     {
+        $this->db_fields_changed = false;
+        
         if(count($this->db_fields) > 0)
         {
             foreach($this->db_fields as $key => $value)
@@ -196,8 +200,13 @@ class Role
                 }
                 break;
         }
-                
-        $this->db_fields[$field_name] = $field_value;
+
+        if(isset($this->db_fields[$field_name])
+        && $field_value != $this->db_fields[$field_name])
+        {
+            $this->db_fields[$field_name] = $field_value;
+            $this->db_fields_changed      = true;
+        }
     }
 
     // Funktion gibt den Wert eines Feldes zurueck
@@ -207,123 +216,96 @@ class Role
         return $this->db_fields[$field_name];
     }
     
-    // aktuelle Rollendaten in der Datenbank updaten
-    // Es muss die ID des eingeloggten Users uebergeben werden,
-    // damit die Aenderung protokolliert werden kann
-    function update($login_user_id)
+    // die Funktion speichert die Rollendaten in der Datenbank,
+    // je nach Bedarf wird ein Insert oder Update gemacht
+    function save($login_user_id)
     {
-        if(count($this->db_fields)    > 0
-        && $this->db_fields['rol_id'] > 0 
-        && $login_user_id             > 0 
-        && is_numeric($this->db_fields['rol_id'])
-        && is_numeric($login_user_id))
+        if((is_numeric($login_user_id) || strlen($login_user_id) == 0)
+        && (is_numeric($this->db_fields['rol_id']) || is_null($this->db_fields['rol_id'])))
         {
-            $act_date = date("Y-m-d H:i:s", time());
-
-            // SQL-Update-Statement zusammenbasteln
-            $item_connection = "";
-            $sql_field_list  = "";
-
-            // Schleife ueber alle DB-Felder und diese dem Update hinzufuegen                
-            foreach($this->db_fields as $key => $value)
+            if($login_user_id > 0)
             {
-                // ID und andere Tabellenfelder sollen nicht im Insert erscheinen
-                if($key != "rol_id" && strpos($key, "rol_") === 0) 
-                {
-                    // jetzt noch Spezialfaelle abhandeln
-                    switch($key)
-                    {
-                        case "rol_last_change":
-                            $sql_field_list = $sql_field_list. " $item_connection $key = '$act_date' ";
-                            break;
-
-                        case "rol_usr_id_change":
-                            $sql_field_list = $sql_field_list. " $item_connection $key = $login_user_id ";
-                            break;
-
-                        default:
-                            $sql_field_list = $sql_field_list. " $item_connection $key = \{$key} ";
-                            break;
-                    }
-
-                    if(strlen($item_connection) == 0)
-                    {
-                        $item_connection = ",";
-                    }
-                }
+                $this->db_fields['rol_last_change']   = date("Y-m-d H:i:s", time());
+                $this->db_fields['rol_usr_id_change'] = $login_user_id;
             }
-
-            $sql = "UPDATE ". TBL_ROLES. " SET $sql_field_list WHERE rol_id = {rol_id} ";
-            $sql = prepareSQL($sql, $this->db_fields);
-            $result = mysql_query($sql, $this->db_connection);
-            db_error($result,__FILE__,__LINE__);
-            return 0;
-        }
-        return -1;
-    }
-
-    // aktuelle Rollendaten neu in der Datenbank schreiben
-    // Es muss die ID des eingeloggten Users uebergeben werden,
-    // damit die Aenderung protokolliert werden kann
-    function insert($login_user_id)
-    {
-        if($login_user_id > 0 
-        && is_numeric($login_user_id)
-        && (  isset($this->db_fields['rol_id']) == false
-           || $this->db_fields['rol_id']        == 0 ))
-        {
-            $act_date = date("Y-m-d H:i:s", time());
-
-            // SQL-Update-Statement zusammenbasteln
-            $item_connection = "";
-            $sql_field_list  = "";
-            $sql_value_list  = "";
-
-            // Schleife ueber alle DB-Felder und diese dem Insert hinzufuegen 
-            foreach($this->db_fields as $key => $value)
-            {
-                // ID und andere Tabellenfelder sollen nicht im Insert erscheinen
-                if($key != "rol_id" && strlen($value) > 0 && strpos($key, "rol_") === 0) 
-                {
-                    $sql_field_list = $sql_field_list. " $item_connection $key ";
-                    if(is_numeric($value))
-                    {
-                        $sql_value_list = $sql_value_list. " $item_connection $value ";
-                    }
-                    else
-                    {
-                        $sql_value_list = $sql_value_list. " $item_connection '$value' ";
-                    }
-
-                    if(strlen($item_connection) == 0)
-                    {
-                        $item_connection = ",";
-                    }
-                }
-            }
-
-            // Felder hinzufuegen, die zwingend erforderlich sind
-            if(isset($this->db_fields['rol_last_change']) == false)
-            {
-                $sql_field_list = $sql_field_list. ", rol_last_change ";
-                $sql_value_list = $sql_value_list. ", '$act_date' ";
-            }
-            if(isset($this->db_fields['rol_usr_id_change']) == false)
-            {
-                $sql_field_list = $sql_field_list. ", rol_usr_id_change ";
-                $sql_value_list = $sql_value_list. ", $login_user_id ";
-            }
-   
-            $sql = "INSERT INTO ". TBL_ROLES. " ($sql_field_list) VALUES ($sql_value_list) ";            
-            $sql = prepareSQL($sql, $this->db_fields);
-            $result = mysql_query($sql, $this->db_connection);
-            db_error($result,__FILE__,__LINE__);
             
-            $this->db_fields['rol_id'] = mysql_insert_id($this->db_connection);
+            if($this->db_fields_changed || is_null($this->db_fields['rol_id']))
+            {
+                // SQL-Update-Statement fuer User-Tabelle zusammenbasteln
+                $item_connection = "";                
+                $sql_field_list  = "";
+                $sql_value_list  = "";
+
+                // Schleife ueber alle DB-Felder und diese dem Update hinzufuegen                
+                foreach($this->db_fields as $key => $value)
+                {
+                    // ID und andere Tabellenfelder sollen nicht im Insert erscheinen
+                    if($key != "rol_id" && strpos($key, "rol_") === 0) 
+                    {
+                        if($this->db_fields['rol_id'] == 0)
+                        {
+                            if(strlen($value) > 0)
+                            {
+                                // Daten fuer ein Insert aufbereiten
+                                $sql_field_list = $sql_field_list. " $item_connection $key ";
+                                if(is_numeric($value))
+                                {
+                                    $sql_value_list = $sql_value_list. " $item_connection $value ";
+                                }
+                                else
+                                {
+                                    $value = addSlashes($value);
+                                    $sql_value_list = $sql_value_list. " $item_connection '$value' ";
+                                }
+                            }
+                        }
+                        else
+                        {
+                            // Daten fuer ein Update aufbereiten
+                            if(strlen($value) == 0 || is_null($value))
+                            {
+                                $sql_field_list = $sql_field_list. " $item_connection $key = NULL ";
+                            }
+                            elseif(is_numeric($value))
+                            {
+                                $sql_field_list = $sql_field_list. " $item_connection $key = $value ";
+                            }
+                            else
+                            {
+                                $value = addSlashes($value);
+                                $sql_field_list = $sql_field_list. " $item_connection $key = '$value' ";
+                            }
+                        }
+                        if(strlen($item_connection) == 0 && strlen($sql_field_list) > 0)
+                        {
+                            $item_connection = ",";
+                        }
+                    }
+                }
+
+                if($this->db_fields['rol_id'] == 0)
+                {
+                    $sql = "INSERT INTO ". TBL_ROLES. " ($sql_field_list) VALUES ($sql_value_list) ";
+                    error_log($sql);
+                    $result = mysql_query($sql, $this->db_connection);
+                    db_error($result,__FILE__,__LINE__);
+                    $this->db_fields['rol_id'] = mysql_insert_id($this->db_connection);
+                }
+                else
+                {
+                    $sql = "UPDATE ". TBL_ROLES. " SET $sql_field_list 
+                             WHERE rol_id = ". $this->db_fields['rol_id'];
+                    error_log($sql);
+                    $result = mysql_query($sql, $this->db_connection);
+                    db_error($result,__FILE__,__LINE__);
+                }
+            }
+
+            $this->db_fields_changed = false;
             return 0;
         }
         return -1;
-    }
+    }    
 
     // aktuelle Rolle loeschen
     function delete()

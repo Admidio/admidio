@@ -123,6 +123,7 @@ echo "
                 echo "</tbody>";
             }
             $image_hidden = "";
+            $block_id     = "cat_$row->cat_id";
             if($row->cat_hidden == 1)
             {
                 $image_hidden = "<img src=\"$g_root_path/adm_program/images/user_key.png\" 
@@ -131,13 +132,13 @@ echo "
             echo "<tbody>
                 <tr>
                     <td class=\"tableSubHeader\" colspan=\"4\">
-                        <a href=\"javascript:showHideBlock('$row->cat_id','$g_root_path')\"><img name=\"img_$row->cat_id\" 
+                        <a href=\"javascript:showHideBlock('$block_id','$g_root_path')\"><img name=\"img_$block_id\" 
                             style=\"padding: 1px 5px 2px 3px; vertical-align: middle;\" src=\"$g_root_path/adm_program/images/triangle_open.gif\" 
                             border=\"0\" alt=\"ausblenden\"></a>$row->cat_name $image_hidden
                     </td>
                 </tr>
             </tbody>
-            <tbody id=\"cat_$row->cat_id\">";
+            <tbody id=\"$block_id\">";
 
             $cat_id = $row->cat_id;
         }            
@@ -149,6 +150,11 @@ echo "
                 {
                     echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/wand.png\"
                     alt=\"Rollen verwalten und zuordnen\" title=\"Rollen verwalten und zuordnen\">";
+                }
+                if($row->rol_approve_users == 1)
+                {
+                    echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/properties.png\"
+                    alt=\"Registrierungen verwalten und zuordnen\" title=\"Registrierungen verwalten und zuordnen\">";
                 }
                 if($row->rol_edit_user == 1)
                 {

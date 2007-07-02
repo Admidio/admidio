@@ -113,16 +113,17 @@ echo "
                     {
                         echo "</tbody>";
                     }
+                    $block_id = "cat_". $value['cat_id'];
                     echo "<tbody>
                         <tr>
                             <td class=\"tableSubHeader\" colspan=\"4\">
-                                <a href=\"javascript:showHideBlock('". $value['cat_id']. "', '$g_root_path')\"><img name=\"img_". $value['cat_id']. "\" 
+                                <a href=\"javascript:showHideBlock('$block_id', '$g_root_path')\"><img name=\"img_$block_id\" 
                                     style=\"padding: 1px 5px 2px 3px; vertical-align: middle;\" src=\"$g_root_path/adm_program/images/triangle_open.gif\" 
                                     border=\"0\" alt=\"ausblenden\"></a>". $value['cat_name']. "
                             </td>
                         </tr>
                     </tbody>
-                    <tbody id=\"cat_". $value['cat_id']. "\">";
+                    <tbody id=\"$block_id\">";
 
                     $category = $value['cat_id'];
                 }             

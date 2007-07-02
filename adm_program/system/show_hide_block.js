@@ -24,7 +24,7 @@
 
 function showHideBlock(block_name, root_path)
 {
-	var block_element = 'cat_' + block_name;
+	var block_element = block_name;
 	var image_element = 'img_' + block_name;
 
 	if(document.getElementById(block_element).style.visibility == 'hidden')

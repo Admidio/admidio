@@ -63,8 +63,8 @@ echo "
         case "bbcode":
             echo "Die Beschreibung bei einigen Modulen (Ank&uuml;ndigungen, Terminen, G&auml;stebuch und Weblinks)
                   k&ouml;nnen mit verschiedenen Tags (BBCode) formatiert werden. Daf&uuml;r m&uuml;ssen die
-                  hier aufgelisteten Tags um den entsprechenden Textabschnitt gesetzt werden.<br /><br />
-                  Beispiele:<br /><br />
+                  hier aufgelisteten Tags um den entsprechenden Textabschnitt gesetzt werden.<br><br>
+                  Beispiele:<br><br>
                   <table class=\"tableList\" style=\"width: 100%;\" cellpadding=\"5\" cellspacing=\"0\">
                      <tr>
                         <th class=\"tableHeader\" width=\"155\" valign=\"top\">Beispiel</th>
@@ -112,8 +112,8 @@ echo "
         case "condition":
             echo "Hier kannst du Bedingungen zu jedem Feld in deiner neuen Liste eingeben.
                   Damit wird die ausgew&auml;hlte Rolle noch einmal nach deinen Bedingungen
-                  eingeschr&auml;nkt.<br /><br />
-                  Beispiele:<br /><br />
+                  eingeschr&auml;nkt.<br><br>
+                  Beispiele:<br><br>
                   <table class=\"tableList\" style=\"width: 95%;\" cellpadding=\"2\" cellspacing=\"0\">
                      <tr>
                         <th class=\"tableHeader\" width=\"75\" valign=\"top\">Feld</th>
@@ -189,7 +189,7 @@ echo "
 
         case "file_size":
             echo "Hier kannst Du die maximal zul&auml;ssige Gr&ouml;&szlig;e einer Datei f&uuml;r das
-                  jeweilige Modul in Kilobyte definieren.<br /><br />
+                  jeweilige Modul in Kilobyte definieren.<br><br>
                   Wenn du 0 als Dateigr&ouml;&szlig;e eintr&auml;gst, deaktivierst du die entsprechende
                   Funktion f&uuml;r alle Benutzer.";
             break;
@@ -201,7 +201,7 @@ echo "
             break;
 
         case "nickname":
-            echo "Mit diesem Namen kannst du dich sp&auml;ter auf der Homepage anmelden.<br /><br />
+            echo "Mit diesem Namen kannst du dich sp&auml;ter auf der Homepage anmelden.<br><br>
                   Damit du ihn dir leicht merken kannst, solltest du deinen Spitznamen oder Vornamen nehmen.
                   Auch Kombinationen, wie zum Beispiel <i>Andi78</i> oder <i>StefanT</i>, sind m&ouml;glich.";
             break;
@@ -221,11 +221,11 @@ echo "
             break;
 
         case "rolle_locked":
-            echo "Rollen, die diese Option aktiviert haben, sind <b>nur</b> f&uuml;r Moderatoren
-                  sichtbar. Benutzer, denen keiner moderierenden Rolle zugewiesen wurden,
-                  k&ouml;nnen keine E-Mails an diese Rolle schreiben, keine Listen dieser Rolle
-                  aufrufen und sehen auch nicht im Profil einer Person, dass diese Mitglied
-                  dieser Rolle ist.";
+            echo "Rollen, die diese Option aktiviert haben, sind <b>nur</b> f&uuml;r Benutzer
+                  sichtbar, die selber das Recht haben, Rollen zu editieren.<br>
+                  Benutzer, die dieses Recht nicht besitzen, k&ouml;nnen keine E-Mails an 
+                  diese Rolle schreiben, keine Listen dieser Rolle aufrufen und sehen auch 
+                  nicht im Profil einer Person, dass diese Mitglied dieser Rolle ist.";
             break;
 
         case "rolle_logout":
@@ -245,7 +245,7 @@ echo "
 
         case "rolle_mail":
             echo "Deine E-Mail wird an alle Mitglieder der ausgew&auml;hlten Rolle geschickt, sofern
-                  diese ihre E-Mail-Adresse im System hinterlegt haben.<br /><br />
+                  diese ihre E-Mail-Adresse im System hinterlegt haben.<br><br>
                   Wenn du eingeloggt bist stehen dir weitere Rollen zur Verf&uuml;gung, an die du E-Mails
                   schreiben kannst.";
             break;
@@ -256,7 +256,7 @@ echo "
 
         case "termin_global":
             echo "Termine / Ank&uuml;ndigungen, die diese Option aktiviert haben, erscheinen auf den Webseiten
-                  folgender Organisationen:<br /><b>";
+                  folgender Organisationen:<br><b>";
 
             // alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist
             $organizations = $g_current_organization->longname;
@@ -268,24 +268,14 @@ echo "
                 next($arr_ref_orgas);
             }
 
-            echo "$organizations</b><br /><br />
+            echo "$organizations</b><br><br>
                   Moderatoren dieser Organisationen k&ouml;nnen den Termin / Nachricht dann bearbeiten
                   bzw. die Option zur&uuml;cksetzen.";
             break;
 
         case "user_field_description":
-            $sql = "SELECT usf_description 
-                      FROM ". TBL_USER_FIELDS. ", ". TBL_CATEGORIES. "
-                     WHERE usf_cat_id = cat_id
-                       AND (  cat_org_id = $g_current_organization->id
-                           OR cat_org_id IS NULL )
-                       AND usf_name   = {0} ";
-            $sql = prepareSQL($sql, array($req_err_text));
-            $result_field = mysql_query($sql, $g_adm_con);
-            db_error($result_field,__FILE__,__LINE__);
-
-            $row = mysql_fetch_object($result_field);
-            echo $row->usf_description;
+            global $g_current_user;
+            echo $g_current_user->getProperty($req_err_text, "usf_description");
             break;
 
         case "dateiname":
@@ -346,7 +336,7 @@ echo "
         case "captcha_help":
             echo " <h3>Was ist das f&uuml;r ein Best&auml;tigungscode?</h3>
                 Hierbei handelt es sich um ein Captcha. Ein Captcha dient zur Spamerkennung. Mit Hilfe des Bildes wird versucht festzustellen, ob das
-                Formular von einem User oder einem Script/Spambot ausgef&uuml;llt wurde. <br /> Bitte trage den im Bild angezeigten
+                Formular von einem User oder einem Script/Spambot ausgef&uuml;llt wurde. <br> Bitte trage den im Bild angezeigten
                 4- bis 6-stelligen Code in das Formularfeld ein.";
             break;
 

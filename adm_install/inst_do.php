@@ -510,7 +510,7 @@ if($req_mode == 1 || $req_mode == 4)
     $role_webmaster->setValue("rol_mail_logout", 1);
     $role_webmaster->setValue("rol_mail_login", 1);
     $role_webmaster->setValue("rol_profile", 1);
-    $role_webmaster->insert();
+    $role_webmaster->save(0);
 
     // Mitglied
     $role_member = new Role($connection);
@@ -519,7 +519,7 @@ if($req_mode == 1 || $req_mode == 4)
     $role_member->setValue("rol_description", "Alle Mitglieder der Organisation");
     $role_member->setValue("rol_mail_login", 1);
     $role_member->setValue("rol_profile", 1);
-    $role_member->insert();
+    $role_member->save(0);
 
     // Vorstand
     $role_management = new Role($connection);
@@ -533,17 +533,16 @@ if($req_mode == 1 || $req_mode == 4)
     $role_management->setValue("rol_mail_logout", 1);
     $role_management->setValue("rol_mail_login", 1);
     $role_management->setValue("rol_profile", 1);
-    $role_management->insert();
+    $role_management->save(0);
 
     // User Webmaster anlegen
-    $pw_md5 = md5($req_user_password);
     $user = new User($connection);
-    $user->last_name  = $req_user_last_name;
-    $user->first_name = $req_user_first_name;
-    $user->email      = $req_user_email;
-    $user->login_name = $req_user_login;
-    $user->password   = $pw_md5;
-    $user->insert(0);
+    $user->setValue("Nachname", $req_user_last_name);
+    $user->setValue("Vorname", $req_user_first_name);
+    $user->setValue("E-Mail", $req_user_email);
+    $user->setValue("usr_login_name", $req_user_login);
+    $user->setValue("usr_password", md5($req_user_password));
+    $user->save(0, false);
     
     // Mitgliedschaft bei Rolle "Webmaster" anlegen
     $sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin, mem_valid)

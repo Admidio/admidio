@@ -141,11 +141,11 @@ elseif($_GET["mode"] == 2)
     {
         // Schauen, ob die Rolle bereits existiert
         $sql    = "SELECT COUNT(*) as count 
-					 FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                     FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                     WHERE rol_name   LIKE '". $_POST['rol_name']. "'
                       AND rol_cat_id = ". $_POST['rol_cat_id']. "
-					  AND rol_cat_id = cat_id
-					  AND cat_org_id = $g_current_organization->id ";
+                      AND rol_cat_id = cat_id
+                      AND cat_org_id = $g_current_organization->id ";
         $result = mysql_query($sql, $g_adm_con);
         db_error($result,__FILE__,__LINE__);
         $row = mysql_fetch_array($result);
@@ -163,10 +163,14 @@ elseif($_GET["mode"] == 2)
         $_POST['rol_mail_logout']  = 1;
         $_POST['rol_mail_login']   = 1;
     }
-    
+
     if(isset($_POST['rol_assign_roles']) == false)
     {
         $_POST['rol_assign_roles'] = 0;
+    }
+    if(isset($_POST['rol_approve_users']) == false)
+    {
+        $_POST['rol_approve_users'] = 0;
     }
     if(isset($_POST['rol_announcements']) == false)
     {
@@ -301,14 +305,7 @@ elseif($_GET["mode"] == 2)
     }
 
     // Daten in Datenbank schreiben
-    if($req_rol_id > 0)
-    {
-        $return_code = $role->update($g_current_user->id);
-    }
-    else
-    {
-        $return_code = $role->insert($g_current_user->id);
-    }
+    $return_code = $role->save($g_current_user->getValue("usr_id"));
 
     if($return_code < 0)
     {
@@ -360,7 +357,7 @@ elseif($_GET["mode"] == 2)
                 $roleDep->clear();
                 $roleDep->setChild($sentChildRole);
                 $roleDep->setParent($req_rol_id);
-                $roleDep->insert($g_current_user->id);
+                $roleDep->insert($g_current_user->getValue("usr_id"));
 
                 //füge alle Mitglieder der ChildRole der ParentRole zu
                 $roleDep->updateMembership();

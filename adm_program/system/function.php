@@ -106,7 +106,7 @@ function hasRole($function, $user_id = 0)
 
     if($user_id == 0)
     {
-        $user_id = $g_current_user->id;
+        $user_id = $g_current_user->getValue("usr_id");
     }
     elseif(is_numeric($user_id) == false)
     {
@@ -182,7 +182,7 @@ function isGroupLeader($rol_id = 0)
 
     $sql    = "SELECT *
                  FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                WHERE mem_usr_id = $g_current_user->id
+                WHERE mem_usr_id = ". $g_current_user->getValue("usr_id"). "
                   AND mem_valid  = 1
                   AND mem_leader = 1
                   AND mem_rol_id = rol_id

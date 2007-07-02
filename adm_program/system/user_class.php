@@ -507,7 +507,7 @@ class User
     // je nach Bedarf wird ein Insert oder Update gemacht
     function save($login_user_id, $set_change_date = true)
     {
-        if(is_numeric($login_user_id) 
+        if((is_numeric($login_user_id) || strlen($login_user_id) == 0)
         && (is_numeric($this->db_fields['usr_id']) || is_null($this->db_fields['usr_id'])))
         {
             if($set_change_date)
@@ -570,7 +570,7 @@ class User
                     }
                 }
 
-                if($this->db_fields['usr_id'] == 0)
+                if($this->db_fields['usr_id'] == 0 || is_null($this->db_fields['usr_id']))
                 {
                     $sql = "INSERT INTO ". TBL_USERS. " ($sql_field_list) VALUES ($sql_value_list) ";
                     error_log($sql);
@@ -619,6 +619,7 @@ class User
                         {
                             $sql = "INSERT INTO ". TBL_USER_DATA. " (usd_usr_id, usd_usf_id, usd_value) 
                                     VALUES (". $this->db_fields['usr_id']. ", ". $value['usf_id']. ", '". $value['usd_value']. "') ";
+                            $this->db_user_fields[$key]['new'] = false;
                         }
                         else
                         {
@@ -630,6 +631,7 @@ class User
                     error_log($sql);
                     $result = mysql_query($sql, $this->db_connection);
                     db_error($result,__FILE__,__LINE__);
+                    $this->db_user_fields[$key]['changed'] = false;
                 }
             }
             $this->db_fields_changed = false;

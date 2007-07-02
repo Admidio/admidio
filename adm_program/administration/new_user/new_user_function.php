@@ -37,7 +37,7 @@ require("../../system/login_valid.php");
 require("../../system/email_class.php");
 
 // nur Webmaster duerfen User bestaetigen, ansonsten Seite verlassen
-if($g_current_user->isWebmaster() == false)
+if($g_current_user->approveUsers() == false)
 {
    $g_message->show("norights");
 }
@@ -88,14 +88,12 @@ $err_text = "";
 
 if($req_new_user_id > 0)
 {
-    $new_user = new User($g_adm_con);
-    $new_user->getUser($req_new_user_id);
+    $new_user = new User($g_adm_con, $req_new_user_id);
 }
 
 if($req_user_id > 0)
 {
-    $user = new User($g_adm_con);
-    $user->getUser($req_user_id);
+    $user = new User($g_adm_con, $req_user_id);
 }
 
 if($req_mode == 1 || $req_mode == 2)
@@ -103,17 +101,17 @@ if($req_mode == 1 || $req_mode == 2)
     // User-Account einem existierenden Mitglied zuordnen
 
     // Daten kopieren, aber nur, wenn noch keine Logindaten existieren
-    if(strlen($user->login_name) == 0 && strlen($user->password) == 0)
+    if(strlen($user->getValue("usr_login_name")) == 0 && strlen($user->getValue("usr_password")) == 0)
     {
-        $user->email      = $new_user->email;
-        $user->login_name = $new_user->login_name;
-        $user->password   = $new_user->password;
+        $user->setValue("E-Mail", $new_user->getValue("E-Mail"));
+        $user->setValue("usr_login_name", $new_user->getValue("usr_login_name"));
+        $user->setValue("usr_password", $new_user->getValue("usr_password"));
     }
 
     // zuerst den neuen Usersatz loeschen, dann den alten Updaten,
     // damit kein Duplicate-Key wegen dem Loginnamen entsteht
     $new_user->delete();
-    $user->update($g_current_user->id);
+    $user->save($g_current_user->getValue("usr_id"));
 }
 
 if($req_mode == 2)
@@ -133,11 +131,11 @@ if($req_mode == 1 || $req_mode == 3)
         // Mail an den User schicken, um die Anmeldung bwz. die Zuordnung zur neuen Orga zu bestaetigen
         $email = new Email();
         $email->setSender($g_preferences['email_administrator']);
-        $email->addRecipient($user->email, "$user->first_name $user->last_name");
+        $email->addRecipient($user->getValue("E-Mail"), $user->getValue("Vorname"). " ". $user->getValue("Nachname"));
         $email->setSubject("Anmeldung auf $g_current_organization->homepage");
-        $email->setText(utf8_decode("Hallo "). $user->first_name. utf8_decode(",\n\ndeine Anmeldung auf ").
+        $email->setText(utf8_decode("Hallo "). $user->getValue("Vorname"). utf8_decode(",\n\ndeine Anmeldung auf ").
             $g_current_organization->homepage."&nbsp". utf8_decode("wurde bestätigt.\n\nNun kannst du dich mit deinem Benutzernamen : ").
-            $user->login_name. utf8_decode("\nund dem Passwort auf der Homepage einloggen.\n\n".
+            $user->getValue("usr_login_name"). utf8_decode("\nund dem Passwort auf der Homepage einloggen.\n\n".
             "Sollten noch Fragen bestehen, schreib eine E-Mail an "). $g_preferences['email_administrator'].
             utf8_decode(" .\n\nViele Grüße\nDie Webmaster"));
         if($email->sendEmail() == true)
@@ -147,7 +145,7 @@ if($req_mode == 1 || $req_mode == 3)
         else
         {
             $err_code = "mail_not_send";
-            $err_text = $user->email;
+            $err_text = $user->getValue("E-Mail");
         }
     }
     else
@@ -165,7 +163,7 @@ elseif($req_mode == 4)
     // Paralell im Forum loeschen, wenn g_forum gesetzt ist
     if($g_forum_integriert)
     {
-        $g_forum->userDelete($new_user->login_name);
+        $g_forum->userDelete($new_user->getValue("usr_login_name"));
     }
 
     // nun aus Admidio-DB loeschen
@@ -179,14 +177,14 @@ elseif($req_mode == 5)
 {
     // Fragen, ob die Registrierung geloescht werden soll
     $g_message->setForwardYesNo("$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;mode=4");
-    $g_message->show("delete_new_user", utf8_encode("$new_user->first_name $new_user->last_name"), "Löschen");
+    $g_message->show("delete_new_user", utf8_encode($new_user->getValue("Vorname"). " ". $new_user->getValue("Nachname")), "Löschen");
 }
 elseif($req_mode == 6)
 {
     // Der User existiert schon und besitzt auch ein Login
     
     // Den Username für die Loeschung im Forum zwischenspeichern
-    $forum_user = $new_user->login_name;
+    $forum_user = $new_user->getValue("usr_login_name");
 
     // Registrierung loeschen
     $new_user->delete();
@@ -194,7 +192,7 @@ elseif($req_mode == 6)
     // Paralell im Forum loeschen, wenn g_forum gesetzt ist
     if($g_forum_integriert)
     {
-        $g_forum->userDelete($new_user->login_name);
+        $g_forum->userDelete($new_user->getValue("usr_login_name"));
     }
 
     // Zugangsdaten neu verschicken
