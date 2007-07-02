@@ -27,7 +27,7 @@ require("../../system/common.php");
 require("../../system/login_valid.php");
 
 // nur Webmaster dürfen User bestätigen, ansonsten Seite verlassen
-if($g_current_user->isWebmaster() == false)
+if($g_current_user->approveUsers() == false)
 {
     $g_message->show("norights");
 }
@@ -43,7 +43,18 @@ $_SESSION['navigation']->clear();
 $_SESSION['navigation']->addUrl($g_current_url);
 
 // Neue Mitglieder der Gruppierung selektieren
-$sql    = "SELECT * FROM ". TBL_USERS. " 
+$sql    = "SELECT usr_id, usr_login_name, last_name.usd_value as last_name,
+                  first_name.usd_value as first_name, email.usd_value as email
+             FROM ". TBL_USERS. " 
+             LEFT JOIN ". TBL_USER_DATA. " as last_name
+               ON last_name.usd_usr_id = usr_id
+              AND last_name.usd_usf_id = ". $g_current_user->getProperty("Nachname", "usf_id"). "
+             LEFT JOIN ". TBL_USER_DATA. " as first_name
+               ON first_name.usd_usr_id = usr_id
+              AND first_name.usd_usf_id = ". $g_current_user->getProperty("Vorname", "usf_id"). "
+             LEFT JOIN ". TBL_USER_DATA. " as email
+               ON email.usd_usr_id = usr_id
+              AND email.usd_usf_id = ". $g_current_user->getProperty("E-Mail", "usf_id"). "
             WHERE usr_valid = 0
               AND usr_reg_org_shortname = '$g_organization' 
             ORDER BY usr_last_name, usr_first_name ";
@@ -77,16 +88,16 @@ echo "
     {
         echo "
         <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
-            <td style=\"text-align: left;\">&nbsp;<a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->usr_id\">$row->usr_last_name, $row->usr_first_name</a></td>
+            <td style=\"text-align: left;\">&nbsp;<a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->usr_id\">$row->last_name, $row->first_name</a></td>
             <td style=\"text-align: left;\">&nbsp;$row->usr_login_name</td>
             <td style=\"text-align: left;\">&nbsp;";
                 if($g_preferences['enable_mail_module'] == 1)
                 {
-                    echo "<a href=\"$g_root_path/adm_program/modules/mail/mail.php?usr_id=$row->usr_id\">$row->usr_email</a>";
+                    echo "<a href=\"$g_root_path/adm_program/modules/mail/mail.php?usr_id=$row->usr_id\">$row->email</a>";
                 }
                 else
                 {
-                    echo "<a href=\"mailto:$row->usr_email\">$row->usr_email</a>";
+                    echo "<a href=\"mailto:$row->usr_email\">$row->email</a>";
                 }
             echo "</td>
             <td style=\"text-align: center;\">

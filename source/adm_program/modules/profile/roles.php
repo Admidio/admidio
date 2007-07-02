@@ -127,25 +127,36 @@ echo "
             </tr>
         </thead>";
 
-        if($g_current_user->assignRoles())
+        if($g_current_user->assignRoles() || $g_current_user->editUser())
         {
-            // Alle Rollen der Gruppierung auflisten
-            $sql    = "SELECT cat_id, cat_name, rol_name, rol_description, mem_usr_id, mem_leader, rol_id
+            // Benutzer mit Rollenrechten darf ALLE Rollen zuordnen
+            // Benutzer mit Benutzereditierrechten darf versteckte und 
+            // Rollen mit Rollenvergaberechten nicht sehen
+            $sql_roles_condition = "";
+            if($g_current_user->editUser())
+            {
+                $sql_roles_condition = "AND rol_assign_roles = 0
+                                        AND rol_locked       = 0 ";
+            }
+            
+            $sql    = "SELECT cat_id, cat_name, rol_name, rol_description, rol_id, mem_usr_id, mem_leader
                          FROM ". TBL_CATEGORIES. ", ". TBL_ROLES. " 
                          LEFT JOIN ". TBL_MEMBERS. "
                            ON rol_id     = mem_rol_id
-                          AND mem_usr_id = {0}
+                          AND mem_usr_id = $req_usr_id
                           AND mem_valid  = 1
                         WHERE rol_valid  = 1
+                              $sql_roles_condition
                           AND rol_cat_id = cat_id
                           AND cat_org_id = $g_current_organization->id
                         ORDER BY cat_sequence, rol_name";
         }
-        elseif(isGroupLeader())
+        else
         {
-            // Alle Rollen auflisten, bei denen das Mitglied Leiter ist
-            $sql    = "SELECT cat_id, cat_name, br.rol_name, br.rol_description, br.rol_id, mgl.mem_usr_id, mgl.mem_leader
-                         FROM ". TBL_MEMBERS. " bm, ". TBL_CATEGORIES. ", ". TBL_ROLES. " br 
+            // Ein Leiter darf nur Rollen zuordnen, bei denen er auch Leiter ist
+            $sql    = "SELECT cat_id, cat_name, rol_name, rol_description, rol_id, 
+                              mgl.mem_usr_id as mem_usr_id, mgl.mem_leader as mem_leader
+                         FROM ". TBL_MEMBERS. " bm, ". TBL_CATEGORIES. ", ". TBL_ROLES. "
                          LEFT JOIN ". TBL_MEMBERS. " mgl
                            ON br.rol_id      = mgl.mem_rol_id
                           AND mgl.mem_usr_id = {0}
@@ -160,23 +171,7 @@ echo "
                           AND cat_org_id     = $g_current_organization->id
                         ORDER BY cat_sequence, br.rol_name";
         }
-        elseif($g_current_user->editUser())
-        {
-            // Alle Rollen auflisten, die keinen Moderatorenstatus haben
-            $sql    = "SELECT cat_id, cat_name, rol_name, rol_description, rol_id, mem_usr_id, mem_leader
-                         FROM ". TBL_CATEGORIES. ", ". TBL_ROLES. " 
-                         LEFT JOIN ". TBL_MEMBERS. "
-                           ON rol_id     = mem_rol_id
-                          AND mem_usr_id = {0}
-                          AND mem_valid  = 1
-                        WHERE rol_valid        = 1
-                          AND rol_assign_roles = 0
-                          AND rol_locked       = 0
-                          AND rol_cat_id = cat_id
-                          AND cat_org_id = $g_current_organization->id
-                        ORDER BY cat_sequence, rol_name";
-        }
-        $sql    = prepareSQL($sql, array($req_usr_id));
+
         $result = mysql_query($sql, $g_adm_con);
         db_error($result,__FILE__,__LINE__);
         $category = "";
@@ -189,16 +184,17 @@ echo "
                 {
                     echo "</tbody>";
                 }
+                $block_id = "cat_$row->cat_id";
                 echo "<tbody>
                     <tr>
                         <td class=\"tableSubHeader\" colspan=\"4\">
-                            <a href=\"javascript:showHideBlock('$row->cat_id','$g_root_path')\"><img name=\"img_$row->cat_id\" 
+                            <a href=\"javascript:showHideBlock('$block_id','$g_root_path')\"><img name=\"img_$block_id\" 
                                 style=\"padding: 1px 5px 2px 3px; vertical-align: middle;\" src=\"$g_root_path/adm_program/images/triangle_open.gif\" 
                                 border=\"0\" alt=\"ausblenden\"></a>$row->cat_name
                         </td>
                     </tr>
                 </tbody>
-                <tbody id=\"cat_$row->cat_id\">";
+                <tbody id=\"$block_id\">";
 
                 $category = $row->cat_name;
             }

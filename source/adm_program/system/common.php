@@ -215,7 +215,7 @@ if(strlen($g_session_id) > 0)
         {
             $g_session_valid = true;
             // falls bisher ein anderer User in der Session gespeichert wurde -> neu einlesen
-            if($g_current_user->id != $row->ses_usr_id)
+            if($g_current_user->getValue("usr_id") != $row->ses_usr_id)
             {
                 $g_current_user->getUser($row->ses_usr_id);
                 $_SESSION['g_current_user'] = $g_current_user;
@@ -293,19 +293,19 @@ if($g_forum_integriert)
     {
         // Ab und an werden die Userid, Username und Password aus der Session gelöscht. 
         // Dies behebt den Fehler.
-        $g_forum->user($g_current_user->login_name);
+        $g_forum->user($g_current_user->getValue("usr_login_name"));
         
         // Wenn die Forum Session bereits valid ist, wird diese Abfrage uebersprungen
         if($g_forum->session_valid != TRUE)
         { 
-            $g_forum->session_valid = $g_forum->userCheck($g_current_user->login_name);
+            $g_forum->session_valid = $g_forum->userCheck($g_current_user->getValue("usr_login_name"));
         }
     
         // Wenn die Forumssession gueltig ist, Userdaten holen und gueltige Session im Forum updaten. 
         if($g_forum->session_valid)
         {
             // Fuer diesen User neue PMs pruefen
-            $g_forum->userPM($g_current_user->login_name);
+            $g_forum->userPM($g_current_user->getValue("usr_login_name"));
             
             // Sofern die Admidio Session gueltig ist, ist auch die Forum Session gueltig
             $g_forum->session("update", $g_forum->userid);

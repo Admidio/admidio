@@ -63,24 +63,23 @@ if ($user_found >= 1)
     $act_date = date("Y-m-d H:i:s", time());
     
     // Userobjekt anlegen
-    $g_current_user = new User($g_adm_con);
-    $g_current_user->getUser($user_row['usr_id']);
+    $g_current_user = new User($g_adm_con, $user_row['usr_id']);
     
-    if($g_current_user->number_invalid >= 3)
+    if($g_current_user->getValue("usr_number_invalid") >= 3)
     {
         // wenn innerhalb 15 min. 3 falsche Logins stattfanden -> Konto 15 min. sperren
-        if(time() - mysqlmaketimestamp($g_current_user->date_invalid) < 900)
+        if(time() - mysqlmaketimestamp($g_current_user->getValue("usr_date_invalid")) < 900)
         {
             $g_message->show("login_failed");
         }
     }
 
-    if($g_current_user->password == $req_password_crypt)
+    if($g_current_user->getValue("usr_password") == $req_password_crypt)
     {
         // alte Sessions des Users loeschen
 
         $sql    = "DELETE FROM ". TBL_SESSIONS. "
-                    WHERE ses_usr_id        = $g_current_user->id
+                    WHERE ses_usr_id        = ". $g_current_user->getValue("usr_id"). "
                       AND ses_org_shortname = '$g_organization' ";
         $result = mysql_query($sql, $g_adm_con);
         db_error($result,__FILE__,__LINE__);
@@ -91,7 +90,7 @@ if ($user_found >= 1)
         // Session-ID speichern
 
         $sql = "INSERT INTO ". TBL_SESSIONS. " (ses_usr_id, ses_org_shortname, ses_session, ses_timestamp, ses_ip_address)
-                VALUES ('$g_current_user->id', '$g_organization', '$g_session_id', '$login_datetime', '". $_SERVER['REMOTE_ADDR']. "') ";
+                VALUES ('". $g_current_user->getValue("usr_id"). "', '$g_organization', '$g_session_id', '$login_datetime', '". $_SERVER['REMOTE_ADDR']. "') ";
         $result = mysql_query($sql, $g_adm_con);
         db_error($result,__FILE__,__LINE__);
 
@@ -99,22 +98,23 @@ if ($user_found >= 1)
         $domain = substr($_SERVER['HTTP_HOST'], 0, strpos($_SERVER['HTTP_HOST'], ':'));
         setcookie("admidio_session_id", "$g_session_id" , 0, "/", $domain, 0);
 
-        //User Daten in Session speichern
-        $_SESSION['g_current_user'] = $g_current_user;
+        // Daten der Orga bei Anmeldung neu einlesen
         unset($_SESSION['g_current_organisation']);
 
         // Logins zaehlen und aktuelles Login-Datum aktualisieren
-        $g_current_user->last_login     = $g_current_user->actual_login;
-        $g_current_user->number_login   = $g_current_user->number_login + 1;
-        $g_current_user->actual_login   = $act_date;
-        $g_current_user->date_invalid   = NULL;
-        $g_current_user->number_invalid = 0;
-        $g_current_user->update($user_row['usr_id'], false);
+        $g_current_user->setValue("usr_last_login",   $g_current_user->getValue("usr_actual_login"));
+        $g_current_user->setValue("usr_number_login", $g_current_user->getValue("usr_number_login") + 1);
+        $g_current_user->setValue("usr_actual_login", $act_date);
+        $g_current_user->setValue("usr_date_invalid", NULL);
+        $g_current_user->setValue("usr_number_invalid", 0);
+        $g_current_user->save($user_row['usr_id'], false);
 
         // Paralell im Forum einloggen, wenn g_forum gesetzt ist
         if($g_forum_integriert)
         {
-            $g_forum->userLogin($g_current_user->id, $req_login_name, $req_password_crypt, $g_current_user->login_name, $g_current_user->password, $g_current_user->email);
+            $g_forum->userLogin($g_current_user->getValue("usr_id"), $req_login_name, $req_password_crypt, 
+                                $g_current_user->getValue("usr_login_name"), $g_current_user->getValue("usr_password"), 
+                                $g_current_user->getValue("E-Mail"));
 
             $login_message = $g_forum->message;
         }
@@ -141,18 +141,18 @@ if ($user_found >= 1)
     {
         // ungueltige Logins werden mitgeloggt
         
-        if($g_current_user->number_invalid >= 3)
+        if($g_current_user->getValue("usr_number_invalid") >= 3)
         {
-            $g_current_user->number_invalid = 1;
+            $g_current_user->setValue("usr_number_invalid", 1);
         }
         else
         {
-            $g_current_user->number_invalid = $g_current_user->number_invalid + 1;
+            $g_current_user->setValue("usr_number_invalid", $g_current_user->getValue("usr_number_invalid") + 1);
         }
-        $g_current_user->date_invalid   = $act_date;
-        $g_current_user->update($user_row['usr_id'], false);
+        $g_current_user->setValue("usr_date_invalid", $act_date);
+        $g_current_user->save($user_row['usr_id'], false);
 
-        if($g_current_user->number_invalid >= 3)
+        if($g_current_user->getValue("usr_number_invalid") >= 3)
         {
             $g_message->show("login_failed");
         }

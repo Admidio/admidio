@@ -64,43 +64,50 @@ if(isset($_GET["new_user"]))
     $req_new_usr = $_GET["new_user"];
 }
 
-if($g_current_user->assignRoles())
+if($g_current_user->assignRoles() || $g_current_user->editUser())
 {
-    // Alle Rollen der Gruppierung auflisten
-    $sql    = "SELECT rol_id, rol_name, rol_max_members
-                 FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+    // Benutzer mit Rollenrechten darf ALLE Rollen zuordnen
+    // Benutzer mit Benutzereditierrechten darf versteckte und 
+    // Rollen mit Rollenvergaberechten nicht sehen
+    $sql_roles_condition = "";
+    if($g_current_user->editUser())
+    {
+        $sql_roles_condition = "AND rol_assign_roles = 0
+                                AND rol_locked       = 0 ";
+    }
+
+    $sql    = "SELECT rol_id, rol_name, rol_max_members, mem_usr_id, mem_leader, mem_valid
+                 FROM ". TBL_CATEGORIES. ", ". TBL_ROLES. " 
+                 LEFT JOIN ". TBL_MEMBERS. "
+                   ON rol_id     = mem_rol_id
+                  AND mem_usr_id = $req_usr_id
                 WHERE rol_valid  = 1
+                      $sql_roles_condition
                   AND rol_cat_id = cat_id
                   AND cat_org_id = $g_current_organization->id
-                ORDER BY rol_name";
+                ORDER BY cat_sequence, rol_name";
 }
-elseif(isGroupLeader())
+else
 {
-    // Alle Rollen auflisten, bei denen das Mitglied Leiter ist
-    $sql    = "SELECT rol_id, rol_name, rol_max_members
-                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                WHERE mem_usr_id = $g_current_user->id
-                  AND mem_valid  = 1
-                  AND mem_leader = 1
-                  AND rol_id     = mem_rol_id
-                  AND rol_valid  = 1
-                  AND rol_locked = 0
-                  AND rol_cat_id = cat_id
-                  AND cat_org_id = $g_current_organization->id
-                ORDER BY rol_name";
+    // Ein Leiter darf nur Rollen zuordnen, bei denen er auch Leiter ist
+    $sql    = "SELECT rol_id, rol_name, rol_max_members,
+                      mgl.mem_usr_id as mem_usr_id, mgl.mem_leader as mem_leader, mgl_mem_valid as mem_valid
+                 FROM ". TBL_MEMBERS. " bm, ". TBL_CATEGORIES. ", ". TBL_ROLES. "
+                 LEFT JOIN ". TBL_MEMBERS. " mgl
+                   ON br.rol_id      = mgl.mem_rol_id
+                  AND mgl.mem_usr_id = {0}
+                  AND mgl.mem_valid  = 1
+                WHERE bm.mem_usr_id  = $g_current_user->id
+                  AND bm.mem_valid   = 1
+                  AND bm.mem_leader  = 1
+                  AND br.rol_id      = bm.mem_rol_id
+                  AND br.rol_valid   = 1
+                  AND br.rol_locked  = 0
+                  AND br.rol_cat_id  = cat_id
+                  AND cat_org_id     = $g_current_organization->id
+                ORDER BY cat_sequence, br.rol_name";
 }
-elseif($g_current_user->editUser())
-{
-    // Alle Rollen auflisten, die keinen Moderatorenstatus haben
-    $sql    = "SELECT rol_id, rol_name, rol_max_members
-                 FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                WHERE rol_valid        = 1
-                  AND rol_assign_roles = 0
-                  AND rol_locked       = 0
-                  AND rol_cat_id       = cat_id
-                  AND cat_org_id       = $g_current_organization->id
-                ORDER BY rol_name";
-}
+error_log($sql);
 $result_rolle = mysql_query($sql, $g_adm_con);
 db_error($result_rolle,__FILE__,__LINE__);
 
@@ -161,73 +168,68 @@ while($row = mysql_fetch_object($result_rolle))
     // der Webmaster-Rolle duerfen nur Webmaster neue Mitglieder zuweisen
     if($row->rol_name != 'Webmaster' || $g_current_user->isWebmaster())
     {
+        $role_assign = 0;
         if(isset($_POST["role-$row->rol_id"]) && $_POST["role-$row->rol_id"] == 1)
         {
-            $function = 1;
-        }
-        else
-        {
-            $function = 0;
+            $role_assign = 1;
         }
 
+        $role_leader = 0;
         if(isset($_POST["leader-$row->rol_id"]) && $_POST["leader-$row->rol_id"] == 1)
         {
-            $leiter   = 1;
+            $role_leader = 1;
+        }
+
+        // Rollenmitgliedschaften aktualisieren
+        if(is_null($row->mem_usr_id))
+        {
+            // neue Mitgliederdaten einfuegen, aber nur, wenn auch ein Haeckchen da ist
+            if($role_assign == 1)
+            {
+                $sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin,mem_end, mem_valid, mem_leader)
+                          VALUES ($row->rol_id, $req_usr_id, NOW(),NULL, 1, $role_leader) ";
+                error_log($sql);
+                $result = mysql_query($sql, $g_adm_con);
+                db_error($result,__FILE__,__LINE__);
+                $count_assigned++;
+            }
         }
         else
         {
-            $leiter   = 0;
-        }
-
-        $sql    = "SELECT * FROM ". TBL_MEMBERS. ", ". TBL_ROLES. "
-                    WHERE mem_rol_id = $row->rol_id
-                      AND mem_usr_id = {0}
-                      AND mem_rol_id = rol_id ";
-        $sql    = prepareSQL($sql, array($req_usr_id));
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result,__FILE__,__LINE__);
-
-        $user_found = mysql_num_rows($result);
-
-        if($user_found > 0)
-        {
-            // neue Mitgliederdaten zurueckschreiben
-            if($function == 1)
+            // neue Rollenmitgliederdaten zurueckschreiben, falls sich diese geaendert haben
+            if($role_assign == 1)
             {
-                $sql = "UPDATE ". TBL_MEMBERS. " SET mem_valid  = 1
-                                                   , mem_end    = NULL
-                                                   , mem_leader = $leiter
-                            WHERE mem_rol_id = $row->rol_id
-                              AND mem_usr_id = {0}";
-                $count_assigned++;
+                if($row->mem_valid == 0)
+                {
+                    $sql = "UPDATE ". TBL_MEMBERS. " SET mem_valid  = 1
+                                                       , mem_end    = NULL
+                                                       , mem_leader = $role_leader
+                                WHERE mem_rol_id = $row->rol_id
+                                  AND mem_usr_id = $req_usr_id ";
+                    error_log($sql);
+                    $result = mysql_query($sql, $g_adm_con);
+                    db_error($result,__FILE__,__LINE__);
+                    $count_assigned++;
+                }
             }
             else
             {
-                $sql = "UPDATE ". TBL_MEMBERS. " SET mem_valid  = 0
-                                                   , mem_end    = NOW()
-                                                   , mem_leader = $leiter
-                            WHERE mem_rol_id = $row->rol_id
-                              AND mem_usr_id = {0}";
+                if($row->mem_valid == 1)
+                {
+                    $sql = "UPDATE ". TBL_MEMBERS. " SET mem_valid  = 0
+                                                       , mem_end    = NOW()
+                                                       , mem_leader = $role_leader
+                                WHERE mem_rol_id = $row->rol_id
+                                  AND mem_usr_id = $req_usr_id ";
+                    error_log($sql);
+                    $result = mysql_query($sql, $g_adm_con);
+                    db_error($result,__FILE__,__LINE__);
+                }
             }
         }
-        else
-        {
-            // neue Mitgliederdaten einfuegen, aber nur, wenn auch ein Haeckchen da ist
-            if($function == 1)
-            {
-                $sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin,mem_end, mem_valid, mem_leader)
-                          VALUES ($row->rol_id, {0}, NOW(),NULL, 1, $leiter) ";
-                $count_assigned++;
-            }
-        }
-
-        // Update aufueren
-        $sql    = prepareSQL($sql, array($req_usr_id));
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result,__FILE__,__LINE__);
 
         // find the parent roles
-        if($function == 1)
+        if($role_assign == 1)
         {
             $tmpRoles = RoleDependency::getParentRoles($g_adm_con,$row->rol_id);
             foreach($tmpRoles as $tmpRole)
@@ -275,5 +277,10 @@ if($req_new_user == 1 && $count_assigned == 0)
 }
 
 // zur Ausgangsseite zurueck
+if(strpos($_SESSION['navigation']->getUrl(), "new_user_assign.php") > 0)
+{
+    // von hier aus direkt zur Registrierungsuebersicht zurueck
+    $_SESSION['navigation']->deleteLastUrl();
+}
 $g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
 $g_message->show("save");

@@ -381,13 +381,13 @@ elseif($new_user == 2)
                   FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                   LEFT JOIN ". TBL_USER_DATA. " first_name
                     ON first_name.usd_usr_id = usr_id
-                   AND first_name.usd_usf_id = ". getProperty("Vorname", "usf_id"). "
+                   AND first_name.usd_usf_id = ". $g_current_user->getProperty("Vorname", "usf_id"). "
                   LEFT JOIN ". TBL_USER_DATA. " last_name
                     ON last_name.usd_usr_id = usr_id
-                   AND last_name.usd_usf_id = ". getProperty("Nachname", "usf_id"). "
+                   AND last_name.usd_usf_id = ". $g_current_user->getProperty("Nachname", "usf_id"). "
                  RIGHT JOIN ". TBL_USER_DATA. " email
                     ON email.usd_usr_id = usr_id
-                   AND email.usd_usf_id = ". getProperty("E-Mail", "usf_id"). "
+                   AND email.usd_usf_id = ". $g_current_user->getProperty("E-Mail", "usf_id"). "
                    AND LENGTH(email.usd_value) > 0
                  WHERE rol_name          = 'Webmaster'
                    AND rol_cat_id        = cat_id
@@ -430,7 +430,7 @@ elseif($new_user == 2)
 if($usr_id == 0)
 {
     // neuer User -> Rollen zuordnen
-    header("Location: roles.php?user_id=". $user->getValue("usr_id"). "&new_user=1");
+    header("Location: $g_root_path/adm_program/modules/profile/roles.php?user_id=". $user->getValue("usr_id"). "&new_user=1");
     exit();
 }
 elseif($new_user == 0 && $user->valid == 0)

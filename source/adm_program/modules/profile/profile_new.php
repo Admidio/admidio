@@ -179,18 +179,18 @@ function getFieldCode($field, $user, $new_user)
     {
         $checked_female = "";
         $checked_male   = "";
-        if($new_user == 0 && $field['usd_value'] == 2)
+        if($field['usd_value'] == 2)
         {
             $checked_female = " checked ";
         }
-        elseif($new_user == 0 && $field['usd_value'] == 1)
+        elseif($field['usd_value'] == 1)
         {
             $checked_male = " checked ";
         }
-        $value = "<input type=\"radio\" id=\"female\" name=\"gender\" value=\"2\" $checked_female $readonly >
+        $value = "<input type=\"radio\" id=\"female\" name=\"usf-". $field['usf_id']. "\" value=\"2\" $checked_female $readonly >
             <label for=\"female\"><img src=\"$g_root_path/adm_program/images/female.png\" title=\"weiblich\" alt=\"weiblich\"></label>
             &nbsp;
-            <input type=\"radio\" id=\"male\" name=\"gender\" value=\"1\" $checked_male $readonly >
+            <input type=\"radio\" id=\"male\" name=\"usf-". $field['usf_id']. "\" value=\"1\" $checked_male $readonly >
             <label for=\"male\"><img src=\"$g_root_path/adm_program/images/male.png\" title=\"m&auml;nnlich\" alt=\"m&auml;nnlich\"></label>";
     }
     elseif($field['usf_name'] == "Land")
@@ -369,13 +369,15 @@ echo "
             {
                 if(strlen($category) > 0)
                 {
-                    echo "</div>";
+                    // div-Container groupBoxBody und groupBox schliessen
+                    echo "</div></div>";
                     $margintop = "15px";
                 }
                 $category = $value['cat_name'];
 
                 echo "<div class=\"groupBox\" style=\"margin-top: $margintop; text-align: left;\">
-                    <div class=\"groupBoxHeadline\">". $value['cat_name']. "</div>";
+                    <div class=\"groupBoxHeadline\">". $value['cat_name']. "</div>
+                    <div class=\"groupBoxBody\">";
             }
 
             // bei schneller Registrierung duerfen nur die Pflichtfelder ausgegeben werden
@@ -448,8 +450,8 @@ echo "
             }
         }
         
-        // letzte Box noch schliesen
-        echo "</div>";
+        // div-Container groupBoxBody und groupBox schliessen
+        echo "</div></div>";
 
         // User, die sich registrieren wollen, bekommen jetzt noch das Captcha praesentiert,
         // falls es in den Orgaeinstellungen aktiviert wurde...
