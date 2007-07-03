@@ -76,8 +76,8 @@ if (array_key_exists("usr_id", $_GET))
                      FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                     WHERE mem_usr_id = usr_id
                       AND mem_rol_id = rol_id
-					  AND rol_cat_id = cat_id
-					  AND cat_org_id = $g_current_organization->id
+                      AND rol_cat_id = cat_id
+                      AND cat_org_id = $g_current_organization->id
                       AND usr_id  = {0} ";
     }
     else
@@ -136,7 +136,9 @@ $email = new Email();
 if (strlen($_POST['name']) > 0)
 {
     //Absenderangaben checken falls der User eingeloggt ist, damit ein paar schlaue User nicht einfach die Felder aendern koennen...
-    if ( $g_session_valid && ($_POST['mailfrom'] != $g_current_user->email || $_POST['name'] != "$g_current_user->first_name $g_current_user->last_name") )
+    if ( $g_session_valid 
+    && (  $_POST['mailfrom'] != $g_current_user->getValue("E-Mail") 
+       || $_POST['name'] != $g_current_user->getValue("Vorname"). " ". $g_current_user->getValue("Nachname")) )
     {
         $g_message->show("invalid");
     }
@@ -207,18 +209,18 @@ if (array_key_exists("rol_id", $_POST) && strlen($err_code) == 0)
         if ($g_session_valid)
         {
             $sql    = "SELECT rol_mail_login 
-						 FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                         FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                         WHERE rol_id = {0} 
-					      AND rol_cat_id = cat_id
-					      AND cat_org_id = $g_current_organization->id ";
+                          AND rol_cat_id = cat_id
+                          AND cat_org_id = $g_current_organization->id ";
         }
         else
         {
             $sql    = "SELECT rol_mail_logout 
-						 FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                         FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                         WHERE rol_id = {0} 
-					      AND rol_cat_id = cat_id
-					      AND cat_org_id = $g_current_organization->id ";
+                          AND rol_cat_id = cat_id
+                          AND cat_org_id = $g_current_organization->id ";
         }
         $sql    = prepareSQL($sql, array($_POST['rol_id']));
         $result = mysql_query($sql, $g_adm_con);
@@ -260,8 +262,8 @@ else
     $sql    = "SELECT usr_first_name, usr_last_name, usr_email, rol_name
                 FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                WHERE rol_id            = {0}
-				 AND rol_cat_id        = cat_id
-				 AND cat_org_id        = $g_current_organization->id
+                 AND rol_cat_id        = cat_id
+                 AND cat_org_id        = $g_current_organization->id
                  AND mem_rol_id        = rol_id
                  AND mem_valid         = 1
                  AND mem_usr_id        = usr_id

@@ -181,7 +181,7 @@ if(strlen($req_folder) > 0)
 }
 
 //Button Upload und Neuer Ordner
-if ($g_session_valid && $g_current_user->editDownloadRight())
+if ($g_current_user->editDownloadRight())
 {
     echo "<p>
         <span class=\"iconLink\">
@@ -205,7 +205,7 @@ echo" <table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\">
            <th class=\"tableHeader\" style=\"text-align: left;\">Name</th>
            <th class=\"tableHeader\" style=\"text-align: center;\">Erstellungsdatum</th>
            <th class=\"tableHeader\" style=\"text-align: right;\">Gr&ouml;&szlig;e&nbsp;</th>";
-           if ($g_session_valid && $g_current_user->editDownloadRight())
+           if ($g_current_user->editDownloadRight())
            {
                echo "<th class=\"tableHeader\" align=\"center\">Editieren</th>";
            }
@@ -220,7 +220,10 @@ if(Count($ordnerarray)==0)
            <td colspan=\"2\">Dieser Ordner ist leer</td>
            <td></td>
            <td></td>";
-           if ($g_session_valid && $g_current_user->editDownloadRight()) echo "<td></td>";
+           if ($g_current_user->editDownloadRight()) 
+           {
+               echo "<td></td>";
+           }
   echo "</tr>";
 }
 
@@ -242,7 +245,7 @@ for($i=0; $i<count($ordnerarray); $i++)
               <td style=\"text-align: left;\"><a href=\"$g_root_path/adm_program/modules/download/download.php?folder=". urlencode($next_folder). "&amp;default_folder=". urlencode($req_default_folder). "\">$ordnerarray[$i]</a></td>
               <td>&nbsp;</td>
               <td>&nbsp;</td>";
-        if ($g_session_valid && $g_current_user->editDownloadRight())
+        if ($g_current_user->editDownloadRight())
         {
            echo "
            <td style=\"text-align: center;\">&nbsp;
@@ -312,7 +315,7 @@ for($i=0; $i<count($ordnerarray); $i++)
                  <td style=\"text-align: right;\">$dateigroesse kB&nbsp;</td>";
 
         //Moderation
-        if ($g_session_valid && $g_current_user->editDownloadRight())
+        if ($g_current_user->editDownloadRight())
         {
            echo "
            <td align=\"center\">&nbsp;

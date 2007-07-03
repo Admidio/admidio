@@ -179,7 +179,7 @@ if($_POST["upload"])
                                      pho_last_change ={1},
                                      pho_usr_id_change = {2}
                                WHERE pho_id = {3}";
-                        $sql    = prepareSQL($sql, array($bildnr, $act_datetime, $g_current_user->id,$pho_id));
+                        $sql    = prepareSQL($sql, array($bildnr, $act_datetime, $g_current_user->getValue("usr_id"),$pho_id));
                         $result = mysql_query($sql, $g_adm_con);
                         db_error($result,__FILE__,__LINE__);
                     }

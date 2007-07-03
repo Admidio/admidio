@@ -69,7 +69,7 @@ if( ($_POST["old_password"] != "" || $g_current_user->isWebmaster() )
         if($user->getValue("usr_password") == $old_password_crypt || $g_current_user->isWebmaster())
         {
             $user->setValue("usr_password", md5($_POST["new_password"]));
-            $user->save($g_current_user->id);
+            $user->save($g_current_user->getValue("usr_id"));
 
             // Paralell im Forum aendern, wenn g_forum gesetzt ist
             if($g_forum_integriert)
