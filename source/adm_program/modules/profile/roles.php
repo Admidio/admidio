@@ -161,7 +161,7 @@ echo "
                            ON rol_id         = mgl.mem_rol_id
                           AND mgl.mem_usr_id = $req_usr_id
                           AND mgl.mem_valid  = 1
-                        WHERE bm.mem_usr_id  = $g_current_user->id
+                        WHERE bm.mem_usr_id  = ". $g_current_user->getValue("usr_id"). "
                           AND bm.mem_valid   = 1
                           AND bm.mem_leader  = 1
                           AND rol_id         = bm.mem_rol_id

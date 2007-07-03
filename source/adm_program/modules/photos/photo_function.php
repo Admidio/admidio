@@ -278,10 +278,10 @@ function delete ($pho_id, $bild)
 
    //&Auml;ndern der Datenbankeintaege
     $sql="  UPDATE ". TBL_PHOTOS. "
-            SET pho_quantity = '$neuebilderzahl',
-                pho_last_change ='$act_datetime',
-                pho_usr_id_change = $g_current_user->id
-            WHERE pho_id = '$pho_id'";
+            SET pho_quantity      = '$neuebilderzahl',
+                pho_last_change   ='$act_datetime',
+                pho_usr_id_change = ". $g_current_user->getValue("usr_id"). "
+            WHERE pho_id = $pho_id ";
     $result = mysql_query($sql, $g_adm_con);
     db_error($result,__FILE__,__LINE__);
 };

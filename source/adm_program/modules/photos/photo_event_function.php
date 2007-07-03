@@ -176,7 +176,7 @@ if(isset($_POST["submit"]) && $_POST["submit"])
         $sql="  INSERT INTO ". TBL_PHOTOS. "(pho_quantity, pho_name, pho_begin, pho_end, pho_photographers,
                                              pho_timestamp, pho_last_change, pho_org_shortname, pho_usr_id, pho_locked)
                 VALUES(0, 'neu', '0000-00-00', '0000-00-00', 'leider unbekannt', '$act_datetime', '$act_datetime', '$g_organization',
-                        '$g_current_user->id', '$locked')";
+                        ". $g_current_user->getValue("usr_id"). ", '$locked')";
         $result = mysql_query($sql, $g_adm_con);
         db_error($result,__FILE__,__LINE__);
         //erfragen der id
@@ -257,12 +257,12 @@ if(isset($_POST["submit"]) && $_POST["submit"])
             $sql=$sql."pho_pho_id_parent = NULL,";
     }
     $sql=$sql."     pho_begin ='$beginn',
-                    pho_end ='$ende',
+                    pho_end   ='$ende',
                     pho_photographers ='$photographen',
-                    pho_last_change ='$act_datetime',
-                    pho_usr_id_change = '$g_current_user->id',
+                    pho_last_change   ='$act_datetime',
+                    pho_usr_id_change = ". $g_current_user->getValue("usr_id"). ",
                     pho_locked = '$locked'
-            WHERE   pho_id = '$pho_id'";
+            WHERE   pho_id     = '$pho_id'";
 
     //SQL Befehl ausfuehren
     $result = mysql_query($sql, $g_adm_con);

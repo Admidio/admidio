@@ -84,8 +84,8 @@ mysql_select_db($g_adm_db, $g_adm_con );
 $sql    = "SELECT rol_id, rol_mail_logout
              FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
             WHERE rol_name   = 'Webmaster' 
-			  AND rol_cat_id = cat_id
-			  AND cat_org_id = $g_current_organization->id ";
+              AND rol_cat_id = cat_id
+              AND cat_org_id = $g_current_organization->id ";
 $result = mysql_query($sql, $g_adm_con);
 db_error($result,__FILE__,__LINE__);
 $webmaster_row = mysql_fetch_object($result);
@@ -94,15 +94,15 @@ if($g_session_valid == 1)
 {
     echo "<div>
         Benutzer:<br>
-        <a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$g_current_user->id\" 
-            target=\"$plg_link_target\">$g_current_user->first_name $g_current_user->last_name</a>
+        <a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=". $g_current_user->getValue("usr_id"). "\" 
+            target=\"$plg_link_target\">". $g_current_user->getValue("Vorname"). " ". $g_current_user->getValue("Nachname"). "</a>
     </div>
     <div style=\"padding-top: 7px;\">
         Eingeloggt seit:<br>
-        <b>". mysqldatetime("h:i", $g_current_user->actual_login). " Uhr</b>
+        <b>". mysqldatetime("h:i", $g_current_user->getValue("usr_actual_login")). " Uhr</b>
     </div>
     <div style=\"padding-top: 7px;\">
-        Anzahl Logins:<br><b>$g_current_user->number_login</b>";
+        Anzahl Logins:<br><b>". $g_current_user->getValue("usr_number_login"). "</b>";
     
     // Zeigt einen Rank des Benutzers an, sofern diese in der config.php hinterlegt sind
     if(count($plg_rank) > 0)

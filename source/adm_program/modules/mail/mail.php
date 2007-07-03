@@ -44,7 +44,7 @@ if ($g_preferences['enable_mail_module'] != 1)
 }
 
 
-if ($g_session_valid && !isValidEmailAddress($g_current_user->email))
+if ($g_session_valid && !isValidEmailAddress($g_current_user->getValue("E-Mail")))
 {
     // der eingeloggte Benutzer hat in seinem Profil keine gueltige Mailadresse hinterlegt,
     // die als Absender genutzt werden kann...
@@ -364,9 +364,9 @@ echo "
      <div style=\"margin-top: 8px;\">
         <div style=\"text-align: right; width: 25%; float: left;\">Name:</div>
         <div style=\"text-align: left; margin-left: 27%;\">";
-           if ($g_current_user->id != 0)
+           if ($g_current_user->getValue("usr_id") != 0)
            {
-               echo "<input class=\"readonly\" readonly type=\"text\" name=\"name\" style=\"width: 200px;\" maxlength=\"50\" value=\"$g_current_user->first_name $g_current_user->last_name\">";
+               echo "<input class=\"readonly\" readonly type=\"text\" name=\"name\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $g_current_user->getValue("Vorname"). " ". $g_current_user->getValue("Nachname"). "\">";
            }
            else
            {
@@ -377,9 +377,9 @@ echo "
      <div style=\"margin-top: 8px;\">
         <div style=\"text-align: right; width: 25%; float: left;\">E-Mail:</div>
         <div style=\"text-align: left; margin-left: 27%;\">";
-           if ($g_current_user->id != 0)
+           if ($g_current_user->getValue("usr_id") != 0)
            {
-               echo "<input class=\"readonly\" readonly type=\"text\" name=\"mailfrom\" style=\"width: 350px;\" maxlength=\"50\" value=\"$g_current_user->email\">";
+               echo "<input class=\"readonly\" readonly type=\"text\" name=\"mailfrom\" style=\"width: 350px;\" maxlength=\"50\" value=\"". $g_current_user->getValue("E-Mail"). "\">";
            }
            else
            {
@@ -486,13 +486,13 @@ echo "
 </form>";
 
 // Focus auf das erste Eingabefeld setzen
-if (!array_key_exists("usr_id", $_GET)
- && !array_key_exists("rol_id", $_GET)
- && !array_key_exists("rolle",  $_GET))
+if (!isset($_GET['usr_id'])
+ && !isset($_GET['rol_id'])
+ && !isset($_GET['rolle']) )
 {
     $focus_field = "rol_id";
 }
-else if($g_current_user->id == 0)
+else if($g_current_user->getValue("usr_id") == 0)
 {
     $focus_field = "name";
 }

@@ -282,21 +282,21 @@ class Role
                     }
                 }
 
-                if($this->db_fields['rol_id'] == 0)
-                {
-                    $sql = "INSERT INTO ". TBL_ROLES. " ($sql_field_list) VALUES ($sql_value_list) ";
-                    error_log($sql);
-                    $result = mysql_query($sql, $this->db_connection);
-                    db_error($result,__FILE__,__LINE__);
-                    $this->db_fields['rol_id'] = mysql_insert_id($this->db_connection);
-                }
-                else
+                if($this->db_fields['rol_id'] > 0)
                 {
                     $sql = "UPDATE ". TBL_ROLES. " SET $sql_field_list 
                              WHERE rol_id = ". $this->db_fields['rol_id'];
                     error_log($sql);
                     $result = mysql_query($sql, $this->db_connection);
                     db_error($result,__FILE__,__LINE__);
+                }
+                else
+                {
+                    $sql = "INSERT INTO ". TBL_ROLES. " ($sql_field_list) VALUES ($sql_value_list) ";
+                    error_log($sql);
+                    $result = mysql_query($sql, $this->db_connection);
+                    db_error($result,__FILE__,__LINE__);
+                    $this->db_fields['rol_id'] = mysql_insert_id($this->db_connection);
                 }
             }
 
