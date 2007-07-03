@@ -24,9 +24,8 @@
  * setArray($field_arra)  - uebernimmt alle Werte aus einem Array in das Field-Array
  * setValue($field_name, $field_value) - setzt einen Wert fuer ein bestimmtes Feld
  * getValue($field_name)  - gibt den Wert eines Feldes zurueck
- * update($login_user_id) - Rolle wird mit den geaenderten Daten in die Datenbank
- *                          zurueckgeschrieben
- * insert($login_user_id) - Eine neue Rolle wird in die Datenbank geschrieben
+ * save($login_user_id)   - Rolle wird mit den geaenderten Daten in die Datenbank
+ *                          zurueckgeschrieben bwz. angelegt
  * delete()               - Die gewaehlte Rolle wird aus der Datenbank geloescht
  * setInactive()          - setzt die Rolle auf inaktiv
  * setActive()            - setzt die Rolle wieder auf aktiv

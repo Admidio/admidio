@@ -117,9 +117,9 @@ else
     // Name, Emailadresse und Homepage vorbelegt werden...
     if ($_GET['id'] == 0 && $g_session_valid)
     {
-        $form_values['name']     = $g_current_user->first_name. " ". $g_current_user->last_name;
-        $form_values['email']    = $g_current_user->email;
-        $form_values['homepage'] = $g_current_user->homepage;
+        $form_values['name']     = $g_current_user->getValue("Vorname"). " ". $g_current_user->getValue("Nachname");
+        $form_values['email']    = $g_current_user->getValue("E-Mail");
+        $form_values['homepage'] = $g_current_user->getValue("Homepage");
     }
 
 }
@@ -176,7 +176,7 @@ echo "
         <div>
             <div style=\"text-align: right; width: 25%; float: left;\">Name:</div>
             <div style=\"text-align: left; margin-left: 27%;\">";
-            if ($g_current_user->id != 0)
+            if ($g_current_user->getValue("usr_id") != 0)
             {
                 // Eingeloggte User sollen ihren Namen nicht aendern duerfen
                 echo "<input class=\"readonly\" readonly type=\"text\" id=\"name\" name=\"name\" tabindex=\"1\" style=\"width: 350px;\" maxlength=\"60\" value=\"". htmlspecialchars($form_values['name'], ENT_QUOTES). "\">";
@@ -258,7 +258,7 @@ echo "
     </div>
 </form>";
 
-if ($g_current_user->id == 0)
+if ($g_current_user->getValue("usr_id") == 0)
 {
     $focusField = "name";
 }

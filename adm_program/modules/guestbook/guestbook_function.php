@@ -205,11 +205,11 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
             if ($g_session_valid)
             {
                 // Falls der User eingeloggt ist wird die aktuelle UserId und der korrekte Name mitabgespeichert...
-                $realName = $g_current_user->first_name. " ". $g_current_user->last_name;
+                $realName = $g_current_user->getValue("Vorname"). " ". $g_current_user->getValue("Nachname");
 
                 $sql = "INSERT INTO ". TBL_GUESTBOOK. " (gbo_org_id, gbo_usr_id, gbo_name, gbo_text, gbo_email,
                                                          gbo_homepage, gbo_timestamp, gbo_ip_address)
-                                         VALUES ($g_current_organization->id, $g_current_user->id, '$realName', {0}, {1},
+                                         VALUES ($g_current_organization->id, ". $g_current_user->getValue("usr_id"). ", '$realName', {0}, {1},
                                                  {2}, '$actDate', '$ipAddress')";
 
                 $sql    = prepareSQL($sql, array($text, $email, $homepage));
@@ -256,8 +256,8 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
                                                   , gbo_text     = {1}
                                                   , gbo_email    = {2}
                                                   , gbo_homepage = {3}
-                                                  , gbo_last_change    = '$actDate'
-                                                  , gbo_usr_id_change = $g_current_user->id
+                                                  , gbo_last_change   = '$actDate'
+                                                  , gbo_usr_id_change = ". $g_current_user->getValue("usr_id"). "
                      WHERE gbo_id = {4}";
             $sql    = prepareSQL($sql, array($name, $text, $email, $homepage, $_GET['id']));
             $result = mysql_query($sql, $g_adm_con);
@@ -355,10 +355,10 @@ elseif($_GET["mode"] == 4 || $_GET["mode"] == 8)
             if ($g_session_valid)
             {
                 // Falls der User eingeloggt ist wird die aktuelle UserId und der korrekte Name mitabgespeichert...
-                $realName = $g_current_user->first_name. " ". $g_current_user->last_name;
+                $realName = $g_current_user->getValue("Vorname"). " ". $g_current_user->getValue("Nachname");
 
                 $sql = "INSERT INTO ". TBL_GUESTBOOK_COMMENTS. " (gbc_gbo_id, gbc_usr_id, gbc_name, gbc_text, gbc_email, gbc_timestamp, gbc_ip_address)
-                                                         VALUES ({0}, $g_current_user->id, '$realName', {1}, {2}, '$actDate', '$ipAddress')";
+                                                         VALUES ({0}, ". $g_current_user->getValue("usr_id"). ", '$realName', {1}, {2}, '$actDate', '$ipAddress')";
                 $sql    = prepareSQL($sql, array($_GET['id'], $text, $email));
                 $result = mysql_query($sql, $g_adm_con);
                 db_error($result,__FILE__,__LINE__);
@@ -399,8 +399,8 @@ elseif($_GET["mode"] == 4 || $_GET["mode"] == 8)
             $sql = "UPDATE ". TBL_GUESTBOOK_COMMENTS. " SET  gbc_name     = {0}
                                                            , gbc_text     = {1}
                                                            , gbc_email    = {2}
-                                                           , gbc_last_change    = '$actDate'
-                                                           , gbc_usr_id_change = $g_current_user->id
+                                                           , gbc_last_change   = '$actDate'
+                                                           , gbc_usr_id_change = ". $g_current_user->getValue("usr_id"). "
                      WHERE gbc_id = {3}";
             $sql    = prepareSQL($sql, array($name, $text, $email, $_GET['id']));
             $result = mysql_query($sql, $g_adm_con);

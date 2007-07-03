@@ -56,31 +56,6 @@ class User
 {
     var $db_connection;
     var $webmaster;
-    var $id;
-    var $last_name;
-    var $first_name;
-    var $address;
-    var $zip_code;
-    var $city;
-    var $country;
-    var $phone;
-    var $mobile;
-    var $fax;
-    var $birthday;
-    var $gender;
-    var $email;
-    var $homepage;
-    var $login_name;
-    var $password;
-    var $last_login;
-    var $actual_login;
-    var $number_login;
-    var $date_invalid;
-    var $number_invalid;
-    var $last_change;
-    var $usr_id_change;
-    var $valid;
-    var $reg_org_shortname;
     
     var $db_fields_changed;         // Merker ob an den db_fields Daten was geaendert wurde
     var $db_fields      = array();  // Array ueber alle Felder der User-Tabelle des entsprechenden Users
@@ -118,33 +93,6 @@ class User
                             $this->db_fields[$key] = $value;
                         }
                     }
-
-                    // Variablen fuellen
-                    $this->id         = $row['usr_id'];
-                    $this->last_name  = $row['usr_last_name'];
-                    $this->first_name = $row['usr_first_name'];
-                    $this->address    = $row['usr_address'];
-                    $this->zip_code   = $row['usr_zip_code'];
-                    $this->city       = $row['usr_city'];
-                    $this->country    = $row['usr_country'];
-                    $this->phone      = $row['usr_phone'];
-                    $this->mobile     = $row['usr_mobile'];
-                    $this->fax        = $row['usr_fax'];
-                    $this->birthday   = $row['usr_birthday'];
-                    $this->gender         = $row['usr_gender'];
-                    $this->email          = $row['usr_email'];
-                    $this->homepage       = $row['usr_homepage'];
-                    $this->login_name     = $row['usr_login_name'];
-                    $this->password       = $row['usr_password'];
-                    $this->last_login     = $row['usr_last_login'];
-                    $this->actual_login   = $row['usr_actual_login'];
-                    $this->number_login   = $row['usr_number_login'];
-                    $this->date_invalid   = $row['usr_date_invalid'];
-                    $this->number_invalid = $row['usr_number_invalid'];
-                    $this->last_change    = $row['usr_last_change'];
-                    $this->usr_id_change  = $row['usr_usr_id_change'];
-                    $this->valid          = $row['usr_valid'];
-                    $this->reg_org_shortname = $row->usr_reg_org_shortname;
                 }
             }
             
@@ -209,33 +157,6 @@ class User
     function clear()
     {
         $this->db_fields_changed = false;
-    
-        $this->id             = 0;
-        $this->last_name      = "";
-        $this->first_name     = "";
-        $this->address        = "";
-        $this->zip_code       = "";
-        $this->city           = "";
-        $this->country        = "";
-        $this->phone          = "";
-        $this->mobile         = "";
-        $this->fax            = "";
-        $this->birthday       = NULL;
-        $this->gender         = "";
-        $this->email          = "";
-        $this->homepage       = "";
-        $this->login_name     = NULL;
-        $this->password       = NULL;
-        $this->last_login     = NULL;
-        $this->actual_login   = NULL;
-        $this->number_login   = 0;
-        $this->date_invalid   = NULL;
-        $this->number_invalid = 0;
-        $this->last_change    = NULL;
-        $this->usr_id_change  = 0;
-        $this->valid          = 1;
-        $this->reg_org_shortname = NULL;
-        
         $this->webmaster = -1;
 
         if(count($this->db_fields) > 0)
@@ -404,104 +325,6 @@ class User
     {
         return $this->db_user_fields[$field_name][$property];
     }    
-    
-    // aktuelle Userdaten in der Datenbank updaten
-    // Es muss die ID des eingeloggten Users uebergeben werden,
-    // damit die Aenderung protokolliert werden kann
-    function update($login_user_id, $set_change_date = true)
-    {
-        if($this->id > 0 && $login_user_id > 0 && is_numeric($login_user_id))
-        {
-            if($set_change_date)
-            {
-                $this->last_change = date("Y-m-d H:i:s", time());
-                $login_user_id     = $this->usr_id_change;
-            }
-            
-            // PLZ darf nicht ueber prepareSQL geprueft werden, 
-            // da sonst fuehrende Nullen entfernt wuerden
-            $this->zip_code = mysql_escape_string(stripslashes($this->zip_code));
-
-            $sql = "UPDATE ". TBL_USERS. " SET usr_last_name  = {0}
-                                             , usr_first_name = {1}
-                                             , usr_address    = {2}
-                                             , usr_zip_code   = '$this->zip_code'
-                                             , usr_city       = {3}
-                                             , usr_country    = {4}
-                                             , usr_phone      = {5}
-                                             , usr_mobile     = {6}
-                                             , usr_fax        = {7}
-                                             , usr_birthday   = {8}
-                                             , usr_gender     = {9}
-                                             , usr_email      = {10}
-                                             , usr_homepage   = {11}
-                                             , usr_last_login = {12}
-                                             , usr_actual_login   = {13}
-                                             , usr_number_login   = {14}
-                                             , usr_date_invalid   = {15}
-                                             , usr_number_invalid = {16}
-                                             , usr_last_change    = {17}
-                                             , usr_usr_id_change  = $login_user_id
-                                             , usr_valid          = {18}
-                                             , usr_reg_org_shortname = {19}
-                                             , usr_login_name     = {20}
-                                             , usr_password       = {21}
-                     WHERE usr_id = $this->id ";
-            $sql = prepareSQL($sql, array($this->last_name, $this->first_name, $this->address,
-                        $this->city, $this->country, $this->phone, $this->mobile, $this->fax, $this->birthday,
-                        $this->gender, $this->email, $this->homepage, $this->last_login, $this->actual_login,
-                        $this->number_login, $this->date_invalid, $this->number_invalid, $this->last_change,
-                        $this->valid, $this->reg_org_shortname, $this->login_name, $this->password));
-            $result = mysql_query($sql, $this->db_connection);
-            db_error($result,__FILE__,__LINE__);
-            return 0;
-        }
-        return -1;
-    }
-
-    // aktuelle Userdaten neu in der Datenbank schreiben
-    // Es muss die ID des eingeloggten Users uebergeben werden,
-    // damit die Aenderung protokolliert werden kann (Ausnahme bei Registrierung)
-    function insert($login_user_id)
-    {
-        if($this->id == 0  && is_numeric($login_user_id)    // neuer angelegter User
-        && ($login_user_id >= 0 || $this->valid == 0))       // neuer registrierter User
-        {
-            $act_date = date("Y-m-d H:i:s", time());
-
-            // PLZ darf nicht ueber prepareSQL geprueft werden, 
-            // da sonst fuehrende Nullen entfernt wuerden
-            $this->zip_code = mysql_escape_string(stripslashes($this->zip_code));
-
-            $sql = "INSERT INTO ". TBL_USERS. " (usr_last_name, usr_first_name, usr_address, usr_zip_code,
-                                  usr_city, usr_country, usr_phone, usr_mobile, usr_fax, usr_birthday,
-                                  usr_gender, usr_email, usr_homepage, usr_last_login, usr_actual_login,
-                                  usr_number_login, usr_date_invalid, usr_number_invalid, usr_last_change,
-                                  usr_valid, usr_reg_org_shortname, usr_login_name, usr_password, usr_usr_id_change )
-                         VALUES ({0}, {1}, {2}, '$this->zip_code', {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, NULL, NULL,
-                                 0,  NULL, 0, '$act_date', {12}, {13}, {14}, {15}";
-            // bei einer Registrierung ist die Login-User-Id nicht gefüllt
-            if($login_user_id == 0)
-            {
-                $sql = $sql. ", NULL )";
-            }
-            else
-            {
-                $sql = $sql. ", $login_user_id )";
-            }
-            
-            $sql = prepareSQL($sql, array($this->last_name, $this->first_name, $this->address, 
-                        $this->city, $this->country, $this->phone, $this->mobile, $this->fax, $this->birthday,
-                        $this->gender, $this->email, $this->homepage, $this->valid,
-                        $this->reg_org_shortname, $this->login_name, $this->password));                        
-            $result = mysql_query($sql, $this->db_connection);
-            db_error($result,__FILE__,__LINE__);
-
-            $this->id = mysql_insert_id($this->db_connection);
-            return 0;
-        }
-        return -1;
-    }
     
     // die Funktion speichert die Userdaten in der Datenbank,
     // je nach Bedarf wird ein Insert oder Update gemacht

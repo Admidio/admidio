@@ -126,7 +126,7 @@ if ($_GET["mode"] == 1 || ($_GET["mode"] == 3 && $_GET["lnk_id"] > 0) )
         {
             $sql = "INSERT INTO ". TBL_LINKS. " ( lnk_org_id, lnk_usr_id, lnk_timestamp,
                                                   lnk_name, lnk_url, lnk_description, lnk_cat_id)
-                                     VALUES ($g_current_organization->id, $g_current_user->id, '$act_date',
+                                     VALUES ($g_current_organization->id, ". $g_current_user->getValue("usr_id"). ", '$act_date',
                                              {0}, {1}, {2}, {3})";
             $sql    = prepareSQL($sql, array($linkName, $linkUrl, $description, $category));
             $result = mysql_query($sql, $g_adm_con);
@@ -138,7 +138,7 @@ if ($_GET["mode"] == 1 || ($_GET["mode"] == 3 && $_GET["lnk_id"] > 0) )
                                                  lnk_url    = {1},
                                                  lnk_description   = {2},
                                                  lnk_last_change   = '$act_date',
-                                                 lnk_usr_id_change = $g_current_user->id,
+                                                 lnk_usr_id_change = ". $g_current_user->getValue("usr_id"). ",
                                                  lnk_cat_id        =  {3}
                     WHERE lnk_id = {4}";
             $sql    = prepareSQL($sql, array($linkName, $linkUrl, $description, $category, $_GET['lnk_id']));

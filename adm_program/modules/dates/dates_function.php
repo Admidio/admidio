@@ -74,7 +74,7 @@ if(is_numeric($_GET["mode"]) == false
     $g_message->show("invalid");
 }
 
-// Rollenobjekt anlegen
+// Terminobjekt anlegen
 $date = new Date($g_adm_con);
 
 if($req_dat_id > 0)
@@ -175,14 +175,7 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
     }
     
     // Daten in Datenbank schreiben
-    if($req_dat_id > 0)
-    {
-        $return_code = $date->update($g_current_user->id);
-    }
-    else
-    {
-        $return_code = $date->insert($g_current_user->id);
-    }
+    $return_code = $date->save($g_current_user->getValue("usr_id"), $g_current_organization->shortname);
 
     if($return_code < 0)
     {

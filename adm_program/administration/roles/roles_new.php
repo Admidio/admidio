@@ -465,9 +465,9 @@ echo "
                 <div style=\"margin-top: 6px;\">
                     <div style=\"text-align: left; width: 25%; float: left;\">G&uuml;ltig von:&nbsp;</div>
                     <div style=\"text-align: left;\">
-                        <input type=\"text\" name=\"rol_start_date\" size=\"10\" maxlength=\"10\" value=\"". $role->getValue("rol_start_date"). "\">
+                        <input type=\"text\" name=\"rol_start_date\" size=\"10\" maxlength=\"10\" value=\"". mysqldate('d.m.y', $role->getValue("rol_start_date")). "\">
                         bis
-                        <input type=\"text\" name=\"rol_end_date\" size=\"10\" maxlength=\"10\" value=\"". $role->getValue("rol_end_date"). "\">&nbsp;(Datum)
+                        <input type=\"text\" name=\"rol_end_date\" size=\"10\" maxlength=\"10\" value=\"". mysqldate('d.m.y', $role->getValue("rol_end_date")). "\">&nbsp;(Datum)
                     </div>
                 </div>
                 <div style=\"margin-top: 6px;\">

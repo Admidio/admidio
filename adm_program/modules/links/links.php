@@ -287,16 +287,14 @@ else
                                 <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer; vertical-align: middle;\" width=\"16\" height=\"16\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"
                                  onclick=\"self.location.href='$g_root_path/adm_program/modules/links/links_function.php?lnk_id=$row->lnk_id&amp;mode=4'\">";
                         }
-                        $user_create = new User($g_adm_con);
-                        $user_create->getUser($row->lnk_usr_id);
-                        echo "Angelegt von ". strSpecialChars2Html($user_create->first_name). " ". strSpecialChars2Html($user_create->last_name).
+                        $user_create = new User($g_adm_con, $row->lnk_usr_id);
+                        echo "Angelegt von ". $user_create->getValue("Vorname"). " ". $user_create->getValue("Nachname").
                         " am ". mysqldatetime("d.m.y h:i", $row->lnk_timestamp);
 
                         if($row->lnk_usr_id_change > 0)
                         {
-                            $user_change = new User($g_adm_con);
-                            $user_change->getUser($row->lnk_usr_id_change);
-                            echo "<br>Zuletzt bearbeitet von ". strSpecialChars2Html($user_change->first_name). " ". strSpecialChars2Html($user_change->last_name).
+                            $user_change = new User($g_adm_con, $row->lnk_usr_id_change);
+                            echo "<br>Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname").
                             " am ". mysqldatetime("d.m.y h:i", $row->lnk_last_change);
                         }
                     echo "</div>";

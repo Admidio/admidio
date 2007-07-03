@@ -70,7 +70,7 @@ if($g_current_user->assignRoles() || $g_current_user->editUser())
     // Benutzer mit Benutzereditierrechten darf versteckte und 
     // Rollen mit Rollenvergaberechten nicht sehen
     $sql_roles_condition = "";
-    if($g_current_user->editUser())
+    if($g_current_user->editUser() && !$g_current_user->assignRoles())
     {
         $sql_roles_condition = "AND rol_assign_roles = 0
                                 AND rol_locked       = 0 ";
@@ -91,21 +91,21 @@ else
 {
     // Ein Leiter darf nur Rollen zuordnen, bei denen er auch Leiter ist
     $sql    = "SELECT rol_id, rol_name, rol_max_members,
-                      mgl.mem_usr_id as mem_usr_id, mgl.mem_leader as mem_leader, mgl_mem_valid as mem_valid
+                      mgl.mem_usr_id as mem_usr_id, mgl.mem_leader as mem_leader, mgl.mem_valid as mem_valid
                  FROM ". TBL_MEMBERS. " bm, ". TBL_CATEGORIES. ", ". TBL_ROLES. "
                  LEFT JOIN ". TBL_MEMBERS. " mgl
-                   ON br.rol_id      = mgl.mem_rol_id
-                  AND mgl.mem_usr_id = {0}
+                   ON rol_id         = mgl.mem_rol_id
+                  AND mgl.mem_usr_id = $req_usr_id
                   AND mgl.mem_valid  = 1
                 WHERE bm.mem_usr_id  = $g_current_user->id
                   AND bm.mem_valid   = 1
                   AND bm.mem_leader  = 1
-                  AND br.rol_id      = bm.mem_rol_id
-                  AND br.rol_valid   = 1
-                  AND br.rol_locked  = 0
-                  AND br.rol_cat_id  = cat_id
+                  AND rol_id         = bm.mem_rol_id
+                  AND rol_valid      = 1
+                  AND rol_locked     = 0
+                  AND rol_cat_id     = cat_id
                   AND cat_org_id     = $g_current_organization->id
-                ORDER BY cat_sequence, br.rol_name";
+                ORDER BY cat_sequence, rol_name";
 }
 error_log($sql);
 $result_rolle = mysql_query($sql, $g_adm_con);
