@@ -107,21 +107,19 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
         {
             $sql = "INSERT INTO ". TBL_ANNOUNCEMENTS. " (ann_global, ann_org_shortname, ann_usr_id, ann_timestamp,
                                                          ann_headline, ann_description)
-                                                 VALUES ($global, '$g_organization', '$g_current_user->id', '$act_date',
-                                                         {0}, {1})";
-            $sql    = prepareSQL($sql, array($headline, $content));
+                                                 VALUES ($global, '$g_organization', ". $g_current_user->getValue("usr_id"). ", '$act_date',
+                                                         '$headline', '$content')";
             $result = mysql_query($sql, $g_adm_con);
             db_error($result,__FILE__,__LINE__);
         }
         else
         {
-            $sql = "UPDATE ". TBL_ANNOUNCEMENTS. " SET ann_global         = $global
-                                                     , ann_headline   = {0}
-                                                     , ann_description   = {1}
-                                                     , ann_last_change    = '$act_date'
-                                                     , ann_usr_id_change = $g_current_user->id
-                     WHERE ann_id = {2}";
-            $sql    = prepareSQL($sql, array($headline, $content, $_GET['ann_id']));
+            $sql = "UPDATE ". TBL_ANNOUNCEMENTS. " SET ann_global        = $global
+                                                     , ann_headline      = '$headline'
+                                                     , ann_description   = '$content'
+                                                     , ann_last_change   = '$act_date'
+                                                     , ann_usr_id_change = ". $g_current_user->getValue("usr_id"). "
+                     WHERE ann_id = ". $_GET['ann_id'];
             $result = mysql_query($sql, $g_adm_con);
             db_error($result,__FILE__,__LINE__);
         }

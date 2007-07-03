@@ -330,16 +330,14 @@ else
                 }
             echo "</div>
             <div class=\"smallFontSize\" style=\"margin: 8px 4px 4px 4px;\">";
-                $user_create = new User($g_adm_con);
-                $user_create->getUser($row->dat_usr_id);
-                echo "Angelegt von ". strSpecialChars2Html($user_create->first_name). " ". strSpecialChars2Html($user_create->last_name).
+                $user_create = new User($g_adm_con, $row->dat_usr_id);
+                echo "Angelegt von ". $user_create->getValue("Vorname"). " ". $user_create->getValue("Nachname").
                 " am ". mysqldatetime("d.m.y h:i", $row->dat_timestamp);
 
                 if($row->dat_usr_id_change > 0)
                 {
-                    $user_change = new User($g_adm_con);
-                    $user_change->getUser($row->dat_usr_id_change);
-                    echo "<br>Zuletzt bearbeitet von ". strSpecialChars2Html($user_change->first_name). " ". strSpecialChars2Html($user_change->last_name).
+                    $user_change = new User($g_adm_con, $row->dat_usr_id_change);
+                    echo "<br>Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname").
                     " am ". mysqldatetime("d.m.y h:i", $row->dat_last_change);
                 }
             echo "</div>

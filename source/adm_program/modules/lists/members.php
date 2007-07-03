@@ -284,8 +284,8 @@ $g_layout['header'] = "
         var i, id_head, id_body;
         for (i=0;i<ids.length;i++)
         {
-            id_head = 'head_' + ids[i];
-            id_body = 'cat_' + ids[i];
+            id_head = 'head_letter_' + ids[i];
+            id_body = 'letter_' + ids[i];
             if(document.getElementById(id_head))
             {
                 document.getElementById(id_head).style.visibility = 'hidden';
@@ -297,11 +297,10 @@ $g_layout['header'] = "
 
         // Angeforderten Bereich anzeigen
         id_head = 'head_' + element_id;
-        id_body = 'cat_' + element_id;
         document.getElementById(id_head).style.visibility = 'visible';
         document.getElementById(id_head).style.display    = '';
-        document.getElementById(id_body).style.visibility = 'visible';
-        document.getElementById(id_body).style.display    = '';
+        document.getElementById(element_id).style.visibility = 'visible';
+        document.getElementById(element_id).style.display    = '';
     }
 
     // Alle Divs anzeigen
@@ -312,8 +311,8 @@ $g_layout['header'] = "
         
         for (i=0;i<ids.length;i++)
         {
-            id_head = 'head_' + ids[i];
-            id_body = 'cat_' + ids[i];
+            id_head = 'head_letter_' + ids[i];
+            id_body = 'letter_' + ids[i];
             
             if(document.getElementById(id_head))
             {
@@ -383,7 +382,7 @@ echo "
             //Falls Nicht Link zu Anker
             if(in_array($menu_letter, $first_letter_array) && $menu_letter>=65 && $menu_letter<=90)
             {
-                echo"<a href=\"#\" onClick=\"toggleDiv('$menu_letter_string');\">$menu_letter_string</a>&nbsp;";
+                echo"<a href=\"#\" onClick=\"toggleDiv('letter_$menu_letter_string');\">$menu_letter_string</a>&nbsp;";
             }
 
             //Fuer Namen die mit Zahlen beginnen
@@ -507,7 +506,7 @@ echo "
 
                 // Ueberschrift fuer neuen Buchstaben
                 $block_id = "letter_$letter_string";
-                echo "<tbody id=\"head_$letter_string\">
+                echo "<tbody id=\"head_$block_id\">
                     <tr>
                         <td class=\"tableSubHeader\" colspan=\"6\">
                             <a href=\"javascript:showHideBlock('$block_id','$g_root_path')\"><img name=\"img_$block_id\" 

@@ -270,4 +270,21 @@ while($row_cat = mysql_fetch_array($result_cat))
     $sequence++;
 }
 
+// alte User-Felder aus adm_users entfernen
+$sql = "ALTER TABLE ". TBL_USERS. " DROP COLUMN `usr_last_name`,
+         DROP COLUMN `usr_first_name`,
+         DROP COLUMN `usr_address`,
+         DROP COLUMN `usr_zip_code`,
+         DROP COLUMN `usr_city`,
+         DROP COLUMN `usr_country`,
+         DROP COLUMN `usr_phone`,
+         DROP COLUMN `usr_mobile`,
+         DROP COLUMN `usr_fax`,
+         DROP COLUMN `usr_birthday`,
+         DROP COLUMN `usr_gender`,
+         DROP COLUMN `usr_email`,
+         DROP COLUMN `usr_homepage` ";
+$result = mysql_query($sql, $connection);
+if(!$result) showError(mysql_error());
+
 ?>

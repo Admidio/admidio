@@ -135,12 +135,11 @@ if (isset($comment_result))
             if($row->gbc_usr_id_change > 0)
             {
                 // Userdaten des Editors holen...
-                $user_change = new User($g_adm_con);
-                $user_change->getUser($row->gbc_usr_id_change);
+                $user_change = new User($g_adm_con, $row->gbc_usr_id_change);
 
                 echo "
                 <div class=\"smallFontSize\" style=\"margin: 8px 4px 4px 4px;\">Zuletzt bearbeitet von ".
-                strSpecialChars2Html($user_change->first_name). " ". strSpecialChars2Html($user_change->last_name).
+                $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname").
                 " am ". mysqldatetime("d.m.y h:i", $row->gbc_last_change). "</div>";
             }
 
