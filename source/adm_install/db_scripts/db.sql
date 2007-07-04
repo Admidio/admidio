@@ -228,8 +228,9 @@ create table %PRAEFIX%_sessions
 (
    ses_id                         int(11) unsigned               not null AUTO_INCREMENT,
    ses_usr_id                     int(11) unsigned,
-   ses_org_shortname              varchar(10)                    not null,
+   ses_org_id                     tinyint(4)                     not null,
    ses_session                    varchar(35)                    not null,
+   ses_begin                      datetime                       not null,
    ses_timestamp                  datetime                       not null,
    ses_ip_address                 varchar(15)                    not null,
    ses_blob                       blob,
@@ -242,11 +243,11 @@ auto_increment = 1;
 
 -- Index
 alter table %PRAEFIX%_sessions add index SES_USR_FK (ses_usr_id);
-alter table %PRAEFIX%_sessions add index SES_ORG_FK (ses_org_shortname);
+alter table %PRAEFIX%_sessions add index SES_ORG_FK (ses_org_id);
 
 -- Constraints
-alter table %PRAEFIX%_sessions add constraint %PRAEFIX%_FK_SES_ORG foreign key (ses_org_shortname)
-      references %PRAEFIX%_organizations (org_shortname) on delete restrict on update restrict;
+alter table %PRAEFIX%_sessions add constraint %PRAEFIX%_FK_SES_ORG foreign key (ses_org_id)
+      references %PRAEFIX%_organizations (org_id) on delete restrict on update restrict;
 alter table %PRAEFIX%_sessions add constraint %PRAEFIX%_FK_SES_USR foreign key (ses_usr_id)
       references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
 

@@ -62,7 +62,7 @@ echo "
 <h1 class=\"moduleHeadline\">$g_current_organization->longname</h1>
 
 <p>";
-    if($g_session_valid == 1)
+    if($g_valid_login == 1)
     {
         echo "<span class=\"iconLink\">
             <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/logout.php\"><img
@@ -239,7 +239,8 @@ echo "</p>
 
         if($g_forum->session_valid)
         {
-            $forumstext = "Sie sind als <b>".$g_forum->user."</b> im Forum <b>".$g_forum->sitename."</b> angemeldet ".$g_forum->neuePM_Text;
+            $forumstext = "Sie sind als <b>".$g_forum->user."</b> im Forum <b>".$g_forum->sitename."</b> angemeldet ".
+                          $g_forum->getUserPM($g_current_user->getValue("usr_login_name"));
         }
         else
         {

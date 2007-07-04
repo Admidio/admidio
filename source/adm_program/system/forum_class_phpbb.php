@@ -11,10 +11,12 @@
  *
  * Das Objekt wird erzeugt durch Aufruf des Konstruktors und der Uebergabe der
  * aktuellen Datenbankverbindung:
- * $forum = new Forum($g_forum_com);
+ * $forum = new Forum($server, $database, $db_user, $db_password);
  *
  *
  * Folgende Funktionen stehen nun zur Verfuegung:
+ *
+ * connect()              - Stellt die Verbindung zur Datenbank her
  *
  * userClear()            - Userdaten und Session_Valid loeschen
  *
@@ -47,7 +49,8 @@
  * user($username)            - Funktion holt die Userdaten
  *                          $username = Der aktuelle login_name des Users
  *
- * userPM($username)              - Funktion prueft auf neue Private Messages (PM)
+ * getUserPM($username)   - Funktion prueft auf neue Private Messages (PM) vorliegen und 
+ *                          gibt diese als String zurueck
  *
  * checkAdmin($username, $password_crypt)
  *                        - Funktion ueberprueft ob der Admin Account im Forum ungleich des 
@@ -111,7 +114,10 @@ class Forum
 
     // Forum DB Daten
     var $forum_db_connection;
+    var $forum_server;
     var $forum_db;
+    var $forum_user;
+    var $forum_password;
 
     // Admidio DB Daten
     var $adm_con;
@@ -132,13 +138,20 @@ class Forum
     var $user;                      // Username im Forum
     var $password;                  // Password im Forum
     var $neuePM;                    // Nachrichten im Forum
-    var $neuePM_Text;               // Formatierter Ausgabetext für private Nachrichten
-
 
     // Konstruktor
-    function Forum($connection)
+    function Forum($server, $database, $db_user, $db_password)
     {
-        $this->forum_db_connection = $connection;
+        $this->forum_server   = $server;
+        $this->forum_db       = $database;
+        $this->forum_user     = $db_user;
+        $this->forum_password = $db_password;
+        $this->connect();
+    }
+    
+    function connect()
+    {
+        $this->forum_db_connection = mysql_connect($this->forum_server, $this->forum_user, $this->forum_password);
     }
 
 
@@ -151,7 +164,6 @@ class Forum
         $this->user             = "Gast";
         $this->password         = "";
         $this->neuePM           = 0;
-        $this->neuePM_Text      = "";
     }
 
 
@@ -196,7 +208,7 @@ class Forum
         db_error($result,__FILE__,__LINE__);
         $row = mysql_fetch_array($result);
         $this->server = str_replace('http://', '', $row[0]);
-		$this->server = str_replace('HTTP://', '', $row[0]);
+        $this->server = str_replace('HTTP://', '', $row[0]);
 
         $sql    = "SELECT config_value FROM ". $this->praefix. "_config WHERE config_name = 'script_path' ";
         $result = mysql_query($sql, $this->forum_db_connection);
@@ -205,11 +217,11 @@ class Forum
         $this->path = $row[0];
         if(strpos($this->path, "/", 0) == 0)
         {
-        	$this->path = str_replace('//', '', '/'.$this->path);
+            $this->path = str_replace('//', '', '/'.$this->path);
         }
         if(strpos($this->path, "/", strlen($this->path)-1) == TRUE)
         {
-        	$this->path = str_replace('//', '', $this->path.'/');
+            $this->path = str_replace('//', '', $this->path.'/');
         }
 
         // Admidio DB waehlen
@@ -233,7 +245,7 @@ class Forum
         mysql_select_db($this->adm_db, $this->adm_con);
 
         // Wenn ein Ergebis groesser 0 vorliegt, existiert der User bereits.
-        if(mysql_num_rows($result) !=0)
+        if(mysql_num_rows($result) > 0)
         {
             return TRUE;
         }
@@ -361,7 +373,7 @@ class Forum
 
 
     // Funktion prueft auf neue PM
-    function userPM($forum_user)
+    function getUserPM($forum_user)
     {
         // Forums DB waehlen
         mysql_select_db($this->forum_db, $this->forum_db_connection);
@@ -373,24 +385,27 @@ class Forum
 
         $row = mysql_fetch_array($result);
 
-        $this->neuePM   = $row[0];
+        $this->neuePM = $row[0];
+        $neuePM_Text  = "";
 
         // Wenn neue Nachrichten vorliegen, einen ansprechenden Text generieren
         if ($this->neuePM == 0)
         {
-            $this->neuePM_Text = "und haben <b>keine</b> neue Nachrichten.";
+            $neuePM_Text = "und haben <b>keine</b> neue Nachrichten.";
         }
         elseif ($this->neuePM == 1)
         {
-            $this->neuePM_Text = "und haben <b>1</b> neue Nachricht.";
+            $neuePM_Text = "und haben <b>1</b> neue Nachricht.";
         }
         else
         {
-            $this->neuePM_Text = "und haben <b>".$this->neuePM."</b> neue Nachrichten.";
+            $neuePM_Text = "und haben <b>".$this->neuePM."</b> neue Nachrichten.";
         }
 
         // Admidio DB waehlen
         mysql_select_db($this->adm_db, $this->adm_con);
+        
+        return $neuePM_Text;
     }
 
 
@@ -651,7 +666,7 @@ class Forum
     // Funktion updated einen bestehenden User im Forum
     function userUpdate($forum_username, $forum_useraktiv, $forum_password, $forum_email)
     {
-        // Erst mal schauen ob der User alle Kriterien erfaellt um im Forum aktiv zu sein
+        // Erst mal schauen ob der User alle Kriterien erfuellt um im Forum aktiv zu sein
         // Voraussetzung ist ein gueltiger Benutzername, eine Email und ein Password
         if(strlen($forum_username) > 0 AND strlen($forum_password) > 0 AND strlen($forum_email) > 0)
         {
@@ -705,6 +720,38 @@ class Forum
         mysql_select_db($this->adm_db, $this->adm_con);
     }
 
+    // diese Funktion bekommt den Admidio-Session-Status (eingeloggt ja/nein) uebergeben und
+    // prueft dann, ob die Session im Forum aktualisiert werden muss
+    function checkSession($admidio_login_valid)
+    {
+        // Forum Session auf Gueltigkeit pruefen
+        // Nur wenn die Admidio Session valid ist, wird auf die Forum Session valid sein
+        if($admidio_login_valid)
+        {
+            // Wenn die Forum Session bereits valid ist, wird diese Abfrage uebersprungen
+            if($this->session_valid != TRUE)
+            { 
+                $this->session_valid = $this->userCheck($this->user);
+            }
+
+            // Wenn die Forumssession gueltig ist, Userdaten holen und gueltige Session im Forum updaten. 
+            if($this->session_valid)
+            {
+                // Sofern die Admidio Session gueltig ist, ist auch die Forum Session gueltig
+                $this->session("update", $this->userid);
+            }
+        }
+        else
+        {
+            // Die Admidio Session ist nicht valid, also ist die Forum Session ebenfalls nicht valid
+            if($this->session_valid)
+            {
+                // Admidio Session ist abgelaufen, ungueltig oder ein logoff, also im Forum logoff
+                $this->session("logoff", $this->userid);
+            }
+            $this->session_valid = FALSE;
+        }
+    }
 
     // Funktion kuemmert sich um die Sessions und das Cookie des Forums
     function session($aktion, $forum_userid)

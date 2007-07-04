@@ -42,6 +42,7 @@ require_once(SERVER_PATH. "/adm_program/system/message_text.php");
 require_once(SERVER_PATH. "/adm_program/system/navigation_class.php");
 require_once(SERVER_PATH. "/adm_program/system/user_class.php");
 require_once(SERVER_PATH. "/adm_program/system/organization_class.php");
+require_once(SERVER_PATH. "/adm_program/system/session_class.php");
 if($g_forum_integriert)
 {
     require_once(SERVER_PATH. "/adm_program/system/forum_class_phpbb.php");
@@ -112,16 +113,19 @@ session_name('admidio_php_session_id');
 session_start();
 
 // Globale Variablen
-$g_session_id    = "";
-$g_session_valid = false;
+$g_valid_login = false;
 $g_layout        = array();
 $g_current_url   = "http://". $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI'];
 $g_message       = new Message();
 
-// Cookies einlesen
+// Session-ID ermitteln
 if(isset($_COOKIE['admidio_session_id']))
 {
     $g_session_id = $_COOKIE['admidio_session_id'];
+}
+else
+{
+    $g_session_id = session_id();
 }
 
 // globale Klassen mit Datenbankbezug werden in Sessionvariablen gespeichert, 
@@ -144,21 +148,8 @@ else
         die("<div style=\"color: #CC0000;\">Error: ". $message_text['missing_orga']. "</div>");
     }
     
-    // Einstellungen der Organisation auslesen
-    $sql    = "SELECT * FROM ". TBL_PREFERENCES. "
-                WHERE prf_org_id = $g_current_organization->id ";
-    $result = mysql_query($sql, $g_adm_con);
-    if($result == false)
-    {
-        // Fehler direkt ausgeben, da hier sonst Endlosschleifen entstehen
-        die("<div style=\"color: #CC0000;\">Error: ". mysql_error(). "</div>");
-    }
-    
-    $g_preferences = array();
-    while($prf_row = mysql_fetch_object($result))
-    {
-        $g_preferences[$prf_row->prf_name] = $prf_row->prf_value;
-    }
+    // organisationsspezifische Einstellungen aus adm_preferences auslesen
+    $g_preferences = $g_current_organization->getPreferences();
     
     // Daten in Session-Variablen sichern
     $_SESSION['g_current_organization'] =& $g_current_organization;
@@ -185,145 +176,106 @@ if(isset($_SESSION['navigation']) == false)
 }
 
 /*********************************************************************************
-Aktuelle Session auf Gueltigkeit pruefen
+Session auf Gueltigkeit pruefen bzw. anlegen
 /********************************************************************************/
 
-if(strlen($g_session_id) > 0)
+$g_current_session = new Session($g_adm_con, $g_session_id);
+
+if($g_current_session->getValue("ses_id") > 0)
 {
-    // Session auf Gueltigkeit pruefen
-
-    $sql    = "SELECT * FROM ". TBL_SESSIONS. " WHERE ses_session LIKE {0}";
-    $sql    = prepareSQL($sql, array($g_session_id));
-    $result = mysql_query($sql, $g_adm_con);
-
-    db_error($result,__FILE__,__LINE__);
-
-    $session_found = mysql_num_rows($result);
-    $row           = mysql_fetch_object($result);
-
-    if ($session_found == 1)
-    {    
-        $valid    = false;
-        $time_gap = time() - mysqlmaketimestamp($row->ses_timestamp);
-        // wenn länger nichts gemacht wurde, als in Orga-Prefs eingestellt ist, dann ausloggen
-        if ($time_gap < $g_preferences['logout_minutes'] * 60) 
+    // erst einmal pruefen, ob Organisation- oder Userobjekt neu eingelesen werden muessen,
+    // da die Daten evtl. von anderen Usern in der DB geaendert wurden
+    if($g_current_session->getValue("ses_renew") == 1)
+    {
+        // Userobjekt neu einlesen
+        $g_current_user->getUser($g_current_user->getValue("usr_id"));
+        $g_current_session->setValue("ses_renew", 0);
+    }
+    if($g_current_session->getValue("ses_renew") == 2)
+    {
+        // Organisationsobjekt neu einlesen
+        $g_current_organization->getOrganization($g_organization);
+        $g_preferences = $g_current_organization->getPreferences();
+        $g_current_session->setValue("ses_renew", 0);
+    }
+    
+    // nun die Session pruefen
+    if($g_current_session->getValue("ses_usr_id") > 0)
+    {
+        if($g_current_session->getValue("ses_usr_id") == $g_current_user->getValue("usr_id"))
         {
-            $valid = true;
-        }
-
-        if($valid)
-        {
-            $g_session_valid = true;
-            // falls bisher ein anderer User in der Session gespeichert wurde -> neu einlesen
-            if($g_current_user->getValue("usr_id") != $row->ses_usr_id)
+            // Session gehoert zu einem eingeloggten User -> pruefen, ob der User noch eingeloggt sein darf
+            $valid    = false;
+            $time_gap = time() - mysqlmaketimestamp($g_current_session->getValue("ses_timestamp"));
+            // wenn länger nichts gemacht wurde, als in Orga-Prefs eingestellt ist, dann ausloggen
+            if ($time_gap < $g_preferences['logout_minutes'] * 60) 
             {
-                $g_current_user->getUser($row->ses_usr_id);
-                $_SESSION['g_current_user'] = $g_current_user;
+                $valid = true;
             }
 
-            // Datetime der Session muss aktualisiert werden
-
-            $act_datetime   = date("Y-m-d H:i:s", time());
-
-            $sql    = "UPDATE ". TBL_SESSIONS. " SET ses_timestamp = '$act_datetime' 
-                        WHERE ses_session LIKE {0}";
-            $sql    = prepareSQL($sql, array($g_session_id));
-            $result = mysql_query($sql, $g_adm_con);
-            db_error($result,__FILE__,__LINE__);
+            if($valid)
+            {
+                // User-Login ist gueltig
+                $g_valid_login = true;
+            }
+            else
+            {
+                // User war zu lange inaktiv -> User aus Session entfernen
+                $g_current_user->clear();
+                $g_current_session->setValue("ses_usr_id", "");
+            }
         }
         else
         {
-            // User war zu lange inaktiv -> Session loeschen
+            // irgendwas stimmt nicht, also alles zuruecksetzen
             $g_current_user->clear();
-            $_SESSION['g_current_user'] = $g_current_user;
-
-            $sql    = "DELETE FROM ". TBL_SESSIONS. " WHERE ses_session LIKE {0}";
-            $sql    = prepareSQL($sql, array($g_session_id));
-            $result = mysql_query($sql, $g_adm_con);
-
-            db_error($result,__FILE__,__LINE__);
+            $g_current_session->setValue("ses_usr_id", "");
         }
     }
-    else
-    {
-        $g_current_user->clear();
-
-        if ($session_found != 0)
-        {
-            // ID mehrfach vergeben -> Fehler und IDs loeschen
-            $sql    = "DELETE FROM ". TBL_SESSIONS. " WHERE ses_session LIKE {0}";
-            $sql    = prepareSQL($sql, array($g_session_id));
-            $result = mysql_query($sql, $g_adm_con);
-
-            db_error($result,__FILE__,__LINE__);
-        }
-    }
+    
+    // Update auf Sessionsatz machen (u.a. timestamp aktualisieren)
+    $g_current_session->save();
+}
+else
+{
+    // Session existierte noch nicht, dann neu anlegen
+    $g_current_user->clear();
+    $g_current_session->setValue("ses_session", $g_session_id);
+    $g_current_session->save();
+    
+    // Alle alten Session loeschen
+    $g_current_session->tableCleanup($g_preferences['logout_minutes']);
 }
 
-// Verbindung zur Forum-Datenbank herstellen und die Funktionen, sowie Routinen des Forums laden.
+/*********************************************************************************
+Verbindung zur Forum-Datenbank herstellen und die Funktionen, sowie Routinen des Forums laden.
+/********************************************************************************/
+
 if($g_forum_integriert) 
 {
-    $g_forum_con = mysql_connect ($g_forum_srv, $g_forum_usr, $g_forum_pw);
-    
     // globale Klassen mit Datenbankbezug werden in Sessionvariablen gespeichert, 
     // damit die Daten nicht bei jedem Script aus der Datenbank ausgelesen werden muessen
     if(isset($_SESSION['g_forum']))
     {
         $g_forum =& $_SESSION['g_forum'];
-        $g_forum->forum_db_connection   = $g_forum_con;
-        $g_forum->adm_con               = $g_adm_con;
+        $g_forum->connect();
+        $g_forum->adm_con = $g_adm_con;
     }
     else
     {
-        $g_forum = new Forum($g_forum_con);
-        $g_forum->praefix               = $g_forum_praefix;
-        $g_forum->export                = $g_forum_export;
-        $g_forum->version               = $g_forum_version;
-        $g_forum->session_id            = session_id();
-        $g_forum->forum_db              = $g_forum_db;
-        $g_forum->adm_con               = $g_adm_con;
-        $g_forum->adm_db                = $g_adm_db;
+        $g_forum = new Forum($g_forum_srv, $g_forum_db, $g_forum_usr, $g_forum_pw);
+        $_SESSION['g_forum'] =& $g_forum;
+        $g_forum->praefix     = $g_forum_praefix;
+        $g_forum->export      = $g_forum_export;
+        $g_forum->version     = $g_forum_version;
+        $g_forum->session_id  = session_id();
+        $g_forum->adm_con     = $g_adm_con;
+        $g_forum->adm_db      = $g_adm_db;
         $g_forum->preferences();
-        $_SESSION['g_forum']            = $g_forum;
     }
     
     // Forum Session auf Gueltigkeit pruefen
-    // Nur wenn die Admidio Session valid ist, wird auf die Forum Session valid sein
-    if($g_session_valid)
-    {
-        // Ab und an werden die Userid, Username und Password aus der Session gelöscht. 
-        // Dies behebt den Fehler.
-        $g_forum->user($g_current_user->getValue("usr_login_name"));
-        
-        // Wenn die Forum Session bereits valid ist, wird diese Abfrage uebersprungen
-        if($g_forum->session_valid != TRUE)
-        { 
-            $g_forum->session_valid = $g_forum->userCheck($g_current_user->getValue("usr_login_name"));
-        }
-    
-        // Wenn die Forumssession gueltig ist, Userdaten holen und gueltige Session im Forum updaten. 
-        if($g_forum->session_valid)
-        {
-            // Fuer diesen User neue PMs pruefen
-            $g_forum->userPM($g_current_user->getValue("usr_login_name"));
-            
-            // Sofern die Admidio Session gueltig ist, ist auch die Forum Session gueltig
-            $g_forum->session("update", $g_forum->userid);
-        }
-    }
-    else
-    {
-        // Die Admidio Session ist nicht valid, also ist die Forum Session ebenfalls nicht valid
-        if($g_forum->session_valid)
-        {
-            // Admidio Session ist abgelaufen, ungueltig oder ein logoff, also im Forum logoff
-            $g_forum->session("logoff", $g_forum->userid);
-        }
-        $g_forum->session_valid = FALSE;
-    }
-    
-    // Daten in Session-Variablen sichern
-    $_SESSION['g_forum'] = $g_forum;
+    $g_forum->checkSession($g_valid_login);
 }
 else
 {

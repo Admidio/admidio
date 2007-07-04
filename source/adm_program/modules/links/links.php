@@ -138,7 +138,7 @@ db_error($links_result,__FILE__,__LINE__);
 
 // Gucken wieviele Linkdatensaetze insgesamt fuer die Gruppierung vorliegen...
 // Das wird naemlich noch fuer die Seitenanzeige benoetigt...
-if ($g_session_valid == false)
+if ($g_valid_login == false)
 {
     // Wenn User nicht eingeloggt ist, Kategorien, die hidden sind, aussortieren
     $sql    = "SELECT COUNT(*) FROM ". TBL_LINKS. "
@@ -225,7 +225,7 @@ else
 
         if ($row->lnk_cat_id != $previous_cat_id)
         {
-            if (($row->cat_hidden == 1) && ($g_session_valid == false))
+            if (($row->cat_hidden == 1) && ($g_valid_login == false))
             {
                 // Nichts anzeigen, weil Kategorie versteckt ist und User nicht eingeloggt
                 $dont_write = true;

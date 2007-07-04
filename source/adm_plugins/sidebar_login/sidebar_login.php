@@ -90,7 +90,7 @@ $result = mysql_query($sql, $g_adm_con);
 db_error($result,__FILE__,__LINE__);
 $webmaster_row = mysql_fetch_object($result);
 
-if($g_session_valid == 1)
+if($g_valid_login == 1)
 {
     echo "<div>
         Benutzer:<br>

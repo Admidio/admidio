@@ -101,7 +101,7 @@ class Message
     {
         // noetig, da dies bei den includes benoetigt wird
         global $g_forum, $g_layout;
-        global $g_session_valid, $g_root_path, $g_preferences;
+        global $g_valid_login, $g_root_path, $g_preferences;
         global $g_adm_db, $g_adm_srv, $g_adm_con;
         global $g_organization, $g_current_organization, $g_current_user;
         global $g_current_url;

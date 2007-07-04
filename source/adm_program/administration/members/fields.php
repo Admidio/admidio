@@ -139,7 +139,7 @@ echo "
                     </tr>
                 </tbody>
                 <tbody id=\"$block_id\">";
-                $js_drag_drop = $js_drag_drop. " Sortable.create('$block_id',{tag:'tr',onUpdate:updateDB,ghosting:true,dropOnEmpty:true,containment:['cat_$row->cat_name'],hoverclass:'drag'}); ";
+                $js_drag_drop = $js_drag_drop. " Sortable.create('$block_id',{tag:'tr',onUpdate:updateDB,ghosting:true,dropOnEmpty:true,containment:['$block_id'],hoverclass:'drag'}); ";
 
                 $cat_id = $row->cat_id;
             }           

@@ -44,7 +44,7 @@ if ($g_preferences['enable_mail_module'] != 1)
 }
 
 
-if ($g_session_valid && !isValidEmailAddress($g_current_user->getValue("E-Mail")))
+if ($g_valid_login && !isValidEmailAddress($g_current_user->getValue("E-Mail")))
 {
     // der eingeloggte Benutzer hat in seinem Profil keine gueltige Mailadresse hinterlegt,
     // die als Absender genutzt werden kann...
@@ -63,7 +63,7 @@ if (isset($_GET["usr_id"]))
 {
     // Falls eine Usr_id uebergeben wurde, muss geprueft werden ob der User ueberhaupt
     // auf diese zugreifen darf oder ob die UsrId ueberhaupt eine gueltige Mailadresse hat...
-    if (!$g_session_valid)
+    if (!$g_valid_login)
     {
         //in ausgeloggtem Zustand duerfen nie direkt usr_ids uebergeben werden...
         $g_message->show("invalid");
@@ -116,7 +116,7 @@ elseif (isset($_GET["rol_id"]))
         $g_message->show("invalid");
     }
 
-    if ($g_session_valid)
+    if ($g_valid_login)
     {
         $sql    = "SELECT rol_mail_login, rol_name 
                      FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
@@ -152,7 +152,7 @@ elseif (isset($_GET["rolle"]) && isset($_GET["cat"]))
     $_GET["rolle"] = strStripTags($_GET["rolle"]);
     $_GET["cat"]   = strStripTags($_GET["cat"]);
 
-    if ($g_session_valid)
+    if ($g_valid_login)
     {
         $sql    = "SELECT rol_mail_login, rol_id
                     FROM ". TBL_ROLES. " ,". TBL_CATEGORIES. "
@@ -289,7 +289,7 @@ echo "
                    echo "<option value=\"\" selected=\"selected\">- Bitte w&auml;hlen -</option>";
                }
 
-               if ($g_session_valid)
+               if ($g_valid_login)
                {
                    if ($g_current_user->assignRoles())
                    {
@@ -420,7 +420,7 @@ echo "
 
 
      // Nur eingeloggte User duerfen Attachments mit max 3MB anhaengen...
-     if (($g_session_valid) && ($g_preferences['max_email_attachment_size'] > 0) && (ini_get('file_uploads') == '1'))
+     if (($g_valid_login) && ($g_preferences['max_email_attachment_size'] > 0) && (ini_get('file_uploads') == '1'))
      {
          // das Feld userfile wird in der Breite mit size und width gesetzt, da FF nur size benutzt und IE size zu breit macht :(
          echo "
@@ -447,7 +447,7 @@ echo "
 
      // Nicht eingeloggte User bekommen jetzt noch das Captcha praesentiert,
      // falls es in den Orgaeinstellungen aktiviert wurde...
-     if (!$g_session_valid && $g_preferences['enable_mail_captcha'] == 1)
+     if (!$g_valid_login && $g_preferences['enable_mail_captcha'] == 1)
      {
          echo "
 

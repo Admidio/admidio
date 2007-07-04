@@ -417,9 +417,9 @@ echo "</div>
                 }
                 echo"<div style=\"margin-top: 5px;\">
                     <span class=\"iconLink\">
-                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id=$user->id\"><img
+                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id=". $user->getValue("usr_id"). "\"><img
                          class=\"iconLink\" src=\"$g_root_path/adm_program/images/vcard.png\" style=\"vertical-align: top;\" border=\"0\" title=\"Benutzer als vCard exportieren\" alt=\"Benutzer als vCard exportieren\"></a>
-                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id=$user->id\">vCard exportieren</a>
+                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id=". $user->getValue("usr_id"). "\">vCard exportieren</a>
                     </span>
                 </div>
             </div>

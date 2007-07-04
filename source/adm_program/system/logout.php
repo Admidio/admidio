@@ -26,14 +26,9 @@
 
 require("common.php");
 
-// Session pruefen
-
-$sql    = "SELECT * FROM ". TBL_SESSIONS. " WHERE ses_session = {0} ";
-$sql    = prepareSQL($sql, array($g_session_id));
-$result = mysql_query($sql, $g_adm_con);
-db_error($result,__FILE__,__LINE__);
-
-$session_found = mysql_num_rows($result);
+// User aus der Session entfernen
+$g_current_session->setValue("ses_usr_id", "");
+$g_current_session->save();
 
 // Inhalt der Cookies loeschen
 $domain = substr($_SERVER['HTTP_HOST'], 0, strpos($_SERVER['HTTP_HOST'], ':'));
@@ -42,16 +37,6 @@ setcookie("admidio_session_id", "" , time() - 1000, "/", $domain, 0);
 unset($_SESSION['g_current_organisation']);
 unset($_SESSION['g_current_user']);
 unset($_SESSION['g_preferences']);
-
-if($session_found > 0)
-{
-    // Session loeschen
-
-    $sql    = "DELETE FROM ". TBL_SESSIONS. " WHERE ses_session = {0}";
-    $sql    = prepareSQL($sql, array($g_session_id));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
-}
 
 // Wenn die Session des Forums aktiv ist, diese ebenfalls loeschen.
 if($g_forum_integriert && $g_forum->session_valid)

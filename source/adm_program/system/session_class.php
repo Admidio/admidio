@@ -1,36 +1,37 @@
 <?php
 /******************************************************************************
- * Klasse fuer Datenbanktabelle adm_roles
+ * Klasse fuer Datenbanktabelle adm_sessions
  *
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  *
- * Diese Klasse dient dazu einen Rollenobjekt zu erstellen.
- * Eine Rolle kann ueber diese Klasse in der Datenbank verwaltet werden.
- * Dazu werden die Informationen der Rolle sowie der zugehoerigen Kategorie
- * ausgelesen. Geschrieben werden aber nur die Rollendaten
+ * Diese Klasse dient dazu ein Sessionobjekt zu erstellen.
+ * Eine Session kann ueber diese Klasse in der Datenbank verwaltet werden.
  *
  * Das Objekt wird erzeugt durch Aufruf des Konstruktors und der Uebergabe der
  * aktuellen Datenbankverbindung:
- * $role = new Role($g_adm_con);
+ * $session = new Session($g_adm_con);
  *
- * Mit der Funktion getRole($user_id) kann die gewuenschte Rolle ausgelesen
- * werden.
+ * Mit der Funktion getSession($session_id) kann die gewuenschte Session ausgelesen
+ * werden. Die Session ID ist hierbei allerdings der eindeutige String aus der PHP-Session
  *
  * Folgende Funktionen stehen weiter zur Verfuegung:
  *
  * clear()                - Die Klassenvariablen werden neu initialisiert
  * setArray($field_arra)  - uebernimmt alle Werte aus einem Array in das Field-Array
- * setValue($field_name, $field_value) - setzt einen Wert fuer ein bestimmtes Feld
+ * setValue($field_name, $field_value) 
+ *                         - setzt einen Wert fuer ein bestimmtes Feld
  * getValue($field_name)  - gibt den Wert eines Feldes zurueck
  * save($login_user_id)   - Rolle wird mit den geaenderten Daten in die Datenbank
  *                          zurueckgeschrieben bwz. angelegt
  * delete()               - Die gewaehlte Rolle wird aus der Datenbank geloescht
- * setInactive()          - setzt die Rolle auf inaktiv
- * setActive()            - setzt die Rolle wieder auf aktiv
- * countVacancies($count_leaders = false) - gibt die freien Plaetze der Rolle zurueck
- *                          dies ist interessant, wenn rol_max_members gesetzt wurde
+ * renewUserObject()      - diese Funktion stoesst ein Neueinlesen des User-Objekts an
+ * renewOrganizationObject() 
+ *                        - diese Funktion stoesst ein Neueinlesen des Organisations-Objekts an
+ * tableCleanup($max_inactive_time)         
+ *                        - Funktion loescht Datensaetze aus der Session-Tabelle 
+ *                          die nicht mehr gebraucht werden
  *
  ******************************************************************************
  *
@@ -49,7 +50,7 @@
  *
  *****************************************************************************/
 
-class Role
+class Session
 {
     var $db_connection;
     
@@ -57,12 +58,12 @@ class Role
     var $db_fields = array();       // Array ueber alle Felder der Rollen-Tabelle der entsprechenden Rolle
 
     // Konstruktor
-    function Role($connection, $role = 0)
+    function Session($connection, $session = 0)
     {
         $this->db_connection = $connection;
-        if(strlen($role) > 0)
+        if(strlen($session) > 0)
         {
-            $this->getRole($role);
+            $this->getSession($session);
         }
         else
         {
@@ -70,29 +71,22 @@ class Role
         }
     }
 
-    // Rolle mit der uebergebenen ID aus der Datenbank auslesen
-    function getRole($role)
+    // Session mit der uebergebenen Session-ID aus der Datenbank auslesen
+    function getSession($session)
     {
-        global $g_current_organization;
-        
         $this->clear();
         
-        if(is_numeric($role))
+        if(is_numeric($session))
         {
             $sql = "SELECT * 
-                      FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. " 
-                     WHERE rol_cat_id = cat_id
-                       AND rol_id     = $role
-                       AND cat_org_id = $g_current_organization->id ";
+                      FROM ". TBL_SESSIONS. "
+                     WHERE ses_id    = $session ";
         }
         else
         {
-            $role = addslashes($role);
             $sql = "SELECT * 
-                      FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. " 
-                     WHERE rol_cat_id = cat_id
-                       AND rol_name   LIKE '$role'
-                       AND cat_org_id = $g_current_organization->id ";
+                      FROM ". TBL_SESSIONS. "
+                     WHERE ses_session = '$session' ";
         }
         
         $result = mysql_query($sql, $this->db_connection);
@@ -112,7 +106,7 @@ class Role
                     $this->db_fields[$key] = $value;
                 }
             }
-        }
+        }        
     }
 
     // alle Klassenvariablen wieder zuruecksetzen
@@ -131,7 +125,7 @@ class Role
         {
             // alle Spalten der Tabelle adm_roles ins Array einlesen 
             // und auf null setzen
-            $sql = "SHOW COLUMNS FROM ". TBL_ROLES;
+            $sql = "SHOW COLUMNS FROM ". TBL_SESSIONS;
             $result = mysql_query($sql, $this->db_connection);
             db_error($result,__FILE__,__LINE__);
             
@@ -163,8 +157,9 @@ class Role
             // Plausibilitaetspruefungen
             switch($field_name)
             {
-                case "rol_id":
-                case "rol_cat_id":
+                case "ses_id":
+                case "ses_org_id":
+                case "ses_usr_id":
                     if(is_numeric($field_value) == false
                     || $field_value == 0)
                     {
@@ -172,36 +167,12 @@ class Role
                     }
                     break;
 
-                case "rol_weekday":
-                case "rol_max_members":
-                case "rol_usr_id_change":
+                case "ses_renew":
                     if(is_numeric($field_value) == false)
                     {
                         $field_value = "";
                     }
-                    break;
-
-                case "rol_approve_users":
-                case "rol_assign_roles":
-                case "rol_announcements":
-                case "rol_dates":
-                case "rol_download":
-                case "rol_edit_user":
-                case "rol_guestbook":
-                case "rol_guestbook_comments":
-                case "rol_mail_logout":
-                case "rol_mail_login":
-                case "rol_photo":
-                case "rol_profile":
-                case "rol_weblinks":
-                case "rol_locked":
-                case "rol_valid":
-                case "rol_system":
-                    if($field_value != 1)
-                    {
-                        $field_value = 0;
-                    }
-                    break;
+                    break;            
             }
         }
 
@@ -222,18 +193,25 @@ class Role
     
     // die Funktion speichert die Rollendaten in der Datenbank,
     // je nach Bedarf wird ein Insert oder Update gemacht
-    function save($login_user_id)
+    function save()
     {
-        if((is_numeric($login_user_id) || strlen($login_user_id) == 0)
-        && (is_numeric($this->db_fields['rol_id']) || strlen($this->db_fields['rol_id']) == 0))
+        if(is_numeric($this->db_fields['ses_id']) || strlen($this->db_fields['ses_id']) == 0)
         {
-            if($login_user_id > 0)
+            global $g_current_organization;
+            if(strlen($this->db_fields['ses_id']) == 0)
             {
-                $this->db_fields['rol_last_change']   = date("Y-m-d H:i:s", time());
-                $this->db_fields['rol_usr_id_change'] = $login_user_id;
+                // Default-Daten vorbelegen
+                $this->db_fields['ses_org_id']     = $g_current_organization->id;
+                $this->db_fields['ses_begin']      = date("Y-m-d H:i:s", time());
+                $this->db_fields['ses_timestamp']  = date("Y-m-d H:i:s", time());
+                $this->db_fields['ses_ip_address'] = $_SERVER['REMOTE_ADDR'];
+            }
+            else
+            {
+                $this->db_fields['ses_timestamp'] = date("Y-m-d H:i:s", time());
             }
             
-            if($this->db_fields_changed || strlen($this->db_fields['rol_id']) == 0)
+            if($this->db_fields_changed || strlen($this->db_fields['ses_id']) == 0)
             {
                 // SQL-Update-Statement fuer User-Tabelle zusammenbasteln
                 $item_connection = "";                
@@ -244,9 +222,9 @@ class Role
                 foreach($this->db_fields as $key => $value)
                 {
                     // ID und andere Tabellenfelder sollen nicht im Insert erscheinen
-                    if($key != "rol_id" && strpos($key, "rol_") === 0) 
+                    if($key != "ses_id" && strpos($key, "ses_") === 0) 
                     {
-                        if($this->db_fields['rol_id'] == 0)
+                        if($this->db_fields['ses_id'] == 0)
                         {
                             if(strlen($value) > 0)
                             {
@@ -287,21 +265,21 @@ class Role
                     }
                 }
 
-                if($this->db_fields['rol_id'] > 0)
+                if($this->db_fields['ses_id'] > 0)
                 {
-                    $sql = "UPDATE ". TBL_ROLES. " SET $sql_field_list 
-                             WHERE rol_id = ". $this->db_fields['rol_id'];
+                    $sql = "UPDATE ". TBL_SESSIONS. " SET $sql_field_list 
+                             WHERE ses_id = ". $this->db_fields['ses_id'];
                     error_log($sql);
                     $result = mysql_query($sql, $this->db_connection);
                     db_error($result,__FILE__,__LINE__);
                 }
                 else
                 {
-                    $sql = "INSERT INTO ". TBL_ROLES. " ($sql_field_list) VALUES ($sql_value_list) ";
+                    $sql = "INSERT INTO ". TBL_SESSIONS. " ($sql_field_list) VALUES ($sql_value_list) ";
                     error_log($sql);
                     $result = mysql_query($sql, $this->db_connection);
                     db_error($result,__FILE__,__LINE__);
-                    $this->db_fields['rol_id'] = mysql_insert_id($this->db_connection);
+                    $this->db_fields['ses_id'] = mysql_insert_id($this->db_connection);
                 }
             }
 
@@ -311,100 +289,53 @@ class Role
         return -1;
     }    
 
-    // aktuelle Rolle loeschen
+    // aktuelle Session loeschen
     function delete()
     {
-        // die Rolle "Webmaster" darf nicht geloescht werden
-        if($this->db_fields['rol_name'] != "Webmaster")
-        {
-            $sql    = "DELETE FROM ". TBL_ROLE_DEPENDENCIES. " 
-                        WHERE rld_rol_id_parent = ". $this->db_fields['rol_id']. "
-                           OR rld_rol_id_child  = ". $this->db_fields['rol_id'];
-            $result = mysql_query($sql, $this->db_connection);
-            db_error($result,__FILE__,__LINE__);
+        $sql    = "DELETE FROM ". TBL_SESSIONS. " 
+                    WHERE ses_id = ". $this->db_fields['ses_id'];
+        $result = mysql_query($sql, $this->db_connection);
+        db_error($result,__FILE__,__LINE__);
 
-            $sql    = "DELETE FROM ". TBL_MEMBERS. " 
-                        WHERE mem_rol_id = ". $this->db_fields['rol_id'];
-            $result = mysql_query($sql, $this->db_connection);
-            db_error($result,__FILE__,__LINE__);
-
-            $sql    = "DELETE FROM ". TBL_ROLES. " 
-                        WHERE rol_id = ". $this->db_fields['rol_id'];
-            $result = mysql_query($sql, $this->db_connection);
-            db_error($result,__FILE__,__LINE__);
-
-            $this->clear();
-            return 0;
-        }
-        return -1;
+        $this->clear();
+        return 0;
     }
     
-    // aktuelle Rolle wird auf inaktiv gesetzt
-    function setInactive()
+    
+    // diese Funktion stoesst ein Neueinlesen des User-Objekts beim naechsten Seitenaufruf an
+    function renewUserObject()
     {
-        // die Rolle "Webmaster" darf nicht auf inaktiv gesetzt werden
-        if($this->db_fields['rol_name'] != "Webmaster")
-        {
-            $sql    = "UPDATE ". TBL_MEMBERS. " SET mem_valid = 0
-                                                  , mem_end   = SYSDATE()
-                        WHERE mem_rol_id = ". $this->db_fields['rol_id']. "
-                          AND mem_valid  = 1 ";
-            $result = mysql_query($sql, $this->db_connection);
-            db_error($result,__FILE__,__LINE__);
-
-            $sql    = "UPDATE ". TBL_ROLES. " SET rol_valid = 0
-                        WHERE rol_id = ". $this->db_fields['rol_id'];
-            $result = mysql_query($sql, $this->db_connection);
-            db_error($result,__FILE__,__LINE__);
-            
-            return 0;
-        }
-        return -1;
-    }
-
-    // aktuelle Rolle wird auf aktiv gesetzt
-    function setActive()
-    {
-        // die Rolle "Webmaster" ist immer aktiv
-        if($this->db_fields['rol_name'] != "Webmaster")
-        {
-            $sql    = "UPDATE ". TBL_MEMBERS. " SET mem_valid = 1
-                                                  , mem_end   = NULL
-                        WHERE mem_rol_id = ". $this->db_fields['rol_id'];
-            $result = mysql_query($sql, $this->db_connection);
-            db_error($result,__FILE__,__LINE__);
-
-            $sql    = "UPDATE ". TBL_ROLES. " SET rol_valid = 1
-                        WHERE rol_id = ". $this->db_fields['rol_id'];
-            $result = mysql_query($sql, $this->db_connection);
-            db_error($result,__FILE__,__LINE__);
-            
-            return 0;
-        }
-        return -1;
+        $sql    = "UPDATE ". TBL_SESSIONS. " SET ses_renew = 1 ";
+        $result = mysql_query($sql, $this->db_connection);
+        db_error($result,__FILE__,__LINE__);
+        error_log($sql);
     }
     
-    // die Funktion gibt die Anzahl freier Plaetze zurueck
-    // ist rol_max_members nicht gesetzt so wird immer 999 zurueckgegeben
-    function countVacancies($count_leaders = false)
+    // diese Funktion stoesst ein Neueinlesen des Organisations-Objekts beim naechsten Seitenaufruf an
+    function renewOrganizationObject()
     {
-        if($this->db_fields['rol_max_members'] > 0)
+        $sql    = "UPDATE ". TBL_SESSIONS. " SET ses_renew = 2 ";
+        $result = mysql_query($sql, $this->db_connection);
+        db_error($result,__FILE__,__LINE__);
+    }
+    
+    // diese Funktion loescht Datensaetze aus der Session-Tabelle die nicht mehr gebraucht werden
+    function tableCleanup($max_inactive_time)
+    {
+        // Zeitpunkt bestimmen, ab dem die Sessions geloescht werden, mind. 1 Stunde
+        if($max_inactive_time > 60)
         {
-            $sql    = "SELECT mem_usr_id FROM ". TBL_MEMBERS. "
-                        WHERE mem_rol_id = ". $this->db_fields['rol_id']. "
-                          AND mem_valid  = 1";
-            if($count_leaders == false)
-            {
-                $sql = $sql. " AND mem_leader = 0 ";
-            }
-            $sql    = prepareSQL($sql, array($req_rol_id));
-            $result = mysql_query($sql, $g_adm_con);
-            db_error($result,__FILE__,__LINE__);
-            
-            $num_members = mysql_num_rows($result);            
-            return $this->db_fields['rol_max_members'] - $num_members;
+            $date_session_delete = time() - $max_inactive_time * 60;
         }
-        return 999;
+        else
+        {
+            $date_session_delete = time() - 60 * 60;
+        }
+            
+        $sql    = "DELETE FROM ". TBL_SESSIONS. " 
+                    WHERE ses_timestamp < '". date("Y.m.d H:i:s", $date_session_delete). "'";
+        $result = mysql_query($sql, $this->db_connection);
+        db_error($result,__FILE__,__LINE__);        
     }
 }
 ?>

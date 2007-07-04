@@ -115,7 +115,7 @@ else
 
     // Wenn keine ID uebergeben wurde, der User aber eingeloggt ist koennen zumindest
     // Name, Emailadresse und Homepage vorbelegt werden...
-    if ($_GET['id'] == 0 && $g_session_valid)
+    if ($_GET['id'] == 0 && $g_valid_login)
     {
         $form_values['name']     = $g_current_user->getValue("Vorname"). " ". $g_current_user->getValue("Nachname");
         $form_values['email']    = $g_current_user->getValue("E-Mail");
@@ -124,7 +124,7 @@ else
 
 }
 
-if (!$g_session_valid && $g_preferences['flooding_protection_time'] != 0)
+if (!$g_valid_login && $g_preferences['flooding_protection_time'] != 0)
 {
     // Falls er nicht eingeloggt ist, wird vor dem Ausfuellen des Formulars noch geprueft ob der
     // User innerhalb einer festgelegten Zeitspanne unter seiner IP-Adresse schon einmal
@@ -218,7 +218,7 @@ echo "
 
         // Nicht eingeloggte User bekommen jetzt noch das Captcha praesentiert,
         // falls es in den Orgaeinstellungen aktiviert wurde...
-        if (!$g_session_valid && $g_preferences['enable_guestbook_captcha'] == 1)
+        if (!$g_valid_login && $g_preferences['enable_guestbook_captcha'] == 1)
         {
             echo "
 

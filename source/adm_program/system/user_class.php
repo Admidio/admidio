@@ -90,7 +90,14 @@ class User
                     {
                         if($key != "usr_photo")
                         {
-                            $this->db_fields[$key] = $value;
+                            if(is_null($value))
+                            {
+                                $this->db_fields[$key] = "";
+                            }
+                            else
+                            {
+                                $this->db_fields[$key] = $value;
+                            }
                         }
                     }
                 }
@@ -169,7 +176,7 @@ class User
                 }
                 else
                 {
-                    $this->db_fields[$key] = NULL;
+                    $this->db_fields[$key] = "";
                 }
             }
         }
@@ -189,7 +196,7 @@ class User
                 }
                 else
                 {
-                    $this->db_fields[$row['Field']] = NULL;
+                    $this->db_fields[$row['Field']] = "";
                 }
             }
         }
@@ -240,36 +247,35 @@ class User
         $field_name  = stripSlashes($field_name);
         $field_value = stripSlashes($field_value);
         
-        if(strlen($field_value) == 0)
+        if(strlen($field_value) > 0)
         {
-            $field_value = NULL;
-        }
-        
-        // Plausibilitaetspruefungen
-        switch($field_name)
-        {
-            case "usr_id":
-            case "usr_usr_id_change":
-                if(is_numeric($field_value) == false 
-                || $field_value == 0)
-                {
-                    $field_value = NULL;
-                }                
-                break;
+            // Plausibilitaetspruefungen
+            switch($field_name)
+            {
+                case "usr_id":
+                case "usr_usr_id_change":
+                    if(is_numeric($field_value) == false 
+                    || $field_value == 0)
+                    {
+                        $field_value = "";
+                    }                
+                    break;
 
-            case "usr_id_number_login":
-            case "usr_id_number_invalid":
-                if(is_numeric($field_value) == false)
-                {
-                    $field_value = NULL;
-                }
-                break;
+                case "usr_id_number_login":
+                case "usr_id_number_invalid":
+                    if(is_numeric($field_value) == false)
+                    {
+                        $field_value = "";
+                    }
+                    break;
+            }
         }
 
         if(strpos($field_name, "usr_") === 0)
         {
             // Daten fuer User-Tabelle
-            if($field_value != $this->db_fields[$field_name])
+            if(isset($this->db_fields[$field_name])
+            && $field_value != $this->db_fields[$field_name])
             {
                 $this->db_fields[$field_name] = $field_value;
                 $this->db_fields_changed = true;
@@ -331,7 +337,7 @@ class User
     function save($login_user_id, $set_change_date = true)
     {
         if((is_numeric($login_user_id) || strlen($login_user_id) == 0)
-        && (is_numeric($this->db_fields['usr_id']) || is_null($this->db_fields['usr_id'])))
+        && (is_numeric($this->db_fields['usr_id']) || strlen($this->db_fields['usr_id']) == 0))
         {
             if($set_change_date)
             {
@@ -339,7 +345,7 @@ class User
                 $this->db_fields['usr_usr_id_change'] = $login_user_id;
             }
             
-            if($this->db_fields_changed || is_null($this->db_fields['usr_id']))
+            if($this->db_fields_changed || strlen($this->db_fields['usr_id']) == 0)
             {
                 // SQL-Update-Statement fuer User-Tabelle zusammenbasteln
                 $item_connection = "";                
@@ -695,11 +701,11 @@ class User
     {
         if($profileID == NULL)
         {
-            $profileID = $this->id;
+            $profileID = $this->db_fields['usr_id'];
         }
 
         //soll das eigene Profil bearbeitet werden?
-        if($profileID == $this->id && $this->db_fields['usr_id'] > 0)
+        if($profileID == $this->db_fields['usr_id'] && $this->db_fields['usr_id'] > 0)
         {
             $edit_profile = $this->checkRolesRight('rol_profile');
 

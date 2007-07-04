@@ -194,6 +194,7 @@ foreach($_POST as $key => $value)
 }
 
 unset($_SESSION['organization_request']);
+$g_current_session->renewOrganizationObject();
 
 // zur Ausgangsseite zurueck
 $g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);

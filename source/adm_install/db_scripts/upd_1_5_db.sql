@@ -9,8 +9,8 @@ ALTER TABLE %PRAEFIX%_user_fields DROP FOREIGN KEY %PRAEFIX%_FK_USF_ORG;
 ALTER TABLE %PRAEFIX%_user_fields DROP index USF_ORG_FK;
 
 ALTER TABLE %PRAEFIX%_user_fields ADD COLUMN `usf_cat_id` int(11) unsigned AFTER `usf_id`;
-alter table %PRAEFIX%_user_fields add index USF_CAT_FK (usf_cat_id);
-alter table %PRAEFIX%_user_fields add constraint FK_USF_CAT foreign key (usf_cat_id)
+ALTER TABLE %PRAEFIX%_user_fields ADD index USF_CAT_FK (usf_cat_id);
+ALTER TABLE %PRAEFIX%_user_fields ADD constraint FK_USF_CAT foreign key (usf_cat_id)
       references %PRAEFIX%_categories (cat_id) on delete restrict on update restrict;
 ALTER TABLE %PRAEFIX%_user_fields ADD COLUMN `usf_system` tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER `usf_description`;
 ALTER TABLE %PRAEFIX%_user_fields CHANGE COLUMN `usf_locked` `usf_hidden` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0;
@@ -22,9 +22,20 @@ ALTER TABLE %PRAEFIX%_user_fields ADD COLUMN `usf_sequence` smallint NOT NULL AF
 ALTER TABLE %PRAEFIX%_users ADD COLUMN `usr_text` text AFTER `usr_photo`;
 
 -- Session-Tabelle ergaenzen
+ALTER TABLE %PRAEFIX%_sessions ADD COLUMN `ses_begin` datetime NOT NULL AFTER `ses_session`;
 ALTER TABLE %PRAEFIX%_sessions ADD COLUMN `ses_renew` tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER `ses_blob`;
-ALTER TABLE %PRAEFIX%_sessions MODIFY COLUMN `ses_usr_id` INTEGER UNSIGNED DEFAULT 0;
+ALTER TABLE %PRAEFIX%_sessions MODIFY COLUMN `ses_usr_id` INTEGER UNSIGNED;
 ALTER TABLE %PRAEFIX%_sessions MODIFY COLUMN `ses_ip_address` VARCHAR(15) NOT NULL;
+
+-- org_shortname in org_id in Sessiontabelle umwandeln
+ALTER TABLE %PRAEFIX%_sessions DROP FOREIGN KEY %PRAEFIX%_FK_SES_ORG;
+ALTER TABLE %PRAEFIX%_sessions DROP INDEX SES_ORG_FK;
+ALTER TABLE %PRAEFIX%_sessions DROP COLUMN ses_org_shortname;
+
+ALTER TABLE %PRAEFIX%_sessions ADD COLUMN `ses_org_id` tinyint(4) NOT NULL AFTER `ses_id`;
+ALTER TABLE %PRAEFIX%_sessions ADD index SES_ORG_FK (ses_org_id);
+ALTER TABLE %PRAEFIX%_sessions ADD constraint %PRAEFIX%_FK_SES_ORG foreign key (ses_org_id)
+      references %PRAEFIX%_organizations (org_id) on delete restrict on update restrict;
 
 -- org_shortname aus Rollentabelle entfernen
 ALTER TABLE %PRAEFIX%_roles DROP FOREIGN KEY %PRAEFIX%_FK_ROL_ORG;
