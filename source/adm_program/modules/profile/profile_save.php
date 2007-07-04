@@ -318,7 +318,7 @@ if($g_forum_integriert && $login_name_changed)
 }
 
 // wenn Daten des eingeloggten Users geaendert werden, dann Session-Variablen aktualisieren
-if($user->id == $g_current_user->getValue("usr_id"))
+if($user->getValue("usr_id") == $g_current_user->getValue("usr_id"))
 {
     $g_current_user = $user;
 }
@@ -433,7 +433,7 @@ if($usr_id == 0)
     header("Location: $g_root_path/adm_program/modules/profile/roles.php?user_id=". $user->getValue("usr_id"). "&new_user=1");
     exit();
 }
-elseif($new_user == 0 && $user->valid == 0)
+elseif($new_user == 0 && $user->getValue("usr_valid") == 0)
 {
     // neue Registrierung bearbeitet
     $g_message->setForwardUrl($_SESSION['navigation']->getPreviousUrl(), 2000);
