@@ -152,12 +152,15 @@ echo "
         </table>
 
         <div style=\"margin-top: 6px;\">
-            <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
-            <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
+            <button name=\"back\" type=\"button\" onclick=\"history.back()\">
+            <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" 
+            width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
             &nbsp;Zur&uuml;ck</button>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button id=\"weiter\" type=\"submit\" value=\"weiter\" tabindex=\"2\">Weiter&nbsp;
-            <img src=\"$g_root_path/adm_program/images/forward.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Weiter\"></button>
+            <button id=\"import\" type=\"submit\">
+            <img src=\"$g_root_path/adm_program/images/database_in.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" 
+            width=\"16\" height=\"16\" border=\"0\" alt=\"Weiter\">
+            &nbsp;Importieren</button>
         </div>
     </div>
 </form>

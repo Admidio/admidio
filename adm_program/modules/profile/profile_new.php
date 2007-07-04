@@ -154,11 +154,6 @@ if(isset($_SESSION['profile_request']))
     unset($_SESSION['profile_request']);
     $b_history = true;
 }
-elseif($usr_id > 0)
-{
-    // um die Zurueck-Funktion zu vereinfachen, deutsche Zeitangaben nutzen
-    $user->birthday = mysqldate('d.m.y', $user->birthday);
-}
 
 // diese Funktion gibt den Html-Code fuer ein Feld mit Beschreibung wieder
 // dabei wird der Inhalt richtig formatiert

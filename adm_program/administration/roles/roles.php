@@ -111,10 +111,11 @@ echo "
                   AND rol_cat_id = cat_id
                   AND cat_org_id = $g_current_organization->id
                 ORDER BY cat_sequence ASC, rol_name ASC ";
-    $usr_result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
+    $rol_result = mysql_query($sql, $g_adm_con);
+    db_error($rol_result,__FILE__,__LINE__);
+    error_log($sql);
 
-    while($row = mysql_fetch_object($usr_result))
+    while($row = mysql_fetch_object($rol_result))
     {
         if($cat_id != $row->cat_id)
         {
