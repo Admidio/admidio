@@ -97,7 +97,7 @@ if(!$g_current_user->assignRoles())
     // wenn nicht Moderator, dann keine versteckten Rollen anzeigen
     $sql .= " AND rol_locked = 0 ";
 }
-if($g_session_valid == false)
+if($g_valid_login == false)
 {
     $sql .= " AND cat_hidden = 0 ";
 }
@@ -115,7 +115,7 @@ $list_found = mysql_num_rows($result_lst);
 
 if($list_found == 0)
 {
-    if($g_session_valid == true)
+    if($g_valid_login == true)
     {
         // wenn User eingeloggt, dann Meldung, dass keine Rollen in der Kategorie existieren
         if($active_role == 0)
@@ -196,7 +196,7 @@ if($show_ctg_sel == 1)
     $sql = "SELECT * FROM ". TBL_CATEGORIES. "
              WHERE cat_org_id = $g_current_organization->id
                AND cat_type   = 'ROL' ";
-    if($g_session_valid == false)
+    if($g_valid_login == false)
     {
         $sql .= " AND cat_hidden = 0 ";
     }

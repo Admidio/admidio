@@ -95,7 +95,7 @@ $anz_geb = mysql_num_rows($result);
 
 if($anz_geb > 0)
 {
-    if($plg_show_names_extern == 1 || $g_session_valid == 1)
+    if($plg_show_names_extern == 1 || $g_valid_login == 1)
     {
         while($row = mysql_fetch_object($result))
         {
@@ -147,9 +147,9 @@ if($anz_geb > 0)
             
             // Namen mit Alter und Mail-Link anzeigen
             if(strlen($row->usr_email) > 0
-            && ($g_session_valid || $plg_show_email_extern))
+            && ($g_valid_login || $plg_show_email_extern))
             {
-                if($g_session_valid)
+                if($g_valid_login)
                 {
                     echo "<a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->usr_id\" 
                          target=\"$plg_link_target\">$show_name</a>";

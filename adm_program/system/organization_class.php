@@ -18,12 +18,14 @@
  *
  * Folgende Funktionen stehen nun zur Verfuegung:
  *
- * update() - Die Organisation wird mit den geaenderten Daten in die Datenbank 
- *            zurueckgeschrieben
- * insert() - Eine neue Organisation wird in die Datenbank geschrieben
- * clear()  - Die Klassenvariablen werden neu initialisiert
+ * update()         - Die Organisation wird mit den geaenderten Daten in die Datenbank 
+ *                    zurueckgeschrieben
+ * insert()         - Eine neue Organisation wird in die Datenbank geschrieben
+ * clear()          - Die Klassenvariablen werden neu initialisiert
+ * getPreferences() - gibt ein Array mit allen organisationsspezifischen Einstellungen
+ *                    aus adm_preferences zurueck
  * getReferenceOrganizations($child = true, $parent = true)
- *          - Gibt ein Array mit allen Kinder- bzw. Elternorganisationen zurueck
+ *                  - Gibt ein Array mit allen Kinder- bzw. Elternorganisationen zurueck
  *
  ******************************************************************************
  *
@@ -135,6 +137,24 @@ class Organization
             return 0;
         }
         return -1;
+    }
+    
+    // gibt ein Array mit allen organisationsspezifischen Einstellungen
+    // aus adm_preferences zurueck
+    function getPreferences()
+    {
+        $sql    = "SELECT * FROM ". TBL_PREFERENCES. "
+                    WHERE prf_org_id = ". $this->id;
+        $result = mysql_query($sql, $this->db_connection);
+        db_error($result,__FILE__,__LINE__);
+
+        $preferences = array();
+        while($prf_row = mysql_fetch_array($result))
+        {
+            $preferences[$prf_row['prf_name']] = $prf_row['prf_value'];
+        }
+        
+        return $preferences;
     }
     
     // gibt ein Array mit allen Kinder- bzw. Elternorganisationen zurueck

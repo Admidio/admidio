@@ -371,6 +371,11 @@ if($req_mode == 3)
     // Updatescripte fuer die Datenbank verarbeiten
     if($req_version > 0)
     {
+        // vor dem Update erst einmal alle Session loeschen, damit User ausgeloggt sind
+        $sql = "DELETE FROM ". TBL_SESSIONS;
+        $result = mysql_query($sql, $connection);
+        if(!$result) showError(mysql_error());
+        
         for($update_count = $req_version; $update_count <= 5; $update_count++)
         {
             if($update_count == 3)

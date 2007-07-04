@@ -170,7 +170,7 @@ if($_GET['mode'] == 1)
 
     $_SESSION['navigation']->deleteLastUrl();
     unset($_SESSION['fields_request']);
-    unset($_SESSION['g_current_user']);
+    $g_current_session->renewUserObject();
 
     $err_code = "save";
 }
@@ -186,7 +186,7 @@ elseif($_GET['mode'] == 2 || $_GET["mode"] == 3)
     {
         // Feld loeschen
         $user_field->delete();
-        unset($_SESSION['g_current_user']);
+        $g_current_session->renewUserObject();
 
         $err_code = "delete";
     }
@@ -207,6 +207,8 @@ elseif($_GET['mode'] == 4)
     {
         $user_field->setValue("usf_sequence", $_GET['sequence']);
         $user_field->update();
+        // Alle Userobjekte der Benutzer neu einlesen
+        $g_current_session->renewUserObject();
     }
     exit();
 }

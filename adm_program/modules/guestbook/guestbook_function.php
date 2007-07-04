@@ -159,7 +159,7 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
 
     // Falls der User nicht eingeloggt ist, aber ein Captcha geschaltet ist,
     // muss natuerlich der Code ueberprueft werden
-    if ($_GET["mode"] == 1 && !$g_session_valid && $g_preferences['enable_guestbook_captcha'] == 1)
+    if ($_GET["mode"] == 1 && !$g_valid_login && $g_preferences['enable_guestbook_captcha'] == 1)
     {
         if ( !isset($_SESSION['captchacode']) || strtoupper($_SESSION['captchacode']) != strtoupper($_POST['captcha']) )
         {
@@ -202,7 +202,7 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
 
         if ($_GET['id'] == 0)
         {
-            if ($g_session_valid)
+            if ($g_valid_login)
             {
                 // Falls der User eingeloggt ist wird die aktuelle UserId und der korrekte Name mitabgespeichert...
                 $realName = $g_current_user->getValue("Vorname"). " ". $g_current_user->getValue("Nachname");
@@ -323,7 +323,7 @@ elseif($_GET["mode"] == 4 || $_GET["mode"] == 8)
 
     // Falls der User nicht eingeloggt ist, aber ein Captcha geschaltet ist,
     // muss natuerlich der Code ueberprueft werden
-    if ($_GET["mode"] == 4 && !$g_session_valid && $g_preferences['enable_guestbook_captcha'] == 1)
+    if ($_GET["mode"] == 4 && !$g_valid_login && $g_preferences['enable_guestbook_captcha'] == 1)
     {
         if ( !isset($_SESSION['captchacode']) || strtoupper($_SESSION['captchacode']) != strtoupper($_POST['captcha']) )
         {
@@ -352,7 +352,7 @@ elseif($_GET["mode"] == 4 || $_GET["mode"] == 8)
 
         if ($_GET["mode"] == 4)
         {
-            if ($g_session_valid)
+            if ($g_valid_login)
             {
                 // Falls der User eingeloggt ist wird die aktuelle UserId und der korrekte Name mitabgespeichert...
                 $realName = $g_current_user->getValue("Vorname"). " ". $g_current_user->getValue("Nachname");

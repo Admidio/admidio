@@ -225,6 +225,7 @@ class UserField
             $sql = "UPDATE ". TBL_USER_FIELDS. " SET $sql_field_list WHERE usf_id = ". $this->db_fields['usf_id'];
             $result = mysql_query($sql, $this->db_connection);
             db_error($result,__FILE__,__LINE__);
+            error_log($sql);
             return 0;
         }
         return -1;
@@ -270,6 +271,7 @@ class UserField
             $sql = "INSERT INTO ". TBL_USER_FIELDS. " ($sql_field_list) VALUES ($sql_value_list) ";
             $result = mysql_query($sql, $this->db_connection);
             db_error($result,__FILE__,__LINE__);
+            error_log($sql);
             
             $this->db_fields['usf_id'] = mysql_insert_id($this->db_connection);
             return 0;

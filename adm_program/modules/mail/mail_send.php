@@ -54,7 +54,7 @@ if (isset($_GET["rol_id"]) && is_numeric($_POST["rol_id"]) == false)
 // Pruefungen, ob die Seite regulaer aufgerufen wurde
 
 // in ausgeloggtem Zustand duerfen nie direkt usr_ids uebergeben werden...
-if (array_key_exists("usr_id", $_GET) && !$g_session_valid)
+if (array_key_exists("usr_id", $_GET) && !$g_valid_login)
 {
     $g_message->show("invalid");
 }
@@ -111,7 +111,7 @@ if (empty($_POST))
 
 // Falls der User nicht eingeloggt ist, aber ein Captcha geschaltet ist,
 // muss natuerlich der Code ueberprueft werden
-if (!$g_session_valid && $g_preferences['enable_mail_captcha'] == 1)
+if (!$g_valid_login && $g_preferences['enable_mail_captcha'] == 1)
 {
     if ( !isset($_SESSION['captchacode']) || strtoupper($_SESSION['captchacode']) != strtoupper($_POST['captcha']) )
     {
@@ -136,7 +136,7 @@ $email = new Email();
 if (strlen($_POST['name']) > 0)
 {
     //Absenderangaben checken falls der User eingeloggt ist, damit ein paar schlaue User nicht einfach die Felder aendern koennen...
-    if ( $g_session_valid 
+    if ( $g_valid_login 
     && (  $_POST['mailfrom'] != $g_current_user->getValue("E-Mail") 
        || $_POST['name'] != $g_current_user->getValue("Vorname"). " ". $g_current_user->getValue("Nachname")) )
     {
@@ -154,7 +154,7 @@ if (strlen($_POST['name']) > 0)
             if (isset($_FILES['userfile']))
             {
                 //noch mal schnell pruefen ob der User wirklich eingelogt ist...
-                if (!$g_session_valid)
+                if (!$g_valid_login)
                 {
                     $g_message->show("invalid");
                 }
@@ -206,7 +206,7 @@ if (array_key_exists("rol_id", $_POST) && strlen($err_code) == 0)
     }
     else
     {
-        if ($g_session_valid)
+        if ($g_valid_login)
         {
             $sql    = "SELECT rol_mail_login 
                          FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
@@ -294,7 +294,7 @@ if (isset($_POST['kopie']) && $_POST['kopie'] == true)
     $email->setCopyToSenderFlag();
 
     //Falls der User eingeloggt ist, werden die Empfaenger der Mail in der Kopie aufgelistet
-    if ($g_session_valid)
+    if ($g_valid_login)
     {
         $email->setListRecipientsFlag();
     }
@@ -313,7 +313,7 @@ else
 $mail_body = $mail_body. " von $g_current_organization->homepage folgende E-Mail geschickt:\n";
 $mail_body = $mail_body. "Eine Antwort kannst Du an ". $_POST['mailfrom']. " schicken.";
 
-if (!$g_session_valid)
+if (!$g_valid_login)
 {
     $mail_body = $mail_body. utf8_decode("\n(Der Absender war nicht eingeloggt. Deshalb könnten die Absenderangaben fehlerhaft sein.)");
 }

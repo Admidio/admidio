@@ -76,30 +76,12 @@ if ($user_found >= 1)
 
     if($g_current_user->getValue("usr_password") == $req_password_crypt)
     {
-        // alte Sessions des Users loeschen
-
-        $sql    = "DELETE FROM ". TBL_SESSIONS. "
-                    WHERE ses_usr_id        = ". $g_current_user->getValue("usr_id"). "
-                      AND ses_org_shortname = '$g_organization' ";
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result,__FILE__,__LINE__);
-
-        $g_session_id   = session_id();
-        $login_datetime = date("Y.m.d H:i:s", time());
-
-        // Session-ID speichern
-
-        $sql = "INSERT INTO ". TBL_SESSIONS. " (ses_usr_id, ses_org_shortname, ses_session, ses_timestamp, ses_ip_address)
-                VALUES ('". $g_current_user->getValue("usr_id"). "', '$g_organization', '$g_session_id', '$login_datetime', '". $_SERVER['REMOTE_ADDR']. "') ";
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result,__FILE__,__LINE__);
+        $g_current_session->setValue("ses_usr_id", $g_current_user->getValue("usr_id"));
+        $g_current_session->save();
 
         // Cookies fuer die Anmeldung setzen und evtl. Ports entfernen
         $domain = substr($_SERVER['HTTP_HOST'], 0, strpos($_SERVER['HTTP_HOST'], ':'));
         setcookie("admidio_session_id", "$g_session_id" , 0, "/", $domain, 0);
-
-        // Daten der Orga bei Anmeldung neu einlesen
-        unset($_SESSION['g_current_organisation']);
 
         // Logins zaehlen und aktuelles Login-Datum aktualisieren
         $g_current_user->setValue("usr_last_login",   $g_current_user->getValue("usr_actual_login"));
