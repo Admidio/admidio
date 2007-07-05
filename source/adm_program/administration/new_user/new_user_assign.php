@@ -155,7 +155,7 @@ echo "
                                 <div style=\"margin-top: 5px;\">
                                     <span class=\"iconLink\">
                                         <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=6\"><img
-                                         class=\"iconLink\" src=\"$g_root_path/adm_program/images/key.png\" style=\"vertical-align: middle;\" border=\"0\" title=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\" alt=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\"></a>
+                                        class=\"iconLink\" src=\"$g_root_path/adm_program/images/key.png\" alt=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\"></a>
                                         <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=6\">Zugangsdaten zuschicken</a>
                                     </span>
                                 </div>";
@@ -169,7 +169,7 @@ echo "
                             <div style=\"margin-top: 5px;\">
                                 <span class=\"iconLink\">
                                     <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=1\"><img
-                                     class=\"iconLink\" src=\"$g_root_path/adm_program/images/properties.png\" style=\"vertical-align: middle;\" border=\"0\" title=\"Zugangsdaten zuordnen\" alt=\"Zugangsdaten zuordnen\"></a>
+                                    class=\"iconLink\" src=\"$g_root_path/adm_program/images/properties.png\" alt=\"Zugangsdaten zuordnen\"></a>
                                     <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=1\">Zugangsdaten zuordnen</a>
                                 </span>
                             </div>";
@@ -188,7 +188,7 @@ echo "
                             <div style=\"margin-top: 5px;\">
                                 <span class=\"iconLink\">
                                     <a class=\"iconLink\" href=\"$link\"><img class=\"iconLink\" 
-                                     src=\"$g_root_path/adm_program/images/properties.png\" style=\"vertical-align: middle;\" border=\"0\" title=\"Mitgliedschaft zuweisen\" alt=\"Mitgliedschaft zuweisen\"></a>
+                                    class=\"iconLink\" src=\"$g_root_path/adm_program/images/properties.png\" alt=\"Mitgliedschaft zuweisen\"></a>
                                     <a class=\"iconLink\" href=\"$link\">Mitgliedschaft zuweisen</a>
                                 </span>
                             </div>";
@@ -201,7 +201,7 @@ echo "
                             <div style=\"margin-top: 5px;\">                        
                                 <span class=\"iconLink\">
                                     <a class=\"iconLink\" href=\"$link\"><img class=\"iconLink\"
-                                     src=\"$g_root_path/adm_program/images/properties.png\" style=\"vertical-align: middle;\" border=\"0\" title=\"Rollen und Logindaten diesem Benutzer zuordnen\" alt=\"Rollen und Logindaten diesem Benutzer zuordnen\"></a>
+                                    class=\"iconLink\" src=\"$g_root_path/adm_program/images/properties.png\" alt=\"Rollen und Logindaten diesem Benutzer zuordnen\"></a>
                                     <a class=\"iconLink\" href=\"$link\">Mitgliedschaft und Logindaten diesem Benutzer zuordnen</a>
                                 </span>
                             </div>";
@@ -221,7 +221,7 @@ echo "
                 <div style=\"margin-top: 5px;\">
                     <span class=\"iconLink\">
                         <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$req_new_user_id&new_user=3\"><img
-                         class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" title=\"Neuen Benutzer anlegen\" alt=\"Neuen Benutzer anlegen\"></a>
+                        class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" alt=\"Neuen Benutzer anlegen\"></a>
                         <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$req_new_user_id&new_user=3\">Benutzer anlegen</a>
                     </span>
                 </div>
@@ -231,7 +231,7 @@ echo "
     <div style=\"margin-top: 20px;\">
         <span class=\"iconLink\">
             <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\"><img
-             class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Zur&uuml;ck\"></a>
+            class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
             <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
         </span>
     </div>

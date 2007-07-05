@@ -66,7 +66,7 @@ echo "
     {
         echo "<span class=\"iconLink\">
             <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/logout.php\"><img
-            src=\"$g_root_path/adm_program/images/door_in.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Logout\"></a>
+            class=\"iconLink\" src=\"$g_root_path/adm_program/images/door_in.png\" alt=\"Logout\"></a>
             <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/logout.php\">Logout</a>
         </span>";
     }
@@ -74,7 +74,7 @@ echo "
     {
         echo "<span class=\"iconLink\">
             <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/login.php\"><img
-            src=\"$g_root_path/adm_program/images/key.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Login\"></a>
+            class=\"iconLink\" src=\"$g_root_path/adm_program/images/key.png\" alt=\"Login\"></a>
             <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/login.php\">Login</a>
         </span>";
         if($g_preferences['registration_mode'] > 0)
@@ -82,7 +82,7 @@ echo "
             echo "&nbsp;&nbsp;&nbsp;
             <span class=\"iconLink\">
                 <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/registration.php\"><img
-                src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Registrieren\"></a>
+                class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" alt=\"Registrieren\"></a>
                 <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/registration.php\">Registrieren</a>
             </span>";
         }

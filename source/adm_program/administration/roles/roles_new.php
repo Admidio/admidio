@@ -557,7 +557,7 @@ echo "
                         <br>
                         <span class=\"iconLink\">
                             <a class=\"iconLink\" href=\"javascript:hinzufuegen()\"><img
-                            class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Feld hinzuf&uuml;gen\"></a>
+                            class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" alt=\"Feld hinzuf&uuml;gen\"></a>
                             <a class=\"iconLink\" href=\"javascript:hinzufuegen()\">Rolle hinzuf&uuml;gen</a>
                         </span>
                     </div>
@@ -572,7 +572,7 @@ echo "
                         <br>
                         <span class=\"iconLink\">
                             <a class=\"iconLink\" href=\"javascript:entfernen()\"><img
-                            class=\"iconLink\" src=\"$g_root_path/adm_program/images/delete.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Feld hinzuf&uuml;gen\"></a>
+                            class=\"iconLink\" src=\"$g_root_path/adm_program/images/delete.png\" alt=\"Feld hinzuf&uuml;gen\"></a>
                             <a class=\"iconLink\" href=\"javascript:entfernen()\">Rolle entfernen</a>
                         </span>
                     </div>

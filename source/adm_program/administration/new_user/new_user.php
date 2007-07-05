@@ -57,7 +57,7 @@ $sql    = "SELECT usr_id, usr_login_name, last_name.usd_value as last_name,
               AND email.usd_usf_id = ". $g_current_user->getProperty("E-Mail", "usf_id"). "
             WHERE usr_valid = 0
               AND usr_reg_org_shortname = '$g_organization' 
-            ORDER BY usr_last_name, usr_first_name ";
+            ORDER BY last_name, first_name ";
 $usr_result = mysql_query($sql, $g_adm_con);
 db_error($usr_result,__FILE__,__LINE__);
 $member_found = mysql_num_rows($usr_result);

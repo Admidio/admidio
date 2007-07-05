@@ -191,7 +191,7 @@ echo "
                 <td colspan=\"4\" style=\"padding: 4px;\">&nbsp;
                     <span class=\"iconLink\">
                         <a class=\"iconLink\" href=\"javascript:addField()\"><img
-                        class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Feld hinzuf&uuml;gen\"></a>
+                        class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" alt=\"Feld hinzuf&uuml;gen\"></a>
                         <a class=\"iconLink\" href=\"javascript:addField()\">Feld hinzuf&uuml;gen</a>
                     </span>
                 </td>

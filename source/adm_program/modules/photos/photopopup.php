@@ -119,8 +119,8 @@ echo "
     if($last>0)
     {
         echo"<span class=\"iconLink\">
-            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photopopup.php?bild=$last&pho_id=$pho_id\">
-                <img class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Vorheriges Bild\">
+            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photopopup.php?bild=$last&pho_id=$pho_id\"><img 
+                class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" alt=\"Vorheriges Bild\">
             </a>
             <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photopopup.php?bild=$last&pho_id=$pho_id\">Vorheriges Bild</a>
         </span>
@@ -130,8 +130,8 @@ echo "
     {
         echo"<span class=\"iconLink\">
             <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photopopup.php?bild=$next&pho_id=$pho_id\">N&auml;chstes Bild</a>
-            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photopopup.php?bild=$next&pho_id=$pho_id\">
-                <img class=\"iconLink\" src=\"$g_root_path/adm_program/images/forward.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"N&auml;chstes Bild\">
+            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photopopup.php?bild=$next&pho_id=$pho_id\"><img 
+                class=\"iconLink\" src=\"$g_root_path/adm_program/images/forward.png\" alt=\"N&auml;chstes Bild\">
             </a>
         </span>";
     }
@@ -176,7 +176,7 @@ echo "
     echo"<p>
         <span class=\"iconLink\">
             <a href=\"javascript:parent.window.close()\"><img
-            class=\"iconLink\" src=\"$g_root_path/adm_program/images/door_in.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Login\"></a>
+            class=\"iconLink\" src=\"$g_root_path/adm_program/images/door_in.png\" alt=\"Login\"></a>
             <a class=\"iconLink\" href=\"javascript:parent.window.close()\">Fenster schlie&szlig;en</a>
         </span>
     </p>

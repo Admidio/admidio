@@ -192,7 +192,7 @@ if ($_GET['id'] == 0)
     echo "<p>
         <span class=\"iconLink\">
             <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/guestbook/guestbook_new.php?headline=". $_GET["headline"]. "\"><img
-            class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Neuen Eintrag anlegen\"></a>
+            class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" alt=\"Neuen Eintrag anlegen\"></a>
             <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/guestbook/guestbook_new.php?headline=". $_GET["headline"]. "\">Neuen Eintrag anlegen</a>
         </span>
     </p>";
@@ -206,7 +206,7 @@ else
     echo "<p>
         <span class=\"iconLink\">
             <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/guestbook/guestbook.php?headline=". $_GET["headline"]. "&start=". $_GET["start"] ."\"><img
-            class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Zur&uuml;ck zum G&auml;stebuch\"></a>
+            class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck zum G&auml;stebuch\"></a>
             <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/guestbook/guestbook.php?headline=". $_GET["headline"]. "&start=". $_GET["start"] ."\"\">Zur&uuml;ck zum G&auml;stebuch</a>
         </span>
     </p>";

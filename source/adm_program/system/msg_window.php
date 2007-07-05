@@ -256,7 +256,7 @@ echo "
 
         case "termin_global":
             echo "Termine / Ank&uuml;ndigungen, die diese Option aktiviert haben, erscheinen auf den Webseiten
-                  folgender Organisationen:<br><b>";
+                  folgender Organisationen:<p><b>";
 
             // alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist
             $organizations = $g_current_organization->longname;
@@ -264,12 +264,12 @@ echo "
 
             while($orga = current($arr_ref_orgas))
             {
-                $organizations = $organizations. ", $orga";
+                $organizations = $organizations. ",<br>- $orga";
                 next($arr_ref_orgas);
             }
 
-            echo "$organizations</b><br><br>
-                  Moderatoren dieser Organisationen k&ouml;nnen den Termin / Nachricht dann bearbeiten
+            echo "- $organizations</b></p>
+                  Moderatoren dieser Organisationen k&ouml;nnen den Termin / Ank&uuml;ndigung dann bearbeiten
                   bzw. die Option zur&uuml;cksetzen.";
             break;
 
@@ -349,7 +349,7 @@ echo "</div>
 <div style=\"padding-top: 10px;\" align=\"center\">
     <span class=\"iconLink\">
         <a class=\"iconLink\" href=\"javascript:window.close();\"><img
-         class=\"iconLink\" src=\"$g_root_path/adm_program/images/door_in.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Schlie&szlig;en\"></a>
+         class=\"iconLink\" src=\"$g_root_path/adm_program/images/door_in.png\" alt=\"Schlie&szlig;en\"></a>
         <a class=\"iconLink\" href=\"javascript:window.close();\">Schlie&szlig;en</a>
     </span>
 </div>";

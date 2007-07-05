@@ -74,6 +74,11 @@ a:hover {
     text-decoration:  underline;
 }
 
+.iconLink {
+	 vertical-align:   top;
+	 border-width:     0px;
+}
+
 /* Layout fuer die Boxen (Termine usw.)
    Es ist in einen Kopf (boxHead) und einen Inhalt (boxBody),
    der aber den Kopfbereich umschliesst, unterteilt
@@ -191,6 +196,7 @@ a:hover {
     font-weight:      bold;
     font-style:       italic;
     letter-spacing:	 0.2em;
+    text-align:       left;
 }
 
 /* Farbe des Markierungsbalken in Listen */

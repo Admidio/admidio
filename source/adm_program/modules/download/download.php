@@ -111,7 +111,7 @@ else
 if (strlen($req_default_folder) > 0 || strlen($req_folder) > 0)
 {
     $link = "<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/download.php?default_folder=". urlencode($req_default_folder). "\"><img 
-                class=\"iconLink\" src=\"$g_root_path/adm_program/images/application_view_list.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Downloads\"></a>
+                class=\"iconLink\" src=\"$g_root_path/adm_program/images/application_view_list.png\" alt=\"Downloads\"></a>
              <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/download.php?default_folder=". urlencode($req_default_folder). "\">$text</a>";
 }
 
@@ -186,13 +186,13 @@ if ($g_current_user->editDownloadRight())
     echo "<p>
         <span class=\"iconLink\">
             <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/folder_new.php?folder=". urlencode($req_folder). "&amp;default_folder=". urlencode($req_default_folder). "\"><img
-            class=\"iconLink\" src=\"$g_root_path/adm_program/images/folder_create.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Ordner erstellen\"></a>
+            class=\"iconLink\" src=\"$g_root_path/adm_program/images/folder_create.png\" alt=\"Ordner erstellen\"></a>
             <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/folder_new.php?folder=". urlencode($req_folder). "&amp;default_folder=". urlencode($req_default_folder). "\">Ordner anlegen</a>
         </span>
         &nbsp;&nbsp;&nbsp;&nbsp;
         <span class=\"iconLink\">
             <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/upload.php?folder=". urlencode($req_folder). "&amp;default_folder=". urlencode($req_default_folder). "\"><img
-            class=\"iconLink\" src=\"$g_root_path/adm_program/images/page_white_get.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Hochladen\"></a>
+            class=\"iconLink\" src=\"$g_root_path/adm_program/images/page_white_get.png\" alt=\"Hochladen\"></a>
             <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/upload.php?folder=". urlencode($req_folder). "&amp;default_folder=". urlencode($req_default_folder). "\">Datei hochladen</a>
         </span>
     </p>";

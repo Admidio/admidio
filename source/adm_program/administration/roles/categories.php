@@ -108,7 +108,7 @@ echo "
 <p>
     <span class=\"iconLink\">
         <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/categories_new.php?type=$req_type\"><img 
-        src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Kategorie anlegen\"></a>
+        class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" alt=\"Kategorie anlegen\"></a>
         <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/categories_new.php?type=$req_type\">Kategorie anlegen</a>
     </span>
 </p>
@@ -189,7 +189,7 @@ echo "
 <p>
     <span class=\"iconLink\">
         <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\"><img
-        class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Zur&uuml;ck\"></a>
+        class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
         <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
     </span>
 </p>

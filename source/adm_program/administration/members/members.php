@@ -98,141 +98,82 @@ unset ($_SESSION['QuerySuggestions']);
 $_SESSION['navigation']->clear();
 $_SESSION['navigation']->addUrl($g_current_url);
 
+
+// Bedingungen fuer das SQL-Statement je nach Modus setzen
 if ($req_queryForm)
 {
-    //Es wurde eine Suchanfrage uebermittelt
-
-    if ($req_members)
-    {
-        //Es werden nur OrganisationsMitglieder durchsucht
-        $sql    = "SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name, 
-                          email.usd_value as email, homepage.usd_value as homepage,
-                          usr_login_name, usr_last_change, 1 member
-                     FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_USERS. "
-                     LEFT JOIN ". TBL_USER_DATA. " as first_name
-                       ON first_name.usd_usr_id = usr_id
-                      AND first_name.usd_usf_id = ". $g_current_user->getProperty("Vorname", "usf_id"). "
-                     LEFT JOIN ". TBL_USER_DATA. " as email
-                       ON email.usd_usr_id = usr_id
-                      AND email.usd_usf_id = ". $g_current_user->getProperty("E-Mail", "usf_id"). "
-                     LEFT JOIN ". TBL_USER_DATA. " as homepage
-                       ON homepage.usd_usr_id = usr_id
-                      AND homepage.usd_usf_id = ". $g_current_user->getProperty("Homepage", "usf_id"). "
-                    RIGHT JOIN ". TBL_USER_DATA. " as last_name
-                       ON last_name.usd_usr_id = usr_id
-                      AND last_name.usd_usf_id = ". $g_current_user->getProperty("Nachname", "usf_id"). "
-                      AND (  last_name.usd_value  LIKE {0}
-                          OR first_name.usd_value LIKE {0} )
-                    WHERE usr_valid = 1
-                      AND mem_usr_id = usr_id
-                      AND mem_rol_id = rol_id
-                      AND mem_valid  = 1
-                      AND rol_valid  = 1
-                      AND rol_cat_id = cat_id
-                      AND cat_org_id = $g_current_organization->id
-                    ORDER BY last_name, first_name ";
-    }
-    else
-    {
-        // alle DB-User auslesen und Anzahl der zugeordneten Orga-Rollen ermitteln
-        $sql    = "SELECT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name, 
-                          email.usd_value as email, homepage.usd_value as homepage,
-                          usr_login_name, usr_last_change, count(rol_id) member
-                     FROM ". TBL_USERS. "
-                     LEFT JOIN ". TBL_MEMBERS. "
-                       ON mem_usr_id = usr_id
-                      AND mem_valid  = 1
-                     LEFT JOIN ". TBL_ROLES. "
-                       ON mem_rol_id = rol_id
-                      AND rol_valid  = 1
-                     LEFT JOIN ". TBL_CATEGORIES. "
-                       ON rol_cat_id = cat_id
-                      AND cat_org_id = $g_current_organization->id
-                     LEFT JOIN ". TBL_USER_DATA. " as first_name
-                       ON first_name.usd_usr_id = usr_id
-                      AND first_name.usd_usf_id = ". $g_current_user->getProperty("Vorname", "usf_id"). "
-                     LEFT JOIN ". TBL_USER_DATA. " as email
-                       ON email.usd_usr_id = usr_id
-                      AND email.usd_usf_id = ". $g_current_user->getProperty("E-Mail", "usf_id"). "
-                     LEFT JOIN ". TBL_USER_DATA. " as homepage
-                       ON homepage.usd_usr_id = usr_id
-                      AND homepage.usd_usf_id = ". $g_current_user->getProperty("Homepage", "usf_id"). "
-                    RIGHT JOIN ". TBL_USER_DATA. " as last_name
-                       ON last_name.usd_usr_id = usr_id
-                      AND last_name.usd_usf_id = ". $g_current_user->getProperty("Nachname", "usf_id"). "
-                      AND (  last_name.usd_value  LIKE {0}
-                          OR first_name.usd_value LIKE {0} )
-                    WHERE usr_valid = 1
-                    GROUP BY usr_id
-                    ORDER BY last_name, first_name ";
-    }
-    $sql    = prepareSQL($sql, array(str_replace(',', '', $req_queryForm). '%'));
+    // Bedingung fuer die Suchanfrage
+    $search_string = str_replace(',', '', $req_queryForm). '%';
+    $search_condition = " AND (  last_name.usd_value  LIKE '$search_string'
+                              OR first_name.usd_value LIKE '$search_string' ) ";    
 }
 else
 {
-    // alle Mitglieder zur Auswahl selektieren
-    // unbestaetigte User werden dabei nicht angezeigt
-    if($req_members)
-    {
-        $sql    = "SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name, 
-                          email.usd_value as email, homepage.usd_value as homepage,
-                          usr_login_name, usr_last_change, 1 member
-                     FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_USERS. "
-                    RIGHT JOIN ". TBL_USER_DATA. " as last_name
-                       ON last_name.usd_usr_id = usr_id
-                      AND last_name.usd_usf_id = ". $g_current_user->getProperty("Nachname", "usf_id"). "
-                      AND last_name.usd_value LIKE '$req_letter%'
-                     LEFT JOIN ". TBL_USER_DATA. " as first_name
-                       ON first_name.usd_usr_id = usr_id
-                      AND first_name.usd_usf_id = ". $g_current_user->getProperty("Vorname", "usf_id"). "
-                     LEFT JOIN ". TBL_USER_DATA. " as email
-                       ON email.usd_usr_id = usr_id
-                      AND email.usd_usf_id = ". $g_current_user->getProperty("E-Mail", "usf_id"). "
-                     LEFT JOIN ". TBL_USER_DATA. " as homepage
-                       ON homepage.usd_usr_id = usr_id
-                      AND homepage.usd_usf_id = ". $g_current_user->getProperty("Homepage", "usf_id"). "
-                    WHERE usr_valid = 1
-                      AND mem_usr_id = usr_id
-                      AND mem_rol_id = rol_id
-                      AND mem_valid  = 1
-                      AND rol_valid  = 1
-                      AND rol_cat_id = cat_id
-                      AND cat_org_id = $g_current_organization->id
-                    ORDER BY last_name, first_name ";
-    }
-    else
-    {
-        // alle DB-User auslesen und Anzahl der zugeordneten Orga-Rollen ermitteln
-        $sql    = "SELECT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name, 
-                          email.usd_value as email, homepage.usd_value as homepage,
-                          usr_login_name, usr_last_change, count(cat_id) member
-                     FROM ". TBL_USERS. "
-                     LEFT JOIN ". TBL_MEMBERS. "
-                       ON mem_usr_id = usr_id
-                      AND mem_valid  = 1
-                     LEFT JOIN ". TBL_ROLES. "
-                       ON mem_rol_id = rol_id
-                      AND rol_valid  = 1
-                     LEFT JOIN ". TBL_CATEGORIES. "
-                       ON rol_cat_id = cat_id
-                      AND cat_org_id = $g_current_organization->id
-                    RIGHT JOIN ". TBL_USER_DATA. " as last_name
-                       ON last_name.usd_usr_id = usr_id
-                      AND last_name.usd_usf_id = ". $g_current_user->getProperty("Nachname", "usf_id"). "
-                      AND last_name.usd_value LIKE '$req_letter%'
-                     LEFT JOIN ". TBL_USER_DATA. " as first_name
-                       ON first_name.usd_usr_id = usr_id
-                      AND first_name.usd_usf_id = ". $g_current_user->getProperty("Vorname", "usf_id"). "
-                     LEFT JOIN ". TBL_USER_DATA. " as email
-                       ON email.usd_usr_id = usr_id
-                      AND email.usd_usf_id = ". $g_current_user->getProperty("E-Mail", "usf_id"). "
-                     LEFT JOIN ". TBL_USER_DATA. " as homepage
-                       ON homepage.usd_usr_id = usr_id
-                      AND homepage.usd_usf_id = ". $g_current_user->getProperty("Homepage", "usf_id"). "
-                    WHERE usr_valid = 1
-                    GROUP BY usr_id
-                    ORDER BY last_name, first_name ";
-    }
+    $search_condition = " AND last_name.usd_value LIKE '$req_letter%' ";
+}
+
+// alle Mitglieder zur Auswahl selektieren
+// unbestaetigte User werden dabei nicht angezeigt
+if($req_members)
+{
+    $sql    = "SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name, 
+                      email.usd_value as email, homepage.usd_value as homepage,
+                      usr_login_name, usr_last_change, 1 member
+                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_USERS. "
+                 LEFT JOIN ". TBL_USER_DATA. " as first_name
+                   ON first_name.usd_usr_id = usr_id
+                  AND first_name.usd_usf_id = ". $g_current_user->getProperty("Vorname", "usf_id"). "
+                 LEFT JOIN ". TBL_USER_DATA. " as email
+                   ON email.usd_usr_id = usr_id
+                  AND email.usd_usf_id = ". $g_current_user->getProperty("E-Mail", "usf_id"). "
+                 LEFT JOIN ". TBL_USER_DATA. " as homepage
+                   ON homepage.usd_usr_id = usr_id
+                  AND homepage.usd_usf_id = ". $g_current_user->getProperty("Homepage", "usf_id"). "
+                RIGHT JOIN ". TBL_USER_DATA. " as last_name
+                   ON last_name.usd_usr_id = usr_id
+                  AND last_name.usd_usf_id = ". $g_current_user->getProperty("Nachname", "usf_id"). "
+                      $search_condition
+                WHERE usr_valid = 1
+                  AND mem_usr_id = usr_id
+                  AND mem_rol_id = rol_id
+                  AND mem_valid  = 1
+                  AND rol_valid  = 1
+                  AND rol_cat_id = cat_id
+                  AND cat_org_id = $g_current_organization->id
+                ORDER BY last_name, first_name ";
+}
+else
+{
+    // alle DB-User auslesen und Anzahl der zugeordneten Orga-Rollen ermitteln
+    $sql    = "SELECT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name, 
+                      email.usd_value as email, homepage.usd_value as homepage,
+                      usr_login_name, usr_last_change, count(cat_id) member
+                 FROM ". TBL_USERS. "
+                 LEFT JOIN ". TBL_MEMBERS. "
+                   ON mem_usr_id = usr_id
+                  AND mem_valid  = 1
+                 LEFT JOIN ". TBL_ROLES. "
+                   ON mem_rol_id = rol_id
+                  AND rol_valid  = 1
+                 LEFT JOIN ". TBL_CATEGORIES. "
+                   ON rol_cat_id = cat_id
+                  AND cat_org_id = $g_current_organization->id
+                 LEFT JOIN ". TBL_USER_DATA. " as first_name
+                   ON first_name.usd_usr_id = usr_id
+                  AND first_name.usd_usf_id = ". $g_current_user->getProperty("Vorname", "usf_id"). "
+                 LEFT JOIN ". TBL_USER_DATA. " as email
+                   ON email.usd_usr_id = usr_id
+                  AND email.usd_usf_id = ". $g_current_user->getProperty("E-Mail", "usf_id"). "
+                 LEFT JOIN ". TBL_USER_DATA. " as homepage
+                   ON homepage.usd_usr_id = usr_id
+                  AND homepage.usd_usf_id = ". $g_current_user->getProperty("Homepage", "usf_id"). "
+                RIGHT JOIN ". TBL_USER_DATA. " as last_name
+                   ON last_name.usd_usr_id = usr_id
+                  AND last_name.usd_usf_id = ". $g_current_user->getProperty("Nachname", "usf_id"). "
+                      $search_condition
+                WHERE usr_valid = 1
+                GROUP BY usr_id
+                ORDER BY last_name, first_name ";
 }
 error_log($sql);
 $result_mgl = mysql_query($sql, $g_adm_con);
@@ -279,19 +220,19 @@ echo "
 <p>
     <span class=\"iconLink\">
         <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?new_user=1\"><img
-        class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Benutzer anlegen\"></a>
+        class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" alt=\"Benutzer anlegen\"></a>
         <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_new.php?new_user=1\">Benutzer anlegen</a>
     </span>
     &nbsp;&nbsp;&nbsp;&nbsp;
     <span class=\"iconLink\">
         <a href=\"$g_root_path/adm_program/administration/members/import.php\"><img
-        class=\"iconLink\" src=\"$g_root_path/adm_program/images/database_in.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Benutzer importieren\"></a>
+        class=\"iconLink\" src=\"$g_root_path/adm_program/images/database_in.png\" alt=\"Benutzer importieren\"></a>
         <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/import.php\">Benutzer importieren</a>
     </span>
     &nbsp;&nbsp;&nbsp;&nbsp;
     <span class=\"iconLink\">
         <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/fields.php\"><img
-         class=\"iconLink\" src=\"$g_root_path/adm_program/images/application_form.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Organisationsspezifische Profilfelder pflegen\"></a>
+        class=\"iconLink\" src=\"$g_root_path/adm_program/images/application_form.png\" alt=\"Organisationsspezifische Profilfelder pflegen\"></a>
         <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/fields.php\">Profilfelder pflegen</a>
     </span>
 </p>";
@@ -314,7 +255,7 @@ if($count_mem_rol != mysql_num_rows($result_mgl) || $req_members == false)
     echo "<p>
     <span class=\"iconLink\">
         <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members.php?members=$link_members&letter=$req_letter&queryForm=$req_queryForm\"><img
-         class=\"iconLink\" src=\"$g_root_path/adm_program/images/$link_icon\" style=\"vertical-align: middle;\" border=\"0\" alt=\"$link_text\"></a>
+        class=\"iconLink\" src=\"$g_root_path/adm_program/images/$link_icon\" alt=\"$link_text\"></a>
         <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members.php?members=$link_members&letter=$req_letter&queryForm=$req_queryForm\">$link_text</a>
     </span>
     </p>";
@@ -322,11 +263,11 @@ if($count_mem_rol != mysql_num_rows($result_mgl) || $req_members == false)
 
 if($req_members)
 {
-    echo "<p>Alle Mitglieder ";
+    echo "<p>Alle aktiven Mitglieder ";
 }
 else
 {
-    echo "<p>Alle Benutzer (Mitglieder, Ehemalige) ";
+    echo "<p>Alle Mitglieder und Ehemalige ";
 }
 
 if(strlen($req_letter) > 0)

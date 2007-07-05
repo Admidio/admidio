@@ -173,13 +173,13 @@ if ($_GET['id'] == 0 && ($g_current_user->editWeblinksRight() || $g_preferences[
         echo "<p>
             <span class=\"iconLink\">
                 <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/links/links_new.php?headline=". $_GET["headline"]. "\"><img
-                class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Neu anlegen\"></a>
+                class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" alt=\"Neu anlegen\"></a>
                 <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/links/links_new.php?headline=". $_GET["headline"]. "\">Neu anlegen</a>
             </span>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <span class=\"iconLink\">
                 <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/categories.php?type=LNK\"><img
-                src=\"$g_root_path/adm_program/images/application_double.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Kategorien pflegen\"></a>
+                src=\"$g_root_path/adm_program/images/application_double.png\" alt=\"Kategorien pflegen\"></a>
                 <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/categories.php?type=LNK\">Kategorien pflegen</a>
             </span>
         </p>";
