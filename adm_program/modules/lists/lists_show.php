@@ -365,7 +365,7 @@ if($req_mode != "csv")
         echo "<p>
             <span class=\"iconLink\">
                 <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\"><img
-                class=\"iconLink\" src=\"$g_root_path/adm_program/images/$image\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Zur&uuml;ck\"></a>
+                class=\"iconLink\" src=\"$g_root_path/adm_program/images/$image\" alt=\"Zur&uuml;ck\"></a>
                 <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\">$text</a>
             </span>
         </p>
@@ -375,8 +375,7 @@ if($req_mode != "csv")
         {
             echo "<span class=\"iconLink\">
                 <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/mail/mail.php?rol_id=$req_rol_id\"><img
-                class=\"iconLink\" src=\"$g_root_path/adm_program/images/email.png\" style=\"vertical-align: middle; cursor: pointer;\"
-                border=\"0\" alt=\"E-Mail an Mitglieder\"></a>
+                class=\"iconLink\" src=\"$g_root_path/adm_program/images/email.png\" alt=\"E-Mail an Mitglieder\"></a>
                 <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/mail/mail.php?rol_id=$req_rol_id\">E-Mail an Mitglieder</a>
             </span>
             &nbsp;&nbsp;&nbsp;";
@@ -384,7 +383,7 @@ if($req_mode != "csv")
 
         echo "<span class=\"iconLink\">
             <a class=\"iconLink\" href=\"#\" onclick=\"window.open('$g_root_path/adm_program/modules/lists/lists_show.php?type=$req_type&amp;mode=print&amp;rol_id=$req_rol_id', '_blank')\"><img
-            class=\"iconLink\" src=\"$g_root_path/adm_program/images/print.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Druckvorschau\"></a>
+            class=\"iconLink\" src=\"$g_root_path/adm_program/images/print.png\" alt=\"Druckvorschau\"></a>
             <a class=\"iconLink\" href=\"#\" onclick=\"window.open('$g_root_path/adm_program/modules/lists/lists_show.php?type=$req_type&amp;mode=print&amp;rol_id=$req_rol_id', '_blank')\">Druckvorschau</a>
         </span>
 

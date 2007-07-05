@@ -65,7 +65,7 @@ echo "
 <p>
     <span class=\"iconLink\">
         <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/roles_new.php\"><img
-        src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Rolle anlegen\"></a>
+        class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" alt=\"Rolle anlegen\"></a>
         <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/roles_new.php\">Rolle anlegen</a>
     </span>
     &nbsp;&nbsp;&nbsp;&nbsp;";
@@ -83,13 +83,13 @@ echo "
     }
     echo "<span class=\"iconLink\">
         <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/roles.php?inactive=$req_valid\"><img
-        src=\"$g_root_path/adm_program/images/$image\" style=\"vertical-align: middle;\" border=\"0\" alt=\"$description_lnk\"></a>
+        class=\"iconLink\" src=\"$g_root_path/adm_program/images/$image\" alt=\"$description_lnk\"></a>
         <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/roles.php?inactive=$req_valid\">$description_lnk</a>
     </span>
     &nbsp;&nbsp;&nbsp;&nbsp;
     <span class=\"iconLink\">
         <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/categories.php?type=ROL\"><img
-        src=\"$g_root_path/adm_program/images/application_double.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Kategorien pflegen\"></a>
+        class=\"iconLink\" src=\"$g_root_path/adm_program/images/application_double.png\" alt=\"Kategorien pflegen\"></a>
         <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/categories.php?type=ROL\">Kategorien pflegen</a>
     </span>
 </p>

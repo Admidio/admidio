@@ -338,7 +338,7 @@ echo "
         {
             echo "<span class=\"iconLink\">
                 <a class=\"iconLink\" href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=u\"><img
-                class=\"iconLink\" src=\"$g_root_path/adm_program/images/group.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Alle Benutzer anzeigen\"></a>
+                class=\"iconLink\" src=\"$g_root_path/adm_program/images/group.png\" alt=\"Alle Benutzer anzeigen\"></a>
                 <a class=\"iconLink\" href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=u\">Alle Benutzer anzeigen</a>
             </span>";
         }
@@ -347,7 +347,7 @@ echo "
             //Nur Mitglieder anzeigen
             echo "<span class=\"iconLink\">
                 <a class=\"iconLink\" href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=m\"><img
-                class=\"iconLink\" src=\"$g_root_path/adm_program/images/user.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Nur Mitglieder anzeigen\"></a>
+                class=\"iconLink\" src=\"$g_root_path/adm_program/images/user.png\" alt=\"Nur Mitglieder anzeigen\"></a>
                 <a class=\"iconLink\" href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=m\">Nur Mitglieder anzeigen</a>
             </span>";
 
@@ -357,7 +357,7 @@ echo "
             echo"&nbsp;&nbsp;&nbsp;&nbsp;
             <span class=\"iconLink\">
                 <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?new_user=1\"><img
-                class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Login\"></a>
+                class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" alt=\"Login\"></a>
                 <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_new.php?new_user=1\">Benutzer anlegen</a>
             </span>";
         }

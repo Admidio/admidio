@@ -26,8 +26,8 @@
  *
  *****************************************************************************/
 
-require("../../system/common.php");
-require("../../system/login_valid.php");
+require_once("../../system/common.php");
+require_once("../../system/login_valid.php");
 
 // nur berechtigte User duerfen Querysuggestions empfangen
 if (!$g_current_user->editUser())
@@ -104,15 +104,16 @@ else
                            ON first_name.usd_usr_id = usr_id
                           AND first_name.usd_usf_id = ". $g_current_user->getProperty("Vorname", "usf_id"). "
                         WHERE usr_valid = 1
-                        ORDER BY usr_last_name, usr_first_name ";
+                        ORDER BY last_name, first_name ";
         }
+        error_log($sql);
         $result_mgl = mysql_query($sql, $g_adm_con);
         db_error($result_mgl,__FILE__,__LINE__);
 
         // Jetzt das komplette resultSet in ein Array schreiben...
         while($row = mysql_fetch_object($result_mgl))
         {
-            $entry=array('lastName' => $row->last_name, 'firstName' => $row->first_name);
+            $entry = array('lastName' => $row->last_name, 'firstName' => $row->first_name);
             $querySuggestions[]=$entry;
         }
 

@@ -78,13 +78,13 @@ echo "
 <p>
     <span class=\"iconLink\">
         <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/fields_new.php\"><img 
-        src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Profilfeld anlegen\"></a>
+        class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" alt=\"Profilfeld anlegen\"></a>
         <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/fields_new.php\">Profilfeld anlegen</a>
     </span>
     &nbsp;&nbsp;&nbsp;&nbsp;
     <span class=\"iconLink\">
         <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/categories.php?type=USF\"><img
-        src=\"$g_root_path/adm_program/images/application_double.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Kategorien pflegen\"></a>
+        class=\"iconLink\" src=\"$g_root_path/adm_program/images/application_double.png\" alt=\"Kategorien pflegen\"></a>
         <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/categories.php?type=USF\">Kategorien pflegen</a>
     </span>
 </p>";
@@ -237,7 +237,7 @@ echo "</table>
 <p>
     <span class=\"iconLink\">
         <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\"><img
-        class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Zur&uuml;ck\"></a>
+        class=\"iconLink\" class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
         <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
     </span>
 </p>

@@ -336,7 +336,7 @@ echo "</div>
                                                             $route_url .= ",%20". $g_current_user->getValue("Land");
                                                         }
 
-                                                        $route_url .= "&daddr=". urlencode($user->address);
+                                                        $route_url .= "&daddr=". urlencode($user->getValue("Adresse"));
                                                         if(strlen($user->getValue("PLZ"))  > 0)
                                                         {
                                                             $route_url .= ",%20". $user->getValue("PLZ");
@@ -410,7 +410,7 @@ echo "</div>
                     echo "<div style=\"margin-top: 5px;\">
                         <span class=\"iconLink\">
                             <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$a_user_id\"><img
-                             class=\"iconLink\" src=\"$g_root_path/adm_program/images/photo.png\" style=\"vertical-align: top;\" border=\"0\" alt=\"Foto &auml;ndern\"></a>
+                             class=\"iconLink\" src=\"$g_root_path/adm_program/images/photo.png\" alt=\"Foto &auml;ndern\"></a>
                             <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$a_user_id\">Foto &auml;ndern</a>
                         </span>
                     </div>";
@@ -418,7 +418,7 @@ echo "</div>
                 echo"<div style=\"margin-top: 5px;\">
                     <span class=\"iconLink\">
                         <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id=". $user->getValue("usr_id"). "\"><img
-                         class=\"iconLink\" src=\"$g_root_path/adm_program/images/vcard.png\" style=\"vertical-align: top;\" border=\"0\" title=\"Benutzer als vCard exportieren\" alt=\"Benutzer als vCard exportieren\"></a>
+                         class=\"iconLink\" src=\"$g_root_path/adm_program/images/vcard.png\" alt=\"Benutzer als vCard exportieren\"></a>
                         <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id=". $user->getValue("usr_id"). "\">vCard exportieren</a>
                     </span>
                 </div>
@@ -625,7 +625,7 @@ echo "</div>
         <div style=\"margin-top: 5px;\">
             <span class=\"iconLink\">
                 <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\"><img
-                 class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Zur&uuml;ck\"></a>
+                 class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
                 <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
             </span>
         </div>";

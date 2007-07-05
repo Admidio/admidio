@@ -297,7 +297,7 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
         if ( $on_page > 1 )
         {
             $page_string = '<a class="iconLink" href="' . $base_url . "&amp;start=" . ( ( $on_page - 2 ) * $per_page ) . '"><img 
-                                class="iconLink" src="'. $g_root_path. '/adm_program/images/back.png" style="vertical-align: middle;" border="0" alt="Vorherige"></a>
+                                class="iconLink" src="'. $g_root_path. '/adm_program/images/back.png" alt="Vorherige"></a>
                             <a class="iconLink" href="' . $base_url . "&amp;start=" . ( ( $on_page - 2 ) * $per_page ) . '">Vorherige</a>&nbsp;&nbsp;' . $page_string;
         }
 
@@ -305,7 +305,7 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
         {
             $page_string .= '&nbsp;&nbsp;<a class="iconLink" href="' . $base_url . "&amp;start=" . ( $on_page * $per_page ) . '">N&auml;chste</a>
                             <a class="iconLink" href="' . $base_url . "&amp;start=" . ( $on_page * $per_page ) . '"><img 
-                                class="iconLink" src="'. $g_root_path. '/adm_program/images/forward.png" style="vertical-align: middle;" border="0" alt="N&auml;chste"></a>';
+                                class="iconLink" src="'. $g_root_path. '/adm_program/images/forward.png" alt="N&auml;chste"></a>';
         }
 
     }

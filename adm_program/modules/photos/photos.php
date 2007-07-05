@@ -271,7 +271,7 @@ if($pho_id > 0)
     echo "<p>
         <span class=\"iconLink\">
             <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photos.php\"><img
-            class=\"iconLink\" src=\"$g_root_path/adm_program/images/application_view_tile.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Fotogalerien\"></a>
+            class=\"iconLink\" src=\"$g_root_path/adm_program/images/application_view_tile.png\" alt=\"Fotogalerien\"></a>
             <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photos.php\">Fotogalerien</a>$navilink
         </span>
     </p>";
@@ -283,7 +283,7 @@ if($g_current_user->editPhotoRight())
     echo"<p>
         <span class=\"iconLink\">
             <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photo_event_new.php?aufgabe=new&amp;pho_id=$pho_id\"><img
-            class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Veranstaltung anlegen\"></a>
+            class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" alt=\"Veranstaltung anlegen\"></a>
             <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photo_event_new.php?aufgabe=new&amp;pho_id=$pho_id\">Veranstaltung anlegen</a>
         </span>";
         if($pho_id > 0)
@@ -291,7 +291,7 @@ if($g_current_user->editPhotoRight())
             echo "&nbsp;&nbsp;&nbsp;&nbsp;
             <span class=\"iconLink\">
                 <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=".$_SESSION['photo_event']['pho_id']."\"><img
-                class=\"iconLink\" src=\"$g_root_path/adm_program/images/photo.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Bilder hochladen\"></a>
+                class=\"iconLink\" src=\"$g_root_path/adm_program/images/photo.png\" alt=\"Bilder hochladen\"></a>
                 <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=".$_SESSION['photo_event']['pho_id']."\">Bilder hochladen</a>
             </span>";
         }
@@ -718,7 +718,7 @@ if($_SESSION['photo_event']['pho_id']!=NULL)
     echo "<p>
         <span class=\"iconLink\">
             <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\"><img
-            class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Zur&uuml;ck\"></a>
+            class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
             <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
         </span>
     </p>";
