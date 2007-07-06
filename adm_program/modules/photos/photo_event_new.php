@@ -8,8 +8,8 @@
  *
  * Uebergaben:
  * pho_id: id der Veranstaltung die bearbeitet werden soll
- * aufgabe: - new (neues Formular)
- *          - change (Formular fuer Aenderunmgen)
+ * job:    - new (neues Formular)
+ *         - change (Formular fuer Aenderunmgen)
  *
  ******************************************************************************
  *
@@ -30,6 +30,7 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
+require("../../system/photo_event_class.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_photo_module'] != 1)
@@ -52,76 +53,105 @@ if(isset($_GET["pho_id"]) && is_numeric($_GET["pho_id"]) == false && $_GET["pho_
 }
 
 // Aufgabe gesetzt, welche Aufgabe
-if(isset($_GET["aufgabe"]) && $_GET["aufgabe"] != "new" && $_GET["aufgabe"] != "change")
+if(isset($_GET["job"]) && $_GET["job"] != "new" && $_GET["job"] != "change")
 {
     $g_message->show("invalid");
 }
 
 //Variablen initialisieren
-$form_values = array();
 $pho_id = $_GET["pho_id"];
-
 $_SESSION['navigation']->addUrl($g_current_url);
 
-//Wenn die eventsession besteht in form_values einlesen
+// Fotoeventobjekt anlegen
+$photo_event = new PhotoEvent($g_adm_con);
+
+// nur Daten holen, wenn Veranstaltung editiert werden soll
+if ($_GET["job"] == "change")
+{
+    $photo_event->getPhotoEvent($pho_id);
+    
+    // Pruefung, ob die Fotoveranstaltung zur aktuellen Organisation gehoert
+    if($photo_event->getValue("pho_org_shortname") != $g_organization)
+    {
+        $g_message->show("norights");
+    }
+}
+
 if(isset($_SESSION['photo_event_request']))
 {
-    $form_values = $_SESSION['photo_event_request'];
+    // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
+    // nun die vorher eingegebenen Inhalte auslesen
+    foreach($_SESSION['photo_event_request'] as $key => $value)
+    {
+        if(strpos($key, "pho_") == 0)
+        {
+            $photo_event->setValue($key, $value);
+        }        
+    }
     unset($_SESSION['photo_event_request']);
 }
 else
 {
-
-    $form_values['veranstaltung']   = "";
-    $form_values['parent']          = "";
-    $form_values['beginn']          = "";
-    $form_values['ende']            = "";
-    $form_values['photographen']    = "";
-    $form_values['locked']          = 0;
+    // Datum formatieren
+    $photo_event->setValue("pho_begin", mysqldate('d.m.y', $photo_event->getValue("pho_begin")));
+    $photo_event->setValue("pho_end", mysqldate('d.m.y', $photo_event->getValue("pho_end")));
 }
 
-
-//sonst, veranstaltung aufrufen und inhalte in form values uebertragen
-if ($_GET['aufgabe'] == "change")
+// einlesen der Veranstaltungsliste
+$pho_id_condition = "";
+if($photo_event->getValue("pho_id") > 0)
 {
-    //Erfassen der Veranstaltung bei Aenderungsaufruf
-    $sql = "SELECT *
-              FROM ". TBL_PHOTOS. "
-             WHERE pho_id = {0} ";
-    $sql = prepareSQL($sql, array($_GET['pho_id']));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
-    $adm_photo = mysql_fetch_array($result);
-
-    // pruefen, ob Veranstaltung zur aktuellen Organisation gehoert
-    if($adm_photo['pho_org_shortname'] != $g_organization)
-    {
-        $g_message->show("invalid");
-    }
-
-    //inhalten in form_values uebertragen
-    $form_values['veranstaltung']       = $adm_photo["pho_name"];
-    $form_values['parent']              = $adm_photo["pho_pho_id_parent"];
-    $form_values['beginn']              = mysqldate("d.m.y", $adm_photo["pho_begin"]);
-    $form_values['ende']                = mysqldate("d.m.y", $adm_photo["pho_end"]);
-    $form_values['photographen']        = $adm_photo["pho_photographers"];
-    $form_values['locked']              = $adm_photo["pho_locked"];
+    $pho_id_condition = " AND pho_id <> ". $photo_event->getValue("pho_id");
 }
 
-
-//Aktueller Timestamp
-$act_datetime= date("Y.m.d G:i:s", time());
-
-//erfassen der Veranstaltungsliste
 $sql="  SELECT *
         FROM ". TBL_PHOTOS. "
         WHERE pho_org_shortname ='$g_organization'
+        AND   pho_pho_id_parent IS NULL
+        $pho_id_condition
         ORDER BY pho_begin DESC ";
+error_log($sql);
 $result_list = mysql_query($sql, $g_adm_con);
 db_error($result_list,__FILE__,__LINE__);
 
-//Speicherort
-$ordner = "../../../adm_my_files/photos/".$form_values['beginn']."_".$pho_id;
+//Parent
+//Suchen nach Kindern, Funktion mit selbstaufruf
+function subfolder($parent_id, $vorschub, $photo_event, $pho_id)
+{
+    global $g_adm_con;
+    $vorschub = $vorschub."&nbsp;&nbsp;&nbsp;&nbsp;";
+
+    //Erfassen der auszugebenden Veranstaltung
+    $pho_id_condition = "";
+    if($photo_event->getValue("pho_id") > 0)
+    {
+        $pho_id_condition = " AND pho_id <> ". $photo_event->getValue("pho_id");
+    }    
+    
+    $sql = "SELECT *
+            FROM ". TBL_PHOTOS. "
+            WHERE pho_pho_id_parent = $parent_id 
+            $pho_id_condition ";
+    error_log($sql);
+    $result_child = mysql_query($sql, $g_adm_con);
+    db_error($result_child,__FILE__,__LINE__);
+
+    while($adm_photo_child = mysql_fetch_array($result_child))
+    {
+        //Wenn die Elternveranstaltung von pho_id dann selected
+        $selected = 0;
+        if(($adm_photo_child["pho_id"] == $photo_event->getValue("pho_pho_id_parent"))
+        ||  $adm_photo_child["pho_id"] == $pho_id)
+        {
+            $selected = " selected ";
+        }
+
+        echo"<option value=\"".$adm_photo_child["pho_id"]."\" $selected>".$vorschub."&#151;".$adm_photo_child["pho_name"]
+        ."&nbsp(".mysqldate("y", $adm_photo_child["pho_begin"]).")</option>";
+
+        subfolder($adm_photo_child["pho_id"], $vorschub, $photo_event, $pho_id);
+    }//while
+}//function
 
 /******************************HTML-Kopf******************************************/
 
@@ -133,12 +163,12 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 echo"
 <div class=\"formHead\">";
     //bei neuer Veranstaltung
-    if($_GET["aufgabe"]=="new")
+    if($_GET["job"]=="new")
     {
         echo "Neue Veranstaltung anlegen";
     }
     //bei bestehender Veranstaltung
-    if($_GET["aufgabe"]=="change")
+    if($_GET["job"]=="change")
     {
             echo "Veranstaltung bearbeiten";
     }
@@ -148,13 +178,13 @@ echo"</div>";
 echo"
 <div class=\"formBody\" align=\"center\">
     <form method=\"POST\" action=\"$g_root_path/adm_program/modules/photos/photo_event_function.php?pho_id=". $_GET["pho_id"];
-        if($_GET["aufgabe"]=="new")
+        if($_GET["job"]=="new")
         {
-            echo "&aufgabe=makenew\">";
+            echo "&job=makenew\">";
         }
-        if($_GET["aufgabe"]=="change")
+        if($_GET["job"]=="change")
         {
-            echo "&aufgabe=makechange\">";
+            echo "&job=makechange\">";
         }
 
         //Veranstaltung
@@ -162,89 +192,31 @@ echo"
         <div>
             <div style=\"text-align: right; width: 170px; float: left;\">Veranstaltung:</div>
             <div style=\"text-align: left; margin-left: 180px;\">
-                <input type=\"text\" id=\"veranstaltung\" name=\"veranstaltung\" style=\"width: 300px;\" maxlength=\"50\" tabindex=\"1\" value=\"".$form_values['veranstaltung']."\">
+                <input type=\"text\" id=\"pho_name\" name=\"pho_name\" style=\"width: 300px;\" maxlength=\"50\" tabindex=\"1\" value=\"".$photo_event->getValue("pho_name")."\">
                 <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
             </div>
-        </div>";
-
-        //Parent
-        //Suchen nach Kindern, Funktion mit selbstaufruf
-        function subfolder($parent_id, $vorschub, $pho_id, $adm_photo, $option)
-        {
-            global $g_adm_con;
-            global $form_values;
-            $vorschub=$vorschub."&nbsp;&nbsp;&nbsp;&nbsp;";
-
-            //Erfassen der auszugebenden Veranstaltung
-            $sql = "SELECT *
-                    FROM ". TBL_PHOTOS. "
-                    WHERE (pho_pho_id_parent ='$parent_id')";
-            $result_child = mysql_query($sql, $g_adm_con);
-            db_error($result_child,__FILE__,__LINE__);
-
-            while($adm_photo_child=mysql_fetch_array($result_child)){
-                if($adm_photo_child["pho_id"]!=NULL)
-                {
-                    if($adm_photo_child["pho_id"]!=$adm_photo["pho_pho_id_parent"] && $adm_photo_child["pho_id"]!=$pho_id && $option!=false)
-                    {
-                        echo"<option value=\"".$adm_photo_child["pho_id"]."\">".$vorschub."&#151;".$adm_photo_child["pho_name"]
-                        ."&nbsp(".mysqldate("y", $adm_photo_child["pho_begin"]).")</option>";
-                    }
-                    if($adm_photo_child["pho_id"]==$form_values['parent'] && $option!=false)
-                    {
-                        echo"<option value=\"".$adm_photo_child["pho_id"]."\" selected=\"selected\">".$vorschub."&#151;".$adm_photo_child["pho_name"]
-                        ."&nbsp(".mysqldate("y", $adm_photo_child["pho_begin"]).")</option>";
-                    }
-
-                    //Versnstaltung selbst darf nicht ausgewaehlt werden
-                    if($adm_photo_child["pho_id"]!=$adm_photo["pho_pho_id_parent"] && $adm_photo_child["pho_id"]==$pho_id && $_GET["aufgabe"]=="change" || $option==false )
-                    {
-                        echo"<option value=\"".$adm_photo_child["pho_id"]."\" disabled=\"disabled\">".$vorschub."&#151;".$adm_photo_child["pho_name"]
-                        ."&nbsp(".mysqldate("y", $adm_photo_child["pho_begin"]).")</option>";
-                        $option=false;
-                    }
-
-                    $parent_id = $adm_photo_child["pho_id"];
-                    subfolder($parent_id, $vorschub, $pho_id, $adm_photo, $option);
-                }//if
-            }//while
-        }//function
-
-        echo"
+        </div>
         <div style=\"margin-top: 6px;\">
            <div style=\"text-align: right; width: 170px; float: left;\">in Ordner:</div>
            <div style=\"text-align: left; margin-left: 180px;\">
-                <select size=\"1\" name=\"parent\" tabindex=\"2\">
+                <select size=\"1\" name=\"pho_pho_id_parent\" tabindex=\"2\">
                     <option value=\"0\">Fotogalerien(Hauptordner)</option>";
 
-                    while($adm_photo_list = mysql_fetch_array($result_list)){
-                        if($adm_photo_list["pho_pho_id_parent"]==NULL)
+                    while($adm_photo_list = mysql_fetch_array($result_list))
+                    {
+                        //Wenn die Elternveranstaltung von pho_id dann selected
+                        $selected = 0;
+                        if(($adm_photo_list["pho_id"] == $photo_event->getValue("pho_pho_id_parent"))
+                        ||  $adm_photo_list["pho_id"] == $pho_id)
                         {
-                            //Wenn die Elternveranstaltung von pho_id dann selectet
-                            if($adm_photo_list["pho_id"]==$form_values['parent'] || ($_GET["aufgabe"]=="new" && $pho_id==$adm_photo_list["pho_id"]))
-                            {
-                                echo"<option value=\"".$adm_photo_list["pho_id"]."\" selected=\"selected\">".$adm_photo_list["pho_name"]
-                                ."&nbsp;(".mysqldate("y", $adm_photo_list["pho_begin"]).")</option>";
-                                $option=true;
-                            }
-                            //Normal
-                            if($pho_id!=$adm_photo_list["pho_id"] && $adm_photo_list["pho_id"]!=$adm_photo["pho_pho_id_parent"])
-                            {
-                                echo"<option value=\"".$adm_photo_list["pho_id"]."\">".$adm_photo_list["pho_name"]
-                                ."&nbsp;(".mysqldate("y", $adm_photo_list["pho_begin"]).")</option>";
-                                $option=true;
-                            }
-                            //Versnstaltung selbst darf nicht ausgewaehlt werden
-                            if($pho_id==$adm_photo_list["pho_id"] && $_GET["aufgabe"]=="change")
-                            {
-                                echo"<option value=\"".$adm_photo_list["pho_id"]."\" disabled=\"disabled\">".$adm_photo_list["pho_name"]
-                                ."&nbsp;(".mysqldate("y", $adm_photo_list["pho_begin"]).")</option>";
-                                $option=false;
-                            }
-                            $parent_id = $adm_photo_list["pho_id"];
-                            //Auftruf der Funktion
-                            subfolder($parent_id, $vorschub, $pho_id, $adm_photo, $option);
-                        }//if
+                            $selected = " selected ";
+                        }
+                        
+                        echo"<option value=\"".$adm_photo_list["pho_id"]."\" $selected>".$adm_photo_list["pho_name"]
+                        ."&nbsp;(".mysqldate("y", $adm_photo_list["pho_begin"]).")</option>";
+                        
+                        //Auftruf der Funktion
+                        subfolder($adm_photo_list["pho_id"], "", $photo_event, $pho_id);
                     }//while
                     echo"
                 </select>
@@ -256,7 +228,7 @@ echo"
         <div style=\"margin-top: 6px;\">
             <div style=\"text-align: right; width: 170px; float: left;\">Beginn:</div>
             <div style=\"text-align: left; margin-left: 180px;\">
-                <input type=\"text\" name=\"beginn\" size=\"10\" tabindex=\"3\" maxlength=\"10\" value=\"".$form_values['beginn']."\">
+                <input type=\"text\" name=\"pho_begin\" size=\"10\" tabindex=\"3\" maxlength=\"10\" value=\"". $photo_event->getValue("pho_begin")."\">
                 <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
             </div>
         </div>";
@@ -266,7 +238,7 @@ echo"
         <div style=\"margin-top: 6px;\">
             <div style=\"text-align: right; width: 170px; float: left;\">Ende:</div>
             <div style=\"text-align: left; margin-left: 180px;\">
-                <input type=\"text\" name=\"ende\" size=\"10\" tabindex=\"4\" maxlength=\"10\" value=\"".$form_values['ende']."\">
+                <input type=\"text\" name=\"pho_end\" size=\"10\" tabindex=\"4\" maxlength=\"10\" value=\"". $photo_event->getValue("pho_end")."\">
             </div>
         </div>";
 
@@ -275,7 +247,7 @@ echo"
         <div style=\"margin-top: 6px;\">
             <div style=\"text-align: right; width: 170px; float: left;\">Fotografen:</div>
             <div style=\"text-align: left; margin-left: 180px;\">
-                <input type=\"text\" name=\"photographen\" style=\"width: 300px;\" tabindex=\"5\" maxlength=\"100\" value=\"".$form_values['photographen']."\">
+                <input type=\"text\" name=\"pho_photographers\" style=\"width: 300px;\" tabindex=\"5\" maxlength=\"100\" value=\"".$photo_event->getValue("pho_photographers")."\">
             </div>
         </div>";
 
@@ -284,9 +256,9 @@ echo"
         <div style=\"margin-top: 6px;\">
             <div style=\"text-align: right; width: 170px; float: left;\">Sperren:</div>
             <div style=\"text-align: left; margin-left: 180px;\">";
-                echo "<input type=\"checkbox\" name=\"locked\" id=\"locked\" tabindex=\"6\" value=\"1\"";
+                echo "<input type=\"checkbox\" name=\"pho_locked\" id=\"locked\" tabindex=\"6\" value=\"1\"";
 
-                if($form_values['locked']==1)
+                if($photo_event->getValue("pho_locked") == 1)
                 {
                     echo "checked = \"checked\" ";
                 }

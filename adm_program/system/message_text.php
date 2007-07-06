@@ -308,22 +308,20 @@ $message_text = array(
     "dateiendungphotoup" =>
         "Die ausgewählte Datei ist nicht im JPG-Format gespeichert.<br />",
 
-    "startdatum" =>
-        "Es muss ein gültiges Startdatum für die Veranstalltung eingegeben werden.<br />",
-
-    "enddatum" =>
-        "Das eingegebene Enddatum ist ungültig.<br />",
-
     "startvorend" =>
         "Das eingegebene Enddatum liegt vor dem Anfangsdatum.<br />",
-
-    "veranstaltung" =>
-        "Es muss ein Name für die Veranstaltung eingegeben weden.<br />",
 
     "delete_veranst" =>
         "Willst du die Veranstaltung:<br />
         <b>%VAR1%</b><br />wirklich löschen?<br>
         Alle enthaltenen Unterveranstaltungen und Bilder gehen verloren.",
+        
+    "event_deleted" =>
+        "Die Veranstaltung wurde erfolgreich gelöscht.",
+        
+    "event_deleted_error" =>
+        "Beim Löschen der Veranstaltung sind Probleme aufgetreten.<br>
+        Es konnten nicht alle Dateien bzw. Datensätze der Veranstaltung gelöscht werden.",
 
     "delete_photo" =>
         "Soll das ausgewählte Foto wirklich gelöscht werden?",

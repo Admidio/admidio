@@ -25,6 +25,7 @@
  *
  *****************************************************************************/
 
+require("../../system/photo_event_class.php");
 require("../../system/common.php");
 require("../../system/login_valid.php");
 require("photo_function.php");
@@ -54,38 +55,26 @@ if (empty($_POST))
     $g_message->show("empty_photo_post", ini_get(post_max_size));
 }
 
-//Uebernahme Variablen
-$pho_id= $_GET['pho_id'];
-
-//erfassen der Veranstaltung
-$sql = "    SELECT *
-            FROM ". TBL_PHOTOS. "
-            WHERE pho_id = {0}";
-$sql    = prepareSQL($sql, array($pho_id));
-$result = mysql_query($sql, $g_adm_con);
-db_error($result,__FILE__,__LINE__);
-$adm_photo = mysql_fetch_array($result);
+// Fotoveranstaltungs-Objekt erzeugen oder aus Session lesen
+if(isset($_SESSION['photo_event']) && $_SESSION['photo_event']->getValue("pho_id") == $_GET["pho_id"])
+{
+    $photo_event =& $_SESSION['photo_event'];
+    $photo_event->db_connection = $g_adm_con;
+}
+else
+{
+    $photo_event = new PhotoEvent($g_adm_con, $_GET["pho_id"]);
+    $_SESSION['photo_event'] =& $photo_event;
+}
 
 // pruefen, ob Veranstaltung zur aktuellen Organisation gehoert
-if($adm_photo['pho_org_shortname'] != $g_organization)
+if($photo_event->getValue('pho_org_shortname') != $g_organization)
 {
     $g_message->show("invalid");
 }
 
 //Ordnerpfad
-$ordner = "../../../adm_my_files/photos/".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"];
-
-//Erfassen der Eltern Veranstaltung
-if($adm_photo["pho_pho_id_parent"]!=NULL)
-{
-    $pho_parent_id=$adm_photo["pho_pho_id_parent"];
-    $sql="  SELECT *
-            FROM ". TBL_PHOTOS. "
-            WHERE pho_id = $pho_parent_id";
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
-    $adm_photo_parent = mysql_fetch_array($result);
-}
+$ordner = "../../../adm_my_files/photos/".$photo_event->getValue("pho_begin")."_".$photo_event->getValue("pho_id");
 
 //Kontrollmechanismen bei Upload
 if($_POST["upload"])
@@ -140,58 +129,54 @@ if($_POST["upload"])
     //Anlegen des Berichts
     echo"
     <div style=\"width: 670px\" align=\"center\" class=\"formHead\">Bericht</div>
-    <div style=\"width: 670px\" align=\"center\" class=\"formBody\">Bitte einen Moment Geduld. Die Bilder wurden der Veranstaltung <br> - ".$adm_photo["pho_name"]." - <br>erfolgreich hinzugef&uuml;gt, wenn sie hier angezeigt werden.<br>";
+    <div style=\"width: 670px\" align=\"center\" class=\"formBody\">Bitte einen Moment Geduld. 
+        Die Bilder wurden der Veranstaltung <br> - ".$photo_event->getValue("pho_name")." - <br>
+        erfolgreich hinzugef&uuml;gt, wenn sie hier angezeigt werden.<br>";
 
-         //Verarbeitungsschleife fuer die einzelnen Bilder
-            $bildnr=$adm_photo["pho_quantity"];
-            for($x=0; $x<=4; $x=$x+1)
+        //Verarbeitungsschleife fuer die einzelnen Bilder
+        $bildnr=$photo_event->getValue("pho_quantity");
+        for($x=0; $x<=4; $x=$x+1)
+        {
+            $y=$x+1;
+            if($_FILES["bilddatei"]["name"][$x]!=NULL && $ordner!=NULL)
             {
-                $y=$x+1;
-                if($_FILES["bilddatei"]["name"][$x]!=NULL && $ordner!=NULL)
+                //errechnen der neuen Bilderzahl
+                $bildnr++;
+                echo "<br>Bild $bildnr:<br>";
+
+                //Bild in Tempordner verschieben, groeße aendern und speichern
+                if(move_uploaded_file($_FILES["bilddatei"]["tmp_name"][$x], "../../../adm_my_files/photos/temp".$y.".jpg"))
                 {
-                    //errechnen der neuen Bilderzahl
-                    $bildnr++;
-                    echo "<br>Bild $bildnr:<br>";
+                    $temp_bild="../../../adm_my_files/photos/temp".$y.".jpg";
 
-                    //Bild in Tempordner verschieben, groeße aendern und speichern
-                    if(move_uploaded_file($_FILES["bilddatei"]["tmp_name"][$x], "../../../adm_my_files/photos/temp".$y.".jpg"))
+                    //Bild skalliert speichern
+                    image_save($temp_bild, $g_preferences['photo_save_scale'], $ordner."/".$bildnr.".jpg");
+
+                    //Loeschen des Bildes aus Arbeitsspeicher
+                    if(file_exists("../../../adm_my_files/photos/temp".$y.".jpg"))
                     {
-                        $temp_bild="../../../adm_my_files/photos/temp".$y.".jpg";
-                        
-                        //Bild skalliert speichern
-                        image_save($temp_bild, $g_preferences['photo_save_scale'], $ordner."/".$bildnr.".jpg");
-
-                        //Loeschen des Bildes aus Arbeitsspeicher
-                        if(file_exists("../../../adm_my_files/photos/temp".$y.".jpg"))
-                        {
-                            unlink("../../../adm_my_files/photos/temp".$y.".jpg");
-                        }
-                    }//Ende Bild speichern
-
-
-                    //Kontrolle
-                    if(file_exists($ordner."/".$bildnr.".jpg"))
-                    {
-                        echo"<img src=\"photo_show.php?scal=".$g_preferences['photo_save_scale']."&aufgabe=anzeigen&bild=$ordner/$bildnr.jpg\"><br><br>";
-                        //Aendern der Datenbankeintaege
-                        $sql=" UPDATE ". TBL_PHOTOS. "
-                               SET   pho_quantity = {0},
-                                     pho_last_change ={1},
-                                     pho_usr_id_change = {2}
-                               WHERE pho_id = {3}";
-                        $sql    = prepareSQL($sql, array($bildnr, $act_datetime, $g_current_user->getValue("usr_id"),$pho_id));
-                        $result = mysql_query($sql, $g_adm_con);
-                        db_error($result,__FILE__,__LINE__);
+                        unlink("../../../adm_my_files/photos/temp".$y.".jpg");
                     }
-                    else
-                    {
-                        $bildnr--;
-                        echo"Das Bild konnte nicht verarbeitet werden.";
-                    }
-                    unset($y);
-                }//if($bilddatei!= "")
-            }//for
+                }//Ende Bild speichern
 
+
+                //Kontrolle
+                if(file_exists($ordner."/".$bildnr.".jpg"))
+                {
+                    echo"<img src=\"photo_show.php?scal=".$g_preferences['photo_save_scale']."&bild=$ordner/$bildnr.jpg\"><br><br>";
+
+                    //Aendern der Datenbankeintaege
+                    $photo_event->setValue("pho_quantity", $photo_event->getValue("pho_quantity")+1);
+                    $photo_event->save($g_current_user->getValue("usr_id"));
+                }
+                else
+                {
+                    $bildnr--;
+                    echo"Das Bild konnte nicht verarbeitet werden.";
+                }
+                unset($y);
+            }//if($bilddatei!= "")
+        }//for
 
         //Buttons
         echo"
