@@ -31,24 +31,31 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
+
 require_once("../../system/common.php");
-require_once("../../system/login_valid.php");
+require_once("../../system/photo_event_class.php");
 
-// pruefen ob das Modul ueberhaupt aktiviert ist
-if ($g_preferences['enable_photo_module'] != 1)
+// die Funktionen sollten auch ausgeloggt irgendwo benutzt werden koennen
+if(isset($_GET["job"]))
 {
-    // das Modul ist deaktiviert
-    $g_message->show("module_disabled");
-}
+    require_once("../../system/login_valid.php");
 
-// erst pruefen, ob der User Fotoberarbeitungsrechte hat
-if(!$g_current_user->editPhotoRight())
-{
-    $g_message->show("photoverwaltunsrecht");
-}
+    // pruefen ob das Modul ueberhaupt aktiviert ist
+    if ($g_preferences['enable_photo_module'] != 1)
+    {
+        // das Modul ist deaktiviert
+        $g_message->show("module_disabled");
+    }
 
-//URL auf Navigationstack ablegen
-$_SESSION['navigation']->addUrl($g_current_url);
+    // erst pruefen, ob der User Fotoberarbeitungsrechte hat
+    if(!$g_current_user->editPhotoRight())
+    {
+        $g_message->show("photoverwaltunsrecht");
+    }
+
+    //URL auf Navigationstack ablegen
+    $_SESSION['navigation']->addUrl($g_current_url);
+}
 
 // Uebergabevariablen pruefen
 
@@ -136,15 +143,10 @@ function right_rotate ($pho_id, $bild)
     header("Content-Type: image/jpeg");
 
     //Aufruf der ggf. Uebergebenen Veranstaltung
-    $sql = "    SELECT *
-                FROM ". TBL_PHOTOS. "
-                WHERE (pho_id ='$pho_id')";
-    $result_event = mysql_query($sql, $g_adm_con);
-    db_error($result_event,__FILE__,__LINE__);
-    $adm_photo = mysql_fetch_array($result_event);
+    $photo_event = new PhotoEvent($g_adm_con, $pho_id);
 
     //Ordnerpfad zusammensetzen
-    $ordner = "../../../adm_my_files/photos/".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"];
+    $ordner = "../../../adm_my_files/photos/".$photo_event->getValue("pho_begin")."_".$photo_event->getValue("pho_id");
 
     //Ermittlung der Original Bildgroessee
     $bildgroesse = getimagesize("$ordner/$bild.jpg");
@@ -189,15 +191,10 @@ function left_rotate ($pho_id, $bild)
     header("Content-Type: image/jpeg");
 
     //Aufruf der ggf. Uebergebenen Veranstaltung
-    $sql = "    SELECT *
-                FROM ". TBL_PHOTOS. "
-                WHERE (pho_id ='$pho_id')";
-    $result_event = mysql_query($sql, $g_adm_con);
-    db_error($result_event,__FILE__,__LINE__);
-    $adm_photo = mysql_fetch_array($result_event);
+    $photo_event = new PhotoEvent($g_adm_con, $pho_id);
 
     //Ordnerpfad zusammensetzen
-    $ordner = "../../../adm_my_files/photos/".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"];
+    $ordner = "../../../adm_my_files/photos/".$photo_event->getValue("pho_begin")."_".$photo_event->getValue("pho_id");
 
     //Ermittlung der Original Bildgroessee
     $bildgroesse = getimagesize("$ordner/$bild.jpg");
@@ -239,21 +236,15 @@ function delete ($pho_id, $bild)
     global $g_current_user;
     global $g_adm_con;
     global $g_organization;
-    global $act_datetime;
 
-    //erfassen der Veranstaltung
-    $sql = "    SELECT *
-                FROM ". TBL_PHOTOS. "
-                WHERE (pho_id ='$pho_id')";
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
-    $adm_photo = mysql_fetch_array($result);
-
+    // einlesen der Veranstaltung
+    $photo_event = new PhotoEvent($g_adm_con, $pho_id);
+    
     //Speicherort
-    $ordner = "../../../adm_my_files/photos/".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"];
+    $ordner = "../../../adm_my_files/photos/".$photo_event->getValue("pho_begin")."_".$photo_event->getValue("pho_id");
 
     //Bericht mit loeschen
-    $neuebilderzahl = $adm_photo["pho_quantity"]-1;
+    $neuebilderzahl = $photo_event->getValue("pho_quantity")-1;
 
     //Bilder loeschen
     if(file_exists("$ordner/$bild.jpg"))
@@ -264,7 +255,7 @@ function delete ($pho_id, $bild)
 
     //Umbennenen der Restbilder
     $neuenr=1;
-    for($x=1; $x<=$adm_photo["pho_quantity"]; $x++)
+    for($x=1; $x<=$photo_event->getValue("pho_quantity"); $x++)
     {
         if(file_exists("$ordner/$x.jpg"))
         {
@@ -276,14 +267,9 @@ function delete ($pho_id, $bild)
         }//if
    }//for
 
-   //&Auml;ndern der Datenbankeintaege
-    $sql="  UPDATE ". TBL_PHOTOS. "
-            SET pho_quantity      = '$neuebilderzahl',
-                pho_last_change   ='$act_datetime',
-                pho_usr_id_change = ". $g_current_user->getValue("usr_id"). "
-            WHERE pho_id = $pho_id ";
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
+   // Aendern der Datenbankeintaege
+   $photo_event->setValue("pho_quantity", $neuebilderzahl);
+   $photo_event->save($g_current_user->getValue("usr_id"));
 };
 
 //Nutzung der rotatefunktion
@@ -312,14 +298,6 @@ if(isset($_GET["job"]) && $_GET["job"]=="delete_request")
 //Nutzung der Loeschfunktion
 if(isset($_GET["job"]) && $_GET["job"]=="do_delete")
 {
-    //erfassen der Veranstaltung
-    $sql = "    SELECT *
-                FROM ". TBL_PHOTOS. "
-                WHERE (pho_id ='$pho_id')";
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
-    $adm_photo = mysql_fetch_array($result);
-
     //Aufruf der entsprechenden Funktion
     delete($pho_id, $_GET["bild"]);
 

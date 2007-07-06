@@ -26,6 +26,7 @@
  *
  *****************************************************************************/
 
+require("../../system/photo_event_class.php");
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
@@ -59,40 +60,26 @@ if($ini!=1)
 //URL auf Navigationstack ablegen
 $_SESSION['navigation']->addUrl($g_current_url);
 
-//Uebernahme Variablen
-$pho_id= $_GET['pho_id'];
-
-//erfassen der Veranstaltung
-$sql = "    SELECT *
-            FROM ". TBL_PHOTOS. "
-            WHERE pho_id ={0}";
-$sql    = prepareSQL($sql, array($pho_id));
-$result = mysql_query($sql, $g_adm_con);
-db_error($result,__FILE__,__LINE__);
-$adm_photo = mysql_fetch_array($result);
+// Fotoveranstaltungs-Objekt erzeugen oder aus Session lesen
+if(isset($_SESSION['photo_event']) && $_SESSION['photo_event']->getValue("pho_id") == $_GET["pho_id"])
+{
+    $photo_event =& $_SESSION['photo_event'];
+    $photo_event->db_connection = $g_adm_con;
+}
+else
+{
+    $photo_event = new PhotoEvent($g_adm_con, $_GET["pho_id"]);
+    $_SESSION['photo_event'] =& $photo_event;
+}
 
 // pruefen, ob Veranstaltung zur aktuellen Organisation gehoert
-if($adm_photo['pho_org_shortname'] != $g_organization)
+if($photo_event->getValue("pho_org_shortname") != $g_organization)
 {
     $g_message->show("invalid");
 }
 
 //Ordnerpfad
-$ordner = "../../../adm_my_files/photos/".$adm_photo["pho_begin"]."_".$adm_photo["pho_id"];
-
-//Erfassen der Eltern Veranstaltung
-if($adm_photo["pho_pho_id_parent"]!=NULL)
-{
-    $pho_parent_id=$adm_photo["pho_pho_id_parent"];
-    $sql="  SELECT *
-            FROM ". TBL_PHOTOS. "
-            WHERE pho_id ='$pho_parent_id'";
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
-    $adm_photo_parent = mysql_fetch_array($result);
-}
-else $adm_photo_parent = NULL;
-
+$ordner = "../../../adm_my_files/photos/".$photo_event->getValue("pho_begin")."_".$photo_event->getValue("pho_id");
 
 // Html-Kopf ausgeben
 $g_layout['title'] = "Fotos hochladen";
@@ -100,12 +87,12 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 /**************************Formular********************************************************/
 echo"
-<form name=\"photoup\" method=\"post\" action=\"$g_root_path/adm_program/modules/photos/photoupload_do.php?pho_id=$pho_id\" enctype=\"multipart/form-data\">
+<form name=\"photoup\" method=\"post\" action=\"$g_root_path/adm_program/modules/photos/photoupload_do.php?pho_id=". $_GET['pho_id']. "\" enctype=\"multipart/form-data\">
     <div style=\"width: 410px\" align=\"center\" class=\"formHead\">Bilder hochladen</div>
     <div style=\"width: 410px\" align=\"center\" class=\"formBody\">
         Bilder zu dieser Veranstaltung hinzuf&uuml;gen:<br>"
-        .$adm_photo["pho_name"]."<br>"
-        ."(Beginn: ". mysqldate("d.m.y", $adm_photo["pho_begin"]).")"
+        .$photo_event->getValue("pho_name")."<br>"
+        ."(Beginn: ". mysqldate("d.m.y", $photo_event->getValue("pho_begin")).")"
         ."<hr class=\"formLine\" width=\"85%\" />
         <p>Bild 1:<input type=\"file\" id=\"bilddatei1\" name=\"bilddatei[]\" value=\"durchsuchen\"></p>
         <p>Bild 2:<input type=\"file\" name=\"bilddatei[]\" value=\"durchsuchen\"></p>

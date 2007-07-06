@@ -28,6 +28,7 @@
  *
  *****************************************************************************/
 
+require("../../system/photo_event_class.php");
 require("../../system/common.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
@@ -36,7 +37,6 @@ if ($g_preferences['enable_photo_module'] != 1)
     // das Modul ist deaktiviert
     $g_message->show("module_disabled");
 }
-
 
 // Uebergabevariablen pruefen
 
@@ -51,47 +51,27 @@ if(isset($_GET["bild"]) && is_numeric($_GET["bild"]) == false)
 }
 
 //Uebernahme der uebergebenen variablen
-$pho_id= $_GET['pho_id'];
-$bild= $_GET['bild'];
+$pho_id = $_GET['pho_id'];
+$bild   = $_GET['bild'];
 
 //erfassen der Veranstaltung falls noch nicht in Session gespeichert
-if(!isset($_SESSION['photo_event']) || $_SESSION['photo_event']['pho_id']!= $pho_id)
+if(isset($_SESSION['photo_event']) && $_SESSION['photo_event']->getValue("pho_id") == $pho_id)
 {
-    $sql="  SELECT *
-            FROM ". TBL_PHOTOS. "
-            WHERE pho_id ={0}";
-    $sql    = prepareSQL($sql, array($pho_id));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
-    $adm_photo = mysql_fetch_array($result);
-
-    //Variablen in Session schreiben
-    $_SESSION['photo_event']['pho_id']= $adm_photo['pho_id'];
-    $_SESSION['photo_event']['pho_org_schortname']= $adm_photo['pho_org_schortname'];
-    $_SESSION['photo_event']['pho_quantity']= $adm_photo['pho_quantity'];
-    $_SESSION['photo_event']['pho_name']= $adm_photo['pho_name'];
-    $_SESSION['photo_event']['pho_begin']= $adm_photo['pho_begin'];
-    $_SESSION['photo_event']['pho_end']= $adm_photo['pho_end'];
-    $_SESSION['photo_event']['pho_photographers']= $adm_photo['pho_photographers'];
-    $_SESSION['photo_event']['pho_usr_id']= $adm_photo['pho_usr_id'];
-    $_SESSION['photo_event']['pho_timestamp']= $adm_photo['pho_timestamp'];
-    $_SESSION['photo_event']['pho_locked']= $adm_photo['pho_locked'];
-    $_SESSION['photo_event']['pho_pho_id_parent']= $adm_photo['pho_pho_id_parent'];
-    $_SESSION['photo_event']['pho_last_change']= $adm_photo['pho_last_change'];
-    $_SESSION['photo_event']['pho_usr_id_change']= $adm_photo['pho_usr_id_change'];
-
+    $photo_event =& $_SESSION['photo_event'];
+    $photo_event->db_connection = $g_adm_con;
+}
+else
+{
+    $photo_event = new PhotoEvent($g_adm_con, $pho_id);
+    $_SESSION['photo_event'] =& $photo_event;
 }
 
-
-//Aanzahl der Bilder
-$bilder = $_SESSION['photo_event']['pho_quantity'];
-
 //Naechstes und Letztes Bild
-$last=$bild-1;
-$next=$bild+1;
+$prev_image = $bild-1;
+$next_image = $bild+1;
 
 //Ordnerpfad zusammensetzen
-$ordner_foto = "/adm_my_files/photos/".$_SESSION['photo_event']['pho_begin']."_".$_SESSION['photo_event']['pho_id'];
+$ordner_foto = "/adm_my_files/photos/".$photo_event->getValue("pho_begin")."_".$photo_event->getValue("pho_id");
 $ordner      = SERVER_PATH. $ordner_foto;
 $ordner_url  = $g_root_path. $ordner_foto;
 
@@ -106,31 +86,32 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 //Ausgabe der Eine Tabelle Kopfzelle mit &Uuml;berschrift, Photographen und Datum
 //untere Zelle mit Buttons Bild und Fenster Schlie&szlig;en Button
 echo "
-<div class=\"formHead\" style=\"width:".$body_with."px\">".$_SESSION['photo_event']['pho_name']."</div>
+<div class=\"formHead\" style=\"width:".$body_with."px\">".$photo_event->getValue("pho_name")."</div>
 <div class=\"formBody\" style=\"width:".$body_with."px; height: ".$body_height."px;\">";
-    echo"Datum: ".mysqldate("d.m.y", $_SESSION['photo_event']['pho_begin']);
-    if($_SESSION['photo_event']['pho_end'] != $_SESSION['photo_event']['pho_begin'])
+    echo"Datum: ".mysqldate("d.m.y", $photo_event->getValue("pho_begin"));
+    if($photo_event->getValue("pho_end") != $photo_event->getValue("pho_begin")
+    && strlen($photo_event->getValue("pho_end")) > 0)
     {
-        echo " bis ".mysqldate("d.m.y", $_SESSION['photo_event']['pho_end']);
+        echo " bis ".mysqldate("d.m.y", $photo_event->getValue("pho_end"));
     }
-    echo "<br>Fotos von: ".$_SESSION['photo_event']['pho_photographers']."<br><br>";
+    echo "<br>Fotos von: ".$photo_event->getValue("pho_photographers")."<br><br>";
 
     //Vor und zurueck buttons
-    if($last>0)
+    if($prev_image > 0)
     {
         echo"<span class=\"iconLink\">
-            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photopopup.php?bild=$last&pho_id=$pho_id\"><img 
+            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photopopup.php?bild=$prev_image&pho_id=$pho_id\"><img 
                 class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" alt=\"Vorheriges Bild\">
             </a>
-            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photopopup.php?bild=$last&pho_id=$pho_id\">Vorheriges Bild</a>
+            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photopopup.php?bild=$prev_image&pho_id=$pho_id\">Vorheriges Bild</a>
         </span>
         &nbsp;&nbsp;&nbsp;&nbsp;";
     }
-    if($next<=$bilder)
+    if($next_image <= $photo_event->getValue("pho_quantity"))
     {
         echo"<span class=\"iconLink\">
-            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photopopup.php?bild=$next&pho_id=$pho_id\">N&auml;chstes Bild</a>
-            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photopopup.php?bild=$next&pho_id=$pho_id\"><img 
+            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photopopup.php?bild=$next_image&pho_id=$pho_id\">N&auml;chstes Bild</a>
+            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photopopup.php?bild=$next_image&pho_id=$pho_id\"><img 
                 class=\"iconLink\" src=\"$g_root_path/adm_program/images/forward.png\" alt=\"N&auml;chstes Bild\">
             </a>
         </span>";
