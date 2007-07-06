@@ -179,7 +179,7 @@ if ($_GET['id'] == 0 && ($g_current_user->editWeblinksRight() || $g_preferences[
             &nbsp;&nbsp;&nbsp;&nbsp;
             <span class=\"iconLink\">
                 <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/categories.php?type=LNK\"><img
-                src=\"$g_root_path/adm_program/images/application_double.png\" alt=\"Kategorien pflegen\"></a>
+                class=\"iconLink\" src=\"$g_root_path/adm_program/images/application_double.png\" alt=\"Kategorien pflegen\"></a>
                 <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/categories.php?type=LNK\">Kategorien pflegen</a>
             </span>
         </p>";
