@@ -83,7 +83,14 @@ class Date
                 // Daten in das Klassenarray schieben
                 foreach($row as $key => $value)
                 {
-                    $this->db_fields[$key] = $value;
+                    if(is_null($value))
+                    {
+                        $this->db_fields[$key] = "";
+                    }
+                    else
+                    {
+                        $this->db_fields[$key] = $value;
+                    }
                 }
             }
         }
@@ -98,7 +105,7 @@ class Date
         {
             foreach($this->db_fields as $key => $value)
             {
-                $this->db_fields[$key] = null;
+                $this->db_fields[$key] = "";
             }
         }
         else
@@ -111,7 +118,7 @@ class Date
             
             while ($row = mysql_fetch_array($result))
             {
-                $this->db_fields[$row['Field']] = null;
+                $this->db_fields[$row['Field']] = "";
             }
         }
     }
@@ -132,31 +139,29 @@ class Date
         $field_name  = strStripTags($field_name);
         $field_value = strStripTags($field_value);
         
-        if(strlen($field_value) == 0)
+        if(strlen($field_value) > 0)
         {
-            $field_value = null;
+            // Plausibilitaetspruefungen
+            switch($field_name)
+            {
+                case "dat_id":
+                case "dat_usr_id":
+                case "dat_usr_id_change":
+                    if(is_numeric($field_value) == false)
+                    {
+                        $field_value = null;
+                    }
+                    break;
+
+                case "dat_global":
+                    if($field_value != 1)
+                    {
+                        $field_value = 0;
+                    }
+                    break;
+            }
         }
-        
-        // Plausibilitaetspruefungen
-        switch($field_name)
-        {
-            case "dat_id":
-            case "dat_usr_id":
-            case "dat_usr_id_change":
-                if(is_numeric($field_value) == false)
-                {
-                    $field_value = null;
-                }
-                break;
-            
-            case "dat_global":
-                if($field_value != 1)
-                {
-                    $field_value = 0;
-                }
-                break;
-        }
-                
+
         if(isset($this->db_fields[$field_name])
         && $field_value != $this->db_fields[$field_name])
         {
@@ -182,16 +187,16 @@ class Date
             if($login_user_id > 0)
             {
                 // Default-Felder vorbelegen
-                if($this->db_fields['dat_id'] == 0)
+                if($this->db_fields['dat_id'] > 0)
+                {
+                    $this->db_fields['dat_last_change']   = date("Y-m-d H:i:s", time());
+                    $this->db_fields['dat_usr_id_change'] = $login_user_id;
+                }
+                else
                 {
                     $this->db_fields['dat_timestamp']     = date("Y-m-d H:i:s", time());
                     $this->db_fields['dat_usr_id']        = $login_user_id;
                     $this->db_fields['dat_org_shortname'] = $organization;
-                }
-                else
-                {
-                    $this->db_fields['dat_last_change']   = date("Y-m-d H:i:s", time());
-                    $this->db_fields['dat_usr_id_change'] = $login_user_id;
                 }
             }
             

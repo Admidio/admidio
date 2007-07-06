@@ -93,15 +93,15 @@ $_SESSION['dates_request'] = $_REQUEST;
 
 if($_GET["mode"] == 1 || $_GET["mode"] == 3)
 {
-    if(strlen(trim($_POST['dat_headline'])) == 0)
+    if(strlen($_POST['dat_headline']) == 0)
     {
         $g_message->show("feld", "&Uuml;berschrift");
     }
-    if(strlen(trim($_POST['dat_description'])) == 0)
+    if(strlen($_POST['dat_description']) == 0)
     {
         $g_message->show("feld", "Beschreibung");
     }
-    if(strlen(trim($_POST['date_from'])) == 0)
+    if(strlen($_POST['date_from']) == 0)
     {
         $g_message->show("feld", "Datum Beginn");
     }
