@@ -360,7 +360,7 @@ class PhotoEvent
                 {
                     // nun den entsprechenden Ordner loeschen
                     $this->deleteInFilesystem($act_folder_entry);
-                    chmod($act_folder_entry, 0777);
+                    @chmod($act_folder_entry, 0777);
                     if(@rmdir($act_folder_entry) == false)
                     {
                         return false;
@@ -371,7 +371,7 @@ class PhotoEvent
                     // die Datei loeschen
                     if(file_exists($act_folder_entry))
                     {
-                        chmod($act_folder_entry, 0777);
+                        @chmod($act_folder_entry, 0777);
                         if(@unlink($act_folder_entry) == false)
                         {
                             return false;
