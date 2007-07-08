@@ -217,6 +217,7 @@ if($g_current_session->getValue("ses_id") > 0)
             {
                 // User-Login ist gueltig
                 $g_valid_login = true;
+                $g_current_session->setValue("ses_timestamp", date("Y-m-d H:i:s", time()));
             }
             else
             {
