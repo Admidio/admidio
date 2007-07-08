@@ -53,7 +53,7 @@ if(!$g_current_user->editDownloadRight())
 }
 
 //testen ob Schreibrechte fuer adm_my_files bestehen
-if (decoct(fileperms("../../../adm_my_files/download"))!=40777)
+if (is_writeable("../../../adm_my_files/download") == false)
 {
     $g_message->show("invalid_folder");
 }

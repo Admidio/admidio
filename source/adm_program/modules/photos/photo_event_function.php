@@ -159,7 +159,7 @@ if(isset($_POST["submit"]) && $_POST["submit"])
     if ($_GET["job"]=="makenew")
     {
         //Wenn keine Schreibrechte Loeschen der Daten aus der Datenbank
-        if (decoct(fileperms("../../../adm_my_files/photos"))!=40777)
+        if(is_writeable("../../../adm_my_files/photos") == false)
         {
             $g_message->addVariableContent("adm_my_files/photos", 1);
             $g_message->addVariableContent($g_preferences['email_administrator'], 2);
@@ -188,7 +188,7 @@ if(isset($_POST["submit"]) && $_POST["submit"])
     {
         $ordnerneu = "$beginn"."_".$adm_photo["pho_id"];
         //testen ob Schreibrechte fuer adm_my_files bestehen
-        if (decoct(fileperms("../../../adm_my_files/photos"))!=40777)
+        if(is_writeable("../../../adm_my_files/photos") == false)
         {
             $g_message->addVariableContent("adm_my_files/photos", 1);
             $g_message->addVariableContent($g_preferences['email_administrator'], 2);
