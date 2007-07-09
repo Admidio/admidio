@@ -453,15 +453,15 @@ echo "
         if ($new_user == 2 && $g_preferences['enable_registration_captcha'] == 1)
         {
             echo "
-            <div style=\"margin-top: 6px;\">
-                <div style=\"text-align: left; margin-left: 32%;\">
+            <div style=\"margin-top: 10px;\">
+                <div style=\"text-align: left; margin-left: 28%;\">
                     <img src=\"$g_root_path/adm_program/system/captcha_class.php?id=". time(). "\" border=\"0\" alt=\"Captcha\" />
                 </div>
             </div>
 
             <div style=\"margin-top: 6px;\">
-                <div style=\"text-align: right; width: 30%; float: left;\">Best&auml;tigungscode:&nbsp;</div>
-                <div style=\"text-align: left; margin-left: 32%;\">
+                <div style=\"text-align: left; width: 26%; float: left;\">Best&auml;tigungscode:&nbsp;</div>
+                <div style=\"text-align: left; margin-left: 28%;\">
                     <input type=\"text\" id=\"captcha\" name=\"captcha\" style=\"width: 200px;\" maxlength=\"8\" value=\"\">&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>&nbsp;
                     <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                      onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=captcha_help','Message','width=400,height=320,left=310,top=200,scrollbars=yes')\">
@@ -517,11 +517,11 @@ echo "
 <script type=\"text/javascript\"><!--\n";
     if($g_current_user->editUser() || $new_user > 0)
     {
-        echo "document.getElementById('last_name').focus();";
+        echo "document.getElementById('usf-". $g_current_user->getProperty("Nachname", "usf_id"). "').focus();";
     }
     else
     {
-        echo "document.getElementById('address').focus();";
+        echo "document.getElementById('usf-". $g_current_user->getProperty("Adresse", "usf_id"). "').focus();";
     }
 echo "\n--></script>";
 
