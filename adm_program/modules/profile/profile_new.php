@@ -434,7 +434,7 @@ echo "
                                 <div style=\"text-align: left; width: 25%; float: left;\">Passwort:&nbsp;</div>
                                 <div style=\"text-align: left; margin-left: 27%;\">
                                     <button name=\"password\" type=\"button\" value=\"Passwort &auml;ndern\" onclick=\"window.open('password.php?user_id=$usr_id','Titel','width=350,height=260,left=310,top=200')\">
-                                    <img src=\"$g_root_path/adm_program/images/key.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Passwort &auml;ndern\">
+                                    <img src=\"$g_root_path/adm_program/images/key.png\" alt=\"Passwort &auml;ndern\">
                                     &nbsp;Passwort &auml;ndern</button>
                                 </div>
                             </div>";
@@ -486,11 +486,11 @@ echo "
         echo "
         <div style=\"margin-top: 6px;\">
             <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
-            <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
+            <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\">
             &nbsp;Zur&uuml;ck</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
             <button name=\"speichern\" type=\"submit\" value=\"speichern\">
-            <img src=\"$g_root_path/adm_program/images/$btn_image\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"$btn_text\">
+            <img src=\"$g_root_path/adm_program/images/$btn_image\" alt=\"$btn_text\">
             &nbsp;$btn_text</button>
         </div>";
 

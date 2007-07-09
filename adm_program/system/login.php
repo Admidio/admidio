@@ -57,7 +57,7 @@ echo "
         </div>
         <div style=\"margin-top: 15px; margin-bottom: 15px;\">
             <button name=\"login\" type=\"submit\" value=\"login\">
-            <img src=\"$g_root_path/adm_program/images/key.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Login\">
+            <img src=\"$g_root_path/adm_program/images/key.png\" alt=\"Login\">
             &nbsp;Login</button>
         </div>";
         if($g_preferences['registration_mode'] > 0)

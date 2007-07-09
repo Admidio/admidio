@@ -127,13 +127,13 @@ echo "</div>
     if($err_code == "")
     {
         echo "<button name=\"schliessen\" type=\"button\" value=\"schliessen\" onclick=\"window.close()\">
-        <img src=\"$g_root_path/adm_program/images/door_in.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\">
+        <img src=\"$g_root_path/adm_program/images/door_in.png\" alt=\"Schlie&szlig;en\">
         &nbsp;Schlie&szlig;en</button>";
     }
     else
     {
         echo "<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
-        <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\">
+        <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\">
         &nbsp;Zur&uuml;ck</button>";
     }
 echo "</div>";

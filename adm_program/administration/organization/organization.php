@@ -838,7 +838,7 @@ echo "
     <br />
     <div class=\"formBody\" style=\"text-align: center;\">
         <button name=\"save\" type=\"submit\" value=\"speichern\">
-            <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
+            <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\">
             &nbsp;Speichern</button>
     </div>
 </form>

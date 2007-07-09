@@ -60,6 +60,17 @@ h1 {
     color:            #666666;
 }
 
+/* Layout fuer Buttons mit Icon */
+button {
+	 padding-top: 		 2px;
+	 padding-bottom:   2px;
+}
+
+button img {
+	 vertical-align:   top;
+	 border-width:     0px;
+}
+
 /* Links */
 
 a:link, a:visited {

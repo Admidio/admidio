@@ -148,11 +148,11 @@ echo "
 
         <div style=\"margin-top: 6px;\">
             <button id=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
-            <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
+            <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\">
             &nbsp;Zur&uuml;ck</button>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <button id=\"speichern\" type=\"submit\" value=\"speichern\">
-            <img src=\"$g_root_path/adm_program/images/disk.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Speichern\">
+            <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\">
             &nbsp;Speichern</button>
         </div>";
     echo "</div>
