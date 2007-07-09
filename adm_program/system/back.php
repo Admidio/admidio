@@ -31,6 +31,11 @@ include("common.php");
 $_SESSION['navigation']->deleteLastUrl();
 
 // Jetzt die "neue" letzte Url aufrufen
-header("Location: ". $_SESSION['navigation']->getUrl());
+$next_url = $_SESSION['navigation']->getUrl();
+if(strlen($next_url) == 0)
+{
+    $next_url = "$g_root_path/$g_main_page";
+}
+header("Location: $next_url");
  
 ?>

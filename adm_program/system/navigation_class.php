@@ -63,8 +63,11 @@ class Navigation
     // Funktion entfernt die letzte Url aus dem Array
     function deleteLastUrl()
     {
-        $this->count--;
-        unset($this->url_arr[$this->count]);
+        if($this->count > 0)
+        {
+            $this->count--;
+            unset($this->url_arr[$this->count]);
+        }
     }
 
     // fuegt eine Seite zum Navigationsstack hinzu
@@ -96,11 +99,15 @@ class Navigation
     // gibt die letzte Url aus dem Stack zurueck
     function getUrl()
     {
-        if($this->count == 0)
+        if($this->count > 0)
+        {
+            return $this->url_arr[$this->count-1];
+        }
+        else
         {
             return null;
         }
-        return $this->url_arr[$this->count-1];
+        
     }
 }
 ?>
