@@ -105,17 +105,17 @@ if($_GET["mode"] == 1)
         </p>
         <button name=\"back\" type=\"button\" value=\"back\"
             onclick=\"history.back()\">
-            <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
+            <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\">
             &nbsp;Zur&uuml;ck</button>
         &nbsp;&nbsp;&nbsp;&nbsp;
         <button name=\"delete\" type=\"button\" value=\"delete\"
             onclick=\"self.location.href='$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=". $_GET['rol_id']. "&mode=4'\">
-            <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Rolle l&ouml;schen\">
+            <img src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Rolle l&ouml;schen\">
             &nbsp;L&ouml;schen</button>
         &nbsp;&nbsp;&nbsp;&nbsp;
         <button name=\"inactive\" type=\"button\" value=\"inactive\"
             onclick=\"self.location.href='$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=". $_GET['rol_id']. "&mode=3'\">
-            <img src=\"$g_root_path/adm_program/images/wand_gray.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Inaktive Rolle\">
+            <img src=\"$g_root_path/adm_program/images/wand_gray.png\" alt=\"Inaktive Rolle\">
             &nbsp;Inaktive Rolle</button>
     </div>";
 

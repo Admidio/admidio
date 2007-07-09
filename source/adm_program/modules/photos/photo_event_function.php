@@ -266,7 +266,7 @@ if(isset($_POST["submit"]) && $_POST["submit"])
         </table>
         <hr class=\"formLine\" width=\"85%\" />
         <button name=\"weiter\" type=\"button\" value=\"weiter\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id'\">Weiter&nbsp;
-            <img src=\"$g_root_path/adm_program/images/forward.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Weiter\">
+            <img src=\"$g_root_path/adm_program/images/forward.png\" alt=\"Weiter\">
         </button>
     </div><br><br>";
 }//submit
@@ -388,7 +388,7 @@ if(isset($_GET["job"]) && $_GET["job"]=="do_delete")
 echo"
 <hr class=\"formLine\" width=\"85%\" />
 <button name=\"weiter\" type=\"button\" value=\"weiter\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php'\">Weiter&nbsp;
-    <img src=\"$g_root_path/adm_program/images/forward.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Weiter\">
+    <img src=\"$g_root_path/adm_program/images/forward.png\" alt=\"Weiter\">
 </button>
 </div>";
 */

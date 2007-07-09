@@ -203,12 +203,12 @@ echo "
             if($_SESSION['navigation']->count > 1)
             {
                 echo "<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
-                    <img src=\"$g_root_path/adm_program/images/back.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Zur&uuml;ck\">
+                    <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\">
                     Zur&uuml;ck</button>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
             }
             echo "<button name=\"anzeigen\" type=\"submit\" value=\"anzeigen\">
-                <img src=\"$g_root_path/adm_program/images/application_view_columns.png\" style=\"vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Liste anzeigen\">
+                <img src=\"$g_root_path/adm_program/images/application_view_columns.png\" alt=\"Liste anzeigen\">
                 &nbsp;Liste anzeigen</button>            
         </p>
     </div>
