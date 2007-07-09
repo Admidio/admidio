@@ -308,6 +308,7 @@ class PhotoEvent
     {
         $return_code = true;
     
+        // erst einmal rekursiv zur tiefsten Tochterveranstaltung gehen
         $sql = "SELECT pho_id FROM ". TBL_PHOTOS. "
                  WHERE pho_pho_id_parent = $photo_id ";
         error_log($sql);
@@ -321,32 +322,41 @@ class PhotoEvent
             {
                 error_log("row: ". $row[0]);
                 $return_code = $this->deleteInDatabase($row['pho_id']);
+            }
+        }
 
-                if($return_code)
-                {
-                    //Ordnerpfad zusammensetzen
-                    $folder = SERVER_PATH. "/adm_my_files/photos/".$this->db_fields['pho_begin']."_$photo_id";
-                    // nun erst den Ordner im Dateisystem loeschen
-                    $return_code = $this->deleteInFilesystem($folder);
+        // nun DB-Eintrag und Ordner loeschen
+        if($return_code)
+        {
+            //Ordnerpfad zusammensetzen
+            $folder = SERVER_PATH. "/adm_my_files/photos/".$this->db_fields['pho_begin']."_$photo_id";
+            // nun erst rekursiv den Ordner im Dateisystem loeschen
+            $return_code = $this->deleteInFilesystem($folder);
 
-                    if($return_code)
-                    {
-                        // Veranstaltung jetzt loeschen            
-                        $sql = "DELETE FROM ". TBL_PHOTOS. "
-                                 WHERE pho_id = $photo_id ";
-                        error_log($sql);
-                        $result = mysql_query($sql, $this->db_connection);
-                        db_error($result,__FILE__,__LINE__);
-                    }
-                }
+            // nun noch den uebergebenen Ordner loeschen
+            @chmod($folder, 0777);
+            error_log($folder);
+            if(@rmdir($folder) == false)
+            {
+                return false;
+            }
+        
+            if($return_code)
+            {
+                // Veranstaltung jetzt loeschen            
+                $sql = "DELETE FROM ". TBL_PHOTOS. "
+                         WHERE pho_id = $photo_id ";
+                error_log($sql);
+                $result = mysql_query($sql, $this->db_connection);
+                db_error($result,__FILE__,__LINE__);
             }
         }
         
         return $return_code;
     }
     
-    // Rekursive Funktion die den uebergebenen Ordner und alle
-    // Unterordner mit allen Dateien loescht
+    // Rekursive Funktion die alles innerhalb des uebergebenen
+    // Ordners mit Unterordnern und allen Dateien loescht
     function deleteInFilesystem($folder)
     {
         $dh  = opendir($folder);
@@ -380,6 +390,8 @@ class PhotoEvent
                 }
             }
         }
+        closedir($dh);
+                    
         return true;
     }
 }

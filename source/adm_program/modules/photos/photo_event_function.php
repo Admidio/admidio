@@ -281,7 +281,7 @@ if(isset($_GET["job"]) && $_GET["job"]=="delete_request")
     $g_message->show("delete_veranst", utf8_encode($photo_event->getValue("pho_name")));
 }
 
-
+// Nun Veranstaltung loeschen
 if(isset($_GET["job"]) && $_GET["job"]=="do_delete")
 {
     $return_code = $photo_event->delete();
@@ -295,104 +295,7 @@ if(isset($_GET["job"]) && $_GET["job"]=="do_delete")
     {
         $g_message->show("event_deleted_error");
     }
-    /*
-    //Erfasse der zu loeschenden Veranstaltung bzw. Unterveranstaltungen
-    //Erfassen der Veranstaltung bei Aenderungsaufruf und schreiben in array
-    $delete_ids = array(0=>$pho_id);
-    $counter=1;
-    //rekursive Funktion
-    function event_delete ($delete_id)
-    {
-        global $g_adm_con;
-        global $delete_ids;
-        global $counter;
-        $sql="  SELECT *
-                FROM ". TBL_PHOTOS. "
-                WHERE (pho_pho_id_parent ='$delete_id')";
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result,__FILE__,__LINE__);
-
-        while($adm_photo_delete_collect  = mysql_fetch_array($result))
-        {
-            $delete_ids["$counter"]=$adm_photo_delete_collect["pho_id"];
-            $counter++;
-            event_delete($adm_photo_delete_collect["pho_id"]);
-        }
-    }
-
-    //Funktion starten
-    event_delete($pho_id);
-
-    // HTML-Kopf
-    $g_layout['title'] = "Veranstaltungsverwaltung";
-    require(SERVER_PATH. "/adm_program/layout/overall_header.php");
-
-    //Bericht
-    echo"<div style=\"width: 500px\" align=\"center\" class=\"formHead\">Bericht</div>";
-    echo"<div style=\"width: 500px\" align=\"center\" class=\"formBody\">";
-
-    //Alle veranstaltungen aufrufen und sie selbst und ihre Bilder loeschen
-    for($x=0; $x<$counter; $x++)
-    {
-        $pho_id_delete=$delete_ids[$x];
-        $sql="  SELECT *
-                FROM ". TBL_PHOTOS. "
-                WHERE (pho_id ='$pho_id_delete')";
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result,__FILE__,__LINE__);
-        $adm_photo_delete = mysql_fetch_array($result);
-
-        //Ordnerpfad zusammensetzen
-        $ordner = "../../../adm_my_files/photos/".$adm_photo_delete["pho_begin"]."_".$adm_photo_delete["pho_id"];
-
-        //wenn Ordner existiert
-        if(file_exists($ordner))
-        {
-            chmod("$ordner", 0777);
-            //Loeschen der Bilder
-            for($y=1; $y<=$adm_photo_delete["pho_quantity"]; $y++)
-            {
-                if(file_exists("$ordner/$y.jpg"))
-                    {
-                        chmod("$ordner/$y.jpg", 0777);
-                            if(unlink("$ordner/$y.jpg"))
-                            {
-                                echo"Datei &bdquo;".$adm_photo_delete["pho_begin"]."_".$adm_photo_delete["pho_id"]."/$y.jpg&rdquo; wurde erfolgreich gel&ouml;scht.<br>";
-                            }
-                    }
-            }
-        }
-
-        //Loeschen der Daten aus der Datenbank
-        $sql =" DELETE
-                FROM ". TBL_PHOTOS. "
-                WHERE (pho_id ='".$adm_photo_delete["pho_id"]."')";
-        $result_delet = mysql_query($sql, $g_adm_con);
-        db_error($result_delet,__FILE__,__LINE__);
-        if($result_delet)
-        {
-            echo"Der Datensatz zu &bdquo;".$adm_photo_delete["pho_name"]."&rdquo; wurde aus der Datenbank gel&ouml;scht.";
-        }
-
-        //Loeschen der Ordners
-        if(file_exists($ordner))
-            {
-                if(rmdir("$ordner"))
-                {
-                    echo"<br>Die Veranstaltung wurde erfolgreich gel&ouml;scht.<br>";
-                }
-        }
-    }//for
-
-//Zurueckbutton
-echo"
-<hr class=\"formLine\" width=\"85%\" />
-<button name=\"weiter\" type=\"button\" value=\"weiter\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php'\">Weiter&nbsp;
-    <img src=\"$g_root_path/adm_program/images/forward.png\" alt=\"Weiter\">
-</button>
-</div>";
-*/
-}//Ende Veranstaltung loeschen
+}
 
 require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
 ?>
