@@ -73,13 +73,6 @@ $rss = new RSSfeed("http://$g_current_organization->homepage", "$g_current_organ
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
 while ($row = mysql_fetch_object($result))
 {
-    // Den Autor des Links ermitteln
-    $sql     = "SELECT * FROM ". TBL_USERS. " WHERE usr_id = $row->lnk_usr_id";
-    $result2 = mysql_query($sql, $g_adm_con);
-    db_error($result2,__FILE__,__LINE__);
-    $user = mysql_fetch_object($result2);
-
-
     // Die Attribute fuer das Item zusammenstellen
     $title = $row->lnk_name;
     $link  = "$g_root_path/adm_program/modules/links/links.php?id=". $row->lnk_id;
@@ -97,7 +90,10 @@ while ($row = mysql_fetch_object($result))
     }
 
     $description = $description. "<br /><br /><a href=\"$link\">Link auf $g_current_organization->homepage</a>";
-    $description = $description. "<br /><br /><i>Angelegt von ". strSpecialChars2Html($user->usr_first_name). " ". strSpecialChars2Html($user->usr_last_name);
+
+    // Den Autor der Links ermitteln und ausgeben
+    $user = new User($g_adm_con, $row->lnk_usr_id);
+    $description = $description. "<br /><br /><i>Angelegt von ". strSpecialChars2Html($user->getValue("Vorname"). " ". strSpecialChars2Html($user->getValue("Nachname");
     $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->lnk_timestamp). "</i>";
 
     $pubDate = date('r', strtotime($row->lnk_timestamp));

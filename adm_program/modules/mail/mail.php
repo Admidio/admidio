@@ -74,38 +74,24 @@ if (isset($_GET["usr_id"]))
         $g_message->show("invalid");
     }
 
-    if (!$g_current_user->editUser())
-    {
-        $sql    = "SELECT DISTINCT usr_id, usr_email
-                     FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                    WHERE mem_usr_id = usr_id
-                      AND mem_rol_id = rol_id
-                      AND rol_cat_id = cat_id
-                      AND cat_org_id = $g_current_organization->id
-                      AND usr_id     = {0} ";
-    }
-    else
-    {
-        $sql    = "SELECT usr_id, usr_email
-                     FROM ". TBL_USERS. "
-                    WHERE usr_id  = {0} ";
-    }
-    $sql    = prepareSQL($sql, array($_GET['usr_id']));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
-    $row = mysql_fetch_object($result);
+    //usr_id wurde uebergeben, dann Kontaktdaten des Users aus der DB fischen
+    $user = new User($g_adm_con, $_GET['usr_id']);
 
-    if (mysql_num_rows($result) != 1)
+    // darf auf die User-Id zugegriffen werden    
+    if((  $g_current_user->editUser() == false
+       && isMember($user->getValue("usr_id")) == false)
+    || strlen($user->getValue("usr_id")) == 0 )
     {
         $g_message->show("usrid_not_found");
     }
 
-    if (!isValidEmailAddress($row->usr_email))
+    // besitzt der User eine gueltige E-Mail-Adresse
+    if (!isValidEmailAddress($user->getValue("E-Mail")))
     {
         $g_message->show("usrmail_not_found");
     }
 
-    $userEmail = $row->usr_email;
+    $userEmail = $user->getValue("E-Mail");
 }
 elseif (isset($_GET["rol_id"]))
 {

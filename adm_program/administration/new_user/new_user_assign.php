@@ -138,7 +138,7 @@ echo "
                         }
                         else
                         {
-                            echo "<a href=\"mailto:$row->usr_email\">$row->email</a><br>";
+                            echo "<a href=\"mailto:$row->email\">$row->email</a><br>";
                         }
                     }
 

@@ -96,13 +96,6 @@ $rss = new RSSfeed("http://$g_current_organization->homepage", "$g_current_organ
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
 while ($row = mysql_fetch_object($result))
 {
-    // Den Autor des Termins ermitteln
-    $sql = "SELECT * FROM ". TBL_USERS. " WHERE usr_id = $row->dat_usr_id";
-    $result2 = mysql_query($sql, $g_adm_con);
-    db_error($result2,__FILE__,__LINE__);
-    $user = mysql_fetch_object($result2);
-
-
     // Die Attribute fuer das Item zusammenstellen
     $title = mysqldatetime("d.m.y", $row->dat_begin). " ". $row->dat_headline;
     $link  = "$g_root_path/adm_program/modules/dates/dates.php?id=". $row->dat_id;
@@ -149,9 +142,22 @@ while ($row = mysql_fetch_object($result))
     }
 
     $description = $description. "<br /><br /><a href=\"$link\">Link auf $g_current_organization->homepage</a>";
-    $description = $description. "<br /><br /><i>Angelegt von ". strSpecialChars2Html($user->usr_first_name). " ". strSpecialChars2Html($user->usr_last_name);
+    
+    // Den Autor des Termins ermitteln und ausgeben
+    $user = new User($g_adm_con, $row->dat_usr_id);
+    $description = $description. "<br /><br /><i>Angelegt von ". strSpecialChars2Html($user->getValue("Vorname"). " ". strSpecialChars2Html($user->getValue("Nachname");
     $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->dat_timestamp). "</i>";
 
+    // Zuletzt geaendert nur anzeigen, wenn Änderung nach 15 Minuten oder durch anderen Nutzer gemacht wurde
+    if($row->dat_usr_id_change > 0
+    && (  strtotime($row->dat_last_change) > (strtotime($row->dat_timestamp) + 900)
+       || $row->dat_usr_id_change != $row->dat_usr_id ) )
+    {
+        $user_change = new User($g_adm_con, $row->dat_usr_id_change);
+        $description = $description. "<br>Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname");
+        $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->dat_last_change);
+    }
+    
     $pubDate = date('r',strtotime($row->dat_timestamp));
 
 
