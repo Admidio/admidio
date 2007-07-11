@@ -58,7 +58,8 @@ $result = mysql_query($sql, $g_adm_con);
 db_error($result,__FILE__,__LINE__);
 
 //Funktion mit selbstaufruf zum erfassen der Bilder in Unterveranstaltungen
-function bildersumme($pho_id_parent){
+function bildersumme($pho_id_parent)
+{
     global $g_adm_con;
     global $g_organization;
     global $bildersumme;
@@ -84,22 +85,6 @@ $rss = new RSSfeed("http://$g_current_organization->homepage", "$g_current_organ
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
 while ($row = mysql_fetch_object($result))
 {
-    // Den Anleger ermitteln
-    $sql     = "SELECT usr_first_name, usr_last_name FROM ". TBL_USERS. " WHERE usr_id = {0}";
-    $sql    = prepareSQL($sql, array($row->pho_usr_id));
-    $result2 = mysql_query($sql, $g_adm_con);
-    db_error($result2,__FILE__,__LINE__);
-    $create_user = mysql_fetch_object($result2);
-
-    // Den Veraenderer ermitteln falls ungleich NULL
-    if($row->pho_usr_id_change!= NULL)
-    {
-        $sql     = "SELECT usr_first_name, usr_last_name FROM ". TBL_USERS. " WHERE usr_id = {0}";
-        $sql    = prepareSQL($sql, array($row->pho_usr_id_change));
-        $result3 = mysql_query($sql, $g_adm_con);
-        db_error($result3,__FILE__,__LINE__);
-        $update_user = mysql_fetch_object($result3);
-    }
     // Die Attribute fuer das Item zusammenstellen
 
     //Titel
@@ -163,12 +148,19 @@ while ($row = mysql_fetch_object($result))
     $description = $description. "<br /><br /><a href=\"$link\">Link auf $g_current_organization->homepage</a>";
 
     //Angaben zum Anleger
-    $description = $description. "<br /><br /><i>Angelegt von ". strSpecialChars2Html($create_user->usr_first_name). " ". strSpecialChars2Html($create_user->usr_last_name);
+    $create_user = new User($g_adm_con, $row->pho_usr_id);
+    $description = $description. "<br /><br /><i>Angelegt von ". strSpecialChars2Html($create_user->getValue("Vorname"). " ". strSpecialChars2Html($create_user->getValue("Nachname"));
     $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->pho_timestamp). "</i>";
 
-    //Angaben zum Updater
-    $description = $description. "<br /><i>Letztes Update durch ". strSpecialChars2Html($update_user->usr_first_name). " ". strSpecialChars2Html($update_user->usr_last_name);
-    $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->pho_last_change). "</i>";
+    if($row->pho_usr_id_change > 0
+    && (  strtotime($row->pho_last_change) > (strtotime($row->pho_timestamp) + 3600)
+       || $row->pho_usr_id_change != $row->pho_usr_id ) )
+    {
+        //Angaben zum Updater
+        $update_user = new User($g_adm_con, $row->pho_usr_id_change);
+        $description = $description. "<br /><i>Letztes Update durch ". strSpecialChars2Html($update_user->getValue("Vorname")). " ". strSpecialChars2Html($create_user->getValue("Nachname"));
+        $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->pho_last_change). "</i>";
+    }
 
     $pubDate = date('r',strtotime($row->pho_timestamp));
 

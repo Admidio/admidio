@@ -30,6 +30,7 @@
 
 require("../../system/common.php");
 require("../../system/email_class.php");
+require("../../system/role_class.php");
 
 if ($g_preferences['enable_mail_module'] != 1)
 {
@@ -70,33 +71,19 @@ $_SESSION['mail_request'] = $_REQUEST;
 // auf diese zugreifen darf oder ob die UsrId ueberhaupt eine gueltige Mailadresse hat...
 if (array_key_exists("usr_id", $_GET))
 {
-    if (!$g_current_user->editUser())
-    {
-        $sql    = "SELECT DISTINCT usr_id, usr_email
-                     FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                    WHERE mem_usr_id = usr_id
-                      AND mem_rol_id = rol_id
-                      AND rol_cat_id = cat_id
-                      AND cat_org_id = $g_current_organization->id
-                      AND usr_id  = {0} ";
-    }
-    else
-    {
-        $sql    = "SELECT usr_id, usr_email
-                     FROM ". TBL_USERS. "
-                    WHERE usr_id  = {0} ";
-    }
-    $sql    = prepareSQL($sql, array($_GET['usr_id']));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
-    $row = mysql_fetch_object($result);
+    //usr_id wurde uebergeben, dann Kontaktdaten des Users aus der DB fischen
+    $user = new User($g_adm_con, $_GET['usr_id']);
 
-    if (mysql_num_rows($result) != 1)
+    // darf auf die User-Id zugegriffen werden    
+    if((  $g_current_user->editUser() == false
+       && isMember($user->getValue("usr_id")) == false)
+    || strlen($user->getValue("usr_id")) == 0 )
     {
         $g_message->show("usrid_not_found");
     }
 
-    if (!isValidEmailAddress($row->usr_email))
+    // besitzt der User eine gueltige E-Mail-Adresse
+    if (!isValidEmailAddress($user->getValue("E-Mail")))
     {
         $g_message->show("usrmail_not_found");
     }
@@ -108,17 +95,6 @@ if (empty($_POST))
 {
     $g_message->show("invalid");
 }
-
-// Falls der User nicht eingeloggt ist, aber ein Captcha geschaltet ist,
-// muss natuerlich der Code ueberprueft werden
-if (!$g_valid_login && $g_preferences['enable_mail_captcha'] == 1)
-{
-    if ( !isset($_SESSION['captchacode']) || strtoupper($_SESSION['captchacode']) != strtoupper($_POST['captcha']) )
-    {
-        $g_message->show("captcha_code");
-    }
-}
-
 
 $err_code = "";
 $err_text = "";
@@ -162,7 +138,7 @@ if (strlen($_POST['name']) > 0)
                 //Pruefen ob ein Fehler beim Upload vorliegt
                 if (($_FILES['userfile']['error'] != 0) &&  ($_FILES['userfile']['error'] != 4))
                 {
-                    $err_code = "attachment";
+                    $g_message->show("attachment");
                 }
                 //Wenn ein Attachment vorliegt dieses der Mail hinzufuegen
                 if ($_FILES['userfile']['error'] == 0)
@@ -182,63 +158,47 @@ if (strlen($_POST['name']) > 0)
         }
         else
         {
-            $err_code = "feld";
-            $err_text = "Betreff";
+            $g_message->show("feld", "Betreff");
         }
     }
     else
     {
-        $err_code = "email_invalid";
+        $g_message->show("email_invalid");
     }
 }
 else
 {
-    $err_code = "feld";
-    $err_text = "Name";
+    $g_message->show("feld", "Name");
 }
 
-if (array_key_exists("rol_id", $_POST) && strlen($err_code) == 0)
-{
-
+if (array_key_exists("rol_id", $_POST))
+{    
     if (strlen($_POST['rol_id']) == 0)
     {
-        $err_code = "mail_rolle";
+        $g_message->show("mail_rolle");
     }
-    else
-    {
-        if ($g_valid_login)
-        {
-            $sql    = "SELECT rol_mail_login 
-                         FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                        WHERE rol_id = {0} 
-                          AND rol_cat_id = cat_id
-                          AND cat_org_id = $g_current_organization->id ";
-        }
-        else
-        {
-            $sql    = "SELECT rol_mail_logout 
-                         FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                        WHERE rol_id = {0} 
-                          AND rol_cat_id = cat_id
-                          AND cat_org_id = $g_current_organization->id ";
-        }
-        $sql    = prepareSQL($sql, array($_POST['rol_id']));
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result,__FILE__,__LINE__);
-        $row = mysql_fetch_array($result);
+    
+    $role = new Role($g_adm_con, $_POST['rol_id']);
 
-        if ($row[0] != 1)
-        {
-            $err_code = "invalid";
-        }
+    if ($g_valid_login && $role->getValue("rol_mail_login") == false)
+    {
+        $g_message->show("invalid");
+    }
+    
+    if (!$g_valid_login && $role->getValue("rol_mail_logout") == false)
+    {
+        $g_message->show("invalid");
     }
 }
 
-
-//Pruefen ob bis hier Fehler aufgetreten sind
-if (strlen($err_code) > 0)
+// Falls der User nicht eingeloggt ist, aber ein Captcha geschaltet ist,
+// muss natuerlich der Code ueberprueft werden
+if (!$g_valid_login && $g_preferences['enable_mail_captcha'] == 1)
 {
-    $g_message->show($err_code, $err_text);
+    if ( !isset($_SESSION['captchacode']) || strtoupper($_SESSION['captchacode']) != strtoupper($_POST['captcha']) )
+    {
+        $g_message->show("captcha_code");
+    }
 }
 
 $rolle = null;
@@ -246,36 +206,38 @@ $rolle = null;
 //Nun die Empfaenger zusammensuchen und an das Mailobjekt uebergeben
 if (array_key_exists("usr_id", $_GET))
 {
-    //usr_id wurde uebergeben, dann Kontaktdaten des Users aus der DB fischen
-    $sql    = "SELECT usr_first_name, usr_last_name, usr_email FROM ". TBL_USERS. " WHERE usr_id = {0} ";
-    $sql    = prepareSQL($sql, array($_GET['usr_id']));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
-    $row = mysql_fetch_row($result);
-
     //den gefundenen User dem Mailobjekt hinzufuegen...
-    $email->addRecipient($row[2], "$row[0] $row[1]");
+    $email->addRecipient($user->getValue("E-Mail"), $user->getValue("Vorname"). " ". $user->getValue("Nachname"));
 }
 else
 {
     //Rolle wurde uebergeben, dann an alle Mitglieder aus der DB fischen
-    $sql    = "SELECT usr_first_name, usr_last_name, usr_email, rol_name
+    $sql   = "SELECT first_name.usd_value as first_name, last_name.usd_value as last_name, 
+                     email.usd_value as email, rol_name
                 FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
-               WHERE rol_id            = {0}
+               RIGHT JOIN ". TBL_USER_DATA. " as email
+                  ON email.usd_usr_id = usr_id
+                 AND email.usd_usf_id = ". $g_current_user->getProperty("E-Mail", "usf_id"). "
+                 AND LENGTH(email.usd_value) > 0
+                LEFT JOIN ". TBL_USER_DATA. " as last_name
+                  ON last_name.usd_usr_id = usr_id
+                 AND last_name.usd_usf_id = ". $g_current_user->getProperty("Nachname", "usf_id"). "
+                LEFT JOIN ". TBL_USER_DATA. " as first_name
+                  ON first_name.usd_usr_id = usr_id
+                 AND first_name.usd_usf_id = ". $g_current_user->getProperty("Vorname", "usf_id"). "
+               WHERE rol_id            = ". $_POST['rol_id']. "
                  AND rol_cat_id        = cat_id
                  AND cat_org_id        = $g_current_organization->id
                  AND mem_rol_id        = rol_id
                  AND mem_valid         = 1
                  AND mem_usr_id        = usr_id
-                 AND usr_valid         = 1
-                 AND LENGTH(usr_email) > 0 ";
-    $sql    = prepareSQL($sql, array($_POST['rol_id']));
+                 AND usr_valid         = 1 ";
     $result = mysql_query($sql, $g_adm_con);
     db_error($result,__FILE__,__LINE__);
 
     while ($row = mysql_fetch_object($result))
     {
-        $email->addBlindCopy($row->usr_email, "$row->usr_first_name $row->usr_last_name");
+        $email->addBlindCopy($row->email, "$row->first_name $row->last_name");
         $rolle = $row->rol_name;
     }
 

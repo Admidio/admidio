@@ -554,11 +554,11 @@ echo "
                     //Haekchen setzen ob jemand Mitglied ist oder nicht
                     if(in_array($user['usr_id'], $role_member))
                     {
-                        echo"<input type=\"checkbox\" onclick=\"unmarkLeader(this)\" id=\"member_$user[0]\" name=\"member_$user[0]\" checked value=\"1\">";
+                        echo"<input type=\"checkbox\" onclick=\"unmarkLeader(this)\" id=\"member_". $user['usr_id']. "\" name=\"member_". $user['usr_id']. "\" checked value=\"1\">";
                     }
                     else
                     {
-                        echo"<input type=\"checkbox\" onclick=\"unmarkLeader(this)\" id=\"member_$user[0]\" name=\"member_$user[0]\" value=\"1\">";
+                        echo"<input type=\"checkbox\" onclick=\"unmarkLeader(this)\" id=\"member_". $user['usr_id']. "\" name=\"member_". $user['usr_id']. "\" value=\"1\">";
                     }
                 echo"</td>
 
@@ -566,11 +566,11 @@ echo "
                     //Haekchen setzen ob jemand Leiter ist oder nicht
                     if(in_array($user['usr_id'], $group_leaders))
                     {
-                        echo"<input type=\"checkbox\" onclick=\"markMember(this)\" id=\"leader_$user[0]\" name=\"leader_$user[0]\" checked value=\"1\">";
+                        echo"<input type=\"checkbox\" onclick=\"markMember(this)\" id=\"leader_". $user['usr_id']. "\" name=\"leader_". $user['usr_id']. "\" checked value=\"1\">";
                     }
                     else
                     {
-                        echo"<input type=\"checkbox\" onclick=\"markMember(this)\" id=\"leader_$user[0]\" name=\"leader_$user[0]\" value=\"1\">";
+                        echo"<input type=\"checkbox\" onclick=\"markMember(this)\" id=\"leader_". $user['usr_id']. "\" name=\"leader_". $user['usr_id']. "\" value=\"1\">";
                     }
                 echo"</td>
             </tr>";
@@ -643,23 +643,23 @@ echo "
             while($user = mysql_fetch_array($result_user))
             {
                  //Datensatz ausgeben
-                $user_text= $user['usr_first_name']."&nbsp;".$user['usr_last_name']."&nbsp;&nbsp;&nbsp;"
-                            .$user['usr_address']."&nbsp;&nbsp;&nbsp;"
-                            .$user['usr_zip_code']."&nbsp;".$user['usr_city']."&nbsp;&nbsp;&nbsp;"
-                            .$user['usr_phone'];
+                $user_text= $user['first_name']."&nbsp;".$user['last_name']."&nbsp;&nbsp;&nbsp;"
+                            .$user['address']."&nbsp;&nbsp;&nbsp;"
+                            .$user['zip_code']."&nbsp;".$user['city']."&nbsp;&nbsp;&nbsp;"
+                            .$user['phone'];
                 echo"
                 <tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\">
                     <td style=\"text-align: center;\">
                         <img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/note.png\" alt=\"Userinformationen\" title=\"$user_text\">
                     </td>
-                    <td style=\"text-align: left;\">". $user['usr_last_name']."</td>
-                    <td style=\"text-align: left;\">". $user['usr_first_name']."</td>
+                    <td style=\"text-align: left;\">". $user['last_name']."</td>
+                    <td style=\"text-align: left;\">". $user['first_name']."</td>
 
                     <td style=\"text-align: center;\">";
                         //Geburtstag nur ausgeben wenn bekannt
-                        if($user['usr_birthday']!='0000-00-00')
+                        if($user['birthday']!='0000-00-00')
                         {
-                            echo mysqldate("d.m.y", $user['usr_birthday']);
+                            echo mysqldate("d.m.y", $user['birthday']);
                         }
                     echo"</td>
 
@@ -667,11 +667,11 @@ echo "
                         //Haekchen setzen ob jemand Mitglied ist oder nicht
                         if(in_array($user['usr_id'], $role_member))
                         {
-                            echo"<input type=\"checkbox\" onclick=\"unmarkLeader(this)\" id=\"member_$user[0]\" name=\"member_$user[0]\" checked value=\"1\">";
+                            echo"<input type=\"checkbox\" onclick=\"unmarkLeader(this)\" id=\"member_". $user['usr_id']. "\" name=\"member_". $user['usr_id']. "\" checked value=\"1\">";
                         }
                         else
                         {
-                            echo"<input type=\"checkbox\" onclick=\"unmarkLeader(this)\" id=\"member_$user[0]\" name=\"member_$user[0]\" value=\"1\">";
+                            echo"<input type=\"checkbox\" onclick=\"unmarkLeader(this)\" id=\"member_". $user['usr_id']. "\" name=\"member_". $user['usr_id']. "\" value=\"1\">";
                         }
                     echo"</td>
 
@@ -679,11 +679,11 @@ echo "
                         //Haekchen setzen ob jemand Leiter ist oder nicht
                         if(in_array($user['usr_id'], $group_leaders))
                         {
-                            echo"<input type=\"checkbox\" onclick=\"markMember(this)\" id=\"leader_$user[0]\" name=\"leader_$user[0]\" checked value=\"1\">";
+                            echo"<input type=\"checkbox\" onclick=\"markMember(this)\" id=\"leader_". $user['usr_id']. "\" name=\"leader_". $user['usr_id']. "\" checked value=\"1\">";
                         }
                         else
                         {
-                            echo"<input type=\"checkbox\" onclick=\"markMember(this)\" id=\"leader_$user[0]\" name=\"leader_$user[0]\" value=\"1\">";
+                            echo"<input type=\"checkbox\" onclick=\"markMember(this)\" id=\"leader_". $user['usr_id']. "\" name=\"leader_". $user['usr_id']. "\" value=\"1\">";
                         }
                     echo"</td>
                 </tr>";

@@ -238,7 +238,10 @@ else
                 echo "Angelegt von ". $user_create->getValue("Vorname"). " ". $user_create->getValue("Nachname").
                 " am ". mysqldatetime("d.m.y h:i", $row->ann_timestamp);
 
-                if($row->ann_usr_id_change > 0)
+                // Zuletzt geaendert nur anzeigen, wenn Änderung nach 15 Minuten oder durch anderen Nutzer gemacht wurde
+                if($row->ann_usr_id_change > 0
+                && (  strtotime($row->ann_last_change) > (strtotime($row->ann_timestamp) + 900)
+                   || $row->ann_usr_id_change != $row->ann_usr_id ) )
                 {
                     $user_change = new User($g_adm_con, $row->ann_usr_id_change);
                     echo "<br>Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname").

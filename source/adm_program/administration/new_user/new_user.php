@@ -97,7 +97,7 @@ echo "
                 }
                 else
                 {
-                    echo "<a href=\"mailto:$row->usr_email\">$row->email</a>";
+                    echo "<a href=\"mailto:$row->email\">$row->email</a>";
                 }
             echo "</td>
             <td style=\"text-align: center;\">
