@@ -53,6 +53,17 @@ if(!is_numeric($pho_id))
     $g_message->show("invalid");
 }
 
+//pho_begin
+$pho_begin=NULL;
+if(isset($_GET['pho_begin']))
+{
+    $pho_begin = $_GET['pho_begin'];
+}
+if(1==2)
+{
+    $g_message->show("invalid");
+}
+
 //Bildnr.
 $pic_nr=NULL;
 if(isset($_GET['pic_nr']))
@@ -86,32 +97,8 @@ if($side != "y" && $side != "x" && $side!=NULL)
     $g_message->show("invalid");
 }
 
-// Fotoveranstaltungs-Objekt erzeugen oder aus Session lesen
-if(isset($_SESSION['photo_event']) && $_SESSION['photo_event']->getValue("pho_id") == $pho_id)
-{
-    $photo_event =& $_SESSION['photo_event'];
-    $photo_event->db_connection = $g_adm_con;
-}
-else
-{
-    // einlesen der Veranstaltung falls noch nicht in Session gespeichert
-    $photo_event = new PhotoEvent($g_adm_con);
-    if($pho_id > 0)
-    {
-        $photo_event->getPhotoEvent($pho_id);
-    }
-
-    $_SESSION['photo_event'] =& $photo_event;
-}
-
-// pruefen, ob Veranstaltung zur aktuellen Organisation gehoert
-if($pho_id > 0 && $photo_event->getValue("pho_org_shortname") != $g_organization)
-{
-    $g_message->show("invalid");
-}   
-
 //Bildpfadzusammensetzten
-$bild=SERVER_PATH. "/adm_my_files/photos/".$photo_event->getValue("pho_begin")."_".$pho_id."/".$pic_nr.".jpg";
+$bild=SERVER_PATH. "/adm_my_files/photos/".$pho_begin."_".$pho_id."/".$pic_nr.".jpg";
 
 //Ermittlung der Original Bildgroesse
 $bildgroesse = getimagesize("$bild");
