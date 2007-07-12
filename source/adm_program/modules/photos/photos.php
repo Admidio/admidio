@@ -546,9 +546,8 @@ echo "<div class=\"formBody\">";
                 //Wenn kein Bild gefunden wurde
                 if($bsp_pho_id==0)
                 {
-                    $bsp_pic_path = SERVER_PATH. "/adm_program/images/nopix.jpg";
+                   $bsp_pic_path = SERVER_PATH. "/adm_program/images/nopix.jpg";
                 }
-
 
                 //Ausgabe
                 echo"
@@ -562,7 +561,7 @@ echo "<div class=\"formBody\">";
                             {
                                 echo"<div align=\"center\">
                                     <a target=\"_self\" href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$adm_photo_list["pho_id"]."\">
-                                    <img src=\"$g_root_path/adm_program/modules/photos/photo_show.php?bild=$bsp_pic_path&amp;scal=".$g_preferences['photo_preview_scale']."&amp;side=y\" border=\"0\" alt=\"Zufallsbild\"
+                                    <img src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$bsp_pho_id."&amp;pic_nr=".$bsp_pic_nr."&amp;scal=".$g_preferences['photo_preview_scale']."&amp;side=y\" border=\"0\" alt=\"Zufallsbild\"
                                     style=\"vertical-align: middle; align: right;\"></a>
                                 </div>";
                             }
