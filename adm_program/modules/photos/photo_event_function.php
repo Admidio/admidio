@@ -81,7 +81,7 @@ if($_GET["job"] != "makenew")
 }
 
 //Speicherort mit dem Pfad aus der Datenbank
-$ordner = "../../../adm_my_files/photos/".$photo_event->getValue("pho_begin")."_".$photo_event->getValue("pho_id");
+$ordner = SERVER_PATH. "/adm_my_files/photos/".$photo_event->getValue("pho_begin")."_".$photo_event->getValue("pho_id");
 
 /********************Aenderungen oder Neueintraege kontrollieren***********************************/
 if(isset($_POST["submit"]) && $_POST["submit"])
@@ -159,7 +159,7 @@ if(isset($_POST["submit"]) && $_POST["submit"])
     if ($_GET["job"]=="makenew")
     {
         //Wenn keine Schreibrechte Loeschen der Daten aus der Datenbank
-        if(is_writeable("../../../adm_my_files/photos") == false)
+        if(is_writeable(SERVER_PATH. "/adm_my_files/photos") == false)
         {
             $g_message->addVariableContent("adm_my_files/photos", 1);
             $g_message->addVariableContent($g_preferences['email_administrator'], 2);
@@ -175,8 +175,8 @@ if(isset($_POST["submit"]) && $_POST["submit"])
         $ordnerneu = $_POST['pho_begin']."_".$pho_id;
 
         //wenn Rechte OK, Ordner erstellen
-        $ordnererstellt = mkdir("../../../adm_my_files/photos/$ordnerneu",0777);
-        chmod("../../../adm_my_files/photos/$ordnerneu", 0777);
+        $ordnererstellt = mkdir(SERVER_PATH. "/adm_my_files/photos/$ordnerneu",0777);
+        chmod(SERVER_PATH. "/adm_my_files/photos/$ordnerneu", 0777);
 
         // Anlegen der Veranstaltung war erfolgreich -> event_new aus der Historie entfernen
         $_SESSION['navigation']->deleteLastUrl();
@@ -184,11 +184,11 @@ if(isset($_POST["submit"]) && $_POST["submit"])
 
     /********************Aenderung des Ordners***********************************/
     //Bearbeiten Anfangsdatum und Ordner ge&auml;ndert
-    elseif ($_GET["job"]=="makechange" && $ordner != "../../../adm_my_files/photos/".$_POST['pho_begin']."_"."$pho_id")
+    elseif ($_GET["job"]=="makechange" && $ordner != SERVER_PATH. "/adm_my_files/photos/".$_POST['pho_begin']."_"."$pho_id")
     {
-        $ordnerneu = "$beginn"."_".$adm_photo["pho_id"];
+        $ordnerneu = "$beginn"."_".$photo_event->getValue("pho_id");
         //testen ob Schreibrechte fuer adm_my_files bestehen
-        if(is_writeable("../../../adm_my_files/photos") == false)
+        if(is_writeable(SERVER_PATH. "/adm_my_files/photos") == false)
         {
             $g_message->addVariableContent("adm_my_files/photos", 1);
             $g_message->addVariableContent($g_preferences['email_administrator'], 2);
@@ -198,15 +198,15 @@ if(isset($_POST["submit"]) && $_POST["submit"])
         //wenn Rechte OK, Ordner erstellen
         else
         {
-            mkdir("../../../adm_my_files/photos/$ordnerneu",0777);
-            chmod("../../../adm_my_files/photos/$ordnerneu", 0777);
+            mkdir(SERVER_PATH. "/adm_my_files/photos/$ordnerneu",0777);
+            chmod(SERVER_PATH. "/adm_my_files/photos/$ordnerneu", 0777);
         }
 
         //Dateien verschieben
-        for($x=1; $x<=$adm_photo["pho_quantity"]; $x++)
+        for($x=1; $x<=$photo_event->getValue("pho_quantity"); $x++)
         {
             chmod("$ordner/$x.jpg", 0777);
-            copy("$ordner/$x.jpg", "../../../adm_my_files/photos/$ordnerneu/$x.jpg");
+            copy("$ordner/$x.jpg", SERVER_PATH. "/adm_my_files/photos/$ordnerneu/$x.jpg");
             unlink("$ordner/$x.jpg");
         }
 

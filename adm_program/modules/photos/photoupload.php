@@ -78,9 +78,6 @@ if($photo_event->getValue("pho_org_shortname") != $g_organization)
     $g_message->show("invalid");
 }
 
-//Ordnerpfad
-$ordner = "../../../adm_my_files/photos/".$photo_event->getValue("pho_begin")."_".$photo_event->getValue("pho_id");
-
 // Html-Kopf ausgeben
 $g_layout['title'] = "Fotos hochladen";
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");    
