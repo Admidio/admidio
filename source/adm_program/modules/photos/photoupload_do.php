@@ -74,7 +74,7 @@ if($photo_event->getValue('pho_org_shortname') != $g_organization)
 }
 
 //Ordnerpfad
-$ordner = "../../../adm_my_files/photos/".$photo_event->getValue("pho_begin")."_".$photo_event->getValue("pho_id");
+$ordner = SERVER_PATH. "/adm_my_files/photos/".$photo_event->getValue("pho_begin")."_".$photo_event->getValue("pho_id");
 
 //Kontrollmechanismen bei Upload
 if($_POST["upload"])
@@ -145,17 +145,17 @@ if($_POST["upload"])
                 echo "<br>Bild $bildnr:<br>";
 
                 //Bild in Tempordner verschieben, groeße aendern und speichern
-                if(move_uploaded_file($_FILES["bilddatei"]["tmp_name"][$x], "../../../adm_my_files/photos/temp".$y.".jpg"))
+                if(move_uploaded_file($_FILES["bilddatei"]["tmp_name"][$x], SERVER_PATH. "/adm_my_files/photos/temp".$y.".jpg"))
                 {
-                    $temp_bild="../../../adm_my_files/photos/temp".$y.".jpg";
+                    $temp_bild=SERVER_PATH. "/adm_my_files/photos/temp".$y.".jpg";
 
                     //Bild skalliert speichern
                     image_save($temp_bild, $g_preferences['photo_save_scale'], $ordner."/".$bildnr.".jpg");
 
                     //Loeschen des Bildes aus Arbeitsspeicher
-                    if(file_exists("../../../adm_my_files/photos/temp".$y.".jpg"))
+                    if(file_exists(SERVER_PATH. "/adm_my_files/photos/temp".$y.".jpg"))
                     {
-                        unlink("../../../adm_my_files/photos/temp".$y.".jpg");
+                        unlink(SERVER_PATH. "/adm_my_files/photos/temp".$y.".jpg");
                     }
                 }//Ende Bild speichern
 

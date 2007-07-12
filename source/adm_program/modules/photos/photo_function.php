@@ -146,7 +146,7 @@ function right_rotate ($pho_id, $bild)
     $photo_event = new PhotoEvent($g_adm_con, $pho_id);
 
     //Ordnerpfad zusammensetzen
-    $ordner = "../../../adm_my_files/photos/".$photo_event->getValue("pho_begin")."_".$photo_event->getValue("pho_id");
+    $ordner = SERVER_PATH. "/adm_my_files/photos/".$photo_event->getValue("pho_begin")."_".$photo_event->getValue("pho_id");
 
     //Ermittlung der Original Bildgroessee
     $bildgroesse = getimagesize("$ordner/$bild.jpg");
@@ -194,7 +194,7 @@ function left_rotate ($pho_id, $bild)
     $photo_event = new PhotoEvent($g_adm_con, $pho_id);
 
     //Ordnerpfad zusammensetzen
-    $ordner = "../../../adm_my_files/photos/".$photo_event->getValue("pho_begin")."_".$photo_event->getValue("pho_id");
+    $ordner = SERVER_PATH. "/adm_my_files/photos/".$photo_event->getValue("pho_begin")."_".$photo_event->getValue("pho_id");
 
     //Ermittlung der Original Bildgroessee
     $bildgroesse = getimagesize("$ordner/$bild.jpg");
@@ -241,7 +241,7 @@ function delete ($pho_id, $bild)
     $photo_event = new PhotoEvent($g_adm_con, $pho_id);
     
     //Speicherort
-    $ordner = "../../../adm_my_files/photos/".$photo_event->getValue("pho_begin")."_".$photo_event->getValue("pho_id");
+    $ordner = SERVER_PATH. "/adm_my_files/photos/".$photo_event->getValue("pho_begin")."_".$photo_event->getValue("pho_id");
 
     //Bericht mit loeschen
     $neuebilderzahl = $photo_event->getValue("pho_quantity")-1;

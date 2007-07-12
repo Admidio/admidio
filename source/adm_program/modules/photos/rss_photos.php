@@ -134,7 +134,7 @@ while ($row = mysql_fetch_object($result))
         $description = $description. "<br /><br />Beispielbilder:<br />";
         for($bild=$row->pho_quantity; $bild>=$row->pho_quantity-4 && $bild>0; $bild--)
         {
-            $bildpfad = "../../../adm_my_files/photos/".$row->pho_begin."_".$row->pho_id."/".$bild.".jpg";
+            $bildpfad = SERVER_PATH. "/adm_my_files/photos/".$row->pho_begin."_".$row->pho_id."/".$bild.".jpg";
             //Zu Sicherheit noch überwachen ob das Bild existiert, wenn ja raus damit
             if (file_exists($bildpfad))
             {
