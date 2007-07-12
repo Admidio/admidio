@@ -59,7 +59,7 @@ if(isset($_GET['pho_begin']))
 {
     $pho_begin = $_GET['pho_begin'];
 }
-if(1==2)
+if(!dtCheckDate(mysqldate("d.m.y", $pho_begin)))
 {
     $g_message->show("invalid");
 }
