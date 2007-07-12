@@ -27,7 +27,6 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
-
 require("../../system/photo_event_class.php");
 require("../../system/common.php");
 
@@ -150,7 +149,7 @@ echo "
     //Ausgabe Bild
     echo"
     <div style=\"align: center\">
-        <img src=\"$g_root_path/adm_program/modules/photos/photo_show.php?bild=$ordner_url/$bild.jpg&amp;scal=$scal&amp;side=$side\"  border=\"0\" alt=\"$ordner_url $bild\">
+        <img src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$bild."&amp;scal=".$scal."&amp;side=".$side."\"border=\"0\" alt=\"$ordner_url $bild\">
     </div>";
 
     //Fenster schliessen Button

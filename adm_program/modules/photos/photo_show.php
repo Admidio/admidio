@@ -28,6 +28,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
+require("../../system/photo_event_class.php");
 require("../../system/common.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
@@ -39,6 +40,29 @@ if ($g_preferences['enable_photo_module'] != 1)
 
 
 header("Content-Type: image/jpeg");
+
+//Uebergaben pruefen
+//pho_id
+$pho_id=NULL;
+if(isset($_GET['pho_id']))
+{
+    $pho_id = $_GET['pho_id'];
+}
+if(!is_numeric($pho_id))
+{
+    $g_message->show("invalid");
+}
+
+//Bildnr.
+$pic_nr=NULL;
+if(isset($_GET['pic_nr']))
+{
+    $pic_nr = $_GET['pic_nr'];
+}
+if(!is_numeric($pic_nr))
+{
+    $g_message->show("invalid");
+}
 
 //Scale
 $scal=NULL;
@@ -62,13 +86,32 @@ if($side != "y" && $side != "x" && $side!=NULL)
     $g_message->show("invalid");
 }
 
-//Bild
-$bild;
-if(isset($_GET['bild']))
+// Fotoveranstaltungs-Objekt erzeugen oder aus Session lesen
+if(isset($_SESSION['photo_event']) && $_SESSION['photo_event']->getValue("pho_id") == $pho_id)
 {
-    $bild = strStripTags($_GET['bild']);
+    $photo_event =& $_SESSION['photo_event'];
+    $photo_event->db_connection = $g_adm_con;
+}
+else
+{
+    // einlesen der Veranstaltung falls noch nicht in Session gespeichert
+    $photo_event = new PhotoEvent($g_adm_con);
+    if($pho_id > 0)
+    {
+        $photo_event->getPhotoEvent($pho_id);
+    }
+
+    $_SESSION['photo_event'] =& $photo_event;
 }
 
+// pruefen, ob Veranstaltung zur aktuellen Organisation gehoert
+if($pho_id > 0 && $photo_event->getValue("pho_org_shortname") != $g_organization)
+{
+    $g_message->show("invalid");
+}   
+
+//Bildpfadzusammensetzten
+$bild=SERVER_PATH. "/adm_my_files/photos/".$photo_event->getValue("pho_begin")."_".$pho_id."/".$pic_nr.".jpg";
 
 //Ermittlung der Original Bildgroesse
 $bildgroesse = getimagesize("$bild");
