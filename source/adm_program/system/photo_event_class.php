@@ -330,15 +330,20 @@ class PhotoEvent
         {
             //Ordnerpfad zusammensetzen
             $folder = SERVER_PATH. "/adm_my_files/photos/".$this->db_fields['pho_begin']."_$photo_id";
-            // nun erst rekursiv den Ordner im Dateisystem loeschen
-            $return_code = $this->deleteInFilesystem($folder);
-
-            // nun noch den uebergebenen Ordner loeschen
-            @chmod($folder, 0777);
-            error_log($folder);
-            if(@rmdir($folder) == false)
+            
+            // aktuellen Ordner incl. Unterordner und Dateien loeschen, falls er existiert
+            if(file_exists($folder))
             {
-                return false;
+	            // nun erst rekursiv den Ordner im Dateisystem loeschen
+	            $return_code = $this->deleteInFilesystem($folder);
+	
+	            // nun noch den uebergebenen Ordner loeschen
+	            @chmod($folder, 0777);
+	            error_log($folder);
+	            if(@rmdir($folder) == false)
+	            {
+	                return false;
+	            }
             }
         
             if($return_code)
@@ -359,38 +364,41 @@ class PhotoEvent
     // Ordners mit Unterordnern und allen Dateien loescht
     function deleteInFilesystem($folder)
     {
-        $dh  = opendir($folder);
-        while (false !== ($filename = readdir($dh)))
+        $dh  = @opendir($folder);
+        if($dh)
         {
-            if($filename != "." && $filename != "..")
-            {
-                $act_folder_entry = "$folder/$filename";
-                
-                if(is_dir($act_folder_entry))
-                {
-                    // nun den entsprechenden Ordner loeschen
-                    $this->deleteInFilesystem($act_folder_entry);
-                    @chmod($act_folder_entry, 0777);
-                    if(@rmdir($act_folder_entry) == false)
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    // die Datei loeschen
-                    if(file_exists($act_folder_entry))
-                    {
-                        @chmod($act_folder_entry, 0777);
-                        if(@unlink($act_folder_entry) == false)
-                        {
-                            return false;
-                        }
-                    }
-                }
-            }
+	        while (false !== ($filename = readdir($dh)))
+	        {
+	            if($filename != "." && $filename != "..")
+	            {
+	                $act_folder_entry = "$folder/$filename";
+	                
+	                if(is_dir($act_folder_entry))
+	                {
+	                    // nun den entsprechenden Ordner loeschen
+	                    $this->deleteInFilesystem($act_folder_entry);
+	                    @chmod($act_folder_entry, 0777);
+	                    if(@rmdir($act_folder_entry) == false)
+	                    {
+	                        return false;
+	                    }
+	                }
+	                else
+	                {
+	                    // die Datei loeschen
+	                    if(file_exists($act_folder_entry))
+	                    {
+	                        @chmod($act_folder_entry, 0777);
+	                        if(@unlink($act_folder_entry) == false)
+	                        {
+	                            return false;
+	                        }
+	                    }
+	                }
+	            }
+	        }
+	        closedir($dh);
         }
-        closedir($dh);
                     
         return true;
     }
