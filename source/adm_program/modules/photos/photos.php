@@ -481,7 +481,7 @@ echo "<div class=\"formBody\">";
         global $g_organization;
         global $bsp_pho_id;
         global $bsp_pic_nr;
-        global $bsp_pic_beginn;
+        global $bsp_pic_begin;
         
         $sql = "    SELECT *
                     FROM ". TBL_PHOTOS. "
@@ -495,7 +495,7 @@ echo "<div class=\"formBody\">";
             {
                 $bsp_pic_nr = mt_rand(1, $adm_photo_child["pho_quantity"]);
                 $bsp_pho_id = $adm_photo_child["pho_id"];
-                $bsp_pic_beginn = $adm_photo_child["pho_begin"];
+                $bsp_pic_begin = $adm_photo_child["pho_begin"];
             }
             else 
             {
@@ -525,14 +525,14 @@ echo "<div class=\"formBody\">";
                 //Bild aus Veranstaltung als Vorschau auswaehlen
                 $bsp_pho_id=0;
                 $bsp_pic_nr=0;
-                $bsp_pic_beginn=0;
+                $bsp_pic_begin=0;
 
                 //sehen ob die Hauptveranstaltung Bilder enthaelt, nur wenn nicht in unterveranst suchen
                 if($adm_photo_list["pho_quantity"]>0)
                 {
                     $bsp_pic_nr=mt_rand(1, $adm_photo_list["pho_quantity"]);
                     $bsp_pho_id=$adm_photo_list["pho_id"];
-                    $bsp_pic_beginn=$adm_photo_list["pho_begin"];
+                    $bsp_pic_begin=$adm_photo_list["pho_begin"];
                 }
                 //Sonst Funktionsaufruf zur Bildauswahl
                 else 
@@ -541,7 +541,7 @@ echo "<div class=\"formBody\">";
                 }
 
                 //Pfad des Beispielbildes
-                $bsp_pic_path = SERVER_PATH. "/adm_my_files/photos/".$bsp_pic_beginn."_".$bsp_pho_id."/".$bsp_pic_nr.".jpg";
+                $bsp_pic_path = SERVER_PATH. "/adm_my_files/photos/".$bsp_pic_begin."_".$bsp_pho_id."/".$bsp_pic_nr.".jpg";
 
                 //Wenn kein Bild gefunden wurde
                 if($bsp_pho_id==0)
@@ -561,7 +561,7 @@ echo "<div class=\"formBody\">";
                             {
                                 echo"<div align=\"center\">
                                     <a target=\"_self\" href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$adm_photo_list["pho_id"]."\">
-                                    <img src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$bsp_pho_id."&amp;pic_nr=".$bsp_pic_nr."&amp;scal=".$g_preferences['photo_preview_scale']."&amp;side=y\" border=\"0\" alt=\"Zufallsbild\"
+                                    <img src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$bsp_pho_id."&amp;pic_nr=".$bsp_pic_nr."&amp;pho_begin=".$bsp_pic_begin."&amp;scal=".$g_preferences['photo_preview_scale']."&amp;side=y\" border=\"0\" alt=\"Zufallsbild\"
                                     style=\"vertical-align: middle; align: right;\"></a>
                                 </div>";
                             }
