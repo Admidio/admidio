@@ -50,7 +50,7 @@ if(isset($_GET['pho_id']))
 }
 if(!is_numeric($pho_id))
 {
-    $g_message->show("invalid");
+	$g_message->show("invalid");
 }
 
 //pho_begin
@@ -59,9 +59,9 @@ if(isset($_GET['pho_begin']))
 {
     $pho_begin = $_GET['pho_begin'];
 }
-if(!dtCheckDate(mysqldate("d.m.y", $pho_begin)))
+if(!dtCheckDate(mysqldate("d.m.y", $pho_begin)) && $pho_begin!=0)
 {
-    $g_message->show("invalid");
+	$g_message->show("invalid");
 }
 
 //Bildnr.
@@ -99,6 +99,12 @@ if($side != "y" && $side != "x" && $side!=NULL)
 
 //Bildpfadzusammensetzten
 $bild=SERVER_PATH. "/adm_my_files/photos/".$pho_begin."_".$pho_id."/".$pic_nr.".jpg";
+
+//Falls die 0 als Bildnummer übergeben wurde
+if(!file_exists($bild))
+{
+	$bild = SERVER_PATH. "/adm_program/images/nopix.jpg";
+}
 
 //Ermittlung der Original Bildgroesse
 $bildgroesse = getimagesize("$bild");

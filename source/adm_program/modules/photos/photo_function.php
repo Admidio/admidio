@@ -132,7 +132,21 @@ function image_save($orig_path, $scale, $destination_path)
 }
 
 
-
+//Loeschen eines Thumbnails
+//pho_id: Veranstaltungsid
+//bild: nr des Bildes dessen Thumbnail gelöscht werden soll
+function thumbnail_delete($pho_id, $pic_nr, $pho_begin)
+{
+	//Ordnerpfad zusammensetzen
+    $pic_path = SERVER_PATH. "/adm_my_files/photos/".$pho_begin."_".$pho_id."/thumbnails/".$pic_nr.".jpg";
+	
+    //Thumbnail loeschen
+	if(file_exists($pic_path))
+    {
+        chmod($pic_path, 0777);
+        unlink($pic_path);
+    }
+}
 
 //Rechtsdrehung eines Bildes
 //pho_id: Veranstaltungsid
@@ -145,9 +159,12 @@ function right_rotate ($pho_id, $bild)
     //Aufruf der ggf. Uebergebenen Veranstaltung
     $photo_event = new PhotoEvent($g_adm_con, $pho_id);
 
+    //Thumbnail loeschen
+    thumbnail_delete($pho_id, $bild, $photo_event->getValue("pho_begin"));
+    
     //Ordnerpfad zusammensetzen
     $ordner = SERVER_PATH. "/adm_my_files/photos/".$photo_event->getValue("pho_begin")."_".$photo_event->getValue("pho_id");
-
+  
     //Ermittlung der Original Bildgroessee
     $bildgroesse = getimagesize("$ordner/$bild.jpg");
 
@@ -192,6 +209,9 @@ function left_rotate ($pho_id, $bild)
 
     //Aufruf der ggf. Uebergebenen Veranstaltung
     $photo_event = new PhotoEvent($g_adm_con, $pho_id);
+    
+    //Thumbnail loeschen
+    thumbnail_delete($pho_id, $bild, $photo_event->getValue("pho_begin"));
 
     //Ordnerpfad zusammensetzen
     $ordner = SERVER_PATH. "/adm_my_files/photos/".$photo_event->getValue("pho_begin")."_".$photo_event->getValue("pho_id");
@@ -245,7 +265,7 @@ function delete ($pho_id, $bild)
 
     //Bericht mit loeschen
     $neuebilderzahl = $photo_event->getValue("pho_quantity")-1;
-
+    
     //Bilder loeschen
     if(file_exists("$ordner/$bild.jpg"))
     {
@@ -253,7 +273,7 @@ function delete ($pho_id, $bild)
         unlink("$ordner/$bild.jpg");
     }
 
-    //Umbennenen der Restbilder
+    //Umbennenen der Restbilder und Thumbnails loeschen
     $neuenr=1;
     for($x=1; $x<=$photo_event->getValue("pho_quantity"); $x++)
     {
@@ -265,12 +285,16 @@ function delete ($pho_id, $bild)
             }//if
             $neuenr++;
         }//if
+        
+        //Thumbnails loeschen
+         thumbnail_delete($pho_id, $neuenr-1, $photo_event->getValue("pho_begin"));
    }//for
 
    // Aendern der Datenbankeintaege
    $photo_event->setValue("pho_quantity", $neuebilderzahl);
    $photo_event->save($g_current_user->getValue("usr_id"));
 };
+
 
 //Nutzung der rotatefunktion
 if(isset($_GET["job"]) && $_GET["job"]=="rotate")
@@ -300,7 +324,16 @@ if(isset($_GET["job"]) && $_GET["job"]=="do_delete")
 {
     //Aufruf der entsprechenden Funktion
     delete($pho_id, $_GET["bild"]);
+    
+    //Neu laden der Veranstaltungsdaten
+    $photo_event = new PhotoEvent($g_adm_con);
+	if($pho_id > 0)
+    {
+        $photo_event->getPhotoEvent($pho_id);
+    }
 
+    $_SESSION['photo_event'] =& $photo_event;
+    
     $_SESSION['navigation']->deleteLastUrl();
     $g_message->setForwardUrl("$g_root_path/adm_program/system/back.php", 2000);
     $g_message->show("photo_deleted");

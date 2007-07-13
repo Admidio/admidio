@@ -649,9 +649,7 @@ echo "<div class=\"formBody\">";
 
         /****************************Leere Veranstaltung****************/
         //Falls die Veranstaltung weder Bilder noch Unterordner enthaelt
-        if((  ($photo_event->getValue("pho_quantity")=="0" || strlen($photo_event->getValue("pho_quantity")) == 0) 
-           && mysql_num_rows($result_list) == 0)
-        || $events == $ignored)  // alle vorhandenen Veranstaltungen werden ignoriert
+        if(($photo_event->getValue("pho_quantity")=="0" || strlen($photo_event->getValue("pho_quantity")) == 0) && $events<1)  // alle vorhandenen Veranstaltungen werden ignoriert
         {
             echo"<tr style=\"text-align: center;\"><td>Diese Veranstaltung enth&auml;lt leider noch keine Bilder.</td></tr>";
         }
