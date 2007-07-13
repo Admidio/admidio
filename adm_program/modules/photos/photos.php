@@ -162,16 +162,13 @@ $g_layout['title'] = "Fotogalerien";
 if($g_preferences['enable_rss'] == 1)
 {
     $g_layout['header'] =  "<link type=\"application/rss+xml\" rel=\"alternate\" title=\"$g_current_organization->longname - Fotos\"
-            href=\"$g_root_path/adm_program/modules/photos/rss_photos.php\">";
+            href=\"$g_root_path/adm_program/modules/photos/rss_photos.php\">
+
+            <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/script.aculo.us/prototype.js\"></script>
+            <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/script.aculo.us/scriptaculous.js?load=effects\"></script>
+            <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/lightbox/lightbox.js\"></script>
+            <link rel=\"stylesheet\" href=\"$g_root_path/adm_program/layout/lightbox.css\" type=\"text/css\" media=\"screen\" />";
 };
-
-//Lightbox laden
-echo"	<script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/lightbox/prototype.js\"></script>
-		<script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/lightbox/scriptaculous.js?load=effects\"></script>
-		<script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/lightbox/lightbox.js\"></script>";
-//Lightbox-Stylesheets
-echo"<link rel=\"stylesheet\" href=\"$g_root_path/adm_program/layout/lightbox.css\" type=\"text/css\" media=\"screen\" />";
-
 
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
