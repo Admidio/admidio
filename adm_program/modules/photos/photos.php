@@ -166,11 +166,11 @@ if($g_preferences['enable_rss'] == 1)
 };
 
 //Lightbox laden
-echo"	<script type=\"text/javascript\" src=\"lightbox/js/prototype.js\"></script>
-		<script type=\"text/javascript\" src=\"lightbox/js/scriptaculous.js?load=effects\"></script>
-		<script type=\"text/javascript\" src=\"lightbox/js/lightbox.js\"></script>";
+echo"	<script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/lightbox/prototype.js\"></script>
+		<script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/lightbox/scriptaculous.js?load=effects\"></script>
+		<script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/lightbox/lightbox.js\"></script>";
 //Lightbox-Stylesheets
-echo"<link rel=\"stylesheet\" href=\"$g_root_path/adm_config/lightbox.css\" type=\"text/css\" media=\"screen\" />";
+echo"<link rel=\"stylesheet\" href=\"$g_root_path/adm_program/layout/lightbox.css\" type=\"text/css\" media=\"screen\" />";
 
 
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");

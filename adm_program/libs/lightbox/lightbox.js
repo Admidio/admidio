@@ -509,7 +509,7 @@ Lightbox.prototype = {
 		// if image is part of set display 'Image x of x' 
 		if(imageArray.length > 1){
 			Element.show('numberDisplay');
-			Element.setInnerHTML( 'numberDisplay', "Image " + eval(activeImage + 1) + " of " + imageArray.length);
+			Element.setInnerHTML( 'numberDisplay', "Bild " + eval(activeImage + 1) + " von " + imageArray.length);
 		}
 
 		new Effect.Parallel(
