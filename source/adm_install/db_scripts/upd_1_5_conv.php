@@ -194,6 +194,11 @@ while($row_orga = mysql_fetch_object($result_orga))
             VALUES ($row_orga->org_id, 'system_align', 'center')";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
+    
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+            VALUES ($row_orga->org_id, 'photo_show_mode', '0')";
+    $result = mysql_query($sql, $connection);
+    if(!$result) showError(mysql_error());
 
     $sql = "UPDATE ". TBL_USER_FIELDS. " SET usf_cat_id = $cat_id_data
              WHERE usf_org_shortname = '$row_orga->org_shortname' ";
