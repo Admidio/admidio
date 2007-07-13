@@ -165,6 +165,14 @@ if($g_preferences['enable_rss'] == 1)
             href=\"$g_root_path/adm_program/modules/photos/rss_photos.php\">";
 };
 
+//Lightbox laden
+echo"	<script type=\"text/javascript\" src=\"lightbox/js/prototype.js\"></script>
+		<script type=\"text/javascript\" src=\"lightbox/js/scriptaculous.js?load=effects\"></script>
+		<script type=\"text/javascript\" src=\"lightbox/js/lightbox.js\"></script>";
+//Lightbox-Stylesheets
+echo"<link rel=\"stylesheet\" href=\"$g_root_path/adm_config/lightbox.css\" type=\"text/css\" media=\"screen\" />";
+
+
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 //Ueberschift
@@ -348,12 +356,17 @@ echo "<div class=\"formBody\">";
                             image_save($ordner."/".$bild.".jpg", $g_preferences['photo_thumbs_scale'], $ordner."/thumbnails/".$bild.".jpg");
                         }
                         
-                        echo "
+                        /*echo "
                         <td style=\"text-align: center;\">
                             <img onclick=\"window.open('$g_root_path/adm_program/modules/photos/photopopup.php?bild=$bild&pho_id=$pho_id','msg', 'height=".$popup_height.", width=".$popup_width.",left=162,top=5')\" 
                             style=\"vertical-align: middle; cursor: pointer;\" src=\"".$ordner_url."/thumbnails/".$bild.".jpg\" border=\"0\" alt=\"$bild\">
+                            <br>";*/
+                        
+                        echo "
+                        <td style=\"text-align: center;\">
+                            <a href=\"".$ordner_url."/".$bild.".jpg\" rel=\"lightbox[roadtrip]\" title=\"".$photo_event->getValue("pho_name")."\"><img src=\"".$ordner_url."/thumbnails/".$bild.".jpg\" border=\"0\" alt=\"$bild\"></a>
                             <br>";
-
+                        
                             //Buttons fuer moderatoren
                             if($g_current_user->editPhotoRight())
                             {
