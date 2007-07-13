@@ -151,19 +151,30 @@ if($_POST["upload"])
 
                     //Bild skalliert speichern
                     image_save($temp_bild, $g_preferences['photo_save_scale'], $ordner."/".$bildnr.".jpg");
-
+					
+                 	//Nachsehen ob Thumnailordner existiert
+			        if(!file_exists($ordner."/thumbnails"))
+			        {
+			            mkdir($ordner."/thumbnails", 0777);
+			        }
+			        
+                    //Thumbnail speichern
+                    image_save($temp_bild, $g_preferences['photo_thumbs_scale'], $ordner."/thumbnails/".$bildnr.".jpg");
                     //Loeschen des Bildes aus Arbeitsspeicher
+                    
                     if(file_exists(SERVER_PATH. "/adm_my_files/photos/temp".$y.".jpg"))
                     {
                         unlink(SERVER_PATH. "/adm_my_files/photos/temp".$y.".jpg");
-                    }
+                    }         	
+                    
+                
                 }//Ende Bild speichern
 
 
                 //Kontrolle
                 if(file_exists($ordner."/".$bildnr.".jpg"))
                 {
-                    echo"<img src=\"photo_show.php?scal=".$g_preferences['photo_save_scale']."&bild=$ordner/$bildnr.jpg\"><br><br>";
+                    echo"<img src=\"photo_show.php?scal=".$g_preferences['photo_save_scale']."&amp;pic_nr=".$bildnr."&amp;pho_id=".$photo_event->getValue("pho_id")."&amp;pho_begin=".$photo_event->getValue("pho_begin")."\"><br><br>";
 
                     //Aendern der Datenbankeintaege
                     $photo_event->setValue("pho_quantity", $photo_event->getValue("pho_quantity")+1);
