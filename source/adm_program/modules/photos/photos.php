@@ -162,13 +162,20 @@ $g_layout['title'] = "Fotogalerien";
 if($g_preferences['enable_rss'] == 1)
 {
     $g_layout['header'] =  "<link type=\"application/rss+xml\" rel=\"alternate\" title=\"$g_current_organization->longname - Fotos\"
-            href=\"$g_root_path/adm_program/modules/photos/rss_photos.php\">
-
+            href=\"$g_root_path/adm_program/modules/photos/rss_photos.php\">";
+    
+    //Lightbox-Mode
+    if($g_preferences['photo_show_mode']==1)
+    {
+		$g_layout['header'] = $g_layout['header']."
             <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/script.aculo.us/prototype.js\"></script>
             <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/script.aculo.us/scriptaculous.js?load=effects\"></script>
             <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/lightbox/lightbox.js\"></script>
             <link rel=\"stylesheet\" href=\"$g_root_path/adm_program/layout/lightbox.css\" type=\"text/css\" media=\"screen\" />";
+    }
 };
+
+$g_layout['onload'] = " onload=\"initLightbox()\" ";
 
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
@@ -353,18 +360,35 @@ echo "<div class=\"formBody\">";
                             image_save($ordner."/".$bild.".jpg", $g_preferences['photo_thumbs_scale'], $ordner."/thumbnails/".$bild.".jpg");
                         }
                         
-                        /*echo "
-                        <td style=\"text-align: center;\">
-                            <img onclick=\"window.open('$g_root_path/adm_program/modules/photos/photopopup.php?bild=$bild&pho_id=$pho_id','msg', 'height=".$popup_height.", width=".$popup_width.",left=162,top=5')\" 
-                            style=\"vertical-align: middle; cursor: pointer;\" src=\"".$ordner_url."/thumbnails/".$bild.".jpg\" border=\"0\" alt=\"$bild\">
-                            <br>";*/
+                        //Popup-Mode
+                        if($g_preferences['photo_show_mode']==0)
+                        {
+                        	echo "
+                        	<td style=\"text-align: center;\">
+                            	<img onclick=\"window.open('$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$bild&pho_id=$pho_id','msg', 'height=".$popup_height.", width=".$popup_width.",left=162,top=5')\" 
+                            	style=\"vertical-align: middle; cursor: pointer;\" src=\"".$ordner_url."/thumbnails/".$bild.".jpg\" border=\"0\" alt=\"$bild\">
+                            	<br>";
+                        }
                         
-                        echo "
-                        <td style=\"text-align: center;\">
-                            <a href=\"".$ordner_url."/".$bild.".jpg\" rel=\"lightbox[roadtrip]\" title=\"".$photo_event->getValue("pho_name")."\"><img src=\"".$ordner_url."/thumbnails/".$bild.".jpg\" border=\"0\" alt=\"$bild\"></a>
-                            <br>";
+                        //Lightbox-Mode
+                        if($g_preferences['photo_show_mode']==1)
+                        {
+                        	echo "
+                        	<td style=\"text-align: center;\">
+                            	<a href=\"".$ordner_url."/".$bild.".jpg\" rel=\"lightbox[roadtrip]\" title=\"".$photo_event->getValue("pho_name")."\"><img src=\"".$ordner_url."/thumbnails/".$bild.".jpg\" border=\"0\" alt=\"$bild\"></a>
+                            	<br>";
+                        }
                         
-                            //Buttons fuer moderatoren
+                        //Gleichesfenster-Mode
+                        if($g_preferences['photo_show_mode']==2)
+                        {
+                        	echo "
+                        	<td style=\"text-align: center;\">
+                            	<img onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$bild&pho_id=$pho_id'\" 
+                            	style=\"vertical-align: middle; cursor: pointer;\" src=\"".$ordner_url."/thumbnails/".$bild.".jpg\" border=\"0\" alt=\"$bild\">";
+                        }   
+                        	
+							//Buttons fuer moderatoren
                             if($g_current_user->editPhotoRight())
                             {
                                 echo"
