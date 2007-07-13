@@ -622,6 +622,39 @@ echo "
                     eingeblendet. Der Schriftzug wird nicht beim hochladen mit abgespeichert. Die Einblendung
                     erfolgt nur bei Bildern mit einer Skalierung &uuml;ber 200 Pixel der l&auml;ngeren Seite, also in der Regl nicht bei Thumbnails.
                 </div>
+
+                <div style=\"margin-top: 15px;\">
+                    <div style=\"text-align: left; width: 55%; float: left;\">Fotodarstellung:</div>
+                    <div style=\"text-align: left;\">
+                        <select size=\"1\" name=\"photo_show_mode\">
+                            <option value=\"0\" ";
+                            if($form_values['photo_show_mode'] == 0)
+                            {
+                                echo " selected ";
+                            }
+                            echo ">Popupfenster</option>
+                            <option value=\"1\" ";
+                            if($form_values['photo_show_mode'] == 1)
+                            {
+                                echo " selected ";
+                            }
+                            echo ">Lightbox</option>
+                            <option value=\"2\" ";
+                            if($form_values['photo_show_mode'] == 2)
+                            {
+                                echo " selected ";
+                            }
+                            echo ">Gleiches Fenster</option>
+                        </select>
+                    </div>
+                </div>
+                <div class=\"smallText\">
+                    Wie sollen die Bilder in der Gro&szlig;enansicht angezeigt werden?<br/>
+					1) in einem Popupfenster<br/>
+					2) mit Lightbox (der rest der Seite wird ausgegraut)<br/>
+					3) im gleichen Fenster					
+                </div>
+
             </div>
         </div>";
 

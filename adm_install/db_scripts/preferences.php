@@ -59,6 +59,7 @@ $orga_preferences = array(
     'photo_show_height'   => '380',
     'photo_image_text'    => '1',
     'photo_preview_scale' => '100',
+    'photo_show_mode'   => '1',
     
     // Gaestebuch
     'enable_guestbook_module'   => '1',
