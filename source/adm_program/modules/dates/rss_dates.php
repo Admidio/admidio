@@ -143,9 +143,12 @@ while ($row = mysql_fetch_object($result))
 
     $description = $description. "<br /><br /><a href=\"$link\">Link auf $g_current_organization->homepage</a>";
     
+    //i-cal downloadlink
+    $description = $description. "<br /><br /><a href=\"$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=$row->dat_id&mode=4\">Termin in meinen Kalender &uuml;bernehmen</a>";
+    
     // Den Autor des Termins ermitteln und ausgeben
     $user = new User($g_adm_con, $row->dat_usr_id);
-    $description = $description. "<br /><br /><i>Angelegt von ". strSpecialChars2Html($user->getValue("Vorname"). " ". strSpecialChars2Html($user->getValue("Nachname");
+    $description = $description. "<br /><br /><i>Angelegt von ". strSpecialChars2Html($user->getValue("Vorname")). " ". strSpecialChars2Html($user->getValue("Nachname"))."";
     $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->dat_timestamp). "</i>";
 
     // Zuletzt geaendert nur anzeigen, wenn Änderung nach 15 Minuten oder durch anderen Nutzer gemacht wurde
