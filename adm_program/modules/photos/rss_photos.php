@@ -149,7 +149,7 @@ while ($row = mysql_fetch_object($result))
 
     //Angaben zum Anleger
     $create_user = new User($g_adm_con, $row->pho_usr_id);
-    $description = $description. "<br /><br /><i>Angelegt von ". strSpecialChars2Html($create_user->getValue("Vorname"). " ". strSpecialChars2Html($create_user->getValue("Nachname"));
+    $description = $description. "<br /><br /><i>Angelegt von ". strSpecialChars2Html($create_user->getValue("Vorname")). " ". strSpecialChars2Html($create_user->getValue("Nachname"));
     $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->pho_timestamp). "</i>";
 
     if($row->pho_usr_id_change > 0

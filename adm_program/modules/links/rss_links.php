@@ -93,7 +93,7 @@ while ($row = mysql_fetch_object($result))
 
     // Den Autor der Links ermitteln und ausgeben
     $user = new User($g_adm_con, $row->lnk_usr_id);
-    $description = $description. "<br /><br /><i>Angelegt von ". strSpecialChars2Html($user->getValue("Vorname"). " ". strSpecialChars2Html($user->getValue("Nachname");
+    $description = $description. "<br /><br /><i>Angelegt von ". strSpecialChars2Html($user->getValue("Vorname")). " ". strSpecialChars2Html($user->getValue("Nachname"));
     $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->lnk_timestamp). "</i>";
 
     $pubDate = date('r', strtotime($row->lnk_timestamp));

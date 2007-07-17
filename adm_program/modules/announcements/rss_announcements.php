@@ -117,7 +117,7 @@ while ($row = mysql_fetch_object($result))
 
     // Den Autor der Ankuendigung ermitteln und ausgeben
     $user = new User($g_adm_con, $row->ann_usr_id);
-    $description = $description. "<br /><br /><i>Angelegt von ". strSpecialChars2Html($user->getValue("Vorname"). " ". strSpecialChars2Html($user->getValue("Nachname");
+    $description = $description. "<br /><br /><i>Angelegt von ". strSpecialChars2Html($user->getValue("Vorname")). " ". strSpecialChars2Html($user->getValue("Nachname"));
     $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->ann_timestamp). "</i>";
 
     // Zuletzt geaendert nur anzeigen, wenn Änderung nach 15 Minuten oder durch anderen Nutzer gemacht wurde
