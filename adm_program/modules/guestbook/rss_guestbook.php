@@ -57,7 +57,7 @@ if ($g_preferences['enable_bbcode'] == 1)
 
 // die 10 letzten Eintraege aus der DB fischen...
 $sql = "SELECT * FROM ". TBL_GUESTBOOK. "
-        WHERE gbo_org_id = '$g_current_organization->id'
+        WHERE gbo_org_id = ". $g_current_organization->getValue("org_id"). "
         ORDER BY gbo_timestamp DESC
         LIMIT 10 ";
 
@@ -68,7 +68,7 @@ db_error($result,__FILE__,__LINE__);
 // ab hier wird der RSS-Feed zusammengestellt
 
 // Ein RSSfeed-Objekt erstellen
-$rss = new RSSfeed("http://$g_current_organization->homepage", "$g_current_organization->longname - Gaestebuch", "Die 10 neuesten Gaestebucheintraege");
+$rss = new RSSfeed("http://". $g_current_organization->getValue("org_homepage"), $g_current_organization->getValue("org_longname"). " - Gaestebuch", "Die 10 neuesten Gaestebucheintraege");
 
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
@@ -90,7 +90,7 @@ while ($row = mysql_fetch_object($result))
         $description = $description. "<br /><br />". nl2br(strSpecialChars2Html($row->gbo_text));
     }
 
-    $description = $description. "<br /><br /><a href=\"$link\">Link auf $g_current_organization->homepage</a>";
+    $description = $description. "<br /><br /><a href=\"$link\">Link auf ". $g_current_organization->getValue("org_homepage"). "</a>";
 
     $pubDate = date('r', strtotime($row->gbo_timestamp));
 

@@ -61,7 +61,7 @@ if($req_rol_id > 0)
     $role->getRole($req_rol_id);
     
     // Pruefung, ob die Rolle zur aktuellen Organisation gehoert
-    if($role->getValue("cat_org_id") != $g_current_organization->id)
+    if($role->getValue("cat_org_id") != $g_current_organization->getValue("org_id"))
     {
         $g_message->show("norights");
     }
@@ -172,7 +172,7 @@ echo "
                             echo ">- Bitte w&auml;hlen -</option>";
 
                         $sql = "SELECT * FROM ". TBL_CATEGORIES. "
-                                 WHERE cat_org_id = $g_current_organization->id
+                                 WHERE cat_org_id = ". $g_current_organization->getValue("org_id"). "
                                    AND cat_type   = 'ROL'
                                  ORDER BY cat_sequence ASC ";
                         $result = mysql_query($sql, $g_adm_con);
@@ -536,7 +536,7 @@ echo "
                                   FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                                  WHERE rol_valid  = 1
                                    AND rol_cat_id = cat_id
-                                   AND cat_org_id = $g_current_organization->id
+                                   AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
                                  ORDER BY rol_name ";
                         $allRoles = mysql_query($sql, $g_adm_con);
                         db_error($allRoles,__FILE__,__LINE__);

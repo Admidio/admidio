@@ -62,7 +62,7 @@ echo "
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
 <html>
 <head>
-    <title>$g_current_organization->longname"; 
+    <title>". $g_current_organization->getValue("org_longname"); 
     if(strlen($g_layout['title']) > 0)
     {
         echo " - ". $g_layout['title'];

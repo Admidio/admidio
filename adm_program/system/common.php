@@ -132,7 +132,7 @@ else
 // damit die Daten nicht bei jedem Script aus der Datenbank ausgelesen werden muessen
 if(isset($_SESSION['g_current_organization']) 
 && isset($_SESSION['g_preferences'])
-&& $g_organization == $_SESSION['g_current_organization']->shortname )
+&& $g_organization == $_SESSION['g_current_organization']->getValue("org_shortname"))
 {
     $g_current_organization =& $_SESSION['g_current_organization'];
     $g_current_organization->db_connection = $g_adm_con;
@@ -142,7 +142,7 @@ else
 {
     $g_current_organization = new Organization($g_adm_con);
     $g_current_organization->getOrganization($g_organization);
-    if($g_current_organization->id == 0)
+    if($g_current_organization->getValue("org_id") == 0)
     {
         // Organisation wurde nicht gefunden
         die("<div style=\"color: #CC0000;\">Error: ". $message_text['missing_orga']. "</div>");

@@ -91,7 +91,7 @@ else
 
     if ($_GET['id'] != 0)
     {
-        $sql    = "SELECT * FROM ". TBL_GUESTBOOK. " WHERE gbo_id = {0} and gbo_org_id = $g_current_organization->id";
+        $sql    = "SELECT * FROM ". TBL_GUESTBOOK. " WHERE gbo_id = {0} and gbo_org_id = ". $g_current_organization->getValue("org_id");
         $sql    = prepareSQL($sql, array($_GET['id']));
         $result = mysql_query($sql, $g_adm_con);
         db_error($result,__FILE__,__LINE__);
@@ -133,7 +133,7 @@ if (!$g_valid_login && $g_preferences['flooding_protection_time'] != 0)
 
     $sql = "SELECT count(*) FROM ". TBL_GUESTBOOK. "
             where unix_timestamp(gbo_timestamp) > unix_timestamp()-". $g_preferences['flooding_protection_time']. "
-              and gbo_org_id = $g_current_organization->id
+              and gbo_org_id = ". $g_current_organization->getValue("org_id"). "
               and gbo_ip_address = '$ipAddress' ";
     $result = mysql_query($sql, $g_adm_con);
     db_error($result,__FILE__,__LINE__);

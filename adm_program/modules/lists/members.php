@@ -70,7 +70,7 @@ if(  (!$g_current_user->assignRoles()
    && !$g_current_user->editUser()) 
 || (  !$g_current_user->isWebmaster() 
    && $role->getValue("rol_name") == "Webmaster") 
-|| $role->getValue("cat_org_id") != $g_current_organization->id)
+|| $role->getValue("cat_org_id") != $g_current_organization->getValue("org_id"))
 {
     $g_message->show("norights");
 }
@@ -120,7 +120,7 @@ if($restrict=="m")
             AND rol_valid  = 1
             AND usr_valid  = 1
             AND rol_cat_id = cat_id
-            AND cat_org_id = $g_current_organization->id
+            AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
             ORDER BY last_name, first_name ";
     error_log($sql);
     $result_user = mysql_query($sql, $g_adm_con);

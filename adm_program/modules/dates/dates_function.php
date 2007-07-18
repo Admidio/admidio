@@ -175,7 +175,7 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
     }
     
     // Daten in Datenbank schreiben
-    $return_code = $date->save($g_current_user->getValue("usr_id"), $g_current_organization->shortname);
+    $return_code = $date->save($g_current_user->getValue("usr_id"), $g_current_organization->getValue("org_shortname"));
 
     if($return_code < 0)
     {

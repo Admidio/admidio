@@ -38,7 +38,7 @@ $_SESSION['organization_request'] = $_REQUEST;
 // Pruefen, ob alle notwendigen Felder gefuellt sind
 // *******************************************************************************
 
-if(strlen($_POST["longname"]) == 0)
+if(strlen($_POST["org_longname"]) == 0)
 {
     $g_message->show("feld", "Name (lang)");
 }
@@ -63,17 +63,6 @@ if(is_numeric($_POST['logout_minutes']) == false || $_POST['logout_minutes'] <= 
 // *******************************************************************************
 // Daten speichern
 // *******************************************************************************
-
-$g_current_organization->longname  = strStripTags($_POST["longname"]);
-$g_current_organization->homepage  = strStripTags($_POST["homepage"]);
-if(isset($_POST["parent"]))
-{
-    $g_current_organization->org_id_parent = $_POST["parent"];
-}
-else
-{
-    $g_current_organization->org_id_parent = null;
-}
 
 if(isset($_POST["enable_mail_module"]) == false)
 {
@@ -172,9 +161,20 @@ if(isset($_POST["enable_announcements_module"]) == false)
 // *******************************************************************************
 // Organisation updaten
 // *******************************************************************************
-$ret_code = $g_current_organization->update();
+
+// POST Variablen in das UserField-Objekt schreiben
+foreach($_POST as $key => $value)
+{
+    if(strpos($key, "org_") === 0)
+    {
+        $g_current_organization->setValue($key, $value);
+    }
+}
+
+$ret_code = $g_current_organization->save();
 if($ret_code != 0)
 {
+	$g_current_organization->clear();
     $g_message->show("mysql", $ret_code);
 }
 
@@ -183,16 +183,17 @@ if($ret_code != 0)
 foreach($_POST as $key => $value)
 {
     // Elmente, die nicht in adm_preferences gespeichert werden hier aussortieren
-    if($key != "version"
-    && $key != "shortname"
-    && $key != "longname"
-    && $key != "homepage"
+    if(strpos($key, "org_") === false
+    && $key != "version"
     && $key != "save")
     {
-        writeOrgaPreferences($key, $value);
+    	$preferences[$key] = $value;
     }
 }
 
+$g_current_organization->setPreferences($preferences);
+
+// Aufraeumen
 unset($_SESSION['organization_request']);
 $g_current_session->renewOrganizationObject();
 

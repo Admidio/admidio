@@ -201,7 +201,7 @@ class Session
             if(strlen($this->db_fields['ses_id']) == 0)
             {
                 // Default-Daten vorbelegen
-                $this->db_fields['ses_org_id']     = $g_current_organization->id;
+                $this->db_fields['ses_org_id']     = $g_current_organization->getValue("org_id");
                 $this->db_fields['ses_begin']      = date("Y-m-d H:i:s", time());
                 $this->db_fields['ses_timestamp']  = date("Y-m-d H:i:s", time());
                 $this->db_fields['ses_ip_address'] = $_SERVER['REMOTE_ADDR'];

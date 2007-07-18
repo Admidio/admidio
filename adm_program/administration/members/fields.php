@@ -92,7 +92,7 @@ echo "
 $sql = "SELECT * FROM ". TBL_CATEGORIES. ", ". TBL_USER_FIELDS. "
          WHERE cat_type   = 'USF'
            AND usf_cat_id = cat_id
-           AND (  cat_org_id = $g_current_organization->id
+           AND (  cat_org_id = ". $g_current_organization->getValue("org_id"). "
                OR cat_org_id IS NULL )
          ORDER BY cat_sequence ASC, usf_sequence ASC ";
 $result = mysql_query($sql, $g_adm_con);

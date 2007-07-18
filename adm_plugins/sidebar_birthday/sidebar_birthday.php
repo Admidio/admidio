@@ -83,7 +83,7 @@ $sql    = "SELECT DISTINCT usr_id, usr_last_name, usr_first_name, usr_login_name
               AND rol_valid  = 1
              JOIN ". TBL_CATEGORIES. "
                ON rol_cat_id = cat_id
-              AND cat_org_id = $g_current_organization->id
+              AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
             WHERE Month(usr_birthday)      = Month(SYSDATE())
               AND DayOfMonth(usr_birthday) = DayOfMonth(SYSDATE())
               AND usr_valid = 1

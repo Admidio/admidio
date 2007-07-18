@@ -207,7 +207,7 @@ class PhotoEvent
                 {
                     $this->db_fields['pho_timestamp']     = date("Y-m-d H:i:s", time());
                     $this->db_fields['pho_usr_id']        = $login_user_id;
-                    $this->db_fields['pho_org_shortname'] = $g_current_organization->shortname;
+                    $this->db_fields['pho_org_shortname'] = $g_current_organization->getValue("org_shortname");
                 }
             }
             

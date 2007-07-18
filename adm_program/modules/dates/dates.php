@@ -98,7 +98,7 @@ $_SESSION['navigation']->addUrl($g_current_url);
 $g_layout['title'] = $req_headline;
 if($g_preferences['enable_rss'] == 1)
 {
-    $g_layout['header'] =  "<link type=\"application/rss+xml\" rel=\"alternate\" title=\"$g_current_organization->longname - Termine\"
+    $g_layout['header'] =  "<link type=\"application/rss+xml\" rel=\"alternate\" title=\"". $g_current_organization->getValue("org_longname"). " - Termine\"
         href=\"$g_root_path/adm_program/modules/dates/rss_dates.php\">";
 };
 
@@ -137,7 +137,7 @@ while($orga = current($arr_ref_orgas))
 // damit das SQL-Statement nachher nicht auf die Nase faellt, muss $organizations gefuellt sein
 if(strlen($organizations) == 0)
 {
-    $organizations = "'$g_current_organization->shortname'";
+    $organizations = "'". $g_current_organization->getValue("org_shortname"). "'";
 }
 
 // falls eine id fuer ein bestimmtes Datum uebergeben worden ist...
@@ -146,7 +146,7 @@ if($req_id > 0)
     $sql = "SELECT * FROM ". TBL_DATES. "
              WHERE ( dat_id = {0}
                    AND ((dat_global   = 1 AND dat_org_shortname IN ($organizations))
-                        OR dat_org_shortname = '$g_organization'))";
+                        OR dat_org_shortname = '". $g_current_organization->getValue("org_shortname"). "'))";
     $sql    = prepareSQL($sql, array($req_id));
 }
 //...ansonsten alle fuer die Gruppierung passenden Termine aus der DB holen.
@@ -156,7 +156,7 @@ else
     if($req_mode == "old")
     {
         $sql    = "SELECT * FROM ". TBL_DATES. "
-                    WHERE (  dat_org_shortname = '$g_organization'
+                    WHERE (  dat_org_shortname = '". $g_current_organization->getValue("org_shortname"). "'
                        OR (   dat_global   = 1
                           AND dat_org_shortname IN ($organizations) ))
                       AND dat_begin < '$act_date'

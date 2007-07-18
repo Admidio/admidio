@@ -132,7 +132,7 @@ class User
                        $join_user_data
                  WHERE usf_cat_id = cat_id 
                    AND (  cat_org_id IS NULL
-                       OR cat_org_id  = $g_current_organization->id )
+                       OR cat_org_id  = ". $g_current_organization->getValue("org_id"). " )
                  ORDER BY cat_sequence, usf_sequence";
         error_log($sql);
         $result_usf = mysql_query($sql, $this->db_connection);
@@ -640,7 +640,7 @@ class User
                           AND $right     = 1
                           AND rol_valid  = 1 
                           AND rol_cat_id = cat_id
-                          AND cat_org_id = $g_current_organization->id ";
+                          AND cat_org_id = ". $g_current_organization->getValue("org_id");
             $result = mysql_query($sql, $this->db_connection);
             db_error($result,__FILE__,__LINE__);
 
@@ -770,7 +770,7 @@ class User
                           AND rol_name   = 'Webmaster'
                           AND rol_valid  = 1 
                           AND rol_cat_id = cat_id
-                          AND cat_org_id = $g_current_organization->id ";
+                          AND cat_org_id = ". $g_current_organization->getValue("org_id");
             error_log($sql);
             $result = mysql_query($sql, $this->db_connection);
             db_error($result,__FILE__,__LINE__);            

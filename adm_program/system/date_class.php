@@ -182,7 +182,7 @@ class Date
     function save($login_user_id, $organization)
     {
         if((is_numeric($login_user_id) || strlen($login_user_id) == 0)
-        && (is_numeric($this->db_fields['dat_id']) || is_null($this->db_fields['dat_id'])))
+        && (is_numeric($this->db_fields['dat_id']) || strlen($this->db_fields['dat_id']) == 0))
         {
             if($login_user_id > 0)
             {

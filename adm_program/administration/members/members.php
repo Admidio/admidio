@@ -120,6 +120,10 @@ if($req_members)
                       email.usd_value as email, homepage.usd_value as homepage,
                       usr_login_name, usr_last_change, 1 member
                  FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_USERS. "
+                RIGHT JOIN ". TBL_USER_DATA. " as last_name
+                   ON last_name.usd_usr_id = usr_id
+                  AND last_name.usd_usf_id = ". $g_current_user->getProperty("Nachname", "usf_id"). "
+                      $search_condition
                  LEFT JOIN ". TBL_USER_DATA. " as first_name
                    ON first_name.usd_usr_id = usr_id
                   AND first_name.usd_usf_id = ". $g_current_user->getProperty("Vorname", "usf_id"). "
@@ -129,17 +133,13 @@ if($req_members)
                  LEFT JOIN ". TBL_USER_DATA. " as homepage
                    ON homepage.usd_usr_id = usr_id
                   AND homepage.usd_usf_id = ". $g_current_user->getProperty("Homepage", "usf_id"). "
-                RIGHT JOIN ". TBL_USER_DATA. " as last_name
-                   ON last_name.usd_usr_id = usr_id
-                  AND last_name.usd_usf_id = ". $g_current_user->getProperty("Nachname", "usf_id"). "
-                      $search_condition
                 WHERE usr_valid = 1
                   AND mem_usr_id = usr_id
                   AND mem_rol_id = rol_id
                   AND mem_valid  = 1
                   AND rol_valid  = 1
                   AND rol_cat_id = cat_id
-                  AND cat_org_id = $g_current_organization->id
+                  AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
                 ORDER BY last_name, first_name ";
 }
 else
@@ -149,6 +149,10 @@ else
                       email.usd_value as email, homepage.usd_value as homepage,
                       usr_login_name, usr_last_change, count(cat_id) member
                  FROM ". TBL_USERS. "
+                RIGHT JOIN ". TBL_USER_DATA. " as last_name
+                   ON last_name.usd_usr_id = usr_id
+                  AND last_name.usd_usf_id = ". $g_current_user->getProperty("Nachname", "usf_id"). "
+                      $search_condition
                  LEFT JOIN ". TBL_MEMBERS. "
                    ON mem_usr_id = usr_id
                   AND mem_valid  = 1
@@ -157,7 +161,7 @@ else
                   AND rol_valid  = 1
                  LEFT JOIN ". TBL_CATEGORIES. "
                    ON rol_cat_id = cat_id
-                  AND cat_org_id = $g_current_organization->id
+                  AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
                  LEFT JOIN ". TBL_USER_DATA. " as first_name
                    ON first_name.usd_usr_id = usr_id
                   AND first_name.usd_usf_id = ". $g_current_user->getProperty("Vorname", "usf_id"). "
@@ -167,10 +171,6 @@ else
                  LEFT JOIN ". TBL_USER_DATA. " as homepage
                    ON homepage.usd_usr_id = usr_id
                   AND homepage.usd_usf_id = ". $g_current_user->getProperty("Homepage", "usf_id"). "
-                RIGHT JOIN ". TBL_USER_DATA. " as last_name
-                   ON last_name.usd_usr_id = usr_id
-                  AND last_name.usd_usf_id = ". $g_current_user->getProperty("Nachname", "usf_id"). "
-                      $search_condition
                 WHERE usr_valid = 1
                 GROUP BY usr_id
                 ORDER BY last_name, first_name ";
@@ -317,7 +317,7 @@ echo "<p>";
                           ". TBL_USERS. ", ". TBL_USER_FIELDS. ", ". TBL_USER_DATA. "
                     WHERE rol_valid  = 1
                       AND rol_cat_id = cat_id
-                      AND cat_org_id = $g_current_organization->id
+                      AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
                       AND mem_rol_id = rol_id
                       AND mem_usr_id = usr_id
                       AND mem_valid  = 1
@@ -395,10 +395,14 @@ if($num_members > 0)
     echo "<table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\">
         <tr>
             <th class=\"tableHeader\" align=\"right\">Nr.</th>
-            <th class=\"tableHeader\" align=\"center\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/user.png\" alt=\"Mitglied bei $g_current_organization->longname\" title=\"Mitglied bei $g_current_organization->longname\" border=\"0\"></th>
+            <th class=\"tableHeader\" align=\"center\"><img style=\"cursor: help;\" 
+				src=\"$g_root_path/adm_program/images/user.png\" alt=\"Mitglied bei ". $g_current_organization->getValue("org_longname"). "\" 
+				title=\"Mitglied bei ". $g_current_organization->getValue("org_longname"). "\" border=\"0\"></th>
             <th class=\"tableHeader\" align=\"left\">&nbsp;Name</th>
-            <th class=\"tableHeader\" align=\"center\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/email.png\" alt=\"E-Mail\" title=\"E-Mail\"></th>
-            <th class=\"tableHeader\" align=\"center\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/globe.png\" alt=\"Homepage\" title=\"Homepage\"></th>
+            <th class=\"tableHeader\" align=\"center\"><img style=\"cursor: help;\" 
+				src=\"$g_root_path/adm_program/images/email.png\" alt=\"E-Mail\" title=\"E-Mail\"></th>
+            <th class=\"tableHeader\" align=\"center\"><img style=\"cursor: help;\" 
+				src=\"$g_root_path/adm_program/images/globe.png\" alt=\"Homepage\" title=\"Homepage\"></th>
             <th class=\"tableHeader\" align=\"left\">&nbsp;Benutzer</th>
             <th class=\"tableHeader\" align=\"center\">&nbsp;Aktualisiert am</th>
             <th class=\"tableHeader\" align=\"center\">Bearbeiten</th>
@@ -422,8 +426,8 @@ if($num_members > 0)
                         if($row['member'] > 0)
                         {
                             echo "<a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=". $row['usr_id']. "\"><img
-                                src=\"$g_root_path/adm_program/images/user.png\" alt=\"Mitglied bei $g_current_organization->longname\"
-                                title=\"Mitglied bei $g_current_organization->longname\" border=\"0\"></a>";
+                                src=\"$g_root_path/adm_program/images/user.png\" alt=\"Mitglied bei ". $g_current_organization->getValue("org_longname"). "\"
+                                title=\"Mitglied bei ". $g_current_organization->getValue("org_longname"). "\" border=\"0\"></a>";
                         }
                         else
                         {
@@ -461,7 +465,7 @@ if($num_members > 0)
                                      FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. "
                                     WHERE rol_valid   = 1
                                       AND rol_cat_id  = cat_id
-                                      AND cat_org_id <> $g_current_organization->id
+                                      AND cat_org_id <> ". $g_current_organization->getValue("org_id"). "
                                       AND mem_rol_id  = rol_id
                                       AND mem_valid   = 1
                                       AND mem_usr_id  = ". $row['usr_id'];

@@ -59,7 +59,7 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 // Html des Modules ausgeben
 echo "
-<h1 class=\"moduleHeadline\">$g_current_organization->longname</h1>
+<h1 class=\"moduleHeadline\">". $g_current_organization->getValue("org_longname"). "</h1>
 
 <p>";
     if($g_valid_login == 1)

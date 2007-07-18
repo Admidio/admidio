@@ -55,7 +55,7 @@ if ($cid > 0)
     $sql    = "SELECT * FROM ". TBL_GUESTBOOK_COMMENTS. ", ". TBL_GUESTBOOK. "
                                    WHERE gbo_id     = {0}
                                      AND gbc_gbo_id = gbo_id
-                                     AND gbo_org_id = '$g_current_organization->id'
+                                     AND gbo_org_id = ". $g_current_organization->getValue("org_id"). "
                                    ORDER by gbc_timestamp asc";
 
     $sql    = prepareSQL($sql, array($cid));

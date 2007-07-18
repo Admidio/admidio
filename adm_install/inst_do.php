@@ -34,6 +34,7 @@
 require("../adm_program/system/function.php");
 require("../adm_program/system/string.php");
 require("../adm_program/system/date.php");
+require("../adm_program/system/organization_class.php");
 require("../adm_program/system/user_class.php");
 require("../adm_program/system/role_class.php");
 
@@ -295,6 +296,9 @@ if(!mysql_select_db($_SESSION['database'], $connection ))
     showError("Die angegebene Datenbank <b>". $_SESSION['database']. "</b> konnte nicht gefunden werden !");
 }
 
+// leeres Organisationsobjekt erstellen
+$organization = new Organization($connection);
+
 if($req_mode == 1)
 {
     $filename = "db_scripts/db.sql";
@@ -371,6 +375,8 @@ if($req_mode == 3)
     // Updatescripte fuer die Datenbank verarbeiten
     if($req_version > 0)
     {
+    	include("db_scripts/preferences.php");
+    	
         // vor dem Update erst einmal alle Session loeschen, damit User ausgeloggt sind
         $sql = "DELETE FROM ". TBL_SESSIONS;
         $result = mysql_query($sql, $connection);
@@ -378,6 +384,7 @@ if($req_mode == 3)
         
         for($update_count = $req_version; $update_count <= 5; $update_count++)
         {
+        	// erst einmal die SQL-Datei Statement fuer Statement verarbeiten
             if($update_count == 3)
             {
                 $filename = "db_scripts/upd_1_3_db.sql";
@@ -417,7 +424,21 @@ if($req_mode == 3)
                     }
                 }
             }
-
+            
+            // jetzt noch evtl. neue Orga-Parameter in DB schreiben
+			$organization->clear();
+            
+			$sql = "SELECT * FROM ". TBL_ORGANIZATIONS;
+			$result_orga = mysql_query($sql, $connection);
+			if(!$result_orga) showError(mysql_error());
+			
+			while($row_orga = mysql_fetch_array($result_orga))
+			{
+				$organization->setValue("org_id", $row_orga['org_id']);
+				$organization->setPreferences($orga_preferences, false);
+			}
+			
+            // Nun das PHP-Script abarbeiten
             if($update_count == 3)
             {
                 include("db_scripts/upd_1_3_conv.php");
@@ -429,7 +450,7 @@ if($req_mode == 3)
             elseif($update_count == 5)
             {
                 include("db_scripts/upd_1_5_conv.php");
-            }
+            }			
         }
     }
     else
@@ -447,26 +468,18 @@ if($req_mode == 1 || $req_mode == 4)
     $req_orga_name_short = strStripTags($_POST['orga_name_short']);
     $req_orga_name_long  = strStripTags($_POST['orga_name_long']);
 
-    $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. " WHERE org_shortname = {0} ";
-    $sql = prepareSQL($sql, array($req_orga_name_short));
-    $result = mysql_query($sql, $connection);
-    if(!$result)
-    {
-        showError(mysql_error());
-    }
+    $organization->getOrganization($req_orga_name_short);
 
-    if(mysql_num_rows($result) > 0)
+    if($organization->getValue("org_id") > 0)
     {
         showError("Eine Organisation mit dem angegebenen kurzen Namen <b>$req_orga_name_short</b> existiert bereits.<br /><br />
                    W&auml;hlen Sie bitte einen anderen kurzen Namen !");
     }
 
-    $sql = "INSERT INTO ". TBL_ORGANIZATIONS. " (org_shortname, org_longname, org_homepage)
-                                         VALUES ({0}, {1}, '". $_SERVER['HTTP_HOST']. "') ";
-    $sql = prepareSQL($sql, array($req_orga_name_short, $req_orga_name_long));
-    $result = mysql_query($sql, $connection);
-    if(!$result) showError(mysql_error());
-    $org_id = mysql_insert_id($connection);
+    $organization->setValue("org_shortname", $req_orga_name_short);
+    $organization->setValue("org_longname", $req_orga_name_long);
+    $organization->setValue("org_homepage", $_SERVER['HTTP_HOST']);
+    $organization->save();
     
     // alle Einstellungen aus preferences.php in die Tabelle adm_preferences schreiben
     include("db_scripts/preferences.php");
@@ -474,24 +487,24 @@ if($req_mode == 1 || $req_mode == 4)
     foreach($orga_preferences as $key => $value)
     {
         $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-                                           VALUES ($org_id,    '$key',   '$value') ";
+                                           VALUES (". $organization->getValue("org_id"). ",    '$key',   '$value') ";
         $result = mysql_query($sql, $connection);
         db_error($result,__FILE__,__LINE__);
     }
     
     // Default-Kategorie fuer Rollen und Links eintragen
     $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_sequence)
-                                           VALUES ($org_id, 'ROL', 'Allgemein', 0, 1)";
+                                           VALUES (". $organization->getValue("org_id"). ", 'ROL', 'Allgemein', 0, 1)";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
     $category_common = mysql_insert_id();
     
     $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_sequence)
-                                      VALUES ($org_id, 'ROL', 'Gruppen', 0, 2)
-                                           , ($org_id, 'ROL', 'Kurse', 0, 3)
-                                           , ($org_id, 'ROL', 'Mannschaften', 0, 4)
-                                           , ($org_id, 'LNK', 'Allgemein', 0, 1)
-                                           , ($org_id, 'USF', '". utf8_decode('Zusätzliche Daten'). "', 0, 2) ";
+                                      VALUES (". $organization->getValue("org_id"). ", 'ROL', 'Gruppen', 0, 2)
+                                           , (". $organization->getValue("org_id"). ", 'ROL', 'Kurse', 0, 3)
+                                           , (". $organization->getValue("org_id"). ", 'ROL', 'Mannschaften', 0, 4)
+                                           , (". $organization->getValue("org_id"). ", 'LNK', 'Allgemein', 0, 1)
+                                           , (". $organization->getValue("org_id"). ", 'USF', '". utf8_decode('Zusätzliche Daten'). "', 0, 2) ";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
 
@@ -551,8 +564,8 @@ if($req_mode == 1 || $req_mode == 4)
     
     // Mitgliedschaft bei Rolle "Webmaster" anlegen
     $sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin, mem_valid)
-                                   VALUES (". $role_webmaster->getValue("rol_id"). ", $user->id, NOW(), 1) 
-                                        , (". $role_member->getValue("rol_id"). ", $user->id, NOW(), 1) ";
+                                   VALUES (". $role_webmaster->getValue("rol_id"). ", ". $user->getValue("usr_id"). ", NOW(), 1) 
+                                        , (". $role_member->getValue("rol_id"). ", ". $user->getValue("usr_id"). ", NOW(), 1) ";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
 }

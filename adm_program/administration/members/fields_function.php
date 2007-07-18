@@ -75,7 +75,7 @@ if($_GET['usf_id'] > 0)
     
     // Pruefung, ob das Feld zur aktuellen Organisation gehoert bzw. allen verfuegbar ist
     if($user_field->getValue("cat_org_id") >  0
-    && $user_field->getValue("cat_org_id") != $g_current_organization->id)
+    && $user_field->getValue("cat_org_id") != $g_current_organization->getValue("org_id"))
     {
         $g_message->show("norights");
     }
@@ -113,7 +113,7 @@ if($_GET['mode'] == 1)
                      FROM ". TBL_USER_FIELDS. "
                      JOIN ". TBL_CATEGORIES. "
                        ON usf_cat_id = cat_id
-                      AND (  cat_org_id = $g_current_organization->id
+                      AND (  cat_org_id = ". $g_current_organization->getValue("org_id"). "
                           OR cat_org_id IS NULL )
                     WHERE usf_name LIKE '". $_POST['usf_name']. "'";
         $result = mysql_query($sql, $g_adm_con);

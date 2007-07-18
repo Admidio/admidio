@@ -57,7 +57,7 @@ if ($g_preferences['enable_bbcode'] == 1)
 
 // alle Links aus der DB fischen...
 $sql = "SELECT * FROM ". TBL_LINKS. "
-        WHERE lnk_org_id = '$g_current_organization->id'
+        WHERE lnk_org_id = ". $g_current_organization->getValue("org_id"). "
         ORDER BY lnk_timestamp DESC";
 
 $result = mysql_query($sql, $g_adm_con);
@@ -67,7 +67,7 @@ db_error($result,__FILE__,__LINE__);
 // ab hier wird der RSS-Feed zusammengestellt
 
 // Ein RSSfeed-Objekt erstellen
-$rss = new RSSfeed("http://$g_current_organization->homepage", "$g_current_organization->longname - Links", "Linksammlung von $g_current_organization->longname");
+$rss = new RSSfeed("http://". $g_current_organization->getValue("org_homepage"), $g_current_organization->getValue("org_longname"). " - Links", "Linksammlung von ". $g_current_organization->getValue("org_longname"));
 
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
@@ -89,7 +89,7 @@ while ($row = mysql_fetch_object($result))
         $description = $description. "<br /><br />". nl2br(strSpecialChars2Html($row->lnk_description));
     }
 
-    $description = $description. "<br /><br /><a href=\"$link\">Link auf $g_current_organization->homepage</a>";
+    $description = $description. "<br /><br /><a href=\"$link\">Link auf ". $g_current_organization->getValue("org_homepage"). "</a>";
 
     // Den Autor der Links ermitteln und ausgeben
     $user = new User($g_adm_con, $row->lnk_usr_id);

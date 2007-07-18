@@ -84,7 +84,7 @@ if($req_cat_id > 0)
     
     // Pruefung, ob die Kategorie zur aktuellen Organisation gehoert bzw. allen verfuegbar ist
     if($category->getValue("cat_org_id") >  0
-    && $category->getValue("cat_org_id") != $g_current_organization->id)
+    && $category->getValue("cat_org_id") != $g_current_organization->getValue("org_id"))
     {
         $g_message->show("norights");
     }

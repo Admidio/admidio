@@ -227,7 +227,7 @@ else
                  AND first_name.usd_usf_id = ". $g_current_user->getProperty("Vorname", "usf_id"). "
                WHERE rol_id            = ". $_POST['rol_id']. "
                  AND rol_cat_id        = cat_id
-                 AND cat_org_id        = $g_current_organization->id
+                 AND cat_org_id        = ". $g_current_organization->getValue("org_id"). "
                  AND mem_rol_id        = rol_id
                  AND mem_valid         = 1
                  AND mem_usr_id        = usr_id
@@ -272,7 +272,7 @@ else
 {
     $mail_body = $mail_body. "Dir";
 }
-$mail_body = $mail_body. " von $g_current_organization->homepage folgende E-Mail geschickt:\n";
+$mail_body = $mail_body. " von ". $g_current_organization->getValue("org_homepage"). " folgende E-Mail geschickt:\n";
 $mail_body = $mail_body. "Eine Antwort kannst Du an ". $_POST['mailfrom']. " schicken.";
 
 if (!$g_valid_login)
