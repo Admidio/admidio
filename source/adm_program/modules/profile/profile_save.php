@@ -112,7 +112,7 @@ if($usr_id > 0)
                          FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. "
                         WHERE rol_valid   = 1
                           AND rol_cat_id  = cat_id
-                          AND cat_org_id <> $g_current_organization->id
+                          AND cat_org_id <> ". $g_current_organization->getValue("org_id"). "
                           AND mem_rol_id  = rol_id
                           AND mem_valid   = 1
                           AND mem_usr_id  = $usr_id ";
@@ -276,7 +276,7 @@ if($g_current_user->isWebmaster() || $new_user > 0)
 if($new_user == 2)
 {
     $user->setValue("usr_valid", 0);
-    $user->setValue("usr_reg_org_shortname", $g_current_organization->shortname);
+    $user->setValue("usr_reg_org_shortname", $g_current_organization->getValue("org_shortname"));
     $user->setValue("usr_password", md5($_POST['usr_password']));
 }
 
@@ -351,9 +351,9 @@ if($new_user == 3)
         $email = new Email();
         $email->setSender($g_preferences['email_administrator']);
         $email->addRecipient($user->getValue("E-Mail"), $user->getValue("Vorname"). " ". $user->getValue("Nachname"));
-        $email->setSubject("Anmeldung auf $g_current_organization->homepage");
+        $email->setSubject("Anmeldung auf ". $g_current_organization->getValue("org_homepage"));
         $email->setText(utf8_decode("Hallo "). $user->getValue("Vorname"). utf8_decode(",\n\ndeine Anmeldung auf ").
-            $g_current_organization->homepage. utf8_decode("wurde bestätigt.\n\nNun kannst du dich mit deinem Benutzernamen : ").
+            $g_current_organization->getValue("org_homepage"). utf8_decode("wurde bestätigt.\n\nNun kannst du dich mit deinem Benutzernamen : ").
             $user->getValue("usr_login_name"). utf8_decode("\nund dem Passwort auf der Homepage einloggen.\n\n".
             "Sollten noch Fragen bestehen, schreib eine E-Mail an "). $g_preferences['email_administrator'].
             utf8_decode(" .\n\nViele Grüße\nDie Webmaster"));
@@ -361,7 +361,7 @@ if($new_user == 3)
     }
 
     // neuer User -> Rollen zuordnen
-    $location = "Location: roles.php?user_id=$user->id&new_user=1";
+    $location = "Location: roles.php?user_id=". $user->getValue("usr_id"). "&new_user=1";
     header($location);
     exit();
 }
@@ -391,7 +391,7 @@ elseif($new_user == 2)
                    AND LENGTH(email.usd_value) > 0
                  WHERE rol_name          = 'Webmaster'
                    AND rol_cat_id        = cat_id
-                   AND cat_org_id        = $g_current_organization->id
+                   AND cat_org_id        = ". $g_current_organization->getValue("org_id"). "
                    AND mem_rol_id        = rol_id
                    AND mem_valid         = 1
                    AND mem_usr_id        = usr_id
@@ -406,7 +406,7 @@ elseif($new_user == 2)
             $email->setSender($g_preferences['email_administrator']);
             $email->addRecipient($row['email'], $row['first_name']. " ". $row['last_name']);
             $email->setSubject(utf8_decode("Neue Registrierung"));
-            $email->setText(utf8_decode("Es hat sich ein neuer User auf "). $g_current_organization->homepage.
+            $email->setText(utf8_decode("Es hat sich ein neuer User auf "). $g_current_organization->getValue("org_homepage").
                 utf8_decode(" registriert.\n\nNachname: "). $user->getValue("Nachname"). utf8_decode("\nVorname:  ").
                 $user->getValue("Vorname"). utf8_decode("\nE-Mail:   "). $user->getValue("E-Mail").
                 utf8_decode("\n\n\nDiese Nachricht wurde automatisch erzeugt."));

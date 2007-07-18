@@ -88,7 +88,7 @@ unset($_SESSION['guestbook_comment_request']);
 $g_layout['title'] = $_GET["headline"];
 if($g_preferences['enable_rss'] == 1)
 {
-    $g_layout['header'] =  "<link type=\"application/rss+xml\" rel=\"alternate\" title=\"$g_current_organization->longname - Gaestebuch\"
+    $g_layout['header'] =  "<link type=\"application/rss+xml\" rel=\"alternate\" title=\"". $g_current_organization->getValue("org_longname"). " - Gaestebuch\"
         href=\"$g_root_path/adm_program/modules/guestbook/rss_guestbook.php\">";
 };
 
@@ -157,7 +157,7 @@ echo "
 if ($_GET['id'] > 0)
 {
     $sql    = "SELECT * FROM ". TBL_GUESTBOOK. "
-               WHERE gbo_id = {0} and gbo_org_id = '$g_current_organization->id'";
+               WHERE gbo_id = {0} and gbo_org_id = ". $g_current_organization->getValue("org_id");
 
     $sql    = prepareSQL($sql, array($_GET['id']));
 }
@@ -165,7 +165,7 @@ if ($_GET['id'] > 0)
 else
 {
     $sql    = "SELECT * FROM ". TBL_GUESTBOOK. "
-               WHERE gbo_org_id = '$g_current_organization->id'
+               WHERE gbo_org_id = ". $g_current_organization->getValue("org_id"). "
                ORDER BY gbo_timestamp DESC
                LIMIT {0}, 10 ";
 
@@ -178,7 +178,7 @@ db_error($guestbook_result,__FILE__,__LINE__);
 // Gucken wieviele Gaestebucheintraege insgesamt vorliegen...
 // Das ist wichtig für die Seitengenerierung...
 $sql    = "SELECT COUNT(*) FROM ". TBL_GUESTBOOK. "
-           WHERE gbo_org_id = '$g_current_organization->id'";
+           WHERE gbo_org_id = ". $g_current_organization->getValue("org_id");
 $result = mysql_query($sql, $g_adm_con);
 db_error($result,__FILE__,__LINE__);
 $row = mysql_fetch_array($result);

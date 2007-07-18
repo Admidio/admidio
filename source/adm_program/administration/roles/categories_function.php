@@ -101,7 +101,7 @@ if($req_cat_id > 0)
     
     // Pruefung, ob die Kategorie zur aktuellen Organisation gehoert bzw. allen verfuegbar ist
     if($category->getValue("cat_org_id") >  0
-    && $category->getValue("cat_org_id") != $g_current_organization->id)
+    && $category->getValue("cat_org_id") != $g_current_organization->getValue("org_id"))
     {
         $g_message->show("norights");
     }
@@ -109,7 +109,7 @@ if($req_cat_id > 0)
 else
 {
     // es wird eine neue Kategorie angelegt
-    $category->setValue("cat_org_id", $g_current_organization->id);
+    $category->setValue("cat_org_id", $g_current_organization->getValue("org_id"));
     $category->setValue("cat_type", $_GET['type']);
 }
 
@@ -131,7 +131,7 @@ if($_GET['mode'] == 1)
         // Schauen, ob die Kategorie bereits existiert
         $sql    = "SELECT COUNT(*) as count 
                      FROM ". TBL_CATEGORIES. "
-                    WHERE (  cat_org_id  = $g_current_organization->id
+                    WHERE (  cat_org_id  = ". $g_current_organization->getValue("org_id"). "
                           OR cat_org_id IS NULL )
                       AND cat_type = '". $_GET['type']. "'
                       AND cat_name LIKE '". $_POST['cat_name']. "'";

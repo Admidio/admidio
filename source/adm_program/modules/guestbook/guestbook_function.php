@@ -124,13 +124,18 @@ if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mod
     // Abschliessend wird jetzt noch geprueft ob die uebergebene ID ueberhaupt zur Orga gehoert
     if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mode'] == 6 )
     {
-        $sql    = "SELECT * FROM ". TBL_GUESTBOOK. " WHERE gbo_id = {0} and gbo_org_id = $g_current_organization->id";
+        $sql    = "SELECT * FROM ". TBL_GUESTBOOK. " 
+				   WHERE gbo_id = {0} 
+				   and gbo_org_id = ". $g_current_organization->getValue("org_id");
         $sql    = prepareSQL($sql, array($_GET['id']));
     }
 
     if ($_GET['mode'] == 5 || $_GET['mode'] == 7 || $_GET['mode'] == 8)
     {
-        $sql    = "SELECT * FROM ". TBL_GUESTBOOK_COMMENTS. ", ". TBL_GUESTBOOK. " WHERE gbc_id = {0} and gbc_gbo_id = gbo_id and gbo_org_id = $g_current_organization->id";
+        $sql    = "SELECT * FROM ". TBL_GUESTBOOK_COMMENTS. ", ". TBL_GUESTBOOK. " 
+                   WHERE gbc_id = {0} 
+				   and gbc_gbo_id = gbo_id 
+				   and gbo_org_id = ". $g_current_organization->getValue("org_id");
         $sql    = prepareSQL($sql, array($_GET['id']));
     }
 
@@ -209,7 +214,7 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
 
                 $sql = "INSERT INTO ". TBL_GUESTBOOK. " (gbo_org_id, gbo_usr_id, gbo_name, gbo_text, gbo_email,
                                                          gbo_homepage, gbo_timestamp, gbo_ip_address)
-                                         VALUES ($g_current_organization->id, ". $g_current_user->getValue("usr_id"). ", '$realName', {0}, {1},
+                                         VALUES (". $g_current_organization->getValue("org_id"). ", ". $g_current_user->getValue("usr_id"). ", '$realName', {0}, {1},
                                                  {2}, '$actDate', '$ipAddress')";
 
                 $sql    = prepareSQL($sql, array($text, $email, $homepage));
@@ -226,7 +231,7 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
                     // einen GB-Eintrag erzeugt hat...
                     $sql = "SELECT count(*) FROM ". TBL_GUESTBOOK. "
                             where unix_timestamp(gbo_timestamp) > unix_timestamp()-". $g_preferences['flooding_protection_time']. "
-                              and gbo_org_id = $g_current_organization->id
+                              and gbo_org_id = ". $g_current_organization->getValue("org_id"). "
                               and gbo_ip_address = '$ipAddress' ";
                     $result = mysql_query($sql, $g_adm_con);
                     db_error($result,__FILE__,__LINE__);
@@ -241,7 +246,7 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
                 // Falls er nicht eingeloggt ist, gibt es das sql-Statement natürlich ohne die UserID
                 $sql = "INSERT INTO ". TBL_GUESTBOOK. " (gbo_org_id, gbo_name, gbo_text, gbo_email,
                                                          gbo_homepage, gbo_timestamp, gbo_ip_address)
-                                         VALUES ($g_current_organization->id, {0}, {1}, {2},
+                                         VALUES (". $g_current_organization->getValue("org_id"). ", {0}, {1}, {2},
                                                  {3}, '$actDate', '$ipAddress')";
 
                 $sql    = prepareSQL($sql, array($name, $text, $email, $homepage));

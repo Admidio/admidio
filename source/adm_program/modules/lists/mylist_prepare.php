@@ -118,7 +118,7 @@ for($i = 0; $i < count($_POST); $i++)
                 $sql = "SELECT usf_type 
                           FROM ". TBL_USER_FIELDS. ", ". TBL_CATEGORIES. "
                          WHERE usf_cat_id = cat_id
-                           AND (  cat_org_id = $g_current_organization->id
+                           AND (  cat_org_id = ". $g_current_organization->getValue("org_id"). "
                                OR cat_org_id IS NULL )
                            AND usf_id     = '$act_field_name' ";
                 $result = mysql_query($sql, $g_adm_con);
@@ -185,7 +185,7 @@ $main_sql = "SELECT mem_leader, usr_id, $sql_select
               WHERE rol_id     = $req_rol_id
                 AND rol_valid  = 1
                 AND rol_cat_id = cat_id
-                AND cat_org_id = $g_current_organization->id
+                AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
                 AND mem_rol_id = rol_id
                 AND mem_valid  = $act_members
                 AND mem_usr_id = usr_id

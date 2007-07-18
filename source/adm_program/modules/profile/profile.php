@@ -490,8 +490,8 @@ echo "</div>
                          AND rol_valid  = 1
                          AND rol_cat_id = cat_id
                          AND cat_org_id = org_id
-                         AND (  cat_org_id = $g_current_organization->id
-                             OR (   cat_org_id <> $g_current_organization->id
+                         AND (  cat_org_id = ". $g_current_organization->getValue("org_id"). "
+                             OR (   cat_org_id <> ". $g_current_organization->getValue("org_id"). "
                                 AND rol_locked  = 0 ))
                        ORDER BY org_shortname, cat_sequence, rol_name ";
         }
@@ -530,7 +530,7 @@ echo "</div>
                     <div style=\"text-align: right;\">&nbsp;";
                         // Moderatoren & Gruppenleiter duerfen neue Rollen zuordnen
                         if(($g_current_user->assignRoles() || isGroupLeader() || $g_current_user->editUser())
-                        && $user->getValue("usr_reg_org_shortname") != $g_current_organization->shortname)
+                        && $user->getValue("usr_reg_org_shortname") != $g_current_organization->getValue("org_shortname"))
                         {
                             echo "<a href=\"$g_root_path/adm_program/modules/profile/roles.php?user_id=$a_user_id\"><img
                             src=\"$g_root_path/adm_program/images/edit.png\" style=\"vertical-align: top;\" 
@@ -557,7 +557,7 @@ echo "</div>
                         {
                             echo " - Leiter";
                         }
-                        if($row['org_shortname'] == $g_current_organization->shortname)
+                        if($row['org_shortname'] == $g_current_organization->getValue("org_shortname"))
                         {
                             // nun fuer alle Rollenrechte die Icons anzeigen
                             echo "&nbsp;";

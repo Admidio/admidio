@@ -72,7 +72,7 @@ if($req_rol_id > 0)
     $role->getRole($req_rol_id);
     
     // Pruefung, ob die Rolle zur aktuellen Organisation gehoert
-    if($role->getValue("cat_org_id") != $g_current_organization->id)
+    if($role->getValue("cat_org_id") != $g_current_organization->getValue("org_id"))
     {
         $g_message->show("norights");
     }
@@ -145,7 +145,7 @@ elseif($_GET["mode"] == 2)
                     WHERE rol_name   LIKE '". $_POST['rol_name']. "'
                       AND rol_cat_id = ". $_POST['rol_cat_id']. "
                       AND rol_cat_id = cat_id
-                      AND cat_org_id = $g_current_organization->id ";
+                      AND cat_org_id = ". $g_current_organization->getValue("org_id");
         $result = mysql_query($sql, $g_adm_con);
         db_error($result,__FILE__,__LINE__);
         $row = mysql_fetch_array($result);

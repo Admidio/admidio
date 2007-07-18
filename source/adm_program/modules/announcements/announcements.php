@@ -85,7 +85,7 @@ $_SESSION['navigation']->addUrl($g_current_url);
 $g_layout['title'] = $req_headline;
 if($g_preferences['enable_rss'] == 1)
 {
-    $g_layout['header'] = "<link type=\"application/rss+xml\" rel=\"alternate\" title=\"$g_current_organization->longname - Ankuendigungen\"
+    $g_layout['header'] = "<link type=\"application/rss+xml\" rel=\"alternate\" title=\"". $g_current_organization->getValue("org_longname"). " - Ankuendigungen\"
     href=\"$g_root_path/adm_program/modules/announcements/rss_announcements.php\">";
 };
 
@@ -113,7 +113,7 @@ while($orga = current($arr_ref_orgas))
 // damit das SQL-Statement nachher nicht auf die Nase faellt, muss $organizations gefuellt sein
 if(strlen($organizations) == 0)
 {
-    $organizations = "'$g_current_organization->shortname'";
+    $organizations = "'". $g_current_organization->getValue("org_shortname"). "'";
 }
 
 // falls eine id fuer eine bestimmte Ankuendigung uebergeben worden ist...
@@ -122,14 +122,14 @@ if($req_id > 0)
     $sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
                 WHERE ( ann_id = {0}
                       AND ((ann_global   = 1 AND ann_org_shortname IN ($organizations))
-                           OR ann_org_shortname = '$g_organization'))";
+                           OR ann_org_shortname = '". $g_current_organization->getValue("org_shortname"). "'))";
     $sql    = prepareSQL($sql, array($req_id));
 }
 //...ansonsten alle fuer die Gruppierung passenden Ankuendigungen aus der DB holen.
 else
 {
     $sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
-                WHERE (  ann_org_shortname = '$g_organization'
+                WHERE (  ann_org_shortname = '". $g_current_organization->getValue("org_shortname"). "'
                       OR (   ann_global   = 1
                          AND ann_org_shortname IN ($organizations) ))
                 ORDER BY ann_timestamp DESC

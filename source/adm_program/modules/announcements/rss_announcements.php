@@ -74,13 +74,13 @@ while ($orga = current($arr_ref_orgas))
 // damit das SQL-Statement nachher nicht auf die Nase faellt, muss $organizations gefuellt sein
 if (strlen($organizations) == 0)
 {
-    $organizations = "'$g_current_organization->shortname'";
+    $organizations = "'". $g_current_organization->getValue("org_shortname"). "'";
 }
 
 
 // die neuesten 10 Annkuedigungen aus der DB fischen...
 $sql = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
-        WHERE ( ann_org_shortname = '$g_current_organization->shortname'
+        WHERE ( ann_org_shortname = '". $g_current_organization->getValue("org_shortname"). "'
         OR ( ann_global = 1 AND ann_org_shortname IN ($organizations) ))
         ORDER BY ann_timestamp DESC
         LIMIT 10 ";
@@ -92,7 +92,7 @@ db_error($result,__FILE__,__LINE__);
 // ab hier wird der RSS-Feed zusammengestellt
 
 // Ein RSSfeed-Objekt erstellen
-$rss = new RSSfeed("http://$g_current_organization->homepage", "$g_current_organization->longname - Ankuendigungen", "Die 10 neuesten Ankuendigungen");
+$rss = new RSSfeed("http://". $g_current_organization->getValue("org_homepage"), $g_current_organization->getValue("org_longname"). " - Ankuendigungen", "Die 10 neuesten Ankuendigungen");
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
 while ($row = mysql_fetch_object($result))
@@ -113,7 +113,7 @@ while ($row = mysql_fetch_object($result))
         $description = $description. "<br /><br />". nl2br(strSpecialChars2Html($row->ann_description));
     }
 
-    $description = $description. "<br /><br /><a href=\"$link\">Link auf $g_current_organization->homepage</a>";
+    $description = $description. "<br /><br /><a href=\"$link\">Link auf ". $g_current_organization->getValue("org_homepage"). "</a>";
 
     // Den Autor der Ankuendigung ermitteln und ausgeben
     $user = new User($g_adm_con, $row->ann_usr_id);

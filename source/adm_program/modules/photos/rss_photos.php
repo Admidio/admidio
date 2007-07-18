@@ -49,11 +49,10 @@ if ($g_preferences['enable_photo_module'] != 1)
 
 // die neuesten 10 Photoveranstaltungen aus der DB fischen...
 $sql = "SELECT * FROM ". TBL_PHOTOS. "
-        WHERE ( pho_org_shortname = {0}
+        WHERE ( pho_org_shortname = '". $g_current_organization->getValue("org_shortname"). "'
         AND pho_locked = 0)
         ORDER BY pho_timestamp DESC
         LIMIT 10";
-$sql    = prepareSQL($sql, array($g_current_organization->shortname));
 $result = mysql_query($sql, $g_adm_con);
 db_error($result,__FILE__,__LINE__);
 
@@ -80,7 +79,7 @@ function bildersumme($pho_id_parent)
 // ab hier wird der RSS-Feed zusammengestellt
 
 // Ein RSSfeed-Objekt erstellen
-$rss = new RSSfeed("http://$g_current_organization->homepage", "$g_current_organization->longname - Fotos", "Die 10 neuesten Fotoveranstaltungen");
+$rss = new RSSfeed("http://". $g_current_organization->getValue("org_homepage"), $g_current_organization->getValue("org_longname"). " - Fotos", "Die 10 neuesten Fotoveranstaltungen");
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
 while ($row = mysql_fetch_object($result))
@@ -145,7 +144,7 @@ while ($row = mysql_fetch_object($result))
     }
 
     //Link zur Momepage
-    $description = $description. "<br /><br /><a href=\"$link\">Link auf $g_current_organization->homepage</a>";
+    $description = $description. "<br /><br /><a href=\"$link\">Link auf ". $g_current_organization->getValue("org_homepage"). "</a>";
 
     //Angaben zum Anleger
     $create_user = new User($g_adm_con, $row->pho_usr_id);

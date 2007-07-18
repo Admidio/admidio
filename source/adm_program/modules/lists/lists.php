@@ -91,7 +91,7 @@ $_SESSION['navigation']->addUrl($g_current_url);
 $sql = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
          WHERE rol_valid  = $active_role
            AND rol_cat_id = cat_id 
-           AND cat_org_id = $g_current_organization->id ";
+           AND cat_org_id = ". $g_current_organization->getValue("org_id");
 if(!$g_current_user->assignRoles())
 {
     // wenn nicht Moderator, dann keine versteckten Rollen anzeigen
@@ -107,7 +107,7 @@ if(strlen($category) > 0 && $category != "Alle")
     $sql .= " AND cat_type   = 'ROL'
               AND cat_name   = '$category' ";
 }
-$sql .= "ORDER BY cat_sequence, rol_name ";
+$sql .= " ORDER BY cat_sequence, rol_name ";
 
 $result_lst = mysql_query($sql, $g_adm_con);
 db_error($result_lst,__FILE__,__LINE__);
@@ -194,7 +194,7 @@ if($show_ctg_sel == 1)
 {
     // Combobox mit allen Kategorien anzeigen
     $sql = "SELECT * FROM ". TBL_CATEGORIES. "
-             WHERE cat_org_id = $g_current_organization->id
+             WHERE cat_org_id = ". $g_current_organization->getValue("org_id"). "
                AND cat_type   = 'ROL' ";
     if($g_valid_login == false)
     {

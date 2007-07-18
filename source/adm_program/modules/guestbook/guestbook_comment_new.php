@@ -120,7 +120,7 @@ else
     if (isset($_GET['cid']))
     {
         $sql    = "SELECT * FROM ". TBL_GUESTBOOK. ",".TBL_GUESTBOOK_COMMENTS.  "
-                    WHERE gbc_id = {0} and gbo_org_id = $g_current_organization->id
+                    WHERE gbc_id = {0} and gbo_org_id = ". $g_current_organization->getValue("org_id"). "
                       AND gbo_id = gbc_gbo_id";
         $sql    = prepareSQL($sql, array($_GET['cid']));
         $result = mysql_query($sql, $g_adm_con);

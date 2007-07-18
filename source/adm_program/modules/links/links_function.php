@@ -75,7 +75,7 @@ if (array_key_exists("mode", $_GET))
 // jetzt wird noch geprueft ob die eventuell uebergebene lnk_id uberhaupt zur Orga gehoert oder existiert...
 if ($_GET["lnk_id"] > 0)
 {
-    $sql    = "SELECT * FROM ". TBL_LINKS. " WHERE lnk_id = {0} and lnk_org_id = $g_current_organization->id";
+    $sql    = "SELECT * FROM ". TBL_LINKS. " WHERE lnk_id = {0} and lnk_org_id = ". $g_current_organization->getValue("org_id");
     $sql    = prepareSQL($sql, array($_GET['lnk_id']));
     $result = mysql_query($sql, $g_adm_con);
     db_error($result,__FILE__,__LINE__);
@@ -126,7 +126,7 @@ if ($_GET["mode"] == 1 || ($_GET["mode"] == 3 && $_GET["lnk_id"] > 0) )
         {
             $sql = "INSERT INTO ". TBL_LINKS. " ( lnk_org_id, lnk_usr_id, lnk_timestamp,
                                                   lnk_name, lnk_url, lnk_description, lnk_cat_id)
-                                     VALUES ($g_current_organization->id, ". $g_current_user->getValue("usr_id"). ", '$act_date',
+                                     VALUES (". $g_current_organization->getValue("org_id"). ", ". $g_current_user->getValue("usr_id"). ", '$act_date',
                                              {0}, {1}, {2}, {3})";
             $sql    = prepareSQL($sql, array($linkName, $linkUrl, $description, $category));
             $result = mysql_query($sql, $g_adm_con);

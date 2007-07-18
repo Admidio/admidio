@@ -50,7 +50,7 @@ $sql    = "SELECT usr_id
               AND mem_valid      = 1
               AND rol_valid      = 1 
               AND rol_cat_id     = cat_id
-              AND cat_org_id     = $g_current_organization->id ";
+              AND cat_org_id     = ". $g_current_organization->getValue("org_id");
 $sql    = prepareSQL($sql, array($req_login_name));
 $result = mysql_query($sql, $g_adm_con);
 db_error($result,__FILE__,__LINE__);

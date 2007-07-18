@@ -108,7 +108,7 @@ elseif (isset($_GET["rol_id"]))
                      FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                     WHERE rol_id = {0} 
                       AND rol_cat_id = cat_id
-                      AND cat_org_id = $g_current_organization->id ";
+                      AND cat_org_id = ". $g_current_organization->getValue("org_id");
     }
     else
     {
@@ -116,7 +116,7 @@ elseif (isset($_GET["rol_id"]))
                      FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                     WHERE rol_id = {0} 
                       AND rol_cat_id = cat_id
-                      AND cat_org_id = $g_current_organization->id ";
+                      AND cat_org_id = ". $g_current_organization->getValue("org_id");
     }
     $sql    = prepareSQL($sql, array($_GET['rol_id']));
     $result = mysql_query($sql, $g_adm_con);
@@ -144,7 +144,7 @@ elseif (isset($_GET["rolle"]) && isset($_GET["cat"]))
                     FROM ". TBL_ROLES. " ,". TBL_CATEGORIES. "
                    WHERE UPPER(rol_name) = UPPER({0})
                    AND rol_cat_id        = cat_id
-                   AND cat_org_id        = $g_current_organization->id
+                   AND cat_org_id        = ". $g_current_organization->getValue("org_id"). "
                    AND UPPER(cat_name)   = UPPER({1})";
     }
     else
@@ -153,7 +153,7 @@ elseif (isset($_GET["rolle"]) && isset($_GET["cat"]))
                     FROM ". TBL_ROLES. " ,". TBL_CATEGORIES. "
                    WHERE UPPER(rol_name) = UPPER({0})
                    AND rol_cat_id        = cat_id
-                   AND cat_org_id        = $g_current_organization->id
+                   AND cat_org_id        = ". $g_current_organization->getValue("org_id"). "
                    AND UPPER(cat_name)   = UPPER({1})";
     }
     $sql    = prepareSQL($sql, array($_GET['rolle'],$_GET['cat']));
@@ -226,7 +226,7 @@ $_SESSION['navigation']->addUrl($g_current_url);
 $g_layout['title'] = "E-Mail verschicken";
 if($g_preferences['enable_rss'] == 1)
 {
-    $g_layout['header'] =  "<link type=\"application/rss+xml\" rel=\"alternate\" title=\"$g_current_organization->longname - Ankuendigungen\"
+    $g_layout['header'] =  "<link type=\"application/rss+xml\" rel=\"alternate\" title=\"". $g_current_organization->getValue("org_longname"). " - Ankuendigungen\"
     href=\"$g_root_path/adm_program/modules/announcements/rss_announcements.php\">";
 };
 
@@ -285,7 +285,7 @@ echo "
                                    WHERE rol_mail_login = 1
                                    AND rol_valid        = 1
                                    AND rol_cat_id       = cat_id
-                                   AND cat_org_id       = $g_current_organization->id
+                                   AND cat_org_id       = ". $g_current_organization->getValue("org_id"). "
                                    ORDER BY cat_sequence, rol_name ";
                    }
                    else
@@ -298,7 +298,7 @@ echo "
                                    AND rol_locked       = 0
                                    AND rol_valid        = 1
                                    AND rol_cat_id       = cat_id
-                                   AND cat_org_id       = $g_current_organization->id
+                                   AND cat_org_id       = ". $g_current_organization->getValue("org_id"). "
                                    ORDER BY cat_sequence, rol_name ";
                    }
                }
@@ -311,7 +311,7 @@ echo "
                                WHERE rol_mail_logout = 1
                                AND rol_valid         = 1
                                AND rol_cat_id        = cat_id
-                               AND cat_org_id        = $g_current_organization->id
+                               AND cat_org_id        = ". $g_current_organization->getValue("org_id"). "
                                ORDER BY cat_sequence, rol_name ";
                }
                $result = mysql_query($sql, $g_adm_con);

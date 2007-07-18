@@ -165,14 +165,14 @@ $sql = "UPDATE ". TBL_ROLES. " SET rol_approve_users = 1
 $result = mysql_query($sql, $connection);
 if(!$result) showError(mysql_error());
 
-// neue Systemeinstellungen anlegen
+// Orga-spezifische Kategorie anlegen
 $sql = "SELECT * FROM ". TBL_ORGANIZATIONS;
 $result_orga = mysql_query($sql, $connection);
 if(!$result_orga) showError(mysql_error());
 
 while($row_orga = mysql_fetch_object($result_orga))
 {
-    // Orga-spezifische Kategorie anlegen
+    
     $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_sequence)
                                       VALUES ($row_orga->org_id, 'USF', '". utf8_decode('Zusätzliche Daten'). "', 0, 2)";
     $result = mysql_query($sql, $connection);
@@ -180,23 +180,13 @@ while($row_orga = mysql_fetch_object($result_orga))
     $cat_id_data = mysql_insert_id();
 
     // Systemeinstellungen anlegen
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-            VALUES ($row_orga->org_id, 'lists_members_per_page', '0')";
+    $sql = "UPDATE ". TBL_PREFERENCES. " SET prf_value = '0'
+             WHERE prf_name = 'lists_members_per_page' ";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
 
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-            VALUES ($row_orga->org_id, 'user_css', 'main.css')";
-    $result = mysql_query($sql, $connection);
-    if(!$result) showError(mysql_error());
-
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-            VALUES ($row_orga->org_id, 'system_align', 'center')";
-    $result = mysql_query($sql, $connection);
-    if(!$result) showError(mysql_error());
-    
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-            VALUES ($row_orga->org_id, 'photo_show_mode', '0')";
+    $sql = "UPDATE ". TBL_PREFERENCES. " SET prf_value = 'main.css'
+             WHERE prf_name = 'user_css' ";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
 

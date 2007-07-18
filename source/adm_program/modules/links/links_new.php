@@ -86,7 +86,7 @@ else
     // -> Felder mit Daten des Links vorbelegen
     if ($_GET["lnk_id"] != 0)
     {
-        $sql    = "SELECT * FROM ". TBL_LINKS. " WHERE lnk_id = {0} and lnk_org_id = $g_current_organization->id";
+        $sql    = "SELECT * FROM ". TBL_LINKS. " WHERE lnk_id = {0} and lnk_org_id = ". $g_current_organization->getValue("org_id");
         $sql    = prepareSQL($sql, array($_GET['lnk_id']));
         $result = mysql_query($sql, $g_adm_con);
         db_error($result,__FILE__,__LINE__);
@@ -164,7 +164,7 @@ echo "
                         echo ">- Bitte w&auml;hlen -</option>";
                         
                     $sql = "SELECT * FROM ". TBL_CATEGORIES. "
-                             WHERE cat_org_id = $g_current_organization->id
+                             WHERE cat_org_id = ". $g_current_organization->getValue("org_id"). "
                                AND cat_type   = 'LNK'
                              ORDER BY cat_sequence ASC ";
                     $result = mysql_query($sql, $g_adm_con);

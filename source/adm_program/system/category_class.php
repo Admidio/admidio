@@ -227,7 +227,7 @@ class Category
 
             // erst einmal die hoechste Reihenfolgennummer der Kategorie ermitteln
             $sql = "SELECT COUNT(*) as count FROM ". TBL_CATEGORIES. "
-                     WHERE (  cat_org_id  = $g_current_organization->id
+                     WHERE (  cat_org_id  = ". $g_current_organization->getValue("org_id"). "
                            OR cat_org_id IS NULL )
                        AND cat_type = '". $this->db_fields['cat_type']. "'";
             $result = mysql_query($sql, $this->db_connection);

@@ -108,7 +108,7 @@ if($new_user == 0)
                      FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. "
                     WHERE rol_valid   = 1
                       AND rol_cat_id  = cat_id
-                      AND cat_org_id <> $g_current_organization->id
+                      AND cat_org_id <> ". $g_current_organization->getValue("org_id"). "
                       AND mem_rol_id  = rol_id
                       AND mem_valid   = 1
                       AND mem_usr_id  = $usr_id ";
@@ -121,7 +121,7 @@ if($new_user == 0)
             // User, der woanders noch aktiv ist, darf in dieser Orga nicht bearbeitet werden
             // falls doch eine Registrierung vorliegt, dann darf Profil angezeigt werden
             if($user->getValue("usr_valid") != 0 
-            || $user->getValue("usr_reg_org_shortname") != $g_current_organization->shortname)
+            || $user->getValue("usr_reg_org_shortname") != $g_current_organization->getValue("org_shortname"))
             {
                 $g_message->show("norights");
             }

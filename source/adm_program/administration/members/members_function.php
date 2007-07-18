@@ -76,7 +76,7 @@ if($_GET["mode"] != 1)
                  FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_CATEGORIES. "
                 WHERE rol_valid   = 1
                   AND rol_cat_id  = cat_id
-                  AND cat_org_id <> $g_current_organization->id
+                  AND cat_org_id <> ". $g_current_organization->getValue("org_id"). "
                   AND mem_rol_id  = rol_id
                   AND mem_valid   = 1
                   AND mem_usr_id  = ". $_GET['user_id'];
@@ -152,7 +152,7 @@ elseif($_GET["mode"] == 2)
               FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. "
              WHERE rol_valid  = 1
                AND rol_cat_id = cat_id
-               AND cat_org_id = $g_current_organization->id
+               AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
                AND mem_rol_id = rol_id
                AND mem_valid  = 1
                AND mem_usr_id = ". $_GET['user_id'];
@@ -170,7 +170,7 @@ elseif($_GET["mode"] == 2)
     }
 
     $err_code = "remove_member_ok";
-    $err_text = utf8_encode($g_current_organization->longname);
+    $err_text = utf8_encode($g_current_organization->getValue("org_longname"));
 }
 elseif($_GET["mode"] == 3)
 {
@@ -234,9 +234,9 @@ elseif($_GET["mode"] == 4)
         $email = new Email();
         $email->setSender($g_preferences['email_administrator']);
         $email->addRecipient($user->getValue("E-Mail"), $user->getValue("Vorname"). " ". $user->getValue("Nachname"));
-        $email->setSubject(utf8_decode("Logindaten für "). $g_current_organization->homepage);
+        $email->setSubject(utf8_decode("Logindaten für "). $g_current_organization->getValue("org_homepage"));
         $email->setText(utf8_decode("Hallo "). $user->getValue("Vorname"). utf8_decode(",\n\ndu erhälst deine Logindaten für ").
-            $g_current_organization->homepage. utf8_decode(".\n\nBenutzername: ").
+            $g_current_organization->getValue("org_homepage"). utf8_decode(".\n\nBenutzername: ").
             $user->getValue("usr_login_name"). utf8_decode("\nPasswort: $password\n\n".
             "Das Passwort wurde automatisch generiert.\n".
             "Du solltest es nach dem Login in deinem Profil ändern.\n\n" .
@@ -272,7 +272,7 @@ elseif($_GET["mode"] == 6)
         // User ist AUCH noch in anderen Orgas Mitglied -> User kann nur aus dieser Orga entfernt werden
         $g_message->setForwardYesNo("$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET["user_id"]. "&mode=2");
         $g_message->addVariableContent(utf8_encode($user->getValue("Vorname"). " ". $user->getValue("Nachname")));
-        $g_message->addVariableContent(utf8_encode($g_current_organization->longname));
+        $g_message->addVariableContent(utf8_encode($g_current_organization->getValue("org_longname")));
         $g_message->show("remove_member", "", "Entfernen");
     }
     elseif($this_orga == false && $other_orga == 0)
@@ -280,7 +280,7 @@ elseif($_GET["mode"] == 6)
         // User ist in keiner Orga mehr Mitglied -> kann komplett geloescht werden
         $g_message->setForwardYesNo("$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET["user_id"]. "&mode=3");
         $g_message->addVariableContent(utf8_encode($user->getValue("Vorname"). " ". $user->getValue("Nachname")));
-        $g_message->addVariableContent(utf8_encode($g_current_organization->longname));
+        $g_message->addVariableContent(utf8_encode($g_current_organization->getValue("org_longname")));
         $g_message->show("delete_user", "", "Löschen");
     }
 }

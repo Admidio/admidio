@@ -178,7 +178,7 @@ switch($req_type)
                       AND f$usf_city.usd_usf_id = $usf_city
                     WHERE rol_id     = {0}
                       AND rol_cat_id = cat_id
-                      AND cat_org_id = $g_current_organization->id
+                      AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
                       AND rol_id     = mem_rol_id
                       AND mem_valid  = ". $role->getValue("rol_valid"). "
                       AND mem_usr_id = usr_id
@@ -213,7 +213,7 @@ switch($req_type)
                       AND f$usf_email.usd_usf_id = $usf_email
                     WHERE rol_id     = {0}
                       AND rol_cat_id = cat_id
-                      AND cat_org_id = $g_current_organization->id
+                      AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
                       AND rol_id     = mem_rol_id
                       AND mem_valid  = ". $role->getValue("rol_valid"). "
                       AND mem_usr_id = usr_id
@@ -240,7 +240,7 @@ switch($req_type)
                       AND f$usf_birthday.usd_usf_id = $usf_birthday
                     WHERE rol_id     = {0}
                       AND rol_cat_id = cat_id
-                      AND cat_org_id = $g_current_organization->id
+                      AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
                       AND rol_id     = mem_rol_id
                       AND mem_valid  = 0
                       AND mem_usr_id = usr_id
@@ -309,7 +309,7 @@ if($req_mode != "csv")
         <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
         <html>
         <head>
-            <title>$g_current_organization->longname - Liste - ". $role->getValue("rol_name"). "</title>
+            <title>". $g_current_organization->getValue("org_longname"). " - Liste - ". $role->getValue("rol_name"). "</title>
             <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_program/layout/print.css\">
 
             <!--[if lt IE 7]>

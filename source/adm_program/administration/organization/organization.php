@@ -49,10 +49,10 @@ if(isset($_SESSION['organization_request']))
 }
 else
 {
-    $form_values['shortname']                      = $g_current_organization->shortname;
-    $form_values['longname']                       = $g_current_organization->longname;
-    $form_values['homepage']                       = $g_current_organization->homepage;
-    $form_values['parent']                         = $g_current_organization->org_id_parent;
+	foreach($g_current_organization->db_fields as $key => $value)
+	{
+		$form_values[$key] = $value;
+	}
 
     // alle Systemeinstellungen in das form-Array schreiben
     foreach($g_preferences as $key => $value)
@@ -137,19 +137,19 @@ echo "
                 <div style=\"margin-top: 15px;\">
                     <div style=\"text-align: left; width: 55%; float: left;\">Name (Abk.):</div>
                     <div style=\"text-align: left;\">
-                        <input type=\"text\" name=\"shortname\" class=\"readonly\" readonly size=\"10\" maxlength=\"10\" value=\"". $form_values['shortname']. "\">
+                        <input type=\"text\" name=\"org_shortname\" class=\"readonly\" readonly size=\"10\" maxlength=\"10\" value=\"". $form_values['org_shortname']. "\">
                     </div>
                 </div>
                 <div style=\"margin-top: 15px;\">
                     <div style=\"text-align: left; width: 55%; float: left;\">Name (lang):</div>
                     <div style=\"text-align: left;\">
-                        <input type=\"text\" id=\"longname\" name=\"longname\" style=\"width: 200px;\" maxlength=\"60\" value=\"". $form_values['longname']. "\">
+                        <input type=\"text\" id=\"org_longname\" name=\"org_longname\" style=\"width: 200px;\" maxlength=\"60\" value=\"". $form_values['org_longname']. "\">
                     </div>
                 </div>
                 <div style=\"margin-top: 15px;\">
                     <div style=\"text-align: left; width: 55%; float: left;\">Homepage:</div>
                     <div style=\"text-align: left;\">
-                        <input type=\"text\" name=\"homepage\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['homepage']. "\">
+                        <input type=\"text\" name=\"org_homepage\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['org_homepage']. "\">
                     </div>
                 </div>
                 <div style=\"margin-top: 15px;\">
@@ -164,7 +164,8 @@ echo "
                 </div>";
 
                 // Pruefung ob dieser Orga bereits andere Orgas untergeordnet sind
-                $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. " WHERE org_org_id_parent = $g_current_organization->id";
+                $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. " 
+						 WHERE org_org_id_parent = ". $g_current_organization->getValue("org_id");
                 $result = mysql_query($sql, $g_adm_con);
                 db_error($result,__FILE__,__LINE__);
 
@@ -172,7 +173,7 @@ echo "
                 if(mysql_num_rows($result)==0)
                 {
                     $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. "
-                             WHERE org_id <> $g_current_organization->id
+                             WHERE org_id <> ". $g_current_organization->getValue("org_id"). "
                                AND org_org_id_parent is NULL
                              ORDER BY org_longname ASC, org_shortname ASC ";
                     $result = mysql_query($sql, $g_adm_con);
@@ -185,9 +186,9 @@ echo "
                         <div style=\"margin-top: 15px;\">
                             <div style=\"text-align: left; width: 55%; float: left;\">&Uuml;bergeordnete Organisation:</div>
                             <div style=\"text-align: left;\">
-                                <select size=\"1\" name=\"parent\">
+                                <select size=\"1\" name=\"org_org_id_parent\">
                                     <option value=\"0\" ";
-                                    if(strlen($form_values['parent']) == 0)
+                                    if(strlen($form_values['org_org_id_parent']) == 0)
                                     {
                                         echo " selected ";
                                     }
@@ -196,7 +197,7 @@ echo "
                                     while($row = mysql_fetch_object($result))
                                     {
                                         echo "<option value=\"$row->org_id\"";
-                                            if($form_values['parent'] == $row->org_id)
+                                            if($form_values['org_org_id_parent'] == $row->org_id)
                                             {
                                                 echo " selected ";
                                             }

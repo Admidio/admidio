@@ -161,7 +161,7 @@ if($locked=="1" || $locked=="0")
 $g_layout['title'] = "Fotogalerien";
 if($g_preferences['enable_rss'] == 1)
 {
-    $g_layout['header'] =  "<link type=\"application/rss+xml\" rel=\"alternate\" title=\"$g_current_organization->longname - Fotos\"
+    $g_layout['header'] =  "<link type=\"application/rss+xml\" rel=\"alternate\" title=\"". $g_current_organization->getValue("org_longname"). " - Fotos\"
             href=\"$g_root_path/adm_program/modules/photos/rss_photos.php\">";
     
     //Lightbox-Mode

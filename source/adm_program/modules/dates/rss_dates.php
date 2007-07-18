@@ -91,7 +91,7 @@ db_error($result,__FILE__,__LINE__);
 // ab hier wird der RSS-Feed zusammengestellt
 
 // Ein RSSfeed-Objekt erstellen
-$rss = new RSSfeed("http://$g_current_organization->homepage", "$g_current_organization->longname - Termine", "Die 10 naechsten Termine");
+$rss = new RSSfeed("http://". $g_current_organization->getValue("org_homepage"), $g_current_organization->getValue("org_longname"). " - Termine", "Die 10 naechsten Termine");
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
 while ($row = mysql_fetch_object($result))
@@ -141,7 +141,7 @@ while ($row = mysql_fetch_object($result))
         $description = $description. "<br /><br />". nl2br(strSpecialChars2Html($row->dat_description));
     }
 
-    $description = $description. "<br /><br /><a href=\"$link\">Link auf $g_current_organization->homepage</a>";
+    $description = $description. "<br /><br /><a href=\"$link\">Link auf ". $g_current_organization->getValue("org_homepage"). "</a>";
     
     //i-cal downloadlink
     $description = $description. "<br /><br /><a href=\"$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=$row->dat_id&mode=4\">Termin in meinen Kalender &uuml;bernehmen</a>";

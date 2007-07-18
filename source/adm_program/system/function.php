@@ -122,7 +122,7 @@ function hasRole($function, $user_id = 0)
                   AND rol_name   = '$function'
                   AND rol_valid  = 1 
                   AND rol_cat_id = cat_id
-                  AND cat_org_id = $g_current_organization->id ";
+                  AND cat_org_id = ". $g_current_organization->getValue("org_id");
     $result = mysql_query($sql, $g_adm_con);
     db_error($result,__FILE__,__LINE__);
 
@@ -156,7 +156,7 @@ function isMember($user_id)
                   AND mem_rol_id = rol_id
                   AND rol_valid  = 1 
                   AND rol_cat_id = cat_id
-                  AND cat_org_id = $g_current_organization->id ";
+                  AND cat_org_id = ". $g_current_organization->getValue("org_id");
     $result = mysql_query($sql, $g_adm_con);
     db_error($result,__FILE__,__LINE__);
 
@@ -188,7 +188,7 @@ function isGroupLeader($rol_id = 0)
                   AND mem_rol_id = rol_id
                   AND rol_valid  = 1 
                   AND rol_cat_id = cat_id
-                  AND cat_org_id = $g_current_organization->id ";
+                  AND cat_org_id = ". $g_current_organization->getValue("org_id");
     if ($rol_id != 0)
     {
         $sql .= "  AND mem_rol_id           = {0}";
@@ -340,7 +340,7 @@ function generateRoleSelectBox($default_role = 0, $field_id = "")
                 $sql     = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                              WHERE rol_valid  = 1
                                AND rol_cat_id = cat_id
-                               AND cat_org_id = $g_current_organization->id
+                               AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
                              ORDER BY cat_sequence, rol_name";
             }
             else
@@ -349,7 +349,7 @@ function generateRoleSelectBox($default_role = 0, $field_id = "")
                              WHERE rol_locked = 0
                                AND rol_valid  = 1
                                AND rol_cat_id = cat_id
-                               AND cat_org_id = $g_current_organization->id
+                               AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
                              ORDER BY cat_sequence, rol_name";
             }
             $result_lst = mysql_query($sql, $g_adm_con);
@@ -378,41 +378,6 @@ function generateRoleSelectBox($default_role = 0, $field_id = "")
             $box_string .= "</optgroup>
         </select>";
     return $box_string;
-}
-
-// Funktion um Systemeinstellungen in die DB und das globale Array zu schreiben
-
-function writeOrgaPreferences($name, $value)
-{
-    global $g_adm_con, $g_current_organization, $g_preferences;
-
-    $sql = "SELECT * FROM ". TBL_PREFERENCES. "
-             WHERE prf_name   = {0}
-               AND prf_org_id = $g_current_organization->id ";
-    $sql = prepareSQL($sql, array($name));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
-
-    if(mysql_num_rows($result) > 0)
-    {
-        $sql = "UPDATE ". TBL_PREFERENCES. " SET prf_value = {0}
-                 WHERE prf_name   = {1}
-                   AND prf_org_id = $g_current_organization->id ";
-        $sql = prepareSQL($sql, array($value, $name));
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result,__FILE__,__LINE__);
-    }
-    else
-    {
-        $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-                                           VALUES ($g_current_organization->id, {0}, {1}) ";
-        $sql = prepareSQL($sql, array($name, $value));
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result,__FILE__,__LINE__);
-    }
-    
-    // den Wert noch im globalen Array setzen
-    $g_preferences[$name] = $value;
 }
 
 ?>

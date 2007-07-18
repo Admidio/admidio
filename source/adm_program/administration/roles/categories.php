@@ -123,7 +123,7 @@ echo "
     </thead>";
     
         $sql = "SELECT * FROM ". TBL_CATEGORIES. "
-                 WHERE (  cat_org_id  = $g_current_organization->id
+                 WHERE (  cat_org_id  = ". $g_current_organization->getValue("org_id"). "
                        OR cat_org_id IS NULL )
                    AND cat_type   = {0}
                  ORDER BY cat_sequence ASC ";

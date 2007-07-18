@@ -62,7 +62,7 @@ if($req_usf_id > 0)
     
     // Pruefung, ob das Feld zur aktuellen Organisation gehoert
     if($user_field->getValue("cat_org_id") >  0
-    && $user_field->getValue("cat_org_id") != $g_current_organization->id)
+    && $user_field->getValue("cat_org_id") != $g_current_organization->getValue("org_id"))
     {
         $g_message->show("norights");
     }
@@ -130,7 +130,7 @@ echo "
                         echo ">- Bitte w&auml;hlen -</option>";
                         
                     $sql = "SELECT * FROM ". TBL_CATEGORIES. "
-                             WHERE (  cat_org_id = $g_current_organization->id
+                             WHERE (  cat_org_id = ". $g_current_organization->getValue("org_id"). "
                                    OR cat_org_id IS NULL )
                                AND cat_type   = 'USF'
                              ORDER BY cat_sequence ASC ";

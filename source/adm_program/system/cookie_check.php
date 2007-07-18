@@ -34,7 +34,7 @@ if(isset($_COOKIE['admidio_session_id']) == false)
 {
     unset($_SESSION['login_forward_url']);
     $g_message->setForwardUrl("home");
-    $g_message->show("no_cookie", $g_current_organization->homepage);
+    $g_message->show("no_cookie", $g_current_organization->getValue("org_homepage"));
 }
 else
 {

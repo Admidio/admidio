@@ -95,7 +95,7 @@ echo "
                         <td valign=\"top\"><b>[center]</b>Text zentriert darstellen<b>[/center]</b></td>
                      </tr>
                      <tr>
-                        <td valign=\"top\">Einen <a href=\"http://$g_current_organization->homepage\">Link</a> setzen</td>
+                        <td valign=\"top\">Einen <a href=\"http://". $g_current_organization->getValue("org_homepage"). "\">Link</a> setzen</td>
                         <td valign=\"top\">Einen <b>[url=</b>http://www.beispiel.de<b>]</b>Link<b>[/url]</b> setzen</td>
                      </tr>
                      <tr>
@@ -259,7 +259,7 @@ echo "
                   folgender Organisationen:<p><b>";
 
             // alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist
-            $organizations = $g_current_organization->longname;
+            $organizations = $g_current_organization->getValue("org_longname");
             $arr_ref_orgas = $g_current_organization->getReferenceOrganizations(true, true, true);
 
             while($orga = current($arr_ref_orgas))
@@ -274,7 +274,6 @@ echo "
             break;
 
         case "user_field_description":
-            global $g_current_user;
             echo $g_current_user->getProperty($req_err_text, "usf_description");
             break;
 

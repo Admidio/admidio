@@ -148,7 +148,7 @@ echo "
                         WHERE rol_valid  = 1
                               $sql_roles_condition
                           AND rol_cat_id = cat_id
-                          AND cat_org_id = $g_current_organization->id
+                          AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
                         ORDER BY cat_sequence, rol_name";
         }
         else
@@ -168,7 +168,7 @@ echo "
                           AND rol_valid      = 1
                           AND rol_locked     = 0
                           AND rol_cat_id     = cat_id
-                          AND cat_org_id     = $g_current_organization->id
+                          AND cat_org_id     = ". $g_current_organization->getValue("org_id"). "
                         ORDER BY cat_sequence, rol_name";
         }
         error_log($sql);

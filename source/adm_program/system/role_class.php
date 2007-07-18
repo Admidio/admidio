@@ -70,7 +70,7 @@ class Role
         }
     }
 
-    // Rolle mit der uebergebenen ID aus der Datenbank auslesen
+    // Rolle mit der uebergebenen ID oder dem Rollennamen aus der Datenbank auslesen
     function getRole($role)
     {
         global $g_current_organization;
@@ -79,22 +79,19 @@ class Role
         
         if(is_numeric($role))
         {
-            $sql = "SELECT * 
-                      FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. " 
-                     WHERE rol_cat_id = cat_id
-                       AND rol_id     = $role
-                       AND cat_org_id = $g_current_organization->id ";
+        	$condition = " rol_id = $role ";
         }
         else
         {
             $role = addslashes($role);
-            $sql = "SELECT * 
-                      FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. " 
-                     WHERE rol_cat_id = cat_id
-                       AND rol_name   LIKE '$role'
-                       AND cat_org_id = $g_current_organization->id ";
+            $condition = " rol_name LIKE '$role' ";
         }
-        
+
+        $sql = "SELECT * 
+                  FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. " 
+                 WHERE rol_cat_id = cat_id
+                   AND $condition
+                   AND cat_org_id = ". $g_current_organization->getValue("org_id");
         $result = mysql_query($sql, $this->db_connection);
         db_error($result,__FILE__,__LINE__);
 

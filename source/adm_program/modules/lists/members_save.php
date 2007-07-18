@@ -61,7 +61,7 @@ if(  (!$g_current_user->assignRoles()
    && !$g_current_user->editUser()) 
 || (  !$g_current_user->isWebmaster()
    && $role->getValue("rol_name") == "Webmaster") 
-|| $role->getValue("cat_org_id") != $g_current_organization->id)
+|| $role->getValue("cat_org_id") != $g_current_organization->getValue("org_id"))
 {
    $g_message->show("norights");
 }

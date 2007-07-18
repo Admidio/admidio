@@ -73,10 +73,10 @@ mysql_select_db($g_adm_db, $g_adm_con );
 
 // alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
 $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. "
-         WHERE org_org_id_parent = $g_current_organization->id ";
-if($g_current_organization->org_id_parent > 0)
+         WHERE org_org_id_parent = ". $g_current_organization->getValue("org_id");
+if($g_current_organization->getValue("org_org_id_parent") > 0)
 {
-    $sql = $sql. " OR org_id = $g_current_organization->org_id_parent ";
+    $sql = $sql. " OR org_id = ". $g_current_organization->getValue("org_org_id_parent");
 }
 $result = mysql_query($sql, $g_adm_con);
 db_error($result,__FILE__,__LINE__);

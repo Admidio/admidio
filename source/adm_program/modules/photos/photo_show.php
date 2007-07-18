@@ -155,7 +155,7 @@ if ($scal>200 && $g_preferences['photo_image_text'] == 1)
     $font_s = $scal/40;
     $font_x = $font_s;
     $font_y = $neubildsize[1]-$font_s;
-    $text="&#169;&#32;".$g_current_organization->homepage;
+    $text="&#169;&#32;".$g_current_organization->getValue("org_homepage");
     imagettftext($neubild, $font_s, 0, $font_x, $font_y, $font_c, $font_ttf, $text);
 }
 

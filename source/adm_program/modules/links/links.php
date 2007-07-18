@@ -94,7 +94,7 @@ $linksPerPage = 10;
 $g_layout['title'] = $_GET["headline"];
 if($g_preferences['enable_rss'] == 1)
 {
-    $g_layout['header'] =  "<link type=\"application/rss+xml\" rel=\"alternate\" title=\"$g_current_organization->longname - Links\"
+    $g_layout['header'] =  "<link type=\"application/rss+xml\" rel=\"alternate\" title=\"". $g_current_organization->getValue("org_longname"). " - Links\"
         href=\"$g_root_path/adm_program/modules/links/rss_links.php\">";
 };
 
@@ -111,9 +111,9 @@ if ($_GET['id'] > 0)
     $sql1    = "SELECT * FROM ". TBL_LINKS. "
                LEFT JOIN ". TBL_CATEGORIES ."
                ON lnk_cat_id = cat_id
-               AND cat_org_id = $g_current_organization->id
+               AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
                WHERE lnk_id = {0}
-               AND lnk_org_id = $g_current_organization->id ";
+               AND lnk_org_id = ". $g_current_organization->getValue("org_id");
 
     $sql1    = prepareSQL($sql1, array($_GET['id']));
 }
@@ -124,9 +124,9 @@ else
     $sql1    = "SELECT * FROM ". TBL_LINKS. "
                LEFT JOIN ". TBL_CATEGORIES ."
                ON lnk_cat_id = cat_id
-               AND cat_org_id = $g_current_organization->id
+               AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
                AND cat_type = 'LNK'
-               WHERE lnk_org_id = $g_current_organization->id
+               WHERE lnk_org_id = ". $g_current_organization->getValue("org_id"). "
                ORDER BY cat_sequence, lnk_name, lnk_timestamp DESC
                LIMIT {0}, 10 ";
 
@@ -144,17 +144,17 @@ if ($g_valid_login == false)
     $sql    = "SELECT COUNT(*) FROM ". TBL_LINKS. "
               LEFT JOIN ". TBL_CATEGORIES ."
               ON lnk_cat_id = cat_id
-              AND cat_org_id = $g_current_organization->id
+              AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
               AND cat_type = 'LNK' 
               AND cat_hidden = 0
-              WHERE lnk_org_id = $g_current_organization->id
+              WHERE lnk_org_id = ". $g_current_organization->getValue("org_id"). "
               ORDER BY lnk_name DESC";    
 } 
 else
 {   
     // Alle Kategorien anzeigen
     $sql    = "SELECT COUNT(*) FROM ". TBL_LINKS. "
-              WHERE lnk_org_id = $g_current_organization->id
+              WHERE lnk_org_id = ". $g_current_organization->getValue("org_id"). "
               ORDER BY lnk_name DESC";
 }
 
