@@ -147,7 +147,7 @@ a:hover {
     padding:          8px;
 }
 
-.formLine {
+.formBody hr {
     border:           1px solid #6CA7A8;
 }
 
@@ -220,4 +220,20 @@ a:hover {
 .listMouseOver {
     background-color: #d5d5d5;
     color:            #555555;
+}
+
+/* Elemente fuer Navigationsklasse */
+.page_navigation{
+	text-align: center;
+}
+.navigation_arrow{
+	vertical-align: middle;
+	border: none;
+}
+
+/* Zusatzinformation wer letzte Aenderungen vorgenommen hat etc.*/
+.edit_information{
+	font-size: 8pt;
+	margin: 8px 4px 4px 4px;
+	text-align: center;
 }
