@@ -57,7 +57,7 @@ class Role
     var $db_fields = array();       // Array ueber alle Felder der Rollen-Tabelle der entsprechenden Rolle
 
     // Konstruktor
-    function Role($connection, $role = 0)
+    function Role($connection, $role = "")
     {
         $this->db_connection = $connection;
         if(strlen($role) > 0)

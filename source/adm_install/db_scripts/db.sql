@@ -16,11 +16,11 @@ drop table if exists %PRAEFIX%_guestbook_comments;
 
 drop table if exists %PRAEFIX%_guestbook;
 
-drop table if exists %PRAEFIX%_folders;
+drop table if exists %PRAEFIX%_folder_roles;
 
 drop table if exists %PRAEFIX%_files;
 
-drop table if exists %PRAEFIX%_folder_roles;
+drop table if exists %PRAEFIX%_folders;
 
 drop table if exists %PRAEFIX%_dates;
 

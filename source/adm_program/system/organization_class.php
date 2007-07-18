@@ -52,9 +52,10 @@ class Organization
     var $db_fields = array();       // Array ueber alle Felder der Rollen-Tabelle der entsprechenden Rolle
 
     // Konstruktor
-    function Organization($connection, $organization = 0)
+    function Organization($connection, $organization = "")
     {
         $this->db_connection = $connection;
+        
         if(strlen($organization) > 0)
         {
             $this->getOrganization($organization);
@@ -97,7 +98,7 @@ class Organization
                     $this->db_fields[$key] = $value;
                 }
             }
-        }        
+        }   
     }
 
     // alle Klassenvariablen wieder zuruecksetzen
@@ -117,6 +118,7 @@ class Organization
             // alle Spalten der Tabelle adm_roles ins Array einlesen 
             // und auf null setzen
             $sql = "SHOW COLUMNS FROM ". TBL_ORGANIZATIONS;
+            error_log($sql);
             $result = mysql_query($sql, $this->db_connection);
             db_error($result,__FILE__,__LINE__);
             
