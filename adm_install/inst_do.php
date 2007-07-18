@@ -297,7 +297,7 @@ if(!mysql_select_db($_SESSION['database'], $connection ))
 }
 
 // leeres Organisationsobjekt erstellen
-$organization = new Organization($connection);
+$g_current_organization = new Organization($connection);
 
 if($req_mode == 1)
 {
@@ -426,16 +426,14 @@ if($req_mode == 3)
             }
             
             // jetzt noch evtl. neue Orga-Parameter in DB schreiben
-			$organization->clear();
-            
 			$sql = "SELECT * FROM ". TBL_ORGANIZATIONS;
 			$result_orga = mysql_query($sql, $connection);
 			if(!$result_orga) showError(mysql_error());
 			
 			while($row_orga = mysql_fetch_array($result_orga))
 			{
-				$organization->setValue("org_id", $row_orga['org_id']);
-				$organization->setPreferences($orga_preferences, false);
+				$g_current_organization->setValue("org_id", $row_orga['org_id']);
+				$g_current_organization->setPreferences($orga_preferences, false);
 			}
 			
             // Nun das PHP-Script abarbeiten
@@ -468,18 +466,18 @@ if($req_mode == 1 || $req_mode == 4)
     $req_orga_name_short = strStripTags($_POST['orga_name_short']);
     $req_orga_name_long  = strStripTags($_POST['orga_name_long']);
 
-    $organization->getOrganization($req_orga_name_short);
+    $g_current_organization->getOrganization($req_orga_name_short);
 
-    if($organization->getValue("org_id") > 0)
+    if($g_current_organization->getValue("org_id") > 0)
     {
         showError("Eine Organisation mit dem angegebenen kurzen Namen <b>$req_orga_name_short</b> existiert bereits.<br /><br />
                    W&auml;hlen Sie bitte einen anderen kurzen Namen !");
     }
 
-    $organization->setValue("org_shortname", $req_orga_name_short);
-    $organization->setValue("org_longname", $req_orga_name_long);
-    $organization->setValue("org_homepage", $_SERVER['HTTP_HOST']);
-    $organization->save();
+    $g_current_organization->setValue("org_shortname", $req_orga_name_short);
+    $g_current_organization->setValue("org_longname", $req_orga_name_long);
+    $g_current_organization->setValue("org_homepage", $_SERVER['HTTP_HOST']);
+    $g_current_organization->save();
     
     // alle Einstellungen aus preferences.php in die Tabelle adm_preferences schreiben
     include("db_scripts/preferences.php");
@@ -487,24 +485,24 @@ if($req_mode == 1 || $req_mode == 4)
     foreach($orga_preferences as $key => $value)
     {
         $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-                                           VALUES (". $organization->getValue("org_id"). ",    '$key',   '$value') ";
+                                           VALUES (". $g_current_organization->getValue("org_id"). ",    '$key',   '$value') ";
         $result = mysql_query($sql, $connection);
         db_error($result,__FILE__,__LINE__);
     }
     
     // Default-Kategorie fuer Rollen und Links eintragen
     $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_sequence)
-                                           VALUES (". $organization->getValue("org_id"). ", 'ROL', 'Allgemein', 0, 1)";
+                                           VALUES (". $g_current_organization->getValue("org_id"). ", 'ROL', 'Allgemein', 0, 1)";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
     $category_common = mysql_insert_id();
     
     $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_sequence)
-                                      VALUES (". $organization->getValue("org_id"). ", 'ROL', 'Gruppen', 0, 2)
-                                           , (". $organization->getValue("org_id"). ", 'ROL', 'Kurse', 0, 3)
-                                           , (". $organization->getValue("org_id"). ", 'ROL', 'Mannschaften', 0, 4)
-                                           , (". $organization->getValue("org_id"). ", 'LNK', 'Allgemein', 0, 1)
-                                           , (". $organization->getValue("org_id"). ", 'USF', '". utf8_decode('Zusätzliche Daten'). "', 0, 2) ";
+                                      VALUES (". $g_current_organization->getValue("org_id"). ", 'ROL', 'Gruppen', 0, 2)
+                                           , (". $g_current_organization->getValue("org_id"). ", 'ROL', 'Kurse', 0, 3)
+                                           , (". $g_current_organization->getValue("org_id"). ", 'ROL', 'Mannschaften', 0, 4)
+                                           , (". $g_current_organization->getValue("org_id"). ", 'LNK', 'Allgemein', 0, 1)
+                                           , (". $g_current_organization->getValue("org_id"). ", 'USF', '". utf8_decode('Zusätzliche Daten'). "', 0, 2) ";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
 
@@ -570,6 +568,11 @@ if($req_mode == 1 || $req_mode == 4)
     if(!$result) showError(mysql_error());
 }
 
+// globale Objekte entfernen, damit sie neu eingelesen werden
+unset($_SESSION['g_current_organisation']);
+unset($_SESSION['g_preferences']);
+unset($_SESSION['g_current_user']);
+
 if($req_mode == 1)
 {
     header("Location: index.php?mode=2");
@@ -577,10 +580,6 @@ if($req_mode == 1)
 }
 else
 {
-    // globale Orga-Objekte entfernen, damit sie neu eingelesen werden
-    unset($_SESSION['g_current_organisation']);
-    unset($_SESSION['g_preferences']);
-    
     showError("Die Einrichtung der Datenbank konnte erfolgreich abgeschlossen werden.<br><br>
                Nun muss noch das Installationsverzeichnis <b>adm_install</b> gel&ouml;scht werden.", "Fertig", 2);
 }

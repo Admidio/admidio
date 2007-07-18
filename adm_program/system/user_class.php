@@ -72,7 +72,6 @@ class User
     // User mit der uebergebenen ID aus der Datenbank auslesen
     function getUser($user_id)
     {
-        global $g_current_organization;
         $this->clear();
         
         if(is_numeric($user_id))

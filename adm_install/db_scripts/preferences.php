@@ -29,13 +29,14 @@
 $orga_preferences = array(
 
     // System
-    'enable_rss'     => '1',
-    'enable_bbcode'  => '1',
-    'logout_minutes' => '20',
+    'enable_rss'      => '1',
+    'enable_bbcode'   => '1',
+    'logout_minutes'  => '20',
     'enable_system_mails' => '1',
     'email_administrator' => 'webmaster@'. $_SERVER['HTTP_HOST'],
-    'user_css'       => 'user.css',
-    'system_align'   => 'center',
+    'default_country' => 'Deutschland',
+    'user_css'        => 'user.css',
+    'system_align'    => 'center',
     
     // Registrierung
     'registration_mode'              => '1',
