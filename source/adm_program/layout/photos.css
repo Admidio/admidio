@@ -1,3 +1,34 @@
+/******************************************************************************
+ * Cascading-Style-Sheets-Datei um das Aussehen von Admidio anzupassen
+ *
+ * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Homepage     : http://www.admidio.org
+ * Module-Owner : Jochen Erkens
+ *
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!! W I C H T I G !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ * Diese Datei bitte NICHT anpassen, da diese bei jedem Update ueberschrieben
+ * werden sollte. Anpassungen koennen in der user.css im Ordner adm_config
+ * gemacht werden. Die CSS-Einstellungen koennen dazu einfach in diese Datei
+ * kopiert werden
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ *
+ ******************************************************************************
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *
+ *****************************************************************************/
 /*Die Thumbnails werden in einer Tabelle aufbebaut
 hier koenne Einstellungen fuer diese vorgenommen werden*/
 #photo_thumbnail_table {
@@ -20,14 +51,6 @@ hier koenne Einstellungen fuer diese vorgenommen werden*/
 	border: none;
 }
 
-/*Einstellung fuer die Icons die den Usern mit Editrechten unter den Bildern angezeigt werden*/
-.photo_thumbnail_edit_icons{
-	vertical-align: middle;
-	cursor: pointer;
-	border: none;
-	height: 16px;
-	width: 16px;
-}
 
 /*Auch die Fotoevents werden in einer Tabelle angezeigt*/
 #photo_event_table{
@@ -42,7 +65,7 @@ hier koenne Einstellungen fuer diese vorgenommen werden*/
 .photo_event_table_pic_column{
     padding: 4px;
    	text-align: right;
-   	width: 50%;
+   	width: 35%;
 }
 
 /*Einstellung fuer die FotoeventtabellenTextspalte, z.B. Breite oder Ausrichtung des enthaltenen Textes*/
@@ -74,7 +97,16 @@ hier koenne Einstellungen fuer diese vorgenommen werden*/
 	margin: 4px;
 }
 
-/*Umramender Container um Thumbnail- und Fotoeventtabelle*/
-#photo_list_border{
+/*Umramender Container um Thumbnail- und Fotoeventtabelle, sowie Uploadbericht*/
+.photo_list_container{
+	border-width: 2px;
+	border-color: #6CA7A8;
+	border-style: solid;
+	width: 550px;
+}
+
+/*Einstellungen fuer die ausgabe der grossen Photos (ohne LightBox)*/
+.photo_output{
+	text-align: center;
 	border: none;
 }

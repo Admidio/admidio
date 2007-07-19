@@ -85,24 +85,44 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 /**************************Formular********************************************************/
 echo"
 <form name=\"photoup\" method=\"post\" action=\"$g_root_path/adm_program/modules/photos/photoupload_do.php?pho_id=". $_GET['pho_id']. "\" enctype=\"multipart/form-data\">
-    <div style=\"width: 410px\" align=\"center\" class=\"formHead\">Bilder hochladen</div>
-    <div style=\"width: 410px\" align=\"center\" class=\"formBody\">
-        Bilder zu dieser Veranstaltung hinzuf&uuml;gen:<br>"
-        .$photo_event->getValue("pho_name")."<br>"
-        ."(Beginn: ". mysqldate("d.m.y", $photo_event->getValue("pho_begin")).")"
-        ."<hr class=\"formLine\" width=\"85%\" />
-        <p>Bild 1:<input type=\"file\" id=\"bilddatei1\" name=\"bilddatei[]\" value=\"durchsuchen\"></p>
-        <p>Bild 2:<input type=\"file\" name=\"bilddatei[]\" value=\"durchsuchen\"></p>
-        <p>Bild 3:<input type=\"file\" name=\"bilddatei[]\" value=\"durchsuchen\"></p>
-        <p>Bild 4:<input type=\"file\" name=\"bilddatei[]\" value=\"durchsuchen\"></p>
-        <p>Bild 5:<input type=\"file\" name=\"bilddatei[]\" value=\"durchsuchen\"></p>
+    <div class=\"formHead\">Bilder hochladen</div>
+    <div class=\"formBody\">
+        <div class=\"form_row\">
+			Bilder zu dieser Veranstaltung hinzuf&uuml;gen:<br>"
+	        .$photo_event->getValue("pho_name")."<br>"
+	        ."(Beginn: ". mysqldate("d.m.y", $photo_event->getValue("pho_begin")).")"
+	        ."
+		</div>
+		<hr>
+	    <div class=\"form_row\">
+			<div class=\"form_row_text\">Bild 1:</div>
+			<div class=\"form_row_field\"<input type=\"file\" id=\"bilddatei1\" name=\"bilddatei[]\" value=\"durchsuchen\"></div>
+		</div>
+	    <div class=\"form_row\">
+			<div class=\"form_row_text\">Bild 2:</div>
+			<div class=\"form_row_field\"<input type=\"file\" name=\"bilddatei[]\" value=\"durchsuchen\"></div>
+		</div>
+	    <div class=\"form_row\">
+			<div class=\"form_row_text\">Bild 2:</div>
+			<div class=\"form_row_field\"<input type=\"file\" name=\"bilddatei[]\" value=\"durchsuchen\"></div>
+		</div>
+	    <div class=\"form_row\">
+			<div class=\"form_row_text\">Bild 2:</div>
+			<div class=\"form_row_field\"<input type=\"file\" name=\"bilddatei[]\" value=\"durchsuchen\"></div>
+		</div>
+	    <div class=\"form_row\">
+			<div class=\"form_row_text\">Bild 2:</div>
+			<div class=\"form_row_field\"<input type=\"file\" name=\"bilddatei[]\" value=\"durchsuchen\"></div>
+		</div>
 
-        <hr class=\"formLine\" width=\"85%\" />
-        Hilfe: <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_up_help','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\">
-        <hr class=\"formLine\" width=\"85%\" />
+		<div class=\"form_row\">
+	        <hr />
+	        Hilfe: <img src=\"$g_root_path/adm_program/images/help.png\" class=\"iconLink\" alt=\"Hilfe\" title=\"Hilfe\"
+	                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_up_help','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\">
+	        <hr />
+		</div>
 
-        <div style=\"margin-top: 6px;\">
+        <div class=\"form_row\">
             <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
                 <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\">
                 &nbsp;Zur&uuml;ck
