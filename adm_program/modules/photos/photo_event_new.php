@@ -176,7 +176,7 @@ echo"</div>";
 
 //Body
 echo"
-<div class=\"formBody\" align=\"center\">
+<div class=\"formBody\">
     <form method=\"POST\" action=\"$g_root_path/adm_program/modules/photos/photo_event_function.php?pho_id=". $_GET["pho_id"];
         if($_GET["job"]=="new")
         {
@@ -189,16 +189,16 @@ echo"
 
         //Veranstaltung
         echo"
-        <div>
-            <div style=\"text-align: right; width: 170px; float: left;\">Veranstaltung:</div>
-            <div style=\"text-align: left; margin-left: 180px;\">
+        <div class=\"form_row\">
+            <div class=\"form_row_text\">Veranstaltung:</div>
+            <div class=\"form_row_field\">
                 <input type=\"text\" id=\"pho_name\" name=\"pho_name\" style=\"width: 300px;\" maxlength=\"50\" tabindex=\"1\" value=\"".$photo_event->getValue("pho_name")."\">
-                <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
-            </div>
+                <span title=\"Pflichtfeld\" class=\"mandatory_field_marker\">*</span>
         </div>
-        <div style=\"margin-top: 6px;\">
-           <div style=\"text-align: right; width: 170px; float: left;\">in Ordner:</div>
-           <div style=\"text-align: left; margin-left: 180px;\">
+        </div>
+        <div class=\"form_row\">
+           <div class=\"form_row_text\">in Ordner:</div>
+           <div class=\"form_row_field\">
                 <select size=\"1\" name=\"pho_pho_id_parent\" tabindex=\"2\">
                     <option value=\"0\">Fotogalerien(Hauptordner)</option>";
 
@@ -225,37 +225,37 @@ echo"
 
         //Beginn
         echo"
-        <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 170px; float: left;\">Beginn:</div>
-            <div style=\"text-align: left; margin-left: 180px;\">
+        <div class=\"form_row\">
+            <div class=\"form_row_text\">Beginn:</div>
+            <div class=\"form_row_field\">
                 <input type=\"text\" name=\"pho_begin\" size=\"10\" tabindex=\"3\" maxlength=\"10\" value=\"". $photo_event->getValue("pho_begin")."\">
-                <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
+                <span title=\"Pflichtfeld\" class=\"mandatory_field_marker\">*</span>
             </div>
         </div>";
 
         //Ende
         echo"
-        <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 170px; float: left;\">Ende:</div>
-            <div style=\"text-align: left; margin-left: 180px;\">
+        <div class=\"form_row\">
+            <div class=\"form_row_text\">Ende:</div>
+            <div class=\"form_row_field\">
                 <input type=\"text\" name=\"pho_end\" size=\"10\" tabindex=\"4\" maxlength=\"10\" value=\"". $photo_event->getValue("pho_end")."\">
             </div>
         </div>";
 
         //Photographen
         echo"
-        <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 170px; float: left;\">Fotografen:</div>
-            <div style=\"text-align: left; margin-left: 180px;\">
+        <div class=\"form_row\">
+            <div class=\"form_row_text\">Fotografen:</div>
+            <div class=\"form_row_field\">
                 <input type=\"text\" name=\"pho_photographers\" style=\"width: 300px;\" tabindex=\"5\" maxlength=\"100\" value=\"".$photo_event->getValue("pho_photographers")."\">
             </div>
         </div>";
 
         //Freigabe
         echo"
-        <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 170px; float: left;\">Sperren:</div>
-            <div style=\"text-align: left; margin-left: 180px;\">";
+        <div class=\"form_row\">
+            <div class=\"form_row_text\">Sperren:</div>
+            <div  class=\"form_row_field\">";
                 echo "<input type=\"checkbox\" name=\"pho_locked\" id=\"locked\" tabindex=\"6\" value=\"1\"";
 
                 if($photo_event->getValue("pho_locked") == 1)
@@ -268,22 +268,22 @@ echo"
 
         //Submit- und Zurueckbutton
         echo"
-        <div style=\"margin-top: 6px;\">
-            <hr class=\"formLine\" width=\"85%\" />
+        <div class=\"form_row\">
+            <hr />
             Hilfe: <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                     onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=veranst_help','Message','width=500, height=400, left=310,top=200,scrollbars=no')\">
-            <hr class=\"formLine\" width=\"85%\" />
-            <div style=\"margin-top: 6px;\">
-                <button name=\"zurueck\" type=\"button\" tabindex=\"7\" value=\"zurueck\" onclick=\"history.back()\">
-                    <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\">
-                    &nbsp;Zur&uuml;ck
-                </button>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <button name=\"submit\" type=\"submit\" tabindex=\"8\" value=\"speichern\">
-                    <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\">
-                    &nbsp;Speichern
-                </button>
-           </div>
+            <hr />
+        </div>
+        <div class=\"form_row\">
+            <button name=\"zurueck\" type=\"button\" tabindex=\"7\" value=\"zurueck\" onclick=\"history.back()\">
+                <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\">
+                &nbsp;Zur&uuml;ck
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button name=\"submit\" type=\"submit\" tabindex=\"8\" value=\"speichern\">
+                <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\">
+                &nbsp;Speichern
+            </button>
         </div>
     </form>
 </div>

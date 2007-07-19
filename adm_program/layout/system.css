@@ -56,6 +56,13 @@ h1 {
      margin-bottom:   10px;
 }
 
+hr {
+	border-width: 1px;
+	border-color: #6CA7A8;
+	border-style: solid;
+	width: 85%;
+}
+
 .readonly {
     color:            #666666;
 }
@@ -86,8 +93,11 @@ a:hover {
 }
 
 .iconLink {
-	 vertical-align:   top;
+	 vertical-align:   middle;
 	 border-width:     0px;
+	 cursor: pointer;
+	 width: 16px;
+	 height: 16px;
 }
 
 /* Layout fuer die Boxen (Termine usw.)
@@ -148,7 +158,29 @@ a:hover {
 }
 
 .formBody hr {
-    border:           1px solid #6CA7A8;
+	border-width: 1px;
+	border-color: #6CA7A8;
+	border-style: solid;
+	width: 85%;
+}
+
+.form_row{
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.form_row_text{
+	float: left;
+	text-align: left;
+	width: 170px;
+	vertical-align: middle;
+	padding-left: 10px;
+}
+
+.form_row_field{
+	text-align: left;
+	padding-left: 180px;
+	max-width: 400px;
 }
 
 /* Einfache rechteckige Groupbox mit Rahmen um bestimmte Teile zu markieren,
@@ -236,4 +268,9 @@ a:hover {
 	font-size: 8pt;
 	margin: 8px 4px 4px 4px;
 	text-align: center;
+}
+
+/*Pflichtfeldmarkierung*/
+.mandatory_field_marker{
+	color: #990000;
 }

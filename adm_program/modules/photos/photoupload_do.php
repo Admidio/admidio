@@ -118,6 +118,9 @@ if($_POST["upload"])
     $_SESSION['navigation']->deleteLastUrl();
 }//Kontrollmechanismen
 
+//Photomodulspezifische CSS laden
+$g_layout['header'] = $g_layout['header']."<link rel=\"stylesheet\" href=\"$g_root_path/adm_program/layout/photos.css\" type=\"text/css\" media=\"screen\" />";
+
 // Html-Kopf ausgeben
 $g_layout['title'] = "Fotos hochladen";
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");
@@ -128,8 +131,9 @@ if($_POST["upload"])
     //bei selbstaufruf der Datei Hinweise zu hochgeladenen Dateien und Kopieren der Datei in Ordner
     //Anlegen des Berichts
     echo"
-    <div style=\"width: 670px\" align=\"center\" class=\"formHead\">Bericht</div>
-    <div style=\"width: 670px\" align=\"center\" class=\"formBody\">Bitte einen Moment Geduld. 
+    <h1>Fotoupload - Bericht</h1>
+	<div class=\"photo_list_container\">
+		Bitte einen Moment Geduld. 
         Die Bilder wurden der Veranstaltung <br> - ".$photo_event->getValue("pho_name")." - <br>
         erfolgreich hinzugef&uuml;gt, wenn sie hier angezeigt werden.<br>";
 
@@ -191,8 +195,8 @@ if($_POST["upload"])
 
         //Buttons
         echo"
-        <hr class=\"formLine\" width=\"85%\" />
-        <div style=\"margin-top: 6px;\">
+        <hr />
+        <div class=\"form_row\">
             <button name=\"uebersicht\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id'\">
                 <img src=\"$g_root_path/adm_program/images/application_view_tile.png\" alt=\"Zur&uuml;ck\">
                 &nbsp;&Uuml;bersicht

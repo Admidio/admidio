@@ -226,18 +226,27 @@ if(isset($_POST["submit"]) && $_POST["submit"])
         $photo_event->save($g_current_user->getValue("usr_id"));
     }
 
+    //Photomodulspezifische CSS laden
+	$g_layout['header'] = $g_layout['header']."<link rel=\"stylesheet\" href=\"$g_root_path/adm_program/layout/photos.css\" type=\"text/css\" media=\"screen\" />";
+    
     // HTML-Kopf
     $g_layout['title'] = "Veranstaltungsverwaltung";
     require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
-    echo"<div style=\"width: 430px\" align=\"center\" class=\"formHead\">Bericht</div>";
+    echo"<h1>Bericht</h1>";
     echo"
-    <div style=\"width: 430px\" align=\"center\" class=\"formBody\">
-        <table cellspacing=3 cellpadding=0 border=\"0\">
-            <tr><td colspan=\"2\" align=\"center\">Die Veranstaltung wurde erfolgreich angelegt / ge&auml;ndert:<br>&nbsp;</td></tr>
-            <tr><td align=\"right\">Veranstaltung:</td><td align=\"left\">".$photo_event->getValue("pho_name")."</td></tr>
-            <tr><td align=\"right\" width=\"50%\">in Ordner:</td><td align=\"left\">";
-                if($photo_event->getValue("pho_pho_id_parent") > 0)
+    <div class=\"photo_list_container\">
+		<div class=\"form_row\">Die Veranstaltung wurde erfolgreich angelegt / ge&auml;ndert:</div>
+        
+		<div class=\"form_row\">
+			<div class=\"form_row_text\">Veranstaltung:</div>
+			<div class=\"form_row_field\">".$photo_event->getValue("pho_name")."</div>
+		</div>
+        
+		<div class=\"form_row\">
+			<div class=\"form_row_text\">in Ordner:</div>
+			<div class=\"form_row_field\">";
+ 				if($photo_event->getValue("pho_pho_id_parent") > 0)
                 {
                     $photo_event_parent = new PhotoEvent($g_adm_con, $photo_event->getValue("pho_pho_id_parent"));
                     echo $photo_event_parent->getValue("pho_name");
@@ -246,29 +255,58 @@ if(isset($_POST["submit"]) && $_POST["submit"])
                 {
                     echo "Fotogalerien(Hauptordner)";
                 }
-            echo"
-            </td></tr>
-            <tr><td align=\"right\">Anfangsdatum:</td><td align=\"left\">".mysqldate("d.m.y", $photo_event->getValue("pho_begin"))."</td></tr>
-            <tr><td align=\"right\">Enddatum:</td><td align=\"left\">".mysqldate("d.m.y", $photo_event->getValue("pho_end"))."</td></tr>
-            <tr><td align=\"right\">Fotografen:</td><td align=\"left\">".$photo_event->getValue("pho_photographers")."</td></tr>
-            <tr><td align=\"right\">Gesperrt:</td><td align=\"left\">";
-            if($photo_event->getValue("pho_locked")==1)
-            {
-                 echo "Ja";
-            }
-            else
-            {
-                 echo "Nein";
-            }
-            echo"
-            </td></tr>
-            <tr><td align=\"right\" width=\"50%\">Aktuelle Bilderzahl:</td><td align=\"left\">".$photo_event->getValue("pho_quantity")."</td></tr>
-        </table>
-        <hr class=\"formLine\" width=\"85%\" />
-        <button name=\"weiter\" type=\"button\" value=\"weiter\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id'\">Weiter&nbsp;
-            <img src=\"$g_root_path/adm_program/images/forward.png\" alt=\"Weiter\">
-        </button>
-    </div><br><br>";
+        	echo"</div>
+		</div>
+        
+		<div class=\"form_row\">
+			<div class=\"form_row_text\">Anfangsdatum:</div>
+			<div class=\"form_row_field\">".mysqldate("d.m.y", $photo_event->getValue("pho_begin"))."</div>
+		</div>
+        
+		<div class=\"form_row\">
+			<div class=\"form_row_text\">Enddatum:</div>
+			<div class=\"form_row_field\">".mysqldate("d.m.y", $photo_event->getValue("pho_end"))."</div>
+		</div>
+        
+		<div class=\"form_row\">
+			<div class=\"form_row_text\">Fotografen:</div>
+			<div class=\"form_row_field\">".$photo_event->getValue("pho_photographers")."</div>
+		</div>
+        
+		<div class=\"form_row\">
+			<div class=\"form_row_text\">Gesperrt:</div>
+			<div class=\"form_row_field\">";
+	        	if($photo_event->getValue("pho_locked")==1)
+	            {
+	                 echo "Ja";
+	            }
+	            else
+	            {
+	                 echo "Nein";
+	            }  	
+        	echo"</div>
+		</div>
+        
+		<div class=\"form_row\">
+			<div class=\"form_row_text\">Aktuelle Bilderzahl:</div>
+			<div class=\"form_row_field\">";
+        		if($photo_event->getValue("pho_quantity")!=NULL)
+        		{
+					echo $photo_event->getValue("pho_quantity");
+        		}
+        		else
+        		{
+					echo"0";
+        		}
+	        echo"</div>
+		</div>
+        <div class=\"form_row\"><hr  /></div>
+        <div class=\"form_row\">
+			<button name=\"weiter\" type=\"button\" value=\"weiter\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id'\">Weiter&nbsp;
+	            <img src=\"$g_root_path/adm_program/images/forward.png\" alt=\"Weiter\">
+	        </button>
+		</div>
+	</div><br><br>";
 }//submit
 
 
