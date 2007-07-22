@@ -153,7 +153,7 @@ class Organization extends TableAccess
     			&& $value  != $db_preferences[$key])
     			{
     				// Pref existiert in DB, aber Wert hat sich geaendert
-					$sql = "UPDATE ". TBL_PREFERENCES. " SET prf_value = $value
+					$sql = "UPDATE ". TBL_PREFERENCES. " SET prf_value = '$value'
 					         WHERE prf_org_id = ". $this->db_fields['org_id']. "
 							   AND prf_name   = '$key' ";
 					error_log($sql);	
