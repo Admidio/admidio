@@ -23,9 +23,8 @@
  * setArray($field_arra)  - uebernimmt alle Werte aus einem Array in das Field-Array
  * setValue($field_name, $field_value) - setzt einen Wert fuer ein bestimmtes Feld
  * getValue($field_name)  - gibt den Wert eines Feldes zurueck
- * update($login_user_id) - Rolle wird mit den geaenderten Daten in die Datenbank
- *                          zurueckgeschrieben
- * insert($login_user_id) - Eine neue Rolle wird in die Datenbank geschrieben
+ * save()                 - Feld wird mit den geaenderten Daten in die Datenbank
+ *                          zurueckgeschrieben oder angelegt
  * delete()               - Die gewaehlte Rolle wird aus der Datenbank geloescht
  *
  ******************************************************************************
@@ -45,15 +44,18 @@
  *
  *****************************************************************************/
 
-class UserField
-{
-    var $db_connection;
-    var $db_fields = array();
+require_once(SERVER_PATH. "/adm_program/system/table_access_class.php");
 
+class UserField extends TableAccess
+{
     // Konstruktor
     function UserField($connection, $usf_id = 0)
     {
-        $this->db_connection = $connection;
+        $this->db_connection  = $connection;
+        $this->table_name     = TBL_USER_FIELDS;
+        $this->column_praefix = "usf";
+        $this->key_name       = "usf_id";
+        
         if($usf_id > 0)
         {
             $this->getUserField($usf_id);
@@ -67,77 +69,20 @@ class UserField
     // Benutzerdefiniertes Feld mit der uebergebenen ID aus der Datenbank auslesen
     function getUserField($usf_id)
     {
-        $this->clear();
-        
-        if($usf_id > 0 && is_numeric($usf_id))
-        {
-            $sql = "SELECT * 
-                      FROM ". TBL_USER_FIELDS. ", ". TBL_CATEGORIES. " 
-                     WHERE usf_cat_id = cat_id
-                       AND usf_id     = $usf_id";
-            $result = mysql_query($sql, $this->db_connection);
-            db_error($result,__FILE__,__LINE__);
-
-            if($row = mysql_fetch_array($result, MYSQL_ASSOC))
-            {
-                // Daten in das Klassenarray schieben
-                foreach($row as $key => $value)
-                {
-                    $this->db_fields[$key] = $value;
-                }
-            }
-        }
-    }
-
-    // alle Klassenvariablen wieder zuruecksetzen
-    function clear()
-    {
-        if(count($this->db_fields) > 0)
-        {
-            foreach($this->db_fields as $key => $value)
-            {
-                $this->db_fields[$key] = null;
-            }
-        }
-        else
-        {
-            // alle Spalten der Tabelle adm_roles ins Array einlesen 
-            // und auf null setzen
-            $sql = "SHOW COLUMNS FROM ". TBL_USER_FIELDS;
-            $result = mysql_query($sql, $this->db_connection);
-            db_error($result,__FILE__,__LINE__);
-            
-            while ($row = mysql_fetch_array($result))
-            {
-                $this->db_fields[$row['Field']] = null;
-            }
+    	if(is_numeric($usf_id))
+    	{
+	    	$tables    = TBL_CATEGORIES;
+	    	$condition = "       usf_cat_id = cat_id
+	                         AND usf_id     = $usf_id ";
+	    	$this->readData($usf_id, $condition, $tables);
         }
     }
     
-    // Funktion uebernimmt alle Werte eines Arrays in das Field-Array
-    function setArray($field_array)
+    // interne Funktion, die bei setValue den uebergebenen Wert prueft
+	// und ungueltige Werte auf leer setzt
+	// die Funktion wird innerhalb von setValue() aufgerufen
+    function checkValue($field_name, $field_value)
     {
-        foreach($field_array as $field => $value)
-        {
-            $this->db_fields[$field] = $value;
-        }
-    }
-    
-    // Funktion setzt den Wert eines Feldes neu, 
-    // dabei koennen noch noetige Plausibilitaetspruefungen gemacht werden
-    function setValue($field_name, $field_value)
-    {
-        $field_name  = strStripTags($field_name, true);
-        $field_value = strStripTags($field_value);
-        $field_name  = stripSlashes($field_name);
-        $field_value = stripSlashes($field_value);
-        
-        if(strlen($field_value) == 0)
-        {
-            $field_value = null;
-        }
-        
-        // Plausibilitaetspruefungen
         switch($field_name)
         {
             case "usf_id":
@@ -146,6 +91,7 @@ class UserField
                 || $field_value == 0)
                 {
                     $field_value = null;
+                    return false;
                 }
                 
                 if($field_name == "usf_cat_id"
@@ -170,130 +116,23 @@ class UserField
                 if($field_value != 1)
                 {
                     $field_value = 0;
+                    return false;
                 }
                 break;
-        }
-        
-        $this->db_fields[$field_name] = $field_value;
-    }
-
-    // Funktion gibt den Wert eines Feldes zurueck
-    // hier koennen auch noch bestimmte Formatierungen angewandt werden
-    function getValue($field_name)
-    {
-        return $this->db_fields[$field_name];
+        }    	
+        return true;
     }
     
-    // aktuelle Felddaten in der Datenbank updaten
-    function update()
-    {
-        if(count($this->db_fields)    > 0
-        && $this->db_fields['usf_id'] > 0 
-        && is_numeric($this->db_fields['usf_id']))
-        {
-            // SQL-Update-Statement zusammenbasteln
-            $item_connection = "";
-            $sql_field_list  = "";
-
-            // Schleife ueber alle DB-Felder und diese dem Update hinzufuegen                
-            foreach($this->db_fields as $key => $value)
-            {
-                // ID und andere Tabellenfelder sollen nicht im Insert erscheinen
-                if($key != "usf_id" && strpos($key, "usf_") === 0) 
-                {
-                    if(strlen($value) == 0)
-                    {
-                        $sql_field_list = $sql_field_list. " $item_connection $key = NULL ";
-                    }
-                    elseif(is_numeric($value))
-                    {
-                        $sql_field_list = $sql_field_list. " $item_connection $key = $value ";
-                    }
-                    else
-                    {
-                        $value = addSlashes($value);
-                        $sql_field_list = $sql_field_list. " $item_connection $key = '$value' ";
-                    }
-
-                    if(strlen($item_connection) == 0)
-                    {
-                        $item_connection = ",";
-                    }
-                }
-            }
-
-            $sql = "UPDATE ". TBL_USER_FIELDS. " SET $sql_field_list WHERE usf_id = ". $this->db_fields['usf_id'];
-            $result = mysql_query($sql, $this->db_connection);
-            db_error($result,__FILE__,__LINE__);
-            error_log($sql);
-            return 0;
-        }
-        return -1;
-    }
-
-    // aktuelle Felddaten neu in der Datenbank schreiben
-    function insert()
-    {
-        global $g_current_organization;
-        
-        if(isset($this->db_fields['usf_id']) == false
-        || $this->db_fields['usf_id']        == 0 )
-        {
-            // SQL-Update-Statement zusammenbasteln
-            $item_connection = "";
-            $sql_field_list  = "";
-            $sql_value_list  = "";
-
-            // Schleife ueber alle DB-Felder und diese dem Insert hinzufuegen 
-            foreach($this->db_fields as $key => $value)
-            {
-                // ID und andere Tabellenfelder sollen nicht im Insert erscheinen
-                if($key != "usf_id" && strlen($value) > 0 && strpos($key, "usf_") === 0) 
-                {
-                    $sql_field_list = $sql_field_list. " $item_connection $key ";
-                    if(is_numeric($value))
-                    {
-                        $sql_value_list = $sql_value_list. " $item_connection $value ";
-                    }
-                    else
-                    {
-                        $value = addSlashes($value);
-                        $sql_value_list = $sql_value_list. " $item_connection '$value' ";
-                    }
-
-                    if(strlen($item_connection) == 0)
-                    {
-                        $item_connection = ",";
-                    }
-                }
-            }
-                        
-            $sql = "INSERT INTO ". TBL_USER_FIELDS. " ($sql_field_list) VALUES ($sql_value_list) ";
-            $result = mysql_query($sql, $this->db_connection);
-            db_error($result,__FILE__,__LINE__);
-            error_log($sql);
-            
-            $this->db_fields['usf_id'] = mysql_insert_id($this->db_connection);
-            return 0;
-        }
-        return -1;
-    }
-
-    // aktuelles Feld loeschen
-    function delete()
+    // interne Funktion, die die Referenzen bearbeitet, wenn die Kategorie geloescht wird
+	// die Funktion wird innerhalb von delete() aufgerufen
+    function deleteReferences()
     {
         $sql    = "DELETE FROM ". TBL_USER_DATA. "
                     WHERE usd_usf_id = ". $this->db_fields['usf_id'];
         $result = mysql_query($sql, $this->db_connection);
         db_error($result,__FILE__,__LINE__);
 
-        $sql    = "DELETE FROM ". TBL_USER_FIELDS. "
-                    WHERE usf_id = ". $this->db_fields['usf_id'];
-        $result = mysql_query($sql, $this->db_connection);
-        db_error($result,__FILE__,__LINE__);
-
-        $this->clear();
-        return 0;
-    }
+        return true;
+    }    
 }
 ?>

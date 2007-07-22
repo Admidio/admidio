@@ -31,6 +31,8 @@
  *
  *****************************************************************************/
 
+define('SERVER_PATH', substr(__FILE__, 0, strpos(__FILE__, "adm_install")-1));
+
 require("../adm_program/system/function.php");
 require("../adm_program/system/string.php");
 require("../adm_program/system/date.php");
@@ -506,6 +508,15 @@ if($req_mode == 1 || $req_mode == 4)
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
 
+    // User Webmaster anlegen
+    $g_current_user = new User($connection);
+    $g_current_user->setValue("Nachname", $req_user_last_name);
+    $g_current_user->setValue("Vorname", $req_user_first_name);
+    $g_current_user->setValue("E-Mail", $req_user_email);
+    $g_current_user->setValue("usr_login_name", $req_user_login);
+    $g_current_user->setValue("usr_password", md5($req_user_password));
+    $g_current_user->save(false);
+    
     // nun die Default-Rollen anlegen
 
     // Webmaster
@@ -550,20 +561,11 @@ if($req_mode == 1 || $req_mode == 4)
     $role_management->setValue("rol_mail_login", 1);
     $role_management->setValue("rol_profile", 1);
     $role_management->save(0);
-
-    // User Webmaster anlegen
-    $user = new User($connection);
-    $user->setValue("Nachname", $req_user_last_name);
-    $user->setValue("Vorname", $req_user_first_name);
-    $user->setValue("E-Mail", $req_user_email);
-    $user->setValue("usr_login_name", $req_user_login);
-    $user->setValue("usr_password", md5($req_user_password));
-    $user->save(0, false);
     
     // Mitgliedschaft bei Rolle "Webmaster" anlegen
     $sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin, mem_valid)
-                                   VALUES (". $role_webmaster->getValue("rol_id"). ", ". $user->getValue("usr_id"). ", NOW(), 1) 
-                                        , (". $role_member->getValue("rol_id"). ", ". $user->getValue("usr_id"). ", NOW(), 1) ";
+                                   VALUES (". $role_webmaster->getValue("rol_id"). ", ". $g_current_user->getValue("usr_id"). ", NOW(), 1) 
+                                        , (". $role_member->getValue("rol_id"). ", ". $g_current_user->getValue("usr_id"). ", NOW(), 1) ";
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
 }

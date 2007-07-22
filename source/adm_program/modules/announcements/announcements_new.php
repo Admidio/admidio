@@ -31,6 +31,7 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
+require("../../system/announcement_class.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_announcements_module'] != 1)
@@ -66,43 +67,33 @@ if(isset($_GET['headline']))
 
 $_SESSION['navigation']->addUrl($g_current_url);
 
-if(isset($_SESSION['announcements_request']))
-{
-    $form_values = $_SESSION['announcements_request'];
-    unset($_SESSION['announcements_request']);
-}
-else
-{
-    $form_values['headline']    = "";
-    $form_values['description'] = "";
-    $form_values['global']      = 0;
+// Ankuendigungsobjekt anlegen
+$announcement = new Announcement($g_adm_con);
 
-    // Wenn eine Ankuendigungs-ID uebergeben wurde, soll die Ankuendigung geaendert werden
-    // -> Felder mit Daten der Ankuendigung vorbelegen
-
-    if ($req_ann_id > 0)
+if($req_ann_id > 0)
+{
+    $announcement->getAnnouncement($req_ann_id);
+    
+    // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
+    if($announcement->getValue("ann_org_shortname") != $g_organization
+    && $announcement->getValue("ann_global") == 0 )
     {
-        $sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
-                    WHERE ann_id = {0}
-                      AND (  ann_org_shortname = '$g_organization'
-                          OR ann_global = 1) ";
-        $sql    = prepareSQL($sql, array($_GET['ann_id']));
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result,__FILE__,__LINE__);
-
-        if (mysql_num_rows($result) > 0)
-        {
-            $row_ba = mysql_fetch_object($result);
-
-            $form_values['headline']    = $row_ba->ann_headline;
-            $form_values['description'] = $row_ba->ann_description;
-            $form_values['global']      = $row_ba->ann_global;
-        }
-        else
-        {
-            $g_message->show("norights");
-        }
+        $g_message->show("norights");
     }
+}
+
+if(isset($_SESSION['announcement_request']))
+{
+    // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
+    // nun die vorher eingegebenen Inhalte auslesen
+    foreach($_SESSION['announcement_request'] as $key => $value)
+    {
+        if(strpos($key, "ann_") == 0)
+        {
+            $announcement->setValue($key, $value);
+        }        
+    }
+    unset($_SESSION['announcement_request']);
 }
 
 // Html-Kopf ausgeben
@@ -112,17 +103,7 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 // Html des Modules ausgeben
 echo "
-<form name=\"form\" action=\"$g_root_path/adm_program/modules/announcements/announcements_function.php?ann_id=$req_ann_id&amp;headline=". $_GET['headline']. "&amp;mode=";
-    if($req_ann_id > 0)
-    {
-        echo "3";
-    }
-    else
-    {
-        echo "1";
-    }
-    echo "\" method=\"post\" name=\"AnkuendigungAnlegen\">
-
+<form name=\"form\" method=\"post\" action=\"$g_root_path/adm_program/modules/announcements/announcements_function.php?ann_id=$req_ann_id&amp;headline=". $_GET['headline']. "&amp;mode=1\">
     <div class=\"formHead\">";
         if($req_ann_id > 0)
         {
@@ -137,7 +118,7 @@ echo "
         <div>
             <div style=\"text-align: right; width: 25%; float: left;\">&Uuml;berschrift:</div>
             <div style=\"text-align: left; margin-left: 27%;\">
-                <input type=\"text\" name=\"headline\" style=\"width: 350px;\" tabindex=\"1\" maxlength=\"100\" value=\"". htmlspecialchars($form_values['headline'], ENT_QUOTES). "\">
+                <input type=\"text\" name=\"ann_headline\" style=\"width: 350px;\" tabindex=\"1\" maxlength=\"100\" value=\"". htmlspecialchars($announcement->getValue("ann_headline"), ENT_QUOTES). "\">
                 <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
             </div>
         </div>
@@ -151,26 +132,21 @@ echo "
             }
             echo "</div>
             <div style=\"text-align: left; margin-left: 27%;\">
-                <textarea  name=\"description\" style=\"width: 350px;\" tabindex=\"2\" rows=\"10\" cols=\"40\">". htmlspecialchars($form_values['description'], ENT_QUOTES). "</textarea>
+                <textarea  name=\"ann_description\" style=\"width: 350px;\" tabindex=\"2\" rows=\"10\" cols=\"40\">". htmlspecialchars($announcement->getValue("ann_description"), ENT_QUOTES). "</textarea>
                 <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
             </div>
         </div>";
 
-        // bei mehr als einer Organisation, Checkbox anzeigen, ob Ankuendigung bei anderen angezeigt werden soll
-        $sql = "SELECT COUNT(1) FROM ". TBL_ORGANIZATIONS. "
-                 WHERE org_org_id_parent IS NOT NULL ";
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result,__FILE__,__LINE__);
-        $row = mysql_fetch_array($result);
-
-        if($row[0] > 0)
+        // besitzt die Organisation eine Elternorga oder hat selber Kinder, so kann die Ankuendigung auf "global" gesetzt werden
+        if($g_current_organization->getValue("org_org_id_parent") > 0
+        || $g_current_organization->hasChildOrganizations())
         {
             echo "
             <div style=\"margin-top: 6px;\">
                 <div style=\"text-align: right; width: 25%; float: left;\">&nbsp;</div>
                 <div style=\"text-align: left; margin-left: 27%;\">
-                    <input type=\"checkbox\" id=\"global\" name=\"global\" tabindex=\"3\" ";
-                    if(isset($form_values['global']) && $form_values['global'] == 1)
+                    <input type=\"checkbox\" id=\"ann_global\" name=\"ann_global\" tabindex=\"3\" ";
+                    if($announcement->getValue("ann_global") == 1)
                     {
                         echo " checked=\"checked\" ";
                     }

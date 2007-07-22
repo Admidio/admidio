@@ -9,9 +9,8 @@
  * Uebergaben:
  *
  * ann_id:   ID der Ankuendigung, die angezeigt werden soll
- * mode:     1 - Neue Ankuendigung anlegen
+ * mode:     1 - Neue Ankuendigung anlegen/aendern
  *           2 - Ankuendigung loeschen
- *           3 - Ankuendigung aendern
  *           4 - Frage, ob Ankuendigung geloescht werden soll
  *
  ******************************************************************************
@@ -33,6 +32,7 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
+require("../../system/announcement_class.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_announcements_module'] != 1)
@@ -60,18 +60,16 @@ if(is_numeric($_GET["mode"]) == false
     $g_message->show("invalid");
 }
 
-if($_GET["mode"] == 2 || $_GET["mode"] == 3 || $_GET["mode"] == 4)
-{
-    // pruefen, ob man die Ankuendigung bearbeiten darf
-    $sql = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
-             WHERE ann_id = {0}
-               AND (  ann_org_shortname = '$g_organization'
-                   OR ann_global = 1 ) ";
-    $sql = prepareSQL($sql, array($_GET['ann_id']));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
+// Ankuendigungsobjekt anlegen
+$announcement = new Announcement($g_adm_con);
 
-    if(!$row_ann = mysql_fetch_object($result))
+if($_GET["ann_id"] > 0)
+{
+    $announcement->getAnnouncement($_GET["ann_id"]);
+    
+    // Pruefung, ob die Ankuendigung zur aktuellen Organisation gehoert bzw. global ist
+    if($announcement->getValue("ann_org_shortname") != $g_organization
+    && $announcement->getValue("ann_global") == 0 )
     {
         $g_message->show("norights");
     }
@@ -79,75 +77,48 @@ if($_GET["mode"] == 2 || $_GET["mode"] == 3 || $_GET["mode"] == 4)
 
 $_SESSION['announcements_request'] = $_REQUEST;
 
-$err_code = "";
-$err_text = "";
-
-if($_GET["mode"] == 1 || $_GET["mode"] == 3)
+if($_GET["mode"] == 1)
 {
-    $headline = strStripTags($_POST['headline']);
-    $content  = strStripTags($_POST['description']);
-
-    if(strlen($headline) > 0
-    && strlen($content)  > 0)
+    if(strlen($_POST['ann_headline']) == 0)
     {
-        $act_date = date("Y.m.d G:i:s", time());
-
-        if(array_key_exists("global", $_POST))
-        {
-            $global = 1;
-        }
-        else
-        {
-            $global = 0;
-        }
-
-        // Termin speichern
-
-        if ($_GET["ann_id"] == 0)
-        {
-            $sql = "INSERT INTO ". TBL_ANNOUNCEMENTS. " (ann_global, ann_org_shortname, ann_usr_id, ann_timestamp,
-                                                         ann_headline, ann_description)
-                                                 VALUES ($global, '$g_organization', ". $g_current_user->getValue("usr_id"). ", '$act_date',
-                                                         '$headline', '$content')";
-            $result = mysql_query($sql, $g_adm_con);
-            db_error($result,__FILE__,__LINE__);
-        }
-        else
-        {
-            $sql = "UPDATE ". TBL_ANNOUNCEMENTS. " SET ann_global        = $global
-                                                     , ann_headline      = '$headline'
-                                                     , ann_description   = '$content'
-                                                     , ann_last_change   = '$act_date'
-                                                     , ann_usr_id_change = ". $g_current_user->getValue("usr_id"). "
-                     WHERE ann_id = ". $_GET['ann_id'];
-            $result = mysql_query($sql, $g_adm_con);
-            db_error($result,__FILE__,__LINE__);
-        }
-        unset($_SESSION['announcements_request']);
-        $_SESSION['navigation']->deleteLastUrl();
-
-        header("Location: ". $_SESSION['navigation']->getUrl());
-        exit();
+        $g_message->show("feld", "&Uuml;berschrift");
     }
-    else
+    if(strlen($_POST['ann_description']) == 0)
     {
-        if(strlen($headline) > 0)
-        {
-            $err_text = "Beschreibung";
-        }
-        else
-        {
-            $err_text = "&Uuml;berschrift";
-        }
-        $err_code = "feld";
+        $g_message->show("feld", "Beschreibung");
     }
+
+    if(isset($_POST['ann_global']) == false)
+    {
+        $_POST['ann_global'] = 0;
+    }
+    
+    // POST Variablen in das Ankuendigungs-Objekt schreiben
+    foreach($_POST as $key => $value)
+    {
+        if(strpos($key, "ann_") === 0)
+        {
+            $announcement->setValue($key, $value);
+        }
+    }
+    
+    // Daten in Datenbank schreiben
+    $return_code = $announcement->save();
+
+    if($return_code < 0)
+    {
+        $g_message->show("norights");
+    }
+    
+    unset($_SESSION['announcements_request']);
+    $_SESSION['navigation']->deleteLastUrl();
+
+    header("Location: ". $_SESSION['navigation']->getUrl());
+    exit();
 }
 elseif($_GET["mode"] == 2)
 {
-    $sql = "DELETE FROM ". TBL_ANNOUNCEMENTS. " WHERE ann_id = {0}";
-    $sql    = prepareSQL($sql, array($_GET["ann_id"]));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
+    $announcement->delete();
 
     $g_message->setForwardUrl($_SESSION['navigation']->getUrl());
     $g_message->show("delete");
@@ -155,8 +126,7 @@ elseif($_GET["mode"] == 2)
 elseif($_GET["mode"] == 4)
 {
     $g_message->setForwardYesNo("$g_root_path/adm_program/modules/announcements/announcements_function.php?ann_id=". $_GET["ann_id"]. "&amp;mode=2");
-    $g_message->show("delete_announcement", utf8_encode($row_ann->ann_headline), "Löschen");
+    $g_message->show("delete_announcement", utf8_encode($announcement->getValue("ann_headline")), "Löschen");
 }
 
-$g_message->show($err_code, $err_text);
 ?>

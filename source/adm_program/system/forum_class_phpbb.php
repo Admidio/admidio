@@ -23,7 +23,7 @@
  * preferences()          - Die Preferences des Forums werden in die Allgemeine 
  *                          Forums Umgebungsdaten eingelesen.
  *
- * userCheck($username)   - Es wird geürüft, ob es den User (Username) schon im Forum gibt.
+ * userCheck($username)   - Es wird geï¿½rï¿½ft, ob es den User (Username) schon im Forum gibt.
  *                          $username = Der login_name des Users
  *                          RETURNCODE = TRUE  - Den User gibt es
  *                          RETURNCODE = FALSE - Den User gibt es nicht
@@ -276,7 +276,7 @@ class Forum
         {
             if($this->checkAdmin($login_name, $password_crypt))
             {
-                $this->message = "loginforum_admin";
+                $this->message = "login_forum_admin";
             }
         }
 
@@ -288,7 +288,7 @@ class Forum
                 // Export der Admido Daten ins Forum und einen Forum Account erstellen
                 $this->userInsert($forum_user, 1, $forum_password, $forum_email);
 
-                $this->message = "loginforum_new";
+                $this->message = "login_forum_new";
                 $this->session_valid = TRUE;        
             }
             else
@@ -311,7 +311,7 @@ class Forum
             if(!($this->checkPassword($password_crypt, $this->password, $this->userid)))
             {
                 // Password wurde zurueck gesetzt, Meldung vorbereiten
-                $this->message = "loginforum_pass";
+                $this->message = "login_forum_pass";
             }
 
             // Session anlegen
@@ -320,7 +320,7 @@ class Forum
             if($this->message == "")
             {
                 // Im Forum und in Admidio angemeldet, Meldung vorbereiten
-                $this->message = "loginforum";
+                $this->message = "login_forum";
             }
         }
     }
@@ -329,24 +329,27 @@ class Forum
     // Funktion meldet den aktuellen User im Forum ab
     function userLogoff()
     {
-        // Session wird auf logoff gesetzt
-        $this->session("logoff", $this->userid);
-
-        // Forums DB waehlen
-        mysql_select_db($this->forum_db, $this->forum_db_connection);
-
-        // Last_Visit fuer das Forum aktualisieren
-        $sql    = "UPDATE ". $this->praefix. "_users 
-                   SET user_lastvisit = ". time() . "
-                  WHERE user_id = $this->userid";
-        $result = mysql_query($sql, $this->forum_db_connection);
-        db_error($result,__FILE__,__LINE__);
-
-        // Admidio DB waehlen
-        mysql_select_db($this->adm_db, $this->adm_con);
-
-        // Session-Valid und Userdaten loeschen
-        $this->userClear();
+    	if($this->session_valid)
+    	{
+	        // Session wird auf logoff gesetzt
+	        $this->session("logoff", $this->userid);
+	
+	        // Forums DB waehlen
+	        mysql_select_db($this->forum_db, $this->forum_db_connection);
+	
+	        // Last_Visit fuer das Forum aktualisieren
+	        $sql    = "UPDATE ". $this->praefix. "_users 
+	                   SET user_lastvisit = ". time() . "
+	                  WHERE user_id = $this->userid";
+	        $result = mysql_query($sql, $this->forum_db_connection);
+	        db_error($result,__FILE__,__LINE__);
+	
+	        // Admidio DB waehlen
+	        mysql_select_db($this->adm_db, $this->adm_con);
+	
+	        // Session-Valid und Userdaten loeschen
+	        $this->userClear();
+    	}
     }
 
 

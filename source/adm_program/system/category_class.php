@@ -22,9 +22,8 @@
  * setArray($field_arra)  - uebernimmt alle Werte aus einem Array in das Field-Array
  * setValue($field_name, $field_value) - setzt einen Wert fuer ein bestimmtes Feld
  * getValue($field_name)  - gibt den Wert eines Feldes zurueck
- * update($login_user_id) - Rolle wird mit den geaenderten Daten in die Datenbank
- *                          zurueckgeschrieben
- * insert($login_user_id) - Eine neue Rolle wird in die Datenbank geschrieben
+ * save()                 - Kategorie wird mit den geaenderten Daten in die Datenbank
+ *                          zurueckgeschrieben oder angelegt
  * delete()               - Die gewaehlte Rolle wird aus der Datenbank geloescht
  *
  ******************************************************************************
@@ -44,15 +43,18 @@
  *
  *****************************************************************************/
 
-class Category
-{
-    var $db_connection;
-    var $db_fields = array();
+require_once(SERVER_PATH. "/adm_program/system/table_access_class.php");
 
+class Category extends TableAccess
+{
     // Konstruktor
     function Category($connection, $cat_id = 0)
     {
-        $this->db_connection = $connection;
+        $this->db_connection  = $connection;
+        $this->table_name     = TBL_CATEGORIES;
+        $this->column_praefix = "cat";
+        $this->key_name       = "cat_id";
+        
         if($cat_id > 0)
         {
             $this->getCategory($cat_id);
@@ -66,77 +68,14 @@ class Category
     // Benutzerdefiniertes Feld mit der uebergebenen ID aus der Datenbank auslesen
     function getCategory($cat_id)
     {
-        $this->clear();
-        
-        if($cat_id > 0 && is_numeric($cat_id))
-        {
-            $sql = "SELECT * 
-                      FROM ". TBL_CATEGORIES. " 
-                     WHERE cat_id     = $cat_id";
-                     error_log($sql);
-            $result = mysql_query($sql, $this->db_connection);
-            db_error($result,__FILE__,__LINE__);
-
-            if($row = mysql_fetch_array($result, MYSQL_ASSOC))
-            {
-                // Daten in das Klassenarray schieben
-                foreach($row as $key => $value)
-                {
-                    $this->db_fields[$key] = $value;
-                }
-            }
-        }
-    }
-
-    // alle Klassenvariablen wieder zuruecksetzen
-    function clear()
-    {
-        if(count($this->db_fields) > 0)
-        {
-            foreach($this->db_fields as $key => $value)
-            {
-                $this->db_fields[$key] = null;
-            }
-        }
-        else
-        {
-            // alle Spalten der Tabelle adm_roles ins Array einlesen 
-            // und auf null setzen
-            $sql = "SHOW COLUMNS FROM ". TBL_CATEGORIES;
-            $result = mysql_query($sql, $this->db_connection);
-            db_error($result,__FILE__,__LINE__);
-            
-            while ($row = mysql_fetch_array($result))
-            {
-                $this->db_fields[$row['Field']] = null;
-            }
-        }
+        $this->readData($cat_id);
     }
     
-    // Funktion uebernimmt alle Werte eines Arrays in das Field-Array
-    function setArray($field_array)
+    // interne Funktion, die bei setValue den uebergebenen Wert prueft
+	// und ungueltige Werte auf leer setzt
+	// die Funktion wird innerhalb von setValue() aufgerufen
+    function checkValue($field_name, $field_value)
     {
-        foreach($field_array as $field => $value)
-        {
-            $this->db_fields[$field] = $value;
-        }
-    }
-    
-    // Funktion setzt den Wert eines Feldes neu, 
-    // dabei koennen noch noetige Plausibilitaetspruefungen gemacht werden
-    function setValue($field_name, $field_value)
-    {
-        $field_name  = strStripTags($field_name, true);
-        $field_value = strStripTags($field_value);
-        $field_name  = stripSlashes($field_name);
-        $field_value = stripSlashes($field_value);
-        
-        if(strlen($field_value) == 0)
-        {
-            $field_value = null;
-        }
-        
-        // Plausibilitaetspruefungen
         switch($field_name)
         {
             case "cat_id":
@@ -145,6 +84,7 @@ class Category
                 || $field_value == 0)
                 {
                     $field_value = null;
+                    return false;
                 }
                 break;
             
@@ -153,79 +93,21 @@ class Category
                 if($field_value != 1)
                 {
                     $field_value = 0;
+                    return false;
                 }
-                break;
-        }
-        
-        $this->db_fields[$field_name] = $field_value;
-    }
-
-    // Funktion gibt den Wert eines Feldes zurueck
-    // hier koennen auch noch bestimmte Formatierungen angewandt werden
-    function getValue($field_name)
-    {
-        return $this->db_fields[$field_name];
+                break;  
+        }    	
+        return true;
     }
     
-    // aktuelle Felddaten in der Datenbank updaten
-    function update()
+    // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
+	// die Funktion wird innerhalb von save() aufgerufen
+    function initializeFields()
     {
-        if(count($this->db_fields)    > 0
-        && $this->db_fields['cat_id'] > 0 
-        && is_numeric($this->db_fields['cat_id']))
+        if(strlen($this->db_fields[$this->key_name]) == 0)
         {
-            $act_date = date("Y-m-d H:i:s", time());
-
-            // SQL-Update-Statement zusammenbasteln
-            $item_connection = "";
-            $sql_field_list  = "";
-
-            // Schleife ueber alle DB-Felder und diese dem Update hinzufuegen                
-            foreach($this->db_fields as $key => $value)
-            {
-                // ID und andere Tabellenfelder sollen nicht im Insert erscheinen
-                if($key != "cat_id" && strpos($key, "cat_") === 0) 
-                {
-                    if(strlen($value) == 0)
-                    {
-                        $sql_field_list = $sql_field_list. " $item_connection $key = NULL ";
-                    }
-                    elseif(is_numeric($value))
-                    {
-                        $sql_field_list = $sql_field_list. " $item_connection $key = $value ";
-                    }
-                    else
-                    {
-                        $value = addSlashes($value);
-                        $sql_field_list = $sql_field_list. " $item_connection $key = '$value' ";
-                    }
-
-                    if(strlen($item_connection) == 0)
-                    {
-                        $item_connection = ",";
-                    }
-                }
-            }
-
-            $sql = "UPDATE ". TBL_CATEGORIES. " SET $sql_field_list WHERE cat_id = ". $this->db_fields['cat_id'];
-            $result = mysql_query($sql, $this->db_connection);
-            db_error($result,__FILE__,__LINE__);
-            return 0;
-        }
-        return -1;
-    }
-
-    // aktuelle Felddaten neu in der Datenbank schreiben
-    function insert()
-    {
-        global $g_current_organization;
-        
-        if(isset($this->db_fields['cat_id']) == false
-        || $this->db_fields['cat_id']        == 0 )
-        {
-            $act_date = date("Y-m-d H:i:s", time());
-
-            // erst einmal die hoechste Reihenfolgennummer der Kategorie ermitteln
+            // beim Insert die hoechste Reihenfolgennummer der Kategorie ermitteln
+			global $g_current_organization;
             $sql = "SELECT COUNT(*) as count FROM ". TBL_CATEGORIES. "
                      WHERE (  cat_org_id  = ". $g_current_organization->getValue("org_id"). "
                            OR cat_org_id IS NULL )
@@ -236,50 +118,13 @@ class Category
             $row = mysql_fetch_array($result);
 
             $this->db_fields['cat_sequence'] = $row['count'] + 1;
-            
-            // SQL-Update-Statement zusammenbasteln
-            $item_connection = "";
-            $sql_field_list  = "";
-            $sql_value_list  = "";
-
-            // Schleife ueber alle DB-Felder und diese dem Insert hinzufuegen 
-            foreach($this->db_fields as $key => $value)
-            {
-                // ID und andere Tabellenfelder sollen nicht im Insert erscheinen
-                if($key != "cat_id" && strlen($value) > 0 && strpos($key, "cat_") === 0) 
-                {
-                    $sql_field_list = $sql_field_list. " $item_connection $key ";
-                    if(is_numeric($value))
-                    {
-                        $sql_value_list = $sql_value_list. " $item_connection $value ";
-                    }
-                    else
-                    {
-                        $value = addSlashes($value);
-                        $sql_value_list = $sql_value_list. " $item_connection '$value' ";
-                    }
-
-                    if(strlen($item_connection) == 0)
-                    {
-                        $item_connection = ",";
-                    }
-                }
-            }
-                        
-            $sql = "INSERT INTO ". TBL_CATEGORIES. " ($sql_field_list) VALUES ($sql_value_list) ";
-            $result = mysql_query($sql, $this->db_connection);
-            db_error($result,__FILE__,__LINE__);
-            
-            $this->db_fields['cat_id'] = mysql_insert_id($this->db_connection);
-            return 0;
         }
-        return -1;
     }
-
-    // aktuelles Feld loeschen
-    function delete()
+    
+    // interne Funktion, die die Referenzen bearbeitet, wenn die Kategorie geloescht wird
+	// die Funktion wird innerhalb von delete() aufgerufen
+    function deleteReferences()
     {
-        // erst einmal zugehoerige Daten loeschen
         if($this->db_fields['cat_type'] == 'ROL')
         {
             $sql    = "DELETE FROM ". TBL_ROLES. "
@@ -301,15 +146,7 @@ class Category
             $result = mysql_query($sql, $this->db_connection);
             db_error($result,__FILE__,__LINE__);
         }
-
-        // Feld loeschen
-        $sql    = "DELETE FROM ". TBL_CATEGORIES. "
-                    WHERE cat_id = ". $this->db_fields['cat_id'];
-        $result = mysql_query($sql, $this->db_connection);
-        db_error($result,__FILE__,__LINE__);
-
-        $this->clear();
-        return 0;
+        return true; 	
     }
 }
 ?>

@@ -9,9 +9,8 @@
  * Uebergaben:
  *
  * dat_id: ID des Termins, der angezeigt werden soll
- * mode:   1 - Neuen Termin anlegen
+ * mode:   1 - Neuen Termin anlegen/aendern
  *         2 - Termin loeschen
- *         3 - Termin aendern
  *         4 - Termin im iCal-Format exportieren
  *         5 - Frage, ob Termin geloescht werden soll
  *
@@ -91,7 +90,7 @@ if($req_dat_id > 0)
 
 $_SESSION['dates_request'] = $_REQUEST;
 
-if($_GET["mode"] == 1 || $_GET["mode"] == 3)
+if($_GET["mode"] == 1)
 {
     if(strlen($_POST['dat_headline']) == 0)
     {
@@ -165,7 +164,7 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
         $_POST['dat_global'] = 0;
     }
 
-    // POST Variablen in das Role-Objekt schreiben
+    // POST Variablen in das Termin-Objekt schreiben
     foreach($_POST as $key => $value)
     {
         if(strpos($key, "dat_") === 0)
@@ -175,7 +174,7 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
     }
     
     // Daten in Datenbank schreiben
-    $return_code = $date->save($g_current_user->getValue("usr_id"), $g_current_organization->getValue("org_shortname"));
+    $return_code = $date->save();
 
     if($return_code < 0)
     {
@@ -190,17 +189,13 @@ if($_GET["mode"] == 1 || $_GET["mode"] == 3)
 }
 elseif($_GET["mode"] == 2)
 {
-    $role->delete();
+    $date->delete();
     
     $g_message->setForwardUrl($_SESSION['navigation']->getUrl());
     $g_message->show("delete");
 }
 elseif($_GET["mode"] == 4)
 {
-    // Termindaten aus Datenbank holen
-    $date = new Date($g_adm_con);
-    $date->getDate($_GET["dat_id"]);
-
     header('Content-Type: text/calendar');
     header('Content-Disposition: attachment; filename="'. $date->getValue("dat_begin"). '.ics"');
 
@@ -210,7 +205,7 @@ elseif($_GET["mode"] == 4)
 elseif($_GET["mode"] == 5)
 {
     $g_message->setForwardYesNo("$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=". $_GET["dat_id"]. "&amp;mode=2");
-    $g_message->show("delete_date", utf8_encode($row_dat->dat_headline), "Löschen");
+    $g_message->show("delete_date", utf8_encode($date->getValue("dat_headline")), "Löschen");
 }
 
 ?>

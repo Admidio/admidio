@@ -18,14 +18,21 @@
  *
  * Folgende Funktionen stehen nun zur Verfuegung:
  *
- * update()         - Die Organisation wird mit den geaenderten Daten in die Datenbank 
- *                    zurueckgeschrieben
- * insert()         - Eine neue Organisation wird in die Datenbank geschrieben
- * clear()          - Die Klassenvariablen werden neu initialisiert
- * getPreferences() - gibt ein Array mit allen organisationsspezifischen Einstellungen
- *                    aus adm_preferences zurueck
+ * clear()                - Die Klassenvariablen werden neu initialisiert
+ * setArray($field_arra)  - uebernimmt alle Werte aus einem Array in das Field-Array
+ * setValue($field_name, $field_value) 
+ *                        - setzt einen Wert fuer ein bestimmtes Feld
+ * getValue($field_name)  - gibt den Wert eines Feldes zurueck
+ * save($login_user_id)   - Rolle wird mit den geaenderten Daten in die Datenbank
+ *                          zurueckgeschrieben bwz. angelegt
+ * delete()               - Die aktuelle Orga wird aus der Datenbank geloescht
+ * getPreferences()       - gibt ein Array mit allen organisationsspezifischen Einstellungen
+ *                          aus adm_preferences zurueck
  * getReferenceOrganizations($child = true, $parent = true)
- *                  - Gibt ein Array mit allen Kinder- bzw. Elternorganisationen zurueck
+ *                        - Gibt ein Array mit allen Kinder- bzw. Elternorganisationen zurueck
+ * isChildOrganization($organization)
+ *                        - prueft ob die uebergebene Orga Kind der aktuellen Orga ist
+ * hasChildOrganizations()- prueft, ob die Orga Kinderorganisationen besitzt
  *
  ******************************************************************************
  *
@@ -44,17 +51,20 @@
  *
  *****************************************************************************/
 
-class Organization
-{
-    var $db_connection;
-    
-    var $db_fields_changed;         // Merker ob an den db_fields Daten was geaendert wurde
-    var $db_fields = array();       // Array ueber alle Felder der Rollen-Tabelle der entsprechenden Rolle
+require_once(SERVER_PATH. "/adm_program/system/table_access_class.php");
 
+class Organization extends TableAccess
+{
+	var $b_check_childs;		// Flag, ob schon nach Kinderorganisationen gesucht wurde
+	var $child_orgas = array();	// Array mit allen Kinderorganisationen
+	
     // Konstruktor
     function Organization($connection, $organization = "")
     {
-        $this->db_connection = $connection;
+        $this->db_connection  = $connection;
+        $this->table_name     = TBL_ORGANIZATIONS;
+        $this->column_praefix = "org";
+        $this->key_name       = "org_id";
         
         if(strlen($organization) > 0)
         {
@@ -69,197 +79,46 @@ class Organization
     // Organisation mit der uebergebenen ID oder der Kurzbezeichnung aus der Datenbank auslesen
     function getOrganization($organization)
     {
-        if(is_numeric($organization))
-        {
-        	$condition = " org_id = $organization ";
-        }
-        else
+		$condition = "";
+		
+		// wurde org_shortname uebergeben, dann die SQL-Bedingung anpassen
+        if(is_numeric($organization) == false)
         {
             $organization = addslashes($organization);
             $condition = " org_shortname LIKE '$organization' ";
         }
-
-        $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. " 
-                 WHERE $condition ";
-        $result = mysql_query($sql, $this->db_connection);
-        db_error($result,__FILE__,__LINE__);
-
-        if($row = mysql_fetch_array($result, MYSQL_ASSOC))
-        {
-            // Daten in das Klassenarray schieben
-            foreach($row as $key => $value)
-            {
-                if(is_null($value))
-                {
-                    $this->db_fields[$key] = "";
-                }
-                else
-                {
-                    $this->db_fields[$key] = $value;
-                }
-            }
-        }   
-    }
-
-    // alle Klassenvariablen wieder zuruecksetzen
-   function clear()
-   {
-        $this->db_fields_changed = false;
         
-        if(count($this->db_fields) > 0)
-        {
-            foreach($this->db_fields as $key => $value)
-            {
-                $this->db_fields[$key] = "";
-            }
-        }
-        else
-        {
-            // alle Spalten der Tabelle adm_roles ins Array einlesen 
-            // und auf null setzen
-            $sql = "SHOW COLUMNS FROM ". TBL_ORGANIZATIONS;
-            error_log($sql);
-            $result = mysql_query($sql, $this->db_connection);
-            db_error($result,__FILE__,__LINE__);
-            
-            while ($row = mysql_fetch_array($result))
-            {
-                $this->db_fields[$row['Field']] = "";
-            }
-        }
-    }
-
-    // Funktion uebernimmt alle Werte eines Arrays in das Field-Array
-    function setArray($field_array)
-    {
-        foreach($field_array as $field => $value)
-        {
-            $this->db_fields[$field] = $value;
-        }
+        $this->readData($organization, $condition);
     }
     
-    // Funktion setzt den Wert eines Feldes neu, 
-    // dabei koennen noch noetige Plausibilitaetspruefungen gemacht werden
-    function setValue($field_name, $field_value)
+    // interne Funktion, die spezielle Daten des Organizationobjekts loescht
+    // die Funktion wird innerhalb von clear() aufgerufen
+    function clearAdditionalData()
     {
-        $field_name  = strStripTags($field_name);
-        $field_value = strStripTags($field_value);
+    	$this->b_check_childs = false;
+    	$this->child_orgas    = array();
+    }
+    
+    // interne Funktion, die bei setValue den uebergebenen Wert prueft
+	// und ungueltige Werte auf leer setzt
+	// die Funktion wird innerhalb von setValue() aufgerufen
+    function checkValue($field_name, $field_value)
+    {
+        switch($field_name)
+        {
+            case "org_id":
+            case "org_org_id_parent":
+                if(is_numeric($field_value) == false
+                || $field_value == 0)
+                {
+                    $field_value = "";
+                    return false;
+                }
+                break;
+        }    	
+        return true;
+    }
         
-        if(strlen($field_value) > 0)
-        {
-            // Plausibilitaetspruefungen
-            switch($field_name)
-            {
-                case "org_id":
-                case "org_org_id_parent":
-                    if(is_numeric($field_value) == false
-                    || $field_value == 0)
-                    {
-                        $field_value = "";
-                    }
-                    break;
-            }
-        }
-
-        if(isset($this->db_fields[$field_name])
-        && $field_value != $this->db_fields[$field_name])
-        {
-            $this->db_fields[$field_name] = $field_value;
-            $this->db_fields_changed      = true;
-        }
-    }
-
-    // Funktion gibt den Wert eines Feldes zurueck
-    // hier koennen auch noch bestimmte Formatierungen angewandt werden
-    function getValue($field_name)
-    {
-        return $this->db_fields[$field_name];
-    }
-    
-    // die Funktion speichert die Organisationsdaten in der Datenbank,
-    // je nach Bedarf wird ein Insert oder Update gemacht
-    function save()
-    {
-        if(is_numeric($this->db_fields['org_id']) || strlen($this->db_fields['org_id']) == 0)
-        {
-            if($this->db_fields_changed || strlen($this->db_fields['org_id']) == 0)
-            {
-                // SQL-Update-Statement fuer User-Tabelle zusammenbasteln
-                $item_connection = "";                
-                $sql_field_list  = "";
-                $sql_value_list  = "";
-
-                // Schleife ueber alle DB-Felder und diese dem Update hinzufuegen                
-                foreach($this->db_fields as $key => $value)
-                {
-                    // ID und andere Tabellenfelder sollen nicht im Insert erscheinen
-                    if($key != "org_id" && strpos($key, "org_") === 0) 
-                    {
-                        if($this->db_fields['org_id'] == 0)
-                        {
-                            if(strlen($value) > 0)
-                            {
-                                // Daten fuer ein Insert aufbereiten
-                                $sql_field_list = $sql_field_list. " $item_connection $key ";
-                                if(is_numeric($value))
-                                {
-                                    $sql_value_list = $sql_value_list. " $item_connection $value ";
-                                }
-                                else
-                                {
-                                    $value = addSlashes($value);
-                                    $sql_value_list = $sql_value_list. " $item_connection '$value' ";
-                                }
-                            }
-                        }
-                        else
-                        {
-                            // Daten fuer ein Update aufbereiten
-                            if(strlen($value) == 0 || is_null($value))
-                            {
-                                $sql_field_list = $sql_field_list. " $item_connection $key = NULL ";
-                            }
-                            elseif(is_numeric($value))
-                            {
-                                $sql_field_list = $sql_field_list. " $item_connection $key = $value ";
-                            }
-                            else
-                            {
-                                $value = addSlashes($value);
-                                $sql_field_list = $sql_field_list. " $item_connection $key = '$value' ";
-                            }
-                        }
-                        if(strlen($item_connection) == 0 && strlen($sql_field_list) > 0)
-                        {
-                            $item_connection = ",";
-                        }
-                    }
-                }
-
-                if($this->db_fields['org_id'] > 0)
-                {
-                    $sql = "UPDATE ". TBL_ORGANIZATIONS. " SET $sql_field_list 
-                             WHERE org_id = ". $this->db_fields['org_id'];
-                    error_log($sql);
-                    $result = mysql_query($sql, $this->db_connection);
-                    db_error($result,__FILE__,__LINE__);
-                }
-                else
-                {
-                    $sql = "INSERT INTO ". TBL_ORGANIZATIONS. " ($sql_field_list) VALUES ($sql_value_list) ";
-                    error_log($sql);
-                    $result = mysql_query($sql, $this->db_connection);
-                    db_error($result,__FILE__,__LINE__);
-                    $this->db_fields['org_id'] = mysql_insert_id($this->db_connection);
-                }
-            }
-
-            $this->db_fields_changed = false;
-            return 0;
-        }
-        return -1;
-    }    
-    
     // gibt ein Array mit allen organisationsspezifischen Einstellungen
     // aus adm_preferences zurueck
     function getPreferences()
@@ -354,6 +213,50 @@ class Organization
             }
         }
         return $arr_child_orgas;
+    }
+    
+    // prueft, ob die uebergebene Orga (ID oder Shortname) ein Kind
+    // der aktuellen Orga ist
+    function isChildOrganization($organization)
+    {
+    	if($this->b_check_childs == false)
+    	{
+    		// Daten erst einmal aus DB einlesen
+    		$this->child_orgas = $this->getReferenceOrganizations(true, false);
+    		$this->b_check_childs = true;
+    	}
+    	
+    	if(is_numeric($organization))
+    	{
+    		// org_id wurde uebergeben
+    		$ret_code = array_key_exists($organization, $this->child_orgas);
+    	}
+    	else
+    	{
+    		// org_shortname wurde uebergeben
+    		$ret_code = in_array($organization, $this->child_orgas);
+    	}
+    	return $ret_code;
+    }
+    
+    // prueft, ob die Orga Kinderorganisationen besitzt
+    function hasChildOrganizations()
+    {
+      	if($this->b_check_childs == false)
+    	{
+    		// Daten erst einmal aus DB einlesen
+    		$this->child_orgas = $this->getReferenceOrganizations(true, false);
+    		$this->b_check_childs = true;
+    	}
+
+    	if(count($this->child_orgas) > 0)
+    	{
+    		return true;
+    	}
+    	else
+    	{
+    		return false;
+    	}
     }
 }
 ?>

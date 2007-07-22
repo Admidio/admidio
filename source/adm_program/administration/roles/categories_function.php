@@ -160,14 +160,7 @@ if($_GET['mode'] == 1)
     }
     
     // Daten in Datenbank schreiben
-    if($_GET['cat_id'] > 0)
-    {
-        $return_code = $category->update();
-    }
-    else
-    {
-        $return_code = $category->insert();
-    }
+    $return_code = $category->save();
 
     if($return_code < 0)
     {
@@ -211,7 +204,7 @@ elseif($_GET['mode'] == 4)
     if($sequence_old != $_GET['sequence'])
     {
         $category->setValue("cat_sequence", $_GET['sequence']);
-        $category->update();
+        $category->save();
         
         // Alle Userobjekte der Benutzer neu einlesen
         if($_GET['type'] == "USF")
