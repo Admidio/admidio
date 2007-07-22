@@ -100,75 +100,68 @@ else
 
 $_SESSION['links_request'] = $_REQUEST;
 
-
-$err_code = "";
-$err_text = "";
-
 if ($_GET["mode"] == 1 || ($_GET["mode"] == 3 && $_GET["lnk_id"] > 0) )
 {
     $linkName = strStripTags($_POST['linkname']);
     $description  = strStripTags($_POST['description']);
     $linkUrl = strStripTags(trim($_POST['linkurl']));
     $category = $_POST['category'];
-
-    if (strlen($linkName) > 0 && strlen($description)  > 0 && strlen($linkUrl) > 0)
+    
+    if(strlen($linkName) == 0)
     {
-        $act_date = date("Y.m.d G:i:s", time());
+    	$g_message->show("feld", "Linkname");
+    }
+    if(strlen($linkUrl) == 0)
+    {
+    	$g_message->show("feld", "Linkadresse");
+    }
+    if(strlen($category) == 0)
+    {
+    	$g_message->show("feld", "Kategorie");
+    }
+    if(strlen($description) == 0)
+    {
+    	$g_message->show("feld", "Beschreibung");
+    }
+    
+    $act_date = date("Y.m.d G:i:s", time());
 
-        //Die Webadresse wird jetzt falls sie nicht mit http:// oder https:// beginnt entsprechend aufbereitet
-        if (substr($linkUrl, 0, 7) != 'http://' && substr($linkUrl, 0, 8) != 'https://' )
-        {
-            $linkUrl = "http://". $linkUrl;
-        }
+    //Die Webadresse wird jetzt falls sie nicht mit http:// oder https:// beginnt entsprechend aufbereitet
+    if (substr($linkUrl, 0, 7) != 'http://' && substr($linkUrl, 0, 8) != 'https://' )
+    {
+        $linkUrl = "http://". $linkUrl;
+    }
 
-        //Link wird jetzt in der DB gespeichert
-        if ($_GET["lnk_id"] == 0)
-        {
-            $sql = "INSERT INTO ". TBL_LINKS. " ( lnk_org_id, lnk_usr_id, lnk_timestamp,
-                                                  lnk_name, lnk_url, lnk_description, lnk_cat_id)
-                                     VALUES (". $g_current_organization->getValue("org_id"). ", ". $g_current_user->getValue("usr_id"). ", '$act_date',
-                                             {0}, {1}, {2}, {3})";
-            $sql    = prepareSQL($sql, array($linkName, $linkUrl, $description, $category));
-            $result = mysql_query($sql, $g_adm_con);
-            db_error($result,__FILE__,__LINE__);
-        }
-        else
-        {
-            $sql = "UPDATE ". TBL_LINKS. " SET   lnk_name   = {0},
-                                                 lnk_url    = {1},
-                                                 lnk_description   = {2},
-                                                 lnk_last_change   = '$act_date',
-                                                 lnk_usr_id_change = ". $g_current_user->getValue("usr_id"). ",
-                                                 lnk_cat_id        =  {3}
-                    WHERE lnk_id = {4}";
-            $sql    = prepareSQL($sql, array($linkName, $linkUrl, $description, $category, $_GET['lnk_id']));
-            $result = mysql_query($sql, $g_adm_con);
-            db_error($result,__FILE__,__LINE__);
-        }
-
-        unset($_SESSION['links_request']);
-
-        $location = "Location: $g_root_path/adm_program/modules/links/links.php?headline=". $_GET['headline'];
-        header($location);
-        exit();
+    //Link wird jetzt in der DB gespeichert
+    if ($_GET["lnk_id"] == 0)
+    {
+        $sql = "INSERT INTO ". TBL_LINKS. " ( lnk_org_id, lnk_usr_id, lnk_timestamp,
+                                              lnk_name, lnk_url, lnk_description, lnk_cat_id)
+                                 VALUES (". $g_current_organization->getValue("org_id"). ", ". $g_current_user->getValue("usr_id"). ", '$act_date',
+                                         {0}, {1}, {2}, {3})";
+        $sql    = prepareSQL($sql, array($linkName, $linkUrl, $description, $category));
+        $result = mysql_query($sql, $g_adm_con);
+        db_error($result,__FILE__,__LINE__);
     }
     else
     {
-        if (strlen($linkName) == 0)
-        {
-            $err_text = "Linkname";
-        }
-        elseif (strlen($linkUrl) == 0)
-        {
-            $err_text = "Linkadresse";
-        }
-        elseif (strlen($description) == 0)
-        {
-            $err_text = "Beschreibung";
-        }
-
-        $err_code = "feld";
+        $sql = "UPDATE ". TBL_LINKS. " SET   lnk_name   = {0},
+                                             lnk_url    = {1},
+                                             lnk_description   = {2},
+                                             lnk_last_change   = '$act_date',
+                                             lnk_usr_id_change = ". $g_current_user->getValue("usr_id"). ",
+                                             lnk_cat_id        =  {3}
+                WHERE lnk_id = {4}";
+        $sql    = prepareSQL($sql, array($linkName, $linkUrl, $description, $category, $_GET['lnk_id']));
+        $result = mysql_query($sql, $g_adm_con);
+        db_error($result,__FILE__,__LINE__);
     }
+
+    unset($_SESSION['links_request']);
+
+    $location = "Location: $g_root_path/adm_program/modules/links/links.php?headline=". $_GET['headline'];
+    header($location);
+    exit();
 }
 
 elseif ($_GET["mode"] == 2 && $_GET["lnk_id"] > 0)
@@ -201,5 +194,4 @@ else
     $g_message->show("invalid");
 }
 
-$g_message->show($err_code, $err_text);
 ?>

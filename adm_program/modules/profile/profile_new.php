@@ -343,7 +343,7 @@ echo "
         }
         else
         {
-            echo "Profil von ". $user->first_name. " ". $user->last_name;
+            echo "Profil von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname");
         }
     echo "</div>
     <div class=\"formBody\">"; 
