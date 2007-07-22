@@ -1,19 +1,19 @@
 <?php
 /******************************************************************************
- * Klasse fuer Datenbanktabelle adm_dates
+ * Klasse fuer Datenbanktabelle adm_announcements
  *
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  *
- * Diese Klasse dient dazu ein Terminobjekt zu erstellen. 
- * Ein Termin kann ueber diese Klasse in der Datenbank verwaltet werden
+ * Diese Klasse dient dazu ein Ankuendigungsobjekt zu erstellen. 
+ * Eine Ankuendigung kann ueber diese Klasse in der Datenbank verwaltet werden
  *
  * Das Objekt wird erzeugt durch Aufruf des Konstruktors und der Uebergabe der
  * aktuellen Datenbankverbindung:
- * $date = new Date($g_adm_con);
+ * $date = new Announcement($g_adm_con);
  *
- * Mit der Funktion getDate($dat_id) kann nun der gewuenschte Termin ausgelesen
+ * Mit der Funktion getAnnouncement($ann_id) kann nun die gewuenschte Ankuendigung ausgelesen
  * werden.
  *
  * Folgende Funktionen stehen nun zur Verfuegung:
@@ -22,10 +22,9 @@
  * setArray($field_arra)  - uebernimmt alle Werte aus einem Array in das Field-Array 
  * setValue($field_name, $field_value) - setzt einen Wert fuer ein bestimmtes Feld
  * getValue($field_name)  - gibt den Wert eines Feldes zurueck
- * save()                 - Termin wird mit den geaenderten Daten in die Datenbank
+ * save()                 - Ankuendigung wird mit den geaenderten Daten in die Datenbank
  *                          zurueckgeschrieben bwz. angelegt
- * delete()               - Der gewaehlte Termin wird aus der Datenbank geloescht
- * getIcal()              - gibt einen Termin im iCal-Format zurueck
+ * delete()               - Die aktuelle Ankuendigung wird aus der Datenbank geloescht
  *
  ******************************************************************************
  *
@@ -44,22 +43,21 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. "/adm_program/libs/bennu/bennu.inc.php");
 require_once(SERVER_PATH. "/adm_program/system/table_access_class.php");
 
-class Date extends TableAccess
+class Announcement extends TableAccess
 {
     // Konstruktor
-    function Date($connection, $date_id = 0)
+    function Announcement($connection, $ann_id = 0)
     {
         $this->db_connection  = $connection;
-        $this->table_name     = TBL_DATES;
-        $this->column_praefix = "dat";
-        $this->key_name       = "dat_id";
+        $this->table_name     = TBL_ANNOUNCEMENTS;
+        $this->column_praefix = "ann";
+        $this->key_name       = "ann_id";
         
-        if($date_id > 0)
+        if($ann_id > 0)
         {
-            $this->getDate($date_id);
+            $this->getAnnouncement($ann_id);
         }
         else
         {
@@ -68,9 +66,9 @@ class Date extends TableAccess
     }
 
     // Termin mit der uebergebenen ID aus der Datenbank auslesen
-    function getDate($date_id)
+    function getAnnouncement($ann_id)
     {
-        $this->readData($date_id);
+        $this->readData($ann_id);
     }
     
     // interne Funktion, die bei setValue den uebergebenen Wert prueft
@@ -80,9 +78,9 @@ class Date extends TableAccess
     {
         switch($field_name)
         {
-            case "dat_id":
-            case "dat_usr_id":
-            case "dat_usr_id_change":
+            case "ann_id":
+            case "ann_usr_id":
+            case "ann_usr_id_change":
                 if(is_numeric($field_value) == false)
                 {
                     $field_value = null;
@@ -90,7 +88,7 @@ class Date extends TableAccess
                 }
                 break;
 
-            case "dat_global":
+            case "ann_global":
                 if($field_value != 1)
                 {
                     $field_value = 0;
@@ -109,39 +107,15 @@ class Date extends TableAccess
     	
         if(strlen($this->db_fields[$this->key_name]) > 0)
         {
-            $this->db_fields['dat_last_change']   = date("Y-m-d H:i:s", time());
-            $this->db_fields['dat_usr_id_change'] = $g_current_user->getValue("usr_id");
+            $this->db_fields['ann_last_change']   = date("Y-m-d H:i:s", time());
+            $this->db_fields['ann_usr_id_change'] = $g_current_user->getValue("usr_id");
         }
         else
         {
-            $this->db_fields['dat_timestamp']     = date("Y-m-d H:i:s", time());
-            $this->db_fields['dat_usr_id']        = $g_current_user->getValue("usr_id");
-            $this->db_fields['dat_org_shortname'] = $g_current_organization->getValue("org_shortname");
+            $this->db_fields['ann_timestamp']     = date("Y-m-d H:i:s", time());
+            $this->db_fields['ann_usr_id']        = $g_current_user->getValue("usr_id");
+            $this->db_fields['ann_org_shortname'] = $g_current_organization->getValue("org_shortname");
         }
     }
-   
-    // gibt einen Termin im iCal-Format zurueck
-    function getIcal($domain)
-    {
-        $cal = new iCalendar;
-        $event = new iCalendar_event;
-        $cal->add_property('METHOD','PUBLISH');
-        $prodid = "-//www.admidio.org//Admidio" . ADMIDIO_VERSION . "//DE";
-        $cal->add_property('PRODID',$prodid);
-        $uid = mysqldatetime("ymdThis", $this->db_fields['dat_timestamp']) . "+" . $this->db_fields['dat_usr_id'] . "@" . $domain;
-        $event->add_property('uid', $uid);
-    
-        $event->add_property('summary',     utf8_encode($this->db_fields['dat_headline']));
-        $event->add_property('description', utf8_encode($this->db_fields['dat_description']));
-
-        $event->add_property('dtstart', mysqldatetime("ymdThis", $this->db_fields['dat_begin']));
-        $event->add_property('dtend',   mysqldatetime("ymdThis", $this->db_fields['dat_end']));
-        $event->add_property('dtstamp', mysqldatetime("ymdThisZ", $this->db_fields['dat_timestamp']));
-
-        $event->add_property('location', utf8_encode($this->db_fields['dat_location']));
-
-        $cal->add_component($event);
-        return $cal->serialize();    
-    }    
 }
 ?>

@@ -28,7 +28,8 @@
  * getProperty($field_name, $property) 
  *                      - gibt den Inhalt einer Eigenschaft eines Feldes zurueck.
  *                        Dies kann die usf_id, usf_type, cat_id, cat_name usw. sein
- * save($login_user_id) - User wird mit den geaenderten Daten in die Datenbank
+ * save($set_change_date = true) 
+ *                      - User wird mit den geaenderten Daten in die Datenbank
  *                        zurueckgeschrieben bwz. angelegt
  * delete()             - Der gewaehlte User wird aus der Datenbank geloescht
  * getVCard()           - Es wird eine vCard des Users als String zurueckgegeben
@@ -333,15 +334,16 @@ class User
     
     // die Funktion speichert die Userdaten in der Datenbank,
     // je nach Bedarf wird ein Insert oder Update gemacht
-    function save($login_user_id, $set_change_date = true)
+    function save($set_change_date = true)
     {
-        if((is_numeric($login_user_id) || strlen($login_user_id) == 0)
-        && (is_numeric($this->db_fields['usr_id']) || strlen($this->db_fields['usr_id']) == 0))
+        if(is_numeric($this->db_fields['usr_id']) 
+        || strlen($this->db_fields['usr_id']) == 0)
         {
             if($set_change_date)
             {
+            	global $g_current_user;
                 $this->db_fields['usr_last_change']   = date("Y-m-d H:i:s", time());
-                $this->db_fields['usr_usr_id_change'] = $login_user_id;
+                $this->db_fields['usr_usr_id_change'] = $g_current_user->getValue("usr_id");
             }
             
             if($this->db_fields_changed || strlen($this->db_fields['usr_id']) == 0)
@@ -419,7 +421,7 @@ class User
             {
                 // Daten der User-Tabelle wurde nicht geaendert, dann nur Fingerabdruck aktualisieren
                 $sql = "UPDATE ". TBL_USERS. " SET usr_last_change   = '". $this->db_fields['usr_last_change']. "'
-                                                 , usr_usr_id_change = ". $this->db_fields['usr_usr_id_change']. "
+                                                 , usr_usr_id_change = ".  $this->db_fields['usr_usr_id_change']. "
                          WHERE usr_id = ". $this->db_fields['usr_id'];
                 error_log($sql);                         
                 $result = mysql_query($sql, $this->db_connection);

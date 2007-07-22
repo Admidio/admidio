@@ -119,7 +119,7 @@ if($_POST["upload"])
 }//Kontrollmechanismen
 
 //Photomodulspezifische CSS laden
-$g_layout['header'] = $g_layout['header']."<link rel=\"stylesheet\" href=\"$g_root_path/adm_program/layout/photos.css\" type=\"text/css\" media=\"screen\" />";
+$g_layout['header'] = "<link rel=\"stylesheet\" href=\"$g_root_path/adm_program/layout/photos.css\" type=\"text/css\" media=\"screen\" />";
 
 // Html-Kopf ausgeben
 $g_layout['title'] = "Fotos hochladen";
@@ -182,7 +182,7 @@ if($_POST["upload"])
 
                     //Aendern der Datenbankeintaege
                     $photo_event->setValue("pho_quantity", $photo_event->getValue("pho_quantity")+1);
-                    $photo_event->save($g_current_user->getValue("usr_id"));
+                    $photo_event->save();
                 }
                 else
                 {

@@ -111,7 +111,7 @@ if($req_mode == 1 || $req_mode == 2)
     // zuerst den neuen Usersatz loeschen, dann den alten Updaten,
     // damit kein Duplicate-Key wegen dem Loginnamen entsteht
     $new_user->delete();
-    $user->save($g_current_user->getValue("usr_id"));
+    $user->save();
 }
 
 if($req_mode == 2)

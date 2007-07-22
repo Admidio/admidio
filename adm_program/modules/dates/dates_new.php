@@ -66,7 +66,7 @@ if(!isset($_GET['headline']))
 
 $_SESSION['navigation']->addUrl($g_current_url);
 
-// Rollenobjekt anlegen
+// Terminobjekt anlegen
 $date = new Date($g_adm_con);
 
 if($req_dat_id > 0)
@@ -120,16 +120,7 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 // Html des Modules ausgeben
 echo "
-<form name=\"form\" action=\"$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=$req_dat_id&amp;mode=";
-    if($req_dat_id > 0)
-    {
-        echo "3";
-    }
-    else
-    {
-        echo "1";
-    }
-    echo "\" method=\"post\" name=\"TerminAnlegen\">
+<form name=\"form\" method=\"post\" action=\"$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=$req_dat_id&amp;mode=1\">
 
     <div class=\"formHead\">";
         if($req_dat_id > 0)
@@ -150,13 +141,9 @@ echo "
             </div>
         </div>";
 
-        // bei mehr als einer Organisation, Checkbox anzeigen, ob Termin bei anderen angezeigt werden soll
-        $sql = "SELECT org_id FROM ". TBL_ORGANIZATIONS. "
-                 WHERE org_org_id_parent IS NOT NULL ";
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result,__FILE__,__LINE__);
-
-        if(mysql_num_rows($result) > 0)
+        // besitzt die Organisation eine Elternorga oder hat selber Kinder, so kann die Ankuendigung auf "global" gesetzt werden
+        if($g_current_organization->getValue("org_org_id_parent") > 0
+        || $g_current_organization->hasChildOrganizations())
         {
             echo "
             <div style=\"margin-top: 6px;\">

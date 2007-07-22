@@ -154,14 +154,7 @@ if($_GET['mode'] == 1)
     }
     
     // Daten in Datenbank schreiben
-    if($_GET['usf_id'] > 0)
-    {
-        $return_code = $user_field->update();
-    }
-    else
-    {
-        $return_code = $user_field->insert();
-    }
+    $return_code = $user_field->save();
 
     if($return_code < 0)
     {
@@ -206,7 +199,7 @@ elseif($_GET['mode'] == 4)
     if($sequence_old != $_GET['sequence'])
     {
         $user_field->setValue("usf_sequence", $_GET['sequence']);
-        $user_field->update();
+        $user_field->save();
         // Alle Userobjekte der Benutzer neu einlesen
         $g_current_session->renewUserObject();
     }

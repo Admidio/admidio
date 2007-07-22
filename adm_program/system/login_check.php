@@ -132,7 +132,7 @@ if ($user_found >= 1)
             $g_current_user->setValue("usr_number_invalid", $g_current_user->getValue("usr_number_invalid") + 1);
         }
         $g_current_user->setValue("usr_date_invalid", $act_date);
-        $g_current_user->save($user_row['usr_id'], false);
+        $g_current_user->save(false);
 
         if($g_current_user->getValue("usr_number_invalid") >= 3)
         {

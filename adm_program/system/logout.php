@@ -34,20 +34,15 @@ $g_current_session->save();
 $domain = substr($_SERVER['HTTP_HOST'], 0, strpos($_SERVER['HTTP_HOST'], ':'));
 setcookie("admidio_session_id", "" , time() - 1000, "/", $domain, 0);
 
-unset($_SESSION['g_current_organisation']);
 unset($_SESSION['g_current_user']);
-unset($_SESSION['g_preferences']);
+
+$message_code = "logout";
 
 // Wenn die Session des Forums aktiv ist, diese ebenfalls loeschen.
 if($g_forum_integriert && $g_forum->session_valid)
 {
-    $g_forum->userLogoff();
-
-    $message_code = "logoutforum";    
-}
-else
-{
-    $message_code = "logout";
+  	$g_forum->userLogoff();
+	$message_code = "logoutforum";
 }
 
 // Hinweis auf erfolgreiches Ausloggen und weiter zur Startseite

@@ -56,7 +56,7 @@ else
         $g_message->addVariableContent($g_current_user->getValue("usr_login_name"));
         $g_message->addVariableContent($g_forum->sitename);
         
-        if($message_code != "loginforum")
+        if($message_code != "login_forum")
         {
             // Wenn es eine andere Meldung, als eine Standard-Meldung ist, dem User mehr Zeit zum lesen lassen
             $show_time = 0;

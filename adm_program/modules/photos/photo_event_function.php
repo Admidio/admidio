@@ -168,7 +168,7 @@ if(isset($_POST["submit"]) && $_POST["submit"])
         }
 
         // Veranstaltung in Datenbank schreiben
-        $photo_event->save($g_current_user->getValue("usr_id"));
+        $photo_event->save();
         $pho_id = $photo_event->getValue("pho_id");
         
         //Verzeichnis erstellen    
@@ -223,11 +223,11 @@ if(isset($_POST["submit"]) && $_POST["submit"])
     if($_GET["job"]=="makechange")
     {
         // geaenderte Daten in der Datenbank akutalisieren
-        $photo_event->save($g_current_user->getValue("usr_id"));
+        $photo_event->save();
     }
 
     //Photomodulspezifische CSS laden
-	$g_layout['header'] = $g_layout['header']."<link rel=\"stylesheet\" href=\"$g_root_path/adm_program/layout/photos.css\" type=\"text/css\" media=\"screen\" />";
+	$g_layout['header'] = "<link rel=\"stylesheet\" href=\"$g_root_path/adm_program/layout/photos.css\" type=\"text/css\" media=\"screen\" />";
     
     // HTML-Kopf
     $g_layout['title'] = "Veranstaltungsverwaltung";

@@ -305,7 +305,7 @@ elseif($_GET["mode"] == 2)
     }
 
     // Daten in Datenbank schreiben
-    $return_code = $role->save($g_current_user->getValue("usr_id"));
+    $return_code = $role->save();
 
     if($return_code < 0)
     {
@@ -395,7 +395,7 @@ elseif($_GET["mode"] == 4)
     // Rolle aus der DB loeschens
     $return_code = $role->delete();
     
-    if($return_code < 0)
+    if($return_code == false)
     {
         $g_message->show("norights");
     }

@@ -292,7 +292,7 @@ function delete ($pho_id, $bild)
 
    // Aendern der Datenbankeintaege
    $photo_event->setValue("pho_quantity", $neuebilderzahl);
-   $photo_event->save($g_current_user->getValue("usr_id"));
+   $photo_event->save();
 };
 
 

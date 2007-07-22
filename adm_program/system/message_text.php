@@ -217,30 +217,30 @@ $message_text = array(
 
 
     //Meldungen Anmeldung im Forum
-    "loginforum" =>
+    "login_forum" =>
         "Du hast dich erfolgreich auf Admidio und <br />im Forum <b>%VAR2%</b>
         als User <b>%VAR1%</b> angemeldet.",
 
-    "loginforum_pass" =>
+    "login_forum_pass" =>
         "Dein Password im Forum %VAR2% wurde auf das Admidio-Password zurückgesetz.<br>
         Verwende beim nächsten Login im Forum dein Admidio-Password.<br><br>
         Du wurdest erfolgreich auf Admidio und <br />im Forum <b>%VAR2%</b>
         als User <b>%VAR1%</b> angemeldet.",
 
-    "loginforum_admin" =>
+    "login_forum_admin" =>
         "Dein Administrator-Account vom Forum %VAR2% wurde auf den
         Admidio-Account zurückgesetz.<br>
         Verwende beim nächsten Login im Forum deinen Admidio-Usernamen und dein Admidio-Password.<br><br>
         Du wurdest erfolgreich auf Admidio und <br />im Forum <b>%VAR2%</b>
         als User <b>%VAR1%</b> angemeldet.",
 
-    "loginforum_new" =>
+    "login_forum_new" =>
         "Dein Admidio-Account wurde in das Forum %VAR2% exportiert und angelegt.<br>
         Verwende beim nächsten Login im Forum deinen Admidio-Usernamen und dein Admidio-Password.<br><br>
         Du wurdest erfolgreich auf Admidio und <br />im Forum <b>%VAR2%</b>
         als User <b>%VAR1%</b> angemeldet.",
 
-    "logoutforum" =>
+    "logout_forum" =>
         "Du wurdest erfolgreich auf Admidio und <br />im Forum abgemeldet.",
 
     "login_name_forum" =>

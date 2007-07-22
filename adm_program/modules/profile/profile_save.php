@@ -295,7 +295,7 @@ if ($new_user == 2 && $g_preferences['enable_registration_captcha'] == 1)
 // Benutzerdaten in Datenbank schreiben
 /*------------------------------------------------------------*/
 
-$ret_code = $user->save($g_current_user->getValue("usr_id"));        
+$ret_code = $user->save();        
 
 if($ret_code != 0)
 {
@@ -336,7 +336,7 @@ if($new_user == 3)
     // User auf aktiv setzen
     $user->setValue("usr_valid", 1);
     $user->setValue("usr_reg_org_shortname", "");
-    $user->save($g_current_user->getValue("usr_id"));
+    $user->save();
 
     // Den User nun im Forum auch als Aktiv updaten, wenn g_forum gesetzt ist
     if($g_forum_integriert)

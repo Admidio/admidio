@@ -211,7 +211,7 @@ for($i = $start_row; $i < count($_SESSION["file_lines"]); $i++)
     || ($dup_users  > 0 && $_SESSION["user_import_mode"] > 1) )
     {
         // Usersatz anlegen
-        $user->save($g_current_user->getValue("usr_id"));
+        $user->save();
         $count_import++;
         $mem_exists = false;
         
