@@ -151,6 +151,11 @@ if(isset($_SESSION['profile_request']))
         }
     }
     
+    if(isset($form_values["usr_login_name"]))
+    {
+        $user->setValue("usr_login_name", $form_values["usr_login_name"]);
+    }
+    
     unset($_SESSION['profile_request']);
     $b_history = true;
 }
@@ -356,11 +361,20 @@ echo "
         
         foreach($user->db_user_fields as $key => $value)
         {
+            // bei schneller Registrierung duerfen nur die Pflichtfelder ausgegeben werden
+            if($new_user == 2 && $g_preferences['registration_mode'] == 1 && $value['usf_mandatory'] == 0)
+            {
+                $show_field = false;
+            }
+            else
+            {
+                $show_field = true;
+            }
+        
             // Kategorienwechsel den Kategorienheader anzeigen
             // bei schneller Registrierung duerfen nur die Pflichtfelder ausgegeben werden
             if($category != $value['cat_name']
-            && (  $new_user != 2
-               || ( $new_user == 2 && $value['usf_mandatory'] == 1 )))
+            && $show_field == true)
             {
                 if(strlen($category) > 0)
                 {
@@ -376,8 +390,7 @@ echo "
             }
 
             // bei schneller Registrierung duerfen nur die Pflichtfelder ausgegeben werden
-            if($new_user != 2
-            || ( $new_user == 2 && $value['usf_mandatory'] == 1 ))
+            if($show_field == true)
             {
                 // Html des Feldes ausgeben
                 echo getFieldCode($value, $user, $new_user);

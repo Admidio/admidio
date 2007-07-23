@@ -379,16 +379,16 @@ elseif($new_user == 2)
     {
         $sql = "SELECT first_name.usd_value as first_name, last_name.usd_value as last_name, email.usd_value as email
                   FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
+                 RIGHT JOIN ". TBL_USER_DATA. " email
+                    ON email.usd_usr_id = usr_id
+                   AND email.usd_usf_id = ". $g_current_user->getProperty("E-Mail", "usf_id"). "
+                   AND LENGTH(email.usd_value) > 0
                   LEFT JOIN ". TBL_USER_DATA. " first_name
                     ON first_name.usd_usr_id = usr_id
                    AND first_name.usd_usf_id = ". $g_current_user->getProperty("Vorname", "usf_id"). "
                   LEFT JOIN ". TBL_USER_DATA. " last_name
                     ON last_name.usd_usr_id = usr_id
                    AND last_name.usd_usf_id = ". $g_current_user->getProperty("Nachname", "usf_id"). "
-                 RIGHT JOIN ". TBL_USER_DATA. " email
-                    ON email.usd_usr_id = usr_id
-                   AND email.usd_usf_id = ". $g_current_user->getProperty("E-Mail", "usf_id"). "
-                   AND LENGTH(email.usd_value) > 0
                  WHERE rol_name          = 'Webmaster'
                    AND rol_cat_id        = cat_id
                    AND cat_org_id        = ". $g_current_organization->getValue("org_id"). "
