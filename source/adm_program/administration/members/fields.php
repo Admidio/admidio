@@ -41,7 +41,7 @@ $g_layout['header'] = "
     <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/ajax.js\"></script>
     <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/show_hide_block.js\"></script>
     <script src=\"$g_root_path/adm_program/libs/script.aculo.us/prototype.js\" type=\"text/javascript\"></script>
-    <script src=\"$g_root_path/adm_program/libs/script.aculo.us/scriptaculous.js\" type=\"text/javascript\"></script>
+    <script src=\"$g_root_path/adm_program/libs/script.aculo.us/scriptaculous.js?load=effects,dragdrop\" type=\"text/javascript\"></script>
     
     <style type=\"text/css\">
         .drag {
