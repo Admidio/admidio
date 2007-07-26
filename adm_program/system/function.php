@@ -239,7 +239,7 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
 
         for($i = 1; $i < $init_page_max + 1; $i++)
         {
-            $page_string .= ( $i == $on_page ) ? '<b class="iconLink">' . $i . '</b>' : '<a class="iconLink" href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
+            $page_string .= ( $i == $on_page ) ? $i: '<a href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
             if ( $i <  $init_page_max )
             {
                 $page_string .= "&nbsp;&nbsp;";
@@ -257,7 +257,7 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
 
                 for($i = $init_page_min - 1; $i < $init_page_max + 2; $i++)
                 {
-                    $page_string .= ($i == $on_page) ? '<b class="iconLink">' . $i . '</b>' : '<a class="iconLink" href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
+                    $page_string .= ($i == $on_page) ? $i : '<a href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
                     if ( $i <  $init_page_max + 1 )
                     {
                         $page_string .= '&nbsp;&nbsp;';
@@ -273,7 +273,7 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
 
             for($i = $total_pages - 2; $i < $total_pages + 1; $i++)
             {
-                $page_string .= ( $i == $on_page ) ? '<b class="iconLink">' . $i . '</b>'  : '<a class="iconLink" href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
+                $page_string .= ( $i == $on_page ) ? $i  : '<a href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
                 if( $i <  $total_pages )
                 {
                     $page_string .= "&nbsp;&nbsp;";
@@ -285,7 +285,7 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
     {
         for($i = 1; $i < $total_pages + 1; $i++)
         {
-            $page_string .= ( $i == $on_page ) ? '<b class="iconLink">' . $i . '</b>' : '<a class="iconLink" href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
+            $page_string .= ( $i == $on_page ) ? $i : '<a href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
             if ( $i <  $total_pages )
             {
                 $page_string .= '&nbsp;&nbsp;';
@@ -297,21 +297,21 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
     {
         if ( $on_page > 1 )
         {
-            $page_string = '<a class="iconLink" href="' . $base_url . "&amp;start=" . ( ( $on_page - 2 ) * $per_page ) . '"><img 
-                                class="iconLink" src="'. $g_root_path. '/adm_program/images/back.png" alt="Vorherige"></a>
-                            <a class="iconLink" href="' . $base_url . "&amp;start=" . ( ( $on_page - 2 ) * $per_page ) . '">Vorherige</a>&nbsp;&nbsp;' . $page_string;
+            $page_string = '<a href="' . $base_url . "&amp;start=" . ( ( $on_page - 2 ) * $per_page ) . '"><img 
+                                class="navigationArrow" src="'. $g_root_path. '/adm_program/images/back.png" alt="Vorherige"></a>
+                            <a href="' . $base_url . "&amp;start=" . ( ( $on_page - 2 ) * $per_page ) . '">Vorherige</a>&nbsp;&nbsp;' . $page_string;
         }
 
         if ( $on_page < $total_pages )
         {
-            $page_string .= '&nbsp;&nbsp;<a class="iconLink" href="' . $base_url . "&amp;start=" . ( $on_page * $per_page ) . '">N&auml;chste</a>
-                            <a class="iconLink" href="' . $base_url . "&amp;start=" . ( $on_page * $per_page ) . '"><img 
-                                class="iconLink" src="'. $g_root_path. '/adm_program/images/forward.png" alt="N&auml;chste"></a>';
+            $page_string .= '&nbsp;&nbsp;<a href="' . $base_url . "&amp;start=" . ( $on_page * $per_page ) . '">N&auml;chste</a>
+                            <a class="navigationArrow" href="' . $base_url . "&amp;start=" . ( $on_page * $per_page ) . '"><img 
+                                 src="'. $g_root_path. '/adm_program/images/forward.png" alt="N&auml;chste"></a>';
         }
 
     }
 
-    $page_string = '<p><span class="iconLink">Seite:&nbsp;&nbsp;' . $page_string. '</span></p>';
+    $page_string = '<div class="pageNavigation">Seite:&nbsp;&nbsp;' . $page_string. '</div>';
 
     return $page_string;
 }
