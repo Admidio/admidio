@@ -67,6 +67,13 @@ hr {
     color:            #666666;
 }
 
+.icon16 {
+	 vertical-align:   middle;
+	 border-width:     0px;
+	 width: 16px;
+	 height: 16px;
+}
+
 /* Layout fuer Buttons mit Icon */
 button {
 	 padding-top: 		 2px;
@@ -114,6 +121,27 @@ a:hover {
     font-size:        12pt;
     font-weight:      bold;
     padding:          2px;
+    vertical-align:   middle;
+}
+
+.boxHeadIcon{
+	float: left;
+	margin: 2px;
+}
+
+.boxHeadLeft{
+	float: left;
+	margin-left: 5px;
+}
+
+.boxHeadCenter{
+	float: left;
+	margin-left: 10px;
+}
+
+.boxHeadRight{
+	float: right;
+	margin-right: 5px;
 }
 
 .boxBody {
@@ -126,6 +154,7 @@ a:hover {
     border-style:     solid;
     border-collapse:  collapse;
     padding:          0px;
+    overflow: hidden;
 }
 
 /* Layout fuer die Formulare
@@ -296,4 +325,14 @@ a:hover {
 .navigationPath{
 	text-align: center;
 	margin: 4px;
+}
+
+/*Iconliste Horizontal*/
+.iconListHor ul, li{
+	list-style-position: inside;
+	list-style-type: none;
+	padding: 0px;
+	margin: 0px;
+	display: inline;
+	padding-left: 2px;
 }
