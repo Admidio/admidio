@@ -221,15 +221,15 @@ if($pho_id > 0)
 if($g_current_user->editPhotoRight())
 {
     echo"<div class=\"editorLink\">
-            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photo_event_new.php?job=new&amp;pho_id=$pho_id\"><img
+            <a href=\"$g_root_path/adm_program/modules/photos/photo_event_new.php?job=new&amp;pho_id=$pho_id\"><img
             class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" alt=\"Veranstaltung anlegen\"></a>
-            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photo_event_new.php?job=new&amp;pho_id=$pho_id\">Veranstaltung anlegen</a>";
+            <a href=\"$g_root_path/adm_program/modules/photos/photo_event_new.php?job=new&amp;pho_id=$pho_id\">Veranstaltung anlegen</a>";
         if($pho_id > 0)
         {
             echo "&nbsp;&nbsp;&nbsp;&nbsp;
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id\"><img
+                <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id\"><img
                 class=\"iconLink\" src=\"$g_root_path/adm_program/images/photo.png\" alt=\"Bilder hochladen\"></a>
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id\">Bilder hochladen</a>";
+                <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id\">Bilder hochladen</a>";
         }
     echo "</div>";
 }
@@ -691,13 +691,11 @@ echo "</div>";
 //Uebersicht
 if($photo_event->getValue("pho_id") > 0)
 {
-    echo "<p>
-        <span class=\"iconLink\">
-            <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\"><img
+    echo "<div class=\"pageNavigation\">
+            <a href=\"$g_root_path/adm_program/system/back.php\"><img
             class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
-            <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
-        </span>
-    </p>";
+            <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+        </div>";
 }
 
 /***************************Seitenende***************************/
