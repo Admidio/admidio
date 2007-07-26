@@ -257,11 +257,17 @@ a:hover {
 
 /* Elemente fuer Navigationsklasse */
 .pageNavigation{
+	font-weight: bold;
 	text-align: center;
 	vertical-align: middle;
+	margin: 10px;
 }
-.navigationArrow{
-	vertical-align: middle;
+
+.pageNavigation a{
+}
+
+.pageNavigation img{
+	vertical-align: top;
 	border: none;
 }
 

@@ -294,7 +294,7 @@ echo "<div class=\"photoModuleContainer\">";
             {
                 echo"
                 <a href=\"$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$vorseite&amp;pho_id=$pho_id\">
-                    <img src=\"$g_root_path/adm_program/images/back.png\" class=\"navigationArrow\" alt=\"Vorherige\">
+                    <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Vorherige\">
                 </a>
                 <a href=\"$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$vorseite&amp;pho_id=$pho_id\">Vorherige</a>&nbsp;&nbsp;";
             }
@@ -317,7 +317,7 @@ echo "<div class=\"photoModuleContainer\">";
                 echo"
                 <a href=\"$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$nachseite&amp;pho_id=$pho_id\">N&auml;chste</a>
                 <a href=\"$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$nachseite&amp;pho_id=$pho_id\">
-                    <img src=\"$g_root_path/adm_program/images/forward.png\" class=\"navigationArrow\" alt=\"N&auml;chste\">
+                    <img src=\"$g_root_path/adm_program/images/forward.png\" alt=\"N&auml;chste\">
                 </a>";
             }
         echo"</div>";
