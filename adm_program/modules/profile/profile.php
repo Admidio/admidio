@@ -182,7 +182,7 @@ function getFieldCode($field, $user_id)
 }
 
 // User auslesen
-$user = new User($g_adm_con, $a_user_id);
+$user = new User($g_db, $a_user_id);
 
 unset($_SESSION['profile_request']);
 // Seiten fuer Zuruecknavigation merken
@@ -381,18 +381,18 @@ echo "</div>
             // *******************************************************************************
 
             //Nachsehen ob fuer den User ein Photo gespeichert wurde
-            $sql =" SELECT usr_photo
-                    FROM ".TBL_USERS."
-                    WHERE usr_id = '$a_user_id'";
-            $result_photo = mysql_query($sql, $g_adm_con);
-            db_error($result_photo,__FILE__,__LINE__);
+            $sql =" SELECT usr_id
+                      FROM ".TBL_USERS."
+                     WHERE usr_id = $a_user_id
+                       AND usr_photo IS NOT NULL ";
+            $result_photo = $g_db->query($sql);
 
             echo"
             <div style=\"margin-top: 4px; text-align: center;\">
                 <div class=\"groupBox\">
                     <div class=\"groupBoxBody\">";
                         //Falls vorhanden Bild ausgeben
-                        if(mysql_result($result_photo,0,"usr_photo")!=NULL)
+                        if($g_db->num_rows($result_photo) > 0)
                         {
                             echo"<img src=\"$g_root_path/adm_program/modules/profile/profile_photo_show.php?usr_id=$a_user_id&amp;id=". time(). "\" alt=\"Profilfoto\">";
                         }
@@ -509,17 +509,15 @@ echo "</div>
                          AND cat_org_id = org_id
                        ORDER BY org_shortname, cat_sequence, rol_name";
         }
-        $result_role = mysql_query($sql, $g_adm_con);
-        db_error($result_role,__FILE__,__LINE__);
-        $count_role = mysql_num_rows($result_role);
+        $result_role = $g_db->query($sql);
+        $count_role  = $g_db->num_rows($result_role);
 
         if($count_role > 0)
         {
             $sql = "SELECT org_shortname FROM ". TBL_ORGANIZATIONS;
-            $result = mysql_query($sql, $g_adm_con);
-            db_error($result,__FILE__,__LINE__);
+            $g_db->query($sql);
 
-            $count_grp = mysql_num_rows($result);
+            $count_grp = $g_db->num_rows();
             $i = 0;
 
             echo "<div class=\"groupBox\" style=\"margin-top: 10px; text-align: left; height: 100%;\">
@@ -540,7 +538,7 @@ echo "</div>
                     echo "</div>
                 </div>
                 <div class=\"groupBoxBody\">";
-                    while($row = mysql_fetch_array($result_role))
+                    while($row = $g_db->fetch_array($result_role))
                     {
                         // jede einzelne Rolle anzeigen
                         if($i > 0)

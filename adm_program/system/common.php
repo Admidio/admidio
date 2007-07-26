@@ -32,8 +32,29 @@ if ('common.php' == basename($_SERVER['SCRIPT_FILENAME']))
 define('SERVER_PATH', substr(__FILE__, 0, strpos(__FILE__, "adm_program")-1));
 define('ADMIDIO_VERSION', '1.5 Beta');  // die Versionsnummer bitte nicht aendern !!!
 
-// includes OHNE Datenbankverbindung
+// Konfigurationsdatei einbinden
 require_once(SERVER_PATH. "/adm_config/config.php");
+
+// falls Debug-Kennzeichen nicht in config.php gesetzt wurde, dann hier auf false setzen
+if(isset($g_debug) == false || $g_debug != 1)
+{
+    $g_debug = 0;
+}
+
+ // Standard-Praefix ist adm auch wegen Kompatibilitaet zu alten Versionen
+if(strlen($g_tbl_praefix) == 0)
+{
+    $g_tbl_praefix = "adm";
+}
+
+// Default-DB-Type ist immer MySql
+if(!isset($g_db_type))
+{
+    $g_db_type = "mysql";
+}
+
+// includes OHNE Datenbankverbindung
+require_once(SERVER_PATH. "/adm_program/system/". $g_db_type. "_class.php");
 require_once(SERVER_PATH. "/adm_program/system/function.php");
 require_once(SERVER_PATH. "/adm_program/system/date.php");
 require_once(SERVER_PATH. "/adm_program/system/string.php");
@@ -46,18 +67,6 @@ require_once(SERVER_PATH. "/adm_program/system/session_class.php");
 if($g_forum_integriert)
 {
     require_once(SERVER_PATH. "/adm_program/system/forum_class_phpbb.php");
-}
-
-// falls Debug-Kennzeichen nicht in config.php gesetzt wurde, dann hier auf false setzen
-if(isset($g_debug) == false || $g_debug != 1)
-{
-    $g_debug = 0;
-}
-
- // Standard-Praefix ist adm auch wegen Kompatibilitaet zu alten Versionen
-if(strlen($g_tbl_praefix) == 0)
-{
-    $g_tbl_praefix = "adm";
 }
 
 // Defines fuer alle Datenbanktabellen
@@ -91,32 +100,21 @@ $_COOKIE  = array_map("strStripTags", $_COOKIE);
 // Anfuehrungszeichen escapen, damit DB-Abfragen sicher sind
 if(get_magic_quotes_gpc() == false)
 {
-    strAddSlashesDeep($_REQUEST);
-    strAddSlashesDeep($_GET);
-    strAddSlashesDeep($_POST);
-    strAddSlashesDeep($_COOKIE);
+    $_REQUEST = strAddSlashesDeep($_REQUEST);
+    $_GET     = strAddSlashesDeep($_GET);
+    $_POST    = strAddSlashesDeep($_POST);
+    $_COOKIE  = strAddSlashesDeep($_COOKIE);
 }
-
- // Verbindung zu Datenbank herstellen
-$g_adm_con = @mysql_connect ($g_adm_srv, $g_adm_usr, $g_adm_pw);
-if($g_adm_con == false)
-{
-    die("Es konnte keine Verbindung zur Datenbank hergestellt werden.");
-}
-if(mysql_select_db($g_adm_db, $g_adm_con) == false)
-{
-    die("Die Datenbank $g_adm_db wurde nicht gefunden. ");
-}
-
-// PHP-Session starten
-session_name('admidio_php_session_id');
-session_start();
 
 // Globale Variablen
 $g_valid_login = false;
 $g_layout        = array();
 $g_current_url   = "http://". $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI'];
 $g_message       = new Message();
+
+// PHP-Session starten
+session_name('admidio_php_session_id');
+session_start();
 
 // Session-ID ermitteln
 if(isset($_COOKIE['admidio_session_id']))
@@ -128,20 +126,24 @@ else
     $g_session_id = session_id();
 }
 
+ // Verbindung zu Datenbank herstellen
+$g_db = new MySqlDB();
+$g_adm_con = $g_db->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
+
 // globale Klassen mit Datenbankbezug werden in Sessionvariablen gespeichert, 
 // damit die Daten nicht bei jedem Script aus der Datenbank ausgelesen werden muessen
 if(isset($_SESSION['g_current_organization']) 
 && isset($_SESSION['g_preferences'])
 && $g_organization == $_SESSION['g_current_organization']->getValue("org_shortname"))
 {
-    $g_current_organization =& $_SESSION['g_current_organization'];
-    $g_current_organization->db_connection = $g_adm_con;
-    $g_preferences  =& $_SESSION['g_preferences'];
+    $g_current_organization     =& $_SESSION['g_current_organization'];
+    $g_current_organization->db =& $g_db;
+    $g_preferences              =& $_SESSION['g_preferences'];
 }
 else
 {
-    $g_current_organization = new Organization($g_adm_con);
-    $g_current_organization->getOrganization($g_organization);
+    $g_current_organization = new Organization($g_db, $g_organization);
+    
     if($g_current_organization->getValue("org_id") == 0)
     {
         // Organisation wurde nicht gefunden
@@ -160,11 +162,11 @@ else
 if(isset($_SESSION['g_current_user']))
 {
     $g_current_user =& $_SESSION['g_current_user'];
-    $g_current_user->db_connection = $g_adm_con;
+    $g_current_user->db =& $g_db;
 }
 else
 {
-    $g_current_user  = new User($g_adm_con);
+    $g_current_user  = new User($g_db);
     $_SESSION['g_current_user'] =& $g_current_user;
 }
 
@@ -179,7 +181,7 @@ if(isset($_SESSION['navigation']) == false)
 Session auf Gueltigkeit pruefen bzw. anlegen
 /********************************************************************************/
 
-$g_current_session = new Session($g_adm_con, $g_session_id);
+$g_current_session = new Session($g_db, $g_session_id);
 
 if($g_current_session->getValue("ses_id") > 0)
 {

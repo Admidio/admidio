@@ -102,7 +102,7 @@ class Message
         // noetig, da dies bei den includes benoetigt wird
         global $g_forum, $g_layout;
         global $g_valid_login, $g_root_path, $g_preferences;
-        global $g_adm_db, $g_adm_srv, $g_adm_con;
+        global $g_db, $g_adm_db, $g_adm_srv, $g_adm_con;
         global $g_organization, $g_current_organization, $g_current_user;
         global $g_current_url;
         
@@ -155,7 +155,11 @@ class Message
         }
                     
         // Variablen angeben
-        $this->inline = headers_sent();
+        if($this->inline == false)
+        {
+            // nur pruefen, wenn vorher nicht schon auf true gesetzt wurde
+            $this->inline = headers_sent();
+        }
         $g_root_path  = $GLOBALS['g_root_path'];
         
         if($this->inline == false)

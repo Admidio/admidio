@@ -40,13 +40,6 @@ if ($g_preferences['enable_photo_module'] != 1)
     $g_message->show("module_disabled");
 }
 
-//nachsehen ob daten √ºber die Veranstaltung vorhanden sind
-if(isset($_SESSION['photo_event_request']))
-{
-    $form_values = $_SESSION['photo_event_request'];
-    unset($_SESSION['photo_event_request']);
-}
-
 //pruefen ob adm_my_files/photos existiert
 if(!file_exists(SERVER_PATH. "/adm_my_files/photos"))
 {
@@ -63,7 +56,9 @@ else
     $pho_id = NULL;
 }
 
-//Wurde keine Veranstaltung √ºbergeben kann das Navigationsstack zur√ºckgesetzt werden
+unset($_SESSION['photo_event_request']);
+
+//Wurde keine Veranstaltung uebergeben kann das Navigationsstack zur?ºckgesetzt werden
 if ($pho_id == NULL)
 {
     $_SESSION['navigation']->clear();
@@ -117,12 +112,12 @@ if(!is_numeric($locked) && $locked!=NULL)
 if(isset($_SESSION['photo_event']) && $_SESSION['photo_event']->getValue("pho_id") == $pho_id)
 {
     $photo_event =& $_SESSION['photo_event'];
-    $photo_event->db_connection = $g_adm_con;
+    $photo_event->db =& $g_db;
 }
 else
 {
     // einlesen der Veranstaltung falls noch nicht in Session gespeichert
-    $photo_event = new PhotoEvent($g_adm_con);
+    $photo_event = new PhotoEvent($g_db);
     if($pho_id > 0)
     {
         $photo_event->getPhotoEvent($pho_id);
@@ -168,7 +163,7 @@ if($g_preferences['enable_rss'] == 1)
 //Lightbox-Mode
 if($g_preferences['photo_show_mode']==1)
 {
-	$g_layout['header'] = $g_layout['header']."
+    $g_layout['header'] = $g_layout['header']."
         <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/script.aculo.us/prototype.js\"></script>
         <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/script.aculo.us/scriptaculous.js?load=effects\"></script>
         <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/lightbox/lightbox.js\"></script>
@@ -197,7 +192,7 @@ echo "</h1>";
 //solange nach Unterveranstaltungen suchen bis es keine mehr gibt
 $navilink = "";
 $pho_parent_id = $photo_event->getValue("pho_pho_id_parent");
-$photo_event_parent = new PhotoEvent($g_adm_con);
+$photo_event_parent = new PhotoEvent($g_db);
 
 while ($pho_parent_id > 0)
 {
@@ -264,7 +259,7 @@ echo "<div class=\"photoModuleContainer\">";
         //Differenz
         $difference = $g_preferences['photo_thumbs_row']-$g_preferences['photo_thumbs_column'];
 
-        //Popupfenstergr√∂√üe
+        //Popupfenstergr???üe
         $popup_height = $g_preferences['photo_show_height']+210;
         $popup_width  = $g_preferences['photo_show_width']+70;
 
@@ -281,52 +276,52 @@ echo "<div class=\"photoModuleContainer\">";
 
         //Datum der Veranstaltung
         echo"<div id=\"photoEventInformation\">
-	        Datum: ".mysqldate("d.m.y", $photo_event->getValue("pho_begin"));
-	        if($photo_event->getValue("pho_end") != $photo_event->getValue("pho_begin"))
-	        {
-	            echo " bis ".mysqldate("d.m.y", $photo_event->getValue("pho_end"));
-	        }
+            Datum: ".mysqldate("d.m.y", $photo_event->getValue("pho_begin"));
+            if($photo_event->getValue("pho_end") != $photo_event->getValue("pho_begin"))
+            {
+                echo " bis ".mysqldate("d.m.y", $photo_event->getValue("pho_end"));
+            }
         echo"</div>";
 
         //Container mit Navigation
         echo" <div class=\"pageNavigation\">";
-	        //Seitennavigation
-	        echo"Seite:&nbsp;";
-	
-	        //Vorherige thumb_seite
-	        $vorseite=$thumb_seite-1;
-	        if($vorseite>=1)
-	        {
-	            echo"
-	            <a href=\"$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$vorseite&amp;pho_id=$pho_id\">
-	                <img src=\"$g_root_path/adm_program/images/back.png\" class=\"navigationArrow\" alt=\"Vorherige\">
-	            </a>
-	            <a href=\"$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$vorseite&amp;pho_id=$pho_id\">Vorherige</a>&nbsp;&nbsp;";
-	        }
-	
-	        //Seitenzahlen
-	        for($s=1; $s<=$thumb_seiten; $s++)
-	        {
-	            if($s==$thumb_seite)
-	            {
-	                echo $thumb_seite."&nbsp;";
-	            }
-	            if($s!=$thumb_seite){
-	                echo"<a href='$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$s&pho_id=$pho_id'>$s</a>&nbsp;";
-	            }
-	        }
-	
-	        //naechste thumb_seite
-	        $nachseite=$thumb_seite+1;
-	        if($nachseite<=$thumb_seiten){
-	            echo"
-	            <a href=\"$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$nachseite&amp;pho_id=$pho_id\">N&auml;chste</a>
-	            <a href=\"$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$nachseite&amp;pho_id=$pho_id\">
-	                <img src=\"$g_root_path/adm_program/images/forward.png\" class=\"navigationArrow\" alt=\"N&auml;chste\">
-	            </a>";
-	        }
-		echo"</div>";
-	        
+            //Seitennavigation
+            echo"Seite:&nbsp;";
+    
+            //Vorherige thumb_seite
+            $vorseite=$thumb_seite-1;
+            if($vorseite>=1)
+            {
+                echo"
+                <a href=\"$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$vorseite&amp;pho_id=$pho_id\">
+                    <img src=\"$g_root_path/adm_program/images/back.png\" class=\"navigationArrow\" alt=\"Vorherige\">
+                </a>
+                <a href=\"$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$vorseite&amp;pho_id=$pho_id\">Vorherige</a>&nbsp;&nbsp;";
+            }
+    
+            //Seitenzahlen
+            for($s=1; $s<=$thumb_seiten; $s++)
+            {
+                if($s==$thumb_seite)
+                {
+                    echo $thumb_seite."&nbsp;";
+                }
+                if($s!=$thumb_seite){
+                    echo"<a href='$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$s&pho_id=$pho_id'>$s</a>&nbsp;";
+                }
+            }
+    
+            //naechste thumb_seite
+            $nachseite=$thumb_seite+1;
+            if($nachseite<=$thumb_seiten){
+                echo"
+                <a href=\"$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$nachseite&amp;pho_id=$pho_id\">N&auml;chste</a>
+                <a href=\"$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$nachseite&amp;pho_id=$pho_id\">
+                    <img src=\"$g_root_path/adm_program/images/forward.png\" class=\"navigationArrow\" alt=\"N&auml;chste\">
+                </a>";
+            }
+        echo"</div>";
+            
         //Thumbnailtabelle
         echo"
         <table id=\"photoThumbnailTable\">";
@@ -363,31 +358,31 @@ echo "<div class=\"photoModuleContainer\">";
                         //Popup-Mode
                         if($g_preferences['photo_show_mode']==0)
                         {
-                        	echo "
-                        	<td class=\"photoThumbnailTableColumn\">
-                            	<img onclick=\"window.open('$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$bild&pho_id=$pho_id','msg', 'height=".$popup_height.", width=".$popup_width.",left=162,top=5')\" 
-                            	 src=\"".$ordner_url."/thumbnails/".$bild.".jpg\" class=\"photoThumbnail\" alt=\"$bild\">
-                            	<br>";
+                            echo "
+                            <td class=\"photoThumbnailTableColumn\">
+                                <img onclick=\"window.open('$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$bild&pho_id=$pho_id','msg', 'height=".$popup_height.", width=".$popup_width.",left=162,top=5')\" 
+                                 src=\"".$ordner_url."/thumbnails/".$bild.".jpg\" class=\"photoThumbnail\" alt=\"$bild\">
+                                <br>";
                         }
                         
                         //Lightbox-Mode
                         if($g_preferences['photo_show_mode']==1)
                         {
-                        	echo "
-                        	<td class=\"photoThumbnailTableColumn\">
-                            	<a href=\"".$ordner_url."/".$bild.".jpg\" rel=\"lightbox[roadtrip]\" title=\"".$photo_event->getValue("pho_name")."\"><img src=\"".$ordner_url."/thumbnails/".$bild.".jpg\" class=\"thumbnail\" alt=\"$bild\"></a>
-                            	<br>";
+                            echo "
+                            <td class=\"photoThumbnailTableColumn\">
+                                <a href=\"".$ordner_url."/".$bild.".jpg\" rel=\"lightbox[roadtrip]\" title=\"".$photo_event->getValue("pho_name")."\"><img src=\"".$ordner_url."/thumbnails/".$bild.".jpg\" class=\"thumbnail\" alt=\"$bild\"></a>
+                                <br>";
                         }
                         
                         //Gleichesfenster-Mode
                         if($g_preferences['photo_show_mode']==2)
                         {
-                        	echo "
-                        	<td class=\"photoThumbnailTableColumn\">
-                            	<img onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$bild&pho_id=$pho_id'\" src=\"".$ordner_url."/thumbnails/".$bild.".jpg\" class=\"thumbnail\" alt=\"$bild\">";
+                            echo "
+                            <td class=\"photoThumbnailTableColumn\">
+                                <img onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$bild&pho_id=$pho_id'\" src=\"".$ordner_url."/thumbnails/".$bild.".jpg\" class=\"thumbnail\" alt=\"$bild\">";
                         }   
-                        	
-							//Buttons fuer moderatoren
+                            
+                            //Buttons fuer moderatoren
                             if($g_current_user->editPhotoRight())
                             {
                                 echo"
@@ -412,18 +407,18 @@ echo "<div class=\"photoModuleContainer\">";
         <div class=\"editInformation\">";
             if($photo_event->getValue("pho_usr_id") > 0)
             {
-                $user_create = new User($g_adm_con, $photo_event->getValue("pho_usr_id"));
+                $user_create = new User($g_db, $photo_event->getValue("pho_usr_id"));
                 echo"Angelegt von ". strSpecialChars2Html($user_create->getValue("Vorname")). " ". strSpecialChars2Html($user_create->getValue("Nachname"))
                 ." am ". mysqldatetime("d.m.y h:i", $photo_event->getValue("pho_timestamp"));
             }
             
-            // Zuletzt geaendert nur anzeigen, wenn √Ñnderung nach 1 Stunde oder durch anderen Nutzer gemacht wurde
+            // Zuletzt geaendert nur anzeigen, wenn ?Ñnderung nach 1 Stunde oder durch anderen Nutzer gemacht wurde
             if($photo_event->getValue("pho_usr_id_change") > 0
             && $photo_event->getValue("pho_last_change") > 0
             && (  strtotime($photo_event->getValue("pho_last_change")) > (strtotime($photo_event->getValue("pho_timestamp")) + 3600)
                || $photo_event->getValue("pho_usr_id_change") != $photo_event->getValue("pho_usr_id") ) )
             {
-                $user_change = new User($g_adm_con, $photo_event->getValue("pho_usr_id_change"));
+                $user_change = new User($g_db, $photo_event->getValue("pho_usr_id_change"));
                 echo"<br>
                 Letztes Update durch ". strSpecialChars2Html($user_change->getValue("Vorname")). " ". strSpecialChars2Html($user_change->getValue("Nachname"))
                 ." am ". mysqldatetime("d.m.y h:i", $photo_event->getValue("pho_last_change"));

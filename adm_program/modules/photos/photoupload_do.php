@@ -59,11 +59,11 @@ if (empty($_POST))
 if(isset($_SESSION['photo_event']) && $_SESSION['photo_event']->getValue("pho_id") == $_GET["pho_id"])
 {
     $photo_event =& $_SESSION['photo_event'];
-    $photo_event->db_connection = $g_adm_con;
+    $photo_event->db =& $g_db;
 }
 else
 {
-    $photo_event = new PhotoEvent($g_adm_con, $_GET["pho_id"]);
+    $photo_event = new PhotoEvent($g_db, $_GET["pho_id"]);
     $_SESSION['photo_event'] =& $photo_event;
 }
 
@@ -131,8 +131,8 @@ if($_POST["upload"])
     //bei selbstaufruf der Datei Hinweise zu hochgeladenen Dateien und Kopieren der Datei in Ordner
     //Anlegen des Berichts
     echo"<h1 class=\"moduleHeadline\">Fotogalerien - Upload</h1>
-	<div class=\"photoModuleContainer\">
-		Bitte einen Moment Geduld. 
+    <div class=\"photoModuleContainer\">
+        Bitte einen Moment Geduld. 
         Die Bilder wurden der Veranstaltung <br> - ".$photo_event->getValue("pho_name")." - <br>
         erfolgreich hinzugef&uuml;gt, wenn sie hier angezeigt werden.<br>";
 
@@ -154,13 +154,13 @@ if($_POST["upload"])
 
                     //Bild skalliert speichern
                     image_save($temp_bild, $g_preferences['photo_save_scale'], $ordner."/".$bildnr.".jpg");
-					
-                 	//Nachsehen ob Thumnailordner existiert
-			        if(!file_exists($ordner."/thumbnails"))
-			        {
-			            mkdir($ordner."/thumbnails", 0777);
-			        }
-			        
+                    
+                    //Nachsehen ob Thumnailordner existiert
+                    if(!file_exists($ordner."/thumbnails"))
+                    {
+                        mkdir($ordner."/thumbnails", 0777);
+                    }
+                    
                     //Thumbnail speichern
                     image_save($temp_bild, $g_preferences['photo_thumbs_scale'], $ordner."/thumbnails/".$bildnr.".jpg");
                     //Loeschen des Bildes aus Arbeitsspeicher
@@ -168,7 +168,7 @@ if($_POST["upload"])
                     if(file_exists(SERVER_PATH. "/adm_my_files/photos/temp".$y.".jpg"))
                     {
                         unlink(SERVER_PATH. "/adm_my_files/photos/temp".$y.".jpg");
-                    }         	
+                    }           
                     
                 
                 }//Ende Bild speichern
@@ -178,7 +178,7 @@ if($_POST["upload"])
                 if(file_exists($ordner."/".$bildnr.".jpg"))
                 {
                     echo"<img src=\"photo_show.php?scal=300&amp;pic_nr=".$bildnr."&amp;pho_id=".$photo_event->getValue("pho_id")."&amp;pho_begin=".$photo_event->getValue("pho_begin")."\"
-							class=\"photoOutput\"><br><br>";
+                            class=\"photoOutput\"><br><br>";
 
                     //Aendern der Datenbankeintaege
                     $photo_event->setValue("pho_quantity", $photo_event->getValue("pho_quantity")+1);
@@ -198,16 +198,16 @@ if($_POST["upload"])
         <hr />
         <div class=\"formRow\">
             <span class=\"editorLink\">
-	            <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\"><img
-	            class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
-	            <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
-        	</span>
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\"><img
+                class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+            </span>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<span class=\"editorLink\">
-	            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id\"><img
-	            class=\"iconLink\" src=\"$g_root_path/adm_program/images/photo.png\" alt=\"Weitere Bilder hochladen\"></a>
-	            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id\">Weitere Bilder hochladen</a>
-        	</span>
+            <span class=\"editorLink\">
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id\"><img
+                class=\"iconLink\" src=\"$g_root_path/adm_program/images/photo.png\" alt=\"Weitere Bilder hochladen\"></a>
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id\">Weitere Bilder hochladen</a>
+            </span>
          </div>
     </div><br><br>";
 }//if($upload)

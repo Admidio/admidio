@@ -12,7 +12,7 @@
  *
  * Das Objekt wird erzeugt durch Aufruf des Konstruktors und der Uebergabe der
  * aktuellen Datenbankverbindung:
- * $user_field = new UserField($g_adm_con);
+ * $user_field = new UserField($g_db);
  *
  * Mit der Funktion getUserField($user_id) kann das gewuenschte Feld ausgelesen
  * werden.
@@ -49,9 +49,9 @@ require_once(SERVER_PATH. "/adm_program/system/table_access_class.php");
 class UserField extends TableAccess
 {
     // Konstruktor
-    function UserField($connection, $usf_id = 0)
+    function UserField(&$db, $usf_id = 0)
     {
-        $this->db_connection  = $connection;
+        $this->db            =& $db;
         $this->table_name     = TBL_USER_FIELDS;
         $this->column_praefix = "usf";
         $this->key_name       = "usf_id";
@@ -69,18 +69,18 @@ class UserField extends TableAccess
     // Benutzerdefiniertes Feld mit der uebergebenen ID aus der Datenbank auslesen
     function getUserField($usf_id)
     {
-    	if(is_numeric($usf_id))
-    	{
-	    	$tables    = TBL_CATEGORIES;
-	    	$condition = "       usf_cat_id = cat_id
-	                         AND usf_id     = $usf_id ";
-	    	$this->readData($usf_id, $condition, $tables);
+        if(is_numeric($usf_id))
+        {
+            $tables    = TBL_CATEGORIES;
+            $condition = "       usf_cat_id = cat_id
+                             AND usf_id     = $usf_id ";
+            $this->readData($usf_id, $condition, $tables);
         }
     }
     
     // interne Funktion, die bei setValue den uebergebenen Wert prueft
-	// und ungueltige Werte auf leer setzt
-	// die Funktion wird innerhalb von setValue() aufgerufen
+    // und ungueltige Werte auf leer setzt
+    // die Funktion wird innerhalb von setValue() aufgerufen
     function checkValue($field_name, $field_value)
     {
         switch($field_name)
@@ -100,10 +100,9 @@ class UserField extends TableAccess
                     // erst einmal die hoechste Reihenfolgennummer der Kategorie ermitteln
                     $sql = "SELECT COUNT(*) as count FROM ". TBL_USER_FIELDS. "
                              WHERE usf_cat_id = $field_value";
-                    $result = mysql_query($sql, $this->db_connection);
-                    db_error($result,__FILE__,__LINE__);
+                    $this->db->query($sql);
 
-                    $row = mysql_fetch_array($result);
+                    $row = $this->db->fetch_array();
 
                     $this->db_fields['usf_sequence'] = $row['count'] + 1;
                 }
@@ -119,18 +118,17 @@ class UserField extends TableAccess
                     return false;
                 }
                 break;
-        }    	
+        }       
         return true;
     }
     
     // interne Funktion, die die Referenzen bearbeitet, wenn die Kategorie geloescht wird
-	// die Funktion wird innerhalb von delete() aufgerufen
+    // die Funktion wird innerhalb von delete() aufgerufen
     function deleteReferences()
     {
         $sql    = "DELETE FROM ". TBL_USER_DATA. "
                     WHERE usd_usf_id = ". $this->db_fields['usf_id'];
-        $result = mysql_query($sql, $this->db_connection);
-        db_error($result,__FILE__,__LINE__);
+        $this->db->query($sql);
 
         return true;
     }    

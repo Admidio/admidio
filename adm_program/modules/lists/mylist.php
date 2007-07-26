@@ -92,7 +92,7 @@ $default_fields = 6;    // Anzahl der Felder, die beim Aufruf angezeigt werden
 
 if(isset($_SESSION['mylist_request']))
 {
-    $form_values = $_SESSION['mylist_request'];
+    $form_values = strStripSlashesDeep($_SESSION['mylist_request']);
     unset($_SESSION['mylist_request']);
     $req_rol_id = $form_values['rol_id'];
     if(isset($form_values['former']) && $form_values['former'] == 1)

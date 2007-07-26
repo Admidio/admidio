@@ -10,7 +10,12 @@
  *****************************************************************************/
 
 // Zeit in der die User noch als Aktiv gelten (Default = 10)
-$onlinezeit = 10;
+$plg_time_online = 10;
+
+// Sollen Besucher (nicht eingeloggte Benutzer) auch angezeigt werden
+// 0 = nur eingeloggte Mitglieder werden angezeigt
+// 1 = (Default) Anzahl der Besucher wird aufgelistet
+$plg_show_visitors = 1;
 
 // Anzeige der Benutzernamen untereinander bzw. nebeneinander
 // 0 = (Default) Benutzernamen untereinander auflisten (1 Name pro Zeile)

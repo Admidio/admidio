@@ -30,7 +30,7 @@ require("role_class.php");
 $_SESSION['navigation']->addUrl($g_current_url);
 
 // Rollenobjekt fuer 'Webmaster' anlegen
-$role_webmaster = new Role($g_adm_con, 'Webmaster');
+$role_webmaster = new Role($g_db, 'Webmaster');
 
 // Html-Kopf ausgeben
 $g_layout['title']  = "Login";

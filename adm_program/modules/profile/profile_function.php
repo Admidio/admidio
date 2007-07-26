@@ -46,7 +46,7 @@ if(is_numeric($_GET["mode"]) == false
 if($_GET["mode"] == 1)
 {
     // Userdaten aus Datenbank holen
-    $user = new User($g_adm_con, $_GET['user_id']);
+    $user = new User($g_db, $_GET['user_id']);
 
     header('Content-Type: text/x-vcard');
     header('Content-Disposition: attachment; filename="'. $user->getValue("Vorname"). ' '. $user->getValue("Nachname"). '.vcf"');

@@ -63,7 +63,7 @@ $pho_id = $_GET["pho_id"];
 $_SESSION['navigation']->addUrl($g_current_url);
 
 // Fotoeventobjekt anlegen
-$photo_event = new PhotoEvent($g_adm_con);
+$photo_event = new PhotoEvent($g_db);
 
 // nur Daten holen, wenn Veranstaltung editiert werden soll
 if ($_GET["job"] == "change")
@@ -85,7 +85,7 @@ if(isset($_SESSION['photo_event_request']))
     {
         if(strpos($key, "pho_") == 0)
         {
-            $photo_event->setValue($key, $value);
+            $photo_event->setValue($key, stripslashes($value));
         }        
     }
     unset($_SESSION['photo_event_request']);

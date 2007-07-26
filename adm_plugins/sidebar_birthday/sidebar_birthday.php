@@ -72,39 +72,54 @@ else
     $plg_link_target = "_self";
 }
 
+// DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
+$g_db->select_db($g_adm_db);
 
-$sql    = "SELECT DISTINCT usr_id, usr_last_name, usr_first_name, usr_login_name, usr_birthday, usr_email
+$sql    = "SELECT DISTINCT usr_id, usr_login_name, 
+                           last_name.usd_value as last_name, first_name.usd_value as first_name, 
+                           birthday.usd_value as birthday, email.usd_value as email
              FROM ". TBL_USERS. " 
-             JOIN ". TBL_MEMBERS. "
+            RIGHT JOIN ". TBL_USER_DATA. " as birthday
+               ON birthday.usd_usr_id = usr_id
+              AND birthday.usd_usf_id = ". $g_current_user->getProperty("Geburtstag", "usf_id"). "
+              AND Month(birthday.usd_value)      = Month(SYSDATE())
+              AND DayOfMonth(birthday.usd_value) = DayOfMonth(SYSDATE())
+             LEFT JOIN ". TBL_USER_DATA. " as last_name
+               ON last_name.usd_usr_id = usr_id
+              AND last_name.usd_usf_id = ". $g_current_user->getProperty("Nachname", "usf_id"). "
+             LEFT JOIN ". TBL_USER_DATA. " as first_name
+               ON first_name.usd_usr_id = usr_id
+              AND first_name.usd_usf_id = ". $g_current_user->getProperty("Vorname", "usf_id"). "
+             LEFT JOIN ". TBL_USER_DATA. " as email
+               ON email.usd_usr_id = usr_id
+              AND email.usd_usf_id = ". $g_current_user->getProperty("E-Mail", "usf_id"). "
+             LEFT JOIN ". TBL_MEMBERS. "
                ON mem_usr_id = usr_id
               AND mem_valid  = 1
-             JOIN ". TBL_ROLES. "
+             LEFT JOIN ". TBL_ROLES. "
                ON mem_rol_id = rol_id
               AND rol_valid  = 1
-             JOIN ". TBL_CATEGORIES. "
+             LEFT JOIN ". TBL_CATEGORIES. "
                ON rol_cat_id = cat_id
               AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
-            WHERE Month(usr_birthday)      = Month(SYSDATE())
-              AND DayOfMonth(usr_birthday) = DayOfMonth(SYSDATE())
-              AND usr_valid = 1
-            ORDER BY usr_last_name, usr_first_name ";
-$result = mysql_query($sql, $g_adm_con);
-db_error($result,__FILE__,__LINE__);
+            WHERE usr_valid = 1
+            ORDER BY last_name, first_name ";
+$result = $g_db->query($sql);
 
-$anz_geb = mysql_num_rows($result);
+$anz_geb = $g_db->num_rows($result);
 
 if($anz_geb > 0)
 {
     if($plg_show_names_extern == 1 || $g_valid_login == 1)
     {
-        while($row = mysql_fetch_object($result))
+        while($row = $g_db->fetch_array($result))
         {
             // Alter berechnen
             // Hier muss man aufpassen, da viele PHP-Funkionen nicht mit einem Datum vor 1970 umgehen koennen !!!
             $act_date  = getDate(time());
-            $geb_day   = mysqldatetime("d", $row->usr_birthday);
-            $geb_month = mysqldatetime("m", $row->usr_birthday);
-            $geb_year  = mysqldatetime("y", $row->usr_birthday);
+            $geb_day   = mysqldatetime("d", $row['birthday']);
+            $geb_month = mysqldatetime("m", $row['birthday']);
+            $geb_year  = mysqldatetime("y", $row['birthday']);
             $birthday = false;
 
             if($act_date['mon'] >= $geb_month)
@@ -130,33 +145,33 @@ if($anz_geb > 0)
             // Anzeigeart des Namens beruecksichtigen
             if($plg_show_names == 2)        // Nachname, Vorname
             {
-                $show_name = "$row->usr_last_name, $row->usr_first_name";
+                $show_name = $row['last_name']. ", ". $row['first_name'];
             }
             elseif($plg_show_names == 3)    // Vorname
             {
-                $show_name = $row->usr_first_name;
+                $show_name = $row['first_name'];
             }
             elseif($plg_show_names == 4)    // Loginname
             {
-                $show_name = $row->usr_login_name;
+                $show_name = $row['usr_login_name'];
             }
             else                            // Vorname Nachname
             {
-                $show_name = "$row->usr_first_name $row->usr_last_name";
+                $show_name = $row['first_name']. " ". $row['last_name'];
             }
             
             // Namen mit Alter und Mail-Link anzeigen
-            if(strlen($row->usr_email) > 0
+            if(strlen($row['email']) > 0
             && ($g_valid_login || $plg_show_email_extern))
             {
                 if($g_valid_login)
                 {
-                    echo "<a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->usr_id\" 
+                    echo "<a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=". $row['usr_id']. "\" 
                          target=\"$plg_link_target\">$show_name</a>";
                 }
                 else
                 {
-                    echo "<a class=\"$plg_link_class\" href=\"mailto:$row->usr_email\" 
+                    echo "<a class=\"$plg_link_class\" href=\"mailto:". $row['email']. "\" 
                         target=\"$plg_link_target\">$show_name</a>";
                 }
             }

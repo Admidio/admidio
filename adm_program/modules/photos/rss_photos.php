@@ -147,7 +147,7 @@ while ($row = mysql_fetch_object($result))
     $description = $description. "<br /><br /><a href=\"$link\">Link auf ". $g_current_organization->getValue("org_homepage"). "</a>";
 
     //Angaben zum Anleger
-    $create_user = new User($g_adm_con, $row->pho_usr_id);
+    $create_user = new User($g_db, $row->pho_usr_id);
     $description = $description. "<br /><br /><i>Angelegt von ". strSpecialChars2Html($create_user->getValue("Vorname")). " ". strSpecialChars2Html($create_user->getValue("Nachname"));
     $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->pho_timestamp). "</i>";
 
@@ -156,7 +156,7 @@ while ($row = mysql_fetch_object($result))
        || $row->pho_usr_id_change != $row->pho_usr_id ) )
     {
         //Angaben zum Updater
-        $update_user = new User($g_adm_con, $row->pho_usr_id_change);
+        $update_user = new User($g_db, $row->pho_usr_id_change);
         $description = $description. "<br /><i>Letztes Update durch ". strSpecialChars2Html($update_user->getValue("Vorname")). " ". strSpecialChars2Html($create_user->getValue("Nachname"));
         $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->pho_last_change). "</i>";
     }

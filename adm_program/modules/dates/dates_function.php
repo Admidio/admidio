@@ -74,7 +74,7 @@ if(is_numeric($_GET["mode"]) == false
 }
 
 // Terminobjekt anlegen
-$date = new Date($g_adm_con);
+$date = new Date($g_db);
 
 if($req_dat_id > 0)
 {

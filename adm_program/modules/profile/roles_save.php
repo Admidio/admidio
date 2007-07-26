@@ -107,15 +107,13 @@ else
                   AND cat_org_id     = ". $g_current_organization->getValue("org_id"). "
                 ORDER BY cat_sequence, rol_name";
 }
-error_log($sql);
-$result_rolle = mysql_query($sql, $g_adm_con);
-db_error($result_rolle,__FILE__,__LINE__);
+$result_rolle = $g_db->query($sql);
 
 $count_assigned = 0;
 $parentRoles = array();
 
 // Ergebnisse durchlaufen und kontrollieren ob maximale Teilnehmerzahl ueberschritten wuerde
-while($row = mysql_fetch_object($result_rolle))
+while($row = $g_db->fetch_object($result_rolle))
 {
     if($row->rol_max_members > 0)
     {
@@ -123,14 +121,12 @@ while($row = mysql_fetch_object($result_rolle))
         $sql    =   "SELECT COUNT(*)
                        FROM ". TBL_MEMBERS. "
                       WHERE mem_rol_id = $row->rol_id
-                        AND mem_usr_id = {0}
+                        AND mem_usr_id = $req_usr_id
                         AND mem_leader = 0
                         AND mem_valid  = 1";
-        $sql    = prepareSQL($sql, array($req_usr_id));
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result,__FILE__,__LINE__);
+        $g_db->query($sql);
 
-        $row_usr = mysql_fetch_array($result);
+        $row_usr = $g_db->fetch_array();
 
         if($row_usr[0] == 0)
         {
@@ -140,10 +136,9 @@ while($row = mysql_fetch_object($result_rolle))
                           WHERE mem_rol_id = $row->rol_id
                             AND mem_leader = 0
                             AND mem_valid  = 1";
-            $result = mysql_query($sql, $g_adm_con);
-            db_error($result,__FILE__,__LINE__);
+            $g_db->query($sql);
 
-            $row_members = mysql_fetch_array($result);
+            $row_members = $g_db->fetch_array();
 
             //Bedingungen fuer Abbruch und Abbruch
             if($row_members[0] >= $row->rol_max_members
@@ -157,13 +152,13 @@ while($row = mysql_fetch_object($result_rolle))
 }
 
 //Dateizeiger auf erstes Element zurueck setzen
-if(mysql_num_rows($result_rolle)>0)
+if($g_db->num_rows($result_rolle)>0)
 {
-    mysql_data_seek($result_rolle, 0);
+    $g_db->data_seek($result_rolle, 0);
 }
 
 // Ergebnisse durchlaufen und Datenbankupdate durchfuehren
-while($row = mysql_fetch_object($result_rolle))
+while($row = $g_db->fetch_object($result_rolle))
 {
     // der Webmaster-Rolle duerfen nur Webmaster neue Mitglieder zuweisen
     if($row->rol_name != 'Webmaster' || $g_current_user->isWebmaster())
@@ -188,9 +183,7 @@ while($row = mysql_fetch_object($result_rolle))
             {
                 $sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin,mem_end, mem_valid, mem_leader)
                           VALUES ($row->rol_id, $req_usr_id, NOW(),NULL, 1, $role_leader) ";
-                error_log($sql);
-                $result = mysql_query($sql, $g_adm_con);
-                db_error($result,__FILE__,__LINE__);
+                $g_db->query($sql);
                 $count_assigned++;
             }
         }
@@ -206,9 +199,7 @@ while($row = mysql_fetch_object($result_rolle))
                                                        , mem_leader = $role_leader
                                 WHERE mem_rol_id = $row->rol_id
                                   AND mem_usr_id = $req_usr_id ";
-                    error_log($sql);
-                    $result = mysql_query($sql, $g_adm_con);
-                    db_error($result,__FILE__,__LINE__);
+                    $g_db->query($sql);
                     $count_assigned++;
                 }
             }
@@ -221,9 +212,7 @@ while($row = mysql_fetch_object($result_rolle))
                                                        , mem_leader = $role_leader
                                 WHERE mem_rol_id = $row->rol_id
                                   AND mem_usr_id = $req_usr_id ";
-                    error_log($sql);
-                    $result = mysql_query($sql, $g_adm_con);
-                    db_error($result,__FILE__,__LINE__);
+                    $g_db->query($sql);
                 }
             }
         }
@@ -231,7 +220,7 @@ while($row = mysql_fetch_object($result_rolle))
         // find the parent roles
         if($role_assign == 1)
         {
-            $tmpRoles = RoleDependency::getParentRoles($g_adm_con,$row->rol_id);
+            $tmpRoles = RoleDependency::getParentRoles($g_db,$row->rol_id);
             foreach($tmpRoles as $tmpRole)
             {
                 if(!in_array($tmpRole,$parentRoles))
@@ -259,15 +248,13 @@ if(count($parentRoles) > 0 )
     // alle einzufuegenden Rollen anhaengen
     foreach($parentRoles as $actRole)
     {
-        $sql .= " ($actRole, {0}, NOW(), NULL, 1, 0),";
+        $sql .= " ($actRole, $req_usr_id, NOW(), NULL, 1, 0),";
     }
 
     // Das letzte Komma wieder wegschneiden
     $sql = substr($sql,0,-1);
     
-    $sql    = prepareSQL($sql, array($req_usr_id));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
+    $g_db->query($sql);
 }
 
 if($req_new_user == 1 && $count_assigned == 0)

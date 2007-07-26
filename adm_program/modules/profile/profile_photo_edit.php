@@ -73,7 +73,7 @@ if($g_current_user->editProfile($req_usr_id) == false)
 }
 
 // User auslesen
-$user = new User($g_adm_con, $req_usr_id);
+$user = new User($g_db, $req_usr_id);
 
 if($job=="save")
 {

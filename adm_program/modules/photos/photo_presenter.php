@@ -58,11 +58,11 @@ $bild   = $_GET['bild'];
 if(isset($_SESSION['photo_event']) && $_SESSION['photo_event']->getValue("pho_id") == $pho_id)
 {
     $photo_event =& $_SESSION['photo_event'];
-    $photo_event->db_connection = $g_adm_con;
+    $photo_event->db =& $g_db;
 }
 else
 {
-    $photo_event = new PhotoEvent($g_adm_con, $pho_id);
+    $photo_event = new PhotoEvent($g_db, $pho_id);
     $_SESSION['photo_event'] =& $photo_event;
 }
 
@@ -87,7 +87,7 @@ $g_layout['title']    = "Fotogalerien";
 //wenn Popupmode normalen kopf unterdruecken
 if($g_preferences['photo_show_mode']==0)
 {                      
-	$g_layout['includes'] = false;
+    $g_layout['includes'] = false;
 }
 
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");
@@ -106,28 +106,28 @@ echo "
     echo "<br>Fotos von: ".$photo_event->getValue("pho_photographers")."<br><br>";
 
     //Vor und zurueck buttons
-	echo"<div class=\"pageNavigation\">";
-	    if($prev_image > 0)
-	    {
-	        echo"<span class=\"iconLink\">
-	            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$prev_image&pho_id=$pho_id\"><img 
-	                class=\"navigationArrow\" src=\"$g_root_path/adm_program/images/back.png\" alt=\"Vorheriges Bild\">
-	            </a>
-	            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$prev_image&pho_id=$pho_id\">Vorheriges Bild</a>
-	        </span>
-	        &nbsp;&nbsp;&nbsp;&nbsp;";
-	    }
-	    if($next_image <= $photo_event->getValue("pho_quantity"))
-	    {
-	        echo"<span class=\"iconLink\">
-	            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$next_image&pho_id=$pho_id\">N&auml;chstes Bild</a>
-	            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$next_image&pho_id=$pho_id\"><img 
-	                class=\"navigationArrow\" src=\"$g_root_path/adm_program/images/forward.png\" alt=\"N&auml;chstes Bild\">
-	            </a>
-	        </span>";
-	    }
-	    echo"<br><br>
-	</div>";
+    echo"<div class=\"pageNavigation\">";
+        if($prev_image > 0)
+        {
+            echo"<span class=\"iconLink\">
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$prev_image&pho_id=$pho_id\"><img 
+                    class=\"navigationArrow\" src=\"$g_root_path/adm_program/images/back.png\" alt=\"Vorheriges Bild\">
+                </a>
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$prev_image&pho_id=$pho_id\">Vorheriges Bild</a>
+            </span>
+            &nbsp;&nbsp;&nbsp;&nbsp;";
+        }
+        if($next_image <= $photo_event->getValue("pho_quantity"))
+        {
+            echo"<span class=\"iconLink\">
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$next_image&pho_id=$pho_id\">N&auml;chstes Bild</a>
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$next_image&pho_id=$pho_id\"><img 
+                    class=\"navigationArrow\" src=\"$g_root_path/adm_program/images/forward.png\" alt=\"N&auml;chstes Bild\">
+                </a>
+            </span>";
+        }
+        echo"<br><br>
+    </div>";
 
     //Ermittlung der Original Bildgroesse
     $bildgroesse = getimagesize("$ordner/$bild.jpg");
@@ -164,28 +164,28 @@ echo "
 
     //Fenster schliessen Button
     //wenn Popupmode
-	if($g_preferences['photo_show_mode']==0)
-	{   
-    	echo"<div class=\"editorLink\"><br />
+    if($g_preferences['photo_show_mode']==0)
+    {   
+        echo"<div class=\"editorLink\"><br />
         <span class=\"iconLink\">
             <a href=\"javascript:parent.window.close()\"><img
             class=\"iconLink\" src=\"$g_root_path/adm_program/images/door_in.png\" alt=\"Login\"></a>
             <a class=\"iconLink\" href=\"javascript:parent.window.close()\">Fenster schlie&szlig;en</a>
         </span>
-    	</div>";
-	}
-	
-	//Zurueck zur Uebersicht Button
+        </div>";
+    }
+    
+    //Zurueck zur Uebersicht Button
     //wenn Fenstermode
-	if($g_preferences['photo_show_mode']==2)
-	{   
-    	echo"<div class=\"editorLink\">
+    if($g_preferences['photo_show_mode']==2)
+    {   
+        echo"<div class=\"editorLink\">
         <span class=\"iconLink\">
             <img onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id'\" class=\"iconLink\" src=\"$g_root_path/adm_program/images/application_view_tile.png\" alt=\"Login\"></a>
             <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id\">zur &Uuml;bersicht</a>
         </span>
-    	</div>";
-	}
+        </div>";
+    }
 echo"</div>";
         
 require(SERVER_PATH. "/adm_program/layout/overall_footer.php");

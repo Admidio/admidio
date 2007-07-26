@@ -96,7 +96,7 @@ else
 }
 
 // User auslesen
-$user = new User($g_adm_con, $usr_id);
+$user = new User($g_db, $usr_id);
 
 if($new_user == 0)
 {
@@ -112,11 +112,10 @@ if($new_user == 0)
                       AND mem_rol_id  = rol_id
                       AND mem_valid   = 1
                       AND mem_usr_id  = $usr_id ";
-        $result      = mysql_query($sql, $g_adm_con);
-        db_error($result,__FILE__,__LINE__);
+        $g_db->query($sql);
         $b_other_orga = false;
 
-        if(mysql_num_rows($result) > 0)
+        if($g_db->num_rows() > 0)
         {
             // User, der woanders noch aktiv ist, darf in dieser Orga nicht bearbeitet werden
             // falls doch eine Registrierung vorliegt, dann darf Profil angezeigt werden
@@ -135,7 +134,7 @@ $_SESSION['navigation']->addUrl($g_current_url);
 
 if(isset($_SESSION['profile_request']))
 {
-    $form_values = $_SESSION['profile_request'];
+    $form_values = strStripSlashesDeep($_SESSION['profile_request']);
     
     foreach($user->db_user_fields as $key => $value)
     {
@@ -267,7 +266,7 @@ function getFieldCode($field, $user, $new_user)
             $maxlength = "50";
         }
         
-        $value = "<input type=\"text\" id=\"usf-". $field['usf_id']. "\" name=\"usf-". $field['usf_id']. "\" style=\"width: $width;\" maxlength=\"$maxlength\" $readonly value=\"". $field['usd_value']. "\" $readonly >";
+        $value = "<input type=\"text\" id=\"usf-". $field['usf_id']. "\" name=\"usf-". $field['usf_id']. "\" style=\"width: $width;\" maxlength=\"$maxlength\" $readonly value=\"". htmlspecialchars($field['usd_value']). "\" $readonly >";
     }
     
     // Icons der Messenger anzeigen
@@ -404,7 +403,7 @@ echo "
                     echo "<div style=\"margin-top: 5px;\">
                         <div style=\"text-align: left; width: 25%; float: left;\">Benutzername:&nbsp;</div>
                         <div style=\"text-align: left; margin-left: 27%;\">
-                            <input type=\"text\" name=\"usr_login_name\" style=\"width: 200px;\" maxlength=\"20\" value=\"". $user->getValue("usr_login_name"). "\" ";
+                            <input type=\"text\" name=\"usr_login_name\" style=\"width: 200px;\" maxlength=\"20\" value=\"". htmlspecialchars($user->getValue("usr_login_name")). "\" ";
                             if($g_current_user->isWebmaster() == false && $new_user == 0)
                             {
                                 echo " class=\"readonly\" readonly ";
@@ -516,7 +515,7 @@ echo "
             }
             else
             {
-                $user_last_change = new User($g_adm_con, $user->getValue("usr_usr_id_change"));
+                $user_last_change = new User($g_db, $user->getValue("usr_usr_id_change"));
             }
 
             echo "<div style=\"margin-top: 6px;\"><span style=\"font-size: 10pt\">

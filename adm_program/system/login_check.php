@@ -63,7 +63,7 @@ if ($user_found >= 1)
     $act_date = date("Y-m-d H:i:s", time());
     
     // Userobjekt anlegen
-    $g_current_user = new User($g_adm_con, $user_row['usr_id']);
+    $g_current_user = new User($g_db, $user_row['usr_id']);
     
     if($g_current_user->getValue("usr_number_invalid") >= 3)
     {

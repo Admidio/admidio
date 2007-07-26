@@ -67,7 +67,7 @@ if(!isset($_GET['headline']))
 $_SESSION['navigation']->addUrl($g_current_url);
 
 // Terminobjekt anlegen
-$date = new Date($g_adm_con);
+$date = new Date($g_db);
 
 if($req_dat_id > 0)
 {
@@ -89,7 +89,7 @@ if(isset($_SESSION['dates_request']))
     {
         if(strpos($key, "dat_") == 0)
         {
-            $date->setValue($key, $value);
+            $date->setValue($key, stripslashes($value));
         }        
     }
     $date_from = $_SESSION['dates_request']['date_from'];

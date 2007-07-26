@@ -76,7 +76,7 @@ if(isset($_GET['cat_id']))
 $_SESSION['navigation']->addUrl($g_current_url);
 
 // UserField-objekt anlegen
-$category = new Category($g_adm_con);
+$category = new Category($g_db);
 
 if($req_cat_id > 0)
 {
@@ -98,7 +98,7 @@ if(isset($_SESSION['categories_request']))
     {
         if(strpos($key, "cat_") == 0)
         {
-            $category->setValue($key, $value);
+            $category->setValue($key, stripslashes($value));
         }        
     }
     unset($_SESSION['categories_request']);

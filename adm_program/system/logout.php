@@ -41,8 +41,8 @@ $message_code = "logout";
 // Wenn die Session des Forums aktiv ist, diese ebenfalls loeschen.
 if($g_forum_integriert && $g_forum->session_valid)
 {
-  	$g_forum->userLogoff();
-	$message_code = "logoutforum";
+    $g_forum->userLogoff();
+    $message_code = "logout_forum";
 }
 
 // Hinweis auf erfolgreiches Ausloggen und weiter zur Startseite

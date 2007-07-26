@@ -75,7 +75,7 @@ if (isset($_GET["usr_id"]))
     }
 
     //usr_id wurde uebergeben, dann Kontaktdaten des Users aus der DB fischen
-    $user = new User($g_adm_con, $_GET['usr_id']);
+    $user = new User($g_db, $_GET['usr_id']);
 
     // darf auf die User-Id zugegriffen werden    
     if((  $g_current_user->editUser() == false
@@ -199,7 +199,7 @@ if (strpos($_SESSION['navigation']->getUrl(),'mail_send.php') > 0 && isset($_SES
 {
     // Das Formular wurde also schon einmal ausgefüllt,
     // da der User hier wieder gelandet ist nach der Mailversand-Seite
-    $form_values = $_SESSION['mail_request'];
+    $form_values = strStripSlashesDeep($_SESSION['mail_request']);
     unset($_SESSION['mail_request']);
 
     $_SESSION['navigation']->deleteLastUrl();

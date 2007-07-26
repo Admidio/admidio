@@ -65,7 +65,7 @@ if(isset($_GET["rol_id"]))
 }
 
 // Rollenobjekt anlegen
-$role = new Role($g_adm_con);
+$role = new Role($g_db);
 
 if($req_rol_id > 0)
 {
@@ -327,10 +327,10 @@ elseif($_GET["mode"] == 2)
 
         $sentChildRoles = $_POST['ChildRoles'];
 
-        $roleDep = new RoleDependency($g_adm_con);
+        $roleDep = new RoleDependency($g_db);
 
         // holt eine Liste der ausgewählten Rolen
-        $DBChildRoles = RoleDependency::getChildRoles($g_adm_con,$req_rol_id);
+        $DBChildRoles = RoleDependency::getChildRoles($g_db,$req_rol_id);
 
         //entferne alle Rollen die nicht mehr ausgewählt sind
         if($DBChildRoles != -1)

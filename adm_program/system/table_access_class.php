@@ -11,7 +11,7 @@
  *
  * Das Objekt wird erzeugt durch Aufruf des Konstruktors und der Uebergabe der
  * aktuellen Datenbankverbindung:
- * $orga = new TblOrganization($g_adm_con);
+ * $orga = new TblOrganization($g_db);
  *
  * Mit der Funktion getOrganization($shortname) kann die gewuenschte Organisation
  * ausgelesen werden.
@@ -46,59 +46,57 @@
 
 class TableAccess
 {
-    var $db_connection;
-   	var $table_name;
-   	var $column_praefix;
-   	var $key_name;
+    var $table_name;
+    var $column_praefix;
+    var $key_name;
+    var $db;
     
     var $db_fields_changed;         // Merker ob an den db_fields Daten was geaendert wurde
     var $db_fields = array();       // Array ueber alle Felder der Rollen-Tabelle der entsprechenden Rolle
     
     // liest den Datensatz von $key_value ein
-	// key_value : Schluesselwert von dem der Datensatz gelesen werden soll
-	// sql_where_condition : optional eine individuelle WHERE-Bedinugung fuer das SQL-Statement
-	// sql_additioinal_tables : mit Komma getrennte Auflistung weiterer Tabelle, die mit
-	//                          eingelesen werden soll, dabei muessen die Verknuepfungen
-	//                          in sql_where_condition stehen
+    // key_value : Schluesselwert von dem der Datensatz gelesen werden soll
+    // sql_where_condition : optional eine individuelle WHERE-Bedinugung fuer das SQL-Statement
+    // sql_additioinal_tables : mit Komma getrennte Auflistung weiterer Tabelle, die mit
+    //                          eingelesen werden soll, dabei muessen die Verknuepfungen
+    //                          in sql_where_condition stehen
     function readData($key_value, $sql_where_condition = "", $sql_additional_tables = "")
     {
-    	// erst einmal alle Felder in das Array schreiben, falls kein Satz gefunden wird
-    	$this->clear();
-    	
-    	if(strlen($sql_where_condition) == 0 && is_numeric($key_value))
-    	{
-    		// es wurde keine Bedingung uebergeben, dann den Satz mit der Key-Id lesen
-			$sql_where_condition = " $this->key_name = $key_value ";
-    	}
-    	if(strlen($sql_additional_tables) > 0)
-    	{
-    		$sql_additional_tables = ", $sql_additional_tables";
-    	}
-    	
-    	if(strlen($sql_where_condition) > 0)
-    	{
-	        $sql = "SELECT * FROM $this->table_name $sql_additional_tables
-	                 WHERE $sql_where_condition ";
-	        error_log($sql);
-	        $result = mysql_query($sql, $this->db_connection);
-	        db_error($result,__FILE__,__LINE__);
-	
-	        if($row = mysql_fetch_array($result, MYSQL_ASSOC))
-	        {
-	            // Daten in das Klassenarray schieben
-	            foreach($row as $key => $value)
-	            {
-	                if(is_null($value))
-	                {
-	                    $this->db_fields[$key] = "";
-	                }
-	                else
-	                {
-	                    $this->db_fields[$key] = $value;
-	                }
-	            }
-	        }
-    	}     	
+        // erst einmal alle Felder in das Array schreiben, falls kein Satz gefunden wird
+        $this->clear();
+        
+        if(strlen($sql_where_condition) == 0 && is_numeric($key_value))
+        {
+            // es wurde keine Bedingung uebergeben, dann den Satz mit der Key-Id lesen
+            $sql_where_condition = " $this->key_name = $key_value ";
+        }
+        if(strlen($sql_additional_tables) > 0)
+        {
+            $sql_additional_tables = ", $sql_additional_tables";
+        }
+        
+        if(strlen($sql_where_condition) > 0)
+        {
+            $sql = "SELECT * FROM $this->table_name $sql_additional_tables
+                     WHERE $sql_where_condition ";
+            $result = $this->db->query($sql);
+    
+            if($row = $this->db->fetch_array($result, MYSQL_ASSOC))
+            {
+                // Daten in das Klassenarray schieben
+                foreach($row as $key => $value)
+                {
+                    if(is_null($value))
+                    {
+                        $this->db_fields[$key] = "";
+                    }
+                    else
+                    {
+                        $this->db_fields[$key] = $value;
+                    }
+                }
+            }
+        }       
     }
     
     // alle Klassenvariablen wieder zuruecksetzen
@@ -106,12 +104,12 @@ class TableAccess
    {
         $this->db_fields_changed = false;
         
-      	// Zusaetzliche Daten der abgeleiteten Klasse loeschen
-		if(method_exists($this, "clearAdditionalData"))
-		{
-       		$this->clearAdditionalData();
-		}
-				        
+        // Zusaetzliche Daten der abgeleiteten Klasse loeschen
+        if(method_exists($this, "clearAdditionalData"))
+        {
+            $this->clearAdditionalData();
+        }
+                        
         if(count($this->db_fields) > 0)
         {
             foreach($this->db_fields as $key => $value)
@@ -124,11 +122,9 @@ class TableAccess
             // alle Spalten der Tabelle ins Array einlesen 
             // und auf leer setzen
             $sql = "SHOW COLUMNS FROM $this->table_name ";
-            error_log($sql);
-            $result = mysql_query($sql, $this->db_connection);
-            db_error($result,__FILE__,__LINE__);
-            
-            while ($row = mysql_fetch_array($result))
+            $this->db->query($sql);
+
+            while ($row = $this->db->fetch_array())
             {
                 $this->db_fields[$row['Field']] = "";
             }
@@ -154,7 +150,7 @@ class TableAccess
         // Plausibilitaets-Check des Wertes vornehmen
         if(strlen($field_value) > 0)
         {
-        	$this->checkValue($field_name, &$field_value);
+            $this->checkValue($field_name, &$field_value);
         }
 
         if(isset($this->db_fields[$field_name])
@@ -175,18 +171,18 @@ class TableAccess
     // je nach Bedarf wird ein Insert oder Update gemacht
     function save()
     {
-    	// nur durchfuehren, wenn das Schluesselfeld vernuenftig belegt ist
+        // nur durchfuehren, wenn das Schluesselfeld vernuenftig belegt ist
         if(is_numeric($this->db_fields[$this->key_name]) 
         || strlen($this->db_fields[$this->key_name]) == 0)
         {
             if($this->db_fields_changed || strlen($this->db_fields[$this->key_name]) == 0)
             {
-            	// Defaultdaten vorbelegen
-				if(method_exists($this, "initializeFields"))
-				{
-            		$this->initializeFields();
-				}
-            	
+                // Defaultdaten vorbelegen
+                if(method_exists($this, "initializeFields"))
+                {
+                    $this->initializeFields();
+                }
+                
                 // SQL-Update-Statement fuer User-Tabelle zusammenbasteln
                 $item_connection = "";                
                 $sql_field_list  = "";
@@ -243,17 +239,13 @@ class TableAccess
                 {
                     $sql = "UPDATE $this->table_name SET $sql_field_list 
                              WHERE $this->key_name = ". $this->db_fields[$this->key_name];
-                    error_log($sql);
-                    $result = mysql_query($sql, $this->db_connection);
-                    db_error($result,__FILE__,__LINE__);
+                    $this->db->query($sql);
                 }
                 else
                 {
                     $sql = "INSERT INTO $this->table_name ($sql_field_list) VALUES ($sql_value_list) ";
-                    error_log($sql);
-                    $result = mysql_query($sql, $this->db_connection);
-                    db_error($result,__FILE__,__LINE__);
-                    $this->db_fields[$this->key_name] = mysql_insert_id($this->db_connection);
+                    $this->db->query($sql);
+                    $this->db_fields[$this->key_name] = $this->db->insert_id();
                 }
             }
 
@@ -266,24 +258,22 @@ class TableAccess
     // aktuelle Datensatz loeschen und ggf. noch die Referenzen
     function delete()
     {
-    	$ret_code = true;
-    	
+        $ret_code = true;
+        
         // erst einmal die Referenzen verarbeiten
-		if(method_exists($this, "deleteReferences"))
-		{
-      		$ret_code = $this->deleteReferences();
-		}
-				    	
-		if($ret_code == true)
-		{
-	        $sql    = "DELETE FROM $this->table_name 
-	                    WHERE $this->key_name = ". $this->db_fields[$this->key_name];
-	        error_log($sql);
-	        $result = mysql_query($sql, $this->db_connection);
-	        db_error($result,__FILE__,__LINE__);
-	
-	        $this->clear();
-		}
+        if(method_exists($this, "deleteReferences"))
+        {
+            $ret_code = $this->deleteReferences();
+        }
+                        
+        if($ret_code == true)
+        {
+            $sql    = "DELETE FROM $this->table_name 
+                        WHERE $this->key_name = ". $this->db_fields[$this->key_name];
+            $this->db->query($sql);
+    
+            $this->clear();
+        }
         return $ret_code;
     }    
 }

@@ -132,7 +132,7 @@ $arr_usf_types = array();    // speichert zu jeder usf_id den usf_type
 $arr_usf_names = array();    // speichert zu jeder usf_id den usf_name
 
 // Rollenobjekt erzeugen
-$role = new Role($g_adm_con, $req_rol_id);
+$role = new Role($g_db, $req_rol_id);
 
 // Nummer der Spalte, ab der die Anzeigefelder anfangen (beginnend mit 0)
 $start_column = 2;

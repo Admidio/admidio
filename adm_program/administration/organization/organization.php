@@ -44,15 +44,15 @@ $_SESSION['navigation']->addUrl($g_current_url);
 
 if(isset($_SESSION['organization_request']))
 {
-    $form_values = $_SESSION['organization_request'];
+    $form_values = strStripSlashesDeep($_SESSION['organization_request']);
     unset($_SESSION['organization_request']);
 }
 else
 {
-	foreach($g_current_organization->db_fields as $key => $value)
-	{
-		$form_values[$key] = $value;
-	}
+    foreach($g_current_organization->db_fields as $key => $value)
+    {
+        $form_values[$key] = $value;
+    }
 
     // alle Systemeinstellungen in das form-Array schreiben
     foreach($g_preferences as $key => $value)
@@ -165,7 +165,7 @@ echo "
 
                 // Pruefung ob dieser Orga bereits andere Orgas untergeordnet sind
                 $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. " 
-						 WHERE org_org_id_parent = ". $g_current_organization->getValue("org_id");
+                         WHERE org_org_id_parent = ". $g_current_organization->getValue("org_id");
                 $result = mysql_query($sql, $g_adm_con);
                 db_error($result,__FILE__,__LINE__);
 
@@ -651,9 +651,9 @@ echo "
                 </div>
                 <div class=\"smallText\">
                     Wie sollen die Bilder in der Gro&szlig;enansicht angezeigt werden?<br/>
-					1) in einem Popupfenster<br/>
-					2) mit Lightbox (der rest der Seite wird ausgegraut)<br/>
-					3) im gleichen Fenster					
+                    1) in einem Popupfenster<br/>
+                    2) mit Lightbox (der rest der Seite wird ausgegraut)<br/>
+                    3) im gleichen Fenster                  
                 </div>
 
             </div>

@@ -330,7 +330,7 @@ else
                 }
             echo "</div>
             <div class=\"smallFontSize\" style=\"margin: 8px 4px 4px 4px;\">";
-                $user_create = new User($g_adm_con, $row->dat_usr_id);
+                $user_create = new User($g_db, $row->dat_usr_id);
                 echo "Angelegt von ". $user_create->getValue("Vorname"). " ". $user_create->getValue("Nachname").
                 " am ". mysqldatetime("d.m.y h:i", $row->dat_timestamp);
 
@@ -339,7 +339,7 @@ else
                 && (  strtotime($row->dat_last_change) > (strtotime($row->dat_timestamp) + 900)
                    || $row->dat_usr_id_change != $row->dat_usr_id ) )
                 {
-                    $user_change = new User($g_adm_con, $row->dat_usr_id_change);
+                    $user_change = new User($g_db, $row->dat_usr_id_change);
                     echo "<br>Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname").
                     " am ". mysqldatetime("d.m.y h:i", $row->dat_last_change);
                 }

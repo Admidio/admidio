@@ -85,7 +85,7 @@ if($_GET["mode"] != 1)
     $other_orga = mysql_num_rows($result);
 
     // User-Objekt anlegen
-    $user = new User($g_adm_con, $_GET['user_id']);
+    $user = new User($g_db, $_GET['user_id']);
 }
 
 if($_GET["mode"] == 1)

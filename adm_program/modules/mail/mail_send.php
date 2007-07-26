@@ -72,7 +72,7 @@ $_SESSION['mail_request'] = $_REQUEST;
 if (array_key_exists("usr_id", $_GET))
 {
     //usr_id wurde uebergeben, dann Kontaktdaten des Users aus der DB fischen
-    $user = new User($g_adm_con, $_GET['usr_id']);
+    $user = new User($g_db, $_GET['usr_id']);
 
     // darf auf die User-Id zugegriffen werden    
     if((  $g_current_user->editUser() == false
@@ -178,7 +178,7 @@ if (array_key_exists("rol_id", $_POST))
         $g_message->show("mail_rolle");
     }
     
-    $role = new Role($g_adm_con, $_POST['rol_id']);
+    $role = new Role($g_db, $_POST['rol_id']);
 
     if ($g_valid_login && $role->getValue("rol_mail_login") == false)
     {

@@ -39,9 +39,14 @@ require_once(PLUGIN_PATH. "/sidebar_online/config.php");
  
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
 // falls nicht, hier noch mal die Default-Werte setzen
-if(isset($onlinezeit) == false || is_numeric($onlinezeit) == false)
+if(isset($plg_time_online) == false || is_numeric($plg_time_online) == false)
 {
-    $onlinezeit = 10;
+    $plg_time_online = 10;
+}
+
+if(isset($plg_show_visitors) == false || is_numeric($plg_show_visitors) == false)
+{
+    $plg_show_visitors = 1;
 }
 
 if(isset($plg_show_users_side_by_side) == false || is_numeric($plg_show_users_side_by_side) == false)
@@ -68,45 +73,65 @@ else
 }
 
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
-mysql_select_db($g_adm_db, $g_adm_con );
+$g_db->select_db($g_adm_db);
 
 // Aktuelle Zeit setzten
 $act_date = date("Y.m.d H:i:s", time());
 // Referenzzeit setzen
-$ref_date = date("Y.m.d H:i:s", time() - 60 * $onlinezeit);
+$ref_date = date("Y.m.d H:i:s", time() - 60 * $plg_time_online);
 
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
-mysql_select_db($g_adm_db, $g_adm_con );
+$g_db->select_db($g_adm_db);
 
 // User IDs alles Sessons finden, die in genannter aktueller und referenz Zeit sind
-$sql = "SELECT ses_usr_id FROM ". TBL_SESSIONS. " WHERE ses_timestamp BETWEEN '".$ref_date."' AND '".$act_date."'";
-$result = mysql_query($sql, $g_adm_con);
-db_error($result,__FILE__,__LINE__);
-
-if(mysql_num_rows($result) > 0)
+$sql = "SELECT ses_usr_id, usr_login_name
+          FROM ". TBL_SESSIONS. " 
+          LEFT JOIN ". TBL_USERS. "
+            ON ses_usr_id = usr_id
+         WHERE ses_timestamp BETWEEN '".$ref_date."' AND '".$act_date."' ";
+if($plg_show_visitors == 0)
 {
-    echo "Seit ".$onlinezeit." Minuten online:<br>";
+    $sql = $sql. " AND ses_usr_id IS NOT NULL ";
+}
+$sql = $sql. " ORDER BY ses_usr_id ";
+$result = $g_db->query($sql);
+
+if($g_db->num_rows($result) > 0)
+{
+    echo "Seit ".$plg_time_online." Minuten online:<br>";
+    $usr_id_merker  = 0;
+    $count_visitors = 0;
     
-    while($row = mysql_fetch_object($result))
+    while($row = $g_db->fetch_object($result))
     {
-        // User_login_name finden und ausgeben
-        $sql = "SELECT usr_login_name FROM ". TBL_USERS. " WHERE usr_id LIKE '".$row->ses_usr_id."'";
-    
-        $on_result = mysql_query($sql, $g_adm_con);
-        db_error($on_result,__FILE__,__LINE__);
-        
-        $useronline = mysql_fetch_array($on_result);
-        echo "<b><a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->ses_usr_id\" target=\"$plg_link_target\">".$useronline['usr_login_name']."</a></b>";
-        
-        // User neben-/untereinander anzeigen
-        if($plg_show_users_side_by_side)
+        if($row->ses_usr_id > 0)
         {
-            echo ", ";
+            if($row->ses_usr_id != $usr_id_merker)
+            {
+                echo "<b><a class=\"$plg_link_class\"  target=\"$plg_link_target\"
+                    href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->ses_usr_id\">$row->usr_login_name</a></b>";
+
+                // User neben-/untereinander anzeigen
+                if($plg_show_users_side_by_side)
+                {
+                    echo ", ";
+                }
+                else
+                {
+                    echo "<br>";
+                }
+                $usr_id_merker = $row->ses_usr_id;
+            }
         }
         else
         {
-            echo "<br>";
+            $count_visitors++;
         }
+    }
+    
+    if($plg_show_visitors && $count_visitors > 0)
+    {
+        echo $count_visitors. " Besucher";
     }
 }
 else

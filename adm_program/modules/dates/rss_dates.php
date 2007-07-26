@@ -147,7 +147,7 @@ while ($row = mysql_fetch_object($result))
     $description = $description. "<br /><br /><a href=\"$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=$row->dat_id&mode=4\">Termin in meinen Kalender &uuml;bernehmen</a>";
     
     // Den Autor des Termins ermitteln und ausgeben
-    $user = new User($g_adm_con, $row->dat_usr_id);
+    $user = new User($g_db, $row->dat_usr_id);
     $description = $description. "<br /><br /><i>Angelegt von ". strSpecialChars2Html($user->getValue("Vorname")). " ". strSpecialChars2Html($user->getValue("Nachname"));
     $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->dat_timestamp). "</i>";
 
@@ -156,7 +156,7 @@ while ($row = mysql_fetch_object($result))
     && (  strtotime($row->dat_last_change) > (strtotime($row->dat_timestamp) + 900)
        || $row->dat_usr_id_change != $row->dat_usr_id ) )
     {
-        $user_change = new User($g_adm_con, $row->dat_usr_id_change);
+        $user_change = new User($g_db, $row->dat_usr_id_change);
         $description = $description. "<br>Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname");
         $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->dat_last_change);
     }

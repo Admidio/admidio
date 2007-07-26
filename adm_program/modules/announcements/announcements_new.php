@@ -68,7 +68,7 @@ if(isset($_GET['headline']))
 $_SESSION['navigation']->addUrl($g_current_url);
 
 // Ankuendigungsobjekt anlegen
-$announcement = new Announcement($g_adm_con);
+$announcement = new Announcement($g_db);
 
 if($req_ann_id > 0)
 {
@@ -82,18 +82,18 @@ if($req_ann_id > 0)
     }
 }
 
-if(isset($_SESSION['announcement_request']))
+if(isset($_SESSION['announcements_request']))
 {
     // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
     // nun die vorher eingegebenen Inhalte auslesen
-    foreach($_SESSION['announcement_request'] as $key => $value)
+    foreach($_SESSION['announcements_request'] as $key => $value)
     {
         if(strpos($key, "ann_") == 0)
         {
-            $announcement->setValue($key, $value);
+            $announcement->setValue($key, stripslashes($value));
         }        
     }
-    unset($_SESSION['announcement_request']);
+    unset($_SESSION['announcements_request']);
 }
 
 // Html-Kopf ausgeben

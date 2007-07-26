@@ -210,6 +210,7 @@ function isGroupLeader($rol_id = 0)
 }
 
 // diese Funktion gibt eine Seitennavigation in Anhaengigkeit der Anzahl Seiten zurueck
+// Teile dieser Funktion sind von generatePagination aus phpBB2
 // Beispiel:
 //              Seite: < Vorherige 1  2  3 ... 9  10  11 Naechste >
 // Uebergaben:
@@ -238,7 +239,7 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
 
         for($i = 1; $i < $init_page_max + 1; $i++)
         {
-            $page_string .= ( $i == $on_page ) ? '<b>' . $i . '</b>' : '<a class="iconLink" href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
+            $page_string .= ( $i == $on_page ) ? '<b class="iconLink">' . $i . '</b>' : '<a class="iconLink" href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
             if ( $i <  $init_page_max )
             {
                 $page_string .= "&nbsp;&nbsp;";
@@ -256,7 +257,7 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
 
                 for($i = $init_page_min - 1; $i < $init_page_max + 2; $i++)
                 {
-                    $page_string .= ($i == $on_page) ? '<b>' . $i . '</b>' : '<a class="iconLink" href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
+                    $page_string .= ($i == $on_page) ? '<b class="iconLink">' . $i . '</b>' : '<a class="iconLink" href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
                     if ( $i <  $init_page_max + 1 )
                     {
                         $page_string .= '&nbsp;&nbsp;';
@@ -272,7 +273,7 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
 
             for($i = $total_pages - 2; $i < $total_pages + 1; $i++)
             {
-                $page_string .= ( $i == $on_page ) ? '<b>' . $i . '</b>'  : '<a class="iconLink" href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
+                $page_string .= ( $i == $on_page ) ? '<b class="iconLink">' . $i . '</b>'  : '<a class="iconLink" href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
                 if( $i <  $total_pages )
                 {
                     $page_string .= "&nbsp;&nbsp;";
@@ -284,7 +285,7 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
     {
         for($i = 1; $i < $total_pages + 1; $i++)
         {
-            $page_string .= ( $i == $on_page ) ? '<b>' . $i . '</b>' : '<a class="iconLink" href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
+            $page_string .= ( $i == $on_page ) ? '<b class="iconLink">' . $i . '</b>' : '<a class="iconLink" href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
             if ( $i <  $total_pages )
             {
                 $page_string .= '&nbsp;&nbsp;';
@@ -378,6 +379,68 @@ function generateRoleSelectBox($default_role = 0, $field_id = "")
             $box_string .= "</optgroup>
         </select>";
     return $box_string;
+}
+
+// Teile dieser Funktion sind von get_backtrace aus phpBB3
+// Return a nicely formatted backtrace (parts from the php manual by diz at ysagoon dot com)
+
+function getBacktrace()
+{
+    //global $phpbb_root_path;
+
+    $output = '<div style="font-family: monospace;">';
+    $backtrace = debug_backtrace();
+    //$path = phpbb_realpath($phpbb_root_path);
+    $path = SERVER_PATH;
+
+    foreach ($backtrace as $number => $trace)
+    {
+        // We skip the first one, because it only shows this file/function
+        if ($number == 0)
+        {
+            continue;
+        }
+
+        // Strip the current directory from path
+        if (empty($trace['file']))
+        {
+            $trace['file'] = '';
+        }
+        else
+        {
+            $trace['file'] = str_replace(array($path, '\\'), array('', '/'), $trace['file']);
+            $trace['file'] = substr($trace['file'], 1);
+        }
+        $args = array();
+
+        // If include/require/include_once is not called, do not show arguments - they may contain sensible information
+        if (!in_array($trace['function'], array('include', 'require', 'include_once')))
+        {
+            unset($trace['args']);
+        }
+        else
+        {
+            // Path...
+            if (!empty($trace['args'][0]))
+            {
+                $argument = htmlspecialchars($trace['args'][0]);
+                $argument = str_replace(array($path, '\\'), array('', '/'), $argument);
+                $argument = substr($argument, 1);
+                $args[] = "'{$argument}'";
+            }
+        }
+
+        $trace['class'] = (!isset($trace['class'])) ? '' : $trace['class'];
+        $trace['type'] = (!isset($trace['type'])) ? '' : $trace['type'];
+
+        $output .= '<br />';
+        $output .= '<b>FILE:</b> ' . htmlspecialchars($trace['file']) . '<br />';
+        $output .= '<b>LINE:</b> ' . ((!empty($trace['line'])) ? $trace['line'] : '') . '<br />';
+
+        $output .= '<b>CALL:</b> ' . htmlspecialchars($trace['class'] . $trace['type'] . $trace['function']) . '(' . ((sizeof($args)) ? implode(', ', $args) : '') . ')<br />';
+    }
+    $output .= '</div>';
+    return $output;
 }
 
 ?>

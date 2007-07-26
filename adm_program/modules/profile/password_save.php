@@ -54,68 +54,80 @@ if(isset($_GET['user_id']))
 $err_code   = "";
 $count_user = 0;
 
-$user = new User($g_adm_con, $req_user_id);
+$user = new User($g_db, $req_user_id);
 
 if( ($_POST["old_password"] != "" || $g_current_user->isWebmaster() )
 && $_POST["new_password"] != ""
 && $_POST["new_password2"] != "")
 {
-    if ($_POST["new_password"] == $_POST["new_password2"])
+    if(strlen($_POST["new_password"]) > 5)
     {
-        // pruefen, ob altes Passwort korrekt eingegeben wurde
-        $old_password_crypt = md5($_POST["old_password"]);
-
-        // Webmaster duerfen Passwort so aendern
-        if($user->getValue("usr_password") == $old_password_crypt || $g_current_user->isWebmaster())
+        if ($_POST["new_password"] == $_POST["new_password2"])
         {
-            $user->setValue("usr_password", md5($_POST["new_password"]));
-            $user->save();
+            // pruefen, ob altes Passwort korrekt eingegeben wurde
+            $old_password_crypt = md5($_POST["old_password"]);
 
-            // Paralell im Forum aendern, wenn g_forum gesetzt ist
-            if($g_forum_integriert)
+            // Webmaster duerfen Passwort so aendern
+            if($user->getValue("usr_password") == $old_password_crypt || $g_current_user->isWebmaster())
             {
-                $g_forum->userUpdate($user->getValue("usr_login_name"), 1, $user->getValue("usr_password"), $user->getValue("E-Mail"));
+                $user->setValue("usr_password", md5($_POST["new_password"]));
+                $user->save();
+
+                // Paralell im Forum aendern, wenn g_forum gesetzt ist
+                if($g_forum_integriert)
+                {
+                    $g_forum->userUpdate($user->getValue("usr_login_name"), 1, $user->getValue("usr_password"), $user->getValue("E-Mail"));
+                }
+
+                // wenn das PW des eingeloggten Users geaendert wird, dann Session-Variablen aktualisieren
+                if($user->getValue("usr_id") == $g_current_user->getValue("usr_id"))
+                {
+                    $g_current_user->setValue("usr_password", $user->getValue("usr_password"));
+                }
             }
-
-            // wenn das PW des eingeloggten Users geaendert wird, dann Session-Variablen aktualisieren
-            if($user->getValue("usr_id") == $g_current_user->getValue("usr_id"))
+            else
             {
-                $g_current_user->setValue("usr_password", $user->getValue("usr_password"));
+                $err_code = "old_password_wrong";
             }
         }
         else
         {
-            $err_code = "altes_passwort";
+            $err_code = "passwords_not_equal";
         }
     }
     else
     {
-        $err_code = "passwort";
+        $err_code = "password_length";
     }
 }
 else
 {
-    $err_code = "felder";
+    $err_code = "fields";
 }
 
 // Html-Kopf ausgeben
-$g_layout['title'] = "Passwort &auml;ndern";
+$g_layout['title']    = "Passwort &auml;ndern";
+$g_layout['includes'] = false;
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 echo "<br />
 <div class=\"groupBox\" align=\"left\" style=\"padding: 10px\">";
     switch ($err_code)
     {
-        case "felder":
+        case "fields":
             echo "Es sind nicht alle Felder aufgef&uuml;llt worden.";
             break;
 
-        case "passwort":
+        case "passwords_not_equal":
             echo "Das Passwort stimmt nicht mit der Wiederholung &uuml;berein.";
             break;
 
-        case "altes_passwort":
+        case "old_password_wrong":
             echo "Das alte Passwort ist falsch.";
+            break;
+            
+        case "password_length":
+            echo "Das neue Passwort muss aus mindestens 6 Zeichen bestehen.";
             break;
 
         default:
