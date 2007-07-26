@@ -11,7 +11,7 @@
  *
  * Das Objekt wird erzeugt durch Aufruf des Konstruktors und der Uebergabe der
  * aktuellen Datenbankverbindung:
- * $user = new User($g_adm_con);
+ * $user = new User($g_db);
  *
  * Mit der Funktion getUser($user_id) kann nun der gewuenschte User ausgelesen
  * werden.
@@ -64,9 +64,9 @@ class User
     var $roles_rights   = array();  // Array ueber alle Rollenrechte mit dem entsprechenden Status des Users
 
     // Konstruktor
-    function User($connection, $user_id = 0)
+    function User(&$db, $user_id = 0)
     {
-        $this->db_connection = $connection;
+        $this->db =& $db;
         $this->getUser($user_id);
     }
 
@@ -80,10 +80,9 @@ class User
             if($user_id > 0)
             {
                 $sql = "SELECT * FROM ". TBL_USERS. " WHERE usr_id = $user_id";
-                $result = mysql_query($sql, $this->db_connection);
-                db_error($result,__FILE__,__LINE__);            
+                $result = $this->db->query($sql);
 
-                if($row = mysql_fetch_array($result, MYSQL_ASSOC))
+                if($row = $this->db->fetch_array($result, MYSQL_ASSOC))
                 {                
                     // Daten in das Klassenarray schieben
                     foreach($row as $key => $value)
@@ -134,17 +133,15 @@ class User
                    AND (  cat_org_id IS NULL
                        OR cat_org_id  = ". $g_current_organization->getValue("org_id"). " )
                  ORDER BY cat_sequence, usf_sequence";
-        error_log($sql);
-        $result_usf = mysql_query($sql, $this->db_connection);
-        db_error($result_usf,__FILE__,__LINE__);        
+        $result_usf = $this->db->query($sql);
 
-        while($row_usf = mysql_fetch_array($result_usf))
+        while($row_usf = $this->db->fetch_array($result_usf))
         {
             // ein mehrdimensionales Array aufbauen, welche fuer jedes usf-Feld alle 
             // Daten des Sql-Statements beinhaltet
-            for($i = 0; $i < mysql_num_fields($result_usf); $i++)
+            for($i = 0; $i < $this->db->num_fields($result_usf); $i++)
             {
-                $this->db_user_fields[$row_usf['usf_name']][mysql_field_name($result_usf, $i)] = $row_usf[$i];
+                $this->db_user_fields[$row_usf['usf_name']][$this->db->field_name($result_usf, $i)] = $row_usf[$i];
             }
             // Flag, ob der Inhalt geaendert wurde, um das Update effektiver zu gestalten
             $this->db_user_fields[$row_usf['usf_name']]['changed'] = false;
@@ -185,10 +182,9 @@ class User
             // alle Spalten der Tabelle adm_roles ins Array einlesen 
             // und auf null setzen
             $sql = "SHOW COLUMNS FROM ". TBL_USERS;
-            $result = mysql_query($sql, $this->db_connection);
-            db_error($result,__FILE__,__LINE__);
+            $result = $this->db->query($sql);
             
-            while ($row = mysql_fetch_array($result))
+            while ($row = $this->db->fetch_array($result))
             {
                 if($row['Field'] == "usr_valid")
                 {
@@ -244,8 +240,6 @@ class User
     {        
         $field_name  = strStripTags($field_name);
         $field_value = strStripTags($field_value);
-        $field_name  = stripSlashes($field_name);
-        $field_value = stripSlashes($field_value);
         
         if(strlen($field_value) > 0)
         {
@@ -341,7 +335,7 @@ class User
         {
             if($set_change_date)
             {
-            	global $g_current_user;
+                global $g_current_user;
                 $this->db_fields['usr_last_change']   = date("Y-m-d H:i:s", time());
                 $this->db_fields['usr_usr_id_change'] = $g_current_user->getValue("usr_id");
             }
@@ -404,17 +398,13 @@ class User
                 {
                     $sql = "UPDATE ". TBL_USERS. " SET $sql_field_list 
                              WHERE usr_id = ". $this->db_fields['usr_id'];
-                    error_log($sql);
-                    $result = mysql_query($sql, $this->db_connection);
-                    db_error($result,__FILE__,__LINE__);
+                    $result = $this->db->query($sql);
                 }
                 else
                 {
                     $sql = "INSERT INTO ". TBL_USERS. " ($sql_field_list) VALUES ($sql_value_list) ";
-                    error_log($sql);
-                    $result = mysql_query($sql, $this->db_connection);
-                    db_error($result,__FILE__,__LINE__);
-                    $this->db_fields['usr_id'] = mysql_insert_id($this->db_connection);
+                    $result = $this->db->query($sql);
+                    $this->db_fields['usr_id'] = $this->db->insert_id();
                 }
             }
             else
@@ -423,9 +413,7 @@ class User
                 $sql = "UPDATE ". TBL_USERS. " SET usr_last_change   = '". $this->db_fields['usr_last_change']. "'
                                                  , usr_usr_id_change = ".  $this->db_fields['usr_usr_id_change']. "
                          WHERE usr_id = ". $this->db_fields['usr_id'];
-                error_log($sql);                         
-                $result = mysql_query($sql, $this->db_connection);
-                db_error($result,__FILE__,__LINE__);
+                $result = $this->db->query($sql);
             }
 
             
@@ -458,9 +446,7 @@ class User
                                        AND usd_usf_id = ". $value['usf_id'];
                         }
                     }
-                    error_log($sql);
-                    $result = mysql_query($sql, $this->db_connection);
-                    db_error($result,__FILE__,__LINE__);
+                    $result = $this->db->query($sql);
                     $this->db_user_fields[$key]['changed'] = false;
                 }
             }
@@ -475,95 +461,75 @@ class User
     {
         $sql    = "UPDATE ". TBL_ANNOUNCEMENTS. " SET ann_usr_id = NULL
                     WHERE ann_usr_id = ". $this->db_fields['usr_id'];
-        error_log($sql);
-        $result = mysql_query($sql, $this->db_connection);
-        db_error($result,__FILE__,__LINE__);
+        $this->db->query($sql);
 
         $sql    = "UPDATE ". TBL_ANNOUNCEMENTS. " SET ann_usr_id_change = NULL
                     WHERE ann_usr_id_change = ". $this->db_fields['usr_id'];
-        $result = mysql_query($sql, $this->db_connection);
-        db_error($result,__FILE__,__LINE__);
+        $this->db->query($sql);
 
         $sql    = "UPDATE ". TBL_DATES. " SET dat_usr_id = NULL
                     WHERE dat_usr_id = ". $this->db_fields['usr_id'];
-        $result = mysql_query($sql, $this->db_connection);
-        db_error($result,__FILE__,__LINE__);
+        $this->db->query($sql);
 
         $sql    = "UPDATE ". TBL_DATES. " SET dat_usr_id_change = NULL
                     WHERE dat_usr_id_change = ". $this->db_fields['usr_id'];
-        $result = mysql_query($sql, $this->db_connection);
-        db_error($result,__FILE__,__LINE__);
+        $this->db->query($sql);
 
         $sql    = "UPDATE ". TBL_FOLDERS. " SET fol_usr_id = NULL
                     WHERE fol_usr_id = ". $this->db_fields['usr_id'];
-        $result = mysql_query($sql, $this->db_connection);
-        db_error($result,__FILE__,__LINE__);
+        $this->db->query($sql);
 
         $sql    = "UPDATE ". TBL_FILES. " SET fil_usr_id = NULL
                     WHERE fil_usr_id = ". $this->db_fields['usr_id'];
-        $result = mysql_query($sql, $this->db_connection);
-        db_error($result,__FILE__,__LINE__);
+        $this->db->query($sql);
 
         $sql    = "UPDATE ". TBL_GUESTBOOK. " SET gbo_usr_id = NULL
                     WHERE gbo_usr_id = ". $this->db_fields['usr_id'];
-        $result = mysql_query($sql, $this->db_connection);
-        db_error($result,__FILE__,__LINE__);
+        $this->db->query($sql);
 
         $sql    = "UPDATE ". TBL_GUESTBOOK. " SET gbo_usr_id_change = NULL
                     WHERE gbo_usr_id_change = ". $this->db_fields['usr_id'];
-        $result = mysql_query($sql, $this->db_connection);
-        db_error($result,__FILE__,__LINE__);
+        $this->db->query($sql);
 
         $sql    = "UPDATE ". TBL_LINKS. " SET lnk_usr_id = NULL
                     WHERE lnk_usr_id = ". $this->db_fields['usr_id'];
-        $result = mysql_query($sql, $this->db_connection);
-        db_error($result,__FILE__,__LINE__);
+        $this->db->query($sql);
 
         $sql    = "UPDATE ". TBL_PHOTOS. " SET pho_usr_id = NULL
                     WHERE pho_usr_id = ". $this->db_fields['usr_id'];
-        $result = mysql_query($sql, $this->db_connection);
-        db_error($result,__FILE__,__LINE__);
+        $this->db->query($sql);
 
         $sql    = "UPDATE ". TBL_PHOTOS. " SET pho_usr_id_change = NULL
                     WHERE pho_usr_id_change = ". $this->db_fields['usr_id'];
-        $result = mysql_query($sql, $this->db_connection);
-        db_error($result,__FILE__,__LINE__);
+        $this->db->query($sql);
 
         $sql    = "UPDATE ". TBL_ROLES. " SET rol_usr_id_change = NULL
                     WHERE rol_usr_id_change = ". $this->db_fields['usr_id'];
-        $result = mysql_query($sql, $this->db_connection);
-        db_error($result,__FILE__,__LINE__);
+        $this->db->query($sql);
 
         $sql    = "UPDATE ". TBL_ROLE_DEPENDENCIES. " SET rld_usr_id = NULL
                     WHERE rld_usr_id = ". $this->db_fields['usr_id'];
-        $result = mysql_query($sql, $this->db_connection);
-        db_error($result,__FILE__,__LINE__);
+        $this->db->query($sql);
 
         $sql    = "UPDATE ". TBL_USERS. " SET usr_usr_id_change = NULL
                     WHERE usr_usr_id_change = ". $this->db_fields['usr_id'];
-        $result = mysql_query($sql, $this->db_connection);
-        db_error($result,__FILE__,__LINE__);
+        $this->db->query($sql);
 
         $sql    = "DELETE FROM ". TBL_GUESTBOOK_COMMENTS. " WHERE gbc_usr_id = ". $this->db_fields['usr_id'];
-        $result = mysql_query($sql, $this->db_connection);
-        db_error($result,__FILE__,__LINE__);
+        $this->db->query($sql);
 
         $sql    = "DELETE FROM ". TBL_MEMBERS. " WHERE mem_usr_id = ". $this->db_fields['usr_id'];
-        $result = mysql_query($sql, $this->db_connection);
-        db_error($result,__FILE__,__LINE__);
-
+        $this->db->query($sql);
+        
         $sql    = "DELETE FROM ". TBL_SESSIONS. " WHERE ses_usr_id = ". $this->db_fields['usr_id'];
-        $result = mysql_query($sql, $this->db_connection);
-        db_error($result,__FILE__,__LINE__);
+        $this->db->query($sql);
 
         $sql    = "DELETE FROM ". TBL_USER_DATA. " WHERE usd_usr_id = ". $this->db_fields['usr_id'];
-        $result = mysql_query($sql, $this->db_connection);
-        db_error($result,__FILE__,__LINE__);
+        $this->db->query($sql);
 
         $sql    = "DELETE FROM ". TBL_USERS. "
                     WHERE usr_id = ". $this->db_fields['usr_id'];
-        $result = mysql_query($sql, $this->db_connection);
-        db_error($result,__FILE__,__LINE__);
+        $this->db->query($sql);
 
         $this->clear();
     }
@@ -642,10 +608,9 @@ class User
                           AND rol_valid  = 1 
                           AND rol_cat_id = cat_id
                           AND cat_org_id = ". $g_current_organization->getValue("org_id");
-            $result = mysql_query($sql, $this->db_connection);
-            db_error($result,__FILE__,__LINE__);
+            $this->db->query($sql);
 
-            $num_rows = mysql_num_rows($result);
+            $num_rows = $this->db->num_rows();
 
             if($num_rows > 0)
             {
@@ -772,11 +737,9 @@ class User
                           AND rol_valid  = 1 
                           AND rol_cat_id = cat_id
                           AND cat_org_id = ". $g_current_organization->getValue("org_id");
-            error_log($sql);
-            $result = mysql_query($sql, $this->db_connection);
-            db_error($result,__FILE__,__LINE__);            
+            $this->db->query($sql);           
             
-            if(mysql_num_rows($result) > 0)
+            if($this->db->num_rows() > 0)
             {
                 $this->webmaster = 1;
             }

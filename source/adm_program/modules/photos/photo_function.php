@@ -137,11 +137,11 @@ function image_save($orig_path, $scale, $destination_path)
 //bild: nr des Bildes dessen Thumbnail gelöscht werden soll
 function thumbnail_delete($pho_id, $pic_nr, $pho_begin)
 {
-	//Ordnerpfad zusammensetzen
+    //Ordnerpfad zusammensetzen
     $pic_path = SERVER_PATH. "/adm_my_files/photos/".$pho_begin."_".$pho_id."/thumbnails/".$pic_nr.".jpg";
-	
+    
     //Thumbnail loeschen
-	if(file_exists($pic_path))
+    if(file_exists($pic_path))
     {
         chmod($pic_path, 0777);
         unlink($pic_path);
@@ -157,7 +157,7 @@ function right_rotate ($pho_id, $bild)
     header("Content-Type: image/jpeg");
 
     //Aufruf der ggf. Uebergebenen Veranstaltung
-    $photo_event = new PhotoEvent($g_adm_con, $pho_id);
+    $photo_event = new PhotoEvent($g_db, $pho_id);
 
     //Thumbnail loeschen
     thumbnail_delete($pho_id, $bild, $photo_event->getValue("pho_begin"));
@@ -208,7 +208,7 @@ function left_rotate ($pho_id, $bild)
     header("Content-Type: image/jpeg");
 
     //Aufruf der ggf. Uebergebenen Veranstaltung
-    $photo_event = new PhotoEvent($g_adm_con, $pho_id);
+    $photo_event = new PhotoEvent($g_db, $pho_id);
     
     //Thumbnail loeschen
     thumbnail_delete($pho_id, $bild, $photo_event->getValue("pho_begin"));
@@ -258,7 +258,7 @@ function delete ($pho_id, $bild)
     global $g_organization;
 
     // einlesen der Veranstaltung
-    $photo_event = new PhotoEvent($g_adm_con, $pho_id);
+    $photo_event = new PhotoEvent($g_db, $pho_id);
     
     //Speicherort
     $ordner = SERVER_PATH. "/adm_my_files/photos/".$photo_event->getValue("pho_begin")."_".$photo_event->getValue("pho_id");
@@ -326,8 +326,8 @@ if(isset($_GET["job"]) && $_GET["job"]=="do_delete")
     delete($pho_id, $_GET["bild"]);
     
     //Neu laden der Veranstaltungsdaten
-    $photo_event = new PhotoEvent($g_adm_con);
-	if($pho_id > 0)
+    $photo_event = new PhotoEvent($g_db);
+    if($pho_id > 0)
     {
         $photo_event->getPhotoEvent($pho_id);
     }

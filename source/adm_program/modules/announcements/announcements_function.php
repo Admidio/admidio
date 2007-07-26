@@ -61,7 +61,7 @@ if(is_numeric($_GET["mode"]) == false
 }
 
 // Ankuendigungsobjekt anlegen
-$announcement = new Announcement($g_adm_con);
+$announcement = new Announcement($g_db);
 
 if($_GET["ann_id"] > 0)
 {

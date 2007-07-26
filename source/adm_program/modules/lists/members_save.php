@@ -51,7 +51,7 @@ else
 }
 
 // Objekt der uebergeben Rollen-ID erstellen
-$role = new Role($g_adm_con, $role_id);
+$role = new Role($g_db, $role_id);
 
 // nur Moderatoren duerfen Rollen zuweisen
 // nur Webmaster duerfen die Rolle Webmaster zuweisen
@@ -177,7 +177,7 @@ while($user= mysql_fetch_array($result_user))
             db_error($result,__FILE__,__LINE__);
             
             // abhaengige Rollen finden
-            $tmpRoles = RoleDependency::getParentRoles($g_adm_con,$role_id);
+            $tmpRoles = RoleDependency::getParentRoles($g_db,$role_id);
             foreach($tmpRoles as $tmpRole)
             {
                 if(!in_array($tmpRole,$parentRoles))
@@ -231,7 +231,7 @@ while($user= mysql_fetch_array($result_user))
         db_error($result,__FILE__,__LINE__);
         
         // abhaengige Rollen finden
-        $tmpRoles = RoleDependency::getParentRoles($g_adm_con,$role_id);
+        $tmpRoles = RoleDependency::getParentRoles($g_db,$role_id);
         foreach($tmpRoles as $tmpRole)
         {
             if(!in_array($tmpRole,$parentRoles))

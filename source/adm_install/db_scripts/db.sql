@@ -227,7 +227,7 @@ alter table %PRAEFIX%_user_data add constraint %PRAEFIX%_FK_USD_USR foreign key 
 create table %PRAEFIX%_sessions
 (
    ses_id                         int(11) unsigned               not null AUTO_INCREMENT,
-   ses_usr_id                     int(11) unsigned,
+   ses_usr_id                     int(11) unsigned               default NULL,
    ses_org_id                     tinyint(4)                     not null,
    ses_session                    varchar(35)                    not null,
    ses_begin                      datetime                       not null,

@@ -11,7 +11,7 @@
  *
  * Das Objekt wird erzeugt durch Aufruf des Konstruktors und der Uebergabe der
  * aktuellen Datenbankverbindung:
- * $session = new Session($g_adm_con);
+ * $session = new Session($g_db);
  *
  * Mit der Funktion getSession($session_id) kann die gewuenschte Session ausgelesen
  * werden. Die Session ID ist hierbei allerdings der eindeutige String aus der PHP-Session
@@ -55,9 +55,9 @@ require_once(SERVER_PATH. "/adm_program/system/table_access_class.php");
 class Session extends TableAccess
 {
     // Konstruktor
-    function Session($connection, $session = 0)
+    function Session(&$db, $session = 0)
     {
-        $this->db_connection  = $connection;
+        $this->db            =& $db;
         $this->table_name     = TBL_SESSIONS;
         $this->column_praefix = "ses";
         $this->key_name       = "ses_id";
@@ -75,18 +75,18 @@ class Session extends TableAccess
     // Session mit der uebergebenen Session-ID aus der Datenbank auslesen
     function getSession($session)
     {
-    	// wurde ses_session uebergeben, dann die SQL-Bedingung anpassen
+        // wurde ses_session uebergeben, dann die SQL-Bedingung anpassen
         if(is_numeric($session) == false)
         {
             $condition = " ses_session = '$session' ";
-        }    	
-    	
+        }       
+        
         $this->readData($session, $condition);
     }
 
     // interne Funktion, die bei setValue den uebergebenen Wert prueft
-	// und ungueltige Werte auf leer setzt
-	// die Funktion wird innerhalb von setValue() aufgerufen
+    // und ungueltige Werte auf leer setzt
+    // die Funktion wird innerhalb von setValue() aufgerufen
     function checkValue($field_name, $field_value)
     {
         switch($field_name)
@@ -109,18 +109,18 @@ class Session extends TableAccess
                     return false;
                 }
                 break;   
-        }    	
+        }       
         return true;
     }
 
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
-	// die Funktion wird innerhalb von save() aufgerufen
+    // die Funktion wird innerhalb von save() aufgerufen
     function initializeFields()
     {
         if(strlen($this->db_fields[$this->key_name]) == 0)
         {
-        	// Insert
-        	global $g_current_organization;
+            // Insert
+            global $g_current_organization;
             $this->db_fields['ses_org_id']     = $g_current_organization->getValue("org_id");
             $this->db_fields['ses_begin']      = date("Y-m-d H:i:s", time());
             $this->db_fields['ses_timestamp']  = date("Y-m-d H:i:s", time());
@@ -128,26 +128,25 @@ class Session extends TableAccess
         }
         else
         {
-        	// Update
+            // Update
             $this->db_fields['ses_timestamp'] = date("Y-m-d H:i:s", time());
         }
     }  
 
-    // diese Funktion stoesst ein Neueinlesen des User-Objekts beim naechsten Seitenaufruf an
+    // diese Funktion stoesst ein Neueinlesen des User-Objekts bei allen angemeldeten
+    // Usern beim naechsten Seitenaufruf an
     function renewUserObject()
     {
         $sql    = "UPDATE ". TBL_SESSIONS. " SET ses_renew = 1 ";
-        $result = mysql_query($sql, $this->db_connection);
-        db_error($result,__FILE__,__LINE__);
-        error_log($sql);
+        $this->db->query($sql);
     }
     
-    // diese Funktion stoesst ein Neueinlesen des Organisations-Objekts beim naechsten Seitenaufruf an
+    // diese Funktion stoesst ein Neueinlesen des Organisations-Objekts bei allen angemeldeten
+    // Usern beim naechsten Seitenaufruf an
     function renewOrganizationObject()
     {
         $sql    = "UPDATE ". TBL_SESSIONS. " SET ses_renew = 2 ";
-        $result = mysql_query($sql, $this->db_connection);
-        db_error($result,__FILE__,__LINE__);
+        $this->db->query($sql);
     }
     
     // diese Funktion loescht Datensaetze aus der Session-Tabelle die nicht mehr gebraucht werden
@@ -165,8 +164,7 @@ class Session extends TableAccess
             
         $sql    = "DELETE FROM ". TBL_SESSIONS. " 
                     WHERE ses_timestamp < '". date("Y.m.d H:i:s", $date_session_delete). "'";
-        $result = mysql_query($sql, $this->db_connection);
-        db_error($result,__FILE__,__LINE__);        
+        $this->db->query($sql);
     }
 }
 ?>

@@ -54,7 +54,7 @@ else
 
 // jede Zeile aus der Datei einzeln durchgehen und den Benutzer in der DB anlegen
 $line = reset($_SESSION["file_lines"]);
-$user = new User($g_adm_con);
+$user = new User($g_db);
 $start_row    = 0;
 $count_import = 0;
 $imported_fields = array();
@@ -178,7 +178,7 @@ for($i = $start_row; $i < count($_SESSION["file_lines"]); $i++)
 
     if($dup_users > 0)
     {
-        $duplicate_user = new User($g_adm_con);
+        $duplicate_user = new User($g_db);
         
         if($_SESSION["user_import_mode"] == 3)
         {

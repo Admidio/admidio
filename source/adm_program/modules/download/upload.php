@@ -81,7 +81,7 @@ if(strlen($folder) > 0)
 
 if(isset($_SESSION['download_request']))
 {
-   $form_values = $_SESSION['download_request'];
+   $form_values = strStripSlashesDeep($_SESSION['download_request']);
    unset($_SESSION['download_request']);
 }
 else

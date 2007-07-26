@@ -165,7 +165,10 @@ $message_text = array(
         Damit du dich erfolgreich anmelden kannst, musst du in deinem Browser
         so einstellen, dass dieser Cookies von %VAR1% akzeptiert.",
 
-    "passwort" =>
+    "password_length" =>
+        "Das Passwort muss aus mindestens 6 Zeichen bestehen.",
+
+    "passwords_not_equal" =>
         "Das Passwort stimmt nicht mit der Wiederholung überein.",
 
     "password_unknown" =>

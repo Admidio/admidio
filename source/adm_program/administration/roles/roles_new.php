@@ -54,7 +54,7 @@ if(isset($_GET["rol_id"]))
 $_SESSION['navigation']->addUrl($g_current_url);
 
 // Rollenobjekt anlegen
-$role = new Role($g_adm_con);
+$role = new Role($g_db);
 
 if($req_rol_id > 0)
 {
@@ -82,7 +82,7 @@ if(isset($_SESSION['roles_request']))
     {
         if(strpos($key, "rol_") == 0)
         {
-            $role->setValue($key, $value);
+            $role->setValue($key, stripslashes($value));
         }        
     }
     unset($_SESSION['roles_request']);
@@ -529,7 +529,7 @@ echo "
                     <div style=\"text-align: left; float: left; padding-right: 5%;\">";
 
                         // holt eine Liste der ausgewählten Rolen
-                        $childRoles = RoleDependency::getChildRoles($g_adm_con,$req_rol_id);
+                        $childRoles = RoleDependency::getChildRoles($g_db,$req_rol_id);
 
                         // Alle Rollen auflisten, die der Benutzer sehen darf
                         $sql = "SELECT * 
@@ -598,7 +598,7 @@ echo "
         if($req_rol_id > 0 && $role->getValue("rol_usr_id_change") > 0)
         {
             // Angabe ueber die letzten Aenderungen
-            $user_change = new User($g_adm_con, $role->getValue("rol_usr_id_change"));
+            $user_change = new User($g_db, $role->getValue("rol_usr_id_change"));
 
             echo "<div style=\"margin-top: 6px;\">
                 <span style=\"font-size: 10pt\">

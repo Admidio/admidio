@@ -24,7 +24,7 @@ ALTER TABLE %PRAEFIX%_users ADD COLUMN `usr_text` text AFTER `usr_photo`;
 -- Session-Tabelle ergaenzen
 ALTER TABLE %PRAEFIX%_sessions ADD COLUMN `ses_begin` datetime NOT NULL AFTER `ses_session`;
 ALTER TABLE %PRAEFIX%_sessions ADD COLUMN `ses_renew` tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER `ses_blob`;
-ALTER TABLE %PRAEFIX%_sessions MODIFY COLUMN `ses_usr_id` INTEGER UNSIGNED;
+ALTER TABLE %PRAEFIX%_sessions MODIFY COLUMN `ses_usr_id` INTEGER UNSIGNED DEFAULT NULL;
 ALTER TABLE %PRAEFIX%_sessions MODIFY COLUMN `ses_ip_address` VARCHAR(15) NOT NULL;
 
 -- org_shortname in org_id in Sessiontabelle umwandeln

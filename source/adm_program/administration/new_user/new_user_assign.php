@@ -55,7 +55,7 @@ else
 }
 
 // neuen User erst einmal als Objekt erzeugen
-$new_user = new User($g_adm_con, $req_new_user_id);
+$new_user = new User($g_db, $req_new_user_id);
 
 // alle User aus der DB selektieren, die denselben Vor- und Nachnamen haben
 $sql = "SELECT usr_id, usr_login_name, last_name.usd_value as last_name, 

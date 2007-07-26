@@ -36,6 +36,7 @@ if(!defined('PLUGIN_PATH'))
     define('PLUGIN_PATH', substr(__FILE__, 0, strpos(__FILE__, "sidebar_login")-1));
 }
 require_once(PLUGIN_PATH. "/../adm_program/system/common.php");
+require_once(PLUGIN_PATH. "/../adm_program/system/role_class.php");
 require_once(PLUGIN_PATH. "/sidebar_login/config.php");
  
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
@@ -79,16 +80,7 @@ if(isset($plg_rank) == false)
 }
 
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
-mysql_select_db($g_adm_db, $g_adm_con );
-
-$sql    = "SELECT rol_id, rol_mail_logout
-             FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-            WHERE rol_name   = 'Webmaster' 
-              AND rol_cat_id = cat_id
-              AND cat_org_id = ". $g_current_organization->getValue("org_id");
-$result = mysql_query($sql, $g_adm_con);
-db_error($result,__FILE__,__LINE__);
-$webmaster_row = mysql_fetch_object($result);
+$g_db->select_db($g_adm_db);
 
 if($g_valid_login == 1)
 {
@@ -166,15 +158,18 @@ else
                 }
                 if($plg_show_email_link)
                 {
+                    // Rollenobjekt fuer 'Webmaster' anlegen
+                    $role_webmaster = new Role($g_db, 'Webmaster');
+    
                     // E-Mail intern oder extern verschicken
                     if($g_preferences['enable_mail_module'] != 1 
-                    || $webmaster_row->rol_mail_logout != 1 )
+                    || $role_webmaster->getValue("rol_mail_logout") != 1 )
                     {
                         $mail_link = "mailto:". $g_preferences['email_administrator']. "?subject=Loginprobleme";
                     }
                     else
                     {
-                        $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?rol_id=$webmaster_row->rol_id&subject=Loginprobleme";
+                        $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?rol_id=". $role_webmaster->getValue("rol_id"). "&subject=Loginprobleme";
                     }
                     echo "<a class=\"$plg_link_class\" href=\"$mail_link\" target=\"$plg_link_target\">Loginprobleme</a>";
                 }

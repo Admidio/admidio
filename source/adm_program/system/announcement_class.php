@@ -11,7 +11,7 @@
  *
  * Das Objekt wird erzeugt durch Aufruf des Konstruktors und der Uebergabe der
  * aktuellen Datenbankverbindung:
- * $date = new Announcement($g_adm_con);
+ * $date = new Announcement($g_db);
  *
  * Mit der Funktion getAnnouncement($ann_id) kann nun die gewuenschte Ankuendigung ausgelesen
  * werden.
@@ -48,9 +48,9 @@ require_once(SERVER_PATH. "/adm_program/system/table_access_class.php");
 class Announcement extends TableAccess
 {
     // Konstruktor
-    function Announcement($connection, $ann_id = 0)
+    function Announcement(&$db, $ann_id = 0)
     {
-        $this->db_connection  = $connection;
+        $this->db            =& $db;
         $this->table_name     = TBL_ANNOUNCEMENTS;
         $this->column_praefix = "ann";
         $this->key_name       = "ann_id";
@@ -72,8 +72,8 @@ class Announcement extends TableAccess
     }
     
     // interne Funktion, die bei setValue den uebergebenen Wert prueft
-	// und ungueltige Werte auf leer setzt
-	// die Funktion wird innerhalb von setValue() aufgerufen
+    // und ungueltige Werte auf leer setzt
+    // die Funktion wird innerhalb von setValue() aufgerufen
     function checkValue($field_name, $field_value)
     {
         switch($field_name)
@@ -95,16 +95,16 @@ class Announcement extends TableAccess
                     return false;
                 }
                 break; 
-        }    	
+        }       
         return true;
     }
     
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
-	// die Funktion wird innerhalb von save() aufgerufen
+    // die Funktion wird innerhalb von save() aufgerufen
     function initializeFields()
     {
-    	global $g_current_organization, $g_current_user;
-    	
+        global $g_current_organization, $g_current_user;
+        
         if(strlen($this->db_fields[$this->key_name]) > 0)
         {
             $this->db_fields['ann_last_change']   = date("Y-m-d H:i:s", time());

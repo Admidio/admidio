@@ -36,6 +36,7 @@ define('SERVER_PATH', substr(__FILE__, 0, strpos(__FILE__, "adm_install")-1));
 require("../adm_program/system/function.php");
 require("../adm_program/system/string.php");
 require("../adm_program/system/date.php");
+require("../adm_program/system/mysql_class.php");
 require("../adm_program/system/organization_class.php");
 require("../adm_program/system/user_class.php");
 require("../adm_program/system/role_class.php");
@@ -288,18 +289,12 @@ if($req_mode == 1 || $req_mode == 4)
 // Daten verarbeiten
 /*------------------------------------------------------------*/
 
-// Verbindung zu Datenbank herstellen
-$connection = mysql_connect ($_SESSION['server'], $_SESSION['user'], $_SESSION['password'])
-              or showError("Es konnte keine Verbindung zur Datenbank hergestellt werden.<br /><br />
-                            Pr&uuml;fen Sie noch einmal Ihre MySql-Zugangsdaten !");
-
-if(!mysql_select_db($_SESSION['database'], $connection ))
-{
-    showError("Die angegebene Datenbank <b>". $_SESSION['database']. "</b> konnte nicht gefunden werden !");
-}
+ // Verbindung zu Datenbank herstellen
+$db = new MySqlDB();
+$connection = $db->connect($_SESSION['server'], $_SESSION['user'], $_SESSION['password'], $_SESSION['database']);
 
 // leeres Organisationsobjekt erstellen
-$g_current_organization = new Organization($connection);
+$g_current_organization = new Organization($db);
 
 if($req_mode == 1)
 {
@@ -316,11 +311,7 @@ if($req_mode == 1)
         {
             // Praefix fuer die Tabellen einsetzen und SQL-Statement ausfuehren
             $sql = str_replace("%PRAEFIX%", $g_tbl_praefix, $sql);
-            $result = mysql_query($sql, $connection);
-            if(!$result)
-            {
-                die(showError(mysql_error()));
-            }
+            $db->query($sql);
         }
     }
 
@@ -329,15 +320,13 @@ if($req_mode == 1)
     // Orga-Uebergreifende Kategorien anlegen
     $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_system, cat_sequence)
                                       VALUES (NULL, 'USF', 'Stammdaten', 0, 1, 0) ";
-    $result = mysql_query($sql, $connection);
-    if(!$result) showError(mysql_error());
-    $cat_id_stammdaten = mysql_insert_id();
+    $db->query($sql);
+    $cat_id_stammdaten = $db->insert_id();
 
     $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_system, cat_sequence)
                                       VALUES (NULL, 'USF', 'Messenger', 0, 1, 1) ";
-    $result = mysql_query($sql, $connection);
-    if(!$result) showError(mysql_error());
-    $cat_id_messenger = mysql_insert_id();
+    $db->query($sql);
+    $cat_id_messenger = $db->insert_id();
 
     // Stammdatenfelder anlegen
     $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_cat_id, usf_type, usf_name, usf_description, usf_system, usf_disabled, usf_sequence)
@@ -355,9 +344,8 @@ if($req_mode == 1)
                                             , ($cat_id_stammdaten, 'EMAIL','E-Mail', 'Es muss eine g&uuml;ltige E-Mail-Adresse angegeben werden.<br />' + 
                                                                    'Ohne diese kann das Programm nicht genutzt werden.', 1, 0, 12)
                                             , ($cat_id_stammdaten, 'URL',  'Homepage', NULL, 1, 0, 13) ";
-    $result = mysql_query($sql, $connection);
-    if(!$result) showError(mysql_error());
-    $usf_id_homepage = mysql_insert_id();
+    $db->query($sql);
+    $usf_id_homepage = $db->insert_id();
 
     // Messenger anlegen
     $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_cat_id, usf_type, usf_name, usf_description, usf_system, usf_sequence)
@@ -367,9 +355,7 @@ if($req_mode == 1)
                                             , ($cat_id_messenger, 'TEXT', 'MSN', 'MSN Messenger', 1, 4)
                                             , ($cat_id_messenger, 'TEXT', 'Skype', 'Skype', 1, 5) 
                                             , ($cat_id_messenger, 'TEXT', 'Yahoo', 'Yahoo! Messenger', 1, 6)  ";
-                                            
-    $result = mysql_query($sql, $connection);
-    if(!$result) showError(mysql_error());
+    $db->query($sql);
 }
 
 if($req_mode == 3)
@@ -377,16 +363,15 @@ if($req_mode == 3)
     // Updatescripte fuer die Datenbank verarbeiten
     if($req_version > 0)
     {
-    	include("db_scripts/preferences.php");
-    	
+        include("db_scripts/preferences.php");
+        
         // vor dem Update erst einmal alle Session loeschen, damit User ausgeloggt sind
         $sql = "DELETE FROM ". TBL_SESSIONS;
-        $result = mysql_query($sql, $connection);
-        if(!$result) showError(mysql_error());
+        $db->query($sql);
         
         for($update_count = $req_version; $update_count <= 5; $update_count++)
         {
-        	// erst einmal die SQL-Datei Statement fuer Statement verarbeiten
+            // erst einmal die SQL-Datei Statement fuer Statement verarbeiten
             if($update_count == 3)
             {
                 $filename = "db_scripts/upd_1_3_db.sql";
@@ -418,26 +403,21 @@ if($req_mode == 3)
                     {
                         // Praefix fuer die Tabellen einsetzen und SQL-Statement ausfuehren
                         $sql = str_replace("%PRAEFIX%", $g_tbl_praefix, $sql);
-                        $result = mysql_query($sql, $connection);
-                        if(!$result)
-                        {
-                            die(showError(mysql_error()));
-                        }
+                        $db->query($sql);
                     }
                 }
             }
             
             // jetzt noch evtl. neue Orga-Parameter in DB schreiben
-			$sql = "SELECT * FROM ". TBL_ORGANIZATIONS;
-			$result_orga = mysql_query($sql, $connection);
-			if(!$result_orga) showError(mysql_error());
-			
-			while($row_orga = mysql_fetch_array($result_orga))
-			{
-				$g_current_organization->setValue("org_id", $row_orga['org_id']);
-				$g_current_organization->setPreferences($orga_preferences, false);
-			}
-			
+            $sql = "SELECT * FROM ". TBL_ORGANIZATIONS;
+            $result_orga = $db->query($sql);
+            
+            while($row_orga = $db->fetch_array($result_orga))
+            {
+                $g_current_organization->setValue("org_id", $row_orga['org_id']);
+                $g_current_organization->setPreferences($orga_preferences, false);
+            }
+            
             // Nun das PHP-Script abarbeiten
             if($update_count == 3)
             {
@@ -450,7 +430,7 @@ if($req_mode == 3)
             elseif($update_count == 5)
             {
                 include("db_scripts/upd_1_5_conv.php");
-            }			
+            }           
         }
     }
     else
@@ -488,16 +468,14 @@ if($req_mode == 1 || $req_mode == 4)
     {
         $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
                                            VALUES (". $g_current_organization->getValue("org_id"). ",    '$key',   '$value') ";
-        $result = mysql_query($sql, $connection);
-        db_error($result,__FILE__,__LINE__);
+        $db->query($sql);
     }
     
     // Default-Kategorie fuer Rollen und Links eintragen
     $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_sequence)
                                            VALUES (". $g_current_organization->getValue("org_id"). ", 'ROL', 'Allgemein', 0, 1)";
-    $result = mysql_query($sql, $connection);
-    if(!$result) showError(mysql_error());
-    $category_common = mysql_insert_id();
+    $db->query($sql);
+    $category_common = $db->insert_id();
     
     $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_sequence)
                                       VALUES (". $g_current_organization->getValue("org_id"). ", 'ROL', 'Gruppen', 0, 2)
@@ -505,11 +483,10 @@ if($req_mode == 1 || $req_mode == 4)
                                            , (". $g_current_organization->getValue("org_id"). ", 'ROL', 'Mannschaften', 0, 4)
                                            , (". $g_current_organization->getValue("org_id"). ", 'LNK', 'Allgemein', 0, 1)
                                            , (". $g_current_organization->getValue("org_id"). ", 'USF', '". utf8_decode('Zusätzliche Daten'). "', 0, 2) ";
-    $result = mysql_query($sql, $connection);
-    if(!$result) showError(mysql_error());
+    $db->query($sql);
 
     // User Webmaster anlegen
-    $g_current_user = new User($connection);
+    $g_current_user = new User($db);
     $g_current_user->setValue("Nachname", $req_user_last_name);
     $g_current_user->setValue("Vorname", $req_user_first_name);
     $g_current_user->setValue("E-Mail", $req_user_email);
@@ -520,7 +497,7 @@ if($req_mode == 1 || $req_mode == 4)
     // nun die Default-Rollen anlegen
 
     // Webmaster
-    $role_webmaster = new Role($connection);
+    $role_webmaster = new Role($db);
     $role_webmaster->setValue("rol_cat_id", $category_common);
     $role_webmaster->setValue("rol_name", "Webmaster");
     $role_webmaster->setValue("rol_description", "Gruppe der Administratoren des Systems");
@@ -540,7 +517,7 @@ if($req_mode == 1 || $req_mode == 4)
     $role_webmaster->save(0);
 
     // Mitglied
-    $role_member = new Role($connection);
+    $role_member = new Role($db);
     $role_member->setValue("rol_cat_id", $category_common);
     $role_member->setValue("rol_name", "Mitglied");
     $role_member->setValue("rol_description", "Alle Mitglieder der Organisation");
@@ -549,7 +526,7 @@ if($req_mode == 1 || $req_mode == 4)
     $role_member->save(0);
 
     // Vorstand
-    $role_management = new Role($connection);
+    $role_management = new Role($db);
     $role_management->setValue("rol_cat_id", $category_common);
     $role_management->setValue("rol_name", "Vorstand");
     $role_management->setValue("rol_description", "Vorstand des Vereins");
@@ -566,8 +543,7 @@ if($req_mode == 1 || $req_mode == 4)
     $sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin, mem_valid)
                                    VALUES (". $role_webmaster->getValue("rol_id"). ", ". $g_current_user->getValue("usr_id"). ", NOW(), 1) 
                                         , (". $role_member->getValue("rol_id"). ", ". $g_current_user->getValue("usr_id"). ", NOW(), 1) ";
-    $result = mysql_query($sql, $connection);
-    if(!$result) showError(mysql_error());
+    $db->query($sql);
 }
 
 // globale Objekte entfernen, damit sie neu eingelesen werden

@@ -93,7 +93,7 @@ if(isset($_GET['sequence']))
 }
 
 // UserField-objekt anlegen
-$category = new Category($g_adm_con);
+$category = new Category($g_db);
 
 if($req_cat_id > 0)
 {

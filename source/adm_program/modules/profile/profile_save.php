@@ -98,7 +98,7 @@ if($new_user == 0 && $g_current_user->editProfile($usr_id) == false)
     $g_message->show("norights");
 }
 
-$user = new User($g_adm_con, $usr_id);
+$user = new User($g_db, $usr_id);
 
 if($usr_id > 0)
 {
@@ -116,11 +116,10 @@ if($usr_id > 0)
                           AND mem_rol_id  = rol_id
                           AND mem_valid   = 1
                           AND mem_usr_id  = $usr_id ";
-            $result      = mysql_query($sql, $g_adm_con);
-            db_error($result,__FILE__,__LINE__);
+            $g_db->query($sql);
             $b_other_orga = false;
 
-            if(mysql_num_rows($result) > 0)
+            if($g_db->num_rows() > 0)
             {
                 // User, der woanders noch aktiv ist, darf in dieser Orga nicht bearbeitet werden
                 $g_message->show("norights");
@@ -141,10 +140,16 @@ if($new_user == 2)
         $g_message->show("feld", "Benutzername");
     }
 
+    // Passwort sollte laenger als 6 Zeichen sein
+    if(strlen($_POST['usr_password']) < 6)
+    {
+        $g_message->show("password_length");
+    }
+
     // beide Passwortfelder muessen identisch sein
     if ($_POST['usr_password'] != $_POST['password2'])
     {
-        $g_message->show("passwort");
+        $g_message->show("passwords_not_equal");
     }
 
     if(strlen($_POST['usr_password']) == 0)
@@ -235,12 +240,11 @@ if($g_current_user->isWebmaster() || $new_user > 0)
         // pruefen, ob der Benutzername bereits vergeben ist
         $sql = "SELECT usr_id FROM ". TBL_USERS. "
                  WHERE usr_login_name = '". $_POST['usr_login_name']. "'";
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result,__FILE__,__LINE__);
+        $g_db->query($sql);
 
-        if(mysql_num_rows($result) > 0)
+        if($g_db->num_rows() > 0)
         {
-            $row = mysql_fetch_array($result);
+            $row = $g_db->fetch_array();
 
             if(strcmp($row['usr_id'], $usr_id) != 0)
             {
@@ -396,10 +400,9 @@ elseif($new_user == 2)
                    AND mem_valid         = 1
                    AND mem_usr_id        = usr_id
                    AND usr_valid         = 1 ";
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result,__FILE__,__LINE__);
+        $result = $g_db->query($sql);
 
-        while($row = mysql_fetch_array($result))
+        while($row = $g_db->fetch_array($result))
         {
             // Mail an die Webmaster schicken, dass sich ein neuer User angemeldet hat
             $email = new Email();

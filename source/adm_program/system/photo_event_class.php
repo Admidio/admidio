@@ -11,7 +11,7 @@
  *
  * Das Objekt wird erzeugt durch Aufruf des Konstruktors und der Uebergabe der
  * aktuellen Datenbankverbindung:
- * $photo_event = new PhotoEvent($g_adm_con);
+ * $photo_event = new PhotoEvent($g_db);
  *
  * Mit der Funktion getPhotoEvent($pho_id) kann die gewuenschte Fotoveranstaltung 
  * ausgelesen werden. 
@@ -50,9 +50,9 @@ require_once("$absolute_path/adm_program/system/table_access_class.php");
 class PhotoEvent extends TableAccess
 {
     // Konstruktor
-    function PhotoEvent($connection, $photo_id = 0)
+    function PhotoEvent(&$db, $photo_id = 0)
     {
-        $this->db_connection  = $connection;
+        $this->db            =& $db;
         $this->table_name     = TBL_PHOTOS;
         $this->column_praefix = "pho";
         $this->key_name       = "pho_id";
@@ -74,8 +74,8 @@ class PhotoEvent extends TableAccess
     }
     
     // interne Funktion, die bei setValue den uebergebenen Wert prueft
-	// und ungueltige Werte auf leer setzt
-	// die Funktion wird innerhalb von setValue() aufgerufen
+    // und ungueltige Werte auf leer setzt
+    // die Funktion wird innerhalb von setValue() aufgerufen
     function checkValue($field_name, $field_value)
     {
         switch($field_name)
@@ -107,16 +107,16 @@ class PhotoEvent extends TableAccess
                     return false;
                 }
                 break; 
-        }    	
+        }       
         return true;
     }
     
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
-	// die Funktion wird innerhalb von save() aufgerufen
+    // die Funktion wird innerhalb von save() aufgerufen
     function initializeFields()
     {
-    	global $g_current_organization, $g_current_user;
-    	
+        global $g_current_organization, $g_current_user;
+        
         if($this->db_fields[$this->key_name] > 0)
         {
             $this->db_fields['pho_last_change']   = date("Y-m-d H:i:s", time());
@@ -131,10 +131,10 @@ class PhotoEvent extends TableAccess
     }
     
     // interne Funktion, die die Fotoveranstaltung in Datenbank und File-System loeschen
-	// die Funktion wird innerhalb von delete() aufgerufen
+    // die Funktion wird innerhalb von delete() aufgerufen
     function deleteReferences()
     {
-        return $this->deleteInDatabase($this->db_fields['pho_id']); 	
+        return $this->deleteInDatabase($this->db_fields['pho_id']);     
     }    
 
     // Rekursive Funktion die die uebergebene Veranstaltung und alle
@@ -144,13 +144,11 @@ class PhotoEvent extends TableAccess
         $return_code = true;
     
         // erst einmal rekursiv zur tiefsten Tochterveranstaltung gehen
-        $sql = "SELECT pho_id FROM ". TBL_PHOTOS. "
-                 WHERE pho_pho_id_parent = $photo_id ";
-        error_log($sql);
-        $result1 = mysql_query($sql, $this->db_connection);
-        db_error($result1,__FILE__,__LINE__);
+        $sql     = "SELECT pho_id FROM ". TBL_PHOTOS. "
+                     WHERE pho_pho_id_parent = $photo_id ";
+        $result1 = $this->db->query($sql);
         
-        while($row = mysql_fetch_array($result1))
+        while($row = $this->db->fetch_array($result1))
         {
             if($return_code)
             {
@@ -168,16 +166,16 @@ class PhotoEvent extends TableAccess
             // aktuellen Ordner incl. Unterordner und Dateien loeschen, falls er existiert
             if(file_exists($folder))
             {
-	            // nun erst rekursiv den Ordner im Dateisystem loeschen
-	            $return_code = $this->deleteInFilesystem($folder);
-	
-	            // nun noch den uebergebenen Ordner loeschen
-	            @chmod($folder, 0777);
-	            error_log($folder);
-	            if(@rmdir($folder) == false)
-	            {
-	                return false;
-	            }
+                // nun erst rekursiv den Ordner im Dateisystem loeschen
+                $return_code = $this->deleteInFilesystem($folder);
+    
+                // nun noch den uebergebenen Ordner loeschen
+                @chmod($folder, 0777);
+                error_log($folder);
+                if(@rmdir($folder) == false)
+                {
+                    return false;
+                }
             }
         }
         
@@ -191,37 +189,37 @@ class PhotoEvent extends TableAccess
         $dh  = @opendir($folder);
         if($dh)
         {
-	        while (false !== ($filename = readdir($dh)))
-	        {
-	            if($filename != "." && $filename != "..")
-	            {
-	                $act_folder_entry = "$folder/$filename";
-	                
-	                if(is_dir($act_folder_entry))
-	                {
-	                    // nun den entsprechenden Ordner loeschen
-	                    $this->deleteInFilesystem($act_folder_entry);
-	                    @chmod($act_folder_entry, 0777);
-	                    if(@rmdir($act_folder_entry) == false)
-	                    {
-	                        return false;
-	                    }
-	                }
-	                else
-	                {
-	                    // die Datei loeschen
-	                    if(file_exists($act_folder_entry))
-	                    {
-	                        @chmod($act_folder_entry, 0777);
-	                        if(@unlink($act_folder_entry) == false)
-	                        {
-	                            return false;
-	                        }
-	                    }
-	                }
-	            }
-	        }
-	        closedir($dh);
+            while (false !== ($filename = readdir($dh)))
+            {
+                if($filename != "." && $filename != "..")
+                {
+                    $act_folder_entry = "$folder/$filename";
+                    
+                    if(is_dir($act_folder_entry))
+                    {
+                        // nun den entsprechenden Ordner loeschen
+                        $this->deleteInFilesystem($act_folder_entry);
+                        @chmod($act_folder_entry, 0777);
+                        if(@rmdir($act_folder_entry) == false)
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        // die Datei loeschen
+                        if(file_exists($act_folder_entry))
+                        {
+                            @chmod($act_folder_entry, 0777);
+                            if(@unlink($act_folder_entry) == false)
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+            closedir($dh);
         }
                     
         return true;

@@ -62,7 +62,7 @@ if(isset($_GET["new_user"]))
     $req_new_usr = $_GET["new_user"];
 }
 
-$user     = new User($g_adm_con, $req_usr_id);
+$user     = new User($g_db, $req_usr_id);
 $_SESSION['navigation']->addUrl($g_current_url);
 
 //Testen ob Feste Rolle gesetzt ist
@@ -171,12 +171,10 @@ echo "
                           AND cat_org_id     = ". $g_current_organization->getValue("org_id"). "
                         ORDER BY cat_sequence, rol_name";
         }
-        error_log($sql);
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result,__FILE__,__LINE__);
+        $result = $g_db->query($sql);
         $category = "";
 
-        while($row = mysql_fetch_object($result))
+        while($row = $g_db->fetch_object($result))
         {
             if($category != $row->cat_name)
             {

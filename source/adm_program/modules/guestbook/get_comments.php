@@ -135,7 +135,7 @@ if (isset($comment_result))
             if($row->gbc_usr_id_change > 0)
             {
                 // Userdaten des Editors holen...
-                $user_change = new User($g_adm_con, $row->gbc_usr_id_change);
+                $user_change = new User($g_db, $row->gbc_usr_id_change);
 
                 echo "
                 <div class=\"smallFontSize\" style=\"margin: 8px 4px 4px 4px;\">Zuletzt bearbeitet von ".

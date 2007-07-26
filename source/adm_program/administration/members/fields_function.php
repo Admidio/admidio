@@ -67,7 +67,7 @@ if(isset($_GET['sequence']))
 }
 
 // UserField-objekt anlegen
-$user_field = new UserField($g_adm_con);
+$user_field = new UserField($g_db);
 
 if($_GET['usf_id'] > 0)
 {

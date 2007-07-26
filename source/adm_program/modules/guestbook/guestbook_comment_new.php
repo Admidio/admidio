@@ -105,7 +105,7 @@ else
 
 if (isset($_SESSION['guestbook_comment_request']))
 {
-    $form_values = $_SESSION['guestbook_comment_request'];
+    $form_values = strStripSlashesDeep($_SESSION['guestbook_comment_request']);
     unset($_SESSION['guestbook_comment_request']);
 }
 else

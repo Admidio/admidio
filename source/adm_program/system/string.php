@@ -63,20 +63,28 @@ function strStripTags($srcString, $checkChar = 0)
 // fuegt Quotes einem mittels addslashes() gequoteten Array und String hinzu
 function strAddSlashesDeep($value)
 {
-    $value = is_array($value) ?
-                array_map('strAddSlashesDeep', $value) :
-                addslashes($value);
-
+    if(is_array($value))
+    {
+        $value = array_map("strAddSlashesDeep", $value);
+    }
+    else
+    {
+        $value = addslashes($value); 
+    }
     return $value;
 }
 
 // Entfernt Quotes aus einem mittels addslashes() gequoteten Array und String
 function strStripSlashesDeep($value)
 {
-    $value = is_array($value) ?
-                array_map('strStripSlashesDeep', $value) :
-                stripslashes($value);
-
+    if(is_array($value))
+    {
+        $value = array_map("strStripSlashesDeep", $value);
+    }
+    else
+    {
+        $value = stripslashes($value);
+    }
     return $value;
 }
 

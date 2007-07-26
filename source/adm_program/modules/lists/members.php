@@ -60,7 +60,7 @@ if(!isset($_GET["restrict"]))
 }
 
 // Objekt der uebergeben Rollen-ID erstellen
-$role = new Role($g_adm_con, $role_id);
+$role = new Role($g_db, $role_id);
 
 // nur Moderatoren duerfen Rollen zuweisen
 // nur Webmaster duerfen die Rolle Webmaster zuweisen

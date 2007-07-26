@@ -11,7 +11,7 @@
  *
  * Das Objekt wird erzeugt durch Aufruf des Konstruktors und der Uebergabe der
  * aktuellen Datenbankverbindung:
- * $date = new Date($g_adm_con);
+ * $date = new Date($g_db);
  *
  * Mit der Funktion getDate($dat_id) kann nun der gewuenschte Termin ausgelesen
  * werden.
@@ -50,9 +50,9 @@ require_once(SERVER_PATH. "/adm_program/system/table_access_class.php");
 class Date extends TableAccess
 {
     // Konstruktor
-    function Date($connection, $date_id = 0)
+    function Date(&$db, $date_id = 0)
     {
-        $this->db_connection  = $connection;
+        $this->db            =& $db;
         $this->table_name     = TBL_DATES;
         $this->column_praefix = "dat";
         $this->key_name       = "dat_id";
@@ -74,8 +74,8 @@ class Date extends TableAccess
     }
     
     // interne Funktion, die bei setValue den uebergebenen Wert prueft
-	// und ungueltige Werte auf leer setzt
-	// die Funktion wird innerhalb von setValue() aufgerufen
+    // und ungueltige Werte auf leer setzt
+    // die Funktion wird innerhalb von setValue() aufgerufen
     function checkValue($field_name, $field_value)
     {
         switch($field_name)
@@ -97,16 +97,16 @@ class Date extends TableAccess
                     return false;
                 }
                 break; 
-        }    	
+        }       
         return true;
     }
     
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
-	// die Funktion wird innerhalb von save() aufgerufen
+    // die Funktion wird innerhalb von save() aufgerufen
     function initializeFields()
     {
-    	global $g_current_organization, $g_current_user;
-    	
+        global $g_current_organization, $g_current_user;
+        
         if(strlen($this->db_fields[$this->key_name]) > 0)
         {
             $this->db_fields['dat_last_change']   = date("Y-m-d H:i:s", time());

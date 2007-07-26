@@ -46,6 +46,15 @@ if(!isset($plg_max_char_per_word) || !is_numeric($plg_max_char_per_word))
     $plg_max_char_per_word = 0;
 }
 
+if(isset($plg_link_class))
+{
+    $plg_link_class = strip_tags($plg_link_class);
+}
+else
+{
+    $plg_link_class = "";
+}
+
 if(isset($plg_link_target))
 {
     $plg_link_target = strip_tags($plg_link_target);
@@ -68,7 +77,8 @@ if(!isset($plg_photos_max_width) || !is_numeric($plg_photos_max_width))
 {
     $plg_photos_max_width = 150;
 }
-if(!isset($plg_photos_max_height) || !is_numeric($plg_photos_max_heigth))
+
+if(!isset($plg_photos_max_height) || !is_numeric($plg_photos_max_height))
 {
     $plg_photos_max_height = 200;
 }
@@ -86,7 +96,7 @@ if(!isset($plg_photos_show_link))
 }
 
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
-mysql_select_db($g_adm_db, $g_adm_con );
+$g_db->select_db($g_adm_db);
 
 //Versnstaltungen Aufrufen
 //Bedingungen: Vreigegeben,Anzahllimit, Bilder enthalten 
@@ -103,27 +113,27 @@ if($plg_photos_events != 0)
     $sql = $sql."LIMIT 0, $plg_photos_events";
 }
 
-$result = mysql_query($sql, $g_adm_con);
+$result = $g_db->query($sql);
 
 do{
-	//Zeiger per Zufall auf eine Veranstaltung setzen
-	mysql_data_seek($result, mt_rand(0, mysql_num_rows($result)-1));
-	
-	//Ausgewähltendatendatz holen
-	$event =  mysql_fetch_array($result);
-	
-	//Falls gewuensch Bild per Zufall auswaehlen
-	if($plg_photos_picnr ==0)
-	{
-	    $picnr = mt_rand(1, $event['pho_quantity']);
-	}
-	else
-	{
-	    $picnr = $plg_photos_picnr;
-	}
-	
-	//Bilpfad zusammensetzen
-	$picpath = PLUGIN_PATH. "/../adm_my_files/photos/".$event['pho_begin']."_".$event['pho_id']."/".$picnr.".jpg";
+    //Zeiger per Zufall auf eine Veranstaltung setzen
+    $g_db->data_seek($result, mt_rand(0, $g_db->num_rows($result)-1));
+    
+    //Ausgewähltendatendatz holen
+    $event =  $g_db->fetch_array($result);
+    
+    //Falls gewuensch Bild per Zufall auswaehlen
+    if($plg_photos_picnr ==0)
+    {
+        $picnr = mt_rand(1, $event['pho_quantity']);
+    }
+    else
+    {
+        $picnr = $plg_photos_picnr;
+    }
+    
+    //Bilpfad zusammensetzen
+    $picpath = PLUGIN_PATH. "/../adm_my_files/photos/".$event['pho_begin']."_".$event['pho_id']."/".$picnr.".jpg";
 }while(!file_exists($picpath));
 
 //Ermittlung der Original Bildgroesse
@@ -163,12 +173,12 @@ $pho_id = $event['pho_id'];
 if($bildgroesse[0]/$plg_photos_max_width > $bildgroesse[1]/$plg_photos_max_height)
 {
    echo "<img onclick=\"window.open('$g_root_path/adm_program/modules/photos/photopopup.php?bild=$picnr&pho_id=$pho_id','msg', 'height=".$popup_height.", width=".$popup_width.",left=162,top=5')\" style=\"vertical-align: middle; cursor: pointer;\"
-            src=\"$g_root_path/adm_program/modules/photos/photo_show.php?bild=".$picpath."&amp;scal=".$plg_photos_max_width."&amp;side=x\"  border=\"0\" alt=\"Zufallsbild\">";
+            src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$picnr."&amp;pho_begin=".$event['pho_begin']."&amp;scal=".$plg_photos_max_width."&amp;side=x\"  border=\"0\" alt=\"Zufallsbild\">";
 }
 else
 {
-   echo "<img onclick=\"window.open('../../adm_program/modules/photos/photopopup.php?bild=$picnr&pho_id=$pho_id','msg', 'height=".$popup_height.", width=".$popup_width.",left=162,top=5')\" style=\"vertical-align: middle; cursor: pointer;\"
-            src=\"$g_root_path/adm_program/modules/photos/photo_show.php?bild=".$picpath."&amp;scal=".$plg_photos_max_height."&amp;side=y\"  border=\"0\" alt=\"Zufallsbild\">";
+   echo "<img onclick=\"window.open('$g_root_path/adm_program/modules/photos/photopopup.php?bild=$picnr&pho_id=$pho_id','msg', 'height=".$popup_height.", width=".$popup_width.",left=162,top=5')\" style=\"vertical-align: middle; cursor: pointer;\"
+            src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$picnr."&amp;pho_begin=".$event['pho_begin']."&amp;scal=".$plg_photos_max_height."&amp;side=y\"  border=\"0\" alt=\"Zufallsbild\">";
 }
 
 

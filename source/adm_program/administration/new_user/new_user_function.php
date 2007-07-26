@@ -88,12 +88,12 @@ $err_text = "";
 
 if($req_new_user_id > 0)
 {
-    $new_user = new User($g_adm_con, $req_new_user_id);
+    $new_user = new User($g_db, $req_new_user_id);
 }
 
 if($req_user_id > 0)
 {
-    $user = new User($g_adm_con, $req_user_id);
+    $user = new User($g_db, $req_user_id);
 }
 
 if($req_mode == 1 || $req_mode == 2)

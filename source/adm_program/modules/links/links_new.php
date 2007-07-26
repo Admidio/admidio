@@ -72,7 +72,7 @@ $_SESSION['navigation']->addUrl($g_current_url);
 
 if (isset($_SESSION['links_request']))
 {
-    $form_values = $_SESSION['links_request'];
+    $form_values = strStripSlashesDeep($_SESSION['links_request']);
     unset($_SESSION['links_request']);
 }
 else

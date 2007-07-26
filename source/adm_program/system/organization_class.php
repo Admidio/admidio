@@ -11,7 +11,7 @@
  *
  * Das Objekt wird erzeugt durch Aufruf des Konstruktors und der Uebergabe der
  * aktuellen Datenbankverbindung:
- * $orga = new TblOrganization($g_adm_con);
+ * $orga = new TblOrganization($g_db);
  *
  * Mit der Funktion getOrganization($shortname) kann die gewuenschte Organisation
  * ausgelesen werden.
@@ -55,13 +55,13 @@ require_once(SERVER_PATH. "/adm_program/system/table_access_class.php");
 
 class Organization extends TableAccess
 {
-	var $b_check_childs;		// Flag, ob schon nach Kinderorganisationen gesucht wurde
-	var $child_orgas = array();	// Array mit allen Kinderorganisationen
-	
+    var $b_check_childs;        // Flag, ob schon nach Kinderorganisationen gesucht wurde
+    var $child_orgas = array(); // Array mit allen Kinderorganisationen
+    
     // Konstruktor
-    function Organization($connection, $organization = "")
+    function Organization(&$db, $organization = "")
     {
-        $this->db_connection  = $connection;
+        $this->db            =& $db;
         $this->table_name     = TBL_ORGANIZATIONS;
         $this->column_praefix = "org";
         $this->key_name       = "org_id";
@@ -79,9 +79,9 @@ class Organization extends TableAccess
     // Organisation mit der uebergebenen ID oder der Kurzbezeichnung aus der Datenbank auslesen
     function getOrganization($organization)
     {
-		$condition = "";
-		
-		// wurde org_shortname uebergeben, dann die SQL-Bedingung anpassen
+        $condition = "";
+        
+        // wurde org_shortname uebergeben, dann die SQL-Bedingung anpassen
         if(is_numeric($organization) == false)
         {
             $organization = addslashes($organization);
@@ -95,13 +95,13 @@ class Organization extends TableAccess
     // die Funktion wird innerhalb von clear() aufgerufen
     function clearAdditionalData()
     {
-    	$this->b_check_childs = false;
-    	$this->child_orgas    = array();
+        $this->b_check_childs = false;
+        $this->child_orgas    = array();
     }
     
     // interne Funktion, die bei setValue den uebergebenen Wert prueft
-	// und ungueltige Werte auf leer setzt
-	// die Funktion wird innerhalb von setValue() aufgerufen
+    // und ungueltige Werte auf leer setzt
+    // die Funktion wird innerhalb von setValue() aufgerufen
     function checkValue($field_name, $field_value)
     {
         switch($field_name)
@@ -115,7 +115,7 @@ class Organization extends TableAccess
                     return false;
                 }
                 break;
-        }    	
+        }       
         return true;
     }
         
@@ -125,11 +125,10 @@ class Organization extends TableAccess
     {
         $sql    = "SELECT * FROM ". TBL_PREFERENCES. "
                     WHERE prf_org_id = ". $this->db_fields['org_id'];
-        $result = mysql_query($sql, $this->db_connection);
-        db_error($result,__FILE__,__LINE__);
+        $result = $this->db->query($sql);
 
         $preferences = array();
-        while($prf_row = mysql_fetch_array($result))
+        while($prf_row = $this->db->fetch_array($result))
         {
             $preferences[$prf_row['prf_name']] = $prf_row['prf_value'];
         }
@@ -138,39 +137,35 @@ class Organization extends TableAccess
     }
     
     // die Funktion schreibt alle Parameter aus dem uebergebenen Array
-	// zurueck in die Datenbank, dabei werden nur die veraenderten oder
-	// neuen Parameter geschrieben
-	// $update : bestimmt, ob vorhandene Werte aktualisiert werden
+    // zurueck in die Datenbank, dabei werden nur die veraenderten oder
+    // neuen Parameter geschrieben
+    // $update : bestimmt, ob vorhandene Werte aktualisiert werden
     function setPreferences($preferences, $update = true)
     {
-    	$db_preferences = $this->getPreferences();
+        $db_preferences = $this->getPreferences();
 
-    	foreach($preferences as $key => $value)
-    	{
-    		if(array_key_exists($key, $db_preferences))
-    		{
-    			if($update == true
-    			&& $value  != $db_preferences[$key])
-    			{
-    				// Pref existiert in DB, aber Wert hat sich geaendert
-					$sql = "UPDATE ". TBL_PREFERENCES. " SET prf_value = '$value'
-					         WHERE prf_org_id = ". $this->db_fields['org_id']. "
-							   AND prf_name   = '$key' ";
-					error_log($sql);	
-			        $result = mysql_query($sql, $this->db_connection);
-			        db_error($result,__FILE__,__LINE__);
-    			}
-    		}
-    		else
-    		{
-    			// Parameter existiert noch nicht in DB
-				$sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-						VALUES   (". $this->db_fields['org_id']. ", '$key', '$value') ";
-		        error_log($sql);				
-		        $result = mysql_query($sql, $this->db_connection);
-		        db_error($result,__FILE__,__LINE__);
-    		}
-    	}
+        foreach($preferences as $key => $value)
+        {
+            if(array_key_exists($key, $db_preferences))
+            {
+                if($update == true
+                && $value  != $db_preferences[$key])
+                {
+                    // Pref existiert in DB, aber Wert hat sich geaendert
+                    $sql = "UPDATE ". TBL_PREFERENCES. " SET prf_value = '$value'
+                             WHERE prf_org_id = ". $this->db_fields['org_id']. "
+                               AND prf_name   = '$key' ";
+                    $this->db->query($sql);
+                }
+            }
+            else
+            {
+                // Parameter existiert noch nicht in DB
+                $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+                        VALUES   (". $this->db_fields['org_id']. ", '$key', '$value') ";
+                $this->db->query($sql);
+            }
+        }
     }
     
     // gibt ein Array mit allen Kinder- bzw. Elternorganisationen zurueck
@@ -198,18 +193,17 @@ class Organization extends TableAccess
             }
             $sql .= " org_id = ". $this->db_fields['org_org_id_parent'];
         }
-        $result = mysql_query($sql, $this->db_connection);
-        db_error($result,__FILE__,__LINE__);
+        $this->db->query($sql);
         
-        while($row = mysql_fetch_object($result))
+        while($row = $this->db->fetch_array())
         {
             if($longname == true)
             {
-                $arr_child_orgas[$row->org_id] = $row->org_longname;
+                $arr_child_orgas[$row->org_id] = $row['org_longname'];
             }
             else
             {
-                $arr_child_orgas[$row->org_id] = $row->org_shortname;
+                $arr_child_orgas[$row->org_id] = $row['org_shortname'];
             }
         }
         return $arr_child_orgas;
@@ -219,44 +213,44 @@ class Organization extends TableAccess
     // der aktuellen Orga ist
     function isChildOrganization($organization)
     {
-    	if($this->b_check_childs == false)
-    	{
-    		// Daten erst einmal aus DB einlesen
-    		$this->child_orgas = $this->getReferenceOrganizations(true, false);
-    		$this->b_check_childs = true;
-    	}
-    	
-    	if(is_numeric($organization))
-    	{
-    		// org_id wurde uebergeben
-    		$ret_code = array_key_exists($organization, $this->child_orgas);
-    	}
-    	else
-    	{
-    		// org_shortname wurde uebergeben
-    		$ret_code = in_array($organization, $this->child_orgas);
-    	}
-    	return $ret_code;
+        if($this->b_check_childs == false)
+        {
+            // Daten erst einmal aus DB einlesen
+            $this->child_orgas = $this->getReferenceOrganizations(true, false);
+            $this->b_check_childs = true;
+        }
+        
+        if(is_numeric($organization))
+        {
+            // org_id wurde uebergeben
+            $ret_code = array_key_exists($organization, $this->child_orgas);
+        }
+        else
+        {
+            // org_shortname wurde uebergeben
+            $ret_code = in_array($organization, $this->child_orgas);
+        }
+        return $ret_code;
     }
     
     // prueft, ob die Orga Kinderorganisationen besitzt
     function hasChildOrganizations()
     {
-      	if($this->b_check_childs == false)
-    	{
-    		// Daten erst einmal aus DB einlesen
-    		$this->child_orgas = $this->getReferenceOrganizations(true, false);
-    		$this->b_check_childs = true;
-    	}
+        if($this->b_check_childs == false)
+        {
+            // Daten erst einmal aus DB einlesen
+            $this->child_orgas = $this->getReferenceOrganizations(true, false);
+            $this->b_check_childs = true;
+        }
 
-    	if(count($this->child_orgas) > 0)
-    	{
-    		return true;
-    	}
-    	else
-    	{
-    		return false;
-    	}
+        if(count($this->child_orgas) > 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
 ?>

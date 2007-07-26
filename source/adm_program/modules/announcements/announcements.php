@@ -120,10 +120,9 @@ if(strlen($organizations) == 0)
 if($req_id > 0)
 {
     $sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
-                WHERE ( ann_id = {0}
+                WHERE ( ann_id = $req_id
                       AND ((ann_global   = 1 AND ann_org_shortname IN ($organizations))
                            OR ann_org_shortname = '". $g_current_organization->getValue("org_shortname"). "'))";
-    $sql    = prepareSQL($sql, array($req_id));
 }
 //...ansonsten alle fuer die Gruppierung passenden Ankuendigungen aus der DB holen.
 else
@@ -133,13 +132,10 @@ else
                       OR (   ann_global   = 1
                          AND ann_org_shortname IN ($organizations) ))
                 ORDER BY ann_timestamp DESC
-                LIMIT {0}, 10 ";
-
-    $sql    = prepareSQL($sql, array($req_start));
+                LIMIT $req_start, 10 ";
 }
 
-$announcements_result = mysql_query($sql, $g_adm_con);
-db_error($announcements_result,__FILE__,__LINE__);
+$announcements_result = $g_db->query($sql);
 
 // Gucken wieviele Datensaetze die Abfrage ermittelt kann...
 $sql    = "SELECT COUNT(*) FROM ". TBL_ANNOUNCEMENTS. "
@@ -234,7 +230,7 @@ else
                 }
             echo "</div>
             <div class=\"smallFontSize\" style=\"margin: 8px 4px 4px 4px;\">";
-                $user_create = new User($g_adm_con, $row->ann_usr_id);
+                $user_create = new User($g_db, $row->ann_usr_id);
                 echo "Angelegt von ". $user_create->getValue("Vorname"). " ". $user_create->getValue("Nachname").
                 " am ". mysqldatetime("d.m.y h:i", $row->ann_timestamp);
 
@@ -243,7 +239,7 @@ else
                 && (  strtotime($row->ann_last_change) > (strtotime($row->ann_timestamp) + 900)
                    || $row->ann_usr_id_change != $row->ann_usr_id ) )
                 {
-                    $user_change = new User($g_adm_con, $row->ann_usr_id_change);
+                    $user_change = new User($g_db, $row->ann_usr_id_change);
                     echo "<br>Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname").
                     " am ". mysqldatetime("d.m.y h:i", $row->ann_last_change);
                 }

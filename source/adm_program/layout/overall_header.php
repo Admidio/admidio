@@ -56,13 +56,18 @@ if(isset($g_layout['includes']) == false)
 {
     $g_layout['includes'] = true;
 }
+$orga_name = "";
+if(isset($g_current_organization))
+{
+    $orga_name = $g_current_organization->getValue("org_longname");
+}
 
 echo "
 <!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org -->\n
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
 <html>
 <head>
-    <title>". $g_current_organization->getValue("org_longname"); 
+    <title>$orga_name"; 
     if(strlen($g_layout['title']) > 0)
     {
         echo " - ". $g_layout['title'];

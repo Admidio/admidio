@@ -13,7 +13,7 @@
  *
  * Das Objekt wird erzeugt durch Aufruf des Konstruktors und der Uebergabe der
  * aktuellen Datenbankverbindung:
- * $role = new Role($g_adm_con);
+ * $role = new Role($g_db);
  *
  * Mit der Funktion getRole($user_id) kann die gewuenschte Rolle ausgelesen
  * werden.
@@ -54,9 +54,9 @@ require_once(SERVER_PATH. "/adm_program/system/table_access_class.php");
 class Role extends TableAccess
 {
     // Konstruktor
-    function Role($connection, $role = "")
+    function Role(&$db, $role = "")
     {
-        $this->db_connection  = $connection;
+        $this->db            =& $db;
         $this->table_name     = TBL_ROLES;
         $this->column_praefix = "rol";
         $this->key_name       = "rol_id";
@@ -78,7 +78,7 @@ class Role extends TableAccess
 
         if(is_numeric($role))
         {
-        	$condition = " rol_id = $role ";
+            $condition = " rol_id = $role ";
         }
         else
         {
@@ -86,15 +86,15 @@ class Role extends TableAccess
             $condition = " rol_name LIKE '$role' ";
         }
         
-    	$tables    = TBL_CATEGORIES;
-    	$condition = $condition. " AND rol_cat_id = cat_id
+        $tables    = TBL_CATEGORIES;
+        $condition = $condition. " AND rol_cat_id = cat_id
                                    AND cat_org_id = ". $g_current_organization->getValue("org_id");
-    	$this->readData($role, $condition, $tables);
+        $this->readData($role, $condition, $tables);
     }
     
     // interne Funktion, die bei setValue den uebergebenen Wert prueft
-	// und ungueltige Werte auf leer setzt
-	// die Funktion wird innerhalb von setValue() aufgerufen
+    // und ungueltige Werte auf leer setzt
+    // die Funktion wird innerhalb von setValue() aufgerufen
     function checkValue($field_name, $field_value)
     {
         switch($field_name)
@@ -140,22 +140,22 @@ class Role extends TableAccess
                     $field_value = 0;
                 }
                 break;
-        }    	
+        }       
         return true;
     }
     
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
-	// die Funktion wird innerhalb von save() aufgerufen
+    // die Funktion wird innerhalb von save() aufgerufen
     function initializeFields()
     {
-    	global $g_current_user;
-    	
+        global $g_current_user;
+        
         $this->db_fields['rol_last_change']   = date("Y-m-d H:i:s", time());
         $this->db_fields['rol_usr_id_change'] = $g_current_user->getValue("usr_id");
     }
 
     // interne Funktion, die die Fotoveranstaltung in Datenbank und File-System loeschen
-	// die Funktion wird innerhalb von delete() aufgerufen
+    // die Funktion wird innerhalb von delete() aufgerufen
     function deleteReferences()
     {
         // die Rolle "Webmaster" darf nicht geloescht werden
@@ -164,20 +164,18 @@ class Role extends TableAccess
             $sql    = "DELETE FROM ". TBL_ROLE_DEPENDENCIES. " 
                         WHERE rld_rol_id_parent = ". $this->db_fields['rol_id']. "
                            OR rld_rol_id_child  = ". $this->db_fields['rol_id'];
-            $result = mysql_query($sql, $this->db_connection);
-            db_error($result,__FILE__,__LINE__);
+            $this->db->query($sql);
 
             $sql    = "DELETE FROM ". TBL_MEMBERS. " 
                         WHERE mem_rol_id = ". $this->db_fields['rol_id'];
-            $result = mysql_query($sql, $this->db_connection);
-            db_error($result,__FILE__,__LINE__);
+            $this->db->query($sql);
             
             return true;
         }
         else
         {
-        	return false;
-        } 	
+            return false;
+        }   
     }
     
     // aktuelle Rolle wird auf inaktiv gesetzt
@@ -190,13 +188,11 @@ class Role extends TableAccess
                                                   , mem_end   = SYSDATE()
                         WHERE mem_rol_id = ". $this->db_fields['rol_id']. "
                           AND mem_valid  = 1 ";
-            $result = mysql_query($sql, $this->db_connection);
-            db_error($result,__FILE__,__LINE__);
+            $this->db->query($sql);
 
             $sql    = "UPDATE ". TBL_ROLES. " SET rol_valid = 0
                         WHERE rol_id = ". $this->db_fields['rol_id'];
-            $result = mysql_query($sql, $this->db_connection);
-            db_error($result,__FILE__,__LINE__);
+            $this->db->query($sql);
             
             return 0;
         }
@@ -212,13 +208,11 @@ class Role extends TableAccess
             $sql    = "UPDATE ". TBL_MEMBERS. " SET mem_valid = 1
                                                   , mem_end   = NULL
                         WHERE mem_rol_id = ". $this->db_fields['rol_id'];
-            $result = mysql_query($sql, $this->db_connection);
-            db_error($result,__FILE__,__LINE__);
+            $this->db->query($sql);
 
             $sql    = "UPDATE ". TBL_ROLES. " SET rol_valid = 1
                         WHERE rol_id = ". $this->db_fields['rol_id'];
-            $result = mysql_query($sql, $this->db_connection);
-            db_error($result,__FILE__,__LINE__);
+            $this->db->query($sql);
             
             return 0;
         }
@@ -238,11 +232,9 @@ class Role extends TableAccess
             {
                 $sql = $sql. " AND mem_leader = 0 ";
             }
-            $sql    = prepareSQL($sql, array($req_rol_id));
-            $result = mysql_query($sql, $g_adm_con);
-            db_error($result,__FILE__,__LINE__);
+            $this->db->query($sql);
             
-            $num_members = mysql_num_rows($result);            
+            $num_members = $this->db->num_rows();            
             return $this->db_fields['rol_max_members'] - $num_members;
         }
         return 999;

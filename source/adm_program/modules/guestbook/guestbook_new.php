@@ -76,7 +76,7 @@ if ($_GET["id"] != 0)
 
 if (isset($_SESSION['guestbook_entry_request']))
 {
-    $form_values = $_SESSION['guestbook_entry_request'];
+    $form_values = strStripSlashesDeep($_SESSION['guestbook_entry_request']);
     unset($_SESSION['guestbook_entry_request']);
 }
 else

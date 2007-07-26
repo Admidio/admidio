@@ -78,7 +78,7 @@ else
 
 $act_date = date("Y.m.d 00:00:00", time());
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
-mysql_select_db($g_adm_db, $g_adm_con );
+$g_db->select_db($g_adm_db);
 
 // alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
 $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. "
@@ -87,13 +87,12 @@ if($g_current_organization->getValue("org_org_id_parent") > 0)
 {
     $sql = $sql. " OR org_id = ". $g_current_organization->getValue("org_org_id_parent");
 }
-$result = mysql_query($sql, $g_adm_con);
-db_error($result,__FILE__,__LINE__);
+$result = $g_db->query($sql);
 
 $organizations = null;
 $i             = 0;
 
-while($row = mysql_fetch_object($result))
+while($row = $g_db->fetch_object($result))
 {
     if($i > 0) 
     {
@@ -119,12 +118,11 @@ else
                 ORDER BY ann_timestamp DESC
                 LIMIT $plg_announcements_count";
 }
-$result = mysql_query($sql, $g_adm_con);
-db_error($result,__FILE__,__LINE__);
+$result = $g_db->query($sql);
 
-if(mysql_num_rows($result) > 0)
+if($g_db->num_rows($result) > 0)
 {
-    while($row = mysql_fetch_object($result))
+    while($row = $g_db->fetch_object($result))
     {
         echo "<a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/modules/announcements/announcements.php?id=$row->ann_id&amp;headline=". utf8_decode($plg_headline). "\" target=\"$plg_link_target\">";
         

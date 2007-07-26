@@ -116,7 +116,7 @@ while ($row = mysql_fetch_object($result))
     $description = $description. "<br /><br /><a href=\"$link\">Link auf ". $g_current_organization->getValue("org_homepage"). "</a>";
 
     // Den Autor der Ankuendigung ermitteln und ausgeben
-    $user = new User($g_adm_con, $row->ann_usr_id);
+    $user = new User($g_db, $row->ann_usr_id);
     $description = $description. "<br /><br /><i>Angelegt von ". strSpecialChars2Html($user->getValue("Vorname")). " ". strSpecialChars2Html($user->getValue("Nachname"));
     $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->ann_timestamp). "</i>";
 
@@ -125,7 +125,7 @@ while ($row = mysql_fetch_object($result))
     && (  strtotime($row->ann_last_change) > (strtotime($row->ann_timestamp) + 900)
        || $row->ann_usr_id_change != $row->ann_usr_id ) )
     {
-        $user_change = new User($g_adm_con, $row->ann_usr_id_change);
+        $user_change = new User($g_db, $row->ann_usr_id_change);
         $description = $description. "<br>Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname");
         $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->ann_last_change);
     }
