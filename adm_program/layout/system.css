@@ -197,6 +197,21 @@ a:hover {
 	margin-top: 5px;
 	margin-bottom: 5px;
 }
+.formBody ul{
+	list-style-position: inside;
+	list-style-type: none;
+	margin: 0px;
+	padding: 0px;
+}
+
+.formBody ul ul{
+	margin: 8px;
+}
+
+.formBody ul ul li{
+	display: inline;
+	padding-right: 5px;
+}
 
 .formRowText{
 	float: left;

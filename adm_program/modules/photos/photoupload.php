@@ -96,41 +96,30 @@ echo"
             ."
         </div>
         <hr>
+        <ul>
+			<ul>
+				<li>Bild 1:</li>
+				<li><input type=\"file\" id=\"bilddatei1\" name=\"bilddatei[]\" value=\"durchsuchen\"></li>
+			</ul>
+			<ul>
+				<li>Bild 2:</li>
+				<li><input type=\"file\" name=\"bilddatei[]\" value=\"durchsuchen\"></li>
+			</ul>
+			<ul>
+				<li>Bild 3:</li>
+				<li><input type=\"file\" name=\"bilddatei[]\" value=\"durchsuchen\"></li>
+			</ul>
+			<ul>
+				<li>Bild 4:</li>
+				<li><input type=\"file\" name=\"bilddatei[]\" value=\"durchsuchen\"></li>
+			</ul>
+			<ul>
+				<li>Bild 5:</li>
+				<li><input type=\"file\" name=\"bilddatei[]\" value=\"durchsuchen\"></li>
+			</ul>
+		</ul>
+		<hr />
         <div class=\"formRow\">
-            <div class=\"formRowText\">Bild 1:</div>
-            <div class=\"formRowField\"<input type=\"file\" id=\"bilddatei1\" name=\"bilddatei[]\" value=\"durchsuchen\"></div>
-        </div>
-        <div class=\"formRow\">
-            <div class=\"formRowText\">Bild 2:</div>
-            <div class=\"formRowField\"<input type=\"file\" name=\"bilddatei[]\" value=\"durchsuchen\"></div>
-        </div>
-        <div class=\"formRow\">
-            <div class=\"formRowText\">Bild 2:</div>
-            <div class=\"formRowField\"<input type=\"file\" name=\"bilddatei[]\" value=\"durchsuchen\"></div>
-        </div>
-        <div class=\"formRow\">
-            <div class=\"formRowText\">Bild 2:</div>
-            <div class=\"formRowField\"<input type=\"file\" name=\"bilddatei[]\" value=\"durchsuchen\"></div>
-        </div>
-        <div class=\"formRow\">
-            <div class=\"formRowText\">Bild 2:</div>
-            <div class=\"formRowField\"<input type=\"file\" name=\"bilddatei[]\" value=\"durchsuchen\"></div>
-        </div>
-
-        <div class=\"formRow\">
-            <hr />
-            Hilfe: <img src=\"$g_root_path/adm_program/images/help.png\" class=\"iconLink\" alt=\"Hilfe\" title=\"Hilfe\"
-                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_up_help','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\">
-            <hr />
-        </div>
-
-        <div class=\"formRow\">
-            <span class=\"editorLink\">
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\"><img
-                class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
-            </span>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <button name=\"upload\" type=\"submit\" value=\"speichern\">
                 <img src=\"$g_root_path/adm_program/images/page_white_get.png\" alt=\"Speichern\">
                 &nbsp;Bilder hochladen
@@ -138,6 +127,19 @@ echo"
         </div>
    </div>
 </form>";
+
+echo"
+<div class=\"pageNavigation\">
+	<a href=\"$g_root_path/adm_program/system/back.php\"><img class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
+    <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	
+	<img src=\"$g_root_path/adm_program/images/help.png\" class=\"iconLink\" alt=\"Hilfe\" title=\"Hilfe\"
+       onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_up_help','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\">	
+	<a onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_up_help','Message','width=600,height=600,left=310,top=200,scrollbars=yes'\")\">Hilfe</a>
+</div>
+
+";
 
 //Seitenende
 echo"
