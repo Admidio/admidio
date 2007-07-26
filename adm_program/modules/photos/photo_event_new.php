@@ -157,6 +157,8 @@ function subfolder($parent_id, $vorschub, $photo_event, $pho_id)
 
 $g_layout['title'] = "Veranstaltungsverwaltung";
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+echo"<h1 class=\"moduleHeadline\">Fotogalerien - Veranstaltungsverwaltung</h1>";
+
 
 /****************************Formular***********************************************/
 //Kopfzeile
@@ -189,16 +191,16 @@ echo"
 
         //Veranstaltung
         echo"
-        <div class=\"form_row\">
-            <div class=\"form_row_text\">Veranstaltung:</div>
-            <div class=\"form_row_field\">
+        <div class=\"formRow\">
+            <div class=\"formRowText\">Veranstaltung:</div>
+            <div class=\"formRowField\">
                 <input type=\"text\" id=\"pho_name\" name=\"pho_name\" style=\"width: 300px;\" maxlength=\"50\" tabindex=\"1\" value=\"".$photo_event->getValue("pho_name")."\">
-                <span title=\"Pflichtfeld\" class=\"mandatory_field_marker\">*</span>
+                <span title=\"Pflichtfeld\" class=\"mandatoryFieldMarker\">*</span>
         </div>
         </div>
-        <div class=\"form_row\">
-           <div class=\"form_row_text\">in Ordner:</div>
-           <div class=\"form_row_field\">
+        <div class=\"formRow\">
+           <div class=\"formRowText\">in Ordner:</div>
+           <div class=\"formRowField\">
                 <select size=\"1\" name=\"pho_pho_id_parent\" tabindex=\"2\">
                     <option value=\"0\">Fotogalerien(Hauptordner)</option>";
 
@@ -225,37 +227,37 @@ echo"
 
         //Beginn
         echo"
-        <div class=\"form_row\">
-            <div class=\"form_row_text\">Beginn:</div>
-            <div class=\"form_row_field\">
+        <div class=\"formRow\">
+            <div class=\"formRowText\">Beginn:</div>
+            <div class=\"formRowField\">
                 <input type=\"text\" name=\"pho_begin\" size=\"10\" tabindex=\"3\" maxlength=\"10\" value=\"". $photo_event->getValue("pho_begin")."\">
-                <span title=\"Pflichtfeld\" class=\"mandatory_field_marker\">*</span>
+                <span title=\"Pflichtfeld\" class=\"mandatoryFieldMarker\">*</span>
             </div>
         </div>";
 
         //Ende
         echo"
-        <div class=\"form_row\">
-            <div class=\"form_row_text\">Ende:</div>
-            <div class=\"form_row_field\">
+        <div class=\"formRow\">
+            <div class=\"formRowText\">Ende:</div>
+            <div class=\"formRowField\">
                 <input type=\"text\" name=\"pho_end\" size=\"10\" tabindex=\"4\" maxlength=\"10\" value=\"". $photo_event->getValue("pho_end")."\">
             </div>
         </div>";
 
         //Photographen
         echo"
-        <div class=\"form_row\">
-            <div class=\"form_row_text\">Fotografen:</div>
-            <div class=\"form_row_field\">
+        <div class=\"formRow\">
+            <div class=\"formRowText\">Fotografen:</div>
+            <div class=\"formRowField\">
                 <input type=\"text\" name=\"pho_photographers\" style=\"width: 300px;\" tabindex=\"5\" maxlength=\"100\" value=\"".$photo_event->getValue("pho_photographers")."\">
             </div>
         </div>";
 
         //Freigabe
         echo"
-        <div class=\"form_row\">
-            <div class=\"form_row_text\">Sperren:</div>
-            <div  class=\"form_row_field\">";
+        <div class=\"formRow\">
+            <div class=\"formRowText\">Sperren:</div>
+            <div  class=\"formRowField\">";
                 echo "<input type=\"checkbox\" name=\"pho_locked\" id=\"locked\" tabindex=\"6\" value=\"1\"";
 
                 if($photo_event->getValue("pho_locked") == 1)
@@ -268,17 +270,18 @@ echo"
 
         //Submit- und Zurueckbutton
         echo"
-        <div class=\"form_row\">
+        <div class=\"formRow\">
             <hr />
             Hilfe: <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
                     onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=veranst_help','Message','width=500, height=400, left=310,top=200,scrollbars=no')\">
             <hr />
         </div>
-        <div class=\"form_row\">
-            <button name=\"zurueck\" type=\"button\" tabindex=\"7\" value=\"zurueck\" onclick=\"history.back()\">
-                <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\">
-                &nbsp;Zur&uuml;ck
-            </button>
+        <div class=\"formRow\">
+            <span class=\"editorLink\">
+	            <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\"><img
+	            class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
+	            <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+        	</span>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <button name=\"submit\" type=\"submit\" tabindex=\"8\" value=\"speichern\">
                 <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\">

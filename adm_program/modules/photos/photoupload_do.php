@@ -130,9 +130,8 @@ if($_POST["upload"])
 {
     //bei selbstaufruf der Datei Hinweise zu hochgeladenen Dateien und Kopieren der Datei in Ordner
     //Anlegen des Berichts
-    echo"
-    <h1>Fotoupload - Bericht</h1>
-	<div class=\"photo_list_container\">
+    echo"<h1 class=\"moduleHeadline\">Fotogalerien - Upload</h1>
+	<div class=\"photoModuleContainer\">
 		Bitte einen Moment Geduld. 
         Die Bilder wurden der Veranstaltung <br> - ".$photo_event->getValue("pho_name")." - <br>
         erfolgreich hinzugef&uuml;gt, wenn sie hier angezeigt werden.<br>";
@@ -178,7 +177,8 @@ if($_POST["upload"])
                 //Kontrolle
                 if(file_exists($ordner."/".$bildnr.".jpg"))
                 {
-                    echo"<img src=\"photo_show.php?scal=".$g_preferences['photo_save_scale']."&amp;pic_nr=".$bildnr."&amp;pho_id=".$photo_event->getValue("pho_id")."&amp;pho_begin=".$photo_event->getValue("pho_begin")."\"><br><br>";
+                    echo"<img src=\"photo_show.php?scal=300&amp;pic_nr=".$bildnr."&amp;pho_id=".$photo_event->getValue("pho_id")."&amp;pho_begin=".$photo_event->getValue("pho_begin")."\"
+							class=\"photoOutput\"><br><br>";
 
                     //Aendern der Datenbankeintaege
                     $photo_event->setValue("pho_quantity", $photo_event->getValue("pho_quantity")+1);
@@ -196,16 +196,18 @@ if($_POST["upload"])
         //Buttons
         echo"
         <hr />
-        <div class=\"form_row\">
-            <button name=\"uebersicht\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id'\">
-                <img src=\"$g_root_path/adm_program/images/application_view_tile.png\" alt=\"Zur&uuml;ck\">
-                &nbsp;&Uuml;bersicht
-            </button>
+        <div class=\"formRow\">
+            <span class=\"editorLink\">
+	            <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\"><img
+	            class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
+	            <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+        	</span>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button name=\"moreupload\" type=\"button\" value=\"moreupload\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id'\">
-                <img src=\"$g_root_path/adm_program/images/photo.png\" alt=\"Speichern\">
-                &nbsp;Weitere Bilder hochladen
-            </button>
+			<span class=\"editorLink\">
+	            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id\"><img
+	            class=\"iconLink\" src=\"$g_root_path/adm_program/images/photo.png\" alt=\"Weitere Bilder hochladen\"></a>
+	            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id\">Weitere Bilder hochladen</a>
+        	</span>
          </div>
     </div><br><br>";
 }//if($upload)

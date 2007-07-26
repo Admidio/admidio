@@ -235,17 +235,17 @@ if(isset($_POST["submit"]) && $_POST["submit"])
 
     echo"<h1>Bericht</h1>";
     echo"
-    <div class=\"photo_list_container\">
-		<div class=\"form_row\">Die Veranstaltung wurde erfolgreich angelegt / ge&auml;ndert:</div>
+    <div class=\"photoModuleContainer\">
+		<div class=\"formRow\">Die Veranstaltung wurde erfolgreich angelegt / ge&auml;ndert:</div>
         
-		<div class=\"form_row\">
-			<div class=\"form_row_text\">Veranstaltung:</div>
-			<div class=\"form_row_field\">".$photo_event->getValue("pho_name")."</div>
+		<div class=\"formRow\">
+			<div class=\"formRowText\">Veranstaltung:</div>
+			<div class=\"formRowField\">".$photo_event->getValue("pho_name")."</div>
 		</div>
         
-		<div class=\"form_row\">
-			<div class=\"form_row_text\">in Ordner:</div>
-			<div class=\"form_row_field\">";
+		<div class=\"formRow\">
+			<div class=\"formRowText\">in Ordner:</div>
+			<div class=\"formRowField\">";
  				if($photo_event->getValue("pho_pho_id_parent") > 0)
                 {
                     $photo_event_parent = new PhotoEvent($g_adm_con, $photo_event->getValue("pho_pho_id_parent"));
@@ -258,24 +258,24 @@ if(isset($_POST["submit"]) && $_POST["submit"])
         	echo"</div>
 		</div>
         
-		<div class=\"form_row\">
-			<div class=\"form_row_text\">Anfangsdatum:</div>
-			<div class=\"form_row_field\">".mysqldate("d.m.y", $photo_event->getValue("pho_begin"))."</div>
+		<div class=\"formRow\">
+			<div class=\"formRowText\">Anfangsdatum:</div>
+			<div class=\"formRowField\">".mysqldate("d.m.y", $photo_event->getValue("pho_begin"))."</div>
 		</div>
         
-		<div class=\"form_row\">
-			<div class=\"form_row_text\">Enddatum:</div>
-			<div class=\"form_row_field\">".mysqldate("d.m.y", $photo_event->getValue("pho_end"))."</div>
+		<div class=\"formRow\">
+			<div class=\"formRowText\">Enddatum:</div>
+			<div class=\"formRowField\">".mysqldate("d.m.y", $photo_event->getValue("pho_end"))."</div>
 		</div>
         
-		<div class=\"form_row\">
-			<div class=\"form_row_text\">Fotografen:</div>
-			<div class=\"form_row_field\">".$photo_event->getValue("pho_photographers")."</div>
+		<div class=\"formRow\">
+			<div class=\"formRowText\">Fotografen:</div>
+			<div class=\"formRowField\">".$photo_event->getValue("pho_photographers")."</div>
 		</div>
         
-		<div class=\"form_row\">
-			<div class=\"form_row_text\">Gesperrt:</div>
-			<div class=\"form_row_field\">";
+		<div class=\"formRow\">
+			<div class=\"formRowText\">Gesperrt:</div>
+			<div class=\"formRowField\">";
 	        	if($photo_event->getValue("pho_locked")==1)
 	            {
 	                 echo "Ja";
@@ -287,9 +287,9 @@ if(isset($_POST["submit"]) && $_POST["submit"])
         	echo"</div>
 		</div>
         
-		<div class=\"form_row\">
-			<div class=\"form_row_text\">Aktuelle Bilderzahl:</div>
-			<div class=\"form_row_field\">";
+		<div class=\"formRow\">
+			<div class=\"formRowText\">Aktuelle Bilderzahl:</div>
+			<div class=\"formRowField\">";
         		if($photo_event->getValue("pho_quantity")!=NULL)
         		{
 					echo $photo_event->getValue("pho_quantity");
@@ -300,8 +300,8 @@ if(isset($_POST["submit"]) && $_POST["submit"])
         		}
 	        echo"</div>
 		</div>
-        <div class=\"form_row\"><hr  /></div>
-        <div class=\"form_row\">
+        <div class=\"formRow\"><hr  /></div>
+        <div class=\"formRow\">
 			<button name=\"weiter\" type=\"button\" value=\"weiter\" onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id'\">Weiter&nbsp;
 	            <img src=\"$g_root_path/adm_program/images/forward.png\" alt=\"Weiter\">
 	        </button>

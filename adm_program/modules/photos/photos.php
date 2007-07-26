@@ -216,7 +216,7 @@ while ($pho_parent_id > 0)
 if($pho_id > 0)
 {
     //Ausgabe des Linkpfads
-    echo "<div id=\"photo_navigation_path\">
+    echo "<div class=\"navigationPath\">
             <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photos.php\"><img class=\"iconLink\" src=\"$g_root_path/adm_program/images/application_view_tile.png\" alt=\"Fotogalerien\"></a>
             <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photos.php\">Fotogalerien</a>$navilink
         </div>";
@@ -225,7 +225,7 @@ if($pho_id > 0)
 //bei Seitenaufruf mit Moderationsrechten
 if($g_current_user->editPhotoRight())
 {
-    echo"<div id=\"photo_editor_links\">
+    echo"<div class=\"editorLink\">
             <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photo_event_new.php?job=new&amp;pho_id=$pho_id\"><img
             class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" alt=\"Veranstaltung anlegen\"></a>
             <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photo_event_new.php?job=new&amp;pho_id=$pho_id\">Veranstaltung anlegen</a>";
@@ -240,7 +240,7 @@ if($g_current_user->editPhotoRight())
 }
 
 //Anlegender Tabelle
-echo "<div class=\"photo_list_container\">";
+echo "<div class=\"photoModuleContainer\">";
     /*************************THUMBNAILS**********************************/
     //Nur wenn uebergeben Veranstaltung Bilder enthaelt
     if($photo_event->getValue("pho_quantity") > 0)
@@ -280,17 +280,18 @@ echo "<div class=\"photo_list_container\">";
         }
 
         //Datum der Veranstaltung
-        echo"
-        Datum: ".mysqldate("d.m.y", $photo_event->getValue("pho_begin"));
-        if($photo_event->getValue("pho_end") != $photo_event->getValue("pho_begin"))
-        {
-            echo " bis ".mysqldate("d.m.y", $photo_event->getValue("pho_end"));
-        }
+        echo"<div id=\"photoEventInformation\">
+	        Datum: ".mysqldate("d.m.y", $photo_event->getValue("pho_begin"));
+	        if($photo_event->getValue("pho_end") != $photo_event->getValue("pho_begin"))
+	        {
+	            echo " bis ".mysqldate("d.m.y", $photo_event->getValue("pho_end"));
+	        }
+        echo"</div>";
 
         //Container mit Navigation
-        echo" <div class=\"page_navigation\">";
+        echo" <div class=\"pageNavigation\">";
 	        //Seitennavigation
-	        echo"<br>Seite:&nbsp;";
+	        echo"Seite:&nbsp;";
 	
 	        //Vorherige thumb_seite
 	        $vorseite=$thumb_seite-1;
@@ -298,7 +299,7 @@ echo "<div class=\"photo_list_container\">";
 	        {
 	            echo"
 	            <a href=\"$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$vorseite&amp;pho_id=$pho_id\">
-	                <img src=\"$g_root_path/adm_program/images/back.png\" class=\"navigation_arrow\" alt=\"Vorherige\">
+	                <img src=\"$g_root_path/adm_program/images/back.png\" class=\"navigationArrow\" alt=\"Vorherige\">
 	            </a>
 	            <a href=\"$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$vorseite&amp;pho_id=$pho_id\">Vorherige</a>&nbsp;&nbsp;";
 	        }
@@ -321,17 +322,17 @@ echo "<div class=\"photo_list_container\">";
 	            echo"
 	            <a href=\"$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$nachseite&amp;pho_id=$pho_id\">N&auml;chste</a>
 	            <a href=\"$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$nachseite&amp;pho_id=$pho_id\">
-	                <img src=\"$g_root_path/adm_program/images/forward.png\" class=\"navigation_arrow\" alt=\"N&auml;chste\">
+	                <img src=\"$g_root_path/adm_program/images/forward.png\" class=\"navigationArrow\" alt=\"N&auml;chste\">
 	            </a>";
 	        }
 		echo"</div>";
 	        
         //Thumbnailtabelle
         echo"
-        <table id=\"photo_thumbnail_table\">";
+        <table id=\"photoThumbnailTable\">";
             for($zeile=1;$zeile<=$g_preferences['photo_thumbs_row'];$zeile++)//durchlaufen der Tabellenzeilen
             {
-                echo "<tr class=\"photo_thumbnail_table_row\">";
+                echo "<tr class=\"photoThumbnailTableRow\">";
                 for($spalte=1;$spalte<=$g_preferences['photo_thumbs_column'];$spalte++)//durchlaufen der Tabellenzeilen
                 {
                     $bild = ($thumb_seite*$thumbs_per_side)-$thumbs_per_side+($zeile*$g_preferences['photo_thumbs_column'])-$g_preferences['photo_thumbs_row']+$spalte+$difference;//Errechnug welches Bild ausgegeben wird
@@ -363,9 +364,9 @@ echo "<div class=\"photo_list_container\">";
                         if($g_preferences['photo_show_mode']==0)
                         {
                         	echo "
-                        	<td class=\"photo_thumbnail_table_column\">
+                        	<td class=\"photoThumbnailTableColumn\">
                             	<img onclick=\"window.open('$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$bild&pho_id=$pho_id','msg', 'height=".$popup_height.", width=".$popup_width.",left=162,top=5')\" 
-                            	 src=\"".$ordner_url."/thumbnails/".$bild.".jpg\" class=\"photo_thumbnail\" alt=\"$bild\">
+                            	 src=\"".$ordner_url."/thumbnails/".$bild.".jpg\" class=\"photoThumbnail\" alt=\"$bild\">
                             	<br>";
                         }
                         
@@ -373,7 +374,7 @@ echo "<div class=\"photo_list_container\">";
                         if($g_preferences['photo_show_mode']==1)
                         {
                         	echo "
-                        	<td class=\"photo_thumbnail_table_column\">
+                        	<td class=\"photoThumbnailTableColumn\">
                             	<a href=\"".$ordner_url."/".$bild.".jpg\" rel=\"lightbox[roadtrip]\" title=\"".$photo_event->getValue("pho_name")."\"><img src=\"".$ordner_url."/thumbnails/".$bild.".jpg\" class=\"thumbnail\" alt=\"$bild\"></a>
                             	<br>";
                         }
@@ -382,7 +383,7 @@ echo "<div class=\"photo_list_container\">";
                         if($g_preferences['photo_show_mode']==2)
                         {
                         	echo "
-                        	<td class=\"photo_thumbnail_table_column\">
+                        	<td class=\"photoThumbnailTableColumn\">
                             	<img onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$bild&pho_id=$pho_id'\" src=\"".$ordner_url."/thumbnails/".$bild.".jpg\" class=\"thumbnail\" alt=\"$bild\">";
                         }   
                         	
@@ -408,7 +409,7 @@ echo "<div class=\"photo_list_container\">";
 
         //Anleger und Veraendererinfos
         echo"
-        <div class=\"edit_information\">";
+        <div class=\"editInformation\">";
             if($photo_event->getValue("pho_usr_id") > 0)
             {
                 $user_create = new User($g_adm_con, $photo_event->getValue("pho_usr_id"));
@@ -538,7 +539,7 @@ echo "<div class=\"photo_list_container\">";
 
     // Navigation mit Vor- und Zurueck-Buttons
     $base_url = "$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$pho_id;
-    echo "<div class=\"page_navigation\">".generatePagination($base_url, $events-$ignored, 10, $event_element, TRUE)."</div>
+    echo "<div class=\"pageNavigation\">".generatePagination($base_url, $events-$ignored, 10, $event_element, TRUE)."</div>
     <table id=\"photo_event_table\">";
         for($x=$event_element+$ignored-$ignore; $x<=$event_element+$ignored+9 && $x<$events; $x++)
         {
@@ -583,8 +584,8 @@ echo "<div class=\"photo_list_container\">";
 
                 //Ausgabe
                 echo"
-                <tr class=\"photo_event_table_row\">
-                    <td class=\"photo_event_table_pic_column\">";
+                <tr class=\"photoEventTableRow\">
+                    <td class=\"photoEventTablePicColumn\">";
                         if(file_exists($ordner))
                         {
                             //beispielbild nur anzeigen wenn x-seite unter 3+ y-seite ist
@@ -593,12 +594,12 @@ echo "<div class=\"photo_list_container\">";
                             {
                                 echo"
                                     <a target=\"_self\" href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$adm_photo_list["pho_id"]."\">
-                                    <img  class=\"photo_preview_pic\" src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$bsp_pho_id."&amp;pic_nr=".$bsp_pic_nr."&amp;pho_begin=".$bsp_pic_begin."&amp;scal=".$g_preferences['photo_preview_scale']."&amp;side=y\" alt=\"Zufallsbild\"></a>
+                                    <img  class=\"photoPreviewPic\" src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$bsp_pho_id."&amp;pic_nr=".$bsp_pic_nr."&amp;pho_begin=".$bsp_pic_begin."&amp;scal=".$g_preferences['photo_preview_scale']."&amp;side=y\" alt=\"Zufallsbild\"></a>
                                 ";
                             }
                         }
                     echo"</td>
-                    <td class=\"photo_event_table_text_column\">";
+                    <td class=\"photoEventTableTextColumn\">";
                         //Warnung fuer Leute mit Fotorechten: Ordner existiert nicht
                         if(!file_exists($ordner) && $g_current_user->editPhotoRight())
                         {
