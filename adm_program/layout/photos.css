@@ -31,21 +31,21 @@
  *****************************************************************************/
 /*Die Thumbnails werden in einer Tabelle aufbebaut
 hier koenne Einstellungen fuer diese vorgenommen werden*/
-#photo_thumbnail_table {
+#photoThumbnailTable {
 	width: 550px;	
 }
 
 /*Einstellung fuer die Thumbnailtabellenzeile, z.B. die Hoehe*/
-.photo_thumbnail_table_row{
+.photoThumbnailTableRow{
 }
 
 /*Einstellung fuer die Thumbnailtabellenspalte, z.B. Breite oder Ausrichtung des enthaltenen Textes*/
-.photo_thumbnail_table_column{
+.photoThumbnailTableColumn{
 	text-align: center;
 }
 
 /*Einstellung fuer das Thumbnail selbst, z.B. laesst sich ein Rand um jedes Bild legen*/
-.photo_thumbnail{
+.photoThumbnail{
 	vertical-align: middle;
 	cursor: pointer;
 	border: none;
@@ -53,60 +53,53 @@ hier koenne Einstellungen fuer diese vorgenommen werden*/
 
 
 /*Auch die Fotoevents werden in einer Tabelle angezeigt*/
-#photo_event_table{
+#photoEventTable{
 	width: 550px;
 }
 
 /*Einstellung fuer die Fotoeventtabellenzeile, z.B. die Hoehe*/
-.photo_event_table_row{
+.photoEventTableRow{
 }
 
 /*Einstellung fuer die FotoeventtabellenBILDERspalte*/
-.photo_event_table_pic_column{
+.photoEventTablePicColumn{
     padding: 4px;
    	text-align: right;
    	width: 35%;
 }
 
 /*Einstellung fuer die FotoeventtabellenTextspalte, z.B. Breite oder Ausrichtung des enthaltenen Textes*/
-.photo_event_table_text_column{
+.photoEventTableTextColumn{
 	text-align: left;
 	font-size: 8px;
 }
 
 /*Wenn in dieser Spalte Ein Link vorkommt wir dieser So dargestellt*/
-.photo_event_table_text_column a{
+.photoEventTableTextColumn a{
 	font-size: 12px;
 }
 
 /*Auch das Vorschaubild koenne z.B. einen Rand erhalten*/
-.photo_preview_pic{
+.photoPreviewPic{
 	border: none;
 	vertical-align: middle;
 }
 
-/*Einstellungen fuer den Pfad mit dessen Hilfe man durch die Veranstaltungen navigieren kann*/
-#photo_navigation_path{
-	text-align: center;
-	margin: 4px;
-}
-
-/*Wie sollen die Links fuer User mit Editorrechten (unterhalb der Ueberschrift) aussehen*/
-#photo_editor_links{
-	text-align: center;
-	margin: 4px;
-}
-
 /*Umramender Container um Thumbnail- und Fotoeventtabelle, sowie Uploadbericht*/
-.photo_list_container{
-	border-width: 2px;
+.photoModuleContainer{
+	border-width: 0px;
 	border-color: #6CA7A8;
 	border-style: solid;
 	width: 550px;
 }
 
 /*Einstellungen fuer die ausgabe der grossen Photos (ohne LightBox)*/
-.photo_output{
+.photoOutput{
 	text-align: center;
 	border: none;
+}
+
+/*Informationen ueber den Thumbnails, derzeit nur Datum*/
+#photoEventInformation{
+	margin: 5px
 }

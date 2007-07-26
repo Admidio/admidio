@@ -164,20 +164,21 @@ a:hover {
 	width: 85%;
 }
 
-.form_row{
+.formRow{
 	margin-top: 5px;
 	margin-bottom: 5px;
 }
 
-.form_row_text{
+.formRowText{
 	float: left;
-	text-align: left;
+	text-align: right;
 	width: 170px;
 	vertical-align: middle;
 	padding-left: 10px;
+	padding-right: 10px;
 }
 
-.form_row_field{
+.formRowField{
 	text-align: left;
 	padding-left: 180px;
 	max-width: 400px;
@@ -255,22 +256,38 @@ a:hover {
 }
 
 /* Elemente fuer Navigationsklasse */
-.page_navigation{
+.pageNavigation{
 	text-align: center;
+	vertical-align: middle;
 }
-.navigation_arrow{
+.navigationArrow{
 	vertical-align: middle;
 	border: none;
 }
 
 /* Zusatzinformation wer letzte Aenderungen vorgenommen hat etc.*/
-.edit_information{
+.editInformation{
 	font-size: 8pt;
 	margin: 8px 4px 4px 4px;
 	text-align: center;
 }
 
 /*Pflichtfeldmarkierung*/
-.mandatory_field_marker{
+.mandatoryFieldMarker{
 	color: #990000;
+}
+
+
+/*Wie sollen die Links fuer User mit Editorrechten aussehen*/
+.editorLinks{
+	text-align: center;
+	margin: 4px;
+	vertical-align: middle;
+}
+
+
+/*Einstellungen fuer eine Pfadnavigation, z.B. durch die Versanstaltungsherarchie im Fotomodul*/
+.navigationPath{
+	text-align: center;
+	margin: 4px;
 }
