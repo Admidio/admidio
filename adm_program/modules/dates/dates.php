@@ -218,13 +218,11 @@ if($req_id == 0
     // Neue Termine anlegen
     if($g_current_user->editDates())
     {
-        echo "<p>
-            <span class=\"iconLink\">
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/dates/dates_new.php?headline$req_headline\"><img
+        echo "<div class=\"editorLink\">
+                <a href=\"$g_root_path/adm_program/modules/dates/dates_new.php?headline$req_headline\"><img
                 class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" alt=\"Termin anlegen\"></a>
                 <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/dates/dates_new.php?headline=$req_headline\">Anlegen</a>
-            </span>
-        </p>";
+            </div>";
     }
 
     // Navigation mit Vor- und Zurueck-Buttons
@@ -250,37 +248,38 @@ else
     while($row = mysql_fetch_object($dates_result))
     {
         echo "
-        <div class=\"boxBody\" style=\"overflow: hidden;\">
+        <div class=\"boxBody\">
             <div class=\"boxHead\">
-                <div style=\"width: 85%; float: left;\">
-                    <img src=\"$g_root_path/adm_program/images/date.png\" style=\"vertical-align: middle;\" alt=\"". strSpecialChars2Html($row->dat_headline). "\">
-                    ". mysqldatetime("d.m.y", $row->dat_begin). "
-                    &nbsp;". strSpecialChars2Html($row->dat_headline). "
-                </div>";
-                // Link zum iCal export
-                echo "<div style=\"text-align: right;\">
-                    <img src=\"$g_root_path/adm_program/images/database_out.png\" style=\"cursor: pointer\"
-                        width=\"16\" height=\"16\" border=\"0\" alt=\"Exportieren (iCal)\" title=\"Exportieren (iCal)\"
-                        onclick=\"self.location.href='$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=$row->dat_id&mode=4'\">";
-
-                    // aendern & loeschen darf man nur eigene Termine, ausser Moderatoren
-                    if ($g_current_user->editDates())
-                    {
-                        echo "&nbsp;<img src=\"$g_root_path/adm_program/images/edit.png\" style=\"cursor: pointer\"
-                            width=\"16\" height=\"16\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"
-                            onclick=\"self.location.href='dates_new.php?dat_id=$row->dat_id&amp;headline=$req_headline'\">";
-
-                            // Loeschen darf man nur Termine der eigenen Gliedgemeinschaft
-                            if($row->dat_org_shortname == $g_organization)
-                            {
-                                echo "
-                                <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer\"
-                                    width=\"16\" height=\"16\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"
-                                    onclick=\"self.location.href='$g_root_path/adm_program/modules/dates/dates_function.php?mode=5&dat_id=$row->dat_id'\">";
-                            }
-                    }
-                echo "&nbsp;</div>
-            </div>
+				<div class=\"boxHeadIcon\"><img src=\"$g_root_path/adm_program/images/date.png\" class=\"icon16\" alt=\"". strSpecialChars2Html($row->dat_headline). "\"></div>                
+				<div class=\"boxHeadLeft\">". mysqldatetime("d.m.y", $row->dat_begin). "</div>
+                <div class=\"boxHeadCenter\"> ". strSpecialChars2Html($row->dat_headline). "</div>
+                <div class=\"boxHeadRight\"><div class=\"iconListHor\">
+					<ul>";
+						// Link zum iCal export
+						echo"
+						<li><img src=\"$g_root_path/adm_program/images/database_out.png\" class=\"iconLink alt=\"Exportieren (iCal)\" title=\"Exportieren (iCal)\"
+                        	onclick=\"self.location.href='$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=$row->dat_id&mode=4'\">
+						</li>";
+    					// aendern & loeschen darf man nur eigene Termine, ausser Moderatoren
+	                    if ($g_current_user->editDates())
+	                    {
+	                        echo "<li><img src=\"$g_root_path/adm_program/images/edit.png\" class=\"iconLink alt=\"Bearbeiten\" title=\"Bearbeiten\"
+	                            onclick=\"self.location.href='dates_new.php?dat_id=$row->dat_id&amp;headline=$req_headline'\"></li>";
+	
+	                            // Loeschen darf man nur Termine der eigenen Gliedgemeinschaft
+	                            if($row->dat_org_shortname == $g_organization)
+	                            {
+	                                echo "
+	                                <li><img src=\"$g_root_path/adm_program/images/cross.png\" class=\"iconLink alt=\"L&ouml;schen\" title=\"L&ouml;schen\"
+	                                    onclick=\"self.location.href='$g_root_path/adm_program/modules/dates/dates_function.php?mode=5&dat_id=$row->dat_id'\"></li>";
+	                            }
+	                    }
+        
+        
+					echo"</ul></div>
+				</div>";        		
+        		
+            echo"</div>
 
             <div style=\"margin: 8px 4px 4px 4px;\">";
                 if (mysqldatetime("h:i", $row->dat_begin) != "00:00")
@@ -329,7 +328,7 @@ else
                     echo nl2br(strSpecialChars2Html($row->dat_description));
                 }
             echo "</div>
-            <div class=\"smallFontSize\" style=\"margin: 8px 4px 4px 4px;\">";
+            <div class=\"editInformation\">";
                 $user_create = new User($g_db, $row->dat_usr_id);
                 echo "Angelegt von ". $user_create->getValue("Vorname"). " ". $user_create->getValue("Nachname").
                 " am ". mysqldatetime("d.m.y h:i", $row->dat_timestamp);
