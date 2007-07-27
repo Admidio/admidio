@@ -5,10 +5,10 @@
     <h2>Schnittstelle zum phpBB-Forum einrichten</h2>
 
     <p>Seit der Admidio Version 1.4 wird das <a href="http://www.phpbb.de">phpBB-Forum</a>
-    ab der Version 2.0.18 vollständig integriert und unterstützt. </p>
+    ab der Version 2.0.18 vollstÃ¤ndig integriert und unterstÃ¼tzt. </p>
     
     <p>Nach erfolgreicher Installation des Forums und der Anpassung in Admidio 
-    erhalten sie auf der Übersichtsseite den zusätzlichen Modulpunkt Forum:</p>
+    erhalten sie auf der Ãœbersichtsseite den zusÃ¤tzlichen Modulpunkt Forum:</p>
     
     <p><img src="help/images/screenshots/forum_uebersicht_logoff.png" alt="forum_uebersicht_logoff.png" /></p>
     
@@ -17,58 +17,58 @@
     
     <p><img src="help/images/screenshots/forum_uebersicht_logon.png" alt="forum_uebersicht_logon.png" /></p>
     
-    <p>Jeder User, der sich über eine Webanmeldung bei Admdio anmeldet, oder der 
-    unter der Benutzerverwaltung von Admidio mit einem gültigen Benutzernamen 
-    angelegt wurde, erhält im Forum einen gleichnamigen Benutzeraccount. </p>
+    <p>Jeder User, der sich Ã¼ber eine Webanmeldung bei Admdio anmeldet, oder der 
+    unter der Benutzerverwaltung von Admidio mit einem gÃ¼ltigen Benutzernamen 
+    angelegt wurde, erhÃ¤lt im Forum einen gleichnamigen Benutzeraccount. </p>
     
-    <p>Auf der Übersicht sieht jeder User, ob im Forum eine PM (Private Message) 
+    <p>Auf der Ãœbersicht sieht jeder User, ob im Forum eine PM (Private Message) 
     noch ungelesen verweilt.</p>
     
-    <p>Änderungen des Benutzernamens, der Email oder des Passwords in Admidio 
+    <p>Ã„nderungen des Benutzernamens, der Email oder des Passwords in Admidio 
     werden im Forum gleichgezogen und sind somit redundant.</p>
     
     <p>Ein im Forum abweichendes Password oder Email wird immer auf das in 
-    Admido hinterlegte Password und Email zurückgesetzt. Der User erhält dazu 
+    Admido hinterlegte Password und Email zurÃ¼ckgesetzt. Der User erhÃ¤lt dazu 
     eine entspechende Meldung.</p>
     
-    <p>Es wird im Forum geprüft ob ein gleichnamiger Benutzeraccount existiert, 
-    im ja Falle erhält der User bei der Webanmeldung die Aufforderung einen 
-    anderen Benutzernamen zu wählen. Gleiches gilt für das Ändern oder Anlegen 
+    <p>Es wird im Forum geprÃ¼ft ob ein gleichnamiger Benutzeraccount existiert, 
+    im ja Falle erhÃ¤lt der User bei der Webanmeldung die Aufforderung einen 
+    anderen Benutzernamen zu wÃ¤hlen. Gleiches gilt fÃ¼r das Ã„ndern oder Anlegen 
     eines Benutzernamens in Admidio.</p>
     
     <p>Bei der Erstanmeldung des Webmasters in Admidio, nach erfolgreicher 
     Installation des Forums und der Anpassung in Admidio, wird der Administrator 
     Account im Forum auf den Benutzernamen, dass Password und die Email der in 
-    Admidio hinterlegten Daten gleichgezogen. Der Webmaster erhält einen 
+    Admidio hinterlegten Daten gleichgezogen. Der Webmaster erhÃ¤lt einen 
     entsprechenden Hinweis.</p>
     
     <p class="notice"><b>Hinweis:</b><br /> Das Forum befindet sich im Parallelbetrieb zu Admidio. 
     Mit der Standardinstallation und Anpassung kann sich jederzeit ein Benutzer 
     auf dem Forum anmelden, ohne sich dabei in Admidio zu registrieren. Das 
-    bedeutet, Admidiouser können im Forum mit dort registrierten Usern und 
+    bedeutet, Admidiouser kÃ¶nnen im Forum mit dort registrierten Usern und 
     Besuchern schreiben. Ein Forum User ist nicht immer ein Admidio User, jedoch 
-    ist jeder Admidio User (mit gültigem Benutzernamen) ein User im Forum.<br />
-    Das Forum lässt sich auch&nbsp; -so es gewünscht ist - im Stand Allone 
+    ist jeder Admidio User (mit gÃ¼ltigem Benutzernamen) ein User im Forum.<br />
+    Das Forum lÃ¤sst sich auch&nbsp; -so es gewÃ¼nscht ist - im Stand Allone 
     Betrieb mit Admidio anpassen. Dazu sind Anpassungen einiger php Datei des 
-    Forums notwenig. Es ist dann keinerlei Registrierung im Forum mehr möglich. 
-    Nur registrierte Benutzer über Admidio haben einen gültigen Account im 
+    Forums notwenig. Es ist dann keinerlei Registrierung im Forum mehr mÃ¶glich. 
+    Nur registrierte Benutzer Ã¼ber Admidio haben einen gÃ¼ltigen Account im 
     Forum. Dazu sind Anpassungen einiger php Datei des Forums notwenig, welche 
-    ich im Abschnitt Stand-Allone-Forum näher erkläre.&nbsp; </p>
+    ich im Abschnitt Stand-Allone-Forum nÃ¤her erklÃ¤re.&nbsp; </p>
     
     <h2>Installation des phpBB Forums:</h2>
     
     <p>Laden sie sich auf <a href="http://www.phpbb.de">phpbb.de</a> oder 
     <a href="http://www.phpbb.com">phpbb.com</a> die Installationsdateien 
     herunter und installieren sie das Board nach den Installationsanleitungen 
-    von phpBB auf ihrem Webserver.&nbsp; Support für die Installation des phpBB 
+    von phpBB auf ihrem Webserver.&nbsp; Support fÃ¼r die Installation des phpBB 
     Forums erhalten sie bei phpBB direkt. <br />
     Wir empfehlen Ihnen einen Installationsordner direkt auf ihrem Webspace 
-    unter root/forum. Sollte ihre Domaine z.B. www.beispiel.de sein, wäre der 
+    unter root/forum. Sollte ihre Domaine z.B. www.beispiel.de sein, wÃ¤re der 
     entsprechende Ordner www.beispiel.de/forum</p>
     
-    <h2>Nötige Einstellungen auf dem Forum:</h2>
+    <h2>NÃ¶tige Einstellungen auf dem Forum:</h2>
     
-    <p>Stellen sie sicher, dass das Forum komplett installiert und lauffähig 
+    <p>Stellen sie sicher, dass das Forum komplett installiert und lauffÃ¤hig 
     ist. Gehen sie in die Administration des Forums unter Allgemein, 
     Konfiguration. Suchen sie dort den Punkt &quot;Namenswechsel erlauben&quot; und 
     Schalten sie es auf <b>Nein</b>! Speichern sie die Einstellungen.</p>
@@ -84,7 +84,7 @@
     <h2>Anpassungen der Admidio Software:</h2>
     
     <p>Laden sie sich die Datei config.php aus dem Verzeichnis adm_config 
-    herunter und öffnen Sie diese mit einem Editor. Am Ende finden sie die 
+    herunter und Ã¶ffnen Sie diese mit einem Editor. Am Ende finden sie die 
     Zeilen:</p>
 
     <p class="code">// Forumspezifisch<br />
@@ -102,7 +102,7 @@
     $g_forum_db = &quot;&quot;;<br /></p>
     
     
-    <p>Setzen sie den Wert für $g_forum auf 1. </p>
+    <p>Setzen sie den Wert fÃ¼r $g_forum auf 1. </p>
     
     
     <p>Bei $g_forum_praefix verwenden sie den Praefix (ohne Unterstrich &quot;_&quot;), den 
@@ -114,7 +114,7 @@
     ein. </p>
     
     
-    <p>Bei $g_forum_usr verwenden sie den Usernamen für die Datenbank unter 
+    <p>Bei $g_forum_usr verwenden sie den Usernamen fÃ¼r die Datenbank unter 
     $g_forum_srv.</p>
     
     
@@ -129,7 +129,7 @@
     melden sich auf diesem Datenbankserver mit dem User <b>beispieluser</b> und dem 
     Password <b>beispielpassword</b> an. Sie verwenden dort die Datenbank auf der das 
     Forum ebenfalls installiert ist mit dem Namen <b>beispiel_forums_datenbank</b>. Dann 
-    würde ihr config.php wie folgt aussehen:</p>
+    wÃ¼rde ihr config.php wie folgt aussehen:</p>
     
     
     <p class="code">// Forumspezifisch<br />
@@ -157,22 +157,22 @@
     Sollte dies bei ihnen der Fall sein, laden sie die Datei config.php mit dem 
     Standard Windows Editor Notepad. Dieser Notepad Editor kann sehr wohl UTF8 
     Dateien lesen, speichert diese jedoch ohne Byte-Order-Mark. Speichern sie 
-    diese als speichern unter und überschreiben die original Datei.&nbsp; Laden 
+    diese als speichern unter und Ã¼berschreiben die original Datei.&nbsp; Laden 
     sie diese dann wieder auf ihren Webspace ins angegebene Verzeichnis.</p>
     
     
     <h2>Stand-Allone-Betrieb des Forums:</h2>
     
-    <p>Standardmäßig wird das Forum im parallel Betrieb zu Admidio genutzt. 
-    Jederzeit können sich User im Forum registrieren. Admidio Benutzer können 
-    sich im Forum mit Gästen und anderen Forumsbenutzern unterhalten. </p>
-    <p>Möchten sie das Forum exklusiv für Admidio Benutzer betreiben, sind 
+    <p>StandardmÃ¤ÃŸig wird das Forum im parallel Betrieb zu Admidio genutzt. 
+    Jederzeit kÃ¶nnen sich User im Forum registrieren. Admidio Benutzer kÃ¶nnen 
+    sich im Forum mit GÃ¤sten und anderen Forumsbenutzern unterhalten. </p>
+    <p>MÃ¶chten sie das Forum exklusiv fÃ¼r Admidio Benutzer betreiben, sind 
     Anpassungen der Forum Sourcen notwenig.</p>
     <p>Zu bearbeitende Dateien:<br /></p>
     <p class="code">includes/usercp_register.php<br />
     language/lang_german/lang_main.php<br />
     templates/subSilver/agreement.tpl</p>
-    <p><b>Öffnen sie die Datei includes/usercp_register.php und suchen sie</b><br /></p>
+    <p><b>Ã–ffnen sie die Datei includes/usercp_register.php und suchen sie</b><br /></p>
     <p class="code">if ( $mode == 'register' &amp;&amp; !isset($HTTP_POST_VARS['agreed']) &amp;&amp; 
 !isset($HTTP_GET_VARS['agreed']) )</p>
     <p>Ersetzten sie diese Zeile mit</p>
@@ -184,12 +184,12 @@
     <p class="code">//show_coppa();<br />
     echo &quot;&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&lt;b&gt;&lt;center&gt;<br />
     Die Registrierung ist auf diesem Board abgeschaltet!&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;<br />
-    Melden sie sich bitte über die Admidio Seite an.&lt;/b&gt;&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;<br />
-    &lt;a href=&quot;.getenv('HTTP_REFERER').&quot;&gt;Zurück zur vorherigen Seite&lt;/a&gt;&lt;br /&gt;&lt;br 
+    Melden sie sich bitte Ã¼ber die Admidio Seite an.&lt;/b&gt;&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;<br />
+    &lt;a href=&quot;.getenv('HTTP_REFERER').&quot;&gt;ZurÃ¼ck zur vorherigen Seite&lt;/a&gt;&lt;br /&gt;&lt;br 
     /&gt;<br />
-    &lt;a href=http://&quot;.getenv('SERVER_NAME').&quot;&gt;Zurück zur Hauptseite&lt;/a&gt;<br />
+    &lt;a href=http://&quot;.getenv('SERVER_NAME').&quot;&gt;ZurÃ¼ck zur Hauptseite&lt;/a&gt;<br />
     &lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&quot;;</p>
-    <p><b>Öffnen sie die Datei 
+    <p><b>Ã–ffnen sie die Datei 
     language/lang_german/lang_main.php, sofern vorhanden in allen anderen 
     Spachdateien, suchen sie</b></p>
     <p class="code">$lang['Agree_under_13']</p>
@@ -198,7 +198,7 @@
 
    </p>
 
-    <p><b>Öffnen sie die Datei 
+    <p><b>Ã–ffnen sie die Datei 
     templates/subSilver/agreement.tpl und sofern vorhanden in allen weiteren 
     Templates, suchen sie</b><br /></p>
     <p class="code">&lt;td&gt;&lt;span class=&quot;genmed&quot;&gt;&lt;br /&gt;{AGREEMENT}&lt;br /&gt;&lt;br /&gt;&lt;br 
@@ -218,7 +218,7 @@
     <p>Speicher sie die Dateien und laden Sie sie in die entsprechenden 
     Verzeichnisse hoch.</p>
     
-    <p class="notice"><b>Hinweis:</b><br /> Die Änderungen der Sourcen beseitigen gleichzeitig den 
+    <p class="notice"><b>Hinweis:</b><br /> Die Ã„nderungen der Sourcen beseitigen gleichzeitig den 
     Fehler der automatischen BOT Registrierungen im Forum.</p>
 
     <p>&nbsp;</p>

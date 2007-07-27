@@ -39,7 +39,7 @@
     /adm_program/system/common.php");<br />
     ?&gt;</p>
     
-    <p>Danach folgt, wie bei Punkt 1, der Einbau der Plugins an den von Ihnen gewünschten Stellen:</p>
+    <p>Danach folgt, wie bei Punkt 1, der Einbau der Plugins an den von Ihnen gewÃ¼nschten Stellen:</p>
     
     <p class="code">&lt;?php<br />
     include($_SERVER['DOCUMENT_ROOT']. "/<i>Pfad-zu-Admidio-Ordner</i>
