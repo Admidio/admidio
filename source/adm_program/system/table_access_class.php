@@ -131,7 +131,7 @@ class TableAccess
         }
     }    
     
-    // Funktion uebernimmt alle Werte eines Arrays in das Field-Array
+    // Methode uebernimmt alle Werte eines Arrays in das Field-Array
     function setArray($field_array)
     {
         foreach($field_array as $field => $value)
@@ -140,7 +140,7 @@ class TableAccess
         }
     }
 
-    // Funktion setzt den Wert eines Feldes neu, 
+    // Methode setzt den Wert eines Feldes neu, 
     // dabei koennen noch noetige Plausibilitaetspruefungen gemacht werden
     function setValue($field_name, $field_value)
     {
@@ -161,13 +161,23 @@ class TableAccess
         }
     }    
     
-    // Funktion gibt den Wert eines Feldes zurueck
+    // Methode gibt den Wert eines Feldes zurueck
     function getValue($field_name)
     {
-        return $this->db_fields[$field_name];
+        if(method_exists($this, "_getValue"))
+        {
+            $value = $this->_getValue($field_name);
+        }
+        
+        if(isset($this->db_fields[$field_name]))
+        {
+            $value = $this->db_fields[$field_name];
+        }
+        
+        return $value;
     }    
     
-    // die Funktion speichert die Organisationsdaten in der Datenbank,
+    // die Methode speichert die Organisationsdaten in der Datenbank,
     // je nach Bedarf wird ein Insert oder Update gemacht
     function save()
     {
@@ -175,14 +185,14 @@ class TableAccess
         if(is_numeric($this->db_fields[$this->key_name]) 
         || strlen($this->db_fields[$this->key_name]) == 0)
         {
+            // Defaultdaten vorbelegen
+            if(method_exists($this, "_save"))
+            {
+                $this->_save();
+            }
+                
             if($this->db_fields_changed || strlen($this->db_fields[$this->key_name]) == 0)
             {
-                // Defaultdaten vorbelegen
-                if(method_exists($this, "_save"))
-                {
-                    $this->_save();
-                }
-                
                 // SQL-Update-Statement fuer User-Tabelle zusammenbasteln
                 $item_connection = "";                
                 $sql_field_list  = "";

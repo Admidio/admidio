@@ -42,7 +42,7 @@ if(strlen($_POST['loginname']) == 0)
 
 $sql    = "SELECT usr_id
              FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-            WHERE usr_login_name LIKE ". $_POST['loginname']. "
+            WHERE usr_login_name LIKE '". $_POST['loginname']. "'
               AND usr_valid      = 1
               AND mem_usr_id     = usr_id
               AND mem_rol_id     = rol_id
@@ -129,7 +129,8 @@ if ($user_found >= 1)
             $g_current_user->setValue("usr_number_invalid", $g_current_user->getValue("usr_number_invalid") + 1);
         }
         $g_current_user->setValue("usr_date_invalid", $act_date);
-        $g_current_user->save(false);
+        $g_current_user->b_set_last_change = false;
+        $g_current_user->save();
 
         if($g_current_user->getValue("usr_number_invalid") >= 3)
         {

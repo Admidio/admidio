@@ -53,58 +53,41 @@
  *
  *****************************************************************************/
 
-class User
+require_once(SERVER_PATH. "/adm_program/system/table_access_class.php");
+
+class User extends TableAccess
 {
-    var $db_connection;
     var $webmaster;
+    var $b_set_last_change;         // Kennzeichen, ob User und Zeitstempel der aktuellen Aenderung gespeichert werden sollen
     
-    var $db_fields_changed;         // Merker ob an den db_fields Daten was geaendert wurde
-    var $db_fields      = array();  // Array ueber alle Felder der User-Tabelle des entsprechenden Users
     var $db_user_fields = array();  // Array ueber alle Felder der User-Fields-Tabelle des entsprechenden Users
     var $roles_rights   = array();  // Array ueber alle Rollenrechte mit dem entsprechenden Status des Users
 
     // Konstruktor
     function User(&$db, $user_id = 0)
     {
-        $this->db =& $db;
-        $this->getUser($user_id);
+        $this->db            =& $db;
+        $this->table_name     = TBL_USERS;
+        $this->column_praefix = "usr";
+        $this->key_name       = "usr_id";
+        
+        if(strlen($user_id) > 0)
+        {
+            $this->getUser($user_id);
+        }
+        else
+        {
+            $this->clear();
+        }
     }
 
     // User mit der uebergebenen ID aus der Datenbank auslesen
     function getUser($user_id)
     {
-        $this->clear();
-        
-        if(is_numeric($user_id))
-        {
-            if($user_id > 0)
-            {
-                $sql = "SELECT * FROM ". TBL_USERS. " WHERE usr_id = $user_id";
-                $result = $this->db->query($sql);
-
-                if($row = $this->db->fetch_array($result, MYSQL_ASSOC))
-                {                
-                    // Daten in das Klassenarray schieben
-                    foreach($row as $key => $value)
-                    {
-                        if($key != "usr_photo")
-                        {
-                            if(is_null($value))
-                            {
-                                $this->db_fields[$key] = "";
-                            }
-                            else
-                            {
-                                $this->db_fields[$key] = $value;
-                            }
-                        }
-                    }
-                }
-            }
-            
-            // user_data-Array aufbauen
-            $this->fillUserFieldArray($user_id);
-        }
+        $this->readData($user_id);
+                    
+        // user_data-Array aufbauen
+        $this->fillUserFieldArray($user_id);
     }
     
     function fillUserFieldArray($user_id = 0)
@@ -158,44 +141,11 @@ class User
     }
 
     // alle Klassenvariablen wieder zuruecksetzen
-    function clear()
+    // die Methode wird innerhalb von clear() aufgerufen
+    function _clear()
     {
-        $this->db_fields_changed = false;
         $this->webmaster = -1;
-
-        if(count($this->db_fields) > 0)
-        {
-            foreach($this->db_fields as $key => $value)
-            {
-                if($key == "usr_valid")
-                {
-                    $this->db_fields[$key] = "1";
-                }
-                else
-                {
-                    $this->db_fields[$key] = "";
-                }
-            }
-        }
-        else
-        {
-            // alle Spalten der Tabelle adm_roles ins Array einlesen 
-            // und auf null setzen
-            $sql = "SHOW COLUMNS FROM ". TBL_USERS;
-            $result = $this->db->query($sql);
-            
-            while ($row = $this->db->fetch_array($result))
-            {
-                if($row['Field'] == "usr_valid")
-                {
-                    $this->db_fields[$row['Field']] = "1";
-                }
-                else
-                {
-                    $this->db_fields[$row['Field']] = "";
-                }
-            }
-        }
+        $this->b_set_last_change = true;
         
         // user_data-Array initialisieren
         if(count($this->db_user_fields) > 0)
@@ -234,48 +184,33 @@ class User
         $this->roles_rights['rol_weblinks']      = -1;
     }
 
-    // Funktion setzt den Wert eines Profilfeldes neu, 
-    // dabei koennen noch noetige Plausibilitaetspruefungen gemacht werden
-    function setValue($field_name, $field_value)
+    // interne Methode, die bei setValue den uebergebenen Wert prueft
+    // und ungueltige Werte auf leer setzt
+    // die Methode wird innerhalb von setValue() aufgerufen
+    function _setValue($field_name, $field_value)
     {        
-        $field_name  = strStripTags($field_name);
-        $field_value = strStripTags($field_value);
-        
-        if(strlen($field_value) > 0)
+        // Plausibilitaetspruefungen
+        switch($field_name)
         {
-            // Plausibilitaetspruefungen
-            switch($field_name)
-            {
-                case "usr_id":
-                case "usr_usr_id_change":
-                    if(is_numeric($field_value) == false 
-                    || $field_value == 0)
-                    {
-                        $field_value = "";
-                    }                
-                    break;
+            case "usr_id":
+            case "usr_usr_id_change":
+                if(is_numeric($field_value) == false 
+                || $field_value == 0)
+                {
+                    $field_value = "";
+                }                
+                break;
 
-                case "usr_id_number_login":
-                case "usr_id_number_invalid":
-                    if(is_numeric($field_value) == false)
-                    {
-                        $field_value = "";
-                    }
-                    break;
-            }
+            case "usr_id_number_login":
+            case "usr_id_number_invalid":
+                if(is_numeric($field_value) == false)
+                {
+                    $field_value = "";
+                }
+                break;
         }
 
-        if(strpos($field_name, "usr_") === 0)
-        {
-            // Daten fuer User-Tabelle
-            if(isset($this->db_fields[$field_name])
-            && $field_value != $this->db_fields[$field_name])
-            {
-                $this->db_fields[$field_name] = $field_value;
-                $this->db_fields_changed = true;
-            }
-        }
-        else
+        if(strpos($field_name, "usr_") !== 0)
         {
             // Daten fuer User-Fields-Tabelle
             if($field_value != $this->db_user_fields[$field_name]['usd_value'])
@@ -304,21 +239,21 @@ class User
         }
     }
     
-    // Funktion gibt den Wert eines Feldes zurueck
-    // hier koennen auch noch bestimmte Formatierungen angewandt werden
-    function getValue($field_name)
+    // Methode prueft, ob evtl. ein Wert aus der User-Fields-Tabelle
+    // angefordert wurde und gibt diesen zurueck
+    // die Funktion wird innerhalb von getValue() aufgerufen
+    function _getValue($field_name)
     {
-        if(strpos($field_name, "usr_") === 0)
+        $value = "";
+        
+        if(strpos($field_name, "usr_") !== 0)
         {
-            return $this->db_fields[$field_name];
+            $value = $this->getProperty($field_name, "usd_value");
         }
-        else
-        {
-            return $this->getProperty($field_name, "usd_value");
-        }
+        return $value;
     }    
 
-    // Funktion gibt den Wert eines Profilfeldes zurueck
+    // Methode gibt den Wert eines Profilfeldes zurueck
     // Property ist dabei ein Feldname aus der Tabelle adm_user_fields oder adm_user_data
     // hier koennen auch noch bestimmte Formatierungen angewandt werden
     function getProperty($field_name, $property)
@@ -328,136 +263,55 @@ class User
     
     // die Funktion speichert die Userdaten in der Datenbank,
     // je nach Bedarf wird ein Insert oder Update gemacht
-    function save($set_change_date = true)
+    function _save($set_change_date = true)
     {
-        if(is_numeric($this->db_fields['usr_id']) 
-        || strlen($this->db_fields['usr_id']) == 0)
+        if($this->b_set_last_change)
         {
-            if($set_change_date)
+            global $g_current_user;
+            $this->db_fields['usr_last_change']   = date("Y-m-d H:i:s", time());
+            $this->db_fields['usr_usr_id_change'] = $g_current_user->getValue("usr_id");
+        }
+
+        // nun noch Updates fuer alle geaenderten User-Fields machen
+        foreach($this->db_user_fields as $key => $value)
+        {
+            if($value['changed'] == true)
             {
-                global $g_current_user;
-                $this->db_fields['usr_last_change']   = date("Y-m-d H:i:s", time());
-                $this->db_fields['usr_usr_id_change'] = $g_current_user->getValue("usr_id");
-            }
-            
-            if($this->db_fields_changed || strlen($this->db_fields['usr_id']) == 0)
-            {
-                // SQL-Update-Statement fuer User-Tabelle zusammenbasteln
-                $item_connection = "";                
+                $item_connection = "";
                 $sql_field_list  = "";
-                $sql_value_list  = "";
 
-                // Schleife ueber alle DB-Felder und diese dem Update hinzufuegen                
-                foreach($this->db_fields as $key => $value)
+                if(is_null($value['usd_value']))
                 {
-                    // ID und andere Tabellenfelder sollen nicht im Insert erscheinen
-                    if($key != "usr_id" && strpos($key, "usr_") === 0) 
-                    {
-                        if($this->db_fields['usr_id'] == 0)
-                        {
-                            if(strlen($value) > 0)
-                            {
-                                // Daten fuer ein Insert aufbereiten
-                                $sql_field_list = $sql_field_list. " $item_connection $key ";
-                                if(is_numeric($value))
-                                {
-                                    $sql_value_list = $sql_value_list. " $item_connection $value ";
-                                }
-                                else
-                                {
-                                    $value = addSlashes($value);
-                                    $sql_value_list = $sql_value_list. " $item_connection '$value' ";
-                                }
-                            }
-                        }
-                        else
-                        {
-                            // Daten fuer ein Update aufbereiten
-                            if(strlen($value) == 0 || is_null($value))
-                            {
-                                $sql_field_list = $sql_field_list. " $item_connection $key = NULL ";
-                            }
-                            elseif(is_numeric($value))
-                            {
-                                $sql_field_list = $sql_field_list. " $item_connection $key = $value ";
-                            }
-                            else
-                            {
-                                $value = addSlashes($value);
-                                $sql_field_list = $sql_field_list. " $item_connection $key = '$value' ";
-                            }
-                        }
-                        if(strlen($item_connection) == 0 && strlen($sql_field_list) > 0)
-                        {
-                            $item_connection = ",";
-                        }
-                    }
-                }
-
-                if($this->db_fields['usr_id'] > 0)
-                {
-                    $sql = "UPDATE ". TBL_USERS. " SET $sql_field_list 
-                             WHERE usr_id = ". $this->db_fields['usr_id'];
-                    $result = $this->db->query($sql);
+                    $sql = "DELETE FROM ". TBL_USER_DATA. " 
+                             WHERE usd_usr_id = ". $this->db_fields['usr_id']. "
+                               AND usd_usf_id = ". $value['usf_id'];
                 }
                 else
                 {
-                    $sql = "INSERT INTO ". TBL_USERS. " ($sql_field_list) VALUES ($sql_value_list) ";
-                    $result = $this->db->query($sql);
-                    $this->db_fields['usr_id'] = $this->db->insert_id();
-                }
-            }
-            else
-            {
-                // Daten der User-Tabelle wurde nicht geaendert, dann nur Fingerabdruck aktualisieren
-                $sql = "UPDATE ". TBL_USERS. " SET usr_last_change   = '". $this->db_fields['usr_last_change']. "'
-                                                 , usr_usr_id_change = ".  $this->db_fields['usr_usr_id_change']. "
-                         WHERE usr_id = ". $this->db_fields['usr_id'];
-                $result = $this->db->query($sql);
-            }
-
-            
-            // nun noch Updates fuer alle geaenderten User-Fields machen
-            foreach($this->db_user_fields as $key => $value)
-            {
-                if($value['changed'] == true)
-                {
-                    $item_connection = "";
-                    $sql_field_list  = "";
-                    
-                    if(is_null($value['usd_value']))
+                    if($value['new'] == true)
                     {
-                        $sql = "DELETE FROM ". TBL_USER_DATA. " 
-                                 WHERE usd_usr_id = ". $this->db_fields['usr_id']. "
-                                   AND usd_usf_id = ". $value['usf_id'];
+                        $sql = "INSERT INTO ". TBL_USER_DATA. " (usd_usr_id, usd_usf_id, usd_value) 
+                                VALUES (". $this->db_fields['usr_id']. ", ". $value['usf_id']. ", '". $value['usd_value']. "') ";
+                        $this->db_user_fields[$key]['new'] = false;
                     }
                     else
                     {
-                        if($value['new'] == true)
-                        {
-                            $sql = "INSERT INTO ". TBL_USER_DATA. " (usd_usr_id, usd_usf_id, usd_value) 
-                                    VALUES (". $this->db_fields['usr_id']. ", ". $value['usf_id']. ", '". $value['usd_value']. "') ";
-                            $this->db_user_fields[$key]['new'] = false;
-                        }
-                        else
-                        {
-                            $sql = "UPDATE ". TBL_USER_DATA. " SET usd_value = '". $value['usd_value']. "'
-                                     WHERE usd_usr_id = ". $this->db_fields['usr_id']. "
-                                       AND usd_usf_id = ". $value['usf_id'];
-                        }
+                        $sql = "UPDATE ". TBL_USER_DATA. " SET usd_value = '". $value['usd_value']. "'
+                                 WHERE usd_usr_id = ". $this->db_fields['usr_id']. "
+                                   AND usd_usf_id = ". $value['usf_id'];
                     }
-                    $result = $this->db->query($sql);
-                    $this->db_user_fields[$key]['changed'] = false;
                 }
+                $result = $this->db->query($sql);
+                $this->db_user_fields[$key]['changed'] = false;
             }
-            $this->db_fields_changed = false;
-            return 0;
         }
-        return -1;
+
+        $this->b_set_last_change = true;
     }
 
-    // aktuellen Benutzer loeschen
-    function delete()
+    // Referenzen zum aktuellen Benutzer loeschen
+    // die Methode wird innerhalb von delete() aufgerufen
+    function _delete()
     {
         $sql    = "UPDATE ". TBL_ANNOUNCEMENTS. " SET ann_usr_id = NULL
                     WHERE ann_usr_id = ". $this->db_fields['usr_id'];
@@ -526,12 +380,6 @@ class User
 
         $sql    = "DELETE FROM ". TBL_USER_DATA. " WHERE usd_usr_id = ". $this->db_fields['usr_id'];
         $this->db->query($sql);
-
-        $sql    = "DELETE FROM ". TBL_USERS. "
-                    WHERE usr_id = ". $this->db_fields['usr_id'];
-        $this->db->query($sql);
-
-        $this->clear();
     }
 
     // gibt die Userdaten als VCard zurueck
