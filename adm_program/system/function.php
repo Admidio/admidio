@@ -158,7 +158,7 @@ function isMember($user_id)
                   AND cat_org_id = ". $g_current_organization->getValue("org_id");
     $result = $g_db->query($sql);
 
-    $row = $g_db->fetch_row($result);
+    $row = $g_db->fetch_array($result);
     $row_count = $row[0];
 
     if($row_count > 0)

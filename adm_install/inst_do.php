@@ -492,7 +492,8 @@ if($req_mode == 1 || $req_mode == 4)
     $g_current_user->setValue("E-Mail", $req_user_email);
     $g_current_user->setValue("usr_login_name", $req_user_login);
     $g_current_user->setValue("usr_password", md5($req_user_password));
-    $g_current_user->save(false);
+    $g_current_user->b_set_last_change = false;
+    $g_current_user->save();
     
     // nun die Default-Rollen anlegen
 
