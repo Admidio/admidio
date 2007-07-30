@@ -25,15 +25,74 @@
  
 class DB
 {
-    var $connect_id;
+    var $layer;
     var $user;
     var $password;
     var $dbname;
     var $server;
-    var $result;
-    var $sql;
-    var $version;
+    
+    var $connect_id;    
     var $query_result;
+    var $sql;
+    var $transaction = false;
+    
+    // Modus der Transaktoin setzen (Inspiriert von phpBB)
+    function sql_transaction($status = 'begin')
+    {
+        switch ($status)
+        {
+            case 'begin':
+                // If we are within a transaction we will not open another one, 
+                // but enclose the current one to not loose data (prevening auto commit)
+                if ($this->transaction)
+                {
+                    $this->transactions++;
+                    return true;
+                }
+
+                $result = $this->_transaction('begin');
+
+                if (!$result)
+                {
+                    $this->db_error();
+                }
+
+                $this->transaction = true;
+            break;
+
+            case 'commit':
+                // If there was a previously opened transaction we do not commit yet... 
+                // but count back the number of inner transactions
+                if ($this->transaction && $this->transactions)
+                {
+                    $this->transactions--;
+                    return true;
+                }
+
+                $result = $this->_transaction('commit');
+
+                if (!$result)
+                {
+                    $this->db_error();
+                }
+
+                $this->transaction = false;
+                $this->transactions = 0;
+            break;
+
+            case 'rollback':
+                $result = $this->_transaction('rollback');
+                $this->transaction = false;
+                $this->transactions = 0;
+            break;
+
+            default:
+                $result = $this->_transaction($status);
+            break;
+        }
+
+        return $result;
+    }    
     
     function db_error()
     {
@@ -46,7 +105,7 @@ class DB
             require(SERVER_PATH. "/adm_program/layout/overall_header.php");       
         }
 
-        $error = $this->getErrorCode();
+        $error = $this->_db_error();
         $backtrace = getBacktrace();
                     
         $error_string = "<div style=\"font-family: monospace;\">

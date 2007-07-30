@@ -95,8 +95,7 @@ $sql = "SELECT * FROM ". TBL_CATEGORIES. ", ". TBL_USER_FIELDS. "
            AND (  cat_org_id = ". $g_current_organization->getValue("org_id"). "
                OR cat_org_id IS NULL )
          ORDER BY cat_sequence ASC, usf_sequence ASC ";
-$result = mysql_query($sql, $g_adm_con);
-db_error($result,__FILE__,__LINE__);
+$result = $g_db->query($sql);
 
 $js_drag_drop = "";
 
@@ -117,9 +116,9 @@ echo "
     
     $cat_id = 0;
 
-    if(mysql_num_rows($result) > 0)
+    if($g_db->num_rows($result) > 0)
     {
-        while($row = mysql_fetch_object($result))
+        while($row = $g_db->fetch_object($result))
         {
             if($cat_id != $row->cat_id)
             {

@@ -146,9 +146,8 @@ elseif($_GET["mode"] == 2)
                       AND rol_cat_id = ". $_POST['rol_cat_id']. "
                       AND rol_cat_id = cat_id
                       AND cat_org_id = ". $g_current_organization->getValue("org_id");
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result,__FILE__,__LINE__);
-        $row = mysql_fetch_array($result);
+        $result = $g_db->query($sql);
+        $row    = $g_db->fetch_array($result);
 
         if($row['count'] > 0)
         {

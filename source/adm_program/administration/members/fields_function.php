@@ -116,9 +116,8 @@ if($_GET['mode'] == 1)
                       AND (  cat_org_id = ". $g_current_organization->getValue("org_id"). "
                           OR cat_org_id IS NULL )
                     WHERE usf_name LIKE '". $_POST['usf_name']. "'";
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result,__FILE__,__LINE__);
-        $row = mysql_fetch_array($result);
+        $result = $g_db->query($sql);
+        $row    = $g_db->fetch_array($result);
 
         if($row['count'] > 0)
         {

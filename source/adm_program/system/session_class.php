@@ -87,7 +87,7 @@ class Session extends TableAccess
     // interne Funktion, die bei setValue den uebergebenen Wert prueft
     // und ungueltige Werte auf leer setzt
     // die Funktion wird innerhalb von setValue() aufgerufen
-    function checkValue($field_name, $field_value)
+    function _setValue($field_name, $field_value)
     {
         switch($field_name)
         {
@@ -115,7 +115,7 @@ class Session extends TableAccess
 
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
     // die Funktion wird innerhalb von save() aufgerufen
-    function initializeFields()
+    function _save()
     {
         if(strlen($this->db_fields[$this->key_name]) == 0)
         {

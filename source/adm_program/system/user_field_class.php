@@ -81,7 +81,7 @@ class UserField extends TableAccess
     // interne Funktion, die bei setValue den uebergebenen Wert prueft
     // und ungueltige Werte auf leer setzt
     // die Funktion wird innerhalb von setValue() aufgerufen
-    function checkValue($field_name, $field_value)
+    function _setValue($field_name, $field_value)
     {
         switch($field_name)
         {
@@ -90,7 +90,7 @@ class UserField extends TableAccess
                 if(is_numeric($field_value) == false 
                 || $field_value == 0)
                 {
-                    $field_value = null;
+                    $field_value = "";
                     return false;
                 }
                 
@@ -124,7 +124,7 @@ class UserField extends TableAccess
     
     // interne Funktion, die die Referenzen bearbeitet, wenn die Kategorie geloescht wird
     // die Funktion wird innerhalb von delete() aufgerufen
-    function deleteReferences()
+    function _delete()
     {
         $sql    = "DELETE FROM ". TBL_USER_DATA. "
                     WHERE usd_usf_id = ". $this->db_fields['usf_id'];

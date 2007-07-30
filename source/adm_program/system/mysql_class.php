@@ -30,6 +30,7 @@ class MySqlDB extends DB
     // Verbindung zur Datenbank aufbauen    
     function connect($sql_server, $sql_user, $sql_password, $sql_dbname)
     {
+        $this->layer    = "mysql";
         $this->server   = $sql_server;
         $this->user     = $sql_user;
         $this->password = $sql_password;
@@ -143,8 +144,31 @@ class MySqlDB extends DB
         return mysql_data_seek($result, $row_number);
     }
     
+    // Modus einer Transaktion setzen
+    // diese Funktion wird aus transaction() aufgerufen
+    function _transaction($status = 'begin')
+    {
+        switch ($status)
+        {
+            case 'begin':
+                return mysql_query('BEGIN', $this->connect_id);
+            break;
+
+            case 'commit':
+                return mysql_query('COMMIT', $this->connect_id);
+            break;
+
+            case 'rollback':
+                return mysql_query('ROLLBACK', $this->connect_id);
+            break;
+        }
+
+        return true;
+    }    
+    
     // gibt ein Array mit Fehlernummer und Beschreibung zurueck    
-    function getErrorCode()
+    // diese Funktion wird aus db_error() aufgerufen
+    function _db_error()
     {
         if (!$this->connect_id)
         {

@@ -30,10 +30,9 @@ require("common.php");
 $user_found  = 0;
 
 // Uebergabevariablen filtern
-$req_login_name     = strStripTags($_POST['loginname']);
 $req_password_crypt = md5($_POST["passwort"]);
 
-if(strlen($req_login_name) == 0)
+if(strlen($_POST['loginname']) == 0)
 {
     $g_message->show("feld", "Benutzername");
 }
@@ -43,7 +42,7 @@ if(strlen($req_login_name) == 0)
 
 $sql    = "SELECT usr_id
              FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-            WHERE usr_login_name LIKE {0}
+            WHERE usr_login_name LIKE ". $_POST['loginname']. "
               AND usr_valid      = 1
               AND mem_usr_id     = usr_id
               AND mem_rol_id     = rol_id
@@ -51,12 +50,10 @@ $sql    = "SELECT usr_id
               AND rol_valid      = 1 
               AND rol_cat_id     = cat_id
               AND cat_org_id     = ". $g_current_organization->getValue("org_id");
-$sql    = prepareSQL($sql, array($req_login_name));
-$result = mysql_query($sql, $g_adm_con);
-db_error($result,__FILE__,__LINE__);
+$result = $g_db->query($sql);
 
-$user_found = mysql_num_rows($result);
-$user_row   = mysql_fetch_array($result);
+$user_found = $g_db->num_rows($result);
+$user_row   = $g_db->fetch_array($result);
 
 if ($user_found >= 1)
 {
@@ -94,7 +91,7 @@ if ($user_found >= 1)
         // Paralell im Forum einloggen, wenn g_forum gesetzt ist
         if($g_forum_integriert)
         {
-            $g_forum->userLogin($g_current_user->getValue("usr_id"), $req_login_name, $req_password_crypt, 
+            $g_forum->userLogin($g_current_user->getValue("usr_id"), $_POST['loginname'], $req_password_crypt, 
                                 $g_current_user->getValue("usr_login_name"), $g_current_user->getValue("usr_password"), 
                                 $g_current_user->getValue("E-Mail"));
 

@@ -58,9 +58,8 @@ $sql    = "SELECT usr_id, usr_login_name, last_name.usd_value as last_name,
             WHERE usr_valid = 0
               AND usr_reg_org_shortname = '$g_organization' 
             ORDER BY last_name, first_name ";
-$usr_result = mysql_query($sql, $g_adm_con);
-db_error($usr_result,__FILE__,__LINE__);
-$member_found = mysql_num_rows($usr_result);
+$usr_result   = $g_db->query($sql);
+$member_found = $g_db->num_rows($usr_result);
 
 if ($member_found == 0)
 {
@@ -84,7 +83,7 @@ echo "
         <th class=\"tableHeader\" style=\"text-align: center;\">&nbsp;Funktionen</th>
     </tr>";
 
-    while($row = mysql_fetch_object($usr_result))
+    while($row = $g_db->fetch_object($usr_result))
     {
         echo "
         <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
