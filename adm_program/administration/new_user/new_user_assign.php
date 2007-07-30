@@ -86,8 +86,8 @@ $sql = "SELECT usr_id, usr_login_name, last_name.usd_value as last_name,
                   AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4)  LIKE SUBSTRING(SOUNDEX('". $new_user->getValue("Vorname"). "'), 1, 4) )
                OR (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4)  LIKE SUBSTRING(SOUNDEX('". $new_user->getValue("Vorname"). "'), 1, 4)
                   AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4)  LIKE SUBSTRING(SOUNDEX('". $new_user->getValue("Nachname")."'), 1, 4) ) )";
-$result_usr = mysql_query($sql, $g_adm_con);
-$member_found = mysql_num_rows($result_usr);
+$result_usr   = $g_db->query($sql);
+$member_found = $g_db->num_rows($result_usr);
 
 if($member_found == 0)
 {
@@ -114,7 +114,7 @@ echo "
         <div class=\"groupBoxBody\">";
             // Alle gefundenen Benutzer mit Adresse ausgeben und einem Link zur weiteren moeglichen Verarbeitung
             $i = 0;
-            while($row = mysql_fetch_object($result_usr))
+            while($row = $g_db->fetch_object($result_usr))
             {
                 if($i > 0)
                 {

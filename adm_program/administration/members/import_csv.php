@@ -171,10 +171,8 @@ for($i = $start_row; $i < count($_SESSION["file_lines"]); $i++)
                AND first_name.usd_usf_id = ".  $user->getProperty("Vorname", "usf_id"). "
                AND first_name.usd_value  = '". $user->getValue("Vorname"). "'
              WHERE usr_valid      = 1 ";
-    error_log($sql);
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
-    $dup_users = mysql_num_rows($result);
+    $result = $g_db->query($sql);
+    $dup_users = $g_db->num_rows($result);
 
     if($dup_users > 0)
     {
@@ -183,7 +181,7 @@ for($i = $start_row; $i < count($_SESSION["file_lines"]); $i++)
         if($_SESSION["user_import_mode"] == 3)
         {
             // alle vorhandene User mit dem Namen loeschen            
-            while($row = mysql_fetch_array($result))
+            while($row = $g_db->fetch_array($result))
             {
                 $duplicate_user->GetUser($row['usr_id']);
                 $duplicate_user->delete();
@@ -192,7 +190,7 @@ for($i = $start_row; $i < count($_SESSION["file_lines"]); $i++)
         elseif($_SESSION["user_import_mode"] == 4 && $dup_users == 1)
         {
             // Daten des Nutzers werden angepasst
-            $row = mysql_fetch_array($result);
+            $row = $g_db->fetch_array($result);
             $duplicate_user->GetUser($row['usr_id']);
             
             foreach($imported_fields as $key => $field_name)
@@ -221,17 +219,15 @@ for($i = $start_row; $i < count($_SESSION["file_lines"]); $i++)
             $sql = "SELECT COUNT(*) as count FROM ". TBL_MEMBERS. "
                      WHERE mem_rol_id = ". $_SESSION['rol_id']. "
                        AND mem_usr_id = ". $user->getValue("usr_id");
-            $result = mysql_query($sql, $g_adm_con);
-            db_error($result,__FILE__,__LINE__);
-            $row = mysql_fetch_array($result);
+            $result = $g_db->query($sql);
+            $row = $g_db->fetch_array($result);
             
             if($row['count'] > 0)
             {
                 $sql = "UPDATE ". TBL_USERS. " SET mem_end   = NULL
                                                  , mem_valid = 1 
                          WHERE mem_usr_id = ". $user->getValue("usr_id");
-                $result = mysql_query($sql, $g_adm_con);
-                db_error($result,__FILE__,__LINE__);
+                $result = $g_db->query($sql);
                 $mem_exists = true;
             }
         }
@@ -241,9 +237,7 @@ for($i = $start_row; $i < count($_SESSION["file_lines"]); $i++)
             // Rolle dem User zuordnen
             $sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin, mem_valid)
                                            VALUES (". $_SESSION['rol_id']. ", ". $user->getValue("usr_id"). ", NOW(), 1) ";
-            error_log($sql);
-            $result = mysql_query($sql, $g_adm_con);
-            db_error($result,__FILE__,__LINE__);
+            $result = $g_db->query($sql);
         }
     }
 

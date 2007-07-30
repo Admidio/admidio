@@ -93,7 +93,7 @@ class Organization extends TableAccess
     
     // interne Funktion, die spezielle Daten des Organizationobjekts loescht
     // die Funktion wird innerhalb von clear() aufgerufen
-    function clearAdditionalData()
+    function _clear()
     {
         $this->b_check_childs = false;
         $this->child_orgas    = array();
@@ -102,7 +102,7 @@ class Organization extends TableAccess
     // interne Funktion, die bei setValue den uebergebenen Wert prueft
     // und ungueltige Werte auf leer setzt
     // die Funktion wird innerhalb von setValue() aufgerufen
-    function checkValue($field_name, $field_value)
+    function _setValue($field_name, $field_value)
     {
         switch($field_name)
         {

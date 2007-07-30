@@ -166,20 +166,18 @@ echo "
                 // Pruefung ob dieser Orga bereits andere Orgas untergeordnet sind
                 $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. " 
                          WHERE org_org_id_parent = ". $g_current_organization->getValue("org_id");
-                $result = mysql_query($sql, $g_adm_con);
-                db_error($result,__FILE__,__LINE__);
+                $result = $g_db->query($sql);
 
                 //Falls andere Orgas untergeordnet sind, darf diese Orga keiner anderen Orga untergeordnet werden
-                if(mysql_num_rows($result)==0)
+                if($g_db->num_rows($result)==0)
                 {
                     $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. "
                              WHERE org_id <> ". $g_current_organization->getValue("org_id"). "
                                AND org_org_id_parent is NULL
                              ORDER BY org_longname ASC, org_shortname ASC ";
-                    $result = mysql_query($sql, $g_adm_con);
-                    db_error($result,__FILE__,__LINE__);
+                    $result = $g_db->query($sql);
 
-                    if(mysql_num_rows($result) > 0)
+                    if($g_db->num_rows($result) > 0)
                     {
                         // Auswahlfeld fuer die uebergeordnete Organisation
                         echo "
@@ -194,7 +192,7 @@ echo "
                                     }
                                     echo ">keine</option>";
 
-                                    while($row = mysql_fetch_object($result))
+                                    while($row = $g_db->fetch_object($result))
                                     {
                                         echo "<option value=\"$row->org_id\"";
                                             if($form_values['org_org_id_parent'] == $row->org_id)

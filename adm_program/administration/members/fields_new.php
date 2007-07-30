@@ -134,10 +134,9 @@ echo "
                                    OR cat_org_id IS NULL )
                                AND cat_type   = 'USF'
                              ORDER BY cat_sequence ASC ";
-                    $result = mysql_query($sql, $g_adm_con);
-                    db_error($result,__FILE__,__LINE__);
+                    $result = $g_db->query($sql);
 
-                    while($row = mysql_fetch_object($result))
+                    while($row = $g_db->fetch_object($result))
                     {
                         echo "<option value=\"$row->cat_id\"";
                             if($user_field->getValue("usf_cat_id") == $row->cat_id)

@@ -175,10 +175,9 @@ echo "
                                  WHERE cat_org_id = ". $g_current_organization->getValue("org_id"). "
                                    AND cat_type   = 'ROL'
                                  ORDER BY cat_sequence ASC ";
-                        $result = mysql_query($sql, $g_adm_con);
-                        db_error($result,__FILE__,__LINE__);
+                        $result = $g_db->query($sql);
 
-                        while($row = mysql_fetch_object($result))
+                        while($row = $g_db->fetch_object($result))
                         {
                             echo "<option value=\"$row->cat_id\"";
                                 if($role->getValue("rol_cat_id") == $row->cat_id)
@@ -538,8 +537,7 @@ echo "
                                    AND rol_cat_id = cat_id
                                    AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
                                  ORDER BY rol_name ";
-                        $allRoles = mysql_query($sql, $g_adm_con);
-                        db_error($allRoles,__FILE__,__LINE__);
+                        $allRoles = $g_db->query($sql);
 
                         if($childRoles == -1)
                             $noChildRoles = true;
@@ -550,7 +548,7 @@ echo "
 
                         echo "unabh&auml;ngig<br>
                         <select name=\"AllRoles\" size=\"8\" style=\"width: 200px;\">";
-                            while($row = mysql_fetch_object($allRoles))
+                            while($row = $g_db->fetch_object($allRoles))
                             {
                                 if(in_array($row->rol_id,$childRoles)  )
                                     $childRoleObjects[] = $row;

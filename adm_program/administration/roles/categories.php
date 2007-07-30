@@ -125,14 +125,12 @@ echo "
         $sql = "SELECT * FROM ". TBL_CATEGORIES. "
                  WHERE (  cat_org_id  = ". $g_current_organization->getValue("org_id"). "
                        OR cat_org_id IS NULL )
-                   AND cat_type   = {0}
+                   AND cat_type   = $req_type
                  ORDER BY cat_sequence ASC ";
-        $sql = prepareSQL($sql, array($req_type));
-        $cat_result = mysql_query($sql, $g_adm_con);
-        db_error($cat_result,__FILE__,__LINE__);
+        $cat_result = $g_db->query($sql);
         $write_tbody = false;
 
-        while($cat_row = mysql_fetch_array($cat_result))
+        while($cat_row = $g_db->fetch_array($cat_result))
         {
             // da bei USF die Kategorie Stammdaten nicht verschoben werden darf, muss hier ein bischen herumgewurschtelt werden
             if($cat_row['cat_name'] == "Stammdaten" && $_GET['type'] == "USF")

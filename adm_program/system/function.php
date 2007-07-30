@@ -102,7 +102,7 @@ function prepareSQL($queryString, $paramArr)
 
 function hasRole($function, $user_id = 0)
 {
-    global $g_current_user, $g_current_organization, $g_adm_con;
+    global $g_current_user, $g_current_organization, $g_db;
 
     if($user_id == 0)
     {
@@ -123,10 +123,9 @@ function hasRole($function, $user_id = 0)
                   AND rol_valid  = 1 
                   AND rol_cat_id = cat_id
                   AND cat_org_id = ". $g_current_organization->getValue("org_id");
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
+    $result = $g_db->query($sql);
 
-    $user_found = mysql_num_rows($result);
+    $user_found = $g_db->num_rows($result);
 
     if($user_found == 1)
     {
@@ -142,7 +141,7 @@ function hasRole($function, $user_id = 0)
 
 function isMember($user_id)
 {
-    global $g_current_user, $g_current_organization, $g_adm_con;
+    global $g_current_user, $g_current_organization, $g_db;
     
     if(is_numeric($user_id) == false)
     {
@@ -157,10 +156,9 @@ function isMember($user_id)
                   AND rol_valid  = 1 
                   AND rol_cat_id = cat_id
                   AND cat_org_id = ". $g_current_organization->getValue("org_id");
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
+    $result = $g_db->query($sql);
 
-    $row = mysql_fetch_row($result);
+    $row = $g_db->fetch_row($result);
     $row_count = $row[0];
 
     if($row_count > 0)
@@ -178,7 +176,7 @@ function isMember($user_id)
 
 function isGroupLeader($rol_id = 0)
 {
-    global $g_current_user, $g_current_organization, $g_adm_con;
+    global $g_current_user, $g_current_organization, $g_db;
 
     $sql    = "SELECT *
                  FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
@@ -191,13 +189,11 @@ function isGroupLeader($rol_id = 0)
                   AND cat_org_id = ". $g_current_organization->getValue("org_id");
     if ($rol_id != 0)
     {
-        $sql .= "  AND mem_rol_id           = {0}";
+        $sql .= "  AND mem_rol_id           = $rol_id";
     }
-    $sql    = prepareSQL($sql, array($rol_id));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
+    $result = $g_db->query($sql);
 
-    $edit_user = mysql_num_rows($result);
+    $edit_user = $g_db->num_rows($result);
 
     if($edit_user > 0)
     {
@@ -324,7 +320,7 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
 
 function generateRoleSelectBox($default_role = 0, $field_id = "")
 {
-    global $g_current_user, $g_current_organization, $g_adm_con;
+    global $g_current_user, $g_current_organization, $g_db;
     
     if(strlen($field_id) == 0)
     {
@@ -353,11 +349,10 @@ function generateRoleSelectBox($default_role = 0, $field_id = "")
                                AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
                              ORDER BY cat_sequence, rol_name";
             }
-            $result_lst = mysql_query($sql, $g_adm_con);
-            db_error($result_lst,__FILE__,__LINE__);
+            $result_lst = $g_db->query($sql);
             $act_category = "";
 
-            while($row = mysql_fetch_object($result_lst))
+            while($row = $g_db->fetch_object($result_lst))
             {
                 if($act_category != $row->cat_name)
                 {

@@ -105,9 +105,9 @@ class TableAccess
         $this->db_fields_changed = false;
         
         // Zusaetzliche Daten der abgeleiteten Klasse loeschen
-        if(method_exists($this, "clearAdditionalData"))
+        if(method_exists($this, "_clear"))
         {
-            $this->clearAdditionalData();
+            $this->_clear();
         }
                         
         if(count($this->db_fields) > 0)
@@ -148,9 +148,9 @@ class TableAccess
         $field_value = strStripTags($field_value);
         
         // Plausibilitaets-Check des Wertes vornehmen
-        if(strlen($field_value) > 0)
+        if(method_exists($this, "_setValue"))
         {
-            $this->checkValue($field_name, &$field_value);
+            $this->_setValue($field_name, &$field_value);
         }
 
         if(isset($this->db_fields[$field_name])
@@ -178,9 +178,9 @@ class TableAccess
             if($this->db_fields_changed || strlen($this->db_fields[$this->key_name]) == 0)
             {
                 // Defaultdaten vorbelegen
-                if(method_exists($this, "initializeFields"))
+                if(method_exists($this, "_save"))
                 {
-                    $this->initializeFields();
+                    $this->_save();
                 }
                 
                 // SQL-Update-Statement fuer User-Tabelle zusammenbasteln
@@ -261,9 +261,9 @@ class TableAccess
         $ret_code = true;
         
         // erst einmal die Referenzen verarbeiten
-        if(method_exists($this, "deleteReferences"))
+        if(method_exists($this, "_delete"))
         {
-            $ret_code = $this->deleteReferences();
+            $ret_code = $this->_delete();
         }
                         
         if($ret_code == true)

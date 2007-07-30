@@ -135,9 +135,8 @@ if($_GET['mode'] == 1)
                           OR cat_org_id IS NULL )
                       AND cat_type = '". $_GET['type']. "'
                       AND cat_name LIKE '". $_POST['cat_name']. "'";
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result,__FILE__,__LINE__);
-        $row = mysql_fetch_array($result);
+        $result = $g_db->query($sql);
+        $row    = $g_db->fetch_array($result);
 
         if($row['count'] > 0)
         {

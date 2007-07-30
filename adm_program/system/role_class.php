@@ -95,7 +95,7 @@ class Role extends TableAccess
     // interne Funktion, die bei setValue den uebergebenen Wert prueft
     // und ungueltige Werte auf leer setzt
     // die Funktion wird innerhalb von setValue() aufgerufen
-    function checkValue($field_name, $field_value)
+    function _setValue($field_name, $field_value)
     {
         switch($field_name)
         {
@@ -146,7 +146,7 @@ class Role extends TableAccess
     
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
     // die Funktion wird innerhalb von save() aufgerufen
-    function initializeFields()
+    function _save()
     {
         global $g_current_user;
         
@@ -156,7 +156,7 @@ class Role extends TableAccess
 
     // interne Funktion, die die Fotoveranstaltung in Datenbank und File-System loeschen
     // die Funktion wird innerhalb von delete() aufgerufen
-    function deleteReferences()
+    function _delete()
     {
         // die Rolle "Webmaster" darf nicht geloescht werden
         if($this->db_fields['rol_name'] != "Webmaster")

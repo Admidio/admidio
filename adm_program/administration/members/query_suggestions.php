@@ -106,12 +106,10 @@ else
                         WHERE usr_valid = 1
                         ORDER BY last_name, first_name ";
         }
-        error_log($sql);
-        $result_mgl = mysql_query($sql, $g_adm_con);
-        db_error($result_mgl,__FILE__,__LINE__);
+        $result_mgl = $g_db->query($sql);
 
         // Jetzt das komplette resultSet in ein Array schreiben...
-        while($row = mysql_fetch_object($result_mgl))
+        while($row = $g_db->fetch_object($result_mgl))
         {
             $entry = array('lastName' => $row->last_name, 'firstName' => $row->first_name);
             $querySuggestions[]=$entry;

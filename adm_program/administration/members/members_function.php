@@ -80,9 +80,8 @@ if($_GET["mode"] != 1)
                   AND mem_rol_id  = rol_id
                   AND mem_valid   = 1
                   AND mem_usr_id  = ". $_GET['user_id'];
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
-    $other_orga = mysql_num_rows($result);
+    $result = $g_db->query($sql);
+    $other_orga = $g_db->num_rows($result);
 
     // User-Objekt anlegen
     $user = new User($g_db, $_GET['user_id']);
@@ -156,17 +155,15 @@ elseif($_GET["mode"] == 2)
                AND mem_rol_id = rol_id
                AND mem_valid  = 1
                AND mem_usr_id = ". $_GET['user_id'];
-    $result_mgl = mysql_query($sql, $g_adm_con);
-    db_error($result_mgl,__FILE__,__LINE__);
+    $result_mgl = $g_db->query($sql);
 
-    while($row = mysql_fetch_array($result_mgl))
+    while($row = $g_db->fetch_array($result_mgl))
     {
         // alle Rollen der aktuellen Gliedgemeinschaft auf ungueltig setzen
         $sql    = "UPDATE ". TBL_MEMBERS. " SET mem_valid = 0
                                               , mem_end   = NOW()
                     WHERE mem_id = ". $row['mem_id'];
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result,__FILE__,__LINE__);
+        $result = $g_db->query($sql);
     }
 
     $err_code = "remove_member_ok";
@@ -227,8 +224,7 @@ elseif($_GET["mode"] == 4)
         // Passwort des Users updaten
         $sql    = "UPDATE ". TBL_USERS. " SET usr_password = '$password_md5'
                     WHERE usr_id = ". $user->getValue("usr_id");
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result,__FILE__,__LINE__);
+        $result = $g_db->query($sql);
 
         // Mail an den User mit den Loginaten schicken
         $email = new Email();

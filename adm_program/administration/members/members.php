@@ -175,11 +175,8 @@ else
                 GROUP BY usr_id
                 ORDER BY last_name, first_name ";
 }
-error_log($sql);
-$result_mgl = mysql_query($sql, $g_adm_con);
-db_error($result_mgl,__FILE__,__LINE__);
-
-$num_members = mysql_num_rows($result_mgl);
+$result_mgl  = $g_db->query($sql);
+$num_members = $g_db->num_rows($result_mgl);
 
 if($num_members < $req_start)
 {
@@ -190,10 +187,8 @@ if($num_members < $req_start)
 $sql    = "SELECT COUNT(*) as count
              FROM ". TBL_USERS. "
             WHERE usr_valid = 1 ";
-$result = mysql_query($sql, $g_adm_con);
-db_error($result,__FILE__,__LINE__);
-
-$row = mysql_fetch_array($result);
+$result = $g_db->query($sql);
+$row    = $g_db->fetch_array($result);
 $count_mem_rol = $row['count'];
 
 // Html-Kopf ausgeben
@@ -237,7 +232,7 @@ echo "
     </span>
 </p>";
 
-if($count_mem_rol != mysql_num_rows($result_mgl) || $req_members == false)
+if($count_mem_rol != $g_db->num_rows($result_mgl) || $req_members == false)
 {
     // Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
     if($req_members == 1)
@@ -337,17 +332,15 @@ echo "<p>";
                       AND usd_usr_id = usr_id
                     ORDER BY usd_value ";
     }
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
-
-    $letter_row = mysql_fetch_array($result);
+    $result      = $g_db->query($sql);
+    $letter_row  = $g_db->fetch_array($result);
     $letter_menu = "A";
 
     // kleine Vorschleife die alle Sonderzeichen (Zahlen) vor dem A durchgeht 
     // (diese werden nicht im Buchstabenmenue angezeigt)
     while(ord($letter_row[0]) < ord("A"))
     {
-        $letter_row = mysql_fetch_array($result);
+        $letter_row = $g_db->fetch_array($result);
     }
 
     // Nun alle Buchstaben mit evtl. vorhandenen Links im Buchstabenmenue anzeigen
@@ -384,7 +377,7 @@ echo "<p>";
         // naechsten Buchstaben anwaehlen
         if($letter_found == true)
         {
-            $letter_row = mysql_fetch_array($result);
+            $letter_row = $g_db->fetch_array($result);
         }
         $letter_menu = strNextLetter($letter_menu);
     }
@@ -396,13 +389,13 @@ if($num_members > 0)
         <tr>
             <th class=\"tableHeader\" align=\"right\">Nr.</th>
             <th class=\"tableHeader\" align=\"center\"><img style=\"cursor: help;\" 
-				src=\"$g_root_path/adm_program/images/user.png\" alt=\"Mitglied bei ". $g_current_organization->getValue("org_longname"). "\" 
-				title=\"Mitglied bei ". $g_current_organization->getValue("org_longname"). "\" border=\"0\"></th>
+                src=\"$g_root_path/adm_program/images/user.png\" alt=\"Mitglied bei ". $g_current_organization->getValue("org_longname"). "\" 
+                title=\"Mitglied bei ". $g_current_organization->getValue("org_longname"). "\" border=\"0\"></th>
             <th class=\"tableHeader\" align=\"left\">&nbsp;Name</th>
             <th class=\"tableHeader\" align=\"center\"><img style=\"cursor: help;\" 
-				src=\"$g_root_path/adm_program/images/email.png\" alt=\"E-Mail\" title=\"E-Mail\"></th>
+                src=\"$g_root_path/adm_program/images/email.png\" alt=\"E-Mail\" title=\"E-Mail\"></th>
             <th class=\"tableHeader\" align=\"center\"><img style=\"cursor: help;\" 
-				src=\"$g_root_path/adm_program/images/globe.png\" alt=\"Homepage\" title=\"Homepage\"></th>
+                src=\"$g_root_path/adm_program/images/globe.png\" alt=\"Homepage\" title=\"Homepage\"></th>
             <th class=\"tableHeader\" align=\"left\">&nbsp;Benutzer</th>
             <th class=\"tableHeader\" align=\"center\">&nbsp;Aktualisiert am</th>
             <th class=\"tableHeader\" align=\"center\">Bearbeiten</th>
@@ -410,14 +403,14 @@ if($num_members > 0)
         $i = 0;
 
         // jetzt erst einmal zu dem ersten relevanten Datensatz springen
-        if(!mysql_data_seek($result_mgl, $req_start))
+        if(!$g_db->data_seek($result_mgl, $req_start))
         {
             $g_message->show("invalid");
         }
 
         for($i = 0; $i < $members_per_page && $i + $req_start < $num_members; $i++)
         {
-            if($row = mysql_fetch_array($result_mgl))
+            if($row = $g_db->fetch_array($result_mgl))
             {
                 echo "
                 <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
@@ -469,11 +462,10 @@ if($num_members > 0)
                                       AND mem_rol_id  = rol_id
                                       AND mem_valid   = 1
                                       AND mem_usr_id  = ". $row['usr_id'];
-                        $result      = mysql_query($sql, $g_adm_con);
-                        db_error($result,__FILE__,__LINE__);
+                        $result = $g_db->query($sql);
                         $b_other_orga = false;
 
-                        if(mysql_num_rows($result) > 0)
+                        if($g_db->num_rows($result) > 0)
                         {
                             $b_other_orga = true;
                         }
