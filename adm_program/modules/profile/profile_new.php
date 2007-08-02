@@ -356,7 +356,6 @@ echo "
         // *******************************************************************************
 
         $category = "";
-        $margintop = "0px";
         
         foreach($user->db_user_fields as $key => $value)
         {
@@ -379,11 +378,10 @@ echo "
                 {
                     // div-Container groupBoxBody und groupBox schliessen
                     echo "</div></div>";
-                    $margintop = "15px";
                 }
                 $category = $value['cat_name'];
 
-                echo "<div class=\"groupBox\" style=\"margin-top: $margintop; text-align: left;\">
+                echo "<div class=\"groupBox\">
                     <div class=\"groupBoxHeadline\">". $value['cat_name']. "</div>
                     <div class=\"groupBoxBody\">";
             }

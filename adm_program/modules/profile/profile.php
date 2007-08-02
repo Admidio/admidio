@@ -215,7 +215,7 @@ echo "</div>
         // *******************************************************************************
 
         echo "<div style=\"width: 66%; margin-right: 10px; float: left;\">
-            <div class=\"groupBox\" style=\"margin-top: 4px; text-align: left;\">
+            <div class=\"groupBox\">
                 <div class=\"groupBoxHeadline\">
                     <div style=\"width: 60%; float: left;\">
                         ". $user->getValue("Vorname"). " ". $user->getValue("Nachname"). "&nbsp;&nbsp;";
@@ -388,40 +388,38 @@ echo "</div>
             $result_photo = $g_db->query($sql);
 
             echo"
-            <div style=\"margin-top: 4px; text-align: center;\">
-                <div class=\"groupBox\">
-                    <div class=\"groupBoxBody\">";
-                        //Falls vorhanden Bild ausgeben
-                        if($g_db->num_rows($result_photo) > 0)
-                        {
-                            echo"<img src=\"$g_root_path/adm_program/modules/profile/profile_photo_show.php?usr_id=$a_user_id&amp;id=". time(). "\" alt=\"Profilfoto\">";
-                        }
-                        //wenn nicht Schattenkopf
-                        else
-                        {
-                            echo"<img src=\"$g_root_path/adm_program/images/no_profile_pic.png\" alt=\"Profilfoto\">";
-                        }
-                    echo"</div>
-                </div>";
-                
-                // Nur berechtigte User duerfen ein Profil editieren
-                if($g_current_user->editProfile($a_user_id) == true)
-                {
-                    echo "<div style=\"margin-top: 5px;\">
-                        <span class=\"iconLink\">
-                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$a_user_id\"><img
-                             class=\"iconLink\" src=\"$g_root_path/adm_program/images/photo.png\" alt=\"Foto &auml;ndern\"></a>
-                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$a_user_id\">Foto &auml;ndern</a>
-                        </span>
-                    </div>";
-                }
-                echo"<div style=\"margin-top: 5px;\">
+            <div class=\"groupBox\">
+                <div class=\"groupBoxBody\" style=\"text-align: center;\">";
+                    //Falls vorhanden Bild ausgeben
+                    if($g_db->num_rows($result_photo) > 0)
+                    {
+                        echo"<img src=\"$g_root_path/adm_program/modules/profile/profile_photo_show.php?usr_id=$a_user_id&amp;id=". time(). "\" alt=\"Profilfoto\">";
+                    }
+                    //wenn nicht Schattenkopf
+                    else
+                    {
+                        echo"<img src=\"$g_root_path/adm_program/images/no_profile_pic.png\" alt=\"Profilfoto\">";
+                    }
+                echo"</div>
+            </div>";
+
+            // Nur berechtigte User duerfen ein Profil editieren
+            if($g_current_user->editProfile($a_user_id) == true)
+            {
+                echo "<div style=\"margin-top: 5px;\">
                     <span class=\"iconLink\">
-                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id=". $user->getValue("usr_id"). "\"><img
-                         class=\"iconLink\" src=\"$g_root_path/adm_program/images/vcard.png\" alt=\"Benutzer als vCard exportieren\"></a>
-                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id=". $user->getValue("usr_id"). "\">vCard exportieren</a>
+                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$a_user_id\"><img
+                         class=\"iconLink\" src=\"$g_root_path/adm_program/images/photo.png\" alt=\"Foto &auml;ndern\"></a>
+                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$a_user_id\">Foto &auml;ndern</a>
                     </span>
-                </div>
+                </div>";
+            }
+            echo"<div style=\"margin-top: 5px;\">
+                <span class=\"iconLink\">
+                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id=". $user->getValue("usr_id"). "\"><img
+                     class=\"iconLink\" src=\"$g_root_path/adm_program/images/vcard.png\" alt=\"Benutzer als vCard exportieren\"></a>
+                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id=". $user->getValue("usr_id"). "\">vCard exportieren</a>
+                </span>
             </div>
         </div>
     </div>
@@ -454,7 +452,7 @@ echo "</div>
                 }
                 $category = $value['cat_name'];
                 
-                echo "<div class=\"groupBox\" style=\"margin-top: 10px; text-align: left;\">
+                echo "<div class=\"groupBox\">
                     <div class=\"groupBoxHeadline\">". $value['cat_name']. "</div>
                     <div class=\"groupBoxBody\">";
             }
@@ -472,7 +470,7 @@ echo "</div>
     // div-Container groupBoxBody und groupBox schliessen
     echo "</div></div>
 
-   <div style=\"margin-top: 5px;\">";
+   <div>";
 
         // *******************************************************************************
         // Rollen-Block
@@ -520,14 +518,14 @@ echo "</div>
             $count_grp = $g_db->num_rows();
             $i = 0;
 
-            echo "<div class=\"groupBox\" style=\"margin-top: 10px; text-align: left; height: 100%;\">
+            echo "<div class=\"groupBox\">
                 <div class=\"groupBoxHeadline\">
                     <div style=\"width: 70%; float: left;\">
                         Rollen und Berechtigungen&nbsp;";
                     echo "</div>
                     <div style=\"text-align: right;\">&nbsp;";
                         // Moderatoren & Gruppenleiter duerfen neue Rollen zuordnen
-                        if(($g_current_user->assignRoles() || isGroupLeader() || $g_current_user->editUser())
+                        if(($g_current_user->assignRoles() || isGroupLeader($g_current_user->getValue("usr_id")) || $g_current_user->editUser())
                         && $user->getValue("usr_reg_org_shortname") != $g_current_organization->getValue("org_shortname"))
                         {
                             echo "<a href=\"$g_root_path/adm_program/modules/profile/roles.php?user_id=$a_user_id\"><img

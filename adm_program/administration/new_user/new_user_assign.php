@@ -109,7 +109,7 @@ echo "
     Es wurde bereits ein Benutzer mit &auml;hnlichem Namen wie 
     <b>". $new_user->getValue("Vorname"). " ". $new_user->getValue("Nachname"). "</b> 
     in der Datenbank gefunden.<br>
-    <div class=\"groupBox\" style=\"margin-top: 10px; text-align: left;\">
+    <div class=\"groupBox\">
         <div class=\"groupBoxHeadline\">Gefundene Benutzer</div>
         <div class=\"groupBoxBody\">";
             // Alle gefundenen Benutzer mit Adresse ausgeben und einem Link zur weiteren moeglichen Verarbeitung
@@ -212,7 +212,8 @@ echo "
             }
         echo "</div>
     </div>
-    <div class=\"groupBox\" style=\"margin-top: 10px; text-align: left;\">
+    
+    <div class=\"groupBox\">
         <div class=\"groupBoxHeadline\">Neuen Benutzer anlegen</div>
         <div class=\"groupBoxBody\">
             <div style=\"margin-left: 20px;\">
@@ -228,6 +229,7 @@ echo "
             </div>
         </div>
     </div>
+    
     <div style=\"margin-top: 20px;\">
         <span class=\"iconLink\">
             <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\"><img
