@@ -119,38 +119,39 @@ echo "
             {
                 echo "
                 <form name=\"installation\" action=\"index.php\" method=\"post\">
-                <div class=\"groupBox\" style=\"width: 350px; text-align: left;\">
-                <div class=\"groupBoxHeadline\">Aktion ausw&auml;hlen</div>
-                <br>
-                <div>&nbsp;
-                    <input type=\"radio\" id=\"install\" name=\"mode\" value=\"1\" ";
-                if($first_install) echo " checked ";
-                echo "/>&nbsp;
-                    <label for=\"install\">Admidio installieren und einrichten
-                </div>
-                <br>
-                <div>&nbsp;
-                    <input type=\"radio\" id=\"update\" name=\"mode\" value=\"3\" ";
-                if(!$first_install) echo " checked ";
-                echo "/>&nbsp;
-                    <label for=\"update\">Admidio Datenbank updaten
-                </div>";
-                /* vorlaefig ausgebaut, da die Einrichtung noch nicht komfortabel genug ist
-                <br>
-                <div>&nbsp;
-                    <input type=\"radio\" id=\"orga\" name=\"mode\" value=\"4\" />&nbsp;
-                    <label for=\"orga\">Neue Organisation hinzuf&uuml;gen
-                </div>*/
-                echo "<br>
+                <div class=\"groupBox\" style=\"width: 350px;\">
+                    <div class=\"groupBoxHeadline\">Aktion ausw&auml;hlen</div>
+                    <div class=\"groupBoxBody\">
+                        <ul>
+                            <li>
+                                <input type=\"radio\" id=\"install\" name=\"mode\" value=\"1\" ";
+                                if($first_install) echo " checked ";
+                                    echo "/>&nbsp;
+                                <label for=\"install\">Admidio installieren und einrichten</label>
+                            </li>
+                            <li>
+                                <input type=\"radio\" id=\"update\" name=\"mode\" value=\"3\" ";
+                                if(!$first_install) echo " checked ";
+                                    echo "/>&nbsp;
+                                <label for=\"update\">Admidio Datenbank updaten</label>
+                            </li>
+                        </ul>";
+                        /* vorlaefig ausgebaut, da die Einrichtung noch nicht komfortabel genug ist
+                        <br>
+                        <div>&nbsp;
+                            <input type=\"radio\" id=\"orga\" name=\"mode\" value=\"4\" />&nbsp;
+                            <label for=\"orga\">Neue Organisation hinzuf&uuml;gen
+                        </div>*/
+                    echo "</div>
                 </div>";
             }
             elseif($req_mode == 2)
             {
                 echo "<br>
                 <form name=\"installation\" action=\"inst_do.php?mode=5\" method=\"post\">
-                    <div class=\"groupBox\" style=\"width: 350px; text-align: left;\">
+                    <div class=\"groupBox\" style=\"width: 350px;\">
                         <div class=\"groupBoxHeadline\">Datei config.php anlegen</div>
-                        <div>
+                        <div class=\"groupBoxBody\">
                             <p>Laden Sie nun die Datei <b>config.php</b> herunter und kopieren Sie
                                 diese in das Verzeichnis <b>adm_config</b>.</p>
                                 <p>Klicken Sie erst danach auf <i>Weiter</i>.</p>
@@ -166,140 +167,172 @@ echo "
             }
             else
             {
-                echo "<form name=\"installation\" action=\"inst_do.php?mode=$req_mode\" method=\"post\">";
                 // Verbindungsdaten zur Datenbank
+                echo "<form name=\"installation\" action=\"inst_do.php?mode=$req_mode\" method=\"post\">
+                    <div class=\"groupBox\" style=\"width: 350px;\">
+                        <div class=\"groupBoxHeadline\">Zugangsdaten MySql-Datenbank</div>
+                        <div class=\"groupBoxBody\">
+                            <ul>
+                                <li>
+                                    <dl>
+                                        <dt><label for=\"server\">Server:</label></dt>
+                                        <dd><input type=\"text\" name=\"server\" id=\"server\" style=\"width: 200px;\" maxlength=\"50\"></dd>
+                                    </dl>
+                                </li>
+                                <li>
+                                    <dl>
+                                        <dt><label for=\"user\">Login:</label></dt>
+                                        <dd><input type=\"text\" name=\"user\" id=\"user\" style=\"width: 200px;\" maxlength=\"50\"></dd>
+                                    </dl>
+                                </li>
+                                <li>
+                                    <dl>
+                                        <dt><label for=\"password\">Passwort:</label></dt>
+                                        <dd><input type=\"password\" name=\"password\" id=\"password\" style=\"width: 200px;\" maxlength=\"50\"></dd>
+                                    </dl>
+                                </li>
+                                <li>
+                                    <dl>
+                                        <dt><label for=\"database\">Datenbank:</label></dt>
+                                        <dd><input type=\"text\" name=\"database\" id=\"database\" style=\"width: 200px;\" maxlength=\"50\"></dd>
+                                    </dl>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <br />";
+
+                    // Optionen fuer die Installation
+                    if($req_mode == 1)
+                    {
+                        echo "
+                        <div class=\"groupBox\" style=\"width: 350px;\">
+                            <div class=\"groupBoxHeadline\">Optionen</div>
+                            <div class=\"groupBoxBody\">
+                                <ul>
+                                    <li>Hier k&ouml;nnen Sie ein Pr&auml;fix f&uuml;r die Datenbank-Tabellen von Admidio angeben.</li>
+                                    <li>
+                                        <dl>
+                                            <dt><label for=\"praefix\">Tabellenpr&auml;fix:</label></dt>
+                                            <dd><input type=\"text\" name=\"praefix\" id=\"praefix\" style=\"width: 80px;\" maxlength=\"10\"></dd>
+                                        </dl>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <br />";
+                    }
+
+                    // Updaten von Version
+                    if($req_mode == 3)
+                    {
+                        echo "<br />
+                        <div class=\"groupBox\" style=\"width: 350px;\">
+                            <div class=\"groupBoxHeadline\">Optionen</div>
+                            <div class=\"groupBoxBody\">
+                                <ul>
+                                    <li>
+                                        <dl>
+                                            <dt><label for=\"version\">Update von:</label></dt>
+                                            <dd>
+                                                <select size=\"1\" name=\"version\" id=\"version\">
+                                                    <option value=\"0\" selected=\"selected\">- Bitte w&auml;hlen -</option>
+                                                    <option value=\"5\">Version 1.4.*</option>
+                                                    <option value=\"4\">Version 1.3.*</option>
+                                                    <option value=\"3\">Version 1.2.*</option>
+                                                </select>
+                                            </dd>
+                                        </dl>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <br />";
+                    }
+
+                    // Organisation anlegen
+                    if($req_mode != 3)
+                    {
+                        echo "
+                        <div class=\"groupBox\" style=\"width: 350px;\">
+                            <div class=\"groupBoxHeadline\">Organisation / Verein</div>
+                            <div class=\"groupBoxBody\">
+                                <ul>
+                                    <li>
+                                        <dl>
+                                            <dt><label for=\"orga_name_short\">Name (Abk.):</label></dt>
+                                            <dd><input type=\"text\" name=\"orga_name_short\" id=\"orga_name_short\" style=\"width: 80px;\" maxlength=\"10\" /></dd>
+                                        </dl>
+                                    </li>
+                                    <li>
+                                        <dl>
+                                            <dt><label for=\"orga_name_long\">Name (lang):</label></dt>
+                                            <dd><input type=\"text\" name=\"orga_name_long\" id=\"orga_name_long\" style=\"width: 200px;\" maxlength=\"60\" /></dd>
+                                        </dl>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <br />";
+                    }
+
+                    // Webmaster anlegen
+                    if($req_mode == 1
+                    || $req_mode == 4)
+                    {
+                        echo "
+                        <div class=\"groupBox\" style=\"width: 350px;\">
+                            <div class=\"groupBoxHeadline\">Webmaster anlegen</div>
+                            <div class=\"groupBoxBody\">
+                                <ul>
+                                    <li>
+                                        <dl>
+                                            <dt><label for=\"user_last_name\">Nachname:</label></dt>
+                                            <dd><input type=\"text\" name=\"user_last_name\" id=\"user_last_name\" style=\"width: 200px;\" maxlength=\"50\" /></dd>
+                                        </dl>
+                                    </li>
+                                    <li>
+                                        <dl>
+                                            <dt><label for=\"user_first_name\">Vorname:</label></dt>
+                                            <dd><input type=\"text\" name=\"user_first_name\" id=\"user_first_name\" style=\"width: 200px;\" maxlength=\"50\" /></dd>
+                                        </dl>
+                                    </li>
+                                    <li>
+                                        <dl>
+                                            <dt><label for=\"user_email\">E-Mail:</label></dt>
+                                            <dd><input type=\"text\" name=\"user_email\" id=\"user_email\" style=\"width: 200px;\" maxlength=\"50\" /></dd>
+                                        </dl>
+                                    </li>
+                                    <li>
+                                        <dl>
+                                            <dt><label for=\"user_login\">Benutzername:</label></dt>
+                                            <dd><input type=\"text\" name=\"user_login\" id=\"user_login\" style=\"width: 200px;\" maxlength=\"50\" /></dd>
+                                        </dl>
+                                    </li>
+                                    <li>
+                                        <dl>
+                                            <dt><label for=\"password\">Passwort:</label></dt>
+                                            <dd><input type=\"text\" name=\"password\" id=\"password\" style=\"width: 200px;\" maxlength=\"50\" /></dd>
+                                        </dl>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <br />";
+                    }
+                }
                 echo "
-                <table class=\"groupBox\" width=\"350\" cellpadding=\"5\">
-                    <tr>
-                        <td class=\"groupBoxHeadline\" colspan=\"2\">Zugangsdaten MySql-Datenbank</td>
-                    </tr>
-                    <tr>
-                        <td width=\"120px\">Server:</td>
-                        <td><input type=\"text\" name=\"server\" size=\"25\" maxlength=\"50\" /></td>
-                    </tr>
-                    <tr>
-                        <td width=\"120px\">Login:</td>
-                        <td><input type=\"text\" name=\"user\" size=\"25\" maxlength=\"50\" /></td>
-                    </tr>
-                    <tr>
-                        <td width=\"120px\">Passwort:</td>
-                        <td><input type=\"password\" name=\"password\" size=\"25\" maxlength=\"50\" /></td>
-                    </tr>
-                    <tr>
-                        <td width=\"120px\">Datenbank:</td>
-                        <td><input type=\"text\" name=\"database\" size=\"25\" maxlength=\"50\" /></td>
-                    </tr>
-                </table>
-
-                <br />";
-
-                // Optionen fuer die Installation
-                if($req_mode == 1)
-                {
-                    echo "
-                    <table class=\"groupBox\" width=\"350\" cellpadding=\"5\">
-                        <tr>
-                            <td class=\"groupBoxHeadline\" colspan=\"2\">Optionen</td>
-                        </tr>
-                        <tr>
-                            <td colspan=\"2\">Hier k&ouml;nnen Sie ein Pr&auml;fix f&uuml;r die Datenbank-Tabellen von Admidio angeben.</td>
-                        </tr>
-                        <tr>
-                            <td width=\"120px\">Tabellenpr&auml;fix:</td>
-                            <td><input type=\"text\" name=\"praefix\" size=\"10\" maxlength=\"10\" value=\"adm\" /></td>
-                        </tr>
-                    </table>
-                    <br />";
-                }
-
-                // Updaten von Version
-                if($req_mode == 3)
-                {
-                    echo "<br />
-                    <table class=\"groupBox\" width=\"350\" cellpadding=\"5\">
-                        <tr>
-                            <td class=\"groupBoxHeadline\" colspan=\"2\">Optionen</td>
-                        </tr>
-                        <tr>
-                            <td width=\"120px\">Update von:</td>
-                            <td>
-                                <select size=\"1\" name=\"version\">
-                                    <option value=\"0\" selected=\"selected\">- Bitte w&auml;hlen -</option>
-                                    <option value=\"5\">Version 1.4.*</option>
-                                    <option value=\"4\">Version 1.3.*</option>
-                                    <option value=\"3\">Version 1.2.*</option>
-                                </select>
-                            </td>
-                        </tr>
-                    </table>
-                    <br />";
-                }
-
-                // Organisation anlegen
-                if($req_mode != 3)
-                {
-                    echo "
-                    <table class=\"groupBox\" width=\"350\" cellpadding=\"5\">
-                        <tr>
-                            <td class=\"groupBoxHeadline\" colspan=\"2\">Organisation / Verein</td>
-                        </tr>
-                        <tr>
-                            <td width=\"120px\">Name (Abk.):</td>
-                            <td><input type=\"text\" name=\"orga_name_short\" size=\"10\" maxlength=\"10\" /></td>
-                        </tr>
-                        <tr>
-                            <td width=\"120px\">Name (lang):</td>
-                            <td><input type=\"text\" name=\"orga_name_long\" size=\"25\" maxlength=\"60\" /></td>
-                        </tr>
-                    </table>
-                    <br />";
-                }
-
-                // Webmaster anlegen
-                if($req_mode == 1
-                || $req_mode == 4)
-                {
-                    echo "
-                    <table class=\"groupBox\" width=\"350\" cellpadding=\"5\">
-                        <tr>
-                            <td class=\"groupBoxHeadline\" colspan=\"2\">Webmaster anlegen</td>
-                        </tr>
-                        <tr>
-                            <td width=\"120px\">Nachname:</td>
-                            <td><input type=\"text\" name=\"user_last_name\" size=\"25\" maxlength=\"50\" /></td>
-                        </tr>
-                        <tr>
-                            <td width=\"120px\">Vorname:</td>
-                            <td><input type=\"text\" name=\"user_first_name\" size=\"25\" maxlength=\"50\" /></td>
-                        </tr>
-                        <tr>
-                            <td width=\"120px\">E-Mail:</td>
-                            <td><input type=\"text\" name=\"user_email\" size=\"25\" maxlength=\"50\" /></td>
-                        </tr>
-                        <tr>
-                            <td width=\"120px\">Benutzername:</td>
-                            <td><input type=\"text\" name=\"user_login\" size=\"25\" maxlength=\"50\" /></td>
-                        </tr>
-                        <tr>
-                            <td width=\"120px\">Passwort:</td>
-                            <td><input type=\"password\" name=\"user_password\" size=\"25\" maxlength=\"50\" /></td>
-                        </tr>
-                    </table>
-                    <br />";
-                }
-            }
-            echo "
-            <div style=\"margin-top: 15px; margin-bottom: 5px;\">";
-                if($req_mode > 0)
-                {
-                    echo "<button name=\"back\" type=\"button\" value=\"back\" onclick=\"history.back()\">
-                        <img src=\"../adm_program/images/back.png\" alt=\"Zurueck\">
-                        &nbsp;Zur&uuml;ck</button>&nbsp;&nbsp;";
-                }
-                echo "<button name=\"forward\" type=\"submit\" value=\"forward\">Weiter&nbsp;
-                    <img src=\"../adm_program/images/forward.png\" alt=\"Weiter\">
-                </button>
-            </div>
+                <div style=\"margin-top: 15px; margin-bottom: 5px;\">";
+                    if($req_mode > 0)
+                    {
+                        echo "<button name=\"back\" type=\"button\" value=\"back\" onclick=\"history.back()\">
+                            <img src=\"../adm_program/images/back.png\" alt=\"Zurueck\">
+                            &nbsp;Zur&uuml;ck</button>&nbsp;&nbsp;";
+                    }
+                    echo "<button name=\"forward\" type=\"submit\" value=\"forward\">Weiter&nbsp;
+                        <img src=\"../adm_program/images/forward.png\" alt=\"Weiter\">
+                    </button>
+                </div>
             </form>
         </div>
     </div>
