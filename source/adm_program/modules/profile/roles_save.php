@@ -35,7 +35,7 @@ require("../../system/role_dependency_class.php");
 
 
 // nur Webmaster & Moderatoren duerfen Rollen zuweisen
-if(!$g_current_user->assignRoles() && !isGroupLeader() && !$g_current_user->editUser())
+if(!$g_current_user->assignRoles() && !isGroupLeader($g_current_user->getValue("usr_id")) && !$g_current_user->editUser())
 {
     $g_message->show("norights");
 }

@@ -111,30 +111,33 @@ $g_layout['includes'] = false;
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 echo "<br />
-<div class=\"groupBox\" align=\"left\" style=\"padding: 10px\">";
-    switch ($err_code)
-    {
-        case "fields":
-            echo "Es sind nicht alle Felder aufgef&uuml;llt worden.";
-            break;
+<div class=\"groupBox\">
+    <div class=\"groupBoxHeadline\">Hinweis</div>
+    <div class=\"groupBoxBody\">";
+        switch ($err_code)
+        {
+            case "fields":
+                echo "Es sind nicht alle Felder aufgef&uuml;llt worden.";
+                break;
 
-        case "passwords_not_equal":
-            echo "Das Passwort stimmt nicht mit der Wiederholung &uuml;berein.";
-            break;
+            case "passwords_not_equal":
+                echo "Das Passwort stimmt nicht mit der Wiederholung &uuml;berein.";
+                break;
 
-        case "old_password_wrong":
-            echo "Das alte Passwort ist falsch.";
-            break;
-            
-        case "password_length":
-            echo "Das neue Passwort muss aus mindestens 6 Zeichen bestehen.";
-            break;
+            case "old_password_wrong":
+                echo "Das alte Passwort ist falsch.";
+                break;
 
-        default:
-            echo "Das Passwort wurde erfolgreich ge&auml;ndert.";
-            break;
-    }
-echo "</div>
+            case "password_length":
+                echo "Das neue Passwort muss aus mindestens 6 Zeichen bestehen.";
+                break;
+
+            default:
+                echo "Das Passwort wurde erfolgreich ge&auml;ndert.";
+                break;
+        }
+    echo "</div>
+</div>
 <div style=\"padding-top: 10px;\" align=\"center\">";
     if($err_code == "")
     {

@@ -68,8 +68,7 @@ if (isset($comment_result))
 {
 
     echo"
-    <div id=\"comments_$cid\" style=\"visibility: visible; display: block; text-align: left;\">
-        <br />";
+    <div id=\"comments_$cid\" style=\"visibility: visible; display: block; text-align: left;\">";
 
     //Kommentarnummer auf 1 setzen
     $commentNumber = 1;
@@ -119,31 +118,32 @@ if (isset($comment_result))
             echo "
             </div>
 
-            <div style=\"margin: 8px 4px 4px 4px;\">";
-                // wenn BBCode aktiviert ist, den Text noch parsen, ansonsten direkt ausgeben
-                if ($g_preferences['enable_bbcode'] == 1)
+            <div class=\"groupBoxBody\">
+                <div style=\"margin: 8px 4px 4px 4px;\">";
+                    // wenn BBCode aktiviert ist, den Text noch parsen, ansonsten direkt ausgeben
+                    if ($g_preferences['enable_bbcode'] == 1)
+                    {
+                        echo strSpecialChars2Html($bbcode->parse($row->gbc_text));
+                    }
+                    else
+                    {
+                        echo nl2br(strSpecialChars2Html($row->gbc_text));
+                    }
+                echo "</div>";
+
+                // Falls der Kommentar editiert worden ist, wird dies angezeigt
+                if($row->gbc_usr_id_change > 0)
                 {
-                    echo strSpecialChars2Html($bbcode->parse($row->gbc_text));
+                    // Userdaten des Editors holen...
+                    $user_change = new User($g_db, $row->gbc_usr_id_change);
+
+                    echo "
+                    <div class=\"smallFontSize\" style=\"margin: 8px 4px 4px 4px;\">Zuletzt bearbeitet von ".
+                    $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname").
+                    " am ". mysqldatetime("d.m.y h:i", $row->gbc_last_change). "</div>";
                 }
-                else
-                {
-                    echo nl2br(strSpecialChars2Html($row->gbc_text));
-                }
-            echo "</div>";
-
-            // Falls der Kommentar editiert worden ist, wird dies angezeigt
-            if($row->gbc_usr_id_change > 0)
-            {
-                // Userdaten des Editors holen...
-                $user_change = new User($g_db, $row->gbc_usr_id_change);
-
-                echo "
-                <div class=\"smallFontSize\" style=\"margin: 8px 4px 4px 4px;\">Zuletzt bearbeitet von ".
-                $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname").
-                " am ". mysqldatetime("d.m.y h:i", $row->gbc_last_change). "</div>";
-            }
-
-        echo"
+            echo "
+            </div>
         </div>
 
         <br />";
