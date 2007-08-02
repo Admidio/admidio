@@ -49,6 +49,11 @@ if(isset($plg_show_visitors) == false || is_numeric($plg_show_visitors) == false
     $plg_show_visitors = 1;
 }
 
+if(isset($plg_show_self) == false || is_numeric($plg_show_self) == false)
+{
+    $plg_show_self = 1;
+}
+
 if(isset($plg_show_users_side_by_side) == false || is_numeric($plg_show_users_side_by_side) == false)
 {
     $plg_show_users_side_by_side = 0;
@@ -93,6 +98,10 @@ if($plg_show_visitors == 0)
 {
     $sql = $sql. " AND ses_usr_id IS NOT NULL ";
 }
+if($plg_show_self == 0 && $g_valid_login)
+{
+    $sql = $sql. " AND ses_usr_id <> ". $g_current_user->getValue("usr_id");
+}
 $sql = $sql. " ORDER BY ses_usr_id ";
 $result = $g_db->query($sql);
 
@@ -136,6 +145,6 @@ if($g_db->num_rows($result) > 0)
 }
 else
 {
-    echo "Momentan ist kein Benutzer online";
+    echo "Momentan ist kein anderer Benutzer online";
 }
 ?>

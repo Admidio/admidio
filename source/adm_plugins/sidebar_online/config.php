@@ -17,6 +17,11 @@ $plg_time_online = 10;
 // 1 = (Default) Anzahl der Besucher wird aufgelistet
 $plg_show_visitors = 1;
 
+// soll das eigene Login angezeigt werden
+// 0 = das eigene Login (auch ausgeloggt) wird nicht angezeigt
+// 1 = (Default) das eigene Login (auch ausgeloggt) wird angezeigt
+$plg_show_self = 1;
+
 // Anzeige der Benutzernamen untereinander bzw. nebeneinander
 // 0 = (Default) Benutzernamen untereinander auflisten (1 Name pro Zeile)
 // 1 = Benutzernamen nebeneinander auflisten
