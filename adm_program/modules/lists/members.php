@@ -66,7 +66,7 @@ $role = new Role($g_db, $role_id);
 // nur Webmaster duerfen die Rolle Webmaster zuweisen
 // beide muessen Mitglied der richtigen Gliedgemeinschaft sein
 if(  (!$g_current_user->assignRoles()
-   && !isGroupLeader($role_id) 
+   && !isGroupLeader($g_current_user->getValue("usr_id"), $role_id) 
    && !$g_current_user->editUser()) 
 || (  !$g_current_user->isWebmaster() 
    && $role->getValue("rol_name") == "Webmaster") 

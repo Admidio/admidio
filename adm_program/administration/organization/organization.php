@@ -66,8 +66,14 @@ $g_layout['title']  = "Organisationseinstellungen";
 $g_layout['header'] =  "
     <style type=\"text/css\">
         .smallText {
-            font-size: 7pt;
+            font-size:  7pt;
             font-weight: normal;
+        }
+        
+        .groupBox {
+            visibility: hidden; 
+            display:    none; 
+            width:      95%;
         }
     </style>
 
@@ -124,7 +130,7 @@ echo "
 
 <form action=\"$g_root_path/adm_program/administration/organization/organization_function.php\" method=\"post\" name=\"orga_settings\">
     <div class=\"formBody\">
-        <div class=\"groupBox\" id=\"general\" style=\"visibility: hidden; display: none; margin-top: 15px; text-align: left; width: 95%;\">
+        <div class=\"groupBox\" id=\"general\">
             <div class=\"groupBoxHeadline\">Allgemeine Einstellungen</div>
             <div class=\"groupBoxBody\">
                 <div style=\"margin-top: 6px;\">
@@ -365,7 +371,7 @@ echo "
         /**************************************************************************************/
 
         echo"
-        <div class=\"groupBox\" id=\"register\" style=\"visibility: hidden; display: none; margin-top: 15px; text-align: left; width: 95%;\">
+        <div class=\"groupBox\" id=\"register\">
             <div class=\"groupBoxHeadline\">Einstellungen Registrierung&nbsp;&nbsp; </div>
             <div class=\"groupBoxBody\">
                 <div style=\"margin-top: 15px;\">
@@ -439,7 +445,7 @@ echo "
         /**************************************************************************************/
 
         echo"
-        <div class=\"groupBox\" id=\"announcement-module\" style=\"visibility: hidden; display: none; margin-top: 15px; text-align: left; width: 95%;\">
+        <div class=\"groupBox\" id=\"announcement-module\">
             <div class=\"groupBoxHeadline\">Einstellungen Ank&uuml;ndigungsmodul&nbsp;&nbsp; </div>
             <div class=\"groupBoxBody\">
                 <div style=\"margin-top: 6px;\">
@@ -466,7 +472,7 @@ echo "
         /**************************************************************************************/
 
         echo"
-        <div class=\"groupBox\"    id=\"download-module\" style=\"visibility: hidden; display: none; margin-top: 15px; text-align: left; width: 95%;\">
+        <div class=\"groupBox\" id=\"download-module\">
             <div class=\"groupBoxHeadline\">Einstellungen Downloadmodul&nbsp;&nbsp; </div>
             <div class=\"groupBoxBody\">
                 <div style=\"margin-top: 6px;\">
@@ -504,7 +510,7 @@ echo "
         /**************************************************************************************/
 
         echo"
-        <div class=\"groupBox\" id=\"photo-module\" style=\"visibility: hidden; display: none; margin-top: 15px; text-align: left; width: 95%;\">
+        <div class=\"groupBox\" id=\"photo-module\">
             <div class=\"groupBoxHeadline\">Einstellungen Fotomodul&nbsp;&nbsp; </div>
             <div class=\"groupBoxBody\">
                 <div style=\"margin-top: 6px;\">
@@ -662,7 +668,7 @@ echo "
         /**************************************************************************************/
 
         echo"
-        <div class=\"groupBox\" id=\"guestbook-module\" style=\"visibility: hidden; display: none; margin-top: 15px; text-align: left; width: 95%;\">
+        <div class=\"groupBox\" id=\"guestbook-module\">
             <div class=\"groupBoxHeadline\">Einstellungen G&auml;stebuchmodul&nbsp;&nbsp; </div>
             <div class=\"groupBoxBody\">
                 <div style=\"margin-top: 6px;\">
@@ -736,9 +742,21 @@ echo "
         /**************************************************************************************/
 
         echo"
-        <div class=\"groupBox\" id=\"list-module\" style=\"visibility: hidden; display: none; margin-top: 15px; text-align: left; width: 95%;\">
+        <div class=\"groupBox\" id=\"list-module\">
             <div class=\"groupBoxHeadline\">Einstellungen Listen&nbsp;&nbsp; </div>
             <div class=\"groupBoxBody\">
+                <div style=\"margin-top: 6px;\">
+                 <div style=\"text-align: left; width: 55%; float: left;\">Anzahl Rollen pro Seite:</div>
+                    <div style=\"text-align: left;\">
+                        <input type=\"text\" name=\"lists_roles_per_page\" size=\"4\" maxlength=\"4\" value=\"". $form_values['lists_roles_per_page']. "\">
+                    </div>
+                </div>
+                <div class=\"smallText\">
+                    Anzahl der Rollen die auf einer Seite in der Listen&uuml;bersicht aufgelistet werden. Gibt es mehr Rollen
+                    so kann man in der Liste bl&auml;ttern. Bei dem Wert 0 werden alle Rollen aufgelistet und die 
+                    Bl&auml;ttern-Funktion deaktiviert.
+                </div>
+                
                 <div style=\"margin-top: 6px;\">
                  <div style=\"text-align: left; width: 55%; float: left;\">Anzahl Teilnehmer pro Seite:</div>
                     <div style=\"text-align: left;\">
@@ -746,9 +764,10 @@ echo "
                     </div>
                 </div>
                 <div class=\"smallText\">
-                    Anzahl der Teilnehmer die auf einer Seite aufgelistet werden. Gibt es mehr Teilnehmer zu einer Rolle, 
-                    so kann man in der Liste bl&auml;ttern. Die Druckvorschau und der Export sind von diesem Wert nicht
-                    betroffen. Bei dem Wert 0 werden alle Teilnehmer aufgelistet und die Bl&auml;ttern-Funktion deaktiviert.
+                    Anzahl der Teilnehmer die auf einer Seite in einer Liste aufgelistet werden. 
+                    Gibt es mehr Teilnehmer zu einer Rolle, so kann man in der Liste bl&auml;ttern. 
+                    Die Druckvorschau und der Export sind von diesem Wert nicht betroffen. 
+                    Bei dem Wert 0 werden alle Teilnehmer aufgelistet und die Bl&auml;ttern-Funktion deaktiviert.
                 </div>
             </div>
         </div>";
@@ -759,7 +778,7 @@ echo "
         /**************************************************************************************/
 
         echo"
-        <div class=\"groupBox\" id=\"mail-module\" style=\"visibility: hidden; display: none; margin-top: 15px; text-align: left; width: 95%;\">
+        <div class=\"groupBox\" id=\"mail-module\">
             <div class=\"groupBoxHeadline\">Einstellungen Mailmodul&nbsp;&nbsp; </div>
             <div class=\"groupBoxBody\">
                 <div style=\"margin-top: 6px;\">
@@ -815,7 +834,7 @@ echo "
         /**************************************************************************************/
 
         echo"
-        <div class=\"groupBox\" id=\"dates-module\" style=\"visibility: hidden; display: none; margin-top: 15px; text-align: left; width: 95%;\">
+        <div class=\"groupBox\" id=\"dates-module\">
             <div class=\"groupBoxHeadline\">Einstellungen Terminmodul&nbsp;&nbsp; </div>
             <div class=\"groupBoxBody\">
                 <div style=\"margin-top: 6px;\">
@@ -842,7 +861,7 @@ echo "
         /**************************************************************************************/
 
         echo"
-        <div class=\"groupBox\" id=\"links-module\" style=\"visibility: hidden; display: none; margin-top: 15px; text-align: left; width: 95%;\">
+        <div class=\"groupBox\" id=\"links-module\">
             <div class=\"groupBoxHeadline\">Einstellungen Weblinksmodul&nbsp;&nbsp; </div>
             <div class=\"groupBoxBody\">
                 <div style=\"margin-top: 6px;\">
