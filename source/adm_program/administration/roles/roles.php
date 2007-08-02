@@ -54,14 +54,58 @@ unset($_SESSION['roles_request']);
 
 // Html-Kopf ausgeben
 $g_layout['title']  = "Rollenverwaltung";
-$g_layout['header'] = "<script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/show_hide_block.js\"></script>";
+$g_layout['header'] = "<script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/show_hide_block.js\"></script>
+                       <style type=\"text/css\">
+                           .iconLink li {
+                               padding: 15px;
+                               list-style-type: none;
+                               display: inline;
+                           }
+
+                           .iconLink img {
+                               vertical-align:   top;
+                               border-width:     0px;
+                           }
+                       </style>";
 
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 // Html des Modules ausgeben
 echo "
-<h1 class=\"moduleHeadline\">Rollenverwaltung</h1>
+<h1 class=\"moduleHeadline\">Rollenverwaltung</h1>";
 
+if($req_valid == true)
+{
+    $description_lnk = "Inaktive Rollen";
+    $description_lst = "Aktive Rollen";
+    $image       = "wand_gray.png";
+}
+else
+{
+    $description_lnk = "Aktive Rollen";
+    $description_lst = "Inaktive Rollen";
+    $image       = "wand.png";
+}
+
+echo "
+<ul class=\"iconLink\">
+    <li>
+        <a href=\"$g_root_path/adm_program/administration/roles/roles_new.php\"><img
+        src=\"$g_root_path/adm_program/images/add.png\" alt=\"Rolle anlegen\"></a>
+        <a href=\"$g_root_path/adm_program/administration/roles/roles_new.php\">Rolle anlegen</a>
+    </li>
+    <li>
+        <a href=\"$g_root_path/adm_program/administration/roles/roles.php?inactive=$req_valid\"><img
+        src=\"$g_root_path/adm_program/images/$image\" alt=\"$description_lnk\"></a>
+        <a href=\"$g_root_path/adm_program/administration/roles/roles.php?inactive=$req_valid\">$description_lnk</a>
+    </li>
+    <li>
+        <a href=\"$g_root_path/adm_program/administration/roles/categories.php?type=ROL\"><img
+        src=\"$g_root_path/adm_program/images/application_double.png\" alt=\"Kategorien pflegen\"></a>
+        <a href=\"$g_root_path/adm_program/administration/roles/categories.php?type=ROL\">Kategorien pflegen</a>
+    </li>
+</ul>";
+/*
 <p>
     <span class=\"iconLink\">
         <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/roles_new.php\"><img
@@ -93,7 +137,8 @@ echo "
         <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/categories.php?type=ROL\">Kategorien pflegen</a>
     </span>
 </p>
-
+*/
+echo "
 <table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\">
     <thead>
         <tr>

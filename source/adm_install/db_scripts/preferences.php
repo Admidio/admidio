@@ -69,6 +69,7 @@ $orga_preferences = array(
     'enable_gbook_comments4all' => '0',
     
     // Listen
+    'lists_roles_per_page'   => '10',
     'lists_members_per_page' => '20',
     
     // Mailmodul

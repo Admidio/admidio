@@ -141,68 +141,64 @@ function hasRole($function, $user_id = 0)
 
 function isMember($user_id)
 {
-    global $g_current_user, $g_current_organization, $g_db;
+    global $g_current_organization, $g_db;
     
-    if(is_numeric($user_id) == false)
+    if(is_numeric($user_id) && $user_id > 0)
     {
-        return -1;
-    }
+        $sql    = "SELECT COUNT(*)
+                     FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                    WHERE mem_usr_id = $user_id
+                      AND mem_valid  = 1
+                      AND mem_rol_id = rol_id
+                      AND rol_valid  = 1 
+                      AND rol_cat_id = cat_id
+                      AND cat_org_id = ". $g_current_organization->getValue("org_id");
+        $result = $g_db->query($sql);
 
-    $sql    = "SELECT COUNT(*)
-                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                WHERE mem_usr_id = $user_id
-                  AND mem_valid  = 1
-                  AND mem_rol_id = rol_id
-                  AND rol_valid  = 1 
-                  AND rol_cat_id = cat_id
-                  AND cat_org_id = ". $g_current_organization->getValue("org_id");
-    $result = $g_db->query($sql);
+        $row = $g_db->fetch_array($result);
+        $row_count = $row[0];
 
-    $row = $g_db->fetch_array($result);
-    $row_count = $row[0];
-
-    if($row_count > 0)
-    {
-        return true;
+        if($row_count > 0)
+        {
+            return true;
+        }
     }
-    else
-    {
-        return false;
-    }
+    return false;
 }
 
 // Funktion prueft, ob der angemeldete User Leiter einer Gruppe /Kurs ist
 // Optionaler Parameter role_id prueft ob der angemeldete User Leiter der uebergebenen Gruppe / Kurs ist
 
-function isGroupLeader($rol_id = 0)
+function isGroupLeader($user_id, $role_id = 0)
 {
-    global $g_current_user, $g_current_organization, $g_db;
+    global $g_current_organization, $g_db;
 
-    $sql    = "SELECT *
-                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                WHERE mem_usr_id = ". $g_current_user->getValue("usr_id"). "
-                  AND mem_valid  = 1
-                  AND mem_leader = 1
-                  AND mem_rol_id = rol_id
-                  AND rol_valid  = 1 
-                  AND rol_cat_id = cat_id
-                  AND cat_org_id = ". $g_current_organization->getValue("org_id");
-    if ($rol_id != 0)
+    if(is_numeric($user_id) && $user_id >  0
+    && is_numeric($role_id))
     {
-        $sql .= "  AND mem_rol_id           = $rol_id";
-    }
-    $result = $g_db->query($sql);
+        $sql    = "SELECT *
+                     FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                    WHERE mem_usr_id = $user_id
+                      AND mem_valid  = 1
+                      AND mem_leader = 1
+                      AND mem_rol_id = rol_id
+                      AND rol_valid  = 1 
+                      AND rol_cat_id = cat_id
+                      AND cat_org_id = ". $g_current_organization->getValue("org_id");
+        if ($role_id > 0)
+        {
+            $sql .= "  AND mem_rol_id = $role_id";
+        }
+        $result = $g_db->query($sql);
 
-    $edit_user = $g_db->num_rows($result);
+        $edit_user = $g_db->num_rows($result);
 
-    if($edit_user > 0)
-    {
-        return true;
+        if($edit_user > 0)
+        {
+            return true;
+        }
     }
-    else
-    {
-        return false;
-    }
+    return false;
 }
 
 // diese Funktion gibt eine Seitennavigation in Anhaengigkeit der Anzahl Seiten zurueck

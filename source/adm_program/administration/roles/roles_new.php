@@ -191,12 +191,12 @@ echo "
             </div>
         </div>
 
-        <div class=\"groupBox\" id=\"properties_box\" style=\"margin-top: 15px; text-align: left; width: 90%;\">
+        <div class=\"groupBox\" id=\"properties_box\" style=\"width: 90%;\">
             <div class=\"groupBoxHeadline\" id=\"properties_head\">
                 <a href=\"javascript:showHideBlock('properties_body','$g_root_path')\"><img name=\"img_properties_body\" 
-                    style=\"padding: 0px 5px 2px 0px; vertical-align: middle;\" 
+                    style=\"margin-bottom: 2px; vertical-align: middle;\" 
                     src=\"$g_root_path/adm_program/images/triangle_open.gif\" 
-                    border=\"0\" alt=\"ausblenden\"></a>Eigenschaften
+                    border=\"0\" alt=\"ausblenden\"></a> Eigenschaften
             </div>
 
             <div class=\"groupBoxBody\" id=\"properties_body\">
@@ -278,12 +278,12 @@ echo "
             echo "</div>
         </div>
         
-        <div class=\"groupBox\" id=\"justifications_box\" style=\"margin-top: 15px; text-align: left; width: 90%;\">
+        <div class=\"groupBox\" id=\"justifications_box\" style=\"width: 90%;\">
             <div class=\"groupBoxHeadline\">
                 <a href=\"javascript:showHideBlock('justifications_body','$g_root_path')\"><img name=\"img_justifications_body\" 
-                    style=\"padding: 0px 5px 2px 0px; vertical-align: middle;\" 
+                    style=\"margin-bottom: 2px; vertical-align: middle;\" 
                     src=\"$g_root_path/adm_program/images/triangle_open.gif\" 
-                    border=\"0\" alt=\"ausblenden\"></a>Berechtigungen
+                    border=\"0\" alt=\"ausblenden\"></a> Berechtigungen
             </div>
 
             <div class=\"groupBoxBody\" id=\"justifications_body\">
@@ -458,12 +458,12 @@ echo "
             echo "</div>
         </div>
 
-        <div class=\"groupBox\" id=\"dates_box\" style=\"margin-top: 15px; text-align: left; width: 90%;\">
+        <div class=\"groupBox\" id=\"dates_box\" style=\"width: 90%;\">
             <div class=\"groupBoxHeadline\" id=\"dates_head\">
                 <a href=\"javascript:showHideBlock('dates_body','$g_root_path')\"><img name=\"img_dates_body\" 
-                    style=\"padding: 0px 5px 2px 0px; vertical-align: middle;\" 
+                    style=\"margin-bottom: 2px; vertical-align: middle;\" 
                     src=\"$g_root_path/adm_program/images/triangle_open.gif\" 
-                    border=\"0\" alt=\"ausblenden\"></a>Termine / Treffen&nbsp;&nbsp;(optional)
+                    border=\"0\" alt=\"ausblenden\"></a> Termine / Treffen&nbsp;&nbsp;(optional)
             </div>
 
             <div class=\"groupBoxBody\" id=\"dates_body\">        
@@ -513,12 +513,12 @@ echo "
             </div>
         </div>
         
-        <div class=\"groupBox\" id=\"dependancies_box\" style=\"margin-top: 15px; text-align: left; width: 90%;\">
+        <div class=\"groupBox\" id=\"dependancies_box\" style=\"width: 90%;\">
             <div class=\"groupBoxHeadline\" id=\"dependancies_head\">
                 <a href=\"javascript:showHideBlock('dependancies_body','$g_root_path')\"><img name=\"img_dependancies_body\" 
-                    style=\"padding: 0px 5px 2px 0px; vertical-align: middle;\" 
+                    style=\"margin-bottom: 2px; vertical-align: middle;\" 
                     src=\"$g_root_path/adm_program/images/triangle_open.gif\" 
-                    border=\"0\" alt=\"ausblenden\"></a>Abh&auml;ngigkeiten&nbsp;&nbsp;(optional)
+                    border=\"0\" alt=\"ausblenden\"></a> Abh&auml;ngigkeiten&nbsp;&nbsp;(optional)
             </div>
 
             <div class=\"groupBoxBody\" id=\"dependancies_body\">  
