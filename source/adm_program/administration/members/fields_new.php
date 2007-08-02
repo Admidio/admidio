@@ -97,176 +97,228 @@ else
 {
     $g_layout['title']  = "Profilfeld anlegen";
 }
-
+/*
+$g_layout['header'] = "<style type=\"text/css\">
+                           .formBody ul {
+                               list-style-type: none;
+                           }
+                           .formBody li {
+                                padding: 0px;
+                                display: inline;
+                           }
+                           .formBody dl {
+                               list-style-type: none;
+                               list-style-position: inside;
+                               margin-top: 0px;
+                           }
+                           .formBody dt {
+                               width:       30%;
+                               text-align:  left;
+                               float:       left;
+                               display:     block;
+                           }
+                           .formBody dd {
+                               margin-left: 31%;
+                               text-align:  left;
+                           }
+                           
+                           .formSubmit {
+                               padding-top: 5px;
+                           }
+                       </style>";
+*/
 // Html-Kopf ausgeben
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 echo "
 <form action=\"$g_root_path/adm_program/administration/members/fields_function.php?usf_id=$req_usf_id&amp;mode=1\" method=\"post\" id=\"edit_field\">
+<div class=\"formLayout\" id=\"fields_new_form\">
     <div class=\"formHead\">". $g_layout['title']. "</div>
     <div class=\"formBody\">
-        <div>
-            <div style=\"text-align: right; width: 28%; float: left;\">Name:</div>
-            <div style=\"text-align: left; margin-left: 29%;\">
-                <input type=\"text\" id=\"usf_name\" name=\"usf_name\" $html_disabled size=\"20\" maxlength=\"15\" value=\"". htmlspecialchars($user_field->getValue("usf_name"), ENT_QUOTES). "\">
-                <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
-            </div>
-        </div>
-        <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 28%; float: left;\">Beschreibung:</div>
-            <div style=\"text-align: left; margin-left: 29%;\">
-                <input type=\"text\" name=\"usf_description\" style=\"width: 330px;\" maxlength=\"255\" value=\"". htmlspecialchars($user_field->getValue("usf_description"), ENT_QUOTES). "\">
-            </div>
-        </div>
-        <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 28%; float: left;\">Kategorie:</div>
-            <div style=\"text-align: left; margin-left: 29%;\">
-                <select size=\"1\" name=\"usf_cat_id\" $html_disabled>
-                    <option value=\" \""; 
-                        if($user_field->getValue("usf_cat_id") == 0) 
-                        {
-                            echo " selected=\"selected\"";
-                        }
-                        echo ">- Bitte w&auml;hlen -</option>";
-                        
-                    $sql = "SELECT * FROM ". TBL_CATEGORIES. "
-                             WHERE (  cat_org_id = ". $g_current_organization->getValue("org_id"). "
-                                   OR cat_org_id IS NULL )
-                               AND cat_type   = 'USF'
-                             ORDER BY cat_sequence ASC ";
-                    $result = $g_db->query($sql);
+        <ul>
+            <li>
+                <dl>
+                    <dt><label for=\"usf_name\">Name:</label></dt>
+                    <dd><input type=\"text\" name=\"usf_name\" id=\"usf_name\" $html_disabled style=\"width: 150px;\" maxlength=\"15\"
+                        value=\"". htmlspecialchars($user_field->getValue("usf_name"), ENT_QUOTES). "\">
+                        <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span></dd>
+                </dl>
+            </li>
+            <li>
+                <dl>
+                    <dt><label for=\"usf_description\">Beschreibung:</label></dt>
+                    <dd><input type=\"text\" name=\"usf_description\" id=\"usf_description\" style=\"width: 330px;\" maxlength=\"255\" 
+                        value=\"". htmlspecialchars($user_field->getValue("usf_description"), ENT_QUOTES). "\"></dd>
+                </dl>
+            </li>
+            <li>
+                <dl>
+                    <dt><label for=\"usf_cat_id\">Kategorie:</label></dt>
+                    <dd>
+                        <select size=\"1\" name=\"usf_cat_id\" id=\"usf_cat_id\" $html_disabled>
+                            <option value=\" \""; 
+                                if($user_field->getValue("usf_cat_id") == 0) 
+                                {
+                                    echo " selected=\"selected\"";
+                                }
+                                echo ">- Bitte w&auml;hlen -</option>";
 
-                    while($row = $g_db->fetch_object($result))
-                    {
-                        echo "<option value=\"$row->cat_id\"";
-                            if($user_field->getValue("usf_cat_id") == $row->cat_id)
+                            $sql = "SELECT * FROM ". TBL_CATEGORIES. "
+                                     WHERE (  cat_org_id = ". $g_current_organization->getValue("org_id"). "
+                                           OR cat_org_id IS NULL )
+                                       AND cat_type   = 'USF'
+                                     ORDER BY cat_sequence ASC ";
+                            $result = $g_db->query($sql);
+
+                            while($row = $g_db->fetch_object($result))
                             {
-                                echo " selected ";
+                                echo "<option value=\"$row->cat_id\"";
+                                    if($user_field->getValue("usf_cat_id") == $row->cat_id)
+                                    {
+                                        echo " selected ";
+                                    }
+                                echo ">$row->cat_name</option>";
                             }
-                        echo ">$row->cat_name</option>";
-                    }
-                echo "</select>
-                <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
-            </div>
-        </div>        
-        <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 28%; float: left;\">Datentyp:</div>
-            <div style=\"text-align: left; margin-left: 29%;\">
-                <select size=\"1\" name=\"usf_type\" $html_disabled>
-                    <option value=\" \""; 
-                        if(strlen($user_field->getValue("usf_type")) == 0) 
+                        echo "</select>
+                        <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
+                    </dd>
+                </dl>
+            </li>
+            <li>
+                <dl>
+                    <dt><label for=\"usf_type\">Datentyp:</label></dt>
+                    <dd>
+                        <select size=\"1\" name=\"usf_type\" id=\"usf_type\" $html_disabled>
+                            <option value=\" \""; 
+                                if(strlen($user_field->getValue("usf_type")) == 0) 
+                                {
+                                    echo " selected=\"selected\"";
+                                }
+                                echo ">- Bitte w&auml;hlen -</option>\n
+                            <option value=\"DATE\""; 
+                                if($user_field->getValue("usf_type") == "DATE") 
+                                {
+                                    echo " selected=\"selected\""; 
+                                }
+                                echo ">Datum</option>\n
+                            <option value=\"EMAIL\""; 
+                                if($user_field->getValue("usf_type") == "EMAIL") 
+                                {
+                                    echo " selected=\"selected\""; 
+                                }
+                                echo ">E-Mail</option>\n
+                            <option value=\"CHECKBOX\""; 
+                                if($user_field->getValue("usf_type") == "CHECKBOX") 
+                                {
+                                    echo " selected=\"selected\""; 
+                                }
+                                echo ">Ja / Nein</option>\n
+                            <option value=\"TEXT\"";     
+                                if($user_field->getValue("usf_type") == "TEXT") 
+                                {
+                                    echo " selected=\"selected\""; 
+                                }
+                                echo ">Text (50 Zeichen)</option>\n
+                            <option value=\"TEXT_BIG\""; 
+                                if($user_field->getValue("usf_type") == "TEXT_BIG") 
+                                {
+                                    echo " selected=\"selected\""; 
+                                }
+                                echo ">Text (255 Zeichen)</option>\n
+                            <option value=\"URL\""; 
+                                if($user_field->getValue("usf_type") == "URL") 
+                                {
+                                    echo " selected=\"selected\""; 
+                                }
+                                echo ">URL</option>\n
+                            <option value=\"NUMERIC\"";  
+                                if($user_field->getValue("usf_type") == "NUMERIC") 
+                                {
+                                    echo " selected=\"selected\""; 
+                                }
+                                echo ">Zahl</option>\n
+                        </select>
+                        <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
+                    </dd>
+                </dl>
+            </li>
+            <li>
+                <dl>
+                    <dt>
+                        <label for=\"usf_hidden\">
+                            <img src=\"$g_root_path/adm_program/images/eye.png\" alt=\"Feld f&uuml;r alle Benutzer sichtbar\">
+                        </label>
+                    </dt>
+                    <dd>
+                        <input type=\"checkbox\" name=\"usf_hidden\" id=\"usf_hidden\" ";
+                        if($user_field->getValue("usf_hidden") == 0)
                         {
-                            echo " selected=\"selected\"";
+                            echo " checked ";
                         }
-                        echo ">- Bitte w&auml;hlen -</option>\n
-                    <option value=\"DATE\""; 
-                        if($user_field->getValue("usf_type") == "DATE") 
+                        echo " value=\"1\" />
+                        <label for=\"usf_hidden\">Feld f&uuml;r alle Benutzer sichtbar&nbsp;</label>
+                        <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: middle;\" vspace=\"1\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=field_hidden','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
+                    </dd>
+                </dl>
+            </li>            
+            <li>
+                <dl>
+                    <dt>
+                        <label for=\"usf_disabled\">
+                            <img src=\"$g_root_path/adm_program/images/textfield_key.png\" alt=\"Feld nur f&uuml;r berechtigte Benutzer editierbar\">
+                        </label>
+                    </dt>
+                    <dd>
+                        <input type=\"checkbox\" name=\"usf_disabled\" id=\"usf_disabled\" ";
+                        if($user_field->getValue("usf_disabled") == 1)
                         {
-                            echo " selected=\"selected\""; 
+                            echo " checked ";
                         }
-                        echo ">Datum</option>\n
-                    <option value=\"EMAIL\""; 
-                        if($user_field->getValue("usf_type") == "EMAIL") 
+                        echo " value=\"1\" />
+                        <label for=\"usf_disabled\">Feld nur f&uuml;r berechtigte Benutzer editierbar&nbsp;</label>
+                        <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: middle;\" vspace=\"1\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=field_disabled','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
+                    </dd>
+                </dl>
+            </li>            
+            <li>
+                <dl>
+                    <dt>
+                        <label for=\"usf_mandatory\">
+                            <img src=\"$g_root_path/adm_program/images/asterisk_yellow.png\" alt=\"Pflichtfeld, muss vom Benutzer gef&uuml;llt werden\">
+                        </label>
+                    </dt>
+                    <dd>
+                        <input type=\"checkbox\" name=\"usf_mandatory\" id=\"usf_mandatory\" ";
+                        if($user_field->getValue("usf_mandatory") == 1)
                         {
-                            echo " selected=\"selected\""; 
+                            echo " checked ";
                         }
-                        echo ">E-Mail</option>\n
-                    <option value=\"CHECKBOX\""; 
-                        if($user_field->getValue("usf_type") == "CHECKBOX") 
-                        {
-                            echo " selected=\"selected\""; 
-                        }
-                        echo ">Ja / Nein</option>\n
-                    <option value=\"TEXT\"";     
-                        if($user_field->getValue("usf_type") == "TEXT") 
-                        {
-                            echo " selected=\"selected\""; 
-                        }
-                        echo ">Text (50 Zeichen)</option>\n
-                    <option value=\"TEXT_BIG\""; 
-                        if($user_field->getValue("usf_type") == "TEXT_BIG") 
-                        {
-                            echo " selected=\"selected\""; 
-                        }
-                        echo ">Text (255 Zeichen)</option>\n
-                    <option value=\"URL\""; 
-                        if($user_field->getValue("usf_type") == "URL") 
-                        {
-                            echo " selected=\"selected\""; 
-                        }
-                        echo ">URL</option>\n
-                    <option value=\"NUMERIC\"";  
-                        if($user_field->getValue("usf_type") == "NUMERIC") 
-                        {
-                            echo " selected=\"selected\""; 
-                        }
-                        echo ">Zahl</option>\n
-                </select>
-                <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
-            </div>
-        </div>
-        <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 28%; float: left;\">
-                <img src=\"$g_root_path/adm_program/images/eye.png\" alt=\"Feld f&uuml;r alle Benutzer sichtbar\">
-            </div>
-            <div style=\"text-align: left; margin-left: 29%;\">
-                <input type=\"checkbox\" id=\"usf_hidden\" name=\"usf_hidden\" ";
-                if($user_field->getValue("usf_hidden") == 0)
-                {
-                    echo " checked ";
-                }
-                echo " value=\"1\" />
-                <label for=\"usf_hidden\">Feld f&uuml;r alle Benutzer sichtbar&nbsp;</label>
-                <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: middle;\" vspace=\"1\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=field_hidden','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
-            </div>
-        </div>
-        <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 28%; float: left;\">
-                <img src=\"$g_root_path/adm_program/images/textfield_key.png\" alt=\"Feld nur f&uuml;r berechtigte Benutzer editierbar\">
-            </div>
-            <div style=\"text-align: left; margin-left: 29%;\">
-                <input type=\"checkbox\" id=\"usf_disabled\" name=\"usf_disabled\" ";
-                if($user_field->getValue("usf_disabled") == 1)
-                {
-                    echo " checked ";
-                }
-                echo " value=\"1\" />
-                <label for=\"usf_disabled\">Feld nur f&uuml;r berechtigte Benutzer editierbar&nbsp;</label>
-                <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: middle;\" vspace=\"1\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=field_disabled','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
-            </div>
-        </div>
-        <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 28%; float: left;\">
-                <img src=\"$g_root_path/adm_program/images/asterisk_yellow.png\" alt=\"Pflichtfeld, muss vom Benutzer gef&uuml;llt werden\">
-            </div>
-            <div style=\"text-align: left; margin-left: 29%;\">
-                <input type=\"checkbox\" id=\"usf_mandatory\" name=\"usf_mandatory\" ";
-                if($user_field->getValue("usf_mandatory") == 1)
-                {
-                    echo " checked ";
-                }
-                echo " value=\"1\" />
-                <label for=\"usf_mandatory\">Pflichtfeld, muss vom Benutzer gef&uuml;llt werden&nbsp;</label>
-                <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: middle;\" vspace=\"1\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=field_mandatory','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
-            </div>
-        </div>
+                        echo " value=\"1\" />
+                        <label for=\"usf_mandatory\">Pflichtfeld, muss vom Benutzer gef&uuml;llt werden&nbsp;</label>
+                        <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: middle;\" vspace=\"1\" align=\"top\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=field_mandatory','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
+                    </dd>
+                </dl>
+            </li>            
+        </ul>
 
-        <hr class=\"formLine\" width=\"85%\" />
+        <hr />
 
-        <div style=\"margin-top: 6px;\">
-            <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
-            <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\">
-            &nbsp;Zur&uuml;ck</button>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <div class=\"formSubmit\">
             <button name=\"speichern\" type=\"submit\" value=\"speichern\">
             <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\">
             &nbsp;Speichern</button>
-        </div>";
-    echo "</div>
+        </div>
+    </div>
+</div>
 </form>
+
+<div class=\"pageNavigation\">
+    <a href=\"$g_root_path/adm_program/system/back.php\"><img class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
+    <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+</div>
 
 <script type=\"text/javascript\"><!--
     document.getElementById('usf_name').focus();

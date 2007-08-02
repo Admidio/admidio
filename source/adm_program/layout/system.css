@@ -103,8 +103,6 @@ a:hover {
 	 vertical-align:   middle;
 	 border-width:     0px;
 	 cursor: pointer;
-	 width: 16px;
-	 height: 16px;
 }
 
 /* Layout fuer die Boxen (Termine usw.)
@@ -187,16 +185,47 @@ a:hover {
 }
 
 .formBody hr {
-	border-width: 1px;
-	border-color: #6CA7A8;
-	border-style: solid;
-	width: 85%;
+	border-width: 		 1px;
+	border-color: 		 #6CA7A8;
+	border-style: 		 solid;
+	width: 				 85%;
 }
 
+.formBody ul {
+	margin:            0px;
+	padding:           0px;
+	list-style-type: 	 none;
+}
+
+.formBody li {	
+	display:				 inline-block;
+	padding:     		 4px 0px 4px 0px;
+}
+.formBody dl {
+	margin:            0px;
+	padding:     		 0px;
+}
+.formBody dt {
+	width:       		 30%;
+	text-align:  		 left;
+	float:       		 left;
+	display:     		 block;
+}
+.formBody dd {
+	margin-left: 		 31%;
+	text-align:  		 left;
+}
+
+.formSubmit {
+	padding-top: 		 5px;
+}
+
+/*
 .formRow{
 	margin-top: 5px;
 	margin-bottom: 5px;
 }
+
 .formBody ul{
 	list-style-position: inside;
 	list-style-type: none;
@@ -227,7 +256,7 @@ a:hover {
 	padding-left: 180px;
 	max-width: 400px;
 }
-
+*/
 /* Einfache rechteckige Groupbox mit Rahmen um bestimmte Teile zu markieren,
    wird haeufig innerhalb von Formularen genutzt (z.B.: Profil, Rollenpflege) */
 
@@ -238,7 +267,9 @@ a:hover {
     border-color:     #999999;
     border-style:     solid;
     border-collapse:  collapse;
-    padding:          5px;
+    padding:          5px 10px 5px 10px;
+    text-align: 		 left;
+    margin-top: 		 12px;
 }
 
 /* Ueberschrift der rechteckigen Groupbox */
@@ -343,11 +374,8 @@ a:hover {
 }
 
 /*Iconliste Horizontal*/
-.iconListHor ul, li{
-	list-style-position: inside;
+.iconListHor ul, .iconListHor li{
 	list-style-type: none;
-	padding: 0px;
-	margin: 0px;
+	padding: 5px;
 	display: inline;
-	padding-left: 2px;
 }
