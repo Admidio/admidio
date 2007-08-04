@@ -99,12 +99,6 @@ a:hover {
     text-decoration:  underline;
 }
 
-.iconLink {
-	 vertical-align:   middle;
-	 border-width:     0px;
-	 cursor: pointer;
-}
-
 /* Layout fuer die Boxen (Termine usw.)
    Es ist in einen Kopf (boxHead) und einen Inhalt (boxBody),
    der aber den Kopfbereich umschliesst, unterteilt
@@ -189,29 +183,29 @@ a:hover {
 	border-color: 		 #6CA7A8;
 	border-style: 		 solid;
 	width: 				 85%;
+	margin: 20px;
 }
 
 .formBody ul {
-	margin:            0px;
+	margin:            20px;
 	padding:           0px;
 	list-style-type: 	 none;
 }
 
-.formBody li {	
-	display:				 inline-block;
-	padding:     		 4px 0px 4px 0px;
+.formBody ul li {	
+	display:			inline;
 }
-.formBody dl {
-	margin:            0px;
+.formBody ul li dl {
+	margin:           	10px 0px 10px 0px;
 	padding:     		 0px;
 }
-.formBody dt {
+.formBody ul li dl dt {
 	width:       		 30%;
 	text-align:  		 left;
 	float:       		 left;
 	display:     		 block;
 }
-.formBody dd {
+.formBody ul li dl dd {
 	margin-left: 		 31%;
 	text-align:  		 left;
 }
@@ -220,43 +214,7 @@ a:hover {
 	padding-top: 		 5px;
 }
 
-/*
-.formRow{
-	margin-top: 5px;
-	margin-bottom: 5px;
-}
 
-.formBody ul{
-	list-style-position: inside;
-	list-style-type: none;
-	margin: 0px;
-	padding: 0px;
-}
-
-.formBody ul ul{
-	margin: 8px;
-}
-
-.formBody ul ul li{
-	display: inline;
-	padding-right: 5px;
-}
-
-.formRowText{
-	float: left;
-	text-align: right;
-	width: 170px;
-	vertical-align: middle;
-	padding-left: 10px;
-	padding-right: 10px;
-}
-
-.formRowField{
-	text-align: left;
-	padding-left: 180px;
-	max-width: 400px;
-}
-*/
 /* Einfache rechteckige Groupbox mit Rahmen um bestimmte Teile zu markieren,
    wird haeufig innerhalb von Formularen genutzt (z.B.: Profil, Rollenpflege) */
 
@@ -330,15 +288,43 @@ a:hover {
     color:            #555555;
 }
 
+/*Links in Verbindung mit einem Icon (mit Text)*/
+.iconTextLink{
+	margin: 5px;
+	text-align: center;
+}
+.iconTextLink li{
+	list-style-type: none;
+	display: inline;
+	margin: 0px 10px 0px 10px;
+}
+.iconTextLink img{
+	border: none;
+	vertical-align: middle;
+	padding-right: 1px;
+}
+
+/*Iconlinks um Funktionen aufzurufen (ohne Text)*/
+.iconLinkRow{
+	margin 0px;
+	padding: 0px;
+}
+.iconLinkRow li{
+	list-style-type: none;
+	display: inline;
+	text-align: left;
+	padding: 0px;
+}
+.iconLinkRow a img{
+	border: none;
+}
+
 /* Elemente fuer Navigationsklasse */
 .pageNavigation{
 	font-weight: bold;
 	text-align: center;
 	vertical-align: middle;
 	margin: 10px;
-}
-
-.pageNavigation a{
 }
 
 .pageNavigation img{
@@ -359,23 +345,17 @@ a:hover {
 }
 
 
-/*Wie sollen die Links fuer User mit Editorrechten aussehen*/
-.editorLinks{
-	text-align: center;
-	margin: 4px;
-	vertical-align: middle;
-}
-
-
 /*Einstellungen fuer eine Pfadnavigation, z.B. durch die Versanstaltungsherarchie im Fotomodul*/
 .navigationPath{
 	text-align: center;
-	margin: 4px;
+	margin: 5px;
+}
+.navigationPath img{
+	border: none;
+	vertical-align: middle;
 }
 
-/*Iconliste Horizontal*/
+/*Iconliste Horizontal für Informationen*/
 .iconListHor ul, .iconListHor li{
-	list-style-type: none;
-	padding: 5px;
-	display: inline;
+
 }

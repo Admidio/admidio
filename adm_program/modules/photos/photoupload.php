@@ -97,26 +97,26 @@ echo"
         </div>
         <hr>
         <ul>
-			<ul>
-				<li>Bild 1:</li>
-				<li><input type=\"file\" id=\"bilddatei1\" name=\"bilddatei[]\" value=\"durchsuchen\"></li>
-			</ul>
-			<ul>
-				<li>Bild 2:</li>
-				<li><input type=\"file\" name=\"bilddatei[]\" value=\"durchsuchen\"></li>
-			</ul>
-			<ul>
-				<li>Bild 3:</li>
-				<li><input type=\"file\" name=\"bilddatei[]\" value=\"durchsuchen\"></li>
-			</ul>
-			<ul>
-				<li>Bild 4:</li>
-				<li><input type=\"file\" name=\"bilddatei[]\" value=\"durchsuchen\"></li>
-			</ul>
-			<ul>
-				<li>Bild 5:</li>
-				<li><input type=\"file\" name=\"bilddatei[]\" value=\"durchsuchen\"></li>
-			</ul>
+			<li><dl>
+				<dt>Bild 1:</dt>
+				<dd><input type=\"file\" id=\"bilddatei1\" name=\"bilddatei[]\" value=\"durchsuchen\"></dd>
+			</dl></li>
+			<li><dl>
+				<dt>Bild 2:</dt>
+				<dd><input type=\"file\" name=\"bilddatei[]\" value=\"durchsuchen\"></dd>
+			</dl></li>
+			<li><dl>
+				<dt>Bild 3:</dt>
+				<dd><input type=\"file\" name=\"bilddatei[]\" value=\"durchsuchen\"></dd>
+			</dl></li>
+			<li><dl>
+				<dt>Bild 4:</dt>
+				<dd><input type=\"file\" name=\"bilddatei[]\" value=\"durchsuchen\"></dd>
+			</dl></li>
+			<li><dl>
+				<dt>Bild 5:</dt>
+				<dd><input type=\"file\" name=\"bilddatei[]\" value=\"durchsuchen\"></dd>
+			</dl></li>
 		</ul>
 		<hr />
         <div class=\"formRow\">

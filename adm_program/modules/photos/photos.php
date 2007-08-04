@@ -173,7 +173,10 @@ if($g_preferences['photo_show_mode']==1)
 //Photomodulspezifische CSS laden
 $g_layout['header'] = $g_layout['header']."<link rel=\"stylesheet\" href=\"$g_root_path/adm_program/layout/photos.css\" type=\"text/css\" media=\"screen\" />";
 
-$g_layout['onload'] = " onload=\"initLightbox()\" ";
+if($g_preferences['photo_show_mode']==1)
+{
+	$g_layout['onload'] = " onload=\"initLightbox()\" ";
+}
 
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
@@ -200,8 +203,7 @@ while ($pho_parent_id > 0)
     $photo_event_parent->getPhotoEvent($pho_parent_id);
     
     //Link zusammensetzen
-    $navilink = "&nbsp;&gt;&nbsp;<a class=\"iconLink\" 
-        href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$photo_event_parent->getValue("pho_id")."\">".
+    $navilink = "&nbsp;&gt;&nbsp;<a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$photo_event_parent->getValue("pho_id")."\">".
         $photo_event_parent->getValue("pho_name")."</a>".$navilink;
 
     //Elternveranst
@@ -212,26 +214,29 @@ if($pho_id > 0)
 {
     //Ausgabe des Linkpfads
     echo "<div class=\"navigationPath\">
-            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photos.php\"><img class=\"iconLink\" src=\"$g_root_path/adm_program/images/application_view_tile.png\" alt=\"Fotogalerien\"></a>
-            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photos.php\">Fotogalerien</a>$navilink
+            <a href=\"$g_root_path/adm_program/modules/photos/photos.php\"><img src=\"$g_root_path/adm_program/images/application_view_tile.png\" alt=\"Fotogalerien\"></a>
+            <a href=\"$g_root_path/adm_program/modules/photos/photos.php\">Fotogalerien</a>$navilink
         </div>";
 }
 
 //bei Seitenaufruf mit Moderationsrechten
 if($g_current_user->editPhotoRight())
 {
-    echo"<div class=\"editorLink\">
-            <a href=\"$g_root_path/adm_program/modules/photos/photo_event_new.php?job=new&amp;pho_id=$pho_id\"><img
-            class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" alt=\"Veranstaltung anlegen\"></a>
-            <a href=\"$g_root_path/adm_program/modules/photos/photo_event_new.php?job=new&amp;pho_id=$pho_id\">Veranstaltung anlegen</a>";
+    echo"<ul class=\"iconTextLink\">
+            <li>
+				<a href=\"$g_root_path/adm_program/modules/photos/photo_event_new.php?job=new&amp;pho_id=$pho_id\"><img
+             		src=\"$g_root_path/adm_program/images/add.png\" alt=\"Veranstaltung anlegen\"></a>
+            	<a href=\"$g_root_path/adm_program/modules/photos/photo_event_new.php?job=new&amp;pho_id=$pho_id\">Veranstaltung anlegen</a>
+			</li>";
         if($pho_id > 0)
         {
-            echo "&nbsp;&nbsp;&nbsp;&nbsp;
+            echo "<li>
                 <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id\"><img
-                class=\"iconLink\" src=\"$g_root_path/adm_program/images/photo.png\" alt=\"Bilder hochladen\"></a>
-                <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id\">Bilder hochladen</a>";
+                	 src=\"$g_root_path/adm_program/images/photo.png\" alt=\"Bilder hochladen\"></a>
+                <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id\">Bilder hochladen</a>
+			</li>";
         }
-    echo "</div>";
+    echo "</ul>";
 }
 
 //Anlegender Tabelle
@@ -386,12 +391,14 @@ echo "<div class=\"photoModuleContainer\">";
                             if($g_current_user->editPhotoRight())
                             {
                                 echo"
-                                <img src=\"$g_root_path/adm_program/images/arrow_turn_left.png\" class=\"iconLink\" alt=\"nach links drehen\" title=\"nach links drehen\"
-                                    onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photo_function.php?pho_id=$pho_id&bild=$bild&thumb_seite=$thumb_seite&job=rotate&direction=left'\">
-                                <img src=\"$g_root_path/adm_program/images/cross.png\" class=\"iconLink\" alt=\"Foto l&ouml;schen\" title=\"Foto l&ouml;schen\"
-                                    onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photo_function.php?pho_id=$pho_id&bild=$bild&thumb_seite=$thumb_seite&job=delete_request'\">
-                                <img src=\"$g_root_path/adm_program/images/arrow_turn_right.png\" class=\"iconLink\" alt=\"nach rechts drehen\" title=\"nach rechts drehen\"
-                                    onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photo_function.php?pho_id=$pho_id&bild=$bild&thumb_seite=$thumb_seite&job=rotate&direction=right'\">";
+                                <ul class=\"iconLinkRow\">
+									<li><a href='$g_root_path/adm_program/modules/photos/photo_function.php?pho_id=$pho_id&bild=$bild&thumb_seite=$thumb_seite&job=rotate&direction=left'\">
+										<img src=\"$g_root_path/adm_program/images/arrow_turn_left.png\" class=\"iconLink\" alt=\"nach links drehen\" title=\"nach links drehen\"></a></li>
+	                                <li><a href='$g_root_path/adm_program/modules/photos/photo_function.php?pho_id=$pho_id&bild=$bild&thumb_seite=$thumb_seite&job=delete_request'\">
+										<img src=\"$g_root_path/adm_program/images/cross.png\" class=\"iconLink\" alt=\"Foto l&ouml;schen\" title=\"Foto l&ouml;schen\"></a></li>
+	                                <li><a href='$g_root_path/adm_program/modules/photos/photo_function.php?pho_id=$pho_id&bild=$bild&thumb_seite=$thumb_seite&job=rotate&direction=right'\">
+										<img src=\"$g_root_path/adm_program/images/arrow_turn_right.png\" class=\"iconLink\" alt=\"nach rechts drehen\" title=\"nach rechts drehen\"></a></li>
+                            	</ul>";
                             }
                         echo"
                         </td>";
@@ -595,18 +602,23 @@ echo "<div class=\"photoModuleContainer\">";
                         }
                     echo"</td>
                     <td class=\"photoEventTableTextColumn\">";
-                        //Warnung fuer Leute mit Fotorechten: Ordner existiert nicht
-                        if(!file_exists($ordner) && $g_current_user->editPhotoRight())
-                        {
-                            echo"<img src=\"$g_root_path/adm_program/images/warning16.png\" class=\"iconLink\" alt=\"Warnhinweis\" title=\"Warnhinweis\"
-                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=folder_not_found','Message','width=400, height=400, left=310,top=200,scrollbars=no')\">&nbsp;";
-                        }
-
-                        //Hinweis fur Leute mit Photorechten: Veranstaltung ist gesperrt
-                        if($adm_photo_list["pho_locked"]==1 && file_exists($ordner))
-                        {
-                            echo"<img src=\"$g_root_path/adm_program/images/lock.png\" class=\"iconLink\" alt=\"Veranstaltung ist gesperrt\" title=\"Veranstaltung ist gesperrt\"
-                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=not_approved','Message','width=400, height=300, left=310,top=200,scrollbars=no')\">&nbsp;";
+                        if((!file_exists($ordner) && $g_current_user->editPhotoRight()) || ($adm_photo_list["pho_locked"]==1 && file_exists($ordner)))
+                        {                 	
+	                    	echo"<ul class=\"iconLinkRow\">";
+							//Warnung fuer Leute mit Fotorechten: Ordner existiert nicht
+	                        if(!file_exists($ordner) && $g_current_user->editPhotoRight())
+	                        {
+	                            echo"<li><img src=\"$g_root_path/adm_program/images/warning16.png\" class=\"iconLink\" alt=\"Warnhinweis\" title=\"Warnhinweis\"
+	                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=folder_not_found','Message','width=400, height=400, left=310,top=200,scrollbars=no')\"></li>";
+	                        }
+	
+	                        //Hinweis fur Leute mit Photorechten: Veranstaltung ist gesperrt
+	                        if($adm_photo_list["pho_locked"]==1 && file_exists($ordner))
+	                        {
+	                            echo"<li><img src=\"$g_root_path/adm_program/images/lock.png\" class=\"iconLink\" alt=\"Veranstaltung ist gesperrt\" title=\"Veranstaltung ist gesperrt\"
+	                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=not_approved','Message','width=400, height=300, left=310,top=200,scrollbars=no')\"></li>";
+	                        }
+                        	echo"</ul>";
                         }
 
                         //Veranstaltungs angaben
@@ -631,37 +643,41 @@ echo "<div class=\"photoModuleContainer\">";
                             //bei Moderationrecheten
                             if ($g_current_user->editPhotoRight())
                             {
-                                $this_pho_id = $adm_photo_list["pho_id"];
+                                echo"<ul class=\"iconLinkRow\">";
+								$this_pho_id = $adm_photo_list["pho_id"];
                                 if(file_exists($ordner))
                                 {
                                     echo"
-                                    <img src=\"$g_root_path/adm_program/images/photo.png\" class=\"iconLink\" alt=\"Bilder hochladen\" title=\"Bilder hochladen\"
-                                        onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$this_pho_id'\">&nbsp;
-
-                                    <img src=\"$g_root_path/adm_program/images/edit.png\"class=\"iconLink\" alt=\"Bearbeiten\" title=\"Bearbeiten\"
-                                        onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photo_event_new.php?pho_id=$this_pho_id&job=change'\">&nbsp;";
+									<li><a href='$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$this_pho_id'\">
+                                   		<img src=\"$g_root_path/adm_program/images/photo.png\" alt=\"Bilder hochladen\" title=\"Bilder hochladen\" />
+									</a></li>
+									
+									<li><a href='$g_root_path/adm_program/modules/photos/photo_event_new.php?pho_id=$this_pho_id&job=change'\">
+                                    	<img src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" />
+                                    </a></li>";
                                 }
 
                                 echo"
-                                <img src=\"$g_root_path/adm_program/images/cross.png\" class=\"iconLink\"
-                                     alt=\"Veranstaltung L&ouml;schen\" title=\"Veranstaltung L&ouml;schen\"
-                                     onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photo_event_function.php?job=delete_request&pho_id=$this_pho_id'\">";
+                                <li><a href='$g_root_path/adm_program/modules/photos/photo_event_function.php?job=delete_request&pho_id=$this_pho_id'\">
+									<img src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Veranstaltung L&ouml;schen\" title=\"Veranstaltung L&ouml;schen\">
+                                </a></li>";
 
                                 if($adm_photo_list["pho_locked"]==1 && file_exists($ordner))
                                 {
                                     echo"
-                                    <img src=\"$g_root_path/adm_program/images/key.png\"  alt=\"Freigeben\" title=\"Freigeben\"
-                                        class=\"iconLink\"
-                                        onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=$this_pho_id&locked=0'\">";
+                                    <li><a href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=$this_pho_id&locked=0'\">
+											<img src=\"$g_root_path/adm_program/images/key.png\"  alt=\"Freigeben\" title=\"Freigeben\">
+                                	</a></li>";
                                 }
 
                                 if($adm_photo_list["pho_locked"]==0 && file_exists($ordner))
                                 {
                                     echo"
-                                    <img src=\"$g_root_path/adm_program/images/key.png\" alt=\"Sperren\" title=\"Sperren\"
-                                        class=\"iconLink\"
-                                        onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=$this_pho_id&locked=1'\">";
+                                    <li><a href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=$this_pho_id&locked=1'\">
+                                    	<img src=\"$g_root_path/adm_program/images/key.png\" alt=\"Sperren\" title=\"Sperren\">
+                                	</a></li>";
                                 }
+                                echo"</ul>";
                             }
                         echo"
                     </td>
@@ -691,11 +707,12 @@ echo "</div>";
 //Uebersicht
 if($photo_event->getValue("pho_id") > 0)
 {
-    echo "<div class=\"pageNavigation\">
-            <a href=\"$g_root_path/adm_program/system/back.php\"><img
-            class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
-            <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
-        </div>";
+    echo "<ul class=\"iconTextLink\">
+            <li><a href=\"$g_root_path/adm_program/system/back.php\">
+				<img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
+            	<a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+			</li>
+        </ul>";
 }
 
 /***************************Seitenende***************************/

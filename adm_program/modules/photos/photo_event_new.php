@@ -191,105 +191,113 @@ echo"
 
         //Veranstaltung
         echo"
-        <div class=\"formRow\">
-            <div class=\"formRowText\">Veranstaltung:</div>
-            <div class=\"formRowField\">
-                <input type=\"text\" id=\"pho_name\" name=\"pho_name\" style=\"width: 300px;\" maxlength=\"50\" tabindex=\"1\" value=\"".$photo_event->getValue("pho_name")."\">
-                <span title=\"Pflichtfeld\" class=\"mandatoryFieldMarker\">*</span>
-        </div>
-        </div>
-        <div class=\"formRow\">
-           <div class=\"formRowText\">in Ordner:</div>
-           <div class=\"formRowField\">
-                <select size=\"1\" name=\"pho_pho_id_parent\" tabindex=\"2\">
-                    <option value=\"0\">Fotogalerien(Hauptordner)</option>";
+        <ul>
+			<li><dl>
+				<dt>Veranstaltung:</dt>
+	            <dd>
+	                <input type=\"text\" id=\"pho_name\" name=\"pho_name\" style=\"width: 300px;\" maxlength=\"50\" tabindex=\"1\" value=\"".$photo_event->getValue("pho_name")."\">
+	                <span title=\"Pflichtfeld\" class=\"mandatoryFieldMarker\">*</span>
+				</dd>
+			</dl></li>";
+				
+	        	//Unterordnung
+	        	echo"
+			<li><dl>
+	           <dt>in Ordner:</dt>
+	           <dd>
+	                <select size=\"1\" name=\"pho_pho_id_parent\" tabindex=\"2\">
+	                    <option value=\"0\">Fotogalerien(Hauptordner)</option>";
+	
+	                   while($adm_photo_list = mysql_fetch_array($result_list))
+	                    {
+	                        //Wenn die Elternveranstaltung von pho_id dann selected
+	                        $selected = 0;
+	                        if(($adm_photo_list["pho_id"] == $photo_event->getValue("pho_pho_id_parent"))
+	                        ||  $adm_photo_list["pho_id"] == $pho_id)
+	                        {
+	                            $selected = " selected ";
+	                        }
+	                        
+	                        echo"<option value=\"".$adm_photo_list["pho_id"]."\" $selected style=\"maxlength: 40px;\">".$adm_photo_list["pho_name"]
+	                        ."&nbsp;(".mysqldate("y", $adm_photo_list["pho_begin"]).")</option>";
+	                        
+	                        //Auftruf der Funktion
+	                        subfolder($adm_photo_list["pho_id"], "", $photo_event, $pho_id);
+	                    }//while
+	                    echo"
+	                </select>
+	            </dd>
+			</dl></li>";
+	
+		        //Beginn
+	    	    echo"
+			<li><dl>
+	            <dt>Beginn:</dt>
+	            <dd>
+	                <input type=\"text\" name=\"pho_begin\" size=\"10\" tabindex=\"3\" maxlength=\"10\" value=\"". $photo_event->getValue("pho_begin")."\">
+	                <span title=\"Pflichtfeld\" class=\"mandatoryFieldMarker\">*</span>
+	            </dd>
+			</dl></li>";
+	
+		        //Ende
+		        echo"
+			<li><dl>
+		        <dt>Ende:</dt>
+	            <dd>
+	                <input type=\"text\" name=\"pho_end\" size=\"10\" tabindex=\"4\" maxlength=\"10\" value=\"". $photo_event->getValue("pho_end")."\">
+	            </dd>
+			</dl></li>";
+	
+		        //Photographen
+		        echo"
+			<li><dl>
+	            <dt>Fotografen:</dt>
+	            <dd>
+	                <input type=\"text\" name=\"pho_photographers\" style=\"width: 300px;\" tabindex=\"5\" maxlength=\"100\" value=\"".$photo_event->getValue("pho_photographers")."\">
+	            </dd>
+			</dl></li>";
+	
+		        //Freigabe
+		        echo"
+			<li><dl>
+	            <dt>Sperren:</dt>
+	            <dd>";
+	                echo "<input type=\"checkbox\" name=\"pho_locked\" id=\"locked\" tabindex=\"6\" value=\"1\"";
+	
+	                if($photo_event->getValue("pho_locked") == 1)
+	                {
+	                    echo "checked = \"checked\" ";
+	                }
+	
+	             echo"</dd>
+			</dl></li>
+		</ul>";
 
-                    while($adm_photo_list = mysql_fetch_array($result_list))
-                    {
-                        //Wenn die Elternveranstaltung von pho_id dann selected
-                        $selected = 0;
-                        if(($adm_photo_list["pho_id"] == $photo_event->getValue("pho_pho_id_parent"))
-                        ||  $adm_photo_list["pho_id"] == $pho_id)
-                        {
-                            $selected = " selected ";
-                        }
-                        
-                        echo"<option value=\"".$adm_photo_list["pho_id"]."\" $selected>".$adm_photo_list["pho_name"]
-                        ."&nbsp;(".mysqldate("y", $adm_photo_list["pho_begin"]).")</option>";
-                        
-                        //Auftruf der Funktion
-                        subfolder($adm_photo_list["pho_id"], "", $photo_event, $pho_id);
-                    }//while
-                    echo"
-                </select>
-            </div>
-        </div>";
-
-        //Beginn
-        echo"
-        <div class=\"formRow\">
-            <div class=\"formRowText\">Beginn:</div>
-            <div class=\"formRowField\">
-                <input type=\"text\" name=\"pho_begin\" size=\"10\" tabindex=\"3\" maxlength=\"10\" value=\"". $photo_event->getValue("pho_begin")."\">
-                <span title=\"Pflichtfeld\" class=\"mandatoryFieldMarker\">*</span>
-            </div>
-        </div>";
-
-        //Ende
-        echo"
-        <div class=\"formRow\">
-            <div class=\"formRowText\">Ende:</div>
-            <div class=\"formRowField\">
-                <input type=\"text\" name=\"pho_end\" size=\"10\" tabindex=\"4\" maxlength=\"10\" value=\"". $photo_event->getValue("pho_end")."\">
-            </div>
-        </div>";
-
-        //Photographen
-        echo"
-        <div class=\"formRow\">
-            <div class=\"formRowText\">Fotografen:</div>
-            <div class=\"formRowField\">
-                <input type=\"text\" name=\"pho_photographers\" style=\"width: 300px;\" tabindex=\"5\" maxlength=\"100\" value=\"".$photo_event->getValue("pho_photographers")."\">
-            </div>
-        </div>";
-
-        //Freigabe
-        echo"
-        <div class=\"formRow\">
-            <div class=\"formRowText\">Sperren:</div>
-            <div  class=\"formRowField\">";
-                echo "<input type=\"checkbox\" name=\"pho_locked\" id=\"locked\" tabindex=\"6\" value=\"1\"";
-
-                if($photo_event->getValue("pho_locked") == 1)
-                {
-                    echo "checked = \"checked\" ";
-                }
-
-             echo"</div>
-        </div>";
-
-        //Submit- und Zurueckbutton
-        echo"
-        <div class=\"formRow\">
-            <hr />
-            Hilfe: <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=veranst_help','Message','width=500, height=400, left=310,top=200,scrollbars=no')\">
-            <hr />
-        </div>
-        <div class=\"formRow\">
-            <span class=\"editorLink\">
-	            <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\"><img
-	            class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
-	            <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
-        	</span>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        //Submitbutton
+        echo"<hr />
+        <p>
             <button name=\"submit\" type=\"submit\" tabindex=\"8\" value=\"speichern\">
                 <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\">
                 &nbsp;Speichern
             </button>
-        </div>
+        </p>
     </form>
 </div>
+
+
+<ul class=\"iconTextLink\">
+	<li>
+		<a href=\"$g_root_path/adm_program/system/back.php\"><img class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
+    	<a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+	</li>
+	
+	<li>
+		<img src=\"$g_root_path/adm_program/images/help.png\" class=\"iconLink\" alt=\"Hilfe\" title=\"Hilfe\"
+       onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_up_help','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\">	
+		<a onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=veranst_help','Message','width=500,height=400,left=310,top=200,scrollbars=yes'\")\">Hilfe</a>
+	</li>
+</div>
+
 
 <script type=\"text/javascript\">
     <!--

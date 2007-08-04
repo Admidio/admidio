@@ -106,28 +106,25 @@ echo "
     echo "<br>Fotos von: ".$photo_event->getValue("pho_photographers")."<br><br>";
 
     //Vor und zurueck buttons
-    echo"<div class=\"pageNavigation\">";
+    echo"<ul class=\"iconTextLink\">";
         if($prev_image > 0)
         {
-            echo"<span class=\"iconLink\">
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$prev_image&pho_id=$pho_id\"><img 
-                    class=\"navigationArrow\" src=\"$g_root_path/adm_program/images/back.png\" alt=\"Vorheriges Bild\">
+            echo"<li>
+                <a href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$prev_image&pho_id=$pho_id\"><img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Vorheriges Bild\">
                 </a>
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$prev_image&pho_id=$pho_id\">Vorheriges Bild</a>
-            </span>
-            &nbsp;&nbsp;&nbsp;&nbsp;";
+                <a href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$prev_image&pho_id=$pho_id\">Vorheriges Bild</a>
+            </li>";
         }
         if($next_image <= $photo_event->getValue("pho_quantity"))
         {
-            echo"<span class=\"iconLink\">
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$next_image&pho_id=$pho_id\">N&auml;chstes Bild</a>
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$next_image&pho_id=$pho_id\"><img 
-                    class=\"navigationArrow\" src=\"$g_root_path/adm_program/images/forward.png\" alt=\"N&auml;chstes Bild\">
+            echo"<li>
+                <a href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$next_image&pho_id=$pho_id\">N&auml;chstes Bild</a>
+                <a  href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$next_image&pho_id=$pho_id\"><img src=\"$g_root_path/adm_program/images/forward.png\" alt=\"N&auml;chstes Bild\">
                 </a>
-            </span>";
+            </li>";
         }
-        echo"<br><br>
-    </div>";
+        echo"
+    </ul>";
 
     //Ermittlung der Original Bildgroesse
     $bildgroesse = getimagesize("$ordner/$bild.jpg");
@@ -166,25 +163,24 @@ echo "
     //wenn Popupmode
     if($g_preferences['photo_show_mode']==0)
     {   
-        echo"<div class=\"editorLink\"><br />
-        <span class=\"iconLink\">
-            <a href=\"javascript:parent.window.close()\"><img
-            class=\"iconLink\" src=\"$g_root_path/adm_program/images/door_in.png\" alt=\"Login\"></a>
-            <a class=\"iconLink\" href=\"javascript:parent.window.close()\">Fenster schlie&szlig;en</a>
-        </span>
-        </div>";
+        echo"<ul class=\"iconTextLink\">
+        <li>
+            <a href=\"javascript:parent.window.close()\"><img class=\"iconLink\" src=\"$g_root_path/adm_program/images/door_in.png\" alt=\"Login\"></a>
+            <a href=\"javascript:parent.window.close()\">Fenster schlie&szlig;en</a>
+        </li>
+        </ul>";
     }
     
     //Zurueck zur Uebersicht Button
     //wenn Fenstermode
     if($g_preferences['photo_show_mode']==2)
     {   
-        echo"<div class=\"editorLink\">
-        <span class=\"iconLink\">
-            <img onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id'\" class=\"iconLink\" src=\"$g_root_path/adm_program/images/application_view_tile.png\" alt=\"Login\"></a>
-            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id\">zur &Uuml;bersicht</a>
-        </span>
-        </div>";
+        echo"<ul class=\"iconTextLink\">
+        <li>
+            <a href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id'\"><img src=\"$g_root_path/adm_program/images/application_view_tile.png\" alt=\"Login\"></a>
+            <a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id\">zur &Uuml;bersicht</a>
+        </li>
+        </ul>";
     }
 echo"</div>";
         
