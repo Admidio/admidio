@@ -196,19 +196,16 @@ if($_POST["upload"])
         //Buttons
         echo"
         <hr />
-        <div class=\"formRow\">
-            <span class=\"editorLink\">
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\"><img
-                class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
+        <ul class=\"iconLinkText\">
+            <li>
+                <a href=\"$g_root_path/adm_program/system/back.php\"><img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
                 <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
-            </span>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <span class=\"editorLink\">
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id\"><img
-                class=\"iconLink\" src=\"$g_root_path/adm_program/images/photo.png\" alt=\"Weitere Bilder hochladen\"></a>
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id\">Weitere Bilder hochladen</a>
-            </span>
-         </div>
+            </li>
+            <li>
+                <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id\"><img src=\"$g_root_path/adm_program/images/photo.png\" alt=\"Weitere Bilder hochladen\"></a>
+                <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id\">Weitere Bilder hochladen</a>
+            </li>
+         </ul>
     </div><br><br>";
 }//if($upload)
 
