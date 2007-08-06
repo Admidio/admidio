@@ -5,28 +5,14 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Jochen Erkens
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  * Uebergaben:
  * pho_id: id der Veranstaltung die bearbeitet werden soll
- * job:    - makenew (neue eingaben speichern)
- *         - makechange (Aenderungen ausfuehren)
+ * job:    - new    (neue eingaben speichern)
+ *         - change (Aenderungen ausfuehren)
  *         - delete (Loeschen einer Veranstaltung)
  *         - delete_request
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 79 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
 
@@ -54,8 +40,8 @@ if(isset($_GET["pho_id"]) && is_numeric($_GET["pho_id"]) == false && $_GET["pho_
     $g_message->show("invalid");
 }
 
-if(isset($_GET["job"]) && $_GET["job"] != "makenew" && $_GET["job"] != "do_delete"
-    && $_GET["job"] != "makechange" && $_GET["job"] != "delete_request")
+if(isset($_GET["job"]) && $_GET["job"] != "new" && $_GET["job"] != "do_delete"
+    && $_GET["job"] != "change" && $_GET["job"] != "delete_request")
 {
     $g_message->show("invalid");
 }
@@ -69,7 +55,7 @@ $pho_id  = $_GET['pho_id'];
 // Fotoeventobjekt anlegen
 $photo_event = new PhotoEvent($g_db);
 
-if($_GET["job"] != "makenew")
+if($_GET["job"] != "new")
 {
     $photo_event->getPhotoEvent($pho_id);
     
@@ -156,7 +142,7 @@ if(isset($_POST["submit"]) && $_POST["submit"])
     }
     
     /********************neuen Datensatz anlegen***********************************/
-    if ($_GET["job"]=="makenew")
+    if ($_GET["job"]=="new")
     {
         //Wenn keine Schreibrechte Loeschen der Daten aus der Datenbank
         if(is_writeable(SERVER_PATH. "/adm_my_files/photos") == false)
@@ -184,7 +170,7 @@ if(isset($_POST["submit"]) && $_POST["submit"])
 
     /********************Aenderung des Ordners***********************************/
     //Bearbeiten Anfangsdatum und Ordner ge&auml;ndert
-    elseif ($_GET["job"]=="makechange" && $ordner != SERVER_PATH. "/adm_my_files/photos/".$_POST['pho_begin']."_"."$pho_id")
+    elseif ($_GET["job"]=="change" && $ordner != SERVER_PATH. "/adm_my_files/photos/".$_POST['pho_begin']."_"."$pho_id")
     {
         $ordnerneu = "$beginn"."_".$photo_event->getValue("pho_id");
         //testen ob Schreibrechte fuer adm_my_files bestehen
@@ -220,7 +206,7 @@ if(isset($_POST["submit"]) && $_POST["submit"])
 
     /********************Aenderung der Datenbankeinträge***********************************/
 
-    if($_GET["job"]=="makechange")
+    if($_GET["job"]=="change")
     {
         // geaenderte Daten in der Datenbank akutalisieren
         $photo_event->save();
@@ -236,76 +222,76 @@ if(isset($_POST["submit"]) && $_POST["submit"])
     echo"
     <div class=\"formHead\">Bericht</div>
     <div class=\"formBody\"> 
-		<p>Die Veranstaltung wurde erfolgreich angelegt / ge&auml;ndert:</p>  
-		<ul>
-	        <li><dl>
-	            <dt>Veranstaltung:</dt>
-	            <dd>".$photo_event->getValue("pho_name")."</dd>
-	        </dl></li>
-	        
-	        <li><dl>
-	            <dt>in Ordner:</dt>
-	            <dd>";
-	                if($photo_event->getValue("pho_pho_id_parent") > 0)
-	                {
-	                    $photo_event_parent = new PhotoEvent($g_db, $photo_event->getValue("pho_pho_id_parent"));
-	                    echo $photo_event_parent->getValue("pho_name");
-	                }
-	                else
-	                {
-	                    echo "Fotogalerien(Hauptordner)";
-	                }
-	            echo"</dd>
-	        </dl></li>
-	        
-	        <li><dl>
-	            <dt>Anfangsdatum:</dt>
-	            <dd>".mysqldate("d.m.y", $photo_event->getValue("pho_begin"))."</dd>
-	        </dl></li>
-	        
-	        <li><dl>
-	            <dt>Enddatum:</dt>
-	            <dd>".mysqldate("d.m.y", $photo_event->getValue("pho_end"))."</dd>
-	        </dl></li>
-	        
-	        <li><dl>
-	            <dt>Fotografen:</dt>
-	            <dd>".$photo_event->getValue("pho_photographers")."</dd>
-	        </dl></li>
-	        
-	        <li><dl>
-	            <dt>Gesperrt:</dt>
-	            <dd>";
-	                if($photo_event->getValue("pho_locked")==1)
-	                {
-	                     echo "Ja";
-	                }
-	                else
-	                {
-	                     echo "Nein";
-	                }   
-	            echo"</dd>
-	        </dl></li>
-	        
-	        <li><dl>
-	            <dt>Aktuelle Bilderzahl:</dt>
-	            <dd>";
-	                if($photo_event->getValue("pho_quantity")!=NULL)
-	                {
-	                    echo $photo_event->getValue("pho_quantity");
-	                }
-	                else
-	                {
-	                    echo"0";
-	                }
-	            echo"</dd>
-	        </dl></li>
-		<ul>
-	</div>
+        <p>Die Veranstaltung wurde erfolgreich angelegt / ge&auml;ndert:</p>  
+        <ul>
+            <li><dl>
+                <dt>Veranstaltung:</dt>
+                <dd>".$photo_event->getValue("pho_name")."</dd>
+            </dl></li>
+            
+            <li><dl>
+                <dt>in Ordner:</dt>
+                <dd>";
+                    if($photo_event->getValue("pho_pho_id_parent") > 0)
+                    {
+                        $photo_event_parent = new PhotoEvent($g_db, $photo_event->getValue("pho_pho_id_parent"));
+                        echo $photo_event_parent->getValue("pho_name");
+                    }
+                    else
+                    {
+                        echo "Fotogalerien(Hauptordner)";
+                    }
+                echo"</dd>
+            </dl></li>
+            
+            <li><dl>
+                <dt>Anfangsdatum:</dt>
+                <dd>".mysqldate("d.m.y", $photo_event->getValue("pho_begin"))."</dd>
+            </dl></li>
+            
+            <li><dl>
+                <dt>Enddatum:</dt>
+                <dd>".mysqldate("d.m.y", $photo_event->getValue("pho_end"))."</dd>
+            </dl></li>
+            
+            <li><dl>
+                <dt>Fotografen:</dt>
+                <dd>".$photo_event->getValue("pho_photographers")."</dd>
+            </dl></li>
+            
+            <li><dl>
+                <dt>Gesperrt:</dt>
+                <dd>";
+                    if($photo_event->getValue("pho_locked")==1)
+                    {
+                         echo "Ja";
+                    }
+                    else
+                    {
+                         echo "Nein";
+                    }   
+                echo"</dd>
+            </dl></li>
+            
+            <li><dl>
+                <dt>Aktuelle Bilderzahl:</dt>
+                <dd>";
+                    if($photo_event->getValue("pho_quantity")!=NULL)
+                    {
+                        echo $photo_event->getValue("pho_quantity");
+                    }
+                    else
+                    {
+                        echo"0";
+                    }
+                echo"</dd>
+            </dl></li>
+        <ul>
+    </div>
     <ul class=\"iconTextLink\">
         <li><a href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id'\">Weiter&nbsp;</a>
             <a href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id'\"><img src=\"$g_root_path/adm_program/images/forward.png\" alt=\"Weiter\"></a>
-		</li>
+        </li>
     </ul>
     ";
 }//submit

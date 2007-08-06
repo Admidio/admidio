@@ -5,25 +5,11 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  * Uebergaben:
  *
  * usf_id: ID des Feldes, das bearbeitet werden soll
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  ****************************************************************************/
  
@@ -97,36 +83,7 @@ else
 {
     $g_layout['title']  = "Profilfeld anlegen";
 }
-/*
-$g_layout['header'] = "<style type=\"text/css\">
-                           .formBody ul {
-                               list-style-type: none;
-                           }
-                           .formBody li {
-                                padding: 0px;
-                                display: inline;
-                           }
-                           .formBody dl {
-                               list-style-type: none;
-                               list-style-position: inside;
-                               margin-top: 0px;
-                           }
-                           .formBody dt {
-                               width:       30%;
-                               text-align:  left;
-                               float:       left;
-                               display:     block;
-                           }
-                           .formBody dd {
-                               margin-left: 31%;
-                               text-align:  left;
-                           }
-                           
-                           .formSubmit {
-                               padding-top: 5px;
-                           }
-                       </style>";
-*/
+
 // Html-Kopf ausgeben
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
@@ -141,7 +98,7 @@ echo "
                     <dt><label for=\"usf_name\">Name:</label></dt>
                     <dd><input type=\"text\" name=\"usf_name\" id=\"usf_name\" $html_disabled style=\"width: 150px;\" maxlength=\"15\"
                         value=\"". htmlspecialchars($user_field->getValue("usf_name"), ENT_QUOTES). "\">
-                        <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span></dd>
+                        <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span></dd>
                 </dl>
             </li>
             <li>
@@ -180,7 +137,7 @@ echo "
                                 echo ">$row->cat_name</option>";
                             }
                         echo "</select>
-                        <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
+                        <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                     </dd>
                 </dl>
             </li>
@@ -238,7 +195,7 @@ echo "
                                 }
                                 echo ">Zahl</option>\n
                         </select>
-                        <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
+                        <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                     </dd>
                 </dl>
             </li>
@@ -315,10 +272,13 @@ echo "
 </div>
 </form>
 
-<div class=\"pageNavigation\">
-    <a href=\"$g_root_path/adm_program/system/back.php\"><img class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
-    <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
-</div>
+<ul class=\"iconTextLink\">
+    <li>
+        <a href=\"$g_root_path/adm_program/system/back.php\"><img 
+        src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
+        <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+    </li>
+</ul>
 
 <script type=\"text/javascript\"><!--
     document.getElementById('usf_name').focus();
