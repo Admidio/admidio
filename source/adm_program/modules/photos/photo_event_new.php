@@ -5,26 +5,12 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Jochen Erkens
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  * Uebergaben:
  * pho_id: id der Veranstaltung die bearbeitet werden soll
  * job:    - new (neues Formular)
  *         - change (Formular fuer Aenderunmgen)
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 79 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
 
@@ -110,15 +96,13 @@ $sql="  SELECT *
         AND   pho_pho_id_parent IS NULL
         $pho_id_condition
         ORDER BY pho_begin DESC ";
-error_log($sql);
-$result_list = mysql_query($sql, $g_adm_con);
-db_error($result_list,__FILE__,__LINE__);
+$result_list = $g_db->query($sql);
 
 //Parent
 //Suchen nach Kindern, Funktion mit selbstaufruf
 function subfolder($parent_id, $vorschub, $photo_event, $pho_id)
 {
-    global $g_adm_con;
+    global $g_adm_con, $g_db;
     $vorschub = $vorschub."&nbsp;&nbsp;&nbsp;&nbsp;";
 
     //Erfassen der auszugebenden Veranstaltung
@@ -132,11 +116,9 @@ function subfolder($parent_id, $vorschub, $photo_event, $pho_id)
             FROM ". TBL_PHOTOS. "
             WHERE pho_pho_id_parent = $parent_id 
             $pho_id_condition ";
-    error_log($sql);
-    $result_child = mysql_query($sql, $g_adm_con);
-    db_error($result_child,__FILE__,__LINE__);
+    $result_child = $g_db->query($sql);
 
-    while($adm_photo_child = mysql_fetch_array($result_child))
+    while($adm_photo_child = $g_db->fetch_array($result_child))
     {
         //Wenn die Elternveranstaltung von pho_id dann selected
         $selected = 0;
@@ -161,147 +143,149 @@ echo"<h1 class=\"moduleHeadline\">Fotogalerien - Veranstaltungsverwaltung</h1>";
 
 
 /****************************Formular***********************************************/
-//Kopfzeile
-echo"
-<div class=\"formHead\">";
-    //bei neuer Veranstaltung
-    if($_GET["job"]=="new")
-    {
-        echo "Neue Veranstaltung anlegen";
-    }
-    //bei bestehender Veranstaltung
-    if($_GET["job"]=="change")
-    {
-            echo "Veranstaltung bearbeiten";
-    }
-echo"</div>";
 
-//Body
-echo"
-<div class=\"formBody\">
-    <form method=\"POST\" action=\"$g_root_path/adm_program/modules/photos/photo_event_function.php?pho_id=". $_GET["pho_id"];
+echo "
+<form method=\"POST\" action=\"$g_root_path/adm_program/modules/photos/photo_event_function.php?pho_id=". $_GET["pho_id"]. "&job=". $_GET["job"]. "\">
+<div class=\"formLayout\" id=\"photo_event_new_form\">
+    <div class=\"formHead\">";
+        //bei neuer Veranstaltung
         if($_GET["job"]=="new")
         {
-            echo "&job=makenew\">";
+            echo "Neue Veranstaltung anlegen";
         }
+        //bei bestehender Veranstaltung
         if($_GET["job"]=="change")
         {
-            echo "&job=makechange\">";
+                echo "Veranstaltung bearbeiten";
         }
-
+    echo"</div>
+    <div class=\"formBody\">";
         //Veranstaltung
         echo"
         <ul>
-			<li><dl>
-				<dt>Veranstaltung:</dt>
-	            <dd>
-	                <input type=\"text\" id=\"pho_name\" name=\"pho_name\" style=\"width: 300px;\" maxlength=\"50\" tabindex=\"1\" value=\"".$photo_event->getValue("pho_name")."\">
-	                <span title=\"Pflichtfeld\" class=\"mandatoryFieldMarker\">*</span>
-				</dd>
-			</dl></li>";
-				
-	        	//Unterordnung
-	        	echo"
-			<li><dl>
-	           <dt>in Ordner:</dt>
-	           <dd>
-	                <select size=\"1\" name=\"pho_pho_id_parent\" tabindex=\"2\">
-	                    <option value=\"0\">Fotogalerien(Hauptordner)</option>";
-	
-	                   while($adm_photo_list = mysql_fetch_array($result_list))
-	                    {
-	                        //Wenn die Elternveranstaltung von pho_id dann selected
-	                        $selected = 0;
-	                        if(($adm_photo_list["pho_id"] == $photo_event->getValue("pho_pho_id_parent"))
-	                        ||  $adm_photo_list["pho_id"] == $pho_id)
-	                        {
-	                            $selected = " selected ";
-	                        }
-	                        
-	                        echo"<option value=\"".$adm_photo_list["pho_id"]."\" $selected style=\"maxlength: 40px;\">".$adm_photo_list["pho_name"]
-	                        ."&nbsp;(".mysqldate("y", $adm_photo_list["pho_begin"]).")</option>";
-	                        
-	                        //Auftruf der Funktion
-	                        subfolder($adm_photo_list["pho_id"], "", $photo_event, $pho_id);
-	                    }//while
-	                    echo"
-	                </select>
-	            </dd>
-			</dl></li>";
-	
-		        //Beginn
-	    	    echo"
-			<li><dl>
-	            <dt>Beginn:</dt>
-	            <dd>
-	                <input type=\"text\" name=\"pho_begin\" size=\"10\" tabindex=\"3\" maxlength=\"10\" value=\"". $photo_event->getValue("pho_begin")."\">
-	                <span title=\"Pflichtfeld\" class=\"mandatoryFieldMarker\">*</span>
-	            </dd>
-			</dl></li>";
-	
-		        //Ende
-		        echo"
-			<li><dl>
-		        <dt>Ende:</dt>
-	            <dd>
-	                <input type=\"text\" name=\"pho_end\" size=\"10\" tabindex=\"4\" maxlength=\"10\" value=\"". $photo_event->getValue("pho_end")."\">
-	            </dd>
-			</dl></li>";
-	
-		        //Photographen
-		        echo"
-			<li><dl>
-	            <dt>Fotografen:</dt>
-	            <dd>
-	                <input type=\"text\" name=\"pho_photographers\" style=\"width: 300px;\" tabindex=\"5\" maxlength=\"100\" value=\"".$photo_event->getValue("pho_photographers")."\">
-	            </dd>
-			</dl></li>";
-	
-		        //Freigabe
-		        echo"
-			<li><dl>
-	            <dt>Sperren:</dt>
-	            <dd>";
-	                echo "<input type=\"checkbox\" name=\"pho_locked\" id=\"locked\" tabindex=\"6\" value=\"1\"";
-	
-	                if($photo_event->getValue("pho_locked") == 1)
-	                {
-	                    echo "checked = \"checked\" ";
-	                }
-	
-	             echo"</dd>
-			</dl></li>
-		</ul>";
+            <li>
+                <dl>
+                    <dt><label for=\"pho_name\">Veranstaltung:</label></dt>
+                    <dd>
+                        <input type=\"text\" id=\"pho_name\" name=\"pho_name\" style=\"width: 300px;\" maxlength=\"50\" tabindex=\"1\" value=\"".$photo_event->getValue("pho_name")."\">
+                        <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
+                    </dd>
+                </dl>
+            </li>";
+                
+            //Unterordnung
+            echo"
+            <li>
+                <dl>
+                    <dt><label for=\"pho_pho_id_parent\">in Ordner:</label></dt>
+                    <dd>
+                        <select size=\"1\" id=\"pho_pho_id_parent\" name=\"pho_pho_id_parent\" style=\"max-width: 95%;\" tabindex=\"2\">
+                            <option value=\"0\">Fotogalerien(Hauptordner)</option>";
+
+                           while($adm_photo_list = $g_db->fetch_array($result_list))
+                            {
+                                //Wenn die Elternveranstaltung von pho_id dann selected
+                                $selected = 0;
+                                if(($adm_photo_list["pho_id"] == $photo_event->getValue("pho_pho_id_parent"))
+                                ||  $adm_photo_list["pho_id"] == $pho_id)
+                                {
+                                    $selected = " selected ";
+                                }
+
+                                echo"<option value=\"".$adm_photo_list["pho_id"]."\" $selected style=\"maxlength: 40px;\">".$adm_photo_list["pho_name"]
+                                ."&nbsp;(".mysqldate("y", $adm_photo_list["pho_begin"]).")</option>";
+
+                                //Auftruf der Funktion
+                                subfolder($adm_photo_list["pho_id"], "", $photo_event, $pho_id);
+                            }//while
+                            echo"
+                        </select>
+                    </dd>
+                </dl>
+            </li>";
+    
+            //Beginn
+            echo"
+            <li>
+                <dl>
+                    <dt><label for=\"pho_begin\">Beginn:</label></dt>
+                    <dd>
+                        <input type=\"text\" id=\"pho_begin\" name=\"pho_begin\" size=\"10\" tabindex=\"3\" maxlength=\"10\" value=\"". $photo_event->getValue("pho_begin")."\">
+                        <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
+                    </dd>
+                </dl>
+            </li>";
+    
+            //Ende
+            echo"
+            <li>
+                <dl>
+                    <dt><label for=\"pho_end\">Ende:</label></dt>
+                    <dd>
+                        <input type=\"text\" id=\"pho_end\" name=\"pho_end\" size=\"10\" tabindex=\"4\" maxlength=\"10\" value=\"". $photo_event->getValue("pho_end")."\">
+                    </dd>
+                </dl>
+            </li>";
+    
+            //Photographen
+            echo"
+            <li>
+                <dl>
+                    <dt><label for=\"pho_photographers\">Fotografen:</label></dt>
+                    <dd>
+                        <input type=\"text\" id=\"pho_photographers\" name=\"pho_photographers\" style=\"width: 300px;\" tabindex=\"5\" maxlength=\"100\" value=\"".$photo_event->getValue("pho_photographers")."\">
+                    </dd>
+                </dl>
+            </li>";
+    
+            //Freigabe
+            echo"
+            <li>
+                <dl>
+                    <dt><label for=\"pho_locked\">Sperren:</label></dt>
+                    <dd>";
+                        echo "<input type=\"checkbox\" id=\"pho_locked\" name=\"pho_locked\" tabindex=\"6\" value=\"1\"";
+
+                        if($photo_event->getValue("pho_locked") == 1)
+                        {
+                            echo "checked = \"checked\" ";
+                        }
+
+                     echo"</dd>
+                </dl>
+            </li>
+        </ul>";
 
         //Submitbutton
         echo"<hr />
-        <p>
+        <div>
             <button name=\"submit\" type=\"submit\" tabindex=\"8\" value=\"speichern\">
                 <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\">
                 &nbsp;Speichern
             </button>
-        </p>
-    </form>
+        </div>
+    </div>
 </div>
-
+</form>
 
 <ul class=\"iconTextLink\">
-	<li>
-		<a href=\"$g_root_path/adm_program/system/back.php\"><img class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
-    	<a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
-	</li>
-	
-	<li>
-		<img src=\"$g_root_path/adm_program/images/help.png\" class=\"iconLink\" alt=\"Hilfe\" title=\"Hilfe\"
-       onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_up_help','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\">	
-		<a onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=veranst_help','Message','width=500,height=400,left=310,top=200,scrollbars=yes'\")\">Hilfe</a>
-	</li>
+    <li>
+        <a href=\"$g_root_path/adm_program/system/back.php\"><img 
+        src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
+        <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+    </li>
+    
+    <li>
+        <img src=\"$g_root_path/adm_program/images/help.png\" class=\"iconLink\" alt=\"Hilfe\" title=\"Hilfe\"
+       onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_up_help','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\">   
+        <a onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=veranst_help','Message','width=500,height=400,left=310,top=200,scrollbars=yes'\")\">Hilfe</a>
+    </li>
 </div>
 
 
 <script type=\"text/javascript\">
     <!--
-        document.getElementById('veranstaltung').focus();
+        document.getElementById('pho_name').focus();
     -->
 </script>";
 
