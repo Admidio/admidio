@@ -212,25 +212,23 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 echo "
 <h1 class=\"moduleHeadline\">Benutzerverwaltung</h1>
 
-<p>
-    <span class=\"iconLink\">
+<ul class=\"iconTextLink\">
+    <li>
         <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?new_user=1\"><img
-        class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" alt=\"Benutzer anlegen\"></a>
-        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_new.php?new_user=1\">Benutzer anlegen</a>
-    </span>
-    &nbsp;&nbsp;&nbsp;&nbsp;
-    <span class=\"iconLink\">
+        src=\"$g_root_path/adm_program/images/add.png\" alt=\"Benutzer anlegen\"></a>
+        <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?new_user=1\">Benutzer anlegen</a>
+    </li>
+    <li>
         <a href=\"$g_root_path/adm_program/administration/members/import.php\"><img
-        class=\"iconLink\" src=\"$g_root_path/adm_program/images/database_in.png\" alt=\"Benutzer importieren\"></a>
-        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/import.php\">Benutzer importieren</a>
-    </span>
-    &nbsp;&nbsp;&nbsp;&nbsp;
-    <span class=\"iconLink\">
-        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/fields.php\"><img
-        class=\"iconLink\" src=\"$g_root_path/adm_program/images/application_form.png\" alt=\"Organisationsspezifische Profilfelder pflegen\"></a>
-        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/fields.php\">Profilfelder pflegen</a>
-    </span>
-</p>";
+        src=\"$g_root_path/adm_program/images/database_in.png\" alt=\"Benutzer importieren\"></a>
+        <a href=\"$g_root_path/adm_program/administration/members/import.php\">Benutzer importieren</a>
+    </li>
+    <li>
+        <a href=\"$g_root_path/adm_program/administration/members/fields.php\"><img
+        src=\"$g_root_path/adm_program/images/application_form.png\" alt=\"Organisationsspezifische Profilfelder pflegen\"></a>
+        <a href=\"$g_root_path/adm_program/administration/members/fields.php\">Profilfelder pflegen</a>
+    </li>
+</ul>";
 
 if($count_mem_rol != $g_db->num_rows($result_mgl) || $req_members == false)
 {
@@ -247,13 +245,14 @@ if($count_mem_rol != $g_db->num_rows($result_mgl) || $req_members == false)
         $link_icon = "user.png";
         $link_members = 1;
     }
-    echo "<p>
-    <span class=\"iconLink\">
-        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members.php?members=$link_members&letter=$req_letter&queryForm=$req_queryForm\"><img
-        class=\"iconLink\" src=\"$g_root_path/adm_program/images/$link_icon\" alt=\"$link_text\"></a>
-        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members.php?members=$link_members&letter=$req_letter&queryForm=$req_queryForm\">$link_text</a>
-    </span>
-    </p>";
+    echo "
+    <ul class=\"iconTextLink\">
+        <li>
+            <a href=\"$g_root_path/adm_program/administration/members/members.php?members=$link_members&letter=$req_letter&queryForm=$req_queryForm\"><img
+            src=\"$g_root_path/adm_program/images/$link_icon\" alt=\"$link_text\"></a>
+            <a href=\"$g_root_path/adm_program/administration/members/members.php?members=$link_members&letter=$req_letter&queryForm=$req_queryForm\">$link_text</a>
+        </li>
+    </ul>";
 }
 
 if($req_members)
@@ -291,13 +290,13 @@ echo "
 </script>
 ";
 
-echo "<p>";
+echo "<div class=\"pageNavigation\">";
 
     // Leiste mit allen Buchstaben des Alphabets anzeigen
 
     if (strlen($req_letter) == 0 && !$req_queryForm)
     {
-        echo "<b>Alle</b>&nbsp;&nbsp;&nbsp;";
+        echo "<span class=\"selected\">Alle</span>&nbsp;&nbsp;&nbsp;";
     }
     else
     {
@@ -361,7 +360,7 @@ echo "<p>";
 
         if($letter_menu == substr($req_letter, 0, 1))
         {
-            echo "<b>$letter_menu</b>";
+            echo "<span class=\"selected\">$letter_menu</span>";
         }
         elseif($letter_found == true)
         {
@@ -381,7 +380,7 @@ echo "<p>";
         }
         $letter_menu = strNextLetter($letter_menu);
     }
-echo "</p>";
+echo "</div>";
 
 if($num_members > 0)
 {
@@ -452,7 +451,7 @@ if($num_members > 0)
                     echo "</td>
                     <td align=\"left\">&nbsp;". $row['usr_login_name']. "</td>
                     <td align=\"center\">&nbsp;". mysqldatetime("d.m.y h:i" , $row['usr_last_change']). "</td>
-                    <td align=\"center\">";
+                    <td align=\"center\" style=\"margin: 0px; padding: 0px;\">";
                         // pruefen, ob der User noch in anderen Organisationen aktiv ist
                         $sql    = "SELECT *
                                      FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. "
@@ -469,50 +468,55 @@ if($num_members > 0)
                         {
                             $b_other_orga = true;
                         }
-
-                        // Link um E-Mail mit neuem Passwort zu zuschicken
-                        // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
-                        if($row['member'] > 0
-                        && $g_current_user->isWebmaster()
-                        && strlen($row['usr_login_name']) > 0
-                        && strlen($row['email']) > 0
-                        && $g_preferences['enable_system_mails'] == 1)
-                        {
-                            echo "<a href=\"$g_root_path/adm_program/administration/members/members_function.php?user_id=". $row['usr_id']. "&mode=5\"><img
-                                src=\"$g_root_path/adm_program/images/key.png\" border=\"0\" alt=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\"
-                                title=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\"></a>&nbsp;";
-                        }
-                        else
-                        {
-                            echo "<img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">&nbsp;";
-                        }
-
-                        // Link um User zu editieren
-                        // es duerfen keine Nicht-Mitglieder editiert werden, die Mitglied in einer anderen Orga sind
-                        if($row['member'] > 0 || $b_other_orga == false)
-                        {
-                            echo "<a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=". $row['usr_id']. "\"><img
-                                src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Benutzerdaten bearbeiten\" title=\"Benutzerdaten bearbeiten\"></a>&nbsp;";
-                        }
-                        else
-                        {
-                            echo "<img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">";
-                        }
-
-
-                        // wenn der User nicht mehr Mitglied der aktuellen Orga, aber noch Mitglied einer anderen Orga ist,
-                        // dann darf er nicht aus der DB geloescht werden
-                        if(($b_other_orga == false || $row['member'] > 0)
-                        && $row['usr_id'] != $g_current_user->getValue("usr_id"))
-                        {
-                            echo "<a href=\"$g_root_path/adm_program/administration/members/members_function.php?user_id=". $row['usr_id']. "&mode=6\"><img
-                                src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Benutzer entfernen\" title=\"Benutzer entfernen\"></a>";
-                        }
-                        else
-                        {
-                            echo "<img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">";
-                        }
-                    echo "</td>
+                        
+                        echo "<ul class=\"iconLinkRow\">
+                            <li>";
+                                // Link um E-Mail mit neuem Passwort zu zuschicken
+                                // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
+                                if($row['member'] > 0
+                                && $g_current_user->isWebmaster()
+                                && strlen($row['usr_login_name']) > 0
+                                && strlen($row['email']) > 0
+                                && $g_preferences['enable_system_mails'] == 1)
+                                {
+                                    echo "<a href=\"$g_root_path/adm_program/administration/members/members_function.php?user_id=". $row['usr_id']. "&mode=5\"><img
+                                    src=\"$g_root_path/adm_program/images/key.png\" alt=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\"
+                                    title=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\"></a>";
+                                }
+                                else
+                                {
+                                    echo "<img src=\"$g_root_path/adm_program/images/dummy.gif\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">";
+                                }
+                            echo "</li>
+                            <li>";
+                                // Link um User zu editieren
+                                // es duerfen keine Nicht-Mitglieder editiert werden, die Mitglied in einer anderen Orga sind
+                                if($row['member'] > 0 || $b_other_orga == false)
+                                {
+                                    echo "<a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=". $row['usr_id']. "\"><img
+                                        src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Benutzerdaten bearbeiten\" title=\"Benutzerdaten bearbeiten\"></a>";
+                                }
+                                else
+                                {
+                                    echo "<img src=\"$g_root_path/adm_program/images/dummy.gif\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">";
+                                }
+                            echo "</li>
+                            <li>";
+                                // wenn der User nicht mehr Mitglied der aktuellen Orga, aber noch Mitglied einer anderen Orga ist,
+                                // dann darf er nicht aus der DB geloescht werden
+                                if(($b_other_orga == false || $row['member'] > 0)
+                                && $row['usr_id'] != $g_current_user->getValue("usr_id"))
+                                {
+                                    echo "<a href=\"$g_root_path/adm_program/administration/members/members_function.php?user_id=". $row['usr_id']. "&mode=6\"><img
+                                        src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Benutzer entfernen\" title=\"Benutzer entfernen\"></a>";
+                                }
+                                else
+                                {
+                                    echo "<img src=\"$g_root_path/adm_program/images/dummy.gif\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">";
+                                }
+                            echo "</li>
+                        </ul>
+                    </td>
                 </tr>";
             }
         }

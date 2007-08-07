@@ -47,43 +47,49 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 echo "
 <p>&nbsp;</p>
 <form id=\"form_import\" action=\"$g_root_path/adm_program/administration/members/import_function.php\" method=\"post\" enctype=\"multipart/form-data\">
+<div class=\"formLayout\" id=\"import_form\">
     <div class=\"formHead\">Benutzer aus Datei importieren</div>
     <div class=\"formBody\">
-        <div style=\"margin-top: 15px;\">
-            <div style=\"text-align: right; width: 30%; float: left;\">Format:</div>
-            <div style=\"text-align: left; margin-left: 32%;\">CSV
-            </div>
-        </div>
-        <div style=\"margin-top: 15px;\">
-            <div style=\"text-align: right; width: 30%; float: left;\">Datei ausw&auml;hlen:</div>
-            <div style=\"text-align: left; margin-left: 32%;\">
-                <input id=\"userfile\" name=\"userfile\" size=\"30\" type=\"file\">
-            </div>
-        </div>
-        <div style=\"margin-top: 15px;\">
-            <div style=\"text-align: right; width: 30%; float: left;\">Rolle zuordnen:</div>
-            <div style=\"text-align: left; margin-left: 32%;\">";
-                // Combobox mit allen Rollen ausgeben
-                echo generateRoleSelectBox();
+        <ul>
+            <li>
+                <dl>
+                    <dt>Format:</dt>
+                    <dd>CSV</dd>
+                </dl>
+            </li>
+            <li>
+                <dl>
+                    <dt><label for=\"userfile\">Datei ausw&auml;hlen:</label></dt>
+                    <dd><input id=\"userfile\" name=\"userfile\" size=\"30\" type=\"file\"></dd>
+                </dl>
+            </li>
+            <li>
+                <dl>
+                    <dt><label for=\"rol_id\">Rolle zuordnen:</label></dt>
+                    <dd>";
+                        // Combobox mit allen Rollen ausgeben
+                        echo generateRoleSelectBox();
 
-                echo "&nbsp;
-                <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                onClick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=role_assign','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\">
-            </div>
-        </div>
-        <div style=\"margin-top: 15px;\">
-            Bereits existierende Benutzer&nbsp;
-            <select size=\"1\" id=\"user_import_mode\" name=\"user_import_mode\">
-                <option value=\"1\" selected>behalten</option>
-                <option value=\"2\">duplizieren</option>
-                <option value=\"3\">ersetzen</option>
-                <option value=\"4\">erg&auml;nzen</option>
-            </select>
-        </div>
+                        echo "&nbsp;
+                        <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                        onClick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=role_assign','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\">
+                    </dd>
+                </dl>
+            </li>
+            <li>
+                <label for=\"user_import_mode\">Bereits existierende Benutzer</label>&nbsp;
+                <select size=\"1\" id=\"user_import_mode\" name=\"user_import_mode\">
+                    <option value=\"1\" selected>behalten</option>
+                    <option value=\"2\">duplizieren</option>
+                    <option value=\"3\">ersetzen</option>
+                    <option value=\"4\">erg&auml;nzen</option>
+                </select>
+            </li>
+        </ul>
 
-        <hr class=\"formLine\" style=\"margin-top: 10px; margin-bottom: 10px;\" width=\"85%\" />
+        <hr />
 
-        <div style=\"margin-top: 6px;\">
+        <div class=\"formSubmit\">
             <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
             <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\">
             &nbsp;Zur&uuml;ck</button>
@@ -92,6 +98,7 @@ echo "
             <img src=\"$g_root_path/adm_program/images/forward.png\" alt=\"Weiter\"></button>
         </div>
     </div>
+</div>
 </form>
 
 <script type=\"text/javascript\"><!--

@@ -197,7 +197,7 @@ function getFieldCode($field, $user, $new_user)
         //Laenderliste oeffnen
         $landlist = fopen(SERVER_PATH. "/adm_program/system/staaten.txt", "r");
         $value = "
-        <select size=\"1\" name=\"usf-". $field['usf_id']. "\">
+        <select size=\"1\" id=\"usf-". $field['usf_id']. "\" name=\"usf-". $field['usf_id']. "\">
             <option value=\"\"";
                 if(strlen($g_preferences['default_country']) == 0
                 && strlen($field['usd_value']) == 0)
@@ -248,10 +248,10 @@ function getFieldCode($field, $user, $new_user)
                 $field['usd_value'] = mysqldate('d.m.y', $field['usd_value']);
             }
         }
-        elseif($field['usf_type'] == "EMAIL" || $field['usf_type'] == "URL" || $field['usf_type'] == "BIG_TEXT")
+        elseif($field['usf_type'] == "EMAIL" || $field['usf_type'] == "URL" || $field['usf_type'] == "TEXT_BIG")
         {
             $width     = "300px";
-            if($field['usf_type'] == "BIG_TEXT")
+            if($field['usf_type'] == "TEXT_BIG")
             {
                 $maxlength = "255";
             }
@@ -304,7 +304,7 @@ function getFieldCode($field, $user, $new_user)
     $mandatory = "";
     if($field['usf_mandatory'] == 1)
     {
-        $mandatory = "&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>";
+        $mandatory = "&nbsp;<span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>";
     }
     
     // Fragezeichen mit Feldbeschreibung anzeigen, wenn diese hinterlegt ist
@@ -317,11 +317,12 @@ function getFieldCode($field, $user, $new_user)
     }
     
     // nun den Html-Code fuer das Feld zusammensetzen
-    $html = "
-        <div style=\"margin-top: 5px;\">
-            <div style=\"text-align: left; width: 25%; float: left;\">$icon". $field['usf_name']. ":&nbsp;</div>
-            <div style=\"text-align: left; margin-left: 27%;\">$value$mandatory$description</div>
-        </div>";
+    $html = "<li>
+                <dl>
+                    <dt><label for=\"usf-". $field['usf_id']. "\">$icon". $field['usf_name']. ":</label></dt>
+                    <dd>$value$mandatory$description</dd>
+                </dl>
+            </li>";
              
     return $html;
 }
@@ -332,6 +333,7 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 echo "
 <form action=\"$g_root_path/adm_program/modules/profile/profile_save.php?user_id=$usr_id&amp;new_user=$new_user\" method=\"post\" name=\"ProfilAnzeigen\">
+<div class=\"formLayout\" id=\"profile_new_form\">
     <div class=\"formHead\">";
         if($new_user == 1)
         {
@@ -377,13 +379,15 @@ echo "
                 if(strlen($category) > 0)
                 {
                     // div-Container groupBoxBody und groupBox schliessen
-                    echo "</div></div>";
+                    echo "</ul></div></div>";
                 }
                 $category = $value['cat_name'];
 
-                echo "<div class=\"groupBox\">
+                echo "<a name=\"cat-". $value['cat_id']. "\"></a>
+                <div class=\"groupBox\">
                     <div class=\"groupBoxHeadline\">". $value['cat_name']. "</div>
-                    <div class=\"groupBoxBody\">";
+                    <div class=\"groupBoxBody\">
+                        <ul>";
             }
 
             // bei schneller Registrierung duerfen nur die Pflichtfelder ausgegeben werden
@@ -398,59 +402,67 @@ echo "
                 // Nach dem Vornamen noch Benutzername und Passwort anzeigen
                 if($usr_id > 0 || $new_user == 2)
                 {
-                    echo "<div style=\"margin-top: 5px;\">
-                        <div style=\"text-align: left; width: 25%; float: left;\">Benutzername:&nbsp;</div>
-                        <div style=\"text-align: left; margin-left: 27%;\">
-                            <input type=\"text\" name=\"usr_login_name\" style=\"width: 200px;\" maxlength=\"20\" value=\"". htmlspecialchars($user->getValue("usr_login_name")). "\" ";
-                            if($g_current_user->isWebmaster() == false && $new_user == 0)
-                            {
-                                echo " class=\"readonly\" readonly ";
-                            }
-                            echo " />";
-                        if($new_user > 0)
-                        {
-                            echo "&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>&nbsp;
-                            <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=nickname','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\">";
-                        }
-                    echo "</div>
-                    </div>";
+                    echo "<li>
+                        <dl>
+                            <dt><label for=\"usr_login_name\">Benutzername:</label></dt>
+                            <dd>
+                                <input type=\"text\" id=\"usr_login_name\" name=\"usr_login_name\" style=\"width: 200px;\" maxlength=\"20\" value=\"". htmlspecialchars($user->getValue("usr_login_name")). "\" ";
+                                if($g_current_user->isWebmaster() == false && $new_user == 0)
+                                {
+                                    echo " class=\"readonly\" readonly ";
+                                }
+                                echo " />";
+                                if($new_user > 0)
+                                {
+                                    echo "&nbsp;<span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>&nbsp;
+                                    <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=nickname','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\">";
+                                }
+                            echo "</dd>
+                        </dl>
+                    </li>";
 
                     if($new_user == 2)
                     {
-                        echo "<div style=\"margin-top: 5px;\">
-                            <div style=\"text-align: left; width: 25%; float: left;\">Passwort:&nbsp;</div>
-                            <div style=\"text-align: left; margin-left: 27%;\">
-                                <input type=\"password\" name=\"usr_password\" style=\"width: 130px;\" maxlength=\"20\" />
-                                <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>&nbsp;
-                                <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=password','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\">
-                            </div>
-                        </div>
-                        <div style=\"margin-top: 5px;\">
-                            <div style=\"text-align: left; width: 25%; float: left;\">Passwort (Wdh):&nbsp;</div>
-                            <div style=\"text-align: left; margin-left: 27%;\">
-                                <input type=\"password\" name=\"password2\" style=\"width: 130px;\" maxlength=\"20\" />
-                                <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
-                            </div>
-                        </div>";
+                        echo "<li>
+                            <dl>
+                                <dt><label for=\"usr_password\">Passwort:</label></dt>
+                                <dd>
+                                    <input type=\"password\" id=\"usr_password\" name=\"usr_password\" style=\"width: 130px;\" maxlength=\"20\" />
+                                    <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>&nbsp;
+                                    <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=password','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\">
+                                </dd>
+                            </dl>
+                        </li>
+                        <li>
+                            <dl>
+                                <dt><label for=\"password2\">Passwort (Wdh):</label></dt>
+                                <dd>
+                                    <input type=\"password\" id=\"password2\" name=\"password2\" style=\"width: 130px;\" maxlength=\"20\" />
+                                    <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
+                                </dd>
+                            </dl>
+                        </li>";
                     }
                     else
                     {
                         // eigenes Passwort aendern, nur Webmaster duerfen Passwoerter von anderen aendern
                         if($g_current_user->isWebmaster() || $g_current_user->getValue("usr_id") == $usr_id )
                         {
-                            echo "<div style=\"margin-top: 5px;\">
-                                <div style=\"text-align: left; width: 25%; float: left;\">Passwort:&nbsp;</div>
-                                <div style=\"text-align: left; margin-left: 27%;\">
-                                    <button name=\"password\" type=\"button\" value=\"Passwort &auml;ndern\" onclick=\"window.open('password.php?user_id=$usr_id','Titel','width=350,height=260,left=310,top=200')\">
-                                    <img src=\"$g_root_path/adm_program/images/key.png\" alt=\"Passwort &auml;ndern\">
-                                    &nbsp;Passwort &auml;ndern</button>
-                                </div>
-                            </div>";
+                            echo "<li>
+                                <dl>
+                                    <dt><label for=\"password\">Passwort:</label></dt>
+                                    <dd>
+                                        <button id=\"password\" name=\"password\" type=\"button\" value=\"Passwort &auml;ndern\" onclick=\"window.open('password.php?user_id=$usr_id','Titel','width=350,height=260,left=310,top=200')\">
+                                        <img src=\"$g_root_path/adm_program/images/key.png\" alt=\"Passwort &auml;ndern\">
+                                        &nbsp;Passwort &auml;ndern</button>
+                                    </dd>
+                                </dl>
+                            </li>";
                         }
                     }
-                    echo "<hr class=\"formLine\" width=\"85%\">";
+                    echo "<li><hr></li>";
                 }
             }
         }
@@ -463,21 +475,26 @@ echo "
         if ($new_user == 2 && $g_preferences['enable_registration_captcha'] == 1)
         {
             echo "
-            <div style=\"margin-top: 10px;\">
-                <div style=\"text-align: left; margin-left: 28%;\">
-                    <img src=\"$g_root_path/adm_program/system/captcha_class.php?id=". time(). "\" border=\"0\" alt=\"Captcha\" />
-                </div>
-            </div>
-
-            <div style=\"margin-top: 6px;\">
-                <div style=\"text-align: left; width: 26%; float: left;\">Best&auml;tigungscode:&nbsp;</div>
-                <div style=\"text-align: left; margin-left: 28%;\">
-                    <input type=\"text\" id=\"captcha\" name=\"captcha\" style=\"width: 200px;\" maxlength=\"8\" value=\"\">&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>&nbsp;
-                    <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                     onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=captcha_help','Message','width=400,height=320,left=310,top=200,scrollbars=yes')\">
-                </div>
-            </div>
-            <hr class=\"formLine\" width=\"85%\">";
+            <ul>
+                <li>
+                    <dl>
+                        <dt>&nbsp;</dt>
+                        <dd><img src=\"$g_root_path/adm_program/system/captcha_class.php?id=". time(). "\" border=\"0\" alt=\"Captcha\" /></dd>
+                    </dl>
+                </li>
+                <li>
+                    <dl>
+                        <dt>Best&auml;tigungscode:</dt>
+                        <dd>
+                            <input type=\"text\" id=\"captcha\" name=\"captcha\" style=\"width: 200px;\" maxlength=\"8\" value=\"\">
+                            <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>&nbsp;
+                            <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                             onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=captcha_help','Message','width=400,height=320,left=310,top=200,scrollbars=yes')\">
+                        </dd>
+                    </dl>
+                </li>
+            </ul>
+            <hr />";
         }
 
         // Bild und Text fuer den Speichern-Button
@@ -493,17 +510,6 @@ echo "
             $btn_text  = "Speichern";
         }
 
-        echo "
-        <div style=\"margin-top: 6px;\">
-            <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
-            <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\">
-            &nbsp;Zur&uuml;ck</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-            <button name=\"speichern\" type=\"submit\" value=\"speichern\">
-            <img src=\"$g_root_path/adm_program/images/$btn_image\" alt=\"$btn_text\">
-            &nbsp;$btn_text</button>
-        </div>";
-
         if($new_user == 0 && $user->getValue("usr_usr_id_change") > 0)
         {
             // Angabe ueber die letzten Aenderungen
@@ -516,13 +522,29 @@ echo "
                 $user_last_change = new User($g_db, $user->getValue("usr_usr_id_change"));
             }
 
-            echo "<div style=\"margin-top: 6px;\"><span style=\"font-size: 10pt\">
+            echo "<div class=\"formSubmit\">
                 Letzte &Auml;nderung am ". mysqldatetime("d.m.y h:i", $user->getValue("usr_last_change")).
-                " durch ". $user_last_change->getValue("Vorname"). " ". $user_last_change->getValue("Nachname"). "</span>
+                " durch ". $user_last_change->getValue("Vorname"). " ". $user_last_change->getValue("Nachname"). "
             </div>";
         }
-    echo "</div>
+
+        echo "
+        <div class=\"formSubmit\">
+            <button name=\"speichern\" type=\"submit\" value=\"speichern\">
+            <img src=\"$g_root_path/adm_program/images/$btn_image\" alt=\"$btn_text\">
+            &nbsp;$btn_text</button>
+        </div>
+    </div>
+</div>
 </form>
+
+<ul class=\"iconTextLink\">
+    <li>
+        <a href=\"$g_root_path/adm_program/system/back.php\"><img 
+        src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
+        <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+    </li>
+</ul>
 
 <script type=\"text/javascript\"><!--\n";
     if($g_current_user->editUser() || $new_user > 0)

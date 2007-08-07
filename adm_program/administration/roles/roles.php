@@ -88,7 +88,7 @@ else
 }
 
 echo "
-<ul class=\"iconLink\">
+<ul class=\"iconTextLink\">
     <li>
         <a href=\"$g_root_path/adm_program/administration/roles/roles_new.php\"><img
         src=\"$g_root_path/adm_program/images/add.png\" alt=\"Rolle anlegen\"></a>

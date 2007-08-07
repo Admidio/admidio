@@ -41,21 +41,24 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 echo "
 <br /><br /><br />
 <form action=\"$g_root_path/adm_program/system/login_check.php\" name=\"Login\" method=\"post\">
+<div class=\"formLayout\" id=\"login_form\">
     <div class=\"formHead\" style=\"width: 260px\">Login</div>
     <div class=\"formBody\" style=\"width: 260px\">
-        <div style=\"margin-top: 7px;\">
-            <div style=\"text-align: right; width: 110px; float: left;\">Benutzername:</div>
-            <div style=\"text-align: left; margin-left: 120px;\">
-                <input type=\"text\" id=\"loginname\" name=\"loginname\" size=\"14\" maxlength=\"20\" />
-            </div>
-        </div>
-        <div style=\"margin-top: 15px;\">
-            <div style=\"text-align: right; width: 110px; float: left;\">Passwort:</div>
-            <div style=\"text-align: left; margin-left: 120px;\">
-                <input type=\"password\" name=\"passwort\" size=\"14\" maxlength=\"20\" />
-            </div>
-        </div>
-        <div style=\"margin-top: 15px; margin-bottom: 15px;\">
+        <ul>
+            <li>
+                <dl>
+                    <dt><label for=\"loginname\">Benutzername:</label></dt>
+                    <dd><input type=\"text\" id=\"loginname\" name=\"loginname\" size=\"14\" maxlength=\"20\" /></dd>
+                </dl>
+            </li>
+            <li>
+                <dl>
+                    <dt><label for=\"password\">Passwort:</label></dt>
+                    <dd><input type=\"password\" name=\"passwort\" size=\"14\" maxlength=\"20\" /></dd>
+                </dl>
+            </li>
+        </ul>
+        <div class=\"formSubmit\">
             <button name=\"login\" type=\"submit\" value=\"login\">
             <img src=\"$g_root_path/adm_program/images/key.png\" alt=\"Login\">
             &nbsp;Login</button>
@@ -83,6 +86,7 @@ echo "
             Powered by <a href=\"http://www.admidio.org\" target=\"_blank\">Admidio</a>
         </div>
     </div>
+</div>
 </form>
 
 <script type=\"text/javascript\"><!--

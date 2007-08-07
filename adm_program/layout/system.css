@@ -141,38 +141,32 @@ a:hover {
 /* Layout fuer die Formulare
    Es ist in einen Kopf (formHead) und einen Inhalt (formBody) unterteilt
    (z.B.: Profil, Login, Registrieren) */
+   
+.formLayout {
+	 width:            550px;
+	 border:				 1px solid #555555;
+}
 
 .formHead {
-    width:            550px;         /* Maximale Breite von Formularen */
     color:            #333333;
     background-color: #85C226;
     font-size:        12pt;
     font-weight:      bold;
     letter-spacing:	 0.2em;
-    border-width:     1px 1px 0px 1px;
-    border-color:     #555555;
-    border-style:     solid;
-    border-collapse:  collapse;
+    border-bottom:    1px solid #555555;
     padding:          3px 15px 0px 15px;
 }
 
 .formBody {
-    width:            550px;         /* Maximale Breite von Formularen */
     color:            #555555;
     background-color: #eaeaea;
-    border-width:     1px;
-    border-color:     #555555;
-    border-style:     solid;
-    border-collapse:  collapse;
     padding:          10px 15px 10px 15px;
 }
 
 .formBody hr {
-	border-width: 		 1px;
-	border-color: 		 #6CA7A8;
-	border-style: 		 solid;
+	border:				 1px solid #6CA7A8;
 	width: 				 85%;
-	margin: 				 10px;
+	margin: 				 10px;	
 }
 
 .formBody ul {
@@ -183,6 +177,7 @@ a:hover {
 
 .formBody ul li {	
 	display:				 inline;
+	text-align:			 center;
 }
 .formBody ul li dl {
 	margin:            10px 0px 10px 0px;
@@ -201,6 +196,7 @@ a:hover {
 
 .formSubmit {
 	padding-top: 		 5px;
+	padding-bottom:	 5px;
 }
 
 
@@ -278,8 +274,13 @@ a:hover {
 }
 
 /*Links in Verbindung mit einem Icon (mit Text)*/
-.iconTextLink li{
+.iconTextLink {
 	list-style-type: 	 none;
+	padding: 			 0px;
+	margin:				 15px;
+}
+
+.iconTextLink li{	
 	display: 			 inline;
 	padding: 			 10px;
 }
@@ -291,31 +292,56 @@ a:hover {
 }
 
 /*Iconlinks um Funktionen aufzurufen (ohne Text)*/
-.iconLinkRow{
+.iconLinkRow {
+	list-style-type: 	 none;
 	margin 				 0px;
 	padding: 			 0px;
 }
-.iconLinkRow li{
+
+.iconLinkRow li {	
+	display: 			 inline;
+	text-align: 		 left;
+	padding: 			 0px;
+	margin-left:		 2px;
+}
+
+.iconLinkRow a img {
+	border: 				 none;
+}
+
+/* Icon um Informationen anzuzeigen (ohne Text und Link)*/
+.iconInformationRow {
 	list-style-type: 	 none;
+	margin 				 0px;
+	padding: 			 0px;
+}
+
+.iconInformationRow li {	
 	display: 			 inline;
 	text-align: 		 left;
 	padding: 			 0px;
 }
-.iconLinkRow a img{
+
+.iconInformationRow img {
 	border: 				 none;
+	cursor: 				 help;
 }
+
 
 /* Elemente fuer Navigationsklasse */
-.pageNavigation{
-	font-weight: 		 bold;
+.pageNavigation {
 	text-align: 		 center;
 	vertical-align: 	 middle;
-	margin: 				 10px;
+	margin: 				 15px;
 }
 
-.pageNavigation img{
+.pageNavigation img {
 	vertical-align: 	 top;
 	border: 				 none;
+}
+
+.pageNavigation .selected {
+	font-weight:		 bold;
 }
 
 /* Zusatzinformation wer letzte Aenderungen vorgenommen hat etc.*/
@@ -339,4 +365,32 @@ a:hover {
 .navigationPath img{
 	border: 				 none;
 	vertical-align: 	 middle;
+}
+
+/* spezielle Anpassung fuer die Loginseite */
+#login_form ul li dl dd {
+	margin-left:		 45%;
+}
+
+#profile_roles_box ul li dl dt {
+	width:				 75%;
+}
+
+#profile_roles_box ul li dl dd {
+	margin-left:       76%;
+	text-align:			 right;
+}
+
+/* spezielle Anpassung fuer die Passwortseite */
+#password_form ul li dl dt {
+	width:				 50%;
+}
+
+#password_form ul li dl dd {
+	margin-left:		 51%;
+}
+
+/* spezielle Anpassung fuer die Profilseite */
+#profile_form ul li dl {
+	margin:            3px 0px 3px 0px;
 }
