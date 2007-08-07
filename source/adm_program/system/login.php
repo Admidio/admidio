@@ -41,9 +41,9 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 echo "
 <br /><br /><br />
 <form action=\"$g_root_path/adm_program/system/login_check.php\" name=\"Login\" method=\"post\">
-<div class=\"formLayout\" id=\"login_form\">
-    <div class=\"formHead\" style=\"width: 260px\">Login</div>
-    <div class=\"formBody\" style=\"width: 260px\">
+<div class=\"formLayout\" id=\"login_form\" style=\"width: 260px\">
+    <div class=\"formHead\">Login</div>
+    <div class=\"formBody\">
         <ul>
             <li>
                 <dl>
