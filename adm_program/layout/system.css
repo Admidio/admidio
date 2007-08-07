@@ -27,7 +27,7 @@
 
 .veryBigFontSize {
     font-size:        14pt;
-    font-weight:		 bold;
+    font-weight:	  bold;
 }
 .smallFontSize {
     font-size:        8pt;
@@ -40,16 +40,14 @@ body {
 }
 
 h1 {
-     color:				 #85C226;
-     letter-spacing:	 0.3em;
+     color:			  #85C226;
+     letter-spacing:  0.3em;
      margin-bottom:   10px;
 }
 
 hr {
-	border-width: 1px;
-	border-color: #6CA7A8;
-	border-style: solid;
-	width: 85%;
+	border:			  1px solid #6CA7A8;
+	width: 			  85%;
 }
 
 .readonly {
@@ -130,10 +128,7 @@ a:hover {
     width:            550px;
     text-align:       left;
     background-color: #eaeaea;
-    border-width:     1px;
-    border-color:     #555555;
-    border-style:     solid;
-    border-collapse:  collapse;
+    border:           1px solid #555555;
     padding:          0px;
     overflow: hidden;
 }
@@ -143,8 +138,8 @@ a:hover {
    (z.B.: Profil, Login, Registrieren) */
    
 .formLayout {
-	 width:            550px;
-	 border:				 1px solid #555555;
+    width:            550px;
+    border:		      1px solid #555555;
 }
 
 .formHead {
@@ -152,7 +147,7 @@ a:hover {
     background-color: #85C226;
     font-size:        12pt;
     font-weight:      bold;
-    letter-spacing:	 0.2em;
+    letter-spacing:	  0.2em;
     border-bottom:    1px solid #555555;
     padding:          3px 15px 0px 15px;
 }
@@ -164,9 +159,9 @@ a:hover {
 }
 
 .formBody hr {
-	border:				 1px solid #6CA7A8;
-	width: 				 85%;
-	margin: 				 10px;	
+	border:           1px solid #6CA7A8;
+	width:            85%;
+	margin:           10px;	
 }
 
 .formBody ul {
