@@ -494,7 +494,7 @@ echo "
                 <div style=\"margin-top: 15px;\">
                     <div style=\"text-align: left; width: 55%; float: left;\">Maximale Dateigr&ouml;&szlig;e:</div>
                     <div style=\"text-align: left;\">
-                        <input type=\"text\" name=\"max_file_upload_size\" size=\"4\" maxlength=\"6\" value=\"". $form_values['max_file_upload_size']. "\"> KB
+                        <input type=\"text\" name=\"max_file_upload_size\" size=\"6\" maxlength=\"10\" value=\"". $form_values['max_file_upload_size']. "\"> KB
                     </div>
                 </div>
                 <div class=\"smallText\">

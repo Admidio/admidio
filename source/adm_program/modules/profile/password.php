@@ -50,34 +50,35 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 // Html des Modules ausgeben
 echo "
-<form action=\"$g_root_path/adm_program/modules/profile/password_save.php?user_id=". $_GET['user_id']. "\" method=\"post\" name=\"Anmeldung\">
-    <div class=\"formHead\" style=\"width: 300px\">Passwort &auml;ndern</div>
-    <div class=\"formBody\" style=\"width: 300px\">
-        <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 150px; float: left;\">Altes Passwort:</div>
-            <div style=\"text-align: left; margin-left: 160px;\">
-                <input type=\"password\" id=\"old_password\" name=\"old_password\" size=\"10\" maxlength=\"20\" />
-            </div>
-        </div>
+<form action=\"$g_root_path/adm_program/modules/profile/password_save.php?user_id=". $_GET['user_id']. "\" method=\"post\">
+<div class=\"formLayout\" id=\"password_form\" style=\"width: 300px\">
+    <div class=\"formHead\">Passwort &auml;ndern</div>
+    <div class=\"formBody\">
+        <ul>
+            <li>
+                <dl>
+                    <dt><label for=\"old_password\">Altes Passwort:</label></dt>
+                    <dd><input type=\"password\" id=\"old_password\" name=\"old_password\" size=\"10\" maxlength=\"20\" /></dd>
+                </dl>
+            </li>
+            <li><hr /></li>
+            <li>
+                <dl>
+                    <dt><label for=\"new_password\">Neues Passwort:</label></dt>
+                    <dd><input type=\"password\" id=\"new_password\" name=\"new_password\" size=\"10\" maxlength=\"20\" /></dd>
+                </dl>
+            </li>
+            <li>
+                <dl>
+                    <dt><label for=\"new_password2\">Wiederholen:</label></dt>
+                    <dd><input type=\"password\" id=\"new_password2\" name=\"new_password2\" size=\"10\" maxlength=\"20\" /></dd>
+                </dl>
+            </li>
+        </ul>
 
-        <hr class=\"formLine\" width=\"80%\" />
+        <hr />
 
-        <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 150px; float: left;\">Neues Passwort:</div>
-            <div style=\"text-align: left; margin-left: 160px;\">
-                <input type=\"password\" name=\"new_password\" size=\"10\" maxlength=\"20\" />
-            </div>
-        </div>
-        <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 150px; float: left;\">Wiederholen:</div>
-            <div style=\"text-align: left; margin-left: 160px;\">
-                <input type=\"password\" name=\"new_password2\" size=\"10\" maxlength=\"20\" />
-            </div>
-        </div>
-
-        <hr class=\"formLine\" width=\"80%\" />
-
-        <div style=\"margin-top: 6px;\">
+        <div class=\"formSubmit\">
             <button name=\"schliessen\" type=\"button\" value=\"schliessen\" onclick=\"window.close()\">
                 <img src=\"$g_root_path/adm_program/images/door_in.png\" alt=\"Schlie&szlig;en\">
                 &nbsp;Schlie&szlig;en</button>

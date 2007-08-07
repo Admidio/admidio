@@ -231,7 +231,7 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
 
         for($i = 1; $i < $init_page_max + 1; $i++)
         {
-            $page_string .= ( $i == $on_page ) ? $i: '<a href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
+            $page_string .= ( $i == $on_page ) ? '<span class="selected">'. $i. '</span>' : '<a href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
             if ( $i <  $init_page_max )
             {
                 $page_string .= "&nbsp;&nbsp;";
@@ -249,7 +249,7 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
 
                 for($i = $init_page_min - 1; $i < $init_page_max + 2; $i++)
                 {
-                    $page_string .= ($i == $on_page) ? $i : '<a href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
+                    $page_string .= ($i == $on_page) ? '<span class="selected">'. $i. '</span>' : '<a href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
                     if ( $i <  $init_page_max + 1 )
                     {
                         $page_string .= '&nbsp;&nbsp;';
@@ -265,7 +265,7 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
 
             for($i = $total_pages - 2; $i < $total_pages + 1; $i++)
             {
-                $page_string .= ( $i == $on_page ) ? $i  : '<a href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
+                $page_string .= ( $i == $on_page ) ? '<span class="selected">'. $i. '</span>'  : '<a href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
                 if( $i <  $total_pages )
                 {
                     $page_string .= "&nbsp;&nbsp;";
@@ -277,7 +277,7 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
     {
         for($i = 1; $i < $total_pages + 1; $i++)
         {
-            $page_string .= ( $i == $on_page ) ? $i : '<a href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
+            $page_string .= ( $i == $on_page ) ? '<span class="selected">'. $i. '</span>' : '<a href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
             if ( $i <  $total_pages )
             {
                 $page_string .= '&nbsp;&nbsp;';

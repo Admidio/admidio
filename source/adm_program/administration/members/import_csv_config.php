@@ -76,6 +76,7 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 // Html des Modules ausgeben
 echo "
 <form action=\"$g_root_path/adm_program/administration/members/import_csv.php\" method=\"post\">
+<div class=\"formLayout\" id=\"import_csv_form\">
     <div class=\"formHead\">Felder zuordnen</div>
     <div class=\"formBody\">
         <div style=\"text-align: center; width: 100%;\">
@@ -91,7 +92,7 @@ echo "
             <label for=\"first_row\">Erste Zeile beinhaltet die Spaltenbezeichnungen</label>
         </div>
 
-        <table class=\"tableList\" style=\"width: 75%;\" cellpadding=\"2\" cellspacing=\"0\">
+        <table class=\"tableList\" style=\"width: 80%;\" cellpadding=\"2\" cellspacing=\"0\">
             <thead>
                 <tr>
                     <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;Datenbankfeld</th>
@@ -151,7 +152,7 @@ echo "
         echo "</tbody>
         </table>
 
-        <div style=\"margin-top: 6px;\">
+        <div class=\"formSubmit\">
             <button name=\"back\" type=\"button\" onclick=\"history.back()\">
             <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\">
             &nbsp;Zur&uuml;ck</button>
@@ -161,6 +162,7 @@ echo "
             &nbsp;Importieren</button>
         </div>
     </div>
+</div>
 </form>
 
 <script type=\"text/javascript\"><!--
