@@ -5,6 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Jochen Erkens
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  * Uebergaben:
  *
@@ -14,21 +15,6 @@
  *              u - alle in der Datenbank gespeicherten user
  * popup   :    0 - (Default) Fenster wird normal mit Homepagerahmen angezeigt
  *              1 - Fenster wurde im Popupmodus aufgerufen
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
 
@@ -47,11 +33,14 @@ else
     $role_id = $_GET["rol_id"];
 }
 
-if(isset($_GET["restrict"]) && $_GET["restrict"] != "m" && $_GET["restrict"] != "u")
+if(isset($_GET["restrict"]) && $_GET["restrict"] == "u")
 {
-    $g_message->show("invalid");
+    $restrict = "u";
 }
-
+else
+{
+    $restrict = "m";
+}
 
 //URL auf Navigationstack ablegen, wenn werder selbstaufruf der Seite, noch interner Ankeraufruf
 if(!isset($_GET["restrict"]))
@@ -75,21 +64,9 @@ if(  (!$g_current_user->assignRoles()
     $g_message->show("norights");
 }
 
-//uebername ob nur Mitglieder oder alle User der Datenbank angezeigt werden sollen
-if(isset($_GET["restrict"]))
-{
-    $restrict=$_GET["restrict"];
-}
-else $restrict="m";
-
-if(strlen($restrict) == 0 || !$g_current_user->assignRoles() || !$g_current_user->editUser())
-{
-    $restrict="m";
-}
-
-//Falls gefordert, nur Aufruf von Inhabern der Rolle Mitglied
 if($restrict=="m")
 {
+    //Falls gefordert, nur Aufruf von Inhabern der Rolle Mitglied
     $sql = "SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name, birthday.usd_value as birthday, 
                    city.usd_value as city, phone.usd_value as phone, address.usd_value as address, zip_code.usd_value as zip_code
             FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_USERS. "
@@ -122,16 +99,10 @@ if($restrict=="m")
             AND rol_cat_id = cat_id
             AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
             ORDER BY last_name, first_name ";
-    error_log($sql);
-    $result_user = mysql_query($sql, $g_adm_con);
-    db_error($result_user,__FILE__,__LINE__);
-    //Zaehlen wieviele Leute in der Datenbank stehen
-    $user_anzahl = mysql_num_rows($result_user);
 }
-
-//Falls gefordert, aufrufen alle Leute aus der Datenbank
-if($restrict=="u")
+elseif($restrict=="u")
 {
+    //Falls gefordert, aufrufen alle Leute aus der Datenbank
     $sql = "SELECT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name, birthday.usd_value as birthday, 
                    city.usd_value as city, phone.usd_value as phone, address.usd_value as address, zip_code.usd_value as zip_code
             FROM ". TBL_USERS. "
@@ -158,16 +129,15 @@ if($restrict=="u")
              AND zip_code.usd_usf_id = ". $g_current_user->getProperty("PLZ", "usf_id"). "
             WHERE usr_valid = 1
             ORDER BY last_name, first_name ";
-    error_log($sql);
-    $result_user = mysql_query($sql, $g_adm_con);
-    db_error($result_user,__FILE__,__LINE__);
-    //Zaehlen wieviele Leute in der Datenbank stehen
-    $user_anzahl = mysql_num_rows($result_user);
 }
+$result_user = $g_db->query($sql);
+
+//Zaehlen wieviele Leute in der Datenbank stehen
+$user_anzahl = $g_db->num_rows($result_user);
 
 ///Erfassen welche Anfansgsbuchstaben bei Nachnamen Vorkommen
 $first_letter_array = array();
-for($x=0; $user = mysql_fetch_array($result_user); $x++)
+for($x=0; $user = $g_db->fetch_array($result_user); $x++)
 {
     //Anfangsbuchstabe erfassen
     $this_letter = ord($user['last_name']);
@@ -206,22 +176,20 @@ for($x=0; $user = mysql_fetch_array($result_user); $x++)
 }
 
 //SQL-Abfrag zurück an Anfang setzen
-mysql_data_seek ($result_user, 0);
+$g_db->data_seek ($result_user, 0);
 
 
 //Erfassen wer die Rolle bereits hat oder schon mal hatte
 $sql="  SELECT mem_usr_id, mem_rol_id, mem_valid, mem_leader
         FROM ". TBL_MEMBERS. "
-        WHERE mem_rol_id = {0}";
-$sql    = prepareSQL($sql, array($role_id));
-$result_role_member = mysql_query($sql, $g_adm_con);
-db_error($result_role_member,__FILE__,__LINE__);
+        WHERE mem_rol_id = $role_id ";
+$result_role_member = $g_db->query($sql);
 
 //Schreiben der User-IDs die die Rolle bereits haben oder hatten in Array
 //Schreiben der Leiter der Rolle in weiters arry
-$role_member = array();
+$role_member   = array();
 $group_leaders = array();
-for($y=0; $member = mysql_fetch_array($result_role_member); $y++)
+for($y=0; $member = $g_db->fetch_array($result_role_member); $y++)
 {
     if($member['mem_valid']==1)
     {
@@ -237,10 +205,9 @@ for($y=0; $member = mysql_fetch_array($result_role_member); $y++)
 $sql    = "SELECT COUNT(*)
              FROM ". TBL_USERS. "
             WHERE usr_valid = 1 ";
-$result = mysql_query($sql, $g_adm_con);
-db_error($result,__FILE__,__LINE__);
+$result = $g_db->query($sql);
 
-$row = mysql_fetch_array($result);
+$row = $g_db->fetch_array($result);
 $count_valid_users = $row[0];
 
 // Html-Kopf ausgeben
@@ -366,7 +333,7 @@ echo "
 
 
     //Buchstaben Navigation bei mehr als 50 personen
-    if(mysql_num_rows($result_user)>=50)
+    if($g_db->num_rows($result_user)>=50)
     {
         //Alle
         echo"<p><a href=\"#\" onClick=\"showAll();\">Alle</a>&nbsp;";
@@ -404,7 +371,7 @@ echo "
 
         //Container anlegen und Ausgabe
         $letter_merker=34;
-        $user = mysql_fetch_array($result_user);
+        $user = $g_db->fetch_array($result_user);
 
         //Anfangsbuchstabe erfassen
         $this_letter = ord($user['last_name']);
@@ -454,7 +421,7 @@ echo "
             </thead>";
 
         //Zeilen ausgeben
-        for($x=1; $x<=mysql_num_rows($result_user); $x++)
+        for($x=1; $x<=$g_db->num_rows($result_user); $x++)
         {
             //Sprung zu Buchstaben
             if($this_letter!=$letter_merker && $letter_merker==35)
@@ -576,7 +543,7 @@ echo "
             </tr>";
 
             //Naechsten Datensatz abrufen
-            $user = mysql_fetch_array($result_user);
+            $user = $g_db->fetch_array($result_user);
 
             //Anfangsbuchstabe erfassen
             $this_letter = ord($user['last_name']);
@@ -611,7 +578,7 @@ echo "
                 $this_letter = 85;
             }
 
-            if($this_letter != $letter_merker || mysql_num_rows($result_user)+1==$x)
+            if($this_letter != $letter_merker || $g_db->num_rows($result_user)+1==$x)
             {
                 echo "</tbody>";
             }
@@ -640,7 +607,7 @@ echo "
             </thead>
             <tbody>";
 
-            while($user = mysql_fetch_array($result_user))
+            while($user = $g_db->fetch_array($result_user))
             {
                  //Datensatz ausgeben
                 $user_text= $user['first_name']."&nbsp;".$user['last_name']."&nbsp;&nbsp;&nbsp;"
@@ -707,7 +674,7 @@ echo "
 </form>";
 
 //nur bei mehr als 50
-if(mysql_num_rows($result_user)>=50)
+if($g_db->num_rows($result_user)>=50)
 {
     echo"
     <div class=\"smallFontSize\">

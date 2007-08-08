@@ -6,21 +6,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  *****************************************************************************/
 
@@ -121,10 +107,9 @@ for($i = 0; $i < count($_POST); $i++)
                            AND (  cat_org_id = ". $g_current_organization->getValue("org_id"). "
                                OR cat_org_id IS NULL )
                            AND usf_id     = '$act_field_name' ";
-                $result = mysql_query($sql, $g_adm_con);
-                db_error($result,__FILE__,__LINE__);
+                $result = $g_db->query($sql);
                 
-                $row = mysql_fetch_object($result);
+                $row = $g_db->fetch_object($result);
                 
                 if($row->usf_type == "CHECKBOX")
                 {

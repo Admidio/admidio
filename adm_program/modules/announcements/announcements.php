@@ -5,6 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  * Uebergaben:
  *
@@ -12,21 +13,6 @@
  * headline  - Ueberschrift, die ueber den Ankuendigungen steht
  *             (Default) Ankuendigungen
  * id        - Nur eine einzige Annkuendigung anzeigen lassen.
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
 
@@ -143,9 +129,8 @@ $sql    = "SELECT COUNT(*) FROM ". TBL_ANNOUNCEMENTS. "
                   OR (   ann_global   = 1
                      AND ann_org_shortname IN ($organizations) ))
             ORDER BY ann_timestamp ASC ";
-$result = mysql_query($sql, $g_adm_con);
-db_error($result,__FILE__,__LINE__);
-$row = mysql_fetch_array($result);
+$result = $g_db->query($sql);
+$row    = $g_db->fetch_array($result);
 $num_announcements = $row[0];
 
 // Icon-Links und Navigation anzeigen
@@ -170,7 +155,7 @@ if($req_id == 0
     echo generatePagination($base_url, $num_announcements, 10, $req_start, TRUE);
 }
 
-if (mysql_num_rows($announcements_result) == 0)
+if ($g_db->num_rows($announcements_result) == 0)
 {
     // Keine Ankuendigungen gefunden
     if($req_id > 0)
@@ -185,7 +170,7 @@ if (mysql_num_rows($announcements_result) == 0)
 else
 {
     // Ankuendigungen auflisten
-    while($row = mysql_fetch_object($announcements_result))
+    while($row = $g_db->fetch_object($announcements_result))
     {
         echo "
         <div class=\"boxBody\" style=\"overflow: hidden;\">
@@ -250,7 +235,7 @@ else
     }  // Ende While-Schleife
 }
 
-if(mysql_num_rows($announcements_result) > 2)
+if($g_db->num_rows($announcements_result) > 2)
 {
     // Navigation mit Vor- und Zurueck-Buttons
     // erst anzeigen, wenn mehr als 2 Eintraege (letzte Navigationsseite) vorhanden sind

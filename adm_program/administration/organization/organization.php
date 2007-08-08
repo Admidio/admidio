@@ -5,21 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  *****************************************************************************/
 
@@ -106,29 +92,32 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 echo "
 <h1 class=\"moduleHeadline\">Organisationseinstellungen</h1>
 
-<div class=\"formBody\" style=\"text-align: center;\">
-    <a href=\"#\" onClick=\"toggleDiv('general');\">Allgemein</a>
+<div class=\"formLayout\">
+    <div class=\"formBody\" style=\"text-align: center;\">
+        <a href=\"#\" onClick=\"toggleDiv('general');\">Allgemein</a>
 
-     &#124; <a href=\"#\" onClick=\"toggleDiv('register');\">Registrierung</a>
+         &#124; <a href=\"#\" onClick=\"toggleDiv('register');\">Registrierung</a>
 
-     &#124; <a href=\"#\" onClick=\"toggleDiv('announcement-module');\">Ank&uuml;ndigungen</a>
+         &#124; <a href=\"#\" onClick=\"toggleDiv('announcement-module');\">Ank&uuml;ndigungen</a>
 
-     &#124; <a href=\"#\" onClick=\"toggleDiv('download-module');\">Downloads</a>
+         &#124; <a href=\"#\" onClick=\"toggleDiv('download-module');\">Downloads</a>
 
-     &#124; <a href=\"#\" onClick=\"toggleDiv('photo-module');\">Fotos</a>
+         &#124; <a href=\"#\" onClick=\"toggleDiv('photo-module');\">Fotos</a>
 
-     &#124; <a href=\"#\" onClick=\"toggleDiv('guestbook-module');\">G&auml;stebuch</a>
+         &#124; <a href=\"#\" onClick=\"toggleDiv('guestbook-module');\">G&auml;stebuch</a>
 
-     &#124; <a href=\"#\" onClick=\"toggleDiv('list-module');\">Listen</a>
+         &#124; <a href=\"#\" onClick=\"toggleDiv('list-module');\">Listen</a>
 
-     &#124; <a href=\"#\" onClick=\"toggleDiv('mail-module');\">Mails</a>
+         &#124; <a href=\"#\" onClick=\"toggleDiv('mail-module');\">Mails</a>
 
-     &#124; <a href=\"#\" onClick=\"toggleDiv('dates-module');\">Termine</a>
+         &#124; <a href=\"#\" onClick=\"toggleDiv('dates-module');\">Termine</a>
 
-     &#124; <a href=\"#\" onClick=\"toggleDiv('links-module');\">Links</a>
+         &#124; <a href=\"#\" onClick=\"toggleDiv('links-module');\">Links</a>
+    </div>
 </div><br />
 
 <form action=\"$g_root_path/adm_program/administration/organization/organization_function.php\" method=\"post\" name=\"orga_settings\">
+<div class=\"formLayout\" id=\"organization_form\">
     <div class=\"formBody\">
         <div class=\"groupBox\" id=\"general\">
             <div class=\"groupBoxHeadline\">Allgemeine Einstellungen</div>
@@ -883,15 +872,17 @@ echo "
         </div>
 
      <br />
-    </div>";
+    </div>
+</div>
 
-    echo "
     <br />
+<div class=\"formLayout\">
     <div class=\"formBody\" style=\"text-align: center;\">
         <button name=\"save\" type=\"submit\" value=\"speichern\">
             <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\">
             &nbsp;Speichern</button>
     </div>
+</div>
 </form>
 
 <script type=\"text/javascript\"><!--
