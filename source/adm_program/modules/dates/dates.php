@@ -5,6 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  * Uebergaben:
  *
@@ -14,21 +15,6 @@
  * headline     - Ueberschrift, die ueber den Terminen steht
  *                (Default) Termine
  * id           - Nur einen einzigen Termin anzeigen lassen.
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
 
@@ -179,10 +165,7 @@ else
         $sql    = prepareSQL($sql, array($req_start));
     }
 }
-
-
-$dates_result = mysql_query($sql, $g_adm_con);
-db_error($dates_result,__FILE__,__LINE__);
+$dates_result = $g_db->query($sql);
 
 // Gucken wieviele Datensaetze die Abfrage ermittelt kann...
 if($req_mode == "old")
@@ -205,9 +188,8 @@ else
                       OR dat_end   >= '$act_date' )
                 ORDER BY dat_begin ASC ";
 }
-$result = mysql_query($sql, $g_adm_con);
-db_error($result,__FILE__,__LINE__);
-$row = mysql_fetch_array($result);
+$result = $g_db->query($sql);
+$row    = $g_db->fetch_array($result);
 $num_dates = $row[0];
 
 // Icon-Links und Navigation anzeigen
@@ -230,7 +212,7 @@ if($req_id == 0
     echo generatePagination($base_url, $num_dates, 10, $req_start, TRUE);
 }
 
-if(mysql_num_rows($dates_result) == 0)
+if($g_db->num_rows($dates_result) == 0)
 {
     // Keine Termine gefunden
     if($req_id > 0)
@@ -245,40 +227,40 @@ if(mysql_num_rows($dates_result) == 0)
 else
 {
     // Termine auflisten
-    while($row = mysql_fetch_object($dates_result))
+    while($row = $g_db->fetch_object($dates_result))
     {
         echo "
         <div class=\"boxBody\">
             <div class=\"boxHead\">
-				<div class=\"boxHeadIcon\"><img src=\"$g_root_path/adm_program/images/date.png\" class=\"icon16\" alt=\"". strSpecialChars2Html($row->dat_headline). "\"></div>                
-				<div class=\"boxHeadLeft\">". mysqldatetime("d.m.y", $row->dat_begin). "</div>
+                <div class=\"boxHeadIcon\"><img src=\"$g_root_path/adm_program/images/date.png\" class=\"icon16\" alt=\"". strSpecialChars2Html($row->dat_headline). "\"></div>                
+                <div class=\"boxHeadLeft\">". mysqldatetime("d.m.y", $row->dat_begin). "</div>
                 <div class=\"boxHeadCenter\"> ". strSpecialChars2Html($row->dat_headline). "</div>
                 <div class=\"boxHeadRight\"><div class=\"iconListHor\">
-					<ul>";
-						// Link zum iCal export
-						echo"
-						<li><img src=\"$g_root_path/adm_program/images/database_out.png\" class=\"iconLink alt=\"Exportieren (iCal)\" title=\"Exportieren (iCal)\"
-                        	onclick=\"self.location.href='$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=$row->dat_id&mode=4'\">
-						</li>";
-    					// aendern & loeschen darf man nur eigene Termine, ausser Moderatoren
-	                    if ($g_current_user->editDates())
-	                    {
-	                        echo "<li><img src=\"$g_root_path/adm_program/images/edit.png\" class=\"iconLink alt=\"Bearbeiten\" title=\"Bearbeiten\"
-	                            onclick=\"self.location.href='dates_new.php?dat_id=$row->dat_id&amp;headline=$req_headline'\"></li>";
-	
-	                            // Loeschen darf man nur Termine der eigenen Gliedgemeinschaft
-	                            if($row->dat_org_shortname == $g_organization)
-	                            {
-	                                echo "
-	                                <li><img src=\"$g_root_path/adm_program/images/cross.png\" class=\"iconLink alt=\"L&ouml;schen\" title=\"L&ouml;schen\"
-	                                    onclick=\"self.location.href='$g_root_path/adm_program/modules/dates/dates_function.php?mode=5&dat_id=$row->dat_id'\"></li>";
-	                            }
-	                    }
+                    <ul>";
+                        // Link zum iCal export
+                        echo"
+                        <li><img src=\"$g_root_path/adm_program/images/database_out.png\" class=\"iconLink alt=\"Exportieren (iCal)\" title=\"Exportieren (iCal)\"
+                            onclick=\"self.location.href='$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=$row->dat_id&mode=4'\">
+                        </li>";
+                        // aendern & loeschen darf man nur eigene Termine, ausser Moderatoren
+                        if ($g_current_user->editDates())
+                        {
+                            echo "<li><img src=\"$g_root_path/adm_program/images/edit.png\" class=\"iconLink alt=\"Bearbeiten\" title=\"Bearbeiten\"
+                                onclick=\"self.location.href='dates_new.php?dat_id=$row->dat_id&amp;headline=$req_headline'\"></li>";
+    
+                                // Loeschen darf man nur Termine der eigenen Gliedgemeinschaft
+                                if($row->dat_org_shortname == $g_organization)
+                                {
+                                    echo "
+                                    <li><img src=\"$g_root_path/adm_program/images/cross.png\" class=\"iconLink alt=\"L&ouml;schen\" title=\"L&ouml;schen\"
+                                        onclick=\"self.location.href='$g_root_path/adm_program/modules/dates/dates_function.php?mode=5&dat_id=$row->dat_id'\"></li>";
+                                }
+                        }
         
         
-					echo"</ul></div>
-				</div>";        		
-        		
+                    echo"</ul></div>
+                </div>";                
+                
             echo"</div>
 
             <div style=\"margin: 8px 4px 4px 4px;\">";
@@ -349,7 +331,7 @@ else
     }  // Ende While-Schleife
 }
 
-if(mysql_num_rows($dates_result) > 2)
+if($g_db->num_rows($dates_result) > 2)
 {
     // Navigation mit Vor- und Zurueck-Buttons
     // erst anzeigen, wenn mehr als 2 Eintraege (letzte Navigationsseite) vorhanden sind

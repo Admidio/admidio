@@ -5,27 +5,13 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Jochen Erkens
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  * Uebergaben:
  *
  * user_id: Benutzer deren Zuordnung geaendert werden soll
  * url:     URL auf die danach weitergeleitet wird
  * role_id: Rolle zu denen die Zuordnug geaendert werden soll
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
 
@@ -71,12 +57,11 @@ if(  (!$g_current_user->assignRoles()
 $sql =" SELECT *
         FROM ". TBL_MEMBERS. "
         WHERE mem_rol_id = $role_id";
-$result_mem_role = mysql_query($sql, $g_adm_con);
-db_error($result_mem_role,__FILE__,__LINE__);
+$result_mem_role = $g_db->query($sql);
 
 //Schreiben der Datensaetze in Array sortiert nach zugewiesenen Benutzern (id)
 $mitglieder_array= array(array());
-for($x=0; $mem_role= mysql_fetch_array($result_mem_role); $x++)
+for($x=0; $mem_role= $g_db->fetch_array($result_mem_role); $x++)
 {
     for($y=0; $y<=6; $y++)
     {
@@ -88,15 +73,14 @@ for($x=0; $mem_role= mysql_fetch_array($result_mem_role); $x++)
 $sql =" SELECT *
         FROM ". TBL_USERS. "
         WHERE usr_valid = 1 ";
-$result_user = mysql_query($sql, $g_adm_con);
-db_error($result_user,__FILE__,__LINE__);
+$result_user = $g_db->query($sql);
 
 //Kontrolle ob nicht am ende die Mitgliederzahl ueberstigen wird
 if($role->getValue("rol_max_members") != NULL)
 {
     //Zaehler fuer die Mitgliederzahl
     $counter=0;
-    while($user= mysql_fetch_array($result_user))
+    while($user= $g_db->fetch_array($result_user))
     {
         if ($_POST["member_".$user["usr_id"]]==true && $_POST["leader_".$user["usr_id"]]==false)
         {
@@ -109,11 +93,11 @@ if($role->getValue("rol_max_members") != NULL)
     }
 
     //Dateizeiger zurueck zum Anfang
-    mysql_data_seek($result_user,0);
+    $g_db->data_seek($result_user,0);
 }
 
 //Kontrolle der member und leader Felder
-while($user= mysql_fetch_array($result_user))
+while($user= $g_db->fetch_array($result_user))
 {
     //Kontrolle für membervariablen
     if(!isset($_POST["member_".$user["usr_id"]]))
@@ -128,12 +112,12 @@ while($user= mysql_fetch_array($result_user))
     }
 }
 //Dateizeiger zurueck zum Anfang
-mysql_data_seek($result_user,0);
+$g_db->data_seek($result_user,0);
 
 
 
 //Datensaetze durchgehen und sehen ob faer den Benutzer eine aenderung vorliegt
-while($user= mysql_fetch_array($result_user))
+while($user= $g_db->fetch_array($result_user))
 {
 
     $parentRoles = array();
@@ -148,13 +132,11 @@ while($user= mysql_fetch_array($result_user))
         {
             $mem_id = $mitglieder_array[$user["usr_id"]][0];
             $sql =" UPDATE ". TBL_MEMBERS. "
-                    SET mem_valid  = 0,
-                        mem_end    = NOW(),
-                        mem_leader = 0
-                    WHERE mem_id = {0}";
-            $sql    = prepareSQL($sql, array($mem_id));
-            $result = mysql_query($sql, $g_adm_con);
-            db_error($result,__FILE__,__LINE__);
+                       SET mem_valid  = 0
+                         , mem_end    = NOW()
+                         , mem_leader = 0
+                     WHERE mem_id     = $mem_id ";
+            $result = $g_db->query($sql);
         }
 
         //Falls wieder angemeldet wurde
@@ -171,10 +153,8 @@ while($user= mysql_fetch_array($result_user))
                 $sql .=", mem_leader = 1 ";
             }
 
-            $sql .= "WHERE mem_id = {0}";
-            $sql    = prepareSQL($sql, array($mem_id));
-            $result = mysql_query($sql, $g_adm_con);
-            db_error($result,__FILE__,__LINE__);
+            $sql .= "WHERE mem_id = $mem_id ";
+            $result = $g_db->query($sql);
             
             // abhaengige Rollen finden
             $tmpRoles = RoleDependency::getParentRoles($g_db,$role_id);
@@ -195,20 +175,16 @@ while($user= mysql_fetch_array($result_user))
                 if($_POST["leader_".$user["usr_id"]]==true && $mitglieder_array[$user["usr_id"]][6]==0)
                 {
                     $sql =" UPDATE ". TBL_MEMBERS. " SET mem_leader  = 1
-                            WHERE mem_id = {0}";
-                    $sql    = prepareSQL($sql, array($mem_id));
-                    $result = mysql_query($sql, $g_adm_con);
-                    db_error($result,__FILE__,__LINE__);
+                            WHERE mem_id = $mem_id ";
+                    $result = $g_db->query($sql);
                 }
 
                 //Falls Leiter entfernt werden soll
                 if($_POST["leader_".$user["usr_id"]]==false && $mitglieder_array[$user["usr_id"]][6]==1)
                 {
                     $sql =" UPDATE ". TBL_MEMBERS. " SET mem_leader  = 0
-                            WHERE mem_id = {0}";
-                    $sql    = prepareSQL($sql, array($mem_id));
-                    $result = mysql_query($sql, $g_adm_con);
-                db_error($result,__FILE__,__LINE__);
+                            WHERE mem_id = $mem_id ";
+                    $result = $g_db->query($sql);
                 }
         }
     }
@@ -218,17 +194,18 @@ while($user= mysql_fetch_array($result_user))
     {
         $usr_id = $user["usr_id"];
         $sql="  INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin, mem_valid, mem_leader)
-                VALUES ({0}, {1}, NOW(), 1";
+                VALUES ($role_id, $usr_id, NOW(), 1";
 
         //Falls jemand direkt Leiter werden soll
         if($_POST["leader_".$user["usr_id"]]==true)
         {
             $sql .=", 1) ";
         }
-        else $sql .=", 0) ";
-        $sql    = prepareSQL($sql, array($role_id, $usr_id));
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result,__FILE__,__LINE__);
+        else 
+        {
+            $sql .=", 0) ";
+        }
+        $result = $g_db->query($sql);
         
         // abhaengige Rollen finden
         $tmpRoles = RoleDependency::getParentRoles($g_db,$role_id);
@@ -246,15 +223,13 @@ while($user= mysql_fetch_array($result_user))
         // alle einzufuegenden Rollen anhaengen
         foreach($parentRoles as $actRole)
         {
-            $sql .= " ($actRole, {0}, NOW(), NULL, 1, 0),";
+            $sql .= " ($actRole, ". $user['usr_id']. ", NOW(), NULL, 1, 0),";
         }
 
         //Das letzte Komma wieder wegschneiden
         $sql = substr($sql,0,-1);
         
-        $sql    = prepareSQL($sql, array($user["usr_id"]));
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result,__FILE__,__LINE__);
+        $result = $g_db->query($sql);
     }
     
 }

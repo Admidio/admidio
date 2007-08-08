@@ -5,6 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  * Uebergaben:
  *
@@ -12,21 +13,6 @@
  * mode   : Ausgabeart   (html, print, csv-ms, csv-ms-2k, csv-oo)
  * rol_id : Rolle, fuer die die Funktion dargestellt werden soll
  * start  : Angabe, ab welchem Datensatz Mitglieder angezeigt werden sollen 
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
 
@@ -176,7 +162,7 @@ switch($req_type)
                      LEFT JOIN ". TBL_USER_DATA ." f$usf_city
                        ON f$usf_city.usd_usr_id = usr_id
                       AND f$usf_city.usd_usf_id = $usf_city
-                    WHERE rol_id     = {0}
+                    WHERE rol_id     = $req_rol_id
                       AND rol_cat_id = cat_id
                       AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
                       AND rol_id     = mem_rol_id
@@ -211,7 +197,7 @@ switch($req_type)
                      LEFT JOIN ". TBL_USER_DATA ." f$usf_email
                        ON f$usf_email.usd_usr_id = usr_id
                       AND f$usf_email.usd_usf_id = $usf_email
-                    WHERE rol_id     = {0}
+                    WHERE rol_id     = $req_rol_id
                       AND rol_cat_id = cat_id
                       AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
                       AND rol_id     = mem_rol_id
@@ -238,7 +224,7 @@ switch($req_type)
                      LEFT JOIN ". TBL_USER_DATA ." f$usf_birthday
                        ON f$usf_birthday.usd_usr_id = usr_id
                       AND f$usf_birthday.usd_usf_id = $usf_birthday
-                    WHERE rol_id     = {0}
+                    WHERE rol_id     = $req_rol_id
                       AND rol_cat_id = cat_id
                       AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
                       AND rol_id     = mem_rol_id
@@ -276,11 +262,9 @@ for($i = 0; $i < count($arr_fields); $i++)
 }
 
 // SQL-Statement der Liste ausfuehren und pruefen ob Daten vorhanden sind
-$main_sql = prepareSQL($main_sql, array($req_rol_id));
-$result_list = mysql_query($main_sql, $g_adm_con);
-db_error($result_list,__FILE__,__LINE__);
+$result_list = $g_db->query($main_sql);
 
-$num_members = mysql_num_rows($result_list);
+$num_members = $g_db->num_rows($result_list);
 
 if($num_members == 0)
 {
@@ -420,10 +404,9 @@ for($i = $start_column; $i < count($arr_fields); $i++)
         $usf_id = substr($arr_fields[$i], 1, strpos($arr_fields[$i], "."));
         $sql = "SELECT usf_name, usf_type FROM ". TBL_USER_FIELDS. "
                  WHERE usf_id = $usf_id ";
-        $result_user_fields = mysql_query($sql, $g_adm_con);
-        db_error($result_user_fields,__FILE__,__LINE__);
+        $result_user_fields = $g_db->query($sql);
 
-        $row = mysql_fetch_object($result_user_fields);
+        $row = $g_db->fetch_object($result_user_fields);
         $col_name = $row->usf_name;
         $arr_usf_types[$usf_id] = $row->usf_type;
         $arr_usf_names[$usf_id] = $row->usf_name;
@@ -489,14 +472,14 @@ else
 }
 
 // jetzt erst einmal zu dem ersten relevanten Datensatz springen
-if(!mysql_data_seek($result_list, $req_start))
+if(!$g_db->data_seek($result_list))
 {
     $g_message->show("invalid");
 }
 
 for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
 {
-    if($row = mysql_fetch_array($result_list))
+    if($row = $g_db->fetch_array($result_list))
     {
         if($req_mode != "csv")
         {

@@ -5,6 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  * Uebergaben:
  *
@@ -16,21 +17,6 @@
  *                     no  - Combobox nicht anzeigen
  * active_role : 1 - (Default) aktive Rollen auflisten
  *               0 - inaktive Rollen auflisten
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
 
@@ -213,10 +199,9 @@ if($show_ctg_sel == 1)
         $sql .= " AND cat_hidden = 0 ";
     }
     $sql .= " ORDER BY cat_sequence ASC ";
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
+    $result = $g_db->query($sql);
 
-    if(mysql_num_rows($result) > 0)
+    if($g_db->num_rows($result) > 0)
     {
         echo '<p>Kategorie w&auml;hlen:&nbsp;&nbsp;
         <select size="1" id="category" onchange="showCategory()">
@@ -227,7 +212,7 @@ if($show_ctg_sel == 1)
             }
             echo '>Alle</option>';
 
-            while($row = mysql_fetch_object($result))
+            while($row = $g_db->fetch_object($result))
             {
                 echo '<option value="'. urlencode($row->cat_name). '"';
                 if($category == $row->cat_name)
