@@ -6,21 +6,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  *****************************************************************************/
 
@@ -261,19 +247,18 @@ if($g_forum_integriert)
     if(isset($_SESSION['g_forum']))
     {
         $g_forum =& $_SESSION['g_forum'];
-        $g_forum->connect();
-        $g_forum->adm_con = $g_adm_con;
+        $g_forum->connect($g_forum_srv, $g_forum_usr, $g_forum_pw, $g_forum_db, $g_db);
     }
     else
     {
-        $g_forum = new Forum($g_forum_srv, $g_forum_db, $g_forum_usr, $g_forum_pw);
+        $g_forum = new Forum();
+        $g_forum->connect($g_forum_srv, $g_forum_usr, $g_forum_pw, $g_forum_db, $g_db);
+        
         $_SESSION['g_forum'] =& $g_forum;
         $g_forum->praefix     = $g_forum_praefix;
         $g_forum->export      = $g_forum_export;
         $g_forum->version     = $g_forum_version;
         $g_forum->session_id  = session_id();
-        $g_forum->adm_con     = $g_adm_con;
-        $g_forum->adm_db      = $g_adm_db;
         $g_forum->preferences();
     }
     

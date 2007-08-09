@@ -5,21 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  *****************************************************************************/
  
@@ -28,7 +14,7 @@ require_once(SERVER_PATH. "/adm_program/system/db_class.php");
 class MySqlDB extends DB
 {
     // Verbindung zur Datenbank aufbauen    
-    function connect($sql_server, $sql_user, $sql_password, $sql_dbname)
+    function connect($sql_server, $sql_user, $sql_password, $sql_dbname, $new_connection = false)
     {
         $this->layer    = "mysql";
         $this->server   = $sql_server;
@@ -36,7 +22,7 @@ class MySqlDB extends DB
         $this->password = $sql_password;
         $this->dbname   = $sql_dbname;
         
-        $this->connect_id = @mysql_connect($this->server, $this->user, $this->password);
+        $this->connect_id = @mysql_connect($this->server, $this->user, $this->password, $new_connection);
         
         if($this->connect_id)
         {
