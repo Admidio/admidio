@@ -244,7 +244,7 @@ echo "
                         </div>
                     </div>
                     <div class=\"groupBoxBody\">
-                        <ul>
+                        <ul class=\"formFieldList\">
                             <li>
                                 <dl>
                                     <dt>Benutzername:</dt>
@@ -463,7 +463,7 @@ echo "
                             }
                         echo "</div>
                         <div class=\"groupBoxBody\">
-                            <ul>";
+                            <ul class=\"formFieldList\">";
                 }
 
                 // Html des Feldes ausgeben
@@ -546,7 +546,7 @@ echo "
                             }
                     echo "</div>
                     <div class=\"groupBoxBody\">
-                        <ul>";
+                        <ul class=\"formFieldList\">";
                             while($row = $g_db->fetch_array($result_role))
                             {
                                 // jede einzelne Rolle anzeigen
@@ -576,6 +576,13 @@ echo "
                                                             alt=\"Rollen verwalten und zuordnen\" title=\"Rollen verwalten und zuordnen\">
                                                         </li>";
                                                     }
+                                                    if($row['rol_approve_users'] == 1)
+                                                    {
+                                                        echo "<li>
+                                                            <img src=\"$g_root_path/adm_program/images/properties.png\"
+                                                            alt=\"Registrierungen verwalten und zuordnen\" title=\"Registrierungen verwalten und zuordnen\">
+                                                        </li>";
+                                                    }                                                    
                                                     if($row['rol_edit_user'] == 1)
                                                     {
                                                         echo "<li>
