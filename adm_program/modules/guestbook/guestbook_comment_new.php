@@ -5,6 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  * Uebergaben:
  *
@@ -12,21 +13,6 @@
  * cid           - ID des Kommentars der editiert werden soll
  * headline      - Ueberschrift, die ueber den Einraegen steht
  *                 (Default) Gaestebuch
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
 
@@ -120,21 +106,19 @@ else
     if (isset($_GET['cid']))
     {
         $sql    = "SELECT * FROM ". TBL_GUESTBOOK. ",".TBL_GUESTBOOK_COMMENTS.  "
-                    WHERE gbc_id = {0} and gbo_org_id = ". $g_current_organization->getValue("org_id"). "
+                    WHERE gbc_id = ". $_GET['cid']. " and gbo_org_id = ". $g_current_organization->getValue("org_id"). "
                       AND gbo_id = gbc_gbo_id";
-        $sql    = prepareSQL($sql, array($_GET['cid']));
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result,__FILE__,__LINE__);
+        $result = $g_db->query($sql);
 
-        if (mysql_num_rows($result) > 0)
+        if ($g_db->num_rows($result) > 0)
         {
-            $row_ba = mysql_fetch_object($result);
+            $row_ba = $g_db->fetch_object($result);
 
             $form_values['name']     = $row_ba->gbc_name;
-            $form_values['entry']     = $row_ba->gbc_text;
+            $form_values['entry']    = $row_ba->gbc_text;
             $form_values['email']    = $row_ba->gbc_email;
         }
-        elseif (mysql_num_rows($result) == 0)
+        elseif ($g_db->num_rows($result) == 0)
         {
             //Wenn keine Daten zu der CID gefunden worden bzw. die CID einer anderen Orga gehört ist Schluss mit lustig...
             $g_message->show("invalid");
@@ -162,9 +146,8 @@ if (!$g_valid_login && $g_preferences['flooding_protection_time'] != 0)
     $sql = "SELECT count(*) FROM ". TBL_GUESTBOOK_COMMENTS. "
             where unix_timestamp(gbc_timestamp) > unix_timestamp()-". $g_preferences['flooding_protection_time']. "
               and gbc_ip_address = '$ipAddress' ";
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
-    $row = mysql_fetch_array($result);
+    $result = $g_db->query($sql);
+    $row = $g_db->fetch_array($result);
     if($row[0] > 0)
     {
           //Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...

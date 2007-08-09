@@ -5,26 +5,12 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  * Uebergaben:
  *
  * usr_id  - E-Mail an den entsprechenden Benutzer schreiben
  * rol_id  - E-Mail an alle Mitglieder der Rolle schreiben
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
 
@@ -232,10 +218,9 @@ else
                  AND mem_valid         = 1
                  AND mem_usr_id        = usr_id
                  AND usr_valid         = 1 ";
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
+    $result = $g_db->query($sql);
 
-    while ($row = mysql_fetch_object($result))
+    while ($row = $g_db->fetch_object($result))
     {
         $email->addBlindCopy($row->email, "$row->first_name $row->last_name");
         $rolle = $row->rol_name;

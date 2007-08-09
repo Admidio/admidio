@@ -5,97 +5,9 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  *****************************************************************************/
-
-// Funktion fuer das Error-Handling der Datenbank
-
-function db_error($result, $file = "", $line = "")
-{
-    global $g_root_path;
-    global $g_message;
-
-    if($result == false)
-    {
-        $error_string = "";
-        if(strlen($file) > 0)
-        {
-            // nur den Dateinamen ohne Pfad anzeigen
-            $file = substr($file, strrpos($file, "\\"));
-            $file = substr($file, strrpos($file, "/"));
-            $file = substr($file, 1);
-            $error_string = $error_string. "<i>File:</i> <b>$file</b><br>";
-        }
-        if(strlen($line) > 0)
-        {
-            $error_string = $error_string. "<i>Line:</i> <b>$line</b><br>";
-        }
-        $error_string = $error_string. "<i>Errorcode:</i> <b>". mysql_errno(). "</b><br>". mysql_error();
-        
-        if(headers_sent() == false)
-        {
-            $g_message->show("mysql", $error_string);
-        }
-        else
-        {
-            echo "<div style=\"color: #CC0000;\">$error_string</div>";
-        }
-        exit();
-    }
-}
-
-// die uebergebenen Variablen fuer den SQL-Code werden geprueft
-// dadurch soll es nicht mehr moeglich sein, Code in ein Statement einzuschleusen
-//
-// Anwendungsbeispiel:
-// $sqlQuery = 'SELECT col1, col2 FROM tab1 WHERE col1 = {1} AND col3 = {2} LIMIT {3}';
-// $stm = mysql_query(prepareSQL($sqlQuery, array('username', 24.3, 20);
-
-function prepareSQL($queryString, $paramArr)
-{
-    foreach (array_keys($paramArr) as $paramName)
-    {
-        // wenn Variable ein Leerstring ist, dann Null in DB schreiben
-        if(strlen($paramArr[$paramName]) == 0)
-        {
-            $paramArr[$paramName] = 'NULL';
-        }
-
-        // Variablentyp pruefen und danach Formatieren
-        if (is_int($paramArr[$paramName]))
-        {
-            // Integer
-            $paramArr[$paramName] = (int)$paramArr[$paramName];
-        }
-        elseif (is_numeric($paramArr[$paramName]))
-        {
-            // Zahl
-            $paramArr[$paramName] = (float)$paramArr[$paramName];
-        }
-        elseif (($paramArr[$paramName] != 'NULL') and ($paramArr[$paramName] != 'NOT NULL'))
-        {
-            // String, aber nicht NULL
-            $paramArr[$paramName] = mysql_escape_string(stripslashes($paramArr[$paramName]));
-            $paramArr[$paramName] = '\''.$paramArr[$paramName].'\'';
-        }
-    }
-    return preg_replace('/\{(.*?)\}/ei','$paramArr[\'$1\']', $queryString);
-}
 
 // Funktion prueft, ob ein User die uebergebene Rolle besitzt
 // Inhalt der Variable "$function" muss gleich dem DB-Feld "rolle.funktion" sein

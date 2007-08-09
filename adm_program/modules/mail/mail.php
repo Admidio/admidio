@@ -5,6 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  * Uebergaben:
  *
@@ -16,21 +17,6 @@
  * body    - Inhalt der E-Mail
  * kopie   - 1 (Default) Checkbox "Kopie an mich senden" ist gesetzt
  *         - 0 Checkbox "Kopie an mich senden" ist NICHT gesetzt
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
 
@@ -106,7 +92,7 @@ elseif (isset($_GET["rol_id"]))
     {
         $sql    = "SELECT rol_mail_login, rol_name 
                      FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                    WHERE rol_id = {0} 
+                    WHERE rol_id = ". $_GET['rol_id']. "
                       AND rol_cat_id = cat_id
                       AND cat_org_id = ". $g_current_organization->getValue("org_id");
     }
@@ -114,14 +100,12 @@ elseif (isset($_GET["rol_id"]))
     {
         $sql    = "SELECT rol_mail_logout, rol_name 
                      FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                    WHERE rol_id = {0} 
+                    WHERE rol_id = ". $_GET['rol_id']. "
                       AND rol_cat_id = cat_id
                       AND cat_org_id = ". $g_current_organization->getValue("org_id");
     }
-    $sql    = prepareSQL($sql, array($_GET['rol_id']));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
-    $row = mysql_fetch_array($result);
+    $result = $g_db->query($sql);
+    $row = $g_db->fetch_array($result);
 
     if ($row[0] != 1)
     {
@@ -142,24 +126,22 @@ elseif (isset($_GET["rolle"]) && isset($_GET["cat"]))
     {
         $sql    = "SELECT rol_mail_login, rol_id
                     FROM ". TBL_ROLES. " ,". TBL_CATEGORIES. "
-                   WHERE UPPER(rol_name) = UPPER({0})
+                   WHERE UPPER(rol_name) = UPPER('". $_GET['rolle']. "')
                    AND rol_cat_id        = cat_id
                    AND cat_org_id        = ". $g_current_organization->getValue("org_id"). "
-                   AND UPPER(cat_name)   = UPPER({1})";
+                   AND UPPER(cat_name)   = UPPER('". $_GET['cat']. "')";
     }
     else
     {
         $sql    = "SELECT rol_mail_logout, rol_id
                     FROM ". TBL_ROLES. " ,". TBL_CATEGORIES. "
-                   WHERE UPPER(rol_name) = UPPER({0})
+                   WHERE UPPER(rol_name) = UPPER('". $_GET['rolle']. "')
                    AND rol_cat_id        = cat_id
                    AND cat_org_id        = ". $g_current_organization->getValue("org_id"). "
-                   AND UPPER(cat_name)   = UPPER({1})";
+                   AND UPPER(cat_name)   = UPPER('". $_GET['cat']. "')";
     }
-    $sql    = prepareSQL($sql, array($_GET['rolle'],$_GET['cat']));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
-    $row = mysql_fetch_array($result);
+    $result = $g_db->query($sql);
+    $row = $g_db->fetch_array($result);
 
     if ($row[0] != 1)
     {
@@ -314,11 +296,10 @@ echo "
                                AND cat_org_id        = ". $g_current_organization->getValue("org_id"). "
                                ORDER BY cat_sequence, rol_name ";
                }
-               $result = mysql_query($sql, $g_adm_con);
-               db_error($result,__FILE__,__LINE__);
+               $result = $g_db->query($sql);
                $act_category = "";
 
-               while ($row = mysql_fetch_object($result))
+               while ($row = $g_db->fetch_object($result))
                {
                    if($act_category != $row->cat_name)
                     {
