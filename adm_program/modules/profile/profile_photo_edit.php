@@ -77,6 +77,8 @@ if($job=="save")
         $g_current_session->setValue("ses_blob", "");
         $g_current_session->setValue("ses_renew", 1);
         $g_current_session->save();
+        
+        $_SESSION['navigation']->deleteLastUrl();
     }
     
     // zur Ausgangsseite zurueck
@@ -140,6 +142,8 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 /*****************************Bild hochladen*************************************/
 if($job==NULL)
 {
+    $_SESSION['navigation']->addUrl($g_current_url);
+    
     echo "
     <form name=\"photoup\" method=\"post\" action=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=upload&usr_id=".$req_usr_id."\" enctype=\"multipart/form-data\">
     <div class=\"formLayout\" id=\"profile_photo_upload_form\">
@@ -288,8 +292,8 @@ if($job=="upload")
             <hr />
             
             <div class=\"formSubmit\">
-                <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=dont_save&usr_id=".$req_usr_id."'\">
-                    <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\">
+                <button name=\"cancel\" type=\"button\" value=\"abbrechen\" onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=dont_save&usr_id=".$req_usr_id."'\">
+                    <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Abbrechen\">
                     &nbsp;Abbrechen
                 </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <button name=\"update\" type=\"button\" value=\"update\" onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=save&usr_id=".$req_usr_id."'\">
