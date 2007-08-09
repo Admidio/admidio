@@ -5,6 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Martin Guenzler
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  * Uebergaben:
  *
@@ -19,20 +20,6 @@
  *                  gesetzt, kann der Anwender nur noch in Unterordner und nicht
  *                  in hoehere Ordner des Default-Ordners navigieren
  * file   :  die Datei / der Ordner der / die verarbeitet wird
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
 
@@ -190,16 +177,17 @@ if($req_mode == 1)
     }
        
     $local_file = $_FILES['userfile']['name'];
+
     //Dateigroesse ueberpruefen Servereinstellungen
     if ($_FILES['userfile']['error']==1)
     {
         $g_message->show("file_2big_server",ini_get(post_max_size));
     }
-
+    
     //Dateigroesse ueberpruefen Administratoreinstellungen
     if ($_FILES['userfile']['size']>($g_preferences['max_file_upload_size'])*1000)
     {
-        $g_message->show("file_2big_server",ini_get(post_max_size));
+        $g_message->show("file_2big", $g_preferences['max_file_upload_size']);
     }
 
     // Datei-Extension ermitteln
