@@ -5,27 +5,12 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Daniel Dieckelmann
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  * start     - Angabe, ab welchem Datensatz Links angezeigt werden sollen
  * headline  - Ueberschrift, die ueber den Links steht
  *             (Default) Links
  * id        - Nur einen einzigen Link anzeigen lassen.
- *
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
 
@@ -112,10 +97,8 @@ if ($_GET['id'] > 0)
                LEFT JOIN ". TBL_CATEGORIES ."
                ON lnk_cat_id = cat_id
                AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
-               WHERE lnk_id = {0}
+               WHERE lnk_id = ". $_GET['id']. "
                AND lnk_org_id = ". $g_current_organization->getValue("org_id");
-
-    $sql1    = prepareSQL($sql1, array($_GET['id']));
 }
 //...ansonsten alle fuer die Gruppierung passenden Links aus der DB holen.
 else
@@ -128,13 +111,10 @@ else
                AND cat_type = 'LNK'
                WHERE lnk_org_id = ". $g_current_organization->getValue("org_id"). "
                ORDER BY cat_sequence, lnk_name, lnk_timestamp DESC
-               LIMIT {0}, 10 ";
-
-    $sql1    = prepareSQL($sql1, array($_GET['start']));
+               LIMIT ". $_GET['start']. ", 10 ";
 }
 
-$links_result = mysql_query($sql1, $g_adm_con);
-db_error($links_result,__FILE__,__LINE__);
+$links_result = $g_db->query($sql1);
 
 // Gucken wieviele Linkdatensaetze insgesamt fuer die Gruppierung vorliegen...
 // Das wird naemlich noch fuer die Seitenanzeige benoetigt...
@@ -158,9 +138,8 @@ else
               ORDER BY lnk_name DESC";
 }
 
-$result = mysql_query($sql, $g_adm_con);
-db_error($result,__FILE__,__LINE__);
-$row = mysql_fetch_array($result);
+$result = $g_db->query($sql);
+$row = $g_db->fetch_array($result);
 $numLinks = $row[0];
 
 // Icon-Links und Navigation anzeigen
@@ -190,7 +169,7 @@ if ($_GET['id'] == 0 && ($g_current_user->editWeblinksRight() || $g_preferences[
     echo generatePagination($baseUrl, $numLinks, 10, $_GET["start"], TRUE);
 }
 
-if (mysql_num_rows($links_result) == 0)
+if ($g_db->num_rows($links_result) == 0)
 {
     // Keine Links gefunden
     if ($_GET['id'] > 0)
@@ -205,7 +184,7 @@ if (mysql_num_rows($links_result) == 0)
 else
 {
 
-    // Zaehlervariable fuer Anzahl von mysql_fetch_object
+    // Zaehlervariable fuer Anzahl von fetch_object
     $j = 0;
     // Zaehlervariable fuer Anzahl der Links in einer Kategorie
     $i = 0;
@@ -220,7 +199,7 @@ else
 
     // Solange die vorherige Kategorie-ID sich nicht veraendert...
     // Sonst in die neue Kategorie springen
-    while (($row = mysql_fetch_object($links_result)) && ($j<$linksPerPage))
+    while (($row = $g_db->fetch_object($links_result)) && ($j<$linksPerPage))
     {
 
         if ($row->lnk_cat_id != $previous_cat_id)
@@ -321,7 +300,7 @@ else
     echo "</div>";
 } // Ende Wenn mehr als 0 Datensaetze
 
-if (mysql_num_rows($links_result) > 2)
+if ($g_db->num_rows($links_result) > 2)
 {
     // Navigation mit Vor- und Zurueck-Buttons
     // erst anzeigen, wenn mehr als 2 Eintraege (letzte Navigationsseite) vorhanden sind

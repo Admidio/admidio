@@ -5,6 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  * Uebergaben:
  *
@@ -12,21 +13,6 @@
  * headline  - Ueberschrift, die ueber den Gaestebucheintraegen steht
  *             (Default) Gaestebuch
  * id          - Nur einen einzigen Gaestebucheintrag anzeigen lassen.
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
 
@@ -157,9 +143,7 @@ echo "
 if ($_GET['id'] > 0)
 {
     $sql    = "SELECT * FROM ". TBL_GUESTBOOK. "
-               WHERE gbo_id = {0} and gbo_org_id = ". $g_current_organization->getValue("org_id");
-
-    $sql    = prepareSQL($sql, array($_GET['id']));
+               WHERE gbo_id = ". $_GET['id']. " and gbo_org_id = ". $g_current_organization->getValue("org_id");
 }
 //...ansonsten alle fuer die Gruppierung passenden Gaestebucheintraege aus der DB holen.
 else
@@ -167,21 +151,17 @@ else
     $sql    = "SELECT * FROM ". TBL_GUESTBOOK. "
                WHERE gbo_org_id = ". $g_current_organization->getValue("org_id"). "
                ORDER BY gbo_timestamp DESC
-               LIMIT {0}, 10 ";
-
-    $sql    = prepareSQL($sql, array($_GET['start']));
+               LIMIT ". $_GET['start']. ", 10 ";
 }
 
-$guestbook_result = mysql_query($sql, $g_adm_con);
-db_error($guestbook_result,__FILE__,__LINE__);
+$guestbook_result = $g_db->query($sql);
 
 // Gucken wieviele Gaestebucheintraege insgesamt vorliegen...
 // Das ist wichtig für die Seitengenerierung...
 $sql    = "SELECT COUNT(*) FROM ". TBL_GUESTBOOK. "
            WHERE gbo_org_id = ". $g_current_organization->getValue("org_id");
-$result = mysql_query($sql, $g_adm_con);
-db_error($result,__FILE__,__LINE__);
-$row = mysql_fetch_array($result);
+$result = $g_db->query($sql);
+$row = $g_db->fetch_array($result);
 $num_guestbook = $row[0];
 
 // Icon-Links und Navigation anzeigen
@@ -212,7 +192,7 @@ else
     </p>";
 }
 
-if (mysql_num_rows($guestbook_result) == 0)
+if ($g_db->num_rows($guestbook_result) == 0)
 {
     // Keine Gaestebucheintraege gefunden
     if ($_GET['id'] > 0)
@@ -228,7 +208,7 @@ else
 {
 
     // Gaestebucheintraege auflisten
-    while ($row = mysql_fetch_object($guestbook_result))
+    while ($row = $g_db->fetch_object($guestbook_result))
     {
         echo "
         <div class=\"boxBody\" style=\"overflow: hidden;\">
@@ -307,13 +287,11 @@ else
                 $sql    = "SELECT * FROM ". TBL_GUESTBOOK_COMMENTS. "
                            WHERE gbc_gbo_id = '$row->gbo_id'
                            ORDER by gbc_timestamp asc";
-
-                $comment_result = mysql_query($sql, $g_adm_con);
-                db_error($comment_result,__FILE__,__LINE__);
+                $comment_result = $g_db->query($sql);
 
 
                 // Falls Kommentare vorhanden sind...
-                if ($_GET['id'] == 0 && mysql_num_rows($comment_result) > 0)
+                if ($_GET['id'] == 0 && $g_db->num_rows($comment_result) > 0)
                 {
                     // Dieses div wird erst gemeinsam mit den Kommentaren ueber Javascript eingeblendet
                     echo "
@@ -330,7 +308,7 @@ else
                         <a href=\"javascript:toggleComments($row->gbo_id)\">
                         <img src=\"$g_root_path/adm_program/images/comments.png\" style=\"vertical-align: middle;\" alt=\"Kommentare anzeigen\"
                         title=\"Kommentare anzeigen\" border=\"0\"></a>
-                        <a href=\"javascript:toggleComments($row->gbo_id)\">". mysql_num_rows($comment_result). " Kommentar(e) zu diesem Eintrag</a>
+                        <a href=\"javascript:toggleComments($row->gbo_id)\">". $g_db->num_rows($comment_result). " Kommentar(e) zu diesem Eintrag</a>
                         <div id=\"comments_$row->gbo_id\" style=\"text-align: left;\"></div>
                     </div>";
 
@@ -340,7 +318,7 @@ else
                 }
 
 
-                if ($_GET['id'] == 0 && mysql_num_rows($comment_result) == 0 && ($g_current_user->commentGuestbookRight() || $g_preferences['enable_gbook_comments4all'] == 1) )
+                if ($_GET['id'] == 0 && $g_db->num_rows($comment_result) == 0 && ($g_current_user->commentGuestbookRight() || $g_preferences['enable_gbook_comments4all'] == 1) )
                 {
                     // Falls keine Kommentare vorhanden sind, aber das Recht zur Kommentierung, wird der Link zur Kommentarseite angezeigt...
                     $load_url = "$g_root_path/adm_program/modules/guestbook/guestbook_comment_new.php?id=$row->gbo_id";
@@ -356,7 +334,7 @@ else
 
                 // Falls eine ID uebergeben wurde und der dazugehoerige Eintrag existiert,
                 // werden unter dem Eintrag die dazugehoerigen Kommentare (falls welche da sind) angezeigt.
-                if (mysql_num_rows($guestbook_result) > 0 && $_GET['id'] > 0)
+                if ($g_db->num_rows($guestbook_result) > 0 && $_GET['id'] > 0)
                 {
                     include("get_comments.php");
                 }
@@ -368,7 +346,7 @@ else
 }
 
 
-if (mysql_num_rows($guestbook_result) > 2)
+if ($g_db->num_rows($guestbook_result) > 2)
 {
     // Navigation mit Vor- und Zurueck-Buttons
     // erst anzeigen, wenn mehr als 2 Eintraege (letzte Navigationsseite) vorhanden sind

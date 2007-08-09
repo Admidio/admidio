@@ -5,28 +5,13 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  * Uebergaben:
  *
  * cid: Hiermit wird die ID des Gaestebucheintrages uebergeben
  *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- *
  *****************************************************************************/
-
 
 
 if (isset($_GET['cid']) && is_numeric($_GET['cid']))
@@ -53,15 +38,11 @@ else
 if ($cid > 0)
 {
     $sql    = "SELECT * FROM ". TBL_GUESTBOOK_COMMENTS. ", ". TBL_GUESTBOOK. "
-                                   WHERE gbo_id     = {0}
+                                   WHERE gbo_id     = $cid
                                      AND gbc_gbo_id = gbo_id
                                      AND gbo_org_id = ". $g_current_organization->getValue("org_id"). "
                                    ORDER by gbc_timestamp asc";
-
-    $sql    = prepareSQL($sql, array($cid));
-
-    $comment_result = mysql_query($sql, $g_adm_con);
-    db_error($comment_result,__FILE__,__LINE__);
+    $comment_result = $g_db->query($sql);
 }
 
 if (isset($comment_result))
@@ -74,7 +55,7 @@ if (isset($comment_result))
     $commentNumber = 1;
 
     // Jetzt nur noch die Kommentare auflisten
-    while ($row = mysql_fetch_object($comment_result))
+    while ($row = $g_db->fetch_object($comment_result))
     {
         $cid = $row->gbc_gbo_id;
 

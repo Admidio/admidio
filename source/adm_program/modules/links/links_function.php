@@ -5,6 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Daniel Dieckelmann
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  * Uebergaben:
  *
@@ -16,21 +17,6 @@
  * url:      kann beim Loeschen mit uebergeben werden
  * headline: Ueberschrift, die ueber den Links steht
  *           (Default) Links
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
 
@@ -75,18 +61,18 @@ if (array_key_exists("mode", $_GET))
 // jetzt wird noch geprueft ob die eventuell uebergebene lnk_id uberhaupt zur Orga gehoert oder existiert...
 if ($_GET["lnk_id"] > 0)
 {
-    $sql    = "SELECT * FROM ". TBL_LINKS. " WHERE lnk_id = {0} and lnk_org_id = ". $g_current_organization->getValue("org_id");
-    $sql    = prepareSQL($sql, array($_GET['lnk_id']));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
+    $sql    = "SELECT * FROM ". TBL_LINKS. " 
+                WHERE lnk_id     = ". $_GET['lnk_id']. " 
+                  AND lnk_org_id = ". $g_current_organization->getValue("org_id");
+    $result = $g_db->query($sql);
 
-    if (mysql_num_rows($result) == 0)
+    if ($g_db->num_rows($result) == 0)
     {
         //Wenn keine Daten zu der ID gefunden worden bzw. die ID einer anderen Orga gehört ist Schluss mit lustig...
         $g_message->show("invalid");
     }
 
-    $linkObject = mysql_fetch_object($result);
+    $linkObject = $g_db->fetch_object($result);
 }
 
 if (array_key_exists("headline", $_GET))
@@ -109,19 +95,19 @@ if ($_GET["mode"] == 1 || ($_GET["mode"] == 3 && $_GET["lnk_id"] > 0) )
     
     if(strlen($linkName) == 0)
     {
-    	$g_message->show("feld", "Linkname");
+        $g_message->show("feld", "Linkname");
     }
     if(strlen($linkUrl) == 0)
     {
-    	$g_message->show("feld", "Linkadresse");
+        $g_message->show("feld", "Linkadresse");
     }
     if(strlen($category) == 0)
     {
-    	$g_message->show("feld", "Kategorie");
+        $g_message->show("feld", "Kategorie");
     }
     if(strlen($description) == 0)
     {
-    	$g_message->show("feld", "Beschreibung");
+        $g_message->show("feld", "Beschreibung");
     }
     
     $act_date = date("Y.m.d G:i:s", time());
@@ -138,23 +124,19 @@ if ($_GET["mode"] == 1 || ($_GET["mode"] == 3 && $_GET["lnk_id"] > 0) )
         $sql = "INSERT INTO ". TBL_LINKS. " ( lnk_org_id, lnk_usr_id, lnk_timestamp,
                                               lnk_name, lnk_url, lnk_description, lnk_cat_id)
                                  VALUES (". $g_current_organization->getValue("org_id"). ", ". $g_current_user->getValue("usr_id"). ", '$act_date',
-                                         {0}, {1}, {2}, {3})";
-        $sql    = prepareSQL($sql, array($linkName, $linkUrl, $description, $category));
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result,__FILE__,__LINE__);
+                                         '$linkName', '$linkUrl', '$description', $category)";
+        $result = $g_db->query($sql);
     }
     else
     {
-        $sql = "UPDATE ". TBL_LINKS. " SET   lnk_name   = {0},
-                                             lnk_url    = {1},
-                                             lnk_description   = {2},
+        $sql = "UPDATE ". TBL_LINKS. " SET   lnk_name   = '$linkName',
+                                             lnk_url    = '$linkUrl',
+                                             lnk_description   = '$description',
                                              lnk_last_change   = '$act_date',
                                              lnk_usr_id_change = ". $g_current_user->getValue("usr_id"). ",
-                                             lnk_cat_id        =  {3}
-                WHERE lnk_id = {4}";
-        $sql    = prepareSQL($sql, array($linkName, $linkUrl, $description, $category, $_GET['lnk_id']));
-        $result = mysql_query($sql, $g_adm_con);
-        db_error($result,__FILE__,__LINE__);
+                                             lnk_cat_id        =  $category
+                WHERE lnk_id = ". $_GET['lnk_id'];
+        $result = $g_db->query($sql);
     }
 
     unset($_SESSION['links_request']);
@@ -167,10 +149,9 @@ if ($_GET["mode"] == 1 || ($_GET["mode"] == 3 && $_GET["lnk_id"] > 0) )
 elseif ($_GET["mode"] == 2 && $_GET["lnk_id"] > 0)
 {
     // Loeschen von Weblinks...
-    $sql = "DELETE FROM ". TBL_LINKS. " WHERE lnk_id = {0}";
-    $sql    = prepareSQL($sql, array($_GET["lnk_id"]));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
+    $sql = "DELETE FROM ". TBL_LINKS. " 
+             WHERE lnk_id = ". $_GET["lnk_id"];
+    $result = $g_db->query($sql, $g_adm_con);
 
     if (!isset($_GET["url"]))
     {

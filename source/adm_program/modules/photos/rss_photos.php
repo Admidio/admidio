@@ -5,27 +5,12 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Jochen Erkens
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  * Erzeugt einen RSS 2.0 - Feed mit Hilfe der RSS-Klasse fuer die 10 neuesten Fotoveranstaltungen
  *
  *
  * Spezifikation von RSS 2.0: http://www.feedvalidator.org/docs/rss2.html
- *
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
 
@@ -53,23 +38,20 @@ $sql = "SELECT * FROM ". TBL_PHOTOS. "
         AND pho_locked = 0)
         ORDER BY pho_timestamp DESC
         LIMIT 10";
-$result = mysql_query($sql, $g_adm_con);
-db_error($result,__FILE__,__LINE__);
+$result = $g_db->query($sql);
 
 //Funktion mit selbstaufruf zum erfassen der Bilder in Unterveranstaltungen
 function bildersumme($pho_id_parent)
 {
-    global $g_adm_con;
-    global $g_organization;
+    global $g_db;
     global $bildersumme;
     $sql = "    SELECT *
                 FROM ". TBL_PHOTOS. "
-                WHERE pho_pho_id_parent = {0}
+                WHERE pho_pho_id_parent = $pho_id_parent
                 AND pho_locked = 0";
-    $sql    = prepareSQL($sql, array($pho_id_parent));
-    $result_child= mysql_query($sql, $g_adm_con);
-    db_error($result_child,__FILE__,__LINE__);
-    while($adm_photo_child=mysql_fetch_array($result_child))
+    $result_child = $g_db->query($sql);
+    
+    while($adm_photo_child = $g_db->fetch_array($result_child))
     {
         $bildersumme=$bildersumme+$adm_photo_child["pho_quantity"];
         bildersumme($adm_photo_child["pho_id"]);
@@ -82,7 +64,7 @@ function bildersumme($pho_id_parent)
 $rss = new RSSfeed("http://". $g_current_organization->getValue("org_homepage"), $g_current_organization->getValue("org_longname"). " - Fotos", "Die 10 neuesten Fotoveranstaltungen");
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
-while ($row = mysql_fetch_object($result))
+while ($row = $g_db->fetch_object($result))
 {
     // Die Attribute fuer das Item zusammenstellen
 
@@ -95,11 +77,9 @@ while ($row = mysql_fetch_object($result))
         //Erfassen der Eltern Veranstaltung
         $sql=" SELECT *
                  FROM ". TBL_PHOTOS. "
-                WHERE pho_id ={0}";
-        $sql    = prepareSQL($sql, array($pho_parent_id));
-        $result_parents = mysql_query($sql, $g_adm_con);
-        db_error($result_parents,__FILE__,__LINE__);
-        $adm_photo_parent = mysql_fetch_array($result_parents);
+                WHERE pho_id = $pho_parent_id ";
+        $result_parents = $g_db->query($sql);
+        $adm_photo_parent = $g_db->fetch_array($result_parents);
 
         //Link zusammensetzen
         $parents = " > ".$adm_photo_parent["pho_name"].$parents;

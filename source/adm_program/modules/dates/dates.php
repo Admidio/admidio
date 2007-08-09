@@ -130,10 +130,9 @@ if(strlen($organizations) == 0)
 if($req_id > 0)
 {
     $sql = "SELECT * FROM ". TBL_DATES. "
-             WHERE ( dat_id = {0}
+             WHERE ( dat_id = $req_id
                    AND ((dat_global   = 1 AND dat_org_shortname IN ($organizations))
                         OR dat_org_shortname = '". $g_current_organization->getValue("org_shortname"). "'))";
-    $sql    = prepareSQL($sql, array($req_id));
 }
 //...ansonsten alle fuer die Gruppierung passenden Termine aus der DB holen.
 else
@@ -148,8 +147,7 @@ else
                       AND dat_begin < '$act_date'
                       AND dat_end   < '$act_date'
                     ORDER BY dat_begin DESC
-                    LIMIT {0}, 10 ";
-        $sql    = prepareSQL($sql, array($req_start));
+                    LIMIT $req_start, 10 ";
     }
     //... ansonsten fuer neue Termine
     else
@@ -161,8 +159,7 @@ else
                       AND (  dat_begin >= '$act_date'
                           OR dat_end   >= '$act_date' )
                     ORDER BY dat_begin ASC
-                    LIMIT {0}, 10 ";
-        $sql    = prepareSQL($sql, array($req_start));
+                    LIMIT $req_start, 10 ";
     }
 }
 $dates_result = $g_db->query($sql);

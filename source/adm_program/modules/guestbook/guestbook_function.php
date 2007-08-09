@@ -5,6 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  * Uebergaben:
  *
@@ -20,21 +21,6 @@
  * url:      kann beim Loeschen mit uebergeben werden
  * headline: Ueberschrift, die ueber den Gaestebuch steht
  *           (Default) Gaestebuch
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
 
@@ -125,29 +111,26 @@ if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mod
     if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mode'] == 6 )
     {
         $sql    = "SELECT * FROM ". TBL_GUESTBOOK. " 
-				   WHERE gbo_id = {0} 
-				   and gbo_org_id = ". $g_current_organization->getValue("org_id");
-        $sql    = prepareSQL($sql, array($_GET['id']));
+                   WHERE gbo_id = ". $_GET['id']. "
+                   and gbo_org_id = ". $g_current_organization->getValue("org_id");
     }
 
     if ($_GET['mode'] == 5 || $_GET['mode'] == 7 || $_GET['mode'] == 8)
     {
         $sql    = "SELECT * FROM ". TBL_GUESTBOOK_COMMENTS. ", ". TBL_GUESTBOOK. " 
-                   WHERE gbc_id = {0} 
-				   and gbc_gbo_id = gbo_id 
-				   and gbo_org_id = ". $g_current_organization->getValue("org_id");
-        $sql    = prepareSQL($sql, array($_GET['id']));
+                   WHERE gbc_id = ". $_GET['id']. "
+                   and gbc_gbo_id = gbo_id 
+                   and gbo_org_id = ". $g_current_organization->getValue("org_id");
     }
 
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
+    $result = $g_db->query($sql);
 
-    if (mysql_num_rows($result) == 0)
+    if ($g_db->num_rows($result) == 0)
     {
         $g_message->show("invalid");
     }
 
-    $gbObject = mysql_fetch_object($result);
+    $gbObject = $g_db->fetch_object($result);
 
 }
 
@@ -214,13 +197,10 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
 
                 $sql = "INSERT INTO ". TBL_GUESTBOOK. " (gbo_org_id, gbo_usr_id, gbo_name, gbo_text, gbo_email,
                                                          gbo_homepage, gbo_timestamp, gbo_ip_address)
-                                         VALUES (". $g_current_organization->getValue("org_id"). ", ". $g_current_user->getValue("usr_id"). ", '$realName', {0}, {1},
-                                                 {2}, '$actDate', '$ipAddress')";
+                                         VALUES (". $g_current_organization->getValue("org_id"). ", ". $g_current_user->getValue("usr_id"). ", '$realName', '$text', '$email',
+                                                 '$homepage', '$actDate', '$ipAddress')";
 
-                $sql    = prepareSQL($sql, array($text, $email, $homepage));
-                $result = mysql_query($sql, $g_adm_con);
-                db_error($result,__FILE__,__LINE__);
-
+                $result = $g_db->query($sql, $g_adm_con);
             }
             else
             {
@@ -233,9 +213,8 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
                             where unix_timestamp(gbo_timestamp) > unix_timestamp()-". $g_preferences['flooding_protection_time']. "
                               and gbo_org_id = ". $g_current_organization->getValue("org_id"). "
                               and gbo_ip_address = '$ipAddress' ";
-                    $result = mysql_query($sql, $g_adm_con);
-                    db_error($result,__FILE__,__LINE__);
-                    $row = mysql_fetch_array($result);
+                    $result = $g_db->query($sql);
+                    $row    = $g_db->fetch_array($result);
                     if($row[0] > 0)
                     {
                         //Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
@@ -246,27 +225,23 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
                 // Falls er nicht eingeloggt ist, gibt es das sql-Statement natürlich ohne die UserID
                 $sql = "INSERT INTO ". TBL_GUESTBOOK. " (gbo_org_id, gbo_name, gbo_text, gbo_email,
                                                          gbo_homepage, gbo_timestamp, gbo_ip_address)
-                                         VALUES (". $g_current_organization->getValue("org_id"). ", {0}, {1}, {2},
-                                                 {3}, '$actDate', '$ipAddress')";
+                                         VALUES (". $g_current_organization->getValue("org_id"). ", '$name', '$text', '$email',
+                                                 '$homepage', '$actDate', '$ipAddress')";
 
-                $sql    = prepareSQL($sql, array($name, $text, $email, $homepage));
-                $result = mysql_query($sql, $g_adm_con);
-                db_error($result,__FILE__,__LINE__);
+                $result = $g_db->query($sql);
             }
 
         }
         else
         {
-            $sql = "UPDATE ". TBL_GUESTBOOK. " SET  gbo_name     = {0}
-                                                  , gbo_text     = {1}
-                                                  , gbo_email    = {2}
-                                                  , gbo_homepage = {3}
+            $sql = "UPDATE ". TBL_GUESTBOOK. " SET  gbo_name     = '$name'
+                                                  , gbo_text     = '$text'
+                                                  , gbo_email    = '$email'
+                                                  , gbo_homepage = '$homepage'
                                                   , gbo_last_change   = '$actDate'
                                                   , gbo_usr_id_change = ". $g_current_user->getValue("usr_id"). "
-                     WHERE gbo_id = {4}";
-            $sql    = prepareSQL($sql, array($name, $text, $email, $homepage, $_GET['id']));
-            $result = mysql_query($sql, $g_adm_con);
-            db_error($result,__FILE__,__LINE__);
+                     WHERE gbo_id = ". $_GET['id'];
+            $result = $g_db->query($sql);
         }
 
         // Der Inhalt des Formulars wird bei erfolgreichem insert/update aus der Session geloescht
@@ -300,16 +275,12 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
 elseif($_GET["mode"] == 2)
 {
     //erst einmal alle vorhanden Kommentare zu diesem Gaestebucheintrag loeschen...
-    $sql = "DELETE FROM ". TBL_GUESTBOOK_COMMENTS. " WHERE gbc_gbo_id = {0}";
-    $sql    = prepareSQL($sql, array($_GET['id']));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
+    $sql = "DELETE FROM ". TBL_GUESTBOOK_COMMENTS. " WHERE gbc_gbo_id = ". $_GET['id'];
+    $result = $g_db->query($sql, $g_adm_con);
 
     //dann den Eintrag selber loeschen...
-    $sql = "DELETE FROM ". TBL_GUESTBOOK. " WHERE gbo_id = {0}";
-    $sql    = prepareSQL($sql, array($_GET['id']));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
+    $sql = "DELETE FROM ". TBL_GUESTBOOK. " WHERE gbo_id = ". $_GET['id'];
+    $result = $g_db->query($sql, $g_adm_con);
 
     if (!isset($_GET["url"]))
     {
@@ -363,10 +334,8 @@ elseif($_GET["mode"] == 4 || $_GET["mode"] == 8)
                 $realName = $g_current_user->getValue("Vorname"). " ". $g_current_user->getValue("Nachname");
 
                 $sql = "INSERT INTO ". TBL_GUESTBOOK_COMMENTS. " (gbc_gbo_id, gbc_usr_id, gbc_name, gbc_text, gbc_email, gbc_timestamp, gbc_ip_address)
-                                                         VALUES ({0}, ". $g_current_user->getValue("usr_id"). ", '$realName', {1}, {2}, '$actDate', '$ipAddress')";
-                $sql    = prepareSQL($sql, array($_GET['id'], $text, $email));
-                $result = mysql_query($sql, $g_adm_con);
-                db_error($result,__FILE__,__LINE__);
+                                                         VALUES (". $_GET['id']. ", ". $g_current_user->getValue("usr_id"). ", '$realName', '$text', '$email', '$actDate', '$ipAddress')";
+                $result = $g_db->query($sql);
             }
             else
             {
@@ -376,11 +345,10 @@ elseif($_GET["mode"] == 4 || $_GET["mode"] == 8)
                     // User innerhalb einer festgelegten Zeitspanne unter seiner IP-Adresse schon einmal
                     // einen GB-Eintrag/Kommentar erzeugt hat...
                     $sql = "SELECT count(*) FROM ". TBL_GUESTBOOK_COMMENTS. "
-                            where unix_timestamp(gbc_timestamp) > unix_timestamp()-". $g_preferences['flooding_protection_time']. "
-                              and gbc_ip_address = '$ipAddress' ";
-                    $result = mysql_query($sql, $g_adm_con);
-                    db_error($result,__FILE__,__LINE__);
-                    $row = mysql_fetch_array($result);
+                             WHERE unix_timestamp(gbc_timestamp) > unix_timestamp()-". $g_preferences['flooding_protection_time']. "
+                               AND gbc_ip_address = '$ipAddress' ";
+                    $result = $g_db->query($sql);
+                    $row = $g_db->fetch_array($result);
                     if($row[0] > 0)
                     {
                         //Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
@@ -390,26 +358,20 @@ elseif($_GET["mode"] == 4 || $_GET["mode"] == 8)
 
                 // Falls er nicht eingeloggt ist, gibt es das sql-Statement natürlich ohne die UserID
                 $sql = "INSERT INTO ". TBL_GUESTBOOK_COMMENTS. " (gbc_gbo_id, gbc_name, gbc_text, gbc_email, gbc_timestamp, gbc_ip_address)
-                                                         VALUES ({0}, {1}, {2}, {3}, '$actDate', '$ipAddress')";
-                $sql    = prepareSQL($sql, array($_GET['id'], $name, $text, $email));
-
-                $result = mysql_query($sql, $g_adm_con);
-                db_error($result,__FILE__,__LINE__);
-
+                                                         VALUES (". $_GET['id']. ", '$name', '$text', '$email', '$actDate', '$ipAddress')";
+                $result = $g_db->query($sql, $g_adm_con);
             }
         }
         else
         {
             // hier wird der Eintrag natuerlich nur modifiziert
-            $sql = "UPDATE ". TBL_GUESTBOOK_COMMENTS. " SET  gbc_name     = {0}
-                                                           , gbc_text     = {1}
-                                                           , gbc_email    = {2}
+            $sql = "UPDATE ". TBL_GUESTBOOK_COMMENTS. " SET  gbc_name     = '$name'
+                                                           , gbc_text     = '$text'
+                                                           , gbc_email    = '$email'
                                                            , gbc_last_change   = '$actDate'
                                                            , gbc_usr_id_change = ". $g_current_user->getValue("usr_id"). "
                      WHERE gbc_id = {3}";
-            $sql    = prepareSQL($sql, array($name, $text, $email, $_GET['id']));
-            $result = mysql_query($sql, $g_adm_con);
-            db_error($result,__FILE__,__LINE__);
+            $result = $g_db->query($sql, $g_adm_con);
         }
 
         // Der Inhalt des Formulars wird bei erfolgreichem insert/update aus der Session geloescht
@@ -443,10 +405,8 @@ elseif($_GET["mode"] == 4 || $_GET["mode"] == 8)
 elseif ($_GET["mode"] == 5)
 {
     //Gaestebuchkommentar loeschen...
-    $sql = "DELETE FROM ". TBL_GUESTBOOK_COMMENTS. " WHERE gbc_id = {0}";
-    $sql    = prepareSQL($sql, array($_GET['id']));
-    $result = mysql_query($sql, $g_adm_con);
-    db_error($result,__FILE__,__LINE__);
+    $sql = "DELETE FROM ". TBL_GUESTBOOK_COMMENTS. " WHERE gbc_id = ". $_GET['id'];
+    $result = $g_db->query($sql, $g_adm_con);
 
     if (!isset($_GET["url"]))
     {
