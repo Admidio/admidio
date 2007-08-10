@@ -203,7 +203,7 @@ echo "
             // Userdaten-Block
             // *******************************************************************************
 
-            echo "<div style=\"width: 66%; margin-right: 10px; float: left;\">
+            echo "<div style=\"width: 65%; float: left;\">
                 <div class=\"groupBox\">
                     <div class=\"groupBoxHeadline\">
                         <div style=\"float: left;\">". $user->getValue("Vorname"). " ". $user->getValue("Nachname"). "&nbsp;</div>
@@ -230,7 +230,9 @@ echo "
                             <ul class=\"iconLinkRow\">
                                 <li>
                                     <a href=\"$g_root_path/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id=". $user->getValue("usr_id"). "\"><img
-                                    src=\"$g_root_path/adm_program/images/vcard.png\" alt=\"Benutzer als vCard exportieren\" title=\"Benutzer als vCard exportieren\"></a>
+                                    src=\"$g_root_path/adm_program/images/vcard.png\" 
+                                    alt=\"vCard von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname"). " exportieren\" 
+                                    title=\"vCard von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname"). " exportieren\"></a>
                                 </li>";
                                 // Nur berechtigte User duerfen ein Profil editieren
                                 if($g_current_user->editProfile($a_user_id) == true)
@@ -375,7 +377,7 @@ echo "
                 </div>
             </div>";
 
-            echo "<div style=\"width: 32%; float: left\">";
+            echo "<div style=\"width: 28%; float: right\">";
 
                 // *******************************************************************************
                 // Bild-Block
@@ -467,59 +469,41 @@ echo "
         }
 
         // div-Container groupBoxBody und groupBox schliessen
-        echo "</div></div>
+        echo "</div></div>";
 
-       <div>";
-
+        if($g_preferences['enable_roles_view'] == 1)
+        {
             // *******************************************************************************
             // Rollen-Block
             // *******************************************************************************
 
             // Alle Rollen auflisten, die dem Mitglied zugeordnet sind
-            if($g_current_user->assignRoles())
-            {
-               // auch gesperrte Rollen, aber nur von dieser Gruppierung anzeigen
-               $sql    = "SELECT *
-                            FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_ORGANIZATIONS. "
-                           WHERE mem_rol_id = rol_id
-                             AND mem_valid  = 1
-                             AND mem_usr_id = $a_user_id
-                             AND rol_valid  = 1
-                             AND rol_cat_id = cat_id
-                             AND cat_org_id = org_id
-                             AND (  cat_org_id = ". $g_current_organization->getValue("org_id"). "
-                                 OR (   cat_org_id <> ". $g_current_organization->getValue("org_id"). "
-                                    AND rol_locked  = 0 ))
-                           ORDER BY org_shortname, cat_sequence, rol_name ";
-            }
-            else
+            $show_locked = "";
+            if($g_current_user->assignRoles() == false)
             {
                // kein Moderator, dann keine gesperrten Rollen anzeigen
-               $sql    = "SELECT *
-                            FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_ORGANIZATIONS. "
-                           WHERE mem_rol_id = rol_id
-                             AND mem_valid  = 1
-                             AND mem_usr_id = $a_user_id
-                             AND rol_valid  = 1
-                             AND rol_locked = 0
-                             AND rol_cat_id = cat_id
-                             AND cat_org_id = org_id
-                           ORDER BY org_shortname, cat_sequence, rol_name";
+               $show_locked = " AND rol_locked = 0 ";
             }
+            
+            $sql    = "SELECT *
+                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_ORGANIZATIONS. "
+                        WHERE mem_rol_id = rol_id
+                          AND mem_valid  = 1
+                          AND mem_usr_id = $a_user_id
+                          AND rol_valid  = 1
+                              $show_locked
+                          AND rol_cat_id = cat_id
+                          AND cat_org_id = org_id
+                          AND org_id     = ". $g_current_organization->getValue("org_id"). "
+                        ORDER BY org_shortname, cat_sequence, rol_name";
             $result_role = $g_db->query($sql);
             $count_role  = $g_db->num_rows($result_role);
 
             if($count_role > 0)
             {
-                $sql = "SELECT org_shortname FROM ". TBL_ORGANIZATIONS;
-                $g_db->query($sql);
-
-                $count_grp = $g_db->num_rows();
-                $i = 0;
-
                 echo "<div class=\"groupBox\" id=\"profile_roles_box\">
                     <div class=\"groupBoxHeadline\">
-                        <div style=\"float: left;\">Rollen und Berechtigungen&nbsp;</div>";
+                        <div style=\"float: left;\">Rollenmitgliedschaften und Berechtigungen&nbsp;</div>";
                             // Moderatoren & Gruppenleiter duerfen neue Rollen zuordnen
                             if(($g_current_user->assignRoles() || isGroupLeader($g_current_user->getValue("usr_id")) || $g_current_user->editUser())
                             && $user->getValue("usr_reg_org_shortname") != $g_current_organization->getValue("org_shortname"))
@@ -543,113 +527,158 @@ echo "
                                 echo "<li>
                                     <dl>
                                         <dt>
-                                            <div style=\"float: left\">";
-                                                if($count_grp > 1)
-                                                {
-                                                    echo $row['org_shortname']. " - ";
-                                                }
-                                                echo $row['cat_name']. " - ". $row['rol_name'];
+                                            <div style=\"float: left\">".
+                                                $row['cat_name']. " - ". $row['rol_name'];
                                                 if($row['mem_leader'] == 1)
                                                 {
                                                     echo " - Leiter";
                                                 }
                                             echo "&nbsp;</div>";
                                             
-                                            if($row['org_shortname'] == $g_current_organization->getValue("org_shortname"))
-                                            {
-                                                // nun fuer alle Rollenrechte die Icons anzeigen
-                                                echo "<ul class=\"iconInformationRow\">";
-                                                    if($row['rol_assign_roles'] == 1)
-                                                    {
-                                                        echo "<li>
-                                                            <img src=\"$g_root_path/adm_program/images/wand.png\"
-                                                            alt=\"Rollen verwalten und zuordnen\" title=\"Rollen verwalten und zuordnen\">
-                                                        </li>";
-                                                    }
-                                                    if($row['rol_approve_users'] == 1)
-                                                    {
-                                                        echo "<li>
-                                                            <img src=\"$g_root_path/adm_program/images/properties.png\"
-                                                            alt=\"Registrierungen verwalten und zuordnen\" title=\"Registrierungen verwalten und zuordnen\">
-                                                        </li>";
-                                                    }                                                    
-                                                    if($row['rol_edit_user'] == 1)
-                                                    {
-                                                        echo "<li>
-                                                            <img src=\"$g_root_path/adm_program/images/group.png\"
-                                                            alt=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\" title=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\">
-                                                        </li>";
-                                                    }
-                                                    if($row['rol_profile'] == 1)
-                                                    {
-                                                        echo "<li>
-                                                            <img src=\"$g_root_path/adm_program/images/user.png\"
-                                                            alt=\"Eigenes Profil bearbeiten\" title=\"Eigenes Profil bearbeiten\">
-                                                        </li>";
-                                                    }
-                                                    if($row['rol_announcements'] == 1 && $g_preferences['enable_announcements_module'] == 1)
-                                                    {
-                                                        echo "<li>
-                                                            <img src=\"$g_root_path/adm_program/images/note.png\"
-                                                            alt=\"Ank&uuml;ndigungen anlegen und bearbeiten\" title=\"Ank&uuml;ndigungen anlegen und bearbeiten\">
-                                                        </li>";
-                                                    }
-                                                    if($row['rol_dates'] == 1 && $g_preferences['enable_dates_module'] == 1)
-                                                    {
-                                                        echo "<li>
-                                                            <img src=\"$g_root_path/adm_program/images/date.png\"
-                                                            alt=\"Termine anlegen und bearbeiten\" title=\"Termine anlegen und bearbeiten\">
-                                                        </li>";
-                                                    }
-                                                    if($row['rol_photo'] == 1 && $g_preferences['enable_photo_module'] == 1)
-                                                    {
-                                                        echo "<li>
-                                                            <img src=\"$g_root_path/adm_program/images/photo.png\"
-                                                            alt=\"Fotos hochladen und bearbeiten\" title=\"Fotos hochladen und bearbeiten\">
-                                                        </li>";
-                                                    }
-                                                    if($row['rol_download'] == 1 && $g_preferences['enable_download_module'] == 1)
-                                                    {
-                                                        echo "<li>
-                                                            <img src=\"$g_root_path/adm_program/images/folder_down.png\"
-                                                            alt=\"Downloads hochladen und bearbeiten\" title=\"Downloads hochladen und bearbeiten\">
-                                                        </li>";
-                                                    }
-                                                    if($row['rol_guestbook'] == 1 && $g_preferences['enable_guestbook_module'] == 1)
-                                                    {
-                                                        echo "<li>
-                                                            <img src=\"$g_root_path/adm_program/images/comment.png\"
-                                                            alt=\"G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen\" title=\"G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen\">
-                                                        </li>";
-                                                    }
-                                                    if($row['rol_guestbook_comments'] == 1 && $g_preferences['enable_guestbook_module'] == 1)
-                                                    {
-                                                        echo "<li>
-                                                            <img src=\"$g_root_path/adm_program/images/comments.png\"
-                                                            alt=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\" title=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\">
-                                                        </li>";
-                                                    }
-                                                    if($row['rol_weblinks'] == 1 && $g_preferences['enable_weblinks_module'] == 1)
-                                                    {
-                                                        echo "<li>
-                                                            <img src=\"$g_root_path/adm_program/images/globe.png\"
-                                                            alt=\"Weblinks anlegen und bearbeiten\" title=\"Weblinks anlegen und bearbeiten\">
-                                                        </li>";
-                                                    }
-                                                echo "</ul>";
-                                            }
-                                        echo "</dt>
+                                            // nun fuer alle Rollenrechte die Icons anzeigen
+                                            echo "<ul class=\"iconInformationRow\">";
+                                                if($row['rol_assign_roles'] == 1)
+                                                {
+                                                    echo "<li>
+                                                        <img src=\"$g_root_path/adm_program/images/wand.png\"
+                                                        alt=\"Rollen verwalten und zuordnen\" title=\"Rollen verwalten und zuordnen\">
+                                                    </li>";
+                                                }
+                                                if($row['rol_approve_users'] == 1)
+                                                {
+                                                    echo "<li>
+                                                        <img src=\"$g_root_path/adm_program/images/properties.png\"
+                                                        alt=\"Registrierungen verwalten und zuordnen\" title=\"Registrierungen verwalten und zuordnen\">
+                                                    </li>";
+                                                }                                                    
+                                                if($row['rol_edit_user'] == 1)
+                                                {
+                                                    echo "<li>
+                                                        <img src=\"$g_root_path/adm_program/images/group.png\"
+                                                        alt=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\" title=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\">
+                                                    </li>";
+                                                }
+                                                if($row['rol_profile'] == 1)
+                                                {
+                                                    echo "<li>
+                                                        <img src=\"$g_root_path/adm_program/images/user.png\"
+                                                        alt=\"Eigenes Profil bearbeiten\" title=\"Eigenes Profil bearbeiten\">
+                                                    </li>";
+                                                }
+                                                if($row['rol_announcements'] == 1 && $g_preferences['enable_announcements_module'] == 1)
+                                                {
+                                                    echo "<li>
+                                                        <img src=\"$g_root_path/adm_program/images/note.png\"
+                                                        alt=\"Ank&uuml;ndigungen anlegen und bearbeiten\" title=\"Ank&uuml;ndigungen anlegen und bearbeiten\">
+                                                    </li>";
+                                                }
+                                                if($row['rol_dates'] == 1 && $g_preferences['enable_dates_module'] == 1)
+                                                {
+                                                    echo "<li>
+                                                        <img src=\"$g_root_path/adm_program/images/date.png\"
+                                                        alt=\"Termine anlegen und bearbeiten\" title=\"Termine anlegen und bearbeiten\">
+                                                    </li>";
+                                                }
+                                                if($row['rol_photo'] == 1 && $g_preferences['enable_photo_module'] == 1)
+                                                {
+                                                    echo "<li>
+                                                        <img src=\"$g_root_path/adm_program/images/photo.png\"
+                                                        alt=\"Fotos hochladen und bearbeiten\" title=\"Fotos hochladen und bearbeiten\">
+                                                    </li>";
+                                                }
+                                                if($row['rol_download'] == 1 && $g_preferences['enable_download_module'] == 1)
+                                                {
+                                                    echo "<li>
+                                                        <img src=\"$g_root_path/adm_program/images/folder_down.png\"
+                                                        alt=\"Downloads hochladen und bearbeiten\" title=\"Downloads hochladen und bearbeiten\">
+                                                    </li>";
+                                                }
+                                                if($row['rol_guestbook'] == 1 && $g_preferences['enable_guestbook_module'] == 1)
+                                                {
+                                                    echo "<li>
+                                                        <img src=\"$g_root_path/adm_program/images/comment.png\"
+                                                        alt=\"G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen\" title=\"G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen\">
+                                                    </li>";
+                                                }
+                                                if($row['rol_guestbook_comments'] == 1 && $g_preferences['enable_guestbook_module'] == 1)
+                                                {
+                                                    echo "<li>
+                                                        <img src=\"$g_root_path/adm_program/images/comments.png\"
+                                                        alt=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\" title=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\">
+                                                    </li>";
+                                                }
+                                                if($row['rol_weblinks'] == 1 && $g_preferences['enable_weblinks_module'] == 1)
+                                                {
+                                                    echo "<li>
+                                                        <img src=\"$g_root_path/adm_program/images/globe.png\"
+                                                        alt=\"Weblinks anlegen und bearbeiten\" title=\"Weblinks anlegen und bearbeiten\">
+                                                    </li>";
+                                                }
+                                            echo "</ul>
+                                        </dt>
                                         <dd>seit ". mysqldate('d.m.y', $row['mem_begin']). "</dd>
                                     </dl>
                                 </li>";
-                                $i++;
                             }
                         echo "</ul>
                     </div>
                 </div>";
             }
-        echo "</div>
-    </div>
+        }
+
+        if($g_preferences['enable_extern_roles_view'] == 1
+        && (  $g_current_organization->getValue("org_org_id_parent") > 0 
+           || $g_current_organization->hasChildOrganizations() ))
+        {
+            // *******************************************************************************
+            // Rollen-Block anderer Organisationen
+            // *******************************************************************************
+
+            // Alle Rollen auflisten, die dem Mitglied zugeordnet sind
+            $sql = "SELECT *
+                      FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_ORGANIZATIONS. "
+                     WHERE mem_rol_id = rol_id
+                       AND mem_valid  = 1
+                       AND mem_usr_id = $a_user_id
+                       AND rol_valid  = 1
+                       AND rol_locked = 0
+                       AND rol_cat_id = cat_id
+                       AND cat_org_id = org_id
+                       AND org_id    <> ". $g_current_organization->getValue("org_id"). "
+                     ORDER BY org_shortname, cat_sequence, rol_name";
+            $result_role = $g_db->query($sql);
+
+            if($g_db->num_rows($result_role) > 0)
+            {
+                echo "<div class=\"groupBox\" id=\"profile_roles_box\">
+                    <div class=\"groupBoxHeadline\">Rollenmitgliedschaften anderer Organisationen&nbsp;</div>
+                    <div class=\"groupBoxBody\">
+                        <ul class=\"formFieldList\">";
+                            while($row = $g_db->fetch_array($result_role))
+                            {
+                                // jede einzelne Rolle anzeigen
+                                echo "
+                                <li>
+                                    <dl>
+                                        <dt>
+                                            <div style=\"float: left\">". $row['org_shortname']. " - ".
+                                                $row['cat_name']. " - ". $row['rol_name'];
+                                                if($row['mem_leader'] == 1)
+                                                {
+                                                    echo " - Leiter";
+                                                }
+                                            echo "&nbsp;</div>
+                                        </dt>
+                                        <dd>seit ". mysqldate('d.m.y', $row['mem_begin']). "</dd>
+                                    </dl>
+                                </li>";
+                            }
+                        echo "</ul>
+                    </div>
+                </div>";
+            }
+        }
+    echo "</div>
 </div>";
 
 if(isset($_GET['user_id']) == true)

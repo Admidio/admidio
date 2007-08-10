@@ -50,11 +50,6 @@ if(is_numeric($_POST['logout_minutes']) == false || $_POST['logout_minutes'] <= 
 // Daten speichern
 // *******************************************************************************
 
-if(isset($_POST["enable_mail_module"]) == false)
-{
-    $_POST["enable_mail_module"] = 0;
-}
-
 if(isset($_POST["enable_system_mails"]) == false)
 {
     $_POST["enable_system_mails"] = 0;
@@ -128,6 +123,21 @@ if(isset($_POST["enable_gbook_comments4all"]) == false)
 if(strlen($_POST["flooding_protection_time"]) == 0)
 {
     $_POST["flooding_protection_time"] = 0;
+}
+
+if(isset($_POST["enable_mail_module"]) == false)
+{
+    $_POST["enable_mail_module"] = 0;
+}
+
+if(isset($_POST["enable_roles_view"]) == false)
+{
+    $_POST["enable_roles_view"] = 0;
+}
+
+if(isset($_POST["enable_extern_roles_view"]) == false)
+{
+    $_POST["enable_extern_roles_view"] = 0;
 }
 
 if(isset($_POST["enable_weblinks_module"]) == false)

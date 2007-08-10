@@ -76,6 +76,10 @@ $orga_preferences = array(
     'enable_mail_module'        => '1',
     'max_email_attachment_size' => '1024',
     'enable_mail_captcha'       => '1',
+
+    // Profil
+    'enable_roles_view'        => '1',
+    'enable_extern_roles_view' => '1',
         
     // Termine
     'enable_dates_module' => '1',
