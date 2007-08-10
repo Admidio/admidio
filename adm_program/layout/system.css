@@ -27,7 +27,7 @@
 
 .veryBigFontSize {
     font-size:        14pt;
-    font-weight:	  bold;
+    font-weight:      bold;
 }
 .smallFontSize {
     font-size:        8pt;
@@ -40,14 +40,14 @@ body {
 }
 
 h1 {
-     color:			  #85C226;
+     color:           #85C226;
      letter-spacing:  0.3em;
      margin-bottom:   10px;
 }
 
 hr {
-	border:			  1px solid #6CA7A8;
-	width: 			  85%;
+    border:           1px solid #6CA7A8;
+    width:            85%;
 }
 
 .readonly {
@@ -55,21 +55,21 @@ hr {
 }
 
 .icon16 {
-	 vertical-align:   middle;
-	 border-width:     0px;
-	 width: 16px;
-	 height: 16px;
+     vertical-align:   middle;
+     border-width:     0px;
+     width: 16px;
+     height: 16px;
 }
 
 /* Layout fuer Buttons mit Icon */
 button {
-	 padding-top: 		 2px;
-	 padding-bottom:   2px;
+     padding-top:        2px;
+     padding-bottom:   2px;
 }
 
 button img {
-	 vertical-align:   top;
-	 border-width:     0px;
+     vertical-align:   top;
+     border-width:     0px;
 }
 
 /* Links */
@@ -104,23 +104,23 @@ a:hover {
 }
 
 .boxHeadIcon{
-	float: left;
-	margin: 2px;
+    float: left;
+    margin: 2px;
 }
 
 .boxHeadLeft{
-	float: left;
-	margin-left: 5px;
+    float: left;
+    margin-left: 5px;
 }
 
 .boxHeadCenter{
-	float: left;
-	margin-left: 10px;
+    float: left;
+    margin-left: 10px;
 }
 
 .boxHeadRight{
-	float: right;
-	margin-right: 5px;
+    float: right;
+    margin-right: 5px;
 }
 
 .boxBody {
@@ -138,8 +138,8 @@ a:hover {
    (z.B.: Profil, Login, Registrieren) */
    
 .formLayout {
-    width:            550px;
-    border:		      1px solid #555555;
+    width:            570px;
+    border:           1px solid #555555;
 }
 
 .formHead {
@@ -147,9 +147,10 @@ a:hover {
     background-color: #85C226;
     font-size:        12pt;
     font-weight:      bold;
-    letter-spacing:	  0.2em;
+    letter-spacing:   0.2em;
     border-bottom:    1px solid #555555;
     padding:          3px 15px 0px 15px;
+    text-align:       center;
 }
 
 .formBody {
@@ -159,39 +160,54 @@ a:hover {
 }
 
 .formBody hr {
-	border:           1px solid #6CA7A8;
-	width:            85%;
-	margin:           10px;	
+    border:           1px solid #6CA7A8;
+    width:            85%;
+    margin:           10px; 
 }
 
 .formBody ul {
-	margin:            0px;
-	padding:           0px;
-	list-style-type: 	 none;
+    margin:            0px;
+    padding:           0px;
+    list-style-type:     none;
 }
 
-.formBody ul li {	
-	display:				 inline;
-	text-align:			 center;
+.formBody ul li {   
+    display:                 inline;
+    text-align:          center;
 }
-.formBody ul li dl {
-	margin:            10px 0px 10px 0px;
-	padding:     		 0px;
+
+/* Ordnet Felder mit ihren Beschreibungen in Formularen.
+   Diese werden in einer Liste untereinander und 
+   mit Beschreibung + Feld nebenandern angeordnet */
+
+.formFieldList {
+    margin:            0px;
+    padding:           0px;
+    list-style-type:     none;
 }
-.formBody ul li dl dt {
-	width:       		 30%;
-	text-align:  		 left;
-	float:       		 left;
-	display:     		 block;
+
+.formFieldList li { 
+    display:                 inline;
+    text-align:          center;
 }
-.formBody ul li dl dd {
-	margin-left: 		 31%;
-	text-align:  		 left;
+.formFieldList li dl {
+    margin:            8px 0px 8px 0px;
+    padding:             0px;
+}
+.formFieldList li dl dt {
+    width:               30%;
+    text-align:          left;
+    float:               left;
+    display:             block;
+}
+.formFieldList li dl dd {
+    margin-left:         31%;
+    text-align:          left;
 }
 
 .formSubmit {
-	padding-top: 		 5px;
-	padding-bottom:	 5px;
+    padding-top:         5px;
+    padding-bottom:  5px;
 }
 
 
@@ -206,8 +222,8 @@ a:hover {
     border-style:     solid;
     border-collapse:  collapse;
     padding:          5px 10px 5px 10px;
-    text-align: 		 left;
-    margin-top: 		 12px;
+    text-align:          left;
+    margin-top:          12px;
 }
 
 /* Ueberschrift der rechteckigen Groupbox */
@@ -249,10 +265,10 @@ a:hover {
     background-color: #c5c5c5;
     padding:          1px;
     color:            #888888;
-    font-size:        13pt;	 
+    font-size:        13pt;  
     font-weight:      bold;
     font-style:       italic;
-    letter-spacing:	 0.2em;
+    letter-spacing:  0.2em;
     text-align:       left;
 }
 
@@ -270,122 +286,130 @@ a:hover {
 
 /*Links in Verbindung mit einem Icon (mit Text)*/
 .iconTextLink {
-	list-style-type: 	 none;
-	padding: 			 0px;
-	margin:				 15px;
+    list-style-type:     none;
+    padding:             0px;
+    margin:              15px;
 }
 
-.iconTextLink li{	
-	display: 			 inline;
-	padding: 			 10px;
+.iconTextLink li{   
+    display:             inline;
+    padding:             10px;
 }
 
 .iconTextLink img{
-	border: 				 none;
-	vertical-align: 	 middle;
-	padding-right: 	 1px;
+    border:                  none;
+    vertical-align:      middle;
+    padding-right:   1px;
 }
 
 /*Iconlinks um Funktionen aufzurufen (ohne Text)*/
 .iconLinkRow {
-	list-style-type: 	 none;
-	margin 				 0px;
-	padding: 			 0px;
+    list-style-type:     none;
+    margin               0px;
+    padding:             0px;
 }
 
-.iconLinkRow li {	
-	display: 			 inline;
-	text-align: 		 left;
-	padding: 			 0px;
-	margin-left:		 2px;
+.iconLinkRow li {   
+    display:             inline;
+    text-align:          left;
+    padding:             0px;
+    margin-left:         2px;
 }
 
 .iconLinkRow a img {
-	border: 				 none;
+    border:                  none;
 }
 
 /* Icon um Informationen anzuzeigen (ohne Text und Link)*/
 .iconInformationRow {
-	list-style-type: 	 none;
-	margin 				 0px;
-	padding: 			 0px;
+    list-style-type:     none;
+    margin               0px;
+    padding:             0px;
 }
 
-.iconInformationRow li {	
-	display: 			 inline;
-	text-align: 		 left;
-	padding: 			 0px;
+.iconInformationRow li {    
+    display:             inline;
+    text-align:          left;
+    padding:             0px;
 }
 
 .iconInformationRow img {
-	border: 				 none;
-	cursor: 				 help;
+    border:              none;
+    cursor:              help;
 }
 
 
 /* Elemente fuer Navigationsklasse */
 .pageNavigation {
-	text-align: 		 center;
-	vertical-align: 	 middle;
-	margin: 				 15px;
+    text-align:          center;
+    vertical-align:      middle;
+    margin:              15px;
 }
 
 .pageNavigation img {
-	vertical-align: 	 top;
-	border: 				 none;
+    vertical-align:      top;
+    border:              none;
 }
 
 .pageNavigation .selected {
-	font-weight:		 bold;
+    font-weight:         bold;
 }
 
 /* Zusatzinformation wer letzte Aenderungen vorgenommen hat etc.*/
 .editInformation{
-	font-size: 			 8pt;
-	margin: 				 8px 4px 4px 4px;
-	text-align: 		 center;
+    font-size:           8pt;
+    margin:              8px 4px 4px 4px;
+    text-align:          left;
 }
 
 /*Pflichtfeldmarkierung*/
 .mandatoryFieldMarker{
-	color: 			    #990000;
+    color:               #990000;
 }
 
 
 /*Einstellungen fuer eine Pfadnavigation, z.B. durch die Versanstaltungsherarchie im Fotomodul*/
 .navigationPath{
-	text-align: 		 center;
-	margin: 				 5px;
+    text-align:          center;
+    margin:              5px;
 }
 .navigationPath img{
-	border: 				 none;
-	vertical-align: 	 middle;
+    border:              none;
+    vertical-align:      middle;
 }
 
 /* spezielle Anpassung fuer die Loginseite */
-#login_form ul li dl dd {
-	margin-left:		 45%;
+#login_form .formFieldList li dl dt {
+    width:               45%;
 }
 
-#profile_roles_box ul li dl dt {
-	width:				 75%;
-}
-
-#profile_roles_box ul li dl dd {
-	margin-left:       76%;
-	text-align:			 right;
+#login_form .formFieldList li dl dd {
+    margin-left:         46%;
 }
 
 /* spezielle Anpassung fuer die Passwortseite */
-#password_form ul li dl dt {
-	width:				 50%;
+#password_form .formFieldList li dl dt {
+    width:               50%;
 }
 
-#password_form ul li dl dd {
-	margin-left:		 51%;
+#password_form .formFieldList li dl dd {
+    margin-left:         51%;
 }
 
 /* spezielle Anpassung fuer die Profilseite */
-#profile_form ul li dl {
-	margin:            3px 0px 3px 0px;
+#profile_form .formFieldList li dl {
+    margin:              3px 0px 3px 0px;
+}
+
+#profile_roles_box ul li dl dt {
+    width:               75%;
+}
+
+#profile_roles_box ul li dl dd {
+    margin-left:         76%;
+    text-align:          right;
+}
+
+#infoboxListsBox {
+    width:               400px; 
 }

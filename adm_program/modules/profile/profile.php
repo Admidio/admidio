@@ -390,18 +390,8 @@ echo "
 
                 echo"
                 <div class=\"groupBox\">
-                    <div class=\"groupBoxBody\" style=\"text-align: center;\">";
-                        //Falls vorhanden Bild ausgeben
-                        if($g_db->num_rows($result_photo) > 0)
-                        {
-                            echo"<img src=\"$g_root_path/adm_program/modules/profile/profile_photo_show.php?usr_id=$a_user_id&amp;id=". time(). "\" alt=\"Profilfoto\">";
-                        }
-                        //wenn nicht Schattenkopf
-                        else
-                        {
-                            echo"<img src=\"$g_root_path/adm_program/images/no_profile_pic.png\" alt=\"Profilfoto\">";
-                        }
-                        echo "
+                    <div class=\"groupBoxBody\" style=\"text-align: center;\">
+                        <img src=\"$g_root_path/adm_program/modules/profile/profile_photo_show.php?usr_id=$a_user_id&amp;id=". time(). "\" alt=\"Profilfoto\">
                         <ul class=\"iconLinkRow\">
                             <li>
                                 <a href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$a_user_id\"><img

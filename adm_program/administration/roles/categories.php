@@ -105,13 +105,13 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 echo "
 <h1 class=\"moduleHeadline\">Kategorien</h1>
 
-<p>
-    <span class=\"iconLink\">
-        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/categories_new.php?type=$req_type\"><img 
-        class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" alt=\"Kategorie anlegen\"></a>
-        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/categories_new.php?type=$req_type\">Kategorie anlegen</a>
-    </span>
-</p>
+<ul class=\"iconTextLink\">
+    <li>
+        <a href=\"$g_root_path/adm_program/administration/roles/categories_new.php?type=$req_type\"><img 
+        src=\"$g_root_path/adm_program/images/add.png\" alt=\"Kategorie anlegen\"></a>
+        <a href=\"$g_root_path/adm_program/administration/roles/categories_new.php?type=$req_type\">Kategorie anlegen</a>
+    </li>
+</ul>
 
 <table class=\"tableList\" style=\"width: 300px;\" cellpadding=\"2\" cellspacing=\"0\">
     <thead>
@@ -184,13 +184,13 @@ echo "
     echo "</tbody>
 </table>
 
-<p>
-    <span class=\"iconLink\">
-        <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\"><img
-        class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
-        <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
-    </span>
-</p>
+<ul class=\"iconTextLink\">
+    <li>
+        <a href=\"$g_root_path/adm_program/system/back.php\"><img
+        src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
+        <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+    </li>
+</ul>
 
 <script type=\"text/javascript\"><!--
     Sortable.create('cat_list',{tag:'tr',onUpdate:updateDB,ghosting:true,dropOnEmpty:true,containment:['cat_list'],hoverclass:'drag'});

@@ -256,7 +256,7 @@ class RoleDependency
         return -1;
     }
 
-    function removeChildRoles($dbConnection,$parentId)
+    function removeChildRoles(&$db, $parentId)
     {
         if($parentId > 0 && is_numeric($parentId))
         {
@@ -264,7 +264,7 @@ class RoleDependency
 
             $sql = "DELETE FROM ". TBL_ROLE_DEPENDENCIES.
                    " WHERE rld_rol_id_parent = $parentId ";
-            $this->db->query($sql);
+            $db->query($sql);
 
             return  0;
         }

@@ -89,23 +89,25 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 echo "
 <form action=\"$g_root_path/adm_program/administration/members/fields_function.php?usf_id=$req_usf_id&amp;mode=1\" method=\"post\" id=\"edit_field\">
-<div class=\"formLayout\" id=\"fields_new_form\">
+<div class=\"formLayout\" id=\"edit_fields_form\">
     <div class=\"formHead\">". $g_layout['title']. "</div>
     <div class=\"formBody\">
-        <ul>
+        <ul class=\"formFieldList\">
             <li>
                 <dl>
                     <dt><label for=\"usf_name\">Name:</label></dt>
                     <dd><input type=\"text\" name=\"usf_name\" id=\"usf_name\" $html_disabled style=\"width: 150px;\" maxlength=\"15\"
                         value=\"". htmlspecialchars($user_field->getValue("usf_name"), ENT_QUOTES). "\">
-                        <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span></dd>
+                        <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
+                    </dd>
                 </dl>
             </li>
             <li>
                 <dl>
                     <dt><label for=\"usf_description\">Beschreibung:</label></dt>
                     <dd><input type=\"text\" name=\"usf_description\" id=\"usf_description\" style=\"width: 330px;\" maxlength=\"255\" 
-                        value=\"". htmlspecialchars($user_field->getValue("usf_description"), ENT_QUOTES). "\"></dd>
+                        value=\"". htmlspecialchars($user_field->getValue("usf_description"), ENT_QUOTES). "\">
+                    </dd>
                 </dl>
             </li>
             <li>

@@ -110,7 +110,8 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 // Html des Modules ausgeben
 echo "
-<form action=\"$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=$req_cat_id&amp;type=". $_GET["type"]. "&amp;mode=1\" method=\"post\" id=\"edit_category\">
+<form action=\"$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=$req_cat_id&amp;type=". $_GET["type"]. "&amp;mode=1\" method=\"post\">
+<div class=\"formLayout\" id=\"edit_categories_form\">
     <div class=\"formHead\">";
         if($req_cat_id > 0)
         {
@@ -122,44 +123,55 @@ echo "
         }
     echo "</div>
     <div class=\"formBody\">
-        <div>
-            <div style=\"text-align: right; width: 23%; float: left;\">Name:</div>
-            <div style=\"text-align: left; margin-left: 24%;\">
-                <input type=\"text\" id=\"cat_name\" name=\"cat_name\" size=\"30\" maxlength=\"30\" value=\"". htmlspecialchars($category->getValue("cat_name"), ENT_QUOTES). "\">
-                <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
-            </div>
-        </div>
-        <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 23%; float: left;\">
-                <label for=\"hidden\"><img src=\"$g_root_path/adm_program/images/user_key.png\" alt=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\"></label>
-            </div>
-            <div style=\"text-align: left; margin-left: 24%;\">
-                <input type=\"checkbox\" id=\"cat_hidden\" name=\"cat_hidden\" ";
-                    if($category->getValue("cat_hidden") == 1)
-                    {
-                        echo " checked ";
-                    }
-                    echo " value=\"1\" />
-                <label for=\"cat_hidden\">Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar&nbsp;</label>
-            </div>
-        </div>
+        <ul class=\"formFieldList\">
+            <li>
+                <dl>
+                    <dt><label for=\"cat_name\">Name:</label></dt>
+                    <dd>
+                        <input type=\"text\" id=\"cat_name\" name=\"cat_name\" size=\"30\" maxlength=\"30\" value=\"". htmlspecialchars($category->getValue("cat_name"), ENT_QUOTES). "\">
+                        <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
+                    </dd>
+                </dl>
+            </li>
+            <li>
+                <dl>
+                    <dt>
+                        <label for=\"cat_hidden\"><img src=\"$g_root_path/adm_program/images/user_key.png\" alt=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\"></label>
+                    </dt>
+                    <dd>
+                        <input type=\"checkbox\" id=\"cat_hidden\" name=\"cat_hidden\" ";
+                            if($category->getValue("cat_hidden") == 1)
+                            {
+                                echo " checked ";
+                            }
+                            echo " value=\"1\" />
+                        <label for=\"cat_hidden\">Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar&nbsp;</label>
+                    </dd>
+                </dl>
+            </li>
+        </ul>
 
-        <hr class=\"formLine\" width=\"85%\" />
+        <hr />
 
-        <div style=\"margin-top: 6px;\">
-            <button id=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
-            <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\">
-            &nbsp;Zur&uuml;ck</button>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <div class=\"formSubmit\">
             <button id=\"speichern\" type=\"submit\" value=\"speichern\">
             <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\">
             &nbsp;Speichern</button>
-        </div>";
-    echo "</div>
+        </div>
+    </div>
+</div>
 </form>
 
+<ul class=\"iconTextLink\">
+    <li>
+        <a href=\"$g_root_path/adm_program/system/back.php\"><img 
+        src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
+        <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+    </li>
+</ul>
+
 <script type=\"text/javascript\"><!--
-    document.getElementById('name').focus();
+    document.getElementById('cat_name').focus();
 --></script>";
 
 require(SERVER_PATH. "/adm_program/layout/overall_footer.php");

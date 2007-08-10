@@ -346,41 +346,38 @@ if($req_mode != "csv")
             $text  = "Listen&uuml;bersicht";            
         }
 
-        echo "<p>
-            <span class=\"iconLink\">
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\"><img
-                class=\"iconLink\" src=\"$g_root_path/adm_program/images/$image\" alt=\"Zur&uuml;ck\"></a>
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\">$text</a>
-            </span>
-        </p>
+        echo "
+        <div class=\"navigationPath\">
+            <a href=\"$g_root_path/adm_program/system/back.php\"><img
+            src=\"$g_root_path/adm_program/images/$image\" alt=\"Zur&uuml;ck\"></a>
+            <a href=\"$g_root_path/adm_program/system/back.php\">$text</a>
+        </div>
         
-        <p>";
-        if($role->getValue("rol_mail_login") == 1 && $g_preferences['enable_mail_module'] == 1)
-        {
-            echo "<span class=\"iconLink\">
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/mail/mail.php?rol_id=$req_rol_id\"><img
-                class=\"iconLink\" src=\"$g_root_path/adm_program/images/email.png\" alt=\"E-Mail an Mitglieder\"></a>
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/mail/mail.php?rol_id=$req_rol_id\">E-Mail an Mitglieder</a>
-            </span>
-            &nbsp;&nbsp;&nbsp;";
-        }
+        <ul class=\"iconTextLink\">";
+            if($role->getValue("rol_mail_login") == 1 && $g_preferences['enable_mail_module'] == 1)
+            {
+                echo "<li>
+                    <a href=\"$g_root_path/adm_program/modules/mail/mail.php?rol_id=$req_rol_id\"><img
+                    src=\"$g_root_path/adm_program/images/email.png\" alt=\"E-Mail an Mitglieder\"></a>
+                    <a href=\"$g_root_path/adm_program/modules/mail/mail.php?rol_id=$req_rol_id\">E-Mail an Mitglieder</a>
+                </li>";
+            }
 
-        echo "<span class=\"iconLink\">
-            <a class=\"iconLink\" href=\"#\" onclick=\"window.open('$g_root_path/adm_program/modules/lists/lists_show.php?type=$req_type&amp;mode=print&amp;rol_id=$req_rol_id', '_blank')\"><img
-            class=\"iconLink\" src=\"$g_root_path/adm_program/images/print.png\" alt=\"Druckvorschau\"></a>
-            <a class=\"iconLink\" href=\"#\" onclick=\"window.open('$g_root_path/adm_program/modules/lists/lists_show.php?type=$req_type&amp;mode=print&amp;rol_id=$req_rol_id', '_blank')\">Druckvorschau</a>
-        </span>
-
-        &nbsp;&nbsp;
-
-        <img class=\"iconLink\" src=\"$g_root_path/adm_program/images/database_out.png\" style=\"vertical-align: middle;\" border=\"0\" alt=\"Exportieren\">
-        <select size=\"1\" name=\"list$i\" onchange=\"exportList(this)\">
-            <option value=\"\" selected=\"selected\">Exportieren nach ...</option>
-            <option value=\"csv-ms\">Microsoft Excel</option>
-            <option value=\"csv-ms-2k\">Microsoft Excel 97/2000</option>
-            <option value=\"csv-oo\">CSV-Datei (OpenOffice)</option>
-        </select>
-        </p>";
+            echo "<li>
+                <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/modules/lists/lists_show.php?type=$req_type&amp;mode=print&amp;rol_id=$req_rol_id', '_blank')\"><img
+                src=\"$g_root_path/adm_program/images/print.png\" alt=\"Druckvorschau\"></a>
+                <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/modules/lists/lists_show.php?type=$req_type&amp;mode=print&amp;rol_id=$req_rol_id', '_blank')\">Druckvorschau</a>
+            </li>
+            <li>
+                <img src=\"$g_root_path/adm_program/images/database_out.png\" alt=\"Exportieren\">
+                <select size=\"1\" name=\"list$i\" onchange=\"exportList(this)\">
+                    <option value=\"\" selected=\"selected\">Exportieren nach ...</option>
+                    <option value=\"csv-ms\">Microsoft Excel</option>
+                    <option value=\"csv-ms-2k\">Microsoft Excel 97/2000</option>
+                    <option value=\"csv-oo\">CSV-Datei (OpenOffice)</option>
+                </select>
+            </li>
+        </ul>";
     }
 }
 
@@ -472,7 +469,7 @@ else
 }
 
 // jetzt erst einmal zu dem ersten relevanten Datensatz springen
-if(!$g_db->data_seek($result_list))
+if(!$g_db->data_seek($result_list, 0))
 {
     $g_message->show("invalid");
 }
@@ -771,85 +768,98 @@ else
     {
         echo "
         <br />
-        <table class=\"$class_table\" style=\"width: 400px;\" cellpadding=\"2\" cellspacing=\"0\">";
-            //Kopf
-            echo"
-            <tr>
-                <th class=\"$class_header\" colspan=\"2\">Infobox: ". $role->getValue("rol_name"). "</th>
-            </tr>
-            ";
-            //Kategorie
-            echo"
-            <tr>
-                <td>Kategorie:</td>
-                <td>".$role->getValue("cat_name")."</td>
-            </tr>";
+        
+        <div class=\"groupBox\" id=\"infoboxListsBox\">
+            <div class=\"groupBoxHeadline\">Infobox: ". $role->getValue("rol_name"). "</div>
+            <div class=\"groupBoxBody\">
+                <ul class=\"formFieldList\">
+                    <li>";
+                        //Kategorie
+                        echo"
+                        <dl>
+                            <dt>Kategorie:</dt>
+                            <dd>".$role->getValue("cat_name")."</dd>
+                        </dl>
+                    </li>";
 
-            //Beschreibung
-            if(strlen($role->getValue("rol_description")) > 0)
-            {
-                echo"<tr>
-                    <td>Beschreibung:</td>
-                    <td>".$role->getValue("rol_description")."</td>
-                </tr>";
-            }
-
-            //Zeitraum
-            if(strlen($role->getValue("rol_start_date")) > 0)
-            {
-                echo"<tr>
-                    <td>Zeitraum:</td>
-                    <td>". mysqldate("d.m.y", $role->getValue("rol_start_date")). " bis ". mysqldate("d.m.y", $role->getValue("rol_end_date")). "</td>
-                </tr>";
-            }
-
-            //Termin
-            if($role->getValue("rol_weekday") > 0 || strlen($role->getValue("rol_start_time")) > 0)
-            {
-                echo"<tr>
-                    <td>Termin: </td>
-                    <td>"; 
-                        if($role->getValue("rol_weekday") > 0)
+                        //Beschreibung
+                        if(strlen($role->getValue("rol_description")) > 0)
                         {
-                            echo $arrDay[$role->getValue("rol_weekday")-1];
-                        }
-                        if(strlen($role->getValue("rol_start_time")) > 0)
-                        {
-                            echo " von ". mysqltime("h:i", $role->getValue("rol_start_time")). " bis ". mysqltime("h:i", $role->getValue("rol_end_time"));
+                            echo"<li>
+                                <dl>
+                                    <dt>Beschreibung:</dt>
+                                    <dd>".$role->getValue("rol_description")."</dd>
+                                </dl>
+                            </li>";
                         }
 
-                    echo"</td>
-                </tr>";
-            }
+                        //Zeitraum
+                        if(strlen($role->getValue("rol_start_date")) > 0)
+                        {
+                            echo"<li>
+                                <dl>
+                                    <dt>Zeitraum:</dt>
+                                    <dd>". mysqldate("d.m.y", $role->getValue("rol_start_date")). " bis ". mysqldate("d.m.y", $role->getValue("rol_end_date")). "</dd>
+                                </dl>
+                            </li>";
+                        }
 
-            //Treffpunkt
-            if(strlen($role->getValue("rol_location")) > 0)
-            {
-                echo"<tr>
-                    <td>Treffpunkt:</td>
-                    <td>".$role->getValue("rol_location")."</td>
-                </tr>";
-            }
+                        //Termin
+                        if($role->getValue("rol_weekday") > 0 || strlen($role->getValue("rol_start_time")) > 0)
+                        {
+                            echo"<li>
+                                <dl>
+                                    <dt>Termin: </dt>
+                                    <dd>"; 
+                                        if($role->getValue("rol_weekday") > 0)
+                                        {
+                                            echo $arrDay[$role->getValue("rol_weekday")-1];
+                                        }
+                                        if(strlen($role->getValue("rol_start_time")) > 0)
+                                        {
+                                            echo " von ". mysqltime("h:i", $role->getValue("rol_start_time")). " bis ". mysqltime("h:i", $role->getValue("rol_end_time"));
+                                        }
 
-            //Beitrag
-            if(strlen($role->getValue("rol_cost")) > 0)
-            {
-                echo"<tr>
-                    <td>Beitrag:</td>
-                    <td>". $role->getValue("rol_cost"). " &euro;</td>
-                </tr>";
-            }
+                                    echo"</dd>
+                                </dl>
+                            </li>";
+                        }
 
-            //maximale Teilnehmerzahl
-            if(strlen($role->getValue("rol_max_members")) > 0)
-            {
-                echo"<tr>
-                    <td>Max. Teilnehmer:</td>
-                    <td>". $role->getValue("rol_max_members"). "</td>
-                </tr>";
-            }
+                        //Treffpunkt
+                        if(strlen($role->getValue("rol_location")) > 0)
+                        {
+                            echo"<li>
+                                <dl>
+                                    <dt>Treffpunkt:</dt>
+                                    <dd>".$role->getValue("rol_location")."</dd>
+                                </dl>
+                            </li>";
+                        }
 
-        echo"</table>";
+                        //Beitrag
+                        if(strlen($role->getValue("rol_cost")) > 0)
+                        {
+                            echo"<li>
+                                <dl>
+                                    <dt>Beitrag:</dt>
+                                    <dd>". $role->getValue("rol_cost"). " &euro;</dd>
+                                </dl>
+                            </li>";
+                        }
+
+                        //maximale Teilnehmerzahl
+                        if(strlen($role->getValue("rol_max_members")) > 0)
+                        {
+                            echo"<li>
+                                <dl>
+                                    <dt>Max. Teilnehmer:</dt>
+                                    <dd>". $role->getValue("rol_max_members"). "</dd>
+                                </dl>
+                            </li>";
+                        }
+                echo"</ul>
+            </div>
+        </div>";
     } // Ende Infobox
     
     if($req_mode == "print")

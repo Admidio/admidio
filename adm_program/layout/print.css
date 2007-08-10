@@ -29,9 +29,7 @@
 .tableListPrint {
     width:            270mm;
     background-color: #ffffff;
-    border-width:     1px;
-    border-color:     #dddddd;
-    border-style:     solid;
+    border:           1px solid #cccccc;
     padding:          0px;
     border-spacing:   0px;
     margin:           0px;
@@ -51,13 +49,67 @@
 
 .tableSubHeaderFontPrint {
     color:            #888888;
-    font-size:        12pt;	 
+    font-size:        12pt;  
     font-weight:      bold;
     font-style:       italic;
-    letter-spacing:	 0.2em;
+    letter-spacing:   0.2em;
 }
 
 .tableRowPrint {
-    border-width:        0px;
-    border-style:        solid;
+    border-width:     0px;
+    border-style:     solid;
+}
+
+
+/* Einfache rechteckige Groupbox mit Rahmen um bestimmte Teile zu markieren,
+   z.B. die Infobox in Listen */
+
+.groupBox {
+    color:            #000000;
+    background-color: #ffffff;
+    border:           1px solid #cccccc;
+    padding:          5px 10px 5px 10px;
+    text-align:       left;
+    margin-top:       12px;
+}
+
+/* Ueberschrift der rechteckigen Groupbox */
+
+.groupBoxHeadline {
+    color:            #000000;
+    font-weight:      bold;
+    padding-bottom:   5px;
+}
+
+/* Ordnet Felder mit ihren Beschreibungen in Formularen.
+   Diese werden in einer Liste untereinander und 
+   mit Beschreibung + Feld nebenandern angeordnet */
+
+.formFieldList {
+    margin:            0px;
+    padding:           0px;
+    list-style-type:   none;
+}
+
+.formFieldList li { 
+    display:           inline;
+    text-align:        center;
+}
+.formFieldList li dl {
+    margin:            8px 0px 8px 0px;
+    padding:           0px;
+}
+.formFieldList li dl dt {
+    width:             30%;
+    text-align:        left;
+    float:             left;
+    display:           block;
+}
+.formFieldList li dl dd {
+    margin-left:       31%;
+    text-align:        left;
+}
+
+#infoboxListsBox {
+    width:             400px; 
 }

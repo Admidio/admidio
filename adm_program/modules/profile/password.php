@@ -54,7 +54,7 @@ echo "
 <div class=\"formLayout\" id=\"password_form\" style=\"width: 300px\">
     <div class=\"formHead\">Passwort &auml;ndern</div>
     <div class=\"formBody\">
-        <ul>
+        <ul class=\"formFieldList\">
             <li>
                 <dl>
                     <dt><label for=\"old_password\">Altes Passwort:</label></dt>
