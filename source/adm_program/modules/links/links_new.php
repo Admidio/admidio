@@ -72,9 +72,10 @@ else
     // -> Felder mit Daten des Links vorbelegen
     if ($_GET["lnk_id"] != 0)
     {
-        $sql    = "SELECT * FROM ". TBL_LINKS. " 
+        $sql    = "SELECT * FROM ". TBL_LINKS. ", ". TBL_CATEGORIES ."
                     WHERE lnk_id     = ". $_GET['lnk_id']. " 
-                      AND lnk_org_id = ". $g_current_organization->getValue("org_id");
+                      AND lnk_cat_id = cat_id
+                      AND cat_org_id = ". $g_current_organization->getValue("org_id");
         $result = $g_db->query($sql);
 
         if ($g_db->num_rows($result) > 0)
@@ -99,18 +100,18 @@ $g_layout['title'] = $_GET["headline"];
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 // Html des Modules ausgeben
-echo "
-<form action=\"$g_root_path/adm_program/modules/links/links_function.php?lnk_id=". $_GET["lnk_id"]. "&amp;headline=". $_GET['headline']. "&amp;mode=";
-    if($_GET["lnk_id"] > 0)
-    {
-        echo "3";
-    }
-    else
-    {
-        echo "1";
-    }
-    echo "\" method=\"post\" name=\"LinkAnlegen\">
+if($_GET["lnk_id"] > 0)
+{
+    $new_mode = "3";
+}
+else
+{
+    $new_mode = "1";
+}
 
+echo "
+<form action=\"$g_root_path/adm_program/modules/links/links_function.php?lnk_id=". $_GET["lnk_id"]. "&amp;headline=". $_GET['headline']. "&amp;mode=$new_mode\" method=\"post\">
+<div class=\"formLayout\" id=\"edit_links_form\">
     <div class=\"formHead\">";
         if($_GET["lnk_id"] > 0)
         {
@@ -122,81 +123,92 @@ echo "
         }
     echo "</div>
     <div class=\"formBody\">
-        <div>
-            <div style=\"text-align: right; width: 25%; float: left;\">Linkname:</div>
-            <div style=\"text-align: left; margin-left: 27%;\">
-                <input type=\"text\" id=\"linkname\" name=\"linkname\" tabindex=\"1\" style=\"width: 350px;\" maxlength=\"250\" value=\"". htmlspecialchars($form_values['linkname'], ENT_QUOTES). "\">
-                <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
-            </div>
-        </div>
+        <ul class=\"formFieldList\">
+            <li>
+                <dl>
+                    <dt><label for=\"linkname\">Linkname:</label></dt>
+                    <dd>
+                        <input type=\"text\" id=\"linkname\" name=\"linkname\" tabindex=\"1\" style=\"width: 350px;\" maxlength=\"250\" value=\"". htmlspecialchars($form_values['linkname'], ENT_QUOTES). "\">
+                        <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
+                    </dd>
+                </dl>
+            </li>
+            <li>
+                <dl>
+                    <dt><label for=\"linkurl\">Linkadresse:</label></dt>
+                    <dd>
+                        <input type=\"text\" id=\"linkurl\" name=\"linkurl\" tabindex=\"2\" style=\"width: 350px;\" maxlength=\"250\" value=\"". htmlspecialchars($form_values['linkurl'], ENT_QUOTES). "\">
+                        <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
+                    </dd>
+                </dl>
+            </li>
+            <li>
+                <dl>
+                    <dt><label for=\"category\">Kategorie:</label></dt>
+                    <dd>
+                        <select size=\"1\" name=\"category\" tabindex=\"3\">
+                            <option value=\" \""; 
+                                if($form_values['category'] == 0) 
+                                {
+                                    echo " selected=\"selected\"";
+                                }
+                                echo ">- Bitte w&auml;hlen -</option>";
 
-        <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 25%; float: left;\">Linkadresse:</div>
-            <div style=\"text-align: left; margin-left: 27%;\">
-                <input type=\"text\" id=\"linkurl\" name=\"linkurl\" tabindex=\"2\" style=\"width: 350px;\" maxlength=\"250\" value=\"". htmlspecialchars($form_values['linkurl'], ENT_QUOTES). "\">
-                <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
-            </div>
-        </div>
+                            $sql = "SELECT * FROM ". TBL_CATEGORIES. "
+                                     WHERE cat_org_id = ". $g_current_organization->getValue("org_id"). "
+                                       AND cat_type   = 'LNK'
+                                     ORDER BY cat_sequence ASC ";
+                            $result = $g_db->query($sql);
 
-        <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 25%; float: left;\">Kategorie:</div>
-            <div style=\"text-align: left; margin-left: 27%;\">
-                <select size=\"1\" name=\"category\" tabindex=\"3\">
-                    <option value=\" \""; 
-                        if($form_values['category'] == 0) 
-                        {
-                            echo " selected=\"selected\"";
-                        }
-                        echo ">- Bitte w&auml;hlen -</option>";
-                        
-                    $sql = "SELECT * FROM ". TBL_CATEGORIES. "
-                             WHERE cat_org_id = ". $g_current_organization->getValue("org_id"). "
-                               AND cat_type   = 'LNK'
-                             ORDER BY cat_sequence ASC ";
-                    $result = $g_db->query($sql);
-
-                    while($row = $g_db->fetch_object($result))
-                    {
-                        echo "<option value=\"$row->cat_id\"";
-                            if($form_values['category'] == $row->cat_id)
+                            while($row = $g_db->fetch_object($result))
                             {
-                                echo " selected ";
+                                echo "<option value=\"$row->cat_id\"";
+                                    if($form_values['category'] == $row->cat_id)
+                                    {
+                                        echo " selected ";
+                                    }
+                                echo ">$row->cat_name</option>";
                             }
-                        echo ">$row->cat_name</option>";
-                    }
-                echo "</select>
-            </div>
-        </div>
+                        echo "</select>
+                        <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
+                    </dd>
+                </dl>
+            </li>
+            <li>
+                <dl>
+                    <dt><label for=\"description\">Beschreibung:</label>";
+                        if($g_preferences['enable_bbcode'] == 1)
+                        {
+                          echo "<br /><br />
+                          <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\" tabindex=\"7\">Text formatieren</a>";
+                        }
+                    echo "</dt>
+                    <dd>
+                        <textarea  name=\"description\" tabindex=\"4\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". htmlspecialchars($form_values['description'], ENT_QUOTES). "</textarea>
+                        <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
+                    </dd>
+                </dl>
+            </li>
+        </ul>
 
-        <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 25%; float: left;\">Beschreibung:";
-                if($g_preferences['enable_bbcode'] == 1)
-                {
-                  echo "<br><br>
-                  <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\" tabindex=\"7\">Text formatieren</a>";
-                }
-            echo "</div>
-            <div style=\"text-align: left; margin-left: 27%;\">
-                <textarea  name=\"description\" tabindex=\"4\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". htmlspecialchars($form_values['description'], ENT_QUOTES). "</textarea>
-                <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
-            </div>
-        </div>";
+        <hr />
 
-
-        echo "<hr class=\"formLine\" width=\"85%\" />
-
-        <div style=\"margin-top: 6px;\">
-            <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\" tabindex=\"6\">
-                <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\">
-                &nbsp;Zur&uuml;ck</button>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <div class=\"formSubmit\">
             <button name=\"speichern\" type=\"submit\" value=\"speichern\" tabindex=\"5\">
                 <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\">
                 &nbsp;Speichern</button>
-        </div>";
-
-    echo "</div>
+        </div>
+    </div>
+</div>
 </form>
+
+<ul class=\"iconTextLink\">
+    <li>
+        <a href=\"$g_root_path/adm_program/system/back.php\"><img 
+        src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
+        <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+    </li>
+</ul>
 
 <script type=\"text/javascript\"><!--
     document.getElementById('linkname').focus();

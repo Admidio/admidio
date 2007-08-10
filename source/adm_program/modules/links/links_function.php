@@ -61,9 +61,11 @@ if (array_key_exists("mode", $_GET))
 // jetzt wird noch geprueft ob die eventuell uebergebene lnk_id uberhaupt zur Orga gehoert oder existiert...
 if ($_GET["lnk_id"] > 0)
 {
-    $sql    = "SELECT * FROM ". TBL_LINKS. " 
-                WHERE lnk_id     = ". $_GET['lnk_id']. " 
-                  AND lnk_org_id = ". $g_current_organization->getValue("org_id");
+    $sql    = "SELECT * FROM ". TBL_LINKS. ", ". TBL_CATEGORIES ."
+                WHERE lnk_id     = ". $_GET['lnk_id']. "
+                  AND lnk_cat_id = cat_id
+                  AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
+                  AND cat_type = 'LNK' ";
     $result = $g_db->query($sql);
 
     if ($g_db->num_rows($result) == 0)
@@ -121,10 +123,10 @@ if ($_GET["mode"] == 1 || ($_GET["mode"] == 3 && $_GET["lnk_id"] > 0) )
     //Link wird jetzt in der DB gespeichert
     if ($_GET["lnk_id"] == 0)
     {
-        $sql = "INSERT INTO ". TBL_LINKS. " ( lnk_org_id, lnk_usr_id, lnk_timestamp,
+        $sql = "INSERT INTO ". TBL_LINKS. " ( lnk_usr_id, lnk_timestamp,
                                               lnk_name, lnk_url, lnk_description, lnk_cat_id)
-                                 VALUES (". $g_current_organization->getValue("org_id"). ", ". $g_current_user->getValue("usr_id"). ", '$act_date',
-                                         '$linkName', '$linkUrl', '$description', $category)";
+                                     VALUES (". $g_current_user->getValue("usr_id"). ", '$act_date',
+                                              '$linkName', '$linkUrl', '$description', $category)";
         $result = $g_db->query($sql);
     }
     else

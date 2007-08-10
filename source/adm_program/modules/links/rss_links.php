@@ -41,9 +41,11 @@ if ($g_preferences['enable_bbcode'] == 1)
 }
 
 // alle Links aus der DB fischen...
-$sql = "SELECT * FROM ". TBL_LINKS. "
-        WHERE lnk_org_id = ". $g_current_organization->getValue("org_id"). "
-        ORDER BY lnk_timestamp DESC";
+$sql = "SELECT * FROM ". TBL_LINKS. ", ". TBL_CATEGORIES ."
+         WHERE lnk_cat_id = cat_id
+           AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
+           AND cat_type = 'LNK'
+         ORDER BY lnk_timestamp DESC";
 $result = $g_db->query($sql);
 
 
