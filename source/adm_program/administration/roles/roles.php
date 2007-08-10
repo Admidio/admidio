@@ -104,41 +104,8 @@ echo "
         src=\"$g_root_path/adm_program/images/application_double.png\" alt=\"Kategorien pflegen\"></a>
         <a href=\"$g_root_path/adm_program/administration/roles/categories.php?type=ROL\">Kategorien pflegen</a>
     </li>
-</ul>";
-/*
-<p>
-    <span class=\"iconLink\">
-        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/roles_new.php\"><img
-        class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" alt=\"Rolle anlegen\"></a>
-        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/roles_new.php\">Rolle anlegen</a>
-    </span>
-    &nbsp;&nbsp;&nbsp;&nbsp;";
-    if($req_valid == true)
-    {
-        $description_lnk = "Inaktive Rollen";
-        $description_lst = "Aktive Rollen";
-        $image       = "wand_gray.png";
-    }
-    else
-    {
-        $description_lnk = "Aktive Rollen";
-        $description_lst = "Inaktive Rollen";
-        $image       = "wand.png";
-    }
-    echo "<span class=\"iconLink\">
-        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/roles.php?inactive=$req_valid\"><img
-        class=\"iconLink\" src=\"$g_root_path/adm_program/images/$image\" alt=\"$description_lnk\"></a>
-        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/roles.php?inactive=$req_valid\">$description_lnk</a>
-    </span>
-    &nbsp;&nbsp;&nbsp;&nbsp;
-    <span class=\"iconLink\">
-        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/categories.php?type=ROL\"><img
-        class=\"iconLink\" src=\"$g_root_path/adm_program/images/application_double.png\" alt=\"Kategorien pflegen\"></a>
-        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/categories.php?type=ROL\">Kategorien pflegen</a>
-    </span>
-</p>
-*/
-echo "
+</ul>
+
 <table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\">
     <thead>
         <tr>

@@ -368,7 +368,7 @@ elseif($_GET["mode"] == 2)
     }
     else
     {
-        RoleDependency::removeChildRoles($g_adm_con,$req_rol_id);
+        RoleDependency::removeChildRoles($g_db,$req_rol_id);
     }
 
     $_SESSION['navigation']->deleteLastUrl();

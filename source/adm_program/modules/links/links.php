@@ -253,7 +253,7 @@ else
                 if($g_current_user->editWeblinksRight())
                 {
                     echo "
-                    <div class=\"smallFontSize\" style=\"margin-top: 10px; text-align: left;\">";
+                    <div class=\"editInformation\">";
                         // aendern & loeschen duerfen nur User mit den gesetzten Rechten
                         if ($g_current_user->editWeblinksRight())
                         {

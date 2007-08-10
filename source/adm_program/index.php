@@ -72,7 +72,7 @@ echo "</ul>
 <div class=\"formLayout\" id=\"modules_list_form\">
     <div class=\"formHead\">Module</div>
     <div class=\"formBody\">
-        <ul>";
+        <ul class=\"formFieldList\">";
             if($g_preferences['enable_announcements_module'] == 1)
             {
                 echo "
@@ -261,7 +261,7 @@ if($g_current_user->isWebmaster() || $g_current_user->assignRoles() || $g_curren
     <div class=\"formLayout\" id=\"administration_list_form\">
         <div class=\"formHead\">Administration</div>
         <div class=\"formBody\">
-            <ul>";
+            <ul class=\"formFieldList\">";
                 if($g_current_user->approveUsers() && $g_preferences['registration_mode'] > 0)
                 {
                     echo "

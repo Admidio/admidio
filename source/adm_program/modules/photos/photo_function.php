@@ -153,7 +153,7 @@ function thumbnail_delete($pho_id, $pic_nr, $pho_begin)
 //bild: nr des Bildes das gedreht werden soll
 function right_rotate ($pho_id, $bild)
 {
-    global $g_adm_con;
+    global $g_db;
     header("Content-Type: image/jpeg");
 
     //Aufruf der ggf. Uebergebenen Veranstaltung
@@ -204,7 +204,7 @@ function right_rotate ($pho_id, $bild)
 //bild: nr des Bildes das gedreht werden soll
 function left_rotate ($pho_id, $bild)
 {
-    global $g_adm_con;
+    global $g_db;
     header("Content-Type: image/jpeg");
 
     //Aufruf der ggf. Uebergebenen Veranstaltung
@@ -254,7 +254,7 @@ function left_rotate ($pho_id, $bild)
 function delete ($pho_id, $bild)
 {
     global $g_current_user;
-    global $g_adm_con;
+    global $g_db;
     global $g_organization;
 
     // einlesen der Veranstaltung

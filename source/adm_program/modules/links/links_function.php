@@ -153,7 +153,7 @@ elseif ($_GET["mode"] == 2 && $_GET["lnk_id"] > 0)
     // Loeschen von Weblinks...
     $sql = "DELETE FROM ". TBL_LINKS. " 
              WHERE lnk_id = ". $_GET["lnk_id"];
-    $result = $g_db->query($sql, $g_adm_con);
+    $result = $g_db->query($sql);
 
     if (!isset($_GET["url"]))
     {

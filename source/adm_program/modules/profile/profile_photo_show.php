@@ -57,7 +57,16 @@ else
         $user = new User($g_db, $_GET["usr_id"]);
     }
     
-    echo $user->getValue("usr_photo");
+    if(strlen($user->getValue("usr_photo")) > 0)
+    {
+        echo $user->getValue("usr_photo");
+    }
+    else
+    {
+        // es wurde kein Bild gefunden, dann ein Dummy-Bild zurueckgeben
+        $no_profile_pic = imagecreatefrompng($g_root_path. "/adm_program/images/no_profile_pic.png");
+        echo imagepng($no_profile_pic);
+    }
 }
 
 ?>

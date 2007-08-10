@@ -50,7 +50,7 @@ echo "
 <div class=\"formLayout\" id=\"import_form\">
     <div class=\"formHead\">Benutzer aus Datei importieren</div>
     <div class=\"formBody\">
-        <ul>
+        <ul class=\"formFieldList\">
             <li>
                 <dl>
                     <dt>Format:</dt>

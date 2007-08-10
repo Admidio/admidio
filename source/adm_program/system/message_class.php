@@ -102,9 +102,8 @@ class Message
         // noetig, da dies bei den includes benoetigt wird
         global $g_forum, $g_layout;
         global $g_valid_login, $g_root_path, $g_preferences;
-        global $g_db, $g_adm_db, $g_adm_srv, $g_adm_con;
+        global $g_db, $g_adm_con, $g_adm_db, $g_current_url;
         global $g_organization, $g_current_organization, $g_current_user;
-        global $g_current_url;
         
         // Uebergabevariablen auswerten
         if(strlen($msg_key) > 0)
@@ -179,43 +178,43 @@ class Message
         echo '
         <br /><br />
         <div class="formLayout" id="message_form" style="width: 350px">
-        	<div class="formHead">'. $this->headline. '</div>
-        	<div class="formBody">
-            	<p>'. $this->content. '</p>
-            	<p>';
-                	if(strlen($this->forward_url) > 0)
-                	{
-                    	if($this->yes_no_buttons == true)
-                    	{
-                        	echo '
-                        	<button id="ja" type="button" value="ja" onclick="self.location.href=\''. $this->forward_url. '\'">
-                            	<img src="'. $g_root_path. '/adm_program/images/ok.png" alt="Ja">
-                            	&nbsp;&nbsp;Ja&nbsp;&nbsp;&nbsp;
-                        	</button>
-                        	&nbsp;&nbsp;&nbsp;&nbsp;
-                        	<button id="nein" type="button" value="nein" onclick="history.back()">
-                            	<img src="'. $g_root_path. '/adm_program/images/error.png" alt="Nein">
-                            	&nbsp;Nein
-                        	</button>';
-                    	}
-                    	else
-                    	{
-                        	// Wenn weitergeleitet wird, dann auch immer einen Weiter-Button anzeigen
-                        	echo '<button id="weiter" type="button" value="weiter" onclick="window.location.href=\''. $this->forward_url. '\'">
-                        	<img src="'. $g_root_path. '/adm_program/images/forward.png" alt="Weiter">
-                        	&nbsp;Weiter</button>';
-                    	}
-                	}
-                	else
-                	{
-                    	// Wenn nicht weitergeleitet wird, dann immer einen Zurueck-Button anzeigen
-                    	echo '<button id="zurueck" type="button" value="zurueck" onclick="history.back()">
-                    	<img src="'. $g_root_path. '/adm_program/images/back.png" alt="Zurueck">
-                    	&nbsp;Zur&uuml;ck</button>';
-                	}
-            	echo '</p>
-        	</div>
-       	</div>';
+            <div class="formHead">'. $this->headline. '</div>
+            <div class="formBody">
+                <p>'. $this->content. '</p>
+                <p>';
+                    if(strlen($this->forward_url) > 0)
+                    {
+                        if($this->yes_no_buttons == true)
+                        {
+                            echo '
+                            <button id="ja" type="button" value="ja" onclick="self.location.href=\''. $this->forward_url. '\'">
+                                <img src="'. $g_root_path. '/adm_program/images/ok.png" alt="Ja">
+                                &nbsp;&nbsp;Ja&nbsp;&nbsp;&nbsp;
+                            </button>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <button id="nein" type="button" value="nein" onclick="history.back()">
+                                <img src="'. $g_root_path. '/adm_program/images/error.png" alt="Nein">
+                                &nbsp;Nein
+                            </button>';
+                        }
+                        else
+                        {
+                            // Wenn weitergeleitet wird, dann auch immer einen Weiter-Button anzeigen
+                            echo '<button id="weiter" type="button" value="weiter" onclick="window.location.href=\''. $this->forward_url. '\'">
+                            <img src="'. $g_root_path. '/adm_program/images/forward.png" alt="Weiter">
+                            &nbsp;Weiter</button>';
+                        }
+                    }
+                    else
+                    {
+                        // Wenn nicht weitergeleitet wird, dann immer einen Zurueck-Button anzeigen
+                        echo '<button id="zurueck" type="button" value="zurueck" onclick="history.back()">
+                        <img src="'. $g_root_path. '/adm_program/images/back.png" alt="Zurueck">
+                        &nbsp;Zur&uuml;ck</button>';
+                    }
+                echo '</p>
+            </div>
+        </div>';
         
         if($this->inline == false)
         {

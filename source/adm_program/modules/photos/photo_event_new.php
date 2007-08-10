@@ -102,7 +102,7 @@ $result_list = $g_db->query($sql);
 //Suchen nach Kindern, Funktion mit selbstaufruf
 function subfolder($parent_id, $vorschub, $photo_event, $pho_id)
 {
-    global $g_adm_con, $g_db;
+    global $g_db;
     $vorschub = $vorschub."&nbsp;&nbsp;&nbsp;&nbsp;";
 
     //Erfassen der auszugebenden Veranstaltung
@@ -162,7 +162,7 @@ echo "
     <div class=\"formBody\">";
         //Veranstaltung
         echo"
-        <ul>
+        <ul class=\"formFieldList\">
             <li>
                 <dl>
                     <dt><label for=\"pho_name\">Veranstaltung:</label></dt>
@@ -258,7 +258,7 @@ echo "
 
         //Submitbutton
         echo"<hr />
-        <div>
+        <div class=\"formSubmit\">
             <button name=\"submit\" type=\"submit\" tabindex=\"8\" value=\"speichern\">
                 <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\">
                 &nbsp;Speichern

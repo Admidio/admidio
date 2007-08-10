@@ -44,7 +44,7 @@ echo "
 <div class=\"formLayout\" id=\"login_form\" style=\"width: 260px\">
     <div class=\"formHead\">Login</div>
     <div class=\"formBody\">
-        <ul>
+        <ul class=\"formFieldList\">
             <li>
                 <dl>
                     <dt><label for=\"loginname\">Benutzername:</label></dt>

@@ -200,7 +200,7 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
                                          VALUES (". $g_current_organization->getValue("org_id"). ", ". $g_current_user->getValue("usr_id"). ", '$realName', '$text', '$email',
                                                  '$homepage', '$actDate', '$ipAddress')";
 
-                $result = $g_db->query($sql, $g_adm_con);
+                $result = $g_db->query($sql);
             }
             else
             {
@@ -276,11 +276,11 @@ elseif($_GET["mode"] == 2)
 {
     //erst einmal alle vorhanden Kommentare zu diesem Gaestebucheintrag loeschen...
     $sql = "DELETE FROM ". TBL_GUESTBOOK_COMMENTS. " WHERE gbc_gbo_id = ". $_GET['id'];
-    $result = $g_db->query($sql, $g_adm_con);
+    $result = $g_db->query($sql);
 
     //dann den Eintrag selber loeschen...
     $sql = "DELETE FROM ". TBL_GUESTBOOK. " WHERE gbo_id = ". $_GET['id'];
-    $result = $g_db->query($sql, $g_adm_con);
+    $result = $g_db->query($sql);
 
     if (!isset($_GET["url"]))
     {
@@ -359,7 +359,7 @@ elseif($_GET["mode"] == 4 || $_GET["mode"] == 8)
                 // Falls er nicht eingeloggt ist, gibt es das sql-Statement natürlich ohne die UserID
                 $sql = "INSERT INTO ". TBL_GUESTBOOK_COMMENTS. " (gbc_gbo_id, gbc_name, gbc_text, gbc_email, gbc_timestamp, gbc_ip_address)
                                                          VALUES (". $_GET['id']. ", '$name', '$text', '$email', '$actDate', '$ipAddress')";
-                $result = $g_db->query($sql, $g_adm_con);
+                $result = $g_db->query($sql);
             }
         }
         else
@@ -371,7 +371,7 @@ elseif($_GET["mode"] == 4 || $_GET["mode"] == 8)
                                                            , gbc_last_change   = '$actDate'
                                                            , gbc_usr_id_change = ". $g_current_user->getValue("usr_id"). "
                      WHERE gbc_id = {3}";
-            $result = $g_db->query($sql, $g_adm_con);
+            $result = $g_db->query($sql);
         }
 
         // Der Inhalt des Formulars wird bei erfolgreichem insert/update aus der Session geloescht
@@ -406,7 +406,7 @@ elseif ($_GET["mode"] == 5)
 {
     //Gaestebuchkommentar loeschen...
     $sql = "DELETE FROM ". TBL_GUESTBOOK_COMMENTS. " WHERE gbc_id = ". $_GET['id'];
-    $result = $g_db->query($sql, $g_adm_con);
+    $result = $g_db->query($sql);
 
     if (!isset($_GET["url"]))
     {

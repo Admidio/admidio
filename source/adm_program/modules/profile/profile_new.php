@@ -333,7 +333,7 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 echo "
 <form action=\"$g_root_path/adm_program/modules/profile/profile_save.php?user_id=$usr_id&amp;new_user=$new_user\" method=\"post\" name=\"ProfilAnzeigen\">
-<div class=\"formLayout\" id=\"profile_new_form\">
+<div class=\"formLayout\" id=\"edit_profile_form\">
     <div class=\"formHead\">";
         if($new_user == 1)
         {
@@ -387,7 +387,7 @@ echo "
                 <div class=\"groupBox\">
                     <div class=\"groupBoxHeadline\">". $value['cat_name']. "</div>
                     <div class=\"groupBoxBody\">
-                        <ul>";
+                        <ul class=\"formFieldList\">";
             }
 
             // bei schneller Registrierung duerfen nur die Pflichtfelder ausgegeben werden
