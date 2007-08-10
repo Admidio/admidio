@@ -445,7 +445,7 @@ elseif($new_user == 0 && $user->getValue("usr_valid") == 0)
 else
 {
     // zur Profilseite zurueckkehren
-    $g_message->setForwardUrl("$g_root_path/adm_program/modules/profile/profile.php?user_id=$usr_id", 2000);
+    $g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
     $g_message->show("save");
 }
 ?>

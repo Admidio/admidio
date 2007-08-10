@@ -658,21 +658,21 @@ echo "
                     </div>
                 </div>";
             }
-        echo "</div>";
-
-        if($a_user_id != $g_current_user->getValue("usr_id") && isset($_GET['user_id']) == true)
-        {
-            echo "<div style=\"clear: left; font-size: 1pt;\">&nbsp;</div>
-            <div style=\"margin-top: 5px;\">
-                <span class=\"iconLink\">
-                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\"><img
-                     class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
-                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
-                </span>
-            </div>";
-        }
-    echo "</div>
+        echo "</div>
+    </div>
 </div>";
+
+if(isset($_GET['user_id']) == true)
+{
+    echo "
+    <ul class=\"iconTextLink\">
+        <li>
+            <a href=\"$g_root_path/adm_program/system/back.php\"><img 
+            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
+            <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+        </li>
+    </ul>";
+}
 
 require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
 
