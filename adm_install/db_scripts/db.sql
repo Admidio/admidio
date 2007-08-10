@@ -574,7 +574,6 @@ alter table %PRAEFIX%_guestbook_comments add constraint %PRAEFIX%_FK_GBC_USR_CHA
 create table %PRAEFIX%_links
 (
    lnk_id                         int(11) unsigned               not null AUTO_INCREMENT,
-   lnk_org_id                     tinyint(4)                     not null,
    lnk_cat_id                     int(11) unsigned               not null,
    lnk_name                       varchar(255)                   not null,
    lnk_description                text,
@@ -588,14 +587,11 @@ create table %PRAEFIX%_links
 type = InnoDB;
 
 -- Index
-alter table %PRAEFIX%_links add index LNK_ORG_FK (lnk_org_id);
 alter table %PRAEFIX%_links add index LNK_USR_FK (lnk_usr_id);
 alter table %PRAEFIX%_links add index LNK_CAT_FK (lnk_cat_id);
 alter table %PRAEFIX%_links add index LNK_USR_CHANGE_FK (lnk_usr_id_change);
 
 -- Constraints
-alter table %PRAEFIX%_links add constraint %PRAEFIX%_FK_LNK_ORG foreign key (lnk_org_id)
-      references %PRAEFIX%_organizations (org_id) on delete restrict on update restrict;
 alter table %PRAEFIX%_links add constraint %PRAEFIX%_FK_LNK_USR foreign key (lnk_usr_id)
       references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
 alter table %PRAEFIX%_links add constraint %PRAEFIX%_FK_LNK_CAT foreign key (lnk_cat_id)

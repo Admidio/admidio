@@ -42,6 +42,11 @@ ALTER TABLE %PRAEFIX%_roles DROP FOREIGN KEY %PRAEFIX%_FK_ROL_ORG;
 ALTER TABLE %PRAEFIX%_roles DROP INDEX ROL_ORG_FK;
 ALTER TABLE %PRAEFIX%_roles DROP COLUMN rol_org_shortname;
 
+-- Organisation aus Links entfernen
+ALTER TABLE %PRAEFIX%_links DROP FOREIGN KEY %PRAEFIX%_FK_LNK_ORG;
+ALTER TABLE %PRAEFIX%_links DROP index LNK_ORG_FK;
+ALTER TABLE %PRAEFIX%_links DROP COLUMN lnk_org_id;
+
 -- Kategorie-Tabelle anpassen
 ALTER TABLE %PRAEFIX%_categories CHANGE COLUMN `cat_org_id` `cat_org_id` tinyint(4);
 ALTER TABLE %PRAEFIX%_categories ADD COLUMN `cat_system` tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER `cat_hidden`;

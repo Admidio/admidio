@@ -93,25 +93,21 @@ echo "
 // falls eine id fuer einen bestimmten Link uebergeben worden ist...
 if ($_GET['id'] > 0)
 {
-    $sql1    = "SELECT * FROM ". TBL_LINKS. "
-               LEFT JOIN ". TBL_CATEGORIES ."
-               ON lnk_cat_id = cat_id
-               AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
-               WHERE lnk_id = ". $_GET['id']. "
-               AND lnk_org_id = ". $g_current_organization->getValue("org_id");
+    $sql1 = "SELECT * FROM ". TBL_LINKS. ", ". TBL_CATEGORIES ."
+             WHERE lnk_id = ". $_GET['id']. "
+             AND lnk_cat_id = cat_id
+             AND cat_org_id = ". $g_current_organization->getValue("org_id");
 }
 //...ansonsten alle fuer die Gruppierung passenden Links aus der DB holen.
 else
 {
     // Links bereits nach den Namen ihrer Kategorie sortiert.
-    $sql1    = "SELECT * FROM ". TBL_LINKS. "
-               LEFT JOIN ". TBL_CATEGORIES ."
-               ON lnk_cat_id = cat_id
-               AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
-               AND cat_type = 'LNK'
-               WHERE lnk_org_id = ". $g_current_organization->getValue("org_id"). "
-               ORDER BY cat_sequence, lnk_name, lnk_timestamp DESC
-               LIMIT ". $_GET['start']. ", 10 ";
+    $sql1 = "SELECT * FROM ". TBL_LINKS. ", ". TBL_CATEGORIES ."
+             WHERE lnk_cat_id = cat_id
+             AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
+             AND cat_type = 'LNK'
+             ORDER BY cat_sequence, lnk_name, lnk_timestamp DESC
+             LIMIT ". $_GET['start']. ", 10 ";
 }
 
 $links_result = $g_db->query($sql1);
@@ -121,21 +117,21 @@ $links_result = $g_db->query($sql1);
 if ($g_valid_login == false)
 {
     // Wenn User nicht eingeloggt ist, Kategorien, die hidden sind, aussortieren
-    $sql    = "SELECT COUNT(*) FROM ". TBL_LINKS. "
-              LEFT JOIN ". TBL_CATEGORIES ."
-              ON lnk_cat_id = cat_id
-              AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
-              AND cat_type = 'LNK' 
-              AND cat_hidden = 0
-              WHERE lnk_org_id = ". $g_current_organization->getValue("org_id"). "
-              ORDER BY lnk_name DESC";    
+    $sql = "SELECT COUNT(*) FROM ". TBL_LINKS. ", ". TBL_CATEGORIES ."
+            WHERE lnk_cat_id = cat_id
+            AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
+            AND cat_type = 'LNK' 
+            AND cat_hidden = 0
+            ORDER BY cat_sequence, lnk_name DESC";    
 } 
 else
 {   
     // Alle Kategorien anzeigen
-    $sql    = "SELECT COUNT(*) FROM ". TBL_LINKS. "
-              WHERE lnk_org_id = ". $g_current_organization->getValue("org_id"). "
-              ORDER BY lnk_name DESC";
+    $sql = "SELECT COUNT(*) FROM ". TBL_LINKS. ", ". TBL_CATEGORIES ."
+            WHERE lnk_cat_id = cat_id
+            AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
+            AND cat_type = 'LNK'
+            ORDER BY cat_sequence, lnk_name DESC";
 }
 
 $result = $g_db->query($sql);
@@ -149,19 +145,19 @@ if ($_GET['id'] == 0 && ($g_current_user->editWeblinksRight() || $g_preferences[
     // Neuen Link anlegen
     if ($g_current_user->editWeblinksRight())
     {
-        echo "<p>
-            <span class=\"iconLink\">
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/links/links_new.php?headline=". $_GET["headline"]. "\"><img
-                class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" alt=\"Neu anlegen\"></a>
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/links/links_new.php?headline=". $_GET["headline"]. "\">Neu anlegen</a>
-            </span>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <span class=\"iconLink\">
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/categories.php?type=LNK\"><img
-                class=\"iconLink\" src=\"$g_root_path/adm_program/images/application_double.png\" alt=\"Kategorien pflegen\"></a>
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/categories.php?type=LNK\">Kategorien pflegen</a>
-            </span>
-        </p>";
+        echo "
+        <ul class=\"iconTextLink\">
+            <li>
+                <a href=\"$g_root_path/adm_program/modules/links/links_new.php?headline=". $_GET["headline"]. "\"><img
+                src=\"$g_root_path/adm_program/images/add.png\" alt=\"Neu anlegen\"></a>
+                <a href=\"$g_root_path/adm_program/modules/links/links_new.php?headline=". $_GET["headline"]. "\">Neu anlegen</a>
+            </li>
+            <li>
+                <a href=\"$g_root_path/adm_program/administration/roles/categories.php?type=LNK\"><img
+                src=\"$g_root_path/adm_program/images/application_double.png\" alt=\"Kategorien pflegen\"></a>
+                <a href=\"$g_root_path/adm_program/administration/roles/categories.php?type=LNK\">Kategorien pflegen</a>
+            </li>
+        </ul>";
     }
 
     // Navigation mit Vor- und Zurueck-Buttons
@@ -219,10 +215,11 @@ else
                 $did_write_something = true;
                 if ($j>0)
                 {
-                    echo "</div><br />";
+                    echo "</div></div><br />";
                 }
-                echo "<div class=\"formHead\">$row->cat_name</div>
-                <div class=\"formBody\" style=\"overflow: hidden;\">";
+                echo "<div class=\"formLayout\" id=\"links_overview\">
+                    <div class=\"formHead\">$row->cat_name</div>
+                    <div class=\"formBody\" style=\"overflow: hidden;\">";
             }
         }
 
@@ -230,7 +227,7 @@ else
         {
             if($i > 0)
             {
-                echo "<hr class=\"formLine\" width=\"98%\" />";
+                echo "<hr />";
             }
             echo "
             <div style=\"text-align: left;\">
@@ -297,7 +294,7 @@ else
         <p>Es sind keine Eintr&auml;ge vorhanden.</p>";
     }
 
-    echo "</div>";
+    echo "</div></div>";
 } // Ende Wenn mehr als 0 Datensaetze
 
 if ($g_db->num_rows($links_result) > 2)
