@@ -110,9 +110,9 @@ else
 
 if (strlen($req_default_folder) > 0 || strlen($req_folder) > 0)
 {
-    $link = "<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/download.php?default_folder=". urlencode($req_default_folder). "\"><img 
-                class=\"iconLink\" src=\"$g_root_path/adm_program/images/application_view_list.png\" alt=\"Downloads\"></a>
-             <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/download.php?default_folder=". urlencode($req_default_folder). "\">$text</a>";
+    $link = "<a href=\"$g_root_path/adm_program/modules/download/download.php?default_folder=". urlencode($req_default_folder). "\"><img 
+                src=\"$g_root_path/adm_program/images/application_view_list.png\" alt=\"Downloads\"></a>
+             <a href=\"$g_root_path/adm_program/modules/download/download.php?default_folder=". urlencode($req_default_folder). "\">$text</a>";
 }
 
 $i=0;
@@ -132,7 +132,7 @@ While ($i <> count($path)-1)
 
 if(strlen($req_folder) > 0)
 {
-    $link = "<p><span class=\"iconLink\">$link &gt; $path[$i]</span></p>";
+    $link = "<div class=\"navigationPath\">$link &gt; $path[$i]</div>";
 }
 
 // pruefen, ob Ordner ueberhaupt existiert
@@ -183,19 +183,19 @@ if(strlen($req_folder) > 0)
 //Button Upload und Neuer Ordner
 if ($g_current_user->editDownloadRight())
 {
-    echo "<p>
-        <span class=\"iconLink\">
-            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/folder_new.php?folder=". urlencode($req_folder). "&amp;default_folder=". urlencode($req_default_folder). "\"><img
-            class=\"iconLink\" src=\"$g_root_path/adm_program/images/folder_create.png\" alt=\"Ordner erstellen\"></a>
-            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/folder_new.php?folder=". urlencode($req_folder). "&amp;default_folder=". urlencode($req_default_folder). "\">Ordner anlegen</a>
-        </span>
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        <span class=\"iconLink\">
-            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/upload.php?folder=". urlencode($req_folder). "&amp;default_folder=". urlencode($req_default_folder). "\"><img
-            class=\"iconLink\" src=\"$g_root_path/adm_program/images/page_white_get.png\" alt=\"Hochladen\"></a>
-            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/download/upload.php?folder=". urlencode($req_folder). "&amp;default_folder=". urlencode($req_default_folder). "\">Datei hochladen</a>
-        </span>
-    </p>";
+    echo "
+    <ul class=\"iconTextLink\">
+        <li>
+            <a href=\"$g_root_path/adm_program/modules/download/folder_new.php?folder=". urlencode($req_folder). "&amp;default_folder=". urlencode($req_default_folder). "\"><img
+            src=\"$g_root_path/adm_program/images/folder_create.png\" alt=\"Ordner erstellen\"></a>
+            <a href=\"$g_root_path/adm_program/modules/download/folder_new.php?folder=". urlencode($req_folder). "&amp;default_folder=". urlencode($req_default_folder). "\">Ordner anlegen</a>
+        </li>
+        <li>
+            <a href=\"$g_root_path/adm_program/modules/download/upload.php?folder=". urlencode($req_folder). "&amp;default_folder=". urlencode($req_default_folder). "\"><img
+            src=\"$g_root_path/adm_program/images/page_white_get.png\" alt=\"Hochladen\"></a>
+            <a href=\"$g_root_path/adm_program/modules/download/upload.php?folder=". urlencode($req_folder). "&amp;default_folder=". urlencode($req_default_folder). "\">Datei hochladen</a>
+        </li>
+    </ul>";
 };
 
 //Anlegen der Tabelle
@@ -215,16 +215,15 @@ echo" <table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\">
 //falls der Ordner leer ist
 if(Count($ordnerarray)==0)
 {
-  echo"
-        <tr>
-           <td colspan=\"2\">Dieser Ordner ist leer</td>
-           <td></td>
-           <td></td>";
-           if ($g_current_user->editDownloadRight()) 
-           {
-               echo "<td></td>";
-           }
-  echo "</tr>";
+    $colspan = "4";
+    if ($g_current_user->editDownloadRight())
+    {
+        $colspan = "5";
+    }
+    
+    echo"<tr>
+       <td colspan=\"$colspan\">Dieser Ordner ist leer</td>
+    </tr>";
 }
 
 

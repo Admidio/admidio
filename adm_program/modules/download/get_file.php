@@ -5,6 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Martin Günzler
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  * Uebergaben:
  *
@@ -14,20 +15,6 @@
  *                  gesetzt, kann der Anwender nur noch in Unterordner und nicht
  *                  in hoehere Ordner des Default-Ordners navigieren
  * file   :  die Datei / der Ordner der / die verarbeitet wird
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
 
@@ -43,7 +30,7 @@ if ($g_preferences['enable_download_module'] != 1)
 $folder = strStripTags(urldecode($_GET['folder']));
 $file   = strStripTags(urldecode($_GET['file']));
 $default_folder = strStripTags(urldecode($_GET['default_folder']));
-$act_folder     = "../../../adm_my_files/download";
+$act_folder     = SERVER_PATH. "/adm_my_files/download";
 
 // uebergebene Ordner auf Gueltigkeit pruefen
 // und Ordnerpfad zusammensetzen

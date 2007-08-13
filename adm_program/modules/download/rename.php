@@ -5,6 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Martin Günzler
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  * Uebergaben:
  *
@@ -14,20 +15,6 @@
  *                  gesetzt, kann der Anwender nur noch in Unterordner und nicht
  *                  in hoehere Ordner des Default-Ordners navigieren
  * file   :  die Datei / der Ordner der / die verarbeitet wird
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
 
@@ -110,35 +97,47 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 // Html des Modules ausgeben
 echo "<br>
 <form method=\"POST\" action=\"$g_root_path/adm_program/modules/download/download_function.php?mode=4&amp;folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "&amp;file=". urlencode($file). "\">
-    <div class=\"formHead\" style=\"width: 400px\">Datei/Ordner umbenennen</div>
-    <div class=\"formBody\" style=\"width: 400px\">
-        <div>
-            <div style=\"text-align: right; width: 35%; float: left;\">Bisheriger Name:</div>
-            <div style=\"text-align: left; margin-left: 37%;\">$file_array[0]</div>
-        </div>
-        <div style=\"margin-top: 10px;\">
-            <div style=\"text-align: right; width: 35%; float: left;\">Neuer Name:</div>
-            <div style=\"text-align: left; margin-left: 37%;\">
-                <input type=\"text\" id=\"new_name\" name=\"new_name\" value=\"". $form_values['new_name']. "\" size=\"25\" tabindex=\"1\">$file_extension
-                &nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
-                &nbsp;<img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=dateiname','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\">
-            </div>
-        </div>
+<div class=\"formLayout\" id=\"edit_download_form\" style=\"width: 400px\">
+    <div class=\"formHead\">Datei/Ordner umbenennen</div>
+    <div class=\"formBody\">
+        <ul class=\"formFieldList\">
+            <li>
+                <dl>
+                    <dt>Bisheriger Name:</dt>
+                    <dd>$file_array[0]&nbsp;</dd>
+                </dl>
+            </li>
+            <li>
+                <dl>
+                    <dt><label for=\"new_name\">Neuer Name:</label></dt>
+                    <dd>
+                        <input type=\"text\" id=\"new_name\" name=\"new_name\" value=\"". $form_values['new_name']. "\" size=\"25\" tabindex=\"1\">$file_extension
+                        &nbsp;<span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
+                        &nbsp;<img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=dateiname','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\">
+                    </dd>
+                </dl>
+            </li>
+        </ul>         
 
-        <hr class=\"formLine\" style=\"margin-top: 10px; margin-bottom: 10px;\" width=\"85%\" />
+        <hr />
 
-        <div style=\"margin-top: 6px;\">
-            <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
-            <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\">
-            &nbsp;Zur&uuml;ck</button>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button name=\"umbenennen\" type=\"submit\" value=\"umbenennen\" tabindex=\"2\">
+        <div class=\"formSubmit\">
+            <button name=\"rename\" type=\"submit\" value=\"umbenennen\" tabindex=\"2\">
             <img src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Hochladen\">
             &nbsp;Umbenennen</button>
         </div>
     </div>
+</div>
 </form>
+
+<ul class=\"iconTextLink\">
+    <li>
+        <a href=\"$g_root_path/adm_program/system/back.php\"><img 
+        src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
+        <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+    </li>
+</ul>
 
 <script type=\"text/javascript\"><!--
     document.getElementById('new_name').focus();
