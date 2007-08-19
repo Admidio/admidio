@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Funktionen zuordnen
+ * Mitglieder einer Rolle zuordnen
  *
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -294,43 +294,44 @@ $g_layout['header'] = "
 
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 echo "
-<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?role_id=".$role_id. "\" method=\"post\" name=\"Mitglieder\">
-   <h2>Mitglieder zu ". $role->getValue("rol_name"). " zuordnen</h2>";
+<h1>Mitglieder zuordnen</h1>
+<h3>Rolle ". $role->getValue("rol_name"). "</h3>";
 
-    if($count_valid_users != $user_anzahl || $restrict == "u")
-    {
-        //Button Alle bzw. nur Mitglieder anzeigen
-        echo "<p>";
-        if($restrict=="m" && ($g_current_user->assignRoles() || $g_current_user->editUser()))
+if(($count_valid_users != $user_anzahl || $restrict == "u")
+&& ($g_current_user->assignRoles() || $g_current_user->editUser()))
+{
+    //Button Alle bzw. nur Mitglieder anzeigen
+    echo "<ul class=\"iconTextLink\">";
+        if($restrict=="m")
         {
-            echo "<span class=\"iconLink\">
-                <a class=\"iconLink\" href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=u\"><img
-                class=\"iconLink\" src=\"$g_root_path/adm_program/images/group.png\" alt=\"Alle Benutzer anzeigen\"></a>
-                <a class=\"iconLink\" href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=u\">Alle Benutzer anzeigen</a>
-            </span>";
+            echo "<li>
+                <a href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=u\"><img
+                src=\"$g_root_path/adm_program/images/group.png\" alt=\"Alle Benutzer anzeigen\"></a>
+                <a href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=u\">Alle Benutzer anzeigen</a>
+            </li>";
         }
-        else if($restrict=="u" && ($g_current_user->assignRoles() || $g_current_user->editUser()))
+        else
         {
             //Nur Mitglieder anzeigen
-            echo "<span class=\"iconLink\">
-                <a class=\"iconLink\" href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=m\"><img
-                class=\"iconLink\" src=\"$g_root_path/adm_program/images/user.png\" alt=\"Nur Mitglieder anzeigen\"></a>
-                <a class=\"iconLink\" href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=m\">Nur Mitglieder anzeigen</a>
-            </span>";
+            echo "<li>
+                <a href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=m\"><img
+                src=\"$g_root_path/adm_program/images/user.png\" alt=\"Nur Mitglieder anzeigen\"></a>
+                <a href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=m\">Nur Mitglieder anzeigen</a>
+            </li>";
 
             //aktuelle Rolle in SessionID sichern
             $_SESSION['set_rol_id'] = $role_id;
             //Neuen Benutzer Anlegen
-            echo"&nbsp;&nbsp;&nbsp;&nbsp;
-            <span class=\"iconLink\">
+            echo"<li>
                 <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?new_user=1\"><img
-                class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" alt=\"Login\"></a>
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_new.php?new_user=1\">Benutzer anlegen</a>
-            </span>";
+                src=\"$g_root_path/adm_program/images/add.png\" alt=\"Login\"></a>
+                <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?new_user=1\">Benutzer anlegen</a>
+            </li>";
         }
-        echo "</p>";
-    }
+    echo "</ul>";
+}
 
+echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?role_id=".$role_id. "\" method=\"post\">";
 
     //Buchstaben Navigation bei mehr als 50 personen
     if($g_db->num_rows($result_user)>=50)
@@ -366,7 +367,7 @@ echo "
                 $menu_letter = 64;
             }
         }//for
-        
+
         echo "</p>";
 
         //Container anlegen und Ausgabe
@@ -408,15 +409,15 @@ echo "
 
         //Tabelle anlegen
         echo"
-        <table class=\"tableList\" cellpadding=\"3\" cellspacing=\"0\">
+        <table class=\"tableList\" cellspacing=\"0\">
             <thead>
                 <tr>
-                    <th class=\"tableHeader\" style=\"text-align: left;\">Info</th>
-                    <th class=\"tableHeader\" style=\"text-align: left;\">Name</th>
-                    <th class=\"tableHeader\" style=\"text-align: left;\">Vorname</th>
-                    <th class=\"tableHeader\" style=\"text-align: center;\">Geburtsdatum</th>
-                    <th class=\"tableHeader\" style=\"text-align: center;\">Mitglied</th>
-                    <th class=\"tableHeader\" style=\"text-align: center;\">Leiter</th>
+                    <th>Info</th>
+                    <th>Name</th>
+                    <th>Vorname</th>
+                    <th>Geburtsdatum</th>
+                    <th style=\"text-align: center;\">Mitglied</th>
+                    <th style=\"text-align: center;\">Leiter</th>
                 </tr>
             </thead>";
 
@@ -503,13 +504,11 @@ echo "
             
             echo"
             <tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\">
-                <td style=\"text-align: center;\">
-                    <img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/note.png\" alt=\"Userinformationen\" title=\"$user_text\">
-                </td>
-                <td style=\"text-align: left;\">". $user['last_name']."</td>
-                <td style=\"text-align: left;\">". $user['first_name']."</td>
+                <td><img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/note.png\" alt=\"Userinformationen\" title=\"$user_text\"></td>
+                <td>". $user['last_name']."</td>
+                <td>". $user['first_name']."</td>
 
-                <td style=\"text-align: center;\">";
+                <td>";
                     //Geburtstag nur ausgeben wenn bekannt
                     if(strlen($user['birthday']) > 0)
                     {
@@ -594,15 +593,15 @@ echo "
     {
         //Tabelle anlegen
         echo"
-        <table class=\"tableList\" cellpadding=\"3\" cellspacing=\"0\" >
+        <table class=\"tableList\" cellspacing=\"0\" >
             <thead>
                 <tr>
-                    <th class=\"tableHeader\" style=\"text-align: left;\">Info</th>
-                    <th class=\"tableHeader\" style=\"text-align: left;\">Name</th>
-                    <th class=\"tableHeader\" style=\"text-align: left;\">Vorname</th>
-                    <th class=\"tableHeader\" style=\"text-align: left;\">Geburtsdatum</th>
-                    <th class=\"tableHeader\" style=\"text-align: left;\">Mitglied</th>
-                    <th class=\"tableHeader\" style=\"text-align: left;\">Leiter</th>
+                    <th>Info</th>
+                    <th>Name</th>
+                    <th>Vorname</th>
+                    <th>Geburtsdatum</th>
+                    <th style=\"text-align: center;\">Mitglied</th>
+                    <th style=\"text-align: center;\">Leiter</th>
                 </tr>
             </thead>
             <tbody>";
@@ -616,13 +615,10 @@ echo "
                             .$user['phone'];
                 echo"
                 <tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\">
-                    <td style=\"text-align: center;\">
-                        <img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/note.png\" alt=\"Userinformationen\" title=\"$user_text\">
-                    </td>
-                    <td style=\"text-align: left;\">". $user['last_name']."</td>
-                    <td style=\"text-align: left;\">". $user['first_name']."</td>
-
-                    <td style=\"text-align: center;\">";
+                    <td><img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/note.png\" alt=\"Userinformationen\" title=\"$user_text\"></td>
+                    <td>". $user['last_name']."</td>
+                    <td>". $user['first_name']."</td>
+                    <td>";
                         //Geburtstag nur ausgeben wenn bekannt
                         if($user['birthday']!='0000-00-00')
                         {
@@ -662,7 +658,7 @@ echo "
     }
     
     //Buttons schliessen oder Speichern
-    echo"<div style=\"margin: 8px;\">
+    echo"<div class=\"formSubmit\">
         <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
                 <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\">
                 &nbsp;Zur&uuml;ck</button>

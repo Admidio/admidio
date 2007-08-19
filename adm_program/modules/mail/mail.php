@@ -34,7 +34,8 @@ if ($g_valid_login && !isValidEmailAddress($g_current_user->getValue("E-Mail")))
 {
     // der eingeloggte Benutzer hat in seinem Profil keine gueltige Mailadresse hinterlegt,
     // die als Absender genutzt werden kann...
-    $g_message->show("profile_mail", "$g_root_path/adm_program/modules/profile/profile.php");
+    $g_message->addVariableContent("$g_root_path/adm_program/modules/profile/profile.php", 1, false);
+    $g_message->show("profile_mail");
 }
 
 

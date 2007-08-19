@@ -5,6 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  * Uebergaben:
  *
@@ -13,21 +14,6 @@
  * letter      : alle User deren Nachnamen mit dem Buchstaben beginnt, werden angezeigt
  * start       : Angabe, ab welchem Datensatz Mitglieder angezeigt werden sollen
  * search      : Inhalt des Suchfeldes, damit dieser beim Blaettern weiter genutzt werden kann
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
 
@@ -384,20 +370,20 @@ echo "</div>";
 
 if($num_members > 0)
 {
-    echo "<table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\">
+    echo "<table class=\"tableList\" cellspacing=\"0\">
         <tr>
-            <th class=\"tableHeader\" align=\"right\">Nr.</th>
-            <th class=\"tableHeader\" align=\"center\"><img style=\"cursor: help;\" 
+            <th>Nr.</th>
+            <th><img class=\"iconInformation\" 
                 src=\"$g_root_path/adm_program/images/user.png\" alt=\"Mitglied bei ". $g_current_organization->getValue("org_longname"). "\" 
-                title=\"Mitglied bei ". $g_current_organization->getValue("org_longname"). "\" border=\"0\"></th>
-            <th class=\"tableHeader\" align=\"left\">&nbsp;Name</th>
-            <th class=\"tableHeader\" align=\"center\"><img style=\"cursor: help;\" 
+                title=\"Mitglied bei ". $g_current_organization->getValue("org_longname"). "\"></th>
+            <th>Name</th>
+            <th><img class=\"iconInformation\" 
                 src=\"$g_root_path/adm_program/images/email.png\" alt=\"E-Mail\" title=\"E-Mail\"></th>
-            <th class=\"tableHeader\" align=\"center\"><img style=\"cursor: help;\" 
+            <th><img class=\"iconInformation\" 
                 src=\"$g_root_path/adm_program/images/globe.png\" alt=\"Homepage\" title=\"Homepage\"></th>
-            <th class=\"tableHeader\" align=\"left\">&nbsp;Benutzer</th>
-            <th class=\"tableHeader\" align=\"center\">&nbsp;Aktualisiert am</th>
-            <th class=\"tableHeader\" align=\"center\">Bearbeiten</th>
+            <th>Benutzer</th>
+            <th>Aktualisiert am</th>
+            <th style=\"text-align: center;\">Bearbeiten</th>
         </tr>";
         $i = 0;
 
@@ -413,21 +399,21 @@ if($num_members > 0)
             {
                 echo "
                 <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
-                    <td align=\"right\">". ($req_start + $i + 1). "&nbsp;</td>
-                    <td align=\"center\">";
+                    <td>". ($req_start + $i + 1). "</td>
+                    <td>";
                         if($row['member'] > 0)
                         {
                             echo "<a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=". $row['usr_id']. "\"><img
                                 src=\"$g_root_path/adm_program/images/user.png\" alt=\"Mitglied bei ". $g_current_organization->getValue("org_longname"). "\"
-                                title=\"Mitglied bei ". $g_current_organization->getValue("org_longname"). "\" border=\"0\"></a>";
+                                title=\"Mitglied bei ". $g_current_organization->getValue("org_longname"). "\"></a>";
                         }
                         else
                         {
                             echo "&nbsp;";
                         }
                     echo "</td>
-                    <td align=\"left\">&nbsp;<a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=". $row['usr_id']. "\">". $row['last_name']. ",&nbsp;". $row['first_name']. "</a></td>
-                    <td align=\"center\">";
+                    <td><a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=". $row['usr_id']. "\">". $row['last_name']. ",&nbsp;". $row['first_name']. "</a></td>
+                    <td>";
                         if(strlen($row['email']) > 0)
                         {
                             if($g_preferences['enable_mail_module'] != 1)
@@ -439,19 +425,19 @@ if($num_members > 0)
                                 $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?usr_id=". $row['usr_id'];
                             }
                             echo "<a href=\"$mail_link\"><img src=\"$g_root_path/adm_program/images/email.png\"
-                                alt=\"E-Mail an ". $row['email']. " schreiben\" title=\"E-Mail an ". $row['email']. " schreiben\" border=\"0\"></a>";
+                                alt=\"E-Mail an ". $row['email']. " schreiben\" title=\"E-Mail an ". $row['email']. " schreiben\"></a>";
                         }
                     echo "</td>
-                    <td align=\"center\">";
+                    <td>";
                         if(strlen($row['homepage']) > 0)
                         {
                             echo "<a href=\"". $row['homepage']. "\" target=\"_blank\"><img
-                                src=\"$g_root_path/adm_program/images/globe.png\" alt=\"Homepage\" title=\"Homepage\" border=\"0\"></a>";
+                                src=\"$g_root_path/adm_program/images/globe.png\" alt=\"Homepage\" title=\"Homepage\"></a>";
                         }
                     echo "</td>
-                    <td align=\"left\">&nbsp;". $row['usr_login_name']. "</td>
-                    <td align=\"center\">&nbsp;". mysqldatetime("d.m.y h:i" , $row['usr_last_change']). "</td>
-                    <td align=\"center\" style=\"margin: 0px; padding: 0px;\">";
+                    <td>". $row['usr_login_name']. "</td>
+                    <td>". mysqldatetime("d.m.y h:i" , $row['usr_last_change']). "</td>
+                    <td align=\"center\">";
                         // pruefen, ob der User noch in anderen Organisationen aktiv ist
                         $sql    = "SELECT *
                                      FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. "

@@ -5,21 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  *****************************************************************************/
 
@@ -42,8 +28,18 @@ class Message
     // Inhalt fuer eine Variable hinzufuegen
     // wird die Variablennummer nicht uebergeben, so wird automatisch eine neue mit 
     // der aktellen Nummer genommen
-    function addVariableContent($content, $variable_number = 0)
+    function addVariableContent($content, $variable_number = 0, $show_bold = true)
     {
+        if($show_bold)
+        {
+            $content = "<strong>". utf8_decode($content). "</strong>";
+        }
+        else
+        {
+            $content = utf8_decode($content);
+        }
+
+
         if($variable_number > 0)
         {
             $variable_number--;
@@ -113,7 +109,7 @@ class Message
         
         if(strlen($msg_variable1) > 0)
         {
-            $this->variables[0] = utf8_decode($msg_variable1);
+            $this->variables[0] = "<strong>". utf8_decode($msg_variable1). "</strong>";
         }
         if(strlen($msg_headline) > 0)
         {

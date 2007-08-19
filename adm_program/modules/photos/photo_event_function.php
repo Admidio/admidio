@@ -148,7 +148,7 @@ if(isset($_POST["submit"]) && $_POST["submit"])
         if(is_writeable(SERVER_PATH. "/adm_my_files/photos") == false)
         {
             $g_message->addVariableContent("adm_my_files/photos", 1);
-            $g_message->addVariableContent($g_preferences['email_administrator'], 2);
+            $g_message->addVariableContent($g_preferences['email_administrator'], 2 ,false);
             $g_message->setForwardUrl("$g_root_path/adm_program/modules/photos/photos.php");
             $g_message->show("write_access");
         }
@@ -177,7 +177,7 @@ if(isset($_POST["submit"]) && $_POST["submit"])
         if(is_writeable(SERVER_PATH. "/adm_my_files/photos") == false)
         {
             $g_message->addVariableContent("adm_my_files/photos", 1);
-            $g_message->addVariableContent($g_preferences['email_administrator'], 2);
+            $g_message->addVariableContent($g_preferences['email_administrator'], 2, false);
             $g_message->setForwardUrl("$g_root_path/adm_program/modules/photos/photos.php");
             $g_message->show("write_access");
         }

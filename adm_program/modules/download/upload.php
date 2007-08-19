@@ -89,7 +89,7 @@ echo "<br>
         <ul class=\"formFieldList\">
             <li>
                 <dl>
-                    <dt style=\"width: 95%;\">Datei in den Ordner <b>";
+                    <dt>Datei in den Ordner <b>";
                         if(strlen($folder) == 0)
                         {
                             if(strlen($default_folder) == 0)
@@ -124,7 +124,7 @@ echo "<br>
                     <dt><label for=\"new_name\">Neuer Dateiname:</label></dt>
                     <dd>
                         <input type=\"text\" id=\"new_name\" name=\"new_name\" size=\"25\" tabindex=\"1\" value=\"". $form_values['new_name']. "\">
-                        &nbsp;(optional)&nbsp;<img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                        &nbsp;(optional)<img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
                         onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=dateiname','Message','width=400,height=350,left=310,top=200,scrollbars=yes')\">
                     </dd>
                 </dl>

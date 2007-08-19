@@ -5,6 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  * Diese Klasse dient dazu einen Objekt einer Organisation zu erstellen. 
  * Eine Organisation kann ueber diese Klasse in der Datenbank verwaltet werden
@@ -33,21 +34,6 @@
  * isChildOrganization($organization)
  *                        - prueft ob die uebergebene Orga Kind der aktuellen Orga ist
  * hasChildOrganizations()- prueft, ob die Orga Kinderorganisationen besitzt
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
 
@@ -199,11 +185,11 @@ class Organization extends TableAccess
         {
             if($longname == true)
             {
-                $arr_child_orgas[$row->org_id] = $row['org_longname'];
+                $arr_child_orgas[$row['org_id']] = $row['org_longname'];
             }
             else
             {
-                $arr_child_orgas[$row->org_id] = $row['org_shortname'];
+                $arr_child_orgas[$row['org_id']] = $row['org_shortname'];
             }
         }
         return $arr_child_orgas;

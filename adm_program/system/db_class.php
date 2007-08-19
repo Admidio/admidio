@@ -5,21 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  *****************************************************************************/
  
@@ -34,17 +20,17 @@ class DB
     var $connect_id;    
     var $query_result;
     var $sql;
-    var $transaction = false;
+    var $transactions = 0;
     
     // Modus der Transaktoin setzen (Inspiriert von phpBB)
-    function sql_transaction($status = 'begin')
+    function transaction($status = 'begin')
     {
         switch ($status)
         {
             case 'begin':
                 // If we are within a transaction we will not open another one, 
                 // but enclose the current one to not loose data (prevening auto commit)
-                if ($this->transaction)
+                if ($this->transactions > 0)
                 {
                     $this->transactions++;
                     return true;
@@ -57,13 +43,13 @@ class DB
                     $this->db_error();
                 }
 
-                $this->transaction = true;
+                $this->transactions = 1;
             break;
 
             case 'commit':
                 // If there was a previously opened transaction we do not commit yet... 
                 // but count back the number of inner transactions
-                if ($this->transaction && $this->transactions)
+                if ($this->transactions > 1)
                 {
                     $this->transactions--;
                     return true;
@@ -76,13 +62,11 @@ class DB
                     $this->db_error();
                 }
 
-                $this->transaction = false;
                 $this->transactions = 0;
             break;
 
             case 'rollback':
                 $result = $this->_transaction('rollback');
-                $this->transaction = false;
                 $this->transactions = 0;
             break;
 
@@ -97,6 +81,11 @@ class DB
     function db_error()
     {
         global $g_root_path, $g_message, $g_preferences, $g_current_organization;
+
+        if($this->transactions > 0)
+        {
+            $this->transaction("rollback");
+        }
 
         if(headers_sent() == false && isset($g_preferences))
         {

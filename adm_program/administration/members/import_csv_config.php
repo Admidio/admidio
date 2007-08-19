@@ -5,21 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  *****************************************************************************/
 
@@ -92,11 +78,11 @@ echo "
             <label for=\"first_row\">Erste Zeile beinhaltet die Spaltenbezeichnungen</label>
         </div>
 
-        <table class=\"tableList\" style=\"width: 80%;\" cellpadding=\"2\" cellspacing=\"0\">
+        <table class=\"tableList\" style=\"width: 80%;\" cellspacing=\"0\">
             <thead>
                 <tr>
-                    <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;Datenbankfeld</th>
-                    <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;Dateispalte</th>
+                    <th>Datenbankfeld</th>
+                    <th>Dateispalte</th>
                 </tr>
             </thead>";
 
@@ -129,8 +115,8 @@ echo "
                     $category = $value['cat_id'];
                 }             
                 echo "<tr>
-                    <td style=\"text-align: left;\">&nbsp;". $value['usf_name']. ":</td>
-                    <td style=\"text-align: left;\">&nbsp;
+                    <td><label for=\"usf-". $value['usf_id']. "\">". $value['usf_name']. ":</label></td>
+                    <td>
                         <select size=\"1\" id=\"usf-". $value['usf_id']. "\" name=\"usf-". $value['usf_id']. "\">
                             <option value=\"\" selected=\"selected\"></option>";
 

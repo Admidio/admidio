@@ -5,6 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  * Uebergaben:
  *
@@ -13,21 +14,6 @@
  *        2 Datenbank installieren
  *        3 Datenbank updaten
  *        4 Neue Organisation anlegen
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
 
@@ -89,25 +75,27 @@ function showError($err_msg, $err_head = "Fehler", $mode = 1)
     </head>
     <body>
         <div style="margin-top: 10px; margin-bottom: 10px;" align="center"><br>
-            <div class="formHead" style="width: 300px;">'. $err_head. '</div>
-            <div class="formBody" style="width: 300px;">
-                <p>'. $err_msg. '</p>
-                <p><button id="zurueck" type="button" value="zurueck" onclick="';
-                if($mode == 1)
-                {
-                    // Fehlermeldung (Zurueckgehen)
-                    echo 'history.back()">
-                    <img src="../adm_program/images/back.png" alt="Zurueck">
-                    &nbsp;Zur&uuml;ck';
-                }
-                elseif($mode == 2)
-                {
-                    // Erfolgreich durchgefuehrt
-                    echo 'self.location.href=\'../adm_program/index.php\'">
-                    <img src="../adm_program/images/application_view_list.png" alt="Zurueck">
-                    &nbsp;Admidio &Uuml;bersicht';
-                }
-                echo '</button></p>
+            <div class="formLayout" id="install_message_form" style="width: 300px;">
+                <div class="formHead">'. $err_head. '</div>
+                <div class="formBody">
+                    <p>'. $err_msg. '</p>
+                    <p><button id="zurueck" type="button" value="zurueck" onclick="';
+                    if($mode == 1)
+                    {
+                        // Fehlermeldung (Zurueckgehen)
+                        echo 'history.back()">
+                        <img src="../adm_program/images/back.png" alt="Zurueck">
+                        &nbsp;Zur&uuml;ck';
+                    }
+                    elseif($mode == 2)
+                    {
+                        // Erfolgreich durchgefuehrt
+                        echo 'self.location.href=\'../adm_program/index.php\'">
+                        <img src="../adm_program/images/application_view_list.png" alt="Zurueck">
+                        &nbsp;Admidio &Uuml;bersicht';
+                    }
+                    echo '</button></p>
+                </div>
             </div>
         </div>
     </body>
@@ -289,9 +277,10 @@ if($req_mode == 1 || $req_mode == 4)
 // Daten verarbeiten
 /*------------------------------------------------------------*/
 
- // Verbindung zu Datenbank herstellen
+ // Verbindung zu Datenbank herstellen und Transaktion starten
 $db = new MySqlDB();
 $connection = $db->connect($_SESSION['server'], $_SESSION['user'], $_SESSION['password'], $_SESSION['database']);
+$db->transaction("begin");
 
 // leeres Organisationsobjekt erstellen
 $g_current_organization = new Organization($db);
@@ -546,6 +535,9 @@ if($req_mode == 1 || $req_mode == 4)
                                         , (". $role_member->getValue("rol_id"). ", ". $g_current_user->getValue("usr_id"). ", NOW(), 1) ";
     $db->query($sql);
 }
+
+// Transaktion abschliessen
+$db->transaction("commit");
 
 // globale Objekte entfernen, damit sie neu eingelesen werden
 unset($_SESSION['g_current_organisation']);

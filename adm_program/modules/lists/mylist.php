@@ -5,6 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  * Uebergaben:
  *
@@ -13,21 +14,6 @@
  *                 0 - Ehemalige Rollen auflisten
  * active_member : 1 - (Default) aktive Mitglieder der Rolle anzeigen
  *                 0 - Ehemalige Mitglieder der Rolle anzeigen
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
 
@@ -148,7 +134,8 @@ $g_layout['header'] = "
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 echo "
-<form action=\"$g_root_path/adm_program/modules/lists/mylist_prepare.php\" method=\"post\" name=\"properties\">
+<form action=\"$g_root_path/adm_program/modules/lists/mylist_prepare.php\" method=\"post\">
+<div class=\"formLayout\" id=\"mylist_form\">
     <div class=\"formHead\">Eigene Liste</div>
     <div class=\"formBody\">
         <b>1.</b> W&auml;hle eine Rolle aus von der du eine Mitgliederliste erstellen willst:
@@ -168,13 +155,13 @@ echo "
 
         <p><b>2.</b> Bestimme die Felder, die in der Liste angezeigt werden sollen:</p>
 
-        <table class=\"tableList\" style=\"width: 95%;\" cellpadding=\"0\" cellspacing=\"0\">
+        <table class=\"tableList\" style=\"width: 94%;\" cellspacing=\"0\">
             <tr>
-                <th class=\"tableHeader\" style=\"width: 18%;\">Nr.</th>
-                <th class=\"tableHeader\" style=\"width: 37%;\">Feld</th>
-                <th class=\"tableHeader\" style=\"width: 18%;\">Sortierung</th>
-                <th class=\"tableHeader\" style=\"width: 27%;\">Bedingung
-                    <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: middle; padding-bottom: 1px;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                <th style=\"width: 18%;\">Nr.</th>
+                <th style=\"width: 37%;\">Feld</th>
+                <th style=\"width: 18%;\">Sortierung</th>
+                <th style=\"width: 27%;\">Bedingung
+                    <img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
                     onClick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=condition','Message','width=450,height=600,left=310,top=200,scrollbars=yes')\">
                 </th>
             </tr>
@@ -188,31 +175,41 @@ echo "
                 echo "</td>
             </tr>
             <tr>
-                <td colspan=\"4\" style=\"padding: 4px;\">&nbsp;
-                    <span class=\"iconLink\">
-                        <a class=\"iconLink\" href=\"javascript:addField()\"><img
-                        class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" alt=\"Feld hinzuf&uuml;gen\"></a>
-                        <a class=\"iconLink\" href=\"javascript:addField()\">Feld hinzuf&uuml;gen</a>
-                    </span>
+                <td colspan=\"4\">&nbsp;
+                    <ul class=\"iconTextLink\">
+                        <li>
+                            <a href=\"javascript:addField()\"><img
+                            src=\"$g_root_path/adm_program/images/add.png\" alt=\"Feld hinzuf&uuml;gen\"></a>
+                            <a href=\"javascript:addField()\">Feld hinzuf&uuml;gen</a>
+                        </li>
+                    </ul>
                 </td>
             </tr>
         </table>
+        
+        <hr />
 
-        <p>";
-            // Zurueck-Button nur anzeigen, wenn MyList nicht direkt aufgerufen wurde
-            if($_SESSION['navigation']->count > 1)
-            {
-                echo "<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
-                    <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\">
-                    Zur&uuml;ck</button>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-            }
-            echo "<button name=\"anzeigen\" type=\"submit\" value=\"anzeigen\">
-                <img src=\"$g_root_path/adm_program/images/application_view_columns.png\" alt=\"Liste anzeigen\">
-                &nbsp;Liste anzeigen</button>            
-        </p>
+        <div class=\"formSubmit\">
+            <button name=\"anzeigen\" type=\"submit\" value=\"anzeigen\">
+            <img src=\"$g_root_path/adm_program/images/application_view_columns.png\" alt=\"Liste anzeigen\">
+            &nbsp;Liste anzeigen</button>            
+        </div>
     </div>
+</div>
 </form>";
+
+// Zurueck-Button nur anzeigen, wenn MyList nicht direkt aufgerufen wurde
+if($_SESSION['navigation']->count > 1)
+{
+    echo "
+    <ul class=\"iconTextLink\">
+        <li>
+            <a href=\"$g_root_path/adm_program/system/back.php\"><img 
+            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
+            <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+        </li>
+    </ul>";
+}
     
 require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
 

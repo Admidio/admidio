@@ -5,6 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  * Uebergaben:
  *
@@ -13,21 +14,6 @@
  *            1 - Dialog um neue Benutzer hinzuzufuegen.
  *            2 - Dialog um Registrierung entgegenzunehmen
  *            3 - Registrierung zuordnen/akzeptieren
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
 
@@ -311,8 +297,7 @@ function getFieldCode($field, $user, $new_user)
     $description = "";
     if(strlen($field['usf_description']) > 0 && $field['cat_name'] != "Messenger")
     {
-        $description = "&nbsp;<img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\"
-        vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+        $description = "<img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
         onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=user_field_description&amp;err_text=". urlencode($field['usf_name']). "','Message','width=400,height=400,left=310,top=200,scrollbars=yes')\">";
     }
     
@@ -415,7 +400,7 @@ echo "
                                 if($new_user > 0)
                                 {
                                     echo "&nbsp;<span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>&nbsp;
-                                    <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                                    <img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
                                     onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=nickname','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\">";
                                 }
                             echo "</dd>
@@ -430,7 +415,7 @@ echo "
                                 <dd>
                                     <input type=\"password\" id=\"usr_password\" name=\"usr_password\" style=\"width: 130px;\" maxlength=\"20\" />
                                     <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>&nbsp;
-                                    <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                                    <img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
                                     onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=password','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\">
                                 </dd>
                             </dl>
@@ -488,7 +473,7 @@ echo "
                         <dd>
                             <input type=\"text\" id=\"captcha\" name=\"captcha\" style=\"width: 200px;\" maxlength=\"8\" value=\"\">
                             <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>&nbsp;
-                            <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                            <img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
                              onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=captcha_help','Message','width=400,height=320,left=310,top=200,scrollbars=yes')\">
                         </dd>
                     </dl>
@@ -522,7 +507,7 @@ echo "
                 $user_last_change = new User($g_db, $user->getValue("usr_usr_id_change"));
             }
 
-            echo "<div class=\"formSubmit\">
+            echo "<div class=\"editInformation\">
                 Letzte &Auml;nderung am ". mysqldatetime("d.m.y h:i", $user->getValue("usr_last_change")).
                 " durch ". $user_last_change->getValue("Vorname"). " ". $user_last_change->getValue("Nachname"). "
             </div>";

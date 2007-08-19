@@ -83,7 +83,7 @@ echo "<br>
         <ul class=\"formFieldList\">
             <li>
                 <dl>
-                    <dt style=\"width: 95%;\">
+                    <dt>
                         Neuer Ordner in <b>";
                         if(strlen($folder) == 0)
                         {

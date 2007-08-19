@@ -54,6 +54,17 @@ hr {
     color:              #666666;
 }
 
+/* Elemente, die fuer ein Drag&Drop angefasst werden koennen */
+.dragable {
+    cursor:		move;
+    border-width:       0px;
+}
+
+textarea {
+    font-family:        arial, sans-serif;
+    font-size:          10pt;
+}
+
 /* Layout fuer Buttons mit Icon */
 button {
      padding-top:       2px;
@@ -159,19 +170,9 @@ a:hover {
 
 .formBody hr {
     border:             1px solid #6CA7A8;
-    width:              85%;
-    margin:             10px; 
-}
-
-.formBody ul {
-    margin:             0px;
-    padding:            0px;
-    list-style-type:    none;
-}
-
-.formBody ul li {   
-    display:            inline;
-    text-align:         center;
+    width:              100%;
+    margin-top:         10px; 
+    margin-bottom:      10px; 
 }
 
 /* Ordnet Felder mit ihren Beschreibungen in Formularen.
@@ -186,15 +187,14 @@ a:hover {
 
 .formFieldList li { 
     display:            inline;
-    text-align:         center;
+    text-align:         left;
 }
 .formFieldList li dl {
+    padding:            0px;
     margin-top:         8px;
     margin-bottom:      8px;
-    padding:            0px;
 }
 .formFieldList li dl dt {
-    width:              30%;
     text-align:         left;
     float:              left;
 }
@@ -242,17 +242,20 @@ a:hover {
     width:              550px;         /* Optimale Breite von Listen */
     font-size:          10pt;
     background-color:   #eaeaea;
-    border-width:       1px;
-    border-color:       #555555;
-    border-style:       solid;
-    padding:            0px;
-    border-spacing:     0px;
+    border:             1px solid #555555;
 }
 
-.tableHeader {
+.tableList th {
     color:              #555555;
     font-size:          10pt;
     background-color:   #85C226;
+    text-align:         left;
+    padding:            3px;
+}
+
+.tableList td {
+    text-align:         left;
+    vertical-align:     top;
     padding:            3px;
 }
 
@@ -286,7 +289,8 @@ a:hover {
 .iconTextLink {
     list-style-type:    none;
     padding:            0px;
-    margin:             15px;
+    margin-top:         10px;
+    margin-bottom:      10px;
 }
 
 .iconTextLink li{   
@@ -303,7 +307,7 @@ a:hover {
 /*Iconlinks um Funktionen aufzurufen (ohne Text)*/
 .iconLinkRow {
     list-style-type:    none;
-    margin              0px;
+    margin:             0px;
     padding:            0px;
 }
 
@@ -319,23 +323,20 @@ a:hover {
 }
 
 /* Icon um Informationen anzuzeigen (ohne Text und Link)*/
-.iconInformationRow {
-    list-style-type:    none;
-    margin              0px;
-    padding:            0px;
-}
-
-.iconInformationRow li {    
-    display:            inline;
-    text-align:         left;
-    padding:            0px;
-}
-
-.iconInformationRow img {
-    border:             none;
+.iconInformation {
+    margin-left:        2px;
+    margin-right:       2px;
     cursor:             help;
+    vertical-align:     top;
 }
 
+/* Hilfeicon, bei dem ein kleines Fenster mit entsprechender Hilfe aufgerufen wird */
+.iconHelpLink {
+    border:             none;
+    cursor:             pointer;
+    vertical-align:     top;
+    margin:             2px 5px 0px 5px;
+}
 
 /* Elemente fuer Navigationsklasse */
 .pageNavigation {
@@ -360,6 +361,10 @@ a:hover {
     text-align:         left;
 }
 
+.formBody .editInformation {
+    text-align:         center;
+}
+
 /*Pflichtfeldmarkierung*/
 .mandatoryFieldMarker{
     color:              #990000;
@@ -378,19 +383,11 @@ a:hover {
 }
 
 /* spezielle Anpassung fuer die Loginseite */
-#login_form .formFieldList li dl dt {
-    width:              40%;
-}
-
 #login_form .formFieldList li dl dd {
     margin-left:        40%;
 }
 
 /* spezielle Anpassung fuer die Passwortseite */
-#password_form .formFieldList li dl dt {
-    width:              50%;
-}
-
 #password_form .formFieldList li dl dd {
     margin-left:        50%;
 }
@@ -399,10 +396,6 @@ a:hover {
 #organization_form .formFieldList li dl {
     margin-top:         15px;
     margin-bottom:      5px;
-}
-
-#organization_form .formFieldList li dl dt {
-    width:              55%;
 }
 
 #organization_form .formFieldList li dl dd {
@@ -414,13 +407,18 @@ a:hover {
     margin:             3px 0px 3px 0px;
 }
 
-#profile_roles_box ul li dl dt {
-    width:              75%;
+#profile_roles_box ul li dl dd {
+    margin-left:        70%;
+    text-align:         right;
 }
 
-#profile_roles_box ul li dl dd {
-    margin-left:        75%;
+#profile_former_roles_box ul li dl dd {
+    margin-left:        55%;
     text-align:         right;
+}
+
+#lists_overview .formFieldList li dt {
+    margin-left:	20px;
 }
 
 #infoboxListsBox {

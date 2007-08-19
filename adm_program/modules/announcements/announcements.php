@@ -141,13 +141,14 @@ if($req_id == 0
     // Neue Ankuendigung anlegen
     if($g_current_user->editAnnouncements())
     {
-        echo "<p>
-            <span class=\"iconLink\">
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/announcements/announcements_new.php?headline=$req_headline\"><img
-                class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" alt=\"Neu anlegen\"></a>
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/announcements/announcements_new.php?headline=$req_headline\">Anlegen</a>
-            </span>
-        </p>";
+        echo "
+        <ul class=\"iconTextLink\">
+            <li>
+                <a href=\"$g_root_path/adm_program/modules/announcements/announcements_new.php?headline=$req_headline\"><img
+                src=\"$g_root_path/adm_program/images/add.png\" alt=\"Neu anlegen\"></a>
+                <a href=\"$g_root_path/adm_program/modules/announcements/announcements_new.php?headline=$req_headline\">Anlegen</a>
+            </li>
+        </ul>";        
     }
 
     // Navigation mit Vor- und Zurueck-Buttons
@@ -214,7 +215,7 @@ else
                     echo nl2br(strSpecialChars2Html($row->ann_description));
                 }
             echo "</div>
-            <div class=\"smallFontSize\" style=\"margin: 8px 4px 4px 4px;\">";
+            <div class=\"editInformation\">";
                 $user_create = new User($g_db, $row->ann_usr_id);
                 echo "Angelegt von ". $user_create->getValue("Vorname"). " ". $user_create->getValue("Nachname").
                 " am ". mysqldatetime("d.m.y h:i", $row->ann_timestamp);

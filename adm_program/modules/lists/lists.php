@@ -118,15 +118,13 @@ if($num_roles == 0)
         // wenn User eingeloggt, dann Meldung, dass keine Rollen in der Kategorie existieren
         if($active_role == 0)
         {
-            $err_code = "no_old_roles";
-            $err_text = "";
+            $g_message->show("no_old_roles");
         }
         else
         {
-            $err_code = "no_category_roles";
-            $err_text = "$g_root_path/adm_program/administration/roles/roles.php";
+            $g_message->addVariableContent("$g_root_path/adm_program/administration/roles/roles.php", 1, false);
+            $g_message->show("no_old_roles");
         }
-        $g_message->show($err_code, $err_text, "Hinweis");
     }
     else
     {
@@ -295,12 +293,12 @@ for($i = 0; $i < $roles_per_page && $i + $_GET["start"] < $num_roles; $i++)
 
         if($count_cat_entries > 0)
         {
-            echo"<hr class=\"formLine\" width=\"98%\" />";
+            echo"<hr />";
         }
 
         echo "
-        <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: left; float: left;\">&nbsp;";
+        <div>
+            <div style=\"float: left;\">";
                 // Link nur anzeigen, wenn Rolle auch Mitglieder hat
                 if($num_member > 0 || $num_leader > 0)
                 {
@@ -317,7 +315,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET["start"] < $num_roles; $i++)
                 }
                 else
                 {
-                    echo "<b>". $row_lst['rol_name']. "</b>";
+                    echo "<strong>". $row_lst['rol_name']. "</strong>";
                 }
 
                 if($g_current_user->assignRoles() 
@@ -366,86 +364,111 @@ for($i = 0; $i < $roles_per_page && $i + $_GET["start"] < $num_roles; $i++)
                     echo "&nbsp;";
                 }
             echo "</div>
-        </div>";
+        </div>
+        
+        <ul class=\"formFieldList\">";
+            if(strlen($row_lst['rol_description']) > 0)
+            {
+                echo "
+                <li>
+                    <dl>
+                        <dt>Beschreibung:</dt>
+                        <dd>". $row_lst['rol_description']. "</dd>
+                    </dl>
+                </li>";
+            }
 
-        if(strlen($row_lst['rol_description']) > 0)
-        {
-            echo "<div style=\"margin-top: 3px;\">
-                <div style=\"margin-left: 30px; width: 130px; text-align: left; float: left;\">Beschreibung:</div>
-                <div style=\"margin-left: 160px; text-align: left;\">". $row_lst['rol_description']. "</div>
-            </div>";
-        }
+            if(strlen($row_lst['rol_start_date']) > 0)
+            {
+                echo "
+                <li>
+                    <dl>
+                        <dt>Zeitraum:</dt>
+                        <dd>". mysqldate("d.m.y", $row_lst['rol_start_date']). " bis ". mysqldate("d.m.y", $row_lst['rol_end_date']). "</dd>
+                    </dl>
+                </li>";
+            }
+            if($row_lst['rol_weekday'] > 0
+            || strlen($row_lst['rol_start_time']) > 0 )
+            {
+                echo "
+                <li>
+                    <dl>
+                        <dt>Gruppenstunde:</dt>
+                        <dd>"; 
+                            if($row_lst['rol_weekday'] > 0)
+                            {
+                                echo $arrDay[$row_lst['rol_weekday']-1];
+                            }
+                            if(strlen($row_lst['rol_start_time']) > 0)
+                            {
+                                echo " von ". mysqltime("h:i", $row_lst['rol_start_time']). " bis ". mysqltime("h:i", $row_lst['rol_end_time']);
+                            }
+                        echo "</dd>
+                    </dl>
+                </li>";
+            }
+            //Treffpunkt
+            if(strlen($row_lst['rol_location']) > 0)
+            {
+                echo "
+                <li>
+                    <dl>
+                        <dt>Treffpunkt:</dt>
+                        <dd>". $row_lst['rol_location']. "</dd>
+                    </dl>
+                </li>";
+            }
+            //Teinehmer
+            echo "
+            <li>
+                <dl>
+                    <dt>Teilnehmer:</dt>
+                    <dd>$num_member";
+                        if($row_lst['rol_max_members'] > 0)
+                        {
+                            echo " von max. ". $row_lst['rol_max_members'];
+                        }
+                        if($active_role && $num_former > 0)
+                        {
+                            // Anzahl Ehemaliger anzeigen
+                            if($num_former == 1)
+                            {
+                                echo "&nbsp;&nbsp;($num_former Ehemaliger) ";
+                            }
+                            else
+                            {
+                                echo "&nbsp;&nbsp;($num_former Ehemalige) ";
+                            }
+                        }
+                    echo "</dd>
+                </dl>
+            </li>";
 
-        if(strlen($row_lst['rol_start_date']) > 0)
-        {
-            echo "<div style=\"margin-top: 3px;\">
-                <div style=\"margin-left: 30px; width: 130px; text-align: left; float: left;\">Zeitraum:</div>
-                <div style=\"text-align: left;\">". mysqldate("d.m.y", $row_lst['rol_start_date']). " bis ". mysqldate("d.m.y", $row_lst['rol_end_date']). "</div>";
-            echo "</div>";
-        }
-        if($row_lst['rol_weekday'] > 0
-        || strlen($row_lst['rol_start_time']) > 0 )
-        {
-            echo "<div style=\"margin-top: 3px;\">
-                <div style=\"margin-left: 30px; width: 130px; text-align: left; float: left;\">Gruppenstunde:</div>
-                <div style=\"text-align: left;\">"; 
-                    if($row_lst['rol_weekday'] > 0)
-                    {
-                        echo $arrDay[$row_lst['rol_weekday']-1];
-                    }
-                    if(strlen($row_lst['rol_start_time']) > 0)
-                    {
-                        echo " von ". mysqltime("h:i", $row_lst['rol_start_time']). " bis ". mysqltime("h:i", $row_lst['rol_end_time']);
-                    }
-                echo "</div>";
-            echo "</div>";
-        }
-        //Treffpunkt
-        if(strlen($row_lst['rol_location']) > 0)
-        {
-            echo "<div style=\"margin-top: 3px;\">
-                <div style=\"margin-left: 30px; width: 130px; text-align: left; float: left;\">Treffpunkt:</div>
-                <div style=\"text-align: left;\">". $row_lst['rol_location']. "</div>
-            </div>";
-        }
-        //Teinehmer
-        echo "
-        <div style=\"margin-top: 3px;\">
-            <div style=\"margin-left: 30px; width: 130px; text-align: left; float: left;\">Teilnehmer:</div>
-            <div style=\"text-align: left;\">$num_member";
-                if($row_lst['rol_max_members'] > 0)
-                {
-                    echo " von max. ". $row_lst['rol_max_members'];
-                }
-                if($active_role && $num_former > 0)
-                {
-                    // Anzahl Ehemaliger anzeigen
-                    if($num_former == 1)
-                    {
-                        echo "&nbsp;&nbsp;($num_former Ehemaliger) ";
-                    }
-                    else
-                    {
-                        echo "&nbsp;&nbsp;($num_former Ehemalige) ";
-                    }
-                }
-            echo "</div>
-        </div>";
-        //Leiter
-        if($num_leader>0){
-            echo "<div style=\"margin-top: 3px;\">
-                <div style=\"margin-left: 30px; width: 130px; text-align: left; float: left;\">Leiter:</div>
-                <div style=\"text-align: left;\">$num_leader</div>
-            </div>";
-        }
-        //Beitrag
-        if(strlen($row_lst['rol_cost']) > 0)
-        {
-            echo "<div style=\"margin-top: 3px;\">
-                <div style=\"margin-left: 30px; width: 130px; text-align: left; float: left;\">Beitrag:</div>
-                <div style=\"margin-left: 160px; text-align: left;\">". $row_lst['rol_cost']. " &euro;</div>
-            </div>";
-        }
+            //Leiter
+            if($num_leader>0)
+            {
+                echo "
+                <li>
+                    <dl>
+                        <dt>Leiter:</dt>
+                        <dd>$num_leader</dd>
+                    </dl>
+                </li>";
+            }
+
+            //Beitrag
+            if(strlen($row_lst['rol_cost']) > 0)
+            {
+                echo "
+                <li>
+                    <dl>
+                        <dt>Beitrag:</dt>
+                        <dd>". $row_lst['rol_cost']. " &euro;</dd>
+                    </dl>
+                </li>";
+            }
+        echo "</ul>";
         $count_cat_entries++;
     }
 }

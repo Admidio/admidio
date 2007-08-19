@@ -5,21 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  ****************************************************************************/
  
@@ -75,19 +61,18 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 echo "
 <h1 class=\"moduleHeadline\">Profilfelder</h1>
 
-<p>
-    <span class=\"iconLink\">
-        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/fields_new.php\"><img 
-        class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" alt=\"Profilfeld anlegen\"></a>
-        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/fields_new.php\">Profilfeld anlegen</a>
-    </span>
-    &nbsp;&nbsp;&nbsp;&nbsp;
-    <span class=\"iconLink\">
-        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/categories.php?type=USF\"><img
-        class=\"iconLink\" src=\"$g_root_path/adm_program/images/application_double.png\" alt=\"Kategorien pflegen\"></a>
-        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/categories.php?type=USF\">Kategorien pflegen</a>
-    </span>
-</p>";
+<ul class=\"iconTextLink\">
+    <li>
+        <a href=\"$g_root_path/adm_program/administration/members/fields_new.php\"><img 
+        src=\"$g_root_path/adm_program/images/add.png\" alt=\"Profilfeld anlegen\"></a>
+        <a href=\"$g_root_path/adm_program/administration/members/fields_new.php\">Profilfeld anlegen</a>
+    </li>
+    <li>
+        <a href=\"$g_root_path/adm_program/administration/roles/categories.php?type=USF\"><img
+        src=\"$g_root_path/adm_program/images/application_double.png\" alt=\"Kategorien pflegen\"></a>
+        <a href=\"$g_root_path/adm_program/administration/roles/categories.php?type=USF\">Kategorien pflegen</a>
+    </li>
+</ul>";
 
 $sql = "SELECT * FROM ". TBL_CATEGORIES. ", ". TBL_USER_FIELDS. "
          WHERE cat_type   = 'USF'
@@ -100,17 +85,18 @@ $result = $g_db->query($sql);
 $js_drag_drop = "";
 
 echo "
-<table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\">
+<table class=\"tableList\" cellspacing=\"0\">
     <thead>
         <tr>
-            <th class=\"tableHeader\" style=\"text-align: left;\" colspan=\"2\">Feld <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+            <th colspan=\"2\">Feld<img 
+                class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
                 onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=field','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\"></th>
-            <th class=\"tableHeader\" style=\"text-align: left;\">Beschreibung</th>
-            <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/eye.png\" alt=\"Feld f&uuml;r alle Benutzer bzw. nur berechtigte Nutzer sichtbar\" title=\"Feld f&uuml;r alle Benutzer bzw. nur berechtigte Nutzer sichtbar\"></th>
-            <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/textfield_key.png\" alt=\"Feld nur f&uuml;r berechtigte Benutzer (Rollenrecht bzw. eigenes Profil) editierbar\" title=\"Feld nur f&uuml;r berechtigte Benutzer (Rollenrecht bzw. eigenes Profil) editierbar\"></th>
-            <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/asterisk_yellow.png\" alt=\"Pflichtfeld, muss vom Benutzer gef&uuml;llt werden\" title=\"Pflichtfeld, muss vom Benutzer gef&uuml;llt werden\"></th>
-            <th class=\"tableHeader\" style=\"text-align: left;\">Datentyp</th>
-            <th class=\"tableHeader\" style=\"width: 40px;\">&nbsp;</th>
+            <th>Beschreibung</th>
+            <th><img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/eye.png\" alt=\"Feld f&uuml;r alle Benutzer bzw. nur berechtigte Nutzer sichtbar\" title=\"Feld f&uuml;r alle Benutzer bzw. nur berechtigte Nutzer sichtbar\"></th>
+            <th><img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/textfield_key.png\" alt=\"Feld nur f&uuml;r berechtigte Benutzer (Rollenrecht bzw. eigenes Profil) editierbar\" title=\"Feld nur f&uuml;r berechtigte Benutzer (Rollenrecht bzw. eigenes Profil) editierbar\"></th>
+            <th><img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/asterisk_yellow.png\" alt=\"Pflichtfeld, muss vom Benutzer gef&uuml;llt werden\" title=\"Pflichtfeld, muss vom Benutzer gef&uuml;llt werden\"></th>
+            <th>Datentyp</th>
+            <th style=\"width: 40px;\">&nbsp;</th>
         </tr>
     </thead>";
     
@@ -144,40 +130,40 @@ echo "
             }           
             echo "
             <tr id=\"row_$row->usf_id\" class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
-                <td style=\"text-align: left; width: 18px;\"><img class=\"dragable\" src=\"$g_root_path/adm_program/images/arrow_out.png\" style=\"cursor: move;\" border=\"0\" alt=\"Reihenfolge &auml;ndern\" title=\"Reihenfolge &auml;ndern\"></td>
-                <td style=\"text-align: left;\"><a href=\"$g_root_path/adm_program/administration/members/fields_new.php?usf_id=$row->usf_id\">$row->usf_name</a></td>
-                <td style=\"text-align: left;\">$row->usf_description</td>
-                <td style=\"text-align: center;\">";
+                <td style=\"width: 18px;\"><img class=\"dragable\" src=\"$g_root_path/adm_program/images/arrow_out.png\" alt=\"Reihenfolge &auml;ndern\" title=\"Reihenfolge &auml;ndern\"></td>
+                <td><a href=\"$g_root_path/adm_program/administration/members/fields_new.php?usf_id=$row->usf_id\">$row->usf_name</a></td>
+                <td>$row->usf_description</td>
+                <td>";
                     if($row->usf_hidden == 1)
                     {
-                        echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/eye_gray.png\" alt=\"Feld nur f&uuml;r berechtigte Benutzer (eigenes Profil &amp; Rollenrecht) sichtbar\" title=\"Feld nur f&uuml;r berechtigte Benutzer (eigenes Profil &amp; Rollenrecht) sichtbar\">";
+                        echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/eye_gray.png\" alt=\"Feld nur f&uuml;r berechtigte Benutzer (eigenes Profil &amp; Rollenrecht) sichtbar\" title=\"Feld nur f&uuml;r berechtigte Benutzer (eigenes Profil &amp; Rollenrecht) sichtbar\">";
                     }
                     else
                     {
-                        echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/eye.png\" alt=\"Feld f&uuml;r alle Benutzer sichtbar\" title=\"Feld f&uuml;r alle Benutzer sichtbar\">";
+                        echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/eye.png\" alt=\"Feld f&uuml;r alle Benutzer sichtbar\" title=\"Feld f&uuml;r alle Benutzer sichtbar\">";
                     }
                 echo "</td>
-                <td style=\"text-align: center;\">";
+                <td>";
                     if($row->usf_disabled == 1)
                     {
-                        echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/textfield_key.png\" alt=\"Feld nur f&uuml;r berechtigte Benutzer editierbar\" title=\"Feld nur f&uuml;r berechtigte Benutzer editierbar\">";
+                        echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/textfield_key.png\" alt=\"Feld nur f&uuml;r berechtigte Benutzer editierbar\" title=\"Feld nur f&uuml;r berechtigte Benutzer editierbar\">";
                     }
                     else
                     {
-                        echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/textfield.png\" alt=\"Feld im eigenen Profil und f&uuml;r berechtigte Benutzer editierbar\" title=\"Feld im eigenen Profil und f&uuml;r berechtigte Benutzer editierbar\">";
+                        echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/textfield.png\" alt=\"Feld im eigenen Profil und f&uuml;r berechtigte Benutzer editierbar\" title=\"Feld im eigenen Profil und f&uuml;r berechtigte Benutzer editierbar\">";
                     }
                 echo "</td>
-                <td style=\"text-align: center;\">";
+                <td>";
                     if($row->usf_mandatory == 1)
                     {
-                        echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/asterisk_yellow.png\" alt=\"Pflichtfeld, muss vom Benutzer gef&uuml;llt werden\" title=\"Pflichtfeld, muss vom Benutzer gef&uuml;llt werden\">";
+                        echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/asterisk_yellow.png\" alt=\"Pflichtfeld, muss vom Benutzer gef&uuml;llt werden\" title=\"Pflichtfeld, muss vom Benutzer gef&uuml;llt werden\">";
                     }
                     else
                     {
-                        echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/asterisk_gray.png\" alt=\"Feld muss nicht zwingend vom Benutzer gef&uuml;llt werden\" title=\"Feld muss nicht zwingend vom Benutzer gef&uuml;llt werden\">";
+                        echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/asterisk_gray.png\" alt=\"Feld muss nicht zwingend vom Benutzer gef&uuml;llt werden\" title=\"Feld muss nicht zwingend vom Benutzer gef&uuml;llt werden\">";
                     }
                 echo "</td>
-                <td style=\"text-align: left;\">";
+                <td>";
                     if($row->usf_type == "DATE")
                     {
                         echo "Datum";
@@ -207,7 +193,7 @@ echo "
                         echo "Zahl";
                     }
                 echo "</td>
-                <td style=\"text-align: center;\">
+                <td style=\"text-align: right;\">
                     <a href=\"$g_root_path/adm_program/administration/members/fields_new.php?usf_id=$row->usf_id\">
                     <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>&nbsp;";
                     if($row->usf_system == 1)
@@ -233,13 +219,13 @@ echo "
     }
 echo "</table>
 
-<p>
-    <span class=\"iconLink\">
-        <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\"><img
-        class=\"iconLink\" class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
-        <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
-    </span>
-</p>
+<ul class=\"iconTextLink\">
+    <li>
+        <a href=\"$g_root_path/adm_program/system/back.php\"><img 
+        src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
+        <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+    </li>
+</ul>
 
 <script type=\"text/javascript\"><!--
     $js_drag_drop

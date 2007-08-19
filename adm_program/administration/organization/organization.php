@@ -342,68 +342,74 @@ echo "
         <div class=\"groupBox\" id=\"register\">
             <div class=\"groupBoxHeadline\">Einstellungen Registrierung&nbsp;&nbsp; </div>
             <div class=\"groupBoxBody\">
-                <div style=\"margin-top: 15px;\">
-                    <div style=\"text-align: left; width: 55%; float: left;\">Registrierung:</div>
-                    <div style=\"text-align: left;\">
-                        <select size=\"1\" name=\"registration_mode\">
-                            <option value=\"0\" ";
-                            if($form_values['registration_mode'] == 0)
-                            {
-                                echo " selected ";
-                            }
-                            echo ">Deaktiviert</option>
-                            <option value=\"1\" ";
-                            if($form_values['registration_mode'] == 1)
-                            {
-                                echo " selected ";
-                            }
-                            echo ">Schnelle Registrierung</option>
-                            <option value=\"2\" ";
-                            if($form_values['registration_mode'] == 2)
-                            {
-                                echo " selected ";
-                            }
-                            echo ">Erweiterte Registrierung</option>
-                        </select>
-                    </div>
-                </div>
-                <div class=\"smallText\">
-                    Hier kann die Art der Registrierung festgelegt bzw. ganz abgeschaltet werden. Mit der schnellen
-                    Registrierung kann der Benutzer nur die Pflichtfelder eingeben, bei der erweiterten
-                    Registrierung stehen ihm alle Felder des Profils zur Verf&uuml;gung.
-                </div>
-
-                <div style=\"margin-top: 15px;\">
-                    <div style=\"text-align: left; width: 55%; float: left;\">Captcha aktivieren:</div>
-                    <div style=\"text-align: left;\">
-                        <input type=\"checkbox\" id=\"enable_registration_captcha\" name=\"enable_registration_captcha\" ";
-                        if(isset($form_values['enable_registration_captcha']) && $form_values['enable_registration_captcha'] == 1)
-                        {
-                            echo " checked ";
-                        }
-                        echo " value=\"1\" />
-                    </div>
-                </div>
-                <div class=\"smallText\">
-                    Bei der Registrierung wird f&uuml;r alle Benutzer bei aktiviertem Captcha ein alphanumerischer
-                    Code eingeblendet. Diesen muss der Benutzer vor der Registrierung korrekt eingeben. Dies soll sicherstellen,
-                    dass das Formular nicht von Spammern missbraucht werden kann.
-                </div>
-
-                <div style=\"margin-top: 15px;\">
-                    <div style=\"text-align: left; width: 55%; float: left;\">E-Mail-Benachrichtigung:</div>
-                    <div style=\"text-align: left;\">
-                        <input type=\"checkbox\" id=\"enable_registration_admin_mail\" name=\"enable_registration_admin_mail\" ";
-                        if(isset($form_values['enable_registration_admin_mail']) && $form_values['enable_registration_admin_mail'] == 1)
-                        {
-                            echo " checked ";
-                        }
-                        echo " value=\"1\" />
-                    </div>
-                </div>
-                <div class=\"smallText\">
-                    Alle Webmaster erhalten eine E-Mail, sobald sich ein neuer User im System registriert hat.
-                </div>
+                <ul class=\"formFieldList\">
+                    <li>
+                        <dl>
+                            <dt><label for=\"registration_mode\">Registrierung:</label></dt>
+                            <dd>
+                                <select size=\"1\" id=\"registration_mode\" name=\"registration_mode\">
+                                    <option value=\"0\" ";
+                                    if($form_values['registration_mode'] == 0)
+                                    {
+                                        echo " selected ";
+                                    }
+                                    echo ">Deaktiviert</option>
+                                    <option value=\"1\" ";
+                                    if($form_values['registration_mode'] == 1)
+                                    {
+                                        echo " selected ";
+                                    }
+                                    echo ">Schnelle Registrierung</option>
+                                    <option value=\"2\" ";
+                                    if($form_values['registration_mode'] == 2)
+                                    {
+                                        echo " selected ";
+                                    }
+                                    echo ">Erweiterte Registrierung</option>
+                                </select>
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Hier kann die Art der Registrierung festgelegt bzw. ganz abgeschaltet werden. Mit der schnellen
+                        Registrierung kann der Benutzer nur die Pflichtfelder eingeben, bei der erweiterten
+                        Registrierung stehen ihm alle Felder des Profils zur Verf&uuml;gung.
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"enable_registration_captcha\">Captcha aktivieren:</label></dt>
+                            <dd>
+                                <input type=\"checkbox\" id=\"enable_registration_captcha\" name=\"enable_registration_captcha\" ";
+                                if(isset($form_values['enable_registration_captcha']) && $form_values['enable_registration_captcha'] == 1)
+                                {
+                                    echo " checked ";
+                                }
+                                echo " value=\"1\" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Bei der Registrierung wird f&uuml;r alle Benutzer bei aktiviertem Captcha ein alphanumerischer
+                        Code eingeblendet. Diesen muss der Benutzer vor der Registrierung korrekt eingeben. Dies soll sicherstellen,
+                        dass das Formular nicht von Spammern missbraucht werden kann.
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"enable_registration_admin_mail\">E-Mail-Benachrichtigung:</label></dt>
+                            <dd>
+                                <input type=\"checkbox\" id=\"enable_registration_admin_mail\" name=\"enable_registration_admin_mail\" ";
+                                if(isset($form_values['enable_registration_admin_mail']) && $form_values['enable_registration_admin_mail'] == 1)
+                                {
+                                    echo " checked ";
+                                }
+                                echo " value=\"1\" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Alle Webmaster erhalten eine E-Mail, sobald sich ein neuer User im System registriert hat.
+                    </li>
+                </ul>
             </div>
         </div>";
 
@@ -447,32 +453,37 @@ echo "
         <div class=\"groupBox\" id=\"download-module\">
             <div class=\"groupBoxHeadline\">Einstellungen Downloadmodul&nbsp;&nbsp; </div>
             <div class=\"groupBoxBody\">
-                <div style=\"margin-top: 6px;\">
-                    <div style=\"text-align: left; width: 55%; float: left;\">Downloadmodul aktivieren:</div>
-                    <div style=\"text-align: left;\">
-                        <input type=\"checkbox\" id=\"enable_download_module\" name=\"enable_download_module\" ";
-                        if(isset($form_values['enable_download_module']) && $form_values['enable_download_module'] == 1)
-                        {
-                            echo " checked ";
-                        }
-                        echo " value=\"1\" />
-                    </div>
-                </div>
-                <div class=\"smallText\">
-                    Das Downloadmodul kann &uuml;ber diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
-                    aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt.
-                </div>
-
-                <div style=\"margin-top: 15px;\">
-                    <div style=\"text-align: left; width: 55%; float: left;\">Maximale Dateigr&ouml;&szlig;e:</div>
-                    <div style=\"text-align: left;\">
-                        <input type=\"text\" name=\"max_file_upload_size\" size=\"6\" maxlength=\"10\" value=\"". $form_values['max_file_upload_size']. "\"> KB
-                    </div>
-                </div>
-                <div class=\"smallText\">
-                    Benutzer k&ouml;nnen nur Dateien hochladen, bei denen die Dateigr&ouml;&szlig;e kleiner als der hier
-                    angegebene Wert ist. Steht hier 0, so ist der Upload deaktiviert.
-                </div>
+                <ul class=\"formFieldList\">
+                    <li>
+                        <dl>
+                            <dt><label for=\"enable_download_module\">Downloadmodul aktivieren:</label></dt>
+                            <dd>
+                                <input type=\"checkbox\" id=\"enable_download_module\" name=\"enable_download_module\" ";
+                                if(isset($form_values['enable_download_module']) && $form_values['enable_download_module'] == 1)
+                                {
+                                    echo " checked ";
+                                }
+                                echo " value=\"1\" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Das Downloadmodul kann &uuml;ber diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
+                        aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt.
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"max_file_upload_size\">Maximale Dateigr&ouml;&szlig;e:</label></dt>
+                            <dd>
+                                <input type=\"text\" id=\"max_file_upload_size\" name=\"max_file_upload_size\" size=\"6\" maxlength=\"10\" value=\"". $form_values['max_file_upload_size']. "\"> KB
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Benutzer k&ouml;nnen nur Dateien hochladen, bei denen die Dateigr&ouml;&szlig;e kleiner als der hier
+                        angegebene Wert ist. Steht hier 0, so ist der Upload deaktiviert.
+                    </li>
+                </ul>
             </div>
         </div>";
 
@@ -485,153 +496,165 @@ echo "
         <div class=\"groupBox\" id=\"photo-module\">
             <div class=\"groupBoxHeadline\">Einstellungen Fotomodul&nbsp;&nbsp; </div>
             <div class=\"groupBoxBody\">
-                <div style=\"margin-top: 6px;\">
-                    <div style=\"text-align: left; width: 55%; float: left;\">Fotomodul aktivieren:</div>
-                    <div style=\"text-align: left;\">
-                        <input type=\"checkbox\" id=\"enable_photo_module\" name=\"enable_photo_module\" ";
-                        if(isset($form_values['enable_photo_module']) && $form_values['enable_photo_module'] == 1)
-                        {
-                            echo " checked ";
-                        }
-                        echo " value=\"1\" />
-                    </div>
-                </div>
-                <div class=\"smallText\">
-                    Das Fotomodul kann &uuml;ber diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
-                    aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt.
-                </div>
-
-                <div style=\"margin-top: 15px;\">
-                    <div style=\"text-align: left; width: 55%; float: left;\">Thumbnailzeilen:</div>
-                    <div style=\"text-align: left;\">
-                        <input type=\"text\" name=\"photo_thumbs_row\" size=\"2\" maxlength=\"2\" value=\"". $form_values['photo_thumbs_row']. "\">
-                     </div>
-                </div>
-                <div class=\"smallText\">
-                    Der hier angegebene Wert bestimmt wieviele Zeilen an Thumbnails auf einer Seite angezeigt werden. (Standardwert: 5)
-                </div>
-
-                <div style=\"margin-top: 15px;\">
-                    <div style=\"text-align: left; width: 55%; float: left;\">Thumbnailspalten:</div>
-                    <div style=\"text-align: left;\">
-                        <input type=\"text\" name=\"photo_thumbs_column\" size=\"2\" maxlength=\"2\" value=\"". $form_values['photo_thumbs_column']. "\">
-                     </div>
-                </div>
-                <div class=\"smallText\">
-                    Der hier angegebene Wert bestimmt wieviele Zeilen an Thumbnails auf einer Seite angezeigt werden.
-                    Vorsicht: zuviele Thumbnails nebeneinander passen nicht ins Layout. Ggf. die Thumbnailskalierung
-                    herunter setzen. (Standardwert: 5)
-                </div>
-
-                <div style=\"margin-top: 15px;\">
-                    <div style=\"text-align: left; width: 55%; float: left;\">Skalierung Thumbnails:</div>
-                    <div style=\"text-align: left;\">
-                        <input type=\"text\" name=\"photo_thumbs_scale\" size=\"4\" maxlength=\"4\" value=\"". $form_values['photo_thumbs_scale']. "\"> Pixel
-                     </div>
-                </div>
-                <div class=\"smallText\">
-                    Hier kann festgelegt werden auf welchen Wert die l&auml;ngere Bildseite in der Thumbnailanzeige
-                    skaliert werden soll. Vorsicht: Werden die Thumbnails zu breit, passen weniger nebeneinander.
-                    Ggf. weniger Thumbnailspalten einstellen. (Standardwert: 100)
-                </div>
-
-                <div style=\"margin-top: 15px;\">
-                    <div style=\"text-align: left; width: 55%; float: left;\">Skalierung beim Hochladen:</div>
-                    <div style=\"text-align: left;\">
-                        <input type=\"text\" name=\"photo_save_scale\" size=\"4\" maxlength=\"4\" value=\"". $form_values['photo_save_scale']. "\"> Pixel
-                     </div>
-                </div>
-                <div class=\"smallText\">
-                    Beim hochladen werden alle Bilder neu skaliert. Der hier eingegeben Pixelwert
-                    ist der Parameter f&uuml;r die l&auml;ngere Seite des Bildes, egal ob das Bild im Hoch-
-                    oder Querformat &uuml;bergeben wurde. Die andere Seite wird im Verh&auml;ltnis berechnet.(Standardwert: 640)
-                </div>
-
-                <div style=\"margin-top: 15px;\">
-                    <div style=\"text-align: left; width: 55%; float: left;\">H&ouml;he der Vorschaubilder:</div>
-                    <div style=\"text-align: left;\">
-                        <input type=\"text\" name=\"photo_preview_scale\" size=\"4\" maxlength=\"4\" value=\"". $form_values['photo_preview_scale']. "\"> Pixel
-                     </div>
-                </div>
-                <div class=\"smallText\">
-                    Hier wird die H&ouml;he des jeweiligen Vorschaubildes in der Veranstaltungs&uuml;bersicht festgelegt. (Standardwert: 100)
-                </div>
-
-                <div style=\"margin-top: 15px;\">
-                    <div style=\"text-align: left; width: 55%; float: left;\">Max. Bildanzeigebreite:</div>
-                    <div style=\"text-align: left;\">
-                        <input type=\"text\" name=\"photo_show_width\" size=\"4\" maxlength=\"4\" value=\"". $form_values['photo_show_width']. "\"> Pixel
-                     </div>
-                </div>
-                <div class=\"smallText\">
-                    Die hier angegeben Werte bestimmen die maximale Breite und H&ouml;he die ein Bild im Anzeigefenster
-                    haben darf. Das Fenster wird automatisch entsprechend gr&ouml;&szlig;er. Besonders bei der H&ouml;he
-                    ist Vorsicht angebracht, da &uuml;ber und unter dem Bild noch genug Platz f&uuml;r Layout und Browser
-                    sein muss. (Standardwert: 500)
-                </div>
-
-                <div style=\"margin-top: 15px;\">
-                    <div style=\"text-align: left; width: 55%; float: left;\">Max. Bildanzeigeh&ouml;he:</div>
-                    <div style=\"text-align: left;\">
-                        <input type=\"text\" name=\"photo_show_height\" size=\"4\" maxlength=\"4\" value=\"". $form_values['photo_show_height']. "\"> Pixel
-                     </div>
-                </div>
-                <div class=\"smallText\">
-                    Die hier angegeben Werte bestimmen die maximale Breite und H&ouml;he die ein Bild im Anzeigefenster
-                    haben darf. Das Fenster wird automatisch entsprechend gr&ouml;&szlig;er. Besonders bei der H&ouml;he
-                    ist Vorsicht angebracht, da &uuml;ber und unter dem Bild noch genug Platz f&uuml;r Layout und Browser
-                    sein muss. (Standardwert: 380)
-                </div>
-
-                <div style=\"margin-top: 15px;\">
-                    <div style=\"text-align: left; width: 55%; float: left;\">Bildtext einblenden:</div>
-                    <div style=\"text-align: left;\">
-                        <input type=\"checkbox\" id=\"photo_image_text\" name=\"photo_image_text\" ";
-                        if(isset($form_values['photo_image_text']) && $form_values['photo_image_text'] == 1)
-                        {
-                            echo " checked ";
-                        }
-                        echo " value=\"1\" />
-                    </div>
-                </div>
-                <div class=\"smallText\">
-                    Ist diese Funktion aktiviert, wird in jedes angezeigte Bild das &#169;-Symbol und die Homepage
-                    eingeblendet. Der Schriftzug wird nicht beim hochladen mit abgespeichert. Die Einblendung
-                    erfolgt nur bei Bildern mit einer Skalierung &uuml;ber 200 Pixel der l&auml;ngeren Seite, also in der Regl nicht bei Thumbnails.
-                </div>
-
-                <div style=\"margin-top: 15px;\">
-                    <div style=\"text-align: left; width: 55%; float: left;\">Fotodarstellung:</div>
-                    <div style=\"text-align: left;\">
-                        <select size=\"1\" name=\"photo_show_mode\">
-                            <option value=\"0\" ";
-                            if($form_values['photo_show_mode'] == 0)
-                            {
-                                echo " selected ";
-                            }
-                            echo ">Popupfenster</option>
-                            <option value=\"1\" ";
-                            if($form_values['photo_show_mode'] == 1)
-                            {
-                                echo " selected ";
-                            }
-                            echo ">Lightbox</option>
-                            <option value=\"2\" ";
-                            if($form_values['photo_show_mode'] == 2)
-                            {
-                                echo " selected ";
-                            }
-                            echo ">Gleiches Fenster</option>
-                        </select>
-                    </div>
-                </div>
-                <div class=\"smallText\">
-                    Wie sollen die Bilder in der Gro&szlig;enansicht angezeigt werden?<br/>
-                    1) in einem Popupfenster<br/>
-                    2) mit Lightbox (der rest der Seite wird ausgegraut)<br/>
-                    3) im gleichen Fenster                  
-                </div>
-
+                <ul class=\"formFieldList\">
+                    <li>
+                        <dl>
+                            <dt><label for=\"enable_photo_module\">Fotomodul aktivieren:</label></dt>
+                            <dd>
+                                <input type=\"checkbox\" id=\"enable_photo_module\" name=\"enable_photo_module\" ";
+                                if(isset($form_values['enable_photo_module']) && $form_values['enable_photo_module'] == 1)
+                                {
+                                    echo " checked ";
+                                }
+                                echo " value=\"1\" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Das Fotomodul kann &uuml;ber diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
+                        aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt.
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"photo_thumbs_row\">Thumbnailzeilen:</label></dd>
+                            <dd>
+                                <input type=\"text\" id=\"photo_thumbs_row\" name=\"photo_thumbs_row\" size=\"2\" maxlength=\"2\" value=\"". $form_values['photo_thumbs_row']. "\">
+                             </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Der hier angegebene Wert bestimmt wieviele Zeilen an Thumbnails auf einer Seite angezeigt werden. (Standardwert: 5)
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"photo_thumbs_column\">Thumbnailspalten:</label></dt>
+                            <dd>
+                                <input type=\"text\" id=\"photo_thumbs_column\" name=\"photo_thumbs_column\" size=\"2\" maxlength=\"2\" value=\"". $form_values['photo_thumbs_column']. "\">
+                             </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Der hier angegebene Wert bestimmt wieviele Zeilen an Thumbnails auf einer Seite angezeigt werden.
+                        Vorsicht: zuviele Thumbnails nebeneinander passen nicht ins Layout. Ggf. die Thumbnailskalierung
+                        herunter setzen. (Standardwert: 5)
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"photo_thumbs_scale\">Skalierung Thumbnails:</label></dt>
+                            <dd>
+                                <input type=\"text\" id=\"photo_thumbs_scale\" name=\"photo_thumbs_scale\" size=\"4\" maxlength=\"4\" value=\"". $form_values['photo_thumbs_scale']. "\"> Pixel
+                             </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Hier kann festgelegt werden auf welchen Wert die l&auml;ngere Bildseite in der Thumbnailanzeige
+                        skaliert werden soll. Vorsicht: Werden die Thumbnails zu breit, passen weniger nebeneinander.
+                        Ggf. weniger Thumbnailspalten einstellen. (Standardwert: 100)
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"photo_save_scale\">Skalierung beim Hochladen:</label></dt>
+                            <dd>
+                                <input type=\"text\" id=\"photo_save_scale\" name=\"photo_save_scale\" size=\"4\" maxlength=\"4\" value=\"". $form_values['photo_save_scale']. "\"> Pixel
+                             </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Beim hochladen werden alle Bilder neu skaliert. Der hier eingegeben Pixelwert
+                        ist der Parameter f&uuml;r die l&auml;ngere Seite des Bildes, egal ob das Bild im Hoch-
+                        oder Querformat &uuml;bergeben wurde. Die andere Seite wird im Verh&auml;ltnis berechnet.(Standardwert: 640)
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"photo_preview_scale\">H&ouml;he der Vorschaubilder:</label></dt>
+                            <dd>
+                                <input type=\"text\" name=\"photo_preview_scale\" name=\"photo_preview_scale\" size=\"4\" maxlength=\"4\" value=\"". $form_values['photo_preview_scale']. "\"> Pixel
+                             </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Hier wird die H&ouml;he des jeweiligen Vorschaubildes in der Veranstaltungs&uuml;bersicht festgelegt. (Standardwert: 100)
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"photo_show_width\">Max. Bildanzeigebreite:</label></dt>
+                            <dd>
+                                <input type=\"text\" id=\"photo_show_width\" name=\"photo_show_width\" size=\"4\" maxlength=\"4\" value=\"". $form_values['photo_show_width']. "\"> Pixel
+                             </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Die hier angegeben Werte bestimmen die maximale Breite und H&ouml;he die ein Bild im Anzeigefenster
+                        haben darf. Das Fenster wird automatisch entsprechend gr&ouml;&szlig;er. Besonders bei der H&ouml;he
+                        ist Vorsicht angebracht, da &uuml;ber und unter dem Bild noch genug Platz f&uuml;r Layout und Browser
+                        sein muss. (Standardwert: 500)
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"photo_show_height\">Max. Bildanzeigeh&ouml;he:</label></dt>
+                            <dd>
+                                <input type=\"text\" id=\"photo_show_height\" name=\"photo_show_height\" size=\"4\" maxlength=\"4\" value=\"". $form_values['photo_show_height']. "\"> Pixel
+                             </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Die hier angegeben Werte bestimmen die maximale Breite und H&ouml;he die ein Bild im Anzeigefenster
+                        haben darf. Das Fenster wird automatisch entsprechend gr&ouml;&szlig;er. Besonders bei der H&ouml;he
+                        ist Vorsicht angebracht, da &uuml;ber und unter dem Bild noch genug Platz f&uuml;r Layout und Browser
+                        sein muss. (Standardwert: 380)
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"photo_image_text\">Bildtext einblenden:</label></dt>
+                            <dd>
+                                <input type=\"checkbox\" id=\"photo_image_text\" name=\"photo_image_text\" ";
+                                if(isset($form_values['photo_image_text']) && $form_values['photo_image_text'] == 1)
+                                {
+                                    echo " checked ";
+                                }
+                                echo " value=\"1\" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Ist diese Funktion aktiviert, wird in jedes angezeigte Bild das &#169;-Symbol und die Homepage
+                        eingeblendet. Der Schriftzug wird nicht beim hochladen mit abgespeichert. Die Einblendung
+                        erfolgt nur bei Bildern mit einer Skalierung &uuml;ber 200 Pixel der l&auml;ngeren Seite, also in der Regl nicht bei Thumbnails.
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"photo_show_mode\">Fotodarstellung:</label></dt>
+                            <dd>
+                                <select size=\"1\" id=\"photo_show_mode\" name=\"photo_show_mode\">
+                                    <option value=\"0\" ";
+                                    if($form_values['photo_show_mode'] == 0)
+                                    {
+                                        echo " selected ";
+                                    }
+                                    echo ">Popupfenster</option>
+                                    <option value=\"1\" ";
+                                    if($form_values['photo_show_mode'] == 1)
+                                    {
+                                        echo " selected ";
+                                    }
+                                    echo ">Lightbox</option>
+                                    <option value=\"2\" ";
+                                    if($form_values['photo_show_mode'] == 2)
+                                    {
+                                        echo " selected ";
+                                    }
+                                    echo ">Gleiches Fenster</option>
+                                </select>
+                            </dd>
+                        </dt>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Wie sollen die Bilder in der Gro&szlig;enansicht angezeigt werden?<br/>
+                        1) in einem Popupfenster<br/>
+                        2) mit Lightbox (der rest der Seite wird ausgegraut)<br/>
+                        3) im gleichen Fenster                  
+                    </li>
+                </ul>
             </div>
         </div>";
 
@@ -643,68 +666,75 @@ echo "
         <div class=\"groupBox\" id=\"guestbook-module\">
             <div class=\"groupBoxHeadline\">Einstellungen G&auml;stebuchmodul&nbsp;&nbsp; </div>
             <div class=\"groupBoxBody\">
-                <div style=\"margin-top: 6px;\">
-                    <div style=\"text-align: left; width: 55%; float: left;\">G&auml;stebuch aktivieren:</div>
-                    <div style=\"text-align: left;\">
-                        <input type=\"checkbox\" id=\"enable_guestbook_module\" name=\"enable_guestbook_module\" ";
-                        if(isset($form_values['enable_guestbook_module']) && $form_values['enable_guestbook_module'] == 1)
-                        {
-                            echo " checked ";
-                        }
-                        echo " value=\"1\" />
-                    </div>
-                </div>
-                <div class=\"smallText\">
-                    Das G&auml;stebuch kann &uuml;ber diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
-                    aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt.
-                </div>
-
-                <div style=\"margin-top: 15px;\">
-                    <div style=\"text-align: left; width: 55%; float: left;\">Captcha aktivieren:</div>
-                    <div style=\"text-align: left;\">
-                        <input type=\"checkbox\" id=\"enable_guestbook_captcha\" name=\"enable_guestbook_captcha\" ";
-                        if(isset($form_values['enable_guestbook_captcha']) && $form_values['enable_guestbook_captcha'] == 1)
-                        {
-                            echo " checked ";
-                        }
-                        echo " value=\"1\" />
-                    </div>
-                </div>
-                <div class=\"smallText\">
-                    F&uuml;r nicht eingeloggte Benutzer wird im G&auml;stebuchformular bei aktiviertem Captcha ein alphanumerischer
-                    Code eingeblendet. Diesen muss der Benutzer vor dem Absenden des Formularinhalts korrekt eingeben.
-                    Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann.
-                </div>
-
-                <div style=\"margin-top: 15px;\">
-                    <div style=\"text-align: left; width: 55%; float: left;\">Anonyme Kommentare erlauben:</div>
-                    <div style=\"text-align: left;\">
-                        <input type=\"checkbox\" id=\"enable_gbook_comments4all\" name=\"enable_gbook_comments4all\" ";
-                        if(isset($form_values['enable_gbook_comments4all']) && $form_values['enable_gbook_comments4all'] == 1)
-                        {
-                            echo " checked ";
-                        }
-                        echo " value=\"1\" />
-                    </div>
-                </div>
-                <div class=\"smallText\">
-                    Nicht eingeloggte Benutzer k&ouml;nnen, nach Aktivierung dieser Option, Eintr&auml;ge im G&auml;stebuch kommentieren. Die Rechtevergabe
-                    f&uuml;r dieses Feature &uuml;ber die Rollenverwaltung wird dann ignoriert.
-                </div>
-
-                <div style=\"margin-top: 15px;\">
-                    <div style=\"text-align: left; width: 55%; float: left;\">Flooding Protection Intervall:</div>
-                    <div style=\"text-align: left;\">
-                        <input type=\"text\" name=\"flooding_protection_time\" size=\"4\" maxlength=\"4\" value=\"". $form_values['flooding_protection_time']. "\"> Sekunden
-                    </div>
-                </div>
-                <div class=\"smallText\">
-                    F&uuml;r nicht eingeloggte Benutzer wird bei Eintr&auml;gen im G&auml;stebuch &uuml;berpr&uuml;ft,
-                    ob sie innerhalb des eingestellten Intervalls bereits einen Eintrag get&auml;tigt haben.
-                    Damit soll verhindert werden, dass Benutzer in zu kurzen Zeitabst&auml;nden hintereinander
-                    ungew&uuml;nschte Eintr&auml;ge erzeugen. Ist das Intervall auf 0 gesetzt wird diese &Uuml;berpr&uuml;fung
-                    nicht durchgef&uuml;hrt.
-                </div>
+                <ul class=\"formFieldList\">
+                    <li>
+                        <dl>
+                            <dt><label for=\"enable_guestbook_module\">G&auml;stebuch aktivieren:</label></dt>
+                            <dd>
+                                <input type=\"checkbox\" id=\"enable_guestbook_module\" name=\"enable_guestbook_module\" ";
+                                if(isset($form_values['enable_guestbook_module']) && $form_values['enable_guestbook_module'] == 1)
+                                {
+                                    echo " checked ";
+                                }
+                                echo " value=\"1\" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Das G&auml;stebuch kann &uuml;ber diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
+                        aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt.
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"enable_guestbook_captcha\">Captcha aktivieren:</label></dt>
+                            <dd>
+                                <input type=\"checkbox\" id=\"enable_guestbook_captcha\" name=\"enable_guestbook_captcha\" ";
+                                if(isset($form_values['enable_guestbook_captcha']) && $form_values['enable_guestbook_captcha'] == 1)
+                                {
+                                    echo " checked ";
+                                }
+                                echo " value=\"1\" />
+                            </dd>
+                        </dt>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        F&uuml;r nicht eingeloggte Benutzer wird im G&auml;stebuchformular bei aktiviertem Captcha ein alphanumerischer
+                        Code eingeblendet. Diesen muss der Benutzer vor dem Absenden des Formularinhalts korrekt eingeben.
+                        Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann.
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"enable_gbook_comments4all\">Anonyme Kommentare erlauben:</label></dt>
+                            <dd>
+                                <input type=\"checkbox\" id=\"enable_gbook_comments4all\" name=\"enable_gbook_comments4all\" ";
+                                if(isset($form_values['enable_gbook_comments4all']) && $form_values['enable_gbook_comments4all'] == 1)
+                                {
+                                    echo " checked ";
+                                }
+                                echo " value=\"1\" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Nicht eingeloggte Benutzer k&ouml;nnen, nach Aktivierung dieser Option, Eintr&auml;ge im G&auml;stebuch kommentieren. Die Rechtevergabe
+                        f&uuml;r dieses Feature &uuml;ber die Rollenverwaltung wird dann ignoriert.
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"flooding_protection_time\">Flooding Protection Intervall:</label></dt>
+                            <dd>
+                                <input type=\"text\" id=\"flooding_protection_time\" name=\"flooding_protection_time\" size=\"4\" maxlength=\"4\" value=\"". $form_values['flooding_protection_time']. "\"> Sekunden
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        F&uuml;r nicht eingeloggte Benutzer wird bei Eintr&auml;gen im G&auml;stebuch &uuml;berpr&uuml;ft,
+                        ob sie innerhalb des eingestellten Intervalls bereits einen Eintrag get&auml;tigt haben.
+                        Damit soll verhindert werden, dass Benutzer in zu kurzen Zeitabst&auml;nden hintereinander
+                        ungew&uuml;nschte Eintr&auml;ge erzeugen. Ist das Intervall auf 0 gesetzt wird diese &Uuml;berpr&uuml;fung
+                        nicht durchgef&uuml;hrt.
+                    </li>
+                </ul>
             </div>
         </div>";
 
@@ -717,30 +747,35 @@ echo "
         <div class=\"groupBox\" id=\"list-module\">
             <div class=\"groupBoxHeadline\">Einstellungen Listen&nbsp;&nbsp; </div>
             <div class=\"groupBoxBody\">
-                <div style=\"margin-top: 6px;\">
-                 <div style=\"text-align: left; width: 55%; float: left;\">Anzahl Rollen pro Seite:</div>
-                    <div style=\"text-align: left;\">
-                        <input type=\"text\" name=\"lists_roles_per_page\" size=\"4\" maxlength=\"4\" value=\"". $form_values['lists_roles_per_page']. "\">
-                    </div>
-                </div>
-                <div class=\"smallText\">
-                    Anzahl der Rollen die auf einer Seite in der Listen&uuml;bersicht aufgelistet werden. Gibt es mehr Rollen
-                    so kann man in der Liste bl&auml;ttern. Bei dem Wert 0 werden alle Rollen aufgelistet und die 
-                    Bl&auml;ttern-Funktion deaktiviert.
-                </div>
-                
-                <div style=\"margin-top: 6px;\">
-                 <div style=\"text-align: left; width: 55%; float: left;\">Anzahl Teilnehmer pro Seite:</div>
-                    <div style=\"text-align: left;\">
-                        <input type=\"text\" name=\"lists_members_per_page\" size=\"4\" maxlength=\"4\" value=\"". $form_values['lists_members_per_page']. "\">
-                    </div>
-                </div>
-                <div class=\"smallText\">
-                    Anzahl der Teilnehmer die auf einer Seite in einer Liste aufgelistet werden. 
-                    Gibt es mehr Teilnehmer zu einer Rolle, so kann man in der Liste bl&auml;ttern. 
-                    Die Druckvorschau und der Export sind von diesem Wert nicht betroffen. 
-                    Bei dem Wert 0 werden alle Teilnehmer aufgelistet und die Bl&auml;ttern-Funktion deaktiviert.
-                </div>
+                <ul class=\"formFieldList\">
+                    <li>
+                        <dl>
+                            <dt><label for=\"lists_roles_per_page\">Anzahl Rollen pro Seite:</label></dt>
+                            <dd>
+                                <input type=\"text\" id=\"lists_roles_per_page\" name=\"lists_roles_per_page\" size=\"4\" maxlength=\"4\" value=\"". $form_values['lists_roles_per_page']. "\">
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Anzahl der Rollen die auf einer Seite in der Listen&uuml;bersicht aufgelistet werden. Gibt es mehr Rollen
+                        so kann man in der Liste bl&auml;ttern. Bei dem Wert 0 werden alle Rollen aufgelistet und die 
+                        Bl&auml;ttern-Funktion deaktiviert.
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"lists_members_per_page\">Anzahl Teilnehmer pro Seite:</label></dt>
+                            <dd>
+                                <input type=\"text\" id=\"lists_members_per_page\" name=\"lists_members_per_page\" size=\"4\" maxlength=\"4\" value=\"". $form_values['lists_members_per_page']. "\">
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Anzahl der Teilnehmer die auf einer Seite in einer Liste aufgelistet werden. 
+                        Gibt es mehr Teilnehmer zu einer Rolle, so kann man in der Liste bl&auml;ttern. 
+                        Die Druckvorschau und der Export sind von diesem Wert nicht betroffen. 
+                        Bei dem Wert 0 werden alle Teilnehmer aufgelistet und die Bl&auml;ttern-Funktion deaktiviert.
+                    </li>
+                </ul>
             </div>
         </div>";
 
@@ -753,50 +788,56 @@ echo "
         <div class=\"groupBox\" id=\"mail-module\">
             <div class=\"groupBoxHeadline\">Einstellungen Mailmodul&nbsp;&nbsp; </div>
             <div class=\"groupBoxBody\">
-                <div style=\"margin-top: 6px;\">
-                    <div style=\"text-align: left; width: 55%; float: left;\">Mailmodul aktivieren:</div>
-                    <div style=\"text-align: left;\">
-                        <input type=\"checkbox\" id=\"enable_mail_module\" name=\"enable_mail_module\" ";
-                        if(isset($form_values['enable_mail_module']) && $form_values['enable_mail_module'] == 1)
-                        {
-                            echo " checked ";
-                        }
-                        echo " value=\"1\" />
-                    </div>
-                </div>
-                <div class=\"smallText\">
-                    Das Mailmodul kann &uuml;ber diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
-                    aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt. Falls der Server keinen
-                    Mailversand unterst&uuml;tzt, sollte das Modul deaktiviert werden.
-                </div>
-
-                <div style=\"margin-top: 15px;\">
-                    <div style=\"text-align: left; width: 55%; float: left;\">Captcha aktivieren:</div>
-                    <div style=\"text-align: left;\">
-                        <input type=\"checkbox\" id=\"enable_mail_captcha\" name=\"enable_mail_captcha\" ";
-                        if(isset($form_values['enable_mail_captcha']) && $form_values['enable_mail_captcha'] == 1)
-                        {
-                            echo " checked ";
-                        }
-                        echo " value=\"1\" />
-                    </div>
-                </div>
-                <div class=\"smallText\">
-                    F&uuml;r nicht eingeloggte Benutzer wird im Mailformular bei aktiviertem Captcha ein alphanumerischer
-                    Code eingeblendet. Diesen muss der Benutzer vor dem Mailversand korrekt eingeben. Dies soll sicherstellen,
-                    dass das Formular nicht von Spammern missbraucht werden kann.
-                </div>
-
-                <div style=\"margin-top: 15px;\">
-                    <div style=\"text-align: left; width: 55%; float: left;\">Maximale Dateigr&ouml;&szlig;e f&uuml;r Anh&auml;nge:</div>
-                    <div style=\"text-align: left;\">
-                        <input type=\"text\" name=\"max_email_attachment_size\" size=\"4\" maxlength=\"6\" value=\"". $form_values['max_email_attachment_size']. "\"> KB
-                    </div>
-                </div>
-                <div class=\"smallText\">
-                    Benutzer k&ouml;nnen nur Dateien anh&auml;ngen, bei denen die Dateigr&ouml;&szlig;e kleiner als der hier
-                    angegebene Wert ist. Steht hier 0, so sind keine Anh&auml;nge im Mailmodul m&ouml;glich.
-                </div>
+                <ul class=\"formFieldList\">
+                    <li>
+                        <dl>
+                            <dt><label for=\"enable_mail_module\">Mailmodul aktivieren:</label></dt>
+                            <dd>
+                                <input type=\"checkbox\" id=\"enable_mail_module\" name=\"enable_mail_module\" ";
+                                if(isset($form_values['enable_mail_module']) && $form_values['enable_mail_module'] == 1)
+                                {
+                                    echo " checked ";
+                                }
+                                echo " value=\"1\" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Das Mailmodul kann &uuml;ber diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
+                        aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt. Falls der Server keinen
+                        Mailversand unterst&uuml;tzt, sollte das Modul deaktiviert werden.
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"enable_mail_captcha\">Captcha aktivieren:</label></dt>
+                            <dd>
+                                <input type=\"checkbox\" id=\"enable_mail_captcha\" name=\"enable_mail_captcha\" ";
+                                if(isset($form_values['enable_mail_captcha']) && $form_values['enable_mail_captcha'] == 1)
+                                {
+                                    echo " checked ";
+                                }
+                                echo " value=\"1\" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        F&uuml;r nicht eingeloggte Benutzer wird im Mailformular bei aktiviertem Captcha ein alphanumerischer
+                        Code eingeblendet. Diesen muss der Benutzer vor dem Mailversand korrekt eingeben. Dies soll sicherstellen,
+                        dass das Formular nicht von Spammern missbraucht werden kann.
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"max_email_attachment_size\">Maximale Dateigr&ouml;&szlig;e f&uuml;r Anh&auml;nge:</label></dt>
+                            <dd>
+                                <input type=\"text\" id=\"max_email_attachment_size\" name=\"max_email_attachment_size\" size=\"4\" maxlength=\"6\" value=\"". $form_values['max_email_attachment_size']. "\"> KB
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Benutzer k&ouml;nnen nur Dateien anh&auml;ngen, bei denen die Dateigr&ouml;&szlig;e kleiner als der hier
+                        angegebene Wert ist. Steht hier 0, so sind keine Anh&auml;nge im Mailmodul m&ouml;glich.
+                    </li>
+                </ul>
             </div>
         </div>";
 
@@ -857,8 +898,25 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Es wird ein Kasten mit allen Rollen dieser Organisation angezeigt, bei denen der Benutzer Mitglied ist. 
+                        Es wird ein Kasten mit allen Rollen dieser Organisation angezeigt, bei denen der Benutzer Mitglied <b>ist</b>. 
                         Dazu werden die entsprechenden Berechtigungen und das Eintrittsdatum aufgelistet.
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"enable_former_roles_view\">Ehemalige Rollenmitgliedschaften anzeigen:</label></dt>
+                            <dd>
+                                <input type=\"checkbox\" id=\"enable_former_roles_view\" name=\"enable_former_roles_view\" ";
+                                if(isset($form_values['enable_former_roles_view']) && $form_values['enable_former_roles_view'] == 1)
+                                {
+                                    echo " checked ";
+                                }
+                                echo " value=\"1\" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Es wird ein Kasten mit allen Rollen dieser Organisation angezeigt, bei denen der Benutzer Mitglied <b>war</b>. 
+                        Dazu wird das entsprechende Eintritts- und Austrittsdatum angezeigt.
                     </li>";
                     
                     if($g_current_organization->getValue("org_org_id_parent") > 0 
@@ -948,12 +1006,11 @@ echo "
                 </ul>
             </div>
         </div>
-
-     <br />
     </div>
 </div>
 
-    <br />
+<br />
+
 <div class=\"formLayout\">
     <div class=\"formBody\" style=\"text-align: center;\">
         <button name=\"save\" type=\"submit\" value=\"speichern\">

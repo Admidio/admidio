@@ -5,6 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  * Uebergaben:
  *
@@ -12,21 +13,6 @@
  *        Typ der Kategorien, die gepflegt werden sollen
  *        ROL = Rollenkategorien
  *        LNK = Linkkategorien
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  ****************************************************************************/
  
@@ -113,74 +99,74 @@ echo "
     </li>
 </ul>
 
-<table class=\"tableList\" style=\"width: 300px;\" cellpadding=\"2\" cellspacing=\"0\">
+<table class=\"tableList\" style=\"width: 300px;\" cellspacing=\"0\">
     <thead>
         <tr>
-            <th class=\"tableHeader\" style=\"text-align: left;\" colspan=\"2\">Bezeichnung</th>
-            <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/user_key.png\" alt=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\" title=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\"></th>
-            <th class=\"tableHeader\">&nbsp;</th>
+            <th colspan=\"2\">Bezeichnung</th>
+            <th><img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/user_key.png\" alt=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\" title=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\"></th>
+            <th>&nbsp;</th>
         </tr>
     </thead>";
     
-        $sql = "SELECT * FROM ". TBL_CATEGORIES. "
-                 WHERE (  cat_org_id  = ". $g_current_organization->getValue("org_id"). "
-                       OR cat_org_id IS NULL )
-                   AND cat_type   = '$req_type'
-                 ORDER BY cat_sequence ASC ";
-        $cat_result = $g_db->query($sql);
-        $write_tbody = false;
+    $sql = "SELECT * FROM ". TBL_CATEGORIES. "
+             WHERE (  cat_org_id  = ". $g_current_organization->getValue("org_id"). "
+                   OR cat_org_id IS NULL )
+               AND cat_type   = '$req_type'
+             ORDER BY cat_sequence ASC ";
+    $cat_result = $g_db->query($sql);
+    $write_tbody = false;
 
-        while($cat_row = $g_db->fetch_array($cat_result))
+    while($cat_row = $g_db->fetch_array($cat_result))
+    {
+        // da bei USF die Kategorie Stammdaten nicht verschoben werden darf, muss hier ein bischen herumgewurschtelt werden
+        if($cat_row['cat_name'] == "Stammdaten" && $_GET['type'] == "USF")
         {
-            // da bei USF die Kategorie Stammdaten nicht verschoben werden darf, muss hier ein bischen herumgewurschtelt werden
-            if($cat_row['cat_name'] == "Stammdaten" && $_GET['type'] == "USF")
-            {
-                $drag_icon = "&nbsp;";
-                echo "<tbody id=\"cat_stammdaten\">";
-            }
-            else
-            {
-                if($write_tbody == false)
-                {
-                    $write_tbody = true;
-                    if($_GET['type'] == "USF")
-                    {
-                        echo "</tbody>";
-                    }
-                    echo "<tbody id=\"cat_list\">";
-                }
-                $drag_icon = "<img class=\"dragable\" src=\"$g_root_path/adm_program/images/arrow_out.png\" style=\"cursor: move;\" border=\"0\" alt=\"Reihenfolge &auml;ndern\" title=\"Reihenfolge &auml;ndern\">";
-            }
-            echo "
-            <tr id=\"row_". $cat_row['cat_id']. "\" class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
-                <td style=\"text-align: left; width: 18px;\">$drag_icon</td>
-                <td style=\"text-align: left;\"><a href=\"$g_root_path/adm_program/administration/roles/categories_new.php?cat_id=". $cat_row['cat_id']. "&amp;type=$req_type\">". $cat_row['cat_name']. "</a></td>
-                <td style=\"text-align: center;\">";
-                    if($cat_row['cat_hidden'] == 1)
-                    {
-                        echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/user_key.png\" alt=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\" title=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\">";
-                    }
-                    else
-                    {
-                        echo "&nbsp;";
-                    }
-                echo "</td>
-                <td style=\"text-align: right; width: 45px;\">
-                    <a href=\"$g_root_path/adm_program/administration/roles/categories_new.php?cat_id=". $cat_row['cat_id']. "&amp;type=$req_type\">
-                    <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>&nbsp;";
-
-                    if($cat_row['cat_system'] == 1)
-                    {
-                        echo "<img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">";
-                    }
-                    else
-                    {
-                        echo "<a href=\"$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=". $cat_row['cat_id']. "&amp;mode=3&amp;type=$req_type\"><img
-                        src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>";
-                    }
-                echo "</td>
-            </tr>";
+            $drag_icon = "&nbsp;";
+            echo "<tbody id=\"cat_stammdaten\">";
         }
+        else
+        {
+            if($write_tbody == false)
+            {
+                $write_tbody = true;
+                if($_GET['type'] == "USF")
+                {
+                    echo "</tbody>";
+                }
+                echo "<tbody id=\"cat_list\">";
+            }
+            $drag_icon = "<img class=\"dragable\" src=\"$g_root_path/adm_program/images/arrow_out.png\" alt=\"Reihenfolge &auml;ndern\" title=\"Reihenfolge &auml;ndern\">";
+        }
+        echo "
+        <tr id=\"row_". $cat_row['cat_id']. "\" class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
+            <td style=\"width: 5%;\">$drag_icon</td>
+            <td><a href=\"$g_root_path/adm_program/administration/roles/categories_new.php?cat_id=". $cat_row['cat_id']. "&amp;type=$req_type\">". $cat_row['cat_name']. "</a></td>
+            <td>";
+                if($cat_row['cat_hidden'] == 1)
+                {
+                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/user_key.png\" alt=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\" title=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\">";
+                }
+                else
+                {
+                    echo "&nbsp;";
+                }
+            echo "</td>
+            <td style=\"text-align: right; width: 45px;\">
+                <a href=\"$g_root_path/adm_program/administration/roles/categories_new.php?cat_id=". $cat_row['cat_id']. "&amp;type=$req_type\">
+                <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>&nbsp;";
+
+                if($cat_row['cat_system'] == 1)
+                {
+                    echo "<img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">";
+                }
+                else
+                {
+                    echo "<a href=\"$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=". $cat_row['cat_id']. "&amp;mode=3&amp;type=$req_type\"><img
+                    src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>";
+                }
+            echo "</td>
+        </tr>";
+    }
     echo "</tbody>
 </table>
 

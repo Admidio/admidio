@@ -1,29 +1,16 @@
 <?php
 /******************************************************************************
- * Termine auflisten
+ * Rollen mit Berechtigungen auflisten
  *
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  * Uebergaben:
  *
  * inactive: 0 - (Default) alle aktiven Rollen anzeigen
  *           1 - alle inaktiven Rollen anzeigen
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
 
@@ -106,13 +93,13 @@ echo "
     </li>
 </ul>
 
-<table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\">
+<table class=\"tableList\" cellspacing=\"0\">
     <thead>
         <tr>
-            <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;$description_lst</th>
-            <th class=\"tableHeader\" style=\"text-align: left;\">&nbsp;Berechtigungen</th>
-            <th class=\"tableHeader\"><img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Rolle nur f&uuml;r Moderatoren sichtbar\" title=\"Rolle nur f&uuml;r Moderatoren sichtbar\"></th>
-            <th class=\"tableHeader\">Funktionen</th>
+            <th>$description_lst</th>
+            <th>Berechtigungen</th>
+            <th style=\"text-align: center;\"><img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Rolle nur f&uuml;r Moderatoren sichtbar\" title=\"Rolle nur f&uuml;r Moderatoren sichtbar\"></th>
+            <th style=\"text-align: center;\">Funktionen</th>
         </tr>
     </thead>";
     $cat_id = "";
@@ -155,79 +142,79 @@ echo "
         }            
         echo "
         <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
-            <td style=\"text-align: left;\">&nbsp;<a href=\"$g_root_path/adm_program/administration/roles/roles_new.php?rol_id=$row->rol_id\" title=\"$row->rol_description\">$row->rol_name</a></td>
-            <td style=\"text-align: left;\">";
+            <td>&nbsp;<a href=\"$g_root_path/adm_program/administration/roles/roles_new.php?rol_id=$row->rol_id\" title=\"$row->rol_description\">$row->rol_name</a></td>
+            <td>";
                 if($row->rol_assign_roles == 1)
                 {
-                    echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/wand.png\"
+                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/wand.png\"
                     alt=\"Rollen verwalten und zuordnen\" title=\"Rollen verwalten und zuordnen\">";
                 }
                 if($row->rol_approve_users == 1)
                 {
-                    echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/properties.png\"
+                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/properties.png\"
                     alt=\"Registrierungen verwalten und zuordnen\" title=\"Registrierungen verwalten und zuordnen\">";
                 }
                 if($row->rol_edit_user == 1)
                 {
-                    echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/group.png\"
+                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/group.png\"
                     alt=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\" title=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\">";
                 }
                 if($row->rol_profile == 1)
                 {
-                    echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/user.png\"
+                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/user.png\"
                     alt=\"Eigenes Profil bearbeiten\" title=\"Eigenes Profil bearbeiten\">";
                 }
                 if($row->rol_announcements == 1 && $g_preferences['enable_announcements_module'] == 1)
                 {
-                    echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/note.png\"
+                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/note.png\"
                     alt=\"Ank&uuml;ndigungen anlegen und bearbeiten\" title=\"Ank&uuml;ndigungen anlegen und bearbeiten\">";
                 }
                 if($row->rol_dates == 1 && $g_preferences['enable_dates_module'] == 1)
                 {
-                    echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/date.png\"
+                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/date.png\"
                     alt=\"Termine anlegen und bearbeiten\" title=\"Termine anlegen und bearbeiten\">";
                 }
                 if($row->rol_photo == 1 && $g_preferences['enable_photo_module'] == 1)
                 {
-                    echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/photo.png\"
+                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/photo.png\"
                     alt=\"Fotos hochladen und bearbeiten\" title=\"Fotos hochladen und bearbeiten\">";
                 }
                 if($row->rol_download == 1 && $g_preferences['enable_download_module'] == 1)
                 {
-                    echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/folder_down.png\"
+                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/folder_down.png\"
                     alt=\"Downloads hochladen und bearbeiten\" title=\"Downloads hochladen und bearbeiten\">";
                 }
                 if($row->rol_guestbook == 1 && $g_preferences['enable_guestbook_module'] == 1)
                 {
-                    echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/comment.png\"
+                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/comment.png\"
                     alt=\"G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen\" title=\"G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen\">";
                 }
                 // falls anonyme Gaestebuchkommentare erfassen werden duerfen, braucht man das Recht pro Rolle nicht mehr zu vergeben
                 if($row->rol_guestbook_comments == 1  && $g_preferences['enable_guestbook_module'] == 1 && $g_preferences['enable_gbook_comments4all'] == false)
                 {
-                    echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/comments.png\"
+                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/comments.png\"
                     alt=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\" title=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\">";
                 }
                 if($row->rol_mail_logout == 1 && $g_preferences['enable_mail_module'] == 1)
                 {
-                    echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/email.png\"
+                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/email.png\"
                     alt=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\" title=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\">";
                 }
                 if($row->rol_mail_login == 1 && $g_preferences['enable_mail_module'] == 1)
                 {
-                    echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/email_key.png\"
+                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/email_key.png\"
                     alt=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\" title=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\">";
                 }
                 if($row->rol_weblinks == 1 && $g_preferences['enable_weblinks_module'] == 1)
                 {
-                    echo "&nbsp;<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/globe.png\"
+                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/globe.png\"
                     alt=\"Weblinks anlegen und bearbeiten\" title=\"Weblinks anlegen und bearbeiten\">";
                 }
             echo "</td>
             <td style=\"text-align: center;\">";
                 if($row->rol_locked == 1)
                 {
-                    echo "<img style=\"cursor: help;\" src=\"$g_root_path/adm_program/images/lock.png\"
+                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/lock.png\"
                     alt=\"Rolle nur f&uuml;r Moderatoren sichtbar\" title=\"Rolle nur f&uuml;r Moderatoren sichtbar\">";
                 }
             echo "</td>

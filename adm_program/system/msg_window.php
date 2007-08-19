@@ -5,24 +5,10 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  * err_code - Code fuer die Information, die angezeigt werden soll
  * err_text - Text, der innerhalb einer Meldung angezeigt werden kann
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
 
@@ -67,46 +53,46 @@ echo "
                       k&ouml;nnen mit verschiedenen Tags (BBCode) formatiert werden. Daf&uuml;r m&uuml;ssen die
                       hier aufgelisteten Tags um den entsprechenden Textabschnitt gesetzt werden.<br><br>
                       Beispiele:<br><br>
-                      <table class=\"tableList\" style=\"width: 100%;\" cellpadding=\"5\" cellspacing=\"0\">
+                      <table class=\"tableList\" style=\"width: 100%;\" cellspacing=\"0\">
                          <tr>
-                            <th class=\"tableHeader\" width=\"155\" valign=\"top\">Beispiel</th>
-                            <th class=\"tableHeader\" valign=\"top\">BBCode</th>
+                            <th style=\"width: 155px;\">Beispiel</th>
+                            <th>BBCode</th>
                          </tr>
                          <tr>
-                            <td valign=\"top\">Text <b>fett</b> darstellen</td>
-                            <td valign=\"top\">Text <b>[b]</b>fett<b>[/b]</b> darstellen</td>
+                            <td>Text <b>fett</b> darstellen</td>
+                            <td>Text <b>[b]</b>fett<b>[/b]</b> darstellen</td>
                          </tr>
                          <tr>
-                            <td valign=\"top\">Text <u>unterstreichen</u></td>
-                            <td valign=\"top\">Text <b>[u]</b>unterstreichen<b>[/u]</b></td>
+                            <td>Text <u>unterstreichen</u></td>
+                            <td>Text <b>[u]</b>unterstreichen<b>[/u]</b></td>
                          </tr>
                          <tr>
-                            <td valign=\"top\">Text <i>kursiv</i> darstellen</td>
-                            <td valign=\"top\">Text <b>[i]</b>kursiv<b>[/i]</b> darstellen</td>
+                            <td>Text <i>kursiv</i> darstellen</td>
+                            <td>Text <b>[i]</b>kursiv<b>[/i]</b> darstellen</td>
                          </tr>
                          <tr>
-                            <td valign=\"top\">Text <span style=\"font-size: 14pt;\">gro&szlig;</span> darstellen</td>
-                            <td valign=\"top\">Text <b>[big]</b>gro&szlig;<b>[/big]</b> darstellen</td>
+                            <td>Text <span style=\"font-size: 14pt;\">gro&szlig;</span> darstellen</td>
+                            <td>Text <b>[big]</b>gro&szlig;<b>[/big]</b> darstellen</td>
                          </tr>
                          <tr>
-                            <td valign=\"top\">Text <span style=\"font-size: 8pt;\">klein</span> darstellen</td>
-                            <td valign=\"top\">Text <b>[small]</b>klein<b>[/small]</b> darstellen</td>
+                            <td>Text <span style=\"font-size: 8pt;\">klein</span> darstellen</td>
+                            <td>Text <b>[small]</b>klein<b>[/small]</b> darstellen</td>
                          </tr>
                          <tr>
-                            <td valign=\"top\" style=\"text-align: center;\">Text zentriert darstellen</td>
-                            <td valign=\"top\"><b>[center]</b>Text zentriert darstellen<b>[/center]</b></td>
+                            <td style=\"text-align: center;\">Text zentriert darstellen</td>
+                            <td><b>[center]</b>Text zentriert darstellen<b>[/center]</b></td>
                          </tr>
                          <tr>
-                            <td valign=\"top\">Einen <a href=\"http://". $g_current_organization->getValue("org_homepage"). "\">Link</a> setzen</td>
-                            <td valign=\"top\">Einen <b>[url=</b>http://www.beispiel.de<b>]</b>Link<b>[/url]</b> setzen</td>
+                            <td>Einen <a href=\"http://". $g_current_organization->getValue("org_homepage"). "\">Link</a> setzen</td>
+                            <td>Einen <b>[url=</b>http://www.beispiel.de<b>]</b>Link<b>[/url]</b> setzen</td>
                          </tr>
                          <tr>
-                            <td valign=\"top\">Eine <a href=\"mailto:". $g_preferences['email_administrator']. "\">Mailadresse</a> angeben</td>
-                            <td valign=\"top\">Eine <b>[email=</b>webmaster@demo.de<b>]</b> Mailadresse<b>[/email]</b> angeben</td>
+                            <td>Eine <a href=\"mailto:". $g_preferences['email_administrator']. "\">Mailadresse</a> angeben</td>
+                            <td>Eine <b>[email=</b>webmaster@demo.de<b>]</b> Mailadresse<b>[/email]</b> angeben</td>
                          </tr>
                          <tr>
-                            <td valign=\"top\">Ein Bild <img src=\"$g_root_path/adm_program/images/admidio_logo_20.png\"> anzeigen</td>
-                            <td valign=\"top\">Ein Bild <b>[img]</b>http://www.beispiel.de/bild.jpg<b>[/img]</b> anzeigen</td>
+                            <td>Ein Bild <img src=\"$g_root_path/adm_program/images/admidio_logo_20.png\"> anzeigen</td>
+                            <td>Ein Bild <b>[img]</b>http://www.beispiel.de/bild.jpg<b>[/img]</b> anzeigen</td>
                          </tr>
                       </table>";
                 break;
@@ -116,41 +102,41 @@ echo "
                       Damit wird die ausgew&auml;hlte Rolle noch einmal nach deinen Bedingungen
                       eingeschr&auml;nkt.<br><br>
                       Beispiele:<br><br>
-                      <table class=\"tableList\" style=\"width: 95%;\" cellpadding=\"2\" cellspacing=\"0\">
+                      <table class=\"tableList\" style=\"width: 100%;\" cellspacing=\"0\">
                          <tr>
-                            <th class=\"tableHeader\" width=\"75\" valign=\"top\">Feld</th>
-                            <th class=\"tableHeader\" width=\"110\" valign=\"top\">Bedingung</th>
-                            <th class=\"tableHeader\">Erkl&auml;rung</th>
+                            <th style=\"width: 75px;\">Feld</th>
+                            <th style=\"width: 110px;\">Bedingung</th>
+                            <th>Erkl&auml;rung</th>
                          </tr>
                          <tr>
-                            <td valign=\"top\">Nachname</td>
-                            <td width=\"110\" valign=\"top\"><b>Schmitz</b></td>
+                            <td>Nachname</td>
+                            <td><b>Schmitz</b></td>
                             <td>Sucht alle Benutzer mit dem Nachnamen Schmitz</td>
                          </tr>
                          <tr>
-                            <td valign=\"top\">Nachname</td>
-                            <td width=\"110\" valign=\"top\"><b>Mei*</b></td>
+                            <td>Nachname</td>
+                            <td><b>Mei*</b></td>
                             <td>Sucht alle Benutzer deren Namen mit Mei anf&auml;ngt</td>
                          </tr>
                          <tr>
-                            <td valign=\"top\">Geburtstag</td>
-                            <td width=\"110\" valign=\"top\"><b>&gt; 01.03.1986</b></td>
+                            <td>Geburtstag</td>
+                            <td><b>&gt; 01.03.1986</b></td>
                             <td>Sucht alle Benutzer, die nach dem 01.03.1986 geboren wurden</td>
                          </tr>
                          <tr>
-                            <td valign=\"top\">Ort</td>
-                            <td width=\"110\" valign=\"top\"><b>K&ouml;ln oder Bonn</b></td>
+                            <td>Ort</td>
+                            <td><b>K&ouml;ln oder Bonn</b></td>
                             <td>Sucht alle Benutzer, die aus K&ouml;ln oder Bonn kommen</td>
                          </tr>
                          <tr>
-                            <td valign=\"top\">Telefon</td>
-                            <td width=\"110\" valign=\"top\"><b>*241*&nbsp;&nbsp;*54</b></td>
+                            <td>Telefon</td>
+                            <td><b>*241*&nbsp;&nbsp;*54</b></td>
                             <td>Sucht alle Benutzer, deren Telefonnummer 241 enth&auml;lt und
                                mit 54 endet</td>
                          </tr>
                          <tr>
-                            <td valign=\"top\">Ja/Nein Feld</td>
-                            <td width=\"110\" valign=\"top\"><b>Ja</b></td>
+                            <td>Ja/Nein Feld</td>
+                            <td><b>Ja</b></td>
                             <td>Sucht alle Benutzer bei denen ein H&auml;ckchen gesetzt wurde</td>
                          </tr>
                       </table>";
@@ -348,14 +334,14 @@ echo "
 
     echo "</div>
 </div>
-    
-<div style=\"padding-top: 10px;\" align=\"center\">
-    <span class=\"iconLink\">
-        <a class=\"iconLink\" href=\"javascript:window.close();\"><img
-         class=\"iconLink\" src=\"$g_root_path/adm_program/images/door_in.png\" alt=\"Schlie&szlig;en\"></a>
-        <a class=\"iconLink\" href=\"javascript:window.close();\">Schlie&szlig;en</a>
-    </span>
-</div>";
+
+<ul class=\"iconTextLink\">
+    <li>
+        <a href=\"javascript:window.close();\"><img
+        src=\"$g_root_path/adm_program/images/door_in.png\" alt=\"Schlie&szlig;en\"></a>
+        <a href=\"javascript:window.close();\">Schlie&szlig;en</a>
+    </li>
+</ul>";
     
 require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
 
