@@ -97,18 +97,14 @@ $arr_col_name = array('usr_login_name' => 'Benutzername',
 if($req_mode == "html")
 {
     $class_table           = "tableList";
-    $class_header          = "tableHeader";
     $class_sub_header      = "tableSubHeader";
     $class_sub_header_font = "tableSubHeaderFont";
-    $class_row             = "";
 }
 else if($req_mode == "print")
 {
     $class_table           = "tableListPrint";
-    $class_header          = "tableHeaderPrint";
     $class_sub_header      = "tableSubHeaderPrint";
     $class_sub_header_font = "tableSubHeaderFontPrint";
-    $class_row             = "tableRowPrint";
 }
 
 $main_sql  = "";   // enthaelt das Haupt-Sql-Statement fuer die Liste
@@ -330,7 +326,7 @@ if($req_mode != "csv")
     //Beschreibung der Rolle einblenden
     if(strlen($role->getValue("rol_description")) > 0)
     {
-        echo "<p>". $role->getValue("rol_description"). "</p>";
+        echo "<h3>". $role->getValue("rol_description"). "</h3>";
     }
 
     if($req_mode == "html")
@@ -384,7 +380,7 @@ if($req_mode != "csv")
 if($req_mode != "csv")
 {
     // Tabellenkopf schreiben
-    echo "<table class=\"$class_table\" style=\"width: 95%;\" cellpadding=\"2\" cellspacing=\"0\">
+    echo "<table class=\"$class_table\" style=\"width: 95%;\" cellspacing=\"0\">
         <thead><tr>";
 }
 
@@ -442,9 +438,9 @@ for($i = $start_column; $i < count($arr_fields); $i++)
         if($i == $start_column)
         {
             // die Laufende Nummer noch davorsetzen
-            echo "<th class=\"$class_header\" style=\"text-align: $align;\">&nbsp;Nr.</th>";
+            echo "<th style=\"text-align: $align;\">Nr.</th>";
         }
-        echo "<th class=\"$class_header\" style=\"text-align: $align;\">&nbsp;$col_name</th>\n";
+        echo "<th style=\"text-align: $align;\">$col_name</th>\n";
     }
 }  // End-For
 
@@ -554,9 +550,9 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                 if($i == $start_column)
                 {
                     // die Laufende Nummer noch davorsetzen
-                    echo "<td  class=\"$class_row\" style=\"text-align: $align;\">&nbsp;$irow</th>";
+                    echo "<td style=\"text-align: $align;\">$irow</th>";
                 }
-                echo "<td  class=\"$class_row\" style=\"text-align: $align;\">&nbsp;";
+                echo "<td style=\"text-align: $align;\">";
             }
             else
             {

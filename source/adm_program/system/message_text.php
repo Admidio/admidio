@@ -5,21 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  *****************************************************************************/
 
@@ -40,7 +26,7 @@ $message_text = array(
         "Es existiert bereits eine Kategorie in dieser Organisation mit diesem Namen.",
 
     "date_invalid" =>
-        "<p>Es wurde kein gültiges Datum in das Feld <b>%VAR1%</b> eingegeben.</p>
+        "<p>Es wurde kein gültiges Datum in das Feld %VAR1% eingegeben.</p>
         <p>Das Format des Datums sollte <i>dd.mm.yyyy</i> sein.</p>",
 
     "delete" =>
@@ -48,46 +34,46 @@ $message_text = array(
 
     "delete_announcement" =>
         "Willst du die Ankündigung<br />
-        <b>%VAR1%</b><br />wirklich löschen?",
+        %VAR1%<br />wirklich löschen?",
 
     "delete_category" =>
-        "<p>Soll die Kategorie <b>%VAR1%</b> wirklich gelöscht werden ?</p>
+        "<p>Soll die Kategorie %VAR1% wirklich gelöscht werden ?</p>
         <p>Es werden alle Daten, die dieser Kategorie zugeordnet sind 
         (Felder, Rollen, Links), mit gelöscht.</p>",
 
     "delete_date" =>
         "Willst du den Termin<br />
-        <b>%VAR1%</b><br />wirklich löschen?",
+        %VAR1%<br />wirklich löschen?",
 
     "delete_role" =>
-        "Willst du die Rolle <b>%VAR1%</b> wirklich löschen?<br><br>
+        "Willst du die Rolle %VAR1% wirklich löschen?<br><br>
         Es werden damit auch alle Mitgliedschaften entgütig entfernt.",
 
     "delete_field" =>
-        "<p>Willst du das Feld <b>%VAR1%</b> wirklich löschen?</p>
+        "<p>Willst du das Feld %VAR1% wirklich löschen?</p>
         <p>Es werden alle Daten, die Benutzer in diesem Feld gespeichert haben, gelöscht.</p>",
 
     "delete_user" =>
-        "<p>Willst du <b>%VAR1%</b> wirklich löschen?</p>
+        "<p>Willst du %VAR1% wirklich löschen?</p>
         <p>Der Benutzer wird damit physikalisch in der Datenbank gelöscht und ein Zugriff auf
         seine Daten ist nicht mehr möglich.</p>",
 
     "delete_new_user" =>
         "<p>Willst du die Web-Registrierung von
-        <b>%VAR1%</b> wirklich löschen?</p>",
+        %VAR1% wirklich löschen?</p>",
 
     "email_invalid" =>
         "Die E-Mail-Adresse ist nicht gültig.",
 
     "field_numeric" =>
-        "Das Feld <b>%VAR1%</b> darf nur Zahlen enthalten.<br>
+        "Das Feld %VAR1% darf nur Zahlen enthalten.<br>
         Korrigiere bitte deine Eingabe.",
 
     "field_exist" =>
         " Es existiert bereits ein Feld in dieser Organisation mit diesem Namen.",
 
     "feld" =>
-        "Das Feld <b>%VAR1%</b> ist nicht gefüllt.",
+        "Das Feld %VAR1% ist nicht gefüllt.",
 
     "felder" =>
         "Es sind nicht alle Felder gefüllt worden.",
@@ -141,8 +127,7 @@ $message_text = array(
 
     "no_category_roles" =>
         "Es sind noch keine Rollen für diese Kategorie erstellt worden.<br /><br />
-        Rollen können <a href=\"%VAR1%\">hier</a>
-        erstellt und gepflegt werden.",
+        Rollen können <a href=\"%VAR1%\">hier</a> erstellt und gepflegt werden.",
 
     "no_old_roles" =>
         "Es sind noch keine Rollen aus dem System entfernt worden.<br /><br />
@@ -183,10 +168,10 @@ $message_text = array(
         "Die Mitgliedschaft des Benutzers bei %VAR1% wurde erfolgreich beendet!",
 
     "role_active" =>
-        "Die Rolle <b>%VAR1%</b> wurde auf <b>aktiv</b> gesetzt.",
+        "Die Rolle %VAR1% wurde auf <b>aktiv</b> gesetzt.",
 
     "role_inactive" =>
-        "Die Rolle <b>%VAR1%</b> wurde auf <b>inaktiv</b> gesetzt.",
+        "Die Rolle %VAR1% wurde auf <b>inaktiv</b> gesetzt.",
 
     "role_exist" =>
         " Es existiert bereits eine Rolle in dieser Kategorie mit demselben Namen.",
@@ -199,7 +184,7 @@ $message_text = array(
         Die Uhrzeit muss zwischen 00:00 und 23:59 liegen!",
 
     "send_new_login" =>
-        "Möchtest du <b>%VAR1%</b> eine E-Mail mit dem Benutzernamen
+        "Möchtest du %VAR1% eine E-Mail mit dem Benutzernamen
         und einem neuen Passwort zumailen?",
 
     "max_members" =>
@@ -213,7 +198,7 @@ $message_text = array(
         "Speichern nicht möglich, die Rolle hat bereits mehr Mitglieder als die von dir eingegebene Begrenzung.",
 
     "write_access" =>
-        "Der Ordner <b>%VAR1%</b> konnte nicht angelegt werden. Du musst dich an
+        "Der Ordner %VAR1% konnte nicht angelegt werden. Du musst dich an
         den <a href=\"mailto:%VAR2%\">Webmaster</a>
         wenden, damit dieser <acronym title=\"über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen.\">
         Schreibrechte</acronym> für den Ordner setzen kann.",
@@ -221,27 +206,27 @@ $message_text = array(
 
     //Meldungen Anmeldung im Forum
     "login_forum" =>
-        "Du hast dich erfolgreich auf Admidio und <br />im Forum <b>%VAR2%</b>
-        als User <b>%VAR1%</b> angemeldet.",
+        "Du hast dich erfolgreich auf Admidio und <br />im Forum %VAR2%
+        als User %VAR1% angemeldet.",
 
     "login_forum_pass" =>
         "Dein Password im Forum %VAR2% wurde auf das Admidio-Password zurückgesetz.<br>
         Verwende beim nächsten Login im Forum dein Admidio-Password.<br><br>
-        Du wurdest erfolgreich auf Admidio und <br />im Forum <b>%VAR2%</b>
-        als User <b>%VAR1%</b> angemeldet.",
+        Du wurdest erfolgreich auf Admidio und <br />im Forum %VAR2%
+        als User %VAR1% angemeldet.",
 
     "login_forum_admin" =>
         "Dein Administrator-Account vom Forum %VAR2% wurde auf den
         Admidio-Account zurückgesetz.<br>
         Verwende beim nächsten Login im Forum deinen Admidio-Usernamen und dein Admidio-Password.<br><br>
-        Du wurdest erfolgreich auf Admidio und <br />im Forum <b>%VAR2%</b>
-        als User <b>%VAR1%</b> angemeldet.",
+        Du wurdest erfolgreich auf Admidio und <br />im Forum %VAR2%
+        als User %VAR1% angemeldet.",
 
     "login_forum_new" =>
         "Dein Admidio-Account wurde in das Forum %VAR2% exportiert und angelegt.<br>
         Verwende beim nächsten Login im Forum deinen Admidio-Usernamen und dein Admidio-Password.<br><br>
-        Du wurdest erfolgreich auf Admidio und <br />im Forum <b>%VAR2%</b>
-        als User <b>%VAR1%</b> angemeldet.",
+        Du wurdest erfolgreich auf Admidio und <br />im Forum %VAR2%
+        als User %VAR1% angemeldet.",
 
     "logout_forum" =>
         "Du wurdest erfolgreich auf Admidio und <br />im Forum abgemeldet.",
@@ -262,17 +247,17 @@ $message_text = array(
     //Fehlermeldungen Linkmodul
     "delete_link" =>
         "Willst du den Link<br />
-        <b>%VAR1%</b><br />wirklich löschen?",
+        %VAR1%<br />wirklich löschen?",
 
 
     //Fehlermeldungen Gästebuchmodul
     "delete_gbook_entry" =>
         "Willst du den Gästebucheintrag von<br />
-        <b>%VAR1%</b><br />wirklich löschen?",
+        %VAR1%<br />wirklich löschen?",
 
     "delete_gbook_comment" =>
         "Willst du den Kommentar von<br />
-        <b>%VAR1%</b><br />wirklich löschen?",
+        %VAR1%<br />wirklich löschen?",
 
     "flooding_protection" =>
         "Dein letzter Eintrag im Gästebuch <br />
@@ -316,7 +301,7 @@ $message_text = array(
 
     "delete_veranst" =>
         "Willst du die Veranstaltung:<br />
-        <b>%VAR1%</b><br />wirklich löschen?<br>
+        %VAR1%<br />wirklich löschen?<br>
         Alle enthaltenen Unterveranstaltungen und Bilder gehen verloren.",
         
     "event_deleted" =>
@@ -364,36 +349,36 @@ $message_text = array(
         "Der aufgerufene Ordner existiert nicht.",
 
     "delete_file_folder" =>
-        "Willst du die Datei / den Ordner <b>%VAR1%</b> wirklich löschen?",
+        "Willst du die Datei / den Ordner %VAR1% wirklich löschen?",
 
     "delete_file" =>
-        "Die Datei <b>%VAR1%</b> wurde gelöscht.",
+        "Die Datei %VAR1% wurde gelöscht.",
 
     "delete_folder" =>
-        "Der Ordner <b>%VAR1%</b> wurde gelöscht.",
+        "Der Ordner %VAR1% wurde gelöscht.",
 
     "delete_error" =>
         "Beim Löschen ist ein unbekannter Fehler aufgetreten.",
 
     "upload_file" =>
-        "Die Datei <b>%VAR1%</b> wurde hochgeladen.",
+        "Die Datei %VAR1% wurde hochgeladen.",
 
     "create_folder" =>
-        "Der Ordner <b>%VAR1%</b> wurde angelegt.",
+        "Der Ordner %VAR1% wurde angelegt.",
 
     "folder_exists" =>
-        "Der Ordner <b>%VAR1%</b> existiert bereits!<br><br>
+        "Der Ordner %VAR1% existiert bereits!<br><br>
         Wähle bitte einen anderen Namen für den neuen Ordner aus.",
 
     "file_exists" =>
-        "Die Datei <b>%VAR1%</b> existiert bereits!<br><br>
+        "Die Datei %VAR1% existiert bereits!<br><br>
         Wähle bitte einen anderen Dateinamen aus.",
 
     "rename_folder" =>
-        "Der Ordner <b>%VAR1%</b> wurde umbenannt.",
+        "Der Ordner %VAR1% wurde umbenannt.",
 
     "rename_file" =>
-        "Die Datei <b>%VAR1%</b> wurde umbenannt.",
+        "Die Datei %VAR1% wurde umbenannt.",
 
     "file_2big" =>
         "Die hochgeladene Datei übersteigt die zulässige
@@ -408,16 +393,16 @@ $message_text = array(
         Vermutlich wurde die vom Server vorgegebene maximale Uploadgröße von %VAR1% B. überschritten!",
 
     "file_upload_error" =>
-        "Beim Hochladen der Datei <b>%VAR1%</b> ist ein unbekannter Fehler aufgetreten.",
+        "Beim Hochladen der Datei %VAR1% ist ein unbekannter Fehler aufgetreten.",
     //Ende Fehlermeldungen Downloadmodul
 
 
     //Fehlermeldungen Mailmodul
     "mail_send" =>
-        "Die E-Mail wurde erfolgreich an <b>%VAR1%</b> versendet.",
+        "Die E-Mail wurde erfolgreich an %VAR1% versendet.",
 
     "mail_not_send" =>
-        "Die E-Mail konnte leider nicht an <b>%VAR1%</b> gesendet werden.",
+        "Die E-Mail konnte leider nicht an %VAR1% gesendet werden.",
 
     "attachment" =>
         "Dein Dateinanhang konnte nicht hochgeladen werden.<br />
@@ -464,6 +449,6 @@ $message_text = array(
 
     "default" =>
         "Es ist ein Fehler aufgetreten.<br><br>
-        Der gesuchte Hinweis <b>%VAR1%</b> konnte nicht gefunden werden!"
+        Der gesuchte Hinweis %VAR1% konnte nicht gefunden werden!"
  )
 ?>

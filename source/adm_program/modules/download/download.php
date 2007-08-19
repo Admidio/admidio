@@ -5,6 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Martin Günzler
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  * Uebergaben:
  *    
@@ -16,20 +17,6 @@
  *                  in hoehere Ordner des Default-Ordners navigieren
  * sort   : Gibt die Art der Sortierung an. Default ist aufsteigend. Bei der Uebergabe
  *          von "desc" wird absteigend sortiert.
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
 
@@ -199,15 +186,15 @@ if ($g_current_user->editDownloadRight())
 };
 
 //Anlegen der Tabelle
-echo" <table class=\"tableList\" cellpadding=\"2\" cellspacing=\"0\">
+echo" <table class=\"tableList\" cellspacing=\"0\">
         <tr>
-           <th class=\"tableHeader\" width=\"25\" style=\"text-align: center;\"><img src=\"$g_root_path/adm_program/images/folder.png\" border=\"0\" alt=\"Ordner\"></th>
-           <th class=\"tableHeader\" style=\"text-align: left;\">Name</th>
-           <th class=\"tableHeader\" style=\"text-align: center;\">Erstellungsdatum</th>
-           <th class=\"tableHeader\" style=\"text-align: right;\">Gr&ouml;&szlig;e&nbsp;</th>";
+           <th style=\"width: 25px;\"><img src=\"$g_root_path/adm_program/images/folder.png\" border=\"0\" alt=\"Ordner\"></th>
+           <th>Name</th>
+           <th>Erstellungsdatum</th>
+           <th>Gr&ouml;&szlig;e&nbsp;</th>";
            if ($g_current_user->editDownloadRight())
            {
-               echo "<th class=\"tableHeader\" align=\"center\">Editieren</th>";
+               echo "<th style=\"text-align: center;\">Editieren</th>";
            }
         echo "</tr>";
 
@@ -239,17 +226,17 @@ for($i=0; $i<count($ordnerarray); $i++)
 
         echo "
            <tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\">
-              <td style=\"text-align: center;\"><a href=\"$g_root_path/adm_program/modules/download/download.php?folder=". urlencode($next_folder). "&amp;default_folder=". urlencode($req_default_folder). "\">
+              <td><a href=\"$g_root_path/adm_program/modules/download/download.php?folder=". urlencode($next_folder). "&amp;default_folder=". urlencode($req_default_folder). "\">
                  <img src=\"$g_root_path/adm_program/images/folder.png\" border=\"0\" alt=\"Ordner\" title=\"Ordner\"></a></td>
-              <td style=\"text-align: left;\"><a href=\"$g_root_path/adm_program/modules/download/download.php?folder=". urlencode($next_folder). "&amp;default_folder=". urlencode($req_default_folder). "\">$ordnerarray[$i]</a></td>
+              <td><a href=\"$g_root_path/adm_program/modules/download/download.php?folder=". urlencode($next_folder). "&amp;default_folder=". urlencode($req_default_folder). "\">$ordnerarray[$i]</a></td>
               <td>&nbsp;</td>
               <td>&nbsp;</td>";
         if ($g_current_user->editDownloadRight())
         {
            echo "
-           <td style=\"text-align: center;\">&nbsp;
+           <td style=\"text-align: center;\">
               <a href=\"$g_root_path/adm_program/modules/download/rename.php?folder=". urlencode($req_folder). "&amp;file=". urlencode($ordnerarray[$i]). "&amp;default_folder=". urlencode($req_default_folder). "\"><img 
-                src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Umbenennen\"></a>&nbsp;&nbsp;&nbsp;
+                src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Umbenennen\"></a>&nbsp;
               <a href=\"$g_root_path/adm_program/modules/download/download_function.php?mode=5&amp;file=". urlencode($ordnerarray[$i]). "&amp;folder=". urlencode($req_folder). "&amp;default_folder=". urlencode($req_default_folder). "\"><img 
                 src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>
            </td>";
@@ -308,18 +295,18 @@ for($i=0; $i<count($ordnerarray); $i++)
 
         //Link und Dateiinfo Ausgabe
         echo "<tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\">
-                 <td style=\"text-align: center;\"><a href=\"$g_root_path/adm_program/modules/download/get_file.php?folder=". urlencode($req_folder). "&amp;file=". urlencode($ordnerarray[$i]). "&amp;default_folder=". urlencode($req_default_folder). "\"><img src=\"$g_root_path/adm_program/images/$dateiendung.png\" border=\"0\" alt=\"Datei\" title=\"Datei\"></a></td>
-                 <td style=\"text-align: left;\"><a href=\"$g_root_path/adm_program/modules/download/get_file.php?folder=". urlencode($req_folder). "&amp;file=". urlencode($ordnerarray[$i]). "&amp;default_folder=". urlencode($req_default_folder). "\">$ordnerarray[$i]</a></td>
-                 <td style=\"text-align: center;\">$dateidatum</td>
-                 <td style=\"text-align: right;\">$dateigroesse kB&nbsp;</td>";
+                 <td><a href=\"$g_root_path/adm_program/modules/download/get_file.php?folder=". urlencode($req_folder). "&amp;file=". urlencode($ordnerarray[$i]). "&amp;default_folder=". urlencode($req_default_folder). "\"><img src=\"$g_root_path/adm_program/images/$dateiendung.png\" border=\"0\" alt=\"Datei\" title=\"Datei\"></a></td>
+                 <td><a href=\"$g_root_path/adm_program/modules/download/get_file.php?folder=". urlencode($req_folder). "&amp;file=". urlencode($ordnerarray[$i]). "&amp;default_folder=". urlencode($req_default_folder). "\">$ordnerarray[$i]</a></td>
+                 <td>$dateidatum</td>
+                 <td>$dateigroesse kB&nbsp;</td>";
 
         //Moderation
         if ($g_current_user->editDownloadRight())
         {
            echo "
-           <td align=\"center\">&nbsp;
+           <td style=\"text-align: center;\">
               <a href=\"$g_root_path/adm_program/modules/download/rename.php?folder=". urlencode($req_folder). "&amp;file=". urlencode($ordnerarray[$i]). "&amp;default_folder=". urlencode($req_default_folder). "\">
-                 <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Umbenennen\"></a>&nbsp;&nbsp;&nbsp;
+                 <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Umbenennen\"></a>&nbsp;
               <a href=\"$g_root_path/adm_program/modules/download/download_function.php?mode=5&amp;file=". urlencode($ordnerarray[$i]). "&amp;folder=". urlencode($req_folder). "&amp;default_folder=". urlencode($req_default_folder). "\">
                  <img src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>
            </td>";

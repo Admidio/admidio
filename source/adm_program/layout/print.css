@@ -35,7 +35,7 @@
     margin:           0px;
 }
 
-.tableHeaderPrint {
+.tableListPrint th {
     color:            #000000;
     font-family:      arial, sans-serif;
     font-size:        10pt;
@@ -55,7 +55,7 @@
     letter-spacing:   0.2em;
 }
 
-.tableRowPrint {
+.tableListPrint td {
     border-width:     0px;
     border-style:     solid;
 }

@@ -6,21 +6,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  *****************************************************************************/
 
@@ -30,9 +16,9 @@ require("common.php");
 $user_found  = 0;
 
 // Uebergabevariablen filtern
-$req_password_crypt = md5($_POST["passwort"]);
+$req_password_crypt = md5($_POST["usr_password"]);
 
-if(strlen($_POST['loginname']) == 0)
+if(strlen($_POST['usr_login_name']) == 0)
 {
     $g_message->show("feld", "Benutzername");
 }
@@ -42,7 +28,7 @@ if(strlen($_POST['loginname']) == 0)
 
 $sql    = "SELECT usr_id
              FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-            WHERE usr_login_name LIKE '". $_POST['loginname']. "'
+            WHERE usr_login_name LIKE '". $_POST['usr_login_name']. "'
               AND usr_valid      = 1
               AND mem_usr_id     = usr_id
               AND mem_rol_id     = rol_id
@@ -91,7 +77,7 @@ if ($user_found >= 1)
         // Paralell im Forum einloggen, wenn g_forum gesetzt ist
         if($g_forum_integriert)
         {
-            $g_forum->userLogin($g_current_user->getValue("usr_id"), $_POST['loginname'], $req_password_crypt, 
+            $g_forum->userLogin($g_current_user->getValue("usr_id"), $_POST['usr_login_name'], $req_password_crypt, 
                                 $g_current_user->getValue("usr_login_name"), $g_current_user->getValue("usr_password"), 
                                 $g_current_user->getValue("E-Mail"));
 

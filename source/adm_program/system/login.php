@@ -5,21 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  *****************************************************************************/
 
@@ -47,14 +33,14 @@ echo "
         <ul class=\"formFieldList\">
             <li>
                 <dl>
-                    <dt><label for=\"loginname\">Benutzername:</label></dt>
-                    <dd><input type=\"text\" id=\"loginname\" name=\"loginname\" size=\"14\" maxlength=\"20\" /></dd>
+                    <dt><label for=\"usr_login_name\">Benutzername:</label></dt>
+                    <dd><input type=\"text\" id=\"usr_login_name\" name=\"usr_login_name\" size=\"14\" maxlength=\"20\" /></dd>
                 </dl>
             </li>
             <li>
                 <dl>
-                    <dt><label for=\"password\">Passwort:</label></dt>
-                    <dd><input type=\"password\" name=\"passwort\" size=\"14\" maxlength=\"20\" /></dd>
+                    <dt><label for=\"usr_password\">Passwort:</label></dt>
+                    <dd><input type=\"password\" id=\"usr_password\" name=\"usr_password\" size=\"14\" maxlength=\"20\" /></dd>
                 </dl>
             </li>
         </ul>
@@ -90,7 +76,7 @@ echo "
 </form>
 
 <script type=\"text/javascript\"><!--
-    document.getElementById('loginname').focus();
+    document.getElementById('usr_login_name').focus();
 --></script>";
 
 require(SERVER_PATH. "/adm_program/layout/overall_footer.php");

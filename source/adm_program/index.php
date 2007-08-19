@@ -182,7 +182,13 @@ echo "</ul>
                         src=\"$g_root_path/adm_program/images/person_big.png\" alt=\"Profil\" /></a>
                     </dt>
                     <dd>
-                        <span class=\"veryBigFontSize\"><a href=\"$g_root_path/adm_program/modules/profile/profile.php\">Profil</a></span><br />
+                        <span class=\"veryBigFontSize\"><a href=\"$g_root_path/adm_program/modules/profile/profile.php\">Profil</a></span>";
+                        if($g_valid_login)
+                        {
+                            echo "&nbsp;&nbsp;
+                            &#91; <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=". $g_current_user->getValue("usr_id"). "\">Profil bearbeiten</a> &#93;";
+                        }
+                        echo "<br />
                         <span class=\"smallFontSize\">Das eigene Profil anschauen und bearbeiten.</span>
                     </dd>
                 </dl>

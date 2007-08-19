@@ -5,25 +5,12 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  * Uebergaben:
  *
  * field_number : wenn ueber Ajax nachgeladen wird, steht hier die Nummer
  *                des Feldes, welches erzeugt werden soll
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
  
@@ -38,8 +25,8 @@ if(isset($_POST['field_number']))
     $b_ajax = true;
 }
 
-echo "<div style=\"text-align: center; width: 18%; float: left; margin-top: 5px;\">&nbsp;$i. Feld :&nbsp;</div>
-    <div style=\"text-align: center; width: 37%; float: left; margin-top: 5px;\">
+echo "<div style=\"text-align: left; width: 18%; float: left; margin-top: 5px;\">$i. Feld :</div>
+    <div style=\"text-align: left; width: 37%; float: left; margin-top: 5px;\">
         <select size=\"1\" name=\"column$i\">
             <option value=\"\" ";
                 if($b_ajax == true || $b_history == false)
@@ -153,7 +140,7 @@ echo "<div style=\"text-align: center; width: 18%; float: left; margin-top: 5px;
             </optgroup>
         </select>&nbsp;&nbsp;
     </div>
-    <div style=\"text-align: center; width: 18%; float: left; margin-top: 5px;\">
+    <div style=\"text-align: left; width: 18%; float: left; margin-top: 5px;\">
         <select size=\"1\" name=\"sort$i\">
             <option value=\"\" ";
                 if($b_ajax == true || isset($form_values["sort$i"]) == false)
@@ -185,7 +172,7 @@ echo "<div style=\"text-align: center; width: 18%; float: left; margin-top: 5px;
     {
         $condition = "";
     }
-    echo "<div style=\"text-align: center; width: 27%; float: left; margin-top: 5px;\">
+    echo "<div style=\"text-align: left; width: 27%; float: left; margin-top: 5px;\">
         <input type=\"text\" name=\"condition$i\" size=\"15\" maxlength=\"30\" value=\"$condition\">
     </div>
     <span id=\"next_field_". ($i + 1). "\" style=\"clear: left;\"></span>";

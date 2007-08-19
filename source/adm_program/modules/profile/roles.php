@@ -5,27 +5,13 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  * Uebergaben:
  *
  * user_id     - Funktionen der uebergebenen user_id aendern
  * new_user: 0 - (Default) Daten eines vorhandenen Users werden bearbeitet
  *           1 - Der User ist gerade angelegt worden -> Rollen muessen zugeordnet werden
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
 
@@ -113,15 +99,14 @@ echo "
 <h3>Profil von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname"). "</h3>
 
 <form action=\"$g_root_path/adm_program/modules/profile/roles_save.php?user_id=$req_usr_id&amp;new_user=$req_new_user\" method=\"post\" name=\"Funktionen\">
-    <table class=\"tableList\" cellpadding=\"3\" cellspacing=\"0\">
+    <table class=\"tableList\" cellspacing=\"0\">
         <thead>
             <tr>
-                <th class=\"tableHeader\">&nbsp;</th>
-                <th class=\"tableHeader\" style=\"text-align: left;\">Rolle</th>
-                <th class=\"tableHeader\" style=\"text-align: left;\">Beschreibung</th>
-                <th class=\"tableHeader\" style=\"text-align: center; width: 80px;\">Leiter
-                    <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: middle; padding-bottom: 1px;\"
-                    width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
+                <th>&nbsp;</th>
+                <th>Rolle</th>
+                <th>Beschreibung</th>
+                <th style=\"text-align: center; width: 80px;\">Leiter<img 
+                    class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
                     onClick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=leader','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
                 </th>
             </tr>
@@ -198,7 +183,7 @@ echo "
             }
             echo "
             <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
-               <td style=\"text-align: center; vertical-align: top;\">
+               <td style=\"text-align: center;\">
                   <input type=\"checkbox\" id=\"role-$row->rol_id\" name=\"role-$row->rol_id\" ";
                      if($row->mem_usr_id > 0)
                      {
@@ -220,9 +205,9 @@ echo "
 
                      echo " onclick=\"unmarkLeader(this)\" value=\"1\" />
                </td>
-               <td style=\"text-align: left; vertical-align: top;\"><label for=\"role-$row->rol_id\">$row->rol_name</label></td>
-               <td style=\"text-align: left; vertical-align: top;\">$row->rol_description</td>
-               <td style=\"text-align: center; vertical-align: top;\">
+               <td><label for=\"role-$row->rol_id\">$row->rol_name</label></td>
+               <td>$row->rol_description</td>
+               <td style=\"text-align: center;\">
                         <input type=\"checkbox\" id=\"leader-$row->rol_id\" name=\"leader-$row->rol_id\" ";
                         if($row->mem_leader > 0)
                         {
@@ -241,7 +226,7 @@ echo "
         }
     echo "</table>
 
-    <div style=\"margin: 8px;\">";
+    <div class=\"formSubmit\">";
         echo "<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
             <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\">
               &nbsp;Zur&uuml;ck</button>

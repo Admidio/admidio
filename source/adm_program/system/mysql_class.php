@@ -52,7 +52,7 @@ class MySqlDB extends DB
         global $g_debug;
         
         // im Debug-Modus werden alle SQL-Statements mitgeloggt
-        if($g_debug)
+        //if($g_debug)
         {
             error_log($sql);
         }
@@ -137,15 +137,15 @@ class MySqlDB extends DB
         switch ($status)
         {
             case 'begin':
-                return mysql_query('BEGIN', $this->connect_id);
+                return $this->query('BEGIN');
             break;
 
             case 'commit':
-                return mysql_query('COMMIT', $this->connect_id);
+                return $this->query('COMMIT');
             break;
 
             case 'rollback':
-                return mysql_query('ROLLBACK', $this->connect_id);
+                return $this->query('ROLLBACK');
             break;
         }
 

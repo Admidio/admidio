@@ -5,6 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  * Uebergaben:
  *
@@ -15,21 +16,6 @@
  *       5 - Frage, ob Zugangsdaten geschickt werden soll
  *       6 - Frage, ob Mitglied geloescht werden soll
  * user_id - Id des Benutzers, der bearbeitet werden soll
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
 
@@ -95,34 +81,35 @@ if($_GET["mode"] == 1)
 
     // Html des Modules ausgeben
     echo "<br /><br /><br />
-    <div class=\"formHead\" style=\"width: 400px\">Mitglied l&ouml;schen</div>
-
-    <div class=\"formBody\" style=\"width: 400px\">
-        <p align=\"left\">
-            <img src=\"$g_root_path/adm_program/images/user.png\" style=\"vertical-align: bottom;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Ehemaliger\">
-            Du kannst den Benutzer zu einem <b>Ehemaligen</b> machen. Dies hat den Vorteil, dass die Daten
-            erhalten bleiben und du sp&auml;ter immer wieder sehen kannst, welchen Rollen diese Person
-            zugeordnet war.
-        </p>
-        <p align=\"left\">
-            <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"vertical-align: bottom;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer l&ouml;schen\">
-            Wenn du <b>L&ouml;schen</b> ausw&auml;hlst, wird der Datensatz entg&uuml;ltig aus der Datenbank
-            entfernt und es ist sp&auml;ter nicht mehr m&ouml;glich Daten dieser Person einzusehen.
-        </p>
-        <button name=\"back\" type=\"button\" value=\"back\"
-            onclick=\"history.back()\">
-            <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\">
-            &nbsp;Zur&uuml;ck</button>
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        <button name=\"delete\" type=\"button\" value=\"delete\"
-            onclick=\"self.location.href='$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET['user_id']. "&mode=3'\">
-            <img src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Benutzer l&ouml;schen\">
-            &nbsp;L&ouml;schen</button>
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        <button name=\"former\" type=\"button\" value=\"former\"
-            onclick=\"self.location.href='$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET['user_id']. "&mode=2'\">
-            <img src=\"$g_root_path/adm_program/images/user.png\" alt=\"Ehemaliger\">
-            &nbsp;Ehemaliger</button>
+    <div class=\"formLayout\" id=\"user_delete_message_form\" style=\"width: 400px\">
+        <div class=\"formHead\">Mitglied l&ouml;schen</div>
+        <div class=\"formBody\">
+            <p align=\"left\">
+                <img src=\"$g_root_path/adm_program/images/user.png\" style=\"vertical-align: bottom;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Ehemaliger\">
+                Du kannst den Benutzer zu einem <b>Ehemaligen</b> machen. Dies hat den Vorteil, dass die Daten
+                erhalten bleiben und du sp&auml;ter immer wieder sehen kannst, welchen Rollen diese Person
+                zugeordnet war.
+            </p>
+            <p align=\"left\">
+                <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"vertical-align: bottom;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer l&ouml;schen\">
+                Wenn du <b>L&ouml;schen</b> ausw&auml;hlst, wird der Datensatz entg&uuml;ltig aus der Datenbank
+                entfernt und es ist sp&auml;ter nicht mehr m&ouml;glich Daten dieser Person einzusehen.
+            </p>
+            <button name=\"back\" type=\"button\" value=\"back\"
+                onclick=\"history.back()\">
+                <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\">
+                &nbsp;Zur&uuml;ck</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <button name=\"delete\" type=\"button\" value=\"delete\"
+                onclick=\"self.location.href='$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET['user_id']. "&mode=3'\">
+                <img src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Benutzer l&ouml;schen\">
+                &nbsp;L&ouml;schen</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <button name=\"former\" type=\"button\" value=\"former\"
+                onclick=\"self.location.href='$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET['user_id']. "&mode=2'\">
+                <img src=\"$g_root_path/adm_program/images/user.png\" alt=\"Ehemaliger\">
+                &nbsp;Ehemaliger</button>
+        </div>
     </div>";
 
     require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
@@ -173,9 +160,8 @@ elseif($_GET["mode"] == 3)
 {
     // User aus der Datenbank loeschen
     
-    // Es duerfen keine Webmaster entfernt werden
-    if($g_current_user->isWebmaster() == false
-    && $user->isWebmaster()           == true)
+    // nur Webmaster duerfen dies
+    if($g_current_user->isWebmaster() == false)
     {
         $g_message->show("norights");
     }
@@ -257,27 +243,29 @@ elseif($_GET["mode"] == 5)
 }
 elseif($_GET["mode"] == 6)
 {
-    if($this_orga == true && $other_orga == 0)
+    if($this_orga == true && $other_orga == 0 && $g_current_user->isWebmaster())
     {
+        // nur Webmaster duerfen dies
         // User ist NUR Mitglied der aktuellen Orga -> dann fragen, ob Ehemaliger oder ganz loeschen
         header("Location: $g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET["user_id"]. "&mode=1");
         exit();
     }
-    elseif($this_orga == true && $other_orga > 0)
+    elseif($this_orga == false && $other_orga == 0 && $g_current_user->isWebmaster())
     {
-        // User ist AUCH noch in anderen Orgas Mitglied -> User kann nur aus dieser Orga entfernt werden
-        $g_message->setForwardYesNo("$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET["user_id"]. "&mode=2");
-        $g_message->addVariableContent(utf8_encode($user->getValue("Vorname"). " ". $user->getValue("Nachname")));
-        $g_message->addVariableContent(utf8_encode($g_current_organization->getValue("org_longname")));
-        $g_message->show("remove_member", "", "Entfernen");
-    }
-    elseif($this_orga == false && $other_orga == 0)
-    {
+        // nur Webmaster duerfen dies
         // User ist in keiner Orga mehr Mitglied -> kann komplett geloescht werden
         $g_message->setForwardYesNo("$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET["user_id"]. "&mode=3");
         $g_message->addVariableContent(utf8_encode($user->getValue("Vorname"). " ". $user->getValue("Nachname")));
         $g_message->addVariableContent(utf8_encode($g_current_organization->getValue("org_longname")));
         $g_message->show("delete_user", "", "Löschen");
+    }
+    else
+    {
+        // User kann nur aus dieser Orga entfernt werden
+        $g_message->setForwardYesNo("$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET["user_id"]. "&mode=2");
+        $g_message->addVariableContent(utf8_encode($user->getValue("Vorname"). " ". $user->getValue("Nachname")));
+        $g_message->addVariableContent(utf8_encode($g_current_organization->getValue("org_longname")));
+        $g_message->show("remove_member", "", "Entfernen");
     }
 }
 

@@ -5,27 +5,13 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  * Uebergaben:
  *
  * dat_id   - ID des Termins, der bearbeitet werden soll
  * headline - Ueberschrift, die ueber den Terminen steht
  *            (Default) Termine
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
 
@@ -121,7 +107,7 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 // Html des Modules ausgeben
 echo "
 <form name=\"form\" method=\"post\" action=\"$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=$req_dat_id&amp;mode=1\">
-
+<div class=\"formLayout\" id=\"edit_dates_form\">
     <div class=\"formHead\">";
         if($req_dat_id > 0)
         {
@@ -133,90 +119,109 @@ echo "
         }
     echo "</div>
     <div class=\"formBody\">
-        <div>
-            <div style=\"text-align: right; width: 25%; float: left;\">&Uuml;berschrift:</div>
-            <div style=\"text-align: left; margin-left: 27%;\">
-                <input type=\"text\" name=\"dat_headline\" style=\"width: 350px;\" maxlength=\"100\" value=\"". htmlspecialchars($date->getValue("dat_headline"), ENT_QUOTES). "\">
-                <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
-            </div>
-        </div>";
+        <ul class=\"formFieldList\">
+            <li>
+                <dl>
+                    <dt><label for=\"dat_headline\">&Uuml;berschrift:</label></dt>
+                    <dd>
+                        <input type=\"text\" id=\"dat_headline\" name=\"dat_headline\" style=\"width: 350px;\" maxlength=\"100\" value=\"". htmlspecialchars($date->getValue("dat_headline"), ENT_QUOTES). "\">
+                        <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
+                    </dd>
+                </dl>
+            </li>";
 
-        // besitzt die Organisation eine Elternorga oder hat selber Kinder, so kann die Ankuendigung auf "global" gesetzt werden
-        if($g_current_organization->getValue("org_org_id_parent") > 0
-        || $g_current_organization->hasChildOrganizations())
-        {
-            echo "
-            <div style=\"margin-top: 6px;\">
-                <div style=\"text-align: right; width: 25%; float: left;\">&nbsp;</div>
-                <div style=\"text-align: left; margin-left: 27%;\">
-                    <input type=\"checkbox\" id=\"dat_global\" name=\"dat_global\" ";
-                    if($date->getValue("dat_global") == 1)
-                    {
-                        echo " checked=\"checked\" ";
-                    }
-                    echo " value=\"1\" />
-                    <label for=\"dat_global\">". $_GET['headline']. " ist f&uuml;r mehrere Organisationen sichtbar</label>&nbsp;
-                    <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" alt=\"Hilfe\" title=\"Hilfe\"
-                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=termin_global','Message','width=400,height=350,left=310,top=200,scrollbars=yes')\">
-                </div>
-            </div>";
-        }
+            // besitzt die Organisation eine Elternorga oder hat selber Kinder, so kann die Ankuendigung auf "global" gesetzt werden
+            if($g_current_organization->getValue("org_org_id_parent") > 0
+            || $g_current_organization->hasChildOrganizations())
+            {
+                echo "
+                <li>
+                    <dl>
+                        <dt>&nbsp;</dt>
+                        <dd>
+                            <input type=\"checkbox\" id=\"dat_global\" name=\"dat_global\" ";
+                            if($date->getValue("dat_global") == 1)
+                            {
+                                echo " checked=\"checked\" ";
+                            }
+                            echo " value=\"1\" />
+                            <label for=\"dat_global\">". $_GET['headline']. " ist f&uuml;r mehrere Organisationen sichtbar</label>&nbsp;
+                            <img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
+                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=termin_global','Message','width=400,height=350,left=310,top=200,scrollbars=yes')\">
+                        </dd>
+                    </dl>
+                </li>";
+            }
 
-        echo "<hr class=\"formLine\" width=\"85%\" />
+            echo "<hr />
 
-        <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 25%; float: left;\">Datum Beginn:</div>
-            <div style=\"text-align: left; width: 75%; position: relative; left: 2%;\">
-                <input type=\"text\" name=\"date_from\" size=\"10\" maxlength=\"10\" value=\"$date_from\">
-                <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Uhrzeit Beginn:&nbsp;
-                <input type=\"text\" name=\"time_from\" size=\"5\" maxlength=\"5\" value=\"$time_from\">
-            </div>
-        </div>
-        <div style=\"margin-top: 6px;\">
-        <div style=\"text-align: right; width: 25%; float: left;\">Datum Ende:</div>
-            <div style=\"text-align: left; width: 75%; position: relative; left: 2%;\">
-                <input type=\"text\" name=\"date_to\" size=\"10\" maxlength=\"10\" value=\"$date_to\">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Uhrzeit Ende:&nbsp;
-                <input type=\"text\" name=\"time_to\" size=\"5\" maxlength=\"5\" value=\"$time_to\">
-            </div>
-        </div>
-        <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 25%; float: left;\">Treffpunkt:</div>
-            <div style=\"text-align: left; margin-left: 27%;\">
-                <input type=\"text\" name=\"dat_location\" style=\"width: 350px;\" maxlength=\"50\" value=\"". htmlspecialchars($date->getValue("dat_location"), ENT_QUOTES). "\">
-            </div>
-        </div>
-        <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 25%; float: left;\">Beschreibung:";
-                if($g_preferences['enable_bbcode'] == 1)
-                {
-                    echo "<br><br>
-                    <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\" tabindex=\"6\">Text formatieren</a>";
-                }
-            echo "</div>
-            <div style=\"text-align: left; margin-left: 27%;\">
-                <textarea  name=\"dat_description\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". htmlspecialchars($date->getValue("dat_description"), ENT_QUOTES). "</textarea>
-                <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
-            </div>
-        </div>
+            <li>
+                <dl>
+                    <dt><label for=\"date_from\">Datum Beginn:</label></dt>
+                    <dd>
+                        <input type=\"text\" id=\"date_from\" name=\"date_from\" size=\"10\" maxlength=\"10\" value=\"$date_from\">
+                        <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label for=\"time_from\">Uhrzeit Beginn:</label>&nbsp;
+                        <input type=\"text\" id=\"time_from\" name=\"time_from\" size=\"5\" maxlength=\"5\" value=\"$time_from\">
+                    </dd>
+                </dl>
+            </li>
+            <li>
+                <dl>
+                    <dt><label for=\"date_to\">Datum Ende:</label></dt>
+                    <dd>
+                        <input type=\"text\" id=\"date_to\" name=\"date_to\" size=\"10\" maxlength=\"10\" value=\"$date_to\">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label for=\"time_to\">Uhrzeit Ende:</label>&nbsp;
+                        <input type=\"text\"id=\"time_to\" name=\"time_to\" size=\"5\" maxlength=\"5\" value=\"$time_to\">
+                    </dd>
+                </dl>
+            </li>
+            <li>
+                <dl>
+                    <dt><label for=\"dat_location\">Treffpunkt:</label></dt>
+                    <dd>
+                        <input type=\"text\" id=\"dat_location\" name=\"dat_location\" style=\"width: 350px;\" maxlength=\"50\" value=\"". htmlspecialchars($date->getValue("dat_location"), ENT_QUOTES). "\">
+                    </dd>
+                </dl>
+            </li>
+            <li>
+                <dl>
+                    <dt><label for=\"dat_description\">Beschreibung:</label>";
+                        if($g_preferences['enable_bbcode'] == 1)
+                        {
+                            echo "<br><br>
+                            <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\" tabindex=\"6\">Text formatieren</a>";
+                        }
+                    echo "</dt>
+                    <dd>
+                        <textarea id=\"dat_description\" name=\"dat_description\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". htmlspecialchars($date->getValue("dat_description"), ENT_QUOTES). "</textarea>
+                        <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
+                    </dd>
+                </dl>
+            </li>            
+        </ul>
 
-        <hr class=\"formLine\" width=\"85%\" />
+        <hr />
 
-        <div style=\"margin-top: 6px;\">
-            <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
-                <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\">
-                &nbsp;Zur&uuml;ck</button>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <div class=\"formSubmit\">
             <button name=\"speichern\" type=\"submit\" value=\"speichern\">
                 <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\">
                 &nbsp;Speichern</button>
         </div>
     </div>
+</div>
 </form>
 
+<ul class=\"iconTextLink\">
+    <li>
+        <a href=\"$g_root_path/adm_program/system/back.php\"><img 
+        src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
+        <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+    </li>
+</ul>
+
 <script type=\"text/javascript\"><!--
-    document.form.headline.focus();
+    document.getElementById('dat_headline').focus();
 --></script>";
 
 require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
