@@ -12,21 +12,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender 
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  *****************************************************************************/
 
@@ -84,7 +70,25 @@ $g_db->select_db($g_adm_db);
 
 if($g_valid_login == 1)
 {
-    echo "<div>
+    echo "
+    <script type=\"text/javascript\">
+        function loadPageLogout()
+        {";
+            if(strlen($plg_link_target) > 0 && strpos($plg_link_target, "_") === false)
+            {
+                echo "
+                parent.$plg_link_target.location.href = '$g_root_path/adm_program/system/logout.php';
+                self.location.reload(); ";
+            }
+            else
+            {
+                echo "self.location.href = '$g_root_path/adm_program/system/logout.php';";
+            }
+        echo "
+        }
+    </script>
+    
+    <div>
         Benutzer:<br>
         <a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=". $g_current_user->getValue("usr_id"). "\" 
             target=\"$plg_link_target\">". $g_current_user->getValue("Vorname"). " ". $g_current_user->getValue("Nachname"). "</a>
@@ -123,21 +127,42 @@ if($g_valid_login == 1)
     if($plg_show_logout_link)
     {
         echo "<div style=\"padding-top: 5px;\">
-            <a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/system/logout.php\" target=\"$plg_link_target\">Logout</a>       
+            <a class=\"$plg_link_class\" href=\"javascript:loadPageLogout()\">Logout</a>       
         </div>";
     }
 }
 else
 {
     // Login-Formular
-    echo "<form style=\"display: inline;\" action=\"$g_root_path/adm_program/system/login_check.php\" method=\"post\">
+    echo "
+    <script type=\"text/javascript\">
+        function loadPageLogin()
+        {
+            var loginname = document.login_form_sidebar.usr_login_name.value;
+            var password  = document.login_form_sidebar.usr_password.value;
+            var link      = '$g_root_path/adm_program/system/login_check.php?usr_login_name=' + loginname + '&usr_password=' + password;";
+
+            if(strlen($plg_link_target) > 0 && strpos($plg_link_target, "_") === false)
+            {
+                echo "parent.$plg_link_target.location.href = link;
+                self.location.reload(); ";
+            }
+            else
+            {
+                echo "self.location.href = link;";
+            }
+        echo "
+        }
+    </script>
+    
+    <form style=\"display: inline;\" action=\"javascript:loadPageLogin()\" method=\"get\" name=\"login_form_sidebar\">
         <div>
             Login-Name:<br>
-            <input type=\"text\" name=\"loginname\" size=\"10\" maxLength=\"25\">
+            <input type=\"text\" id=\"usr_login_name\" name=\"usr_login_name\" size=\"10\" maxLength=\"25\">
         </div>
         <div style=\"padding-top: 5px;\">
             Passwort:<br>
-            <input type=\"password\" name=\"passwort\" size=\"10\" maxLength=\"25\">
+            <input type=\"password\" id=\"usr_password\" name=\"usr_password\" size=\"10\" maxLength=\"25\">
         </div>
         <div style=\"padding-top: 5px;\">
             <input type=\"submit\" value=\"Login\">        
@@ -175,7 +200,7 @@ else
                 }
             echo "</div>";
         }    
-    echo "</form>";
+    echo "</form>";   
 }
 
 ?>

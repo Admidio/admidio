@@ -460,7 +460,7 @@ echo "
         if ($new_user == 2 && $g_preferences['enable_registration_captcha'] == 1)
         {
             echo "
-            <ul>
+            <ul class=\"formFieldList\">
                 <li>
                     <dl>
                         <dt>&nbsp;</dt>

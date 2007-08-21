@@ -16,9 +16,9 @@ require("common.php");
 $user_found  = 0;
 
 // Uebergabevariablen filtern
-$req_password_crypt = md5($_POST["usr_password"]);
+$req_password_crypt = md5($_GET["usr_password"]);
 
-if(strlen($_POST['usr_login_name']) == 0)
+if(strlen($_GET['usr_login_name']) == 0)
 {
     $g_message->show("feld", "Benutzername");
 }
@@ -28,7 +28,7 @@ if(strlen($_POST['usr_login_name']) == 0)
 
 $sql    = "SELECT usr_id
              FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-            WHERE usr_login_name LIKE '". $_POST['usr_login_name']. "'
+            WHERE usr_login_name LIKE '". $_GET['usr_login_name']. "'
               AND usr_valid      = 1
               AND mem_usr_id     = usr_id
               AND mem_rol_id     = rol_id
@@ -77,7 +77,7 @@ if ($user_found >= 1)
         // Paralell im Forum einloggen, wenn g_forum gesetzt ist
         if($g_forum_integriert)
         {
-            $g_forum->userLogin($g_current_user->getValue("usr_id"), $_POST['usr_login_name'], $req_password_crypt, 
+            $g_forum->userLogin($g_current_user->getValue("usr_id"), $_GET['usr_login_name'], $req_password_crypt, 
                                 $g_current_user->getValue("usr_login_name"), $g_current_user->getValue("usr_password"), 
                                 $g_current_user->getValue("E-Mail"));
 
