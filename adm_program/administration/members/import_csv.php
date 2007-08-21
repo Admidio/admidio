@@ -140,8 +140,8 @@ for($i = $start_row; $i < count($_SESSION["file_lines"]); $i++)
                 }
                 elseif($value['usf_type'] == "INTEGER")
                 {
-                    // Integer sollte kleiner als 2 Milliarden sein
-                    if($col_value > -2000000000 && $col_value < 2000000000)
+                    // Zahl darf Punkt und Komma enthalten
+                    if(is_numeric(strtr($col_value, ",.", "00")) == true)
                     {
                         $user->setValue($value['usf_name'], $col_value);
                     }

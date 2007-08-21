@@ -223,6 +223,10 @@ function getFieldCode($field, $user, $new_user)
         }
         $value = "<input type=\"checkbox\" id=\"usf-". $field['usf_id']. "\" name=\"usf-". $field['usf_id']. "\" $mode $readonly value=\"1\">";
     }
+    elseif($field['usf_type'] == "TEXT_BIG")
+    {
+        $value = "<textarea name=\"usf-". $field['usf_id']. "\" id=\"usf-". $field['usf_id']. "\" style=\"width: 300px;\" rows=\"2\">". htmlspecialchars($field['usd_value']). "</textarea>";
+    }
     else
     {
         if($field['usf_type'] == "DATE")
@@ -234,17 +238,10 @@ function getFieldCode($field, $user, $new_user)
                 $field['usd_value'] = mysqldate('d.m.y', $field['usd_value']);
             }
         }
-        elseif($field['usf_type'] == "EMAIL" || $field['usf_type'] == "URL" || $field['usf_type'] == "TEXT_BIG")
+        elseif($field['usf_type'] == "EMAIL" || $field['usf_type'] == "URL")
         {
             $width     = "300px";
-            if($field['usf_type'] == "TEXT_BIG")
-            {
-                $maxlength = "255";
-            }
-            else
-            {
-                $maxlength = "50";
-            }
+            $maxlength = "50";
         }
         else
         {

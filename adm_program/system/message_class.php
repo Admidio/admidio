@@ -55,7 +55,7 @@ class Message
     // ist timer > 0 wird nach x Millisec. automatisch auf die URL weitergeleitet
     function setForwardUrl($url, $timer = 0)
     {
-        if ($url == "home")
+        if ($url == "home" || strlen($url) == 0)
         {
             // auf die Startseite verweisen
             $this->forward_url = $GLOBALS['g_root_path']. "/". $GLOBALS['g_main_page'];
