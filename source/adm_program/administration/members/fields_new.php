@@ -60,6 +60,19 @@ if(isset($_SESSION['fields_request']))
     // nun die vorher eingegebenen Inhalte auslesen
     foreach($_SESSION['fields_request'] as $key => $value)
     {
+        // hidden muss 0 sein, wenn ein Haeckchen gesetzt wird
+        if($key == "usf_hidden")
+        {
+            if($value == 1)
+            {
+                $value = 0;
+            }
+            else
+            {
+                $value = 1;
+            }
+        }
+        
         if(strpos($key, "usf_") == 0)
         {
             $user_field->setValue($key, stripslashes($value));
@@ -105,8 +118,8 @@ echo "
             <li>
                 <dl>
                     <dt><label for=\"usf_description\">Beschreibung:</label></dt>
-                    <dd><input type=\"text\" name=\"usf_description\" id=\"usf_description\" style=\"width: 330px;\" maxlength=\"255\" 
-                        value=\"". htmlspecialchars($user_field->getValue("usf_description"), ENT_QUOTES). "\">
+                    <dd><textarea name=\"usf_description\" id=\"usf_description\" style=\"width: 330px;\" rows=\"2\">".
+                        htmlspecialchars($user_field->getValue("usf_description"), ENT_QUOTES). "</textarea>
                     </dd>
                 </dl>
             </li>

@@ -1,10 +1,11 @@
 <?php
 /******************************************************************************
- * Verschiedene Funktionen fuer das Profil
+ * Profil/Registrierung wird angelegt bzw. gespeichert
  *
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  * Uebergaben:
  *
@@ -14,25 +15,11 @@
  *            2 - Registrierung entgegennehmen
  *            3 - Registrierung zuordnen/akzeptieren
  *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- *
  *****************************************************************************/
 
 require("../../system/common.php");
 require("../../system/email_class.php");
+
 // Registrierung muss ausgeloggt moeglich sein
 if($_GET['new_user'] != 2)
 {
@@ -210,7 +197,7 @@ foreach($user->db_user_fields as $key => $value)
             elseif($value['usf_type'] == "NUMERIC")
             {
                 // Zahl muss numerisch sein
-                if(is_numeric($_POST[$post_id]) == false)
+                if(is_numeric(strtr($_POST[$post_id], ",.", "00")) == false)
                 {
                     $g_message->show("field_numeric", $value['usf_name']);
                 }
@@ -444,7 +431,7 @@ elseif($new_user == 0 && $user->getValue("usr_valid") == 0)
 }
 else
 {
-    // zur Profilseite zurueckkehren
+    // zur Profilseite zurueckkehren    
     $g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
     $g_message->show("save");
 }
