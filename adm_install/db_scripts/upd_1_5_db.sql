@@ -57,6 +57,10 @@ ALTER TABLE %PRAEFIX%_user_data DROP INDEX ak_usr_usf_id;
 ALTER TABLE %PRAEFIX%_user_data DROP COLUMN usd_id, DROP PRIMARY KEY;
 ALTER TABLE %PRAEFIX%_user_data ADD PRIMARY KEY(usd_usr_id, usd_usf_id);
 
+-- Tabelle Einstellungen anpassen
+ALTER TABLE %PRAEFIX%_preferences ADD UNIQUE ak_org_id_name (prf_org_id, prf_name);
+ALTER TABLE %PRAEFIX%_preferences MODIFY COLUMN prf_org_id TINYINT(4);
+
 -- Tabellen fuer den Downloadbereich erstellen
 
 /*==============================================================*/

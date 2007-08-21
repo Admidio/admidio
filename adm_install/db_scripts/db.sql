@@ -98,10 +98,11 @@ alter table %PRAEFIX%_texts add constraint %PRAEFIX%_FK_TXT_ORG foreign key (txt
 create table %PRAEFIX%_preferences
 (
    prf_id                         int(11) unsigned               not null AUTO_INCREMENT,
-   prf_org_id                     tinyint(4)                     not null,
+   prf_org_id                     tinyint(4),
    prf_name                       varchar(30)                    not null,
    prf_value                      varchar(255),
-   primary key (prf_id)
+   primary key (prf_id),
+   unique ak_org_id_name (prf_org_id, prf_name)
 )
 type = InnoDB;
 

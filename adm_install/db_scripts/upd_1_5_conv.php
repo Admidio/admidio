@@ -144,6 +144,11 @@ $sql = "UPDATE ". TBL_ROLES. " SET rol_approve_users = 1
          WHERE rol_assign_roles = 1 ";
 $db->query($sql);
 
+// Datenbank-Versionsnummer schreiben
+$sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+                                   VALUES (NULL, 'db_version', '1.5.0') ";
+$db->query($sql);    
+
 // Orga-spezifische Kategorie anlegen
 $sql = "SELECT * FROM ". TBL_ORGANIZATIONS;
 $result_orga = $db->query($sql);
