@@ -18,6 +18,7 @@
  *****************************************************************************/
 
 define('SERVER_PATH', substr(__FILE__, 0, strpos(__FILE__, "adm_install")-1));
+define('ADMIDIO_VERSION', '1.5.0');  // die Versionsnummer bitte nicht aendern !!!
 
 require("../adm_program/system/function.php");
 require("../adm_program/system/string.php");
@@ -421,6 +422,12 @@ if($req_mode == 3)
                 include("db_scripts/upd_1_5_conv.php");
             }           
         }
+        
+        // Datenbank-Versionsnummer updaten
+        $sql = "UPDATE ". TBL_PREFERENCES. " SET prf_value = '". ADMIDIO_VERSION. "'
+                 WHERE prf_org_id IS NULL
+                   AND prf_name    = 'db_version' ";
+        $db->query($sql);
     }
     else
     {
@@ -534,7 +541,13 @@ if($req_mode == 1 || $req_mode == 4)
                                    VALUES (". $role_webmaster->getValue("rol_id"). ", ". $g_current_user->getValue("usr_id"). ", NOW(), 1) 
                                         , (". $role_member->getValue("rol_id"). ", ". $g_current_user->getValue("usr_id"). ", NOW(), 1) ";
     $db->query($sql);
+    
+    // Datenbank-Versionsnummer schreiben
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+                                       VALUES (NULL, 'db_version', '". ADMIDIO_VERSION. "') ";
+    $db->query($sql);    
 }
+
 
 // Transaktion abschliessen
 $db->transaction("commit");
