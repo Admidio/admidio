@@ -212,7 +212,7 @@ $g_layout['header'] = "
             {
                 var former_list = document.getElementById('former_role_list');
                 var end_date  = '". date("d.m.Y", time()). "';
-                var newLi     = document.createElement('li');
+                var newListElement = document.createElement('li');
                 var leader    = '';
                 var webmaster = '';
                 list          = document.getElementById('role_list');
@@ -229,11 +229,12 @@ $g_layout['header'] = "
                         'src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Rolle l&ouml;schen\" title=\"Rolle l&ouml;schen\"></a>';";
                 }
                 $g_layout['header'] = $g_layout['header']. "
-                var html = '<dl><dt>' + cat_name + ' - ' + rol_name + 
-                            '&nbsp;</dt><dd>vom ' + mem_begin + ' bis ' + 
+                var html = '<dl><dt>' + cat_name + ' - ' + rol_name + leader +
+                            '</dt><dd>vom ' + mem_begin + ' bis ' + 
                             end_date + webmaster + '</dd></dl>';
-                newLi.innerHTML = html;
-                former_list.appendChild(newLi);
+                newListElement.setAttribute('id', 'former_role_' + rol_id);
+                newListElement.innerHTML = html;
+                former_list.appendChild(newListElement);
 
                 resObject.open('POST', '$g_root_path/adm_program/modules/profile/profile_function.php', true);
                 resObject.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');

@@ -115,6 +115,7 @@ $g_layout['header'] = "
         function addField() 
         {
             actFieldCount++;
+            
             resObject.open('POST', '$g_root_path/adm_program/modules/lists/mylist_field_list.php', true);
             resObject.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             resObject.onreadystatechange = handleResponse;
@@ -125,8 +126,9 @@ $g_layout['header'] = "
         {
             if(resObject.readyState == 4) 
             {
-                var objectId = 'next_field_' + actFieldCount;
-                document.getElementById(objectId).innerHTML += resObject.responseText;
+                var table       = document.getElementById('mylist_fields_table');
+                var newTableRow = table.insertRow(actFieldCount);
+                newTableRow.innerHTML = resObject.responseText;
             }
         }
     </script>";
@@ -155,36 +157,39 @@ echo "
 
         <p><b>2.</b> Bestimme die Felder, die in der Liste angezeigt werden sollen:</p>
 
-        <table class=\"tableList\" style=\"width: 94%;\" cellspacing=\"0\">
-            <tr>
-                <th style=\"width: 18%;\">Nr.</th>
-                <th style=\"width: 37%;\">Feld</th>
-                <th style=\"width: 18%;\">Sortierung</th>
-                <th style=\"width: 27%;\">Bedingung
-                    <img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
-                    onClick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=condition','Message','width=450,height=600,left=310,top=200,scrollbars=yes')\">
-                </th>
-            </tr>
-            <tr>
-                <td colspan=\"4\">";
-                    // Zeilen mit den einzelnen Feldern anzeigen
-                    for($i = 1; $i <= $default_fields; $i++)
-                    {
-                        include("mylist_field_list.php");
-                    }
-                echo "</td>
-            </tr>
-            <tr>
-                <td colspan=\"4\">&nbsp;
-                    <ul class=\"iconTextLink\">
-                        <li>
-                            <a href=\"javascript:addField()\"><img
-                            src=\"$g_root_path/adm_program/images/add.png\" alt=\"Feld hinzuf&uuml;gen\"></a>
-                            <a href=\"javascript:addField()\">Feld hinzuf&uuml;gen</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
+        <table class=\"tableList\" id=\"mylist_fields_table\" style=\"width: 94%;\" cellspacing=\"0\">
+            <thead>
+                <tr>
+                    <th style=\"width: 18%;\">Nr.</th>
+                    <th style=\"width: 37%;\">Feld</th>
+                    <th style=\"width: 18%;\">Sortierung</th>
+                    <th style=\"width: 27%;\">Bedingung
+                        <img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
+                        onClick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=condition','Message','width=450,height=600,left=310,top=200,scrollbars=yes')\">
+                    </th>
+                </tr>
+            </thead>
+            <tbody>";            
+                // Zeilen mit den einzelnen Feldern anzeigen
+                for($i = 1; $i <= $default_fields; $i++)
+                {
+                    echo "<tr>";
+                    include("mylist_field_list.php");
+                    echo "</tr>";
+                }
+                echo "
+                <tr id=\"table_row_button\">
+                    <td colspan=\"4\">&nbsp;
+                        <ul class=\"iconTextLink\">
+                            <li>
+                                <a href=\"javascript:addField()\"><img
+                                src=\"$g_root_path/adm_program/images/add.png\" alt=\"Feld hinzuf&uuml;gen\"></a>
+                                <a href=\"javascript:addField()\">Feld hinzuf&uuml;gen</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
         </table>
         
         <hr />
