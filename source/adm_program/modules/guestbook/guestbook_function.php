@@ -246,6 +246,7 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
 
         // Der Inhalt des Formulars wird bei erfolgreichem insert/update aus der Session geloescht
         unset($_SESSION['guestbook_entry_request']);
+        $_SESSION['navigation']->deleteLastUrl();
 
         // Der CaptchaCode wird bei erfolgreichem insert/update aus der Session geloescht
         if (isset($_SESSION['captchacode']))
@@ -376,6 +377,7 @@ elseif($_GET["mode"] == 4 || $_GET["mode"] == 8)
 
         // Der Inhalt des Formulars wird bei erfolgreichem insert/update aus der Session geloescht
         unset($_SESSION['guestbook_comment_request']);
+        $_SESSION['navigation']->deleteLastUrl();
 
         // Der CaptchaCode wird bei erfolgreichem insert/update aus der Session geloescht
         if (isset($_SESSION['captchacode']))

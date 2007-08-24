@@ -5,24 +5,11 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Jochen Erkens
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  * Uebergaben:
  *
  * pho_id: id der Veranstaltung zu der die Bilder hinzugefuegt werden sollen
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 79 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
 
@@ -86,7 +73,8 @@ echo"<h1 class=\"moduleHeadline\">Fotogalerien - Upload</h1>";
 
 /**************************Formular********************************************************/
 echo"
-<form name=\"photoup\" method=\"post\" action=\"$g_root_path/adm_program/modules/photos/photoupload_do.php?pho_id=". $_GET['pho_id']. "\" enctype=\"multipart/form-data\">
+<form method=\"post\" action=\"$g_root_path/adm_program/modules/photos/photoupload_do.php?pho_id=". $_GET['pho_id']. "\" enctype=\"multipart/form-data\">
+<div class=\"formLayout\" id=\"photo_upload_form\">
     <div class=\"formHead\">Bilder hochladen</div>
     <div class=\"formBody\">
         <div class=\"formRow\">
@@ -96,50 +84,56 @@ echo"
             ."
         </div>
         <hr>
-        <ul>
-			<li><dl>
-				<dt>Bild 1:</dt>
-				<dd><input type=\"file\" id=\"bilddatei1\" name=\"bilddatei[]\" value=\"durchsuchen\"></dd>
-			</dl></li>
-			<li><dl>
-				<dt>Bild 2:</dt>
-				<dd><input type=\"file\" name=\"bilddatei[]\" value=\"durchsuchen\"></dd>
-			</dl></li>
-			<li><dl>
-				<dt>Bild 3:</dt>
-				<dd><input type=\"file\" name=\"bilddatei[]\" value=\"durchsuchen\"></dd>
-			</dl></li>
-			<li><dl>
-				<dt>Bild 4:</dt>
-				<dd><input type=\"file\" name=\"bilddatei[]\" value=\"durchsuchen\"></dd>
-			</dl></li>
-			<li><dl>
-				<dt>Bild 5:</dt>
-				<dd><input type=\"file\" name=\"bilddatei[]\" value=\"durchsuchen\"></dd>
-			</dl></li>
-		</ul>
-		<hr />
-        <div class=\"formRow\">
+        <ul class=\"formFieldList\">
+            <li><dl>
+                <dt><label for=\"bilddatei1\">Bild 1:</label></dt>
+                <dd><input type=\"file\" id=\"bilddatei1\" name=\"bilddatei[]\" value=\"durchsuchen\"></dd>
+            </dl></li>
+            <li><dl>
+                <dt><label for=\"bilddatei1\">Bild 2:</label></dt>
+                <dd><input type=\"file\" id=\"bilddatei2\" name=\"bilddatei[]\" value=\"durchsuchen\"></dd>
+            </dl></li>
+            <li><dl>
+                <dt><label for=\"bilddatei1\">Bild 3:</label></dt>
+                <dd><input type=\"file\" id=\"bilddatei3\" name=\"bilddatei[]\" value=\"durchsuchen\"></dd>
+            </dl></li>
+            <li><dl>
+                <dt><label for=\"bilddatei1\">Bild 4:</label></dt>
+                <dd><input type=\"file\" id=\"bilddatei4\" name=\"bilddatei[]\" value=\"durchsuchen\"></dd>
+            </dl></li>
+            <li><dl>
+                <dt><label for=\"bilddatei1\">Bild 5:</label></dt>
+                <dd><input type=\"file\" id=\"bilddatei5\" name=\"bilddatei[]\" value=\"durchsuchen\"></dd>
+            </dl></li>
+        </ul>
+        <hr />
+        <div class=\"formSubmit\">
             <button name=\"upload\" type=\"submit\" value=\"speichern\">
                 <img src=\"$g_root_path/adm_program/images/page_white_get.png\" alt=\"Speichern\">
                 &nbsp;Bilder hochladen
             </button>
         </div>
    </div>
+</div>
 </form>";
 
 echo"
-<div class=\"pageNavigation\">
-	<a href=\"$g_root_path/adm_program/system/back.php\"><img class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
-    <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	
-	<img src=\"$g_root_path/adm_program/images/help.png\" class=\"iconLink\" alt=\"Hilfe\" title=\"Hilfe\"
-       onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_up_help','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\">	
-	<a onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_up_help','Message','width=600,height=600,left=310,top=200,scrollbars=yes'\")\">Hilfe</a>
-</div>
-
-";
+<ul class=\"iconTextLinkList\">
+    <li>
+        <span class=\"iconLink\">
+            <a href=\"$g_root_path/adm_program/system/back.php\"><img 
+            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
+            <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+        </span>
+    </li>    
+    <li>
+        <span class=\"iconLink\">
+            <img src=\"$g_root_path/adm_program/images/help.png\" class=\"iconLink\" alt=\"Hilfe\" title=\"Hilfe\"
+               onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_up_help','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\">   
+            <a onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_up_help','Message','width=600,height=600,left=310,top=200,scrollbars=yes'\")\">Hilfe</a>
+        </span>
+    </li>
+</ul>";
 
 //Seitenende
 echo"

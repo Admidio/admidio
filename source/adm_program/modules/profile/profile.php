@@ -118,19 +118,23 @@ function getFieldCode($field, $user_id)
             $icq_number = implode("", reset($matches));
 
             // ICQ Onlinestatus anzeigen
-            $value = "<a href=\"http://www.icq.com/whitepages/cmd.php?uin=$icq_number&amp;action=add\"  class=\"wpaction\">
-            <img border=\"0\" src=\"http://status.icq.com/online.gif?icq=$icq_number&amp;img=5\"
-            style=\"vertical-align: middle;\" alt=\"". $field['usd_value']. " zu ". $field['usf_name']. " hinzuf&uuml;gen\" 
-            title=\"". $field['usd_value']. " zu ". $field['usf_name']. " hinzuf&uuml;gen\" /></a>&nbsp;$value";
+            $value = "<span class=\"iconLink\">
+                        <a href=\"http://www.icq.com/whitepages/cmd.php?uin=$icq_number&amp;action=add\" class=\"wpaction\"><img 
+                        src=\"http://status.icq.com/online.gif?icq=$icq_number&amp;img=5\" 
+                        alt=\"". $field['usd_value']. " zu ". $field['usf_name']. " hinzuf&uuml;gen\" 
+                        title=\"". $field['usd_value']. " zu ". $field['usf_name']. " hinzuf&uuml;gen\" /></a>
+                      </span>$value";
         }
         elseif($field['usf_name'] == 'Skype')
         {
             // Skype Onlinestatus anzeigen
             $value = "<script type=\"text/javascript\" src=\"http://download.skype.com/share/skypebuttons/js/skypeCheck.js\"></script>
-            <a href=\"skype:". $field['usd_value']. "?add\"><img src=\"http://mystatus.skype.com/smallicon/". $field['usd_value']. "\"
-            style=\"border: none; vertical-align: middle;\" width=\"16\" height=\"16\" 
-            title=\"". $field['usd_value']. " zu ". $field['usf_name']. " hinzuf&uuml;gen\" 
-            alt=\"". $field['usd_value']. " zu ". $field['usf_name']. " hinzuf&uuml;gen\" /></a>&nbsp;&nbsp;$value";
+            <span class=\"iconLink\">
+                <a href=\"skype:". $field['usd_value']. "?add\"><img 
+                src=\"http://mystatus.skype.com/smallicon/". $field['usd_value']. "\"
+                title=\"". $field['usd_value']. " zu ". $field['usf_name']. " hinzuf&uuml;gen\" 
+                alt=\"". $field['usd_value']. " zu ". $field['usf_name']. " hinzuf&uuml;gen\" /></a>
+            </span>$value";
         }
         else
         {
@@ -225,8 +229,8 @@ $g_layout['header'] = "
                 if($g_current_user->isWebmaster())
                 {
                     $g_layout['header'] = $g_layout['header']. " 
-                        webmaster = '&nbsp;<a href=\"javascript:deleteFormerRole(' + rol_id + ', \'' + rol_name + '\')\"><img ' +
-                        'src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Rolle l&ouml;schen\" title=\"Rolle l&ouml;schen\"></a>';";
+                        webmaster = '<span class=\"iconLink\"><a href=\"javascript:deleteFormerRole(' + rol_id + ', \'' + rol_name + '\')\"><img ' +
+                        'src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Rolle l&ouml;schen\" title=\"Rolle l&ouml;schen\"></a></span>';";
                 }
                 $g_layout['header'] = $g_layout['header']. "
                 var html = '<dl><dt>' + cat_name + ' - ' + rol_name + leader +
@@ -292,23 +296,23 @@ echo "
                             }
                         echo "</div>
                         <div style=\"text-align: right;\">
-                            <ul class=\"iconLinkRow\">
-                                <li>
-                                    <a href=\"$g_root_path/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id=". $user->getValue("usr_id"). "\"><img
-                                    src=\"$g_root_path/adm_program/images/vcard.png\" 
-                                    alt=\"vCard von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname"). " exportieren\" 
-                                    title=\"vCard von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname"). " exportieren\"></a>
-                                </li>";
-                                // Nur berechtigte User duerfen ein Profil editieren
-                                if($g_current_user->editProfile($a_user_id) == true)
-                                {
-                                    echo "<li>
-                                        <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$a_user_id\"><img
-                                        src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Profildaten bearbeiten\" title=\"Profildaten bearbeiten\"></a>
-                                    </li>";
-                                }
-                            echo "</ul>
-                        </div>
+                            <span class=\"iconLink\">
+                                <a href=\"$g_root_path/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id=". $user->getValue("usr_id"). "\"><img
+                                src=\"$g_root_path/adm_program/images/vcard.png\" 
+                                alt=\"vCard von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname"). " exportieren\" 
+                                title=\"vCard von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname"). " exportieren\"></a>
+                            </span>";
+                            
+                            // Nur berechtigte User duerfen ein Profil editieren
+                            if($g_current_user->editProfile($a_user_id) == true)
+                            {
+                                echo "
+                                <span class=\"iconLink\">
+                                    <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$a_user_id\"><img
+                                    src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Profildaten bearbeiten\" title=\"Profildaten bearbeiten\"></a>
+                                </span>";
+                            }
+                        echo "</div>
                     </div>
                     <div class=\"groupBoxBody\">
                         <ul class=\"formFieldList\">
@@ -459,16 +463,14 @@ echo "
                 <div class=\"groupBox\">
                     <div class=\"groupBoxBody\" style=\"text-align: center;\">
                         <img src=\"$g_root_path/adm_program/modules/profile/profile_photo_show.php?usr_id=$a_user_id&amp;id=". time(). "\" alt=\"Profilfoto\">
-                        <ul class=\"iconLinkRow\">
-                            <li>
-                                <a href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$a_user_id\"><img
-                                src=\"$g_root_path/adm_program/images/photo.png\" alt=\"Foto &auml;ndern\" title=\"Foto &auml;ndern\"></a>
-                            </li>
-                            <li>
-                                <a href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=msg_delete&usr_id=$a_user_id\"><img
-                                src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Foto l&ouml;schen\" title=\"Foto l&ouml;schen\"></a>
-                            </li>
-                        </ul>
+                        <span class=\"iconLink\">
+                            <a href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$a_user_id\"><img
+                            src=\"$g_root_path/adm_program/images/photo.png\" alt=\"Foto &auml;ndern\" title=\"Foto &auml;ndern\"></a>
+                        </span>
+                        <span class=\"iconLink\">
+                            <a href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=msg_delete&usr_id=$a_user_id\"><img
+                            src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Foto l&ouml;schen\" title=\"Foto l&ouml;schen\"></a>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -510,12 +512,10 @@ echo "
                             {
                                 echo "
                                 <div style=\"text-align: right;\">
-                                    <ul class=\"iconLinkRow\">
-                                        <li>
-                                            <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$a_user_id#cat-". $value['cat_id']. "\"><img
-                                            src=\"$g_root_path/adm_program/images/edit.png\" alt=\"". $value['cat_name']. " bearbeiten\" title=\"". $value['cat_name']. " bearbeiten\"></a>
-                                        </li>
-                                    </ul>
+                                    <span class=\"iconLink\">
+                                        <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$a_user_id#cat-". $value['cat_id']. "\"><img
+                                        src=\"$g_root_path/adm_program/images/edit.png\" alt=\"". $value['cat_name']. " bearbeiten\" title=\"". $value['cat_name']. " bearbeiten\"></a>
+                                    </span>
                                 </div>";
                             }
                         echo "</div>
@@ -573,12 +573,10 @@ echo "
                         {
                             echo "
                             <div style=\"text-align: right;\">
-                                <ul class=\"iconLinkRow\">
-                                    <li>
-                                        <a href=\"$g_root_path/adm_program/modules/profile/roles.php?user_id=$a_user_id\"><img
-                                        src=\"$g_root_path/adm_program/images/edit.png\" title=\"Rollen &auml;ndern\" alt=\"Rollen &auml;ndern\"></a>
-                                    </li>
-                                </ul>
+                                <span class=\"iconLink\">
+                                    <a href=\"$g_root_path/adm_program/modules/profile/roles.php?user_id=$a_user_id\"><img
+                                    src=\"$g_root_path/adm_program/images/edit.png\" title=\"Rollen &auml;ndern\" alt=\"Rollen &auml;ndern\"></a>
+                                </span>
                             </div>";
                         }
                 echo "</div>
@@ -668,8 +666,11 @@ echo "
                                             if($g_current_user->assignRoles() || $g_current_user->editUser())
 
                                             {
-                                                echo "&nbsp;<a href=\"javascript:deleteRole(". $row['rol_id']. ", '". $row['rol_name']. "', ". $row['rol_valid']. ", '". $row['cat_name']. "', '". mysqldate('d.m.y', $row['mem_begin']). "')\"><img 
-                                                src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Rolle l&ouml;schen\" title=\"Rolle l&ouml;schen\"></a>";
+                                                echo "
+                                                <span class=\"iconLink\">
+                                                    <a href=\"javascript:deleteRole(". $row['rol_id']. ", '". $row['rol_name']. "', ". $row['rol_valid']. ", '". $row['cat_name']. "', '". mysqldate('d.m.y', $row['mem_begin']). "')\"><img 
+                                                    src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Rolle l&ouml;schen\" title=\"Rolle l&ouml;schen\"></a>
+                                                </span>";
                                             }
                                         echo "</dd>
                                     </dl>
@@ -733,8 +734,11 @@ echo "
                                             bis ". mysqldate('d.m.y', $row['mem_end']);
                                             if($g_current_user->isWebmaster())
                                             {
-                                                echo "&nbsp;<a href=\"javascript:deleteFormerRole(". $row['rol_id']. ", '". $row['rol_name']. "')\"><img 
-                                                src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Rolle l&ouml;schen\" title=\"Rolle l&ouml;schen\"></a>";
+                                                echo "
+                                                <span class=\"iconLink\">
+                                                    <a href=\"javascript:deleteFormerRole(". $row['rol_id']. ", '". $row['rol_name']. "')\"><img 
+                                                    src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Rolle l&ouml;schen\" title=\"Rolle l&ouml;schen\"></a>
+                                                </span>";
                                             }
                                         echo "</dd>
                                     </dl>
@@ -804,11 +808,13 @@ echo "
 if(isset($_GET['user_id']) == true)
 {
     echo "
-    <ul class=\"iconTextLink\">
+    <ul class=\"iconTextLinkList\">
         <li>
-            <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
-            <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+            <span class=\"iconTextLink\">
+                <a href=\"$g_root_path/adm_program/system/back.php\"><img 
+                src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
+                <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+            </span>
         </li>
     </ul>";
 }

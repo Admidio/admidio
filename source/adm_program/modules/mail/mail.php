@@ -216,242 +216,273 @@ if($g_preferences['enable_rss'] == 1)
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 echo "
 <form action=\"$g_root_path/adm_program/modules/mail/mail_send.php?";
-  // usr_id wird mit GET uebergeben,
-  // da keine E-Mail-Adresse von mail_send angenommen werden soll
-  if (array_key_exists("usr_id", $_GET))
-  {
-      echo "usr_id=". $_GET['usr_id']. "&";
-  }
-  echo "\" method=\"post\" name=\"Mail\" enctype=\"multipart/form-data\">
+    // usr_id wird mit GET uebergeben,
+    // da keine E-Mail-Adresse von mail_send angenommen werden soll
+    if (array_key_exists("usr_id", $_GET))
+    {
+        echo "usr_id=". $_GET['usr_id']. "&";
+    }
+    echo "\" method=\"post\" name=\"Mail\" enctype=\"multipart/form-data\">
 
-  <div class=\"formHead\">";
-  if ($_GET["subject"] == "")
-  {
-      echo "E-Mail verschicken";
-  }
-  else
-  {
-      echo $_GET["subject"];
-  }
-  echo "</div>
-  <div class=\"formBody\">
-     <div>
-        <div style=\"text-align: right; width: 25%; float: left;\">an:</div>
-        <div style=\"text-align: left; margin-left: 27%;\">";
-           if (array_key_exists("usr_id", $_GET))
-           {
-               // usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
-               echo "<input class=\"readonly\" readonly type=\"text\" name=\"mailto\" style=\"width: 350px;\" maxlength=\"50\" value=\"$userEmail\">";
-           }
-           elseif ( array_key_exists("rol_id", $_GET) || (array_key_exists("rolle", $_GET) && array_key_exists("cat", $_GET)) )
-           {
-               // Rolle wurde uebergeben, dann E-Mails nur an diese Rolle schreiben
-               echo "
-                <select size=\"1\" id=\"rol_id\" name=\"rol_id\"><option value=\"$rollenID\" selected=\"selected\">$rollenName</option></select>&nbsp;";
-           }
-           else
-           {
-               // keine Uebergabe, dann alle Rollen entsprechend Login/Logout auflisten
-               echo "<select size=\"1\" id=\"rol_id\" name=\"rol_id\">";
-               if ($form_values['rol_id'] == "")
-               {
-                   echo "<option value=\"\" selected=\"selected\">- Bitte w&auml;hlen -</option>";
-               }
-
-               if ($g_valid_login)
-               {
-                   if ($g_current_user->assignRoles())
-                   {
-                        // im eingeloggten Zustand duerfen nur Moderatoren an gelocked Rollen schreiben
-                           $sql    = "SELECT rol_name, rol_id, cat_name 
-                                   FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                                   WHERE rol_mail_login = 1
-                                   AND rol_valid        = 1
-                                   AND rol_cat_id       = cat_id
-                                   AND cat_org_id       = ". $g_current_organization->getValue("org_id"). "
-                                   ORDER BY cat_sequence, rol_name ";
-                   }
-                   else
-                   {
-                        // alle nicht gelocked Rollen auflisten,
-                        // an die im eingeloggten Zustand Mails versendet werden duerfen
-                           $sql    = "SELECT rol_name, rol_id, cat_name 
-                                   FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                                   WHERE rol_mail_login = 1
-                                   AND rol_locked       = 0
-                                   AND rol_valid        = 1
-                                   AND rol_cat_id       = cat_id
-                                   AND cat_org_id       = ". $g_current_organization->getValue("org_id"). "
-                                   ORDER BY cat_sequence, rol_name ";
-                   }
-               }
-               else
-               {
-                    // alle Rollen auflisten,
-                    // an die im nicht eingeloggten Zustand Mails versendet werden duerfen
-                       $sql    = "SELECT rol_name, rol_id, cat_name 
-                               FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                               WHERE rol_mail_logout = 1
-                               AND rol_valid         = 1
-                               AND rol_cat_id        = cat_id
-                               AND cat_org_id        = ". $g_current_organization->getValue("org_id"). "
-                               ORDER BY cat_sequence, rol_name ";
-               }
-               $result = $g_db->query($sql);
-               $act_category = "";
-
-               while ($row = $g_db->fetch_object($result))
-               {
-                   if($act_category != $row->cat_name)
-                    {
-                        if(strlen($act_category) > 0)
-                        {
-                            echo "</optgroup>";
-                        }
-                        echo "<optgroup label=\"$row->cat_name\">";
-                        $act_category = $row->cat_name;
-                    }
-                    echo "<option value=\"$row->rol_id\" ";
-                    if ($row->rol_id == $form_values['rol_id'])
-                    {
-                        echo "selected=\"selected\"";
-                    }
-                    echo ">$row->rol_name</option>";
-               }
-
-               echo "</optgroup>
-               </select>&nbsp;
-               <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" alt=\"Hilfe\" title=\"Hilfe\"
-               onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_mail','Message','width=400,height=400,left=310,top=200')\">";
-           }
-        echo "&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span></div>
-     </div>
-
-     <hr class=\"formLine\" width=\"90%\" />
-
-     <div style=\"margin-top: 8px;\">
-        <div style=\"text-align: right; width: 25%; float: left;\">Name:</div>
-        <div style=\"text-align: left; margin-left: 27%;\">";
-           if ($g_current_user->getValue("usr_id") != 0)
-           {
-               echo "<input class=\"readonly\" readonly type=\"text\" name=\"name\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $g_current_user->getValue("Vorname"). " ". $g_current_user->getValue("Nachname"). "\">";
-           }
-           else
-           {
-               echo "<input type=\"text\" id=\"name\" name=\"name\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['name']. "\">";
-           }
-        echo "&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span></div>
-     </div>
-     <div style=\"margin-top: 8px;\">
-        <div style=\"text-align: right; width: 25%; float: left;\">E-Mail:</div>
-        <div style=\"text-align: left; margin-left: 27%;\">";
-           if ($g_current_user->getValue("usr_id") != 0)
-           {
-               echo "<input class=\"readonly\" readonly type=\"text\" name=\"mailfrom\" style=\"width: 350px;\" maxlength=\"50\" value=\"". $g_current_user->getValue("E-Mail"). "\">";
-           }
-           else
-           {
-               echo "<input type=\"text\" name=\"mailfrom\" style=\"width: 350px;\" maxlength=\"50\" value=\"". $form_values['mailfrom']. "\">";
-           }
-        echo "&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span></div>
-     </div>
-
-     <hr class=\"formLine\" width=\"90%\" />
-
-     <div style=\"margin-top: 8px;\">
-        <div style=\"text-align: right; width: 25%; float: left;\">Betreff:</div>
-        <div style=\"text-align: left; margin-left: 27%;\">";
-           if ($_GET['subject'] == "")
-           {
-               echo "<input type=\"text\" id=\"subject\" name=\"subject\" style=\"width: 350px;\" maxlength=\"50\" value=\"". $form_values['subject']. "\">";
-           }
-           else
-           {
-               echo "<input class=\"readonly\" readonly type=\"text\" name=\"subject\" style=\"width: 350px;\" maxlength=\"50\" value=\"". $_GET['subject']. "\">";
-           }
-        echo "&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span></div>
-     </div>
-     <div style=\"margin-top: 8px;\">
-        <div style=\"text-align: right; width: 25%; float: left;\">Nachricht:</div>
-        <div style=\"text-align: left; margin-left: 27%;\">";
-           if ($form_values['body'] != "")
-           {
-               echo "<textarea name=\"body\" style=\"width: 350px;\" rows=\"10\" cols=\"45\">". $form_values['body']. "</textarea>";
-           }
-           else
-           {
-               echo "<textarea name=\"body\" style=\"width: 350px;\" rows=\"10\" cols=\"45\">". $_GET['body']. "</textarea>";
-           }
+    <div class=\"formLayout\" id=\"write_mail_form\">
+        <div class=\"formHead\">";
+            if ($_GET["subject"] == "")
+            {
+                echo "E-Mail verschicken";
+            }
+            else
+            {
+                echo $_GET["subject"];
+            }
         echo "</div>
-     </div>";
+        <div class=\"formBody\">
+            <ul class=\"formFieldList\">
+                <li>
+                    <dl>
+                        <dt><label for=\"rol_id\">an:</label></dt>
+                        <dd>";
+                            if (array_key_exists("usr_id", $_GET))
+                            {
+                                // usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
+                                echo "<input type=\"text\" class=\"readonly\" readonly id=\"mailto\" name=\"mailto\" style=\"width: 350px;\" maxlength=\"50\" value=\"$userEmail\">";
+                            }
+                            elseif ( array_key_exists("rol_id", $_GET) || (array_key_exists("rolle", $_GET) && array_key_exists("cat", $_GET)) )
+                            {
+                                // Rolle wurde uebergeben, dann E-Mails nur an diese Rolle schreiben
+                                echo "
+                                <select size=\"1\" id=\"rol_id\" name=\"rol_id\"><option value=\"$rollenID\" selected=\"selected\">$rollenName</option></select>";
+                            }
+                            else
+                            {
+                                // keine Uebergabe, dann alle Rollen entsprechend Login/Logout auflisten
+                                echo "<select size=\"1\" id=\"rol_id\" name=\"rol_id\">";
+                                if ($form_values['rol_id'] == "")
+                                {
+                                    echo "<option value=\"\" selected=\"selected\">- Bitte w&auml;hlen -</option>";
+                                }
 
+                                if ($g_valid_login)
+                                {
+                                    if ($g_current_user->assignRoles())
+                                    {
+                                        // im eingeloggten Zustand duerfen nur Moderatoren an gelocked Rollen schreiben
+                                       $sql    = "SELECT rol_name, rol_id, cat_name 
+                                               FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                                               WHERE rol_mail_login = 1
+                                               AND rol_valid        = 1
+                                               AND rol_cat_id       = cat_id
+                                               AND cat_org_id       = ". $g_current_organization->getValue("org_id"). "
+                                               ORDER BY cat_sequence, rol_name ";
+                                    }
+                                    else
+                                    {
+                                        // alle nicht gelocked Rollen auflisten,
+                                        // an die im eingeloggten Zustand Mails versendet werden duerfen
+                                       $sql    = "SELECT rol_name, rol_id, cat_name 
+                                               FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                                               WHERE rol_mail_login = 1
+                                               AND rol_locked       = 0
+                                               AND rol_valid        = 1
+                                               AND rol_cat_id       = cat_id
+                                               AND cat_org_id       = ". $g_current_organization->getValue("org_id"). "
+                                               ORDER BY cat_sequence, rol_name ";
+                                    }
+                                }
+                                else
+                                {
+                                    // alle Rollen auflisten,
+                                    // an die im nicht eingeloggten Zustand Mails versendet werden duerfen
+                                    $sql    = "SELECT rol_name, rol_id, cat_name 
+                                               FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                                               WHERE rol_mail_logout = 1
+                                               AND rol_valid         = 1
+                                               AND rol_cat_id        = cat_id
+                                               AND cat_org_id        = ". $g_current_organization->getValue("org_id"). "
+                                               ORDER BY cat_sequence, rol_name ";
+                                }
+                                $result = $g_db->query($sql);
+                                $act_category = "";
 
+                                while ($row = $g_db->fetch_object($result))
+                                {
+                                    if($act_category != $row->cat_name)
+                                    {
+                                        if(strlen($act_category) > 0)
+                                        {
+                                            echo "</optgroup>";
+                                        }
+                                        echo "<optgroup label=\"$row->cat_name\">";
+                                        $act_category = $row->cat_name;
+                                    }
+                                    echo "<option value=\"$row->rol_id\" ";
+                                    if ($row->rol_id == $form_values['rol_id'])
+                                    {
+                                        echo "selected=\"selected\"";
+                                    }
+                                    echo ">$row->rol_name</option>";
+                                }
 
-     // Nur eingeloggte User duerfen Attachments mit max 3MB anhaengen...
-     if (($g_valid_login) && ($g_preferences['max_email_attachment_size'] > 0) && (ini_get('file_uploads') == '1'))
-     {
-         // das Feld userfile wird in der Breite mit size und width gesetzt, da FF nur size benutzt und IE size zu breit macht :(
-         echo "
-         <div style=\"margin-top: 8px;\">
-             <div style=\"text-align: right; width: 25%; float: left;\">Anhang:</div>
-             <div style=\"text-align: left; margin-left: 27%;\">
-                 <input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"" . ($g_preferences['max_email_attachment_size'] * 1024) . "\">
-                 <input name=\"userfile\" size=\"35\" style=\"width: 350px;\" type=\"file\">
-             </div>
-         </div>";
-     }
+                                echo "</optgroup>
+                                </select>
+                                <img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
+                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_mail','Message','width=400,height=400,left=310,top=200')\">";
+                            }
+                            echo "<span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
+                        </dd>
+                    </dl>
+                </li>
+                <li>
+                    <hr />
+                </li>
+                <li>
+                    <dl>
+                        <dt><label for=\"name\">Name:</label></dt>
+                        <dd>";
+                            if ($g_current_user->getValue("usr_id") > 0)
+                            {
+                               echo "<input type=\"text\" class=\"readonly\" id=\"name\" name=\"name\" readonly style=\"width: 200px;\" maxlength=\"50\" value=\"". $g_current_user->getValue("Vorname"). " ". $g_current_user->getValue("Nachname"). "\">";
+                            }
+                            else
+                            {
+                               echo "<input type=\"text\" id=\"name\" name=\"name\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['name']. "\">";
+                            }
+                            echo "<span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
+                        </dd>
+                    </dl>
+                </li>
+                <li>
+                    <dl>
+                        <dt><label for=\"mailfrom\">E-Mail:</label></dt>
+                        <dd>";
+                            if ($g_current_user->getValue("usr_id") > 0)
+                            {
+                               echo "<input type=\"text\" class=\"readonly\" id=\"mailfrom\" name=\"mailfrom\" readonly style=\"width: 350px;\" maxlength=\"50\" value=\"". $g_current_user->getValue("E-Mail"). "\">";
+                            }
+                            else
+                            {
+                               echo "<input type=\"text\" id=\"mailfrom\" name=\"mailfrom\" style=\"width: 350px;\" maxlength=\"50\" value=\"". $form_values['mailfrom']. "\">";
+                            }
+                            echo "<span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
+                        </dd>
+                    </dl>
+                </li>
+                <li>
+                    <hr />
+                </li>
+                <li>
+                    <dl>
+                        <dt><label for=\"subject\">Betreff:</label></dt>
+                        <dd>";
+                            if (strlen($_GET['subject']) > 0)
+                            {
+                               echo "<input type=\"text\" class=\"readonly\" readonly id=\"subject\" name=\"subject\" style=\"width: 350px;\" maxlength=\"50\" value=\"". $_GET['subject']. "\">";
+                            }
+                            else
+                            {
+                               echo "<input type=\"text\" id=\"subject\" name=\"subject\" style=\"width: 350px;\" maxlength=\"50\" value=\"". $form_values['subject']. "\">";
+                            }
+                            echo "<span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
+                        </dd>
+                    </dl>
+                </li>
+                <li>
+                    <dl>
+                        <dt><label for=\"body\">Nachricht:</label></dt>
+                        <dd>";
+                            if (strlen($form_values['body']) > 0)
+                            {
+                               echo "<textarea id=\"body\" name=\"body\" style=\"width: 350px;\" rows=\"10\" cols=\"45\">". $form_values['body']. "</textarea>";
+                            }
+                            else
+                            {
+                               echo "<textarea id=\"body\" name=\"body\" style=\"width: 350px;\" rows=\"10\" cols=\"45\">". $_GET['body']. "</textarea>";
+                            }
+                        echo "</dd>
+                    </dl>
+                </li>";
 
-     echo "
-     <div style=\"margin-top: 8px;\">
-        <div style=\"text-align: left; margin-left: 27%;\">
-           <input type=\"checkbox\" id=\"kopie\" name=\"kopie\" value=\"1\" ";
-           if ($_GET['kopie'] == 1)
-           {
-               echo " checked=\"checked\" ";
-           }
-           echo "> <label for=\"kopie\">Kopie der E-Mail an mich senden</label>
+                // Nur eingeloggte User duerfen Attachments mit max 3MB anhaengen...
+                if (($g_valid_login) && ($g_preferences['max_email_attachment_size'] > 0) && (ini_get('file_uploads') == '1'))
+                {
+                    // das Feld userfile wird in der Breite mit size und width gesetzt, da FF nur size benutzt und IE size zu breit macht :(
+                    echo "
+                    <li>
+                        <dl>
+                            <dt><label for=\"userfile\">Anhang:</label></dt>
+                            <dd>
+                                <input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"" . ($g_preferences['max_email_attachment_size'] * 1024) . "\">
+                                <input id=\"userfile\" name=\"userfile\" size=\"35\" style=\"width: 350px;\" type=\"file\">
+                            </dd>
+                        </dl>
+                    </li>";
+                }
+
+                echo "
+                <li>
+                    <dl>
+                        <dt>&nbsp;</dt>
+                        <dd>
+                            <input type=\"checkbox\" id=\"kopie\" name=\"kopie\" value=\"1\" ";
+                            if ($_GET['kopie'] == 1)
+                            {
+                                echo " checked=\"checked\" ";
+                            }
+                            echo "> <label for=\"kopie\">Kopie der E-Mail an mich senden</label>
+                        </dd>
+                    </dl>
+                </li>";
+
+                // Nicht eingeloggte User bekommen jetzt noch das Captcha praesentiert,
+                // falls es in den Orgaeinstellungen aktiviert wurde...
+                if (!$g_valid_login && $g_preferences['enable_mail_captcha'] == 1)
+                {
+                    echo "
+                    <li>
+                        <dl>
+                            <dt>&nbsp;</dt>
+                            <dd>
+                                <img src=\"$g_root_path/adm_program/system/captcha_class.php?id=". time(). "\" alt=\"Captcha\" />
+                            </dd>
+                        </dt>
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"captcha\">Best&auml;tigungscode:</label></dt>
+                            <dd>
+                                <input type=\"text\" id=\"captcha\" name=\"captcha\" style=\"width: 200px;\" maxlength=\"8\" value=\"\">
+                                <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
+                                <img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
+                                     onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=captcha_help','Message','width=400,height=320,left=310,top=200,scrollbars=yes')\">
+                            </dd>
+                        </dl>
+                    </li>";
+                }
+            echo "</ul>
+            
+            <hr />
+
+            <div class=\"formSubmit\">
+                <button name=\"abschicken\" type=\"submit\" value=\"abschicken\">
+                <img src=\"$g_root_path/adm_program/images/email.png\" alt=\"Abschicken\">
+                &nbsp;Abschicken</button>
+            </div>
         </div>
-     </div>";
-
-     // Nicht eingeloggte User bekommen jetzt noch das Captcha praesentiert,
-     // falls es in den Orgaeinstellungen aktiviert wurde...
-     if (!$g_valid_login && $g_preferences['enable_mail_captcha'] == 1)
-     {
-         echo "
-
-         <div style=\"margin-top: 6px;\">
-             <div style=\"text-align: left; margin-left: 27%;\">
-                 <img src=\"$g_root_path/adm_program/system/captcha_class.php?id=". time(). "\" border=\"0\" alt=\"Captcha\" />
-             </div>
-         </div>
-
-         <div style=\"margin-top: 6px;\">
-                <div style=\"text-align: right; width: 25%; float: left;\">Best&auml;tigungscode:</div>
-                <div style=\"text-align: left; margin-left: 27%;\">
-                    <input type=\"text\" id=\"captcha\" name=\"captcha\" style=\"width: 200px;\" maxlength=\"8\" value=\"\">&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>&nbsp;
-                    <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                         onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=captcha_help','Message','width=400,height=320,left=310,top=200,scrollbars=yes')\">
-                </div>
-         </div>";
-     }
-
-     echo "
-     <hr class=\"formLine\" width=\"90%\" />
-
-     <div style=\"margin-top: 8px;\">";
-         if(isset($_GET['usr_id']) || isset($_GET['rol_id']))
-         {
-            echo "<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
-               <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\">
-               &nbsp;Zur&uuml;ck</button>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-         }
-        echo "<button name=\"abschicken\" type=\"submit\" value=\"abschicken\">
-           <img src=\"$g_root_path/adm_program/images/email.png\" alt=\"Abschicken\">
-           &nbsp;Abschicken</button>
-     </div>
-  </div>
+    </div>
 </form>";
+
+if(isset($_GET['usr_id']) || isset($_GET['rol_id']))
+{
+    echo "
+    <ul class=\"iconTextLinkList\">
+        <li>
+            <span class=\"iconTextLink\">
+                <a href=\"$g_root_path/adm_program/system/back.php\"><img 
+                src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
+                <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+            </span>
+        </li>
+    </ul>";
+}
 
 // Focus auf das erste Eingabefeld setzen
 if (!isset($_GET['usr_id'])

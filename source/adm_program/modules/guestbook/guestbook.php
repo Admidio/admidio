@@ -69,6 +69,10 @@ if ($g_preferences['enable_bbcode'] == 1)
 
 unset($_SESSION['guestbook_entry_request']);
 unset($_SESSION['guestbook_comment_request']);
+
+// Navigation faengt hier im Modul an
+$_SESSION['navigation']->clear();
+$_SESSION['navigation']->addUrl($g_current_url);
 
 // Html-Kopf ausgeben
 $g_layout['title'] = $_GET["headline"];
@@ -169,27 +173,33 @@ $num_guestbook = $row[0];
 if ($_GET['id'] == 0)
 {
     // Neuen Gaestebucheintrag anlegen
-    echo "<p>
-        <span class=\"iconLink\">
-            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/guestbook/guestbook_new.php?headline=". $_GET["headline"]. "\"><img
-            class=\"iconLink\" src=\"$g_root_path/adm_program/images/add.png\" alt=\"Neuen Eintrag anlegen\"></a>
-            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/guestbook/guestbook_new.php?headline=". $_GET["headline"]. "\">Neuen Eintrag anlegen</a>
-        </span>
-    </p>";
-
+    echo "
+    <ul class=\"iconTextLinkList\">
+        <li>
+            <span class=\"iconTextLink\">
+                <a href=\"$g_root_path/adm_program/modules/guestbook/guestbook_new.php?headline=". $_GET["headline"]. "\"><img
+                src=\"$g_root_path/adm_program/images/add.png\" alt=\"Neuen Eintrag anlegen\"></a>
+                <a href=\"$g_root_path/adm_program/modules/guestbook/guestbook_new.php?headline=". $_GET["headline"]. "\">Neuen Eintrag anlegen</a>
+            </span>
+        </li>
+    </ul>";
+    
     // Navigation mit Vor- und Zurueck-Buttons
     $base_url = "$g_root_path/adm_program/modules/guestbook/guestbook.php?headline=". $_GET["headline"];
     echo generatePagination($base_url, $num_guestbook, 10, $_GET["start"], TRUE);
 }
 else
 {
-    echo "<p>
-        <span class=\"iconLink\">
-            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/guestbook/guestbook.php?headline=". $_GET["headline"]. "&start=". $_GET["start"] ."\"><img
-            class=\"iconLink\" src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck zum G&auml;stebuch\"></a>
-            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/guestbook/guestbook.php?headline=". $_GET["headline"]. "&start=". $_GET["start"] ."\"\">Zur&uuml;ck zum G&auml;stebuch</a>
-        </span>
-    </p>";
+    echo "
+    <ul class=\"iconTextLinkList\">
+        <li>
+            <span class=\"iconTextLink\">
+                <a href=\"$g_root_path/adm_program/modules/guestbook/guestbook.php?headline=". $_GET["headline"]. "&start=". $_GET["start"] ."\"><img
+                src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck zum G&auml;stebuch\"></a>
+                <a href=\"$g_root_path/adm_program/modules/guestbook/guestbook.php?headline=". $_GET["headline"]. "&start=". $_GET["start"] ."\"\">Zur&uuml;ck zum G&auml;stebuch</a>
+            </span>
+        </li>
+    </ul>";
 }
 
 if ($g_db->num_rows($guestbook_result) == 0)
@@ -221,41 +231,42 @@ else
                     if (strlen(trim($row->gbo_homepage)) > 0)
                     {
                         echo "
-                        <a href=\"$row->gbo_homepage\" target=\"_blank\">
-                        <img src=\"$g_root_path/adm_program/images/globe.png\" style=\"vertical-align: middle;\" alt=\"Gehe zu $row->gbo_homepage\"
-                        title=\"Gehe zu $row->gbo_homepage\" border=\"0\"></a>";
+                        <span class=\"iconLink\">
+                            <a href=\"$row->gbo_homepage\" target=\"_blank\"><img src=\"$g_root_path/adm_program/images/globe.png\" 
+                            alt=\"Gehe zu $row->gbo_homepage\" title=\"Gehe zu $row->gbo_homepage\"></a>
+                        </span>";
                     }
 
                     // Falls eine Mailadresse des Users angegeben wurde, soll ein Maillink angezeigt werden...
                     if (isValidEmailAddress($row->gbo_email))
                     {
                         echo "
-                        <a href=\"mailto:$row->gbo_email\">
-                        <img src=\"$g_root_path/adm_program/images/email.png\" style=\"vertical-align: middle;\" alt=\"Mail an $row->gbo_email\"
-                        title=\"Mail an $row->gbo_email\" border=\"0\"></a>";
+                        <span class=\"iconLink\">
+                            <a href=\"mailto:$row->gbo_email\"><img src=\"$g_root_path/adm_program/images/email.png\" 
+                            alt=\"Mail an $row->gbo_email\" title=\"Mail an $row->gbo_email\"></a>
+                        </span>";
                     }
 
-                echo "</div>";
+                echo "</div>
 
-
-                echo "<div style=\"text-align: right;\">". mysqldatetime("d.m.y h:i", $row->gbo_timestamp). "&nbsp;";
+                <div style=\"text-align: right;\">". mysqldatetime("d.m.y h:i", $row->gbo_timestamp). "&nbsp;";
 
                     // aendern & loeschen duerfen nur User mit den gesetzten Rechten
                     if ($g_current_user->editGuestbookRight())
                     {
                             echo "
-                            <img src=\"$g_root_path/adm_program/images/edit.png\" style=\"cursor: pointer; vertical-align: middle;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"
-                            onclick=\"self.location.href='$g_root_path/adm_program/modules/guestbook/guestbook_new.php?id=$row->gbo_id&amp;headline=". $_GET['headline']. "'\">";
-
-                            echo "
-                            <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer; vertical-align: middle;\" width=\"16\" height=\"16\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"
-                             onclick=\"self.location.href='$g_root_path/adm_program/modules/guestbook/guestbook_function.php?id=$row->gbo_id&amp;mode=6'\">";
-
+                            <span class=\"iconLink\">
+                                <a href=\"$g_root_path/adm_program/modules/guestbook/guestbook_new.php?id=$row->gbo_id&amp;headline=". $_GET['headline']. "\"><img 
+                                src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>
+                            </span>
+                            <span class=\"iconLink\">
+                                <a href=\"$g_root_path/adm_program/modules/guestbook/guestbook_function.php?id=$row->gbo_id&amp;mode=6\"><img 
+                                src=\"$g_root_path/adm_program/images/cross.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>
+                            </span>";
                     }
 
-
-                    echo "&nbsp;</div>";
-                echo "</div>
+                    echo "&nbsp;</div>
+                </div>
 
                 <div style=\"margin: 8px 4px 4px 4px;\">";
                     // wenn BBCode aktiviert ist, den Text noch parsen, ansonsten direkt ausgeben
@@ -277,9 +288,11 @@ else
                     $user_change = new User($g_db, $row->gbo_usr_id_change);
 
                     echo "
-                    <div class=\"smallFontSize\" style=\"margin: 8px 4px 4px 4px;\">Zuletzt bearbeitet von ".
-                    $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname").
-                    " am ". mysqldatetime("d.m.y h:i", $row->gbo_last_change). "</div>";
+                    <div class=\"editInformation\">
+                        Zuletzt bearbeitet von ".
+                        $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname").
+                        " am ". mysqldatetime("d.m.y h:i", $row->gbo_last_change). "
+                    </div>";
                 }
 
 
@@ -296,19 +309,21 @@ else
                     // Dieses div wird erst gemeinsam mit den Kommentaren ueber Javascript eingeblendet
                     echo "
                     <div id=\"commentsVisible_$row->gbo_id\" style=\"visibility: hidden; display: none; margin: 8px 4px 4px;\">
-                        <a href=\"javascript:toggleComments($row->gbo_id)\">
-                        <img src=\"$g_root_path/adm_program/images/comments.png\" style=\"vertical-align: middle;\" alt=\"Kommentare ausblenden\"
-                        title=\"Kommentare ausblenden\" border=\"0\"></a>
-                        <a href=\"javascript:toggleComments($row->gbo_id)\">Kommentare ausblenden</a>
+                        <span class=\"iconTextLink\">                    
+                            <a href=\"javascript:toggleComments($row->gbo_id)\"><img src=\"$g_root_path/adm_program/images/comments.png\" 
+                            alt=\"Kommentare ausblenden\" title=\"Kommentare ausblenden\"></a>
+                            <a href=\"javascript:toggleComments($row->gbo_id)\">Kommentare ausblenden</a>
+                        </span>
                     </div>";
 
                     // Dieses div wird ausgeblendet wenn die Kommetare angezeigt werden
                     echo "
                     <div id=\"commentsInvisible_$row->gbo_id\" style=\"visibility: visible; display: block; margin: 8px 4px 4px;\">
-                        <a href=\"javascript:toggleComments($row->gbo_id)\">
-                        <img src=\"$g_root_path/adm_program/images/comments.png\" style=\"vertical-align: middle;\" alt=\"Kommentare anzeigen\"
-                        title=\"Kommentare anzeigen\" border=\"0\"></a>
-                        <a href=\"javascript:toggleComments($row->gbo_id)\">". $g_db->num_rows($comment_result). " Kommentar(e) zu diesem Eintrag</a>
+                        <span class=\"iconTextLink\">
+                            <a href=\"javascript:toggleComments($row->gbo_id)\"><img src=\"$g_root_path/adm_program/images/comments.png\" 
+                            alt=\"Kommentare anzeigen\" title=\"Kommentare anzeigen\"></a>
+                            <a href=\"javascript:toggleComments($row->gbo_id)\">". $g_db->num_rows($comment_result). " Kommentar(e) zu diesem Eintrag</a>
+                        </span>
                         <div id=\"comments_$row->gbo_id\" style=\"text-align: left;\"></div>
                     </div>";
 
@@ -323,11 +338,12 @@ else
                     // Falls keine Kommentare vorhanden sind, aber das Recht zur Kommentierung, wird der Link zur Kommentarseite angezeigt...
                     $load_url = "$g_root_path/adm_program/modules/guestbook/guestbook_comment_new.php?id=$row->gbo_id";
                     echo "
-                    <div class=\"smallFontSize\" style=\"margin: 8px 4px 4px 4px;\">
-                        <a href=\"$load_url\">
-                        <img src=\"$g_root_path/adm_program/images/comment_new.png\" style=\"vertical-align: middle;\" alt=\"Kommentieren\"
-                        title=\"Kommentieren\" border=\"0\"></a>
-                        <a href=\"$load_url\">Einen Kommentar zu diesem Beitrag schreiben.</a>
+                    <div class=\"editInformation\">
+                        <span class=\"iconTextLink\">
+                            <a href=\"$load_url\"><img src=\"$g_root_path/adm_program/images/comment_new.png\" 
+                            alt=\"Kommentieren\" title=\"Kommentieren\"></a>
+                            <a href=\"$load_url\">Einen Kommentar zu diesem Beitrag schreiben.</a>
+                        </span>
                     </div>";
                 }
 

@@ -146,16 +146,20 @@ if ($_GET['id'] == 0 && ($g_current_user->editWeblinksRight() || $g_preferences[
     if ($g_current_user->editWeblinksRight())
     {
         echo "
-        <ul class=\"iconTextLink\">
+        <ul class=\"iconTextLinkList\">
             <li>
-                <a href=\"$g_root_path/adm_program/modules/links/links_new.php?headline=". $_GET["headline"]. "\"><img
-                src=\"$g_root_path/adm_program/images/add.png\" alt=\"Neu anlegen\"></a>
-                <a href=\"$g_root_path/adm_program/modules/links/links_new.php?headline=". $_GET["headline"]. "\">Neu anlegen</a>
+                <span class=\"iconTextLink\">
+                    <a href=\"$g_root_path/adm_program/modules/links/links_new.php?headline=". $_GET["headline"]. "\"><img
+                    src=\"$g_root_path/adm_program/images/add.png\" alt=\"Neu anlegen\"></a>
+                    <a href=\"$g_root_path/adm_program/modules/links/links_new.php?headline=". $_GET["headline"]. "\">Neu anlegen</a>
+                </span>
             </li>
             <li>
-                <a href=\"$g_root_path/adm_program/administration/roles/categories.php?type=LNK\"><img
-                src=\"$g_root_path/adm_program/images/application_double.png\" alt=\"Kategorien pflegen\"></a>
-                <a href=\"$g_root_path/adm_program/administration/roles/categories.php?type=LNK\">Kategorien pflegen</a>
+                <span class=\"iconTextLink\">
+                    <a href=\"$g_root_path/adm_program/administration/roles/categories.php?type=LNK\"><img
+                    src=\"$g_root_path/adm_program/images/application_double.png\" alt=\"Kategorien pflegen\"></a>
+                    <a href=\"$g_root_path/adm_program/administration/roles/categories.php?type=LNK\">Kategorien pflegen</a>
+                </span>
             </li>
         </ul>";
     }
@@ -232,10 +236,11 @@ else
             echo "
             <div style=\"text-align: left;\">
                 <div style=\"text-align: left;\">
-                    <a href=\"$row->lnk_url\" target=\"_blank\">
-                        <img src=\"$g_root_path/adm_program/images/globe.png\" style=\"vertical-align: top;\"
-                            alt=\"Gehe zu $row->lnk_name\" title=\"Gehe zu $row->lnk_name\" border=\"0\"></a>
-                    <a href=\"$row->lnk_url\" target=\"_blank\">$row->lnk_name</a>
+                    <span class=\"iconLink\">
+                        <a href=\"$row->lnk_url\" target=\"_blank\"><img src=\"$g_root_path/adm_program/images/globe.png\"
+                        alt=\"Gehe zu $row->lnk_name\" title=\"Gehe zu $row->lnk_name\"></a>
+                        <a href=\"$row->lnk_url\" target=\"_blank\">$row->lnk_name</a>
+                    </span<
                 </div>
                 <div style=\"margin-top: 10px; text-align: left;\">";
 
@@ -257,11 +262,15 @@ else
                         // aendern & loeschen duerfen nur User mit den gesetzten Rechten
                         if ($g_current_user->editWeblinksRight())
                         {
-                            echo "<img src=\"$g_root_path/adm_program/images/edit.png\" style=\"cursor: pointer; vertical-align: middle;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"
-                                onclick=\"self.location.href='$g_root_path/adm_program/modules/links/links_new.php?lnk_id=$row->lnk_id&amp;headline=". $_GET['headline']. "'\">
-
-                                <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer; vertical-align: middle;\" width=\"16\" height=\"16\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"
-                                 onclick=\"self.location.href='$g_root_path/adm_program/modules/links/links_function.php?lnk_id=$row->lnk_id&amp;mode=4'\">";
+                            echo "
+                            <span class=\"iconLink\">
+                                <a href=\"$g_root_path/adm_program/modules/links/links_new.php?lnk_id=$row->lnk_id&amp;headline=". $_GET['headline']. "\"><img 
+                                src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>
+                            </span>
+                            <span class=\"iconLink\">
+                                <a href=\"$g_root_path/adm_program/modules/links/links_function.php?lnk_id=$row->lnk_id&amp;mode=4\"><img 
+                                src=\"$g_root_path/adm_program/images/cross.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>
+                            </span>";
                         }
                         $user_create = new User($g_db, $row->lnk_usr_id);
                         echo "Angelegt von ". $user_create->getValue("Vorname"). " ". $user_create->getValue("Nachname").

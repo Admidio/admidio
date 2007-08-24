@@ -171,32 +171,39 @@ if(strlen($req_folder) > 0)
 if ($g_current_user->editDownloadRight())
 {
     echo "
-    <ul class=\"iconTextLink\">
+    <ul class=\"iconTextLinkList\">
         <li>
-            <a href=\"$g_root_path/adm_program/modules/download/folder_new.php?folder=". urlencode($req_folder). "&amp;default_folder=". urlencode($req_default_folder). "\"><img
-            src=\"$g_root_path/adm_program/images/folder_create.png\" alt=\"Ordner erstellen\"></a>
-            <a href=\"$g_root_path/adm_program/modules/download/folder_new.php?folder=". urlencode($req_folder). "&amp;default_folder=". urlencode($req_default_folder). "\">Ordner anlegen</a>
+            <span class=\"iconTextLink\">
+                <a href=\"$g_root_path/adm_program/modules/download/folder_new.php?folder=". urlencode($req_folder). "&amp;default_folder=". urlencode($req_default_folder). "\"><img
+                src=\"$g_root_path/adm_program/images/folder_create.png\" alt=\"Ordner erstellen\"></a>
+                <a href=\"$g_root_path/adm_program/modules/download/folder_new.php?folder=". urlencode($req_folder). "&amp;default_folder=". urlencode($req_default_folder). "\">Ordner anlegen</a>
+            </span>
         </li>
         <li>
-            <a href=\"$g_root_path/adm_program/modules/download/upload.php?folder=". urlencode($req_folder). "&amp;default_folder=". urlencode($req_default_folder). "\"><img
-            src=\"$g_root_path/adm_program/images/page_white_get.png\" alt=\"Hochladen\"></a>
-            <a href=\"$g_root_path/adm_program/modules/download/upload.php?folder=". urlencode($req_folder). "&amp;default_folder=". urlencode($req_default_folder). "\">Datei hochladen</a>
+            <span class=\"iconTextLink\">
+                <a href=\"$g_root_path/adm_program/modules/download/upload.php?folder=". urlencode($req_folder). "&amp;default_folder=". urlencode($req_default_folder). "\"><img
+                src=\"$g_root_path/adm_program/images/page_white_get.png\" alt=\"Hochladen\"></a>
+                <a href=\"$g_root_path/adm_program/modules/download/upload.php?folder=". urlencode($req_folder). "&amp;default_folder=". urlencode($req_default_folder). "\">Datei hochladen</a>
+            </span>
         </li>
     </ul>";
 };
 
 //Anlegen der Tabelle
-echo" <table class=\"tableList\" cellspacing=\"0\">
-        <tr>
-           <th style=\"width: 25px;\"><img src=\"$g_root_path/adm_program/images/folder.png\" border=\"0\" alt=\"Ordner\"></th>
-           <th>Name</th>
-           <th>Erstellungsdatum</th>
-           <th>Gr&ouml;&szlig;e&nbsp;</th>";
-           if ($g_current_user->editDownloadRight())
-           {
-               echo "<th style=\"text-align: center;\">Editieren</th>";
-           }
-        echo "</tr>";
+echo "
+<table class=\"tableList\" cellspacing=\"0\">
+    <tr>
+        <th style=\"width: 25px;\"><img class=\"iconInformation\" 
+            src=\"$g_root_path/adm_program/images/folder.png\" alt=\"Ordner / Dateityp\" title=\"Ordner / Dateityp\">
+        </th>
+        <th>Name</th>
+        <th>Erstellungsdatum</th>
+        <th>Gr&ouml;&szlig;e</th>";
+        if ($g_current_user->editDownloadRight())
+        {
+           echo "<th style=\"text-align: center;\">Editieren</th>";
+        }
+    echo "</tr>";
 
 
 //falls der Ordner leer ist
@@ -217,32 +224,44 @@ if(Count($ordnerarray)==0)
 //durchlafen des Ordnerarrays und Ordnerlinkausgabe in Tabellenzeilen, ruft erneut die download.txt auf nur mit neuem Ordner
 for($i=0; $i<count($ordnerarray); $i++)
 {
-     if(filetype("$act_folder/$ordnerarray[$i]")=="dir")
-     {
+    if(filetype("$act_folder/$ordnerarray[$i]")=="dir")
+    {
         if(strlen($req_folder) > 0)
-           $next_folder = "$req_folder/$ordnerarray[$i]";
+        {
+            $next_folder = "$req_folder/$ordnerarray[$i]";
+        }
         else
-           $next_folder = $ordnerarray[$i];
+        {
+            $next_folder = $ordnerarray[$i];
+        }
 
         echo "
-           <tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\">
-              <td><a href=\"$g_root_path/adm_program/modules/download/download.php?folder=". urlencode($next_folder). "&amp;default_folder=". urlencode($req_default_folder). "\">
-                 <img src=\"$g_root_path/adm_program/images/folder.png\" border=\"0\" alt=\"Ordner\" title=\"Ordner\"></a></td>
-              <td><a href=\"$g_root_path/adm_program/modules/download/download.php?folder=". urlencode($next_folder). "&amp;default_folder=". urlencode($req_default_folder). "\">$ordnerarray[$i]</a></td>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>";
-        if ($g_current_user->editDownloadRight())
-        {
-           echo "
-           <td style=\"text-align: center;\">
-              <a href=\"$g_root_path/adm_program/modules/download/rename.php?folder=". urlencode($req_folder). "&amp;file=". urlencode($ordnerarray[$i]). "&amp;default_folder=". urlencode($req_default_folder). "\"><img 
-                src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Umbenennen\"></a>&nbsp;
-              <a href=\"$g_root_path/adm_program/modules/download/download_function.php?mode=5&amp;file=". urlencode($ordnerarray[$i]). "&amp;folder=". urlencode($req_folder). "&amp;default_folder=". urlencode($req_default_folder). "\"><img 
-                src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>
-           </td>";
-        }
+        <tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\">
+            <td>
+                <span class=\"iconLink\">
+                    <a href=\"$g_root_path/adm_program/modules/download/download.php?folder=". urlencode($next_folder). "&amp;default_folder=". urlencode($req_default_folder). "\"><img 
+                    src=\"$g_root_path/adm_program/images/folder.png\" alt=\"Ordner\" title=\"Ordner\"></a>
+                </span>
+            </td>
+            <td><a href=\"$g_root_path/adm_program/modules/download/download.php?folder=". urlencode($next_folder). "&amp;default_folder=". urlencode($req_default_folder). "\">$ordnerarray[$i]</a></td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>";
+            if ($g_current_user->editDownloadRight())
+            {
+                echo "
+                <td style=\"text-align: center;\">
+                    <span class=\"iconLink\">
+                        <a href=\"$g_root_path/adm_program/modules/download/rename.php?folder=". urlencode($req_folder). "&amp;file=". urlencode($ordnerarray[$i]). "&amp;default_folder=". urlencode($req_default_folder). "\"><img 
+                        src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Bearbeiten\" title=\"Umbenennen\"></a>
+                    </span>
+                    <span class=\"iconLink\">
+                        <a href=\"$g_root_path/adm_program/modules/download/download_function.php?mode=5&amp;file=". urlencode($ordnerarray[$i]). "&amp;folder=". urlencode($req_folder). "&amp;default_folder=". urlencode($req_default_folder). "\"><img 
+                        src=\"$g_root_path/adm_program/images/cross.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>
+                    </span>
+                </td>";
+            }
         echo "</tr>";
-     };
+    };
 };
 
 //durchlaufen des Ordnerarrays und Dateilinkausgabe in Tabellenzeilen
@@ -294,22 +313,32 @@ for($i=0; $i<count($ordnerarray); $i++)
            $dateiendung = "page_white_question";
 
         //Link und Dateiinfo Ausgabe
-        echo "<tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\">
-                 <td><a href=\"$g_root_path/adm_program/modules/download/get_file.php?folder=". urlencode($req_folder). "&amp;file=". urlencode($ordnerarray[$i]). "&amp;default_folder=". urlencode($req_default_folder). "\"><img src=\"$g_root_path/adm_program/images/$dateiendung.png\" border=\"0\" alt=\"Datei\" title=\"Datei\"></a></td>
-                 <td><a href=\"$g_root_path/adm_program/modules/download/get_file.php?folder=". urlencode($req_folder). "&amp;file=". urlencode($ordnerarray[$i]). "&amp;default_folder=". urlencode($req_default_folder). "\">$ordnerarray[$i]</a></td>
-                 <td>$dateidatum</td>
-                 <td>$dateigroesse kB&nbsp;</td>";
+        echo "
+        <tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\">
+            <td>
+                <span class=\"iconLink\">
+                    <a href=\"$g_root_path/adm_program/modules/download/get_file.php?folder=". urlencode($req_folder). "&amp;file=". urlencode($ordnerarray[$i]). "&amp;default_folder=". urlencode($req_default_folder). "\"><img 
+                    src=\"$g_root_path/adm_program/images/$dateiendung.png\" alt=\"Datei\" title=\"Datei\"></a>
+                </span>
+            </td>
+            <td><a href=\"$g_root_path/adm_program/modules/download/get_file.php?folder=". urlencode($req_folder). "&amp;file=". urlencode($ordnerarray[$i]). "&amp;default_folder=". urlencode($req_default_folder). "\">$ordnerarray[$i]</a></td>
+            <td>$dateidatum</td>
+            <td>$dateigroesse kB&nbsp;</td>";
 
         //Moderation
         if ($g_current_user->editDownloadRight())
         {
-           echo "
-           <td style=\"text-align: center;\">
-              <a href=\"$g_root_path/adm_program/modules/download/rename.php?folder=". urlencode($req_folder). "&amp;file=". urlencode($ordnerarray[$i]). "&amp;default_folder=". urlencode($req_default_folder). "\">
-                 <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Umbenennen\"></a>&nbsp;
-              <a href=\"$g_root_path/adm_program/modules/download/download_function.php?mode=5&amp;file=". urlencode($ordnerarray[$i]). "&amp;folder=". urlencode($req_folder). "&amp;default_folder=". urlencode($req_default_folder). "\">
-                 <img src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>
-           </td>";
+            echo "
+            <td style=\"text-align: center;\">
+                <span class=\"iconLink\">
+                    <a href=\"$g_root_path/adm_program/modules/download/rename.php?folder=". urlencode($req_folder). "&amp;file=". urlencode($ordnerarray[$i]). "&amp;default_folder=". urlencode($req_default_folder). "\"><img 
+                    src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Bearbeiten\" title=\"Umbenennen\"></a>
+                </span>
+                <span class=\"iconLink\">
+                    <a href=\"$g_root_path/adm_program/modules/download/download_function.php?mode=5&amp;file=". urlencode($ordnerarray[$i]). "&amp;folder=". urlencode($req_folder). "&amp;default_folder=". urlencode($req_default_folder). "\"><img 
+                    src=\"$g_root_path/adm_program/images/cross.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>
+                </span>
+            </td>";
         }
         echo "</tr>";
      };

@@ -56,7 +56,7 @@ hr {
 
 /* Elemente, die fuer ein Drag&Drop angefasst werden koennen */
 .dragable {
-    cursor:		move;
+    cursor:     move;
     border-width:       0px;
 }
 
@@ -286,14 +286,14 @@ a:hover {
 }
 
 /*Links in Verbindung mit einem Icon (mit Text)*/
-.iconTextLink {
+.iconTextLinkList {
     list-style-type:    none;
     padding:            0px;
     margin-top:         10px;
     margin-bottom:      10px;
 }
 
-.iconTextLink li{   
+.iconTextLinkList li{   
     display:            inline;
     padding:            10px;
 }
@@ -304,30 +304,27 @@ a:hover {
     padding-right:      1px;
 }
 
-/*Iconlinks um Funktionen aufzurufen (ohne Text)*/
-.iconLinkRow {
-    list-style-type:    none;
-    margin:             0px;
-    padding:            0px;
-}
-
-.iconLinkRow li {   
-    display:            inline;
-    text-align:         left;
-    padding:            0px;
-    margin-left:        2px;
-}
-
-.iconLinkRow a img {
+/* Iconlinks um Funktionen aufzurufen (ohne Text) */
+.iconLink img {
     border:             none;
+    vertical-align:     top;
+    margin-left:        2px;
+    margin-right:       2px;
+}
+
+/* Icon um Bereiche auf und zu zuklappen */
+iconShowHide {
+    border:             none;
+    vertical-align:     middle;
+    padding: 1px 5px 2px 3px;
 }
 
 /* Icon um Informationen anzuzeigen (ohne Text und Link)*/
 .iconInformation {
-    margin-left:        2px;
-    margin-right:       2px;
     cursor:             help;
     vertical-align:     top;
+    margin-left:        2px;
+    margin-right:       2px;
 }
 
 /* Hilfeicon, bei dem ein kleines Fenster mit entsprechender Hilfe aufgerufen wird */
@@ -335,7 +332,7 @@ a:hover {
     border:             none;
     cursor:             pointer;
     vertical-align:     top;
-    margin:             2px 5px 0px 5px;
+    margin:             2px 3px 0px 3px;
 }
 
 /* Elemente fuer Navigationsklasse */
@@ -368,6 +365,7 @@ a:hover {
 /*Pflichtfeldmarkierung*/
 .mandatoryFieldMarker{
     color:              #990000;
+    margin-left:        3px;
 }
 
 
@@ -418,7 +416,7 @@ a:hover {
 }
 
 #lists_overview .formFieldList li dt {
-    margin-left:	20px;
+    margin-left:    20px;
 }
 
 #infoboxListsBox {

@@ -85,13 +85,13 @@ if($_GET["mode"] == 1)
         <div class=\"formHead\">Mitglied l&ouml;schen</div>
         <div class=\"formBody\">
             <p align=\"left\">
-                <img src=\"$g_root_path/adm_program/images/user.png\" style=\"vertical-align: bottom;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Ehemaliger\">
+                <img src=\"$g_root_path/adm_program/images/user.png\" alt=\"Ehemaliger\">
                 Du kannst den Benutzer zu einem <b>Ehemaligen</b> machen. Dies hat den Vorteil, dass die Daten
                 erhalten bleiben und du sp&auml;ter immer wieder sehen kannst, welchen Rollen diese Person
                 zugeordnet war.
             </p>
             <p align=\"left\">
-                <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"vertical-align: bottom;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Benutzer l&ouml;schen\">
+                <img src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Benutzer l&ouml;schen\">
                 Wenn du <b>L&ouml;schen</b> ausw&auml;hlst, wird der Datensatz entg&uuml;ltig aus der Datenbank
                 entfernt und es ist sp&auml;ter nicht mehr m&ouml;glich Daten dieser Person einzusehen.
             </p>

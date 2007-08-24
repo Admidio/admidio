@@ -142,11 +142,13 @@ if($req_id == 0
     if($g_current_user->editAnnouncements())
     {
         echo "
-        <ul class=\"iconTextLink\">
+        <ul class=\"iconTextLinkList\">
             <li>
-                <a href=\"$g_root_path/adm_program/modules/announcements/announcements_new.php?headline=$req_headline\"><img
-                src=\"$g_root_path/adm_program/images/add.png\" alt=\"Neu anlegen\"></a>
-                <a href=\"$g_root_path/adm_program/modules/announcements/announcements_new.php?headline=$req_headline\">Anlegen</a>
+                <span class=\"iconTextLink\">
+                    <a href=\"$g_root_path/adm_program/modules/announcements/announcements_new.php?headline=$req_headline\"><img
+                    src=\"$g_root_path/adm_program/images/add.png\" alt=\"Neu anlegen\"></a>
+                    <a href=\"$g_root_path/adm_program/modules/announcements/announcements_new.php?headline=$req_headline\">Anlegen</a>
+                </span>
             </li>
         </ul>";        
     }
@@ -176,7 +178,7 @@ else
         echo "
         <div class=\"boxBody\" style=\"overflow: hidden;\">
             <div class=\"boxHead\">
-                <div style=\"width: 75%; float: left;\">
+                <div style=\"width: 70%; float: left;\">
                     <img src=\"$g_root_path/adm_program/images/note.png\" style=\"vertical-align: top;\" alt=\"". strSpecialChars2Html($row->ann_headline). "\">&nbsp;".
                     strSpecialChars2Html($row->ann_headline). "
                 </div>";
@@ -184,19 +186,23 @@ else
                 // aendern & loeschen duerfen nur User mit den gesetzten Rechten
                 if($g_current_user->editAnnouncements())
                 {
-                    echo "<div style=\"text-align: right;\">" .
-                        mysqldatetime("d.m.y", $row->ann_timestamp). "&nbsp;
-                        <img src=\"$g_root_path/adm_program/images/edit.png\" style=\"cursor: pointer;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"
-                        onclick=\"self.location.href='announcements_new.php?ann_id=$row->ann_id&amp;headline=$req_headline'\">";
+                    echo "<div style=\"text-align: right;\">
+                        <span class=\"iconLink\">
+                            <a href=\"$g_root_path/adm_program/modules/announcements/announcements_new.php?ann_id=$row->ann_id&amp;headline=$req_headline\"><img 
+                            src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>
+                        </span>";
 
                         // Loeschen darf man nur Ankuendigungen der eigenen Gliedgemeinschaft
                         if($row->ann_org_shortname == $g_organization)
                         {
                             echo "
-                            <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer;\" width=\"16\" height=\"16\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"
-                                onclick=\"self.location.href='$g_root_path/adm_program/modules/announcements/announcements_function.php?mode=4&ann_id=$row->ann_id'\">";
+                            <span class=\"iconLink\">
+                                <a href=\"$g_root_path/adm_program/modules/announcements/announcements_function.php?mode=4&ann_id=$row->ann_id\"><img 
+                                src=\"$g_root_path/adm_program/images/cross.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>
+                            </span>";
                         }
-                    echo "&nbsp;</div>";
+                        echo mysqldatetime("d.m.y", $row->ann_timestamp). "&nbsp;
+                    </div>";
                 }
                 else
                 {

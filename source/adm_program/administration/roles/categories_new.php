@@ -5,6 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  * Uebergaben:
  *
@@ -12,21 +13,6 @@
  * type :  Typ der Kategorie, die angelegt werden sollen
  *         ROL = Rollenkategorien
  *         LNK = Linkkategorien
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  ****************************************************************************/
  
@@ -145,7 +131,7 @@ echo "
                                 echo " checked ";
                             }
                             echo " value=\"1\" />
-                        <label for=\"cat_hidden\">Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar&nbsp;</label>
+                        <label for=\"cat_hidden\">Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar</label>
                     </dd>
                 </dl>
             </li>
@@ -162,11 +148,13 @@ echo "
 </div>
 </form>
 
-<ul class=\"iconTextLink\">
+<ul class=\"iconTextLinkList\">
     <li>
-        <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-        src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
-        <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+        <span class=\"iconTextLink\">
+            <a href=\"$g_root_path/adm_program/system/back.php\"><img 
+            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
+            <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+        </span>
     </li>
 </ul>
 

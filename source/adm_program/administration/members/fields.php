@@ -61,16 +61,20 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 echo "
 <h1 class=\"moduleHeadline\">Profilfelder</h1>
 
-<ul class=\"iconTextLink\">
+<ul class=\"iconTextLinkList\">
     <li>
-        <a href=\"$g_root_path/adm_program/administration/members/fields_new.php\"><img 
-        src=\"$g_root_path/adm_program/images/add.png\" alt=\"Profilfeld anlegen\"></a>
-        <a href=\"$g_root_path/adm_program/administration/members/fields_new.php\">Profilfeld anlegen</a>
+        <span class=\"iconTextLink\">
+            <a href=\"$g_root_path/adm_program/administration/members/fields_new.php\"><img 
+            src=\"$g_root_path/adm_program/images/add.png\" alt=\"Profilfeld anlegen\"></a>
+            <a href=\"$g_root_path/adm_program/administration/members/fields_new.php\">Profilfeld anlegen</a>
+        </span>
     </li>
     <li>
-        <a href=\"$g_root_path/adm_program/administration/roles/categories.php?type=USF\"><img
-        src=\"$g_root_path/adm_program/images/application_double.png\" alt=\"Kategorien pflegen\"></a>
-        <a href=\"$g_root_path/adm_program/administration/roles/categories.php?type=USF\">Kategorien pflegen</a>
+        <span class=\"iconTextLink\">
+            <a href=\"$g_root_path/adm_program/administration/roles/categories.php?type=USF\"><img
+            src=\"$g_root_path/adm_program/images/application_double.png\" alt=\"Kategorien pflegen\"></a>
+            <a href=\"$g_root_path/adm_program/administration/roles/categories.php?type=USF\">Kategorien pflegen</a>
+        </span>
     </li>
 </ul>";
 
@@ -116,10 +120,8 @@ echo "
                 echo "<tbody>
                     <tr>
                         <td class=\"tableSubHeader\" colspan=\"8\">
-                            <a
-                                href=\"javascript:showHideBlock('$block_id', '$g_root_path')\"><img name=\"img_$block_id\" 
-                                style=\"vertical-align: middle; padding: 1px 5px 2px 3px;\" src=\"$g_root_path/adm_program/images/triangle_open.gif\" 
-                                border=\"0\" alt=\"ausblenden\"></a>$row->cat_name
+                            <a class=\"iconShowHide\" href=\"javascript:showHideBlock('$block_id', '$g_root_path')\"><img 
+                            name=\"img_$block_id\" src=\"$g_root_path/adm_program/images/triangle_open.gif\" alt=\"ausblenden\"></a>$row->cat_name
                         </td>
                     </tr>
                 </tbody>
@@ -193,17 +195,25 @@ echo "
                         echo "Zahl";
                     }
                 echo "</td>
-                <td style=\"text-align: right;\">
-                    <a href=\"$g_root_path/adm_program/administration/members/fields_new.php?usf_id=$row->usf_id\">
-                    <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>&nbsp;";
+                <td style=\"text-align: right; width: 45px;\">
+                    <span class=\"iconLink\">
+                        <a href=\"$g_root_path/adm_program/administration/members/fields_new.php?usf_id=$row->usf_id\"><img 
+                        src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>
+                    </span>";
                     if($row->usf_system == 1)
                     {
-                        echo "<img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">";
+                        echo "
+                        <span class=\"iconLink\">
+                            <img src=\"$g_root_path/adm_program/images/dummy.png\" alt=\"dummy\">
+                        </span>";
                     }
                     else
                     {
-                        echo "<a href=\"$g_root_path/adm_program/administration/members/fields_function.php?mode=3&amp;usf_id=$row->usf_id\"><img
-                        src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>";
+                        echo "
+                        <span class=\"iconLink\">
+                            <a href=\"$g_root_path/adm_program/administration/members/fields_function.php?mode=3&amp;usf_id=$row->usf_id\"><img
+                            src=\"$g_root_path/adm_program/images/cross.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>
+                        </span>";
                     }
                 echo "</td>
             </tr>";
@@ -219,11 +229,13 @@ echo "
     }
 echo "</table>
 
-<ul class=\"iconTextLink\">
+<ul class=\"iconTextLinkList\">
     <li>
-        <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-        src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
-        <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+        <span class=\"iconTextLink\">
+            <a href=\"$g_root_path/adm_program/system/back.php\"><img 
+            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
+            <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+        </span>
     </li>
 </ul>
 

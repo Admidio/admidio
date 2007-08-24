@@ -301,31 +301,37 @@ if(($count_valid_users != $user_anzahl || $restrict == "u")
 && ($g_current_user->assignRoles() || $g_current_user->editUser()))
 {
     //Button Alle bzw. nur Mitglieder anzeigen
-    echo "<ul class=\"iconTextLink\">";
+    echo "<ul class=\"iconTextLinkList\">";
         if($restrict=="m")
         {
             echo "<li>
-                <a href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=u\"><img
-                src=\"$g_root_path/adm_program/images/group.png\" alt=\"Alle Benutzer anzeigen\"></a>
-                <a href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=u\">Alle Benutzer anzeigen</a>
+                <span class=\"iconTextLink\">
+                    <a href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=u\"><img
+                    src=\"$g_root_path/adm_program/images/group.png\" alt=\"Alle Benutzer anzeigen\"></a>
+                    <a href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=u\">Alle Benutzer anzeigen</a>
+                </span>
             </li>";
         }
         else
         {
             //Nur Mitglieder anzeigen
             echo "<li>
-                <a href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=m\"><img
-                src=\"$g_root_path/adm_program/images/user.png\" alt=\"Nur Mitglieder anzeigen\"></a>
-                <a href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=m\">Nur Mitglieder anzeigen</a>
+                <span class=\"iconTextLink\">
+                    <a href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=m\"><img
+                    src=\"$g_root_path/adm_program/images/user.png\" alt=\"Nur Mitglieder anzeigen\"></a>
+                    <a href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=m\">Nur Mitglieder anzeigen</a>
+                </span>
             </li>";
 
             //aktuelle Rolle in SessionID sichern
             $_SESSION['set_rol_id'] = $role_id;
             //Neuen Benutzer Anlegen
             echo"<li>
-                <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?new_user=1\"><img
-                src=\"$g_root_path/adm_program/images/add.png\" alt=\"Login\"></a>
-                <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?new_user=1\">Benutzer anlegen</a>
+                <span class=\"iconTextLink\">
+                    <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?new_user=1\"><img
+                    src=\"$g_root_path/adm_program/images/add.png\" alt=\"Login\"></a>
+                    <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?new_user=1\">Benutzer anlegen</a>
+                </span>
             </li>";
         }
     echo "</ul>";
@@ -477,9 +483,8 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
                 echo "<tbody id=\"head_$block_id\">
                     <tr>
                         <td class=\"tableSubHeader\" colspan=\"6\">
-                            <a href=\"javascript:showHideBlock('$block_id','$g_root_path')\"><img name=\"img_$block_id\" 
-                                style=\"padding: 1px 5px 2px 3px; vertical-align: middle;\" src=\"$g_root_path/adm_program/images/triangle_open.gif\" 
-                                border=\"0\" alt=\"ausblenden\"></a>$letter_string
+                            <a href=\"javascript:showHideBlock('$block_id','$g_root_path')\"><img class=\"iconShowHide\"
+                            name=\"img_$block_id\" src=\"$g_root_path/adm_program/images/triangle_open.gif\" alt=\"ausblenden\"></a>$letter_string
                         </td>
                     </tr>
                 </tbody>

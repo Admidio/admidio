@@ -145,7 +145,7 @@ echo "
                                 echo " checked=\"checked\" ";
                             }
                             echo " value=\"1\" />
-                            <label for=\"dat_global\">". $_GET['headline']. " ist f&uuml;r mehrere Organisationen sichtbar</label>&nbsp;
+                            <label for=\"dat_global\">". $_GET['headline']. " ist f&uuml;r mehrere Organisationen sichtbar</label>
                             <img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
                             onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=termin_global','Message','width=400,height=350,left=310,top=200,scrollbars=yes')\">
                         </dd>
@@ -212,11 +212,13 @@ echo "
 </div>
 </form>
 
-<ul class=\"iconTextLink\">
+<ul class=\"iconTextLinkList\">
     <li>
-        <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-        src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
-        <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+        <span class=\"iconTextLink\">
+            <a href=\"$g_root_path/adm_program/system/back.php\"><img 
+            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
+            <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+        </span>
     </li>
 </ul>
 

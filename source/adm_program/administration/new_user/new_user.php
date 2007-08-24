@@ -66,7 +66,7 @@ echo "
         <th>Name</th>
         <th>Benutzername</th>
         <th>E-Mail</th>
-        <th style=\"text-align: center;\">&nbsp;Funktionen</th>
+        <th style=\"text-align: center;\">Funktionen</th>
     </tr>";
 
     while($row = $g_db->fetch_object($usr_result))
@@ -86,10 +86,14 @@ echo "
                 }
             echo "</td>
             <td style=\"text-align: center;\">
-                <a href=\"$g_root_path/adm_program/administration/new_user/new_user_assign.php?new_user_id=$row->usr_id\">
-                   <img src=\"$g_root_path/adm_program/images/properties.png\" border=\"0\" alt=\"Anmeldung zuordnen\" title=\"Anmeldung zuordnen\"></a>&nbsp;&nbsp;
-                <a href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$row->usr_id&amp;mode=5\">
-                   <img src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Anmeldung l&ouml;schen\" title=\"Anmeldung l&ouml;schen\"></a>
+                <span class=\"iconLink\">
+                    <a href=\"$g_root_path/adm_program/administration/new_user/new_user_assign.php?new_user_id=$row->usr_id\"><img 
+                    src=\"$g_root_path/adm_program/images/properties.png\" alt=\"Anmeldung zuordnen\" title=\"Anmeldung zuordnen\"></a>
+                </span>
+                <span class=\"iconLink\">
+                    <a href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$row->usr_id&amp;mode=5\"><img 
+                    src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Anmeldung l&ouml;schen\" title=\"Anmeldung l&ouml;schen\"></a>
+                </span>
             </td>
         </tr>";
     }

@@ -70,33 +70,32 @@ if (isset($comment_result))
                 if (isValidEmailAddress($row->gbc_email))
                 {
                     echo "
-                    <a href=\"mailto:$row->gbc_email\">
-                    <img src=\"$g_root_path/adm_program/images/email.png\" style=\"vertical-align: middle;\" alt=\"Mail an $row->gbc_email\"
-                    title=\"Mail an $row->gbc_email\" border=\"0\"></a>";
+                    <span class=\"iconLink\">
+                        <a href=\"mailto:$row->gbc_email\"><img src=\"$g_root_path/adm_program/images/email.png\" 
+                        alt=\"Mail an $row->gbc_email\" title=\"Mail an $row->gbc_email\"></a>
+                    </span>";
                 }
 
                 echo "
-                </div>";
+                </div>
 
-
-                echo "
-                <div style=\"text-align: right;\">". mysqldatetime("d.m.y h:i", $row->gbc_timestamp). "&nbsp;";
+                <div style=\"text-align: right;\">". mysqldatetime("d.m.y h:i", $row->gbc_timestamp);
 
                 // aendern und loeschen von Kommentaren duerfen nur User mit den gesetzten Rechten
                 if ($g_current_user->editGuestbookRight())
                 {
-                        echo "
-                        <img src=\"$g_root_path/adm_program/images/edit.png\" style=\"cursor: pointer;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"
-                         onclick=\"self.location.href='guestbook_comment_new.php?cid=$row->gbc_id'\">";
-
-                        echo "
-                        <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"cursor: pointer;\" width=\"16\" height=\"16\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"
-                         onclick=\"self.location.href='guestbook_function.php?id=$row->gbc_id&amp;mode=7'\">";
-
+                    echo "
+                    <span class=\"iconLink\">
+                        <a href=\"$g_root_path/adm_program/modules/guestbook/guestbook_comment_new.php?cid=$row->gbc_id\"><img 
+                        src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>
+                    </span>
+                    <span class=\"iconLink\">
+                        <a href=\"$g_root_path/adm_program/modules/guestbook/guestbook_function.php?id=$row->gbc_id&amp;mode=7\"><img 
+                        src=\"$g_root_path/adm_program/images/cross.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>
+                    </span>";
                 }
 
-                echo "&nbsp;</div>";
-            echo "
+                echo "</div>
             </div>
 
             <div class=\"groupBoxBody\">
@@ -119,9 +118,11 @@ if (isset($comment_result))
                     $user_change = new User($g_db, $row->gbc_usr_id_change);
 
                     echo "
-                    <div class=\"smallFontSize\" style=\"margin: 8px 4px 4px 4px;\">Zuletzt bearbeitet von ".
-                    $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname").
-                    " am ". mysqldatetime("d.m.y h:i", $row->gbc_last_change). "</div>";
+                    <div class=\"editInformation\">
+                        Zuletzt bearbeitet von ".
+                        $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname").
+                        " am ". mysqldatetime("d.m.y h:i", $row->gbc_last_change). "
+                    </div>";
                 }
             echo "
             </div>
@@ -139,11 +140,12 @@ if (isset($comment_result))
         // Bei Kommentierungsrechten, wird der Link zur Kommentarseite angezeigt...
         $load_url = "$g_root_path/adm_program/modules/guestbook/guestbook_comment_new.php?id=$cid";
         echo "
-        <div class=\"smallFontSize\" style=\"margin: 8px 4px 4px 4px;\">
-            <a href=\"$load_url\">
-            <img src=\"$g_root_path/adm_program/images/comment_new.png\" style=\"vertical-align: middle;\" alt=\"Kommentieren\"
-            title=\"Kommentieren\" border=\"0\"></a>
-            <a href=\"$load_url\">Einen Kommentar zu diesem Beitrag schreiben.</a>
+        <div class=\"editInformation\">
+            <span class=\"iconTextLink\">
+                <a href=\"$load_url\"><img src=\"$g_root_path/adm_program/images/comment_new.png\" 
+                alt=\"Kommentieren\" title=\"Kommentieren\"></a>
+                <a href=\"$load_url\">Einen Kommentar zu diesem Beitrag schreiben.</a>
+            </span>
         </div>";
     }
 

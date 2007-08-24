@@ -53,12 +53,13 @@ echo "
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
 <html>
 <head>
+    <meta http-equiv=\"content-type\" content=\"text/html; charset=iso-8859-1\">
     <title>$orga_name"; 
     if(strlen($g_layout['title']) > 0)
     {
         echo " - ". $g_layout['title'];
     }
-    echo "</title>
+    echo "</title>    
     
     <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_program/layout/system.css\">\n";
     

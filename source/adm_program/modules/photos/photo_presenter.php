@@ -5,26 +5,12 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Jochen Erkens
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  * Uebergaben:
  *
  * Bild: welches Bild soll angezeigt werden
  * pho_id: Id der Veranstaltung aus der das Bild stammt
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
 
@@ -106,21 +92,23 @@ echo "
     echo "<br>Fotos von: ".$photo_event->getValue("pho_photographers")."<br><br>";
 
     //Vor und zurueck buttons
-    echo"<ul class=\"iconTextLink\">";
+    echo"<ul class=\"iconTextLinkList\">";
         if($prev_image > 0)
         {
             echo"<li>
-                <a href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$prev_image&pho_id=$pho_id\"><img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Vorheriges Bild\">
-                </a>
-                <a href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$prev_image&pho_id=$pho_id\">Vorheriges Bild</a>
+                <span class=\"iconTextLink\">
+                    <a href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$prev_image&pho_id=$pho_id\"><img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Vorheriges Bild\"></a>
+                    <a href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$prev_image&pho_id=$pho_id\">Vorheriges Bild</a>
+                </span>
             </li>";
         }
         if($next_image <= $photo_event->getValue("pho_quantity"))
         {
             echo"<li>
-                <a href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$next_image&pho_id=$pho_id\">N&auml;chstes Bild</a>
-                <a  href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$next_image&pho_id=$pho_id\"><img src=\"$g_root_path/adm_program/images/forward.png\" alt=\"N&auml;chstes Bild\">
-                </a>
+                <span class=\"iconTextLink\">
+                    <a href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$next_image&pho_id=$pho_id\">N&auml;chstes Bild</a>
+                    <a  href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$next_image&pho_id=$pho_id\"><img src=\"$g_root_path/adm_program/images/forward.png\" alt=\"N&auml;chstes Bild\"></a>
+                </span>
             </li>";
         }
         echo"
@@ -157,17 +145,19 @@ echo "
 
     //Ausgabe Bild
     echo"
-        <div><img class=\"photoOutput\" src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$bild."&amp;pho_begin=".$photo_event->getValue("pho_begin")."&amp;scal=".$scal."&amp;side=".$side."\"border=\"0\" alt=\"$ordner_url $bild\">";
+        <div><img class=\"photoOutput\" src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$bild."&amp;pho_begin=".$photo_event->getValue("pho_begin")."&amp;scal=".$scal."&amp;side=".$side."\" alt=\"$ordner_url $bild\">";
 
     //Fenster schliessen Button
     //wenn Popupmode
     if($g_preferences['photo_show_mode']==0)
     {   
-        echo"<ul class=\"iconTextLink\">
-        <li>
-            <a href=\"javascript:parent.window.close()\"><img class=\"iconLink\" src=\"$g_root_path/adm_program/images/door_in.png\" alt=\"Login\"></a>
-            <a href=\"javascript:parent.window.close()\">Fenster schlie&szlig;en</a>
-        </li>
+        echo"<ul class=\"iconTextLinkList\">
+            <li>
+                <span class=\"iconTextLink\">
+                    <a href=\"javascript:parent.window.close()\"><img class=\"iconLink\" src=\"$g_root_path/adm_program/images/door_in.png\" alt=\"Login\"></a>
+                    <a href=\"javascript:parent.window.close()\">Fenster schlie&szlig;en</a>
+                </span>
+            </li>
         </ul>";
     }
     
@@ -175,11 +165,13 @@ echo "
     //wenn Fenstermode
     if($g_preferences['photo_show_mode']==2)
     {   
-        echo"<ul class=\"iconTextLink\">
-        <li>
-            <a href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id'\"><img src=\"$g_root_path/adm_program/images/application_view_tile.png\" alt=\"Login\"></a>
-            <a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id\">zur &Uuml;bersicht</a>
-        </li>
+        echo"<ul class=\"iconTextLinkList\">
+            <li>
+                <span class=\"iconTextLink\">
+                    <a href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id'\"><img src=\"$g_root_path/adm_program/images/application_view_tile.png\" alt=\"Login\"></a>
+                    <a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id\">zur &Uuml;bersicht</a>
+                </span>
+            </li>
         </ul>";
     }
 echo"</div>";

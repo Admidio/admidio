@@ -171,9 +171,8 @@ echo "
                 echo "<tbody>
                     <tr>
                         <td class=\"tableSubHeader\" colspan=\"4\">
-                            <a href=\"javascript:showHideBlock('$block_id','$g_root_path')\"><img name=\"img_$block_id\" 
-                                style=\"padding: 1px 5px 2px 3px; vertical-align: middle;\" src=\"$g_root_path/adm_program/images/triangle_open.gif\" 
-                                border=\"0\" alt=\"ausblenden\"></a>$row->cat_name
+                            <a href=\"javascript:showHideBlock('$block_id','$g_root_path')\"><img class=\"iconShowHide\"
+                            name=\"img_$block_id\" src=\"$g_root_path/adm_program/images/triangle_open.gif\" alt=\"ausblenden\"></a>$row->cat_name
                         </td>
                     </tr>
                 </tbody>

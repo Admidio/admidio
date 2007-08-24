@@ -41,29 +41,35 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 echo "
 <h1 class=\"moduleHeadline\">". $g_current_organization->getValue("org_longname"). "</h1>
 
-<ul class=\"iconTextLink\">";
+<ul class=\"iconTextLinkList\">";
     if($g_valid_login == 1)
     {
         echo "<li>
-            <a href=\"$g_root_path/adm_program/system/logout.php\"><img
-            src=\"$g_root_path/adm_program/images/door_in.png\" alt=\"Logout\"></a>
-            <a href=\"$g_root_path/adm_program/system/logout.php\">Logout</a>
+            <span class=\"iconTextLink\">
+                <a href=\"$g_root_path/adm_program/system/logout.php\"><img
+                src=\"$g_root_path/adm_program/images/door_in.png\" alt=\"Logout\"></a>
+                <a href=\"$g_root_path/adm_program/system/logout.php\">Logout</a>
+            </span>
         </li>";
     }
     else
     {
         echo "<li>
-            <a href=\"$g_root_path/adm_program/system/login.php\"><img
-            src=\"$g_root_path/adm_program/images/key.png\" alt=\"Login\"></a>
-            <a href=\"$g_root_path/adm_program/system/login.php\">Login</a>
+            <span class=\"iconTextLink\">
+                <a href=\"$g_root_path/adm_program/system/login.php\"><img
+                src=\"$g_root_path/adm_program/images/key.png\" alt=\"Login\"></a>
+                <a href=\"$g_root_path/adm_program/system/login.php\">Login</a>
+            </span>
         </li>";
         
         if($g_preferences['registration_mode'] > 0)
         {
             echo "<li>
-                <a href=\"$g_root_path/adm_program/system/registration.php\"><img
-                src=\"$g_root_path/adm_program/images/add.png\" alt=\"Registrieren\"></a>
-                <a href=\"$g_root_path/adm_program/system/registration.php\">Registrieren</a>
+                <span class=\"iconTextLink\">
+                    <a href=\"$g_root_path/adm_program/system/registration.php\"><img
+                    src=\"$g_root_path/adm_program/images/add.png\" alt=\"Registrieren\"></a>
+                    <a href=\"$g_root_path/adm_program/system/registration.php\">Registrieren</a>
+                </span>
             </li>";
         }
     }

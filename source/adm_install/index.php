@@ -5,6 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  * Uebergaben:
  *
@@ -13,21 +14,6 @@
  *        2 Datenbank installieren
  *        3 Datenbank updaten
  *        4 Neue Organisation anlegen
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
 
@@ -87,7 +73,7 @@ echo "
 <div align=\"center\">
     <div class=\"formLayout\" id=\"installation_form\">
         <div class=\"formHead\" style=\"text-align: left; letter-spacing: 0em;\">
-            <img style=\"float:left; padding: 5px 0px 0px 0px;\" src=\"../adm_program/images/admidio_logo_50.png\" border=\"0\" alt=\"www.admidio.org\" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <img style=\"float:left; padding: 5px 0px 0px 0px; border: none;\" src=\"../adm_program/images/admidio_logo_50.png\" alt=\"www.admidio.org\" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <div style=\"font-size: 16pt; font-weight: bold; text-align: right; padding: 5px 10px 10px 0px;\">Version $admidio_version</div>
             <div style=\"font-size: 11pt; padding: 0px 0px 5px 0px;\">Die Online-Mitgliederverwaltung f&uuml;r Vereine, Gruppen und Organisationen</div>
         </div>

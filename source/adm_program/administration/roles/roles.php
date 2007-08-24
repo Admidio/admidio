@@ -75,21 +75,27 @@ else
 }
 
 echo "
-<ul class=\"iconTextLink\">
+<ul class=\"iconTextLinkList\">
     <li>
-        <a href=\"$g_root_path/adm_program/administration/roles/roles_new.php\"><img
-        src=\"$g_root_path/adm_program/images/add.png\" alt=\"Rolle anlegen\"></a>
-        <a href=\"$g_root_path/adm_program/administration/roles/roles_new.php\">Rolle anlegen</a>
+        <span class=\"iconTextLink\">
+            <a href=\"$g_root_path/adm_program/administration/roles/roles_new.php\"><img
+            src=\"$g_root_path/adm_program/images/add.png\" alt=\"Rolle anlegen\"></a>
+            <a href=\"$g_root_path/adm_program/administration/roles/roles_new.php\">Rolle anlegen</a>
+        </span>
     </li>
     <li>
-        <a href=\"$g_root_path/adm_program/administration/roles/roles.php?inactive=$req_valid\"><img
-        src=\"$g_root_path/adm_program/images/$image\" alt=\"$description_lnk\"></a>
-        <a href=\"$g_root_path/adm_program/administration/roles/roles.php?inactive=$req_valid\">$description_lnk</a>
+        <span class=\"iconTextLink\">
+            <a href=\"$g_root_path/adm_program/administration/roles/roles.php?inactive=$req_valid\"><img
+            src=\"$g_root_path/adm_program/images/$image\" alt=\"$description_lnk\"></a>
+            <a href=\"$g_root_path/adm_program/administration/roles/roles.php?inactive=$req_valid\">$description_lnk</a>
+        </span>
     </li>
     <li>
-        <a href=\"$g_root_path/adm_program/administration/roles/categories.php?type=ROL\"><img
-        src=\"$g_root_path/adm_program/images/application_double.png\" alt=\"Kategorien pflegen\"></a>
-        <a href=\"$g_root_path/adm_program/administration/roles/categories.php?type=ROL\">Kategorien pflegen</a>
+        <span class=\"iconTextLink\">
+            <a href=\"$g_root_path/adm_program/administration/roles/categories.php?type=ROL\"><img
+            src=\"$g_root_path/adm_program/images/application_double.png\" alt=\"Kategorien pflegen\"></a>
+            <a href=\"$g_root_path/adm_program/administration/roles/categories.php?type=ROL\">Kategorien pflegen</a>
+        </span>
     </li>
 </ul>
 
@@ -124,15 +130,14 @@ echo "
             $block_id     = "cat_$row->cat_id";
             if($row->cat_hidden == 1)
             {
-                $image_hidden = "<img src=\"$g_root_path/adm_program/images/user_key.png\" 
-                            style=\"vertical-align: middle;\" border=\"0\" alt=\"Nur sichtbar f&uuml;r eingeloggte Benutzer\" title=\"Nur sichtbar f&uuml;r eingeloggte Benutzer\">";
+                $image_hidden = "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/user_key.png\" 
+                                 alt=\"Nur sichtbar f&uuml;r eingeloggte Benutzer\" title=\"Nur sichtbar f&uuml;r eingeloggte Benutzer\">";
             }
             echo "<tbody>
                 <tr>
                     <td class=\"tableSubHeader\" colspan=\"4\">
-                        <a href=\"javascript:showHideBlock('$block_id','$g_root_path')\"><img name=\"img_$block_id\" 
-                            style=\"padding: 1px 5px 2px 3px; vertical-align: middle;\" src=\"$g_root_path/adm_program/images/triangle_open.gif\" 
-                            border=\"0\" alt=\"ausblenden\"></a>$row->cat_name $image_hidden
+                        <a class=\"iconShowHide\" href=\"javascript:showHideBlock('$block_id','$g_root_path')\"><img 
+                        name=\"img_$block_id\" src=\"$g_root_path/adm_program/images/triangle_open.gif\" alt=\"ausblenden\"></a>$row->cat_name $image_hidden
                     </td>
                 </tr>
             </tbody>
@@ -219,35 +224,52 @@ echo "
                 }
             echo "</td>
             <td style=\"text-align: center;\">
-                <a href=\"$g_root_path/adm_program/modules/lists/lists_show.php?type=address&amp;mode=html&amp;rol_id=$row->rol_id\"><img
-                src=\"$g_root_path/adm_program/images/application_view_columns.png\" border=\"0\" alt=\"Mitglieder anzeigen\" title=\"Mitglieder anzeigen\"></a>&nbsp;";
+                <span class=\"iconLink\">
+                    <a href=\"$g_root_path/adm_program/modules/lists/lists_show.php?type=address&amp;mode=html&amp;rol_id=$row->rol_id\"><img
+                    src=\"$g_root_path/adm_program/images/application_view_columns.png\" alt=\"Mitglieder anzeigen\" title=\"Mitglieder anzeigen\"></a>
+                </span>";
 
                 if($req_valid == true)
                 {
-                    echo "<a href=\"$g_root_path/adm_program/modules/lists/members.php?rol_id=$row->rol_id\"><img 
-                        src=\"$g_root_path/adm_program/images/add.png\" border=\"0\" alt=\"Mitglieder zuordnen\" title=\"Mitglieder zuordnen\"></a>&nbsp;";
+                    echo "
+                    <span class=\"iconLink\">
+                        <a href=\"$g_root_path/adm_program/modules/lists/members.php?rol_id=$row->rol_id\"><img 
+                        src=\"$g_root_path/adm_program/images/add.png\" alt=\"Mitglieder zuordnen\" title=\"Mitglieder zuordnen\"></a>
+                    </span>";
                 }
                 else
                 {
-                    echo "<a href=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$row->rol_id&amp;mode=5\"><img
-                        src=\"$g_root_path/adm_program/images/wand.png\" border=\"0\" alt=\"Rolle aktivieren\" title=\"Rolle aktivieren\"></a>&nbsp;";
+                    echo "
+                    <span class=\"iconLink\">
+                        <a href=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$row->rol_id&amp;mode=5\"><img
+                        src=\"$g_root_path/adm_program/images/wand.png\" alt=\"Rolle aktivieren\" title=\"Rolle aktivieren\"></a>
+                    </span>";
                 }
 
                 if($row->rol_name == "Webmaster")
                 {
-                    echo "<img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">";
+                    echo "
+                    <span class=\"iconLink\">
+                        <img src=\"$g_root_path/adm_program/images/dummy.png\" alt=\"dummy\">
+                    </span>";
                 }
                 else
                 {
                     if($req_valid == true)
                     {
-                        echo "<a href=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$row->rol_id&amp;mode=1\"><img 
-                            src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Rolle l&ouml;schen\" title=\"Rolle l&ouml;schen\"></a>";
+                        echo "
+                        <span class=\"iconLink\">
+                            <a href=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$row->rol_id&amp;mode=1\"><img 
+                            src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Rolle l&ouml;schen\" title=\"Rolle l&ouml;schen\"></a>
+                        </span>";
                     }
                     else
                     {
-                        echo "<a href=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$row->rol_id&amp;mode=6\"><img 
-                            src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"Rolle l&ouml;schen\" title=\"Rolle l&ouml;schen\"></a>";
+                        echo "
+                        <span class=\"iconLink\">
+                            <a href=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$row->rol_id&amp;mode=6\"><img 
+                            src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Rolle l&ouml;schen\" title=\"Rolle l&ouml;schen\"></a>
+                        </span>";
                     }
                 }
             echo "</td>

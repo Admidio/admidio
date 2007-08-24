@@ -118,7 +118,7 @@ while ($row = $g_db->fetch_object($result))
             if (file_exists($bildpfad))
             {
                 $description = $description. "
-                 <img src=\"$g_root_path/adm_program/modules/photos/photo_show.php?bild=".$bildpfad."&amp;scal=100\" border=\"0\" alt=\"bild\">&nbsp;";
+                 <img src=\"$g_root_path/adm_program/modules/photos/photo_show.php?bild=".$bildpfad."&amp;scal=100\" alt=\"bild\">&nbsp;";
             }
         }
     }

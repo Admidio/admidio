@@ -93,13 +93,13 @@ if($_GET["mode"] == 1)
 
     <div class=\"formBody\" style=\"width: 400px\">
         <p align=\"left\">
-            <img src=\"$g_root_path/adm_program/images/wand_gray.png\" style=\"vertical-align: bottom;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Inaktive Rolle\">
+            <img src=\"$g_root_path/adm_program/images/wand_gray.png\" alt=\"Inaktive Rolle\">
             Du kannst die Rolle zu einer <b>inaktiven Rolle</b> machen. Dies hat den Vorteil, dass die Daten
             (Mitgliederzuordnung) erhalten bleiben und du sp&auml;ter immer wieder sehen kannst, welche Personen dieser Rolle
             zugeordnet waren. Allerdings erscheint die Rolle nicht mehr in den &uuml;blichen &Uuml;bersichten.
         </p>
         <p align=\"left\">
-            <img src=\"$g_root_path/adm_program/images/cross.png\" style=\"vertical-align: bottom;\" width=\"16\" height=\"16\" border=\"0\" alt=\"Rolle l&ouml;schen\">
+            <img src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Rolle l&ouml;schen\">
             Wenn du <b>L&ouml;schen</b> ausw&auml;hlst, wird die Rolle und alle Mitgliedszuordnungen entg&uuml;ltig aus der Datenbank
             entfernt und es ist sp&auml;ter nicht mehr m&ouml;glich Daten dieser Rolle einzusehen.
         </p>
