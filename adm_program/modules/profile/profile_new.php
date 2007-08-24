@@ -287,7 +287,7 @@ function getFieldCode($field, $user, $new_user)
     $mandatory = "";
     if($field['usf_mandatory'] == 1)
     {
-        $mandatory = "&nbsp;<span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>";
+        $mandatory = "<span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>";
     }
     
     // Fragezeichen mit Feldbeschreibung anzeigen, wenn diese hinterlegt ist
@@ -396,7 +396,7 @@ echo "
                                 echo " />";
                                 if($new_user > 0)
                                 {
-                                    echo "&nbsp;<span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>&nbsp;
+                                    echo "<span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                                     <img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
                                     onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=nickname','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\">";
                                 }
@@ -411,7 +411,7 @@ echo "
                                 <dt><label for=\"usr_password\">Passwort:</label></dt>
                                 <dd>
                                     <input type=\"password\" id=\"usr_password\" name=\"usr_password\" style=\"width: 130px;\" maxlength=\"20\" />
-                                    <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>&nbsp;
+                                    <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                                     <img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
                                     onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=password','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\">
                                 </dd>
@@ -461,7 +461,7 @@ echo "
                 <li>
                     <dl>
                         <dt>&nbsp;</dt>
-                        <dd><img src=\"$g_root_path/adm_program/system/captcha_class.php?id=". time(). "\" border=\"0\" alt=\"Captcha\" /></dd>
+                        <dd><img src=\"$g_root_path/adm_program/system/captcha_class.php?id=". time(). "\" alt=\"Captcha\" /></dd>
                     </dl>
                 </li>
                 <li>
@@ -469,7 +469,7 @@ echo "
                         <dt>Best&auml;tigungscode:</dt>
                         <dd>
                             <input type=\"text\" id=\"captcha\" name=\"captcha\" style=\"width: 200px;\" maxlength=\"8\" value=\"\">
-                            <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>&nbsp;
+                            <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                             <img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
                              onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=captcha_help','Message','width=400,height=320,left=310,top=200,scrollbars=yes')\">
                         </dd>
@@ -520,11 +520,13 @@ echo "
 </div>
 </form>
 
-<ul class=\"iconTextLink\">
+<ul class=\"iconTextLinkList\">
     <li>
-        <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-        src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
-        <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+        <span class=\"iconTextLink\">
+            <a href=\"$g_root_path/adm_program/system/back.php\"><img 
+            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
+            <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+        </span>
     </li>
 </ul>
 

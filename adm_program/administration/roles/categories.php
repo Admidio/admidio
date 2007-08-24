@@ -91,11 +91,13 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 echo "
 <h1 class=\"moduleHeadline\">Kategorien</h1>
 
-<ul class=\"iconTextLink\">
+<ul class=\"iconTextLinkList\">
     <li>
-        <a href=\"$g_root_path/adm_program/administration/roles/categories_new.php?type=$req_type\"><img 
-        src=\"$g_root_path/adm_program/images/add.png\" alt=\"Kategorie anlegen\"></a>
-        <a href=\"$g_root_path/adm_program/administration/roles/categories_new.php?type=$req_type\">Kategorie anlegen</a>
+        <span class=\"iconTextLink\">
+            <a href=\"$g_root_path/adm_program/administration/roles/categories_new.php?type=$req_type\"><img 
+            src=\"$g_root_path/adm_program/images/add.png\" alt=\"Kategorie anlegen\"></a>
+            <a href=\"$g_root_path/adm_program/administration/roles/categories_new.php?type=$req_type\">Kategorie anlegen</a>
+        </span>
     </li>
 </ul>
 
@@ -152,17 +154,25 @@ echo "
                 }
             echo "</td>
             <td style=\"text-align: right; width: 45px;\">
-                <a href=\"$g_root_path/adm_program/administration/roles/categories_new.php?cat_id=". $cat_row['cat_id']. "&amp;type=$req_type\">
-                <img src=\"$g_root_path/adm_program/images/edit.png\" border=\"0\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>&nbsp;";
+                <span class=\"iconLink\">
+                    <a href=\"$g_root_path/adm_program/administration/roles/categories_new.php?cat_id=". $cat_row['cat_id']. "&amp;type=$req_type\"><img 
+                    src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>
+                </span>";
 
                 if($cat_row['cat_system'] == 1)
                 {
-                    echo "<img src=\"$g_root_path/adm_program/images/dummy.gif\" border=\"0\" alt=\"dummy\" style=\"width: 16px; height: 16px;\">";
+                    echo "
+                    <span class=\"iconLink\">
+                        <img src=\"$g_root_path/adm_program/images/dummy.png\" alt=\"dummy\">
+                    </span>";
                 }
                 else
                 {
-                    echo "<a href=\"$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=". $cat_row['cat_id']. "&amp;mode=3&amp;type=$req_type\"><img
-                    src=\"$g_root_path/adm_program/images/cross.png\" border=\"0\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>";
+                    echo "
+                    <span class=\"iconLink\">
+                        <a href=\"$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=". $cat_row['cat_id']. "&amp;mode=3&amp;type=$req_type\"><img
+                        src=\"$g_root_path/adm_program/images/cross.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>
+                    </span>";
                 }
             echo "</td>
         </tr>";
@@ -170,11 +180,13 @@ echo "
     echo "</tbody>
 </table>
 
-<ul class=\"iconTextLink\">
+<ul class=\"iconTextLinkList\">
     <li>
-        <a href=\"$g_root_path/adm_program/system/back.php\"><img
-        src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
-        <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+        <span class=\"iconTextLink\">
+            <a href=\"$g_root_path/adm_program/system/back.php\"><img 
+            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
+            <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+        </span>
     </li>
 </ul>
 

@@ -349,29 +349,35 @@ if($req_mode != "csv")
             <a href=\"$g_root_path/adm_program/system/back.php\">$text</a>
         </div>
         
-        <ul class=\"iconTextLink\">";
+        <ul class=\"iconTextLinkList\">";
             if($role->getValue("rol_mail_login") == 1 && $g_preferences['enable_mail_module'] == 1)
             {
                 echo "<li>
-                    <a href=\"$g_root_path/adm_program/modules/mail/mail.php?rol_id=$req_rol_id\"><img
-                    src=\"$g_root_path/adm_program/images/email.png\" alt=\"E-Mail an Mitglieder\"></a>
-                    <a href=\"$g_root_path/adm_program/modules/mail/mail.php?rol_id=$req_rol_id\">E-Mail an Mitglieder</a>
+                    <span class=\"iconTextLink\">
+                        <a href=\"$g_root_path/adm_program/modules/mail/mail.php?rol_id=$req_rol_id\"><img
+                        src=\"$g_root_path/adm_program/images/email.png\" alt=\"E-Mail an Mitglieder\"></a>
+                        <a href=\"$g_root_path/adm_program/modules/mail/mail.php?rol_id=$req_rol_id\">E-Mail an Mitglieder</a>
+                    </span>
                 </li>";
             }
 
             echo "<li>
-                <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/modules/lists/lists_show.php?type=$req_type&amp;mode=print&amp;rol_id=$req_rol_id', '_blank')\"><img
-                src=\"$g_root_path/adm_program/images/print.png\" alt=\"Druckvorschau\"></a>
-                <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/modules/lists/lists_show.php?type=$req_type&amp;mode=print&amp;rol_id=$req_rol_id', '_blank')\">Druckvorschau</a>
+                <span class=\"iconTextLink\">
+                    <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/modules/lists/lists_show.php?type=$req_type&amp;mode=print&amp;rol_id=$req_rol_id', '_blank')\"><img
+                    src=\"$g_root_path/adm_program/images/print.png\" alt=\"Druckvorschau\"></a>
+                    <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/modules/lists/lists_show.php?type=$req_type&amp;mode=print&amp;rol_id=$req_rol_id', '_blank')\">Druckvorschau</a>
+                </span>
             </li>
             <li>
-                <img src=\"$g_root_path/adm_program/images/database_out.png\" alt=\"Exportieren\">
-                <select size=\"1\" name=\"list$i\" onchange=\"exportList(this)\">
-                    <option value=\"\" selected=\"selected\">Exportieren nach ...</option>
-                    <option value=\"csv-ms\">Microsoft Excel</option>
-                    <option value=\"csv-ms-2k\">Microsoft Excel 97/2000</option>
-                    <option value=\"csv-oo\">CSV-Datei (OpenOffice)</option>
-                </select>
+                <span class=\"iconTextLink\">
+                    <img src=\"$g_root_path/adm_program/images/database_out.png\" alt=\"Exportieren\">
+                    <select size=\"1\" name=\"list$i\" onchange=\"exportList(this)\">
+                        <option value=\"\" selected=\"selected\">Exportieren nach ...</option>
+                        <option value=\"csv-ms\">Microsoft Excel</option>
+                        <option value=\"csv-ms-2k\">Microsoft Excel 97/2000</option>
+                        <option value=\"csv-oo\">CSV-Datei (OpenOffice)</option>
+                    </select>
+                </span>
             </li>
         </ul>";
     }

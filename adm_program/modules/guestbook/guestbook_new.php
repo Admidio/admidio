@@ -60,6 +60,8 @@ if ($_GET["id"] != 0)
     }
 }
 
+$_SESSION['navigation']->addUrl($g_current_url);
+
 if (isset($_SESSION['guestbook_entry_request']))
 {
     $form_values = strStripSlashesDeep($_SESSION['guestbook_entry_request']);
@@ -135,18 +137,18 @@ $g_layout['title'] = $_GET["headline"];
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 // Html des Modules ausgeben
-echo "
-<form action=\"$g_root_path/adm_program/modules/guestbook/guestbook_function.php?id=". $_GET["id"]. "&amp;headline=". $_GET['headline']. "&amp;mode=";
-    if ($_GET['id'] > 0)
-    {
-        echo "3";
-    }
-    else
-    {
-        echo "1";
-    }
-    echo "\" method=\"post\" name=\"Gaestebucheintrag\">
+if ($_GET['id'] > 0)
+{
+    $mode = "3";
+}
+else
+{
+    $mode = "1";
+}
 
+echo "
+<form action=\"$g_root_path/adm_program/modules/guestbook/guestbook_function.php?id=". $_GET["id"]. "&amp;headline=". $_GET['headline']. "&amp;mode=$mode\" method=\"post\">
+<div class=\"formLayout\" id=\"edit_guestbook_form\">
     <div class=\"formHead\">";
         if ($_GET['id'] > 0)
         {
@@ -158,88 +160,102 @@ echo "
         }
     echo "</div>
     <div class=\"formBody\">
-        <div>
-            <div style=\"text-align: right; width: 25%; float: left;\">Name:</div>
-            <div style=\"text-align: left; margin-left: 27%;\">";
-            if ($g_current_user->getValue("usr_id") != 0)
+        <ul class=\"formFieldList\">
+            <li>
+                <dl>
+                    <dt><label for=\"name\">Name:</label></dt>
+                    <dd>";
+                        if ($g_current_user->getValue("usr_id") > 0)
+                        {
+                            // Eingeloggte User sollen ihren Namen nicht aendern duerfen
+                            echo "<input type=\"text\" id=\"name\" name=\"name\" class=\"readonly\" readonly tabindex=\"1\" style=\"width: 350px;\" maxlength=\"60\" value=\"". htmlspecialchars($form_values['name'], ENT_QUOTES). "\">";
+                        }
+                        else
+                        {
+                            echo "<input type=\"text\" id=\"name\" name=\"name\" tabindex=\"1\" style=\"width: 350px;\" maxlength=\"60\" value=\"". htmlspecialchars($form_values['name'], ENT_QUOTES). "\">
+                            <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>";
+                        }
+                    echo "</dd>
+                </dl>
+            </li>
+            <li>
+                <dl>
+                    <dt><label for=\"email\">Emailadresse:</label></dt>
+                    <dd>
+                        <input type=\"text\" id=\"email\" name=\"email\" tabindex=\"2\" style=\"width: 350px;\" maxlength=\"50\" value=\"". htmlspecialchars($form_values['email'], ENT_QUOTES). "\">
+                    </dd>
+                </dl>
+            </li>
+            <li>
+                <dl>
+                    <dt><label for=\"homepage\">Homepage:</label></dt>
+                    <dd>
+                        <input type=\"text\" id=\"homepage\" name=\"homepage\" tabindex=\"3\" style=\"width: 350px;\" maxlength=\"50\" value=\"". htmlspecialchars($form_values['homepage'], ENT_QUOTES). "\">
+                    </dd>
+                </dl>
+            </li>
+            <li>
+                <dl>
+                    <dt><label for=\"entry\">Text:</label>";
+                        if ($g_preferences['enable_bbcode'] == 1)
+                        {
+                          echo "<br><br>
+                          <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\" tabindex=\"4\">Text formatieren</a>";
+                        }
+                    echo "</dt>
+                    <dd>
+                        <textarea id=\"entry\" name=\"entry\" tabindex=\"4\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". htmlspecialchars($form_values['entry'], ENT_QUOTES). "</textarea>
+                        <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
+                    </dd>
+                </dl>
+            </li>";
+
+            // Nicht eingeloggte User bekommen jetzt noch das Captcha praesentiert,
+            // falls es in den Orgaeinstellungen aktiviert wurde...
+            if (!$g_valid_login && $g_preferences['enable_guestbook_captcha'] == 1)
             {
-                // Eingeloggte User sollen ihren Namen nicht aendern duerfen
-                echo "<input class=\"readonly\" readonly type=\"text\" id=\"name\" name=\"name\" tabindex=\"1\" style=\"width: 350px;\" maxlength=\"60\" value=\"". htmlspecialchars($form_values['name'], ENT_QUOTES). "\">";
+                echo "
+                <li>
+                    <dl>
+                        <dt>&nbsp;</dt>
+                        <dd>
+                            <img src=\"$g_root_path/adm_program/system/captcha_class.php?id=". time(). "\" alt=\"Captcha\" />
+                        </dd>
+                    </dl>
+
+                    <dl>
+                       <dt><label for=\"captcha\">Best&auml;tigungscode:</label></dt>
+                       <dd>
+                           <input type=\"text\" id=\"captcha\" name=\"captcha\" tabindex=\"5\" style=\"width: 200px;\" maxlength=\"8\" value=\"\">
+                           <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
+                           <img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
+                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=captcha_help','Message','width=400,height=320,left=310,top=200,scrollbars=yes')\">
+                       </dd>
+                    </dl>
+                </li>";
             }
-            else
-            {
-                echo "<input type=\"text\" id=\"name\" name=\"name\" tabindex=\"1\" style=\"width: 350px;\" maxlength=\"60\" value=\"". htmlspecialchars($form_values['name'], ENT_QUOTES). "\">
-                <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>";
-            }
-            echo "</div>
-        </div>
+        echo "</ul>
 
-        <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 25%; float: left;\">Emailadresse:</div>
-            <div style=\"text-align: left; margin-left: 27%;\">
-                <input type=\"text\" id=\"email\" name=\"email\" tabindex=\"2\" style=\"width: 350px;\" maxlength=\"50\" value=\"". htmlspecialchars($form_values['email'], ENT_QUOTES). "\">
-            </div>
-        </div>
+        <hr />
 
-        <div style=\"margin-top: 6px;\">
-            <div style=\"text-align: right; width: 25%; float: left;\">Homepage:</div>
-            <div style=\"text-align: left; margin-left: 27%;\">
-                <input type=\"text\" id=\"homepage\" name=\"homepage\" tabindex=\"3\" style=\"width: 350px;\" maxlength=\"50\" value=\"". htmlspecialchars($form_values['homepage'], ENT_QUOTES). "\">
-            </div>
-        </div>
-
-        <div style=\"margin-top: 6px;\">
-        <div style=\"text-align: right; width: 25%; float: left;\">Text:";
-            if ($g_preferences['enable_bbcode'] == 1)
-            {
-              echo "<br><br>
-              <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\" tabindex=\"4\">Text formatieren</a>";
-            }
-            echo "</div>
-            <div style=\"text-align: left; vertical-align: top; margin-left: 27%;\">
-                <textarea id=\"entry\" name=\"entry\" tabindex=\"4\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". htmlspecialchars($form_values['entry'], ENT_QUOTES). "</textarea>&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
-            </div>
-        </div>";
-
-        // Nicht eingeloggte User bekommen jetzt noch das Captcha praesentiert,
-        // falls es in den Orgaeinstellungen aktiviert wurde...
-        if (!$g_valid_login && $g_preferences['enable_guestbook_captcha'] == 1)
-        {
-            echo "
-
-            <div style=\"margin-top: 6px;\">
-                <div style=\"text-align: left; margin-left: 27%;\">
-                    <img src=\"$g_root_path/adm_program/system/captcha_class.php?id=". time(). "\" border=\"0\" alt=\"Captcha\" />
-                </div>
-            </div>
-
-            <div style=\"margin-top: 6px;\">
-                   <div style=\"text-align: right; width: 25%; float: left;\">Best&auml;tigungscode:</div>
-                   <div style=\"text-align: left; margin-left: 27%;\">
-                       <input type=\"text\" id=\"captcha\" name=\"captcha\" tabindex=\"5\" style=\"width: 200px;\" maxlength=\"8\" value=\"\">
-                       <span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
-                       <img src=\"$g_root_path/adm_program/images/help.png\" style=\"cursor: pointer; vertical-align: top;\" vspace=\"1\" width=\"16\" height=\"16\" border=\"0\" alt=\"Hilfe\" title=\"Hilfe\"
-                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=captcha_help','Message','width=400,height=320,left=310,top=200,scrollbars=yes')\">
-                   </div>
-            </div>";
-        }
-
-
-        echo "
-
-        <hr class=\"formLine\" width=\"85%\" />
-
-        <div style=\"margin-top: 6px;\">
-            <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\" tabindex=\"6\">
-                <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\">
-                &nbsp;Zur&uuml;ck</button>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button name=\"speichern\" type=\"submit\" value=\"speichern\" tabindex=\"7\">
+        <div class=\"formSubmit\">
+            <button name=\"speichern\" type=\"submit\" value=\"speichern\" tabindex=\"6\">
                 <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\">
                 &nbsp;Speichern</button>
         </div>
     </div>
-</form>";
+</div>
+</form>
+
+<ul class=\"iconTextLinkList\">
+    <li>
+        <span class=\"iconTextLink\">
+            <a href=\"$g_root_path/adm_program/system/back.php\"><img 
+            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
+            <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+        </span>
+    </li>
+</ul>";
 
 if ($g_current_user->getValue("usr_id") == 0)
 {

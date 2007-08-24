@@ -196,14 +196,20 @@ if($_POST["upload"])
         //Buttons
         echo"
         <hr />
-        <ul class=\"iconLinkText\">
+        <ul class=\"iconTextLinkList\">
             <li>
-                <a href=\"$g_root_path/adm_program/system/back.php\"><img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+                <span class=\"iconLink\">
+                    <a href=\"$g_root_path/adm_program/system/back.php\"><img 
+                    src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
+                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+                </span>
             </li>
             <li>
-                <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id\"><img src=\"$g_root_path/adm_program/images/photo.png\" alt=\"Weitere Bilder hochladen\"></a>
-                <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id\">Weitere Bilder hochladen</a>
+                <span class=\"iconLink\">
+                    <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id\"><img 
+                    src=\"$g_root_path/adm_program/images/photo.png\" alt=\"Weitere Bilder hochladen\"></a>
+                    <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id\">Weitere Bilder hochladen</a>
+                </span>
             </li>
          </ul>
     </div><br><br>";

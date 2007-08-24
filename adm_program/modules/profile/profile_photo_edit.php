@@ -143,39 +143,27 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 if($job==NULL)
 {
     $_SESSION['navigation']->addUrl($g_current_url);
+
+    if($req_usr_id == $g_current_user->getValue("usr_id"))
+    {
+        $headline = "Mein Profilfoto &auml;ndern";
+    }
+    else
+    {
+        $headline = "Profilfoto von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname"). " &auml;ndern";
+    }
     
     echo "
-    <form name=\"photoup\" method=\"post\" action=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=upload&usr_id=".$req_usr_id."\" enctype=\"multipart/form-data\">
+    <form method=\"post\" action=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=upload&usr_id=".$req_usr_id."\" enctype=\"multipart/form-data\">
     <div class=\"formLayout\" id=\"profile_photo_upload_form\">
-        <div class=\"formHead\">";
-            if($req_usr_id == $g_current_user->getValue("usr_id"))
-            {
-                echo "Mein Profilfoto &auml;ndern";
-            }
-            else
-            {
-                echo "Profilfoto von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname"). " &auml;ndern";
-            }
-        echo "</div>
+        <div class=\"formHead\">$headline</div>
 
-        <div class=\"formBody\">";
-            echo"Aktuelles Bild:<br>";
+        <div class=\"formBody\">
+            <p>Aktuelles Bild:</p>
 
-            //Falls vorhanden Bild ausgeben
-            if(strlen($user->getValue("usr_photo")) > 0)
-            {
-                echo"<img src=\"profile_photo_show.php?usr_id=$req_usr_id\"\">";
-            }        
-            else
-            {
-                //wenn nicht dann Schattenkopf
-                echo"<img src=\"$g_root_path/adm_program/images/no_profile_pic.png\">";
-            }
-            echo"<br /><br />";
+            <img src=\"profile_photo_show.php?usr_id=$req_usr_id&amp;id=". time(). "\">
 
-            //Bildupload
-            echo"            
-            Bitte hier ein neues Bild ausw&auml;hlen:
+            <p>Bitte hier ein neues Bild ausw&auml;hlen:</p>
             <p><input type=\"file\" id=\"bilddatei\" name=\"bilddatei\" size=\"40\" value=\"durchsuchen\"></p>
 
             <hr />
@@ -190,11 +178,13 @@ if($job==NULL)
     </div>
     </form>
     
-    <ul class=\"iconTextLink\">
+    <ul class=\"iconTextLinkList\">
         <li>
-            <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
-            <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+            <span class=\"iconTextLink\">
+                <a href=\"$g_root_path/adm_program/system/back.php\"><img 
+                src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
+                <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+            </span>
         </li>
     </ul>";
 }
@@ -267,25 +257,21 @@ if($job=="upload")
 
             //neues und altes Bild anzeigen
             echo"
-            <table cellpadding=\"4\" cellspacing=\"0\" border=\"0\" style=\"width: 100%\">
+            <table style=\"border: none; width: 100%; padding: 5px;\">
                 <tr style=\"text-align: center;\">
-                    <td>Aktuelles Bild:<br>";
+                    <td>Aktuelles Bild:</td>
+                    <td>Neues Bild:</td>
+                </tr>
+                <tr style=\"text-align: center;\">
+                    <td>";
                         // Falls vorhanden Bild ausgeben
 
                         // es wird eine id uebergeben, damit immer ein eindeutiger Pfad vorhanden ist 
                         // und nicht ein altes Bild aus dem Cache genommen wird
-                        if(strlen($user->getValue("usr_photo")) > 0)
-                        {
-                            echo"<img src=\"profile_photo_show.php?usr_id=$req_usr_id&amp;id=". time(). "\">";
-                        }
-                        //wenn nicht Schattenkopf
-                        else
-                        {
-                            echo"<img src=\"$g_root_path/adm_program/images/no_profile_pic.png\">";
-                        }
-                        echo"
+                        echo"<img src=\"profile_photo_show.php?usr_id=$req_usr_id&amp;id=". time(). "\">
+                        
                     </td>
-                    <td>Neues Bild:<br><img src=\"profile_photo_show.php?usr_id=$req_usr_id&amp;tmp_photo=1&amp;id=". time(). "\"></td>
+                    <td><img src=\"profile_photo_show.php?usr_id=$req_usr_id&amp;tmp_photo=1&amp;id=". time(). "\"></td>
                 </tr>
             </table>
 
@@ -293,7 +279,7 @@ if($job=="upload")
             
             <div class=\"formSubmit\">
                 <button name=\"cancel\" type=\"button\" value=\"abbrechen\" onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=dont_save&usr_id=".$req_usr_id."'\">
-                    <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Abbrechen\">
+                    <img src=\"$g_root_path/adm_program/images/error.png\" alt=\"Abbrechen\">
                     &nbsp;Abbrechen
                 </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <button name=\"update\" type=\"button\" value=\"update\" onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=save&usr_id=".$req_usr_id."'\">

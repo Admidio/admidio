@@ -140,13 +140,11 @@ echo "
                                 {
                                     echo "<br>M&ouml;chtest du ihm seinen Loginnamen mit Passwort als Erinnerung zuschicken ?<br>
 
-                                    <ul class=\"iconTextLink\">
-                                        <li>
-                                            <a href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=6\"><img
-                                            src=\"$g_root_path/adm_program/images/key.png\" alt=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\"></a>
-                                            <a href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=6\">Zugangsdaten zuschicken</a>
-                                        </li>
-                                    </ul>";
+                                    <span class=\"iconTextLink\">
+                                        <a href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=6\"><img
+                                        src=\"$g_root_path/adm_program/images/key.png\" alt=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\"></a>
+                                        <a href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=6\">Zugangsdaten zuschicken</a>
+                                    </span>";
                                 }
                             }
                             else
@@ -155,13 +153,11 @@ echo "
                                 echo "<br>Dieser Benutzer besitzt noch kein Login.<br>
                                     M&ouml;chtest du ihm die Daten dieser Registrierung zuordnen ?<br>
 
-                                <ul class=\"iconTextLink\">
-                                    <li>
-                                        <a href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=1\"><img
-                                        src=\"$g_root_path/adm_program/images/properties.png\" alt=\"Zugangsdaten zuordnen\"></a>
-                                        <a href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=1\">Zugangsdaten zuordnen</a>
-                                    </li>
-                                </ul>";
+                                <span class=\"iconTextLink\">
+                                    <a href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=1\"><img
+                                    src=\"$g_root_path/adm_program/images/properties.png\" alt=\"Zugangsdaten zuordnen\"></a>
+                                    <a href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=1\">Zugangsdaten zuordnen</a>
+                                </span>";
                             }
                         }
                         else
@@ -175,13 +171,11 @@ echo "
                                 echo "<br>Dieser Benutzer ist noch kein Mitglied der Organisation $g_organization, 
                                 besitzt aber bereits Logindaten.<br>
 
-                                <ul class=\"iconTextLink\">
-                                    <li>
-                                        <a href=\"$link\"><img class=\"iconLink\" 
-                                        src=\"$g_root_path/adm_program/images/properties.png\" alt=\"Mitgliedschaft zuweisen\"></a>
-                                        <a href=\"$link\">Mitgliedschaft zuweisen</a>
-                                    </li>
-                                </ul>";
+                                <span class=\"iconTextLink\">
+                                    <a href=\"$link\"><img class=\"iconLink\" 
+                                    src=\"$g_root_path/adm_program/images/properties.png\" alt=\"Mitgliedschaft zuweisen\"></a>
+                                    <a href=\"$link\">Mitgliedschaft zuweisen</a>
+                                </span>";
                             }               
                             else
                             {
@@ -189,13 +183,11 @@ echo "
                                 echo "<br>Dieser Benutzer ist noch kein Mitglied der Organisation $g_organization und 
                                 besitzt auch keine Logindaten.<br>
                                 
-                                <ul class=\"iconTextLink\">
-                                    <li>
-                                        <a href=\"$link\"><img class=\"iconLink\"
-                                        src=\"$g_root_path/adm_program/images/properties.png\" alt=\"Rollen und Logindaten diesem Benutzer zuordnen\"></a>
-                                        <a href=\"$link\">Mitgliedschaft und Logindaten diesem Benutzer zuordnen</a>
-                                    </li>
-                                </ul>";
+                                <span class=\"iconTextLink\">
+                                    <a href=\"$link\"><img class=\"iconLink\"
+                                    src=\"$g_root_path/adm_program/images/properties.png\" alt=\"Rollen und Logindaten diesem Benutzer zuordnen\"></a>
+                                    <a href=\"$link\">Mitgliedschaft und Logindaten diesem Benutzer zuordnen</a>
+                                </span>";
                             }               
                         }
                     echo "</div>";
@@ -211,26 +203,26 @@ echo "
                     Falls der neue Benutzer nicht bei den oben aufgelisteten Benutzern dabei ist, 
                     kannst du auch einen neuen Benutzer anlegen.<br>
                     
-                    <ul class=\"iconTextLink\">
-                        <li>
-                            <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$req_new_user_id&new_user=3\"><img
-                            src=\"$g_root_path/adm_program/images/add.png\" alt=\"Neuen Benutzer anlegen\"></a>
-                            <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$req_new_user_id&new_user=3\">Benutzer anlegen</a>
-                        </li>
-                    </ul>
+                    <span class=\"iconTextLink\">
+                        <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$req_new_user_id&new_user=3\"><img
+                        src=\"$g_root_path/adm_program/images/add.png\" alt=\"Neuen Benutzer anlegen\"></a>
+                        <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$req_new_user_id&new_user=3\">Benutzer anlegen</a>
+                    </span>
                 </div>
             </div>
         </div>
-
-        <ul class=\"iconTextLink\">
-            <li>
-                <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-                src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
-                <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
-            </li>
-        </ul>
     </div>
-</div>";
+</div>
+
+<ul class=\"iconTextLinkList\">
+    <li>
+        <span class=\"iconTextLink\">
+            <a href=\"$g_root_path/adm_program/system/back.php\"><img 
+            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
+            <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+        </span>
+    </li>
+</ul>";
 
 require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
 

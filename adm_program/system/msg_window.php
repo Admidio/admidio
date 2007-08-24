@@ -315,7 +315,7 @@ echo "
             case "not_approved":
                 echo " <h3>Warnung!!!</h3>
                     Die Veranstaltung ist z.Zt. gesperrt und wird Homepagebesuchern deswegen nicht angezeigt. Zum Freigeben bitte
-                    den entsprechende Icon (<img src=\"$g_root_path/adm_program/images/key.png\" border=\"0\">)
+                    den entsprechende Icon (<img src=\"$g_root_path/adm_program/images/key.png\">)
                     in der Bearbeitungszeile nutzen.";
                 break;
 
@@ -335,11 +335,13 @@ echo "
     echo "</div>
 </div>
 
-<ul class=\"iconTextLink\">
+<ul class=\"iconTextLinkList\">
     <li>
-        <a href=\"javascript:window.close();\"><img
-        src=\"$g_root_path/adm_program/images/door_in.png\" alt=\"Schlie&szlig;en\"></a>
-        <a href=\"javascript:window.close();\">Schlie&szlig;en</a>
+        <span class=\"iconTextLink\">
+            <a href=\"javascript:window.close();\"><img
+            src=\"$g_root_path/adm_program/images/door_in.png\" alt=\"Schlie&szlig;en\"></a>
+            <a href=\"javascript:window.close();\">Schlie&szlig;en</a>
+        </span>
     </li>
 </ul>";
     

@@ -190,10 +190,8 @@ echo "
 
         <div class=\"groupBox\" id=\"properties_box\" style=\"width: 90%;\">
             <div class=\"groupBoxHeadline\" id=\"properties_head\">
-                <a href=\"javascript:showHideBlock('properties_body','$g_root_path')\"><img name=\"img_properties_body\" 
-                    style=\"margin-bottom: 2px; vertical-align: middle;\" 
-                    src=\"$g_root_path/adm_program/images/triangle_open.gif\" 
-                    border=\"0\" alt=\"ausblenden\"></a> Eigenschaften
+                <a class=\"iconShowHide\" href=\"javascript:showHideBlock('properties_body','$g_root_path')\"><img 
+                name=\"img_properties_body\" src=\"$g_root_path/adm_program/images/triangle_open.gif\" alt=\"ausblenden\"></a>Eigenschaften
             </div>
 
             <div class=\"groupBoxBody\" id=\"properties_body\">
@@ -280,10 +278,8 @@ echo "
         
         <div class=\"groupBox\" id=\"justifications_box\" style=\"width: 90%;\">
             <div class=\"groupBoxHeadline\">
-                <a href=\"javascript:showHideBlock('justifications_body','$g_root_path')\"><img name=\"img_justifications_body\" 
-                    style=\"margin-bottom: 2px; vertical-align: middle;\" 
-                    src=\"$g_root_path/adm_program/images/triangle_open.gif\" 
-                    border=\"0\" alt=\"ausblenden\"></a> Berechtigungen
+                <a class=\"iconShowHide\" href=\"javascript:showHideBlock('justifications_body','$g_root_path')\"><img 
+                name=\"img_justifications_body\" src=\"$g_root_path/adm_program/images/triangle_open.gif\" alt=\"ausblenden\"></a>Berechtigungen
             </div>
 
             <div class=\"groupBoxBody\" id=\"justifications_body\">
@@ -448,10 +444,8 @@ echo "
 
         <div class=\"groupBox\" id=\"dates_box\" style=\"width: 90%;\">
             <div class=\"groupBoxHeadline\" id=\"dates_head\">
-                <a href=\"javascript:showHideBlock('dates_body','$g_root_path')\"><img name=\"img_dates_body\" 
-                    style=\"margin-bottom: 2px; vertical-align: middle;\" 
-                    src=\"$g_root_path/adm_program/images/triangle_open.gif\" 
-                    border=\"0\" alt=\"ausblenden\"></a> Termine / Treffen&nbsp;&nbsp;(optional)
+                <a class=\"iconShowHide\" href=\"javascript:showHideBlock('dates_body','$g_root_path')\"><img 
+                name=\"img_dates_body\" src=\"$g_root_path/adm_program/images/triangle_open.gif\" alt=\"ausblenden\"></a>Termine / Treffen&nbsp;&nbsp;(optional)
             </div>
 
             <div class=\"groupBoxBody\" id=\"dates_body\">        
@@ -514,10 +508,8 @@ echo "
         
         <div class=\"groupBox\" id=\"dependancies_box\" style=\"width: 90%;\">
             <div class=\"groupBoxHeadline\" id=\"dependancies_head\">
-                <a href=\"javascript:showHideBlock('dependancies_body','$g_root_path')\"><img name=\"img_dependancies_body\" 
-                    style=\"margin-bottom: 2px; vertical-align: middle;\" 
-                    src=\"$g_root_path/adm_program/images/triangle_open.gif\" 
-                    border=\"0\" alt=\"ausblenden\"></a> Abh&auml;ngigkeiten&nbsp;&nbsp;(optional)
+                <a class=\"iconShowHide\" href=\"javascript:showHideBlock('dependancies_body','$g_root_path')\"><img
+                name=\"img_dependancies_body\" src=\"$g_root_path/adm_program/images/triangle_open.gif\" alt=\"ausblenden\"></a>Abh&auml;ngigkeiten&nbsp;&nbsp;(optional)
             </div>
 
             <div class=\"groupBoxBody\" id=\"dependancies_body\">  
@@ -558,13 +550,11 @@ echo "
                             }
                         echo "</select>
                         <br>
-                        <ul class=\"iconTextLink\">
-                            <li>
-                                <a href=\"javascript:hinzufuegen()\"><img
-                                src=\"$g_root_path/adm_program/images/add.png\" alt=\"Feld hinzuf&uuml;gen\"></a>
-                                <a href=\"javascript:hinzufuegen()\">Rolle hinzuf&uuml;gen</a>
-                            </li>
-                        </ul>
+                        <span class=\"iconTextLink\">
+                            <a href=\"javascript:hinzufuegen()\"><img
+                            src=\"$g_root_path/adm_program/images/add.png\" alt=\"Feld hinzuf&uuml;gen\"></a>
+                            <a href=\"javascript:hinzufuegen()\">Rolle hinzuf&uuml;gen</a>
+                        </span>
                     </div>
                     <div>
                         abh&auml;ngig<br>
@@ -575,13 +565,11 @@ echo "
                             }
                         echo "</select>
                         <br>
-                        <ul class=\"iconTextLink\">
-                            <li>
-                                <a href=\"javascript:entfernen()\"><img
-                                src=\"$g_root_path/adm_program/images/delete.png\" alt=\"Feld hinzuf&uuml;gen\"></a>
-                                <a href=\"javascript:entfernen()\">Rolle entfernen</a>
-                            </li>
-                        </ul>
+                        <span class=\"iconTextLink\">
+                            <a href=\"javascript:entfernen()\"><img
+                            src=\"$g_root_path/adm_program/images/delete.png\" alt=\"Feld hinzuf&uuml;gen\"></a>
+                            <a href=\"javascript:entfernen()\">Rolle entfernen</a>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -608,11 +596,13 @@ echo "
 </div>
 </form>
 
-<ul class=\"iconTextLink\">
+<ul class=\"iconTextLinkList\">
     <li>
-        <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-        src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
-        <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+        <span class=\"iconTextLink\">
+            <a href=\"$g_root_path/adm_program/system/back.php\"><img 
+            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
+            <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+        </span>
     </li>
 </ul>
 
