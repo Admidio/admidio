@@ -5,6 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
  *
  * Diese Klasse dient dazu einen Userobjekt zu erstellen.
  * Ein User kann ueber diese Klasse in der Datenbank verwaltet werden
@@ -35,21 +36,6 @@
  * getVCard()           - Es wird eine vCard des Users als String zurueckgegeben
  * isWebmaster()        - gibt true/false zurueck, falls der User Mitglied der 
  *                        Rolle "Webmaster" ist
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
 
@@ -263,7 +249,7 @@ class User extends TableAccess
     
     // die Funktion speichert die Userdaten in der Datenbank,
     // je nach Bedarf wird ein Insert oder Update gemacht
-    function _save($set_change_date = true)
+    function _save()
     {
         if($this->b_set_last_change)
         {
@@ -272,6 +258,13 @@ class User extends TableAccess
             $this->db_fields['usr_usr_id_change'] = $g_current_user->getValue("usr_id");
         }
 
+        $this->b_set_last_change = true;
+    }
+    
+    // Methode wird erst nach dem Speichern des Users aufgerufen und speichert
+    // alle Profilfelder aus adm_user_fields
+    function _afterSave()
+    {
         // nun noch Updates fuer alle geaenderten User-Fields machen
         foreach($this->db_user_fields as $key => $value)
         {
@@ -305,8 +298,6 @@ class User extends TableAccess
                 $this->db_user_fields[$key]['changed'] = false;
             }
         }
-
-        $this->b_set_last_change = true;
     }
 
     // Referenzen zum aktuellen Benutzer loeschen

@@ -311,7 +311,7 @@ echo "
                                         <li>
                                             <dl>
                                                 <dt><label for=\"password\">Passwort:</label></dt>
-                                                <dd><input type=\"text\" name=\"password\" id=\"password\" style=\"width: 200px;\" maxlength=\"50\" /></dd>
+                                                <dd><input type=\"password\" name=\"user_password\" id=\"user_password\" style=\"width: 200px;\" maxlength=\"50\" /></dd>
                                             </dl>
                                         </li>
                                     </ul>

@@ -251,6 +251,12 @@ class TableAccess
                 }
             }
 
+            // Nach dem Speichern eine Funktion aufrufen um evtl. abhaenige Daten noch anzupassen
+            if(method_exists($this, "_afterSave"))
+            {
+                $this->_afterSave();
+            }
+
             $this->db_fields_changed = false;
             return 0;
         }

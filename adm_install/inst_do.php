@@ -283,9 +283,6 @@ $db = new MySqlDB();
 $connection = $db->connect($_SESSION['server'], $_SESSION['user'], $_SESSION['password'], $_SESSION['database']);
 $db->transaction("begin");
 
-// leeres Organisationsobjekt erstellen
-$g_current_organization = new Organization($db);
-
 if($req_mode == 1)
 {
     $filename = "db_scripts/db.sql";
@@ -354,7 +351,7 @@ if($req_mode == 3)
     if($req_version > 0)
     {
         include("db_scripts/preferences.php");
-        
+                
         // vor dem Update erst einmal alle Session loeschen, damit User ausgeloggt sind
         $sql = "DELETE FROM ". TBL_SESSIONS;
         $db->query($sql);
@@ -397,6 +394,9 @@ if($req_mode == 3)
                     }
                 }
             }
+
+            // leeres Organisationsobjekt erstellen
+            $g_current_organization = new Organization($db);
             
             // jetzt noch evtl. neue Orga-Parameter in DB schreiben
             $sql = "SELECT * FROM ". TBL_ORGANIZATIONS;
@@ -444,7 +444,8 @@ if($req_mode == 1 || $req_mode == 4)
     $req_orga_name_short = strStripTags($_POST['orga_name_short']);
     $req_orga_name_long  = strStripTags($_POST['orga_name_long']);
 
-    $g_current_organization->getOrganization($req_orga_name_short);
+    // Organisationsobjekt erstellen
+    $g_current_organization = new Organization($db, $req_orga_name_short);
 
     if($g_current_organization->getValue("org_id") > 0)
     {

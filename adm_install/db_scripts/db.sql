@@ -147,6 +147,7 @@ create table %PRAEFIX%_users
    usr_password                   varchar(35),
    usr_photo                      blob,
    usr_text                       text,
+   usr_last_session_id            varchar(35),
    usr_last_login                 datetime,
    usr_actual_login               datetime,
    usr_number_login               smallint(5) unsigned           not null default 0,
@@ -202,7 +203,7 @@ alter table %PRAEFIX%_user_fields add constraint FK_USF_CAT foreign key (usf_cat
 /*==============================================================*/
 /* Table: adm_user_data                                         */
 /*==============================================================*/
-create table adm_user_data
+create table %PRAEFIX%_user_data
 (
    usd_usr_id                     int(11) unsigned               not null,
    usd_usf_id                     int(11) unsigned               not null,
