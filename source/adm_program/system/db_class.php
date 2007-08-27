@@ -78,14 +78,19 @@ class DB
         return $result;
     }    
     
+    // Ausgabe der Datenbank-Fehlermeldung
     function db_error()
     {
-        global $g_root_path, $g_message, $g_preferences, $g_current_organization;
+        global $g_root_path, $g_message, $g_preferences, $g_current_organization;        
 
+        $error = $this->_db_error();
+        $backtrace = getBacktrace();
+
+        // Rollback bei einer offenen Transaktion
         if($this->transactions > 0)
         {
             $this->transaction("rollback");
-        }
+        }        
 
         if(headers_sent() == false && isset($g_preferences))
         {
@@ -93,9 +98,6 @@ class DB
             $g_layout['title']  = "Datenbank-Fehler";
             require(SERVER_PATH. "/adm_program/layout/overall_header.php");       
         }
-
-        $error = $this->_db_error();
-        $backtrace = getBacktrace();
                     
         $error_string = "<div style=\"font-family: monospace;\">
                          <p><b>S Q L - E R R O R</b></p>
