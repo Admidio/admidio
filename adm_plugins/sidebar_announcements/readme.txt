@@ -14,9 +14,11 @@
 
  1. Einleitung
 -------------------------------------------------------------------------
+Plugin das die letzten X Ankuendigungen in einer schlanken Oberflaeche auflistet
+und so ideal in einer Seitenleiste eingesetzt werden kann
+
 Sidebar Announcements ist ein Plugin zu der Online-Mitgliederverwaltung
 Admidio (http://www.admidio.org) und kann nicht ohne diese benutzt werden.
-
 
  2. Installation
 -------------------------------------------------------------------------
@@ -28,11 +30,12 @@ eines Plugins erklärt.
 
  3. Update
 -------------------------------------------------------------------------
-Ersetzen Sie die alle Dateien (bis auf die Datei config.php !!!) 
-des Plugins durch die neuen Dateien.
+Bei einem Update sollten Sie in der Regel nur die sidebar_announcements.php
+ersetzen.
 
-Falls es mit der neuen Version neue Einstellungen gibt, die Sie gerne verändern
-möchten, so müssen Sie diese noch in Ihre vorhandene config.php eintragen.
+Falls es mit der neuen Version neue Einstellungen gibt, die Sie gerne 
+verändern möchten, so müssen Sie diese noch in die bereits vorhandene 
+config.php eintragen.
 
  4. Bugs
 -------------------------------------------------------------------------
@@ -46,9 +49,11 @@ http://forum.admidio.org
 
  5. Lizenz
 -------------------------------------------------------------------------
-Die Admidio Mitgliederverwaltung sowie die Plugins stehen unter der 
-GNU General Public License 2. Bevor Sie Admidio oder ein Plugin benutzen, 
-sollten Sie unbedingt die gpl-de.html durchlesen.
+Die Admidio Mitgliederverwaltung sowie dieses Plugin stehen unter der 
+GNU General Public License 2. Bevor Sie Admidio oder dieses Plugin benutzen, 
+sollten Sie unbedingt die mitgelieferte gpl-de.html durchlesen oder auf
+der GNU Homepage nachschauen.
+http://www.gnu.org/licenses/gpl-2.0.html
 
  6. Copyright
 -------------------------------------------------------------------------

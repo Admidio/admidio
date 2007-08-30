@@ -15,7 +15,7 @@
 }
  
 .plgLoginFieldList li { 
-    display:            inline;
+    display:            inline-block;
     text-align:         left;
     float:              none;       /* left : Alles in einer Zeile anzeigen */
 }

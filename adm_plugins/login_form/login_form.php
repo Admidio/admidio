@@ -188,7 +188,7 @@ else
                 <li>
                     <dl>
                         <dt><input type=\"checkbox\" id=\"auto_login\" name=\"auto_login\" value=\"1\"> 
-                            <label for=\"auto_login\">angemeldet bleiben</label></dt>
+                            <label for=\"auto_login\">angemeldet bleiben</label></dt><span>&nbsp;</span>
                     </dl>
                 </li>";
             }            
@@ -196,7 +196,7 @@ else
             echo '
             <li>
                 <dl>
-                    <dt><input type="submit" value="Login"></dt>
+                    <dt><input type="submit" value="Login"></dt><span>&nbsp;</span>
                 </dl>
             </li>';
         
@@ -208,7 +208,7 @@ else
                         if($plg_show_register_link && $g_preferences['registration_mode'])
                         {
                             echo '<dt><a href="'. $g_root_path. '/adm_program/system/registration.php" 
-                                target="'. $plg_link_target. '">Registrieren</a></dt>';
+                                target="'. $plg_link_target. '">Registrieren</a></dt><span>&nbsp;</span>';
                         }
                         if($plg_show_register_link && $plg_show_email_link)
                         {
@@ -229,7 +229,7 @@ else
                             {
                                 $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?rol_id=". $role_webmaster->getValue("rol_id"). "&subject=Loginprobleme";
                             }
-                            echo '<dt><a href="'. $mail_link. '" target="'. $plg_link_target. '">Loginprobleme</a></dt>';
+                            echo '<dt><a href="'. $mail_link. '" target="'. $plg_link_target. '">Loginprobleme</a></dt><span>&nbsp;</span>';
                         }
                     echo '</dl>
                 </li>';

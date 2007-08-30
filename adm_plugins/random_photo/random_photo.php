@@ -16,14 +16,17 @@
  *
  *****************************************************************************/
 
+// Pfad des Plugins ermitteln
+$plugin_folder_pos = strpos(__FILE__, "adm_plugins") + 11;
+$plugin_file_pos   = strpos(__FILE__, "random_photo.php");
+$plugin_folder     = substr(__FILE__, $plugin_folder_pos+1, $plugin_file_pos-$plugin_folder_pos-2);
 
-// Include von common 
 if(!defined('PLUGIN_PATH'))
 {
-    define('PLUGIN_PATH', substr(__FILE__, 0, strpos(__FILE__, "random_photo")-1));
+    define('PLUGIN_PATH', substr(__FILE__, 0, $plugin_folder_pos));
 }
 require_once(PLUGIN_PATH. "/../adm_program/system/common.php");
-require_once(PLUGIN_PATH. "/random_photo/config.php");
+require_once(PLUGIN_PATH. "/$plugin_folder/config.php");
 
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
 // falls nicht, hier noch mal die Default-Werte setzen
