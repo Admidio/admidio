@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Jochen Erkens
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
  *
@@ -25,12 +25,6 @@ if ($g_preferences['enable_photo_module'] != 1)
 {
     // das Modul ist deaktiviert
     $g_message->show("module_disabled");
-}
-
-//pruefen ob adm_my_files/photos existiert
-if(!file_exists(SERVER_PATH. "/adm_my_files/photos"))
-{
-    $g_message->show("no_photo_folder");
 }
 
 //ID Pruefen
