@@ -1,0 +1,35 @@
+/******************************************************************************
+ * Cascading-Style-Sheets-Datei um das Aussehen des Login Form Plugins anzupassen
+ *
+ * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Homepage     : http://www.admidio.org
+ * Module-Owner : Markus Fassbender
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ *
+ *****************************************************************************/
+ 
+.plgLoginFieldList {
+    margin:             0px;
+    padding:            0px;
+    list-style-type:    none;
+}
+ 
+.plgLoginFieldList li { 
+    display:            inline;
+    text-align:         left;
+    float:              none;       /* left : Alles in einer Zeile anzeigen */
+}
+.plgLoginFieldList li dl {
+    padding:            0px;
+    margin-top:         5px;
+    margin-bottom:      5px;
+}
+.plgLoginFieldList li dl dt {
+    text-align:         left;
+    float:              left;       /* none : Label und Feld untereinander */
+}
+.plgLoginFieldList li dl dd {
+    margin-left:        100px;      /* 0px  : Label und Feld untereinander */
+    text-align:         left;
+    font-weight:        bold;
+}
