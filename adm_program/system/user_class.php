@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Diese Klasse dient dazu einen Userobjekt zu erstellen.
  * Ein User kann ueber diese Klasse in der Datenbank verwaltet werden
@@ -56,6 +56,7 @@ class User extends TableAccess
         $this->table_name     = TBL_USERS;
         $this->column_praefix = "usr";
         $this->key_name       = "usr_id";
+        $this->auto_increment = true;
         
         if(strlen($user_id) > 0)
         {
@@ -132,6 +133,9 @@ class User extends TableAccess
     {
         $this->webmaster = -1;
         $this->b_set_last_change = true;
+        
+        // neue User sollten i.d.R. auf valid stehen (Ausnahme Registrierung)
+        $this->db_fields['usr_valid'] = 1;
         
         // user_data-Array initialisieren
         if(count($this->db_user_fields) > 0)

@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
 
@@ -24,6 +24,10 @@ $message_text = array(
 
     "category_exist" =>
         "Es existiert bereits eine Kategorie in dieser Organisation mit diesem Namen.",
+
+    "database_invalid" =>
+        "<p>Die Datenbankversion stimmt nicht mit der Version der Admidio-Scripte überein.</p>
+        <p>Wende dich bitte an den <a href=\"mailto:%VAR1%\">Webmaster</a>.</p>",
 
     "date_invalid" =>
         "<p>Es wurde kein gültiges Datum in das Feld %VAR1% eingegeben.</p>

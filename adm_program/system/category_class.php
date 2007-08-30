@@ -5,6 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Diese Klasse dient dazu einen Kategorieobjekt zu erstellen.
  * Eine Kategorieobjekt kann ueber diese Klasse in der Datenbank verwaltet werden
@@ -26,21 +27,6 @@
  *                          zurueckgeschrieben oder angelegt
  * delete()               - Die gewaehlte Rolle wird aus der Datenbank geloescht
  *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- *
  *****************************************************************************/
 
 require_once(SERVER_PATH. "/adm_program/system/table_access_class.php");
@@ -54,6 +40,7 @@ class Category extends TableAccess
         $this->table_name     = TBL_CATEGORIES;
         $this->column_praefix = "cat";
         $this->key_name       = "cat_id";
+        $this->auto_increment = true;
         
         if($cat_id > 0)
         {
@@ -104,7 +91,7 @@ class Category extends TableAccess
     // die Funktion wird innerhalb von save() aufgerufen
     function _save()
     {
-        if(strlen($this->db_fields[$this->key_name]) == 0)
+        if($this->new_record)
         {
             // beim Insert die hoechste Reihenfolgennummer der Kategorie ermitteln
             global $g_current_organization;

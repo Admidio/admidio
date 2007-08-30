@@ -5,6 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Diese Klasse dient dazu ein Sessionobjekt zu erstellen.
  * Eine Session kann ueber diese Klasse in der Datenbank verwaltet werden.
@@ -33,21 +34,6 @@
  *                        - Funktion loescht Datensaetze aus der Session-Tabelle 
  *                          die nicht mehr gebraucht werden
  *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- *
  *****************************************************************************/
 
 require_once(SERVER_PATH. "/adm_program/system/table_access_class.php");
@@ -61,6 +47,7 @@ class Session extends TableAccess
         $this->table_name     = TBL_SESSIONS;
         $this->column_praefix = "ses";
         $this->key_name       = "ses_id";
+        $this->auto_increment = true;
         
         if(strlen($session) > 0)
         {
@@ -75,10 +62,10 @@ class Session extends TableAccess
     // Session mit der uebergebenen Session-ID aus der Datenbank auslesen
     function getSession($session)
     {
-        // wurde ses_session uebergeben, dann die SQL-Bedingung anpassen
+        // wurde ses_session_id uebergeben, dann die SQL-Bedingung anpassen
         if(is_numeric($session) == false)
         {
-            $condition = " ses_session = '$session' ";
+            $condition = " ses_session_id = '$session' ";
         }       
         
         $this->readData($session, $condition);
@@ -117,7 +104,7 @@ class Session extends TableAccess
     // die Funktion wird innerhalb von save() aufgerufen
     function _save()
     {
-        if(strlen($this->db_fields[$this->key_name]) == 0)
+        if($this->new_record)
         {
             // Insert
             global $g_current_organization;

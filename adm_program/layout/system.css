@@ -4,7 +4,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!! W I C H T I G !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  * Diese Datei bitte NICHT anpassen, da diese bei jedem Update ueberschrieben
@@ -298,7 +298,11 @@ a:hover {
     padding:            10px;
 }
 
-.iconTextLink img{
+.iconTextLink {
+    font-size:          10pt;
+}
+
+.iconTextLink img {
     border:             none;
     vertical-align:     middle;
     padding-right:      1px;
@@ -315,8 +319,8 @@ a:hover {
 /* Icon um Bereiche auf und zu zuklappen */
 iconShowHide {
     border:             none;
-    vertical-align:     middle;
-    padding: 1px 5px 2px 3px;
+    vertical-align:     top;
+    padding:            1px 5px 2px 3px;
 }
 
 /* Icon um Informationen anzuzeigen (ohne Text und Link)*/
@@ -382,7 +386,7 @@ iconShowHide {
 
 /* spezielle Anpassung fuer die Loginseite */
 #login_form .formFieldList li dl dd {
-    margin-left:        40%;
+    margin-left:        43%;
 }
 
 /* spezielle Anpassung fuer die Passwortseite */

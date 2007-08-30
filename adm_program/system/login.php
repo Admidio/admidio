@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
 
@@ -34,7 +34,7 @@ echo "
             <li>
                 <dl>
                     <dt><label for=\"usr_login_name\">Benutzername:</label></dt>
-                    <dd><input type=\"text\" id=\"usr_login_name\" name=\"usr_login_name\" size=\"14\" maxlength=\"20\" /></dd>
+                    <dd><input type=\"text\" id=\"usr_login_name\" name=\"usr_login_name\" size=\"14\" maxlength=\"35\" /></dd>
                 </dl>
             </li>
             <li>
@@ -42,8 +42,19 @@ echo "
                     <dt><label for=\"usr_password\">Passwort:</label></dt>
                     <dd><input type=\"password\" id=\"usr_password\" name=\"usr_password\" size=\"14\" maxlength=\"20\" /></dd>
                 </dl>
-            </li>
-        </ul>
+            </li>";
+            
+            if($g_preferences['enable_auto_login'] == 1)
+            {
+                echo "
+                <li>
+                    <dl>
+                        <dt><input type=\"checkbox\" id=\"auto_login\" name=\"auto_login\" value=\"1\"> 
+                            <label for=\"auto_login\">dauerhaft angemeldet bleiben</label></dt>
+                    </dl>
+                </li>";
+            }
+        echo "</ul>
         <div class=\"formSubmit\">
             <button name=\"login\" type=\"submit\" value=\"login\">
             <img src=\"$g_root_path/adm_program/images/key.png\" alt=\"Login\">

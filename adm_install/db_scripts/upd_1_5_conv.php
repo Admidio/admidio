@@ -5,21 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
 
@@ -144,11 +130,6 @@ $sql = "UPDATE ". TBL_ROLES. " SET rol_approve_users = 1
          WHERE rol_assign_roles = 1 ";
 $db->query($sql);
 
-// Datenbank-Versionsnummer schreiben
-$sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-                                   VALUES (NULL, 'db_version', '1.5.0') ";
-$db->query($sql);    
-
 // Orga-spezifische Kategorie anlegen
 $sql = "SELECT * FROM ". TBL_ORGANIZATIONS;
 $result_orga = $db->query($sql);
@@ -177,6 +158,11 @@ while($row_orga = $db->fetch_object($result_orga))
     $sql = "UPDATE ". TBL_USER_FIELDS. " SET usf_cat_id = $cat_id_data
              WHERE usf_org_shortname = '$row_orga->org_shortname' ";
     $db->query($sql);
+
+    // Datenbank-Versionsnummer schreiben
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+                                       VALUES ($row_orga->org_id, 'db_version', '1.5.0') ";
+    $db->query($sql);    
 }
 
 // Messenger-Felder aktualisieren

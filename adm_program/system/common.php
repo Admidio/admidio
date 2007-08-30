@@ -6,7 +6,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
 
@@ -25,6 +25,13 @@ require_once(SERVER_PATH. "/adm_config/config.php");
 if(isset($g_debug) == false || $g_debug != 1)
 {
     $g_debug = 0;
+}
+
+if($g_debug)
+{
+    // aktuelles Script mit Uebergaben in Logdatei schreiben
+    error_log("--------------------------------------------------------------------------------\n".
+              $_SERVER['SCRIPT_FILENAME']. "\n? ". $_SERVER['QUERY_STRING']);
 }
 
  // Standard-Praefix ist adm auch wegen Kompatibilitaet zu alten Versionen
@@ -57,6 +64,7 @@ if($g_forum_integriert)
 
 // Defines fuer alle Datenbanktabellen
 define("TBL_ANNOUNCEMENTS",     $g_tbl_praefix. "_announcements");
+define("TBL_AUTO_LOGIN",        $g_tbl_praefix. "_auto_login");
 define("TBL_CATEGORIES",        $g_tbl_praefix. "_categories");
 define("TBL_DATES",             $g_tbl_praefix. "_dates");
 define("TBL_FILES",             $g_tbl_praefix. "_files");
@@ -144,6 +152,14 @@ else
     $_SESSION['g_preferences']          =& $g_preferences;
 }
 
+// pruefen, ob Datenbank-Version zu den Scripten passt
+if(isset($g_preferences['db_version']) == false
+|| version_compare(substr($g_preferences['db_version'], 0, 3), substr(ADMIDIO_VERSION, 0, 3)) != 0)
+{
+    $g_message->addVariableContent($g_preferences['email_administrator'], 1, false);
+    $g_message->show("database_invalid");
+}
+
 // Daten des angemeldeten Users auch in Session speichern
 if(isset($_SESSION['g_current_user']))
 {
@@ -169,6 +185,49 @@ Session auf Gueltigkeit pruefen bzw. anlegen
 
 $g_current_session = new Session($g_db, $g_session_id);
 
+// erst einmal pruefen, ob evtl. frueher ein Autologin-Cookie gesetzt wurde
+// dann diese Session wiederherstellen
+
+$b_auto_login = false;
+if($g_preferences['enable_auto_login'] == 1 && isset($_COOKIE['admidio_data']))
+{
+    $admidio_data = explode(";", $_COOKIE['admidio_data']);
+    
+    if($admidio_data[0] == true         // autologin
+    && is_numeric($admidio_data[1]))    // user_id 
+    {   
+        if($g_current_user->getValue("usr_id") != $admidio_data[1])
+        {
+            // User aus der Autologin-Session wiederherstellen
+            require_once(SERVER_PATH. "/adm_program/system/auto_login_class.php");
+            $auto_login = new AutoLogin($g_db, $g_session_id);
+            
+            // User nur herstellen, wenn Cookie-User-Id == gespeicherte DB-User-Id
+            if($auto_login->getValue("atl_usr_id") == $admidio_data[1])
+            {
+                $g_current_user->getUser($auto_login->getValue("atl_usr_id"));
+                $b_auto_login = true;
+            }
+            else
+            {
+                // irgendwas stimmt nicht -> sicherheitshalber den Auto-Login-Eintrag loeschen
+                $auto_login->delete();
+            }
+        }
+        else
+        {
+            $b_auto_login = true;
+        }
+        
+        if($g_current_session->getValue("ses_id") == 0)
+        {
+            $g_current_session->setValue("ses_session_id", $g_session_id);
+            $g_current_session->setValue("ses_usr_id",  $g_current_user->getValue("usr_id"));
+            $g_current_session->save();
+        }
+    }
+}
+
 if($g_current_session->getValue("ses_id") > 0)
 {
     // erst einmal pruefen, ob Organisation- oder Userobjekt neu eingelesen werden muessen,
@@ -186,22 +245,18 @@ if($g_current_session->getValue("ses_id") > 0)
         $g_preferences = $g_current_organization->getPreferences();
         $g_current_session->setValue("ses_renew", 0);
     }
-    
+
     // nun die Session pruefen
     if($g_current_session->getValue("ses_usr_id") > 0)
     {
         if($g_current_session->getValue("ses_usr_id") == $g_current_user->getValue("usr_id"))
         {
             // Session gehoert zu einem eingeloggten User -> pruefen, ob der User noch eingeloggt sein darf
-            $valid    = false;
             $time_gap = time() - mysqlmaketimestamp($g_current_session->getValue("ses_timestamp"));
+            
             // wenn länger nichts gemacht wurde, als in Orga-Prefs eingestellt ist, dann ausloggen
-            if ($time_gap < $g_preferences['logout_minutes'] * 60) 
-            {
-                $valid = true;
-            }
-
-            if($valid)
+            if ($time_gap < $g_preferences['logout_minutes'] * 60
+            || $b_auto_login == true) 
             {
                 // User-Login ist gueltig
                 $g_valid_login = true;
@@ -229,7 +284,7 @@ else
 {
     // Session existierte noch nicht, dann neu anlegen
     $g_current_user->clear();
-    $g_current_session->setValue("ses_session", $g_session_id);
+    $g_current_session->setValue("ses_session_id", $g_session_id);
     $g_current_session->save();
     
     // Alle alten Session loeschen

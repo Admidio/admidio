@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
  *
@@ -596,13 +596,12 @@ echo "
                                 echo "<li id=\"role_". $row['mem_rol_id']. "\">
                                     <dl>
                                         <dt>
-                                            <div style=\"float: left\">".
-                                                $row['cat_name']. " - ". $row['rol_name'];
+                                            ". $row['cat_name']. " - ". $row['rol_name'];
                                                 if($row['mem_leader'] == 1)
                                                 {
                                                     echo " - Leiter";
                                                 }
-                                            echo "&nbsp;</div>";
+                                            echo "&nbsp;";
                                             
                                             // nun fuer alle Rollenrechte die Icons anzeigen
                                             if($row['rol_assign_roles'] == 1)
@@ -785,13 +784,13 @@ echo "
                                 <li>
                                     <dl>
                                         <dt>
-                                            <div style=\"float: left\">". $row['org_shortname']. " - ".
+                                            ". $row['org_shortname']. " - ".
                                                 $row['cat_name']. " - ". $row['rol_name'];
                                                 if($row['mem_leader'] == 1)
                                                 {
                                                     echo " - Leiter";
                                                 }
-                                            echo "&nbsp;</div>
+                                            echo "&nbsp;
                                         </dt>
                                         <dd>seit ". mysqldate('d.m.y', $row['mem_begin']). "</dd>
                                     </dl>

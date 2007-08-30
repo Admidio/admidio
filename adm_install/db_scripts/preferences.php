@@ -2,26 +2,28 @@
 /******************************************************************************
  * Systemeinstellungen fuer eine Organisation
  *
- * WICHTIG: Neue Einstellungen muessen auch im jeweiligen Updatescript 
+ * WICHTIG: Sollen neue Einstellungen bei einem Update andere Werte erhalten,
+ *          so muessen diese im Updatescript fuer jede Organisation
  *          eingetragen werden !!!
  *
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
 
 $orga_preferences = array(
 
     // System
-    'enable_rss'      => '1',
-    'enable_bbcode'   => '1',
-    'logout_minutes'  => '20',
+    'enable_rss'          => '1',
+    'enable_bbcode'       => '1',
+    'enable_auto_login'   => '1',
+    'logout_minutes'      => '20',
     'enable_system_mails' => '1',
     'email_administrator' => 'webmaster@'. $_SERVER['HTTP_HOST'],
-    'user_css'        => 'user.css',
-    'system_align'    => 'center',
+    'user_css'            => 'user.css',
+    'system_align'        => 'center',
     
     // Registrierung
     'registration_mode'              => '1',

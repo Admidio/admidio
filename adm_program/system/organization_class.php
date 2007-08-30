@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Diese Klasse dient dazu einen Objekt einer Organisation zu erstellen. 
  * Eine Organisation kann ueber diese Klasse in der Datenbank verwaltet werden
@@ -51,6 +51,7 @@ class Organization extends TableAccess
         $this->table_name     = TBL_ORGANIZATIONS;
         $this->column_praefix = "org";
         $this->key_name       = "org_id";
+        $this->auto_increment = true;
         
         if(strlen($organization) > 0)
         {

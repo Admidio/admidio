@@ -1,0 +1,98 @@
+<?php
+/******************************************************************************
+ * Klasse fuer Datenbanktabelle adm_auto_login
+ *
+ * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Homepage     : http://www.admidio.org
+ * Module-Owner : Markus Fassbender
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ *
+ * Diese Klasse dient dazu ein Autologinobjekt zu erstellen.
+ * Das Autologin kann ueber diese Klasse in der Datenbank verwaltet werden.
+ *
+ *****************************************************************************/
+
+require_once(SERVER_PATH. "/adm_program/system/table_access_class.php");
+
+class AutoLogin extends TableAccess
+{
+    // Konstruktor
+    function AutoLogin(&$db, $session = "")
+    {
+        $this->db            =& $db;
+        $this->table_name     = TBL_AUTO_LOGIN;
+        $this->column_praefix = "atl";
+        $this->key_name       = "atl_session_id";
+        $this->auto_increment = false;
+        
+        if(strlen($session) > 0)
+        {
+            $this->getAutoLogin($session);
+        }
+        else
+        {
+            $this->clear();
+        }
+    }
+
+    // AutoLogin mit der uebergebenen Session-ID aus der Datenbank auslesen
+    function getAutoLogin($session)
+    {
+        $this->readData($session);
+    }
+
+    // interne Funktion, die bei setValue den uebergebenen Wert prueft
+    // und ungueltige Werte auf leer setzt
+    // die Funktion wird innerhalb von setValue() aufgerufen
+    function _setValue($field_name, $field_value)
+    {
+        switch($field_name)
+        {
+            case "atl_org_id":
+            case "atl_usr_id":
+                if(is_numeric($field_value) == false
+                || $field_value == 0)
+                {
+                    $field_value = "";
+                    return false;
+                }
+                break;
+        }       
+        return true;
+    }
+
+    // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
+    // die Funktion wird innerhalb von save() aufgerufen
+    function _save()
+    {
+        if($this->new_record)
+        {
+            // Insert
+            global $g_current_organization;
+            $this->db_fields['atl_org_id']     = $g_current_organization->getValue("org_id");
+            $this->db_fields['atl_last_login'] = date("Y-m-d H:i:s", time());
+            $this->db_fields['atl_ip_address'] = $_SERVER['REMOTE_ADDR'];
+            
+            // Tabelle aufraeumen, wenn ein neuer Datensatz geschrieben wird
+            $this->tableCleanup();
+        }
+        else
+        {
+            // Update
+            $this->db_fields['atl_last_login'] = date("Y-m-d H:i:s", time());
+            $this->db_fields['atl_ip_address'] = $_SERVER['REMOTE_ADDR'];
+        }
+    }  
+    
+    // diese Funktion loescht Datensaetze aus der AutoLogin-Tabelle die nicht mehr gebraucht werden
+    function tableCleanup()
+    {
+        // Zeitpunkt bestimmen, ab dem die Auto-Logins geloescht werden, mind. 1 Jahr alt
+        $date_session_delete = time() - 60*60*24*365;
+            
+        $sql    = "DELETE FROM ". TBL_AUTO_LOGIN. " 
+                    WHERE atl_last_login < '". date("Y.m.d H:i:s", $date_session_delete). "'";
+        $this->db->query($sql);
+    }    
+}
+?>
