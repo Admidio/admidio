@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Diese Klasse dient dazu einen Objekt einer Organisation zu erstellen. 
  * Eine Organisation kann ueber diese Klasse in der Datenbank verwaltet werden
@@ -35,8 +35,10 @@ class TableAccess
     var $table_name;
     var $column_praefix;
     var $key_name;
+    var $auto_increment;
     var $db;
     
+    var $new_record;                // Merker, ob ein neuer Datensatz oder vorhandener Datensatz bearbeitet wird
     var $db_fields_changed;         // Merker ob an den db_fields Daten was geaendert wurde
     var $db_fields = array();       // Array ueber alle Felder der Rollen-Tabelle der entsprechenden Rolle
     
@@ -50,11 +52,12 @@ class TableAccess
     {
         // erst einmal alle Felder in das Array schreiben, falls kein Satz gefunden wird
         $this->clear();
-        
-        if(strlen($sql_where_condition) == 0 && is_numeric($key_value))
+
+        // es wurde keine Bedingung uebergeben, dann den Satz mit der Key-Id lesen, 
+        // falls diese sinnvoll gefuellt ist
+        if(strlen($sql_where_condition) == 0 && strlen($key_value) > 0 && $key_value != "0")
         {
-            // es wurde keine Bedingung uebergeben, dann den Satz mit der Key-Id lesen
-            $sql_where_condition = " $this->key_name = $key_value ";
+            $sql_where_condition = " $this->key_name = '$key_value' ";
         }
         if(strlen($sql_additional_tables) > 0)
         {
@@ -69,6 +72,8 @@ class TableAccess
     
             if($row = $this->db->fetch_array($result, MYSQL_ASSOC))
             {
+                $this->new_record = false;
+                
                 // Daten in das Klassenarray schieben
                 foreach($row as $key => $value)
                 {
@@ -89,12 +94,7 @@ class TableAccess
    function clear()
    {
         $this->db_fields_changed = false;
-        
-        // Zusaetzliche Daten der abgeleiteten Klasse loeschen
-        if(method_exists($this, "_clear"))
-        {
-            $this->_clear();
-        }
+        $this->new_record        = true;
                         
         if(count($this->db_fields) > 0)
         {
@@ -114,6 +114,12 @@ class TableAccess
             {
                 $this->db_fields[$row['Field']] = "";
             }
+        }
+        
+        // Zusaetzliche Daten der abgeleiteten Klasse loeschen
+        if(method_exists($this, "_clear"))
+        {
+            $this->_clear();
         }
     }    
     
@@ -168,15 +174,17 @@ class TableAccess
     function save()
     {
         // nur durchfuehren, wenn das Schluesselfeld vernuenftig belegt ist
-        if(is_numeric($this->db_fields[$this->key_name]) 
-        || strlen($this->db_fields[$this->key_name]) == 0)
+        if((  $this->auto_increment == true
+           && (  is_numeric($this->db_fields[$this->key_name]) 
+              || strlen($this->db_fields[$this->key_name]) == 0))
+        || $this->auto_increment == false)
         {
             // Defaultdaten vorbelegen
             if(method_exists($this, "_save"))
             {
                 $this->_save();
             }
-                
+
             if($this->db_fields_changed || strlen($this->db_fields[$this->key_name]) == 0)
             {
                 // SQL-Update-Statement fuer User-Tabelle zusammenbasteln
@@ -187,10 +195,14 @@ class TableAccess
                 // Schleife ueber alle DB-Felder und diese dem Update hinzufuegen                
                 foreach($this->db_fields as $key => $value)
                 {
-                    // ID und andere Tabellenfelder sollen nicht im Insert erscheinen
-                    if($key != $this->key_name && strpos($key, $this->column_praefix. "_") === 0) 
+                    // bei Auto-Increment-ID darf diese nicht im Insert erscheinen
+                    // Felder anderer Tabellen auch nicht
+                    if((  (  $this->auto_increment == true 
+                          && $key != $this->key_name )
+                       || $this->auto_increment == false )
+                    && strpos($key, $this->column_praefix. "_") === 0) 
                     {
-                        if($this->db_fields[$this->key_name] == 0)
+                        if($this->new_record)
                         {
                             if(strlen($value) > 0)
                             {
@@ -237,17 +249,18 @@ class TableAccess
                     }
                 }
 
-                if($this->db_fields[$this->key_name] > 0)
-                {
-                    $sql = "UPDATE $this->table_name SET $sql_field_list 
-                             WHERE $this->key_name = ". $this->db_fields[$this->key_name];
-                    $this->db->query($sql);
-                }
-                else
+                if($this->new_record)
                 {
                     $sql = "INSERT INTO $this->table_name ($sql_field_list) VALUES ($sql_value_list) ";
                     $this->db->query($sql);
                     $this->db_fields[$this->key_name] = $this->db->insert_id();
+                    $this->new_record = false;
+                }
+                else
+                {
+                    $sql = "UPDATE $this->table_name SET $sql_field_list 
+                             WHERE $this->key_name = '". $this->db_fields[$this->key_name]. "'";
+                    $this->db->query($sql);
                 }
             }
 
@@ -277,7 +290,7 @@ class TableAccess
         if($ret_code == true)
         {
             $sql    = "DELETE FROM $this->table_name 
-                        WHERE $this->key_name = ". $this->db_fields[$this->key_name];
+                        WHERE $this->key_name = '". $this->db_fields[$this->key_name]. "'";
             $this->db->query($sql);
     
             $this->clear();

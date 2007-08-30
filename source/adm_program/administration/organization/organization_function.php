@@ -1,11 +1,11 @@
 <?php
 /******************************************************************************
- * Verschiedene Funktionen fuer Organisationen
+ * Organisationseinstellungen speichern
  *
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
 
@@ -24,7 +24,7 @@ $_SESSION['organization_request'] = $_REQUEST;
 // Pruefen, ob alle notwendigen Felder gefuellt sind
 // *******************************************************************************
 
-if(strlen($_POST["org_longname"]) == 0)
+if(strlen($_POST['org_longname']) == 0)
 {
     $g_message->show("feld", "Name (lang)");
 }
@@ -50,115 +50,121 @@ if(is_numeric($_POST['logout_minutes']) == false || $_POST['logout_minutes'] <= 
 // Daten speichern
 // *******************************************************************************
 
-if(isset($_POST["enable_system_mails"]) == false)
+if(isset($_POST['enable_system_mails']) == false)
 {
-    $_POST["enable_system_mails"] = 0;
+    $_POST['enable_system_mails'] = 0;
 }
 
-if(strlen($_POST["max_email_attachment_size"]) == 0)
+if(strlen($_POST['max_email_attachment_size']) == 0)
 {
-    $_POST["max_email_attachment_size"] = 0;
+    $_POST['max_email_attachment_size'] = 0;
 }
 
-if(isset($_POST["enable_mail_captcha"]) == false)
+if(isset($_POST['enable_mail_captcha']) == false)
 {
-    $_POST["enable_mail_captcha"] = 0;
+    $_POST['enable_mail_captcha'] = 0;
 }
 
-if(isset($_POST["enable_registration_captcha"]) == false)
+if(isset($_POST['enable_registration_captcha']) == false)
 {
-    $_POST["enable_registration_captcha"] = 0;
+    $_POST['enable_registration_captcha'] = 0;
 }
 
-if(isset($_POST["enable_registration_admin_mail"]) == false)
+if(isset($_POST['enable_registration_admin_mail']) == false)
 {
-    $_POST["enable_registration_admin_mail"] = 0;
+    $_POST['enable_registration_admin_mail'] = 0;
 }
 
-if(isset($_POST["enable_bbcode"]) == false)
+if(isset($_POST['enable_bbcode']) == false)
 {
-    $_POST["enable_bbcode"] = 0;
+    $_POST['enable_bbcode'] = 0;
 }
 
-if(isset($_POST["enable_rss"]) == false)
+if(isset($_POST['enable_rss']) == false)
 {
-    $_POST["enable_rss"] = 0;
+    $_POST['enable_rss'] = 0;
 }
 
-if(isset($_POST["enable_download_module"]) == false)
+if(isset($_POST['enable_auto_login']) == false)
 {
-    $_POST["enable_download_module"] = 0;
+    $_POST['enable_auto_login'] = 0;
 }
 
-if(strlen($_POST["max_file_upload_size"]) == 0)
+if(isset($_POST['enable_download_module']) == false)
 {
-    $_POST["max_file_upload_size"] = 0;
+    $_POST['enable_download_module'] = 0;
 }
 
-if(isset($_POST["enable_photo_module"]) == false)
+if(strlen($_POST['max_file_upload_size']) == 0)
 {
-    $_POST["enable_photo_module"] = 0;
+    $_POST['max_file_upload_size'] = 0;
 }
 
-if(isset($_POST["photo_image_text"]) == false)
+if(isset($_POST['enable_photo_module']) == false)
 {
-    $_POST["photo_image_text"] = 0;
+    $_POST['enable_photo_module'] = 0;
 }
 
-if(isset($_POST["enable_guestbook_module"]) == false)
+if(isset($_POST['photo_image_text']) == false)
 {
-    $_POST["enable_guestbook_module"] = 0;
+    $_POST['photo_image_text'] = 0;
 }
 
-if(isset($_POST["enable_guestbook_captcha"]) == false)
+if(isset($_POST['enable_guestbook_module']) == false)
 {
-    $_POST["enable_guestbook_captcha"] = 0;
+    $_POST['enable_guestbook_module'] = 0;
 }
 
-if(isset($_POST["enable_gbook_comments4all"]) == false)
+if(isset($_POST['enable_guestbook_captcha']) == false)
 {
-    $_POST["enable_gbook_comments4all"] = 0;
+    $_POST['enable_guestbook_captcha'] = 0;
 }
 
-if(strlen($_POST["flooding_protection_time"]) == 0)
+if(isset($_POST['enable_gbook_comments4all']) == false)
 {
-    $_POST["flooding_protection_time"] = 0;
+    $_POST['enable_gbook_comments4all'] = 0;
 }
 
-if(isset($_POST["enable_mail_module"]) == false)
+if(strlen($_POST['flooding_protection_time']) == 0)
 {
-    $_POST["enable_mail_module"] = 0;
+    $_POST['flooding_protection_time'] = 0;
 }
 
-if(isset($_POST["enable_roles_view"]) == false)
+if(isset($_POST['enable_mail_module']) == false)
 {
-    $_POST["enable_roles_view"] = 0;
+    $_POST['enable_mail_module'] = 0;
 }
 
-if(isset($_POST["enable_former_roles_view"]) == false)
+if(isset($_POST['enable_roles_view']) == false)
 {
-    $_POST["enable_former_roles_view"] = 0;
+    $_POST['enable_roles_view'] = 0;
 }
 
-if(isset($_POST["enable_extern_roles_view"]) == false)
+if(isset($_POST['enable_former_roles_view']) == false)
 {
-    $_POST["enable_extern_roles_view"] = 0;
+    $_POST['enable_former_roles_view'] = 0;
 }
 
-if(isset($_POST["enable_weblinks_module"]) == false)
+if(isset($_POST['enable_extern_roles_view']) == false)
 {
-    $_POST["enable_weblinks_module"] = 0;
+    $_POST['enable_extern_roles_view'] = 0;
 }
 
-if(isset($_POST["enable_dates_module"]) == false)
+if(isset($_POST['enable_weblinks_module']) == false)
 {
-    $_POST["enable_dates_module"] = 0;
+    $_POST['enable_weblinks_module'] = 0;
 }
 
-if(isset($_POST["enable_announcements_module"]) == false)
+if(isset($_POST['enable_dates_module']) == false)
 {
-    $_POST["enable_announcements_module"] = 0;
+    $_POST['enable_dates_module'] = 0;
 }
+
+if(isset($_POST['enable_announcements_module']) == false)
+{
+    $_POST['enable_announcements_module'] = 0;
+}
+
 // *******************************************************************************
 // Organisation updaten
 // *******************************************************************************
@@ -188,11 +194,11 @@ foreach($_POST as $key => $value)
     && $key != "version"
     && $key != "save")
     {
-        $preferences[$key] = $value;
+        $g_preferences[$key] = $value;
     }
 }
 
-$g_current_organization->setPreferences($preferences);
+$g_current_organization->setPreferences($g_preferences);
 
 // Aufraeumen
 unset($_SESSION['organization_request']);

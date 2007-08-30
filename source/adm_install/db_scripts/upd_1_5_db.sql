@@ -20,6 +20,7 @@ ALTER TABLE %PRAEFIX%_user_fields ADD COLUMN `usf_sequence` smallint NOT NULL AF
 
 -- User-Tabelle ergaenzen
 ALTER TABLE %PRAEFIX%_users ADD COLUMN `usr_text` text AFTER `usr_photo`;
+ALTER TABLE %PRAEFIX%_users MODIFY COLUMN `usr_login_name` VARCHAR(35) DEFAULT NULL;
 
 -- Session-Tabelle ergaenzen
 ALTER TABLE %PRAEFIX%_sessions ADD COLUMN `ses_begin` datetime NOT NULL AFTER `ses_session`;
@@ -36,6 +37,10 @@ ALTER TABLE %PRAEFIX%_sessions ADD COLUMN `ses_org_id` tinyint(4) NOT NULL AFTER
 ALTER TABLE %PRAEFIX%_sessions ADD index SES_ORG_FK (ses_org_id);
 ALTER TABLE %PRAEFIX%_sessions ADD constraint %PRAEFIX%_FK_SES_ORG foreign key (ses_org_id)
       references %PRAEFIX%_organizations (org_id) on delete restrict on update restrict;
+      
+ALTER TABLE %PRAEFIX%_sessions CHANGE COLUMN `ses_session` `ses_session_id` VARCHAR(35) NOT NULL;
+ALTER TABLE %PRAEFIX%_sessions DROP INDEX `ak_session`;
+ALTER TABLE %PRAEFIX%_sessions ADD INDEX `ak_session` USING BTREE(`ses_session_id`);      
 
 -- org_shortname aus Rollentabelle entfernen
 ALTER TABLE %PRAEFIX%_roles DROP FOREIGN KEY %PRAEFIX%_FK_ROL_ORG;
@@ -59,7 +64,6 @@ ALTER TABLE %PRAEFIX%_user_data ADD PRIMARY KEY(usd_usr_id, usd_usf_id);
 
 -- Tabelle Einstellungen anpassen
 ALTER TABLE %PRAEFIX%_preferences ADD UNIQUE ak_org_id_name (prf_org_id, prf_name);
-ALTER TABLE %PRAEFIX%_preferences MODIFY COLUMN prf_org_id TINYINT(4);
 
 -- Tabellen fuer den Downloadbereich erstellen
 
@@ -141,3 +145,28 @@ alter table %PRAEFIX%_folder_roles add constraint %PRAEFIX%_FK_FLR_FOL foreign k
 
 alter table %PRAEFIX%_folder_roles add constraint %PRAEFIX%_FK_FLR_ROL foreign key (flr_rol_id)
       references %PRAEFIX%_roles (rol_id) on delete restrict on update restrict;
+
+/*==============================================================*/
+/* Table: adm_auto_login                                        */
+/*==============================================================*/
+create table %PRAEFIX%_auto_login
+(
+   atl_session_id                 varchar(35)                    not null,
+   atl_org_id                     int(4)                         not null,
+   atl_usr_id                     int(11)                        not null,
+   atl_last_login                 datetime                       not null,
+   atl_ip_address                 varchar(15)                    not null,
+   primary key (atl_session_id)
+)
+type = InnoDB;
+
+-- Index
+alter table %PRAEFIX%_auto_login add index ATL_USR_FK (atl_usr_id);
+alter table %PRAEFIX%_auto_login add index ATL_ORG_FK (atl_org_id);
+
+-- Constraints
+alter table %PRAEFIX%_auto_login add constraint %PRAEFIX%_FK_ATL_USR foreign key (atl_usr_id)
+      references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
+
+alter table %PRAEFIX%_auto_login add constraint %PRAEFIX%_FK_ATL_ORG foreign key (atl_org_id)
+      references %PRAEFIX%_organizations (org_id) on delete restrict on update restrict;      

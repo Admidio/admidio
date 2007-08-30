@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
 
@@ -265,6 +265,25 @@ echo "
                         Termine, G&auml;stebuch, Fotogalerien und Weblinks) auf den jeweiligen &Uuml;bersichtsseiten
                         bereitstellen, die dann &uuml;ber den Browser einem Feedreader zugeordnet
                         werden k&ouml;nnen.
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"enable_auto_login\">Automatisch anmelden:</label></dt>
+                            <dd>
+                                <input type=\"checkbox\" id=\"enable_auto_login\" name=\"enable_auto_login\" ";
+                                if(isset($form_values['enable_auto_login']) && $form_values['enable_auto_login'] == 1)
+                                {
+                                    echo " checked ";
+                                }
+                                echo " value=\"1\" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Benutzer k&ouml;nnen beim Anmelden festlegen, ob die Anmeldung auf dem Rechner gespeichert werden soll.
+                        Bei einem weiteren Besuch der Homepage sind diese Benutzer dann automatisch angemeldet. Dies kann
+                        allerdings auch dazu f&uuml;hren, dass Benutzer diese Option unbedacht einsetzen und so evtl. fremde
+                        Personen Zugriff auf die Daten bekommen.
                     </li>
                     <li>
                         <dl>

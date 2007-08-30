@@ -3,6 +3,8 @@
  *
  * Copyright    : (c) 2004 - 2005 The Admidio Team
  * Homepage     : http://www.admidio.org
+ * Module-Owner : Markus Fassbender
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  ******************************************************************************/
 
@@ -31,6 +33,8 @@ drop table if exists %PRAEFIX%_members;
 drop table if exists %PRAEFIX%_role_dependencies;
 
 drop table if exists %PRAEFIX%_roles;
+
+drop table if exists %PRAEFIX%_auto_login;
 
 drop table if exists %PRAEFIX%_sessions;
 
@@ -98,7 +102,7 @@ alter table %PRAEFIX%_texts add constraint %PRAEFIX%_FK_TXT_ORG foreign key (txt
 create table %PRAEFIX%_preferences
 (
    prf_id                         int(11) unsigned               not null AUTO_INCREMENT,
-   prf_org_id                     tinyint(4),
+   prf_org_id                     tinyint(4)                     not null,
    prf_name                       varchar(30)                    not null,
    prf_value                      varchar(255),
    primary key (prf_id),
@@ -147,7 +151,6 @@ create table %PRAEFIX%_users
    usr_password                   varchar(35),
    usr_photo                      blob,
    usr_text                       text,
-   usr_last_session_id            varchar(35),
    usr_last_login                 datetime,
    usr_actual_login               datetime,
    usr_number_login               smallint(5) unsigned           not null default 0,
@@ -231,14 +234,14 @@ create table %PRAEFIX%_sessions
    ses_id                         int(11) unsigned               not null AUTO_INCREMENT,
    ses_usr_id                     int(11) unsigned               default NULL,
    ses_org_id                     tinyint(4)                     not null,
-   ses_session                    varchar(35)                    not null,
+   ses_session_id                 varchar(35)                    not null,
    ses_begin                      datetime                       not null,
    ses_timestamp                  datetime                       not null,
    ses_ip_address                 varchar(15)                    not null,
    ses_blob                       blob,
    ses_renew                      tinyint(1) unsigned            not null default 0,
    primary key (ses_id),
-   key ak_session (ses_session)
+   key ak_session (ses_session_id)
 )
 type = InnoDB
 auto_increment = 1;
@@ -252,6 +255,31 @@ alter table %PRAEFIX%_sessions add constraint %PRAEFIX%_FK_SES_ORG foreign key (
       references %PRAEFIX%_organizations (org_id) on delete restrict on update restrict;
 alter table %PRAEFIX%_sessions add constraint %PRAEFIX%_FK_SES_USR foreign key (ses_usr_id)
       references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
+      
+/*==============================================================*/
+/* Table: adm_auto_login                                        */
+/*==============================================================*/
+create table %PRAEFIX%_auto_login
+(
+   atl_session_id                 varchar(35)                    not null,
+   atl_org_id                     int(4)                         not null,
+   atl_usr_id                     int(11)                        not null,
+   atl_last_login                 datetime                       not null,
+   atl_ip_address                 varchar(15)                    not null,
+   primary key (atl_session_id)
+)
+type = InnoDB;
+
+-- Index
+alter table %PRAEFIX%_auto_login add index ATL_USR_FK (atl_usr_id);
+alter table %PRAEFIX%_auto_login add index ATL_ORG_FK (atl_org_id);
+
+-- Constraints
+alter table %PRAEFIX%_auto_login add constraint %PRAEFIX%_FK_ATL_USR foreign key (atl_usr_id)
+      references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
+
+alter table %PRAEFIX%_auto_login add constraint %PRAEFIX%_FK_ATL_ORG foreign key (atl_org_id)
+      references %PRAEFIX%_organizations (org_id) on delete restrict on update restrict;      
 
 /*==============================================================*/
 /* Table: adm_roles                                             */

@@ -6,25 +6,12 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
 
-require("common.php");
+require_once("common.php");
+require_once("auto_login_class.php");
 
 // User aus der Session entfernen
 $g_current_session->setValue("ses_usr_id", "");
@@ -33,6 +20,15 @@ $g_current_session->save();
 // Inhalt der Cookies loeschen
 $domain = substr($_SERVER['HTTP_HOST'], 0, strpos($_SERVER['HTTP_HOST'], ':'));
 setcookie("admidio_session_id", "" , time() - 1000, "/", $domain, 0);
+
+// Autologin wieder entfernen
+if(isset($_COOKIE['admidio_data']))
+{
+    setcookie("admidio_data",       "" , time() - 1000, "/", $domain, 0);
+    
+    $auto_login = new AutoLogin($g_db, $g_session_id);
+    $auto_login->delete();
+}
 
 unset($_SESSION['g_current_user']);
 

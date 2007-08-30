@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
  *
@@ -202,6 +202,7 @@ if(strlen($g_tbl_praefix) == 0)
 
 // Defines fuer alle Datenbanktabellen
 define("TBL_ANNOUNCEMENTS",     $g_tbl_praefix. "_announcements");
+define("TBL_AUTO_LOGIN",        $g_tbl_praefix. "_auto_login");
 define("TBL_CATEGORIES",        $g_tbl_praefix. "_categories");
 define("TBL_DATES",             $g_tbl_praefix. "_dates");
 define("TBL_FILES",             $g_tbl_praefix. "_files");
@@ -406,6 +407,12 @@ if($req_mode == 3)
             {
                 $g_current_organization->setValue("org_id", $row_orga['org_id']);
                 $g_current_organization->setPreferences($orga_preferences, false);
+                
+                // Datenbank-Versionsnummer updaten
+                $sql = "UPDATE ". TBL_PREFERENCES. " SET prf_value = '". ADMIDIO_VERSION. "'
+                         WHERE prf_org_id  = ". $g_current_organization->getValue("org_id"). "
+                           AND prf_name    = 'db_version' ";
+                $db->query($sql);                
             }
             
             // Nun das PHP-Script abarbeiten
@@ -422,12 +429,6 @@ if($req_mode == 3)
                 include("db_scripts/upd_1_5_conv.php");
             }           
         }
-        
-        // Datenbank-Versionsnummer updaten
-        $sql = "UPDATE ". TBL_PREFERENCES. " SET prf_value = '". ADMIDIO_VERSION. "'
-                 WHERE prf_org_id IS NULL
-                   AND prf_name    = 'db_version' ";
-        $db->query($sql);
     }
     else
     {
@@ -464,9 +465,14 @@ if($req_mode == 1 || $req_mode == 4)
     foreach($orga_preferences as $key => $value)
     {
         $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-                                           VALUES (". $g_current_organization->getValue("org_id"). ",    '$key',   '$value') ";
+                                           VALUES (". $g_current_organization->getValue("org_id"). ", '$key', '$value') ";
         $db->query($sql);
     }
+    
+    // Datenbank-Versionsnummer schreiben
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+                                       VALUES (". $g_current_organization->getValue("org_id"). ", 'db_version', '". ADMIDIO_VERSION. "') ";
+    $db->query($sql);    
     
     // Default-Kategorie fuer Rollen und Links eintragen
     $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_sequence)
@@ -542,11 +548,6 @@ if($req_mode == 1 || $req_mode == 4)
                                    VALUES (". $role_webmaster->getValue("rol_id"). ", ". $g_current_user->getValue("usr_id"). ", NOW(), 1) 
                                         , (". $role_member->getValue("rol_id"). ", ". $g_current_user->getValue("usr_id"). ", NOW(), 1) ";
     $db->query($sql);
-    
-    // Datenbank-Versionsnummer schreiben
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-                                       VALUES (NULL, 'db_version', '". ADMIDIO_VERSION. "') ";
-    $db->query($sql);    
 }
 
 
