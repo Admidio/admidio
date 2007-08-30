@@ -122,20 +122,26 @@ if(strlen($req_folder) > 0)
     $link = "<div class=\"navigationPath\">$link &gt; $path[$i]</div>";
 }
 
-// pruefen, ob Ordner ueberhaupt existiert
-if(!is_dir($act_folder))
-{
-    $g_message->show("folder_not_exist");
-}
-
-// Ordnerinhalt in Array schreiben
+// wenn Ordner existiert, dann Inhalt in Array schreiben
 $ordnerarray = array();
-$dh  = opendir($act_folder);
-while (false !== ($filename = readdir($dh)))
+
+if(is_dir($act_folder))
 {
-    if($filename != "." && $filename != "..")
+    $dh  = opendir($act_folder);
+    while (false !== ($filename = readdir($dh)))
     {
-        $ordnerarray[] = $filename;
+        if($filename != "." && $filename != "..")
+        {
+            $ordnerarray[] = $filename;
+        }
+    }
+}
+else
+{
+    // bei Default-Ordner keine Fehlermeldung, da dieser beim ersten Upload angelegt wird
+    if($act_folder != SERVER_PATH. "/adm_my_files/download")
+    {
+        $g_message->show("folder_not_exist");
     }
 }
 

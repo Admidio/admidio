@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Jochen Erkens
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
  * pho_id: id der Veranstaltung die bearbeitet werden soll
@@ -144,25 +144,23 @@ if(isset($_POST["submit"]) && $_POST["submit"])
     /********************neuen Datensatz anlegen***********************************/
     if ($_GET["job"]=="new")
     {
-        //Wenn keine Schreibrechte Loeschen der Daten aus der Datenbank
-        if(is_writeable(SERVER_PATH. "/adm_my_files/photos") == false)
+        // Veranstaltung in Datenbank schreiben
+        $photo_event->save();
+        
+        $error = $photo_event->createFolder();
+        
+        if($error['code'] < 0)
         {
-            $g_message->addVariableContent("adm_my_files/photos", 1);
+            $photo_event->delete();
+            
+            // der entsprechende Ordner konnte nicht angelegt werden
+            $g_message->addVariableContent($error['text'], 1);
             $g_message->addVariableContent($g_preferences['email_administrator'], 2 ,false);
             $g_message->setForwardUrl("$g_root_path/adm_program/modules/photos/photos.php");
             $g_message->show("write_access");
         }
-
-        // Veranstaltung in Datenbank schreiben
-        $photo_event->save();
-        $pho_id = $photo_event->getValue("pho_id");
         
-        //Verzeichnis erstellen    
-        $ordnerneu = $_POST['pho_begin']."_".$pho_id;
-
-        //wenn Rechte OK, Ordner erstellen
-        $ordnererstellt = mkdir(SERVER_PATH. "/adm_my_files/photos/$ordnerneu",0777);
-        chmod(SERVER_PATH. "/adm_my_files/photos/$ordnerneu", 0777);
+        $pho_id = $photo_event->getValue("pho_id");
 
         // Anlegen der Veranstaltung war erfolgreich -> event_new aus der Historie entfernen
         $_SESSION['navigation']->deleteLastUrl();

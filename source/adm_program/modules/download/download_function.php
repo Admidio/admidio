@@ -5,11 +5,11 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Martin Guenzler
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
  *
- * mode   :  1 - Datei / Ordner hochladen
+ * mode   :  1 - Datei hochladen
  *           2 - Datei / Ordner loeschen
  *           3 - Ordner erstellen
  *           4 - Datei / Ordner umbenennen
@@ -40,13 +40,37 @@ if(!$g_current_user->editDownloadRight())
 }
 
 //testen ob Schreibrechte fuer adm_my_files bestehen
-if (is_writeable("../../../adm_my_files/download") == false)
+if(is_writeable(SERVER_PATH. "/adm_my_files"))
 {
-    $g_message->show("invalid_folder");
+    if(file_exists(SERVER_PATH. "/adm_my_files/download") == false)
+    {
+        // Ordner fuer die Downloads existiert noch nicht -> erst anlegen
+        $b_return = @mkdir(SERVER_PATH. "/adm_my_files/download", 0777);
+        if($b_return)
+        {
+            $b_return = @chmod(SERVER_PATH. "/adm_my_files/download", 0777);
+        }
+        if($b_return == false)
+        {
+            // der entsprechende Ordner konnte nicht angelegt werden
+            $g_message->addVariableContent("adm_my_files/download", 1);
+            $g_message->addVariableContent($g_preferences['email_administrator'], 2 ,false);
+            $g_message->setForwardUrl("$g_root_path/adm_program/modules/download/download.php");
+            $g_message->show("write_access");
+        }
+    }
+}
+else
+{
+    // der entsprechende Ordner konnte nicht angelegt werden
+    $g_message->addVariableContent("adm_my_files", 1);
+    $g_message->addVariableContent($g_preferences['email_administrator'], 2 ,false);
+    $g_message->setForwardUrl("$g_root_path/adm_program/modules/download/download.php");
+    $g_message->show("write_access");
 }
 
 // lokale Variablen initialisieren
-$act_folder = "../../../adm_my_files/download";
+$act_folder = SERVER_PATH. "/adm_my_files/download";
 
 // lokale Variablen der Uebergabevariablen initialisieren
 $req_mode   = 0;
@@ -330,8 +354,20 @@ elseif($req_mode == 3)
     else
     {
         // Ordner erstellen
-        mkdir("$act_folder/$req_new_folder",0777);
-        chmod("$act_folder/$req_new_folder", 0777);
+        $b_return = @mkdir("$act_folder/$req_new_folder", 0777);
+        if($b_return)
+        {
+            $b_return = @chmod("$act_folder/$req_new_folder", 0777);
+        }
+        if($b_return == false)
+        {
+            // der entsprechende Ordner konnte nicht angelegt werden
+            $g_message->addVariableContent("adm_my_files/download/$req_new_folder", 1);
+            $g_message->addVariableContent($g_preferences['email_administrator'], 2 ,false);
+            $g_message->setForwardUrl("$g_root_path/adm_program/modules/download/download.php");
+            $g_message->show("write_access");
+        }
+        
         $g_message->setForwardUrl("$g_root_path/adm_program/system/back.php");
         $g_message->show("create_folder", $req_new_folder);
     }

@@ -27,6 +27,7 @@
  * save()                 - Veranstaltung wird mit den geaenderten Daten in die Datenbank
  *                          zurueckgeschrieben bwz. angelegt
  * delete()               - Die gewaehlte Veranstaltung wird aus der Datenbank geloescht
+ * createFolder()         - erzeugt den entsprechenden Ordner unter adm_my_files/photos
  *
  *****************************************************************************/
 
@@ -106,14 +107,14 @@ class PhotoEvent extends TableAccess
         
         if($this->new_record)
         {
-            $this->db_fields['pho_last_change']   = date("Y-m-d H:i:s", time());
-            $this->db_fields['pho_usr_id_change'] = $g_current_user->getValue("usr_id");
-        }
-        else
-        {
             $this->db_fields['pho_timestamp']     = date("Y-m-d H:i:s", time());
             $this->db_fields['pho_usr_id']        = $g_current_user->getValue("usr_id");
             $this->db_fields['pho_org_shortname'] = $g_current_organization->getValue("org_shortname");
+        }
+        else
+        {
+            $this->db_fields['pho_last_change']   = date("Y-m-d H:i:s", time());
+            $this->db_fields['pho_usr_id_change'] = $g_current_user->getValue("usr_id");
         }
     }
     
@@ -139,7 +140,6 @@ class PhotoEvent extends TableAccess
         {
             if($return_code)
             {
-                error_log("row: ". $row[0]);
                 $return_code = $this->deleteInDatabase($row['pho_id']);
             }
         }
@@ -158,11 +158,18 @@ class PhotoEvent extends TableAccess
     
                 // nun noch den uebergebenen Ordner loeschen
                 @chmod($folder, 0777);
-                error_log($folder);
                 if(@rmdir($folder) == false)
                 {
                     return false;
                 }
+            }
+
+            if($return_code)
+            {
+                // Veranstaltung jetzt in DB loeschen            
+                $sql = "DELETE FROM ". TBL_PHOTOS. "
+                         WHERE pho_id = $photo_id ";
+                $this->db->query($sql);
             }
         }
         
@@ -210,6 +217,50 @@ class PhotoEvent extends TableAccess
         }
                     
         return true;
+    }
+    
+    // Legt den Ordner fuer die Veranstaltung im Dateisystem an
+    function createFolder()
+    {
+        $error = array("code" => "0", "text" => "");
+    
+        if(is_writeable(SERVER_PATH. "/adm_my_files"))
+        {
+            if(file_exists(SERVER_PATH. "/adm_my_files/photos") == false)
+            {
+                // Ordner fuer die Fotos existiert noch nicht -> erst anlegen
+                $b_return = @mkdir(SERVER_PATH. "/adm_my_files/photos", 0777);
+                if($b_return)
+                {
+                    $b_return = @chmod(SERVER_PATH. "/adm_my_files/photos", 0777);
+                }
+                if($b_return == false)
+                {
+                    $error['code'] = "-2";
+                    $error['text'] = "adm_my_files/photos";
+                }
+            }
+            
+            // nun den Ordner fuer die Veranstaltung anlegen
+            $folder_name = $this->db_fields['pho_begin']. "_". $this->db_fields['pho_id'];
+            
+            $b_return = @mkdir(SERVER_PATH. "/adm_my_files/photos/$folder_name", 0777);
+            if($b_return)
+            {
+                $b_return = @chmod(SERVER_PATH. "/adm_my_files/photos/$folder_name", 0777);
+            }
+            if($b_return == false)
+            {
+                $error['code'] = "-3";
+                $error['text'] = "adm_my_files/photos/$folder_name";
+            }
+        }
+        else
+        {
+            $error['code'] = "-1";
+            $error['text'] = "adm_my_files";
+        }
+        return $error;
     }
 }
 ?>
