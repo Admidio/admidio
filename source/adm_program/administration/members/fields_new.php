@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
  *
@@ -266,6 +266,11 @@ echo "
                         if($user_field->getValue("usf_mandatory") == 1)
                         {
                             echo " checked ";
+                        }
+                        if($user_field->getValue("usf_name") == "Nachname"
+                        || $user_field->getValue("usf_name") == "Vorname")
+                        {
+                            echo " disabled ";
                         }
                         echo " value=\"1\" />
                         <label for=\"usf_mandatory\">Pflichtfeld, muss vom Benutzer gef&uuml;llt werden</label>

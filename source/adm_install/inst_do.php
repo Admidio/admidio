@@ -317,21 +317,21 @@ if($req_mode == 1)
     $cat_id_messenger = $db->insert_id();
 
     // Stammdatenfelder anlegen
-    $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_cat_id, usf_type, usf_name, usf_description, usf_system, usf_disabled, usf_sequence)
-                                       VALUES ($cat_id_stammdaten, 'TEXT', 'Nachname', NULL, 1, 1, 1)
-                                            , ($cat_id_stammdaten, 'TEXT', 'Vorname', NULL, 1, 1, 2)
-                                            , ($cat_id_stammdaten, 'TEXT', 'Adresse', NULL, 1, 0, 3) 
-                                            , ($cat_id_stammdaten, 'TEXT', 'PLZ', NULL, 1, 0, 4)
-                                            , ($cat_id_stammdaten, 'TEXT', 'Ort', NULL, 1, 0, 5)
-                                            , ($cat_id_stammdaten, 'TEXT', 'Land', NULL, 1, 0, 6)
-                                            , ($cat_id_stammdaten, 'TEXT', 'Telefon', NULL, 1, 0, 7)
-                                            , ($cat_id_stammdaten, 'TEXT', 'Handy', NULL, 1, 0, 8)
-                                            , ($cat_id_stammdaten, 'TEXT', 'Fax', NULL, 1, 0, 9)
-                                            , ($cat_id_stammdaten, 'DATE', 'Geburtstag', NULL, 1, 0, 10)
-                                            , ($cat_id_stammdaten, 'NUMERIC', 'Geschlecht', NULL, 1, 0, 11)
-                                            , ($cat_id_stammdaten, 'EMAIL','E-Mail', 'Es muss eine g&uuml;ltige E-Mail-Adresse angegeben werden.<br />' + 
-                                                                   'Ohne diese kann das Programm nicht genutzt werden.', 1, 0, 12)
-                                            , ($cat_id_stammdaten, 'URL',  'Homepage', NULL, 1, 0, 13) ";
+    $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_cat_id, usf_type, usf_name, usf_description, usf_system, usf_disabled, usf_mandatory, usf_sequence)
+                                       VALUES ($cat_id_stammdaten, 'TEXT', 'Nachname', NULL, 1, 1, 1, 1)
+                                            , ($cat_id_stammdaten, 'TEXT', 'Vorname', NULL, 1, 1, 1, 2)
+                                            , ($cat_id_stammdaten, 'TEXT', 'Adresse', NULL, 1, 0, 0, 3) 
+                                            , ($cat_id_stammdaten, 'TEXT', 'PLZ', NULL, 1, 0, 0, 4)
+                                            , ($cat_id_stammdaten, 'TEXT', 'Ort', NULL, 1, 0, 0, 5)
+                                            , ($cat_id_stammdaten, 'TEXT', 'Land', NULL, 1, 0, 0, 6)
+                                            , ($cat_id_stammdaten, 'TEXT', 'Telefon', NULL, 1, 0, 0, 7)
+                                            , ($cat_id_stammdaten, 'TEXT', 'Handy', NULL, 1, 0, 0, 8)
+                                            , ($cat_id_stammdaten, 'TEXT', 'Fax', NULL, 1, 0, 0, 9)
+                                            , ($cat_id_stammdaten, 'DATE', 'Geburtstag', NULL, 1, 0, 0, 10)
+                                            , ($cat_id_stammdaten, 'NUMERIC', 'Geschlecht', NULL, 1, 0, 0, 11)
+                                            , ($cat_id_stammdaten, 'EMAIL','E-Mail', 'Es muss eine g&uuml;ltige E-Mail-Adresse angegeben werden.
+                                                                    Ohne diese kann das Programm nicht genutzt werden.', 1, 0, 1, 12)
+                                            , ($cat_id_stammdaten, 'URL',  'Homepage', NULL, 1, 0, 0, 13) ";
     $db->query($sql);
     $usf_id_homepage = $db->insert_id();
 

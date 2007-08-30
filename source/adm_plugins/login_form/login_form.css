@@ -8,28 +8,37 @@
  *
  *****************************************************************************/
  
-.plgLoginFieldList {
+#plgLoginFormFieldList {
     margin:             0px;
     padding:            0px;
-    list-style-type:    none;
+    /*list-style-type:    none;*/
 }
  
-.plgLoginFieldList li { 
-    display:            inline-block;
+#plgLoginFormFieldList li { 
+    display:            inline;
     text-align:         left;
     float:              none;       /* left : Alles in einer Zeile anzeigen */
+    overflow:           hidden;
 }
-.plgLoginFieldList li dl {
+
+#plgLoginFormFieldList li dl {
     padding:            0px;
-    margin-top:         5px;
-    margin-bottom:      5px;
+    margin-top:         3px;
+    margin-bottom:      3px;
 }
-.plgLoginFieldList li dl dt {
+
+#plgLoginFormFieldList li dl dt {
     text-align:         left;
     float:              left;       /* none : Label und Feld untereinander */
 }
-.plgLoginFieldList li dl dd {
+
+#plgLoginFormFieldList li dl dd {
     margin-left:        100px;      /* 0px  : Label und Feld untereinander */
     text-align:         left;
     font-weight:        bold;
+}
+
+/* Hack, da der IE mit diesem CSS nicht klar kommt */
+ul[id]#plgLoginFormFieldList li {
+    display:              block;
 }
