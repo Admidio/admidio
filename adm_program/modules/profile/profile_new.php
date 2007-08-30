@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
  *
@@ -388,7 +388,7 @@ echo "
                         <dl>
                             <dt><label for=\"usr_login_name\">Benutzername:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"usr_login_name\" name=\"usr_login_name\" style=\"width: 200px;\" maxlength=\"20\" value=\"". htmlspecialchars($user->getValue("usr_login_name")). "\" ";
+                                <input type=\"text\" id=\"usr_login_name\" name=\"usr_login_name\" style=\"width: 200px;\" maxlength=\"35\" value=\"". htmlspecialchars($user->getValue("usr_login_name")). "\" ";
                                 if($g_current_user->isWebmaster() == false && $new_user == 0)
                                 {
                                     echo " class=\"readonly\" readonly ";

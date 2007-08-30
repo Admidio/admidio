@@ -87,7 +87,7 @@ if($g_valid_login == 1)
         }
     </script>
     
-    <ul class="plgLoginFieldList">
+    <ul id="plgLoginFormFieldList">
         <li>
             <dl>
                 <dt>Benutzer:</dt>
@@ -168,7 +168,7 @@ else
     </script>
     
     <form style="display: inline;" action="javascript:loadPageLogin()" method="get" name="plg_login_form">
-        <ul class="plgLoginFieldList">
+        <ul id="plgLoginFormFieldList">
             <li>
                 <dl>
                     <dt><label for="usr_login_name">Login-Name:</label></dt>
@@ -184,19 +184,19 @@ else
             
             if($g_preferences['enable_auto_login'] == 1)
             {
-                echo "
+                echo '
                 <li>
                     <dl>
-                        <dt><input type=\"checkbox\" id=\"auto_login\" name=\"auto_login\" value=\"1\"> 
-                            <label for=\"auto_login\">angemeldet bleiben</label></dt><span>&nbsp;</span>
+                        <dt style="clear: left;"><input type="checkbox" id="auto_login" name="auto_login" value="1"> 
+                            <label for="auto_login">angemeldet bleiben</label></dt>
                     </dl>
-                </li>";
+                </li>';
             }            
             
             echo '
             <li>
                 <dl>
-                    <dt><input type="submit" value="Login"></dt><span>&nbsp;</span>
+                    <dt style="clear: left;"><input type="submit" value="Login"></dt>
                 </dl>
             </li>';
         
@@ -207,8 +207,8 @@ else
                     <dl>';
                         if($plg_show_register_link && $g_preferences['registration_mode'])
                         {
-                            echo '<dt><a href="'. $g_root_path. '/adm_program/system/registration.php" 
-                                target="'. $plg_link_target. '">Registrieren</a></dt><span>&nbsp;</span>';
+                            echo '<dt style="clear: left;"><a href="'. $g_root_path. '/adm_program/system/registration.php" 
+                                target="'. $plg_link_target. '">Registrieren</a></dt>';
                         }
                         if($plg_show_register_link && $plg_show_email_link)
                         {
@@ -229,7 +229,7 @@ else
                             {
                                 $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?rol_id=". $role_webmaster->getValue("rol_id"). "&subject=Loginprobleme";
                             }
-                            echo '<dt><a href="'. $mail_link. '" target="'. $plg_link_target. '">Loginprobleme</a></dt><span>&nbsp;</span>';
+                            echo '<dt style="clear: left;"><a href="'. $mail_link. '" target="'. $plg_link_target. '">Loginprobleme</a></dt>';
                         }
                     echo '</dl>
                 </li>';

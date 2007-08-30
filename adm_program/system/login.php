@@ -51,21 +51,25 @@ echo "
                     <dl>
                         <dt><input type=\"checkbox\" id=\"auto_login\" name=\"auto_login\" value=\"1\"> 
                             <label for=\"auto_login\">dauerhaft angemeldet bleiben</label></dt>
+                        <dd>&nbsp;</dd>
                     </dl>
                 </li>";
             }
         echo "</ul>
+        
         <div class=\"formSubmit\">
             <button name=\"login\" type=\"submit\" value=\"login\">
             <img src=\"$g_root_path/adm_program/images/key.png\" alt=\"Login\">
             &nbsp;Login</button>
         </div>";
+        
         if($g_preferences['registration_mode'] > 0)
         {
             echo "<div class=\"smallFontSize\" style=\"margin-top: 5px;\">
                 <a href=\"$g_root_path/adm_program/system/registration.php\">Ich m&ouml;chte mich registrieren!</a>
             </div>";
         }
+        
         // E-Mail intern oder extern verschicken
         if($g_preferences['enable_mail_module'] != 1 
         || $role_webmaster->getValue("rol_mail_logout") != 1 )
