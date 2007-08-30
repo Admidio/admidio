@@ -22,7 +22,6 @@ angezeigt.
 Login Form ist ein Plugin zu der Online-Mitgliederverwaltung
 Admidio (http://www.admidio.org) und kann nicht ohne diese benutzt werden.
 
-
  2. Installation
 -------------------------------------------------------------------------
 Beachten Sie bitte für eine fehlerfreie Installation unsere Onlinehilfe !
