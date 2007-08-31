@@ -48,8 +48,9 @@ http://www.admidio.de/index.php?help/installation.php
 
 Dort wird Ihnen Schritt für Schritt die Installation erklärt. 
 
-Zu Ihrer Sicherheit sollten Sie nach der erfolgreichen Installation den
+Zu Ihrer Sicherheit müssen Sie nach der erfolgreichen Installation den
 Ordner adm_install löschen.
+
 
  3. Update
 -------------------------------------------------------------------------
@@ -58,12 +59,12 @@ http://www.admidio.de/index.php?help/update.php
 
 Wichtig !!!
 Falls Sie ein Bugfix-Update einspielen (diese ändern nur die 3. Stelle 
-der Versionsnummer z.B. 1.2.0 nach 1.2.1) brauchen Sie nur das Verzeichnis 
+der Versionsnummer z.B. 1.4.0 nach 1.4.1) brauchen Sie nur das Verzeichnis 
 adm_program auf Ihrem Webserver zu ersetzen und haben damit das Update 
 erfolgreich durchgeführt.
 
 Kurzanleitung bei einen Versionswechsel:    					
-(z.B. Version 1.2.x nach 1.3.x)
+(z.B. Version 1.3.x nach 1.4.x)
 
 - Löschen Sie bitte die Ordner adm_install (falls nicht schon geschehen) 
   und adm_program der bisherigen Version
@@ -71,6 +72,7 @@ Kurzanleitung bei einen Versionswechsel:
   an diese Stelle
 - Rufen Sie die Datei index.php im Verzeichnis adm_install auf und
   gehen dort das Update Schritt für Schritt durch
+
 
  4. Bugs
 -------------------------------------------------------------------------
@@ -82,16 +84,19 @@ http://sourceforge.net/projects/admidio
 Sie können den Fehler aber auch erst einmal in unserem Forum melden.
 http://forum.admidio.org
 
+
  5. Lizenz
 -------------------------------------------------------------------------
 Die Admidio Mitgliederverwaltung steht unter der GNU General Public License 2. 
 Bevor Sie Admidio benutzen, sollten Sie unbedingt die gpl-de.html durchlesen.
 Mit der Installation und Benutzung der Admidio Mitgliederverwaltung 
 akteptieren Sie die Bedingungen der GNU General Public License.
+http://www.gnu.org/licenses/gpl-2.0.html
 
 Teile von Admidio stehen unter der Creative Commons Lizenz. Dies sind die 
-Icons der Tango-Bibliothek (Creative Commons Attribution Share-Alike license)
-und die Icons der Silk-Bibliothek (Creative Commons Attribution 2.5 License).
+Icons der Tango-Bibliothek (Creative Commons Attribution Share-Alike license),
+die Icons der Silk-Bibliothek und Lightbox2 (Creative Commons Attribution 2.5 License).
+
 
  6. Copyright
 -------------------------------------------------------------------------
@@ -109,13 +114,18 @@ Wir möchten uns an dieser Stelle bei Personen und Projekten bedanken, die
 an Admidio mitgearbeitet haben, oder deren Arbeit in Admidio eingeflossen 
 ist.
 
-Thomas Thoss
-   Überarbeitung und Erweiterung der phpBB-Schnittstelle
-
 Mark James
 	http://www.famfamfam.com
 	Icon Bibliothek famfamfam
 	Silk Icons
+	
+Thomas Fuchs
+	http://script.aculo.us
+	script.acolu.us JavaScript libraries
+	
+Lokesh Dhakar
+	http://www.huddletogether.com/projects/lightbox2
+	Lightbox 2
 	
 Tango Desktop Project
 	http://tango.freedesktop.org
