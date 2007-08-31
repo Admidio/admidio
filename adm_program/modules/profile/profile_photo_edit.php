@@ -142,7 +142,7 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 /*****************************Bild hochladen*************************************/
 if($job==NULL)
 {
-    $_SESSION['navigation']->addUrl($g_current_url);
+    $_SESSION['navigation']->addUrl(CURRENT_URL);
 
     if($req_usr_id == $g_current_user->getValue("usr_id"))
     {

@@ -98,7 +98,7 @@ class Message
         // noetig, da dies bei den includes benoetigt wird
         global $g_forum, $g_layout;
         global $g_valid_login, $g_root_path, $g_preferences;
-        global $g_db, $g_adm_con, $g_adm_db, $g_current_url;
+        global $g_db, $g_adm_con, $g_adm_db;
         global $g_organization, $g_current_organization, $g_current_user;
         
         // Uebergabevariablen auswerten

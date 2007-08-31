@@ -67,7 +67,7 @@ if(isset($_GET["sort"]))
 
 //Verwaltung der Session
 $_SESSION['navigation']->clear();
-$_SESSION['navigation']->addUrl($g_current_url);
+$_SESSION['navigation']->addUrl(CURRENT_URL);
 unset($_SESSION['download_request']);
 
 $act_folder = SERVER_PATH. "/adm_my_files/download";

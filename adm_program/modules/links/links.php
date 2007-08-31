@@ -68,7 +68,7 @@ if ($g_preferences['enable_bbcode'] == 1)
 
 // Navigation initialisieren - Modul faengt hier an.
 $_SESSION['navigation']->clear();
-$_SESSION['navigation']->addUrl($g_current_url);
+$_SESSION['navigation']->addUrl(CURRENT_URL);
 
 unset($_SESSION['links_request']);
 

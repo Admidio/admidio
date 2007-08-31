@@ -71,7 +71,7 @@ if($req_rol_id == 0)
     // Navigation faengt hier im Modul an
     $_SESSION['navigation']->clear();
 }
-$_SESSION['navigation']->addUrl($g_current_url);
+$_SESSION['navigation']->addUrl(CURRENT_URL);
 
 $b_history = false;     // History-Funktion bereits aktiviert ja/nein
 $default_fields = 6;    // Anzahl der Felder, die beim Aufruf angezeigt werden

@@ -54,7 +54,7 @@ else
     $_GET["headline"] = "Links";
 }
 
-$_SESSION['navigation']->addUrl($g_current_url);
+$_SESSION['navigation']->addUrl(CURRENT_URL);
 
 if (isset($_SESSION['links_request']))
 {

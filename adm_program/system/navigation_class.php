@@ -15,7 +15,7 @@
  * zu loeschen.
  *
  * Nun muss auf allen Seiten innerhalb des Moduls die Funktion
- * $_SESSION['navigation']->addUrl($g_current_url) aufgerufen werde
+ * $_SESSION['navigation']->addUrl(CURRENT_URL) aufgerufen werde
  *
  * Will man nun an einer Stelle zuruecksurfen, so muss die Funktion
  * $_SESSION['navigation']->getUrl() aufgerufen werden

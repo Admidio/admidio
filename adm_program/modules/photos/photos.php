@@ -46,7 +46,7 @@ if ($pho_id == NULL)
 }
 
 //URL auf Navigationstack ablegen
-$_SESSION['navigation']->addUrl($g_current_url);
+$_SESSION['navigation']->addUrl(CURRENT_URL);
 
 //aktuelle event_element
 if(array_key_exists("start", $_GET))

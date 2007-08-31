@@ -78,7 +78,7 @@ unset($_SESSION['dates_request']);
 $act_date = date("Y.m.d 00:00:00", time());
 // Navigation faengt hier im Modul an
 $_SESSION['navigation']->clear();
-$_SESSION['navigation']->addUrl($g_current_url);
+$_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Html-Kopf ausgeben
 $g_layout['title'] = $req_headline;

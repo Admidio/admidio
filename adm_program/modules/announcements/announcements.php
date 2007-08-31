@@ -65,7 +65,7 @@ if($g_preferences['enable_bbcode'] == 1)
 unset($_SESSION['announcements_request']);
 // Navigation faengt hier im Modul an
 $_SESSION['navigation']->clear();
-$_SESSION['navigation']->addUrl($g_current_url);
+$_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Html-Kopf ausgeben
 $g_layout['title'] = $req_headline;

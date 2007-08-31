@@ -60,7 +60,7 @@ if ($_GET["id"] != 0)
     }
 }
 
-$_SESSION['navigation']->addUrl($g_current_url);
+$_SESSION['navigation']->addUrl(CURRENT_URL);
 
 if (isset($_SESSION['guestbook_entry_request']))
 {

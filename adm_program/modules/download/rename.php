@@ -34,7 +34,7 @@ if(!$g_current_user->editDownloadRight())
     $g_message->show("norights");
 }
 
-$_SESSION['navigation']->addUrl($g_current_url);
+$_SESSION['navigation']->addUrl(CURRENT_URL);
 $default_folder = strStripTags(urldecode($_GET['default_folder']));
 $folder     = strStripTags(urldecode($_GET['folder']));
 $file       = strStripTags($_GET['file']);

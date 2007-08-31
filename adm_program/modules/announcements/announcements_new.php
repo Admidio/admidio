@@ -51,7 +51,7 @@ if(isset($_GET['headline']))
     $req_headline = strStripTags($_GET["headline"]);
 }
 
-$_SESSION['navigation']->addUrl($g_current_url);
+$_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Ankuendigungsobjekt anlegen
 $announcement = new Announcement($g_db);

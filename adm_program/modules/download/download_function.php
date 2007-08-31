@@ -484,7 +484,7 @@ elseif($req_mode == 4)
 }
 elseif($req_mode == 5)
 {   
-    $_SESSION['navigation']->addUrl($g_current_url);
+    $_SESSION['navigation']->addUrl(CURRENT_URL);
     $g_message->setForwardYesNo("$g_root_path/adm_program/modules/download/download_function.php?mode=2&amp;folder=$req_folder&amp;file=$req_file&amp;default_folder=$req_default_folder");
     $g_message->show("delete_file_folder",$req_file);
 }

@@ -37,7 +37,7 @@ if(isset($_GET['usf_id']))
     $req_usf_id = $_GET['usf_id'];
 }
 
-$_SESSION['navigation']->addUrl($g_current_url);
+$_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // benutzerdefiniertes Feldobjekt anlegen
 $user_field = new UserField($g_db);

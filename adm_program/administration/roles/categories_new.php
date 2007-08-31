@@ -59,7 +59,7 @@ if(isset($_GET['cat_id']))
     $req_cat_id = $_GET['cat_id'];
 }
 
-$_SESSION['navigation']->addUrl($g_current_url);
+$_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // UserField-objekt anlegen
 $category = new Category($g_db);

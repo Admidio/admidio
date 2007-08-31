@@ -49,7 +49,7 @@ if(isset($_GET["new_user"]))
 }
 
 $user     = new User($g_db, $req_usr_id);
-$_SESSION['navigation']->addUrl($g_current_url);
+$_SESSION['navigation']->addUrl(CURRENT_URL);
 
 //Testen ob Feste Rolle gesetzt ist
 if(isset($_SESSION['set_rol_id']))

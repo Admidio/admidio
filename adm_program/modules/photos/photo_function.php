@@ -54,7 +54,7 @@ if(isset($_GET["job"]))
     }
 
     //URL auf Navigationstack ablegen
-    $_SESSION['navigation']->addUrl($g_current_url);
+    $_SESSION['navigation']->addUrl(CURRENT_URL);
 }
 
 // Uebergabevariablen pruefen

@@ -26,7 +26,7 @@ if($g_debug == 0 && file_exists("../../../adm_install"))
 
 // Navigation faengt hier im Modul an
 $_SESSION['navigation']->clear();
-$_SESSION['navigation']->addUrl($g_current_url);
+$_SESSION['navigation']->addUrl(CURRENT_URL);
 
 if(isset($_SESSION['organization_request']))
 {

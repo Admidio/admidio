@@ -15,11 +15,11 @@ if ('common.php' == basename($_SERVER['SCRIPT_FILENAME']))
     die('Diese Seite darf nicht direkt aufgerufen werden !');
 }
 
-define('SERVER_PATH', substr(__FILE__, 0, strpos(__FILE__, "adm_program")-1));
-define('ADMIDIO_VERSION', '1.5 Beta');  // die Versionsnummer bitte nicht aendern !!!
+$admidio_path = substr(__FILE__, 0, strpos(__FILE__, "adm_program")-1);
 
-// Konfigurationsdatei einbinden
-require_once(SERVER_PATH. "/adm_config/config.php");
+// Konstanten und Konfigurationsdatei einbinden
+require_once($admidio_path. "/adm_config/config.php");
+require_once($admidio_path. "/adm_program/system/constants.php");
 
 // falls Debug-Kennzeichen nicht in config.php gesetzt wurde, dann hier auf false setzen
 if(isset($g_debug) == false || $g_debug != 1)
@@ -62,29 +62,6 @@ if($g_forum_integriert)
     require_once(SERVER_PATH. "/adm_program/system/forum_class_phpbb.php");
 }
 
-// Defines fuer alle Datenbanktabellen
-define("TBL_ANNOUNCEMENTS",     $g_tbl_praefix. "_announcements");
-define("TBL_AUTO_LOGIN",        $g_tbl_praefix. "_auto_login");
-define("TBL_CATEGORIES",        $g_tbl_praefix. "_categories");
-define("TBL_DATES",             $g_tbl_praefix. "_dates");
-define("TBL_FILES",             $g_tbl_praefix. "_files");
-define("TBL_FOLDERS",           $g_tbl_praefix. "_folders");
-define("TBL_FOLDER_ROLES",      $g_tbl_praefix. "_folder_roles");
-define("TBL_GUESTBOOK",         $g_tbl_praefix. "_guestbook");
-define("TBL_GUESTBOOK_COMMENTS",$g_tbl_praefix. "_guestbook_comments");
-define("TBL_LINKS",             $g_tbl_praefix. "_links");
-define("TBL_MEMBERS",           $g_tbl_praefix. "_members");
-define("TBL_ORGANIZATIONS",     $g_tbl_praefix. "_organizations");
-define("TBL_PHOTOS",            $g_tbl_praefix. "_photos");
-define("TBL_PREFERENCES",       $g_tbl_praefix. "_preferences");
-define("TBL_ROLE_DEPENDENCIES", $g_tbl_praefix. "_role_dependencies");
-define("TBL_ROLES",             $g_tbl_praefix. "_roles");
-define("TBL_SESSIONS",          $g_tbl_praefix. "_sessions");
-define("TBL_TEXTS",             $g_tbl_praefix. "_texts");
-define("TBL_USERS",             $g_tbl_praefix. "_users");
-define("TBL_USER_DATA",         $g_tbl_praefix. "_user_data");
-define("TBL_USER_FIELDS",       $g_tbl_praefix. "_user_fields");
-
 // Variablen von HMTL & PHP-Code befreien
 $_REQUEST = array_map("strStripTags", $_REQUEST);
 $_GET     = array_map("strStripTags", $_GET);
@@ -102,13 +79,15 @@ if(get_magic_quotes_gpc() == false)
 
 // Globale Variablen
 $g_valid_login = false;
-$g_layout        = array();
-$g_current_url   = "http://". $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI'];
-$g_message       = new Message();
+$g_layout      = array();
+$g_message     = new Message();
 
 // PHP-Session starten
-session_name('admidio_php_session_id');
-session_start();
+if(headers_sent() == false)
+{
+    session_name('admidio_php_session_id');
+    session_start();
+}
 
 // Session-ID ermitteln
 if(isset($_COOKIE['admidio_session_id']))

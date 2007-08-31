@@ -18,7 +18,7 @@ if (!$g_current_user->editUser())
     $g_message->show("norights");
 }
 
-$_SESSION['navigation']->addUrl($g_current_url);
+$_SESSION['navigation']->addUrl(CURRENT_URL);
 unset($_SESSION['fields_request']);
 
 // zusaetzliche Daten fuer den Html-Kopf setzen
