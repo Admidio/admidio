@@ -36,7 +36,7 @@ if($g_valid_login == false)
     if(isset($_SESSION['login_forward_url']) == false)
     {
         // aufgerufene URL merken, damit diese nach dem Einloggen sofort aufgerufen werden kann
-        $_SESSION['login_forward_url'] = $g_current_url;
+        $_SESSION['login_forward_url'] = CURRENT_URL;
     }
     
     // User nicht eingeloggt -> Loginseite aufrufen

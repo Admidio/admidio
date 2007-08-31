@@ -50,7 +50,7 @@ else
     $g_message->show("invalid");
 }
 
-$_SESSION['navigation']->addUrl($g_current_url);
+$_SESSION['navigation']->addUrl(CURRENT_URL);
 unset($_SESSION['categories_request']);
 
 // Html-Kopf ausgeben

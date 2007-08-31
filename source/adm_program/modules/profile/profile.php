@@ -182,7 +182,7 @@ if($a_user_id != $g_current_user->getValue("usr_id") && isset($_GET['user_id']) 
 {
     $_SESSION['navigation']->clear();
 }
-$_SESSION['navigation']->addUrl($g_current_url);
+$_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Html-Kopf ausgeben
 $g_layout['title'] = "Profil";

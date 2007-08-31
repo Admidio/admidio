@@ -35,7 +35,7 @@ else
 
 // Navigation faengt hier im Modul an
 $_SESSION['navigation']->clear();
-$_SESSION['navigation']->addUrl($g_current_url);
+$_SESSION['navigation']->addUrl(CURRENT_URL);
 
 unset($_SESSION['roles_request']);
 

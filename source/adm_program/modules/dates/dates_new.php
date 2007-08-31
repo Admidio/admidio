@@ -50,7 +50,7 @@ if(!isset($_GET['headline']))
     $_GET["headline"] = "Termine";
 }
 
-$_SESSION['navigation']->addUrl($g_current_url);
+$_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Terminobjekt anlegen
 $date = new Date($g_db);

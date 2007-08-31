@@ -38,7 +38,7 @@ if(isset($_GET["rol_id"]))
     $req_rol_id = $_GET["rol_id"];
 }
 
-$_SESSION['navigation']->addUrl($g_current_url);
+$_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Rollenobjekt anlegen
 $role = new Role($g_db);

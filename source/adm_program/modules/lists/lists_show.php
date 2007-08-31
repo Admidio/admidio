@@ -276,7 +276,7 @@ if($num_members < $req_start)
 if($req_mode == "html" && $req_start == 0)
 {
     // Url fuer die Zuruecknavigation merken, aber nur in der Html-Ansicht
-    $_SESSION['navigation']->addUrl($g_current_url);
+    $_SESSION['navigation']->addUrl(CURRENT_URL);
 }
 
 if($req_mode != "csv")

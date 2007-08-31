@@ -88,7 +88,7 @@ else
     $_GET["headline"] = "G&auml;stebuch";
 }
 
-$_SESSION['navigation']->addUrl($g_current_url);
+$_SESSION['navigation']->addUrl(CURRENT_URL);
 
 if (isset($_SESSION['guestbook_comment_request']))
 {

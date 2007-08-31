@@ -82,7 +82,7 @@ if($member_found == 0)
     exit();
 }
 
-$_SESSION['navigation']->addUrl($g_current_url);
+$_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Html-Kopf ausgeben
 $g_layout['title'] = "Neuen Benutzer zuordnen";

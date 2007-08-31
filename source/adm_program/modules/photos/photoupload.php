@@ -45,7 +45,7 @@ if($ini!=1)
 }
 
 //URL auf Navigationstack ablegen
-$_SESSION['navigation']->addUrl($g_current_url);
+$_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Fotoveranstaltungs-Objekt erzeugen oder aus Session lesen
 if(isset($_SESSION['photo_event']) && $_SESSION['photo_event']->getValue("pho_id") == $_GET["pho_id"])

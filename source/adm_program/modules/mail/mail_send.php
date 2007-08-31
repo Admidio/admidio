@@ -48,7 +48,7 @@ if (array_key_exists("usr_id", $_GET) && !$g_valid_login)
 
 // aktuelle Seite im NaviObjekt speichern. Dann kann in der Vorgaengerseite geprueft werden, ob das
 // Formular mit den in der Session gespeicherten Werten ausgefuellt werden soll...
-$_SESSION['navigation']->addUrl($g_current_url);
+$_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Der Inhalt des Formulars wird nun in der Session gespeichert...
 $_SESSION['mail_request'] = $_REQUEST;

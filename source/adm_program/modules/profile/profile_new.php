@@ -116,7 +116,7 @@ if($new_user == 0)
 }
 
 $b_history = false;     // History-Funktion bereits aktiviert ja/nein
-$_SESSION['navigation']->addUrl($g_current_url);
+$_SESSION['navigation']->addUrl(CURRENT_URL);
 
 if(isset($_SESSION['profile_request']))
 {

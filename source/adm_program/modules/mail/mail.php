@@ -203,7 +203,7 @@ if(isset($_GET["usr_id"]) == false && isset($_GET["rol_id"]) == false)
 {
     $_SESSION['navigation']->clear();
 }
-$_SESSION['navigation']->addUrl($g_current_url);
+$_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Html-Kopf ausgeben
 $g_layout['title'] = "E-Mail verschicken";

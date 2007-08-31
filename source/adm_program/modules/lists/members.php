@@ -45,7 +45,7 @@ else
 //URL auf Navigationstack ablegen, wenn werder selbstaufruf der Seite, noch interner Ankeraufruf
 if(!isset($_GET["restrict"]))
 {
-    $_SESSION['navigation']->addUrl($g_current_url);
+    $_SESSION['navigation']->addUrl(CURRENT_URL);
 }
 
 // Objekt der uebergeben Rollen-ID erstellen

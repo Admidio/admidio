@@ -82,7 +82,7 @@ unset ($_SESSION['QuerySuggestions']);
 
 // Navigation faengt hier im Modul an
 $_SESSION['navigation']->clear();
-$_SESSION['navigation']->addUrl($g_current_url);
+$_SESSION['navigation']->addUrl(CURRENT_URL);
 
 
 // Bedingungen fuer das SQL-Statement je nach Modus setzen

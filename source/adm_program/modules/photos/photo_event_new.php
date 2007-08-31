@@ -46,7 +46,7 @@ if(isset($_GET["job"]) && $_GET["job"] != "new" && $_GET["job"] != "change")
 
 //Variablen initialisieren
 $pho_id = $_GET["pho_id"];
-$_SESSION['navigation']->addUrl($g_current_url);
+$_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Fotoeventobjekt anlegen
 $photo_event = new PhotoEvent($g_db);

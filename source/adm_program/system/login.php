@@ -13,7 +13,7 @@ require("common.php");
 require("role_class.php");
 
 // Url merken (wird in cookie_check wieder entfernt)
-$_SESSION['navigation']->addUrl($g_current_url);
+$_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Rollenobjekt fuer 'Webmaster' anlegen
 $role_webmaster = new Role($g_db, 'Webmaster');
