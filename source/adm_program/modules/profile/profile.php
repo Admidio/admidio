@@ -188,73 +188,7 @@ $_SESSION['navigation']->addUrl($g_current_url);
 $g_layout['title'] = "Profil";
 $g_layout['header'] = "
     <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/ajax.js\"></script>
-    
-    <script type=\"text/javascript\">
-        var resObject     = createXMLHttpRequest();
-        var list;
-        var element
-
-        function deleteFormerRole(rol_id, rol_name) 
-        {
-            var msg_result = confirm('Willst du den Verweis auf die ehemalige Mitgliedschaft bei der Rolle ' + rol_name + ' wirklich entfernen ?');
-            if(msg_result)
-            {
-                list    = document.getElementById('former_role_list');
-                element = document.getElementById('former_role_' + rol_id);
-
-                resObject.open('POST', '$g_root_path/adm_program/modules/profile/profile_function.php', true);
-                resObject.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                resObject.onreadystatechange = handleResponse;
-                resObject.send('mode=3&user_id=". $user->getValue("usr_id"). "&rol_id=' + rol_id);
-            }
-        }
-        
-        function deleteRole(rol_id, rol_name, rol_leader, cat_name, mem_begin)
-        {
-            var msg_result = confirm('Willst du die Mitgliedschaft bei der Rolle ' + rol_name + ' wirklich beenden ?');
-            if(msg_result)
-            {
-                var former_list = document.getElementById('former_role_list');
-                var end_date  = '". date("d.m.Y", time()). "';
-                var newListElement = document.createElement('li');
-                var leader    = '';
-                var webmaster = '';
-                list          = document.getElementById('role_list');
-                element       = document.getElementById('role_' + rol_id);
-
-                if(rol_leader == 1)
-                {
-                    leader = ' - Leiter';
-                }";
-                if($g_current_user->isWebmaster())
-                {
-                    $g_layout['header'] = $g_layout['header']. " 
-                        webmaster = '<span class=\"iconLink\"><a href=\"javascript:deleteFormerRole(' + rol_id + ', \'' + rol_name + '\')\"><img ' +
-                        'src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Rolle l&ouml;schen\" title=\"Rolle l&ouml;schen\"></a></span>';";
-                }
-                $g_layout['header'] = $g_layout['header']. "
-                var html = '<dl><dt>' + cat_name + ' - ' + rol_name + leader +
-                            '</dt><dd>vom ' + mem_begin + ' bis ' + 
-                            end_date + webmaster + '</dd></dl>';
-                newListElement.setAttribute('id', 'former_role_' + rol_id);
-                newListElement.innerHTML = html;
-                former_list.appendChild(newListElement);
-
-                resObject.open('POST', '$g_root_path/adm_program/modules/profile/profile_function.php', true);
-                resObject.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                resObject.onreadystatechange = handleResponse;
-                resObject.send('mode=2&user_id=". $user->getValue("usr_id"). "&rol_id=' + rol_id);
-            }
-        }
-
-        function handleResponse() 
-        {
-            if(resObject.readyState == 4) 
-            {
-                list.removeChild(element);
-            }
-        }
-    </script>";
+    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/modules/profile/profile.js\"></script>";
 
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
@@ -277,7 +211,8 @@ echo "
             // Userdaten-Block
             // *******************************************************************************
 
-            echo "<div style=\"width: 65%; float: left;\">
+            echo "
+            <div style=\"width: 65%; float: left;\">
                 <div class=\"groupBox\">
                     <div class=\"groupBoxHeadline\">
                         <div style=\"float: left;\">". $user->getValue("Vorname"). " ". $user->getValue("Nachname");
@@ -468,7 +403,7 @@ echo "
                             src=\"$g_root_path/adm_program/images/photo.png\" alt=\"Foto &auml;ndern\" title=\"Foto &auml;ndern\"></a>
                         </span>
                         <span class=\"iconLink\">
-                            <a href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=msg_delete&usr_id=$a_user_id\"><img
+                            <a href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=msg_delete&amp;usr_id=$a_user_id\"><img
                             src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Foto l&ouml;schen\" title=\"Foto l&ouml;schen\"></a>
                         </span>
                     </div>
@@ -533,8 +468,11 @@ echo "
             }
         }
 
-        // div-Container groupBoxBody und groupBox schliessen
-        echo "</div></div>";
+        if(strlen($category) > 0)
+        {
+            // div-Container groupBoxBody und groupBox schliessen
+            echo "</ul></div></div>";
+        }
 
         if($g_preferences['enable_roles_view'] == 1)
         {
@@ -667,7 +605,8 @@ echo "
                                             {
                                                 echo "
                                                 <span class=\"iconLink\">
-                                                    <a href=\"javascript:deleteRole(". $row['rol_id']. ", '". $row['rol_name']. "', ". $row['rol_valid']. ", '". $row['cat_name']. "', '". mysqldate('d.m.y', $row['mem_begin']). "')\"><img 
+                                                    <a href=\"javascript:deleteRole(". $row['rol_id']. ", '". $row['rol_name']. "', ". $row['rol_valid']. ", ". $user->getValue("usr_id"). ", '". $row['cat_name']. "', '". 
+                                                    mysqldate('d.m.y', $row['mem_begin']). "', ". $g_current_user->isWebmaster(). ", '". $g_root_path. "')\"><img 
                                                     src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Rolle l&ouml;schen\" title=\"Rolle l&ouml;schen\"></a>
                                                 </span>";
                                             }
@@ -708,8 +647,14 @@ echo "
                         ORDER BY org_shortname, cat_sequence, rol_name";
             $result_role = $g_db->query($sql);
             $count_role  = $g_db->num_rows($result_role);
+            $visible     = "";
+            
+            if($count_role == 0)
+            {
+                $visible = ' style="display: none;" ';
+            }
 
-            echo "<div class=\"groupBox\" id=\"profile_former_roles_box\">
+            echo "<div class=\"groupBox\" id=\"profile_former_roles_box\" $visible>
                 <div class=\"groupBoxHeadline\">Ehemalige Rollenmitgliedschaften&nbsp;</div>
                 <div class=\"groupBoxBody\">
                     <ul class=\"formFieldList\" id=\"former_role_list\">";
@@ -735,7 +680,7 @@ echo "
                                             {
                                                 echo "
                                                 <span class=\"iconLink\">
-                                                    <a href=\"javascript:deleteFormerRole(". $row['rol_id']. ", '". $row['rol_name']. "')\"><img 
+                                                    <a href=\"javascript:deleteFormerRole(". $row['rol_id']. ", '". $row['rol_name']. "', ". $user->getValue("usr_id"). ", '". $g_root_path. "')\"><img 
                                                     src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Rolle l&ouml;schen\" title=\"Rolle l&ouml;schen\"></a>
                                                 </span>";
                                             }
