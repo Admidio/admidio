@@ -200,7 +200,7 @@ auto_increment = 1;
 alter table %PRAEFIX%_user_fields add index USF_CAT_FK (usf_cat_id);
 
 -- Constraints
-alter table %PRAEFIX%_user_fields add constraint FK_USF_CAT foreign key (usf_cat_id)
+alter table %PRAEFIX%_user_fields add constraint %PRAEFIX%_FK_USF_CAT foreign key (usf_cat_id)
       references %PRAEFIX%_categories (cat_id) on delete restrict on update restrict;
 
 /*==============================================================*/
@@ -262,8 +262,8 @@ alter table %PRAEFIX%_sessions add constraint %PRAEFIX%_FK_SES_USR foreign key (
 create table %PRAEFIX%_auto_login
 (
    atl_session_id                 varchar(35)                    not null,
-   atl_org_id                     int(4)                         not null,
-   atl_usr_id                     int(11)                        not null,
+   atl_org_id                     tinyint(4)                     not null,
+   atl_usr_id                     int(11) unsigned               not null,
    atl_last_login                 datetime                       not null,
    atl_ip_address                 varchar(15)                    not null,
    primary key (atl_session_id)
