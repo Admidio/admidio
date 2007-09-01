@@ -95,14 +95,14 @@ class Announcement extends TableAccess
         
         if($this->new_record)
         {
-            $this->db_fields['ann_last_change']   = date("Y-m-d H:i:s", time());
-            $this->db_fields['ann_usr_id_change'] = $g_current_user->getValue("usr_id");
-        }
-        else
-        {
             $this->db_fields['ann_timestamp']     = date("Y-m-d H:i:s", time());
             $this->db_fields['ann_usr_id']        = $g_current_user->getValue("usr_id");
             $this->db_fields['ann_org_shortname'] = $g_current_organization->getValue("org_shortname");
+        }
+        else
+        {
+            $this->db_fields['ann_last_change']   = date("Y-m-d H:i:s", time());
+            $this->db_fields['ann_usr_id_change'] = $g_current_user->getValue("usr_id");
         }
     }
 }
