@@ -152,8 +152,8 @@ alter table %PRAEFIX%_folder_roles add constraint %PRAEFIX%_FK_FLR_ROL foreign k
 create table %PRAEFIX%_auto_login
 (
    atl_session_id                 varchar(35)                    not null,
-   atl_org_id                     int(4)                         not null,
-   atl_usr_id                     int(11)                        not null,
+   atl_org_id                     tinyint(4)                     not null,
+   atl_usr_id                     int(11) unsigned               not null,
    atl_last_login                 datetime                       not null,
    atl_ip_address                 varchar(15)                    not null,
    primary key (atl_session_id)

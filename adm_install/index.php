@@ -36,8 +36,8 @@ if(isset($_REQUEST['mode']) && is_numeric($_REQUEST['mode']))   // mode kann per
 }
 
 // Versionsnummer aus common.php auslesen
-// muss hier etwas komplizierter sein, da common.php nicht eingebunden werden kann
-$file_handle = fopen("../adm_program/system/common.php", "r");
+// muss hier etwas komplizierter sein, da constants.php nicht eingebunden werden kann
+$file_handle = fopen("../adm_program/system/constants.php", "r");
 $admidio_version = null;
 
 while (!feof($file_handle) && strlen($admidio_version) == 0) 
