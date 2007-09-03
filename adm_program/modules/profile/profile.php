@@ -327,7 +327,7 @@ echo "
                                                                     || strlen($g_current_user->getValue("Ort"))  > 0 ))
                                                                     {
                                                                         // Link fuer die Routenplanung
-                                                                        $route_url = "http://maps.google.com/?f=d&saddr=". urlencode($g_current_user->getValue("Adresse"));
+                                                                        $route_url = "http://maps.google.com/?f=d&amp;saddr=". urlencode($g_current_user->getValue("Adresse"));
                                                                         if(strlen($g_current_user->getValue("PLZ"))  > 0)
                                                                         {
                                                                             $route_url .= ",%20". $g_current_user->getValue("PLZ");
@@ -341,7 +341,7 @@ echo "
                                                                             $route_url .= ",%20". $g_current_user->getValue("Land");
                                                                         }
 
-                                                                        $route_url .= "&daddr=". urlencode($user->getValue("Adresse"));
+                                                                        $route_url .= "&amp;daddr=". urlencode($user->getValue("Adresse"));
                                                                         if(strlen($user->getValue("PLZ"))  > 0)
                                                                         {
                                                                             $route_url .= ",%20". $user->getValue("PLZ");
@@ -718,7 +718,7 @@ echo "
 
             if($g_db->num_rows($result_role) > 0)
             {
-                echo "<div class=\"groupBox\" id=\"profile_roles_box\">
+                echo "<div class=\"groupBox\" id=\"profile_roles_box_other_orga\">
                     <div class=\"groupBoxHeadline\">Rollenmitgliedschaften anderer Organisationen&nbsp;</div>
                     <div class=\"groupBoxBody\">
                         <ul class=\"formFieldList\">";
