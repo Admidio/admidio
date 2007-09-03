@@ -22,6 +22,7 @@ angezeigt.
 Login Form ist ein Plugin zu der Online-Mitgliederverwaltung
 Admidio (http://www.admidio.org) und kann nicht ohne diese benutzt werden.
 
+
  2. Installation
 -------------------------------------------------------------------------
 Beachten Sie bitte für eine fehlerfreie Installation unsere Onlinehilfe !
@@ -29,6 +30,7 @@ http://www.admidio.de/index.php?help/plugins.php
 
 Dort wird Ihnen Schritt für Schritt die Installation und Einrichtung
 eines Plugins erklärt.
+
 
  3. Update
 -------------------------------------------------------------------------
@@ -38,6 +40,7 @@ ersetzen.
 Falls es mit der neuen Version neue Einstellungen gibt, die Sie gerne 
 verändern möchten, so müssen Sie diese noch in die bereits vorhandene 
 config.php eintragen.
+
 
  4. Bugs
 -------------------------------------------------------------------------
@@ -49,6 +52,7 @@ http://sourceforge.net/projects/admidio
 Sie können den Fehler aber auch erst einmal in unserem Forum melden.
 http://forum.admidio.org
 
+
  5. Lizenz
 -------------------------------------------------------------------------
 Die Admidio Mitgliederverwaltung sowie dieses Plugin stehen unter der 
@@ -56,6 +60,7 @@ GNU General Public License 2. Bevor Sie Admidio oder dieses Plugin benutzen,
 sollten Sie unbedingt die mitgelieferte gpl-de.html durchlesen oder auf
 der GNU Homepage nachschauen.
 http://www.gnu.org/licenses/gpl-2.0.html
+
 
  6. Copyright
 -------------------------------------------------------------------------

@@ -65,8 +65,6 @@ if(isset($plg_rank) == false)
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
 $g_db->select_db($g_adm_db);
 
-echo '<link rel="stylesheet" type="text/css" href="'. $g_root_path. '/adm_plugins/'. $plugin_folder. '/login_form.css">';
-
 if($g_valid_login == 1)
 {
     echo '    
@@ -87,7 +85,7 @@ if($g_valid_login == 1)
         }
     </script>
     
-    <ul id="plgLoginFormFieldList">
+    <ul class="formFieldList" id="plgLoginFormFieldList">
         <li>
             <dl>
                 <dt>Benutzer:</dt>
@@ -142,6 +140,7 @@ if($g_valid_login == 1)
                 </dl>
             </li>";
         }
+    echo "</ul>";
 }
 else
 {
@@ -168,7 +167,7 @@ else
     </script>
     
     <form style="display: inline;" action="javascript:loadPageLogin()" method="get" name="plg_login_form">
-        <ul id="plgLoginFormFieldList">
+        <ul class="formFieldList" id="plgLoginFormFieldList">
             <li>
                 <dl>
                     <dt><label for="usr_login_name">Login-Name:</label></dt>
@@ -187,8 +186,8 @@ else
                 echo '
                 <li>
                     <dl>
-                        <dt style="clear: left;"><input type="checkbox" id="auto_login" name="auto_login" value="1"> 
-                            <label for="auto_login">angemeldet bleiben</label></dt>
+                        <dt><label for="auto_login">Angemeldet bleiben:</label></dt>
+                        <dd><input type="checkbox" id="auto_login" name="auto_login" value="1"></dd>
                     </dl>
                 </li>';
             }            
