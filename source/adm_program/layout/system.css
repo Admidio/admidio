@@ -414,6 +414,11 @@ iconShowHide {
     text-align:         right;
 }
 
+#profile_roles_box_other_orga ul li dl dd {
+    margin-left:        70%;
+    text-align:         right;
+}
+
 #profile_former_roles_box ul li dl dd {
     margin-left:        55%;
     text-align:         right;
