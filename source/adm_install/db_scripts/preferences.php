@@ -23,7 +23,6 @@ $orga_preferences = array(
     'enable_system_mails' => '1',
     'email_administrator' => 'webmaster@'. $_SERVER['HTTP_HOST'],
     'user_css'            => 'user.css',
-    'system_align'        => 'center',
     
     // Registrierung
     'registration_mode'              => '1',

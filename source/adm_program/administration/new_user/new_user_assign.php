@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
  *
@@ -95,7 +95,7 @@ echo "
     <div class=\"formBody\">
         Es wurde bereits ein Benutzer mit &auml;hnlichem Namen wie 
         <strong>". $new_user->getValue("Vorname"). " ". $new_user->getValue("Nachname"). "</strong> 
-        in der Datenbank gefunden.<br>
+        in der Datenbank gefunden.<br />
         <div class=\"groupBox\">
             <div class=\"groupBoxHeadline\">Gefundene Benutzer</div>
             <div class=\"groupBoxBody\">";
@@ -108,24 +108,24 @@ echo "
                         echo "<hr />";
                     }
                     echo "<div style=\"margin-left: 20px;\">
-                        <i>$row->first_name $row->last_name</i><br>";
+                        <i>$row->first_name $row->last_name</i><br />";
                         if(strlen($row->address) > 0)
                         {
-                            echo "$row->address<br>";
+                            echo "$row->address<br />";
                         }
                         if(strlen($row->zip_code) > 0 || strlen($row->city) > 0)
                         {
-                            echo "$row->zip_code $row->city<br>";
+                            echo "$row->zip_code $row->city<br />";
                         }
                         if(strlen($row->email) > 0)
                         {
                             if($g_preferences['enable_mail_module'] == 1)
                             {
-                                echo "<a href=\"$g_root_path/adm_program/modules/mail/mail.php?usr_id=$row->usr_id\">$row->email</a><br>";
+                                echo "<a href=\"$g_root_path/adm_program/modules/mail/mail.php?usr_id=$row->usr_id\">$row->email</a><br />";
                             }
                             else
                             {
-                                echo "<a href=\"mailto:$row->email\">$row->email</a><br>";
+                                echo "<a href=\"mailto:$row->email\">$row->email</a><br />";
                             }
                         }
 
@@ -135,14 +135,14 @@ echo "
                             if(strlen($row->usr_login_name) > 0)
                             {
                                 // Logindaten sind bereits vorhanden -> Logindaten neu zuschicken                    
-                                echo "<br>Dieser Benutzer besitzt schon ein g&uuml;ltiges Login.";
+                                echo "<br />Dieser Benutzer besitzt schon ein g&uuml;ltiges Login.";
                                 if($g_preferences['enable_system_mails'] == 1)
                                 {
-                                    echo "<br>M&ouml;chtest du ihm seinen Loginnamen mit Passwort als Erinnerung zuschicken ?<br>
+                                    echo "<br />M&ouml;chtest du ihm seinen Loginnamen mit Passwort als Erinnerung zuschicken ?<br />
 
                                     <span class=\"iconTextLink\">
                                         <a href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=6\"><img
-                                        src=\"$g_root_path/adm_program/images/key.png\" alt=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\"></a>
+                                        src=\"$g_root_path/adm_program/images/key.png\" alt=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\" /></a>
                                         <a href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=6\">Zugangsdaten zuschicken</a>
                                     </span>";
                                 }
@@ -150,12 +150,12 @@ echo "
                             else
                             {
                                 // Logindaten sind NICHT vorhanden -> diese nun zuordnen
-                                echo "<br>Dieser Benutzer besitzt noch kein Login.<br>
-                                    M&ouml;chtest du ihm die Daten dieser Registrierung zuordnen ?<br>
+                                echo "<br />Dieser Benutzer besitzt noch kein Login.<br />
+                                    M&ouml;chtest du ihm die Daten dieser Registrierung zuordnen ?<br />
 
                                 <span class=\"iconTextLink\">
                                     <a href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=1\"><img
-                                    src=\"$g_root_path/adm_program/images/properties.png\" alt=\"Zugangsdaten zuordnen\"></a>
+                                    src=\"$g_root_path/adm_program/images/properties.png\" alt=\"Zugangsdaten zuordnen\" /></a>
                                     <a href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=1\">Zugangsdaten zuordnen</a>
                                 </span>";
                             }
@@ -168,24 +168,24 @@ echo "
                             if(strlen($row->usr_login_name) > 0)
                             {
                                 // Logindaten sind bereits vorhanden
-                                echo "<br>Dieser Benutzer ist noch kein Mitglied der Organisation $g_organization, 
-                                besitzt aber bereits Logindaten.<br>
+                                echo "<br />Dieser Benutzer ist noch kein Mitglied der Organisation $g_organization, 
+                                besitzt aber bereits Logindaten.<br />
 
                                 <span class=\"iconTextLink\">
                                     <a href=\"$link\"><img class=\"iconLink\" 
-                                    src=\"$g_root_path/adm_program/images/properties.png\" alt=\"Mitgliedschaft zuweisen\"></a>
+                                    src=\"$g_root_path/adm_program/images/properties.png\" alt=\"Mitgliedschaft zuweisen\" /></a>
                                     <a href=\"$link\">Mitgliedschaft zuweisen</a>
                                 </span>";
                             }               
                             else
                             {
                                 // KEINE Logindaten vorhanden
-                                echo "<br>Dieser Benutzer ist noch kein Mitglied der Organisation $g_organization und 
-                                besitzt auch keine Logindaten.<br>
+                                echo "<br />Dieser Benutzer ist noch kein Mitglied der Organisation $g_organization und 
+                                besitzt auch keine Logindaten.<br />
                                 
                                 <span class=\"iconTextLink\">
                                     <a href=\"$link\"><img class=\"iconLink\"
-                                    src=\"$g_root_path/adm_program/images/properties.png\" alt=\"Rollen und Logindaten diesem Benutzer zuordnen\"></a>
+                                    src=\"$g_root_path/adm_program/images/properties.png\" alt=\"Rollen und Logindaten diesem Benutzer zuordnen\" /></a>
                                     <a href=\"$link\">Mitgliedschaft und Logindaten diesem Benutzer zuordnen</a>
                                 </span>";
                             }               
@@ -201,12 +201,12 @@ echo "
             <div class=\"groupBoxBody\">
                 <div style=\"margin-left: 20px;\">
                     Falls der neue Benutzer nicht bei den oben aufgelisteten Benutzern dabei ist, 
-                    kannst du auch einen neuen Benutzer anlegen.<br>
+                    kannst du auch einen neuen Benutzer anlegen.<br />
                     
                     <span class=\"iconTextLink\">
-                        <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$req_new_user_id&new_user=3\"><img
-                        src=\"$g_root_path/adm_program/images/add.png\" alt=\"Neuen Benutzer anlegen\"></a>
-                        <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$req_new_user_id&new_user=3\">Benutzer anlegen</a>
+                        <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$req_new_user_id&amp;new_user=3\"><img
+                        src=\"$g_root_path/adm_program/images/add.png\" alt=\"Neuen Benutzer anlegen\" /></a>
+                        <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$req_new_user_id&amp;new_user=3\">Benutzer anlegen</a>
                     </span>
                 </div>
             </div>
@@ -218,8 +218,8 @@ echo "
     <li>
         <span class=\"iconTextLink\">
             <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
-            <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück\" /></a>
+            <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
         </span>
     </li>
 </ul>";

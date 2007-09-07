@@ -24,6 +24,7 @@
     font-family:      arial, sans-serif;
     font-size:        10pt;
     background-color: #ffffff;
+    text-align:       center;
 }
 
 .tableListPrint {
@@ -32,7 +33,7 @@
     border:           1px solid #cccccc;
     padding:          0px;
     border-spacing:   0px;
-    margin:           0px;
+    margin:           auto;
 }
 
 .tableListPrint th {

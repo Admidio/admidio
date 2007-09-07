@@ -97,7 +97,7 @@ $result = $g_db->query($sql);
 
 if($g_db->num_rows($result) > 0)
 {
-    echo "Seit ".$plg_time_online." Minuten online:<br>";
+    echo "Seit ".$plg_time_online." Minuten online:<br />";
     $usr_id_merker  = 0;
     $count_visitors = 0;
     
@@ -117,7 +117,7 @@ if($g_db->num_rows($result) > 0)
                 }
                 else
                 {
-                    echo "<br>";
+                    echo "<br />";
                 }
                 $usr_id_merker = $row->ses_usr_id;
             }

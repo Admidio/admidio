@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Jochen Erkens
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
  *
@@ -154,23 +154,23 @@ if($job==NULL)
     }
     
     echo "
-    <form method=\"post\" action=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=upload&usr_id=".$req_usr_id."\" enctype=\"multipart/form-data\">
+    <form method=\"post\" action=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=upload&amp;usr_id=".$req_usr_id."\" enctype=\"multipart/form-data\">
     <div class=\"formLayout\" id=\"profile_photo_upload_form\">
         <div class=\"formHead\">$headline</div>
 
         <div class=\"formBody\">
             <p>Aktuelles Bild:</p>
 
-            <img src=\"profile_photo_show.php?usr_id=$req_usr_id&amp;id=". time(). "\">
+            <img src=\"profile_photo_show.php?usr_id=$req_usr_id&amp;id=". time(). "\" alt=\"Aktuelles Bild\" />
 
             <p>Bitte hier ein neues Bild ausw&auml;hlen:</p>
-            <p><input type=\"file\" id=\"bilddatei\" name=\"bilddatei\" size=\"40\" value=\"durchsuchen\"></p>
+            <p><input type=\"file\" id=\"bilddatei\" name=\"bilddatei\" size=\"40\" value=\"durchsuchen\" /></p>
 
             <hr />
 
             <div class=\"formSubmit\">
                 <button name=\"upload\" type=\"submit\" value=\"speichern\">
-                    <img src=\"$g_root_path/adm_program/images/page_white_get.png\" alt=\"Speichern\">
+                    <img src=\"$g_root_path/adm_program/images/page_white_get.png\" alt=\"Speichern\" />
                     &nbsp;Bild Hochladen
                 </button>
              </div>
@@ -182,8 +182,8 @@ if($job==NULL)
         <li>
             <span class=\"iconTextLink\">
                 <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-                src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
-                <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+                src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück\" /></a>
+                <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
             </span>
         </li>
     </ul>";
@@ -268,22 +268,22 @@ if($job=="upload")
 
                         // es wird eine id uebergeben, damit immer ein eindeutiger Pfad vorhanden ist 
                         // und nicht ein altes Bild aus dem Cache genommen wird
-                        echo"<img src=\"profile_photo_show.php?usr_id=$req_usr_id&amp;id=". time(). "\">
+                        echo"<img src=\"profile_photo_show.php?usr_id=$req_usr_id&amp;id=". time(). "\" alt=\"Aktuelles Bild\" />
                         
                     </td>
-                    <td><img src=\"profile_photo_show.php?usr_id=$req_usr_id&amp;tmp_photo=1&amp;id=". time(). "\"></td>
+                    <td><img src=\"profile_photo_show.php?usr_id=$req_usr_id&amp;tmp_photo=1&amp;id=". time(). "\" alt=\"Neues Bild\" /></td>
                 </tr>
             </table>
 
             <hr />
             
             <div class=\"formSubmit\">
-                <button name=\"cancel\" type=\"button\" value=\"abbrechen\" onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=dont_save&usr_id=".$req_usr_id."'\">
-                    <img src=\"$g_root_path/adm_program/images/error.png\" alt=\"Abbrechen\">
+                <button name=\"cancel\" type=\"button\" value=\"abbrechen\" onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=dont_save&amp;usr_id=".$req_usr_id."'\">
+                    <img src=\"$g_root_path/adm_program/images/error.png\" alt=\"Abbrechen\" />
                     &nbsp;Abbrechen
                 </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <button name=\"update\" type=\"button\" value=\"update\" onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=save&usr_id=".$req_usr_id."'\">
-                    <img src=\"$g_root_path/adm_program/images/database_in.png\" alt=\"Update\">
+                <button name=\"update\" type=\"button\" value=\"update\" onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=save&amp;usr_id=".$req_usr_id."'\">
+                    <img src=\"$g_root_path/adm_program/images/database_in.png\" alt=\"Update\" />
                     &nbsp;Neues Bild &uuml;bernehmen
                 </button>
             </div>

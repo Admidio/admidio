@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Daniel Dieckelmann
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * start     - Angabe, ab welchem Datensatz Links angezeigt werden sollen
  * headline  - Ueberschrift, die ueber den Links steht
@@ -80,7 +80,7 @@ $g_layout['title'] = $_GET["headline"];
 if($g_preferences['enable_rss'] == 1)
 {
     $g_layout['header'] =  "<link type=\"application/rss+xml\" rel=\"alternate\" title=\"". $g_current_organization->getValue("org_longname"). " - Links\"
-        href=\"$g_root_path/adm_program/modules/links/rss_links.php\">";
+        href=\"$g_root_path/adm_program/modules/links/rss_links.php\" />";
 };
 
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");
@@ -150,14 +150,14 @@ if ($_GET['id'] == 0 && ($g_current_user->editWeblinksRight() || $g_preferences[
             <li>
                 <span class=\"iconTextLink\">
                     <a href=\"$g_root_path/adm_program/modules/links/links_new.php?headline=". $_GET["headline"]. "\"><img
-                    src=\"$g_root_path/adm_program/images/add.png\" alt=\"Neu anlegen\"></a>
+                    src=\"$g_root_path/adm_program/images/add.png\" alt=\"Neu anlegen\" /></a>
                     <a href=\"$g_root_path/adm_program/modules/links/links_new.php?headline=". $_GET["headline"]. "\">Neu anlegen</a>
                 </span>
             </li>
             <li>
                 <span class=\"iconTextLink\">
                     <a href=\"$g_root_path/adm_program/administration/roles/categories.php?type=LNK\"><img
-                    src=\"$g_root_path/adm_program/images/application_double.png\" alt=\"Kategorien pflegen\"></a>
+                    src=\"$g_root_path/adm_program/images/application_double.png\" alt=\"Kategorien pflegen\" /></a>
                     <a href=\"$g_root_path/adm_program/administration/roles/categories.php?type=LNK\">Kategorien pflegen</a>
                 </span>
             </li>
@@ -238,7 +238,7 @@ else
                 <div style=\"text-align: left;\">
                     <span class=\"iconLink\">
                         <a href=\"$row->lnk_url\" target=\"_blank\"><img src=\"$g_root_path/adm_program/images/globe.png\"
-                        alt=\"Gehe zu $row->lnk_name\" title=\"Gehe zu $row->lnk_name\"></a>
+                        alt=\"Gehe zu $row->lnk_name\" title=\"Gehe zu $row->lnk_name\" /></a>
                         <a href=\"$row->lnk_url\" target=\"_blank\">$row->lnk_name</a>
                     </span>
                 </div>
@@ -247,11 +247,11 @@ else
                     // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
                     if ($g_preferences['enable_bbcode'] == 1)
                     {
-                        echo strSpecialChars2Html($bbcode->parse($row->lnk_description));
+                        echo $bbcode->parse($row->lnk_description);
                     }
                     else
                     {
-                        echo nl2br(strSpecialChars2Html($row->lnk_description));
+                        echo nl2br($row->lnk_description);
                     }
                 echo "</div>";
 
@@ -265,11 +265,11 @@ else
                             echo "
                             <span class=\"iconLink\">
                                 <a href=\"$g_root_path/adm_program/modules/links/links_new.php?lnk_id=$row->lnk_id&amp;headline=". $_GET['headline']. "\"><img 
-                                src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>
+                                src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
                             </span>
                             <span class=\"iconLink\">
                                 <a href=\"$g_root_path/adm_program/modules/links/links_function.php?lnk_id=$row->lnk_id&amp;mode=4\"><img 
-                                src=\"$g_root_path/adm_program/images/cross.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>
+                                src=\"$g_root_path/adm_program/images/cross.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" /></a>
                             </span>";
                         }
                         $user_create = new User($g_db, $row->lnk_usr_id);
@@ -279,7 +279,7 @@ else
                         if($row->lnk_usr_id_change > 0)
                         {
                             $user_change = new User($g_db, $row->lnk_usr_id_change);
-                            echo "<br>Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname").
+                            echo "<br />Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname").
                             " am ". mysqldatetime("d.m.y h:i", $row->lnk_last_change);
                         }
                     echo "</div>";

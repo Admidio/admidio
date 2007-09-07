@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
  *
@@ -63,8 +63,8 @@ if (isset($comment_result))
         <div class=\"groupBox\" style=\"overflow: hidden; margin-left: 20px; margin-right: 20px;\">
             <div class=\"groupBoxHeadline\">
                 <div style=\"text-align: left; float: left;\">
-                    <img src=\"$g_root_path/adm_program/images/comments.png\" style=\"vertical-align: top;\" alt=\"Kommentar ". $commentNumber. "\">&nbsp;".
-                    "Kommentar von ". strSpecialChars2Html($row->gbc_name);
+                    <img src=\"$g_root_path/adm_program/images/comments.png\" style=\"vertical-align: top;\" alt=\"Kommentar ". $commentNumber. "\" />&nbsp;".
+                    "Kommentar von ". $row->gbc_name;
 
                 // Falls eine Mailadresse des Users angegeben wurde, soll ein Maillink angezeigt werden...
                 if (isValidEmailAddress($row->gbc_email))
@@ -72,7 +72,7 @@ if (isset($comment_result))
                     echo "
                     <span class=\"iconLink\">
                         <a href=\"mailto:$row->gbc_email\"><img src=\"$g_root_path/adm_program/images/email.png\" 
-                        alt=\"Mail an $row->gbc_email\" title=\"Mail an $row->gbc_email\"></a>
+                        alt=\"Mail an $row->gbc_email\" title=\"Mail an $row->gbc_email\" /></a>
                     </span>";
                 }
 
@@ -87,11 +87,11 @@ if (isset($comment_result))
                     echo "
                     <span class=\"iconLink\">
                         <a href=\"$g_root_path/adm_program/modules/guestbook/guestbook_comment_new.php?cid=$row->gbc_id\"><img 
-                        src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>
+                        src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
                     </span>
                     <span class=\"iconLink\">
                         <a href=\"$g_root_path/adm_program/modules/guestbook/guestbook_function.php?id=$row->gbc_id&amp;mode=7\"><img 
-                        src=\"$g_root_path/adm_program/images/cross.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>
+                        src=\"$g_root_path/adm_program/images/cross.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" /></a>
                     </span>";
                 }
 
@@ -103,11 +103,11 @@ if (isset($comment_result))
                     // wenn BBCode aktiviert ist, den Text noch parsen, ansonsten direkt ausgeben
                     if ($g_preferences['enable_bbcode'] == 1)
                     {
-                        echo strSpecialChars2Html($bbcode->parse($row->gbc_text));
+                        echo $bbcode->parse($row->gbc_text);
                     }
                     else
                     {
-                        echo nl2br(strSpecialChars2Html($row->gbc_text));
+                        echo nl2br($row->gbc_text);
                     }
                 echo "</div>";
 
@@ -143,7 +143,7 @@ if (isset($comment_result))
         <div class=\"editInformation\">
             <span class=\"iconTextLink\">
                 <a href=\"$load_url\"><img src=\"$g_root_path/adm_program/images/comment_new.png\" 
-                alt=\"Kommentieren\" title=\"Kommentieren\"></a>
+                alt=\"Kommentieren\" title=\"Kommentieren\" /></a>
                 <a href=\"$load_url\">Einen Kommentar zu diesem Beitrag schreiben.</a>
             </span>
         </div>";

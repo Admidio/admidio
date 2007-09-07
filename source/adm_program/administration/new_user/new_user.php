@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
  
@@ -88,11 +88,11 @@ echo "
             <td style=\"text-align: center;\">
                 <span class=\"iconLink\">
                     <a href=\"$g_root_path/adm_program/administration/new_user/new_user_assign.php?new_user_id=$row->usr_id\"><img 
-                    src=\"$g_root_path/adm_program/images/properties.png\" alt=\"Anmeldung zuordnen\" title=\"Anmeldung zuordnen\"></a>
+                    src=\"$g_root_path/adm_program/images/properties.png\" alt=\"Anmeldung zuordnen\" title=\"Anmeldung zuordnen\" /></a>
                 </span>
                 <span class=\"iconLink\">
                     <a href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$row->usr_id&amp;mode=5\"><img 
-                    src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Anmeldung l&ouml;schen\" title=\"Anmeldung l&ouml;schen\"></a>
+                    src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Anmeldung l&ouml;schen\" title=\"Anmeldung l&ouml;schen\" /></a>
                 </span>
             </td>
         </tr>";

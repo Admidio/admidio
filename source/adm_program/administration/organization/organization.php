@@ -51,11 +51,6 @@ else
 $g_layout['title']  = "Organisationseinstellungen";
 $g_layout['header'] =  "
     <style type=\"text/css\">
-        .smallText {
-            font-size:  7pt;
-            font-weight: normal;
-        }
-        
         .groupBox {
             visibility: hidden; 
             display:    none; 
@@ -63,7 +58,7 @@ $g_layout['header'] =  "
         }
     </style>
 
-    <script type=\"text/javascript\">
+    <script type=\"text/javascript\"><!--
         // Dieses Array enthaelt alle IDs, die in den Orga-Einstellungen auftauchen
         ids = new Array('general', 'register', 'announcement-module', 'download-module', 'photo-module', 
                         'guestbook-module', 'list-module', 'mail-module','profile-module', 'dates-module', 
@@ -85,7 +80,7 @@ $g_layout['header'] =  "
             document.getElementById(element_id).style.display    = 'block';
             // window.blur();
         }
-    </script>";
+    --></script>";
 
 // Html-Kopf ausgeben
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");
@@ -95,29 +90,29 @@ echo "
 
 <div class=\"formLayout\">
     <div class=\"formBody\" style=\"text-align: center;\">
-        <a href=\"#\" onClick=\"toggleDiv('general');\">Allgemein</a>
+        <a href=\"#\" onclick=\"toggleDiv('general');\">Allgemein</a>
 
-         &#124; <a href=\"#\" onClick=\"toggleDiv('register');\">Registrierung</a>
+         &#124; <a href=\"#\" onclick=\"toggleDiv('register');\">Registrierung</a>
 
-         &#124; <a href=\"#\" onClick=\"toggleDiv('announcement-module');\">Ank&uuml;ndigungen</a>
+         &#124; <a href=\"#\" onclick=\"toggleDiv('announcement-module');\">Ank&uuml;ndigungen</a>
 
-         &#124; <a href=\"#\" onClick=\"toggleDiv('download-module');\">Downloads</a>
+         &#124; <a href=\"#\" onclick=\"toggleDiv('download-module');\">Downloads</a>
 
-         &#124; <a href=\"#\" onClick=\"toggleDiv('photo-module');\">Fotos</a>
+         &#124; <a href=\"#\" onclick=\"toggleDiv('photo-module');\">Fotos</a>
 
-         &#124; <a href=\"#\" onClick=\"toggleDiv('guestbook-module');\">G&auml;stebuch</a>
+         &#124; <a href=\"#\" onclick=\"toggleDiv('guestbook-module');\">G&auml;stebuch</a>
 
-         &#124; <a href=\"#\" onClick=\"toggleDiv('list-module');\">Listen</a>
+         &#124; <a href=\"#\" onclick=\"toggleDiv('list-module');\">Listen</a>
 
-         &#124; <a href=\"#\" onClick=\"toggleDiv('mail-module');\">Mails</a>
+         &#124; <a href=\"#\" onclick=\"toggleDiv('mail-module');\">Mails</a>
          
-         &#124; <a href=\"#\" onClick=\"toggleDiv('profile-module');\">Profil</a>
+         &#124; <a href=\"#\" onclick=\"toggleDiv('profile-module');\">Profil</a>
 
-         &#124; <a href=\"#\" onClick=\"toggleDiv('dates-module');\">Termine</a>
+         &#124; <a href=\"#\" onclick=\"toggleDiv('dates-module');\">Termine</a>
 
-         &#124; <a href=\"#\" onClick=\"toggleDiv('links-module');\">Links</a>
+         &#124; <a href=\"#\" onclick=\"toggleDiv('links-module');\">Links</a>
     </div>
-</div><br />
+</div>
 
 <form action=\"$g_root_path/adm_program/administration/organization/organization_function.php\" method=\"post\">
 <div class=\"formLayout\" id=\"organization_form\">
@@ -130,33 +125,33 @@ echo "
                         <dl>
                             <dt><label for=\"version\">Admidio-Version:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"version\" name=\"version\" class=\"readonly\" readonly size=\"10\" maxlength=\"10\" value=\"". ADMIDIO_VERSION. "\">&nbsp;
-                                <a href=\"http://www.admidio.org/index.php?download.php\" target=\"_blank\">Update suchen</a>
+                                <input type=\"text\" id=\"version\" name=\"version\" class=\"readonly\" readonly=\"readonly\" size=\"10\" maxlength=\"10\" value=\"". ADMIDIO_VERSION. "\" />&nbsp;
+                                <a href=\"http://www.admidio.org/index.php?download.php\">Update suchen</a>
                             </dd>
                         </dl>
                     </li>
                     <li>
                         <dl>
                             <dt><label for=\"org_shortname\">Name (Abk.):</label></dt>
-                            <dd><input type=\"text\" id=\"org_shortname\" name=\"org_shortname\" class=\"readonly\" readonly size=\"10\" maxlength=\"10\" value=\"". $form_values['org_shortname']. "\"></dd>
+                            <dd><input type=\"text\" id=\"org_shortname\" name=\"org_shortname\" class=\"readonly\" readonly=\"readonly\" size=\"10\" maxlength=\"10\" value=\"". $form_values['org_shortname']. "\" /></dd>
                         </dl>
                     </li>
                     <li>
                         <dl>
                             <dt><label for=\"org_longname\">Name (lang):</label></dt>
-                            <dd><input type=\"text\" id=\"org_longname\" name=\"org_longname\" style=\"width: 200px;\" maxlength=\"60\" value=\"". $form_values['org_longname']. "\"></dd>
+                            <dd><input type=\"text\" id=\"org_longname\" name=\"org_longname\" style=\"width: 200px;\" maxlength=\"60\" value=\"". $form_values['org_longname']. "\" /></dd>
                         </dl>
                     </li>
                     <li>
                         <dl>
                             <dt><label for=\"org_homepage\">Homepage:</label></dt>
-                            <dd><input type=\"text\" id=\"org_homepage\" name=\"org_homepage\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['org_homepage']. "\"></dd>
+                            <dd><input type=\"text\" id=\"org_homepage\" name=\"org_homepage\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['org_homepage']. "\" /></dd>
                         </dl>
                     </li>
                     <li>
                         <dl>
                             <dt><label for=\"email_administrator\">E-Mail Adresse des Administrator:</label></dt>
-                            <dd><input type=\"text\" id=\"email_administrator\" name=\"email_administrator\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['email_administrator']. "\"></dd>
+                            <dd><input type=\"text\" id=\"email_administrator\" name=\"email_administrator\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['email_administrator']. "\" /></dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
@@ -185,7 +180,7 @@ echo "
                                             <option value=\"0\" ";
                                             if(strlen($form_values['org_org_id_parent']) == 0)
                                             {
-                                                echo " selected ";
+                                                echo " selected=\"selected\" ";
                                             }
                                             echo ">keine</option>";
 
@@ -194,7 +189,7 @@ echo "
                                                 echo "<option value=\"$row->org_id\"";
                                                     if($form_values['org_org_id_parent'] == $row->org_id)
                                                     {
-                                                        echo " selected ";
+                                                        echo " selected=\"selected\" ";
                                                     }
                                                     echo ">$row->org_shortname</option>";
                                             }
@@ -217,7 +212,7 @@ echo "
                                 <input type=\"checkbox\" id=\"enable_system_mails\" name=\"enable_system_mails\" ";
                                 if(isset($form_values['enable_system_mails']) && $form_values['enable_system_mails'] == 1)
                                 {
-                                    echo " checked ";
+                                    echo " checked=\"checked\" ";
                                 }
                                 echo " value=\"1\" />
                             </dd>
@@ -237,7 +232,7 @@ echo "
                                 <input type=\"checkbox\" id=\"enable_bbcode\" name=\"enable_bbcode\" ";
                                 if(isset($form_values['enable_bbcode']) && $form_values['enable_bbcode'] == 1)
                                 {
-                                    echo " checked ";
+                                    echo " checked=\"checked\" ";
                                 }
                                 echo " value=\"1\" />
                             </dd>
@@ -254,7 +249,7 @@ echo "
                                 <input type=\"checkbox\" id=\"enable_rss\" name=\"enable_rss\" ";
                                 if(isset($form_values['enable_rss']) && $form_values['enable_rss'] == 1)
                                 {
-                                    echo " checked ";
+                                    echo " checked=\"checked\" ";
                                 }
                                 echo " value=\"1\" />
                             </dd>
@@ -273,7 +268,7 @@ echo "
                                 <input type=\"checkbox\" id=\"enable_auto_login\" name=\"enable_auto_login\" ";
                                 if(isset($form_values['enable_auto_login']) && $form_values['enable_auto_login'] == 1)
                                 {
-                                    echo " checked ";
+                                    echo " checked=\"checked\" ";
                                 }
                                 echo " value=\"1\" />
                             </dd>
@@ -288,7 +283,7 @@ echo "
                     <li>
                         <dl>
                             <dt><label for=\"logout_minutes\">Automatischer Logout nach:</label></dt>
-                            <dd><input type=\"text\" id=\"logout_minutes\" name=\"logout_minutes\" size=\"4\" maxlength=\"4\" value=\"". $form_values['logout_minutes']. "\"> Minuten</dd>
+                            <dd><input type=\"text\" id=\"logout_minutes\" name=\"logout_minutes\" size=\"4\" maxlength=\"4\" value=\"". $form_values['logout_minutes']. "\" /> Minuten</dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
@@ -311,7 +306,7 @@ echo "
                                             echo "<option value=\"$filename\" ";
                                             if($form_values['user_css'] == $filename)
                                             {
-                                                echo " selected ";
+                                                echo " selected=\"selected\" ";
                                             }
                                             echo ">$filename</option>";
                                         }
@@ -321,32 +316,8 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Eine Stylesheet-Datei aus dem adm_config-Ordner kann hier ausgew&auml;hlt werden. 
-                        Diese &uuml;berschreibt dann die System-Stylesheet-Einstellungen. 
-                    </li>
-                    <li>
-                        <dl>
-                            <dt><label for=\"system_align\">Admidio Anordnung:</label></dt>
-                            <dd>
-                                <select size=\"1\" id=\"system_align\" name=\"system_align\">";
-                                    $arr_align = array("center" => "Zentriert", "left" => "Linksb&uuml;ndig", "right" => "Rechtsb&uuml;ndig");
-
-                                    foreach($arr_align as $key => $value)
-                                    {
-                                        echo "<option value=\"$key\" ";
-                                        if($form_values['system_align'] == $key)
-                                        {
-                                            echo " selected ";
-                                        }                            
-                                        echo ">$value</option>";
-                                    }
-                                echo "</select>
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class=\"smallFontSize\">
-                        Hier kann eingestellt werden, wie die Admidio-Module im Browser angeordnet werden sollen. Dies wirkt sich 
-                        nur auf das Modul selber und nicht den Inhalt aus body_top.php und body_bottom.php aus.
+                        Eine Stylesheet-Datei aus dem adm_config-Ordner kann hier ausgewählt werden. 
+                        Diese überschreibt die System-Stylesheet-Einstellungen. 
                     </li>
                 </ul>
             </div>
@@ -370,19 +341,19 @@ echo "
                                     <option value=\"0\" ";
                                     if($form_values['registration_mode'] == 0)
                                     {
-                                        echo " selected ";
+                                        echo " selected=\"selected\" ";
                                     }
                                     echo ">Deaktiviert</option>
                                     <option value=\"1\" ";
                                     if($form_values['registration_mode'] == 1)
                                     {
-                                        echo " selected ";
+                                        echo " selected=\"selected\" ";
                                     }
                                     echo ">Schnelle Registrierung</option>
                                     <option value=\"2\" ";
                                     if($form_values['registration_mode'] == 2)
                                     {
-                                        echo " selected ";
+                                        echo " selected=\"selected\" ";
                                     }
                                     echo ">Erweiterte Registrierung</option>
                                 </select>
@@ -401,7 +372,7 @@ echo "
                                 <input type=\"checkbox\" id=\"enable_registration_captcha\" name=\"enable_registration_captcha\" ";
                                 if(isset($form_values['enable_registration_captcha']) && $form_values['enable_registration_captcha'] == 1)
                                 {
-                                    echo " checked ";
+                                    echo " checked=\"checked\" ";
                                 }
                                 echo " value=\"1\" />
                             </dd>
@@ -419,7 +390,7 @@ echo "
                                 <input type=\"checkbox\" id=\"enable_registration_admin_mail\" name=\"enable_registration_admin_mail\" ";
                                 if(isset($form_values['enable_registration_admin_mail']) && $form_values['enable_registration_admin_mail'] == 1)
                                 {
-                                    echo " checked ";
+                                    echo " checked=\"checked\" ";
                                 }
                                 echo " value=\"1\" />
                             </dd>
@@ -450,19 +421,19 @@ echo "
                                     <option value=\"0\" ";
                                     if($form_values['enable_announcements_module'] == 0)
                                     {
-                                        echo " selected ";
+                                        echo " selected=\"selected\" ";
                                     }
                                     echo ">Deaktiviert</option>
                                     <option value=\"1\" ";
                                     if($form_values['enable_announcements_module'] == 1)
                                     {
-                                        echo " selected ";
+                                        echo " selected=\"selected\" ";
                                     }
                                     echo ">Aktiviert</option>
                                     <option value=\"2\" ";
                                     if($form_values['enable_announcements_module'] == 2)
                                     {
-                                        echo " selected ";
+                                        echo " selected=\"selected\" ";
                                     }
                                     echo ">Nur für registrierte Benutzer</option>
                                 </select>                            
@@ -496,7 +467,7 @@ echo "
                                 <input type=\"checkbox\" id=\"enable_download_module\" name=\"enable_download_module\" ";
                                 if(isset($form_values['enable_download_module']) && $form_values['enable_download_module'] == 1)
                                 {
-                                    echo " checked ";
+                                    echo " checked=\"checked\" ";
                                 }
                                 echo " value=\"1\" />
                             </dd>
@@ -510,7 +481,7 @@ echo "
                         <dl>
                             <dt><label for=\"max_file_upload_size\">Maximale Dateigr&ouml;&szlig;e:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"max_file_upload_size\" name=\"max_file_upload_size\" size=\"6\" maxlength=\"10\" value=\"". $form_values['max_file_upload_size']. "\"> KB
+                                <input type=\"text\" id=\"max_file_upload_size\" name=\"max_file_upload_size\" size=\"6\" maxlength=\"10\" value=\"". $form_values['max_file_upload_size']. "\" /> KB
                             </dd>
                         </dl>
                     </li>
@@ -539,7 +510,7 @@ echo "
                                 <input type=\"checkbox\" id=\"enable_photo_module\" name=\"enable_photo_module\" ";
                                 if(isset($form_values['enable_photo_module']) && $form_values['enable_photo_module'] == 1)
                                 {
-                                    echo " checked ";
+                                    echo " checked=\"checked\" ";
                                 }
                                 echo " value=\"1\" />
                             </dd>
@@ -551,9 +522,9 @@ echo "
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"photo_thumbs_row\">Thumbnailzeilen:</label></dd>
+                            <dt><label for=\"photo_thumbs_row\">Thumbnailzeilen:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"photo_thumbs_row\" name=\"photo_thumbs_row\" size=\"2\" maxlength=\"2\" value=\"". $form_values['photo_thumbs_row']. "\">
+                                <input type=\"text\" id=\"photo_thumbs_row\" name=\"photo_thumbs_row\" size=\"2\" maxlength=\"2\" value=\"". $form_values['photo_thumbs_row']. "\" />
                              </dd>
                         </dl>
                     </li>
@@ -564,7 +535,7 @@ echo "
                         <dl>
                             <dt><label for=\"photo_thumbs_column\">Thumbnailspalten:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"photo_thumbs_column\" name=\"photo_thumbs_column\" size=\"2\" maxlength=\"2\" value=\"". $form_values['photo_thumbs_column']. "\">
+                                <input type=\"text\" id=\"photo_thumbs_column\" name=\"photo_thumbs_column\" size=\"2\" maxlength=\"2\" value=\"". $form_values['photo_thumbs_column']. "\" />
                              </dd>
                         </dl>
                     </li>
@@ -577,7 +548,7 @@ echo "
                         <dl>
                             <dt><label for=\"photo_thumbs_scale\">Skalierung Thumbnails:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"photo_thumbs_scale\" name=\"photo_thumbs_scale\" size=\"4\" maxlength=\"4\" value=\"". $form_values['photo_thumbs_scale']. "\"> Pixel
+                                <input type=\"text\" id=\"photo_thumbs_scale\" name=\"photo_thumbs_scale\" size=\"4\" maxlength=\"4\" value=\"". $form_values['photo_thumbs_scale']. "\" /> Pixel
                              </dd>
                         </dl>
                     </li>
@@ -590,7 +561,7 @@ echo "
                         <dl>
                             <dt><label for=\"photo_save_scale\">Skalierung beim Hochladen:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"photo_save_scale\" name=\"photo_save_scale\" size=\"4\" maxlength=\"4\" value=\"". $form_values['photo_save_scale']. "\"> Pixel
+                                <input type=\"text\" id=\"photo_save_scale\" name=\"photo_save_scale\" size=\"4\" maxlength=\"4\" value=\"". $form_values['photo_save_scale']. "\" /> Pixel
                              </dd>
                         </dl>
                     </li>
@@ -603,7 +574,7 @@ echo "
                         <dl>
                             <dt><label for=\"photo_preview_scale\">H&ouml;he der Vorschaubilder:</label></dt>
                             <dd>
-                                <input type=\"text\" name=\"photo_preview_scale\" name=\"photo_preview_scale\" size=\"4\" maxlength=\"4\" value=\"". $form_values['photo_preview_scale']. "\"> Pixel
+                                <input type=\"text\" id=\"photo_preview_scale\" name=\"photo_preview_scale\" size=\"4\" maxlength=\"4\" value=\"". $form_values['photo_preview_scale']. "\" /> Pixel
                              </dd>
                         </dl>
                     </li>
@@ -614,7 +585,7 @@ echo "
                         <dl>
                             <dt><label for=\"photo_show_width\">Max. Bildanzeigebreite:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"photo_show_width\" name=\"photo_show_width\" size=\"4\" maxlength=\"4\" value=\"". $form_values['photo_show_width']. "\"> Pixel
+                                <input type=\"text\" id=\"photo_show_width\" name=\"photo_show_width\" size=\"4\" maxlength=\"4\" value=\"". $form_values['photo_show_width']. "\" /> Pixel
                              </dd>
                         </dl>
                     </li>
@@ -628,7 +599,7 @@ echo "
                         <dl>
                             <dt><label for=\"photo_show_height\">Max. Bildanzeigeh&ouml;he:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"photo_show_height\" name=\"photo_show_height\" size=\"4\" maxlength=\"4\" value=\"". $form_values['photo_show_height']. "\"> Pixel
+                                <input type=\"text\" id=\"photo_show_height\" name=\"photo_show_height\" size=\"4\" maxlength=\"4\" value=\"". $form_values['photo_show_height']. "\" /> Pixel
                              </dd>
                         </dl>
                     </li>
@@ -645,7 +616,7 @@ echo "
                                 <input type=\"checkbox\" id=\"photo_image_text\" name=\"photo_image_text\" ";
                                 if(isset($form_values['photo_image_text']) && $form_values['photo_image_text'] == 1)
                                 {
-                                    echo " checked ";
+                                    echo " checked=\"checked\" ";
                                 }
                                 echo " value=\"1\" />
                             </dd>
@@ -664,24 +635,24 @@ echo "
                                     <option value=\"0\" ";
                                     if($form_values['photo_show_mode'] == 0)
                                     {
-                                        echo " selected ";
+                                        echo " selected=\"selected\" ";
                                     }
                                     echo ">Popupfenster</option>
                                     <option value=\"1\" ";
                                     if($form_values['photo_show_mode'] == 1)
                                     {
-                                        echo " selected ";
+                                        echo " selected=\"selected\" ";
                                     }
                                     echo ">Lightbox</option>
                                     <option value=\"2\" ";
                                     if($form_values['photo_show_mode'] == 2)
                                     {
-                                        echo " selected ";
+                                        echo " selected=\"selected\" ";
                                     }
                                     echo ">Gleiches Fenster</option>
                                 </select>
                             </dd>
-                        </dt>
+                        </dl>
                     </li>
                     <li class=\"smallFontSize\">
                         Wie sollen die Bilder in der Gro&szlig;enansicht angezeigt werden?<br/>
@@ -710,19 +681,19 @@ echo "
                                     <option value=\"0\" ";
                                     if($form_values['enable_guestbook_module'] == 0)
                                     {
-                                        echo " selected ";
+                                        echo " selected=\"selected\" ";
                                     }
                                     echo ">Deaktiviert</option>
                                     <option value=\"1\" ";
                                     if($form_values['enable_guestbook_module'] == 1)
                                     {
-                                        echo " selected ";
+                                        echo " selected=\"selected\" ";
                                     }
                                     echo ">Aktiviert</option>
                                     <option value=\"2\" ";
                                     if($form_values['enable_guestbook_module'] == 2)
                                     {
-                                        echo " selected ";
+                                        echo "selected=\"selected\" ";
                                     }
                                     echo ">Nur für registrierte Benutzer</option>
                                 </select>                             
@@ -742,11 +713,11 @@ echo "
                                 <input type=\"checkbox\" id=\"enable_guestbook_captcha\" name=\"enable_guestbook_captcha\" ";
                                 if(isset($form_values['enable_guestbook_captcha']) && $form_values['enable_guestbook_captcha'] == 1)
                                 {
-                                    echo " checked ";
+                                    echo " checked=\"checked\" ";
                                 }
                                 echo " value=\"1\" />
                             </dd>
-                        </dt>
+                        </dl>
                     </li>
                     <li class=\"smallFontSize\">
                         F&uuml;r nicht eingeloggte Benutzer wird im G&auml;stebuchformular bei aktiviertem Captcha ein alphanumerischer
@@ -760,7 +731,7 @@ echo "
                                 <input type=\"checkbox\" id=\"enable_gbook_comments4all\" name=\"enable_gbook_comments4all\" ";
                                 if(isset($form_values['enable_gbook_comments4all']) && $form_values['enable_gbook_comments4all'] == 1)
                                 {
-                                    echo " checked ";
+                                    echo " checked=\"checked\" ";
                                 }
                                 echo " value=\"1\" />
                             </dd>
@@ -774,7 +745,7 @@ echo "
                         <dl>
                             <dt><label for=\"flooding_protection_time\">Flooding Protection Intervall:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"flooding_protection_time\" name=\"flooding_protection_time\" size=\"4\" maxlength=\"4\" value=\"". $form_values['flooding_protection_time']. "\"> Sekunden
+                                <input type=\"text\" id=\"flooding_protection_time\" name=\"flooding_protection_time\" size=\"4\" maxlength=\"4\" value=\"". $form_values['flooding_protection_time']. "\" /> Sekunden
                             </dd>
                         </dl>
                     </li>
@@ -803,7 +774,7 @@ echo "
                         <dl>
                             <dt><label for=\"lists_roles_per_page\">Anzahl Rollen pro Seite:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"lists_roles_per_page\" name=\"lists_roles_per_page\" size=\"4\" maxlength=\"4\" value=\"". $form_values['lists_roles_per_page']. "\">
+                                <input type=\"text\" id=\"lists_roles_per_page\" name=\"lists_roles_per_page\" size=\"4\" maxlength=\"4\" value=\"". $form_values['lists_roles_per_page']. "\" />
                             </dd>
                         </dl>
                     </li>
@@ -816,7 +787,7 @@ echo "
                         <dl>
                             <dt><label for=\"lists_members_per_page\">Anzahl Teilnehmer pro Seite:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"lists_members_per_page\" name=\"lists_members_per_page\" size=\"4\" maxlength=\"4\" value=\"". $form_values['lists_members_per_page']. "\">
+                                <input type=\"text\" id=\"lists_members_per_page\" name=\"lists_members_per_page\" size=\"4\" maxlength=\"4\" value=\"". $form_values['lists_members_per_page']. "\" />
                             </dd>
                         </dl>
                     </li>
@@ -847,7 +818,7 @@ echo "
                                 <input type=\"checkbox\" id=\"enable_mail_module\" name=\"enable_mail_module\" ";
                                 if(isset($form_values['enable_mail_module']) && $form_values['enable_mail_module'] == 1)
                                 {
-                                    echo " checked ";
+                                    echo " checked=\"checked\" ";
                                 }
                                 echo " value=\"1\" />
                             </dd>
@@ -865,7 +836,7 @@ echo "
                                 <input type=\"checkbox\" id=\"enable_mail_captcha\" name=\"enable_mail_captcha\" ";
                                 if(isset($form_values['enable_mail_captcha']) && $form_values['enable_mail_captcha'] == 1)
                                 {
-                                    echo " checked ";
+                                    echo " checked=\"checked\" ";
                                 }
                                 echo " value=\"1\" />
                             </dd>
@@ -880,7 +851,7 @@ echo "
                         <dl>
                             <dt><label for=\"max_email_attachment_size\">Maximale Dateigr&ouml;&szlig;e f&uuml;r Anh&auml;nge:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"max_email_attachment_size\" name=\"max_email_attachment_size\" size=\"4\" maxlength=\"6\" value=\"". $form_values['max_email_attachment_size']. "\"> KB
+                                <input type=\"text\" id=\"max_email_attachment_size\" name=\"max_email_attachment_size\" size=\"4\" maxlength=\"6\" value=\"". $form_values['max_email_attachment_size']. "\" /> KB
                             </dd>
                         </dl>
                     </li>
@@ -913,7 +884,7 @@ echo "
                                     <option value=\"\"";
                                     if(strlen($form_values['default_country']) == 0)
                                     {
-                                        echo " selected ";
+                                        echo " selected=\"selected\" ";
                                     }
                                     echo ">- Bitte w&auml;hlen -</option>";
                                     $land = trim(fgets($landlist));
@@ -922,7 +893,7 @@ echo "
                                         echo"<option value=\"$land\"";
                                         if($land == $form_values['default_country'])
                                         {
-                                            echo " selected ";
+                                            echo " selected=\"selected\" ";
                                         }
                                         echo">$land</option>";
                                         $land = trim(fgets($landlist));
@@ -942,7 +913,7 @@ echo "
                                 <input type=\"checkbox\" id=\"enable_roles_view\" name=\"enable_roles_view\" ";
                                 if(isset($form_values['enable_roles_view']) && $form_values['enable_roles_view'] == 1)
                                 {
-                                    echo " checked ";
+                                    echo " checked=\"checked\" ";
                                 }
                                 echo " value=\"1\" />
                             </dd>
@@ -959,7 +930,7 @@ echo "
                                 <input type=\"checkbox\" id=\"enable_former_roles_view\" name=\"enable_former_roles_view\" ";
                                 if(isset($form_values['enable_former_roles_view']) && $form_values['enable_former_roles_view'] == 1)
                                 {
-                                    echo " checked ";
+                                    echo " checked=\"checked\" ";
                                 }
                                 echo " value=\"1\" />
                             </dd>
@@ -981,7 +952,7 @@ echo "
                                     <input type=\"checkbox\" id=\"enable_extern_roles_view\" name=\"enable_extern_roles_view\" ";
                                     if(isset($form_values['enable_extern_roles_view']) && $form_values['enable_extern_roles_view'] == 1)
                                     {
-                                        echo " checked ";
+                                        echo " checked=\"checked\" ";
                                     }
                                     echo " value=\"1\" />
                                 </dd>
@@ -1014,19 +985,19 @@ echo "
                                     <option value=\"0\" ";
                                     if($form_values['enable_dates_module'] == 0)
                                     {
-                                        echo " selected ";
+                                        echo " selected=\"selected\" ";
                                     }
                                     echo ">Deaktiviert</option>
                                     <option value=\"1\" ";
                                     if($form_values['enable_dates_module'] == 1)
                                     {
-                                        echo " selected ";
+                                        echo " selected=\"selected\" ";
                                     }
                                     echo ">Aktiviert</option>
                                     <option value=\"2\" ";
                                     if($form_values['enable_dates_module'] == 2)
                                     {
-                                        echo " selected ";
+                                        echo " selected=\"selected\" ";
                                     }
                                     echo ">Nur für registrierte Benutzer</option>
                                 </select>
@@ -1060,7 +1031,7 @@ echo "
                                 <input type=\"checkbox\" id=\"enable_weblinks_module\" name=\"enable_weblinks_module\" ";
                                 if(isset($form_values['enable_weblinks_module']) && $form_values['enable_weblinks_module'] == 1)
                                 {
-                                    echo " checked ";
+                                    echo " checked=\"checked\" ";
                                 }
                                 echo " value=\"1\" />
                             </dd>
@@ -1076,12 +1047,10 @@ echo "
     </div>
 </div>
 
-<br />
-
 <div class=\"formLayout\">
     <div class=\"formBody\" style=\"text-align: center;\">
         <button name=\"save\" type=\"submit\" value=\"speichern\">
-            <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\">
+            <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\" />
             &nbsp;Speichern</button>
     </div>
 </div>

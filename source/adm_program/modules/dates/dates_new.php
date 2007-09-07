@@ -106,7 +106,7 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 // Html des Modules ausgeben
 echo "
-<form name=\"form\" method=\"post\" action=\"$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=$req_dat_id&amp;mode=1\">
+<form method=\"post\" action=\"$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=$req_dat_id&amp;mode=1\">
 <div class=\"formLayout\" id=\"edit_dates_form\">
     <div class=\"formHead\">";
         if($req_dat_id > 0)
@@ -124,7 +124,7 @@ echo "
                 <dl>
                     <dt><label for=\"dat_headline\">&Uuml;berschrift:</label></dt>
                     <dd>
-                        <input type=\"text\" id=\"dat_headline\" name=\"dat_headline\" style=\"width: 350px;\" maxlength=\"100\" value=\"". htmlspecialchars($date->getValue("dat_headline"), ENT_QUOTES). "\">
+                        <input type=\"text\" id=\"dat_headline\" name=\"dat_headline\" style=\"width: 350px;\" maxlength=\"100\" value=\"". $date->getValue("dat_headline"). "\" />
                         <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                     </dd>
                 </dl>
@@ -147,27 +147,26 @@ echo "
                             echo " value=\"1\" />
                             <label for=\"dat_global\">". $_GET['headline']. " ist f&uuml;r mehrere Organisationen sichtbar</label>
                             <img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
-                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=termin_global','Message','width=400,height=350,left=310,top=200,scrollbars=yes')\">
+                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=termin_global','Message','width=400,height=350,left=310,top=200,scrollbars=yes')\" />
                         </dd>
                     </dl>
                 </li>";
             }
 
-            echo "<hr />
+            echo "<li><hr /></li>
 
             <li>
                 <dl>
                     <dt><label for=\"date_from\">Datum Beginn:</label></dt>
                     <dd>
-                        <input type=\"text\" id=\"date_from\" name=\"date_from\" size=\"10\" maxlength=\"10\" value=\"$date_from\">
+                        <input type=\"text\" id=\"date_from\" name=\"date_from\" size=\"10\" maxlength=\"10\" value=\"$date_from\" />
                         <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                         <span style=\"margin-left: 40px;\">
                             <label for=\"time_from\">Uhrzeit Beginn:</label>
-                        <span>
-                        <span style=\"margin-left: 10px;\">
-                            <input type=\"text\" id=\"time_from\" name=\"time_from\" size=\"5\" maxlength=\"5\" value=\"$time_from\">
                         </span>
-                    </span>
+                        <span style=\"margin-left: 10px;\">
+                            <input type=\"text\" id=\"time_from\" name=\"time_from\" size=\"5\" maxlength=\"5\" value=\"$time_from\" />
+                        </span>
                     </dd>
                 </dl>
             </li>
@@ -175,13 +174,13 @@ echo "
                 <dl>
                     <dt><label for=\"date_to\">Datum Ende:</label></dt>
                     <dd>
-                        <input type=\"text\" id=\"date_to\" name=\"date_to\" size=\"10\" maxlength=\"10\" value=\"$date_to\">
+                        <input type=\"text\" id=\"date_to\" name=\"date_to\" size=\"10\" maxlength=\"10\" value=\"$date_to\" />
                         &nbsp;&nbsp;
                         <span style=\"margin-left: 40px;\">
                             <label for=\"time_to\">Uhrzeit Ende:</label>
                         </span>
                         <span style=\"margin-left: 20px;\">
-                            <input type=\"text\"id=\"time_to\" name=\"time_to\" size=\"5\" maxlength=\"5\" value=\"$time_to\">
+                            <input type=\"text\" id=\"time_to\" name=\"time_to\" size=\"5\" maxlength=\"5\" value=\"$time_to\" />
                         </span>
                     </dd>
                 </dl>
@@ -190,7 +189,7 @@ echo "
                 <dl>
                     <dt><label for=\"dat_location\">Treffpunkt:</label></dt>
                     <dd>
-                        <input type=\"text\" id=\"dat_location\" name=\"dat_location\" style=\"width: 350px;\" maxlength=\"50\" value=\"". htmlspecialchars($date->getValue("dat_location"), ENT_QUOTES). "\">
+                        <input type=\"text\" id=\"dat_location\" name=\"dat_location\" style=\"width: 350px;\" maxlength=\"50\" value=\"". $date->getValue("dat_location"). "\" />
                     </dd>
                 </dl>
             </li>
@@ -199,12 +198,12 @@ echo "
                     <dt><label for=\"dat_description\">Beschreibung:</label>";
                         if($g_preferences['enable_bbcode'] == 1)
                         {
-                            echo "<br><br>
+                            echo "<br /><br />
                             <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\" tabindex=\"6\">Text formatieren</a>";
                         }
                     echo "</dt>
                     <dd>
-                        <textarea id=\"dat_description\" name=\"dat_description\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". htmlspecialchars($date->getValue("dat_description"), ENT_QUOTES). "</textarea>
+                        <textarea id=\"dat_description\" name=\"dat_description\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". $date->getValue("dat_description"). "</textarea>
                         <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                     </dd>
                 </dl>
@@ -215,7 +214,7 @@ echo "
 
         <div class=\"formSubmit\">
             <button name=\"speichern\" type=\"submit\" value=\"speichern\">
-                <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\">
+                <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\" />
                 &nbsp;Speichern</button>
         </div>
     </div>
@@ -226,8 +225,8 @@ echo "
     <li>
         <span class=\"iconTextLink\">
             <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
-            <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück\" /></a>
+            <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
         </span>
     </li>
 </ul>

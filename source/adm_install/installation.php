@@ -22,24 +22,25 @@
 function showPage($message, $next_url, $icon, $icon_text, $focus = "next_page")
 {
     // Html des Modules ausgeben
-    echo '
-    <!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org -->
-    <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-    <html>
+    echo '    
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="de" xml:lang="de">
     <head>
+        <!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org -->
+
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta name="author"   content="Admidio Team" />
+        <meta name="robots"   content="noindex" />
+        
         <title>Admidio - Update</title>
 
-        <meta http-equiv="content-type" content="text/html; charset=utf-8">
-        <meta name="author"   content="Admidio Team">
-        <meta name="robots"   content="noindex">
-
-        <link rel="stylesheet" type="text/css" href="../adm_program/layout/system.css">
+        <link rel="stylesheet" type="text/css" href="../adm_program/layout/system.css" />
 
         <!--[if lt IE 7]>
         <script type="text/javascript" src="../adm_program/system/correct_png.js"></script>
         <![endif]-->
         
-        <script>
+        <script><!--
             function startUpdate()
             {
                 $submit_button = document.getElementById(\'next_page\');
@@ -50,10 +51,9 @@ function showPage($message, $next_url, $icon, $icon_text, $focus = "next_page")
                 }
                 document.forms[0].submit();
             }
-        </script>
+        --></script>
     </head>
     <body>
-    <div id="system_align" style="margin-top: 10px; margin-bottom: 10px;" align="center">
         <form action="'. $next_url. '" method="post">
         <div class="formLayout" id="installation_form">
             <div class="formHead" style="text-align: left; letter-spacing: 0em;">
@@ -69,7 +69,7 @@ function showPage($message, $next_url, $icon, $icon_text, $focus = "next_page")
                 <hr />
                 <div class="formSubmit" style="text-align: center;">
                     <button type="button" id="next_page" name="next_page" value="'. $icon_text. '" onclick="startUpdate()">
-                    <img src="../adm_program/images/'. $icon. '" alt="'. $icon_text. '">
+                    <img src="../adm_program/images/'. $icon. '" alt="'. $icon_text. '" />
                     &nbsp;'. $icon_text. '</button>
                 </div>
             </div>
@@ -79,7 +79,6 @@ function showPage($message, $next_url, $icon, $icon_text, $focus = "next_page")
         <script type="text/javascript"><!--
             document.getElementById(\''. $focus. '\').focus();
         --></script>
-    </div>
     </body>
     </html>';
     exit();
@@ -132,7 +131,7 @@ if($req_mode == 1)
 {
     // Willkommen zur Installation
     session_destroy();
-    $message = '<strong>Willkommen zur Installation von Admidio</strong><br><br>
+    $message = '<strong>Willkommen zur Installation von Admidio</strong><br /><br />
                 Auf den nächsten Seiten müssen Sie einige zur Installation notwenigen Daten eingeben.
                 Sie benötigen dazu die Zugangsdaten zu der Datenbank, auf der Admidio zukünftig laufen 
                 soll.';
@@ -158,7 +157,7 @@ elseif($req_mode == 2)
         $praefix  = "adm";
     }
 
-    $message = '<strong>Zugangsdaten zur Datenbank eingeben</strong><br><br>
+    $message = '<strong>Zugangsdaten zur Datenbank eingeben</strong><br /><br />
                 Geben Sie in diesem Formular Ihre Zugangsdaten zur Datenbank an. Sie können das 
                 Tabellenpräfix auf Wunsch verändern. Dies ist notwendig, falls Sie mehrere 
                 Admidio-Installationen in derselben Datenbank einrichten möchten.
@@ -170,37 +169,37 @@ elseif($req_mode == 2)
                             <li>
                                 <dl>
                                     <dt><label for="server">Server:</label></dt>
-                                    <dd><input type="text" name="server" id="server" style="width: 250px;" maxlength="50" value="'. $server. '"></dd>
+                                    <dd><input type="text" name="server" id="server" style="width: 250px;" maxlength="50" value="'. $server. '" /></dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
                                     <dt><label for="user">Login:</label></dt>
-                                    <dd><input type="text" name="user" id="user" style="width: 250px;" maxlength="50" value="'. $user. '"></dd>
+                                    <dd><input type="text" name="user" id="user" style="width: 250px;" maxlength="50" value="'. $user. '" /></dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
                                     <dt><label for="password">Passwort:</label></dt>
-                                    <dd><input type="password" name="password" id="password" style="width: 250px;" maxlength="50"></dd>
+                                    <dd><input type="password" name="password" id="password" style="width: 250px;" maxlength="50" /></dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
                                     <dt><label for="database">Datenbank:</label></dt>
-                                    <dd><input type="text" name="database" id="database" style="width: 250px;" maxlength="50" value="'. $database. '"></dd>
+                                    <dd><input type="text" name="database" id="database" style="width: 250px;" maxlength="50" value="'. $database. '" /></dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
                                     <dt><label for="praefix">Tabellenpr&auml;fix:</label></dt>
-                                    <dd><input type="text" name="praefix" id="praefix" style="width: 80px;" maxlength="10" value="'. $praefix. '"></dd>
+                                    <dd><input type="text" name="praefix" id="praefix" style="width: 80px;" maxlength="10" value="'. $praefix. '" /></dd>
                                 </dl>
                             </li>
                         </ul>
                     </div>
                 </div>
-                <br>';
+                <br />';
     showPage($message, "installation.php?mode=3", "forward.png", "Organisation festlegen", "server");
 }
 elseif($req_mode == 3)
@@ -259,7 +258,7 @@ elseif($req_mode == 3)
         $orga_name_long  = "";
     }
     
-    $message = '<strong>Organisation festlegen</strong><br><br>
+    $message = '<strong>Organisation festlegen</strong><br /><br />
                 Geben Sie in diesem Formular die Abkürzung und den offiziellen Namen der Organisation / Verein
                 ein, für die Sie Admidio nutzen möchten.
                 
@@ -270,19 +269,19 @@ elseif($req_mode == 3)
                             <li>
                                 <dl>
                                     <dt><label for="orga_name_short">Name (Abkürzung):</label></dt>
-                                    <dd><input type="text" name="orga_name_short" id="orga_name_short" style="width: 80px;" maxlength="10" value="'. $orga_name_short. '"></dd>
+                                    <dd><input type="text" name="orga_name_short" id="orga_name_short" style="width: 80px;" maxlength="10" value="'. $orga_name_short. '" /></dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
                                     <dt><label for="orga_name_long">Name (ausgeschrieben):</label></dt>
-                                    <dd><input type="text" name="orga_name_long" id="orga_name_long" style="width: 250px;" maxlength="60" value="'. $orga_name_long. '"></dd>
+                                    <dd><input type="text" name="orga_name_long" id="orga_name_long" style="width: 250px;" maxlength="60" value="'. $orga_name_long. '" /></dd>
                                 </dl>
                             </li>
                         </ul>
                     </div>
                 </div>
-                <br>';
+                <br />';
     showPage($message, "installation.php?mode=4", "forward.png", "Administrator anlegen", "orga_name_short");    
 }
 elseif($req_mode == 4)
@@ -318,7 +317,7 @@ elseif($req_mode == 4)
         $user_email      = "";
         $user_login      = "";
     }
-    $message = '<strong>Administrator anlegen</strong><br><br>
+    $message = '<strong>Administrator anlegen</strong><br /><br />
                 Geben Sie in diesem Formular Name, E-Mail und die Zugangsdaten des Administrators an.
                 Mit diesem Benutzer können Sie sich nach der Installation bei Admidio anmelden.
                 
@@ -329,43 +328,43 @@ elseif($req_mode == 4)
                             <li>
                                 <dl>
                                     <dt><label for="user_last_name">Nachname:</label></dt>
-                                    <dd><input type="text" name="user_last_name" id="user_last_name" style="width: 250px;" maxlength="50" value="'. $user_last_name. '"></dd>
+                                    <dd><input type="text" name="user_last_name" id="user_last_name" style="width: 250px;" maxlength="50" value="'. $user_last_name. '" /></dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
                                     <dt><label for="user_first_name">Vorname:</label></dt>
-                                    <dd><input type="text" name="user_first_name" id="user_first_name" style="width: 250px;" maxlength="50" value="'. $user_first_name. '"></dd>
+                                    <dd><input type="text" name="user_first_name" id="user_first_name" style="width: 250px;" maxlength="50" value="'. $user_first_name. '" /></dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
                                     <dt><label for="user_email">E-Mail:</label></dt>
-                                    <dd><input type="text" name="user_email" id="user_email" style="width: 250px;" maxlength="50" value="'. $user_email. '"></dd>
+                                    <dd><input type="text" name="user_email" id="user_email" style="width: 250px;" maxlength="50" value="'. $user_email. '" /></dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
                                     <dt><label for="user_login">Benutzername:</label></dt>
-                                    <dd><input type="text" name="user_login" id="user_login" style="width: 250px;" maxlength="50" value="'. $user_login. '"></dd>
+                                    <dd><input type="text" name="user_login" id="user_login" style="width: 250px;" maxlength="50" value="'. $user_login. '" /></dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
                                     <dt><label for="user_password">Passwort:</label></dt>
-                                    <dd><input type="password" name="user_password" id="user_password" style="width: 150px;" maxlength="50"></dd>
+                                    <dd><input type="password" name="user_password" id="user_password" style="width: 150px;" maxlength="50" /></dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
                                     <dt><label for="user_password_confirm">Passwort bestätigen:</label></dt>
-                                    <dd><input type="password" name="user_password_confirm" id="user_password_confirm" style="width: 150px;" maxlength="50"></dd>
+                                    <dd><input type="password" name="user_password_confirm" id="user_password_confirm" style="width: 150px;" maxlength="50" /></dd>
                                 </dl>
                             </li>
                         </ul>
                     </div>
                 </div>
-                <br>';
+                <br />';
     showPage($message, "installation.php?mode=5", "forward.png", "Konfigurationsdatei erzeugen", "user_last_name");    
 }
 elseif($req_mode == 5)
@@ -399,17 +398,17 @@ elseif($req_mode == 5)
         }
     }
     
-    $message = '<strong>Konfigurationsdatei anlegen</strong><br><br>
+    $message = '<strong>Konfigurationsdatei anlegen</strong><br /><br />
                 Laden Sie die Konfigurationsdatei <strong>config.php</strong> herunter und kopieren Sie
                 diese in das Verzeichnis <strong>adm_config</strong>. Danach können Sie mit der Installation
-                fortfahren.<br><br>
+                fortfahren.<br /><br />
                 
                 <span class="iconTextLink">
                     <a href="installation.php?mode=6"><img
-                    src="../adm_program/images/page_white_put.png" alt="config.php herunterladen"></a>
+                    src="../adm_program/images/page_white_put.png" alt="config.php herunterladen" /></a>
                     <a href="installation.php?mode=6">config.php herunterladen</a>
                 </span>
-                <br>';
+                <br />';
     showPage($message, "installation.php?mode=7", "database_in.png", "Admidio installieren", "config_file");    
 }
 elseif($req_mode == 6)
@@ -631,12 +630,12 @@ elseif($req_mode == 7)
     unset($_SESSION['g_preferences']);
     unset($_SESSION['g_current_user']);
     
-    $message = '<strong>Die Installation war erfolgreich</strong><br><br>
+    $message = '<strong>Die Installation war erfolgreich</strong><br /><br />
                 Die Admidio-Datenbank ist nun installiert und die Konfigurationsdatei eingerichtet.
                 Sie können nun mit Admidio arbeiten und sich mit den Daten des Administrators anmelden.';
     if(is_writeable("../adm_my_files") == false)
     {
-        $message = $message. '<br><br>Zuvor sollten Sie allerdings dem Ordner <strong>adm_my_files</strong>
+        $message = $message. '<br /><br />Zuvor sollten Sie allerdings dem Ordner <strong>adm_my_files</strong>
                    Schreibrechte geben. Ohne diese können Sie keine Fotos oder Dateien hochladen.';
     }
     showPage($message, "../adm_program/index.php", "application_view_list.png", "Übersichtsseite");    

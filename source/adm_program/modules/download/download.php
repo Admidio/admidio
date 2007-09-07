@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Martin Günzler
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
  *    
@@ -98,7 +98,7 @@ else
 if (strlen($req_default_folder) > 0 || strlen($req_folder) > 0)
 {
     $link = "<a href=\"$g_root_path/adm_program/modules/download/download.php?default_folder=". urlencode($req_default_folder). "\"><img 
-                src=\"$g_root_path/adm_program/images/application_view_list.png\" alt=\"Downloads\"></a>
+                src=\"$g_root_path/adm_program/images/application_view_list.png\" alt=\"Downloads\" /></a>
              <a href=\"$g_root_path/adm_program/modules/download/download.php?default_folder=". urlencode($req_default_folder). "\">$text</a>";
 }
 
@@ -181,14 +181,14 @@ if ($g_current_user->editDownloadRight())
         <li>
             <span class=\"iconTextLink\">
                 <a href=\"$g_root_path/adm_program/modules/download/folder_new.php?folder=". urlencode($req_folder). "&amp;default_folder=". urlencode($req_default_folder). "\"><img
-                src=\"$g_root_path/adm_program/images/folder_create.png\" alt=\"Ordner erstellen\"></a>
+                src=\"$g_root_path/adm_program/images/folder_create.png\" alt=\"Ordner erstellen\" /></a>
                 <a href=\"$g_root_path/adm_program/modules/download/folder_new.php?folder=". urlencode($req_folder). "&amp;default_folder=". urlencode($req_default_folder). "\">Ordner anlegen</a>
             </span>
         </li>
         <li>
             <span class=\"iconTextLink\">
                 <a href=\"$g_root_path/adm_program/modules/download/upload.php?folder=". urlencode($req_folder). "&amp;default_folder=". urlencode($req_default_folder). "\"><img
-                src=\"$g_root_path/adm_program/images/page_white_get.png\" alt=\"Hochladen\"></a>
+                src=\"$g_root_path/adm_program/images/page_white_get.png\" alt=\"Hochladen\" /></a>
                 <a href=\"$g_root_path/adm_program/modules/download/upload.php?folder=". urlencode($req_folder). "&amp;default_folder=". urlencode($req_default_folder). "\">Datei hochladen</a>
             </span>
         </li>
@@ -200,7 +200,7 @@ echo "
 <table class=\"tableList\" cellspacing=\"0\">
     <tr>
         <th style=\"width: 25px;\"><img class=\"iconInformation\" 
-            src=\"$g_root_path/adm_program/images/folder.png\" alt=\"Ordner / Dateityp\" title=\"Ordner / Dateityp\">
+            src=\"$g_root_path/adm_program/images/folder.png\" alt=\"Ordner / Dateityp\" title=\"Ordner / Dateityp\" />
         </th>
         <th>Name</th>
         <th>Erstellungsdatum</th>
@@ -246,7 +246,7 @@ for($i=0; $i<count($ordnerarray); $i++)
             <td>
                 <span class=\"iconLink\">
                     <a href=\"$g_root_path/adm_program/modules/download/download.php?folder=". urlencode($next_folder). "&amp;default_folder=". urlencode($req_default_folder). "\"><img 
-                    src=\"$g_root_path/adm_program/images/folder.png\" alt=\"Ordner\" title=\"Ordner\"></a>
+                    src=\"$g_root_path/adm_program/images/folder.png\" alt=\"Ordner\" title=\"Ordner\" /></a>
                 </span>
             </td>
             <td><a href=\"$g_root_path/adm_program/modules/download/download.php?folder=". urlencode($next_folder). "&amp;default_folder=". urlencode($req_default_folder). "\">$ordnerarray[$i]</a></td>
@@ -258,11 +258,11 @@ for($i=0; $i<count($ordnerarray); $i++)
                 <td style=\"text-align: center;\">
                     <span class=\"iconLink\">
                         <a href=\"$g_root_path/adm_program/modules/download/rename.php?folder=". urlencode($req_folder). "&amp;file=". urlencode($ordnerarray[$i]). "&amp;default_folder=". urlencode($req_default_folder). "\"><img 
-                        src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Bearbeiten\" title=\"Umbenennen\"></a>
+                        src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Bearbeiten\" title=\"Umbenennen\" /></a>
                     </span>
                     <span class=\"iconLink\">
                         <a href=\"$g_root_path/adm_program/modules/download/download_function.php?mode=5&amp;file=". urlencode($ordnerarray[$i]). "&amp;folder=". urlencode($req_folder). "&amp;default_folder=". urlencode($req_default_folder). "\"><img 
-                        src=\"$g_root_path/adm_program/images/cross.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>
+                        src=\"$g_root_path/adm_program/images/cross.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" /></a>
                     </span>
                 </td>";
             }
@@ -324,7 +324,7 @@ for($i=0; $i<count($ordnerarray); $i++)
             <td>
                 <span class=\"iconLink\">
                     <a href=\"$g_root_path/adm_program/modules/download/get_file.php?folder=". urlencode($req_folder). "&amp;file=". urlencode($ordnerarray[$i]). "&amp;default_folder=". urlencode($req_default_folder). "\"><img 
-                    src=\"$g_root_path/adm_program/images/$dateiendung.png\" alt=\"Datei\" title=\"Datei\"></a>
+                    src=\"$g_root_path/adm_program/images/$dateiendung.png\" alt=\"Datei\" title=\"Datei\" /></a>
                 </span>
             </td>
             <td><a href=\"$g_root_path/adm_program/modules/download/get_file.php?folder=". urlencode($req_folder). "&amp;file=". urlencode($ordnerarray[$i]). "&amp;default_folder=". urlencode($req_default_folder). "\">$ordnerarray[$i]</a></td>
@@ -338,11 +338,11 @@ for($i=0; $i<count($ordnerarray); $i++)
             <td style=\"text-align: center;\">
                 <span class=\"iconLink\">
                     <a href=\"$g_root_path/adm_program/modules/download/rename.php?folder=". urlencode($req_folder). "&amp;file=". urlencode($ordnerarray[$i]). "&amp;default_folder=". urlencode($req_default_folder). "\"><img 
-                    src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Bearbeiten\" title=\"Umbenennen\"></a>
+                    src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Bearbeiten\" title=\"Umbenennen\" /></a>
                 </span>
                 <span class=\"iconLink\">
                     <a href=\"$g_root_path/adm_program/modules/download/download_function.php?mode=5&amp;file=". urlencode($ordnerarray[$i]). "&amp;folder=". urlencode($req_folder). "&amp;default_folder=". urlencode($req_default_folder). "\"><img 
-                    src=\"$g_root_path/adm_program/images/cross.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>
+                    src=\"$g_root_path/adm_program/images/cross.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" /></a>
                 </span>
             </td>";
         }

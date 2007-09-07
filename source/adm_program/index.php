@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
 
@@ -47,7 +47,7 @@ echo "
         echo "<li>
             <span class=\"iconTextLink\">
                 <a href=\"$g_root_path/adm_program/system/logout.php\"><img
-                src=\"$g_root_path/adm_program/images/door_in.png\" alt=\"Logout\"></a>
+                src=\"$g_root_path/adm_program/images/door_in.png\" alt=\"Logout\" /></a>
                 <a href=\"$g_root_path/adm_program/system/logout.php\">Logout</a>
             </span>
         </li>";
@@ -57,7 +57,7 @@ echo "
         echo "<li>
             <span class=\"iconTextLink\">
                 <a href=\"$g_root_path/adm_program/system/login.php\"><img
-                src=\"$g_root_path/adm_program/images/key.png\" alt=\"Login\"></a>
+                src=\"$g_root_path/adm_program/images/key.png\" alt=\"Login\" /></a>
                 <a href=\"$g_root_path/adm_program/system/login.php\">Login</a>
             </span>
         </li>";
@@ -67,7 +67,7 @@ echo "
             echo "<li>
                 <span class=\"iconTextLink\">
                     <a href=\"$g_root_path/adm_program/system/registration.php\"><img
-                    src=\"$g_root_path/adm_program/images/add.png\" alt=\"Registrieren\"></a>
+                    src=\"$g_root_path/adm_program/images/add.png\" alt=\"Registrieren\" /></a>
                     <a href=\"$g_root_path/adm_program/system/registration.php\">Registrieren</a>
                 </span>
             </li>";
@@ -271,8 +271,7 @@ echo "</ul>
 
 if($g_current_user->isWebmaster() || $g_current_user->assignRoles() || $g_current_user->approveUsers() || $g_current_user->editUser())
 {
-    echo "<br /><br />
-
+    echo "
     <div class=\"formLayout\" id=\"administration_list_form\">
         <div class=\"formHead\">Administration</div>
         <div class=\"formBody\">

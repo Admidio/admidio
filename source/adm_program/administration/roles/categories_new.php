@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
  *
@@ -114,7 +114,7 @@ echo "
                 <dl>
                     <dt><label for=\"cat_name\">Name:</label></dt>
                     <dd>
-                        <input type=\"text\" id=\"cat_name\" name=\"cat_name\" size=\"30\" maxlength=\"30\" value=\"". htmlspecialchars($category->getValue("cat_name"), ENT_QUOTES). "\">
+                        <input type=\"text\" id=\"cat_name\" name=\"cat_name\" size=\"30\" maxlength=\"30\" value=\"". $category->getValue("cat_name"). "\" />
                         <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                     </dd>
                 </dl>
@@ -122,13 +122,13 @@ echo "
             <li>
                 <dl>
                     <dt>
-                        <label for=\"cat_hidden\"><img src=\"$g_root_path/adm_program/images/user_key.png\" alt=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\"></label>
+                        <label for=\"cat_hidden\"><img src=\"$g_root_path/adm_program/images/user_key.png\" alt=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\" /></label>
                     </dt>
                     <dd>
                         <input type=\"checkbox\" id=\"cat_hidden\" name=\"cat_hidden\" ";
                             if($category->getValue("cat_hidden") == 1)
                             {
-                                echo " checked ";
+                                echo " checked=\"checked\" ";
                             }
                             echo " value=\"1\" />
                         <label for=\"cat_hidden\">Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar</label>
@@ -141,7 +141,7 @@ echo "
 
         <div class=\"formSubmit\">
             <button id=\"speichern\" type=\"submit\" value=\"speichern\">
-            <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\">
+            <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\" />
             &nbsp;Speichern</button>
         </div>
     </div>
@@ -152,8 +152,8 @@ echo "
     <li>
         <span class=\"iconTextLink\">
             <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
-            <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück\" /></a>
+            <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
         </span>
     </li>
 </ul>

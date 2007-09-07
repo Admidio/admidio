@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Daniel Dieckelmann
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
  *
@@ -128,7 +128,7 @@ echo "
                 <dl>
                     <dt><label for=\"linkname\">Linkname:</label></dt>
                     <dd>
-                        <input type=\"text\" id=\"linkname\" name=\"linkname\" tabindex=\"1\" style=\"width: 350px;\" maxlength=\"250\" value=\"". htmlspecialchars($form_values['linkname'], ENT_QUOTES). "\">
+                        <input type=\"text\" id=\"linkname\" name=\"linkname\" tabindex=\"1\" style=\"width: 350px;\" maxlength=\"250\" value=\"". $form_values['linkname']. "\" />
                         <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                     </dd>
                 </dl>
@@ -137,7 +137,7 @@ echo "
                 <dl>
                     <dt><label for=\"linkurl\">Linkadresse:</label></dt>
                     <dd>
-                        <input type=\"text\" id=\"linkurl\" name=\"linkurl\" tabindex=\"2\" style=\"width: 350px;\" maxlength=\"250\" value=\"". htmlspecialchars($form_values['linkurl'], ENT_QUOTES). "\">
+                        <input type=\"text\" id=\"linkurl\" name=\"linkurl\" tabindex=\"2\" style=\"width: 350px;\" maxlength=\"250\" value=\"". $form_values['linkurl']. "\" />
                         <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                     </dd>
                 </dl>
@@ -165,7 +165,7 @@ echo "
                                 echo "<option value=\"$row->cat_id\"";
                                     if($form_values['category'] == $row->cat_id)
                                     {
-                                        echo " selected ";
+                                        echo " selected=\"selected\" ";
                                     }
                                 echo ">$row->cat_name</option>";
                             }
@@ -184,7 +184,7 @@ echo "
                         }
                     echo "</dt>
                     <dd>
-                        <textarea  name=\"description\" tabindex=\"4\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". htmlspecialchars($form_values['description'], ENT_QUOTES). "</textarea>
+                        <textarea  name=\"description\" tabindex=\"4\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". $form_values['description']. "</textarea>
                         <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                     </dd>
                 </dl>
@@ -195,7 +195,7 @@ echo "
 
         <div class=\"formSubmit\">
             <button name=\"speichern\" type=\"submit\" value=\"speichern\" tabindex=\"5\">
-                <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\">
+                <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\" />
                 &nbsp;Speichern</button>
         </div>
     </div>
@@ -206,8 +206,8 @@ echo "
     <li>
         <span class=\"iconTextLink\">
             <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
-            <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück\" /></a>
+            <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
         </span>
     </li>
 </ul>

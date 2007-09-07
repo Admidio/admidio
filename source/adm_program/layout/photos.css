@@ -17,7 +17,7 @@
 /*Die Thumbnails werden in einer Tabelle aufbebaut
 hier koenne Einstellungen fuer diese vorgenommen werden*/
 #photoThumbnailTable {
-	width: 550px;	
+    width: 550px;   
 }
 
 /*Einstellung fuer die Thumbnailtabellenzeile, z.B. die Hoehe*/
@@ -26,20 +26,20 @@ hier koenne Einstellungen fuer diese vorgenommen werden*/
 
 /*Einstellung fuer die Thumbnailtabellenspalte, z.B. Breite oder Ausrichtung des enthaltenen Textes*/
 .photoThumbnailTableColumn{
-	text-align: center;
+    text-align: center;
 }
 
 /*Einstellung fuer das Thumbnail selbst, z.B. laesst sich ein Rand um jedes Bild legen*/
 .photoThumbnail{
-	vertical-align: middle;
-	cursor: pointer;
-	border: none;
+    vertical-align: middle;
+    cursor: pointer;
+    border: none;
 }
 
 
 /*Auch die Fotoevents werden in einer Tabelle angezeigt*/
 #photoEventTable{
-	width: 550px;
+    width: 550px;
 }
 
 /*Einstellung fuer die Fotoeventtabellenzeile, z.B. die Hoehe*/
@@ -49,42 +49,44 @@ hier koenne Einstellungen fuer diese vorgenommen werden*/
 /*Einstellung fuer die FotoeventtabellenBILDERspalte*/
 .photoEventTablePicColumn{
     padding: 4px;
-   	text-align: right;
-   	width: 35%;
+    text-align: right;
+    width: 35%;
 }
 
 /*Einstellung fuer die FotoeventtabellenTextspalte, z.B. Breite oder Ausrichtung des enthaltenen Textes*/
 .photoEventTableTextColumn{
-	text-align: left;
-	font-size: 8px;
+    text-align: left;
+    font-size: 8px;
 }
 
 /*Wenn in dieser Spalte Ein Link vorkommt wir dieser So dargestellt*/
 .photoEventTableTextColumn a{
-	font-size: 12px;
+    font-size: 12px;
 }
 
 /*Auch das Vorschaubild koenne z.B. einen Rand erhalten*/
 .photoPreviewPic{
-	border: none;
-	vertical-align: middle;
+    border: none;
+    vertical-align: middle;
 }
 
 /*Umramender Container um Thumbnail- und Fotoeventtabelle, sowie Uploadbericht*/
 .photoModuleContainer{
-	border-width: 0px;
-	border-color: #6CA7A8;
-	border-style: solid;
-	width: 550px;
+    border-width: 0px;
+    border-color: #6CA7A8;
+    border-style: solid;
+    width: 550px;
+    margin: auto;
+    text-align: center;
 }
 
 /*Einstellungen fuer die ausgabe der grossen Photos (ohne LightBox)*/
 .photoOutput{
-	text-align: center;
-	border: none;
+    text-align: center;
+    border: none;
 }
 
 /*Informationen ueber den Thumbnails, derzeit nur Datum*/
 #photoEventInformation{
-	margin: 5px
+    margin: 5px
 }

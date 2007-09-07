@@ -25,9 +25,8 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 // Html des Modules ausgeben
 echo "
-<br /><br /><br />
-<form action=\"$g_root_path/adm_program/system/login_check.php\" name=\"Login\" method=\"get\">
-<div class=\"formLayout\" id=\"login_form\" style=\"width: 260px\">
+<form action=\"$g_root_path/adm_program/system/login_check.php\" method=\"get\">
+<div class=\"formLayout\" id=\"login_form\" style=\"width: 300px; margin-top: 60px;\">
     <div class=\"formHead\">Login</div>
     <div class=\"formBody\">
         <ul class=\"formFieldList\">
@@ -49,7 +48,7 @@ echo "
                 echo "
                 <li>
                     <dl>
-                        <dt><input type=\"checkbox\" id=\"auto_login\" name=\"auto_login\" value=\"1\"> 
+                        <dt><input type=\"checkbox\" id=\"auto_login\" name=\"auto_login\" value=\"1\" /> 
                             <label for=\"auto_login\">dauerhaft angemeldet bleiben</label></dt>
                         <dd>&nbsp;</dd>
                     </dl>
@@ -59,7 +58,7 @@ echo "
         
         <div class=\"formSubmit\">
             <button name=\"login\" type=\"submit\" value=\"login\">
-            <img src=\"$g_root_path/adm_program/images/key.png\" alt=\"Login\">
+            <img src=\"$g_root_path/adm_program/images/key.png\" alt=\"Login\" />
             &nbsp;Login</button>
         </div>";
         
@@ -78,13 +77,13 @@ echo "
         }
         else
         {
-            $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?rol_id=". $role_webmaster->getValue("rol_id"). "&subject=Loginprobleme";
+            $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?rol_id=". $role_webmaster->getValue("rol_id"). "&amp;subject=Loginprobleme";
         }
         echo "<div class=\"smallFontSize\" style=\"margin-top: 5px;\">
             <a href=\"$mail_link\">Ich habe mein Passwort vergessen!</a>
         </div>
         <div class=\"smallFontSize\" style=\"margin-top: 20px;\">
-            Powered by <a href=\"http://www.admidio.org\" target=\"_blank\">Admidio</a>
+            Powered by <a href=\"http://www.admidio.org\">Admidio</a>
         </div>
     </div>
 </div>

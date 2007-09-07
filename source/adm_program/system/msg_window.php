@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * err_code - Code fuer die Information, die angezeigt werden soll
  * err_text - Text, der innerhalb einer Meldung angezeigt werden kann
@@ -51,8 +51,8 @@ echo "
             case "bbcode":
                 echo "Die Beschreibung bei einigen Modulen (Ank&uuml;ndigungen, Terminen, G&auml;stebuch und Weblinks)
                       k&ouml;nnen mit verschiedenen Tags (BBCode) formatiert werden. Daf&uuml;r m&uuml;ssen die
-                      hier aufgelisteten Tags um den entsprechenden Textabschnitt gesetzt werden.<br><br>
-                      Beispiele:<br><br>
+                      hier aufgelisteten Tags um den entsprechenden Textabschnitt gesetzt werden.<br /><br />
+                      Beispiele:<br /><br />
                       <table class=\"tableList\" style=\"width: 100%;\" cellspacing=\"0\">
                          <tr>
                             <th style=\"width: 155px;\">Beispiel</th>
@@ -91,7 +91,7 @@ echo "
                             <td>Eine <b>[email=</b>webmaster@demo.de<b>]</b> Mailadresse<b>[/email]</b> angeben</td>
                          </tr>
                          <tr>
-                            <td>Ein Bild <img src=\"$g_root_path/adm_program/images/admidio_logo_20.png\"> anzeigen</td>
+                            <td>Ein Bild <img src=\"$g_root_path/adm_program/images/admidio_logo_20.png\" /> anzeigen</td>
                             <td>Ein Bild <b>[img]</b>http://www.beispiel.de/bild.jpg<b>[/img]</b> anzeigen</td>
                          </tr>
                       </table>";
@@ -100,8 +100,8 @@ echo "
             case "condition":
                 echo "Hier kannst du Bedingungen zu jedem Feld in deiner neuen Liste eingeben.
                       Damit wird die ausgew&auml;hlte Rolle noch einmal nach deinen Bedingungen
-                      eingeschr&auml;nkt.<br><br>
-                      Beispiele:<br><br>
+                      eingeschr&auml;nkt.<br /><br />
+                      Beispiele:<br /><br />
                       <table class=\"tableList\" style=\"width: 100%;\" cellspacing=\"0\">
                          <tr>
                             <th style=\"width: 75px;\">Feld</th>
@@ -177,19 +177,19 @@ echo "
 
             case "file_size":
                 echo "Hier kannst Du die maximal zul&auml;ssige Gr&ouml;&szlig;e einer Datei f&uuml;r das
-                      jeweilige Modul in Kilobyte definieren.<br><br>
+                      jeweilige Modul in Kilobyte definieren.<br /><br />
                       Wenn du 0 als Dateigr&ouml;&szlig;e eintr&auml;gst, deaktivierst du die entsprechende
                       Funktion f&uuml;r alle Benutzer.";
                 break;
 
             case "leader":
-                echo "Leiter werden in den Mitgliederlisten dieser Rolle gesondert aufgef&uuml;hrt.<br><br>
+                echo "Leiter werden in den Mitgliederlisten dieser Rolle gesondert aufgef&uuml;hrt.<br /><br />
                       Leiter haben au&szlig;erdem die M&ouml;glichkeit neue Mitglieder aus der Organisation
                       der Rolle zu zuordnen oder vorhandene Mitglieder zu entfernen.";
                 break;
 
             case "nickname":
-                echo "Mit diesem Namen kannst du dich sp&auml;ter auf der Homepage anmelden.<br><br>
+                echo "Mit diesem Namen kannst du dich sp&auml;ter auf der Homepage anmelden.<br /><br />
                       Damit du ihn dir leicht merken kannst, solltest du deinen Spitznamen oder Vornamen nehmen.
                       Auch Kombinationen, wie zum Beispiel <i>Andi78</i> oder <i>StefanT</i>, sind m&ouml;glich.";
                 break;
@@ -203,14 +203,14 @@ echo "
             case "rolle_benutzer":
                 echo "Rollen, die diese Option aktiviert haben, haben die Berechtigung
                       Benutzerdaten (au&szlig;er Passw&ouml;rter) und Rollenzugeh&ouml;rigkeiten
-                      anderer Mitglieder zu bearbeiten.<br>
+                      anderer Mitglieder zu bearbeiten.<br />
                       Au&szlig;erdem haben sie Zugriff auf die Benutzerverwaltung und k&ouml;nnen
                       dort neue Benutzer anlegen oder alte Benutzer l&ouml;schen.";
                 break;
 
             case "rolle_locked":
                 echo "Rollen, die diese Option aktiviert haben, sind <b>nur</b> f&uuml;r Benutzer
-                      sichtbar, die selber das Recht haben, Rollen zu editieren.<br>
+                      sichtbar, die selber das Recht haben, Rollen zu editieren.<br />
                       Benutzer, die dieses Recht nicht besitzen, k&ouml;nnen keine E-Mails an 
                       diese Rolle schreiben, keine Listen dieser Rolle aufrufen und sehen auch 
                       nicht im Profil einer Person, dass diese Mitglied dieser Rolle ist.";
@@ -233,15 +233,15 @@ echo "
 
             case "rolle_mail":
                 echo "Deine E-Mail wird an alle Mitglieder der ausgew&auml;hlten Rolle geschickt, sofern
-                      diese ihre E-Mail-Adresse im System hinterlegt haben.<br><br>
+                      diese ihre E-Mail-Adresse im System hinterlegt haben.<br /><br />
                       Wenn du eingeloggt bist stehen dir weitere Rollen zur Verf&uuml;gung, an die du E-Mails
                       schreiben kannst.";
                 break;
-				
-			case "rolle_ecard":
+                
+            case "rolle_ecard":
                 echo "Deine E-card wird an ein Mitglied der ausgew&auml;hlten Rolle geschickt, sofern
-                      diese ihre E-Mail-Adresse im System hinterlegt hat.<br><br>
-					  Unter der Rollenauswahl besteht die M&ouml;glichkeit ein Mitglied dieser Rolle auszuw&auml;hlen.";
+                      diese ihre E-Mail-Adresse im System hinterlegt hat.<br /><br />
+                      Unter der Rollenauswahl besteht die M&ouml;glichkeit ein Mitglied dieser Rolle auszuw&auml;hlen.";
                 break;
 
             case "role_assign":
@@ -258,7 +258,7 @@ echo "
 
                 while($orga = current($arr_ref_orgas))
                 {
-                    $organizations = $organizations. ",<br>- $orga";
+                    $organizations = $organizations. ",<br />- $orga";
                     next($arr_ref_orgas);
                 }
 
@@ -284,13 +284,13 @@ echo "
                     Auf den &bdquo;Durchsuchen&ldquo; Button klicken und die gew&uuml;nschte Bilddatei auf der
                     Festplatte ausw&auml;hlen. Den Vorgang ggf. bis zu f&uuml;nfmal wiederholen,
                     bis alle Felder gef&uuml;llt sind. Dann auf &bdquo;Bilder hochladen&ldquo; klicken und ein wenig Geduld haben.
-                    <br>
+                    <br />
                     <h3>Hinweise:</h3>
                     Die Bilder m&uuml;ssen im JPG Format gespeichert sein.
                     Die Bilder werden automatisch auf eine Aufl&ouml;sung von ".$g_preferences['photo_save_scale']." Pixel der
                     l&auml;ngeren Seite skaliert (andere Seite im Verh&auml;ltnis) bevor sie gespeichert werden.
                     Der Name der Dateien spielt keine Rolle, da sie automatisch mit fortlaufender
-                    Nummer benannt werden.<br>
+                    Nummer benannt werden.<br />
                     Da auch bei schnellen Internetanbindungen das Hochladen von gr&ouml;&szlig;eren Dateien einige
                     Zeit in Anspruch nehmen kann, empfehlen wir zun&auml;chst alle hoch zu ladenden Bilder in einen
                     Sammelordner zu kopieren und diese dann mit einer Bildbearbeitungssoftware auf ".$g_preferences['photo_save_scale']." Pixel
@@ -314,14 +314,14 @@ echo "
                 echo " <h3>Warnung!!!</h3>
                     Der zugeh&ouml;rige Ordner wurde nicht gefunden. Sollte er bewusst &uuml;ber FTP gel&ouml;scht worden sein
                     oder nicht mehr die M&ouml;glichkeit bestehen ihn wieder herzustellen, bitte
-                    den Datensatz mit klick auf das (<img src=\"$g_root_path/adm_program/images/cross.png\" style=\"vertical-align: top;\">)Icon l&ouml;schen.
+                    den Datensatz mit klick auf das (<img src=\"$g_root_path/adm_program/images/cross.png\" style=\"vertical-align: top;\" />)Icon l&ouml;schen.
                     Besuchern der Website ohne Fotoverwaltungsrecht, wird diese Veranstaltung nicht mehr angezeigt.";
                 break;
 
             case "not_approved":
                 echo " <h3>Warnung!!!</h3>
                     Die Veranstaltung ist z.Zt. gesperrt und wird Homepagebesuchern deswegen nicht angezeigt. Zum Freigeben bitte
-                    den entsprechende Icon (<img src=\"$g_root_path/adm_program/images/key.png\">)
+                    den entsprechende Icon (<img src=\"$g_root_path/adm_program/images/key.png\" />)
                     in der Bearbeitungszeile nutzen.";
                 break;
 
@@ -329,7 +329,7 @@ echo "
             case "captcha_help":
                 echo " <h3>Was ist das f&uuml;r ein Best&auml;tigungscode?</h3>
                     Hierbei handelt es sich um ein Captcha. Ein Captcha dient zur Spamerkennung. Mit Hilfe des Bildes wird versucht festzustellen, ob das
-                    Formular von einem User oder einem Script/Spambot ausgef&uuml;llt wurde. <br> Bitte trage den im Bild angezeigten
+                    Formular von einem User oder einem Script/Spambot ausgef&uuml;llt wurde. <br /> Bitte trage den im Bild angezeigten
                     4- bis 6-stelligen Code in das Formularfeld ein.";
                 break;
 
@@ -345,8 +345,8 @@ echo "
     <li>
         <span class=\"iconTextLink\">
             <a href=\"javascript:window.close();\"><img
-            src=\"$g_root_path/adm_program/images/door_in.png\" alt=\"Schlie&szlig;en\"></a>
-            <a href=\"javascript:window.close();\">Schlie&szlig;en</a>
+            src=\"$g_root_path/adm_program/images/door_in.png\" alt=\"Schließen\" /></a>
+            <a href=\"javascript:window.close();\">Schließen</a>
         </span>
     </li>
 </ul>";

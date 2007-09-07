@@ -5,6 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Diese Klasse erzeugt ein RSSfeed-Objekt nach RSS 2.0.
  *
@@ -25,22 +26,6 @@
  * function buildFeed()
  *
  * Spezifikation von RSS 2.0: http://www.feedvalidator.org/docs/rss2.html
- *
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
 
@@ -79,7 +64,7 @@ function buildFeed()
 function rssHeader()
 {
     header("Content-type: application/xml");
-    echo '<?xml version="1.0" encoding="iso-8859-1"?>'. chr(10). '<rss version="2.0">'. chr(10);
+    echo '<?xml version="1.0" encoding="utf-8"?>'. chr(10). '<rss version="2.0">'. chr(10);
 }
 
 function openChannel()
@@ -94,7 +79,7 @@ function addChannelInfos()
     {
         if (isset($this->channel[$field]))
         {
-            echo "<${field}>". htmlspecialchars($this->channel[$field]). "</${field}>\n";
+            echo "<${field}>". htmlspecialchars($this->channel[$field], ENT_QUOTES). "</${field}>\n";
         }
     }
     echo "<language>de</language>\n";
@@ -112,11 +97,11 @@ function buildItems()
         {
             if (isset($item[$field]))
             {
-                echo "<${field}>". htmlspecialchars($item[$field]). "</${field}>\n";
+                echo "<${field}>". htmlspecialchars($item[$field], ENT_QUOTES). "</${field}>\n";
             }
         }
         echo "<guid>". $item['link']. "</guid>\n";
-        echo "<source url=\"$this->feed\">". htmlspecialchars($this->channel['title']). "</source>";
+        echo "<source url=\"$this->feed\">". htmlspecialchars($this->channel['title'], ENT_QUOTES). "</source>";
         echo "</item>\n\n";
     }
 }

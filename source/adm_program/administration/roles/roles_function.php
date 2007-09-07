@@ -5,6 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
  *
@@ -15,20 +16,6 @@
  *         4 - Rolle loeschen
  *         5 - Rolle wieder aktiv setzen
  *         6 - Frage, ob inaktive Rolle geloescht werden soll
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
 
@@ -93,29 +80,29 @@ if($_GET["mode"] == 1)
 
     <div class=\"formBody\" style=\"width: 400px\">
         <p align=\"left\">
-            <img src=\"$g_root_path/adm_program/images/wand_gray.png\" alt=\"Inaktive Rolle\">
+            <img src=\"$g_root_path/adm_program/images/wand_gray.png\" alt=\"Inaktive Rolle\" />
             Du kannst die Rolle zu einer <b>inaktiven Rolle</b> machen. Dies hat den Vorteil, dass die Daten
             (Mitgliederzuordnung) erhalten bleiben und du sp&auml;ter immer wieder sehen kannst, welche Personen dieser Rolle
             zugeordnet waren. Allerdings erscheint die Rolle nicht mehr in den &uuml;blichen &Uuml;bersichten.
         </p>
         <p align=\"left\">
-            <img src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Rolle l&ouml;schen\">
+            <img src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Rolle l&ouml;schen\" />
             Wenn du <b>L&ouml;schen</b> ausw&auml;hlst, wird die Rolle und alle Mitgliedszuordnungen entg&uuml;ltig aus der Datenbank
             entfernt und es ist sp&auml;ter nicht mehr m&ouml;glich Daten dieser Rolle einzusehen.
         </p>
         <button name=\"back\" type=\"button\" value=\"back\"
             onclick=\"history.back()\">
-            <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\">
-            &nbsp;Zur&uuml;ck</button>
+            <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück\" />
+            &nbsp;Zurück</button>
         &nbsp;&nbsp;&nbsp;&nbsp;
         <button name=\"delete\" type=\"button\" value=\"delete\"
             onclick=\"self.location.href='$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=". $_GET['rol_id']. "&mode=4'\">
-            <img src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Rolle l&ouml;schen\">
+            <img src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Rolle l&ouml;schen\" />
             &nbsp;L&ouml;schen</button>
         &nbsp;&nbsp;&nbsp;&nbsp;
         <button name=\"inactive\" type=\"button\" value=\"inactive\"
             onclick=\"self.location.href='$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=". $_GET['rol_id']. "&mode=3'\">
-            <img src=\"$g_root_path/adm_program/images/wand_gray.png\" alt=\"Inaktive Rolle\">
+            <img src=\"$g_root_path/adm_program/images/wand_gray.png\" alt=\"Inaktive Rolle\" />
             &nbsp;Inaktive Rolle</button>
     </div>";
 

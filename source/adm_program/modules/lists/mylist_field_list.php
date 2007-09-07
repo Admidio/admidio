@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
  *
@@ -32,7 +32,7 @@ echo "
         <option value=\"\" ";
             if($b_ajax == true || $b_history == false)
             {
-                echo " selected ";
+                echo " selected=\"selected\" ";
             }
             echo "></option>";
 
@@ -55,11 +55,11 @@ echo "
                         {
                             if($form_values["column$i"] == "usr_photo")
                             {
-                                $photo_selected = " selected ";                          
+                                $photo_selected = " selected=\"selected\" ";                          
                             }
                             elseif($form_values["column$i"] == "usr_login_name")
                             {
-                                $login_selected = " selected ";                          
+                                $login_selected = " selected=\"selected\" ";                          
                             }
                         }
 
@@ -111,7 +111,7 @@ echo "
                 if($b_ajax == false && $b_history == true
                 && $form_values["column$i"] == $value['usf_id'])
                 {
-                    $selected = " selected ";                          
+                    $selected = " selected=\"selected\" ";                          
                 }
 
                 echo"<option value=\"". $value['usf_id']. "\" $selected >$field_name</option>";
@@ -125,11 +125,11 @@ echo "
         {
             if($form_values["column$i"] == "mem_begin")
             {
-                $begin_selected = " selected ";                          
+                $begin_selected = " selected=\"selected\" ";                          
             }
             elseif($form_values["column$i"] == "mem_end")
             {
-                $end_selected = " selected ";                          
+                $end_selected = " selected=\"selected\" ";                          
             }
         }
 
@@ -146,21 +146,21 @@ echo "
         <option value=\"\" ";
             if($b_ajax == true || isset($form_values["sort$i"]) == false)
             {
-                echo " selected ";
+                echo " selected=\"selected\" ";
             }
             echo ">&nbsp;</option>
         <option value=\"ASC\" ";
             if($b_ajax == false && $b_history == true
             && $form_values["sort$i"] == "ASC")
             {
-                echo " selected ";
+                echo " selected=\"selected\" ";
             }
             echo ">A bis Z</option>
         <option value=\"DESC\" ";
             if($b_ajax == false && $b_history == true
             && $form_values["sort$i"] == "DESC")
             {
-                echo " selected ";
+                echo " selected=\"selected\" ";
             }
             echo ">Z bis A</option>
     </select>
@@ -174,6 +174,6 @@ else
     $condition = "";
 }
 echo "<td>
-    <input type=\"text\" name=\"condition$i\" size=\"15\" maxlength=\"30\" value=\"$condition\">
+    <input type=\"text\" name=\"condition$i\" size=\"15\" maxlength=\"30\" value=\"$condition\" />
 </td>";
 ?>

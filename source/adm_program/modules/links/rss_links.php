@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Erzeugt einen RSS 2.0 - Feed mit Hilfe der RSS-Klasse fuer alle Links
  *
@@ -61,24 +61,24 @@ while ($row = $g_db->fetch_object($result))
     // Die Attribute fuer das Item zusammenstellen
     $title = $row->lnk_name;
     $link  = "$g_root_path/adm_program/modules/links/links.php?id=". $row->lnk_id;
-    $description = "<a href=\"$row->lnk_url\" target=\"_blank\"><b>". strSpecialChars2Html($row->lnk_name). "</b></a>";
+    $description = "<a href=\"$row->lnk_url\" target=\"_blank\"><b>$row->lnk_name</b></a>";
 
 
     // Die Ankuendigungen eventuell durch den UBB-Parser schicken
     if ($g_preferences['enable_bbcode'] == 1)
     {
-        $description = $description. "<br /><br />". strSpecialChars2Html($bbcode->parse($row->lnk_description));
+        $description = $description. "<br /><br />". $bbcode->parse($row->lnk_description);
     }
     else
     {
-        $description = $description. "<br /><br />". nl2br(strSpecialChars2Html($row->lnk_description));
+        $description = $description. "<br /><br />". nl2br($row->lnk_description);
     }
 
     $description = $description. "<br /><br /><a href=\"$link\">Link auf ". $g_current_organization->getValue("org_homepage"). "</a>";
 
     // Den Autor der Links ermitteln und ausgeben
     $user = new User($g_db, $row->lnk_usr_id);
-    $description = $description. "<br /><br /><i>Angelegt von ". strSpecialChars2Html($user->getValue("Vorname")). " ". strSpecialChars2Html($user->getValue("Nachname"));
+    $description = $description. "<br /><br /><i>Angelegt von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname");
     $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->lnk_timestamp). "</i>";
 
     $pubDate = date('r', strtotime($row->lnk_timestamp));

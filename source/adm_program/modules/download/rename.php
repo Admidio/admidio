@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Martin Günzler
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
  *
@@ -95,9 +95,9 @@ $g_layout['title'] = "Umbenennen";
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 // Html des Modules ausgeben
-echo "<br>
-<form method=\"POST\" action=\"$g_root_path/adm_program/modules/download/download_function.php?mode=4&amp;folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "&amp;file=". urlencode($file). "\">
-<div class=\"formLayout\" id=\"edit_download_form\" style=\"width: 400px\">
+echo "
+<form method=\"post\" action=\"$g_root_path/adm_program/modules/download/download_function.php?mode=4&amp;folder=". urlencode($folder). "&amp;default_folder=". urlencode($default_folder). "&amp;file=". urlencode($file). "\">
+<div class=\"formLayout\" id=\"edit_download_form\" style=\"width: 400px; margin-top: 60px;\">
     <div class=\"formHead\">Datei/Ordner umbenennen</div>
     <div class=\"formBody\">
         <ul class=\"formFieldList\">
@@ -111,10 +111,10 @@ echo "<br>
                 <dl>
                     <dt><label for=\"new_name\">Neuer Name:</label></dt>
                     <dd>
-                        <input type=\"text\" id=\"new_name\" name=\"new_name\" value=\"". $form_values['new_name']. "\" size=\"25\" tabindex=\"1\">$file_extension
+                        <input type=\"text\" id=\"new_name\" name=\"new_name\" value=\"". $form_values['new_name']. "\" size=\"25\" tabindex=\"1\" />$file_extension
                         <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                         <img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
-                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=dateiname','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\">
+                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=dateiname','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\" />
                     </dd>
                 </dl>
             </li>
@@ -124,7 +124,7 @@ echo "<br>
 
         <div class=\"formSubmit\">
             <button name=\"rename\" type=\"submit\" value=\"umbenennen\" tabindex=\"2\">
-            <img src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Hochladen\">
+            <img src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Hochladen\" />
             &nbsp;Umbenennen</button>
         </div>
     </div>
@@ -135,8 +135,8 @@ echo "<br>
     <li>
         <span class=\"iconTextLink\">
             <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
-            <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück\" /></a>
+            <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
         </span>
     </li>
 </ul>
