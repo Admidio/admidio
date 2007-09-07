@@ -242,7 +242,7 @@ echo "<div class=\"photoModuleContainer\">";
         {
             mkdir($ordner."/thumbnails", 0777);
         }
-        
+      
         //Thumbnails pro Seite
         $thumbs_per_side = $g_preferences['photo_thumbs_row']*$g_preferences['photo_thumbs_column'];
 
@@ -344,7 +344,7 @@ echo "<div class=\"photoModuleContainer\">";
                         {
                             image_save($ordner."/".$bild.".jpg", $g_preferences['photo_thumbs_scale'], $ordner."/thumbnails/".$bild.".jpg");
                         }
-                        
+                         
                         echo "<td class=\"photoThumbnailTableColumn\">";
                         
                             //Popup-Mode
@@ -389,8 +389,14 @@ echo "<div class=\"photoModuleContainer\">";
                                     src=\"$g_root_path/adm_program/images/arrow_turn_right.png\" alt=\"nach rechts drehen\" title=\"nach rechts drehen\"></a>
                                 </span>";
                             }
-                        echo"
-                        </td>";
+                            if($g_valid_login == true)
+                            {
+                                echo"<span class=\"iconLink\">
+                                    <a href=\"".$g_root_path."/adm_program/modules/ecards/ecard_form.php?photo=".$bild."&amp;pho_id=".$pho_id."\"><img 
+                                    src=\"$g_root_path/adm_program/images/email.png\" alt=\"Als E@card versenden\" title=\"Als E@card versenden\" /></a>
+                                </span>";
+                            }
+                        echo"</td>";
                     }//if
                 }//for
                 echo "

@@ -5,6 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
  *
@@ -14,34 +15,19 @@
  *         4 - Termin im iCal-Format exportieren
  *         5 - Frage, ob Termin geloescht werden soll
  *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- *
  *****************************************************************************/
 
 require("../../system/common.php");
 require("../../system/date_class.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
-if ($g_preferences['enable_dates_module'] != 1)
+if ($g_preferences['enable_dates_module'] == 0)
 {
     // das Modul ist deaktiviert
     $g_message->show("module_disabled");
 }
 
-if($_GET["mode"] != 4)
+if($_GET["mode"] != 4 || $g_preferences['enable_dates_module'] == 2)
 {
     // Alle Funktionen, ausser Exportieren, duerfen nur eingeloggte User
     require("../../system/login_valid.php");
@@ -88,10 +74,10 @@ if($req_dat_id > 0)
     }
 }
 
-$_SESSION['dates_request'] = $_REQUEST;
-
 if($_GET["mode"] == 1)
 {
+    $_SESSION['dates_request'] = $_REQUEST;
+    
     if(strlen($_POST['dat_headline']) == 0)
     {
         $g_message->show("feld", "&Uuml;berschrift");

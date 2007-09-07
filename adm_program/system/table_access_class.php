@@ -202,6 +202,7 @@ class TableAccess
                        || $this->auto_increment == false )
                     && strpos($key, $this->column_praefix. "_") === 0) 
                     {
+                        $value = utf8_decode_db($value);
                         if($this->new_record)
                         {
                             if(strlen($value) > 0)

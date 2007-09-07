@@ -197,7 +197,7 @@ function getFieldCode($field, $user, $new_user)
                 <option value=\"\">--------------------------------</option>\n";
             }
 
-            $land = utf8_decode(trim(fgets($landlist)));
+            $land = trim(fgets($landlist));
             while (!feof($landlist))
             {
                 $value = $value. "<option value=\"$land\"";
@@ -210,7 +210,7 @@ function getFieldCode($field, $user, $new_user)
                         $value = $value. " selected ";
                      }
                 $value = $value. ">$land</option>\n";
-                $land = utf8_decode(trim(fgets($landlist)));
+                $land = trim(fgets($landlist));
             }
         $value = $value. "</select>";
     }

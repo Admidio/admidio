@@ -79,7 +79,8 @@ echo "</ul>
     <div class=\"formHead\">Module</div>
     <div class=\"formBody\">
         <ul class=\"formFieldList\">";
-            if($g_preferences['enable_announcements_module'] == 1)
+            if( $g_preferences['enable_announcements_module'] == 1 
+            || ($g_preferences['enable_announcements_module'] == 2 && $g_valid_login))
             {
                 echo "
                 <li>
@@ -147,7 +148,8 @@ echo "</ul>
                 </li>";
             }
 
-            if($g_preferences['enable_guestbook_module'] == 1)
+            if( $g_preferences['enable_guestbook_module'] == 1 
+            || ($g_preferences['enable_guestbook_module'] == 2 && $g_valid_login))
             {
                 echo "
                 <li>
@@ -200,7 +202,8 @@ echo "</ul>
                 </dl>
             </li>";
 
-            if($g_preferences['enable_dates_module'] == 1)
+            if( $g_preferences['enable_dates_module'] == 1 
+            || ($g_preferences['enable_dates_module'] == 2 && $g_valid_login))
             {
                 echo "
                 <li>

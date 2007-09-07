@@ -16,6 +16,8 @@ class DB
     var $password;
     var $dbname;
     var $server;
+    var $utf8;
+    var $version;
     
     var $connect_id;    
     var $query_result;

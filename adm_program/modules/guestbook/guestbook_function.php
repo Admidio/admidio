@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
  *
@@ -27,10 +27,15 @@
 require("../../system/common.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
-if ($g_preferences['enable_guestbook_module'] != 1)
+if ($g_preferences['enable_guestbook_module'] == 0)
 {
     // das Modul ist deaktiviert
     $g_message->show("module_disabled");
+}
+elseif($g_preferences['enable_guestbook_module'] == 2)
+{
+    // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
+    require("../../system/login_valid.php");
 }
 
 
@@ -197,8 +202,8 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
 
                 $sql = "INSERT INTO ". TBL_GUESTBOOK. " (gbo_org_id, gbo_usr_id, gbo_name, gbo_text, gbo_email,
                                                          gbo_homepage, gbo_timestamp, gbo_ip_address)
-                                         VALUES (". $g_current_organization->getValue("org_id"). ", ". $g_current_user->getValue("usr_id"). ", '$realName', '$text', '$email',
-                                                 '$homepage', '$actDate', '$ipAddress')";
+                                         VALUES (". $g_current_organization->getValue("org_id"). ", ". $g_current_user->getValue("usr_id"). ", '". utf8_decode_db($realName). "', '". utf8_decode_db($text). "', '". utf8_decode_db($email). "',
+                                                 '". utf8_decode_db($homepage). "', '$actDate', '$ipAddress')";
 
                 $result = $g_db->query($sql);
             }
@@ -225,8 +230,8 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
                 // Falls er nicht eingeloggt ist, gibt es das sql-Statement natürlich ohne die UserID
                 $sql = "INSERT INTO ". TBL_GUESTBOOK. " (gbo_org_id, gbo_name, gbo_text, gbo_email,
                                                          gbo_homepage, gbo_timestamp, gbo_ip_address)
-                                         VALUES (". $g_current_organization->getValue("org_id"). ", '$name', '$text', '$email',
-                                                 '$homepage', '$actDate', '$ipAddress')";
+                                         VALUES (". $g_current_organization->getValue("org_id"). ", '". utf8_decode_db($name). "', '". utf8_decode_db($text). "', '". utf8_decode_db($email). "',
+                                                 '". utf8_decode_db($homepage). "', '$actDate', '$ipAddress')";
 
                 $result = $g_db->query($sql);
             }
@@ -234,10 +239,10 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
         }
         else
         {
-            $sql = "UPDATE ". TBL_GUESTBOOK. " SET  gbo_name     = '$name'
-                                                  , gbo_text     = '$text'
-                                                  , gbo_email    = '$email'
-                                                  , gbo_homepage = '$homepage'
+            $sql = "UPDATE ". TBL_GUESTBOOK. " SET  gbo_name     = '". utf8_decode_db($name). "'
+                                                  , gbo_text     = '". utf8_decode_db($text). "'
+                                                  , gbo_email    = '". utf8_decode_db($email). "'
+                                                  , gbo_homepage = '". utf8_decode_db($homepage). "'
                                                   , gbo_last_change   = '$actDate'
                                                   , gbo_usr_id_change = ". $g_current_user->getValue("usr_id"). "
                      WHERE gbo_id = ". $_GET['id'];
@@ -335,7 +340,7 @@ elseif($_GET["mode"] == 4 || $_GET["mode"] == 8)
                 $realName = $g_current_user->getValue("Vorname"). " ". $g_current_user->getValue("Nachname");
 
                 $sql = "INSERT INTO ". TBL_GUESTBOOK_COMMENTS. " (gbc_gbo_id, gbc_usr_id, gbc_name, gbc_text, gbc_email, gbc_timestamp, gbc_ip_address)
-                                                         VALUES (". $_GET['id']. ", ". $g_current_user->getValue("usr_id"). ", '$realName', '$text', '$email', '$actDate', '$ipAddress')";
+                                                         VALUES (". $_GET['id']. ", ". $g_current_user->getValue("usr_id"). ", '". utf8_decode_db($realName). "', '". utf8_decode_db($text). "', '". utf8_decode_db($email). "', '$actDate', '$ipAddress')";
                 $result = $g_db->query($sql);
             }
             else
@@ -359,16 +364,16 @@ elseif($_GET["mode"] == 4 || $_GET["mode"] == 8)
 
                 // Falls er nicht eingeloggt ist, gibt es das sql-Statement natürlich ohne die UserID
                 $sql = "INSERT INTO ". TBL_GUESTBOOK_COMMENTS. " (gbc_gbo_id, gbc_name, gbc_text, gbc_email, gbc_timestamp, gbc_ip_address)
-                                                         VALUES (". $_GET['id']. ", '$name', '$text', '$email', '$actDate', '$ipAddress')";
+                                                         VALUES (". $_GET['id']. ", '". utf8_decode_db($name). "', '". utf8_decode_db($text). "', '". utf8_decode_db($email). "', '$actDate', '$ipAddress')";
                 $result = $g_db->query($sql);
             }
         }
         else
         {
             // hier wird der Eintrag natuerlich nur modifiziert
-            $sql = "UPDATE ". TBL_GUESTBOOK_COMMENTS. " SET  gbc_name     = '$name'
-                                                           , gbc_text     = '$text'
-                                                           , gbc_email    = '$email'
+            $sql = "UPDATE ". TBL_GUESTBOOK_COMMENTS. " SET  gbc_name     = '". utf8_decode_db($name). "'
+                                                           , gbc_text     = '". utf8_decode_db($text). "'
+                                                           , gbc_email    = '". utf8_decode_db($email). "'
                                                            , gbc_last_change   = '$actDate'
                                                            , gbc_usr_id_change = ". $g_current_user->getValue("usr_id"). "
                      WHERE gbc_id = {3}";

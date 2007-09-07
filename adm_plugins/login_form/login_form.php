@@ -117,7 +117,7 @@ if($g_valid_login == 1)
                             $count_rank = key($plg_rank);
                             if($count_rank < $g_current_user->getValue("usr_number_login"))
                             {
-                                $rank = utf8_decode(strip_tags($value));
+                                $rank = strip_tags($value);
                             }
                             $value = next($plg_rank);
                         }

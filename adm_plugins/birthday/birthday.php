@@ -136,6 +136,7 @@ if($anz_geb > 0)
 {
     if($plg_show_names_extern == 1 || $g_valid_login == 1)
     {
+        $later = "";
         // Hier fügen wir Text ein, der an die Auflistung von Geburtstagskindern eines Zeitraumes > 1 Tag angepasst ist.
         if ($plg_show_zeitraum > 0)
         {

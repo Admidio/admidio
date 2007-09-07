@@ -66,14 +66,16 @@ textarea {
 }
 
 /* Layout fuer Buttons mit Icon */
+
 button {
-     padding-top:       2px;
-     padding-bottom:    2px;
+    padding:            0em .25em;
+    width:              auto;       /* noetig damit IE6 lange Buttons vernuenftig darstellt */
+    overflow:           visible;    /* noetig damit IE6 lange Buttons vernuenftig darstellt */
 }
 
 button img {
-     vertical-align:    top;
-     border-width:      0px;
+     vertical-align:    middle;
+     border-width:      none;
 }
 
 /* Links */
@@ -94,6 +96,13 @@ a:hover {
    Es ist in einen Kopf (boxHead) und einen Inhalt (boxBody),
    der aber den Kopfbereich umschliesst, unterteilt
    (z.B.: Ankuendigungen, Termine) */
+
+.boxLayout {
+    width:              550px;
+    border:             1px solid #555555;
+    overflow:           hidden;
+    margin-bottom:      25px;
+}
 
 .boxHead {
     color:              #333333;
@@ -134,12 +143,9 @@ a:hover {
 
 .boxBody {
     color:              #555555;
-    width:              550px;
     text-align:         left;
     background-color:   #eaeaea;
-    border:             1px solid #555555;
-    padding:            0px;
-    overflow:           hidden;
+    padding:            5px;
 }
 
 /* Layout fuer die Formulare
@@ -296,10 +302,11 @@ a:hover {
 .iconTextLinkList li{   
     display:            inline;
     padding:            10px;
+    font-size:          10pt;
 }
 
 .iconTextLink {
-    font-size:          10pt;
+    
 }
 
 .iconTextLink img {
@@ -318,9 +325,9 @@ a:hover {
 
 /* Icon um Bereiche auf und zu zuklappen */
 iconShowHide {
-    border:             none;
+    border-width:       0px;
     vertical-align:     top;
-    padding:            1px 5px 2px 3px;
+    margin:            1px 5px 2px 3px;
 }
 
 /* Icon um Informationen anzuzeigen (ohne Text und Link)*/
@@ -358,7 +365,7 @@ iconShowHide {
 /* Zusatzinformation wer letzte Aenderungen vorgenommen hat etc.*/
 .editInformation{
     font-size:          8pt;
-    margin:             8px 4px 4px 4px;
+    margin-top:         8px;
     text-align:         left;
 }
 

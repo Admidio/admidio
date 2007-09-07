@@ -237,6 +237,12 @@ echo "
                       Wenn du eingeloggt bist stehen dir weitere Rollen zur Verf&uuml;gung, an die du E-Mails
                       schreiben kannst.";
                 break;
+				
+			case "rolle_ecard":
+                echo "Deine E-card wird an ein Mitglied der ausgew&auml;hlten Rolle geschickt, sofern
+                      diese ihre E-Mail-Adresse im System hinterlegt hat.<br><br>
+					  Unter der Rollenauswahl besteht die M&ouml;glichkeit ein Mitglied dieser Rolle auszuw&auml;hlen.";
+                break;
 
             case "role_assign":
                 echo "W&auml;hle bitte eine Rolle aus, der alle importierten Benutzer automatisch zugeordnet werden.";

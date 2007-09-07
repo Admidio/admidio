@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
  *
@@ -20,7 +20,7 @@ require("../../system/login_valid.php");
 require("../../system/date_class.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
-if ($g_preferences['enable_dates_module'] != 1)
+if ($g_preferences['enable_dates_module'] == 0)
 {
     // das Modul ist deaktiviert
     $g_message->show("module_disabled");
@@ -161,8 +161,13 @@ echo "
                     <dd>
                         <input type=\"text\" id=\"date_from\" name=\"date_from\" size=\"10\" maxlength=\"10\" value=\"$date_from\">
                         <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label for=\"time_from\">Uhrzeit Beginn:</label>&nbsp;
-                        <input type=\"text\" id=\"time_from\" name=\"time_from\" size=\"5\" maxlength=\"5\" value=\"$time_from\">
+                        <span style=\"margin-left: 40px;\">
+                            <label for=\"time_from\">Uhrzeit Beginn:</label>
+                        <span>
+                        <span style=\"margin-left: 10px;\">
+                            <input type=\"text\" id=\"time_from\" name=\"time_from\" size=\"5\" maxlength=\"5\" value=\"$time_from\">
+                        </span>
+                    </span>
                     </dd>
                 </dl>
             </li>
@@ -171,8 +176,13 @@ echo "
                     <dt><label for=\"date_to\">Datum Ende:</label></dt>
                     <dd>
                         <input type=\"text\" id=\"date_to\" name=\"date_to\" size=\"10\" maxlength=\"10\" value=\"$date_to\">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label for=\"time_to\">Uhrzeit Ende:</label>&nbsp;
-                        <input type=\"text\"id=\"time_to\" name=\"time_to\" size=\"5\" maxlength=\"5\" value=\"$time_to\">
+                        &nbsp;&nbsp;
+                        <span style=\"margin-left: 40px;\">
+                            <label for=\"time_to\">Uhrzeit Ende:</label>
+                        </span>
+                        <span style=\"margin-left: 20px;\">
+                            <input type=\"text\"id=\"time_to\" name=\"time_to\" size=\"5\" maxlength=\"5\" value=\"$time_to\">
+                        </span>
                     </dd>
                 </dl>
             </li>

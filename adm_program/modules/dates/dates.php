@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
  *
@@ -22,10 +22,15 @@ require("../../system/common.php");
 require("../../system/bbcode.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
-if ($g_preferences['enable_dates_module'] != 1)
+if($g_preferences['enable_dates_module'] == 0)
 {
     // das Modul ist deaktiviert
     $g_message->show("module_disabled");
+}
+elseif($g_preferences['enable_dates_module'] == 2)
+{
+    // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
+    require("../../system/login_valid.php");
 }
 
 // lokale Variablen der Uebergabevariablen initialisieren
@@ -82,7 +87,8 @@ $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Html-Kopf ausgeben
 $g_layout['title'] = $req_headline;
-if($g_preferences['enable_rss'] == 1)
+
+if($g_preferences['enable_rss'] == 1 && $g_preferences['enable_dates_module'] == 1)
 {
     $g_layout['header'] =  "<link type=\"application/rss+xml\" rel=\"alternate\" title=\"". $g_current_organization->getValue("org_longname"). " - Termine\"
         href=\"$g_root_path/adm_program/modules/dates/rss_dates.php\">";
@@ -232,14 +238,14 @@ else
     while($row = $g_db->fetch_object($dates_result))
     {
         echo "
-        <div class=\"boxBody\">
+        <div class=\"boxLayout\">
             <div class=\"boxHead\">
                 <div class=\"boxHeadIcon\"><img src=\"$g_root_path/adm_program/images/date.png\" class=\"icon16\" alt=\"". strSpecialChars2Html($row->dat_headline). "\"></div>                
                 <div class=\"boxHeadLeft\">". mysqldatetime("d.m.y", $row->dat_begin). "</div>
                 <div class=\"boxHeadCenter\"> ". strSpecialChars2Html($row->dat_headline). "</div>
                 <div class=\"boxHeadRight\">
                     <span class=\"iconLink\">
-                        <a href=\"self.location.href='$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=$row->dat_id&mode=4\"><img 
+                        <a href=\"$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=$row->dat_id&mode=4\"><img 
                         src=\"$g_root_path/adm_program/images/database_out.png\" alt=\"Exportieren (iCal)\" title=\"Exportieren (iCal)\"></a>
                     </span>";
                     
@@ -265,71 +271,76 @@ else
                 echo"</div>
             </div>
 
-            <div style=\"margin: 8px 4px 4px 4px;\">";
-                if (mysqldatetime("h:i", $row->dat_begin) != "00:00")
-                {
-                    echo "Beginn:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>".
-                    mysqldatetime("h:i", $row->dat_begin). "</b> Uhr&nbsp;&nbsp;&nbsp;&nbsp;";
-                }
-
-                if($row->dat_begin != $row->dat_end)
-                {
+            <div class=\"boxBody\">
+                <div style=\"margin-bottom: 10px;\">";
                     if (mysqldatetime("h:i", $row->dat_begin) != "00:00")
                     {
-                        echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                        echo "Beginn:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>".
+                        mysqldatetime("h:i", $row->dat_begin). "</strong> Uhr&nbsp;&nbsp;&nbsp;&nbsp;";
                     }
 
-                    echo "Ende:&nbsp;";
-                    if(mysqldatetime("d.m.y", $row->dat_begin) != mysqldatetime("d.m.y", $row->dat_end))
+                    if($row->dat_begin != $row->dat_end)
                     {
-                        echo "<b>". mysqldatetime("d.m.y", $row->dat_end). "</b>";
+                        if (mysqldatetime("h:i", $row->dat_begin) != "00:00")
+                        {
+                            echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                        }
+
+                        echo "Ende:&nbsp;";
+                        if(mysqldatetime("d.m.y", $row->dat_begin) != mysqldatetime("d.m.y", $row->dat_end))
+                        {
+                            echo "<strong>". mysqldatetime("d.m.y", $row->dat_end). "</strong>";
+
+                            if (mysqldatetime("h:i", $row->dat_end) != "00:00")
+                            {
+                                echo " um ";
+                            }
+                        }
 
                         if (mysqldatetime("h:i", $row->dat_end) != "00:00")
                         {
-                            echo " um ";
+                            echo "<strong>". mysqldatetime("h:i", $row->dat_end). "</strong> Uhr";
                         }
                     }
 
-                    if (mysqldatetime("h:i", $row->dat_end) != "00:00")
+                    if ($row->dat_location != "")
                     {
-                        echo "<b>". mysqldatetime("h:i", $row->dat_end). "</b> Uhr";
+                        if (mysqldatetime("h:i", $row->dat_begin) != "00:00"
+                        && $row->dat_begin != $row->dat_end)
+                        {
+                            echo "<br>";
+                        }
+                        echo "Treffpunkt:&nbsp;<strong>". strSpecialChars2Html($row->dat_location). "</strong>";
                     }
-                }
+                echo "</div>
+                <div>";
+                    // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
+                    if($g_preferences['enable_bbcode'] == 1)
+                    {
+                        echo strSpecialChars2Html($bbcode->parse($row->dat_description));
+                    }
+                    else
+                    {
+                        echo nl2br(strSpecialChars2Html($row->dat_description));
+                    }
+                echo "</div>
+                <div class=\"editInformation\">";
+                    $user_create = new User($g_db, $row->dat_usr_id);
+                    echo "Angelegt von ". $user_create->getValue("Vorname"). " ". $user_create->getValue("Nachname").
+                    " am ". mysqldatetime("d.m.y h:i", $row->dat_timestamp);
 
-                if ($row->dat_location != "")
-                {
-                    echo "<br />Treffpunkt:&nbsp;<b>". strSpecialChars2Html($row->dat_location). "</b>";
-                }
-            echo "</div>
-            <div style=\"margin: 8px 4px 4px 4px;\">";
-                // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
-                if($g_preferences['enable_bbcode'] == 1)
-                {
-                    echo strSpecialChars2Html($bbcode->parse($row->dat_description));
-                }
-                else
-                {
-                    echo nl2br(strSpecialChars2Html($row->dat_description));
-                }
-            echo "</div>
-            <div class=\"editInformation\">";
-                $user_create = new User($g_db, $row->dat_usr_id);
-                echo "Angelegt von ". $user_create->getValue("Vorname"). " ". $user_create->getValue("Nachname").
-                " am ". mysqldatetime("d.m.y h:i", $row->dat_timestamp);
-
-                // Zuletzt geaendert nur anzeigen, wenn Änderung nach 15 Minuten oder durch anderen Nutzer gemacht wurde
-                if($row->dat_usr_id_change > 0
-                && (  strtotime($row->dat_last_change) > (strtotime($row->dat_timestamp) + 900)
-                   || $row->dat_usr_id_change != $row->dat_usr_id ) )
-                {
-                    $user_change = new User($g_db, $row->dat_usr_id_change);
-                    echo "<br>Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname").
-                    " am ". mysqldatetime("d.m.y h:i", $row->dat_last_change);
-                }
-            echo "</div>
-        </div>
-
-        <br />";
+                    // Zuletzt geaendert nur anzeigen, wenn Änderung nach 15 Minuten oder durch anderen Nutzer gemacht wurde
+                    if($row->dat_usr_id_change > 0
+                    && (  strtotime($row->dat_last_change) > (strtotime($row->dat_timestamp) + 900)
+                       || $row->dat_usr_id_change != $row->dat_usr_id ) )
+                    {
+                        $user_change = new User($g_db, $row->dat_usr_id_change);
+                        echo "<br>Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname").
+                        " am ". mysqldatetime("d.m.y h:i", $row->dat_last_change);
+                    }
+                echo "</div>
+            </div>
+        </div>";
     }  // Ende While-Schleife
 }
 

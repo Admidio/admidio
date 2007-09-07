@@ -21,6 +21,7 @@ class MySqlDB extends DB
         $this->user     = $sql_user;
         $this->password = $sql_password;
         $this->dbname   = $sql_dbname;
+        $this->utf8     = false;
         
         $this->connect_id = @mysql_connect($this->server, $this->user, $this->password, $new_connection);
         
@@ -29,13 +30,14 @@ class MySqlDB extends DB
             if (@mysql_select_db($this->dbname, $this->connect_id))
             {
                 // MySql-Server-Version ermitteln und schauen, ob es UNICODE unterstuetzt
-                $this->mysql_version = mysql_get_server_info($this->connect_id);
-/*
-                if (version_compare($this->mysql_version, '4.1.3', '>='))
+                $this->version = mysql_get_server_info($this->connect_id);
+
+                if (version_compare($this->version, '4.1.3', '>='))
                 {
+                    $this->utf8 = true;
                     @mysql_query("SET NAMES 'utf8'", $this->connect_id);
                 }
-*/
+
                 return $this->connect_id;
             }
         }
@@ -77,7 +79,17 @@ class MySqlDB extends DB
             $result = $this->query_result;
         }
         
-        return mysql_fetch_array($result, $result_type);
+        $values = mysql_fetch_array($result, $result_type);
+        
+        // Daten nun noch nach UTF8 konvertieren
+        if(is_array($values))
+        {
+            foreach($values as $key => $value)
+            {
+                $values[$key] = utf8_encode_db($value);
+            }
+        }
+        return $values;
     }
 
     function fetch_object($result = false)

@@ -444,20 +444,36 @@ echo "
                 <ul class=\"formFieldList\">
                     <li>
                         <dl>
-                            <dt><label for=\"enable_announcements_module\">Ank&uuml;ndigungsmodul aktivieren:</label></dt>
+                            <dt><label for=\"enable_announcements_module\">Ankündigungsmodul aktivieren:</label></dt>
                             <dd>
-                                <input type=\"checkbox\" id=\"enable_announcements_module\" name=\"enable_announcements_module\" ";
-                                if(isset($form_values['enable_announcements_module']) && $form_values['enable_announcements_module'] == 1)
-                                {
-                                    echo " checked ";
-                                }
-                                echo " value=\"1\" />
+                                <select size=\"1\" id=\"enable_announcements_module\" name=\"enable_announcements_module\">
+                                    <option value=\"0\" ";
+                                    if($form_values['enable_announcements_module'] == 0)
+                                    {
+                                        echo " selected ";
+                                    }
+                                    echo ">Deaktiviert</option>
+                                    <option value=\"1\" ";
+                                    if($form_values['enable_announcements_module'] == 1)
+                                    {
+                                        echo " selected ";
+                                    }
+                                    echo ">Aktiviert</option>
+                                    <option value=\"2\" ";
+                                    if($form_values['enable_announcements_module'] == 2)
+                                    {
+                                        echo " selected ";
+                                    }
+                                    echo ">Nur für registrierte Benutzer</option>
+                                </select>                            
                             </dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Das Ank&uuml;ndigungsmodul kann &uuml;ber diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
-                        aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt.
+                        Das Ankündigungsmodul kann &uuml;ber diese Einstellung komplett deaktiviert oder nur für 
+                        registrierte Nutzer freigegeben werden. Haben nur registrierte Nutzer Zugriff, so
+                        wird das Modul für Besucher komplett ausgeblendet. Der RSS-Feed ist allerdings
+                        für beide Gruppen dann nicht mehr aufrufbar.
                     </li>
                 </ul>
             </div>
@@ -690,18 +706,34 @@ echo "
                         <dl>
                             <dt><label for=\"enable_guestbook_module\">G&auml;stebuch aktivieren:</label></dt>
                             <dd>
-                                <input type=\"checkbox\" id=\"enable_guestbook_module\" name=\"enable_guestbook_module\" ";
-                                if(isset($form_values['enable_guestbook_module']) && $form_values['enable_guestbook_module'] == 1)
-                                {
-                                    echo " checked ";
-                                }
-                                echo " value=\"1\" />
+                                <select size=\"1\" id=\"enable_guestbook_module\" name=\"enable_guestbook_module\">
+                                    <option value=\"0\" ";
+                                    if($form_values['enable_guestbook_module'] == 0)
+                                    {
+                                        echo " selected ";
+                                    }
+                                    echo ">Deaktiviert</option>
+                                    <option value=\"1\" ";
+                                    if($form_values['enable_guestbook_module'] == 1)
+                                    {
+                                        echo " selected ";
+                                    }
+                                    echo ">Aktiviert</option>
+                                    <option value=\"2\" ";
+                                    if($form_values['enable_guestbook_module'] == 2)
+                                    {
+                                        echo " selected ";
+                                    }
+                                    echo ">Nur für registrierte Benutzer</option>
+                                </select>                             
                             </dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Das G&auml;stebuch kann &uuml;ber diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
-                        aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt.
+                        Das Gästebuch kann &uuml;ber diese Einstellung komplett deaktiviert oder nur für 
+                        registrierte Nutzer freigegeben werden. Haben nur registrierte Nutzer Zugriff, so
+                        wird das Modul für Besucher komplett ausgeblendet. Der RSS-Feed ist allerdings
+                        für beide Gruppen dann nicht mehr aufrufbar.
                     </li>
                     <li>
                         <dl>
@@ -884,7 +916,7 @@ echo "
                                         echo " selected ";
                                     }
                                     echo ">- Bitte w&auml;hlen -</option>";
-                                    $land = utf8_decode(trim(fgets($landlist)));
+                                    $land = trim(fgets($landlist));
                                     while (!feof($landlist))
                                     {
                                         echo"<option value=\"$land\"";
@@ -893,7 +925,7 @@ echo "
                                             echo " selected ";
                                         }
                                         echo">$land</option>";
-                                        $land = utf8_decode(trim(fgets($landlist)));
+                                        $land = trim(fgets($landlist));
                                     }
                                 echo"</select>
                             </dd>
@@ -971,25 +1003,41 @@ echo "
 
         echo"
         <div class=\"groupBox\" id=\"dates-module\">
-            <div class=\"groupBoxHeadline\">Einstellungen Terminmodul&nbsp;&nbsp; </div>
+            <div class=\"groupBoxHeadline\">Einstellungen Terminmodul</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
                     <li>
                         <dl>
                             <dt><label for=\"enable_dates_module\">Terminmodul aktivieren:</label></dt>
                             <dd>
-                                <input type=\"checkbox\" id=\"enable_dates_module\" name=\"enable_dates_module\" ";
-                                if(isset($form_values['enable_dates_module']) && $form_values['enable_dates_module'] == 1)
-                                {
-                                    echo " checked ";
-                                }
-                                echo " value=\"1\" />
+                                <select size=\"1\" id=\"enable_dates_module\" name=\"enable_dates_module\">
+                                    <option value=\"0\" ";
+                                    if($form_values['enable_dates_module'] == 0)
+                                    {
+                                        echo " selected ";
+                                    }
+                                    echo ">Deaktiviert</option>
+                                    <option value=\"1\" ";
+                                    if($form_values['enable_dates_module'] == 1)
+                                    {
+                                        echo " selected ";
+                                    }
+                                    echo ">Aktiviert</option>
+                                    <option value=\"2\" ";
+                                    if($form_values['enable_dates_module'] == 2)
+                                    {
+                                        echo " selected ";
+                                    }
+                                    echo ">Nur für registrierte Benutzer</option>
+                                </select>
                             </dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Das Terminmodul kann &uuml;ber diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
-                        aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt.
+                        Das Terminmodul kann &uuml;ber diese Einstellung komplett deaktiviert oder nur für 
+                        registrierte Nutzer freigegeben werden. Haben nur registrierte Nutzer Zugriff, so
+                        wird das Modul für Besucher komplett ausgeblendet. Der RSS-Feed ist allerdings
+                        für beide Gruppen dann nicht mehr aufrufbar.
                     </li>
                 </ul>
             </div>

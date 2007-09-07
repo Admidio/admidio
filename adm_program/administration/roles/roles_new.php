@@ -107,7 +107,7 @@ $g_layout['header'] = "
                 document.formRole.elements['ChildRoles[]'].options[i].selected = true;
             }
 
-            document.formRole.submit();
+            document.forms[0].submit();
         }
     </script>";
 
@@ -339,7 +339,7 @@ echo "
                         </div>
                     </li>";
                     
-                    if($g_preferences['enable_announcements_module'])
+                    if($g_preferences['enable_announcements_module'] > 0)
                     {
                         echo "
                         <li>
@@ -353,7 +353,7 @@ echo "
                             </div>
                         </li>";
                     }
-                    if($g_preferences['enable_dates_module'])
+                    if($g_preferences['enable_dates_module'] > 0)
                     {
                         echo "
                         <li>
@@ -367,7 +367,7 @@ echo "
                             </div>
                         </li>";
                     }
-                    if($g_preferences['enable_photo_module'])
+                    if($g_preferences['enable_photo_module'] > 0)
                     {
                         echo "
                         <li>
@@ -381,7 +381,7 @@ echo "
                             </div>
                         </li>";
                     }
-                    if($g_preferences['enable_download_module'])
+                    if($g_preferences['enable_download_module'] > 0)
                     {
                         echo "
                         <li>
@@ -395,7 +395,7 @@ echo "
                             </div>
                         </li>";
                     }
-                    if($g_preferences['enable_guestbook_module'])
+                    if($g_preferences['enable_guestbook_module'] > 0)
                     {
                         echo "
                         <li>
@@ -424,7 +424,7 @@ echo "
                             </li>";
                         }
                     }
-                    if($g_preferences['enable_weblinks_module'])
+                    if($g_preferences['enable_weblinks_module'] > 0)
                     {
                         echo "
                         <li>

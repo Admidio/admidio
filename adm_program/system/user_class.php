@@ -142,7 +142,7 @@ class User extends TableAccess
         {
             foreach($this->db_user_fields as $key => $value)
             {
-                $this->db_user_fields[$key]['usd_value'] = NULL;
+                $this->db_user_fields[$key]['usd_value'] = "";
                 $this->db_user_fields[$key]['new']       = true;
                 $this->db_user_fields[$key]['changed']   = false;
             }
@@ -205,7 +205,7 @@ class User extends TableAccess
             // Daten fuer User-Fields-Tabelle
             if($field_value != $this->db_user_fields[$field_name]['usd_value'])
             {
-                if(is_null($this->db_user_fields[$field_name]['usd_value']))
+                if(strlen($this->db_user_fields[$field_name]['usd_value']) == 0)
                 {
                     $this->db_user_fields[$field_name]['new'] = true;
                 }
@@ -275,9 +275,9 @@ class User extends TableAccess
             if($value['changed'] == true)
             {
                 $item_connection = "";
-                $sql_field_list  = "";
+                $sql_field_list  = "";                
 
-                if(is_null($value['usd_value']))
+                if(strlen($value['usd_value']) == 0)
                 {
                     $sql = "DELETE FROM ". TBL_USER_DATA. " 
                              WHERE usd_usr_id = ". $this->db_fields['usr_id']. "
@@ -285,6 +285,8 @@ class User extends TableAccess
                 }
                 else
                 {
+                    $value['usd_value'] = utf8_decode_db($value['usd_value']);
+                    
                     if($value['new'] == true)
                     {
                         $sql = "INSERT INTO ". TBL_USER_DATA. " (usd_usr_id, usd_usf_id, usd_value) 

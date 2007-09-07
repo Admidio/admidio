@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
  *
@@ -20,7 +20,7 @@ require("../../system/login_valid.php");
 require("../../system/announcement_class.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
-if ($g_preferences['enable_announcements_module'] != 1)
+if ($g_preferences['enable_announcements_module'] == 0)
 {
     // das Modul ist deaktiviert
     $g_message->show("module_disabled");
