@@ -13,7 +13,7 @@
     <h2>Wie baue ich Plugins ein ?</h2>
     
     <p><a href="http://forum.admidio.org/viewforum.php?f=9">Laden Sie das Plugin von unserer Homepage herunter</a> und entpacken 
-    Sie die Zip-Datei. Kopieren Sie das Verzeichnis mit den Dateien in den Ordner <b>adm_plugins</b> in Ihrem 
+    Sie die Zip-Datei. Kopieren Sie das Verzeichnis mit den Dateien in den Ordner <strong>adm_plugins</strong> in Ihrem 
     Admidio-Ordner. Falls der Ordner adm_plugins noch nicht existiert, m&uuml;ssen Sie ihn zuerst noch erstellen. 
     Dieser sollte sich auf derselben Ebene wie <i>adm_my_files</i> befinden.</p>
     
@@ -25,14 +25,14 @@
     in Ihre ehemals reine Html-Seite integrieren. F&uuml;gen Sie nun das Plugin mit einer der folgenden Methoden
     in Ihren Html-Code an der Stelle ein, an der die Ausgabe des Plugins dargestellt werden soll:</p>
     
-    <p><b>1.</b> Benutzen Sie das Plugin <b>nur</b> innerhalb von Admidio-Seiten, so reicht ein einfacher Aufruf von:
+    <p><strong>1.</strong> Benutzen Sie das Plugin <strong>nur</strong> innerhalb von Admidio-Seiten, so reicht ein einfacher Aufruf von:
     
     <p class="code">&lt;?php<br />
     include(SERVER_PATH. "/adm_plugins/sidebar_dates/sidebar_dates.php");<br />
     ?&gt;</p>
     
-    <p><b>2.</b> Wird das Plugin auf Seiten benutzt, die nichts mit Admidio zu tun haben, so muss vorher noch die <i>common.php</i>
-    <b>ganz am Anfang</b> Ihrer Php-Datei &uuml;ber den Serverpfad eingebunden werden:</p>
+    <p><strong>2.</strong> Wird das Plugin auf Seiten benutzt, die nichts mit Admidio zu tun haben, so muss vorher noch die <i>common.php</i>
+    <strong>ganz am Anfang</strong> Ihrer Php-Datei &uuml;ber den Serverpfad eingebunden werden:</p>
     
     <p class="code">&lt;?php<br />
     include_once($_SERVER['DOCUMENT_ROOT']. "/<i>Pfad-zu-Admidio-Ordner</i>
@@ -46,7 +46,7 @@
     /adm_plugins/sidebar_dates/sidebar_dates.php");<br />
     ?&gt;</p>
     
-    <p><b>3.</b> Haben die vorherigen Varianten nicht zum Erfolg gef&uuml;hrt kann man die Plugins auch direkt 
+    <p><strong>3.</strong> Haben die vorherigen Varianten nicht zum Erfolg gef&uuml;hrt kann man die Plugins auch direkt 
     &uuml;ber eine URL einbinden. Allerdings wird bei dieser Variante die common.php f&uuml;r jedes Plugin wiederholt
     abgearbeitet, was der Performance des Webservers nicht gerade dienlich ist.</p>
     
@@ -57,13 +57,19 @@
     
     <h2>Wo kann ich Plugins konfigurieren ?</h2>
     
-    <p>Konfigurieren k&ouml;nnen Sie die meisten Plugins &uuml;ber eine <b>config.php</b> Datei, die sich im selben Ordner
+    <p>Konfigurieren k&ouml;nnen Sie die meisten Plugins &uuml;ber eine <strong>config.php</strong> Datei, die sich im selben Ordner
     wie das Plugin befindet. Hier stehen Ihnen einige Variablen mit Default-Werten zur Verf&uuml;gung. Diese k&ouml;nnen
     Sie Ihren Bed&uuml;rfnissen anpassen.</p>
     
     <p>Bei einem Update des Plugins brauchen und sollen Sie diese Datei nicht 
     &uuml;berschreiben. Sind durch das Update neue Einstellungen hinzugekommen, so m&uuml;ssen Sie die neuen Variablen aus
     der heruntergeladenen config.php in Ihre bisherige config.php des Plugins kopieren und den gew&uuml;nschten Wert einsetzen.</p>
+    
+    <p>Manche Plugins besitzen noch eine <strong>CSS-Datei</strong>. Über diese Datei können Sie das Aussehen und 
+    teilweise die Anordnung bestimmter Bereiche eines Plugins anpassen. Diese CSS-Datei müssen Sie in den &lt;head&gt;-Bereich
+    der PHP-Seiten integrieren, auf denen das Plugin zu sehen ist.</p>
+    
+    <p class="code">&lt;link rel="stylesheet" type="text/css" href="http://<i>Pfad-zu-Admidio</i>/adm_plugins/birthday/birthday.css"&gt;</p>
     
     <p>Ein Beispiel f&uuml;r eine Integration von mehreren Plugins in einer Seitenleiste sehen Sie auf diesem 
     Screenshot im hervorgehobenen Bereich:</p>
@@ -78,7 +84,7 @@
       <a href="index.php?help/layout.php"><img src="help/images/icons/back.png" style="vertical-align: bottom; border: 0px;" alt="Admidio dem eigenen Layout anpassen" title="Admidio dem eigenen Layout anpassen" /></a>
    </div>
    <div style="text-align: right;">
-      <b>N&auml;chster Artikel:</b>&nbsp;
+      <strong>N&auml;chster Artikel:</strong>&nbsp;
       <a href="index.php?help/rollen.php">Rollen anlegen und pflegen</a>&nbsp;
       <a href="index.php?help/rollen.php"><img src="help/images/icons/forward.png" style="vertical-align: bottom; border: 0px;" alt="Rollen anlegen und pflegen" title="Rollen anlegen und pflegen" /></a>
    </div>

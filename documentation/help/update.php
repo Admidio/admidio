@@ -2,26 +2,27 @@
 <?php include("help_menu.php"); ?>
 
 <td style="background-color: #ffffff; padding-left: 15px;">
-   <h2>Admidio auf eine neue Version updaten:</h2>
+    <h2>Updateanleitung:</h2>
 
-   <ul style="padding-left: 15px;">
-   <li><p>Nachdem Sie Admidio von <a href="index.php?download.php">dieser Seite</a> heruntergeladen haben,
-   entpacken Sie die Zip-Datei lokal auf Ihrem Rechner. L&ouml;schen Sie auf Ihrem Webspace die Ordner
+    <p class="notice"><b>Hinweis:</b><br />
+    Diese Updateanleitung betrifft nur das Update einer Hauptversion. Falls Sie ein Bugfix-Update einspielen
+    (diese &auml;ndern nur die 3. Stelle der Versionsnummer z.B. 1.5.0 nach 1.5.1)
+    brauchen Sie nur das Verzeichnis <b>adm_program</b> auf Ihrem Webserver zu ersetzen und haben damit das Update erfolgreich
+    durchgef&uuml;hrt.<br /><br />
+    <strong>Legen Sie vor dem Update ein Backup Ihrer Datenbank und aller Programmdateien an !</strong></p>
+   
+   <ol style="padding-left: 20px;">
+   <li><p>Laden Sie Admidio von unserer <a href="index.php?download.php">Downloadseite</a> herunter und
+   entpacken Sie die Zip-Datei lokal auf Ihrem Rechner.</li>
+   
+   <li>L&ouml;schen Sie auf Ihrem Webspace die Ordner
    <b>adm_install</b> (wenn nicht schon geschehen) und <b>adm_program</b>.</p>
-   <p>( Die Ordner <i>adm_config</i> und <i>adm_my_files</i> d&uuml;rfen Sie auf keinen Fall l&ouml;schen, da hier Ihre Einstellungen,
-   Fotos und Downloads gespeichert werden! )</p></li>
-
-   <li><p class="notice"><b>Hinweis:</b><br />Falls Sie ein Bugfix-Update einspielen (diese &auml;ndern nur die 3. Stelle der Versionsnummer z.B. 1.2.0 nach 1.2.1)
-   brauchen Sie nur das Verzeichnis <b>adm_program</b> auf Ihrem Webserver zu ersetzen und haben damit das Update erfolgreich
-   durchgef&uuml;hrt.<br /><br />
-   Bei gr&ouml;&szlig;eren Versionswechseln z.B. von 1.3 auf 1.4 m&uuml;ssen Sie noch die nachfolgenden
-   Punkte durchgehen:</p></li>
+   <p class="notice"><b>Hinweis:</b><br />
+   Die Ordner <i>adm_config</i> und <i>adm_my_files</i> d&uuml;rfen Sie auf keinen Fall l&ouml;schen, da hier Ihre Einstellungen,
+   Fotos und Downloads gespeichert werden!</p></li>
 
    <li><p>Kopieren Sie <b>nur</b> die Verzeichnisse <b>adm_install</b> und <b>adm_program</b> mit Ihrem
    FTP-Programm auf den Webserver Ihrer Homepage.</p></li>
-
-   <li>Bevor Sie nun die Datenbank updaten, sollten Sie auf jeden Fall ein Backup erstellen, damit Sie im Fehlerfall
-   noch einmal eine Datenbank einspielen und das Update erneut durchf&uuml;hren k&ouml;nnen !</li>
 
    <li><p>Rufen Sie nun in Ihrem Browser die Datei <b>index.php</b> aus dem Verzeichnis <b>adm_install</b>
    auf Ihrer Homepage auf.</p>
@@ -42,8 +43,8 @@
 
    <li>Nachdem das Update erfolgreich durchgelaufen ist, sollten Sie das Verzeichnis <b>adm_install</b> auf
    Ihrem Webserver l&ouml;schen.</li>
-   </ul>
+   </ol>
 
-   <b>Nun haben Sie Admidio erfolgreich aktualisiert und k&ouml;nnen mit der neuen Version arbeiten !</b>
+   <p><strong>Nun haben Sie Admidio erfolgreich aktualisiert und k&ouml;nnen mit der neuen Version arbeiten !</strong></p>
 
 </td>
