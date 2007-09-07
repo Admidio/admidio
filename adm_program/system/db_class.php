@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
  
@@ -104,8 +104,8 @@ class DB
         $error_string = "<div style=\"font-family: monospace;\">
                          <p><b>S Q L - E R R O R</b></p>
                          <p><b>CODE:</b> ". $error['code']. "</p>
-                         ". $error['message']. "<br><br>
-                         <b>B A C K T R A C E</b><br>
+                         ". $error['message']. "<br /><br />
+                         <b>B A C K T R A C E</b><br />
                          $backtrace
                          </div>";
         echo $error_string;

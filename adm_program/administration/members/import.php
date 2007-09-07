@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
 
@@ -46,7 +46,7 @@ echo "
             <li>
                 <dl>
                     <dt><label for=\"userfile\">Datei ausw&auml;hlen:</label></dt>
-                    <dd><input id=\"userfile\" name=\"userfile\" size=\"30\" type=\"file\"></dd>
+                    <dd><input id=\"userfile\" name=\"userfile\" size=\"30\" type=\"file\" /></dd>
                 </dl>
             </li>
             <li>
@@ -58,14 +58,14 @@ echo "
 
                         echo "&nbsp;
                         <img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
-                        onClick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=role_assign','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\">
+                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=role_assign','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\" />
                     </dd>
                 </dl>
             </li>
             <li>
                 <label for=\"user_import_mode\">Bereits existierende Benutzer</label>&nbsp;
                 <select size=\"1\" id=\"user_import_mode\" name=\"user_import_mode\">
-                    <option value=\"1\" selected>behalten</option>
+                    <option value=\"1\" selected=\"selected\">behalten</option>
                     <option value=\"2\">duplizieren</option>
                     <option value=\"3\">ersetzen</option>
                     <option value=\"4\">erg&auml;nzen</option>
@@ -77,11 +77,11 @@ echo "
 
         <div class=\"formSubmit\">
             <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
-            <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\">
-            &nbsp;Zur&uuml;ck</button>
+            <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück\" />
+            &nbsp;Zurück</button>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <button id=\"weiter\" type=\"submit\" value=\"weiter\" tabindex=\"2\">Weiter&nbsp;
-            <img src=\"$g_root_path/adm_program/images/forward.png\" alt=\"Weiter\"></button>
+            <img src=\"$g_root_path/adm_program/images/forward.png\" alt=\"Weiter\" /></button>
         </div>
     </div>
 </div>

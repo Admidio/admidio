@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Jochen Erkens
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
  *
@@ -307,7 +307,7 @@ if(($count_valid_users != $user_anzahl || $restrict == "u")
             echo "<li>
                 <span class=\"iconTextLink\">
                     <a href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=u\"><img
-                    src=\"$g_root_path/adm_program/images/group.png\" alt=\"Alle Benutzer anzeigen\"></a>
+                    src=\"$g_root_path/adm_program/images/group.png\" alt=\"Alle Benutzer anzeigen\" /></a>
                     <a href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=u\">Alle Benutzer anzeigen</a>
                 </span>
             </li>";
@@ -318,7 +318,7 @@ if(($count_valid_users != $user_anzahl || $restrict == "u")
             echo "<li>
                 <span class=\"iconTextLink\">
                     <a href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=m\"><img
-                    src=\"$g_root_path/adm_program/images/user.png\" alt=\"Nur Mitglieder anzeigen\"></a>
+                    src=\"$g_root_path/adm_program/images/user.png\" alt=\"Nur Mitglieder anzeigen\" /></a>
                     <a href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=m\">Nur Mitglieder anzeigen</a>
                 </span>
             </li>";
@@ -329,7 +329,7 @@ if(($count_valid_users != $user_anzahl || $restrict == "u")
             echo"<li>
                 <span class=\"iconTextLink\">
                     <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?new_user=1\"><img
-                    src=\"$g_root_path/adm_program/images/add.png\" alt=\"Login\"></a>
+                    src=\"$g_root_path/adm_program/images/add.png\" alt=\"Login\" /></a>
                     <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?new_user=1\">Benutzer anlegen</a>
                 </span>
             </li>";
@@ -343,7 +343,7 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
     if($g_db->num_rows($result_user)>=50)
     {
         //Alle
-        echo"<p><a href=\"#\" onClick=\"showAll();\">Alle</a>&nbsp;";
+        echo"<p><a href=\"#\" onclick=\"showAll();\">Alle</a>&nbsp;";
 
         for($menu_letter=35; $menu_letter<=90; $menu_letter++)
         {
@@ -356,7 +356,7 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
             //Falls Nicht Link zu Anker
             if(in_array($menu_letter, $first_letter_array) && $menu_letter>=65 && $menu_letter<=90)
             {
-                echo"<a href=\"#\" onClick=\"toggleDiv('letter_$menu_letter_string');\">$menu_letter_string</a>&nbsp;";
+                echo"<a href=\"#\" onclick=\"toggleDiv('letter_$menu_letter_string');\">$menu_letter_string</a>&nbsp;";
             }
 
             //Fuer Namen die mit Zahlen beginnen
@@ -364,7 +364,7 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
             {
                 if( in_array(35, $first_letter_array))
                 {
-                    echo"<a href=\"#\" onClick=\"toggleDiv('zahl');\">$menu_letter_string</a>&nbsp;";
+                    echo"<a href=\"#\" onclick=\"toggleDiv('zahl');\">$menu_letter_string</a>&nbsp;";
                 }
                 else 
                 {
@@ -484,7 +484,7 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
                     <tr>
                         <td class=\"tableSubHeader\" colspan=\"6\">
                             <a href=\"javascript:showHideBlock('$block_id','$g_root_path')\"><img class=\"iconShowHide\"
-                            name=\"img_$block_id\" src=\"$g_root_path/adm_program/images/triangle_open.gif\" alt=\"ausblenden\"></a>$letter_string
+                            id=\"img_$block_id\" src=\"$g_root_path/adm_program/images/triangle_open.gif\" alt=\"ausblenden\" /></a>$letter_string
                         </td>
                     </tr>
                 </tbody>
@@ -508,8 +508,8 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
             }
             
             echo"
-            <tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\">
-                <td><img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/note.png\" alt=\"Userinformationen\" title=\"$user_text\"></td>
+            <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
+                <td><img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/note.png\" alt=\"Userinformationen\" title=\"$user_text\" /></td>
                 <td>". $user['last_name']."</td>
                 <td>". $user['first_name']."</td>
 
@@ -525,11 +525,11 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
                     //Haekchen setzen ob jemand Mitglied ist oder nicht
                     if(in_array($user['usr_id'], $role_member))
                     {
-                        echo"<input type=\"checkbox\" onclick=\"unmarkLeader(this)\" id=\"member_". $user['usr_id']. "\" name=\"member_". $user['usr_id']. "\" checked value=\"1\">";
+                        echo"<input type=\"checkbox\" onclick=\"unmarkLeader(this)\" id=\"member_". $user['usr_id']. "\" name=\"member_". $user['usr_id']. "\" checked=\"checked\" value=\"1\" />";
                     }
                     else
                     {
-                        echo"<input type=\"checkbox\" onclick=\"unmarkLeader(this)\" id=\"member_". $user['usr_id']. "\" name=\"member_". $user['usr_id']. "\" value=\"1\">";
+                        echo"<input type=\"checkbox\" onclick=\"unmarkLeader(this)\" id=\"member_". $user['usr_id']. "\" name=\"member_". $user['usr_id']. "\" value=\"1\" />";
                     }
                 echo"</td>
 
@@ -537,11 +537,11 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
                     //Haekchen setzen ob jemand Leiter ist oder nicht
                     if(in_array($user['usr_id'], $group_leaders))
                     {
-                        echo"<input type=\"checkbox\" onclick=\"markMember(this)\" id=\"leader_". $user['usr_id']. "\" name=\"leader_". $user['usr_id']. "\" checked value=\"1\">";
+                        echo"<input type=\"checkbox\" onclick=\"markMember(this)\" id=\"leader_". $user['usr_id']. "\" name=\"leader_". $user['usr_id']. "\" checked=\"checked\" value=\"1\" />";
                     }
                     else
                     {
-                        echo"<input type=\"checkbox\" onclick=\"markMember(this)\" id=\"leader_". $user['usr_id']. "\" name=\"leader_". $user['usr_id']. "\" value=\"1\">";
+                        echo"<input type=\"checkbox\" onclick=\"markMember(this)\" id=\"leader_". $user['usr_id']. "\" name=\"leader_". $user['usr_id']. "\" value=\"1\" />";
                     }
                 echo"</td>
             </tr>";
@@ -619,8 +619,8 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
                             .$user['zip_code']."&nbsp;".$user['city']."&nbsp;&nbsp;&nbsp;"
                             .$user['phone'];
                 echo"
-                <tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\">
-                    <td><img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/note.png\" alt=\"Userinformationen\" title=\"$user_text\"></td>
+                <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
+                    <td><img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/note.png\" alt=\"Userinformationen\" title=\"$user_text\" /></td>
                     <td>". $user['last_name']."</td>
                     <td>". $user['first_name']."</td>
                     <td>";
@@ -635,11 +635,11 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
                         //Haekchen setzen ob jemand Mitglied ist oder nicht
                         if(in_array($user['usr_id'], $role_member))
                         {
-                            echo"<input type=\"checkbox\" onclick=\"unmarkLeader(this)\" id=\"member_". $user['usr_id']. "\" name=\"member_". $user['usr_id']. "\" checked value=\"1\">";
+                            echo"<input type=\"checkbox\" onclick=\"unmarkLeader(this)\" id=\"member_". $user['usr_id']. "\" name=\"member_". $user['usr_id']. "\" checked=\"checked\" value=\"1\" />";
                         }
                         else
                         {
-                            echo"<input type=\"checkbox\" onclick=\"unmarkLeader(this)\" id=\"member_". $user['usr_id']. "\" name=\"member_". $user['usr_id']. "\" value=\"1\">";
+                            echo"<input type=\"checkbox\" onclick=\"unmarkLeader(this)\" id=\"member_". $user['usr_id']. "\" name=\"member_". $user['usr_id']. "\" value=\"1\" />";
                         }
                     echo"</td>
 
@@ -647,11 +647,11 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
                         //Haekchen setzen ob jemand Leiter ist oder nicht
                         if(in_array($user['usr_id'], $group_leaders))
                         {
-                            echo"<input type=\"checkbox\" onclick=\"markMember(this)\" id=\"leader_". $user['usr_id']. "\" name=\"leader_". $user['usr_id']. "\" checked value=\"1\">";
+                            echo"<input type=\"checkbox\" onclick=\"markMember(this)\" id=\"leader_". $user['usr_id']. "\" name=\"leader_". $user['usr_id']. "\" checked=\"checked\" value=\"1\" />";
                         }
                         else
                         {
-                            echo"<input type=\"checkbox\" onclick=\"markMember(this)\" id=\"leader_". $user['usr_id']. "\" name=\"leader_". $user['usr_id']. "\" value=\"1\">";
+                            echo"<input type=\"checkbox\" onclick=\"markMember(this)\" id=\"leader_". $user['usr_id']. "\" name=\"leader_". $user['usr_id']. "\" value=\"1\" />";
                         }
                     echo"</td>
                 </tr>";
@@ -665,11 +665,11 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
     //Buttons schliessen oder Speichern
     echo"<div class=\"formSubmit\">
         <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
-                <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\">
-                &nbsp;Zur&uuml;ck</button>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
+                <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück\" />
+                &nbsp;Zurück</button>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <button name=\"speichern\" type=\"submit\" value=\"speichern\">
-            <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\">&nbsp;Speichern
+            <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\" />&nbsp;Speichern
         </button>
     </div>
 </form>";

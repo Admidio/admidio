@@ -60,17 +60,17 @@ while ($row = $g_db->fetch_object($result))
     // Die Attribute fuer das Item zusammenstellen
     $title = $row->gbo_name;
     $link  = "$g_root_path/adm_program/modules/guestbook/guestbook.php?id=". $row->gbo_id;
-    $description = "<b>". strSpecialChars2Html($row->gbo_name). " schrieb am ". mysqldatetime("d.m.y h:i", $row->gbo_timestamp)."</b>";
+    $description = "<b>$row->gbo_name schrieb am ". mysqldatetime("d.m.y h:i", $row->gbo_timestamp)."</b>";
 
 
     // Die Ankuendigungen eventuell durch den UBB-Parser schicken
     if ($g_preferences['enable_bbcode'] == 1)
     {
-        $description = $description. "<br /><br />". strSpecialChars2Html($bbcode->parse($row->gbo_text));
+        $description = $description. "<br /><br />". $bbcode->parse($row->gbo_text);
     }
     else
     {
-        $description = $description. "<br /><br />". nl2br(strSpecialChars2Html($row->gbo_text));
+        $description = $description. "<br /><br />". nl2br($row->gbo_text);
     }
 
     $description = $description. "<br /><br /><a href=\"$link\">Link auf ". $g_current_organization->getValue("org_homepage"). "</a>";

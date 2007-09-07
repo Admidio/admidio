@@ -33,7 +33,7 @@ if(!$g_current_user->editAnnouncements())
 
 // lokale Variablen der Uebergabevariablen initialisieren
 $req_ann_id   = 0;
-$req_headline = "Ank&uuml;ndigungen";
+$req_headline = "Ankündigungen";
 
 // Uebergabevariablen pruefen
 
@@ -89,7 +89,7 @@ require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 // Html des Modules ausgeben
 echo "
-<form name=\"form\" method=\"post\" action=\"$g_root_path/adm_program/modules/announcements/announcements_function.php?ann_id=$req_ann_id&amp;headline=". $_GET['headline']. "&amp;mode=1\">
+<form method=\"post\" action=\"$g_root_path/adm_program/modules/announcements/announcements_function.php?ann_id=$req_ann_id&amp;headline=". $_GET['headline']. "&amp;mode=1\">
 <div class=\"formLayout\" id=\"edit_announcements_form\">
     <div class=\"formHead\">";
         if($req_ann_id > 0)
@@ -107,7 +107,7 @@ echo "
                 <dl>
                     <dt><label for=\"ann_headline\">&Uuml;berschrift:</label></dt>
                     <dd>
-                        <input type=\"text\" id=\"ann_headline\" name=\"ann_headline\" style=\"width: 350px;\" tabindex=\"1\" maxlength=\"100\" value=\"". htmlspecialchars($announcement->getValue("ann_headline"), ENT_QUOTES). "\">
+                        <input type=\"text\" id=\"ann_headline\" name=\"ann_headline\" style=\"width: 350px;\" tabindex=\"1\" maxlength=\"100\" value=\"". $announcement->getValue("ann_headline"). "\" />
                         <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                     </dd>
                 </dl>
@@ -117,12 +117,12 @@ echo "
                     <dt><label for=\"ann_description\">Beschreibung:</label>";
                         if($g_preferences['enable_bbcode'] == 1)
                         {
-                          echo "<br><br>
-                          <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=500,left=310,top=200,scrollbars=yes')\" tabindex=\"6\">Text formatieren</a>";
+                          echo "<br /><br />
+                          <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=500,left=310,top=200,scrollbars=yes')\" tabindex=\"5\">Text formatieren</a>";
                         }
                     echo "</dt>
                     <dd>
-                        <textarea id=\"ann_description\" name=\"ann_description\" style=\"width: 350px;\" tabindex=\"2\" rows=\"10\" cols=\"40\">". htmlspecialchars($announcement->getValue("ann_description"), ENT_QUOTES). "</textarea>
+                        <textarea id=\"ann_description\" name=\"ann_description\" style=\"width: 350px;\" tabindex=\"2\" rows=\"10\" cols=\"40\">". $announcement->getValue("ann_description"). "</textarea>
                         <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                     </dd>
                 </dl>
@@ -145,7 +145,7 @@ echo "
                             echo " value=\"1\" />
                             <label for=\"ann_global\">$req_headline f&uuml;r mehrere Organisationen sichtbar</label>
                             <img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
-                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=termin_global','Message','width=400,height=350,left=310,top=200,scrollbars=yes')\">
+                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=termin_global','Message','width=400,height=350,left=310,top=200,scrollbars=yes')\" />
                         </dd>
                     </dl>
                 </li>";
@@ -155,8 +155,8 @@ echo "
         <hr />
 
         <div class=\"formSubmit\">
-            <button name=\"speichern\" type=\"submit\" tabindex=\"5\" value=\"speichern\" tabindex=\"4\">
-                <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\">
+            <button name=\"speichern\" type=\"submit\" value=\"speichern\" tabindex=\"4\">
+                <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\" />
                 &nbsp;Speichern</button>
         </div>
     </div>
@@ -167,8 +167,8 @@ echo "
     <li>
         <span class=\"iconTextLink\">
             <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
-            <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück\" /></a>
+            <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
         </span>
     </li>
 </ul>

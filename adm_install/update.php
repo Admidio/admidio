@@ -20,37 +20,37 @@ function showPage($message, $next_url, $icon, $icon_text)
     // Html des Modules ausgeben
     global $g_root_path;
     echo '
-    <!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org -->
-    <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-    <html>
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="de" xml:lang="de">
     <head>
+        <!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org -->
+        
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta name="author"   content="Admidio Team" />
+        <meta name="robots"   content="noindex" />
+        
         <title>Admidio - Update</title>
 
-        <meta http-equiv="content-type" content="text/html; charset=utf-8">
-        <meta name="author"   content="Admidio Team">
-        <meta name="robots"   content="noindex">
-
-        <link rel="stylesheet" type="text/css" href="../adm_program/layout/system.css">
+        <link rel="stylesheet" type="text/css" href="../adm_program/layout/system.css" />
 
         <!--[if lt IE 7]>
         <script type="text/javascript" src="../adm_program/system/correct_png.js"></script>
         <![endif]-->
         
-        <script>
+        <script><!--
             function startUpdate()
             {
                 $submit_button = document.getElementById(\'next_page\');
                 if($submit_button.value == \'Datenbank aktualisieren\')
                 {
                     $submit_button.disabled  = true;
-                    $submit_button.innerHTML = \'<img src="../adm_program/images/loader.gif" alt="Loading"> Datenbank wird aktualisiert\';
+                    $submit_button.innerHTML = \'<img src="../adm_program/images/loader.gif" alt="Loading" /> Datenbank wird aktualisiert\';
                 }
                 document.forms[0].submit();
             }
-        </script>
+        --></script>
     </head>
     <body>
-    <div id="system_align" style="margin-top: 10px; margin-bottom: 10px;" align="center">
         <form action="'. $next_url. '" method="post">
         <div class="formLayout" id="installation_form">
             <div class="formHead" style="text-align: left; letter-spacing: 0em;">
@@ -66,7 +66,7 @@ function showPage($message, $next_url, $icon, $icon_text)
 
                 <div class="formSubmit" style="text-align: center;">
                     <button type="button" id="next_page" name="next_page" value="'. $icon_text. '" onclick="startUpdate()">
-                    <img src="../adm_program/images/'. $icon. '" alt="'. $icon_text. '">
+                    <img src="../adm_program/images/'. $icon. '" alt="'. $icon_text. '" />
                     &nbsp;'. $icon_text. '</button>
                 </div>            
             </div>
@@ -76,7 +76,6 @@ function showPage($message, $next_url, $icon, $icon_text)
         <script type="text/javascript"><!--
             document.getElementById(\'next_page\').focus();
         --></script>
-    </div>
     </body>
     </html>';
     exit();
@@ -140,10 +139,10 @@ if($req_mode == 1)
     // pruefen, ob ein Update ueberhaupt notwendig ist
     if(isset($g_preferences['db_version']) == false)
     {
-        $message   = '<strong>Eine Aktualisierung der Datenbank ist erforderlich</strong><br><br>
+        $message   = '<strong>Eine Aktualisierung der Datenbank ist erforderlich</strong><br /><br />
                       Sie haben bisher eine Version 1.x von Admidio verwendet. Um Ihre Datenbank
                       erfolgreich auf Admidio '. ADMIDIO_VERSION. ' zu migrieren, ist es erforderlich,
-                      dass Sie Ihre bisherige Version angeben:<br><br>
+                      dass Sie Ihre bisherige Version angeben:<br /><br />
                       Bisherige Admidio-Version:&nbsp;
                       <select id="old_version" name="old_version" size="1">
                           <option value="0" selected="selected">- Bitte wählen -</option>
@@ -155,12 +154,12 @@ if($req_mode == 1)
     }
     elseif(version_compare(substr($g_preferences['db_version'], 0, 3), substr(ADMIDIO_VERSION, 0, 3)) != 0)
     {
-        $message   = "<strong>Eine Aktualisierung der Datenbank ist erforderlich</strong><br><br>";
+        $message   = "<strong>Eine Aktualisierung der Datenbank ist erforderlich</strong><br /><br />";
         showPage($message, "update.php?mode=2", "database_in.png", "Datenbank aktualisieren");
     }
     elseif(version_compare(substr($g_preferences['db_version'], 0, 3), substr(ADMIDIO_VERSION, 0, 3)) == 0)
     {
-        $message   = "<strong>Eine Aktualisierung ist nicht erforderlich</strong><br><br>
+        $message   = "<strong>Eine Aktualisierung ist nicht erforderlich</strong><br /><br />
                       Die Admidio-Datenbank ist aktuell.";
         showPage($message, "$g_root_path/$g_main_page", "application_view_list.png", "Übersichtsseite");
     }
@@ -281,8 +280,8 @@ elseif($req_mode == 2)
     unset($_SESSION['g_preferences']);
     unset($_SESSION['g_current_user']);
 
-    $message   = '<strong>Die Aktualisierung war erfolgreich</strong><br><br>
-                  Die Admidio-Datenbank ist jetzt auf die Version '. ADMIDIO_VERSION. ' aktualisiert worden.<br>
+    $message   = '<strong>Die Aktualisierung war erfolgreich</strong><br /><br />
+                  Die Admidio-Datenbank ist jetzt auf die Version '. ADMIDIO_VERSION. ' aktualisiert worden.<br />
                   Sie können nun wieder mit Admidio arbeiten.';
     showPage($message, "$g_root_path/$g_main_page", "application_view_list.png", "Übersichtsseite");
 }

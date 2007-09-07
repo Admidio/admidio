@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
  *
@@ -107,7 +107,7 @@ echo "
                 <th>Beschreibung</th>
                 <th style=\"text-align: center; width: 80px;\">Leiter<img 
                     class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
-                    onClick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=leader','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
+                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=leader','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\" />
                 </th>
             </tr>
         </thead>";
@@ -172,7 +172,7 @@ echo "
                     <tr>
                         <td class=\"tableSubHeader\" colspan=\"4\">
                             <a href=\"javascript:showHideBlock('$block_id','$g_root_path')\"><img class=\"iconShowHide\"
-                            name=\"img_$block_id\" src=\"$g_root_path/adm_program/images/triangle_open.gif\" alt=\"ausblenden\"></a>$row->cat_name
+                            id=\"img_$block_id\" src=\"$g_root_path/adm_program/images/triangle_open.gif\" alt=\"ausblenden\" /></a>$row->cat_name
                         </td>
                     </tr>
                 </tbody>
@@ -186,20 +186,20 @@ echo "
                   <input type=\"checkbox\" id=\"role-$row->rol_id\" name=\"role-$row->rol_id\" ";
                      if($row->mem_usr_id > 0)
                      {
-                        echo " checked ";
+                        echo " checked=\"checked\" ";
                      }
 
                      // wenn der User aus der Mitgliederzuordnung heraus neu angelegt wurde
                      // entsprechende Rolle sofort hinzufuegen
                      if($row->rol_id == $set_rol_id)
                      {
-                        echo " checked ";
+                        echo " checked=\"checked\" ";
                      }
 
                      // die Funktion Webmaster darf nur von einem Webmaster vergeben werden
                      if($row->rol_name == 'Webmaster' && !$g_current_user->isWebmaster())
                      {
-                        echo " disabled ";
+                        echo " disabled=\"disabled\" ";
                      }
 
                      echo " onclick=\"unmarkLeader(this)\" value=\"1\" />
@@ -210,13 +210,13 @@ echo "
                         <input type=\"checkbox\" id=\"leader-$row->rol_id\" name=\"leader-$row->rol_id\" ";
                         if($row->mem_leader > 0)
                         {
-                            echo " checked ";
+                            echo " checked=\"checked\" ";
                         }
 
                         // die Funktion Webmaster darf nur von einem Webmaster vergeben werden
                         if($row->rol_name == 'Webmaster' && !$g_current_user->isWebmaster())
                         {
-                            echo " disabled ";
+                            echo " disabled=\"disabled\" ";
                         }
 
                         echo " onclick=\"markMember(this)\" value=\"1\" />
@@ -227,13 +227,13 @@ echo "
 
     <div class=\"formSubmit\">";
         echo "<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
-            <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\">
-              &nbsp;Zur&uuml;ck</button>
+            <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück\" />
+              &nbsp;Zurück</button>
 
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
         <button name=\"speichern\" type=\"submit\" value=\"speichern\">
-            <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\">
+            <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\" />
             &nbsp;Speichern</button>
     </div>
 </form>";

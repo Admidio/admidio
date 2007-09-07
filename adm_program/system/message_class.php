@@ -172,8 +172,7 @@ class Message
         }
         
         echo '
-        <br /><br />
-        <div class="formLayout" id="message_form" style="width: 350px">
+        <div class="formLayout" id="message_form" style="width: 350px; margin-top: 60px;">
             <div class="formHead">'. $this->headline. '</div>
             <div class="formBody">
                 <p>'. $this->content. '</p>
@@ -184,12 +183,12 @@ class Message
                         {
                             echo '
                             <button id="ja" type="button" value="ja" onclick="self.location.href=\''. $this->forward_url. '\'">
-                                <img src="'. $g_root_path. '/adm_program/images/ok.png" alt="Ja">
+                                <img src="'. $g_root_path. '/adm_program/images/ok.png" alt="Ja" />
                                 &nbsp;&nbsp;Ja&nbsp;&nbsp;&nbsp;
                             </button>
                             &nbsp;&nbsp;&nbsp;&nbsp;
                             <button id="nein" type="button" value="nein" onclick="history.back()">
-                                <img src="'. $g_root_path. '/adm_program/images/error.png" alt="Nein">
+                                <img src="'. $g_root_path. '/adm_program/images/error.png" alt="Nein" />
                                 &nbsp;Nein
                             </button>';
                         }
@@ -197,7 +196,7 @@ class Message
                         {
                             // Wenn weitergeleitet wird, dann auch immer einen Weiter-Button anzeigen
                             echo '<button id="weiter" type="button" value="weiter" onclick="window.location.href=\''. $this->forward_url. '\'">
-                            <img src="'. $g_root_path. '/adm_program/images/forward.png" alt="Weiter">
+                            <img src="'. $g_root_path. '/adm_program/images/forward.png" alt="Weiter" />
                             &nbsp;Weiter</button>';
                         }
                     }
@@ -205,8 +204,8 @@ class Message
                     {
                         // Wenn nicht weitergeleitet wird, dann immer einen Zurueck-Button anzeigen
                         echo '<button id="zurueck" type="button" value="zurueck" onclick="history.back()">
-                        <img src="'. $g_root_path. '/adm_program/images/back.png" alt="Zurueck">
-                        &nbsp;Zur&uuml;ck</button>';
+                        <img src="'. $g_root_path. '/adm_program/images/back.png" alt="Zurueck" />
+                        &nbsp;Zurück</button>';
                     }
                 echo '</p>
             </div>

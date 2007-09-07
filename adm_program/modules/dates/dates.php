@@ -91,7 +91,7 @@ $g_layout['title'] = $req_headline;
 if($g_preferences['enable_rss'] == 1 && $g_preferences['enable_dates_module'] == 1)
 {
     $g_layout['header'] =  "<link type=\"application/rss+xml\" rel=\"alternate\" title=\"". $g_current_organization->getValue("org_longname"). " - Termine\"
-        href=\"$g_root_path/adm_program/modules/dates/rss_dates.php\">";
+        href=\"$g_root_path/adm_program/modules/dates/rss_dates.php\" />";
 };
 
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");
@@ -208,7 +208,7 @@ if($req_id == 0
             <li>
                 <span class=\"iconTextLink\">
                     <a href=\"$g_root_path/adm_program/modules/dates/dates_new.php?headline$req_headline\"><img
-                    src=\"$g_root_path/adm_program/images/add.png\" alt=\"Termin anlegen\"></a>
+                    src=\"$g_root_path/adm_program/images/add.png\" alt=\"Termin anlegen\" /></a>
                     <a href=\"$g_root_path/adm_program/modules/dates/dates_new.php?headline=$req_headline\">Anlegen</a>
                 </span>
             </li>
@@ -240,13 +240,15 @@ else
         echo "
         <div class=\"boxLayout\">
             <div class=\"boxHead\">
-                <div class=\"boxHeadIcon\"><img src=\"$g_root_path/adm_program/images/date.png\" class=\"icon16\" alt=\"". strSpecialChars2Html($row->dat_headline). "\"></div>                
-                <div class=\"boxHeadLeft\">". mysqldatetime("d.m.y", $row->dat_begin). "</div>
-                <div class=\"boxHeadCenter\"> ". strSpecialChars2Html($row->dat_headline). "</div>
+                <div class=\"boxHeadLeft\">
+                    <img src=\"$g_root_path/adm_program/images/date.png\" class=\"icon16\" alt=\"$row->dat_headline\" />
+                    ". mysqldatetime("d.m.y", $row->dat_begin). "
+                </div>
+                <div class=\"boxHeadCenter\">$row->dat_headline</div>
                 <div class=\"boxHeadRight\">
                     <span class=\"iconLink\">
-                        <a href=\"$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=$row->dat_id&mode=4\"><img 
-                        src=\"$g_root_path/adm_program/images/database_out.png\" alt=\"Exportieren (iCal)\" title=\"Exportieren (iCal)\"></a>
+                        <a href=\"$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=$row->dat_id&amp;mode=4\"><img 
+                        src=\"$g_root_path/adm_program/images/database_out.png\" alt=\"Exportieren (iCal)\" title=\"Exportieren (iCal)\" /></a>
                     </span>";
                     
                     // aendern & loeschen darf man nur eigene Termine, ausser Moderatoren
@@ -255,7 +257,7 @@ else
                         echo "
                         <span class=\"iconLink\">
                             <a href=\"$g_root_path/adm_program/modules/dates/dates_new.php?dat_id=$row->dat_id&amp;headline=$req_headline\"><img 
-                            src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>
+                            src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
                         </span>";
 
                         // Loeschen darf man nur Termine der eigenen Gliedgemeinschaft
@@ -263,8 +265,8 @@ else
                         {
                             echo "
                             <span class=\"iconLink\">
-                                <a href=\"$g_root_path/adm_program/modules/dates/dates_function.php?mode=5&dat_id=$row->dat_id\"><img 
-                                src=\"$g_root_path/adm_program/images/cross.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>
+                                <a href=\"$g_root_path/adm_program/modules/dates/dates_function.php?mode=5&amp;dat_id=$row->dat_id\"><img 
+                                src=\"$g_root_path/adm_program/images/cross.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" /></a>
                             </span>";
                         }
                     }
@@ -308,20 +310,20 @@ else
                         if (mysqldatetime("h:i", $row->dat_begin) != "00:00"
                         && $row->dat_begin != $row->dat_end)
                         {
-                            echo "<br>";
+                            echo "<br />";
                         }
-                        echo "Treffpunkt:&nbsp;<strong>". strSpecialChars2Html($row->dat_location). "</strong>";
+                        echo "Treffpunkt:&nbsp;<strong>". $row->dat_location. "</strong>";
                     }
                 echo "</div>
                 <div>";
                     // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
                     if($g_preferences['enable_bbcode'] == 1)
                     {
-                        echo strSpecialChars2Html($bbcode->parse($row->dat_description));
+                        echo $bbcode->parse($row->dat_description);
                     }
                     else
                     {
-                        echo nl2br(strSpecialChars2Html($row->dat_description));
+                        echo nl2br($row->dat_description);
                     }
                 echo "</div>
                 <div class=\"editInformation\">";
@@ -335,7 +337,7 @@ else
                        || $row->dat_usr_id_change != $row->dat_usr_id ) )
                     {
                         $user_change = new User($g_db, $row->dat_usr_id_change);
-                        echo "<br>Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname").
+                        echo "<br />Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname").
                         " am ". mysqldatetime("d.m.y h:i", $row->dat_last_change);
                     }
                 echo "</div>

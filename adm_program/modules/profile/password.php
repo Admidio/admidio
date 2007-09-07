@@ -5,25 +5,11 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
  *
  * user_id     -   Passwort der übergebenen user_id aendern
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
  
@@ -80,11 +66,11 @@ echo "
 
         <div class=\"formSubmit\">
             <button name=\"schliessen\" type=\"button\" value=\"schliessen\" onclick=\"window.close()\">
-                <img src=\"$g_root_path/adm_program/images/door_in.png\" alt=\"Schlie&szlig;en\">
-                &nbsp;Schlie&szlig;en</button>
+                <img src=\"$g_root_path/adm_program/images/door_in.png\" alt=\"Schließen\" />
+                &nbsp;Schließen</button>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <button name=\"speichern\" type=\"submit\" value=\"speichern\">
-                <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\">
+                <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\" />
                 &nbsp;Speichern</button>
         </div>
     </div>

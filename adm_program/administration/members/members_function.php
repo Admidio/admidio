@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
  *
@@ -85,29 +85,29 @@ if($_GET["mode"] == 1)
         <div class=\"formHead\">Mitglied l&ouml;schen</div>
         <div class=\"formBody\">
             <p align=\"left\">
-                <img src=\"$g_root_path/adm_program/images/user.png\" alt=\"Ehemaliger\">
+                <img src=\"$g_root_path/adm_program/images/user.png\" alt=\"Ehemaliger\" />
                 Du kannst den Benutzer zu einem <b>Ehemaligen</b> machen. Dies hat den Vorteil, dass die Daten
                 erhalten bleiben und du sp&auml;ter immer wieder sehen kannst, welchen Rollen diese Person
                 zugeordnet war.
             </p>
             <p align=\"left\">
-                <img src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Benutzer l&ouml;schen\">
+                <img src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Benutzer l&ouml;schen\" />
                 Wenn du <b>L&ouml;schen</b> ausw&auml;hlst, wird der Datensatz entg&uuml;ltig aus der Datenbank
                 entfernt und es ist sp&auml;ter nicht mehr m&ouml;glich Daten dieser Person einzusehen.
             </p>
             <button name=\"back\" type=\"button\" value=\"back\"
                 onclick=\"history.back()\">
-                <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\">
-                &nbsp;Zur&uuml;ck</button>
+                <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück\" />
+                &nbsp;Zurück</button>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <button name=\"delete\" type=\"button\" value=\"delete\"
                 onclick=\"self.location.href='$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET['user_id']. "&mode=3'\">
-                <img src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Benutzer l&ouml;schen\">
+                <img src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Benutzer l&ouml;schen\" />
                 &nbsp;L&ouml;schen</button>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <button name=\"former\" type=\"button\" value=\"former\"
                 onclick=\"self.location.href='$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET['user_id']. "&mode=2'\">
-                <img src=\"$g_root_path/adm_program/images/user.png\" alt=\"Ehemaliger\">
+                <img src=\"$g_root_path/adm_program/images/user.png\" alt=\"Ehemaliger\" />
                 &nbsp;Ehemaliger</button>
         </div>
     </div>";

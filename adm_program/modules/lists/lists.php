@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
  *
@@ -136,7 +136,7 @@ if($num_roles == 0)
 // Html-Kopf ausgeben
 $g_layout['title'] = "Listen";
 $g_layout['header'] = "
-    <script language=\"JavaScript\" type=\"text/javascript\"><!--
+    <script type=\"text/javascript\"><!--
         function showCategory()
         {
             var category = document.getElementById('category').value;
@@ -206,7 +206,7 @@ if($show_ctg_sel == 1)
             <option value="Alle" ';
             if(strlen($category) == 0)
             {
-                echo " selected ";
+                echo " selected=\"selected\" ";
             }
             echo '>Alle</option>';
 
@@ -215,7 +215,7 @@ if($show_ctg_sel == 1)
                 echo '<option value="'. urlencode($row->cat_name). '"';
                 if($category == $row->cat_name)
                 {
-                    echo " selected ";
+                    echo " selected=\"selected\" ";
                 }
                 echo ">$row->cat_name</option>";
             }
@@ -331,7 +331,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET["start"] < $num_roles; $i++)
                             echo "
                             <span class=\"iconLink\">
                                 <a href=\"$g_root_path/adm_program/administration/roles/roles_new.php?rol_id=". $row_lst['rol_id']. "\"><img
-                                src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Einstellungen\" title=\"Einstellungen\"></a>
+                                src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Einstellungen\" title=\"Einstellungen\" /></a>
                             </span>";
                         }
 
@@ -341,7 +341,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET["start"] < $num_roles; $i++)
                             echo "
                             <span class=\"iconLink\">
                                 <a href=\"$g_root_path/adm_program/modules/lists/members.php?rol_id=". $row_lst['rol_id']. "\"><img 
-                                src=\"$g_root_path/adm_program/images/add.png\" alt=\"Mitglieder zuordnen\" title=\"Mitglieder zuordnen\"></a>
+                                src=\"$g_root_path/adm_program/images/add.png\" alt=\"Mitglieder zuordnen\" title=\"Mitglieder zuordnen\" /></a>
                             </span>";
                         }
                     }

@@ -84,7 +84,7 @@ if(isset($_SESSION['fields_request']))
 $html_disabled = "";
 if($user_field->getValue("usf_system") == 1)
 {
-    $html_disabled = " disabled ";
+    $html_disabled = " disabled=\"disabled\" ";
 }
 
 // zusaetzliche Daten fuer den Html-Kopf setzen
@@ -110,7 +110,7 @@ echo "
                 <dl>
                     <dt><label for=\"usf_name\">Name:</label></dt>
                     <dd><input type=\"text\" name=\"usf_name\" id=\"usf_name\" $html_disabled style=\"width: 150px;\" maxlength=\"15\"
-                        value=\"". htmlspecialchars($user_field->getValue("usf_name"), ENT_QUOTES). "\">
+                        value=\"". $user_field->getValue("usf_name"). "\" />
                         <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                     </dd>
                 </dl>
@@ -118,8 +118,8 @@ echo "
             <li>
                 <dl>
                     <dt><label for=\"usf_description\">Beschreibung:</label></dt>
-                    <dd><textarea name=\"usf_description\" id=\"usf_description\" style=\"width: 330px;\" rows=\"2\">".
-                        htmlspecialchars($user_field->getValue("usf_description"), ENT_QUOTES). "</textarea>
+                    <dd><textarea name=\"usf_description\" id=\"usf_description\" style=\"width: 330px;\" rows=\"2\" cols=\"40\">".
+                        $user_field->getValue("usf_description"). "</textarea>
                     </dd>
                 </dl>
             </li>
@@ -147,7 +147,7 @@ echo "
                                 echo "<option value=\"$row->cat_id\"";
                                     if($user_field->getValue("usf_cat_id") == $row->cat_id)
                                     {
-                                        echo " selected ";
+                                        echo " selected=\"selected\" ";
                                     }
                                 echo ">$row->cat_name</option>";
                             }
@@ -218,19 +218,19 @@ echo "
                 <dl>
                     <dt>
                         <label for=\"usf_hidden\">
-                            <img src=\"$g_root_path/adm_program/images/eye.png\" alt=\"Feld f&uuml;r alle Benutzer sichtbar\">
+                            <img src=\"$g_root_path/adm_program/images/eye.png\" alt=\"Feld f&uuml;r alle Benutzer sichtbar\" />
                         </label>
                     </dt>
                     <dd>
                         <input type=\"checkbox\" name=\"usf_hidden\" id=\"usf_hidden\" ";
                         if($user_field->getValue("usf_hidden") == 0)
                         {
-                            echo " checked ";
+                            echo " checked=\"checked\" ";
                         }
                         echo " value=\"1\" />
                         <label for=\"usf_hidden\">Feld f&uuml;r alle Benutzer sichtbar</label>
                         <img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
-                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=field_hidden','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
+                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=field_hidden','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\" />
                     </dd>
                 </dl>
             </li>            
@@ -238,19 +238,19 @@ echo "
                 <dl>
                     <dt>
                         <label for=\"usf_disabled\">
-                            <img src=\"$g_root_path/adm_program/images/textfield_key.png\" alt=\"Feld nur f&uuml;r berechtigte Benutzer editierbar\">
+                            <img src=\"$g_root_path/adm_program/images/textfield_key.png\" alt=\"Feld nur f&uuml;r berechtigte Benutzer editierbar\" />
                         </label>
                     </dt>
                     <dd>
                         <input type=\"checkbox\" name=\"usf_disabled\" id=\"usf_disabled\" ";
                         if($user_field->getValue("usf_disabled") == 1)
                         {
-                            echo " checked ";
+                            echo " checked=\"checked\" ";
                         }
                         echo " value=\"1\" />
                         <label for=\"usf_disabled\">Feld nur f&uuml;r berechtigte Benutzer editierbar</label>
                         <img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
-                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=field_disabled','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
+                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=field_disabled','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\" />
                     </dd>
                 </dl>
             </li>            
@@ -258,24 +258,24 @@ echo "
                 <dl>
                     <dt>
                         <label for=\"usf_mandatory\">
-                            <img src=\"$g_root_path/adm_program/images/asterisk_yellow.png\" alt=\"Pflichtfeld, muss vom Benutzer gef&uuml;llt werden\">
+                            <img src=\"$g_root_path/adm_program/images/asterisk_yellow.png\" alt=\"Pflichtfeld, muss vom Benutzer gef&uuml;llt werden\" />
                         </label>
                     </dt>
                     <dd>
                         <input type=\"checkbox\" name=\"usf_mandatory\" id=\"usf_mandatory\" ";
                         if($user_field->getValue("usf_mandatory") == 1)
                         {
-                            echo " checked ";
+                            echo " checked=\"checked\" ";
                         }
                         if($user_field->getValue("usf_name") == "Nachname"
                         || $user_field->getValue("usf_name") == "Vorname")
                         {
-                            echo " disabled ";
+                            echo " disabled=\"disabled\" ";
                         }
                         echo " value=\"1\" />
                         <label for=\"usf_mandatory\">Pflichtfeld, muss vom Benutzer gef&uuml;llt werden</label>
                         <img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
-                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=field_mandatory','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\">
+                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=field_mandatory','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\" />
                     </dd>
                 </dl>
             </li>            
@@ -285,7 +285,7 @@ echo "
 
         <div class=\"formSubmit\">
             <button name=\"speichern\" type=\"submit\" value=\"speichern\">
-            <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\">
+            <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\" />
             &nbsp;Speichern</button>
         </div>
     </div>
@@ -296,8 +296,8 @@ echo "
     <li>
         <span class=\"iconTextLink\">
             <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
-            <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück\" /></a>
+            <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
         </span>
     </li>
 </ul>

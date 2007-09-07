@@ -5,6 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Jochen Erkens
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
  *
@@ -12,20 +13,6 @@
  * scal: Pixelanzahl auf die die laengere Bildseite scaliert werden soll
  * nr: Nummer des hochgeladenen bildes
  * side: Seite des Bildes die scaliert werden soll
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
 require("../../system/photo_event_class.php");
@@ -50,7 +37,7 @@ if(isset($_GET['pho_id']))
 }
 if(!is_numeric($pho_id))
 {
-	$g_message->show("invalid");
+    $g_message->show("invalid");
 }
 
 //pho_begin
@@ -61,7 +48,7 @@ if(isset($_GET['pho_begin']))
 }
 if(!dtCheckDate(mysqldate("d.m.y", $pho_begin)) && $pho_begin!=0)
 {
-	$g_message->show("invalid");
+    $g_message->show("invalid");
 }
 
 //Bildnr.
@@ -103,7 +90,7 @@ $bild=SERVER_PATH. "/adm_my_files/photos/".$pho_begin."_".$pho_id."/".$pic_nr.".
 //Falls die 0 als Bildnummer übergeben wurde
 if(!file_exists($bild))
 {
-	$bild = SERVER_PATH. "/adm_program/images/nopix.jpg";
+    $bild = SERVER_PATH. "/adm_program/images/nopix.jpg";
 }
 
 //Ermittlung der Original Bildgroesse

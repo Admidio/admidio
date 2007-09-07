@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
  *
@@ -210,7 +210,7 @@ $g_layout['title'] = "E-Mail verschicken";
 if($g_preferences['enable_rss'] == 1)
 {
     $g_layout['header'] =  "<link type=\"application/rss+xml\" rel=\"alternate\" title=\"". $g_current_organization->getValue("org_longname"). " - Ankuendigungen\"
-    href=\"$g_root_path/adm_program/modules/announcements/rss_announcements.php\">";
+    href=\"$g_root_path/adm_program/modules/announcements/rss_announcements.php\" />";
 };
 
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");
@@ -222,7 +222,7 @@ echo "
     {
         echo "usr_id=". $_GET['usr_id']. "&";
     }
-    echo "\" method=\"post\" name=\"Mail\" enctype=\"multipart/form-data\">
+    echo "\" method=\"post\" enctype=\"multipart/form-data\">
 
     <div class=\"formLayout\" id=\"write_mail_form\">
         <div class=\"formHead\">";
@@ -244,7 +244,7 @@ echo "
                             if (array_key_exists("usr_id", $_GET))
                             {
                                 // usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
-                                echo "<input type=\"text\" class=\"readonly\" readonly id=\"mailto\" name=\"mailto\" style=\"width: 350px;\" maxlength=\"50\" value=\"$userEmail\">";
+                                echo "<input type=\"text\" class=\"readonly\" readonly=\"readonly\" id=\"mailto\" name=\"mailto\" style=\"width: 350px;\" maxlength=\"50\" value=\"$userEmail\" />";
                             }
                             elseif ( array_key_exists("rol_id", $_GET) || (array_key_exists("rolle", $_GET) && array_key_exists("cat", $_GET)) )
                             {
@@ -325,7 +325,7 @@ echo "
                                 echo "</optgroup>
                                 </select>
                                 <img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
-                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_mail','Message','width=400,height=400,left=310,top=200')\">";
+                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_mail','Message','width=400,height=400,left=310,top=200')\" />";
                             }
                             echo "<span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                         </dd>
@@ -340,11 +340,11 @@ echo "
                         <dd>";
                             if ($g_current_user->getValue("usr_id") > 0)
                             {
-                               echo "<input type=\"text\" class=\"readonly\" id=\"name\" name=\"name\" readonly style=\"width: 200px;\" maxlength=\"50\" value=\"". $g_current_user->getValue("Vorname"). " ". $g_current_user->getValue("Nachname"). "\">";
+                               echo "<input type=\"text\" class=\"readonly\" id=\"name\" name=\"name\" readonly=\"readonly\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $g_current_user->getValue("Vorname"). " ". $g_current_user->getValue("Nachname"). "\" />";
                             }
                             else
                             {
-                               echo "<input type=\"text\" id=\"name\" name=\"name\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['name']. "\">";
+                               echo "<input type=\"text\" id=\"name\" name=\"name\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['name']. "\" />";
                             }
                             echo "<span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                         </dd>
@@ -356,11 +356,11 @@ echo "
                         <dd>";
                             if ($g_current_user->getValue("usr_id") > 0)
                             {
-                               echo "<input type=\"text\" class=\"readonly\" id=\"mailfrom\" name=\"mailfrom\" readonly style=\"width: 350px;\" maxlength=\"50\" value=\"". $g_current_user->getValue("E-Mail"). "\">";
+                               echo "<input type=\"text\" class=\"readonly\" id=\"mailfrom\" name=\"mailfrom\" readonly=\"readonly\" style=\"width: 350px;\" maxlength=\"50\" value=\"". $g_current_user->getValue("E-Mail"). "\" />";
                             }
                             else
                             {
-                               echo "<input type=\"text\" id=\"mailfrom\" name=\"mailfrom\" style=\"width: 350px;\" maxlength=\"50\" value=\"". $form_values['mailfrom']. "\">";
+                               echo "<input type=\"text\" id=\"mailfrom\" name=\"mailfrom\" style=\"width: 350px;\" maxlength=\"50\" value=\"". $form_values['mailfrom']. "\" />";
                             }
                             echo "<span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                         </dd>
@@ -375,11 +375,11 @@ echo "
                         <dd>";
                             if (strlen($_GET['subject']) > 0)
                             {
-                               echo "<input type=\"text\" class=\"readonly\" readonly id=\"subject\" name=\"subject\" style=\"width: 350px;\" maxlength=\"50\" value=\"". $_GET['subject']. "\">";
+                               echo "<input type=\"text\" class=\"readonly\" readonly=\"readonly\" id=\"subject\" name=\"subject\" style=\"width: 350px;\" maxlength=\"50\" value=\"". $_GET['subject']. "\" />";
                             }
                             else
                             {
-                               echo "<input type=\"text\" id=\"subject\" name=\"subject\" style=\"width: 350px;\" maxlength=\"50\" value=\"". $form_values['subject']. "\">";
+                               echo "<input type=\"text\" id=\"subject\" name=\"subject\" style=\"width: 350px;\" maxlength=\"50\" value=\"". $form_values['subject']. "\" />";
                             }
                             echo "<span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                         </dd>
@@ -410,8 +410,8 @@ echo "
                         <dl>
                             <dt><label for=\"userfile\">Anhang:</label></dt>
                             <dd>
-                                <input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"" . ($g_preferences['max_email_attachment_size'] * 1024) . "\">
-                                <input id=\"userfile\" name=\"userfile\" size=\"35\" style=\"width: 350px;\" type=\"file\">
+                                <input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"" . ($g_preferences['max_email_attachment_size'] * 1024) . "\" />
+                                <input id=\"userfile\" name=\"userfile\" size=\"35\" style=\"width: 350px;\" type=\"file\" />
                             </dd>
                         </dl>
                     </li>";
@@ -427,7 +427,7 @@ echo "
                             {
                                 echo " checked=\"checked\" ";
                             }
-                            echo "> <label for=\"kopie\">Kopie der E-Mail an mich senden</label>
+                            echo " /> <label for=\"kopie\">Kopie der E-Mail an mich senden</label>
                         </dd>
                     </dl>
                 </li>";
@@ -449,10 +449,10 @@ echo "
                         <dl>
                             <dt><label for=\"captcha\">Best&auml;tigungscode:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"captcha\" name=\"captcha\" style=\"width: 200px;\" maxlength=\"8\" value=\"\">
+                                <input type=\"text\" id=\"captcha\" name=\"captcha\" style=\"width: 200px;\" maxlength=\"8\" value=\"\" />
                                 <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                                 <img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
-                                     onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=captcha_help','Message','width=400,height=320,left=310,top=200,scrollbars=yes')\">
+                                     onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=captcha_help','Message','width=400,height=320,left=310,top=200,scrollbars=yes')\" />
                             </dd>
                         </dl>
                     </li>";
@@ -463,7 +463,7 @@ echo "
 
             <div class=\"formSubmit\">
                 <button name=\"abschicken\" type=\"submit\" value=\"abschicken\">
-                <img src=\"$g_root_path/adm_program/images/email.png\" alt=\"Abschicken\">
+                <img src=\"$g_root_path/adm_program/images/email.png\" alt=\"Abschicken\" />
                 &nbsp;Abschicken</button>
             </div>
         </div>
@@ -477,8 +477,8 @@ if(isset($_GET['usr_id']) || isset($_GET['rol_id']))
         <li>
             <span class=\"iconTextLink\">
                 <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-                src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
-                <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+                src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück\" /></a>
+                <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
             </span>
         </li>
     </ul>";

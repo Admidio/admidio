@@ -5,25 +5,11 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
  *
  * user_id - Password der uebergebenen ID aendern
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *****************************************************************************/
 
@@ -142,14 +128,14 @@ echo "<br />
     if($err_code == "")
     {
         echo "<button name=\"schliessen\" type=\"button\" value=\"schliessen\" onclick=\"window.close()\">
-        <img src=\"$g_root_path/adm_program/images/door_in.png\" alt=\"Schlie&szlig;en\">
-        &nbsp;Schlie&szlig;en</button>";
+        <img src=\"$g_root_path/adm_program/images/door_in.png\" alt=\"Schließen\" />
+        &nbsp;Schließen</button>";
     }
     else
     {
         echo "<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
-        <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\">
-        &nbsp;Zur&uuml;ck</button>";
+        <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück\" />
+        &nbsp;Zurück</button>";
     }
 echo "</div>";
         

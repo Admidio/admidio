@@ -121,8 +121,8 @@ if($_POST["upload"])
     echo"<h1 class=\"moduleHeadline\">Fotogalerien - Upload</h1>
     <div class=\"photoModuleContainer\">
         Bitte einen Moment Geduld. 
-        Die Bilder wurden der Veranstaltung <br> - ".$photo_event->getValue("pho_name")." - <br>
-        erfolgreich hinzugef&uuml;gt, wenn sie hier angezeigt werden.<br>";
+        Die Bilder wurden der Veranstaltung <br /> - ".$photo_event->getValue("pho_name")." - <br />
+        erfolgreich hinzugef&uuml;gt, wenn sie hier angezeigt werden.<br />";
 
         //Verarbeitungsschleife fuer die einzelnen Bilder
         $bildnr=$photo_event->getValue("pho_quantity");
@@ -133,7 +133,7 @@ if($_POST["upload"])
             {
                 //errechnen der neuen Bilderzahl
                 $bildnr++;
-                echo "<br>Bild $bildnr:<br>";
+                echo "<br />Bild $bildnr:<br />";
 
                 //Bild in Tempordner verschieben, groeße aendern und speichern
                 if(move_uploaded_file($_FILES["bilddatei"]["tmp_name"][$x], SERVER_PATH. "/adm_my_files/photos/temp".$y.".jpg"))
@@ -166,7 +166,7 @@ if($_POST["upload"])
                 if(file_exists($ordner."/".$bildnr.".jpg"))
                 {
                     echo"<img src=\"photo_show.php?scal=300&amp;pic_nr=".$bildnr."&amp;pho_id=".$photo_event->getValue("pho_id")."&amp;pho_begin=".$photo_event->getValue("pho_begin")."\"
-                            class=\"photoOutput\"><br><br>";
+                            class=\"photoOutput\" /><br /><br />";
 
                     //Aendern der Datenbankeintaege
                     $photo_event->setValue("pho_quantity", $photo_event->getValue("pho_quantity")+1);
@@ -188,19 +188,19 @@ if($_POST["upload"])
             <li>
                 <span class=\"iconLink\">
                     <a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id\"><img 
-                    src=\"$g_root_path/adm_program/images/application_view_tile.png\" alt=\"Zur&uuml;ck\"></a>
+                    src=\"$g_root_path/adm_program/images/application_view_tile.png\" alt=\"Zurück\" /></a>
                     <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id\">&Uuml;bersicht</a>
                 </span>
             </li>
             <li>
                 <span class=\"iconLink\">
                     <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id\"><img 
-                    src=\"$g_root_path/adm_program/images/photo.png\" alt=\"Weitere Bilder hochladen\"></a>
+                    src=\"$g_root_path/adm_program/images/photo.png\" alt=\"Weitere Bilder hochladen\" /></a>
                     <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id\">Weitere Bilder hochladen</a>
                 </span>
             </li>
          </ul>
-    </div><br><br>";
+    </div><br /><br />";
 }//if($upload)
 
 //Seitenende

@@ -590,7 +590,7 @@ Ajax.InPlaceEditor.prototype = {
     return string.match(/<br/i) || string.match(/<p>/i);
   },
   convertHTMLLineBreaks: function(string) {
-    return string.replace(/<br>/gi, "\n").replace(/<br\/>/gi, "\n").replace(/<\/p>/gi, "\n").replace(/<p>/gi, "");
+    return string.replace(/<br />/gi, "\n").replace(/<br\/>/gi, "\n").replace(/<\/p>/gi, "\n").replace(/<p>/gi, "");
   },
   createEditField: function() {
     var text;

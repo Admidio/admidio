@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
  *
@@ -150,7 +150,7 @@ echo "
         <input type=\"checkbox\" id=\"former\" name=\"former\" value=\"1\" ";
             if(!$active_member) 
             {
-                echo " checked ";
+                echo " checked=\"checked\" ";
             }
             echo " />
         <label for=\"former\">nur Ehemalige</label></p>
@@ -165,7 +165,7 @@ echo "
                     <th style=\"width: 18%;\">Sortierung</th>
                     <th style=\"width: 27%;\">Bedingung
                         <img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
-                        onClick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=condition','Message','width=450,height=600,left=310,top=200,scrollbars=yes')\">
+                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=condition','Message','width=450,height=600,left=310,top=200,scrollbars=yes')\" />
                     </th>
                 </tr>
             </thead>
@@ -182,7 +182,7 @@ echo "
                     <td colspan=\"4\">
                         <span class=\"iconTextLink\">
                             <a href=\"javascript:addField()\"><img
-                            src=\"$g_root_path/adm_program/images/add.png\" alt=\"Feld hinzuf&uuml;gen\"></a>
+                            src=\"$g_root_path/adm_program/images/add.png\" alt=\"Feld hinzuf&uuml;gen\" /></a>
                             <a href=\"javascript:addField()\">Feld hinzuf&uuml;gen</a>
                         </span>
                     </td>
@@ -194,7 +194,7 @@ echo "
 
         <div class=\"formSubmit\">
             <button name=\"anzeigen\" type=\"submit\" value=\"anzeigen\">
-            <img src=\"$g_root_path/adm_program/images/application_view_columns.png\" alt=\"Liste anzeigen\">
+            <img src=\"$g_root_path/adm_program/images/application_view_columns.png\" alt=\"Liste anzeigen\" />
             &nbsp;Liste anzeigen</button>            
         </div>
     </div>
@@ -209,8 +209,8 @@ if($_SESSION['navigation']->count > 1)
         <li>
             <span class=\"iconTextLink\">
                 <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-                src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
-                <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+                src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück\" /></a>
+                <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
             </span>
         </li>
     </ul>";

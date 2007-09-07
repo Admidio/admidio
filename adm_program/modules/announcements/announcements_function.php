@@ -67,7 +67,7 @@ if($_GET["mode"] == 1)
 {
     if(strlen($_POST['ann_headline']) == 0)
     {
-        $g_message->show("feld", "&Uuml;berschrift");
+        $g_message->show("feld", "Überschrift");
     }
     if(strlen($_POST['ann_description']) == 0)
     {

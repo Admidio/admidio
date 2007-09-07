@@ -33,7 +33,7 @@ elseif($g_preferences['enable_announcements_module'] == 2)
 
 // lokale Variablen der Uebergabevariablen initialisieren
 $req_start    = 0;
-$req_headline = "Ank&uuml;ndigungen";
+$req_headline = "Ankündigungen";
 $req_id       = 0;
 
 // Uebergabevariablen pruefen
@@ -77,7 +77,7 @@ $g_layout['title'] = $req_headline;
 if($g_preferences['enable_rss'] == 1)
 {
     $g_layout['header'] = "<link type=\"application/rss+xml\" rel=\"alternate\" title=\"". $g_current_organization->getValue("org_longname"). " - Ankuendigungen\"
-    href=\"$g_root_path/adm_program/modules/announcements/rss_announcements.php\">";
+    href=\"$g_root_path/adm_program/modules/announcements/rss_announcements.php\" />";
 };
 
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");
@@ -151,7 +151,7 @@ if($req_id == 0
             <li>
                 <span class=\"iconTextLink\">
                     <a href=\"$g_root_path/adm_program/modules/announcements/announcements_new.php?headline=$req_headline\"><img
-                    src=\"$g_root_path/adm_program/images/add.png\" alt=\"Neu anlegen\"></a>
+                    src=\"$g_root_path/adm_program/images/add.png\" alt=\"Neu anlegen\" /></a>
                     <a href=\"$g_root_path/adm_program/modules/announcements/announcements_new.php?headline=$req_headline\">Anlegen</a>
                 </span>
             </li>
@@ -184,8 +184,8 @@ else
         <div class=\"boxLayout\">
             <div class=\"boxHead\">
                 <div style=\"width: 70%; float: left;\">
-                    <img src=\"$g_root_path/adm_program/images/note.png\" style=\"vertical-align: top;\" alt=\"". strSpecialChars2Html($row->ann_headline). "\">&nbsp;".
-                    strSpecialChars2Html($row->ann_headline). "
+                    <img src=\"$g_root_path/adm_program/images/note.png\" style=\"vertical-align: top;\" alt=\"$row->ann_headline\" />
+                    $row->ann_headline
                 </div>
                 <div style=\"text-align: right;\">".
                     mysqldatetime("d.m.y", $row->ann_timestamp). "&nbsp;";
@@ -196,7 +196,7 @@ else
                         echo "
                         <span class=\"iconLink\">
                             <a href=\"$g_root_path/adm_program/modules/announcements/announcements_new.php?ann_id=$row->ann_id&amp;headline=$req_headline\"><img 
-                            src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>
+                            src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
                         </span>";
 
                         // Loeschen darf man nur Ankuendigungen der eigenen Gliedgemeinschaft
@@ -204,8 +204,8 @@ else
                         {
                             echo "
                             <span class=\"iconLink\">
-                                <a href=\"$g_root_path/adm_program/modules/announcements/announcements_function.php?mode=4&ann_id=$row->ann_id\"><img 
-                                src=\"$g_root_path/adm_program/images/cross.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>
+                                <a href=\"$g_root_path/adm_program/modules/announcements/announcements_function.php?mode=4&amp;ann_id=$row->ann_id\"><img 
+                                src=\"$g_root_path/adm_program/images/cross.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" /></a>
                             </span>";
                         }    
                     }
@@ -216,11 +216,11 @@ else
                 // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
                 if($g_preferences['enable_bbcode'] == 1)
                 {
-                    echo strSpecialChars2Html($bbcode->parse($row->ann_description));
+                    echo $bbcode->parse($row->ann_description);
                 }
                 else
                 {
-                    echo nl2br(strSpecialChars2Html($row->ann_description));
+                    echo nl2br($row->ann_description);
                 }
             
                 echo "
@@ -235,7 +235,7 @@ else
                        || $row->ann_usr_id_change != $row->ann_usr_id ) )
                     {
                         $user_change = new User($g_db, $row->ann_usr_id_change);
-                        echo "<br>Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname").
+                        echo "<br />Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname").
                         " am ". mysqldatetime("d.m.y h:i", $row->ann_last_change);
                     }
                 echo "</div>

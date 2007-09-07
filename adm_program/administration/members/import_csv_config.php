@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
 
@@ -74,7 +74,7 @@ echo "
         </div>
 
         <div style=\"margin-top: 6px; margin-bottom: 10px;\">
-            <input type=\"checkbox\" id=\"first_row\" name=\"first_row\" style=\"vertical-align: middle;\" checked value=\"1\" />&nbsp;
+            <input type=\"checkbox\" id=\"first_row\" name=\"first_row\" style=\"vertical-align: middle;\" checked=\"checked\" value=\"1\" />&nbsp;
             <label for=\"first_row\">Erste Zeile beinhaltet die Spaltenbezeichnungen</label>
         </div>
 
@@ -105,7 +105,7 @@ echo "
                         <tr>
                             <td class=\"tableSubHeader\" colspan=\"4\">
                                 <a class=\"iconShowHide\" href=\"javascript:showHideBlock('$block_id', '$g_root_path')\"><img 
-                                name=\"img_$block_id\" src=\"$g_root_path/adm_program/images/triangle_open.gif\" alt=\"ausblenden\"></a>". $value['cat_name']. "
+                                id=\"img_$block_id\" src=\"$g_root_path/adm_program/images/triangle_open.gif\" alt=\"ausblenden\" /></a>". $value['cat_name']. "
                             </td>
                         </tr>
                     </tbody>
@@ -139,11 +139,11 @@ echo "
 
         <div class=\"formSubmit\">
             <button name=\"back\" type=\"button\" onclick=\"history.back()\">
-            <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\">
-            &nbsp;Zur&uuml;ck</button>
+            <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück\" />
+            &nbsp;Zurück</button>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <button id=\"import\" type=\"submit\">
-            <img src=\"$g_root_path/adm_program/images/database_in.png\" alt=\"Weiter\">
+            <img src=\"$g_root_path/adm_program/images/database_in.png\" alt=\"Weiter\" />
             &nbsp;Importieren</button>
         </div>
     </div>

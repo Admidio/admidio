@@ -180,7 +180,7 @@ $count_mem_rol = $row['count'];
 // Html-Kopf ausgeben
 $g_layout['title']  = "Benutzerverwaltung";
 $g_layout['header'] = '
-    <link rel="stylesheet" type="text/css" href="autosuggest.css">
+    <link rel="stylesheet" type="text/css" href="autosuggest.css" />
     <script type="text/javascript" src="../../libs/bsn.autosuggest/bsn.Ajax.js"></script>
     <script type="text/javascript" src="../../libs/bsn.autosuggest/bsn.DOM.js"></script>
     <script type="text/javascript" src="../../libs/bsn.autosuggest/bsn.AutoSuggest.js"></script>
@@ -202,21 +202,21 @@ echo "
     <li>
         <span class=\"iconTextLink\">
             <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?new_user=1\"><img
-            src=\"$g_root_path/adm_program/images/add.png\" alt=\"Benutzer anlegen\"></a>
+            src=\"$g_root_path/adm_program/images/add.png\" alt=\"Benutzer anlegen\" /></a>
             <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?new_user=1\">Benutzer anlegen</a>
         </span>
     </li>
     <li>
         <span class=\"iconTextLink\">
             <a href=\"$g_root_path/adm_program/administration/members/import.php\"><img
-            src=\"$g_root_path/adm_program/images/database_in.png\" alt=\"Benutzer importieren\"></a>
+            src=\"$g_root_path/adm_program/images/database_in.png\" alt=\"Benutzer importieren\" /></a>
             <a href=\"$g_root_path/adm_program/administration/members/import.php\">Benutzer importieren</a>
         </span>
     </li>
     <li>
         <span class=\"iconTextLink\">
             <a href=\"$g_root_path/adm_program/administration/members/fields.php\"><img
-            src=\"$g_root_path/adm_program/images/application_form.png\" alt=\"Organisationsspezifische Profilfelder pflegen\"></a>
+            src=\"$g_root_path/adm_program/images/application_form.png\" alt=\"Organisationsspezifische Profilfelder pflegen\" /></a>
             <a href=\"$g_root_path/adm_program/administration/members/fields.php\">Profilfelder pflegen</a>
         </span>
     </li>
@@ -241,9 +241,9 @@ if($count_mem_rol != $g_db->num_rows($result_mgl) || $req_members == false)
     <ul class=\"iconTextLinkList\">
         <li>
             <span class=\"iconTextLink\">
-                <a href=\"$g_root_path/adm_program/administration/members/members.php?members=$link_members&letter=$req_letter&queryForm=$req_queryForm\"><img
-                src=\"$g_root_path/adm_program/images/$link_icon\" alt=\"$link_text\"></a>
-                <a href=\"$g_root_path/adm_program/administration/members/members.php?members=$link_members&letter=$req_letter&queryForm=$req_queryForm\">$link_text</a>
+                <a href=\"$g_root_path/adm_program/administration/members/members.php?members=$link_members&amp;letter=$req_letter&amp;queryForm=$req_queryForm\"><img
+                src=\"$g_root_path/adm_program/images/$link_icon\" alt=\"$link_text\" /></a>
+                <a href=\"$g_root_path/adm_program/administration/members/members.php?members=$link_members&amp;letter=$req_letter&amp;queryForm=$req_queryForm\">$link_text</a>
             </span>
         </li>
     </ul>";
@@ -266,12 +266,12 @@ echo " werden angezeigt</p>";
 
 //Hier gibt es jetzt noch die Suchbox...
 echo "
-<div style=\"width: 300px;\">
-    <form action=\"$g_root_path/adm_program/administration/members/members.php?members=$req_members\" method=\"post\">
-        <input type=\"text\" value=\"$req_queryForm\" name=\"queryForm\" id=\"queryForm\" autocomplete=\"off\" style=\"width: 200px;\"  />
-        <input type=\"submit\" value=\"Suchen\" />
-    </form>
-</div>
+<form action=\"$g_root_path/adm_program/administration/members/members.php?members=$req_members\" method=\"post\">
+    <div style=\"width: 300px; margin: auto;\">
+        <input type=\"text\" value=\"$req_queryForm\" name=\"queryForm\" id=\"queryForm\" style=\"width: 200px;\"  />
+        <input type=\"submit\" value=\"Suchen\" />    
+    </div>
+</form>
 
 <script type=\"text/javascript\">
     var options = {
@@ -358,7 +358,7 @@ echo "<div class=\"pageNavigation\">";
         }
         elseif($letter_found == true)
         {
-            echo "<a href=\"$g_root_path/adm_program/administration/members/members.php?members=$req_members&letter=$letter_menu\">$letter_menu</a>";
+            echo "<a href=\"$g_root_path/adm_program/administration/members/members.php?members=$req_members&amp;letter=$letter_menu\">$letter_menu</a>";
         }
         else
         {
@@ -383,12 +383,12 @@ if($num_members > 0)
             <th>Nr.</th>
             <th><img class=\"iconInformation\" 
                 src=\"$g_root_path/adm_program/images/user.png\" alt=\"Mitglied bei ". $g_current_organization->getValue("org_longname"). "\" 
-                title=\"Mitglied bei ". $g_current_organization->getValue("org_longname"). "\"></th>
+                title=\"Mitglied bei ". $g_current_organization->getValue("org_longname"). "\" /></th>
             <th>Name</th>
             <th><img class=\"iconInformation\" 
-                src=\"$g_root_path/adm_program/images/email.png\" alt=\"E-Mail\" title=\"E-Mail\"></th>
+                src=\"$g_root_path/adm_program/images/email.png\" alt=\"E-Mail\" title=\"E-Mail\" /></th>
             <th><img class=\"iconInformation\" 
-                src=\"$g_root_path/adm_program/images/globe.png\" alt=\"Homepage\" title=\"Homepage\"></th>
+                src=\"$g_root_path/adm_program/images/globe.png\" alt=\"Homepage\" title=\"Homepage\" /></th>
             <th>Benutzer</th>
             <th>Aktualisiert am</th>
             <th style=\"text-align: center;\">Funktionen</th>
@@ -415,7 +415,7 @@ if($num_members > 0)
                             <span class=\"iconLink\">
                                 <a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=". $row['usr_id']. "\"><img
                                 src=\"$g_root_path/adm_program/images/user.png\" alt=\"Mitglied bei ". $g_current_organization->getValue("org_longname"). "\"
-                                title=\"Mitglied bei ". $g_current_organization->getValue("org_longname"). "\"></a>
+                                title=\"Mitglied bei ". $g_current_organization->getValue("org_longname"). "\" /></a>
                             </span>";
                         }
                         else
@@ -438,7 +438,7 @@ if($num_members > 0)
                             echo "
                             <span class=\"iconLink\">
                                 <a href=\"$mail_link\"><img src=\"$g_root_path/adm_program/images/email.png\"
-                                alt=\"E-Mail an ". $row['email']. " schreiben\" title=\"E-Mail an ". $row['email']. " schreiben\"></a>
+                                alt=\"E-Mail an ". $row['email']. " schreiben\" title=\"E-Mail an ". $row['email']. " schreiben\" /></a>
                             </span>";
                         }
                     echo "</td>
@@ -448,7 +448,7 @@ if($num_members > 0)
                             echo "
                             <span class=\"iconLink\">
                                 <a href=\"". $row['homepage']. "\" target=\"_blank\"><img
-                                src=\"$g_root_path/adm_program/images/globe.png\" alt=\"Homepage\" title=\"Homepage\"></a>
+                                src=\"$g_root_path/adm_program/images/globe.png\" alt=\"Homepage\" title=\"Homepage\" /></a>
                             </span>";
                         }
                     echo "</td>
@@ -482,16 +482,16 @@ if($num_members > 0)
                         {
                             echo "
                             <span class=\"iconLink\">
-                                <a href=\"$g_root_path/adm_program/administration/members/members_function.php?user_id=". $row['usr_id']. "&mode=5\"><img
+                                <a href=\"$g_root_path/adm_program/administration/members/members_function.php?user_id=". $row['usr_id']. "&amp;mode=5\"><img
                                 src=\"$g_root_path/adm_program/images/key.png\" alt=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\"
-                                title=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\"></a>
+                                title=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\" /></a>
                             </span>";
                         }
                         else
                         {
                             echo "
                             <span class=\"iconLink\">
-                                <img src=\"$g_root_path/adm_program/images/dummy.png\" alt=\"dummy\">
+                                <img src=\"$g_root_path/adm_program/images/dummy.png\" alt=\"dummy\" />
                             </span>";
                         }
 
@@ -502,14 +502,14 @@ if($num_members > 0)
                             echo "
                             <span class=\"iconLink\">
                                 <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=". $row['usr_id']. "\"><img
-                                src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Benutzerdaten bearbeiten\" title=\"Benutzerdaten bearbeiten\"></a>
+                                src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Benutzerdaten bearbeiten\" title=\"Benutzerdaten bearbeiten\" /></a>
                             </span>";
                         }
                         else
                         {
                             echo "
                             <span class=\"iconLink\">
-                                <img src=\"$g_root_path/adm_program/images/dummy.png\" alt=\"dummy\">
+                                <img src=\"$g_root_path/adm_program/images/dummy.png\" alt=\"dummy\" />
                             </span>";
                         }
 
@@ -520,15 +520,15 @@ if($num_members > 0)
                         {
                             echo "
                             <span class=\"iconLink\">
-                                <a href=\"$g_root_path/adm_program/administration/members/members_function.php?user_id=". $row['usr_id']. "&mode=6\"><img
-                                src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Benutzer entfernen\" title=\"Benutzer entfernen\"></a>
+                                <a href=\"$g_root_path/adm_program/administration/members/members_function.php?user_id=". $row['usr_id']. "&amp;mode=6\"><img
+                                src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Benutzer entfernen\" title=\"Benutzer entfernen\" /></a>
                             </span>";
                         }
                         else
                         {
                             echo "
                             <span class=\"iconLink\">
-                                <img src=\"$g_root_path/adm_program/images/dummy.png\" alt=\"dummy\">
+                                <img src=\"$g_root_path/adm_program/images/dummy.png\" alt=\"dummy\" />
                             </span>";
                         }
                     echo "</td>

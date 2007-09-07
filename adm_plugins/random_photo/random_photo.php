@@ -163,19 +163,19 @@ $pho_id = $event['pho_id'];
 if($bildgroesse[0]/$plg_photos_max_width > $bildgroesse[1]/$plg_photos_max_height)
 {
    echo "<img onclick=\"window.open('$g_root_path/adm_program/modules/photos/photopopup.php?bild=$picnr&pho_id=$pho_id','msg', 'height=".$popup_height.", width=".$popup_width.",left=162,top=5')\" style=\"vertical-align: middle; cursor: pointer;\"
-            src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$picnr."&amp;pho_begin=".$event['pho_begin']."&amp;scal=".$plg_photos_max_width."&amp;side=x\"  border=\"0\" alt=\"Zufallsbild\">";
+            src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$picnr."&amp;pho_begin=".$event['pho_begin']."&amp;scal=".$plg_photos_max_width."&amp;side=x\"  border=\"0\" alt=\"Zufallsbild\" />";
 }
 else
 {
    echo "<img onclick=\"window.open('$g_root_path/adm_program/modules/photos/photopopup.php?bild=$picnr&pho_id=$pho_id','msg', 'height=".$popup_height.", width=".$popup_width.",left=162,top=5')\" style=\"vertical-align: middle; cursor: pointer;\"
-            src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$picnr."&amp;pho_begin=".$event['pho_begin']."&amp;scal=".$plg_photos_max_height."&amp;side=y\"  border=\"0\" alt=\"Zufallsbild\">";
+            src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$picnr."&amp;pho_begin=".$event['pho_begin']."&amp;scal=".$plg_photos_max_height."&amp;side=y\"  border=\"0\" alt=\"Zufallsbild\" />";
 }
 
 
 //Link zur Veranstaltung
 if($plg_photos_show_link)
 {
-    echo"<br><a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$pho_id."\" target=\"$plg_link_target\">".$link_text."</a>";
+    echo"<br /><a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$pho_id."\" target=\"$plg_link_target\">".$link_text."</a>";
 }
 
 ?>

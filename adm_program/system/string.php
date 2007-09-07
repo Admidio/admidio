@@ -5,39 +5,9 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
-
-// alle Sonderzeichen werden in Html-Standard übersetzt
-// Diese Funktion unterscheidet sich von htmlentities(), da HTML-Tags
-// hierdurch immer noch funktionieren
-//
-// z.B.: ü -> &uuml;  ä -> &auml;  ö -> &ouml;  ß -> &szlig;
-
-function strSpecialChars2Html($srcString)
-{
-    $srcString = htmlentities($srcString, ENT_NOQUOTES);
-    $srcString = str_replace("&lt;", "<", $srcString);
-    $srcString = str_replace("&gt;", ">", $srcString);
-    $srcString = str_replace("&amp;", "&", $srcString);
-
-    return $srcString;
-}
 
 // entfernt Html-, PHP-Codes und Spaces am Anfang und Ende des Strings
 

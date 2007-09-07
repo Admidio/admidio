@@ -50,7 +50,7 @@ $message_text = array(
         %VAR1%<br />wirklich löschen?",
 
     "delete_role" =>
-        "Willst du die Rolle %VAR1% wirklich löschen?<br><br>
+        "Willst du die Rolle %VAR1% wirklich löschen?<br /><br />
         Es werden damit auch alle Mitgliedschaften entgütig entfernt.",
 
     "delete_field" =>
@@ -70,7 +70,7 @@ $message_text = array(
         "Die E-Mail-Adresse ist nicht gültig.",
 
     "field_numeric" =>
-        "Das Feld %VAR1% darf nur Zahlen enthalten.<br>
+        "Das Feld %VAR1% darf nur Zahlen enthalten.<br />
         Korrigiere bitte deine Eingabe.",
 
     "field_exist" =>
@@ -150,7 +150,7 @@ $message_text = array(
 
     "no_cookie" =>
         "Der Login kann nicht durchgeführt werden, da dein Browser
-        das Setzen von Cookies verbietet!<br><br>
+        das Setzen von Cookies verbietet!<br /><br />
         Damit du dich erfolgreich anmelden kannst, musst du in deinem Browser
         so einstellen, dass dieser Cookies von %VAR1% akzeptiert.",
 
@@ -214,21 +214,21 @@ $message_text = array(
         als User %VAR1% angemeldet.",
 
     "login_forum_pass" =>
-        "Dein Password im Forum %VAR2% wurde auf das Admidio-Password zurückgesetz.<br>
-        Verwende beim nächsten Login im Forum dein Admidio-Password.<br><br>
+        "Dein Password im Forum %VAR2% wurde auf das Admidio-Password zurückgesetz.<br />
+        Verwende beim nächsten Login im Forum dein Admidio-Password.<br /><br />
         Du wurdest erfolgreich auf Admidio und <br />im Forum %VAR2%
         als User %VAR1% angemeldet.",
 
     "login_forum_admin" =>
         "Dein Administrator-Account vom Forum %VAR2% wurde auf den
-        Admidio-Account zurückgesetz.<br>
-        Verwende beim nächsten Login im Forum deinen Admidio-Usernamen und dein Admidio-Password.<br><br>
+        Admidio-Account zurückgesetz.<br />
+        Verwende beim nächsten Login im Forum deinen Admidio-Usernamen und dein Admidio-Password.<br /><br />
         Du wurdest erfolgreich auf Admidio und <br />im Forum %VAR2%
         als User %VAR1% angemeldet.",
 
     "login_forum_new" =>
-        "Dein Admidio-Account wurde in das Forum %VAR2% exportiert und angelegt.<br>
-        Verwende beim nächsten Login im Forum deinen Admidio-Usernamen und dein Admidio-Password.<br><br>
+        "Dein Admidio-Account wurde in das Forum %VAR2% exportiert und angelegt.<br />
+        Verwende beim nächsten Login im Forum deinen Admidio-Usernamen und dein Admidio-Password.<br /><br />
         Du wurdest erfolgreich auf Admidio und <br />im Forum %VAR2%
         als User %VAR1% angemeldet.",
 
@@ -305,14 +305,14 @@ $message_text = array(
 
     "delete_veranst" =>
         "Willst du die Veranstaltung:<br />
-        %VAR1%<br />wirklich löschen?<br>
+        %VAR1%<br />wirklich löschen?<br />
         Alle enthaltenen Unterveranstaltungen und Bilder gehen verloren.",
         
     "event_deleted" =>
         "Die Veranstaltung wurde erfolgreich gelöscht.",
         
     "event_deleted_error" =>
-        "Beim Löschen der Veranstaltung sind Probleme aufgetreten.<br>
+        "Beim Löschen der Veranstaltung sind Probleme aufgetreten.<br />
         Es konnten nicht alle Dateien bzw. Datensätze der Veranstaltung gelöscht werden.",
 
     "delete_photo" =>
@@ -340,7 +340,7 @@ $message_text = array(
         "Du hast eine ungültigen Datei aufgerufen!",
 
     "invalid_file_name" =>
-        "Der ausgwählte Dateiname enthält ungültige Zeichen!<br><br>
+        "Der ausgwählte Dateiname enthält ungültige Zeichen!<br /><br />
         Wähle bitte einen anderen Namen für die Datei aus.",
 
     "invalid_file_extension" =>
@@ -371,11 +371,11 @@ $message_text = array(
         "Der Ordner %VAR1% wurde angelegt.",
 
     "folder_exists" =>
-        "Der Ordner %VAR1% existiert bereits!<br><br>
+        "Der Ordner %VAR1% existiert bereits!<br /><br />
         Wähle bitte einen anderen Namen für den neuen Ordner aus.",
 
     "file_exists" =>
-        "Die Datei %VAR1% existiert bereits!<br><br>
+        "Die Datei %VAR1% existiert bereits!<br /><br />
         Wähle bitte einen anderen Dateinamen aus.",
 
     "rename_folder" =>
@@ -393,7 +393,7 @@ $message_text = array(
         Dateigröße von %VAR1% B.",
 
     "empty_upload_post" =>
-        "Die Seite wurde ungültig aufgerufen oder die Datei konnte nicht hochgeladen werden.<br>
+        "Die Seite wurde ungültig aufgerufen oder die Datei konnte nicht hochgeladen werden.<br />
         Vermutlich wurde die vom Server vorgegebene maximale Uploadgröße von %VAR1% B. überschritten!",
 
     "file_upload_error" =>
@@ -452,7 +452,7 @@ $message_text = array(
     //Fehlermeldungen Servereinstellungen
 
     "default" =>
-        "Es ist ein Fehler aufgetreten.<br><br>
+        "Es ist ein Fehler aufgetreten.<br /><br />
         Der gesuchte Hinweis %VAR1% konnte nicht gefunden werden!"
  )
 ?>

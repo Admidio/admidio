@@ -51,11 +51,11 @@ function getFieldCode($field, $user_id)
         case "CHECKBOX":
             if($field['usd_value'] == 1)
             {
-                $value = "<img src=\"$g_root_path/adm_program/images/checkbox_checked.gif\" alt=\"on\">";
+                $value = "<img src=\"$g_root_path/adm_program/images/checkbox_checked.gif\" alt=\"on\" />";
             }
             else
             {
-                $value = "<img src=\"$g_root_path/adm_program/images/checkbox.gif\" alt=\"off\">";
+                $value = "<img src=\"$g_root_path/adm_program/images/checkbox.gif\" alt=\"off\" />";
             }
             break;
             
@@ -222,11 +222,11 @@ echo "
                             {
                                 if($user->getValue("Geschlecht") == 1)
                                 {
-                                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/male.png\" title=\"m&auml;nnlich\" alt=\"m&auml;nnlich\">";
+                                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/male.png\" title=\"m&auml;nnlich\" alt=\"m&auml;nnlich\" />";
                                 }
                                 elseif($user->getValue("Geschlecht") == 2)
                                 {
-                                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/female.png\" title=\"weiblich\" alt=\"weiblich\">";
+                                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/female.png\" title=\"weiblich\" alt=\"weiblich\" />";
                                 }
                             }
                         echo "</div>
@@ -235,7 +235,7 @@ echo "
                                 <a href=\"$g_root_path/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id=". $user->getValue("usr_id"). "\"><img
                                 src=\"$g_root_path/adm_program/images/vcard.png\" 
                                 alt=\"vCard von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname"). " exportieren\" 
-                                title=\"vCard von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname"). " exportieren\"></a>
+                                title=\"vCard von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname"). " exportieren\" /></a>
                             </span>";
                             
                             // Nur berechtigte User duerfen ein Profil editieren
@@ -244,7 +244,7 @@ echo "
                                 echo "
                                 <span class=\"iconLink\">
                                     <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$a_user_id\"><img
-                                    src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Profildaten bearbeiten\" title=\"Profildaten bearbeiten\"></a>
+                                    src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Profildaten bearbeiten\" title=\"Profildaten bearbeiten\" /></a>
                                 </span>";
                             }
                         echo "</div>
@@ -397,14 +397,14 @@ echo "
                 echo"
                 <div class=\"groupBox\">
                     <div class=\"groupBoxBody\" style=\"text-align: center;\">
-                        <img src=\"$g_root_path/adm_program/modules/profile/profile_photo_show.php?usr_id=$a_user_id&amp;id=". time(). "\" alt=\"Profilfoto\">
+                        <img src=\"$g_root_path/adm_program/modules/profile/profile_photo_show.php?usr_id=$a_user_id&amp;id=". time(). "\" alt=\"Profilfoto\" />
                         <span class=\"iconLink\">
                             <a href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$a_user_id\"><img
-                            src=\"$g_root_path/adm_program/images/photo.png\" alt=\"Foto &auml;ndern\" title=\"Foto &auml;ndern\"></a>
+                            src=\"$g_root_path/adm_program/images/photo.png\" alt=\"Foto &auml;ndern\" title=\"Foto &auml;ndern\" /></a>
                         </span>
                         <span class=\"iconLink\">
                             <a href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=msg_delete&amp;usr_id=$a_user_id\"><img
-                            src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Foto l&ouml;schen\" title=\"Foto l&ouml;schen\"></a>
+                            src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Foto l&ouml;schen\" title=\"Foto l&ouml;schen\" /></a>
                         </span>
                     </div>
                 </div>
@@ -449,7 +449,7 @@ echo "
                                 <div style=\"text-align: right;\">
                                     <span class=\"iconLink\">
                                         <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$a_user_id#cat-". $value['cat_id']. "\"><img
-                                        src=\"$g_root_path/adm_program/images/edit.png\" alt=\"". $value['cat_name']. " bearbeiten\" title=\"". $value['cat_name']. " bearbeiten\"></a>
+                                        src=\"$g_root_path/adm_program/images/edit.png\" alt=\"". $value['cat_name']. " bearbeiten\" title=\"". $value['cat_name']. " bearbeiten\" /></a>
                                     </span>
                                 </div>";
                             }
@@ -513,7 +513,7 @@ echo "
                             <div style=\"text-align: right;\">
                                 <span class=\"iconLink\">
                                     <a href=\"$g_root_path/adm_program/modules/profile/roles.php?user_id=$a_user_id\"><img
-                                    src=\"$g_root_path/adm_program/images/edit.png\" title=\"Rollen &auml;ndern\" alt=\"Rollen &auml;ndern\"></a>
+                                    src=\"$g_root_path/adm_program/images/edit.png\" title=\"Rollen &auml;ndern\" alt=\"Rollen &auml;ndern\" /></a>
                                 </span>
                             </div>";
                         }
@@ -545,57 +545,57 @@ echo "
                                             if($row['rol_assign_roles'] == 1)
                                             {
                                                 echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/wand.png\"
-                                                alt=\"Rollen verwalten und zuordnen\" title=\"Rollen verwalten und zuordnen\">";
+                                                alt=\"Rollen verwalten und zuordnen\" title=\"Rollen verwalten und zuordnen\" />";
                                             }
                                             if($row['rol_approve_users'] == 1)
                                             {
                                                 echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/properties.png\"
-                                                alt=\"Registrierungen verwalten und zuordnen\" title=\"Registrierungen verwalten und zuordnen\">";
+                                                alt=\"Registrierungen verwalten und zuordnen\" title=\"Registrierungen verwalten und zuordnen\" />";
                                             }                                                    
                                             if($row['rol_edit_user'] == 1)
                                             {
                                                 echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/group.png\"
-                                                alt=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\" title=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\">";
+                                                alt=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\" title=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\" />";
                                             }
                                             if($row['rol_profile'] == 1)
                                             {
                                                 echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/user.png\"
-                                                alt=\"Eigenes Profil bearbeiten\" title=\"Eigenes Profil bearbeiten\">";
+                                                alt=\"Eigenes Profil bearbeiten\" title=\"Eigenes Profil bearbeiten\" />";
                                             }
                                             if($row['rol_announcements'] == 1 && $g_preferences['enable_announcements_module'] > 0)
                                             {
                                                 echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/note.png\"
-                                                alt=\"Ank&uuml;ndigungen anlegen und bearbeiten\" title=\"Ank&uuml;ndigungen anlegen und bearbeiten\">";
+                                                alt=\"Ank&uuml;ndigungen anlegen und bearbeiten\" title=\"Ank&uuml;ndigungen anlegen und bearbeiten\" />";
                                             }
                                             if($row['rol_dates'] == 1 && $g_preferences['enable_dates_module'] > 0)
                                             {
                                                 echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/date.png\"
-                                                alt=\"Termine anlegen und bearbeiten\" title=\"Termine anlegen und bearbeiten\">";
+                                                alt=\"Termine anlegen und bearbeiten\" title=\"Termine anlegen und bearbeiten\" />";
                                             }
                                             if($row['rol_photo'] == 1 && $g_preferences['enable_photo_module'] > 0)
                                             {
                                                 echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/photo.png\"
-                                                alt=\"Fotos hochladen und bearbeiten\" title=\"Fotos hochladen und bearbeiten\">";
+                                                alt=\"Fotos hochladen und bearbeiten\" title=\"Fotos hochladen und bearbeiten\" />";
                                             }
                                             if($row['rol_download'] == 1 && $g_preferences['enable_download_module'] > 0)
                                             {
                                                 echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/folder_down.png\"
-                                                alt=\"Downloads hochladen und bearbeiten\" title=\"Downloads hochladen und bearbeiten\">";
+                                                alt=\"Downloads hochladen und bearbeiten\" title=\"Downloads hochladen und bearbeiten\" />";
                                             }
                                             if($row['rol_guestbook'] == 1 && $g_preferences['enable_guestbook_module'] > 0)
                                             {
                                                 echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/comment.png\"
-                                                alt=\"G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen\" title=\"G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen\">";
+                                                alt=\"G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen\" title=\"G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen\" />";
                                             }
                                             if($row['rol_guestbook_comments'] == 1 && $g_preferences['enable_guestbook_module'] > 0)
                                             {
                                                 echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/comments.png\"
-                                                alt=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\" title=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\">";
+                                                alt=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\" title=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\" />";
                                             }
                                             if($row['rol_weblinks'] == 1 && $g_preferences['enable_weblinks_module'] > 0)
                                             {
                                                 echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/globe.png\"
-                                                alt=\"Weblinks anlegen und bearbeiten\" title=\"Weblinks anlegen und bearbeiten\">";
+                                                alt=\"Weblinks anlegen und bearbeiten\" title=\"Weblinks anlegen und bearbeiten\" />";
                                             }
                                         echo "</dt>
                                         <dd>
@@ -607,7 +607,7 @@ echo "
                                                 <span class=\"iconLink\">
                                                     <a href=\"javascript:deleteRole(". $row['rol_id']. ", '". $row['rol_name']. "', ". $row['rol_valid']. ", ". $user->getValue("usr_id"). ", '". $row['cat_name']. "', '". 
                                                     mysqldate('d.m.y', $row['mem_begin']). "', ". $g_current_user->isWebmaster(). ", '". $g_root_path. "')\"><img 
-                                                    src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Rolle l&ouml;schen\" title=\"Rolle l&ouml;schen\"></a>
+                                                    src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Rolle l&ouml;schen\" title=\"Rolle l&ouml;schen\" /></a>
                                                 </span>";
                                             }
                                         echo "</dd>
@@ -681,7 +681,7 @@ echo "
                                                 echo "
                                                 <span class=\"iconLink\">
                                                     <a href=\"javascript:deleteFormerRole(". $row['rol_id']. ", '". $row['rol_name']. "', ". $user->getValue("usr_id"). ", '". $g_root_path. "')\"><img 
-                                                    src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Rolle l&ouml;schen\" title=\"Rolle l&ouml;schen\"></a>
+                                                    src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Rolle l&ouml;schen\" title=\"Rolle l&ouml;schen\" /></a>
                                                 </span>";
                                             }
                                         echo "</dd>
@@ -756,8 +756,8 @@ if(isset($_GET['user_id']) == true)
         <li>
             <span class=\"iconTextLink\">
                 <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-                src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
-                <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+                src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück\" /></a>
+                <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
             </span>
         </li>
     </ul>";

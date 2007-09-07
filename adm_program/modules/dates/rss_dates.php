@@ -110,17 +110,17 @@ while ($row = $g_db->fetch_object($result))
 
     if ($row->dat_location != "")
     {
-        $description = $description. "<br /><br />Treffpunkt:&nbsp;". strSpecialChars2Html($row->dat_location);
+        $description = $description. "<br /><br />Treffpunkt:&nbsp;". $row->dat_location;
     }
 
     //eventuell noch die Beschreibung durch den UBB-Parser schicken...
     if ($g_preferences['enable_bbcode'] == 1)
     {
-        $description = $description. "<br /><br />". strSpecialChars2Html($bbcode->parse($row->dat_description));
+        $description = $description. "<br /><br />". $bbcode->parse($row->dat_description);
     }
     else
     {
-        $description = $description. "<br /><br />". nl2br(strSpecialChars2Html($row->dat_description));
+        $description = $description. "<br /><br />". nl2br($row->dat_description);
     }
 
     $description = $description. "<br /><br /><a href=\"$link\">Link auf ". $g_current_organization->getValue("org_homepage"). "</a>";
@@ -130,7 +130,7 @@ while ($row = $g_db->fetch_object($result))
     
     // Den Autor des Termins ermitteln und ausgeben
     $user = new User($g_db, $row->dat_usr_id);
-    $description = $description. "<br /><br /><i>Angelegt von ". strSpecialChars2Html($user->getValue("Vorname")). " ". strSpecialChars2Html($user->getValue("Nachname"));
+    $description = $description. "<br /><br /><i>Angelegt von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname");
     $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->dat_timestamp). "</i>";
 
     // Zuletzt geaendert nur anzeigen, wenn Änderung nach 15 Minuten oder durch anderen Nutzer gemacht wurde
@@ -139,7 +139,7 @@ while ($row = $g_db->fetch_object($result))
        || $row->dat_usr_id_change != $row->dat_usr_id ) )
     {
         $user_change = new User($g_db, $row->dat_usr_id_change);
-        $description = $description. "<br>Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname");
+        $description = $description. "<br />Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname");
         $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->dat_last_change);
     }
     

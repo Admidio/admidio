@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Jochen Erkens
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Erzeugt einen RSS 2.0 - Feed mit Hilfe der RSS-Klasse fuer die 10 neuesten Fotoveranstaltungen
  *
@@ -97,7 +97,7 @@ while ($row = $g_db->fetch_object($result))
     bildersumme($row->pho_id);
 
     //Inhalt zusammensetzen
-    $description = "Fotogalerien".$parents." > ". strSpecialChars2Html($row->pho_name);
+    $description = "Fotogalerien".$parents." > ". $row->pho_name;
     $description = $description. "<br /><br /> Bilder: ".$bildersumme;
     $description = $description. "<br /> Datum: ".mysqldate("d.m.y", $row->pho_begin);
     //Enddatum nur wenn anders als startdatum
@@ -118,7 +118,7 @@ while ($row = $g_db->fetch_object($result))
             if (file_exists($bildpfad))
             {
                 $description = $description. "
-                 <img src=\"$g_root_path/adm_program/modules/photos/photo_show.php?bild=".$bildpfad."&amp;scal=100\" alt=\"bild\">&nbsp;";
+                 <img src=\"$g_root_path/adm_program/modules/photos/photo_show.php?bild=".$bildpfad."&amp;scal=100\" alt=\"bild\" />&nbsp;";
             }
         }
     }
@@ -128,7 +128,7 @@ while ($row = $g_db->fetch_object($result))
 
     //Angaben zum Anleger
     $create_user = new User($g_db, $row->pho_usr_id);
-    $description = $description. "<br /><br /><i>Angelegt von ". strSpecialChars2Html($create_user->getValue("Vorname")). " ". strSpecialChars2Html($create_user->getValue("Nachname"));
+    $description = $description. "<br /><br /><i>Angelegt von ". $create_user->getValue("Vorname"). " ". $create_user->getValue("Nachname");
     $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->pho_timestamp). "</i>";
 
     if($row->pho_usr_id_change > 0

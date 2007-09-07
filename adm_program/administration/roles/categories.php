@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
  *
@@ -66,7 +66,7 @@ $g_layout['header'] = "
         }
     </style>
     
-    <script type=\"text/javascript\">
+    <script type=\"text/javascript\"><!--
         var resObject     = createXMLHttpRequest();
         
         function updateDB(element)
@@ -83,7 +83,7 @@ $g_layout['header'] = "
                 resObject.send(null);
             }
         }
-    </script>";
+    --></script>";
     
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
@@ -95,7 +95,7 @@ echo "
     <li>
         <span class=\"iconTextLink\">
             <a href=\"$g_root_path/adm_program/administration/roles/categories_new.php?type=$req_type\"><img 
-            src=\"$g_root_path/adm_program/images/add.png\" alt=\"Kategorie anlegen\"></a>
+            src=\"$g_root_path/adm_program/images/add.png\" alt=\"Kategorie anlegen\" /></a>
             <a href=\"$g_root_path/adm_program/administration/roles/categories_new.php?type=$req_type\">Kategorie anlegen</a>
         </span>
     </li>
@@ -105,7 +105,7 @@ echo "
     <thead>
         <tr>
             <th colspan=\"2\">Bezeichnung</th>
-            <th><img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/user_key.png\" alt=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\" title=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\"></th>
+            <th><img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/user_key.png\" alt=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\" title=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\" /></th>
             <th>&nbsp;</th>
         </tr>
     </thead>";
@@ -137,7 +137,7 @@ echo "
                 }
                 echo "<tbody id=\"cat_list\">";
             }
-            $drag_icon = "<img class=\"dragable\" src=\"$g_root_path/adm_program/images/arrow_out.png\" alt=\"Reihenfolge &auml;ndern\" title=\"Reihenfolge &auml;ndern\">";
+            $drag_icon = "<img class=\"dragable\" src=\"$g_root_path/adm_program/images/arrow_out.png\" alt=\"Reihenfolge &auml;ndern\" title=\"Reihenfolge &auml;ndern\" />";
         }
         echo "
         <tr id=\"row_". $cat_row['cat_id']. "\" class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
@@ -146,7 +146,7 @@ echo "
             <td>";
                 if($cat_row['cat_hidden'] == 1)
                 {
-                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/user_key.png\" alt=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\" title=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\">";
+                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/user_key.png\" alt=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\" title=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\" />";
                 }
                 else
                 {
@@ -156,14 +156,14 @@ echo "
             <td style=\"text-align: right; width: 45px;\">
                 <span class=\"iconLink\">
                     <a href=\"$g_root_path/adm_program/administration/roles/categories_new.php?cat_id=". $cat_row['cat_id']. "&amp;type=$req_type\"><img 
-                    src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>
+                    src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
                 </span>";
 
                 if($cat_row['cat_system'] == 1)
                 {
                     echo "
                     <span class=\"iconLink\">
-                        <img src=\"$g_root_path/adm_program/images/dummy.png\" alt=\"dummy\">
+                        <img src=\"$g_root_path/adm_program/images/dummy.png\" alt=\"dummy\" />
                     </span>";
                 }
                 else
@@ -171,7 +171,7 @@ echo "
                     echo "
                     <span class=\"iconLink\">
                         <a href=\"$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=". $cat_row['cat_id']. "&amp;mode=3&amp;type=$req_type\"><img
-                        src=\"$g_root_path/adm_program/images/cross.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>
+                        src=\"$g_root_path/adm_program/images/cross.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" /></a>
                     </span>";
                 }
             echo "</td>
@@ -184,8 +184,8 @@ echo "
     <li>
         <span class=\"iconTextLink\">
             <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
-            <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück\" /></a>
+            <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
         </span>
     </li>
 </ul>

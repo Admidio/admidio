@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Jochen Erkens
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
  *
@@ -79,7 +79,7 @@ if($g_preferences['photo_show_mode']==0)
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 //Ausgabe der Eine Tabelle Kopfzelle mit &Uuml;berschrift, Photographen und Datum
-//untere Zelle mit Buttons Bild und Fenster Schlie&szlig;en Button
+//untere Zelle mit Buttons Bild und Fenster Schließen Button
 echo "
 <div class=\"formHead\" style=\"width:".$body_with."px\">".$photo_event->getValue("pho_name")."</div>
 <div class=\"formBody\" style=\"width:".$body_with."px; height: ".$body_height."px;\">";
@@ -89,7 +89,7 @@ echo "
     {
         echo " bis ".mysqldate("d.m.y", $photo_event->getValue("pho_end"));
     }
-    echo "<br>Fotos von: ".$photo_event->getValue("pho_photographers")."<br><br>";
+    echo "<br />Fotos von: ".$photo_event->getValue("pho_photographers")."<br /><br />";
 
     //Vor und zurueck buttons
     echo"<ul class=\"iconTextLinkList\">";
@@ -97,7 +97,7 @@ echo "
         {
             echo"<li>
                 <span class=\"iconTextLink\">
-                    <a href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$prev_image&pho_id=$pho_id\"><img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Vorheriges Bild\"></a>
+                    <a href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$prev_image&pho_id=$pho_id\"><img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Vorheriges Bild\" /></a>
                     <a href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$prev_image&pho_id=$pho_id\">Vorheriges Bild</a>
                 </span>
             </li>";
@@ -106,8 +106,8 @@ echo "
         {
             echo"<li>
                 <span class=\"iconTextLink\">
-                    <a href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$next_image&pho_id=$pho_id\">N&auml;chstes Bild</a>
-                    <a  href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$next_image&pho_id=$pho_id\"><img src=\"$g_root_path/adm_program/images/forward.png\" alt=\"N&auml;chstes Bild\"></a>
+                    <a href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$next_image&pho_id=$pho_id\">Nächstes Bild</a>
+                    <a  href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$next_image&pho_id=$pho_id\"><img src=\"$g_root_path/adm_program/images/forward.png\" alt=\"Nächstes Bild\" /></a>
                 </span>
             </li>";
         }
@@ -154,8 +154,8 @@ echo "
         echo"<ul class=\"iconTextLinkList\">
             <li>
                 <span class=\"iconTextLink\">
-                    <a href=\"javascript:parent.window.close()\"><img class=\"iconLink\" src=\"$g_root_path/adm_program/images/door_in.png\" alt=\"Login\"></a>
-                    <a href=\"javascript:parent.window.close()\">Fenster schlie&szlig;en</a>
+                    <a href=\"javascript:parent.window.close()\"><img class=\"iconLink\" src=\"$g_root_path/adm_program/images/door_in.png\" alt=\"Fenster schließen\" /></a>
+                    <a href=\"javascript:parent.window.close()\">Fenster schließen</a>
                 </span>
             </li>
         </ul>";
@@ -168,8 +168,8 @@ echo "
         echo"<ul class=\"iconTextLinkList\">
             <li>
                 <span class=\"iconTextLink\">
-                    <a href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id'\"><img src=\"$g_root_path/adm_program/images/application_view_tile.png\" alt=\"Login\"></a>
-                    <a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id\">zur &Uuml;bersicht</a>
+                    <a href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id'\"><img src=\"$g_root_path/adm_program/images/application_view_tile.png\" alt=\"zur Übersicht\" /></a>
+                    <a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id\">zur Übersicht</a>
                 </span>
             </li>
         </ul>";

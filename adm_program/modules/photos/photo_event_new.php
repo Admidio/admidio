@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Jochen Erkens
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
  * pho_id: id der Veranstaltung die bearbeitet werden soll
@@ -125,7 +125,7 @@ function subfolder($parent_id, $vorschub, $photo_event, $pho_id)
         if(($adm_photo_child["pho_id"] == $photo_event->getValue("pho_pho_id_parent"))
         ||  $adm_photo_child["pho_id"] == $pho_id)
         {
-            $selected = " selected ";
+            $selected = " selected=\"selected\" ";
         }
 
         echo"<option value=\"".$adm_photo_child["pho_id"]."\" $selected>".$vorschub."&#151;".$adm_photo_child["pho_name"]
@@ -145,7 +145,7 @@ echo"<h1 class=\"moduleHeadline\">Fotogalerien - Veranstaltungsverwaltung</h1>";
 /****************************Formular***********************************************/
 
 echo "
-<form method=\"POST\" action=\"$g_root_path/adm_program/modules/photos/photo_event_function.php?pho_id=". $_GET["pho_id"]. "&job=". $_GET["job"]. "\">
+<form method=\"post\" action=\"$g_root_path/adm_program/modules/photos/photo_event_function.php?pho_id=". $_GET["pho_id"]. "&amp;job=". $_GET["job"]. "\">
 <div class=\"formLayout\" id=\"photo_event_new_form\">
     <div class=\"formHead\">";
         //bei neuer Veranstaltung
@@ -167,7 +167,7 @@ echo "
                 <dl>
                     <dt><label for=\"pho_name\">Veranstaltung:</label></dt>
                     <dd>
-                        <input type=\"text\" id=\"pho_name\" name=\"pho_name\" style=\"width: 300px;\" maxlength=\"50\" tabindex=\"1\" value=\"".$photo_event->getValue("pho_name")."\">
+                        <input type=\"text\" id=\"pho_name\" name=\"pho_name\" style=\"width: 300px;\" maxlength=\"50\" tabindex=\"1\" value=\"".$photo_event->getValue("pho_name")."\" />
                         <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                     </dd>
                 </dl>
@@ -189,7 +189,7 @@ echo "
                                 if(($adm_photo_list["pho_id"] == $photo_event->getValue("pho_pho_id_parent"))
                                 ||  $adm_photo_list["pho_id"] == $pho_id)
                                 {
-                                    $selected = " selected ";
+                                    $selected = " selected=\"selected\" ";
                                 }
 
                                 echo"<option value=\"".$adm_photo_list["pho_id"]."\" $selected style=\"maxlength: 40px;\">".$adm_photo_list["pho_name"]
@@ -210,7 +210,7 @@ echo "
                 <dl>
                     <dt><label for=\"pho_begin\">Beginn:</label></dt>
                     <dd>
-                        <input type=\"text\" id=\"pho_begin\" name=\"pho_begin\" size=\"10\" tabindex=\"3\" maxlength=\"10\" value=\"". $photo_event->getValue("pho_begin")."\">
+                        <input type=\"text\" id=\"pho_begin\" name=\"pho_begin\" size=\"10\" tabindex=\"3\" maxlength=\"10\" value=\"". $photo_event->getValue("pho_begin")."\" />
                         <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                     </dd>
                 </dl>
@@ -222,7 +222,7 @@ echo "
                 <dl>
                     <dt><label for=\"pho_end\">Ende:</label></dt>
                     <dd>
-                        <input type=\"text\" id=\"pho_end\" name=\"pho_end\" size=\"10\" tabindex=\"4\" maxlength=\"10\" value=\"". $photo_event->getValue("pho_end")."\">
+                        <input type=\"text\" id=\"pho_end\" name=\"pho_end\" size=\"10\" tabindex=\"4\" maxlength=\"10\" value=\"". $photo_event->getValue("pho_end")."\" />
                     </dd>
                 </dl>
             </li>";
@@ -233,7 +233,7 @@ echo "
                 <dl>
                     <dt><label for=\"pho_photographers\">Fotografen:</label></dt>
                     <dd>
-                        <input type=\"text\" id=\"pho_photographers\" name=\"pho_photographers\" style=\"width: 300px;\" tabindex=\"5\" maxlength=\"100\" value=\"".$photo_event->getValue("pho_photographers")."\">
+                        <input type=\"text\" id=\"pho_photographers\" name=\"pho_photographers\" style=\"width: 300px;\" tabindex=\"5\" maxlength=\"100\" value=\"".$photo_event->getValue("pho_photographers")."\" />
                     </dd>
                 </dl>
             </li>";
@@ -251,7 +251,7 @@ echo "
                             echo "checked = \"checked\" ";
                         }
 
-                     echo"</dd>
+                     echo" /></dd>
                 </dl>
             </li>
         </ul>";
@@ -260,7 +260,7 @@ echo "
         echo"<hr />
         <div class=\"formSubmit\">
             <button name=\"submit\" type=\"submit\" tabindex=\"8\" value=\"speichern\">
-                <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\">
+                <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\" />
                 &nbsp;Speichern
             </button>
         </div>
@@ -272,19 +272,19 @@ echo "
     <li>
         <span class=\"iconTextLink\">
             <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
-            <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück\" /></a>
+            <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
         </span>
     </li>
     
     <li>
         <span class=\"iconTextLink\">
             <img src=\"$g_root_path/adm_program/images/help.png\" class=\"iconLink\" alt=\"Hilfe\" title=\"Hilfe\"
-            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_up_help','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\">   
-            <a onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=veranst_help','Message','width=500,height=400,left=310,top=200,scrollbars=yes'\")\">Hilfe</a>
+            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_up_help','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\" />   
+            <a onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=veranst_help','Message','width=500,height=400,left=310,top=200,scrollbars=yes')\">Hilfe</a>
         </span>
     </li>
-</div>
+</ul>
 
 
 <script type=\"text/javascript\">

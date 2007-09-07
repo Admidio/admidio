@@ -48,13 +48,13 @@ if(isset($plg_show_logout_link) == false || is_numeric($plg_show_logout_link) ==
     $plg_show_logout_link = 1;
 }
 
-if(isset($plg_link_target))
+if(isset($plg_link_target) && $plg_link_target != "_self")
 {
-    $plg_link_target = strip_tags($plg_link_target);
+    $plg_link_target = ' target="'. strip_tags($plg_link_target). '" ';
 }
 else
 {
-    $plg_link_target = "_self";
+    $plg_link_target = "";
 }
 
 if(isset($plg_rank) == false)
@@ -91,7 +91,7 @@ if($g_valid_login == 1)
                 <dt>Benutzer:</dt>
                 <dd>
                     <a href="'. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='. $g_current_user->getValue("usr_id"). '" 
-                    target="'. $plg_link_target. '">'. $g_current_user->getValue("Vorname"). ' '. $g_current_user->getValue("Nachname"). '</a>
+                    '. $plg_link_target. '>'. $g_current_user->getValue("Vorname"). ' '. $g_current_user->getValue("Nachname"). '</a>
                 </dd>
             </dl>
         </li>
@@ -146,11 +146,11 @@ else
 {
     // Login-Formular
     echo '
-    <script type="text/javascript">
+    <script type="text/javascript"><!--
         function loadPageLogin()
         {
-            var loginname = document.plg_login_form.usr_login_name.value;
-            var password  = document.plg_login_form.usr_password.value;
+            var loginname = document.getElementById(\'plg_usr_login_name\').value;
+            var password  = document.getElementById(\'plg_usr_password\').value;
             var link      = \''. $g_root_path. '/adm_program/system/login_check.php?usr_login_name=\' + loginname + \'&usr_password=\' + password;';
 
             if(strlen($plg_link_target) > 0 && strpos($plg_link_target, "_") === false)
@@ -164,20 +164,20 @@ else
             }
         echo '
         }
-    </script>
+    --></script>
     
-    <form style="display: inline;" action="javascript:loadPageLogin()" method="get" name="plg_login_form">
+    <form id="plg_login_form" style="display: inline;" action="javascript:loadPageLogin()" method="get">
         <ul class="formFieldList" id="plgLoginFormFieldList">
             <li>
                 <dl>
                     <dt><label for="usr_login_name">Login-Name:</label></dt>
-                    <dd><input type="text" id="usr_login_name" name="usr_login_name" size="10" maxlength="35"></dd>
+                    <dd><input type="text" id="plg_usr_login_name" name="usr_login_name" size="10" maxlength="35" /></dd>
                 </dl>
             </li>
             <li>
                 <dl>
                     <dt><label for="usr_password">Passwort:</label></dt>
-                    <dd><input type="password" id="usr_password" name="usr_password" size="10" maxlength="25"></dd>
+                    <dd><input type="password" id="plg_usr_password" name="usr_password" size="10" maxlength="25" /></dd>
                 </dl>
             </li>';
             
@@ -187,7 +187,7 @@ else
                 <li>
                     <dl>
                         <dt><label for="auto_login">Angemeldet bleiben:</label></dt>
-                        <dd><input type="checkbox" id="auto_login" name="auto_login" value="1"></dd>
+                        <dd><input type="checkbox" id="plg_auto_login" name="auto_login" value="1" /></dd>
                     </dl>
                 </li>';
             }            
@@ -195,7 +195,9 @@ else
             echo '
             <li>
                 <dl>
-                    <dt style="clear: left;"><input type="submit" value="Login"></dt>
+                    <dt style="clear: left;">
+                        <button type="submit" value="Login">Login</button>
+                    </dt>
                 </dl>
             </li>';
         
@@ -207,7 +209,7 @@ else
                         if($plg_show_register_link && $g_preferences['registration_mode'])
                         {
                             echo '<dt style="clear: left;"><a href="'. $g_root_path. '/adm_program/system/registration.php" 
-                                target="'. $plg_link_target. '">Registrieren</a></dt>';
+                                 '. $plg_link_target. '>Registrieren</a></dt>';
                         }
                         if($plg_show_register_link && $plg_show_email_link)
                         {
@@ -226,9 +228,9 @@ else
                             }
                             else
                             {
-                                $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?rol_id=". $role_webmaster->getValue("rol_id"). "&subject=Loginprobleme";
+                                $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?rol_id=". $role_webmaster->getValue("rol_id"). "&amp;subject=Loginprobleme";
                             }
-                            echo '<dt style="clear: left;"><a href="'. $mail_link. '" target="'. $plg_link_target. '">Loginprobleme</a></dt>';
+                            echo '<dt style="clear: left;"><a href="'. $mail_link. '" '. $plg_link_target. '>Loginprobleme</a></dt>';
                         }
                     echo '</dl>
                 </li>';

@@ -292,7 +292,7 @@ if(isset($_POST["submit"]) && $_POST["submit"])
         <li>
             <span class=\"iconTextLink\">
                 <a href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id'\">Weiter&nbsp;</a>
-                <a href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id'\"><img src=\"$g_root_path/adm_program/images/forward.png\" alt=\"Weiter\"></a>
+                <a href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id'\"><img src=\"$g_root_path/adm_program/images/forward.png\" alt=\"Weiter\" /></a>
             </span>
         </li>
     </ul>";

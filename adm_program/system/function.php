@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
 
@@ -228,14 +228,14 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
         if ( $on_page > 1 )
         {
             $page_string = '<a href="' . $base_url . "&amp;start=" . ( ( $on_page - 2 ) * $per_page ) . '"><img 
-                                class="navigationArrow" src="'. $g_root_path. '/adm_program/images/back.png" alt="Vorherige"></a>
+                                class="navigationArrow" src="'. $g_root_path. '/adm_program/images/back.png" alt="Vorherige" /></a>
                             <a href="' . $base_url . "&amp;start=" . ( ( $on_page - 2 ) * $per_page ) . '">Vorherige</a>&nbsp;&nbsp;' . $page_string;
         }
 
         if ( $on_page < $total_pages )
         {
             $page_string .= '&nbsp;&nbsp;<a href="' . $base_url . "&amp;start=" . ( $on_page * $per_page ) . '">N&auml;chste</a>
-                            <a class="navigationArrow" href="' . $base_url . "&amp;start=" . ( $on_page * $per_page ) . '"><img 
+                            <a class="navigationArrow" href="' . $base_url . "&amp;start=" . ( $on_page * $per_page ) . '" /><img 
                                  src="'. $g_root_path. '/adm_program/images/forward.png" alt="N&auml;chste"></a>';
         }
 
@@ -301,7 +301,7 @@ function generateRoleSelectBox($default_role = 0, $field_id = "")
                 $selected = "";
                 if($row->rol_id == $default_role)
                 {
-                    $selected = " selected ";
+                    $selected = " selected=\"selected\" ";
                 }
                 $box_string .= "<option $selected value=\"$row->rol_id\">$row->rol_name</option>";
             }
@@ -352,7 +352,7 @@ function getBacktrace()
             // Path...
             if (!empty($trace['args'][0]))
             {
-                $argument = htmlspecialchars($trace['args'][0]);
+                $argument = htmlentities($trace['args'][0]);
                 $argument = str_replace(array($path, '\\'), array('', '/'), $argument);
                 $argument = substr($argument, 1);
                 $args[] = "'{$argument}'";
@@ -363,10 +363,10 @@ function getBacktrace()
         $trace['type'] = (!isset($trace['type'])) ? '' : $trace['type'];
 
         $output .= '<br />';
-        $output .= '<b>FILE:</b> ' . htmlspecialchars($trace['file']) . '<br />';
+        $output .= '<b>FILE:</b> ' . htmlentities($trace['file']) . '<br />';
         $output .= '<b>LINE:</b> ' . ((!empty($trace['line'])) ? $trace['line'] : '') . '<br />';
 
-        $output .= '<b>CALL:</b> ' . htmlspecialchars($trace['class'] . $trace['type'] . $trace['function']) . '(' . ((sizeof($args)) ? implode(', ', $args) : '') . ')<br />';
+        $output .= '<b>CALL:</b> ' . htmlentities($trace['class'] . $trace['type'] . $trace['function']) . '(' . ((sizeof($args)) ? implode(', ', $args) : '') . ')<br />';
     }
     $output .= '</div>';
     return $output;

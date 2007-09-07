@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
  *
@@ -284,32 +284,33 @@ if($req_mode != "csv")
     // Html-Kopf wird geschrieben
     if($req_mode == "print")
     {
-        echo "
-        <!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org -->\n
-        <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
-        <html>
+        echo '
+        <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+        <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="de" xml:lang="de">
         <head>
-            <meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\">
+            <!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org -->
+            
+            <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         
-            <title>". $g_current_organization->getValue("org_longname"). " - Liste - ". $role->getValue("rol_name"). "</title>
-            <link rel=\"stylesheet\" type=\"text/css\" href=\"$g_root_path/adm_program/layout/print.css\">
+            <title>'. $g_current_organization->getValue("org_longname"). ' - Liste - '. $role->getValue("rol_name"). '</title>
+            
+            <link rel="stylesheet" type="text/css" href="'. $g_root_path. '/adm_program/layout/print.css" />
 
             <!--[if lt IE 7]>
-            <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/correct_png.js\"></script>
+            <script type="text/javascript" src="'. $g_root_path. '/adm_program/system/correct_png.js"></script>
             <![endif]-->
 
-            <style type=\"text/css\">
+            <style type="text/css">
                 @page { size:landscape; }
             </style>
         </head>
-        <body class=\"bodyPrint\">
-            <div style=\"margin-top: 10px; margin-bottom: 10px;\" align=\"center\">";
+        <body class="bodyPrint">';
     }
     else
     {
         $g_layout['title']  = "Liste - ". $role->getValue("rol_name");
         $g_layout['header'] = "
-            <script language=\"JavaScript\" type=\"text/javascript\"><!--\n
+            <script type=\"text/javascript\"><!--
                 function exportList(element)
                 {
                     var sel_list = element.value;
@@ -347,7 +348,7 @@ if($req_mode != "csv")
         echo "
         <div class=\"navigationPath\">
             <a href=\"$g_root_path/adm_program/system/back.php\"><img
-            src=\"$g_root_path/adm_program/images/$image\" alt=\"Zur&uuml;ck\"></a>
+            src=\"$g_root_path/adm_program/images/$image\" alt=\"Zurück\" /></a>
             <a href=\"$g_root_path/adm_program/system/back.php\">$text</a>
         </div>
         
@@ -357,7 +358,7 @@ if($req_mode != "csv")
                 echo "<li>
                     <span class=\"iconTextLink\">
                         <a href=\"$g_root_path/adm_program/modules/mail/mail.php?rol_id=$req_rol_id\"><img
-                        src=\"$g_root_path/adm_program/images/email.png\" alt=\"E-Mail an Mitglieder\"></a>
+                        src=\"$g_root_path/adm_program/images/email.png\" alt=\"E-Mail an Mitglieder\" /></a>
                         <a href=\"$g_root_path/adm_program/modules/mail/mail.php?rol_id=$req_rol_id\">E-Mail an Mitglieder</a>
                     </span>
                 </li>";
@@ -366,13 +367,13 @@ if($req_mode != "csv")
             echo "<li>
                 <span class=\"iconTextLink\">
                     <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/modules/lists/lists_show.php?type=$req_type&amp;mode=print&amp;rol_id=$req_rol_id', '_blank')\"><img
-                    src=\"$g_root_path/adm_program/images/print.png\" alt=\"Druckvorschau\"></a>
+                    src=\"$g_root_path/adm_program/images/print.png\" alt=\"Druckvorschau\" /></a>
                     <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/modules/lists/lists_show.php?type=$req_type&amp;mode=print&amp;rol_id=$req_rol_id', '_blank')\">Druckvorschau</a>
                 </span>
             </li>
             <li>
                 <span class=\"iconTextLink\">
-                    <img src=\"$g_root_path/adm_program/images/database_out.png\" alt=\"Exportieren\">
+                    <img src=\"$g_root_path/adm_program/images/database_out.png\" alt=\"Exportieren\" />
                     <select size=\"1\" name=\"list$i\" onchange=\"exportList(this)\">
                         <option value=\"\" selected=\"selected\">Exportieren nach ...</option>
                         <option value=\"csv-ms\">Microsoft Excel</option>
@@ -508,9 +509,9 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
 
         if($req_mode == "html")
         {
-            echo "<tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\"
-            onMouseOut=\"this.className='listMouseOut'\" style=\"cursor: pointer\"
-            onClick=\"window.location.href='$g_root_path/adm_program/modules/profile/profile.php?user_id=". $row['usr_id']. "'\">\n";
+            echo "<tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\"
+            onmouseout=\"this.className='listMouseOut'\" style=\"cursor: pointer\"
+            onclick=\"window.location.href='$g_root_path/adm_program/modules/profile/profile.php?user_id=". $row['usr_id']. "'\">\n";
         }
         else if($req_mode == "print")
         {
@@ -558,7 +559,7 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                 if($i == $start_column)
                 {
                     // die Laufende Nummer noch davorsetzen
-                    echo "<td style=\"text-align: $align;\">$irow</th>";
+                    echo "<td style=\"text-align: $align;\">$irow</td>";
                 }
                 echo "<td style=\"text-align: $align;\">";
             }
@@ -601,7 +602,7 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                     else
                     {
                         $content = "<img src=\"$g_root_path/adm_program/images/male.png\"
-                                    style=\"vertical-align: middle;\" alt=\"m&auml;nnlich\">";
+                                    style=\"vertical-align: middle;\" alt=\"m&auml;nnlich\" />";
                     }
                 }
                 elseif($row[$i] == 2)
@@ -613,7 +614,7 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                     else
                     {
                         $content = "<img src=\"$g_root_path/adm_program/images/female.png\"
-                                    style=\"vertical-align: middle;\" alt=\"weiblich\">";
+                                    style=\"vertical-align: middle;\" alt=\"weiblich\" />";
                     }
                 }
                 else
@@ -631,7 +632,7 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                 {
                     $_SESSION['profilphoto'][$row['usr_id']]=$row[$i];
                     $content = "<img src=\"photo_show.php?usr_id=".$row['usr_id']."\"
-                                style=\"vertical-align: middle;\" alt=\"Benutzerfoto\">";
+                                style=\"vertical-align: middle;\" alt=\"Benutzerfoto\" />";
                 }
                 if ($req_mode == "csv" && $row[$i] != NULL)
                 {
@@ -653,7 +654,7 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                             else
                             {
                                 echo "<img src=\"$g_root_path/adm_program/images/checkbox_checked.gif\"
-                                    style=\"vertical-align: middle;\" alt=\"on\">";
+                                    style=\"vertical-align: middle;\" alt=\"on\" />";
                             }
                         }
                         else
@@ -665,7 +666,7 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                             else
                             {
                                 echo "<img src=\"$g_root_path/adm_program/images/checkbox.gif\"
-                                    style=\"vertical-align: middle;\" alt=\"off\">";
+                                    style=\"vertical-align: middle;\" alt=\"off\" />";
                             }
                         }
                         break;
@@ -868,7 +869,7 @@ else
     
     if($req_mode == "print")
     {
-        echo "</div></body></html>";
+        echo "</body></html>";
     }
     else
     {    

@@ -166,7 +166,7 @@ class TableAccess
             $value = $this->db_fields[$field_name];
         }
         
-        return $value;
+        return htmlspecialchars($value, ENT_QUOTES);
     }    
     
     // die Methode speichert die Organisationsdaten in der Datenbank,

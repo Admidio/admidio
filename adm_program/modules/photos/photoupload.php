@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Jochen Erkens
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
  *
@@ -78,38 +78,38 @@ echo"
     <div class=\"formHead\">Bilder hochladen</div>
     <div class=\"formBody\">
         <div class=\"formRow\">
-            Bilder zu dieser Veranstaltung hinzuf&uuml;gen:<br>"
-            .$photo_event->getValue("pho_name")."<br>"
+            Bilder zu dieser Veranstaltung hinzuf&uuml;gen:<br />"
+            .$photo_event->getValue("pho_name")."<br />"
             ."(Beginn: ". mysqldate("d.m.y", $photo_event->getValue("pho_begin")).")"
             ."
         </div>
-        <hr>
+        <hr />
         <ul class=\"formFieldList\">
             <li><dl>
                 <dt><label for=\"bilddatei1\">Bild 1:</label></dt>
-                <dd><input type=\"file\" id=\"bilddatei1\" name=\"bilddatei[]\" value=\"durchsuchen\"></dd>
+                <dd><input type=\"file\" id=\"bilddatei1\" name=\"bilddatei[]\" value=\"durchsuchen\" /></dd>
             </dl></li>
             <li><dl>
                 <dt><label for=\"bilddatei1\">Bild 2:</label></dt>
-                <dd><input type=\"file\" id=\"bilddatei2\" name=\"bilddatei[]\" value=\"durchsuchen\"></dd>
+                <dd><input type=\"file\" id=\"bilddatei2\" name=\"bilddatei[]\" value=\"durchsuchen\" /></dd>
             </dl></li>
             <li><dl>
                 <dt><label for=\"bilddatei1\">Bild 3:</label></dt>
-                <dd><input type=\"file\" id=\"bilddatei3\" name=\"bilddatei[]\" value=\"durchsuchen\"></dd>
+                <dd><input type=\"file\" id=\"bilddatei3\" name=\"bilddatei[]\" value=\"durchsuchen\" /></dd>
             </dl></li>
             <li><dl>
                 <dt><label for=\"bilddatei1\">Bild 4:</label></dt>
-                <dd><input type=\"file\" id=\"bilddatei4\" name=\"bilddatei[]\" value=\"durchsuchen\"></dd>
+                <dd><input type=\"file\" id=\"bilddatei4\" name=\"bilddatei[]\" value=\"durchsuchen\" /></dd>
             </dl></li>
             <li><dl>
                 <dt><label for=\"bilddatei1\">Bild 5:</label></dt>
-                <dd><input type=\"file\" id=\"bilddatei5\" name=\"bilddatei[]\" value=\"durchsuchen\"></dd>
+                <dd><input type=\"file\" id=\"bilddatei5\" name=\"bilddatei[]\" value=\"durchsuchen\" /></dd>
             </dl></li>
         </ul>
         <hr />
         <div class=\"formSubmit\">
             <button name=\"upload\" type=\"submit\" value=\"speichern\">
-                <img src=\"$g_root_path/adm_program/images/page_white_get.png\" alt=\"Speichern\">
+                <img src=\"$g_root_path/adm_program/images/page_white_get.png\" alt=\"Speichern\" />
                 &nbsp;Bilder hochladen
             </button>
         </div>
@@ -117,20 +117,20 @@ echo"
 </div>
 </form>";
 
-echo"
+echo "
 <ul class=\"iconTextLinkList\">
     <li>
         <span class=\"iconLink\">
             <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
-            <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
+            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück\" /></a>
+            <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
         </span>
     </li>    
     <li>
         <span class=\"iconLink\">
             <img src=\"$g_root_path/adm_program/images/help.png\" class=\"iconLink\" alt=\"Hilfe\" title=\"Hilfe\"
-               onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_up_help','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\">   
-            <a onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_up_help','Message','width=600,height=600,left=310,top=200,scrollbars=yes'\")\">Hilfe</a>
+               onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_up_help','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\" />   
+            <a onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_up_help','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\">Hilfe</a>
         </span>
     </li>
 </ul>";
