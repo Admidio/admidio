@@ -27,7 +27,7 @@ $g_root_path = "%ROOT_PATH%";
 // Startseite deiner Homepage
 // Auf diese Seite geht Admidio z.B. nach dem Login
 // Relativer Pfad von $g_root_path aus gesehen
-$g_main_page = "admidio.html";
+$g_main_page = "index.html";
 
 // Kurzbezeichnung der Gruppierung, des Vereins oder der Organisation auf der Admidio läuft
 // Diese muss der Eingabe auf der Installationsseite entsprechen !!!
