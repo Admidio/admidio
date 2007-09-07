@@ -240,7 +240,7 @@ else
                         <a href=\"$row->lnk_url\" target=\"_blank\"><img src=\"$g_root_path/adm_program/images/globe.png\"
                         alt=\"Gehe zu $row->lnk_name\" title=\"Gehe zu $row->lnk_name\"></a>
                         <a href=\"$row->lnk_url\" target=\"_blank\">$row->lnk_name</a>
-                    </span<
+                    </span>
                 </div>
                 <div style=\"margin-top: 10px; text-align: left;\">";
 

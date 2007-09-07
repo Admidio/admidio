@@ -5,14 +5,14 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
  *
  * start     - Angabe, ab welchem Datensatz Gaestebucheintraege angezeigt werden sollen
  * headline  - Ueberschrift, die ueber den Gaestebucheintraegen steht
  *             (Default) Gaestebuch
- * id          - Nur einen einzigen Gaestebucheintrag anzeigen lassen.
+ * id        - Nur einen einzigen Gaestebucheintrag anzeigen lassen.
  *
  *****************************************************************************/
 
@@ -20,10 +20,15 @@ require("../../system/common.php");
 require("../../system/bbcode.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
-if ($g_preferences['enable_guestbook_module'] != 1)
+if ($g_preferences['enable_guestbook_module'] == 0)
 {
     // das Modul ist deaktiviert
     $g_message->show("module_disabled");
+}
+elseif($g_preferences['enable_guestbook_module'] == 2)
+{
+    // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
+    require("../../system/login_valid.php");
 }
 
 // Uebergabevariablen pruefen
@@ -221,7 +226,7 @@ else
     while ($row = $g_db->fetch_object($guestbook_result))
     {
         echo "
-        <div class=\"boxBody\" style=\"overflow: hidden;\">
+        <div class=\"boxLayout\">
             <div class=\"boxHead\">
                 <div style=\"text-align: left; float: left;\">
                     <img src=\"$g_root_path/adm_program/images/comment.png\" style=\"vertical-align: middle;\" alt=\"". strSpecialChars2Html($row->gbo_name). "\">&nbsp;".
@@ -265,20 +270,19 @@ else
                             </span>";
                     }
 
-                    echo "&nbsp;</div>
-                </div>
+                echo "</div>
+            </div>
 
-                <div style=\"margin: 8px 4px 4px 4px;\">";
-                    // wenn BBCode aktiviert ist, den Text noch parsen, ansonsten direkt ausgeben
-                    if ($g_preferences['enable_bbcode'] == 1)
-                    {
-                        echo strSpecialChars2Html($bbcode->parse($row->gbo_text));
-                    }
-                    else
-                    {
-                        echo nl2br(strSpecialChars2Html($row->gbo_text));
-                    }
-                echo "</div>";
+            <div class=\"boxBody\">";
+                // wenn BBCode aktiviert ist, den Text noch parsen, ansonsten direkt ausgeben
+                if ($g_preferences['enable_bbcode'] == 1)
+                {
+                    echo strSpecialChars2Html($bbcode->parse($row->gbo_text));
+                }
+                else
+                {
+                    echo nl2br(strSpecialChars2Html($row->gbo_text));
+                }
 
 
                 // Falls der Eintrag editiert worden ist, wird dies angezeigt
@@ -355,9 +359,8 @@ else
                     include("get_comments.php");
                 }
 
-        echo "</div>
-
-        <br />";
+            echo "</div>
+        </div>";
     }  // Ende While-Schleife
 }
 

@@ -5,6 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
  *
@@ -13,21 +14,6 @@
  *           2 - Ankuendigung loeschen
  *           4 - Frage, ob Ankuendigung geloescht werden soll
  *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- *
  *****************************************************************************/
 
 require("../../system/common.php");
@@ -35,7 +21,7 @@ require("../../system/login_valid.php");
 require("../../system/announcement_class.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
-if ($g_preferences['enable_announcements_module'] != 1)
+if ($g_preferences['enable_announcements_module'] == 0)
 {
     // das Modul ist deaktiviert
     $g_message->show("module_disabled");

@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
  *
@@ -20,10 +20,15 @@ require("../../system/common.php");
 require("../../system/bbcode.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
-if ($g_preferences['enable_announcements_module'] != 1)
+if ($g_preferences['enable_announcements_module'] == 0)
 {
     // das Modul ist deaktiviert
     $g_message->show("module_disabled");
+}
+elseif($g_preferences['enable_announcements_module'] == 2)
+{
+    // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
+    require("../../system/login_valid.php");
 }
 
 // lokale Variablen der Uebergabevariablen initialisieren
@@ -176,17 +181,19 @@ else
     while($row = $g_db->fetch_object($announcements_result))
     {
         echo "
-        <div class=\"boxBody\" style=\"overflow: hidden;\">
+        <div class=\"boxLayout\">
             <div class=\"boxHead\">
                 <div style=\"width: 70%; float: left;\">
                     <img src=\"$g_root_path/adm_program/images/note.png\" style=\"vertical-align: top;\" alt=\"". strSpecialChars2Html($row->ann_headline). "\">&nbsp;".
                     strSpecialChars2Html($row->ann_headline). "
-                </div>";
-
-                // aendern & loeschen duerfen nur User mit den gesetzten Rechten
-                if($g_current_user->editAnnouncements())
-                {
-                    echo "<div style=\"text-align: right;\">
+                </div>
+                <div style=\"text-align: right;\">".
+                    mysqldatetime("d.m.y", $row->ann_timestamp). "&nbsp;";
+                    
+                    // aendern & loeschen duerfen nur User mit den gesetzten Rechten
+                    if($g_current_user->editAnnouncements())
+                    {
+                        echo "
                         <span class=\"iconLink\">
                             <a href=\"$g_root_path/adm_program/modules/announcements/announcements_new.php?ann_id=$row->ann_id&amp;headline=$req_headline\"><img 
                             src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\"></a>
@@ -200,17 +207,12 @@ else
                                 <a href=\"$g_root_path/adm_program/modules/announcements/announcements_function.php?mode=4&ann_id=$row->ann_id\"><img 
                                 src=\"$g_root_path/adm_program/images/cross.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\"></a>
                             </span>";
-                        }
-                        echo mysqldatetime("d.m.y", $row->ann_timestamp). "&nbsp;
-                    </div>";
-                }
-                else
-                {
-                    echo "<div style=\"text-align: right;\">". mysqldatetime("d.m.y", $row->ann_timestamp). "&nbsp;</div>";
-                }
-            echo "</div>
+                        }    
+                    }
+                    echo "</div>
+            </div>
 
-            <div style=\"margin: 8px 4px 4px 4px;\">";
+            <div class=\"boxBody\">";
                 // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
                 if($g_preferences['enable_bbcode'] == 1)
                 {
@@ -220,25 +222,25 @@ else
                 {
                     echo nl2br(strSpecialChars2Html($row->ann_description));
                 }
-            echo "</div>
-            <div class=\"editInformation\">";
-                $user_create = new User($g_db, $row->ann_usr_id);
-                echo "Angelegt von ". $user_create->getValue("Vorname"). " ". $user_create->getValue("Nachname").
-                " am ". mysqldatetime("d.m.y h:i", $row->ann_timestamp);
+            
+                echo "
+                <div class=\"editInformation\">";
+                    $user_create = new User($g_db, $row->ann_usr_id);
+                    echo "Angelegt von ". $user_create->getValue("Vorname"). " ". $user_create->getValue("Nachname").
+                    " am ". mysqldatetime("d.m.y h:i", $row->ann_timestamp);
 
-                // Zuletzt geaendert nur anzeigen, wenn Änderung nach 15 Minuten oder durch anderen Nutzer gemacht wurde
-                if($row->ann_usr_id_change > 0
-                && (  strtotime($row->ann_last_change) > (strtotime($row->ann_timestamp) + 900)
-                   || $row->ann_usr_id_change != $row->ann_usr_id ) )
-                {
-                    $user_change = new User($g_db, $row->ann_usr_id_change);
-                    echo "<br>Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname").
-                    " am ". mysqldatetime("d.m.y h:i", $row->ann_last_change);
-                }
-            echo "</div>
-        </div>
-
-        <br />";
+                    // Zuletzt geaendert nur anzeigen, wenn Änderung nach 15 Minuten oder durch anderen Nutzer gemacht wurde
+                    if($row->ann_usr_id_change > 0
+                    && (  strtotime($row->ann_last_change) > (strtotime($row->ann_timestamp) + 900)
+                       || $row->ann_usr_id_change != $row->ann_usr_id ) )
+                    {
+                        $user_change = new User($g_db, $row->ann_usr_id_change);
+                        echo "<br>Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname").
+                        " am ". mysqldatetime("d.m.y h:i", $row->ann_last_change);
+                    }
+                echo "</div>
+            </div>
+        </div>";
     }  // Ende While-Schleife
 }
 

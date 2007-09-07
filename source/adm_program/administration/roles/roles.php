@@ -169,48 +169,48 @@ echo "
                     echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/user.png\"
                     alt=\"Eigenes Profil bearbeiten\" title=\"Eigenes Profil bearbeiten\">";
                 }
-                if($row->rol_announcements == 1 && $g_preferences['enable_announcements_module'] == 1)
+                if($row->rol_announcements == 1 && $g_preferences['enable_announcements_module'] > 0)
                 {
                     echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/note.png\"
                     alt=\"Ank&uuml;ndigungen anlegen und bearbeiten\" title=\"Ank&uuml;ndigungen anlegen und bearbeiten\">";
                 }
-                if($row->rol_dates == 1 && $g_preferences['enable_dates_module'] == 1)
+                if($row->rol_dates == 1 && $g_preferences['enable_dates_module'] > 0)
                 {
                     echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/date.png\"
                     alt=\"Termine anlegen und bearbeiten\" title=\"Termine anlegen und bearbeiten\">";
                 }
-                if($row->rol_photo == 1 && $g_preferences['enable_photo_module'] == 1)
+                if($row->rol_photo == 1 && $g_preferences['enable_photo_module'] > 0)
                 {
                     echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/photo.png\"
                     alt=\"Fotos hochladen und bearbeiten\" title=\"Fotos hochladen und bearbeiten\">";
                 }
-                if($row->rol_download == 1 && $g_preferences['enable_download_module'] == 1)
+                if($row->rol_download == 1 && $g_preferences['enable_download_module'] > 0)
                 {
                     echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/folder_down.png\"
                     alt=\"Downloads hochladen und bearbeiten\" title=\"Downloads hochladen und bearbeiten\">";
                 }
-                if($row->rol_guestbook == 1 && $g_preferences['enable_guestbook_module'] == 1)
+                if($row->rol_guestbook == 1 && $g_preferences['enable_guestbook_module'] > 0)
                 {
                     echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/comment.png\"
                     alt=\"G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen\" title=\"G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen\">";
                 }
                 // falls anonyme Gaestebuchkommentare erfassen werden duerfen, braucht man das Recht pro Rolle nicht mehr zu vergeben
-                if($row->rol_guestbook_comments == 1  && $g_preferences['enable_guestbook_module'] == 1 && $g_preferences['enable_gbook_comments4all'] == false)
+                if($row->rol_guestbook_comments == 1  && $g_preferences['enable_guestbook_module'] > 0 && $g_preferences['enable_gbook_comments4all'] == false)
                 {
                     echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/comments.png\"
                     alt=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\" title=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\">";
                 }
-                if($row->rol_mail_logout == 1 && $g_preferences['enable_mail_module'] == 1)
+                if($row->rol_mail_logout == 1 && $g_preferences['enable_mail_module'] > 0)
                 {
                     echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/email.png\"
                     alt=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\" title=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\">";
                 }
-                if($row->rol_mail_login == 1 && $g_preferences['enable_mail_module'] == 1)
+                if($row->rol_mail_login == 1 && $g_preferences['enable_mail_module'] > 0)
                 {
                     echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/email_key.png\"
                     alt=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\" title=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\">";
                 }
-                if($row->rol_weblinks == 1 && $g_preferences['enable_weblinks_module'] == 1)
+                if($row->rol_weblinks == 1 && $g_preferences['enable_weblinks_module'] > 0)
                 {
                     echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/globe.png\"
                     alt=\"Weblinks anlegen und bearbeiten\" title=\"Weblinks anlegen und bearbeiten\">";

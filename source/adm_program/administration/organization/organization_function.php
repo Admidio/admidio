@@ -110,11 +110,6 @@ if(isset($_POST['photo_image_text']) == false)
     $_POST['photo_image_text'] = 0;
 }
 
-if(isset($_POST['enable_guestbook_module']) == false)
-{
-    $_POST['enable_guestbook_module'] = 0;
-}
-
 if(isset($_POST['enable_guestbook_captcha']) == false)
 {
     $_POST['enable_guestbook_captcha'] = 0;
@@ -153,16 +148,6 @@ if(isset($_POST['enable_extern_roles_view']) == false)
 if(isset($_POST['enable_weblinks_module']) == false)
 {
     $_POST['enable_weblinks_module'] = 0;
-}
-
-if(isset($_POST['enable_dates_module']) == false)
-{
-    $_POST['enable_dates_module'] = 0;
-}
-
-if(isset($_POST['enable_announcements_module']) == false)
-{
-    $_POST['enable_announcements_module'] = 0;
 }
 
 // *******************************************************************************

@@ -9,6 +9,32 @@
  *
  *****************************************************************************/
 
+
+// diese Funktionen wandeln einen String von und nach UTF8 um, 
+// aber nur wenn die DB keine UTF8-Verbindung aufbauen kann
+function utf8_decode_db($string)
+{
+    global $g_db;
+    
+    if($g_db->utf8 == false)
+    {
+        $string = utf8_decode($string);
+    }
+    return $string;
+}
+
+function utf8_encode_db($string)
+{
+    global $g_db;
+    
+    if($g_db->utf8 == false)
+    {
+        $string = utf8_encode($string);
+    }
+    return $string;
+}
+
+
 // Funktion prueft, ob ein User die uebergebene Rolle besitzt
 // Inhalt der Variable "$function" muss gleich dem DB-Feld "rolle.funktion" sein
 

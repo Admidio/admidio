@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
 
@@ -32,22 +32,22 @@ class Message
     {
         if($show_bold)
         {
-            $content = "<strong>". utf8_decode($content). "</strong>";
+            $content = "<strong>$content</strong>";
         }
         else
         {
-            $content = utf8_decode($content);
+            $content = $content;
         }
 
 
         if($variable_number > 0)
         {
             $variable_number--;
-            $this->variables[$variable_number] = utf8_decode($content);
+            $this->variables[$variable_number] = $content;
         }
         else
         {
-            $this->variables[] = utf8_decode($content);
+            $this->variables[] = $content;
         }
     }
     
@@ -109,11 +109,11 @@ class Message
         
         if(strlen($msg_variable1) > 0)
         {
-            $this->variables[0] = "<strong>". utf8_decode($msg_variable1). "</strong>";
+            $this->variables[0] = "<strong>$msg_variable1</strong>";
         }
         if(strlen($msg_headline) > 0)
         {
-            $this->headline = utf8_decode($msg_headline);
+            $this->headline = $msg_headline;
         }
         else
         {
@@ -133,13 +133,13 @@ class Message
         // Text auslesen und auf ISO-8859-1 konvertieren
         if(isset($GLOBALS['message_text'][$this->key]))
         {
-            $this->content = utf8_decode($GLOBALS['message_text'][$this->key]);
+            $this->content = $GLOBALS['message_text'][$this->key];
         }
         else
         {
             // Text nicht gefunden -> Standard-Meldung
             $this->variables[0] = $msg_key;
-            $this->content = utf8_decode($GLOBALS['message_text']["default"]);
+            $this->content = $GLOBALS['message_text']["default"];
         }
         
         // Variablen des Messagetextes (%VAR1%, %VAR2% ...) fuellen
