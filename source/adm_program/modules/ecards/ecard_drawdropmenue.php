@@ -126,10 +126,14 @@ else if ($g_valid_login && isset($_GET['rol_id']) && !isset($_GET['base']))
 		{
 			echo $menuheader.'<option value="" selected="selected">- Bitte w&auml;hlen -</option>'.$menudata.$menubody;
 		}
+		else
+		{
+		    echo " Kein User vorhanden der eine g&uuml;ltige E-mail besitzt! <br /> Bitte w&auml;hlen Sie eine andere Rolle aus! ";
+		}
 	}
-	else if(!is_numeric($_GET['rol_id']) || !isset($menudata))
+	else
 	{
-	    echo " Kein User vorhanden der eine g&uuml;ltige E-mail besitzt! <br /> Bitte w&auml;hlen Sie eine andere Rolle aus! ";
+	    echo " Bitte w&auml;hlen Sie eine andere Rolle aus diese ist ung&uuml;ltig! ";
 	}
 	echo '<input type="hidden" name="ecard[email_recepient]" value="" />
 		  <input type="hidden" name="ecard[name_recepient]"  value="" />';
@@ -162,8 +166,8 @@ else if($g_valid_login && isset($_GET['usrid']) && $_GET['usrid']!="extern")
 }
 else if($g_valid_login && isset($_GET['usrid']) == "extern")
 {
-		echo '<input id="name_recepient" type="text" name="ecard[name_recepient]"  style="margin-bottom:3px; width: 200px;" onclick="javascript:blendout(this.id);" maxlength="50" value="<Empf&auml;nger Name>"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
-        echo '<input id="email_recepient" type="text" name="ecard[email_recepient]" style="width: 350px;" onclick="javascript:blendout(this.id);" maxlength="50" value="<Empf&auml;nger E-mail>"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
+		echo '<input id="name_recepient" type="text" name="ecard[name_recepient]"  style="margin-bottom:3px; width: 200px;" onclick="javascript:blendout(this.id);" onfocus="javascript:blendout(this.id);" maxlength="50" value="<Empf&auml;nger Name>"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
+        echo '<input id="email_recepient" type="text" name="ecard[email_recepient]" style="width: 350px;" onclick="javascript:blendout(this.id);" onfocus="javascript:blendout(this.id);" maxlength="50" value="<Empf&auml;nger E-mail>"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
 }
 else
 {
