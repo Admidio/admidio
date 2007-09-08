@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /******************************************************************************
  * E@card Form
  *
@@ -31,7 +31,7 @@ require_once("ecard_lib.php");
 /**/	$max_w = "250";		// Maximale Breite des E-Card Bildes							
 /**/	$max_h = "250";		// Maximale Höhe des E-Card Bildes					
 /**/	$template = "ecard_1.tpl";
-/**/	$tmpl_folder = "templates/";						
+/**/	$tmpl_folder = "../../layout/";						
 /**/	$g_preferences['enable_e@card_module']=1;		
 /**/	$max_length = 250;  // Maximale Länge des E-Card Textes
 /**/	$msgTextError1 = "Es ist ein Fehler bei der Verarbeitung der E-C@rd aufgetreten. Bitte probier es zu einem späteren Zeitpunkt noch einmal.";
@@ -336,7 +336,13 @@ $javascript='
 			document.ecard_form.target = "ecard_preview";
 			document.ecard_form.submit();
 		}
-  
+        function blendout(id)
+		{
+		    if(document.getElementById(id).value == "<Empfänger Name>" || document.getElementById(id).value == "<Empfänger E-mail>")
+			{
+				document.getElementById(id).value = "";
+			}
+		}
 		function countMax() 
 		{
 			max  = '.$max_length.';
@@ -345,12 +351,13 @@ $javascript='
 			{
 				alert("Die Nachricht darf maximal " + max + " Zeichen lang sein.!");
 				document.ecard_form["ecard[message]"].value = document.ecard_form["ecard[message]"].value.substring(0,max);
+				document.getElementById(\'counter\').innerHTML = \'<b> + wert + </b>\';
 				wert = 0;
-				document.ecard_form.counter.value = wert;
 			} 
 			else 
 			{
-				document.ecard_form.counter.value = max - document.ecard_form["ecard[message]"].value.length;
+			    var zwprodukt = max - document.ecard_form["ecard[message]"].value.length;
+				document.getElementById(\'counter\').innerHTML = \'<b>\' + zwprodukt + \'</b>\';
 			}
 		} // Ende function countMax()
 
@@ -495,7 +502,8 @@ if (empty($submit_action))
                 </li>
                <li>
                  <dl>
-                   <dt><label>An:</label></dt>
+                   <dt><label>An:</label>			        
+				   </dt>
                    <dd>';
 							if (array_key_exists("usr_id", $_GET))
                             {
@@ -506,9 +514,10 @@ if (empty($submit_action))
                             }
                             else
                             {
-							   echo '<div id="exinswitch" style="float:right; margin-right:5px;">
-							             <a href="javascript:getExtern()">externer Empf&auml;nger</a>
-									 </div>
+							   echo '<div style="height:48px; width:370px;">
+									 <div id="exinswitch" style="float:right; margin-left:5px; display:relativ;">
+										 <a href="javascript:getExtern()">externer Empf&auml;nger</a>
+								     </div>
 									 <div id="basedropdownmenu" style="display:block; margin-bottom:3px;">
 									     <script language="javascript" type="text/javascript">getMenu();</script>
 									 </div>
@@ -516,7 +525,7 @@ if (empty($submit_action))
 										 <input type="hidden" name="ecard[email_recepient]" value="" />
 		                                 <input type="hidden" name="ecard[name_recepient]"  value="" />
 								     </div>
-								     <div id="extern"></div>';
+								     <div id="extern"></div></div>';
                             }
                             echo '
                         </dd>
@@ -568,9 +577,8 @@ if (empty($submit_action))
                     <dl>
                         <dt>
 						    <label>Nachricht:</label>
-							<div style="padding:70px 40px 40px 20px;">
-							    max char: 
-								<input type="text" name="counter" size="3" maxlength="3" value="'; echo $max_length.'" />
+							<div style="padding:70px 0px 40px 20px;">
+							    noch&nbsp;<div id="counter" style="border:0px; display:inline;"><b>'; echo $max_length.'</b></div>&nbsp;Zeichen:
 							</div>
 						</dt>
                         <dd>
