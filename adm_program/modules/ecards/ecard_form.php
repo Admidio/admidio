@@ -264,7 +264,7 @@ $javascript='
                 error_message += "- E-Mail des Absenders\n";
             }
   
-            if (document.ecard_form["ecard[name_recepient]"].value == "") 
+            if (document.ecard_form["ecard[name_recepient]"].value == "" || document.ecard_form["ecard[name_recepient]"].value == "<Empfänger Name>") 
 			{
                 error = true;
                 error_message += "- name des Empfängers\n";
