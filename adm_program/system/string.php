@@ -9,21 +9,30 @@
  *
  *****************************************************************************/
 
-// entfernt Html-, PHP-Codes und Spaces am Anfang und Ende des Strings
+// entfernt Html-, PHP-Codes und Spaces am Anfang und Ende 
+// eines Strings oder aller Elemente eines Arrays
 
 function strStripTags($srcString, $checkChar = 0)
 {
-    // Spaces vorne und hinten entfernen
-    $srcString = trim($srcString);
-    // HTML und PHP Tags entfernen
-    $srcString = strip_tags($srcString);
-    
-    if($checkChar)
+    if(is_array($srcString))
     {
-        $anz = strspn($srcString, "abcdefghijklmnopqrstuvwxyzäöüßABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜ0123456789.-_+ ");
-        if($anz != strlen($srcString))
+        // Jedes Funktion fuer jedes Arrayelement aufrufen
+        $srcString = array_map("strStripTags", $srcString);
+    }
+    else
+    {
+        // Spaces vorne und hinten entfernen
+        $srcString = trim($srcString);
+        // HTML und PHP Tags entfernen
+        $srcString = strip_tags($srcString);
+    
+        if($checkChar)
         {
-            $srcString = "";
+            $anz = strspn($srcString, "abcdefghijklmnopqrstuvwxyzäöüßABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜ0123456789.-_+ ");
+            if($anz != strlen($srcString))
+            {
+                $srcString = "";
+            }
         }
     }
 
