@@ -96,35 +96,38 @@ if ($g_valid_login && isset($_GET['base']) =="1")
 }
 else if ($g_valid_login && isset($_GET['rol_id']) && !isset($_GET['base']))
 {
-	$sql = "SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name 
-			FROM ". TBL_MEMBERS. ", ". TBL_USERS. "
-			LEFT JOIN ". TBL_USER_DATA. " as last_name
-				ON last_name.usd_usr_id = usr_id
-				AND last_name.usd_usf_id = ". $g_current_user->getProperty("Nachname", "usf_id")."
-			LEFT JOIN ". TBL_USER_DATA. " as first_name
-				ON first_name.usd_usr_id = usr_id
-				AND first_name.usd_usf_id = ". $g_current_user->getProperty("Vorname", "usf_id")."
-			WHERE usr_id = mem_usr_id
-			AND mem_rol_id = ".$_GET['rol_id']."
-			AND mem_valid = 1
-			AND usr_valid = 1
-			ORDER BY last_name, first_name";
-	
-	$result 	  = $g_db->query($sql);
-	$act_category = "";
-	$menuheader   = '<select size="1" id="menu" name="menu" onchange="javascript:getMenuRecepientNameEmail(this.value)">';
-	$menubody     = '</select>';
-	$menudata     = "";
-	while ($row = $g_db->fetch_object($result))
+    if(is_numeric($_GET['rol_id']))
 	{
-		$menudata.='<option value="'.$row->usr_id.'">'.$row->first_name.' '.$row->last_name.'</option>';
+		$sql = "SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name 
+				FROM ". TBL_MEMBERS. ", ". TBL_USERS. "
+				LEFT JOIN ". TBL_USER_DATA. " as last_name
+					ON last_name.usd_usr_id = usr_id
+					AND last_name.usd_usf_id = ". $g_current_user->getProperty("Nachname", "usf_id")."
+				LEFT JOIN ". TBL_USER_DATA. " as first_name
+					ON first_name.usd_usr_id = usr_id
+					AND first_name.usd_usf_id = ". $g_current_user->getProperty("Vorname", "usf_id")."
+				WHERE usr_id = mem_usr_id
+				AND mem_rol_id = ".$_GET['rol_id']."
+				AND mem_valid = 1
+				AND usr_valid = 1
+				ORDER BY last_name, first_name";
+		
+		$result 	  = $g_db->query($sql);
+		$act_category = "";
+		$menuheader   = '<select size="1" id="menu" name="menu" onchange="javascript:getMenuRecepientNameEmail(this.value)">';
+		$menubody     = '</select>';
+		$menudata     = "";
+		while ($row = $g_db->fetch_object($result))
+		{
+			$menudata.='<option value="'.$row->usr_id.'">'.$row->first_name.' '.$row->last_name.'</option>';
+		}
+		
+		if (!empty($menudata))
+		{
+			echo $menuheader.'<option value="" selected="selected">- Bitte w&auml;hlen -</option>'.$menudata.$menubody;
+		}
 	}
-	
-	if (!empty($menudata))
-	{
-		echo $menuheader.'<option value="" selected="selected">- Bitte w&auml;hlen -</option>'.$menudata.$menubody;
-	}
-	else
+	else if(!is_numeric($_GET['rol_id']) || !isset($menudata))
 	{
 	    echo " Kein User vorhanden der eine g&uuml;ltige E-mail besitzt! <br /> Bitte w&auml;hlen Sie eine andere Rolle aus! ";
 	}
@@ -159,8 +162,8 @@ else if($g_valid_login && isset($_GET['usrid']) && $_GET['usrid']!="extern")
 }
 else if($g_valid_login && isset($_GET['usrid']) == "extern")
 {
-		echo '<input type="text" name="ecard[name_recepient]"  style="margin-bottom:3px; width: 200px;" maxlength="50" value=""><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
-        echo '<input type="text" name="ecard[email_recepient]" style="width: 350px;" maxlength="50" value=""><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
+		echo '<input id="name_recepient" type="text" name="ecard[name_recepient]"  style="margin-bottom:3px; width: 200px;" onclick="javascript:blendout(this.id);" maxlength="50" value="<Empf&auml;nger Name>"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
+        echo '<input id="email_recepient" type="text" name="ecard[email_recepient]" style="width: 350px;" onclick="javascript:blendout(this.id);" maxlength="50" value="<Empf&auml;nger E-mail>"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
 }
 else
 {

@@ -41,15 +41,15 @@ function getPostGetVars() {
    {   
 	if(trim($ecard["name_recepient"]) == "")
 	{
-	  $ecard["name_recepient"] = "< Name >";
+	  $ecard["name_recepient"] = "< Empf&auml;nger Name >";
 	}
 	if( $ecard["email_recepient"] == "")
 	{
-	  $ecard["email_recepient"] = "< E-Mail >";
+	  $ecard["email_recepient"] = "< Empf&auml;nger E-Mail >";
 	}
 	if($ecard["message"] == "")
 	{
-	  $ecard["message"] = "< Nachricht >";
+	  $ecard["message"] = "< Deine Nachricht >";
 	}
 	$ecard_data = preg_replace ("/<%g_root_path%>/", $root_path, $ecard_data);
     $ecard_data = preg_replace ("/<%ecard_sender_id%>/", $usr_id, $ecard_data);
