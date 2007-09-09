@@ -39,11 +39,11 @@ function getPostGetVars() {
 
    function parse_ecard_template($ecard,$ecard_data,$root_path,$usr_id,$propotional_width,$propotional_height) 
    {   
-	if(strip_tags(trim($ecard["name_recepient"])) == "")
+	if(strip_tags(trim(isset($ecard["name_recepient"]))) == "")
 	{
 	  $ecard["name_recepient"] = "< Empf&auml;nger Name >";
 	}
-	if(strip_tags(trim($ecard["email_recepient"])) == "")
+	if(strip_tags(trim(isset($ecard["email_recepient"]))) == "")
 	{
 	  $ecard["email_recepient"] = "< Empf&auml;nger E-Mail >";
 	}
