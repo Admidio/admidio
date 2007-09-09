@@ -29,8 +29,13 @@ require_once("ecard_lib.php");
 // Variablen die in die DB kommen und vom Admin änderbar sind
 //**********************************************************
 /**/	$max_w = "250";		// Maximale Breite des E-Card Bildes							
-/**/	$max_h = "250";		// Maximale Höhe des E-Card Bildes					
-/**/	$template = "ecard_1.tpl";
+/**/	$max_h = "250";		// Maximale Höhe des E-Card Bildes	
+/*		es können hier mehere Templates eingetragen werden welche dann vom Benutzt ausgewählt werden dürfen				
+/**/	$templates = array ("ecard_1.tpl"); 
+/*      es können hier mehere Briefmarken eingetragen werden welche dann vom Benutzt ausgewählt werden dürfen */
+/**/	$briefmarken = array ("standard.gif","halloween.gif","kuss.gif","ostern.gif","schwein.gif","smiley1.gif","smiley2.gif","smiley3.gif","sonnenuntergang.gif","torte.gif","weihnachten.gif","winter.gif"); 
+/*      es können hier mehere Hintergründe eingetragen werden welche dann vom Benutzt ausgewählt werden dürfen */
+/**/	$hintergrund = array ("kein","fledermaeuse.jpg","geschenke.jpg","herzen.jpg","klee.jpg","noten.jpg","ostereier.jpg","sterne.dark.jpg"); 
 /**/	$tmpl_folder = "../../layout/";						
 /**/	$g_preferences['enable_e@card_module']=1;		
 /**/	$max_length = 250;  // Maximale Länge des E-Card Textes
@@ -411,6 +416,18 @@ $javascript='
 		{
 			macheRequest(\''.$g_root_path.'/adm_program/modules/ecards/ecard_drawdropmenue.php?usrid=\'+ usr_id, \'dropdownmenu\' );
 		}
+		function getTemplate(template)
+		{
+			macheRequest(\''.$g_root_path.'/adm_program/modules/ecards/ecard_drawdropmenue.php?template=\'+ template, \'template\' );
+		}
+		function getBriefmarke(briefmarke)
+		{
+			macheRequest(\''.$g_root_path.'/adm_program/modules/ecards/ecard_drawdropmenue.php?briefmarke=\'+ briefmarke, \'briefmarke\' );		
+		}
+		function getHintergrund(hintergrund)
+		{
+			macheRequest(\''.$g_root_path.'/adm_program/modules/ecards/ecard_drawdropmenue.php?hintergrund=\'+ hintergrund, \'hintergrund\' );		
+		}
 		function getExtern()
 		{
 		   var basedropdiv = \'basedropdownmenu\';
@@ -494,7 +511,6 @@ if (empty($submit_action))
 	  
 		echo' <form name="ecard_form" action="#" method="post">
 			  <input type="hidden" name="ecard[image_name]" value="'; if (! empty($ecard["image_name"])) echo $ecard["image_name"]; echo'" />
-			  <input type="hidden" name="ecard[template_name]" value="'.$template.'" />
 			  <input type="hidden" name="submit_action" value="" />
 			  <ul class="formFieldList">
 			   <li>
@@ -525,7 +541,8 @@ if (empty($submit_action))
 										 <input type="hidden" name="ecard[email_recepient]" value="" />
 		                                 <input type="hidden" name="ecard[name_recepient]"  value="" />
 								     </div>
-								     <div id="extern"></div></div>';
+								     <div id="extern"></div>
+									 </div>';
                             }
                             echo '
                         </dd>
@@ -592,8 +609,115 @@ if (empty($submit_action))
 			           </dd>
                     </dl>
                 </li>
+				<li>
+                    <hr />
+                </li>
+			    <li>
+                    <dl>
+                        <dt>
+						    <label>Einstellungen:</label>
+						</dt>
+                        <dd>
+						<table width="350px" summary="Einstellungen" border="0px">
+						<tr>
+						  <td>Template:</td>
+						  <td>Briefmarke:</td>
+						  <td>Hintergrund:</td>
+						</tr>
+						<tr>
+						  <td>
+						';
+						$templatedata = "";
+						$templatefirstvalue = "";
+						echo '<select size="1" id="templates" name="templates" onchange="getTemplate(this.value)">';
+						for($i=0; $i<count($templates);$i++)
+						{
+						    $TemplName = explode(".", $templates[$i]);
+							echo '<option value="'.$templates[$i].'"';
+							if ($i == 0)
+							{
+								 $templatedata = ' selected=\'selected\' ';
+								 $templatefirstvalue = '<input type="hidden" name="ecard[template_name]" value="'.$templates[$i].'" />';
+								 echo $templatedata;
+							}
+							echo '>'.$TemplName[0].'</option>';
+						}
+						echo '</select>
+						</td>
+			            <td>';
+						$briefmarkendata = "";
+						$briefmarkenfirstvalue = "";
+						echo  '<select size="1" id="briefmarken" name="briefmarken" onchange="getBriefmarke(this.value)">';
+						for($i=0; $i<count($briefmarken);$i++)
+						{
+						    $BriefmName = explode(".", $briefmarken[$i]);
+							echo '<option value="'.$briefmarken[$i].'"';
+							if ($i == 0)
+							{
+								 $briefmarkendata = ' selected=\'selected\' ';
+								 $briefmarkenfirstvalue = '<input type="hidden" name="ecard[briefmarken_name]" value="'.$briefmarken[$i].'" />';
+								 echo $briefmarkendata;
+							}
+							echo '>'.$BriefmName[0].'</option>';
+						}
+						echo  '</select>
+						</td>
+						<td>';
+						$hintergrunddata = "";
+						$hintergrundfirstvalue = "";
+						echo  '<select size="1" id="briefmarken" name="briefmarken" onchange="getHintergrund(this.value)">';
+						for($i=0; $i<count($hintergrund);$i++)
+						{
+						    $HintergName = explode(".", $hintergrund[$i]);
+							echo '<option value="'.$hintergrund[$i].'"';
+							if ($i == 0)
+							{
+								 $hintergrunddata = ' selected=\'selected\' ';
+								 $hintergrundfirstvalue = '<input type="hidden" name="ecard[hintergrund_name]" value="'.$hintergrund[$i].'" />';
+								 echo $hintergrunddata;
+							}
+							echo '>'.$HintergName[0].'</option>';
+						}
+						echo  '</select>
+						</td>
+						</tr>
+						</table>
+						<div id="briefmarke"  style="display:none;">';
+						if( $briefmarkenfirstvalue != "")
+						{
+							echo $briefmarkenfirstvalue;
+						}
+						else
+						{
+							echo '<input type="hidden" name="ecard[briefmarken_name]" value="" />';
+						}
+						echo '</div>
+						<div id="template"  style="display:none;">';
+						if( $templatefirstvalue != "")
+						{
+							echo $templatefirstvalue;
+						}
+						else
+						{
+							echo '<input type="hidden" name="ecard[template_name]" value="" />';
+						}
+						echo '</div>
+						<div id="hintergrund" style="display:none;">';
+						if( $hintergrundfirstvalue != "")
+						{
+							echo $hintergrundfirstvalue;
+						}
+						else
+						{
+							echo '<input type="hidden" name="ecard[hintergrund_name]" value="" />';
+						}
+						echo '</div>
+						</dd>
+                    </dl>
+                </li>
 			</ul> 
-			<hr /></form>
+			<hr />
+			</form>
 			<div style="display:inline;">
 				<button onclick="makePreview()" value="vorschau">
 					<img src="'.$g_root_path.'/adm_program/images/eye.png" alt="Vorschau" />&nbsp;Vorschau
