@@ -9,7 +9,7 @@
 <body>
   <table align="center" border="0" cellpadding="0" cellspacing="0">
    <tbody><tr>
-    <td id="card_form" colspan="2" style="border: 1px solid rgb(0, 0, 0); padding: 10px; ">
+    <td id="card_form" colspan="2" style="border: 1px solid rgb(0, 0, 0); background:url('<%ecard_hintergrund_name%>'); padding: 10px; ">
 		<table border="0" cellpadding="0" cellspacing="0">
 	 <tbody><tr>
 	  <td style=" vertical-align: top;">
@@ -19,7 +19,7 @@
 	    <td>Eine E@card von: <b><a href="<%g_root_path%>/adm_program/modules/mail/mail.php?usr_id=<%ecard_sender_id%>" target="_blank"><%ecard_sender_name%></a></b></td>
 	   </tr>
 	   <tr>
-	    <td align="center"><img src="<%ecard_image_name%>" width="<%ecard_image_width%>" height="<%ecard_image_height%>" style="border: 1px solid rgb(221, 221, 221); margin: 10pt 10px 10px 10pt; padding: 4px;" alt="Ecard"></td>
+	    <td align="center"><img src="<%ecard_image_name%>" width="<%ecard_image_width%>" height="<%ecard_image_height%>" style="border: 0px; margin: 10pt 10px 10px 10pt; padding: 4px;" alt="Ecard"></td>
 	   </tr>
        <tr>
 	    <td align="center"><div style="vertical-align:middle; margin-left:10px; margin-right:10px;"><%ecard_message%></div></td>
@@ -35,7 +35,7 @@
 	    <td colspan="2" style="height: 59px;"><div align="right">
 		<table border="0" cellpadding="0" cellspacing="0">
 		 <tbody><tr>
-		  <td id="card_stamp" style="width: 101px; height: 59px;" align="right"><div align="right"><img src="<%g_root_path%>/adm_program/images/Briefmarke.jpg" alt="frame" border="0" height="59" width="101"></div></td>
+		  <td id="card_stamp" style="width: 101px; height: 59px;" align="right"><div align="right"><img src="<%ecard_briefmarke%>" alt="frame" border="0" height="59" width="101"></div></td>
 
 		 </tr>
 		</tbody></table></div></td>
