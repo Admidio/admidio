@@ -331,7 +331,7 @@ $javascript='
 		}
 		function makePreview() 
 		{
-			document.ecard_form.action = "ecard_preview.php?width='.$propotional_size['width'].'&height'.$propotional_size['height'].'&tmplfolder='.$tmpl_folder.'";
+			document.ecard_form.action = "ecard_preview.php?width='.$propotional_size['width'].'&height='.$propotional_size['height'].'&tmplfolder='.$tmpl_folder.'";
 			popup_win(\''.$g_root_path.'/adm_program/ecards/templates/leer.htm\',\'ecard_preview\',\'resizable=yes,scrollbars=yes,width=600,height=400\');
 			document.ecard_form.target = "ecard_preview";
 			document.ecard_form.submit();
