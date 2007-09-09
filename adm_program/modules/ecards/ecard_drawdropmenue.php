@@ -90,7 +90,8 @@ if ($g_valid_login && isset($_GET['base']) =="1")
 	<img class="iconHelpLink" src="'.$g_root_path.'/adm_program/images/help.png" alt="Hilfe" title="Hilfe"
 	onclick="window.open(\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=rolle_ecard\',\'Message\',\'width=400,height=400,left=310,top=200\')" />
 	<span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
-	
+	<input type="hidden" name="ecard[email_recepient]" value="" />
+    <input type="hidden" name="ecard[name_recepient]"  value="" />
 	
 	';								
 }

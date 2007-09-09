@@ -31,7 +31,7 @@ require_once("ecard_lib.php");
 /**/	$max_w = "250";		// Maximale Breite des E-Card Bildes							
 /**/	$max_h = "250";		// Maximale Höhe des E-Card Bildes	
 /*		es können hier mehere Templates eingetragen werden welche dann vom Benutzt ausgewählt werden dürfen				
-/**/	$templates = array ("ecard_1.tpl"); 
+/**/	$templates = array ("ecard_1.tpl","ecard_2.tpl"); 
 /*      es können hier mehere Briefmarken eingetragen werden welche dann vom Benutzt ausgewählt werden dürfen */
 /**/	$briefmarken = array ("standard.gif","halloween.gif","kuss.gif","ostern.gif","schwein.gif","smiley1.gif","smiley2.gif","smiley3.gif","sonnenuntergang.gif","torte.gif","weihnachten.gif","winter.gif"); 
 /*      es können hier mehere Hintergründe eingetragen werden welche dann vom Benutzt ausgewählt werden dürfen */
@@ -337,7 +337,7 @@ $javascript='
 		function makePreview() 
 		{
 			document.ecard_form.action = "ecard_preview.php?width='.$propotional_size['width'].'&height='.$propotional_size['height'].'&tmplfolder='.$tmpl_folder.'";
-			popup_win(\''.$g_root_path.'/adm_program/ecards/templates/leer.htm\',\'ecard_preview\',\'resizable=yes,scrollbars=yes,width=600,height=400\');
+			popup_win(\''.$g_root_path.'/adm_program/ecards/templates/leer.htm\',\'ecard_preview\',\'resizable=yes,scrollbars=yes,width=800,height=600\');
 			document.ecard_form.target = "ecard_preview";
 			document.ecard_form.submit();
 		}
@@ -538,8 +538,6 @@ if (empty($submit_action))
 									     <script language="javascript" type="text/javascript">getMenu();</script>
 									 </div>
 									 <div id="dropdownmenu" style="display:block;">
-										 <input type="hidden" name="ecard[email_recepient]" value="" />
-		                                 <input type="hidden" name="ecard[name_recepient]"  value="" />
 								     </div>
 								     <div id="extern"></div>
 									 </div>';
