@@ -1,16 +1,12 @@
-﻿<?php
+<?php 
 /******************************************************************************
  * E@card Form
  *
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Roland Eischer 
- * Based on     : Jochen Erkens Photogalerien &
- *                 Elmar Meuthen E-Mails verschicken &
- *                #################################################################
- *                # IBPS E-C@ard                       Version 1.01               #
- *                # Copyright 2002 IBPS Friedrichs     info@ibps-friedrichs.de    #
- *                #################################################################
+ * Based on     : IBPS E-C@ard                       Version 1.01
+ *                Copyright 2002 IBPS Friedrichs     info@ibps-friedrichs.de
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
@@ -37,7 +33,7 @@ require_once("ecard_lib.php");
 /*      es können hier mehere Hintergründe eingetragen werden welche dann vom Benutzt ausgewählt werden dürfen */
 /**/	$hintergrund = array ("kein","fledermaeuse.jpg","geschenke.jpg","herzen.jpg","klee.jpg","noten.jpg","ostereier.jpg","sterne.dark.jpg"); 
 /**/	$tmpl_folder = "../../layout/";						
-/**/	$g_preferences['enable_e@card_module']=1;		
+/**/	$g_preferences['enable_ecard_module']=1;		
 /**/	$max_length = 250;  // Maximale Länge des E-Card Textes
 /**/	$msgTextError1 = "Es ist ein Fehler bei der Verarbeitung der E-C@rd aufgetreten. Bitte probier es zu einem späteren Zeitpunkt noch einmal.";
 /**/	$msgTextError2 = "Es sind einige Eingabefelder nicht bzw. nicht richtig ausgefüllt. Bitte füll diese aus, bzw. korrigier diese.";
@@ -46,15 +42,16 @@ require_once("ecard_lib.php");
 //**********************************************************
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
-if ($g_preferences['enable_e@card_module'] != 1)
+if ($g_preferences['enable_ecard_module'] != 1)
 {
     // das Modul ist deaktiviert
     $g_message->show("module_disabled");
 }
+
 // pruefen ob User eingeloggt ist
 if(!$g_valid_login)
 {
- $g_message->show("invalid");
+    $g_message->show("invalid");
 } 
 //ID Pruefen
 if(isset($_GET["pho_id"]) && is_numeric($_GET["pho_id"]))
@@ -218,7 +215,7 @@ else
 /*********************HTML_TEIL*******************************/
 
 // Html-Kopf ausgeben
-$g_layout['title'] = "E@card";
+$g_layout['title'] = "E-Card";
 //Lightbox-Mode
 $g_layout['header'] = "";
 if($g_preferences['photo_show_mode']==1)
@@ -475,11 +472,11 @@ echo '
     <div class="formHead">';
 	if(! empty($submit_action))
 	{
-	    echo "E@card wegschicken";
+	    echo "E-Card wegschicken";
 	}
 	else
 	{
-	    echo "E@card bearbeiten";
+	    echo "E-Card bearbeiten";
 	}
 echo'
 	</div>
