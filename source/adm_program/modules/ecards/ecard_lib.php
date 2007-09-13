@@ -51,18 +51,21 @@ function getPostGetVars() {
 	{
 	  $ecard["message"] = "< Deine Nachricht >";
 	}
-	$ecard_data = preg_replace ("/<%g_root_path%>/", $root_path, $ecard_data);
-    $ecard_data = preg_replace ("/<%ecard_sender_id%>/", $usr_id, $ecard_data);
-    $ecard_data = preg_replace ("/<%ecard_sender_email%>/", $ecard["email_sender"], $ecard_data);
-    $ecard_data = preg_replace ("/<%ecard_sender_name%>/", $ecard["name_sender"], $ecard_data);
-	$ecard_data = preg_replace ("/<%ecard_image_width%>/", $propotional_width, $ecard_data);
-	$ecard_data = preg_replace ("/<%ecard_image_height%>/", $propotional_height, $ecard_data);
-    $ecard_data = preg_replace ("/<%ecard_image_name%>/", $ecard["image_name"], $ecard_data);
-	$ecard_data = preg_replace ("/<%ecard_hintergrund_name%>/", $root_path."/adm_program/images/ecards/Hintergrund/".$ecard["hintergrund_name"], $ecard_data);
-	$ecard_data = preg_replace ("/<%ecard_briefmarke%>/", $root_path."/adm_program/images/ecards/".$ecard["briefmarken_name"], $ecard_data);
-    $ecard_data = preg_replace ("/<%ecard_message%>/", preg_replace ("/\r?\n/", "<BR>\n", htmlspecialchars($ecard["message"])), $ecard_data);
+	$ecard_data = preg_replace ("/<%g_root_path%>/",			$root_path, $ecard_data);
+	$ecard_data = preg_replace ("/<%ecard_font%>/",				$ecard["schriftart_name"], $ecard_data);
+	$ecard_data = preg_replace ("/<%ecard_font_size%>/",		$ecard["schrift_size"], $ecard_data);
+	$ecard_data = preg_replace ("/<%ecard_font_color%>/",		$ecard["schrift_farbe"], $ecard_data);
+	$ecard_data = preg_replace ("/<%ecard_font_bold%>/",		$ecard["schrift_style_bold"], $ecard_data);
+	$ecard_data = preg_replace ("/<%ecard_font_italic%>/",		$ecard["schrift_style_italic"], $ecard_data);
+    $ecard_data = preg_replace ("/<%ecard_sender_id%>/",		$usr_id, $ecard_data);
+    $ecard_data = preg_replace ("/<%ecard_sender_email%>/",		$ecard["email_sender"], $ecard_data);
+    $ecard_data = preg_replace ("/<%ecard_sender_name%>/",		$ecard["name_sender"], $ecard_data);
+	$ecard_data = preg_replace ("/<%ecard_image_width%>/",		$propotional_width, $ecard_data);
+	$ecard_data = preg_replace ("/<%ecard_image_height%>/",		$propotional_height, $ecard_data);
+    $ecard_data = preg_replace ("/<%ecard_image_name%>/",		$ecard["image_name"], $ecard_data);
+    $ecard_data = preg_replace ("/<%ecard_message%>/", 			preg_replace ("/\r?\n/", "<br />\n", htmlspecialchars($ecard["message"])), $ecard_data);
     $ecard_data = preg_replace ("/<%ecard_reciepient_email%>/", $ecard["email_recepient"], $ecard_data);
-    $ecard_data = preg_replace ("/<%ecard_reciepient_name%>/", $ecard["name_recepient"], $ecard_data);
+    $ecard_data = preg_replace ("/<%ecard_reciepient_name%>/", 	$ecard["name_recepient"], $ecard_data);
     return $ecard_data;
   }
 
