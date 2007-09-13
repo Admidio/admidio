@@ -1,19 +1,23 @@
-<?php 
+<?php
 /******************************************************************************
- * E@card Form
+ * Grußkarte Form
  *
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Roland Eischer 
- * Based on     : IBPS E-C@ard                       Version 1.01
- *                Copyright 2002 IBPS Friedrichs     info@ibps-friedrichs.de
+ * Based on     : Jochen Erkens Photogalerien &
+ *                 Elmar Meuthen E-Mails verschicken &
+ *                #################################################################
+ *                # IBPS E-C@ard                       Version 1.01               #
+ *                # Copyright 2002 IBPS Friedrichs     info@ibps-friedrichs.de    #
+ *                #################################################################
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
  *
  * pho_id:		id der Veranstaltung deren Bilder angezeigt werden sollen
  * photo:       Name des Bildes ohne(.jpg) später -> (admidio/adm_my_files/photos/<* Gallery *>/$_GET['photo'].jpg)
- * usr_id:		Die Benutzer id an dem die E@card gesendet werden soll
+ * usr_id:		Die Benutzer id an dem die Grußkarte gesendet werden soll
  *
  *****************************************************************************/
 
@@ -22,19 +26,23 @@ require_once("../../system/common.php");
 require_once("../photos/photo_function.php");
 require_once("ecard_lib.php");
 
-// Variablen die in die DB kommen und vom Admin änderbar sind
+// Variablen die später in die DB kommen und vom Admin änderbar sind
 //**********************************************************
-/**/	$max_w = "250";		// Maximale Breite des E-Card Bildes							
-/**/	$max_h = "250";		// Maximale Höhe des E-Card Bildes	
+/**/	$max_w_card = "400";		// Maximale Breite des Grußkarten Bildes							
+/**/	$max_h_card = "250";		// Maximale Höhe des Grußkarten Bildes	
+/**/	$max_w_view = "250";		// Maximale Breite des angezeigten Bildes							
+/**/	$max_h_view = "250";		// Maximale Höhe des angezeigten Bildes
 /*		es können hier mehere Templates eingetragen werden welche dann vom Benutzt ausgewählt werden dürfen				
 /**/	$templates = array ("ecard_1.tpl","ecard_2.tpl"); 
-/*      es können hier mehere Briefmarken eingetragen werden welche dann vom Benutzt ausgewählt werden dürfen */
-/**/	$briefmarken = array ("standard.gif","halloween.gif","kuss.gif","ostern.gif","schwein.gif","smiley1.gif","smiley2.gif","smiley3.gif","sonnenuntergang.gif","torte.gif","weihnachten.gif","winter.gif"); 
-/*      es können hier mehere Hintergründe eingetragen werden welche dann vom Benutzt ausgewählt werden dürfen */
-/**/	$hintergrund = array ("kein","fledermaeuse.jpg","geschenke.jpg","herzen.jpg","klee.jpg","noten.jpg","ostereier.jpg","sterne.dark.jpg"); 
+/*      es können hier mehere Schrift name eingetragen werden welche dann vom Benutzer ausgewählt werden dürfen */
+/**/	$fonts = array ("Comic Sans MS","Arial","Arial Black","Courier","Georgia","Helvetica","Impact","Script","Times Roman","Verdana"); 
+/*      es können hier mehere Schriftgrößen eingetragen werden welche dann vom Benutzer ausgewählt werden dürfen */
+/**/	$fontsizes = array ("14","9","10","11","12","13","14","15","16","17","18","20","22","24","30"); 
+/*      es können hier mehere Schrift Farben eingetragen werden welche dann vom Benutzer ausgewählt werden dürfen */
+/**/	$fontcolors = array("yellow","orange","red","maroon","fuchsia","purple","lime","green","teal","aqua","blue","navy","silver","gray","olive","black"); 
 /**/	$tmpl_folder = "../../layout/";						
-/**/	$g_preferences['enable_ecard_module']=1;		
-/**/	$max_length = 250;  // Maximale Länge des E-Card Textes
+/**/	$g_preferences['enable_e@card_module']=1;		
+/**/	$max_length = 150;  // Maximale Länge des Grußkarten Textes
 /**/	$msgTextError1 = "Es ist ein Fehler bei der Verarbeitung der E-C@rd aufgetreten. Bitte probier es zu einem späteren Zeitpunkt noch einmal.";
 /**/	$msgTextError2 = "Es sind einige Eingabefelder nicht bzw. nicht richtig ausgefüllt. Bitte füll diese aus, bzw. korrigier diese.";
 /**/	$ecard_PLAIN_data = "Du hast eine E-Card von einem Mitglied des Vereins ".$g_organization." erhalten.\nKlick auf das Attachment, um die E-Card zu sehen.";
@@ -42,16 +50,15 @@ require_once("ecard_lib.php");
 //**********************************************************
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
-if ($g_preferences['enable_ecard_module'] != 1)
+if ($g_preferences['enable_e@card_module'] != 1)
 {
     // das Modul ist deaktiviert
     $g_message->show("module_disabled");
 }
-
 // pruefen ob User eingeloggt ist
 if(!$g_valid_login)
 {
-    $g_message->show("invalid");
+ $g_message->show("invalid");
 } 
 //ID Pruefen
 if(isset($_GET["pho_id"]) && is_numeric($_GET["pho_id"]))
@@ -147,29 +154,34 @@ if (isset($_GET["usr_id"]))
 	$userName  = $user->getValue("Vorname")." ".$user->getValue("Nachname");
 }
 
-
 $popup_height = $g_preferences['photo_show_height']+210;
 $popup_width  = $g_preferences['photo_show_width']+70;
 $bild         = $_REQUEST['photo'];
 
+// Wenn der übergebene Bildernamen und die daszugehörige Photogallerie Id
+// gültig ist dann wird der komplete Pfad für das Bild generiert
 if(is_numeric($bild) && isset($_GET['pho_id']))
 {
     $ordner_foto      = "/adm_my_files/photos/".$photo_event->getValue("pho_begin")."_".$photo_event->getValue("pho_id");
     $ordnerurl        = $g_root_path. $ordner_foto;
     $bildfull         = "".$ordnerurl."/".$_REQUEST['photo'].".jpg";
 }
+// Wenn nur der Bildernamen übergeben wird ist die Übergabe ungültig
 if(is_numeric($bild) && !isset($_GET['pho_id']))
 {
 	$g_message->show("invalid");
 }
+// Wenn weder die Übergabe des Bildes noch die Photogallery id nummerisch sind -> ungültiger Aufruf
 if(!is_numeric($bild) || !is_numeric($_GET['pho_id']))
 {
 	$g_message->show("invalid");
 }
+//Wenn ein Bilderpfad generiert worden ist dann können die Proportionalen Größen berechnet werden
 if(isset($bildfull))
 {
-	list($width, $height) = getimagesize($bildfull);
-	$propotional_size                   = getPropotionalSize($width, $height, $max_w, $max_h); 
+	list($width, $height)	= getimagesize($bildfull);
+	$propotional_size_card	= getPropotionalSize($width, $height, $max_w_card, $max_h_card);
+	$propotional_size_view	= getPropotionalSize($width, $height, $max_w_view, $max_h_view);
 }
 
 getPostGetVars();
@@ -190,7 +202,7 @@ if (! empty($submit_action))
 	    } 
 	    else 
 	    {
-		    $ecard_HTML_data = parse_ecard_template($ecard,$ecard_data_to_parse,$g_root_path,$g_current_user->getValue("usr_id"),$propotional_size['width'],		$propotional_size['height']);
+		    $ecard_HTML_data = parse_ecard_template($ecard,$ecard_data_to_parse,$g_root_path,$g_current_user->getValue("usr_id"),$propotional_size_card['width'],$propotional_size_card['height']);
 		    $result = sendEcard($ecard,$ecard_HTML_data,$ecard_PLAIN_data);
 		    if ($result) 
 			{
@@ -215,7 +227,7 @@ else
 /*********************HTML_TEIL*******************************/
 
 // Html-Kopf ausgeben
-$g_layout['title'] = "E-Card";
+$g_layout['title'] = "Grußkarten";
 //Lightbox-Mode
 $g_layout['header'] = "";
 if($g_preferences['photo_show_mode']==1)
@@ -251,7 +263,7 @@ $javascript='
         function check() 
 		{
             var error         = false;
-            var error_message = "Du hast die folgenden, für die\nE-C@rd notwendigen Eingabefelder\nnicht bzw. nicht richtig ausgefüllt:\n\n";
+            var error_message = "Du hast die folgenden, für die\nGrußkarte notwendigen Eingabefelder\nnicht bzw. nicht richtig ausgefüllt:\n\n";
 
             if (document.ecard_form["ecard[name_sender]"].value == "") 
 			{
@@ -333,7 +345,7 @@ $javascript='
 		}
 		function makePreview() 
 		{
-			document.ecard_form.action = "ecard_preview.php?width='.$propotional_size['width'].'&height='.$propotional_size['height'].'&tmplfolder='.$tmpl_folder.'";
+			document.ecard_form.action = "ecard_preview.php?width='.$propotional_size_card['width'].'&height='.$propotional_size_card['height'].'&tmplfolder='.$tmpl_folder.'";
 			popup_win(\''.$g_root_path.'/adm_program/ecards/templates/leer.htm\',\'ecard_preview\',\'resizable=yes,scrollbars=yes,width=800,height=600\');
 			document.ecard_form.target = "ecard_preview";
 			document.ecard_form.submit();
@@ -349,11 +361,17 @@ $javascript='
 		{
 			max  = '.$max_length.';
 			wert = max - document.ecard_form["ecard[message]"].value.length;
+			if(document.ecard_form["ecard[message]"].value.length > max)
+			{
+				var txtvalue = document.ecard_form["ecard[message]"].value;
+				document.ecard_form["ecard[message]"].value = txtvalue.substr(0, max);
+			}
 			if (wert < 0) 
 			{
 				alert("Die Nachricht darf maximal " + max + " Zeichen lang sein.!");
+				wert = 0;
 				document.ecard_form["ecard[message]"].value = document.ecard_form["ecard[message]"].value.substring(0,max);
-				document.getElementById(\'counter\').innerHTML = \'<b> + wert + </b>\';
+				document.getElementById(\'counter\').innerHTML = \'<b>\' + wert + \'</b>\';
 				wert = 0;
 			} 
 			else 
@@ -401,9 +419,14 @@ $javascript='
 			xmlHttp.open("GET",seite,true);
 			xmlHttp.send(null);
 		}
+		var basedropdiv = \'basedropdownmenu\';
+		var dropdiv = \'dropdownmenu\';
+		var externdiv = \'extern\';
+		var switchdiv = \'exinswitch\';
 		function getMenu()
 		{
 			macheRequest(\''.$g_root_path.'/adm_program/modules/ecards/ecard_drawdropmenue.php?base=1\' , \'basedropdownmenu\' );
+			
 		}
 		function getMenuRecepientName()
 		{
@@ -412,25 +435,35 @@ $javascript='
 		function getMenuRecepientNameEmail(usr_id)
 		{
 			macheRequest(\''.$g_root_path.'/adm_program/modules/ecards/ecard_drawdropmenue.php?usrid=\'+ usr_id, \'dropdownmenu\' );
+			document.getElementById(externdiv).innerHTML = "&nbsp;";
 		}
-		function getTemplate(template)
+		function getTextStyle(textdiv)
 		{
-			macheRequest(\''.$g_root_path.'/adm_program/modules/ecards/ecard_drawdropmenue.php?template=\'+ template, \'template\' );
+		 	var schrift_size = document.ecard_form["ecard[schrift_size]"].value;
+			var schrift = document.ecard_form["ecard[schriftart_name]"].value;
+			var schrift_farbe = document.ecard_form["ecard[schrift_farbe]"].value;
+			var schrift_bold = "";
+			var schrift_italic = "";
+			if(document.ecard_form.Bold.checked)
+			{
+				schrift_bold = "bold"
+			}
+			if(document.ecard_form.Italic.checked)
+			{
+				schrift_italic = "italic";
+			}
+			var schrift_farbe = document.ecard_form["ecard[schrift_farbe]"].value;
+			var schrift_farbe = document.ecard_form["ecard[schrift_farbe]"].value;
+			document.getElementById(textdiv).style.font = schrift_bold + \' \'+ schrift_italic + \' \'+ schrift_size + \'px \'+schrift;
+			document.getElementById(textdiv).style.color = schrift_farbe;	
 		}
-		function getBriefmarke(briefmarke)
-		{
-			macheRequest(\''.$g_root_path.'/adm_program/modules/ecards/ecard_drawdropmenue.php?briefmarke=\'+ briefmarke, \'briefmarke\' );		
-		}
-		function getHintergrund(hintergrund)
-		{
-			macheRequest(\''.$g_root_path.'/adm_program/modules/ecards/ecard_drawdropmenue.php?hintergrund=\'+ hintergrund, \'hintergrund\' );		
+		function getSetting(name,input_value)
+		{		
+			document.ecard_form[name].value = input_value;	
+			getTextStyle(\'Nachricht\');	
 		}
 		function getExtern()
 		{
-		   var basedropdiv = \'basedropdownmenu\';
-           var dropdiv = \'dropdownmenu\';
-		   var externdiv = \'extern\';
-		   var switchdiv = \'exinswitch\';
 		    if(document.getElementById(basedropdiv).style.display == "none")
 			{
 				document.getElementById(basedropdiv).style.display = \'block\';
@@ -472,11 +505,11 @@ echo '
     <div class="formHead">';
 	if(! empty($submit_action))
 	{
-	    echo "E-Card wegschicken";
+	    echo "Grußkarte wegschicken";
 	}
 	else
 	{
-	    echo "E-Card bearbeiten";
+	    echo "Grußkarte bearbeiten";
 	}
 echo'
 	</div>
@@ -488,18 +521,18 @@ if (empty($submit_action))
 	if($g_preferences['photo_show_mode']==0)
 	{
 		echo "<img onclick=\"window.open('$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=".$_REQUEST['photo']."&pho_id=".$_REQUEST['pho_id']."','msg','height=".$popup_height.", width=".$popup_width.",left=162,top=5')\" 
-			 src=\"".$bildfull."\" width=\"".$propotional_size['width']."\" height=\"".$propotional_size['height']."\" style=\"border: 1px solid rgb(221, 221, 221); padding: 4px; margin: 10pt 10px 10px 10pt;\" alt=\"Ecard\" />";
+			 src=\"".$bildfull."\" width=\"".$propotional_size_view['width']."\" height=\"".$propotional_size_view['height']."\" style=\"border: 1px solid rgb(221, 221, 221); padding: 4px; margin: 10pt 10px 10px 10pt;\" alt=\"Ecard\" />";
 	}
 	//Lightbox-Mode
 	if($g_preferences['photo_show_mode']==1)
 	{
-		echo "<a href=\"".$bildfull."\" rel=\"lightbox[roadtrip]\" title=\"".$photo_event->getValue("pho_name")."\"><img src=\"".$bildfull."\" width=\"".$propotional_size['width']."\" height=\"".$propotional_size['height']."\" style=\"border: 1px solid rgb(221, 221, 221); padding: 4px; margin: 10pt 10px 10px 10pt;\" alt=\"Ecard\" /></a>";
+		echo "<a href=\"".$bildfull."\" rel=\"lightbox[roadtrip]\" title=\"".$photo_event->getValue("pho_name")."\"><img src=\"".$bildfull."\" width=\"".$propotional_size_view['width']."\" height=\"".$propotional_size_view['height']."\" style=\"border: 1px solid rgb(221, 221, 221); padding: 4px; margin: 10pt 10px 10px 10pt;\" alt=\"Ecard\" /></a>";
 	}
 	
 	//Gleichesfenster-Mode
 	if($g_preferences['photo_show_mode']==2)
 	{
-		echo "<img onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=".$_REQUEST['photo']."&pho_id=$pho_id'\" src=\"".$bildfull ."\" width=\"".$propotional_size['width']."\" height=\"".$propotional_size['height']."\" style=\"border: 1px solid rgb(221, 221, 221); padding: 4px; margin: 10pt 10px 10px 10pt;\" alt=\"Ecard\" />";
+		echo "<img onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=".$_REQUEST['photo']."&pho_id=$pho_id'\" src=\"".$bildfull ."\" width=\"".$propotional_size_view['width']."\" height=\"".$propotional_size_view['height']."\" style=\"border: 1px solid rgb(221, 221, 221); padding: 4px; margin: 10pt 10px 10px 10pt;\" alt=\"Ecard\" />";
 	}      
     if ($error_msg != "")
 	{
@@ -536,7 +569,10 @@ if (empty($submit_action))
 									 </div>
 									 <div id="dropdownmenu" style="display:block;">
 								     </div>
-								     <div id="extern"></div>
+								     <div id="extern">
+										 <input type="hidden" name="ecard[email_recepient]" value="" />
+										 <input type="hidden" name="ecard[name_recepient]"  value="" />
+									 </div>
 									 </div>';
                             }
                             echo '
@@ -594,7 +630,7 @@ if (empty($submit_action))
 							</div>
 						</dt>
                         <dd>
-							<textarea style="width: 350px;" rows="10" cols="45" name="ecard[message]" onfocus="javascript:countMax();" onclick="javascript:countMax();" onchange="javascript:countMax();" onkeydown="javascript:countMax();" onkeyup="javascript:countMax();" onkeypress="javascript:countMax();">';
+							<textarea id="Nachricht" style="width: 350px; height: 180px; overflow:hidden;" rows="10" cols="45" name="ecard[message]" onfocus="javascript:countMax();" onclick="javascript:countMax();" onchange="javascript:countMax();" onkeydown="javascript:countMax();" onkeyup="javascript:countMax();" onkeypress="javascript:countMax();" wrap="virtual">';
 					  		if (! empty($ecard["message"])) 
 							{
 						 		echo ''.$ecard["message"].''; 
@@ -612,102 +648,43 @@ if (empty($submit_action))
                         <dt>
 						    <label>Einstellungen:</label>
 						</dt>
-                        <dd>
-						<table width="350px" summary="Einstellungen" border="0px">
-						<tr>
-						  <td>Template:</td>
-						  <td>Briefmarke:</td>
-						  <td>Hintergrund:</td>
-						</tr>
-						<tr>
-						  <td>
-						';
-						$templatedata = "";
-						$templatefirstvalue = "";
-						echo '<select size="1" id="templates" name="templates" onchange="getTemplate(this.value)">';
-						for($i=0; $i<count($templates);$i++)
-						{
-						    $TemplName = explode(".", $templates[$i]);
-							echo '<option value="'.$templates[$i].'"';
-							if ($i == 0)
-							{
-								 $templatedata = ' selected=\'selected\' ';
-								 $templatefirstvalue = '<input type="hidden" name="ecard[template_name]" value="'.$templates[$i].'" />';
-								 echo $templatedata;
-							}
-							echo '>'.$TemplName[0].'</option>';
-						}
-						echo '</select>
-						</td>
-			            <td>';
-						$briefmarkendata = "";
-						$briefmarkenfirstvalue = "";
-						echo  '<select size="1" id="briefmarken" name="briefmarken" onchange="getBriefmarke(this.value)">';
-						for($i=0; $i<count($briefmarken);$i++)
-						{
-						    $BriefmName = explode(".", $briefmarken[$i]);
-							echo '<option value="'.$briefmarken[$i].'"';
-							if ($i == 0)
-							{
-								 $briefmarkendata = ' selected=\'selected\' ';
-								 $briefmarkenfirstvalue = '<input type="hidden" name="ecard[briefmarken_name]" value="'.$briefmarken[$i].'" />';
-								 echo $briefmarkendata;
-							}
-							echo '>'.$BriefmName[0].'</option>';
-						}
-						echo  '</select>
-						</td>
-						<td>';
-						$hintergrunddata = "";
-						$hintergrundfirstvalue = "";
-						echo  '<select size="1" id="briefmarken" name="briefmarken" onchange="getHintergrund(this.value)">';
-						for($i=0; $i<count($hintergrund);$i++)
-						{
-						    $HintergName = explode(".", $hintergrund[$i]);
-							echo '<option value="'.$hintergrund[$i].'"';
-							if ($i == 0)
-							{
-								 $hintergrunddata = ' selected=\'selected\' ';
-								 $hintergrundfirstvalue = '<input type="hidden" name="ecard[hintergrund_name]" value="'.$hintergrund[$i].'" />';
-								 echo $hintergrunddata;
-							}
-							echo '>'.$HintergName[0].'</option>';
-						}
-						echo  '</select>
-						</td>
-						</tr>
-						</table>
-						<div id="briefmarke"  style="display:none;">';
-						if( $briefmarkenfirstvalue != "")
-						{
-							echo $briefmarkenfirstvalue;
-						}
-						else
-						{
-							echo '<input type="hidden" name="ecard[briefmarken_name]" value="" />';
-						}
-						echo '</div>
-						<div id="template"  style="display:none;">';
-						if( $templatefirstvalue != "")
-						{
-							echo $templatefirstvalue;
-						}
-						else
-						{
-							echo '<input type="hidden" name="ecard[template_name]" value="" />';
-						}
-						echo '</div>
-						<div id="hintergrund" style="display:none;">';
-						if( $hintergrundfirstvalue != "")
-						{
-							echo $hintergrundfirstvalue;
-						}
-						else
-						{
-							echo '<input type="hidden" name="ecard[hintergrund_name]" value="" />';
-						}
-						echo '</div>
-						</dd>
+                        <dd>';
+						    $first_value_array = array();
+							echo'<table width="350px" summary="Einstellungen" border="0px">
+								<tr>
+								  <td>Template:</td>
+								  <td>Schriftart:</td>
+								  <td>Schriftgröße:</td>
+								</tr>
+								<tr>
+									<td>';
+										array_push($first_value_array,array(getMenueSettings($templates,"ecard[template_name]","120","false"),"ecard[template_name]"));
+									echo '</td>
+									<td>';
+										array_push($first_value_array,array(getMenueSettings($fonts,"ecard[schriftart_name]","120","true"),"ecard[schriftart_name]"));
+									echo '</td>
+									<td>';
+										array_push($first_value_array,array(getMenueSettings($fontsizes,"ecard[schrift_size]","50","false"),"ecard[schrift_size]"));
+								    echo  '</td>
+							    </tr>
+								<tr>
+								  <td>Schriftfarbe:</td>
+								  <td>Style:</td>
+								  <td></td>
+								</tr>
+								<tr>
+									<td>';
+										array_push($first_value_array,array(getColorSettings($fontcolors,"ecard[schrift_farbe]","8"),"ecard[schrift_farbe]"));
+									echo '</td>
+									<td colspan="2">';
+										echo '<b>Bold: </b><input name="Bold" value="bold" onclick="javascript: getSetting(\'ecard[schrift_style_bold]\',this.value);" type="checkbox" />											  <i>Italic: </i><input name="Italic" value="italic" onclick="javascript: getSetting(\'ecard[schrift_style_italic]\',this.value);" type="checkbox" />'; 					
+									echo '</td>
+							    </tr>
+							</table>';
+							getFirstSettings($first_value_array);
+							echo '<input type="hidden" name="ecard[schrift_style_bold]" value="" />';		
+							echo '<input type="hidden" name="ecard[schrift_style_italic]" value="" />';			
+						echo '</dd>
                     </dl>
                 </li>
 			</ul> 
@@ -790,5 +767,79 @@ function getPropotionalSize($src_w, $src_h, $max_w, $max_h)
 	}
 	return $return_val;
 }
-
+// gibt ein Menü für die Einstellungen des Template aus
+// Übergabe: 
+// 			$data_array			.. Daten für die Einstellungen in einem Array
+//			$name_ecard_input	.. Name des Ecards inputs
+//			$width				.. die Größe des Menüs
+//			$schowfont			.. wenn gesetzt bekommen die Menü Einträge einen universellen font-style
+function getMenueSettings($data_array,$name_ecard_input,$width,$schowfont)
+{
+	$temp_data = "";
+	echo  '<select size="1" onchange="getSetting(\''.$name_ecard_input.'\',this.value)" style="width:'.$width.'px;">';
+	for($i=0; $i<count($data_array);$i++)
+	{
+		$temp_name = explode(".", $data_array[$i]);
+		
+		if ($i == 0 && $schowfont != "true")
+		{
+			echo '<option value="'.$data_array[$i].'" selected=\'selected\'>'.$temp_name[0].'</option>';
+		}
+		else if($schowfont != "true")
+		{
+			echo '<option value="'.$data_array[$i].'">'.$temp_name[0].'</option>';
+		}
+		else
+		{
+			echo '<option value="'.$data_array[$i].'" selected=\'selected\' style="font-family:'.$temp_name[0].';">'.$temp_name[0].'</option>';
+		}
+		
+	}
+	echo  '</select>';
+	return '<input type="hidden" name="'.$name_ecard_input.'" value="'.$data_array[0].'" />';
+}
+// gibt ein Menü für die Einstellungen des Template aus
+// Übergabe: 
+// 			$data_array			.. Daten für die Einstellungen in einem Array
+//			$name_ecard_input	.. Name des Ecards inputs
+function getColorSettings($data_array,$name_ecard_input,$anz)
+{
+	$temp_data = "";
+	echo  '<table border="0" cellpadding="1" cellspacing="1" summary="colorTable"><tr>';
+	for($i=0; $i<count($data_array);$i++)
+	{
+		if (!is_integer(($i+1)/$anz))
+		{
+		    echo '<td style="height:20px; width:17px; background-color: '.$data_array[$i].'; cursor:pointer;" onclick="javascript: getSetting(\''.$name_ecard_input.'\',\''.$data_array[$i].'\');"></td>';
+		}
+		else if( $i == 0 )
+		{
+			echo '<td style="height:20px; width:17px; background-color: '.$data_array[$i].'; cursor:pointer;" onclick="javascript: getSetting(\''.$name_ecard_input.'\',\''.$data_array[$i].'\');"></td>';
+		}
+		else
+		{
+			echo '<td style="height:20px; width:17px; background-color: '.$data_array[$i].'; cursor:pointer;" onclick="javascript: getSetting(\''.$name_ecard_input.'\',\''.$data_array[$i].'\');"></td></tr><tr>';
+		}
+		
+	}
+	echo  '</tr></table>';
+	return '<input type="hidden" name="'.$name_ecard_input.'" value="'.$data_array[0].'" />';
+}
+// gibt die ersten Einstellungen des Template aus
+// Übergabe: 
+// 			$first_value_array			.. Daten für die Einstellungen in einem Array
+function getFirstSettings($first_value_array)
+{
+	foreach($first_value_array as $item)
+	{
+		if( $item[0] != "")
+		{
+			echo $item[0];
+		}
+		else
+		{
+			echo '<input type="hidden" name="'.$item[2].'" value="" />';
+		}
+	}
+}
 ?>

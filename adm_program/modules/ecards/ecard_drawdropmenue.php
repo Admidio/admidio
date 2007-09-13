@@ -16,6 +16,9 @@
  *****************************************************************************/
  
 require_once("../../system/common.php");
+// Wenn das erste Menü mit den aufgelisteten Rollen gezeichnet werden soll (Übergabe base == 1)
+// Es werden alle Rollen die in dieser Organisation vorhanden sind aufgelistet und stehen nun bereit 
+// zur Auswahl
 if ($g_valid_login && isset($_GET['base']) =="1")
 {
 	echo '<select size="1" id="rol_id" name="rol_id" onchange="javascript:getMenuRecepientName()">';
@@ -90,11 +93,12 @@ if ($g_valid_login && isset($_GET['base']) =="1")
 	<img class="iconHelpLink" src="'.$g_root_path.'/adm_program/images/help.png" alt="Hilfe" title="Hilfe"
 	onclick="window.open(\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=rolle_ecard\',\'Message\',\'width=400,height=400,left=310,top=200\')" />
 	<span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
-	<input type="hidden" name="ecard[email_recepient]" value="" />
-    <input type="hidden" name="ecard[name_recepient]"  value="" />
 	
 	';								
 }
+// Wenn die Rolle ausgewählt worden ist wird dieses Menü gezeichnet
+// Es werden alle Mitglieder in dieser Rolle aufgelistet die eine gültuige 
+// E-mail besitzen und stehen bereit zur Auswahl
 else if ($g_valid_login && isset($_GET['rol_id']) && !isset($_GET['base']))
 {
     if(is_numeric($_GET['rol_id']))
@@ -136,9 +140,10 @@ else if ($g_valid_login && isset($_GET['rol_id']) && !isset($_GET['base']))
 	{
 	    echo " Bitte w&auml;hlen Sie eine andere Rolle aus diese ist ung&uuml;ltig! ";
 	}
-	echo '<input type="hidden" name="ecard[email_recepient]" value="" />
-		  <input type="hidden" name="ecard[name_recepient]"  value="" />';
 }
+// Wenn ein User ausgewählt worden ist werden zwei input Boxen ausgegeben
+// Es wird von dem ausgewählten User der Name und die Email jeweils in eine input Box geschrieben und 
+// ausgegeben wobei nur die input Box mit den Namen sichtbar ist (schreibgeschütz!)
 else if($g_valid_login && isset($_GET['usrid']) && $_GET['usrid']!="extern")
 {
 	$sql = "SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name, email.usd_value as email
@@ -165,27 +170,13 @@ else if($g_valid_login && isset($_GET['usrid']) && $_GET['usrid']!="extern")
 		';
 	}
 }
+// Wenn der User sich entschließt diese Grußkarte an einen Empfänger zu senden der nicht
+// in dieser Organisation vorhanden ist wird ihm die Möglichkeit der manuellen Eingabe des
+// Namen und Empfänger geboten
 else if($g_valid_login && isset($_GET['usrid']) == "extern")
 {
 	echo '<input id="name_recepient" type="text" name="ecard[name_recepient]"  style="margin-bottom:3px; width: 200px;" onclick="javascript:blendout(this.id);" onfocus="javascript:blendout(this.id);" maxlength="50" value="<Empf&auml;nger Name>"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
 	echo '<input id="email_recepient" type="text" name="ecard[email_recepient]" style="width: 350px;" onclick="javascript:blendout(this.id);" onfocus="javascript:blendout(this.id);" maxlength="50" value="<Empf&auml;nger E-mail>"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
-}
-else if( isset($_GET['briefmarke']) )
-{
-	echo '<input type="hidden" name="ecard[briefmarken_name]" value="'.$_GET['briefmarke'].'" />';
-}
-else if( isset($_GET['template']) )
-{
-	echo '<input type="hidden" name="ecard[template_name]" value="'.$_GET['template'].'" />';
-}
-else if( isset($_GET['hintergrund']) )
-{
-	echo '<input type="hidden" name="ecard[hintergrund_name]" value="'.$_GET['hintergrund'].'" />';
-}
-else
-{
-	echo '<input type="hidden" name="ecard[email_recepient]" value="" />
-		  <input type="hidden" name="ecard[name_recepient]"  value="" />';
 }
 
 ?>
