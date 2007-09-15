@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>E@card</title>
+<title>Gru&szlig;karte</title>
 <style type="text/css">
 *{
 font-family:<%ecard_font%>; 
@@ -25,7 +25,7 @@ font-size:<%ecard_font_size%>px;
 	  <table  border="0" cellpadding="0" cellspacing="2">
 	   <tbody>
        <tr>
-	    <td>Eine E@card von: <b><a href="<%g_root_path%>/adm_program/modules/mail/mail.php?usr_id=<%ecard_sender_id%>" target="_blank"><%ecard_sender_name%></a></b></td>
+	    <td>Eine Gru&szlig;karte von: <b><a href="<%g_root_path%>/adm_program/modules/mail/mail.php?usr_id=<%ecard_sender_id%>" target="_blank"><%ecard_sender_name%></a></b></td>
 	   </tr>
 	   <tr>
 	    <td align="center"><img src="<%ecard_image_name%>" width="<%ecard_image_width%>" height="<%ecard_image_height%>" style="border: 0px; margin: 10pt 10px 10px 10pt; padding: 4px;" alt="Ecard"></td>
