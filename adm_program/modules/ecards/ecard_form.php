@@ -5,12 +5,8 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Roland Eischer 
- * Based on     : Jochen Erkens Photogalerien &
- *                 Elmar Meuthen E-Mails verschicken &
- *                #################################################################
- *                # IBPS E-C@ard                       Version 1.01               #
- *                # Copyright 2002 IBPS Friedrichs     info@ibps-friedrichs.de    #
- *                #################################################################
+ * Based on     : Jochen Erkens: Photogalerien &
+ *                Elmar Meuthen: E-Mails verschicken
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
@@ -24,30 +20,31 @@
 require_once("../../system/photo_event_class.php");
 require_once("../../system/common.php");
 require_once("../photos/photo_function.php");
-require_once("ecard_lib.php");
+require_once("ecard_function.php");
 
 // Variablen die später in die DB kommen und vom Admin änderbar sind
 //**********************************************************
-/**/	$max_w_card = "400";		// Maximale Breite des Grußkarten Bildes							
-/**/	$max_h_card = "250";		// Maximale Höhe des Grußkarten Bildes	
-/**/	$max_w_view = "250";		// Maximale Breite des angezeigten Bildes							
-/**/	$max_h_view = "250";		// Maximale Höhe des angezeigten Bildes
+/**/	$max_w_card			= "400";		// Maximale Breite des Grußkarten Bildes							
+/**/	$max_h_card			= "250";		// Maximale Höhe des Grußkarten Bildes	
+/**/	$max_w_view			= "250";		// Maximale Breite des angezeigten Bildes							
+/**/	$max_h_view 		= "250";		// Maximale Höhe des angezeigten Bildes
 /*		es können hier mehere Templates eingetragen werden welche dann vom Benutzt ausgewählt werden dürfen				
-/**/	$templates = array ("ecard_1.tpl","ecard_2.tpl"); 
+/**/	$templates 			= array ("ecard_1.tpl","ecard_2.tpl","ecard_3.tpl"); 
 /*      es können hier mehere Schrift name eingetragen werden welche dann vom Benutzer ausgewählt werden dürfen */
-/**/	$fonts = array ("Comic Sans MS","Arial","Arial Black","Courier","Georgia","Helvetica","Impact","Script","Times Roman","Verdana"); 
+/**/	$fonts 				= array ("Comic Sans MS","Arial","Arial Black","Courier","Georgia","Helvetica","Impact","Script","Times Roman","Verdana"); 
 /*      es können hier mehere Schriftgrößen eingetragen werden welche dann vom Benutzer ausgewählt werden dürfen */
-/**/	$fontsizes = array ("14","9","10","11","12","13","14","15","16","17","18","20","22","24","30"); 
+/**/	$font_sizes 		= array ("14","9","10","11","12","13","14","15","16","17","18","20","22","24","30"); 
 /*      es können hier mehere Schrift Farben eingetragen werden welche dann vom Benutzer ausgewählt werden dürfen */
-/**/	$fontcolors = array("yellow","orange","red","maroon","fuchsia","purple","lime","green","teal","aqua","blue","navy","silver","gray","olive","black"); 
-/**/	$tmpl_folder = "../../layout/";						
-/**/	$g_preferences['enable_e@card_module']=1;		
-/**/	$max_length = 150;  // Maximale Länge des Grußkarten Textes
-/**/	$msgTextError1 = "Es ist ein Fehler bei der Verarbeitung der E-C@rd aufgetreten. Bitte probier es zu einem späteren Zeitpunkt noch einmal.";
-/**/	$msgTextError2 = "Es sind einige Eingabefelder nicht bzw. nicht richtig ausgefüllt. Bitte füll diese aus, bzw. korrigier diese.";
-/**/	$ecard_PLAIN_data = "Du hast eine E-Card von einem Mitglied des Vereins ".$g_organization." erhalten.\nKlick auf das Attachment, um die E-Card zu sehen.";
-/**/	$error_msg = "";
+/**/	$font_colors 		= array("black","yellow","orange","red","maroon","fuchsia","purple","lime","green","teal","aqua","blue","navy","silver","gray","olive"); 
+/**/	$tmpl_folder 		= "../../layout/";								
+/**/	$max_length 		= 150;  // Maximale Länge des Grußkarten Textes
+/**/	$ecard_plain_data 	= "Du hast eine E-Card von einem Mitglied des Vereins ".$g_organization." erhalten.\n Falls du diese nicht sehen kannst befindet sich diese im Anhang der Mail";
+/**/	$msg_error_1		= "Es ist ein Fehler bei der Verarbeitung der E-C@rd aufgetreten. Bitte probier es zu einem späteren Zeitpunkt noch einmal.";
+/**/	$msg_error_2 		= "Es sind einige Eingabefelder nicht bzw. nicht richtig ausgefüllt. Bitte füll diese aus, bzw. korrigier diese.";
+/**/	$g_preferences['enable_e@card_module']	= 1;
 //**********************************************************
+
+$error_msg			= "";
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_e@card_module'] != 1)
@@ -150,8 +147,8 @@ if (isset($_GET["usr_id"]))
         $g_message->show("usrmail_not_found");
     }
 
-    $userEmail = $user->getValue("E-Mail");
-	$userName  = $user->getValue("Vorname")." ".$user->getValue("Nachname");
+    $user_email = $user->getValue("E-Mail");
+	$user_name  = $user->getValue("Vorname")." ".$user->getValue("Nachname");
 }
 
 $popup_height = $g_preferences['photo_show_height']+210;
@@ -162,9 +159,9 @@ $bild         = $_REQUEST['photo'];
 // gültig ist dann wird der komplete Pfad für das Bild generiert
 if(is_numeric($bild) && isset($_GET['pho_id']))
 {
-    $ordner_foto      = "/adm_my_files/photos/".$photo_event->getValue("pho_begin")."_".$photo_event->getValue("pho_id");
-    $ordnerurl        = $g_root_path. $ordner_foto;
-    $bildfull         = "".$ordnerurl."/".$_REQUEST['photo'].".jpg";
+    $ordner_foto		= "/adm_my_files/photos/".$photo_event->getValue("pho_begin")."_".$photo_event->getValue("pho_id");
+    $ordner_url			= $g_root_path.$ordner_foto;
+    $bild_url			= "".$ordner_url."/".$_REQUEST['photo'].".jpg";
 }
 // Wenn nur der Bildernamen übergeben wird ist die Übergabe ungültig
 if(is_numeric($bild) && !isset($_GET['pho_id']))
@@ -176,58 +173,69 @@ if(!is_numeric($bild) || !is_numeric($_GET['pho_id']))
 {
 	$g_message->show("invalid");
 }
-//Wenn ein Bilderpfad generiert worden ist dann können die Proportionalen Größen berechnet werden
-if(isset($bildfull))
+// Wenn ein Bilderpfad generiert worden ist dann können die Proportionalen Größen berechnet werden
+if(isset($bild_url))
 {
-	list($width, $height)	= getimagesize($bildfull);
+	list($width, $height)	= getimagesize($bild_url);
 	$propotional_size_card	= getPropotionalSize($width, $height, $max_w_card, $max_h_card);
 	$propotional_size_view	= getPropotionalSize($width, $height, $max_w_view, $max_h_view);
 }
 
-getPostGetVars();
+// ruf die Funktion auf die alle Post und Get Variablen parsed
+getVars();
 $ecard_send = false;
+// Wenn versucht wird die GRußkarte zu versenden werden die notwendigen FElder geprüft und wenn alles okay ist wird das Template geparsed und die Grußkarte weggeschickt
 if (! empty($submit_action)) 
 {
-    if ( check_email($ecard["email_recepient"]) && check_email($ecard["email_sender"]) 
+	// Wenn die Felder Name E-mail von dem Empänger und Sender nicht leer sind
+    if ( checkEmail($ecard["email_recepient"]) && checkEmail($ecard["email_sender"]) 
 	&& ($ecard["email_recepient"] != "") && ($ecard["name_sender"] != "") )    
 	{
+		// Wenn die Nachricht größer ist als die maximal Länge wird sie zurückgestutzt
 	    if (strlen($ecard["message"]) > $max_length) 
 		{
 	        $ecard["message"] = substr($ecard["message"],0,$max_length-1);
 	    }
-		list($error,$ecard_data_to_parse) = get_ecard_template($ecard["template_name"],$tmpl_folder);
+		// Template wird geparsed
+		list($error,$ecard_data_to_parse) = getEcardTemplate($ecard["template_name"],$tmpl_folder);
+		// Wenn es einen Error gibt ihn ausgeben
 	    if ($error) 
 	    {
-		    $error_msg = $msgTextError1;
+		    $error_msg = $msg_error_1;
 	    } 
+		// Wenn nicht dann die Grußkarte versuchen zu versenden
 	    else 
 	    {
-		    $ecard_HTML_data = parse_ecard_template($ecard,$ecard_data_to_parse,$g_root_path,$g_current_user->getValue("usr_id"),$propotional_size_card['width'],$propotional_size_card['height']);
-		    $result = sendEcard($ecard,$ecard_HTML_data,$ecard_PLAIN_data);
+		    $ecard_html_data = parseEcardTemplate($ecard,$ecard_data_to_parse,$g_root_path,$g_current_user->getValue("usr_id"),$propotional_size_card['width'],$propotional_size_card['height']);
+		    $result = sendEcard($ecard,$ecard_html_data,$ecard_plain_data);
+			// Wenn die Grußkarte erfolgreich gesendet wurde 
 		    if ($result) 
 			{
 			    $ecard_send = true;
 		    } 
+			// Wenn nicht dann die dementsprechende Error Nachricht ausgeben
 			else 
 		    {
-			    $error_msg = $msgTextError1;
+			    $error_msg = $msg_error_1;
 		    }
 	   }
-	} 
+	}
+	// Wenn die Felder leer sind oder ungültig dann eine dementsprechente Error Nachricht ausgeben
 	else 
 	{
-        $error_msg = $msgTextError2;
+        $error_msg = $msg_error_2;
 	}
 } 
+// Wenn noch keine Anfrage zum versenden der Grußkarte vorhanden ist das Grußkarten Bild setzten
 else 
 {
-    $ecard["image_name"] = $bildfull;
+    $ecard["image_name"] = $bild_url;
 }
 
 /*********************HTML_TEIL*******************************/
 
 // Html-Kopf ausgeben
-$g_layout['title'] = "Grußkarten";
+$g_layout['title'] = "Gru&szlig;karten";
 //Lightbox-Mode
 $g_layout['header'] = "";
 if($g_preferences['photo_show_mode']==1)
@@ -521,18 +529,18 @@ if (empty($submit_action))
 	if($g_preferences['photo_show_mode']==0)
 	{
 		echo "<img onclick=\"window.open('$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=".$_REQUEST['photo']."&pho_id=".$_REQUEST['pho_id']."','msg','height=".$popup_height.", width=".$popup_width.",left=162,top=5')\" 
-			 src=\"".$bildfull."\" width=\"".$propotional_size_view['width']."\" height=\"".$propotional_size_view['height']."\" style=\"border: 1px solid rgb(221, 221, 221); padding: 4px; margin: 10pt 10px 10px 10pt;\" alt=\"Ecard\" />";
+			 src=\"".$bild_url."\" width=\"".$propotional_size_view['width']."\" height=\"".$propotional_size_view['height']."\" style=\"border: 1px solid rgb(221, 221, 221); padding: 4px; margin: 10pt 10px 10px 10pt;\" alt=\"Grußkarte\" />";
 	}
 	//Lightbox-Mode
 	if($g_preferences['photo_show_mode']==1)
 	{
-		echo "<a href=\"".$bildfull."\" rel=\"lightbox[roadtrip]\" title=\"".$photo_event->getValue("pho_name")."\"><img src=\"".$bildfull."\" width=\"".$propotional_size_view['width']."\" height=\"".$propotional_size_view['height']."\" style=\"border: 1px solid rgb(221, 221, 221); padding: 4px; margin: 10pt 10px 10px 10pt;\" alt=\"Ecard\" /></a>";
+		echo "<a href=\"".$bild_url."\" rel=\"lightbox[roadtrip]\" title=\"".$photo_event->getValue("pho_name")."\"><img src=\"".$bild_url."\" width=\"".$propotional_size_view['width']."\" height=\"".$propotional_size_view['height']."\" style=\"border: 1px solid rgb(221, 221, 221); padding: 4px; margin: 10pt 10px 10px 10pt;\" alt=\"Grußkarte\" /></a>";
 	}
 	
 	//Gleichesfenster-Mode
 	if($g_preferences['photo_show_mode']==2)
 	{
-		echo "<img onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=".$_REQUEST['photo']."&pho_id=$pho_id'\" src=\"".$bildfull ."\" width=\"".$propotional_size_view['width']."\" height=\"".$propotional_size_view['height']."\" style=\"border: 1px solid rgb(221, 221, 221); padding: 4px; margin: 10pt 10px 10px 10pt;\" alt=\"Ecard\" />";
+		echo "<img onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=".$_REQUEST['photo']."&pho_id=$pho_id'\" src=\"".$bild_url."\" width=\"".$propotional_size_view['width']."\" height=\"".$propotional_size_view['height']."\" style=\"border: 1px solid rgb(221, 221, 221); padding: 4px; margin: 10pt 10px 10px 10pt;\" alt=\"Grußkarte\" />";
 	}      
     if ($error_msg != "")
 	{
@@ -554,8 +562,8 @@ if (empty($submit_action))
 							if (array_key_exists("usr_id", $_GET))
                             {
                                 // usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
-								echo '<input type="text" class="readonly" readonly="readonly" name="ecard[name_recepient]" style="margin-bottom:3px; width: 200px;" maxlength="50" value="'.$userName.'"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
-                                echo '<input type="text" class="readonly" readonly="readonly" name="ecard[email_recepient]" style="width: 350px;" maxlength="50" value="'.$userEmail.'"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
+								echo '<input type="text" class="readonly" readonly="readonly" name="ecard[name_recepient]" style="margin-bottom:3px; width: 200px;" maxlength="50" value="'.$user_name.'"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
+                                echo '<input type="text" class="readonly" readonly="readonly" name="ecard[email_recepient]" style="width: 350px;" maxlength="50" value="'.$user_email.'"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
 								
                             }
                             else
@@ -650,7 +658,7 @@ if (empty($submit_action))
 						</dt>
                         <dd>';
 						    $first_value_array = array();
-							echo'<table width="350px" summary="Einstellungen" border="0px">
+							echo'<table width="350px" cellpadding="5" cellspacing="0" summary="Einstellungen"  border="0px">
 								<tr>
 								  <td>Template:</td>
 								  <td>Schriftart:</td>
@@ -664,19 +672,19 @@ if (empty($submit_action))
 										array_push($first_value_array,array(getMenueSettings($fonts,"ecard[schriftart_name]","120","true"),"ecard[schriftart_name]"));
 									echo '</td>
 									<td>';
-										array_push($first_value_array,array(getMenueSettings($fontsizes,"ecard[schrift_size]","50","false"),"ecard[schrift_size]"));
+										array_push($first_value_array,array(getMenueSettings($font_sizes,"ecard[schrift_size]","50","false"),"ecard[schrift_size]"));
 								    echo  '</td>
 							    </tr>
 								<tr>
 								  <td>Schriftfarbe:</td>
-								  <td>Style:</td>
+								  <td style="padding-left:40px;">Style:</td>
 								  <td></td>
 								</tr>
 								<tr>
 									<td>';
-										array_push($first_value_array,array(getColorSettings($fontcolors,"ecard[schrift_farbe]","8"),"ecard[schrift_farbe]"));
+										array_push($first_value_array,array(getColorSettings($font_colors,"ecard[schrift_farbe]","8"),"ecard[schrift_farbe]"));
 									echo '</td>
-									<td colspan="2">';
+									<td colspan="2" style="padding-left:40px;">';
 										echo '<b>Bold: </b><input name="Bold" value="bold" onclick="javascript: getSetting(\'ecard[schrift_style_bold]\',this.value);" type="checkbox" />											  <i>Italic: </i><input name="Italic" value="italic" onclick="javascript: getSetting(\'ecard[schrift_style_italic]\',this.value);" type="checkbox" />'; 					
 									echo '</td>
 							    </tr>
@@ -704,21 +712,24 @@ if (empty($submit_action))
 else 
 {     
 	echo'<br />
-	<span style="font-size:16px; font-weight:bold">Deine E-C@ard wurde erfolgreich versendet.</span>
+	<div align="center"><span style="font-size:16px; font-weight:bold">Deine Gru&szlig;karte wurde erfolgreich versendet.</span></div>
 	<br /><br />
-	<table cellpadding="0" cellspacing="0" border="0" summary="Erfolg">
-	  <tr>
-		<td class="TextBlack12">
-			<span style="font-weight:bold;">Absender:</span><br />'; echo $ecard["name_sender"].", ".$ecard["email_sender"]; 
-   echo'</td>
-	  </tr>
-	  <tr>
-		<td>&nbsp;</td>
-	  </tr>
-	  <tr>
-		<td class="TextBlack12"><span style="font-weight:bold;" >Empfänger:</span><br />'; echo $ecard["name_recepient"].", ".$ecard["email_recepient"]; 
-  echo '</td>
-      </tr>
+	<table cellpadding="0" cellspacing="0" border="0" summary="Erfolg" align="center">
+		<tr>
+			<td align="left"><b>Absender:</b></td>
+		</tr>
+		<tr>
+			<td align="left">'; echo $ecard["name_sender"].", ".$ecard["email_sender"]; echo'</td>
+		</tr>
+		<tr>
+			<td align="left">&nbsp;</td>
+		</tr>
+		<tr>
+			<td align="left"><b>Empfänger:</b></td>
+		</tr>
+		<tr>
+			<td align="left">'; echo $ecard["name_recepient"].", ".$ecard["email_recepient"]; echo '</td>
+		</tr>
 	</table>
 	<br /><br/>';
 }  
@@ -741,105 +752,4 @@ if($photo_event->getValue("pho_id") > 0)
 
 /***************************Seitenende***************************/
 require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
-
-
-/***************************Funktinen***************************/
-
-//rechnet die propotionale Größe eines Bildes aus
-// dh. wenn man ein Bild mit der max Auflösung 600x400 haben will
-// übergibt mann der Funktion die max_w und max_h und bekommt die propotionale Größe zurück
-function getPropotionalSize($src_w, $src_h, $max_w, $max_h)
-{
-	$return_val['width']=$src_w;
-	$return_val['height']=$src_h;
-	if($max_w < $src_w || $max_h < $src_h)
-	{
-		$return_val['width']=$max_w;
-		$return_val['height']=$max_h;
-		if($src_w >= $src_h)
-		{ 
-			$return_val['height'] = round(($max_w*$src_h)/$src_w);
-		}
-		else 
-		{
-			$return_val['width']  = ($max_h*$src_w)/$src_h;
-		}
-	}
-	return $return_val;
-}
-// gibt ein Menü für die Einstellungen des Template aus
-// Übergabe: 
-// 			$data_array			.. Daten für die Einstellungen in einem Array
-//			$name_ecard_input	.. Name des Ecards inputs
-//			$width				.. die Größe des Menüs
-//			$schowfont			.. wenn gesetzt bekommen die Menü Einträge einen universellen font-style
-function getMenueSettings($data_array,$name_ecard_input,$width,$schowfont)
-{
-	$temp_data = "";
-	echo  '<select size="1" onchange="getSetting(\''.$name_ecard_input.'\',this.value)" style="width:'.$width.'px;">';
-	for($i=0; $i<count($data_array);$i++)
-	{
-		$temp_name = explode(".", $data_array[$i]);
-		
-		if ($i == 0 && $schowfont != "true")
-		{
-			echo '<option value="'.$data_array[$i].'" selected=\'selected\'>'.$temp_name[0].'</option>';
-		}
-		else if($schowfont != "true")
-		{
-			echo '<option value="'.$data_array[$i].'">'.$temp_name[0].'</option>';
-		}
-		else
-		{
-			echo '<option value="'.$data_array[$i].'" selected=\'selected\' style="font-family:'.$temp_name[0].';">'.$temp_name[0].'</option>';
-		}
-		
-	}
-	echo  '</select>';
-	return '<input type="hidden" name="'.$name_ecard_input.'" value="'.$data_array[0].'" />';
-}
-// gibt ein Menü für die Einstellungen des Template aus
-// Übergabe: 
-// 			$data_array			.. Daten für die Einstellungen in einem Array
-//			$name_ecard_input	.. Name des Ecards inputs
-function getColorSettings($data_array,$name_ecard_input,$anz)
-{
-	$temp_data = "";
-	echo  '<table border="0" cellpadding="1" cellspacing="1" summary="colorTable"><tr>';
-	for($i=0; $i<count($data_array);$i++)
-	{
-		if (!is_integer(($i+1)/$anz))
-		{
-		    echo '<td style="height:20px; width:17px; background-color: '.$data_array[$i].'; cursor:pointer;" onclick="javascript: getSetting(\''.$name_ecard_input.'\',\''.$data_array[$i].'\');"></td>';
-		}
-		else if( $i == 0 )
-		{
-			echo '<td style="height:20px; width:17px; background-color: '.$data_array[$i].'; cursor:pointer;" onclick="javascript: getSetting(\''.$name_ecard_input.'\',\''.$data_array[$i].'\');"></td>';
-		}
-		else
-		{
-			echo '<td style="height:20px; width:17px; background-color: '.$data_array[$i].'; cursor:pointer;" onclick="javascript: getSetting(\''.$name_ecard_input.'\',\''.$data_array[$i].'\');"></td></tr><tr>';
-		}
-		
-	}
-	echo  '</tr></table>';
-	return '<input type="hidden" name="'.$name_ecard_input.'" value="'.$data_array[0].'" />';
-}
-// gibt die ersten Einstellungen des Template aus
-// Übergabe: 
-// 			$first_value_array			.. Daten für die Einstellungen in einem Array
-function getFirstSettings($first_value_array)
-{
-	foreach($first_value_array as $item)
-	{
-		if( $item[0] != "")
-		{
-			echo $item[0];
-		}
-		else
-		{
-			echo '<input type="hidden" name="'.$item[2].'" value="" />';
-		}
-	}
-}
 ?>

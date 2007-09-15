@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * E@card Draw Dropdown Manue
+ * Grußkarte Draw Dropdown Menü
  *
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org

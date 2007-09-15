@@ -1,16 +1,18 @@
 <?php
-/*
-#################################################################
-# IBPS E-C@ard                       Version 1.01               #
-# Copyright 2002 IBPS Friedrichs     info@ibps-friedrichs.de    #
-#################################################################
-# Filename: ecard_preview.php                                   #
-# Letzte Änderung: 28.01.2003                                   #
-# Sprachversion: deutsch (andere noch nicht verfügbar)          #
-#################################################################
-*/
+/******************************************************************************
+ * Grußkarte Vorschau
+ *
+ * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Homepage     : http://www.admidio.org
+ * Module-Owner : Roland Eischer 
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ *****************************************************************************/
+ 
+/****************** includes *************************************************/
 include("ecard_lib.php");
 require_once("../../system/common.php");
+
+/****************** Ausgabe des geparsten Templates **************************/
 $propotional_width	= "";
 $propotional_height	= "";
 $tmpl_folder		= "";
@@ -27,14 +29,14 @@ if(isset($_GET['tmplfolder']))
 	$tmpl_folder		= $_GET['tmplfolder'];
 }
 
-getPostGetVars();
-list($error,$ecard_data_to_parse) = get_ecard_template($ecard["template_name"],$tmpl_folder);
+getVars();
+list($error,$ecard_data_to_parse) = getEcardTemplate($ecard["template_name"],$tmpl_folder);
 if ($error) 
 {
-	header("Location:http://10.1.19.108/ecards/templates/error.htm");
+	echo "ERROR 404";
 } 
 else 
 {
-  echo parse_ecard_template($ecard,$ecard_data_to_parse,$g_root_path,$g_current_user->getValue("usr_id"),$propotional_width,$propotional_height);
+	echo parseEcardTemplate($ecard,$ecard_data_to_parse,$g_root_path,$g_current_user->getValue("usr_id"),$propotional_width,$propotional_height);
 }
 ?>
