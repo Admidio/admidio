@@ -1,8 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>Grußkarte</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Gru&szlig;karte</title>
 <style type="text/css">
 *{
 font-family:<%ecard_font%>; 
@@ -17,9 +17,9 @@ font-size:<%ecard_font_size%>px;
 </style>
 </head>
 <body>
-<table align="center" border="0" cellpadding="0" cellspacing="0" summary="Grußkarte">
+<table align="center" border="0" cellpadding="0" cellspacing="0" summary="Grukarte">
 <tbody><tr><td>
-<table align="center" border="0" cellpadding="0" width="100%" cellspacing="0" summary="Grußkarte Bild">
+<table align="center" border="0" cellpadding="0" width="100%" cellspacing="0" summary="Grukarte Bild">
    <tbody><tr>
     <td id="card_form_image" colspan="2" style="border: 1px solid rgb(0, 0, 0); background:url('<%ecard_hintergrund_name%>'); padding: 10px; vertical-align:middle;" align="center">
 		<table border="0" cellpadding="0" cellspacing="0" summary="Bild">
@@ -28,7 +28,7 @@ font-size:<%ecard_font_size%>px;
 	  <table  border="0" cellpadding="0" cellspacing="2" summary="Bild">
 	   <tbody>
 	   <tr>
-	    <td align="center" width="<%ecard_image_width%>"><img src="<%ecard_image_name%>" width="<%ecard_image_width%>" height="<%ecard_image_height%>" style="border: 0px; margin: 10pt 10px 10px 10pt; padding: 4px;" alt="Ecard" /></td>
+	    <td align="center" width="<%ecard_image_width%>"><img src="<%ecard_image_name%>" width="<%ecard_image_width%>" height="<%ecard_image_height%>" style="border: 0px; margin: 10pt 10px 10px 10pt; padding: 4px;" alt="GruÃŸkarte" /></td>
 	   </tr>
 	   	  </tbody></table></td>
 	 </tr>
@@ -41,16 +41,16 @@ font-size:<%ecard_font_size%>px;
     <td style="height:10px;"></td>
   </tr>
   <tr><td>
-  <table align="center" border="0" cellpadding="0" cellspacing="0" summary="Grußkarte Text">
+  <table align="center" border="0" cellpadding="0" cellspacing="0" summary="Grukarte Text">
    <tbody><tr>
     <td id="card_form" colspan="2" style="border: 1px solid rgb(0, 0, 0); padding: 10px; ">
-		<table border="0" cellpadding="0" cellspacing="0" summary="Grußkarte">
+		<table border="0" cellpadding="0" cellspacing="0" summary="Grukarte">
 	 <tbody><tr>
 	  <td style="vertical-align: top; height:90%;">
 	  <table  border="0" cellpadding="0" style="height:270px;" cellspacing="2" summary="Sender">
 	   <tbody>
        <tr>
-	    <td>Eine E@card von: <b><a href="<%g_root_path%>/adm_program/modules/mail/mail.php?usr_id=<%ecard_sender_id%>" target="_blank"><%ecard_sender_name%></a></b></td>
+	    <td>Eine Gru&szlig;karte von: <b><a href="<%g_root_path%>/adm_program/modules/mail/mail.php?usr_id=<%ecard_sender_id%>" target="_blank"><%ecard_sender_name%></a></b></td>
 	   </tr>
        <tr>
          <td style="height:10px;"></td>
