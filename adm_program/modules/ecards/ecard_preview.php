@@ -9,8 +9,9 @@
  *****************************************************************************/
  
 /****************** includes *************************************************/
-include("ecard_lib.php");
 require_once("../../system/common.php");
+require_once("ecard_function.php");
+
 
 /****************** Ausgabe des geparsten Templates **************************/
 $propotional_width	= "";
