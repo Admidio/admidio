@@ -110,6 +110,18 @@ function getFirstSettings($first_value_array)
 		}
 	}
 }
+function getCCRecipients($ecard,$max_cc_recipients)
+{
+	$Versandliste = array();
+	for($i=1;$i<=$max_cc_recipients;$i++)
+	{
+		if(isset($ecard["name_ccrecipient_".$i.""]) != "" && isset($ecard["email_ccrecipient_".$i.""]) != "")
+		{
+			array_push($Versandliste,array($ecard["name_ccrecipient_".$i.""],$ecard["email_ccrecipient_".$i.""]));
+		}
+	}
+	return $Versandliste;
+}
  
 /** Funktionen fürs sammeln,parsen und versenden der Informationen von der ecard_form **/
 
@@ -151,6 +163,7 @@ function getEcardTemplate($template_name,$tmpl_folder)
 	}
 	return array($error,$file_data);
 }
+/*
 // Diese Funktion ersetzt alle im Template enthaltenen Platzhalter durch die dementsprechenden Informationen
 // Übergabe:
 //		$ecard				..	array mit allen Informationen die in den inputs der Form gespeichert sind
@@ -159,6 +172,8 @@ function getEcardTemplate($template_name,$tmpl_folder)
 //		$usr_id				..	die User id
 //		$proportional_width	..	die proportionale Breite des Bildes für das Template
 //		$propotional_height	..	die proportionale Höhe des Bildes für das Template
+//		$empfänger_name		..	der Name des Empfängers
+//		$empfänger_email	..	die Email des Empfängers
 //
 // Ersetzt werden folgende Platzhalter
 //		
@@ -168,17 +183,18 @@ function getEcardTemplate($template_name,$tmpl_folder)
 //		Sender Daten:			<%ecard_sender_id%>			<%ecard_sender_email%> 		<%ecard_sender_name%>
 //		Bild Daten:				<%ecard_image_width%>		<%ecard_image_height%> 		<%ecard_image_name%>
 //		Nachricht:				<%ecard_message%>
-function parseEcardTemplate($ecard,$ecard_data,$root_path,$usr_id,$propotional_width,$propotional_height) 
+*/
+function parseEcardTemplate($ecard,$ecard_data,$root_path,$usr_id,$propotional_width,$propotional_height,$empfänger_name,$empfänger_email) 
 {   
 	// Falls der Name des Empfänger nicht vorhanden ist wird er für die Vorschau ersetzt
-	if(strip_tags(trim($ecard["name_recepient"])) == "")
+	if(strip_tags(trim($empfänger_name)) == "")
 	{
-	  $ecard["name_recepient"]	= "< Empf&auml;nger Name >";
+	  $empfänger_name	= "< Empf&auml;nger Name >";
 	}
 	// Falls die Email des Empfänger nicht vorhanden ist wird sie für die Vorschau ersetzt
-	if(strip_tags(trim($ecard["email_recepient"])) == "")
+	if(strip_tags(trim($empfänger_email)) == "")
 	{
-	  $ecard["email_recepient"]	= "< Empf&auml;nger E-Mail >";
+	  $empfänger_email	= "< Empf&auml;nger E-Mail >";
 	}
 	// Falls die Nachricht nicht vorhanden ist wird sie für die Vorschau ersetzt
 	if($ecard["message"] == "")
@@ -198,8 +214,8 @@ function parseEcardTemplate($ecard,$ecard_data,$root_path,$usr_id,$propotional_w
 	$ecard_data = preg_replace ("/<%ecard_sender_email%>/",		$ecard["email_sender"], $ecard_data);
 	$ecard_data = preg_replace ("/<%ecard_sender_name%>/",		$ecard["name_sender"], $ecard_data);
 	// Hier wird der Empfänger Name und Email ersetzt
-	$ecard_data = preg_replace ("/<%ecard_reciepient_email%>/", $ecard["email_recepient"], $ecard_data);
-	$ecard_data = preg_replace ("/<%ecard_reciepient_name%>/", 	$ecard["name_recepient"], $ecard_data);
+	$ecard_data = preg_replace ("/<%ecard_reciepient_email%>/", $empfänger_email, $ecard_data);
+	$ecard_data = preg_replace ("/<%ecard_reciepient_name%>/", 	$empfänger_name, $ecard_data);
 	// Hier wird die Bild Breite, Höhe und Name ersetzt
 	$ecard_data = preg_replace ("/<%ecard_image_width%>/",		$propotional_width, $ecard_data);
 	$ecard_data = preg_replace ("/<%ecard_image_height%>/",		$propotional_height, $ecard_data);
@@ -216,10 +232,14 @@ function parseEcardTemplate($ecard,$ecard_data,$root_path,$usr_id,$propotional_w
 //		$ecard				.. array mit allen Informationen die in den inputs der Form gespeichert sind
 //		$ecard_html_data	.. geparste Daten vom Template
 //		$ecard_plain_data	.. plain Text der vom User in der DB eingestellt werden kann (er wird am Anfang im Body Bereich der Mail hinzugefügt)
-function sendEcard($ecard,$ecard_html_data,$ecard_plain_data) 
+//		$sender_name		.. der Name des Senders
+//		$sender_email		.. die Email des Senders
+//		$empfänger_name		.. der Name des Empfängers
+//		$empfänger_email	.. die Email des Empfängers
+function sendEcard($ecard,$ecard_html_data,$ecard_plain_data,$empfänger_name,$empfänger_email) 
 {
 	// Einstellungen für From To setzen
-	$HMTLMail = new MailClass($ecard["email_recepient"],'Grußkarte von '.$ecard["name_sender"]);
+	$HMTLMail = new MailClass($empfänger_email,'Grußkarte von '.$empfänger_name);
 	$HMTLMail->setFromName($ecard["name_sender"]);
 	$HMTLMail->setFromAddr($ecard["email_sender"]);
 

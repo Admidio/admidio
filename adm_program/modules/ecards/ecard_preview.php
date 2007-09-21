@@ -38,6 +38,9 @@ if ($error)
 } 
 else 
 {
-	echo parseEcardTemplate($ecard,$ecard_data_to_parse,$g_root_path,$g_current_user->getValue("usr_id"),$propotional_width,$propotional_height);
+	if(isset($ecard["name_recepient"]) && isset($ecard["email_recepient"]))
+	{
+		echo parseEcardTemplate($ecard,$ecard_data_to_parse,$g_root_path,$g_current_user->getValue("usr_id"),$propotional_width,$propotional_height,$ecard["name_recepient"],$ecard["email_recepient"]);
+	}
 }
 ?>
