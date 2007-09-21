@@ -41,13 +41,13 @@ font-size:<%ecard_font_size%>px;
     <td style="height:10px;"></td>
   </tr>
   <tr><td>
-  <table align="center" border="0" cellpadding="0" cellspacing="0" summary="Grukarte Text">
+  <table align="center" border="0" cellpadding="0" cellspacing="0" summary="Grukarte Text" style="min-height:300px;">
    <tbody><tr>
     <td id="card_form" colspan="2" style="border: 1px solid rgb(0, 0, 0); padding: 10px; ">
 		<table border="0" cellpadding="0" cellspacing="0" summary="Grukarte">
 	 <tbody><tr>
-	  <td style="vertical-align: top; height:90%;">
-	  <table  border="0" cellpadding="0" style="height:270px;" cellspacing="2" summary="Sender">
+	  <td style="vertical-align: top; height:90%; ">
+	  <table  border="0" cellpadding="0" style="height:270px; min-height:400px; width:400px; " cellspacing="2" summary="Sender">
 	   <tbody>
        <tr>
 	    <td>Eine Gru&szlig;karte von: <b><a href="<%g_root_path%>/adm_program/modules/mail/mail.php?usr_id=<%ecard_sender_id%>" target="_blank"><%ecard_sender_name%></a></b></td>
@@ -63,8 +63,10 @@ font-size:<%ecard_font_size%>px;
        </td></tr>
 	   	  </tbody></table>
        </td>
-	  <td style="width: 8px;">&nbsp;</td>
-	  <td style="background: rgb(0, 0, 0) none repeat scroll 0%; width: 1px;"><img src="none.jpg" alt="" border="0" height="270" width="1" /></td>
+	  <td style="width: 8px; vertical-align:bottom; min-height:300px;">
+	       <img src="<%g_root_path%>/adm_program/images/ecards/ownertext.png" width="30px" style="border:0px;" />
+	  </td>	  
+	  <td style="background: rgb(0, 0, 0); width:1px;"><br/></td>
 	  <td style="width: 8px;">&nbsp;</td>
 	  <td style="vertical-align: top;height:100%;" >
 	   <table  border="0" cellpadding="0" cellspacing="2" style="height:100%" summary="Sender Data">
@@ -72,23 +74,31 @@ font-size:<%ecard_font_size%>px;
                <tr style="vertical-align:top; margin:5px 5px 5px 5px;">
                 <td>
                       <div align="right">
-                        <img src="<%g_root_path%>/adm_program/images/ecards/standard.gif" alt="Briefmarke"  border="0" height="59" width="101" />
+                        <img src="<%g_root_path%>/adm_program/images/ecards/stamp.png" alt="Briefmarke"  style="border:0px;" height="129" width="150" />
                       </div>
                 </td>
                </tr>
                <tr>
                <td style="height:5px;"></td>
                </tr>
-               <tr style="height:90%;">
-                   <td style="height:90%; vertical-align:middle; padding:5px; background-color:#FFFFFF; z-index:500; border:0px; filter:alpha(opacity=90);-moz-opacity:.90; opacity:.90;">
-                     <table summary="Sender Data">
+               <tr style="height:90%; vertical-align:middle;">
+                   <td style="height:90%; vertical-align:middle; padding:5px; width:300px;">
+                    <table summary="Sender Data" cellpadding="0" cellspacing="0" rules="none" border="0" width="300px">
                          <tr>
                              <td><b>An:</b></td>
-                             <td><%ecard_reciepient_name%></td>
+                             <td style="padding-left:5px;"><%ecard_reciepient_name%></td>
+                         </tr>
+                         <tr style="height:1px;">
+                         	<td><hr color="black" size="1px" /></td>
+                         	<td><hr color="black" size="1px" /></td>
                          </tr>
                          <tr>
                              <td><b>E-Mail:</b></td>
-                             <td><%ecard_reciepient_email%></td>
+                             <td  style="padding-left:5px;"><%ecard_reciepient_email%></td>
+                         </tr>
+                         <tr style="height:1px;">
+                         	<td><hr color="black" size="1px" /></td>
+                         	<td><hr color="black" size="1px" /></td>
                          </tr>
                      </table>
                    </td>

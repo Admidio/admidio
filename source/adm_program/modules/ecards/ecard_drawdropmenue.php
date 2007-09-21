@@ -94,16 +94,16 @@ if ($g_valid_login && isset($_GET['base']) =="1")
 	onclick="window.open(\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=rolle_ecard\',\'Message\',\'width=400,height=400,left=310,top=200\')" />
 	<span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
 	
-	';								
+	';					
 }
 // Wenn die Rolle ausgewählt worden ist wird dieses Menü gezeichnet
 // Es werden alle Mitglieder in dieser Rolle aufgelistet die eine gültuige 
 // E-mail besitzen und stehen bereit zur Auswahl
-else if ($g_valid_login && isset($_GET['rol_id']) && !isset($_GET['base']))
+else if ($g_valid_login && isset($_GET['rol_id']) && !isset($_GET['base']) && !isset($_GET['usrid']))
 {
     if(is_numeric($_GET['rol_id']))
 	{
-		$sql = "SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name 
+		$sql = "SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name, email.usd_value as email
 				FROM ". TBL_MEMBERS. ", ". TBL_USERS. "
 				LEFT JOIN ". TBL_USER_DATA. " as last_name
 					ON last_name.usd_usr_id = usr_id
@@ -111,24 +111,27 @@ else if ($g_valid_login && isset($_GET['rol_id']) && !isset($_GET['base']))
 				LEFT JOIN ". TBL_USER_DATA. " as first_name
 					ON first_name.usd_usr_id = usr_id
 					AND first_name.usd_usf_id = ". $g_current_user->getProperty("Vorname", "usf_id")."
+				LEFT JOIN ". TBL_USER_DATA. " as email
+					ON email.usd_usr_id = usr_id
+					AND email.usd_usf_id = ". $g_current_user->getProperty("E-Mail", "usf_id")."
 				WHERE usr_id = mem_usr_id
 				AND mem_rol_id = ".$_GET['rol_id']."
 				AND mem_valid = 1
 				AND usr_valid = 1
+				AND email.usd_usr_id = email.usd_usr_id
 				ORDER BY last_name, first_name";
 		
 		$result 	  = $g_db->query($sql);
-		$act_category = "";
 		$menuheader   = '<select size="1" id="menu" name="menu" onchange="javascript:getMenuRecepientNameEmail(this.value)">';
 		$menubody     = '</select>';
-		$menudata     = "";
+		$menudata     = '<option value="Rolle_'.$_GET['rol_id'].'" style="font-weight:bold;"><b>An die gesammte Rolle</b></option>';
 		while ($row = $g_db->fetch_object($result))
 		{
 			$menudata.='<option value="'.$row->usr_id.'">'.$row->first_name.' '.$row->last_name.'</option>';
 		}
-		
 		if (!empty($menudata))
 		{
+			$menudata	= preg_replace ("/ü\ö\ä\Ü\Ö\Ä\ß/","/&uuml;\&ouml;\&auml;\&Uuml;\&Ouml;\&Auml;\&szlig;/", $menudata);
 			echo $menuheader.'<option value="" selected="selected">- Bitte w&auml;hlen -</option>'.$menudata.$menubody;
 		}
 		else
@@ -146,28 +149,39 @@ else if ($g_valid_login && isset($_GET['rol_id']) && !isset($_GET['base']))
 // ausgegeben wobei nur die input Box mit den Namen sichtbar ist (schreibgeschütz!)
 else if($g_valid_login && isset($_GET['usrid']) && $_GET['usrid']!="extern")
 {
-	$sql = "SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name, email.usd_value as email
-				FROM ". TBL_MEMBERS. ", ". TBL_USERS. "
-				LEFT JOIN ". TBL_USER_DATA. " as last_name
-					ON last_name.usd_usr_id = usr_id
-					AND last_name.usd_usf_id = ". $g_current_user->getProperty("Nachname", "usf_id")."
-				LEFT JOIN ". TBL_USER_DATA. " as first_name
-					ON first_name.usd_usr_id = usr_id
-					AND first_name.usd_usf_id = ". $g_current_user->getProperty("Vorname", "usf_id")."
-				LEFT JOIN ". TBL_USER_DATA. " as email
-					ON email.usd_usr_id = usr_id
-					AND email.usd_usf_id = ". $g_current_user->getProperty("E-Mail", "usf_id")."
-				WHERE usr_id = ".$_GET['usrid']."
-				AND mem_valid = 1
-				AND usr_valid = 1
-				ORDER BY last_name, first_name";
-	
-	$result = $g_db->query($sql);
-	while ($row = $g_db->fetch_object($result))
+	if(is_numeric($_GET['usrid']) == 1)
 	{
-		echo '<input type="hidden" name="ecard[email_recepient]" value="'.$row->email.'" />
-		<input type="text" name="ecard[name_recepient]" size="25" class="readonly" readonly="readonly"  maxlength="40" style="width: 200px;" value="'.$row->first_name.' '.$row->last_name.'" />
-		';
+		$sql = "SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name, email.usd_value as email
+					FROM ". TBL_MEMBERS. ", ". TBL_USERS. "
+					LEFT JOIN ". TBL_USER_DATA. " as last_name
+						ON last_name.usd_usr_id = usr_id
+						AND last_name.usd_usf_id = ". $g_current_user->getProperty("Nachname", "usf_id")."
+					LEFT JOIN ". TBL_USER_DATA. " as first_name
+						ON first_name.usd_usr_id = usr_id
+						AND first_name.usd_usf_id = ". $g_current_user->getProperty("Vorname", "usf_id")."
+					LEFT JOIN ". TBL_USER_DATA. " as email
+						ON email.usd_usr_id = usr_id
+						AND email.usd_usf_id = ". $g_current_user->getProperty("E-Mail", "usf_id")."
+					WHERE usr_id = ".$_GET['usrid']."
+					AND mem_valid = 1
+					AND usr_valid = 1
+					ORDER BY last_name, first_name";
+		
+		$result = $g_db->query($sql);
+		while ($row = $g_db->fetch_object($result))
+		{
+			$full_name	= ''.$row->first_name.' '.$row->last_name.'';
+			$full_name	= preg_replace ("/ü\ö\ä\Ü\Ö\Ä\ß/","/&uuml;\&ouml;\&auml;\&Uuml;\&Ouml;\&Auml;\&szlig;/", $full_name);
+			echo '<input type="hidden" name="ecard[email_recepient]" value="'.$row->email.'" />
+			<input type="text" name="ecard[name_recepient]" size="25" class="readonly" readonly="readonly"  maxlength="40" style="width: 200px;" value="'.$full_name.'" />
+			';
+		}
+	}
+	else
+	{
+		echo '<input type="hidden" name="ecard[email_recepient]" value="< '.$_GET['usrid'].'@rolle.com >" />
+			<input type="text" name="ecard[name_recepient]" size="25" class="readonly" readonly="readonly"  maxlength="40" style="width: 200px;" value="< die gesammte Rolle >" />
+			';
 	}
 }
 // Wenn der User sich entschließt diese Grußkarte an einen Empfänger zu senden der nicht

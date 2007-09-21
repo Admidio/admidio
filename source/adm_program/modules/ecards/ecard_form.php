@@ -28,6 +28,8 @@ require_once("ecard_function.php");
 /**/	$max_h_card			= "250";		// Maximale Höhe des Grußkarten Bildes	
 /**/	$max_w_view			= "250";		// Maximale Breite des angezeigten Bildes							
 /**/	$max_h_view 		= "250";		// Maximale Höhe des angezeigten Bildes
+/**/    $max_cc_recipients  = "10";			// Maximale Anzahl von CC Empfängern
+/**/	$max_length 		= 150;  // Maximale Länge des Grußkarten Textes
 /*		es können hier mehere Templates eingetragen werden welche dann vom Benutzt ausgewählt werden dürfen				
 /**/	$templates 			= array ("ecard_1.tpl","ecard_2.tpl","ecard_3.tpl"); 
 /*      es können hier mehere Schrift name eingetragen werden welche dann vom Benutzer ausgewählt werden dürfen */
@@ -37,14 +39,15 @@ require_once("ecard_function.php");
 /*      es können hier mehere Schrift Farben eingetragen werden welche dann vom Benutzer ausgewählt werden dürfen */
 /**/	$font_colors 		= array("black","yellow","orange","red","maroon","fuchsia","purple","lime","green","teal","aqua","blue","navy","silver","gray","olive"); 
 /**/	$tmpl_folder 		= "../../layout/";								
-/**/	$max_length 		= 150;  // Maximale Länge des Grußkarten Textes
 /**/	$ecard_plain_data 	= "Du hast eine E-Card von einem Mitglied des Vereins ".$g_organization." erhalten.\n Falls du diese nicht sehen kannst befindet sich diese im Anhang der Mail";
 /**/	$msg_error_1		= "Es ist ein Fehler bei der Verarbeitung der E-C@rd aufgetreten. Bitte probier es zu einem späteren Zeitpunkt noch einmal.";
 /**/	$msg_error_2 		= "Es sind einige Eingabefelder nicht bzw. nicht richtig ausgefüllt. Bitte füll diese aus, bzw. korrigier diese.";
 /**/	$g_preferences['enable_e@card_module']	= 1;
 //**********************************************************
 
-$error_msg			= "";
+$error_msg					= "";
+$email_versand_liste		= array(); // Array wo alle Empfänger aufgelistet werden (jedoch keine zusätzlichen);
+$email_versand_liste_all	= array(); // Array wo alle Empfänger aufgelistet werden (inklusive zusätzlichen);
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_e@card_module'] != 1)
@@ -196,7 +199,7 @@ if (! empty($submit_action))
 		{
 	        $ecard["message"] = substr($ecard["message"],0,$max_length-1);
 	    }
-		// Template wird geparsed
+		// Template wird geholt
 		list($error,$ecard_data_to_parse) = getEcardTemplate($ecard["template_name"],$tmpl_folder);
 		// Wenn es einen Error gibt ihn ausgeben
 	    if ($error) 
@@ -206,18 +209,53 @@ if (! empty($submit_action))
 		// Wenn nicht dann die Grußkarte versuchen zu versenden
 	    else 
 	    {
-		    $ecard_html_data = parseEcardTemplate($ecard,$ecard_data_to_parse,$g_root_path,$g_current_user->getValue("usr_id"),$propotional_size_card['width'],$propotional_size_card['height']);
-		    $result = sendEcard($ecard,$ecard_html_data,$ecard_plain_data);
-			// Wenn die Grußkarte erfolgreich gesendet wurde 
-		    if ($result) 
+			$rolle = str_replace(array("< Rolle_","@rolle.com >"),"",$ecard["email_recepient"]);
+			if(!is_numeric($rolle))
 			{
-			    $ecard_send = true;
-		    } 
-			// Wenn nicht dann die dementsprechende Error Nachricht ausgeben
-			else 
-		    {
-			    $error_msg = $msg_error_1;
-		    }
+				array_push($email_versand_liste,array($ecard["name_recepient"],$ecard["email_recepient"]));
+			}
+			else
+			{
+				$sql = "SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name, email.usd_value as email
+				FROM ". TBL_MEMBERS. ", ". TBL_USERS. "
+				LEFT JOIN ". TBL_USER_DATA. " as last_name
+					ON last_name.usd_usr_id = usr_id
+					AND last_name.usd_usf_id = ". $g_current_user->getProperty("Nachname", "usf_id")."
+				LEFT JOIN ". TBL_USER_DATA. " as first_name
+					ON first_name.usd_usr_id = usr_id
+					AND first_name.usd_usf_id = ". $g_current_user->getProperty("Vorname", "usf_id")."
+				LEFT JOIN ". TBL_USER_DATA. " as email
+					ON email.usd_usr_id = usr_id
+					AND email.usd_usf_id = ". $g_current_user->getProperty("E-Mail", "usf_id")."
+				WHERE usr_id = mem_usr_id
+				AND mem_rol_id = ".$rolle."
+				AND mem_valid = 1
+				AND usr_valid = 1
+				AND email.usd_usr_id = email.usd_usr_id
+				ORDER BY last_name, first_name";
+		
+				$result 	  = $g_db->query($sql);
+				while ($row = $g_db->fetch_object($result))
+				{
+					array_push($email_versand_liste,array("".$row->first_name." ".$row->last_name."",$row->email));
+				}
+			}
+			$email_versand_liste_all = array_merge($email_versand_liste,getCCRecipients($ecard,$max_cc_recipients));
+			for($i=0; $i<count($email_versand_liste_all);$i++)
+			{
+				$ecard_html_data = parseEcardTemplate($ecard,$ecard_data_to_parse,$g_root_path,$g_current_user->getValue("usr_id"),$propotional_size_card['width'],$propotional_size_card['height'],$email_versand_liste_all[$i][0],$email_versand_liste_all[$i][1]);
+				$result = sendEcard($ecard,$ecard_html_data,$ecard_plain_data,$email_versand_liste_all[$i][0],$email_versand_liste_all[$i][1]);
+				// Wenn die Grußkarte erfolgreich gesendet wurde 
+				if ($result) 
+				{
+					$ecard_send = true;
+				} 
+				// Wenn nicht dann die dementsprechende Error Nachricht ausgeben
+				else 
+				{
+					$error_msg = $msg_error_1;
+				}
+			}
 	   }
 	}
 	// Wenn die Felder leer sind oder ungültig dann eine dementsprechente Error Nachricht ausgeben
@@ -249,6 +287,12 @@ if($g_preferences['photo_show_mode']==1)
 
 $javascript='
     <script language="javascript" type="text/javascript">
+	    var basedropdiv = \'basedropdownmenu\';
+		var dropdiv = \'dropdownmenu\';
+		var externdiv = \'extern\';
+		var switchdiv = \'exinswitch\';
+		var max_recipients = '.$max_cc_recipients.';
+		var now_recipients = 0;
         function popup_win(theURL,winName,winOptions) 
 		{
              win = window.open(theURL,winName,winOptions);
@@ -276,7 +320,7 @@ $javascript='
             if (document.ecard_form["ecard[name_sender]"].value == "") 
 			{
                 error = true;
-                error_message += "- name des Absenders\n";
+                error_message += "- Name des Absenders\n";
             } 
  
             if ((document.ecard_form["ecard[email_sender]"].value == "") || 
@@ -289,7 +333,7 @@ $javascript='
             if (document.ecard_form["ecard[name_recepient]"].value == "" || document.ecard_form["ecard[name_recepient]"].value == "<Empfänger Name>") 
 			{
                 error = true;
-                error_message += "- name des Empfängers\n";
+                error_message += "- Name des Empfängers\n";
             } 
             if ((document.ecard_form["ecard[email_recepient]"].value == "") || 
                (echeck(document.ecard_form["ecard[email_recepient]"].value) == false)) 
@@ -300,7 +344,40 @@ $javascript='
         	if (document.ecard_form["ecard[message]"].value == "") 
 			{
 				error = true;
-				error_message += "- eine Nachricht\n";
+				error_message += "- Eine Nachricht\n";
+			}
+			for(var i=1; i <= now_recipients; i++)
+			{
+				var namedoc = document.ecard_form["ecard[name_ccrecipient_"+[i]+"]"];	
+				var emaildoc = 	document.ecard_form["ecard[email_ccrecipient_"+[i]+"]"];
+				var message = "";
+				var goterror = false;		
+				if(namedoc)
+				{
+					if(namedoc.value == "")
+					{
+						message += " - Name des "+[i]+". CC - Empfängers \n";
+						error = true;
+						goterror = true;
+					}
+				}
+				if(emaildoc)
+				{
+					if(emaildoc.value == "" || !echeck(emaildoc.value))
+					{
+						message += " - E-Mail des "+[i]+". CC - Empfängers \n";
+						error = true;
+						goterror = true;
+					}
+				}
+				if(goterror && i==1)
+				{
+					error_message += "\nCC - Empfänger\n-------------------------------\n"+message;
+				}
+				else if(goterror)
+				{
+					error_message += "-------------------------------\n"+message;
+				}
 			}
 			if (error) 
 			{
@@ -354,7 +431,7 @@ $javascript='
 		function makePreview() 
 		{
 			document.ecard_form.action = "ecard_preview.php?width='.$propotional_size_card['width'].'&height='.$propotional_size_card['height'].'&tmplfolder='.$tmpl_folder.'";
-			popup_win(\''.$g_root_path.'/adm_program/ecards/templates/leer.htm\',\'ecard_preview\',\'resizable=yes,scrollbars=yes,width=800,height=600\');
+			popup_win(\''.$g_root_path.'/adm_program/ecards/templates/leer.htm\',\'ecard_preview\',\'resizable=yes,scrollbars=yes,width=1024,height=1024\');
 			document.ecard_form.target = "ecard_preview";
 			document.ecard_form.submit();
 		}
@@ -427,10 +504,6 @@ $javascript='
 			xmlHttp.open("GET",seite,true);
 			xmlHttp.send(null);
 		}
-		var basedropdiv = \'basedropdownmenu\';
-		var dropdiv = \'dropdownmenu\';
-		var externdiv = \'extern\';
-		var switchdiv = \'exinswitch\';
 		function getMenu()
 		{
 			macheRequest(\''.$g_root_path.'/adm_program/modules/ecards/ecard_drawdropmenue.php?base=1\' , \'basedropdownmenu\' );
@@ -442,8 +515,157 @@ $javascript='
 		}
 		function getMenuRecepientNameEmail(usr_id)
 		{
-			macheRequest(\''.$g_root_path.'/adm_program/modules/ecards/ecard_drawdropmenue.php?usrid=\'+ usr_id, \'dropdownmenu\' );
+			macheRequest(\''.$g_root_path.'/adm_program/modules/ecards/ecard_drawdropmenue.php?usrid=\'+ usr_id + \'&rol_id=\'+ document.ecard_form.rol_id.value, \'dropdownmenu\' );
 			document.getElementById(externdiv).innerHTML = "&nbsp;";
+		}
+		function saveData()
+		{
+			var savedata = new Array();
+			for(var i=1; i <= now_recipients; i++)
+			{
+				var namedoc = document.ecard_form["ecard[name_ccrecipient_"+[i]+"]"];	
+				var emaildoc = 	document.ecard_form["ecard[email_ccrecipient_"+[i]+"]"];
+				if(namedoc)
+				{	
+					namedoc = document.ecard_form["ecard[name_ccrecipient_"+[i]+"]"].value;
+				}
+				else
+				{
+					namedoc = "";
+				}
+				if(emaildoc)
+				{
+					emaildoc = 	document.ecard_form["ecard[email_ccrecipient_"+[i]+"]"].value;
+				}
+				else
+				{
+					emaildoc = "";
+				}
+				savedata[i] = new Array();
+				savedata[i][0] = emaildoc;
+				savedata[i][1]  = namedoc;
+			}
+			return savedata;
+		}
+		function restoreSavedData(saved_data)
+		{
+			var i = 0;
+			for (var i = 0; i < saved_data.length; i++)
+			{				
+				var namedoc = document.ecard_form["ecard[name_ccrecipient_"+[i]+"]"];	
+				var emaildoc = 	document.ecard_form["ecard[email_ccrecipient_"+[i]+"]"];
+				if(emaildoc)
+				{
+					emaildoc.value = saved_data[i][0];
+				}
+				if(namedoc)
+				{	
+					namedoc.value = saved_data[i][1];
+				}
+			}
+			saved_data = "";
+		}	
+		function addRecipient()
+		{
+			if (now_recipients < max_recipients)
+			{
+				now_recipients++;
+				var data	= \'<div id="\'+ [now_recipients] +\'">\';
+				data += \'<table id="table_\'+ [now_recipients] +\'" border="0" summary="data\'+ [now_recipients] +\'">\';
+				data += \'<tr>\';	
+				data += \'<td style="width:30px;" align="right">\'+ [now_recipients] +\'. </td>\';			
+				data += \'<td style="width:150px; padding-left:10px;"><input name="ecard[name_ccrecipient_\'+ [now_recipients] +\']" size="15" maxlength="50" style="width: 150px;" value="" type="text" /></td>\';    
+				data += \'<td style="width:150px; padding-left:10px;"><input name="ecard[email_ccrecipient_\'+ [now_recipients] +\']" size="15" maxlength="50" style="width: 150px;" value="" type="text" /></td>\';    
+				data += \'</tr></table>\';
+				data += \'</div>\';
+				var saved_data = new Array();
+				saved_data = saveData();
+				document.getElementById(\'ccrecipientContainer\').innerHTML += data ;
+				restoreSavedData(saved_data);
+				saved_data = "";
+				if (now_recipients > 0)
+				{
+					document.getElementById(\'btn_del\').style.display = "block";
+					document.getElementById(\'btn_delall\').style.display = "block";
+					document.getElementById(\'btn_delContent\').style.display = "block";
+					document.getElementById(\'moreRecipient\').style.display = "block";
+					document.getElementById(\'getmoreRecipent\').innerHTML = "<a href=\"javascript:showHide(\'moreRecipient\');\">Keine weiteren Empf.</a>";
+				}	
+			}
+			if (now_recipients+1 > max_recipients)
+			{
+				document.getElementById(\'btn_add\').disabled = true;
+			}
+		
+		}
+		function delContent()
+		{
+			var anzrecipients = now_recipients;
+			var x = window.confirm("Bist du sicher das du den Inhalt von allen löschen willst?")
+			if (x)
+			{
+				for(var i=1; i <= now_recipients; i++)
+				{
+					var namedoc = document.ecard_form["ecard[name_ccrecipient_"+[i]+"]"];	
+					var emaildoc = 	document.ecard_form["ecard[email_ccrecipient_"+[i]+"]"];
+					if(namedoc)
+					{	
+						document.ecard_form["ecard[name_ccrecipient_"+[i]+"]"].value = "";
+					}
+					if(emaildoc)
+					{
+						document.ecard_form["ecard[email_ccrecipient_"+[i]+"]"].value = "";
+					}
+				}
+			}
+		}
+		function delRecipient()
+		{	
+			if (now_recipients > 0)
+			{	
+				
+				var d = document.getElementById(\'ccrecipientContainer\');
+				var olddiv = document.getElementById(now_recipients);
+				d.removeChild(olddiv);
+				now_recipients--;
+			}
+			else
+			{
+				now_recipients = 0;
+			}
+			if (now_recipients == 0)
+			{
+				if(document.getElementById(\'getmoreRecipent\').innerHTML == "<a href=\"javascript:showHide(\'moreRecipient\');\">Keine weiteren Empf.</a>")
+				{
+					showHide(\'moreRecipient\');
+				}
+				document.getElementById(\'btn_del\').style.display = "none";
+				document.getElementById(\'btn_delall\').style.display = "none";
+				document.getElementById(\'btn_delContent\').style.display = "none";
+				document.getElementById(\'moreRecipient\').style.display = "none";
+				document.getElementById(\'getmoreRecipent\').innerHTML = "<a href=\"javascript:showHide(\'moreRecipient\');\">Mehr Empfänger</a>";
+			}
+			
+			if (now_recipients <= max_recipients)
+			{
+				document.getElementById(\'btn_add\').disabled = false;
+			}
+		
+		}
+		function delAllRecipients(t)
+		{
+			var anzrecipients = now_recipients;
+			if(!t)
+			{
+				var x = window.confirm("Bist du sicher das du alle löschen willst?")
+			}
+			if (x || t)
+			{
+				for (var i = 0; i < anzrecipients; i++)
+				{
+					delRecipient();
+				}
+			}
 		}
 		function getTextStyle(textdiv)
 		{
@@ -469,6 +691,21 @@ $javascript='
 		{		
 			document.ecard_form[name].value = input_value;	
 			getTextStyle(\'Nachricht\');	
+		}
+		function showHide(div)
+		{
+			if(document.getElementById(div).style.display == "none")
+			{
+				document.getElementById(div).style.display = "block";
+				document.getElementById(\'getmoreRecipent\').innerHTML = "<a href=\"javascript:showHide(\'moreRecipient\');\">Keine weiteren Empf.</a>";
+				addRecipient();
+			}
+			else
+			{
+				document.getElementById(div).style.display = "none";
+				document.getElementById(\'getmoreRecipent\').innerHTML = "<a href=\"javascript:showHide(\'moreRecipient\');\">Mehr Empfänger</a>";
+				delAllRecipients(\'ja\');
+			}
 		}
 		function getExtern()
 		{
@@ -556,7 +793,10 @@ if (empty($submit_action))
                 </li>
                <li>
                  <dl>
-                   <dt><label>An:</label>			        
+                   <dt><label>An:</label>	
+				   <div id="getmoreRecipent" style="margin-top:15px; float:left; display:relativ;">
+					<a href="javascript:showHide(\'moreRecipient\');">Mehr Empfänger</a>
+					</div>		        
 				   </dt>
                    <dd>';
 							if (array_key_exists("usr_id", $_GET))
@@ -568,7 +808,7 @@ if (empty($submit_action))
                             }
                             else
                             {
-							   echo '<div style="height:48px; width:370px;">
+							   echo '<div style=" height:48px; width:370px;">
 									 <div id="exinswitch" style="float:right; margin-left:5px; display:relativ;">
 										 <a href="javascript:getExtern()">externer Empf&auml;nger</a>
 								     </div>
@@ -578,8 +818,8 @@ if (empty($submit_action))
 									 <div id="dropdownmenu" style="display:block;">
 								     </div>
 								     <div id="extern">
-										 <input type="hidden" name="ecard[email_recepient]" value="" />
-										 <input type="hidden" name="ecard[name_recepient]"  value="" />
+										 <input type="hidden" name="ecard[email_recepient]" value="< Empf&auml;nger E-Mail >" />
+										 <input type="hidden" name="ecard[name_recepient]"  value="< Empf&auml;nger Name >" />
 									 </div>
 									 </div>';
                             }
@@ -587,6 +827,36 @@ if (empty($submit_action))
                         </dd>
                     </dl>
                 </li>
+				<li>
+					<div id="moreRecipient" style="display:none;">
+					<hr />
+						<dl>
+							<dt>Weitere Empfänger</dt>
+							<dd>
+								<div id="buttons" style="width:370px; border:0px;">
+									<table summary="TableButtons" border="0" style="width:370px;">
+										<tr>
+										<td><a href="javascript:addRecipient();" id="btn_add" >hinzuf&uuml;gen</a></td>
+										<td style="padding-left:10px;"><a href="javascript:delRecipient();" id="btn_del" style="display:none;">l&ouml;schen</a></td>
+										<td style="padding-left:10px;"><a href="javascript:delAllRecipients();" id="btn_delall" style="display:none;">alle l&ouml;schen</a></td>
+										<td style="padding-left:10px;"><a href="javascript:delContent();" id="btn_delContent" style="display:none;">Inhalt l&ouml;schen</a></td>
+										</tr>
+									</table>
+								</div>
+								<div id="TableTitle" style="width:350px; border:0px; padding-top:10px;">
+									<table summary="TableccContailer" border="0">
+										<tr>
+											<td style="width:30px;">Anzahl</td>
+											<td style="width:150px;" align="center">Name</td>
+											<td style="width:150px;" align="center">Email</td>
+										</tr>
+									</table>
+								</div>
+								<div id="ccrecipientContainer" style="width:490px; border:0px;">
+								</div>
+						</dl>
+					</div>
+				</li>
 				<li>
                     <hr />
                 </li>
@@ -716,22 +986,57 @@ else
 	<br /><br />
 	<table cellpadding="0" cellspacing="0" border="0" summary="Erfolg" align="center">
 		<tr>
-			<td align="left"><b>Absender:</b></td>
+			<td align="left" colspan="2"><b>Absender:</b></td>
 		</tr>
 		<tr>
-			<td align="left">'; echo $ecard["name_sender"].", ".$ecard["email_sender"]; echo'</td>
+			<td align="left" style="padding-right:5px;">'; echo $ecard["name_sender"].',</td><td align="left">'.$ecard["email_sender"]; echo'</td>
 		</tr>
 		<tr>
 			<td align="left">&nbsp;</td>
 		</tr>
 		<tr>
-			<td align="left"><b>Empfänger:</b></td>
-		</tr>
-		<tr>
-			<td align="left">'; echo $ecard["name_recepient"].", ".$ecard["email_recepient"]; echo '</td>
-		</tr>
-	</table>
-	<br /><br/>';
+			<td align="left" colspan="2"><b>Empfänger:</b></td>
+		</tr><tr>';
+		foreach($email_versand_liste as $item)
+		{
+				$i=0;
+				foreach($item as $item2)
+				{
+						if (!is_integer(($i+1)/2))
+						{
+							echo '<td align="left"  style="padding-right:5px;">'; echo $item2.',</td></td>'; 
+						}
+						else
+						{
+							echo'<td align="left"  style="padding-right:5px;">'; echo $item2.'</td></tr><tr>';
+						}
+						$i++;
+				}
+		}			
+		echo '</tr>';
+		$Liste = array();
+		$Liste = getCCRecipients($ecard,$max_cc_recipients);
+		if(count($Liste)>0)
+		{
+			echo '<tr><td>&nbsp;</td></tr><tr><td colspan="2"><b>Zusätzliche Empfänger</b></td></tr><tr>';
+			foreach($Liste as $item)
+			{
+				$i=0;
+				foreach($item as $item2)
+				{
+					if (!is_integer(($i+1)/2))
+					{
+						echo '<td align="left">'.$item2.'</td>'; 
+					}
+					else
+					{
+						echo'<td align="left">'.$item2.'</td></tr><tr>';
+					}
+					$i++;
+				}
+			}
+		}
+	echo '</tr></table><br /><br/>';
 }  
 echo "</div></div></div>";
 /************************Buttons********************************/
