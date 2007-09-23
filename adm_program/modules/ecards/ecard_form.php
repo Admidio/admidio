@@ -209,11 +209,14 @@ if (! empty($submit_action))
 		// Wenn nicht dann die Grußkarte versuchen zu versenden
 	    else 
 	    {
+			// Es wird geprüft ob der Benutzer der ganzen Rolle eine Grußkarte schicken will
 			$rolle = str_replace(array("< Rolle_","@rolle.com >"),"",$ecard["email_recepient"]);
+			// Wenn nicht dann Name und Email des Empfängers zur versand Liste hinzufügen
 			if(!is_numeric($rolle))
 			{
 				array_push($email_versand_liste,array($ecard["name_recepient"],$ecard["email_recepient"]));
 			}
+			// Wenn schon dann alle Namen und die duzugehörigen Emails auslesen und in die versand Liste hinzufügen
 			else
 			{
 				$sql = "SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name, email.usd_value as email
@@ -714,7 +717,7 @@ $javascript='
 				document.getElementById(basedropdiv).style.display = \'block\';
 				document.getElementById(dropdiv).style.display = \'block\';
 				document.getElementById(externdiv).style.display = \'none\';
-				document.getElementById(externdiv).innerHTML = "&nbsp;";
+				document.getElementById(externdiv).innerHTML = \'<input type="hidden" name="ecard[email_recepient]" value="< Empf&auml;nger E-Mail >" /><input type="hidden" name="ecard[name_recepient]"  value="< Empf&auml;nger Name >" />\';
 				getMenu();
 				document.getElementById(switchdiv).innerHTML = \'<a href="javascript:getExtern();">externer Empf&auml;nger</a>\';
 			}
