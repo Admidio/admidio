@@ -210,7 +210,7 @@ if (! empty($submit_action))
 	    else 
 	    {
 			// Es wird geprüft ob der Benutzer der ganzen Rolle eine Grußkarte schicken will
-			$rolle = str_replace(array("< Rolle_","@rolle.com >"),"",$ecard["email_recepient"]);
+			$rolle = str_replace(array("Rolle_","@rolle.com"),"",$ecard["email_recepient"]);
 			// Wenn nicht dann Name und Email des Empfängers zur versand Liste hinzufügen
 			if(!is_numeric($rolle))
 			{
@@ -834,7 +834,7 @@ if (empty($submit_action))
 					<div id="moreRecipient" style="display:none;">
 					<hr />
 						<dl>
-							<dt>Weitere Empfänger</dt>
+							<dt>Weitere Empfänger:</dt>
 							<dd>
 								<div id="buttons" style="width:370px; border:0px;">
 									<table summary="TableButtons" border="0" style="width:370px;">
