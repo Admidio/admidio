@@ -179,8 +179,8 @@ else if($g_valid_login && isset($_GET['usrid']) && $_GET['usrid']!="extern")
 	}
 	else
 	{
-		echo '<input type="hidden" name="ecard[email_recepient]" value="< '.$_GET['usrid'].'@rolle.com >" />
-			<input type="text" name="ecard[name_recepient]" size="25" class="readonly" readonly="readonly"  maxlength="40" style="width: 200px;" value="< die gesamte Rolle >" />
+		echo '<input type="hidden" name="ecard[email_recepient]" value="'.$_GET['usrid'].'@rolle.com" />
+			<input type="text" name="ecard[name_recepient]" size="25" class="readonly" readonly="readonly"  maxlength="40" style="width: 200px;" value="die gesamte Rolle" />
 			';
 	}
 }
