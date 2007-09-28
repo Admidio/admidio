@@ -151,10 +151,6 @@ while($row_orga = $g_db->fetch_object($result_orga))
              WHERE prf_name = 'lists_members_per_page' ";
     $g_db->query($sql);
 
-    $sql = "UPDATE ". TBL_PREFERENCES. " SET prf_value = 'main.css'
-             WHERE prf_name = 'user_css' ";
-    $g_db->query($sql);
-
     $sql = "UPDATE ". TBL_USER_FIELDS. " SET usf_cat_id = $cat_id_data
              WHERE usf_org_shortname = '$row_orga->org_shortname' ";
     $g_db->query($sql);

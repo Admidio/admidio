@@ -39,8 +39,8 @@ ALTER TABLE %PRAEFIX%_sessions ADD constraint %PRAEFIX%_FK_SES_ORG foreign key (
       references %PRAEFIX%_organizations (org_id) on delete restrict on update restrict;
       
 ALTER TABLE %PRAEFIX%_sessions CHANGE COLUMN `ses_session` `ses_session_id` VARCHAR(35) NOT NULL;
-ALTER TABLE %PRAEFIX%_sessions DROP INDEX `ak_session`;
-ALTER TABLE %PRAEFIX%_sessions ADD INDEX `ak_session` USING BTREE(`ses_session_id`);      
+ALTER TABLE %PRAEFIX%_sessions DROP INDEX ak_session;
+ALTER TABLE %PRAEFIX%_sessions ADD INDEX ak_session (ses_session_id);      
 
 -- org_shortname aus Rollentabelle entfernen
 ALTER TABLE %PRAEFIX%_roles DROP FOREIGN KEY %PRAEFIX%_FK_ROL_ORG;
