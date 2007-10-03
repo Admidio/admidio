@@ -174,9 +174,10 @@ switch($req_type)
         $usf_phone      = $g_current_user->getProperty("Telefon", "usf_id");
         $usf_mobile     = $g_current_user->getProperty("Handy", "usf_id");
         $usf_email      = $g_current_user->getProperty("E-Mail", "usf_id");
+        $usf_fax        = $g_current_user->getProperty("Fax", "usf_id");
         
         $main_sql = "SELECT mem_leader, usr_id, f$usf_last_name.usd_value, f$usf_first_name.usd_value, 
-                            f$usf_phone.usd_value, f$usf_mobile.usd_value, f$usf_email.usd_value, usr_fax
+                            f$usf_phone.usd_value, f$usf_mobile.usd_value, f$usf_email.usd_value, f$usf_fax.usd_value
                      FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                      LEFT JOIN ". TBL_USER_DATA ." f$usf_last_name
                        ON f$usf_last_name.usd_usr_id = usr_id
@@ -193,6 +194,9 @@ switch($req_type)
                      LEFT JOIN ". TBL_USER_DATA ." f$usf_email
                        ON f$usf_email.usd_usr_id = usr_id
                       AND f$usf_email.usd_usf_id = $usf_email
+                     LEFT JOIN ". TBL_USER_DATA ." f$usf_fax
+                       ON f$usf_fax.usd_usr_id = usr_id
+                      AND f$usf_fax.usd_usf_id = $usf_fax
                     WHERE rol_id     = $req_rol_id
                       AND rol_cat_id = cat_id
                       AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
