@@ -193,15 +193,17 @@ class Forum
 
         $sql    = "SELECT config_value FROM ". $this->praefix. "_config WHERE config_name = 'script_path' ";
         $result = $this->forum_db->query($sql);
-        $row    = $this->forum_db->fetch_array($result);
-        $this->path = $row[0];
-        if(strpos($this->path, "/", 0) == 0)
+        $row    = $this->forum_db->fetch_array($result);        
+        $this->path = trim(str_replace('//', '/', $row[0]));
+        
+        // Slash am Anfang und Ende entfernen
+        if(strpos($this->path, "/") == 0)
         {
-            $this->path = str_replace('//', '', '/'.$this->path);
+            $this->path = substr($this->path, 1);
         }
-        if(strpos($this->path, "/", strlen($this->path)-1) == TRUE)
+        if(strrpos($this->path, "/") == strlen($this->path)-1)
         {
-            $this->path = str_replace('//', '', $this->path.'/');
+            $this->path = substr($this->path, 0, strlen($this->path)-1);
         }
     }
 
