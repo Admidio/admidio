@@ -119,14 +119,14 @@ class Date extends TableAccess
         $uid = mysqldatetime("ymdThis", $this->db_fields['dat_timestamp']) . "+" . $this->db_fields['dat_usr_id'] . "@" . $domain;
         $event->add_property('uid', $uid);
     
-        $event->add_property('summary',     utf8_encode($this->db_fields['dat_headline']));
-        $event->add_property('description', utf8_encode($this->db_fields['dat_description']));
+        $event->add_property('summary',     $this->db_fields['dat_headline']);
+        $event->add_property('description', $this->db_fields['dat_description']);
 
         $event->add_property('dtstart', mysqldatetime("ymdThis", $this->db_fields['dat_begin']));
         $event->add_property('dtend',   mysqldatetime("ymdThis", $this->db_fields['dat_end']));
         $event->add_property('dtstamp', mysqldatetime("ymdThisZ", $this->db_fields['dat_timestamp']));
 
-        $event->add_property('location', utf8_encode($this->db_fields['dat_location']));
+        $event->add_property('location', $this->db_fields['dat_location']);
 
         $cal->add_component($event);
         return $cal->serialize();    

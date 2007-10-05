@@ -71,17 +71,7 @@ echo "
                     echo "</optgroup>";
                 }
 
-                // Ajax gibt alles in UTF8 zurueck
-                if($b_ajax)
-                {
-                    $category_name = utf8_encode($value['cat_name']);
-                }
-                else
-                {
-                    $category_name = $value['cat_name'];
-                }                        
-
-                echo "<optgroup label=\"$category_name\">";
+                echo "<optgroup label=\"". $value['cat_name']. "\">";
 
                 if($value['cat_name'] == "Stammdaten")
                 {
@@ -97,15 +87,6 @@ echo "
             //Nur Moderatoren duerfen sich gelockte Felder anzeigen lassen 
             if($value['usf_hidden'] == 0 || $g_current_user->assignRoles())
             {
-                // Ajax gibt alles in UTF8 zurueck
-                if($b_ajax)
-                {
-                    $field_name = utf8_encode($value['usf_name']);
-                }
-                else
-                {
-                    $field_name = $value['usf_name'];
-                }
                 // wenn Zurueck gewaehlt wurde, dann Felder mit den alten Werten vorbelegen
                 $selected = "";
                 if($b_ajax == false && $b_history == true
@@ -114,7 +95,7 @@ echo "
                     $selected = " selected=\"selected\" ";                          
                 }
 
-                echo"<option value=\"". $value['usf_id']. "\" $selected >$field_name</option>";
+                echo"<option value=\"". $value['usf_id']. "\" $selected >". $value['usf_name']. "</option>";
             }
         } 
 

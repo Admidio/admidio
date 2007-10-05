@@ -305,7 +305,7 @@ if(isset($_POST["submit"]) && $_POST["submit"])
 if(isset($_GET["job"]) && $_GET["job"]=="delete_request")
 {
     $g_message->setForwardYesNo("$g_root_path/adm_program/modules/photos/photo_event_function.php?job=do_delete&pho_id=$pho_id");
-    $g_message->show("delete_veranst", utf8_encode($photo_event->getValue("pho_name")));
+    $g_message->show("delete_veranst", $photo_event->getValue("pho_name"));
 }
 
 // Nun Veranstaltung loeschen

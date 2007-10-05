@@ -178,7 +178,7 @@ elseif($_GET['mode'] == 2 || $_GET["mode"] == 3)
     {
         // Frage, ob Kategorie geloescht werden soll
         $g_message->setForwardYesNo("$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=$req_cat_id&mode=2&type=". $_GET['type']);
-        $g_message->show("delete_category", utf8_encode($category->getValue("cat_name")), "Löschen");
+        $g_message->show("delete_category", $category->getValue("cat_name"), "Löschen");
     }    
 }
 elseif($_GET['mode'] == 4)

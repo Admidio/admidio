@@ -131,7 +131,7 @@ while($row = $g_db->fetch_object($result_rolle))
             && isset($_POST["leader-$row->rol_id"]) && $_POST["leader-$row->rol_id"] == false
             && isset($_POST["role-$row->rol_id"])   && $_POST["role-$row->rol_id"]   == true)
             {
-                $g_message->show("max_members_profile", utf8_encode($row->rol_name));
+                $g_message->show("max_members_profile", $row->rol_name);
             }
         }
     }

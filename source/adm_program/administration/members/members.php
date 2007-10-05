@@ -341,9 +341,9 @@ echo "<div class=\"pageNavigation\">";
     {
         // pruefen, ob es Mitglieder zum Buchstaben gibt, unter Beruecksichtigung deutscher Sonderzeichen
         if( $letter_menu == $letter_row[0]
-        || ($letter_menu == "A" && utf8_encode($letter_row[0]) == "Ä")
-        || ($letter_menu == "O" && utf8_encode($letter_row[0]) == "Ö")
-        || ($letter_menu == "U" && utf8_encode($letter_row[0]) == "Ü") )
+        || ($letter_menu == "A" && $letter_row[0] == "Ä")
+        || ($letter_menu == "O" && $letter_row[0] == "Ö")
+        || ($letter_menu == "U" && $letter_row[0] == "Ü") )
         {
             $letter_found = true;
         }
