@@ -343,11 +343,11 @@ if($new_user == 3)
         $email->setSender($g_preferences['email_administrator']);
         $email->addRecipient($user->getValue("E-Mail"), $user->getValue("Vorname"). " ". $user->getValue("Nachname"));
         $email->setSubject("Anmeldung auf ". $g_current_organization->getValue("org_homepage"));
-        $email->setText(utf8_decode("Hallo "). $user->getValue("Vorname"). utf8_decode(",\n\ndeine Anmeldung auf ").
-            $g_current_organization->getValue("org_homepage"). utf8_decode("wurde bestätigt.\n\nNun kannst du dich mit deinem Benutzernamen : ").
-            $user->getValue("usr_login_name"). utf8_decode("\nund dem Passwort auf der Homepage einloggen.\n\n".
-            "Sollten noch Fragen bestehen, schreib eine E-Mail an "). $g_preferences['email_administrator'].
-            utf8_decode(" .\n\nViele Grüße\nDie Webmaster"));
+        $email->setText("Hallo ". $user->getValue("Vorname"). ",\n\ndeine Anmeldung auf ".
+            $g_current_organization->getValue("org_homepage"). "wurde bestätigt.\n\nNun kannst du dich mit deinem Benutzernamen : ".
+            $user->getValue("usr_login_name"). "\nund dem Passwort auf der Homepage einloggen.\n\n".
+            "Sollten noch Fragen bestehen, schreib eine E-Mail an ". $g_preferences['email_administrator'].
+            " .\n\nViele Grüße\nDie Webmaster");
         $email->sendEmail();
     }
 
@@ -395,11 +395,11 @@ elseif($new_user == 2)
             $email = new Email();
             $email->setSender($g_preferences['email_administrator']);
             $email->addRecipient($row['email'], $row['first_name']. " ". $row['last_name']);
-            $email->setSubject(utf8_decode("Neue Registrierung"));
-            $email->setText(utf8_decode("Es hat sich ein neuer User auf "). $g_current_organization->getValue("org_homepage").
-                utf8_decode(" registriert.\n\nNachname: "). $user->getValue("Nachname"). utf8_decode("\nVorname:  ").
-                $user->getValue("Vorname"). utf8_decode("\nE-Mail:   "). $user->getValue("E-Mail").
-                utf8_decode("\n\n\nDiese Nachricht wurde automatisch erzeugt."));
+            $email->setSubject("Neue Registrierung");
+            $email->setText("Es hat sich ein neuer User auf ". $g_current_organization->getValue("org_homepage").
+                " registriert.\n\nNachname: ". $user->getValue("Nachname"). "\nVorname:  ".
+                $user->getValue("Vorname"). "\nE-Mail:   ". $user->getValue("E-Mail").
+                "\n\n\nDiese Nachricht wurde automatisch erzeugt.");
             if($email->sendEmail() == false)
             {
                 $err_code = "mail_not_send";

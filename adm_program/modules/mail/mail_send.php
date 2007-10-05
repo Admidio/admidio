@@ -262,7 +262,7 @@ $mail_body = $mail_body. "Eine Antwort kannst Du an ". $_POST['mailfrom']. " sch
 
 if (!$g_valid_login)
 {
-    $mail_body = $mail_body. utf8_decode("\n(Der Absender war nicht eingeloggt. Deshalb könnten die Absenderangaben fehlerhaft sein.)");
+    $mail_body = $mail_body. "\n(Der Absender war nicht eingeloggt. Deshalb könnten die Absenderangaben fehlerhaft sein.)";
 }
 $mail_body = $mail_body. "\n\n\n". $_POST['body'];
 
