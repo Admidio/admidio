@@ -168,7 +168,7 @@ elseif ($_GET["mode"] == 4 && $_GET["lnk_id"] > 0)
 {
     //Nachfrage ob Weblinkeintrag geloescht werden soll
     $g_message->setForwardYesNo("$g_root_path/adm_program/modules/links/links_function.php?lnk_id=$_GET[lnk_id]&mode=2&url=$g_root_path/adm_program/modules/links/links.php");
-    $g_message->show("delete_link", utf8_encode($linkObject->lnk_name));
+    $g_message->show("delete_link", $linkObject->lnk_name);
 }
 
 else

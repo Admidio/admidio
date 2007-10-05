@@ -374,7 +374,7 @@ elseif($_GET["mode"] == 3)
     }
 
     $msg_code = "role_inactive";
-    $g_message->addVariableContent(utf8_encode($role->getValue("rol_name")));
+    $g_message->addVariableContent($role->getValue("rol_name"));
 }
 elseif($_GET["mode"] == 4)
 {
@@ -399,13 +399,13 @@ elseif($_GET["mode"] == 5)
     }
 
     $msg_code = "role_active";
-    $g_message->addVariableContent(utf8_encode($role->getValue("rol_name")));
+    $g_message->addVariableContent($role->getValue("rol_name"));
 }
 elseif($_GET["mode"] == 6)
 {
     // Fragen, ob die inaktive Rolle geloescht werden soll
     $g_message->setForwardYesNo("$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$req_rol_id&amp;mode=4");
-    $g_message->show("delete_role", utf8_encode($role->getValue("rol_name")), "Löschen");
+    $g_message->show("delete_role", $role->getValue("rol_name"), "Löschen");
 }
 
 $g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);

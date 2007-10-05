@@ -191,7 +191,7 @@ elseif($_GET["mode"] == 4)
 elseif($_GET["mode"] == 5)
 {
     $g_message->setForwardYesNo("$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=". $_GET["dat_id"]. "&amp;mode=2");
-    $g_message->show("delete_date", utf8_encode($date->getValue("dat_headline")), "Löschen");
+    $g_message->show("delete_date", $date->getValue("dat_headline"), "Löschen");
 }
 
 ?>

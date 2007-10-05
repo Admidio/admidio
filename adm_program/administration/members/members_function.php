@@ -154,7 +154,7 @@ elseif($_GET["mode"] == 2)
     }
 
     $err_code = "remove_member_ok";
-    $err_text = utf8_encode($g_current_organization->getValue("org_longname"));
+    $err_text = $g_current_organization->getValue("org_longname");
 }
 elseif($_GET["mode"] == 3)
 {
@@ -239,7 +239,7 @@ elseif($_GET["mode"] == 5)
 {
     // Fragen, ob Zugangsdaten verschickt werden sollen
     $g_message->setForwardYesNo("$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET["user_id"]. "&mode=4");
-    $g_message->show("send_new_login", utf8_encode($user->getValue("Vorname"). " ". $user->getValue("Nachname")));
+    $g_message->show("send_new_login", $user->getValue("Vorname"). " ". $user->getValue("Nachname"));
 }
 elseif($_GET["mode"] == 6)
 {
@@ -255,16 +255,16 @@ elseif($_GET["mode"] == 6)
         // nur Webmaster duerfen dies
         // User ist in keiner Orga mehr Mitglied -> kann komplett geloescht werden
         $g_message->setForwardYesNo("$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET["user_id"]. "&mode=3");
-        $g_message->addVariableContent(utf8_encode($user->getValue("Vorname"). " ". $user->getValue("Nachname")));
-        $g_message->addVariableContent(utf8_encode($g_current_organization->getValue("org_longname")));
+        $g_message->addVariableContent($user->getValue("Vorname"). " ". $user->getValue("Nachname"));
+        $g_message->addVariableContent($g_current_organization->getValue("org_longname"));
         $g_message->show("delete_user", "", "Löschen");
     }
     else
     {
         // User kann nur aus dieser Orga entfernt werden
         $g_message->setForwardYesNo("$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET["user_id"]. "&mode=2");
-        $g_message->addVariableContent(utf8_encode($user->getValue("Vorname"). " ". $user->getValue("Nachname")));
-        $g_message->addVariableContent(utf8_encode($g_current_organization->getValue("org_longname")));
+        $g_message->addVariableContent($user->getValue("Vorname"). " ". $user->getValue("Nachname"));
+        $g_message->addVariableContent($g_current_organization->getValue("org_longname"));
         $g_message->show("remove_member", "", "Entfernen");
     }
 }

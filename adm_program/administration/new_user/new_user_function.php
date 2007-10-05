@@ -163,7 +163,7 @@ elseif($req_mode == 5)
 {
     // Fragen, ob die Registrierung geloescht werden soll
     $g_message->setForwardYesNo("$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;mode=4");
-    $g_message->show("delete_new_user", utf8_encode($new_user->getValue("Vorname"). " ". $new_user->getValue("Nachname")), "Löschen");
+    $g_message->show("delete_new_user", $new_user->getValue("Vorname"). " ". $new_user->getValue("Nachname"), "Löschen");
 }
 elseif($req_mode == 6)
 {
