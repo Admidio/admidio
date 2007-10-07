@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Grußkarte Funktionen
+ * GruÃŸkarte Funktionen
  *
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -11,11 +11,11 @@
 /****************** includes *************************************************/
  include('mail.class.php');
  
-/****************** Funktionen für ecard_form ********************************/
+/****************** Funktionen fuer ecard_form ********************************/
  
-// rechnet die propotionale Größe eines Bildes aus
-// dh. wenn man ein Bild mit der max Auflösung 600x400 haben will
-// übergibt mann der Funktion die max_w und max_h und bekommt die propotionale Größe zurück
+// rechnet die propotionale GroeÃŸe eines Bildes aus
+// dh. wenn man ein Bild mit der max Aufloesung 600x400 haben will
+// uebergibt mann der Funktion die max_w und max_h und bekommt die propotionale GroeÃŸe zurueck
 function getPropotionalSize($src_w, $src_h, $max_w, $max_h)
 {
 	$return_val['width']=$src_w;
@@ -35,12 +35,12 @@ function getPropotionalSize($src_w, $src_h, $max_w, $max_h)
 	}
 	return $return_val;
 }
-// gibt ein Menü für die Einstellungen des Template aus
-// Übergabe: 
-// 			$data_array			.. Daten für die Einstellungen in einem Array
+// gibt ein Menue fuer die Einstellungen des Template aus
+// Uebergabe: 
+// 			$data_array			.. Daten fuer die Einstellungen in einem Array
 //			$name_ecard_input	.. Name des Ecards inputs
-//			$width				.. die Größe des Menüs
-//			$schowfont			.. wenn gesetzt bekommen die Menü Einträge einen universellen font-style
+//			$width				.. die GroeÃŸe des Menues
+//			$schowfont			.. wenn gesetzt bekommen die Menue Eintraege einen universellen font-style
 function getMenueSettings($data_array,$name_ecard_input,$width,$schowfont)
 {
 	$temp_data = "";
@@ -66,9 +66,9 @@ function getMenueSettings($data_array,$name_ecard_input,$width,$schowfont)
 	echo  '</select>';
 	return '<input type="hidden" name="'.$name_ecard_input.'" value="'.$data_array[0].'" />';
 }
-// gibt ein Menü für die Einstellungen des Template aus
-// Übergabe: 
-// 			$data_array			.. Daten für die Einstellungen in einem Array
+// gibt ein Menue fuer die Einstellungen des Template aus
+// Uebergabe: 
+// 			$data_array			.. Daten fuer die Einstellungen in einem Array
 //			$name_ecard_input	.. Name des Ecards inputs
 function getColorSettings($data_array,$name_ecard_input,$anz)
 {
@@ -94,8 +94,8 @@ function getColorSettings($data_array,$name_ecard_input,$anz)
 	return '<input type="hidden" name="'.$name_ecard_input.'" value="'.$data_array[0].'" />';
 }
 // gibt die ersten Einstellungen des Template aus
-// Übergabe: 
-// 			$first_value_array			.. Daten für die Einstellungen in einem Array
+// Uebergabe: 
+// 			$first_value_array			.. Daten fuer die Einstellungen in einem Array
 function getFirstSettings($first_value_array)
 {
 	foreach($first_value_array as $item)
@@ -123,7 +123,7 @@ function getCCRecipients($ecard,$max_cc_recipients)
 	return $Versandliste;
 }
  
-/** Funktionen fürs sammeln,parsen und versenden der Informationen von der ecard_form **/
+/** Funktionen fuers sammeln,parsen und versenden der Informationen von der ecard_form **/
 
 // Diese Funktion holt alle Variablen ab und speichert sie in einem array
 function getVars() 
@@ -140,8 +140,8 @@ function getVars()
     $$key = $value;
   }
 }
-// Diese Funktion holt das Template aus dem übergebenen Verzeichnis und liefert die Daten und einen error state zurück
-// Übergabe:
+// Diese Funktion holt das Template aus dem uebergebenen Verzeichnis und liefert die Daten und einen error state zurueck
+// Uebergabe:
 //		$template_name	.. der Name des Template
 //		$tmpl_folder	.. der Name des Ordner wo das Template vorhanden ist
 function getEcardTemplate($template_name,$tmpl_folder) 
@@ -165,38 +165,38 @@ function getEcardTemplate($template_name,$tmpl_folder)
 }
 /*
 // Diese Funktion ersetzt alle im Template enthaltenen Platzhalter durch die dementsprechenden Informationen
-// Übergabe:
+// Uebergabe:
 //		$ecard				..	array mit allen Informationen die in den inputs der Form gespeichert sind
-//		$ecard_data			..	geparste Information von dem Grußkarten Template
+//		$ecard_data			..	geparste Information von dem GruÃŸkarten Template
 //		$root_path			..	der Pfad zu admidio Verzeichnis
 //		$usr_id				..	die User id
-//		$proportional_width	..	die proportionale Breite des Bildes für das Template
-//		$propotional_height	..	die proportionale Höhe des Bildes für das Template
-//		$empfänger_name		..	der Name des Empfängers
-//		$empfänger_email	..	die Email des Empfängers
+//		$proportional_width	..	die proportionale Breite des Bildes fuer das Template
+//		$propotional_height	..	die proportionale Hoehe des Bildes fuer das Template
+//		$empfaenger_name		..	der Name des Empfaengers
+//		$empfaenger_email	..	die Email des Empfaengers
 //
 // Ersetzt werden folgende Platzhalter
 //		
 //		Admidio Pfad:			<%g_root_path%>	
 //		Style Eigenschaften:	<%ecard_font%>				<%ecard_font_size%>			<%ecard_font_color%> <%ecard_font_bold%> <%ecard_font_italic%>
-//		Empfänger Daten:		<%ecard_reciepient_email%>	<%ecard_reciepient_name%>
+//		Empfaenger Daten:		<%ecard_reciepient_email%>	<%ecard_reciepient_name%>
 //		Sender Daten:			<%ecard_sender_id%>			<%ecard_sender_email%> 		<%ecard_sender_name%>
 //		Bild Daten:				<%ecard_image_width%>		<%ecard_image_height%> 		<%ecard_image_name%>
 //		Nachricht:				<%ecard_message%>
 */
-function parseEcardTemplate($ecard,$ecard_data,$root_path,$usr_id,$propotional_width,$propotional_height,$empfänger_name,$empfänger_email) 
+function parseEcardTemplate($ecard,$ecard_data,$root_path,$usr_id,$propotional_width,$propotional_height,$empfaenger_name,$empfaenger_email) 
 {   
-	// Falls der Name des Empfänger nicht vorhanden ist wird er für die Vorschau ersetzt
-	if(strip_tags(trim($empfänger_name)) == "")
+	// Falls der Name des Empfaenger nicht vorhanden ist wird er fuer die Vorschau ersetzt
+	if(strip_tags(trim($empfaenger_name)) == "")
 	{
-	  $empfänger_name	= "< Empf&auml;nger Name >";
+	  $empfaenger_name	= "< Empf&auml;nger Name >";
 	}
-	// Falls die Email des Empfänger nicht vorhanden ist wird sie für die Vorschau ersetzt
-	if(strip_tags(trim($empfänger_email)) == "")
+	// Falls die Email des Empfaenger nicht vorhanden ist wird sie fuer die Vorschau ersetzt
+	if(strip_tags(trim($empfaenger_email)) == "")
 	{
-	  $empfänger_email	= "< Empf&auml;nger E-Mail >";
+	  $empfaenger_email	= "< Empf&auml;nger E-Mail >";
 	}
-	// Falls die Nachricht nicht vorhanden ist wird sie für die Vorschau ersetzt
+	// Falls die Nachricht nicht vorhanden ist wird sie fuer die Vorschau ersetzt
 	if($ecard["message"] == "")
 	{
 	  $ecard["message"]			= "< Deine Nachricht >";
@@ -213,48 +213,48 @@ function parseEcardTemplate($ecard,$ecard_data,$root_path,$usr_id,$propotional_w
 	$ecard_data = preg_replace ("/<%ecard_sender_id%>/",		$usr_id, $ecard_data);
 	$ecard_data = preg_replace ("/<%ecard_sender_email%>/",		$ecard["email_sender"], $ecard_data);
 	$ecard_data = preg_replace ("/<%ecard_sender_name%>/",		$ecard["name_sender"], $ecard_data);
-	// Hier wird der Empfänger Name und Email ersetzt
-	$ecard_data = preg_replace ("/<%ecard_reciepient_email%>/", $empfänger_email, $ecard_data);
-	$ecard_data = preg_replace ("/<%ecard_reciepient_name%>/", 	$empfänger_name, $ecard_data);
-	// Hier wird die Bild Breite, Höhe und Name ersetzt
+	// Hier wird der Empfaenger Name und Email ersetzt
+	$ecard_data = preg_replace ("/<%ecard_reciepient_email%>/", $empfaenger_email, $ecard_data);
+	$ecard_data = preg_replace ("/<%ecard_reciepient_name%>/", 	$empfaenger_name, $ecard_data);
+	// Hier wird die Bild Breite, Hoehe und Name ersetzt
 	$ecard_data = preg_replace ("/<%ecard_image_width%>/",		$propotional_width, $ecard_data);
 	$ecard_data = preg_replace ("/<%ecard_image_height%>/",		$propotional_height, $ecard_data);
 	$ecard_data = preg_replace ("/<%ecard_image_name%>/",		$ecard["image_name"], $ecard_data);
 	// Hier wird die Nachricht ersetzt
 	$ecard_data = preg_replace ("/<%ecard_message%>/", 			preg_replace ("/\r?\n/", "<br />\n", htmlspecialchars($ecard["message"])), $ecard_data);
     // Hier werden die Umlaute ersetzt
-	$ecard_data = preg_replace ("/ü\ö\ä\Ü\Ö\Ä\ß/","/&uuml;\&ouml;\&auml;\&Uuml;\&Ouml;\&Auml;\&szlig;/", $ecard_data);
-	// Die fertig geparsten Daten werden jetzt nurnoch als Return Wert zurückgeliefert
+	$ecard_data = preg_replace ("/Ã¼\Ã¶\Ã¤\Ãœ\Ã–\Ã„\ÃŸ/","/&uuml;\&ouml;\&auml;\&Uuml;\&Ouml;\&Auml;\&szlig;/", $ecard_data);
+	// Die fertig geparsten Daten werden jetzt nurnoch als Return Wert zurueckgeliefert
 	return $ecard_data;
 }
-// Diese Funktion ruft die Mail Klasse auf und übergibt ihr die zu sendenden Daten
-// Übergabe:
+// Diese Funktion ruft die Mail Klasse auf und uebergibt ihr die zu sendenden Daten
+// Uebergabe:
 //		$ecard				.. array mit allen Informationen die in den inputs der Form gespeichert sind
 //		$ecard_html_data	.. geparste Daten vom Template
-//		$ecard_plain_data	.. plain Text der vom User in der DB eingestellt werden kann (er wird am Anfang im Body Bereich der Mail hinzugefügt)
+//		$ecard_plain_data	.. plain Text der vom User in der DB eingestellt werden kann (er wird am Anfang im Body Bereich der Mail hinzugefuegt)
 //		$sender_name		.. der Name des Senders
 //		$sender_email		.. die Email des Senders
-//		$empfänger_name		.. der Name des Empfängers
-//		$empfänger_email	.. die Email des Empfängers
-function sendEcard($ecard,$ecard_html_data,$ecard_plain_data,$empfänger_name,$empfänger_email) 
+//		$empfaenger_name		.. der Name des Empfaengers
+//		$empfaenger_email	.. die Email des Empfaengers
+function sendEcard($ecard,$ecard_html_data,$ecard_plain_data,$empfaenger_name,$empfaenger_email) 
 {
-	// Einstellungen für From To setzen
-	$HMTLMail = new MailClass($empfänger_email,'Grußkarte von '.$empfänger_name);
+	// Einstellungen fuer From To setzen
+	$HMTLMail = new MailClass($empfaenger_email,'GruÃŸkarte von '.$empfaenger_name);
 	$HMTLMail->setFromName($ecard["name_sender"]);
 	$HMTLMail->setFromAddr($ecard["email_sender"]);
 
-	// Body Teil hinzufügen zur Mail
+	// Body Teil hinzufuegen zur Mail
 	$HMTLMail->addTextPlainBodyPart($ecard_plain_data);
 	
-	// Die HTML Grußkarte vorsichtshalber an die Mail anhängen darum muss vorerstmal ein File erstellt werden das dann später angehängt wird
-	$Datei = "Grußkarte.html";
+	// Die HTML GruÃŸkarte vorsichtshalber an die Mail anhaengen darum muss vorerstmal ein File erstellt werden das dann spaeter angehaengt wird
+	$Datei = "GruÃŸkarte.html";
 	$FilePointer = fopen($Datei, "w+");
 	fwrite($FilePointer, $ecard_html_data);
 	fclose($FilePointer);
-	// Das File mit dem Inhalt der Grußkarte anhängen
+	// Das File mit dem Inhalt der GruÃŸkarte anhaengen
 	$HMTLMail->attachFile($Datei,"text/plain","attachment");
 	unlink($Datei);
-	// Bilder die im HTML Teil der Grußkarte gefunden werden, werden integriert 
+	// Bilder die im HTML Teil der GruÃŸkarte gefunden werden, werden integriert 
 	if (preg_match_all("/(<img.*src=\")(.*)(\".*>)/Uim", $ecard_html_data, $matchArray)) 
 	{
 		for ($i=0; $i < count($matchArray[0]); ++$i) 
@@ -270,16 +270,16 @@ function sendEcard($ecard,$ecard_html_data,$ecard_plain_data,$empfänger_name,$em
 			}
 		}
 	}
-	// Body Teil hinzufügen zur Mail
+	// Body Teil hinzufuegen zur Mail
 	$HMTLMail->addHTMLBodyPart($ecard_html_data);
 	
 	// Build and send the mail
 	$result = $HMTLMail->BuildAndSendMessage();
 	return $result;
 }
-// Diese Funktion überprüft den übergebenen String auf eine gültige E-mail Addresse und gibt True oder False zurück
-// Übergabe
-//		$email	.. Die Email die geprüft werden soll
+// Diese Funktion ueberprueft den uebergebenen String auf eine gueltige E-mail Addresse und gibt True oder False zurueck
+// Uebergabe
+//		$email	.. Die Email die geprueft werden soll
 function checkEmail($email) 
 {
 	if (preg_match ("/(@.*@)|(\.\.)|(@\.)|(\.@)|(^\.)/", $email) || !preg_match ("/^.+\@(\[?)[a-zA-Z0-9\-\.]+\.([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/", $email)) 
