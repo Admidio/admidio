@@ -119,7 +119,7 @@ else if ($g_valid_login && isset($_GET['rol_id']) && !isset($_GET['base']) && !i
 				AND mem_valid = 1
 				AND usr_valid = 1
 				AND email.usd_usr_id = email.usd_usr_id
-				ORDER BY last_name, first_name";
+				ORDER BY last_name,first_name ASC";
 		
 		$result 	  = $g_db->query($sql);
 		$menuheader   = '<select size="1" id="menu" name="menu" onchange="javascript:getMenuRecepientNameEmail(this.value)">';
@@ -127,7 +127,7 @@ else if ($g_valid_login && isset($_GET['rol_id']) && !isset($_GET['base']) && !i
 		$menudata     = '<option value="Rolle_'.$_GET['rol_id'].'" style="font-weight:bold;"><b>An die gesamte Rolle</b></option>';
 		while ($row = $g_db->fetch_object($result))
 		{
-			$menudata.='<option value="'.$row->usr_id.'">'.$row->first_name.' '.$row->last_name.'</option>';
+			$menudata.='<option value="'.$row->usr_id.'">'.$row->last_name.' '.$row->first_name.'</option>';
 		}
 		if (!empty($menudata))
 		{

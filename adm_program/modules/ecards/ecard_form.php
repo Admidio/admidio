@@ -12,7 +12,7 @@
  * Uebergaben:
  *
  * pho_id:		id der Veranstaltung deren Bilder angezeigt werden sollen
- * photo:       Name des Bildes ohne(.jpg) später -> (admidio/adm_my_files/photos/<* Gallery *>/$_GET['photo'].jpg)
+ * photo:       Name des Bildes ohne(.jpg) spaeter -> (admidio/adm_my_files/photos/<* Gallery *>/$_GET['photo'].jpg)
  * usr_id:		Die Benutzer id an dem die Grußkarte gesendet werden soll
  *
  *****************************************************************************/
@@ -22,32 +22,32 @@ require_once("../../system/common.php");
 require_once("../photos/photo_function.php");
 require_once("ecard_function.php");
 
-// Variablen die später in die DB kommen und vom Admin änderbar sind
+// Variablen die spaeter in die DB kommen und vom Admin aenderbar sind
 //**********************************************************
 /**/	$max_w_card			= "400";		// Maximale Breite des Grußkarten Bildes							
 /**/	$max_h_card			= "250";		// Maximale Höhe des Grußkarten Bildes	
 /**/	$max_w_view			= "250";		// Maximale Breite des angezeigten Bildes							
 /**/	$max_h_view 		= "250";		// Maximale Höhe des angezeigten Bildes
-/**/    $max_cc_recipients  = "10";			// Maximale Anzahl von CC Empfängern
-/**/	$max_length 		= 150;  // Maximale Länge des Grußkarten Textes
-/*		es können hier mehere Templates eingetragen werden welche dann vom Benutzt ausgewählt werden dürfen				
+/**/    $max_cc_recipients  = "10";			// Maximale Anzahl von CC Empfaengern
+/**/	$max_length 		= 150;			// Maximale Laenge des Grußkarten Textes
+/*		es können hier mehere Templates eingetragen werden welche dann vom Benutzt ausgewaehlt werden dürfen				
 /**/	$templates 			= array ("ecard_1.tpl","ecard_2.tpl","ecard_3.tpl"); 
-/*      es können hier mehere Schrift name eingetragen werden welche dann vom Benutzer ausgewählt werden dürfen */
+/*      es können hier mehere Schrift name eingetragen werden welche dann vom Benutzer ausgewaehlt werden dürfen */
 /**/	$fonts 				= array ("Comic Sans MS","Arial","Arial Black","Courier","Georgia","Helvetica","Impact","Script","Times Roman","Verdana"); 
-/*      es können hier mehere Schriftgrößen eingetragen werden welche dann vom Benutzer ausgewählt werden dürfen */
+/*      es können hier mehere Schriftgrößen eingetragen werden welche dann vom Benutzer ausgewaehlt werden dürfen */
 /**/	$font_sizes 		= array ("14","9","10","11","12","13","14","15","16","17","18","20","22","24","30"); 
-/*      es können hier mehere Schrift Farben eingetragen werden welche dann vom Benutzer ausgewählt werden dürfen */
+/*      es können hier mehere Schrift Farben eingetragen werden welche dann vom Benutzer ausgewaehlt werden dürfen */
 /**/	$font_colors 		= array("black","yellow","orange","red","maroon","fuchsia","purple","lime","green","teal","aqua","blue","navy","silver","gray","olive"); 
 /**/	$tmpl_folder 		= "../../layout/";								
 /**/	$ecard_plain_data 	= "Du hast eine E-Card von einem Mitglied des Vereins ".$g_organization." erhalten.\n Falls du diese nicht sehen kannst befindet sich diese im Anhang der Mail";
-/**/	$msg_error_1		= "Es ist ein Fehler bei der Verarbeitung der E-C@rd aufgetreten. Bitte probier es zu einem späteren Zeitpunkt noch einmal.";
+/**/	$msg_error_1		= "Es ist ein Fehler bei der Verarbeitung der E-C@rd aufgetreten. Bitte probier es zu einem sp&auml;teren Zeitpunkt noch einmal.";
 /**/	$msg_error_2 		= "Es sind einige Eingabefelder nicht bzw. nicht richtig ausgefüllt. Bitte füll diese aus, bzw. korrigier diese.";
 /**/	$g_preferences['enable_e@card_module']	= 1;
 //**********************************************************
 
 $error_msg					= "";
-$email_versand_liste		= array(); // Array wo alle Empfänger aufgelistet werden (jedoch keine zusätzlichen);
-$email_versand_liste_all	= array(); // Array wo alle Empfänger aufgelistet werden (inklusive zusätzlichen);
+$email_versand_liste		= array(); // Array wo alle Empfaenger aufgelistet werden (jedoch keine zusaetzlichen);
+$email_versand_liste_all	= array(); // Array wo alle Empfaenger aufgelistet werden (inklusive zusaetzlichen);
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_e@card_module'] != 1)
@@ -187,14 +187,14 @@ if(isset($bild_url))
 // ruf die Funktion auf die alle Post und Get Variablen parsed
 getVars();
 $ecard_send = false;
-// Wenn versucht wird die GRußkarte zu versenden werden die notwendigen FElder geprüft und wenn alles okay ist wird das Template geparsed und die Grußkarte weggeschickt
+// Wenn versucht wird die Grußkarte zu versenden werden die notwendigen FElder geprüft und wenn alles okay ist wird das Template geparsed und die Grußkarte weggeschickt
 if (! empty($submit_action)) 
 {
-	// Wenn die Felder Name E-mail von dem Empänger und Sender nicht leer sind
+	// Wenn die Felder Name E-mail von dem Empaenger und Sender nicht leer sind
     if ( checkEmail($ecard["email_recepient"]) && checkEmail($ecard["email_sender"]) 
 	&& ($ecard["email_recepient"] != "") && ($ecard["name_sender"] != "") )    
 	{
-		// Wenn die Nachricht größer ist als die maximal Länge wird sie zurückgestutzt
+		// Wenn die Nachricht größer ist als die maximal Laenge wird sie zurückgestutzt
 	    if (strlen($ecard["message"]) > $max_length) 
 		{
 	        $ecard["message"] = substr($ecard["message"],0,$max_length-1);
@@ -211,7 +211,7 @@ if (! empty($submit_action))
 	    {
 			// Es wird geprüft ob der Benutzer der ganzen Rolle eine Grußkarte schicken will
 			$rolle = str_replace(array("Rolle_","@rolle.com"),"",$ecard["email_recepient"]);
-			// Wenn nicht dann Name und Email des Empfängers zur versand Liste hinzufügen
+			// Wenn nicht dann Name und Email des Empfaengers zur versand Liste hinzufügen
 			if(!is_numeric($rolle))
 			{
 				array_push($email_versand_liste,array($ecard["name_recepient"],$ecard["email_recepient"]));
@@ -646,7 +646,7 @@ $javascript='
 				document.getElementById(\'btn_delall\').style.display = "none";
 				document.getElementById(\'btn_delContent\').style.display = "none";
 				document.getElementById(\'moreRecipient\').style.display = "none";
-				document.getElementById(\'getmoreRecipent\').innerHTML = "<a href=\"javascript:showHide(\'moreRecipient\');\">Mehr Empfänger</a>";
+				document.getElementById(\'getmoreRecipent\').innerHTML = "<a href=\"javascript:showHide(\'moreRecipient\');\">Mehr Empf&auml;nger</a>";
 			}
 			
 			if (now_recipients <= max_recipients)
@@ -706,7 +706,7 @@ $javascript='
 			else
 			{
 				document.getElementById(div).style.display = "none";
-				document.getElementById(\'getmoreRecipent\').innerHTML = "<a href=\"javascript:showHide(\'moreRecipient\');\">Mehr Empfänger</a>";
+				document.getElementById(\'getmoreRecipent\').innerHTML = "<a href=\"javascript:showHide(\'moreRecipient\');\">Mehr Empf&auml;nger</a>";
 				delAllRecipients(\'ja\');
 			}
 		}
@@ -798,7 +798,7 @@ if (empty($submit_action))
                  <dl>
                    <dt><label>An:</label>	
 				   <div id="getmoreRecipent" style="margin-top:15px; float:left; display:relativ;">
-					<a href="javascript:showHide(\'moreRecipient\');">Mehr Empfänger</a>
+					<a href="javascript:showHide(\'moreRecipient\');">Mehr Empf&auml;nger</a>
 					</div>		        
 				   </dt>
                    <dd>';
@@ -834,7 +834,7 @@ if (empty($submit_action))
 					<div id="moreRecipient" style="display:none;">
 					<hr />
 						<dl>
-							<dt>Weitere Empfänger:</dt>
+							<dt>Weitere Empf&auml;nger:</dt>
 							<dd>
 								<div id="buttons" style="width:370px; border:0px;">
 									<table summary="TableButtons" border="0" style="width:370px;">
@@ -998,7 +998,7 @@ else
 			<td align="left">&nbsp;</td>
 		</tr>
 		<tr>
-			<td align="left" colspan="2"><b>Empfänger:</b></td>
+			<td align="left" colspan="2"><b>Empf&auml;nger:</b></td>
 		</tr><tr>';
 		foreach($email_versand_liste as $item)
 		{
@@ -1021,7 +1021,7 @@ else
 		$Liste = getCCRecipients($ecard,$max_cc_recipients);
 		if(count($Liste)>0)
 		{
-			echo '<tr><td>&nbsp;</td></tr><tr><td colspan="2"><b>Zusätzliche Empfänger</b></td></tr><tr>';
+			echo '<tr><td>&nbsp;</td></tr><tr><td colspan="2"><b>Zus&auml;tzliche Empf&auml;nger</b></td></tr><tr>';
 			foreach($Liste as $item)
 			{
 				$i=0;
