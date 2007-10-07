@@ -90,7 +90,7 @@ if($_POST["upload"])
             //Die hochgeladene Datei ueberschreitet die in der Anweisung upload_max_filesize in php.ini festgelegte Groesse.
             if($_FILES["bilddatei"]["error"]["$x"]==1)
             {
-                $g_message->show("photo_2big", ini_get(upload_max_filesize));
+                $g_message->show("photo_2big", ini_get("upload_max_filesize"));
             }
         }
 
