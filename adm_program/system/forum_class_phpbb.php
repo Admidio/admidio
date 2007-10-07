@@ -408,8 +408,19 @@ class Forum
 
 
     // Funktion legt einen neuen Benutzer im Forum an
-    function userInsert($forum_username, $forum_useraktiv, $forum_password, $forum_email)
+    function userInsert($forum_username, $forum_password, $forum_email)
     {
+        // Erst mal schauen ob der User alle Kriterien erfuellt um im Forum aktiv zu sein
+        // Voraussetzung ist ein gueltiger Benutzername, eine Email und ein Password
+        if(strlen($forum_username) > 0 AND strlen($forum_password) > 0 AND strlen($forum_email) > 0)
+        {
+            $forum_useraktiv = 1;
+        }
+        else
+        {
+            $forum_useraktiv = 0;
+        }
+            
         // jetzt noch den neuen User ins Forum eintragen, ggf. Fehlermeldung als Standard ausgeben.
         $sql    = "SELECT MAX(user_id) as anzahl FROM ". $this->praefix. "_users";
         $result = $this->forum_db->query($sql);
@@ -559,7 +570,7 @@ class Forum
 
 
     // Funktion updated einen bestehenden User im Forum
-    function userUpdate($forum_username, $forum_useraktiv, $forum_password, $forum_email)
+    function userUpdate($forum_username, $forum_password, $forum_email)
     {
         // Erst mal schauen ob der User alle Kriterien erfuellt um im Forum aktiv zu sein
         // Voraussetzung ist ein gueltiger Benutzername, eine Email und ein Password
@@ -569,19 +580,21 @@ class Forum
         }
         else
         {
-            $forum_useraktiv = 1;
+            $forum_useraktiv = 0;
         }
 
         // User im Forum updaten
         $sql    = "UPDATE ". $this->praefix. "_users
-                   SET user_password = '$forum_password', user_active = $forum_useraktiv, user_email = '$forum_email'
+                      SET user_password = '$forum_password'
+                        , user_active   = $forum_useraktiv
+                        , user_email    = '$forum_email'
                    WHERE username = '". $forum_username. "' ";
         $result = $this->forum_db->query($sql);
     }
 
 
     // Funktion updated einen bestehenden User im Forum
-    function usernameUpdate($forum_new_username, $forum_old_username, $forum_useraktiv, $forum_password, $forum_email)
+    function usernameUpdate($forum_new_username, $forum_old_username, $forum_password, $forum_email)
     {
         // Erst mal schauen ob der User alle Kriterien erfuellt um im Forum aktiv zu sein
         // Voraussetzung ist ein gueltiger Benutzername, eine Email und ein Password
@@ -591,13 +604,16 @@ class Forum
         }
         else
         {
-            $forum_useraktiv = 1;
+            $forum_useraktiv = 0;
         }
 
         // User im Forum updaten
         $sql    = "UPDATE ". $this->praefix. "_users
-                   SET username = '$forum_new_username', user_password = '$forum_password', user_active = $forum_useraktiv, user_email = '$forum_email'
-                   WHERE username = '". $forum_old_username. "' ";
+                      SET username      = '$forum_new_username'
+                        , user_password = '$forum_password'
+                        , user_active   = $forum_useraktiv
+                        , user_email    = '$forum_email'
+                    WHERE username = '". $forum_old_username. "' ";
         $result = $this->forum_db->query($sql);
     }
 

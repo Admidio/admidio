@@ -299,12 +299,12 @@ if($g_forum_integriert && $login_name_changed)
     if(strlen($forum_old_username) > 0)
     {
         // Ein Update eines bestehenden Forumusers
-        $g_forum->usernameUpdate($user->getValue("usr_login_name"), $forum_old_username, 1, $user->getValue("usr_password"), $user->getValue("E-Mail"));
+        $g_forum->usernameUpdate($user->getValue("usr_login_name"), $forum_old_username, $user->getValue("usr_password"), $user->getValue("E-Mail"));
     }
     else
     {
         // Eine Neuanmeldung im Forum
-        $g_forum->userInsert($user->getValue("usr_login_name"), 1, $user->getValue("usr_password"), $user->getValue("E-Mail"));
+        $g_forum->userInsert($user->getValue("usr_login_name"), $user->getValue("usr_password"), $user->getValue("E-Mail"));
     }
 }
 
@@ -332,7 +332,7 @@ if($new_user == 3)
     // Den User nun im Forum auch als Aktiv updaten, wenn g_forum gesetzt ist
     if($g_forum_integriert)
     {
-        $g_forum->userUpdate($user->getValue("usr_login_name"), 1, $user->getValue("usr_password"), $user->getValue("E-Mail"));
+        $g_forum->userUpdate($user->getValue("usr_login_name"), $user->getValue("usr_password"), $user->getValue("E-Mail"));
     }
 
     // nur ausfuehren, wenn E-Mails auch unterstuetzt werden
