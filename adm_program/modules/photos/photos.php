@@ -358,18 +358,18 @@ echo "<div class=\"photoModuleContainer\">";
                             }
 
                             //Lightbox-Mode
-                            if($g_preferences['photo_show_mode']==1)
+                            elseif($g_preferences['photo_show_mode']==1)
                             {
                                 echo "<div>
-                                    <a href=\"".$ordner_url."/".$bild.".jpg\" rel=\"lightbox[roadtrip]\" title=\"".$photo_event->getValue("pho_name")."\"><img src=\"".$ordner_url."/thumbnails/".$bild.".jpg\" class=\"thumbnail\" alt=\"$bild\" /></a>
+                                    <a href=\"".$ordner_url."/".$bild.".jpg\" rel=\"lightbox[roadtrip]\" title=\"".$photo_event->getValue("pho_name")."\"><img src=\"".$ordner_url."/thumbnails/".$bild.".jpg\" class=\"photoThumbnail\" alt=\"$bild\" /></a>
                                 </div>";
                             }
 
                             //Gleichesfenster-Mode
-                            if($g_preferences['photo_show_mode']==2)
+                            elseif($g_preferences['photo_show_mode']==2)
                             {
                                 echo "<div>
-                                    <img onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$bild&pho_id=$pho_id'\" src=\"".$ordner_url."/thumbnails/".$bild.".jpg\" class=\"thumbnail\" alt=\"$bild\" />
+                                    <img onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$bild&pho_id=$pho_id'\" src=\"".$ordner_url."/thumbnails/".$bild.".jpg\" class=\"photoThumbnail\" alt=\"$bild\" />
                                 </div>";
                             }   
                             
