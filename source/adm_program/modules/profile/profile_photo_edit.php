@@ -115,7 +115,7 @@ elseif( isset($_POST["upload"]))
     //Dateigroesse
     if ($_FILES["bilddatei"]["error"]==1)
     {
-        $g_message->show("profile_photo_2big", ini_get(upload_max_filesize));
+        $g_message->show("profile_photo_2big", ini_get("upload_max_filesize"));
     }
 
     //Kontrolle ob Bilder ausgewaehlt wurden
