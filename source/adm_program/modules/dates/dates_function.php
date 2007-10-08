@@ -67,8 +67,7 @@ if($req_dat_id > 0)
     $date->getDate($req_dat_id);
     
     // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
-    if($date->getValue("dat_org_shortname") != $g_organization
-    && $date->getValue("dat_global") == 0 )
+    if($date->editRight() == false )
     {
         $g_message->show("norights");
     }
@@ -175,10 +174,18 @@ if($_GET["mode"] == 1)
 }
 elseif($_GET["mode"] == 2)
 {
-    $date->delete();
+    // Termin loeschen, wenn sie zur aktuellen Orga gehoert
+    if($date->getValue("dat_org_shortname") == $g_current_organization->getValue("org_shortname"))
+    {
+        $date->delete();
     
-    $g_message->setForwardUrl($_SESSION['navigation']->getUrl());
-    $g_message->show("delete");
+        $g_message->setForwardUrl($_SESSION['navigation']->getUrl());
+        $g_message->show("delete");
+    }
+    else
+    {
+        $g_message->show("norights");
+    }
 }
 elseif($_GET["mode"] == 4)
 {

@@ -156,6 +156,7 @@ class TableAccess
     // Methode gibt den Wert eines Feldes zurueck
     function getValue($field_name)
     {
+        $value = "";
         if(method_exists($this, "_getValue"))
         {
             $value = $this->_getValue($field_name);

@@ -20,6 +20,7 @@
 
 require("../../system/common.php");
 require("../../system/bbcode.php");
+require("../../system/date_class.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if($g_preferences['enable_dates_module'] == 0)
@@ -234,39 +235,46 @@ if($g_db->num_rows($dates_result) == 0)
 }
 else
 {
+    $date = new Date($g_db);
+
     // Termine auflisten
     while($row = $g_db->fetch_object($dates_result))
     {
+        $date->clear();
+        $date->setArray($row);
         echo "
         <div class=\"boxLayout\">
             <div class=\"boxHead\">
                 <div class=\"boxHeadLeft\">
-                    <img src=\"$g_root_path/adm_program/images/date.png\" class=\"icon16\" alt=\"$row->dat_headline\" />
-                    ". mysqldatetime("d.m.y", $row->dat_begin). "
+                    <img src=\"$g_root_path/adm_program/images/date.png\" class=\"icon16\" alt=\"". $date->getValue("dat_headline"). "\" />
+                    ". mysqldatetime("d.m.y", $date->getValue("dat_begin")). "
                 </div>
-                <div class=\"boxHeadCenter\">$row->dat_headline</div>
+                <div class=\"boxHeadCenter\">". $date->getValue("dat_headline"). "</div>
                 <div class=\"boxHeadRight\">
                     <span class=\"iconLink\">
-                        <a href=\"$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=$row->dat_id&amp;mode=4\"><img 
+                        <a href=\"$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=". $date->getValue("dat_id"). "&amp;mode=4\"><img 
                         src=\"$g_root_path/adm_program/images/database_out.png\" alt=\"Exportieren (iCal)\" title=\"Exportieren (iCal)\" /></a>
                     </span>";
                     
-                    // aendern & loeschen darf man nur eigene Termine, ausser Moderatoren
+                    // aendern & loeschen duerfen nur User mit den gesetzten Rechten
                     if ($g_current_user->editDates())
                     {
-                        echo "
-                        <span class=\"iconLink\">
-                            <a href=\"$g_root_path/adm_program/modules/dates/dates_new.php?dat_id=$row->dat_id&amp;headline=$req_headline\"><img 
-                            src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
-                        </span>";
-
-                        // Loeschen darf man nur Termine der eigenen Gliedgemeinschaft
-                        if($row->dat_org_shortname == $g_organization)
+                        if($date->editRight() == true)
                         {
                             echo "
                             <span class=\"iconLink\">
-                                <a href=\"$g_root_path/adm_program/modules/dates/dates_function.php?mode=5&amp;dat_id=$row->dat_id\"><img 
-                                src=\"$g_root_path/adm_program/images/cross.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" /></a>
+                                <a href=\"$g_root_path/adm_program/modules/dates/dates_new.php?dat_id=". $date->getValue("dat_id"). "&amp;headline=$req_headline\"><img 
+                                src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
+                            </span>";
+                        }
+
+                        // Loeschen darf man nur Termine der eigenen Gliedgemeinschaft
+                        if($date->getValue("dat_org_shortname") == $g_organization)
+                        {
+                            echo "
+                            <span class=\"iconLink\">
+                                <a href=\"$g_root_path/adm_program/modules/dates/dates_function.php?mode=5&amp;dat_id=". $date->getValue("dat_id"). "\"><img 
+                                src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Löschen\" title=\"Löschen\" /></a>
                             </span>";
                         }
                     }
@@ -275,70 +283,70 @@ else
 
             <div class=\"boxBody\">
                 <div style=\"margin-bottom: 10px;\">";
-                    if (mysqldatetime("h:i", $row->dat_begin) != "00:00")
+                    if (mysqldatetime("h:i", $date->getValue("dat_begin")) != "00:00")
                     {
                         echo "Beginn:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>".
-                        mysqldatetime("h:i", $row->dat_begin). "</strong> Uhr&nbsp;&nbsp;&nbsp;&nbsp;";
+                        mysqldatetime("h:i", $date->getValue("dat_begin")). "</strong> Uhr&nbsp;&nbsp;&nbsp;&nbsp;";
                     }
 
-                    if($row->dat_begin != $row->dat_end)
+                    if($date->getValue("dat_begin") != $date->getValue("dat_end"))
                     {
-                        if (mysqldatetime("h:i", $row->dat_begin) != "00:00")
+                        if (mysqldatetime("h:i", $date->getValue("dat_begin")) != "00:00")
                         {
                             echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
                         }
 
                         echo "Ende:&nbsp;";
-                        if(mysqldatetime("d.m.y", $row->dat_begin) != mysqldatetime("d.m.y", $row->dat_end))
+                        if(mysqldatetime("d.m.y", $date->getValue("dat_begin")) != mysqldatetime("d.m.y", $date->getValue("dat_end")))
                         {
-                            echo "<strong>". mysqldatetime("d.m.y", $row->dat_end). "</strong>";
+                            echo "<strong>". mysqldatetime("d.m.y", $date->getValue("dat_end")). "</strong>";
 
-                            if (mysqldatetime("h:i", $row->dat_end) != "00:00")
+                            if (mysqldatetime("h:i", $date->getValue("dat_end")) != "00:00")
                             {
                                 echo " um ";
                             }
                         }
 
-                        if (mysqldatetime("h:i", $row->dat_end) != "00:00")
+                        if (mysqldatetime("h:i", $date->getValue("dat_end")) != "00:00")
                         {
-                            echo "<strong>". mysqldatetime("h:i", $row->dat_end). "</strong> Uhr";
+                            echo "<strong>". mysqldatetime("h:i", $date->getValue("dat_end")). "</strong> Uhr";
                         }
                     }
 
-                    if ($row->dat_location != "")
+                    if ($date->getValue("dat_location") != "")
                     {
-                        if (mysqldatetime("h:i", $row->dat_begin) != "00:00"
-                        && $row->dat_begin != $row->dat_end)
+                        if (mysqldatetime("h:i", $date->getValue("dat_begin")) != "00:00"
+                        && $date->getValue("dat_begin") != $date->getValue("dat_end"))
                         {
                             echo "<br />";
                         }
-                        echo "Treffpunkt:&nbsp;<strong>". $row->dat_location. "</strong>";
+                        echo "Treffpunkt:&nbsp;<strong>". $date->getValue("dat_location"). "</strong>";
                     }
                 echo "</div>
                 <div>";
                     // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
                     if($g_preferences['enable_bbcode'] == 1)
                     {
-                        echo $bbcode->parse($row->dat_description);
+                        echo $bbcode->parse($date->getValue("dat_description"));
                     }
                     else
                     {
-                        echo nl2br($row->dat_description);
+                        echo nl2br($date->getValue("dat_description"));
                     }
                 echo "</div>
                 <div class=\"editInformation\">";
-                    $user_create = new User($g_db, $row->dat_usr_id);
+                    $user_create = new User($g_db, $date->getValue("dat_usr_id"));
                     echo "Angelegt von ". $user_create->getValue("Vorname"). " ". $user_create->getValue("Nachname").
-                    " am ". mysqldatetime("d.m.y h:i", $row->dat_timestamp);
+                    " am ". mysqldatetime("d.m.y h:i", $date->getValue("dat_timestamp"));
 
-                    // Zuletzt geaendert nur anzeigen, wenn Änderung nach 15 Minuten oder durch anderen Nutzer gemacht wurde
-                    if($row->dat_usr_id_change > 0
-                    && (  strtotime($row->dat_last_change) > (strtotime($row->dat_timestamp) + 900)
-                       || $row->dat_usr_id_change != $row->dat_usr_id ) )
+                    // Zuletzt geaendert nur anzeigen, wenn Aenderung nach 15 Minuten oder durch anderen Nutzer gemacht wurde
+                    if($date->getValue("dat_usr_id_change") > 0
+                    && (  strtotime($date->getValue("dat_last_change")) > (strtotime($date->getValue("dat_timestamp")) + 900)
+                       || $date->getValue("dat_usr_id_change") != $date->getValue("dat_usr_id") ) )
                     {
-                        $user_change = new User($g_db, $row->dat_usr_id_change);
+                        $user_change = new User($g_db, $date->getValue("dat_usr_id_change"));
                         echo "<br />Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname").
-                        " am ". mysqldatetime("d.m.y h:i", $row->dat_last_change);
+                        " am ". mysqldatetime("d.m.y h:i", $date->getValue("dat_last_change"));
                     }
                 echo "</div>
             </div>

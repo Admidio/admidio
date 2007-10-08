@@ -54,8 +54,7 @@ if($_GET["ann_id"] > 0)
     $announcement->getAnnouncement($_GET["ann_id"]);
     
     // Pruefung, ob die Ankuendigung zur aktuellen Organisation gehoert bzw. global ist
-    if($announcement->getValue("ann_org_shortname") != $g_organization
-    && $announcement->getValue("ann_global") == 0 )
+    if($announcement->editRight() == false)
     {
         $g_message->show("norights");
     }
@@ -104,10 +103,18 @@ if($_GET["mode"] == 1)
 }
 elseif($_GET["mode"] == 2)
 {
-    $announcement->delete();
-
-    $g_message->setForwardUrl($_SESSION['navigation']->getUrl());
-    $g_message->show("delete");
+    // Ankuendigung loeschen, wenn sie zur aktuellen Orga gehoert
+    if($announcement->getValue("ann_org_shortname") == $g_current_organization->getValue("org_shortname"))
+    {
+        $announcement->delete();
+    
+        $g_message->setForwardUrl($_SESSION['navigation']->getUrl());
+        $g_message->show("delete");
+    }
+    else
+    {
+        $g_message->show("norights");
+    }
 }
 elseif($_GET["mode"] == 4)
 {

@@ -60,8 +60,7 @@ if($req_dat_id > 0)
     $date->getDate($req_dat_id);
     
     // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
-    if($date->getValue("dat_org_shortname") != $g_organization
-    && $date->getValue("dat_global") == 0 )
+    if($date->editRight() == false)
     {
         $g_message->show("norights");
     }
@@ -111,7 +110,7 @@ echo "
     <div class=\"formHead\">";
         if($req_dat_id > 0)
         {
-            echo $_GET['headline']. " &auml;ndern";
+            echo $_GET['headline']. " ändern";
         }
         else
         {
@@ -122,7 +121,7 @@ echo "
         <ul class=\"formFieldList\">
             <li>
                 <dl>
-                    <dt><label for=\"dat_headline\">&Uuml;berschrift:</label></dt>
+                    <dt><label for=\"dat_headline\">Überschrift:</label></dt>
                     <dd>
                         <input type=\"text\" id=\"dat_headline\" name=\"dat_headline\" style=\"width: 350px;\" maxlength=\"100\" value=\"". $date->getValue("dat_headline"). "\" />
                         <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
