@@ -61,8 +61,7 @@ if($req_ann_id > 0)
     $announcement->getAnnouncement($req_ann_id);
     
     // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
-    if($announcement->getValue("ann_org_shortname") != $g_organization
-    && $announcement->getValue("ann_global") == 0 )
+    if($announcement->editRight() == false)
     {
         $g_message->show("norights");
     }
@@ -94,7 +93,7 @@ echo "
     <div class=\"formHead\">";
         if($req_ann_id > 0)
         {
-            echo "$req_headline &auml;ndern";
+            echo "$req_headline ändern";
         }
         else
         {
@@ -105,7 +104,7 @@ echo "
         <ul class=\"formFieldList\">
             <li>
                 <dl>
-                    <dt><label for=\"ann_headline\">&Uuml;berschrift:</label></dt>
+                    <dt><label for=\"ann_headline\">Überschrift:</label></dt>
                     <dd>
                         <input type=\"text\" id=\"ann_headline\" name=\"ann_headline\" style=\"width: 350px;\" tabindex=\"1\" maxlength=\"100\" value=\"". $announcement->getValue("ann_headline"). "\" />
                         <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>

@@ -131,5 +131,25 @@ class Date extends TableAccess
         $cal->add_component($event);
         return $cal->serialize();    
     }    
+    
+    // prueft, ob der Termin von der aktuellen Orga bearbeitet werden darf
+    function editRight()
+    {
+        global $g_current_organization;
+        
+        // Termine der eigenen Orga darf bearbeitet werden
+        if($this->db_fields['dat_org_shortname'] == $g_current_organization->getValue("org_shortname"))
+        {
+            return true;
+        }
+        // Termine von Kinder-Orgas darf bearbeitet werden, wenn diese als global definiert wurden
+        elseif($this->db_fields['dat_global'] == true
+        && $g_current_organization->isChildOrganization($this->db_fields['dat_org_shortname']))
+        {
+            return true;
+        }
+    
+        return false;
+    }    
 }
 ?>

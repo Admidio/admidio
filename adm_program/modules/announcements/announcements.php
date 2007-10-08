@@ -18,6 +18,7 @@
 
 require("../../system/common.php");
 require("../../system/bbcode.php");
+require("../../system/announcement_class.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_announcements_module'] == 0)
@@ -177,35 +178,42 @@ if ($g_db->num_rows($announcements_result) == 0)
 }
 else
 {
+    $announcement = new Announcement($g_db);
+
     // Ankuendigungen auflisten
     while($row = $g_db->fetch_object($announcements_result))
     {
+        $announcement->clear();
+        $announcement->setArray($row);
         echo "
         <div class=\"boxLayout\">
             <div class=\"boxHead\">
                 <div style=\"width: 70%; float: left;\">
-                    <img src=\"$g_root_path/adm_program/images/note.png\" style=\"vertical-align: top;\" alt=\"$row->ann_headline\" />
-                    $row->ann_headline
+                    <img src=\"$g_root_path/adm_program/images/note.png\" style=\"vertical-align: top;\" alt=\"". $announcement->getValue("ann_headline"). "\" />".
+                    $announcement->getValue("ann_headline"). "
                 </div>
                 <div style=\"text-align: right;\">".
-                    mysqldatetime("d.m.y", $row->ann_timestamp). "&nbsp;";
+                    mysqldatetime("d.m.y", $announcement->getValue("ann_timestamp")). "&nbsp;";
                     
                     // aendern & loeschen duerfen nur User mit den gesetzten Rechten
                     if($g_current_user->editAnnouncements())
                     {
-                        echo "
-                        <span class=\"iconLink\">
-                            <a href=\"$g_root_path/adm_program/modules/announcements/announcements_new.php?ann_id=$row->ann_id&amp;headline=$req_headline\"><img 
-                            src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
-                        </span>";
-
-                        // Loeschen darf man nur Ankuendigungen der eigenen Gliedgemeinschaft
-                        if($row->ann_org_shortname == $g_organization)
+                        if($announcement->editRight() == true)
                         {
                             echo "
                             <span class=\"iconLink\">
-                                <a href=\"$g_root_path/adm_program/modules/announcements/announcements_function.php?mode=4&amp;ann_id=$row->ann_id\"><img 
-                                src=\"$g_root_path/adm_program/images/cross.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" /></a>
+                                <a href=\"$g_root_path/adm_program/modules/announcements/announcements_new.php?ann_id=". $announcement->getValue("ann_id"). "&amp;headline=$req_headline\"><img 
+                                src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
+                            </span>";
+                        }
+
+                        // Loeschen darf man nur Ankuendigungen der eigenen Gliedgemeinschaft
+                        if($announcement->getValue("ann_org_shortname") == $g_organization)
+                        {
+                            echo "
+                            <span class=\"iconLink\">
+                                <a href=\"$g_root_path/adm_program/modules/announcements/announcements_function.php?mode=4&amp;ann_id=". $announcement->getValue("ann_id"). "\"><img 
+                                src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Löschen\" title=\"Löschen\" /></a>
                             </span>";
                         }    
                     }
@@ -216,27 +224,27 @@ else
                 // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
                 if($g_preferences['enable_bbcode'] == 1)
                 {
-                    echo $bbcode->parse($row->ann_description);
+                    echo $bbcode->parse($announcement->getValue("ann_description"));
                 }
                 else
                 {
-                    echo nl2br($row->ann_description);
+                    echo nl2br($announcement->getValue("ann_description"));
                 }
             
                 echo "
                 <div class=\"editInformation\">";
-                    $user_create = new User($g_db, $row->ann_usr_id);
+                    $user_create = new User($g_db, $announcement->getValue("ann_usr_id"));
                     echo "Angelegt von ". $user_create->getValue("Vorname"). " ". $user_create->getValue("Nachname").
-                    " am ". mysqldatetime("d.m.y h:i", $row->ann_timestamp);
+                    " am ". mysqldatetime("d.m.y h:i", $announcement->getValue("ann_timestamp"));
 
-                    // Zuletzt geaendert nur anzeigen, wenn Änderung nach 15 Minuten oder durch anderen Nutzer gemacht wurde
-                    if($row->ann_usr_id_change > 0
-                    && (  strtotime($row->ann_last_change) > (strtotime($row->ann_timestamp) + 900)
-                       || $row->ann_usr_id_change != $row->ann_usr_id ) )
+                    // Zuletzt geaendert nur anzeigen, wenn Aenderung nach 15 Minuten oder durch anderen Nutzer gemacht wurde
+                    if($announcement->getValue("ann_usr_id_change") > 0
+                    && (  strtotime($announcement->getValue("ann_last_change")) > (strtotime($announcement->getValue("ann_timestamp")) + 900)
+                       || $announcement->getValue("ann_usr_id_change") != $announcement->getValue("ann_usr_id") ) )
                     {
-                        $user_change = new User($g_db, $row->ann_usr_id_change);
+                        $user_change = new User($g_db, $announcement->getValue("ann_usr_id_change"));
                         echo "<br />Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname").
-                        " am ". mysqldatetime("d.m.y h:i", $row->ann_last_change);
+                        " am ". mysqldatetime("d.m.y h:i", $announcement->getValue("ann_last_change"));
                     }
                 echo "</div>
             </div>
