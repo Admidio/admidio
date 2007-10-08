@@ -90,3 +90,7 @@ hier koenne Einstellungen fuer diese vorgenommen werden*/
 #photoEventInformation{
     margin: 5px
 }
+
+.photoModuleContainer .editInformation {
+    text-align: center;
+}
