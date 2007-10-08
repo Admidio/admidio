@@ -33,13 +33,13 @@ echo "
             <li>
                 <dl>
                     <dt><label for=\"usr_login_name\">Benutzername:</label></dt>
-                    <dd><input type=\"text\" id=\"usr_login_name\" name=\"usr_login_name\" size=\"14\" maxlength=\"35\" /></dd>
+                    <dd><input type=\"text\" id=\"usr_login_name\" name=\"usr_login_name\" style=\"width: 120px;\" maxlength=\"35\" tabindex=\"1\" /></dd>
                 </dl>
             </li>
             <li>
                 <dl>
                     <dt><label for=\"usr_password\">Passwort:</label></dt>
-                    <dd><input type=\"password\" id=\"usr_password\" name=\"usr_password\" size=\"14\" maxlength=\"20\" /></dd>
+                    <dd><input type=\"password\" id=\"usr_password\" name=\"usr_password\" style=\"width: 120px;\" maxlength=\"20\" tabindex=\"2\" /></dd>
                 </dl>
             </li>";
             
@@ -48,16 +48,15 @@ echo "
                 echo "
                 <li>
                     <dl>
-                        <dt><input type=\"checkbox\" id=\"auto_login\" name=\"auto_login\" value=\"1\" /> 
-                            <label for=\"auto_login\">dauerhaft angemeldet bleiben</label></dt>
-                        <dd>&nbsp;</dd>
+                        <dt><label for=\"auto_login\">Angemeldet bleiben:</label></dt>
+                        <dd><input type=\"checkbox\" id=\"auto_login\" name=\"auto_login\" value=\"1\" tabindex=\"3\" /></dd>
                     </dl>
                 </li>";
             }
         echo "</ul>
         
         <div class=\"formSubmit\">
-            <button name=\"login\" type=\"submit\" value=\"login\">
+            <button name=\"login\" type=\"submit\" value=\"login\" tabindex=\"4\">
             <img src=\"$g_root_path/adm_program/images/key.png\" alt=\"Login\" />
             &nbsp;Login</button>
         </div>";
