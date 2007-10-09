@@ -115,10 +115,10 @@ while ($row = $g_db->fetch_object($result))
         {
             $bildpfad = SERVER_PATH. "/adm_my_files/photos/".$row->pho_begin."_".$row->pho_id."/".$bild.".jpg";
             //Zu Sicherheit noch überwachen ob das Bild existiert, wenn ja raus damit
-            if (file_exists($bildpfad))
+        	if (file_exists($bildpfad))
             {
                 $description = $description. "
-                 <img src=\"$g_root_path/adm_program/modules/photos/photo_show.php?bild=".$bildpfad."&amp;scal=100\" alt=\"bild\" />&nbsp;";
+                 <img src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$row->pho_id."&amp;pic_nr=".$bild."&amp;pho_begin=".$row->pho_begin."&amp;scal=100\" border=\"0\" />&nbsp;";
             }
         }
     }
