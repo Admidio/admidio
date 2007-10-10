@@ -329,10 +329,10 @@ a:hover {
 }
 
 /* Icon um Bereiche auf und zu zuklappen */
-iconShowHide {
-    border-width:       0px;
+.iconShowHide img {
+    border:             none;
     vertical-align:     top;
-    margin:            1px 5px 2px 3px;
+    margin:             4px 5px 2px 3px;
 }
 
 /* Icon um Informationen anzuzeigen (ohne Text und Link)*/
@@ -348,7 +348,7 @@ iconShowHide {
     border:             none;
     cursor:             pointer;
     vertical-align:     top;
-    margin:             2px 3px 0px 3px;
+    margin:             4px 3px 0px 3px;
 }
 
 /* Elemente fuer Navigationsklasse */
