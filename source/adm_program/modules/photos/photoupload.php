@@ -9,7 +9,7 @@
  *
  * Uebergaben:
  *
- * pho_id: id der Veranstaltung zu der die Bilder hinzugefuegt werden sollen
+ * pho_id: id des Albums zu dem die Bilder hinzugefuegt werden sollen
  *
  *****************************************************************************/
 
@@ -59,7 +59,7 @@ else
     $_SESSION['photo_event'] =& $photo_event;
 }
 
-// pruefen, ob Veranstaltung zur aktuellen Organisation gehoert
+// pruefen, ob Album zur aktuellen Organisation gehoert
 if($photo_event->getValue("pho_org_shortname") != $g_organization)
 {
     $g_message->show("invalid");
@@ -78,7 +78,7 @@ echo"
     <div class=\"formHead\">Bilder hochladen</div>
     <div class=\"formBody\">
         <div class=\"formRow\">
-            Bilder zu dieser Veranstaltung hinzuf&uuml;gen:<br />"
+            Bilder zu diesem Album hinzuf&uuml;gen:<br />"
             .$photo_event->getValue("pho_name")."<br />"
             ."(Beginn: ". mysqldate("d.m.y", $photo_event->getValue("pho_begin")).")"
             ."

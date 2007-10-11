@@ -9,7 +9,7 @@
  *
  * Uebergaben:
  *
- * pho_id: id der Veranstaltung zu der die Bilder hinzugefuegt werden sollen
+ * pho_id: id des Albums zu dem die Bilder hinzugefuegt werden sollen
  *
  *****************************************************************************/
 
@@ -55,7 +55,7 @@ else
     $_SESSION['photo_event'] =& $photo_event;
 }
 
-// pruefen, ob Veranstaltung zur aktuellen Organisation gehoert
+// pruefen, ob Album zur aktuellen Organisation gehoert
 if($photo_event->getValue('pho_org_shortname') != $g_organization)
 {
     $g_message->show("invalid");
@@ -121,7 +121,7 @@ if($_POST["upload"])
     echo"<h1 class=\"moduleHeadline\">Fotogalerien - Upload</h1>
     <div class=\"photoModuleContainer\">
         Bitte einen Moment Geduld. 
-        Die Bilder wurden der Veranstaltung <br /> - ".$photo_event->getValue("pho_name")." - <br />
+        Die Bilder wurden dem Album <br /> - ".$photo_event->getValue("pho_name")." - <br />
         erfolgreich hinzugef&uuml;gt, wenn sie hier angezeigt werden.<br />";
 
         //Verarbeitungsschleife fuer die einzelnen Bilder

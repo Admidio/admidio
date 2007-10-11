@@ -8,7 +8,7 @@
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
- * pho_id: id der Veranstaltung die bearbeitet werden soll
+ * pho_id: id des Albums das bearbeitet werden soll
  * job:    - new (neues Formular)
  *         - change (Formular fuer Aenderunmgen)
  *
@@ -32,7 +32,7 @@ if(!$g_current_user->editPhotoRight())
 }
 
 // Uebergabevariablen pruefen
-//Veranstaltungsuebergabe Numerisch und != Null?
+//Albumsuebergabe Numerisch und != Null?
 if(isset($_GET["pho_id"]) && is_numeric($_GET["pho_id"]) == false && $_GET["pho_id"]!=NULL)
 {
     $g_message->show("invalid");
@@ -51,7 +51,7 @@ $_SESSION['navigation']->addUrl(CURRENT_URL);
 // Fotoeventobjekt anlegen
 $photo_event = new PhotoEvent($g_db);
 
-// nur Daten holen, wenn Veranstaltung editiert werden soll
+// nur Daten holen, wenn Album editiert werden soll
 if ($_GET["job"] == "change")
 {
     $photo_event->getPhotoEvent($pho_id);
@@ -83,7 +83,7 @@ else
     $photo_event->setValue("pho_end", mysqldate('d.m.y', $photo_event->getValue("pho_end")));
 }
 
-// einlesen der Veranstaltungsliste
+// einlesen der Albumliste
 $pho_id_condition = "";
 if($photo_event->getValue("pho_id") > 0)
 {
@@ -105,7 +105,7 @@ function subfolder($parent_id, $vorschub, $photo_event, $pho_id)
     global $g_db;
     $vorschub = $vorschub."&nbsp;&nbsp;&nbsp;&nbsp;";
 
-    //Erfassen der auszugebenden Veranstaltung
+    //Erfassen des auszugebenden Albums
     $pho_id_condition = "";
     if($photo_event->getValue("pho_id") > 0)
     {
@@ -137,9 +137,9 @@ function subfolder($parent_id, $vorschub, $photo_event, $pho_id)
 
 /******************************HTML-Kopf******************************************/
 
-$g_layout['title'] = "Veranstaltungsverwaltung";
+$g_layout['title'] = "Foto-Album-Verwaltung";
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");
-echo"<h1 class=\"moduleHeadline\">Fotogalerien - Veranstaltungsverwaltung</h1>";
+echo"<h1 class=\"moduleHeadline\">Foto-Album-Verwaltung</h1>";
 
 
 /****************************Formular***********************************************/
@@ -148,24 +148,24 @@ echo "
 <form method=\"post\" action=\"$g_root_path/adm_program/modules/photos/photo_event_function.php?pho_id=". $_GET["pho_id"]. "&amp;job=". $_GET["job"]. "\">
 <div class=\"formLayout\" id=\"photo_event_new_form\">
     <div class=\"formHead\">";
-        //bei neuer Veranstaltung
+        //bei neuem Album
         if($_GET["job"]=="new")
         {
-            echo "Neue Veranstaltung anlegen";
+            echo "Neues Album anlegen";
         }
-        //bei bestehender Veranstaltung
+        //bei bestehendem Album
         if($_GET["job"]=="change")
         {
-                echo "Veranstaltung bearbeiten";
+                echo "Album bearbeiten";
         }
     echo"</div>
     <div class=\"formBody\">";
-        //Veranstaltung
+        //Album
         echo"
         <ul class=\"formFieldList\">
             <li>
                 <dl>
-                    <dt><label for=\"pho_name\">Veranstaltung:</label></dt>
+                    <dt><label for=\"pho_name\">Album:</label></dt>
                     <dd>
                         <input type=\"text\" id=\"pho_name\" name=\"pho_name\" style=\"width: 300px;\" maxlength=\"50\" tabindex=\"1\" value=\"".$photo_event->getValue("pho_name")."\" />
                         <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>

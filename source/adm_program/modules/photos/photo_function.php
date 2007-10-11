@@ -9,7 +9,7 @@
  *
  * Uebergaben:
  *
- * pho_id: id der Veranstaltung
+ * pho_id: id des Albums
  * job: - do_delete
  *      - rotate
  *      - delete_request
@@ -120,7 +120,7 @@ function image_save($orig_path, $scale, $destination_path)
 
 
 //Loeschen eines Thumbnails
-//pho_id: Veranstaltungsid
+//pho_id: Albumid
 //bild: nr des Bildes dessen Thumbnail gelöscht werden soll
 function thumbnail_delete($pho_id, $pic_nr, $pho_begin)
 {
@@ -136,14 +136,14 @@ function thumbnail_delete($pho_id, $pic_nr, $pho_begin)
 }
 
 //Rechtsdrehung eines Bildes
-//pho_id: Veranstaltungsid
+//pho_id: Albumid
 //bild: nr des Bildes das gedreht werden soll
 function right_rotate ($pho_id, $bild)
 {
     global $g_db;
     header("Content-Type: image/jpeg");
 
-    //Aufruf der ggf. Uebergebenen Veranstaltung
+    //Aufruf des ggf. uebergebenen Albums
     $photo_event = new PhotoEvent($g_db, $pho_id);
 
     //Thumbnail loeschen
@@ -187,14 +187,14 @@ function right_rotate ($pho_id, $bild)
 };
 
 //Linksdrehung eines Bildes
-//pho_id: Veranstaltungsid
+//pho_id: Albumid
 //bild: nr des Bildes das gedreht werden soll
 function left_rotate ($pho_id, $bild)
 {
     global $g_db;
     header("Content-Type: image/jpeg");
 
-    //Aufruf der ggf. Uebergebenen Veranstaltung
+    //Aufruf des ggf. uebergebenen Albums
     $photo_event = new PhotoEvent($g_db, $pho_id);
     
     //Thumbnail loeschen
@@ -244,7 +244,7 @@ function delete ($pho_id, $bild)
     global $g_db;
     global $g_organization;
 
-    // einlesen der Veranstaltung
+    // einlesen des Albums
     $photo_event = new PhotoEvent($g_db, $pho_id);
     
     //Speicherort
@@ -312,7 +312,7 @@ if(isset($_GET["job"]) && $_GET["job"]=="do_delete")
     //Aufruf der entsprechenden Funktion
     delete($pho_id, $_GET["bild"]);
     
-    //Neu laden der Veranstaltungsdaten
+    //Neu laden der Albumdaten
     $photo_event = new PhotoEvent($g_db);
     if($pho_id > 0)
     {

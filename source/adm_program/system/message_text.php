@@ -304,16 +304,16 @@ $message_text = array(
         "Das eingegebene Enddatum liegt vor dem Anfangsdatum.<br />",
 
     "delete_veranst" =>
-        "Willst du die Veranstaltung:<br />
+        "Willst du das Album:<br />
         %VAR1%<br />wirklich löschen?<br />
-        Alle enthaltenen Unterveranstaltungen und Bilder gehen verloren.",
+        Alle enthaltenen Unteralben und Bilder gehen verloren.",
         
     "event_deleted" =>
-        "Die Veranstaltung wurde erfolgreich gelöscht.",
+        "Das Album wurde erfolgreich gelöscht.",
         
     "event_deleted_error" =>
-        "Beim Löschen der Veranstaltung sind Probleme aufgetreten.<br />
-        Es konnten nicht alle Dateien bzw. Datensätze der Veranstaltung gelöscht werden.",
+        "Beim Löschen des Albums sind Probleme aufgetreten.<br />
+        Es konnten nicht alle Dateien bzw. Datensätze gelöscht werden.",
 
     "delete_photo" =>
         "Soll das ausgewählte Foto wirklich gelöscht werden?",

@@ -8,10 +8,10 @@
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
- * pho_id: id der Veranstaltung die bearbeitet werden soll
+ * pho_id: id des Albums das bearbeitet werden soll
  * job:    - new    (neue eingaben speichern)
  *         - change (Aenderungen ausfuehren)
- *         - delete (Loeschen einer Veranstaltung)
+ *         - delete (Loeschen eines Albums)
  *         - delete_request
  *
  *****************************************************************************/
@@ -80,10 +80,10 @@ if(isset($_POST["submit"]) && $_POST["submit"])
         $_POST['pho_locked'] = 0;
     }
 
-    //Veranstaltung
+    //Album
     if(strlen($_POST['pho_name']) == 0)
     {
-        $g_message->show("feld", "Veranstaltung");
+        $g_message->show("feld", "Album");
     }
     
     //Beginn
@@ -144,7 +144,7 @@ if(isset($_POST["submit"]) && $_POST["submit"])
     /********************neuen Datensatz anlegen***********************************/
     if ($_GET["job"]=="new")
     {
-        // Veranstaltung in Datenbank schreiben
+        // Album in Datenbank schreiben
         $photo_event->save();
         
         $error = $photo_event->createFolder();
@@ -162,7 +162,7 @@ if(isset($_POST["submit"]) && $_POST["submit"])
         
         $pho_id = $photo_event->getValue("pho_id");
 
-        // Anlegen der Veranstaltung war erfolgreich -> event_new aus der Historie entfernen
+        // Anlegen des Albums war erfolgreich -> event_new aus der Historie entfernen
         $_SESSION['navigation']->deleteLastUrl();
     }//if
 
@@ -198,7 +198,7 @@ if(isset($_POST["submit"]) && $_POST["submit"])
         chmod("$ordner", 0777);
         rmdir("$ordner");
         
-        // Aendern der Veranstaltung war erfolgreich -> event_new aus der Historie entfernen
+        // Aendern des Albums war erfolgreich -> event_new aus der Historie entfernen
         $_SESSION['navigation']->deleteLastUrl();
     }//if
 
@@ -214,22 +214,22 @@ if(isset($_POST["submit"]) && $_POST["submit"])
     $g_layout['header'] = "<link rel=\"stylesheet\" href=\"$g_root_path/adm_program/layout/photos.css\" type=\"text/css\" media=\"screen\" />";
     
     // HTML-Kopf
-    $g_layout['title'] = "Veranstaltungsverwaltung";
+    $g_layout['title'] = "Foto-Abum-Verwaltung";
     require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
     echo"
     <div class=\"formLayout\" id=\"photo_report_form\">
         <div class=\"formHead\">Bericht</div>
         <div class=\"formBody\"> 
-            <p>Die Veranstaltung wurde erfolgreich angelegt / ge&auml;ndert:</p>  
+            <p>Das Album wurde erfolgreich angelegt / ge&auml;ndert:</p>  
             <ul class=\"formFieldList\">
                 <li><dl>
-                    <dt>Veranstaltung:</dt>
+                    <dt>Album:</dt>
                     <dd>".$photo_event->getValue("pho_name")."</dd>
                 </dl></li>
 
                 <li><dl>
-                    <dt>in Ordner:</dt>
+                    <dt>im Album:</dt>
                     <dd>";
                         if($photo_event->getValue("pho_pho_id_parent") > 0)
                         {
@@ -299,7 +299,7 @@ if(isset($_POST["submit"]) && $_POST["submit"])
 }//submit
 
 
-/***********************Veranstaltung Loeschen*******************************************/
+/***********************Album Loeschen*******************************************/
 
 //Nachfrage ob geloescht werden soll
 if(isset($_GET["job"]) && $_GET["job"]=="delete_request")
@@ -308,7 +308,7 @@ if(isset($_GET["job"]) && $_GET["job"]=="delete_request")
     $g_message->show("delete_veranst", $photo_event->getValue("pho_name"));
 }
 
-// Nun Veranstaltung loeschen
+// Nun Album loeschen
 if(isset($_GET["job"]) && $_GET["job"]=="do_delete")
 {
     $return_code = $photo_event->delete();

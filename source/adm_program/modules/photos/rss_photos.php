@@ -74,7 +74,7 @@ while ($row = $g_db->fetch_object($result))
     //Titel muss mit Ordnerstruktur zusammengesetzt werden
     while ($pho_parent_id != NULL)
     {
-        //Erfassen der Eltern Veranstaltung
+        //Erfassen des Eltern Albums
         $sql=" SELECT *
                  FROM ". TBL_PHOTOS. "
                 WHERE pho_id = $pho_parent_id ";

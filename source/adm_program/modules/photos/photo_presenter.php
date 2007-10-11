@@ -10,7 +10,7 @@
  * Uebergaben:
  *
  * Bild: welches Bild soll angezeigt werden
- * pho_id: Id der Veranstaltung aus der das Bild stammt
+ * pho_id: Id des Albums aus der das Bild stammt
  *
  *****************************************************************************/
 
@@ -40,7 +40,7 @@ if(isset($_GET["bild"]) && is_numeric($_GET["bild"]) == false)
 $pho_id = $_GET['pho_id'];
 $bild   = $_GET['bild'];
 
-//erfassen der Veranstaltung falls noch nicht in Session gespeichert
+//erfassen des Albums falls noch nicht in Session gespeichert
 if(isset($_SESSION['photo_event']) && $_SESSION['photo_event']->getValue("pho_id") == $pho_id)
 {
     $photo_event =& $_SESSION['photo_event'];
