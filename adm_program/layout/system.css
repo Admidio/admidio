@@ -116,17 +116,12 @@ a:hover {
     font-size:          12pt;
     font-weight:        bold;
     padding:            2px;
-    vertical-align:     middle;
 }
 
 .boxHead img {
-    margin:             2px;
+    margin-right:       4px;
     vertical-align:     middle;
-}
-
-.boxHeadIcon img {
-    vertical-align:     middle;
-    border-width:       0px;
+    border: 			0px;
 }
 
 .boxHeadLeft{
@@ -149,6 +144,24 @@ a:hover {
     text-align:         left;
     background-color:   #eaeaea;
     padding:            5px;
+}
+
+/*Layout für die Komentare innerhalb des boxBodys*/
+.commentBoxHidden{
+	visibility:         hidden;
+	display:            none;
+}
+
+.showCommentLink{
+	margin:             8px 4px 4px;
+}
+
+.hideCommentLink{
+	margin:              8px 4px 4px;
+}
+
+.commentBoxText{
+	margin-top: 		20px;
 }
 
 /* Layout fuer die Formulare

@@ -188,11 +188,11 @@ else
         echo "
         <div class=\"boxLayout\">
             <div class=\"boxHead\">
-                <div style=\"width: 70%; float: left;\">
-                    <img src=\"$g_root_path/adm_program/images/note.png\" style=\"vertical-align: top;\" alt=\"". $announcement->getValue("ann_headline"). "\" />".
+                <div class=\"boxHeadLeft\">
+                    <img src=\"$g_root_path/adm_program/images/note.png\" alt=\"". $announcement->getValue("ann_headline"). "\" />".
                     $announcement->getValue("ann_headline"). "
                 </div>
-                <div style=\"text-align: right;\">".
+                <div class=\"boxHeadRight\">".
                     mysqldatetime("d.m.y", $announcement->getValue("ann_timestamp")). "&nbsp;";
                     
                     // aendern & loeschen duerfen nur User mit den gesetzten Rechten

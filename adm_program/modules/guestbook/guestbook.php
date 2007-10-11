@@ -228,7 +228,7 @@ else
         echo "
         <div class=\"boxLayout\">
             <div class=\"boxHead\">
-                <div style=\"float: left;\">
+                <div class=\"boxHeadLeft\">
                     <img src=\"$g_root_path/adm_program/images/comment.png\" alt=\"$row->gbo_name\" />
                     $row->gbo_name";
 
@@ -254,7 +254,7 @@ else
 
                 echo "</div>
 
-                <div style=\"text-align: right;\">". mysqldatetime("d.m.y h:i", $row->gbo_timestamp). "&nbsp;";
+                <div class=\"boxHeadRight\">". mysqldatetime("d.m.y h:i", $row->gbo_timestamp). "&nbsp;";
 
                     // aendern & loeschen duerfen nur User mit den gesetzten Rechten
                     if ($g_current_user->editGuestbookRight())
@@ -312,7 +312,7 @@ else
                 {
                     // Dieses div wird erst gemeinsam mit den Kommentaren ueber Javascript eingeblendet
                     echo "
-                    <div id=\"commentsVisible_$row->gbo_id\" style=\"visibility: hidden; display: none; margin: 8px 4px 4px;\">
+                    <div id=\"commentsVisible_$row->gbo_id\" class=\"hideCommentLink\" style=\"visibility: hidden; display: none;\">
                         <span class=\"iconTextLink\">                    
                             <a href=\"javascript:toggleComments($row->gbo_id)\"><img src=\"$g_root_path/adm_program/images/comments.png\" 
                             alt=\"Kommentare ausblenden\" title=\"Kommentare ausblenden\" /></a>
@@ -322,7 +322,7 @@ else
 
                     // Dieses div wird ausgeblendet wenn die Kommetare angezeigt werden
                     echo "
-                    <div id=\"commentsInvisible_$row->gbo_id\" style=\"visibility: visible; display: block; margin: 8px 4px 4px;\">
+                    <div id=\"commentsInvisible_$row->gbo_id\" class=\"showCommentLink\" style=\"visibility: visible; display: block;\">
                         <span class=\"iconTextLink\">
                             <a href=\"javascript:toggleComments($row->gbo_id)\"><img src=\"$g_root_path/adm_program/images/comments.png\" 
                             alt=\"Kommentare anzeigen\" title=\"Kommentare anzeigen\" /></a>
@@ -333,7 +333,7 @@ else
 
                     // Hier ist das div, in das die Kommentare reingesetzt werden
                     echo "
-                    <div id=\"commentSection_$row->gbo_id\" style=\"visibility: hidden; display: none;\"></div>";
+                    <div id=\"commentSection_$row->gbo_id\" class=\"commentBoxHidden\"></div>";
                 }
 
 
