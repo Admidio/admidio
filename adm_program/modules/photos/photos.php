@@ -9,10 +9,10 @@
  *
  * Uebergaben:
  *
- * pho_id:      id der Veranstaltung deren Bilder angezeigt werden sollen
+ * pho_id:      id des Albums dessen Bilder angezeigt werden sollen
  * thumb_seite: welch Seite der Thumbnails ist die aktuelle
- * start:       mit welchem Element beginnt die Veranstaltungsliste
- * locked:      die Veranstaltung soll freigegebn/gesperrt werden
+ * start:       mit welchem Element beginnt die Albumliste
+ * locked:      das Album soll freigegebn/gesperrt werden
  *
  *****************************************************************************/
 
@@ -39,7 +39,7 @@ else
 
 unset($_SESSION['photo_event_request']);
 
-//Wurde keine Veranstaltung uebergeben kann das Navigationsstack zur?ºckgesetzt werden
+//Wurde keine Album uebergeben kann das Navigationsstack zurueckgesetzt werden
 if ($pho_id == NULL)
 {
     $_SESSION['navigation']->clear();
@@ -97,7 +97,7 @@ if(isset($_SESSION['photo_event']) && $_SESSION['photo_event']->getValue("pho_id
 }
 else
 {
-    // einlesen der Veranstaltung falls noch nicht in Session gespeichert
+    // einlesen des Albums falls noch nicht in Session gespeichert
     $photo_event = new PhotoEvent($g_db);
     if($pho_id > 0)
     {
@@ -107,7 +107,7 @@ else
     $_SESSION['photo_event'] =& $photo_event;
 }
 
-// pruefen, ob Veranstaltung zur aktuellen Organisation gehoert
+// pruefen, ob Album zur aktuellen Organisation gehoert
 if($pho_id > 0 && $photo_event->getValue("pho_org_shortname") != $g_organization)
 {
     $g_message->show("invalid");
@@ -180,7 +180,7 @@ $photo_event_parent = new PhotoEvent($g_db);
 
 while ($pho_parent_id > 0)
 {
-    // Einlesen der Eltern Veranstaltung
+    // Einlesen des Eltern Albums
     $photo_event_parent->getPhotoEvent($pho_parent_id);
     
     //Link zusammensetzen
@@ -207,8 +207,8 @@ if($g_current_user->editPhotoRight())
             <li>
                 <span class=\"iconTextLink\">
                     <a href=\"$g_root_path/adm_program/modules/photos/photo_event_new.php?job=new&amp;pho_id=$pho_id\"><img
-                        src=\"$g_root_path/adm_program/images/add.png\" alt=\"Veranstaltung anlegen\" /></a>
-                    <a href=\"$g_root_path/adm_program/modules/photos/photo_event_new.php?job=new&amp;pho_id=$pho_id\">Veranstaltung anlegen</a>
+                        src=\"$g_root_path/adm_program/images/add.png\" alt=\"Album anlegen\" /></a>
+                    <a href=\"$g_root_path/adm_program/modules/photos/photo_event_new.php?job=new&amp;pho_id=$pho_id\">Album anlegen</a>
                 </span>
             </li>";
         if($pho_id > 0)
@@ -227,7 +227,7 @@ if($g_current_user->editPhotoRight())
 //Anlegender Tabelle
 echo "<div class=\"photoModuleContainer\">";
     /*************************THUMBNAILS**********************************/
-    //Nur wenn uebergeben Veranstaltung Bilder enthaelt
+    //Nur wenn uebergebenes Album Bilder enthaelt
     if($photo_event->getValue("pho_quantity") > 0)
     {        
         //Aanzahl der Bilder
@@ -264,7 +264,7 @@ echo "<div class=\"photoModuleContainer\">";
             $thumb_seiten++;
         }
 
-        //Datum der Veranstaltung
+        //Datum des Albums
         echo"<div id=\"photoEventInformation\">
             Datum: ".mysqldate("d.m.y", $photo_event->getValue("pho_begin"));
             if($photo_event->getValue("pho_end") != $photo_event->getValue("pho_begin"))
@@ -430,9 +430,9 @@ echo "<div class=\"photoModuleContainer\">";
             }
         echo "</div>";
     }
-    /************************Veranstaltungsliste*************************************/
+    /************************Albumliste*************************************/
 
-    //erfassen der Veranstaltungen die in der Veranstaltungstabelle ausgegeben werden sollen
+    //erfassen der Alben die in der Albentabelle ausgegeben werden sollen
     $sql="      SELECT *
                 FROM ". TBL_PHOTOS. "
                 WHERE pho_org_shortname ='$g_organization' ";
@@ -452,10 +452,10 @@ echo "<div class=\"photoModuleContainer\">";
     $sql = $sql." ORDER BY pho_begin DESC ";
     $result_list = $g_db->query($sql);
 
-    //Gesamtzahl der auszugebenden Veranstaltungen
+    //Gesamtzahl der auszugebenden Alben
     $events = $g_db->num_rows($result_list);
 
-    // falls zur aktuellen Veranstaltung Bilder und Unterveranstaltungen existieren,
+    // falls zum aktuellen Album Bilder und Unterveranstaltungen existieren,
     // dann einen Trennstrich zeichnen
     if($photo_event->getValue("pho_quantity") > 0 && $events > 0)
     {
@@ -557,7 +557,7 @@ echo "<div class=\"photoModuleContainer\">";
             //Funktion zum Bildersummieren aufrufen
             bildersumme($adm_photo_list["pho_id"]);
 
-            //Bild aus Veranstaltung als Vorschau auswaehlen
+            //Bild aus Album als Vorschau auswaehlen
             $bsp_pho_id=0;
             $bsp_pic_nr=0;
             $bsp_pic_begin=0;
@@ -612,16 +612,16 @@ echo "<div class=\"photoModuleContainer\">";
                             onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=folder_not_found','Message','width=400, height=400, left=310,top=200,scrollbars=no')\" /></li>";
                         }
 
-                        //Hinweis fur Leute mit Photorechten: Veranstaltung ist gesperrt
+                        //Hinweis fur Leute mit Photorechten: Album ist gesperrt
                         if($adm_photo_list["pho_locked"]==1 && file_exists($ordner))
                         {
-                            echo"<li><img src=\"$g_root_path/adm_program/images/lock.png\" class=\"iconLink\" alt=\"Veranstaltung ist gesperrt\" title=\"Veranstaltung ist gesperrt\"
+                            echo"<li><img src=\"$g_root_path/adm_program/images/lock.png\" class=\"iconLink\" alt=\"Album ist gesperrt\" title=\"Album ist gesperrt\"
                             onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=not_approved','Message','width=400, height=300, left=310,top=200,scrollbars=no')\" /></li>";
                         }
                         echo"</ul>";
                     }
 
-                    //Veranstaltungs angaben
+                    //Album angaben
                     if(file_exists($ordner))
                     {
                         echo"<a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$adm_photo_list["pho_id"]."\">".$adm_photo_list["pho_name"]."</a><br />";
@@ -661,7 +661,7 @@ echo "<div class=\"photoModuleContainer\">";
                             echo"
                             <span class=\"iconLink\">
                                 <a href=\"$g_root_path/adm_program/modules/photos/photo_event_function.php?job=delete_request&amp;pho_id=$this_pho_id\"><img 
-                                src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Veranstaltung L&ouml;schen\" title=\"Veranstaltung L&ouml;schen\" /></a>
+                                src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Album L&ouml;schen\" title=\"Album L&ouml;schen\" /></a>
                             </span>";
 
                             if($adm_photo_list["pho_locked"]==1 && file_exists($ordner))
@@ -694,11 +694,11 @@ echo "<div class=\"photoModuleContainer\">";
         echo "</table>";
     }
         
-    /****************************Leere Veranstaltung****************/
-    //Falls die Veranstaltung weder Bilder noch Unterordner enthaelt
-    if(($photo_event->getValue("pho_quantity")=="0" || strlen($photo_event->getValue("pho_quantity")) == 0) && $events<1)  // alle vorhandenen Veranstaltungen werden ignoriert
+    /****************************Leeres Album****************/
+    //Falls das Album weder Bilder noch Unterordner enthaelt
+    if(($photo_event->getValue("pho_quantity")=="0" || strlen($photo_event->getValue("pho_quantity")) == 0) && $events<1)  // alle vorhandenen Albumen werden ignoriert
     {
-        echo"Diese Veranstaltung enth&auml;lt leider noch keine Bilder.";
+        echo"Dieses Album enth&auml;lt leider noch keine Bilder.";
     }
     
     if($g_db->num_rows($result_list) > 2)
