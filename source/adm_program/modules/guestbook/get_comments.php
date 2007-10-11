@@ -62,7 +62,7 @@ if (isset($comment_result))
         echo "
         <div class=\"groupBox\" style=\"overflow: hidden; margin-left: 20px; margin-right: 20px;\">
             <div class=\"groupBoxHeadline\">
-                <div style=\"text-align: left; float: left;\">
+                <div class=\"boxHeadLeft\">
                     <img src=\"$g_root_path/adm_program/images/comments.png\" style=\"vertical-align: top;\" alt=\"Kommentar ". $commentNumber. "\" />&nbsp;".
                     "Kommentar von ". $row->gbc_name;
 
@@ -79,7 +79,7 @@ if (isset($comment_result))
                 echo "
                 </div>
 
-                <div style=\"text-align: right;\">". mysqldatetime("d.m.y h:i", $row->gbc_timestamp);
+                <div class=\"boxHeadRight\">". mysqldatetime("d.m.y h:i", $row->gbc_timestamp);
 
                 // aendern und loeschen von Kommentaren duerfen nur User mit den gesetzten Rechten
                 if ($g_current_user->editGuestbookRight())
@@ -99,7 +99,7 @@ if (isset($comment_result))
             </div>
 
             <div class=\"groupBoxBody\">
-                <div style=\"margin: 8px 4px 4px 4px;\">";
+                <div class=\"commentBoxText\">";
                     // wenn BBCode aktiviert ist, den Text noch parsen, ansonsten direkt ausgeben
                     if ($g_preferences['enable_bbcode'] == 1)
                     {

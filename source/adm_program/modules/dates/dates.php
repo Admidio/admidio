@@ -246,7 +246,7 @@ else
         <div class=\"boxLayout\">
             <div class=\"boxHead\">
                 <div class=\"boxHeadLeft\">
-                    <img src=\"$g_root_path/adm_program/images/date.png\" class=\"icon16\" alt=\"". $date->getValue("dat_headline"). "\" />
+                    <img src=\"$g_root_path/adm_program/images/date.png\" alt=\"". $date->getValue("dat_headline"). "\" />
                     ". mysqldatetime("d.m.y", $date->getValue("dat_begin")). "
                 </div>
                 <div class=\"boxHeadCenter\">". $date->getValue("dat_headline"). "</div>
