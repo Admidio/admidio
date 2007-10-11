@@ -44,6 +44,7 @@ h1 {
      color:             #85C226;
      letter-spacing:    0.3em;
      margin-bottom:     10px;
+     text-align: 		center;
 }
 
 hr {
@@ -302,6 +303,7 @@ a:hover {
     padding:            0px;
     margin-top:         10px;
     margin-bottom:      10px;
+    text-align: 		center;
 }
 
 .iconTextLinkList li{   
