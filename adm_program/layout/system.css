@@ -69,7 +69,7 @@ textarea {
 
 /* Layout fuer Buttons mit Icon */
 
-button {
+button {    
     padding:            0em .25em;
     width:              auto;       /* noetig damit IE6 lange Buttons vernuenftig darstellt */
     overflow:           visible;    /* noetig damit IE6 lange Buttons vernuenftig darstellt */
@@ -79,6 +79,7 @@ button img {
      vertical-align:    middle;
      border-width:      none;
 }
+
 
 /* Links */
 
@@ -230,6 +231,7 @@ a:hover {
 .formSubmit {
     padding-top:        5px;
     padding-bottom:     5px;
+    text-align: 	    center;
 }
 
 
