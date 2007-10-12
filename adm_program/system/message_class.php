@@ -176,7 +176,7 @@ class Message
             <div class="formHead">'. $this->headline. '</div>
             <div class="formBody">
                 <p>'. $this->content. '</p>
-                <p>';
+                <div class="formSubmit">';
                     if(strlen($this->forward_url) > 0)
                     {
                         if($this->yes_no_buttons == true)
@@ -207,7 +207,7 @@ class Message
                         <img src="'. $g_root_path. '/adm_program/images/back.png" alt="Zurueck" />
                         &nbsp;Zurück</button>';
                     }
-                echo '</p>
+                echo '</div>
             </div>
         </div>';
         
