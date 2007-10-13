@@ -78,7 +78,10 @@ function image_save($orig_path, $scale, $destination_path)
 {
     if(file_exists($orig_path))
     {
-        //Ermittlung der Original Bildgroesse
+        //Speicher zur Bildbearbeitung bereit stellen, erst ab php5 noetig
+		ini_set('memory_limit', '50M');
+		
+		//Ermittlung der Original Bildgroesse
         $bildgroesse = getimagesize($orig_path);
 
         //Errechnung seitenverhaeltniss
@@ -94,7 +97,7 @@ function image_save($orig_path, $scale, $destination_path)
         if($bildgroesse[0]<$bildgroesse[1]){
             $neubildsize = array (round($scale*$seitenverhaeltnis), $scale);
         }
-
+                    
 
         // Erzeugung neues Bild
         $neubild = imagecreatetruecolor($neubildsize[0], $neubildsize[1]);
