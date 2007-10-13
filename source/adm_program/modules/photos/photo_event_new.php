@@ -177,7 +177,7 @@ echo "
             echo"
             <li>
                 <dl>
-                    <dt><label for=\"pho_pho_id_parent\">in Ordner:</label></dt>
+                    <dt><label for=\"pho_pho_id_parent\">im Album:</label></dt>
                     <dd>
                         <select size=\"1\" id=\"pho_pho_id_parent\" name=\"pho_pho_id_parent\" style=\"max-width: 95%;\" tabindex=\"2\">
                             <option value=\"0\">Fotogalerien(Hauptordner)</option>";
