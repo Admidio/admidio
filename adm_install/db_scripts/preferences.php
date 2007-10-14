@@ -62,7 +62,16 @@ $orga_preferences = array(
     'enable_mail_module'        => '1',
     'max_email_attachment_size' => '1024',
     'enable_mail_captcha'       => '1',
-
+	
+	// Grußkartenmodul
+	'enable_ecard_module'		=> '1',
+	'ecard_view_width'			=> '250',
+	'ecard_view_height'			=> '250',
+	'ecard_card_picture_width'	=> '400',
+	'ecard_card_picture_height'	=> '250',
+	'ecard_cc_recipients'		=> '10',
+	'ecard_text_length'			=> '150',
+	
     // Profil
     'default_country'          => 'Deutschland',
     'enable_roles_view'        => '1',
