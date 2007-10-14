@@ -198,6 +198,14 @@ elseif($_GET["mode"] == 2)
     {
         $_POST['rol_weblinks'] = 0;
     }
+	if(isset($_POST['rol_this_list_view']) == false)
+    {
+        $_POST['rol_this_list_view'] = 0;
+    }
+	if(isset($_POST['rol_all_lists_view']) == false)
+    {
+        $_POST['rol_all_lists_view'] = 0;
+    }     
     if(isset($_POST['rol_profile']) == false)
     {
         $_POST['rol_profile'] = 0;
