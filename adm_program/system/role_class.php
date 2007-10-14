@@ -137,8 +137,8 @@ class Role extends TableAccess
     {
         global $g_current_user;
         
-        $this->db_fields['rol_last_change']   = date("Y-m-d H:i:s", time());
-        $this->db_fields['rol_usr_id_change'] = $g_current_user->getValue("usr_id");
+        $this->setValue("rol_last_change", date("Y-m-d H:i:s", time()));
+        $this->setValue("rol_usr_id_change", $g_current_user->getValue("usr_id"));
     }
 
     // interne Funktion, die die Fotoveranstaltung in Datenbank und File-System loeschen
