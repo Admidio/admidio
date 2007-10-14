@@ -149,6 +149,10 @@ if(isset($_POST['enable_weblinks_module']) == false)
 {
     $_POST['enable_weblinks_module'] = 0;
 }
+if(isset($_POST['enable_ecard_module']) == false)
+{
+    $_POST['enable_ecard_module'] = 0;
+}
 
 // *******************************************************************************
 // Organisation updaten

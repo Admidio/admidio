@@ -24,33 +24,26 @@ require_once("ecard_function.php");
 
 // Variablen die spaeter in die DB kommen und vom Admin aenderbar sind
 //**********************************************************
-/**/	$max_w_card			= "400";		// Maximale Breite des Grußkarten Bildes							
-/**/	$max_h_card			= "250";		// Maximale Höhe des Grußkarten Bildes	
-/**/	$max_w_view			= "250";		// Maximale Breite des angezeigten Bildes							
-/**/	$max_h_view 		= "250";		// Maximale Höhe des angezeigten Bildes
-/**/    $max_cc_recipients  = "10";			// Maximale Anzahl von CC Empfaengern
-/**/	$max_length 		= 150;			// Maximale Laenge des Grußkarten Textes
-/*		es können hier mehere Templates eingetragen werden welche dann vom Benutzt ausgewaehlt werden dürfen				
-/**/	$templates 			= array ("ecard_1.tpl","ecard_2.tpl","ecard_3.tpl"); 
-/*      es können hier mehere Schrift name eingetragen werden welche dann vom Benutzer ausgewaehlt werden dürfen */
-/**/	$fonts 				= array ("Comic Sans MS","Arial","Arial Black","Courier","Georgia","Helvetica","Impact","Script","Times Roman","Verdana"); 
-/*      es können hier mehere Schriftgrößen eingetragen werden welche dann vom Benutzer ausgewaehlt werden dürfen */
-/**/	$font_sizes 		= array ("14","9","10","11","12","13","14","15","16","17","18","20","22","24","30"); 
-/*      es können hier mehere Schrift Farben eingetragen werden welche dann vom Benutzer ausgewaehlt werden dürfen */
-/**/	$font_colors 		= array("black","yellow","orange","red","maroon","fuchsia","purple","lime","green","teal","aqua","blue","navy","silver","gray","olive"); 
-/**/	$tmpl_folder 		= "../../layout/";								
-/**/	$ecard_plain_data 	= "Du hast eine E-Card von einem Mitglied des Vereins ".$g_organization." erhalten.\n Falls du diese nicht sehen kannst befindet sich diese im Anhang der Mail";
-/**/	$msg_error_1		= "Es ist ein Fehler bei der Verarbeitung der E-C@rd aufgetreten. Bitte probier es zu einem sp&auml;teren Zeitpunkt noch einmal.";
-/**/	$msg_error_2 		= "Es sind einige Eingabefelder nicht bzw. nicht richtig ausgefüllt. Bitte füll diese aus, bzw. korrigier diese.";
-/**/	$g_preferences['enable_e@card_module']	= 1;
+/*		es können hier mehere Templates eingetragen werden welche dann vom Benutzt ausgewaehlt werden dürfen (erstes Element im Array-> Standart Einstellung)	*/			
+/**/	$templates 			= array ("ecard_1.tpl","ecard_1.tpl","ecard_2.tpl","ecard_3.tpl"); 
+/*      es können hier mehere Schrift name eingetragen werden welche dann vom Benutzer ausgewaehlt werden dürfen (erstes Element im Array-> Standart Einstellung) */
+/**/	$fonts 				= array ("Comic Sans MS","Arial","Arial Black","Courier","Comic Sans MS","Georgia","Helvetica","Impact","Script","Times Roman","Verdana"); 
+/*      es können hier mehere Schriftgrößen eingetragen werden welche dann vom Benutzer ausgewaehlt werden dürfen (erstes Element im Array-> Standart Einstellung) */
+/**/	$font_sizes 		= array ("20","9","10","11","12","13","14","15","16","17","18","20","22","24","30"); 
+/*      es können hier mehere Schrift Farben eingetragen werden welche dann vom Benutzer ausgewaehlt werden dürfen (erstes Element im Array-> Standart Einstellung) */
+/**/	$font_colors 		= array ("black","yellow","orange","red","maroon","fuchsia","purple","lime","green","teal","aqua","blue","navy","silver","gray","olive","black"); 							
 //**********************************************************
 
 $error_msg					= "";
 $email_versand_liste		= array(); // Array wo alle Empfaenger aufgelistet werden (jedoch keine zusaetzlichen);
 $email_versand_liste_all	= array(); // Array wo alle Empfaenger aufgelistet werden (inklusive zusaetzlichen);
+$tmpl_folder 		= "../../layout/";	
+$ecard_plain_data 	= "Du hast eine E-Card von einem Mitglied des Vereins ".$g_organization." erhalten.\n Falls du diese nicht sehen kannst befindet sich diese im Anhang der Mail";
+$msg_error_1		= "Es ist ein Fehler bei der Verarbeitung der E-C@rd aufgetreten. Bitte probier es zu einem sp&auml;teren Zeitpunkt noch einmal.";
+$msg_error_2 		= "Es sind einige Eingabefelder nicht bzw. nicht richtig ausgefüllt. Bitte füll diese aus, bzw. korrigier diese.";
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
-if ($g_preferences['enable_e@card_module'] != 1)
+if ($g_preferences['enable_ecard_module'] != 1)
 {
     // das Modul ist deaktiviert
     $g_message->show("module_disabled");
@@ -180,8 +173,8 @@ if(!is_numeric($bild) || !is_numeric($_GET['pho_id']))
 if(isset($bild_url))
 {
 	list($width, $height)	= getimagesize($bild_url);
-	$propotional_size_card	= getPropotionalSize($width, $height, $max_w_card, $max_h_card);
-	$propotional_size_view	= getPropotionalSize($width, $height, $max_w_view, $max_h_view);
+	$propotional_size_card	= getPropotionalSize($width, $height, $g_preferences['ecard_card_picture_width'], $g_preferences['ecard_card_picture_height']);
+	$propotional_size_view	= getPropotionalSize($width, $height, $g_preferences['ecard_view_width'], $g_preferences['ecard_view_height']);
 }
 
 // ruf die Funktion auf die alle Post und Get Variablen parsed
@@ -195,9 +188,9 @@ if (! empty($submit_action))
 	&& ($ecard["email_recepient"] != "") && ($ecard["name_sender"] != "") )    
 	{
 		// Wenn die Nachricht größer ist als die maximal Laenge wird sie zurückgestutzt
-	    if (strlen($ecard["message"]) > $max_length) 
+	    if (strlen($ecard["message"]) > $g_preferences['ecard_text_length']) 
 		{
-	        $ecard["message"] = substr($ecard["message"],0,$max_length-1);
+	        $ecard["message"] = substr($ecard["message"],0,$g_preferences['ecard_text_length']-1);
 	    }
 		// Template wird geholt
 		list($error,$ecard_data_to_parse) = getEcardTemplate($ecard["template_name"],$tmpl_folder);
@@ -243,7 +236,7 @@ if (! empty($submit_action))
 					array_push($email_versand_liste,array("".$row->first_name." ".$row->last_name."",$row->email));
 				}
 			}
-			$email_versand_liste_all = array_merge($email_versand_liste,getCCRecipients($ecard,$max_cc_recipients));
+			$email_versand_liste_all = array_merge($email_versand_liste,getCCRecipients($ecard,$g_preferences['ecard_cc_recipients']));
 			for($i=0; $i<count($email_versand_liste_all);$i++)
 			{
 				$ecard_html_data = parseEcardTemplate($ecard,$ecard_data_to_parse,$g_root_path,$g_current_user->getValue("usr_id"),$propotional_size_card['width'],$propotional_size_card['height'],$email_versand_liste_all[$i][0],$email_versand_liste_all[$i][1]);
@@ -294,7 +287,7 @@ $javascript='
 		var dropdiv = \'dropdownmenu\';
 		var externdiv = \'extern\';
 		var switchdiv = \'exinswitch\';
-		var max_recipients = '.$max_cc_recipients.';
+		var max_recipients = '.$g_preferences['ecard_cc_recipients'].';
 		var now_recipients = 0;
         function popup_win(theURL,winName,winOptions) 
 		{
@@ -447,7 +440,7 @@ $javascript='
 		}
 		function countMax() 
 		{
-			max  = '.$max_length.';
+			max  = '.$g_preferences['ecard_text_length'].';
 			wert = max - document.ecard_form["ecard[message]"].value.length;
 			if(document.ecard_form["ecard[message]"].value.length > max)
 			{
@@ -907,11 +900,11 @@ if (empty($submit_action))
                         <dt>
 						    <label>Nachricht:</label>
 							<div style="padding:70px 0px 40px 20px;">
-							    noch&nbsp;<div id="counter" style="border:0px; display:inline;"><b>'; echo $max_length.'</b></div>&nbsp;Zeichen:
+							    noch&nbsp;<div id="counter" style="border:0px; display:inline;"><b>'; echo $g_preferences['ecard_text_length'].'</b></div>&nbsp;Zeichen:
 							</div>
 						</dt>
                         <dd>
-							<textarea id="Nachricht" style="width: 350px; height: 180px; overflow:hidden;" rows="10" cols="45" name="ecard[message]" onfocus="javascript:countMax();" onclick="javascript:countMax();" onchange="javascript:countMax();" onkeydown="javascript:countMax();" onkeyup="javascript:countMax();" onkeypress="javascript:countMax();" wrap="virtual">';
+							<textarea id="Nachricht" style="width: 350px; height: 180px; overflow:hidden; font:'.$font_sizes[0].'px '.$fonts[0].'; color:'.$font_colors[0].';" rows="10" cols="45" name="ecard[message]" onfocus="javascript:countMax();" onclick="javascript:countMax();" onchange="javascript:countMax();" onkeydown="javascript:countMax();" onkeyup="javascript:countMax();" onkeypress="javascript:countMax();" wrap="virtual">';
 					  		if (! empty($ecard["message"])) 
 							{
 						 		echo ''.$ecard["message"].''; 
@@ -1018,7 +1011,7 @@ else
 		}			
 		echo '</tr>';
 		$Liste = array();
-		$Liste = getCCRecipients($ecard,$max_cc_recipients);
+		$Liste = getCCRecipients($ecard,$g_preferences['ecard_cc_recipients']);
 		if(count($Liste)>0)
 		{
 			echo '<tr><td>&nbsp;</td></tr><tr><td colspan="2"><b>Zus&auml;tzliche Empf&auml;nger</b></td></tr><tr>';

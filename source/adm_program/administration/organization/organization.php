@@ -61,7 +61,7 @@ $g_layout['header'] =  "
     <script type=\"text/javascript\"><!--
         // Dieses Array enthaelt alle IDs, die in den Orga-Einstellungen auftauchen
         ids = new Array('general', 'register', 'announcement-module', 'download-module', 'photo-module', 
-                        'guestbook-module', 'list-module', 'mail-module','profile-module', 'dates-module', 
+                        'guestbook-module', 'list-module', 'mail-module', 'ecard-module', 'profile-module', 'dates-module', 
                         'links-module');
 
 
@@ -105,6 +105,8 @@ echo "
          &#124; <a href=\"#\" onclick=\"toggleDiv('list-module');\">Listen</a>
 
          &#124; <a href=\"#\" onclick=\"toggleDiv('mail-module');\">Mails</a>
+		 
+		 &#124; <a href=\"#\" onclick=\"toggleDiv('ecard-module');\">Grußkarten</a>
          
          &#124; <a href=\"#\" onclick=\"toggleDiv('profile-module');\">Profil</a>
 
@@ -322,7 +324,8 @@ echo "
                 </ul>
             </div>
         </div>";
-
+		
+		
 
         /**************************************************************************************/
         // Einstellungen Registrierung
@@ -863,6 +866,83 @@ echo "
             </div>
         </div>";
 
+		/**************************************************************************************/
+        //Einstellungen Grußkartenmodul
+        /**************************************************************************************/
+		echo"
+        <div class=\"groupBox\" id=\"ecard-module\">
+            <div class=\"groupBoxHeadline\">Einstellungen Grußkartenmodul&nbsp;&nbsp; </div>
+            <div class=\"groupBoxBody\">
+                <ul class=\"formFieldList\">
+                    <li>
+                        <dl>
+                            <dt><label for=\"enable_ecard_module\">Grußkartenmodul aktivieren:</label></dt>
+                            <dd>
+                                <input type=\"checkbox\" id=\"enable_ecard_module\" name=\"enable_ecard_module\" ";
+                                if(isset($form_values['enable_ecard_module']) && $form_values['enable_ecard_module'] == 1)
+                                {
+                                    echo " checked=\"checked\" ";
+                                }
+                                echo " value=\"1\" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Das Grußkartenmodul kann &uuml;ber diese Einstellung komplett deaktiviert werden.
+						Falls der Server keinen Mailversand unterst&uuml;tzt, sollte das Modul deaktiviert werden.
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"ecard_view_scale\">Skalierung Vorschaubild:</label></dt>
+                            <dd>
+                               Breite: <input type=\"text\" id=\"ecard_view_width\" name=\"ecard_view_width\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_view_width']. "\" />
+							   Höhe: <input type=\"text\" id=\"ecard_view_height\" name=\"ecard_view_height\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_view_height']. "\" /> Pixel
+                             </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Hier kann festgelegt werden auf welchen Wert die Breite und H&ouml;he des Vorschau-Bildes skaliert werden soll.
+						(Standardwert: Breite 250 | H&ouml;he 250)
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"ecard_card_picture_scale\">Skalierung Grußkartenbild:</label></dt>
+                            <dd>
+                                Breite: <input type=\"text\" id=\"ecard_card_picture_width\" name=\"ecard_card_picture_width\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_card_picture_width']. "\" />
+							   Höhe: <input type=\"text\" id=\"ecard_card_picture_height\" name=\"ecard_card_picture_height\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_card_picture_height']. "\" /> Pixel
+                             </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                       Hier kann festgelegt werden auf welchen Wert die Breite und H&ouml;he des Grußkarten-Bildes skaliert werden soll.
+					   (Standardwert: Breite 400 | H&ouml;he 250)
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"ecard_cc_recipients\">Max. weitere Empf&auml;nger</label> 
+							</dt>
+                            <dd>
+                                <input type=\"text\" id=\"ecard_cc_recipients\" name=\"ecard_cc_recipients\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_cc_recipients']. "\" />
+                             </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Hier wird die max. Anzahl der weiteren Empf&auml;ngern festgelegt. (Standardwert: 10)
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"ecard_text_length\">Max. L&auml;nge des Mitteilungstextes:</label></dt>
+                            <dd>
+                                <input type=\"text\" id=\"ecard_text_length\" name=\"ecard_text_length\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_text_length']. "\" />
+                             </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Hier wird die max. Zeichenlänge des Mitteilungstextes festgelegt. (Standardwert: 150)
+                    </li>
+                </ul>
+            </div>
+        </div>";
 
         /**************************************************************************************/
         //Einstellungen Profilmodul
