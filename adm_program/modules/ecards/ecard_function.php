@@ -45,17 +45,21 @@ function getMenueSettings($data_array,$name_ecard_input,$width,$schowfont)
 {
 	$temp_data = "";
 	echo  '<select size="1" onchange="getSetting(\''.$name_ecard_input.'\',this.value)" style="width:'.$width.'px;">';
-	for($i=0; $i<count($data_array);$i++)
+	for($i=1; $i<count($data_array);$i++)
 	{
 		$temp_name = explode(".", $data_array[$i]);
 		
-		if ($i == 0 && $schowfont != "true")
+		if (strcmp($data_array[$i],$data_array[0]) == 0 && $schowfont != "true")
 		{
 			echo '<option value="'.$data_array[$i].'" selected=\'selected\'>'.$temp_name[0].'</option>';
 		}
 		else if($schowfont != "true")
 		{
 			echo '<option value="'.$data_array[$i].'">'.$temp_name[0].'</option>';
+		}
+		else if (strcmp($data_array[$i],$data_array[0]) == 0)
+		{
+			echo '<option value="'.$data_array[$i].'" selected=\'selected\' style="font-family:'.$temp_name[0].';">'.$temp_name[0].'</option>';
 		}
 		else
 		{
@@ -74,9 +78,9 @@ function getColorSettings($data_array,$name_ecard_input,$anz)
 {
 	$temp_data = "";
 	echo  '<table border="0" cellpadding="1" cellspacing="1" summary="colorTable"><tr>';
-	for($i=0; $i<count($data_array);$i++)
+	for($i=1; $i<count($data_array);$i++)
 	{
-		if (!is_integer(($i+1)/$anz))
+		if (!is_integer(($i)/$anz))
 		{
 		    echo '<td style="height:20px; width:17px; background-color: '.$data_array[$i].'; cursor:pointer;" onclick="javascript: getSetting(\''.$name_ecard_input.'\',\''.$data_array[$i].'\');"></td>';
 		}

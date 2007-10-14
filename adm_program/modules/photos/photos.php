@@ -390,7 +390,7 @@ echo "<div class=\"photoModuleContainer\">";
                                     src=\"$g_root_path/adm_program/images/arrow_turn_right.png\" alt=\"nach rechts drehen\" title=\"nach rechts drehen\" /></a>
                                 </span>";
                             }
-                            if($g_valid_login == true)
+                            if($g_valid_login == true && $g_preferences['enable_ecard_module'] == 1)
                             {
                                 echo"
                                 <span class=\"iconLink\">
