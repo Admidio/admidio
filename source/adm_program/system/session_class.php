@@ -108,10 +108,10 @@ class Session extends TableAccess
         {
             // Insert
             global $g_current_organization;
-            $this->db_fields['ses_org_id']     = $g_current_organization->getValue("org_id");
-            $this->db_fields['ses_begin']      = date("Y-m-d H:i:s", time());
-            $this->db_fields['ses_timestamp']  = date("Y-m-d H:i:s", time());
-            $this->db_fields['ses_ip_address'] = $_SERVER['REMOTE_ADDR'];
+            $this->setValue("ses_org_id", $g_current_organization->getValue("org_id"));
+            $this->setValue("ses_begin", date("Y-m-d H:i:s", time()));
+            $this->setValue("ses_timestamp", date("Y-m-d H:i:s", time()));
+            $this->setValue("ses_ip_address", $_SERVER['REMOTE_ADDR']);
         }
         else
         {

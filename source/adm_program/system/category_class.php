@@ -103,7 +103,7 @@ class Category extends TableAccess
 
             $row = $this->db->fetch_array();
 
-            $this->db_fields['cat_sequence'] = $row['count'] + 1;
+            $this->setValue("cat_sequence", $row['count'] + 1);
         }
     }
     

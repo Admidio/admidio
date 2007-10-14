@@ -258,8 +258,8 @@ class User extends TableAccess
         if($this->b_set_last_change)
         {
             global $g_current_user;
-            $this->db_fields['usr_last_change']   = date("Y-m-d H:i:s", time());
-            $this->db_fields['usr_usr_id_change'] = $g_current_user->getValue("usr_id");
+            $this->setValue("usr_last_change", date("Y-m-d H:i:s", time()));
+            $this->setValue("usr_usr_id_change", $g_current_user->getValue("usr_id"));
         }
 
         $this->b_set_last_change = true;

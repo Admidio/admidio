@@ -41,6 +41,7 @@ class TableAccess
     var $new_record;                // Merker, ob ein neuer Datensatz oder vorhandener Datensatz bearbeitet wird
     var $db_fields_changed;         // Merker ob an den db_fields Daten was geaendert wurde
     var $db_fields = array();       // Array ueber alle Felder der Rollen-Tabelle der entsprechenden Rolle
+    var $db_fields_infos = array(); // Array, welches weitere Informationen (geaendert ja/nein, Feldtyp) speichert
     
     // liest den Datensatz von $key_value ein
     // key_value : Schluesselwert von dem der Datensatz gelesen werden soll
@@ -96,11 +97,13 @@ class TableAccess
         $this->db_fields_changed = false;
         $this->new_record        = true;
                         
-        if(count($this->db_fields) > 0)
+        if(count($this->db_fields) > 0
+        && count($this->db_fields_infos) > 0)
         {
             foreach($this->db_fields as $key => $value)
             {
                 $this->db_fields[$key] = "";
+                $this->db_fields_infos[$key]['changed'] = false;
             }
         }
         else
@@ -113,6 +116,8 @@ class TableAccess
             while ($row = $this->db->fetch_array())
             {
                 $this->db_fields[$row['Field']] = "";
+                $this->db_fields_infos[$row['Field']]['changed'] = false;
+                $this->db_fields_infos[$row['Field']]['type']    = $row['Type'];
             }
         }
         
@@ -150,6 +155,7 @@ class TableAccess
         {
             $this->db_fields[$field_name] = $field_value;
             $this->db_fields_changed      = true;
+            $this->db_fields_infos[$field_name]['changed'] = true;
         }
     }    
     
@@ -166,8 +172,18 @@ class TableAccess
         {
             $value = $this->db_fields[$field_name];
         }
-        
-        return htmlspecialchars($value, ENT_QUOTES);
+         
+        // bei Textfeldern muessen Anfuehrungszeichen noch escaped werden
+        if(isset($this->db_fields_infos[$field_name]) == false
+        || strpos($this->db_fields_infos[$field_name]['type'], "char") !== false
+        || strpos($this->db_fields_infos[$field_name]['type'], "text") !== false)
+        {
+            return htmlspecialchars($value, ENT_QUOTES);
+        }
+        else
+        {
+            return $value;
+        }
     }    
     
     // die Methode speichert die Organisationsdaten in der Datenbank,
@@ -203,16 +219,39 @@ class TableAccess
                        || $this->auto_increment == false )
                     && strpos($key, $this->column_praefix. "_") === 0) 
                     {
-                        $value = utf8_decode_db($value);
-                        if($this->new_record)
+                        if($this->db_fields_infos[$key]['changed'] == true)
                         {
-                            if(strlen($value) > 0)
+                            $value = utf8_decode_db($value);
+                            if($this->new_record)
                             {
-                                // Daten fuer ein Insert aufbereiten
-                                $sql_field_list = $sql_field_list. " $item_connection $key ";
-                                if(is_numeric($value))
+                                if(strlen($value) > 0)
                                 {
-                                    $sql_value_list = $sql_value_list. " $item_connection $value ";
+                                    // Daten fuer ein Insert aufbereiten
+                                    $sql_field_list = $sql_field_list. " $item_connection $key ";
+                                    if(is_numeric($value))
+                                    {
+                                        $sql_value_list = $sql_value_list. " $item_connection $value ";
+                                    }
+                                    else
+                                    {
+                                        // Slashs (falls vorhanden) erst einmal entfernen und dann neu Zuordnen, 
+                                        // damit sie auf jeden Fall da sind
+                                        $value = stripslashes($value);
+                                        $value = addslashes($value);
+                                        $sql_value_list = $sql_value_list. " $item_connection '$value' ";
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                // Daten fuer ein Update aufbereiten
+                                if(strlen($value) == 0 || is_null($value))
+                                {
+                                    $sql_field_list = $sql_field_list. " $item_connection $key = NULL ";
+                                }
+                                elseif(is_numeric($value))
+                                {
+                                    $sql_field_list = $sql_field_list. " $item_connection $key = $value ";
                                 }
                                 else
                                 {
@@ -220,33 +259,14 @@ class TableAccess
                                     // damit sie auf jeden Fall da sind
                                     $value = stripslashes($value);
                                     $value = addslashes($value);
-                                    $sql_value_list = $sql_value_list. " $item_connection '$value' ";
+                                    $sql_field_list = $sql_field_list. " $item_connection $key = '$value' ";
                                 }
                             }
-                        }
-                        else
-                        {
-                            // Daten fuer ein Update aufbereiten
-                            if(strlen($value) == 0 || is_null($value))
+                            if(strlen($item_connection) == 0 && strlen($sql_field_list) > 0)
                             {
-                                $sql_field_list = $sql_field_list. " $item_connection $key = NULL ";
+                                $item_connection = ",";
                             }
-                            elseif(is_numeric($value))
-                            {
-                                $sql_field_list = $sql_field_list. " $item_connection $key = $value ";
-                            }
-                            else
-                            {
-                                // Slashs (falls vorhanden) erst einmal entfernen und dann neu Zuordnen, 
-                                // damit sie auf jeden Fall da sind
-                                $value = stripslashes($value);
-                                $value = addslashes($value);
-                                $sql_field_list = $sql_field_list. " $item_connection $key = '$value' ";
-                            }
-                        }
-                        if(strlen($item_connection) == 0 && strlen($sql_field_list) > 0)
-                        {
-                            $item_connection = ",";
+                            $this->db_fields_infos[$key]['changed'] = false;
                         }
                     }
                 }
