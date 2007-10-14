@@ -215,6 +215,16 @@ echo "
                     echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/globe.png\"
                     alt=\"Weblinks anlegen und bearbeiten\" title=\"Weblinks anlegen und bearbeiten\" />";
                 }
+    			if($row->rol_this_list_view == 1)
+                {
+                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/list.png\"
+                    alt=\"Mitgliederliste dieser Rolle einsehen\" title=\"Mitgliederliste dieser Rolle einsehen\" />";
+                }
+   				if($row->rol_all_lists_view == 1)
+                {
+                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/lists.png\"
+                    alt=\"Mitgliederlisten aller Rollen einsehen\" title=\"Mitgliederlisten aller Rollen einsehen\" />";
+                }
             echo "</td>
             <td style=\"text-align: center;\">";
                 if($row->rol_locked == 1)

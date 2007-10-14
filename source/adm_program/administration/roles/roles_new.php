@@ -444,6 +444,31 @@ echo "
                             </div>
                         </li>";
                     }
+                    //Listenrechte
+                    //Diese Liste
+                    echo "
+                        <li>
+                            <div>
+                                <input type=\"checkbox\" id=\"rol_this_list_view\" name=\"rol_this_list_view\" ";
+                                if($role->getValue("rol_this_list_view") == 1)
+                                    echo " checked=\"checked\" ";
+                                echo " value=\"1\" />&nbsp;
+                                <label for=\"rol_this_list_view\"><img src=\"$g_root_path/adm_program/images/list.png\" alt=\"Mitgliederliste dieser Rolle einsehen\" /></label>
+                                <label for=\"rol_this_list_view\">Mitgliederliste dieser Rolle einsehen</label>
+                            </div>
+                        </li>";
+                    //Alle Listen
+                    echo "
+                        <li>
+                            <div>
+                                <input type=\"checkbox\" id=\"rol_all_lists_view\" name=\"rol_all_lists_view\" ";
+                                if($role->getValue("rol_all_lists_view") == 1)
+                                    echo " checked=\"checked\" ";
+                                echo " value=\"1\" />&nbsp;
+                                <label for=\"rol_all_lists_view\"><img src=\"$g_root_path/adm_program/images/lists.png\" alt=\"Mitgliederlisten aller Rollen einsehen\" /></label>
+                                <label for=\"rol_all_lists_view\">Mitgliederlisten aller Rollen einsehen</label>
+                            </div>
+                        </li>";                 
                 echo "</ul>
             </div>
         </div>
