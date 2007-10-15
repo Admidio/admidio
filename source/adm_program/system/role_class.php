@@ -122,6 +122,8 @@ class Role extends TableAccess
             case "rol_locked":
             case "rol_valid":
             case "rol_system":
+            case "rol_this_list_view":
+            case "rol_all_lists_view":
                 if($field_value != 1)
                 {
                     $field_value = 0;
