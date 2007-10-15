@@ -172,6 +172,8 @@ class User extends TableAccess
         $this->roles_rights['rol_photo']         = -1;
         $this->roles_rights['rol_profile']       = -1;
         $this->roles_rights['rol_weblinks']      = -1;
+        $this->roles_rights['rol_this_list_view']= -1;
+        $this->roles_rights['rol_all_lists_view']= -1;
     }
 
     // interne Methode, die bei setValue den uebergebenen Wert prueft
@@ -440,7 +442,7 @@ class User extends TableAccess
     // Funktion prueft, ob der User das uebergebene Rollenrecht besitzt
     function checkRolesRight($right)
     {
-        if($this->roles_rights[$right] == -1 && $this->db_fields['usr_id'] > 0)
+		if($this->roles_rights[$right] == -1 && $this->db_fields['usr_id'] > 0)
         {
             global $g_current_organization;
 
@@ -454,7 +456,7 @@ class User extends TableAccess
                           AND rol_cat_id = cat_id
                           AND cat_org_id = ". $g_current_organization->getValue("org_id");
             $this->db->query($sql);
-
+        echo"test";exit();
             $num_rows = $this->db->num_rows();
 
             if($num_rows > 0)
@@ -558,6 +560,12 @@ class User extends TableAccess
     function editPhotoRight()
     {
         return $this->checkRolesRight('rol_photo');
+    }
+    
+    // Funktion prueft, ob der angemeldete User alle Listen einsehen darf    
+    function allListsView()
+    {
+        return $this->checkRolesRight('rol_all_lists_view');
     }
 
     // Funktion prueft, ob der angemeldete User Weblinks anlegen und editieren darf
