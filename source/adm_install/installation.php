@@ -98,9 +98,9 @@ else
 session_name('admidio_php_session_id');
 session_start();
 
-if(isset($_SERVER['tbl_praefix']))
+if(isset($_SESSION['praefix']))
 {
-    $g_tbl_praefix = $_SERVER['tbl_praefix'];
+    $g_tbl_praefix = $_SESSION['praefix'];
 }
 else
 {

@@ -135,7 +135,7 @@ class User extends TableAccess
         $this->b_set_last_change = true;
         
         // neue User sollten i.d.R. auf valid stehen (Ausnahme Registrierung)
-        $this->db_fields['usr_valid'] = 1;
+        $this->setValue("usr_valid", 1);
         
         // user_data-Array initialisieren
         if(count($this->db_user_fields) > 0)
@@ -456,7 +456,6 @@ class User extends TableAccess
                           AND rol_cat_id = cat_id
                           AND cat_org_id = ". $g_current_organization->getValue("org_id");
             $this->db->query($sql);
-        echo"test";exit();
             $num_rows = $this->db->num_rows();
 
             if($num_rows > 0)

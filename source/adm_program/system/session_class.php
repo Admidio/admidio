@@ -116,7 +116,7 @@ class Session extends TableAccess
         else
         {
             // Update
-            $this->db_fields['ses_timestamp'] = date("Y-m-d H:i:s", time());
+            $this->setValue("ses_timestamp", date("Y-m-d H:i:s", time()));
         }
     }  
 
