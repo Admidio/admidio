@@ -460,10 +460,9 @@ elseif($req_mode == 7)
     // allerdings darf hier keine Fehlermeldung wg. dem safe_mode kommen
     @set_time_limit(120);
     
-     // Verbindung zu Datenbank herstellen und Transaktion starten
+     // Verbindung zu Datenbank herstellen
     $db = new MySqlDB();
     $connection = $db->connect($_SESSION['server'], $_SESSION['user'], $_SESSION['password'], $_SESSION['database']);
-    $db->transaction("begin");
  
     $filename = "db_scripts/db.sql";
     $file     = fopen($filename, "r")
@@ -621,9 +620,6 @@ elseif($req_mode == 7)
                                    VALUES (". $role_webmaster->getValue("rol_id"). ", ". $g_current_user->getValue("usr_id"). ", NOW(), 1) 
                                         , (". $role_member->getValue("rol_id"). ", ". $g_current_user->getValue("usr_id"). ", NOW(), 1) ";
     $db->query($sql);
-    
-    // Transaktion abschliessen
-    $db->transaction("commit");
     
     // Daten der Session loeschen
     unset($_SESSION['g_current_organisation']);
