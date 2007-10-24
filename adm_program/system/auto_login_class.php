@@ -69,9 +69,9 @@ class AutoLogin extends TableAccess
         {
             // Insert
             global $g_current_organization;
-            $this->db_fields['atl_org_id']     = $g_current_organization->getValue("org_id");
-            $this->db_fields['atl_last_login'] = date("Y-m-d H:i:s", time());
-            $this->db_fields['atl_ip_address'] = $_SERVER['REMOTE_ADDR'];
+            $this->setValue("atl_org_id", $g_current_organization->getValue("org_id"));
+            $this->setValue("atl_last_login", date("Y-m-d H:i:s", time()));
+            $this->setValue("atl_ip_address", $_SERVER['REMOTE_ADDR']);
             
             // Tabelle aufraeumen, wenn ein neuer Datensatz geschrieben wird
             $this->tableCleanup();
@@ -79,8 +79,8 @@ class AutoLogin extends TableAccess
         else
         {
             // Update
-            $this->db_fields['atl_last_login'] = date("Y-m-d H:i:s", time());
-            $this->db_fields['atl_ip_address'] = $_SERVER['REMOTE_ADDR'];
+            $this->setValue("atl_last_login", date("Y-m-d H:i:s", time()));
+            $this->setValue("atl_ip_address", $_SERVER['REMOTE_ADDR']);
         }
     }  
     
