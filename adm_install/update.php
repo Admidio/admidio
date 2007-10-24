@@ -118,7 +118,6 @@ require_once(SERVER_PATH. "/adm_program/system/". $g_db_type. "_class.php");
  // Verbindung zu Datenbank herstellen
 $g_db = new MySqlDB();
 $g_adm_con = $g_db->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
-$g_db->transaction("begin");
 
 // Daten der aktuellen Organisation einlesen
 $g_current_organization = new Organization($g_db, $g_organization);
@@ -268,9 +267,6 @@ elseif($req_mode == 2)
                    AND prf_name    = 'db_version' ";
         $g_db->query($sql);                
     }
-
-    // Transaktion abschliessen
-    $g_db->transaction("commit");
 
     // globale Objekte aus einer evtl. vorhandenen Session entfernen, 
     // damit diese neu eingelesen werden muessen

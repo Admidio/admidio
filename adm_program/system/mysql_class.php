@@ -149,7 +149,7 @@ class MySqlDB extends DB
         switch ($status)
         {
             case 'begin':
-                return $this->query('BEGIN');
+                return $this->query('START TRANSACTION');
             break;
 
             case 'commit':
