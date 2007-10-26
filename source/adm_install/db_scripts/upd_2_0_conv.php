@@ -84,8 +84,8 @@ $g_db->query($sql);
 $usf_id_gender = $g_db->insert_id();
 
 $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_cat_id, usf_type, usf_name, usf_description, usf_system, usf_mandatory, usf_sequence)
-                                   VALUES ($cat_id_stammdaten, 'EMAIL',  'E-Mail', '". utf8_decode_db("Es muss eine gültige E-Mail-Adresse angegeben werden.<br />' + 
-                                                               'Ohne diese kann das Programm nicht genutzt werden."). "', 1, 1, 12) ";
+                                   VALUES ($cat_id_stammdaten, 'EMAIL',  'E-Mail', 'Es muss eine gültige E-Mail-Adresse angegeben werden.<br />' + 
+                                                               'Ohne diese kann das Programm nicht genutzt werden.', 1, 1, 12) ";
 $g_db->query($sql);
 $usf_id_email = $g_db->insert_id();
 
@@ -138,7 +138,7 @@ while($row_orga = $g_db->fetch_object($result_orga))
 {
     
     $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_sequence)
-                                      VALUES ($row_orga->org_id, 'USF', '". utf8_decode_db("Zusätzliche Daten"). "', 0, 2)";
+                                      VALUES ($row_orga->org_id, 'USF', 'Zusätzliche Daten', 0, 2)";
     $g_db->query($sql);
     $cat_id_data = $g_db->insert_id();
 

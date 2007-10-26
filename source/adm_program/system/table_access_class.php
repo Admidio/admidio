@@ -221,7 +221,6 @@ class TableAccess
                     {
                         if($this->db_fields_infos[$key]['changed'] == true)
                         {
-                            $value = utf8_decode_db($value);
                             if($this->new_record)
                             {
                                 if(strlen($value) > 0)

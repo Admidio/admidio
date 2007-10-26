@@ -54,9 +54,14 @@ class MySqlDB extends DB
         global $g_debug;
         
         // im Debug-Modus werden alle SQL-Statements mitgeloggt
-        //if($g_debug)
+        if($g_debug == 1)
         {
             error_log($sql);
+        }
+        
+        if($this->utf8 == false)
+        {
+            $sql = utf8_decode($sql);
         }
         
         $this->query_result = mysql_query($sql, $this->connect_id);
@@ -86,7 +91,14 @@ class MySqlDB extends DB
         {
             foreach($values as $key => $value)
             {
-                $values[$key] = utf8_encode_db($value);
+                if($this->utf8 == false)
+                {
+                    $values[$key] = utf8_encode($value);
+                }
+                else
+                {
+                    $values[$key] = $value;
+                }
             }
         }
         return $values;
@@ -140,29 +152,7 @@ class MySqlDB extends DB
     function data_seek($result, $row_number)
     {
         return mysql_data_seek($result, $row_number);
-    }
-    
-    // Modus einer Transaktion setzen
-    // diese Funktion wird aus transaction() aufgerufen
-    function _transaction($status = 'begin')
-    {
-        switch ($status)
-        {
-            case 'begin':
-                return $this->query('START TRANSACTION');
-            break;
-
-            case 'commit':
-                return $this->query('COMMIT');
-            break;
-
-            case 'rollback':
-                return $this->query('ROLLBACK');
-            break;
-        }
-
-        return true;
-    }    
+    }   
     
     // gibt ein Array mit Fehlernummer und Beschreibung zurueck    
     // diese Funktion wird aus db_error() aufgerufen
