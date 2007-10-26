@@ -238,7 +238,7 @@ else
     $date = new Date($g_db);
 
     // Termine auflisten
-    while($row = $g_db->fetch_object($dates_result))
+    while($row = $g_db->fetch_array($dates_result))
     {
         $date->clear();
         $date->setArray($row);

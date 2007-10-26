@@ -87,18 +87,11 @@ class MySqlDB extends DB
         $values = mysql_fetch_array($result, $result_type);
         
         // Daten nun noch nach UTF8 konvertieren
-        if(is_array($values))
+        if(is_array($values) && $this->utf8 == false)
         {
             foreach($values as $key => $value)
             {
-                if($this->utf8 == false)
-                {
-                    $values[$key] = utf8_encode($value);
-                }
-                else
-                {
-                    $values[$key] = $value;
-                }
+                $values[$key] = utf8_encode($value);
             }
         }
         return $values;
@@ -111,7 +104,21 @@ class MySqlDB extends DB
             $result = $this->query_result;
         }
         
-        return mysql_fetch_object($result);
+        $object = mysql_fetch_object($result);
+        
+        if($this->utf8 == false)
+        {
+            $values = get_object_vars($object);
+
+            if(is_array($values))
+            {
+                foreach($values as $key => $value)
+                {
+                    $object->{$key} = utf8_encode($value);
+                }
+            }
+        }
+        return $object;
     }
 
     // Liefert die ID einer vorherigen INSERT-Operation

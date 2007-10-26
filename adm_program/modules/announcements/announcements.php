@@ -181,7 +181,7 @@ else
     $announcement = new Announcement($g_db);
 
     // Ankuendigungen auflisten
-    while($row = $g_db->fetch_object($announcements_result))
+    while($row = $g_db->fetch_array($announcements_result))
     {
         $announcement->clear();
         $announcement->setArray($row);
