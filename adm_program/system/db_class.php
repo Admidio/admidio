@@ -25,60 +25,53 @@ class DB
     var $transactions = 0;
     
     // Modus der Transaktoin setzen (Inspiriert von phpBB)
-    function transaction($status = 'begin')
+    function startTransaction()
     {
-        switch ($status)
+        // If we are within a transaction we will not open another one, 
+        // but enclose the current one to not loose data (prevening auto commit)
+        if ($this->transactions > 0)
         {
-            case 'begin':
-                // If we are within a transaction we will not open another one, 
-                // but enclose the current one to not loose data (prevening auto commit)
-                if ($this->transactions > 0)
-                {
-                    $this->transactions++;
-                    return true;
-                }
-
-                $result = $this->_transaction('begin');
-
-                if (!$result)
-                {
-                    $this->db_error();
-                }
-
-                $this->transactions = 1;
-            break;
-
-            case 'commit':
-                // If there was a previously opened transaction we do not commit yet... 
-                // but count back the number of inner transactions
-                if ($this->transactions > 1)
-                {
-                    $this->transactions--;
-                    return true;
-                }
-
-                $result = $this->_transaction('commit');
-
-                if (!$result)
-                {
-                    $this->db_error();
-                }
-
-                $this->transactions = 0;
-            break;
-
-            case 'rollback':
-                $result = $this->_transaction('rollback');
-                $this->transactions = 0;
-            break;
-
-            default:
-                $result = $this->_transaction($status);
-            break;
+            $this->transactions++;
+            return true;
         }
 
+        $result = $this->query("START TRANSACTION");
+
+        if (!$result)
+        {
+            $this->db_error();
+        }
+
+        $this->transactions = 1;
+        return result;
+    }
+    
+    function endTransaction($rollback = false)
+    {
+        if($rollback)
+        {
+            $result = $this->query("ROLLBACK");
+        }
+        else
+        {
+            // If there was a previously opened transaction we do not commit yet... 
+            // but count back the number of inner transactions
+            if ($this->transactions > 1)
+            {
+                $this->transactions--;
+                return true;
+            }
+
+            $result = $this->query("COMMIT");
+
+            if (!$result)
+            {
+                $this->db_error();
+            }
+        }
+        $this->transactions = 0;
         return $result;
-    }    
+    }   
     
     // Ausgabe der Datenbank-Fehlermeldung
     function db_error()
@@ -91,7 +84,7 @@ class DB
         // Rollback bei einer offenen Transaktion
         if($this->transactions > 0)
         {
-            $this->transaction("rollback");
+            $this->endTransaction(true);
         }        
 
         if(headers_sent() == false && isset($g_preferences))
@@ -116,7 +109,7 @@ class DB
         }
         
         exit();
-    }    
+    }
 }
  
 ?>

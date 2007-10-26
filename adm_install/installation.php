@@ -496,31 +496,31 @@ elseif($req_mode == 7)
 
     // Stammdatenfelder anlegen
     $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_cat_id, usf_type, usf_name, usf_description, usf_system, usf_disabled, usf_mandatory, usf_sequence)
-                                       VALUES ($cat_id_stammdaten, 'TEXT', '". utf8_decode_db("Nachname"). "', NULL, 1, 1, 1, 1)
-                                            , ($cat_id_stammdaten, 'TEXT', '". utf8_decode_db("Vorname"). "', NULL, 1, 1, 1, 2)
-                                            , ($cat_id_stammdaten, 'TEXT', '". utf8_decode_db("Adresse"). "', NULL, 1, 0, 0, 3) 
-                                            , ($cat_id_stammdaten, 'TEXT', '". utf8_decode_db("PLZ"). "', NULL, 1, 0, 0, 4)
-                                            , ($cat_id_stammdaten, 'TEXT', '". utf8_decode_db("Ort"). "', NULL, 1, 0, 0, 5)
-                                            , ($cat_id_stammdaten, 'TEXT', '". utf8_decode_db("Land"). "', NULL, 1, 0, 0, 6)
-                                            , ($cat_id_stammdaten, 'TEXT', '". utf8_decode_db("Telefon"). "', NULL, 1, 0, 0, 7)
-                                            , ($cat_id_stammdaten, 'TEXT', '". utf8_decode_db("Handy"). "', NULL, 1, 0, 0, 8)
-                                            , ($cat_id_stammdaten, 'TEXT', '". utf8_decode_db("Fax"). "', NULL, 1, 0, 0, 9)
-                                            , ($cat_id_stammdaten, 'DATE', '". utf8_decode_db("Geburtstag"). "', NULL, 1, 0, 0, 10)
-                                            , ($cat_id_stammdaten, 'NUMERIC', '". utf8_decode_db("Geschlecht"). "', NULL, 1, 0, 0, 11)
-                                            , ($cat_id_stammdaten, 'EMAIL','". utf8_decode_db("E-Mail"). "', '". utf8_decode_db("Es muss eine g&uuml;ltige E-Mail-Adresse angegeben werden.
-                                                                    Ohne diese kann das Programm nicht genutzt werden."). "', 1, 0, 1, 12)
-                                            , ($cat_id_stammdaten, 'URL',  '". utf8_decode_db("Homepage"). "', NULL, 1, 0, 0, 13) ";
+                                       VALUES ($cat_id_stammdaten, 'TEXT', 'Nachname', NULL, 1, 1, 1, 1)
+                                            , ($cat_id_stammdaten, 'TEXT', 'Vorname', NULL, 1, 1, 1, 2)
+                                            , ($cat_id_stammdaten, 'TEXT', 'Adresse', NULL, 1, 0, 0, 3) 
+                                            , ($cat_id_stammdaten, 'TEXT', 'PLZ', NULL, 1, 0, 0, 4)
+                                            , ($cat_id_stammdaten, 'TEXT', 'Ort', NULL, 1, 0, 0, 5)
+                                            , ($cat_id_stammdaten, 'TEXT', 'Land', NULL, 1, 0, 0, 6)
+                                            , ($cat_id_stammdaten, 'TEXT', 'Telefon', NULL, 1, 0, 0, 7)
+                                            , ($cat_id_stammdaten, 'TEXT', 'Handy', NULL, 1, 0, 0, 8)
+                                            , ($cat_id_stammdaten, 'TEXT', 'Fax', NULL, 1, 0, 0, 9)
+                                            , ($cat_id_stammdaten, 'DATE', 'Geburtstag', NULL, 1, 0, 0, 10)
+                                            , ($cat_id_stammdaten, 'NUMERIC', 'Geschlecht', NULL, 1, 0, 0, 11)
+                                            , ($cat_id_stammdaten, 'EMAIL','E-Mail', 'Es muss eine gültige E-Mail-Adresse angegeben werden.
+                                                                    Ohne diese kann das Programm nicht genutzt werden.', 1, 0, 1, 12)
+                                            , ($cat_id_stammdaten, 'URL',  'Homepage', NULL, 1, 0, 0, 13) ";
     $db->query($sql);
     $usf_id_homepage = $db->insert_id();
 
     // Messenger anlegen
     $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_cat_id, usf_type, usf_name, usf_description, usf_system, usf_sequence)
-                                       VALUES ($cat_id_messenger, 'TEXT', 'AIM', '". utf8_decode_db("AOL Instant Messenger"). "', 1, 1) 
-                                            , ($cat_id_messenger, 'TEXT', 'Google Talk', '". utf8_decode_db("Google Talk"). "', 1, 2)
-                                            , ($cat_id_messenger, 'TEXT', 'ICQ', '". utf8_decode_db("ICQ"). "', 1, 3) 
-                                            , ($cat_id_messenger, 'TEXT', 'MSN', '". utf8_decode_db("MSN Messenger"). "', 1, 4)
-                                            , ($cat_id_messenger, 'TEXT', 'Skype', '". utf8_decode_db("Skype"). "', 1, 5) 
-                                            , ($cat_id_messenger, 'TEXT', 'Yahoo', '". utf8_decode_db("Yahoo! Messenger"). "', 1, 6)  ";
+                                       VALUES ($cat_id_messenger, 'TEXT', 'AIM', 'AOL Instant Messenger', 1, 1) 
+                                            , ($cat_id_messenger, 'TEXT', 'Google Talk', 'Google Talk', 1, 2)
+                                            , ($cat_id_messenger, 'TEXT', 'ICQ', 'ICQ', 1, 3) 
+                                            , ($cat_id_messenger, 'TEXT', 'MSN', 'MSN Messenger', 1, 4)
+                                            , ($cat_id_messenger, 'TEXT', 'Skype', 'Skype', 1, 5) 
+                                            , ($cat_id_messenger, 'TEXT', 'Yahoo', 'Yahoo! Messenger', 1, 6)  ";
     $db->query($sql); 
     
     // Organisationsobjekt erstellen
@@ -553,11 +553,11 @@ elseif($req_mode == 7)
     $category_common = $db->insert_id();
     
     $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_sequence)
-                                      VALUES (". $g_current_organization->getValue("org_id"). ", 'ROL', '". utf8_decode_db("Gruppen"). "', 0, 2)
-                                           , (". $g_current_organization->getValue("org_id"). ", 'ROL', '". utf8_decode_db("Kurse"). "', 0, 3)
-                                           , (". $g_current_organization->getValue("org_id"). ", 'ROL', '". utf8_decode_db("Mannschaften"). "', 0, 4)
-                                           , (". $g_current_organization->getValue("org_id"). ", 'LNK', '". utf8_decode_db("Allgemein"). "', 0, 1)
-                                           , (". $g_current_organization->getValue("org_id"). ", 'USF', '". utf8_decode_db("Zusätzliche Daten"). "', 0, 2) ";
+                                      VALUES (". $g_current_organization->getValue("org_id"). ", 'ROL', 'Gruppen', 0, 2)
+                                           , (". $g_current_organization->getValue("org_id"). ", 'ROL', 'Kurse', 0, 3)
+                                           , (". $g_current_organization->getValue("org_id"). ", 'ROL', 'Mannschaften', 0, 4)
+                                           , (". $g_current_organization->getValue("org_id"). ", 'LNK', 'Allgemein', 0, 1)
+                                           , (". $g_current_organization->getValue("org_id"). ", 'USF', 'Zusätzliche Daten', 0, 2) ";
     $db->query($sql);
 
     // User Webmaster anlegen

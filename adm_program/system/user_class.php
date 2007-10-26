@@ -287,8 +287,6 @@ class User extends TableAccess
                 }
                 else
                 {
-                    $value['usd_value'] = utf8_decode_db($value['usd_value']);
-                    
                     if($value['new'] == true)
                     {
                         $sql = "INSERT INTO ". TBL_USER_DATA. " (usd_usr_id, usd_usf_id, usd_value) 
