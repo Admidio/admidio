@@ -136,7 +136,6 @@ else
     if($_GET['id'] > 0 && $_GET['mode'] != 4)
     {
         $guestbook_comment->getGuestbookComment($_GET['id']);
-        $guestbook = new Guestbook($g_db, $guestbook_comment->getValue("gbc_gbo_id"));
         
         // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
         if($guestbook->getValue("gbo_org_id") != $g_current_organization->getValue("org_id"))

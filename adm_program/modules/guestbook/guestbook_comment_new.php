@@ -17,7 +17,6 @@
  *****************************************************************************/
 
 require("../../system/common.php");
-require("../../system/guestbook_class.php");
 require("../../system/guestbook_comment_class.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
@@ -100,10 +99,8 @@ if(isset($_GET["cid"]) && $_GET["cid"] > 0)
 {
     $guestbook_comment->getGuestbookComment($_GET["cid"]);
     
-    $guestbook = new Guestbook($g_db, $guestbook_comment->getValue("gbc_gbo_id"));
-    
     // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
-    if($guestbook->getValue("gbo_org_id") != $g_current_organization->getValue("org_id"))
+    if($guestbook_comment->getValue("gbo_org_id") != $g_current_organization->getValue("org_id"))
     {
         $g_message->show("norights");
     }
