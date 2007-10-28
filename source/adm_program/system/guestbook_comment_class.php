@@ -53,6 +53,9 @@ class GuestbookComment extends TableAccess
     // Termin mit der uebergebenen ID aus der Datenbank auslesen
     function getGuestbookComment($gbc_id)
     {
+        $tables    = TBL_GUESTBOOK;
+        $condition = "       gbc_gbo_id = gbo_id 
+                         AND gbc_id     = $gbc_id ";
         $this->readData($gbc_id);
     }
     
