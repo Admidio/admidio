@@ -74,9 +74,13 @@ if ($g_preferences['enable_bbcode'] == 1)
 
 unset($_SESSION['guestbook_entry_request']);
 unset($_SESSION['guestbook_comment_request']);
-
-// Navigation faengt hier im Modul an
-$_SESSION['navigation']->clear();
+
+
+// Navigation faengt hier im Modul an, wenn keine Eintrag direkt aufgerufen wird
+if($_GET['id'] == 0)
+{
+    $_SESSION['navigation']->clear();
+}
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Html-Kopf ausgeben
@@ -199,9 +203,9 @@ else
     <ul class=\"iconTextLinkList\">
         <li>
             <span class=\"iconTextLink\">
-                <a href=\"$g_root_path/adm_program/modules/guestbook/guestbook.php?headline=". $_GET["headline"]. "&amp;start=". $_GET["start"] ."\"><img
-                src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück zum G&auml;stebuch\" /></a>
-                <a href=\"$g_root_path/adm_program/modules/guestbook/guestbook.php?headline=". $_GET["headline"]. "&amp;start=". $_GET["start"] ."\">Zurück zum G&auml;stebuch</a>
+                <a href=\"". $_SESSION['navigation']->getPreviousUrl() ."\"><img
+                src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück zum Gästebuch\" /></a>
+                <a href=\"". $_SESSION['navigation']->getPreviousUrl() ."\">Zurück zum Gästebuch</a>
             </span>
         </li>
     </ul>";

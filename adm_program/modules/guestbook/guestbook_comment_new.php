@@ -17,6 +17,8 @@
  *****************************************************************************/
 
 require("../../system/common.php");
+require("../../system/guestbook_class.php");
+require("../../system/guestbook_comment_class.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_guestbook_module'] == 0)
@@ -86,55 +88,47 @@ if (array_key_exists("headline", $_GET))
 }
 else
 {
-    $_GET["headline"] = "G&auml;stebuch";
+    $_GET["headline"] = "Gästebuch";
 }
 
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
-if (isset($_SESSION['guestbook_comment_request']))
+// Gaestebuchkommentarobjekt anlegen
+$guestbook_comment = new GuestbookComment($g_db);
+
+if(isset($_GET["cid"]) && $_GET["cid"] > 0)
 {
-    $form_values = strStripSlashesDeep($_SESSION['guestbook_comment_request']);
+    $guestbook_comment->getGuestbookComment($_GET["cid"]);
+    
+    $guestbook = new Guestbook($g_db, $guestbook_comment->getValue("gbc_gbo_id"));
+    
+    // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
+    if($guestbook->getValue("gbo_org_id") != $g_current_organization->getValue("org_id"))
+    {
+        $g_message->show("norights");
+    }
+}
+
+if(isset($_SESSION['guestbook_comment_request']))
+{
+    // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
+    // nun die vorher eingegebenen Inhalte auslesen
+    foreach($_SESSION['guestbook_comment_request'] as $key => $value)
+    {
+        if(strpos($key, "gbc_") == 0)
+        {
+            $guestbook_comment->setValue($key, stripslashes($value));
+        }        
+    }
     unset($_SESSION['guestbook_comment_request']);
 }
-else
+
+// Wenn der User eingeloggt ist und keine cid uebergeben wurde
+// koennen zumindest Name und Emailadresse vorbelegt werden...
+if (isset($_GET['cid']) == false && $g_valid_login)
 {
-    $form_values['name']  = "";
-    $form_values['email'] = "";
-    $form_values['entry']  = "";
-
-    // Wenn eine cid uebergeben wurde, soll der Eintrag geaendert werden
-    // -> Felder mit Daten des Kommentares vorbelegen
-
-    if (isset($_GET['cid']))
-    {
-        $sql    = "SELECT * FROM ". TBL_GUESTBOOK. ",".TBL_GUESTBOOK_COMMENTS.  "
-                    WHERE gbc_id = ". $_GET['cid']. " and gbo_org_id = ". $g_current_organization->getValue("org_id"). "
-                      AND gbo_id = gbc_gbo_id";
-        $result = $g_db->query($sql);
-
-        if ($g_db->num_rows($result) > 0)
-        {
-            $row_ba = $g_db->fetch_object($result);
-
-            $form_values['name']     = $row_ba->gbc_name;
-            $form_values['entry']    = $row_ba->gbc_text;
-            $form_values['email']    = $row_ba->gbc_email;
-        }
-        elseif ($g_db->num_rows($result) == 0)
-        {
-            //Wenn keine Daten zu der CID gefunden worden bzw. die CID einer anderen Orga gehört ist Schluss mit lustig...
-            $g_message->show("invalid");
-        }
-
-    }
-
-    // Wenn der User eingeloggt ist und keine cid uebergeben wurde
-    // koennen zumindest Name und Emailadresse vorbelegt werden...
-    if (!isset($_GET['cid']) && $g_valid_login)
-    {
-        $form_values['name']     = $g_current_user->getValue("Vorname"). " ". $g_current_user->getValue("Nachname");
-        $form_values['email']    = $g_current_user->getValue("E-Mail");
-    }
+    $guestbook_comment->setValue("gbc_name", $g_current_user->getValue("Vorname"). " ". $g_current_user->getValue("Nachname"));
+    $guestbook_comment->setValue("gbc_email", $g_current_user->getValue("E-Mail"));
 }
 
 
@@ -147,7 +141,7 @@ if (!$g_valid_login && $g_preferences['flooding_protection_time'] != 0)
 
     $sql = "SELECT count(*) FROM ". TBL_GUESTBOOK_COMMENTS. "
             where unix_timestamp(gbc_timestamp) > unix_timestamp()-". $g_preferences['flooding_protection_time']. "
-              and gbc_ip_address = '$ipAddress' ";
+              and gbc_ip_address = '". $guestbook_comment->getValue("gbc_ip_address"). "'";
     $result = $g_db->query($sql);
     $row = $g_db->fetch_array($result);
     if($row[0] > 0)
@@ -188,11 +182,11 @@ echo "
                         if ($g_current_user->getValue("usr_id") > 0)
                         {
                             // Eingeloggte User sollen ihren Namen nicht aendern duerfen
-                            echo "<input class=\"readonly\" readonly=\"readonly\" type=\"text\" id=\"name\" name=\"name\" tabindex=\"1\" style=\"width: 350px;\" maxlength=\"60\" value=\"". $form_values['name']. "\" />";
+                            echo "<input class=\"readonly\" readonly=\"readonly\" type=\"text\" id=\"gbc_name\" name=\"gbc_name\" tabindex=\"1\" style=\"width: 350px;\" maxlength=\"60\" value=\"". $guestbook_comment->getValue("gbc_name"). "\" />";
                         }
                         else
                         {
-                            echo "<input type=\"text\" id=\"name\" name=\"name\" tabindex=\"1\" style=\"width: 350px;\" maxlength=\"60\" value=\"". $form_values['name']. "\" />
+                            echo "<input type=\"text\" id=\"gbc_name\" name=\"gbc_name\" tabindex=\"1\" style=\"width: 350px;\" maxlength=\"60\" value=\"". $guestbook_comment->getValue("gbc_name"). "\" />
                             <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>";
                         }
                     echo "</dd>
@@ -202,7 +196,7 @@ echo "
                 <dl>
                     <dt><label for=\"email\">Emailadresse:</label></dt>
                     <dd>
-                        <input type=\"text\" id=\"email\" name=\"email\" tabindex=\"2\" style=\"width: 350px;\" maxlength=\"50\" value=\"". $form_values['email']. "\" />
+                        <input type=\"text\" id=\"gbc_email\" name=\"gbc_email\" tabindex=\"2\" style=\"width: 350px;\" maxlength=\"50\" value=\"". $guestbook_comment->getValue("gbc_email"). "\" />
                     </dd>
                 </dl>
             </li>
@@ -216,7 +210,7 @@ echo "
                         }
                     echo "</dt>
                     <dd>
-                        <textarea  id=\"entry\" name=\"entry\" tabindex=\"3\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". $form_values['entry']. "</textarea>&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
+                        <textarea  id=\"gbc_text\" name=\"gbc_text\" tabindex=\"3\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". $guestbook_comment->getValue("gbc_text"). "</textarea>&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
                     </dd>
                 </dl>
             </li>";
@@ -236,7 +230,7 @@ echo "
                 </li>
                 <li>
                     <dl>
-                           <dt><label for=\"captcha\">Best&auml;tigungscode:</label></dt>
+                           <dt><label for=\"captcha\">Bestätigungscode:</label></dt>
                            <dd>
                                <input type=\"text\" id=\"captcha\" name=\"captcha\" tabindex=\"4\" style=\"width: 200px;\" maxlength=\"8\" value=\"\" />
                                <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
