@@ -39,8 +39,6 @@ class Category extends TableAccess
         $this->db            =& $db;
         $this->table_name     = TBL_CATEGORIES;
         $this->column_praefix = "cat";
-        $this->key_name       = "cat_id";
-        $this->auto_increment = true;
         
         if($cat_id > 0)
         {
@@ -56,35 +54,6 @@ class Category extends TableAccess
     function getCategory($cat_id)
     {
         $this->readData($cat_id);
-    }
-    
-    // interne Funktion, die bei setValue den uebergebenen Wert prueft
-    // und ungueltige Werte auf leer setzt
-    // die Funktion wird innerhalb von setValue() aufgerufen
-    function _setValue($field_name, $field_value)
-    {
-        switch($field_name)
-        {
-            case "cat_id":
-            case "cat_org_id":
-                if(is_numeric($field_value) == false 
-                || $field_value == 0)
-                {
-                    $field_value = "";
-                    return false;
-                }
-                break;
-            
-            case "cat_system":
-            case "cat_hidden":
-                if($field_value != 1)
-                {
-                    $field_value = 0;
-                    return false;
-                }
-                break;  
-        }       
-        return true;
     }
     
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt

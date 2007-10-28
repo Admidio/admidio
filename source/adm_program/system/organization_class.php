@@ -50,8 +50,6 @@ class Organization extends TableAccess
         $this->db            =& $db;
         $this->table_name     = TBL_ORGANIZATIONS;
         $this->column_praefix = "org";
-        $this->key_name       = "org_id";
-        $this->auto_increment = true;
         
         if(strlen($organization) > 0)
         {
@@ -84,26 +82,6 @@ class Organization extends TableAccess
     {
         $this->b_check_childs = false;
         $this->child_orgas    = array();
-    }
-    
-    // interne Funktion, die bei setValue den uebergebenen Wert prueft
-    // und ungueltige Werte auf leer setzt
-    // die Funktion wird innerhalb von setValue() aufgerufen
-    function _setValue($field_name, $field_value)
-    {
-        switch($field_name)
-        {
-            case "org_id":
-            case "org_org_id_parent":
-                if(is_numeric($field_value) == false
-                || $field_value == 0)
-                {
-                    $field_value = "";
-                    return false;
-                }
-                break;
-        }       
-        return true;
     }
         
     // gibt ein Array mit allen organisationsspezifischen Einstellungen

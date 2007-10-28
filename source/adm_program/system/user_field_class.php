@@ -40,8 +40,6 @@ class UserField extends TableAccess
         $this->db            =& $db;
         $this->table_name     = TBL_USER_FIELDS;
         $this->column_praefix = "usf";
-        $this->key_name       = "usf_id";
-        $this->auto_increment = true;
         
         if($usf_id > 0)
         {
@@ -70,42 +68,18 @@ class UserField extends TableAccess
     // die Funktion wird innerhalb von setValue() aufgerufen
     function _setValue($field_name, $field_value)
     {
-        switch($field_name)
+        if($field_name == "usf_cat_id"
+        && $this->db_fields[$field_name] != $field_value)
         {
-            case "usf_id":
-            case "usf_cat_id":
-                if(is_numeric($field_value) == false 
-                || $field_value == 0)
-                {
-                    $field_value = "";
-                    return false;
-                }
-                
-                if($field_name == "usf_cat_id"
-                && $this->db_fields[$field_name] != $field_value)
-                {
-                    // erst einmal die hoechste Reihenfolgennummer der Kategorie ermitteln
-                    $sql = "SELECT COUNT(*) as count FROM ". TBL_USER_FIELDS. "
-                             WHERE usf_cat_id = $field_value";
-                    $this->db->query($sql);
+            // erst einmal die hoechste Reihenfolgennummer der Kategorie ermitteln
+            $sql = "SELECT COUNT(*) as count FROM ". TBL_USER_FIELDS. "
+                     WHERE usf_cat_id = $field_value";
+            $this->db->query($sql);
 
-                    $row = $this->db->fetch_array();
+            $row = $this->db->fetch_array();
 
-                    $this->db_fields['usf_sequence'] = $row['count'] + 1;
-                }
-                break;
-            
-            case "usf_system":
-            case "usf_disabled":
-            case "usf_hidden":
-            case "usf_mandatory":
-                if($field_value != 1)
-                {
-                    $field_value = 0;
-                    return false;
-                }
-                break;
-        }       
+            $this->setValue("usf_sequence", $row['count'] + 1);
+        }     
         return true;
     }
     

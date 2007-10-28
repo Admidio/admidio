@@ -55,8 +55,6 @@ class User extends TableAccess
         $this->db            =& $db;
         $this->table_name     = TBL_USERS;
         $this->column_praefix = "usr";
-        $this->key_name       = "usr_id";
-        $this->auto_increment = true;
         
         if(strlen($user_id) > 0)
         {
@@ -181,27 +179,6 @@ class User extends TableAccess
     // die Methode wird innerhalb von setValue() aufgerufen
     function _setValue($field_name, $field_value)
     {        
-        // Plausibilitaetspruefungen
-        switch($field_name)
-        {
-            case "usr_id":
-            case "usr_usr_id_change":
-                if(is_numeric($field_value) == false 
-                || $field_value == 0)
-                {
-                    $field_value = "";
-                }                
-                break;
-
-            case "usr_id_number_login":
-            case "usr_id_number_invalid":
-                if(is_numeric($field_value) == false)
-                {
-                    $field_value = "";
-                }
-                break;
-        }
-
         if(strpos($field_name, "usr_") !== 0)
         {
             // Daten fuer User-Fields-Tabelle
@@ -377,6 +354,8 @@ class User extends TableAccess
 
         $sql    = "DELETE FROM ". TBL_USER_DATA. " WHERE usd_usr_id = ". $this->db_fields['usr_id'];
         $this->db->query($sql);
+        
+        return true;
     }
 
     // gibt die Userdaten als VCard zurueck

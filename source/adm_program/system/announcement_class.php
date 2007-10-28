@@ -39,8 +39,6 @@ class Announcement extends TableAccess
         $this->db            =& $db;
         $this->table_name     = TBL_ANNOUNCEMENTS;
         $this->column_praefix = "ann";
-        $this->key_name       = "ann_id";
-        $this->auto_increment = true;
         
         if($ann_id > 0)
         {
@@ -56,35 +54,6 @@ class Announcement extends TableAccess
     function getAnnouncement($ann_id)
     {
         $this->readData($ann_id);
-    }
-    
-    // interne Funktion, die bei setValue den uebergebenen Wert prueft
-    // und ungueltige Werte auf leer setzt
-    // die Funktion wird innerhalb von setValue() aufgerufen
-    function _setValue($field_name, $field_value)
-    {
-        switch($field_name)
-        {
-            case "ann_id":
-            case "ann_usr_id":
-            case "ann_usr_id_change":
-                if(is_numeric($field_value) == false 
-                || $field_value == 0)
-                {
-                    $field_value = "";
-                    return false;
-                }
-                break;
-
-            case "ann_global":
-                if($field_value != 1)
-                {
-                    $field_value = 0;
-                    return false;
-                }
-                break; 
-        }       
-        return true;
     }
     
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt

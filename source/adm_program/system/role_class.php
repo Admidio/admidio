@@ -45,8 +45,6 @@ class Role extends TableAccess
         $this->db            =& $db;
         $this->table_name     = TBL_ROLES;
         $this->column_praefix = "rol";
-        $this->key_name       = "rol_id";
-        $this->auto_increment = true;
         
         if(strlen($role) > 0)
         {
@@ -77,60 +75,6 @@ class Role extends TableAccess
         $condition = $condition. " AND rol_cat_id = cat_id
                                    AND cat_org_id = ". $g_current_organization->getValue("org_id");
         $this->readData($role, $condition, $tables);
-    }
-    
-    // interne Funktion, die bei setValue den uebergebenen Wert prueft
-    // und ungueltige Werte auf leer setzt
-    // die Funktion wird innerhalb von setValue() aufgerufen
-    function _setValue($field_name, $field_value)
-    {
-        switch($field_name)
-        {
-            case "rol_id":
-            case "rol_cat_id":
-                if(is_numeric($field_value) == false
-                || $field_value == 0)
-                {
-                    $field_value = "";
-                    return false;
-                }
-                break;
-
-            case "rol_weekday":
-            case "rol_max_members":
-            case "rol_usr_id_change":
-                if(is_numeric($field_value) == false)
-                {
-                    $field_value = "";
-                    return false;
-                }
-                break;
-
-            case "rol_approve_users":
-            case "rol_assign_roles":
-            case "rol_announcements":
-            case "rol_dates":
-            case "rol_download":
-            case "rol_edit_user":
-            case "rol_guestbook":
-            case "rol_guestbook_comments":
-            case "rol_mail_logout":
-            case "rol_mail_login":
-            case "rol_photo":
-            case "rol_profile":
-            case "rol_weblinks":
-            case "rol_locked":
-            case "rol_valid":
-            case "rol_system":
-            case "rol_this_list_view":
-            case "rol_all_lists_view":
-                if($field_value != 1)
-                {
-                    $field_value = 0;
-                }
-                break;
-        }       
-        return true;
     }
     
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt

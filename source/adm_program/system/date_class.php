@@ -41,8 +41,6 @@ class Date extends TableAccess
         $this->db            =& $db;
         $this->table_name     = TBL_DATES;
         $this->column_praefix = "dat";
-        $this->key_name       = "dat_id";
-        $this->auto_increment = true;
         
         if($date_id > 0)
         {
@@ -58,35 +56,6 @@ class Date extends TableAccess
     function getDate($date_id)
     {
         $this->readData($date_id);
-    }
-    
-    // interne Funktion, die bei setValue den uebergebenen Wert prueft
-    // und ungueltige Werte auf leer setzt
-    // die Funktion wird innerhalb von setValue() aufgerufen
-    function _setValue($field_name, $field_value)
-    {
-        switch($field_name)
-        {
-            case "dat_id":
-            case "dat_usr_id":
-            case "dat_usr_id_change":
-                if(is_numeric($field_value) == false 
-                || $field_value == 0)
-                {
-                    $field_value = "";
-                    return false;
-                }
-                break;
-
-            case "dat_global":
-                if($field_value != 1)
-                {
-                    $field_value = 0;
-                    return false;
-                }
-                break; 
-        }       
-        return true;
     }
     
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt

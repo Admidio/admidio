@@ -35,7 +35,6 @@ class TableAccess
     var $table_name;
     var $column_praefix;
     var $key_name;
-    var $auto_increment;
     var $db;
     
     var $new_record;                // Merker, ob ein neuer Datensatz oder vorhandener Datensatz bearbeitet wird
@@ -118,6 +117,13 @@ class TableAccess
                 $this->db_fields[$row['Field']] = "";
                 $this->db_fields_infos[$row['Field']]['changed'] = false;
                 $this->db_fields_infos[$row['Field']]['type']    = $row['Type'];
+                $this->db_fields_infos[$row['Field']]['key']     = $row['Key'];
+                $this->db_fields_infos[$row['Field']]['extra']   = $row['Extra'];
+                
+                if($row['Key'] == "PRI")
+                {
+                    $this->key_name = $row['Field'];
+                }
             }
         }
         
@@ -141,21 +147,49 @@ class TableAccess
     // dabei koennen noch noetige Plausibilitaetspruefungen gemacht werden
     function setValue($field_name, $field_value)
     {
-        $field_name  = strStripTags($field_name);
-        $field_value = strStripTags($field_value);
-        
-        // Plausibilitaets-Check des Wertes vornehmen
-        if(method_exists($this, "_setValue"))
+        if(isset($this->db_fields[$field_name]))
         {
-            $this->_setValue($field_name, &$field_value);
-        }
-
-        if(isset($this->db_fields[$field_name])
-        && $field_value != $this->db_fields[$field_name])
-        {
-            $this->db_fields[$field_name] = $field_value;
-            $this->db_fields_changed      = true;
-            $this->db_fields_infos[$field_name]['changed'] = true;
+            // Plausibilitaets-Check des Wertes vornehmen
+            if(method_exists($this, "_setValue"))
+            {
+                $this->_setValue($field_name, &$field_value);
+            }
+            
+            // Allgemeine Plausibilitaets-Checks anhand des Feldtyps
+            if(strlen($field_value) > 0)
+            {
+                // Numerische Felder
+                if(strpos($this->db_fields_infos[$field_name]['type'], "int") !== false)
+                {
+                    if(is_numeric($field_value) == false)
+                    {
+                        $field_value = "";
+                    }
+                    
+                    // Schluesselfelder
+                    if((  $this->db_fields_infos[$field_name]['key'] == "PRI"
+                       || $this->db_fields_infos[$field_name]['key'] == "MUL")
+                    && $field_value == 0)
+                    {
+                        $field_value = "";    
+                    }
+                }
+                
+                // Strings
+                elseif(strpos($this->db_fields_infos[$field_name]['type'], "char") !== false
+                ||     strpos($this->db_fields_infos[$field_name]['type'], "text") !== false)
+                {
+                    $field_value = strStripTags($field_value);
+                }
+            }
+    
+            if(isset($this->db_fields[$field_name])
+            && $field_value != $this->db_fields[$field_name])
+            {
+                $this->db_fields[$field_name] = $field_value;
+                $this->db_fields_changed      = true;
+                $this->db_fields_infos[$field_name]['changed'] = true;
+            }
         }
     }    
     
@@ -190,67 +224,38 @@ class TableAccess
     // je nach Bedarf wird ein Insert oder Update gemacht
     function save()
     {
-        // nur durchfuehren, wenn das Schluesselfeld vernuenftig belegt ist
-        if((  $this->auto_increment == true
-           && (  is_numeric($this->db_fields[$this->key_name]) 
-              || strlen($this->db_fields[$this->key_name]) == 0))
-        || $this->auto_increment == false)
+        // Defaultdaten vorbelegen
+        if(method_exists($this, "_save"))
         {
-            // Defaultdaten vorbelegen
-            if(method_exists($this, "_save"))
-            {
-                $this->_save();
-            }
+            $this->_save();
+        }
 
-            if($this->db_fields_changed || strlen($this->db_fields[$this->key_name]) == 0)
-            {
-                // SQL-Update-Statement fuer User-Tabelle zusammenbasteln
-                $item_connection = "";                
-                $sql_field_list  = "";
-                $sql_value_list  = "";
+        if($this->db_fields_changed || strlen($this->db_fields[$this->key_name]) == 0)
+        {
+            // SQL-Update-Statement fuer User-Tabelle zusammenbasteln
+            $item_connection = "";                
+            $sql_field_list  = "";
+            $sql_value_list  = "";
 
-                // Schleife ueber alle DB-Felder und diese dem Update hinzufuegen                
-                foreach($this->db_fields as $key => $value)
+            // Schleife ueber alle DB-Felder und diese dem Update hinzufuegen                
+            foreach($this->db_fields as $key => $value)
+            {
+                // Auto-Increment-Felder duerfen nicht im Insert/Update erscheinen
+                // Felder anderer Tabellen auch nicht
+                if($this->db_fields_infos[$key]['extra'] != "auto_increment"
+                && strpos($key, $this->column_praefix. "_") === 0) 
                 {
-                    // bei Auto-Increment-ID darf diese nicht im Insert erscheinen
-                    // Felder anderer Tabellen auch nicht
-                    if((  (  $this->auto_increment == true 
-                          && $key != $this->key_name )
-                       || $this->auto_increment == false )
-                    && strpos($key, $this->column_praefix. "_") === 0) 
+                    if($this->db_fields_infos[$key]['changed'] == true)
                     {
-                        if($this->db_fields_infos[$key]['changed'] == true)
+                        if($this->new_record)
                         {
-                            if($this->new_record)
+                            if(strlen($value) > 0)
                             {
-                                if(strlen($value) > 0)
+                                // Daten fuer ein Insert aufbereiten
+                                $sql_field_list = $sql_field_list. " $item_connection $key ";
+                                if(is_numeric($value))
                                 {
-                                    // Daten fuer ein Insert aufbereiten
-                                    $sql_field_list = $sql_field_list. " $item_connection $key ";
-                                    if(is_numeric($value))
-                                    {
-                                        $sql_value_list = $sql_value_list. " $item_connection $value ";
-                                    }
-                                    else
-                                    {
-                                        // Slashs (falls vorhanden) erst einmal entfernen und dann neu Zuordnen, 
-                                        // damit sie auf jeden Fall da sind
-                                        $value = stripslashes($value);
-                                        $value = addslashes($value);
-                                        $sql_value_list = $sql_value_list. " $item_connection '$value' ";
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                // Daten fuer ein Update aufbereiten
-                                if(strlen($value) == 0 || is_null($value))
-                                {
-                                    $sql_field_list = $sql_field_list. " $item_connection $key = NULL ";
-                                }
-                                elseif(is_numeric($value))
-                                {
-                                    $sql_field_list = $sql_field_list. " $item_connection $key = $value ";
+                                    $sql_value_list = $sql_value_list. " $item_connection $value ";
                                 }
                                 else
                                 {
@@ -258,43 +263,62 @@ class TableAccess
                                     // damit sie auf jeden Fall da sind
                                     $value = stripslashes($value);
                                     $value = addslashes($value);
-                                    $sql_field_list = $sql_field_list. " $item_connection $key = '$value' ";
+                                    $sql_value_list = $sql_value_list. " $item_connection '$value' ";
                                 }
                             }
-                            if(strlen($item_connection) == 0 && strlen($sql_field_list) > 0)
-                            {
-                                $item_connection = ",";
-                            }
-                            $this->db_fields_infos[$key]['changed'] = false;
                         }
+                        else
+                        {
+                            // Daten fuer ein Update aufbereiten
+                            if(strlen($value) == 0 || is_null($value))
+                            {
+                                $sql_field_list = $sql_field_list. " $item_connection $key = NULL ";
+                            }
+                            elseif(is_numeric($value))
+                            {
+                                $sql_field_list = $sql_field_list. " $item_connection $key = $value ";
+                            }
+                            else
+                            {
+                                // Slashs (falls vorhanden) erst einmal entfernen und dann neu Zuordnen, 
+                                // damit sie auf jeden Fall da sind
+                                $value = stripslashes($value);
+                                $value = addslashes($value);
+                                $sql_field_list = $sql_field_list. " $item_connection $key = '$value' ";
+                            }
+                        }
+                        if(strlen($item_connection) == 0 && strlen($sql_field_list) > 0)
+                        {
+                            $item_connection = ",";
+                        }
+                        $this->db_fields_infos[$key]['changed'] = false;
                     }
                 }
-
-                if($this->new_record)
-                {
-                    $sql = "INSERT INTO $this->table_name ($sql_field_list) VALUES ($sql_value_list) ";
-                    $this->db->query($sql);
-                    $this->db_fields[$this->key_name] = $this->db->insert_id();
-                    $this->new_record = false;
-                }
-                else
-                {
-                    $sql = "UPDATE $this->table_name SET $sql_field_list 
-                             WHERE $this->key_name = '". $this->db_fields[$this->key_name]. "'";
-                    $this->db->query($sql);
-                }
             }
 
-            // Nach dem Speichern eine Funktion aufrufen um evtl. abhaenige Daten noch anzupassen
-            if(method_exists($this, "_afterSave"))
+            if($this->new_record)
             {
-                $this->_afterSave();
+                $sql = "INSERT INTO $this->table_name ($sql_field_list) VALUES ($sql_value_list) ";
+                $this->db->query($sql);
+                $this->db_fields[$this->key_name] = $this->db->insert_id();
+                $this->new_record = false;
             }
-
-            $this->db_fields_changed = false;
-            return 0;
+            else
+            {
+                $sql = "UPDATE $this->table_name SET $sql_field_list 
+                         WHERE $this->key_name = '". $this->db_fields[$this->key_name]. "'";
+                $this->db->query($sql);
+            }
         }
-        return -1;
+
+        // Nach dem Speichern eine Funktion aufrufen um evtl. abhaenige Daten noch anzupassen
+        if(method_exists($this, "_afterSave"))
+        {
+            $this->_afterSave();
+        }
+
+        $this->db_fields_changed = false;
+        return 0;
     }
     
     // aktuelle Datensatz loeschen und ggf. noch die Referenzen
