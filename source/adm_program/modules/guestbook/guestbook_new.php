@@ -16,6 +16,7 @@
  *****************************************************************************/
 
 require("../../system/common.php");
+require("../../system/guestbook_class.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_guestbook_module'] == 0)
@@ -50,7 +51,7 @@ if (array_key_exists("headline", $_GET))
 }
 else
 {
-    $_GET["headline"] = "G&auml;stebuch";
+    $_GET["headline"] = "Gästebuch";
 }
 
 
@@ -67,54 +68,41 @@ if ($_GET["id"] != 0)
 
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
-if (isset($_SESSION['guestbook_entry_request']))
+// Gaestebuchobjekt anlegen
+$guestbook = new Guestbook($g_db);
+
+if($_GET["id"] > 0)
 {
-    $form_values = strStripSlashesDeep($_SESSION['guestbook_entry_request']);
+    $guestbook->getGuestbookEntry($_GET["id"]);
+    
+    // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
+    if($guestbook->getValue("gbo_org_id") != $g_current_organization->getValue("org_id"))
+    {
+        $g_message->show("norights");
+    }
+}
+
+if(isset($_SESSION['guestbook_entry_request']))
+{
+    // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
+    // nun die vorher eingegebenen Inhalte auslesen
+    foreach($_SESSION['guestbook_entry_request'] as $key => $value)
+    {
+        if(strpos($key, "gbo_") == 0)
+        {
+            $guestbook->setValue($key, stripslashes($value));
+        }        
+    }
     unset($_SESSION['guestbook_entry_request']);
 }
-else
+
+// Wenn keine ID uebergeben wurde, der User aber eingeloggt ist koennen zumindest
+// Name, Emailadresse und Homepage vorbelegt werden...
+if ($_GET['id'] == 0 && $g_valid_login)
 {
-    $form_values['name']     = "";
-    $form_values['email']     = "";
-    $form_values['homepage'] = "";
-    $form_values['entry']     = "";
-
-    // Wenn eine ID uebergeben wurde, soll der Eintrag geaendert werden
-    // -> Felder mit Daten des Eintrages vorbelegen
-
-    if ($_GET['id'] != 0)
-    {
-        $sql    = "SELECT * FROM ". TBL_GUESTBOOK. " 
-                    WHERE gbo_id = ". $_GET['id']. "
-                      AND gbo_org_id = ". $g_current_organization->getValue("org_id");
-        $result = $g_db->query($sql);
-
-        if ($g_db->num_rows($result) > 0)
-        {
-            $row_ba = $g_db->fetch_object($result);
-
-            $form_values['name']     = $row_ba->gbo_name;
-            $form_values['entry']     = $row_ba->gbo_text;
-            $form_values['email']    = $row_ba->gbo_email;
-            $form_values['homepage'] = $row_ba->gbo_homepage;
-        }
-        elseif ($g_db->num_rows($result) == 0)
-        {
-            //Wenn keine Daten zu der ID gefunden worden bzw. die ID einer anderen Orga gehört ist Schluss mit lustig...
-            $g_message->show("invalid");
-        }
-
-    }
-
-    // Wenn keine ID uebergeben wurde, der User aber eingeloggt ist koennen zumindest
-    // Name, Emailadresse und Homepage vorbelegt werden...
-    if ($_GET['id'] == 0 && $g_valid_login)
-    {
-        $form_values['name']     = $g_current_user->getValue("Vorname"). " ". $g_current_user->getValue("Nachname");
-        $form_values['email']    = $g_current_user->getValue("E-Mail");
-        $form_values['homepage'] = $g_current_user->getValue("Homepage");
-    }
-
+    $guestbook->setValue("gbo_name", $g_current_user->getValue("Vorname"). " ". $g_current_user->getValue("Nachname"));
+    $guestbook->setValue("gbo_email", $g_current_user->getValue("E-Mail"));
+    $guestbook->setValue("gbo_homepage", $g_current_user->getValue("Homepage"));
 }
 
 if (!$g_valid_login && $g_preferences['flooding_protection_time'] != 0)
@@ -125,9 +113,9 @@ if (!$g_valid_login && $g_preferences['flooding_protection_time'] != 0)
     $ipAddress = $_SERVER['REMOTE_ADDR'];
 
     $sql = "SELECT count(*) FROM ". TBL_GUESTBOOK. "
-            where unix_timestamp(gbo_timestamp) > unix_timestamp()-". $g_preferences['flooding_protection_time']. "
-              and gbo_org_id = ". $g_current_organization->getValue("org_id"). "
-              and gbo_ip_address = '$ipAddress' ";
+             WHERE unix_timestamp(gbo_timestamp) > unix_timestamp()-". $g_preferences['flooding_protection_time']. "
+               AND gbo_org_id = ". $g_current_organization->getValue("org_id"). "
+               AND gbo_ip_address = '". $guestbook->getValue("gbo_ip_address"). "'";
     $result = $g_db->query($sql);
     $row = $g_db->fetch_array($result);
     if($row[0] > 0)
@@ -157,11 +145,11 @@ echo "
     <div class=\"formHead\">";
         if ($_GET['id'] > 0)
         {
-            echo "G&auml;stebucheintrag &auml;ndern";
+            echo "Gästebucheintrag ändern";
         }
         else
         {
-            echo "G&auml;stebucheintrag anlegen";
+            echo "Gästebucheintrag anlegen";
         }
     echo "</div>
     <div class=\"formBody\">
@@ -173,11 +161,11 @@ echo "
                         if ($g_current_user->getValue("usr_id") > 0)
                         {
                             // Eingeloggte User sollen ihren Namen nicht aendern duerfen
-                            echo "<input type=\"text\" id=\"name\" name=\"name\" class=\"readonly\" readonly=\"readonly\" tabindex=\"1\" style=\"width: 350px;\" maxlength=\"60\" value=\"". $form_values['name']. "\" />";
+                            echo "<input type=\"text\" id=\"gbo_name\" name=\"gbo_name\" class=\"readonly\" readonly=\"readonly\" tabindex=\"1\" style=\"width: 350px;\" maxlength=\"60\" value=\"". $guestbook->getValue("gbo_name"). "\" />";
                         }
                         else
                         {
-                            echo "<input type=\"text\" id=\"name\" name=\"name\" tabindex=\"1\" style=\"width: 350px;\" maxlength=\"60\" value=\"". $form_values['name']. "\" />
+                            echo "<input type=\"text\" id=\"gbo_name\" name=\"gbo_name\" tabindex=\"1\" style=\"width: 350px;\" maxlength=\"60\" value=\"". $guestbook->getValue("gbo_name"). "\" />
                             <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>";
                         }
                     echo "</dd>
@@ -187,7 +175,7 @@ echo "
                 <dl>
                     <dt><label for=\"email\">Emailadresse:</label></dt>
                     <dd>
-                        <input type=\"text\" id=\"email\" name=\"email\" tabindex=\"2\" style=\"width: 350px;\" maxlength=\"50\" value=\"". $form_values['email']. "\" />
+                        <input type=\"text\" id=\"gbo_email\" name=\"gbo_email\" tabindex=\"2\" style=\"width: 350px;\" maxlength=\"50\" value=\"". $guestbook->getValue("gbo_email"). "\" />
                     </dd>
                 </dl>
             </li>
@@ -195,7 +183,7 @@ echo "
                 <dl>
                     <dt><label for=\"homepage\">Homepage:</label></dt>
                     <dd>
-                        <input type=\"text\" id=\"homepage\" name=\"homepage\" tabindex=\"3\" style=\"width: 350px;\" maxlength=\"50\" value=\"". $form_values['homepage']. "\" />
+                        <input type=\"text\" id=\"gbo_homepage\" name=\"gbo_homepage\" tabindex=\"3\" style=\"width: 350px;\" maxlength=\"50\" value=\"". $guestbook->getValue("gbo_homepage"). "\" />
                     </dd>
                 </dl>
             </li>
@@ -209,7 +197,7 @@ echo "
                         }
                     echo "</dt>
                     <dd>
-                        <textarea id=\"entry\" name=\"entry\" tabindex=\"4\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". $form_values['entry']. "</textarea>
+                        <textarea id=\"gbo_text\" name=\"gbo_text\" tabindex=\"4\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". $guestbook->getValue("gbo_text"). "</textarea>
                         <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                     </dd>
                 </dl>
@@ -229,7 +217,7 @@ echo "
                     </dl>
 
                     <dl>
-                       <dt><label for=\"captcha\">Best&auml;tigungscode:</label></dt>
+                       <dt><label for=\"captcha\">Bestätigungscode:</label></dt>
                        <dd>
                            <input type=\"text\" id=\"captcha\" name=\"captcha\" tabindex=\"5\" style=\"width: 200px;\" maxlength=\"8\" value=\"\" />
                            <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>

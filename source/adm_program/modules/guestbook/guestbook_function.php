@@ -25,6 +25,8 @@
  *****************************************************************************/
 
 require("../../system/common.php");
+require("../../system/guestbook_class.php");
+require("../../system/guestbook_comment_class.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_guestbook_module'] == 0)
@@ -69,7 +71,7 @@ if (array_key_exists("headline", $_GET))
 }
 else
 {
-    $_GET["headline"] = "G&auml;stebuch";
+    $_GET["headline"] = "Gästebuch";
 }
 
 
@@ -108,40 +110,41 @@ if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mod
             $g_message->show("norights");
         }
     }
-
-
-
-
-    // Abschliessend wird jetzt noch geprueft ob die uebergebene ID ueberhaupt zur Orga gehoert
-    if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mode'] == 6 )
-    {
-        $sql    = "SELECT * FROM ". TBL_GUESTBOOK. " 
-                   WHERE gbo_id = ". $_GET['id']. "
-                   and gbo_org_id = ". $g_current_organization->getValue("org_id");
-    }
-
-    if ($_GET['mode'] == 5 || $_GET['mode'] == 7 || $_GET['mode'] == 8)
-    {
-        $sql    = "SELECT * FROM ". TBL_GUESTBOOK_COMMENTS. ", ". TBL_GUESTBOOK. " 
-                   WHERE gbc_id = ". $_GET['id']. "
-                   and gbc_gbo_id = gbo_id 
-                   and gbo_org_id = ". $g_current_organization->getValue("org_id");
-    }
-
-    $result = $g_db->query($sql);
-
-    if ($g_db->num_rows($result) == 0)
-    {
-        $g_message->show("invalid");
-    }
-
-    $gbObject = $g_db->fetch_object($result);
-
 }
 
-
-$err_code = "";
-$err_text = "";
+if ($_GET['mode'] == 1 || $_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 6)
+{
+    // Gaestebuchobjekt anlegen
+    $guestbook = new Guestbook($g_db);
+    
+    if($_GET['id'] > 0)
+    {
+        $guestbook->getGuestbookEntry($_GET['id']);
+        
+        // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
+        if($guestbook->getValue("gbo_org_id") != $g_current_organization->getValue("org_id"))
+        {
+            $g_message->show("norights");
+        }
+    }
+}
+else
+{
+    // Gaestebuchobjekt anlegen
+    $guestbook_comment = new GuestbookComment($g_db);
+    
+    if($_GET['id'] > 0 && $_GET['mode'] != 4)
+    {
+        $guestbook_comment->getGuestbookComment($_GET['id']);
+        $guestbook = new Guestbook($g_db, $guestbook_comment->getValue("gbc_gbo_id"));
+        
+        // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
+        if($guestbook->getValue("gbo_org_id") != $g_current_organization->getValue("org_id"))
+        {
+            $g_message->show("norights");
+        }
+    }
+}
 
 
 if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
@@ -161,92 +164,54 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
     }
 
 
-    // Daten fuer die DB werden nun aufbereitet...
-
-    $name      = strStripTags($_POST['name']);
-    $text      = strStripTags($_POST['entry']);
-
-    $email     = strStripTags($_POST['email']);
-    if (!isValidEmailAddress($email))
+    // POST Variablen in das Gaestebuchobjekt schreiben
+    foreach($_POST as $key => $value)
     {
-        // falls die Email ein ungueltiges Format aufweist wird sie einfach auf null gesetzt
-        $email = null;
-    }
-
-
-    $homepage  = strStripTags(trim($_POST['homepage']));
-    if (strlen($homepage) != 0)
-    {
-        // Die Webadresse wird jetzt, falls sie nicht mit http:// oder https:// beginnt, entsprechend aufbereitet
-        if (substr($homepage, 0, 7) != 'http://' && substr($homepage, 0, 8) != 'https://' )
+        if(strpos($key, "gbo_") === 0)
         {
-            $homepage = "http://". $homepage;
+            $guestbook->setValue($key, $value);
         }
     }
 
-    $ipAddress = $_SERVER['REMOTE_ADDR'];
-    $actDate   = date("Y.m.d G:i:s", time());
-
-
-    if (strlen($name) > 0 && strlen($text)  > 0)
+    if (strlen($guestbook->getValue("gbo_name")) > 0 && strlen($guestbook->getValue("gbo_text"))  > 0)
     {
-
         // Gaestebucheintrag speichern
-
-        if ($_GET['id'] == 0)
+        
+        if($g_valid_login)
         {
-            if ($g_valid_login)
-            {
-                // Falls der User eingeloggt ist wird die aktuelle UserId und der korrekte Name mitabgespeichert...
-                $realName = $g_current_user->getValue("Vorname"). " ". $g_current_user->getValue("Nachname");
-
-                $sql = "INSERT INTO ". TBL_GUESTBOOK. " (gbo_org_id, gbo_usr_id, gbo_name, gbo_text, gbo_email,
-                                                         gbo_homepage, gbo_timestamp, gbo_ip_address)
-                                         VALUES (". $g_current_organization->getValue("org_id"). ", ". $g_current_user->getValue("usr_id"). ", '". utf8_decode_db($realName). "', '". utf8_decode_db($text). "', '". utf8_decode_db($email). "',
-                                                 '". utf8_decode_db($homepage). "', '$actDate', '$ipAddress')";
-
-                $result = $g_db->query($sql);
+            if(strlen($guestbook->getValue("gbo_name")) == 0)
+            { 
+                // Falls der User eingeloggt ist, wird die aktuelle UserId und der korrekte Name mitabgespeichert...
+                $guestbook->setValue("gbo_name", $g_current_user->getValue("Vorname"). " ". $g_current_user->getValue("Nachname"));
             }
-            else
-            {
-                if ($g_preferences['flooding_protection_time'] != 0)
-                {
-                    // Falls er nicht eingeloggt ist, wird vor dem Abspeichern noch geprueft ob der
-                    // User innerhalb einer festgelegten Zeitspanne unter seiner IP-Adresse schon einmal
-                    // einen GB-Eintrag erzeugt hat...
-                    $sql = "SELECT count(*) FROM ". TBL_GUESTBOOK. "
-                            where unix_timestamp(gbo_timestamp) > unix_timestamp()-". $g_preferences['flooding_protection_time']. "
-                              and gbo_org_id = ". $g_current_organization->getValue("org_id"). "
-                              and gbo_ip_address = '$ipAddress' ";
-                    $result = $g_db->query($sql);
-                    $row    = $g_db->fetch_array($result);
-                    if($row[0] > 0)
-                    {
-                        //Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
-                        $g_message->show("flooding_protection", $g_preferences['flooding_protection_time']);
-                    }
-                }
-
-                // Falls er nicht eingeloggt ist, gibt es das sql-Statement natürlich ohne die UserID
-                $sql = "INSERT INTO ". TBL_GUESTBOOK. " (gbo_org_id, gbo_name, gbo_text, gbo_email,
-                                                         gbo_homepage, gbo_timestamp, gbo_ip_address)
-                                         VALUES (". $g_current_organization->getValue("org_id"). ", '". utf8_decode_db($name). "', '". utf8_decode_db($text). "', '". utf8_decode_db($email). "',
-                                                 '". utf8_decode_db($homepage). "', '$actDate', '$ipAddress')";
-
-                $result = $g_db->query($sql);
-            }
-
         }
         else
         {
-            $sql = "UPDATE ". TBL_GUESTBOOK. " SET  gbo_name     = '". utf8_decode_db($name). "'
-                                                  , gbo_text     = '". utf8_decode_db($text). "'
-                                                  , gbo_email    = '". utf8_decode_db($email). "'
-                                                  , gbo_homepage = '". utf8_decode_db($homepage). "'
-                                                  , gbo_last_change   = '$actDate'
-                                                  , gbo_usr_id_change = ". $g_current_user->getValue("usr_id"). "
-                     WHERE gbo_id = ". $_GET['id'];
-            $result = $g_db->query($sql);
+            if($g_preferences['flooding_protection_time'] != 0)
+            {
+                // Falls er nicht eingeloggt ist, wird vor dem Abspeichern noch geprueft ob der
+                // User innerhalb einer festgelegten Zeitspanne unter seiner IP-Adresse schon einmal
+                // einen GB-Eintrag erzeugt hat...
+                $sql = "SELECT count(*) FROM ". TBL_GUESTBOOK. "
+                        where unix_timestamp(gbo_timestamp) > unix_timestamp()-". $g_preferences['flooding_protection_time']. "
+                          and gbo_org_id = ". $g_current_organization->getValue("org_id"). "
+                          and gbo_ip_address = '". $guestbook->getValue("gbo_ip_adress"). "'";
+                $result = $g_db->query($sql);
+                $row    = $g_db->fetch_array($result);
+                if($row[0] > 0)
+                {
+                    //Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
+                    $g_message->show("flooding_protection", $g_preferences['flooding_protection_time']);
+                }
+            }
+        }
+        
+        // Daten in Datenbank schreiben
+        $return_code = $guestbook->save();
+    
+        if($return_code < 0)
+        {
+            $g_message->show("norights");
         }
 
         // Der Inhalt des Formulars wird bei erfolgreichem insert/update aus der Session geloescht
@@ -260,40 +225,28 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
         }
 
 
-        $location = "Location: $g_root_path/adm_program/modules/guestbook/guestbook.php?headline=". $_GET['headline'];
-        header($location);
+        header("Location: $g_root_path/adm_program/modules/guestbook/guestbook.php?headline=". $_GET['headline']);
         exit();
     }
     else
     {
-        if(strlen($name) > 0)
+        if(strlen($guestbook->getValue("gbo_name")) > 0)
         {
-            $err_text = "Text";
+            $g_message->show("feld", "Text");
         }
         else
         {
-            $err_text = "Name";
+            $g_message->show("feld", "Name");
         }
-        $err_code = "feld";
     }
 }
 
 elseif($_GET["mode"] == 2)
 {
-    //erst einmal alle vorhanden Kommentare zu diesem Gaestebucheintrag loeschen...
-    $sql = "DELETE FROM ". TBL_GUESTBOOK_COMMENTS. " WHERE gbc_gbo_id = ". $_GET['id'];
-    $result = $g_db->query($sql);
+    // den Gaestebucheintrag loeschen...
+    $guestbook->delete();
 
-    //dann den Eintrag selber loeschen...
-    $sql = "DELETE FROM ". TBL_GUESTBOOK. " WHERE gbo_id = ". $_GET['id'];
-    $result = $g_db->query($sql);
-
-    if (!isset($_GET["url"]))
-    {
-        $_GET["url"] = "$g_root_path/$g_main_page";
-    }
-
-    $g_message->setForwardUrl($_GET["url"]);
+    $g_message->setForwardUrl($_SESSION['navigation']->getUrl());
     $g_message->show("delete");
 }
 
@@ -313,71 +266,58 @@ elseif($_GET["mode"] == 4 || $_GET["mode"] == 8)
         }
     }
 
-
-    //Daten fuer die DB vorbereiten
-    $name      = strStripTags($_POST['name']);
-    $text      = strStripTags($_POST['entry']);
-
-    $email     = strStripTags($_POST['email']);
-    if (!isValidEmailAddress($email))
+    // POST Variablen in das Gaestebuchkommentarobjekt schreiben
+    foreach($_POST as $key => $value)
     {
-        // falls die Email ein ungueltiges Format aufweist wird sie einfach auf null gesetzt
-        $email = null;
+        if(strpos($key, "gbc_") === 0)
+        {
+            $guestbook_comment->setValue($key, $value);
+        }
+    }
+    
+    if($_GET['mode'] == 4)
+    {
+        $guestbook_comment->setValue("gbc_gbo_id", $_GET['id']);
     }
 
-
-    $actDate   = date("Y.m.d G:i:s", time());
-    $ipAddress = $_SERVER['REMOTE_ADDR'];
-
-    if (strlen($name) > 0 && strlen($text)  > 0)
+    if (strlen($guestbook_comment->getValue("gbc_name")) > 0 && strlen($guestbook_comment->getValue("gbc_text"))  > 0)
     {
-
-        if ($_GET["mode"] == 4)
+        // Gaestebuchkommentar speichern
+        
+        if($g_valid_login)
         {
-            if ($g_valid_login)
+            if(strlen($guestbook_comment->getValue("gbc_name")) == 0)
             {
-                // Falls der User eingeloggt ist wird die aktuelle UserId und der korrekte Name mitabgespeichert...
-                $realName = $g_current_user->getValue("Vorname"). " ". $g_current_user->getValue("Nachname");
-
-                $sql = "INSERT INTO ". TBL_GUESTBOOK_COMMENTS. " (gbc_gbo_id, gbc_usr_id, gbc_name, gbc_text, gbc_email, gbc_timestamp, gbc_ip_address)
-                                                         VALUES (". $_GET['id']. ", ". $g_current_user->getValue("usr_id"). ", '". utf8_decode_db($realName). "', '". utf8_decode_db($text). "', '". utf8_decode_db($email). "', '$actDate', '$ipAddress')";
-                $result = $g_db->query($sql);
-            }
-            else
-            {
-                if ($g_preferences['flooding_protection_time'] != 0)
-                {
-                    // Falls er nicht eingeloggt ist, wird vor dem Abspeichern noch geprueft ob der
-                    // User innerhalb einer festgelegten Zeitspanne unter seiner IP-Adresse schon einmal
-                    // einen GB-Eintrag/Kommentar erzeugt hat...
-                    $sql = "SELECT count(*) FROM ". TBL_GUESTBOOK_COMMENTS. "
-                             WHERE unix_timestamp(gbc_timestamp) > unix_timestamp()-". $g_preferences['flooding_protection_time']. "
-                               AND gbc_ip_address = '$ipAddress' ";
-                    $result = $g_db->query($sql);
-                    $row = $g_db->fetch_array($result);
-                    if($row[0] > 0)
-                    {
-                        //Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
-                        $g_message->show("flooding_protection", $g_preferences['flooding_protection_time']);
-                    }
-                }
-
-                // Falls er nicht eingeloggt ist, gibt es das sql-Statement natürlich ohne die UserID
-                $sql = "INSERT INTO ". TBL_GUESTBOOK_COMMENTS. " (gbc_gbo_id, gbc_name, gbc_text, gbc_email, gbc_timestamp, gbc_ip_address)
-                                                         VALUES (". $_GET['id']. ", '". utf8_decode_db($name). "', '". utf8_decode_db($text). "', '". utf8_decode_db($email). "', '$actDate', '$ipAddress')";
-                $result = $g_db->query($sql);
+                // Falls der User eingeloggt ist, wird die aktuelle UserId und der korrekte Name mitabgespeichert...
+                $guestbook_comment->setValue("gbc_name", $g_current_user->getValue("Vorname"). " ". $g_current_user->getValue("Nachname"));
             }
         }
         else
         {
-            // hier wird der Eintrag natuerlich nur modifiziert
-            $sql = "UPDATE ". TBL_GUESTBOOK_COMMENTS. " SET  gbc_name     = '". utf8_decode_db($name). "'
-                                                           , gbc_text     = '". utf8_decode_db($text). "'
-                                                           , gbc_email    = '". utf8_decode_db($email). "'
-                                                           , gbc_last_change   = '$actDate'
-                                                           , gbc_usr_id_change = ". $g_current_user->getValue("usr_id"). "
-                     WHERE gbc_id = {3}";
-            $result = $g_db->query($sql);
+            if($g_preferences['flooding_protection_time'] != 0)
+            {
+                // Falls er nicht eingeloggt ist, wird vor dem Abspeichern noch geprueft ob der
+                // User innerhalb einer festgelegten Zeitspanne unter seiner IP-Adresse schon einmal
+                // einen GB-Eintrag/Kommentar erzeugt hat...
+                $sql = "SELECT count(*) FROM ". TBL_GUESTBOOK_COMMENTS. "
+                         WHERE unix_timestamp(gbc_timestamp) > unix_timestamp()-". $g_preferences['flooding_protection_time']. "
+                           AND gbc_ip_address = '". $guestbook_comment->getValue("gbc_ip_adress"). "'";
+                $result = $g_db->query($sql);
+                $row = $g_db->fetch_array($result);
+                if($row[0] > 0)
+                {
+                    //Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
+                    $g_message->show("flooding_protection", $g_preferences['flooding_protection_time']);
+                }
+            }
+        }
+        
+        // Daten in Datenbank schreiben
+        $return_code = $guestbook_comment->save();
+    
+        if($return_code < 0)
+        {
+            $g_message->show("norights");
         }
 
         // Der Inhalt des Formulars wird bei erfolgreichem insert/update aus der Session geloescht
@@ -390,52 +330,43 @@ elseif($_GET["mode"] == 4 || $_GET["mode"] == 8)
             unset($_SESSION['captchacode']);
         }
 
-        $location = "Location: $g_root_path/adm_program/modules/guestbook/guestbook.php?id=". $gbObject->gbo_id. "&headline=". $_GET['headline'];
-        header($location);
+        header("Location: $g_root_path/adm_program/modules/guestbook/guestbook.php?id=". $guestbook_comment->getValue("gbc_gbo_id"). "&headline=". $_GET['headline']);
         exit();
-
     }
     else
     {
-        if(strlen($name) > 0)
+        if(strlen($guestbook_comment->getValue("gbc_name")) > 0)
         {
-            $err_text = "Text";
+            $g_message->show("feld", "Text");
         }
         else
         {
-            $err_text = "Name";
+            $g_message->show("feld", "Name");
         }
-        $err_code = "feld";
     }
 }
 
 elseif ($_GET["mode"] == 5)
 {
     //Gaestebuchkommentar loeschen...
-    $sql = "DELETE FROM ". TBL_GUESTBOOK_COMMENTS. " WHERE gbc_id = ". $_GET['id'];
-    $result = $g_db->query($sql);
+    $guestbook_comment->delete();
 
-    if (!isset($_GET["url"]))
-    {
-        $_GET["url"] = "$g_root_path/$g_main_page";
-    }
-
-    $g_message->setForwardUrl($_GET["url"]);
+    $g_message->setForwardUrl($_SESSION['navigation']->getUrl());
     $g_message->show("delete");
 }
 
 elseif ($_GET["mode"] == 6)
 {
     //Nachfrage ob Gaestebucheintrag geloescht werden soll
-    $g_message->setForwardYesNo("$g_root_path/adm_program/modules/guestbook/guestbook_function.php?id=$_GET[id]&mode=2&url=$g_root_path/adm_program/modules/guestbook/guestbook.php");
-    $g_message->show("delete_gbook_entry", utf8_encode($gbObject->gbo_name));
+    $g_message->setForwardYesNo("$g_root_path/adm_program/modules/guestbook/guestbook_function.php?id=$_GET[id]&mode=2");
+    $g_message->show("delete_gbook_entry", $guestbook->getValue("gbo_name"));
 }
 
 elseif ($_GET["mode"] == 7)
 {
     //Nachfrage ob Gaestebucheintrag geloescht werden soll
-    $g_message->setForwardYesNo("$g_root_path/adm_program/modules/guestbook/guestbook_function.php?id=$_GET[id]&mode=5&url=$g_root_path/adm_program/modules/guestbook/guestbook.php?id=$gbObject->gbc_gbo_id");
-    $g_message->show("delete_gbook_comment", utf8_encode($gbObject->gbc_name));
+    $g_message->setForwardYesNo("$g_root_path/adm_program/modules/guestbook/guestbook_function.php?id=$_GET[id]&mode=5");
+    $g_message->show("delete_gbook_comment", $guestbook_comment->getValue("gbc_name"));
 }
 
 else
@@ -443,6 +374,4 @@ else
     // Falls der Mode unbekannt ist, ist natürlich auch Ende...
     $g_message->show("invalid");
 }
-
-$g_message->show($err_code, $err_text);
 ?>
