@@ -46,8 +46,6 @@ class Session extends TableAccess
         $this->db            =& $db;
         $this->table_name     = TBL_SESSIONS;
         $this->column_praefix = "ses";
-        $this->key_name       = "ses_id";
-        $this->auto_increment = true;
         
         if(strlen($session) > 0)
         {
@@ -69,35 +67,6 @@ class Session extends TableAccess
         }       
         
         $this->readData($session, $condition);
-    }
-
-    // interne Funktion, die bei setValue den uebergebenen Wert prueft
-    // und ungueltige Werte auf leer setzt
-    // die Funktion wird innerhalb von setValue() aufgerufen
-    function _setValue($field_name, $field_value)
-    {
-        switch($field_name)
-        {
-            case "ses_id":
-            case "ses_org_id":
-            case "ses_usr_id":
-                if(is_numeric($field_value) == false
-                || $field_value == 0)
-                {
-                    $field_value = "";
-                    return false;
-                }
-                break;
-                    
-            case "ses_renew":
-                if(is_numeric($field_value) == false)
-                {
-                    $field_value = "";
-                    return false;
-                }
-                break;   
-        }       
-        return true;
     }
 
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt

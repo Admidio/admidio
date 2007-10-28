@@ -22,8 +22,6 @@ class AutoLogin extends TableAccess
         $this->db            =& $db;
         $this->table_name     = TBL_AUTO_LOGIN;
         $this->column_praefix = "atl";
-        $this->key_name       = "atl_session_id";
-        $this->auto_increment = false;
         
         if(strlen($session) > 0)
         {
@@ -39,26 +37,6 @@ class AutoLogin extends TableAccess
     function getAutoLogin($session)
     {
         $this->readData($session);
-    }
-
-    // interne Funktion, die bei setValue den uebergebenen Wert prueft
-    // und ungueltige Werte auf leer setzt
-    // die Funktion wird innerhalb von setValue() aufgerufen
-    function _setValue($field_name, $field_value)
-    {
-        switch($field_name)
-        {
-            case "atl_org_id":
-            case "atl_usr_id":
-                if(is_numeric($field_value) == false
-                || $field_value == 0)
-                {
-                    $field_value = "";
-                    return false;
-                }
-                break;
-        }       
-        return true;
     }
 
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt

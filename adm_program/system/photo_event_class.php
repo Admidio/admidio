@@ -42,8 +42,6 @@ class PhotoEvent extends TableAccess
         $this->db            =& $db;
         $this->table_name     = TBL_PHOTOS;
         $this->column_praefix = "pho";
-        $this->key_name       = "pho_id";
-        $this->auto_increment = true;
         
         if(is_numeric($photo_id))
         {
@@ -59,44 +57,6 @@ class PhotoEvent extends TableAccess
     function getPhotoEvent($photo_id)
     {
         $this->readData($photo_id);
-    }
-    
-    // interne Funktion, die bei setValue den uebergebenen Wert prueft
-    // und ungueltige Werte auf leer setzt
-    // die Funktion wird innerhalb von setValue() aufgerufen
-    function _setValue($field_name, $field_value)
-    {
-        switch($field_name)
-        {
-            case "pho_id":
-            case "pho_usr_id":
-            case "pho_pho_id_parent":
-            case "pho_usr_id_change":
-                if(is_numeric($field_value) == false
-                || $field_value == 0)
-                {
-                    $field_value = "";
-                    return false;
-                }
-                break;
-
-            case "pho_quantity":
-                if(is_numeric($field_value) == false)
-                {
-                    $field_value = "";
-                    return false;
-                }
-                break;            
-
-            case "pho_locked":
-                if($field_value != 1)
-                {
-                    $field_value = 0;
-                    return false;
-                }
-                break; 
-        }       
-        return true;
     }
     
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
