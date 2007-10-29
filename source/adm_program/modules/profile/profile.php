@@ -616,7 +616,7 @@ echo "
                                                 echo "
                                                 <span class=\"iconLink\">
                                                     <a href=\"javascript:deleteRole(". $row['rol_id']. ", '". $row['rol_name']. "', ". $row['rol_valid']. ", ". $user->getValue("usr_id"). ", '". $row['cat_name']. "', '". 
-                                                    mysqldate('d.m.y', $row['mem_begin']). "', ". $g_current_user->isWebmaster(). ", '". $g_root_path. "')\"><img 
+                                                    mysqldate('d.m.y', $row['mem_begin']). "', ". $row['mem_leader']. ", ". $g_current_user->isWebmaster(). ", '". $g_root_path. "')\"><img 
                                                     src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Rolle l&ouml;schen\" title=\"Rolle l&ouml;schen\" /></a>
                                                 </span>";
                                             }
