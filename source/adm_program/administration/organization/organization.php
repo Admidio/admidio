@@ -895,8 +895,18 @@ echo "
                         <dl>
                             <dt><label for=\"ecard_view_scale\">Skalierung Vorschaubild:</label></dt>
                             <dd>
-                               Breite: <input type=\"text\" id=\"ecard_view_width\" name=\"ecard_view_width\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_view_width']. "\" />
-							   Höhe: <input type=\"text\" id=\"ecard_view_height\" name=\"ecard_view_height\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_view_height']. "\" /> Pixel
+								<table summary=\"Skalierung Vorschaubild\" border=\"0\">
+									<tr>
+										<td>Breite: </td>
+										<td><input type=\"text\" id=\"ecard_view_width\" name=\"ecard_view_width\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_view_width']. "\" /></td>
+										<td>Pixel</td>
+									</tr>
+									<tr>
+										<td>Höhe: </td>
+										<td><input type=\"text\" id=\"ecard_view_height\" name=\"ecard_view_height\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_view_height']. "\" /></td>
+										<td>Pixel</td>
+									</tr>
+								</table>
                              </dd>
                         </dl>
                     </li>
@@ -908,8 +918,18 @@ echo "
                         <dl>
                             <dt><label for=\"ecard_card_picture_scale\">Skalierung Grußkartenbild:</label></dt>
                             <dd>
-                                Breite: <input type=\"text\" id=\"ecard_card_picture_width\" name=\"ecard_card_picture_width\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_card_picture_width']. "\" />
-							   Höhe: <input type=\"text\" id=\"ecard_card_picture_height\" name=\"ecard_card_picture_height\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_card_picture_height']. "\" /> Pixel
+								<table summary=\"Skalierung Grußkartenbild\" border=\"0\">
+									<tr>
+										<td>Breite: </td>
+                                		<td><input type=\"text\" id=\"ecard_card_picture_width\" name=\"ecard_card_picture_width\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_card_picture_width']. "\" /></td>
+										<td>Pixel</td>
+									</tr>
+									<tr>
+										<td>Höhe: </td>
+										<td><input type=\"text\" id=\"ecard_card_picture_height\" name=\"ecard_card_picture_height\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_card_picture_height']. "\" /></td>
+										<td>Pixel</td>
+									</tr>
+								</table>
                              </dd>
                         </dl>
                     </li>
@@ -940,10 +960,146 @@ echo "
                     <li class=\"smallFontSize\">
                         Hier wird die max. Zeichenlänge des Mitteilungstextes festgelegt. (Standardwert: 150)
                     </li>
+					<li>
+                        <dl>
+                            <dt><label for=\"ecard_text_length\">Template:</label></dt>
+                            <dd>";
+                                echo getMenueSettings(getfilenames('../../layout/ecard_templates/'),'ecard_template',$form_values['ecard_template'],'120','false','false'); 
+                             echo "</dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Hier kann mann das Standart Template festlegen. (Standardwert: Standart)
+                    </li>
+					<li>
+                        <dl>
+                            <dt><label for=\"ecard_text_length\">Schriftart:</label></dt>
+                            <dd>";
+                                echo getMenueSettings(getElementsFromFile('../../system/schriftarten.txt'),'ecard_text_font',$form_values['ecard_text_font'],'120','true','false'); 
+                             echo "</dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Hier kann mann die Standart Schriftart festlegen. (Standardwert: Comic Sans MS)
+                    </li>
+					<li>
+                        <dl>
+                            <dt><label for=\"ecard_text_length\">Schriftgr&ouml;&szlig;e:</label></dt>
+                            <dd>";
+                                echo getMenueSettings(array ("9","10","11","12","13","14","15","16","17","18","20","22","24","30"),'ecard_text_size',$form_values['ecard_text_size'],'120','false','false');
+                             echo "</dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Hier kann mann die Standart Schriftgr&ouml;&szlig;e festlegen. (Standardwert: 20)
+                    </li>
+					<li>
+                        <dl>
+                            <dt><label for=\"ecard_text_color\">Schriftfarbe:</label></dt>
+                            <dd>";
+                             echo getMenueSettings(getElementsFromFile('../../system/schriftfarben.txt'),'ecard_text_color',$form_values['ecard_text_color'],'120','false','true');
+                             echo "</dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Hier kann mann die Standart Schriftfarbe festlegen. (Standardwert: Schwarz)
+                    </li>
+					
                 </ul>
             </div>
         </div>";
+		function getfilenames($directory) 
+		{
+			$array_files	= array();
+			$i				= 0;
+			if($curdir = opendir($directory)) 
+			{
+				while($file = readdir($curdir)) 
+				{
+					$string = split('_',$file);
+					if($file != '.' && $file != '..' && strcmp($string[0],$file) != "0") 
+					{	
+						$array_files[$i] = $file;
+						$i++;
+					}
+				}
+			}
+			closedir($curdir);
+			return $array_files;
+		}
 
+		// oeffnet ein File und gibt alle Zeilen als Array zurueck
+		// Uebergabe:
+		//			$filepath .. Der Pfad zu dem File
+		function getElementsFromFile($filepath)
+		{
+			$elementsFromFile = array();
+			$list = fopen($filepath, "r");
+			while (!feof($list))
+			{
+				array_push($elementsFromFile,trim(fgets($list)));
+			}
+            return $elementsFromFile;   
+		}
+		
+		// gibt ein Menue fuer die Einstellungen des Grußkartenmoduls aus
+		// Uebergabe: 
+		// 			$data_array			.. Daten fuer die Einstellungen in einem Array
+		//			$name				.. Name des Drop down Menues 
+		//			$first_value		.. der Standart Wert oder eingestellte Wert vom Benutzer
+		//			$width				.. die Groeße des Menues
+		//			$schowfont			.. wenn gesetzt werden   die Menue Eintraege mit der übergebenen Schriftart dargestellt   (Darstellung der Schriftarten)
+		//			$showcolor			.. wenn gesetzt bekommen die Menue Eintraege einen farbigen Hintergrund (Darstellung der Farben)
+		function getMenueSettings($data_array,$name,$first_value,$width,$schowfont,$showcolor)
+		{
+			$temp_data = "";
+			$temp_data .=  '<select size="1" id='.$name.' name='.$name.' style="width:'.$width.'px;">';
+			for($i=0; $i<count($data_array);$i++)
+			{
+				$temp = explode(".", $data_array[$i]);
+				$temp_name = explode("_", $temp[0]);
+				$name = "";
+				if(isset($temp_name[1]) && $temp_name[1] != "" && is_numeric($temp_name[1]))
+				{
+					$name = $temp_name[1].". Template";
+				}
+				else if(isset($temp_name[1]) && $temp_name[1] != "" && !is_numeric($temp_name[1]))
+				{
+					$name = ucfirst($temp_name[1]);
+				}
+				else
+				{
+					$name = $temp_name[0];
+				}
+				
+				if (strcmp($data_array[$i],$first_value) == 0 && $schowfont != "true" && $showcolor != "true")
+				{
+					$temp_data .= '<option value="'.$data_array[$i].'" selected=\'selected\'>'.$name.'</option>';
+				}
+				else if($schowfont != "true" && $showcolor != "true")
+				{
+					$temp_data .= '<option value="'.$data_array[$i].'">'.$name.'</option>';
+				}
+				else if (strcmp($data_array[$i],$first_value) == 0 && $showcolor != "true")
+				{
+					$temp_data .= '<option value="'.$data_array[$i].'" selected=\'selected\' style="font-family:'.$name.';">'.$name.'</option>';
+				}
+				else if($showcolor != "true")
+				{
+					$temp_data .= '<option value="'.$data_array[$i].'" style="font-family:'.$name.';">'.$name.'</option>';
+				}
+				else if (strcmp($data_array[$i],$first_value) == 0)
+				{
+					$temp_data .= '<option value="'.$data_array[$i].'" selected=\'selected\' style="background-color:'.$name.';">'.$name.'</option>';
+				}
+				else
+				{
+					$temp_data .= '<option value="'.$data_array[$i].'" style="background-color:'.$name.';">'.$name.'</option>';
+				}
+			}
+			$temp_data .='</select>';
+			return $temp_data;
+		}
         /**************************************************************************************/
         //Einstellungen Profilmodul
         /**************************************************************************************/

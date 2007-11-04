@@ -25,19 +25,19 @@ require_once("ecard_function.php");
 // Variablen die spaeter in die DB kommen und vom Admin aenderbar sind
 //**********************************************************
 /*		es können hier mehere Templates eingetragen werden welche dann vom Benutzt ausgewaehlt werden dürfen (erstes Element im Array-> Standart Einstellung)	*/			
-/**/	$templates 			= array ("ecard_1.tpl","ecard_1.tpl","ecard_2.tpl","ecard_3.tpl"); 
-/*      es können hier mehere Schrift name eingetragen werden welche dann vom Benutzer ausgewaehlt werden dürfen (erstes Element im Array-> Standart Einstellung) */
-/**/	$fonts 				= array ("Comic Sans MS","Arial","Arial Black","Courier","Comic Sans MS","Georgia","Helvetica","Impact","Script","Times Roman","Verdana"); 
-/*      es können hier mehere Schriftgrößen eingetragen werden welche dann vom Benutzer ausgewaehlt werden dürfen (erstes Element im Array-> Standart Einstellung) */
-/**/	$font_sizes 		= array ("20","9","10","11","12","13","14","15","16","17","18","20","22","24","30"); 
+/**/	 
+/**/	$font_sizes 		= array ("9","10","11","12","13","14","15","16","17","18","20","22","24","30"); 
 /*      es können hier mehere Schrift Farben eingetragen werden welche dann vom Benutzer ausgewaehlt werden dürfen (erstes Element im Array-> Standart Einstellung) */
-/**/	$font_colors 		= array ("black","yellow","orange","red","maroon","fuchsia","purple","lime","green","teal","aqua","blue","navy","silver","gray","olive","black"); 							
+/**/							
 //**********************************************************
 
 $error_msg					= "";
+$tmpl_folder 		= "../../layout/ecard_templates/";
 $email_versand_liste		= array(); // Array wo alle Empfaenger aufgelistet werden (jedoch keine zusaetzlichen);
 $email_versand_liste_all	= array(); // Array wo alle Empfaenger aufgelistet werden (inklusive zusaetzlichen);
-$tmpl_folder 		= "../../layout/";	
+$font_colors 				= getElementsFromFile('../../system/schriftfarben.txt');  
+$fonts 						= getElementsFromFile('../../system/schriftarten.txt');
+$templates 					= getfilenames($tmpl_folder);
 $ecard_plain_data 	= "Du hast eine E-Card von einem Mitglied des Vereins ".$g_organization." erhalten.\n Falls du diese nicht sehen kannst befindet sich diese im Anhang der Mail";
 $msg_error_1		= "Es ist ein Fehler bei der Verarbeitung der E-C@rd aufgetreten. Bitte probier es zu einem sp&auml;teren Zeitpunkt noch einmal.";
 $msg_error_2 		= "Es sind einige Eingabefelder nicht bzw. nicht richtig ausgefüllt. Bitte füll diese aus, bzw. korrigier diese.";
@@ -263,13 +263,13 @@ if (! empty($submit_action))
 // Wenn noch keine Anfrage zum versenden der Grußkarte vorhanden ist das Grußkarten Bild setzten
 else 
 {
-    $ecard["image_name"] = $bild_url;
+    $ecard["image_name"] = "$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$photo."&amp;pho_begin=".$photo_event->getValue("pho_begin")."&amp;scal=".$propotional_size_card['height']."&amp;side=y";
 }
 
 /*********************HTML_TEIL*******************************/
 
 // Html-Kopf ausgeben
-$g_layout['title'] = "Gru&szlig;karten";
+$g_layout['title'] = $g_organization." - Gru&szlig;karten";
 //Lightbox-Mode
 $g_layout['header'] = "";
 if($g_preferences['photo_show_mode']==1)
@@ -280,13 +280,12 @@ if($g_preferences['photo_show_mode']==1)
         <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/lightbox/lightbox.js\"></script>
         <link rel=\"stylesheet\" href=\"".$g_root_path."/adm_program/layout/lightbox.css\" type=\"text/css\" media=\"screen\" />";
 }
-
 $javascript='
     <script language="javascript" type="text/javascript">
 	    var basedropdiv = \'basedropdownmenu\';
 		var dropdiv = \'dropdownmenu\';
 		var externdiv = \'extern\';
-		var switchdiv = \'exinswitch\';
+		var switchdiv = \'externSwitch\';
 		var max_recipients = '.$g_preferences['ecard_cc_recipients'].';
 		var now_recipients = 0;
         function popup_win(theURL,winName,winOptions) 
@@ -585,7 +584,7 @@ $javascript='
 					document.getElementById(\'btn_delall\').style.display = "block";
 					document.getElementById(\'btn_delContent\').style.display = "block";
 					document.getElementById(\'moreRecipient\').style.display = "block";
-					document.getElementById(\'getmoreRecipent\').innerHTML = "<a href=\"javascript:showHide(\'moreRecipient\');\">Keine weiteren Empf.</a>";
+					document.getElementById(\'getmoreRecipient\').innerHTML = "<a href=\"javascript:showHideMoreRecipient(\'moreRecipient\',\'getmoreRecipient\');\">Keine weiteren Empf.</a>";
 				}	
 			}
 			if (now_recipients+1 > max_recipients)
@@ -631,15 +630,15 @@ $javascript='
 			}
 			if (now_recipients == 0)
 			{
-				if(document.getElementById(\'getmoreRecipent\').innerHTML == "<a href=\"javascript:showHide(\'moreRecipient\');\">Keine weiteren Empf.</a>")
+				if(document.getElementById(\'getmoreRecipient\').innerHTML == "<a href=\"javascript:showHideMoreRecipient(\'moreRecipient\',\'getmoreRecipient\');\">Keine weiteren Empf.</a>")
 				{
-					showHide(\'moreRecipient\');
+					showHideMoreRecipient(\'moreRecipient\',\'getmoreRecipient\');
 				}
 				document.getElementById(\'btn_del\').style.display = "none";
 				document.getElementById(\'btn_delall\').style.display = "none";
 				document.getElementById(\'btn_delContent\').style.display = "none";
 				document.getElementById(\'moreRecipient\').style.display = "none";
-				document.getElementById(\'getmoreRecipent\').innerHTML = "<a href=\"javascript:showHide(\'moreRecipient\');\">Mehr Empf&auml;nger</a>";
+				document.getElementById(\'getmoreRecipient\').innerHTML = "<a href=\"javascript:showHideMoreRecipient(\'moreRecipient\',\'getmoreRecipient\');\">Mehr Empf&auml;nger</a>";
 			}
 			
 			if (now_recipients <= max_recipients)
@@ -688,19 +687,32 @@ $javascript='
 			document.ecard_form[name].value = input_value;	
 			getTextStyle(\'Nachricht\');	
 		}
-		function showHide(div)
+		function showHideMoreRecipient(divLayer,divMenu)
 		{
-			if(document.getElementById(div).style.display == "none")
+			if(document.getElementById(divLayer).style.display == "none")
 			{
-				document.getElementById(div).style.display = "block";
-				document.getElementById(\'getmoreRecipent\').innerHTML = "<a href=\"javascript:showHide(\'moreRecipient\');\">Keine weiteren Empf.</a>";
+				document.getElementById(divLayer).style.display = "block";
+				document.getElementById(divMenu).innerHTML = "<a href=\"javascript:showHideMoreRecipient(divLayer,divMenu);\">Keine weiteren Empf.</a>";
 				addRecipient();
 			}
 			else
 			{
-				document.getElementById(div).style.display = "none";
-				document.getElementById(\'getmoreRecipent\').innerHTML = "<a href=\"javascript:showHide(\'moreRecipient\');\">Mehr Empf&auml;nger</a>";
+				document.getElementById(divLayer).style.display = "none";
+				document.getElementById(divMenu).innerHTML = "<a href=\"javascript:showHideMoreRecipient(divLayer,divMenu);\">Mehr Empf&auml;nger</a>";
 				delAllRecipients(\'ja\');
+			}
+		}
+		function showHideMoreSettings(divLayerSetting,divMenuSetting)
+		{
+			if(document.getElementById(divLayerSetting).style.display == "none")
+			{
+				document.getElementById(divLayerSetting).style.display = "block";
+				document.getElementById(divMenuSetting).innerHTML = "<a href=\"javascript:showHideMoreSettings(\'moreSettings\',\'getmoreSettings\');\">Einstellungen ausblenden</a>";
+			}
+			else
+			{
+				document.getElementById(divLayerSetting).style.display = "none";
+				document.getElementById(divMenuSetting).innerHTML = "<a href=\"javascript:showHideMoreSettings(\'moreSettings\',\'getmoreSettings\');\">Einstellungen einblenden</a>";
 			}
 		}
 		function getExtern()
@@ -762,18 +774,18 @@ if (empty($submit_action))
 	if($g_preferences['photo_show_mode']==0)
 	{
 		echo "<img onclick=\"window.open('$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=".$_REQUEST['photo']."&pho_id=".$_REQUEST['pho_id']."','msg','height=".$popup_height.", width=".$popup_width.",left=162,top=5')\" 
-			 src=\"".$bild_url."\" width=\"".$propotional_size_view['width']."\" height=\"".$propotional_size_view['height']."\" style=\"border: 1px solid rgb(221, 221, 221); padding: 4px; margin: 10pt 10px 10px 10pt;\" alt=\"Grußkarte\" />";
+			 src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$photo."&amp;pho_begin=".$photo_event->getValue("pho_begin")."&amp;scal=".$propotional_size_view['height']."&amp;side=y\" width=\"".$propotional_size_view['width']."\" height=\"".$propotional_size_view['height']."\" style=\"border: 1px solid rgb(221, 221, 221); padding: 4px; margin: 10pt 10px 10px 10pt;\" alt=\"".$g_organization." - Grußkarte\" />";
 	}
 	//Lightbox-Mode
 	if($g_preferences['photo_show_mode']==1)
 	{
-		echo "<a href=\"".$bild_url."\" rel=\"lightbox[roadtrip]\" title=\"".$photo_event->getValue("pho_name")."\"><img src=\"".$bild_url."\" width=\"".$propotional_size_view['width']."\" height=\"".$propotional_size_view['height']."\" style=\"border: 1px solid rgb(221, 221, 221); padding: 4px; margin: 10pt 10px 10px 10pt;\" alt=\"Grußkarte\" /></a>";
+		echo "<a href=\"".$bild_url."\" rel=\"lightbox[roadtrip]\" title=\"".$photo_event->getValue("pho_name")."\"><img src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$photo."&amp;pho_begin=".$photo_event->getValue("pho_begin")."&amp;scal=".$propotional_size_view['height']."&amp;side=y\" width=\"".$propotional_size_view['width']."\" height=\"".$propotional_size_view['height']."\" style=\"border: 1px solid rgb(221, 221, 221); padding: 4px; margin: 10pt 10px 10px 10pt;\" alt=\"".$g_organization." - Grußkarte\" /></a>";
 	}
 	
 	//Gleichesfenster-Mode
 	if($g_preferences['photo_show_mode']==2)
 	{
-		echo "<img onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=".$_REQUEST['photo']."&pho_id=$pho_id'\" src=\"".$bild_url."\" width=\"".$propotional_size_view['width']."\" height=\"".$propotional_size_view['height']."\" style=\"border: 1px solid rgb(221, 221, 221); padding: 4px; margin: 10pt 10px 10px 10pt;\" alt=\"Grußkarte\" />";
+		echo "<img onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=".$_REQUEST['photo']."&pho_id=$pho_id'\" src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$photo."&amp;pho_begin=".$photo_event->getValue("pho_begin")."&amp;scal=".$propotional_size_view['height']."&amp;side=y\" width=\"".$propotional_size_view['width']."\" height=\"".$propotional_size_view['height']."\" style=\"border: 1px solid rgb(221, 221, 221); padding: 4px; margin: 10pt 10px 10px 10pt;\" alt=\"".$g_organization." - Grußkarte\" />";
 	}      
     if ($error_msg != "")
 	{
@@ -790,25 +802,34 @@ if (empty($submit_action))
                <li>
                  <dl>
                    <dt><label>An:</label>	
-				   <div id="getmoreRecipent" style="margin-top:15px; float:left; display:relativ;">
-					<a href="javascript:showHide(\'moreRecipient\');">Mehr Empf&auml;nger</a>
+				   <div id="getmoreRecipient" style="padding-top:15px; float:left; position:relative;">
+					<a href="javascript:showHideMoreRecipient(\'moreRecipient\',\'getmoreRecipient\');">Mehr Empf&auml;nger</a>
 					</div>		        
 				   </dt>
-                   <dd>';
+                   <dd style="height:48px; width:370px;">';
 							if (array_key_exists("usr_id", $_GET))
                             {
                                 // usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
-								echo '<input type="text" class="readonly" readonly="readonly" name="ecard[name_recepient]" style="margin-bottom:3px; width: 200px;" maxlength="50" value="'.$user_name.'"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
-                                echo '<input type="text" class="readonly" readonly="readonly" name="ecard[email_recepient]" style="width: 350px;" maxlength="50" value="'.$user_email.'"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
+								echo '
+									<div id="externSwitch" style="float:right; padding-left:5px; position:relative;">
+										 <a href="javascript:getExtern()">externer Empf&auml;nger</a>
+								     </div>
+									  <div id="basedropdownmenu" style="display:block; margin-bottom:3px;">
+									 </div>
+									 <div id="dropdownmenu" style="display:block;">
+								     </div>
+									 <div id="extern">
+										<input type="text" class="readonly" readonly="readonly" name="ecard[name_recepient]" style="margin-bottom:3px; width: 200px;" maxlength="50" value="'.$user_name.'"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
+                                echo '<input type="text" class="readonly" readonly="readonly" name="ecard[email_recepient]" style="width: 330px;" maxlength="50" value="'.$user_email.'"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
+									 </div>';
 								
                             }
                             else
                             {
-							   echo '<div style=" height:48px; width:370px;">
-									 <div id="exinswitch" style="float:right; margin-left:5px; display:relativ;">
+							   echo '<div id="externSwitch" style="float:right; padding-left:5px; position:relative;">
 										 <a href="javascript:getExtern()">externer Empf&auml;nger</a>
 								     </div>
-									 <div id="basedropdownmenu" style="display:block; margin-bottom:3px;">
+									 <div id="basedropdownmenu" style="display:block; padding-bottom:3px;">
 									     <script language="javascript" type="text/javascript">getMenu();</script>
 									 </div>
 									 <div id="dropdownmenu" style="display:block;">
@@ -816,7 +837,6 @@ if (empty($submit_action))
 								     <div id="extern">
 										 <input type="hidden" name="ecard[email_recepient]" value="< Empf&auml;nger E-Mail >" />
 										 <input type="hidden" name="ecard[name_recepient]"  value="< Empf&auml;nger Name >" />
-									 </div>
 									 </div>';
                             }
                             echo '
@@ -878,7 +898,7 @@ if (empty($submit_action))
                     <dl>
                         <dt><label>E-Mail:</label></dt>
                         <dd>
-						   <input type="text" name="ecard[email_sender]" size="25" class="readonly" readonly="readonly" maxlength="40" style="width: 350px;"  value="';
+						   <input type="text" name="ecard[email_sender]" size="25" class="readonly" readonly="readonly" maxlength="40" style="width: 330px;"  value="';
 							if (! empty($ecard["email_sender"]) && !$g_current_user->getValue("E-Mail"))
 							{
 							  echo $ecard["email_sender"];
@@ -902,9 +922,12 @@ if (empty($submit_action))
 							<div style="padding:70px 0px 40px 20px;">
 							    noch&nbsp;<div id="counter" style="border:0px; display:inline;"><b>'; echo $g_preferences['ecard_text_length'].'</b></div>&nbsp;Zeichen:
 							</div>
+							<div id="getmoreSettings" style="padding-top:30px;float:left; position:relative;">
+								<a href="javascript:showHideMoreSettings(\'moreSettings\',\'getmoreSettings\');">Einstellungen einblenden</a>
+							</div>	
 						</dt>
                         <dd>
-							<textarea id="Nachricht" style="width: 350px; height: 180px; overflow:hidden; font:'.$font_sizes[0].'px '.$fonts[0].'; color:'.$font_colors[0].';" rows="10" cols="45" name="ecard[message]" onfocus="javascript:countMax();" onclick="javascript:countMax();" onchange="javascript:countMax();" onkeydown="javascript:countMax();" onkeyup="javascript:countMax();" onkeypress="javascript:countMax();" wrap="virtual">';
+							<textarea id="Nachricht" style="width: 330px; height: 180px; overflow:hidden; font:'.$g_preferences['ecard_text_size'].'px '.$g_preferences['ecard_text_font'].'; color:'.$g_preferences['ecard_text_color'].';" rows="10" cols="45" name="ecard[message]" onfocus="javascript:countMax();" onclick="javascript:countMax();" onchange="javascript:countMax();" onkeydown="javascript:countMax();" onkeyup="javascript:countMax();" onkeypress="javascript:countMax();" wrap="virtual">';
 					  		if (! empty($ecard["message"])) 
 							{
 						 		echo ''.$ecard["message"].''; 
@@ -914,10 +937,9 @@ if (empty($submit_action))
 			           </dd>
                     </dl>
                 </li>
-				<li>
-                    <hr />
-                </li>
 			    <li>
+					<div id="moreSettings" style="display:none;">
+					<hr />
                     <dl>
                         <dt>
 						    <label>Einstellungen:</label>
@@ -932,13 +954,13 @@ if (empty($submit_action))
 								</tr>
 								<tr>
 									<td>';
-										array_push($first_value_array,array(getMenueSettings($templates,"ecard[template_name]","120","false"),"ecard[template_name]"));
+										array_push($first_value_array,array(getMenueSettings($templates,"ecard[template_name]",$g_preferences['ecard_template'],"120","false"),"ecard[template_name]"));
 									echo '</td>
 									<td>';
-										array_push($first_value_array,array(getMenueSettings($fonts,"ecard[schriftart_name]","120","true"),"ecard[schriftart_name]"));
+										array_push($first_value_array,array(getMenueSettings($fonts,"ecard[schriftart_name]",$g_preferences['ecard_text_font'],"120","true"),"ecard[schriftart_name]"));
 									echo '</td>
 									<td>';
-										array_push($first_value_array,array(getMenueSettings($font_sizes,"ecard[schrift_size]","50","false"),"ecard[schrift_size]"));
+										array_push($first_value_array,array(getMenueSettings($font_sizes,"ecard[schrift_size]",$g_preferences['ecard_text_size'],"50","false"),"ecard[schrift_size]"));
 								    echo  '</td>
 							    </tr>
 								<tr>
@@ -948,7 +970,7 @@ if (empty($submit_action))
 								</tr>
 								<tr>
 									<td>';
-										array_push($first_value_array,array(getColorSettings($font_colors,"ecard[schrift_farbe]","8"),"ecard[schrift_farbe]"));
+										array_push($first_value_array,array(getColorSettings($font_colors,"ecard[schrift_farbe]","8",$g_preferences['ecard_text_color']),"ecard[schrift_farbe]"));
 									echo '</td>
 									<td colspan="2" style="padding-left:40px;">';
 										echo '<b>Bold: </b><input name="Bold" value="bold" onclick="javascript: getSetting(\'ecard[schrift_style_bold]\',this.value);" type="checkbox" />											  <i>Italic: </i><input name="Italic" value="italic" onclick="javascript: getSetting(\'ecard[schrift_style_italic]\',this.value);" type="checkbox" />'; 					
@@ -960,6 +982,7 @@ if (empty($submit_action))
 							echo '<input type="hidden" name="ecard[schrift_style_italic]" value="" />';			
 						echo '</dd>
                     </dl>
+					<div>
                 </li>
 			</ul> 
 			<hr />

@@ -34,7 +34,7 @@ getVars();
 list($error,$ecard_data_to_parse) = getEcardTemplate($ecard["template_name"],$tmpl_folder);
 if ($error) 
 {
-	echo "ERROR 404";
+	echo "ERROR - Seite nicht gefunden!";
 } 
 else 
 {
