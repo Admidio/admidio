@@ -1,0 +1,15 @@
+yelloworange
+red
+maroon
+fuchsia
+purple
+lime
+green
+teal
+aqua
+blue
+navy
+silver
+gray
+olive
+black
