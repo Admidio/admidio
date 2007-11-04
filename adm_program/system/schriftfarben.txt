@@ -1,4 +1,5 @@
-yelloworange
+yellow
+orange
 red
 maroon
 fuchsia
