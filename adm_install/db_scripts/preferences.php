@@ -71,6 +71,10 @@ $orga_preferences = array(
 	'ecard_card_picture_height'	=> '250',
 	'ecard_cc_recipients'		=> '10',
 	'ecard_text_length'			=> '150',
+	'ecard_text_font'			=> 'Comic Sans MS', 						
+	'ecard_text_size'			=> '20',
+	'ecard_text_color'			=> 'black',
+	'ecard_template'			=> 'ecard_1.tpl',
 	
     // Profil
     'default_country'          => 'Deutschland',

@@ -40,47 +40,59 @@ function getPropotionalSize($src_w, $src_h, $max_w, $max_h)
 // 			$data_array			.. Daten fuer die Einstellungen in einem Array
 //			$name_ecard_input	.. Name des Ecards inputs
 //			$width				.. die Groeße des Menues
+//			$first_value		.. der Standart Wert oder eingestellte Wert vom Benutzer
 //			$schowfont			.. wenn gesetzt bekommen die Menue Eintraege einen universellen font-style
-function getMenueSettings($data_array,$name_ecard_input,$width,$schowfont)
+function getMenueSettings($data_array,$name_ecard_input,$first_value,$width,$schowfont)
 {
-	$temp_data = "";
 	echo  '<select size="1" onchange="getSetting(\''.$name_ecard_input.'\',this.value)" style="width:'.$width.'px;">';
-	for($i=1; $i<count($data_array);$i++)
+	for($i=0; $i<count($data_array);$i++)
 	{
-		$temp_name = explode(".", $data_array[$i]);
-		
-		if (strcmp($data_array[$i],$data_array[0]) == 0 && $schowfont != "true")
+		$temp = explode(".", $data_array[$i]);
+		$temp_name = explode("_", $temp[0]);
+		$name = "";
+		if(isset($temp_name[1]) && $temp_name[1] != "" && is_numeric($temp_name[1]))
 		{
-			echo '<option value="'.$data_array[$i].'" selected=\'selected\'>'.$temp_name[0].'</option>';
+			$name = $temp_name[1].". Template";
 		}
-		else if($schowfont != "true")
+		else if(isset($temp_name[1]) && $temp_name[1] != "" && !is_numeric($temp_name[1]))
 		{
-			echo '<option value="'.$data_array[$i].'">'.$temp_name[0].'</option>';
-		}
-		else if (strcmp($data_array[$i],$data_array[0]) == 0)
-		{
-			echo '<option value="'.$data_array[$i].'" selected=\'selected\' style="font-family:'.$temp_name[0].';">'.$temp_name[0].'</option>';
+			$name = ucfirst($temp_name[1]);
 		}
 		else
 		{
-			echo '<option value="'.$data_array[$i].'" style="font-family:'.$temp_name[0].';">'.$temp_name[0].'</option>';
+			$name = $temp_name[0];
+		}
+		if (strcmp($data_array[$i],$first_value) == 0 && $schowfont != "true")
+		{
+			echo '<option value="'.$data_array[$i].'" selected=\'selected\'>'.$name.'</option>';
+		}
+		else if($schowfont != "true")
+		{
+			echo '<option value="'.$data_array[$i].'">'.$name.'</option>';
+		}
+		else if (strcmp($data_array[$i],$first_value) == 0)
+		{
+			echo '<option value="'.$data_array[$i].'" selected=\'selected\' style="font-family:'.$name.';">'.$name.'</option>';
+		}
+		else
+		{
+			echo '<option value="'.$data_array[$i].'" style="font-family:'.$name.';">'.$name.'</option>';
 		}
 		
 	}
 	echo  '</select>';
-	return '<input type="hidden" name="'.$name_ecard_input.'" value="'.$data_array[0].'" />';
+	return '<input type="hidden" name="'.$name_ecard_input.'" value="'.$first_value.'" />';
 }
 // gibt ein Menue fuer die Einstellungen des Template aus
 // Uebergabe: 
 // 			$data_array			.. Daten fuer die Einstellungen in einem Array
 //			$name_ecard_input	.. Name des Ecards inputs
-function getColorSettings($data_array,$name_ecard_input,$anz)
+function getColorSettings($data_array,$name_ecard_input,$anz,$first_value)
 {
-	$temp_data = "";
 	echo  '<table border="0" cellpadding="1" cellspacing="1" summary="colorTable"><tr>';
-	for($i=1; $i<count($data_array);$i++)
+	for($i=0; $i<count($data_array);$i++)
 	{
-		if (!is_integer(($i)/$anz))
+		if (!is_integer(($i+1)/$anz))
 		{
 		    echo '<td style="height:20px; width:17px; background-color: '.$data_array[$i].'; cursor:pointer;" onclick="javascript: getSetting(\''.$name_ecard_input.'\',\''.$data_array[$i].'\');"></td>';
 		}
@@ -95,7 +107,7 @@ function getColorSettings($data_array,$name_ecard_input,$anz)
 		
 	}
 	echo  '</tr></table>';
-	return '<input type="hidden" name="'.$name_ecard_input.'" value="'.$data_array[0].'" />';
+	return '<input type="hidden" name="'.$name_ecard_input.'" value="'.$first_value.'" />';
 }
 // gibt die ersten Einstellungen des Template aus
 // Uebergabe: 
@@ -126,6 +138,41 @@ function getCCRecipients($ecard,$max_cc_recipients)
 	}
 	return $Versandliste;
 }
+
+// oeffnet ein File und gibt alle Zeilen als Array zurueck
+// Uebergabe:
+//			$filepath .. Der Pfad zu dem File
+function getElementsFromFile($filepath)
+{
+	$elementsFromFile = array();
+	$list = fopen($filepath, "r");
+	while (!feof($list))
+	{
+		array_push($elementsFromFile,trim(fgets($list)));
+	}
+	return $elementsFromFile;   
+}
+
+function getfilenames($directory) 
+{
+	$array_files	= array();
+	$i				= 0;
+	if($curdir = opendir($directory)) 
+	{
+		while($file = readdir($curdir)) 
+		{
+			$string = split('_',$file);
+			if($file != '.' && $file != '..' && strcmp($string[0],$file) != "0") 
+			{	
+				$array_files[$i] = $file;
+				$i++;
+			}
+		}
+	}
+	closedir($curdir);
+	return $array_files;
+}
+
  
 /** Funktionen fuers sammeln,parsen und versenden der Informationen von der ecard_form **/
 

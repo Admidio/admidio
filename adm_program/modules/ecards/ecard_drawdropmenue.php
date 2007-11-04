@@ -190,7 +190,7 @@ else if($g_valid_login && isset($_GET['usrid']) && $_GET['usrid']!="extern")
 else if($g_valid_login && isset($_GET['usrid']) == "extern")
 {
 	echo '<input id="name_recepient" type="text" name="ecard[name_recepient]"  style="margin-bottom:3px; width: 200px;" onclick="javascript:blendout(this.id);" onfocus="javascript:blendout(this.id);" maxlength="50" value="<Empf&auml;nger Name>"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
-	echo '<input id="email_recepient" type="text" name="ecard[email_recepient]" style="width: 350px;" onclick="javascript:blendout(this.id);" onfocus="javascript:blendout(this.id);" maxlength="50" value="<Empf&auml;nger E-mail>"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
+	echo '<input id="email_recepient" type="text" name="ecard[email_recepient]" style="width: 330px;" onclick="javascript:blendout(this.id);" onfocus="javascript:blendout(this.id);" maxlength="50" value="<Empf&auml;nger E-mail>"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
 }
 
 ?>
