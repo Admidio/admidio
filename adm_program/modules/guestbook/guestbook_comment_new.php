@@ -174,7 +174,7 @@ echo "
         <ul class=\"formFieldList\">
             <li>
                 <dl>
-                    <dt><label for=\"name\">Name:</label></dt>
+                    <dt><label for=\"gbc_name\">Name:</label></dt>
                     <dd>";
                         if ($g_current_user->getValue("usr_id") > 0)
                         {
@@ -191,7 +191,7 @@ echo "
             </li>
             <li>
                 <dl>
-                    <dt><label for=\"email\">Emailadresse:</label></dt>
+                    <dt><label for=\"gbc_email\">Emailadresse:</label></dt>
                     <dd>
                         <input type=\"text\" id=\"gbc_email\" name=\"gbc_email\" tabindex=\"2\" style=\"width: 350px;\" maxlength=\"50\" value=\"". $guestbook_comment->getValue("gbc_email"). "\" />
                     </dd>
@@ -199,7 +199,7 @@ echo "
             </li>
             <li>
                 <dl>
-                    <dt><label for=\"entry\">Kommentar:</label>";
+                    <dt><label for=\"gbc_text\">Kommentar:</label>";
                         if ($g_preferences['enable_bbcode'] == 1)
                         {
                           echo "<br /><br />

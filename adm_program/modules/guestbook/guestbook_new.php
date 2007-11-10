@@ -156,7 +156,7 @@ echo "
         <ul class=\"formFieldList\">
             <li>
                 <dl>
-                    <dt><label for=\"name\">Name:</label></dt>
+                    <dt><label for=\"gbo_name\">Name:</label></dt>
                     <dd>";
                         if ($g_current_user->getValue("usr_id") > 0)
                         {
@@ -173,7 +173,7 @@ echo "
             </li>
             <li>
                 <dl>
-                    <dt><label for=\"email\">Emailadresse:</label></dt>
+                    <dt><label for=\"gbo_email\">Emailadresse:</label></dt>
                     <dd>
                         <input type=\"text\" id=\"gbo_email\" name=\"gbo_email\" tabindex=\"2\" style=\"width: 350px;\" maxlength=\"50\" value=\"". $guestbook->getValue("gbo_email"). "\" />
                     </dd>
@@ -181,7 +181,7 @@ echo "
             </li>
             <li>
                 <dl>
-                    <dt><label for=\"homepage\">Homepage:</label></dt>
+                    <dt><label for=\"gbo_homepage\">Homepage:</label></dt>
                     <dd>
                         <input type=\"text\" id=\"gbo_homepage\" name=\"gbo_homepage\" tabindex=\"3\" style=\"width: 350px;\" maxlength=\"50\" value=\"". $guestbook->getValue("gbo_homepage"). "\" />
                     </dd>
@@ -189,7 +189,7 @@ echo "
             </li>
             <li>
                 <dl>
-                    <dt><label for=\"entry\">Text:</label>";
+                    <dt><label for=\"gbo_text\">Text:</label>";
                         if ($g_preferences['enable_bbcode'] == 1)
                         {
                           echo "<br /><br />
