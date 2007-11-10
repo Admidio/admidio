@@ -26,7 +26,7 @@ if ($g_preferences['enable_rss'] != 1)
     $g_message->show("rss_disabled");
 }
 
-// pruefen ob das Modul ueberhaupt aktiviert ist
+// pruefen ob das Modul ueberhaupt aktiviert ist bzw. das Modul oeffentlich zugaenglich ist
 if ($g_preferences['enable_weblinks_module'] != 1)
 {
     // das Modul ist deaktiviert

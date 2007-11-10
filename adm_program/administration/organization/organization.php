@@ -1264,12 +1264,26 @@ echo "
                         <dl>
                             <dt><label for=\"enable_weblinks_module\">Weblinksmodul aktivieren:</label></dt>
                             <dd>
-                                <input type=\"checkbox\" id=\"enable_weblinks_module\" name=\"enable_weblinks_module\" ";
-                                if(isset($form_values['enable_weblinks_module']) && $form_values['enable_weblinks_module'] == 1)
-                                {
-                                    echo " checked=\"checked\" ";
-                                }
-                                echo " value=\"1\" />
+                                <select size=\"1\" id=\"enable_weblinks_module\" name=\"enable_weblinks_module\">
+                                    <option value=\"0\" ";
+                                    if($form_values['enable_weblinks_module'] == 0)
+                                    {
+                                        echo " selected=\"selected\" ";
+                                    }
+                                    echo ">Deaktiviert</option>
+                                    <option value=\"1\" ";
+                                    if($form_values['enable_weblinks_module'] == 1)
+                                    {
+                                        echo " selected=\"selected\" ";
+                                    }
+                                    echo ">Aktiviert</option>
+                                    <option value=\"2\" ";
+                                    if($form_values['enable_weblinks_module'] == 2)
+                                    {
+                                        echo " selected=\"selected\" ";
+                                    }
+                                    echo ">Nur für registrierte Benutzer</option>
+                                </select>
                             </dd>
                         </dl>
                     </li>

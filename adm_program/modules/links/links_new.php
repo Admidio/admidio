@@ -17,9 +17,10 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
+require("../../system/weblink_class.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
-if ($g_preferences['enable_weblinks_module'] != 1)
+if ($g_preferences['enable_weblinks_module'] == 0)
 {
     // das Modul ist deaktiviert
     $g_message->show("module_disabled");
@@ -56,6 +57,28 @@ else
 
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
+// Weblinkobjekt anlegen
+$link = new Weblink($g_db);
+
+if($_GET["lnk_id"] > 0)
+{
+    $link->getWeblink($_GET["lnk_id"]);
+}
+
+if(isset($_SESSION['links_request']))
+{
+    // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
+    // nun die vorher eingegebenen Inhalte auslesen
+    foreach($_SESSION['links_request'] as $key => $value)
+    {
+        if(strpos($key, "lnk_") == 0)
+        {
+            $link->setValue($key, stripslashes($value));
+        }        
+    }
+    unset($_SESSION['links_request']);
+}
+/*
 if (isset($_SESSION['links_request']))
 {
     $form_values = strStripSlashesDeep($_SESSION['links_request']);
@@ -94,7 +117,7 @@ else
         }
     }
 }
-
+*/
 // Html-Kopf ausgeben
 $g_layout['title'] = $_GET["headline"];
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");
@@ -126,27 +149,27 @@ echo "
         <ul class=\"formFieldList\">
             <li>
                 <dl>
-                    <dt><label for=\"linkname\">Linkname:</label></dt>
+                    <dt><label for=\"lnk_name\">Linkname:</label></dt>
                     <dd>
-                        <input type=\"text\" id=\"linkname\" name=\"linkname\" tabindex=\"1\" style=\"width: 350px;\" maxlength=\"250\" value=\"". $form_values['linkname']. "\" />
+                        <input type=\"text\" id=\"lnk_name\" name=\"lnk_name\" tabindex=\"1\" style=\"width: 350px;\" maxlength=\"250\" value=\"". $link->getValue("lnk_name"). "\" />
                         <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                     </dd>
                 </dl>
             </li>
             <li>
                 <dl>
-                    <dt><label for=\"linkurl\">Linkadresse:</label></dt>
+                    <dt><label for=\"lnk_url\">Linkadresse:</label></dt>
                     <dd>
-                        <input type=\"text\" id=\"linkurl\" name=\"linkurl\" tabindex=\"2\" style=\"width: 350px;\" maxlength=\"250\" value=\"". $form_values['linkurl']. "\" />
+                        <input type=\"text\" id=\"lnk_url\" name=\"lnk_url\" tabindex=\"2\" style=\"width: 350px;\" maxlength=\"250\" value=\"". $link->getValue("lnk_url"). "\" />
                         <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                     </dd>
                 </dl>
             </li>
             <li>
                 <dl>
-                    <dt><label for=\"category\">Kategorie:</label></dt>
+                    <dt><label for=\"lnk_cat_id\">Kategorie:</label></dt>
                     <dd>
-                        <select size=\"1\" name=\"category\" tabindex=\"3\">
+                        <select id=\"lnk_cat_id\" name=\"lnk_cat_id\" size=\"1\" tabindex=\"3\">
                             <option value=\" \""; 
                                 if($form_values['category'] == 0) 
                                 {
@@ -163,7 +186,7 @@ echo "
                             while($row = $g_db->fetch_object($result))
                             {
                                 echo "<option value=\"$row->cat_id\"";
-                                    if($form_values['category'] == $row->cat_id)
+                                    if($link->getValue("lnk_cat_id") == $row->cat_id)
                                     {
                                         echo " selected=\"selected\" ";
                                     }
@@ -176,7 +199,7 @@ echo "
             </li>
             <li>
                 <dl>
-                    <dt><label for=\"description\">Beschreibung:</label>";
+                    <dt><label for=\"lnk_description\">Beschreibung:</label>";
                         if($g_preferences['enable_bbcode'] == 1)
                         {
                           echo "<br /><br />
@@ -184,7 +207,7 @@ echo "
                         }
                     echo "</dt>
                     <dd>
-                        <textarea  name=\"description\" tabindex=\"4\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". $form_values['description']. "</textarea>
+                        <textarea id=\"lnk_description\" name=\"lnk_description\" tabindex=\"4\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". $link->getValue("lnk_description"). "</textarea>
                         <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                     </dd>
                 </dl>

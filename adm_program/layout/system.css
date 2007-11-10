@@ -454,7 +454,11 @@ a:hover {
 }
 
 #lists_overview .formFieldList li dt {
-    margin-left:    20px;
+    margin-left:        20px;
+}
+
+#links_overview .formBody {
+	text-align:	        left;
 }
 
 #infoboxListsBox {
