@@ -78,46 +78,7 @@ if(isset($_SESSION['links_request']))
     }
     unset($_SESSION['links_request']);
 }
-/*
-if (isset($_SESSION['links_request']))
-{
-    $form_values = strStripSlashesDeep($_SESSION['links_request']);
-    unset($_SESSION['links_request']);
-}
-else
-{
-    $form_values['linkname']    = "";
-    $form_values['description'] = "";
-    $form_values['linkurl']     = "";
-    $form_values['category']    = 0;
 
-    // Wenn eine Link-ID uebergeben wurde, soll der Link geaendert werden
-    // -> Felder mit Daten des Links vorbelegen
-    if ($_GET["lnk_id"] != 0)
-    {
-        $sql    = "SELECT * FROM ". TBL_LINKS. ", ". TBL_CATEGORIES ."
-                    WHERE lnk_id     = ". $_GET['lnk_id']. " 
-                      AND lnk_cat_id = cat_id
-                      AND cat_org_id = ". $g_current_organization->getValue("org_id");
-        $result = $g_db->query($sql);
-
-        if ($g_db->num_rows($result) > 0)
-        {
-            $row_ba = $g_db->fetch_object($result);
-
-            $form_values['linkname']    = $row_ba->lnk_name;
-            $form_values['description'] = $row_ba->lnk_description;
-            $form_values['linkurl']     = $row_ba->lnk_url;
-            $form_values['category']    = $row_ba->lnk_cat_id;
-        }
-        elseif ($g_db->num_rows($result) == 0)
-        {
-            //Wenn keine Daten zu der ID gefunden worden bzw. die ID einer anderen Orga gehört ist Schluss mit lustig...
-            $g_message->show("invalid");
-        }
-    }
-}
-*/
 // Html-Kopf ausgeben
 $g_layout['title'] = $_GET["headline"];
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");
