@@ -221,7 +221,8 @@ echo "</ul>
                 </li>";
             }
 
-            if($g_preferences['enable_weblinks_module'] == 1)
+            if( $g_preferences['enable_weblinks_module'] == 1
+            || ($g_preferences['enable_weblinks_module'] == 2 && $g_valid_login))
             {
                 echo "
                 <li>

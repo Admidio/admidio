@@ -144,11 +144,6 @@ if(isset($_POST['enable_extern_roles_view']) == false)
 {
     $_POST['enable_extern_roles_view'] = 0;
 }
-
-if(isset($_POST['enable_weblinks_module']) == false)
-{
-    $_POST['enable_weblinks_module'] = 0;
-}
 if(isset($_POST['enable_ecard_module']) == false)
 {
     $_POST['enable_ecard_module'] = 0;

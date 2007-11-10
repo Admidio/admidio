@@ -22,9 +22,10 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
+require("../../system/weblink_class.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
-if ($g_preferences['enable_weblinks_module'] != 1)
+if ($g_preferences['enable_weblinks_module'] == 0)
 {
     // das Modul ist deaktiviert
     $g_message->show("module_disabled");
@@ -58,25 +59,6 @@ if (array_key_exists("mode", $_GET))
     }
 }
 
-// jetzt wird noch geprueft ob die eventuell uebergebene lnk_id uberhaupt zur Orga gehoert oder existiert...
-if ($_GET["lnk_id"] > 0)
-{
-    $sql    = "SELECT * FROM ". TBL_LINKS. ", ". TBL_CATEGORIES ."
-                WHERE lnk_id     = ". $_GET['lnk_id']. "
-                  AND lnk_cat_id = cat_id
-                  AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
-                  AND cat_type = 'LNK' ";
-    $result = $g_db->query($sql);
-
-    if ($g_db->num_rows($result) == 0)
-    {
-        //Wenn keine Daten zu der ID gefunden worden bzw. die ID einer anderen Orga gehört ist Schluss mit lustig...
-        $g_message->show("invalid");
-    }
-
-    $linkObject = $g_db->fetch_object($result);
-}
-
 if (array_key_exists("headline", $_GET))
 {
     $_GET["headline"] = strStripTags($_GET["headline"]);
@@ -86,89 +68,75 @@ else
     $_GET["headline"] = "Links";
 }
 
+// Linkobjekt anlegen
+$link = new Weblink($g_db);
+
+if($_GET["lnk_id"] > 0)
+{
+    $link->getWeblink($_GET["lnk_id"]);
+}
+
 $_SESSION['links_request'] = $_REQUEST;
 
 if ($_GET["mode"] == 1 || ($_GET["mode"] == 3 && $_GET["lnk_id"] > 0) )
 {
-    $linkName = strStripTags($_POST['linkname']);
-    $description  = strStripTags($_POST['description']);
-    $linkUrl = strStripTags(trim($_POST['linkurl']));
-    $category = $_POST['category'];
-    
-    if(strlen($linkName) == 0)
+    if(strlen($_POST['lnk_name']) == 0)
     {
         $g_message->show("feld", "Linkname");
     }
-    if(strlen($linkUrl) == 0)
+    if(strlen($_POST['lnk_url']) == 0)
     {
         $g_message->show("feld", "Linkadresse");
     }
-    if(strlen($category) == 0)
+    if(strlen($_POST['lnk_cat_id']) == 0)
     {
         $g_message->show("feld", "Kategorie");
     }
-    if(strlen($description) == 0)
+    if(strlen($_POST['lnk_description']) == 0)
     {
         $g_message->show("feld", "Beschreibung");
     }
     
     $act_date = date("Y.m.d G:i:s", time());
-
-    //Die Webadresse wird jetzt falls sie nicht mit http:// oder https:// beginnt entsprechend aufbereitet
-    if (substr($linkUrl, 0, 7) != 'http://' && substr($linkUrl, 0, 8) != 'https://' )
+   
+    // POST Variablen in das Ankuendigungs-Objekt schreiben
+    foreach($_POST as $key => $value)
     {
-        $linkUrl = "http://". $linkUrl;
+        if(strpos($key, "lnk_") === 0)
+        {
+            $link->setValue($key, $value);
+        }
     }
+    
+    // Daten in Datenbank schreiben
+    $return_code = $link->save();
 
-    //Link wird jetzt in der DB gespeichert
-    if ($_GET["lnk_id"] == 0)
+    if($return_code < 0)
     {
-        $sql = "INSERT INTO ". TBL_LINKS. " ( lnk_usr_id, lnk_timestamp,
-                                              lnk_name, lnk_url, lnk_description, lnk_cat_id)
-                                     VALUES (". $g_current_user->getValue("usr_id"). ", '$act_date',
-                                              '$linkName', '$linkUrl', '$description', $category)";
-        $result = $g_db->query($sql);
-    }
-    else
-    {
-        $sql = "UPDATE ". TBL_LINKS. " SET   lnk_name   = '$linkName',
-                                             lnk_url    = '$linkUrl',
-                                             lnk_description   = '$description',
-                                             lnk_last_change   = '$act_date',
-                                             lnk_usr_id_change = ". $g_current_user->getValue("usr_id"). ",
-                                             lnk_cat_id        =  $category
-                WHERE lnk_id = ". $_GET['lnk_id'];
-        $result = $g_db->query($sql);
+        $g_message->show("norights");
     }
 
     unset($_SESSION['links_request']);
+    $_SESSION['navigation']->deleteLastUrl();
 
-    $location = "Location: $g_root_path/adm_program/modules/links/links.php?headline=". $_GET['headline'];
-    header($location);
+    header("Location: ". $_SESSION['navigation']->getUrl());
     exit();
 }
 
 elseif ($_GET["mode"] == 2 && $_GET["lnk_id"] > 0)
 {
     // Loeschen von Weblinks...
-    $sql = "DELETE FROM ". TBL_LINKS. " 
-             WHERE lnk_id = ". $_GET["lnk_id"];
-    $result = $g_db->query($sql);
+    $link->delete();
 
-    if (!isset($_GET["url"]))
-    {
-        $_GET["url"] = "$g_root_path/$g_main_page";
-    }
-
-    $g_message->setForwardUrl($_GET["url"]);
+    $g_message->setForwardUrl($_SESSION['navigation']->getUrl());
     $g_message->show("delete");
 }
 
 elseif ($_GET["mode"] == 4 && $_GET["lnk_id"] > 0)
 {
     //Nachfrage ob Weblinkeintrag geloescht werden soll
-    $g_message->setForwardYesNo("$g_root_path/adm_program/modules/links/links_function.php?lnk_id=$_GET[lnk_id]&mode=2&url=$g_root_path/adm_program/modules/links/links.php");
-    $g_message->show("delete_link", $linkObject->lnk_name);
+    $g_message->setForwardYesNo("$g_root_path/adm_program/modules/links/links_function.php?lnk_id=$_GET[lnk_id]&mode=2");
+    $g_message->show("delete_link", $link->getValue("lnk_name"));
 }
 
 else

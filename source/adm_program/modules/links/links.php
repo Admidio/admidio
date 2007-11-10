@@ -18,12 +18,16 @@ require("../../system/common.php");
 require("../../system/bbcode.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
-if ($g_preferences['enable_weblinks_module'] != 1)
+if ($g_preferences['enable_weblinks_module'] == 0)
 {
     // das Modul ist deaktiviert
     $g_message->show("module_disabled");
 }
-
+elseif($g_preferences['enable_weblinks_module'] == 2)
+{
+    // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
+    require("../../system/login_valid.php");
+}
 
 // Uebergabevariablen pruefen
 
@@ -234,15 +238,13 @@ else
                 echo "<hr />";
             }
             echo "
-            <div style=\"text-align: left;\">
-                <div style=\"text-align: left;\">
-                    <span class=\"iconLink\">
-                        <a href=\"$row->lnk_url\" target=\"_blank\"><img src=\"$g_root_path/adm_program/images/globe.png\"
-                        alt=\"Gehe zu $row->lnk_name\" title=\"Gehe zu $row->lnk_name\" /></a>
-                        <a href=\"$row->lnk_url\" target=\"_blank\">$row->lnk_name</a>
-                    </span>
-                </div>
-                <div style=\"margin-top: 10px; text-align: left;\">";
+				<span class=\"iconLink\">
+					<a href=\"$row->lnk_url\" target=\"_blank\"><img src=\"$g_root_path/adm_program/images/globe.png\"
+					alt=\"Gehe zu $row->lnk_name\" title=\"Gehe zu $row->lnk_name\" /></a>
+					<a href=\"$row->lnk_url\" target=\"_blank\">$row->lnk_name</a>
+				</span>
+
+                <div style=\"margin-top: 10px;\">";
 
                     // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
                     if ($g_preferences['enable_bbcode'] == 1)
@@ -258,7 +260,7 @@ else
                 if($g_current_user->editWeblinksRight())
                 {
                     echo "
-                    <div class=\"editInformation\">";
+                    <div class=\"editInformation\" style=\"text-align: left;\">";
                         // aendern & loeschen duerfen nur User mit den gesetzten Rechten
                         if ($g_current_user->editWeblinksRight())
                         {
@@ -269,7 +271,7 @@ else
                             </span>
                             <span class=\"iconLink\">
                                 <a href=\"$g_root_path/adm_program/modules/links/links_function.php?lnk_id=$row->lnk_id&amp;mode=4\"><img 
-                                src=\"$g_root_path/adm_program/images/cross.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" /></a>
+                                src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Löschen\" title=\"Löschen\" /></a>
                             </span>";
                         }
                         $user_create = new User($g_db, $row->lnk_usr_id);
@@ -284,7 +286,7 @@ else
                         }
                     echo "</div>";
                 }
-            echo "</div>";
+
             $j++;
          }  // Ende Wenn !dont_write
 
@@ -300,7 +302,7 @@ else
     if (!$did_write_something)
     {
         echo "<!-- Versteckte Kategorie -->
-        <p>Es sind keine Eintr&auml;ge vorhanden.</p>";
+        <p>Es sind keine Einträge vorhanden.</p>";
     }
 
     echo "</div></div>";
