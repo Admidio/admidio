@@ -300,7 +300,7 @@ echo "<div class=\"pageNavigation\">";
     // Alle Anfangsbuchstaben der Nachnamen ermitteln, die bisher in der DB gespeichert sind
     if($req_members == 1)
     {
-        $sql    = "SELECT DISTINCT UPPER(SUBSTRING(usd_value, 1, 1)) 
+        $sql    = "SELECT UPPER(SUBSTRING(usd_value, 1, 1)) as letter, COUNT(1) as count
                      FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. ", 
                           ". TBL_USERS. ", ". TBL_USER_FIELDS. ", ". TBL_USER_DATA. "
                     WHERE rol_valid  = 1
@@ -313,16 +313,18 @@ echo "<div class=\"pageNavigation\">";
                       AND usf_name   = 'Nachname'
                       AND usd_usf_id = usf_id
                       AND usd_usr_id = usr_id
+                    GROUP BY UPPER(SUBSTRING(usd_value, 1, 1))
                     ORDER BY usd_value ";
     }
     else
     {
-        $sql    = "SELECT DISTINCT UPPER(SUBSTRING(usd_value, 1, 1))  
+        $sql    = "SELECT UPPER(SUBSTRING(usd_value, 1, 1)) as letter, COUNT(1) as count 
                      FROM ". TBL_USERS. ", ". TBL_USER_FIELDS. ", ". TBL_USER_DATA. "
                     WHERE usr_valid  = 1 
                       AND usf_name   = 'Nachname'
                       AND usd_usf_id = usf_id
                       AND usd_usr_id = usr_id
+                    GROUP BY UPPER(SUBSTRING(usd_value, 1, 1))
                     ORDER BY usd_value ";
     }
     $result      = $g_db->query($sql);
@@ -331,7 +333,7 @@ echo "<div class=\"pageNavigation\">";
 
     // kleine Vorschleife die alle Sonderzeichen (Zahlen) vor dem A durchgeht 
     // (diese werden nicht im Buchstabenmenue angezeigt)
-    while(ord($letter_row[0]) < ord("A"))
+    while(ord($letter_row['letter']) < ord("A"))
     {
         $letter_row = $g_db->fetch_array($result);
     }
@@ -340,7 +342,7 @@ echo "<div class=\"pageNavigation\">";
     for($i = 0; $i < 26;$i++)
     {
         // pruefen, ob es Mitglieder zum Buchstaben gibt, unter Beruecksichtigung deutscher Sonderzeichen
-        if( $letter_menu == $letter_row[0]
+        if( $letter_menu == $letter_row['letter']
         || ($letter_menu == "A" && $letter_row[0] == "Ä")
         || ($letter_menu == "O" && $letter_row[0] == "Ö")
         || ($letter_menu == "U" && $letter_row[0] == "Ü") )
@@ -358,7 +360,7 @@ echo "<div class=\"pageNavigation\">";
         }
         elseif($letter_found == true)
         {
-            echo "<a href=\"$g_root_path/adm_program/administration/members/members.php?members=$req_members&amp;letter=$letter_menu\">$letter_menu</a>";
+            echo "<a href=\"$g_root_path/adm_program/administration/members/members.php?members=$req_members&amp;letter=$letter_menu\" title=\"". $letter_row['count']. " Benutzer gefunden\">$letter_menu</a>";
         }
         else
         {
