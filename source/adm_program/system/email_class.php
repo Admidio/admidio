@@ -13,12 +13,6 @@
  * Das Objekt wird erzeugt durch Aufruf des Konstruktors:
  * function Email()
  *
- * Bei Bedarf kann nun der ContentType der Mail auf UTF8 gesetzt werden (optional).
- * Dies muss auf jeden Fall an zweiter Stelle durchgefuehrt werden.
- * Wird die Funktion nicht aufgerufen, dann wird automatisch der ContentType
- * auf ISO-8859-1 gesetzt:
- * function setUTF8()
- *
  * Nun wird der Absender gesetzt:
  * function setSender($address, $name='')
  * Uebergaben: $address - Die Emailadresse
@@ -69,13 +63,19 @@ class Email
 //Konstruktor der Klasse.
 function Email()
 {
+	global $g_preferences;
+
     //Wichtig ist das die MimeVersion das erste Element im Header ist...
     $this->headerOptions['MIME-Version'] = '1.0';
 
     //Jetzt wird noch der ContentType der Mail gesetzt.
     //Dieser wird im Falle eines Attachments spaeter ersetzt.
-    $this->headerOptions['Content-Type'] = "text/plain; charset=\"ISO-8859-1\"";
-    $this->contentType = "text/plain; charset=\"ISO-8859-1\"";
+    $this->headerOptions['Content-Type'] = "text/plain; charset=utf8";
+    $this->headerOptions['Content-Transfer-Encoding'] = "quoted-printable";
+    $this->contentType = "text/plain; charset=iso-8859-1";
+    
+    $this->headerOptions['Return-Path'] = $g_preferences['email_administrator'];
+    $this->headerOptions['Sender']      = $g_preferences['email_administrator'];
 
     $this->mailBoundary = "--NextPart_AdmidioMailSystem_". md5(uniqid(rand()));
     $this->copyToSender = false;
@@ -85,13 +85,6 @@ function Email()
     //fuer den Fall das eine Kopie der Mail angefordert wird...
     $this->addresses = '';
 
-}
-
-// Funktion um den ContentType auf UTF-8 umzusetzen
-function setUTF8()
-{
-    $this->headerOptions['Content-Type'] = "text/plain; charset=\"UTF-8\"";
-    $this->contentType = "text/plain; charset=\"UTF-8\"";
 }
 
 // Funktion um den Absender zu setzen
@@ -318,7 +311,8 @@ function sendEmail()
                 $this->prepareBody();
 
                 // Mail wird jetzt versendet...
-                if (!mail($recipient, $subject, $this->mail_body, $this->mail_properties))
+                // das Versenden in UTF8 funktioniert noch nicht bei allen Mailclients (Outlook, GMX)
+                if (!mail(utf8_decode($recipient), utf8_decode($subject), utf8_decode($this->mail_body), utf8_decode($this->mail_properties)))
                 {
                      return false;
                 }
@@ -341,7 +335,8 @@ function sendEmail()
         $this->prepareBody();
 
         // Mail wird jetzt versendet...
-        if (!mail($recipient, $subject, $this->mail_body, $this->mail_properties))
+        // das Versenden in UTF8 funktioniert noch nicht bei allen Mailclients (Outlook, GMX)
+        if (!mail(utf8_decode($recipient), utf8_decode($subject), utf8_decode($this->mail_body), utf8_decode($this->mail_properties)))
         {
              return false;
         }
@@ -376,7 +371,8 @@ function sendEmail()
         $subject = "Kopie: ". $subject;
 
          // Kopie versenden an den originalen Absender...
-         if (!mail($this->headerOptions['From'], $subject, $this->mail_body, $this->mail_properties))
+         // das Versenden in UTF8 funktioniert noch nicht bei allen Mailclients (Outlook, GMX)
+         if (!mail(utf8_decode($this->headerOptions['From']), utf8_decode($subject), utf8_decode($this->mail_body), utf8_decode($this->mail_properties)))
          {
              return false;
          }
