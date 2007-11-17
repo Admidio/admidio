@@ -147,14 +147,14 @@ class TableAccess
     // dabei koennen noch noetige Plausibilitaetspruefungen gemacht werden
     function setValue($field_name, $field_value)
     {
+		// Plausibilitaets-Check des Wertes vornehmen
+		if(method_exists($this, "_setValue"))
+		{
+			$this->_setValue($field_name, &$field_value);
+		}
+    
         if(isset($this->db_fields[$field_name]))
-        {
-            // Plausibilitaets-Check des Wertes vornehmen
-            if(method_exists($this, "_setValue"))
-            {
-                $this->_setValue($field_name, &$field_value);
-            }
-            
+        {            
             // Allgemeine Plausibilitaets-Checks anhand des Feldtyps
             if(strlen($field_value) > 0)
             {
