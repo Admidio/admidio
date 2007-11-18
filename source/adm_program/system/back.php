@@ -20,7 +20,7 @@ $_SESSION['navigation']->deleteLastUrl();
 $next_url = $_SESSION['navigation']->getUrl();
 if(strlen($next_url) == 0)
 {
-    $next_url = "$g_root_path/$g_main_page";
+    $next_url = $g_homepage;
 }
 header("Location: $next_url");
  

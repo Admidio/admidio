@@ -22,6 +22,8 @@ $orga_preferences = array(
     'logout_minutes'      => '20',
     'enable_system_mails' => '1',
     'email_administrator' => 'webmaster@'. $_SERVER['HTTP_HOST'],
+    'homepage_logout'     => 'index.html',
+    'homepage_login'      => 'index.html',    
     'user_css'            => 'user.css',
     
     // Registrierung
