@@ -150,6 +150,14 @@ while($row_orga = $g_db->fetch_object($result_orga))
     $sql = "UPDATE ". TBL_PREFERENCES. " SET prf_value = '0'
              WHERE prf_name = 'lists_members_per_page' ";
     $g_db->query($sql);
+    
+    $sql = "UPDATE ". TBL_PREFERENCES. " SET prf_value = '$g_main_page'
+             WHERE prf_name = 'homepage_logout' ";
+    $g_db->query($sql);
+    
+    $sql = "UPDATE ". TBL_PREFERENCES. " SET prf_value = '$g_main_page'
+             WHERE prf_name = 'homepage_login' ";
+    $g_db->query($sql);
 
     $sql = "UPDATE ". TBL_USER_FIELDS. " SET usf_cat_id = $cat_id_data
              WHERE usf_org_shortname = '$row_orga->org_shortname' ";

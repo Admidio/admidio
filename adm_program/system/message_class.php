@@ -58,7 +58,7 @@ class Message
         if ($url == "home" || strlen($url) == 0)
         {
             // auf die Startseite verweisen
-            $this->forward_url = $GLOBALS['g_root_path']. "/". $GLOBALS['g_main_page'];
+            $this->forward_url = $GLOBALS['g_homepage'];
         }
         else
         {
@@ -83,7 +83,7 @@ class Message
         if ($url == "home")
         {
             // auf die Startseite verweisen
-            $this->forward_url = $GLOBALS['g_root_path']. "/". $GLOBALS['g_main_page'];
+            $this->forward_url = $GLOBALS['g_homepage'];
         }
         else
         {

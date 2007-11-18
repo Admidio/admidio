@@ -270,6 +270,16 @@ else
     $g_current_session->tableCleanup($g_preferences['logout_minutes']);
 }
 
+// Homepageseite festlegen
+if($g_valid_login)
+{
+	$g_homepage = $g_root_path. "/". $g_preferences['homepage_login'];
+}
+else
+{
+	$g_homepage = $g_root_path. "/". $g_preferences['homepage_logout'];
+}
+
 /*********************************************************************************
 Verbindung zur Forum-Datenbank herstellen und die Funktionen, sowie Routinen des Forums laden.
 /********************************************************************************/

@@ -152,13 +152,35 @@ echo "
                     </li>
                     <li>
                         <dl>
+                            <dt><label for=\"homepage_logout\">Startseite (Besucher):</label></dt>
+                            <dd><input type=\"text\" id=\"homepage_logout\" name=\"homepage_logout\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['homepage_logout']. "\" /></dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Diese Seite ist die Standard-Startseite von Admidio auf die Besucher geleitet werden. 
+                        Der Pfad zu der Seite muss relativ zum Admidio-Verzeichnis angegeben werden.<br />
+                        Beispiel: adm_program/index.php
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"homepage_login\">Startseite (angemeldete Benutzer):</label></dt>
+                            <dd><input type=\"text\" id=\"homepage_login\" name=\"homepage_login\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['homepage_login']. "\" /></dd>
+                        </dl>
+                    </li>                                        
+                    <li class=\"smallFontSize\">
+                        Auf diese Seite wird der Benutzer geleitet, sobald er sich angemeldet hat.
+                        Der Pfad zu der Seite muss relativ zum Admidio-Verzeichnis angegeben werden.<br />
+                        Beispiel: adm_program/index.php
+                    </li>
+                    <li>
+                        <dl>
                             <dt><label for=\"email_administrator\">E-Mail Adresse des Administrator:</label></dt>
                             <dd><input type=\"text\" id=\"email_administrator\" name=\"email_administrator\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['email_administrator']. "\" /></dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
                         Hier sollte die E-Mail-Adresse eines Administrators stehen. Diese wird als Absenderadresse
-                        f&uuml;r Systemnachrichten benutzt. (z.B. bei der Registierungsbest&auml;tigung)
+                        für Systemnachrichten benutzt. (z.B. bei der Registierungsbestätigung)
                     </li>";
 
                     //Falls andere Orgas untergeordnet sind, darf diese Orga keiner anderen Orga untergeordnet werden
@@ -221,10 +243,10 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Hier k&ouml;nnen die Systemmails von Admidio deaktiviert werden. Systemmails sind Benachrichtigungen,
-                        wenn sich zum Beispiel ein neuer User angemeldet hat. Aber auch Registrierungsbest&auml;tigungen
+                        Hier können die Systemmails von Admidio deaktiviert werden. Systemmails sind Benachrichtigungen,
+                        wenn sich zum Beispiel ein neuer User angemeldet hat. Aber auch Registrierungsbestätigungen
                         werden als Systemmail verschickt. Dieses Feature sollte also am besten nicht deaktiviert werden.
-                        Es sei denn der Server unterst&uuml;tzt gar keinen Mailversand.
+                        Es sei denn der Server unterstützt gar keinen Mailversand.
                         Das Mailmodul ist durch die Deaktivierung nicht betroffen.
                     </li>
                     <li>
@@ -241,7 +263,7 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Die Benutzer k&ouml;nnen in Textboxen (z.B. Terminbeschreibungen, G&auml;stebucheintr&auml;gen) BB-Code nutzen um den
+                        Die Benutzer können in Textboxen (z.B. Terminbeschreibungen, Gästebucheinträgen) BB-Code nutzen um den
                         Text besser zu formatieren.
                     </li>
                     <li>
@@ -277,9 +299,9 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Benutzer k&ouml;nnen beim Anmelden festlegen, ob die Anmeldung auf dem Rechner gespeichert werden soll.
+                        Benutzer können beim Anmelden festlegen, ob die Anmeldung auf dem Rechner gespeichert werden soll.
                         Bei einem weiteren Besuch der Homepage sind diese Benutzer dann automatisch angemeldet. Dies kann
-                        allerdings auch dazu f&uuml;hren, dass Benutzer diese Option unbedacht einsetzen und so evtl. fremde
+                        allerdings auch dazu führen, dass Benutzer diese Option unbedacht einsetzen und so evtl. fremde
                         Personen Zugriff auf die Daten bekommen.
                     </li>
                     <li>
@@ -290,7 +312,8 @@ echo "
                     </li>
                     <li class=\"smallFontSize\">
                         Dieser Wert gibt an, nach wieviel Minuten ein inaktiver Benutzer automatisch ausgeloggt wird.
-                        Inaktiv ist ein Benutzer solange er keine Seite des Admidio-Systems aufruft.
+                        Inaktiv ist ein Benutzer solange er keine Seite des Admidio-Systems aufruft. Diese Einstellung 
+                        wird ignoriert, falls der Benutzer <b>Angemeldet bleiben</b> ausgewählt hat.
                     </li>
                     <li>
                         <dl>
