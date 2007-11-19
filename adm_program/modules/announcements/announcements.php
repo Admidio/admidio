@@ -13,6 +13,8 @@
  * headline  - Ueberschrift, die ueber den Ankuendigungen steht
  *             (Default) Ankuendigungen
  * id        - Nur eine einzige Annkuendigung anzeigen lassen.
+ * date      - Alle Ankuendigungen zu einem Datum werden aufgelistet
+ *             Uebergabeformat: YYYYMMDD
  *
  *****************************************************************************/
 
@@ -36,6 +38,7 @@ elseif($g_preferences['enable_announcements_module'] == 2)
 $req_start    = 0;
 $req_headline = "Ankündigungen";
 $req_id       = 0;
+$sql_datum    = "";
 
 // Uebergabevariablen pruefen
 
@@ -60,6 +63,18 @@ if(isset($_GET['id']))
         $g_message->show("invalid");
     }
     $req_id = $_GET['id'];
+}
+
+if(array_key_exists("date", $_GET))
+{
+    if(is_numeric($_GET["date"]) == false)
+    {
+        $g_message->show("invalid");
+    }
+	else
+	{
+		$sql_datum = substr($_GET["date"],0,4). "-". substr($_GET["date"],4,2). "-". substr($_GET["date"],6,2);
+	}
 }
 
 if($g_preferences['enable_bbcode'] == 1)
@@ -108,57 +123,63 @@ if(strlen($organizations) == 0)
     $organizations = "'". $g_current_organization->getValue("org_shortname"). "'";
 }
 
-// falls eine id fuer eine bestimmte Ankuendigung uebergeben worden ist...
+// falls eine id fuer ein bestimmtes Datum uebergeben worden ist...
 if($req_id > 0)
 {
-    $sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
-                WHERE ( ann_id = $req_id
-                      AND ((ann_global   = 1 AND ann_org_shortname IN ($organizations))
-                           OR ann_org_shortname = '". $g_current_organization->getValue("org_shortname"). "'))";
+	$conditions = " AND ann_id = $req_id ";
 }
-//...ansonsten alle fuer die Gruppierung passenden Ankuendigungen aus der DB holen.
+//...ansonsten alle fuer die Gruppierung passenden Termine aus der DB holen.
 else
 {
-    $sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
-                WHERE (  ann_org_shortname = '". $g_current_organization->getValue("org_shortname"). "'
-                      OR (   ann_global   = 1
-                         AND ann_org_shortname IN ($organizations) ))
-                ORDER BY ann_timestamp DESC
-                LIMIT $req_start, 10 ";
+	// Ankuendigungen an einem Tag suchen
+	if(strlen($sql_datum) > 0)
+	{
+    	$conditions = " AND DATE_FORMAT(ann_timestamp, '%Y-%m-%d') = '$sql_datum' ";		
+	}
+    //...ansonsten alle fuer die Gruppierung passenden Ankuendigungen aus der DB holen.
+    else
+    {
+    	$conditions = "";
+    }
 }
 
+$sql = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
+         WHERE (  ann_org_shortname = '". $g_current_organization->getValue("org_shortname"). "'
+               OR (   ann_global   = 1
+                  AND ann_org_shortname IN ($organizations) ))
+               $conditions 
+         ORDER BY ann_timestamp DESC
+         LIMIT $req_start, 10";
 $announcements_result = $g_db->query($sql);
 
 // Gucken wieviele Datensaetze die Abfrage ermittelt kann...
-$sql    = "SELECT COUNT(*) FROM ". TBL_ANNOUNCEMENTS. "
-            WHERE (  ann_org_shortname = '$g_organization'
-                  OR (   ann_global   = 1
-                     AND ann_org_shortname IN ($organizations) ))
-            ORDER BY ann_timestamp ASC ";
+$sql = "SELECT COUNT(1) as count 
+          FROM ". TBL_ANNOUNCEMENTS. "
+         WHERE (  ann_org_shortname = '". $g_current_organization->getValue("org_shortname"). "'
+               OR (   ann_global   = 1
+                  AND ann_org_shortname IN ($organizations) ))
+               $conditions ";
 $result = $g_db->query($sql);
 $row    = $g_db->fetch_array($result);
-$num_announcements = $row[0];
+$num_announcements = $row['count'];
 
-// Icon-Links und Navigation anzeigen
-
-if($req_id == 0
-&& ($g_current_user->editAnnouncements() || $g_preferences['enable_rss'] == true))
+// Neue Ankuendigung anlegen
+if($g_current_user->editAnnouncements())
 {
-    // Neue Ankuendigung anlegen
-    if($g_current_user->editAnnouncements())
-    {
-        echo "
-        <ul class=\"iconTextLinkList\">
-            <li>
-                <span class=\"iconTextLink\">
-                    <a href=\"$g_root_path/adm_program/modules/announcements/announcements_new.php?headline=$req_headline\"><img
-                    src=\"$g_root_path/adm_program/images/add.png\" alt=\"Neu anlegen\" /></a>
-                    <a href=\"$g_root_path/adm_program/modules/announcements/announcements_new.php?headline=$req_headline\">Anlegen</a>
-                </span>
-            </li>
-        </ul>";        
-    }
+	echo "
+	<ul class=\"iconTextLinkList\">
+		<li>
+			<span class=\"iconTextLink\">
+				<a href=\"$g_root_path/adm_program/modules/announcements/announcements_new.php?headline=$req_headline\"><img
+				src=\"$g_root_path/adm_program/images/add.png\" alt=\"Neu anlegen\" /></a>
+				<a href=\"$g_root_path/adm_program/modules/announcements/announcements_new.php?headline=$req_headline\">Anlegen</a>
+			</span>
+		</li>
+	</ul>";        
+}
 
+if($num_announcements > 10)
+{
     // Navigation mit Vor- und Zurueck-Buttons
     $base_url = "$g_root_path/adm_program/modules/announcements/announcements.php?headline=$req_headline";
     echo generatePagination($base_url, $num_announcements, 10, $req_start, TRUE);
@@ -252,7 +273,7 @@ else
     }  // Ende While-Schleife
 }
 
-if($g_db->num_rows($announcements_result) > 2)
+if($num_announcements > 10)
 {
     // Navigation mit Vor- und Zurueck-Buttons
     // erst anzeigen, wenn mehr als 2 Eintraege (letzte Navigationsseite) vorhanden sind
