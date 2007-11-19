@@ -15,6 +15,8 @@
  * headline     - Ueberschrift, die ueber den Terminen steht
  *                (Default) Termine
  * id           - Nur einen einzigen Termin anzeigen lassen.
+ * date         - Alle Termine zu einem Datum werden aufgelistet
+ *                Uebergabeformat: YYYYMMDD
  *
  *****************************************************************************/
 
@@ -39,6 +41,7 @@ $req_mode     = "actual";
 $req_start    = 0;
 $req_headline = "Termine";
 $req_id       = 0;
+$sql_datum    = "";
 
 // Uebergabevariablen pruefen
 
@@ -74,6 +77,18 @@ if(isset($_GET['id']))
     $req_id = $_GET['id'];
 }
 
+if(array_key_exists("date", $_GET))
+{
+    if(is_numeric($_GET["date"]) == false)
+    {
+        $g_message->show("invalid");
+    }
+	else
+	{
+		$sql_datum = substr($_GET["date"],0,4). "-". substr($_GET["date"],4,2). "-". substr($_GET["date"],6,2);
+	}
+}
+
 if($g_preferences['enable_bbcode'] == 1)
 {
     // Klasse fuer BBCode
@@ -81,7 +96,7 @@ if($g_preferences['enable_bbcode'] == 1)
 }
 
 unset($_SESSION['dates_request']);
-$act_date = date("Y.m.d 00:00:00", time());
+$act_date = date("Y-m-d 00:00:00", time());
 // Navigation faengt hier im Modul an
 $_SESSION['navigation']->clear();
 $_SESSION['navigation']->addUrl(CURRENT_URL);
@@ -136,89 +151,80 @@ if(strlen($organizations) == 0)
 // falls eine id fuer ein bestimmtes Datum uebergeben worden ist...
 if($req_id > 0)
 {
-    $sql = "SELECT * FROM ". TBL_DATES. "
-             WHERE ( dat_id = $req_id
-                   AND ((dat_global   = 1 AND dat_org_shortname IN ($organizations))
-                        OR dat_org_shortname = '". $g_current_organization->getValue("org_shortname"). "'))";
+	$conditions = " AND dat_id = $req_id ";
 }
 //...ansonsten alle fuer die Gruppierung passenden Termine aus der DB holen.
 else
 {
-    //fuer alter Termine...
-    if($req_mode == "old")
+	// Termine an einem Tag suchen
+	if(strlen($sql_datum) > 0)
+	{
+    	$conditions = "   AND DATE_FORMAT(dat_begin, '%Y-%m-%d') <= '$sql_datum'
+                          AND DATE_FORMAT(dat_end, '%Y-%m-%d')   >= '$sql_datum' 
+                        ORDER BY dat_begin ASC ";		
+	}
+    //fuer alte Termine...
+    elseif($req_mode == "old")
     {
-        $sql    = "SELECT * FROM ". TBL_DATES. "
-                    WHERE (  dat_org_shortname = '". $g_current_organization->getValue("org_shortname"). "'
-                       OR (   dat_global   = 1
-                          AND dat_org_shortname IN ($organizations) ))
-                      AND dat_begin < '$act_date'
-                      AND dat_end   < '$act_date'
-                    ORDER BY dat_begin DESC
-                    LIMIT $req_start, 10 ";
+    	$conditions = "   AND DATE_FORMAT(dat_begin, '%Y-%m-%d') < '$act_date'
+                          AND DATE_FORMAT(dat_end, '%Y-%m-%d')   < '$act_date' 
+                        ORDER BY dat_begin DESC ";
     }
     //... ansonsten fuer neue Termine
     else
     {
-        $sql    = "SELECT * FROM ". TBL_DATES. "
-                    WHERE (  dat_org_shortname = '$g_organization'
-                       OR (   dat_global   = 1
-                          AND dat_org_shortname IN ($organizations) ))
-                      AND (  dat_begin >= '$act_date'
-                          OR dat_end   >= '$act_date' )
-                    ORDER BY dat_begin ASC
-                    LIMIT $req_start, 10 ";
+    	$conditions = "   AND (  DATE_FORMAT(dat_begin, '%Y-%m-%d') >= '$act_date'
+                              OR DATE_FORMAT(dat_end, '%Y-%m-%d')   >= '$act_date' ) 
+                        ORDER BY dat_begin ASC ";
     }
 }
+
+$sql = "SELECT * FROM ". TBL_DATES. "
+         WHERE (  dat_org_shortname = '". $g_current_organization->getValue("org_shortname"). "'
+               OR (   dat_global   = 1
+                  AND dat_org_shortname IN ($organizations) ))
+               $conditions 
+         LIMIT $req_start, 10";
 $dates_result = $g_db->query($sql);
 
-// Gucken wieviele Datensaetze die Abfrage ermittelt kann...
-if($req_mode == "old")
+if($req_id == 0)
 {
-    $sql    = "SELECT COUNT(*) FROM ". TBL_DATES. "
-                WHERE (  dat_org_shortname = '$g_organization'
-                      OR (   dat_global   = 1
-                         AND dat_org_shortname IN ($organizations) ))
-                  AND dat_begin < '$act_date'
-                  AND dat_end   < '$act_date'
-                ORDER BY dat_begin DESC ";
+	// Gucken wieviele Datensaetze die Abfrage ermittelt kann...
+	$sql = "SELECT COUNT(1) as count
+			  FROM ". TBL_DATES. "
+			 WHERE (  dat_org_shortname = '". $g_current_organization->getValue("org_shortname"). "'
+				   OR (   dat_global   = 1
+					  AND dat_org_shortname IN ($organizations) ))
+			       $conditions ";
+	$result = $g_db->query($sql);
+	$row    = $g_db->fetch_array($result);
+	$num_dates = $row['count'];
 }
 else
 {
-    $sql    = "SELECT COUNT(*) FROM ". TBL_DATES. "
-                WHERE (  dat_org_shortname = '$g_organization'
-                      OR (   dat_global   = 1
-                         AND dat_org_shortname IN ($organizations) ))
-                  AND (  dat_begin >= '$act_date'
-                      OR dat_end   >= '$act_date' )
-                ORDER BY dat_begin ASC ";
+	$num_dates = 1;
 }
-$result = $g_db->query($sql);
-$row    = $g_db->fetch_array($result);
-$num_dates = $row[0];
 
-// Icon-Links und Navigation anzeigen
-
-if($req_id == 0
-&& ($g_current_user->editDates() || $g_preferences['enable_rss'] == true))
+// Neue Termine anlegen
+if($g_current_user->editDates())
 {
-    // Neue Termine anlegen
-    if($g_current_user->editDates())
-    {
-        echo "
-        <ul class=\"iconTextLinkList\">
-            <li>
-                <span class=\"iconTextLink\">
-                    <a href=\"$g_root_path/adm_program/modules/dates/dates_new.php?headline$req_headline\"><img
-                    src=\"$g_root_path/adm_program/images/add.png\" alt=\"Termin anlegen\" /></a>
-                    <a href=\"$g_root_path/adm_program/modules/dates/dates_new.php?headline=$req_headline\">Anlegen</a>
-                </span>
-            </li>
-        </ul>";    
-    }
+	echo "
+	<ul class=\"iconTextLinkList\">
+		<li>
+			<span class=\"iconTextLink\">
+				<a href=\"$g_root_path/adm_program/modules/dates/dates_new.php?headline$req_headline\"><img
+				src=\"$g_root_path/adm_program/images/add.png\" alt=\"Termin anlegen\" /></a>
+				<a href=\"$g_root_path/adm_program/modules/dates/dates_new.php?headline=$req_headline\">Anlegen</a>
+			</span>
+		</li>
+	</ul>";    
+}
 
-    // Navigation mit Vor- und Zurueck-Buttons
-    $base_url = "$g_root_path/adm_program/modules/dates/dates.php?mode=$req_mode&headline=$req_headline";
-    echo generatePagination($base_url, $num_dates, 10, $req_start, TRUE);
+if($num_dates > 10)
+{
+	// Navigation mit Vor- und Zurueck-Buttons
+	$base_url = "$g_root_path/adm_program/modules/dates/dates.php?mode=$req_mode&headline=$req_headline";
+	echo generatePagination($base_url, $num_dates, 10, $req_start, TRUE);
 }
 
 if($g_db->num_rows($dates_result) == 0)
@@ -354,7 +360,7 @@ else
     }  // Ende While-Schleife
 }
 
-if($g_db->num_rows($dates_result) > 2)
+if($num_dates > 10)
 {
     // Navigation mit Vor- und Zurueck-Buttons
     // erst anzeigen, wenn mehr als 2 Eintraege (letzte Navigationsseite) vorhanden sind
