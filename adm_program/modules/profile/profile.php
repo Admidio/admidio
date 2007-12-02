@@ -599,12 +599,12 @@ echo "
                                             }
                             				if($row['rol_this_list_view'] == 1)
 							                {
-							                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/list.png\"
+							                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/page_white_text.png\"
 							                    alt=\"Mitgliederliste dieser Rolle einsehen\" title=\"Mitgliederliste dieser Rolle einsehen\" />";
 							                }
 							   				if($row['rol_all_lists_view'] == 1)
 							                {
-							                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/lists.png\"
+							                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/pages_white_text.png\"
 							                    alt=\"Mitgliederlisten aller Rollen einsehen\" title=\"Mitgliederlisten aller Rollen einsehen\" />";
 							                }
 							                                        echo "</dt>
