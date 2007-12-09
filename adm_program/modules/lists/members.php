@@ -343,7 +343,7 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
     if($g_db->num_rows($result_user)>=50)
     {
         //Alle
-        echo"<p><a href=\"#\" onclick=\"showAll();\">Alle</a>&nbsp;";
+        echo"<div class=\"pageNavigation\"><a href=\"#\" onclick=\"showAll();\">Alle</a>&nbsp;";
 
         for($menu_letter=35; $menu_letter<=90; $menu_letter++)
         {
@@ -374,7 +374,7 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
             }
         }//for
 
-        echo "</p>";
+        echo "</div>";
 
         //Container anlegen und Ausgabe
         $letter_merker=34;
