@@ -18,7 +18,7 @@ font-size:<%ecard_font_size%>px;
 </head>
 <body>
 <div align="center" style="margin-top:30px;">
-Eine Grußkarte von: <b><a href="<%g_root_path%>/adm_program/modules/mail/mail.php?usr_id=<%ecard_sender_id%>" target="_blank"><%ecard_sender_name%></a></b>
+Eine Gru&szlig;karte von: <b><a href="<%g_root_path%>/adm_program/modules/mail/mail.php?usr_id=<%ecard_sender_id%>" target="_blank"><%ecard_sender_name%></a></b>
 </div>
 <hr width="80%" color="#000000" size="1" />
 <div align="center">
