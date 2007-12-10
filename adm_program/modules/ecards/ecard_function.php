@@ -9,7 +9,7 @@
  *****************************************************************************/
  
 /****************** includes *************************************************/
- include('mail.class.php');
+require("../../system/email_class.php");
  
 /****************** Funktionen fuer ecard_form ********************************/
  
@@ -126,7 +126,7 @@ function getFirstSettings($first_value_array)
 		}
 	}
 }
-function getCCRecipients($ecard,$max_cc_recipients)
+function getCCRecepients($ecard,$max_cc_recipients)
 {
 	$Versandliste = array();
 	for($i=1;$i<=$max_cc_recipients;$i++)
@@ -282,30 +282,22 @@ function parseEcardTemplate($ecard,$ecard_data,$root_path,$usr_id,$propotional_w
 // Uebergabe:
 //		$ecard				.. array mit allen Informationen die in den inputs der Form gespeichert sind
 //		$ecard_html_data	.. geparste Daten vom Template
-//		$ecard_plain_data	.. plain Text der vom User in der DB eingestellt werden kann (er wird am Anfang im Body Bereich der Mail hinzugefuegt)
+//		$ecard_plain_data	.. plain Text er wird am Anfang im Body Bereich der Mail hinzugefuegt
 //		$sender_name		.. der Name des Senders
 //		$sender_email		.. die Email des Senders
-//		$empfaenger_name		.. der Name des Empfaengers
+//		$empfaenger_name	.. der Name des Empfaengers
 //		$empfaenger_email	.. die Email des Empfaengers
-function sendEcard($ecard,$ecard_html_data,$ecard_plain_data,$empfaenger_name,$empfaenger_email) 
+function sendEcard($ecard,$ecard_html_data,$ecard_plain_data,$empfaenger_name,$empfaenger_email,$cc_empfaenger) 
 {
-	// Einstellungen fuer From To setzen
-	$HMTLMail = new MailClass($empfaenger_email,'Grußkarte von '.$empfaenger_name);
-	$HMTLMail->setFromName($ecard["name_sender"]);
-	$HMTLMail->setFromAddr($ecard["email_sender"]);
-
-	// Body Teil hinzufuegen zur Mail
-	$HMTLMail->addTextPlainBodyPart($ecard_plain_data);
+	$email = new Email();
+	$email->setSender($ecard["email_sender"],$ecard["name_sender"]);
+	$email->setSubject('Grußkarte von '.$ecard["name_sender"].'');
+	$email->addRecipient($empfaenger_email,$empfaenger_name);
+	for($i=0;$i<count($cc_empfaenger);$i++)
+	{
+		$email->addCopy($cc_empfaenger[$i][1],$cc_empfaenger[$i][0]);
+	}
 	
-	// Die HTML Grußkarte vorsichtshalber an die Mail anhaengen darum muss vorerstmal ein File erstellt werden das dann spaeter angehaengt wird
-	$Datei = "Grußkarte.html";
-	$FilePointer = fopen($Datei, "w+");
-	fwrite($FilePointer, $ecard_html_data);
-	fclose($FilePointer);
-	// Das File mit dem Inhalt der Grußkarte anhaengen
-	$HMTLMail->attachFile($Datei,"text/plain","attachment");
-	unlink($Datei);
-	// Bilder die im HTML Teil der Grußkarte gefunden werden, werden integriert 
 	if (preg_match_all("/(<img.*src=\")(.*)(\".*>)/Uim", $ecard_html_data, $matchArray)) 
 	{
 		for ($i=0; $i < count($matchArray[0]); ++$i) 
@@ -313,20 +305,21 @@ function sendEcard($ecard,$ecard_html_data,$ecard_plain_data,$empfaenger_name,$e
 			$tmp_ext  = substr(strrchr($matchArray[2][$i], '.'), 1);
 			$tmp_img_name_array  = explode('/',$matchArray[2][$i]);
 			$tmp_img_name = $tmp_img_name_array[count($tmp_img_name_array)-1];	
+			$tmp_img_name_tmp = explode('?',$tmp_img_name);
+			$tmp_img_name = $tmp_img_name_tmp[0];
+			$tmp_ext_tmp = explode('?',$tmp_ext);
+			$tmp_ext = $tmp_ext_tmp[0];
 			if($tmp_img_name != "none.jpg" && $tmp_img_name != "")
 			{
 				$uid = md5(uniqid($tmp_img_name.time()));
-				$HMTLMail->attachFile($matchArray[2][$i],"image/".$tmp_ext."","inline","",$uid.".".$tmp_ext);
-				$ecard_html_data = str_replace($matchArray[2][$i],"cid:".$uid.".".$tmp_ext,$ecard_html_data);
+				$email->addAttachment($matchArray[2][$i],$tmp_img_name,"image/".$tmp_ext."","inline",$uid);
+				$ecard_html_data = str_replace($matchArray[2][$i],"cid:".$uid,$ecard_html_data);
 			}
 		}
 	}
-	// Body Teil hinzufuegen zur Mail
-	$HMTLMail->addHTMLBodyPart($ecard_html_data);
-	
-	// Build and send the mail
-	$result = $HMTLMail->BuildAndSendMessage();
-	return $result;
+	$email->setText($ecard_html_data);
+	$email->setDataAsHtml();
+	return $email->sendEmail();
 }
 // Diese Funktion ueberprueft den uebergebenen String auf eine gueltige E-mail Addresse und gibt True oder False zurueck
 // Uebergabe

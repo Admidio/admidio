@@ -22,25 +22,18 @@ require_once("../../system/common.php");
 require_once("../photos/photo_function.php");
 require_once("ecard_function.php");
 
-// Variablen die spaeter in die DB kommen und vom Admin aenderbar sind
-//**********************************************************
-/*		es können hier mehere Templates eingetragen werden welche dann vom Benutzt ausgewaehlt werden dürfen (erstes Element im Array-> Standart Einstellung)	*/			
-/**/	 
-/**/	$font_sizes 		= array ("9","10","11","12","13","14","15","16","17","18","20","22","24","30"); 
-/*      es können hier mehere Schrift Farben eingetragen werden welche dann vom Benutzer ausgewaehlt werden dürfen (erstes Element im Array-> Standart Einstellung) */
-/**/							
-//**********************************************************
 
-$error_msg					= "";
-$tmpl_folder 		= "../../layout/ecard_templates/";
 $email_versand_liste		= array(); // Array wo alle Empfaenger aufgelistet werden (jedoch keine zusaetzlichen);
 $email_versand_liste_all	= array(); // Array wo alle Empfaenger aufgelistet werden (inklusive zusaetzlichen);
+$error_msg					= "";
+$tmpl_folder 				= "../../layout/ecard_templates/";
+$font_sizes 				= array ("9","10","11","12","13","14","15","16","17","18","20","22","24","30"); 
 $font_colors 				= getElementsFromFile('../../system/schriftfarben.txt');  
 $fonts 						= getElementsFromFile('../../system/schriftarten.txt');
 $templates 					= getfilenames($tmpl_folder);
-$ecard_plain_data 	= "Du hast eine E-Card von einem Mitglied des Vereins ".$g_organization." erhalten.\n Falls du diese nicht sehen kannst befindet sich diese im Anhang der Mail";
-$msg_error_1		= "Es ist ein Fehler bei der Verarbeitung der E-C@rd aufgetreten. Bitte probier es zu einem sp&auml;teren Zeitpunkt noch einmal.";
-$msg_error_2 		= "Es sind einige Eingabefelder nicht bzw. nicht richtig ausgefüllt. Bitte füll diese aus, bzw. korrigier diese.";
+$ecard_plain_data 			= "Du hast eine Gru&szlig;karte von einem Mitglied des Vereins ".$g_organization." erhalten.\n Falls du diese nicht sehen kannst befindet sich diese im Anhang der Mail";
+$msg_error_1				= "Es ist ein Fehler bei der Verarbeitung der Gru&szlig;karte aufgetreten. Bitte probier es zu einem sp&auml;teren Zeitpunkt noch einmal.";
+$msg_error_2 				= "Es sind einige Eingabefelder nicht bzw. nicht richtig ausgef&uuml;llt. Bitte f&uuml;ll diese aus, bzw. korrigier diese.";
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_ecard_module'] != 1)
@@ -184,8 +177,8 @@ $ecard_send = false;
 if (! empty($submit_action)) 
 {
 	// Wenn die Felder Name E-mail von dem Empaenger und Sender nicht leer sind
-    if ( checkEmail($ecard["email_recepient"]) && checkEmail($ecard["email_sender"]) 
-	&& ($ecard["email_recepient"] != "") && ($ecard["name_sender"] != "") )    
+    if ( checkEmail($ecard["email_recipient"]) && checkEmail($ecard["email_sender"]) 
+	&& ($ecard["email_recipient"] != "") && ($ecard["name_sender"] != "") )    
 	{
 		// Wenn die Nachricht größer ist als die maximal Laenge wird sie zurückgestutzt
 	    if (strlen($ecard["message"]) > $g_preferences['ecard_text_length']) 
@@ -203,44 +196,14 @@ if (! empty($submit_action))
 	    else 
 	    {
 			// Es wird geprüft ob der Benutzer der ganzen Rolle eine Grußkarte schicken will
-			$rolle = str_replace(array("Rolle_","@rolle.com"),"",$ecard["email_recepient"]);
+			$rolle = str_replace(array("Rolle_","@rolle.com"),"",$ecard["email_recipient"]);
 			// Wenn nicht dann Name und Email des Empfaengers zur versand Liste hinzufügen
 			if(!is_numeric($rolle))
 			{
-				array_push($email_versand_liste,array($ecard["name_recepient"],$ecard["email_recepient"]));
-			}
-			// Wenn schon dann alle Namen und die duzugehörigen Emails auslesen und in die versand Liste hinzufügen
-			else
-			{
-				$sql = "SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name, email.usd_value as email
-				FROM ". TBL_MEMBERS. ", ". TBL_USERS. "
-				LEFT JOIN ". TBL_USER_DATA. " as last_name
-					ON last_name.usd_usr_id = usr_id
-					AND last_name.usd_usf_id = ". $g_current_user->getProperty("Nachname", "usf_id")."
-				LEFT JOIN ". TBL_USER_DATA. " as first_name
-					ON first_name.usd_usr_id = usr_id
-					AND first_name.usd_usf_id = ". $g_current_user->getProperty("Vorname", "usf_id")."
-				LEFT JOIN ". TBL_USER_DATA. " as email
-					ON email.usd_usr_id = usr_id
-					AND email.usd_usf_id = ". $g_current_user->getProperty("E-Mail", "usf_id")."
-				WHERE usr_id = mem_usr_id
-				AND mem_rol_id = ".$rolle."
-				AND mem_valid = 1
-				AND usr_valid = 1
-				AND email.usd_usr_id = email.usd_usr_id
-				ORDER BY last_name, first_name";
-		
-				$result 	  = $g_db->query($sql);
-				while ($row = $g_db->fetch_object($result))
-				{
-					array_push($email_versand_liste,array("".$row->first_name." ".$row->last_name."",$row->email));
-				}
-			}
-			$email_versand_liste_all = array_merge($email_versand_liste,getCCRecipients($ecard,$g_preferences['ecard_cc_recipients']));
-			for($i=0; $i<count($email_versand_liste_all);$i++)
-			{
-				$ecard_html_data = parseEcardTemplate($ecard,$ecard_data_to_parse,$g_root_path,$g_current_user->getValue("usr_id"),$propotional_size_card['width'],$propotional_size_card['height'],$email_versand_liste_all[$i][0],$email_versand_liste_all[$i][1]);
-				$result = sendEcard($ecard,$ecard_html_data,$ecard_plain_data,$email_versand_liste_all[$i][0],$email_versand_liste_all[$i][1]);
+				array_push($email_versand_liste,array($ecard["name_recipient"],$ecard["email_recipient"]));
+				
+				$ecard_html_data = parseEcardTemplate($ecard,$ecard_data_to_parse,$g_root_path,$g_current_user->getValue("usr_id"),$propotional_size_card['width'],$propotional_size_card['height'],$ecard["name_recipient"],$ecard["email_recipient"]);
+				$result = sendEcard($ecard,$ecard_html_data,$ecard_plain_data,$ecard["name_recipient"],$ecard["email_recipient"],getCCRecepients($ecard,$g_preferences['ecard_cc_recipients']));
 				// Wenn die Grußkarte erfolgreich gesendet wurde 
 				if ($result) 
 				{
@@ -251,6 +214,62 @@ if (! empty($submit_action))
 				{
 					$error_msg = $msg_error_1;
 				}
+			}
+			// Wenn schon dann alle Namen und die duzugehörigen Emails auslesen und in die versand Liste hinzufügen
+			else
+			{
+				$sql = "SELECT first_name.usd_value as first_name, last_name.usd_value as last_name, 
+                     email.usd_value as email, rol_name
+                FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
+               RIGHT JOIN ". TBL_USER_DATA. " as email
+                  ON email.usd_usr_id = usr_id
+                 AND email.usd_usf_id = ". $g_current_user->getProperty("E-Mail", "usf_id"). "
+                 AND LENGTH(email.usd_value) > 0
+                LEFT JOIN ". TBL_USER_DATA. " as last_name
+                  ON last_name.usd_usr_id = usr_id
+                 AND last_name.usd_usf_id = ". $g_current_user->getProperty("Nachname", "usf_id"). "
+                LEFT JOIN ". TBL_USER_DATA. " as first_name
+                  ON first_name.usd_usr_id = usr_id
+                 AND first_name.usd_usf_id = ". $g_current_user->getProperty("Vorname", "usf_id"). "
+               WHERE rol_id            = ". $rolle. "
+                 AND rol_cat_id        = cat_id
+                 AND cat_org_id        = ". $g_current_organization->getValue("org_id"). "
+                 AND mem_rol_id        = rol_id
+                 AND mem_valid         = 1
+                 AND mem_usr_id        = usr_id
+                 AND usr_valid         = 1 
+				AND email.usd_usr_id = email.usd_usr_id
+				ORDER BY last_name, first_name";
+		
+				$result 	  		= $g_db->query($sql);
+				$firstvalue_name 	= "";
+				$firstvalue_email 	= "";
+				$i	= 0 ;
+				while ($row = $g_db->fetch_object($result))
+				{
+					if($i<1)
+					{
+						$firstvalue_name  = "Gruppe: \"".$row->rol_name."\"";
+						$firstvalue_email = "-";
+						
+					}
+					array_push($email_versand_liste,array("".$row->first_name." ".$row->last_name."",$row->email));
+					$i++;
+				}
+				$email_versand_liste_all = array_merge($email_versand_liste,getCCRecepients($ecard,$g_preferences['ecard_cc_recipients']));
+				$ecard_html_data = parseEcardTemplate($ecard,$ecard_data_to_parse,$g_root_path,$g_current_user->getValue("usr_id"),$propotional_size_card['width'],$propotional_size_card['height'],$firstvalue_name,$firstvalue_email);
+				$result = sendEcard($ecard,$ecard_html_data,$ecard_plain_data,$firstvalue_name,$firstvalue_email,$email_versand_liste_all);
+				// Wenn die Grußkarte erfolgreich gesendet wurde 
+				if ($result) 
+				{
+					$ecard_send = true;
+				} 
+				// Wenn nicht dann die dementsprechende Error Nachricht ausgeben
+				else 
+				{
+					$error_msg = $msg_error_1;
+				}
+				
 			}
 	   }
 	}
@@ -325,13 +344,13 @@ $javascript='
                 error_message += "- E-Mail des Absenders\n";
             }
   
-            if (document.ecard_form["ecard[name_recepient]"].value == "" || document.ecard_form["ecard[name_recepient]"].value == "<Empfänger Name>") 
+            if (document.ecard_form["ecard[name_recipient]"].value == "" || document.ecard_form["ecard[name_recipient]"].value == "<Empfänger Name>") 
 			{
                 error = true;
                 error_message += "- Name des Empfängers\n";
             } 
-            if ((document.ecard_form["ecard[email_recepient]"].value == "") || 
-               (echeck(document.ecard_form["ecard[email_recepient]"].value) == false)) 
+            if ((document.ecard_form["ecard[email_recipient]"].value == "") || 
+               (echeck(document.ecard_form["ecard[email_recipient]"].value) == false)) 
 			{
                 error = true;
                 error_message += "- E-Mail des Empfängers\n";
@@ -435,6 +454,17 @@ $javascript='
 		    if(document.getElementById(id).value == "<Empfänger Name>" || document.getElementById(id).value == "<Empfänger E-mail>")
 			{
 				document.getElementById(id).value = "";
+			}
+		}
+		function blendin(id,type)
+		{
+		    if(document.getElementById(id).value == "" && type == 1)
+			{
+				document.getElementById(id).value = "<Empfänger Name>";
+			}
+			else if(document.getElementById(id).value == "" && type == 2)
+			{
+				document.getElementById(id).value = "<Empfänger E-mail>";
 			}
 		}
 		function countMax() 
@@ -722,7 +752,7 @@ $javascript='
 				document.getElementById(basedropdiv).style.display = \'block\';
 				document.getElementById(dropdiv).style.display = \'block\';
 				document.getElementById(externdiv).style.display = \'none\';
-				document.getElementById(externdiv).innerHTML = \'<input type="hidden" name="ecard[email_recepient]" value="< Empf&auml;nger E-Mail >" /><input type="hidden" name="ecard[name_recepient]"  value="< Empf&auml;nger Name >" />\';
+				document.getElementById(externdiv).innerHTML = \'<input type="hidden" name="ecard[email_recipient]" value="< Empf&auml;nger E-Mail >" /><input type="hidden" name="ecard[name_recipient]"  value="< Empf&auml;nger Name >" />\';
 				getMenu();
 				document.getElementById(switchdiv).innerHTML = \'<a href="javascript:getExtern();">externer Empf&auml;nger</a>\';
 			}
@@ -810,17 +840,13 @@ if (empty($submit_action))
 							if (array_key_exists("usr_id", $_GET))
                             {
                                 // usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
-								echo '
-									<div id="externSwitch" style="float:right; padding-left:5px; position:relative;">
-										 <a href="javascript:getExtern()">externer Empf&auml;nger</a>
-								     </div>
-									  <div id="basedropdownmenu" style="display:block; margin-bottom:3px;">
+								echo '<div id="basedropdownmenu" style="display:block; margin-bottom:3px;">
 									 </div>
 									 <div id="dropdownmenu" style="display:block;">
 								     </div>
 									 <div id="extern">
-										<input type="text" class="readonly" readonly="readonly" name="ecard[name_recepient]" style="margin-bottom:3px; width: 200px;" maxlength="50" value="'.$user_name.'"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
-                                echo '<input type="text" class="readonly" readonly="readonly" name="ecard[email_recepient]" style="width: 330px;" maxlength="50" value="'.$user_email.'"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
+										<input type="text" class="readonly" readonly="readonly" name="ecard[name_recipient]" style="margin-bottom:3px; width: 200px;" maxlength="50" value="'.$user_name.'"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
+                                echo '<input type="text" class="readonly" readonly="readonly" name="ecard[email_recipient]" style="width: 330px;" maxlength="50" value="'.$user_email.'"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
 									 </div>';
 								
                             }
@@ -835,8 +861,8 @@ if (empty($submit_action))
 									 <div id="dropdownmenu" style="display:block;">
 								     </div>
 								     <div id="extern">
-										 <input type="hidden" name="ecard[email_recepient]" value="< Empf&auml;nger E-Mail >" />
-										 <input type="hidden" name="ecard[name_recepient]"  value="< Empf&auml;nger Name >" />
+										 <input type="hidden" name="ecard[email_recipient]" value="< Empf&auml;nger E-Mail >" />
+										 <input type="hidden" name="ecard[name_recipient]"  value="< Empf&auml;nger Name >" />
 									 </div>';
                             }
                             echo '
@@ -1034,10 +1060,10 @@ else
 		}			
 		echo '</tr>';
 		$Liste = array();
-		$Liste = getCCRecipients($ecard,$g_preferences['ecard_cc_recipients']);
+		$Liste = getCCRecepients($ecard,$g_preferences['ecard_cc_recipients']);
 		if(count($Liste)>0)
 		{
-			echo '<tr><td>&nbsp;</td></tr><tr><td colspan="2"><b>Zus&auml;tzliche Empf&auml;nger</b></td></tr><tr>';
+			echo '<tr><td>&nbsp;</td></tr><tr><td colspan="2"><b>Zus&auml;tzliche Empf&auml;nger:</b></td></tr><tr>';
 			foreach($Liste as $item)
 			{
 				$i=0;
@@ -1045,7 +1071,7 @@ else
 				{
 					if (!is_integer(($i+1)/2))
 					{
-						echo '<td align="left">'.$item2.'</td>'; 
+						echo '<td align="left">'.$item2.',</td>'; 
 					}
 					else
 					{

@@ -901,18 +901,25 @@ echo "
                         <dl>
                             <dt><label for=\"enable_ecard_module\">Grußkartenmodul aktivieren:</label></dt>
                             <dd>
-                                <input type=\"checkbox\" id=\"enable_ecard_module\" name=\"enable_ecard_module\" ";
-                                if(isset($form_values['enable_ecard_module']) && $form_values['enable_ecard_module'] == 1)
-                                {
-                                    echo " checked=\"checked\" ";
-                                }
-                                echo " value=\"1\" />
+							<select size=\"1\" id=\"enable_ecard_module\" name=\"enable_ecard_module\">
+                                    <option value=\"0\" ";
+                                    if($form_values['enable_ecard_module'] == 0)
+                                    {
+                                        echo " selected=\"selected\" ";
+                                    }
+                                    echo ">Deaktiviert</option>
+                                    <option value=\"1\" ";
+                                    if($form_values['enable_ecard_module'] == 1)
+                                    {
+                                        echo " selected=\"selected\" ";
+                                    }
+                                    echo ">Aktiviert</option>
+                                </select>      
                             </dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Das Grußkartenmodul kann &uuml;ber diese Einstellung komplett deaktiviert werden.
-						Falls der Server keinen Mailversand unterst&uuml;tzt, sollte das Modul deaktiviert werden.
+                        Das Grußkartenmodul kann &uuml;ber diese Einstellung komplett deaktiviert oder aktiviert werden.Falls der Server keinen Mailversand unterst&uuml;tzt, sollte das Modul deaktiviert werden.
                     </li>
                     <li>
                         <dl>
@@ -962,10 +969,10 @@ echo "
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"ecard_cc_recipients\">Max. weitere Empf&auml;nger</label> 
+                            <dt><label for=\"ecard_cc_recepients\">Max. weitere Empf&auml;nger</label> 
 							</dt>
                             <dd>
-                                <input type=\"text\" id=\"ecard_cc_recipients\" name=\"ecard_cc_recipients\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_cc_recipients']. "\" />
+                                <input type=\"text\" id=\"ecard_cc_recepients\" name=\"ecard_cc_recepients\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_cc_recepients']. "\" />
                              </dd>
                         </dl>
                     </li>
@@ -992,7 +999,7 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Hier kann mann das Standart Template festlegen. (Standardwert: Standart)
+                        Hier wird das Standard Template festgelegt.
                     </li>
 					<li>
                         <dl>
@@ -1003,7 +1010,7 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Hier kann mann die Standart Schriftart festlegen. (Standardwert: Comic Sans MS)
+                        Hier wird die Standard Schriftart festgelegt.
                     </li>
 					<li>
                         <dl>
@@ -1014,7 +1021,7 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Hier kann mann die Standart Schriftgr&ouml;&szlig;e festlegen. (Standardwert: 20)
+                       Hier wird die Standard Schriftgr&ouml;&szlig;e festgelegt.
                     </li>
 					<li>
                         <dl>
@@ -1025,7 +1032,7 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Hier kann mann die Standart Schriftfarbe festlegen. (Standardwert: Schwarz)
+                        Hier wird die Standard Schriftfarbe festgelegt.
                     </li>
 					
                 </ul>
