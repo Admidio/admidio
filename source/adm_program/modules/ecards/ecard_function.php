@@ -126,7 +126,7 @@ function getFirstSettings($first_value_array)
 		}
 	}
 }
-function getCCRecepients($ecard,$max_cc_recipients)
+function getCCRecipients($ecard,$max_cc_recipients)
 {
 	$Versandliste = array();
 	for($i=1;$i<=$max_cc_recipients;$i++)
