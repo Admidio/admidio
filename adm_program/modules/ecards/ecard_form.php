@@ -203,7 +203,7 @@ if (! empty($submit_action))
 				array_push($email_versand_liste,array($ecard["name_recipient"],$ecard["email_recipient"]));
 				
 				$ecard_html_data = parseEcardTemplate($ecard,$ecard_data_to_parse,$g_root_path,$g_current_user->getValue("usr_id"),$propotional_size_card['width'],$propotional_size_card['height'],$ecard["name_recipient"],$ecard["email_recipient"]);
-				$result = sendEcard($ecard,$ecard_html_data,$ecard_plain_data,$ecard["name_recipient"],$ecard["email_recipient"],getCCRecepients($ecard,$g_preferences['ecard_cc_recipients']));
+				$result = sendEcard($ecard,$ecard_html_data,$ecard_plain_data,$ecard["name_recipient"],$ecard["email_recipient"],getCCRecipients($ecard,$g_preferences['ecard_cc_recipients']));
 				// Wenn die Grußkarte erfolgreich gesendet wurde 
 				if ($result) 
 				{
@@ -256,7 +256,7 @@ if (! empty($submit_action))
 					array_push($email_versand_liste,array("".$row->first_name." ".$row->last_name."",$row->email));
 					$i++;
 				}
-				$email_versand_liste_all = array_merge($email_versand_liste,getCCRecepients($ecard,$g_preferences['ecard_cc_recipients']));
+				$email_versand_liste_all = array_merge($email_versand_liste,getCCRecipients($ecard,$g_preferences['ecard_cc_recipients']));
 				$ecard_html_data = parseEcardTemplate($ecard,$ecard_data_to_parse,$g_root_path,$g_current_user->getValue("usr_id"),$propotional_size_card['width'],$propotional_size_card['height'],$firstvalue_name,$firstvalue_email);
 				$result = sendEcard($ecard,$ecard_html_data,$ecard_plain_data,$firstvalue_name,$firstvalue_email,$email_versand_liste_all);
 				// Wenn die Grußkarte erfolgreich gesendet wurde 
@@ -1060,7 +1060,7 @@ else
 		}			
 		echo '</tr>';
 		$Liste = array();
-		$Liste = getCCRecepients($ecard,$g_preferences['ecard_cc_recipients']);
+		$Liste = getCCRecipients($ecard,$g_preferences['ecard_cc_recipients']);
 		if(count($Liste)>0)
 		{
 			echo '<tr><td>&nbsp;</td></tr><tr><td colspan="2"><b>Zus&auml;tzliche Empf&auml;nger:</b></td></tr><tr>';
