@@ -145,7 +145,7 @@ $g_layout['header'] = $g_layout['header']. "
         }
 
     </script>";
-    
+
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");
 
 // Html des Modules ausgeben
@@ -192,7 +192,7 @@ if ($_GET['id'] == 0)
             </span>
         </li>
     </ul>";
-    
+
     // Navigation mit Vor- und Zurueck-Buttons
     $base_url = "$g_root_path/adm_program/modules/guestbook/guestbook.php?headline=". $_GET["headline"];
     echo generatePagination($base_url, $num_guestbook, 10, $_GET["start"], TRUE);
@@ -241,7 +241,7 @@ else
                     {
                         echo "
                         <span class=\"iconLink\">
-                            <a href=\"$row->gbo_homepage\" target=\"_blank\"><img src=\"$g_root_path/adm_program/images/globe.png\" 
+                            <a href=\"$row->gbo_homepage\" target=\"_blank\"><img src=\"$g_root_path/adm_program/images/globe.png\"
                             alt=\"Gehe zu $row->gbo_homepage\" title=\"Gehe zu $row->gbo_homepage\" /></a>
                         </span>";
                     }
@@ -251,7 +251,7 @@ else
                     {
                         echo "
                         <span class=\"iconLink\">
-                            <a href=\"mailto:$row->gbo_email\"><img src=\"$g_root_path/adm_program/images/email.png\" 
+                            <a href=\"mailto:$row->gbo_email\"><img src=\"$g_root_path/adm_program/images/email.png\"
                             alt=\"Mail an $row->gbo_email\" title=\"Mail an $row->gbo_email\" /></a>
                         </span>";
                     }
@@ -265,11 +265,11 @@ else
                     {
                             echo "
                             <span class=\"iconLink\">
-                                <a href=\"$g_root_path/adm_program/modules/guestbook/guestbook_new.php?id=$row->gbo_id&amp;headline=". $_GET['headline']. "\"><img 
+                                <a href=\"$g_root_path/adm_program/modules/guestbook/guestbook_new.php?id=$row->gbo_id&amp;headline=". $_GET['headline']. "\"><img
                                 src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
                             </span>
                             <span class=\"iconLink\">
-                                <a href=\"$g_root_path/adm_program/modules/guestbook/guestbook_function.php?id=$row->gbo_id&amp;mode=6\"><img 
+                                <a href=\"$g_root_path/adm_program/modules/guestbook/guestbook_function.php?id=$row->gbo_id&amp;mode=6\"><img
                                 src=\"$g_root_path/adm_program/images/cross.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" /></a>
                             </span>";
                     }
@@ -311,14 +311,14 @@ else
                 $comment_result = $g_db->query($sql);
 
 
-                // Falls Kommentare vorhanden sind...
-                if ($_GET['id'] == 0 && $g_db->num_rows($comment_result) > 0)
+                // Falls Kommentare vorhanden sind und diese noch nicht geladen werden sollen...
+                if ($_GET['id'] == 0 && $g_db->num_rows($comment_result) > 0 && $g_preferences['enable_intial_comments_loading'] == 0)
                 {
                     // Dieses div wird erst gemeinsam mit den Kommentaren ueber Javascript eingeblendet
                     echo "
                     <div id=\"commentsVisible_$row->gbo_id\" class=\"hideCommentLink\" style=\"visibility: hidden; display: none;\">
-                        <span class=\"iconTextLink\">                    
-                            <a href=\"javascript:toggleComments($row->gbo_id)\"><img src=\"$g_root_path/adm_program/images/comments.png\" 
+                        <span class=\"iconTextLink\">
+                            <a href=\"javascript:toggleComments($row->gbo_id)\"><img src=\"$g_root_path/adm_program/images/comments.png\"
                             alt=\"Kommentare ausblenden\" title=\"Kommentare ausblenden\" /></a>
                             <a href=\"javascript:toggleComments($row->gbo_id)\">Kommentare ausblenden</a>
                         </span>
@@ -328,7 +328,7 @@ else
                     echo "
                     <div id=\"commentsInvisible_$row->gbo_id\" class=\"showCommentLink\" style=\"visibility: visible; display: block;\">
                         <span class=\"iconTextLink\">
-                            <a href=\"javascript:toggleComments($row->gbo_id)\"><img src=\"$g_root_path/adm_program/images/comments.png\" 
+                            <a href=\"javascript:toggleComments($row->gbo_id)\"><img src=\"$g_root_path/adm_program/images/comments.png\"
                             alt=\"Kommentare anzeigen\" title=\"Kommentare anzeigen\" /></a>
                             <a href=\"javascript:toggleComments($row->gbo_id)\">". $g_db->num_rows($comment_result). " Kommentar(e) zu diesem Eintrag</a>
                         </span>
@@ -339,6 +339,37 @@ else
                     echo "
                     <div id=\"commentSection_$row->gbo_id\" class=\"commentBoxHidden\"></div>";
                 }
+                // Falls Kommentare vorhanden sind und diese direkt geladen und angezeigt werden sollen..
+                elseif ($_GET['id'] == 0 && $g_db->num_rows($comment_result) > 0 && $g_preferences['enable_intial_comments_loading'] == 1)
+                {
+                    // Dieses div wird direkt angezeigt
+                    echo "
+                    <div id=\"commentsVisible_$row->gbo_id\" class=\"hideCommentLink\" style=\"visibility: visible; display: block;\">
+                        <span class=\"iconTextLink\">
+                            <a href=\"javascript:toggleComments($row->gbo_id)\"><img src=\"$g_root_path/adm_program/images/comments.png\"
+                            alt=\"Kommentare ausblenden\" title=\"Kommentare ausblenden\" /></a>
+                            <a href=\"javascript:toggleComments($row->gbo_id)\">Kommentare ausblenden</a>
+                        </span>
+                    </div>";
+
+                    // Dieses div wird ausgeblendet bzw wieder angezeigt wenn die Kommentare ausgeblendet werden
+                    echo "
+                    <div id=\"commentsInvisible_$row->gbo_id\" class=\"showCommentLink\" style=\"visibility: hidden; display: none;\">
+                        <span class=\"iconTextLink\">
+                            <a href=\"javascript:toggleComments($row->gbo_id)\"><img src=\"$g_root_path/adm_program/images/comments.png\"
+                            alt=\"Kommentare anzeigen\" title=\"Kommentare anzeigen\" /></a>
+                            <a href=\"javascript:toggleComments($row->gbo_id)\">". $g_db->num_rows($comment_result). " Kommentar(e) zu diesem Eintrag</a>
+                        </span>
+                        <div id=\"comments_$row->gbo_id\" style=\"text-align: left;\"></div>
+                    </div>";
+
+                    // Hier ist das div, in das die Kommentare reingesetzt werden
+                    echo "
+                    <div id=\"commentSection_$row->gbo_id\" class=\"commentBoxHidden\" style=\"visibility: visible; display: block;\">";
+                        include("get_comments.php");
+                    echo "
+                    </div>";
+                }
 
 
                 if ($_GET['id'] == 0 && $g_db->num_rows($comment_result) == 0 && ($g_current_user->commentGuestbookRight() || $g_preferences['enable_gbook_comments4all'] == 1) )
@@ -348,7 +379,7 @@ else
                     echo "
                     <div class=\"editInformation\">
                         <span class=\"iconTextLink\">
-                            <a href=\"$load_url\"><img src=\"$g_root_path/adm_program/images/comment_new.png\" 
+                            <a href=\"$load_url\"><img src=\"$g_root_path/adm_program/images/comment_new.png\"
                             alt=\"Kommentieren\" title=\"Kommentieren\" /></a>
                             <a href=\"$load_url\">Einen Kommentar zu diesem Beitrag schreiben.</a>
                         </span>

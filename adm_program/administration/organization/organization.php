@@ -52,16 +52,16 @@ $g_layout['title']  = "Organisationseinstellungen";
 $g_layout['header'] =  "
     <style type=\"text/css\">
         .groupBox {
-            visibility: hidden; 
-            display:    none; 
+            visibility: hidden;
+            display:    none;
             width:      95%;
         }
     </style>
 
     <script type=\"text/javascript\"><!--
         // Dieses Array enthaelt alle IDs, die in den Orga-Einstellungen auftauchen
-        ids = new Array('general', 'register', 'announcement-module', 'download-module', 'photo-module', 
-                        'guestbook-module', 'list-module', 'mail-module', 'ecard-module', 'profile-module', 'dates-module', 
+        ids = new Array('general', 'register', 'announcement-module', 'download-module', 'photo-module',
+                        'guestbook-module', 'list-module', 'mail-module', 'ecard-module', 'profile-module', 'dates-module',
                         'links-module');
 
 
@@ -105,9 +105,9 @@ echo "
          &#124; <a href=\"#\" onclick=\"toggleDiv('list-module');\">Listen</a>
 
          &#124; <a href=\"#\" onclick=\"toggleDiv('mail-module');\">Mails</a>
-		 
-		 &#124; <a href=\"#\" onclick=\"toggleDiv('ecard-module');\">Grußkarten</a>
-         
+
+         &#124; <a href=\"#\" onclick=\"toggleDiv('ecard-module');\">Grußkarten</a>
+
          &#124; <a href=\"#\" onclick=\"toggleDiv('profile-module');\">Profil</a>
 
          &#124; <a href=\"#\" onclick=\"toggleDiv('dates-module');\">Termine</a>
@@ -157,7 +157,7 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Diese Seite ist die Standard-Startseite von Admidio auf die Besucher geleitet werden. 
+                        Diese Seite ist die Standard-Startseite von Admidio auf die Besucher geleitet werden.
                         Der Pfad zu der Seite muss relativ zum Admidio-Verzeichnis angegeben werden.<br />
                         Beispiel: adm_program/index.php
                     </li>
@@ -166,7 +166,7 @@ echo "
                             <dt><label for=\"homepage_login\">Startseite (angemeldete Benutzer):</label></dt>
                             <dd><input type=\"text\" id=\"homepage_login\" name=\"homepage_login\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['homepage_login']. "\" /></dd>
                         </dl>
-                    </li>                                        
+                    </li>
                     <li class=\"smallFontSize\">
                         Auf diese Seite wird der Benutzer geleitet, sobald er sich angemeldet hat.
                         Der Pfad zu der Seite muss relativ zum Admidio-Verzeichnis angegeben werden.<br />
@@ -222,7 +222,7 @@ echo "
                                 </dl>
                             </li>
                             <li class=\"smallFontSize\">
-                                Hier kannst du die &uuml;bergeordnete Organisation festlegen. 
+                                Hier kannst du die &uuml;bergeordnete Organisation festlegen.
                                 Diese haben dann die Berechtigung Termine f&uuml;r die untergeordneten Organisationen anzulegen.
                             </li>";
                         }
@@ -312,7 +312,7 @@ echo "
                     </li>
                     <li class=\"smallFontSize\">
                         Dieser Wert gibt an, nach wieviel Minuten ein inaktiver Benutzer automatisch ausgeloggt wird.
-                        Inaktiv ist ein Benutzer solange er keine Seite des Admidio-Systems aufruft. Diese Einstellung 
+                        Inaktiv ist ein Benutzer solange er keine Seite des Admidio-Systems aufruft. Diese Einstellung
                         wird ignoriert, falls der Benutzer <b>Angemeldet bleiben</b> ausgewählt hat.
                     </li>
                     <li>
@@ -341,14 +341,14 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Eine Stylesheet-Datei aus dem adm_config-Ordner kann hier ausgewählt werden. 
-                        Diese überschreibt die System-Stylesheet-Einstellungen. 
+                        Eine Stylesheet-Datei aus dem adm_config-Ordner kann hier ausgewählt werden.
+                        Diese überschreibt die System-Stylesheet-Einstellungen.
                     </li>
                 </ul>
             </div>
         </div>";
-		
-		
+
+
 
         /**************************************************************************************/
         // Einstellungen Registrierung
@@ -462,12 +462,12 @@ echo "
                                         echo " selected=\"selected\" ";
                                     }
                                     echo ">Nur für registrierte Benutzer</option>
-                                </select>                            
+                                </select>
                             </dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Das Ankündigungsmodul kann &uuml;ber diese Einstellung komplett deaktiviert oder nur für 
+                        Das Ankündigungsmodul kann &uuml;ber diese Einstellung komplett deaktiviert oder nur für
                         registrierte Nutzer freigegeben werden. Haben nur registrierte Nutzer Zugriff, so
                         wird das Modul für Besucher komplett ausgeblendet. Der RSS-Feed ist allerdings
                         für beide Gruppen dann nicht mehr aufrufbar.
@@ -684,7 +684,7 @@ echo "
                         Wie sollen die Bilder in der Gro&szlig;enansicht angezeigt werden?<br/>
                         1) in einem Popupfenster<br/>
                         2) mit Lightbox (der rest der Seite wird ausgegraut)<br/>
-                        3) im gleichen Fenster                  
+                        3) im gleichen Fenster
                     </li>
                 </ul>
             </div>
@@ -722,12 +722,12 @@ echo "
                                         echo "selected=\"selected\" ";
                                     }
                                     echo ">Nur für registrierte Benutzer</option>
-                                </select>                             
+                                </select>
                             </dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Das Gästebuch kann &uuml;ber diese Einstellung komplett deaktiviert oder nur für 
+                        Das Gästebuch kann &uuml;ber diese Einstellung komplett deaktiviert oder nur für
                         registrierte Nutzer freigegeben werden. Haben nur registrierte Nutzer Zugriff, so
                         wird das Modul für Besucher komplett ausgeblendet. Der RSS-Feed ist allerdings
                         für beide Gruppen dann nicht mehr aufrufbar.
@@ -769,6 +769,22 @@ echo "
                     </li>
                     <li>
                         <dl>
+                            <dt><label for=\"enable_intial_comments_loading\">Kommentare direkt anzeigen:</label></dt>
+                            <dd>
+                                <input type=\"checkbox\" id=\"enable_intial_comments_loading\" name=\"enable_intial_comments_loading\" ";
+                                if(isset($form_values['enable_intial_comments_loading']) && $form_values['enable_intial_comments_loading'] == 1)
+                                {
+                                    echo " checked=\"checked\" ";
+                                }
+                                echo " value=\"1\" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Wenn diese Option aktiviert ist, werden beim Aufruf der G&auml;stebuchseite die Kommentare direkt geladen und nicht ausgeblendet.
+                    </li>
+                    <li>
+                        <dl>
                             <dt><label for=\"flooding_protection_time\">Flooding Protection Intervall:</label></dt>
                             <dd>
                                 <input type=\"text\" id=\"flooding_protection_time\" name=\"flooding_protection_time\" size=\"4\" maxlength=\"4\" value=\"". $form_values['flooding_protection_time']. "\" /> Sekunden
@@ -806,7 +822,7 @@ echo "
                     </li>
                     <li class=\"smallFontSize\">
                         Anzahl der Rollen die auf einer Seite in der Listen&uuml;bersicht aufgelistet werden. Gibt es mehr Rollen
-                        so kann man in der Liste bl&auml;ttern. Bei dem Wert 0 werden alle Rollen aufgelistet und die 
+                        so kann man in der Liste bl&auml;ttern. Bei dem Wert 0 werden alle Rollen aufgelistet und die
                         Bl&auml;ttern-Funktion deaktiviert.
                     </li>
                     <li>
@@ -818,9 +834,9 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Anzahl der Teilnehmer die auf einer Seite in einer Liste aufgelistet werden. 
-                        Gibt es mehr Teilnehmer zu einer Rolle, so kann man in der Liste bl&auml;ttern. 
-                        Die Druckvorschau und der Export sind von diesem Wert nicht betroffen. 
+                        Anzahl der Teilnehmer die auf einer Seite in einer Liste aufgelistet werden.
+                        Gibt es mehr Teilnehmer zu einer Rolle, so kann man in der Liste bl&auml;ttern.
+                        Die Druckvorschau und der Export sind von diesem Wert nicht betroffen.
                         Bei dem Wert 0 werden alle Teilnehmer aufgelistet und die Bl&auml;ttern-Funktion deaktiviert.
                     </li>
                 </ul>
@@ -889,10 +905,10 @@ echo "
             </div>
         </div>";
 
-		/**************************************************************************************/
+        /**************************************************************************************/
         //Einstellungen Grußkartenmodul
         /**************************************************************************************/
-		echo"
+        echo"
         <div class=\"groupBox\" id=\"ecard-module\">
             <div class=\"groupBoxHeadline\">Einstellungen Grußkartenmodul&nbsp;&nbsp; </div>
             <div class=\"groupBoxBody\">
@@ -901,7 +917,7 @@ echo "
                         <dl>
                             <dt><label for=\"enable_ecard_module\">Grußkartenmodul aktivieren:</label></dt>
                             <dd>
-							<select size=\"1\" id=\"enable_ecard_module\" name=\"enable_ecard_module\">
+                            <select size=\"1\" id=\"enable_ecard_module\" name=\"enable_ecard_module\">
                                     <option value=\"0\" ";
                                     if($form_values['enable_ecard_module'] == 0)
                                     {
@@ -914,7 +930,7 @@ echo "
                                         echo " selected=\"selected\" ";
                                     }
                                     echo ">Aktiviert</option>
-                                </select>      
+                                </select>
                             </dd>
                         </dl>
                     </li>
@@ -925,52 +941,52 @@ echo "
                         <dl>
                             <dt><label for=\"ecard_view_scale\">Skalierung Vorschaubild:</label></dt>
                             <dd>
-								<table summary=\"Skalierung Vorschaubild\" border=\"0\">
-									<tr>
-										<td>Breite: </td>
-										<td><input type=\"text\" id=\"ecard_view_width\" name=\"ecard_view_width\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_view_width']. "\" /></td>
-										<td>Pixel</td>
-									</tr>
-									<tr>
-										<td>Höhe: </td>
-										<td><input type=\"text\" id=\"ecard_view_height\" name=\"ecard_view_height\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_view_height']. "\" /></td>
-										<td>Pixel</td>
-									</tr>
-								</table>
+                                <table summary=\"Skalierung Vorschaubild\" border=\"0\">
+                                    <tr>
+                                        <td>Breite: </td>
+                                        <td><input type=\"text\" id=\"ecard_view_width\" name=\"ecard_view_width\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_view_width']. "\" /></td>
+                                        <td>Pixel</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Höhe: </td>
+                                        <td><input type=\"text\" id=\"ecard_view_height\" name=\"ecard_view_height\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_view_height']. "\" /></td>
+                                        <td>Pixel</td>
+                                    </tr>
+                                </table>
                              </dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
                         Hier kann festgelegt werden auf welchen Wert die Breite und H&ouml;he des Vorschau-Bildes skaliert werden soll.
-						(Standardwert: Breite 250 | H&ouml;he 250)
+                        (Standardwert: Breite 250 | H&ouml;he 250)
                     </li>
                     <li>
                         <dl>
                             <dt><label for=\"ecard_card_picture_scale\">Skalierung Grußkartenbild:</label></dt>
                             <dd>
-								<table summary=\"Skalierung Grußkartenbild\" border=\"0\">
-									<tr>
-										<td>Breite: </td>
-                                		<td><input type=\"text\" id=\"ecard_card_picture_width\" name=\"ecard_card_picture_width\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_card_picture_width']. "\" /></td>
-										<td>Pixel</td>
-									</tr>
-									<tr>
-										<td>Höhe: </td>
-										<td><input type=\"text\" id=\"ecard_card_picture_height\" name=\"ecard_card_picture_height\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_card_picture_height']. "\" /></td>
-										<td>Pixel</td>
-									</tr>
-								</table>
+                                <table summary=\"Skalierung Grußkartenbild\" border=\"0\">
+                                    <tr>
+                                        <td>Breite: </td>
+                                        <td><input type=\"text\" id=\"ecard_card_picture_width\" name=\"ecard_card_picture_width\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_card_picture_width']. "\" /></td>
+                                        <td>Pixel</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Höhe: </td>
+                                        <td><input type=\"text\" id=\"ecard_card_picture_height\" name=\"ecard_card_picture_height\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_card_picture_height']. "\" /></td>
+                                        <td>Pixel</td>
+                                    </tr>
+                                </table>
                              </dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
                        Hier kann festgelegt werden auf welchen Wert die Breite und H&ouml;he des Grußkarten-Bildes skaliert werden soll.
-					   (Standardwert: Breite 400 | H&ouml;he 250)
+                       (Standardwert: Breite 400 | H&ouml;he 250)
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"ecard_cc_recepients\">Max. weitere Empf&auml;nger</label> 
-							</dt>
+                            <dt><label for=\"ecard_cc_recepients\">Max. weitere Empf&auml;nger</label>
+                            </dt>
                             <dd>
                                 <input type=\"text\" id=\"ecard_cc_recepients\" name=\"ecard_cc_recepients\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_cc_recepients']. "\" />
                              </dd>
@@ -990,29 +1006,29 @@ echo "
                     <li class=\"smallFontSize\">
                         Hier wird die max. Zeichenlänge des Mitteilungstextes festgelegt. (Standardwert: 150)
                     </li>
-					<li>
+                    <li>
                         <dl>
                             <dt><label for=\"ecard_text_length\">Template:</label></dt>
                             <dd>";
-                                echo getMenueSettings(getfilenames('../../layout/ecard_templates/'),'ecard_template',$form_values['ecard_template'],'120','false','false'); 
+                                echo getMenueSettings(getfilenames('../../layout/ecard_templates/'),'ecard_template',$form_values['ecard_template'],'120','false','false');
                              echo "</dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
                         Hier wird das Standard Template festgelegt.
                     </li>
-					<li>
+                    <li>
                         <dl>
                             <dt><label for=\"ecard_text_length\">Schriftart:</label></dt>
                             <dd>";
-                                echo getMenueSettings(getElementsFromFile('../../system/schriftarten.txt'),'ecard_text_font',$form_values['ecard_text_font'],'120','true','false'); 
+                                echo getMenueSettings(getElementsFromFile('../../system/schriftarten.txt'),'ecard_text_font',$form_values['ecard_text_font'],'120','true','false');
                              echo "</dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
                         Hier wird die Standard Schriftart festgelegt.
                     </li>
-					<li>
+                    <li>
                         <dl>
                             <dt><label for=\"ecard_text_length\">Schriftgr&ouml;&szlig;e:</label></dt>
                             <dd>";
@@ -1023,7 +1039,7 @@ echo "
                     <li class=\"smallFontSize\">
                        Hier wird die Standard Schriftgr&ouml;&szlig;e festgelegt.
                     </li>
-					<li>
+                    <li>
                         <dl>
                             <dt><label for=\"ecard_text_color\">Schriftfarbe:</label></dt>
                             <dd>";
@@ -1034,102 +1050,102 @@ echo "
                     <li class=\"smallFontSize\">
                         Hier wird die Standard Schriftfarbe festgelegt.
                     </li>
-					
+
                 </ul>
             </div>
         </div>";
-		function getfilenames($directory) 
-		{
-			$array_files	= array();
-			$i				= 0;
-			if($curdir = opendir($directory)) 
-			{
-				while($file = readdir($curdir)) 
-				{
-					$string = split('_',$file);
-					if($file != '.' && $file != '..' && strcmp($string[0],$file) != "0") 
-					{	
-						$array_files[$i] = $file;
-						$i++;
-					}
-				}
-			}
-			closedir($curdir);
-			return $array_files;
-		}
+        function getfilenames($directory)
+        {
+            $array_files    = array();
+            $i                = 0;
+            if($curdir = opendir($directory))
+            {
+                while($file = readdir($curdir))
+                {
+                    $string = split('_',$file);
+                    if($file != '.' && $file != '..' && strcmp($string[0],$file) != "0")
+                    {
+                        $array_files[$i] = $file;
+                        $i++;
+                    }
+                }
+            }
+            closedir($curdir);
+            return $array_files;
+        }
 
-		// oeffnet ein File und gibt alle Zeilen als Array zurueck
-		// Uebergabe:
-		//			$filepath .. Der Pfad zu dem File
-		function getElementsFromFile($filepath)
-		{
-			$elementsFromFile = array();
-			$list = fopen($filepath, "r");
-			while (!feof($list))
-			{
-				array_push($elementsFromFile,trim(fgets($list)));
-			}
-            return $elementsFromFile;   
-		}
-		
-		// gibt ein Menue fuer die Einstellungen des Grußkartenmoduls aus
-		// Uebergabe: 
-		// 			$data_array			.. Daten fuer die Einstellungen in einem Array
-		//			$name				.. Name des Drop down Menues 
-		//			$first_value		.. der Standart Wert oder eingestellte Wert vom Benutzer
-		//			$width				.. die Groeße des Menues
-		//			$schowfont			.. wenn gesetzt werden   die Menue Eintraege mit der übergebenen Schriftart dargestellt   (Darstellung der Schriftarten)
-		//			$showcolor			.. wenn gesetzt bekommen die Menue Eintraege einen farbigen Hintergrund (Darstellung der Farben)
-		function getMenueSettings($data_array,$name,$first_value,$width,$schowfont,$showcolor)
-		{
-			$temp_data = "";
-			$temp_data .=  '<select size="1" id='.$name.' name='.$name.' style="width:'.$width.'px;">';
-			for($i=0; $i<count($data_array);$i++)
-			{
-				$temp = explode(".", $data_array[$i]);
-				$temp_name = explode("_", $temp[0]);
-				$name = "";
-				if(isset($temp_name[1]) && $temp_name[1] != "" && is_numeric($temp_name[1]))
-				{
-					$name = $temp_name[1].". Template";
-				}
-				else if(isset($temp_name[1]) && $temp_name[1] != "" && !is_numeric($temp_name[1]))
-				{
-					$name = ucfirst($temp_name[1]);
-				}
-				else
-				{
-					$name = $temp_name[0];
-				}
-				
-				if (strcmp($data_array[$i],$first_value) == 0 && $schowfont != "true" && $showcolor != "true")
-				{
-					$temp_data .= '<option value="'.$data_array[$i].'" selected=\'selected\'>'.$name.'</option>';
-				}
-				else if($schowfont != "true" && $showcolor != "true")
-				{
-					$temp_data .= '<option value="'.$data_array[$i].'">'.$name.'</option>';
-				}
-				else if (strcmp($data_array[$i],$first_value) == 0 && $showcolor != "true")
-				{
-					$temp_data .= '<option value="'.$data_array[$i].'" selected=\'selected\' style="font-family:'.$name.';">'.$name.'</option>';
-				}
-				else if($showcolor != "true")
-				{
-					$temp_data .= '<option value="'.$data_array[$i].'" style="font-family:'.$name.';">'.$name.'</option>';
-				}
-				else if (strcmp($data_array[$i],$first_value) == 0)
-				{
-					$temp_data .= '<option value="'.$data_array[$i].'" selected=\'selected\' style="background-color:'.$name.';">'.$name.'</option>';
-				}
-				else
-				{
-					$temp_data .= '<option value="'.$data_array[$i].'" style="background-color:'.$name.';">'.$name.'</option>';
-				}
-			}
-			$temp_data .='</select>';
-			return $temp_data;
-		}
+        // oeffnet ein File und gibt alle Zeilen als Array zurueck
+        // Uebergabe:
+        //            $filepath .. Der Pfad zu dem File
+        function getElementsFromFile($filepath)
+        {
+            $elementsFromFile = array();
+            $list = fopen($filepath, "r");
+            while (!feof($list))
+            {
+                array_push($elementsFromFile,trim(fgets($list)));
+            }
+            return $elementsFromFile;
+        }
+
+        // gibt ein Menue fuer die Einstellungen des Grußkartenmoduls aus
+        // Uebergabe:
+        //             $data_array            .. Daten fuer die Einstellungen in einem Array
+        //            $name                .. Name des Drop down Menues
+        //            $first_value        .. der Standart Wert oder eingestellte Wert vom Benutzer
+        //            $width                .. die Groeße des Menues
+        //            $schowfont            .. wenn gesetzt werden   die Menue Eintraege mit der übergebenen Schriftart dargestellt   (Darstellung der Schriftarten)
+        //            $showcolor            .. wenn gesetzt bekommen die Menue Eintraege einen farbigen Hintergrund (Darstellung der Farben)
+        function getMenueSettings($data_array,$name,$first_value,$width,$schowfont,$showcolor)
+        {
+            $temp_data = "";
+            $temp_data .=  '<select size="1" id='.$name.' name='.$name.' style="width:'.$width.'px;">';
+            for($i=0; $i<count($data_array);$i++)
+            {
+                $temp = explode(".", $data_array[$i]);
+                $temp_name = explode("_", $temp[0]);
+                $name = "";
+                if(isset($temp_name[1]) && $temp_name[1] != "" && is_numeric($temp_name[1]))
+                {
+                    $name = $temp_name[1].". Template";
+                }
+                else if(isset($temp_name[1]) && $temp_name[1] != "" && !is_numeric($temp_name[1]))
+                {
+                    $name = ucfirst($temp_name[1]);
+                }
+                else
+                {
+                    $name = $temp_name[0];
+                }
+
+                if (strcmp($data_array[$i],$first_value) == 0 && $schowfont != "true" && $showcolor != "true")
+                {
+                    $temp_data .= '<option value="'.$data_array[$i].'" selected=\'selected\'>'.$name.'</option>';
+                }
+                else if($schowfont != "true" && $showcolor != "true")
+                {
+                    $temp_data .= '<option value="'.$data_array[$i].'">'.$name.'</option>';
+                }
+                else if (strcmp($data_array[$i],$first_value) == 0 && $showcolor != "true")
+                {
+                    $temp_data .= '<option value="'.$data_array[$i].'" selected=\'selected\' style="font-family:'.$name.';">'.$name.'</option>';
+                }
+                else if($showcolor != "true")
+                {
+                    $temp_data .= '<option value="'.$data_array[$i].'" style="font-family:'.$name.';">'.$name.'</option>';
+                }
+                else if (strcmp($data_array[$i],$first_value) == 0)
+                {
+                    $temp_data .= '<option value="'.$data_array[$i].'" selected=\'selected\' style="background-color:'.$name.';">'.$name.'</option>';
+                }
+                else
+                {
+                    $temp_data .= '<option value="'.$data_array[$i].'" style="background-color:'.$name.';">'.$name.'</option>';
+                }
+            }
+            $temp_data .='</select>';
+            return $temp_data;
+        }
         /**************************************************************************************/
         //Einstellungen Profilmodul
         /**************************************************************************************/
@@ -1186,7 +1202,7 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Es wird ein Kasten mit allen Rollen dieser Organisation angezeigt, bei denen der Benutzer Mitglied <b>ist</b>. 
+                        Es wird ein Kasten mit allen Rollen dieser Organisation angezeigt, bei denen der Benutzer Mitglied <b>ist</b>.
                         Dazu werden die entsprechenden Berechtigungen und das Eintrittsdatum aufgelistet.
                     </li>
                     <li>
@@ -1203,11 +1219,11 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Es wird ein Kasten mit allen Rollen dieser Organisation angezeigt, bei denen der Benutzer Mitglied <b>war</b>. 
+                        Es wird ein Kasten mit allen Rollen dieser Organisation angezeigt, bei denen der Benutzer Mitglied <b>war</b>.
                         Dazu wird das entsprechende Eintritts- und Austrittsdatum angezeigt.
                     </li>";
-                    
-                    if($g_current_organization->getValue("org_org_id_parent") > 0 
+
+                    if($g_current_organization->getValue("org_org_id_parent") > 0
                     || $g_current_organization->hasChildOrganizations() )
                     {
                         echo "
@@ -1271,7 +1287,7 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Das Terminmodul kann &uuml;ber diese Einstellung komplett deaktiviert oder nur für 
+                        Das Terminmodul kann &uuml;ber diese Einstellung komplett deaktiviert oder nur für
                         registrierte Nutzer freigegeben werden. Haben nur registrierte Nutzer Zugriff, so
                         wird das Modul für Besucher komplett ausgeblendet. Der RSS-Feed ist allerdings
                         für beide Gruppen dann nicht mehr aufrufbar.
