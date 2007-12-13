@@ -125,6 +125,11 @@ if(strlen($_POST['flooding_protection_time']) == 0)
     $_POST['flooding_protection_time'] = 0;
 }
 
+if(isset($_POST['enable_intial_comments_loading']) == false)
+{
+    $_POST['enable_intial_comments_loading'] = 0;
+}
+
 if(isset($_POST['enable_mail_module']) == false)
 {
     $_POST['enable_mail_module'] = 0;
