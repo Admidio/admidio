@@ -188,6 +188,8 @@ $_SESSION['navigation']->addUrl(CURRENT_URL);
 $g_layout['title'] = "Profil";
 $g_layout['header'] = "
     <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/ajax.js\"></script>
+    <script src=\"$g_root_path/adm_program/libs/script.aculo.us/prototype.js\" type=\"text/javascript\"></script>
+    <script src=\"$g_root_path/adm_program/libs/script.aculo.us/scriptaculous.js?load=effects\" type=\"text/javascript\"></script>
     <script type=\"text/javascript\" src=\"$g_root_path/adm_program/modules/profile/profile.js\"></script>";
 
 require(SERVER_PATH. "/adm_program/layout/overall_header.php");
@@ -513,7 +515,7 @@ echo "
                             <div style=\"text-align: right;\">
                                 <span class=\"iconLink\">
                                     <a href=\"$g_root_path/adm_program/modules/profile/roles.php?user_id=$a_user_id\"><img
-                                    src=\"$g_root_path/adm_program/images/edit.png\" title=\"Rollen &auml;ndern\" alt=\"Rollen &auml;ndern\" /></a>
+                                    src=\"$g_root_path/adm_program/images/edit.png\" title=\"Rollen ändern\" alt=\"Rollen ändern\" /></a>
                                 </span>
                             </div>";
                         }
@@ -534,7 +536,7 @@ echo "
                                 echo "<li id=\"role_". $row['mem_rol_id']. "\">
                                     <dl>
                                         <dt>
-                                            ". $row['cat_name']. " - ". $row['rol_name'];
+                                            ". $row['cat_name']. " - <a href=\"$g_root_path/adm_program/modules/lists/lists_show.php?type=address&mode=html&rol_id=". $row['mem_rol_id']. "\">". $row['rol_name']. "</a>";
                                                 if($row['mem_leader'] == 1)
                                                 {
                                                     echo " - Leiter";
@@ -545,7 +547,7 @@ echo "
                                             if($row['rol_assign_roles'] == 1)
                                             {
                                                 echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/wand.png\"
-                                                alt=\"Rollen verwalten und zuordnen\" title=\"Rollen verwalten und zuordnen\" />";
+                                                alt=\"Rollen anlegen, bearbeiten, löschen und zuordnen\" title=\"Rollen anlegen, bearbeiten, löschen und zuordnen\" />";
                                             }
                                             if($row['rol_approve_users'] == 1)
                                             {
@@ -565,7 +567,7 @@ echo "
                                             if($row['rol_announcements'] == 1 && $g_preferences['enable_announcements_module'] > 0)
                                             {
                                                 echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/note.png\"
-                                                alt=\"Ank&uuml;ndigungen anlegen und bearbeiten\" title=\"Ank&uuml;ndigungen anlegen und bearbeiten\" />";
+                                                alt=\"Ankündigungen anlegen und bearbeiten\" title=\"Ankündigungen anlegen und bearbeiten\" />";
                                             }
                                             if($row['rol_dates'] == 1 && $g_preferences['enable_dates_module'] > 0)
                                             {
@@ -585,12 +587,12 @@ echo "
                                             if($row['rol_guestbook'] == 1 && $g_preferences['enable_guestbook_module'] > 0)
                                             {
                                                 echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/comment.png\"
-                                                alt=\"G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen\" title=\"G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen\" />";
+                                                alt=\"Gästebucheinträge bearbeiten und l&ouml;schen\" title=\"Gästebucheinträge bearbeiten und l&ouml;schen\" />";
                                             }
                                             if($row['rol_guestbook_comments'] == 1 && $g_preferences['enable_guestbook_module'] > 0)
                                             {
                                                 echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/comments.png\"
-                                                alt=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\" title=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\" />";
+                                                alt=\"Kommentare zu Gästebucheinträgen anlegen\" title=\"Kommentare zu Gästebucheinträgen anlegen\" />";
                                             }
                                             if($row['rol_weblinks'] == 1 && $g_preferences['enable_weblinks_module'] > 0)
                                             {
@@ -677,7 +679,7 @@ echo "
                                 <li id=\"former_role_". $row['mem_rol_id']. "\">
                                     <dl>
                                         <dt>".
-                                            $row['cat_name']. " - ". $row['rol_name'];
+                                            $row['cat_name']. " - <a href=\"$g_root_path/adm_program/modules/lists/lists_show.php?type=address&mode=html&rol_id=". $row['mem_rol_id']. "\">". $row['rol_name']. "</a>";
                                             if($row['mem_leader'] == 1)
                                             {
                                                 echo " - Leiter";
@@ -774,5 +776,7 @@ if(isset($_GET['user_id']) == true)
 }
 
 require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+
+echo "<div onclick=\"new Effect.Highlight(this)\">Test</div>";
 
 ?>

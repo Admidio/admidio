@@ -9,16 +9,14 @@
  *****************************************************************************/
  
 var resObject     = createXMLHttpRequest();
-var list;
-var element
+var id;
 
 function deleteFormerRole(rol_id, rol_name, usr_id, root_path) 
 {
     var msg_result = confirm('Willst du den Verweis auf die ehemalige Mitgliedschaft bei der Rolle ' + rol_name + ' wirklich entfernen ?');
     if(msg_result)
     {
-        list    = document.getElementById('former_role_list');
-        element = document.getElementById('former_role_' + rol_id);
+        id      = 'former_role_' + rol_id;
 
         resObject.open('POST', root_path + '/adm_program/modules/profile/profile_function.php', true);
         resObject.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -38,8 +36,7 @@ function deleteRole(rol_id, rol_name, rol_valid, usr_id, cat_name, mem_begin, me
         var leader    = '';
         var webmaster = '';
         
-        list          = document.getElementById('role_list');
-        element       = document.getElementById('role_' + rol_id);
+        id      = 'role_' + rol_id;
 
         if(mem_leader == 1)
         {
@@ -50,8 +47,8 @@ function deleteRole(rol_id, rol_name, rol_valid, usr_id, cat_name, mem_begin, me
             webmaster = ' <span class=\"iconLink\"><a href=\"javascript:deleteFormerRole(' + rol_id + ', \'' + rol_name + '\', \'' + usr_id + '\', \'' + root_path + '\')\"><img ' +
             'src=\"' + root_path + '/adm_program/images/cross.png\" alt=\"Rolle löschen\" title=\"Rolle löschen\"></a></span>';
         }
-        var html = '<dl><dt>' + cat_name + ' - ' + rol_name + leader +
-                    '</dt><dd>vom ' + mem_begin + ' bis ' + 
+        var html = '<dl><dt>' + cat_name + ' - ' + '<a href=\"' + root_path + '/adm_program/modules/lists/lists_show.php?type=address&mode=html&rol_id=' + rol_id + '\">' + rol_name + '</a>' + 
+                    leader + '</dt><dd>vom ' + mem_begin + ' bis ' + 
                     end_date + webmaster + '</dd></dl>';
         
         // Listenelement mit Unterelemten einfuegen
@@ -71,6 +68,6 @@ function handleResponse()
 {
     if(resObject.readyState == 4) 
     {
-        list.removeChild(element);
+    	Effect.DropOut(id);
     }
 }
