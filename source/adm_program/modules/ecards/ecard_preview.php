@@ -25,13 +25,9 @@ if(isset($_GET['height']))
 {
 	$propotional_height = $_GET['height'];
 }
-if(isset($_GET['tmplfolder']))
-{
-	$tmpl_folder		= $_GET['tmplfolder'];
-}
 
 getVars();
-list($error,$ecard_data_to_parse) = getEcardTemplate($ecard["template_name"],$tmpl_folder);
+list($error,$ecard_data_to_parse) = getEcardTemplate($ecard["template_name"], THEME_SERVER_PATH. "/ecard_templates");
 if ($error) 
 {
 	echo "ERROR - Seite nicht gefunden!";

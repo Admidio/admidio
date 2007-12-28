@@ -146,7 +146,7 @@ $g_layout['header'] = $g_layout['header']. "
 
     </script>";
 
-require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
 echo "
@@ -187,7 +187,7 @@ if ($_GET['id'] == 0)
         <li>
             <span class=\"iconTextLink\">
                 <a href=\"$g_root_path/adm_program/modules/guestbook/guestbook_new.php?headline=". $_GET["headline"]. "\"><img
-                src=\"$g_root_path/adm_program/images/add.png\" alt=\"Neuen Eintrag anlegen\" /></a>
+                src=\"". THEME_PATH. "/icons/add.png\" alt=\"Neuen Eintrag anlegen\" /></a>
                 <a href=\"$g_root_path/adm_program/modules/guestbook/guestbook_new.php?headline=". $_GET["headline"]. "\">Neuen Eintrag anlegen</a>
             </span>
         </li>
@@ -204,7 +204,7 @@ else
         <li>
             <span class=\"iconTextLink\">
                 <a href=\"". $_SESSION['navigation']->getPreviousUrl() ."\"><img
-                src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück zum Gästebuch\" /></a>
+                src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück zum Gästebuch\" /></a>
                 <a href=\"". $_SESSION['navigation']->getPreviousUrl() ."\">Zurück zum Gästebuch</a>
             </span>
         </li>
@@ -233,7 +233,7 @@ else
         <div class=\"boxLayout\">
             <div class=\"boxHead\">
                 <div class=\"boxHeadLeft\">
-                    <img src=\"$g_root_path/adm_program/images/comment.png\" alt=\"$row->gbo_name\" />
+                    <img src=\"". THEME_PATH. "/icons/comment.png\" alt=\"$row->gbo_name\" />
                     $row->gbo_name";
 
                     // Falls eine Homepage des Users angegeben wurde, soll der Link angezeigt werden...
@@ -241,7 +241,7 @@ else
                     {
                         echo "
                         <span class=\"iconLink\">
-                            <a href=\"$row->gbo_homepage\" target=\"_blank\"><img src=\"$g_root_path/adm_program/images/globe.png\"
+                            <a href=\"$row->gbo_homepage\" target=\"_blank\"><img src=\"". THEME_PATH. "/icons/globe.png\"
                             alt=\"Gehe zu $row->gbo_homepage\" title=\"Gehe zu $row->gbo_homepage\" /></a>
                         </span>";
                     }
@@ -251,7 +251,7 @@ else
                     {
                         echo "
                         <span class=\"iconLink\">
-                            <a href=\"mailto:$row->gbo_email\"><img src=\"$g_root_path/adm_program/images/email.png\"
+                            <a href=\"mailto:$row->gbo_email\"><img src=\"". THEME_PATH. "/icons/email.png\"
                             alt=\"Mail an $row->gbo_email\" title=\"Mail an $row->gbo_email\" /></a>
                         </span>";
                     }
@@ -266,11 +266,11 @@ else
                             echo "
                             <span class=\"iconLink\">
                                 <a href=\"$g_root_path/adm_program/modules/guestbook/guestbook_new.php?id=$row->gbo_id&amp;headline=". $_GET['headline']. "\"><img
-                                src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
+                                src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
                             </span>
                             <span class=\"iconLink\">
                                 <a href=\"$g_root_path/adm_program/modules/guestbook/guestbook_function.php?id=$row->gbo_id&amp;mode=6\"><img
-                                src=\"$g_root_path/adm_program/images/cross.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" /></a>
+                                src=\"". THEME_PATH. "/icons/cross.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" /></a>
                             </span>";
                     }
 
@@ -318,7 +318,7 @@ else
                     echo "
                     <div id=\"commentsVisible_$row->gbo_id\" class=\"hideCommentLink\" style=\"visibility: hidden; display: none;\">
                         <span class=\"iconTextLink\">
-                            <a href=\"javascript:toggleComments($row->gbo_id)\"><img src=\"$g_root_path/adm_program/images/comments.png\"
+                            <a href=\"javascript:toggleComments($row->gbo_id)\"><img src=\"". THEME_PATH. "/icons/comments.png\"
                             alt=\"Kommentare ausblenden\" title=\"Kommentare ausblenden\" /></a>
                             <a href=\"javascript:toggleComments($row->gbo_id)\">Kommentare ausblenden</a>
                         </span>
@@ -328,7 +328,7 @@ else
                     echo "
                     <div id=\"commentsInvisible_$row->gbo_id\" class=\"showCommentLink\" style=\"visibility: visible; display: block;\">
                         <span class=\"iconTextLink\">
-                            <a href=\"javascript:toggleComments($row->gbo_id)\"><img src=\"$g_root_path/adm_program/images/comments.png\"
+                            <a href=\"javascript:toggleComments($row->gbo_id)\"><img src=\"". THEME_PATH. "/icons/comments.png\"
                             alt=\"Kommentare anzeigen\" title=\"Kommentare anzeigen\" /></a>
                             <a href=\"javascript:toggleComments($row->gbo_id)\">". $g_db->num_rows($comment_result). " Kommentar(e) zu diesem Eintrag</a>
                         </span>
@@ -346,7 +346,7 @@ else
                     echo "
                     <div id=\"commentsVisible_$row->gbo_id\" class=\"hideCommentLink\" style=\"visibility: visible; display: block;\">
                         <span class=\"iconTextLink\">
-                            <a href=\"javascript:toggleComments($row->gbo_id)\"><img src=\"$g_root_path/adm_program/images/comments.png\"
+                            <a href=\"javascript:toggleComments($row->gbo_id)\"><img src=\"". THEME_PATH. "/icons/comments.png\"
                             alt=\"Kommentare ausblenden\" title=\"Kommentare ausblenden\" /></a>
                             <a href=\"javascript:toggleComments($row->gbo_id)\">Kommentare ausblenden</a>
                         </span>
@@ -356,7 +356,7 @@ else
                     echo "
                     <div id=\"commentsInvisible_$row->gbo_id\" class=\"showCommentLink\" style=\"visibility: hidden; display: none;\">
                         <span class=\"iconTextLink\">
-                            <a href=\"javascript:toggleComments($row->gbo_id)\"><img src=\"$g_root_path/adm_program/images/comments.png\"
+                            <a href=\"javascript:toggleComments($row->gbo_id)\"><img src=\"". THEME_PATH. "/icons/comments.png\"
                             alt=\"Kommentare anzeigen\" title=\"Kommentare anzeigen\" /></a>
                             <a href=\"javascript:toggleComments($row->gbo_id)\">". $g_db->num_rows($comment_result). " Kommentar(e) zu diesem Eintrag</a>
                         </span>
@@ -379,7 +379,7 @@ else
                     echo "
                     <div class=\"editInformation\">
                         <span class=\"iconTextLink\">
-                            <a href=\"$load_url\"><img src=\"$g_root_path/adm_program/images/comment_new.png\"
+                            <a href=\"$load_url\"><img src=\"". THEME_PATH. "/icons/comment_new.png\"
                             alt=\"Kommentieren\" title=\"Kommentieren\" /></a>
                             <a href=\"$load_url\">Einen Kommentar zu diesem Beitrag schreiben.</a>
                         </span>
@@ -408,6 +408,6 @@ if ($g_db->num_rows($guestbook_result) > 2)
     echo generatePagination($base_url, $num_guestbook, 10, $_GET["start"], TRUE);
 }
 
-require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+require(THEME_SERVER_PATH. "/overall_footer.php");
 
 ?>

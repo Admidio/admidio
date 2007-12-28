@@ -213,7 +213,6 @@ $count_valid_users = $row[0];
 // Html-Kopf ausgeben
 $g_layout['title']  = "Mitglieder zuordnen";
 $g_layout['header'] = "
-    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/show_hide_block.js\"></script>
     <script type=\"text/javascript\"><!--
         function markMember(element)
         {
@@ -292,7 +291,7 @@ $g_layout['header'] = "
     }
     --></script>";
 
-require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+require(THEME_SERVER_PATH. "/overall_header.php");
 echo "
 <h1>Mitglieder zuordnen</h1>
 <h3>Rolle ". $role->getValue("rol_name"). "</h3>";
@@ -307,7 +306,7 @@ if(($count_valid_users != $user_anzahl || $restrict == "u")
             echo "<li>
                 <span class=\"iconTextLink\">
                     <a href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=u\"><img
-                    src=\"$g_root_path/adm_program/images/group.png\" alt=\"Alle Benutzer anzeigen\" /></a>
+                    src=\"". THEME_PATH. "/icons/group.png\" alt=\"Alle Benutzer anzeigen\" /></a>
                     <a href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=u\">Alle Benutzer anzeigen</a>
                 </span>
             </li>";
@@ -318,7 +317,7 @@ if(($count_valid_users != $user_anzahl || $restrict == "u")
             echo "<li>
                 <span class=\"iconTextLink\">
                     <a href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=m\"><img
-                    src=\"$g_root_path/adm_program/images/user.png\" alt=\"Nur Mitglieder anzeigen\" /></a>
+                    src=\"". THEME_PATH. "/icons/user.png\" alt=\"Nur Mitglieder anzeigen\" /></a>
                     <a href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=m\">Nur Mitglieder anzeigen</a>
                 </span>
             </li>";
@@ -329,7 +328,7 @@ if(($count_valid_users != $user_anzahl || $restrict == "u")
             echo"<li>
                 <span class=\"iconTextLink\">
                     <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?new_user=1\"><img
-                    src=\"$g_root_path/adm_program/images/add.png\" alt=\"Login\" /></a>
+                    src=\"". THEME_PATH. "/icons/add.png\" alt=\"Login\" /></a>
                     <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?new_user=1\">Benutzer anlegen</a>
                 </span>
             </li>";
@@ -483,8 +482,8 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
                 echo "<tbody id=\"head_$block_id\">
                     <tr>
                         <td class=\"tableSubHeader\" colspan=\"6\">
-                            <a href=\"javascript:showHideBlock('$block_id','$g_root_path')\"><img class=\"iconShowHide\"
-                            id=\"img_$block_id\" src=\"$g_root_path/adm_program/images/triangle_open.gif\" alt=\"ausblenden\" /></a>$letter_string
+                            <a href=\"javascript:showHideBlock('$block_id','". THEME_PATH. "')\"><img class=\"iconShowHide\"
+                            id=\"img_$block_id\" src=\"". THEME_PATH. "/icons/triangle_open.gif\" alt=\"ausblenden\" /></a>$letter_string
                         </td>
                     </tr>
                 </tbody>
@@ -509,7 +508,7 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
             
             echo"
             <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
-                <td><img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/note.png\" alt=\"Userinformationen\" title=\"$user_text\" /></td>
+                <td><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/note.png\" alt=\"Userinformationen\" title=\"$user_text\" /></td>
                 <td>". $user['last_name']."</td>
                 <td>". $user['first_name']."</td>
 
@@ -620,7 +619,7 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
                             .$user['phone'];
                 echo"
                 <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
-                    <td><img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/note.png\" alt=\"Userinformationen\" title=\"$user_text\" /></td>
+                    <td><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/note.png\" alt=\"Userinformationen\" title=\"$user_text\" /></td>
                     <td>". $user['last_name']."</td>
                     <td>". $user['first_name']."</td>
                     <td>";
@@ -665,11 +664,11 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
     //Buttons schliessen oder Speichern
     echo"<div class=\"formSubmit\">
         <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
-                <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück\" />
+                <img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" />
                 &nbsp;Zurück</button>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <button name=\"speichern\" type=\"submit\" value=\"speichern\">
-            <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\" />&nbsp;Speichern
+            <img src=\"". THEME_PATH. "/icons/disk.png\" alt=\"Speichern\" />&nbsp;Speichern
         </button>
     </div>
 </form>";
@@ -683,6 +682,6 @@ if($g_db->num_rows($result_user)>=50)
     </div>";
 }
    
-require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+require(THEME_SERVER_PATH. "/overall_footer.php");
 
 ?>

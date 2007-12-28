@@ -213,7 +213,7 @@ if($g_preferences['enable_rss'] == 1)
     href=\"$g_root_path/adm_program/modules/announcements/rss_announcements.php\" />";
 };
 
-require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+require(THEME_SERVER_PATH. "/overall_header.php");
 echo "
 <form action=\"$g_root_path/adm_program/modules/mail/mail_send.php?";
     // usr_id wird mit GET uebergeben,
@@ -258,7 +258,7 @@ echo "
                                 echo "<select size=\"1\" id=\"rol_id\" name=\"rol_id\">";
                                 if ($form_values['rol_id'] == "")
                                 {
-                                    echo "<option value=\"\" selected=\"selected\">- Bitte w&auml;hlen -</option>";
+                                    echo "<option value=\"\" selected=\"selected\">- Bitte wählen -</option>";
                                 }
 
                                 if ($g_valid_login)
@@ -324,7 +324,7 @@ echo "
 
                                 echo "</optgroup>
                                 </select>
-                                <img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
+                                <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
                                 onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_mail','Message','width=400,height=400,left=310,top=200')\" />";
                             }
                             echo "<span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
@@ -451,7 +451,7 @@ echo "
                             <dd>
                                 <input type=\"text\" id=\"captcha\" name=\"captcha\" style=\"width: 200px;\" maxlength=\"8\" value=\"\" />
                                 <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
-                                <img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
+                                <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
                                      onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=captcha_help','Message','width=400,height=320,left=310,top=200,scrollbars=yes')\" />
                             </dd>
                         </dl>
@@ -463,7 +463,7 @@ echo "
 
             <div class=\"formSubmit\">
                 <button name=\"abschicken\" type=\"submit\" value=\"abschicken\">
-                <img src=\"$g_root_path/adm_program/images/email.png\" alt=\"Abschicken\" />
+                <img src=\"". THEME_PATH. "/icons/email.png\" alt=\"Abschicken\" />
                 &nbsp;Abschicken</button>
             </div>
         </div>
@@ -477,7 +477,7 @@ if(isset($_GET['usr_id']) || isset($_GET['rol_id']))
         <li>
             <span class=\"iconTextLink\">
                 <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-                src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück\" /></a>
+                src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
                 <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
             </span>
         </li>
@@ -504,6 +504,6 @@ echo "<script type=\"text/javascript\"><!--
     document.getElementById('$focus_field').focus();
 --></script>";
 
-require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+require(THEME_SERVER_PATH. "/overall_footer.php");
 
 ?>

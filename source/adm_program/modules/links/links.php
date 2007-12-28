@@ -87,7 +87,7 @@ if($g_preferences['enable_rss'] == 1)
         href=\"$g_root_path/adm_program/modules/links/rss_links.php\" />";
 };
 
-require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
 echo "
@@ -154,14 +154,14 @@ if ($_GET['id'] == 0 && ($g_current_user->editWeblinksRight() || $g_preferences[
             <li>
                 <span class=\"iconTextLink\">
                     <a href=\"$g_root_path/adm_program/modules/links/links_new.php?headline=". $_GET["headline"]. "\"><img
-                    src=\"$g_root_path/adm_program/images/add.png\" alt=\"Neu anlegen\" /></a>
+                    src=\"". THEME_PATH. "/icons/add.png\" alt=\"Neu anlegen\" /></a>
                     <a href=\"$g_root_path/adm_program/modules/links/links_new.php?headline=". $_GET["headline"]. "\">Neu anlegen</a>
                 </span>
             </li>
             <li>
                 <span class=\"iconTextLink\">
                     <a href=\"$g_root_path/adm_program/administration/roles/categories.php?type=LNK\"><img
-                    src=\"$g_root_path/adm_program/images/application_double.png\" alt=\"Kategorien pflegen\" /></a>
+                    src=\"". THEME_PATH. "/icons/application_double.png\" alt=\"Kategorien pflegen\" /></a>
                     <a href=\"$g_root_path/adm_program/administration/roles/categories.php?type=LNK\">Kategorien pflegen</a>
                 </span>
             </li>
@@ -239,7 +239,7 @@ else
             }
             echo "
 				<span class=\"iconLink\">
-					<a href=\"$row->lnk_url\" target=\"_blank\"><img src=\"$g_root_path/adm_program/images/globe.png\"
+					<a href=\"$row->lnk_url\" target=\"_blank\"><img src=\"". THEME_PATH. "/icons/globe.png\"
 					alt=\"Gehe zu $row->lnk_name\" title=\"Gehe zu $row->lnk_name\" /></a>
 					<a href=\"$row->lnk_url\" target=\"_blank\">$row->lnk_name</a>
 				</span>
@@ -267,11 +267,11 @@ else
                             echo "
                             <span class=\"iconLink\">
                                 <a href=\"$g_root_path/adm_program/modules/links/links_new.php?lnk_id=$row->lnk_id&amp;headline=". $_GET['headline']. "\"><img 
-                                src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
+                                src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
                             </span>
                             <span class=\"iconLink\">
                                 <a href=\"$g_root_path/adm_program/modules/links/links_function.php?lnk_id=$row->lnk_id&amp;mode=4\"><img 
-                                src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Löschen\" title=\"Löschen\" /></a>
+                                src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Löschen\" title=\"Löschen\" /></a>
                             </span>";
                         }
                         $user_create = new User($g_db, $row->lnk_usr_id);
@@ -316,6 +316,6 @@ if ($g_db->num_rows($links_result) > 2)
     echo generatePagination($baseUrl, $numLinks, 10, $_GET["start"], TRUE);
 }
 
-require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+require(THEME_SERVER_PATH. "/overall_footer.php");
 
 ?>
