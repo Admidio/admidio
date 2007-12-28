@@ -41,6 +41,11 @@ else
     }
 }
 
+if(strlen($_POST['theme']) == 0)
+{
+    $g_message->show("feld", "Admidio-Theme");
+}
+
 if(is_numeric($_POST['logout_minutes']) == false || $_POST['logout_minutes'] <= 0)
 {
     $g_message->show("feld", "Automatischer Logout");
