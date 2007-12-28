@@ -59,26 +59,26 @@ function ubbtexthandler($text, $this = null)
 
   //echo '<div>'.htmlspecialchars($text).'</div>';
   $smiles = array();
-  $smiles[':)'] = "<img src=\"$g_root_path/adm_program/images/smilies/emoticon_smile.png\" alt=\"Smile\" />";
-  $smiles[':-)'] = "<img src=\"$g_root_path/adm_program/images/smilies/emoticon_smile.png\" alt=\"Smile\" />";
-  $smiles[':('] = "<img src=\"$g_root_path/adm_program/images/smilies/emoticon_unhappy.png\" alt=\"Unhappy\" />";
-  $smiles[':-('] = "<img src=\"$g_root_path/adm_program/images/smilies/emoticon_unhappy.png\" alt=\"Unhappy\" />";
-  $smiles[';)'] = "<img src=\"$g_root_path/adm_program/images/smilies/emoticon_wink.png\" alt=\"Wink\" />";
-  $smiles[';-)'] = "<img src=\"$g_root_path/adm_program/images/smilies/emoticon_wink.png\" alt=\"Wink\" />";
-  $smiles[':D'] = "<img src=\"$g_root_path/adm_program/images/smilies/emoticon_grin.png\" alt=\"Grin\" />";
-  $smiles[':-D'] = "<img src=\"$g_root_path/adm_program/images/smilies/emoticon_grin.png\" alt=\"Grin\" />";
-  $smiles[':d'] = "<img src=\"$g_root_path/adm_program/images/smilies/emoticon_grin.png\" alt=\"Grin\" />";
-  $smiles[':-d'] = "<img src=\"$g_root_path/adm_program/images/smilies/emoticon_grin.png\" alt=\"Grin\" />";
-  $smiles[':P'] = "<img src=\"$g_root_path/adm_program/images/smilies/emoticon_tongue.png\" alt=\"Tongue\" />";
-  $smiles[':-P'] = "<img src=\"$g_root_path/adm_program/images/smilies/emoticon_tongue.png\" alt=\"Tongue\" />";
-  $smiles[':p'] = "<img src=\"$g_root_path/adm_program/images/smilies/emoticon_tongue.png\" alt=\"Tongue\" />";
-  $smiles[':-p'] = "<img src=\"$g_root_path/adm_program/images/smilies/emoticon_tongue.png\" alt=\"Tongue\" />";
-  $smiles[':O'] = "<img src=\"$g_root_path/adm_program/images/smilies/emoticon_surprised.png\" alt=\"Surprised\" />";
-  $smiles[':-O'] = "<img src=\"$g_root_path/adm_program/images/smilies/emoticon_surprised.png\" alt=\"Surprised\" />";
-  $smiles[':o'] = "<img src=\"$g_root_path/adm_program/images/smilies/emoticon_surprised.png\" alt=\"Surprised\" />";
-  $smiles[':-o'] = "<img src=\"$g_root_path/adm_program/images/smilies/emoticon_surprised.png\" alt=\"Surprised\" />";
-  $smiles[':lol:'] = "<img src=\"$g_root_path/adm_program/images/smilies/emoticon_happy.png\" alt=\"Happy\" />";
-  $smiles[':twisted:'] = "<img src=\"$g_root_path/adm_program/images/smilies/emoticon_evilgrin.png\" alt=\"Evilgrin\" />";
+  $smiles[':)'] = "<img src=\"". THEME_PATH. "/icons/smilies/emoticon_smile.png\" alt=\"Smile\" />";
+  $smiles[':-)'] = "<img src=\"". THEME_PATH. "/icons/smilies/emoticon_smile.png\" alt=\"Smile\" />";
+  $smiles[':('] = "<img src=\"". THEME_PATH. "/icons/smilies/emoticon_unhappy.png\" alt=\"Unhappy\" />";
+  $smiles[':-('] = "<img src=\"". THEME_PATH. "/icons/smilies/emoticon_unhappy.png\" alt=\"Unhappy\" />";
+  $smiles[';)'] = "<img src=\"". THEME_PATH. "/icons/smilies/emoticon_wink.png\" alt=\"Wink\" />";
+  $smiles[';-)'] = "<img src=\"". THEME_PATH. "/icons/smilies/emoticon_wink.png\" alt=\"Wink\" />";
+  $smiles[':D'] = "<img src=\"". THEME_PATH. "/icons/smilies/emoticon_grin.png\" alt=\"Grin\" />";
+  $smiles[':-D'] = "<img src=\"". THEME_PATH. "/icons/smilies/emoticon_grin.png\" alt=\"Grin\" />";
+  $smiles[':d'] = "<img src=\"". THEME_PATH. "/icons/smilies/emoticon_grin.png\" alt=\"Grin\" />";
+  $smiles[':-d'] = "<img src=\"". THEME_PATH. "/icons/smilies/emoticon_grin.png\" alt=\"Grin\" />";
+  $smiles[':P'] = "<img src=\"". THEME_PATH. "/icons/smilies/emoticon_tongue.png\" alt=\"Tongue\" />";
+  $smiles[':-P'] = "<img src=\"". THEME_PATH. "/icons/smilies/emoticon_tongue.png\" alt=\"Tongue\" />";
+  $smiles[':p'] = "<img src=\"". THEME_PATH. "/icons/smilies/emoticon_tongue.png\" alt=\"Tongue\" />";
+  $smiles[':-p'] = "<img src=\"". THEME_PATH. "/icons/smilies/emoticon_tongue.png\" alt=\"Tongue\" />";
+  $smiles[':O'] = "<img src=\"". THEME_PATH. "/icons/smilies/emoticon_surprised.png\" alt=\"Surprised\" />";
+  $smiles[':-O'] = "<img src=\"". THEME_PATH. "/icons/smilies/emoticon_surprised.png\" alt=\"Surprised\" />";
+  $smiles[':o'] = "<img src=\"". THEME_PATH. "/icons/smilies/emoticon_surprised.png\" alt=\"Surprised\" />";
+  $smiles[':-o'] = "<img src=\"". THEME_PATH. "/icons/smilies/emoticon_surprised.png\" alt=\"Surprised\" />";
+  $smiles[':lol:'] = "<img src=\"". THEME_PATH. "/icons/smilies/emoticon_happy.png\" alt=\"Happy\" />";
+  $smiles[':twisted:'] = "<img src=\"". THEME_PATH. "/icons/smilies/emoticon_evilgrin.png\" alt=\"Evilgrin\" />";
 
   foreach($smiles as $ubb => $html)
     $text = str_replace($ubb, $html, $text);

@@ -36,10 +36,9 @@ if(isset($_GET['err_text']))
 
 // Html-Kopf ausgeben
 $g_layout['title']    = "Hinweis";
-$g_layout['header']   = "<script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/window_resize.js\"></script>";
 $g_layout['onload']   = "windowresize()";
 $g_layout['includes'] = false;
-require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
 echo "
@@ -91,7 +90,7 @@ echo "
                             <td>Eine <b>[email=</b>webmaster@demo.de<b>]</b> Mailadresse<b>[/email]</b> angeben</td>
                          </tr>
                          <tr>
-                            <td>Ein Bild <img src=\"$g_root_path/adm_program/images/admidio_logo_20.png\" /> anzeigen</td>
+                            <td>Ein Bild <img src=\"". THEME_PATH. "/icons/admidio_logo_20.png\" /> anzeigen</td>
                             <td>Ein Bild <b>[img]</b>http://www.beispiel.de/bild.jpg<b>[/img]</b> anzeigen</td>
                          </tr>
                       </table>";
@@ -314,14 +313,14 @@ echo "
                 echo " <h3>Warnung!!!</h3>
                     Der zugeh&ouml;rige Ordner wurde nicht gefunden. Sollte er bewusst &uuml;ber FTP gel&ouml;scht worden sein
                     oder nicht mehr die M&ouml;glichkeit bestehen ihn wieder herzustellen, bitte
-                    den Datensatz mit klick auf das (<img src=\"$g_root_path/adm_program/images/cross.png\" style=\"vertical-align: top;\" />)Icon l&ouml;schen.
+                    den Datensatz mit klick auf das (<img src=\"". THEME_PATH. "/icons/cross.png\" style=\"vertical-align: top;\" />)Icon l&ouml;schen.
                     Besuchern der Website ohne Fotoverwaltungsrecht, wird diese Veranstaltung nicht mehr angezeigt.";
                 break;
 
             case "not_approved":
                 echo " <h3>Warnung!!!</h3>
                     Die Veranstaltung ist z.Zt. gesperrt und wird Homepagebesuchern deswegen nicht angezeigt. Zum Freigeben bitte
-                    den entsprechende Icon (<img src=\"$g_root_path/adm_program/images/key.png\" />)
+                    den entsprechende Icon (<img src=\"". THEME_PATH. "/icons/key.png\" />)
                     in der Bearbeitungszeile nutzen.";
                 break;
 
@@ -345,12 +344,12 @@ echo "
     <li>
         <span class=\"iconTextLink\">
             <a href=\"javascript:window.close();\"><img
-            src=\"$g_root_path/adm_program/images/door_in.png\" alt=\"Schließen\" /></a>
+            src=\"". THEME_PATH. "/icons/door_in.png\" alt=\"Schließen\" /></a>
             <a href=\"javascript:window.close();\">Schließen</a>
         </span>
     </li>
 </ul>";
     
-require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+require(THEME_SERVER_PATH. "/overall_footer.php");
 
 ?>

@@ -15,11 +15,9 @@ if ('common.php' == basename($_SERVER['SCRIPT_FILENAME']))
     die('Diese Seite darf nicht direkt aufgerufen werden !');
 }
 
-$admidio_path = substr(__FILE__, 0, strpos(__FILE__, "adm_program")-1);
-
 // Konstanten und Konfigurationsdatei einbinden
-require_once($admidio_path. "/adm_config/config.php");
-require_once($admidio_path. "/adm_program/system/constants.php");
+require_once(substr(__FILE__, 0, strpos(__FILE__, "adm_program")-1). "/config.php");
+require_once(substr(__FILE__, 0, strpos(__FILE__, "adm_program")-1). "/adm_program/system/constants.php");
 
 // falls Debug-Kennzeichen nicht in config.php gesetzt wurde, dann hier auf false setzen
 if(isset($g_debug) == false || $g_debug != 1)
@@ -130,6 +128,10 @@ else
     $_SESSION['g_current_organization'] =& $g_current_organization;
     $_SESSION['g_preferences']          =& $g_preferences;
 }
+
+// Pfad zum gewaehlten Theme zusammensetzen
+define('THEME_SERVER_PATH', SERVER_PATH. "/adm_themes/". $g_preferences['theme']);
+define('THEME_PATH', $g_root_path. "/adm_themes/". $g_preferences['theme']);
 
 // pruefen, ob Datenbank-Version zu den Scripten passt
 if(isset($g_preferences['db_version']) == false
