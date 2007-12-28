@@ -84,7 +84,6 @@ else
 // Html-Kopf ausgeben
 $g_layout['title']  = "Rolle";
 $g_layout['header'] = "
-    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/show_hide_block.js\"></script>
     <script type=\"text/javascript\"><!--
         function hinzufuegen()
         {
@@ -119,7 +118,7 @@ $g_layout['header'] = "
         }
     --></script>";
 
-require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
 echo "
@@ -197,7 +196,7 @@ echo "
         <div class=\"groupBox\" id=\"properties_box\" style=\"width: 90%;\">
             <div class=\"groupBoxHeadline\" id=\"properties_head\">
                 <a class=\"iconShowHide\" href=\"javascript:showHideBlock('properties_body','$g_root_path')\"><img 
-                id=\"img_properties_body\" src=\"$g_root_path/adm_program/images/triangle_open.gif\" alt=\"ausblenden\" /></a>Eigenschaften
+                id=\"img_properties_body\" src=\"". THEME_PATH. "/icons/triangle_open.gif\" alt=\"ausblenden\" /></a>Eigenschaften
             </div>
 
             <div class=\"groupBoxBody\" id=\"properties_body\">
@@ -231,9 +230,9 @@ echo "
                                     echo " checked=\"checked\" ";
                                 }
                                 echo " value=\"1\" />
-                            <label for=\"rol_locked\"><img src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Rolle nur f&uuml;r berechtige Benutzer sichtbar\" /></label>&nbsp;
+                            <label for=\"rol_locked\"><img src=\"". THEME_PATH. "/icons/lock.png\" alt=\"Rolle nur f&uuml;r berechtige Benutzer sichtbar\" /></label>&nbsp;
                             <label for=\"rol_locked\">Rolle nur f&uuml;r berechtige Benutzer sichtbar</label>
-                            <img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
+                            <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
                             onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_locked','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\" />
                         </div>
                     </li>";
@@ -253,9 +252,9 @@ echo "
                                         echo " disabled=\"disabled\" ";
                                     }                                
                                     echo " value=\"1\" />
-                                <label for=\"rol_mail_logout\"><img src=\"$g_root_path/adm_program/images/email.png\" alt=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\" /></label>&nbsp;
+                                <label for=\"rol_mail_logout\"><img src=\"". THEME_PATH. "/icons/email.png\" alt=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\" /></label>&nbsp;
                                 <label for=\"rol_mail_logout\">Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben</label>
-                                <img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
+                                <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
                                 onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_logout','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\" />
                             </div>
                         </li>
@@ -271,9 +270,9 @@ echo "
                                         echo " disabled=\"disabled\" ";
                                     }                                
                                     echo " value=\"1\" />
-                                <label for=\"rol_mail_login\"><img src=\"$g_root_path/adm_program/images/email_key.png\" alt=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\" /></label>&nbsp;
+                                <label for=\"rol_mail_login\"><img src=\"". THEME_PATH. "/icons/email_key.png\" alt=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\" /></label>&nbsp;
                                 <label for=\"rol_mail_login\">Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben</label>
-                                <img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
+                                <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
                                 onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_login','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\" />
                             </div>
                         </li>";
@@ -285,7 +284,7 @@ echo "
         <div class=\"groupBox\" id=\"justifications_box\" style=\"width: 90%;\">
             <div class=\"groupBoxHeadline\">
                 <a class=\"iconShowHide\" href=\"javascript:showHideBlock('justifications_body','$g_root_path')\"><img 
-                id=\"img_justifications_body\" src=\"$g_root_path/adm_program/images/triangle_open.gif\" alt=\"ausblenden\" /></a>Berechtigungen
+                id=\"img_justifications_body\" src=\"". THEME_PATH. "/icons/triangle_open.gif\" alt=\"ausblenden\" /></a>Berechtigungen
             </div>
 
             <div class=\"groupBoxBody\" id=\"justifications_body\">
@@ -302,9 +301,9 @@ echo "
                                 echo " disabled=\"disabled\" ";
                             }
                             echo " value=\"1\" />&nbsp;
-                            <label for=\"rol_assign_roles\"><img src=\"$g_root_path/adm_program/images/wand.png\" alt=\"Rollen verwalten und zuordnen\" /></label>
+                            <label for=\"rol_assign_roles\"><img src=\"". THEME_PATH. "/icons/wand.png\" alt=\"Rollen verwalten und zuordnen\" /></label>
                             <label for=\"rol_assign_roles\">Rollen verwalten und zuordnen</label>
-                            <img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
+                            <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
                             onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_zuordnen','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\" />
                         </div>
                     </li>
@@ -316,7 +315,7 @@ echo "
                                 echo " checked=\"checked\" ";
                             }
                             echo " value=\"1\" />&nbsp;
-                            <label for=\"rol_approve_users\"><img src=\"$g_root_path/adm_program/images/properties.png\" alt=\"Registrierungen verwalten und zuordnen\" /></label>
+                            <label for=\"rol_approve_users\"><img src=\"". THEME_PATH. "/icons/properties.png\" alt=\"Registrierungen verwalten und zuordnen\" /></label>
                             <label for=\"rol_approve_users\">Registrierungen verwalten und zuordnen</label>
                         </div>
                     </li>
@@ -328,9 +327,9 @@ echo "
                                 echo " checked=\"checked\" ";
                             }
                             echo " value=\"1\" />&nbsp;
-                            <label for=\"rol_edit_user\"><img src=\"$g_root_path/adm_program/images/group.png\" alt=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\" /></label>
+                            <label for=\"rol_edit_user\"><img src=\"". THEME_PATH. "/icons/group.png\" alt=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\" /></label>
                             <label for=\"rol_edit_user\">Profildaten und Rollenzuordnungen aller Benutzer bearbeiten</label>
-                            <img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
+                            <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
                             onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_benutzer','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\" />
                         </div>
                     </li>
@@ -340,7 +339,7 @@ echo "
                             if($role->getValue("rol_profile") == 1)
                                 echo " checked=\"checked\" ";
                             echo " value=\"1\" />&nbsp;
-                            <label for=\"rol_profile\"><img src=\"$g_root_path/adm_program/images/user.png\" alt=\"Eigenes Profil bearbeiten\" /></label>
+                            <label for=\"rol_profile\"><img src=\"". THEME_PATH. "/icons/user.png\" alt=\"Eigenes Profil bearbeiten\" /></label>
                             <label for=\"rol_profile\">Eigenes Profil bearbeiten</label>
                         </div>
                     </li>";
@@ -354,7 +353,7 @@ echo "
                                 if($role->getValue("rol_announcements") == 1)
                                     echo " checked=\"checked\" ";
                                 echo " value=\"1\" />&nbsp;
-                                <label for=\"rol_announcements\"><img src=\"$g_root_path/adm_program/images/note.png\" alt=\"Ank&uuml;ndigungen anlegen und bearbeiten\" /></label>
+                                <label for=\"rol_announcements\"><img src=\"". THEME_PATH. "/icons/note.png\" alt=\"Ank&uuml;ndigungen anlegen und bearbeiten\" /></label>
                                 <label for=\"rol_announcements\">Ank&uuml;ndigungen anlegen und bearbeiten&nbsp;</label>
                             </div>
                         </li>";
@@ -368,7 +367,7 @@ echo "
                                 if($role->getValue("rol_dates") == 1)
                                     echo " checked=\"checked\" ";
                                 echo " value=\"1\" />&nbsp;
-                                <label for=\"rol_dates\"><img src=\"$g_root_path/adm_program/images/date.png\" alt=\"Termine anlegen und bearbeiten\" /></label>
+                                <label for=\"rol_dates\"><img src=\"". THEME_PATH. "/icons/date.png\" alt=\"Termine anlegen und bearbeiten\" /></label>
                                 <label for=\"rol_dates\">Termine anlegen und bearbeiten</label>
                             </div>
                         </li>";
@@ -382,7 +381,7 @@ echo "
                                 if($role->getValue("rol_photo") == 1)
                                     echo " checked=\"checked\" ";
                                 echo " value=\"1\" />&nbsp;
-                                <label for=\"rol_photo\"><img src=\"$g_root_path/adm_program/images/photo.png\" alt=\"Fotos hochladen und bearbeiten\" /></label>
+                                <label for=\"rol_photo\"><img src=\"". THEME_PATH. "/icons/photo.png\" alt=\"Fotos hochladen und bearbeiten\" /></label>
                                 <label for=\"rol_photo\">Fotos hochladen und bearbeiten</label>
                             </div>
                         </li>";
@@ -396,7 +395,7 @@ echo "
                                 if($role->getValue("rol_download") == 1)
                                     echo " checked=\"checked\" ";
                                 echo " value=\"1\" />&nbsp;
-                                <label for=\"rol_download\"><img src=\"$g_root_path/adm_program/images/folder_down.png\" alt=\"Downloads hochladen und bearbeiten\" /></label>
+                                <label for=\"rol_download\"><img src=\"". THEME_PATH. "/icons/folder_down.png\" alt=\"Downloads hochladen und bearbeiten\" /></label>
                                 <label for=\"rol_download\">Downloads hochladen und bearbeiten</label>
                             </div>
                         </li>";
@@ -410,7 +409,7 @@ echo "
                                 if($role->getValue("rol_guestbook") == 1)
                                     echo " checked=\"checked\" ";
                                 echo " value=\"1\" />&nbsp;
-                                <label for=\"rol_guestbook\"><img src=\"$g_root_path/adm_program/images/comment.png\" alt=\"G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen\" /></label>
+                                <label for=\"rol_guestbook\"><img src=\"". THEME_PATH. "/icons/comment.png\" alt=\"G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen\" /></label>
                                 <label for=\"rol_guestbook\">G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen</label>
                             </div>
                         </li>";
@@ -424,7 +423,7 @@ echo "
                                     if($role->getValue("rol_guestbook_comments") == 1)
                                         echo " checked=\"checked\" ";
                                     echo " value=\"1\" />&nbsp;
-                                    <label for=\"rol_guestbook_comments\"><img src=\"$g_root_path/adm_program/images/comments.png\" alt=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\" /></label>
+                                    <label for=\"rol_guestbook_comments\"><img src=\"". THEME_PATH. "/icons/comments.png\" alt=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\" /></label>
                                     <label for=\"rol_guestbook_comments\">Kommentare zu G&auml;stebucheintr&auml;gen anlegen</label>
                                 </div>
                             </li>";
@@ -439,7 +438,7 @@ echo "
                                 if($role->getValue("rol_weblinks") == 1)
                                     echo " checked=\"checked\" ";
                                 echo " value=\"1\" />&nbsp;
-                                <label for=\"rol_weblinks\"><img src=\"$g_root_path/adm_program/images/globe.png\" alt=\"Weblinks anlegen und bearbeiten\" /></label>
+                                <label for=\"rol_weblinks\"><img src=\"". THEME_PATH. "/icons/globe.png\" alt=\"Weblinks anlegen und bearbeiten\" /></label>
                                 <label for=\"rol_weblinks\">Weblinks anlegen und bearbeiten</label>
                             </div>
                         </li>";
@@ -453,7 +452,7 @@ echo "
                                 if($role->getValue("rol_this_list_view") == 1)
                                     echo " checked=\"checked\" ";
                                 echo " value=\"1\" />&nbsp;
-                                <label for=\"rol_this_list_view\"><img src=\"$g_root_path/adm_program/images/page_white_text.png\" alt=\"Mitgliederliste dieser Rolle einsehen\" /></label>
+                                <label for=\"rol_this_list_view\"><img src=\"". THEME_PATH. "/icons/page_white_text.png\" alt=\"Mitgliederliste dieser Rolle einsehen\" /></label>
                                 <label for=\"rol_this_list_view\">Mitgliederliste dieser Rolle einsehen</label>
                             </div>
                         </li>";
@@ -465,7 +464,7 @@ echo "
                                 if($role->getValue("rol_all_lists_view") == 1)
                                     echo " checked=\"checked\" ";
                                 echo " value=\"1\" />&nbsp;
-                                <label for=\"rol_all_lists_view\"><img src=\"$g_root_path/adm_program/images/pages_white_text.png\" alt=\"Mitgliederlisten aller Rollen einsehen\" /></label>
+                                <label for=\"rol_all_lists_view\"><img src=\"". THEME_PATH. "/icons/pages_white_text.png\" alt=\"Mitgliederlisten aller Rollen einsehen\" /></label>
                                 <label for=\"rol_all_lists_view\">Mitgliederlisten aller Rollen einsehen</label>
                             </div>
                         </li>";                 
@@ -476,7 +475,7 @@ echo "
         <div class=\"groupBox\" id=\"dates_box\" style=\"width: 90%;\">
             <div class=\"groupBoxHeadline\" id=\"dates_head\">
                 <a class=\"iconShowHide\" href=\"javascript:showHideBlock('dates_body','$g_root_path')\"><img 
-                id=\"img_dates_body\" src=\"$g_root_path/adm_program/images/triangle_open.gif\" alt=\"ausblenden\" /></a>Termine / Treffen&nbsp;&nbsp;(optional)
+                id=\"img_dates_body\" src=\"". THEME_PATH. "/icons/triangle_open.gif\" alt=\"ausblenden\" /></a>Termine / Treffen&nbsp;&nbsp;(optional)
             </div>
 
             <div class=\"groupBoxBody\" id=\"dates_body\">        
@@ -540,7 +539,7 @@ echo "
         <div class=\"groupBox\" id=\"dependancies_box\" style=\"width: 90%;\">
             <div class=\"groupBoxHeadline\" id=\"dependancies_head\">
                 <a class=\"iconShowHide\" href=\"javascript:showHideBlock('dependancies_body','$g_root_path')\"><img
-                id=\"img_dependancies_body\" src=\"$g_root_path/adm_program/images/triangle_open.gif\" alt=\"ausblenden\" /></a>Abh&auml;ngigkeiten&nbsp;&nbsp;(optional)
+                id=\"img_dependancies_body\" src=\"". THEME_PATH. "/icons/triangle_open.gif\" alt=\"ausblenden\" /></a>Abh&auml;ngigkeiten&nbsp;&nbsp;(optional)
             </div>
 
             <div class=\"groupBoxBody\" id=\"dependancies_body\">  
@@ -587,7 +586,7 @@ echo "
                         <div>
                             <span class=\"iconTextLink\">
                                 <a href=\"javascript:hinzufuegen()\"><img
-                                src=\"$g_root_path/adm_program/images/add.png\" alt=\"Rolle hinzufügen\" /></a>
+                                src=\"". THEME_PATH. "/icons/add.png\" alt=\"Rolle hinzufügen\" /></a>
                                 <a href=\"javascript:hinzufuegen()\">Rolle hinzufügen</a>
                             </span>
                         </div>
@@ -605,7 +604,7 @@ echo "
                         <div>
                             <span class=\"iconTextLink\">
                                 <a href=\"javascript:entfernen()\"><img
-                                src=\"$g_root_path/adm_program/images/delete.png\" alt=\"Rolle entfernen\" /></a>
+                                src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Rolle entfernen\" /></a>
                                 <a href=\"javascript:entfernen()\">Rolle entfernen</a>
                             </span>
                         </div>
@@ -628,7 +627,7 @@ echo "
         echo "
         <div class=\"formSubmit\">
             <button name=\"speichern\" type=\"button\" value=\"speichern\" onclick=\"absenden()\">
-                <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\" />
+                <img src=\"". THEME_PATH. "/icons/disk.png\" alt=\"Speichern\" />
                 &nbsp;Speichern</button>
         </div>    
     </div>
@@ -639,7 +638,7 @@ echo "
     <li>
         <span class=\"iconTextLink\">
             <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück\" /></a>
+            src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
             <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
         </span>
     </li>
@@ -666,6 +665,6 @@ echo "
     }
 echo "\n--></script>";
 
-require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+require(THEME_SERVER_PATH. "/overall_footer.php");
 
 ?>
