@@ -211,11 +211,11 @@ if(isset($_POST["submit"]) && $_POST["submit"])
     }
 
     //Photomodulspezifische CSS laden
-    $g_layout['header'] = "<link rel=\"stylesheet\" href=\"$g_root_path/adm_program/layout/photos.css\" type=\"text/css\" media=\"screen\" />";
+    $g_layout['header'] = "<link rel=\"stylesheet\" href=\"". THEME_PATH. "/photos.css\" type=\"text/css\" media=\"screen\" />";
     
     // HTML-Kopf
     $g_layout['title'] = "Foto-Abum-Verwaltung";
-    require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+    require(THEME_SERVER_PATH. "/overall_header.php");
 
     echo"
     <div class=\"formLayout\" id=\"photo_report_form\">
@@ -292,7 +292,7 @@ if(isset($_POST["submit"]) && $_POST["submit"])
         <li>
             <span class=\"iconTextLink\">
                 <a href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id'\">Weiter&nbsp;</a>
-                <a href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id'\"><img src=\"$g_root_path/adm_program/images/forward.png\" alt=\"Weiter\" /></a>
+                <a href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id'\"><img src=\"". THEME_PATH. "/icons/forward.png\" alt=\"Weiter\" /></a>
             </span>
         </li>
     </ul>";
@@ -324,5 +324,5 @@ if(isset($_GET["job"]) && $_GET["job"]=="do_delete")
     }
 }
 
-require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+require(THEME_SERVER_PATH. "/overall_footer.php");
 ?>

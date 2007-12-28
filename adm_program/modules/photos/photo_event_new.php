@@ -138,7 +138,7 @@ function subfolder($parent_id, $vorschub, $photo_event, $pho_id)
 /******************************HTML-Kopf******************************************/
 
 $g_layout['title'] = "Foto-Album-Verwaltung";
-require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+require(THEME_SERVER_PATH. "/overall_header.php");
 echo"<h1 class=\"moduleHeadline\">Foto-Album-Verwaltung</h1>";
 
 
@@ -260,7 +260,7 @@ echo "
         echo"<hr />
         <div class=\"formSubmit\">
             <button name=\"submit\" type=\"submit\" tabindex=\"8\" value=\"speichern\">
-                <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\" />
+                <img src=\"". THEME_PATH. "/icons/disk.png\" alt=\"Speichern\" />
                 &nbsp;Speichern
             </button>
         </div>
@@ -272,14 +272,14 @@ echo "
     <li>
         <span class=\"iconTextLink\">
             <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück\" /></a>
+            src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
             <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
         </span>
     </li>
     
     <li>
         <span class=\"iconTextLink\">
-            <img src=\"$g_root_path/adm_program/images/help.png\" class=\"iconLink\" alt=\"Hilfe\" title=\"Hilfe\"
+            <img src=\"". THEME_PATH. "/icons/help.png\" class=\"iconLink\" alt=\"Hilfe\" title=\"Hilfe\"
             onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_up_help','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\" />   
             <a onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=veranst_help','Message','width=500,height=400,left=310,top=200,scrollbars=yes')\">Hilfe</a>
         </span>
@@ -294,6 +294,6 @@ echo "
 </script>";
 
 /***********************************Ende********************************************/
-require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+require(THEME_SERVER_PATH. "/overall_footer.php");
 
 ?>

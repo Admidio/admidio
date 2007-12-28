@@ -173,10 +173,10 @@ function getFieldCode($field, $user, $new_user)
             $checked_male = " checked=\"checked\" ";
         }
         $value = "<input type=\"radio\" id=\"female\" name=\"usf-". $field['usf_id']. "\" value=\"2\" $checked_female $readonly />
-            <label for=\"female\"><img src=\"$g_root_path/adm_program/images/female.png\" title=\"weiblich\" alt=\"weiblich\" /></label>
+            <label for=\"female\"><img src=\"". THEME_PATH. "/icons/female.png\" title=\"weiblich\" alt=\"weiblich\" /></label>
             &nbsp;
             <input type=\"radio\" id=\"male\" name=\"usf-". $field['usf_id']. "\" value=\"1\" $checked_male $readonly />
-            <label for=\"male\"><img src=\"$g_root_path/adm_program/images/male.png\" title=\"m&auml;nnlich\" alt=\"m&auml;nnlich\" /></label>";
+            <label for=\"male\"><img src=\"". THEME_PATH. "/icons/male.png\" title=\"m&auml;nnlich\" alt=\"m&auml;nnlich\" /></label>";
     }
     elseif($field['usf_name'] == "Land")
     {
@@ -280,7 +280,7 @@ function getFieldCode($field, $user, $new_user)
         {
             $icon = "yahoo.png";
         }
-        $icon = "<img src=\"$g_root_path/adm_program/images/$icon\" style=\"vertical-align: middle;\" alt=\"". $field['usf_name']. "\" />&nbsp;";
+        $icon = "<img src=\"". THEME_PATH. "/icons/$icon\" style=\"vertical-align: middle;\" alt=\"". $field['usf_name']. "\" />&nbsp;";
     }
         
     // Kennzeichen fuer Pflichtfeld setzen
@@ -294,7 +294,7 @@ function getFieldCode($field, $user, $new_user)
     $description = "";
     if(strlen($field['usf_description']) > 0 && $field['cat_name'] != "Messenger")
     {
-        $description = "<img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
+        $description = "<img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
         onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=user_field_description&amp;err_text=". urlencode($field['usf_name']). "','Message','width=400,height=400,left=310,top=200,scrollbars=yes')\" />";
     }
     
@@ -311,7 +311,7 @@ function getFieldCode($field, $user, $new_user)
 
 // Html-Kopf ausgeben
 $g_layout['title'] = "Profil bearbeiten";
-require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+require(THEME_SERVER_PATH. "/overall_header.php");
 
 echo "
 <form action=\"$g_root_path/adm_program/modules/profile/profile_save.php?user_id=$usr_id&amp;new_user=$new_user\" method=\"post\">
@@ -397,7 +397,7 @@ echo "
                                 if($new_user > 0)
                                 {
                                     echo "<span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
-                                    <img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
+                                    <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
                                     onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=nickname','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\" />";
                                 }
                             echo "</dd>
@@ -412,7 +412,7 @@ echo "
                                 <dd>
                                     <input type=\"password\" id=\"usr_password\" name=\"usr_password\" style=\"width: 130px;\" maxlength=\"20\" />
                                     <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
-                                    <img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
+                                    <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
                                     onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=password','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\" />
                                 </dd>
                             </dl>
@@ -437,7 +437,7 @@ echo "
                                     <dt><label for=\"password\">Passwort:</label></dt>
                                     <dd>
                                         <button id=\"password\" name=\"password\" type=\"button\" value=\"Passwort &auml;ndern\" onclick=\"window.open('password.php?user_id=$usr_id','Titel','width=350,height=260,left=310,top=200')\">
-                                        <img src=\"$g_root_path/adm_program/images/key.png\" alt=\"Passwort &auml;ndern\" />
+                                        <img src=\"". THEME_PATH. "/icons/key.png\" alt=\"Passwort &auml;ndern\" />
                                         &nbsp;Passwort &auml;ndern</button>
                                     </dd>
                                 </dl>
@@ -470,7 +470,7 @@ echo "
                         <dd>
                             <input type=\"text\" id=\"captcha\" name=\"captcha\" style=\"width: 200px;\" maxlength=\"8\" value=\"\" />
                             <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
-                            <img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
+                            <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
                              onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=captcha_help','Message','width=400,height=320,left=310,top=200,scrollbars=yes')\" />
                         </dd>
                     </dl>
@@ -513,7 +513,7 @@ echo "
         echo "
         <div class=\"formSubmit\">
             <button name=\"speichern\" type=\"submit\" value=\"speichern\">
-            <img src=\"$g_root_path/adm_program/images/$btn_image\" alt=\"$btn_text\" />
+            <img src=\"". THEME_PATH. "/icons/$btn_image\" alt=\"$btn_text\" />
             &nbsp;$btn_text</button>
         </div>
     </div>
@@ -524,7 +524,7 @@ echo "
     <li>
         <span class=\"iconTextLink\">
             <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück\" /></a>
+            src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
             <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
         </span>
     </li>
@@ -541,6 +541,6 @@ echo "
     }
 echo "\n--></script>";
 
-require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+require(THEME_SERVER_PATH. "/overall_footer.php");
 
 ?>

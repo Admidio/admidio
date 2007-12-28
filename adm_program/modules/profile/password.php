@@ -32,7 +32,7 @@ if(isset($_GET["user_id"]) && is_numeric($_GET["user_id"]) == false)
 // Html-Kopf ausgeben
 $g_layout['title']    = "Passwort &auml;ndern";
 $g_layout['includes'] = false;
-require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
 echo "
@@ -66,11 +66,11 @@ echo "
 
         <div class=\"formSubmit\">
             <button name=\"schliessen\" type=\"button\" value=\"schliessen\" onclick=\"window.close()\">
-                <img src=\"$g_root_path/adm_program/images/door_in.png\" alt=\"Schließen\" />
+                <img src=\"". THEME_PATH. "/icons/door_in.png\" alt=\"Schließen\" />
                 &nbsp;Schließen</button>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <button name=\"speichern\" type=\"submit\" value=\"speichern\">
-                <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\" />
+                <img src=\"". THEME_PATH. "/icons/disk.png\" alt=\"Speichern\" />
                 &nbsp;Speichern</button>
         </div>
     </div>
@@ -80,6 +80,6 @@ echo "
     document.getElementById('old_password').focus();
 --></script>";
     
-require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+require(THEME_SERVER_PATH. "/overall_footer.php");
 
 ?>

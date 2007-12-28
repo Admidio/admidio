@@ -94,7 +94,7 @@ else
 // Html-Kopf ausgeben
 $g_layout['title']    = "Passwort &auml;ndern";
 $g_layout['includes'] = false;
-require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+require(THEME_SERVER_PATH. "/overall_header.php");
 
 echo "<br />
 <div class=\"groupBox\">
@@ -128,17 +128,17 @@ echo "<br />
     if($err_code == "")
     {
         echo "<button name=\"schliessen\" type=\"button\" value=\"schliessen\" onclick=\"window.close()\">
-        <img src=\"$g_root_path/adm_program/images/door_in.png\" alt=\"Schließen\" />
+        <img src=\"". THEME_PATH. "/icons/door_in.png\" alt=\"Schließen\" />
         &nbsp;Schließen</button>";
     }
     else
     {
         echo "<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
-        <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück\" />
+        <img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" />
         &nbsp;Zurück</button>";
     }
 echo "</div>";
         
-require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+require(THEME_SERVER_PATH. "/overall_footer.php");
 
 ?>
