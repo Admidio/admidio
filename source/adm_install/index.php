@@ -10,7 +10,7 @@
  *****************************************************************************/
 
 // pruefen, ob es eine Erstinstallation ist
-if(file_exists("../adm_config/config.php"))
+if(file_exists("../config.php"))
 {
    $page = "update.php";
 }

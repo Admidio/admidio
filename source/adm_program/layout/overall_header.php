@@ -63,7 +63,7 @@ echo '
     }
     echo '</title>    
     
-    <link rel="stylesheet" type="text/css" href="'. $g_root_path. '/adm_program/layout/system.css" />';
+    <link rel="stylesheet" type="text/css" href="'. THEME_PATH. '/system.css" />';
     
     if(strlen($g_preferences['user_css']) > 0)
     {
