@@ -85,12 +85,12 @@ if($side != "y" && $side != "x" && $side!=NULL)
 }
 
 //Bildpfadzusammensetzten
-$bild=SERVER_PATH. "/adm_my_files/photos/".$pho_begin."_".$pho_id."/".$pic_nr.".jpg";
+$bild = SERVER_PATH. "/adm_my_files/photos/".$pho_begin."_".$pho_id."/".$pic_nr.".jpg";
 
 //Falls die 0 als Bildnummer übergeben wurde
 if(!file_exists($bild))
 {
-    $bild = SERVER_PATH. "/adm_program/images/nopix.jpg";
+    $bild = THEME_PATH. "/images/nopix.jpg";
 }
 
 //Ermittlung der Original Bildgroesse
@@ -138,7 +138,7 @@ imagecopyresampled($neubild, $bilddaten, 0, 0, 0, 0, $neubildsize[0], $neubildsi
 if ($scal>200 && $g_preferences['photo_image_text'] == 1)
 {
     $font_c = imagecolorallocate($neubild,255,255,255);
-    $font_ttf=SERVER_PATH."/adm_program/system/mr_phone1.ttf";
+    $font_ttf = THEME_PATH."/font.ttf";
     $font_s = $scal/40;
     $font_x = $font_s;
     $font_y = $neubildsize[1]-$font_s;

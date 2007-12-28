@@ -148,18 +148,18 @@ if($g_preferences['photo_show_mode']==1)
         <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/script.aculo.us/prototype.js\"></script>
         <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/script.aculo.us/scriptaculous.js?load=effects\"></script>
         <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/lightbox/lightbox.js\"></script>
-        <link rel=\"stylesheet\" href=\"$g_root_path/adm_program/layout/lightbox.css\" type=\"text/css\" media=\"screen\" />";
+        <link rel=\"stylesheet\" href=\"". THEME_PATH. "/lightbox.css\" type=\"text/css\" media=\"screen\" />";
 }
 
 //Photomodulspezifische CSS laden
-$g_layout['header'] = $g_layout['header']."<link rel=\"stylesheet\" href=\"$g_root_path/adm_program/layout/photos.css\" type=\"text/css\" media=\"screen\" />";
+$g_layout['header'] = $g_layout['header']."<link rel=\"stylesheet\" href=\"". THEME_PATH. "/photos.css\" type=\"text/css\" media=\"screen\" />";
 
 if($g_preferences['photo_show_mode']==1)
 {
     $g_layout['onload'] = "initLightbox()";
 }
 
-require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+require(THEME_SERVER_PATH. "/overall_header.php");
 
 //Ueberschift
 echo"<h1 class=\"moduleHeadline\">";
@@ -195,7 +195,7 @@ if($pho_id > 0)
 {
     //Ausgabe des Linkpfads
     echo "<div class=\"navigationPath\">
-            <a href=\"$g_root_path/adm_program/modules/photos/photos.php\"><img src=\"$g_root_path/adm_program/images/application_view_tile.png\" alt=\"Fotogalerien\" /></a>
+            <a href=\"$g_root_path/adm_program/modules/photos/photos.php\"><img src=\"". THEME_PATH. "/icons/application_view_tile.png\" alt=\"Fotogalerien\" /></a>
             <a href=\"$g_root_path/adm_program/modules/photos/photos.php\">Fotogalerien</a>$navilink
         </div>";
 }
@@ -207,7 +207,7 @@ if($g_current_user->editPhotoRight())
             <li>
                 <span class=\"iconTextLink\">
                     <a href=\"$g_root_path/adm_program/modules/photos/photo_event_new.php?job=new&amp;pho_id=$pho_id\"><img
-                        src=\"$g_root_path/adm_program/images/add.png\" alt=\"Album anlegen\" /></a>
+                        src=\"". THEME_PATH. "/icons/add.png\" alt=\"Album anlegen\" /></a>
                     <a href=\"$g_root_path/adm_program/modules/photos/photo_event_new.php?job=new&amp;pho_id=$pho_id\">Album anlegen</a>
                 </span>
             </li>";
@@ -216,7 +216,7 @@ if($g_current_user->editPhotoRight())
             echo "<li>
                 <span class=\"iconTextLink\">
                     <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id\"><img
-                         src=\"$g_root_path/adm_program/images/photo.png\" alt=\"Bilder hochladen\" /></a>
+                         src=\"". THEME_PATH. "/icons/photo.png\" alt=\"Bilder hochladen\" /></a>
                     <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id\">Bilder hochladen</a>
                 </span>
             </li>";
@@ -284,7 +284,7 @@ echo "<div class=\"photoModuleContainer\">";
             {
                 echo"
                 <a href=\"$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$vorseite&amp;pho_id=$pho_id\">
-                    <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Vorherige\" />
+                    <img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Vorherige\" />
                 </a>
                 <a href=\"$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$vorseite&amp;pho_id=$pho_id\">Vorherige</a>&nbsp;&nbsp;";
             }
@@ -307,7 +307,7 @@ echo "<div class=\"photoModuleContainer\">";
                 echo"
                 <a href=\"$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$nachseite&amp;pho_id=$pho_id\">N&auml;chste</a>
                 <a href=\"$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$nachseite&amp;pho_id=$pho_id\">
-                    <img src=\"$g_root_path/adm_program/images/forward.png\" alt=\"N&auml;chste\" />
+                    <img src=\"". THEME_PATH. "/icons/forward.png\" alt=\"N&auml;chste\" />
                 </a>";
             }
         echo"</div>";
@@ -379,15 +379,15 @@ echo "<div class=\"photoModuleContainer\">";
                                 echo"
                                 <span class=\"iconLink\">
                                     <a href=\"$g_root_path/adm_program/modules/photos/photo_function.php?pho_id=$pho_id&amp;bild=$bild&amp;thumb_seite=$thumb_seite&amp;job=rotate&amp;direction=left\"><img 
-                                    src=\"$g_root_path/adm_program/images/arrow_turn_left.png\" alt=\"nach links drehen\" title=\"nach links drehen\" /></a>
+                                    src=\"". THEME_PATH. "/icons/arrow_turn_left.png\" alt=\"nach links drehen\" title=\"nach links drehen\" /></a>
                                 </span>
                                 <span class=\"iconLink\">
                                     <a href=\"$g_root_path/adm_program/modules/photos/photo_function.php?pho_id=$pho_id&amp;bild=$bild&amp;thumb_seite=$thumb_seite&amp;job=delete_request\"><img 
-                                    src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Foto l&ouml;schen\" title=\"Foto l&ouml;schen\" /></a>
+                                    src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Foto l&ouml;schen\" title=\"Foto l&ouml;schen\" /></a>
                                 </span>
                                 <span class=\"iconLink\">
                                     <a href=\"$g_root_path/adm_program/modules/photos/photo_function.php?pho_id=$pho_id&amp;bild=$bild&amp;thumb_seite=$thumb_seite&amp;job=rotate&amp;direction=right\"><img 
-                                    src=\"$g_root_path/adm_program/images/arrow_turn_right.png\" alt=\"nach rechts drehen\" title=\"nach rechts drehen\" /></a>
+                                    src=\"". THEME_PATH. "/icons/arrow_turn_right.png\" alt=\"nach rechts drehen\" title=\"nach rechts drehen\" /></a>
                                 </span>";
                             }
                             if($g_valid_login == true && $g_preferences['enable_ecard_module'] == 1)
@@ -395,7 +395,7 @@ echo "<div class=\"photoModuleContainer\">";
                                 echo"
                                 <span class=\"iconLink\">
                                     <a href=\"".$g_root_path."/adm_program/modules/ecards/ecard_form.php?photo=".$bild."&amp;pho_id=".$pho_id."\"><img 
-                                    src=\"$g_root_path/adm_program/images/email.png\" alt=\"Als Grußkarte versenden\" title=\"Als Grußkarte versenden\" /></a>
+                                    src=\"". THEME_PATH. "/icons/email.png\" alt=\"Als Grußkarte versenden\" title=\"Als Grußkarte versenden\" /></a>
                                 </span>";
                             }
                         
@@ -581,7 +581,7 @@ echo "<div class=\"photoModuleContainer\">";
             //Wenn kein Bild gefunden wurde
             if($bsp_pho_id==0)
             {
-               $bsp_pic_path = SERVER_PATH. "/adm_program/images/nopix.jpg";
+               $bsp_pic_path = THEME_PATH. "/images/nopix.jpg";
             }
 
             //Ausgabe
@@ -608,14 +608,14 @@ echo "<div class=\"photoModuleContainer\">";
                         //Warnung fuer Leute mit Fotorechten: Ordner existiert nicht
                         if(!file_exists($ordner) && $g_current_user->editPhotoRight())
                         {
-                            echo"<li><img src=\"$g_root_path/adm_program/images/warning16.png\" class=\"iconLink\" alt=\"Warnhinweis\" title=\"Warnhinweis\"
+                            echo"<li><img src=\"". THEME_PATH. "/icons/warning16.png\" class=\"iconLink\" alt=\"Warnhinweis\" title=\"Warnhinweis\"
                             onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=folder_not_found','Message','width=400, height=400, left=310,top=200,scrollbars=no')\" /></li>";
                         }
 
                         //Hinweis fur Leute mit Photorechten: Album ist gesperrt
                         if($adm_photo_list["pho_locked"]==1 && file_exists($ordner))
                         {
-                            echo"<li><img src=\"$g_root_path/adm_program/images/lock.png\" class=\"iconLink\" alt=\"Album ist gesperrt\" title=\"Album ist gesperrt\"
+                            echo"<li><img src=\"". THEME_PATH. "/icons/lock.png\" class=\"iconLink\" alt=\"Album ist gesperrt\" title=\"Album ist gesperrt\"
                             onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=not_approved','Message','width=400, height=300, left=310,top=200,scrollbars=no')\" /></li>";
                         }
                         echo"</ul>";
@@ -649,19 +649,19 @@ echo "<div class=\"photoModuleContainer\">";
                                 echo"
                                 <span class=\"iconLink\">
                                     <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$this_pho_id\"><img 
-                                    src=\"$g_root_path/adm_program/images/photo.png\" alt=\"Bilder hochladen\" title=\"Bilder hochladen\" /></a>
+                                    src=\"". THEME_PATH. "/icons/photo.png\" alt=\"Bilder hochladen\" title=\"Bilder hochladen\" /></a>
                                 </span>
 
                                 <span class=\"iconLink\">
                                     <a href=\"$g_root_path/adm_program/modules/photos/photo_event_new.php?pho_id=$this_pho_id&amp;job=change\"><img 
-                                    src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
+                                    src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
                                 </span>";
                             }
 
                             echo"
                             <span class=\"iconLink\">
                                 <a href=\"$g_root_path/adm_program/modules/photos/photo_event_function.php?job=delete_request&amp;pho_id=$this_pho_id\"><img 
-                                src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Album L&ouml;schen\" title=\"Album L&ouml;schen\" /></a>
+                                src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Album L&ouml;schen\" title=\"Album L&ouml;schen\" /></a>
                             </span>";
 
                             if($adm_photo_list["pho_locked"]==1 && file_exists($ordner))
@@ -669,7 +669,7 @@ echo "<div class=\"photoModuleContainer\">";
                                 echo"
                                 <span class=\"iconLink\">
                                     <a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=$this_pho_id&amp;locked=0\"><img 
-                                    src=\"$g_root_path/adm_program/images/key.png\"  alt=\"Freigeben\" title=\"Freigeben\" /></a>
+                                    src=\"". THEME_PATH. "/icons/key.png\"  alt=\"Freigeben\" title=\"Freigeben\" /></a>
                                 </span>";
                             }
                             elseif($adm_photo_list["pho_locked"]==0 && file_exists($ordner))
@@ -677,7 +677,7 @@ echo "<div class=\"photoModuleContainer\">";
                                 echo"
                                 <span class=\"iconLink\">
                                     <a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=$this_pho_id&amp;locked=1\"><img 
-                                    src=\"$g_root_path/adm_program/images/key.png\" alt=\"Sperren\" title=\"Sperren\" /></a>
+                                    src=\"". THEME_PATH. "/icons/key.png\" alt=\"Sperren\" title=\"Sperren\" /></a>
                                 </span>";
                             }
                         }
@@ -718,7 +718,7 @@ if($photo_event->getValue("pho_id") > 0)
         <li>
             <span class=\"iconTextLink\">
                 <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-                src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück\" /></a>
+                src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
                 <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
             </span>
         </li>
@@ -727,6 +727,6 @@ if($photo_event->getValue("pho_id") > 0)
 
 /***************************Seitenende***************************/
 
-require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+require(THEME_SERVER_PATH. "/overall_footer.php");
 
 ?>

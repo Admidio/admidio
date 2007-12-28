@@ -67,7 +67,7 @@ if($photo_event->getValue("pho_org_shortname") != $g_organization)
 
 // Html-Kopf ausgeben
 $g_layout['title'] = "Fotos hochladen";
-require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+require(THEME_SERVER_PATH. "/overall_header.php");
 
 echo"<h1 class=\"moduleHeadline\">Fotogalerien - Upload</h1>";
 
@@ -109,7 +109,7 @@ echo"
         <hr />
         <div class=\"formSubmit\">
             <button name=\"upload\" type=\"submit\" value=\"speichern\">
-                <img src=\"$g_root_path/adm_program/images/page_white_get.png\" alt=\"Speichern\" />
+                <img src=\"". THEME_PATH. "/icons/page_white_get.png\" alt=\"Speichern\" />
                 &nbsp;Bilder hochladen
             </button>
         </div>
@@ -122,13 +122,13 @@ echo "
     <li>
         <span class=\"iconLink\">
             <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück\" /></a>
+            src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
             <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
         </span>
     </li>    
     <li>
         <span class=\"iconLink\">
-            <img src=\"$g_root_path/adm_program/images/help.png\" class=\"iconLink\" alt=\"Hilfe\" title=\"Hilfe\"
+            <img src=\"". THEME_PATH. "/icons/help.png\" class=\"iconLink\" alt=\"Hilfe\" title=\"Hilfe\"
                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_up_help','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\" />   
             <a onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_up_help','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\">Hilfe</a>
         </span>
@@ -141,6 +141,6 @@ echo"
         document.getElementById('bilddatei1').focus();
 --></script>";
 
-require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+require(THEME_SERVER_PATH. "/overall_footer.php");
 
 ?>

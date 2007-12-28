@@ -137,7 +137,7 @@ elseif( isset($_POST["upload"]))
 /***************************** HTML-Kopf *************************************/
 
 $g_layout['title'] = "Profilfoto";
-require(SERVER_PATH. "/adm_program/layout/overall_header.php");    
+require(THEME_SERVER_PATH. "/overall_header.php");    
     
 /*****************************Bild hochladen*************************************/
 if($job==NULL)
@@ -170,7 +170,7 @@ if($job==NULL)
 
             <div class=\"formSubmit\">
                 <button name=\"upload\" type=\"submit\" value=\"speichern\">
-                    <img src=\"$g_root_path/adm_program/images/page_white_get.png\" alt=\"Speichern\" />
+                    <img src=\"". THEME_PATH. "/icons/page_white_get.png\" alt=\"Speichern\" />
                     &nbsp;Bild Hochladen
                 </button>
              </div>
@@ -182,7 +182,7 @@ if($job==NULL)
         <li>
             <span class=\"iconTextLink\">
                 <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-                src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück\" /></a>
+                src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
                 <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
             </span>
         </li>
@@ -282,11 +282,11 @@ if($job=="upload")
             
             <div class=\"formSubmit\">
                 <button name=\"cancel\" type=\"button\" value=\"abbrechen\" onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=dont_save&amp;usr_id=".$req_usr_id."'\">
-                    <img src=\"$g_root_path/adm_program/images/error.png\" alt=\"Abbrechen\" />
+                    <img src=\"". THEME_PATH. "/icons/error.png\" alt=\"Abbrechen\" />
                     &nbsp;Abbrechen
                 </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <button name=\"update\" type=\"button\" value=\"update\" onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=save&amp;usr_id=".$req_usr_id."'\">
-                    <img src=\"$g_root_path/adm_program/images/database_in.png\" alt=\"Update\" />
+                    <img src=\"". THEME_PATH. "/icons/database_in.png\" alt=\"Update\" />
                     &nbsp;Neues Bild &uuml;bernehmen
                 </button>
             </div>
@@ -299,6 +299,6 @@ echo "
     document.getElementById('bilddatei').focus();
 --></script>";
 
-require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+require(THEME_SERVER_PATH. "/overall_footer.php");
 
 ?>

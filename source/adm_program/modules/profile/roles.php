@@ -66,7 +66,7 @@ else
 $g_layout['title']  = "Rollen zuordnen";
 $g_layout['header'] = "
     <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/show_hide_block.js\"></script>
-    <script type=\"text/javascript\">
+    <script type=\"text/javascript\"><!--
         function markMember(element)
         {
             if(element.checked == true)
@@ -90,9 +90,9 @@ $g_layout['header'] = "
                 document.getElementById(role_name).checked = false;
             }
         }
-    </script>";
+    --></script>";
 
-require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+require(THEME_SERVER_PATH. "/overall_header.php");
 
 echo "
 <h1 class=\"moduleHeadline\">Rollen zuordnen</h1>
@@ -106,7 +106,7 @@ echo "
                 <th>Rolle</th>
                 <th>Beschreibung</th>
                 <th style=\"text-align: center; width: 80px;\">Leiter<img 
-                    class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
+                    class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
                     onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=leader','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\" />
                 </th>
             </tr>
@@ -171,8 +171,8 @@ echo "
                 echo "<tbody>
                     <tr>
                         <td class=\"tableSubHeader\" colspan=\"4\">
-                            <a href=\"javascript:showHideBlock('$block_id','$g_root_path')\"><img class=\"iconShowHide\"
-                            id=\"img_$block_id\" src=\"$g_root_path/adm_program/images/triangle_open.gif\" alt=\"ausblenden\" /></a>$row->cat_name
+                            <a class=\"iconShowHide\" href=\"javascript:showHideBlock('$block_id','". THEME_PATH. "')\"><img
+                            id=\"img_$block_id\" src=\"". THEME_PATH. "/icons/triangle_open.gif\" alt=\"ausblenden\" /></a>$row->cat_name
                         </td>
                     </tr>
                 </tbody>
@@ -227,17 +227,17 @@ echo "
 
     <div class=\"formSubmit\">";
         echo "<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
-            <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück\" />
+            <img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" />
               &nbsp;Zurück</button>
 
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
         <button name=\"speichern\" type=\"submit\" value=\"speichern\">
-            <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\" />
+            <img src=\"". THEME_PATH. "/icons/disk.png\" alt=\"Speichern\" />
             &nbsp;Speichern</button>
     </div>
 </form>";
 
-require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+require(THEME_SERVER_PATH. "/overall_footer.php");
 
 ?>

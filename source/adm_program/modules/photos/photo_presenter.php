@@ -65,7 +65,7 @@ $body_height = $g_preferences['photo_show_height'] + 130;
 $body_with   = $g_preferences['photo_show_width']  + 20;
 
 //Photomodulspezifische CSS laden
-$g_layout['header'] = $g_layout['header']."<link rel=\"stylesheet\" href=\"$g_root_path/adm_program/layout/photos.css\" type=\"text/css\" media=\"screen\" />";
+$g_layout['header'] = $g_layout['header']."<link rel=\"stylesheet\" href=\"". THEME_PATH. "/photos.css\" type=\"text/css\" media=\"screen\" />";
 
 // Html-Kopf ausgeben
 $g_layout['title']    = "Fotogalerien";
@@ -76,7 +76,7 @@ if($g_preferences['photo_show_mode']==0)
     $g_layout['includes'] = false;
 }
 
-require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+require(THEME_SERVER_PATH. "/overall_header.php");
 
 //Ausgabe der Eine Tabelle Kopfzelle mit &Uuml;berschrift, Photographen und Datum
 //untere Zelle mit Buttons Bild und Fenster Schließen Button
@@ -97,7 +97,7 @@ echo "
         {
             echo"<li>
                 <span class=\"iconTextLink\">
-                    <a href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$prev_image&pho_id=$pho_id\"><img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Vorheriges Bild\" /></a>
+                    <a href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$prev_image&pho_id=$pho_id\"><img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Vorheriges Bild\" /></a>
                     <a href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$prev_image&pho_id=$pho_id\">Vorheriges Bild</a>
                 </span>
             </li>";
@@ -107,7 +107,7 @@ echo "
             echo"<li>
                 <span class=\"iconTextLink\">
                     <a href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$next_image&pho_id=$pho_id\">Nächstes Bild</a>
-                    <a  href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$next_image&pho_id=$pho_id\"><img src=\"$g_root_path/adm_program/images/forward.png\" alt=\"Nächstes Bild\" /></a>
+                    <a  href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$next_image&pho_id=$pho_id\"><img src=\"". THEME_PATH. "/icons/forward.png\" alt=\"Nächstes Bild\" /></a>
                 </span>
             </li>";
         }
@@ -157,7 +157,7 @@ echo "
         echo"<ul class=\"iconTextLinkList\">
             <li>
                 <span class=\"iconTextLink\">
-                    <a href=\"javascript:parent.window.close()\"><img class=\"iconLink\" src=\"$g_root_path/adm_program/images/door_in.png\" alt=\"Fenster schließen\" /></a>
+                    <a href=\"javascript:parent.window.close()\"><img class=\"iconLink\" src=\"". THEME_PATH. "/icons/door_in.png\" alt=\"Fenster schließen\" /></a>
                     <a href=\"javascript:parent.window.close()\">Fenster schließen</a>
                 </span>
             </li>
@@ -171,7 +171,7 @@ echo "
         echo"<ul class=\"iconTextLinkList\">
             <li>
                 <span class=\"iconTextLink\">
-                    <a href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id'\"><img src=\"$g_root_path/adm_program/images/application_view_tile.png\" alt=\"zur Übersicht\" /></a>
+                    <a href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id'\"><img src=\"". THEME_PATH. "/icons/application_view_tile.png\" alt=\"zur Übersicht\" /></a>
                     <a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id\">zur Übersicht</a>
                 </span>
             </li>
@@ -179,6 +179,6 @@ echo "
     }
 echo"</div>";
         
-require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+require(THEME_SERVER_PATH. "/overall_footer.php");
 
 ?>

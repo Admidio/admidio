@@ -107,11 +107,11 @@ if($_POST["upload"])
 }//Kontrollmechanismen
 
 //Photomodulspezifische CSS laden
-$g_layout['header'] = "<link rel=\"stylesheet\" href=\"$g_root_path/adm_program/layout/photos.css\" type=\"text/css\" media=\"screen\" />";
+$g_layout['header'] = "<link rel=\"stylesheet\" href=\"". THEME_PATH. "/photos.css\" type=\"text/css\" media=\"screen\" />";
 
 // Html-Kopf ausgeben
 $g_layout['title'] = "Fotos hochladen";
-require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+require(THEME_SERVER_PATH. "/overall_header.php");
 
 /*****************************Verarbeitung******************************************/
 if($_POST["upload"])
@@ -188,14 +188,14 @@ if($_POST["upload"])
             <li>
                 <span class=\"iconLink\">
                     <a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id\"><img 
-                    src=\"$g_root_path/adm_program/images/application_view_tile.png\" alt=\"Zurück\" /></a>
+                    src=\"". THEME_PATH. "/icons/application_view_tile.png\" alt=\"Zurück\" /></a>
                     <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id\">&Uuml;bersicht</a>
                 </span>
             </li>
             <li>
                 <span class=\"iconLink\">
                     <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id\"><img 
-                    src=\"$g_root_path/adm_program/images/photo.png\" alt=\"Weitere Bilder hochladen\" /></a>
+                    src=\"". THEME_PATH. "/icons/photo.png\" alt=\"Weitere Bilder hochladen\" /></a>
                     <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id\">Weitere Bilder hochladen</a>
                 </span>
             </li>
@@ -204,6 +204,6 @@ if($_POST["upload"])
 }//if($upload)
 
 //Seitenende
-require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+require(THEME_SERVER_PATH. "/overall_footer.php");
 
 ?>

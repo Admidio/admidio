@@ -51,11 +51,11 @@ function getFieldCode($field, $user_id)
         case "CHECKBOX":
             if($field['usd_value'] == 1)
             {
-                $value = "<img src=\"$g_root_path/adm_program/images/checkbox_checked.gif\" alt=\"on\" />";
+                $value = "<img src=\"". THEME_PATH. "/icons/checkbox_checked.gif\" alt=\"on\" />";
             }
             else
             {
-                $value = "<img src=\"$g_root_path/adm_program/images/checkbox.gif\" alt=\"off\" />";
+                $value = "<img src=\"". THEME_PATH. "/icons/checkbox.gif\" alt=\"off\" />";
             }
             break;
             
@@ -157,7 +157,7 @@ function getFieldCode($field, $user_id)
             }
             if(strlen($image) > 0)
             {
-                $value = "<img src=\"$g_root_path/adm_program/images/$image\" style=\"vertical-align: middle;\" 
+                $value = "<img src=\"". THEME_PATH. "/icons/$image\" style=\"vertical-align: middle;\" 
                     alt=\"". $field['usf_name']. "\" title=\"". $field['usf_name']. "\" />&nbsp;&nbsp;$value";
             }
         };
@@ -192,7 +192,7 @@ $g_layout['header'] = "
     <script src=\"$g_root_path/adm_program/libs/script.aculo.us/scriptaculous.js?load=effects\" type=\"text/javascript\"></script>
     <script type=\"text/javascript\" src=\"$g_root_path/adm_program/modules/profile/profile.js\"></script>";
 
-require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+require(THEME_SERVER_PATH. "/overall_header.php");
 
 echo "
 <div class=\"formLayout\" id=\"profile_form\">
@@ -224,18 +224,18 @@ echo "
                             {
                                 if($user->getValue("Geschlecht") == 1)
                                 {
-                                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/male.png\" title=\"m&auml;nnlich\" alt=\"m&auml;nnlich\" />";
+                                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/male.png\" title=\"m&auml;nnlich\" alt=\"m&auml;nnlich\" />";
                                 }
                                 elseif($user->getValue("Geschlecht") == 2)
                                 {
-                                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/female.png\" title=\"weiblich\" alt=\"weiblich\" />";
+                                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/female.png\" title=\"weiblich\" alt=\"weiblich\" />";
                                 }
                             }
                         echo "</div>
                         <div style=\"text-align: right;\">
                             <span class=\"iconLink\">
                                 <a href=\"$g_root_path/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id=". $user->getValue("usr_id"). "\"><img
-                                src=\"$g_root_path/adm_program/images/vcard.png\" 
+                                src=\"". THEME_PATH. "/icons/vcard.png\" 
                                 alt=\"vCard von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname"). " exportieren\" 
                                 title=\"vCard von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname"). " exportieren\" /></a>
                             </span>";
@@ -246,7 +246,7 @@ echo "
                                 echo "
                                 <span class=\"iconLink\">
                                     <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$a_user_id\"><img
-                                    src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Profildaten bearbeiten\" title=\"Profildaten bearbeiten\" /></a>
+                                    src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Profildaten bearbeiten\" title=\"Profildaten bearbeiten\" /></a>
                                 </span>";
                             }
                         echo "</div>
@@ -402,11 +402,11 @@ echo "
                         <img src=\"$g_root_path/adm_program/modules/profile/profile_photo_show.php?usr_id=$a_user_id&amp;id=". time(). "\" alt=\"Profilfoto\" />
                         <span class=\"iconLink\">
                             <a href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$a_user_id\"><img
-                            src=\"$g_root_path/adm_program/images/photo.png\" alt=\"Foto &auml;ndern\" title=\"Foto &auml;ndern\" /></a>
+                            src=\"". THEME_PATH. "/icons/photo.png\" alt=\"Foto &auml;ndern\" title=\"Foto &auml;ndern\" /></a>
                         </span>
                         <span class=\"iconLink\">
                             <a href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=msg_delete&amp;usr_id=$a_user_id\"><img
-                            src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Foto l&ouml;schen\" title=\"Foto l&ouml;schen\" /></a>
+                            src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Foto l&ouml;schen\" title=\"Foto l&ouml;schen\" /></a>
                         </span>
                     </div>
                 </div>
@@ -451,7 +451,7 @@ echo "
                                 <div style=\"text-align: right;\">
                                     <span class=\"iconLink\">
                                         <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$a_user_id#cat-". $value['cat_id']. "\"><img
-                                        src=\"$g_root_path/adm_program/images/edit.png\" alt=\"". $value['cat_name']. " bearbeiten\" title=\"". $value['cat_name']. " bearbeiten\" /></a>
+                                        src=\"". THEME_PATH. "/icons/edit.png\" alt=\"". $value['cat_name']. " bearbeiten\" title=\"". $value['cat_name']. " bearbeiten\" /></a>
                                     </span>
                                 </div>";
                             }
@@ -515,7 +515,7 @@ echo "
                             <div style=\"text-align: right;\">
                                 <span class=\"iconLink\">
                                     <a href=\"$g_root_path/adm_program/modules/profile/roles.php?user_id=$a_user_id\"><img
-                                    src=\"$g_root_path/adm_program/images/edit.png\" title=\"Rollen ändern\" alt=\"Rollen ändern\" /></a>
+                                    src=\"". THEME_PATH. "/icons/edit.png\" title=\"Rollen ändern\" alt=\"Rollen ändern\" /></a>
                                 </span>
                             </div>";
                         }
@@ -546,67 +546,67 @@ echo "
                                             // nun fuer alle Rollenrechte die Icons anzeigen
                                             if($row['rol_assign_roles'] == 1)
                                             {
-                                                echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/wand.png\"
+                                                echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/wand.png\"
                                                 alt=\"Rollen anlegen, bearbeiten, löschen und zuordnen\" title=\"Rollen anlegen, bearbeiten, löschen und zuordnen\" />";
                                             }
                                             if($row['rol_approve_users'] == 1)
                                             {
-                                                echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/properties.png\"
+                                                echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/properties.png\"
                                                 alt=\"Registrierungen verwalten und zuordnen\" title=\"Registrierungen verwalten und zuordnen\" />";
                                             }                                                    
                                             if($row['rol_edit_user'] == 1)
                                             {
-                                                echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/group.png\"
+                                                echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/group.png\"
                                                 alt=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\" title=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\" />";
                                             }
                                             if($row['rol_profile'] == 1)
                                             {
-                                                echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/user.png\"
+                                                echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/user.png\"
                                                 alt=\"Eigenes Profil bearbeiten\" title=\"Eigenes Profil bearbeiten\" />";
                                             }
                                             if($row['rol_announcements'] == 1 && $g_preferences['enable_announcements_module'] > 0)
                                             {
-                                                echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/note.png\"
+                                                echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/note.png\"
                                                 alt=\"Ankündigungen anlegen und bearbeiten\" title=\"Ankündigungen anlegen und bearbeiten\" />";
                                             }
                                             if($row['rol_dates'] == 1 && $g_preferences['enable_dates_module'] > 0)
                                             {
-                                                echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/date.png\"
+                                                echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/date.png\"
                                                 alt=\"Termine anlegen und bearbeiten\" title=\"Termine anlegen und bearbeiten\" />";
                                             }
                                             if($row['rol_photo'] == 1 && $g_preferences['enable_photo_module'] > 0)
                                             {
-                                                echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/photo.png\"
+                                                echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/photo.png\"
                                                 alt=\"Fotos hochladen und bearbeiten\" title=\"Fotos hochladen und bearbeiten\" />";
                                             }
                                             if($row['rol_download'] == 1 && $g_preferences['enable_download_module'] > 0)
                                             {
-                                                echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/folder_down.png\"
+                                                echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/folder_down.png\"
                                                 alt=\"Downloads hochladen und bearbeiten\" title=\"Downloads hochladen und bearbeiten\" />";
                                             }
                                             if($row['rol_guestbook'] == 1 && $g_preferences['enable_guestbook_module'] > 0)
                                             {
-                                                echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/comment.png\"
+                                                echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/comment.png\"
                                                 alt=\"Gästebucheinträge bearbeiten und l&ouml;schen\" title=\"Gästebucheinträge bearbeiten und l&ouml;schen\" />";
                                             }
                                             if($row['rol_guestbook_comments'] == 1 && $g_preferences['enable_guestbook_module'] > 0)
                                             {
-                                                echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/comments.png\"
+                                                echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/comments.png\"
                                                 alt=\"Kommentare zu Gästebucheinträgen anlegen\" title=\"Kommentare zu Gästebucheinträgen anlegen\" />";
                                             }
                                             if($row['rol_weblinks'] == 1 && $g_preferences['enable_weblinks_module'] > 0)
                                             {
-                                                echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/globe.png\"
+                                                echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/globe.png\"
                                                 alt=\"Weblinks anlegen und bearbeiten\" title=\"Weblinks anlegen und bearbeiten\" />";
                                             }
                             				if($row['rol_this_list_view'] == 1)
 							                {
-							                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/page_white_text.png\"
+							                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/page_white_text.png\"
 							                    alt=\"Mitgliederliste dieser Rolle einsehen\" title=\"Mitgliederliste dieser Rolle einsehen\" />";
 							                }
 							   				if($row['rol_all_lists_view'] == 1)
 							                {
-							                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/pages_white_text.png\"
+							                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/pages_white_text.png\"
 							                    alt=\"Mitgliederlisten aller Rollen einsehen\" title=\"Mitgliederlisten aller Rollen einsehen\" />";
 							                }
 							                                        echo "</dt>
@@ -618,8 +618,8 @@ echo "
                                                 echo "
                                                 <span class=\"iconLink\">
                                                     <a href=\"javascript:deleteRole(". $row['rol_id']. ", '". $row['rol_name']. "', ". $row['rol_valid']. ", ". $user->getValue("usr_id"). ", '". $row['cat_name']. "', '". 
-                                                    mysqldate('d.m.y', $row['mem_begin']). "', ". $row['mem_leader']. ", ". $g_current_user->isWebmaster(). ", '". $g_root_path. "')\"><img 
-                                                    src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Rolle l&ouml;schen\" title=\"Rolle l&ouml;schen\" /></a>
+                                                    mysqldate('d.m.y', $row['mem_begin']). "', ". $row['mem_leader']. ", ". $g_current_user->isWebmaster(). ", '". $g_root_path. "', '". $g_preferences['theme']. "')\"><img 
+                                                    src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Rolle löschen\" title=\"Rolle löschen\" /></a>
                                                 </span>";
                                             }
                                         echo "</dd>
@@ -693,7 +693,7 @@ echo "
                                                 echo "
                                                 <span class=\"iconLink\">
                                                     <a href=\"javascript:deleteFormerRole(". $row['rol_id']. ", '". $row['rol_name']. "', ". $user->getValue("usr_id"). ", '". $g_root_path. "')\"><img 
-                                                    src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Rolle l&ouml;schen\" title=\"Rolle l&ouml;schen\" /></a>
+                                                    src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Rolle löschen\" title=\"Rolle löschen\" /></a>
                                                 </span>";
                                             }
                                         echo "</dd>
@@ -768,14 +768,14 @@ if(isset($_GET['user_id']) == true)
         <li>
             <span class=\"iconTextLink\">
                 <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-                src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück\" /></a>
+                src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
                 <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
             </span>
         </li>
     </ul>";
 }
 
-require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+require(THEME_SERVER_PATH. "/overall_footer.php");
 
 echo "<div onclick=\"new Effect.Highlight(this)\">Test</div>";
 
