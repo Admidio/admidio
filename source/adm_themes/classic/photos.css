@@ -1,0 +1,96 @@
+/******************************************************************************
+ * Cascading-Style-Sheets-Datei um das Aussehen von Admidio anzupassen
+ *
+ * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Homepage     : http://www.admidio.org
+ * Module-Owner : Jochen Erkens
+ * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ *
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!! W I C H T I G !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ * Diese Datei bitte NICHT anpassen, da diese bei jedem Update ueberschrieben
+ * werden sollte. Anpassungen koennen in der user.css im Ordner adm_config
+ * gemacht werden. Die CSS-Einstellungen koennen dazu einfach in diese Datei
+ * kopiert werden
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ *
+ *****************************************************************************/
+/*Die Thumbnails werden in einer Tabelle aufbebaut
+hier koenne Einstellungen fuer diese vorgenommen werden*/
+#photoThumbnailTable {
+    width: 550px;   
+}
+
+/*Einstellung fuer die Thumbnailtabellenzeile, z.B. die Hoehe*/
+.photoThumbnailTableRow{
+}
+
+/*Einstellung fuer die Thumbnailtabellenspalte, z.B. Breite oder Ausrichtung des enthaltenen Textes*/
+.photoThumbnailTableColumn{
+    text-align: center;
+}
+
+/*Einstellung fuer das Thumbnail selbst, z.B. laesst sich ein Rand um jedes Bild legen*/
+.photoThumbnail{
+    vertical-align: middle;
+    cursor: pointer;
+    border: none;
+}
+
+
+/*Auch die Fotoevents werden in einer Tabelle angezeigt*/
+#photoEventTable{
+    width: 550px;
+}
+
+/*Einstellung fuer die Fotoeventtabellenzeile, z.B. die Hoehe*/
+.photoEventTableRow{
+}
+
+/*Einstellung fuer die FotoeventtabellenBILDERspalte*/
+.photoEventTablePicColumn{
+    padding: 4px;
+    text-align: right;
+    width: 35%;
+}
+
+/*Einstellung fuer die FotoeventtabellenTextspalte, z.B. Breite oder Ausrichtung des enthaltenen Textes*/
+.photoEventTableTextColumn{
+    text-align: left;
+    font-size: 8px;
+}
+
+/*Wenn in dieser Spalte Ein Link vorkommt wir dieser So dargestellt*/
+.photoEventTableTextColumn a{
+    font-size: 12px;
+}
+
+/*Auch das Vorschaubild koenne z.B. einen Rand erhalten*/
+.photoPreviewPic{
+    border: none;
+    vertical-align: middle;
+}
+
+/*Umramender Container um Thumbnail- und Fotoeventtabelle, sowie Uploadbericht*/
+.photoModuleContainer{
+    border-width: 0px;
+    border-color: #6CA7A8;
+    border-style: solid;
+    width: 550px;
+    margin: auto;
+    text-align: center;
+}
+
+/*Einstellungen fuer die ausgabe der grossen Photos (ohne LightBox)*/
+.photoOutput{
+    text-align: center;
+    border: none;
+}
+
+/*Informationen ueber den Thumbnails, derzeit nur Datum*/
+#photoEventInformation{
+    margin: 5px
+}
+
+.photoModuleContainer .editInformation {
+    text-align: center;
+}
