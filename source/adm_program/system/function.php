@@ -203,15 +203,15 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
         if ( $on_page > 1 )
         {
             $page_string = '<a href="' . $base_url . "&amp;start=" . ( ( $on_page - 2 ) * $per_page ) . '"><img 
-                                class="navigationArrow" src="'. $g_root_path. '/adm_program/images/back.png" alt="Vorherige" /></a>
+                                class="navigationArrow" src="'. THEME_PATH. '/icons/back.png" alt="Vorherige" /></a>
                             <a href="' . $base_url . "&amp;start=" . ( ( $on_page - 2 ) * $per_page ) . '">Vorherige</a>&nbsp;&nbsp;' . $page_string;
         }
 
         if ( $on_page < $total_pages )
         {
-            $page_string .= '&nbsp;&nbsp;<a href="' . $base_url . "&amp;start=" . ( $on_page * $per_page ) . '">N&auml;chste</a>
+            $page_string .= '&nbsp;&nbsp;<a href="' . $base_url . "&amp;start=" . ( $on_page * $per_page ) . '">Nächste</a>
                             <a class="navigationArrow" href="' . $base_url . "&amp;start=" . ( $on_page * $per_page ) . '" /><img 
-                                 src="'. $g_root_path. '/adm_program/images/forward.png" alt="N&auml;chste"></a>';
+                                 src="'. THEME_PATH. '/icons/forward.png" alt="Nächste"></a>';
         }
 
     }

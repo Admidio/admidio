@@ -48,10 +48,8 @@ class Captcha
 
     function Captcha()
     {
-        $absolute_path = substr(__FILE__, 0, strpos(__FILE__, "captcha_class.php"));
-
         // Hier wird jetzt die Schriftart festgelegt...
-        $this->font = $absolute_path. "mr_phone1.ttf";
+        $this->font = THEME_PATH. "/font.ttf";
 
 
         // Nun die Bildgroesse des Captchas festlegen

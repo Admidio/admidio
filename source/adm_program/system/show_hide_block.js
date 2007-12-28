@@ -8,7 +8,7 @@
  *
  *****************************************************************************/
 
-function showHideBlock(block_name, root_path)
+function showHideBlock(block_name, theme_path)
 {
 	var block_element = block_name;
 	var image_element = 'img_' + block_name;
@@ -17,12 +17,12 @@ function showHideBlock(block_name, root_path)
 	{
 		 document.getElementById(block_element).style.visibility = 'visible';
 		 document.getElementById(block_element).style.display    = '';
-		 document.images[image_element].src = root_path + '/adm_program/images/triangle_open.gif';
+		 document.images[image_element].src = theme_path + '/images/triangle_open.gif';
 	}
 	else
 	{
 		 document.getElementById(block_element).style.visibility = 'hidden';
 		 document.getElementById(block_element).style.display    = 'none';
-		 document.images[image_element].src = root_path + '/adm_program/images/triangle_close.gif';
+		 document.images[image_element].src = theme_path + '/images/triangle_close.gif';
 	}
 }

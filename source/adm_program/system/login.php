@@ -21,7 +21,7 @@ $role_webmaster = new Role($g_db, 'Webmaster');
 // Html-Kopf ausgeben
 $g_layout['title']  = "Login";
 
-require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
 echo "
@@ -57,7 +57,7 @@ echo "
         
         <div class=\"formSubmit\">
             <button name=\"login\" type=\"submit\" value=\"login\" tabindex=\"4\">
-            <img src=\"$g_root_path/adm_program/images/key.png\" alt=\"Login\" />
+            <img src=\"". THEME_PATH. "/icons/key.png\" alt=\"Login\" />
             &nbsp;Login</button>
         </div>";
         
@@ -92,6 +92,6 @@ echo "
     document.getElementById('usr_login_name').focus();
 --></script>";
 
-require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+require(THEME_SERVER_PATH. "/overall_footer.php");
 
 ?>

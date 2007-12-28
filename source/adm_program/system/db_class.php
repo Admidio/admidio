@@ -91,7 +91,7 @@ class DB
         {
             // Html-Kopf ausgeben
             $g_layout['title']  = "Datenbank-Fehler";
-            require(SERVER_PATH. "/adm_program/layout/overall_header.php");       
+            require(THEME_SERVER_PATH. "/overall_header.php");       
         }
                     
         $error_string = "<div style=\"font-family: monospace;\">
@@ -105,7 +105,7 @@ class DB
         
         if(headers_sent() == false && isset($g_preferences))
         {
-            require(SERVER_PATH. "/adm_program/layout/overall_footer.php");       
+            require(THEME_SERVER_PATH. "/overall_footer.php");       
         }
         
         exit();
