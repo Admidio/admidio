@@ -56,8 +56,7 @@ else
 
 // Html-Kopf ausgeben
 $g_layout['title'] = "Benutzer importieren";
-$g_layout['header'] = "<script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/show_hide_block.js\"></script>";
-require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
 echo "
@@ -104,8 +103,8 @@ echo "
                     echo "<tbody>
                         <tr>
                             <td class=\"tableSubHeader\" colspan=\"4\">
-                                <a class=\"iconShowHide\" href=\"javascript:showHideBlock('$block_id', '$g_root_path')\"><img 
-                                id=\"img_$block_id\" src=\"$g_root_path/adm_program/images/triangle_open.gif\" alt=\"ausblenden\" /></a>". $value['cat_name']. "
+                                <a class=\"iconShowHide\" href=\"javascript:showHideBlock('$block_id', '". THEME_PATH. "')\"><img 
+                                id=\"img_$block_id\" src=\"". THEME_PATH. "/icons/triangle_open.gif\" alt=\"ausblenden\" /></a>". $value['cat_name']. "
                             </td>
                         </tr>
                     </tbody>
@@ -139,11 +138,11 @@ echo "
 
         <div class=\"formSubmit\">
             <button name=\"back\" type=\"button\" onclick=\"history.back()\">
-            <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück\" />
+            <img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" />
             &nbsp;Zurück</button>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <button id=\"import\" type=\"submit\">
-            <img src=\"$g_root_path/adm_program/images/database_in.png\" alt=\"Weiter\" />
+            <img src=\"". THEME_PATH. "/icons/database_in.png\" alt=\"Weiter\" />
             &nbsp;Importieren</button>
         </div>
     </div>
@@ -154,6 +153,6 @@ echo "
     document.getElementById('first_row').focus();
 --></script>";
     
-require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+require(THEME_SERVER_PATH. "/overall_footer.php");
 
 ?>

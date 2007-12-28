@@ -83,7 +83,7 @@ $g_layout['header'] =  "
     --></script>";
 
 // Html-Kopf ausgeben
-require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+require(THEME_SERVER_PATH. "/overall_header.php");
 
 echo "
 <h1 class=\"moduleHeadline\">Organisationseinstellungen</h1>
@@ -150,6 +150,37 @@ echo "
                             <dd><input type=\"text\" id=\"org_homepage\" name=\"org_homepage\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['org_homepage']. "\" /></dd>
                         </dl>
                     </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"theme\">Admidio-Theme:</label></dt>
+                            <dd>
+                                <select size=\"1\" id=\"theme\" name=\"theme\">
+                                    <option value=\"\">- Bitte wählen -</option>";
+                                    $themes_path = SERVER_PATH. "/adm_themes";
+                                    $dir_handle  = opendir($themes_path);
+
+                                    while (false !== ($filename = readdir($dir_handle)))
+                                    {
+                                    	echo $filename. "<br>";
+                                        if(is_file($filename) == false
+                                        && strpos($filename, ".") !== 0)
+                                        {
+                                            echo "<option value=\"$filename\" ";
+                                            if($form_values['theme'] == $filename)
+                                            {
+                                                echo " selected=\"selected\" ";
+                                            }
+                                            echo ">$filename</option>";
+                                        }
+                                    }
+                                echo "</select>
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Eine Stylesheet-Datei aus dem adm_config-Ordner kann hier ausgewählt werden.
+                        Diese überschreibt die System-Stylesheet-Einstellungen.
+                    </li>                    
                     <li>
                         <dl>
                             <dt><label for=\"homepage_logout\">Startseite (Besucher):</label></dt>
@@ -314,35 +345,6 @@ echo "
                         Dieser Wert gibt an, nach wieviel Minuten ein inaktiver Benutzer automatisch ausgeloggt wird.
                         Inaktiv ist ein Benutzer solange er keine Seite des Admidio-Systems aufruft. Diese Einstellung
                         wird ignoriert, falls der Benutzer <b>Angemeldet bleiben</b> ausgewählt hat.
-                    </li>
-                    <li>
-                        <dl>
-                            <dt><label for=\"user_css\">Eigene Stylesheet-Datei:</label></dt>
-                            <dd>
-                                <select size=\"1\" id=\"user_css\" name=\"user_css\">
-                                    <option value=\"\">keine</option>";
-                                    $config_path = SERVER_PATH. "/adm_config";
-                                    $dir_handle  = opendir($config_path);
-
-                                    while (false !== ($filename = readdir($dir_handle)))
-                                    {
-                                        if(strpos($filename, ".css") > 0)
-                                        {
-                                            echo "<option value=\"$filename\" ";
-                                            if($form_values['user_css'] == $filename)
-                                            {
-                                                echo " selected=\"selected\" ";
-                                            }
-                                            echo ">$filename</option>";
-                                        }
-                                    }
-                                echo "</select>
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class=\"smallFontSize\">
-                        Eine Stylesheet-Datei aus dem adm_config-Ordner kann hier ausgewählt werden.
-                        Diese überschreibt die System-Stylesheet-Einstellungen.
                     </li>
                 </ul>
             </div>
@@ -1010,7 +1012,7 @@ echo "
                         <dl>
                             <dt><label for=\"ecard_text_length\">Template:</label></dt>
                             <dd>";
-                                echo getMenueSettings(getfilenames('../../layout/ecard_templates/'),'ecard_template',$form_values['ecard_template'],'120','false','false');
+                                echo getMenueSettings(getfilenames(THEME_SERVER_PATH. '/ecard_templates'),'ecard_template',$form_values['ecard_template'],'120','false','false');
                              echo "</dd>
                         </dl>
                     </li>
@@ -1334,8 +1336,8 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Das Weblinksmodul kann &uuml;ber diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
-                        aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt.
+                        Das Weblinksmodul kann über diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
+                        aufrufbar und wird auch in der Modulübersichtsseite nicht mehr angezeigt.
                     </li>
                 </ul>
             </div>
@@ -1346,7 +1348,7 @@ echo "
 <div class=\"formLayout\">
     <div class=\"formBody\" style=\"text-align: center;\">
         <button name=\"save\" type=\"submit\" value=\"speichern\">
-            <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\" />
+            <img src=\"". THEME_PATH. "/icons/disk.png\" alt=\"Speichern\" />
             &nbsp;Speichern</button>
     </div>
 </div>
@@ -1354,9 +1356,9 @@ echo "
 
 <script type=\"text/javascript\"><!--
     toggleDiv('general');
-            document.getElementById('longname').focus();
+            document.getElementById('org_longname').focus();
 --></script>";
 
-require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+require(THEME_SERVER_PATH. "/overall_footer.php");
 
 ?>
