@@ -24,7 +24,7 @@ $orga_preferences = array(
     'email_administrator' => 'webmaster@'. $_SERVER['HTTP_HOST'],
     'homepage_logout'     => 'index.html',
     'homepage_login'      => 'index.html',
-    'user_css'            => 'user.css',
+    'theme'               => 'classic',
 
     // Registrierung
     'registration_mode'              => '1',
