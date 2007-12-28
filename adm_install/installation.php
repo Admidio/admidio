@@ -34,11 +34,14 @@ function showPage($message, $next_url, $icon, $icon_text, $focus = "next_page")
         
         <title>Admidio - Update</title>
 
-        <link rel="stylesheet" type="text/css" href="../adm_program/layout/system.css" />
+        <link rel="stylesheet" type="text/css" href="../adm_themes/classic/system.css" />
+        <script type="text/javascript" src="'. $g_root_path. '/adm_program/system/common_functions.js"></script>
 
         <!--[if lt IE 7]>
-        <script type="text/javascript" src="../adm_program/system/correct_png.js"></script>
-        <![endif]-->
+    	<script type="text/javascript"><!--
+			window.attachEvent("onload", correctPNG);
+    	--></script>
+    	<![endif]-->
         
         <script><!--
             function startUpdate()
@@ -47,7 +50,7 @@ function showPage($message, $next_url, $icon, $icon_text, $focus = "next_page")
                 if($submit_button.value == \'Datenbank aktualisieren\' || $submit_button.value == \'Admidio installieren\')
                 {
                     $submit_button.disabled  = true;
-                    $submit_button.innerHTML = \'<img src="../adm_program/images/loader.gif" alt="Loading" /> Datenbank wird aktualisiert\';
+                    $submit_button.innerHTML = \'<img src="../adm_themes/classic/images/loader.gif" alt="Loading" /> Datenbank wird aktualisiert\';
                 }
                 document.forms[0].submit();
             }
@@ -57,7 +60,7 @@ function showPage($message, $next_url, $icon, $icon_text, $focus = "next_page")
         <form action="'. $next_url. '" method="post">
         <div class="formLayout" id="installation_form">
             <div class="formHead" style="text-align: left; letter-spacing: 0em;">
-                <img style="float:left; padding: 5px 0px 0px 0px; border: none;" src="../adm_program/images/admidio_logo_50.png" alt="www.admidio.org" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <img style="float:left; padding: 5px 0px 0px 0px; border: none;" src="../adm_themes/classic/images/admidio_logo_50.png" alt="www.admidio.org" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <div style="font-size: 16pt; font-weight: bold; text-align: right; padding: 5px 10px 10px 0px;">Version '. ADMIDIO_VERSION. '</div>
                 <div style="font-size: 11pt; padding: 0px 0px 5px 0px;">Die Online-Mitgliederverwaltung f&uuml;r Vereine, Gruppen und Organisationen</div>
             </div>
@@ -69,7 +72,7 @@ function showPage($message, $next_url, $icon, $icon_text, $focus = "next_page")
                 <hr />
                 <div class="formSubmit" style="text-align: center;">
                     <button type="button" id="next_page" name="next_page" value="'. $icon_text. '" onclick="startUpdate()">
-                    <img src="../adm_program/images/'. $icon. '" alt="'. $icon_text. '" />
+                    <img src="../adm_themes/classic/images/'. $icon. '" alt="'. $icon_text. '" />
                     &nbsp;'. $icon_text. '</button>
                 </div>
             </div>
@@ -405,7 +408,7 @@ elseif($req_mode == 5)
                 
                 <span class="iconTextLink">
                     <a href="installation.php?mode=6"><img
-                    src="../adm_program/images/page_white_put.png" alt="config.php herunterladen" /></a>
+                    src="../adm_themes/classic/images/page_white_put.png" alt="config.php herunterladen" /></a>
                     <a href="installation.php?mode=6">config.php herunterladen</a>
                 </span>
                 <br />';
@@ -450,7 +453,7 @@ elseif($req_mode == 7)
 {
     // Installation starten
     
-    if(file_exists("../adm_config/config.php") == false)
+    if(file_exists("../config.php") == false)
     {
         $message = "Die Datei <strong>config.php</strong> befindet sich nicht im Verzeichnis <strong>adm_config</strong> !";
         showPage($message, "installation.php?mode=5", "back.png", "Zurück");

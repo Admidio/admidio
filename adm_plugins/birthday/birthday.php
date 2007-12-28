@@ -203,7 +203,7 @@ if($anz_geb > 0)
                              target="'. $plg_link_target. '">'. $show_name. '</a>
                              <span class="iconLink">
                                 <a href="'. $g_root_path. '/adm_program/modules/mail/mail.php?usr_id='. $row['usr_id']. '"><img 
-                                src="'. $g_root_path. '/adm_program/images/email.png" alt="E-Mail senden" title="E-Mail senden"></a>
+                                src="'. THEME_PATH. '/images/email.png" alt="E-Mail senden" title="E-Mail senden"></a>
                             </span>';
                     }
                     else
@@ -211,7 +211,7 @@ if($anz_geb > 0)
                         $show_name = $show_name. 
                             '<span class="iconLink">
                                 <a href="mailto:'. $row['email']. '"><img 
-                                src="'. $g_root_path. '/adm_program/images/email.png" alt="E-Mail senden" title="E-Mail senden"></a>
+                                src="'. THEME_PATH. '/images/email.png" alt="E-Mail senden" title="E-Mail senden"></a>
                             </span>';
                     }
                 }
