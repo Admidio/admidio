@@ -41,8 +41,7 @@ unset($_SESSION['roles_request']);
 
 // Html-Kopf ausgeben
 $g_layout['title']  = "Rollenverwaltung";
-$g_layout['header'] = "<script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/show_hide_block.js\"></script>
-                       <style type=\"text/css\">
+$g_layout['header'] = "<style type=\"text/css\">
                            .iconLink li {
                                padding: 15px;
                                list-style-type: none;
@@ -55,7 +54,7 @@ $g_layout['header'] = "<script type=\"text/javascript\" src=\"$g_root_path/adm_p
                            }
                        </style>";
 
-require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
 echo "
@@ -79,21 +78,21 @@ echo "
     <li>
         <span class=\"iconTextLink\">
             <a href=\"$g_root_path/adm_program/administration/roles/roles_new.php\"><img
-            src=\"$g_root_path/adm_program/images/add.png\" alt=\"Rolle anlegen\" /></a>
+            src=\"". THEME_PATH. "/icons/add.png\" alt=\"Rolle anlegen\" /></a>
             <a href=\"$g_root_path/adm_program/administration/roles/roles_new.php\">Rolle anlegen</a>
         </span>
     </li>
     <li>
         <span class=\"iconTextLink\">
             <a href=\"$g_root_path/adm_program/administration/roles/roles.php?inactive=$req_valid\"><img
-            src=\"$g_root_path/adm_program/images/$image\" alt=\"$description_lnk\" /></a>
+            src=\"". THEME_PATH. "/icons/$image\" alt=\"$description_lnk\" /></a>
             <a href=\"$g_root_path/adm_program/administration/roles/roles.php?inactive=$req_valid\">$description_lnk</a>
         </span>
     </li>
     <li>
         <span class=\"iconTextLink\">
             <a href=\"$g_root_path/adm_program/administration/roles/categories.php?type=ROL\"><img
-            src=\"$g_root_path/adm_program/images/application_double.png\" alt=\"Kategorien pflegen\" /></a>
+            src=\"". THEME_PATH. "/icons/application_double.png\" alt=\"Kategorien pflegen\" /></a>
             <a href=\"$g_root_path/adm_program/administration/roles/categories.php?type=ROL\">Kategorien pflegen</a>
         </span>
     </li>
@@ -104,7 +103,7 @@ echo "
         <tr>
             <th>$description_lst</th>
             <th>Berechtigungen</th>
-            <th style=\"text-align: center;\"><img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/lock.png\" alt=\"Rolle nur f&uuml;r Moderatoren sichtbar\" title=\"Rolle nur f&uuml;r Moderatoren sichtbar\" /></th>
+            <th style=\"text-align: center;\"><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/lock.png\" alt=\"Rolle nur f&uuml;r Moderatoren sichtbar\" title=\"Rolle nur f&uuml;r Moderatoren sichtbar\" /></th>
             <th style=\"text-align: center;\">Funktionen</th>
         </tr>
     </thead>";
@@ -130,14 +129,14 @@ echo "
             $block_id     = "cat_$row->cat_id";
             if($row->cat_hidden == 1)
             {
-                $image_hidden = "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/user_key.png\" 
+                $image_hidden = "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/user_key.png\" 
                                  alt=\"Nur sichtbar f&uuml;r eingeloggte Benutzer\" title=\"Nur sichtbar f&uuml;r eingeloggte Benutzer\" />";
             }
             echo "<tbody>
                 <tr>
                     <td class=\"tableSubHeader\" colspan=\"4\">
                         <a class=\"iconShowHide\" href=\"javascript:showHideBlock('$block_id','$g_root_path')\"><img 
-                        id=\"img_$block_id\" src=\"$g_root_path/adm_program/images/triangle_open.gif\" alt=\"ausblenden\" /></a>$row->cat_name $image_hidden
+                        id=\"img_$block_id\" src=\"". THEME_PATH. "/icons/triangle_open.gif\" alt=\"ausblenden\" /></a>$row->cat_name $image_hidden
                     </td>
                 </tr>
             </tbody>
@@ -151,92 +150,92 @@ echo "
             <td>";
                 if($row->rol_assign_roles == 1)
                 {
-                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/wand.png\"
+                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/wand.png\"
                     alt=\"Rollen verwalten und zuordnen\" title=\"Rollen verwalten und zuordnen\" />";
                 }
                 if($row->rol_approve_users == 1)
                 {
-                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/properties.png\"
+                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/properties.png\"
                     alt=\"Registrierungen verwalten und zuordnen\" title=\"Registrierungen verwalten und zuordnen\" />";
                 }
                 if($row->rol_edit_user == 1)
                 {
-                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/group.png\"
+                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/group.png\"
                     alt=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\" title=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\" />";
                 }
                 if($row->rol_profile == 1)
                 {
-                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/user.png\"
+                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/user.png\"
                     alt=\"Eigenes Profil bearbeiten\" title=\"Eigenes Profil bearbeiten\" />";
                 }
                 if($row->rol_announcements == 1 && $g_preferences['enable_announcements_module'] > 0)
                 {
-                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/note.png\"
+                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/note.png\"
                     alt=\"Ank&uuml;ndigungen anlegen und bearbeiten\" title=\"Ank&uuml;ndigungen anlegen und bearbeiten\" />";
                 }
                 if($row->rol_dates == 1 && $g_preferences['enable_dates_module'] > 0)
                 {
-                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/date.png\"
+                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/date.png\"
                     alt=\"Termine anlegen und bearbeiten\" title=\"Termine anlegen und bearbeiten\" />";
                 }
                 if($row->rol_photo == 1 && $g_preferences['enable_photo_module'] > 0)
                 {
-                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/photo.png\"
+                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/photo.png\"
                     alt=\"Fotos hochladen und bearbeiten\" title=\"Fotos hochladen und bearbeiten\" />";
                 }
                 if($row->rol_download == 1 && $g_preferences['enable_download_module'] > 0)
                 {
-                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/folder_down.png\"
+                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/folder_down.png\"
                     alt=\"Downloads hochladen und bearbeiten\" title=\"Downloads hochladen und bearbeiten\" />";
                 }
                 if($row->rol_guestbook == 1 && $g_preferences['enable_guestbook_module'] > 0)
                 {
-                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/comment.png\"
+                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/comment.png\"
                     alt=\"G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen\" title=\"G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen\" />";
                 }
                 // falls anonyme Gaestebuchkommentare erfassen werden duerfen, braucht man das Recht pro Rolle nicht mehr zu vergeben
                 if($row->rol_guestbook_comments == 1  && $g_preferences['enable_guestbook_module'] > 0 && $g_preferences['enable_gbook_comments4all'] == false)
                 {
-                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/comments.png\"
+                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/comments.png\"
                     alt=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\" title=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\" />";
                 }
                 if($row->rol_mail_logout == 1 && $g_preferences['enable_mail_module'] > 0)
                 {
-                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/email.png\"
+                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/email.png\"
                     alt=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\" title=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\" />";
                 }
                 if($row->rol_mail_login == 1 && $g_preferences['enable_mail_module'] > 0)
                 {
-                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/email_key.png\"
+                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/email_key.png\"
                     alt=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\" title=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\" />";
                 }
                 if($row->rol_weblinks == 1 && $g_preferences['enable_weblinks_module'] > 0)
                 {
-                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/globe.png\"
+                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/globe.png\"
                     alt=\"Weblinks anlegen und bearbeiten\" title=\"Weblinks anlegen und bearbeiten\" />";
                 }
     			if($row->rol_this_list_view == 1)
                 {
-                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/page_white_text.png\"
+                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/page_white_text.png\"
                     alt=\"Mitgliederliste dieser Rolle einsehen\" title=\"Mitgliederliste dieser Rolle einsehen\" />";
                 }
    				if($row->rol_all_lists_view == 1)
                 {
-                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/pages_white_text.png\"
+                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/pages_white_text.png\"
                     alt=\"Mitgliederlisten aller Rollen einsehen\" title=\"Mitgliederlisten aller Rollen einsehen\" />";
                 }
             echo "</td>
             <td style=\"text-align: center;\">";
                 if($row->rol_locked == 1)
                 {
-                    echo "<img class=\"iconInformation\" src=\"$g_root_path/adm_program/images/lock.png\"
+                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/lock.png\"
                     alt=\"Rolle nur f&uuml;r Moderatoren sichtbar\" title=\"Rolle nur f&uuml;r Moderatoren sichtbar\" />";
                 }
             echo "</td>
             <td style=\"text-align: center;\">
                 <span class=\"iconLink\">
                     <a href=\"$g_root_path/adm_program/modules/lists/lists_show.php?type=address&amp;mode=html&amp;rol_id=$row->rol_id\"><img
-                    src=\"$g_root_path/adm_program/images/application_view_columns.png\" alt=\"Mitglieder anzeigen\" title=\"Mitglieder anzeigen\" /></a>
+                    src=\"". THEME_PATH. "/icons/application_view_columns.png\" alt=\"Mitglieder anzeigen\" title=\"Mitglieder anzeigen\" /></a>
                 </span>";
 
                 if($req_valid == true)
@@ -244,7 +243,7 @@ echo "
                     echo "
                     <span class=\"iconLink\">
                         <a href=\"$g_root_path/adm_program/modules/lists/members.php?rol_id=$row->rol_id\"><img 
-                        src=\"$g_root_path/adm_program/images/add.png\" alt=\"Mitglieder zuordnen\" title=\"Mitglieder zuordnen\" /></a>
+                        src=\"". THEME_PATH. "/icons/add.png\" alt=\"Mitglieder zuordnen\" title=\"Mitglieder zuordnen\" /></a>
                     </span>";
                 }
                 else
@@ -252,7 +251,7 @@ echo "
                     echo "
                     <span class=\"iconLink\">
                         <a href=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$row->rol_id&amp;mode=5\"><img
-                        src=\"$g_root_path/adm_program/images/wand.png\" alt=\"Rolle aktivieren\" title=\"Rolle aktivieren\" /></a>
+                        src=\"". THEME_PATH. "/icons/wand.png\" alt=\"Rolle aktivieren\" title=\"Rolle aktivieren\" /></a>
                     </span>";
                 }
 
@@ -260,7 +259,7 @@ echo "
                 {
                     echo "
                     <span class=\"iconLink\">
-                        <img src=\"$g_root_path/adm_program/images/dummy.png\" alt=\"dummy\" />
+                        <img src=\"". THEME_PATH. "/icons/dummy.png\" alt=\"dummy\" />
                     </span>";
                 }
                 else
@@ -270,7 +269,7 @@ echo "
                         echo "
                         <span class=\"iconLink\">
                             <a href=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$row->rol_id&amp;mode=1\"><img 
-                            src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Rolle l&ouml;schen\" title=\"Rolle l&ouml;schen\" /></a>
+                            src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Rolle l&ouml;schen\" title=\"Rolle l&ouml;schen\" /></a>
                         </span>";
                     }
                     else
@@ -278,7 +277,7 @@ echo "
                         echo "
                         <span class=\"iconLink\">
                             <a href=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$row->rol_id&amp;mode=6\"><img 
-                            src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Rolle l&ouml;schen\" title=\"Rolle l&ouml;schen\" /></a>
+                            src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Rolle l&ouml;schen\" title=\"Rolle l&ouml;schen\" /></a>
                         </span>";
                     }
                 }
@@ -288,6 +287,6 @@ echo "
 echo "</tbody>
 </table>";
     
-require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+require(THEME_SERVER_PATH. "/overall_footer.php");
 
 ?>
