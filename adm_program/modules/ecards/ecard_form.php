@@ -26,11 +26,10 @@ require_once("ecard_function.php");
 $email_versand_liste		= array(); // Array wo alle Empfaenger aufgelistet werden (jedoch keine zusaetzlichen);
 $email_versand_liste_all	= array(); // Array wo alle Empfaenger aufgelistet werden (inklusive zusaetzlichen);
 $error_msg					= "";
-$tmpl_folder 				= "../../layout/ecard_templates/";
 $font_sizes 				= array ("9","10","11","12","13","14","15","16","17","18","20","22","24","30"); 
 $font_colors 				= getElementsFromFile('../../system/schriftfarben.txt');  
 $fonts 						= getElementsFromFile('../../system/schriftarten.txt');
-$templates 					= getfilenames($tmpl_folder);
+$templates 					= getfilenames(THEME_SERVER_PATH. "/ecard_templates");
 $ecard_plain_data 			= "Du hast eine Gru&szlig;karte von einem Mitglied des Vereins ".$g_organization." erhalten.\n Falls du diese nicht sehen kannst befindet sich diese im Anhang der Mail";
 $msg_error_1				= "Es ist ein Fehler bei der Verarbeitung der Gru&szlig;karte aufgetreten. Bitte probier es zu einem sp&auml;teren Zeitpunkt noch einmal.";
 $msg_error_2 				= "Es sind einige Eingabefelder nicht bzw. nicht richtig ausgef&uuml;llt. Bitte f&uuml;ll diese aus, bzw. korrigier diese.";
@@ -186,7 +185,7 @@ if (! empty($submit_action))
 	        $ecard["message"] = substr($ecard["message"],0,$g_preferences['ecard_text_length']-1);
 	    }
 		// Template wird geholt
-		list($error,$ecard_data_to_parse) = getEcardTemplate($ecard["template_name"],$tmpl_folder);
+		list($error,$ecard_data_to_parse) = getEcardTemplate($ecard["template_name"],THEME_SERVER_PATH. "/ecard_templates");
 		// Wenn es einen Error gibt ihn ausgeben
 	    if ($error) 
 	    {
@@ -288,7 +287,7 @@ else
 /*********************HTML_TEIL*******************************/
 
 // Html-Kopf ausgeben
-$g_layout['title'] = $g_organization." - Gru&szlig;karten";
+$g_layout['title'] = $g_organization." - Grußkarten";
 //Lightbox-Mode
 $g_layout['header'] = "";
 if($g_preferences['photo_show_mode']==1)
@@ -297,7 +296,7 @@ if($g_preferences['photo_show_mode']==1)
         <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/script.aculo.us/prototype.js\"></script>
         <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/script.aculo.us/scriptaculous.js?load=effects\"></script>
         <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/lightbox/lightbox.js\"></script>
-        <link rel=\"stylesheet\" href=\"".$g_root_path."/adm_program/layout/lightbox.css\" type=\"text/css\" media=\"screen\" />";
+        <link rel=\"stylesheet\" href=\"".THEME_PATH."/lightbox.css\" type=\"text/css\" media=\"screen\" />";
 }
 $javascript='
     <script language="javascript" type="text/javascript">
@@ -444,7 +443,7 @@ $javascript='
 		}
 		function makePreview() 
 		{
-			document.ecard_form.action = "ecard_preview.php?width='.$propotional_size_card['width'].'&height='.$propotional_size_card['height'].'&tmplfolder='.$tmpl_folder.'";
+			document.ecard_form.action = "ecard_preview.php?width='.$propotional_size_card['width'].'&height='.$propotional_size_card['height'].'";
 			popup_win(\''.$g_root_path.'/adm_program/ecards/templates/leer.htm\',\'ecard_preview\',\'resizable=yes,scrollbars=yes,width=1024,height=1024\');
 			document.ecard_form.target = "ecard_preview";
 			document.ecard_form.submit();
@@ -773,7 +772,7 @@ $g_layout['header'] .= $javascript;
 
 
 //Photomodulspezifische CSS laden
-$g_layout["header"] = $g_layout['header']."<link rel=\"stylesheet\" href=\"$g_root_path/adm_program/layout/photos.css\" type=\"text/css\" media=\"screen\" />";
+$g_layout["header"] = $g_layout['header']."<link rel=\"stylesheet\" href=\"". THEME_PATH. "/photos.css\" type=\"text/css\" media=\"screen\" />";
  
 
 if($g_preferences['photo_show_mode']==1)
@@ -781,7 +780,7 @@ if($g_preferences['photo_show_mode']==1)
     $g_layout['onload'] = " onload=\"initLightbox()\" ";
 }
 
-require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+require(THEME_SERVER_PATH. "/overall_header.php");
 
 echo '
 <div class="formLayout" id="profile_form">
@@ -1015,12 +1014,12 @@ if (empty($submit_action))
 			</form>
 			<div style="display:inline;">
 				<button onclick="makePreview()" value="vorschau">
-					<img src="'.$g_root_path.'/adm_program/images/eye.png" alt="Vorschau" />&nbsp;Vorschau
+					<img src="'. THEME_PATH. '/icons/eye.png" alt="Vorschau" />&nbsp;Vorschau
 				</button>
 			</div>
 			<div style="display:inline;">
 				<button onclick="sendEcard()" value="abschicken">
-					<img src="'.$g_root_path.'/adm_program/images/email.png" alt="Abschicken" />&nbsp;Abschicken
+					<img src="'. THEME_PATH. '/icons/email.png" alt="Abschicken" />&nbsp;Abschicken
 				</button>
 			</div>';
 } 
@@ -1093,7 +1092,7 @@ if($photo_event->getValue("pho_id") > 0)
         <li>
             <span class=\"iconTextLink\">
                 <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-                src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zur&uuml;ck\"></a>
+                src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zur&uuml;ck\"></a>
                 <a href=\"$g_root_path/adm_program/system/back.php\">Zur&uuml;ck</a>
             </span>
         </li>
@@ -1101,5 +1100,5 @@ if($photo_event->getValue("pho_id") > 0)
 }
 
 /***************************Seitenende***************************/
-require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+require(THEME_SERVER_PATH. "/overall_footer.php");
 ?>

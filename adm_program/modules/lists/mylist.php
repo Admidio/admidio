@@ -133,7 +133,7 @@ $g_layout['header'] = "
         }
     </script>";
 
-require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+require(THEME_SERVER_PATH. "/overall_header.php");
 
 echo "
 <form action=\"$g_root_path/adm_program/modules/lists/mylist_prepare.php\" method=\"post\">
@@ -164,7 +164,7 @@ echo "
                     <th style=\"width: 37%;\">Feld</th>
                     <th style=\"width: 18%;\">Sortierung</th>
                     <th style=\"width: 27%;\">Bedingung
-                        <img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
+                        <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
                         onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=condition','Message','width=450,height=600,left=310,top=200,scrollbars=yes')\" />
                     </th>
                 </tr>
@@ -182,7 +182,7 @@ echo "
                     <td colspan=\"4\">
                         <span class=\"iconTextLink\">
                             <a href=\"javascript:addField()\"><img
-                            src=\"$g_root_path/adm_program/images/add.png\" alt=\"Feld hinzuf&uuml;gen\" /></a>
+                            src=\"". THEME_PATH. "/icons/add.png\" alt=\"Feld hinzuf&uuml;gen\" /></a>
                             <a href=\"javascript:addField()\">Feld hinzuf&uuml;gen</a>
                         </span>
                     </td>
@@ -194,7 +194,7 @@ echo "
 
         <div class=\"formSubmit\">
             <button name=\"anzeigen\" type=\"submit\" value=\"anzeigen\">
-            <img src=\"$g_root_path/adm_program/images/application_view_columns.png\" alt=\"Liste anzeigen\" />
+            <img src=\"". THEME_PATH. "/icons/application_view_columns.png\" alt=\"Liste anzeigen\" />
             &nbsp;Liste anzeigen</button>            
         </div>
     </div>
@@ -209,13 +209,13 @@ if($_SESSION['navigation']->count > 1)
         <li>
             <span class=\"iconTextLink\">
                 <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-                src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück\" /></a>
+                src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
                 <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
             </span>
         </li>
     </ul>";
 }
     
-require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+require(THEME_SERVER_PATH. "/overall_footer.php");
 
 ?>

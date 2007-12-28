@@ -171,7 +171,7 @@ $g_layout['header'] = "
         }
     //--></script>";
 
-require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
 echo "
@@ -331,7 +331,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET["start"] < $num_roles; $i++)
                             echo "
                             <span class=\"iconLink\">
                                 <a href=\"$g_root_path/adm_program/administration/roles/roles_new.php?rol_id=". $row_lst['rol_id']. "\"><img
-                                src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Einstellungen\" title=\"Einstellungen\" /></a>
+                                src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Einstellungen\" title=\"Einstellungen\" /></a>
                             </span>";
                         }
 
@@ -341,7 +341,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET["start"] < $num_roles; $i++)
                             echo "
                             <span class=\"iconLink\">
                                 <a href=\"$g_root_path/adm_program/modules/lists/members.php?rol_id=". $row_lst['rol_id']. "\"><img 
-                                src=\"$g_root_path/adm_program/images/add.png\" alt=\"Mitglieder zuordnen\" title=\"Mitglieder zuordnen\" /></a>
+                                src=\"". THEME_PATH. "/icons/add.png\" alt=\"Mitglieder zuordnen\" title=\"Mitglieder zuordnen\" /></a>
                             </span>";
                         }
                     }
@@ -482,6 +482,6 @@ echo "</div></div>";
 $base_url = "$g_root_path/adm_program/modules/lists/lists.php?category=$category&category-selection=". $_GET['category-selection']. "&active_role=$active_role";
 echo generatePagination($base_url, $num_roles, $roles_per_page, $_GET["start"], TRUE);
 
-require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+require(THEME_SERVER_PATH. "/overall_footer.php");
 
 ?>

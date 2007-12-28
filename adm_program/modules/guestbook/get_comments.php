@@ -63,7 +63,7 @@ if (isset($comment_result))
         <div class=\"groupBox\" style=\"overflow: hidden; margin-left: 20px; margin-right: 20px;\">
             <div class=\"groupBoxHeadline\">
                 <div class=\"boxHeadLeft\">
-                    <img src=\"$g_root_path/adm_program/images/comments.png\" style=\"vertical-align: top;\" alt=\"Kommentar ". $commentNumber. "\" />&nbsp;".
+                    <img src=\"". THEME_PATH. "/icons/comments.png\" style=\"vertical-align: top;\" alt=\"Kommentar ". $commentNumber. "\" />&nbsp;".
                     "Kommentar von ". $row->gbc_name;
 
                 // Falls eine Mailadresse des Users angegeben wurde, soll ein Maillink angezeigt werden...
@@ -71,7 +71,7 @@ if (isset($comment_result))
                 {
                     echo "
                     <span class=\"iconLink\">
-                        <a href=\"mailto:$row->gbc_email\"><img src=\"$g_root_path/adm_program/images/email.png\" 
+                        <a href=\"mailto:$row->gbc_email\"><img src=\"". THEME_PATH. "/icons/email.png\" 
                         alt=\"Mail an $row->gbc_email\" title=\"Mail an $row->gbc_email\" /></a>
                     </span>";
                 }
@@ -87,11 +87,11 @@ if (isset($comment_result))
                     echo "
                     <span class=\"iconLink\">
                         <a href=\"$g_root_path/adm_program/modules/guestbook/guestbook_comment_new.php?cid=$row->gbc_id\"><img 
-                        src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
+                        src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
                     </span>
                     <span class=\"iconLink\">
                         <a href=\"$g_root_path/adm_program/modules/guestbook/guestbook_function.php?id=$row->gbc_id&amp;mode=7\"><img 
-                        src=\"$g_root_path/adm_program/images/cross.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" /></a>
+                        src=\"". THEME_PATH. "/icons/cross.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" /></a>
                     </span>";
                 }
 
@@ -142,7 +142,7 @@ if (isset($comment_result))
         echo "
         <div class=\"editInformation\">
             <span class=\"iconTextLink\">
-                <a href=\"$load_url\"><img src=\"$g_root_path/adm_program/images/comment_new.png\" 
+                <a href=\"$load_url\"><img src=\"". THEME_PATH. "/icons/comment_new.png\" 
                 alt=\"Kommentieren\" title=\"Kommentieren\" /></a>
                 <a href=\"$load_url\">Einen Kommentar zu diesem Beitrag schreiben.</a>
             </span>

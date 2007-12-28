@@ -81,7 +81,7 @@ if(isset($_SESSION['links_request']))
 
 // Html-Kopf ausgeben
 $g_layout['title'] = $_GET["headline"];
-require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
 if($_GET["lnk_id"] > 0)
@@ -179,7 +179,7 @@ echo "
 
         <div class=\"formSubmit\">
             <button name=\"speichern\" type=\"submit\" value=\"speichern\" tabindex=\"5\">
-                <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\" />
+                <img src=\"". THEME_PATH. "/icons/disk.png\" alt=\"Speichern\" />
                 &nbsp;Speichern</button>
         </div>
     </div>
@@ -190,7 +190,7 @@ echo "
     <li>
         <span class=\"iconTextLink\">
             <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück\" /></a>
+            src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
             <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
         </span>
     </li>
@@ -200,6 +200,6 @@ echo "
     document.getElementById('linkname').focus();
 --></script>";
 
-require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+require(THEME_SERVER_PATH. "/overall_footer.php");
 
 ?>

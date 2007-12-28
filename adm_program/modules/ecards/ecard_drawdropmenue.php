@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Grußkarte Draw Dropdown Menü
+ * Grusskarte Draw Dropdown Menue
  *
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -9,14 +9,14 @@
  *
  * Uebergaben:
  *
- * base:		Ist diese Variable gesetzt bekommt man das Menü mit allen Rollen 
+ * base:		Ist diese Variable gesetzt bekommt man das Menue mit allen Rollen 
  * rol_id:		Durch die ID der Rolle bekomme ich alle Mitglieder dieser
- * usr_id:		Durch die User ID bekommt man den vollständigen Namen + E-mail
+ * usr_id:		Durch die User ID bekommt man den vollstaendigen Namen + E-mail
  *
  *****************************************************************************/
  
 require_once("../../system/common.php");
-// Wenn das erste Menü mit den aufgelisteten Rollen gezeichnet werden soll (Übergabe base == 1)
+// Wenn das erste Menue mit den aufgelisteten Rollen gezeichnet werden soll (Uebergabe base == 1)
 // Es werden alle Rollen die in dieser Organisation vorhanden sind aufgelistet und stehen nun bereit 
 // zur Auswahl
 if ($g_valid_login && isset($_GET['base']) =="1")
@@ -90,14 +90,14 @@ if ($g_valid_login && isset($_GET['base']) =="1")
 	
 	echo '</optgroup>
 	</select>
-	<img class="iconHelpLink" src="'.$g_root_path.'/adm_program/images/help.png" alt="Hilfe" title="Hilfe"
+	<img class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="Hilfe"
 	onclick="window.open(\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=rolle_ecard\',\'Message\',\'width=400,height=400,left=310,top=200\')" />
 	<span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
 	
 	';					
 }
-// Wenn die Rolle ausgewählt worden ist wird dieses Menü gezeichnet
-// Es werden alle Mitglieder in dieser Rolle aufgelistet die eine gültuige 
+// Wenn die Rolle ausgewaehlt worden ist wird dieses Menue gezeichnet
+// Es werden alle Mitglieder in dieser Rolle aufgelistet die eine gueltuige 
 // E-mail besitzen und stehen bereit zur Auswahl
 else if ($g_valid_login && isset($_GET['rol_id']) && !isset($_GET['base']) && !isset($_GET['usrid']))
 {
@@ -134,22 +134,22 @@ else if ($g_valid_login && isset($_GET['rol_id']) && !isset($_GET['base']) && !i
 		}
 		if (!empty($menudata))
 		{
-			$menudata	= preg_replace ("/ü\ö\ä\Ü\Ö\Ä\ß/","/&uuml;\&ouml;\&auml;\&Uuml;\&Ouml;\&Auml;\&szlig;/", $menudata);
-			echo $menuheader.'<option value="" selected="selected">- Bitte w&auml;hlen -</option>'.$menudata.$menubody;
+			$menudata	= preg_replace ("/ï¿½\ï¿½\ï¿½\ï¿½\ï¿½\ï¿½\ï¿½/","/&uuml;\&ouml;\&auml;\&Uuml;\&Ouml;\&Auml;\&szlig;/", $menudata);
+			echo $menuheader.'<option value="" selected="selected">- Bitte wÃ¤hlen -</option>'.$menudata.$menubody;
 		}
 		else
 		{
-		    echo " Kein User vorhanden der eine g&uuml;ltige E-mail besitzt! <br /> Bitte w&auml;hlen Sie eine andere Rolle aus! ";
+		    echo " Kein User vorhanden der eine gÃ¼ltige E-mail besitzt! <br /> Bitte wÃ¤hlen Sie eine andere Rolle aus! ";
 		}
 	}
 	else
 	{
-	    echo " Bitte w&auml;hlen Sie eine andere Rolle aus diese ist ung&uuml;ltig! ";
+	    echo " Bitte wÃ¤hlen Sie eine andere Rolle aus diese ist ungÃ¼ltig! ";
 	}
 }
-// Wenn ein User ausgewählt worden ist werden zwei input Boxen ausgegeben
-// Es wird von dem ausgewählten User der Name und die Email jeweils in eine input Box geschrieben und 
-// ausgegeben wobei nur die input Box mit den Namen sichtbar ist (schreibgeschütz!)
+// Wenn ein User ausgewaehlt worden ist werden zwei input Boxen ausgegeben
+// Es wird von dem ausgewaehlten User der Name und die Email jeweils in eine input Box geschrieben und 
+// ausgegeben wobei nur die input Box mit den Namen sichtbar ist (schreibgeschuetzt!)
 else if($g_valid_login && isset($_GET['usrid']) && $_GET['usrid']!="extern")
 {
 	if(is_numeric($_GET['usrid']) == 1)
@@ -174,7 +174,7 @@ else if($g_valid_login && isset($_GET['usrid']) && $_GET['usrid']!="extern")
 		while ($row = $g_db->fetch_object($result))
 		{
 			$full_name	= ''.$row->first_name.' '.$row->last_name.'';
-			$full_name	= preg_replace ("/ü\ö\ä\Ü\Ö\Ä\ß/","/&uuml;\&ouml;\&auml;\&Uuml;\&Ouml;\&Auml;\&szlig;/", $full_name);
+			$full_name	= preg_replace ("/ï¿½\ï¿½\ï¿½\ï¿½\ï¿½\ï¿½\ï¿½/","/&uuml;\&ouml;\&auml;\&Uuml;\&Ouml;\&Auml;\&szlig;/", $full_name);
 			echo '<input type="hidden" name="ecard[email_recipient]" value="'.$row->email.'" />
 			<input type="text" name="ecard[name_recipient]" size="25" class="readonly" readonly="readonly"  maxlength="40" style="width: 200px;" value="'.$full_name.'" />
 			';
@@ -187,12 +187,12 @@ else if($g_valid_login && isset($_GET['usrid']) && $_GET['usrid']!="extern")
 			';
 	}
 }
-// Wenn der User sich entschließt diese Grußkarte an einen Empfänger zu senden der nicht
-// in dieser Organisation vorhanden ist wird ihm die Möglichkeit der manuellen Eingabe des
-// Namen und Empfänger geboten
+// Wenn der User sich entschliesst diese Grusskarte an einen Empfaenger zu senden der nicht
+// in dieser Organisation vorhanden ist wird ihm die Moeglichkeit der manuellen Eingabe des
+// Namen und Empfaenger geboten
 else if($g_valid_login && isset($_GET['usrid']) == "extern")
 {
-	echo '<input id="name_recipient" type="text" name="ecard[name_recipient]"  style="margin-bottom:3px; width: 200px;" onclick="javascript:blendout(this.id);" onfocus="javascript:blendout(this.id);" onmouseout="javascript:blendin(this.id,1);" maxlength="50" value="<Empf&auml;nger Name>"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
+	echo '<input id="name_recipient" type="text" name="ecard[name_recipient]"  style="margin-bottom:3px; width: 200px;" onclick="javascript:blendout(this.id);" onfocus="javascript:blendout(this.id);" onmouseout="javascript:blendin(this.id,1);" maxlength="50" value="<EmpfÃ¤nger Name>"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
 	echo '<input id="email_recipient" type="text" name="ecard[email_recipient]" style="width: 330px;" onclick="javascript:blendout(this.id);" onfocus="javascript:blendout(this.id);" onmouseout="javascript:blendin(this.id,2);" maxlength="50" value="<Empf&auml;nger E-mail>"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
 }
 

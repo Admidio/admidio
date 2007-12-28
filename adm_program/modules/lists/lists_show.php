@@ -298,11 +298,14 @@ if($req_mode != "csv")
         
             <title>'. $g_current_organization->getValue("org_longname"). ' - Liste - '. $role->getValue("rol_name"). '</title>
             
-            <link rel="stylesheet" type="text/css" href="'. $g_root_path. '/adm_program/layout/print.css" />
+            <link rel="stylesheet" type="text/css" href="'. THEME_PATH. '/print.css" />
+            <script type="text/javascript" src="'. $g_root_path. '/adm_program/system/common_functions.js"></script>
 
             <!--[if lt IE 7]>
-            <script type="text/javascript" src="'. $g_root_path. '/adm_program/system/correct_png.js"></script>
-            <![endif]-->
+    		<script type="text/javascript"><!--
+				window.attachEvent("onload", correctPNG);
+    		--></script>
+    		<![endif]-->
 
             <style type="text/css">
                 @page { size:landscape; }
@@ -325,7 +328,7 @@ if($req_mode != "csv")
                     }
                 }
             //--></script>";
-        require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+        require(THEME_SERVER_PATH. "/overall_header.php");
     }
     
     echo "<h1 class=\"moduleHeadline\">". $role->getValue("rol_name"). "&nbsp;&#40;".$role->getValue("cat_name")."&#41;</h1>";
@@ -352,7 +355,7 @@ if($req_mode != "csv")
         echo "
         <div class=\"navigationPath\">
             <a href=\"$g_root_path/adm_program/system/back.php\"><img
-            src=\"$g_root_path/adm_program/images/$image\" alt=\"Zurück\" /></a>
+            src=\"". THEME_PATH. "/icons/$image\" alt=\"Zurück\" /></a>
             <a href=\"$g_root_path/adm_program/system/back.php\">$text</a>
         </div>
         
@@ -362,7 +365,7 @@ if($req_mode != "csv")
                 echo "<li>
                     <span class=\"iconTextLink\">
                         <a href=\"$g_root_path/adm_program/modules/mail/mail.php?rol_id=$req_rol_id\"><img
-                        src=\"$g_root_path/adm_program/images/email.png\" alt=\"E-Mail an Mitglieder\" /></a>
+                        src=\"". THEME_PATH. "/icons/email.png\" alt=\"E-Mail an Mitglieder\" /></a>
                         <a href=\"$g_root_path/adm_program/modules/mail/mail.php?rol_id=$req_rol_id\">E-Mail an Mitglieder</a>
                     </span>
                 </li>";
@@ -371,13 +374,13 @@ if($req_mode != "csv")
             echo "<li>
                 <span class=\"iconTextLink\">
                     <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/modules/lists/lists_show.php?type=$req_type&amp;mode=print&amp;rol_id=$req_rol_id', '_blank')\"><img
-                    src=\"$g_root_path/adm_program/images/print.png\" alt=\"Druckvorschau\" /></a>
+                    src=\"". THEME_PATH. "/icons/print.png\" alt=\"Druckvorschau\" /></a>
                     <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/modules/lists/lists_show.php?type=$req_type&amp;mode=print&amp;rol_id=$req_rol_id', '_blank')\">Druckvorschau</a>
                 </span>
             </li>
             <li>
                 <span class=\"iconTextLink\">
-                    <img src=\"$g_root_path/adm_program/images/database_out.png\" alt=\"Exportieren\" />
+                    <img src=\"". THEME_PATH. "/icons/database_out.png\" alt=\"Exportieren\" />
                     <select size=\"1\" name=\"list$i\" onchange=\"exportList(this)\">
                         <option value=\"\" selected=\"selected\">Exportieren nach ...</option>
                         <option value=\"csv-ms\">Microsoft Excel</option>
@@ -605,7 +608,7 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                     }
                     else
                     {
-                        $content = "<img src=\"$g_root_path/adm_program/images/male.png\"
+                        $content = "<img src=\"". THEME_PATH. "/icons/male.png\"
                                     style=\"vertical-align: middle;\" alt=\"m&auml;nnlich\" />";
                     }
                 }
@@ -617,7 +620,7 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                     }
                     else
                     {
-                        $content = "<img src=\"$g_root_path/adm_program/images/female.png\"
+                        $content = "<img src=\"". THEME_PATH. "/icons/female.png\"
                                     style=\"vertical-align: middle;\" alt=\"weiblich\" />";
                     }
                 }
@@ -657,7 +660,7 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                             }
                             else
                             {
-                                echo "<img src=\"$g_root_path/adm_program/images/checkbox_checked.gif\"
+                                echo "<img src=\"". THEME_PATH. "/icons/checkbox_checked.gif\"
                                     style=\"vertical-align: middle;\" alt=\"on\" />";
                             }
                         }
@@ -669,7 +672,7 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                             }
                             else
                             {
-                                echo "<img src=\"$g_root_path/adm_program/images/checkbox.gif\"
+                                echo "<img src=\"". THEME_PATH. "/icons/checkbox.gif\"
                                     style=\"vertical-align: middle;\" alt=\"off\" />";
                             }
                         }
@@ -877,7 +880,7 @@ else
     }
     else
     {    
-        require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+        require(THEME_SERVER_PATH. "/overall_footer.php");
     }
 }
 
