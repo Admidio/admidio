@@ -27,7 +27,7 @@ if (ini_get('file_uploads') != '1')
 // Html-Kopf ausgeben
 $g_layout['title']  = "Benutzer importieren";
     
-require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
 echo "
@@ -57,7 +57,7 @@ echo "
                         echo generateRoleSelectBox();
 
                         echo "&nbsp;
-                        <img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
+                        <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
                         onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=role_assign','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\" />
                     </dd>
                 </dl>
@@ -77,11 +77,11 @@ echo "
 
         <div class=\"formSubmit\">
             <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
-            <img src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück\" />
+            <img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" />
             &nbsp;Zurück</button>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <button id=\"weiter\" type=\"submit\" value=\"weiter\" tabindex=\"2\">Weiter&nbsp;
-            <img src=\"$g_root_path/adm_program/images/forward.png\" alt=\"Weiter\" /></button>
+            <img src=\"". THEME_PATH. "/icons/forward.png\" alt=\"Weiter\" /></button>
         </div>
     </div>
 </div>
@@ -91,6 +91,6 @@ echo "
     document.getElementById('userfile').focus();
 --></script>";
     
-require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+require(THEME_SERVER_PATH. "/overall_footer.php");
 
 ?>
