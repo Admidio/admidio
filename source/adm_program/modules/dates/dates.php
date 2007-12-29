@@ -110,7 +110,7 @@ if($g_preferences['enable_rss'] == 1 && $g_preferences['enable_dates_module'] ==
         href=\"$g_root_path/adm_program/modules/dates/rss_dates.php\" />";
 };
 
-require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
 echo "
@@ -213,7 +213,7 @@ if($g_current_user->editDates())
 		<li>
 			<span class=\"iconTextLink\">
 				<a href=\"$g_root_path/adm_program/modules/dates/dates_new.php?headline$req_headline\"><img
-				src=\"$g_root_path/adm_program/images/add.png\" alt=\"Termin anlegen\" /></a>
+				src=\"". THEME_PATH. "/icons/add.png\" alt=\"Termin anlegen\" /></a>
 				<a href=\"$g_root_path/adm_program/modules/dates/dates_new.php?headline=$req_headline\">Anlegen</a>
 			</span>
 		</li>
@@ -252,14 +252,14 @@ else
         <div class=\"boxLayout\">
             <div class=\"boxHead\">
                 <div class=\"boxHeadLeft\">
-                    <img src=\"$g_root_path/adm_program/images/date.png\" alt=\"". $date->getValue("dat_headline"). "\" />
+                    <img src=\"". THEME_PATH. "/icons/date.png\" alt=\"". $date->getValue("dat_headline"). "\" />
                     ". mysqldatetime("d.m.y", $date->getValue("dat_begin")). "
                 </div>
                 <div class=\"boxHeadCenter\">". $date->getValue("dat_headline"). "</div>
                 <div class=\"boxHeadRight\">
                     <span class=\"iconLink\">
                         <a href=\"$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=". $date->getValue("dat_id"). "&amp;mode=4\"><img 
-                        src=\"$g_root_path/adm_program/images/database_out.png\" alt=\"Exportieren (iCal)\" title=\"Exportieren (iCal)\" /></a>
+                        src=\"". THEME_PATH. "/icons/database_out.png\" alt=\"Exportieren (iCal)\" title=\"Exportieren (iCal)\" /></a>
                     </span>";
                     
                     // aendern & loeschen duerfen nur User mit den gesetzten Rechten
@@ -270,7 +270,7 @@ else
                             echo "
                             <span class=\"iconLink\">
                                 <a href=\"$g_root_path/adm_program/modules/dates/dates_new.php?dat_id=". $date->getValue("dat_id"). "&amp;headline=$req_headline\"><img 
-                                src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
+                                src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
                             </span>";
                         }
 
@@ -280,7 +280,7 @@ else
                             echo "
                             <span class=\"iconLink\">
                                 <a href=\"$g_root_path/adm_program/modules/dates/dates_function.php?mode=5&amp;dat_id=". $date->getValue("dat_id"). "\"><img 
-                                src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Löschen\" title=\"Löschen\" /></a>
+                                src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Löschen\" title=\"Löschen\" /></a>
                             </span>";
                         }
                     }
@@ -368,6 +368,6 @@ if($num_dates > 10)
     echo generatePagination($base_url, $num_dates, 10, $req_start, TRUE);
 }
         
-require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+require(THEME_SERVER_PATH. "/overall_footer.php");
 
 ?>

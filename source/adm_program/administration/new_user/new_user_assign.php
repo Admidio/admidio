@@ -86,7 +86,7 @@ $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Html-Kopf ausgeben
 $g_layout['title'] = "Neuen Benutzer zuordnen";
-require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
 echo "
@@ -142,7 +142,7 @@ echo "
 
                                     <span class=\"iconTextLink\">
                                         <a href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=6\"><img
-                                        src=\"$g_root_path/adm_program/images/key.png\" alt=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\" /></a>
+                                        src=\"". THEME_PATH. "/icons/key.png\" alt=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\" /></a>
                                         <a href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=6\">Zugangsdaten zuschicken</a>
                                     </span>";
                                 }
@@ -155,7 +155,7 @@ echo "
 
                                 <span class=\"iconTextLink\">
                                     <a href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=1\"><img
-                                    src=\"$g_root_path/adm_program/images/properties.png\" alt=\"Zugangsdaten zuordnen\" /></a>
+                                    src=\"". THEME_PATH. "/icons/properties.png\" alt=\"Zugangsdaten zuordnen\" /></a>
                                     <a href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=1\">Zugangsdaten zuordnen</a>
                                 </span>";
                             }
@@ -173,7 +173,7 @@ echo "
 
                                 <span class=\"iconTextLink\">
                                     <a href=\"$link\"><img class=\"iconLink\" 
-                                    src=\"$g_root_path/adm_program/images/properties.png\" alt=\"Mitgliedschaft zuweisen\" /></a>
+                                    src=\"". THEME_PATH. "/icons/properties.png\" alt=\"Mitgliedschaft zuweisen\" /></a>
                                     <a href=\"$link\">Mitgliedschaft zuweisen</a>
                                 </span>";
                             }               
@@ -185,7 +185,7 @@ echo "
                                 
                                 <span class=\"iconTextLink\">
                                     <a href=\"$link\"><img class=\"iconLink\"
-                                    src=\"$g_root_path/adm_program/images/properties.png\" alt=\"Rollen und Logindaten diesem Benutzer zuordnen\" /></a>
+                                    src=\"". THEME_PATH. "/icons/properties.png\" alt=\"Rollen und Logindaten diesem Benutzer zuordnen\" /></a>
                                     <a href=\"$link\">Mitgliedschaft und Logindaten diesem Benutzer zuordnen</a>
                                 </span>";
                             }               
@@ -205,7 +205,7 @@ echo "
                     
                     <span class=\"iconTextLink\">
                         <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$req_new_user_id&amp;new_user=3\"><img
-                        src=\"$g_root_path/adm_program/images/add.png\" alt=\"Neuen Benutzer anlegen\" /></a>
+                        src=\"". THEME_PATH. "/icons/add.png\" alt=\"Neuen Benutzer anlegen\" /></a>
                         <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$req_new_user_id&amp;new_user=3\">Benutzer anlegen</a>
                     </span>
                 </div>
@@ -218,12 +218,12 @@ echo "
     <li>
         <span class=\"iconTextLink\">
             <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück\" /></a>
+            src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
             <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
         </span>
     </li>
 </ul>";
 
-require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+require(THEME_SERVER_PATH. "/overall_footer.php");
 
 ?>
