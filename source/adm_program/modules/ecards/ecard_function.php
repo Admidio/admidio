@@ -91,20 +91,19 @@ function getColorSettings($data_array,$name_ecard_input,$anz,$first_value)
 {
 	echo  '<table border="0" cellpadding="1" cellspacing="1" summary="colorTable"><tr>';
 	for($i=0; $i<count($data_array);$i++)
-	{
+	{	
 		if (!is_integer(($i+1)/$anz))
 		{
 		    echo '<td style="height:20px; width:17px; background-color: '.$data_array[$i].'; cursor:pointer;" onclick="javascript: getSetting(\''.$name_ecard_input.'\',\''.$data_array[$i].'\');"></td>';
 		}
-		else if( $i == 0 )
-		{
-			echo '<td style="height:20px; width:17px; background-color: '.$data_array[$i].'; cursor:pointer;" onclick="javascript: getSetting(\''.$name_ecard_input.'\',\''.$data_array[$i].'\');"></td>';
-		}
 		else
 		{
-			echo '<td style="height:20px; width:17px; background-color: '.$data_array[$i].'; cursor:pointer;" onclick="javascript: getSetting(\''.$name_ecard_input.'\',\''.$data_array[$i].'\');"></td></tr><tr>';
-		}
-		
+			echo '<td style="height:20px; width:17px; background-color: '.$data_array[$i].'; cursor:pointer;" onclick="javascript: getSetting(\''.$name_ecard_input.'\',\''.$data_array[$i].'\');"></td>';
+			if($i<count($data_array)-1)
+			{
+				echo '</tr><tr>';
+			}
+		}		
 	}
 	echo  '</tr></table>';
 	return '<input type="hidden" name="'.$name_ecard_input.'" value="'.$first_value.'" />';
@@ -223,12 +222,13 @@ function getEcardTemplate($template_name,$tmpl_folder)
 //		$usr_id				..	die User id
 //		$proportional_width	..	die proportionale Breite des Bildes fuer das Template
 //		$propotional_height	..	die proportionale Hoehe des Bildes fuer das Template
-//		$empfaenger_name		..	der Name des Empfaengers
+//		$empfaenger_name	..	der Name des Empfaengers
 //		$empfaenger_email	..	die Email des Empfaengers
 //
 // Ersetzt werden folgende Platzhalter
 //		
-//		Admidio Pfad:			<%g_root_path%>	
+//		Admidio Pfad:			<%g_root_path%>
+//		Template Verzeichnis	<%template_root_path%>	
 //		Style Eigenschaften:	<%ecard_font%>				<%ecard_font_size%>			<%ecard_font_color%> <%ecard_font_bold%> <%ecard_font_italic%>
 //		Empfaenger Daten:		<%ecard_reciepient_email%>	<%ecard_reciepient_name%>
 //		Sender Daten:			<%ecard_sender_id%>			<%ecard_sender_email%> 		<%ecard_sender_name%>
@@ -254,6 +254,8 @@ function parseEcardTemplate($ecard,$ecard_data,$root_path,$usr_id,$propotional_w
 	}
 	// Hier wird der Pfad zum Admidio Verzeichnis ersetzt
 	$ecard_data = preg_replace ("/<%g_root_path%>/",			$root_path, $ecard_data);
+	// Hier wird der Pfad zum aktuellen Template Verzeichnis ersetzt
+	$ecard_data = preg_replace ("/<%theme_root_path%>/",		THEME_PATH, $ecard_data);
 	// Hier wird die Style Eigenschaften ersetzt
 	$ecard_data = preg_replace ("/<%ecard_font%>/",				$ecard["schriftart_name"], $ecard_data);
 	$ecard_data = preg_replace ("/<%ecard_font_size%>/",		$ecard["schrift_size"], $ecard_data);
@@ -282,12 +284,11 @@ function parseEcardTemplate($ecard,$ecard_data,$root_path,$usr_id,$propotional_w
 // Uebergabe:
 //		$ecard				.. array mit allen Informationen die in den inputs der Form gespeichert sind
 //		$ecard_html_data	.. geparste Daten vom Template
-//		$ecard_plain_data	.. plain Text er wird am Anfang im Body Bereich der Mail hinzugefuegt
 //		$sender_name		.. der Name des Senders
 //		$sender_email		.. die Email des Senders
 //		$empfaenger_name	.. der Name des Empfaengers
 //		$empfaenger_email	.. die Email des Empfaengers
-function sendEcard($ecard,$ecard_html_data,$ecard_plain_data,$empfaenger_name,$empfaenger_email,$cc_empfaenger) 
+function sendEcard($ecard,$ecard_html_data,$empfaenger_name,$empfaenger_email,$cc_empfaenger) 
 {
 	$email = new Email();
 	$email->setSender($ecard["email_sender"],$ecard["name_sender"]);

@@ -134,17 +134,16 @@ else if ($g_valid_login && isset($_GET['rol_id']) && !isset($_GET['base']) && !i
 		}
 		if (!empty($menudata))
 		{
-			$menudata	= preg_replace ("/�\�\�\�\�\�\�/","/&uuml;\&ouml;\&auml;\&Uuml;\&Ouml;\&Auml;\&szlig;/", $menudata);
-			echo $menuheader.'<option value="" selected="selected">- Bitte wählen -</option>'.$menudata.$menubody;
+			echo $menuheader.'<option value="" selected="selected">- Bitte w&auml;hlen -</option>'.$menudata.$menubody;
 		}
 		else
 		{
-		    echo " Kein User vorhanden der eine gültige E-mail besitzt! <br /> Bitte wählen Sie eine andere Rolle aus! ";
+		    echo '<div style="width:300px;background-image: url(\''.THEME_PATH.'/icons/error.png\'); background-repeat: no-repeat;background-position: 5px 5px;margin-top:    1px;	border:	      1px solid #ccc;padding:          5px; background-color: #FFFFE0; padding-left:     28px;\">Kein User vorhanden der eine g&uuml;ltige E-mail besitzt!</div>';
 		}
 	}
 	else
 	{
-	    echo " Bitte wählen Sie eine andere Rolle aus diese ist ungültig! ";
+	    echo '<div style="width:300px; background-image: url(\''.THEME_PATH.'/icons/error.png\');background-repeat: no-repeat; background-position:5px 5px;margin-top:1px;	border:1px solid #ccc;padding:5px;background-color: #FFFFE0; padding-left:28px;\">Bitte w&auml;hlen Sie eine g&uuml;ltige Rolle aus!</div>';
 	}
 }
 // Wenn ein User ausgewaehlt worden ist werden zwei input Boxen ausgegeben
@@ -174,16 +173,15 @@ else if($g_valid_login && isset($_GET['usrid']) && $_GET['usrid']!="extern")
 		while ($row = $g_db->fetch_object($result))
 		{
 			$full_name	= ''.$row->first_name.' '.$row->last_name.'';
-			$full_name	= preg_replace ("/�\�\�\�\�\�\�/","/&uuml;\&ouml;\&auml;\&Uuml;\&Ouml;\&Auml;\&szlig;/", $full_name);
 			echo '<input type="hidden" name="ecard[email_recipient]" value="'.$row->email.'" />
-			<input type="text" name="ecard[name_recipient]" size="25" class="readonly" readonly="readonly"  maxlength="40" style="width: 200px;" value="'.$full_name.'" />
+			<input type="text" name="ecard[name_recipient]" size="25" class="readonly" readonly="readonly"  maxlength="40" style="width: 200px;" value="'.$full_name.'" /><div style="display:inline; margin-left:42px;"><a href="javascript:getMenuRecepientName();">anderer Empf&auml;nger</a></div>
 			';
 		}
 	}
 	else
 	{
 		echo '<input type="hidden" name="ecard[email_recipient]" value="'.$_GET['usrid'].'@rolle.com" />
-			<input type="text" name="ecard[name_recipient]" size="25" class="readonly" readonly="readonly"  maxlength="40" style="width: 200px;" value="die gesamte Rolle" />
+			<input type="text" name="ecard[name_recipient]" size="25" class="readonly" readonly="readonly"  maxlength="40" style="width: 200px;" value="die gesamte Rolle" /><div style="display:inline; margin-left:39px;"><a href="javascript:getMenuRecepientName();">anderen Empf. w.</a></div>
 			';
 	}
 }
@@ -192,8 +190,8 @@ else if($g_valid_login && isset($_GET['usrid']) && $_GET['usrid']!="extern")
 // Namen und Empfaenger geboten
 else if($g_valid_login && isset($_GET['usrid']) == "extern")
 {
-	echo '<input id="name_recipient" type="text" name="ecard[name_recipient]"  style="margin-bottom:3px; width: 200px;" onclick="javascript:blendout(this.id);" onfocus="javascript:blendout(this.id);" onmouseout="javascript:blendin(this.id,1);" maxlength="50" value="<Empfänger Name>"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
-	echo '<input id="email_recipient" type="text" name="ecard[email_recipient]" style="width: 330px;" onclick="javascript:blendout(this.id);" onfocus="javascript:blendout(this.id);" onmouseout="javascript:blendin(this.id,2);" maxlength="50" value="<Empf&auml;nger E-mail>"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
+	echo '<input id="name_recipient" type="text" name="ecard[name_recipient]"  style="margin-bottom:3px; width: 200px;" onclick="javascript:blendout(this.id);" onfocus="javascript:blendout(this.id);" onmouseout="javascript:blendin(this.id,1);" maxlength="50" value="< Empf&auml;nger Name >"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
+	echo '<input id="email_recipient" type="text" name="ecard[email_recipient]" style="width: 330px;" onclick="javascript:blendout(this.id);" onfocus="javascript:blendout(this.id);" onmouseout="javascript:blendin(this.id,2);" maxlength="50" value="< Empf&auml;nger E-Mail >"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
 }
 
 ?>
