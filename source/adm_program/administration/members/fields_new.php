@@ -98,7 +98,7 @@ else
 }
 
 // Html-Kopf ausgeben
-require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+require(THEME_SERVER_PATH. "/overall_header.php");
 
 echo "
 <form action=\"$g_root_path/adm_program/administration/members/fields_function.php?usf_id=$req_usf_id&amp;mode=1\" method=\"post\" id=\"edit_field\">
@@ -218,7 +218,7 @@ echo "
                 <dl>
                     <dt>
                         <label for=\"usf_hidden\">
-                            <img src=\"$g_root_path/adm_program/images/eye.png\" alt=\"Feld f&uuml;r alle Benutzer sichtbar\" />
+                            <img src=\"". THEME_PATH. "/icons/eye.png\" alt=\"Feld f&uuml;r alle Benutzer sichtbar\" />
                         </label>
                     </dt>
                     <dd>
@@ -229,7 +229,7 @@ echo "
                         }
                         echo " value=\"1\" />
                         <label for=\"usf_hidden\">Feld f&uuml;r alle Benutzer sichtbar</label>
-                        <img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
+                        <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
                         onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=field_hidden','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\" />
                     </dd>
                 </dl>
@@ -238,7 +238,7 @@ echo "
                 <dl>
                     <dt>
                         <label for=\"usf_disabled\">
-                            <img src=\"$g_root_path/adm_program/images/textfield_key.png\" alt=\"Feld nur f&uuml;r berechtigte Benutzer editierbar\" />
+                            <img src=\"". THEME_PATH. "/icons/textfield_key.png\" alt=\"Feld nur f&uuml;r berechtigte Benutzer editierbar\" />
                         </label>
                     </dt>
                     <dd>
@@ -249,7 +249,7 @@ echo "
                         }
                         echo " value=\"1\" />
                         <label for=\"usf_disabled\">Feld nur f&uuml;r berechtigte Benutzer editierbar</label>
-                        <img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
+                        <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
                         onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=field_disabled','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\" />
                     </dd>
                 </dl>
@@ -258,7 +258,7 @@ echo "
                 <dl>
                     <dt>
                         <label for=\"usf_mandatory\">
-                            <img src=\"$g_root_path/adm_program/images/asterisk_yellow.png\" alt=\"Pflichtfeld, muss vom Benutzer gef&uuml;llt werden\" />
+                            <img src=\"". THEME_PATH. "/icons/asterisk_yellow.png\" alt=\"Pflichtfeld, muss vom Benutzer gef&uuml;llt werden\" />
                         </label>
                     </dt>
                     <dd>
@@ -274,7 +274,7 @@ echo "
                         }
                         echo " value=\"1\" />
                         <label for=\"usf_mandatory\">Pflichtfeld, muss vom Benutzer gef&uuml;llt werden</label>
-                        <img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
+                        <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
                         onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=field_mandatory','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\" />
                     </dd>
                 </dl>
@@ -285,7 +285,7 @@ echo "
 
         <div class=\"formSubmit\">
             <button name=\"speichern\" type=\"submit\" value=\"speichern\">
-            <img src=\"$g_root_path/adm_program/images/disk.png\" alt=\"Speichern\" />
+            <img src=\"". THEME_PATH. "/icons/disk.png\" alt=\"Speichern\" />
             &nbsp;Speichern</button>
         </div>
     </div>
@@ -296,7 +296,7 @@ echo "
     <li>
         <span class=\"iconTextLink\">
             <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück\" /></a>
+            src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
             <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
         </span>
     </li>
@@ -306,6 +306,6 @@ echo "
     document.getElementById('usf_name').focus();
 --></script>";
 
-require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+require(THEME_SERVER_PATH. "/overall_footer.php");
 
 ?>
