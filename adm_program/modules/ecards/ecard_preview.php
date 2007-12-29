@@ -16,7 +16,6 @@ require_once("ecard_function.php");
 /****************** Ausgabe des geparsten Templates **************************/
 $propotional_width	= "";
 $propotional_height	= "";
-$tmpl_folder		= "";
 if(isset($_GET['width']))
 {
 	$propotional_width  = $_GET['width'];
@@ -27,7 +26,7 @@ if(isset($_GET['height']))
 }
 
 getVars();
-list($error,$ecard_data_to_parse) = getEcardTemplate($ecard["template_name"], THEME_SERVER_PATH. "/ecard_templates");
+list($error,$ecard_data_to_parse) = getEcardTemplate($ecard["template_name"], THEME_SERVER_PATH. "/ecard_templates/");
 if ($error) 
 {
 	echo "ERROR - Seite nicht gefunden!";

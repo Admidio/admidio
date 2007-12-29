@@ -64,7 +64,7 @@ font-size:<%ecard_font_size%>px;
 	   	  </tbody></table>
        </td>
 	  <td style="width: 8px; vertical-align:bottom; min-height:300px;">
-	       <img src="<%g_root_path%>/adm_program/images/ecards/ownertext.png" width="30px" style="border:0px;" />
+	       <img src="<%theme_root_path%>/images/ownertext.png" width="30px" style="border:0px;" />
 	  </td>	  
 	  <td style="background: rgb(0, 0, 0); width:1px;"><br/></td>
 	  <td style="width: 8px;">&nbsp;</td>
@@ -74,7 +74,7 @@ font-size:<%ecard_font_size%>px;
                <tr style="vertical-align:top; margin:5px 5px 5px 5px;">
                 <td>
                       <div align="right">
-                        <img src="<%g_root_path%>/adm_program/images/ecards/stamp.png" alt="Briefmarke"  style="border:0px;" height="129" width="150" />
+                        <img src="<%theme_root_path%>/images/stamp.png" alt="Briefmarke"  style="border:0px;" height="129" width="150" />
                       </div>
                 </td>
                </tr>

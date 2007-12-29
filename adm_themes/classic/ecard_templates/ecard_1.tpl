@@ -36,7 +36,7 @@ font-size:<%ecard_font_size%>px;
 	   </tr>
 	   	  </tbody></table></td>
 	  <td style="width: 8px; vertical-align:bottom;">
-	  	<img src="<%g_root_path%>/adm_program/images/ecards/ownertext.png" width="30px" border="0" />
+	  	<img src="<%theme_root_path%>/images/ownertext.png" width="30px" border="0" />
 	  </td>
 
 	  <td style="background: rgb(0, 0, 0) none repeat scroll 0%; width: 1px; min-width:1px;"><br /></td>
@@ -47,7 +47,7 @@ font-size:<%ecard_font_size%>px;
                <tr style="vertical-align:top; margin:5px 5px 5px 5px;">
                 <td>
                       <div align="right">
-                        <img src="<%g_root_path%>/adm_program/images/ecards/stamp.png" alt="Briefmarke"  border="0" height="129" width="150" />
+                        <img src="<%theme_root_path%>/images/stamp.png" alt="Briefmarke"  border="0" height="129" width="150" />
                       </div>
                 </td>
                </tr>
