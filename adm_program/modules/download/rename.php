@@ -92,7 +92,7 @@ else
 
 // Html-Kopf ausgeben
 $g_layout['title'] = "Umbenennen";
-require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
 echo "
@@ -113,7 +113,7 @@ echo "
                     <dd>
                         <input type=\"text\" id=\"new_name\" name=\"new_name\" value=\"". $form_values['new_name']. "\" size=\"25\" tabindex=\"1\" />$file_extension
                         <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
-                        <img class=\"iconHelpLink\" src=\"$g_root_path/adm_program/images/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
+                        <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
                         onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=dateiname','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\" />
                     </dd>
                 </dl>
@@ -124,7 +124,7 @@ echo "
 
         <div class=\"formSubmit\">
             <button name=\"rename\" type=\"submit\" value=\"umbenennen\" tabindex=\"2\">
-            <img src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Hochladen\" />
+            <img src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Hochladen\" />
             &nbsp;Umbenennen</button>
         </div>
     </div>
@@ -135,7 +135,7 @@ echo "
     <li>
         <span class=\"iconTextLink\">
             <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück\" /></a>
+            src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
             <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
         </span>
     </li>
@@ -145,6 +145,6 @@ echo "
     document.getElementById('new_name').focus();
 --></script>";
     
-require(SERVER_PATH. "/adm_program/layout/overall_footer.php"); 
+require(THEME_SERVER_PATH. "/overall_footer.php"); 
 
 ?>

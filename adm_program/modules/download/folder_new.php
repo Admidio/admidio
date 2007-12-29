@@ -72,7 +72,7 @@ else
 
 // Html-Kopf ausgeben
 $g_layout['title'] = "Ordner erstellen";
-require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
 echo "
@@ -121,7 +121,7 @@ echo "
 
         <div class=\"formSubmit\">
             <button name=\"erstellen\" type=\"submit\" value=\"erstellen\">
-            <img src=\"$g_root_path/adm_program/images/folder_create.png\" alt=\"Ordner erstellen\" />
+            <img src=\"". THEME_PATH. "/icons/folder_create.png\" alt=\"Ordner erstellen\" />
             &nbsp;Ordner erstellen</button>
         </div>
     </div>
@@ -132,7 +132,7 @@ echo "
     <li>
         <span class=\"iconTextLink\">
             <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-            src=\"$g_root_path/adm_program/images/back.png\" alt=\"Zurück\" /></a>
+            src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
             <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
         </span>
     </li>
@@ -142,6 +142,6 @@ echo "
     document.getElementById('new_folder').focus();
 --></script>";
     
-require(SERVER_PATH. "/adm_program/layout/overall_footer.php"); 
+require(THEME_SERVER_PATH. "/overall_footer.php"); 
 
 ?>

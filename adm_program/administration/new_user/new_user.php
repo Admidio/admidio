@@ -55,7 +55,7 @@ if ($member_found == 0)
 
 // Html-Kopf ausgeben
 $g_layout['title'] = "Neue Anmeldungen";
-require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
 echo "
@@ -88,11 +88,11 @@ echo "
             <td style=\"text-align: center;\">
                 <span class=\"iconLink\">
                     <a href=\"$g_root_path/adm_program/administration/new_user/new_user_assign.php?new_user_id=$row->usr_id\"><img 
-                    src=\"$g_root_path/adm_program/images/properties.png\" alt=\"Anmeldung zuordnen\" title=\"Anmeldung zuordnen\" /></a>
+                    src=\"". THEME_PATH. "/icons/properties.png\" alt=\"Anmeldung zuordnen\" title=\"Anmeldung zuordnen\" /></a>
                 </span>
                 <span class=\"iconLink\">
                     <a href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$row->usr_id&amp;mode=5\"><img 
-                    src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Anmeldung l&ouml;schen\" title=\"Anmeldung l&ouml;schen\" /></a>
+                    src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Anmeldung l&ouml;schen\" title=\"Anmeldung l&ouml;schen\" /></a>
                 </span>
             </td>
         </tr>";
@@ -100,6 +100,6 @@ echo "
 
 echo "</table>";
 
-require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+require(THEME_SERVER_PATH. "/overall_footer.php");
 
 ?>

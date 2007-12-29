@@ -96,7 +96,7 @@ if($g_preferences['enable_rss'] == 1)
     href=\"$g_root_path/adm_program/modules/announcements/rss_announcements.php\" />";
 };
 
-require(SERVER_PATH. "/adm_program/layout/overall_header.php");
+require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
 echo "<h1 class=\"moduleHeadline\">$req_headline</h1>";
@@ -171,7 +171,7 @@ if($g_current_user->editAnnouncements())
 		<li>
 			<span class=\"iconTextLink\">
 				<a href=\"$g_root_path/adm_program/modules/announcements/announcements_new.php?headline=$req_headline\"><img
-				src=\"$g_root_path/adm_program/images/add.png\" alt=\"Neu anlegen\" /></a>
+				src=\"". THEME_PATH. "/icons/add.png\" alt=\"Neu anlegen\" /></a>
 				<a href=\"$g_root_path/adm_program/modules/announcements/announcements_new.php?headline=$req_headline\">Anlegen</a>
 			</span>
 		</li>
@@ -210,7 +210,7 @@ else
         <div class=\"boxLayout\">
             <div class=\"boxHead\">
                 <div class=\"boxHeadLeft\">
-                    <img src=\"$g_root_path/adm_program/images/note.png\" alt=\"". $announcement->getValue("ann_headline"). "\" />".
+                    <img src=\"". THEME_PATH. "/icons/note.png\" alt=\"". $announcement->getValue("ann_headline"). "\" />".
                     $announcement->getValue("ann_headline"). "
                 </div>
                 <div class=\"boxHeadRight\">".
@@ -224,7 +224,7 @@ else
                             echo "
                             <span class=\"iconLink\">
                                 <a href=\"$g_root_path/adm_program/modules/announcements/announcements_new.php?ann_id=". $announcement->getValue("ann_id"). "&amp;headline=$req_headline\"><img 
-                                src=\"$g_root_path/adm_program/images/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
+                                src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
                             </span>";
                         }
 
@@ -234,7 +234,7 @@ else
                             echo "
                             <span class=\"iconLink\">
                                 <a href=\"$g_root_path/adm_program/modules/announcements/announcements_function.php?mode=4&amp;ann_id=". $announcement->getValue("ann_id"). "\"><img 
-                                src=\"$g_root_path/adm_program/images/cross.png\" alt=\"Löschen\" title=\"Löschen\" /></a>
+                                src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Löschen\" title=\"Löschen\" /></a>
                             </span>";
                         }    
                     }
@@ -281,6 +281,6 @@ if($num_announcements > 10)
     echo generatePagination($base_url, $num_announcements, 10, $req_start, TRUE);
 }
         
-require(SERVER_PATH. "/adm_program/layout/overall_footer.php");
+require(THEME_SERVER_PATH. "/overall_footer.php");
 
 ?>
