@@ -43,13 +43,15 @@
  *
  *****************************************************************************/
 
+require("common.php");
+
 class Captcha
 {
 
     function Captcha()
     {
         // Hier wird jetzt die Schriftart festgelegt...
-        $this->font = THEME_PATH. "/font.ttf";
+        $this->font = THEME_SERVER_PATH. "/font.ttf";
 
 
         // Nun die Bildgroesse des Captchas festlegen
@@ -150,16 +152,10 @@ class Captcha
         ImageDestroy($image);
 
     }
-
-
 }
 
-
 // Hier wird nun die Klasse initialisiert und das Bildchen ausgegeben...
-session_name('admidio_php_session_id');
-session_start();
 $captcha = new Captcha();
-$captcha->getCaptcha();
-
+$captcha->getCaptcha(); 
 
 ?>
