@@ -154,11 +154,6 @@ if($g_preferences['photo_show_mode']==1)
 //Photomodulspezifische CSS laden
 $g_layout['header'] = $g_layout['header']."<link rel=\"stylesheet\" href=\"". THEME_PATH. "/photos.css\" type=\"text/css\" media=\"screen\" />";
 
-if($g_preferences['photo_show_mode']==1)
-{
-    $g_layout['onload'] = "initLightbox()";
-}
-
 require(THEME_SERVER_PATH. "/overall_header.php");
 
 //Ueberschift
