@@ -256,7 +256,7 @@ if (! empty($submit_action))
 				}
 				$email_versand_liste_all = array_merge($email_versand_liste,getCCRecipients($ecard,$g_preferences['ecard_cc_recipients']));
 				$ecard_html_data = parseEcardTemplate($ecard,$ecard_data_to_parse,$g_root_path,$g_current_user->getValue("usr_id"),$propotional_size_card['width'],$propotional_size_card['height'],$firstvalue_name,$firstvalue_email);
-				$result = sendEcard($ecard,$ecard_html_data,$ecard_plain_data,$firstvalue_name,$firstvalue_email,$email_versand_liste_all);
+				$result = sendEcard($ecard,$ecard_html_data,$firstvalue_name,$firstvalue_email,$email_versand_liste_all);
 				// Wenn die Grußkarte erfolgreich gesendet wurde 
 				if ($result) 
 				{
@@ -803,11 +803,6 @@ $g_layout['header'] .= $javascript;
 $g_layout["header"] = $g_layout['header']."<link rel=\"stylesheet\" href=\"". THEME_PATH. "/photos.css\" type=\"text/css\" media=\"screen\" />";
  
 
-if($g_preferences['photo_show_mode']==1)
-{
-    $g_layout['onload'] = " onload=\"initLightbox()\" ";
-}
-
 require(THEME_SERVER_PATH. "/overall_header.php");
 
 echo '
@@ -875,10 +870,15 @@ if (empty($submit_action))
                <li>
                  <dl>
                    <dt>
-					<label>An:</label>	
-					<div id="getmoreRecipient" style="padding-top:18px; float:left; position:relative;">
-					<a href="javascript:showHideMoreRecipient(\'moreRecipient\',\'getmoreRecipient\');">Mehr Empfänger</a>
-					</div>	        
+					<label>An:</label>
+					';
+					if($g_preferences['enable_ecard_cc_recipients'])
+					{	
+						echo '<div id="getmoreRecipient" style="padding-top:20px;">
+						<a href="javascript:showHideMoreRecipient(\'moreRecipient\',\'getmoreRecipient\');">Mehr Empfänger</a>
+						</div>';
+					}	
+				   echo'        
 				   </dt>
                    <dd id="Menue" style="height:49px; width:370px;">';
 							if (array_key_exists("usr_id", $_GET))
@@ -989,16 +989,34 @@ if (empty($submit_action))
 			    <li>
                     <dl>
                         <dt>
-						    <label>Nachricht:</label>
-							<div style="width:125px; padding:5px 0px 5px 35px; background-image: url(\''.THEME_PATH.'/icons/warning16.png\'); background-repeat: no-repeat;background-position: 5px 5px;border:1px solid #ccc; margin:70px 0px 28px 0px;  background-color: #FFFFE0;">
-							    noch&nbsp;<div id="counter" style="border:0px; display:inline;"><b>'; echo $g_preferences['ecard_text_length'].'</b></div>&nbsp;Zeichen
-							</div>
-							<div id="getmoreSettings" style="padding-top:30px;float:left; position:relative;">
+						    <label>Nachricht:</label>';
+							if($g_preferences['enable_ecard_text_length'])
+							{
+								echo '<div style="width:125px; padding:5px 0px 5px 35px; background-image: url(\''.THEME_PATH.'/icons/warning16.png\'); background-repeat: no-repeat;background-position: 5px 5px;border:1px solid #ccc; margin:70px 0px 28px 0px;  background-color: #FFFFE0;">
+									noch&nbsp;<div id="counter" style="border:0px; display:inline;"><b>'; echo $g_preferences['ecard_text_length'].'</b></div>&nbsp;Zeichen
+								</div>';
+							}
+							echo '<div id="getmoreSettings" style="';
+							if($g_preferences['enable_ecard_text_length'])
+							{
+								echo 'padding-top:30px;';
+							}
+							else
+							{
+								echo 'padding-top:155px;';
+							}
+							echo '">
 								<a href="javascript:showHideMoreSettings(\'moreSettings\',\'getmoreSettings\');">Einstellungen einblenden</a>
 							</div>	
 						</dt>
                         <dd>
-							<textarea id="Nachricht" style="width: 330px; height: 180px; overflow:auto; font:'.$g_preferences['ecard_text_size'].'px '.$g_preferences['ecard_text_font'].'; color:'.$g_preferences['ecard_text_color'].'; wrap:virtual;" rows="10" cols="45" name="ecard[message]" onfocus="javascript:countMax();" onclick="javascript:countMax();" onchange="javascript:countMax();" onkeydown="javascript:countMax();" onkeyup="javascript:countMax();" onkeypress="javascript:countMax();">';
+							<textarea id="Nachricht" style="width: 330px; height: 180px; overflow:auto; font:'.$g_preferences['ecard_text_size'].'px '.$g_preferences['ecard_text_font'].'; color:'.$g_preferences['ecard_text_color'].'; wrap:virtual;" rows="10" cols="45" name="ecard[message]"
+							';
+							if($g_preferences['enable_ecard_text_length'])
+							{
+							echo' onfocus="javascript:countMax();" onclick="javascript:countMax();" onchange="javascript:countMax();" onkeydown="javascript:countMax();" onkeyup="javascript:countMax();" onkeypress="javascript:countMax();';
+							}
+							echo' ">';
 					  		if (! empty($ecard["message"])) 
 							{
 						 		echo ''.$ecard["message"].''; 

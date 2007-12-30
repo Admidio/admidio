@@ -80,6 +80,18 @@ $g_layout['header'] =  "
             document.getElementById(element_id).style.display    = 'block';
             // window.blur();
         }
+		// Versteckt oder zeigt weitere Einstellungsmöglichkeiten
+		function showHideMoreSettings(LayerSetting,LayerSwith)
+		{
+			if(document.getElementById(LayerSwith).value == \"1\")
+			{
+				document.getElementById(LayerSetting).style.display = \"inline\";
+			}
+			else
+			{
+				document.getElementById(LayerSetting).style.display = \"none\";
+			}
+		}
     --></script>";
 
 // Html-Kopf ausgeben
@@ -943,15 +955,18 @@ echo "
                         <dl>
                             <dt><label for=\"ecard_view_scale\">Skalierung Vorschaubild:</label></dt>
                             <dd>
-                                <table summary=\"Skalierung Vorschaubild\" border=\"0\">
+                                <table summary=\"Skalierung Vorschaubild\" border=\"0\" cellspacing=\"2\">
                                     <tr>
                                         <td>Breite: </td>
-                                        <td><input type=\"text\" id=\"ecard_view_width\" name=\"ecard_view_width\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_view_width']. "\" /></td>
-                                        <td>Pixel</td>
+										<td>&nbsp;</td>
+                                        <td style=\"padding-left:20px;\">Höhe: </td>
+										<td>&nbsp;</td>
                                     </tr>
                                     <tr>
-                                        <td>Höhe: </td>
-                                        <td><input type=\"text\" id=\"ecard_view_height\" name=\"ecard_view_height\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_view_height']. "\" /></td>
+                                       
+										<td><input type=\"text\" id=\"ecard_view_width\" name=\"ecard_view_width\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_view_width']. "\" /></td>
+                                        <td>Pixel</td>
+                                        <td style=\"padding-left:20px;\"><input type=\"text\" id=\"ecard_view_height\" name=\"ecard_view_height\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_view_height']. "\" /></td>
                                         <td>Pixel</td>
                                     </tr>
                                 </table>
@@ -966,15 +981,21 @@ echo "
                         <dl>
                             <dt><label for=\"ecard_card_picture_scale\">Skalierung Grußkartenbild:</label></dt>
                             <dd>
-                                <table summary=\"Skalierung Grußkartenbild\" border=\"0\">
+                                <table summary=\"Skalierung Grußkartenbild\" border=\"0\" cellspacing=\"2\">
                                     <tr>
                                         <td>Breite: </td>
-                                        <td><input type=\"text\" id=\"ecard_card_picture_width\" name=\"ecard_card_picture_width\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_card_picture_width']. "\" /></td>
-                                        <td>Pixel</td>
+										<td>&nbsp;</td>
+                                        <td style=\"padding-left:20px;\">Höhe: </td>
+										<td>&nbsp;</td>
                                     </tr>
-                                    <tr>
-                                        <td>Höhe: </td>
-                                        <td><input type=\"text\" id=\"ecard_card_picture_height\" name=\"ecard_card_picture_height\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_card_picture_height']. "\" /></td>
+                                    <tr>                             
+                                        <td>
+											<input type=\"text\" id=\"ecard_card_picture_width\" name=\"ecard_card_picture_width\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_card_picture_width']. "\" />
+										</td>
+                                        <td>Pixel</td>
+										<td style=\"padding-left:20px;\">
+										  <input type=\"text\" id=\"ecard_card_picture_height\" name=\"ecard_card_picture_height\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_card_picture_height']. "\" />
+										</td>
                                         <td>Pixel</td>
                                     </tr>
                                 </table>
@@ -987,26 +1008,63 @@ echo "
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"ecard_cc_recepients\">Max. weitere Empf&auml;nger</label>
+                            <dt><label for=\"ecard_cc_recipients\">Max. weitere Empf&auml;nger</label>
                             </dt>
                             <dd>
-                                <input type=\"text\" id=\"ecard_cc_recepients\" name=\"ecard_cc_recepients\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_cc_recepients']. "\" />
+							<div style=\"display:inline;\">
+							<select size=\"1\" id=\"enable_ecard_cc_recipients\" name=\"enable_ecard_cc_recipients\" style=\"margin-right:20px;\" onchange=\"javascript:showHideMoreSettings('ecard_cc_recipients','enable_ecard_cc_recipients');\">
+                                    <option value=\"0\" ";
+                                    if($form_values['enable_ecard_cc_recipients'] == 0)
+                                    {
+                                        echo " selected=\"selected\" ";
+                                    }
+                                    echo ">Deaktiviert</option>
+                                    <option value=\"1\" ";
+                                    if($form_values['enable_ecard_cc_recipients'] == 1)
+                                    {
+                                        echo " selected=\"selected\" ";
+                                    }
+                                    echo ">Aktiviert</option>
+                                </select>";
+								if($form_values['enable_ecard_cc_recipients'] == 1)
+                                {
+                                echo "<input type=\"text\" id=\"ecard_cc_recipients\" name=\"ecard_cc_recipients\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_cc_recipients']. "\" />";
+								}
+							echo "</div>
                              </dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Hier wird die max. Anzahl der weiteren Empf&auml;ngern festgelegt. (Standardwert: 10)
+                        Hier kann diese Einstellung deaktiviert oder falls gewünscht die max. Anzahl der weiteren Empf&auml;ngern festgelegt werden. (Standardwert: 10)
                     </li>
                     <li>
                         <dl>
                             <dt><label for=\"ecard_text_length\">Max. L&auml;nge des Mitteilungstextes:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"ecard_text_length\" name=\"ecard_text_length\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_text_length']. "\" />
+							 <select size=\"1\" id=\"enable_ecard_text_length\" name=\"enable_ecard_text_length\" style=\"margin-right:20px;\" onchange=\"javascript:showHideMoreSettings('ecard_text_length','enable_ecard_text_length');\">
+                                    <option value=\"0\" ";
+                                    if($form_values['enable_ecard_text_length'] == 0)
+                                    {
+                                        echo " selected=\"selected\" ";
+                                    }
+                                    echo ">Deaktiviert</option>
+                                    <option value=\"1\" ";
+                                    if($form_values['enable_ecard_text_length'] == 1)
+                                    {
+                                        echo " selected=\"selected\" ";
+                                    }
+                                    echo ">Aktiviert</option>
+                                </select>";
+								if($form_values['enable_ecard_text_length'] == 1)
+                                {
+                               echo "<input type=\"text\" id=\"ecard_text_length\" name=\"ecard_text_length\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_text_length']. "\" />";
+								}
+							echo "
                              </dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Hier wird die max. Zeichenlänge des Mitteilungstextes festgelegt. (Standardwert: 150)
+                        Hier kann diese Einstellung deaktiviert oder falls gewünscht die max. Zeichenlänge des Mitteilungstextes festgelegt werden. (Standardwert: 150)
                     </li>
                     <li>
                         <dl>
