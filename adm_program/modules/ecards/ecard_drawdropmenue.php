@@ -174,14 +174,14 @@ else if($g_valid_login && isset($_GET['usrid']) && $_GET['usrid']!="extern")
 		{
 			$full_name	= ''.$row->first_name.' '.$row->last_name.'';
 			echo '<input type="hidden" name="ecard[email_recipient]" value="'.$row->email.'" />
-			<input type="text" name="ecard[name_recipient]" size="25" class="readonly" readonly="readonly"  maxlength="40" style="width: 200px;" value="'.$full_name.'" /><div style="display:inline; margin-left:42px;"><a href="javascript:getMenuRecepientName();">anderer Empf&auml;nger</a></div>
+			<input type="text" name="ecard[name_recipient]" size="25" class="readonly" readonly="readonly"  maxlength="40" style="width: 200px;" value="'.$full_name.'" /><div style="display:inline; margin-left:43px;"><a href="javascript:getMenuRecepientName();">anderer Empf&auml;nger</a></div>
 			';
 		}
 	}
 	else
 	{
 		echo '<input type="hidden" name="ecard[email_recipient]" value="'.$_GET['usrid'].'@rolle.com" />
-			<input type="text" name="ecard[name_recipient]" size="25" class="readonly" readonly="readonly"  maxlength="40" style="width: 200px;" value="die gesamte Rolle" /><div style="display:inline; margin-left:39px;"><a href="javascript:getMenuRecepientName();">anderen Empf. w.</a></div>
+			<input type="text" name="ecard[name_recipient]" size="25" class="readonly" readonly="readonly"  maxlength="40" style="width: 200px;" value="die gesamte Rolle" /><div style="display:inline; margin-left:40px;"><a href="javascript:getMenuRecepientName();">anderen Empf&auml;nger</a></div>
 			';
 	}
 }
