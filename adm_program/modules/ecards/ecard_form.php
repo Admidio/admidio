@@ -329,13 +329,13 @@ $javascript='
             var error         = false;
             var error_message = "Du hast die folgenden, für die\nGrußkarte notwendigen Eingabefelder\nnicht bzw. nicht richtig ausgefüllt:\n\n";
 
-            if (document.ecard_form["ecard[name_sender]"].value == "") 
+            if (!document.ecard_form["ecard[name_sender]"] && document.ecard_form["ecard[name_sender]"].value == "") 
 			{
                 error = true;
                 error_message += "- Name des Absenders\n";
             } 
  
-            if ((document.ecard_form["ecard[email_sender]"].value == "") || 
+            if (!document.ecard_form["ecard[email_sender]"] && (document.ecard_form["ecard[email_sender]"].value == "") || 
                (echeck(document.ecard_form["ecard[email_sender]"].value) == false)) 
 			{
                 error = true;
@@ -905,8 +905,8 @@ if (empty($submit_action))
 									 <div id="dropdownmenu" style="display:block;">
 								     </div>
 								     <div id="extern">
-										 <input type="hidden" name="ecard[email_recipient]" value="" />
-										 <input type="hidden" name="ecard[name_recipient]"  value="" />
+										<input type="hidden" name="ecard[email_recipient]" value="" />
+										<input type="hidden" name="ecard[name_recipient]"  value="" />
 									 </div>
 									  <div id="wrong" style="width:300px;background-image: url(\''.THEME_PATH.'/icons/error.png\'); background-repeat: no-repeat;background-position: 5px 5px;margin-top:5px; border:1px solid #ccc;padding:5px;background-color: #FFFFE0; padding-left: 28px;display:none;"></div>';
                             }
