@@ -17,7 +17,7 @@
   
     if($g_layout['includes'])
     {
-       require(THEME_SERVER_PATH. "/body_bottom.php");
+       require(THEME_SERVER_PATH. "/my_body_bottom.php");
     }
 echo '</body>
 </html>';

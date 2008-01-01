@@ -76,14 +76,14 @@ echo '
 
     if($g_layout['includes'])
     {
-        require(THEME_SERVER_PATH. "/header.php");
+        require(THEME_SERVER_PATH. "/my_header.php");
     }
     
 echo "</head>
 <body". $g_layout['onload']. ">";
     if($g_layout['includes'])
     {
-        require(THEME_SERVER_PATH. "/body_top.php");
+        require(THEME_SERVER_PATH. "/my_body_top.php");
     }
 
  ?>
