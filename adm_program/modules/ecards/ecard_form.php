@@ -199,9 +199,9 @@ if (! empty($submit_action))
 			if(!is_numeric($rolle))
 			{
 				array_push($email_versand_liste,array($ecard["name_recipient"],$ecard["email_recipient"]));
-				
+				$email_versand_liste_all = array_merge($email_versand_liste,getCCRecipients($ecard,$g_preferences['ecard_cc_recipients']));
 				$ecard_html_data = parseEcardTemplate($ecard,$ecard_data_to_parse,$g_root_path,$g_current_user->getValue("usr_id"),$propotional_size_card['width'],$propotional_size_card['height'],$ecard["name_recipient"],$ecard["email_recipient"]);
-				$result = sendEcard($ecard,$ecard_html_data,$ecard["name_recipient"],$ecard["email_recipient"],getCCRecipients($ecard,$g_preferences['ecard_cc_recipients']));
+				$result = sendEcard($ecard,$ecard_html_data,$ecard["name_recipient"],$ecard["email_recipient"],$email_versand_liste_all);
 				// Wenn die Grußkarte erfolgreich gesendet wurde 
 				if ($result) 
 				{
@@ -1090,60 +1090,75 @@ if (empty($submit_action))
 else 
 {     
 	echo'<br />
-	<div align="center"><span style="font-size:16px; font-weight:bold">Deine Grußkarte wurde erfolgreich versendet.</span></div>
+	<div align="center">
+		<div style="text-align:center; 
+		width:380px; 
+		height:30px;
+		background-image: url(\''.THEME_PATH.'/icons/ok_big.png\'); 
+		background-repeat: no-repeat;
+		background-position: 13px 13px;
+		margin-top:5px; 
+		border:1px solid #ccc;
+		padding:20px 0px 5px 35px;
+		background-color: #FFFFE0;  
+		vertical-align:middle;">
+			<span style="font-size:16px; font-weight:bold">Deine Grußkarte wurde erfolgreich versendet.</span>
+		</dv>
+	</div>
 	<br /><br />
+	
 	<table cellpadding="0" cellspacing="0" border="0" summary="Erfolg" align="center">
-		<tr>
-			<td align="left" colspan="2"><b>Absender:</b></td>
-		</tr>
-		<tr>
-			<td align="left" style="padding-right:5px;">'; echo $ecard["name_sender"].',</td><td align="left">'.$ecard["email_sender"]; echo'</td>
-		</tr>
-		<tr>
-			<td align="left">&nbsp;</td>
-		</tr>
-		<tr>
-			<td align="left" colspan="2"><b>Empfänger:</b></td>
-		</tr><tr>';
-		foreach($email_versand_liste as $item)
-		{
-				$i=0;
-				foreach($item as $item2)
-				{
-						if (!is_integer(($i+1)/2))
-						{
-							echo '<td align="left"  style="padding-right:5px;">'; echo $item2.',</td></td>'; 
-						}
-						else
-						{
-							echo'<td align="left"  style="padding-right:5px;">'; echo $item2.'</td></tr><tr>';
-						}
-						$i++;
-				}
-		}			
-		echo '</tr>';
-		$Liste = array();
-		$Liste = getCCRecipients($ecard,$g_preferences['ecard_cc_recipients']);
-		if(count($Liste)>0)
-		{
-			echo '<tr><td>&nbsp;</td></tr><tr><td colspan="2"><b>Zusätzliche Empfänger:</b></td></tr><tr>';
-			foreach($Liste as $item)
+	<tr>
+		<td align="left" colspan="2"><b>Absender:</b></td>
+	</tr>
+	<tr>
+		<td align="left" style="padding-right:5px;">'; echo $ecard["name_sender"].',</td><td align="left">'.$ecard["email_sender"]; echo'</td>
+	</tr>
+	<tr>
+		<td align="left">&nbsp;</td>
+	</tr>
+	<tr>
+		<td align="left" colspan="2"><b>Empfänger:</b></td>
+	</tr><tr>';
+	foreach($email_versand_liste as $item)
+	{
+			$i=0;
+			foreach($item as $item2)
 			{
-				$i=0;
-				foreach($item as $item2)
-				{
 					if (!is_integer(($i+1)/2))
 					{
-						echo '<td align="left">'.$item2.',</td>'; 
+						echo '<td align="left"  style="padding-right:5px;">'; echo $item2.',</td></td>'; 
 					}
 					else
 					{
-						echo'<td align="left">'.$item2.'</td></tr><tr>';
+						echo'<td align="left"  style="padding-right:5px;">'; echo $item2.'</td></tr><tr>';
 					}
 					$i++;
+			}
+	}			
+	echo '</tr>';
+	$Liste = array();
+	$Liste = getCCRecipients($ecard,$g_preferences['ecard_cc_recipients']);
+	if(count($Liste)>0)
+	{
+		echo '<tr><td>&nbsp;</td></tr><tr><td colspan="2"><b>Zusätzliche Empfänger:</b></td></tr><tr>';
+		foreach($Liste as $item)
+		{
+			$i=0;
+			foreach($item as $item2)
+			{
+				if (!is_integer(($i+1)/2))
+				{
+					echo '<td align="left">'.$item2.',</td>'; 
 				}
+				else
+				{
+					echo'<td align="left">'.$item2.'</td></tr><tr>';
+				}
+				$i++;
 			}
 		}
+	}
 	echo '</tr></table><br /><br/>';
 }  
 echo "</div></div></div>";
