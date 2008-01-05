@@ -230,6 +230,10 @@ function prepareBody()
         $this->mail_body    = $this->mail_body. "This message is in MIME format.\n";
         $this->mail_body    = $this->mail_body. "Since your mail reader does not understand this format,\n";
         $this->mail_body    = $this->mail_body. "some or all of this message may not be legible.\n\n";
+		if($this->sendasHTML)
+		{
+			 $this->mail_body    = $this->mail_body.strip_tags($this->text)."\n\n";
+		}
         $this->mail_body    = $this->mail_body. "--". $this->mailBoundary. "\nContent-Type: ". $this->contentType. "\n\n";
     }
 
