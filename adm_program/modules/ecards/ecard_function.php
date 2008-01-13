@@ -278,7 +278,7 @@ function parseEcardTemplate($ecard,$ecard_data,$root_path,$usr_id,$propotional_w
     // Hier werden die Umlaute ersetzt
 	$ecard_data = preg_replace ("/ü\ö\ä\Ü\Ö\Ä\ß/","/&uuml;\&ouml;\&auml;\&Uuml;\&Ouml;\&Auml;\&szlig;/", $ecard_data);
 	// Die fertig geparsten Daten werden jetzt nurnoch als Return Wert zurueckgeliefert
-	return $ecard_data;
+	return stripslashes($ecard_data);
 }
 // Diese Funktion ruft die Mail Klasse auf und uebergibt ihr die zu sendenden Daten
 // Uebergabe:

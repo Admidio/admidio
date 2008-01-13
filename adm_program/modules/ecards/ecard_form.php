@@ -329,13 +329,13 @@ $javascript='
             var error         = false;
             var error_message = "Du hast die folgenden, für die\nGrußkarte notwendigen Eingabefelder\nnicht bzw. nicht richtig ausgefüllt:\n\n";
 
-            if (!document.ecard_form["ecard[name_sender]"] && document.ecard_form["ecard[name_sender]"].value == "") 
+            if (document.ecard_form["ecard[name_sender]"] && document.ecard_form["ecard[name_sender]"].value == "") 
 			{
                 error = true;
                 error_message += "- Name des Absenders\n";
             } 
  
-            if (!document.ecard_form["ecard[email_sender]"] && (document.ecard_form["ecard[email_sender]"].value == "") || 
+            if (document.ecard_form["ecard[email_sender]"] && (document.ecard_form["ecard[email_sender]"].value == "") || 
                (echeck(document.ecard_form["ecard[email_sender]"].value) == false)) 
 			{
                 error = true;
