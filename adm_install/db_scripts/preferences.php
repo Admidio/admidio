@@ -16,15 +16,16 @@
 $orga_preferences = array(
 
     // System
-    'enable_rss'          => '1',
-    'enable_bbcode'       => '1',
-    'enable_auto_login'   => '1',
-    'logout_minutes'      => '20',
-    'enable_system_mails' => '1',
-    'email_administrator' => 'webmaster@'. $_SERVER['HTTP_HOST'],
-    'homepage_logout'     => 'index.html',
-    'homepage_login'      => 'index.html',
-    'theme'               => 'classic',
+    'enable_rss'					=> '1',
+    'enable_bbcode'					=> '1',
+    'enable_auto_login'				=> '1',
+    'logout_minutes'				=> '20',
+    'enable_system_mails'			=> '1',
+    'email_administrator'			=> 'webmaster@'. $_SERVER['HTTP_HOST'],
+    'homepage_logout'				=> 'index.html',
+    'homepage_login'				=> 'index.html',
+    'theme'							=> 'classic',
+	'enable_password_recovery'		=> '1',
 
     // Registrierung
     'registration_mode'              => '1',

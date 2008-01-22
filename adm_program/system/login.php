@@ -74,10 +74,14 @@ echo "
         {
             $mail_link = "mailto:". $g_preferences['email_administrator']. "?subject=Loginprobleme";
         }
-        else
+        else if($g_preferences['enable_password_recovery'] != 1) 
         {
             $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?rol_id=". $role_webmaster->getValue("rol_id"). "&amp;subject=Loginprobleme";
         }
+		else
+		{
+			$mail_link = "$g_root_path/adm_program/system/lost_password.php";
+		}
         echo "<div class=\"smallFontSize\" style=\"margin-top: 5px;\">
             <a href=\"$mail_link\">Ich habe mein Passwort vergessen!</a>
         </div>
