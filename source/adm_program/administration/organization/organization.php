@@ -358,6 +358,33 @@ echo "
                         Inaktiv ist ein Benutzer solange er keine Seite des Admidio-Systems aufruft. Diese Einstellung
                         wird ignoriert, falls der Benutzer <b>Angemeldet bleiben</b> ausgewählt hat.
                     </li>
+					
+					 <li>
+					 	<dl>
+							<dt><label for=\"enable_password_recovery\">Passwort zusenden:</label>
+							</dt>
+							<dd>
+							<select size=\"1\" id=\"enable_password_recovery\" name=\"enable_password_recovery\">
+									<option value=\"0\" ";
+									if($form_values['enable_password_recovery'] == 0)
+									{
+										echo " selected=\"selected\" ";
+									}
+									echo ">Deaktiviert</option>
+									<option value=\"1\" ";
+									if($form_values['enable_password_recovery'] == 1)
+									{
+										echo " selected=\"selected\" ";
+									}
+									echo ">Aktiviert</option>
+								</select>
+							</dd>
+						</dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Der User kann sich wenn er sein Passwort vergessen hatt ein neu generiertes zu schicken!<br />
+						Wenn die Option deaktiviert wurde kann der User nur eine Anfrage an den Webadmin stellen!
+                    </li>
                 </ul>
             </div>
         </div>";

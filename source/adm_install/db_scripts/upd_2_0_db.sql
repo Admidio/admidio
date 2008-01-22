@@ -22,6 +22,8 @@ ALTER TABLE %PRAEFIX%_user_fields ADD COLUMN `usf_sequence` smallint NOT NULL AF
 
 -- User-Tabelle ergaenzen
 ALTER TABLE %PRAEFIX%_users ADD COLUMN `usr_text` text AFTER `usr_photo`;
+ALTER TABLE %PRAEFIX%_users ADD COLUMN `usr_activation_code` VARCHAR(10);
+ALTER TABLE %PRAEFIX%_users ADD COLUMN `usr_new_password` VARCHAR(35);
 ALTER TABLE %PRAEFIX%_users MODIFY COLUMN `usr_login_name` VARCHAR(35) DEFAULT NULL;
 
 -- Session-Tabelle ergaenzen

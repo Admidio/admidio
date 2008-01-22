@@ -160,6 +160,8 @@ create table %PRAEFIX%_users
    usr_usr_id_change              int(11) unsigned,
    usr_valid                      tinyint(1) unsigned            not null default 0,
    usr_reg_org_shortname          varchar(10),
+   usr_activation_code			  varchar(10),
+   usr_new_password 			  varchar(10),
    primary key (usr_id),
    unique ak_usr_login_name (usr_login_name)
 )
