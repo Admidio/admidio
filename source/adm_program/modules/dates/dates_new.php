@@ -102,6 +102,8 @@ else
 $g_layout['title'] = $_GET["headline"];
 
 require(THEME_SERVER_PATH. "/overall_header.php");
+echo"<script language=\"javascript\" type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/calendar/CalendarPopup.js\"></script>
+<link rel=\"stylesheet\" href=\"".THEME_PATH. "/calendar.css\" type=\"text/css\" />";
 
 // Html des Modules ausgeben
 echo "
@@ -158,7 +160,17 @@ echo "
                 <dl>
                     <dt><label for=\"date_from\">Datum Beginn:</label></dt>
                     <dd>
-                        <input type=\"text\" id=\"date_from\" name=\"date_from\" size=\"10\" maxlength=\"10\" value=\"$date_from\" />
+						<form>
+						<script language=\"javascript\" type=\"text/javascript\" id=\"js18\">
+							var cal18 = new CalendarPopup(\"calendardiv\");
+							cal18.setCssPrefix(\"calendar\");
+							writeSource(\"js18\");
+						</script>
+						<input type=\"text\" id=\"date_from\" name=\"date_from\" size=\"10\" maxlength=\"10\" value=\"$date_from\">
+						<img src=\"". THEME_PATH. "/icons/date.png\" alt=\"Kalender\" onclick=\"javascript:cal18.select(document.forms[0].date_from,'anchor18','dd.MM.yyyy'); return false;\" name=\"anchor18\" id=\"anchor18\" style=\"vertical-align:middle;\" />
+						</form>
+						<div id=\"calendardiv\" style=\"position: absolute; visibility: hidden; \"></div>
+
                         <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                         <span style=\"margin-left: 40px;\">
                             <label for=\"time_from\">Uhrzeit Beginn:</label>
@@ -173,7 +185,12 @@ echo "
                 <dl>
                     <dt><label for=\"date_to\">Datum Ende:</label></dt>
                     <dd>
-                        <input type=\"text\" id=\"date_to\" name=\"date_to\" size=\"10\" maxlength=\"10\" value=\"$date_to\" />
+						<script language=\"javascript\" type=\"text/javascript\">
+							writeSource(\"js18\");
+						</script>
+						<input type=\"text\" id=\"date_to\" name=\"date_to\" size=\"10\" maxlength=\"10\" value=\"$date_from\">
+						<img src=\"". THEME_PATH. "/icons/date.png\" alt=\"Kalender\" onclick=\"javascript:cal18.select(document.forms[0].date_to,'anchor17','dd.MM.yyyy'); return false;\" name=\"anchor17\" id=\"anchor17\" style=\"vertical-align:middle;\" />
+						</form>
                         &nbsp;&nbsp;
                         <span style=\"margin-left: 40px;\">
                             <label for=\"time_to\">Uhrzeit Ende:</label>
