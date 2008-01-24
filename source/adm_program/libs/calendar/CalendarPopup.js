@@ -98,7 +98,7 @@ function AnchorPosition_getWindowOffsetTop (el) {
 	return AnchorPosition_getPageOffsetTop(el)-document.body.scrollTop;
 	}
 
-var MONTH_NAMES=new Array('Jänner','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember','Jän','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez');
+var MONTH_NAMES=new Array('Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember','Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez');
 var DAY_NAMES=new Array('Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag','Sonntag','Mo','Di','Mi','Do','Fr','Sa','So');
 function LZ(x) {return(x<0||x>9?"":"0")+x}
 
@@ -644,8 +644,8 @@ function CalendarPopup() {
 	c.offsetY = -60;
 	c.autoHide();
 	// Calendar-specific properties
-	c.monthNames = new Array("J&auml;nner","Februar","M&auml;rz","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember");
-	c.monthAbbreviations = new Array("J&auml;n","Feb","M&auml;r","Apr","Mai","Jun","Jui","Aug","Sep","Okt","Nov","Dez");
+	c.monthNames = new Array("Januar","Februar","M&auml;rz","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember");
+	c.monthAbbreviations = new Array("Jan","Feb","M&auml;r","Apr","Mai","Jun","Jui","Aug","Sep","Okt","Nov","Dez");
 	c.dayHeaders = new Array("So","Mo","Di","Mi","Do","Fr","Sa");
 	c.returnFunction = "CP_tmpReturnFunction";
 	c.returnMonthFunction = "CP_tmpReturnMonthFunction";

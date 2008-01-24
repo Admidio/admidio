@@ -10,7 +10,7 @@ border-bottom:0px;
 font-weight:bold;
 font-size:10pt;
 font-family:arial;
-cursor:default;
+cursor:pointer;
 }
 #calendarcpDayColumnHeader,
 #calendarcpCurrentMonthDate,
@@ -26,7 +26,7 @@ cursor:default;
 font-family:arial;
 font-size:10pt;
 padding-right:2px;
-cursor:default;
+cursor:pointer;
 }
 #calendarcpDayColumnHeader
 {
@@ -34,6 +34,7 @@ border-bottom:1px solid black;
 padding:2px;
 font-weight:bold;
 padding-right:5px;
+cursor:default;
 }
 #calendarcpCurrentMonthDate,
 #calendarcpOtherMonthDate,
