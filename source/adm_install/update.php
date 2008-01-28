@@ -31,7 +31,7 @@ function showPage($message, $next_url, $icon, $icon_text)
         
         <title>Admidio - Update</title>
 
-        <link rel="stylesheet" type="text/css" href="'. THEME_PATH. '/system.css" />
+        <link rel="stylesheet" type="text/css" href="../adm_themes/classic/system.css" />
         <script type="text/javascript" src="'. $g_root_path. '/adm_program/system/common_functions.js"></script>
 
         <!--[if lt IE 7]>
@@ -47,7 +47,7 @@ function showPage($message, $next_url, $icon, $icon_text)
                 if($submit_button.value == \'Datenbank aktualisieren\')
                 {
                     $submit_button.disabled  = true;
-                    $submit_button.innerHTML = \'<img src="'. THEME_PATH. '/images/loader.gif" alt="Loading" /> Datenbank wird aktualisiert\';
+                    $submit_button.innerHTML = \'<img src="../adm_themes/classic/icons/loader.gif" alt="Loading" /> Datenbank wird aktualisiert\';
                 }
                 document.forms[0].submit();
             }
@@ -57,7 +57,7 @@ function showPage($message, $next_url, $icon, $icon_text)
         <form action="'. $next_url. '" method="post">
         <div class="formLayout" id="installation_form">
             <div class="formHead" style="text-align: left; letter-spacing: 0em;">
-                <img style="float:left; padding: 5px 0px 0px 0px; border: none;" src="'. THEME_PATH. '/images/admidio_logo_50.png" alt="www.admidio.org" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <img style="float:left; padding: 5px 0px 0px 0px; border: none;" src="../adm_themes/classic/images/admidio_logo_50.png" alt="www.admidio.org" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <div style="font-size: 16pt; font-weight: bold; text-align: right; padding: 5px 10px 10px 0px;">Version '. ADMIDIO_VERSION. '</div>
                 <div style="font-size: 11pt; padding: 0px 0px 5px 0px;">Die Online-Mitgliederverwaltung f&uuml;r Vereine, Gruppen und Organisationen</div>
             </div>
@@ -69,7 +69,7 @@ function showPage($message, $next_url, $icon, $icon_text)
 
                 <div class="formSubmit" style="text-align: center;">
                     <button type="button" id="next_page" name="next_page" value="'. $icon_text. '" onclick="startUpdate()">
-                    <img src="'. THEME_PATH. '/images/'. $icon. '" alt="'. $icon_text. '" />
+                    <img src="../adm_themes/classic/icons/'. $icon. '" alt="'. $icon_text. '" />
                     &nbsp;'. $icon_text. '</button>
                 </div>            
             </div>
