@@ -35,7 +35,7 @@ function showPage($message, $next_url, $icon, $icon_text, $focus = "next_page")
         <title>Admidio - Update</title>
 
         <link rel="stylesheet" type="text/css" href="../adm_themes/classic/system.css" />
-        <script type="text/javascript" src="'. $g_root_path. '/adm_program/system/common_functions.js"></script>
+        <script type="text/javascript" src="../adm_program/system/common_functions.js"></script>
 
         <!--[if lt IE 7]>
     	<script type="text/javascript"><!--
@@ -50,7 +50,7 @@ function showPage($message, $next_url, $icon, $icon_text, $focus = "next_page")
                 if($submit_button.value == \'Datenbank aktualisieren\' || $submit_button.value == \'Admidio installieren\')
                 {
                     $submit_button.disabled  = true;
-                    $submit_button.innerHTML = \'<img src="../adm_themes/classic/images/loader.gif" alt="Loading" /> Datenbank wird aktualisiert\';
+                    $submit_button.innerHTML = \'<img src="../adm_themes/classic/icons/loader.gif" alt="Loading" /> Datenbank wird aktualisiert\';
                 }
                 document.forms[0].submit();
             }
@@ -72,7 +72,7 @@ function showPage($message, $next_url, $icon, $icon_text, $focus = "next_page")
                 <hr />
                 <div class="formSubmit" style="text-align: center;">
                     <button type="button" id="next_page" name="next_page" value="'. $icon_text. '" onclick="startUpdate()">
-                    <img src="../adm_themes/classic/images/'. $icon. '" alt="'. $icon_text. '" />
+                    <img src="../adm_themes/classic/icons/'. $icon. '" alt="'. $icon_text. '" />
                     &nbsp;'. $icon_text. '</button>
                 </div>
             </div>
@@ -135,9 +135,9 @@ if($req_mode == 1)
     // Willkommen zur Installation
     session_destroy();
     $message = '<strong>Willkommen zur Installation von Admidio</strong><br /><br />
-                Auf den nächsten Seiten müssen Sie einige zur Installation notwenigen Daten eingeben.
-                Sie benötigen dazu die Zugangsdaten zu der Datenbank, auf der Admidio zukünftig laufen 
-                soll.';
+                Auf den nächsten Seiten müssen Sie einige notwendige Informationen für die Einrichtung
+                von Admidio eingeben. Sie benötigen dazu unter anderem die Zugangsdaten zu der 
+                Datenbank, auf der Admidio zukünftig laufen soll.';
     showPage($message, "installation.php?mode=2", "forward.png", "Datenbank Zugangsdaten");
 }
 elseif($req_mode == 2)
@@ -163,7 +163,7 @@ elseif($req_mode == 2)
     $message = '<strong>Zugangsdaten zur Datenbank eingeben</strong><br /><br />
                 Geben Sie in diesem Formular Ihre Zugangsdaten zur Datenbank an. Sie können das 
                 Tabellenpräfix auf Wunsch verändern. Dies ist notwendig, falls Sie mehrere 
-                Admidio-Installationen in derselben Datenbank einrichten möchten.
+                Admidio-Installationen auf derselben Datenbank einrichten möchten.
                 
                 <div class="groupBox">
                     <div class="groupBoxHeadline">Zugangsdaten zur Datenbank</div>
