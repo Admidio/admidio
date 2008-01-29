@@ -42,7 +42,7 @@ $message_text = array(
 
     "delete_category" =>
         "<p>Soll die Kategorie %VAR1% wirklich gelöscht werden ?</p>
-        <p>Es werden alle Daten, die dieser Kategorie zugeordnet sind 
+        <p>Es werden alle Daten, die dieser Kategorie zugeordnet sind
         (Felder, Rollen, Links), mit gelöscht.</p>",
 
     "delete_date" =>
@@ -202,9 +202,9 @@ $message_text = array(
         "Speichern nicht möglich, die Rolle hat bereits mehr Mitglieder als die von dir eingegebene Begrenzung.",
 
     "write_access" =>
-        "Der Ordner %VAR1% konnte nicht angelegt werden. Du musst dich an den 
-        <a href=\"mailto:%VAR2%\">Webmaster</a> wenden, damit dieser die entsprechenden 
-        <acronym title=\"über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen.\">Schreibrechte</acronym> 
+        "Der Ordner %VAR1% konnte nicht angelegt werden. Du musst dich an den
+        <a href=\"mailto:%VAR2%\">Webmaster</a> wenden, damit dieser die entsprechenden
+        <acronym title=\"über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen.\">Schreibrechte</acronym>
         setzen kann.",
 
 
@@ -307,10 +307,10 @@ $message_text = array(
         "Willst du das Album:<br />
         %VAR1%<br />wirklich löschen?<br />
         Alle enthaltenen Unteralben und Bilder gehen verloren.",
-        
+
     "event_deleted" =>
         "Das Album wurde erfolgreich gelöscht.",
-        
+
     "event_deleted_error" =>
         "Beim Löschen des Albums sind Probleme aufgetreten.<br />
         Es konnten nicht alle Dateien bzw. Datensätze gelöscht werden.",
@@ -347,7 +347,7 @@ $message_text = array(
         "Du kannst keine PHP-, HTML- oder Perl-Dateien hochladen.",
 
     "file_not_exist" =>
-        "Die ausgewählte Datei existiert nicht.",
+        "Die ausgewählte Datei existiert nicht auf dem Server.",
 
     "folder_not_exist" =>
         "Der aufgerufene Ordner existiert nicht.",
