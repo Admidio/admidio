@@ -59,7 +59,7 @@ class File extends TableAccess
         $condition = "     fil_id     = $file_id
         		       AND fil_fol_id = fol_id
                        AND fol_org_id = ". $g_current_organization->getValue("org_id");
-        $this->readData($lnk_id, $condition, $tables);
+        $this->readData($file_id, $condition, $tables);
     }
 
 

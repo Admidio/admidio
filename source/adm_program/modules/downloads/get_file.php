@@ -14,6 +14,7 @@
  *****************************************************************************/
 
 require("../../system/common.php");
+require("../../system/file_class.php");
 
 //pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_download_module'] != 1) {
@@ -44,6 +45,12 @@ $file = new File($g_db);
 $file->getFile($_GET['file_id']);
 
 //TODO: pruefen ob ueberhaupt ein Datensatz in der DB gefunden wurde...
+
+//pruefen ob das File oder der Ordner gelocked ist:
+if ($file->getValue("fil_locked") ||  $file->getValue("fol_locked"))
+{
+	$g_message->show("invalid");
+}
 
 //TODO: pruefen ob der User die Berechtigung hat das File runterzuladen...
 
