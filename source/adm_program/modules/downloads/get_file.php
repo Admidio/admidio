@@ -17,7 +17,8 @@ require("../../system/common.php");
 require("../../system/file_class.php");
 
 //pruefen ob das Modul ueberhaupt aktiviert ist
-if ($g_preferences['enable_download_module'] != 1) {
+if ($g_preferences['enable_download_module'] != 1)
+{
     // das Modul ist deaktiviert
     $g_message->show("module_disabled");
 }
@@ -44,9 +45,14 @@ $file = new File($g_db);
 //Fileproperties aus DB lesen
 $file->getFile($_GET['file_id']);
 
-//TODO: pruefen ob ueberhaupt ein Datensatz in der DB gefunden wurde...
+//pruefen ob ueberhaupt ein Datensatz in der DB gefunden wurde...
+if (!$file->getValue('fil_id'))
+{
+	//Datensatz konnte nicht in DB gefunden werden...
+	$g_message->show("invalid");
+}
 
-//pruefen ob das File oder der Ordner gelocked ist:
+//pruefen ob das File oder der Ordner, in dem sich die Datei befindet, gelocked ist:
 if ($file->getValue("fil_locked") ||  $file->getValue("fol_locked"))
 {
 	$g_message->show("invalid");
@@ -61,7 +67,8 @@ $folderName   = $file->getValue("fol_name");
 $completePath = "$folderPath/$folderName/$fileName";
 
 //pruefen ob File ueberhaupt physikalisch existiert
-if (!file_exists($completePath)) {
+if (!file_exists($completePath))
+{
     $g_message->show("file_not_exist");
 }
 
