@@ -39,7 +39,7 @@ class TableAccess
     
     var $new_record;                // Merker, ob ein neuer Datensatz oder vorhandener Datensatz bearbeitet wird
     var $db_fields_changed;         // Merker ob an den db_fields Daten was geaendert wurde
-    var $db_fields = array();       // Array ueber alle Felder der Rollen-Tabelle der entsprechenden Rolle
+    var $db_fields = array();       // Array ueber alle Felder der entsprechenden Tabelle zu dem gewaehlten Datensatz
     var $db_fields_infos = array(); // Array, welches weitere Informationen (geaendert ja/nein, Feldtyp) speichert
     
     // liest den Datensatz von $key_value ein

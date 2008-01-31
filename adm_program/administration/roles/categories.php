@@ -69,7 +69,7 @@ $g_layout['header'] = "
     <script type=\"text/javascript\"><!--
         var resObject     = createXMLHttpRequest();
         
-        function updateDB(element)
+        function updateAllOrgas(element)
         {
             var childs = element.childNodes;
 
@@ -83,6 +83,21 @@ $g_layout['header'] = "
                 resObject.send(null);
             }
         }
+        
+        function updateThisOrga(element)
+        {
+            var childs = element.childNodes;
+
+            for(i=0;i < childs.length; i++)
+            {
+                var id = childs[i].getAttribute('id');
+                var cat_id = id.substr(4);
+                var sequence = i + 1;
+                // Synchroner Request, da ansonsten Scriptaculous verrueckt spielt
+                resObject.open('GET', '$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=' + cat_id + '&type=". $_GET['type']. "&mode=4&sequence=' + sequence, false);
+                resObject.send(null);
+            }
+        }        
     --></script>";
     
 require(THEME_SERVER_PATH. "/overall_header.php");
@@ -117,14 +132,26 @@ echo "
              ORDER BY cat_sequence ASC ";
     $cat_result = $g_db->query($sql);
     $write_tbody = false;
+    $write_all_orgas = false;
 
     while($cat_row = $g_db->fetch_array($cat_result))
     {
-        // da bei USF die Kategorie Stammdaten nicht verschoben werden darf, muss hier ein bischen herumgewurschtelt werden
         if($cat_row['cat_name'] == "Stammdaten" && $_GET['type'] == "USF")
         {
+        		// da bei USF die Kategorie Stammdaten nicht verschoben werden darf, muss hier ein bischen herumgewurschtelt werden
             $drag_icon = "&nbsp;";
             echo "<tbody id=\"cat_stammdaten\">";
+        }
+        elseif($cat_row['cat_org_id'] == 0 && $_GET['type'] == "USF")
+        {
+        		// Kategorien über alle Organisationen kommen immer zuerst
+            if($write_all_orgas == false)
+            {
+                $write_all_orgas = true;
+                echo "</tbody>
+                <tbody id=\"cat_all_orgas\">";
+            }
+            $drag_icon = "<img class=\"dragable\" src=\"". THEME_PATH. "/icons/arrow_out.png\" alt=\"Reihenfolge ändern\" title=\"Reihenfolge ändern\" />";        		
         }
         else
         {
@@ -137,7 +164,7 @@ echo "
                 }
                 echo "<tbody id=\"cat_list\">";
             }
-            $drag_icon = "<img class=\"dragable\" src=\"". THEME_PATH. "/icons/arrow_out.png\" alt=\"Reihenfolge &auml;ndern\" title=\"Reihenfolge &auml;ndern\" />";
+            $drag_icon = "<img class=\"dragable\" src=\"". THEME_PATH. "/icons/arrow_out.png\" alt=\"Reihenfolge ändern\" title=\"Reihenfolge ändern\" />";
         }
         echo "
         <tr id=\"row_". $cat_row['cat_id']. "\" class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
@@ -146,7 +173,7 @@ echo "
             <td>";
                 if($cat_row['cat_hidden'] == 1)
                 {
-                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/user_key.png\" alt=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\" title=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\" />";
+                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/user_key.png\" alt=\"Kategorie nur für eingeloggte Benutzer sichtbar\" title=\"Kategorie nur für eingeloggte Benutzer sichtbar\" />";
                 }
                 else
                 {
@@ -171,7 +198,7 @@ echo "
                     echo "
                     <span class=\"iconLink\">
                         <a href=\"$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=". $cat_row['cat_id']. "&amp;mode=3&amp;type=$req_type\"><img
-                        src=\"". THEME_PATH. "/icons/cross.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" /></a>
+                        src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Löschen\" title=\"Löschen\" /></a>
                     </span>";
                 }
             echo "</td>
@@ -191,7 +218,8 @@ echo "
 </ul>
 
 <script type=\"text/javascript\"><!--
-    Sortable.create('cat_list',{tag:'tr',onUpdate:updateDB,ghosting:true,dropOnEmpty:true,containment:['cat_list'],hoverclass:'drag'});
+		Sortable.create('cat_all_orgas',{tag:'tr',onUpdate:updateAllOrgas,ghosting:true,dropOnEmpty:true,containment:['cat_all_orgas'],hoverclass:'drag'});
+    Sortable.create('cat_list',{tag:'tr',onUpdate:updateThisOrga,ghosting:true,dropOnEmpty:true,containment:['cat_list'],hoverclass:'drag'});
 --></script>";
 
 require(THEME_SERVER_PATH. "/overall_footer.php");
