@@ -23,7 +23,7 @@ $g_db->query($sql);
 $cat_id_stammdaten = $g_db->insert_id();
 
 $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_system, cat_sequence)
-                                  VALUES (NULL, 'USF', 'Messenger', 0, 1, 1)";
+                                  VALUES (NULL, 'USF', 'Messenger', 0, 0, 1)";
 $g_db->query($sql);
 $cat_id_messenger = $g_db->insert_id();
 
@@ -172,7 +172,7 @@ while($row_orga = $g_db->fetch_object($result_orga))
 // Messenger-Felder aktualisieren
 $sql = "UPDATE ". TBL_USER_FIELDS. " SET usf_cat_id = $cat_id_messenger
                                        , usf_type   = 'TEXT'
-                                       , usf_system = 1
+                                       , usf_system = 0
          WHERE usf_type = 'MESSENGER' ";
 $g_db->query($sql);
 

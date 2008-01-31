@@ -493,7 +493,7 @@ elseif($req_mode == 7)
     $cat_id_stammdaten = $db->insert_id();
 
     $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_system, cat_sequence)
-                                      VALUES (NULL, 'USF', 'Messenger', 0, 1, 1) ";
+                                      VALUES (NULL, 'USF', 'Messenger', 0, 0, 1) ";
     $db->query($sql);
     $cat_id_messenger = $db->insert_id();
 
@@ -518,12 +518,12 @@ elseif($req_mode == 7)
 
     // Messenger anlegen
     $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_cat_id, usf_type, usf_name, usf_description, usf_system, usf_sequence)
-                                       VALUES ($cat_id_messenger, 'TEXT', 'AIM', 'AOL Instant Messenger', 1, 1) 
-                                            , ($cat_id_messenger, 'TEXT', 'Google Talk', 'Google Talk', 1, 2)
-                                            , ($cat_id_messenger, 'TEXT', 'ICQ', 'ICQ', 1, 3) 
-                                            , ($cat_id_messenger, 'TEXT', 'MSN', 'MSN Messenger', 1, 4)
-                                            , ($cat_id_messenger, 'TEXT', 'Skype', 'Skype', 1, 5) 
-                                            , ($cat_id_messenger, 'TEXT', 'Yahoo', 'Yahoo! Messenger', 1, 6)  ";
+                                       VALUES ($cat_id_messenger, 'TEXT', 'AIM', 'AOL Instant Messenger', 0, 1) 
+                                            , ($cat_id_messenger, 'TEXT', 'Google Talk', 'Google Talk', 0, 2)
+                                            , ($cat_id_messenger, 'TEXT', 'ICQ', 'ICQ', 0, 3) 
+                                            , ($cat_id_messenger, 'TEXT', 'MSN', 'MSN Messenger', 0, 4)
+                                            , ($cat_id_messenger, 'TEXT', 'Skype', 'Skype', 0, 5) 
+                                            , ($cat_id_messenger, 'TEXT', 'Yahoo', 'Yahoo! Messenger', 0, 6)  ";
     $db->query($sql); 
     
     // Organisationsobjekt erstellen

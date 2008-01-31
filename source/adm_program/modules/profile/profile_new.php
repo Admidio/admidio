@@ -280,33 +280,33 @@ function getFieldCode($field, $user, $new_user)
     
     // Icons der Messenger anzeigen
     $icon = "";
-    if($field['cat_name'] == "Messenger")
+    if($field['usf_name'] == 'AIM')
     {
-        if($field['usf_name'] == 'AIM')
-        {
-            $icon = "aim.png";
-        }
-        elseif($field['usf_name'] == 'Google Talk')
-        {
-            $icon = "google.gif";
-        }
-        elseif($field['usf_name'] == 'ICQ')
-        {
-            $icon = "icq.png";
-        }
-        elseif($field['usf_name'] == 'MSN')
-        {
-            $icon = "msn.png";
-        }
-        elseif($field['usf_name'] == 'Skype')
-        {
-            $icon = "skype.png";
-        }
-        elseif($field['usf_name'] == 'Yahoo')
-        {
-            $icon = "yahoo.png";
-        }
-        $icon = "<img src=\"". THEME_PATH. "/icons/$icon\" style=\"vertical-align: middle;\" alt=\"". $field['usf_name']. "\" />&nbsp;";
+        $icon = "aim.png";
+    }
+    elseif($field['usf_name'] == 'Google Talk')
+    {
+        $icon = "google.gif";
+    }
+    elseif($field['usf_name'] == 'ICQ')
+    {
+        $icon = "icq.png";
+    }
+    elseif($field['usf_name'] == 'MSN')
+    {
+        $icon = "msn.png";
+    }
+    elseif($field['usf_name'] == 'Skype')
+    {
+        $icon = "skype.png";
+    }
+    elseif($field['usf_name'] == 'Yahoo')
+    {
+        $icon = "yahoo.png";
+    }
+    if(strlen($icon) > 0)
+    {
+        $icon = '<img src="'. THEME_PATH. '/icons/'. $icon. '" style="vertical-align: middle;" alt="'. $field['usf_name']. '" />&nbsp;';
     }
         
     // Kennzeichen fuer Pflichtfeld setzen
@@ -325,12 +325,12 @@ function getFieldCode($field, $user, $new_user)
     }
     
     // nun den Html-Code fuer das Feld zusammensetzen
-    $html = "<li>
+    $html = '<li>
                 <dl>
-                    <dt><label for=\"usf-". $field['usf_id']. "\">$icon". $field['usf_name']. ":</label></dt>
-                    <dd>$value$mandatory$description</dd>
+                    <dt><label for="usf-'. $field['usf_id']. '">'. $icon. $field['usf_name']. ':</label></dt>
+                    <dd>'. $value. $mandatory. $description. '</dd>
                 </dl>
-            </li>";
+            </li>';
              
     return $html;
 }
@@ -464,19 +464,17 @@ echo "
                         // eigenes Passwort aendern, nur Webmaster duerfen Passwoerter von anderen aendern
                         if($g_current_user->isWebmaster() || $g_current_user->getValue("usr_id") == $usr_id )
                         {
-                            echo "<li>
+                            echo '<li>
                                 <dl>
-                                    <dt><label for=\"password\">Passwort:</label></dt>
+                                    <dt><label for="password">Passwort:</label></dt>
                                     <dd>
-                                        <button id=\"password\" name=\"password\" type=\"button\" value=\"Passwort &auml;ndern\" onclick=\"window.open('password.php?user_id=$usr_id','Titel','width=350,height=260,left=310,top=200')\">
-                                        <img src=\"". THEME_PATH. "/icons/key.png\" alt=\"Passwort &auml;ndern\" />
-                                        &nbsp;Passwort &auml;ndern</button>
+                                        <button id="password" name="password" type="button" value="Passwort ändern" onclick="window.open(\'password.php?user_id='. $usr_id. '\',\'Titel\',\'width=350,height=260,left=310,top=200\')"><img src="'. THEME_PATH. '/icons/key.png" alt="Passwort ändern" />&nbsp;Passwort ändern</button>
                                     </dd>
                                 </dl>
-                            </li>";
+                            </li>';
                         }
                     }
-                    echo "<li><hr /></li>";
+                    echo '<li><hr /></li>';
                 }
             }
         }
@@ -542,36 +540,34 @@ echo "
             </div>";
         }
 
-        echo "
-        <div class=\"formSubmit\">
-            <button name=\"speichern\" type=\"submit\" value=\"speichern\">
-            <img src=\"". THEME_PATH. "/icons/$btn_image\" alt=\"$btn_text\" />
-            &nbsp;$btn_text</button>
+        echo '
+        <div class="formSubmit">
+            <button name="speichern" type="submit" value="speichern"><img src="'. THEME_PATH. '/icons/'. $btn_image. '" alt="'. $btn_text. '" />&nbsp;'. $btn_text. '</button>
         </div>
     </div>
 </div>
 </form>
 
-<ul class=\"iconTextLinkList\">
+<ul class="iconTextLinkList">
     <li>
-        <span class=\"iconTextLink\">
-            <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-            src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
-            <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
+        <span class="iconTextLink">
+            <a href="'. $g_root_path. '/adm_program/system/back.php"><img 
+            src="'. THEME_PATH. '/icons/back.png" alt="Zurück" /></a>
+            <a href="'. $g_root_path. '/adm_program/system/back.php">Zurück</a>
         </span>
     </li>
 </ul>
 
-<script type=\"text/javascript\"><!--\n";
+<script type="text/javascript"><!--\n';
     if($g_current_user->editUser() || $new_user > 0)
     {
-        echo "document.getElementById('usf-". $g_current_user->getProperty("Nachname", "usf_id"). "').focus();";
+        echo 'document.getElementById(\'usf-'. $g_current_user->getProperty("Nachname", "usf_id"). '\').focus();';
     }
     else
     {
-        echo "document.getElementById('usf-". $g_current_user->getProperty("Adresse", "usf_id"). "').focus();";
+        echo 'document.getElementById(\'usf-'. $g_current_user->getProperty("Adresse", "usf_id"). '\').focus();';
     }
-echo "\n--></script>";
+echo '\n--></script>';
 
 require(THEME_SERVER_PATH. "/overall_footer.php");
 

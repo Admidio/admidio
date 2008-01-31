@@ -91,23 +91,21 @@ if(isset($_SESSION['categories_request']))
 }
 
 // Html-Kopf ausgeben
-$g_layout['title'] = "Kategorie";
+if($req_cat_id > 0)
+{
+    $g_layout['title']  = "Kategorie ändern";
+}
+else
+{
+    $g_layout['title']  = "Kategorie anlegen";
+}
 require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
 echo "
 <form action=\"$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=$req_cat_id&amp;type=". $_GET["type"]. "&amp;mode=1\" method=\"post\">
 <div class=\"formLayout\" id=\"edit_categories_form\">
-    <div class=\"formHead\">";
-        if($req_cat_id > 0)
-        {
-            echo "Kategorie &auml;ndern";
-        }
-        else
-        {
-            echo "Kategorie anlegen";
-        }
-    echo "</div>
+    <div class=\"formHead\">". $g_layout['title']. "</div>
     <div class=\"formBody\">
         <ul class=\"formFieldList\">
             <li>
@@ -118,8 +116,34 @@ echo "
                         <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                     </dd>
                 </dl>
-            </li>
-            <li>
+            </li>";
+            
+          	if($_GET['type'] == "USF" && $category->getValue("cat_system") == 0)
+          	{
+		            // besitzt die Organisation eine Elternorga oder hat selber Kinder, so kann die Kategorie fuer alle Organisationen sichtbar gemacht werden
+		            if($g_current_organization->getValue("org_org_id_parent") > 0
+		            || $g_current_organization->hasChildOrganizations())
+		            {
+		                echo "
+		                <li>
+		                    <dl>
+		                        <dt>&nbsp;</dt>
+		                        <dd>
+		                            <input type=\"checkbox\" id=\"cat_org_id\" name=\"cat_org_id\" tabindex=\"3\" ";
+		                            if($category->getValue("cat_org_id") == 0 && $req_cat_id > 0)
+		                            {
+		                                echo " checked=\"checked\" ";
+		                            }
+		                            echo " value=\"1\" />
+		                            <label for=\"cat_org_id\">Kategorie für mehrere Organisationen sichtbar</label>
+		                            <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
+		                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=termin_global','Message','width=400,height=350,left=310,top=200,scrollbars=yes')\" />
+		                        </dd>
+		                    </dl>
+		                </li>";
+		            }
+		        }
+            echo "<li>
                 <dl>
                     <dt>
                         <label for=\"cat_hidden\"><img src=\"". THEME_PATH. "/icons/user_key.png\" alt=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\" /></label>

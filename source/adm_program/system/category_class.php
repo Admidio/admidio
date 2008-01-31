@@ -60,19 +60,37 @@ class Category extends TableAccess
     // die Funktion wird innerhalb von save() aufgerufen
     function _save()
     {
+    		global $g_current_organization;
+    		
         if($this->new_record)
         {
+        		if($this->db_fields['cat_org_id'] > 0)
+        		{
+        				$org_condition = " AND (  cat_org_id  = ". $g_current_organization->getValue("org_id"). "
+                                       OR cat_org_id IS NULL ) ";
+        	  }
+        	  else
+        	  {
+        	  		$org_condition = " AND cat_org_id IS NULL ";
+        	  }
             // beim Insert die hoechste Reihenfolgennummer der Kategorie ermitteln
-            global $g_current_organization;
             $sql = "SELECT COUNT(*) as count FROM ". TBL_CATEGORIES. "
-                     WHERE (  cat_org_id  = ". $g_current_organization->getValue("org_id"). "
-                           OR cat_org_id IS NULL )
-                       AND cat_type = '". $this->db_fields['cat_type']. "'";
+                     WHERE cat_type = '". $this->db_fields['cat_type']. "'
+                           $org_condition ";
             $this->db->query($sql);
 
             $row = $this->db->fetch_array();
 
-            $this->setValue("cat_sequence", $row['count'] + 1);
+            $this->setValue("cat_sequence", $row['count']);
+            
+            if($this->db_fields['cat_org_id'] == 0)
+            {
+            		// eine Orga-uebergreifende Kategorie ist immer am Anfang, also Kategorien anderer Orgas nach hinten schieben
+        				$sql = "UPDATE ". TBL_CATEGORIES. " SET cat_sequence = cat_sequence + 1
+        				         WHERE cat_type = '". $this->db_fields['cat_type']. "'
+        				           AND cat_org_id IS NOT NULL ";
+        				$this->db->query($sql);            		
+            }
         }
     }
     

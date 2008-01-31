@@ -126,7 +126,7 @@ if($req_members)
                   AND rol_valid  = 1
                   AND rol_cat_id = cat_id
                   AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
-                ORDER BY last_name, first_name ";
+                ORDER BY last_name.usd_value ";
 }
 else
 {
@@ -159,7 +159,7 @@ else
                   AND homepage.usd_usf_id = ". $g_current_user->getProperty("Homepage", "usf_id"). "
                 WHERE usr_valid = 1
                 GROUP BY usr_id
-                ORDER BY last_name, first_name ";
+                ORDER BY last_name.usd_value ";
 }
 $result_mgl  = $g_db->query($sql);
 $num_members = $g_db->num_rows($result_mgl);

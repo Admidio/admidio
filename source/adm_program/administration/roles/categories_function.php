@@ -103,7 +103,7 @@ $err_code = "";
 
 if($_GET['mode'] == 1)
 {
-    // Feld anlegen oder updaten
+    // Kategorie anlegen oder updaten
 
     $_SESSION['categories_request'] = $_REQUEST;
 
@@ -112,15 +112,34 @@ if($_GET['mode'] == 1)
         $g_message->show("feld", "Name");
     }
     
+    // Kategorie ist immer Orga-spezifisch, ausser manuell angelegte Orga-Felder-Kategorie
+    $check_all_orgas = false;
+    
+    if($_GET['type'] == "USF"
+    && (isset($_POST['cat_org_id']) || $category->getValue("cat_system") == 1))
+    {
+        $_POST['cat_org_id'] = NULL;
+        $check_all_orgas = true;
+    }
+    else
+    {
+    		$_POST['cat_org_id'] = $g_current_organization->getValue("org_id");
+    }
+        
     if($req_cat_id == 0)
     {
         // Schauen, ob die Kategorie bereits existiert
+        $search_orga = "";
+        if($check_all_orgas == false)
+        {
+        		$search_orga = " AND (  cat_org_id  = ". $g_current_organization->getValue("org_id"). "
+                                 OR cat_org_id IS NULL )";
+        }
         $sql    = "SELECT COUNT(*) as count 
                      FROM ". TBL_CATEGORIES. "
-                    WHERE (  cat_org_id  = ". $g_current_organization->getValue("org_id"). "
-                          OR cat_org_id IS NULL )
-                      AND cat_type = '". $_GET['type']. "'
-                      AND cat_name LIKE '". $_POST['cat_name']. "'";
+                    WHERE cat_type = '". $_GET['type']. "'
+                      AND cat_name LIKE '". $_POST['cat_name']. "'
+                          $search_orga ";
         $result = $g_db->query($sql);
         $row    = $g_db->fetch_array($result);
 
@@ -183,7 +202,7 @@ elseif($_GET['mode'] == 2 || $_GET["mode"] == 3)
 }
 elseif($_GET['mode'] == 4)
 {
-    // Feldreihenfolge aktualisieren
+    // Kategoriereihenfolge aktualisieren
     $sequence_old = $category->getValue("cat_sequence");
     
     if($sequence_old != $_GET['sequence'])

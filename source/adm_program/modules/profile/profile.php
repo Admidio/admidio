@@ -108,9 +108,10 @@ function getFieldCode($field, $user_id)
             $value = '<span class="smallFontSize">'. $value. '</span>';
         }
     }
-    elseif($field['cat_name'] == "Messenger")
+    else
     {
         // Icons der Messenger anzeigen
+        $image = "";
         if($field['usf_name'] == 'ICQ')
         {
             // Sonderzeichen aus der ICQ-Nummer entfernen (damit kommt www.icq.com nicht zurecht)
@@ -136,31 +137,27 @@ function getFieldCode($field, $user_id)
                 alt=\"". $field['usd_value']. " zu ". $field['usf_name']. " hinzuf&uuml;gen\" /></a>
             </span>$value";
         }
-        else
+        elseif($field['usf_name'] == 'AIM')
         {
-            $image = "";
-            if($field['usf_name'] == 'AIM')
-            {
-                $image = "aim.png";
-            }
-            elseif($field['usf_name'] == 'Google Talk')
-            {
-                $image = "google.gif";
-            }
-            elseif($field['usf_name'] == 'MSN')
-            {
-                $image = "msn.png";
-            }
-            elseif($field['usf_name'] == 'Yahoo')
-            {
-                $image = "yahoo.png";
-            }
-            if(strlen($image) > 0)
-            {
-                $value = "<img src=\"". THEME_PATH. "/icons/$image\" style=\"vertical-align: middle;\" 
-                    alt=\"". $field['usf_name']. "\" title=\"". $field['usf_name']. "\" />&nbsp;&nbsp;$value";
-            }
-        };
+            $image = "aim.png";
+        }
+        elseif($field['usf_name'] == 'Google Talk')
+        {
+            $image = "google.gif";
+        }
+        elseif($field['usf_name'] == 'MSN')
+        {
+            $image = "msn.png";
+        }
+        elseif($field['usf_name'] == 'Yahoo')
+        {
+            $image = "yahoo.png";
+        }
+        if(strlen($image) > 0)
+        {
+            $value = '<img src="'. THEME_PATH. '/icons/'. $image. '" style="vertical-align: middle;" 
+                alt="'. $field['usf_name']. '" title="'. $field['usf_name']. '" />&nbsp;&nbsp;'. $value;
+        }
     }
     
     $html = '<li>
@@ -536,7 +533,7 @@ echo "
                                 echo "<li id=\"role_". $row['mem_rol_id']. "\">
                                     <dl>
                                         <dt>
-                                            ". $row['cat_name']. " - <a href=\"$g_root_path/adm_program/modules/lists/lists_show.php?type=address&mode=html&rol_id=". $row['mem_rol_id']. "\">". $row['rol_name']. "</a>";
+                                            ". $row['cat_name']. " - <a href=\"$g_root_path/adm_program/modules/lists/lists_show.php?type=address&mode=html&rol_id=". $row['mem_rol_id']. "\">". $row['rol_name']. "</a>";
                                                 if($row['mem_leader'] == 1)
                                                 {
                                                     echo " - Leiter";
@@ -587,7 +584,7 @@ echo "
                                             if($row['rol_guestbook'] == 1 && $g_preferences['enable_guestbook_module'] > 0)
                                             {
                                                 echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/comment.png\"
-                                                alt=\"Gästebucheinträge bearbeiten und l&ouml;schen\" title=\"Gästebucheinträge bearbeiten und l&ouml;schen\" />";
+                                                alt=\"Gästebucheinträge bearbeiten und löschen\" title=\"Gästebucheinträge bearbeiten und löschen\" />";
                                             }
                                             if($row['rol_guestbook_comments'] == 1 && $g_preferences['enable_guestbook_module'] > 0)
                                             {
