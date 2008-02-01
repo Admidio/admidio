@@ -22,9 +22,14 @@ ALTER TABLE %PRAEFIX%_user_fields ADD COLUMN `usf_sequence` smallint NOT NULL AF
 
 -- User-Tabelle ergaenzen
 ALTER TABLE %PRAEFIX%_users ADD COLUMN `usr_text` text AFTER `usr_photo`;
-ALTER TABLE %PRAEFIX%_users ADD COLUMN `usr_activation_code` VARCHAR(10);
-ALTER TABLE %PRAEFIX%_users ADD COLUMN `usr_new_password` VARCHAR(35);
+ALTER TABLE %PRAEFIX%_users ADD COLUMN `usr_activation_code` VARCHAR(10) AFTER `usr_text`;
+ALTER TABLE %PRAEFIX%_users ADD COLUMN `usr_new_password` VARCHAR(35) AFTER `usr_password`;
 ALTER TABLE %PRAEFIX%_users MODIFY COLUMN `usr_login_name` VARCHAR(35) DEFAULT NULL;
+
+-- Announcement-Tabelle korrigieren
+ALTER TABLE %PRAEFIX%_announcements DROP FOREIGN KEY %PRAEFIX%_FK_ANN_USR;
+ALTER TABLE %PRAEFIX%_announcements ADD constraint %PRAEFIX%_FK_ANN_USR foreign key (ann_usr_id)
+      references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
 
 -- Session-Tabelle ergaenzen
 ALTER TABLE %PRAEFIX%_sessions ADD COLUMN `ses_begin` datetime NOT NULL AFTER `ses_session`;
@@ -51,10 +56,14 @@ ALTER TABLE %PRAEFIX%_roles DROP FOREIGN KEY %PRAEFIX%_FK_ROL_ORG;
 ALTER TABLE %PRAEFIX%_roles DROP INDEX ROL_ORG_FK;
 ALTER TABLE %PRAEFIX%_roles DROP COLUMN rol_org_shortname;
 
--- Organisation aus Links entfernen
+-- Links-Tabelle korrigieren
 ALTER TABLE %PRAEFIX%_links DROP FOREIGN KEY %PRAEFIX%_FK_LNK_ORG;
 ALTER TABLE %PRAEFIX%_links DROP index LNK_ORG_FK;
 ALTER TABLE %PRAEFIX%_links DROP COLUMN lnk_org_id;
+ALTER TABLE %PRAEFIX%_links DROP FOREIGN KEY %PRAEFIX%_FK_LNK_USR;
+ALTER TABLE %PRAEFIX%_links ADD constraint %PRAEFIX%_FK_LNK_USR foreign key (lnk_usr_id)
+      references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
+
 
 -- Kategorie-Tabelle anpassen
 ALTER TABLE %PRAEFIX%_categories CHANGE COLUMN `cat_org_id` `cat_org_id` tinyint(4);
@@ -87,7 +96,8 @@ create table %PRAEFIX%_folders
    fol_usr_id                     int(11) unsigned,
    primary key (fol_id)
 )
-type = InnoDB;      
+engine = InnoDB
+auto_increment = 1;    
 
 -- Index
 alter table %PRAEFIX%_folders add index FOL_ORG_FK (fol_org_id);
@@ -116,7 +126,8 @@ create table %PRAEFIX%_files
    fil_usr_id                     int(11) unsigned,
    primary key (fil_id)
 )
-type = InnoDB;
+engine = InnoDB
+auto_increment = 1;
 
 -- Index
 alter table %PRAEFIX%_files add index FIL_FOL_FK (fil_fol_id);
@@ -137,7 +148,7 @@ create table %PRAEFIX%_folder_roles
    flr_rol_id                     int(11) unsigned               not null,
    primary key (flr_fol_id, flr_rol_id)
 )
-type = InnoDB;
+engine = InnoDB;
 
 -- Index
 alter table %PRAEFIX%_folder_roles add index FLR_FOL_FK (flr_fol_id);
@@ -162,7 +173,7 @@ create table %PRAEFIX%_auto_login
    atl_ip_address                 varchar(15)                    not null,
    primary key (atl_session_id)
 )
-type = InnoDB;
+engine = InnoDB;
 
 -- Index
 alter table %PRAEFIX%_auto_login add index ATL_USR_FK (atl_usr_id);
