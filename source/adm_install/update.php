@@ -35,19 +35,23 @@ function showPage($message, $next_url, $icon, $icon_text)
         <script type="text/javascript" src="'. $g_root_path. '/adm_program/system/common_functions.js"></script>
 
         <!--[if lt IE 7]>
-    	<script type="text/javascript"><!--
-			window.attachEvent("onload", correctPNG);
-    	--></script>
-    	<![endif]-->
+        <script type="text/javascript"><!--
+            window.attachEvent("onload", correctPNG);
+        --></script>
+        <![endif]-->
         
         <script><!--
+            imgLoader = new Image();
+            imgLoader.src = "../adm_themes/classic/icons/loader.gif";
+
             function startUpdate()
             {
-                $submit_button = document.getElementById(\'next_page\');
-                if($submit_button.value == \'Datenbank aktualisieren\')
+                submit_button = document.getElementById(\'next_page\');
+                if(submit_button.value == \'Datenbank aktualisieren\')
                 {
-                    $submit_button.disabled  = true;
-                    $submit_button.innerHTML = \'<img src="../adm_themes/classic/icons/loader.gif" alt="Loading" /> Datenbank wird aktualisiert\';
+                    submit_button.disabled  = true;
+                    document.btn_icon.src = imgLoader.src;
+                    document.getElementById(\'btn_text\').innerHTML = \'Datenbank wird aktualisiert\';
                 }
                 document.forms[0].submit();
             }
@@ -68,9 +72,7 @@ function showPage($message, $next_url, $icon, $icon_text)
                 '</p>
 
                 <div class="formSubmit" style="text-align: center;">
-                    <button type="button" id="next_page" name="next_page" value="'. $icon_text. '" onclick="startUpdate()">
-                    <img src="../adm_themes/classic/icons/'. $icon. '" alt="'. $icon_text. '" />
-                    &nbsp;'. $icon_text. '</button>
+                    <button type="button" id="next_page" name="next_page" value="'. $icon_text. '" onclick="startUpdate()"><img id="btn_icon" src="../adm_themes/classic/icons/'. $icon. '" alt="'. $icon_text. '" />&nbsp;<span id="btn_text">'. $icon_text. '</span></button>
                 </div>            
             </div>
         </div>

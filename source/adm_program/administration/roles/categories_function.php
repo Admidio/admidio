@@ -18,6 +18,8 @@
  *         3 - Frage, ob Kategorie geloescht werden soll
  *         4 - Reihenfolge fuer die uebergebene usf_id anpassen
  * sequence: neue Reihenfolge fuer die uebergebene usf_id
+ * this_orga: 0 - Reihenfolge von orga-unabhaenigen Kategorien wird veraendert
+ *            1 - 0 - Reihenfolge von orga-abhaenigen Kategorien wird veraendert
  *
  *****************************************************************************/
  
@@ -116,14 +118,14 @@ if($_GET['mode'] == 1)
     $check_all_orgas = false;
     
     if($_GET['type'] == "USF"
-    && (isset($_POST['cat_org_id']) || $category->getValue("cat_system") == 1))
+    && (isset($_POST['cat_org_id']) || $category->getValue("cat_system") == 1 || $g_current_organization->countAllRecords() == 1))
     {
         $_POST['cat_org_id'] = NULL;
         $check_all_orgas = true;
     }
     else
     {
-    		$_POST['cat_org_id'] = $g_current_organization->getValue("org_id");
+        $_POST['cat_org_id'] = $g_current_organization->getValue("org_id");
     }
         
     if($req_cat_id == 0)
@@ -132,7 +134,7 @@ if($_GET['mode'] == 1)
         $search_orga = "";
         if($check_all_orgas == false)
         {
-        		$search_orga = " AND (  cat_org_id  = ". $g_current_organization->getValue("org_id"). "
+            $search_orga = " AND (  cat_org_id  = ". $g_current_organization->getValue("org_id"). "
                                  OR cat_org_id IS NULL )";
         }
         $sql    = "SELECT COUNT(*) as count 
@@ -204,6 +206,17 @@ elseif($_GET['mode'] == 4)
 {
     // Kategoriereihenfolge aktualisieren
     $sequence_old = $category->getValue("cat_sequence");
+
+    if($_GET['type'] == "USF" && $_GET['this_orga'] == 1)
+    {
+        $sql = "SELECT COUNT(1) as count FROM ". TBL_CATEGORIES. "
+                 WHERE cat_type   = 'USF'
+                   AND cat_org_id IS NULL
+                   AND cat_system = 0 ";
+        $g_db->query($sql);
+        $row = $g_db->fetch_array();
+        $_GET['sequence'] = $_GET['sequence'] + $row['count'];
+    }
     
     if($sequence_old != $_GET['sequence'])
     {

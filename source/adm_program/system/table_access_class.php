@@ -95,6 +95,7 @@ class TableAccess
    {
         $this->db_fields_changed = false;
         $this->new_record        = true;
+        $this->record_count      = -1;
                         
         if(count($this->db_fields) > 0
         && count($this->db_fields_infos) > 0)
@@ -132,7 +133,16 @@ class TableAccess
         {
             $this->_clear();
         }
-    }    
+    }
+    
+    // Methode gibt die Anzahl aller Datensaetze dieser Tabelle zurueck
+    function countAllRecords()
+    {
+        $sql = "SELECT COUNT(1) as count FROM $this->table_name ";
+        $this->db->query($sql);
+        $row = $this->db->fetch_array();
+        return $row['count'];
+    }
     
     // Methode uebernimmt alle Werte eines Arrays in das Field-Array
     function setArray($field_array)
@@ -147,11 +157,11 @@ class TableAccess
     // dabei koennen noch noetige Plausibilitaetspruefungen gemacht werden
     function setValue($field_name, $field_value)
     {
-		// Plausibilitaets-Check des Wertes vornehmen
-		if(method_exists($this, "_setValue"))
-		{
-			$this->_setValue($field_name, &$field_value);
-		}
+        // Plausibilitaets-Check des Wertes vornehmen
+        if(method_exists($this, "_setValue"))
+        {
+            $this->_setValue($field_name, &$field_value);
+        }
     
         if(isset($this->db_fields[$field_name]))
         {            
