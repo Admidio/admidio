@@ -65,7 +65,7 @@ create table %PRAEFIX%_organizations
    primary key (org_id),
    unique ak_shortname (org_shortname)
 )
-type = InnoDB
+engine = InnoDB
 auto_increment = 1;
 
 -- Index
@@ -86,7 +86,7 @@ create table %PRAEFIX%_texts
    txt_text                       text,
    primary key (txt_id)
 )
-type = InnoDB
+engine = InnoDB
 auto_increment = 1;
 
 -- Index
@@ -108,7 +108,8 @@ create table %PRAEFIX%_preferences
    primary key (prf_id),
    unique ak_org_id_name (prf_org_id, prf_name)
 )
-type = InnoDB;
+engine = InnoDB
+auto_increment = 1;
 
 -- Index
 alter table %PRAEFIX%_preferences add index PRF_ORG_FK (prf_org_id);
@@ -128,10 +129,10 @@ create table %PRAEFIX%_categories
    cat_name                       varchar(30)                    not null,
    cat_hidden                     tinyint(1) unsigned            not null default 0,
    cat_system                     tinyint(1) unsigned            not null default 0,
-   cat_sequence						 smallint                       not null,
+   cat_sequence						        smallint                       not null,
    primary key (cat_id)
 )
-type = InnoDB
+engine = InnoDB
 auto_increment = 1;
 
 -- Index
@@ -149,8 +150,10 @@ create table %PRAEFIX%_users
    usr_id                         int(11) unsigned               not null AUTO_INCREMENT,
    usr_login_name                 varchar(20),
    usr_password                   varchar(35),
+   usr_new_password 			        varchar(35),
    usr_photo                      blob,
    usr_text                       text,
+   usr_activation_code			      varchar(10),
    usr_last_login                 datetime,
    usr_actual_login               datetime,
    usr_number_login               smallint(5) unsigned           not null default 0,
@@ -160,12 +163,10 @@ create table %PRAEFIX%_users
    usr_usr_id_change              int(11) unsigned,
    usr_valid                      tinyint(1) unsigned            not null default 0,
    usr_reg_org_shortname          varchar(10),
-   usr_activation_code			  varchar(10),
-   usr_new_password 			  varchar(10),
    primary key (usr_id),
    unique ak_usr_login_name (usr_login_name)
 )
-type = InnoDB
+engine = InnoDB
 auto_increment = 1;
 
 -- Index
@@ -195,7 +196,7 @@ create table %PRAEFIX%_user_fields
    usf_sequence						 smallint                       not null,
    primary key (usf_id)
 )
-type = InnoDB
+engine = InnoDB
 auto_increment = 1;
 
 -- Index
@@ -215,7 +216,7 @@ create table %PRAEFIX%_user_data
    usd_value                      varchar(255),
    primary key (usd_usr_id, usd_usf_id)
 )
-type = InnoDB
+engine = InnoDB
 auto_increment = 1;
 
 -- Index
@@ -245,7 +246,7 @@ create table %PRAEFIX%_sessions
    primary key (ses_id),
    key ak_session (ses_session_id)
 )
-type = InnoDB
+engine = InnoDB
 auto_increment = 1;
 
 -- Index
@@ -270,7 +271,7 @@ create table %PRAEFIX%_auto_login
    atl_ip_address                 varchar(15)                    not null,
    primary key (atl_session_id)
 )
-type = InnoDB;
+engine = InnoDB;
 
 -- Index
 alter table %PRAEFIX%_auto_login add index ATL_USR_FK (atl_usr_id);
@@ -322,7 +323,7 @@ create table %PRAEFIX%_roles
    rol_system                     tinyint(1) unsigned            not null default 0,
    primary key (rol_id)
 )
-type = InnoDB
+engine = InnoDB
 auto_increment = 1;
 
 -- Index
@@ -347,7 +348,7 @@ create table %PRAEFIX%_role_dependencies
    rld_timestamp                  datetime                       not null,
    primary key (rld_rol_id_parent, rld_rol_id_child)
 )
-type = InnoDB;
+engine = InnoDB;
 
 -- Index
 alter table %PRAEFIX%_role_dependencies add index RLD_USR_FK (rld_usr_id);
@@ -377,7 +378,7 @@ create table %PRAEFIX%_members
    primary key (mem_id),
    unique ak_rol_usr_id (mem_rol_id, mem_usr_id)
 )
-type = InnoDB
+engine = InnoDB
 auto_increment = 1;
 
 -- Index
@@ -406,7 +407,7 @@ create table %PRAEFIX%_announcements
    ann_usr_id_change              int(11) unsigned,
    primary key (ann_id)
 )
-type = InnoDB
+engine = InnoDB
 auto_increment = 1;
 
 -- Index
@@ -418,7 +419,7 @@ alter table %PRAEFIX%_announcements add index ANN_USR_CHANGE_FK (ann_usr_id_chan
 alter table %PRAEFIX%_announcements add constraint %PRAEFIX%_FK_ANN_ORG foreign key (ann_org_shortname)
       references %PRAEFIX%_organizations (org_shortname) on delete restrict on update restrict;
 alter table %PRAEFIX%_announcements add constraint %PRAEFIX%_FK_ANN_USR foreign key (ann_usr_id)
-      references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
+      references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
 alter table %PRAEFIX%_announcements add constraint %PRAEFIX%_FK_ANN_USR_CHANGE foreign key (ann_usr_id_change)
       references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
       
@@ -441,7 +442,7 @@ create table %PRAEFIX%_dates
    dat_usr_id_change              int(11) unsigned,
    primary key (dat_id)
 )
-type = InnoDB
+engine = InnoDB
 auto_increment = 1;
 
 -- Index
@@ -473,7 +474,8 @@ create table %PRAEFIX%_folders
    fol_usr_id                     int(11) unsigned,
    primary key (fol_id)
 )
-type = InnoDB;      
+engine = InnoDB
+auto_increment = 1;   
 
 -- Index
 alter table %PRAEFIX%_folders add index FOL_ORG_FK (fol_org_id);
@@ -502,7 +504,8 @@ create table %PRAEFIX%_files
    fil_usr_id                     int(11) unsigned,
    primary key (fil_id)
 )
-type = InnoDB;
+engine = InnoDB
+auto_increment = 1;
 
 -- Index
 alter table %PRAEFIX%_files add index FIL_FOL_FK (fil_fol_id);
@@ -523,7 +526,7 @@ create table %PRAEFIX%_folder_roles
    flr_rol_id                     int(11) unsigned               not null,
    primary key (flr_fol_id, flr_rol_id)
 )
-type = InnoDB;
+engine = InnoDB;
 
 -- Index
 alter table %PRAEFIX%_folder_roles add index FLR_FOL_FK (flr_fol_id);
@@ -555,7 +558,8 @@ create table %PRAEFIX%_guestbook
    gbo_usr_id_change              int(11) unsigned,
    primary key (gbo_id)
 )
-type = InnoDB;
+engine = InnoDB
+auto_increment = 1;
 
 -- Index
 alter table %PRAEFIX%_guestbook add index GBO_ORG_FK (gbo_org_id);
@@ -587,7 +591,8 @@ create table %PRAEFIX%_guestbook_comments
    gbc_usr_id_change              int(11) unsigned,
    primary key (gbc_id)
 )
-type = InnoDB;
+engine = InnoDB
+auto_increment = 1;
 
 -- Index
 alter table %PRAEFIX%_guestbook_comments add index GBC_GBO_FK (gbc_gbo_id);
@@ -618,7 +623,8 @@ create table %PRAEFIX%_links
    lnk_last_change                datetime,
    primary key (lnk_id)
 )
-type = InnoDB;
+engine = InnoDB
+auto_increment = 1;
 
 -- Index
 alter table %PRAEFIX%_links add index LNK_USR_FK (lnk_usr_id);
@@ -627,7 +633,7 @@ alter table %PRAEFIX%_links add index LNK_USR_CHANGE_FK (lnk_usr_id_change);
 
 -- Constraints
 alter table %PRAEFIX%_links add constraint %PRAEFIX%_FK_LNK_USR foreign key (lnk_usr_id)
-      references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
+      references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
 alter table %PRAEFIX%_links add constraint %PRAEFIX%_FK_LNK_CAT foreign key (lnk_cat_id)
       references %PRAEFIX%_categories (cat_id) on delete restrict on update restrict;
 alter table %PRAEFIX%_links add constraint %PRAEFIX%_FK_LNK_USR_CHANGE foreign key (lnk_usr_id_change)
@@ -653,7 +659,7 @@ create table %PRAEFIX%_photos
    pho_usr_id_change              int(11) unsigned,
    primary key (pho_id)
 )
-type = InnoDB
+engine = InnoDB
 auto_increment = 1;
 
 -- Index
