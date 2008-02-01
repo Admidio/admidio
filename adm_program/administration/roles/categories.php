@@ -69,35 +69,26 @@ $g_layout['header'] = "
     <script type=\"text/javascript\"><!--
         var resObject     = createXMLHttpRequest();
         
-        function updateAllOrgas(element)
+        function updateDB(element)
         {
             var childs = element.childNodes;
-
+            var this_orga = 0;
+            
+            if(element.id == 'cat_list')
+            {
+                this_orga = 1;
+            }
+                        
             for(i=0;i < childs.length; i++)
             {
                 var id = childs[i].getAttribute('id');
                 var cat_id = id.substr(4);
                 var sequence = i + 1;
                 // Synchroner Request, da ansonsten Scriptaculous verrueckt spielt
-                resObject.open('GET', '$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=' + cat_id + '&type=". $_GET['type']. "&mode=4&sequence=' + sequence, false);
+                resObject.open('GET', '$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=' + cat_id + '&type=". $_GET['type']. "&mode=4&sequence=' + sequence + '&this_orga=' + this_orga, false);
                 resObject.send(null);
             }
         }
-        
-        function updateThisOrga(element)
-        {
-            var childs = element.childNodes;
-
-            for(i=0;i < childs.length; i++)
-            {
-                var id = childs[i].getAttribute('id');
-                var cat_id = id.substr(4);
-                var sequence = i + 1;
-                // Synchroner Request, da ansonsten Scriptaculous verrueckt spielt
-                resObject.open('GET', '$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=' + cat_id + '&type=". $_GET['type']. "&mode=4&sequence=' + sequence, false);
-                resObject.send(null);
-            }
-        }        
     --></script>";
     
 require(THEME_SERVER_PATH. "/overall_header.php");
@@ -138,20 +129,20 @@ echo "
     {
         if($cat_row['cat_name'] == "Stammdaten" && $_GET['type'] == "USF")
         {
-        		// da bei USF die Kategorie Stammdaten nicht verschoben werden darf, muss hier ein bischen herumgewurschtelt werden
+                // da bei USF die Kategorie Stammdaten nicht verschoben werden darf, muss hier ein bischen herumgewurschtelt werden
             $drag_icon = "&nbsp;";
             echo "<tbody id=\"cat_stammdaten\">";
         }
         elseif($cat_row['cat_org_id'] == 0 && $_GET['type'] == "USF")
         {
-        		// Kategorien über alle Organisationen kommen immer zuerst
+                // Kategorien über alle Organisationen kommen immer zuerst
             if($write_all_orgas == false)
             {
                 $write_all_orgas = true;
                 echo "</tbody>
                 <tbody id=\"cat_all_orgas\">";
             }
-            $drag_icon = "<img class=\"dragable\" src=\"". THEME_PATH. "/icons/arrow_out.png\" alt=\"Reihenfolge ändern\" title=\"Reihenfolge ändern\" />";        		
+            $drag_icon = "<img class=\"dragable\" src=\"". THEME_PATH. "/icons/arrow_out.png\" alt=\"Reihenfolge ändern\" title=\"Reihenfolge ändern\" />";             
         }
         else
         {
@@ -218,8 +209,8 @@ echo "
 </ul>
 
 <script type=\"text/javascript\"><!--
-		Sortable.create('cat_all_orgas',{tag:'tr',onUpdate:updateAllOrgas,ghosting:true,dropOnEmpty:true,containment:['cat_all_orgas'],hoverclass:'drag'});
-    Sortable.create('cat_list',{tag:'tr',onUpdate:updateThisOrga,ghosting:true,dropOnEmpty:true,containment:['cat_list'],hoverclass:'drag'});
+        Sortable.create('cat_all_orgas',{tag:'tr',onUpdate:updateDB,ghosting:true,dropOnEmpty:true,containment:['cat_all_orgas'],hoverclass:'drag'});
+    Sortable.create('cat_list',{tag:'tr',onUpdate:updateDB,ghosting:true,dropOnEmpty:true,containment:['cat_list'],hoverclass:'drag'});
 --></script>";
 
 require(THEME_SERVER_PATH. "/overall_footer.php");

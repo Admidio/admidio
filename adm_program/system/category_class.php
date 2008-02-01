@@ -33,6 +33,8 @@ require_once(SERVER_PATH. "/adm_program/system/table_access_class.php");
 
 class Category extends TableAccess
 {
+    var $calc_sequence;
+
     // Konstruktor
     function Category(&$db, $cat_id = 0)
     {
@@ -60,19 +62,22 @@ class Category extends TableAccess
     // die Funktion wird innerhalb von save() aufgerufen
     function _save()
     {
-    		global $g_current_organization;
-    		
-        if($this->new_record)
+        global $g_current_organization;
+        
+        $this->calc_sequence = false;
+            
+        if($this->new_record
+        || $this->db_fields_infos['cat_org_id']['changed'] == true)
         {
-        		if($this->db_fields['cat_org_id'] > 0)
-        		{
-        				$org_condition = " AND (  cat_org_id  = ". $g_current_organization->getValue("org_id"). "
+            if($this->db_fields['cat_org_id'] > 0)
+            {
+                $org_condition = " AND (  cat_org_id  = ". $g_current_organization->getValue("org_id"). "
                                        OR cat_org_id IS NULL ) ";
-        	  }
-        	  else
-        	  {
-        	  		$org_condition = " AND cat_org_id IS NULL ";
-        	  }
+            }
+            else
+            {
+               $org_condition = " AND cat_org_id IS NULL ";
+            }
             // beim Insert die hoechste Reihenfolgennummer der Kategorie ermitteln
             $sql = "SELECT COUNT(*) as count FROM ". TBL_CATEGORIES. "
                      WHERE cat_type = '". $this->db_fields['cat_type']. "'
@@ -85,11 +90,11 @@ class Category extends TableAccess
             
             if($this->db_fields['cat_org_id'] == 0)
             {
-            		// eine Orga-uebergreifende Kategorie ist immer am Anfang, also Kategorien anderer Orgas nach hinten schieben
-        				$sql = "UPDATE ". TBL_CATEGORIES. " SET cat_sequence = cat_sequence + 1
-        				         WHERE cat_type = '". $this->db_fields['cat_type']. "'
-        				           AND cat_org_id IS NOT NULL ";
-        				$this->db->query($sql);            		
+                // eine Orga-uebergreifende Kategorie ist immer am Anfang, also Kategorien anderer Orgas nach hinten schieben
+                $sql = "UPDATE ". TBL_CATEGORIES. " SET cat_sequence = cat_sequence + 1
+                         WHERE cat_type = '". $this->db_fields['cat_type']. "'
+                           AND cat_org_id IS NOT NULL ";
+                $this->db->query($sql);                 
             }
         }
     }

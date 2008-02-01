@@ -136,9 +136,16 @@ $result_orga = $g_db->query($sql);
 
 while($row_orga = $g_db->fetch_object($result_orga))
 {
-    
-    $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_sequence)
+    if($g_db->num_rows($result_orga) > 1)
+    {
+        $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_sequence)
                                       VALUES ($row_orga->org_id, 'USF', 'Zusätzliche Daten', 0, 2)";
+    }
+    else
+    {
+        $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_sequence)
+                                      VALUES (NULL, 'USF', 'Zusätzliche Daten', 0, 2)";
+    }
     $g_db->query($sql);
     $cat_id_data = $g_db->insert_id();
 
@@ -151,21 +158,13 @@ while($row_orga = $g_db->fetch_object($result_orga))
              WHERE prf_name = 'lists_members_per_page' ";
     $g_db->query($sql);
     
-    $sql = "UPDATE ". TBL_PREFERENCES. " SET prf_value = '$g_main_page'
-             WHERE prf_name = 'homepage_logout' ";
-    $g_db->query($sql);
-    
-    $sql = "UPDATE ". TBL_PREFERENCES. " SET prf_value = '$g_main_page'
-             WHERE prf_name = 'homepage_login' ";
-    $g_db->query($sql);
-
     $sql = "UPDATE ". TBL_USER_FIELDS. " SET usf_cat_id = $cat_id_data
              WHERE usf_org_shortname = '$row_orga->org_shortname' ";
     $g_db->query($sql);
 
     // Datenbank-Versionsnummer schreiben
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-                                       VALUES ($row_orga->org_id, 'db_version', '1.5.0') ";
+                                       VALUES ($row_orga->org_id, 'db_version', '2.0.0') ";
     $g_db->query($sql);    
 }
 
