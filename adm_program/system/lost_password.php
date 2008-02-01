@@ -94,7 +94,7 @@ if(! empty($abschicken) && ! empty($empfaenger_email) && !empty($captcha))
 	}
 	else
 	{
-		echoMessagesAndErrors("ERROR aufgetreten !!!",'<font color="red">Es ist ein ERROR beim Senden an \''.$empfaenger_email.'\'!<br /> Bitte versuch es später wieder!</font>');
+		echoMessagesAndErrors("ERROR aufgetreten !!!",'<font color="red">Es ist ein ERROR beim Senden an "'.$empfaenger_email.'" aufgetreten!<br /> Bitte versuch es später wieder!</font>');
 	}
 }
 else

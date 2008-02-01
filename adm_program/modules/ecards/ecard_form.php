@@ -1161,7 +1161,7 @@ else
 	}
 	echo '</tr></table><br /><br/>';
 }  
-echo "</div></div></div>";
+echo "</div></div></div></div>";
 /************************Buttons********************************/
 //Uebersicht
 if($photo_event->getValue("pho_id") > 0)
