@@ -525,20 +525,20 @@ echo "
                     }
                     else
                     {
-                        echo "
-                        <ul class=\"formFieldList\" id=\"role_list\">";
+                        echo '
+                        <ul class="formFieldList" id="role_list">';
                             while($row = $g_db->fetch_array($result_role))
                             {
                                 // jede einzelne Rolle anzeigen
-                                echo "<li id=\"role_". $row['mem_rol_id']. "\">
+                                echo '<li id="role_'. $row['mem_rol_id']. '">
                                     <dl>
                                         <dt>
-                                            ". $row['cat_name']. " - <a href=\"$g_root_path/adm_program/modules/lists/lists_show.php?type=address&mode=html&rol_id=". $row['mem_rol_id']. "\">". $row['rol_name']. "</a>";
+                                            '. $row['cat_name']. ' - <a href="'. $g_root_path. '/adm_program/modules/lists/lists_show.php?type=address&mode=html&rol_id='. $row['mem_rol_id']. '" title="'. $row['rol_description']. '">'. $row['rol_name']. '</a>';
                                                 if($row['mem_leader'] == 1)
                                                 {
-                                                    echo " - Leiter";
+                                                    echo ' - Leiter';
                                                 }
-                                            echo "&nbsp;";
+                                            echo '&nbsp;';
                                             
                                             // nun fuer alle Rollenrechte die Icons anzeigen
                                             if($row['rol_assign_roles'] == 1)
