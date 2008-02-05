@@ -1247,7 +1247,7 @@ echo "
                             <dt><label for=\"default_country\">Standard-Land:</label></dt>
                             <dd>";
                                 // Laenderliste oeffnen
-                                $landlist = fopen("../../system/staaten.txt", "r");
+                                $country_list = fopen("../../system/staaten.txt", "r");
                                 echo "
                                 <select size=\"1\" id=\"default_country\" name=\"default_country\">
                                     <option value=\"\"";
@@ -1255,9 +1255,9 @@ echo "
                                     {
                                         echo " selected=\"selected\" ";
                                     }
-                                    echo ">- Bitte w&auml;hlen -</option>";
-                                    $land = trim(fgets($landlist));
-                                    while (!feof($landlist))
+                                    echo ">- Bitte wählen -</option>";
+                                    $land = trim(fgets($country_list));
+                                    while (!feof($country_list))
                                     {
                                         echo"<option value=\"$land\"";
                                         if($land == $form_values['default_country'])
@@ -1265,14 +1265,15 @@ echo "
                                             echo " selected=\"selected\" ";
                                         }
                                         echo">$land</option>";
-                                        $land = trim(fgets($landlist));
+                                        $land = trim(fgets($country_list));
                                     }
+                                    fclose($country_list);
                                 echo"</select>
                             </dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Das ausgew&auml;hlte Land wird beim Anlegen eines neuen Benutzers automatisch vorgeschlagen und
+                        Das ausgewählte Land wird beim Anlegen eines neuen Benutzers automatisch vorgeschlagen und
                         erleichtert die Eingabe.
                     </li>
                     <li>
