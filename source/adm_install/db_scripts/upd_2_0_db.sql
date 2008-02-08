@@ -26,6 +26,9 @@ ALTER TABLE %PRAEFIX%_users ADD COLUMN `usr_activation_code` VARCHAR(10) AFTER `
 ALTER TABLE %PRAEFIX%_users ADD COLUMN `usr_new_password` VARCHAR(35) AFTER `usr_password`;
 ALTER TABLE %PRAEFIX%_users MODIFY COLUMN `usr_login_name` VARCHAR(35) DEFAULT NULL;
 
+-- Dates-Tabelle ergaenzen
+ALTER TABLE %PRAEFIX%_dates ADD COLUMN `dat_all_day` tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER `dat_end`;
+
 -- Announcement-Tabelle korrigieren
 ALTER TABLE %PRAEFIX%_announcements DROP FOREIGN KEY %PRAEFIX%_FK_ANN_USR;
 ALTER TABLE %PRAEFIX%_announcements ADD constraint %PRAEFIX%_FK_ANN_USR foreign key (ann_usr_id)

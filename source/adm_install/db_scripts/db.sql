@@ -433,6 +433,7 @@ create table %PRAEFIX%_dates
    dat_global                     tinyint(1) unsigned            not null default 0,
    dat_begin                      datetime                       not null,
    dat_end                        datetime,
+   dat_all_day                    tinyint(1) unsigned            not null default 0,
    dat_description                text,
    dat_location                   varchar(100),
    dat_headline                   varchar(50)                    not null,
