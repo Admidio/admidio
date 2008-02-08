@@ -94,6 +94,17 @@ $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_cat_id, usf_type, usf_name, usf_s
 $g_db->query($sql);
 $usf_id_homepage = $g_db->insert_id();
 
+
+// Termine auf "ganztaegig" konvertieren
+$sql = "UPDATE ". TBL_DATES. " SET dat_all_day = 1 
+         WHERE date_format(dat_begin, '%H:%i:%s') = '00:00:00'
+           AND date_format(dat_end, '%H:%i:%s') = '00:00:00' ";
+$g_db->query($sql);
+
+$sql = "UPDATE ". TBL_DATES. " SET dat_end = date_add(dat_end, interval 1 day) 
+         WHERE dat_all_day = 1 ";
+$g_db->query($sql);
+
 // Userdaten in adm_user_fields kopieren
 $sql = "SELECT * FROM ". TBL_USERS;
 $result_usr = $g_db->query($sql);
