@@ -258,7 +258,7 @@ alter table %PRAEFIX%_sessions add constraint %PRAEFIX%_FK_SES_ORG foreign key (
       references %PRAEFIX%_organizations (org_id) on delete restrict on update restrict;
 alter table %PRAEFIX%_sessions add constraint %PRAEFIX%_FK_SES_USR foreign key (ses_usr_id)
       references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
-      
+
 /*==============================================================*/
 /* Table: adm_auto_login                                        */
 /*==============================================================*/
@@ -282,7 +282,7 @@ alter table %PRAEFIX%_auto_login add constraint %PRAEFIX%_FK_ATL_USR foreign key
       references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
 
 alter table %PRAEFIX%_auto_login add constraint %PRAEFIX%_FK_ATL_ORG foreign key (atl_org_id)
-      references %PRAEFIX%_organizations (org_id) on delete restrict on update restrict;      
+      references %PRAEFIX%_organizations (org_id) on delete restrict on update restrict;
 
 /*==============================================================*/
 /* Table: adm_roles                                             */
@@ -335,7 +335,7 @@ alter table %PRAEFIX%_roles add constraint %PRAEFIX%_FK_ROL_CAT foreign key (rol
       references %PRAEFIX%_categories (cat_id) on delete restrict on update restrict;
 alter table %PRAEFIX%_roles add constraint %PRAEFIX%_FK_ROL_USR foreign key (rol_usr_id_change)
       references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
-      
+
 /*==============================================================*/
 /* Table: adm_role_dependencies                                 */
 /*==============================================================*/
@@ -362,7 +362,7 @@ alter table %PRAEFIX%_role_dependencies add constraint %PRAEFIX%_FK_RLD_ROL_PARE
       references %PRAEFIX%_roles (rol_id) on delete restrict on update restrict;
 alter table %PRAEFIX%_role_dependencies add constraint %PRAEFIX%_FK_RLD_USR foreign key (rld_usr_id)
       references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
-      
+
 /*==============================================================*/
 /* Table: adm_members                                           */
 /*==============================================================*/
@@ -390,7 +390,7 @@ alter table %PRAEFIX%_members add constraint %PRAEFIX%_FK_MEM_ROL foreign key (m
       references %PRAEFIX%_roles (rol_id) on delete restrict on update restrict;
 alter table %PRAEFIX%_members add constraint %PRAEFIX%_FK_MEM_USR foreign key (mem_usr_id)
       references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
-      
+
 /*==============================================================*/
 /* Table: adm_announcements                                     */
 /*==============================================================*/
@@ -422,7 +422,7 @@ alter table %PRAEFIX%_announcements add constraint %PRAEFIX%_FK_ANN_USR foreign 
       references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
 alter table %PRAEFIX%_announcements add constraint %PRAEFIX%_FK_ANN_USR_CHANGE foreign key (ann_usr_id_change)
       references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
-      
+
 /*==============================================================*/
 /* Table: adm_dates                                             */
 /*==============================================================*/
@@ -458,7 +458,7 @@ alter table %PRAEFIX%_dates add constraint %PRAEFIX%_FK_DAT_USR foreign key (dat
       references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
 alter table %PRAEFIX%_dates add constraint %PRAEFIX%_FK_DAT_USR_CHANGE foreign key (dat_usr_id_change)
       references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
-      
+
 /*==============================================================*/
 /* Table: adm_folders                                           */
 /*==============================================================*/
@@ -476,7 +476,7 @@ create table %PRAEFIX%_folders
    primary key (fol_id)
 )
 engine = InnoDB
-auto_increment = 1;   
+auto_increment = 1;
 
 -- Index
 alter table %PRAEFIX%_folders add index FOL_ORG_FK (fol_org_id);
@@ -496,7 +496,7 @@ alter table %PRAEFIX%_folders add constraint %PRAEFIX%_FK_FOL_USR foreign key (f
 /*==============================================================*/
 create table %PRAEFIX%_files
 (
-   fil_id                         int(11) unsigned               not null,
+   fil_id                         int(11) unsigned               not null AUTO_INCREMENT,
    fil_fol_id                     int(11) unsigned               not null,
    fil_name                       varchar(255)                   not null,
    fil_locked                     tinyint(1) unsigned            not null default 0,
@@ -517,7 +517,7 @@ alter table %PRAEFIX%_files add constraint %PRAEFIX%_FK_FIL_FOL foreign key (fil
       references %PRAEFIX%_folders (fol_id) on delete restrict on update restrict;
 alter table %PRAEFIX%_files add constraint %PRAEFIX%_FK_FIL_USR foreign key (fil_usr_id)
       references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
-      
+
 /*==============================================================*/
 /* Table: adm_folder_roles                                      */
 /*==============================================================*/
@@ -540,7 +540,7 @@ alter table %PRAEFIX%_folder_roles add constraint %PRAEFIX%_FK_FLR_FOL foreign k
 alter table %PRAEFIX%_folder_roles add constraint %PRAEFIX%_FK_FLR_ROL foreign key (flr_rol_id)
       references %PRAEFIX%_roles (rol_id) on delete restrict on update restrict;
 
-      
+
 /*==============================================================*/
 /* Table: adm_guestbook                                         */
 /*==============================================================*/
@@ -639,7 +639,7 @@ alter table %PRAEFIX%_links add constraint %PRAEFIX%_FK_LNK_CAT foreign key (lnk
       references %PRAEFIX%_categories (cat_id) on delete restrict on update restrict;
 alter table %PRAEFIX%_links add constraint %PRAEFIX%_FK_LNK_USR_CHANGE foreign key (lnk_usr_id_change)
       references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
-      
+
 /*==============================================================*/
 /* Table: adm_photos                                            */
 /*==============================================================*/
