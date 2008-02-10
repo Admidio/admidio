@@ -49,10 +49,10 @@ ALTER TABLE %PRAEFIX%_sessions ADD COLUMN `ses_org_id` tinyint(4) NOT NULL AFTER
 ALTER TABLE %PRAEFIX%_sessions ADD index SES_ORG_FK (ses_org_id);
 ALTER TABLE %PRAEFIX%_sessions ADD constraint %PRAEFIX%_FK_SES_ORG foreign key (ses_org_id)
       references %PRAEFIX%_organizations (org_id) on delete restrict on update restrict;
-      
+
 ALTER TABLE %PRAEFIX%_sessions CHANGE COLUMN `ses_session` `ses_session_id` VARCHAR(35) NOT NULL;
 ALTER TABLE %PRAEFIX%_sessions DROP INDEX ak_session;
-ALTER TABLE %PRAEFIX%_sessions ADD INDEX ak_session (ses_session_id);      
+ALTER TABLE %PRAEFIX%_sessions ADD INDEX ak_session (ses_session_id);
 
 -- org_shortname aus Rollentabelle entfernen
 ALTER TABLE %PRAEFIX%_roles DROP FOREIGN KEY %PRAEFIX%_FK_ROL_ORG;
@@ -100,7 +100,7 @@ create table %PRAEFIX%_folders
    primary key (fol_id)
 )
 engine = InnoDB
-auto_increment = 1;    
+auto_increment = 1;
 
 -- Index
 alter table %PRAEFIX%_folders add index FOL_ORG_FK (fol_org_id);
@@ -120,7 +120,7 @@ alter table %PRAEFIX%_folders add constraint %PRAEFIX%_FK_FOL_USR foreign key (f
 /*==============================================================*/
 create table %PRAEFIX%_files
 (
-   fil_id                         int(11) unsigned               not null,
+   fil_id                         int(11) unsigned               not null AUTO_INCREMENT,
    fil_fol_id                     int(11) unsigned               not null,
    fil_name                       varchar(255)                   not null,
    fil_locked                     tinyint(1) unsigned            not null default 0,
@@ -141,7 +141,7 @@ alter table %PRAEFIX%_files add constraint %PRAEFIX%_FK_FIL_FOL foreign key (fil
       references %PRAEFIX%_folders (fol_id) on delete restrict on update restrict;
 alter table %PRAEFIX%_files add constraint %PRAEFIX%_FK_FIL_USR foreign key (fil_usr_id)
       references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
-      
+
 /*==============================================================*/
 /* Table: adm_folder_roles                                      */
 /*==============================================================*/
@@ -187,4 +187,4 @@ alter table %PRAEFIX%_auto_login add constraint %PRAEFIX%_FK_ATL_USR foreign key
       references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
 
 alter table %PRAEFIX%_auto_login add constraint %PRAEFIX%_FK_ATL_ORG foreign key (atl_org_id)
-      references %PRAEFIX%_organizations (org_id) on delete restrict on update restrict;      
+      references %PRAEFIX%_organizations (org_id) on delete restrict on update restrict;
