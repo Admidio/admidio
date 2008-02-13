@@ -87,7 +87,7 @@ class DB
             $this->endTransaction(true);
         }        
 
-        if(headers_sent() == false && isset($g_preferences))
+        if(headers_sent() == false && isset($g_preferences) && defined('THEME_SERVER_PATH'))
         {
             // Html-Kopf ausgeben
             $g_layout['title']  = "Datenbank-Fehler";
@@ -103,7 +103,7 @@ class DB
                          </div>";
         echo $error_string;
         
-        if(headers_sent() == false && isset($g_preferences))
+        if(headers_sent() == false && isset($g_preferences) && defined('THEME_SERVER_PATH'))
         {
             require(THEME_SERVER_PATH. "/overall_footer.php");       
         }
