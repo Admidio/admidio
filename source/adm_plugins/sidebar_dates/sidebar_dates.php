@@ -57,7 +57,7 @@ else
     $plg_link_target = "_self";
 }
 
-$act_date = date("Y.m.d 00:00:00", time());
+$act_date = date("Y.m.d H:i:s", time());
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
 $g_db->select_db($g_adm_db);
 
@@ -89,8 +89,7 @@ if(strlen($organizations) > 0)
                 WHERE (  dat_org_shortname = '$g_organization'
                       OR (   dat_global   = 1
                          AND dat_org_shortname IN ($organizations) ))
-                  AND (  dat_begin >= '$act_date'
-                      OR dat_end   >= '$act_date' )
+                  AND dat_end   >= '$act_date'
                 ORDER BY dat_begin ASC
                 LIMIT $plg_dates_count";
 }
@@ -98,8 +97,7 @@ else
 {
     $sql    = "SELECT * FROM ". TBL_DATES. "
                 WHERE dat_org_shortname = '$g_organization'
-                  AND (  dat_begin >= '$act_date'
-                      OR dat_end   >= '$act_date' )
+                  AND dat_end   >= '$act_date'
                 ORDER BY dat_begin ASC
                 LIMIT $plg_dates_count";
 }
@@ -109,14 +107,14 @@ if($g_db->num_rows($result) > 0)
 {
     while($row = $g_db->fetch_object($result))
     {
-        echo mysqldatetime("d.m.y", $row->dat_begin). "&nbsp;&nbsp;";
+        echo '<div>'. mysqldatetime("d.m.y", $row->dat_begin). '&nbsp;&nbsp;';
     
         if (mysqldatetime("h:i", $row->dat_begin) != "00:00")
         {
             echo mysqldatetime("h:i", $row->dat_begin);
         }
     
-        echo "<br /><a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/modules/dates/dates.php?id=$row->dat_id\" target=\"$plg_link_target\">";
+        echo '<br /><a class="'. $plg_link_class. '" href="'. $g_root_path. '/adm_program/modules/dates/dates.php?id='. $row->dat_id. '" target="'. $plg_link_target. '">';
     
         if($plg_max_char_per_word > 0)
         {
@@ -138,18 +136,18 @@ if($g_db->num_rows($result) > 0)
                     $new_headline = "$new_headline ". $words[$i];
                 }
             }
-            echo "$new_headline</a><br />-----<br />";
+            echo $new_headline. '</a><br />-----<br /></div>';
         }
         else
         {
-            echo "$row->dat_headline</a><br />-----<br />";
+            echo $row->dat_headline. '</a><br />-----<br /></div>';
         }
     }
     
-    echo "<a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/modules/dates/dates.php\" target=\"$plg_link_target\">Alle Termine</a>";
+    echo '<a class="'. $plg_link_class. '" href="'. $g_root_path. '/adm_program/modules/dates/dates.php" target="'. $plg_link_target. '">Alle Termine</a>';
 }
 else
 {
-    echo "Es sind keine Termine vorhanden.";
+    echo '<div>Es sind keine Termine vorhanden.</div>';
 }
 ?>

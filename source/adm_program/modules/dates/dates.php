@@ -253,8 +253,12 @@ else
             <div class=\"boxHead\">
                 <div class=\"boxHeadLeft\">
                     <img src=\"". THEME_PATH. "/icons/date.png\" alt=\"". $date->getValue("dat_headline"). "\" />
-                    ". mysqldatetime("d.m.y", $date->getValue("dat_begin")). "
-                </div>
+                    ". mysqldatetime("d.m.y", $date->getValue("dat_begin"));
+                    if(mysqldatetime("d.m.y", $date->getValue("dat_begin")) != mysqldatetime("d.m.y", $date->getValue("dat_end")))
+                    {
+                        echo ' - '. mysqldatetime("d.m.y", $date->getValue("dat_end"));
+                    }
+                echo "</div>
                 <div class=\"boxHeadCenter\">". $date->getValue("dat_headline"). "</div>
                 <div class=\"boxHeadRight\">
                     <span class=\"iconLink\">
@@ -287,49 +291,62 @@ else
                 echo"</div>
             </div>
 
-            <div class=\"boxBody\">
-                <div style=\"margin-bottom: 10px;\">";
-                    if (mysqldatetime("h:i", $date->getValue("dat_begin")) != "00:00")
-                    {
-                        echo "Beginn:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>".
-                        mysqldatetime("h:i", $date->getValue("dat_begin")). "</strong> Uhr&nbsp;&nbsp;&nbsp;&nbsp;";
-                    }
-
-                    if($date->getValue("dat_begin") != $date->getValue("dat_end"))
-                    {
-                        if (mysqldatetime("h:i", $date->getValue("dat_begin")) != "00:00")
+            <div class=\"boxBody\">";
+                // Uhrzeit und Ort anzeigen, falls vorhanden
+                if ($date->getValue("dat_all_day") == 0 || strlen($date->getValue("dat_location")) > 0)
+                { 
+                    echo '<div class="date_info_block">';
+                        $margin_left_location = "0";
+                        if ($date->getValue("dat_all_day") == 0)
                         {
-                            echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                            echo '<div style="float: left;">Beginn:<br />Ende:</div>
+                            <div style="float: left;">
+                                <strong>'. mysqldatetime("h:i", $date->getValue("dat_begin")). '</strong> Uhr<br />
+                                <strong>'. mysqldatetime("h:i", $date->getValue("dat_end")). '</strong> Uhr
+                            </div>';
+                            $margin_left_location = "40";
                         }
-
-                        echo "Ende:&nbsp;";
-                        if(mysqldatetime("d.m.y", $date->getValue("dat_begin")) != mysqldatetime("d.m.y", $date->getValue("dat_end")))
+    
+                        if ($date->getValue("dat_location") != "")
                         {
-                            echo "<strong>". mysqldatetime("d.m.y", $date->getValue("dat_end")). "</strong>";
-
-                            if (mysqldatetime("h:i", $date->getValue("dat_end")) != "00:00")
-                            {
-                                echo " um ";
-                            }
+                            echo '<div style="float: left; padding-left: '. $margin_left_location. 'px;">Treffpunkt:&nbsp;<strong></div>
+                            <div style="float: left;">'. $date->getValue("dat_location"). '</strong><br />';
+                                // eventuell Karte- und Routenlink anhaengen
+                                if(count(split("[,; ]", $date->getValue("dat_location"))) > 1)
+                                {
+                                    echo '<span class="iconTextLink">
+                                        <a href="http://maps.google.com/?q='. urlencode($date->getValue("dat_location")). '" target="_blank"><img
+                                        src="'. THEME_PATH. '/icons/map.png" alt="Karte" /></a>
+                                        <a href="http://maps.google.com/?q='. urlencode($date->getValue("dat_location")). '" target="_blank">Karte</a>
+                                    </span>';
+                                    
+                                    // bei gueltigem Login und genuegend Adressdaten auch noch Route anbieten
+                                    if($g_valid_login && strlen($g_current_user->getValue("Adresse")) > 0
+                                    && (  strlen($g_current_user->getValue("PLZ"))  > 0 || strlen($g_current_user->getValue("Ort"))  > 0 ))
+                                    {
+                                        $route_url = 'http://maps.google.com/?f=d&amp;saddr='. urlencode($g_current_user->getValue("Adresse"));
+                                        if(strlen($g_current_user->getValue("PLZ"))  > 0)
+                                        {
+                                            $route_url .= ",%20". urlencode($g_current_user->getValue("PLZ"));
+                                        }
+                                        if(strlen($g_current_user->getValue("Ort"))  > 0)
+                                        {
+                                            $route_url .= ",%20". urlencode($g_current_user->getValue("Ort"));
+                                        }
+                                        if(strlen($g_current_user->getValue("Land"))  > 0)
+                                        {
+                                            $route_url .= ",%20". urlencode($g_current_user->getValue("Land"));
+                                        }
+        
+                                        $route_url .= '&amp;daddr='. urlencode($date->getValue("dat_location"));
+                                        echo ' - <a href="'. $route_url. '" target="_blank">Route anzeigen</a>';
+                                    }
+                                }
+                            echo '</div>';
                         }
-
-                        if (mysqldatetime("h:i", $date->getValue("dat_end")) != "00:00")
-                        {
-                            echo "<strong>". mysqldatetime("h:i", $date->getValue("dat_end")). "</strong> Uhr";
-                        }
-                    }
-
-                    if ($date->getValue("dat_location") != "")
-                    {
-                        if (mysqldatetime("h:i", $date->getValue("dat_begin")) != "00:00"
-                        && $date->getValue("dat_begin") != $date->getValue("dat_end"))
-                        {
-                            echo "<br />";
-                        }
-                        echo "Treffpunkt:&nbsp;<strong>". $date->getValue("dat_location"). "</strong>";
-                    }
-                echo "</div>
-                <div>";
+                    echo '</div>';
+                }
+                echo '<div class="date_description" style="clear: left;">';
                     // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
                     if($g_preferences['enable_bbcode'] == 1)
                     {

@@ -211,8 +211,7 @@ class TableAccess
         {
             $value = $this->_getValue($field_name);
         }
-        
-        if(isset($this->db_fields[$field_name]))
+        elseif(isset($this->db_fields[$field_name]))
         {
             $value = $this->db_fields[$field_name];
         }

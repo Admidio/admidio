@@ -478,3 +478,19 @@ a:hover {
 #infoboxListsBox {
     width:              400px; 
 }
+
+/* spezielle Anpassung fuer die Terminseite */
+
+.date_info_block {
+    line-height:        14pt;
+}
+
+.date_info_block div {
+    padding-right:      5px;
+    padding-bottom:     5px;
+}
+
+.date_description {
+    padding-top:        10px;
+    padding-bottom:     5px;
+}

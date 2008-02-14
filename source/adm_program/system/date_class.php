@@ -58,6 +58,30 @@ class Date extends TableAccess
         $this->readData($date_id);
     }
     
+    function _setValue($field_name, &$field_value)
+    {
+        if($field_name == "dat_end" && $this->db_fields['dat_all_day'] == 1)
+        {
+            // hier muss bei ganztaegigen Terminen das bis-Datum um einen Tag hochgesetzt werden
+            // damit der Termin bei SQL-Abfragen richtig beruecksichtigt wird
+            list($year, $month, $day, $hour, $minute, $second) = split("[- :]", $field_value);
+            $field_value = date("Y-m-d H:i:s", mktime($hour, $minute, $second, $month, $day, $year) + 86400);
+        }
+    }
+    
+    function _getValue($field_name)
+    {
+        $value = $this->db_fields[$field_name];
+        
+        if($field_name == "dat_end" && $this->db_fields['dat_all_day'] == 1)
+        {
+            list($year, $month, $day, $hour, $minute, $second) = split("[- :]", $this->db_fields['dat_end']);
+            $value = date("Y-m-d H:i:s", mktime($hour, $minute, $second, $month, $day, $year) - 86400);
+        }
+        
+        return $value;
+    }
+    
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
     // die Funktion wird innerhalb von save() aufgerufen
     function _save()
