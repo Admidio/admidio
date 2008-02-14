@@ -317,7 +317,7 @@ echo "
                                                                 }
 
                                                                 echo "<br />
-                                                                <span class=\"smallFontSize\">( <a href=\"$map_url\" target=\"_blank\">Stadtplan</a>";
+                                                                ( <a href=\"$map_url\" target=\"_blank\">Karte</a>";
 
                                                                 if($g_current_user->getValue("usr_id") != $a_user_id)
                                                                 {
@@ -353,10 +353,10 @@ echo "
                                                                         {
                                                                             $route_url .= ",%20". $user->getValue("Land");
                                                                         }
-                                                                        echo " - <a href=\"$route_url\" target=\"_blank\">Route berechnen</a>";
+                                                                        echo " - <a href=\"$route_url\" target=\"_blank\">Route anzeigen</a>";
                                                                     }
                                                                 }
-                                                                echo " )</span>";
+                                                                echo " )";
                                                             }
                                                         echo "</dd>
                                                     </dl>

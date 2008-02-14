@@ -69,9 +69,9 @@ echo '
     echo $g_layout['header']. '
 
     <!--[if lt IE 7]>
-    <script type="text/javascript"><!--
+    <script type="text/javascript">
     	window.attachEvent("onload", correctPNG);
-    --></script>
+    </script>
     <![endif]-->';
 
     if($g_layout['includes'])

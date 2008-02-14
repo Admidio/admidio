@@ -140,7 +140,7 @@ function subfolder($parent_id, $vorschub, $photo_event, $pho_id)
 $g_layout['title'] = "Foto-Album-Verwaltung";
 $g_layout['header']	= "";
 $g_layout['header'] .= "
-<script language=\"javascript\" type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/calendar/CalendarPopup.js\"></script>
+<script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/calendar/CalendarPopup.js\"></script>
 <link rel=\"stylesheet\" href=\"".THEME_PATH. "/calendar.css\" type=\"text/css\" />";
 
 require(THEME_SERVER_PATH. "/overall_header.php");
@@ -215,14 +215,13 @@ echo "
                 <dl>
                     <dt><label for=\"pho_begin\">Beginn:</label></dt>
                     <dd>
-						<script language=\"javascript\" type=\"text/javascript\" id=\"js18\">
+						<script type=\"text/javascript\" id=\"js18\">
 							var cal18 = new CalendarPopup(\"calendardiv\");
 							cal18.setCssPrefix(\"calendar\");
-							writeSource(\"js18\");
 						</script>
 						<input type=\"text\" id=\"pho_begin\" name=\"pho_begin\" size=\"10\" tabindex=\"3\" maxlength=\"10\" value=\"". $photo_event->getValue("pho_begin")."\" />
-						<img src=\"". THEME_PATH. "/icons/date.png\" alt=\"Kalender\" onclick=\"javascript:cal18.select(document.forms[0].pho_begin,'anchor18','dd.MM.yyyy'); return false;\" name=\"anchor18\" id=\"anchor18\" style=\"vertical-align:middle; cursor:pointer;\" />
-						<div id=\"calendardiv\" style=\"position: absolute; visibility: hidden; \"></div>
+						<img src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:cal18.select(document.forms[0].pho_begin,'anchor18','dd.MM.yyyy'); return false;\" id=\"anchor18\" style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
+						<span id=\"calendardiv\" style=\"position: absolute; visibility: hidden; \"></span>
                         <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                     </dd>
                 </dl>
@@ -234,11 +233,8 @@ echo "
                 <dl>
                     <dt><label for=\"pho_end\">Ende:</label></dt>
                     <dd>
-						<script language=\"javascript\" type=\"text/javascript\">
-							writeSource(\"js18\");
-						</script>
 						<input type=\"text\" id=\"pho_end\" name=\"pho_end\" size=\"10\" maxlength=\"10\" value=\"". $photo_event->getValue("pho_end")."\">
-						<img src=\"". THEME_PATH. "/icons/date.png\" alt=\"Kalender\" onclick=\"javascript:cal18.select(document.forms[0].pho_end,'anchor17','dd.MM.yyyy'); return false;\" name=\"anchor17\" id=\"anchor17\" style=\"vertical-align:middle;\" />
+						<img src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:cal18.select(document.forms[0].pho_end,'anchor17','dd.MM.yyyy'); return false;\" id=\"anchor17\" style=\"vertical-align:middle;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
                     </dd>
                 </dl>
             </li>";

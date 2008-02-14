@@ -250,27 +250,25 @@ function getFieldCode($field, $user, $new_user)
         }
         if($field['usf_type'] == "DATE" && $field['usf_name'] != 'Geburtstag')
 		{
-			$value = "<script language=\"javascript\" type=\"text/javascript\" id=\"js18\">
+			$value = "<script type=\"text/javascript\" id=\"js18\">
 						var cal18 = new CalendarPopup(\"calendardiv\");
 						cal18.setCssPrefix(\"calendar\");
-						writeSource(\"js18\");
 					</script>
 					<input type=\"text\" id=\"usf". $field['usf_id']. "\" name=\"usf-". $field['usf_id']. "\" style=\"width: $width;\" maxlength=\"$maxlength\" $readonly value=\"". $field['usd_value']. "\" $readonly />
-					<img src=\"". THEME_PATH. "/icons/date.png\" alt=\"Kalender\" onclick=\"javascript:cal18.select(document.forms[0].usf". $field['usf_id']. ",'anchor". $field['usf_id']. "','dd.MM.yyyy'); return false;\" name=\"anchor". $field['usf_id']. "\" id=\"anchor". $field['usf_id']. "\" style=\"vertical-align:middle; cursor:pointer;\" />
-					<div id=\"calendardiv\" style=\"position: absolute; visibility: hidden; \"></div>";
+					<img src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:cal18.select(document.forms[0].usf". $field['usf_id']. ",'anchor". $field['usf_id']. "','dd.MM.yyyy'); return false;\" id=\"anchor". $field['usf_id']. "\" style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
+					<span id=\"calendardiv\" style=\"position: absolute; visibility: hidden; \"></span>";
 		}
 		else if ($field['usf_name'] == 'Geburtstag')
 		{
-			$value = "<script language=\"javascript\" type=\"text/javascript\" id=\"js18\">
+			$value = "<script type=\"text/javascript\" id=\"js18\">
 						var cal19 = new CalendarPopup(\"calendardiv\");
 						cal19.showNavigationDropdowns();
 						cal19.setCssPrefix(\"calendar\");
 						cal19.setYearSelectStartOffset(30)
-						writeSource(\"js18\");
 					</script>
 					<input type=\"text\" id=\"usf". $field['usf_id']. "\" name=\"usf-". $field['usf_id']. "\" style=\"width: $width;\" maxlength=\"$maxlength\" $readonly value=\"". $field['usd_value']. "\" $readonly />
-					<img src=\"". THEME_PATH. "/icons/date.png\" alt=\"Kalender\" onclick=\"javascript:cal19.select(document.forms[0].usf". $field['usf_id']. ",'anchor". $field['usf_id']. "','dd.MM.yyyy'); return false;\" name=\"anchor". $field['usf_id']. "\" id=\"anchor". $field['usf_id']. "\" style=\"vertical-align:middle; cursor:pointer;\" />
-					<div id=\"calendardiv\" style=\"position: absolute; visibility: hidden; \"></div>";
+					<img src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:cal19.select(document.forms[0].usf". $field['usf_id']. ",'anchor". $field['usf_id']. "','dd.MM.yyyy'); return false;\" id=\"anchor". $field['usf_id']. "\" style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
+					<span id=\"calendardiv\" style=\"position: absolute; visibility: hidden; \"></span>";
 		}
 		else
 		{
@@ -340,7 +338,7 @@ $g_layout['title'] = "Profil bearbeiten";
 
 $g_layout['header']	= "";
 $g_layout['header'] .= "
-<script language=\"javascript\" type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/calendar/CalendarPopup.js\"></script>
+<script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/calendar/CalendarPopup.js\"></script>
 <link rel=\"stylesheet\" href=\"".THEME_PATH. "/calendar.css\" type=\"text/css\" />";
 
 require(THEME_SERVER_PATH. "/overall_header.php");
