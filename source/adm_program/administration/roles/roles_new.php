@@ -120,7 +120,7 @@ $g_layout['header'] = "
 
 $g_layout['header']	= "";
 $g_layout['header'] .= "
-<script language=\"javascript\" type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/calendar/CalendarPopup.js\"></script>
+<script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/calendar/CalendarPopup.js\"></script>
 <link rel=\"stylesheet\" href=\"".THEME_PATH. "/calendar.css\" type=\"text/css\" />";
 
 require(THEME_SERVER_PATH. "/overall_header.php");
@@ -489,21 +489,17 @@ echo "
                         <dl>
                             <dt><label for=\"rol_start_date\">G&uuml;ltig von:</label></dt>
                             <dd>
-								<script language=\"javascript\" type=\"text/javascript\" id=\"js18\">
+								<script type=\"text/javascript\" id=\"js18\">
 									var cal18 = new CalendarPopup(\"calendardiv\");
 									cal18.setCssPrefix(\"calendar\");
-									writeSource(\"js18\");
 								</script>
 								<input type=\"text\" id=\"rol_start_date\" name=\"rol_start_date\" size=\"10\" maxlength=\"10\" value=\"". $role->getValue("rol_start_date"). "\" />
-								<img src=\"". THEME_PATH. "/icons/date.png\" alt=\"Kalender\" onclick=\"javascript:cal18.select(document.forms[0].rol_start_date,'anchor18','dd.MM.yyyy'); return false;\" name=\"anchor18\" id=\"anchor18\" style=\"vertical-align:middle; cursor:pointer;\" />
-								<div id=\"calendardiv\" style=\"position: absolute; visibility: hidden; \"></div>
+								<img src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:cal18.select(document.forms[0].rol_start_date,'anchor18','dd.MM.yyyy'); return false;\" id=\"anchor18\" style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
+								<span id=\"calendardiv\" style=\"position: absolute; visibility: hidden; \"></span>
 								
                                 <label for=\"rol_end_date\">bis</label>
-								<script language=\"javascript\" type=\"text/javascript\">
-									writeSource(\"js18\");
-								</script>
 								<input type=\"text\" id=\"rol_end_date\" name=\"rol_end_date\" size=\"10\" maxlength=\"10\" value=\"". $role->getValue("rol_end_date"). "\" />
-								<img src=\"". THEME_PATH. "/icons/date.png\" alt=\"Kalender\" onclick=\"javascript:cal18.select(document.forms[0].rol_end_date,'anchor17','dd.MM.yyyy'); return false;\" name=\"anchor17\" id=\"anchor17\" style=\"vertical-align:middle; cursor:pointer;\" />&nbsp;(Datum)
+								<img src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:cal18.select(document.forms[0].rol_end_date,'anchor17','dd.MM.yyyy'); return false;\" id=\"anchor17\" style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />&nbsp;(Datum)
                             </dd>
                         </dl>
                     </li>
