@@ -213,9 +213,11 @@ class User extends TableAccess
     // die Funktion wird innerhalb von getValue() aufgerufen
     function _getValue($field_name)
     {
-        $value = "";
-        
-        if(strpos($field_name, "usr_") !== 0)
+        if(strpos($field_name, "usr_") === 0)
+        {
+            $value = $this->db_fields[$field_name];
+        }
+        else
         {
             $value = $this->getProperty($field_name, "usd_value");
         }

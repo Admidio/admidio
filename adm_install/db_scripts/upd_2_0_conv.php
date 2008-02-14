@@ -105,6 +105,10 @@ $sql = "UPDATE ". TBL_DATES. " SET dat_end = date_add(dat_end, interval 1 day)
          WHERE dat_all_day = 1 ";
 $g_db->query($sql);
 
+$sql = "DELETE FROM ". TBL_DATES. " 
+         WHERE dat_begin = '0000-00-00 00:00:00' ";
+$g_db->query($sql);
+
 // Userdaten in adm_user_fields kopieren
 $sql = "SELECT * FROM ". TBL_USERS;
 $result_usr = $g_db->query($sql);

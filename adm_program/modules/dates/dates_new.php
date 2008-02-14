@@ -65,6 +65,12 @@ if($req_dat_id > 0)
         $g_message->show("norights");
     }
 }
+else
+{
+    // bei neuem Termin Datum mit aktuellen Daten vorbelegen
+    $date->setValue("dat_begin", date("Y-m-d H:00:00", time()));
+    $date->setValue("dat_end", date("Y-m-d H:00:00", time()+3600));
+}
 
 if(isset($_SESSION['dates_request']))
 {
@@ -88,21 +94,46 @@ else
     // Zeitangaben von/bis aus Datetime-Feld aufsplitten
     $date_from = mysqldatetime("d.m.y", $date->getValue("dat_begin"));
     $time_from = mysqldatetime("h:i",   $date->getValue("dat_begin"));
-    $date_to   = null;
-    $time_to   = null;
-    if($date->getValue("dat_begin") != $date->getValue("dat_end"))
-    {
-        // Datum-Bis nur anzeigen, wenn es sich von Datum-Von unterscheidet
-        $date_to = mysqldatetime("d.m.y", $date->getValue("dat_end"));
-        $time_to = mysqldatetime("h:i",   $date->getValue("dat_end"));
-    }
+    
+    // Datum-Bis nur anzeigen, wenn es sich von Datum-Von unterscheidet
+    $date_to = mysqldatetime("d.m.y", $date->getValue("dat_end"));
+    $time_to = mysqldatetime("h:i",   $date->getValue("dat_end"));
 }
 
 // Html-Kopf ausgeben
 $g_layout['title']	= $_GET["headline"];
 $g_layout['header']	= "";
-$g_layout['header'] .= "<script language=\"javascript\" type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/calendar/CalendarPopup.js\"></script>
-<link rel=\"stylesheet\" href=\"".THEME_PATH. "/calendar.css\" type=\"text/css\" />";
+$g_layout['header'] .= "
+    <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/calendar/CalendarPopup.js\"></script>
+    <link rel=\"stylesheet\" href=\"".THEME_PATH. "/calendar.css\" type=\"text/css\" />
+    
+    <script type=\"text/javascript\">
+        // Funktion blendet Zeitfelder ein/aus
+        function setAllDay()
+        {
+            if(document.getElementById('dat_all_day').checked == true)
+            {
+                document.getElementById('time_from').style.visibility = 'hidden';
+                document.getElementById('time_from').style.display    = 'none';
+                document.getElementById('time_to').style.visibility = 'hidden';
+                document.getElementById('time_to').style.display    = 'none';
+            }
+            else
+            {
+                document.getElementById('time_from').style.visibility = 'visible';
+                document.getElementById('time_from').style.display    = '';
+                document.getElementById('time_to').style.visibility = 'visible';
+                document.getElementById('time_to').style.display    = '';
+            }
+        }
+        
+        // Funktion belegt das Datum-bis entsprechend dem Datum-Von
+        function setDateTo()
+        {
+            alert(document.getElementById('time_from').value);
+            //dateFrom = new Date(
+        } 
+    </script>";
 
 require(THEME_SERVER_PATH. "/overall_header.php");
 
@@ -159,42 +190,44 @@ echo "
 
             <li>
                 <dl>
-                    <dt><label for=\"date_from\">Datum Beginn:</label></dt>
+                    <dt><label for=\"date_from\">Beginn:</label></dt>
                     <dd>
-						<script language=\"javascript\" type=\"text/javascript\" id=\"js18\">
-							var cal18 = new CalendarPopup(\"calendardiv\");
-							cal18.setCssPrefix(\"calendar\");
-							writeSource(\"js18\");
+						<script type=\"text/javascript\" id=\"js18\">
+							var calPopUp = new CalendarPopup(\"calendardiv\");
+							calPopUp.setCssPrefix(\"calendar\");
 						</script>
-						<input type=\"text\" id=\"date_from\" name=\"date_from\" size=\"10\" maxlength=\"10\" value=\"$date_from\" />
-						<img src=\"". THEME_PATH. "/icons/date.png\" alt=\"Kalender\" onclick=\"javascript:cal18.select(document.forms[0].date_from,'anchor18','dd.MM.yyyy'); return false;\" name=\"anchor18\" id=\"anchor18\" style=\"vertical-align:middle; cursor:pointer;\" />
-						<div id=\"calendardiv\" style=\"position: absolute; visibility: hidden; \"></div>
-
-                        <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
-                        <span style=\"margin-left: 40px;\">
-                            <label for=\"time_from\">Uhrzeit Beginn:</label>
-                        </span>
+						<span>
+    						<input type=\"text\" id=\"date_from\" name=\"date_from\" onchange=\"setDateTo()\" size=\"10\" maxlength=\"10\" value=\"$date_from\" />
+    						<img id=\"ico_cal_date_from\" src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:calPopUp.select(document.getElementById('date_from'),'ico_cal_date_from','dd.MM.yyyy');\" style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
+    						<span id=\"calendardiv\" style=\"position: absolute; visibility: hidden; \"></span>
+    				    </span>
                         <span style=\"margin-left: 10px;\">
                             <input type=\"text\" id=\"time_from\" name=\"time_from\" size=\"5\" maxlength=\"5\" value=\"$time_from\" />
+                            <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
+                        </span>
+                        <span style=\"margin-left: 15px;\">
+                            <input type=\"checkbox\" id=\"dat_all_day\" name=\"dat_all_day\" ";
+                            if($date->getValue("dat_all_day") == 1)
+                            {
+                                echo " checked=\"checked\" ";
+                            }
+                            echo " onclick=\"setAllDay()\" value=\"1\" />
+                            <label for=\"dat_all_day\">Ganztägig</label>
                         </span>
                     </dd>
                 </dl>
             </li>
             <li>
                 <dl>
-                    <dt><label for=\"date_to\">Datum Ende:</label></dt>
+                    <dt><label for=\"date_to\">Ende:</label></dt>
                     <dd>
-						<script language=\"javascript\" type=\"text/javascript\">
-							writeSource(\"js18\");
-						</script>
-						<input type=\"text\" id=\"date_to\" name=\"date_to\" size=\"10\" maxlength=\"10\" value=\"$date_to\" />
-						<img src=\"". THEME_PATH. "/icons/date.png\" alt=\"Kalender\" onclick=\"javascript:cal18.select(document.forms[0].date_to,'anchor17','dd.MM.yyyy'); return false;\" name=\"anchor17\" id=\"anchor17\" style=\"vertical-align:middle; cursor:pointer;\" />
-                        &nbsp;&nbsp;
-                        <span style=\"margin-left: 40px;\">
-                            <label for=\"time_to\">Uhrzeit Ende:</label>
-                        </span>
-                        <span style=\"margin-left: 20px;\">
+						<span>
+						    <input type=\"text\" id=\"date_to\" name=\"date_to\" size=\"10\" maxlength=\"10\" value=\"$date_to\" />
+						    <img id=\"ico_cal_date_to\" src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:calPopUp.select(document.getElementById('date_to'),'ico_cal_date_to','dd.MM.yyyy');\" style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
+						</span>
+                        <span style=\"margin-left: 10px;\">
                             <input type=\"text\" id=\"time_to\" name=\"time_to\" size=\"5\" maxlength=\"5\" value=\"$time_to\" />
+                            <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                         </span>
                     </dd>
                 </dl>
@@ -245,9 +278,10 @@ echo "
     </li>
 </ul>
 
-<script type=\"text/javascript\"><!--
+<script type=\"text/javascript\">
     document.getElementById('dat_headline').focus();
---></script>";
+    setAllDay();
+</script>";
 
 require(THEME_SERVER_PATH. "/overall_footer.php");
 

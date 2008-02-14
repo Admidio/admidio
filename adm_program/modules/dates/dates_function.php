@@ -79,7 +79,7 @@ if($_GET["mode"] == 1)
     
     if(strlen($_POST['dat_headline']) == 0)
     {
-        $g_message->show("feld", "&Uuml;berschrift");
+        $g_message->show("feld", "Überschrift");
     }
     if(strlen($_POST['dat_description']) == 0)
     {
@@ -89,15 +89,38 @@ if($_GET["mode"] == 1)
     {
         $g_message->show("feld", "Datum Beginn");
     }
+    if(strlen($_POST['date_to']) == 0)
+    {
+        $g_message->show("feld", "Datum Ende");
+    }
+    if(strlen($_POST['time_from']) == 0 && isset($_POST['dat_all_day']) == false)
+    {
+        $g_message->show("feld", "Uhrzeit Beginn");
+    }
+    if(strlen($_POST['time_to']) == 0 && isset($_POST['dat_all_day']) == false)
+    {
+        $g_message->show("feld", "Uhrzeit Ende");
+    }
+    
+    if(isset($_POST['dat_all_day']))
+    {
+        $_POST['time_from'] = "00:00";
+        $_POST['time_to'] = "00:00";
+        $date->setValue("dat_all_day", 1);
+    }
     
     // Datum und Uhrzeit auf Gueltigkeit pruefen
     
     if(dtCheckDate($_POST['date_from']))
     {
-        if(dtCheckTime($_POST['time_from'])
-        || strlen($_POST['time_from']) > 0)
+        if(strlen($_POST['time_from']) > 0 && dtCheckTime($_POST['time_from']))
         {
-            $date_begin = dtFormatDate($_POST['date_from'], "Y-m-d"). " ". dtFormatTime($_POST['time_from']);
+            // Datum & Uhrzeit formatiert zurueckschreiben
+            $date_arr = explode(".", $_POST['date_from']);
+            $time_arr = explode(":", $_POST['time_from']);
+            $date_from_timestamp = mktime($time_arr[0],$time_arr[1],0,$date_arr[1],$date_arr[0],$date_arr[2]);
+            $date_begin = date("Y-m-d H:i:s", $date_from_timestamp);
+            //$date_begin = dtFormatDate($_POST['date_from'], "Y-m-d"). " ". dtFormatTime($_POST['time_from']);
             $date->setValue("dat_begin", $date_begin);
         }
         else
@@ -121,11 +144,15 @@ if($_GET["mode"] == 1)
     }
 
     if(dtCheckDate($_POST['date_to']))
-    {
-        if(dtCheckTime($_POST['time_to'])
-        || $_POST['time_to'] == "")
+    {   
+        if(strlen($_POST['time_to']) > 0 && dtCheckTime($_POST['time_to']))
         {
-            $date_end = dtFormatDate($_POST['date_to'], "Y-m-d"). " ". dtFormatTime($_POST['time_to']);
+            // Datum & Uhrzeit formatiert zurueckschreiben
+            $date_arr = explode(".", $_POST['date_to']);
+            $time_arr = explode(":", $_POST['time_to']);
+            $date_to_timestamp = mktime($time_arr[0],$time_arr[1],0,$date_arr[1],$date_arr[0],$date_arr[2]);
+            $date_end = date("Y-m-d H:i:s", $date_to_timestamp);
+            //$date_end = dtFormatDate($_POST['date_to'], "Y-m-d"). " ". dtFormatTime($_POST['time_to']);
             $date->setValue("dat_end", $date_end);
         }
         else
@@ -139,16 +166,20 @@ if($_GET["mode"] == 1)
     }
 
     // Enddatum muss groesser oder gleich dem Startdatum sein
-    if(strcmp($_POST['date_from'],$_POST['date_to']) > 0)
+    if($date_from_timestamp > $date_to_timestamp)
     {
-        $g_message->show("date_invalid", "Datum Ende oder Uhrzeit Ende");
+        $g_message->show("startvorend", "Datum Ende oder Uhrzeit Ende");
     }
 
     if(isset($_POST['dat_global']) == false)
     {
         $_POST['dat_global'] = 0;
     }
-
+    if(isset($_POST['dat_all_day']) == false)
+    {
+        $_POST['dat_all_day'] = 0;
+    }
+    
     // POST Variablen in das Termin-Objekt schreiben
     foreach($_POST as $key => $value)
     {
