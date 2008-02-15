@@ -48,7 +48,8 @@ class User extends TableAccess
     
     var $db_user_fields = array();  // Array ueber alle Felder der User-Fields-Tabelle des entsprechenden Users
     var $roles_rights   = array();  // Array ueber alle Rollenrechte mit dem entsprechenden Status des Users
-
+	var $list_view_rights   = array();  // Array ueber Listenrechte einzelner Rollen
+    
     // Konstruktor
     function User(&$db, $user_id = 0)
     {
@@ -170,7 +171,6 @@ class User extends TableAccess
         $this->roles_rights['rol_photo']         = -1;
         $this->roles_rights['rol_profile']       = -1;
         $this->roles_rights['rol_weblinks']      = -1;
-        $this->roles_rights['rol_this_list_view']= -1;
         $this->roles_rights['rol_all_lists_view']= -1;
     }
 
@@ -541,9 +541,85 @@ class User extends TableAccess
     }
     
     // Funktion prueft, ob der angemeldete User alle Listen einsehen darf    
-    function allListsView()
+    function viewRole($rol_id)
     {
-        return $this->checkRolesRight('rol_all_lists_view');
+    	//Zunaechst abfrage ob der User durch irgendeine Rolle das Recht bekommt alle Listen einzusehen
+		if($this->roles_rights['rol_all_lists_view'] == -1 && $this->db_fields['usr_id'] > 0)
+        {
+            
+			// Status wurde noch nicht ausgelesen
+            global $g_current_organization;
+            
+            $sql    = "SELECT rol_id
+                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                        WHERE mem_usr_id = ". $this->db_fields['usr_id']. "
+                          AND mem_valid  = 1
+                          AND mem_rol_id = rol_id
+                          AND rol_all_lists_view  = 1
+                          AND rol_valid  = 1 
+                          AND rol_cat_id = cat_id
+                          AND cat_org_id = ". $g_current_organization->getValue("org_id");
+            $this->db->query($sql);           
+            
+            if($this->db->num_rows() > 0)
+            {
+                $this->roles_rights['rol_all_lists_view'] = 1;
+            }
+            else
+            {
+                $this->roles_rights['rol_all_lists_view'] = 0;
+            }
+        }
+        
+        //Falls er das Recht hat alle Listen einzusehen true zurueckgeben
+        if ($this->roles_rights['rol_all_lists_view'] == 1)
+        {
+            return true;
+        }
+        
+        //Falls er das Recht nicht hat Kontrolle fuer eine bestimmte Rolle
+        else
+        {
+            //nachschauen ob Wert fuer Rolle schon ins Array geschrieben wurde
+            if(array_key_exists  ($rol_id, $this->list_view_rights))
+            {
+				//Falls ja sehen ob Recht besteht und entsprechenden Wert zuückgeben
+				if($this->list_view_rights[$rol_id]==1)
+				{
+					return true;
+				}
+				//Falls Rechte nicht besthen False ausgeben
+				else
+				{
+					return false;
+				}
+            }
+            
+            //Falls noch nicht im Array erfasst SQL-Abfrage
+            global $g_current_organization;
+            $sql    = "SELECT rol_id
+                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                        WHERE mem_usr_id = ". $this->db_fields['usr_id']. "
+                          AND rol_id = ".$rol_id."
+						  AND mem_valid  = 1
+                          AND mem_rol_id = rol_id
+                          AND rol_this_list_view  = 1
+                          AND rol_valid  = 1 
+                          AND rol_cat_id = cat_id
+                          AND cat_org_id = ". $g_current_organization->getValue("org_id");
+            $this->db->query($sql);           
+            
+            if($this->db->num_rows() > 0)
+            {
+                $this->list_view_rights[$rol_id]=1;
+				return true;
+            }
+            else
+            {
+                $this->list_view_rights[$rol_id]=0;
+				return false;
+            }
+        }
     }
 
     // Funktion prueft, ob der angemeldete User Weblinks anlegen und editieren darf

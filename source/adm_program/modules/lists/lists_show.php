@@ -59,6 +59,12 @@ if(isset($_GET['start']))
     $req_start = $_GET['start'];
 }
 
+//Testen ob Recht zur Listeneinsicht besteht
+if(!$g_current_user->viewRole($req_rol_id))
+{
+    $g_message->show("norights");
+}
+
 //SESSION array für bilder initialisieren
 $_SESSION['profilphoto'] = array();
 
