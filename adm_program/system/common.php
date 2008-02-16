@@ -55,10 +55,7 @@ require_once(SERVER_PATH. "/adm_program/system/navigation_class.php");
 require_once(SERVER_PATH. "/adm_program/system/user_class.php");
 require_once(SERVER_PATH. "/adm_program/system/organization_class.php");
 require_once(SERVER_PATH. "/adm_program/system/session_class.php");
-if($g_forum_integriert)
-{
-    require_once(SERVER_PATH. "/adm_program/system/forum_class_phpbb.php");
-}
+require_once(SERVER_PATH. "/adm_program/system/forum_class_phpbb.php");
 
 // Variablen von HMTL & PHP-Code befreien
 $_REQUEST = array_map("strStripTags", $_REQUEST);
@@ -132,7 +129,10 @@ else
 // Pfad zum gewaehlten Theme zusammensetzen
 define('THEME_SERVER_PATH', SERVER_PATH. "/adm_themes/". $g_preferences['theme']);
 define('THEME_PATH', $g_root_path. "/adm_themes/". $g_preferences['theme']);
-
+if ($g_preferences['forum_integriert'])
+{
+require_once(SERVER_PATH. "/adm_program/system/forum_class_phpbb.php");
+}
 // pruefen, ob Datenbank-Version zu den Scripten passt
 if(isset($g_preferences['db_version']) == false
 || version_compare(substr($g_preferences['db_version'], 0, 3), substr(ADMIDIO_VERSION, 0, 3)) != 0)
@@ -286,24 +286,23 @@ else
 Verbindung zur Forum-Datenbank herstellen und die Funktionen, sowie Routinen des Forums laden.
 /********************************************************************************/
 
-if($g_forum_integriert) 
+if($g_preferences['forum_integriert']) 
 {
     // globale Klassen mit Datenbankbezug werden in Sessionvariablen gespeichert, 
     // damit die Daten nicht bei jedem Script aus der Datenbank ausgelesen werden muessen
     if(isset($_SESSION['g_forum']))
     {
         $g_forum =& $_SESSION['g_forum'];
-        $g_forum->connect($g_forum_srv, $g_forum_usr, $g_forum_pw, $g_forum_db, $g_db);
+		$g_forum->connect($g_preferences['forum_srv'], $g_preferences['forum_usr'], $g_preferences['forum_pw'], $g_preferences['forum_db'], $g_db);
     }
     else
     {
         $g_forum = new Forum();
-        $g_forum->connect($g_forum_srv, $g_forum_usr, $g_forum_pw, $g_forum_db, $g_db);
-        
+        $g_forum->connect($g_preferences['forum_srv'], $g_preferences['forum_usr'], $g_preferences['forum_pw'], $g_preferences['forum_db'], $g_db);
         $_SESSION['g_forum'] =& $g_forum;
-        $g_forum->praefix     = $g_forum_praefix;
-        $g_forum->export      = $g_forum_export;
-        $g_forum->version     = $g_forum_version;
+        $g_forum->praefix     = $g_preferences['forum_praefix'];
+        $g_forum->export      = $g_preferences['forum_export'];
+        $g_forum->version     = $g_preferences['forum_version'];
         $g_forum->session_id  = session_id();
         $g_forum->preferences();
     }

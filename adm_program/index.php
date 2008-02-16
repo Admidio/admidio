@@ -240,7 +240,7 @@ echo "</ul>
             }
 
             // Wenn das Forum aktiv ist, dieses auch in der Ã?bersicht anzeigen.
-            if($g_forum_integriert)
+            if($g_preferences['forum_integriert'])
             {
                 if($g_forum->session_valid)
                 {
