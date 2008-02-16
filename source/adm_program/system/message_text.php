@@ -331,6 +331,15 @@ $message_text = array(
         von %VAR1% B. übersteigen!",
     //Ende Fehlermeldungen Fotomodul
 
+	//Fehlermeldungen Forum
+	
+	"forum_access_data" =>
+        "Es wurden entweder die Felder für die Zugangsdaten des Forums nicht oder nicht richtig ausgefüllt!",
+		
+	"forum_db_connection_failed" =>
+		"Es konnte keine Verbindung zur Forumsdatenbank hergestellt werden! Überprüfe bitte die Zugangsdaten auf Richtigkeit!",
+		
+	// Ende Fehlermeldungen Forum
 
     //Fehlermeldungen Downloadmodul
     "invalid_folder" =>

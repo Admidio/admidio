@@ -60,7 +60,7 @@ $g_layout['header'] =  "
 
     <script type=\"text/javascript\"><!--
         // Dieses Array enthaelt alle IDs, die in den Orga-Einstellungen auftauchen
-        ids = new Array('general', 'register', 'announcement-module', 'download-module', 'photo-module',
+        ids = new Array('general', 'register', 'announcement-module', 'download-module', 'photo-module', 'forum',
                         'guestbook-module', 'list-module', 'mail-module', 'ecard-module', 'profile-module', 'dates-module',
                         'links-module');
 
@@ -111,6 +111,8 @@ echo "
          &#124; <a href=\"#\" onclick=\"toggleDiv('download-module');\">Downloads</a>
 
          &#124; <a href=\"#\" onclick=\"toggleDiv('photo-module');\">Fotos</a>
+		 
+		 &#124; <a href=\"#\" onclick=\"toggleDiv('forum');\">Forum</a>
 
          &#124; <a href=\"#\" onclick=\"toggleDiv('guestbook-module');\">G&auml;stebuch</a>
 
@@ -727,6 +729,131 @@ echo "
                         2) mit Lightbox (der rest der Seite wird ausgegraut)<br/>
                         3) im gleichen Fenster
                     </li>
+                </ul>
+            </div>
+        </div>";
+		
+		 /**************************************************************************************/
+        //Einstellungen Forum
+        /**************************************************************************************/
+
+		 echo"
+        <div class=\"groupBox\" id=\"forum\">
+            <div class=\"groupBoxHeadline\">Einstellungen Forum&nbsp;&nbsp; </div>
+            <div class=\"groupBoxBody\">
+                <ul class=\"formFieldList\">
+                    <li>
+                        <dl>
+                            <dt><label for=\"forum_integriert\">Forum aktivieren/deaktivieren:</label></dt>
+                            <dd>
+								<select size=\"1\" id=\"forum_integriert\" name=\"forum_integriert\">
+                                    <option value=\"0\" ";
+                                    if($form_values['forum_integriert'] == 0)
+                                    {
+                                        echo " selected=\"selected\" ";
+                                    }
+                                    echo ">Deaktiviert</option>
+                                    <option value=\"1\" ";
+                                    if($form_values['forum_integriert'] == 1)
+                                    {
+                                        echo " selected=\"selected\" ";
+                                    }
+                                    echo ">Aktiviert</option>
+                                </select>
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Das Forum kann &uuml;ber diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
+                        aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt.
+                    </li>
+					<li>
+                        <dl>
+                            <dt><label for=\"forum_version\">Genutztes Forum:</label></dt>
+                            <dd>
+                                <select size=\"1\" id=\"forum_version\" name=\"forum_version\">
+                                    <option value=\"phpbb2\" ";
+                                    if($form_values['forum_version'] == "phpbb2")
+                                    {
+                                        echo " selected=\"selected\" ";
+                                    }
+                                    echo ">phpbb2</option>
+                                    <option value=\"phpbb3\" ";
+                                    if($form_values['forum_version'] == "phpbb3")
+                                    {
+                                        echo " selected=\"selected\" ";
+                                    }
+                                    echo ">phpbb3</option>
+                                    <option value=\"smf1\" ";
+                                    if($form_values['forum_version'] == "smf1")
+                                    {
+                                        echo " selected=\"selected\" ";
+                                    }
+                                    echo ">smf1</option>
+                                </select>
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Welches Forum soll genutzt werden?<br/>
+						<table summary=\"Forum_Auflistung\" border=\"0\">
+							<tr><td>1) \"phpbb2\"</td><td> - PHP Bulletin Board 2.x (Standart)</td></tr>
+							<tr><td>2) \"phpbb3\"</td><td> - PHP Bulletin Board 3.x *NOCH NICHT GENUTZT*</td></tr>
+							<tr><td>3) \"smf1\"</td><td> - Simple Minds Forum 1.x *NOCH NICHT GENUTZT*</td></tr>						
+						</table>
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"forum_export\">Forum export:</label></dt>
+                            <dd>
+								 <select size=\"1\" id=\"forum_export\" name=\"forum_export\">
+                                    <option value=\"0\" ";
+                                    if($form_values['forum_export'] == "0")
+                                    {
+                                        echo " selected=\"selected\" ";
+                                    }
+                                    echo ">nein</option>
+                                    <option value=\"1\" ";
+                                    if($form_values['forum_export'] == "1")
+                                    {
+                                        echo " selected=\"selected\" ";
+                                    }
+                                    echo ">ja</option>
+                                </select>
+                             </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Vorhandene Admidio Accounts automatisch beim anmelden des Users ins Forum exportieren und einen Forum Account erstellen? (Standardwert: ja)
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"forum_praefix\">Forum Tabellen praefix:</label></dt>
+                            <dd>
+                                <input type=\"text\" id=\"forum_praefix\" name=\"forum_praefix\" size=\"6\" value=\"". $form_values['forum_praefix']. "\" />
+                             </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Hier wird der prefix der Tabellen des phpBB-Forums angegeben. (Bsp.: phpbb)
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"forum_zugangsdaten\">Zugangsdaten zur Datenbank des Forums:</label></dt>
+                            <dd>
+								<table summary=\"Forum_Zugangsdaten\" border=\"0\">
+								<tr><td>Server:</td><td><input type=\"text\" id=\"forum_srv\" name=\"forum_srv\" size=\"20\" value=\"". $form_values['forum_srv']. "\" /></td></tr>
+								<tr><td>Datenbank:</td><td><input type=\"text\" id=\"forum_db\" name=\"forum_db\" size=\"20\" value=\"". $form_values['forum_db']. "\" /></td></tr>
+								<tr><td>Username:</td><td><input type=\"text\" id=\"forum_usr\" name=\"forum_usr\" size=\"20\" value=\"". $form_values['forum_usr']. "\" /></td></tr>
+								<tr><td>Passwort:</td><td><input type=\"password\" id=\"forum_pw\" name=\"forum_pw\" size=\"20\" value=\"". $form_values['forum_pw']. "\" /></td></tr>
+								
+								</table>
+                             </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Hier müssen wenn eines der obrigen Foren ausgewählt und es aktiviert wurde die Zugangsdaten dessen eingetragen werden.
+                    </li>                
                 </ul>
             </div>
         </div>";
