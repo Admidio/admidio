@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /******************************************************************************
  * Verschiedene Funktionen fuer Rollen
  *
@@ -222,8 +222,14 @@ else
 
     while ($row = $g_db->fetch_object($result))
     {
-        $email->addBlindCopy($row->email, "$row->first_name $row->last_name");
-        $rolle = $row->rol_name;
+        // Wenn im Empfänger-Pool die E-Mail-Adresse des Users vorhanden ist und dieser zu gleich eine Kopie
+        // der nachricht angefordert hat, so wird er bei den Empfängern ausgelassen und bekommt nur die Kopie,
+        // damit er nicht zwei mal die gleiche E-Mail bekommt.
+        if !(($row->email == $user->getValue("E-Mail")) && (isset($_POST['kopie']) && $_POST['kopie'] == true))
+        {
+            $email->addBlindCopy($row->email, "$row->first_name $row->last_name");
+            $rolle = $row->rol_name;                
+        }
     }
 
     //Falls in der Rolle kein User mit gueltiger Mailadresse oder die Rolle gar nicht in der Orga
