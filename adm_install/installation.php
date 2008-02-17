@@ -75,7 +75,7 @@ function showPage($message, $next_url, $icon, $icon_text, $focus = "next_page")
                 '</span>
                 <hr />
                 <div class="formSubmit" style="text-align: center;">
-                    <button type="button" id="next_page" name="next_page" value="'. $icon_text. '" onclick="startUpdate()"><img id="btn_icon" src="../adm_themes/classic/icons/'. $icon. '" alt="'. $icon_text. '" />&nbsp;<span id="btn_icon">'. $icon_text. '</span></button>
+                    <button type="button" id="next_page" name="next_page" value="'. $icon_text. '" onclick="startUpdate()"><img id="btn_icon" src="../adm_themes/classic/icons/'. $icon. '" alt="'. $icon_text. '" />&nbsp;<span id="btn_text">'. $icon_text. '</span></button>
                 </div>
             </div>
         </div>
@@ -405,16 +405,16 @@ elseif($req_mode == 5)
     
     $message = '<strong>Konfigurationsdatei anlegen</strong><br /><br />
                 Laden Sie die Konfigurationsdatei <strong>config.php</strong> herunter und kopieren Sie
-                diese in das Verzeichnis <strong>adm_config</strong>. Danach können Sie mit der Installation
-                fortfahren.<br /><br />
+                diese in das Admidio Hauptverzeichnis. Dort liegt auch schon eine <i>config_default.php</i>.<br /><br />
+                Erst nachdem Sie die Datei dort abgelegt haben, können Sie mit der Installation fortfahren.<br /><br />
                 
                 <span class="iconTextLink">
                     <a href="installation.php?mode=6"><img
-                    src="../adm_themes/classic/images/page_white_put.png" alt="config.php herunterladen" /></a>
+                    src="../adm_themes/classic/icons/page_white_put.png" alt="config.php herunterladen" /></a>
                     <a href="installation.php?mode=6">config.php herunterladen</a>
                 </span>
                 <br />';
-    showPage($message, "installation.php?mode=7", "database_in.png", "Admidio installieren", "config_file");    
+    showPage($message, "installation.php?mode=7", "database_in.png", "Admidio installieren", "next_page");    
 }
 elseif($req_mode == 6)
 {
