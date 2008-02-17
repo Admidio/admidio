@@ -539,8 +539,50 @@ class User extends TableAccess
     {
         return $this->checkRolesRight('rol_photo');
     }
-    
-    // Funktion prueft, ob der angemeldete User alle Listen einsehen darf    
+
+    // Funktion prueft, ob der User ein Profil einsehen darf    
+    function viewProfile($usr_id)
+    {
+		//Hat ein User Profileedit rechte, darf er es nauerlich auch sehen
+		if($this->editProfile($usr_id))
+		{
+			$view_profile = true;
+		}
+		else //ist das nicht der Fall, alle Rollen des uebergeben Users aufrufen, und fuer diese die Funktion viewRole aufrufen
+		{
+		 	$view_profile = false;
+			global $g_current_organization;
+            
+            $sql    = "SELECT rol_id
+                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                        WHERE mem_usr_id = ".$usr_id. "
+                          AND mem_valid  = 1
+                          AND mem_rol_id = rol_id
+                          AND rol_valid  = 1 
+                          AND rol_cat_id = cat_id
+                          AND cat_org_id = ". $g_current_organization->getValue("org_id");
+            $this->db->query($sql);
+			
+            if($this->db->num_rows() > 0)
+            {             
+				while($check_role = $this->db->fetch_array())
+                {
+					//Rollenrechte fur Rolle ueberpruefen
+					if($this->viewRole($check_role[0]))
+					{
+						$view_profile = true;
+					}
+				}
+            }
+            else
+            {
+                $view_profile = false;
+            }
+		}
+		return $view_profile;
+    }
+        
+    // Funktion prueft, ob der angemeldete User eine bestimmte oder alle Listen einsehen darf    
     function viewRole($rol_id)
     {
     	//Zunaechst abfrage ob der User durch irgendeine Rolle das Recht bekommt alle Listen einzusehen
@@ -575,10 +617,8 @@ class User extends TableAccess
         if ($this->roles_rights['rol_all_lists_view'] == 1)
         {
             return true;
-        }
-        
-        //Falls er das Recht nicht hat Kontrolle fuer eine bestimmte Rolle
-        else
+        }      
+        else  //Falls er das Recht nicht hat Kontrolle fuer eine bestimmte Rolle
         {
             //nachschauen ob Wert fuer Rolle schon ins Array geschrieben wurde
             if(array_key_exists  ($rol_id, $this->list_view_rights))
@@ -588,8 +628,7 @@ class User extends TableAccess
 				{
 					return true;
 				}
-				//Falls Rechte nicht besthen False ausgeben
-				else
+				else//Falls Rechte nicht besthen False ausgeben
 				{
 					return false;
 				}
