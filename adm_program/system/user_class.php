@@ -36,6 +36,10 @@
  * getVCard()           - Es wird eine vCard des Users als String zurueckgegeben
  * isWebmaster()        - gibt true/false zurueck, falls der User Mitglied der 
  *                        Rolle "Webmaster" ist
+ * viewProfile			- Ueberprueft ob der User das Profil eines uebrgebenen
+ * 						  Users einsehen darf
+ * viewRole				- Überprueft ob der User eine Uebergebene Rolle(Liste)
+ * 						  einsehen darf
  *
  *****************************************************************************/
 
