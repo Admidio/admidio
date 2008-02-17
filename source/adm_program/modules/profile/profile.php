@@ -34,6 +34,12 @@ else
     $a_user_id = $g_current_user->getValue("usr_id");
 }
 
+//Testen ob Recht besteht Profil einzusehn
+if(!$g_current_user->viewProfile($a_user_id))
+{
+    $g_message->show("norights");
+}
+
 // diese Funktion gibt den Html-Code fuer ein Feld mit Beschreibung wieder
 // dabei wird der Inhalt richtig formatiert
 function getFieldCode($field, $user_id)
