@@ -82,7 +82,14 @@ else
 }
 
 // Html-Kopf ausgeben
-$g_layout['title']  = "Rolle";
+if($req_rol_id > 0)
+{
+	$g_layout['title']  = "Rolle ändern";
+}
+else
+{
+	$g_layout['title']  = "Rolle anlegen";
+}
 $g_layout['header'] = "
     <script type=\"text/javascript\"><!--
         function hinzufuegen()
@@ -116,12 +123,10 @@ $g_layout['header'] = "
 
             form.submit();
         }
-    --></script>";
-
-$g_layout['header']	= "";
-$g_layout['header'] .= "
-<script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/calendar/CalendarPopup.js\"></script>
-<link rel=\"stylesheet\" href=\"".THEME_PATH. "/calendar.css\" type=\"text/css\" />";
+    --></script>
+    
+	<script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/calendar/CalendarPopup.js\"></script>
+	<link rel=\"stylesheet\" href=\"".THEME_PATH. "/calendar.css\" type=\"text/css\" />";
 
 require(THEME_SERVER_PATH. "/overall_header.php");
 
@@ -129,16 +134,7 @@ require(THEME_SERVER_PATH. "/overall_header.php");
 echo "
 <form id=\"formRole\" action=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$req_rol_id&amp;mode=2\" method=\"post\">
 <div class=\"formLayout\" id=\"edit_roles_form\">
-    <div class=\"formHead\">";
-        if($req_rol_id > 0)
-        {
-            echo "Rolle &auml;ndern";
-        }
-        else
-        {
-            echo "Rolle anlegen";
-        }
-    echo "</div>
+    <div class=\"formHead\">". $g_layout['title']. "</div>
     <div class=\"formBody\">
         <ul class=\"formFieldList\">
             <li>
@@ -174,7 +170,7 @@ echo "
                                 {
                                     echo " selected=\"selected\"";
                                 }
-                                echo ">- Bitte w&auml;hlen -</option>";
+                                echo ">- Bitte wählen -</option>";
 
                             $sql = "SELECT * FROM ". TBL_CATEGORIES. "
                                      WHERE cat_org_id = ". $g_current_organization->getValue("org_id"). "
@@ -200,7 +196,7 @@ echo "
 
         <div class=\"groupBox\" id=\"properties_box\" style=\"width: 90%;\">
             <div class=\"groupBoxHeadline\" id=\"properties_head\">
-                <a class=\"iconShowHide\" href=\"javascript:showHideBlock('properties_body','$g_root_path')\"><img 
+                <a class=\"iconShowHide\" href=\"javascript:showHideBlock('properties_body','". THEME_PATH. "')\"><img 
                 id=\"img_properties_body\" src=\"". THEME_PATH. "/icons/triangle_open.gif\" alt=\"ausblenden\" /></a>Eigenschaften
             </div>
 
@@ -288,7 +284,7 @@ echo "
         
         <div class=\"groupBox\" id=\"justifications_box\" style=\"width: 90%;\">
             <div class=\"groupBoxHeadline\">
-                <a class=\"iconShowHide\" href=\"javascript:showHideBlock('justifications_body','$g_root_path')\"><img 
+                <a class=\"iconShowHide\" href=\"javascript:showHideBlock('justifications_body','". THEME_PATH. "')\"><img 
                 id=\"img_justifications_body\" src=\"". THEME_PATH. "/icons/triangle_open.gif\" alt=\"ausblenden\" /></a>Berechtigungen
             </div>
 
@@ -479,7 +475,7 @@ echo "
 
         <div class=\"groupBox\" id=\"dates_box\" style=\"width: 90%;\">
             <div class=\"groupBoxHeadline\" id=\"dates_head\">
-                <a class=\"iconShowHide\" href=\"javascript:showHideBlock('dates_body','$g_root_path')\"><img 
+                <a class=\"iconShowHide\" href=\"javascript:showHideBlock('dates_body','". THEME_PATH. "')\"><img 
                 id=\"img_dates_body\" src=\"". THEME_PATH. "/icons/triangle_open.gif\" alt=\"ausblenden\" /></a>Termine / Treffen&nbsp;&nbsp;(optional)
             </div>
 
@@ -551,8 +547,8 @@ echo "
         
         <div class=\"groupBox\" id=\"dependancies_box\" style=\"width: 90%;\">
             <div class=\"groupBoxHeadline\" id=\"dependancies_head\">
-                <a class=\"iconShowHide\" href=\"javascript:showHideBlock('dependancies_body','$g_root_path')\"><img
-                id=\"img_dependancies_body\" src=\"". THEME_PATH. "/icons/triangle_open.gif\" alt=\"ausblenden\" /></a>Abh&auml;ngigkeiten&nbsp;&nbsp;(optional)
+                <a class=\"iconShowHide\" href=\"javascript:showHideBlock('dependancies_body','". THEME_PATH. "')\"><img
+                id=\"img_dependancies_body\" src=\"". THEME_PATH. "/icons/triangle_open.gif\" alt=\"ausblenden\" /></a>Abhängigkeiten&nbsp;&nbsp;(optional)
             </div>
 
             <div class=\"groupBoxBody\" id=\"dependancies_body\">  
@@ -669,11 +665,11 @@ echo "
         && $role->getValue("rol_weekday") == 0
         && strlen($role->getValue("rol_location")) == 0)
         {
-            echo "showHideBlock('dates_body','$g_root_path');\n";
+            echo "showHideBlock('dates_body','". THEME_PATH. "');\n";
         }
         if(count($childRoles) == 0)
         {
-            echo "showHideBlock('dependancies_body','$g_root_path');\n";
+            echo "showHideBlock('dependancies_body','". THEME_PATH. "');\n";
         }
     }
 echo "\n--></script>";
