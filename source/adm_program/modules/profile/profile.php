@@ -311,19 +311,23 @@ echo "
                                                                 $map_url = "http://maps.google.com/?q=". urlencode($user->getValue("Adresse"));
                                                                 if(strlen($user->getValue("PLZ"))  > 0)
                                                                 {
-                                                                    $map_url .= ",%20". $user->getValue("PLZ");
+                                                                    $map_url .= ",%20". urlencode($user->getValue("PLZ"));
                                                                 }
                                                                 if(strlen($user->getValue("Ort"))  > 0)
                                                                 {
-                                                                    $map_url .= ",%20". $user->getValue("Ort");
+                                                                    $map_url .= ",%20". urlencode($user->getValue("Ort"));
                                                                 }
                                                                 if(strlen($user->getValue("Land"))  > 0)
                                                                 {
-                                                                    $map_url .= ",%20". $user->getValue("Land");
+                                                                    $map_url .= ",%20". urlencode($user->getValue("Land"));
                                                                 }
 
-                                                                echo "<br />
-                                                                ( <a href=\"$map_url\" target=\"_blank\">Karte</a>";
+                                                                echo '<br />
+                                                                <span class="iconTextLink">
+																	<a href="'. $map_url. '" target="_blank"><img
+																		src="'. THEME_PATH. '/icons/map.png" alt="Karte" /></a>
+																	<a href="'. $map_url. '" target="_blank">Karte</a>
+																</span>';
 
                                                                 if($g_current_user->getValue("usr_id") != $a_user_id)
                                                                 {
@@ -335,34 +339,33 @@ echo "
                                                                         $route_url = "http://maps.google.com/?f=d&amp;saddr=". urlencode($g_current_user->getValue("Adresse"));
                                                                         if(strlen($g_current_user->getValue("PLZ"))  > 0)
                                                                         {
-                                                                            $route_url .= ",%20". $g_current_user->getValue("PLZ");
+                                                                            $route_url .= ",%20". urlencode($g_current_user->getValue("PLZ"));
                                                                         }
                                                                         if(strlen($g_current_user->getValue("Ort"))  > 0)
                                                                         {
-                                                                            $route_url .= ",%20". $g_current_user->getValue("Ort");
+                                                                            $route_url .= ",%20". urlencode($g_current_user->getValue("Ort"));
                                                                         }
                                                                         if(strlen($g_current_user->getValue("Land"))  > 0)
                                                                         {
-                                                                            $route_url .= ",%20". $g_current_user->getValue("Land");
+                                                                            $route_url .= ",%20". urlencode($g_current_user->getValue("Land"));
                                                                         }
 
                                                                         $route_url .= "&amp;daddr=". urlencode($user->getValue("Adresse"));
                                                                         if(strlen($user->getValue("PLZ"))  > 0)
                                                                         {
-                                                                            $route_url .= ",%20". $user->getValue("PLZ");
+                                                                            $route_url .= ",%20". urlencode($user->getValue("PLZ"));
                                                                         }
                                                                         if(strlen($user->getValue("Ort")) > 0)
                                                                         {
-                                                                            $route_url .= ",%20". $user->getValue("Ort");
+                                                                            $route_url .= ",%20". urlencode($user->getValue("Ort"));
                                                                         }
                                                                         if(strlen($user->getValue("Land")) > 0)
                                                                         {
-                                                                            $route_url .= ",%20". $user->getValue("Land");
+                                                                            $route_url .= ",%20". urlencode($user->getValue("Land"));
                                                                         }
                                                                         echo " - <a href=\"$route_url\" target=\"_blank\">Route anzeigen</a>";
                                                                     }
                                                                 }
-                                                                echo " )";
                                                             }
                                                         echo "</dd>
                                                     </dl>
