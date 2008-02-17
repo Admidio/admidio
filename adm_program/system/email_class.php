@@ -76,7 +76,7 @@ function Email()
 
     //Jetzt wird noch der ContentType der Mail gesetzt.
     //Dieser wird im Falle eines Attachments spaeter ersetzt.
-    $this->headerOptions['Content-Type'] = "text/plain; charset=utf8";
+    $this->headerOptions['Content-Type'] = "text/plain; charset=iso-8859-1";
     $this->headerOptions['Content-Transfer-Encoding'] = "quoted-printable";
     $this->contentType = "text/plain; charset=iso-8859-1";
     
