@@ -152,11 +152,18 @@ function getFieldCode($field, $user, $new_user)
     global $g_preferences, $g_root_path, $g_current_user;
     $value    = "";
     
-    // Kennzeichen fuer readonly setzen
+    // Felder sperren, falls dies so eingestellt wurde
     $readonly = "";
     if($field['usf_disabled'] == 1 && $g_current_user->editUser() == false && $new_user == 0)
     {
-        $readonly = " class=\"readonly\" readonly=\"readonly\" ";
+        if($field['usf_type'] == "CHECKBOX" || $field['usf_name'] == "Geschlecht")
+        {
+        	$readonly = ' disabled="disabled" ';
+        }
+        else
+        {
+        	$readonly = ' class="readonly" readonly="readonly" ';
+        }
     }
 
     // Code fuer die einzelnen Felder zusammensetzen    
