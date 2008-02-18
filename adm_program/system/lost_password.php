@@ -11,13 +11,6 @@
 require("common.php");
 require("email_class.php");
 
-
-//Wurde keine Veranstaltung uebergeben kann das Navigationsstack zurückgesetzt werden
-if ($pho_id == NULL)
-{
-    $_SESSION['navigation']->clear();
-}
-
 //URL auf Navigationstack ablegen
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
