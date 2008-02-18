@@ -1,21 +1,21 @@
 <?php
 /******************************************************************************
- * Klasse fuer Datenbanktabelle adm_files
+ * Klasse fuer Datenbanktabelle adm_folders
  *
  * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Diese Klasse dient dazu ein Fileobjekt zu erstellen.
- * Eine Datei kann ueber diese Klasse in der Datenbank verwaltet werden
+ * Diese Klasse dient dazu ein Folderobjekt zu erstellen.
+ * Ein Ordner kann ueber diese Klasse in der Datenbank verwaltet werden
  *
  * Das Objekt wird erzeugt durch Aufruf des Konstruktors und der Uebergabe der
  * aktuellen Datenbankverbindung:
- * $file = new File($g_db);
+ * $folder = new File($g_db);
  *
- * Mit der Funktion getFile($file_id) kann nun alle Informationen zum File
- * aus der Db ausgelsen werden.
+ * Mit der Funktion getFolder($folder_id) kann nun alle Informationen zum Folder
+ * aus der Db ausgelesen werden.
  *
  * Folgende Funktionen stehen nun zur Verfuegung:
  *
@@ -34,15 +34,15 @@ require_once(SERVER_PATH. "/adm_program/system/table_access_class.php");
 class File extends TableAccess
 {
     // Konstruktor
-    function File(&$db, $file_id = 0)
+    function Folder(&$db, $folder_id = 0)
     {
         $this->db            =& $db;
-        $this->table_name     = TBL_FILES;
-        $this->column_praefix = "fil";
+        $this->table_name     = TBL_FOLDERS;
+        $this->column_praefix = "fol";
 
-        if($file_id > 0)
+        if($folder_id > 0)
         {
-            $this->getFile($file_id);
+            $this->getFolder($folder_id);
         }
         else
         {
@@ -50,34 +50,15 @@ class File extends TableAccess
         }
     }
 
-    // File mit der uebergebenen ID aus der Datenbank auslesen
-    function getFile($file_id)
+    // Folder mit der uebergebenen ID aus der Datenbank auslesen
+    function getFolder($folder_id)
     {
         global $g_current_organization;
 
-        $tables    = TBL_FOLDERS;
-        $condition = "     fil_id     = $file_id
-        		       AND fil_fol_id = fol_id
+        $condition = "     fol_id     = $folder_id
                        AND fol_org_id = ". $g_current_organization->getValue("org_id");
-        $this->readData($file_id, $condition, $tables);
+        $this->readData($folder_id, $condition);
     }
-
-	// File mit der uebergebenen ID aus der Datenbank auslesen fuer das Downloadmodul
-	// Hier wird auch direkt ueberprueft ob die Datei oder der Ordner gesperrt ist.
-    function getFileForDownload($file_id)
-    {
-        global $g_current_organization;
-
-        $tables    = TBL_FOLDERS. ", ". TBL_FOLDER_ROLES;
-        $condition = "     fil_id     = $file_id
-        		       AND fil_fol_id = fol_id
-        		       AND fil_locked = 0
-        		       AND fol_locked = 0
-        		       AND fol_type   = 'download'
-                       AND fol_org_id = ". $g_current_organization->getValue("org_id");
-        $this->readData($file_id, $condition, $tables);
-    }
-
 
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
     // die Funktion wird innerhalb von save() aufgerufen
@@ -87,8 +68,8 @@ class File extends TableAccess
 
         if($this->new_record)
         {
-            $this->setValue("fil_timestamp", date("Y-m-d H:i:s", time()));
-            $this->setValue("fil_usr_id", $g_current_user->getValue("usr_id"));
+            $this->setValue("fol_timestamp", date("Y-m-d H:i:s", time()));
+            $this->setValue("fol_usr_id", $g_current_user->getValue("usr_id"));
         }
 
     }

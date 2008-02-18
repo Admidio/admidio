@@ -471,6 +471,7 @@ create table %PRAEFIX%_folders
    fol_name                       varchar(255)                   not null,
    fol_path                       text                           not null,
    fol_locked                     tinyint (1) unsigned           not null default 0,
+   fol_public                     tinyint (1) unsigned           not null default 0,
    fol_timestamp                  datetime                       not null,
    fol_usr_id                     int(11) unsigned,
    primary key (fol_id)
