@@ -126,7 +126,14 @@ if (!$g_valid_login && $g_preferences['flooding_protection_time'] != 0)
 }
 
 // Html-Kopf ausgeben
-$g_layout['title'] = $_GET["headline"];
+if ($_GET['id'] > 0)
+{
+    $g_layout['title'] = "Gästebucheintrag ändern";
+}
+else
+{
+    $g_layout['title'] = "Gästebucheintrag anlegen";
+}
 require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
@@ -142,16 +149,7 @@ else
 echo "
 <form action=\"$g_root_path/adm_program/modules/guestbook/guestbook_function.php?id=". $_GET["id"]. "&amp;headline=". $_GET['headline']. "&amp;mode=$mode\" method=\"post\">
 <div class=\"formLayout\" id=\"edit_guestbook_form\">
-    <div class=\"formHead\">";
-        if ($_GET['id'] > 0)
-        {
-            echo "Gästebucheintrag ändern";
-        }
-        else
-        {
-            echo "Gästebucheintrag anlegen";
-        }
-    echo "</div>
+    <div class=\"formHead\">". $g_layout['title']. "</div>
     <div class=\"formBody\">
         <ul class=\"formFieldList\">
             <li>

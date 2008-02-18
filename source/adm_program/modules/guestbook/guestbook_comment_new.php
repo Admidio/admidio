@@ -149,27 +149,24 @@ if (!$g_valid_login && $g_preferences['flooding_protection_time'] != 0)
 }
 
 // Html-Kopf ausgeben
-$g_layout['title'] = $_GET["headline"];
-require(THEME_SERVER_PATH. "/overall_header.php");
-
-// Html des Modules ausgeben
 if (isset($_GET['id']))
 {
     $id   = $_GET['id'];
     $mode = "4";
-    $headline = "Kommentar anlegen";
+    $g_layout['title'] = "Kommentar anlegen";
 }
 else
 {
     $id   = $_GET['cid'];
     $mode = "8";
-    $headline = "Kommentar editieren";
+    $g_layout['title'] = "Kommentar editieren";
 }
+require(THEME_SERVER_PATH. "/overall_header.php");
 
 echo "
 <form action=\"$g_root_path/adm_program/modules/guestbook/guestbook_function.php?id=$id&amp;headline=". $_GET['headline']. "&amp;mode=$mode\" method=\"post\">
 <div class=\"formLayout\" id=\"edit_guestbook_comment_form\">
-    <div class=\"formHead\">$headline</div>
+    <div class=\"formHead\">". $g_layout['title']. "</div>
     <div class=\"formBody\">
         <ul class=\"formFieldList\">
             <li>

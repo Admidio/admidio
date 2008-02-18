@@ -137,11 +137,17 @@ function subfolder($parent_id, $vorschub, $photo_event, $pho_id)
 
 /******************************HTML-Kopf******************************************/
 
-$g_layout['title'] = "Foto-Album-Verwaltung";
-$g_layout['header']	= "";
-$g_layout['header'] .= "
-<script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/calendar/CalendarPopup.js\"></script>
-<link rel=\"stylesheet\" href=\"".THEME_PATH. "/calendar.css\" type=\"text/css\" />";
+if($_GET["job"]=="new")
+{
+    $g_layout['title'] = "Neues Album anlegen";
+}
+elseif($_GET["job"]=="change")
+{
+    $g_layout['title'] = "Album bearbeiten";
+}
+$g_layout['header'] = "
+    <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/calendar/CalendarPopup.js\"></script>
+    <link rel=\"stylesheet\" href=\"".THEME_PATH. "/calendar.css\" type=\"text/css\" />";
 
 require(THEME_SERVER_PATH. "/overall_header.php");
 echo"<h1 class=\"moduleHeadline\">Foto-Album-Verwaltung</h1>";
@@ -152,18 +158,7 @@ echo"<h1 class=\"moduleHeadline\">Foto-Album-Verwaltung</h1>";
 echo "
 <form method=\"post\" action=\"$g_root_path/adm_program/modules/photos/photo_event_function.php?pho_id=". $_GET["pho_id"]. "&amp;job=". $_GET["job"]. "\">
 <div class=\"formLayout\" id=\"photo_event_new_form\">
-    <div class=\"formHead\">";
-        //bei neuem Album
-        if($_GET["job"]=="new")
-        {
-            echo "Neues Album anlegen";
-        }
-        //bei bestehendem Album
-        if($_GET["job"]=="change")
-        {
-                echo "Album bearbeiten";
-        }
-    echo"</div>
+    <div class=\"formHead\">". $g_layout['title']. "</div>
     <div class=\"formBody\">";
         //Album
         echo"

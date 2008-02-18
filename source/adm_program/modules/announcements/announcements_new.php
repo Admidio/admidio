@@ -82,7 +82,14 @@ if(isset($_SESSION['announcements_request']))
 }
 
 // Html-Kopf ausgeben
-$g_layout['title'] = $req_headline;
+if($req_ann_id > 0)
+{
+    $g_layout['title'] = $req_headline. " ändern";
+}
+else
+{
+    $g_layout['title'] = $req_headline. " anlegen";
+}
 
 require(THEME_SERVER_PATH. "/overall_header.php");
 
@@ -90,16 +97,7 @@ require(THEME_SERVER_PATH. "/overall_header.php");
 echo "
 <form method=\"post\" action=\"$g_root_path/adm_program/modules/announcements/announcements_function.php?ann_id=$req_ann_id&amp;headline=". $_GET['headline']. "&amp;mode=1\">
 <div class=\"formLayout\" id=\"edit_announcements_form\">
-    <div class=\"formHead\">";
-        if($req_ann_id > 0)
-        {
-            echo "$req_headline ändern";
-        }
-        else
-        {
-            echo "$req_headline anlegen";
-        }
-    echo "</div>
+    <div class=\"formHead\">". $g_layout['title']. "</div>
     <div class=\"formBody\">
         <ul class=\"formFieldList\">
             <li>

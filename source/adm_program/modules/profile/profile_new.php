@@ -341,36 +341,32 @@ function getFieldCode($field, $user, $new_user)
 }
 
 // Html-Kopf ausgeben
-$g_layout['title'] = "Profil bearbeiten";
-
-$g_layout['header']	= "";
-$g_layout['header'] .= "
-<script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/calendar/CalendarPopup.js\"></script>
-<link rel=\"stylesheet\" href=\"".THEME_PATH. "/calendar.css\" type=\"text/css\" />";
+if($new_user == 1)
+{
+    $g_layout['title'] = "Neuer Benutzer";
+}
+elseif($new_user == 2)
+{
+    $g_layout['title'] = "Registrieren";
+}
+elseif($usr_id == $g_current_user->getValue("usr_id"))
+{
+    $g_layout['title'] = "Mein Profil";
+}
+else
+{
+    $g_layout['title'] = "Profil von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname");
+}
+$g_layout['header'] = "
+    <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/calendar/CalendarPopup.js\"></script>
+    <link rel=\"stylesheet\" href=\"".THEME_PATH. "/calendar.css\" type=\"text/css\" />";
 
 require(THEME_SERVER_PATH. "/overall_header.php");
 
 echo "
 <form action=\"$g_root_path/adm_program/modules/profile/profile_save.php?user_id=$usr_id&amp;new_user=$new_user\" method=\"post\">
 <div class=\"formLayout\" id=\"edit_profile_form\">
-    <div class=\"formHead\">";
-        if($new_user == 1)
-        {
-            echo "Neuer Benutzer";
-        }
-        elseif($new_user == 2)
-        {
-            echo "Registrieren";
-        }
-        elseif($usr_id == $g_current_user->getValue("usr_id"))
-        {
-            echo "Mein Profil";
-        }
-        else
-        {
-            echo "Profil von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname");
-        }
-    echo "</div>
+    <div class=\"formHead\">". $g_layout['title']. "</div>
     <div class=\"formBody\">"; 
         // *******************************************************************************
         // Schleife ueber alle Kategorien und Felder ausser den Stammdaten
