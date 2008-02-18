@@ -284,7 +284,14 @@ else
 /*********************HTML_TEIL*******************************/
 
 // Html-Kopf ausgeben
-$g_layout['title'] = $g_organization." - Grußkarten";
+if(! empty($submit_action))
+{
+    $g_layout['title'] = "Grußkarte wegschicken";
+}
+else
+{
+    $g_layout['title'] = "Grußkarte bearbeiten";
+}
 //Lightbox-Mode
 $g_layout['header'] = "";
 if($g_preferences['photo_show_mode']==1)
@@ -821,17 +828,7 @@ echo '
 		 </div>
 	</div>
 </noscript>
-    <div class="formHead">';
-	if(! empty($submit_action))
-	{
-	    echo "Grußkarte wegschicken";
-	}
-	else
-	{
-	    echo "Grußkarte bearbeiten";
-	}
-echo'
-	</div>
+    <div class="formHead">'. $g_layout['title']. '</div>
 	<div class="formBody">
 	<div>';
 if (empty($submit_action))

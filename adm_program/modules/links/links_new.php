@@ -80,7 +80,14 @@ if(isset($_SESSION['links_request']))
 }
 
 // Html-Kopf ausgeben
-$g_layout['title'] = $_GET["headline"];
+if($_GET["lnk_id"] > 0)
+{
+    $g_layout['title'] = $_GET["headline"]. " ändern";
+}
+else
+{
+    $g_layout['title'] = $_GET["headline"]. " anlegen";
+}
 require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
@@ -96,16 +103,7 @@ else
 echo "
 <form action=\"$g_root_path/adm_program/modules/links/links_function.php?lnk_id=". $_GET["lnk_id"]. "&amp;headline=". $_GET['headline']. "&amp;mode=$new_mode\" method=\"post\">
 <div class=\"formLayout\" id=\"edit_links_form\">
-    <div class=\"formHead\">";
-        if($_GET["lnk_id"] > 0)
-        {
-            echo $_GET["headline"]. " &auml;ndern";
-        }
-        else
-        {
-            echo $_GET["headline"]. " anlegen";
-        }
-    echo "</div>
+    <div class=\"formHead\">". $g_layout['title']. "</div>
     <div class=\"formBody\">
         <ul class=\"formFieldList\">
             <li>
@@ -136,7 +134,7 @@ echo "
                                 {
                                     echo " selected=\"selected\"";
                                 }
-                                echo ">- Bitte w&auml;hlen -</option>";
+                                echo ">- Bitte wählen -</option>";
 
                             $sql = "SELECT * FROM ". TBL_CATEGORIES. "
                                      WHERE cat_org_id = ". $g_current_organization->getValue("org_id"). "

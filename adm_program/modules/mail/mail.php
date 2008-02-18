@@ -206,7 +206,14 @@ if(isset($_GET["usr_id"]) == false && isset($_GET["rol_id"]) == false)
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Html-Kopf ausgeben
-$g_layout['title'] = "E-Mail verschicken";
+if (strlen($_GET["subject"]) > 0)
+{
+    $g_layout['title'] = $_GET["subject"];
+}
+else
+{
+    $g_layout['title'] = "E-Mail verschicken";
+}
 if($g_preferences['enable_rss'] == 1)
 {
     $g_layout['header'] =  "<link type=\"application/rss+xml\" rel=\"alternate\" title=\"". $g_current_organization->getValue("org_longname"). " - Ankuendigungen\"
@@ -225,16 +232,7 @@ echo "
     echo "\" method=\"post\" enctype=\"multipart/form-data\">
 
     <div class=\"formLayout\" id=\"write_mail_form\">
-        <div class=\"formHead\">";
-            if ($_GET["subject"] == "")
-            {
-                echo "E-Mail verschicken";
-            }
-            else
-            {
-                echo $_GET["subject"];
-            }
-        echo "</div>
+        <div class=\"formHead\">". $g_layout['title']. "</div>
         <div class=\"formBody\">
             <ul class=\"formFieldList\">
                 <li>

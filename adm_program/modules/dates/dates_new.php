@@ -101,9 +101,15 @@ else
 }
 
 // Html-Kopf ausgeben
-$g_layout['title']	= $_GET["headline"];
-$g_layout['header']	= "";
-$g_layout['header'] .= "
+if($req_dat_id > 0)
+{
+    $g_layout['title'] = $_GET['headline']. " ändern";
+}
+else
+{
+    $g_layout['title'] = $_GET['headline']. " anlegen";
+}
+$g_layout['header'] = "
     <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/calendar/CalendarPopup.js\"></script>
     <link rel=\"stylesheet\" href=\"".THEME_PATH. "/calendar.css\" type=\"text/css\" />
     
@@ -141,16 +147,7 @@ require(THEME_SERVER_PATH. "/overall_header.php");
 echo "
 <form method=\"post\" action=\"$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=$req_dat_id&amp;mode=1\">
 <div class=\"formLayout\" id=\"edit_dates_form\">
-    <div class=\"formHead\">";
-        if($req_dat_id > 0)
-        {
-            echo $_GET['headline']. " ändern";
-        }
-        else
-        {
-            echo $_GET['headline']. " anlegen";
-        }
-    echo "</div>
+    <div class=\"formHead\">". $g_layout['title']. "</div>
     <div class=\"formBody\">
         <ul class=\"formFieldList\">
             <li>
