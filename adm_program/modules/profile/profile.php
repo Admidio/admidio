@@ -542,7 +542,15 @@ echo "
                                 echo '<li id="role_'. $row['mem_rol_id']. '">
                                     <dl>
                                         <dt>
-                                            '. $row['cat_name']. ' - <a href="'. $g_root_path. '/adm_program/modules/lists/lists_show.php?type=address&mode=html&rol_id='. $row['mem_rol_id']. '" title="'. $row['rol_description']. '">'. $row['rol_name']. '</a>';
+                                            '. $row['cat_name']. ' - ';
+                                				if($g_current_user->viewRole($row['mem_rol_id']))
+                                				{
+													echo'<a href="'. $g_root_path. '/adm_program/modules/lists/lists_show.php?type=address&mode=html&rol_id='. $row['mem_rol_id']. '" title="'. $row['rol_description']. '">'. $row['rol_name']. '</a>';
+                                				}
+                                				else
+                                				{
+													echo $row['rol_name'];	
+                                				}
                                                 if($row['mem_leader'] == 1)
                                                 {
                                                     echo ' - Leiter';
@@ -685,7 +693,15 @@ echo "
                                 <li id=\"former_role_". $row['mem_rol_id']. "\">
                                     <dl>
                                         <dt>".
-                                            $row['cat_name']. " - <a href=\"$g_root_path/adm_program/modules/lists/lists_show.php?type=address&mode=html&rol_id=". $row['mem_rol_id']. "\">". $row['rol_name']. "</a>";
+                                            $row['cat_name'];
+                           					 if($g_current_user->viewRole($row['mem_rol_id']))
+                               				{
+												echo" - <a href=\"$g_root_path/adm_program/modules/lists/lists_show.php?type=address&mode=html&rol_id=". $row['mem_rol_id']. "\">". $row['rol_name']. "</a>";
+                               				}
+                               				else
+                               				{
+												echo" - ".$row['rol_name'];	
+                               				}
                                             if($row['mem_leader'] == 1)
                                             {
                                                 echo " - Leiter";
