@@ -111,7 +111,7 @@ else
              AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
              AND cat_type = 'LNK'
              ORDER BY cat_sequence, lnk_name, lnk_timestamp DESC
-             LIMIT ". $_GET['start']. ", 10 ";
+             LIMIT ". $_GET['start']. ", ". $linksPerPage;
 }
 
 $links_result = $g_db->query($sql1);
@@ -170,7 +170,7 @@ if ($_GET['id'] == 0 && ($g_current_user->editWeblinksRight() || $g_preferences[
 
     // Navigation mit Vor- und Zurueck-Buttons
     $baseUrl = "$g_root_path/adm_program/modules/links/links.php?headline=". $_GET["headline"];
-    echo generatePagination($baseUrl, $numLinks, 10, $_GET["start"], TRUE);
+    echo generatePagination($baseUrl, $numLinks, $linksPerPage, $_GET["start"], TRUE);
 }
 
 if ($g_db->num_rows($links_result) == 0)
@@ -182,7 +182,7 @@ if ($g_db->num_rows($links_result) == 0)
     }
     else
     {
-        echo "<p>Es sind keine Eintr&auml;ge vorhanden.</p>";
+        echo "<p>Es sind keine Einträge vorhanden.</p>";
     }
 }
 else
@@ -313,7 +313,7 @@ if ($g_db->num_rows($links_result) > 2)
     // Navigation mit Vor- und Zurueck-Buttons
     // erst anzeigen, wenn mehr als 2 Eintraege (letzte Navigationsseite) vorhanden sind
     $baseUrl = "$g_root_path/adm_program/modules/links/links.php?headline=". $_GET["headline"];
-    echo generatePagination($baseUrl, $numLinks, 10, $_GET["start"], TRUE);
+    echo generatePagination($baseUrl, $numLinks, $linksPerPage, $_GET["start"], TRUE);
 }
 
 require(THEME_SERVER_PATH. "/overall_footer.php");
