@@ -42,8 +42,8 @@ else
 //Fileobject erstellen
 $file = new File($g_db);
 
-//Fileproperties aus DB lesen
-$file->getFile($_GET['file_id']);
+//Fileproperties aus DB lesen fuer den Download
+$file->getFileForDownload($_GET['file_id']);
 
 //pruefen ob ueberhaupt ein Datensatz in der DB gefunden wurde...
 if (!$file->getValue('fil_id'))
@@ -52,19 +52,19 @@ if (!$file->getValue('fil_id'))
 	$g_message->show("invalid");
 }
 
-//pruefen ob das File oder der Ordner, in dem sich die Datei befindet, gelocked ist:
-if ($file->getValue("fil_locked") ||  $file->getValue("fol_locked"))
-{
-	$g_message->show("invalid");
-}
+
 
 //TODO: pruefen ob der User die Berechtigung hat das File runterzuladen...
+if ($file->getValue('fol_public') == 0)
+{
+	//Pruefen ob der Benutzer das Recht hat die Datei herunterzuladen
+}
 
 //Dateinamen und Pfad zusammen setzen
 $fileName     = $file->getValue("fil_name");
 $folderPath   = $file->getValue("fol_path");
 $folderName   = $file->getValue("fol_name");
-$completePath = "$folderPath/$folderName/$fileName";
+$completePath = SERVER_PATH. "/adm_my_files/downloads/". $folderPath. "/". $folderName. "/". $fileName;
 
 //pruefen ob File ueberhaupt physikalisch existiert
 if (!file_exists($completePath))
