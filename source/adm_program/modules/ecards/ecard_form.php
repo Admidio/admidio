@@ -5,8 +5,6 @@
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Roland Eischer 
- * Based on     : Jochen Erkens: Photogalerien &
- *                Elmar Meuthen: E-Mails verschicken
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
