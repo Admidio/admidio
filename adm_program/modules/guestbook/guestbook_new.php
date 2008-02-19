@@ -191,7 +191,7 @@ echo "
                         if ($g_preferences['enable_bbcode'] == 1)
                         {
                           echo "<br /><br />
-                          <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\" tabindex=\"4\">Text formatieren</a>";
+                          <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode&amp;window=true','Message','width=650,height=320,left=310,top=200,scrollbars=yes')\">Text formatieren</a>";
                         }
                     echo "</dt>
                     <dd>

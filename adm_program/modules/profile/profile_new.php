@@ -262,7 +262,7 @@ function getFieldCode($field, $user, $new_user)
 						cal18.setCssPrefix(\"calendar\");
 					</script>
 					<input type=\"text\" id=\"usf". $field['usf_id']. "\" name=\"usf-". $field['usf_id']. "\" style=\"width: $width;\" maxlength=\"$maxlength\" $readonly value=\"". $field['usd_value']. "\" $readonly />
-					<img src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:cal18.select(document.forms[0].usf". $field['usf_id']. ",'anchor". $field['usf_id']. "','dd.MM.yyyy'); return false;\" id=\"anchor". $field['usf_id']. "\" style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
+					<img src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:cal18.select(document.forms[0].usf". $field['usf_id']. ",'anchor". $field['usf_id']. "','dd.MM.yyyy');\" id=\"anchor". $field['usf_id']. "\" style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
 					<span id=\"calendardiv\" style=\"position: absolute; visibility: hidden; \"></span>";
 		}
 		else if ($field['usf_name'] == 'Geburtstag')
@@ -274,7 +274,7 @@ function getFieldCode($field, $user, $new_user)
 						cal19.setYearSelectStartOffset(30)
 					</script>
 					<input type=\"text\" id=\"usf". $field['usf_id']. "\" name=\"usf-". $field['usf_id']. "\" style=\"width: $width;\" maxlength=\"$maxlength\" $readonly value=\"". $field['usd_value']. "\" $readonly />
-					<img src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:cal19.select(document.forms[0].usf". $field['usf_id']. ",'anchor". $field['usf_id']. "','dd.MM.yyyy'); return false;\" id=\"anchor". $field['usf_id']. "\" style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
+					<img src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:cal19.select(document.forms[0].usf". $field['usf_id']. ",'anchor". $field['usf_id']. "','dd.MM.yyyy');\" id=\"anchor". $field['usf_id']. "\" style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
 					<span id=\"calendardiv\" style=\"position: absolute; visibility: hidden; \"></span>";
 		}
 		else
@@ -325,8 +325,8 @@ function getFieldCode($field, $user, $new_user)
     $description = "";
     if(strlen($field['usf_description']) > 0 && $field['cat_name'] != "Messenger")
     {
-        $description = "<img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
-        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=user_field_description&amp;err_text=". urlencode($field['usf_name']). "','Message','width=400,height=400,left=310,top=200,scrollbars=yes')\" />";
+        $description = "<img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\"
+		onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=user_field_description&amp;err_text=". urlencode($field['usf_name']). "',this);\" onmouseout=\"ajax_hideTooltip()\" />";
     }
     
     // nun den Html-Code fuer das Feld zusammensetzen
@@ -430,8 +430,7 @@ echo "
                                 if($new_user > 0)
                                 {
                                     echo "<span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
-                                    <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
-                                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=nickname','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\" />";
+                                    <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=nickname',this);\" onmouseout=\"ajax_hideTooltip()\"/>";
                                 }
                             echo "</dd>
                         </dl>
@@ -445,8 +444,7 @@ echo "
                                 <dd>
                                     <input type=\"password\" id=\"usr_password\" name=\"usr_password\" style=\"width: 130px;\" maxlength=\"20\" />
                                     <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
-                                    <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
-                                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=password','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\" />
+                                    <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=password',this);\" onmouseout=\"ajax_hideTooltip()\" />
                                 </dd>
                             </dl>
                         </li>
@@ -501,8 +499,7 @@ echo "
                         <dd>
                             <input type=\"text\" id=\"captcha\" name=\"captcha\" style=\"width: 200px;\" maxlength=\"8\" value=\"\" />
                             <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
-                            <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
-                             onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=captcha_help','Message','width=400,height=320,left=310,top=200,scrollbars=yes')\" />
+                            <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=captcha_help',this);\" onmouseout=\"ajax_hideTooltip()\" />
                         </dd>
                     </dl>
                 </li>

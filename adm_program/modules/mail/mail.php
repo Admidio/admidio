@@ -217,9 +217,9 @@ else
 if($g_preferences['enable_rss'] == 1)
 {
     $g_layout['header'] =  "<link type=\"application/rss+xml\" rel=\"alternate\" title=\"". $g_current_organization->getValue("org_longname"). " - Ankuendigungen\"
-    href=\"$g_root_path/adm_program/modules/announcements/rss_announcements.php\" />";
+    href=\"$g_root_path/adm_program/modules/announcements/rss_announcements.php\" />
+	";
 };
-
 require(THEME_SERVER_PATH. "/overall_header.php");
 echo "
 <form action=\"$g_root_path/adm_program/modules/mail/mail_send.php?";
@@ -322,8 +322,7 @@ echo "
 
                                 echo "</optgroup>
                                 </select>
-                                <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
-                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_mail','Message','width=400,height=400,left=310,top=200')\" />";
+                                <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_mail',this);return false\" onmouseout=\"ajax_hideTooltip()\"/>";
                             }
                             echo "<span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                         </dd>

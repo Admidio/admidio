@@ -148,7 +148,6 @@ elseif($_GET["job"]=="change")
 $g_layout['header'] = "
     <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/calendar/CalendarPopup.js\"></script>
     <link rel=\"stylesheet\" href=\"".THEME_PATH. "/calendar.css\" type=\"text/css\" />";
-
 require(THEME_SERVER_PATH. "/overall_header.php");
 echo"<h1 class=\"moduleHeadline\">Foto-Album-Verwaltung</h1>";
 
@@ -215,7 +214,7 @@ echo "
 							cal18.setCssPrefix(\"calendar\");
 						</script>
 						<input type=\"text\" id=\"pho_begin\" name=\"pho_begin\" size=\"10\" tabindex=\"3\" maxlength=\"10\" value=\"". $photo_event->getValue("pho_begin")."\" />
-						<img src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:cal18.select(document.forms[0].pho_begin,'anchor18','dd.MM.yyyy'); return false;\" id=\"anchor18\" style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
+						<img src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:cal18.select(document.forms[0].pho_begin,'anchor18','dd.MM.yyyy'); \" id=\"anchor18\" style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
 						<span id=\"calendardiv\" style=\"position: absolute; visibility: hidden; \"></span>
                         <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                     </dd>
@@ -229,7 +228,7 @@ echo "
                     <dt><label for=\"pho_end\">Ende:</label></dt>
                     <dd>
 						<input type=\"text\" id=\"pho_end\" name=\"pho_end\" size=\"10\" maxlength=\"10\" value=\"". $photo_event->getValue("pho_end")."\">
-						<img src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:cal18.select(document.forms[0].pho_end,'anchor17','dd.MM.yyyy'); return false;\" id=\"anchor17\" style=\"vertical-align:middle;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
+						<img src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:cal18.select(document.forms[0].pho_end,'anchor17','dd.MM.yyyy');\" id=\"anchor17\" style=\"vertical-align:middle;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
                     </dd>
                 </dl>
             </li>";
@@ -271,6 +270,7 @@ echo "
                 &nbsp;Speichern
             </button>
         </div>
+            
     </div>
 </div>
 </form>
@@ -283,14 +283,14 @@ echo "
             <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
         </span>
     </li>
-    
-    <li>
-        <span class=\"iconTextLink\">
-            <img src=\"". THEME_PATH. "/icons/help.png\" class=\"iconLink\" alt=\"Hilfe\" title=\"Hilfe\"
-            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_up_help','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\" />   
-            <a onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=veranst_help','Message','width=500,height=400,left=310,top=200,scrollbars=yes')\">Hilfe</a>
+	<li>
+		<span class=\"iconLink\">
+
+            <img src=\"". THEME_PATH. "/icons/help.png\" class=\"iconLink\" alt=\"Hilfe\"
+onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=veranst_help',this);\" onmouseout=\"ajax_hideTooltip()\" />   
+            <a href=\"\" alt=\"Hilfe\" class=\"iconLink\" onclick=\"window.open('http://localhost/htdocs/admidio/adm_program/system/msg_window.php?err_code=veranst_help&amp;window=true','Message','width=500,height=600,left=310,top=200,scrollbars=yes')\">Hilfe</a>
         </span>
-    </li>
+		</li>
 </ul>
 
 

@@ -82,14 +82,7 @@ else
 }
 
 // Html-Kopf ausgeben
-if($req_rol_id > 0)
-{
-	$g_layout['title']  = "Rolle ändern";
-}
-else
-{
-	$g_layout['title']  = "Rolle anlegen";
-}
+$g_layout['title']  = "Rolle";
 $g_layout['header'] = "
     <script type=\"text/javascript\"><!--
         function hinzufuegen()
@@ -123,10 +116,12 @@ $g_layout['header'] = "
 
             form.submit();
         }
-    --></script>
-    
-	<script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/calendar/CalendarPopup.js\"></script>
-	<link rel=\"stylesheet\" href=\"".THEME_PATH. "/calendar.css\" type=\"text/css\" />";
+    --></script>";
+
+$g_layout['header']	= "";
+$g_layout['header'] .= "
+<script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/calendar/CalendarPopup.js\"></script>
+<link rel=\"stylesheet\" href=\"".THEME_PATH. "/calendar.css\" type=\"text/css\" />";
 
 require(THEME_SERVER_PATH. "/overall_header.php");
 
@@ -134,7 +129,16 @@ require(THEME_SERVER_PATH. "/overall_header.php");
 echo "
 <form id=\"formRole\" action=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$req_rol_id&amp;mode=2\" method=\"post\">
 <div class=\"formLayout\" id=\"edit_roles_form\">
-    <div class=\"formHead\">". $g_layout['title']. "</div>
+    <div class=\"formHead\">";
+        if($req_rol_id > 0)
+        {
+            echo "Rolle &auml;ndern";
+        }
+        else
+        {
+            echo "Rolle anlegen";
+        }
+    echo "</div>
     <div class=\"formBody\">
         <ul class=\"formFieldList\">
             <li>
@@ -170,7 +174,7 @@ echo "
                                 {
                                     echo " selected=\"selected\"";
                                 }
-                                echo ">- Bitte wählen -</option>";
+                                echo ">- Bitte w&auml;hlen -</option>";
 
                             $sql = "SELECT * FROM ". TBL_CATEGORIES. "
                                      WHERE cat_org_id = ". $g_current_organization->getValue("org_id"). "
@@ -196,7 +200,7 @@ echo "
 
         <div class=\"groupBox\" id=\"properties_box\" style=\"width: 90%;\">
             <div class=\"groupBoxHeadline\" id=\"properties_head\">
-                <a class=\"iconShowHide\" href=\"javascript:showHideBlock('properties_body','". THEME_PATH. "')\"><img 
+                <a class=\"iconShowHide\" href=\"javascript:showHideBlock('properties_body','$g_root_path')\"><img 
                 id=\"img_properties_body\" src=\"". THEME_PATH. "/icons/triangle_open.gif\" alt=\"ausblenden\" /></a>Eigenschaften
             </div>
 
@@ -233,8 +237,8 @@ echo "
                                 echo " value=\"1\" />
                             <label for=\"rol_locked\"><img src=\"". THEME_PATH. "/icons/lock.png\" alt=\"Rolle nur f&uuml;r berechtige Benutzer sichtbar\" /></label>&nbsp;
                             <label for=\"rol_locked\">Rolle nur f&uuml;r berechtige Benutzer sichtbar</label>
-                            <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
-                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_locked','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\" />
+                            <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\"
+							onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_locked',this);\" onmouseout=\"ajax_hideTooltip()\" />
                         </div>
                     </li>";
 
@@ -255,8 +259,7 @@ echo "
                                     echo " value=\"1\" />
                                 <label for=\"rol_mail_logout\"><img src=\"". THEME_PATH. "/icons/email.png\" alt=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\" /></label>&nbsp;
                                 <label for=\"rol_mail_logout\">Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben</label>
-                                <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
-                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_logout','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\" />
+                                <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\"  onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_logout',this);\" onmouseout=\"ajax_hideTooltip()\" />
                             </div>
                         </li>
                         <li>
@@ -273,8 +276,8 @@ echo "
                                     echo " value=\"1\" />
                                 <label for=\"rol_mail_login\"><img src=\"". THEME_PATH. "/icons/email_key.png\" alt=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\" /></label>&nbsp;
                                 <label for=\"rol_mail_login\">Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben</label>
-                                <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
-                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_login','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\" />
+                                <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" 
+onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_login',this);\" onmouseout=\"ajax_hideTooltip()\" />
                             </div>
                         </li>";
                     }
@@ -284,7 +287,7 @@ echo "
         
         <div class=\"groupBox\" id=\"justifications_box\" style=\"width: 90%;\">
             <div class=\"groupBoxHeadline\">
-                <a class=\"iconShowHide\" href=\"javascript:showHideBlock('justifications_body','". THEME_PATH. "')\"><img 
+                <a class=\"iconShowHide\" href=\"javascript:showHideBlock('justifications_body','$g_root_path')\"><img 
                 id=\"img_justifications_body\" src=\"". THEME_PATH. "/icons/triangle_open.gif\" alt=\"ausblenden\" /></a>Berechtigungen
             </div>
 
@@ -304,8 +307,8 @@ echo "
                             echo " value=\"1\" />&nbsp;
                             <label for=\"rol_assign_roles\"><img src=\"". THEME_PATH. "/icons/wand.png\" alt=\"Rollen verwalten und zuordnen\" /></label>
                             <label for=\"rol_assign_roles\">Rollen verwalten und zuordnen</label>
-                            <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
-                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_zuordnen','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\" />
+                            <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" 
+onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_zuordnen',this);\" onmouseout=\"ajax_hideTooltip()\" />
                         </div>
                     </li>
                     <li>
@@ -330,8 +333,8 @@ echo "
                             echo " value=\"1\" />&nbsp;
                             <label for=\"rol_edit_user\"><img src=\"". THEME_PATH. "/icons/group.png\" alt=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\" /></label>
                             <label for=\"rol_edit_user\">Profildaten und Rollenzuordnungen aller Benutzer bearbeiten</label>
-                            <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
-                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_benutzer','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\" />
+                            <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\"
+onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_benutzer',this);\" onmouseout=\"ajax_hideTooltip()\" />
                         </div>
                     </li>
                     <li>
@@ -475,7 +478,7 @@ echo "
 
         <div class=\"groupBox\" id=\"dates_box\" style=\"width: 90%;\">
             <div class=\"groupBoxHeadline\" id=\"dates_head\">
-                <a class=\"iconShowHide\" href=\"javascript:showHideBlock('dates_body','". THEME_PATH. "')\"><img 
+                <a class=\"iconShowHide\" href=\"javascript:showHideBlock('dates_body','$g_root_path')\"><img 
                 id=\"img_dates_body\" src=\"". THEME_PATH. "/icons/triangle_open.gif\" alt=\"ausblenden\" /></a>Termine / Treffen&nbsp;&nbsp;(optional)
             </div>
 
@@ -490,12 +493,12 @@ echo "
 									cal18.setCssPrefix(\"calendar\");
 								</script>
 								<input type=\"text\" id=\"rol_start_date\" name=\"rol_start_date\" size=\"10\" maxlength=\"10\" value=\"". $role->getValue("rol_start_date"). "\" />
-								<img src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:cal18.select(document.forms[0].rol_start_date,'anchor18','dd.MM.yyyy'); return false;\" id=\"anchor18\" style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
+								<img src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:cal18.select(document.forms[0].rol_start_date,'anchor18','dd.MM.yyyy');\" id=\"anchor18\" style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
 								<span id=\"calendardiv\" style=\"position: absolute; visibility: hidden; \"></span>
 								
                                 <label for=\"rol_end_date\">bis</label>
 								<input type=\"text\" id=\"rol_end_date\" name=\"rol_end_date\" size=\"10\" maxlength=\"10\" value=\"". $role->getValue("rol_end_date"). "\" />
-								<img src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:cal18.select(document.forms[0].rol_end_date,'anchor17','dd.MM.yyyy'); return false;\" id=\"anchor17\" style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />&nbsp;(Datum)
+								<img src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:cal18.select(document.forms[0].rol_end_date,'anchor17','dd.MM.yyyy');\" id=\"anchor17\" style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />&nbsp;(Datum)
                             </dd>
                         </dl>
                     </li>
@@ -547,8 +550,8 @@ echo "
         
         <div class=\"groupBox\" id=\"dependancies_box\" style=\"width: 90%;\">
             <div class=\"groupBoxHeadline\" id=\"dependancies_head\">
-                <a class=\"iconShowHide\" href=\"javascript:showHideBlock('dependancies_body','". THEME_PATH. "')\"><img
-                id=\"img_dependancies_body\" src=\"". THEME_PATH. "/icons/triangle_open.gif\" alt=\"ausblenden\" /></a>Abhängigkeiten&nbsp;&nbsp;(optional)
+                <a class=\"iconShowHide\" href=\"javascript:showHideBlock('dependancies_body','$g_root_path')\"><img
+                id=\"img_dependancies_body\" src=\"". THEME_PATH. "/icons/triangle_open.gif\" alt=\"ausblenden\" /></a>Abh&auml;ngigkeiten&nbsp;&nbsp;(optional)
             </div>
 
             <div class=\"groupBoxBody\" id=\"dependancies_body\">  
@@ -635,7 +638,7 @@ echo "
 
         echo "
         <div class=\"formSubmit\">
-            <button name=\"speichern\" type=\"button\" value=\"speichern\" onclick=\"absenden()\">
+            <button name=\"speichern\" type=\"submit\" value=\"speichern\" onclick=\"absenden()\">
                 <img src=\"". THEME_PATH. "/icons/disk.png\" alt=\"Speichern\" />
                 &nbsp;Speichern</button>
         </div>    
@@ -665,11 +668,11 @@ echo "
         && $role->getValue("rol_weekday") == 0
         && strlen($role->getValue("rol_location")) == 0)
         {
-            echo "showHideBlock('dates_body','". THEME_PATH. "');\n";
+            echo "showHideBlock('dates_body','$g_root_path');\n";
         }
         if(count($childRoles) == 0)
         {
-            echo "showHideBlock('dependancies_body','". THEME_PATH. "');\n";
+            echo "showHideBlock('dependancies_body','$g_root_path');\n";
         }
     }
 echo "\n--></script>";
