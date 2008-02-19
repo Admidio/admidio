@@ -94,9 +94,9 @@ echo "
             <th colspan=\"2\">Feld<img 
                 class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=field',this);\" onmouseout=\"ajax_hideTooltip()\" /></th>
             <th>Beschreibung</th>
-            <th><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/eye.png\" alt=\"Feld f&uuml;r alle Benutzer bzw. nur berechtigte Nutzer sichtbar\" title=\"Feld f&uuml;r alle Benutzer bzw. nur berechtigte Nutzer sichtbar\" /></th>
-            <th><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/textfield_key.png\" alt=\"Feld nur f&uuml;r berechtigte Benutzer (Rollenrecht bzw. eigenes Profil) editierbar\" title=\"Feld nur f&uuml;r berechtigte Benutzer (Rollenrecht bzw. eigenes Profil) editierbar\" /></th>
-            <th><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/asterisk_yellow.png\" alt=\"Pflichtfeld, muss vom Benutzer gef&uuml;llt werden\" title=\"Pflichtfeld, muss vom Benutzer gef&uuml;llt werden\" /></th>
+            <th><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/eye.png\" alt=\"Feld für alle Benutzer bzw. nur berechtigte Nutzer sichtbar\" title=\"Feld für alle Benutzer bzw. nur berechtigte Nutzer sichtbar\" /></th>
+            <th><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/textfield_key.png\" alt=\"Feld nur für berechtigte Benutzer (Recht: Alle Benutzer bearbeiten) editierbar\" title=\"Feld nur für berechtigte Benutzer (Recht: Alle Benutzer bearbeiten) editierbar\" /></th>
+            <th><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/asterisk_yellow.png\" alt=\"Pflichtfeld, muss vom Benutzer gefüllt werden\" title=\"Pflichtfeld, muss vom Benutzer gefüllt werden\" /></th>
             <th>Datentyp</th>
             <th style=\"width: 40px;\">&nbsp;</th>
         </tr>
@@ -150,7 +150,7 @@ echo "
                     }
                     else
                     {
-                        echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/textfield.png\" alt=\"Feld im eigenen Profil und f&uuml;r berechtigte Benutzer editierbar\" title=\"Feld im eigenen Profil und f&uuml;r berechtigte Benutzer editierbar\" />";
+                        echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/textfield.png\" alt=\"Feld nur für berechtigte Benutzer (Recht: Alle Benutzer bearbeiten) editierbar\" title=\"Feld nur für berechtigte Benutzer (Recht: Alle Benutzer bearbeiten) editierbar\" />";
                     }
                 echo "</td>
                 <td>";

@@ -61,7 +61,7 @@ if (array_key_exists("headline", $_GET))
 }
 else
 {
-    $_GET["headline"] = "Links";
+    $_GET["headline"] = "Weblinks";
 }
 
 if ($g_preferences['enable_bbcode'] == 1)
