@@ -778,18 +778,6 @@ echo "
                                         echo " selected=\"selected\" ";
                                     }
                                     echo ">phpbb2</option>
-                                    <option value=\"phpbb3\" ";
-                                    if($form_values['forum_version'] == "phpbb3")
-                                    {
-                                        echo " selected=\"selected\" ";
-                                    }
-                                    echo ">phpbb3</option>
-                                    <option value=\"smf1\" ";
-                                    if($form_values['forum_version'] == "smf1")
-                                    {
-                                        echo " selected=\"selected\" ";
-                                    }
-                                    echo ">smf1</option>
                                 </select>
                             </dd>
                         </dl>
@@ -797,9 +785,7 @@ echo "
                     <li class=\"smallFontSize\">
                         Welches Forum soll genutzt werden?<br/>
 						<table summary=\"Forum_Auflistung\" border=\"0\">
-							<tr><td>1) \"phpbb2\"</td><td> - PHP Bulletin Board 2.x (Standart)</td></tr>
-							<tr><td>2) \"phpbb3\"</td><td> - PHP Bulletin Board 3.x *NOCH NICHT GENUTZT*</td></tr>
-							<tr><td>3) \"smf1\"</td><td> - Simple Minds Forum 1.x *NOCH NICHT GENUTZT*</td></tr>						
+							<tr><td>1) \"phpbb2\"</td><td> - PHP Bulletin Board 2.x (Standart)</td></tr>					
 						</table>
                     </li>
                     <li>
@@ -842,11 +828,12 @@ echo "
                             <dt><label for=\"forum_zugangsdaten\">Zugangsdaten zur Datenbank des Forums:</label></dt>
                             <dd>
 								<table summary=\"Forum_Zugangsdaten\" border=\"0\">
-								<tr><td>Server:</td><td><input type=\"text\" id=\"forum_srv\" name=\"forum_srv\" size=\"20\" value=\"". $form_values['forum_srv']. "\" /></td></tr>
-								<tr><td>Datenbank:</td><td><input type=\"text\" id=\"forum_db\" name=\"forum_db\" size=\"20\" value=\"". $form_values['forum_db']. "\" /></td></tr>
-								<tr><td>Username:</td><td><input type=\"text\" id=\"forum_usr\" name=\"forum_usr\" size=\"20\" value=\"". $form_values['forum_usr']. "\" /></td></tr>
-								<tr><td>Passwort:</td><td><input type=\"password\" id=\"forum_pw\" name=\"forum_pw\" size=\"20\" value=\"". $form_values['forum_pw']. "\" /></td></tr>
-								
+								<tr><td>Server:</td><td><input type=\"text\" id=\"forum_srv\" name=\"forum_srv\" style=\"width:150px\" value=\"". $form_values['forum_srv']. "\" /></td></tr>
+								<tr><td>Datenbank:</td><td><input type=\"text\" id=\"forum_db\" name=\"forum_db\" style=\"width:150px\" value=\"". $form_values['forum_db']. "\" /></td></tr>
+								<tr><td>Username:</td><td><input type=\"text\" id=\"forum_usr\" name=\"forum_usr\" style=\"width:150px\" value=\"". $form_values['forum_usr']. "\" /></td></tr>
+								<tr>
+									<td>Passwort:</td><td><input type=\"password\" id=\"forum_pw\" name=\"forum_pw\" style=\"width:150px\" value=\"". $form_values['forum_pw']. "\" /></td>
+								</tr>
 								</table>
                              </dd>
                         </dl>

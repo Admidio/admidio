@@ -9,6 +9,7 @@
  *
  * err_code - Code fuer die Information, die angezeigt werden soll
  * err_text - Text, der innerhalb einer Meldung angezeigt werden kann
+ * window	- true wenn das script über window.open anstatt über das tooltip aufgerufen wird
  *
  *****************************************************************************/
 
@@ -35,16 +36,20 @@ if(isset($_GET['err_text']))
 }
 
 // Html-Kopf ausgeben
+if(isset($_GET['window']))
+{
 $g_layout['title']    = "Hinweis";
 $g_layout['onload']   = "windowresize()";
 $g_layout['includes'] = false;
 require(THEME_SERVER_PATH. "/overall_header.php");
+
 
 // Html des Modules ausgeben
 echo "
 <div class=\"groupBox\" id=\"message_window\">
     <div class=\"groupBoxHeadline\">Hinweis</div>
     <div class=\"groupBoxBody\">";
+}
         switch ($req_err_code)
         {
             case "bbcode":
@@ -52,7 +57,7 @@ echo "
                       k&ouml;nnen mit verschiedenen Tags (BBCode) formatiert werden. Daf&uuml;r m&uuml;ssen die
                       hier aufgelisteten Tags um den entsprechenden Textabschnitt gesetzt werden.<br /><br />
                       Beispiele:<br /><br />
-                      <table class=\"tableList\" style=\"width: 100%;\" cellspacing=\"0\">
+                      <table class=\"tableList\" style=\"width: auto;\" cellspacing=\"0\">
                          <tr>
                             <th style=\"width: 155px;\">Beispiel</th>
                             <th>BBCode</th>
@@ -278,7 +283,7 @@ echo "
 
             //Fotomodulhifen
 
-            case "photo_up_help":
+           case "photo_up_help":
                 echo " <h3>Was ist zu tun?</h3>
                     Auf den &bdquo;Durchsuchen&ldquo; Button klicken und die gew&uuml;nschte Bilddatei auf der
                     Festplatte ausw&auml;hlen. Den Vorgang ggf. bis zu f&uuml;nfmal wiederholen,
@@ -300,7 +305,7 @@ echo "
                 break;
 
             case "veranst_help":
-                echo " <h3>Was ist zu tun?</h3>
+                echo "<h3>Was ist zu tun?</h3>
                     Alle offenen Felder ausf&uuml;llen. Die Felder Veranstaltung und Beginn sind Pflichtfelder. Ggf. ausw&auml;hlen
                     welcher Veranstaltung die Neue untergeordnet werden soll, z.B. &bdquo;Tag 3&ldquo; in &bdquo;Turnier 2010&ldquo; (solche Unterteilungen sind empfehlenswert bei vielen Bildern).
                     Die Felder Ende und Fotografen sind optional. Nur Freigegebene Veranstaltungen sind f&uuml;r Homepagebesucher sichtbar. M&ouml;chte man z.B. erst alle Bilder hochladen
@@ -336,8 +341,9 @@ echo "
                 echo "Es ist ein Fehler aufgetreten.";
                 break;
         }
-
-    echo "</div>
+if(isset($_GET['window']))
+{
+echo "</div>
 </div>
 
 <ul class=\"iconTextLinkList\">
@@ -351,5 +357,5 @@ echo "
 </ul>";
     
 require(THEME_SERVER_PATH. "/overall_footer.php");
-
+}
 ?>

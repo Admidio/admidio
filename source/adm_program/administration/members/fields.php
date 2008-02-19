@@ -92,8 +92,7 @@ echo "
     <thead>
         <tr>
             <th colspan=\"2\">Feld<img 
-                class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
-                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=field','Message','width=400,height=200,left=310,top=200,scrollbars=yes')\" /></th>
+                class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=field',this);\" onmouseout=\"ajax_hideTooltip()\" /></th>
             <th>Beschreibung</th>
             <th><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/eye.png\" alt=\"Feld f&uuml;r alle Benutzer bzw. nur berechtigte Nutzer sichtbar\" title=\"Feld f&uuml;r alle Benutzer bzw. nur berechtigte Nutzer sichtbar\" /></th>
             <th><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/textfield_key.png\" alt=\"Feld nur f&uuml;r berechtigte Benutzer (Rollenrecht bzw. eigenes Profil) editierbar\" title=\"Feld nur f&uuml;r berechtigte Benutzer (Rollenrecht bzw. eigenes Profil) editierbar\" /></th>
