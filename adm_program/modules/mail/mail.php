@@ -322,7 +322,7 @@ echo "
 
                                 echo "</optgroup>
                                 </select>
-                                <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_mail',this);return false\" onmouseout=\"ajax_hideTooltip()\"/>";
+                                <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_mail',this)\" onmouseout=\"ajax_hideTooltip()\"/>";
                             }
                             echo "<span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                         </dd>

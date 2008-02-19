@@ -245,7 +245,7 @@ echo "
             case "rolle_ecard":
                 echo "Deine Gru&szlig;karte wird an ein Mitglied der ausgew&auml;hlten Rolle geschickt, sofern
                       diese ihre E-Mail-Adresse im System hinterlegt hat.<br /><br />
-                      Unter der Rollenauswahl besteht die M&ouml;glichkeit ein Mitglied dieser Rolle oder die gesammte Rolle auszuw&auml;hlen.";
+                      Unter der Rollenauswahl besteht die M&ouml;glichkeit ein Mitglied dieser Rolle oder die gesamte Rolle auszuw&auml;hlen.";
                 break;
 
             case "role_assign":
