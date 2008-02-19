@@ -62,6 +62,8 @@ class File extends TableAccess
         $this->readData($file_id, $condition, $tables);
     }
 
+
+
 	// File mit der uebergebenen ID aus der Datenbank auslesen fuer das Downloadmodul
 	// Hier wird auch direkt ueberprueft ob die Datei oder der Ordner gesperrt ist.
     function getFileForDownload($file_id)
@@ -73,9 +75,12 @@ class File extends TableAccess
         		       AND fil_fol_id = fol_id
         		       AND fil_locked = 0
         		       AND fol_locked = 0
-        		       AND fol_type   = 'download'
+        		       AND fol_type   = 'DOWNLOAD'
                        AND fol_org_id = ". $g_current_organization->getValue("org_id");
         $this->readData($file_id, $condition, $tables);
+
+        //TODO: Pruefen ob der aktuelle Benutzer Rechte an der Datei hat, die Datei oder der Ordner gelocked ist usw...
+
     }
 
 

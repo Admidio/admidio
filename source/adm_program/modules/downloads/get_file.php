@@ -53,13 +53,6 @@ if (!$file->getValue('fil_id'))
 }
 
 
-
-//TODO: pruefen ob der User die Berechtigung hat das File runterzuladen...
-if ($file->getValue('fol_public') == 0)
-{
-	//Pruefen ob der Benutzer das Recht hat die Datei herunterzuladen
-}
-
 //Dateinamen und Pfad zusammen setzen
 $fileName     = $file->getValue("fil_name");
 $folderPath   = $file->getValue("fol_path");
