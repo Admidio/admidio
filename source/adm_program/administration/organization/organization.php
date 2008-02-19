@@ -106,7 +106,7 @@ echo "
 
          &#124; <a href=\"#\" onclick=\"toggleDiv('register');\">Registrierung</a>
 
-         &#124; <a href=\"#\" onclick=\"toggleDiv('announcement-module');\">Ank&uuml;ndigungen</a>
+         &#124; <a href=\"#\" onclick=\"toggleDiv('announcement-module');\">Ankündigungen</a>
 
          &#124; <a href=\"#\" onclick=\"toggleDiv('download-module');\">Downloads</a>
 
@@ -114,19 +114,19 @@ echo "
 		 
 		 &#124; <a href=\"#\" onclick=\"toggleDiv('forum');\">Forum</a>
 
-         &#124; <a href=\"#\" onclick=\"toggleDiv('guestbook-module');\">G&auml;stebuch</a>
+         &#124; <a href=\"#\" onclick=\"toggleDiv('guestbook-module');\">Gästebuch</a>
+
+         &#124; <a href=\"#\" onclick=\"toggleDiv('ecard-module');\">Grußkarten</a>
 
          &#124; <a href=\"#\" onclick=\"toggleDiv('list-module');\">Listen</a>
 
          &#124; <a href=\"#\" onclick=\"toggleDiv('mail-module');\">Mails</a>
 
-         &#124; <a href=\"#\" onclick=\"toggleDiv('ecard-module');\">Grußkarten</a>
-
          &#124; <a href=\"#\" onclick=\"toggleDiv('profile-module');\">Profil</a>
 
          &#124; <a href=\"#\" onclick=\"toggleDiv('dates-module');\">Termine</a>
 
-         &#124; <a href=\"#\" onclick=\"toggleDiv('links-module');\">Links</a>
+         &#124; <a href=\"#\" onclick=\"toggleDiv('links-module');\">Weblinks</a>
     </div>
 </div>
 
@@ -1505,12 +1505,12 @@ echo "
 
         echo"
         <div class=\"groupBox\" id=\"links-module\">
-            <div class=\"groupBoxHeadline\">Einstellungen Weblinksmodul&nbsp;&nbsp; </div>
+            <div class=\"groupBoxHeadline\">Einstellungen Weblinkmodul&nbsp;&nbsp; </div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
                     <li>
                         <dl>
-                            <dt><label for=\"enable_weblinks_module\">Weblinksmodul aktivieren:</label></dt>
+                            <dt><label for=\"enable_weblinks_module\">Weblinkmodul aktivieren:</label></dt>
                             <dd>
                                 <select size=\"1\" id=\"enable_weblinks_module\" name=\"enable_weblinks_module\">
                                     <option value=\"0\" ";

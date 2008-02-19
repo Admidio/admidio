@@ -218,7 +218,7 @@ echo "
                 <dl>
                     <dt>
                         <label for=\"usf_hidden\">
-                            <img src=\"". THEME_PATH. "/icons/eye.png\" alt=\"Feld f&uuml;r alle Benutzer sichtbar\" />
+                            <img src=\"". THEME_PATH. "/icons/eye.png\" alt=\"Feld für alle Benutzer sichtbar\" />
                         </label>
                     </dt>
                     <dd>
@@ -228,7 +228,7 @@ echo "
                             echo " checked=\"checked\" ";
                         }
                         echo " value=\"1\" />
-                        <label for=\"usf_hidden\">Feld f&uuml;r alle Benutzer sichtbar</label>
+                        <label for=\"usf_hidden\">Feld für alle Benutzer sichtbar</label>
                         <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=field_hidden',this);\" onmouseout=\"ajax_hideTooltip()\"/>
                     </dd>
                 </dl>
@@ -237,7 +237,7 @@ echo "
                 <dl>
                     <dt>
                         <label for=\"usf_disabled\">
-                            <img src=\"". THEME_PATH. "/icons/textfield_key.png\" alt=\"Feld nur f&uuml;r berechtigte Benutzer editierbar\" />
+                            <img src=\"". THEME_PATH. "/icons/textfield_key.png\" alt=\"Feld nur für berechtigte Benutzer editierbar\" />
                         </label>
                     </dt>
                     <dd>
@@ -247,7 +247,7 @@ echo "
                             echo " checked=\"checked\" ";
                         }
                         echo " value=\"1\" />
-                        <label for=\"usf_disabled\">Feld nur f&uuml;r berechtigte Benutzer editierbar</label>
+                        <label for=\"usf_disabled\">Feld nur für berechtigte Benutzer editierbar</label>
                         <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=field_disabled',this);\" onmouseout=\"ajax_hideTooltip()\" />
                     </dd>
                 </dl>
@@ -256,7 +256,7 @@ echo "
                 <dl>
                     <dt>
                         <label for=\"usf_mandatory\">
-                            <img src=\"". THEME_PATH. "/icons/asterisk_yellow.png\" alt=\"Pflichtfeld, muss vom Benutzer gef&uuml;llt werden\" />
+                            <img src=\"". THEME_PATH. "/icons/asterisk_yellow.png\" alt=\"Pflichtfeld, muss vom Benutzer gefüllt werden\" />
                         </label>
                     </dt>
                     <dd>

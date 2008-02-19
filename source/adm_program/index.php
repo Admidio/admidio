@@ -32,8 +32,8 @@ if($g_current_user->isWebmaster())
 $_SESSION['navigation']->clear();
 
 // Html-Kopf ausgeben
-$g_layout['title']  = "Admidio &Uuml;bersicht";
-$g_layout['header'] = "<link rel=\"stylesheet\" href=\"". THEME_PATH. "/mainpage.css\" type=\"text/css\" />";
+$g_layout['title']  = "Admidio Übersicht";
+$g_layout['header'] = '<link rel="stylesheet" href="'. THEME_PATH. '/mainpage.css" type="text/css" />';
 
 require(THEME_SERVER_PATH. "/overall_header.php");
 
@@ -87,11 +87,11 @@ echo "</ul>
                     <dl>
                         <dt>
                             <a href=\"$g_root_path/adm_program/modules/announcements/announcements.php\"><img 
-                            src=\"". THEME_PATH. "/icons/note_big.png\" alt=\"Ank&uuml;ndigungen\" /></a>
+                            src=\"". THEME_PATH. "/icons/note_big.png\" alt=\"Ankündigungen\" title=\"Ankündigungen\" /></a>
                         </dt>
                         <dd>
-                            <span class=\"veryBigFontSize\"><a href=\"$g_root_path/adm_program/modules/announcements/announcements.php\">Ank&uuml;ndigungen</a></span><br />
-                            <span class=\"smallFontSize\">Hier k&ouml;nnen Ank&uuml;ndigungen (News / Aktuelles) angeschaut, erstellt und bearbeitet werden.</span>
+                            <span class=\"veryBigFontSize\"><a href=\"$g_root_path/adm_program/modules/announcements/announcements.php\">Ankündigungen</a></span><br />
+                            <span class=\"smallFontSize\">Hier können Ankündigungen (News / Aktuelles) angeschaut, erstellt und bearbeitet werden.</span>
                         </dd>
                     </dl>
                 </li>";
@@ -104,11 +104,11 @@ echo "</ul>
                     <dl>
                         <dt>
                             <a href=\"$g_root_path/adm_program/modules/download/download.php\"><img 
-                            src=\"". THEME_PATH. "/icons/download_big.png\" alt=\"Download\" /></a>
+                            src=\"". THEME_PATH. "/icons/download_big.png\" alt=\"Downloads\" title=\"Downloads\" /></a>
                         </dt>
                         <dd>
-                            <span class=\"veryBigFontSize\"><a href=\"$g_root_path/adm_program/modules/download/download.php\">Download</a></span><br />
-                            <span class=\"smallFontSize\">Benutzer k&ouml;nnen Dateien aus bestimmten Verzeichnissen herunterladen.</span>
+                            <span class=\"veryBigFontSize\"><a href=\"$g_root_path/adm_program/modules/download/download.php\">Downloads</a></span><br />
+                            <span class=\"smallFontSize\">Benutzer können Dateien aus bestimmten Verzeichnissen herunterladen.</span>
                         </dd>
                     </dl>
                 </li>";
@@ -121,7 +121,7 @@ echo "</ul>
                     <dl>
                         <dt>
                             <a href=\"$g_root_path/adm_program/modules/mail/mail.php\"><img 
-                            src=\"". THEME_PATH. "/icons/mail_open_big.png\" alt=\"E-Mail\" /></a>
+                            src=\"". THEME_PATH. "/icons/mail_open_big.png\" alt=\"E-Mail\" title=\"E-Mail\" /></a>
                         </dt>
                         <dd>
                             <span class=\"veryBigFontSize\"><a href=\"$g_root_path/adm_program/modules/mail/mail.php\">E-Mail</a></span><br />
@@ -138,7 +138,7 @@ echo "</ul>
                     <dl>
                         <dt>
                             <a href=\"$g_root_path/adm_program/modules/photos/photos.php\"><img 
-                            src=\"". THEME_PATH. "/icons/photo_big.png\" alt=\"Fotos\" /></a>
+                            src=\"". THEME_PATH. "/icons/photo_big.png\" alt=\"Fotos\" title=\"Fotos\" /></a>
                         </dt>
                         <dd>
                             <span class=\"veryBigFontSize\"><a href=\"$g_root_path/adm_program/modules/photos/photos.php\">Fotos</a></span><br />
@@ -156,11 +156,11 @@ echo "</ul>
                     <dl>
                         <dt>
                             <a href=\"$g_root_path/adm_program/modules/guestbook/guestbook.php\"><img 
-                            src=\"". THEME_PATH. "/icons/guestbook_big.png\" alt=\"G&auml;stebuch\" /></a>
+                            src=\"". THEME_PATH. "/icons/guestbook_big.png\" alt=\"Gästebuch\" title=\"Gästebuch\" /></a>
                         </dt>
                         <dd>
-                            <span class=\"veryBigFontSize\"><a href=\"$g_root_path/adm_program/modules/guestbook/guestbook.php\">G&auml;stebuch</a></span><br />
-                            <span class=\"smallFontSize\">Hier k&ouml;nnen Besucher ihre Gr&uuml;&szlig;e und Anmerkungen eintragen.</span>
+                            <span class=\"veryBigFontSize\"><a href=\"$g_root_path/adm_program/modules/guestbook/guestbook.php\">Gästebuch</a></span><br />
+                            <span class=\"smallFontSize\">Hier können Besucher ihre Grüße und Anmerkungen eintragen.</span>
                         </dd>
                     </dl>
                 </li>";
@@ -171,7 +171,7 @@ echo "</ul>
                 <dl>
                     <dt>
                         <a href=\"$g_root_path/adm_program/modules/lists/lists.php\"><img 
-                        src=\"". THEME_PATH. "/icons/list_big.png\" alt=\"Listen\" /></a>
+                        src=\"". THEME_PATH. "/icons/list_big.png\" alt=\"Listen\" title=\"Listen\" /></a>
                     </dt>
                     <dd>
                         <span class=\"veryBigFontSize\"><a href=\"$g_root_path/adm_program/modules/lists/lists.php\">Listen</a></span>&nbsp;&nbsp;
@@ -187,7 +187,7 @@ echo "</ul>
                 <dl>
                     <dt>
                         <a href=\"$g_root_path/adm_program/modules/profile/profile.php\"><img 
-                        src=\"". THEME_PATH. "/icons/person_big.png\" alt=\"Profil\" /></a>
+                        src=\"". THEME_PATH. "/icons/person_big.png\" alt=\"Profil\" title=\"Profil\" /></a>
                     </dt>
                     <dd>
                         <span class=\"veryBigFontSize\"><a href=\"$g_root_path/adm_program/modules/profile/profile.php\">Profil</a></span>";
@@ -210,7 +210,7 @@ echo "</ul>
                     <dl>
                         <dt>
                             <a href=\"$g_root_path/adm_program/modules/dates/dates.php\"><img 
-                            src=\"". THEME_PATH. "/icons/history_big.png\" alt=\"Termine\" /></a>
+                            src=\"". THEME_PATH. "/icons/history_big.png\" alt=\"Termine\" title=\"Termine\" /></a>
                         </dt>
                         <dd>
                             <span class=\"veryBigFontSize\"><a href=\"$g_root_path/adm_program/modules/dates/dates.php\">Termine</a></span>&nbsp;&nbsp;
@@ -229,11 +229,11 @@ echo "</ul>
                     <dl>
                         <dt>
                             <a href=\"$g_root_path/adm_program/modules/links/links.php\"><img 
-                            src=\"". THEME_PATH. "/icons/globe_big.png\" alt=\"Weblinks\" /></a>
+                            src=\"". THEME_PATH. "/icons/globe_big.png\" alt=\"Weblinks\" title=\"Weblinks\" /></a>
                         </dt>
                         <dd>
                             <span class=\"veryBigFontSize\"><a href=\"$g_root_path/adm_program/modules/links/links.php\">Weblinks</a></span><br />
-                            <span class=\"smallFontSize\">Hier k&ouml;nnen Links zu interessanten Webseiten abgelegt werden.</span>
+                            <span class=\"smallFontSize\">Hier können Links zu interessanten Webseiten abgelegt werden.</span>
                         </dd>
                     </dl>
                 </li>";
@@ -256,7 +256,7 @@ echo "</ul>
                     <dl>
                         <dt>
                             <a href=\"http://". $_SERVER['HTTP_HOST']. "/".$g_forum->path."/index.php\"><img 
-                            src=\"". THEME_PATH. "/icons/forum_big.png\" alt=\"Forum\" /></a>
+                            src=\"". THEME_PATH. "/icons/forum_big.png\" alt=\"Forum\" title=\"Forum\" /></a>
                         </dt>
                         <dd>
                             <span class=\"veryBigFontSize\"><a href=\"http://". $_SERVER['HTTP_HOST']. "/".$g_forum->path."/index.php\">Forum</a></span><br />
@@ -284,7 +284,7 @@ if($g_current_user->isWebmaster() || $g_current_user->assignRoles() || $g_curren
                         <dl>
                             <dt>
                                 <a href=\"$g_root_path/adm_program/administration/new_user/new_user.php\"><img 
-                                src=\"". THEME_PATH. "/icons/ok_big.png\" alt=\"Web-Anmeldungen\" /></a>
+                                src=\"". THEME_PATH. "/icons/ok_big.png\" alt=\"Web-Anmeldungen\" title=\"Web-Anmeldungen\" /></a>
                             </dt>
                             <dd>
                                 <span class=\"veryBigFontSize\"><a href=\"$g_root_path/adm_program/administration/new_user/new_user.php\">Neue Web-Anmeldungen verwalten</a></span><br />
@@ -301,7 +301,7 @@ if($g_current_user->isWebmaster() || $g_current_user->assignRoles() || $g_curren
                         <dl>
                             <dt>
                                 <a href=\"$g_root_path/adm_program/administration/members/members.php\"><img 
-                                src=\"". THEME_PATH. "/icons/person_admin_big.png\" alt=\"Benutzerverwaltung\" /></a>
+                                src=\"". THEME_PATH. "/icons/person_admin_big.png\" alt=\"Benutzerverwaltung\" title=\"Benutzerverwaltung\" /></a>
                             </dt>
                             <dd>
                                 <span class=\"veryBigFontSize\"><a href=\"$g_root_path/adm_program/administration/members/members.php\">Benutzerverwaltung</a></span><br />
@@ -318,7 +318,7 @@ if($g_current_user->isWebmaster() || $g_current_user->assignRoles() || $g_curren
                         <dl>
                             <dt>
                                 <a href=\"$g_root_path/adm_program/administration/roles/roles.php\"><img 
-                                src=\"". THEME_PATH. "/icons/wand_big.png\" alt=\"Rollenverwaltung\" /></a>
+                                src=\"". THEME_PATH. "/icons/wand_big.png\" alt=\"Rollenverwaltung\" title=\"Rollenverwaltung\" /></a>
                             </dt>
                             <dd>
                                 <span class=\"veryBigFontSize\"><a href=\"$g_root_path/adm_program/administration/roles/roles.php\">Rollenverwaltung</a></span><br />
@@ -335,7 +335,7 @@ if($g_current_user->isWebmaster() || $g_current_user->assignRoles() || $g_curren
                         <dl>
                             <dt>
                                 <a href=\"$g_root_path/adm_program/administration/organization/organization.php\"><img 
-                                src=\"". THEME_PATH. "/icons/options_big.png\" alt=\"Organisationseinstellungen\" /></a>
+                                src=\"". THEME_PATH. "/icons/options_big.png\" alt=\"Organisationseinstellungen\" title=\"Organisationseinstellungen\" /></a>
                             </dt>
                             <dd>
                                 <span class=\"veryBigFontSize\"><a href=\"$g_root_path/adm_program/administration/organization/organization.php\">Organisationseinstellungen</a></span><br />
