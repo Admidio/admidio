@@ -83,10 +83,6 @@
  *                          $aktion = "update"  Die Session wird aktualisiert
  *                          $aktion = "insert"  Die Session wird angemeldet
  *
- * sessionBereinigen()          -  Ungenutzter Code Muell (bitte da lassen)
- *
- * Nix()                  - Eine Funktion, die nichts, rein garnichts macht.
- *
  *****************************************************************************/
 
 class Forum
@@ -469,103 +465,103 @@ class Forum
             $row    = $this->forum_db->fetch_array($result);
             $forum_userid = $row[0];
 
-            // Gruppen ID des Users holen
-            $sql    = "SELECT g.group_id 
-                        FROM ". $this->praefix. "_user_group ug, ". $this->praefix. "_groups g  
-                        WHERE ug.user_id = ". $forum_userid ."
-                            AND g.group_id = ug.group_id 
-                            AND g.group_single_user = 1";
-            $result = $this->forum_db->query($sql);
-            $row    = $this->forum_db->fetch_array($result);
-            $forum_group = $row[0];
-
-            // Alle Post des Users mit Gast Username versehen
-            $sql = "UPDATE ". $this->praefix. "_posts
-                    SET poster_id = -1, post_username = '" . $forum_username . "' 
-                    WHERE poster_id = $forum_userid";
-            $result = $this->forum_db->query($sql);
-
-            // Alle Topics des User auf geloescht setzten
-            $sql = "UPDATE ". $this->praefix. "_topics
-                        SET topic_poster = -1 
-                        WHERE topic_poster = $forum_userid";
-            $result = $this->forum_db->query($sql);
-
-            // Alle Votes des Users auf geloescht setzten
-            $sql = "UPDATE ". $this->praefix. "_vote_voters
-                    SET vote_user_id = -1
-                    WHERE vote_user_id = $forum_userid";
-            $result = $this->forum_db->query($sql);
-
-            // GroupID der der Group holen, in denen der User Mod Rechte hat
-            $sql = "SELECT group_id
-                    FROM ". $this->praefix. "_groups
-                    WHERE group_moderator = $forum_userid";
-            $result = $this->forum_db->query($sql);
-
-            $group_moderator[] = 0;
-
-            while ( $row_group = $this->forum_db->fetch_array($result) )
-            {
-                $group_moderator[] = $row_group['group_id'];
-            }
-
-            if ( count($group_moderator) )
-            {
-                $update_moderator_id = implode(', ', $group_moderator);
-
-                $sql = "UPDATE ". $this->praefix. "_groups
-                    SET group_moderator = 2
-                    WHERE group_moderator IN ($update_moderator_id)";
-                    $result = $this->forum_db->query($sql);
-            }
-
-            // User im Forum loeschen
-            $sql = "DELETE FROM ". $this->praefix. "_users 
-                    WHERE user_id = $forum_userid ";
-            $result = $this->forum_db->query($sql);
-
-            // User aus den Gruppen loeschen
-            $sql = "DELETE FROM ". $this->praefix. "_user_group 
-                    WHERE user_id = $forum_userid ";
-            $result = $this->forum_db->query($sql);
-
-            // Single User Group loeschen
-            $sql = "DELETE FROM ". $this->praefix. "_groups
-                    WHERE group_id =  $forum_group ";
-            $result = $this->forum_db->query($sql);
-
-            // User aus der Auth Tabelle loeschen
-            $sql = "DELETE FROM ". $this->praefix. "_auth_access
-                    WHERE group_id = $forum_group ";
-            $result = $this->forum_db->query($sql);
-
-            // User aus den zu beobachteten Topics Tabelle loeschen
-            $sql = "DELETE FROM ". $this->praefix. "_topics_watch
-                    WHERE user_id = $forum_userid ";
-            $result = $this->forum_db->query($sql);
-
-            // User aus der Banlist Tabelle loeschen
-            $sql = "DELETE FROM ". $this->praefix. "_banlist
-                    WHERE ban_userid = $forum_userid ";
-            $result = $this->forum_db->query($sql);
-
-            // Session des Users loeschen
-            $sql = "DELETE FROM ". $this->praefix. "_sessions
-                    WHERE session_user_id = $forum_userid ";
-            $result = $this->forum_db->query($sql);
-
-            // Session_Keys des User loeschen
-            $sql = "DELETE FROM ". $this->praefix. "_sessions_keys
-                    WHERE user_id = $forum_userid ";
-            $result = $this->forum_db->query($sql);
-
-            return TRUE;
+			if($forum_userid > 0)
+			{
+				// Gruppen ID des Users holen
+				$sql    = "SELECT g.group_id 
+							FROM ". $this->praefix. "_user_group ug, ". $this->praefix. "_groups g  
+							WHERE ug.user_id = ". $forum_userid ."
+								AND g.group_id = ug.group_id 
+								AND g.group_single_user = 1";
+				$result = $this->forum_db->query($sql);
+				$row    = $this->forum_db->fetch_array($result);
+				$forum_group = $row[0];
+	
+				// Alle Post des Users mit Gast Username versehen
+				$sql = "UPDATE ". $this->praefix. "_posts
+						SET poster_id = -1, post_username = '" . $forum_username . "' 
+						WHERE poster_id = $forum_userid";
+				$result = $this->forum_db->query($sql);
+	
+				// Alle Topics des User auf geloescht setzten
+				$sql = "UPDATE ". $this->praefix. "_topics
+							SET topic_poster = -1 
+							WHERE topic_poster = $forum_userid";
+				$result = $this->forum_db->query($sql);
+	
+				// Alle Votes des Users auf geloescht setzten
+				$sql = "UPDATE ". $this->praefix. "_vote_voters
+						SET vote_user_id = -1
+						WHERE vote_user_id = $forum_userid";
+				$result = $this->forum_db->query($sql);
+	
+				// GroupID der der Group holen, in denen der User Mod Rechte hat
+				$sql = "SELECT group_id
+						FROM ". $this->praefix. "_groups
+						WHERE group_moderator = $forum_userid";
+				$result = $this->forum_db->query($sql);
+	
+				$group_moderator[] = 0;
+	
+				while ( $row_group = $this->forum_db->fetch_array($result) )
+				{
+					$group_moderator[] = $row_group['group_id'];
+				}
+	
+				if ( count($group_moderator) )
+				{
+					$update_moderator_id = implode(', ', $group_moderator);
+	
+					$sql = "UPDATE ". $this->praefix. "_groups
+						SET group_moderator = 2
+						WHERE group_moderator IN ($update_moderator_id)";
+						$result = $this->forum_db->query($sql);
+				}
+	
+				// User im Forum loeschen
+				$sql = "DELETE FROM ". $this->praefix. "_users 
+						WHERE user_id = $forum_userid ";
+				$result = $this->forum_db->query($sql);
+	
+				// User aus den Gruppen loeschen
+				$sql = "DELETE FROM ". $this->praefix. "_user_group 
+						WHERE user_id = $forum_userid ";
+				$result = $this->forum_db->query($sql);
+	
+				// Single User Group loeschen
+				$sql = "DELETE FROM ". $this->praefix. "_groups
+						WHERE group_id =  $forum_group ";
+				$result = $this->forum_db->query($sql);
+	
+				// User aus der Auth Tabelle loeschen
+				$sql = "DELETE FROM ". $this->praefix. "_auth_access
+						WHERE group_id = $forum_group ";
+				$result = $this->forum_db->query($sql);
+	
+				// User aus den zu beobachteten Topics Tabelle loeschen
+				$sql = "DELETE FROM ". $this->praefix. "_topics_watch
+						WHERE user_id = $forum_userid ";
+				$result = $this->forum_db->query($sql);
+	
+				// User aus der Banlist Tabelle loeschen
+				$sql = "DELETE FROM ". $this->praefix. "_banlist
+						WHERE ban_userid = $forum_userid ";
+				$result = $this->forum_db->query($sql);
+	
+				// Session des Users loeschen
+				$sql = "DELETE FROM ". $this->praefix. "_sessions
+						WHERE session_user_id = $forum_userid ";
+				$result = $this->forum_db->query($sql);
+	
+				// Session_Keys des User loeschen
+				$sql = "DELETE FROM ". $this->praefix. "_sessions_keys
+						WHERE user_id = $forum_userid ";
+				$result = $this->forum_db->query($sql);
+				
+				return true;
+			}
         }
-        else
-        {
-            return FALSE;
-        }
+		return false;
     }
 
 
