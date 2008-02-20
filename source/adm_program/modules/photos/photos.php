@@ -235,8 +235,9 @@ echo "<div class=\"photoModuleContainer\">";
         if(!file_exists($ordner."/thumbnails"))
         {
             mkdir($ordner."/thumbnails", 0777);
+            chmod($ordner."/thumbnails", 0777);
         }
-      
+      exit();
         //Thumbnails pro Seite
         $thumbs_per_side = $g_preferences['photo_thumbs_row']*$g_preferences['photo_thumbs_column'];
 
