@@ -111,7 +111,7 @@ else
 }
 $g_layout['header'] = "
     <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/calendar/CalendarPopup.js\"></script>
-    <link rel=\"stylesheet\" href=\"".THEME_PATH. "/calendar.css\" type=\"text/css\" />
+    <link rel=\"stylesheet\" href=\"".THEME_PATH. "/css/calendar.css\" type=\"text/css\" />
     
     <script type=\"text/javascript\">
         // Funktion blendet Zeitfelder ein/aus

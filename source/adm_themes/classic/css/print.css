@@ -3,15 +3,10 @@
  *
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
- * Module-Owner : Markus Fassbender
- * License      : http://www.gnu.org/licenses/gpl-2.0.html GNU Public License 2
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * !!!!!!!!!!!!!!!!!!!!!!!!!!!! W I C H T I G !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- * Diese Datei bitte NICHT anpassen, da diese bei jedem Update ueberschrieben
- * werden sollte. Anpassungen koennen in der user.css im Ordner adm_config
- * gemacht werden. Die CSS-Einstellungen koennen dazu einfach in diese Datei
- * kopiert werden
- * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ * Diese CSS-Datei ist fuer das Layout des Listendrucks zustaendig. Hier 
+ * koennen Sie spezielle Anpassungen fuer einen besseren Druck vornehmen
  *
  *****************************************************************************/
 

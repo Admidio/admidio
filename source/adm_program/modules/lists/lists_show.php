@@ -304,7 +304,7 @@ if($req_mode != "csv")
         
             <title>'. $g_current_organization->getValue("org_longname"). ' - Liste - '. $role->getValue("rol_name"). '</title>
             
-            <link rel="stylesheet" type="text/css" href="'. THEME_PATH. '/print.css" />
+            <link rel="stylesheet" type="text/css" href="'. THEME_PATH. '/css/print.css" />
             <script type="text/javascript" src="'. $g_root_path. '/adm_program/system/common_functions.js"></script>
 
             <!--[if lt IE 7]>

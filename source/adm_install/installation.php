@@ -34,7 +34,7 @@ function showPage($message, $next_url, $icon, $icon_text, $focus = "next_page")
         
         <title>Admidio - Update</title>
 
-        <link rel="stylesheet" type="text/css" href="../adm_themes/classic/system.css" />
+        <link rel="stylesheet" type="text/css" href="../adm_themes/classic/css/system.css" />
         <script type="text/javascript" src="../adm_program/system/common_functions.js"></script>
 
         <!--[if lt IE 7]>

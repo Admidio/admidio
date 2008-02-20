@@ -211,7 +211,7 @@ if(isset($_POST["submit"]) && $_POST["submit"])
     }
 
     //Photomodulspezifische CSS laden
-    $g_layout['header'] = "<link rel=\"stylesheet\" href=\"". THEME_PATH. "/photos.css\" type=\"text/css\" media=\"screen\" />";
+    $g_layout['header'] = "<link rel=\"stylesheet\" href=\"". THEME_PATH. "/css/photos.css\" type=\"text/css\" media=\"screen\" />";
     
     // HTML-Kopf
     $g_layout['title'] = "Foto-Abum-Verwaltung";
