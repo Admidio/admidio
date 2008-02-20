@@ -183,14 +183,7 @@ $g_layout['header'] = '
     <link rel="stylesheet" type="text/css" href="'. THEME_PATH. '/css/autosuggest.css" />
     <script type="text/javascript" src="../../libs/bsn.autosuggest/bsn.Ajax.js"></script>
     <script type="text/javascript" src="../../libs/bsn.autosuggest/bsn.DOM.js"></script>
-    <script type="text/javascript" src="../../libs/bsn.autosuggest/bsn.AutoSuggest.js"></script>
-    
-    <style type="text/css">
-        /* Safari braucht im Body position: relative damit das SuggestFeld unter und nicht auf der Suchbox liegt*/
-        body {
-            position: relative;
-        }
-    </style>';
+    <script type="text/javascript" src="../../libs/bsn.autosuggest/bsn.AutoSuggest.js"></script>';
 
 require(THEME_SERVER_PATH. "/overall_header.php");
 

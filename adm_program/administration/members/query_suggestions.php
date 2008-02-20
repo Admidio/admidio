@@ -43,7 +43,7 @@ else
 
 
 
-$xml='<?xml version="1.0" encoding="iso-8859-1" ?>';
+$xml='<?xml version="1.0" encoding="utf-8" ?>';
 
 if (!$query)
 {
