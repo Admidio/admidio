@@ -50,6 +50,7 @@ class File extends TableAccess
         }
     }
 
+
     // File mit der uebergebenen ID aus der Datenbank auslesen
     function getFile($file_id)
     {
@@ -63,14 +64,13 @@ class File extends TableAccess
     }
 
 
-
 	// File mit der uebergebenen ID aus der Datenbank auslesen fuer das Downloadmodul
 	// Hier wird auch direkt ueberprueft ob die Datei oder der Ordner gesperrt ist.
     function getFileForDownload($file_id)
     {
-        global $g_current_organization;
+        global $g_current_organization, $g_current_user;
 
-        $tables    = TBL_FOLDERS. ", ". TBL_FOLDER_ROLES;
+        $tables    = TBL_FOLDERS;
         $condition = "     fil_id     = $file_id
         		       AND fil_fol_id = fol_id
         		       AND fil_locked = 0

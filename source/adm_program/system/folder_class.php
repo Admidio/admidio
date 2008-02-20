@@ -73,7 +73,7 @@ class File extends TableAccess
         //Gucken ob ueberhaupt ein Datensatz gefunden wurde...
         if ($this->getValue('fil_id'))
         {
-	        //Falls der Ordner gelocked ist und der User keine Downloadrechte hat, bekommt er nix zu sehen..
+	        //Falls der Ordner gelocked ist und der User keine Downloadadminrechte hat, bekommt er nix zu sehen..
 	        if (!$g_current_user->editDownloadRight() && $this->getValue("fol_locked"))
 	        {
 	        	$this->clear();
@@ -81,7 +81,23 @@ class File extends TableAccess
 	        else if (!$this->getValue("fol_public"))
 	        {
 	        	//Wenn der Ordner nicht public ist, muessen die Rechte untersucht werden
-	        	//TODO:
+	        	$sql_rights = "SELECT count(*)
+                         FROM ". TBL_FOLDER_ROLES. ", ". TBL_MEMBERS. "
+                        WHERE flr_fol_id		= ". $this->getValue("fol_id"). "
+                          AND flr_rol_id 		= mem_rol_id
+                          AND mem_usr_id 		= ". $g_current_user->getValue("usr_id"). "
+                          AND mem_valid 		= 1";
+        		$result_rights = $this->db->query($sql_rights);
+        		$row_rights = $g_db->fetch_array($result_rights);
+        		$row_count  = $row_rights[0];
+
+        		//Falls der User in keiner Rolle Mitglied ist, die Rechte an dem Ordner besitzt
+        		//wird auch kein Ordner geliefert.
+        		if ($row_count == 0)
+        		{
+        			$this->clear();
+        		}
+
 	        }
         }
     }
@@ -120,12 +136,29 @@ class File extends TableAccess
 			}
 			else if ($g_current_user->editDownloadRight())
 			{
-				//Falls der User editDownloadRechte hat, bekommt er den Ordner natürlich auch zu sehen
+				//Falls der User editDownloadRechte hat, bekommt er den Ordner natuerlich auch zu sehen
 				$addToArray = true;
 			}
 			else
 			{
-				//TODO: Gucken ob der angemeldete Benutzer Rechte an dem Ordner hat...
+				//Gucken ob der angemeldete Benutzer Rechte an dem Unterordner hat...
+				$sql_rights = "SELECT count(*)
+                         FROM ". TBL_FOLDER_ROLES. ", ". TBL_MEMBERS. "
+                        WHERE flr_fol_id		= ". $row_folders->fol_id. "
+                          AND flr_rol_id 		= mem_rol_id
+                          AND mem_usr_id 		= ". $g_current_user->getValue("usr_id"). "
+                          AND mem_valid 		= 1";
+        		$result_rights = $this->db->query($sql_rights);
+        		$row_rights = $g_db->fetch_array($result_rights);
+        		$row_count  = $row_rights[0];
+
+        		//Falls der User in mindestens einer Rolle Mitglied ist, die Rechte an dem Ordner besitzt
+        		//wird der Ordner natuerlich ins Array gepackt.
+        		if ($row_count > 0)
+        		{
+        			$addToArray;
+        		}
+
 			}
 
 			if ($addToArray)
