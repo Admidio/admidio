@@ -147,12 +147,11 @@ if($g_preferences['photo_show_mode']==1)
     $g_layout['header'] = $g_layout['header']."
         <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/script.aculo.us/prototype.js\"></script>
         <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/script.aculo.us/scriptaculous.js?load=effects\"></script>
-        <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/lightbox/lightbox.js\"></script>
-        <link rel=\"stylesheet\" href=\"". THEME_PATH. "/lightbox.css\" type=\"text/css\" media=\"screen\" />";
+        <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/lightbox/lightbox.js\"></script>";
 }
 
 //Photomodulspezifische CSS laden
-$g_layout['header'] = $g_layout['header']."<link rel=\"stylesheet\" href=\"". THEME_PATH. "/photos.css\" type=\"text/css\" media=\"screen\" />";
+$g_layout['header'] = $g_layout['header']."<link rel=\"stylesheet\" href=\"". THEME_PATH. "/css/photos.css\" type=\"text/css\" media=\"screen\" />";
 
 require(THEME_SERVER_PATH. "/overall_header.php");
 

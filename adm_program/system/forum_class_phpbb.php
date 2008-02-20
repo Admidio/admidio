@@ -721,25 +721,5 @@ class Forum
             setcookie($this->cookie_name."_sid", $this->session_id, 0, $this->cookie_path, $this->cookie_domain, $this->cookie_secure);
         }
     }
-
-
-    // CODEMUELL fuer spaeter
-    function sessionBereinigen()
-    {
-        // Bereinigungsarbeiten werden nur durchgefuehrt, wenn sich der Admin anmeldet
-        if($forum_userid == 2)
-        {
-            // Bereinigung der Forum Sessions, wenn diese aelter als 60 Tage sind
-            $sql    = "DELETE FROM ". $this->praefix. "_sessions WHERE session_start + 518400 < $current_time ";
-            $result = $this->forum_db->query($sql);
-        }
-
-        if($forum_userid > 0)
-        {
-            // Alte User-Session des Users im Forum loeschen
-            $sql    = "DELETE FROM ". $this->praefix. "_sessions WHERE session_user_id = $forum_userid AND session_id NOT LIKE '".$g_forum_session_id."' ";
-            $result = $this->forum_db->query($sql);
-        }
-    }
 }
 ?>

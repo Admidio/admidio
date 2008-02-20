@@ -107,7 +107,7 @@ if($_POST["upload"])
 }//Kontrollmechanismen
 
 //Photomodulspezifische CSS laden
-$g_layout['header'] = "<link rel=\"stylesheet\" href=\"". THEME_PATH. "/photos.css\" type=\"text/css\" media=\"screen\" />";
+$g_layout['header'] = "<link rel=\"stylesheet\" href=\"". THEME_PATH. "/css/photos.css\" type=\"text/css\" media=\"screen\" />";
 
 // Html-Kopf ausgeben
 $g_layout['title'] = "Fotos hochladen";

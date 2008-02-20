@@ -180,7 +180,7 @@ $count_mem_rol = $row['count'];
 // Html-Kopf ausgeben
 $g_layout['title']  = "Benutzerverwaltung";
 $g_layout['header'] = '
-    <link rel="stylesheet" type="text/css" href="autosuggest.css" />
+    <link rel="stylesheet" type="text/css" href="'. THEME_PATH. '/css/autosuggest.css" />
     <script type="text/javascript" src="../../libs/bsn.autosuggest/bsn.Ajax.js"></script>
     <script type="text/javascript" src="../../libs/bsn.autosuggest/bsn.DOM.js"></script>
     <script type="text/javascript" src="../../libs/bsn.autosuggest/bsn.AutoSuggest.js"></script>
