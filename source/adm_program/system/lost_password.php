@@ -139,9 +139,7 @@ else
                     </li>";
                 }
 				echo'									
-				<button name="abschicken" type="submit" value="abschicken">
-					<img src="'. THEME_PATH.'/icons/email.png" alt="Abschicken" />&nbsp;Neues Passwort zusenden
-				</button>
+				<button name="abschicken" type="submit" value="abschicken"><img src="'. THEME_PATH.'/icons/email.png" alt="Abschicken" />&nbsp;Neues Passwort zusenden</button>
 				</ul>
 			</form>
 			</div>
