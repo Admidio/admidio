@@ -40,23 +40,13 @@ if(isset($aid) && isset($usr_id))
 		$sql    = "UPDATE ". TBL_USERS. " SET usr_new_password  = ''
 				WHERE `". TBL_USERS. "`.`usr_id` = ". $usr_id;
 		$result = $g_db->query($sql);
-		echo '<div class="formLayout" id="profile_form">
-				<div class="formHead">Passwort übernommen!</div>
-					<div class="formBody">
-						<div algin="left">Das neue Passwort wurde nun übernommen!<br/>Sie können sich jetzt <a href="'.$g_root_path.'/adm_program/system/login.php" target="_blank">hier</a> einloggen!</div>
-					</div>
-				</div>
-			</div>';
+		
+		$g_message->setForwardUrl("".$g_root_path."/adm_program/system/login.php", 2000);
+		$g_message->show("password_activation_password_saved");
 	}
 	else
 	{
-		echo '<div class="formLayout" id="profile_form">
-				<div class="formHead">Aktivierungscode falsch!</div>
-					<div class="formBody">
-						<div>Es wurde entweder schon das Passwort aktiviert oder der Aktivierungscode ist falsch!</div>
-					</div>
-				</div>
-			</div>';
+		$g_message->show("password_activation_id_not_valid");
 		die();
 	}
 }
