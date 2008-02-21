@@ -76,12 +76,9 @@ echo "
         <hr />
 
         <div class=\"formSubmit\">
-            <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
-            <img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" />
-            &nbsp;Zurück</button>
+            <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\"><img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" />&nbsp;Zurück</button>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button id=\"weiter\" type=\"submit\" value=\"weiter\" tabindex=\"2\">Weiter&nbsp;
-            <img src=\"". THEME_PATH. "/icons/forward.png\" alt=\"Weiter\" /></button>
+            <button id=\"weiter\" type=\"submit\" value=\"weiter\" tabindex=\"2\">Weiter&nbsp;<img src=\"". THEME_PATH. "/icons/forward.png\" alt=\"Weiter\" /></button>
         </div>
     </div>
 </div>
