@@ -182,30 +182,20 @@ class Message
                         if($this->yes_no_buttons == true)
                         {
                             echo '
-                            <button id="ja" type="button" value="ja" onclick="self.location.href=\''. $this->forward_url. '\'">
-                                <img src="'. THEME_PATH. '/icons/ok.png" alt="Ja" />
-                                &nbsp;&nbsp;Ja&nbsp;&nbsp;&nbsp;
-                            </button>
+                            <button id="ja" type="button" value="ja" onclick="self.location.href=\''. $this->forward_url. '\'"><img src="'. THEME_PATH. '/icons/ok.png" alt="Ja" />&nbsp;&nbsp;Ja&nbsp;&nbsp;&nbsp;</button>
                             &nbsp;&nbsp;&nbsp;&nbsp;
-                            <button id="nein" type="button" value="nein" onclick="history.back()">
-                                <img src="'. THEME_PATH. '/icons/error.png" alt="Nein" />
-                                &nbsp;Nein
-                            </button>';
+                            <button id="nein" type="button" value="nein" onclick="history.back()"><img src="'. THEME_PATH. '/icons/error.png" alt="Nein" />&nbsp;Nein</button>';
                         }
                         else
                         {
                             // Wenn weitergeleitet wird, dann auch immer einen Weiter-Button anzeigen
-                            echo '<button id="weiter" type="button" value="weiter" onclick="window.location.href=\''. $this->forward_url. '\'">
-                            <img src="'. THEME_PATH. '/icons/forward.png" alt="Weiter" />
-                            &nbsp;Weiter</button>';
+                            echo '<button id="weiter" type="button" value="weiter" onclick="window.location.href=\''. $this->forward_url. '\'"><img src="'. THEME_PATH. '/icons/forward.png" alt="Weiter" />&nbsp;Weiter</button>';
                         }
                     }
                     else
                     {
                         // Wenn nicht weitergeleitet wird, dann immer einen Zurueck-Button anzeigen
-                        echo '<button id="zurueck" type="button" value="zurueck" onclick="history.back()">
-                        <img src="'. THEME_PATH. '/icons/back.png" alt="Zurueck" />
-                        &nbsp;Zurück</button>';
+                        echo '<button id="zurueck" type="button" value="zurueck" onclick="history.back()"><img src="'. THEME_PATH. '/icons/back.png" alt="Zurueck" />&nbsp;Zurück</button>';
                     }
                 echo '</div>
             </div>
