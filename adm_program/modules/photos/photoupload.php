@@ -108,10 +108,7 @@ echo"
         </ul>
         <hr />
         <div class=\"formSubmit\">
-            <button name=\"upload\" type=\"submit\" value=\"speichern\">
-                <img src=\"". THEME_PATH. "/icons/page_white_get.png\" alt=\"Speichern\" />
-                &nbsp;Bilder hochladen
-            </button>
+            <button name=\"upload\" type=\"submit\" value=\"speichern\"><img src=\"". THEME_PATH. "/icons/page_white_get.png\" alt=\"Speichern\" />&nbsp;Bilder hochladen</button>
         </div>
    </div>
 </div>

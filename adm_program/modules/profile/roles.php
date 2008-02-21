@@ -225,15 +225,9 @@ echo "
     echo "</table>
 
     <div class=\"formSubmit\">";
-        echo "<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
-            <img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" />
-              &nbsp;Zurück</button>
-
+        echo "<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\"><img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" />&nbsp;Zurück</button>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-        <button name=\"speichern\" type=\"submit\" value=\"speichern\">
-            <img src=\"". THEME_PATH. "/icons/disk.png\" alt=\"Speichern\" />
-            &nbsp;Speichern</button>
+        <button name=\"speichern\" type=\"submit\" value=\"speichern\"><img src=\"". THEME_PATH. "/icons/disk.png\" alt=\"Speichern\" />&nbsp;Speichern</button>
     </div>
 </form>";
 

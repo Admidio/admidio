@@ -176,9 +176,7 @@ echo "
         <hr />
 
         <div class=\"formSubmit\">
-            <button name=\"speichern\" type=\"submit\" value=\"speichern\" tabindex=\"5\">
-                <img src=\"". THEME_PATH. "/icons/disk.png\" alt=\"Speichern\" />
-                &nbsp;Speichern</button>
+            <button name=\"speichern\" type=\"submit\" value=\"speichern\" tabindex=\"5\"><img src=\"". THEME_PATH. "/icons/disk.png\" alt=\"Speichern\" />&nbsp;Speichern</button>
         </div>
     </div>
 </div>

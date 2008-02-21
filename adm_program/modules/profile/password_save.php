@@ -127,15 +127,11 @@ echo "<br />
 <div style=\"padding-top: 10px;\" align=\"center\">";
     if($err_code == "")
     {
-        echo "<button name=\"schliessen\" type=\"button\" value=\"schliessen\" onclick=\"window.close()\">
-        <img src=\"". THEME_PATH. "/icons/door_in.png\" alt=\"Schließen\" />
-        &nbsp;Schließen</button>";
+        echo "<button name=\"schliessen\" type=\"button\" value=\"schliessen\" onclick=\"window.close()\"><img src=\"". THEME_PATH. "/icons/door_in.png\" alt=\"Schließen\" />&nbsp;Schließen</button>";
     }
     else
     {
-        echo "<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\">
-        <img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" />
-        &nbsp;Zurück</button>";
+        echo "<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\"><img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" />&nbsp;Zurück</button>";
     }
 echo "</div>";
         
