@@ -35,9 +35,8 @@ if (! empty($abschicken) && !$g_valid_login && $g_preferences['enable_mail_captc
 }
 if($g_valid_login)
 {
-	echoMessagesAndErrors("Angemeldet !!!","Du bist am System angemeldet folglich kennst du ja dein Passwort!");
-	echo"<script language='javascript'> setTimeout('window.location.href = \'".$g_root_path."/adm_program/\'',3000); 
-	</script>";	
+	$g_message->setForwardUrl("".$g_root_path."/adm_program/", 2000);
+	$g_message->show("lost_password_allready_logged_in");	
 	die();
 }
 
@@ -53,7 +52,7 @@ if(! empty($abschicken) && ! empty($empfaenger_email) && !empty($captcha))
 	list($user_id,$benutzername,$empfaengername) = getUserDataFromEmail($empfaenger_email);
 	if($user_id == "" || $empfaengername == "")
 	{
-		echoMessagesAndErrors("E-Mail FALSCH ?!?!",'<font color="red">Es konnte die E-Mail: "'.$empfaenger_email.'" nicht gefunden werden!</font><br />Gib bitte <a href="'.$g_root_path.'/adm_program/system/lost_password.php" target="_self">hier</a> eine gültige E-Mail Addresse ein!');
+		$g_message->show('lost_password_email_error',$empfaenger_email);	
 		die();
 	}
 	
@@ -64,13 +63,12 @@ if(! empty($abschicken) && ! empty($empfaenger_email) && !empty($captcha))
 	$email_text		.= " Du hast ein neues Passwort angefordert!\n\n";
 	$email_text		.= " Hier sind deine Daten:\n";
 	$email_text		.= " Benutzername: ".$benutzername."\n";
-	$email_text		.= " Passwort: ".$neues_passwort."\n";
-	$email_text		.= " Aktivierungs Id: ".$activation_id."\n\n";
-	$email_text		.= " Um jetzt dein neues Passwort benutzen zu können musst du jetzt noch auf den Link klicken!"."\n\n";
+	$email_text		.= " Passwort: ".$neues_passwort."\n\n";
+	$email_text		.= " Um jetzt dein neues Passwort benutzen zu können musst du jetzt nur noch auf den Link klicken!"."\n\n";
 	$email_text		.= "".$g_root_path."/adm_program/system/password_activation.php?usr_id=3D".$user_id."&aid=3D".$activation_id.""."\n\n";
 	$email_text		.= " Du kannst jederzeit das generierte Passwort ändern!\n\n";
 	$email_text		.= "*******************************************************************\n";
-	$email_text		.= " Bitte halte in Errinnerung das wir dich nie um deine Benutzdaten fragen!\n";
+	$email_text		.= " Bitte halte in Errinnerung das wir dich nie um deine Benutzerdaten fragen!\n";
 	$email_text		.= "*******************************************************************\n";
 
 	$email = new Email();
@@ -83,11 +81,11 @@ if(! empty($abschicken) && ! empty($empfaenger_email) && !empty($captcha))
 	if($email->sendEmail())
 	{
 		saveActivationlinkAndNewPassword($activation_id,md5($neues_passwort),$user_id);
-		echoMessagesAndErrors("Passwort erfolgreich verschickt!",'Das neue Passwort wurde an "'.$empfaenger_email.'" geschickt!');
+		$g_message->show('password_send',$empfaenger_email);
 	}
 	else
 	{
-		echoMessagesAndErrors("ERROR aufgetreten !!!",'<font color="red">Es ist ein ERROR beim Senden an "'.$empfaenger_email.'" aufgetreten!<br /> Bitte versuch es später wieder!</font>');
+		$g_message->show("lost_password_send_error",$empfaenger_email);	
 	}
 }
 else
@@ -228,15 +226,5 @@ function saveActivationlinkAndNewPassword($activation_id,$neues_passwort,$usr_id
 	global $g_db;
 	$sql = "UPDATE ". TBL_USERS. " SET `usr_activation_code` = '".$activation_id."',`usr_new_password` = '".$neues_passwort."'  WHERE `". TBL_USERS. "`.`usr_id` =".$usr_id." LIMIT 1";
 	$result = $g_db->query($sql);
-}
-function echoMessagesAndErrors($header,$text)
-{
-	echo '<div class="formLayout" id="profile_form">
-				<div class="formHead">'.$header.'</div>
-					<div class="formBody">
-						<div>'.$text.'</div>
-					</div>
-				</div>
-			</div>';
 }
 ?>

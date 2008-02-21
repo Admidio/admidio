@@ -284,7 +284,38 @@ $message_text = array(
     "profile_photo_2big" =>
         "Das hochgeladene Foto übersteigt die vom Server zugelassene
         Dateigröße von %VAR1% B.",
-
+ 	//Ende Fehlermeldungen Profilfoto
+	
+	// Passwort verloren
+	"lost_password_send" =>
+		"Das neue Passwort wurde an die Email Addresse %VAR1% geschickt!",
+		
+	"lost_password_send_error" =>
+		"Es ist ein ERROR beim Senden an die Email Addresse %VAR1% aufgetreten!<br /> Bitte versuch es später wieder!",
+	
+	"lost_password_email_error" =>
+		"Es konnte die E-Mail Addresse: %VAR1% im System nicht gefunden werden!",
+	
+	"lost_password_allready_logged_in" =>
+		"Du bist am System angemeldet folglich kennst du ja dein Passwort!",
+	// Ende Passwort verloren
+	
+	// Password Aktivierung
+	"password_activation_id_not_valid" =>
+		"Es wurde entweder schon das Passwort aktiviert oder der Aktivierungscode ist falsch!",
+	
+	"password_activation_password_saved"=>
+		"Das neue Passwort wurde nun übernommen!",
+	//Ende Password Aktivierung
+	
+	// Grußkarte
+	"ecard_send_error"=>
+		"Es ist ein Fehler bei der Verarbeitung der Grußkarte aufgetreten. Bitte probier es zu einem späteren Zeitpunkt noch einmal.",
+		
+	"ecard_feld_error"=>
+		"Es sind einige Eingabefelder nicht bzw. nicht richtig ausgefüllt. Bitte füll diese aus, bzw. korrigier diese.",
+	
+	//Ende Grußkarte
 
     //Fehlermeldungen Fotomodul
     "no_photo_folder"=>

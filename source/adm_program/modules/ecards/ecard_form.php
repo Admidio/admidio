@@ -28,8 +28,8 @@ $font_sizes 				= array ("9","10","11","12","13","14","15","16","17","18","20","
 $font_colors 				= getElementsFromFile('../../system/schriftfarben.txt');  
 $fonts 						= getElementsFromFile('../../system/schriftarten.txt');
 $templates 					= getfilenames(THEME_SERVER_PATH. "/ecard_templates");
-$msg_error_1				= "Es ist ein Fehler bei der Verarbeitung der Grußkarte aufgetreten. Bitte probier es zu einem späteren Zeitpunkt noch einmal.";
-$msg_error_2 				= "Es sind einige Eingabefelder nicht bzw. nicht richtig ausgefüllt. Bitte füll diese aus, bzw. korrigier diese.";
+$msg_error_1				= "ecard_send_error";
+$msg_error_2 				= "ecard_feld_error";
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_ecard_module'] != 1)
@@ -852,7 +852,7 @@ if (empty($submit_action))
 	}      
     if ($error_msg != "")
 	{
-		echo '<br /><span class="errorMsg">'.$error_msg.'</span>';
+		$g_message->show($error_msg);
 	}
 	  
 		echo' <form name="ecard_form" action="#" method="post">
