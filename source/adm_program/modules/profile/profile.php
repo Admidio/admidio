@@ -799,6 +799,7 @@ if(isset($_GET['user_id']) == true)
 
 require(THEME_SERVER_PATH. "/overall_footer.php");
 
-echo "<div onclick=\"new Effect.Highlight(this)\">Test</div>";
+//Habs mal rausgenommen Gruss Jochen
+//echo "<div onclick=\"new Effect.Highlight(this)\">Test</div>";
 
 ?>

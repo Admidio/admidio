@@ -663,16 +663,23 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
     
     //Buttons schliessen oder Speichern
     echo"<div class=\"formSubmit\">
-        <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\">
-                <img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" />
-                &nbsp;Zurück</button>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <button name=\"speichern\" type=\"submit\" value=\"speichern\">
-            <img src=\"". THEME_PATH. "/icons/disk.png\" alt=\"Speichern\" />&nbsp;Speichern
-        </button>
+        <button name=\"speichern\" type=\"submit\" value=\"speichern\"><img src=\"". THEME_PATH. "/icons/disk.png\" alt=\"Speichern\" />&nbsp;Speichern</button>
     </div>
 </form>";
-
+// Zurueck-Button nur anzeigen, wenn MyList nicht direkt aufgerufen wurde
+if($_SESSION['navigation']->count > 1)
+{
+    echo "
+    <ul class=\"iconTextLinkList\">
+        <li>
+            <span class=\"iconTextLink\">
+                <a href=\"$g_root_path/adm_program/system/back.php\"><img 
+                src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
+                <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
+            </span>
+        </li>
+    </ul>";
+}
 //nur bei mehr als 50
 if($g_db->num_rows($result_user)>=50)
 {

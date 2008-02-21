@@ -265,10 +265,7 @@ echo "
         //Submitbutton
         echo"<hr />
         <div class=\"formSubmit\">
-            <button name=\"submit\" type=\"submit\" tabindex=\"8\" value=\"speichern\">
-                <img src=\"". THEME_PATH. "/icons/disk.png\" alt=\"Speichern\" />
-                &nbsp;Speichern
-            </button>
+            <button name=\"submit\" type=\"submit\" tabindex=\"8\" value=\"speichern\"><img src=\"". THEME_PATH. "/icons/disk.png\" alt=\"Speichern\" />&nbsp;Speichern</button>
         </div>
             
     </div>

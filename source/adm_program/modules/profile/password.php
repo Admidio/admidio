@@ -65,13 +65,9 @@ echo "
         <hr />
 
         <div class=\"formSubmit\">
-            <button name=\"schliessen\" type=\"button\" value=\"schliessen\" onclick=\"window.close()\">
-                <img src=\"". THEME_PATH. "/icons/door_in.png\" alt=\"Schließen\" />
-                &nbsp;Schließen</button>
+            <button name=\"schliessen\" type=\"button\" value=\"schliessen\" onclick=\"window.close()\"><img src=\"". THEME_PATH. "/icons/door_in.png\" alt=\"Schließen\" />&nbsp;Schließen</button>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button name=\"speichern\" type=\"submit\" value=\"speichern\">
-                <img src=\"". THEME_PATH. "/icons/disk.png\" alt=\"Speichern\" />
-                &nbsp;Speichern</button>
+            <button name=\"speichern\" type=\"submit\" value=\"speichern\"><img src=\"". THEME_PATH. "/icons/disk.png\" alt=\"Speichern\" />&nbsp;Speichern</button>
         </div>
     </div>
 </form>
