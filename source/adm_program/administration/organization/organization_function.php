@@ -51,7 +51,7 @@ if(is_numeric($_POST['logout_minutes']) == false || $_POST['logout_minutes'] <= 
     $g_message->show("feld", "Automatischer Logout");
 }
 
-if($_POST['forum_integriert'] == 1 && strlen($_POST['forum_srv']) == 0 || strlen($_POST['forum_usr']) == 0 || strlen($_POST['forum_pw']) == 0 || strlen($_POST['forum_db']) == 0 )
+if($_POST['forum_integriert'] == 1 && (strlen($_POST['forum_srv']) == 0 || strlen($_POST['forum_usr']) == 0 || strlen($_POST['forum_pw']) == 0 || strlen($_POST['forum_db']) == 0 ))
 {
 	$g_message->show("forum_access_data");
 }
