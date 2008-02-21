@@ -402,6 +402,10 @@ class User extends TableAccess
         {
             $vcard .= (string) "EMAIL;PREF;INTERNET:" . $this->getValue("E-Mail"). "\r\n";
         }
+        if (strlen($this->getValue("usr_photo")) > 0)
+        {
+            $vcard .= (string) "PHOTO;ENCODING=BASE64;TYPE=JPEG:".base64_encode($this->getValue("usr_photo")). "\r\n";
+        }
         // Geschlecht ist nicht in vCard 2.1 enthalten, wird hier fuer das Windows-Adressbuch uebergeben
         if ($this->getValue("Geschlecht") > 0)
         {
