@@ -247,7 +247,7 @@ class Forum
                 $this->message = "login_forum_admin";
             }
         }
-
+		
         // Pruefen, ob es den User im Forum gibt, im Nein Fall diesem User ein Forum Account anlegen
         if(!$this->userCheck($login_name))
         {
