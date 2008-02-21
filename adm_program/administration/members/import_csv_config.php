@@ -137,13 +137,9 @@ echo "
         </table>
 
         <div class=\"formSubmit\">
-            <button name=\"back\" type=\"button\" onclick=\"history.back()\">
-            <img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" />
-            &nbsp;Zurück</button>
+            <button name=\"back\" type=\"button\" onclick=\"history.back()\"><img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" />&nbsp;Zurück</button>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button id=\"import\" type=\"submit\">
-            <img src=\"". THEME_PATH. "/icons/database_in.png\" alt=\"Weiter\" />
-            &nbsp;Importieren</button>
+            <button id=\"import\" type=\"submit\"><img src=\"". THEME_PATH. "/icons/database_in.png\" alt=\"Weiter\" />&nbsp;Importieren</button>
         </div>
     </div>
 </div>

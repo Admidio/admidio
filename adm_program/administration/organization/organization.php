@@ -1547,9 +1547,7 @@ echo "
 
 <div class=\"formLayout\">
     <div class=\"formBody\" style=\"text-align: center;\">
-        <button name=\"save\" type=\"submit\" value=\"speichern\">
-            <img src=\"". THEME_PATH. "/icons/disk.png\" alt=\"Speichern\" />
-            &nbsp;Speichern</button>
+        <button name=\"save\" type=\"submit\" value=\"speichern\"><img src=\"". THEME_PATH. "/icons/disk.png\" alt=\"Speichern\" />&nbsp;Speichern</button>
     </div>
 </div>
 </form>
