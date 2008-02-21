@@ -75,10 +75,10 @@ if($_GET["mode"] == 1)
     require(THEME_SERVER_PATH. "/overall_header.php");
 
     // Html des Modules ausgeben
-    echo "<br /><br /><br />
-    <div class=\"formHead\" style=\"width: 400px\">Rolle l&ouml;schen</div>
-
-    <div class=\"formBody\" style=\"width: 400px\">
+echo"
+<div class=\"formLayout\" id=\"edit_announcements_form\">
+	<div class=\"formHead\">Rolle l&ouml;schen</div>
+    <div class=\"formBody\">
         <p align=\"left\">
             <img src=\"". THEME_PATH. "/icons/wand_gray.png\" alt=\"Inaktive Rolle\" />
             Du kannst die Rolle zu einer <b>inaktiven Rolle</b> machen. Dies hat den Vorteil, dass die Daten
@@ -103,7 +103,8 @@ if($_GET["mode"] == 1)
 	            </span>
 	        </li>
 	    </ul>
-	</div>";
+	</div>
+</div>";
 
     require(THEME_SERVER_PATH. "/overall_footer.php");
     exit();
