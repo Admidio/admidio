@@ -281,8 +281,13 @@ for($i = 0; $i < $roles_per_page && $i + $_GET["start"] < $num_roles; $i++)
 
         if($previous_cat_id != $row_lst['cat_id'])
         {
-            if($i > 0)
+            
+			if($i > 0)
             {
+                if($count_cat_entries == 0)
+			    {
+					echo"Diese Kategorie enth&auml;lt keine zur Ansicht freigegebenen Listen.";
+			    }
                 echo "</div></div><br />";
             }
             echo "<div class=\"formLayout\" id=\"lists_overview\">
@@ -477,9 +482,14 @@ for($i = 0; $i < $roles_per_page && $i + $_GET["start"] < $num_roles; $i++)
 	                </li>";
 	            }
 	        echo "</ul>";
-        }
         $count_cat_entries++;
+        }
     }
+}
+
+if($count_cat_entries == 0)
+{
+	echo"Diese Kategorie enth&auml;lt keine zur Ansicht freigegebenen Listen.";
 }
 echo "</div></div>";
 
