@@ -56,9 +56,7 @@ echo "
         echo "</ul>
         
         <div class=\"formSubmit\">
-            <button name=\"login\" type=\"submit\" value=\"login\" tabindex=\"4\">
-            <img src=\"". THEME_PATH. "/icons/key.png\" alt=\"Login\" />
-            &nbsp;Login</button>
+            <button name=\"login\" type=\"submit\" value=\"login\" tabindex=\"4\"><img src=\"". THEME_PATH. "/icons/key.png\" alt=\"Login\" />&nbsp;Login</button>
         </div>";
         
         if($g_preferences['registration_mode'] > 0)
