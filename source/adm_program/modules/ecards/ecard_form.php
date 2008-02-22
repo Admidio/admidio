@@ -1072,14 +1072,10 @@ if (empty($submit_action))
 			<hr />
 			</form>
 			<div style="display:inline;">
-				<button onclick="makePreview()" value="vorschau">
-					<img src="'. THEME_PATH. '/icons/eye.png" alt="Vorschau" />&nbsp;Vorschau
-				</button>
+				<button onclick="makePreview()" value="vorschau"><img src="'. THEME_PATH. '/icons/eye.png" alt="Vorschau" />&nbsp;Vorschau</button>
 			</div>
 			<div style="display:inline;">
-				<button onclick="sendEcard()" value="abschicken">
-					<img src="'. THEME_PATH. '/icons/email.png" alt="Abschicken" />&nbsp;Abschicken
-				</button>
+				<button onclick="sendEcard()" value="abschicken"><img src="'. THEME_PATH. '/icons/email.png" alt="Abschicken" />&nbsp;Abschicken</button>
 			</div>';
 } 
 else 
