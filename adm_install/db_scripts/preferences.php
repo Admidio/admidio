@@ -91,13 +91,15 @@ $orga_preferences = array(
     'ecard_template'				=> 'ecard_1.tpl',
 
     // Profil
-    'default_country'          => 'Deutschland',
-    'enable_roles_view'        => '1',
-    'enable_former_roles_view' => '1',
-    'enable_extern_roles_view' => '1',
+    'default_country'           => 'Deutschland',
+    'profile_show_map_link'     => '1',
+    'profile_show_roles'        => '1',
+    'profile_show_former_roles' => '1',
+    'profile_show_extern_roles' => '1',
 
     // Termine
-    'enable_dates_module' => '1',
+    'enable_dates_module'       => '1',
+    'dates_show_map_link'       => '1',
 
     // Weblinks
     'enable_weblinks_module' => '1'
