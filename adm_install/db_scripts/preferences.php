@@ -49,13 +49,14 @@ $orga_preferences = array(
     'photo_show_height'   => '380',
     'photo_image_text'    => '1',
     'photo_preview_scale' => '100',
-    'photo_show_mode'   => '1',
+    'photo_show_mode'	  => '1',
 
 	// Forum
 	
-	'forum_integriert'		=> '0',
-	'forum_version'			=> 'phpbb2',
-	'forum_export'			=> '1',
+	'forum_integriert'					=> '0',
+	'forum_version'						=> 'phpbb2',
+	'forum_export'						=> '1',
+	'forum_sqldata_from_admidio'		=> '0',
 	
     // Gaestebuch
     'enable_guestbook_module'           => '1',
