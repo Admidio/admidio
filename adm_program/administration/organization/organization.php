@@ -45,6 +45,9 @@ else
     {
         $form_values[$key] = $value;
     }
+    
+    // Forumpassword immer auf 0000 setzen, damit es nicht ausgelesen werden kann
+    $form_values['forum_pw'] = "0000";
 }
 
 // zusaetzliche Daten fuer den Html-Kopf setzen
@@ -750,7 +753,7 @@ echo "
             </div>
         </div>";
 		
-		 /**************************************************************************************/
+		/**************************************************************************************/
         //Einstellungen Forum
         /**************************************************************************************/
 
@@ -759,30 +762,22 @@ echo "
             <div class=\"groupBoxHeadline\">Einstellungen Forum&nbsp;&nbsp; </div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
-                    <li>
+                    <li> 
                         <dl>
-                            <dt><label for=\"forum_integriert\">Forum aktivieren/deaktivieren:</label></dt>
+                            <dt><label for=\"enable_forum_interface\">Forum aktivieren:</label></dt>
                             <dd>
-								<select size=\"1\" id=\"forum_integriert\" name=\"forum_integriert\">
-                                    <option value=\"0\" ";
-                                    if($form_values['forum_integriert'] == 0)
-                                    {
-                                        echo " selected=\"selected\" ";
-                                    }
-                                    echo ">Deaktiviert</option>
-                                    <option value=\"1\" ";
-                                    if($form_values['forum_integriert'] == 1)
-                                    {
-                                        echo " selected=\"selected\" ";
-                                    }
-                                    echo ">Aktiviert</option>
-                                </select>
-                            </dd>
+                                <input type=\"checkbox\" id=\"enable_forum_interface\" name=\"enable_forum_interface\" ";
+                                if(isset($form_values['enable_forum_interface']) && $form_values['enable_forum_interface'] == 1)
+                                {
+                                    echo " checked=\"checked\" ";
+                                }
+                                echo " value=\"1\" />
+                            </dd>                            
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Das Forum kann &uuml;ber diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
-                        aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt.
+                        Das Forum kann über diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
+                        aufrufbar und wird auch in der Modulübersichtsseite nicht mehr angezeigt.
                     </li>
 					<li>
                         <dl>
@@ -807,27 +802,19 @@ echo "
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"forum_export\">Forum export:</label></dt>
+                            <dt><label for=\"forum_export_user\">Admidiobenutzer exportieren:</label></dt>
                             <dd>
-								 <select size=\"1\" id=\"forum_export\" name=\"forum_export\">
-                                    <option value=\"0\" ";
-                                    if($form_values['forum_export'] == "0")
-                                    {
-                                        echo " selected=\"selected\" ";
-                                    }
-                                    echo ">nein</option>
-                                    <option value=\"1\" ";
-                                    if($form_values['forum_export'] == "1")
-                                    {
-                                        echo " selected=\"selected\" ";
-                                    }
-                                    echo ">ja</option>
-                                </select>
-                             </dd>
+                                <input type=\"checkbox\" id=\"forum_export_user\" name=\"forum_export_user\" ";
+                                if(isset($form_values['forum_export_user']) && $form_values['forum_export_user'] == 1)
+                                {
+                                    echo " checked=\"checked\" ";
+                                }
+                                echo " value=\"1\" />
+                            </dd>                            
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Vorhandene Admidio Accounts automatisch beim anmelden des Users ins Forum exportieren und einen Forum Account erstellen? (Standardwert: ja)
+                        Vorhandene Admidiobenutzer werden automatisch beim Anmelden des Users ins Forum exportiert und dort ein Forumbenutzer angelegt. (Standardwert: ja)
                     </li>
                     <li>
                         <dl>
@@ -842,6 +829,12 @@ echo "
                     </li>
                     <li>
                         <dl>
+                            <dt><label for=\"forum_zugangsdaten\">Zugangsdaten zur Datenbank des Forums:</label></dt>
+                            <dd>&nbsp;</dd>
+                        </dl>
+                    </li>
+                    <li>
+                    	<dl>
 							<dt><label for=\"forum_zugangsdaten_von_admidio\">Zugangsdaten von Admidio verwenden:</label></dt>
 							<dd>
 								<div style=\"display:inline;\">
@@ -857,25 +850,31 @@ echo "
 					</li>
 					<li class=\"smallFontSize\">
 						Falls mann die gleiche DB benutzt wie Admidio.
-					<li>
-						<dl>
-							<dt><label for=\"forum_zugangsdaten\">Zugangsdaten zur Datenbank des Forums:</label></dt>
-							<dd>
-								<div id=\"Forum_Zugangsdaten\">";
-								if($form_values['forum_sqldata_from_admidio'] == 0)
-								{
-									echo "<table summary='Forum_Zugangsdaten' border='0'><tr><td>Server:</td><td><input id='forum_srv' name='forum_srv' style='width: 150px;' value='". $form_values['forum_srv']. "' type='text' /></td></tr><tr><td>User:</td><td><input id='forum_usr' name='forum_usr' style='width: 150px;' value='". $form_values['forum_usr']. "' type='text' /></td></tr><tr><td>Passwort:</td><td><input id='forum_pw' name='forum_pw' style='width: 150px;' value='". $form_values['forum_pw']. "' type='password' /></td></tr><tr><td>Datenbank:</td><td><input id='forum_db' name='forum_db' style='width: 150px;' value='". $form_values['forum_db']. "' type='text' /></td></tr></table>";
-								}
-								else
-								{
-									echo "Datenbank: <input id='forum_db' name='forum_db' style='width: 150px;' value='". $form_values['forum_db']. "' type='text' />";
-								}
-								echo "
-								</div>
-							</dd>
-						</dl>
-					</li>		
-			 
+					</li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"forum_srv\">Server:</label></dt>
+                            <dd><input type=\"text\" id=\"forum_srv\" name=\"forum_srv\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['forum_srv']. "\" /></dd>
+                        </dl>
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"forum_db\">Datenbank:</label></dt>
+                            <dd><input type=\"text\" id=\"forum_db\" name=\"forum_db\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['forum_db']. "\" /></dd>
+                        </dl>
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"forum_usr\">Username:</label></dt>
+                            <dd><input type=\"text\" id=\"forum_usr\" name=\"forum_usr\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['forum_usr']. "\" /></dd>
+                        </dl>
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"forum_pw\">Passwort:</label></dt>
+                            <dd><input type=\"password\" id=\"forum_pw\" name=\"forum_pw\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['forum_pw']. "\" /></dd>
+                        </dl>
+                    </li>
                     <li class=\"smallFontSize\">
                         Hier müssen wenn eines der obrigen Foren ausgewählt und es aktiviert wurde die Zugangsdaten dessen eingetragen werden.
                     </li>                

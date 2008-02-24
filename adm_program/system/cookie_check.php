@@ -36,7 +36,7 @@ else
     $message_code = strStripTags($_GET['message_code']);
     $show_time = 2000;
     
-    if($g_preferences['forum_integriert'])
+    if($g_preferences['enable_forum_interface'])
     {
         // Je nach Forumsaktion, Meldung ausgeben und weiter zur ForwardUrl - Seite
         $g_message->addVariableContent($g_current_user->getValue("usr_login_name"));

@@ -52,10 +52,11 @@ $orga_preferences = array(
     'photo_show_mode'	  => '1',
 
 	// Forum
-	
-	'forum_integriert'					=> '0',
-	'forum_version'						=> 'phpbb2',
-	'forum_export'						=> '1',
+
+	'enable_forum_interface'=> '0',
+	'forum_version'			=> 'phpbb2',
+	'forum_export_user'	    => '1',
+	'forum_praefix'         => 'phpbb',
 	'forum_sqldata_from_admidio'		=> '0',
 	
     // Gaestebuch

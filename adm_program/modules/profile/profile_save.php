@@ -243,7 +243,7 @@ if($g_current_user->isWebmaster() || $new_user > 0)
 
         // pruefen, ob der Benutzername bereits im Forum vergeben ist, 
         // Benutzernamenswechesel und diese Dinge
-        if($g_forum_integriert)
+        if($g_preferences['enable_forum_interface'])
         {
             // pruefen, ob der Benutzername bereits im Forum vergeben ist
             if($g_forum->userCheck($user->login_name))
@@ -294,7 +294,7 @@ if($ret_code != 0)
 }
 
 // Nachdem der User erfolgreich aktualisiert den Usernamen im Forum aktualisieren
-if($g_forum_integriert && $login_name_changed)
+if($g_preferences['enable_forum_interface'] && $login_name_changed)
 {
     if(strlen($forum_old_username) > 0)
     {
@@ -330,7 +330,7 @@ if($new_user == 3)
     $user->save();
 
     // Den User nun im Forum auch als Aktiv updaten, wenn g_forum gesetzt ist
-    if($g_forum_integriert)
+    if($g_preferences['enable_forum_interface'])
     {
         $g_forum->userUpdate($user->getValue("usr_login_name"), $user->getValue("usr_password"), $user->getValue("E-Mail"));
     }

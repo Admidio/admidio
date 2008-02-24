@@ -239,8 +239,8 @@ echo "</ul>
                 </li>";
             }
 
-            // Wenn das Forum aktiv ist, dieses auch in der Ã?bersicht anzeigen.
-            if($g_preferences['forum_integriert'])
+            // Wenn das Forum aktiv ist, dieses auch in der Uebersicht anzeigen.
+            if($g_preferences['enable_forum_interface'])
             {
                 if($g_forum->session_valid)
                 {
@@ -255,11 +255,11 @@ echo "</ul>
                 <li>
                     <dl>
                         <dt>
-                            <a href=\"http://". $_SERVER['HTTP_HOST']. "/".$g_forum->path."/index.php\"><img 
+                            <a href=\"". $g_forum->url. "\"><img 
                             src=\"". THEME_PATH. "/icons/forum_big.png\" alt=\"Forum\" title=\"Forum\" /></a>
                         </dt>
                         <dd>
-                            <span class=\"veryBigFontSize\"><a href=\"http://". $_SERVER['HTTP_HOST']. "/".$g_forum->path."/index.php\">Forum</a></span><br />
+                            <span class=\"veryBigFontSize\"><a href=\"". $g_forum->url. "\">Forum</a></span><br />
                             <span class=\"smallFontSize\">$forumstext</span>
                         </dd>
                     </dl>

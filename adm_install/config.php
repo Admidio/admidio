@@ -4,7 +4,6 @@
  *
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
- * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
@@ -28,35 +27,6 @@ $g_root_path = "%ROOT_PATH%";
 // Diese muss der Eingabe auf der Installationsseite entsprechen !!!
 // Beispiel: "ADMIDIO"
 // Maximal 10 Zeichen !!!
-$g_organization = "%ORGANIZATION%";
-
-
-// Forumspezifisch
-// Forum integriert
-// 1 = ja
-// 0 = nein
-$g_forum_integriert = 0;
-
-// Genutztes Forum 
-// "phpbb2"     - PHP Bulletin Board 2.x
-// "phpbb3"     - PHP Bulletin Board 3.x *NOCH NICHT GENUTZT*
-// "smf1"       - Simple Minds Forum 1.x *NOCH NICHT GENUTZT*
-$g_forum_version = "phpbb2";
-
-// Vorhandene Admidio Accounts automatisch beim anmelden des Users ins 
-// Forum exportieren und einen Forum Account erstellen
-// 1 = ja (Standard)
-// 0 = nein
-$g_forum_export = 1;
-
-
-// Praefix der Tabellen des phpBB-Forums
-$g_forum_praefix = "";
-
-// Zugangsdaten zur Datenbank des Forums
-$g_forum_srv = "";
-$g_forum_usr = "";
-$g_forum_pw  = "";
-$g_forum_db  = "";  
+$g_organization = "%ORGANIZATION%"; 
 
 ?>

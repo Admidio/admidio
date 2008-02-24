@@ -60,7 +60,7 @@ if( ($_POST["old_password"] != "" || $g_current_user->isWebmaster() )
                 $user->save();
 
                 // Paralell im Forum aendern, wenn g_forum gesetzt ist
-                if($g_forum_integriert)
+                if($g_preferences['enable_forum_interface'])
                 {
                     $g_forum->userUpdate($user->getValue("usr_login_name"), $user->getValue("usr_password"), $user->getValue("E-Mail"));
                 }

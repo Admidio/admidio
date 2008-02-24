@@ -15,7 +15,7 @@ require("../../system/login_valid.php");
 // nur Webmaster duerfen Organisationen bearbeiten
 if($g_current_user->isWebmaster() == false)
 {
-    $g_message->show("norights");
+    $g_message->show("norights"); 
 }
 
 $_SESSION['organization_request'] = $_REQUEST;
@@ -51,30 +51,24 @@ if(is_numeric($_POST['logout_minutes']) == false || $_POST['logout_minutes'] <= 
     $g_message->show("feld", "Automatischer Logout");
 }
 
-if($_POST['forum_integriert'] == 1 && $_POST['forum_sqldata_from_admidio'] == 0  && (strlen($_POST['forum_srv']) == 0 || strlen($_POST['forum_usr']) == 0 || strlen($_POST['forum_pw']) == 0 || strlen($_POST['forum_db']) == 0 ))
+// Forumverbindung testen
+if($_POST['enable_forum_interface'] == 1 && (strlen($_POST['forum_srv']) == 0 || strlen($_POST['forum_usr']) == 0 || strlen($_POST['forum_pw']) == 0 || strlen($_POST['forum_db']) == 0 ))
 {
 	$g_message->show("forum_access_data");
 }
-else if ($_POST['forum_integriert'] == 1)
+else if ($_POST['enable_forum_interface'] == 1)
 {
-	if($_POST['forum_sqldata_from_admidio'] == 0)
+	// Password 0000 ist aus Sicherheitsgruenden ein Dummy und bedeutet, dass es sich nicht geaendert hat
+	if($_POST['forum_pw'] == "0000")
 	{
-		$DatabasePointer = mysql_connect($_POST['forum_srv'],$_POST['forum_usr'],$_POST['forum_pw']);
+		$_POST['forum_pw'] = $g_preferences['forum_pw'];
 	}
-	else
+
+	$forum_test = new Forum();
+	$connect_id = $forum_test->connect($_POST['forum_srv'], $_POST['forum_usr'], $_POST['forum_pw'], $_POST['forum_db'], $g_db);
+	if($connect_id == false)
 	{
-		$DatabasePointer = mysql_connect($g_adm_srv, $g_adm_usr, $g_adm_pw);
-	}
-	if($DatabasePointer)
-	{
-		$db_selected = mysql_select_db($_POST['forum_db'], $DatabasePointer);
-		if (!$db_selected) {
-			$g_message->show("forum_db_connection_failed");
-		}
-	}
-	else
-	{
-		die ($g_message->show("forum_db_connection_failed"));
+		$g_message->show("forum_db_connection_failed");
 	}
 }
 
@@ -114,7 +108,7 @@ if(isset($_POST['enable_bbcode']) == false)
 
 if(isset($_POST['enable_rss']) == false)
 {
-    $_POST['enable_rss'] = 0;
+    $_POST['enable_rss'] = 0; 
 }
 
 if(isset($_POST['enable_auto_login']) == false)
@@ -140,6 +134,16 @@ if(isset($_POST['enable_photo_module']) == false)
 if(isset($_POST['photo_image_text']) == false)
 {
     $_POST['photo_image_text'] = 0;
+}
+
+if(isset($_POST['enable_forum_interface']) == false)
+{
+    $_POST['enable_forum_interface'] = 0;
+}
+
+if(isset($_POST['forum_export_user']) == false)
+{
+    $_POST['forum_export_user'] = 0;
 }
 
 if(isset($_POST['enable_guestbook_captcha']) == false)
@@ -215,7 +219,16 @@ foreach($_POST as $key => $value)
     && $key != "version"
     && $key != "save")
     {
-        $g_preferences[$key] = $value;
+    	// Forumpassword hier gesondert behandeln, da es nicht angezeigt werden soll
+    	// 0000 bedeutet, dass das PW sich nicht veraendert hat
+    	if($key == "forum_pw" && $value == "0000")
+    	{
+    		$g_preferences[$key] = $g_preferences[$key]; 
+    	}
+    	else
+    	{
+        	$g_preferences[$key] = $value;
+        }
     }
 }
 
