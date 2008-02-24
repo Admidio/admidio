@@ -105,12 +105,12 @@ $g_layout['header'] =  "
 		{
 			if(document.getElementById(LayerSwith).checked == true && document.getElementById(LayerSetting))
 			{
-					document.getElementById(LayerSetting).innerHTML = \"<table summary='Forum_Zugangsdaten' border='0'><tr><td>Datenbank:<\/td><td><input id='forum_db' name='forum_db' style='width: 150px;' value='". $form_values['forum_db']. "' type='text' /><\/td><\/tr><\/table>\";
+					document.getElementById(LayerSetting).innerHTML = \"<li><dl><dt><label for='forum_db'>Datenbank:<\/label><\/dt><dd><input type='text' id='forum_db' name='forum_db' style='width: 200px;' maxlength='50' value='". $form_values['forum_db']. "' \/><\/dd><\/dl><\/li>\";
 			}
 			else
 			{
 					document.getElementById(LayerSetting).innerHTML = \"\";
-					document.getElementById(LayerSetting).innerHTML += \"<table summary='Forum_Zugangsdaten' border='0'><tr><td>Server:<\/td><td><input id='forum_srv' name='forum_srv' style='width: 150px;' value='". $form_values['forum_srv']. "' type='text' /><\/td><\/tr><tr><td>User:<\/td><td><input id='forum_usr' name='forum_usr' style='width: 150px;' value='". $form_values['forum_usr']. "' type='text' /><\/td><\/tr><tr><td>Passwort:<\/td><td><input id='forum_pw' name='forum_pw' style='width: 150px;' value='". $form_values['forum_pw']. "' type='password' /><\/td><\/tr><tr><td>Datenbank:<\/td><td><input id='forum_db' name='forum_db' style='width: 150px;' value='". $form_values['forum_db']. "' type='text' /><\/td><\/tr></\table>\";
+					document.getElementById(LayerSetting).innerHTML += \"<li><dl><dt><label for='forum_srv'>Server:<\/label><\/dt><dd><input type='text' id='forum_srv' name='forum_srv' style='width: 200px;' maxlength='50' value='". $form_values['forum_srv']. "' \/><\/dd><\/dl><\/li><li><dl><dt><label for='forum_usr'>Username:<\/label><\/dt><dd><input type='text' id='forum_usr' name='forum_usr' style='width: 200px;' maxlength='50' value='". $form_values['forum_usr']. "' \/><\/dd><\/dl><\/li><li><dl><dt><label for='forum_pw'>Passwort:<\/label><\/dt><dd><input type='password' id='forum_pw' name='forum_pw' style='width: 200px;' maxlength='50' value='". $form_values['forum_pw']. "' \/><\/dd><\/dl><\/li><li><dl><dt><label for='forum_db'>Datenbank:<\/label><\/dt><dd><input type='text' id='forum_db' name='forum_db' style='width: 200px;' maxlength='50' value='". $form_values['forum_db']. "' \/><\/dd><\/dl><\/li>\";
 			}
 		}
     --></script>";
@@ -851,16 +851,14 @@ echo "
 					<li class=\"smallFontSize\">
 						Falls mann die gleiche DB benutzt wie Admidio.
 					</li>
-                    <li>
+					<div id=\"Forum_Zugangsdaten\">";
+					if(isset($form_values['forum_sqldata_from_admidio']) && $form_values['forum_sqldata_from_admidio'] == 0)
+					{
+                    echo "<li>
+					
                         <dl>
                             <dt><label for=\"forum_srv\">Server:</label></dt>
                             <dd><input type=\"text\" id=\"forum_srv\" name=\"forum_srv\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['forum_srv']. "\" /></dd>
-                        </dl>
-                    </li>
-                    <li>
-                        <dl>
-                            <dt><label for=\"forum_db\">Datenbank:</label></dt>
-                            <dd><input type=\"text\" id=\"forum_db\" name=\"forum_db\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['forum_db']. "\" /></dd>
                         </dl>
                     </li>
                     <li>
@@ -875,6 +873,24 @@ echo "
                             <dd><input type=\"password\" id=\"forum_pw\" name=\"forum_pw\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['forum_pw']. "\" /></dd>
                         </dl>
                     </li>
+					<li>
+                        <dl>
+                            <dt><label for=\"forum_db\">Datenbank:</label></dt>
+                            <dd><input type=\"text\" id=\"forum_db\" name=\"forum_db\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['forum_db']. "\" /></dd>
+                        </dl>
+                    </li>";
+					}
+					else
+					{
+					echo "<li>
+                        <dl>
+                            <dt><label for=\"forum_db\">Datenbank:</label></dt>
+                            <dd><input type=\"text\" id=\"forum_db\" name=\"forum_db\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['forum_db']. "\" /></dd>
+                        </dl>
+                    </li>";
+					}
+					echo"
+					</div>
                     <li class=\"smallFontSize\">
                         Hier müssen wenn eines der obrigen Foren ausgewählt und es aktiviert wurde die Zugangsdaten dessen eingetragen werden.
                     </li>                

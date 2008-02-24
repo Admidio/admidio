@@ -52,7 +52,7 @@ if(is_numeric($_POST['logout_minutes']) == false || $_POST['logout_minutes'] <= 
 }
 
 // Forumverbindung testen
-if($_POST['enable_forum_interface'] == 1 && (strlen($_POST['forum_srv']) == 0 || strlen($_POST['forum_usr']) == 0 || strlen($_POST['forum_pw']) == 0 || strlen($_POST['forum_db']) == 0 ))
+if($_POST['enable_forum_interface'] == 1 && $_POST['forum_sqldata_from_admidio'] == 0 && (strlen($_POST['forum_srv']) == 0 || strlen($_POST['forum_usr']) == 0 || strlen($_POST['forum_pw']) == 0 || strlen($_POST['forum_db']) == 0 ))
 {
 	$g_message->show("forum_access_data");
 }
@@ -65,7 +65,14 @@ else if ($_POST['enable_forum_interface'] == 1)
 	}
 
 	$forum_test = new Forum();
-	$connect_id = $forum_test->connect($_POST['forum_srv'], $_POST['forum_usr'], $_POST['forum_pw'], $_POST['forum_db'], $g_db);
+	if($_POST['forum_sqldata_from_admidio'] == 0)
+	{
+		$connect_id = $forum_test->connect($_POST['forum_srv'], $_POST['forum_usr'], $_POST['forum_pw'], $_POST['forum_db'], $g_db);
+	}
+	else
+	{
+		$connect_id = $forum_test->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $_POST['forum_db'], $g_db);
+	}
 	if($connect_id == false)
 	{
 		$g_message->show("forum_db_connection_failed");
